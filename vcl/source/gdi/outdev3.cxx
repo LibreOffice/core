@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-15 12:01:02 $
+ *  last change: $Author: pl $ $Date: 2002-07-20 15:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,9 +304,12 @@ void OutputDevice::ImplUpdateFontData( BOOL bNewFontLists )
 
                 if( mpPDFWriter )
                 {
-                    if( mpFontList )
+                    if( mpFontList && mpFontList != pSVData->maGDIData.mpScreenFontList )
                         delete mpFontList;
+                    if( mpFontCache && mpFontCache != pSVData->maGDIData.mpScreenFontCache )
+                        delete mpFontCache;
                     mpFontList = mpPDFWriter->filterDevFontList( pSVData->maGDIData.mpScreenFontList );
+                    mpFontCache = new ImplFontCache( FALSE );
                 }
                 else
                     mpGraphics->GetDevFontList( mpFontList );
@@ -2638,18 +2641,21 @@ void OutputDevice::ImplInitFont()
 
     if ( mbInitFont )
     {
-        if ( meOutDevType != OUTDEV_PRINTER )
+        if( !mpPDFWriter || !mpPDFWriter->isBuiltinFont( mpFontEntry->maFontSelData.mpFontData ) )
         {
-            // decide if antialiasing is appropriate
-            BOOL bNonAntialiased = (GetAntialiasing() & ANTIALIASING_DISABLE_TEXT) != 0;
-            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-            bNonAntialiased |= (rStyleSettings.GetDisplayOptions() & DISPLAY_OPTION_AA_DISABLE) != 0;
-            bNonAntialiased |= (rStyleSettings.GetAntialiasingMinPixelHeight() > mpFontEntry->maFontSelData.mnHeight);
-            mpFontEntry->maFontSelData.mbNonAntialiased = bNonAntialiased;
-        }
+            if ( meOutDevType != OUTDEV_PRINTER )
+            {
+                // decide if antialiasing is appropriate
+                BOOL bNonAntialiased = (GetAntialiasing() & ANTIALIASING_DISABLE_TEXT) != 0;
+                const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+                bNonAntialiased |= (rStyleSettings.GetDisplayOptions() & DISPLAY_OPTION_AA_DISABLE) != 0;
+                bNonAntialiased |= (rStyleSettings.GetAntialiasingMinPixelHeight() > mpFontEntry->maFontSelData.mnHeight);
+                mpFontEntry->maFontSelData.mbNonAntialiased = bNonAntialiased;
+            }
 
-        // Select Font
-        mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(mpFontEntry->maFontSelData) );
+            // Select Font
+            mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(mpFontEntry->maFontSelData) );
+        }
         mbInitFont = FALSE;
     }
 }
@@ -2676,6 +2682,15 @@ void OutputDevice::ImplInitTextColor()
 int OutputDevice::ImplNewFont()
 {
     DBG_TESTSOLARMUTEX();
+
+    // get correct font list on the PDF writer if necessary
+    ImplSVData* pSVData = ImplGetSVData();
+    if( ( mpFontList == pSVData->maGDIData.mpScreenFontList ||
+        mpFontCache == pSVData->maGDIData.mpScreenFontCache  )
+        && mpPDFWriter )
+    {
+        ImplUpdateFontData( TRUE );
+    }
 
     if ( !mbNewFont )
         return TRUE;
@@ -2782,20 +2797,25 @@ int OutputDevice::ImplNewFont()
             pFontEntry->maMetric.mnDStrikeoutSize           = 0;
             pFontEntry->maMetric.mnDStrikeoutOffset1        = 0;
             pFontEntry->maMetric.mnDStrikeoutOffset2        = 0;
-#ifndef REMOTE_APPSERVER
-            pGraphics->GetFontMetric( &(pFontEntry->maMetric) );
-#else
 
-            long nFactor = 0;
-            pGraphics->GetFontMetric(
-                pFontEntry->maMetric, nFactor,
+            if( mpPDFWriter && mpPDFWriter->isBuiltinFont( pFontEntry->maFontSelData.mpFontData ) )
+                mpPDFWriter->getFontMetric( &pFontEntry->maFontSelData, &(pFontEntry->maMetric) );
+            else
+            {
+#ifndef REMOTE_APPSERVER
+                pGraphics->GetFontMetric( &(pFontEntry->maMetric) );
+#else
+                long nFactor = 0;
+                pGraphics->GetFontMetric(
+                                         pFontEntry->maMetric, nFactor,
 /*TODO: remove
                 IMPL_CACHE_A1_FIRST, IMPL_CACHE_A1_LAST, pFontEntry->maWidthAry+IMPL_CACHE_A1_INDEX,
 */
-                0x21, 0x20, NULL,
-                (maFont.GetKerning() & KERNING_FONTSPECIFIC) != 0,
-                &pKernPairs, nKernPairs );
+                                         0x21, 0x20, NULL,
+                                         (maFont.GetKerning() & KERNING_FONTSPECIFIC) != 0,
+                                         &pKernPairs, nKernPairs );
 #endif
+            }
 
             pFontEntry->mbFixedFont     = pFontEntry->maMetric.mePitch == PITCH_FIXED;
             pFontEntry->mnLineHeight    = pFontEntry->maMetric.mnAscent + pFontEntry->maMetric.mnDescent;
@@ -2947,6 +2967,12 @@ void OutputDevice::ImplInitKerningPairs( ImplKernPairData* pKernPairs, long nKer
         if ( mbInitFont )
             ImplInitFont();
         pFontEntry->mbInitKernPairs = TRUE;
+        if( mpPDFWriter && mpPDFWriter->isBuiltinFont( mpFontEntry->maFontSelData.mpFontData ) )
+        {
+            pFontEntry->mnKernPairs = 0;
+            pFontEntry->mpKernPairs = NULL;
+            return;
+        }
 #ifndef REMOTE_APPSERVER
         pFontEntry->mnKernPairs = mpGraphics->GetKernPairs( 0, NULL );
         if ( pFontEntry->mnKernPairs )
@@ -3752,7 +3778,7 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
             if( mpFontEntry->mnOrientation )
                 ImplRotatePos( nBaseX, nBaseY, nX, nY, mpFontEntry->mnOrientation );
             SalLayout* pSalLayout = ImplLayout( aStrikeoutText, 0, STRING_LEN, Point(nX,nY) );
-            if( pSalLayout )
+            if( pSalLayout && ! (mpPDFWriter && mpPDFWriter->isBuiltinFont(mpFontEntry->maFontSelData.mpFontData)) )
             {
                 pSalLayout->SetDrawPosition( Point(nX+mnTextOffX, nY+mnTextOffY) );
                 mpGraphics->DrawSalLayout( *pSalLayout );
@@ -4629,7 +4655,8 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, BOOL bTextLines )
         if( ImplDrawRotateText( rSalLayout ) )
             return;
 
-    mpGraphics->DrawSalLayout( rSalLayout );
+    if( ! (mpPDFWriter && mpPDFWriter->isBuiltinFont(mpFontEntry->maFontSelData.mpFontData) ) )
+        mpGraphics->DrawSalLayout( rSalLayout );
 
     if( bTextLines )
         ImplDrawTextLines( rSalLayout,
@@ -5645,7 +5672,11 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     }
     aLayoutArgs.SetDXArray( pDXArray );
 
-    pSalLayout = mpGraphics->LayoutText( aLayoutArgs );
+    if( mpPDFWriter )
+        pSalLayout = mpPDFWriter->createSalLayout( &mpFontEntry->maFontSelData, aLayoutArgs );
+
+    if( ! pSalLayout )
+        pSalLayout = mpGraphics->LayoutText( aLayoutArgs );
 
     // adjust draw position for Left To Right
     if( pSalLayout && ((nLayoutFlags & SAL_LAYOUT_BIDI_RTL) != 0) )

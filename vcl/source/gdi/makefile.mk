@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hjs $ $Date: 2002-07-15 16:57:56 $
+#   last change: $Author: pl $ $Date: 2002-07-20 15:54:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,6 +133,7 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/wall.obj		\
             $(SLO)$/opengl.obj		\
             $(SLO)$/fontcfg.obj		\
+            $(SLO)$/base14.obj		\
             $(SLO)$/pdfwriter.obj	\
             $(SLO)$/pdfwriter_impl.obj
 

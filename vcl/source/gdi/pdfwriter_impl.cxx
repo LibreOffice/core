@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-15 12:02:20 $
+ *  last change: $Author: pl $ $Date: 2002-07-20 15:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,18 @@
 #include <image.hxx>
 #include <outdev.h>
 #include <sallayout.hxx>
+#ifndef REMOTE_APPSERVER
+#include <svsys.h>
+#else
+#include <rmoutdev.hxx>
+#endif
+#include <salgdi.hxx>
+#include <osl/thread.h>
 
 #include "implncvt.hxx"
+
+// TODO: replace DirEntry by osl_createTempFile as soon as that exists
+#include <tools/fsys.hxx>
 
 #include <math.h>
 #ifdef WNT
@@ -477,13 +487,14 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
         m_pReferenceDevice = pVDev;
         pVDev->SetOutputSizePixel( Size( 640, 480 ) );
         m_pReferenceDevice->mpPDFWriter = this;
+        m_pReferenceDevice->ImplUpdateFontData( TRUE );
     }
     return m_pReferenceDevice;
 }
 
 ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
 {
-    DBG_ASSERT( m_aPages.begin() == m_aPages.end(), "Fonts changing during PDF generation, document will be invalid" );
+    DBG_ASSERT( m_aSubsets.size() == 0, "Fonts changing during PDF generation, document will be invalid" );
 
     ImplDevFontList* pFiltered = new ImplDevFontList();
 
@@ -497,12 +508,117 @@ ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
             {
                 ImplFontData* pNewData = new ImplFontData();
                 *pNewData = *pEntry;
+                pNewData->mbDevice = FALSE; // obviously
                 pFiltered->Add( pNewData );
             }
-            pData = pFontList->Next();
+            pEntry = pEntry->mpNext;
         }
+        pData = pFontList->Next();
+    }
+    // first the 14 PDF builtin fonts
+    for( int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
+    {
+        ImplFontData* pNewData = new ImplFontData();
+        pNewData->mpSysData     = (void*)&m_aBuiltinFonts[i];
+        pNewData->maName        = String::CreateFromAscii( m_aBuiltinFonts[i].m_pName );
+        pNewData->maStyleName   = String::CreateFromAscii( m_aBuiltinFonts[i].m_pStyleName );
+        pNewData->mnWidth       = 0;
+        pNewData->mnHeight      = 0;
+        pNewData->meFamily      = m_aBuiltinFonts[i].m_eFamily;
+        pNewData->meCharSet     = m_aBuiltinFonts[i].m_eCharSet;
+        pNewData->mePitch       = m_aBuiltinFonts[i].m_ePitch;
+        pNewData->meWeight      = m_aBuiltinFonts[i].m_eWeight;
+        pNewData->meItalic      = m_aBuiltinFonts[i].m_eItalic;
+        pNewData->meWidthType   = m_aBuiltinFonts[i].m_eWidthType;
+        pNewData->meType        = TYPE_SCALABLE;
+        pNewData->mnVerticalOrientation = 0;
+        pNewData->mbOrientation = FALSE;
+        pNewData->mbDevice      = TRUE;
+        pNewData->mnQuality     = 50000;
+        pNewData->mbSubsettable = FALSE;
+        pNewData->mbEmbeddable  = FALSE;
+
+        pFiltered->Add( pNewData );
     }
     return pFiltered;
+}
+
+bool PDFWriterImpl::isBuiltinFont( ImplFontData* pFont ) const
+{
+    for( int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
+    {
+        if( pFont->mpSysData == (void*)&m_aBuiltinFonts[i] )
+            return true;
+    }
+    return false;
+}
+
+void PDFWriterImpl::getFontMetric( ImplFontSelectData* pSelect, ImplFontMetricData* pMetric ) const
+{
+    for( int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
+    {
+        if( pSelect->mpFontData->mpSysData == (void*)&m_aBuiltinFonts[i] )
+        {
+            pMetric->mnWidth        = pSelect->mnWidth;
+            pMetric->mnAscent       = ( pSelect->mnHeight * m_aBuiltinFonts[i].m_nAscent + 500 ) / 1000;
+            pMetric->mnDescent      = ( pSelect->mnHeight * (-m_aBuiltinFonts[i].m_nDescent) + 500 ) / 1000;
+            pMetric->mnLeading      = 0;
+            pMetric->mnSlant        = 0;
+            pMetric->mnFirstChar    = 32;
+            pMetric->mnLastChar     = 255;
+            pMetric->meFamily       = m_aBuiltinFonts[i].m_eFamily;
+            pMetric->meCharSet      = m_aBuiltinFonts[i].m_eCharSet;
+            pMetric->mePitch        = m_aBuiltinFonts[i].m_ePitch;
+            pMetric->meWeight       = m_aBuiltinFonts[i].m_eWeight;
+            pMetric->meItalic       = m_aBuiltinFonts[i].m_eItalic;
+            pMetric->meType         = TYPE_SCALABLE;
+            pMetric->mbDevice       = TRUE;
+            break;
+        }
+    }
+}
+
+SalLayout* PDFWriterImpl::createSalLayout( ImplFontSelectData* pSelect, ImplLayoutArgs& rArgs ) const
+{
+    GenericSalLayout* pLayout = NULL;
+    for( int n = 0; n < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); n++ )
+    {
+        if( pSelect->mpFontData->mpSysData == (void*)&m_aBuiltinFonts[n] )
+        {
+            int nGlyphCount = rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex;
+            GlyphItem* pGlyphBuffer = new GlyphItem[ nGlyphCount ];
+
+            bool bRightToLeft = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL));
+
+            sal_Int32 nTextWidth = pSelect->mnWidth ? pSelect->mnWidth : pSelect->mnHeight;
+
+            long nWidth = 0;
+            Point aNewPos( 0, 0);
+            for( int i = 0; i < nGlyphCount; ++i )
+            {
+                int nLogicalIndex = bRightToLeft ? (rArgs.mnEndCharIndex-1-i) : (rArgs.mnFirstCharIndex+i);
+                sal_Unicode cChar = rArgs.mpStr[ nLogicalIndex ];
+                if( m_aBuiltinFonts[n].m_eCharSet == RTL_TEXTENCODING_SYMBOL && cChar >= 0xf000 )
+                    cChar -= 0xf000;
+                DBG_ASSERT( cChar < 256, "invalid character index requested for builtin font" );
+                if( cChar > 255 ) // not so good
+                    cChar = 0;
+
+                long nGlyphWidth = cChar < 256 ? (m_aBuiltinFonts[n].m_aWidths[cChar] * nTextWidth + 500 ) / 1000 : 0;
+                long nGlyphFlags = (nGlyphWidth > 0) ? GlyphItem::CLUSTER_START : 0;
+                pGlyphBuffer[i] = GlyphItem( nLogicalIndex, cChar, aNewPos,
+                                             nGlyphFlags, nGlyphWidth );
+
+                aNewPos.X() += nGlyphWidth;
+            }
+            pLayout = new GenericSalLayout( rArgs );
+            pLayout->SetGlyphItems( pGlyphBuffer, nGlyphCount );
+            pLayout->SetOrientation( 0 );
+            pLayout->SetWantFallback( false );
+        }
+    }
+
+    return pLayout;
 }
 
 sal_Int32 PDFWriterImpl::newPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation )
@@ -568,7 +684,7 @@ bool PDFWriterImpl::updateObject( sal_Int32 n )
     return aError == osl_File_E_None;
 }
 
-#define CHECK_RETURN( x ) if( !x ) return 0
+#define CHECK_RETURN( x ) if( !(x) ) return 0
 
 bool PDFWriterImpl::emitGradients()
 {
@@ -806,10 +922,678 @@ bool PDFWriterImpl::emitHatches()
     return true;
 }
 
+sal_Int32 PDFWriterImpl::emitBuiltinFont( ImplFontData* pFont )
+{
+    sal_Int32 nFontObject = 0;
+    for( int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
+    {
+        if( pFont->mpSysData == (void*)&m_aBuiltinFonts[i] )
+        {
+            OStringBuffer aLine( 1024 );
+
+            nFontObject = createObject();
+            CHECK_RETURN( updateObject( nFontObject ) );
+            aLine.append( nFontObject );
+            aLine.append( " 0 obj\r\n  << /Type /Font\r\n"
+                          "     /Subtype /Type1\r\n"
+                          "     /BaseFont /" );
+            aLine.append( m_aBuiltinFonts[i].m_pPSName );
+            aLine.append( "\r\n     /Encoding /WinAnsiEncoding" );
+            aLine.append( "\r\n  >>\r\nendobj\r\n\r\n" );
+            CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+
+            break;
+        }
+    }
+    return nFontObject;
+}
+
+sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
+{
+    if( isBuiltinFont( pFont ) )
+        return emitBuiltinFont( pFont );
+
+    sal_Int32 nFontObject = 0;
+    sal_Int32 nStreamObject = 0;
+    sal_Int32 nFontDescriptor = 0;
+
+    FontSubsetInfo aInfo;
+    sal_Int32 pWidths[256];
+    const unsigned char* pFontData = NULL;
+    long nFontLen = 0;
+    sal_Int32 nLength1, nLength2;
+#ifndef REMOTE_APPSERVER
+    if( pFontData = (const unsigned char*)m_pReferenceDevice->mpGraphics->GetEmbedFontData( pFont, pWidths, aInfo, &nFontLen ) )
+#else
+    // TODO: REMOTE_APPSERVER case
+    if( 0 )
+#endif
+    {
+        if( aInfo.m_nFontType != SAL_FONTSUBSETINFO_TYPE_TYPE1 )
+            goto streamend;
+        // see whether it is pfb or pfa; if it is a pfb, fill ranges
+        // of 6 bytes that are not part of the font program
+        std::list< int > aSections;
+        std::list< int >::const_iterator it;
+        int nIndex = 0;
+        while( pFontData[nIndex] == 0x80 )
+        {
+            aSections.push_back( nIndex );
+            if( pFontData[nIndex+1] == 0x03 )
+                break;
+            sal_Int32 nBytes =
+                ((sal_Int32)pFontData[nIndex+2])            |
+                ((sal_Int32)pFontData[nIndex+3]) << 8       |
+                ((sal_Int32)pFontData[nIndex+4]) << 16      |
+                ((sal_Int32)pFontData[nIndex+5]) << 24;
+            nIndex += nBytes+6;
+        }
+
+        // search for eexec
+        nIndex = 0;
+        int nEndAsciiIndex;
+        int nBeginBinaryIndex;
+        int nEndBinaryIndex;
+        do
+        {
+            while( nIndex < nFontLen-4 &&
+                   ( pFontData[nIndex] != 'e'   ||
+                     pFontData[nIndex+1] != 'e' ||
+                     pFontData[nIndex+2] != 'x' ||
+                     pFontData[nIndex+3] != 'e' ||
+                     pFontData[nIndex+4] != 'c'
+                     )
+                   )
+                nIndex++;
+            // check whether we are in a excluded section
+            for( it = aSections.begin(); it != aSections.end() && (nIndex < *it || nIndex > ((*it) + 5) ); ++it )
+                ;
+        } while( it != aSections.end() && nIndex < nFontLen-4 );
+        // this should end the ascii part
+        if( nIndex > nFontLen-5 )
+            goto streamend;
+
+        nEndAsciiIndex = nIndex+4;
+        // now count backwards until we can account for 512 '0'
+        // which is the endmarker of the (hopefully) binary data
+        // do not count the pfb header sections
+        int nFound = 0;
+        nIndex =  nFontLen-1;
+        while( nIndex > 0 && nFound < 512 )
+        {
+            for( it = aSections.begin(); it != aSections.end() && (nIndex < *it || nIndex > ((*it) + 5) ); ++it )
+                ;
+            if( it == aSections.end() && pFontData[nIndex] == '0' )
+                nFound++;
+            nIndex--;
+        }
+        if( nIndex < 1 || nIndex <= nEndAsciiIndex )
+            goto streamend;
+        // there may be whitespace to ignore before the 512 '0'
+        while( pFontData[nIndex] == '\r' || pFontData[nIndex] == '\n' )
+        {
+            nIndex--;
+            for( it = aSections.begin(); it != aSections.end() && (nIndex < *it || nIndex > ((*it) + 5) ); ++it )
+                ;
+            if( it != aSections.end() )
+            {
+                nIndex = (*it)-1;
+                break; // this is surely a binary boundary, in ascii case it wouldn't matter
+            }
+        }
+        nEndBinaryIndex = nIndex;
+
+        // search for beginning of binary section
+        nBeginBinaryIndex = nEndAsciiIndex;
+        do
+        {
+            nBeginBinaryIndex++;
+            for( it = aSections.begin(); it != aSections.end() && (nBeginBinaryIndex < *it || nBeginBinaryIndex > ((*it) + 5) ); ++it )
+                ;
+        } while( nBeginBinaryIndex < nEndBinaryIndex &&
+                 ( pFontData[nBeginBinaryIndex] == '\r' ||
+                   pFontData[nBeginBinaryIndex] == '\n' ||
+                   it != aSections.end() ) );
+
+        // it seems to be vital to copy the exact whitespace between binary data
+        // and eexec, else a invalid font results. so make nEndAsciiIndex
+        // always immediate in front of nBeginBinaryIndex
+        nEndAsciiIndex = nBeginBinaryIndex-1;
+        for( it = aSections.begin(); it != aSections.end() && (nEndAsciiIndex < *it || nEndAsciiIndex > ((*it)+5)); ++it )
+            ;
+        if( it != aSections.end() )
+            nEndAsciiIndex = (*it)-1;
+
+        nLength1 = nEndAsciiIndex+1; // including the last character
+        for( it = aSections.begin(); it != aSections.end() && *it < nEndAsciiIndex; ++it )
+            nLength1 -= 6; // decrease by pfb section size
+
+        // if the first four bytes are all ascii hex characters, then binary data
+        // has to be converted to real binary data
+        for( nIndex = 0; nIndex < 4 &&
+                 ! ( ( pFontData[ nBeginBinaryIndex+nIndex ] >= '0' && pFontData[ nBeginBinaryIndex+nIndex ] <= '9' ) ||
+                     ( pFontData[ nBeginBinaryIndex+nIndex ] >= 'a' && pFontData[ nBeginBinaryIndex+nIndex ] <= 'f' ) ||
+                     ( pFontData[ nBeginBinaryIndex+nIndex ] >= 'A' && pFontData[ nBeginBinaryIndex+nIndex ] <= 'F' )
+                     ); ++nIndex )
+            ;
+        bool bConvertHexData = true;
+        if( nIndex > 3 )
+        {
+            bConvertHexData = false;
+            nLength2 = nEndBinaryIndex - nBeginBinaryIndex + 1; // include the last byte
+            for( it = aSections.begin(); it != aSections.end(); ++it )
+                if( *it > nBeginBinaryIndex && *it < nEndBinaryIndex )
+                    nLength2 -= 6;
+        }
+        else
+        {
+            // count the hex ascii characters to get nLength2
+            nLength2 = 0;
+            int nNextSectionIndex = 0;
+            for( it = aSections.begin(); it != aSections.end() && *it < nBeginBinaryIndex; ++it )
+                ;
+            if( it != aSections.end() )
+                nNextSectionIndex = *it;
+            for( nIndex = nBeginBinaryIndex; nIndex <= nEndBinaryIndex; nIndex++ )
+            {
+                if( nIndex == nNextSectionIndex )
+                {
+                    nIndex += 6;
+                    ++it;
+                    nNextSectionIndex = (it == aSections.end() ? 0 : *it );
+                }
+                if( ( pFontData[ nIndex ] >= '0' && pFontData[ nIndex ] <= '9' ) ||
+                    ( pFontData[ nIndex ] >= 'a' && pFontData[ nIndex ] <= 'f' ) ||
+                    ( pFontData[ nIndex ] >= 'A' && pFontData[ nIndex ] <= 'F' ) )
+                    nLength2++;
+            }
+            DBG_ASSERT( !(nLength2 & 1), "uneven number of hex chars in binary pfa section" );
+            nLength2 /= 2;
+        }
+
+        // now we can actually write the font stream !
+        OStringBuffer aLine( 512 );
+        nStreamObject = createObject();
+        if( !updateObject(nStreamObject))
+            goto streamend;
+        aLine.append( nStreamObject );
+        aLine.append( " 0 obj\r\n  << /Length " );
+        aLine.append( nLength1+nLength2 );
+        aLine.append( "\r\n     /Length1 " );
+        aLine.append( nLength1 );
+        aLine.append( "\r\n     /Length2 " );
+        aLine.append( nLength2 );
+        aLine.append( "\r\n     /Length3 0\r\n  >>\r\nstream\r\n" );
+        if( !writeBuffer( aLine.getStr(), aLine.getLength() ) )
+            goto streamend;
+
+#if defined DBG_UTIL || defined DEBUG
+        sal_uInt64 nCheckBeginStreamPos = 0;
+        osl_getFilePos( m_aFile, &nCheckBeginStreamPos );
+#endif
+
+        // write ascii section
+        if( aSections.begin() == aSections.end() )
+        {
+            if( ! writeBuffer( pFontData, nEndAsciiIndex+1 ) )
+                goto streamend;
+        }
+        else
+        {
+            // first section always starts at 0
+            it = aSections.begin();
+            nIndex = (*it)+6;
+            ++it;
+            while( *it < nEndAsciiIndex )
+            {
+                if( ! writeBuffer( pFontData+nIndex, (*it)-nIndex ) )
+                    goto streamend;
+                nIndex = (*it)+6;
+                ++it;
+            }
+            // write partial last section
+            if( ! writeBuffer( pFontData+nIndex, nEndAsciiIndex-nIndex+1 ) )
+                goto streamend;
+        }
+
+#if defined DBG_UTIL || defined DEBUG
+        sal_uInt64 nCheckBeginBinaryPos = 0;
+        osl_getFilePos( m_aFile, &nCheckBeginBinaryPos );
+        DBG_ASSERT( nCheckBeginBinaryPos - nCheckBeginStreamPos == nLength1, "wrong /Length1 written" );
+#endif
+
+        // write binary section
+        if( ! bConvertHexData )
+        {
+            if( aSections.begin() == aSections.end() )
+            {
+                if( ! writeBuffer( pFontData+nBeginBinaryIndex, nEndBinaryIndex-nBeginBinaryIndex+1 ) )
+                    goto streamend;
+            }
+            else
+            {
+                for( it = aSections.begin(); *it < nBeginBinaryIndex; ++it )
+                    ;
+                if( *it > nEndBinaryIndex )
+                {
+                    if( ! writeBuffer( pFontData+nBeginBinaryIndex, nEndBinaryIndex-nBeginBinaryIndex+1 ) )
+                        goto streamend;
+                }
+                else
+                {
+                    // write first partial section
+                    if( ! writeBuffer( pFontData+nBeginBinaryIndex, (*it) - nBeginBinaryIndex ) )
+                        goto streamend;
+                    nIndex = (*it)+6;
+                    ++it;
+                    while( *it < nEndBinaryIndex )
+                    {
+                        if( ! writeBuffer( pFontData+nIndex, (*it)-nIndex ) )
+                            goto streamend;
+                        nIndex = (*it)+6;
+                        ++it;
+                    }
+                    // write partial last section
+                    if( ! writeBuffer( pFontData+nIndex, nEndBinaryIndex-nIndex+1 ) )
+                        goto streamend;
+                }
+            }
+        }
+        else
+        {
+            unsigned char* pWriteBuffer = (unsigned char*)rtl_allocateMemory( nLength2 );
+            memset( pWriteBuffer, 0, nLength2 );
+            int nWriteIndex = 0;
+
+            int nNextSectionIndex = 0;
+            for( it = aSections.begin(); it != aSections.end() && *it < nBeginBinaryIndex; ++it )
+                ;
+            if( it != aSections.end() )
+                nNextSectionIndex = *it;
+            for( nIndex = nBeginBinaryIndex; nIndex <= nEndBinaryIndex; nIndex++ )
+            {
+                if( nIndex == nNextSectionIndex )
+                {
+                    nIndex += 6;
+                    ++it;
+                    nNextSectionIndex = (it == aSections.end() ? 0 : *it );
+                }
+                unsigned char cNibble = 0x80;
+                if( pFontData[ nIndex ] >= '0' && pFontData[ nIndex ] <= '9' )
+                    cNibble = pFontData[nIndex] - '0';
+                else if( pFontData[ nIndex ] >= 'a' && pFontData[ nIndex ] <= 'f' )
+                    cNibble = pFontData[nIndex] - 'a' + 10;
+                else if( pFontData[ nIndex ] >= 'A' && pFontData[ nIndex ] <= 'F' )
+                    cNibble = pFontData[nIndex] - 'A' + 10;
+                if( cNibble != 0x80 )
+                {
+                    if( !(nWriteIndex & 1 ) )
+                        cNibble <<= 4;
+                    pWriteBuffer[ nWriteIndex/2 ] |= cNibble;
+                    nWriteIndex++;
+                }
+            }
+            DBG_ASSERT( nWriteIndex == nLength2*2, "wrong write index in binary conversion" );
+            if( ! writeBuffer( pWriteBuffer, nLength2 ) )
+                goto streamend;
+
+            rtl_freeMemory( pWriteBuffer );
+        }
+
+#if defined DBG_UTIL || defined DEBUG
+        sal_uInt64 nCheckEndBinaryPos = 0;
+        osl_getFilePos( m_aFile, &nCheckEndBinaryPos );
+        DBG_ASSERT( nCheckEndBinaryPos - nCheckBeginBinaryPos == nLength2, "wrong /Length2 written" );
+        DBG_ASSERT( nCheckEndBinaryPos - nCheckBeginStreamPos == nLength1+nLength2, "wrong /Length written" );
+#endif
+
+        // and finally close the stream
+        aLine.setLength( 0 );
+        aLine.append( "\r\nendstream\r\nendobj\r\n\r\n" );
+        if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
+            goto streamend;
+    }
+
+    if( nStreamObject )
+        // write font descriptor
+        nFontDescriptor = emitFontDescriptor( pFont, aInfo, 0, nStreamObject );
+
+    if( nFontDescriptor )
+    {
+        // write font object
+        sal_Int32 nObject = createObject();
+        if( ! updateObject( nObject ) )
+            goto streamend;
+        OStringBuffer aLine( 1024 );
+        aLine.append( nObject );
+        aLine.append( " 0 obj\r\n  << /Type /Font\r\n"
+                      "     /Subtype /Type1\r\n"
+                      "     /BaseFont /" );
+        aLine.append( OUStringToOString( aInfo.m_aPSName, osl_getThreadTextEncoding() ) );
+        aLine.append( "\r\n     /Encoding /WinAnsiEncoding" );
+        aLine.append( "\r\n     /FirstChar 0\r\n     /LastChar 255\r\n     /Widths [ " );
+        for( int i = 0; i < 256; i++ )
+        {
+            aLine.append( pWidths[i] );
+            aLine.append( (!i || (i&7)) ? " " : "\r\n     " );
+        }
+        aLine.append( " ]\r\n" );
+        aLine.append( "     /FontDescriptor " );
+        aLine.append( nFontDescriptor );
+        aLine.append( " 0 R\r\n  >>\r\nendobj\r\n\r\n" );
+        if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
+            goto streamend;
+
+        nFontObject = nObject;
+    }
+
+  streamend:
+
+#ifndef REMOTE_APPSERVER
+    if( pFontData )
+        m_pReferenceDevice->mpGraphics->FreeEmbedFontData( pFontData, nFontLen );
+#endif
+
+    return nFontObject;
+}
+
+static void appendSubsetName( int nSubsetID, const OUString& rPSName, OStringBuffer& rBuffer )
+{
+    if( nSubsetID )
+    {
+        for( int i = 0; i < 6; i++ )
+        {
+            int nOffset = (nSubsetID % 26);
+            nSubsetID /= 26;
+            rBuffer.append( (sal_Char)('A'+nOffset) );
+        }
+        rBuffer.append( '+' );
+    }
+    rBuffer.append( OUStringToOString( rPSName, osl_getThreadTextEncoding() ) );
+}
+
+sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode* pUnicodes, int nGlyphs )
+{
+    sal_Int32 nStream = createObject();
+    CHECK_RETURN( updateObject( nStream ) );
+
+    OStringBuffer aContents( 1024 );
+    aContents.append(
+                     "/CIDInit /ProcSet findresource begin\r\n"
+                     "12 dict begin\r\n"
+                     "begincmap\r\n"
+                     "/CIDSystemInfo <<\r\n"
+                     "  /Registry (Adobe)\r\n"
+                     "  /Ordering (UCS)\r\n"
+                     "  /Supplement 0\r\n"
+                     ">> def\r\n"
+                     "/CMapName /Adobe-Identity-UCS def\r\n"
+                     "/CMapType 2 def\r\n"
+                     "1 begincodespacerange\r\n"
+                     "<0000> <FFFF>\r\n"
+                     "endcodespacerange\r\n"
+                     );
+    for( int n = 0; n < 3 && 100*n < nGlyphs; n++ )
+    {
+        aContents.append( (sal_Int32)((nGlyphs > 100*(n+1)) ? 100 : nGlyphs-100*n ) );
+        aContents.append( " beginbfchar\r\n" );
+        for( int i = n*100; i < nGlyphs && i < (nGlyphs-100*n); i++ )
+        {
+            aContents.append( '<' );
+            appendHex( (sal_Int8)pEncoding[i], aContents );
+            aContents.append( "> <" );
+            appendHex( (sal_Int8)(pUnicodes[i] / 256), aContents );
+            appendHex( (sal_Int8)(pUnicodes[i] & 255), aContents );
+            aContents.append( ">\r\n" );
+        }
+        aContents.append( "endbfchar\r\n" );
+    }
+    aContents.append( "endcmap\r\n"
+                      "CMapName currentdict /CMap defineresource pop\r\n"
+                      "end\r\n"
+                      "end\r\n" );
+
+    OStringBuffer aLine( 40 );
+
+    aLine.append( nStream );
+    aLine.append( " 0 obj\r\n  << /Length " );
+    aLine.append( aContents.getLength() );
+    aLine.append( " >>\r\nstream\r\n" );
+    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    CHECK_RETURN( writeBuffer( aContents.getStr(), aContents.getLength() ) );
+    aLine.setLength( 0 );
+    aLine.append( "endstream\r\nendobj\r\n\r\n" );
+    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    return nStream;
+}
+
+sal_Int32 PDFWriterImpl::emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo& rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream )
+{
+    OStringBuffer aLine( 1024 );
+    // get font flags, see PDF reference 1.4 p. 358
+    // possibly characters outside Adobe standard encoding
+    // so set Symbolic flag
+    sal_Int32 nFontFlags = (1<<2);
+    if( pFont->meItalic == ITALIC_NORMAL || pFont->meItalic == ITALIC_OBLIQUE )
+        nFontFlags |= (1 << 6);
+    if( pFont->mePitch == PITCH_FIXED )
+        nFontFlags |= 1;
+    if( pFont->meFamily == FAMILY_SCRIPT )
+        nFontFlags |= (1 << 3);
+    if( pFont->meFamily == FAMILY_ROMAN )
+        nFontFlags |= (1 << 1);
+
+    sal_Int32 nFontDescriptor = createObject();
+    CHECK_RETURN( updateObject( nFontDescriptor ) );
+    aLine.setLength( 0 );
+    aLine.append( nFontDescriptor );
+    aLine.append( " 0 obj\r\n  << /Type /FontDescriptor\r\n" );
+    aLine.append( "     /FontName /" );
+    appendSubsetName( nSubsetID, rInfo.m_aPSName, aLine );
+    aLine.append( "\r\n     /Flags " );
+    aLine.append( nFontFlags );
+    aLine.append( "\r\n     /FontBBox [ " );
+    // note: Top and Bottom are reversed in VCL and PDF rectangles
+    aLine.append( (sal_Int32)rInfo.m_aFontBBox.TopLeft().X() );
+    aLine.append( ' ' );
+    aLine.append( (sal_Int32)rInfo.m_aFontBBox.TopLeft().Y() );
+    aLine.append( ' ' );
+    aLine.append( (sal_Int32)rInfo.m_aFontBBox.BottomRight().X() );
+    aLine.append( ' ' );
+    aLine.append( (sal_Int32)rInfo.m_aFontBBox.BottomRight().Y()+1 );
+    aLine.append( " ]\r\n     /ItalicAngle " );
+    if( pFont->meItalic == ITALIC_OBLIQUE || pFont->meItalic == ITALIC_NORMAL )
+        aLine.append( "-30" );
+    else
+        aLine.append( "0" );
+    aLine.append( "\r\n     /Ascent " );
+    aLine.append( (sal_Int32)rInfo.m_nAscent );
+    aLine.append( "\r\n     /Descent " );
+    aLine.append( (sal_Int32)-rInfo.m_nDescent );
+    aLine.append( "\r\n     /CapHeight " );
+    aLine.append( (sal_Int32)rInfo.m_nCapHeight );
+    // According to PDF reference 1.4 StemV is required
+    // seems a tad strange to me, but well ...
+    aLine.append( "\r\n     /StemV 80\r\n" );
+    aLine.append( "     /FontFile" );
+    switch( rInfo.m_nFontType )
+    {
+        case SAL_FONTSUBSETINFO_TYPE_TRUETYPE:
+            aLine.append( '2' );
+            break;
+        case SAL_FONTSUBSETINFO_TYPE_TYPE1:
+            break;
+        default:
+            DBG_ERROR( "unknown fonttype in PDF font descriptor" );
+            return 0;
+    }
+    aLine.append( ' ' );
+    aLine.append( nFontStream );
+    aLine.append( " 0 R\r\n  >>\r\nendobj\r\n\r\n" );
+    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+
+    return nFontDescriptor;
+}
+
 sal_Int32 PDFWriterImpl::emitFonts()
 {
-    // TODO
-    return 0;
+    sal_Int32 nFontDict = 0;
+
+    if( ! m_aSubsets.size() && ! m_aEmbeddedFonts.size() ) // no fonts
+        return 0;
+
+#ifndef REMOTE_APPSERVER
+    if( ! m_pReferenceDevice->ImplGetGraphics() )
+#else
+    if( ! m_pReferenceDevice->ImplGetServerGraphics() )
+#endif
+        return 0;
+
+    OStringBuffer aLine( 1024 );
+    char buf[8192];
+
+    std::map< sal_Int32, sal_Int32 > aFontIDToObject;
+
+    // TODO: as soon as osl provides osl_createTempFile replace the DirEntry
+    OUString aTmpName;
+    DirEntry aEntry;
+    OUString aSyspath = aEntry.TempName().GetFull();
+    osl_getFileURLFromSystemPath( aSyspath.pData, &aTmpName.pData );
+
+    for( FontSubsetData::iterator it = m_aSubsets.begin(); it != m_aSubsets.end(); ++it )
+    {
+        for( FontEmitList::iterator lit = it->second.m_aSubsets.begin(); lit != it->second.m_aSubsets.end(); ++lit )
+        {
+            long pGlyphIDs[ 256 ];
+            sal_Int32 pWidths[ 256 ];
+            sal_uInt8 pEncoding[ 256 ];
+            sal_Unicode pUnicodes[ 256 ];
+            int nGlyphs = 0;
+            // fill arrays and prepare encoding index map
+            std::map< sal_uInt8, int > aEncodingIndexMap;
+            sal_Int32 nToUnicodeStream = 0;
+            for( FontEmitMapping::iterator fit = lit->m_aMapping.begin(); fit != lit->m_aMapping.end();++fit )
+            {
+                pGlyphIDs[ nGlyphs ] = fit->first;
+                pEncoding[ nGlyphs ] = fit->second.m_nSubsetGlyphID;
+                pUnicodes[ nGlyphs ] = fit->second.m_aUnicode;
+                if( pUnicodes[ nGlyphs ] )
+                    nToUnicodeStream = 1;
+                aEncodingIndexMap[ fit->second.m_nSubsetGlyphID ] = nGlyphs;
+                nGlyphs++;
+            }
+            // TODO: when is osl_getTempFile available ?
+            FontSubsetInfo aSubsetInfo;
+#ifndef REMOTE_APPSERVER
+            if( m_pReferenceDevice->mpGraphics->CreateFontSubset( aTmpName, it->first, pGlyphIDs, pEncoding, pWidths, nGlyphs, aSubsetInfo ) )
+#else
+                // TODO: REMOTE_APPSERVER case
+            if( 0 )
+#endif
+            {
+                DBG_ASSERT( aSubsetInfo.m_nFontType == SAL_FONTSUBSETINFO_TYPE_TRUETYPE, "wrong font type in font subset" );
+                // create font stream
+                oslFileHandle aFontFile;
+                CHECK_RETURN( (osl_File_E_None == osl_openFile( aTmpName.pData, &aFontFile, osl_File_OpenFlag_Read ) ) );
+                // get file size
+                sal_uInt64 nLength;
+                CHECK_RETURN( (osl_File_E_None == osl_setFilePos( aFontFile, osl_Pos_End, 0 ) ) );
+                CHECK_RETURN( (osl_File_E_None == osl_getFilePos( aFontFile, &nLength ) ) );
+                CHECK_RETURN( (osl_File_E_None == osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) );
+
+                sal_Int32 nFontStream = createObject();
+                CHECK_RETURN( updateObject( nFontStream ) );
+                aLine.setLength( 0 );
+                aLine.append( nFontStream );
+                aLine.append( " 0 obj\r\n  << /Length " );
+                aLine.append( (sal_Int32)nLength );
+                aLine.append( "\r\n     /Length1 " );
+                aLine.append( (sal_Int32)nLength );
+                aLine.append( "\r\n  >>\r\nstream\r\n" );
+                CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+
+                // copy font file
+                sal_uInt64 nRead;
+                sal_Bool bEOF = sal_False;
+                do
+                {
+                    CHECK_RETURN( (osl_File_E_None == osl_readFile( aFontFile, buf, sizeof( buf ), &nRead ) ) );
+                    CHECK_RETURN( writeBuffer( buf, nRead ) );
+                    CHECK_RETURN( (osl_File_E_None == osl_isEndOfFile( aFontFile, &bEOF ) ) );
+                } while( ! bEOF );
+
+                // end the stream
+                aLine.setLength( 0 );
+                aLine.append( "\r\nendstream\r\nendobj\r\n\r\n" );
+                CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+
+                // write font descriptor
+                sal_Int32 nFontDescriptor = emitFontDescriptor( it->first, aSubsetInfo, lit->m_nFontID, nFontStream );
+
+                if( nToUnicodeStream )
+                    nToUnicodeStream = createToUnicodeCMap( pEncoding, pUnicodes, nGlyphs );
+
+                sal_Int32 nFontObject = createObject();
+                CHECK_RETURN( updateObject( nFontObject ) );
+                aLine.setLength( 0 );
+                aLine.append( nFontObject );
+                aLine.append( " 0 obj\r\n  << /Type /Font\r\n" );
+                aLine.append( "     /Subtype /TrueType\r\n" );
+                aLine.append( "     /BaseFont /" );
+                appendSubsetName( lit->m_nFontID, aSubsetInfo.m_aPSName, aLine );
+                aLine.append( "\r\n     /FirstChar 1" );
+                aLine.append( "\r\n     /LastChar " );
+                aLine.append( (sal_Int32)nGlyphs );
+                aLine.append( "\r\n     /Widths [ " );
+                for( int i = 0; i < nGlyphs; i++ )
+                {
+                    aLine.append( pWidths[ aEncodingIndexMap[(sal_uInt8)(i+1)] ] );
+                    aLine.append( (i == 0 || (i & 7 )) ? " " : "\r\n     " );
+                }
+                aLine.append( "]\r\n" );
+                aLine.append( "     /FontDescriptor " );
+                aLine.append( nFontDescriptor );
+                aLine.append( " 0 R\r\n" );
+                if( nToUnicodeStream )
+                {
+                    aLine.append( "     /ToUnicode " );
+                    aLine.append( nToUnicodeStream );
+                    aLine.append( " 0 R\r\n" );
+                }
+                aLine.append( "  >>\r\nendobj\r\n\r\n" );
+                CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+
+                aFontIDToObject[ lit->m_nFontID ] = nFontObject;
+            }
+            osl_removeFile( aTmpName.pData );
+        }
+    }
+
+    // emit embedded fonts
+    for( std::map< ImplFontData*, sal_Int32 >::iterator eit = m_aEmbeddedFonts.begin(); eit != m_aEmbeddedFonts.end(); ++eit )
+    {
+        sal_Int32 nObject = emitEmbeddedFont( eit->first );
+        CHECK_RETURN( nObject );
+        aFontIDToObject[ eit->second ] = nObject;
+    }
+
+    nFontDict = createObject();
+    CHECK_RETURN( updateObject( nFontDict ) );
+    aLine.setLength( 0 );
+    aLine.append( nFontDict );
+    aLine.append( " 0 obj\r\n  << " );
+    for( std::map< sal_Int32, sal_Int32 >::iterator mit = aFontIDToObject.begin(); mit != aFontIDToObject.end(); ++mit )
+    {
+        aLine.append( "/F" );
+        aLine.append( mit->first );
+        aLine.append( ' ' );
+        aLine.append( mit->second );
+        aLine.append( " 0 R\r\n     " );
+    }
+    aLine.append( ">>\r\nendobj\r\n\r\n" );
+    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+
+    return nFontDict;
 }
 
 sal_Int32 PDFWriterImpl::emitResources()
@@ -873,8 +1657,7 @@ sal_Int32 PDFWriterImpl::emitResources()
     }
 
     // emit font dict
-    sal_Int32 nFontDict = 0;
-    CHECK_RETURN( (nFontDict = emitFonts()) );
+    sal_Int32 nFontDict = emitFonts();
 
     // emit xobject dict
     sal_Int32 nXObjectDict = 0;
@@ -903,9 +1686,13 @@ sal_Int32 PDFWriterImpl::emitResources()
     CHECK_RETURN( updateObject( nResourceDict ) );
     aLine.setLength( 0 );
     aLine.append( nResourceDict );
-    aLine.append( " 0 obj\r\n  << /Font " );
-    aLine.append( nFontDict );
-    aLine.append( " 0 R\r\n" );
+    aLine.append( " 0 obj\r\n  <<\r\n" );
+    if( nFontDict )
+    {
+        aLine.append( "     /Font " );
+        aLine.append( nFontDict );
+        aLine.append( " 0 R\r\n" );
+    }
     if( nXObjectDict )
     {
         aLine.append( "     /XObject " );
@@ -1106,32 +1893,81 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs, long* pGlyphs, sal_Unicode* pUn
     }
     else
     {
-        // TODO: downloadable font
+        sal_Int32 nFontID = 0;
+        std::map< ImplFontData*, sal_Int32 >::iterator it = m_aEmbeddedFonts.find( pCurrentFont );
+        if( it != m_aEmbeddedFonts.end() )
+            nFontID = it->second;
+        else
+            nFontID = m_aEmbeddedFonts[ pCurrentFont ] = m_nNextFID++;
+        for( int i = 0; i < nGlyphs; i++ )
+        {
+            // for type1 (and builtin) fonts the glyphids are actually character codes
+            pMappedGlyphs[ i ] = (sal_Int8)pGlyphs[i];
+            pMappedFontObjects[ i ] = nFontID;
+        }
     }
 }
 
-void PDFWriterImpl::drawLayout( const SalLayout& rSalLayout )
+void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
 {
-    // TODO: the needed methods must be moved to the base class
-    // then rename the input paramter and scratch the next line
-    const GenericSalLayout& rLayout = reinterpret_cast<const GenericSalLayout&>(rSalLayout);
+    // TODO: rText should come from SalLayout as soon as possible
 
     OStringBuffer aLine( 512 );
+
+    // setup text colors (if necessary)
+    bool bPop = false;
+    if( m_aCurrentPDFState.m_aFillColor != m_aCurrentPDFState.m_aFont.GetColor() )
+    {
+        bool bPop = true;
+        aLine.append( "q " );
+        appendNonStrokingColor( m_aCurrentPDFState.m_aFont.GetColor(), aLine );
+        aLine.append( "\r\n" );
+    }
+
     // begin text object
     aLine.append( "BT\r\n" );
 
-    const int nMaxGlyphs = 100;
+    const int nMaxGlyphs = 256;
 
     long pGlyphs[nMaxGlyphs];
-    sal_Int32 pXOffsets[nMaxGlyphs];
     sal_uInt8 pMappedGlyphs[nMaxGlyphs];
     sal_Int32 pMappedFontObjects[nMaxGlyphs];
+    sal_Unicode pUnicodes[nMaxGlyphs];
+    int pCharIndices[nMaxGlyphs];
     int nGlyphs;
     int nIndex = 0;
     Point aPos;
-    while( nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, pXOffsets ) )
+    bool bFirst = true;
+    int nMinCharIndex = 0, nMaxCharIndex = rText.Len()-1;
+    while( nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, NULL, pCharIndices ) )
     {
-        registerGlyphs( nGlyphs, pGlyphs, NULL, pMappedGlyphs, pMappedFontObjects );
+        // add ascent since PDF calculates relative to baseline, VCL to upper left corner
+        aPos.Y() += m_pReferenceDevice->mpFontEntry->maMetric.mnAscent;
+        // optimize use of Td vs. Tm
+        if( bFirst )
+        {
+            m_aPages.back().appendPoint( aPos, aLine );
+            aLine.append( " Td " );
+            bFirst = false;
+        }
+        else
+        {
+            aLine.append( "1 0 0 1 " );
+            m_aPages.back().appendPoint( aPos, aLine );
+            aLine.append( " Tm " );
+        }
+        for( int i = 0; i < nGlyphs; i++ )
+        {
+            if( pCharIndices[i] >= nMinCharIndex && pCharIndices[i] <= nMaxCharIndex )
+                pUnicodes[i] = rText.GetChar( pCharIndices[i] );
+            else
+                pUnicodes[i] = 0;
+            // note: in case of ctl one character may result
+            // in multiple glyphs. The current SalLayout
+            // implementations set -1 then to indicate that no direct
+            // mapping is possible
+        }
+        registerGlyphs( nGlyphs, pGlyphs, pUnicodes, pMappedGlyphs, pMappedFontObjects );
         int nLast = 0;
         while( nLast < nGlyphs )
         {
@@ -1146,10 +1982,10 @@ void PDFWriterImpl::drawLayout( const SalLayout& rSalLayout )
             for( int i = nLast; i < nNext; i++ )
             {
                 appendHex( (sal_Int8)pMappedGlyphs[i], aLine );
-                if( (i % 70) == 0 )
+                if( i && (i % 35) == 0 )
                     aLine.append( "\r\n" );
             }
-            aLine.append( "> ] Tj\r\n" );
+            aLine.append( "> ] TJ\r\n" );
 
             nLast = nNext;
         }
@@ -1157,11 +1993,13 @@ void PDFWriterImpl::drawLayout( const SalLayout& rSalLayout )
 
     // end textobject
     aLine.append( "ET\r\n" );
+    if( bPop )
+        aLine.append( "Q\r\n" );
 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-void PDFWriterImpl::drawText( const Point& rPos, const String& rText )
+void PDFWriterImpl::drawText( const Point& rPos, const String& rText, xub_StrLen nIndex, xub_StrLen nLen )
 {
     MARK( "drawText" );
 
@@ -1172,13 +2010,59 @@ void PDFWriterImpl::drawText( const Point& rPos, const String& rText )
     // set font on reference device
     m_pReferenceDevice->SetFont( m_aCurrentPDFState.m_aFont );
     m_pReferenceDevice->SetLayoutMode( m_aCurrentPDFState.m_nLayoutMode );
+
     // get the layout from the OuputDevice's SalGraphics
     // this also enforces font substitution and sets the font on SalGraphics
-    SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, 0, rText.Len(), rPos );
-    pLayout->Reference();
+    SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, nIndex, nLen, rPos );
+    if( pLayout )
+    {
+        drawLayout( *pLayout, rText.Copy( nIndex, nLen ) );
+        pLayout->Release();
+    }
+}
 
-    drawLayout( *pLayout );
-    pLayout->Release();
+void PDFWriterImpl::drawTextArray( const Point& rPos, const String& rText, const long* pDXArray, xub_StrLen nIndex, xub_StrLen nLen )
+{
+    MARK( "drawText with array" );
+
+    updateGraphicsState();
+
+    // get a sal layout
+    getReferenceDevice();
+    // set font on reference device
+    m_pReferenceDevice->SetFont( m_aCurrentPDFState.m_aFont );
+    m_pReferenceDevice->SetLayoutMode( m_aCurrentPDFState.m_nLayoutMode );
+
+    // get the layout from the OuputDevice's SalGraphics
+    // this also enforces font substitution and sets the font on SalGraphics
+    SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, nIndex, nLen, rPos, 0, pDXArray );
+    if( pLayout )
+    {
+        drawLayout( *pLayout, rText.Copy( nIndex, nLen ) );
+        pLayout->Release();
+    }
+}
+
+void PDFWriterImpl::drawStretchText( const Point& rPos, ULONG nWidth, const String& rText, xub_StrLen nIndex, xub_StrLen nLen )
+{
+    MARK( "drawText with array" );
+
+    updateGraphicsState();
+
+    // get a sal layout
+    getReferenceDevice();
+    // set font on reference device
+    m_pReferenceDevice->SetFont( m_aCurrentPDFState.m_aFont );
+    m_pReferenceDevice->SetLayoutMode( m_aCurrentPDFState.m_nLayoutMode );
+
+    // get the layout from the OuputDevice's SalGraphics
+    // this also enforces font substitution and sets the font on SalGraphics
+    SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, nIndex, nLen, rPos, nWidth );
+    if( pLayout )
+    {
+        drawLayout( *pLayout, rText.Copy( nIndex, nLen ) );
+        pLayout->Release();
+    }
 }
 
 void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop )

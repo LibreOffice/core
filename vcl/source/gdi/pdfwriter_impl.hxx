@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-15 12:02:21 $
+ *  last change: $Author: pl $ $Date: 2002-07-20 15:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,11 @@
 
 namespace rtl { class OStringBuffer; }
 class SalLayout;
+class ImplLayoutArgs;
 struct ImplFontData;
+struct ImplFontSelectData;
+struct ImplFontMetricData;
+struct FontSubsetInfo;
 
 namespace vcl
 {
@@ -108,6 +112,21 @@ class PDFWriterImpl
 {
 public:
     // definition of structs
+    struct BuiltinFont
+    {
+        const char * const      m_pName;                     // Name
+        const char * const      m_pStyleName;                // StyleName
+        const char * const      m_pPSName;                   // PSName
+        int                         m_nAscent;
+        int                         m_nDescent;
+        FontFamily                  m_eFamily;                   // Family
+        CharSet                     m_eCharSet;                  // CharSet
+        FontPitch                   m_ePitch;                    // Pitch
+        FontWidth                   m_eWidthType;                // WidthType
+        FontWeight                  m_eWeight;                   // Weight
+        FontItalic                  m_eItalic;                   // Italic
+        int                         m_aWidths[256];              // character metrics
+    };
 
     struct PDFPage
     {
@@ -204,7 +223,10 @@ public:
     };
     typedef std::map< ImplFontData*, FontSubset > FontSubsetData;
 
+    typedef std::map< ImplFontData*, sal_Int32 > FontEmbedData;
 private:
+    static const BuiltinFont m_aBuiltinFonts[14];
+
     OutputDevice*                   m_pReferenceDevice;
 
     MapMode                         m_aMapMode; // PDFWriterImpl scaled units
@@ -224,6 +246,7 @@ private:
     std::list< BitmapPatternEmit >  m_aTilings;
     /*  contains all font subsets in use */
     FontSubsetData                  m_aSubsets;
+    FontEmbedData                   m_aEmbeddedFonts;
     sal_Int32                       m_nNextFID;
 
     sal_Int32                       m_nInheritedPageWidth;  // in inch/72
@@ -294,7 +317,8 @@ private:
     void registerGlyphs( int nGlyphs, long* pGlyphs, sal_Unicode* pUnicodes, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects );
 
     /*  emits a text object according to the passed layout */
-    void drawLayout( const SalLayout& rLayout );
+    /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
+    void drawLayout( const SalLayout& rLayout, const String& rText );
 
     /*  writes differences between graphics stack and current real PDF
      *   state to the file
@@ -320,6 +344,14 @@ private:
     bool emitGradients();
     /* writes all hatch patterns */
     bool emitHatches();
+    /* writes a builtin font object and returns its objectid (or 0 in case of failure ) */
+    sal_Int32 emitBuiltinFont( ImplFontData* pFont );
+    /* writes a type1 embedded font object and returns its objectid (or 0 in case of failure ) */
+    sal_Int32 emitEmbeddedFont( ImplFontData* pFont );
+    /* writes a font descriptor and returns its object id (or 0) */
+    sal_Int32 emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo& rInfo, sal_Int32 nSubsetID, sal_Int32 nStream );
+    /* writes a ToUnicode cmap, returns the corresponding stream object */
+    sal_Int32 createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode* pUnicodes, int nGlyphs );
     /* writes a the font dictionary and emits all font objects
      * returns object id of font directory (or 0 on error)
      */
@@ -352,6 +384,11 @@ public:
      *  produces a new font list
      */
     ImplDevFontList* filterDevFontList( ImplDevFontList* pFontList );
+    /*  for OutputDevice: get layout for builtin fonts
+     */
+    bool isBuiltinFont( ImplFontData* pFont ) const;
+    SalLayout* createSalLayout( ImplFontSelectData* pFont, ImplLayoutArgs& rArgs ) const;
+    void getFontMetric( ImplFontSelectData* pFont, ImplFontMetricData* pMetric ) const;
 
 
     /* for documentation of public fucntions please see pdfwriter.hxx */
@@ -431,7 +468,10 @@ public:
     { m_aGraphicsStack.front().m_nAntiAlias = nAntiAlias; }
 
     /* actual drawing functions */
-    void drawText( const Point& rPos, const String& rText );
+    void drawText( const Point& rPos, const String& rText, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
+    void drawTextArray( const Point& rPos, const String& rText, const long* pDXArray = NULL, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
+    void drawStretchText( const Point& rPos, ULONG nWidth, const String& rText,
+                          xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN );
 
     void drawLine( const Point& rStart, const Point& rStop );
     void drawLine( const Point& rStart, const Point& rStop, const LineInfo& rInfo );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-08 14:18:53 $
+ *  last change: $Author: pl $ $Date: 2002-07-20 15:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,7 @@ void PDFWriter::DrawTextArray(
                               xub_StrLen nIndex,
                               xub_StrLen nLen )
 {
-    // TODO
-    DrawText( rStartPt, rStr );
+    ((PDFWriterImpl*)pImplementation)->drawTextArray( rStartPt, rStr, pDXAry, nIndex, nLen );
 }
 
 void PDFWriter::DrawStretchText(
@@ -134,8 +133,7 @@ void PDFWriter::DrawStretchText(
                                 xub_StrLen nIndex,
                                 xub_StrLen nLen )
 {
-    // TODO
-    DrawText( rStartPt, rStr );
+    ((PDFWriterImpl*)pImplementation)->drawStretchText( rStartPt, nWidth, rStr, nIndex, nLen );
 }
 
 void PDFWriter::DrawText(
