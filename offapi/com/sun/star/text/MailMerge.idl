@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MailMerge.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,9 @@ service MailMerge
 {
     /** interface to execute the mail merge action.
 
-        <p>The <member scope="com::sun::star::task::XJob">execute</member>
+        <p>The <member scope="com::sun::star::task">XJob::execute</member>
         method of the interface accepts exactly the same properties
-        provided by this service in its argument sequence.</p>
+        as provided by this service in its argument sequence.</p>
 
         <p>The default values for the properties to be used in the method
         call are those given by this service. If a property is also listed
@@ -147,6 +147,13 @@ service MailMerge
     /** provides access to a
         <type scope="com::sun::star::sdbc">XResultSet</type> of
         a <type scope="com::sun::star::sdbc">ResultSet</type> service.
+
+        <p>Note that any superservices of <type scope="com::sun::star::sdbc">ResultSet</type>
+        are also allowed. Especially, this member can denote an instance of the
+        <type scope="com::sun::star::sdb">RowSet</type>, or an instance obtained
+        by calling <member scope="com::sun::star::sdb">XResultSetAccess::createResultSet</member>
+        on such a <type scope="com::sun::star::sdb">RowSet</type>. This becomes important in
+        conjunction with the <member>Selection</member> property.</p>
      */
     [property] com::sun::star::sdbc::XResultSet ResultSet;
 
@@ -159,6 +166,15 @@ service MailMerge
     //=============================================================================
 
     /** contains a selection that refers to bookmarks of the ResultSet.
+
+        <p>This property is relevant in conjunction with the <member>ResultSet</member>
+        only. A single element of this array describes a bookmark relative to the result set.<br/>
+        Note that this implies that the <member>ResultSet</member> needs to support the
+        <type scope="com::sun::star::sdbcx">XRowLocate</type> interface.</p>
+
+        <p>If this array is empty, the whole result set, as described by <member>ResultSet</member>
+        respectively the triple (<member>DataSourceName</member>, <member>DataCommandType</member>,
+        <member>DataCommand</member>).</p>
      */
     [property] sequence< any > Selection;
 
