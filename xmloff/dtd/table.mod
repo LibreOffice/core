@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.32 2001-04-23 17:27:26 sab Exp $
+	$Id: table.mod,v 1.33 2001-04-25 08:45:16 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -292,7 +292,7 @@
 	table:currency %string; #IMPLIED
 >
 <!-- cell protection in writer: cell attribute; calc uses format -->
-<!ATTLIST table:table-cell table:protect %boolean; "false">
+<!ATTLIST table:table-cell table:protected %boolean; "false">
 
 <!ELEMENT table:cell-range-source EMPTY>
 <!ATTLIST table:cell-range-source

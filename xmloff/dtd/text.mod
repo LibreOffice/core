@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.27 2001-04-23 17:35:09 dvo Exp $
+	$Id: text.mod,v 1.28 2001-04-25 08:45:16 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -730,10 +730,9 @@
 
 <!ATTLIST text:section text:name CDATA #REQUIRED>
 <!ATTLIST text:section text:style-name %styleName; #IMPLIED>
-<!ATTLIST text:section text:protected %boolean; "false">
 <!ATTLIST text:section text:display (true|none|condition) "true">
 <!ATTLIST text:section text:condition %formula; #IMPLIED>
-<!ATTLIST text:section text:protect %boolean; "false">
+<!ATTLIST text:section text:protected %boolean; "false">
 <!ATTLIST text:section text:protection-key CDATA #IMPLIED>
 
 <!ELEMENT text:section-source EMPTY>
