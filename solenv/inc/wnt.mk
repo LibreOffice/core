@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 12:20:03 $
+#   last change: $Author: hr $ $Date: 2004-06-18 15:07:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -165,7 +165,7 @@ CFLAGS+=-Zm200
 
 #.IF"$(bndchk)"==""
 .IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
-CFLAGS+=-Zm500 -wd4290 -wd4786 -wd4800
+CFLAGS+=-Zm500 -wd4290 -wd4786 -wd4800 /Zc:forScope /GR
 .ENDIF
 #.ENDIF
 
