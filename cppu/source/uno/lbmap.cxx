@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-09-21 11:40:40 $
+ *  last change: $Author: pliao $ $Date: 2000-11-17 00:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,11 @@ static inline OUString getLibName(
     aLibName.append( rFrom.getTypeName() );
     aLibName.append( (sal_Unicode)'_' );
     aLibName.append( rTo.getTypeName() );
+#ifdef MACOSX
+    aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dylib.framework") );
+#else
     aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(".so") );
+#endif
 #else
     if (rAddPurpose.getLength())
     {
