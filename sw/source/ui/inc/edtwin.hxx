@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:45:36 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,8 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     void            CleanupDropUserMarker();
     USHORT          GetDropDestination( const Point& rPixPnt,
                                         SdrObject ** ppObj = 0 );
+    //select the object/cursor at the mouse position of the context menu request
+    BOOL            SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos );
 
     /*
      * Handler fuer das Weiterscrollen, wenn der Mauspointer innerhalb eines
