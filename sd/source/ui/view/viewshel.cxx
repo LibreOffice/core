@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:07:22 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _SVX_FMSHELL_HXX
 #include <svx/fmshell.hxx>
+#endif
+#ifndef SD_WINDOW_UPDATER_HXX
+#include "WindowUpdater.hxx"
 #endif
 
 #include "app.hrc"
@@ -252,6 +255,9 @@ void SdViewShell::Construct(void)
     SetName (aName);
 
     pDoc->StartOnlineSpelling(FALSE);
+
+    mpWindowUpdater->SetViewShell (*this);
+    mpWindowUpdater->SetDocument (pDoc);
 }
 
 /*************************************************************************
@@ -268,6 +274,7 @@ SdViewShell::SdViewShell(SfxViewFrame* pFrame, Window *pParent,
                          SFX_VIEW_OBJECTSIZE_EMBEDDED |
                          SFX_VIEW_CAN_PRINT           |
                          SFX_VIEW_HAS_PRINTOPTIONS),
+    mpWindowUpdater (new ::sd::WindowUpdater()),
     aHSplit(&pFrame->GetWindow(), WB_HSCROLL),
     aVSplit(&pFrame->GetWindow(), WB_VSCROLL),
     aDrawBtn(&pFrame->GetWindow(), WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
@@ -1661,4 +1668,11 @@ SdViewShell::CreateAccessibleDocumentView (SdWindow* pWindow)
 {
     return ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> ();
+}
+
+
+
+::sd::WindowUpdater* SdViewShell::GetWindowUpdater (void) const
+{
+    return mpWindowUpdater.get();
 }
