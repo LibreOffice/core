@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 13:57:34 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,14 +132,9 @@ namespace connectivity
             ::connectivity::TIntVector                      m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
 
             ::std::map<sal_Int32, ::connectivity::TInt2IntMap >                 m_aValueRange;
-            ::std::map<sal_Int32, ::connectivity::TInt2IntMap >::iterator       m_aValueRangeIter;
-
             ::std::map<sal_Int32, ::connectivity::TString2IntMap >              m_aStrValueRange;
-            ::std::map<sal_Int32, ::connectivity::TString2IntMap >::iterator    m_aStrValueRangeIter;
 
             ::std::map<sal_Int32, ::connectivity::TInt2StringMap >              m_aIntValueRange;
-            ::std::map<sal_Int32, ::connectivity::TInt2StringMap >::iterator    m_aIntValueRangeIter;
-
 
             SQLHANDLE                                                                   m_aStatementHandle;
             SQLHANDLE                                                                   m_aConnectionHandle;
@@ -156,7 +151,6 @@ namespace connectivity
             sal_Bool                                    m_bEOF;                 // after last record
             sal_Bool                                    m_bLastRecord;
             sal_Bool                                    m_bFreeHandle;
-            sal_Bool                                    m_bFetchData;           // true when SQLGetaData can be called in any order or when fetching data for m_aRow
 
             // set the columncount of the driver
             void checkColumnCount();
