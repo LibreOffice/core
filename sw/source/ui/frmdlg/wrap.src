@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:27:54 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,15 @@ TabPage TP_FRM_WRAP
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
-    GroupBox C_WRAP_BOX
+    FixedLine C_WRAP_FL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 48 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text="Vorgaben";
     };
     ImageRadioButton RB_NO_WRAP
     {
-        Pos = MAP_APPFONT ( 9 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 37 , 37 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Kein : ~Keiner */
         /* ### ACHTUNG: Neuer Text in Resource? ~Kein : ~Keiner */
@@ -109,7 +110,7 @@ TabPage TP_FRM_WRAP
     };
     ImageRadioButton RB_WRAP_LEFT
     {
-        Pos = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 53 , 14 ) ;
         Size = MAP_APPFONT ( 37 , 37 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Links : Links */
         /* ### ACHTUNG: Neuer Text in Resource? ~Links : Links */
@@ -140,7 +141,7 @@ TabPage TP_FRM_WRAP
     };
     ImageRadioButton RB_WRAP_RIGHT
     {
-        Pos = MAP_APPFONT ( 91 , 10 ) ;
+        Pos = MAP_APPFONT ( 94 , 14 ) ;
         Size = MAP_APPFONT ( 37 , 37 ) ;
         Text = "~Rechts" ;
         Text [ ENGLISH ] = "~Right" ;
@@ -168,7 +169,7 @@ TabPage TP_FRM_WRAP
     };
     ImageRadioButton RB_WRAP_PARALLEL
     {
-        Pos = MAP_APPFONT ( 132 , 10 ) ;
+        Pos = MAP_APPFONT ( 135 , 14 ) ;
         Size = MAP_APPFONT ( 37 , 37 ) ;
         Text = "~Parallel" ;
         Text [ ENGLISH ] = "~Parallel" ;
@@ -196,7 +197,7 @@ TabPage TP_FRM_WRAP
     };
     ImageRadioButton RB_WRAP_THROUGH
     {
-        Pos = MAP_APPFONT ( 173 , 10 ) ;
+        Pos = MAP_APPFONT ( 176 , 14 ) ;
         Size = MAP_APPFONT ( 37 , 37 ) ;
         Text = "~Durchlauf" ;
         Text [ ENGLISH ] = "Wrap ~through" ;
@@ -225,7 +226,7 @@ TabPage TP_FRM_WRAP
     };
     ImageRadioButton RB_WRAP_IDEAL
     {
-        Pos = MAP_APPFONT ( 214 , 10 ) ;
+        Pos = MAP_APPFONT ( 217 , 14 ) ;
         Size = MAP_APPFONT ( 37 , 37 ) ;
         Text = "D~ynamisch" ;
         Text [ ENGLISH ] = "D~ynamic Wrap" ;
@@ -251,9 +252,10 @@ TabPage TP_FRM_WRAP
         Text[ catalan ] = "Din·~mico";
         Text[ finnish ] = "~Optimaalinen";
     };
+
     CheckBox CB_ANCHOR_ONLY
     {
-        Pos = MAP_APPFONT ( 12 , 65 ) ;
+        Pos = MAP_APPFONT ( 139 , 65 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Er~ster Absatz" ;
         Text [ ENGLISH ] = "First paragraph only" ;
@@ -280,7 +282,7 @@ TabPage TP_FRM_WRAP
     };
     CheckBox CB_TRANSPARENT
     {
-        Pos = MAP_APPFONT ( 12 , 79 ) ;
+        Pos = MAP_APPFONT ( 139 , 79 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Im Hin~tergrund" ;
         Text [ ENGLISH ] = "To background" ;
@@ -307,7 +309,7 @@ TabPage TP_FRM_WRAP
     };
     CheckBox CB_OUTLINE
     {
-        Pos = MAP_APPFONT ( 12 , 93 ) ;
+        Pos = MAP_APPFONT ( 139 , 93 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text = "Kont~ur" ;
         Text [ ENGLISH ] = "Contou~r" ;
@@ -335,7 +337,7 @@ TabPage TP_FRM_WRAP
     };
     CheckBox CB_ONLYOUTSIDE
     {
-        Pos = MAP_APPFONT ( 18 , 107 ) ;
+        Pos = MAP_APPFONT ( 139 , 107 ) ;
         Size = MAP_APPFONT ( 99 , 10 ) ;
         Text = "~Nur auﬂen" ;
         Text [ ENGLISH ] = "Only outside" ;
@@ -361,10 +363,10 @@ TabPage TP_FRM_WRAP
         Text[ catalan ] = "Solo en el exterior";
         Text[ finnish ] = "Vain ulkopuoli";
     };
-    GroupBox GB_OPTION
+    FixedLine FL_OPTION
     {
-        Pos = MAP_APPFONT ( 6 , 54 ) ;
-        Size = MAP_APPFONT ( 121 , 71 ) ;
+        Pos = MAP_APPFONT ( 133 , 54 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
         Text = "Optionen" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ dutch ] = "Opties" ;
@@ -388,9 +390,14 @@ TabPage TP_FRM_WRAP
         Text[ catalan ] = "Opciones";
         Text[ finnish ] = "Asetukset";
     };
+    FixedLine FL_OPTION_SEP
+    {
+        Pos = MAP_APPFONT ( 128 , 61 ) ;
+        Size = MAP_APPFONT ( 4 , 64 ) ;
+    };
     FixedText FT_LEFT_MARGIN
     {
-        Pos = MAP_APPFONT ( 139 , 66 ) ;
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "L~inks" ;
         Text [ ENGLISH ] = "~Left" ;
@@ -420,7 +427,7 @@ TabPage TP_FRM_WRAP
     MetricField ED_LEFT_MARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 208 , 65 ) ;
+        Pos = MAP_APPFONT ( 81 , 65 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -434,7 +441,7 @@ TabPage TP_FRM_WRAP
     };
     FixedText FT_RIGHT_MARGIN
     {
-        Pos = MAP_APPFONT ( 139 , 81 ) ;
+        Pos = MAP_APPFONT ( 12 , 81 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "Re~chts" ;
         Text [ ENGLISH ] = "~Right" ;
@@ -464,7 +471,7 @@ TabPage TP_FRM_WRAP
     MetricField ED_RIGHT_MARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 208 , 80 ) ;
+        Pos = MAP_APPFONT ( 81 , 80 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -478,7 +485,7 @@ TabPage TP_FRM_WRAP
     };
     FixedText FT_TOP_MARGIN
     {
-        Pos = MAP_APPFONT ( 139 , 96 ) ;
+        Pos = MAP_APPFONT ( 12 , 96 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "O~ben" ;
         Text [ ENGLISH ] = "~Top" ;
@@ -508,7 +515,7 @@ TabPage TP_FRM_WRAP
     MetricField ED_TOP_MARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 208 , 95 ) ;
+        Pos = MAP_APPFONT ( 81 , 95 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -522,7 +529,7 @@ TabPage TP_FRM_WRAP
     };
     FixedText FT_BOTTOM_MARGIN
     {
-        Pos = MAP_APPFONT ( 139 , 111 ) ;
+        Pos = MAP_APPFONT ( 12 , 111 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "Unt~en" ;
         Text [ ENGLISH ] = "~Bottom" ;
@@ -552,7 +559,7 @@ TabPage TP_FRM_WRAP
     MetricField ED_BOTTOM_MARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 208 , 110 ) ;
+        Pos = MAP_APPFONT ( 81 , 110 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -564,10 +571,10 @@ TabPage TP_FRM_WRAP
         Last = 9999 ;
         SpinSize = 10 ;
     };
-    GroupBox GB_MARGIN
+    FixedLine FL_MARGIN
     {
-        Pos = MAP_APPFONT ( 133 , 54 ) ;
-        Size = MAP_APPFONT ( 121 , 71 ) ;
+        Pos = MAP_APPFONT ( 6 , 54 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
         Text = "Abst‰nde" ;
         Text [ ENGLISH ] = "Margins" ;
         Text [ norwegian ] = "Margins" ;

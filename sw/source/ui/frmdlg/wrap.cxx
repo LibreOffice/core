@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ SwWrapDlg::~SwWrapDlg()
 SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage(pParent, SW_RES(TP_FRM_WRAP), rSet),
 
-    aWrapBoxC           (this, SW_RES(C_WRAP_BOX)),
+    aWrapFLC           (this, SW_RES(C_WRAP_FL)),
     aNoWrapRB           (this, SW_RES(RB_NO_WRAP)),
     aWrapLeftRB         (this, SW_RES(RB_WRAP_LEFT)),
     aWrapRightRB        (this, SW_RES(RB_WRAP_RIGHT)),
@@ -162,7 +162,8 @@ SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
     aWrapTransparentCB  (this, SW_RES(CB_TRANSPARENT)),
     aWrapOutlineCB      (this, SW_RES(CB_OUTLINE)),
     aWrapOutsideCB      (this, SW_RES(CB_ONLYOUTSIDE)),
-    aOptionsGB          (this, SW_RES(GB_OPTION)),
+    aOptionsFL          (this, SW_RES(FL_OPTION)),
+    aOptionsSepFL       (this, SW_RES(FL_OPTION_SEP)),
     aLeftMarginFT       (this, SW_RES(FT_LEFT_MARGIN)),
     aLeftMarginED       (this, SW_RES(ED_LEFT_MARGIN)),
     aRightMarginFT      (this, SW_RES(FT_RIGHT_MARGIN)),
@@ -171,7 +172,7 @@ SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
     aTopMarginED        (this, SW_RES(ED_TOP_MARGIN)),
     aBottomMarginFT     (this, SW_RES(FT_BOTTOM_MARGIN)),
     aBottomMarginED     (this, SW_RES(ED_BOTTOM_MARGIN)),
-    aMarginGB           (this, SW_RES(GB_MARGIN)),
+    aMarginFL           (this, SW_RES(FL_MARGIN)),
 
     aWrapIL             (SW_RES(IL_WRAP)),
     nHtmlMode(0),
@@ -184,6 +185,7 @@ SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
     FreeResource();
     SetExchangeSupport();
 
+    aOptionsSepFL.SetStyle( aOptionsSepFL.GetStyle() | WB_VERT );
 
     Link aLk = LINK(this, SwWrapTabPage, RangeModifyHdl);
     aLeftMarginED.SetUpHdl(aLk);
@@ -782,6 +784,9 @@ USHORT* SwWrapTabPage::GetRanges()
 /*--------------------------------------------------------------------
 
    $Log: not supported by cvs2svn $
+   Revision 1.1.1.1  2000/09/18 17:14:38  hr
+   initial import
+
    Revision 1.61  2000/09/18 16:05:35  willem.vandorp
    OpenOffice header added.
 

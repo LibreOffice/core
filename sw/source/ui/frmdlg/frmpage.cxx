@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-05-15 10:02:09 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,13 +564,14 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     aRelHeightCB    (this, SW_RES(CB_REL_HEIGHT)),
     aAutoHeightCB   (this, SW_RES(CB_AUTOHEIGHT)),
     aFixedRatioCB   (this, SW_RES(CB_FIXEDRATIO)),
-    aSizeGB         (this, SW_RES(GB_SIZE)),
+    aSizeFL         (this, SW_RES(FL_SIZE)),
     aAnchorAtPageRB (this, SW_RES(RB_ANCHOR_PAGE)),
     aAnchorAtParaRB (this, SW_RES(RB_ANCHOR_PARA)),
     aAnchorAtCharRB (this, SW_RES(RB_ANCHOR_AT_CHAR)),
     aAnchorAsCharRB (this, SW_RES(RB_ANCHOR_AS_CHAR)),
     aAnchorAtFrameRB(this, SW_RES(RB_ANCHOR_FRAME)),
-    aTypeGB         (this, SW_RES(GB_TYPE)),
+    aTypeFL        (this, SW_RES(FL_TYPE)),
+    aTypeSepFL     (this, SW_RES(FL_TYPE_SEP)),
 
     aHorizontalFT   (this, SW_RES(FT_HORIZONTAL)),
     aHorizontalDLB  (this, SW_RES(DLB_HORIZONTAL)),
@@ -585,7 +586,7 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     aAtVertPosED    (this, SW_RES(ED_AT_VERT_POS)),
     aVertRelationFT (this, SW_RES(FT_VERT_RELATION)),
     aVertRelationLB (this, SW_RES(LB_VERT_RELATION)),
-    aPositionGB     (this, SW_RES(GB_POSITION)),
+    aPositionFL     (this, SW_RES(FL_POSITION)),
     aRealSizeBT     (this, SW_RES(BT_REALSIZE)),
     aExampleWN      (this, SW_RES(WN_BSP)),
     bFormat(FALSE),
@@ -606,6 +607,8 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
 {
     FreeResource();
     SetExchangeSupport();
+
+    aTypeSepFL.SetStyle( aTypeSepFL.GetStyle() | WB_VERT );
 
     Link aLk = LINK(this, SwFrmPage, RangeModifyHdl);
     aWidthED.    SetLoseFocusHdl( aLk );
@@ -684,7 +687,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         aAnchorAtCharRB.Enable( FALSE );
         aAnchorAsCharRB.Enable( FALSE );
         aAnchorAtFrameRB.Enable( FALSE );
-        aTypeGB.Enable( FALSE );
+        aTypeFL.Enable( FALSE );
         aFixedRatioCB.Enable(FALSE);
     }
     else if (rAnchor.GetAnchorId() != FLY_AT_FLY && !pSh->IsFlyInFly())
@@ -2092,11 +2095,11 @@ void SwFrmPage::SetFormatUsed(BOOL bFmt)
         aAnchorAsCharRB.Show(FALSE);
         aAnchorAtFrameRB.Show(FALSE);
 
-        Point aSizePos = aSizeGB.GetPosPixel();
-        Size aSizeSize = aSizeGB.GetSizePixel();
-        aSizeSize.Width() = aTypeGB.GetPosPixel().X() +
-                    aTypeGB.GetSizePixel().Width() - aSizePos.X();
-        aSizeGB.SetSizePixel(aSizeSize);
+        Point aSizePos = aSizeFL.GetPosPixel();
+        Size aSizeSize = aSizeFL.GetSizePixel();
+        aSizeSize.Width() = aTypeFL.GetPosPixel().X() +
+                    aTypeFL.GetSizePixel().Width() - aSizePos.X();
+        aSizeFL.SetSizePixel(aSizeSize);
     }
 }
 
@@ -2450,7 +2453,7 @@ BmpWindow::~BmpWindow()
 
 SwFrmURLPage::SwFrmURLPage( Window *pParent, const SfxItemSet &rSet ) :
     SfxTabPage(pParent,     SW_RES(TP_FRM_URL), rSet),
-    aHyperLinkGB    (this, SW_RES( GB_HYPERLINK )),
+    aHyperLinkFL    (this, SW_RES( FL_HYPERLINK )),
     aURLFT          (this, SW_RES( FT_URL    )),
     aURLED          (this, SW_RES( ED_URL    )),
     aNameFT         (this, SW_RES( FT_NAME   )),
@@ -2458,7 +2461,7 @@ SwFrmURLPage::SwFrmURLPage( Window *pParent, const SfxItemSet &rSet ) :
     aFrameFT        (this, SW_RES( FT_FRAME   )),
     aFrameCB        (this, SW_RES( CB_FRAME   )),
     aSearchPB       (this, SW_RES( PB_SEARCH  )),
-    aImageGB        (this, SW_RES( GB_IMAGE   )),
+    aImageFL        (this, SW_RES( FL_IMAGE   )),
     aServerCB       (this, SW_RES( CB_SERVER  )),
     aClientCB       (this, SW_RES( CB_CLIENT  ))
 {
@@ -2623,16 +2626,16 @@ SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
     aPrevED            (this, SW_RES(ED_PREV)),
     aNextFT            (this, SW_RES(FT_NEXT)),
     aNextED            (this, SW_RES(ED_NEXT)),
-    aNamesGB           (this, SW_RES(GB_NAME)),
+    aNamesFL           (this, SW_RES(FL_NAME)),
 
     aProtectContentCB  (this, SW_RES(CB_PROTECT_CONTENT)),
     aProtectFrameCB    (this, SW_RES(CB_PROTECT_FRAME)),
     aProtectSizeCB     (this, SW_RES(CB_PROTECT_SIZE)),
-    aProtectGB         (this, SW_RES(GB_PROTECT)),
+    aProtectFL         (this, SW_RES(FL_PROTECT)),
 
     aEditInReadonlyCB  (this, SW_RES(CB_EDIT_IN_READONLY)),
     aPrintFrameCB      (this, SW_RES(CB_PRINT_FRAME)),
-    aExtGB             (this, SW_RES(GB_EXT)),
+    aExtFL             (this, SW_RES(FL_EXT)),
     nDlgType(0),
     pWrtSh(0),
     bFormat(FALSE),
@@ -2675,8 +2678,8 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         aProtectSizeCB    .Hide();
         aEditInReadonlyCB .Hide();
         aPrintFrameCB     .Hide();
-        aExtGB            .Hide();
-        aProtectGB.Hide();
+        aExtFL            .Hide();
+        aProtectFL.Hide();
     }
     if ( DLG_FRM_GRF == nDlgType || DLG_FRM_OLE == nDlgType )
     {
@@ -2725,7 +2728,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         aAltNameED.Enable(FALSE);
         aNameFT.Enable( FALSE );
         aAltNameFT.Enable(FALSE);
-        aNamesGB.Enable(FALSE);
+        aNamesFL.Enable(FALSE);
     }
     if(nDlgType == DLG_FRM_STD)
     {
@@ -2861,18 +2864,18 @@ void    SwFrmAddPage::SetFormatUsed(BOOL bFmt)
         aPrevED.Show(FALSE);
         aNextFT.Show(FALSE);
         aNextED.Show(FALSE);
-          aNamesGB.Show(FALSE);
+        aNamesFL.Show(FALSE);
 
-        sal_Int32 nDiff = aExtGB.GetPosPixel().Y() - aNamesGB.GetPosPixel().Y();
+        sal_Int32 nDiff = aExtFL.GetPosPixel().Y() - aNamesFL.GetPosPixel().Y();
 
         lcl_Move(aProtectContentCB, nDiff);
         lcl_Move(aProtectFrameCB, nDiff);
         lcl_Move(aProtectSizeCB, nDiff);
-        lcl_Move(aProtectGB, nDiff);
+        lcl_Move(aProtectFL, nDiff);
 
         lcl_Move(aEditInReadonlyCB, nDiff);
         lcl_Move(aPrintFrameCB, nDiff);
-        lcl_Move(aExtGB, nDiff);
+        lcl_Move(aExtFL, nDiff);
 
     }
 }

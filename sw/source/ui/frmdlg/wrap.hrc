@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,13 @@
 #define ED_TOP_MARGIN       18
 #define ED_BOTTOM_MARGIN    19
 #define FT_BOTTOM_MARGIN    20
-#define GB_MARGIN           21
+#define FL_MARGIN                       21
 #define CB_TRANSPARENT      22
 #define CB_OUTLINE          23
-#define GB_OPTION           24
+#define FL_OPTION                       24
 #define CB_ONLYOUTSIDE      25
-#define C_WRAP_BOX          31
+#define FL_OPTION_SEP                       26
+#define C_WRAP_FL                      31
 
 #define IL_WRAP             32
 // nur fuer die ImageList

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:49:14 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,13 @@
 
 
 
-#define GB_TYPE                 26
+#define FL_TYPE                 26
 #define FT_WIDTH                27
 #define ED_WIDTH                28
 #define FT_HEIGHT               29
 #define ED_HEIGHT               30
 #define CB_AUTOHEIGHT           31
-#define GB_SIZE                 32
+#define FL_SIZE                 32
 #define FT_HORIZONTAL           33
 #define DLB_HORIZONTAL          34
 #define FT_AT_HORZ_POS          35
@@ -88,7 +88,7 @@
 #define ED_AT_VERT_POS          41
 #define FT_VERT_RELATION        3
 #define LB_VERT_RELATION        4
-#define GB_POSITION             43
+#define FL_POSITION             43
 #define BT_REALSIZE             44
 #define BT_MANUAL               45
 
@@ -110,10 +110,10 @@
 #define RB_MIRROR_LEFT_PAGES    64
 #define RB_MIRROR_RIGHT_PAGES   65
 
-#define GB_HYPERLINK            94
+#define FL_HYPERLINK                    94
 #define FT_FRAME                95
 #define CB_FRAME                96
-#define GB_IMAGE                97
+#define FL_IMAGE                97
 #define CB_SERVER               98
 #define CB_CLIENT               99
 
@@ -132,11 +132,12 @@
 #define ED_PREV                 115
 #define FT_NEXT                 116
 #define ED_NEXT                 117
-#define GB_NAME                 118
+#define FL_NAME                 118
 #define CB_PROTECT_CONTENT      119
 #define CB_PROTECT_FRAME        120
 #define CB_PROTECT_SIZE         121
-#define GB_PROTECT              122
+#define FL_PROTECT              122
 #define CB_EDIT_IN_READONLY     123
 #define CB_PRINT_FRAME          124
-#define GB_EXT                  125
+#define FL_EXT                  125
+#define FL_TYPE_SEP             126
