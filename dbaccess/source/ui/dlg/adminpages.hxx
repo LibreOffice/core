@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:43:11 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,13 @@
 #ifndef _SVTOOLS_WIZARDMACHINE_HXX_
 #include <svtools/wizardmachine.hxx>
 #endif
+#ifndef _SV_FIELD_HXX
+#include <vcl/field.hxx>
+#endif
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
+#endif
+
 
 class NumericField;
 class Edit;
@@ -156,10 +163,12 @@ namespace dbaui
     {
     private:
         Link            m_aModifiedHandler;     /// to be called if something on the page has been modified
-
+        sal_Bool        m_abEnableRoadmap;
     protected:
         IAdminHelper* m_pAdminDialog;
         IItemSetHelper* m_pItemSetHelper;
+        FixedText*      m_pFT_HeaderText;
+
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                             m_xORB;
     public:
@@ -227,6 +236,16 @@ namespace dbaui
         virtual void enableHeader( const Bitmap& _rBitmap, sal_Int32 _nPixelHeight, GrantAccess );
         virtual void initializePage();
         virtual sal_Bool commitPage(COMMIT_REASON _eReason);
+
+//        Link                maRoadmapHdl;
+//      void                SetRoadmapHdl( const Link& rLink ) { maRoadmapHdl = rLink; }
+//        const Link&         GetRoadmapHdl() const { return maRoadmapHdl; }
+
+        void                SetRoadmapStateValue( sal_Bool _bDoEnable ) { m_abEnableRoadmap = _bDoEnable; }
+        bool                GetRoadmapStateValue() const { return m_abEnableRoadmap; }
+
+        DECL_LINK(ImplRoadmapHdl, OGenericAdministrationPage*);
+
 
     protected:
         /// default implementation: call FillItemSet, call checkItems,
@@ -303,17 +322,26 @@ namespace dbaui
         */
         void fillString(SfxItemSet& _rSet,Edit* _pEdit,USHORT _nID,sal_Bool& _bChangedSomething);
 
+        // used to set the right Pane header of a wizard to bold
+        void SetControlFontWeight(Window* _pWindow, FontWeight _eWeight = WEIGHT_BOLD);
+        void SetHeaderText( Window* _parent, USHORT _nFTResId, USHORT _StringResId);
+
+        Point MovePoint(Point _aPixelBasePoint, sal_uInt32 _XShift, sal_uInt32 _YShift);
+
+
     protected:
         /** This link be used for controls where the tabpage does not need to take any special action when the control
             is modified. The implementation just calls callModifiedHdl.
         */
         DECL_LINK(OnControlModified, Control*);
+        DECL_LINK(OnTestConnectionClickHdl,PushButton*);
 
         /// may be used in SetXXXHdl calls to controls, is a link to <method>OnControlModified</method>
-        Link getControlModifiedLink() { return LINK(this, OGenericAdministrationPage, OnControlModified); }
+        virtual Link getControlModifiedLink() { return LINK(this, OGenericAdministrationPage, OnControlModified); }
 
     private:
         void postInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+
     };
 
 //.........................................................................
