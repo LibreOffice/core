@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar.src,v $
  *
- *  $Revision: 1.1.1.2 $
+ *  $Revision: 1.1.1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:06:04 $
+ *  last change: $Author: hjs $ $Date: 2001-05-10 05:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ String STR_SVT_CALENDAR_DAY
     Text[ turkish ] = "Gün";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Día";
+    Text[ finnish ] = "Päivä";
 };
 String STR_SVT_CALENDAR_WEEK
 {
@@ -113,6 +114,7 @@ String STR_SVT_CALENDAR_WEEK
     Text[ turkish ] = "Hafta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Semana";
+    Text[ finnish ] = "Viikko";
 };
 String STR_SVT_CALENDAR_TODAY
 {
@@ -140,6 +142,7 @@ String STR_SVT_CALENDAR_TODAY
     Text[ turkish ] = "Bugün";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Hoy";
+    Text[ finnish ] = "Tänään";
 };
 String STR_SVT_CALENDAR_NONE
 {
@@ -167,4 +170,5 @@ String STR_SVT_CALENDAR_NONE
     Text[ turkish ] = "Yok";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ninguno";
+    Text[ finnish ] = "Ei mitään";
 };
