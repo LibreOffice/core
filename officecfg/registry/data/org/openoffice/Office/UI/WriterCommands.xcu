@@ -480,6 +480,12 @@
                     <value>1</value>
                 </prop>
             </node>
+            <node oor:name=".uno:MailMergeWizard" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Serienbrief-Assistent...</value>
+                    <value xml:lang="en-US">~Mail Merge Wizard...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:SetAnchorToFrame" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Am Rahmen verankern</value>
