@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:25:05 $
+ *  last change: $Author: nn $ $Date: 2000-10-09 10:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,7 @@ public:
 
     Window*         GetDialogParent();
     void            ErrorMessage( USHORT nGlobStrId );
+    BOOL            IsEditable() const;
 
     BOOL            AdjustRowHeight( USHORT nStartRow, USHORT nEndRow, USHORT nTab );
 
