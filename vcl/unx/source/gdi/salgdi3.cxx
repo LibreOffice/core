@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-04 17:42:22 $
+ *  last change: $Author: hdu $ $Date: 2002-09-06 15:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1322,7 +1322,7 @@ PspFontLayout::PspFontLayout( const ImplLayoutArgs& rArgs, ::psp::PrinterGfx& rG
     bool bRightToLeft = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL));
 
     int nGlyphCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
-    GlyphItem* pGlyphBuffer = new GlyphItem[ nGlyphCount ];
+    GlyphItem* pGlyphItems = new GlyphItem[ nGlyphCount ];
     long nUnitsPerPixel = 1;
 
     long nWidth = 0;
@@ -1349,11 +1349,12 @@ PspFontLayout::PspFontLayout( const ImplLayoutArgs& rArgs, ::psp::PrinterGfx& rG
         // but most probably no asian pairs in builtin fonts
 
         int nGlyphFlags = bRightToLeft ? GlyphItem::IS_RTL_GLYPH : 0;
-        pGlyphBuffer[i] = GlyphItem( nLogicalIndex, nGlyphIndex, aNewPos,
+        nGlyphIndex |= GF_ISCHAR;
+        pGlyphItems[i] = GlyphItem( nLogicalIndex, nGlyphIndex, aNewPos,
             nGlyphFlags, nGlyphWidth );
     }
 
-    SetGlyphItems( pGlyphBuffer, nGlyphCount );
+    SetGlyphItems( pGlyphItems, nGlyphCount );
     SetOrientation( rGfx.GetFontAngle() );
     SetUnitsPerPixel( nUnitsPerPixel );
     SetWantFallback( false );
