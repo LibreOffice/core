@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:26:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,7 +628,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
                     ::std::vector< ::rtl::OUString >::iterator aAutoEnd = m_aAutoColumns.end();
                     for (sal_Int32 i = 1;aAutoIter !=  aAutoEnd && i <= nColumnCount; ++aAutoIter,++i)
                     {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
                         ::rtl::OUString sColumnName( xMd->getColumnName(i) );
 #endif
                         OColumnNamePos::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
