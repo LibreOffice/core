@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:28:44 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 14:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,18 +555,21 @@ String ContentListBox_Impl::GetSelectEntry() const
 
 // class HelpTabPage_Impl ------------------------------------------------
 
-HelpTabPage_Impl::HelpTabPage_Impl( Window* pParent, const ResId& rResId ) :
+HelpTabPage_Impl::HelpTabPage_Impl(
+    Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin, const ResId& rResId ) :
 
-    TabPage( pParent, rResId )
+    TabPage( pParent, rResId ),
+
+    m_pIdxWin( _pIdxWin )
 
 {
 }
 
 // class ContentTabPage_Impl ---------------------------------------------
 
-ContentTabPage_Impl::ContentTabPage_Impl( Window* pParent ) :
+ContentTabPage_Impl::ContentTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin ) :
 
-    HelpTabPage_Impl( pParent, SfxResId( TP_HELP_CONTENT ) ),
+    HelpTabPage_Impl( pParent, _pIdxWin, SfxResId( TP_HELP_CONTENT ) ),
 
     aContentBox( this, ResId( LB_CONTENTS ) )
 
@@ -590,7 +593,8 @@ void ContentTabPage_Impl::Resize()
 
 void ContentTabPage_Impl::ActivatePage()
 {
-    SetFocusOnBox();
+    if ( !m_pIdxWin->WasCursorLeftOrRight() )
+        SetFocusOnBox();
 }
 
 // -----------------------------------------------------------------------
@@ -670,9 +674,9 @@ void IndexBox_Impl::SelectExecutableEntry()
 
 // class IndexTabPage_Impl -----------------------------------------------
 
-IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent ) :
+IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin ) :
 
-    HelpTabPage_Impl( pParent, SfxResId( TP_HELP_INDEX ) ),
+    HelpTabPage_Impl( pParent, _pIdxWin, SfxResId( TP_HELP_INDEX ) ),
 
     aExpressionFT   ( this, ResId( FT_EXPRESSION ) ),
     aIndexCB        ( this, ResId( CB_INDEX ) ),
@@ -932,7 +936,8 @@ void IndexTabPage_Impl::ActivatePage()
         aFactoryTimer.Start();
     }
 
-    SetFocusOnBox();
+    if ( !m_pIdxWin->WasCursorLeftOrRight() )
+        SetFocusOnBox();
 }
 
 // -----------------------------------------------------------------------
@@ -1078,9 +1083,9 @@ long SearchResultsBox_Impl::Notify( NotifyEvent& rNEvt )
 
 // class SearchTabPage_Impl ----------------------------------------------
 
-SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
+SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin ) :
 
-    HelpTabPage_Impl( pParent, SfxResId( TP_HELP_SEARCH ) ),
+    HelpTabPage_Impl( pParent, _pIdxWin, SfxResId( TP_HELP_SEARCH ) ),
 
     aSearchFT       ( this, ResId( FT_SEARCH ) ),
     aSearchED       ( this, ResId( ED_SEARCH ) ),
@@ -1287,7 +1292,8 @@ void SearchTabPage_Impl::Resize()
 
 void SearchTabPage_Impl::ActivatePage()
 {
-    aSearchED.GrabFocus();
+    if ( !m_pIdxWin->WasCursorLeftOrRight() )
+        aSearchED.GrabFocus();
 }
 
 // -----------------------------------------------------------------------
@@ -1476,9 +1482,9 @@ long BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
 
 // class BookmarksTabPage_Impl -------------------------------------------
 
-BookmarksTabPage_Impl::BookmarksTabPage_Impl( Window* pParent ) :
+BookmarksTabPage_Impl::BookmarksTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin ) :
 
-    HelpTabPage_Impl( pParent, SfxResId( TP_HELP_BOOKMARKS ) ),
+    HelpTabPage_Impl( pParent, _pIdxWin, SfxResId( TP_HELP_BOOKMARKS ) ),
 
     aBookmarksFT    ( this, ResId( FT_BOOKMARKS ) ),
     aBookmarksBox   ( this, ResId( LB_BOOKMARKS ) ),
@@ -1549,7 +1555,8 @@ void BookmarksTabPage_Impl::Resize()
 
 void BookmarksTabPage_Impl::ActivatePage()
 {
-    SetFocusOnBox();
+    if ( !m_pIdxWin->WasCursorLeftOrRight() )
+        SetFocusOnBox();
 }
 
 // -----------------------------------------------------------------------
@@ -1666,16 +1673,17 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* _pParent )
 
     Window( _pParent, SfxResId( WIN_HELP_INDEX ) ),
 
-    aActiveLB   ( this, ResId( LB_ACTIVE ) ),
-    aActiveLine ( this, ResId( FL_ACTIVE ) ),
-    aTabCtrl    ( this, ResId( TC_INDEX ) ),
+    aActiveLB           ( this, ResId( LB_ACTIVE ) ),
+    aActiveLine         ( this, ResId( FL_ACTIVE ) ),
+    aTabCtrl            ( this, ResId( TC_INDEX ) ),
 
-    pParentWin  ( _pParent ),
+    aIndexKeywordLink   ( LINK( this, SfxHelpIndexWindow_Impl, KeywordHdl ) ),
+    pParentWin          ( _pParent ),
 
-    pCPage      ( NULL ),
-    pIPage      ( NULL ),
-    pSPage      ( NULL ),
-    pBPage      ( NULL )
+    pCPage              ( NULL ),
+    pIPage              ( NULL ),
+    pSPage              ( NULL ),
+    pBPage              ( NULL )
 
 {
     FreeResource();
@@ -1693,10 +1701,6 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* _pParent )
     ActivatePageHdl( &aTabCtrl );
     aActiveLB.SetSelectHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectHdl ) );
     nMinWidth = ( aActiveLB.GetSizePixel().Width() / 2 );
-
-    if ( !pIPage )
-        pIPage = new IndexTabPage_Impl( &aTabCtrl );
-    pIPage->SetKeywordHdl( LINK( this, SfxHelpIndexWindow_Impl, KeywordHdl ) );
 
     aTimer.SetTimeoutHdl( LINK( this, SfxHelpIndexWindow_Impl, InitHdl ) );
     aTimer.SetTimeout( 200 );
@@ -1781,33 +1785,25 @@ HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetCurrentPage( USHORT& rCurId )
     {
         case HELP_INDEX_PAGE_CONTENTS:
         {
-            if ( !pCPage )
-                pCPage = new ContentTabPage_Impl( &aTabCtrl );
-            pPage = pCPage;
+            pPage = GetContentPage();
             break;
         }
 
         case HELP_INDEX_PAGE_INDEX:
         {
-            if ( !pIPage )
-                pIPage = new IndexTabPage_Impl( &aTabCtrl );
-            pPage = pIPage;
+            pPage = GetIndexPage();
             break;
         }
 
         case HELP_INDEX_PAGE_SEARCH:
         {
-            if ( !pSPage )
-                pSPage = new SearchTabPage_Impl( &aTabCtrl );
-            pPage = pSPage;
+            pPage = GetSearchPage();
             break;
         }
 
         case HELP_INDEX_PAGE_BOOKMARKS:
         {
-            if ( !pBPage )
-                pBPage = new BookmarksTabPage_Impl( &aTabCtrl );
-            pPage = pBPage;
+            pPage = GetBookmarksPage();
             break;
         }
     }
@@ -1922,8 +1918,9 @@ long SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
     {
          const KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+        USHORT nCode = rKeyCode.GetCode();
 
-        if ( rKeyCode.GetCode() == KEY_TAB )
+        if (  KEY_TAB == nCode )
         {
             // don't exit index pane with <TAB>
             USHORT nPageId = 0;
@@ -1943,7 +1940,7 @@ long SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             }
             else if ( bCtrl )
             {
-                // <CTRL><TAB> moves through the pages
+                // <STRG><TAB> moves through the pages
                 if ( nPageId < HELP_INDEX_PAGE_LAST )
                     nPageId++;
                 else
@@ -1953,6 +1950,10 @@ long SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 nDone = 1;
             }
          }
+        else if ( aTabCtrl.HasFocus() && ( KEY_LEFT == nCode || KEY_RIGHT == nCode ) )
+        {
+            bWasCursorLeftOrRight = true;
+        }
     }
 
     return nDone ? nDone : Window::PreNotify( rNEvt );
@@ -1976,18 +1977,15 @@ void SfxHelpIndexWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link& rLink )
 {
-    if ( !pCPage )
-        pCPage = new ContentTabPage_Impl( &aTabCtrl );
-    pCPage->SetOpenHdl( rLink );
-    if ( !pIPage )
-        pIPage = new IndexTabPage_Impl( &aTabCtrl );
-    pIPage->SetDoubleClickHdl( rLink );
-    if ( !pSPage )
-        pSPage = new SearchTabPage_Impl( &aTabCtrl );
-    pSPage->SetDoubleClickHdl( rLink );
-    if ( !pBPage )
-        pBPage = new BookmarksTabPage_Impl( &aTabCtrl );
-    pBPage->SetDoubleClickHdl( rLink );
+    aPageDoubleClickLink = rLink;
+    if ( pCPage )
+        pCPage->SetOpenHdl( aPageDoubleClickLink );
+    if ( pIPage )
+        pIPage->SetDoubleClickHdl( aPageDoubleClickLink );
+    if ( pSPage )
+        pSPage->SetDoubleClickHdl( aPageDoubleClickLink );
+    if ( pBPage )
+        pBPage->SetDoubleClickHdl( aPageDoubleClickLink );
 }
 
 // -----------------------------------------------------------------------
@@ -1996,13 +1994,8 @@ void SfxHelpIndexWindow_Impl::SetFactory( const String& rFactory, sal_Bool bActi
 {
     if ( rFactory.Len() > 0 )
     {
-        if ( !pIPage )
-            pIPage = new IndexTabPage_Impl( &aTabCtrl );
-        pIPage->SetFactory( rFactory );
-        if ( !pSPage )
-            pSPage = new SearchTabPage_Impl( &aTabCtrl );
-        pSPage->SetFactory( rFactory );
-
+        GetIndexPage()->SetFactory( rFactory );
+        GetSearchPage()->SetFactory( rFactory );
         if ( bActive )
             SetActiveFactory();
     }
@@ -2040,9 +2033,7 @@ String SfxHelpIndexWindow_Impl::GetSelectEntry() const
 
 void SfxHelpIndexWindow_Impl::AddBookmarks( const String& rTitle, const String& rURL )
 {
-    if ( !pBPage )
-        pBPage = new BookmarksTabPage_Impl( &aTabCtrl );
-    pBPage->AddBookmarks( rTitle, rURL );
+    GetBookmarksPage()->AddBookmarks( rTitle, rURL );
 }
 
 // -----------------------------------------------------------------------
@@ -2312,10 +2303,11 @@ bool SfxHelpTextWindow_Impl::isHandledKey( const KeyCode& _rKeyCode )
     bool bRet = false;
     USHORT nCode = _rKeyCode.GetCode();
 
-    // the keys <CTRL><A> (select all), <CTRL><C> (copy), <CTRL><F> (find) and <CTRL><P> (print)
+    // the keys <STRG><A> (select all), <STRG><C> (copy),
+    //          <STRG><F> (find), <STRG><P> (print) and <STRG><W> (close window)
     // were handled in help
     if ( _rKeyCode.IsMod1() &&
-         ( KEY_A == nCode || KEY_C == nCode || KEY_F == nCode || KEY_P == nCode ) )
+         ( KEY_A == nCode || KEY_C == nCode || KEY_F == nCode || KEY_P == nCode || KEY_W == nCode ) )
     {
         if ( KEY_F == nCode )
             DoSearch();
@@ -2404,16 +2396,10 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
                 // create descriptor, set string and find all words
                 Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
                 Reference < XPropertySet > xPropSet( xSrchDesc, UNO_QUERY );
-                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchRegularExpression"),
-                                            makeAny( sal_Bool( sal_True ) ) );
-                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchWords"),
-                                            makeAny( sal_Bool( pDlg->IsOnlyWholeWords() != false ) ) );
-                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchCaseSensitive"),
-                                            makeAny( sal_Bool( pDlg->IsMarchCase() != false ) ) );
-                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchBackwards"),
-                                            makeAny( sal_Bool( pDlg->IsSearchBackwards() != false ) ) );
-                String sSearchString = sfx2::PrepareSearchString( sSearchText, GetBreakIterator(), false );
-                xSrchDesc->setSearchString( sSearchString );
+                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchWords"), makeAny( sal_Bool( pDlg->IsOnlyWholeWords() != false ) ) );
+                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchCaseSensitive"), makeAny( sal_Bool( pDlg->IsMarchCase() != false ) ) );
+                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchBackwards"), makeAny( sal_Bool( pDlg->IsSearchBackwards() != false ) ) );
+                xSrchDesc->setSearchString( sSearchText );
                 Reference< XInterface > xSelection;
                 Reference< XTextRange > xCursor = getCursor();
 
@@ -2591,14 +2577,15 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
          const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
          const KeyCode& rKeyCode = pKEvt->GetKeyCode();
         USHORT nKeyGroup = rKeyCode.GetGroup();
+        USHORT nKey = rKeyCode.GetCode();
         if ( KEYGROUP_ALPHA == nKeyGroup &&  !isHandledKey( rKeyCode ) )
         {
             // do nothing disables the writer accelerators
             nDone = 1;
          }
-        else if ( rKeyCode.IsMod1() && rKeyCode.GetCode() == KEY_F4 )
+        else if ( rKeyCode.IsMod1() && ( KEY_F4 == nKey || KEY_W == nKey ) )
         {
-            // <STRG><F4> -> close top frame
+            // <STRG><F4> or <STRG><W> -> close top frame
             pHelpWin->CloseWindow();
             nDone = 1;
         }
@@ -3168,17 +3155,16 @@ long SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     {
         // Backward == <ALT><LEFT> or <BACKSPACE> Forward == <ALT><RIGHT>
          const KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
-        if ( ( rKeyCode.IsMod2() &&
-               ( rKeyCode.GetCode() == KEY_LEFT || rKeyCode.GetCode() == KEY_RIGHT ) ) ||
-             ( !rKeyCode.GetModifier() &&
-               rKeyCode.GetCode() == KEY_BACKSPACE && !pIndexWin->HasFocusOnEdit() ) )
+        USHORT nKey = rKeyCode.GetCode();
+        if ( ( rKeyCode.IsMod2() && ( KEY_LEFT == nKey || KEY_RIGHT == nKey ) ) ||
+             ( !rKeyCode.GetModifier() && KEY_BACKSPACE == nKey && !pIndexWin->HasFocusOnEdit() ) )
         {
             DoAction( rKeyCode.GetCode() == KEY_RIGHT ? TBI_FORWARD : TBI_BACKWARD );
             bHandled = sal_True;
         }
-        else if ( rKeyCode.IsMod1() && rKeyCode.GetCode() == KEY_F4 )
+        else if ( rKeyCode.IsMod1() && ( KEY_F4 == nKey || KEY_W == nKey ) )
         {
-            // <STRG><F4> -> close top frame
+            // <STRG><F4> or <STRG><W> -> close top frame
             CloseWindow();
             bHandled = sal_True;
         }
