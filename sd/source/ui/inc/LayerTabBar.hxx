@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayerTabBar.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:35:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@ public:
     LayerTabBar (
         DrawViewShell* pDrViewSh,
         ::Window* pParent);
+    LayerTabBar (
+        DrawViewShell* pDrViewSh,
+        ::Window* pParent,
+        const ResId& rResId);
     virtual ~LayerTabBar (void);
 
     /** Inform all listeners of this control that the current layer has been
