@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventImportHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-19 16:05:31 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:16:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,14 +133,14 @@ void XMLEventImportHelper::AddTranslationTable(
             pTrans->sAPIName != NULL;
             pTrans++)
         {
-            OUString rName(OUString::createFromAscii(pTrans->sXMLName));
+            XMLEventName aName( pTrans->nPrefix, pTrans->sXMLName );
 
             // check for conflicting entries
-            DBG_ASSERT(pEventNameMap->find(rName) == pEventNameMap->end(),
+            DBG_ASSERT(pEventNameMap->find(aName) == pEventNameMap->end(),
                        "conflicting event translations");
 
             // assign new translation
-            (*pEventNameMap)[rName] =
+            (*pEventNameMap)[aName] =
                 OUString::createFromAscii(pTrans->sAPIName);
         }
     }
@@ -180,17 +180,29 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
     SvXMLImportContext* pContext = NULL;
 
     // translate event name form xml to api
-    NameMap::iterator aNameIter = pEventNameMap->find(rXmlEventName);
+    OUString sMacroName;
+    sal_uInt16 nMacroPrefix =
+        rImport.GetNamespaceMap().GetKeyByAttrName( rXmlEventName,
+                                                        &sMacroName );
+    XMLEventName aEventName( nMacroPrefix, sMacroName );
+    NameMap::iterator aNameIter = pEventNameMap->find(aEventName);
     if (aNameIter != pEventNameMap->end())
     {
+        OUString aScriptLanguage;
+        sal_uInt16 nScriptPrefix = rImport.GetNamespaceMap().
+                GetKeyByAttrName( rLanguage, &aScriptLanguage );
+        if( XML_NAMESPACE_OOO != nScriptPrefix )
+            aScriptLanguage = rLanguage ;
+
         // check for factory
-        FactoryMap::iterator aFactoryIterator = aFactoryMap.find(rLanguage);
+        FactoryMap::iterator aFactoryIterator =
+            aFactoryMap.find(aScriptLanguage);
         if (aFactoryIterator != aFactoryMap.end())
         {
             // delegate to factory
             pContext = aFactoryIterator->second->CreateContext(
                 rImport, nPrefix, rLocalName, xAttrList,
-                rEvents, aNameIter->second, rLanguage);
+                rEvents, aNameIter->second, aScriptLanguage);
         }
     }
 
