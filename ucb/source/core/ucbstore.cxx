@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstore.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:49:55 $
+ *  last change: $Author: kso $ $Date: 2001-04-09 13:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2363,10 +2363,9 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                                     = xHierNameAccess->getByHierarchicalName(
                                         aHierName );
 
-                                if ( !rValue.Value.hasValue() )
-                                    OSL_ENSURE( sal_False,
-                                      "PersistentPropertySet::getPropertyValues - "
-                                      "Error getting property value!" );
+                                // Note: The value may be void if addProperty
+                                //       was called with a default value
+                                //       of type void.
                             }
                             catch ( NoSuchElementException& )
                             {
@@ -2796,13 +2795,11 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                         = xHierNameAccess->getByHierarchicalName(
                                             aHierName );
 
-                                    if ( !aKeyValue.hasValue() )
-                                        OSL_ENSURE( sal_False,
-                                          "PropertySetInfo_Impl::getProperties - "
-                                          "Error getting property value!" );
-                                    else
-                                        rProp.Type = aKeyValue.getValueType();
+                                    // Note: The type may be void if addProperty
+                                    //       was called with a default value
+                                    //       of type void.
 
+                                    rProp.Type = aKeyValue.getValueType();
                                 }
                                 catch ( NoSuchElementException& )
                                 {
