@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerparser.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:34:54 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ namespace configmgr
             typedef uno::Reference< backenduno::XLayerHandler > HandlerRef;
 
         public:
-            LayerParser(ServiceFactory const & _xSvcFactory, HandlerRef const & _xHandler);
+            LayerParser(Context const & _xContext, HandlerRef const & _xHandler);
             virtual ~LayerParser();
 
         // XDocumentHandler
