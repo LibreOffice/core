@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:26:30 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,19 +717,13 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
             case SID_DB_APP_REPORT_OPEN:
                 aReturn.bEnabled = getContainer()->getSelectionCount() > 0 && getContainer()->isALeafSelected();
                 break;
-            case SID_DB_APP_DSIMPORT:
-                aReturn.bEnabled = sal_True;
-                break;
-            case SID_DB_APP_DSEXPORT:
-                aReturn.bEnabled = sal_True;
-                break;
             case SID_DB_APP_DSUSERADMIN:
-                {
-                    static ODsnTypeCollection aTypeCollection;
-                    DATASOURCE_TYPE eType = aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    aReturn.bEnabled = DST_EMBEDDED != eType;
-                }
-                break;
+            {
+                ODsnTypeCollection aTypeCollection;
+                DATASOURCE_TYPE eType = aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                aReturn.bEnabled = DST_EMBEDDED != eType;
+            }
+            break;
             case SID_DB_APP_DSRELDESIGN:
                 aReturn.bEnabled = sal_True;
                 break;
@@ -792,7 +786,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = !isDataSourceReadOnly();
                 aReturn.aState <<= getContainer()->getPreviewMode() == E_DOCUMENT;
                 break;
-            case SID_DB_APP_DBADMIN:
+            case ID_BROWSER_UNDO:
                 aReturn.bEnabled = sal_False;
                 break;
             default:
@@ -1084,14 +1078,6 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case SID_SELECTALL:
                 getContainer()->selectAll();
                 break;
-            case SID_DB_APP_DSIMPORT:
-                OSL_ENSURE(0,"NYI");
-                // TODO ds import
-                break;
-            case SID_DB_APP_DSEXPORT:
-                OSL_ENSURE(0,"NYI");
-                // TODO ds export
-                break;
             case SID_DB_APP_DSRELDESIGN:
                 {
                     Reference<XConnection> xConnection;
@@ -1153,8 +1139,6 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 m_ePreviewMode = E_DOCUMENT;
                 getContainer()->switchPreview(m_ePreviewMode);
                 break;
-            case SID_DB_APP_DBADMIN:
-                break;
         }
     }
     catch(Exception& e)
@@ -1172,75 +1156,88 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
     InvalidateFeature(_nId);
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::AddSupportedFeatures()
+void OApplicationController::describeSupportedFeatures()
 {
-    OApplicationController_CBASE::AddSupportedFeatures();
+    OApplicationController_CBASE::describeSupportedFeatures();
 
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Save"))]                    = ID_BROWSER_SAVEDOC;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SaveAs"))]                  = ID_BROWSER_SAVEASDOC;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewForm"))]               = SID_APP_NEW_FORM;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewFolder"))]             = SID_APP_NEW_FOLDER;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewFormAutoPilot"))]      = ID_FORM_NEW_PILOT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewFormAutoPilotWithPreSelection"))]      = SID_FORM_CREATE_REPWIZ_PRE_SEL;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewReportAutoPilot"))]    = ID_DOCUMENT_CREATE_REPWIZ;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewReportAutoPilotWithPreSelection"))]    = SID_REPORT_CREATE_REPWIZ_PRE_SEL;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQuery"))]              = ID_NEW_QUERY_DESIGN;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQuerySql"))]           = ID_NEW_QUERY_SQL;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewQueryAutoPilot"))]     = ID_APP_NEW_QUERY_AUTO_PILOT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewTable"))]              = ID_NEW_TABLE_DESIGN;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewTableAutoPilot"))]     = ID_NEW_TABLE_DESIGN_AUTO_PILOT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewView"))]               = ID_NEW_VIEW_DESIGN;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewViewSQL"))]            = ID_NEW_VIEW_SQL;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewViewAutoPilot"))]      = ID_NEW_VIEW_DESIGN_AUTO_PILOT;
+    implDescribeSupportedFeature( ".uno:Save",               ID_BROWSER_SAVEDOC,        CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:SaveAs",             ID_BROWSER_SAVEASDOC,      CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:DBNewForm",          SID_APP_NEW_FORM,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewFolder",        SID_APP_NEW_FOLDER,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewFormAutoPilot", ID_FORM_NEW_PILOT,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewFormAutoPilotWithPreSelection",
+                                                             SID_FORM_CREATE_REPWIZ_PRE_SEL,
+                                                                                        CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:DBNewReportAutoPilot",
+                                                             ID_DOCUMENT_CREATE_REPWIZ, CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewReportAutoPilotWithPreSelection",
+                                                             SID_REPORT_CREATE_REPWIZ_PRE_SEL,
+                                                                                        CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:DBNewQuery",         ID_NEW_QUERY_DESIGN,       CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewQuerySql",      ID_NEW_QUERY_SQL,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewQueryAutoPilot",ID_APP_NEW_QUERY_AUTO_PILOT,
+                                                                                        CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewTable",         ID_NEW_TABLE_DESIGN,       CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewTableAutoPilot",ID_NEW_TABLE_DESIGN_AUTO_PILOT,
+                                                                                        CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewView",          ID_NEW_VIEW_DESIGN,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewViewSQL",       ID_NEW_VIEW_SQL,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewViewAutoPilot", ID_NEW_VIEW_DESIGN_AUTO_PILOT,
+                                                                                        CommandGroup::INSERT );
 
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDelete"))]                = SID_DB_APP_DELETE ;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBRename"))]                = SID_DB_APP_RENAME ;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBEdit"))]                  = SID_DB_APP_EDIT   ;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBOpen"))]                  = SID_DB_APP_OPEN   ;
+    implDescribeSupportedFeature( ".uno:DBDelete",           SID_DB_APP_DELETE,         CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBRename",           SID_DB_APP_RENAME,         CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBEdit",             SID_DB_APP_EDIT,           CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBOpen",             SID_DB_APP_OPEN,           CommandGroup::EDIT );
 
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBTableDelete"))]           = SID_DB_APP_TABLE_DELETE   ;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBTableRename"))]           = SID_DB_APP_TABLE_RENAME   ;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBTableEdit"))]             = SID_DB_APP_TABLE_EDIT ;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBTableOpen"))]             = SID_DB_APP_TABLE_OPEN ;
+    implDescribeSupportedFeature( ".uno:DBTableDelete",      SID_DB_APP_TABLE_DELETE,   CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBTableRename",      SID_DB_APP_TABLE_RENAME,   CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBTableEdit",        SID_DB_APP_TABLE_EDIT,     CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBTableOpen",        SID_DB_APP_TABLE_OPEN,     CommandGroup::EDIT );
 
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBQueryDelete"))]           = SID_DB_APP_QUERY_DELETE   ;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBQueryRename"))]           = SID_DB_APP_QUERY_RENAME   ;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBQueryEdit"))]             = SID_DB_APP_QUERY_EDIT ;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBQueryOpen"))]             = SID_DB_APP_QUERY_OPEN ;
+    implDescribeSupportedFeature( ".uno:DBQueryDelete",      SID_DB_APP_QUERY_DELETE,   CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBQueryRename",      SID_DB_APP_QUERY_RENAME,   CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBQueryEdit",        SID_DB_APP_QUERY_EDIT,     CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBQueryOpen",        SID_DB_APP_QUERY_OPEN,     CommandGroup::EDIT );
 
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBFormDelete"))]            = SID_DB_APP_FORM_DELETE    ;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBFormRename"))]            = SID_DB_APP_FORM_RENAME    ;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBFormEdit"))]              = SID_DB_APP_FORM_EDIT  ;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBFormOpen"))]              = SID_DB_APP_FORM_OPEN  ;
+    implDescribeSupportedFeature( ".uno:DBFormDelete",       SID_DB_APP_FORM_DELETE,    CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBFormRename",       SID_DB_APP_FORM_RENAME,    CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBFormEdit",         SID_DB_APP_FORM_EDIT,      CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBFormOpen",         SID_DB_APP_FORM_OPEN,      CommandGroup::EDIT );
 
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBReportDelete"))]          = SID_DB_APP_REPORT_DELETE;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBReportRename"))]          = SID_DB_APP_REPORT_RENAME;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBReportEdit"))]            = SID_DB_APP_REPORT_EDIT    ;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBReportOpen"))]            = SID_DB_APP_REPORT_OPEN    ;
+    implDescribeSupportedFeature( ".uno:DBReportDelete",     SID_DB_APP_REPORT_DELETE,  CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBReportRename",     SID_DB_APP_REPORT_RENAME,  CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBReportEdit",       SID_DB_APP_REPORT_EDIT,    CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBReportOpen",       SID_DB_APP_REPORT_OPEN,    CommandGroup::EDIT );
 
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SelectAll"))]               = SID_SELECTALL;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Sortup"))]                  = ID_BROWSER_SORTUP;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SortDown"))]                = ID_BROWSER_SORTDOWN;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDSImport"))]              = SID_DB_APP_DSIMPORT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDSExport"))]              = SID_DB_APP_DSEXPORT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBRelationDesign"))]        = SID_DB_APP_DSRELDESIGN;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBUserAdmin"))]             = SID_DB_APP_DSUSERADMIN;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBTableFilter"))]           = SID_DB_APP_TABLEFILTER;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDSProperties"))]          = SID_DB_APP_DSPROPS;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDSConnectionType"))]      = SID_DB_APP_DSCONNECTION_TYPE;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDSAdvancedSettings"))]    = SID_DB_APP_DSADVANCED_SETTINGS;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:PasteSpecial"))]            = SID_DB_APP_PASTE_SPECIAL;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBConvertToView"))]         = SID_DB_APP_CONVERTTOVIEW;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBRefreshTables"))]         = SID_DB_APP_REFRESH_TABLES;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDirectSQL"))]             = ID_DIRECT_SQL;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBViewTables"))]            = SID_DB_APP_VIEW_TABLES;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBViewQueries"))]           = SID_DB_APP_VIEW_QUERIES;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBViewForms"))]             = SID_DB_APP_VIEW_FORMS;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBViewReports"))]           = SID_DB_APP_VIEW_REPORTS;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDisablePreview"))]        = SID_DB_APP_DISABLE_PREVIEW;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBShowDocInfoPreview"))]    = SID_DB_APP_VIEW_DOCINFO_PREVIEW;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBShowDocPreview"))]        = SID_DB_APP_VIEW_DOC_PREVIEW;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBDBAdmin"))]               = SID_DB_APP_DBADMIN;
+    implDescribeSupportedFeature( ".uno:SelectAll",          SID_SELECTALL,             CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:Undo",               ID_BROWSER_UNDO,           CommandGroup::EDIT );
+
+    implDescribeSupportedFeature( ".uno:Sortup",             ID_BROWSER_SORTUP,         CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:SortDown",           ID_BROWSER_SORTDOWN,       CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:DBRelationDesign",   SID_DB_APP_DSRELDESIGN,    CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:DBUserAdmin",        SID_DB_APP_DSUSERADMIN,    CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:DBTableFilter",      SID_DB_APP_TABLEFILTER,    CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:DBDSProperties",     SID_DB_APP_DSPROPS,        CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBDSConnectionType", SID_DB_APP_DSCONNECTION_TYPE,
+                                                                                        CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBDSAdvancedSettings",
+                                                             SID_DB_APP_DSADVANCED_SETTINGS,
+                                                                                        CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:PasteSpecial",       SID_DB_APP_PASTE_SPECIAL,  CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBConvertToView",    SID_DB_APP_CONVERTTOVIEW,  CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBRefreshTables",    SID_DB_APP_REFRESH_TABLES, CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:DBDirectSQL",        ID_DIRECT_SQL,             CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:DBViewTables",       SID_DB_APP_VIEW_TABLES,    CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:DBViewQueries",      SID_DB_APP_VIEW_QUERIES,   CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:DBViewForms",        SID_DB_APP_VIEW_FORMS,     CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:DBViewReports",      SID_DB_APP_VIEW_REPORTS,   CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:DBDisablePreview",   SID_DB_APP_DISABLE_PREVIEW,CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:DBShowDocInfoPreview",
+                                                             SID_DB_APP_VIEW_DOCINFO_PREVIEW,
+                                                                                        CommandGroup::VIEW );
+    implDescribeSupportedFeature( ".uno:DBShowDocPreview",   SID_DB_APP_VIEW_DOC_PREVIEW,
+                                                                                        CommandGroup::VIEW );
 }
 // -----------------------------------------------------------------------------
 OApplicationView*   OApplicationController::getContainer() const
