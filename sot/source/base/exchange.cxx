@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 13:47:29 $
+ *  last change: $Author: ka $ $Date: 2001-03-06 17:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,10 +109,10 @@ static const DataFlavorRepresentation aFormatArray_Impl[] =
 /*  3 SOT_FORMAT_GDIMETAFILE*/                  { "GDIMetaFile", "GDIMetaFile", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*  4 SOT_FORMAT_PRIVATE*/                      { "Private", "Private", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*  5 SOT_FORMAT_FILE*/                         { "FileName", "FileName", &::getCppuType( (const ::rtl::OUString*) 0 ) },
-/*  6 SOT_FORMAT_FILE_LIST*/                    { "FileList", "FileList", &::getCppuType( (const Sequence< ::rtl::OUString >*) 0 ) },
-/*  7 EMPTY*/                                   { "", "", &::getCppuType( (const ::rtl::OUString*) 0 ) },
-/*  8 EMPTY*/                                   { "", "", &::getCppuType( (const ::rtl::OUString*) 0 ) },
-/*  9 EMPTY*/                                   { "", "", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/*  6 SOT_FORMAT_FILE_LIST*/                    { "FileList", "FileList", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*  7 EMPTY*/                                   { "", "", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*  8 EMPTY*/                                   { "", "", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*  9 EMPTY*/                                   { "", "", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 10 SOT_FORMAT_RTF*/                          { "text/richtext", "Rich Text Format", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 11 SOT_FORMATSTR_ID_DRAWING*/                { "Drawing Format", "Drawing Format", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 12 SOT_FORMATSTR_ID_SVXB*/                   { "SVXB (StarView Bitmap/Animation)", "SVXB (StarView Bitmap/Animation)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
