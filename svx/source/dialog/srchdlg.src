@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-01 21:32:34 $
+ *  last change: $Author: kz $ $Date: 2001-11-07 21:29:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ french ] = "Remplacer ~par" ;
         Text [ swedish ] = "Ers�tt me~d" ;
         Text [ dutch ] = "Vervangen ~door" ;
-        Text [ spanish ] = "Reemplazar ~con" ;
+        Text [ spanish ] = "Reemplazar ~por" ;
         Text [ english_us ] = "Re~place with" ;
         Text[ chinese_simplified ] = "替换成(~P)";
         Text[ russian ] = "�������� ��";
@@ -555,7 +555,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ swedish ] = "Ta h�nsyn till teckenbredd";
         Text[ polish ] = "Uwzgl�dnij szeroko�� znak�w";
         Text[ portuguese_brazilian ] = "Match half/full width forms";
-        Text[ japanese ] = "全角と半角";
+        Text[ japanese ] = "全角と半角を区別する";
         Text[ korean ] = "반폭/전폭 형식";
         Text[ chinese_simplified ] = "顾全字符宽度";
         Text[ chinese_traditional ] = "顧及字元寬度";
@@ -1218,6 +1218,7 @@ ModelessDialog RID_SVXDLG_SEARCH
 };
 
  // ********************************************************************** EOF
+
 
 
 
