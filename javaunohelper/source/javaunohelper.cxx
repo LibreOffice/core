@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaunohelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 16:40:54 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 17:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,8 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     const jchar* pJLibName = pJEnv->GetStringChars(jLibName, NULL);
     OUString aLibName( pJLibName );
     pJEnv->ReleaseStringChars( jLibName, pJLibName);
+
+    aLibName += OUString( RTL_CONSTASCII_USTRINGPARAM(SAL_DLLEXTENSION) );
 
     jobject joSLL_cpp = 0;
 
