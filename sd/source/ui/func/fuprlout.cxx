@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuprlout.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2001-11-14 13:31:17 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,9 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
+
+#include "fuprlout.hxx"
 
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
@@ -84,29 +85,38 @@
 #include <svx/svdundo.hxx>
 #endif
 
-#include "fuprlout.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "pres.hxx"
-#include "drviewsh.hxx"
-#include "frmview.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_FRAMW_VIEW_HXX
+#include "FrameView.hxx"
+#endif
 #include "stlpool.hxx"
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "glob.hrc"
 #include "glob.hxx"
 #include "strings.hrc"
 #include "strmname.h"
 #include "app.hrc"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "unprlout.hxx"
 #include "unchss.hxx"
 #include "unmovss.hxx"
 #include "sdattr.hxx"
 #include "sdresid.hxx"
 #include "sdpreslt.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "eetext.hxx"
 #include <svx/editdata.hxx>
+
+namespace sd {
 
 #ifndef SO2_DECL_SVSTORAGE_DEFINED
 #define SO2_DECL_SVSTORAGE_DEFINED
@@ -125,12 +135,13 @@ TYPEINIT1( FuPresentationLayout, FuPoor );
 |*
 \************************************************************************/
 
-FuPresentationLayout::FuPresentationLayout(SdViewShell* pViewSh,
-                                           SdWindow* pWin, SdView* pView,
-                                           SdDrawDocument* pDoc,
-                                           SfxRequest& rReq)
-     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
-
+FuPresentationLayout::FuPresentationLayout (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     // damit nicht Objekte, die gerade editiert werden oder selektiert
     // sind , verschwinden
@@ -164,9 +175,10 @@ FuPresentationLayout::FuPresentationLayout(SdViewShell* pViewSh,
     // wenn wir auf einer Masterpage sind, gelten die Aenderungen fuer alle
     // Seiten und Notizseiten, die das betreffende Layout benutzen
     BOOL bOnMaster = FALSE;
-    if (pViewSh->ISA(SdDrawViewShell))
+    if (pViewSh->ISA(DrawViewShell))
     {
-        EditMode eEditMode = ((SdDrawViewShell*)pViewSh)->GetEditMode();
+        EditMode eEditMode =
+            static_cast<DrawViewShell*>(pViewSh)->GetEditMode();
         if (eEditMode == EM_MASTERPAGE)
             bOnMaster = TRUE;
     }
@@ -218,8 +230,8 @@ FuPresentationLayout::FuPresentationLayout(SdViewShell* pViewSh,
         // That isn't quitely right. If the masterpageview is active and you are
         // removing a masterpage, it's possible that you are removing the
         // current masterpage. So you have to call ResetActualPage !
-        if( pViewShell->ISA(SdDrawViewShell) && !bCheckMasters )
-            ((SdDrawView*)pView)->BlockPageOrderChangedHint(TRUE);
+        if( pViewShell->ISA(DrawViewShell) && !bCheckMasters )
+            static_cast<DrawView*>(pView)->BlockPageOrderChangedHint(TRUE);
 
         if (bLoad)
         {
@@ -243,8 +255,8 @@ FuPresentationLayout::FuPresentationLayout(SdViewShell* pViewSh,
         }
 
         // Blockade wieder aufheben
-        if (pViewShell->ISA(SdDrawViewShell) && !bCheckMasters )
-            ((SdDrawView*)pView)->BlockPageOrderChangedHint(FALSE);
+        if (pViewShell->ISA(DrawViewShell) && !bCheckMasters )
+            static_cast<DrawView*>(pView)->BlockPageOrderChangedHint(FALSE);
 
         /*************************************************************************
         |* Falls dargestellte Masterpage sichtbar war, neu darstellen
@@ -253,12 +265,13 @@ FuPresentationLayout::FuPresentationLayout(SdViewShell* pViewSh,
         {
             if (bOnMaster)
             {
-                if (pViewShell->ISA(SdDrawViewShell))
+                if (pViewShell->ISA(DrawViewShell))
                 {
-                    SdView* pView = ((SdDrawViewShell*)pViewShell)->GetView();
+                    ::sd::View* pView =
+                          static_cast<DrawViewShell*>(pViewShell)->GetView();
                     USHORT nPgNum = pSelectedPage->GetMasterPage(0)->GetPageNum();
 
-                    if (((SdDrawViewShell*)pViewShell)->GetPageKind() == PK_NOTES)
+                    if (static_cast<DrawViewShell*>(pViewShell)->GetPageKind() == PK_NOTES)
                         nPgNum++;
 
                     pView->HideAllPages();
@@ -275,9 +288,10 @@ FuPresentationLayout::FuPresentationLayout(SdViewShell* pViewSh,
         }
 
         // fake a mode change to repaint the page tab bar
-        if( pViewShell && pViewShell->ISA( SdDrawViewShell ) )
+        if( pViewShell && pViewShell->ISA( DrawViewShell ) )
         {
-            SdDrawViewShell* pDrawViewSh = (SdDrawViewShell*)pViewShell;
+            DrawViewShell* pDrawViewSh =
+                static_cast<DrawViewShell*>(pViewShell);
             EditMode eMode = pDrawViewSh->GetEditMode();
             BOOL bLayer = pDrawViewSh->GetLayerMode();
             pDrawViewSh->ChangeEditMode( eMode, !bLayer );
@@ -328,3 +342,4 @@ void FuPresentationLayout::TransferLayoutTemplate(String aFromName,
 }
 
 
+} // end of namespace sd
