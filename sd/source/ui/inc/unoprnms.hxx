@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+ *  last change: $Author: sj $ $Date: 2000-11-17 13:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #define UNO_NAME_PAGE_SPEED             "Speed"
 #define UNO_NAME_PAGE_WIDTH             "Width"
 #define UNO_NAME_PAGE_PREVIEW           "Preview"
+#define UNO_NAME_PAGE_VISIBLE           "Visible"
 
 #define UNO_NAME_OBJ_BOOKMARK           "Bookmark"
 #define UNO_NAME_OBJ_DIMCOLOR           "DimColor"

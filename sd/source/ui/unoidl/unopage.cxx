@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-08 11:20:47 $
+ *  last change: $Author: sj $ $Date: 2000-11-17 13:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ using namespace ::com::sun::star;
 #define WID_PAGE_LDBITMAP 14
 #define WID_PAGE_BACK 15
 #define WID_PAGE_PREVIEW 16
+#define WID_PAGE_VISIBLE 17
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
@@ -210,6 +211,7 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
         { MAP_CHAR_LEN(UNO_NAME_PAGE_SPEED),            WID_PAGE_SPEED,     &::getCppuType((const presentation::AnimationSpeed*)0), 0,  0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     &::getCppuType((const sal_Int32*)0),            0,  0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_PREVIEW),          WID_PAGE_PREVIEW,   SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0)), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_VISIBLE),          WID_PAGE_VISIBLE,   &::getBooleanCppuType(),                        0, 0},
         {0,0,0,0,0}
     };
 
@@ -493,6 +495,14 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             mpPage->SetFadeSpeed( (FadeSpeed) nEnum );
             break;
         }
+        case WID_PAGE_VISIBLE :
+        {
+            sal_Bool    bVisible;
+            if( ! ( aValue >>= bVisible ) )
+                throw lang::IllegalArgumentException();
+            mpPage->SetExcluded( bVisible == FALSE );
+        }
+        break;
         default:
             throw beans::UnknownPropertyException();
             break;
@@ -607,6 +617,14 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
             }
         }
         break;
+
+    case WID_PAGE_VISIBLE :
+    {
+        sal_Bool bVisible = mpPage->IsExcluded() == FALSE;
+        aAny <<= bVisible;
+    }
+    break;
+
     default:
         throw beans::UnknownPropertyException();
         break;
