@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-30 14:22:41 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,14 +407,14 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ spanish ] = "Area contiene XX encabezamientos" ;
         Text [ english_us ] = "~Area contains column headers" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÇøÓòº¬ÓĞ XX ±êÇ©(~H)";
+        Text[ chinese_simplified ] = "ÇøÓòº¬ÓĞ XX ±êÇ©(~A)";
         Text[ russian ] = "Îáëàñòü ñîäåğæèò çàãîëîâêèXX";
         Text[ polish ] = "Obszar zawiera XXnag³ówki (ów)";
-        Text[ japanese ] = "”ÍˆÍ‚É XX ‚Ì€–Ú—“‚ğŠÜ‚Ş(~H)";
-        Text[ chinese_traditional ] = "°Ï°ì§t¦³ XX ¼ĞÅÒ(~H)";
+        Text[ japanese ] = "”ÍˆÍ‚É XX ‚Ì€–Ú—“‚ğŠÜ‚Ş(~A)";
+        Text[ chinese_traditional ] = "°Ï°ì§t¦³ XX ¼ĞÅÒ(~A)";
         Text[ arabic ] = "ÑÃÓÇğXX ÊÊÖãä ÇáãäØŞÉ";
         Text[ greek ] = "Ç ğåñéï÷Ş ğåñéİ÷åé  XX êåöáëßäåò";
-        Text[ korean ] = "¹üÀ§¿¡´Â  XX ¸Ó¸®±Û Æ÷ÇÔ.";
+        Text[ korean ] = "¹üÀ§¿¡´Â  XX ¸Ó¸®±Û Æ÷ÇÔ.(~A)";
         Text[ turkish ] = "Bölüm  XXbaşlıkları içeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -527,7 +527,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ chinese_traditional ] = "½Æ»s±Æ§Çµ²ªG¨ì(~C)";
         Text[ arabic ] = "äÓÎ äÊíÌÉ ÇáİÑÒ Åáì";
         Text[ greek ] = "ÁíôéãñáöŞ áğïôåëåóìÜôùí ôáîéíüìçóçò óôï";
-        Text[ korean ] = "Á¤·Ä °á°ú¸¦ ...¿¡(·Î)  Ãâ·Â :(~C)";
+        Text[ korean ] = "Á¤·Ä °á°ú¸¦ ...¿¡(·Î)  Ãâ·Â (~C):";
         Text[ turkish ] = "Sıralama sonuçlarının kopyalanacağı ~yer";
         Text[ language_user1 ] = " ";
     };
@@ -591,24 +591,24 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Size = MAP_APPFONT ( 196 , 8 ) ;
         Text = "S~prache" ;
         Text [ ENGLISH ] = "Language Settings" ;
-        Text[ english_us ] = "Language Settings";
-        Text[ portuguese ] = "Language Settings";
+        Text[ english_us ] = "~Language";
+        Text[ portuguese ] = "~Língua";
         Text[ russian ] = "ßçûê";
-        Text[ greek ] = "Language Settings";
-        Text[ dutch ] = "Language Settings";
-        Text[ french ] = "Language Settings";
-        Text[ spanish ] = "Language Settings";
-        Text[ italian ] = "Language Settings";
+        Text[ greek ] = "Ãëşóóá";
+        Text[ dutch ] = "~Taal";
+        Text[ french ] = "~Langue";
+        Text[ spanish ] = "I~dioma";
+        Text[ italian ] = "~Lingua";
         Text[ danish ] = "Language Settings";
         Text[ swedish ] = "S~pråk";
         Text[ polish ] = "Jêzyk";
         Text[ portuguese_brazilian ] = "Language Settings";
-        Text[ japanese ] = "Language Settings";
-        Text[ korean ] = "Language Settings";
-        Text[ chinese_simplified ] = "Language Settings";
-        Text[ chinese_traditional ] = "Language Settings";
+        Text[ japanese ] = "Œ¾Œê(~L)";
+        Text[ korean ] = "~Language Settings";
+        Text[ chinese_simplified ] = "ÓïÑÔ(~L)";
+        Text[ chinese_traditional ] = "»y¨¥(~L)";
         Text[ turkish ] = "Language Settings";
-        Text[ arabic ] = "Language Settings";
+        Text[ arabic ] = "ÇááÛÉ";
     };
     ListBox LB_LANGUAGE
     {
@@ -729,7 +729,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ swedish ] = "Dataområde:" ;
         Text [ dutch ] = "Gegevensbereik:" ;
         Text [ spanish ] = "Área de datos:" ;
-        Text [ english_us ] = "Data Area:" ;
+        Text [ english_us ] = "Data area:" ;
         Text[ chinese_simplified ] = "Êı¾İÇøÓò£º";
         Text[ russian ] = "Îáëàñòü äàííûõ:";
         Text[ polish ] = "Obszar danych:";
