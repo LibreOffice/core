@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-21 11:22:25 $
+ *  last change: $Author: hdu $ $Date: 2003-07-22 12:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1109,30 +1109,6 @@ void SimpleWinLayout::Simplify( bool bIsBase )
 
 // =======================================================================
 
-#ifdef GNG_VERT_HACK
-
-class GNGVertLayoutCache : public ImplTextLayoutCache
-{
-public:
-    GNGVertLayoutCache() {}
-    virtual ~GNGVertLayoutCache() { flush( 0 ); }
-    virtual void flush( int nMinLevel );
-
-    GSUBList maGSUBLists[ MAX_FALLBACK ];
-};
-
-// -----------------------------------------------------------------------
-
-void GNGVertLayoutCache::flush( int nMinLevel )
-{
-    for( int i = nMinLevel; i < MAX_FALLBACK; ++i )
-        maGSUBLists[i].clear();
-}
-
-#endif // GNG_VERT_HACK
-
-// =======================================================================
-
 #ifdef USE_UNISCRIBE
 #include <Usp10.h>
 
@@ -1150,17 +1126,6 @@ public:
 
 public:
     bool            IsEmpty() const { return (mnEndGlyphPos <= 0); }
-};
-
-class UniscribeLayoutCache : public ImplTextLayoutCache
-{
-public:
-    UniscribeLayoutCache();
-    virtual ~UniscribeLayoutCache() { flush( 0 ); }
-
-    virtual void flush( int nMinLevel );
-
-    SCRIPT_CACHE maScriptCache[ MAX_FALLBACK ];
 };
 
 class UniscribeLayout : public WinLayout
@@ -1308,26 +1273,6 @@ static bool InitUSP()
     }
 
     return bUspEnabled;
-}
-
-// -----------------------------------------------------------------------
-
-UniscribeLayoutCache::UniscribeLayoutCache()
-{
-    for( int i = 0; i < MAX_FALLBACK; ++i )
-        maScriptCache[ i ] = NULL;
-}
-
-// -----------------------------------------------------------------------
-
-void UniscribeLayoutCache::flush( int nMinLevel )
-{
-    for( int i = nMinLevel; i < MAX_FALLBACK; ++i )
-    {
-        if( maScriptCache[ i ] != NULL )
-            (*pScriptFreeCache)( &maScriptCache[ i ] );
-        maScriptCache[ i ] = NULL;
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -2370,21 +2315,73 @@ void UniscribeLayout::Justify( long nNewWidth )
 
 // =======================================================================
 
+// for performance reasons the informations in the
+// class below are so expensive to get that getting
+// them should be avoided if possible. Only when new
+// fonts get involved they get invalidated
+// TODO: move to upper layers font list management
+class WinTextLayoutCache : public ImplTextLayoutCache
+{
+public:
+    WinTextLayoutCache();
+    virtual ~WinTextLayoutCache() { flush( 0 ); }
+    virtual void flush( int nMinLevel );
+
+// public access only visible to SalGraphics::GetTextLayout()
+#ifdef GNG_VERT_HACK
+    GSUBList maGSUBLists[ MAX_FALLBACK ];
+#endif // GNG_VERT_HACK
+#ifdef USE_UNISCRIBE
+    SCRIPT_CACHE maScriptCache[ MAX_FALLBACK ];
+#endif // USE_UNISCRIBE
+};
+
+// -----------------------------------------------------------------------
+
+WinTextLayoutCache::WinTextLayoutCache()
+{
+#ifdef USE_UNISCRIBE
+    for( int i = 0; i < MAX_FALLBACK; ++i )
+        maScriptCache[ i ] = NULL;
+#endif // USE_UNISCRIBE
+}
+
+// -----------------------------------------------------------------------
+
+void WinTextLayoutCache::flush( int nMinLevel )
+{
+    for( int i = nMinLevel; i < MAX_FALLBACK; ++i )
+    {
+#ifdef GNG_VERT_HACK
+        maGSUBLists[i].clear();
+#endif // GNG_VERT_HACK
+#ifdef USE_UNISCRIBE
+        if( maScriptCache[ i ] != NULL )
+            (*pScriptFreeCache)( &maScriptCache[ i ] );
+        maScriptCache[ i ] = NULL;
+#endif // USE_UNISCRIBE
+    }
+}
+
+// =======================================================================
+
 SalLayout* SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
     WinLayout* pWinLayout = NULL;
+
+    WinTextLayoutCache* pCache = (WinTextLayoutCache*)maGraphicsData.mxTextLayoutCache.get();
+    if( !pCache )
+    {
+        pCache = new WinTextLayoutCache;
+        maGraphicsData.mxTextLayoutCache.reset( pCache );
+    }
 
 #ifdef USE_UNISCRIBE
     if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)  // complex text
     &&   (aUspModule || (bUspEnabled && InitUSP())) ) // CTL layout engine
     {
-        if( maGraphicsData.mxTextLayoutCache.get() == 0 )
-            maGraphicsData.mxTextLayoutCache.reset(new UniscribeLayoutCache);
-
         // script complexity is determined in upper layers
-        SCRIPT_CACHE& rScriptCache =
-            static_cast<UniscribeLayoutCache*>( maGraphicsData.mxTextLayoutCache.get() )
-                ->maScriptCache[ nFallbackLevel ];
+        SCRIPT_CACHE& rScriptCache = pCache->maScriptCache[ nFallbackLevel ];
         pWinLayout = new UniscribeLayout( maGraphicsData.mhDC, rScriptCache );
         // NOTE: it must be guaranteed that the SalGraphics lives longer than
         // the created UniscribeLayout, otherwise the data passed into the
@@ -2399,11 +2396,7 @@ SalLayout* SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
 #endif // GCP_KERN_HACK
 
 #ifdef GNG_VERT_HACK
-        if( maGraphicsData.mxTextLayoutCache.get() == 0 )
-            maGraphicsData.mxTextLayoutCache.reset( new GNGVertLayoutCache );
-        GSUBList& rGSUBList =
-            static_cast<GNGVertLayoutCache*>( maGraphicsData.mxTextLayoutCache.get() )
-                ->maGSUBLists[ nFallbackLevel ];
+        GSUBList& rGSUBList = pCache->maGSUBLists[ nFallbackLevel ];
 #endif // GNG_VERT_HACK
 
         BYTE eCharSet = ANSI_CHARSET;
