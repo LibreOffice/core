@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-02 16:36:06 $
+ *  last change: $Author: pl $ $Date: 2002-12-09 17:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1427,6 +1427,10 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
 
         pFont->m_ePitch = aInfo.pitch ? pitch::Fixed : pitch::Variable;
         pFont->m_eItalic = aInfo.italicAngle == 0 ? italic::Upright : ( aInfo.italicAngle < 0 ? italic::Italic : italic::Oblique );
+        // #104264# there are fonts that set italic angle 0 although they are
+        // italic; use macstyle bit here
+        if( aInfo.italicAngle == 0 && (aInfo.macStyle & 2) )
+            pFont->m_eItalic = italic::Italic;
 
         pFont->m_aEncoding = aInfo.symbolEncoded ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UCS2;
 

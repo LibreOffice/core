@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 15:32:52 $
+ *  last change: $Author: pl $ $Date: 2002-12-09 17:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.17 2002-11-13 15:32:52 pl Exp $
+/* $Id: sft.c,v 1.18 2002-12-09 17:44:39 pl Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -2509,6 +2509,7 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     info->yMin = XUnits(UPEm, GetInt16(table, 38, 1));
     info->xMax = XUnits(UPEm, GetInt16(table, 40, 1));
     info->yMax = XUnits(UPEm, GetInt16(table, 42, 1));
+    info->macStyle = GetInt16(table, 44, 1);
 
     table = getTable(ttf, O_hhea);
     if (table) {

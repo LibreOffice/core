@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-08 14:36:47 $
+ *  last change: $Author: pl $ $Date: 2002-12-09 17:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.9 2002-08-08 14:36:47 hdu Exp $ */
+/* $Id: sft.h,v 1.10 2002-12-09 17:44:40 pl Exp $ */
 
 /**
 
@@ -255,6 +255,7 @@ extern "C" {
         sal_uInt16 *ufamily;          /**< family name UCS2                                         */
         char *subfamily;          /**< subfamily name                                          */
         char *psname;             /**< PostScript name                                         */
+        sal_uInt16 macStyle;      /**< macstyle bits from 'HEAD' table */
         int   weight;             /**< value of WeightClass or 0 if can't be determined        */
         int   width;              /**< value of WidthClass or 0 if can't be determined         */
         int   pitch;              /**< 0: proportianal font, otherwise: monospaced             */
