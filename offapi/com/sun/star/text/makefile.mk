@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: os $ $Date: 2001-01-22 13:23:23 $
+#   last change: $Author: os $ $Date: 2001-01-25 10:04:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,7 @@ IDLFILES=\
     FootnoteNumbering.idl\
     Footnotes.idl\
     FootnoteSettings.idl\
+    GlobalSettings.idl\
     GraphicCrop.idl\
     HoriOrientation.idl\
     HoriOrientationFormat.idl\
