@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:46:12 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,19 +85,10 @@
 #define MN_WIN      30
 #define MN_HELP     31
 
-
-#define MID_INDEXDESIGN \
-    Identifier = SID_INDEXDESIGN ; \
-    HelpId = SID_INDEXDESIGN ; \
-    Text [ de ] = "I~ndexentwurf..." ; \
-    Text [ en-US ] = "~Index Design...";
-
-
 String STR_TABLEDESIGN_DBFIELDTYPES
 {
     //Text [ de ] ="Unbekannt;Text;Zahl;Datum/Zeit;Datum;Zeit;Ja/Nein;Währung;Memo;Zähler;Bild;Text (fix);Dezimal;Binärfeld (fix);Binärfeld;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Objekt;Distinct;Struktur;Feld;BLOB;CLOB;REF;OTHER" ;
 
-    Text [ x-comment ] = "; the sorting of the text doesn't be changed and every type must be translated";
 
     Text [ de ] = "Unbekannt;Text;Zahl;Datum/Zeit;Datum;Zeit;Ja/Nein;Währung;Memo;Zähler;Bild;Text (fix);Dezimal;Binärfeld (fix);Binärfeld;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Objekt;Distinct;Struktur;Feld;BLOB;CLOB;REF;OTHER" ;
     Text [ en-US ] = "Unknown;Text;Number;Date/Time;Date;Time;Yes/No;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Structure;Field;BLOB;CLOB;REF;OTHER";
@@ -107,88 +98,74 @@ String STR_TABLEDESIGN_UNDO_PRIMKEY
 {
     Text [ de ] = "Primärschlüssel einfügen/entfernen" ;
     Text [ en-US ] = "Insert/remove primary key" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_VALUE_YES
 {
     Text [ de ] = "Ja" ;
     Text [ en-US ] = "Yes" ;
-    Text [ x-comment ] = " ";
 };
 String STR_VALUE_NO
 {
     Text [ de ] = "Nein" ;
     Text [ en-US ] = "No" ;
-    Text [ x-comment ] = " ";
 };
 String STR_VALUE_ASC
 {
     Text [ de ] = "Aufsteigend" ;
     Text [ en-US ] = "Ascending" ;
-    Text [ x-comment ] = " ";
 };
 String STR_VALUE_DESC
 {
     Text [ de ] = "Absteigend" ;
     Text [ en-US ] = "Descending" ;
-    Text [ x-comment ] = " ";
 };
 String STR_VALUE_NONE
 {
     // Bemerkung : sollte auch in anderen Sprachen irgendwie zum Wort 'Wert' passen : Wert - keiner ....
     Text [ de ] = "<keiner>" ;
     Text [ en-US ] = "<none>";
-    Text [ x-comment ] = "";
 };
 
 String STR_TAB_FIELD_NAME
 {
     Text [ de ] = "Feldname" ;
     Text [ en-US ] = "Field Name" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TAB_FIELD_DATATYPE
 {
     Text [ de ] = "Feldtyp" ;
     Text [ en-US ] = "Field Type" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TAB_FIELD_LENGTH
 {
     Text [ de ] = "Feldlänge" ;
     Text [ en-US ] = "Field length" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TAB_FIELD_DESCR
 {
     Text [ de ] = "Beschreibung" ;
     Text [ en-US ] = "Description" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TAB_FIELD_NULLABLE
 {
     Text [ de ] = "Eingabe erforderlich" ;
     Text [ en-US ] = "Input required" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FIELD_AUTOINCREMENT
 {
     Text [ de ] = "~Auto-Wert" ;
     Text [ en-US ] = "~AutoValue";
-    Text [ x-comment ] = " ";
 };
 String STR_TAB_PROPERTIES
 {
     Text [ de ] = "Feldeigenschaften" ;
     Text [ en-US ] = "Field Properties" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TABPAGE_GENERAL
 {
     Text [ de ] = "Allgemein" ;
     Text [ en-US ] = "General" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TAB_TABLE_DESCRIPTION
 {
@@ -200,7 +177,6 @@ String STR_TAB_TABLE_PROPERTIES
 {
     Text [ de ] = "Tabelleneigenschaften" ;
     Text [ en-US ] = "Table properties";
-    Text [ x-comment ] = " ";
 };
 
 Control RID_DB_TAB_EDITOR
@@ -217,7 +193,6 @@ ErrorBox ERR_INVALID_LISTBOX_ENTRY
 {
     Message [ de ] = "Der eingegebenen Text ist kein Element der Liste." ;
     Message [ en-US ] = "The text you entered is not a list element. " ;
-    Message [ x-comment ] = " ";
 };
 
 Menu RID_TABLEDESIGNROWPOPUPMENU
@@ -246,7 +221,6 @@ Menu RID_TABLEDESIGNROWPOPUPMENU
         HelpID = SID_TABLEDESIGN_INSERTROWS ;
         Text [ de ] = "Zeilen einfügen" ;
         Text [ en-US ] = "Insert Rows" ;
-            Text [ x-comment ] = " ";
         };
     MenuItem
     {
@@ -259,7 +233,6 @@ Menu RID_TABLEDESIGNROWPOPUPMENU
         Checkable = TRUE ;
         Text [ de ] = "Primärschlüssel" ;
         Text [ en-US ] = "Primary Key" ;
-            Text [ x-comment ] = " ";
         };
     };
 };
@@ -267,236 +240,117 @@ String STR_TABED_UNDO_CELLMODIFIED
 {
     Text [ de ] = "Zelle ändern" ;
     Text [ en-US ] = "Modify cell" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TABED_UNDO_ROWDELETED
 {
     Text [ de ] = "Zeile löschen" ;
     Text [ en-US ] = "Delete row" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TABED_UNDO_TYPE_CHANGED
 {
     Text [ de ] = "Feldtype ändern" ;
     Text [ en-US ] = "Modify Field Type";
-    Text [ x-comment ] = " ";
 };
 String STR_TABED_UNDO_ROWINSERTED
 {
     Text [ de ] = "Zeile einfügen" ;
     Text [ en-US ] = "Insert row" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TABED_UNDO_NEWROWINSERTED
 {
     Text [ de ] = "Neue Zeile einfügen" ;
     Text [ en-US ] = "Insert new row" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TABED_UNDO_PRIMKEY
 {
     Text [ de ] = "Primärschlüssel einfügen/entfernen" ;
     Text [ en-US ] = "Insert/remove primary key" ;
-    Text [ x-comment ] = " ";
 };
 
-ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
-{
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 3 , 1 ) ;
-    //  Size = MAP_APPFONT ( 200 , 14 ) ;
-    OutputSize = TRUE ;
-    Align = BOXALIGN_TOP ;
-    ItemImageList = RID_DEFAULTIMAGELIST_SC ;
-    HideWhenDeactivate = TRUE ;
-    HelpId = HID_TLB_TABLEDESIGN ;
-
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_EDITDOC ;
-            HelpId = SID_EDITDOC ;
-            Checkable = TRUE;
-            Text [ de ] = "Bearbeiten" ;
-            Text [ en-US ] = "Edit";
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_SAVEDOC ;
-            HelpId = SID_SAVEDOC ;
-            Text [ de ] = "Speichern" ;
-            Text [ en-US ] = "Save";
-        };
-        ToolBoxItem
-        {
-            ITEM_FILE_SAVEASDOC
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_INDEXDESIGN ;
-            HelpId = SID_INDEXDESIGN ;
-            MID_INDEXDESIGN
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_CUT ;
-            HelpId = SID_CUT ;
-            MID_SBA_QRY_CUT
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_COPY ;
-            HelpId = SID_COPY ;
-            MID_SBA_QRY_COPY
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_PASTE ;
-            HelpId = SID_PASTE ;
-            MID_SBA_QRY_PASTE
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_UNDO ;
-            HelpId = SID_UNDO ;
-            MID_UNDO
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_REDO ;
-            HelpId = SID_REDO ;
-            MID_REDO
-        };
-        ToolBoxItem
-        {
-            Identifier  = ID_TABLE_DESIGN_NO_CONNECTION;
-            HelpId      = HID_TABLE_DESIGN_NO_CONNECTION ;
-            Hide = TRUE;
-            ItemImage = IMG_DATABASE;
-
-            Text [ de ] = "Keine Verbindung" ;
-            Text [ en-US ] = "No Connection";
-        };
-    };
-};
 String STR_DEFAULT_VALUE
 {
     Text [ de ] = "~Defaultwert" ;
     Text [ en-US ] = "~Default value" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FIELD_REQUIRED
 {
     Text [ de ] = "~Eingabe erforderlich" ;
     Text [ en-US ] = "~Entry required" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TEXT_LENGTH
 {
     Text [ de ] = "~Länge" ;
     Text [ en-US ] = "~Length" ;
-    Text [ x-comment ] = " ";
 };
 String STR_NUMERIC_TYPE
 {
     Text [ de ] = "~Typ" ;
     Text [ en-US ] = "~Type" ;
-    Text [ x-comment ] = " ";
 };
 String STR_LENGTH
 {
     Text [ de ] = "~Länge" ;
     Text [ en-US ] = "~Length" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SCALE
 {
     Text [ de ] = "~Nachkommastellen" ;
     Text [ en-US ] = "Decimal ~places" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT
 {
     Text [ de ] = "Format-Beispiel" ;
     Text [ en-US ] = "Format example";
-    Text [ x-comment ] = " ";
 };
 String STR_HELP_BOOL_DEFAULT
 {
     Text [ de ] = "Wählen Sie einen Wert, der in jedem neu eingefügten Datensatz als Standard erscheinen soll.\nWählen Sie den leeren String, wenn das Feld keinen solchen Standardwert haben soll." ;
     Text [ en-US ] = "Select a value that is to appear in all new records as default.\nIf the field is not to have a default value, select the empty string.";
-    Text [ x-comment ] = " ";
 };
 String STR_HELP_DEFAULT_VALUE
 {
     Text [ de ] = "Geben Sie hier einen Standardwert für das Feld an.\n\nWenn Sie später Daten in die Tabelle eingeben, wird in jedem neuen Datensatz diese Zeichenkette für das aktuelle Feld verwendet. Sie sollte deshalb der weiter unten einzugebenden Zellenformatierung genügen." ;
     Text [ en-US ] = "Enter a default value for this field.\n\nWhen you later enter data in the table, this string will be used in each new record for the field selected. It should, therefore, correspond to the cell format that needs to be entered below." ;
-    Text [ x-comment ] = " ";
 };
 String STR_HELP_FIELD_REQUIRED
 {
     Text [ de ] = "Aktivieren Sie diese Option, wenn in diesem Feld keine NULL-Werte erlaubt sind, der Benutzer also immer Daten eingeben muss." ;
     Text [ en-US ] = "Activate this option if this field cannot contain NULL values, i.e. the user must always enter data." ;
-    Text [ x-comment ] = " ";
 };
 String STR_HELP_TEXT_LENGTH
 {
     Text [ de ] = "Geben Sie die maximal zulässige Textlänge an." ;
     Text [ en-US ] = "Enter the maximum text length permittted." ;
-    Text [ x-comment ] = " ";
 };
 String STR_HELP_NUMERIC_TYPE
 {
     Text [ de ] = "Legen Sie hier fest, welchen Typ die Zahl haben soll." ;
     Text [ en-US ] = "Enter the number format." ;
-    Text [ x-comment ] = " ";
 };
 String STR_HELP_LENGTH
 {
     Text [ de ] = "Geben Sie die Länge für Daten in diesem Feld an.\n\nFür Dezimal-Felder ist das die maximale Länge der eingegebenen Zahl, für Binärfelder die Länge des Datenblockes.\nWenn der Wert größer ist als der maximal für diese Datenbank zulässige, wird er entsprechend korrigiert." ;
     Text [ en-US ] = "Determine the length data can have in this field.\n\nIf decimal fields, then the maximum length of the number to be entered, if binary fields, then the length of the data block.\nThe value will be corrected accordingly when it exceeds the maximum for this database." ;
-    Text [ x-comment ] = " ";
 };
 String STR_HELP_SCALE
 {
     Text [ de ] = "Geben Sie an, wie viel Nachkommastellen die Zahlen in diesem Feld enthalten sollen." ;
     Text [ en-US ] = "Specify the number of decimal places permitted in this field." ;
-    Text [ x-comment ] = " ";
 };
 String STR_HELP_FORMAT_CODE
 {
     Text [ de ] = "Hier sehen Sie, wie die Daten der aktuellen Spalte mit dem aktuell eingestellten Format - das Sie mittels des nebenstehenden Buttons ändern können - formatiert werden würden.";
     Text [ en-US ] = "This is where you see how the data would be displayed in the current format (use the button on the right to modify the format).";
-    Text [ x-comment ] = " ";
 };
 String STR_HELP_FORMAT_BUTTON
 {
     Text [ de ] = "Hiermit können Sie festlegen, wie die Daten der Tabelle bei der Ausgabe formatiert werden sollen.";
     Text [ en-US ] = "This is where you determine the output format of the data.";
-    Text [ x-comment ] = " ";
 };
 String STR_HELP_AUTOINCREMENT
 {
     Text [ de ] = "Wählen Sie, ob dieses Feld Auto-Inkrement-Werte enthalten soll.\n\nSie können in ihm dann keine Daten direkt eingeben, sondern jeder neue Datensatz bekommt automatisch einen eigenen Wert (der sich durch Inkrementieren aus dem des vorigen Datensatzes ergibt) zugewiesen." ;
     Text [ en-US ] = "Choose if this field should contain AutoIncrement values.\n\nYou can not enter data in fields of this type. An intrinsic value will be assigned to each new record automatically (resulting from the increment of the previous record)." ;
-    Text [ x-comment ] = " ";
 };
 PushButton PB_FORMAT
 {
