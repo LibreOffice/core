@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-22 18:23:29 $
+ *  last change: $Author: sj $ $Date: 2001-01-26 13:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -932,12 +932,13 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
             {
                 if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsMirrored" ) ), sal_True ) )
                     aAny >>= bMirrored;
-                if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ) ) )
+
+                if ( bFillBitmap )
                 {
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapTile" ) ) ) )
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapTile" ) ), sal_True ) )
                         aAny >>= bBitmapTile;
                 }
-                if ( !bFillBitmap )
+                else
                 {
                     sal_uInt16 nAngle = ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
                                             String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True ) )
