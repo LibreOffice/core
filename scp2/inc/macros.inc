@@ -28,6 +28,10 @@
 #define ICU_MINOR 6
 #define ICU_MICRO 0
 
+#define CURL_MAJOR 3
+#define CURL_MINOR 0
+#define CURL_MICRO 0
+
 #define MOD_NAME_DESC(id) \
         ALL_LANG(Name,STR_NAME_##id); \
         ALL_LANG(Description,STR_DESC_##id)
@@ -287,8 +291,10 @@
 
 #define STD_SOLS_W4WFILTER_FILE(id,name) \
     File id \
-        PACKED_FILTER_FILE_BODY; \
-        Name            = SOLSW4WFILTERFILENAME(name); \
+        BIN_FILE_BODY; \
+        Styles = (PACKED); \
+        Dir = gid_Dir_Filter; \
+        Name = SOLSW4WFILTERFILENAME(name); \
     End
 
 #define SPECIAL_NO_WARNING_IF_NOT_EXISTS_FILE(id,name) \
