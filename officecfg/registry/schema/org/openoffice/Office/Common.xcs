@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: mav $ $Date: 2002-12-04 14:08:17 $
+ *  last change: $Author: os $ $Date: 2002-12-04 14:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1578,10 +1578,11 @@
 					<value>true</value>
 				</prop>
 			</group>
-			<group oor:name="SourceViewFont">
+            <group oor:name="SourceViewFont">
 				<info>
 					<author>OS</author>
-				</info>
+                    <desc xml:lang="en-US">Specifies the font name and height used in HTML source view</desc>
+               </info>
 				<prop oor:name="FontName" oor:type="xs:string">
 					<info>
 						<desc xml:lang="en-US">Specifies the name of the font that is used in source views (HTML source view or BASIC IDE)</desc>
@@ -4396,7 +4397,7 @@
 						</info>
 						<value>false</value>
 					</prop>
-					<group oor:name="FontSize">
+                    <group oor:name="FontSize"><info><desc xml:lang="en-US">Specifies fontsize for HTML</desc></info>
 						<prop oor:name="Size_1" oor:type="xs:int">
 							<!-- OldPath: Browser/HTML/Font_Sizes -->
 							<!-- OldLocation: soffice.cfg -->
@@ -5020,9 +5021,9 @@
 					<label xml:lang="en-US">Help tips disappear after</label>
 				</info>
 				<constraints>
-					<minInclusive oor:value="1"/>
-					<maxInclusive oor:value="99"/>
-				</constraints>
+                    <minInclusive oor:value="1"><info><desc xml:lang="en-US">second</desc></info></minInclusive>
+                    <maxInclusive oor:value="99"><info><desc xml:lang="en-US">seconds</desc></info></maxInclusive>
+                </constraints>
 				<value>4</value>
 			</prop>
 			<prop oor:name="IsAllowAnimatedGraphics" oor:type="xs:boolean">

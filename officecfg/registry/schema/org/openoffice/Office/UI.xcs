@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcs,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-03 06:39:44 $
+ *  last change: $Author: os $ $Date: 2002-12-04 14:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,6 @@
 					<info>
 						<desc xml:lang="en-US">Color of the document.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="DocBoundaries">
@@ -112,7 +111,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for of the document boundaries.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="AppBackground">
@@ -123,7 +121,6 @@
 					<info>
 						<desc xml:lang="en-US">Specifies Color of the application background.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="ObjectBoundaries">
@@ -140,7 +137,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for object boundaries.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="TableBoundaries">
@@ -157,7 +153,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for table boundaries.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="Links">
@@ -174,7 +169,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for unvisited links.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="LinksVisited">
@@ -191,7 +185,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for visited links.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="Anchor">
@@ -208,7 +201,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for anchors.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="Spell">
@@ -219,7 +211,6 @@
 					<info>
 						<desc xml:lang="en-US">Color of incorrect text found with AutoSpellcheck.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="WriterTextGrid">
@@ -230,7 +221,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for the text grid.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="WriterFieldShadings">
@@ -247,7 +237,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for the field shadings.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="WriterIdxShadings">
@@ -264,7 +253,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for the index and table shadings.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="WriterDirectCursor">
@@ -281,7 +269,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for the direct cursor.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="WriterNotesIndicator">
@@ -292,7 +279,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for note indicators.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="WriterScriptIndicator">
@@ -303,7 +289,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for script indicators.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="WriterSectionBoundaries">
@@ -320,7 +305,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for section boundaries.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="WriterPageBreaks">
@@ -331,7 +315,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for the page break mark.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="HTMLSGML">
@@ -342,7 +325,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for SGML code.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="HTMLComment">
@@ -353,7 +335,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for comments.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="HTMLKeyword">
@@ -364,7 +345,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for keywords.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="HTMLUnknown">
@@ -375,7 +355,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for other text.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="CalcGrid">
@@ -386,7 +365,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for the grid.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="CalcPageBreak">
@@ -397,7 +375,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for page breaks in the page break preview.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="CalcPageBreakManual">
@@ -408,7 +385,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for manual page breaks.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="CalcPageBreakAutomatic">
@@ -419,7 +395,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for automatic page breaks.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="CalcDetective">
@@ -430,7 +405,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for audition arrows to precedent or dependent cells.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="CalcDetectiveError">
@@ -441,7 +415,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for audition arrows to cells containing errors.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="CalcReference">
@@ -452,7 +425,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for the cursor when editing references.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="CalcNotesBackground">
@@ -463,21 +435,9 @@
 					<info>
 						<desc xml:lang="en-US">Color used for the background of notes.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
-			<group oor:name="DrawGuides">
-				<info>
-					<deprecated/>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<deprecated/>
-					</info>
-					<value xsi:nil="true"/>
-				</prop>
-			</group>
-			<group oor:name="DrawGrid">
+            <group oor:name="DrawGrid">
 				<info>
 					<desc xml:lang="en-US">Settings used for the grid in Draw/Impress.</desc>
 				</info>
@@ -491,7 +451,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for the grid.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="DrawDrawing">
@@ -502,7 +461,6 @@
 					<info>
 						<desc xml:lang="en-US">The default drawing color being used.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="DrawFill">
@@ -513,7 +471,6 @@
 					<info>
 						<desc xml:lang="en-US">The default fill color being used.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="BASICIdentifier">
@@ -524,7 +481,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for identifiers.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="BASICComment">
@@ -535,7 +491,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for comments.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="BASICNumber">
@@ -546,7 +501,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for numbers.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="BASICString">
@@ -557,7 +511,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for strings.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="BASICOperator">
@@ -568,7 +521,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for operators.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="BASICKeyword">
@@ -579,7 +531,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for keywords (reserved expressions).</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="BASICError">
@@ -590,7 +541,6 @@
 					<info>
 						<desc xml:lang="en-US">Color used for errors.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 		</group>

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcu,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-11-22 09:39:16 $
+ *  last change: $Author: os $ $Date: 2002-12-04 14:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1082,11 +1082,6 @@
           </prop>
         </node>
         <node oor:name="CalcNotesBackground">
-          <prop oor:name="Color">
-            <value xsi:nil="true"/>
-          </prop>
-        </node>
-        <node oor:name="DrawGuides">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
           </prop>
