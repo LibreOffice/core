@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:55:46 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:23:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=dochdl
-
+LIBTARGET=no
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -85,6 +85,12 @@ SLOFILES =  \
 
 #        $(SLO)$/dataex.obj \
 
+LIB1TARGET = $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES =	\
+        $(SLO)$/gloshdl.obj \
+        $(SLO)$/swdtflvr.obj	
+        
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
