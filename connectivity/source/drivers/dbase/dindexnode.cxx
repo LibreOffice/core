@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:10 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 15:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
+#include <algorithm>
 
 
 using namespace connectivity;
@@ -354,7 +356,7 @@ BOOL ONDXPage::Insert(USHORT nPos, ONDXNode& rNode)
     {
         ++nCount;
         // nach rechts verschieben
-        for (USHORT i = min(nMaxCount-1, nCount-1); nPos < i; i--)
+        for (USHORT i = std::min(nMaxCount-1, nCount-1); nPos < i; i--)
             (*this)[i] = (*this)[i-1];
     }
     else
