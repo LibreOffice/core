@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lingu.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:57:38 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,7 @@ String RID_SVXSTR_HMERR_THESAURUS
     TEXT[ chinese_simplified ] = "ΔϊΙθ¶¨µΔΣοΡΤΓ»ΣΠΈ½ΌΣ΄ΚµδΉ¦Δά΅£\nΗλΔϊΌμ²ιµΔ°²Χ°³ΜΠς΅£\nΘηΣΠ±ΨÒª£¬ΗλΔϊ°²Χ°ÒªΚΉΣΓµΔΣοΡΤ°ζ±Ύ΅£";
     TEXT[ russian ] = "Òεηΰσπσρ δλÿ βϋαπΰννξγξ ÿηϋκΰ νε δξρςσοεν. \nΟπξβεπόςε, οξζΰλσιρςΰ, Βΰψσ θνρςΰλλÿφθώ θ β ρλσχΰε νεξαυξδθμξρςθ\nθνρςΰλλθπσιςε ζελΰεμϋι ÿηϋκ";
     TEXT[ polish ] = "Tezaurus jest niedostκpny dla wybranego jκzyka. \nProszκ sprawdziζ instalacjκ i zainstalowaζ \newentualnie potrzebny jκzyk.";
-    TEXT[ japanese ] = "‘I‘π‚³‚κ‚½Ύκ—p‚Μ—ήκ«“T‚Νg—p‚Ε‚«‚ά‚Ή‚ρB\nΜίΫΈήΧΡ‚Μ²έ½Δ°Ω‚πΑª―Έ‚µ‚ΔA\nκ‡‚Ι‚ζ‚Α‚Δ‚Ν‚²σ–]‚ΜΎκ‚π²έ½Δ°Ω‚µ‚Δ‰Ί‚³‚ΆB";
+    TEXT[ japanese ] = "‘I‘π‚µ‚½Ύκ‚Ε—ήκ«“T‚Νg—p‚Ε‚«‚ά‚Ή‚ρB\nΜίΫΈήΧΡ‚Μ²έ½Δ°Ω‚πΑª―Έ‚µ‚ΔA\n•K—v‚Θ‚η‚ΞAσ–]‚ΜΎκ‚π²έ½Δ°Ω‚µ‚Δ‚­‚Ύ‚³‚ΆB";
     TEXT[ chinese_traditional ] = "±z³]©wªΊ»y¨¥ª©¥»¨S¦³ªώ¥[µό¨ε¥\\―ΰ΅C\n½Π±zΐΛ¬d¦wΈΛªΊµ{¦΅΅C\n­Y¦³¥²­n΅M½Π±z¦wΈΛ­n¨Ο¥ΞªΊ»y¨¥ª©¥»΅C";
     TEXT[ arabic ] = "αΗ νζΜΟ ήΗγζΣ γΡΗΟέΗΚ ααΫΙ ΗαΚν Κγ ΚΝΟνΟεΗ. \nΗαΡΜΗΑ έΝΥ ΗαΚΛΘνΚ ΗαΞΗΥ Θί΅\nΛγ ΗαήνΗγ ΚΛΘνΚ ΗααΫΙ ΗαγΨαζΘΙ΅ ΕΠΗ αÒγ ΗαΓγΡ";
     TEXT[ greek ] = "Δεν υπάρχει διαθέσιμος θησαυρός λέξεων για την επιλεγμένη \nγλώσσα. Παρακαλώ ελέγξτε την εγκατάσταση και, αν χρειαστεί,\n εκτελέστε την εγκατάσταση της γλώσσας που επιθυμείτε";
