@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-25 08:39:16 $
+ *  last change: $Author: aw $ $Date: 2001-04-27 11:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,11 @@
 
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+
+// #UndoRedo#
+#ifndef _SFXSLSTITM_HXX
+#include <svtools/slstitm.hxx>
 #endif
 
 #include <svtools/moduleoptions.hxx>
@@ -1453,6 +1458,102 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
+
+    // #UndoRedo#
+    if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_UNDO))
+    {
+        SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+        sal_Bool bActivate(FALSE);
+
+        if(pUndoManager)
+        {
+            if(pUndoManager->GetUndoActionCount() != 0)
+            {
+                bActivate = TRUE;
+            }
+        }
+
+        if(!bActivate)
+            rSet.DisableItem(SID_UNDO);
+    }
+    if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETUNDOSTRINGS))
+    {
+        SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+        if(pUndoManager)
+        {
+            sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
+            if(nCount)
+            {
+                // prepare list
+                List aStringList;
+
+                for(sal_uInt16 a(0); a < nCount; a++)
+                {
+                    // generate one String in list per undo step
+                    String* pInsertString = new String(pUndoManager->GetUndoActionComment(a));
+                    aStringList.Insert(pInsertString, LIST_APPEND);
+                }
+
+                // set item
+                rSet.Put(SfxStringListItem(SID_GETUNDOSTRINGS, &aStringList));
+
+                // delete Strings again
+                for(a = 0; a < nCount; a++)
+                    delete (String*)aStringList.GetObject(a);
+            }
+            else
+            {
+                rSet.DisableItem(SID_GETUNDOSTRINGS);
+            }
+        }
+    }
+    if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_REDO))
+    {
+        SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+        sal_Bool bActivate(FALSE);
+
+        if(pUndoManager)
+        {
+            if(pUndoManager->GetRedoActionCount() != 0)
+            {
+                bActivate = TRUE;
+            }
+        }
+
+        if(!bActivate)
+            rSet.DisableItem(SID_REDO);
+    }
+    if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETREDOSTRINGS))
+    {
+        SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+        if(pUndoManager)
+        {
+            sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
+            if(nCount)
+            {
+                // prepare list
+                List aStringList;
+
+                for(sal_uInt16 a(0); a < nCount; a++)
+                {
+                    // generate one String in list per undo step
+                    String* pInsertString = new String(pUndoManager->GetRedoActionComment(a));
+                    aStringList.Insert(pInsertString, LIST_APPEND);
+                }
+
+                // set item
+                rSet.Put(SfxStringListItem(SID_GETREDOSTRINGS, &aStringList));
+
+                // delete Strings again
+                for(a = 0; a < nCount; a++)
+                    delete (String*)aStringList.GetObject(a);
+            }
+            else
+            {
+                rSet.DisableItem(SID_GETREDOSTRINGS);
+            }
+        }
+    }
 
     ///////////////////////////////////////////////////////////////////////
     // Menuoption: Edit->Hyperlink
