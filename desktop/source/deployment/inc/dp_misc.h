@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_misc.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:51:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,28 +97,6 @@ inline void try_dispose( css::uno::Reference<css::uno::XInterface> const & x )
     css::uno::Reference<css::lang::XComponent> xComp( x, css::uno::UNO_QUERY );
     if (xComp.is())
         xComp->dispose();
-}
-
-//##############################################################################
-
-//==============================================================================
-template<typename T>
-inline void extract_throw( T * p, css::uno::Any const & a )
-{
-    if (! (a >>= *p)) {
-        throw css::uno::RuntimeException(
-            OUSTR("expected ") + getCppuType(p).getTypeName(),
-            css::uno::Reference<css::uno::XInterface>() );
-    }
-}
-
-//==============================================================================
-template< typename T >
-inline T extract_throw( css::uno::Any const & a )
-{
-    T v;
-    extract_throw<T>( &v, a );
-    return v;
 }
 
 //##############################################################################
