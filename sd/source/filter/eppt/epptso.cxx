@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-24 13:11:46 $
+ *  last change: $Author: sj $ $Date: 2002-05-29 14:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,7 @@ GroupTable::GroupTable() :
 GroupTable::~GroupTable()
 {
     for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; delete mpGroupEntry[ i++ ] );
-    delete mpGroupEntry;
+    delete[] mpGroupEntry;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -333,7 +333,7 @@ void GroupTable::ImplResizeGroupTable( sal_uInt32 nEntrys )
         for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; i++ )
             pTemp[ i ] = mpGroupEntry[ i ];
         if ( mpGroupEntry )
-            delete mpGroupEntry;
+            delete[] mpGroupEntry;
         mpGroupEntry = pTemp;
     }
 }
@@ -372,7 +372,7 @@ sal_uInt32 GroupTable::GetGroupsClosed()
 
 void GroupTable::ClearGroupTable()
 {
-    for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; i++, delete mpGroupEntry );
+    for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; i++, delete mpGroupEntry[ i ] );
     mnCurrentGroupEntry = 0;
 }
 
@@ -519,7 +519,7 @@ void SoundEntry::Write( SvStream& rSt, sal_uInt32 nId )
                 nBytesLeft -= nToDo;
             }
             delete pSourceFile;
-            delete pBuf;
+            delete[] pBuf;
         }
     }
     catch( ::com::sun::star::uno::Exception& )
@@ -2328,7 +2328,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
 void PortionObj::ImplClear()
 {
     delete (FieldEntry*)mpFieldEntry;
-    delete mpText;
+    delete[] mpText;
 }
 
 void PortionObj::ImplConstruct( PortionObj& rPortionObj )
