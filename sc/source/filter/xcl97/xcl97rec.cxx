@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:36:02 $
+ *  last change: $Author: gt $ $Date: 2000-11-17 13:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,12 +112,17 @@
 #include "excupn.hxx"
 
 #include "scitems.hxx"
+
+#include <offmgr/app.hxx>
+#include <offmgr/fltrcfg.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/brshitem.hxx>
+#include <vcl/bmpacc.hxx>
 
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
+#include <svx/msoleexp.hxx>
 
 #include <svtools/useroptions.hxx>
 
@@ -1623,18 +1628,18 @@ XclObjOle::~XclObjOle()
 void XclObjOle::SaveCont( SvStream& rStrm )
 {
     {   // own scope for record length (abused Continue)
-        XclContinue aCont( rStrm, 0 );
+        XclContinue     aCont( rStrm, 0 );
 
         // ftCmo subrecord
         XclObj::SaveCont( rStrm );
 
         // write only as embedded, not linked
-        String aStorageName( RTL_CONSTASCII_STRINGPARAM( "MBD" ) );
-        sal_Char aBuf[ sizeof(UINT32) * 2 + 1 ];
-        UINT32 nPictureId = UINT32(this);
+        String          aStorageName( RTL_CONSTASCII_STRINGPARAM( "MBD" ) );
+        sal_Char        aBuf[ sizeof(UINT32) * 2 + 1 ];
+        UINT32          nPictureId = UINT32(this);
         sprintf( aBuf, "%08X", nPictureId );
         aStorageName.AppendAscii( aBuf );
-        SvStorageRef xOleStg = pRootStorage->OpenStorage( aStorageName,
+        SvStorageRef    xOleStg = pRootStorage->OpenStorage( aStorageName,
                                 STREAM_READWRITE| STREAM_SHARE_DENYALL );
         if( xOleStg.Is() )
         {
@@ -1643,9 +1648,25 @@ void XclObjOle::SaveCont( SvStream& rStrm )
             {
                 // set version to "old" version, because it must be
                 // saved in MS notation.
-                xOleStg->SetVersion( SOFFICE_FILEFORMAT_31 );
-                xObj->DoSaveAs( &xOleStg );
-                xObj->DoSaveCompleted();
+                UINT32                  nFl = 0;
+                OfaFilterOptions*       pFltOpts = OFF_APP()->GetFilterOptions();
+                if( pFltOpts )
+                {
+                    if( pFltOpts->IsStarMath2MathType() )
+                        nFl |= OLE_STARMATH_2_MATHTYPE;
+
+                    if( pFltOpts->IsStarWriter2WinWord() )
+                        nFl |= OLE_STARWRITER_2_WINWORD;
+
+                    if( pFltOpts->IsStarCalc2Excel() )
+                        nFl |= OLE_STARCALC_2_EXCEL;
+
+                    if( pFltOpts->IsStarImpress2PowerPoint() )
+                        nFl |= OLE_STARIMPRESS_2_POWERPOINT;
+                }
+
+                SvxMSExportOLEObjects   aOLEExpFilt( nFl );
+                aOLEExpFilt.ExportOLEObject( *xObj, *xOleStg );
 
                 // ftCf subrecord, undocumented as usual
                 rStrm << UINT16(ftCf) << UINT16(2) << UINT16(0x0002);
@@ -1656,10 +1677,10 @@ void XclObjOle::SaveCont( SvStream& rStrm )
                 // ftPictFmla subrecord, undocumented as usual
                 rStrm << UINT16(ftPictFmla) << UINT16(0);
                 {   // own scope for subrecord length (abused Continue)
-                    XclContinue aPictFmla( rStrm, 0 );
+                    XclContinue         aPictFmla( rStrm, 0 );
                     rStrm << UINT16(0);     // dummy formula length
                     {   // own scope for real formula length (abused Continue)
-                        XclContinue aFmla( rStrm, 0 );
+                        XclContinue     aFmla( rStrm, 0 );
                         const UINT8 pData[] = {
                             0x05, 0x00,
 //                          0xac, 0x10, 0xa4, 0x00,     // Xcl changes values on each object
@@ -1670,7 +1691,7 @@ void XclObjOle::SaveCont( SvStream& rStrm )
                             0x03
                         };
                         rStrm.Write( pData, sizeof(pData) );
-                        XclUnicodeString aName( xOleStg->GetUserName() );
+                        XclUnicodeString    aName( xOleStg->GetUserName() );
                         aName.Write( aFmla );
                         if ( aName.GetByteCount() % 2 == 1 )
                             rStrm << UINT8(0);      // pad byte
@@ -2892,5 +2913,117 @@ const BYTE* XclProtection::GetData( void ) const
 {
     return pMyData;
 }
+
+
+
+
+static sal_Bool lcl_ExportBackgroundGraphic( SvStream& rOut, const Graphic& rGraphic )
+{
+    sal_Bool            bRetValue = FALSE;
+
+    Bitmap              aBmp( rGraphic.GetBitmap() );
+    if( aBmp.GetBitCount() != 24 )
+        aBmp.Convert( BMP_CONVERSION_24BIT );
+
+    BitmapReadAccess*   pAcc;
+
+    if( ( pAcc = aBmp.AcquireReadAccess() ) )
+    {
+        sal_uInt16 nWidth = (sal_uInt16)pAcc->Width();
+        sal_uInt16 nHeight = (sal_uInt16)pAcc->Height();
+        if ( nWidth && nHeight )
+        {
+            rOut << 0x00010009              // magic number
+                 << (sal_uInt32)1312        // unknown1 (Size - 8?)
+                 << (sal_uInt32)12          // unknown2
+                 << nWidth                  // width
+                 << nHeight                 // height
+                 << 1                       // planes
+                 << 24;                     // bits per pixel
+
+            sal_Bool    bAlignment = ( nWidth & 1 );
+
+            sal_uInt32  x, y;
+            for( y = 0 ; y < nHeight ; y++ )
+            {
+                for( x = 0 ; x < nWidth ; x++ )
+                {
+                    BitmapColor aColor( pAcc->GetPixel( y, x ) );
+                    rOut << (sal_uInt8)( aColor.GetBlue() )
+                         << (sal_uInt8)( aColor.GetGreen() )
+                         << (sal_uInt8)( aColor.GetRed() );
+                }
+                if ( bAlignment )
+                    rOut << ( sal_uInt8 ) 0;
+
+            }
+            aBmp.ReleaseAccess( pAcc );
+            bRetValue = TRUE;
+        }
+        aBmp.ReleaseAccess( pAcc );
+    }
+    return bRetValue;
+}
+
+
+
+
+void XclBGPic::_Save( SvStream& r )
+{
+//  if( pData )
+    if( pGr )
+    {
+/*      r << GetNum() << ( UINT16 ) 0;
+                        // dummy, len is written with XclContinue
+
+        XclContinue aCont( r, 0, 0 );   // 2 B done: len!*/
+    // test implementation without continue records!
+        SvMemoryStream      aTmpStr;
+
+        if( lcl_ExportBackgroundGraphic( aTmpStr, *pGr ) )
+        {
+            UINT16          nLen = aTmpStr.Seek( STREAM_SEEK_TO_END );
+            r << GetNum() << nLen;
+            aTmpStr.Seek( STREAM_SEEK_TO_BEGIN );
+            r << aTmpStr;
+        }
+    }
+}
+
+
+XclBGPic::XclBGPic( RootData& r )
+{
+    pGr = NULL;
+
+    SfxStyleSheet*              pStSh = r.pStyleSheet;
+
+    if( pStSh )
+    {
+//      SfxItemSet&             rSet = *pExcRoot->pStyleSheetItemSet;
+//      const SvxBrushItem&     rBrItem = rSet.Get( ATTR_BACKGROUND );
+//      pGr = rBrItem.GetGraphic();
+
+//      const SvxBrushItem&     r = ( ( const SvxBrushItem& ) p->pStyleSheetItemSet->Get( ATTR_BACKGROUND ) );
+        pGr = ( ( const SvxBrushItem& ) r.pStyleSheetItemSet->Get( ATTR_BACKGROUND ) ).GetGraphic();
+    }
+}
+
+
+XclBGPic::~XclBGPic()
+{
+}
+
+
+UINT16 XclBGPic::GetNum() const
+{
+    return 0xE9;
+}
+
+
+UINT16 XclBGPic::GetLen() const
+{
+    return 0;
+}
+
 
 
