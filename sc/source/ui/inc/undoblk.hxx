@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:11:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,8 @@ class ScUndoDeleteMulti: public ScMoveUndo
 public:
                     TYPEINFO();
                     ScUndoDeleteMulti( ScDocShell* pNewDocShell,
-                                       BOOL bNewRows, USHORT nNewTab,
-                                       const USHORT* pRng, USHORT nRngCnt,
+                                       BOOL bNewRows, SCTAB nNewTab,
+                                       const SCCOLROW* pRng, SCCOLROW nRngCnt,
                                        ScDocument* pUndoDocument, ScRefUndoData* pRefData );
     virtual         ~ScUndoDeleteMulti();
 
@@ -163,9 +163,9 @@ public:
 
 private:
     BOOL            bRows;
-    USHORT          nTab;
-    USHORT*         pRanges;
-    USHORT          nRangeCnt;
+    SCTAB           nTab;
+    SCCOLROW*       pRanges;
+    SCCOLROW        nRangeCnt;
     ULONG           nStartChangeAction;
     ULONG           nEndChangeAction;
 
@@ -224,8 +224,8 @@ class ScUndoPaste: public ScBlockUndo
 public:
                     TYPEINFO();
                     ScUndoPaste( ScDocShell* pNewDocShell,
-                                 USHORT nStartX, USHORT nStartY, USHORT nStartZ,
-                                 USHORT nEndX, USHORT nEndY, USHORT nEndZ,
+                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
+                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                                  const ScMarkData& rMark,
                                  ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
                                  USHORT nNewFlags,
@@ -329,9 +329,9 @@ public:
                     TYPEINFO();
                     ScUndoFillTable( ScDocShell* pNewDocShell,
                                      const ScMarkData& rMark,
-                                     USHORT nStartX, USHORT nStartY, USHORT nStartZ,
-                                     USHORT nEndX, USHORT nEndY, USHORT nEndZ,
-                                     ScDocument* pNewUndoDoc, BOOL bNewMulti, USHORT nSrc,
+                                     SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
+                                     SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
+                                     ScDocument* pNewUndoDoc, BOOL bNewMulti, SCTAB nSrc,
                                      USHORT nFlg, USHORT nFunc, BOOL bSkip, BOOL bLink );
     virtual         ~ScUndoFillTable();
 
@@ -350,7 +350,7 @@ private:
     ULONG           nEndChangeAction;
     USHORT          nFlags;
     USHORT          nFunction;
-    USHORT          nSrcTab;
+    SCTAB           nSrcTab;
     BOOL            bMulti;         // Mehrfachselektion
     BOOL            bSkipEmpty;
     BOOL            bAsLink;
@@ -366,8 +366,8 @@ public:
                     TYPEINFO();
                     ScUndoSelectionAttr( ScDocShell* pNewDocShell,
                                          const ScMarkData& rMark,
-                                         USHORT nStartX, USHORT nStartY, USHORT nStartZ,
-                                         USHORT nEndX, USHORT nEndY, USHORT nEndZ,
+                                         SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
+                                         SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                                          ScDocument* pNewUndoDoc, BOOL bNewMulti,
                                          const ScPatternAttr* pNewApply,
                                          const SvxBoxItem* pNewOuter = NULL,
@@ -400,10 +400,10 @@ public:
                             TYPEINFO();
                             ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
                                     const ScMarkData& rMark,
-                                    USHORT nNewStart, USHORT nNewStartTab,
-                                    USHORT nNewEnd, USHORT nNewEndTab,
+                                    SCCOLROW nNewStart, SCTAB nNewStartTab,
+                                    SCCOLROW nNewEnd, SCTAB nNewEndTab,
                                     ScDocument* pNewUndoDoc,
-                                    USHORT nNewCnt, USHORT* pNewRanges,
+                                    SCCOLROW nNewCnt, SCCOLROW* pNewRanges,
                                     ScOutlineTable* pNewUndoTab,
                                     ScSizeMode eNewMode, USHORT nNewSizeTwips,
                                     BOOL bNewWidth );
@@ -418,14 +418,14 @@ public:
 
 private:
     ScMarkData      aMarkData;
-    USHORT          nStart;
-    USHORT          nEnd;
-    USHORT          nStartTab;
-    USHORT          nEndTab;
+    SCCOLROW        nStart;
+    SCCOLROW        nEnd;
+    SCTAB           nStartTab;
+    SCTAB           nEndTab;
     ScDocument*     pUndoDoc;
     ScOutlineTable* pUndoTab;
-    USHORT          nRangeCnt;
-    USHORT*         pRanges;
+    SCCOLROW        nRangeCnt;
+    SCCOLROW*       pRanges;
     USHORT          nNewSize;
     BOOL            bWidth;
     ScSizeMode      eMode;
@@ -476,8 +476,8 @@ class ScUndoMerge: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoMerge( ScDocShell* pNewDocShell,
-                                 USHORT nStartX, USHORT nStartY, USHORT nStartZ,
-                                 USHORT nEndX,   USHORT nEndY,   USHORT nEndZ,
+                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
+                                 SCCOL nEndX,   SCROW nEndY,   SCTAB nEndZ,
                                  BOOL bNewDoMerge, ScDocument* pNewUndoDoc = NULL );
     virtual         ~ScUndoMerge();
 
@@ -528,7 +528,7 @@ public:
                     TYPEINFO();
                     ScUndoReplace( ScDocShell* pNewDocShell,
                                    const ScMarkData& rMark,
-                                   USHORT nCurX, USHORT nCurY, USHORT nCurZ,
+                                   SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                                    const String& rNewUndoStr, ScDocument* pNewUndoDoc,
                                    const SvxSearchItem* pItem );
     virtual         ~ScUndoReplace();
@@ -541,7 +541,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    ScTripel        aCursorPos;
+    ScAddress       aCursorPos;
     ScMarkData      aMarkData;
     String          aUndoStr;           // Daten bei Einfachmarkierung
     ScDocument*     pUndoDoc;           // Blockmarkierung und geloeschte Daten
@@ -558,13 +558,13 @@ class ScUndoTabOp: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoTabOp( ScDocShell* pNewDocShell,
-                                 USHORT nStartX, USHORT nStartY, USHORT nStartZ,
-                                 USHORT nEndX,   USHORT nEndY,   USHORT nEndZ,
+                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
+                                 SCCOL nEndX,   SCROW nEndY,   SCTAB nEndZ,
                                  ScDocument* pNewUndoDoc,
-                                 const ScRefTripel& rFormulaCell,
-                                 const ScRefTripel& rFormulaEnd,
-                                 const ScRefTripel& rRowCell,
-                                 const ScRefTripel& rColCell,
+                                 const ScRefAddress& rFormulaCell,
+                                 const ScRefAddress& rFormulaEnd,
+                                 const ScRefAddress& rRowCell,
+                                 const ScRefAddress& rColCell,
                                  BYTE nMode );
     virtual         ~ScUndoTabOp();
 
@@ -578,10 +578,10 @@ public:
 private:
     ScRange         aRange;
     ScDocument*     pUndoDoc;       // geloeschte Daten
-    ScRefTripel     theFormulaCell;
-    ScRefTripel     theFormulaEnd;
-    ScRefTripel     theRowCell;
-    ScRefTripel     theColCell;
+    ScRefAddress    theFormulaCell;
+    ScRefAddress    theFormulaEnd;
+    ScRefAddress    theRowCell;
+    ScRefAddress    theColCell;
     BYTE            nMode;
 };
 
@@ -593,8 +593,8 @@ public:
 
                             ScUndoConversion(
                                 ScDocShell* pNewDocShell, const ScMarkData& rMark,
-                                USHORT nCurX, USHORT nCurY, USHORT nCurZ, ScDocument* pNewUndoDoc,
-                                USHORT nNewX, USHORT nNewY, USHORT nNewZ, ScDocument* pNewRedoDoc,
+                                SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScDocument* pNewUndoDoc,
+                                SCCOL nNewX, SCROW nNewY, SCTAB nNewZ, ScDocument* pNewRedoDoc,
                                 ScConversionType eConvType );
     virtual                 ~ScUndoConversion();
 
@@ -607,15 +607,15 @@ public:
 
 private:
     ScMarkData              aMarkData;
-    ScTripel                aCursorPos;
+    ScAddress               aCursorPos;
     ScDocument*             pUndoDoc;           // Blockmarkierung und geloeschte Daten
-    ScTripel                aNewCursorPos;
+    ScAddress               aNewCursorPos;
     ScDocument*             pRedoDoc;           // Blockmarkierung und neue Daten
     ULONG                   nStartChangeAction;
     ULONG                   nEndChangeAction;
     ScConversionType        meConvType;
 
-    void                    DoChange( ScDocument* pRefDoc, const ScTripel& rCursorPos );
+    void                    DoChange( ScDocument* pRefDoc, const ScAddress& rCursorPos );
     void                    SetChangeTrack();
 };
 
@@ -918,7 +918,7 @@ class ScUndoRemoveBreaks: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoRemoveBreaks( ScDocShell* pNewDocShell,
-                                    USHORT nNewTab, ScDocument* pNewUndoDoc );
+                                    SCTAB nNewTab, ScDocument* pNewUndoDoc );
     virtual         ~ScUndoRemoveBreaks();
 
     virtual void    Undo();
@@ -929,7 +929,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT          nTab;
+    SCTAB           nTab;
     ScDocument*     pUndoDoc;
 };
 
