@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2002-02-26 13:11:31 $
+ *  last change: $Author: hdu $ $Date: 2002-02-28 12:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,28 +588,38 @@ void UniscribeLayout::Draw() const
         int nMaxIndex = mpGlyphCounts[ nItem ] - 1;
 
         SCRIPT_ITEM& rScriptItem = mpScriptItems[ nItem ];
-        int nLimit = mpScriptItems[ nItem+1 ].iCharPos;
+        int nCharIndexLimit = mpScriptItems[ nItem+1 ].iCharPos;
 
-        if( (rScriptItem.iCharPos < mnFirstCharIndex) || (mnEndCharIndex < nLimit) )
+        if( (rScriptItem.iCharPos < mnFirstCharIndex) || (mnEndCharIndex < nCharIndexLimit) )
         {
             // get glyph range from char range by looking at cluster boundries
             nStartIndex = mnGlyphCapacity;
             nMaxIndex = 0;
 
-            if( nLimit > mnEndCharIndex )
-                nLimit = mnEndCharIndex;
-            nLimit -= rScriptItem.iCharPos;
-
-            int i = mnFirstCharIndex - rScriptItem.iCharPos;
-            if( i < 0 )
-                i = 0;
-            for(; i < nLimit; ++i )
+            int i = mnFirstCharIndex;
+            if( i < rScriptItem.iCharPos )
+                i = rScriptItem.iCharPos;
+            if( nCharIndexLimit > mnEndCharIndex )
+                nCharIndexLimit = mnEndCharIndex;
+            for(; i < nCharIndexLimit; ++i )
             {
-                int n = mpLogClusters[ rScriptItem.iCharPos + i ];
+                int n = mpLogClusters[ i ];
                 if( nStartIndex > n )
                     nStartIndex = n;
                 if( nMaxIndex < n )
                     nMaxIndex = n;
+            }
+
+            // adjust draw position relative to cluster start
+            if( !rScriptItem.a.fRTL )
+            {
+                i = mnFirstCharIndex;
+                while( (--i >= rScriptItem.iCharPos) && (nStartIndex == mpLogClusters[i]) )
+                    aRelPos -= Point( mpCharWidths[i], 0 );
+            }
+            else
+            {
+                // TODO: implement adjustment for RTL case
             }
         }
 
@@ -660,8 +670,90 @@ void UniscribeLayout::Draw() const
 
 bool UniscribeLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyPoly ) const
 {
-    // TODO
-    return false;
+    long nWidth = 0;
+
+    int nGlyphsProcessed = 0;
+    for( int nItem = 0; nItem < mnItemCount; ++nItem )
+    {
+        // default: all characters in range => all glyphs in range
+        int nStartIndex = 0;
+        int nMaxIndex = mpGlyphCounts[ nItem ] - 1;
+
+        SCRIPT_ITEM& rScriptItem = mpScriptItems[ nItem ];
+        int nCharIndexLimit = mpScriptItems[ nItem+1 ].iCharPos;
+
+        if( (rScriptItem.iCharPos < mnFirstCharIndex) || (mnEndCharIndex < nCharIndexLimit) )
+        {
+            // get glyph range from char range by looking at cluster boundries
+            nStartIndex = mnGlyphCapacity;
+            nMaxIndex = 0;
+
+            int i = mnFirstCharIndex;
+            if( i < rScriptItem.iCharPos )
+                i = rScriptItem.iCharPos;
+            if( nCharIndexLimit > mnEndCharIndex )
+                nCharIndexLimit = mnEndCharIndex;
+            for(; i < nCharIndexLimit; ++i )
+            {
+                int n = mpLogClusters[ i ];
+                if( nStartIndex > n )
+                    nStartIndex = n;
+                if( nMaxIndex < n )
+                    nMaxIndex = n;
+            }
+
+            // adjust draw position relative to cluster start
+            if( !rScriptItem.a.fRTL )
+            {
+                i = mnFirstCharIndex;
+                while( (--i >= rScriptItem.iCharPos) && (nStartIndex == mpLogClusters[i]) )
+                    nWidth -= mpCharWidths[i];
+            }
+            else
+            {
+                // TODO: implement adjustment for RTL case
+            }
+        }
+
+        // display if there is something to display
+        int nEndIndex = nMaxIndex + 1;
+        if( nStartIndex < nEndIndex )
+        {
+            // account for multiple glyphs at rightmost character
+            // test only needed when rightmost glyph isn't referenced
+            if( nEndIndex < mpGlyphCounts[ nItem ] )
+            {
+                nEndIndex = mpGlyphCounts[ nItem ];
+                int nCharCount = mpScriptItems[ nItem+1 ].iCharPos - rScriptItem.iCharPos;
+                for( int i = 0; i < nCharCount; ++i )
+                {
+                    int n = mpLogClusters[ rScriptItem.iCharPos + i ];
+                    if( (n < nEndIndex) && (n > nMaxIndex) )
+                        nEndIndex = n;
+                }
+            }
+
+            // now we know the matching glyphs in this item
+            nStartIndex += nGlyphsProcessed;
+            nEndIndex += nGlyphsProcessed;
+        }
+
+        for( int i = nStartIndex; i < nEndIndex; ++i )
+        {
+            // get outline of individual glyph
+            PolyPolygon aGlyphOutline;
+            if( !rSalGraphics.GetGlyphOutline( mpOutGlyphs[i], aGlyphOutline ) )
+                return false;
+
+            // insert outline at correct position
+            aGlyphOutline.Move( nWidth, 0 );
+            nWidth += mpGlyphAdvances[i];
+            for( int j = 0; j < aGlyphOutline.Count(); ++j )
+                rPolyPoly.Insert( aGlyphOutline[j] );
+        }
+    }
+
+    return true;
 }
 
 // -----------------------------------------------------------------------
