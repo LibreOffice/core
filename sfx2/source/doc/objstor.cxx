@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-25 10:41:03 $
+ *  last change: $Author: mba $ $Date: 2002-09-30 16:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,110 +561,9 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         }
     }
 
-    SFX_ITEMSET_ARG( pSet, pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
-    SFX_ITEMSET_ARG( pSet, pData, SfxUsrAnyItem, SID_FILTER_DATA, sal_False );
-    if ( !pData && !pOptions )
-    {
-        Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-        Reference< XNameAccess > xFilterCFG;
-        if( xServiceManager.is() )
-        {
-            xFilterCFG = Reference< XNameAccess >(
-                xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
-                UNO_QUERY );
-        }
-
-        if( xFilterCFG.is() )
-        {
-            BOOL bAbort = FALSE;
-            try {
-                Sequence < PropertyValue > aProps;
-                Any aAny = xFilterCFG->getByName( pFilter->GetName() );
-                if ( aAny >>= aProps )
-                {
-                    ::rtl::OUString aServiceName;
-                    sal_Int32 nPropertyCount = aProps.getLength();
-                    for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
-                        if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
-                        {
-                            ::rtl::OUString aServiceName;
-                            aProps[nProperty].Value >>= aServiceName;
-                            if( aServiceName.getLength() )
-                            {
-                                SfxItemSet* pSet = pMedium->GetItemSet();
-                                Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
-                                if( rHandler.is() )
-                                {
-                                    // we need some properties in the media descriptor, so we have to make sure that they are in
-                                    Any aAny;
-                                    aAny <<= pMedium->GetInputStream();
-                                    SfxItemSet* pSet = GetMedium()->GetItemSet();
-                                    if ( pSet->GetItemState( SID_INPUTSTREAM ) < SFX_ITEM_SET )
-                                    pSet->Put( SfxUsrAnyItem( SID_INPUTSTREAM, aAny ) );
-                                    if ( pSet->GetItemState( SID_FILE_NAME ) < SFX_ITEM_SET )
-                                        pSet->Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
-                                    if ( pSet->GetItemState( SID_FILTER_NAME ) < SFX_ITEM_SET )
-                                        pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
-
-                                    Sequence< PropertyValue > rProperties;
-                                    TransformItems( SID_OPENDOC, *GetMedium()->GetItemSet(), rProperties, NULL );
-                                    RequestFilterOptions* pFORequest = new RequestFilterOptions( GetModel(), rProperties );
-
-                                    Reference< XInteractionRequest > rRequest( pFORequest );
-                                    rHandler->handle( rRequest );
-
-                                    if ( !pFORequest->isAbort() )
-                                    {
-                                       SfxAllItemSet aNewParams( GetPool() );
-                                           TransformParameters( SID_OPENDOC,
-                                                             pFORequest->getFilterOptions(),
-                                                             aNewParams,
-                                                             NULL );
-
-                                           SFX_ITEMSET_ARG( &aNewParams,
-                                                         pOptions,
-                                                         SfxStringItem,
-                                                         SID_FILE_FILTEROPTIONS,
-                                                         sal_False );
-                                           if ( pOptions )
-                                        {
-                                               GetMedium()->GetItemSet()->Put( *pOptions );
-                                        }
-
-                                           SFX_ITEMSET_ARG( &aNewParams,
-                                                         pData,
-                                                         SfxUsrAnyItem,
-                                                         SID_FILTER_DATA,
-                                                         sal_False );
-                                           if ( pData )
-                                               GetMedium()->GetItemSet()->Put( *pData );
-                                    }
-                                    else
-                                        bAbort = TRUE;
-                                }
-                            }
-
-                            break;
-                        }
-                }
-
-                if( bAbort )
-                {
-                    // filter options were not entered
-                    SetError( ERRCODE_ABORT );
-                }
-            }
-            catch( NoSuchElementException& )
-            {
-                // the filter name is unknown
-                SetError( ERRCODE_IO_INVALIDPARAMETER );
-            }
-            catch( Exception& )
-            {
-                SetError( ERRCODE_ABORT );
-            }
-        }
-    }
+    sal_uInt32 nError = HandleFilter( pMedium, this );
+    if ( nError != ERRCODE_NONE )
+        SetError( nError );
 
     if ( GetError() == ERRCODE_NONE && bHasStorage && !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
     {
@@ -869,6 +768,115 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     }
 
     return bOk;
+}
+
+sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc )
+{
+    sal_uInt32 nError = ERRCODE_NONE;
+    SfxItemSet* pSet = pMedium->GetItemSet();
+    SFX_ITEMSET_ARG( pSet, pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
+    SFX_ITEMSET_ARG( pSet, pData, SfxUsrAnyItem, SID_FILTER_DATA, sal_False );
+    if ( !pData && !pOptions )
+    {
+        Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+        Reference< XNameAccess > xFilterCFG;
+        if( xServiceManager.is() )
+        {
+            xFilterCFG = Reference< XNameAccess >(
+                xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+                UNO_QUERY );
+        }
+
+        if( xFilterCFG.is() )
+        {
+            BOOL bAbort = FALSE;
+            try {
+                const SfxFilter* pFilter = pMedium->GetFilter();
+                Sequence < PropertyValue > aProps;
+                Any aAny = xFilterCFG->getByName( pFilter->GetName() );
+                if ( aAny >>= aProps )
+                {
+                    ::rtl::OUString aServiceName;
+                    sal_Int32 nPropertyCount = aProps.getLength();
+                    for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+                        if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
+                        {
+                            ::rtl::OUString aServiceName;
+                            aProps[nProperty].Value >>= aServiceName;
+                            if( aServiceName.getLength() )
+                            {
+                                Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
+                                if( rHandler.is() )
+                                {
+                                    // we need some properties in the media descriptor, so we have to make sure that they are in
+                                    Any aAny;
+                                    aAny <<= pMedium->GetInputStream();
+                                    if ( pSet->GetItemState( SID_INPUTSTREAM ) < SFX_ITEM_SET )
+                                    pSet->Put( SfxUsrAnyItem( SID_INPUTSTREAM, aAny ) );
+                                    if ( pSet->GetItemState( SID_FILE_NAME ) < SFX_ITEM_SET )
+                                        pSet->Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
+                                    if ( pSet->GetItemState( SID_FILTER_NAME ) < SFX_ITEM_SET )
+                                        pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
+
+                                    Sequence< PropertyValue > rProperties;
+                                    TransformItems( SID_OPENDOC, *pSet, rProperties, NULL );
+                                    RequestFilterOptions* pFORequest = new RequestFilterOptions( pDoc->GetModel(), rProperties );
+
+                                    Reference< XInteractionRequest > rRequest( pFORequest );
+                                    rHandler->handle( rRequest );
+
+                                    if ( !pFORequest->isAbort() )
+                                    {
+                                           SfxAllItemSet aNewParams( pDoc->GetPool() );
+                                           TransformParameters( SID_OPENDOC,
+                                                             pFORequest->getFilterOptions(),
+                                                             aNewParams,
+                                                             NULL );
+
+                                           SFX_ITEMSET_ARG( &aNewParams,
+                                                         pOptions,
+                                                         SfxStringItem,
+                                                         SID_FILE_FILTEROPTIONS,
+                                                         sal_False );
+                                           if ( pOptions )
+                                               pSet->Put( *pOptions );
+
+                                           SFX_ITEMSET_ARG( &aNewParams,
+                                                         pData,
+                                                         SfxUsrAnyItem,
+                                                         SID_FILTER_DATA,
+                                                         sal_False );
+                                           if ( pData )
+                                               pSet->Put( *pData );
+                                    }
+                                    else
+                                        bAbort = TRUE;
+                                }
+                            }
+
+                            break;
+                        }
+                }
+
+                if( bAbort )
+                {
+                    // filter options were not entered
+                    nError = ERRCODE_ABORT;
+                }
+            }
+            catch( NoSuchElementException& )
+            {
+                // the filter name is unknown
+                nError = ERRCODE_IO_INVALIDPARAMETER;
+            }
+            catch( Exception& )
+            {
+                nError = ERRCODE_ABORT;
+            }
+        }
+    }
+
+    return nError;
 }
 
 //-------------------------------------------------------------------------
