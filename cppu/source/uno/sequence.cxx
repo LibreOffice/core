@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:29 $
+ *  last change: $Author: dbo $ $Date: 2001-02-05 11:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ namespace cppu
 static inline void allocSeq(
     uno_Sequence ** ppSeq, sal_Int32 nElementSize, sal_Int32 nElements ) throw ()
 {
-    if (nElements)
+    if (nElements >= 0) // (re)alloc memory?
     {
         uno_Sequence * pSeq = (uno_Sequence *)
             (*ppSeq
@@ -109,11 +109,11 @@ static inline void allocSeq(
     }
 }
 //--------------------------------------------------------------------------------------------------
-inline void __defaultConstructElements(
+static inline void __defaultConstructElements(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nStartIndex, sal_Int32 nStopIndex,
-    sal_Int32 nAlloc = 0 ) // >= 0 means (re)alloc memory for nAlloc elements
+    sal_Int32 nAlloc = -1 ) // >= 0 means (re)alloc memory for nAlloc elements
     throw ()
 {
     switch (pElementType->eTypeClass)
@@ -218,10 +218,6 @@ inline void __defaultConstructElements(
     {
         allocSeq( ppSequence, sizeof(int), nAlloc );
 
-//          ::rtl_zeroMemory(
-//              (*ppSequence)->elements + (sizeof(int) * nStartIndex),
-//              sizeof(int) * (nStopIndex - nStartIndex) );
-
         typelib_TypeDescription * pElementTypeDescr = 0;
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
         int eEnum = ((typelib_EnumTypeDescription *)pElementTypeDescr)->nDefaultEnumValue;
@@ -305,12 +301,12 @@ inline void __defaultConstructElements(
     }
 }
 //--------------------------------------------------------------------------------------------------
-inline void __copyConstructElements(
+static inline void __copyConstructElements(
     uno_Sequence ** ppSequence, void * pSourceElements,
     typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nStartIndex, sal_Int32 nStopIndex,
     uno_AcquireFunc acquire,
-    sal_Int32 nAlloc = 0 )
+    sal_Int32 nAlloc = -1 ) // >= 0 means (re)alloc memory for nAlloc elements
     throw ()
 {
     switch (pElementType->eTypeClass)
@@ -524,7 +520,7 @@ inline void __copyConstructElements(
     }
 }
 //--------------------------------------------------------------------------------------------------
-inline void __reallocSequence(
+static inline void __reallocSequence(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nSize,
@@ -541,7 +537,7 @@ inline void __reallocSequence(
         sal_Int32 nRest = nSize - nSourceElements;
         sal_Int32 nCopy = (nRest > 0 ? nSourceElements : nSize);
 
-        if (nCopy > 0)
+        if (nCopy >= 0)
         {
             __copyConstructElements(
                 &pNew, pSource->elements, pElementType,
@@ -553,7 +549,7 @@ inline void __reallocSequence(
             __defaultConstructElements(
                 &pNew, pElementType,
                 nCopy, nSize,
-                nCopy > 0 ? 0 : nSize ); // alloc to nSize if nCopy <= 0
+                nCopy >= 0 ? -1 /* already allocated */ : nSize );
         }
 
         // destruct sequence
