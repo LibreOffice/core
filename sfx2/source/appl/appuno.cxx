@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mav $ $Date: 2002-06-26 14:10:52 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 07:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,7 +450,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     for ( USHORT nSub=0; nSub<nSubCount; nSub++ )
                     {
                         // search sub item by name
-                        ByteString aStr( pSlot->pUnoName );
+                        ByteString aStr( rArg.pName );
                         aStr += '.';
                         aStr += pType->aAttrib[nSub].pName;
                         const char* pName = aStr.GetBuffer();
@@ -559,10 +559,12 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     Point aPos;
                     DBG_ASSERT( sal_False, "TransformParameters()\nProperty \"PosSize\" isn't supported yet!\n" );
                 }
-                else if ( aName == sMacroExecMode
-                    && ( rProp.Value.getValueType() == ::getCppuType((const sal_Int16*)0)
-                      || rProp.Value.getValueType() == ::getCppuType((const sal_Int8*)0) ) )
-                    rSet.Put( SfxUInt16Item( SID_MACROEXECMODE, *((sal_Int16*)rProp.Value.getValue()) ) );
+                else if ( aName == sMacroExecMode )
+                {
+                    sal_Int16 nValue;
+                    if ( rProp.Value >>= nValue )
+                        rSet.Put( SfxUInt16Item( SID_MACROEXECMODE, *((sal_Int16*)rProp.Value.getValue()) ) );
+                }
             }
         }
 #ifdef DB_UTIL
@@ -732,6 +734,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             for(USHORT nId = *pRanges++; nId <= *pRanges; ++nId)
             {
                 if ( rSet.GetItemState(nId) < SFX_ITEM_SET ) //???
+                    // not really set
+                    continue;
+
+                if ( !pSlot->IsMode(SFX_SLOT_METHOD) && nId == rSet.GetPool()->GetWhich( pSlot->GetSlotId() ) )
                     continue;
 
                 USHORT nFormalArgs = pSlot->GetFormalArgumentCount();
@@ -741,68 +747,68 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     USHORT nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
                     if ( nId == nWhich )
                         break;
+                }
 
-                    if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVETO )
-                    {
-                        if ( nId == SID_SAVETO )
-                            // used only internally
-                            break;
-                        if ( nId == SID_DOCFRAME )
-                            break;
-                        if ( nId == SID_PROGRESS_STATUSBAR_CONTROL )
-                            break;
-                        if ( nId == SID_VIEW_DATA )
-                            break;
-                        if ( nId == SID_FILTER_DATA )
-                            break;
-                        if ( nId == SID_DOCUMENT )
-                            break;
-                        if ( nId == SID_INPUTSTREAM )
-                            break;
-                        if ( nId == SID_OUTPUTSTREAM )
-                            break;
-                        if ( nId == SID_POSTDATA )
-                            break;
-                        if ( nId == SID_TEMPLATE )
-                            break;
-                        if ( nId == SID_OPEN_NEW_VIEW )
-                            break;
-                        if ( nId == SID_VIEW_ID )
-                            break;
-                        if ( nId == SID_PLUGIN_MODE )
-                            break;
-                        if ( nId == SID_DOC_READONLY )
-                            break;
-                        if ( nId == SID_SELECTION )
-                            break;
-                        if ( nId == SID_HIDDEN )
-                            break;
-                        if ( nId == SID_SILENT )
-                            break;
-                        if ( nId == SID_PREVIEW )
-                            break;
-                        if ( nId == SID_TARGETNAME )
-                            break;
-                        if ( nId == SID_ORIGURL )
-                            break;
-                        if ( nId == SID_DOC_SALVAGE )
-                            break;
-                        if ( nId == SID_CONTENTTYPE )
-                            break;
-                        if ( nId == SID_TEMPLATE_NAME )
-                            break;
-                        if ( nId == SID_TEMPLATE_REGIONNAME )
-                            break;
-                        if ( nId == SID_JUMPMARK )
-                            break;
-                        if ( nId == SID_OPENURL )
-                            break;
-                        if ( nId == SID_CHARSET )
-                            break;
-                        if ( nId == SID_MACROEXECMODE )
-                            break;
+                if ( nArg<nFormalArgs )
+                    continue;
 
-                    }
+                if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVETO )
+                {
+                    if ( nId == SID_SAVETO )
+                        // used only internally
+                        continue;
+                    if ( nId == SID_DOCFRAME )
+                        continue;
+                    if ( nId == SID_PROGRESS_STATUSBAR_CONTROL )
+                        continue;
+                    if ( nId == SID_VIEW_DATA )
+                        continue;
+                    if ( nId == SID_FILTER_DATA )
+                        continue;
+                    if ( nId == SID_DOCUMENT )
+                        continue;
+                    if ( nId == SID_INPUTSTREAM )
+                        continue;
+                    if ( nId == SID_OUTPUTSTREAM )
+                        continue;
+                    if ( nId == SID_POSTDATA )
+                        continue;
+                    if ( nId == SID_TEMPLATE )
+                        continue;
+                    if ( nId == SID_OPEN_NEW_VIEW )
+                        continue;
+                    if ( nId == SID_VIEW_ID )
+                        continue;
+                    if ( nId == SID_PLUGIN_MODE )
+                        continue;
+                    if ( nId == SID_DOC_READONLY )
+                        continue;
+                    if ( nId == SID_SELECTION )
+                        continue;
+                    if ( nId == SID_HIDDEN )
+                        continue;
+                    if ( nId == SID_SILENT )
+                        continue;
+                    if ( nId == SID_PREVIEW )
+                        continue;
+                    if ( nId == SID_TARGETNAME )
+                        continue;
+                    if ( nId == SID_ORIGURL )
+                        continue;
+                    if ( nId == SID_DOC_SALVAGE )
+                        continue;
+                    if ( nId == SID_CONTENTTYPE )
+                        continue;
+                    if ( nId == SID_TEMPLATE_NAME )
+                        continue;
+                    if ( nId == SID_TEMPLATE_REGIONNAME )
+                        continue;
+                    if ( nId == SID_JUMPMARK )
+                        continue;
+                    if ( nId == SID_OPENURL )
+                        continue;
+                    if ( nId == SID_CHARSET )
+                        continue;
                 }
 
                 ByteString aDbg( "Unknown item detected: ");
@@ -902,7 +908,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                             nSubId |= CONVERT_TWIPS;
 
                         DBG_ASSERT( nSubId <= 255, "Member ID out of range" );
-                        String aName( String::CreateFromAscii( pSlot->pUnoName ) ) ;
+                        String aName( String::CreateFromAscii( rArg.pName ) ) ;
                         aName += '.';
                         aName += String( String::CreateFromAscii( rArg.pType->aAttrib[n-1].pName ) ) ;
                         pValue[nProps].Name = aName;
@@ -1295,8 +1301,9 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
                 SbxVariable *pCompVar = NULL;
                 if ( pSh )
                 {
-                    // mark document: it executes a macro, so it's in a modal mode
-                    pSh->SetMacroMode_Impl( TRUE );
+                    if ( pBasMgr != pAppMgr )
+                        // mark document: it executes an own macro, so it's in a modal mode
+                        pSh->SetMacroMode_Impl( TRUE );
                     if ( pBasMgr == pAppMgr )
                     {
                         // document is executed via AppBASIC, adjust "ThisComponent" variable
