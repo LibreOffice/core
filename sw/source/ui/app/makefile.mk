@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 19:24:50 $
+#   last change: $Author: pjunck $ $Date: 2004-10-22 13:56:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,6 @@ SRC1FILES =\
         acc.src     \
         app.src     \
         mn.src      \
-        mnport.src      \
         error.src
 
 
