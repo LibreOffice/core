@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:09:16 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:50:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,7 @@ class SwRTFParser : public SvxRTFParser
     USHORT nAktBox;         // akt. Box
     USHORT nInsTblRow;      // beim nach \row kein \pard -> neue Line anlegen
     USHORT nNewNumSectDef;  // jeder SectionWechsel kann neue Rules definieren
+    USHORT nRowsToRepeat;
 
     bool bSwPageDesc;
     bool bReadSwFly;        // lese Swg-Fly (wichtig fuer Bitmaps!)
