@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localizedtreeactions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-11 08:28:01 $
+ *  last change: $Author: jb $ $Date: 2001-06-11 09:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #include <stdio.h>
 
 #include "treeactions.hxx"
-#include "cmtree.hxx"
+#include "subtree.hxx"
 #include "matchlocale.hxx"
 #include "typeconverter.hxx"
 
