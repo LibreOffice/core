@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:09:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,8 @@ public:
     inline CharSet      GetCharSet() const { return mrData.meCharSet; }
     /** Returns the width of the '0' character (default font) for the current printer (twips). */
     inline long         GetCharWidth() const { return mrData.mnCharWidth; }
+    /** Returns the current Calc sheet index. */
+    inline bool         IsInGlobals() const { return mrData.mnScTab == SCTAB_GLOBAL; }
     /** Returns the current Calc sheet index. */
     inline SCTAB        GetCurrScTab() const { return mrData.mnScTab; }
     /** Returns whether the "some columns have been cut" warning box should be shown. */
