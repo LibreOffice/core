@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:40:02 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2065,6 +2065,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
         else    // SYSCOLOR
         {
 //          UINT16 nParameter = (BYTE)( nColorCode >> 16);      // SJ: nice compiler optimization bug on windows, though downcasting
+
             UINT16 nParameter = ( nColorCode >> 16 ) & 0x00ff;  // the HiByte of nParameter is not zero, an exclusive AND is helping :o
 
             UINT16 nFunctionBits = (UINT16)( ( nColorCode & 0x00000f00 ) >> 8 );
@@ -2930,6 +2931,11 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
             aObjData.nSpFlags = 0;
             aObjData.eShapeType = mso_sptNil;
         }
+        if ( mbTracing )
+            mpTracer->AddAttribute( aObjData.nSpFlags & SP_FGROUP
+                                    ? rtl::OUString::createFromAscii( "GroupShape" )
+                                    : rtl::OUString::createFromAscii( "Shape" ),
+                                    rtl::OUString::valueOf( (sal_Int32)aObjData.nShapeId ) );
         aObjData.bOpt = maShapeRecords.SeekToContent( rSt, DFF_msofbtOPT, SEEK_FROM_CURRENT_AND_RESTART );
         if ( aObjData.bOpt )
         {
@@ -3068,7 +3074,7 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                 }
                 else
                 {
-                    SvxMSDffAutoShape aAutoShape( *this, rSt, aObjData, aBoundRect, nObjectRotation );
+                    SvxMSDffAutoShape aAutoShape( *this, rSt, aObjData, aBoundRect, nObjectRotation, mpTracer );
                     if ( !aAutoShape.IsEmpty() )
                     {
                         ApplyAttributes( rSt, aSet, NULL );
@@ -3119,6 +3125,8 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                     else if( ( aObjData.eShapeType >= mso_sptTextPlainText ) && ( aObjData.eShapeType <= mso_sptTextCanDown ) ) // WordArt
                     {
                         aObjData.bIsAutoText = TRUE;
+                        if ( mbTracing )
+                            mpTracer->Trace( rtl::OUString::createFromAscii( "escher1000" ), rtl::OUString::valueOf( (sal_Int32)aObjData.eShapeType ) );
                         pRet = ImportWordArt( rSt, aSet, aBoundRect );
                     }
                     else if ( aObjData.eShapeType == mso_sptLine )
@@ -3193,7 +3201,10 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                     {
                         pRet = GetAutoForm( aObjData.eShapeType );
                         if ( pRet )
+                        {
+                            mpTracer->Trace( rtl::OUString::createFromAscii( "escher1001" ), rtl::OUString::valueOf( (sal_Int32)aObjData.eShapeType ) );
                             pRet->NbcSetSnapRect( aBoundRect ); // Groesse setzen
+                        }
                     }
                 }
                 if ( pRet )
@@ -3287,6 +3298,10 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
         }
         pRet =
             ProcessObj( rSt, aObjData, pClientData, aTextRect, pRet);
+        if ( mbTracing )
+            mpTracer->RemoveAttribute( aObjData.nSpFlags & SP_FGROUP
+                                        ? rtl::OUString::createFromAscii( "GroupShape" )
+                                        : rtl::OUString::createFromAscii( "Shape" ) );
     }
     rSt.Seek( nFPosMerk );  // FilePos restaurieren
     return pRet;
@@ -3828,7 +3843,8 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                  long      nApplicationScale,
                                  ColorData mnDefaultColor_,
                                  ULONG     nDefaultFontHeight_,
-                                 SvStream* pStData2_)
+                                 SvStream* pStData2_,
+                                 MSFilterTracer* pTracer )
     :DffPropertyReader( *this ),
      pBLIPInfos(   new SvxMSDffBLIPInfos  ),
      pFormModel( NULL ),
@@ -3845,8 +3861,15 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      nShapeCount( USHRT_MAX ),              // ob Kontroll-Stream korrekte Daten enthaellt
      nSvxMSDffSettings( 0 ),
      nSvxMSDffOLEConvFlags( 0 ),
-     pEscherBlipCache( NULL )
+     pEscherBlipCache( NULL ),
+     mpTracer( pTracer ),
+     mbTracing( sal_False )
 {
+    if ( mpTracer )
+    {
+        uno::Any aAny( mpTracer->GetProperty( rtl::OUString::createFromAscii( "On" ) ) );
+        aAny >>= mbTracing;
+    }
     SetModel( pSdrModel_, nApplicationScale );
 
     // FilePos des/der Stream(s) merken
@@ -3872,7 +3895,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
         pStData->Seek( nOldPosData );
 }
 
-SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_ )
+SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, MSFilterTracer* pTracer )
     :DffPropertyReader( *this ),
      pBLIPInfos(   new SvxMSDffBLIPInfos  ),
      pFormModel( NULL ),
@@ -3889,8 +3912,15 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_ )
      nShapeCount( USHRT_MAX ),              // ob Kontroll-Stream korrekte Daten enthaellt
      nSvxMSDffSettings( 0 ),
      nSvxMSDffOLEConvFlags( 0 ),
-     pEscherBlipCache( NULL )
+     pEscherBlipCache( NULL ),
+     mpTracer( pTracer ),
+     mbTracing( sal_False )
 {
+    if ( mpTracer )
+    {
+        uno::Any aAny( mpTracer->GetProperty( rtl::OUString::createFromAscii( "On" ) ) );
+        aAny >>= mbTracing;
+    }
     SetModel( NULL, 0 );
 }
 
