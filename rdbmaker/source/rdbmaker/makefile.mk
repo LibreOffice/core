@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ganaya $ $Date: 2000-10-09 16:37:00 $
+#   last change: $Author: pluby $ $Date: 2000-10-09 16:52:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,8 +98,7 @@ CXXFILES=	rdbmaker.cxx	\
             rdboptions.cxx	\
             typeblop.cxx	\
             specialtypemanager.cxx	\
-            rdbtype.cxx \
-            staticmb.cxx
+            rdbtype.cxx
 
 
 APP1TARGET= $(TARGET)
@@ -108,8 +107,7 @@ APP1OBJS=   $(OBJ)$/rdbmaker.obj	\
             $(OBJ)$/rdboptions.obj	\
             $(OBJ)$/typeblop.obj	\
             $(OBJ)$/specialtypemanager.obj	\
-            $(OBJ)$/rdbtype.obj			\
-            $(OBJ)$/staticmb.obj			
+            $(OBJ)$/rdbtype.obj
 
 APP1STDLIBS=\
             $(SALLIB) \
