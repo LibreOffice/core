@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 14:02:51 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,7 @@ Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::Windo
 //  ----------------------------------------------------
 VCLXMultiLineEdit::VCLXMultiLineEdit()
     :maTextListeners( *this )
+    ,mbJavaCompatibleTextNotifications( true )
     ,meLineEndType( LINEEND_LF )    // default behavior before introducing this property: LF (unix-like)
 {
 }
@@ -251,13 +252,16 @@ void VCLXMultiLineEdit::setText( const ::rtl::OUString& aText ) throw(::com::sun
     {
         pEdit->SetText( aText );
 
-        // In JAVA wird auch ein textChanged ausgeloest, in VCL nicht.
-        // ::com::sun::star::awt::Toolkit soll JAVA-komform sein...
-        if ( maTextListeners.getLength() )
+        if ( mbJavaCompatibleTextNotifications )
         {
-            ::com::sun::star::awt::TextEvent aEvent;
-            aEvent.Source = (::cppu::OWeakObject*)this;
-            maTextListeners.textChanged( aEvent );
+            // In JAVA wird auch ein textChanged ausgeloest, in VCL nicht.
+            // ::com::sun::star::awt::Toolkit soll JAVA-komform sein...
+            if ( maTextListeners.getLength() )
+            {
+                ::com::sun::star::awt::TextEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                maTextListeners.textChanged( aEvent );
+            }
         }
     }
 }
@@ -449,6 +453,12 @@ void VCLXMultiLineEdit::setProperty( const ::rtl::OUString& PropertyName, const 
     MultiLineEdit* pMultiLineEdit = (MultiLineEdit*)GetWindow();
     if ( pMultiLineEdit )
     {
+        if ( PropertyName.equalsAscii( "JavaCompatibleTextNotifications" ) )
+        {
+            Value >>= mbJavaCompatibleTextNotifications;
+            return;
+        }
+
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
@@ -539,6 +549,18 @@ void VCLXMultiLineEdit::setProperty( const ::rtl::OUString& PropertyName, const 
     return aProp;
 }
 
+void SAL_CALL VCLXMultiLineEdit::setFocus(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    // don't grab the focus if we already have it. Reason is that the only thing which the edit
+    // does is forwarding the focus to it's text window. This text window then does a "select all".
+    // So if the text window already has the focus, and we give the focus to the multi line
+    // edit, then all which happens is that everything is selected.
+    // #i27072# - 2004-04-25 - fs@openoffice.org
+    if ( GetWindow() && !GetWindow()->HasChildPathFocus() )
+        GetWindow()->GrabFocus();
+}
 
 //  ----------------------------------------------------
 //  class VCLXFileDialog
