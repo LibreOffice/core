@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-23 12:56:51 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 21:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,15 +411,9 @@ void SvxSearchItem::SetWordOnly( sal_Bool bVal )
 void SvxSearchItem::SetExact( sal_Bool bVal )
 {
     if (!bVal)
-    {
-        aSearchOpt.searchFlag         |=  SearchFlags::ALL_IGNORE_CASE;
         aSearchOpt.transliterateFlags |=  TransliterationModules_IGNORE_CASE;
-    }
     else
-    {
-        aSearchOpt.searchFlag         &= ~SearchFlags::ALL_IGNORE_CASE;
         aSearchOpt.transliterateFlags &= ~TransliterationModules_IGNORE_CASE;
-    }
 }
 
 
