@@ -11,7 +11,6 @@ ex	extensions\source\resource			nmake	-	all	ex_resrc NULL
 ex	extensions\source\installation			nmake	-	w	ex_inst NULL
 ex	extensions\source\installation\office\instchk		nmake	-	all	ex_ichk NULL
 ex	extensions\source\installation\office\protchk		nmake	-	w	ex_pchk NULL
-ex	extensions\source\installuser			nmake	-	all	ex_instu NULL
 ex	extensions\source\plugin\base			nmake	-	all	ex_plbase NULL
 ex	extensions\source\plugin\win			nmake	-	w	ex_plwin ex_plbase NULL
 ex	extensions\source\plugin\unx			nmake	-	u	ex_plunx NULL
