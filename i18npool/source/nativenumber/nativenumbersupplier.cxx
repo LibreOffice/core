@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: khong $ $Date: 2002-10-10 19:02:25 $
+ *  last change: $Author: khong $ $Date: 2002-10-11 02:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,8 @@ sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 be
                 }
             }
             if (printPower) {
-                if (count > 0 && dst[count-1] == numberChar[0])
+        if (count > 0 && number->multiplierExponent[number->exponentCount-1] == 1 &&
+                dst[count-1] == numberChar[0])
                     count--;
                 if (multiChar > 0) {
                     dst[count] = multiChar;
