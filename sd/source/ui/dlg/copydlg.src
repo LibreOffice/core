@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:58:02 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ ModalDialog DLG_COPY
         Text[ czech ] = "Počet kopií";
         Text[ hebrew ] = "‮מספר עותקים‬";
         Text[ hindi ] = "~प्रतिलिपियों की संख्या";
+        Text[ slovak ] = "Počet ~kópií";
     };
     NumericField NUM_FLD_COPIES
     {
@@ -186,6 +187,7 @@ ModalDialog DLG_COPY
         QuickHelpText[ czech ] = "Hodnoty z výběru";
         QuickHelpText[ hebrew ] = "Werte von Selektion aufnehmen";
         QuickHelpText[ hindi ] = "चुने हुए मात्राएँ";
+        QuickHelpText[ slovak ] = "Hodnoty z výberu";
     };
     PushButton BTN_SET_DEFAULT
     {
@@ -219,6 +221,7 @@ ModalDialog DLG_COPY
         Text[ czech ] = "Výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
+        Text[ slovak ] = "Výcho~dzí";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -260,6 +263,7 @@ ModalDialog DLG_COPY
         CustomUnitText[ czech ] = " stupňů";
         CustomUnitText[ hebrew ] = " ‮מעלות‬";
         CustomUnitText[ hindi ] = "डिग्रियाँ";
+        CustomUnitText[ slovak ] = " stupňov";
     };
     FixedText FT_ANGLE
     {
@@ -293,6 +297,7 @@ ModalDialog DLG_COPY
         Text[ czech ] = "Úhel";
         Text[ hebrew ] = "~Drehwinkel";
         Text[ hindi ] = "~कोण";
+        Text[ slovak ] = "~Uhol";
     };
     FixedText FT_MOVE_X
     {
@@ -326,6 +331,7 @@ ModalDialog DLG_COPY
         Text[ czech ] = "Osa X";
         Text[ hebrew ] = "~X-Achse";
         Text[ hindi ] = "~X अक्षरेखा";
+        Text[ slovak ] = "Os ~X";
     };
     MetricField MTR_FLD_MOVE_X
     {
@@ -427,6 +433,7 @@ ModalDialog DLG_COPY
         Text[ czech ] = "Osa Y";
         Text[ hebrew ] = "~Y-Achse";
         Text[ hindi ] = "~Y अक्षरेखा";
+        Text[ slovak ] = "Os ~Y";
     };
     FixedText FT_WIDTH
     {
@@ -460,6 +467,7 @@ ModalDialog DLG_COPY
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "~चौड़ाई";
+        Text[ slovak ] = "Ší~rka";
     };
     FixedText FT_HEIGHT
     {
@@ -493,6 +501,7 @@ ModalDialog DLG_COPY
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
+        Text[ slovak ] = "~Výška";
     };
     FixedLine GRP_MOVEMENT
     {
@@ -526,6 +535,7 @@ ModalDialog DLG_COPY
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "Verschiebung";
         Text[ hindi ] = "Placement";
+        Text[ slovak ] = "Umiestnenie";
     };
     FixedLine GRP_ENLARGEMENT
     {
@@ -559,6 +569,7 @@ ModalDialog DLG_COPY
         Text[ czech ] = "Zvětšení";
         Text[ hebrew ] = "Vergrößerung";
         Text[ hindi ] = "Enlargement";
+        Text[ slovak ] = "Zväčšenie";
     };
     FixedLine GRP_COLOR
     {
@@ -591,6 +602,7 @@ ModalDialog DLG_COPY
         Text[ czech ] = "Barvy";
         Text[ hebrew ] = "Farben";
         Text[ hindi ] = "Colors";
+        Text[ slovak ] = "Farby";
     };
     ListBox LB_START_COLOR
     {
@@ -632,6 +644,7 @@ ModalDialog DLG_COPY
         Text[ czech ] = "Začátek";
         Text[ hebrew ] = "~Anfang";
         Text[ hindi ] = "~प्रारंभ";
+        Text[ slovak ] = "~Začiatok";
     };
     ListBox LB_END_COLOR
     {
@@ -673,6 +686,7 @@ ModalDialog DLG_COPY
         Text[ czech ] = "Konec";
         Text[ hebrew ] = "E~nde";
         Text[ hindi ] = "~अन्त";
+        Text[ slovak ] = "Koni~ec";
     };
     Text[ chinese_simplified ] = "复制件";
     Text[ russian ] = "�����������";
@@ -689,7 +703,10 @@ ModalDialog DLG_COPY
     Text[ czech ] = "Duplikovat";
     Text[ hebrew ] = "Duplizieren";
     Text[ hindi ] = "नकल";
+    Text[ slovak ] = "Duplikovať";
 };
+
+
 
 
 
