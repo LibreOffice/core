@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:44:55 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,9 @@ private:
     bool                        mbWarnings;     /// Enable/disable assertions.
 
 public:
+    /** Detects the BIFF version of the passed workbook stream. */
+    static XclBiff              DetectBiffVersion( SvStream& rStrm );
+
     /** Constructs the Excel record import stream.
         @param rInStrm  The system input stream. Will be set to its start position.
         @param bContHandling  Automatic CONTINUE lookup on/off. */
