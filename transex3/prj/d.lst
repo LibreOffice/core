@@ -6,9 +6,8 @@ mkdir: %_DEST%\inc%_EXT%\transex3
 ..\%__SRC%\bin\transex3 %_DEST%\bin%_EXT%\transex3
 ..\%__SRC%\bin\lngex.exe %_DEST%\bin%_EXT%\lngex.exe
 ..\%__SRC%\bin\lngex %_DEST%\bin%_EXT%\lngex
-..\%__SRC%\bin\localize.exe %_DEST%\bin%_EXT%\localize.exe
-..\%__SRC%\bin\localize %_DEST%\bin%_EXT%\localize
-..\%__SRC%\bin\localize_u %_DEST%\bin%_EXT%\localize_u
+..\%__SRC%\bin\localize.exe %_DEST%\bin%_EXT%\localize_sl.exe
+..\%__SRC%\bin\localize %_DEST%\bin%_EXT%\localize_sl
 ..\%__SRC%\bin\xrmex.exe %_DEST%\bin%_EXT%\xrmex.exe
 ..\%__SRC%\bin\xrmex %_DEST%\bin%_EXT%\xrmex
 ..\%__SRC%\bin\gsicheck.exe %_DEST%\bin%_EXT%\gsicheck.exe
@@ -17,6 +16,11 @@ mkdir: %_DEST%\inc%_EXT%\transex3
 ..\%__SRC%\bin\ulfex %_DEST%\bin%_EXT%\ulfex
 ..\%__SRC%\bin\txtconv.exe %_DEST%\bin%_EXT%\txtconv.exe
 ..\%__SRC%\bin\txtconv %_DEST%\bin%_EXT%\txtconv
+
+..\scripts\localize.pl %_DEST%\bin%_EXT%\localize.pl
+..\scripts\localize %_DEST%\bin%_EXT%\localize
+..\scripts\localize.btm %_DEST%\bin%_EXT%\localize.bat
+..\scripts\localize.bat %_DEST%\bin%_EXT%\localize.bm
 
 ..\inc\export.hxx %_DEST%\inc%_EXT%\transex3\export.hxx
 ..\inc\utf8conv.hxx %_DEST%\inc%_EXT%\transex3\utf8conv.hxx
