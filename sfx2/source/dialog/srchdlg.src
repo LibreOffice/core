@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:04:10 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ ModelessDialog RID_DLG_SEARCH
         Text[ language_user1 ] = "em: This is the same text used in SO search dialog under Edit � Find & Replace";
         Text = "S~uchen nach";
         Text [ english_us ] = "~Search for";
+        Text[ chinese_simplified ] = "搜寻内容";
     };
     ComboBox ED_SEARCH
     {
@@ -104,6 +105,7 @@ ModelessDialog RID_DLG_SEARCH
         Text = "Nur ganze ~W�rter" ;
         Text [ english_us ] = "~Whole words only" ;
         TabStop = TRUE;
+        Text[ chinese_simplified ] = "全字匹配";
     };
     CheckBox CB_MATCHCASE
     {
@@ -113,6 +115,7 @@ ModelessDialog RID_DLG_SEARCH
         Text = "E~xakte Suche" ;
         Text[ english_us ] = "~Match case";
         TabStop = TRUE;
+        Text[ chinese_simplified ] = "匹配项";
     };
     CheckBox CB_WRAPAROUND
     {
@@ -122,6 +125,7 @@ ModelessDialog RID_DLG_SEARCH
         Text = "Suche am ~Dokumentanfang fortsetzen" ;
         Text [ english_us ] = "Wrap ~around" ;
         TabStop = TRUE;
+        Text[ chinese_simplified ] = "环绕";
     };
     CheckBox CB_BACKWARDS
     {
@@ -131,6 +135,7 @@ ModelessDialog RID_DLG_SEARCH
         Text = "~R�ckw�rts" ;
         Text [ english_us ] = "~Backwards" ;
         TabStop = TRUE;
+        Text[ chinese_simplified ] = "向后";
     };
     PushButton PB_FIND
     {
@@ -141,6 +146,7 @@ ModelessDialog RID_DLG_SEARCH
         Text [ english_us ] = "~Find" ;
         TabStop = TRUE;
         DefButton = TRUE ;
+        Text[ chinese_simplified ] = "搜寻";
     };
     CancelButton PB_CANCELFIND
     {
@@ -150,6 +156,7 @@ ModelessDialog RID_DLG_SEARCH
         Text = "S~chlie�en" ;
         Text [ english_us ] = "~Close" ;
         TabStop = TRUE;
+        Text[ chinese_simplified ] = "关闭";
     };
 
     String STR_TOGGLE
@@ -157,6 +164,8 @@ ModelessDialog RID_DLG_SEARCH
         Text[ language_user1 ] = "em: use the translation used in your language in Mozilla browser Search dialog only if it means both directions like 'wrap' in English. Otherwise, translate this string to mean 'Continue search at the end of the document'";
         Text = "Suche am ~Dokumentende fortsetzen" ;
         Text [ english_us ] = "Wrap ~around" ;
+        Text[ chinese_simplified ] = "环绕";
     };
+    Text[ chinese_simplified ] = "在此页搜寻";
 };
 
