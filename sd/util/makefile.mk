@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-04 09:01:56 $
+#   last change: $Author: obo $ $Date: 2004-08-12 09:22:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,7 +122,8 @@ SHL1STDLIBS+= \
     $(CPPULIB) \
     $(VOSLIB) \
     $(CANVASLIB) \
-    $(SALLIB)
+    $(SALLIB) \
+    $(AVMEDIALIB)	
 
 
 # on MacOSX static libs must be at end of libraries to link with
