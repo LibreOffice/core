@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 15:09:31 $
+#   last change: $Author: hr $ $Date: 2005-04-06 10:52:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,10 +67,5 @@ TARGET=scriptruntimeforjava
 .INCLUDE : ant.mk
 
 .IF "$(SOLAR_JAVA)"!=""
-.IF "$(JDK)"=="gcj"
-all:
-    @echo This dir cannot be build with gcj because of org.mozilla.javascript.EcmaError
-.ELSE
 ALLTAR : ANTBUILD
-.ENDIF
 .ENDIF
