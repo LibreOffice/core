@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 11:52:06 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,25 +77,131 @@ extern "C" {
 #endif
 
 /** @file
+    <p>This library can operate in two modes, application mode and direct mode.</p>
+
+
+    <h2>Application Mode</h2>
+    In application mode the Java related settings are stored in files.
+    There are currently three files which need to be accessed. They are determined
+    by bootstrap parameters:</p>
+    <dl>
+    <dt>UNO_JAVA_JFW_VENDOR_SETTINGS</dt>
+    <dd>contains vendor and version information about JREs as well as the
+    location of plugin-libraries which are responsible for providing information
+    about these JREs as well as starting the VMs.</dd>
+    <dt>UNO_JAVA_JFW_USER_DATA</dt>
+    <dd>The file contains settings for a particular user. One can use the macro
+    $SYSUSERCONFIG in the URL which expands to a directory whery the user's data are
+    kept. On UNIX this would be the home directory and on Windows some sub-directory
+    of the &quot;Documents and Settings&quot; folder.The content of this file is an
+    implementation detail and may change in the future.</dd>
+    <dt>UNO_JAVA_JFW_SHARED_DATA</dt>
+    <dd>The file contains settings valid for all users. If a user changes a setting
+    then it takes precedence over the setting from UNO_JAVA_JFW_SHARED_DATA.
+    The content of this file is an
+    implementation detail and may change in the future.</dd>
+    </dl>
+
+    <p>The values for these parameters must be file URLs and include the file name, for
+    example:<br>
+    file:///d:/MyApp/javavendors.xml<br>
+    All files are XML files and must have the extension .xml.</p>
     <p>
-    This library currently has to operational modes. In office mode it
-    expects that it is located in the program directory and the javavendors.xml
-    file must be in the folder <office>/share/config. A Java Virtual Machine (JVM)
-    can only be created if a JRE has been selected. That is either
-    <code>jfw_setSelectedJRE</code> or <code>jfw_findAndSelectJRE</code> must have
-    run successfully.</p>
-    <p>
-    In &quot;default mode&quot; the framework uses the environment variables
-    <code>JAVA_HOME</code> and <code>CLASSPATH</code> to determine the JRE which
-    is to be used and the class path. If the JRE does not meet the version
-    requirements as specified by the javavendors.xml then jfw_startVM will return
-    JFW_E_FAILED_VERSION. It is expected that the javavendors.xml and the plug-in
-    libraries are located in the same folder as this library. In this mode no
-    settings are written nor read. The functions will return JFW_E_DEFAULT_MODE.
+    Modifying the shared settings is currently not supported by the framework. To provide
+    Java settings for all users one can run OOo and change the settings in the
+    options dialog. These settings are made persistent in the UNO_JAVA_JFW_USER_DATA.
+    The file can then be copied into the base installation.
+    Other users will use automatically these data but can override the settings in
+    the options dialog. This mechanism may change in the future.
+    </p>
+    <p>If shared Java settings are not supported by an application then it is not
+    necessary to specify the bootstrap parameter <code>UNO_JAVA_JFW_SHARED_DATA</code>.
     </p>
 
+    <p>Setting the class path used by a Java VM should not be necesarry. The locations
+    of Jar files should be knows by a class loader. If a jar file depends on another
+    jar file then it can be referenced in the manifest file of the first jar. However,
+    a user may add jars to the class path by using this API. If it becomes necessary
+    to add files to the class path which is to be used by all users then one can use
+    the bootrap parameter UNO_JAVA_JFW_CLASSPATH_URLS. The value contains of file URLs
+    which must be separated by spaces.</p>
+
+
+    <h2>Direct Mode</h2>
+
+    <p>The direct mode is intended for a scenario where no configuration files
+    are available and a Java VM  shall be run. An exception is the file determined by
+    UNO_JAVA_JFW_VENDOR_SETTINGS
+    which will be used if available. An application can then be run by specifying
+    a few bootstrap parameters. For example:</p>
+    <p>
+    regcomp -env:UNO_JAVA_JFW_JREHOME=file:///d:/j2re1.4.2
+    -env:&quot;UNO_JAVA_JFW_CLASSPATH=d:\\solver\\bin\\classes.jar;d:\\solver\\bin\\jurt.jar&quot;
+    -register ....
+    </p>
+    <p>If UNO_JAVA_JFW_VENDOR_SETTINGS is not set then a plugin library must be specified. For example:</p>
+    <p>
+    regcomp -env:UNO_JAVA_JFW_JREHOME=file:///d:/j2re1.4.2
+    -env:&quot;UNO_JAVA_JFW_CLASSPATH=d:\\solver\\bin\\classes.jar;d:\\solver\\bin\\jurt.jar&quot;
+    -env:UNO_JAVA_JFW_PLUGIN=file:\\solver\\bin\\sunjavaplugin.dll -register ....
+    </p>
+    <p>Additionally parameter for the Java VM can be provided. For every parameter
+    a seperate bootstrap parameter must be specified. The names are
+    <code>UNO_JAVA_JFW_PARAMETER_X</code>, where X is 1,2, .. n. For example:</p>
+    <p>
+    regcomp -env:UNO_JAVA_JFW_PARAMETER_1=-Xdebug
+    -env:UNO_JAVA_JFW_PARAMETER_2=-Xrunjdwp:transport=dt_socket,server=y,address=8100
+    -env:UNO_JAVA_JFW_JREHOME=file:///d:/j2re1.4.2
+    -env:&quot;UNO_JAVA_JFW_CLASSPATH=d:\\solver\\bin\\classes.jar;d:\\solver\\bin\\jurt.jar&quot;
+    -register ....</p>
+    <p>
+    Here is a complete list of the bootstrap parameter for the direct mode:
+    </p>
+    <dl>
+    <dt>UNO_JAVA_JFW_JREHOME</dt>
+    <dd>Specifies a file URL to a JRE installation.It must ALWAYS be specified
+    in direct mode</dd>
+    <dt>UNO_JAVA_JFW_ENV_JREHOME</dt>
+    <dd>Setting this parameter, for example to &quot;1&quot; or &quot;true&quot;,
+    causes the framework to use the environment variable JAVA_HOME. It is expected
+    that JAVA_HOME contains a system path rather than a file URL. This parameter
+    and UNO_JAVA_JFW_JREHOME are mutualle exclusive</dd>
+    <dt>UNO_JAVA_JFW_CLASSPATH</dt>
+    <dd>Contains the class path which is to be used by the VM. Special character,
+    such as '\','{','}','$' must be preceded with '\'. See documentation about the
+    bootstrap parameter.</dd>
+    <dt>UNO_JAVA_JFW_ENV_CLASSPATH</dt>
+    <dd>Setting this parameter,for example to &quot;1&quot; or &quot;true&quot;,
+    causes the framework to use the
+    environment variable CLASSPATH. If this variable and UNO_JAVA_JFW_CLASSPATH are
+    set then the class path is composed from UNO_JAVA_JFW_CLASSPATH and the environment
+    variable CLASSPATH.</dd>
+    <dt>UNO_JAVA_JFW_PLUGIN</dt>
+    <dd>Specified a file URL to a plugin library. If this variable is provided
+    then a javavendors.xml is ignored. It must be provided if no
+    javavendors.xml is available.</dd>
+    <dt>UNO_JAVA_JFW_PARAMETER_X</dt>
+    <dd>Specifies a parameter for the Java VM. The X is replaced by
+    non-negative natural numbers starting with 1.</dd>
+    <dt>UNO_JAVA_JFW_DISABLE</dt>
+    <dd>Setting this variable (e.g. "1" or "true") prevents the framework from
+    starting a VM</dd>
+    </dl>
+
+    <p>A note about bootstrap parameters. The implementation of the bootstrap
+    parameter mechanism interprets the characters '\', '$', '{', '}' as
+    escape characters. Thats why the Windows path contain double back-slashes.
+    One should also take into account that a console may have also special
+    escape characters.</p>
+
+    <h2>What mode is used</h2>
+    <p>
+    The default mode is application mode. If at least one bootstrap parameter
+    for the direct mode is provided then direct mode is used. </p>
+
+    <p>
     All settings made by this API are done for the current user if not
-    mentioned differently.
+    mentioned differently.</p>
 */
 
 /** indicates that a JRE has an accessibility bridge installed.
@@ -112,7 +218,7 @@ extern "C" {
 
 /** error codes which are returned by functions of this API.
  */
-typedef enum
+typedef enum _javaFrameworkError
 {
     JFW_E_NONE,
     JFW_E_ERROR,
@@ -122,14 +228,13 @@ typedef enum
     JFW_E_NEED_RESTART,
     JFW_E_RUNNING_JVM,
     JFW_E_JAVA_DISABLED,
-    JFW_E_CONFIG_READWRITE,
-    JFW_E_FORMAT_STORE,
     JFW_E_NO_PLUGIN,
     JFW_E_NOT_RECOGNIZED,
     JFW_E_FAILED_VERSION,
     JFW_E_NO_JAVA_FOUND,
     JFW_E_VM_CREATION_FAILED,
-    JFW_E_DEFAULT_MODE
+    JFW_E_CONFIGURATION,
+    JFW_E_DIRECT_MODE
 } javaFrameworkError;
 
 /** an instance of this struct represents an installation of a Java
@@ -302,13 +407,11 @@ javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning);
     @return
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_ERROR an error occurred. <br/>
-    JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
-    the internally used data store. <br/>
-    JFW_E_FORMAT_STORE the internally used data store has not the
-    expected format<br/>
     JFW_E_NO_PLUGIN a plug-in library could not be found.<br/>
     JFW_E_NO_JAVA_FOUND no JRE was found that meets the requirements.</br>
-    JFW_E_DEFAULT_MODE because of this mode no settings are written.
+    JFW_E_DIRECT_MODE the function cannot be used in this mode. </br>
+    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
+    were not met.
  */
 javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo);
 
@@ -335,11 +438,9 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo);
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_INVALID_ARG at least on of the parameters was NULL<br/>
     JFW_E_ERROR an error occurred. <br/>
-    JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
-    the internally used data store. <br/>
-    JFW_E_FORMAT_STORE the internally used data store has not the
-    expected format<br/>
     JFW_E_NO_PLUGIN a plug-in library could not be found.<br/>
+    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
+    were not met.
 */
 javaFrameworkError SAL_CALL jfw_findAllJREs(
     JavaInfo ***parInfo, sal_Int32 *pSize);
@@ -367,10 +468,8 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(
    JFW_E_NONE function ran successfully.<br/>
    JFW_E_INVALID_ARG at least on of the parameters was NULL<br/>
    JFW_E_ERROR an error occurred. <br/>
-   JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
-   the internally used data store. <br/>
-   JFW_E_FORMAT_STORE the internally used data store has not the
-   expected format<br/>
+   JFW_E_CONFIGURATION mode was not properly set or their prerequisites
+   were not met.</br>
    JFW_E_NO_PLUGIN a plug-in library could not be found.<br/>
    JFW_E_NOT_RECOGNIZED neither plug-in library could detect a JRE. <br/>
    JFW_E_FAILED_VERSION a JRE was detected but if failed the version
@@ -424,10 +523,8 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     JFW_E_INVALID_ARG <code>ppVM</code>, <code>ppEnv</code> are NULL or
     <code>arOptions</code> was NULL but <code>nSize</code> was greater 0.<br/>
     JFW_E_ERROR an error occurred. <br/>
-    JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
-    the internally used data store. <br/>
-    JFW_E_FORMAT_STORE the internally used data store has not the
-    expected format<br/>
+    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
+    were not met.</br>
     JFW_E_NO_PLUGIN the plug-in library responsible for creating the VM
     could not be found.<br/>
     JFW_E_JAVA_DISABLED the use of Java is currently disabled. <br/>
@@ -472,11 +569,9 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions,
     @return
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_ERROR An error occurred.<br/>
-    JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
-    the internally used data store. <br/>
-    JFW_E_FORMAT_STORE the internally used data store has not the
-    expected format<br/>
-    JFW_E_DEFAULT_MODE because of this mode no settings are written.
+    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
+    were not met.<br/>
+    JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
 javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo);
 
@@ -488,8 +583,11 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo);
     If the value of the element <updated> in the javavendors.xml file was
     changed since the time when the last Java was selected then this
     function returns <code>JFW_E_INVALID_SETTINGS</code>. This could happen during
-    a product patch. Then new version requirements may be introduces, so that
+    a product patch. Then new version requirements may be introduced, so that
     the currently selected JRE may not meet these requirements anymore.
+    </p>
+    <p>In direct mode the function returns information about a JRE that was
+    set by the bootstrap parameter UNO_JAVA_JFW_JREHOME.
     </p>
     @param ppInfo
     [out] on return it contains a pointer to a <code>JavaInfo</code> object
@@ -500,13 +598,10 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo);
     @return
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_INVALIDARG <code>ppInfo</code> is a NULL.<br/>
-    JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
-    the internally used data store. <br/>
-    JFW_E_FORMAT_STORE the internally used data store has not the
-    expected format<br/>
+    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
+    were not met.<br/>
     JFW_E_INVALID_SETTINGS the javavendors.xml has been changed and no
     JRE has been selected afterwards. <br/>
-    JFW_E_DEFAULT_MODE because of this mode no settings are read.
  */
 javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo);
 
@@ -523,25 +618,25 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo);
    @return
    JFW_E_NONE function ran successfully.<br/>
    JFW_E_ERROR An error occurred.<br/>
-   JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
-   the internally used data store. <br/>
-   JFW_E_FORMAT_STORE the internally used data store has not the
-   expected format<br/>
-   JFW_E_DEFAULT_MODE because of this mode no settings are written.
+   JFW_E_CONFIGURATION mode was not properly set or their prerequisites
+    were not met.<br/>
+   JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
 javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled);
 
 /** provides the information if Java can be used.
 
+    <p>In direct mode the function evaluates the bootstrap parameter
+    UNO_JAVA_JFW_DISABLE_JAVA. If it is set then the out-parameter
+    bgEnabled will be set to false, otherwise it is set to true.
+    </p>
+
    @return
    JFW_E_NONE function ran successfully.<br/>
    JFW_E_INVALIDARG pbEnabled is NULL<br/>
    JFW_E_ERROR An error occurred.<br/>
-   JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
-   the internally used data store. <br/>
-   JFW_E_FORMAT_STORE the internally used data store has not the
-   expected format<br/>
-   JFW_E_DEFAULT_MODE because of this mode no settings are read.
+   JFW_E_CONFIGURATION mode was not properly set or their prerequisites
+    were not met.<br/>
  */
 javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled);
 
@@ -563,11 +658,9 @@ javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled);
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_INVALIDARG arArgs is NULL and nSize is not 0
     JFW_E_ERROR An error occurred.<br/>
-    JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
-    the internally used data store. <br/>
-    JFW_E_FORMAT_STORE the internally used data store has not the
-    expected format<br/>
-    JFW_E_DEFAULT_MODE because of this mode no settings are written.
+    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
+    were not met.<br/>
+    JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
 javaFrameworkError SAL_CALL jfw_setVMParameters(
     rtl_uString **  arArgs, sal_Int32 nSize);
@@ -590,11 +683,9 @@ javaFrameworkError SAL_CALL jfw_setVMParameters(
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_INVALIDARG parParameters or pSize are  NULL<br/>
     JFW_E_ERROR An error occurred.<br/>
-    JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
-    the internally used data store. <br/>
-    JFW_E_FORMAT_STORE the internally used data store has not the
-    expected format<br/>
-    JFW_E_DEFAULT_MODE because of this mode no settings read.
+    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
+    were not met.<br/>
+    JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
 javaFrameworkError SAL_CALL jfw_getVMParameters(
     rtl_uString *** parParameters,
@@ -614,11 +705,9 @@ javaFrameworkError SAL_CALL jfw_getVMParameters(
    JFW_E_NONE function ran successfully.<br/>
    JFW_E_INVALIDARG pCP is NULL.<br/>
    JFW_E_ERROR An error occurred.<br/>
-   JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
-   the internally used data store. <br/>
-   JFW_E_FORMAT_STORE the internally used data store has not the
-   expected format<br/></br>
-   JFW_E_DEFAULT_MODE because of this mode no settings are written.
+   JFW_E_CONFIGURATION mode was not properly set or their prerequisites
+    were not met.<br/>
+   JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
 javaFrameworkError SAL_CALL jfw_setUserClassPath(rtl_uString * pCP);
 /** provides the value of the current user class path.
@@ -635,11 +724,9 @@ javaFrameworkError SAL_CALL jfw_setUserClassPath(rtl_uString * pCP);
    JFW_E_NONE function ran successfully.<br/>
    JFW_E_INVALIDARG ppCP is NULL.<br/>
    JFW_E_ERROR An error occurred.<br/>
-   JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
-   the internally used data store. <br/>
-   JFW_E_FORMAT_STORE the internally used data store has not the
-   expected format<br/>
-   JFW_E_DEFAULT_MODE because of this mode no settings read.
+   JFW_E_CONFIGURATION mode was not properly set or their prerequisites
+    were not met.<br/>
+   JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
 javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString ** ppCP);
 
@@ -665,12 +752,9 @@ javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString ** ppCP);
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_INVALIDARG sLocation is NULL.<br/>
     JFW_E_ERROR An error occurred.<br/>
-    JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
-    the internally used data store. <br/>
-    JFW_E_FORMAT_STORE the internally used data store has not the
-    expected format</br>
-    JFW_E_DEFAULT_MODE because of this mode no settings are written.
-
+    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
+    were not met.<br/>
+    JFW_E_DIRECT_MODE the function cannot be used in this mode.
     @see jfw_setJRELocations
  */
 javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation);
@@ -696,12 +780,9 @@ javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation);
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_INVALIDARG arLocation is NULL and nSize is not null.<br/>
     JFW_E_ERROR An error occurred.<br/>
-    JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
-    the internally used data store. <br/>
-    JFW_E_FORMAT_STORE the internally used data store has not the
-    expected format</br>
-    JFW_E_DEFAULT_MODE because of this mode no settings are written.
-
+    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
+    were not met.<br/>
+    JFW_E_DIRECT_MODE the function cannot be used in this mode.
     @see jfw_addJRELocations
  */
 javaFrameworkError SAL_CALL jfw_setJRELocations(
@@ -722,11 +803,9 @@ javaFrameworkError SAL_CALL jfw_setJRELocations(
     JFW_E_NONE function ran successfully.<br/>
     JFW_E_INVALIDARG parLocation is NULL or pSize is NULL.<br/>
     JFW_E_ERROR An error occurred.<br/>
-    JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
-    the internally used data store. <br/>
-    JFW_E_FORMAT_STORE the internally used data store has not the
-    expected format</br>
-    JFW_E_DEFAULT_MODE because of this mode no settings are read.
+    JFW_E_CONFIGURATION mode was not properly set or their prerequisites
+    were not met.<br/>
+    JFW_E_DIRECT_MODE the function cannot be used in this mode.
  */
 javaFrameworkError SAL_CALL jfw_getJRELocations(
     rtl_uString *** parLocations, sal_Int32 * pSize);
