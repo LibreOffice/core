@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ip_type.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:11:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,8 @@ class TypePilot
     const Type &        CheckIn_Type(
                             QualifiedName &     i_rFullName,
                             uintt               i_nSequenceCount,
-                            Ce_id               i_nModuleOfOccurrence );
+                            Ce_id               i_nModuleOfOccurrence,
+                            Type_id             i_nTemplateType );
     // INQUIRY
     const Type &        Find_Type(
                             Type_id             i_nType ) const;
@@ -110,7 +111,8 @@ class TypePilot
                         do_CheckIn_Type(
                             QualifiedName &     i_rFullName,
                             uintt               i_nSequenceCount,
-                            Ce_id               i_nModuleOfOccurrence ) = 0;
+                            Ce_id               i_nModuleOfOccurrence,
+                            Type_id             i_nTemplateType ) = 0;
     virtual const Type &
                         inq_Find_Type(
                             Type_id             i_nType ) const = 0;
@@ -133,8 +135,9 @@ class TypePilot
 inline const Type &
 TypePilot::CheckIn_Type( QualifiedName &     i_rFullName,
                          uintt               i_nSequenceCount,
-                         Ce_id               i_nModuleOfOccurrence )
-    { return do_CheckIn_Type(i_rFullName, i_nSequenceCount, i_nModuleOfOccurrence); }
+                         Ce_id               i_nModuleOfOccurrence,
+                         Type_id             i_nTemplateType )
+    { return do_CheckIn_Type(i_rFullName, i_nSequenceCount, i_nModuleOfOccurrence, i_nTemplateType); }
 
 inline const Type &
 TypePilot::Find_Type( Type_id i_nType ) const
