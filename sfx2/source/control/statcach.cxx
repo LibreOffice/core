@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: as $ $Date: 2002-07-05 07:17:28 $
+ *  last change: $Author: mba $ $Date: 2002-08-29 12:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,18 +337,13 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
 
                 if ( pDisp )
                 {
-                    // The intercepting object is a SFX component
-                    // Get the shell that is the slotserver of this component
+                    // The intercepting object is an SFX component
+                    // If it's not using the wanted dispatcher or the AppDispatcher, it's treated like any other UNO component
                     SfxDispatcher *pDispatcher = pDisp->GetDispatcher_Impl();
-                    pDispatcher->_FindServer( nId, aSlotServ, sal_False );
-                    SfxShell* pShell = pDispatcher->GetShell( aSlotServ.GetShellLevel() );
-
-                    // Check if this shell is active on the active dispatcher, if not, we treat it like any other UNO component
-                    sal_uInt16 nLevel = rDispat.GetShellLevel( *pShell );
-                    if ( nLevel != USHRT_MAX )
+                    if ( pDispatcher == &rDispat || pDispatcher == SFX_APP()->GetAppDispatcher_Impl() )
                     {
                         // so we can use this shell direct without StarONE connection
-                        aSlotServ.SetShellLevel( nLevel );
+                        rDispat._FindServer( nId, aSlotServ, sal_False );
                         bSlotDirty = sal_False;
                         bCtrlDirty = sal_True;
 
