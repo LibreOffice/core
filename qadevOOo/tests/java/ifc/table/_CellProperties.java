@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _CellProperties.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:00 $
+ *  last change:$Date: 2003-02-04 13:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@ import lib.MultiPropertyTest;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.xml.AttributeData;
 import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 
 /**
@@ -107,8 +108,9 @@ public class _CellProperties extends MultiPropertyTest {
         XNameContainer uda = null;
         boolean res = false;
         try {
-            //uda = (XNameContainer) new util.NameContainerImpl();
-            uda = (XNameContainer) oObj.getPropertyValue("UserDefinedAttributes");
+            uda = (XNameContainer) AnyConverter.toObject(
+                new Type(XNameContainer.class),
+                    oObj.getPropertyValue("UserDefinedAttributes"));
             AttributeData attr = new AttributeData();
             attr.Namespace = "http://www.sun.com/staroffice/apitest/Cellprop";
             attr.Type="CDATA";
@@ -116,7 +118,9 @@ public class _CellProperties extends MultiPropertyTest {
             uda.insertByName("Cellprop:has-first-alien-attribute",attr);
             String[] els = uda.getElementNames();
             oObj.setPropertyValue("UserDefinedAttributes",uda);
-            uda = (XNameContainer) oObj.getPropertyValue("UserDefinedAttributes");
+            uda = (XNameContainer) AnyConverter.toObject(
+                new Type(XNameContainer.class),
+                    oObj.getPropertyValue("UserDefinedAttributes"));
             els = uda.getElementNames();
             Object obj = uda.getByName("Cellprop:has-first-alien-attribute");
             res = true;
