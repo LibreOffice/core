@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:13:07 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 10:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,9 +136,6 @@
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
-#ifndef _FM_IMPLEMENTATION_IDS_HXX_
-#include "fmimplids.hxx"
-#endif
 
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
@@ -151,6 +148,9 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
 #endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
@@ -2825,7 +2825,7 @@ void DbFilterField::Update()
             }
 
             sal_Int16 i = 0;
-            vector< ::rtl::OUString >   aStringList;
+            ::std::vector< ::rtl::OUString >   aStringList;
             aStringList.reserve(16);
             ::rtl::OUString aStr;
             com::sun::star::util::Date aNullDate = m_rColumn.GetParent().getNullDate();
@@ -2841,7 +2841,7 @@ void DbFilterField::Update()
             }
 
             // filling the entries for the combobox
-            for (vector< ::rtl::OUString >::const_iterator iter = aStringList.begin();
+            for (::std::vector< ::rtl::OUString >::const_iterator iter = aStringList.begin();
                  iter != aStringList.end(); ++iter)
                 ((ComboBox*)m_pWindow)->InsertEntry(*iter, LISTBOX_APPEND);
         }
@@ -2920,7 +2920,17 @@ void FmXGridCell::SetTextLineColor(const Color& _rColor)
 //------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL FmXGridCell::getImplementationId() throw(RuntimeException)
 {
-    return ::form::OImplementationIds::getImplementationId(getTypes());
+    static ::cppu::OImplementationId* pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
 }
 
 // OComponentHelper
