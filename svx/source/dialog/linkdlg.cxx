@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:22:58 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
         if(aUrl.GetProtocol() == INET_PROT_FILE)
         {
             String sOldPath(aUrl.PathToFileName());
-            USHORT nLen = aUrl.GetName().Len();
+            USHORT nLen = aUrl.GetName().getLength();
             sOldPath.Erase(sOldPath.Len() - nLen, nLen);
             aPathDlg.SetPath(sOldPath);
         }
