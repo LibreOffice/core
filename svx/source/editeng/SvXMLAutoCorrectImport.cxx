@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectImport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-16 09:56:46 $
+ *  last change: $Author: mtg $ $Date: 2001-05-02 16:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,21 +162,19 @@ SvXMLWordContext::SvXMLWordContext(
     }
     if (!sWrong.Len() || !sRight.Len() )
         return;
-    /*
-     * GetLongText always returns false anyway ? *confusion* - mtg*/
+
     const International& rInter = Application::GetAppInternational();
     BOOL bOnlyTxt = COMPARE_EQUAL != rInter.Compare( sRight, sWrong, INTN_COMPARE_IGNORECASE );
     if( !bOnlyTxt )
     {
         String sLongSave( sRight );
-        if( !rLocalRef.rAutoCorrect.GetLongText( *(rLocalRef.rStorage), sWrong, sRight ) &&
+        if( !rLocalRef.rAutoCorrect.GetLongText( rLocalRef.rStorage, sWrong, sRight ) &&
             sLongSave.Len() )
         {
             sRight = sLongSave;
             bOnlyTxt = TRUE;
         }
     }
-    /*BOOL bOnlyTxt = TRUE;*/
     SvxAutocorrWordPtr pNew = new SvxAutocorrWord( sWrong, sRight, bOnlyTxt );
 
     if( !rLocalRef.pAutocorr_List->Insert( pNew ) )
