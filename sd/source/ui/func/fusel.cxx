@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:10:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1523,6 +1523,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 case presentation::ClickAction_VANISH:
                 case presentation::ClickAction_INVISIBLE:
                 {
+/*
                     if (static_cast<DrawView*>(pView)->GetSlideShow())
                     {
                         // Objekt ausblenden
@@ -1534,6 +1535,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                         pWindow->ReleaseMouse();
                         bAnimated = TRUE;
                     }
+*/
                 }
                 break;
 
@@ -1549,6 +1551,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                     ( pInfo->eEffect != presentation::AnimationEffect_NONE ||
                     pInfo->eTextEffect != presentation::AnimationEffect_NONE )))
             {
+/*
                 // Objekt ausblenden
                 bHideAndAnimate = TRUE;
                 pDrViewSh->LockInput();
@@ -1556,6 +1559,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 pDrViewSh->UnlockInput();
                 pWindow->ReleaseMouse();
                 bAnimated = TRUE;
+*/
             }
         }
     }
