@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:06:16 $
+ *  last change: $Author: kz $ $Date: 2001-06-15 21:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,10 +98,10 @@ String RID_SVXSTR_NUM_UNDO_ACTIONS
     Text[ russian ] = "Îòìåíèòü äåéñòâèå(ÿ) $(ARG1)";
     Text[ greek ] = "Undo $(ARG1) action";
     Text[ dutch ] = "Undo $(ARG1) action";
-    Text[ french ] = "Annuler les opérations $(ARG1)";
+    Text[ french ] = "Annuler $(ARG1) opération(s)";
     Text[ spanish ] = "Deshacer $(ARG1) acción(es)";
     Text[ finnish ] = "Rückgängig $(ARG1) Aktion(en)";
-    Text[ italian ] = "Undo $(ARG1) action";
+    Text[ italian ] = "Annulla $(ARG1) operazione/i";
     Text[ danish ] = "Undo $(ARG1) action";
     Text[ swedish ] = "Ångra $(ARG1) åtgärd(er)";
     Text[ polish ] = "Cofnij $(ARG1) akcjê(e)";
@@ -124,10 +124,10 @@ String RID_SVXSTR_NUM_REDO_ACTIONS
     Text[ russian ] = "Âîññòàíîâèòü äåéñòâèå(ÿ) $(ARG1)";
     Text[ greek ] = "ÅðáíáöïñÜ $(ARG1) åíÝñãåéáò(þí)";
     Text[ dutch ] = "Redo $(ARG1) action";
-    Text[ french ] = "Restaurer les opérations $(ARG1)";
+    Text[ french ] = "Restaurer $(ARG1) opération(s)";
     Text[ spanish ] = "Restaurar $(ARG1) acción(es)";
     Text[ finnish ] = "Wiederherstellen $(ARG1) Aktion(en)";
-    Text[ italian ] = "Redo $(ARG1) action";
+    Text[ italian ] = "Ripeti $(ARG1) operazione/i";
     Text[ danish ] = "Redo $(ARG1) action";
     Text[ swedish ] = "Återställ $(ARG1) åtgärd(er)";
     Text[ polish ] = "Odtwórz $(ARG1) akcjê(e)";
@@ -140,5 +140,6 @@ String RID_SVXSTR_NUM_REDO_ACTIONS
     Text[ arabic ] = "Redo $(ARG1) action";
     Text[ catalan ] = "Redo $(ARG1) action";
 };
+
 
 
