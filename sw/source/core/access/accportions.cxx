@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-20 10:02:26 $
+ *  last change: $Author: dvo $ $Date: 2002-03-20 10:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,8 @@ void SwAccessiblePortionData::GetAttributeBoundary(
 
     // attribute boundaries can only occur on portion boundaries
     // (if autospell pseudo-portion are included)
-    FillBoundary( rBound, aModelPositions, FindBreak( aModelPositions, nPos ));
+    FillBoundary( rBound, aAccessiblePositions,
+                  FindBreak( aAccessiblePositions, nPos ) );
 }
 
 
