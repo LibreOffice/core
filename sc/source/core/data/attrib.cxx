@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrib.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,7 @@ SfxItemPresentation __EXPORT ScProtectionAttr::GetPresentation
         SfxMapUnit eCoreMetric,
         SfxMapUnit ePresMetric,
         String& rText,
-        const International* pIntl
+        const IntlWrapper* pIntl
     ) const
 {
     String aStrYes  ( ScGlobal::GetRscString(STR_YES) );
@@ -532,7 +532,7 @@ SfxItemPresentation __EXPORT ScRangeItem::GetPresentation
         SfxMapUnit          eCoreUnit,
         SfxMapUnit          ePresUnit,
         String&             rText,
-        const International* pIntl
+        const IntlWrapper* pIntl
     ) const
 {
     rText.Erase();
@@ -759,7 +759,7 @@ SfxItemPresentation __EXPORT ScTableListItem::GetPresentation
         SfxMapUnit          eCoreUnit,
         SfxMapUnit          ePresUnit,
         String&             rText,
-        const International* pIntl
+        const IntlWrapper* pIntl
     ) const
 {
     const sal_Unicode cDelim = ',';
@@ -1315,7 +1315,7 @@ SfxItemPresentation __EXPORT ScViewObjectModeItem::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     String&             rText,
-    const International* pIntl
+    const IntlWrapper* pIntl
 )   const
 {
     String  aDel = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(": "));

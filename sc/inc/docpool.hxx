@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-30 18:16:08 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ public:
                                         SfxItemPresentation ePresentation,
                                         SfxMapUnit          ePresentationMetric,
                                         String&             rText,
-                                        const International* pIntl = 0 ) const;
+                                        const IntlWrapper* pIntl = 0 ) const;
 
     static void InitVersionMaps();
     static void DeleteVersionMaps();

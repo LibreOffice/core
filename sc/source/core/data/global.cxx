@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-10 13:44:49 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _COM_SUN_STAR_I18N_COLLATOROPTIONS_HPP_
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #endif
+#ifndef _UNOTOOLS_INTLWRAPPER_HXX
+#include <unotools/intlwrapper.hxx>
+#endif
 
 #include "global.hxx"
 #include "scresid.hxx"
@@ -140,13 +143,13 @@ ScUnoAddInCollection* ScGlobal::pAddInCollection = NULL;
 ScUserList*     ScGlobal::pUserList = NULL;
 String**        ScGlobal::ppRscString = NULL;
 LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
-International*  ScGlobal::pScInternational = NULL;
 ::com::sun::star::lang::Locale*     ScGlobal::pLocale = NULL;
 CharClass*  ScGlobal::pCharClass = NULL;
 LocaleDataWrapper* ScGlobal::pLocaleData = NULL;
 CalendarWrapper* ScGlobal::pCalendar = NULL;
 CollatorWrapper* ScGlobal::pCollator = NULL;
 CollatorWrapper* ScGlobal::pCaseCollator = NULL;
+IntlWrapper*    ScGlobal::pScIntlWrapper = NULL;
 sal_Unicode     ScGlobal::cListDelimiter = ',';
 String*         ScGlobal::pEmptyString = NULL;
 String*         ScGlobal::pStrClipDocName = NULL;
@@ -582,7 +585,6 @@ void ScGlobal::Init()
 
     //! Wenn Sortierung etc. von der Sprache der installierten Offfice-Version
     //! abhaengen sollen, hier "Application::GetAppInternational().GetLanguage()"
-    pScInternational = new International(eLnge);
     String aLanguage, aCountry;
     ConvertLanguageToIsoNames( International::GetRealLanguage( eLnge ), aLanguage, aCountry );
     pLocale = new ::com::sun::star::lang::Locale( aLanguage, aCountry, EMPTY_STRING );
@@ -594,6 +596,7 @@ void ScGlobal::Init()
     pCollator->loadDefaultCollator( *pLocale, SC_COLLATOR_IGNORES );
     pCaseCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
     pCaseCollator->loadDefaultCollator( *pLocale, 0 );
+    pScIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), *pLocale );
 
     ppRscString = new String *[ STR_COUNT+1 ];
     for( USHORT nC = 0 ; nC <= STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
@@ -669,7 +672,6 @@ void ScGlobal::Clear()
     // asyncs _vor_ ExitExternalFunc zerstoeren!
     theAddInAsyncTbl.DeleteAndDestroy( 0, theAddInAsyncTbl.Count() );
     ExitExternalFunc();
-    DELETEZ(pEmptyString);
     DELETEZ(pAutoFormat);
     DELETEZ(pSearchItem);
     DELETEZ(pFuncCollection);
@@ -700,12 +702,14 @@ void ScGlobal::Clear()
     DELETEZ(pLocaleData);
     DELETEZ(pCharClass);
     DELETEZ(pLocale);
-    DELETEZ(pScInternational);
+    DELETEZ(pScIntlWrapper);
     DELETEZ(pStrClipDocName);
 
     DELETEZ(pUnitConverter);
 
     ScDocumentPool::DeleteVersionMaps();
+
+    DELETEZ(pEmptyString);
 }
 
 //------------------------------------------------------------------------

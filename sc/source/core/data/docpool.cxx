@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-24 17:23:38 $
+ *  last change: $Author: er $ $Date: 2001-05-13 03:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,7 @@ SfxItemPresentation lcl_HFPresentation
     SfxMapUnit          eCoreMetric,
     SfxMapUnit          ePresentationMetric,
     String&             rText,
-    const International* pIntl
+    const IntlWrapper* pIntl
 )
 {
     const SfxItemSet& rSet = ((const SfxSetItem&)rItem).GetItemSet();
@@ -651,7 +651,7 @@ SfxItemPresentation lcl_HFPresentation
 
             default:
                 if ( !pIntl )
-                    pIntl = ScGlobal::pScInternational;
+                    pIntl = ScGlobal::pScIntlWrapper;
                 pItem->GetPresentation( ePresentation, eCoreMetric, ePresentationMetric, aText, pIntl );
 
         }
@@ -677,7 +677,7 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
     SfxItemPresentation ePresentation,
     SfxMapUnit          ePresentationMetric,
     String&             rText,
-    const International* pIntl ) const
+    const IntlWrapper* pIntl ) const
 {
     USHORT  nW = rItem.Which();
     String aStrYes  ( ScGlobal::GetRscString(STR_YES) );
@@ -887,7 +887,7 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
 
         default:
             if ( !pIntl )
-                pIntl = ScGlobal::pScInternational;
+                pIntl = ScGlobal::pScIntlWrapper;
             ePresentation = rItem.GetPresentation( ePresentation, GetMetric( nW ), ePresentationMetric, rText, pIntl );
         break;
     }
