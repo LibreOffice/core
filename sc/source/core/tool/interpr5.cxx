@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:59:26 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,7 +857,7 @@ void ScInterpreter::MFastTrans(ScMatrix* pA, ScMatrix* pR,
 }
 
 BOOL ScInterpreter::MFastBackSubst(ScMatrix* pA, ScMatrix* pR, SCSIZE n, BOOL bIsUpper)
-        // Führt Rückwaertsersetzung der Dreickesmatrix Mat a nach Mat r durch
+        // Fuehrt Rueckwaertsersetzung der Dreickesmatrix Mat a nach Mat r durch
         // 2 Versionen fuer obere (U)  oder untere (L- Unit) Dreiecksmatrizen
 {
     if (!n)
