@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-24 10:14:43 $
+ *  last change: $Author: aw $ $Date: 2001-04-27 11:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,11 @@
 #endif
 #ifndef _SVX_TEXTIT0_HXX //autogen
 #include <svx/xtextit0.hxx>
+#endif
+
+// #UndoRedo#
+#ifndef _SFXSLSTITM_HXX
+#include <svtools/slstitm.hxx>
 #endif
 
 #define CharSetItem                 SfxUInt16Item
