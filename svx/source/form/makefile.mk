@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 19:10:17 $
+#   last change: $Author: obo $ $Date: 2004-03-19 12:21:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,6 @@ SRS1NAME=form
 SRC1FILES= \
     fmexpl.src 		\
     filtnav.src		\
-    taborder.src 	\
     fmstring.src 	\
     tbxform.src		\
     fmsearch.src
