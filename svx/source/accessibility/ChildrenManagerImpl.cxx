@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: af $ $Date: 2002-05-13 12:29:02 $
+ *  last change: $Author: af $ $Date: 2002-05-17 11:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,10 +106,12 @@ ChildrenManagerImpl::~ChildrenManagerImpl (void)
 
 void ChildrenManagerImpl::Init (void)
 {
+    /*
     // Register as document::XEventListener.
     if (maShapeTreeInfo.GetModelBroadcaster().is())
         maShapeTreeInfo.GetModelBroadcaster()->addEventListener (
             static_cast<document::XEventListener*>(this));
+    */
 }
 
 
@@ -532,6 +534,7 @@ void SAL_CALL
     ChildrenManagerImpl::notifyEvent (const document::EventObject& rEventObject)
     throw (uno::RuntimeException)
 {
+#if 0
     OSL_TRACE ("ChildrenManagerImpl::notifyEvent");
     const OUString sShapeModified (RTL_CONSTASCII_USTRINGPARAM("ShapeModified"));
     if (rEventObject.EventName.equals (sShapeModified))
@@ -560,6 +563,7 @@ void SAL_CALL
             }
         }
     }
+#endif
 }
 
 
