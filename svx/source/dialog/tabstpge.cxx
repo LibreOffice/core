@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-09-05 14:22:28 $
+ *  last change: $Author: os $ $Date: 2001-12-05 11:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,16 +423,21 @@ void SvxTabulatorTabPage::InitTabPos_Impl( USHORT nTabPos )
 {
     aTabBox.Clear();
 
+    long nOffset = 0;
+    const SfxPoolItem* pItem = 0;
+    if ( GetItemSet().GetItemState( SID_ATTR_TABSTOP_OFFSET, TRUE, &pItem )
+            == SFX_ITEM_SET )
+    {
+        nOffset = ( (const SfxInt32Item*)pItem )->GetValue();
+        MapUnit eUnit = (MapUnit)GetItemSet().GetPool()->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
+        nOffset = OutputDevice::LogicToLogic( nOffset, eUnit, MAP_100TH_MM  );
+    }
+
     // Aktuelle TabPos korrigieren und Defaults-Tabs
     for ( USHORT i = 0; i < aNewTabs.Count(); i++ )
     {
         if ( aNewTabs[i].GetAdjustment() != SVX_TAB_ADJUST_DEFAULT )
         {
-            long nOffset = 0;
-            const SfxPoolItem* pItem = 0;
-            if ( GetItemSet().GetItemState( SID_ATTR_TABSTOP_OFFSET, TRUE, &pItem )
-                 == SFX_ITEM_SET )
-                nOffset = ( (const SfxInt32Item*)pItem )->GetValue();
             aTabBox.InsertValue( aTabBox.Normalize(
                 aNewTabs[i].GetTabPos() + nOffset ), eDefUnit );
         }
