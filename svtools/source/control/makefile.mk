@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:41:35 $
+#   last change: $Author: obo $ $Date: 2004-03-19 12:27:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ EXCEPTIONSFILES=\
             $(SLO)$/valueacc.obj	
 
 SLOFILES=	$(EXCEPTIONSFILES) \
+            $(SLO)$/fileurlbox.obj \
             $(SLO)$/wizardheader.obj \
             $(SLO)$/ctrltool.obj  \
             $(SLO)$/ctrlbox.obj  \
