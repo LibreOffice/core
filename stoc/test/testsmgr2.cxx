@@ -14,7 +14,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::registry;
 
-void main()
+int main()
 {
     try
     {
@@ -65,4 +65,5 @@ void main()
         printf( "%s\n" , o.getStr() );
         OSL_ASSERT( 0 );
     }
+    return 0;
 }
