@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-07 08:56:25 $
+ *  last change: $Author: jbu $ $Date: 2001-06-08 16:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,7 +459,7 @@ SelectionManager::~SelectionManager()
     {
         osl_terminateThread( m_aThread );
         osl_joinWithThread( m_aThread );
-        osl_freeThreadHandle( m_aThread );
+        osl_destroyThread( m_aThread );
     }
 
     if( m_aDragExecuteThread )
