@@ -19,6 +19,7 @@
         <type>  drafts.com.sun.star.script.framework.provider.XScript </type>
         <type>  drafts.com.sun.star.script.framework.provider.XScriptProvider </type>
         <type>  drafts.com.sun.star.script.framework.runtime.XScriptInvocation </type>
+        <type>  drafts.com.sun.star.script.framework.browse.XBrowseNode </type>
 
     </component-description>
     <project-build-dependency>  cppuhelper  </project-build-dependency>
