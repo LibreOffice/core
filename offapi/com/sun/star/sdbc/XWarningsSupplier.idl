@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XWarningsSupplier.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
     errors.
     @see com::sun::star::sdbc::SQLWarning
  */
-interface XWarningsSupplier: com::sun::star::uno::XInterface
+published interface XWarningsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
