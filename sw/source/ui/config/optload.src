@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 10:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ TabPage TP_OPTLOAD_PAGE
     };
     FixedLine FL_CAPTION
     {
-        Pos = MAP_APPFONT ( 6 , 68 ) ;
+        Pos = MAP_APPFONT ( 6 , 66 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Beschriftung" ;
         Text [ English ] = "Caption" ;
@@ -339,7 +339,7 @@ TabPage TP_OPTLOAD_PAGE
     };
     CheckBox CB_CAPTION
     {
-        Pos = MAP_APPFONT ( 12 , 81 ) ;
+        Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Automatisch" ;
         Text [ ENGLISH ] = "Automatic" ;
@@ -369,7 +369,7 @@ TabPage TP_OPTLOAD_PAGE
     };
     FixedText TXT_OPTIONS
     {
-        Pos = MAP_APPFONT ( 165 , 81 ) ;
+        Pos = MAP_APPFONT ( 165 , 79 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "~Objektauswahl:" ;
         Text [ English ] = "~Object selection" ;
@@ -399,13 +399,13 @@ TabPage TP_OPTLOAD_PAGE
     };
     PushButton PB_OPTIONS
     {
-        Pos = MAP_APPFONT ( 239 , 79 ) ;
+        Pos = MAP_APPFONT ( 239 , 77 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "..." ;
     };
     FixedLine FL_SETTINGS
     {
-        Pos = MAP_APPFONT ( 6 , 97 ) ;
+        Pos = MAP_APPFONT ( 6 , 93 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Einstellungen";
         Text [ ENGLISH ] = "Settings" ;
@@ -433,7 +433,7 @@ TabPage TP_OPTLOAD_PAGE
     };
     FixedText FT_METRIC
     {
-        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Pos = MAP_APPFONT ( 12 , 106 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "~Maﬂeinheit";
         Text [ ENGLISH ] = "Measurement units" ;
@@ -463,14 +463,14 @@ TabPage TP_OPTLOAD_PAGE
     };
     ListBox LB_METRIC
     {
-        Pos = MAP_APPFONT ( 75, 108 ) ;
+        Pos = MAP_APPFONT ( 75, 104 ) ;
         Size = MAP_APPFONT ( 50 , 50 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_TAB
     {
-        Pos = MAP_APPFONT ( 130 , 110 ) ;
+        Pos = MAP_APPFONT ( 130 , 106 ) ;
         Size = MAP_APPFONT ( 73 , 8 ) ;
         Text = "Tabulatorenab~stand";
         Text [ ENGLISH ] = "Default Tab distance" ;
@@ -502,7 +502,7 @@ TabPage TP_OPTLOAD_PAGE
     MetricField MF_TAB
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 206 , 108 ) ;
+        Pos = MAP_APPFONT ( 206 , 104 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -517,11 +517,10 @@ TabPage TP_OPTLOAD_PAGE
     };
     FixedLine FL_COMPAT
     {
-        Pos = MAP_APPFONT ( 6 , 126 ) ;
+        Pos = MAP_APPFONT ( 6 , 122 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Kompatibilit‰t" ;
-        Text [ English ] = "Compatibility" ;
-        Text[ english_us ] = "Compatibility";
+        Text = "Kompatibilit‰t (dokumentspezifische Einstellungen)" ;
+        Text[ english_us ] = "Compatibility (document-specific settings)";
         Text[ portuguese ] = "Compatibilidade";
         Text[ russian ] = "—Ó‚ÏÂÒÚËÏÓÒÚ¸";
         Text[ dutch ] = "Compatibiliteit";
@@ -544,9 +543,16 @@ TabPage TP_OPTLOAD_PAGE
         Text[ catalan ] = "Compatibilitat";
         Text[ thai ] = "‡∏Ñ‡∏ß‡∏≤‡∏°‡πÄ‡∏Ç‡πâ‡∏≤‡∏Å‡∏±‡∏ô‡πÑ‡∏î‡πâ";
     };
+    CheckBox CB_PRINTER_METRICS
+    {
+        Pos = MAP_APPFONT ( 12 , 133) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text = "Druckermaﬂe f¸r Dokumentformatierung verwenden";
+        Text[ english_us ] = "Us~e printer metrics for document formatting";
+    };
     CheckBox CB_MERGE_PARA_DIST
     {
-        Pos = MAP_APPFONT ( 12 , 137) ;
+        Pos = MAP_APPFONT ( 12 , 146) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "Im aktuellen ~Dokument alle Absatz- und Tabellenabst‰nde addieren";
         Text [ English ] = "Add ~distances between paragraphs and tables" ;
@@ -575,7 +581,7 @@ TabPage TP_OPTLOAD_PAGE
     };
     CheckBox CB_MERGE_PARA_DIST_PAGESTART
     {
-        Pos = MAP_APPFONT ( 12 , 150) ;
+        Pos = MAP_APPFONT ( 12 , 159) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "A~bsatz- und Tabellenabst‰nde an Seitenanf‰ngen addieren";
         Text [ English ] = "Add distances at the beginning of pages" ;
@@ -604,7 +610,7 @@ TabPage TP_OPTLOAD_PAGE
     };
     CheckBox CB_TAB_ALIGNMENT
     {
-        Pos = MAP_APPFONT ( 12 , 163) ;
+        Pos = MAP_APPFONT ( 12 , 172) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "~Tabulatorposition ausrichten";
         Text [ English ] = "Align tab stop position" ;
