@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 13:10:20 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 13:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,11 @@ ResMgr* Desktop::GetDesktopResManager()
             as.SetUILanguage(aLanguageType);
             SetSettings(as);
 */
-            Desktop::pResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
+            ::com::sun::star::lang::Locale aLocale;
+            Desktop::pResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale);
+            AllSettings as = GetSettings();
+            as.SetUILocale(aLocale);
+            SetSettings(as);
         }
     }
 
