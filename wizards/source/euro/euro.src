@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-10 20:40:43 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ Text[ english_us ] = "Note: Currency amounts from external links and currency co
     Text[ portuguese ] = "Observaηγo: ι impossνvel converter montantes em moeda ligados a referκncias externas bem como factores de conversγo monetαria em fσrmulas de cιlulas.";
     Text[ russian ] = "Κ Βΰψεμσ ρβεδενθώ: ρσμμϋ βΰλώς, κξςξπϋε ρβÿηΰνϋ ρ βνεψνθμθ ρρϋλκΰμθ, ΰ ςΰκζε τΰκςξπϋ οπεξαπΰηξβΰνθÿ βΰλώςϋ β τξπμσλΰυ ÿχεεκ οπεξαπΰηξβΰςό νεβξημξζνξ.";
     Text[ greek ] = "Συμβουλή: Η μετατροπή ενός ποσού νομίσματος το οποίο είναι συνδεδεμένο με εξωτερικές αναφορές όπως επίσης και παραγόντων μετατροπής νομίσματος οι οποίοι υπάρχουν σε τύπους δεν είναι δυνατή.";
-    Text[ dutch ] = "Tip: Bedragen in valuta die verbonden zijn met externe links en valuta omrekeningsfactoren in celformules kunnen niet worden omgerekend.";
+    Text[ dutch ] = "Tip: Bedragen in valuta die verbonden zijn met externe links en valuta omrekeningsfactoren in celformules kunnen niet worden geconverteerd.";
     Text[ french ] = "Avertissement : Il est impossible de convertir les montants provenant de liens externes, de mκme que les facteurs de conversion inclus dans les formules.";
     Text[ spanish ] = "Advertencia: No se pueden convertir los importes monetarios de referencias externas ni los factores de conversiσn de moneda en fσrmulas.";
     Text[ italian ] = "Nota: non θ possibile convertire gli importi monetari provenienti da riferimenti esterni, nonchι fattori di conversione monetaria in formule.";
@@ -1111,7 +1111,7 @@ Text[ english_us ] = "Warning!";
     Text[ swedish ] = "Varning!";
     Text[ polish ] = "OstrzeΏenie!";
     Text[ portuguese_brazilian ] = "Warning!";
-    Text[ japanese ] = "x!";
+    Text[ japanese ] = "x";
     Text[ korean ] = "°ζ°ν!";
     Text[ chinese_simplified ] = "Ύ―Έζ£΅";
     Text[ chinese_traditional ] = "Δµ§i΅I";
@@ -1136,7 +1136,7 @@ Text[ english_us ] = "Sheet cannot be unprotected";
     Text[ swedish ] = "Tabellskydd upphδvs inte!";
     Text[ polish ] = "Ochrona arkusza nie zostanie zniesiona!";
     Text[ portuguese_brazilian ] = "Sheets are not protected!";
-    Text[ japanese ] = "•\\‚Μ•Ϋμ‚Ν‰π‚Ε‚«‚ά‚Ή‚ρ!";
+    Text[ japanese ] = "•\\‚Μ•Ϋμ‚Ν‰π‚Ε‚«‚ά‚Ή‚ρB";
     Text[ korean ] = "½ΓΖ® ΊΈΘ£΄Β Α¦°ΕµΗΑφ ΎΚ½ΐ΄Ο΄Ω!";
     Text[ chinese_simplified ] = "Ξή·¨Θ΅Οϋ±νΈρ±£»¤£΅";
     Text[ chinese_traditional ] = "¤u§@ªνªΊ«OΕ@¨S¦³³Q¨ϊ®ψ΅I";
@@ -1161,7 +1161,7 @@ Text[ english_us ] = "Sheet cannot be unprotected";
     Text[ swedish ] = "Tabellskydd upphδvs inte!";
     Text[ polish ] = "Ochrona arkusza nie zostanie zniesiona!";
     Text[ portuguese_brazilian ] = "Sheet is not protected!";
-    Text[ japanese ] = "•\\‚Μ•Ϋμ‚Ν‰π‚Ε‚«‚ά‚Ή‚ρ!";
+    Text[ japanese ] = "•\\‚Μ•Ϋμ‚Ν‰π‚Ε‚«‚ά‚Ή‚ρB";
     Text[ korean ] = "½ΓΖ® ΊΈΘ£΄Β Α¦°ΕµΗΑφ ΎΚ½ΐ΄Ο΄Ω!";
     Text[ chinese_simplified ] = "Ξή·¨Θ΅Οϋ±νΈρ±£»¤£΅";
     Text[ chinese_traditional ] = "¤u§@ªνªΊ«OΕ@¨S¦³³Q¨ϊ®ψ΅I";
@@ -1722,7 +1722,7 @@ Text[ english_us ] = "Retrieving the relevant documents...";
     Text[ spanish ] = "Recuperando los documentos relevantes...";
     Text[ italian ] = "Rilevamento dei documenti importanti...";
     Text[ danish ] = "Bestemmer de relevante dokumenter...";
-    Text[ swedish ] = "Bestδmning av de relevanta dokumenten...";
+    Text[ swedish ] = "Samlar de relevanta dokumenten...";
     Text[ polish ] = "Przywracanie waΏnych dokumentσw...";
     Text[ portuguese_brazilian ] = "Retrieving the relevant Documents...";
     Text[ japanese ] = "ΦA‚·‚ιΔή·­ÒέΔ‚π‚ά‚Ζ‚ί‚ι...";
