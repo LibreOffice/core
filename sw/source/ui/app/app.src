@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:22:39 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3338,7 +3338,8 @@ String STR_TABLE_DEFNAME
 String STR_GRAPHIC_DEFNAME
 {
     TEXT = "Grafik" ;
-    TEXT [ English ] = "Graphic" ;
+    TEXT [ english_us ] = "graphics" ;
+    TEXT [ English ] = "graphics" ;
     TEXT [ norwegian ] = "Graphic" ;
     TEXT [ italian ] = "Immagine" ;
     TEXT [ portuguese_brazilian ] = "Figura" ;
@@ -3349,7 +3350,6 @@ String STR_GRAPHIC_DEFNAME
     TEXT [ swedish ] = "Grafik" ;
     TEXT [ dutch ] = "Afbeelding" ;
     TEXT [ spanish ] = "Imagen" ;
-    TEXT [ english_us ] = "Graphic" ;
     TEXT[ chinese_simplified ] = "е›ѕеЅў";
     TEXT[ russian ] = "Графический объект";
     TEXT[ polish ] = "Grafika";
