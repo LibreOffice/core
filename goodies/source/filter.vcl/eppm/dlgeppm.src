@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeppm.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 21:44:54 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 21:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ ModalDialog DLG_EXPORT_EPPM
         Text[ dutch ] = "~Binair";
         Text[ chinese_simplified ] = "∂˛‘™(~B)";
         Text[ greek ] = "ƒı·‰ÈÍ¸";
-        Text[ korean ] = "¿Ã¡¯(~B)";
+        Text[ korean ] = "πŸ¿Ã≥ ∏Æ";
         Text[ turkish ] = "›kili";
         Text[ catalan ] = "~Binario";
         Text[ finnish ] = "~Bin‰‰ri";
@@ -204,5 +204,6 @@ ModalDialog DLG_EXPORT_EPPM
     Text[ catalan ] = "Opciones PPM ";
     Text[ finnish ] = "PPM-asetukset";
 };
+
 
 
