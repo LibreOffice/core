@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:51:08 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 11:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,6 +346,8 @@ class SwRTFParser : public SvxRTFParser
     SwPaM*  pPam;               // SwPosition duerfte doch reichen, oder ??
     SwRelNumRuleSpaces* pRelNumRule;    // Liste aller benannten NumRules
 
+    String sNestedFieldStr;
+
     USHORT nAktPageDesc, nAktFirstPageDesc;
     USHORT nAktBox;         // akt. Box
     USHORT nInsTblRow;      // beim nach \row kein \pard -> neue Line anlegen
@@ -362,6 +364,7 @@ class SwRTFParser : public SvxRTFParser
     bool bNewNumList;       // Word 7.0 NumList gelesen, 6.0 ueberspringen
     bool bFirstContinue;    // 1.Call ins Continue
     bool bContainsPara;     // If there is no paragraph in the section
+    bool bNestedField;
 
     /*
      #i9243#
