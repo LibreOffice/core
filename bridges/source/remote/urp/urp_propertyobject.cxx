@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_propertyobject.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 #include <stdlib.h>
-
 #include <osl/diagnose.h>
 #include <osl/process.h>
 
@@ -333,15 +332,15 @@ void assignFromStringToStruct( const OUString & sProps , struct Properties *pPro
 // PropertyObject implementation
 PropertyObject::PropertyObject(
     struct Properties *pLocalSetting , uno_Environment *pEnvRemote, urp_BridgeImpl *pImpl )
-    : m_pLocalSetting( pLocalSetting )
+    : m_commitChangeCondition( osl_createCondition() )
     , m_nRefCount( 0 )
-    , m_pEnvRemote( pEnvRemote )
-    , m_bApplyProperties( sal_False )
     , m_pBridgeImpl( pImpl )
+    , m_pLocalSetting( pLocalSetting )
+    , m_pEnvRemote( pEnvRemote )
+    , m_bRequestChangeHasBeenCalled( sal_False )
     , m_bClientWaitingForCommit( sal_False )
     , m_bServerWaitingForCommit( sal_False )
-    , m_bRequestChangeHasBeenCalled( sal_False )
-    , m_commitChangeCondition( osl_createCondition() )
+    , m_bApplyProperties( sal_False )
 {
     acquire = staticAcquire;
     release = staticRelease;
@@ -520,7 +519,6 @@ sal_Int32 SAL_CALL PropertyObject::localRequestChange( )
         void *pArg1 = &m_nRandomNumberOfRequest;
         void **ppArgs = &pArg1;
 
-        uno_Sequence *pResult = 0;
         uno_Any exception;
         uno_Any *pException = &exception;
 
@@ -639,7 +637,7 @@ void SAL_CALL PropertyObject::localCommitChange( const ::rtl::OUString &sProps ,
         &pMethodType,
         ((typelib_InterfaceTypeDescription*) pInterfaceType)->ppAllMembers[METHOD_COMMIT_CHANGE] );
 
-    typelib_TypeDescription *pSequenceType= 0;
+//  typelib_TypeDescription *pSequenceType= 0;
 
 
     // extract name/value pairs
@@ -704,7 +702,6 @@ void SAL_CALL PropertyObject::localCommitChange( const ::rtl::OUString &sProps ,
 //      }
 
     void *pArg1 = &pSeq;
-    uno_Sequence *pResult = 0;
     uno_Any exception;
     uno_Any *pException = &exception;
 
