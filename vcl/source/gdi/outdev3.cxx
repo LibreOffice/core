@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: th $ $Date: 2001-08-28 10:47:56 $
+ *  last change: $Author: cp $ $Date: 2001-09-10 10:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4977,16 +4977,23 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
             nMaxWidth = 2;
         nMaxWidth += nWidth;
         long nFullStrikeoutWidth = GetTextWidth( aStrikeoutText );
-        while ( (nFullStrikeoutWidth > nMaxWidth) && aStrikeoutText.Len() )
+        // allow the strikeout to be one pixel larger than the text it strikes out
+        while ( (nFullStrikeoutWidth > (nMaxWidth + 1)) && aStrikeoutText.Len() )
         {
             aStrikeoutText.Erase( aStrikeoutText.Len()-1 );
             nFullStrikeoutWidth = GetTextWidth( aStrikeoutText );
         }
-        if ( mpFontEntry->mnOrientation )
-            ImplRotatePos( nBaseX, nBaseY, nX, nY, mpFontEntry->mnOrientation );
-        ImplDrawTextDirect( nX, nY,
+        // if the textwidth is smaller than the strikeout text, then resign from striking
+        // out at all. This case requires user interaction, e.g. adding a space to the text
+        if (aStrikeoutText.Len() > 0)
+        {
+            if ( mpFontEntry->mnOrientation )
+                ImplRotatePos( nBaseX, nBaseY, nX, nY, mpFontEntry->mnOrientation );
+            ImplDrawTextDirect( nX, nY,
                             aStrikeoutText.GetBuffer(), aStrikeoutText.Len(),
                             NULL, FALSE );
+        }
+
         SetTextColor( aOldColor );
         ImplInitTextColor();
         EnableMapMode( bOldMap );
