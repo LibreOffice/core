@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-18 07:58:41 $
+ *  last change: $Author: sab $ $Date: 2001-07-19 07:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,7 +603,7 @@ SvNumberFormatter* ScDocument::GetEnglishFormatTable() const
 ULONG ScDocument::GetStandardIndexEnglishUS()
 {
     if (nStandardIndexEnglishUS == -1)
-        nStandardIndexEnglishUS = GetFormatTable()->GetStandardIndex(LANGUAGE_ENGLISH_US);
+        nStandardIndexEnglishUS = GetEnglishFormatTable()->GetStandardIndex(LANGUAGE_ENGLISH_US);
     return (ULONG)nStandardIndexEnglishUS;
 }
 

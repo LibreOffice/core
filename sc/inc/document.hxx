@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-18 07:57:23 $
+ *  last change: $Author: sab $ $Date: 2001-07-19 07:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1256,7 +1256,10 @@ public:
 
     SvNumberFormatter*  GetFormatTable() const;
     SvNumberFormatter*  GetEnglishFormatTable() const;
-    ULONG           GetStandardIndexEnglishUS();
+
+    // returns the standard english us
+    // numberformat of the english number formatter
+    ULONG               GetStandardIndexEnglishUS();
 
     void            Sort( USHORT nTab, const ScSortParam& rSortParam, BOOL bKeepQuery );
     USHORT          Query( USHORT nTab, const ScQueryParam& rQueryParam, BOOL bKeepSub );
