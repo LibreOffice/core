@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-30 09:46:28 $
+ *  last change: $Author: mba $ $Date: 2002-10-08 16:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,7 +560,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                 SfxShell *pShell = 0;
                 const SfxSlot *pSlot = 0;
                 if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, sal_False,
-                        SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL) ) )
+                        SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL), FALSE ) )
                 {
                     SfxAllItemSet aSet( pShell->GetPool() );
                     TransformParameters( GetId(), lNewArgs, aSet, pSlot );

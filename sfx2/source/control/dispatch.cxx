@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-06 12:44:20 $
+ *  last change: $Author: mba $ $Date: 2002-10-08 16:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -945,7 +945,8 @@ int SfxDispatcher::GetShellAndSlot_Impl
     SfxShell**      ppShell,    // die SfxShell, welche nSlot z.Zt. bedient
     const SfxSlot** ppSlot,     // der SfxSlot, welcher nSlot z.Zt. bedient
     sal_Bool            bOwnShellsOnly,
-    sal_Bool            bModal      // trotz ModalMode
+    sal_Bool            bModal,     // trotz ModalMode
+    sal_Bool        bRealSlot
 )
 
 /*  [Beschreibung]
@@ -978,7 +979,7 @@ int SfxDispatcher::GetShellAndSlot_Impl
 
         *ppShell = GetShell(aSvr.GetShellLevel());
         *ppSlot = aSvr.GetSlot();
-        if ( 0 == (*ppSlot)->GetExecFnc() )
+        if ( 0 == (*ppSlot)->GetExecFnc() && bRealSlot )
             *ppSlot = (*ppShell)->GetInterface()->GetRealSlot(*ppSlot);
 
 #ifdef DBG_UTILx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-13 13:26:23 $
+ *  last change: $Author: mba $ $Date: 2002-10-08 16:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -967,7 +967,6 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
             }
         }
 
-#if 0
         // check if activated or deactivated frame is a InPlaceFrame
         SfxInPlaceFrame *pOld = PTR_CAST( SfxInPlaceFrame, pViewFrame );
         SfxInPlaceFrame *pNew = PTR_CAST( SfxInPlaceFrame, pFrame );
@@ -984,86 +983,21 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
         // TopWinActivate : both frames belong to different TopWindows
         BOOL bDocWinActivate = pOldContainerFrame && pNewContainerFrame &&
                     pOldContainerFrame->GetTopViewFrame() == pNewContainerFrame->GetTopViewFrame();
-
-        if ( pOldContainerFrame )
+        BOOL bTaskActivate = pOldContainerFrame != pNewContainerFrame;
+        if ( pViewFrame )
         {
-            // a frame has to be deactivated
-            if ( pOld )
+            if ( bTaskActivate )
             {
-                // old active frame was an InPlaceFrame
-                SvInPlaceClient *pCli = pOldContainerFrame->GetViewShell() ?
-                        pOldContainerFrame->GetViewShell()->GetIPClient() : NULL;
-                if ( pCli && pCli->GetProtocol().IsUIActive() )
-                {
-                    if ( bDocWinActivate )
-                    {
-                        pCli->GetIPObj()->GetIPEnv()->DoShowUITools( sal_False );
-                        pCli->GetProtocol().DocWinActivate( sal_False );
-                    }
-                    else
-                        pCli->GetProtocol().TopWinActivate( sal_False );
-                }
-            }
-
-            if ( pOldContainerFrame != pFrame )
-            {
-                // new activated frame is not the container frame of the old deactivated frame
-                if ( !pNew )
-                    NotifyEvent( SfxEventHint( SFX_EVENT_DEACTIVATEDOC, pOldContainerFrame->GetObjectShell() ) );
-                pOldContainerFrame->DoDeactivate( !pNew, pFrame );
-            }
-        }
-
-        pViewFrame = pFrame;
-
-        // Jetzt ist der ViewFrame gesetzt, das TopWindow kann abgefragt werden
-        SfxWorkWindow* pWork = pViewFrame ? pViewFrame->GetFrame()->GetWorkWindow_Impl() : NULL;
-        Window* pWin = pWork ? pWork->GetTopWindow() : NULL;
-        Application::SetDefDialogParent( pWin );
-
-        const SfxObjectShell* pSh = pViewFrame ? pViewFrame->GetObjectShell() : 0;
-        if ( !pSh )
-        {
-            // Wenn es ein Dokument gibt, wird die BaseURL im Activate gesetzt
-            INetURLObject aObject( SvtPathOptions().GetWorkPath() );
-            aObject.setFinalSlash();
-            INetURLObject::SetBaseURL( aObject.GetMainURL() );
-        }
-
-        if ( pViewFrame && !pOld )
-            pViewFrame->GetObjectShell()->PostActivateEvent_Impl();
-
-        if( pViewFrame )
-            pViewFrame->DoActivate( !pOld ||
-                pViewFrame->GetBindings().GetDispatcher_Impl() != pViewFrame->GetDispatcher(),
-                pOldContainerFrame );
-#endif
-        SfxInPlaceFrame *pOld = PTR_CAST( SfxInPlaceFrame, pViewFrame );
-        SfxInPlaceFrame *pNew = PTR_CAST( SfxInPlaceFrame, pFrame );
-        FASTBOOL bTaskActivate = !pNew;
-        SfxViewFrame *pContainer = pViewFrame;
-        while ( pContainer && pContainer->GetParentViewFrame_Impl() )
-            pContainer = pContainer->GetParentViewFrame_Impl();
-
-        BOOL bDocWinActivate = pContainer && pFrame &&
-                ( pContainer->GetTopViewFrame() == pFrame || pFrame->GetTopViewFrame() == pContainer );
-
-        if ( bTaskActivate )
-        {
-            if ( pViewFrame )
-            {
-                // BeamerConfig sichern
+                // prepare UI for deacivation
                 pViewFrame->GetFrame()->Deactivate_Impl();
 
-                // DeactivateEvent f"ur den alten ViewFrame verschicken
-                NotifyEvent( SfxEventHint( SFX_EVENT_DEACTIVATEDOC, pViewFrame->GetObjectShell() ) );
-
-                // Ggf. auch InPlaceDeactivate
-                // Daf"ur den aktiven ContainerFrame suchen
                 if ( pOld )
                 {
-                    // Falls aktiver IPClient, diesen deaktivieren
-                    SvInPlaceClient *pCli = pContainer->GetViewShell() ? pContainer->GetViewShell()->GetIPClient() : NULL;
+                    // broadcast deactivation event
+                    NotifyEvent( SfxEventHint( SFX_EVENT_DEACTIVATEDOC, pViewFrame->GetObjectShell() ) );
+
+                    // inplace deactivation needed
+                    SvInPlaceClient *pCli = pOldContainerFrame->GetViewShell() ? pOldContainerFrame->GetViewShell()->GetIPClient() : NULL;
                     if ( pCli && pCli->GetProtocol().IsUIActive() )
                     {
                         if ( bDocWinActivate )
@@ -1078,109 +1012,72 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
             }
         }
 
-        SfxViewFrame *pOldContainerFrame = pViewFrame;
-        if( pOldContainerFrame )
+        if ( pOldContainerFrame )
         {
-            // Wenn der alte Frame ein IPFrame ist, mu\s dessen ContainerDokument aktiviert werden,
-            // der IPFrame wurde schon im Top/DocWinDeactivate
-            if ( pOld )
-                pOldContainerFrame = pOld->GetParentViewFrame_Impl();
-
-            if ( bTaskActivate && pOldContainerFrame != pViewFrame )
+            if ( bTaskActivate )
                 NotifyEvent( SfxEventHint( SFX_EVENT_DEACTIVATEDOC, pOldContainerFrame->GetObjectShell() ) );
-
             pOldContainerFrame->DoDeactivate( bTaskActivate, pFrame );
+
+            if( pOldContainerFrame->GetProgress() )
+                pOldContainerFrame->GetProgress()->Suspend();
         }
 
         pViewFrame = pFrame;
 
-        // Jetzt ist der ViewFrame gesetzt, das TopWindow kann abgefragt werden
         SfxWorkWindow* pWork = pViewFrame ? pViewFrame->GetFrame()->GetWorkWindow_Impl() : NULL;
         Window* pWin = pWork ? pWork->GetTopWindow() : NULL;
-        //Application::SetDefDialogParent( pWin );
-
         const SfxObjectShell* pSh = pViewFrame ? pViewFrame->GetObjectShell() : 0;
         if ( !pSh )
         {
-            // Wenn es ein Dokument gibt, wird die BaseURL im Activate gesetzt
+            // otherwise BaseURL is set in activation of document
             INetURLObject aObject( SvtPathOptions().GetWorkPath() );
             aObject.setFinalSlash();
             INetURLObject::SetBaseURL( aObject.GetMainURL() );
         }
 
-        if( pViewFrame )
-            pViewFrame->DoActivate(
-                bTaskActivate ||
-                pViewFrame->GetBindings().GetDispatcher_Impl() !=
-                pViewFrame->GetDispatcher(), pOldContainerFrame );
-
-        // Activate mit sal_True auch wenn die zu aktivierenden Bindings gerade
-        // keinen Dispatcher haben
-        if ( pViewFrame && bTaskActivate )
-            pViewFrame->GetObjectShell()->PostActivateEvent_Impl();
-
-        if( pOldContainerFrame && pOldContainerFrame->GetProgress() )
-            pOldContainerFrame->GetProgress()->Suspend();
-
-        // Beim Browsen kann es passieren, da\s gerade keine ViewShell da ist
-        if ( pViewFrame && !pViewFrame->GetViewShell() )
-            return;
-
-        if ( pViewFrame )
+        if( pNewContainerFrame )
         {
-            if ( pNew )
+            pNewContainerFrame->DoActivate( bTaskActivate );
+            if ( bTaskActivate )
+                pNewContainerFrame->GetObjectShell()->PostActivateEvent_Impl();
+
+            SfxProgress *pProgress = pNewContainerFrame->GetProgress();
+            if ( pProgress )
             {
-//                pNew->GetEnv_Impl()->ActivateConfig();
-            }
-            else
-            {
-/*
-                SfxObjectShell *pObjSh = pViewFrame->GetObjectShell();
-                if ( pObjSh->GetConfigManager())
-                {
-                    pObjSh->GetConfigManager()->ActivateTask( pViewFrame );
-                    pObjSh->GetConfigManager()->SetParent(pAppData_Impl->pAppCfg);
-                    pObjSh->GetConfigManager()->Activate(pCfgMgr);
-                }
+                if( pProgress->IsSuspended() )
+                    pProgress->Resume();
                 else
-                {
-                    pAppData_Impl->pAppCfg->ActivateTask( pViewFrame );
-                    pAppData_Impl->pAppCfg->Activate(pCfgMgr);
-                }
-*/
+                    pProgress->SetState( pProgress->GetState() );
+            }
+
+            if ( !pNew )
+            {
                 SfxDispatcher* pDisp = pViewFrame->GetDispatcher();
                 pDisp->Flush();
                 pDisp->Update_Impl(sal_True);
-
-                SfxProgress *pProgress = pViewFrame->GetProgress();
-                if ( !pProgress )
-                    pProgress = pAppData_Impl->pProgress;
-                if ( pProgress )
-                {
-                    if( pProgress->IsSuspended() )
-                        pProgress->Resume();
-                    else
-                        pProgress->SetState( pProgress->GetState() );
-                }
-
-                // Falls aktiver IPClient, diesen aktivieren
-                SvInPlaceClient *pCli = pViewFrame->GetViewShell()->GetIPClient();
-                if ( pCli && pCli->GetProtocol().IsUIActive() )
-                {
-                    if ( bDocWinActivate )
-                    {
-                        pCli->GetIPObj()->GetIPEnv()->DoShowUITools( sal_True );
-                        pCli->GetProtocol().DocWinActivate( sal_True );
-                    }
-                    else
-                        pCli->GetProtocol().TopWinActivate( sal_True );
-                }
             }
         }
-        else
+
+        if ( pViewFrame && pViewFrame->GetViewShell() )
         {
-//            pCfgMgr->ActivateTask( NULL );
-//            pAppData_Impl->pAppCfg->Activate( pCfgMgr );
+            if ( bTaskActivate )
+            {
+                if ( pNew )
+                {
+                    // Activate IPClient if present
+                    SvInPlaceClient *pCli = pNewContainerFrame->GetViewShell()->GetIPClient();
+                    if ( pCli && pCli->GetProtocol().IsUIActive() )
+                    {
+                        if ( bDocWinActivate )
+                        {
+                            pCli->GetIPObj()->GetIPEnv()->DoShowUITools( sal_True );
+                            pCli->GetProtocol().DocWinActivate( sal_True );
+                        }
+                        else
+                            pCli->GetProtocol().TopWinActivate( sal_True );
+                    }
+                }
+            }
         }
     }
 }
