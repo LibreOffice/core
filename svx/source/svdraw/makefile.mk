@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: thb $ $Date: 2001-07-11 10:15:22 $
+#   last change: $Author: cl $ $Date: 2001-11-05 14:02:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
+         $(SLO)$/svdoutlinercache.obj \
          $(SLO)$/dialdll.obj         \
          $(SLO)$/gradtrns.obj         \
          $(SLO)$/svdattr.obj         \
@@ -140,6 +141,7 @@ SLOFILES=\
          $(SLO)$/svdxcgv.obj
 
 SVXLIGHTOBJFILES=\
+         $(OBJ)$/svdoutlinercache.obj \
          $(OBJ)$/dialdll.obj        \
          $(OBJ)$/gradtrns.obj        \
          $(OBJ)$/svdattr.obj         \

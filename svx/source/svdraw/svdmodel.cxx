@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dl $ $Date: 2001-10-24 07:07:21 $
+ *  last change: $Author: cl $ $Date: 2001-11-05 14:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 #include "svdoole2.hxx"
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"   // Objektname
+#include "svdoutlinercache.hxx"
 
 #include <eeitemid.hxx>
 
@@ -169,32 +170,13 @@ SdrModelInfo::SdrModelInfo(FASTBOOL bInit):
     aLastReadDate(Date(0),Time(0)),
     aLastPrintDate(Date(0),Time(0)),
     eCreationCharSet(RTL_TEXTENCODING_DONTKNOW),
-    /*  old SV-stuff, there is no possibility to determine this informations in another way
-    eCreationGUI(GUI_DONTKNOW),
-    eCreationCPU(CPU_DONTKNOW),
-    eCreationSys(SYSTEM_DONTKNOW),
-    */
     eLastWriteCharSet(RTL_TEXTENCODING_DONTKNOW),
-    /*  old SV-stuff, there is no possibility to determine this informations in another way
-    eLastWriteGUI(GUI_DONTKNOW),
-    eLastWriteCPU(CPU_DONTKNOW),
-    eLastWriteSys(SYSTEM_DONTKNOW),
-    */
     eLastReadCharSet(RTL_TEXTENCODING_DONTKNOW)
-    /*  old SV-stuff, there is no possibility to determine this informations in another way
-    eLastReadGUI(GUI_DONTKNOW),
-    eLastReadCPU(CPU_DONTKNOW),
-    eLastReadSys(SYSTEM_DONTKNOW)
-    */
 {
     if (bInit)
     {
         aCreationDate = DateTime();
         eCreationCharSet = gsl_getSystemTextEncoding();
-        /*  old SV-stuff, there is no possibility to determine this informations in another way
-        eCreationGUI=System::GetGUIType();
-        eCreationSys=System::GetSystemType();
-        */
     }
 }
 
@@ -379,6 +361,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     pModelStorage = NULL;
     mpForbiddenCharactersTable = NULL;
     mbModelLocked = FALSE;
+    mpOutlinerCache = NULL;
 
 #ifndef SVX_LIGHT
     SvxAsianConfig aAsian;
@@ -493,6 +476,8 @@ SdrModel::~SdrModel()
 
     DBG_DTOR(SdrModel,NULL);
     Broadcast(SdrHint(HINT_MODELCLEARED));
+
+    delete mpOutlinerCache;
 
     ClearUndoBuffer();
 #ifdef DBG_UTIL
@@ -2695,6 +2680,26 @@ FASTBOOL SdrModel::HasTransparentObjects( BOOL bCheckForAlphaChannel ) const
     }
 
     return bRet;
+}
+
+SdrOutliner* SdrModel::createOutliner( USHORT nOutlinerMode )
+{
+    if( NULL == mpOutlinerCache )
+        mpOutlinerCache = new SdrOutlinerCache(this);
+
+    return mpOutlinerCache->createOutliner( nOutlinerMode );
+}
+
+void SdrModel::disposeOutliner( SdrOutliner* pOutliner )
+{
+    if( mpOutlinerCache )
+    {
+        mpOutlinerCache->disposeOutliner( pOutliner );
+    }
+    else
+    {
+        delete pOutliner;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
