@@ -2,7 +2,6 @@ sw	sw	:	connectivity offmgr NULL
 sw	sw										usr1	-	all	sw_mkout NULL
 sw	sw\inc									get		-	all	sw_inc NULL
 sw	sw\prj									get		-	all	sw_prj NULL
-sw	sw\jobs									get		-	all	sw_jobs NULL
 sw	sw\source\ui\inc						get		-	all	sw_uinc NULL
 sw	sw\source\core\inc						get		-	all	sw_cinc NULL
 sw	sw\source\filter\inc					get		-	all	sw_finc NULL
