@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctools.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:56 $
+ *  last change: $Author: mm $ $Date: 2000-09-27 11:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,14 @@
 
     Source Code Control System - Header
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/tools/rsctools.cxx,v 1.1.1.1 2000-09-18 16:42:56 hr Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/tools/rsctools.cxx,v 1.2 2000-09-27 11:26:12 mm Exp $
 
     Source Code Control System - Update
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:42:56  hr
+    initial import
+
     Revision 1.32  2000/09/17 12:51:12  willem.vandorp
     OpenOffice header added.
 
@@ -186,8 +189,12 @@ int rsc_stricmp( const char *string1, const char *string2 ){
 *************************************************************************/
 ByteString GetTmpFileName()
 {
+ #ifdef MACOSX
     // Use tmpnam instead of tempnam as tempnam has some bugs in Mac OS X
     return ByteString( tmpnam( NULL ) );
+#else
+    return ByteString( tempnam( (const char *) P_tmpdir, NULL ) );
+#endif
 }
 
 /********************************************************************/
