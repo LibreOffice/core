@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:20:52 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #include <tox.hxx>
 #endif
 
+#ifndef _SFXDISPATCH_HXX
+#include <sfx2/dispatch.hxx>
+#endif
 #include <sfx2/app.hxx>
 
 #ifndef _REDLENUM_HXX
@@ -449,6 +452,68 @@ void SwView::GetState(SfxItemSet &rSet)
             case FN_INSERT_FIELD_DATA_ONLY :
                 if(!bInMailMerge && !GetViewFrame()->HasChildWindow(nWhich))
                     rSet.DisableItem(nWhich);
+            break;
+            case SID_ALIGN_ANY_LEFT :
+            case SID_ALIGN_ANY_HCENTER  :
+            case SID_ALIGN_ANY_RIGHT    :
+            case SID_ALIGN_ANY_JUSTIFIED:
+            case SID_ALIGN_ANY_TOP      :
+            case SID_ALIGN_ANY_VCENTER  :
+            case SID_ALIGN_ANY_BOTTOM   :
+            case SID_ALIGN_ANY_HDEFAULT :
+            case SID_ALIGN_ANY_VDEFAULT :
+            {
+                if( !pShell )
+                    SelectShell();
+                USHORT nAlias = 0;
+                bool bDraw = false;
+                int nNewSelectionType = (GetWrtShell().GetSelectionType()
+                                    & ~SwWrtShell::SEL_TBL_CELLS);
+                if( nSelectionType & (SwWrtShell::SEL_DRW_TXT|SwWrtShell::SEL_TXT) )
+                {
+                    switch( nWhich )
+                    {
+                        case SID_ALIGN_ANY_LEFT :       nAlias = SID_ATTR_PARA_ADJUST_LEFT; break;
+                        case SID_ALIGN_ANY_HCENTER  :   nAlias = SID_ATTR_PARA_ADJUST_CENTER; break;
+                        case SID_ALIGN_ANY_RIGHT    :   nAlias = SID_ATTR_PARA_ADJUST_RIGHT; break;
+                        case SID_ALIGN_ANY_JUSTIFIED:   nAlias = SID_ATTR_PARA_ADJUST_BLOCK; break;
+                        case SID_ALIGN_ANY_TOP      :   nAlias = FN_TABLE_VERT_NONE; break;
+                        case SID_ALIGN_ANY_VCENTER  :   nAlias = FN_TABLE_VERT_CENTER; break;
+                        case SID_ALIGN_ANY_BOTTOM   :   nAlias = FN_TABLE_VERT_BOTTOM; break;
+                    }
+                }
+                else if(nSelectionType & (SwWrtShell::SEL_DRW))
+                {
+                    //the draw shell cannot provide a status per item - only one for SID_OBJECT_ALIGN
+                    if(nWhich != SID_ALIGN_ANY_JUSTIFIED)
+                    {
+                        const SfxPoolItem* pItem = 0;
+                        GetViewFrame()->GetDispatcher()->QueryState( SID_OBJECT_ALIGN, pItem );
+                        if(pItem)
+                            bDraw = true;
+                    }
+                }
+                else
+                {
+                    switch( nWhich )
+                    {
+                        case SID_ALIGN_ANY_LEFT :       nAlias = SID_OBJECT_ALIGN_LEFT    ; break;
+                        case SID_ALIGN_ANY_HCENTER  :   nAlias = SID_OBJECT_ALIGN_CENTER ; break;
+                        case SID_ALIGN_ANY_RIGHT    :   nAlias = SID_OBJECT_ALIGN_RIGHT  ; break;
+                        case SID_ALIGN_ANY_TOP      :   nAlias = SID_OBJECT_ALIGN_UP     ;  break;
+                        case SID_ALIGN_ANY_VCENTER  :   nAlias = SID_OBJECT_ALIGN_MIDDLE ;  break;
+                        case SID_ALIGN_ANY_BOTTOM   :   nAlias = SID_OBJECT_ALIGN_DOWN    ; break;
+                    }
+                }
+                //these slots are either re-mapped to text or object alignment
+                const SfxPoolItem* pState = 0;
+                if(nAlias)
+                    GetViewFrame()->GetDispatcher()->QueryState( nAlias, pState );
+                if(pState)
+                    rSet.Put(*pState, nWhich);
+                else if(!bDraw)
+                    rSet.DisableItem(nWhich);
+            }
             break;
         }
         nWhich = aIter.NextWhich();
