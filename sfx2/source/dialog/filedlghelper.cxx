@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-08 11:22:34 $
+ *  last change: $Author: fs $ $Date: 2001-10-12 07:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERGROUPMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -271,6 +274,7 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
 
     sal_Bool                mbDeleteMatcher         : 1;
     sal_Bool                mbInsert                : 1;
+    sal_Bool                mbSystemPicker          : 1;
 
 private:
     void                    addFilters( sal_uInt32 nFlags,
@@ -291,6 +295,8 @@ private:
 
     ErrCode                 getGraphic( const OUString& rURL, Graphic& rGraphic ) const;
     void                    setDefaultValues();
+
+    sal_Int16               implDoExecute();
 
     DECL_LINK( TimeOutHdl_Impl, Timer* );
     DECL_LINK( HandleEvent, FileDialogHelper* );
@@ -862,6 +868,22 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
 }
 
 // ------------------------------------------------------------------------
+sal_Bool lcl_isSystemFilePicker( const Reference< XFilePicker >& _rxFP )
+{
+    try
+    {
+        Reference< XServiceInfo > xSI( _rxFP, UNO_QUERY );
+        if ( xSI.is() && xSI->supportsService( ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFilePicker" ) ) )
+            return sal_True;
+    }
+    catch( const Exception& )
+    {
+    }
+    return sal_False;
+}
+
+
+// ------------------------------------------------------------------------
 // -----------      FileDialogHelper_Impl       ---------------------------
 // ------------------------------------------------------------------------
 
@@ -895,6 +917,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
     mpGraphicFilter = NULL;
 
     mxFileDlg = Reference < XFilePicker > ( xFactory->createInstance( aService ), UNO_QUERY );
+    mbSystemPicker = lcl_isSystemFilePicker( mxFileDlg );
 
     Reference< XFilePickerNotifier > xNotifier( mxFileDlg, UNO_QUERY );
     Reference< XInitialization > xInit( mxFileDlg, UNO_QUERY );
@@ -1050,6 +1073,39 @@ void SAL_CALL PickerThread_Impl::run()
 }
 
 // ------------------------------------------------------------------------
+sal_Int16 FileDialogHelper_Impl::implDoExecute()
+{
+    loadConfig();
+    setDefaultValues();
+    enablePasswordBox();
+    updateFilterOptionsBox();
+
+    sal_Int16 nRet = ExecutableDialogResults::CANCEL;
+    if ( mbSystemPicker )
+    {
+        PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );
+        pThread->create();
+        while ( pThread->GetReturnValue() == nMagic )
+            Application::Yield();
+        pThread->join();
+        nRet = pThread->GetReturnValue();
+        delete pThread;
+    }
+    else
+    {
+        try
+        {
+            nRet = mxFileDlg->execute();
+        }
+        catch( const Exception& )
+        {
+            DBG_ERRORFILE( "FileDialogHelper_Impl::implDoExecute: caught an exception!" );
+        }
+    }
+    return nRet;
+}
+
+// ------------------------------------------------------------------------
 ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                                         SfxItemSet *&   rpSet,
                                         String&         rFilter )
@@ -1060,21 +1116,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
     if ( ! mxFileDlg.is() )
         return ERRCODE_ABORT;
 
-    loadConfig();
-    setDefaultValues();
-    enablePasswordBox();
-    updateFilterOptionsBox();
-
-    PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );
-    pThread->create();
-    while ( pThread->GetReturnValue() == nMagic )
-        Application::Yield();
-
-    pThread->join();
-    sal_Int16 nRet = pThread->GetReturnValue();
-    delete pThread;
-
-    if ( nRet != ExecutableDialogResults::CANCEL )
+    if ( ExecutableDialogResults::CANCEL != implDoExecute() )
     {
         saveConfig();
 
@@ -1190,24 +1232,11 @@ ErrCode FileDialogHelper_Impl::execute()
     if ( ! mxFileDlg.is() )
         return ERRCODE_ABORT;
 
-    loadConfig();
-    setDefaultValues();
-    enablePasswordBox();
-    updateFilterOptionsBox();
-
-    PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );
-    pThread->create();
-
-    while ( pThread->GetReturnValue() == nMagic )
-        Application::Yield();
-
-    pThread->join();
-    sal_Int16 nRet = pThread->GetReturnValue();
-    delete pThread;
+    sal_Int16 nRet = implDoExecute();
 
     maPath = mxFileDlg->getDisplayDirectory();
 
-    if ( nRet == ExecutableDialogResults::CANCEL )
+    if ( ExecutableDialogResults::CANCEL == nRet )
         return ERRCODE_ABORT;
     else
     {
