@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 11:05:07 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,14 +444,6 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
                aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
                sal_False );
 
-        if (IsBlockMode())
-            ReadThroughComponent(
-                pStorage, xModelComp, "atevents.xml", "AutoTextEvents.xml",
-                xServiceFactory,
-                "com.sun.star.comp.Writer.XMLAutotextEventsImporter",
-                aEmptyArgs, rName, IsBlockMode(), xInsertTextRange,
-                aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
-                sal_False );
     }
     else
     {

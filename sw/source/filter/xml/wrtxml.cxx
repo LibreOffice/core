@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-07 15:23:07 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,12 +340,6 @@ sal_uInt32 SwXMLWriter::_Write()
                 "com.sun.star.comp.Writer.XMLContentExporter",
                 aFilterArgs, aProps, bBlock );
 
-        // export auto text events (if in block mode)
-        if ( bBlock  )
-            WriteThroughComponent(
-                pStg, xModelComp, "atevents.xml", xServiceFactory,
-                "com.sun.star.comp.Writer.XMLAutotextEventsExporter",
-                aEmptyArgs, aProps, bBlock );
     }
     else
     {
@@ -404,11 +398,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.20 2001-03-07 15:23:07 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.21 2001-03-09 14:58:43 dvo Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.20  2001/03/07 15:23:07  mib
+      set mime types
+
       Revision 1.19  2001/03/06 11:05:07  mib
       organizer support
 
