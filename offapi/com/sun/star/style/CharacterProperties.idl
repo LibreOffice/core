@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterProperties.idl,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:18:03 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,12 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::style::CharacterProperties
 /** This is a set of properties to describe the style of characters.@see ParagraphProperties
  */
 service CharacterProperties
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFontName
     /** This property specifies the name of the font style.
 
 
@@ -93,7 +91,6 @@ service CharacterProperties
     [property] string CharFontName;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFontStyleName
     /** This property contains the name of the font style.
 
         <p>This property may be empty.</p>
@@ -101,73 +98,63 @@ service CharacterProperties
     [property] string CharFontStyleName;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFontFamily
     /** This property contains font family as specified in
         com.sun.star.awt.FontFamily .
      */
     [property] short CharFontFamily;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFontCharSet
     /** This property contains the text encoding of the font as specified in
         com.sun.star.awt.CharSet.
      */
     [property] short CharFontCharSet;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFontPitch
     /** This property contains the font pitch as specified in com.sun.star.awt.FontPitch.
      */
     [property] short CharFontPitch;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharColor
     /** This property contains the value of the text color.
      */
     [property] long CharColor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharEscapement
     /** specifies the percentage of raisement/lowerment of superscript/subscript
         characters.
 
-        <p>Negative values lower the character.
+        <p>Negative values denote subscripts and positive values superscripts.</p>
      */
     [optional, property] short CharEscapement;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharHeight
     /** This value contains the height of the characters in point.
      */
     [property] float CharHeight;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharUnderline
     /** This property contains the value for the character underline.@see com::sun::star::awt::FontUnderline
      */
     [property] short CharUnderline;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharWeight
     /** This property contains the value of the font weight.@see com::sun::star::awt::FontWeight
      */
     [property] float CharWeight;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharPosture
     /** This property contains the value of the posture of the document.@see com::sun::star::awt::FontSlant
      */
     [property] com::sun::star::awt::FontSlant CharPosture;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharAutoKerning
     /** optional property to determine whether the kerning tables from the current font are used.
 
 
@@ -178,21 +165,18 @@ service CharacterProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharBackColor
     /** optional property which contains the text background color.
      */
     [optional, property] long CharBackColor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharBackTransparent
     /** determines if the text background color is set to transparent.
      */
     [optional, property] boolean CharBackTransparent;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharCaseMap
     /** optional property which contains the value of the case-mapping of the
         text for formatting and displaying.
 
@@ -202,14 +186,12 @@ service CharacterProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharCrossedOut
     /** This property is <TRUE/> if the character(s) is(are) crossed out.
      */
     [optional, property] boolean CharCrossedOut;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFlash
     /** If this optional property is <TRUE/>, then the characters are flashing.
      */
     [optional, property] boolean CharFlash;
@@ -228,21 +210,18 @@ service CharacterProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharKerning
     /** optional property which contains the value of the kerning of the characters.
      */
     [optional, property] short CharKerning;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharLocale
     /** contains the value of the locale.
      */
     [property] com::sun::star::lang::Locale CharLocale;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharKeepTogether
     /** optional property which marks a range of characters to prevent it from being broken into two lines.
 
         <p> A line break is applied before the range of characters if
@@ -252,7 +231,6 @@ service CharacterProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharNoLineBreak
     /** optional property which marks a range of characters to ignore a line break in this area.
 
         <p> A line break is applied behind the range of characters if
@@ -263,7 +241,6 @@ service CharacterProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharShadowed
     /** specifies if the characters are formatted and
         displayed with a shadow effect.
      */
@@ -271,7 +248,6 @@ service CharacterProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFontType
     /** optional property which specifies the fundamental technology of the font.
 
         @see com::sun::star::awt::FontType
@@ -280,7 +256,6 @@ service CharacterProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharStyleName
     /** specifies the name of the style of the font.
      */
     [optional, property] string CharStyleName;
@@ -343,12 +318,11 @@ service CharacterProperties
      */
     [optional, property] boolean CharRotationIsFitToLine;
     //-------------------------------------------------------------------------
-    /** determins the percentage value of scaling of characters.
+    /** determins the percentage value for scaling the width of characters.
 
-        <p>This is used for superscript/subscript
+        <p>The value refers to the original width which is denoted by 100,
+        and it has to be greater than 0.</p>
 
-
-        @see CharacterProperties::CharEscapement
      */
     [optional, property] short CharScaleWidth;
 
