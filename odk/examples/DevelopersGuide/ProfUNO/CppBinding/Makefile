@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: vg $ $Date: 2003-07-09 10:38:45 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:27:51 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -101,11 +101,11 @@ $(OUT_BIN)/%$(INI_EXTENSION) : %$(INI_EXTENSION)
 
 $(OUT_BIN)/%.rdb :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	regmerge $@ / $(DKREGISTRYNAME)
+	$(REGMERGE) $@ / $(DKREGISTRYNAME)
 
 $(GENHPPFILES) :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cppumaker -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(DKREGISTRYNAME)
+	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(DKREGISTRYNAME)
 
 $(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(GENHPPFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
@@ -122,16 +122,20 @@ else
 	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB)
 endif
 
+$(OUT_BIN)/office_connect$(EXE_EXT) : $(OUT_COMP_OBJ)/office_connect.$(OBJ_EXT) 
+
+$(OUT_BIN)/string_samples$(EXE_EXT) : $(OUT_COMP_OBJ)/string_samples.$(OBJ_EXT)
+
 $(COMPONENT_ENV_FLAG) : $(COMPONENT_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $@
 	@echo --------------------------------------------------------------------------------
 	@echo   Register necessary runtime components in $(COMPONENT_RDB)
 	@echo --------------------------------------------------------------------------------
-	regcomp -register -r $(COMPONENT_RDB) -c connector.uno.$(SHAREDLIB_EXT)
-	regcomp -register -r $(COMPONENT_RDB) -c remotebridge.uno.$(SHAREDLIB_EXT)
-	regcomp -register -r $(COMPONENT_RDB) -c bridgefac.uno.$(SHAREDLIB_EXT)
-	regcomp -register -r $(COMPONENT_RDB) -c uuresolver.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMPONENT_RDB) -c connector.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMPONENT_RDB) -c remotebridge.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMPONENT_RDB) -c bridgefac.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMPONENT_RDB) -c uuresolver.uno.$(SHAREDLIB_EXT)
 	@echo bla > $@
 
 
@@ -151,5 +155,5 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_OBJ))
-	-$(DEL) $(subst /,$(PS),$(OUT_BIN)/office_connect*)
-	-$(DEL) $(subst /,$(PS),$(OUT_BIN)/string_samples.*)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/office_connect*))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/string_samples.*))
