@@ -1,0 +1,188 @@
+/*************************************************************************
+ *
+ *  $RCSfile: doclinkdialog.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:39:12 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dialogs.hrc"
+#ifndef _SVX_DOCLINKDIALOG_HRC_
+#include "doclinkdialog.hrc"
+#endif
+
+#define DIALOG_SIZE_X       200
+#define DIALOG_SIZE_Y       94
+#define BUTTON_SIZE_X       50
+#define BUTTON_SIZE_Y       14
+
+#define LABEL_WIDTH         50
+
+#define HEIGHT_LABEL         8
+#define HEIGHT_EDIT         12
+
+#define LINE_1_Y            6
+#define LINE_2_Y            LINE_1_Y + HEIGHT_EDIT + 4
+#define OFFSET_Y            6
+
+ModalDialog DLG_DOCUMENTLINK
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( DIALOG_SIZE_X , DIALOG_SIZE_Y ) ;
+
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    FixedText FT_URL
+    {
+
+        Pos = MAP_APPFONT ( 6, LINE_1_Y ) ;
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - 6, HEIGHT_LABEL ) ;
+        Group = TRUE;
+
+        Text [ de ] =  "~Datenbankdatei";
+        Text [ en-US ] = "~Database file";
+    };
+    ComboBox CMB_URL
+    {
+        Pos = MAP_APPFONT ( 6 , LINE_1_Y + OFFSET_Y + HEIGHT_LABEL - 3) ;
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - 3*LINE_1_Y - BUTTON_SIZE_X , HEIGHT_EDIT ) ;
+
+        SVLook = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        AutoHScroll = TRUE ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_BROWSEFILE
+    {
+        Pos = MAP_APPFONT ( DIALOG_SIZE_X - BUTTON_SIZE_X - 6 , LINE_1_Y + OFFSET_Y + HEIGHT_LABEL - 4) ;
+        Size = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y );
+        Text [ de ] =  "Durch~suchen...";
+        Text [ en-US ] = "~Browse...";
+    };
+
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 6, LINE_1_Y + 2*OFFSET_Y + HEIGHT_LABEL + BUTTON_SIZE_Y - 3) ;
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - 6, HEIGHT_LABEL ) ;
+        Group = TRUE;
+
+        Text [ de ] =  "Registrierter ~Name";
+        Text [ en-US ] = "Registered ~name";
+    };
+    Edit ET_NAME
+    {
+        Pos = MAP_APPFONT ( 6, LINE_1_Y + 3*OFFSET_Y + 2*HEIGHT_LABEL + BUTTON_SIZE_Y - 6) ;
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - 3*LINE_1_Y - BUTTON_SIZE_X , HEIGHT_EDIT ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+
+    FixedLine FL_BOTTOM
+    {
+        Pos = MAP_APPFONT ( 4, LINE_1_Y + 4*OFFSET_Y + 2*HEIGHT_LABEL + BUTTON_SIZE_Y + HEIGHT_EDIT - 6);
+        Size = MAP_APPFONT ( DIALOG_SIZE_X - 8, 8 );
+    };
+
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( DIALOG_SIZE_X - 3 * ( BUTTON_SIZE_X + 3 ) - 6, DIALOG_SIZE_Y - 6 - BUTTON_SIZE_Y );
+        Size = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y );
+        DefButton = TRUE;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( DIALOG_SIZE_X - 2 * ( BUTTON_SIZE_X + 3 ) - 6, DIALOG_SIZE_Y - 6 - BUTTON_SIZE_Y );
+        Size = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y );
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( DIALOG_SIZE_X - 1 * ( BUTTON_SIZE_X + 3 ) - 3, DIALOG_SIZE_Y - 6 - BUTTON_SIZE_Y );
+        Size = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y );
+    };
+
+    String STR_EDIT_LINK
+    {
+        Text [ de ] =  "Datenbankverknüpfung bearbeiten";
+        Text [ en-US ] = "Edit Database Link";
+    };
+    String STR_NEW_LINK
+    {
+        Text [ de ] =  "Neue Datenbankverknüpfung anlegen";
+        Text [ en-US ] = "Create Database Link";
+    };
+};
+
+String STR_LINKEDDOC_DOESNOTEXIST
+{
+    Text [ de ] =  "Die Datei\n$file$\nexistiert nicht.?\n";
+    Text [ en-US ] = "The file\n$file$\ndoes not exist.";
+};
+
+String STR_NAME_CONFLICT
+{
+    Text [ de ] =  "Der Name '$file$' wird bereits für eine andere Datenbank verwendet.\nBitte wählen Sie einen anderen Namen.";
+    Text [ en-US ] = "The name '$file$' is already used for another database.\nPlease choose a different name.";
+};
+
+QueryBox QUERY_DELETE_CONFIRM
+{
+    Buttons = WB_YES_NO ;
+    Message = "Soll der Eintrag gelöscht werden?" ;
+    Message [ en-US ] = "Do you want to delete the entry?" ;
+};
