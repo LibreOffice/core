@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuline.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 10:08:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ FuLine::FuLine (
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    BOOL        bHasMarked = pView->HasMarkedObj();
+    BOOL        bHasMarked = pView->AreObjectsMarked();
 
     const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -147,7 +147,7 @@ FuLine::FuLine (
         const Color          &rIColor         = rILineColorItem.GetValue ();
 
         const SdrObject* pObj = NULL;
-        const SdrMarkList& rMarkList = pView->GetMarkList();
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         if( rMarkList.GetMarkCount() == 1 )
             pObj = rMarkList.GetMark(0)->GetObj();
 
