@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:12:13 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 14:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,10 +352,12 @@ IMPL_LINK( OptionsDialog, OKClick, Button *, pButton )
     return 0;
 }
 
+const ByteString ProfilePrefix("_profile_");
+const USHORT ProfilePrefixLen = ProfilePrefix.Len();
 
-ProfileOptions::ProfileOptions( Window* pParent, Config &aConfig )
+ProfileOptions::ProfileOptions( Window* pParent, Config &rConfig )
 : TabPage( pParent, ResId( RID_TP_PROFILE ) )
-, aConf( aConfig )
+, rConf( rConfig )
 
 , aFlProfile( this, ResId( RID_FL_PROFILE ) )
 , aCbProfile( this, ResId( RID_CB_PROFILE ) )
@@ -363,9 +365,9 @@ ProfileOptions::ProfileOptions( Window* pParent, Config &aConfig )
 , aPbDelProfile( this, ResId( RID_PD_DEL_PROFILE ) )
 
 , aDirs( this, ResId(FL_DIRECTORIES) )
-, aLog( this, LOG_TEXT, LOG_NAME, LOG_SET ,"LogBaseDir", aConfig )
-, aBasis( this, BASIS_TEXT, BASIS_NAME, BASIS_SET ,"BaseDir", aConfig )
-, aHID( this, HID_TEXT, HID_NAME, HID_SET ,"HIDDir", aConfig )
+, aLog( this, LOG_TEXT, LOG_NAME, LOG_SET ,"LogBaseDir", rConfig )
+, aBasis( this, BASIS_TEXT, BASIS_NAME, BASIS_SET ,"BaseDir", rConfig )
+, aHID( this, HID_TEXT, HID_NAME, HID_SET ,"HIDDir", rConfig )
 
 , aAutoReload( this, ResId(CB_AUTORELOAD) )
 , aAutoSave( this, ResId(CB_AUTOSAVE) )
@@ -387,15 +389,17 @@ ProfileOptions::ProfileOptions( Window* pParent, Config &aConfig )
 
 void ProfileOptions::LoadData()
 {
-    for ( USHORT i = 0 ; i < aConf.GetGroupCount() ; i++ )
+    // collect all profiles (all groups starting with the ProfilePrefix)
+    for ( USHORT i = 0 ; i < rConf.GetGroupCount() ; i++ )
     {
-        ByteString aProfile = aConf.GetGroupName( i );
-        if ( aProfile.Match( "_profile_" ) )
-            aCbProfile.InsertEntry( String( aProfile.Copy( 9 ), RTL_TEXTENCODING_UTF8 ) );
+        ByteString aProfile = rConf.GetGroupName( i );
+        if ( aProfile.Match( ProfilePrefix ) )
+            aCbProfile.InsertEntry( String( aProfile.Copy( ProfilePrefixLen ), RTL_TEXTENCODING_UTF8 ) );
     }
-    aConf.SetGroup( "Misc" );
-    ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
-    aCbProfile.SetText( String( aCurrentProfile.Copy( 9 ), RTL_TEXTENCODING_UTF8 ) );
+    // set the current profile
+    rConf.SetGroup( "Misc" );
+    ByteString aCurrentProfile = rConf.ReadKey( "CurrentProfile", "Path" );
+    aCbProfile.SetText( String( aCurrentProfile.Copy( ProfilePrefixLen ), RTL_TEXTENCODING_UTF8 ) );
     CheckButtons( aCbProfile, aPbNewProfile, aPbDelProfile );
 }
 
@@ -404,9 +408,9 @@ IMPL_LINK( ProfileOptions, Select, ComboBox*, EMPTYARG )
     if ( aCbProfile.GetEntryPos( aCbProfile.GetText() ) == LISTBOX_ENTRY_NOTFOUND )
         return 1;
     Save();
-    ByteString aProfileKey( CByteString( "_profile_" ).Append( ByteString( aCbProfile.GetText(), RTL_TEXTENCODING_UTF8 ) ) );
-    aConf.SetGroup( "Misc" );
-    aConf.WriteKey( "CurrentProfile", aProfileKey );
+    ByteString aProfileKey( ByteString( ProfilePrefix ).Append( ByteString( aCbProfile.GetText(), RTL_TEXTENCODING_UTF8 ) ) );
+    rConf.SetGroup( "Misc" );
+    rConf.WriteKey( "CurrentProfile", aProfileKey );
     ReloadProfile();
 
     return 0;
@@ -414,38 +418,39 @@ IMPL_LINK( ProfileOptions, Select, ComboBox*, EMPTYARG )
 
 void ProfileOptions::ReloadProfile()
 {
-    aLog.Reload( aConf );
-    aBasis.Reload( aConf );
-    aHID.Reload( aConf );
-    CheckButtons( aCbProfile, aPbNewProfile, aPbDelProfile );
+    aLog.Reload( rConf );
+    aBasis.Reload( rConf );
+    aHID.Reload( rConf );
 
     ByteString aTemp;
-    aConf.SetGroup( "Misc" );
-    ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Misc" );
-    aConf.SetGroup( aCurrentProfile );
-    aTemp = aConf.ReadKey( "AutoReload", "0" );
-    aAutoReload.Check( aTemp.CompareTo("1") == COMPARE_EQUAL );
-    aTemp = aConf.ReadKey( "AutoSave", "0" );
-    aAutoSave.Check( aTemp.CompareTo("1") == COMPARE_EQUAL );
-    aTemp = aConf.ReadKey( "StopOnSyntaxError", "0" );
-    aStopOnSyntaxError.Check( aTemp.CompareTo("1") == COMPARE_EQUAL );
+    rConf.SetGroup( "Misc" );
+    ByteString aCurrentProfile = rConf.ReadKey( "CurrentProfile", "Misc" );
+    rConf.SetGroup( aCurrentProfile );
+    aTemp = rConf.ReadKey( "AutoReload", "0" );
+    aAutoReload.Check( aTemp.Equals("1") );
+    aTemp = rConf.ReadKey( "AutoSave", "0" );
+    aAutoSave.Check( aTemp.Equals("1") );
+    aTemp = rConf.ReadKey( "StopOnSyntaxError", "0" );
+    aStopOnSyntaxError.Check( aTemp.Equals("1") );
+
+    CheckButtons( aCbProfile, aPbNewProfile, aPbDelProfile );
 }
 
 IMPL_LINK( ProfileOptions, DelProfile, Button*, EMPTYARG )
 {
     String aProfile = aCbProfile.GetText();
-    ByteString aProfileKey( CByteString( "_profile_" ).Append( ByteString( aProfile, RTL_TEXTENCODING_UTF8 ) ) );
+    ByteString aProfileKey( ByteString( ProfilePrefix ).Append( ByteString( aProfile, RTL_TEXTENCODING_UTF8 ) ) );
     if ( aCbProfile.GetEntryPos( aProfile ) != COMBOBOX_ENTRY_NOTFOUND )
     {
         aCbProfile.RemoveEntry( aProfile );
-        aConf.DeleteGroup( aProfileKey );
+        rConf.DeleteGroup( aProfileKey );
     }
-
+    // Set first remaining profile as current profile
     aCbProfile.SetText( aCbProfile.GetEntry( 0 ) );
     aProfile = aCbProfile.GetText();
-    aProfileKey = CByteString( "_profile_" ).Append( ByteString( aProfile, RTL_TEXTENCODING_UTF8 ) );
-    aConf.SetGroup( "Misc" );
-    aConf.WriteKey( "CurrentProfile", aProfileKey );
+    aProfileKey = ByteString( ProfilePrefix ).Append( ByteString( aProfile, RTL_TEXTENCODING_UTF8 ) );
+    rConf.SetGroup( "Misc" );
+    rConf.WriteKey( "CurrentProfile", aProfileKey );
     ReloadProfile();
     CheckButtons( aCbProfile, aPbNewProfile, aPbDelProfile );
 
@@ -455,9 +460,10 @@ IMPL_LINK( ProfileOptions, DelProfile, Button*, EMPTYARG )
 IMPL_LINK( ProfileOptions, NewProfile, Button*, EMPTYARG )
 {
     aCbProfile.InsertEntry( aCbProfile.GetText() );
-    ByteString aProfileKey( CByteString( "_profile_" ).Append( ByteString( aCbProfile.GetText(), RTL_TEXTENCODING_UTF8 ) ) );
-    aConf.SetGroup( "Misc" );
-    aConf.WriteKey( "CurrentProfile", aProfileKey );
+    ByteString aProfileKey( ByteString( ProfilePrefix ).Append( ByteString( aCbProfile.GetText(), RTL_TEXTENCODING_UTF8 ) ) );
+    rConf.SetGroup( "Misc" );
+    rConf.WriteKey( "CurrentProfile", aProfileKey );
+    // save last profile as new data for new profile
     Save();
     CheckButtons( aCbProfile, aPbNewProfile, aPbDelProfile );
 
@@ -472,21 +478,22 @@ IMPL_LINK( ProfileOptions, CheckButtonsHdl, ComboBox*, pCB )
 
 void ProfileOptions::Save()
 {
-    Save(aConf);
+    Save(rConf);
 }
 
-void ProfileOptions::Save( Config &aConfig )
+void ProfileOptions::Save( Config &rConfig )
 {
-    aLog.Save( aConfig );
-    aBasis.Save( aConfig );
-    aHID.Save( aConfig );
+    // save data to current profile
+    aLog.Save( rConfig );
+    aBasis.Save( rConfig );
+    aHID.Save( rConfig );
 
-    aConfig.SetGroup( "Misc" );
-    ByteString aCurrentProfile = aConfig.ReadKey( "CurrentProfile", "Misc" );
-    aConfig.SetGroup( aCurrentProfile );
-    aConfig.WriteKey( "AutoReload", aAutoReload.IsChecked()?"1":"0" );
-    aConfig.WriteKey( "AutoSave", aAutoSave.IsChecked()?"1":"0" );
-    aConfig.WriteKey( "StopOnSyntaxError", aStopOnSyntaxError.IsChecked()?"1":"0" );
+    rConfig.SetGroup( "Misc" );
+    ByteString aCurrentProfile = rConfig.ReadKey( "CurrentProfile", "Misc" );
+    rConfig.SetGroup( aCurrentProfile );
+    rConfig.WriteKey( "AutoReload", aAutoReload.IsChecked()?"1":"0" );
+    rConfig.WriteKey( "AutoSave", aAutoSave.IsChecked()?"1":"0" );
+    rConfig.WriteKey( "StopOnSyntaxError", aStopOnSyntaxError.IsChecked()?"1":"0" );
 }
 
 MiscOptions::MiscOptions( Window* pParent, Config &aConfig )
@@ -658,11 +665,9 @@ GenericOptions::GenericOptions( Window* pParent, Config &aConfig )
     aPbNewValue.SetClickHdl( LINK( this, GenericOptions, NewValue ) );
     aPbDelValue.SetClickHdl( LINK( this, GenericOptions, DelValue ) );
 
-
     aCbArea.SetModifyHdl( LINK( this, GenericOptions, CheckButtonsHdl ) );
     aCbValue.SetModifyHdl( LINK( this, GenericOptions, CheckButtonsHdl ) );
     aCbValue.SetSelectHdl( LINK( this, GenericOptions, CheckButtonsHdl ) );
-
 }
 
 GenericOptions::~GenericOptions()
