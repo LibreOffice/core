@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-10 16:10:22 $
+ *  last change: $Author: mav $ $Date: 2003-03-11 13:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,26 @@ STDMETHODIMP EmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLES
     return S_OK;
 }
 
-STDMETHODIMP EmbedDocument_Impl::Close( DWORD dwSaveOption)
+STDMETHODIMP EmbedDocument_Impl::Close( DWORD dwSaveOption )
 {
-    return S_OK;
+    HRESULT hr = S_OK;
+
+    if ( dwSaveOption && m_pClientSite )
+        hr = m_pClientSite->SaveObject();
+
+    if ( m_pDAdviseHolder )
+        m_pDAdviseHolder->SendOnDataChange( (IDataObject*)this, 0, ADVF_DATAONSTOP );
+
+    if ( m_pClientSite )
+        m_pClientSite->OnShowWindow( FALSE );
+
+    for ( AdviseSinkHashMapIterator iAdvise = m_aAdviseHashMap.begin(); iAdvise != m_aAdviseHashMap.end(); iAdvise++ )
+    {
+        if ( iAdvise->second )
+            iAdvise->second->OnClose();
+    }
+
+    return hr;
 }
 
 STDMETHODIMP EmbedDocument_Impl::SetMoniker( DWORD dwWhichMoniker, IMoniker *pmk )
