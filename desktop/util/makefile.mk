@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 10:46:48 $
+#   last change: $Author: hr $ $Date: 2003-11-07 14:54:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,9 @@ TARGETOBJS=   $(OBJ)$/app.obj					\
             $(OBJ)$/javainteractionhandler.obj	\
             $(OBJ)$/testtool.obj			\
             $(OBJ)$/checkinstall.obj		\
-            $(OBJ)$/cmdlinehelp.obj
+            $(OBJ)$/cmdlinehelp.obj         \
+            $(OBJ)$/langselect.obj          \
+            $(OBJ)$/userinstall.obj          
 
 
 # --- Resourcen ----------------------------------------------------
@@ -115,6 +117,9 @@ APP1_STDPOST=
 
 RESLIB1NAME=		dkt
 RESLIB1SRSFILES=	$(SRS)$/desktop.srs
+
+RESLIB2NAME=		langselect
+RESLIB2SRSFILES=	$(SRS)$/langselect.srs
 
 APP1TARGET=so$/$(TARGET)
 APP1STDLIBS=			\
