@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-15 17:25:17 $
+ *  last change: $Author: jb $ $Date: 2001-03-12 18:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ namespace configmgr
         if (!_pSession->allowsCachingHack())
             m_xDefaultOptions->setNoCache(sal_True);
 
-        m_pTreeMgr = new TreeManager(_pSession, new OOptions(xConverter));
+        m_pTreeMgr = new TreeManager(_pSession, m_xDefaultOptions); //new OOptions(xConverter));
         m_pTreeMgr->acquire();
 
         // put out of line to get rid of the order dependency (and to have a acquired configuration)
