@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cjkoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-04-23 06:17:43 $
+ *  last change: $Author: os $ $Date: 2001-05-07 10:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,7 @@ void    SvtCJKOptions_Impl::Commit()
             case  7: bVal = bEmphasisMarks; break;
             case  8: bVal = bVerticalCallOut; break;
         }
+        pValues[nProp].setValue(&bVal, getBooleanCppuType());
     }
     PutProperties(aPropertyNames, aValues);
 }
