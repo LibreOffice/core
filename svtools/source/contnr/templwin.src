@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:28:27 $
+ *  last change: $Author: pb $ $Date: 2001-11-06 14:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,7 @@ ModalDialog DLG_DOCTEMPLATE
     HelpId = HID_TEMPLATEDLG_DIALOG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT( 320, 240 );
+    Size = MAP_APPFONT( 320, 234 );
     Text = "Vorlagen und Dokumente" ;
     Text [ english_us ] = "Templates and Documents" ;
     Text[ portuguese ] = "Modelos e documentos";
@@ -416,12 +416,12 @@ ModalDialog DLG_DOCTEMPLATE
     Moveable = TRUE ;
     FixedLine FL_DOCTEMPLATE
     {
-        Pos = MAP_APPFONT( 0, 214 );
+        Pos = MAP_APPFONT( 0, 208 );
         Size = MAP_APPFONT( 320, 1 );
     };
     PushButton BTN_DOCTEMPLATE_MANAGE
     {
-        Pos = MAP_APPFONT( 3, 220 );
+        Pos = MAP_APPFONT( 3, 214 );
         Size = MAP_APPFONT( 50, 14 );
         Text = "~Verwalten...";
         Text [ english_us ] = "Organi~ze...";
@@ -447,7 +447,7 @@ ModalDialog DLG_DOCTEMPLATE
     };
     PushButton BTN_DOCTEMPLATE_EDIT
     {
-        Pos = MAP_APPFONT( 56, 220 );
+        Pos = MAP_APPFONT( 56, 214 );
         Size = MAP_APPFONT( 50, 14 );
         Text = "~Bearbeiten";
         Text [ english_us ] = "~Edit";
@@ -473,7 +473,7 @@ ModalDialog DLG_DOCTEMPLATE
     };
     OKButton BTN_DOCTEMPLATE_OPEN
     {
-        Pos = MAP_APPFONT( 158, 220 );
+        Pos = MAP_APPFONT( 158, 214 );
         Size = MAP_APPFONT( 50, 14 );
         DefButton = TRUE;
         Text = "Ö~ffnen";
@@ -500,12 +500,12 @@ ModalDialog DLG_DOCTEMPLATE
     };
     CancelButton BTN_DOCTEMPLATE_CANCEL
     {
-        Pos = MAP_APPFONT( 211, 220 );
+        Pos = MAP_APPFONT( 211, 214 );
         Size = MAP_APPFONT( 50, 14 );
     };
     HelpButton BTN_DOCTEMPLATE_HELP
     {
-        Pos = MAP_APPFONT( 267, 220 );
+        Pos = MAP_APPFONT( 267, 214 );
         Size = MAP_APPFONT( 50, 14 );
     };
 };
