@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2002-04-29 14:12:14 $
+ *  last change: $Author: jl $ $Date: 2002-08-08 10:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,10 @@ namespace stoc_javavm {
             _systemClasspath = buf.makeStringAndClear();
         }
     }
+OUString JVM::getSystemClasspath()
+{
+    return _systemClasspath;
+}
 
     void JVM::addUserClasspath(const OUString & classpath) throw() {
         if( classpath.getLength() )
@@ -266,6 +270,11 @@ namespace stoc_javavm {
             _userClasspath = buf.makeStringAndClear();
         }
     }
+
+OUString JVM::getUserClasspath()
+{
+    return _userClasspath;
+}
 
     void JVM::setPrint(JNIvfprintf vfprintf) throw() {
         _is_print = sal_True;

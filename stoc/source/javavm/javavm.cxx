@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: jl $ $Date: 2002-08-08 08:12:02 $
+ *  last change: $Author: jl $ $Date: 2002-08-08 10:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1296,21 +1296,45 @@ static void initVMConfiguration(JVM * pjvm,
 #endif
     }
 
+    sal_Bool bPropsFail= sal_False;
+    sal_Bool bPropsFail2= sal_False;
+    JavaNotConfiguredException confexc;
     try
     {
         getJavaPropsFromConfig(&jvm, xSMgr,xCtx);
     }
-//     catch(JavaNotConfiguredException& e)
-//     {
-//         throw;
-//     }
-    catch(Exception & exception) {
+    catch(JavaNotConfiguredException& e)
+    {
+        confexc= e;
+        bPropsFail= sal_True;
+    }
+    catch(Exception & exception)
+    {
 #ifdef DEBUG
         OString message = OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("javavm.cxx: couldn't use configuration cause of >%s<", message.getStr());
 #endif
+        bPropsFail2= sal_True;
+    }
 
+    if( bPropsFail ||bPropsFail2)
+    {
         getJavaPropsFromEnvironment(&jvm);
+        // at this point we have to find out if there is a classpath and runtimelib. If not
+        // we'll throw the exception, because Java is misconfigured and won't run.
+        OUString usRuntimeLib= jvm.getRuntimeLib();
+        OUString usUserClasspath= jvm.getUserClasspath();
+        OUString usSystemClasspath= jvm.getSystemClasspath();
+        if( usRuntimeLib.getLength() == 0
+            || (usUserClasspath.getLength == 0 && usSystemClasspath.getLength() == 0))
+        {
+            if (bPropsFail)
+                throw confexc;
+            throw new JavaNotConfiguredException(OUSTR("There is neither a java.ini (or javarc) " \
+                                                       "and there are no environment variables set which " \
+                                                       "contain configuration data"), Reference<XInterface>());
+        }
+
     }
 
     try {

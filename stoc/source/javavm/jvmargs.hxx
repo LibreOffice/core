@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2002-04-29 14:12:14 $
+ *  last change: $Author: jl $ $Date: 2002-08-08 10:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,9 @@ namespace stoc_javavm {
         void setMaxHeapSize(jint jiSize) throw();
         void setDebugPort(jint jiDebugPort) throw();
         void addSystemClasspath(const ::rtl::OUString & str) throw();
+        ::rtl::OUString getSystemClasspath();
         void addUserClasspath(const ::rtl::OUString & str) throw();
+        ::rtl::OUString getUserClasspath();
         void setPrint(JNIvfprintf vfprintf) throw();
         void setExit(JNIexit exit) throw();
         void setAbort(JNIabort abort) throw();
