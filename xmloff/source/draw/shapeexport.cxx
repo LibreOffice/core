@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-04 12:38:50 $
+ *  last change: $Author: fs $ $Date: 2002-11-06 10:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,10 @@
 
 #ifndef _GLOBNAME_HXX
 #include <tools/globname.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
+#include <com/sun/star/beans/XPropertyState.hpp>
 #endif
 
 #include "xmlnmspe.hxx"
@@ -392,6 +396,39 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         if( (!bIsEmptyPresObj || (aShapeInfo.meShapeType != XmlShapeTypePresPageShape)) && bObjSupportsText )
         {
             xPropStates = GetExport().GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter( xPropSet );
+
+            // ----------------------------------------------------------------------
+            // yet more additionally, we need to care for the ParaAdjust property
+            if ( XmlShapeTypeDrawControlShape == aShapeInfo.meShapeType )
+            {
+                // this is because:
+                // * if controls shapes have a ParaAdjust property, then this is the Align property of the control model
+                // * control models are allowed to have an Align of "void"
+                // * the Default for control model's Align is TextAlign_LEFT
+                // * defaults for style properties are not written, but we need to write the "left",
+                //   because we need to distiguish this "left" from the case where not align attribute
+                //   is present which means "void"
+                // 102407 - 2002-11-01 - fs@openoffice.org
+                static const ::rtl::OUString s_sParaAdjustPropertyName( RTL_CONSTASCII_USTRINGPARAM( "ParaAdjust" ) );
+                uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
+                if ( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( s_sParaAdjustPropertyName ) )
+                {
+                    uno::Reference< beans::XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
+                    if ( xPropState.is() && beans::PropertyState_DEFAULT_VALUE == xPropState->getPropertyState( s_sParaAdjustPropertyName ) )
+                    {
+                        sal_Int32 nIndex = GetExport().GetTextParagraphExport()->GetParagraphPropertyMapper()->getPropertySetMapper()->FindEntryIndex( CTF_SD_SHAPE_PARA_ADJUST );
+                            // TODO : this retrieval of the index should be moved into the ctor, holding the index
+                            //          as member, thus saving time.
+                        DBG_ASSERT(-1 != nIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for the ParaAdjust context id!");
+
+                        uno::Any aParaAdjustValue = xPropSet->getPropertyValue( s_sParaAdjustPropertyName );
+                        XMLPropertyState aAlignDefaultState( nIndex, aParaAdjustValue );
+
+                        xPropStates.push_back( aAlignDefaultState );
+                    }
+                }
+            }
+            // ----------------------------------------------------------------------
 
             nCount = 0;
             std::vector< XMLPropertyState >::iterator aIter = xPropStates.begin();
