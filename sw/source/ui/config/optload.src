@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 19:25:58 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include "globals.hrc"
 #include "optload.hrc"
 #include "helpid.h"
+#include "config.hrc"
 
 /**************************************************************************/
 /*                                                                        */
@@ -428,285 +429,6 @@ TabPage TP_OPTLOAD_PAGE
         Size = MAP_APPFONT ( 50 , 50 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
-    };
-    StringArray ST_METRIC
-    {
-        ItemList =
-        {
-            < "Millimeter" ; FUNIT_MM ; > ;
-            < "Zentimeter" ; FUNIT_CM ; > ;
-            < "Meter" ; FUNIT_M ; > ;
-            < "Kilometer" ; FUNIT_KM ; > ;
-            < "Zoll" ; FUNIT_INCH ; > ;
-            < "Fuß" ; FUNIT_FOOT ; > ;
-            < "Meilen" ; FUNIT_MILE ; > ;
-            < "Pica" ; FUNIT_PICA ; > ;
-            < "Point" ; FUNIT_POINT ; > ;
-        };
-        ItemList [ English ] =
-        {
-            < "Millimeter" ; FUNIT_MM ; > ;
-            < "Zentimeter" ; FUNIT_CM ; > ;
-            < "Meter" ; FUNIT_M ; > ;
-            < "Kilometer" ; FUNIT_KM ; > ;
-            < "Zoll" ; FUNIT_INCH ; > ;
-            < "Fuß" ; FUNIT_FOOT ; > ;
-            < "Meilen" ; FUNIT_MILE ; > ;
-            < "Pica" ; FUNIT_PICA ; > ;
-            < "Point" ; FUNIT_POINT ; > ;
-        };
-        ItemList [ norwegian ] =
-        {
-            < "Millimeter" ; FUNIT_MM ; > ;
-            < "Zentimeter" ; FUNIT_CM ; > ;
-            < "Meter" ; FUNIT_M ; > ;
-            < "Kilometer" ; FUNIT_KM ; > ;
-            < "Zoll" ; FUNIT_INCH ; > ;
-            < "Fuß" ; FUNIT_FOOT ; > ;
-            < "Meilen" ; FUNIT_MILE ; > ;
-            < "Pica" ; FUNIT_PICA ; > ;
-            < "Point" ; FUNIT_POINT ; > ;
-        };
-        ItemList [ italian ] =
-        {
-            < "Millimetro" ; FUNIT_MM ; > ;
-            < "Centimetro" ; FUNIT_CM ; > ;
-            < "Metro" ; FUNIT_M ; > ;
-            < "Chilometro" ; FUNIT_KM ; > ;
-            < "Pollice" ; FUNIT_INCH ; > ;
-            < "piede" ; FUNIT_FOOT ; > ;
-            < "miglia" ; FUNIT_MILE ; > ;
-            < "Pica" ; FUNIT_PICA ; > ;
-            < "Punto" ; FUNIT_POINT ; > ;
-        };
-        ItemList [ portuguese_brazilian ] =
-        {
-            < "Millimeter" ; FUNIT_MM ; > ;
-            < "Zentimeter" ; FUNIT_CM ; > ;
-            < "Meter" ; FUNIT_M ; > ;
-            < "Kilometer" ; FUNIT_KM ; > ;
-            < "Zoll" ; FUNIT_INCH ; > ;
-            < "Fuß" ; FUNIT_FOOT ; > ;
-            < "Meilen" ; FUNIT_MILE ; > ;
-            < "Pica" ; FUNIT_PICA ; > ;
-            < "Ponto" ; FUNIT_POINT ; > ;
-        };
-        ItemList [ portuguese ] =
-        {
-            < "Milímetro" ; FUNIT_MM ; > ;
-            < "Centímetro" ; FUNIT_CM ; > ;
-            < "Metro" ; FUNIT_M ; > ;
-            < "Quilómetro" ; FUNIT_KM ; > ;
-            < "Polegada" ; FUNIT_INCH ; > ;
-            < "Pé" ; FUNIT_FOOT ; > ;
-            < "Milhas" ; FUNIT_MILE ; > ;
-            < "Pica" ; FUNIT_PICA ; > ;
-            < "Ponto" ; FUNIT_POINT ; > ;
-        };
-        ItemList [ french ] =
-        {
-            < "Millimètre" ; FUNIT_MM ; > ;
-            < "Centimètre" ; FUNIT_CM ; > ;
-            < "Mètre" ; FUNIT_M ; > ;
-            < "Kilomètre" ; FUNIT_KM ; > ;
-            < "Pouce" ; FUNIT_INCH ; > ;
-            < "Pied" ; FUNIT_FOOT ; > ;
-            < "Miles" ; FUNIT_MILE ; > ;
-            < "Pica" ; FUNIT_PICA ; > ;
-            < "Point" ; FUNIT_POINT ; > ;
-        };
-        ItemList [ dutch ] =
-        {
-            < "Millimeter" ; FUNIT_MM ; > ;
-            < "Centimeter" ; FUNIT_CM ; > ;
-            < "Meter" ; FUNIT_M ; > ;
-            < "Kilometer" ; FUNIT_KM ; > ;
-            < "Duim" ; FUNIT_INCH ; > ;
-            < "Voet" ; FUNIT_FOOT ; > ;
-            < "Mijlen" ; FUNIT_MILE ; > ;
-            < "Pica" ; FUNIT_PICA ; > ;
-            < "Punt" ; FUNIT_POINT ; > ;
-        };
-        ItemList [ spanish ] =
-        {
-            < "Milímetro" ; FUNIT_MM ; > ;
-            < "Centímetro" ; FUNIT_CM ; > ;
-            < "Metro" ; FUNIT_M ; > ;
-            < "Kilómetro" ; FUNIT_KM ; > ;
-            < "Pulgadas" ; FUNIT_INCH ; > ;
-            < "Pie" ; FUNIT_FOOT ; > ;
-            < "Millas" ; FUNIT_MILE ; > ;
-            < "Pica" ; FUNIT_PICA ; > ;
-            < "Punto" ; FUNIT_POINT ; > ;
-        };
-        ItemList [ danish ] =
-        {
-            < "Millimeter" ; FUNIT_MM ; > ;
-            < "Centimeter" ; FUNIT_CM ; > ;
-            < "Meter" ; FUNIT_M ; > ;
-            < "Kilometer" ; FUNIT_KM ; > ;
-            < "Tommer" ; FUNIT_INCH ; > ;
-            < "Fod" ; FUNIT_FOOT ; > ;
-            < "Mil" ; FUNIT_MILE ; > ;
-            < "Pica" ; FUNIT_PICA ; > ;
-            < "Punkt" ; FUNIT_POINT ; > ;
-        };
-        ItemList [ swedish ] =
-        {
-            < "Millimeter" ; FUNIT_MM ; > ;
-            < "Centimeter" ; FUNIT_CM ; > ;
-            < "Meter" ; FUNIT_M ; > ;
-            < "Kilometer" ; FUNIT_KM ; > ;
-            < "Tum" ; FUNIT_INCH ; > ;
-            < "Fot" ; FUNIT_FOOT ; > ;
-            < "Mil" ; FUNIT_MILE ; > ;
-            < "Pica" ; FUNIT_PICA ; > ;
-            < "Punkt" ; FUNIT_POINT ; > ;
-        };
-        ItemList [ finnish ] =
-        {
-            < "Millimeter" ; FUNIT_MM ; > ;
-            < "Zentimeter" ; FUNIT_CM ; > ;
-            < "Meter" ; FUNIT_M ; > ;
-            < "Kilometer" ; FUNIT_KM ; > ;
-            < "Zoll" ; FUNIT_INCH ; > ;
-            < "Fuß" ; FUNIT_FOOT ; > ;
-            < "Meilen" ; FUNIT_MILE ; > ;
-            < "Pica" ; FUNIT_PICA ; > ;
-            < "Point" ; FUNIT_POINT ; > ;
-        };
-        ItemList [ english_us ] =
-        {
-            < "Millimeter" ; FUNIT_MM ; > ;
-            < "Centimeter" ; FUNIT_CM ; > ;
-            < "Meter" ; FUNIT_M ; > ;
-            < "Kilometer" ; FUNIT_KM ; > ;
-            < "Inch" ; FUNIT_INCH ; > ;
-            < "Foot" ; FUNIT_FOOT ; > ;
-            < "Miles" ; FUNIT_MILE ; > ;
-            < "Pica" ; FUNIT_PICA ; > ;
-            < "Point" ; FUNIT_POINT ; > ;
-        };
-    ItemList [ chinese_simplified ] =
-    {
-            < "ºÁÃ×" ; FUNIT_MM ; > ;
-        < "ÀåÃ×" ; FUNIT_CM ; > ;
-        < "Ã×" ; FUNIT_M ; > ;
-        < "¹«Àï" ; FUNIT_KM ; > ;
-        < "Ó¢´ç" ; FUNIT_INCH ; > ;
-        < "Ó¢³ß" ; FUNIT_FOOT ; > ;
-        < "Ó¢Àï" ; FUNIT_MILE ; > ;
-        < "Æ¤¿ÉÐÍ×Ö·û" ; FUNIT_PICA ; > ;
-        < "µã" ; FUNIT_POINT ; > ;
-    };
-    ItemList [ russian ] =
-    {
-            < "Ìèëëèìåòðû" ; FUNIT_MM ; > ;
-        < "Ñàíòèìåòðû" ; FUNIT_CM ; > ;
-        < "Ìåòðû" ; FUNIT_M ; > ;
-        < "Êèëîìåòðû" ; FUNIT_KM ; > ;
-        < "Äþéìû" ; FUNIT_INCH ; > ;
-        < "Ôóòû" ; FUNIT_FOOT ; > ;
-        < "Ìèëè" ; FUNIT_MILE ; > ;
-        < "Ïèêè" ; FUNIT_PICA ; > ;
-        < "Òî÷êè" ; FUNIT_POINT ; > ;
-    };
-    ItemList [ polish ] =
-    {
-            < "Milimetr" ; FUNIT_MM ; > ;
-        < "Centymetr" ; FUNIT_CM ; > ;
-        < "Metr" ; FUNIT_M ; > ;
-        < "Kilometr" ; FUNIT_KM ; > ;
-        < "Cal" ; FUNIT_INCH ; > ;
-        < "Stopa" ; FUNIT_FOOT ; > ;
-        < "Mile" ; FUNIT_MILE ; > ;
-        < "Cycero" ; FUNIT_PICA ; > ;
-        < "Punkt" ; FUNIT_POINT ; > ;
-    };
-    ItemList [ japanese ] =
-    {
-            < "ÐØÒ°ÄÙ" ; FUNIT_MM ; > ;
-        < "¾ÝÁÒ°ÄÙ" ; FUNIT_CM ; > ;
-        < "Ò°ÄÙ" ; FUNIT_M ; > ;
-        < "·ÛÒ°ÄÙ" ; FUNIT_KM ; > ;
-        < "²ÝÁ" ; FUNIT_INCH ; > ;
-        < "Ì¨°Ä" ; FUNIT_FOOT ; > ;
-        < "Ï²Ù" ; FUNIT_MILE ; > ;
-        < "Êß²¶" ; FUNIT_PICA ; > ;
-        < "Îß²ÝÄ" ; FUNIT_POINT ; > ;
-    };
-    ItemList [ chinese_traditional ] =
-    {
-            < "²@¦Ì" ; FUNIT_MM ; > ;
-        < "Íù¦Ì" ; FUNIT_CM ; > ;
-        < "¦Ì" ; FUNIT_M ; > ;
-        < "¤½¨½" ; FUNIT_KM ; > ;
-        < "­^¤o" ; FUNIT_INCH ; > ;
-        < "­^¤Ø" ; FUNIT_FOOT ; > ;
-        < "­^¨½" ; FUNIT_MILE ; > ;
-        < "¥Ö¥i«¬¦r¤¸" ; FUNIT_PICA ; > ;
-        < "ÂI" ; FUNIT_POINT ; > ;
-    };
-    ItemList [ arabic ] =
-    {
-            < "ãíáíãÊÑ" ; FUNIT_MM ; > ;
-        < "ÓäÊíãÊÑ" ; FUNIT_CM ; > ;
-        < "ãÊÑ" ; FUNIT_M ; > ;
-        < "ßíáæãÊÑ" ; FUNIT_KM ; > ;
-        < "ÈæÕÉ" ; FUNIT_INCH ; > ;
-        < "ÞÏã" ; FUNIT_FOOT ; > ;
-        < "ÃãíÇá" ; FUNIT_MILE ; > ;
-        < "ÈíßÇ" ; FUNIT_PICA ; > ;
-        < "äÞØÉ" ; FUNIT_POINT ; > ;
-    };
-    ItemList [ greek ] =
-    {
-            < "×éëéïóôÜ" ; FUNIT_MM ; > ;
-        < "ÅêáôïóôÜ" ; FUNIT_CM ; > ;
-        < "ÌÝôñï" ; FUNIT_M ; > ;
-        < "×éëéüìåôñï" ; FUNIT_KM ; > ;
-        < "ºíôóåò" ; FUNIT_INCH ; > ;
-        < "Ðüäé" ; FUNIT_FOOT ; > ;
-        < "Ìßëéá" ; FUNIT_MILE ; > ;
-        < "Pica (Ðßêá)" ; FUNIT_PICA ; > ;
-        < "Óçìåßï" ; FUNIT_POINT ; > ;
-    };
-    ItemList [ korean ] =
-    {
-            < "¹Ð¸®¹ÌÅÍ" ; FUNIT_MM ; > ;
-        < "¼¾Æ¼¹ÌÅÍ" ; FUNIT_CM ; > ;
-        < "¹ÌÅÍ" ; FUNIT_M ; > ;
-        < "Å³·Î¹ÌÅÍ" ; FUNIT_KM ; > ;
-        < "ÀÎÄ¡" ; FUNIT_INCH ; > ;
-        < "ÇÇÆ®" ; FUNIT_FOOT ; > ;
-        < "¸¶ÀÏ" ; FUNIT_MILE ; > ;
-        < "ÆÄÀÌÄ«" ; FUNIT_PICA ; > ;
-        < "Æ÷ÀÎÆ®" ; FUNIT_POINT ; > ;
-    };
-    ItemList [ turkish ] =
-    {
-            < "Milimetre" ; FUNIT_MM ; > ;
-        < "Santimetre" ; FUNIT_CM ; > ;
-        < "Metre" ; FUNIT_M ; > ;
-        < "Kilometre" ; FUNIT_KM ; > ;
-        < "Ýnç" ; FUNIT_INCH ; > ;
-        < "Ft" ; FUNIT_FOOT ; > ;
-        < "Mil" ; FUNIT_MILE ; > ;
-        < "Pika" ; FUNIT_PICA ; > ;
-        < "Nokta" ; FUNIT_POINT ; > ;
-    };
-    ItemList [ language_user1 ] =
-    {
-            < " " ; FUNIT_MM ; > ;
-        < " " ; FUNIT_CM ; > ;
-        < " " ; FUNIT_M ; > ;
-        < " " ; FUNIT_KM ; > ;
-        < " " ; FUNIT_INCH ; > ;
-        < " " ; FUNIT_FOOT ; > ;
-        < " " ; FUNIT_MILE ; > ;
-        < " " ; FUNIT_PICA ; > ;
-        < " " ; FUNIT_POINT ; > ;
-    };
     };
     FixedText FT_TAB
     {
@@ -1408,5 +1130,285 @@ TabPage TP_OPTCAPTION_PAGE
     Text[ korean ] = "Ä¸¼Ç";
     Text[ language_user1 ] = " ";
     Text[ turkish ] = "Resim yazýsý";
+};
+
+StringArray STR_ARR_METRIC
+{
+        ItemList =
+        {
+            < "Millimeter" ; FUNIT_MM ; > ;
+            < "Zentimeter" ; FUNIT_CM ; > ;
+            < "Meter" ; FUNIT_M ; > ;
+            < "Kilometer" ; FUNIT_KM ; > ;
+            < "Zoll" ; FUNIT_INCH ; > ;
+            < "Fuß" ; FUNIT_FOOT ; > ;
+            < "Meilen" ; FUNIT_MILE ; > ;
+            < "Pica" ; FUNIT_PICA ; > ;
+            < "Point" ; FUNIT_POINT ; > ;
+        };
+        ItemList [ English ] =
+        {
+            < "Millimeter" ; FUNIT_MM ; > ;
+            < "Zentimeter" ; FUNIT_CM ; > ;
+            < "Meter" ; FUNIT_M ; > ;
+            < "Kilometer" ; FUNIT_KM ; > ;
+            < "Zoll" ; FUNIT_INCH ; > ;
+            < "Fuß" ; FUNIT_FOOT ; > ;
+            < "Meilen" ; FUNIT_MILE ; > ;
+            < "Pica" ; FUNIT_PICA ; > ;
+            < "Point" ; FUNIT_POINT ; > ;
+        };
+        ItemList [ norwegian ] =
+        {
+            < "Millimeter" ; FUNIT_MM ; > ;
+            < "Zentimeter" ; FUNIT_CM ; > ;
+            < "Meter" ; FUNIT_M ; > ;
+            < "Kilometer" ; FUNIT_KM ; > ;
+            < "Zoll" ; FUNIT_INCH ; > ;
+            < "Fuß" ; FUNIT_FOOT ; > ;
+            < "Meilen" ; FUNIT_MILE ; > ;
+            < "Pica" ; FUNIT_PICA ; > ;
+            < "Point" ; FUNIT_POINT ; > ;
+        };
+        ItemList [ italian ] =
+        {
+            < "Millimetro" ; FUNIT_MM ; > ;
+            < "Centimetro" ; FUNIT_CM ; > ;
+            < "Metro" ; FUNIT_M ; > ;
+            < "Chilometro" ; FUNIT_KM ; > ;
+            < "Pollice" ; FUNIT_INCH ; > ;
+            < "piede" ; FUNIT_FOOT ; > ;
+            < "miglia" ; FUNIT_MILE ; > ;
+            < "Pica" ; FUNIT_PICA ; > ;
+            < "Punto" ; FUNIT_POINT ; > ;
+        };
+        ItemList [ portuguese_brazilian ] =
+        {
+            < "Millimeter" ; FUNIT_MM ; > ;
+            < "Zentimeter" ; FUNIT_CM ; > ;
+            < "Meter" ; FUNIT_M ; > ;
+            < "Kilometer" ; FUNIT_KM ; > ;
+            < "Zoll" ; FUNIT_INCH ; > ;
+            < "Fuß" ; FUNIT_FOOT ; > ;
+            < "Meilen" ; FUNIT_MILE ; > ;
+            < "Pica" ; FUNIT_PICA ; > ;
+            < "Ponto" ; FUNIT_POINT ; > ;
+        };
+        ItemList [ portuguese ] =
+        {
+            < "Milímetro" ; FUNIT_MM ; > ;
+            < "Centímetro" ; FUNIT_CM ; > ;
+            < "Metro" ; FUNIT_M ; > ;
+            < "Quilómetro" ; FUNIT_KM ; > ;
+            < "Polegada" ; FUNIT_INCH ; > ;
+            < "Pé" ; FUNIT_FOOT ; > ;
+            < "Milhas" ; FUNIT_MILE ; > ;
+            < "Pica" ; FUNIT_PICA ; > ;
+            < "Ponto" ; FUNIT_POINT ; > ;
+        };
+        ItemList [ french ] =
+        {
+            < "Millimètre" ; FUNIT_MM ; > ;
+            < "Centimètre" ; FUNIT_CM ; > ;
+            < "Mètre" ; FUNIT_M ; > ;
+            < "Kilomètre" ; FUNIT_KM ; > ;
+            < "Pouce" ; FUNIT_INCH ; > ;
+            < "Pied" ; FUNIT_FOOT ; > ;
+            < "Miles" ; FUNIT_MILE ; > ;
+            < "Pica" ; FUNIT_PICA ; > ;
+            < "Point" ; FUNIT_POINT ; > ;
+        };
+        ItemList [ dutch ] =
+        {
+            < "Millimeter" ; FUNIT_MM ; > ;
+            < "Centimeter" ; FUNIT_CM ; > ;
+            < "Meter" ; FUNIT_M ; > ;
+            < "Kilometer" ; FUNIT_KM ; > ;
+            < "Duim" ; FUNIT_INCH ; > ;
+            < "Voet" ; FUNIT_FOOT ; > ;
+            < "Mijlen" ; FUNIT_MILE ; > ;
+            < "Pica" ; FUNIT_PICA ; > ;
+            < "Punt" ; FUNIT_POINT ; > ;
+        };
+        ItemList [ spanish ] =
+        {
+            < "Milímetro" ; FUNIT_MM ; > ;
+            < "Centímetro" ; FUNIT_CM ; > ;
+            < "Metro" ; FUNIT_M ; > ;
+            < "Kilómetro" ; FUNIT_KM ; > ;
+            < "Pulgadas" ; FUNIT_INCH ; > ;
+            < "Pie" ; FUNIT_FOOT ; > ;
+            < "Millas" ; FUNIT_MILE ; > ;
+            < "Pica" ; FUNIT_PICA ; > ;
+            < "Punto" ; FUNIT_POINT ; > ;
+        };
+        ItemList [ danish ] =
+        {
+            < "Millimeter" ; FUNIT_MM ; > ;
+            < "Centimeter" ; FUNIT_CM ; > ;
+            < "Meter" ; FUNIT_M ; > ;
+            < "Kilometer" ; FUNIT_KM ; > ;
+            < "Tommer" ; FUNIT_INCH ; > ;
+            < "Fod" ; FUNIT_FOOT ; > ;
+            < "Mil" ; FUNIT_MILE ; > ;
+            < "Pica" ; FUNIT_PICA ; > ;
+            < "Punkt" ; FUNIT_POINT ; > ;
+        };
+        ItemList [ swedish ] =
+        {
+            < "Millimeter" ; FUNIT_MM ; > ;
+            < "Centimeter" ; FUNIT_CM ; > ;
+            < "Meter" ; FUNIT_M ; > ;
+            < "Kilometer" ; FUNIT_KM ; > ;
+            < "Tum" ; FUNIT_INCH ; > ;
+            < "Fot" ; FUNIT_FOOT ; > ;
+            < "Miles" ; FUNIT_MILE ; > ;
+            < "Pica" ; FUNIT_PICA ; > ;
+            < "Punkt" ; FUNIT_POINT ; > ;
+        };
+        ItemList [ finnish ] =
+        {
+            < "Millimeter" ; FUNIT_MM ; > ;
+            < "Zentimeter" ; FUNIT_CM ; > ;
+            < "Meter" ; FUNIT_M ; > ;
+            < "Kilometer" ; FUNIT_KM ; > ;
+            < "Zoll" ; FUNIT_INCH ; > ;
+            < "Fuß" ; FUNIT_FOOT ; > ;
+            < "Meilen" ; FUNIT_MILE ; > ;
+            < "Pica" ; FUNIT_PICA ; > ;
+            < "Point" ; FUNIT_POINT ; > ;
+        };
+        ItemList [ english_us ] =
+        {
+            < "Millimeter" ; FUNIT_MM ; > ;
+            < "Centimeter" ; FUNIT_CM ; > ;
+            < "Meter" ; FUNIT_M ; > ;
+            < "Kilometer" ; FUNIT_KM ; > ;
+            < "Inch" ; FUNIT_INCH ; > ;
+            < "Foot" ; FUNIT_FOOT ; > ;
+            < "Miles" ; FUNIT_MILE ; > ;
+            < "Pica" ; FUNIT_PICA ; > ;
+            < "Point" ; FUNIT_POINT ; > ;
+        };
+    ItemList [ chinese_simplified ] =
+    {
+            < "ºÁÃ×" ; FUNIT_MM ; > ;
+        < "ÀåÃ×" ; FUNIT_CM ; > ;
+        < "Ã×" ; FUNIT_M ; > ;
+        < "¹«Àï" ; FUNIT_KM ; > ;
+        < "Ó¢´ç" ; FUNIT_INCH ; > ;
+        < "Ó¢³ß" ; FUNIT_FOOT ; > ;
+        < "Ó¢Àï" ; FUNIT_MILE ; > ;
+        < "Æ¤¿ÉÐÍ×Ö·û" ; FUNIT_PICA ; > ;
+        < "µã" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ russian ] =
+    {
+            < "Ìèëëèìåòðû" ; FUNIT_MM ; > ;
+        < "Ñàíòèìåòðû" ; FUNIT_CM ; > ;
+        < "Ìåòðû" ; FUNIT_M ; > ;
+        < "Êèëîìåòðû" ; FUNIT_KM ; > ;
+        < "Äþéìû" ; FUNIT_INCH ; > ;
+        < "Ôóòû" ; FUNIT_FOOT ; > ;
+        < "Ìèëè" ; FUNIT_MILE ; > ;
+        < "Ïèêè" ; FUNIT_PICA ; > ;
+        < "Òî÷êè" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ polish ] =
+    {
+            < "Milimetr" ; FUNIT_MM ; > ;
+        < "Centymetr" ; FUNIT_CM ; > ;
+        < "Metr" ; FUNIT_M ; > ;
+        < "Kilometr" ; FUNIT_KM ; > ;
+        < "Cal" ; FUNIT_INCH ; > ;
+        < "Stopa" ; FUNIT_FOOT ; > ;
+        < "Mile" ; FUNIT_MILE ; > ;
+        < "Cycero" ; FUNIT_PICA ; > ;
+        < "Punkt" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ japanese ] =
+    {
+            < "ÐØÒ°ÄÙ" ; FUNIT_MM ; > ;
+        < "¾ÝÁÒ°ÄÙ" ; FUNIT_CM ; > ;
+        < "Ò°ÄÙ" ; FUNIT_M ; > ;
+        < "·ÛÒ°ÄÙ" ; FUNIT_KM ; > ;
+        < "²ÝÁ" ; FUNIT_INCH ; > ;
+        < "Ì¨°Ä" ; FUNIT_FOOT ; > ;
+        < "Ï²Ù" ; FUNIT_MILE ; > ;
+        < "Êß²¶" ; FUNIT_PICA ; > ;
+        < "Îß²ÝÄ" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ chinese_traditional ] =
+    {
+            < "²@¦Ì" ; FUNIT_MM ; > ;
+        < "Íù¦Ì" ; FUNIT_CM ; > ;
+        < "¦Ì" ; FUNIT_M ; > ;
+        < "¤½¨½" ; FUNIT_KM ; > ;
+        < "­^¤o" ; FUNIT_INCH ; > ;
+        < "­^¤Ø" ; FUNIT_FOOT ; > ;
+        < "­^¨½" ; FUNIT_MILE ; > ;
+        < "¥Ö¥i«¬¦r¤¸" ; FUNIT_PICA ; > ;
+        < "ÂI" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ arabic ] =
+    {
+            < "ãíáíãÊÑ" ; FUNIT_MM ; > ;
+        < "ÓäÊíãÊÑ" ; FUNIT_CM ; > ;
+        < "ãÊÑ" ; FUNIT_M ; > ;
+        < "ßíáæãÊÑ" ; FUNIT_KM ; > ;
+        < "ÈæÕÉ" ; FUNIT_INCH ; > ;
+        < "ÞÏã" ; FUNIT_FOOT ; > ;
+        < "ÃãíÇá" ; FUNIT_MILE ; > ;
+        < "ÈíßÇ" ; FUNIT_PICA ; > ;
+        < "äÞØÉ" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ greek ] =
+    {
+            < "×éëéïóôÜ" ; FUNIT_MM ; > ;
+        < "ÅêáôïóôÜ" ; FUNIT_CM ; > ;
+        < "ÌÝôñï" ; FUNIT_M ; > ;
+        < "×éëéüìåôñï" ; FUNIT_KM ; > ;
+        < "ºíôóåò" ; FUNIT_INCH ; > ;
+        < "Ðüäé" ; FUNIT_FOOT ; > ;
+        < "Ìßëéá" ; FUNIT_MILE ; > ;
+        < "Pica (Ðßêá)" ; FUNIT_PICA ; > ;
+        < "Óçìåßï" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ korean ] =
+    {
+            < "¹Ð¸®¹ÌÅÍ" ; FUNIT_MM ; > ;
+        < "¼¾Æ¼¹ÌÅÍ" ; FUNIT_CM ; > ;
+        < "¹ÌÅÍ" ; FUNIT_M ; > ;
+        < "Å³·Î¹ÌÅÍ" ; FUNIT_KM ; > ;
+        < "ÀÎÄ¡" ; FUNIT_INCH ; > ;
+        < "ÇÇÆ®" ; FUNIT_FOOT ; > ;
+        < "¸¶ÀÏ" ; FUNIT_MILE ; > ;
+        < "ÆÄÀÌÄ«" ; FUNIT_PICA ; > ;
+        < "Æ÷ÀÎÆ®" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ turkish ] =
+    {
+            < "Milimetre" ; FUNIT_MM ; > ;
+        < "Santimetre" ; FUNIT_CM ; > ;
+        < "Metre" ; FUNIT_M ; > ;
+        < "Kilometre" ; FUNIT_KM ; > ;
+        < "Ýnç" ; FUNIT_INCH ; > ;
+        < "Ft" ; FUNIT_FOOT ; > ;
+        < "Mil" ; FUNIT_MILE ; > ;
+        < "Pika" ; FUNIT_PICA ; > ;
+        < "Nokta" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ language_user1 ] =
+    {
+            < " " ; FUNIT_MM ; > ;
+        < " " ; FUNIT_CM ; > ;
+        < " " ; FUNIT_M ; > ;
+        < " " ; FUNIT_KM ; > ;
+        < " " ; FUNIT_INCH ; > ;
+        < " " ; FUNIT_FOOT ; > ;
+        < " " ; FUNIT_MILE ; > ;
+        < " " ; FUNIT_PICA ; > ;
+        < " " ; FUNIT_POINT ; > ;
+    };
 };
 

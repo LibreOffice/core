@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-04-03 07:16:44 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_PREVIEW_ZOOM          (FN_VIEW + 51)  /* der Tabellencontroller fuer den Zoom */
 
 #define FN_SET_MODOPT_TBLNUMFMT  (FN_VIEW + 52) /* Zahlenerkennung in Tabellen */
+#define FN_HSCROLL_METRIC        (FN_VIEW + 53) /* Metric horizontal scrollbar */
+#define FN_VSCROLL_METRIC        (FN_VIEW + 54) /* Metric vertical scrollbar */
 
 /*--------------------------------------------------------------------
     Bereich: Einfuegen

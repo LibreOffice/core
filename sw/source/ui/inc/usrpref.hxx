@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:08:04 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,11 @@ class SwMasterUsrPref : public SwViewOption
     sal_Int32   nFldUpdateFlags;    //udpate of fields and charts
     sal_Int32   nLinkUpdateMode;
     FieldUnit   eUserMetric;
+    FieldUnit   eHScrollMetric;
+    sal_Bool    bIsHScrollMetricSet;
+    FieldUnit   eVScrollMetric;
+    sal_Bool    bIsVScrollMetricSet;
+
 
     sal_Int32   nDefTab;            //default tab stop distance
 
@@ -250,6 +255,16 @@ public:
 
     FieldUnit   GetMetric() const { return eUserMetric;}
     void        SetMetric(FieldUnit eSet) { eUserMetric = eSet; SetModified();};
+
+    sal_Bool    IsHScrollMetric()const {return bIsHScrollMetricSet;}
+    FieldUnit   GetHScrollMetric() const { return bIsHScrollMetricSet ? eHScrollMetric : eUserMetric;}
+    void        SetHScrollMetric(FieldUnit eSet)
+        { eHScrollMetric = eSet; bIsHScrollMetricSet = sal_True; SetModified();};
+
+    sal_Bool    IsVScrollMetric()const {return bIsVScrollMetricSet;}
+    FieldUnit   GetVScrollMetric() const { return bIsVScrollMetricSet ? eVScrollMetric : eUserMetric;}
+    void        SetVScrollMetric(FieldUnit eSet)
+        { eVScrollMetric = eSet; bIsVScrollMetricSet = sal_True; SetModified();};
 
     sal_Int32   GetDefTab() const { return nDefTab;}
     void        SetDefTab( sal_Int32  nSet ) {  nDefTab = nSet; SetModified();}

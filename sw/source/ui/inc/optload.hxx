@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:40:18 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,6 @@ private:
     sal_Bool    bHTMLMode;
     UINT16      nLastTab;
     sal_Int32   nOldLinkMode;
-
-    SvxStringArray aMetricArr;
 
     DECL_LINK(CaptionHdl, PushButton*);
     DECL_LINK(MetricHdl, ListBox*);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:36:36 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,13 @@
 #define CB_FLDBACK              21
 #define GB_LINE                 22
 #define CB_POSTIT               23
-
 #define CB_BIGHANDLE                  25
 
+#define GB_SETTINGS             26
+#define LB_METRIC               27
+#define FT_METRIC               28
+
+//test tab page
 #define CB_TEST1        25
 #define CB_TEST2        26
 #define CB_TEST3        27
@@ -148,6 +152,7 @@
 #define RB_ONLY            81
 #define RB_END             82
 #define RB_PAGEEND         83
+#define ST_NONE            84
 #define LB_FAX             86
 #define CB_BLACK_FONT      87
 #define LB_HMETRIC         88

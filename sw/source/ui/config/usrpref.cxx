@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:28:06 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,11 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     aCursorConfig(*this),
     pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : 0),
     nFldUpdateFlags(0),
-    nLinkUpdateMode(0)
+    nLinkUpdateMode(0),
+    eHScrollMetric(FUNIT_CM),
+    eVScrollMetric(FUNIT_CM),
+    bIsHScrollMetricSet(sal_False),
+    bIsVScrollMetricSet(sal_False)
 {
     aContentConfig.Load();
     aLayoutConfig.Load();
@@ -306,11 +310,13 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
         "Window/VerticalScroll",            // 7
         "Window/HorizontalRuler",           // 8
         "Window/VerticalRuler",             // 9
-        "Window/SmoothScroll",              //10
-        "Other/MeasureUnit",                //11
-        "Other/TabStop",                    //12
+        "Window/HorizontalRulerUnit",       //10
+        "Window/VerticalRulerUnit",         //11
+        "Window/SmoothScroll",              //12
+        "Other/MeasureUnit",                //13
+        "Other/TabStop",                    //14
     };
-    const int nCount = bWeb ? 12 : 13;
+    const int nCount = bWeb ? 14 : 15;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -367,11 +373,19 @@ void SwLayoutViewConfig::Commit()
             case  7: bSet = rParent.IsViewVScrollBar(); break;// "Window/VerticalScroll",
             case  8: bSet = rParent.IsViewTabwin(); break;// "Window/HorizontalRuler",
             case  9: bSet = rParent.IsViewVLin(); break;// "Window/VerticalRuler",
-            case 10: bSet = rParent.IsSmoothScroll(); break;// "Window/SmoothScroll",
-            case 11: pValues[nProp] <<= (sal_Int32)rParent.GetMetric(); break;// "Other/MeasureUnit",
-            case 12: pValues[nProp] <<= rParent.GetDefTab(); break;// "Other/TabStop",
+            case 10:
+                if(rParent.bIsHScrollMetricSet)
+                    pValues[nProp] <<= (sal_Int32)rParent.eHScrollMetric; // "Window/HorizontalRulerUnit"
+            break;
+            case 11:
+                if(rParent.bIsVScrollMetricSet)
+                    pValues[nProp] <<= (sal_Int32)rParent.eVScrollMetric; // "Window/VerticalRulerUnit"
+            break;
+            case 12: bSet = rParent.IsSmoothScroll(); break;// "Window/SmoothScroll",
+            case 13: pValues[nProp] <<= (sal_Int32)rParent.GetMetric(); break;// "Other/MeasureUnit",
+            case 14: pValues[nProp] <<= rParent.GetDefTab(); break;// "Other/TabStop",
         }
-        if(nProp < 11)
+        if(nProp < 10 || nProp == 12)
             pValues[nProp].setValue(&bSet, ::getBooleanCppuType());
     }
     PutProperties(aNames, aValues);
@@ -392,7 +406,7 @@ void SwLayoutViewConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                sal_Bool bSet = nProp < 11 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
+                sal_Bool bSet = nProp < 10 || nProp == 12 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
                 switch(nProp)
                 {
                     case  0: rParent.SetSubsLines(bSet); break;// "Line/TextBoundary",
@@ -405,14 +419,28 @@ void SwLayoutViewConfig::Load()
                     case  7: rParent.SetViewVScrollBar(bSet); break;// "Window/VerticalScroll",
                     case  8: rParent.SetViewTabwin(bSet); break;// "Window/HorizontalRuler",
                     case  9: rParent.SetViewVLin(bSet); break;// "Window/VerticalRuler",
-                    case 10: rParent.SetSmoothScroll(bSet); break;// "Window/SmoothScroll",
+                    case 10:
+                    {
+                        rParent.bIsHScrollMetricSet = sal_True;
+                        sal_Int32 nUnit; pValues[nProp] >>= nUnit;
+                        rParent.eHScrollMetric = ((FieldUnit)nUnit);  // "Window/HorizontalRulerUnit"
+                    }
+                    break;
                     case 11:
+                    {
+                        rParent.bIsVScrollMetricSet = sal_True;
+                        sal_Int32 nUnit; pValues[nProp] >>= nUnit;
+                        rParent.eVScrollMetric = ((FieldUnit)nUnit); // "Window/VerticalRulerUnit"
+                    }
+                    break;
+                    case 12: rParent.SetSmoothScroll(bSet); break;// "Window/SmoothScroll",
+                    case 13:
                     {
                         sal_Int32 nUnit; pValues[nProp] >>= nUnit;
                         rParent.SetMetric((FieldUnit)nUnit);
                     }
                     break;// "Other/MeasureUnit",
-                    case 12:
+                    case 14:
                     {
                         sal_Int32 nTab; pValues[nProp] >>= nTab;
                         rParent.SetDefTab(nTab);

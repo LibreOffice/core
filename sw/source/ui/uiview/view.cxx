@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-23 15:43:00 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,7 +822,8 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     ASSERT( pDocSh, "View ohne DocShell." );
     SwWebDocShell* pWebDShell = PTR_CAST( SwWebDocShell, pDocSh );
 
-    SwViewOption aUsrPref( *SW_MOD()->GetUsrPref( 0 != pWebDShell ));
+    const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(0 != pWebDShell);
+    SwViewOption aUsrPref( *pUsrPref);
     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
     sal_Bool bVal;
 
@@ -906,9 +907,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     // Vom HLineal den ZOOM-Faktor einstellen
     pHLineal->SetZoom( Fraction( aUsrPref.GetZoom(), 100 ) );
     pHLineal->SetDoubleClickHdl(LINK( this, SwView, ExecRulerClick ));
-    FieldUnit eMetric = ::GetDfltMetric( 0 != pWebDShell );
-    if( FUNIT_MM == eMetric )
-        eMetric = FUNIT_CM;
+    FieldUnit eMetric = pUsrPref->GetHScrollMetric();
     pHLineal->SetUnit( eMetric );
 
     // DocShell setzen

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:40:18 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,10 @@ class SwContentOptPage : public SfxTabPage
     CheckBox    aFootBackCB;
     CheckBox    aFldBackCB;
 
+    FixedLine   aSettingsGB;
+    FixedText   aMetricFT;
+    ListBox     aMetricLB;
+
 public:
                         SwContentOptPage( Window* pParent,
                                            const SfxItemSet& rSet );
@@ -196,6 +200,7 @@ class SwAddPrinterTabPage : public SfxTabPage
     CheckBox        aPaperFromSetupCB;
     FixedText       aFaxFT;
     ListBox         aFaxLB;
+    String          sNone;
 
     BOOL        bAttrModified;
     BOOL        bPreview;

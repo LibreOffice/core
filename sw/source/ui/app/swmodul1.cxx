@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:17:17 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,14 +537,17 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, BOOL bWeb )
         if(eOldMetric != eMetric)
             pPref->SetMetric(eMetric);
 
+        FieldUnit eHScrollMetric = pPref->IsHScrollMetric() ? pPref->GetHScrollMetric() : eMetric;
+        FieldUnit eVScrollMetric = pPref->IsVScrollMetric() ? pPref->GetVScrollMetric() : eMetric;
+
         SwView* pTmpView = SwModule::GetFirstView();
         // fuer alle MDI-Fenster das Lineal umschalten
         while(pTmpView)
         {
             if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
             {
-                pTmpView->ChangeVLinealMetric(eMetric);
-                pTmpView->ChangeTabMetric(eMetric);
+                pTmpView->ChangeVLinealMetric(eHScrollMetric);
+                pTmpView->ChangeTabMetric(eVScrollMetric);
             }
 
             pTmpView = SwModule::GetNextView(pTmpView);

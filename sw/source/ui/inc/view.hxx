@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-23 15:42:43 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,6 +489,7 @@ public:
     inline int      KillVLineal();
     int             StatVLineal() const { return pVLineal != 0; }
     void            ChangeVLinealMetric(FieldUnit eUnit);
+    BOOL            GetVLinealMetric(FieldUnit& rToFill) const;
 
     inline int      CreateTab();
     inline int      KillTab();
@@ -497,6 +498,7 @@ public:
     SvxRuler       *GetVLineal()    { return pVLineal; }
     void            InvalidateRulerPos();
     void            ChangeTabMetric(FieldUnit eUnit);
+    BOOL            GetHLinealMetric(FieldUnit& rToFill) const;
 
         // Handler
     void            Execute(SfxRequest&);

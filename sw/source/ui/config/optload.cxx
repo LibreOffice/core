@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-04-04 14:25:25 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,9 @@
 #ifndef _SWDOCSH_HXX //autogen
 #include <docsh.hxx>
 #endif
-
+#ifndef _CONFIG_HRC
+#include <config.hrc>
+#endif
 /* -----------------22.10.98 15:12-------------------
  *
  * --------------------------------------------------*/
@@ -149,13 +151,13 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     aMergeDistPageStartCB(this, ResId(CB_MERGE_PARA_DIST_PAGESTART  )),
     aCompatGB   (this, ResId(GB_COMPAT  )),
     pWrtShell   (0),
-    aMetricArr    ( SW_RES( ST_METRIC ) ),
     nLastTab(0),
     nOldLinkMode(MANUAL),
     bHTMLMode(FALSE)
 {
     FreeResource();
 
+    SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
     for ( USHORT i = 0; i < aMetricArr.Count(); ++i )
     {
         String sMetric = aMetricArr.GetStringByPos( i );

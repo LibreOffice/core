@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@
 #define DLG_CONFIG_ADDR         (RC_CONFIG_BEGIN + 17)
 
 #define STR_ERROR_PATH          (RC_CONFIG_BEGIN + 25)
-
-#define CONFIG_ACT_END          STR_ERROR_PATH
+#define STR_ARR_METRIC          (RC_CONFIG_BEGIN + 26)
+#define CONFIG_ACT_END          STR_ARR_METRIC
 
 #if CONFIG_ACT_END > RC_CONFIG_END
 #error Resource-Id Ueberlauf in #file, #line

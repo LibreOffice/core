@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-04-05 05:50:13 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,10 @@
 #include <optdlg.hrc>
 #endif
 
+#ifndef _SVX_STRARRAY_HXX
+#include <svx/strarray.hxx>
+#endif
+
 #define C2S(cChar) String::CreateFromAscii(cChar)
 /*******************************************************
  ******************************************************/
@@ -231,7 +235,10 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
     aIdxEntryCB   ( this,   SW_RES( CB_IDX_ENTRY     ) ),
     aIdxBackCB   ( this,    SW_RES( CB_INDEX     ) ),
     aFootBackCB   ( this,   SW_RES( CB_FOOTBACK  ) ),
-    aFldBackCB    ( this,   SW_RES( CB_FLDBACK      ) )
+    aFldBackCB    ( this,   SW_RES( CB_FLDBACK      ) ),
+    aSettingsGB   ( this,   SW_RES( GB_SETTINGS   ) ),
+    aMetricLB     ( this,   SW_RES( LB_METRIC   ) ),
+    aMetricFT     ( this,   SW_RES( FT_METRIC   ) )
 {
     FreeResource();
     const SfxPoolItem* pItem;
@@ -242,14 +249,40 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
         aIdxEntryCB .Hide();
         aIdxBackCB.Hide();
         aFldBackCB.SetPosPixel(aIdxEntryCB.GetPosPixel());
+        aMetricLB.Show();
+        aSettingsGB.Show();
+        aMetricFT.Show();
+    }
+
+    SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
+    for ( USHORT i = 0; i < aMetricArr.Count(); ++i )
+    {
+        String sMetric = aMetricArr.GetStringByPos( i );
+        FieldUnit eFUnit = (FieldUnit)aMetricArr.GetValue( i );
+
+        switch ( eFUnit )
+        {
+            case FUNIT_MM:
+            case FUNIT_CM:
+            case FUNIT_POINT:
+            case FUNIT_PICA:
+            case FUNIT_INCH:
+            {
+                // nur diese Metriken benutzen
+                USHORT nPos = aMetricLB.InsertEntry( sMetric );
+                aMetricLB.SetEntryData( nPos, (void*)(long)eFUnit );
+                aVMetric.InsertEntry( sMetric );
+                aVMetric.SetEntryData( nPos, (void*)(long)eFUnit );
+                aHMetric.InsertEntry( sMetric );
+                aHMetric.SetEntryData( nPos, (void*)(long)eFUnit );
+            }
+        }
     }
 }
 
 /*-----------------31.08.96 13.58-------------------
 
 --------------------------------------------------*/
-
-
 SwContentOptPage::~SwContentOptPage()
 {
 }
@@ -257,19 +290,34 @@ SwContentOptPage::~SwContentOptPage()
 /*-----------------31.08.96 13.58-------------------
 
 --------------------------------------------------*/
-
-
 SfxTabPage* SwContentOptPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwContentOptPage(pParent, rAttrSet);
 }
+/* -----------------------------07.04.01 16:57--------------------------------
 
+ ---------------------------------------------------------------------------*/
+void lcl_SelectMetricLB(ListBox& rMetric, USHORT nSID, const SfxItemSet& rSet)
+{
+    const SfxPoolItem* pItem;
+    if( rSet.GetItemState( nSID, FALSE, &pItem ) >= SFX_ITEM_AVAILABLE )
+    {
+        FieldUnit eFieldUnit = (FieldUnit)((SfxUInt16Item*)pItem)->GetValue();
+        for ( USHORT i = 0; i < rMetric.GetEntryCount(); ++i )
+        {
+            if ( (int)rMetric.GetEntryData( i ) == (int)eFieldUnit )
+            {
+                rMetric.SelectEntryPos( i );
+                break;
+            }
+        }
+    }
+    rMetric.SaveValue();
+}
 /*-----------------31.08.96 13.58-------------------
 
 --------------------------------------------------*/
-
-
 void SwContentOptPage::Reset(const SfxItemSet& rSet)
 {
     const SwElemItem* pElemAttr = 0;
@@ -300,7 +348,10 @@ void SwContentOptPage::Reset(const SfxItemSet& rSet)
         aSmoothCBox.Check( pElemAttr->bSmoothScroll      );
 //                                            bHtmlMode
     }
-
+    aMetricLB.SetNoSelection();
+    lcl_SelectMetricLB(aMetricLB, SID_ATTR_METRIC, rSet);
+    lcl_SelectMetricLB(aHMetric, FN_HSCROLL_METRIC, rSet);
+    lcl_SelectMetricLB(aVMetric, FN_VSCROLL_METRIC, rSet);
 }
 
 /*-----------------31.08.96 13.58-------------------
@@ -341,6 +392,31 @@ BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     BOOL bRet = !pOldAttr || aElem != *pOldAttr;
     if(bRet)
         bRet = 0 != rSet.Put(aElem);
+    USHORT nMPos = aMetricLB.GetSelectEntryPos();
+    if ( nMPos != aMetricLB.GetSavedValue() )
+    {
+        // Doppel-Cast fuer VA3.0
+        USHORT nFieldUnit = (USHORT)(long)aMetricLB.GetEntryData( nMPos );
+        rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (UINT16)nFieldUnit ) );
+        bRet = TRUE;
+    }
+
+    nMPos = aHMetric.GetSelectEntryPos();
+    if ( nMPos != aHMetric.GetSavedValue() )
+    {
+        // Doppel-Cast fuer VA3.0
+        USHORT nFieldUnit = (USHORT)(long)aHMetric.GetEntryData( nMPos );
+        rSet.Put( SfxUInt16Item( FN_HSCROLL_METRIC, (UINT16)nFieldUnit ) );
+        bRet = TRUE;
+    }
+    nMPos = aVMetric.GetSelectEntryPos();
+    if ( nMPos != aVMetric.GetSavedValue() )
+    {
+        // Doppel-Cast fuer VA3.0
+        USHORT nFieldUnit = (USHORT)(long)aVMetric.GetEntryData( nMPos );
+        rSet.Put( SfxUInt16Item( FN_VSCROLL_METRIC, (UINT16)nFieldUnit ) );
+        bRet = TRUE;
+    }
     return bRet;
 }
 /*----------------- OS 27.01.95  -----------------------
@@ -372,6 +448,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     aSingleJobsCB    (this, SW_RES(CB_SINGLEJOBS)),
     aFaxFT           (this, SW_RES(FT_FAX)),
     aFaxLB           (this, SW_RES(LB_FAX)),
+    sNone(ResId(ST_NONE)),
     bAttrModified( FALSE )
 {
     Init();
@@ -469,7 +546,8 @@ BOOL    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
         if (aEndPageRB.IsChecked()) aAddPrinterAttr.nPrintPostIts =
                                                         POSTITS_ENDPAGE;
 
-        aAddPrinterAttr.sFaxName = aFaxLB.GetSelectEntry();
+        String sFax = aFaxLB.GetSelectEntry();
+        aAddPrinterAttr.sFaxName = sNone == sFax ? aEmptyStr : sFax;
         rCoreSet.Put(aAddPrinterAttr);
     }
     return bAttrModified;
@@ -529,8 +607,10 @@ IMPL_LINK_INLINE_END( SwAddPrinterTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
 
 void  SwAddPrinterTabPage::SetFax( const SvStringsDtor& rFaxLst )
 {
+    aFaxLB.InsertEntry(sNone);
     for ( USHORT i = 0; i < rFaxLst.Count(); ++i )
         aFaxLB.InsertEntry( *rFaxLst.GetObject(i) );
+    aFaxLB.SelectEntryPos(0);
 }
 
 //------------------------------------------------------------------------

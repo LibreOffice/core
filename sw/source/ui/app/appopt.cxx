@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 10:34:48 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
                                     SID_HTML_MODE,          SID_HTML_MODE,
                                     FN_PARAM_SHADOWCURSOR,  FN_PARAM_SHADOWCURSOR,
                                     FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED,
+                                    FN_HSCROLL_METRIC,      FN_VSCROLL_METRIC,
 #ifndef PRODUCT
                                     FN_PARAM_SWTEST,        FN_PARAM_SWTEST,
 #endif
@@ -263,7 +264,16 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         pRet->Put(aBool);
     }
 
-    pRet->Put(SfxUInt16Item( SID_ATTR_METRIC, pPref->GetMetric()));
+    FieldUnit eUnit = pPref->GetHScrollMetric();
+    if(pAppView)
+        pAppView->GetHLinealMetric(eUnit);
+    pRet->Put(SfxUInt16Item( FN_HSCROLL_METRIC, eUnit));
+
+    eUnit = pPref->GetVScrollMetric();
+    if(pAppView)
+        pAppView->GetVLinealMetric(eUnit);
+    pRet->Put(SfxUInt16Item( FN_VSCROLL_METRIC, eUnit));
+    pRet->Put(SfxUInt16Item(SID_ATTR_METRIC, pPref->GetMetric()));
     if(bTextDialog)
     {
         if(pAppView)
@@ -393,6 +403,27 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
         SFX_APP()->SetOptions(rSet);
         const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
         ::SetDfltMetric((FieldUnit)pMetricItem->GetValue(), !bTextDialog);
+    }
+    if( SFX_ITEM_SET == rSet.GetItemState(FN_HSCROLL_METRIC,
+                                                    FALSE, &pItem ) )
+    {
+        SFX_APP()->SetOptions(rSet);
+        const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
+        FieldUnit eUnit = (FieldUnit)pMetricItem->GetValue();
+        pUsrPref->SetHScrollMetric(eUnit);
+        if(pAppView)
+            pAppView->ChangeTabMetric(eUnit);
+    }
+
+    if( SFX_ITEM_SET == rSet.GetItemState(FN_VSCROLL_METRIC,
+                                                    FALSE, &pItem ) )
+    {
+        SFX_APP()->SetOptions(rSet);
+        const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
+        FieldUnit eUnit = (FieldUnit)pMetricItem->GetValue();
+        pUsrPref->SetVScrollMetric(eUnit);
+        if(pAppView)
+            pAppView->ChangeVLinealMetric(eUnit);
     }
 
     if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP,
@@ -569,6 +600,9 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/03/22 10:34:48  os
+    include removed
+
     Revision 1.6  2001/03/22 09:16:59  os
     options dialog changes
 

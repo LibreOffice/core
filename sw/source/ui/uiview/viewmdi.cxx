@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-28 15:24:06 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,9 @@
 #include "viewopt.hxx"
 #include "frmatr.hxx"
 #include "globals.hrc"
-#include "docsh.hxx"
+#ifndef _WDOCSH_HXX
+#include <wdocsh.hxx>
+#endif
 #include "uitool.hxx"
 #include "cmdid.h"
 #include "edtwin.hxx"
@@ -536,8 +538,6 @@ void SwView::ChangeTabMetric( FieldUnit eUnit )
 {
     if ( pHLineal )
     {
-        if(eUnit == FUNIT_MM)
-            eUnit = FUNIT_CM;
         if(pHLineal->GetUnit() != eUnit )
         {
             pHLineal->SetUnit( eUnit );
@@ -550,8 +550,6 @@ void SwView::ChangeVLinealMetric( FieldUnit eUnit )
 {
     if ( pVLineal )
     {
-        if(eUnit == FUNIT_MM)
-            eUnit = FUNIT_CM;
         if(pVLineal->GetUnit() != eUnit)
         {
             pVLineal->SetUnit( eUnit );
@@ -559,7 +557,24 @@ void SwView::ChangeVLinealMetric( FieldUnit eUnit )
         }
     }
 }
+/* -----------------------------07.04.01 17:09--------------------------------
 
+ ---------------------------------------------------------------------------*/
+BOOL SwView::GetVLinealMetric(FieldUnit& eToFill) const
+{
+    if(pVLineal)
+        eToFill = pVLineal->GetUnit();
+    return pVLineal != 0;
+}
+/* -----------------------------07.04.01 17:09--------------------------------
+
+ ---------------------------------------------------------------------------*/
+BOOL SwView::GetHLinealMetric(FieldUnit& eToFill) const
+{
+    if(pHLineal)
+        eToFill = pHLineal->GetUnit();
+    return pHLineal != 0;
+}
 /*************************************************************************
 |*
 |*  SwView::CreateVLineal()
@@ -586,10 +601,11 @@ int SwView::_CreateVLineal()
     pVLineal->SetActive(GetFrame() && IsActive());
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     pVLineal->SetZoom(Fraction(pOpt->GetZoom(), 100));
-    BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
-    FieldUnit eMetric = ::GetDfltMetric(bWeb);
-    if(eMetric == FUNIT_MM)
-        eMetric = FUNIT_CM;
+    SwDocShell* pDocSh = PTR_CAST( SwDocShell, GetViewFrame()->GetObjectShell() );
+    SwWebDocShell* pWebDShell = PTR_CAST( SwWebDocShell, pDocSh );
+    BOOL bWeb = 0 != PTR_CAST( SwWebDocShell, pDocSh );
+    const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(bWeb);
+    FieldUnit eMetric = pUsrPref->GetVScrollMetric();
     pVLineal->SetUnit(eMetric);
 
     InvalidateBorder();
@@ -711,6 +727,9 @@ void SwView::SetImageButtonColor(Color& rColor)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/09/28 15:24:06  os
+    use of configuration service in view options
+
     Revision 1.1.1.1  2000/09/18 17:14:49  hr
     initial import
 

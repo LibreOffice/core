@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 19:24:05 $
+ *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,7 @@ TabPage TP_CONTENT_OPT
     CheckBox CB_HRULER
     {
         Pos = MAP_APPFONT ( 136 , 40 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
         Text = "Horizontales ~Lineal" ;
         Text [ ENGLISH ] = "~Horic. ruler" ;
         Text [ norwegian ] = "~Horic. ruler" ;
@@ -381,7 +381,7 @@ TabPage TP_CONTENT_OPT
     CheckBox CB_VRULER
     {
         Pos = MAP_APPFONT ( 136 , 53 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
         Text = "Verti~kales Lineal" ;
         Text [ ENGLISH ] = "~Vert. ruler" ;
         Text [ norwegian ] = "~Vert. ruler" ;
@@ -739,6 +739,69 @@ TabPage TP_CONTENT_OPT
         Text[ korean ] = "« µÂ(~L)";
         Text[ turkish ] = "Alanlar";
         Text[ language_user1 ] = " ";
+    };
+    FixedLine GB_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 130 , 122 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text = "Einstellungen";
+        Text [ ENGLISH ] = "Settings" ;
+        Text[ english_us ] = "Settings";
+        Text[ portuguese ] = "Settings";
+        Text[ russian ] = "Õ‡ÒÚÓÈÍË";
+        Text[ greek ] = "—ıËÏﬂÛÂÈÚ";
+        Text[ dutch ] = "Settings";
+        Text[ french ] = "Settings";
+        Text[ spanish ] = "Settings";
+        Text[ italian ] = "Settings";
+        Text[ danish ] = "Settings";
+        Text[ swedish ] = "Inst‰llningar";
+        Text[ polish ] = "Ustawienia";
+        Text[ portuguese_brazilian ] = "Settings";
+        Text[ japanese ] = "ê›íË";
+        Text[ korean ] = "Settings";
+        Text[ chinese_simplified ] = "…Ë∂®";
+        Text[ chinese_traditional ] = "≥]©w";
+        Text[ turkish ] = "Settings";
+        Text[ arabic ] = "«·≈⁄œ«œ« ";
+        Hide = TRUE;
+    };
+    FixedText FT_METRIC
+    {
+        Pos = MAP_APPFONT ( 136 , 135 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text = "Maﬂeinheit";
+        Text [ ENGLISH ] = "Measurement units" ;
+        Text [ italian ] = "Unit‡ di misura";
+        Text [ portuguese_brazilian ] = "Unidades mÈtricas";
+        Text [ portuguese ] = "Unidades mÈtricas";
+        Text [ danish ] = "MÂleenhed";
+        Text [ french ] = "UnitÈ de mesure";
+        Text [ swedish ] = "MÂttenhet";
+        Text [ dutch ] = "Maateenheid";
+        Text [ spanish ] = "Unidad de medida";
+        Text [ english_us ] = "Measurement unit";
+        Text[ chinese_simplified ] = "º∆¡øµ•Œª";
+        Text[ russian ] = "≈‰ËÌËˆ‡ ËÁÏÂÂÌËˇ";
+        Text[ polish ] = "Jednostka miary";
+        Text[ japanese ] = "égÇ§íPà ";
+        Text [ norwegian ] = "Metriske Enheter" ;
+        Text [ finnish ] = "Metriset yksikˆt" ;
+        Text[ chinese_traditional ] = "≠p∂q≥Ê¶Ï";
+        Text[ arabic ] = "ÊÕœ… «·ﬁÌ«”";
+        Text[ greek ] = "ÃÔÌ‹‰· Ï›ÙÒÁÛÁÚ";
+        Text[ korean ] = "√¯¡§ ¥‹¿ß";
+        Text[ turkish ] = "÷lÁ¸ birimi";
+        Text[ language_user1 ] = " ";
+        Hide = TRUE;
+    };
+    ListBox LB_METRIC
+    {
+        Pos = MAP_APPFONT ( 199, 133 ) ;
+        Size = MAP_APPFONT ( 50 , 50 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        Hide = TRUE;
     };
 };
 /**************************************************************************/
@@ -1342,8 +1405,12 @@ TabPage TP_OPTPRINT_PAGE
         Size = MAP_APPFONT ( 184 , 70 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        Sort = TRUE ;
         Group = TRUE ;
+    };
+    String ST_NONE
+    {
+        Text = "<Keiner>" ;
+        Text[English] = "<None>" ;
     };
 };
 /**************************************************************************/
