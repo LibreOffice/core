@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:17:22 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,8 @@ const sal_Bool SdrObjCustomShape::GetLineGeometry( XPolyPolygon& rLineGeometry, 
                 sal_uInt16 i;
                 XPolyPolygon aXPP;
                 for ( i = 0; i < rLineGeometry.Count(); i++ )
-                    aXPP.Insert( XOutCreatePolygon( rLineGeometry.GetObject( i ), NULL, 100 ), XPOLYPOLY_APPEND );
+                    aXPP.Insert( XOutCreatePolygon( rLineGeometry.GetObject( i )), XPOLYPOLY_APPEND );
+//BFS09                 aXPP.Insert( XOutCreatePolygon( rLineGeometry.GetObject( i ), NULL, 100 ), XPOLYPOLY_APPEND );
                 rLineGeometry = aXPP;
             }
             bRet = sal_True;
@@ -694,7 +695,7 @@ void SdrObjCustomShape::NbcShear( const Point& rRef, long nWink, double tn, FAST
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-sal_Bool SdrObjCustomShape::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrObjCustomShape::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     sal_Bool bOk = sal_True;
 
@@ -1834,16 +1835,17 @@ BOOL SdrObjCustomShape::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPol
     return FALSE;
 }
 
-void SdrObjCustomShape::WriteData(SvStream& rOut) const
-{
-}
+//BFS01void SdrObjCustomShape::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01}
 
-void SdrObjCustomShape::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-}
+//BFS01void SdrObjCustomShape::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01}
 
 sdr::contact::ViewContact* SdrObjCustomShape::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfSdrObjCustomShape(*this);
 }
 
+// eof
