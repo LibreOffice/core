@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:47:28 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1195,7 +1195,10 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
         }
 
     }
-    sName += OUString::valueOf (nIndex);
+
+    // Put a space between name and index because of Gnopernicus othewise
+    // spells the name.
+    sName += OUString (RTL_CONSTASCII_USTRINGPARAM(" ")) + OUString::valueOf (nIndex);
 
     return sName;
 }
