@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdibrow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-07 15:01:21 $
+ *  last change: $Author: oj $ $Date: 2002-04-09 07:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,17 @@ public:
     virtual FASTBOOL BegChangeEntry(ULONG nPos);
     virtual FASTBOOL EndChangeEntry();
     virtual void     BrkChangeEntry();
+
+    /** GetCellText returns the text at the given position
+        @param  _nRow
+            the number of the row
+        @param  _nColId
+            the ID of the column
+        @return
+            the text out of the cell
+    */
+    virtual String  GetCellText(long _nRow, USHORT _nColId) const;
+
     const ImpItemListRow* GetAktChangeEntry() const { return pAktChangeEntry; }
     XubString GetNewEntryValue() const                 { return pEditControl->GetText(); }
     void SetEntryChangedHdl(const Link& rLink)      { aEntryChangedHdl=rLink; }
