@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-16 21:30:08 $
+ *  last change: $Author: kz $ $Date: 2002-01-23 21:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1637,7 +1637,7 @@ String RID_SVXSTR_GALLERY_SGIERROR
     Text [ spanish ] = "No se puede abrir este archivo.\n¿Desea indicar otra ruta de búsqueda? " ;
     Text [ french ] = "Impossible d'ouvrir ce fichier.\nVoulez-vous indiquer un autre chemin de recherche ? " ;
     Text [ dutch ] = "Dit bestand kan niet worden geopend. \nWilt u een ander zoekpad aangeven??   " ;
-    Text [ swedish ] = "Den här filen kan inte öppnas.\nVill Du ange en annan sökväg?  " ;
+    Text [ swedish ] = "Den här filen kan inte öppnas.\nVill du ange en annan sökväg? " ;
     Text [ danish ] = "Det er ikke muligt at åbne denne fil.\nVil du angive en ny søgesti? " ;
     Text [ portuguese ] = "Impossível abrir este ficheiro.\nDeseja indicar outro atalho de localização?  " ;
     Text [ portuguese_brazilian ] = "Diese Datei kann nicht ge?fnet werden. \nM?hten Sie einen anderen Suchpfad angeben? " ;
