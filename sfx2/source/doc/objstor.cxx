@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-09 10:21:54 $
+ *  last change: $Author: mba $ $Date: 2001-03-09 17:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1015,7 +1015,7 @@ sal_Bool SfxObjectShell::DoSaveAs( SfxMedium &rMedium )
         else
             INetURLObject::SetBaseURL( String() );
 
-    rMedium.CreateTempFile();
+    rMedium.CreateTempFileNoCopy();
 
     sal_Bool bRet = SaveTo_Impl(rMedium);
     INetURLObject::SetBaseURL( aOldURL );
@@ -1729,7 +1729,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         aSavedInfo = GetDocInfo();
 
     pNewFile->SetFilter( GetFactory(), aFilterName);
-    pNewFile->CreateTempFile();
+    pNewFile->CreateTempFileNoCopy();
 
     sal_Bool bOk;
 

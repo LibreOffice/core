@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-19 11:56:33 $
+ *  last change: $Author: mba $ $Date: 2001-03-09 17:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1675,6 +1675,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
 
             case SFX_HINT_DYING:
+            case SFX_HINT_DEINITIALIZING:
                 // when the Object is being deleted, destroy the view too
                 if ( xObjSh.Is() )
                     ReleaseObjectShell_Impl();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-09 10:33:31 $
+ *  last change: $Author: mba $ $Date: 2001-03-09 17:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,7 +452,8 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
 
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
         SfxMedium aMedium( aURL, (STREAM_READ | STREAM_SHARE_DENYNONE), sal_False, NULL, pSet );
-        if ( aMedium.IsStorage() )
+        BOOL bIsStorage = aMedium.IsStorage();
+        if ( bIsStorage )
             aMedium.GetStorage();
         else
             aMedium.GetInStream();
@@ -467,7 +468,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
                     pFilter = rMatcher.GetFilter4Mime( aMime );
         */
             // can't detect filter for external filters!
-            SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONE;
+            SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
             ErrCode nErr = ERRCODE_ABORT;
             const SfxFilter* pOldFilter = NULL;
             if ( aPreselectedFilterName.Len() )
@@ -501,26 +502,32 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
                     aFilterName = aTypeName;
 
                 // next try the detected type
-                pOldFilter = pFilter = rMatcher.GetFilter( aFilterName );
-                if ( !pFilter || ( pFilter->GetFlags() & SFX_FILTER_STARONE ) )
-                    // external types or filters can't be detected with this service
-                    return aTypeName;
-
-                SfxFilterFlags nFlags = pFilter->GetFilterFlags();
-                if ( ( nFlags & nMust ) == nMust && ( nFlags & nDont ) == 0 )
+                if ( aTypeName.getLength() )
                 {
-                    pSet->Put( SfxStringItem( SID_FILTER_NAME, aFilterName ) );
-                    nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
+                    pOldFilter = pFilter = rMatcher.GetFilter( aFilterName );
+                    if ( !pFilter || ( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
+                        // external types or filters can't be detected with this service
+                        return aTypeName;
+
+                    if ( pFilter )
+                    {
+                        SfxFilterFlags nFlags = pFilter->GetFilterFlags();
+                        if ( ( nFlags & nMust ) == nMust && ( nFlags & nDont ) == 0 )
+                        {
+                            pSet->Put( SfxStringItem( SID_FILTER_NAME, aFilterName ) );
+                            nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
+                        }
+                        else
+                            // filterflags not suitable
+                            pFilter = NULL;
+                    }
                 }
-                else
-                    // filterflags not suitable
-                    pFilter = NULL;
             }
 
             // No error while reading from medium ?
             if ( aMedium.GetErrorCode() == ERRCODE_NONE )
             {
-                if ( !pFilter || pOldFilter == pFilter && nErr != ERRCODE_NONE )
+                if ( ( !pFilter || ( pOldFilter == pFilter && nErr != ERRCODE_NONE ) ) && bIsStorage )
                 {
                     // try simplest file lookup: clipboard format in storage
                     pFilter = NULL;
@@ -532,8 +539,8 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
                         if ( !pFilter || ( (pFilter)->GetFilterFlags() & nMust ) != nMust || ( (pFilter)->GetFilterFlags() & nDont ) != 0 )
                             pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat() );
                     }
-                    if ( pFilter )
-                        nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
+//                    if ( pFilter )
+//                        nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
                 }
 
                 // No error while reading from medium ?

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-05 12:42:56 $
+ *  last change: $Author: mba $ $Date: 2001-03-09 17:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,13 +305,13 @@ sal_Bool SfxObjectShell::Close()
         pImp->bClosing = sal_True;
         SfxObjectShellRef aRef(this);
 /*
-        // Ist leider zu sp"at, da kaum noch Macros laufen, wenn keine ::com::sun::star::sdbcx::View
+        // Ist leider zu sp"at, da kaum noch Macros laufen, wenn keine View
         // mehr da ist!
         if ( _pFactory && _pFactory->GetFlags() & SFXOBJECTSHELL_HASOPENDOC )
             // Event nur bei echten Dokumenten
             pSfxApp->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, this) );
 */
-//      Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
+        Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
         //pImp->bClosing = sal_False;
     }
 
