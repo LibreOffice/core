@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:20:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::
     mbUseTransitionEffects  ( sal_True ),
     mbUseLosslessCompression( sal_False ),
     mbReduceImageResolution ( sal_False ),
+    mbSkipEmptyPages        ( sal_False ),
     mnMaxImageResolution    ( 300 ),
     mnQuality               ( 90 ),
     mnFormsFormat           ( 0 ),
@@ -233,7 +234,8 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                     aMtf.Stop();
                     aMtf.WindStart();
 
-                    if( aMtf.GetActionCount() )
+                    if( aMtf.GetActionCount() &&
+                             ( !mbSkipEmptyPages || aPageSize.Width || aPageSize.Height ) )
                         bRet = ImplExportPage( rPDFWriter, *pPDFExtOutDevData, aMtf ) || bRet;
 
                     pOut->Pop();
@@ -313,6 +315,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mnQuality;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ReduceImageResolution" ) ) )
                     rFilterData[ nData ].Value >>= mbReduceImageResolution;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "SkipEmptyPages" ) ) )
+                    rFilterData[ nData ].Value >>= mbSkipEmptyPages;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxImageResolution" ) ) )
                     rFilterData[ nData ].Value >>= mnMaxImageResolution;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ) ) )
@@ -349,7 +353,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 pPDFExtOutDevData->SetIsLosslessCompression( mbUseLosslessCompression );
                 pPDFExtOutDevData->SetIsReduceImageResolution( mbReduceImageResolution );
 
-                Sequence< PropertyValue > aRenderOptions( 4 );
+                Sequence< PropertyValue > aRenderOptions( 6 );
                 aRenderOptions[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
                 aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
                 aRenderOptions[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) );
@@ -359,6 +363,10 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 aRenderOptions[ 2 ].Value <<= sal_True;
                 aRenderOptions[ 3 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPage" ) );
                 aRenderOptions[ 3 ].Value <<= sal_False;
+                aRenderOptions[ 4 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
+                aRenderOptions[ 4 ].Value <<= aPageRange;
+                aRenderOptions[ 5 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SkipEmptyPages" ) );
+                aRenderOptions[ 5 ].Value <<= mbSkipEmptyPages;
 
                 if( aPageRange.getLength() || !aSelection.hasValue() )
                 {
