@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-20 21:24:06 $
+#   last change: $Author: kz $ $Date: 2004-08-02 12:49:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,8 @@ EXCEPTIONSFILES=\
         $(SLO)$/mailmodel.obj		\
         $(SLO)$/cfg.obj				\
         $(SLO)$/partwnd.obj         \
-        $(SLO)$/menucfg.obj
+        $(SLO)$/menucfg.obj         \
+        $(SLO)$/templdlg.obj        
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
@@ -104,7 +105,6 @@ SLOFILES =\
         $(SLO)$/styfitem.obj		\
         $(SLO)$/styledlg.obj		\
         $(SLO)$/tabdlg.obj			\
-        $(SLO)$/templdlg.obj		\
         $(SLO)$/tplcitem.obj		\
         $(SLO)$/tplpitem.obj		\
         $(SLO)$/versdlg.obj			\
