@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:18:32 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:14:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,9 @@
 #endif
 #ifndef _FMTTSPLT_HXX //autogen
 #include <fmtlsplt.hxx>
+#endif
+#ifndef _FMTROWSPLT_HXX //autogen
+#include <fmtrowsplt.hxx>
 #endif
 #ifndef _FMTFTNTX_HXX //autogen
 #include <fmtftntx.hxx>
@@ -2058,6 +2061,14 @@ SfxPoolItem* SwFmtLayoutSplit::Clone( SfxItemPool* pPool ) const
 {
     return new SwFmtLayoutSplit( GetValue() );
 }
+
+// class SwFmtRowSplit
+
+SfxPoolItem* SwFmtRowSplit::Clone( SfxItemPool* pPool ) const
+{
+    return new SwFmtRowSplit( GetValue() );
+}
+
 
 // class SwFmtNoBalancedColumns
 
