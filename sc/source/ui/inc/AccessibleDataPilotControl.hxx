@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDataPilotControl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-05 07:56:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ public:
     //=====  internal  ========================================================
     ScAccessibleDataPilotControl(
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+        ::com::sun::star::accessibility::XAccessible>& rxParent,
         ScDPFieldWindow* pDPFieldWindow);
 
     virtual void Init();
@@ -94,8 +94,8 @@ protected:
 public:
     ///=====  XAccessibleComponent  ============================================
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
-        SAL_CALL getAccessibleAt(
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        SAL_CALL getAccessibleAtPoint(
         const ::com::sun::star::awt::Point& rPoint )
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -118,14 +118,14 @@ public:
         getAccessibleChildCount(void) throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the specified child or NULL if index is invalid.
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
+            ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -168,7 +168,7 @@ private:
     ScDPFieldWindow* mpDPFieldWindow;
     struct AccessibleWeak
     {
-        ::com::sun::star::uno::WeakReference< ::drafts::com::sun::star::accessibility::XAccessible > xWeakAcc;
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > xWeakAcc;
         ScAccessibleDataPilotButton* pAcc;
         AccessibleWeak() : pAcc(NULL) {}
     };
