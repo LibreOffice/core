@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:04:51 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1521,12 +1521,6 @@ SfxSlotInfo FN_SORTING_DLG
 {
     Slotname [ de ] = "Sortieren";
     Slotname [ en-US ] = "Sort";
-    Slotname [ x-comment ] = " ";
-};
-SfxSlotInfo FN_SPELLING_DLG
-{
-    Slotname [ de ] = "Rechtschreibprüfung";
-    Slotname [ en-US ] = "Spellcheck";
     Slotname [ x-comment ] = " ";
 };
 SfxSlotInfo FN_START_DOC_DIRECT
