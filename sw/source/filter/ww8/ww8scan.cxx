@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:06 $
+ *  last change: $Author: cmc $ $Date: 2002-06-24 11:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
         // PLCF fully processed
         p->nStartPos = p->nEndPos = LONG_MAX;
         p->pMemPos = 0;
+        p->nSprmsLen = 0;
         return;
     }
 
@@ -222,6 +223,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
             // Invalid Index
             p->nStartPos = p->nEndPos = LONG_MAX;
             p->pMemPos = 0;
+            p->nSprmsLen = 0;
             return;
         }
         const BYTE* pSprms = pGrpprls[ nSprmIdx ];
@@ -249,6 +251,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
         else
         {
             p->pMemPos = 0;
+            p->nSprmsLen = 0;
             BYTE nSprmListIdx = (BYTE)((nPrm & 0xfe) >> 1);
             if( nSprmListIdx )
             {
@@ -1968,8 +1971,8 @@ void WW8PLCFx::GetSprms( WW8PLCFxDesc* p )
 {
     ASSERT( !this, "Falsches GetSprms gerufen" );
     p->nStartPos = p->nEndPos = LONG_MAX;
-    p->nSprmsLen = 0;
     p->pMemPos = 0;
+    p->nSprmsLen = 0;
     p->bRealLineEnd = FALSE;
     return;
 }
@@ -2555,6 +2558,7 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
     {
         p->nStartPos = p->nEndPos = LONG_MAX;       // PLCF fertig abgearbeitet
         p->pMemPos = 0;
+        p->nSprmsLen = 0;
     }
     else
     {
@@ -2563,6 +2567,7 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
         {
             p->nStartPos = p->nEndPos = LONG_MAX;       // Sepx empty
             p->pMemPos = 0;
+            p->nSprmsLen = 0;
         }
         else
         {
@@ -3241,6 +3246,7 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
     //cp instead of fc's as nature intended
     rDesc.nOrigEndPos = rDesc.nEndPos;
     rDesc.nOrigStartPos = rDesc.nStartPos;
+    rDesc.pOrigMemPos = rDesc.pMemPos;
     if (GetDoingDrawTextBox())
         return;
 
@@ -3512,6 +3518,7 @@ WW8PLCFMan::WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp )
             {
                 WW8_CP nTemp = p->nEndPos+p->nCpOfs;
                 p->pMemPos = 0;
+                p->nSprmsLen = 0;
                 p->nStartPos = nTemp;
                 if (!(*p->pPLCFx).SeekPos(p->nStartPos))
                     p->nEndPos = p->nStartPos = LONG_MAX;
@@ -3736,6 +3743,7 @@ void WW8PLCFMan::AdvSprm( short nIdx, BOOL bStart )
                 {
                     // sicherheitshalber auf Null setzen, da Enden folgen!
                     p->pMemPos = 0;
+                    p->nSprmsLen = 0;
                 }
                 else
                     p->pMemPos += nSprmL;
@@ -3755,6 +3763,7 @@ void WW8PLCFMan::AdvSprm( short nIdx, BOOL bStart )
             if ( (p == pChp) || (p == pPap) )
             {
                 p->pMemPos = 0;
+                p->nSprmsLen = 0;
                 p->nStartPos = p->nOrigEndPos+p->nCpOfs;
 
                 /*
@@ -3810,6 +3819,7 @@ void WW8PLCFMan::AdvSprm( short nIdx, BOOL bStart )
             {
                 (*p->pPLCFx)++;     // next Group of Sprms
                 p->pMemPos = 0;     // !!!
+                p->nSprmsLen = 0;
                 GetNewSprms( *p );
             }
             ASSERT( p->nStartPos <= p->nEndPos, "Attribut ueber Kreuz" );
@@ -3847,6 +3857,7 @@ void WW8PLCFMan::AdvNoSprm( short nIdx, BOOL bStart )
                 if (pTemp->GetClipStart() == -1)
                     (*p->pPLCFx)++;
                 p->pMemPos = 0;
+                p->nSprmsLen = 0;
                 GetNewSprms( aD[nIdx+1] );
                 GetNewNoSprms( *p );
                 if (pTemp->GetClipStart() != -1)
@@ -3867,6 +3878,7 @@ void WW8PLCFMan::AdvNoSprm( short nIdx, BOOL bStart )
     {                                  // NoSprm ohne Ende
         (*p->pPLCFx)++;
         p->pMemPos = 0;                     // MemPos ungueltig
+        p->nSprmsLen = 0;
         GetNewNoSprms( *p );
     }
 }
@@ -4023,7 +4035,7 @@ void WW8PLCFxDesc::Save( WW8PLCFxSave1& rSave ) const
             pPLCFx->SetDirty(FALSE);
             aD.ReduceByOffset();
             rSave.nStartCp = aD.nStartPos;
-            rSave.nPLCFxMemOfs = pMemPos - aD.pMemPos;
+            rSave.nPLCFxMemOfs = pMemPos - pOrigMemPos;
         }
     }
 }
