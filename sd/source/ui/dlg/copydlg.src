@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:01:50 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ ModalDialog DLG_COPY
         Text[ chinese_traditional ] = "~X Ëª∏";
         Text[ arabic ] = "«·„ÕÊ— ”";
         Text[ greek ] = "¢ÓÔÌ·Ú X";
-        Text[ korean ] = "~X Ï∂ï";
+        Text[ korean ] = "X Ï∂ï(~X)";
         Text[ turkish ] = "X ekseni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eix ~X";
@@ -425,7 +425,7 @@ ModalDialog DLG_COPY
         Text[ chinese_traditional ] = "~Y Ëª∏";
         Text[ arabic ] = "«·„ÕÊ— ’";
         Text[ greek ] = "¢ÓÔÌ·Ú ~’";
-        Text[ korean ] = "~Y Ï∂ï";
+        Text[ korean ] = "Y Ï∂ï(~Y)";
         Text[ turkish ] = "Y ekseni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eix ~Y";
@@ -705,6 +705,7 @@ ModalDialog DLG_COPY
     Text[ hindi ] = "‡§®‡§ï‡§≤";
     Text[ slovak ] = "Duplikova≈•";
 };
+
 
 
 
