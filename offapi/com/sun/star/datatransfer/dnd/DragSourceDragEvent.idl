@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DragSourceDragEvent.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-26 11:27:46 $
+ *  last change: $Author: obr $ $Date: 2001-01-29 11:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,20 +82,9 @@ module com { module sun { module star { module datatransfer { module dnd {
 struct DragSourceDragEvent: com::sun::star::datatransfer::dnd::DragSourceEvent
 {
     //-------------------------------------------------------------------------
-    /** the effective drop action which is the intersection of the user's
-        selected action, and the source and target actions
+    /** the drag action selected by the current drop target.
      */
     byte DropAction;
-
-    //-------------------------------------------------------------------------
-    /** the current state of the input device modifiers.
-     */
-    long GestureModifiers;
-
-    //-------------------------------------------------------------------------
-    /** the logical intersection of the current target, source and user actions.
-     */
-    byte TargetActions;
 
     //-------------------------------------------------------------------------
     /** the user's currently selected drop action.
