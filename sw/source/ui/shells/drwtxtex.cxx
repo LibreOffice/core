@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-07 11:26:22 $
+ *  last change: $Author: cl $ $Date: 2002-04-25 10:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
+#endif
+#ifndef _SVX_WRITINGMODEITEM_HXX
+#include <svx/writingmodeitem.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
@@ -492,10 +495,13 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 rSh.EndTextEdit();
 
                 SfxItemSet aAttr( *aNewAttr.GetPool(),
-                            SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT,
-                            SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT );
-                aAttr.Put( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT,
-                        BOOL( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ) ) );
+                            SDRATTR_TEXTDIRECTION,
+                            SDRATTR_TEXTDIRECTION );
+
+                aAttr.Put( SvxWritingModeItem(
+                    nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
+                        com::sun::star::text::WritingMode_LR_TB
+                        : com::sun::star::text::WritingMode_TB_RL ) );
                 pTmpView->SetAttributes( aAttr );
 
                 rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV,
@@ -612,9 +618,19 @@ ASK_ESCAPE:
                 bFlag = pOutliner->IsVertical() ==
                         (SID_TEXTDIRECTION_TOP_TO_BOTTOM == nSlotId);
             else
-                bFlag = (SID_TEXTDIRECTION_LEFT_TO_RIGHT == nSlotId) ==
-                        ((SfxBoolItem&)aEditAttr.Get(
-                            SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT )).GetValue();
+            {
+                com::sun::star::text::WritingMode eMode = (com::sun::star::text::WritingMode)
+                                ( (const SvxWritingModeItem&) aEditAttr.Get( SDRATTR_TEXTDIRECTION ) ).GetValue();
+
+                if( nSlotId == SID_TEXTDIRECTION_LEFT_TO_RIGHT )
+                {
+                    bFlag = eMode == com::sun::star::text::WritingMode_LR_TB;
+                }
+                else
+                {
+                    bFlag = eMode != com::sun::star::text::WritingMode_TB_RL;
+                }
+            }
             break;
         case SID_TRANSLITERATE_HALFWIDTH:
         case SID_TRANSLITERATE_FULLWIDTH:
