@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:51:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -798,8 +798,8 @@ XclImpCachedMatrix::XclImpCachedMatrix( XclImpStream& rStrm ) :
         ++mnScRows;
     }
 
-    for( USHORT nScRow = 0; nScRow < mnScRows; ++nScRow )
-        for( USHORT nScCol = 0; nScCol < mnScCols; ++nScCol )
+    for( SCSIZE nScRow = 0; nScRow < mnScRows; ++nScRow )
+        for( SCSIZE nScCol = 0; nScCol < mnScCols; ++nScCol )
             maValueList.Append( new XclImpCachedValue( rStrm ) );
 }
 
@@ -815,9 +815,9 @@ ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
     {
         pScMatrix = new ScMatrix( mnScCols, mnScRows );
         const XclImpCachedValue* pValue = maValueList.First();
-        for( USHORT nScRow = 0; nScRow < mnScRows; ++nScRow )
+        for( SCSIZE nScRow = 0; nScRow < mnScRows; ++nScRow )
         {
-            for( USHORT nScCol = 0; nScCol < mnScCols; ++nScCol )
+            for( SCSIZE nScCol = 0; nScCol < mnScCols; ++nScCol )
             {
                 switch( pValue->GetType() )
                 {
