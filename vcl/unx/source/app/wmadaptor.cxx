@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-10 17:54:45 $
+ *  last change: $Author: pl $ $Date: 2001-10-08 16:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1286,14 +1286,6 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
                             RevertToNone,
                             CurrentTime
                             );
-        }
-        else if( ! pFrame->maFrameData.mpParent )
-        {
-            // this lets some window managers override
-            // user positioning style (e.g. fvwm2)
-            XSetTransientForHint( m_pDisplay,
-                                  pFrame->maFrameData.GetShellWindow(),
-                                  m_pSalDisplay->GetRootWindow() );
         }
         pFrame->maFrameData.SetPosSize( aTarget );
         pFrame->maFrameData.nWidth_     = aTarget.GetWidth();
