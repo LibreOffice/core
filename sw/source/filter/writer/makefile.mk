@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:57 $
+#   last change: $Author: jp $ $Date: 2000-11-20 09:48:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,14 +79,12 @@ PROJECTPCHSOURCE=..\filt_1st\filt_pch
 CXXFILES = \
         writer.cxx \
         wrt_fn.cxx \
-        wrtswtbl.cxx \
-        wrttxatr.cxx \
+        wrtswtbl.cxx
 
 SLOFILES =  \
         $(SLO)$/writer.obj \
         $(SLO)$/wrt_fn.obj \
-        $(SLO)$/wrtswtbl.obj \
-        $(SLO)$/wrttxatr.obj \
+        $(SLO)$/wrtswtbl.obj
 
 # --- Tagets -------------------------------------------------------
 
