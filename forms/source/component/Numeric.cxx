@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Numeric.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 17:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ void ONumericModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ONumericModel::getServiceName()
+::rtl::OUString SAL_CALL ONumericModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_NUMERICFIELD;  // old (non-sun) name for compatibility !
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Pattern.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 09:46:33 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 17:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ void OPatternModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OPatternModel::getServiceName()
+::rtl::OUString SAL_CALL OPatternModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_PATTERNFIELD;  // old (non-sun) name for compatibility !
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Pattern.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 17:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
     // ::com::sun::star::io::XPersistObject
-    virtual ::rtl::OUString SAL_CALL getServiceName();
+    virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
 
     // starform::XReset
     virtual void _reset();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-22 13:12:50 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 17:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ void OImageControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) co
 }
 
 //------------------------------------------------------------------------------
-void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue)
+void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( ::com::sun::star::uno::Exception)
 {
     switch (nHandle)
     {
@@ -422,13 +422,13 @@ void OImageControlModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString OImageControlModel::getServiceName()
+::rtl::OUString OImageControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_IMAGECONTROL;  // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
-void OImageControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+void OImageControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     // Basisklasse
     OBoundControlModel::write(_rxOutStream);
@@ -442,7 +442,7 @@ void OImageControlModel::write(const Reference<XObjectOutputStream>& _rxOutStrea
 }
 
 //------------------------------------------------------------------------------
-void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
+void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OBoundControlModel::read(_rxInStream);
 
@@ -673,7 +673,7 @@ void OImageControlControl::implInsertGraphics()
 
 // MouseListener
 //------------------------------------------------------------------------------
-void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent& e)
+void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
     //////////////////////////////////////////////////////////////////////
     // Nur linke Maustaste
