@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: nf $ $Date: 2001-05-09 09:02:36 $
+#   last change: $Author: nf $ $Date: 2001-05-21 15:44:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,8 @@ OBJFILES=   			\
     $(OBJ)$/merge.obj   \
     $(OBJ)$/wrdtrans.obj	\
     $(OBJ)$/wtratree.obj	\
-    $(OBJ)$/wtranode.obj
+    $(OBJ)$/wtranode.obj    \
+    $(OBJ)$/srciter.obj	
 
 # extractor and merger for *.src and *.hrc
 APP1TARGET=	$(TARGET)
@@ -135,10 +136,17 @@ APP8OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/xgfconv.obj $(OBJ)$/export2.obj
 APP8STDLIBS=$(STATIC_LIBS)
 
 # encoding converter for text files
-APP9TARGET= txtconv
+#APP9TARGET= txtconv
+#APP9STACK=  16000
+#APP9OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/txtconv.obj
+#APP9STDLIBS=$(STATIC_LIBS)
+
+# encoding converter for text files
+APP9TARGET= localize
 APP9STACK=  16000
-APP9OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/txtconv.obj
-APP9STDLIBS=$(STATIC_LIBS)
+APP9OBJS=   $(OBJ)$/localize.obj
+APP9STDLIBS+=$(STATIC_LIBS) $(BTSTRPLIB)
+APP9LIBS+=	$(LB)$/$(TARGET).lib
 
 DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
 
