@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:21:53 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -851,7 +851,7 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
 
 
 
-SvStorage* SwDoc::GetDocStorage()
+com::sun::star::uno::Reference < com::sun::star::embed::XStorage > SwDoc::GetDocStorage()
 {
     if( pDocShell )
         return pDocShell->GetStorage();
@@ -862,14 +862,14 @@ SvStorage* SwDoc::GetDocStorage()
 
 
 
-SvPersist* SwDoc::GetPersist() const
+SfxObjectShell* SwDoc::GetPersist() const
 {
     return pDocShell ? pDocShell : pLinkMgr->GetPersist();
 }
 
 
 
-void SwDoc::SetPersist( SvPersist* pPersist )
+void SwDoc::SetPersist( SfxObjectShell* pPersist )
 {
     if( !pDocShell )
     {
