@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2001-11-29 13:44:48 $
+#   last change: $Author: mtg $ $Date: 2002-01-29 15:30:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,8 +85,7 @@ SLOFILES= \
         $(SLO)$/ZipEnumeration.obj	\
         $(SLO)$/ZipFile.obj			\
         $(SLO)$/ZipOutputStream.obj	\
-        $(SLO)$/XMemoryStream.obj 	\
-        $(SLO)$/XFileStream.obj	
+        $(SLO)$/XUnbufferedStream.obj
 
 # --- UNO stuff ---------------------------------------------------
 
