@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:32:58 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
-#include <com/sun/star/form/XFormsSupplier.hpp>
+#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER2_HPP_
+#include <com/sun/star/form/XFormsSupplier2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -692,8 +692,9 @@ void SwXMLExport::_ExportContent()
             GetTextParagraphExport()->PreventExportOfControlsInMuteSections(
                 xIAPage, GetFormExport() );
 
-            Reference<XFormsSupplier> xFormSupp(xPage, UNO_QUERY);
-            if (xFormSupp->getForms()->hasElements())
+            Reference<XFormsSupplier2> xFormSupp(xPage, UNO_QUERY);
+            DBG_ASSERT( xFormSupp.is(), "SwXMLExport::_ExportContent: no forms supplier?" );
+            if ( xFormSupp.is() && xFormSupp->hasForms() )
             {
                 ::xmloff::OOfficeFormsExport aOfficeForms(*this);
 
