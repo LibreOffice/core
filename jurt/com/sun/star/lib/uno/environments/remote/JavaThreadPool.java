@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaThreadPool.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2002-06-25 07:16:52 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * This class implements a java thread pool.
  * <p>
- * @version     $Revision: 1.9 $ $ $Date: 2002-06-25 07:16:52 $
+ * @version     $Revision: 1.10 $ $ $Date: 2003-10-09 10:10:15 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
@@ -92,6 +92,10 @@ public class JavaThreadPool implements IThreadPool {
         _javaThreadPoolFactory = javaThreadPoolFactory;
     }
 
+    public ThreadId getThreadId() {
+        return JavaThreadPoolFactory.getThreadId();
+    }
+
     public Object attach( ThreadId threadId )
     {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".attach - id:" + threadId);
@@ -105,7 +109,7 @@ public class JavaThreadPool implements IThreadPool {
     }
 
     public void attach() {
-        attach( _javaThreadPoolFactory.getThreadId() );
+        attach( getThreadId() );
     }
 
     public void detach( Object handle, ThreadId id )
@@ -114,13 +118,13 @@ public class JavaThreadPool implements IThreadPool {
     }
 
     public void detach() {
-        ThreadId threadId =  _javaThreadPoolFactory.getThreadId();
+        ThreadId threadId =  getThreadId();
         detach(_javaThreadPoolFactory.getJobQueue(threadId), threadId );
     }
 
 
     public Object enter( ) throws Throwable {
-        ThreadId threadId = _javaThreadPoolFactory.getThreadId();
+        ThreadId threadId = getThreadId();
         return enter( _javaThreadPoolFactory.getJobQueue( threadId ), threadId  );
     }
 
