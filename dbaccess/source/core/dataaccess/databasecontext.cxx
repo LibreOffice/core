@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-08 16:02:50 $
+ *  last change: $Author: fs $ $Date: 2000-11-10 10:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,6 @@
 #include "apitools.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
-#include <com/sun/star/frame/XConfigManager.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
