@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-30 11:17:16 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 12:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,12 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#endif
 
 
 
@@ -123,56 +129,8 @@ namespace dbaccess
                             public OSubComponent,
                             public OQueryComposer_BASE
     {
-        ::connectivity::OSQLParser              m_aSqlParser;
-        ::connectivity::OSQLParseTreeIterator   m_aSqlIterator;
-        ::std::vector<OPrivateColumns*>         m_aColumnsCollection; // used for columns and parameters of old queries
-        ::std::vector<OPrivateTables*>          m_aTablesCollection;
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>              m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>        m_xMetaData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xTableSupplier;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xColumns;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >        m_xTypeConverter;
-
-
-
-        ::connectivity::OSQLParseNode*          m_pSqlParseNode;
-
-        OPrivateColumns*                        m_pColumns;     // currently used columns
-        OPrivateColumns*                        m_pParameters;  // currently used parameters
-        OPrivateTables*                         m_pTables;      // currently used tables
-
-        ::rtl::OUString                         m_aQuery;
-        ::rtl::OUString                         m_aFilter;  // currently used where clause
-        ::rtl::OUString                         m_aOrder;   // currently used order by clause
-
-        ::rtl::OUString                         m_aWorkSql;
-        ::rtl::OUString                         m_aOrgFilter;
-        ::rtl::OUString                         m_aOrgOrder;
-        ::rtl::OUString                         m_sDecimalSep;
-        ::com::sun::star::lang::Locale          m_aLocale;
-        sal_Int32                               m_nBoolCompareMode; // how to compare bool values
-
-
-        sal_Bool setORCriteria(::connectivity::OSQLParseNode* pCondition,
-            ::std::vector< ::std::vector < ::com::sun::star::beans::PropertyValue > >& rFilters, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const;
-        sal_Bool setANDCriteria(::connectivity::OSQLParseNode* pCondition,
-            ::std::vector < ::com::sun::star::beans::PropertyValue > & rFilters, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const;
-        sal_Bool setComparsionPredicate(::connectivity::OSQLParseNode* pCondition,
-            ::std::vector < ::com::sun::star::beans::PropertyValue > & rFilters, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const;
-
-        ::rtl::OUString getColumnName(::connectivity::OSQLParseNode* pColumnRef) const;
-        void resetIterator(const ::rtl::OUString& aSql);
-        ::rtl::OUString getComposedSort() const;
-        ::rtl::OUString getComposedFilter() const;
-        ::rtl::OUString getGroupBy() const;
-        ::rtl::OUString getHaving() const;
-        ::rtl::OUString createNewStatement() const;
-        ::rtl::OUString getTableAlias(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column ) const;
-        // clears all Columns,Parameters and tables and insert it to their vectors
-        void clearCurrentCollections();
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer> m_xAnalyzer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer> m_xComposer;
 
     protected:
         virtual ~OQueryComposer();
@@ -182,16 +140,6 @@ namespace dbaccess
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory);
 
-
-        enum BoolComparison
-        {
-            BOOL_COMPARISON_DEFAULT = 0, // column = 0, column = 1
-            BOOL_COMPARISON_SQL     = 1, // column Is true, column Is false
-            BOOL_COMPARISON_MISC    = 2, // column = false, column = true
-            BOOL_COMPARISON_ACCESS  = 3  // column = 0, column = -1
-        };
-
-        void SAL_CALL disposing(void);
         // ::com::sun::star::lang::XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
