@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin5.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 16:08:14 $
+ *  last change: $Author: sab $ $Date: 2002-01-18 10:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,16 @@
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
+#endif
+
+#ifndef SC_VIEWUNO_HXX
+#include "viewuno.hxx"
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETVIEW_HPP_
+#include <com/sun/star/sheet/XSpreadsheetView.hpp>
+#endif
+#ifndef _SC_ACCESSIBILITY_ACCESSIBLEDOCUMENT_HXX
+#include "AccessibleDocument.hxx"
 #endif
 
 
@@ -397,3 +407,11 @@ void ScGridWindow::HideNoteMarker()
     DELETEZ(pNoteMarker);
 }
 
+com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
+    ScGridWindow::CreateAccessible()
+{
+    com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheetView> xSheetView =
+        new ScTabViewObj(pViewData->GetViewShell());
+
+    return new ScAccessibleDocument(GetParent()->GetAccessible(), xSheetView);
+}
