@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propimp0.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-31 10:34:35 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,4 +263,34 @@ sal_Bool XMLTextAnimationStepPropertyHdl::exportXML(
     return bRet;
 }
 
+//////////////////////////////////////////////////////////////////////////////
 
+#include "sdxmlexp_impl.hxx"
+
+XMLDateTimeFormatHdl::XMLDateTimeFormatHdl( SvXMLExport* pExport )
+: mpExport( pExport )
+{
+}
+
+XMLDateTimeFormatHdl::~XMLDateTimeFormatHdl()
+{
+}
+
+sal_Bool XMLDateTimeFormatHdl::importXML( const rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    rValue <<= rStrImpValue;
+    return true;
+}
+
+sal_Bool XMLDateTimeFormatHdl::exportXML( rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Int32 nNumberFormat = 0;
+    if( mpExport && (rValue >>= nNumberFormat) )
+    {
+        mpExport->addDataStyle( nNumberFormat );
+        rStrExpValue = mpExport->getDataStyleName( nNumberFormat );
+        return sal_True;
+    }
+
+    return sal_False;
+}
