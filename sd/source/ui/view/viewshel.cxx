@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:48:54 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@
 #include "ViewTabBar.hxx"
 #include <svx/dialogs.hrc>
 #include <svx/extrusionbar.hxx>
+#include <svx/fontworkbar.hxx>
 
 // #96090#
 #ifndef _SFXSLSTITM_HXX
@@ -1759,6 +1760,11 @@ SfxShell* ViewShellObjectBarFactory::CreateShell (
 
             case RID_SVX_EXTRUSION_BAR:
                 pShell = new ::svx::ExtrusionBar(
+                    &mrViewShell.GetViewShellBase());
+                break;
+
+            case RID_SVX_FONTWORK_BAR:
+                pShell = new ::svx::FontworkBar(
                     &mrViewShell.GetViewShellBase());
                 break;
 
