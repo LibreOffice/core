@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-25 14:06:21 $
+ *  last change: $Author: cmc $ $Date: 2001-05-21 09:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2317,59 +2317,66 @@ void WW8PLCFx_Cp_FKP::GetSprms( WW8PLCFxDesc* p )
                 }
                 else
                 {
-                    /*
-                    If the FKP FC that was found was greater than the FC
-                    of the end of the piece, scan piece by piece toward
-                    the end of the document until a piece is found that
-                    contains a  paragraph end mark.
-                    */
-
-                    /*
-                    It's possible to check if a piece contains a paragraph
-                    mark by using the FC of the beginning of the piece to
-                    search in the FKPs for the smallest FC in the FKP rgfc
-                    that is greater than the FC of the beginning of the
-                    piece. If the FC found is less than or equal to the
-                    limit FC of the piece, then the character that ends
-                    the paragraph is the character immediately before the
-                    FKP fc
-                    */
-
-                    (*pPieceIter)++;
-
-                    for (;pPieceIter->GetIdx() < pPieceIter->GetIMax();
-                        (*pPieceIter)++)
+                    if (ePLCF == CHP)
                     {
-                        if( !pPieceIter->Get( nCpStart, nCpEnd, pData ) )
+                        p->nEndPos = nCpEnd;
+                    }
+                    else
+                    {
+                        /*
+                        If the FKP FC that was found was greater than the FC
+                        of the end of the piece, scan piece by piece toward
+                        the end of the document until a piece is found that
+                        contains a  paragraph end mark.
+                        */
+
+                        /*
+                        It's possible to check if a piece contains a paragraph
+                        mark by using the FC of the beginning of the piece to
+                        search in the FKPs for the smallest FC in the FKP rgfc
+                        that is greater than the FC of the beginning of the
+                        piece. If the FC found is less than or equal to the
+                        limit FC of the piece, then the character that ends
+                        the paragraph is the character immediately before the
+                        FKP fc
+                        */
+
+                        (*pPieceIter)++;
+
+                        for (;pPieceIter->GetIdx() < pPieceIter->GetIMax();
+                            (*pPieceIter)++)
                         {
-                            ASSERT( !this, "piece iter broken!" );
-                            break;
-                        }
-                        BOOL bIsUnicode = FALSE;
-                        INT32 nFcStart = SVBT32ToLong(((WW8_PCD*)pData)->fc);
+                            if( !pPieceIter->Get( nCpStart, nCpEnd, pData ) )
+                            {
+                                ASSERT( !this, "piece iter broken!" );
+                                break;
+                            }
+                            BOOL bIsUnicode = FALSE;
+                            INT32 nFcStart = SVBT32ToLong(((WW8_PCD*)pData)->fc);
 
-                        if( 8 <= GetVersion() )
-                        {
-                            nFcStart =
-                                WW8PLCFx_PCD::TransformPieceAddress(
-                                nFcStart,bIsUnicode );
-                        }
-                        nLimitFC = nFcStart + (nCpEnd - nCpStart) *
-                            (bIsUnicode ? 2 : 1);
+                            if( 8 <= GetVersion() )
+                            {
+                                nFcStart =
+                                    WW8PLCFx_PCD::TransformPieceAddress(
+                                    nFcStart,bIsUnicode );
+                            }
+                            nLimitFC = nFcStart + (nCpEnd - nCpStart) *
+                                (bIsUnicode ? 2 : 1);
 
-                        //if it doesn't exist, skip it
-                        if (!SeekPos(nCpStart))
-                            continue;
+                            //if it doesn't exist, skip it
+                            if (!SeekPos(nCpStart))
+                                continue;
 
-                        WW8_FC nOne,nSmallest;
-                        p->pMemPos = WW8PLCFx_Fc_FKP::GetSprms(
-                            nOne, nSmallest, p->nSprmsLen );
+                            WW8_FC nOne,nSmallest;
+                            p->pMemPos = WW8PLCFx_Fc_FKP::GetSprms(
+                                nOne, nSmallest, p->nSprmsLen );
 
-                        if (nSmallest <= nLimitFC)
-                        {
-                            p->nEndPos = nCpEnd -
-                                (nLimitFC-nSmallest) / (bIsUnicode ? 2 : 1);
-                            break;
+                            if (nSmallest <= nLimitFC)
+                            {
+                                p->nEndPos = nCpEnd -
+                                    (nLimitFC-nSmallest) / (bIsUnicode ? 2 : 1);
+                                break;
+                            }
                         }
                     }
                 }
@@ -6365,11 +6372,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.14 2001-04-25 14:06:21 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.15 2001-05-21 09:21:16 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.14  2001/04/25 14:06:21  cmc
+      ##775## ##776## Update PLCF save/restore for cp based era
+
       Revision 1.13  2001/04/20 14:52:14  cmc
       New algorithm to find character and paragraph properties in fastsave documents
 
