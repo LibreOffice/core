@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sj $ $Date: 2001-12-18 14:50:05 $
+ *  last change: $Author: sj $ $Date: 2002-04-29 12:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,6 +436,8 @@ void EscherPropertyContainer::CreateGradientProperties(
         }
         break;
     }
+    if ( !nAngle )
+        nFirstColor ^= 1;
     AddOpt( ESCHER_Prop_fillType, ESCHER_FillShadeScale );
     AddOpt( ESCHER_Prop_fillAngle, ( ( -3600 + nAngle ) << 16 ) / 10 );
     AddOpt( ESCHER_Prop_fillColor, GetGradientColor( pGradient, nFirstColor ) );
