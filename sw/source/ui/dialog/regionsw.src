@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 14:10:47 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
     Text[ chinese_traditional ] = "°Ï°ì(~S)";   \
     Text[ arabic ] = "ÇáäØÇŞ";  \
     Text[ greek ] = "Å~íüôçôá"; \
-    Text[ korean ] = "±¸¿ª(~S)";    \
+    Text[ korean ] = "±¸¿ª";    \
     Text[ turkish ] = "Bölüm";
 
 #define CB_HIDE_TEXT \
@@ -112,7 +112,7 @@
     Text[ chinese_traditional ] = "Áô¤J(~H)";   \
     Text[ arabic ] = "ãÎİí";    \
     Text[ greek ] = "Á~ğüêñõøç";    \
-    Text[ korean ] = "¼û±â±â(~H)";  \
+    Text[ korean ] = "¼û±â±â";  \
     Text[ turkish ] = "Gizle";
 
 #define CB_CONDITION_TEXT  \
@@ -134,7 +134,7 @@
     Text[ chinese_traditional ] = "¦³±ø¥ó(~W)"; \
     Text[ arabic ] = "ÈÔÑØ";    \
     Text[ greek ] = "Ìå óõíèŞê~ç";  \
-    Text[ korean ] = "Á¶°Ç°ú ÇÔ²²(~W)"; \
+    Text[ korean ] = "Á¶°Ç°ú ÇÔ²²"; \
     Text[ turkish ] = "Koşul";
 
 #define CB_FILE_TEXT \
@@ -150,13 +150,13 @@
     Text [ portuguese_brazilian ] = "~Verknüpfung" ; \
     Text [ portuguese ] = "~Ligação" ; \
     Text[ chinese_simplified ] = "Á´½Ó(~L)";    \
-    Text[ russian ] = "Ññûëêà"; \
+    Text[ russian ] = "~Ñâÿçü"; \
     Text[ polish ] = "£¹cze";   \
     Text[ japanese ] = "Øİ¸(~L)";   \
     Text[ chinese_traditional ] = "±¶®|(~L)";   \
     Text[ arabic ] = "ÇÑÊÈÇØ";  \
     Text[ greek ] = "~Óıíäåóç"; \
-    Text[ korean ] = "¿¬°á(~L)";    \
+    Text[ korean ] = "¿¬°á";    \
     Text[ turkish ] = "Bağlantı";
 
 #define CB_DDE_TEXT \
@@ -178,7 +178,7 @@
     Text[ chinese_traditional ] = "DD~E";   \
     Text[ arabic ] = "DDE~";    \
     Text[ greek ] = "~DDE"; \
-    Text[ korean ] = "DD~E";    \
+    Text[ korean ] = "DDE"; \
     Text[ turkish ] = "DDE";
 
 #define FT_DDE_TEXT \
@@ -200,7 +200,7 @@
     Text[ chinese_traditional ] = "~DDE - «ü¥O";    \
     Text[ arabic ] = "ÃãÑ DDE"; \
     Text[ greek ] = "~ÅíôïëŞ DDE";  \
-    Text[ korean ] = "DDE ¸í·É(~C)";    \
+    Text[ korean ] = "DDE~£­¸í·É";  \
     Text[ turkish ] = "DDE komutu";
 
 #define FT_FILE_TEXT \
@@ -222,7 +222,7 @@
     Text[ chinese_traditional ] = "ÀÉ®×¦WºÙ(~F)";   \
     Text[ arabic ] = "ÇÓã Çáãáİ";   \
     Text[ greek ] = "¼íï~ìá áñ÷åßïõ";   \
-    Text[ korean ] = "ÆÄÀÏ ÀÌ¸§(~F)";   \
+    Text[ korean ] = "ÆÄÀÏ ÀÌ¸§";   \
     Text[ turkish ] = "D~osya adı";
 
 #define PB_FILE_TEXT \
@@ -396,7 +396,7 @@ ModalDialog MD_EDIT_REGION
         Text[ chinese_traditional ] = "¦WºÙ(~N)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§(~N)";
+        Text[ korean ] = "ÀÌ¸§";
         Text[ turkish ] = "~Ad";
     };
     Edit ED_RANAME
@@ -543,7 +543,7 @@ ModalDialog MD_EDIT_REGION
         Text[ chinese_traditional ] = "¨Ï¥Î±K½X«OÅ@°Ï°ì(~A)";
         Text[ arabic ] = "äØÇŞÇÊ ãÍãíÉ ÈßáãÉ ÓÑ";
         Text[ greek ] = "Ğåñéï÷İò ìå ğñïóôáóßá êùäéêïı ğñüóâáóçò";
-        Text[ korean ] = "ÆĞ½º¿öµå°¡ º¸È£µÇ¾ú½À´Ï´Ù.(~A)";
+        Text[ korean ] = "ÆĞ½º¿öµå º¸È£µÈ¡¡¿µ¿ª(~A)";
         Text[ turkish ] = "Şifre korumalı bölümler";
     };
     GroupBox GB_EDIT_SECTION
@@ -721,7 +721,7 @@ InfoBox REG_WRONG_PASSWORD
     Message[ chinese_traditional ] = "¿é¤Jªº±K½XµL®Ä¡C";
     Message[ arabic ] = "Êã ÅÏÎÇá ßáãÉ ÓÑ ÛíÑ ÕÍíÍÉ.";
     Message[ greek ] = "ÅéóáãùãŞ Üêõñïõ êùäéêïı ğñüóâáóçò.";
-    Message[ korean ] = "ÁöÁ¤µÈ ÆĞ½º¿öµå°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
+    Message[ korean ] = "Æ²¸° ÆĞ½º¿öµå°¡¡¡ÀÔ·ÂµÇ¾ú½À´Ï´Ù.";
     Message[ turkish ] = "Girilen şifre yanlış.";
 };
 InfoBox REG_WRONG_PASSWD_REPEAT
@@ -909,7 +909,7 @@ TabDialog DLG_INSERT_SECTION
     Text[ greek ] = "ĞñïóèŞêç ôïìİá";
     Text[ polish ] = "Wstaw obszar";
     Text[ japanese ] = "”ÍˆÍ‚Ì‘}“ü";
-    Text[ korean ] = "¹üÀ§ »ğÀÔ";
+    Text[ korean ] = "±¸¿ª »ğÀÔ";
     Text[ chinese_simplified ] = "²åÈëÇøÓò";
     Text[ chinese_traditional ] = "´¡¤J°Ï°ì";
     Text[ arabic ] = "ÅÏÑÇÌ äØÇŞ";
@@ -1221,7 +1221,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ japanese ] = "‹r’";
         Text[ korean ] = "°¢ÁÖ";
         Text[ chinese_simplified ] = "×¢½Å";
-        Text[ chinese_traditional ] = "ª`¸}";
+        Text[ chinese_traditional ] = "µù¸}";
         Text[ arabic ] = "ÍæÇÔí ÓİáíÉ";
         Text[ turkish ] = "Altbilgi";
     };
@@ -1261,7 +1261,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text [ English ] = "Restart number" ;
         Text[ english_us ] = "~Restart numbering";
         Text[ portuguese ] = "~Reiniciar numeração";
-        Text[ russian ] = "Ïåğåçàïóñê íóìåğàöèè";
+        Text[ russian ] = "Íà÷àëî íóìåğàöèè";
         Text[ greek ] = "Åğáíåêêß~íçóç áñéèìïı";
         Text[ dutch ] = "~Nieuwe nummering";
         Text[ french ] = "Numérotation ~séparée";
@@ -1272,7 +1272,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ polish ] = "Uruchom ponownie numer";
         Text[ portuguese_brazilian ] = "own number sequence";
         Text[ japanese ] = "”Ô†‚ğV‚µ‚­n‚ß‚é(~R)";
-        Text[ korean ] = "¹øÈ£ ¸Å±â±â ´Ù½Ã ½ÃÀÛ(~R)";
+        Text[ korean ] = "¹øÈ£¸Å±â±â ´Ù½Ã ½ÃÀÛ(~R)";
         Text[ chinese_simplified ] = "ÖØĞÂ¿ªÊ¼±àºÅ";
         Text[ chinese_traditional ] = "­«·s½s¸¹";
         Text[ arabic ] = "ÅÚÇÏÉ ÈÏÁ ÇáÊÑŞíã";
@@ -1336,7 +1336,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ polish ] = "Format w³asny";
         Text[ portuguese_brazilian ] = "Own format";
         Text[ japanese ] = "”CˆÓ‚Ì‘®(~F)";
-        Text[ korean ] = "°³ÀÎ ¼­½Ä(~F)";
+        Text[ korean ] = "°íÀ¯ ¼­½Ä(~F)";
         Text[ chinese_simplified ] = "×Ô¶¨µÄ¸ñÊ½";
         Text[ chinese_traditional ] = "¦Û­q®æ¦¡";
         Text[ arabic ] = "ÊäÓíŞ ÎÇÕ";
@@ -1488,7 +1488,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text [ English ] = "Restart number" ;
         Text[ english_us ] = "~Restart numbering";
         Text[ portuguese ] = "~Reiniciar numeração";
-        Text[ russian ] = "Ïåğåçàïóñê íóìåğàöèè";
+        Text[ russian ] = "Íà÷àëî íóìåğàöèè";
         Text[ greek ] = "Åğáíåêêßíç~óç áñéèìïı";
         Text[ dutch ] = "Nieuwe n~ummering";
         Text[ french ] = "Numérotation ~séparée";
@@ -1499,7 +1499,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ polish ] = "Uruchom ponownie numer";
         Text[ portuguese_brazilian ] = "own number sequence";
         Text[ japanese ] = "”Ô†‚ğV‚µ‚­n‚ß‚é(~R)";
-        Text[ korean ] = "¹øÈ£ ¸Å±â±â ´Ù½Ã ½ÃÀÛ(~R)";
+        Text[ korean ] = "¹øÈ£¸Å±â±â ´Ù½Ã ½ÃÀÛ(~R)";
         Text[ chinese_simplified ] = "ÖØĞÂ¿ªÊ¼±àºÅ";
         Text[ chinese_traditional ] = "­«·s½s¸¹";
         Text[ arabic ] = "ÅÚÇÏÉ ÈÏÁ ÇáÊÑŞíã";
