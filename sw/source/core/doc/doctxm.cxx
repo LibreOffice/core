@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-31 11:07:39 $
+ *  last change: $Author: os $ $Date: 2000-11-06 07:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1358,6 +1358,8 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
     for( ; pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
     {
         const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
+        if(!pTxtFld)
+            continue;
         const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
