@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-12 19:41:41 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 10:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,29 +181,6 @@ drawing::HomogenMatrix createTransformationMatrix()
     aM4.Scale(1.0, 1.0, ZDIRECTION);
     drawing::HomogenMatrix aHM = Matrix4DToHomogenMatrix(aM4);
     return aHM;
-}
-
-ShapeAppearance getDefaultStyle( sal_Int32 nStyle )
-{
-    switch(nStyle%8)
-    {
-        case 1:
-            return ShapeAppearance( 0, 0, GEOMETRY_CYLINDER, SYMBOL_DIAMOND );
-        case 2:
-            return ShapeAppearance( 0, 0, GEOMETRY_PYRAMID, SYMBOL_ARROW_DOWN );
-        case 3:
-            return ShapeAppearance( 0, 0, GEOMETRY_CONE, SYMBOL_ARROW_UP );
-        case 4:
-            return ShapeAppearance( 0, 0, GEOMETRY_CUBOID, SYMBOL_ARROW_RIGHT );
-        case 5:
-            return ShapeAppearance( 0, 0, GEOMETRY_CYLINDER, SYMBOL_ARROW_LEFT );
-        case 6:
-            return ShapeAppearance( 0, 0, GEOMETRY_PYRAMID, SYMBOL_BOWTIE );
-        case 7:
-            return ShapeAppearance( 0, 0, GEOMETRY_CONE, SYMBOL_SANDGLASS );
-        default:
-            return ShapeAppearance( 0, 0, GEOMETRY_CUBOID, SYMBOL_SQUARE );
-    }
 }
 
 uno::Reference< drawing::XShapes > createDiagram(
@@ -422,7 +399,7 @@ void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysLi
                 {
                     uno::Reference< XDataSeries > xDataSeries( aSeriesList[nS], uno::UNO_QUERY );
 
-                    VDataSeries* pTestSeries = new VDataSeries( xDataSeries, getDefaultStyle(nS) );
+                    VDataSeries* pTestSeries = new VDataSeries( xDataSeries );
                     //virtual void addSeries( VDataSeries* pSeries, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
                     sal_Int32 nXSlot2 = 0;
                     if(aYStackMode==StackMode_NONE)
