@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:49:14 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifdef DEBUG
 
+#include <hash_map>
+#include <tox.hxx>
+
 class String;
 class SwNode;
 class SwTxtAttr;
@@ -105,6 +108,8 @@ const char * dbg_out(const SwPaM & rPam);
 const char * dbg_out(const SwNodeNum & rNum);
 const char * dbg_out(const SwUndos & rUndos);
 const char * dbg_out(const SwRewriter & rRewriter);
-
+const char * dbg_out(const SwNumRuleTbl & rTbl);
+const char * dbg_out(const SwFormToken & rToken);
+const char * dbg_out(const SwFormTokens & rTokens);
 #endif // DEBUG
 #endif // __DBGOUTSW_HXX
