@@ -28,7 +28,7 @@
   <dlg:menulist dlg:id="lstSelection" dlg:tab-index="9" dlg:left="170" dlg:top="96" dlg:width="90" dlg:height="52" dlg:page="1" dlg:help-url="HID:34666" dlg:multiselection="true">
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="Euro.ConvertRun.SelectListItem" script:language="StarBasic"/>
   </dlg:menulist>
-  <dlg:checkbox dlg:id="chkComplete" dlg:tab-index="10" dlg:left="12" dlg:top="43" dlg:width="129" dlg:height="10" dlg:page="1" dlg:help-url="HID:34661" dlg:value="chkComplete" dlg:checked="false">
+  <dlg:checkbox dlg:id="chkComplete" dlg:tab-index="10" dlg:left="12" dlg:top="43" dlg:width="129" dlg:height="10" dlg:page="1" dlg:help-url="HID:34661" dlg:value="chkComplete" dlg:checked="true">
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="Euro.ConvertRun.RetrieveEnableValue" script:language="StarBasic"/>
   </dlg:checkbox>
   <dlg:text dlg:id="lblHint" dlg:tab-index="11" dlg:left="6" dlg:top="164" dlg:width="258" dlg:height="22" dlg:value="lblHint" dlg:multiline="true"/>
@@ -52,7 +52,7 @@
    <dlg:radio dlg:id="optSingleFile" dlg:tab-index="20" dlg:left="12" dlg:top="51" dlg:width="146" dlg:height="10" dlg:page="2" dlg:help-url="HID:34667" dlg:value="optSingleFile">
     <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Euro.AutoPilotRun.SwapExtent" script:language="StarBasic"/>
    </dlg:radio>
-   <dlg:radio dlg:id="optWholeDir" dlg:tab-index="21" dlg:left="12" dlg:top="65" dlg:width="146" dlg:height="10" dlg:page="2" dlg:help-url="HID:34668" dlg:value="optWholeDir">
+   <dlg:radio dlg:id="optWholeDir" dlg:tab-index="21" dlg:left="12" dlg:top="65" dlg:width="146" dlg:height="10" dlg:page="2" dlg:help-url="HID:34668" dlg:value="optWholeDir" dlg:checked="true">
     <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Euro.AutoPilotRun.SwapExtent" script:language="StarBasic"/>
    </dlg:radio>
   </dlg:radiogroup>

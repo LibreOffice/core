@@ -23,6 +23,7 @@ Sub Main()
 		InitializeConverter(oDocument.CharLocale, 1)
 		GetPreSelectedRange()
 		If GoOn Then
+			DialogConvert.GetControl(&quot;chkComplete&quot;).SetFocus()	
 			DialogConvert.Execute
 		Else
 			DialogConvert.Dispose

@@ -34,6 +34,7 @@ Dim i As Integer
 		InitializeConverter(oLocale, 2)
 		ToggleGoOnButton()
 		DialogModel.cmdGoOn.DefaultButton = True
+		DialogConvert.GetControl(&quot;optWholeDir&quot;).SetFocus()
 		DialogConvert.Execute
 	End If
 End Sub
