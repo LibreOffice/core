@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDataPilotControl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-28 06:51:48 $
+ *  last change: $Author: sab $ $Date: 2002-11-05 07:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,12 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL grabFocus(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getForeground(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getBackground(  )
         throw (::com::sun::star::uno::RuntimeException);
 
     ///=====  XAccessibleContext  ==============================================
@@ -400,6 +406,39 @@ void SAL_CALL ScAccessibleDataPilotControl::grabFocus(  )
         mpDPFieldWindow->GrabFocus();
 }
 
+sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getForeground(  )
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    IsObjectValid();
+    sal_Int32 nColor(0);
+    if (mpDPFieldWindow)
+    {
+        nColor = mpDPFieldWindow->GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
+    }
+    return nColor;
+}
+
+sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getBackground(  )
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    IsObjectValid();
+    sal_Int32 nColor(0);
+    if (mpDPFieldWindow)
+    {
+        if (mpDPFieldWindow->GetType() == TYPE_SELECT)
+        {
+            nColor = mpDPFieldWindow->GetSettings().GetStyleSettings().GetFaceColor().GetColor();
+        }
+        else
+        {
+            nColor = mpDPFieldWindow->GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+        }
+    }
+    return nColor;
+}
+
     ///=====  XAccessibleContext  ==============================================
 
 sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getAccessibleChildCount(void)
@@ -599,6 +638,32 @@ void SAL_CALL ScAccessibleDataPilotButton::grabFocus(  )
     {
         mpDPFieldWindow->GrabFocusWithSel(getAccessibleIndexInParent());
     }
+}
+
+sal_Int32 SAL_CALL ScAccessibleDataPilotButton::getForeground(  )
+throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    IsObjectValid();
+    sal_Int32 nColor(0);
+    if (mpDPFieldWindow)
+    {
+        nColor = mpDPFieldWindow->GetSettings().GetStyleSettings().GetButtonTextColor().GetColor();
+    }
+    return nColor;
+}
+
+sal_Int32 SAL_CALL ScAccessibleDataPilotButton::getBackground(  )
+throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    IsObjectValid();
+    sal_Int32 nColor(0);
+    if (mpDPFieldWindow)
+    {
+        nColor = mpDPFieldWindow->GetSettings().GetStyleSettings().GetFaceColor().GetColor();
+    }
+    return nColor;
 }
 
     ///=====  XAccessibleContext  ==============================================

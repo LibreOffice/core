@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-04 13:56:55 $
+ *  last change: $Author: sab $ $Date: 2002-11-05 07:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,14 @@ public:
     explicit                    ScAccessibleCsvRuler( ScCsvRuler& rRuler );
     virtual                     ~ScAccessibleCsvRuler();
 
+    // XAccessibleComponent -----------------------------------------------------
+
+    virtual sal_Int32 SAL_CALL getForeground(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getBackground(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
     // XAccessibleContext -----------------------------------------------------
 
     /** Returns the child count (the ruler does not have children). */
@@ -385,6 +393,12 @@ public:
     /** Returns the cell at the specified point. */
     virtual XAccessibleRef SAL_CALL getAccessibleAt( const AwtPoint& rPoint )
         throw( ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Int32 SAL_CALL getForeground(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getBackground(  )
+        throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleContext -----------------------------------------------------
 
@@ -629,6 +643,12 @@ public:
 
     /** Sets the focus to the column of this cell. */
     virtual void SAL_CALL grabFocus() throw( ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Int32 SAL_CALL getForeground(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getBackground(  )
+        throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleContext -----------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-30 08:39:34 $
+ *  last change: $Author: sab $ $Date: 2002-11-05 07:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef SC_HINTS_HXX
 #include "hints.hxx"
 #endif
+#ifndef SC_SCMOD_HXX
+#include "scmod.hxx"
+#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
@@ -107,6 +110,9 @@
 #endif
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
+#endif
+#ifndef _SVX_COLORCFG_HXX
+#include <svx/colorcfg.hxx>
 #endif
 
 #include <algorithm>
@@ -573,6 +579,20 @@ void SAL_CALL ScAccessibleSpreadsheet::grabFocus(  )
         if (xAccessibleComponent.is())
             xAccessibleComponent->grabFocus();
     }
+}
+
+sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getForeground(  )
+        throw (uno::RuntimeException)
+{
+    return COL_BLACK;
+}
+
+sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getBackground(  )
+        throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    IsObjectValid();
+    return SC_MOD()->GetColorConfig().GetColorValue( ::svx::DOCCOLOR ).nColor;
 }
 
     //=====  XAccessibleContext  ==============================================

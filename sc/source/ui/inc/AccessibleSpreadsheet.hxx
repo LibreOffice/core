@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 11:43:29 $
+ *  last change: $Author: sab $ $Date: 2002-11-05 07:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,12 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL grabFocus(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getForeground(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getBackground(  )
         throw (::com::sun::star::uno::RuntimeException);
 
     ///=====  XAccessibleContext  ==============================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-04 13:57:40 $
+ *  last change: $Author: sab $ $Date: 2002-11-05 07:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,12 @@
 #include "scresid.hxx"
 #endif
 #include "sc.hrc"
+#ifndef SC_SCMOD_HXX
+#include "scmod.hxx"
+#endif
+#ifndef _SVX_COLORCFG_HXX
+#include <svx/colorcfg.hxx>
+#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -472,6 +478,23 @@ ScAccessibleCsvRuler::~ScAccessibleCsvRuler()
     implDispose();
 }
 
+// XAccessibleComponent -----------------------------------------------------
+
+sal_Int32 SAL_CALL ScAccessibleCsvRuler::getForeground(  )
+    throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ensureAlive();
+    return implGetRuler().GetSettings().GetStyleSettings().GetLabelTextColor().GetColor();
+}
+
+sal_Int32 SAL_CALL ScAccessibleCsvRuler::getBackground(  )
+    throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ensureAlive();
+    return implGetRuler().GetSettings().GetStyleSettings().GetFaceColor().GetColor();
+}
 
 // XAccessibleContext ---------------------------------------------------------
 
@@ -987,6 +1010,21 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleAt( const Aw
     return xRet;
 }
 
+sal_Int32 SAL_CALL ScAccessibleCsvGrid::getForeground(  )
+throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ensureAlive();
+    return implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor().GetColor();
+}
+
+sal_Int32 SAL_CALL ScAccessibleCsvGrid::getBackground(  )
+throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ensureAlive();
+    return SC_MOD()->GetColorConfig().GetColorValue( ::svx::DOCCOLOR ).nColor;
+}
 
 // XAccessibleContext ---------------------------------------------------------
 
@@ -1520,6 +1558,21 @@ void SAL_CALL ScAccessibleCsvCell::grabFocus() throw( RuntimeException )
     rGrid.Execute( CSVCMD_MOVEGRIDCURSOR, rGrid.GetColumnPos( mnColumn ) );
 }
 
+sal_Int32 SAL_CALL ScAccessibleCsvCell::getForeground(  )
+throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ensureAlive();
+    return implGetGrid().GetSettings().GetStyleSettings().GetButtonTextColor().GetColor();
+}
+
+sal_Int32 SAL_CALL ScAccessibleCsvCell::getBackground(  )
+throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ensureAlive();
+    return SC_MOD()->GetColorConfig().GetColorValue( ::svx::DOCCOLOR ).nColor;
+}
 
 // XAccessibleContext -----------------------------------------------------
 

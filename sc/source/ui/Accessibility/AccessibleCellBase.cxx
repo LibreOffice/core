@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-16 09:40:15 $
+ *  last change: $Author: sab $ $Date: 2002-11-05 07:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,12 +88,22 @@
 #ifndef SC_SC_HRC
 #include "sc.hrc"
 #endif
+#ifndef SC_UNONAMES_HXX
+#include "unonames.hxx"
+#endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -108,6 +118,7 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
+#include <sfx2/objsh.hxx>
 
 #include <float.h>
 
@@ -151,6 +162,88 @@ sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
             bVisible = sal_False;
     }
     return bVisible;
+}
+
+sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    IsObjectValid();
+    sal_Int32 nColor(0);
+    if (mpDoc)
+    {
+        SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
+        if ( pObjSh )
+        {
+            uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( pObjSh->GetModel(), uno::UNO_QUERY );
+            if ( xSpreadDoc.is() )
+            {
+                uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+                uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
+                if ( xIndex.is() )
+                {
+                    uno::Any aTable = xIndex->getByIndex(maCellAddress.Tab());
+                    uno::Reference<sheet::XSpreadsheet> xTable;
+                    if (aTable>>=xTable)
+                    {
+                        uno::Reference<table::XCell> xCell = xTable->getCellByPosition(maCellAddress.Col(), maCellAddress.Row());
+                        if (xCell.is())
+                        {
+                            uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
+                            if (xCellProps.is())
+                            {
+                                uno::Any aAny = xCellProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CCOLOR)));
+                                aAny >>= nColor;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return nColor;
+}
+
+sal_Int32 SAL_CALL ScAccessibleCellBase::getBackground()
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    IsObjectValid();
+    sal_Int32 nColor(0);
+
+    if (mpDoc)
+    {
+        SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
+        if ( pObjSh )
+        {
+            uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( pObjSh->GetModel(), uno::UNO_QUERY );
+            if ( xSpreadDoc.is() )
+            {
+                uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+                uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
+                if ( xIndex.is() )
+                {
+                    uno::Any aTable = xIndex->getByIndex(maCellAddress.Tab());
+                    uno::Reference<sheet::XSpreadsheet> xTable;
+                    if (aTable>>=xTable)
+                    {
+                        uno::Reference<table::XCell> xCell = xTable->getCellByPosition(maCellAddress.Col(), maCellAddress.Row());
+                        if (xCell.is())
+                        {
+                            uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
+                            if (xCellProps.is())
+                            {
+                                uno::Any aAny = xCellProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLBACK)));
+                                aAny >>= nColor;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return nColor;
 }
 
     //=====  XInterface  =====================================================

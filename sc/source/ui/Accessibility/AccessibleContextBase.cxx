@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-28 07:31:32 $
+ *  last change: $Author: sab $ $Date: 2002-11-05 07:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #endif
 #ifndef _VCL_UNOHELP_HXX
 #include <vcl/unohelp.hxx>
+#endif
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 
 using namespace ::rtl;
@@ -324,15 +327,13 @@ uno::Any SAL_CALL ScAccessibleContextBase::getAccessibleKeyBinding(  )
 sal_Int32 SAL_CALL ScAccessibleContextBase::getForeground(  )
         throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
-    return 0;
+    return COL_BLACK;
 }
 
 sal_Int32 SAL_CALL ScAccessibleContextBase::getBackground(  )
         throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
-    return 0;
+    return COL_WHITE;
 }
 
 //=====  XAccessibleContext  ==================================================
