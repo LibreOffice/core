@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-30 08:32:30 $
+ *  last change: $Author: kso $ $Date: 2000-12-01 08:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,7 +579,7 @@ StringBag OGeneralPage::getInstalledAdabasDBs(const String &_rPath)
     {
         aAdabasConfigDir = ::ucb::Content(sAdabasConfigDir, Reference< ::com::sun::star::ucb::XCommandEnvironment >());
     }
-    catch(::ucb::ContentCreationException&)
+    catch(::com::sun::star::ucb::ContentCreationException&)
     {
         DBG_ERROR("OGeneralPage::OnBrowseConnections: could not create the UCB content for the adabas config directory!");
     }
@@ -1776,6 +1776,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2000/11/30 08:32:30  fs
+ *  #80003# changed some sal_uInt16 to sal_Int32 (need some -1's)
+ *
  *  Revision 1.17  2000/11/29 22:29:40  fs
  *  #80003# implementation of the character set map changed
  *
