@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 12:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,8 +196,8 @@ static void SetRowBorder(SfxItemSet& rSet, const Row &rRow)
 void rtfSections::PrependedInlineNode(const SwPosition &rPos,
     const SwNode &rNode)
 {
-    ASSERT(!maSegments.empty(),
-        "should not be possible, must be at least one segment");
+    ASSERT(!mrReader.IsNewDoc() || !maSegments.empty(),
+        "should not be possible, must be at least one segment in a new document");
     if ((!maSegments.empty()) && (maSegments.back().maStart == rPos.nNode))
         maSegments.back().maStart = SwNodeIndex(rNode);
 }
@@ -225,6 +225,9 @@ void SwRTFParser::ReadTable( int nToken )
     // verhinder Tabelle in Tabelle/Footnote
     SwTwips nTblSz = 0;
     int bReadNewCell = FALSE, bChkExistTbl = FALSE;
+
+
+    enum Limits {eMAXCELLS=64000};
 
     // kein TROWD aber ein TabellenToken -> zwischen TROWD und Tab.Token
     // waren andere Zeichen (siehe Bug 27445.rtf)
@@ -591,14 +594,24 @@ void SwRTFParser::ReadTable( int nToken )
                 ((SfxItemSet&)pFmt->GetAttrSet()).Put( aL );
             }
         }
-        else if( 1 < pLns->Count() && ( rTblSz.GetWidth() != nTblSz
-            || rHoriz.GetHoriOrient() != eAdjust ||
-            ( HORI_LEFT_AND_WIDTH == eAdjust &&
-                nLSpace != pFmt->GetLRSpace().GetLeft() ) ||
-            bHeadlineRepeat != pTableNode->GetTable().IsHeadlineRepeat() ))
+        else if
+            (
+              1 < pLns->Count() &&
+              (
+                rTblSz.GetWidth() != nTblSz ||
+                rHoriz.GetHoriOrient() != eAdjust ||
+                (
+                  HORI_LEFT_AND_WIDTH == eAdjust &&
+                  nLSpace != pFmt->GetLRSpace().GetLeft()
+                ) ||
+                bHeadlineRepeat != pTableNode->GetTable().IsHeadlineRepeat() ||
+                pTableNode->GetTable().GetTabSortBoxes().Count() >= eMAXCELLS
+              )
+            )
         {
             // Tabelle ab der PaM-Position splitten
-            pNewLine = (*pLns)[ pLns->Count() - 2 ];        // die vorherige Line!
+            // die vorherige Line!
+            pNewLine = (*pLns)[ pLns->Count() - 2 ];
             SwTableBox* pBox = pNewLine->GetTabBoxes()[ 0 ];
             while( ( pLns = &pBox->GetTabLines() )->Count() )
                 pBox = (*pLns)[ 0 ]->GetTabBoxes()[ 0 ];
@@ -664,12 +677,18 @@ void SwRTFParser::ReadTable( int nToken )
             {
                 // dann test mal ob wirklich nur eine neue Line eingefuegt
                 // werden soll!
-                SwFrmFmt* pFmt = pTableNode->GetTable().GetFrmFmt();
+                SwTable &rTable = pTableNode->GetTable();
+                SwFrmFmt* pFmt = rTable.GetFrmFmt();
                 const SwFmtFrmSize& rTblSz = pFmt->GetFrmSize();
                 const SwFmtHoriOrient& rHoriz = pFmt->GetHoriOrient();
-                if( rTblSz.GetWidth() != nTblSz
-                    || rHoriz.GetHoriOrient() != eAdjust )
+                if (
+                    rTblSz.GetWidth() != nTblSz ||
+                    rHoriz.GetHoriOrient() != eAdjust ||
+                    rTable.GetTabSortBoxes().Count() >= eMAXCELLS
+                    )
+                {
                     pTableNode = 0;
+                }
             }
         }
 
