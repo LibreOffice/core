@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metaact.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: ka $ $Date: 2001-03-22 17:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3196,7 +3196,9 @@ void MetaFloatTransparentAction::Scale( double fScaleX, double fScaleY )
 void MetaFloatTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << maMtf << maPoint << maSize << maGradient;
+
+    maMtf.Write( rOStm );
+    rOStm << maPoint << maSize << maGradient;
 }
 
 // ------------------------------------------------------------------------
@@ -3262,7 +3264,7 @@ void MetaEPSAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm << maGfxLink;
     rOStm << maPoint;
     rOStm << maSize;
-    rOStm << maSubst;
+    maSubst.Write( rOStm );
 }
 
 // ------------------------------------------------------------------------
