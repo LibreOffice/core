@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_url.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-09 13:38:34 $
+ *  last change: $Author: tra $ $Date: 2002-12-14 13:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,16 +79,6 @@
 #include <unistd.h>
 #endif
 
-#if defined (SOLARIS)
-#   ifndef _ALLOCA_H
-#   include <alloca.h>
-#   endif
-#else
-#   ifndef _STDLIB_H
-#   include <stdlib.h>
-#   endif
-#endif
-
 #ifndef _OSL_FILE_H_
 #include <osl/file.h>
 #endif
@@ -121,6 +111,10 @@
 #include <osl/file.hxx>
 #endif
 
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+
 #ifndef _FILE_ERROR_TRANSL_H_
 #include "file_error_transl.h"
 #endif
@@ -131,6 +125,10 @@
 
 #ifndef _OSL_FILE_PATH_HELPER_HXX_
 #include "file_path_helper.hxx"
+#endif
+
+#ifndef _OSL_UUNXAPI_HXX_
+#include "uunxapi.hxx"
 #endif
 
 /***************************************************
@@ -847,139 +845,6 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
 namespace /* private */
 {
 
-    /****************************************************************************
-     *  osl_access_impl_
-     ***************************************************************************/
-
-    int osl_access_impl_(const sal_Unicode* path, int mode)
-    {
-        int nRet = -1;
-        char p[PATH_MAX];
-        if (UnicodeToText(p, sizeof(p), path, rtl_ustr_getLength(path)))
-            nRet = access(p, mode);
-
-        return nRet;
-    }
-
-    /*********************************************
-
-     ********************************************/
-
-    sal_Unicode* osl_realpath_impl_(const sal_Unicode* path, sal_Unicode* resolved_path)
-    {
-        char urp[PATH_MAX];
-        if (!UnicodeToText(urp, sizeof(urp), path, rtl_ustr_getLength(path)))
-        {
-            errno = ENAMETOOLONG;
-            return NULL;
-        }
-
-        char rp[PATH_MAX];
-        sal_Unicode* prp = NULL;
-
-        if (realpath(urp, rp))
-        {
-            TextToUnicode(rp, strlen(rp) + 1, resolved_path, PATH_MAX);
-            prp = resolved_path;
-        }
-
-        return prp;
-    }
-
-    /*********************************************
-
-     ********************************************/
-
-    struct Path
-    {
-        const sal_Unicode* begin_;
-        const sal_Unicode* end_;
-
-        Path() : begin_(0), end_(0) {}
-
-        operator void* ()
-        {
-            unsigned int l = get_length();
-            return reinterpret_cast<void*>(l);
-        }
-
-        unsigned int get_length()
-        {
-            OSL_ENSURE(end_ > begin_, "end_ must be greater than begin_");
-            return static_cast<unsigned int>(end_ - begin_);
-        }
-    };
-
-    /**************************************************
-     Path tokens are under Unix are ':' separated
-     *************************************************/
-
-    Path pathlist_get_next(const sal_Unicode* pathlist)
-    {
-        OSL_ASSERT(pathlist);
-
-        const sal_Unicode* p = pathlist;
-        Path               path;
-
-        if (*p)
-        {
-            path.begin_ = path.end_ = p;
-
-            while (*path.end_ && (*path.end_ != UNICHAR_COLON))
-                ++path.end_;
-        }
-        return path;
-    }
-
-    /****************************************************************************
-         search_path_impl_
-
-         @param path
-               The file or path the should be searched for.
-
-        @param search_paths
-               A list of search paths, ':' separated.
-
-         @param result
-               On success receives the path found, buffer must be at least
-               PATH_MAX long.
-
-     ***************************************************************************/
-
-     bool search_path_impl_(const sal_Unicode* file_path, const sal_Unicode* search_paths, sal_Unicode* result)
-    {
-        bool               bRet = false;
-        const sal_Unicode* sp   = search_paths;
-        sal_Unicode        buff[PATH_MAX];
-        sal_Unicode*       b    = buff;
-
-        while (*sp)
-        {
-            Path path = pathlist_get_next(sp);
-
-            if (path)
-            {
-                ustrncpy(path.begin_, b, path.get_length());
-
-                if (b[rtl_ustr_getLength(b) - 1] != UNICHAR_SLASH)
-                    ustrchrcat(UNICHAR_SLASH, b);
-
-                ustrcat(file_path, b);
-
-                if (osl_access_impl_(buff, F_OK) > -1)
-                {
-                    bRet = true;
-                    break;
-                }
-            }
-            sp = path.end_ + 1;
-        }
-        if (bRet)
-            ustrcpy(buff, result);
-
-        return bRet;
-    }
-
     /*********************************************
      No separate error code if unicode to text
      conversion or getenv fails because for the
@@ -987,23 +852,15 @@ namespace /* private */
      could not be found in $PATH
      ********************************************/
 
-    bool find_in_PATH(const rtl::OUString& file_path, sal_Unicode* result)
+    bool find_in_PATH(const rtl::OUString& file_path, rtl::OUString& result)
     {
-        bool  bfound = false;
-        char* env_path  = getenv("PATH");
+        bool          bfound = false;
+        rtl::OUString path   = rtl::OUString::createFromAscii("PATH");
+        rtl::OUString env_path;
 
-        if (env_path)
-        {
-            // approximated unicode buffer size may be a little bigger
-            // than necessary if there are 3 byte MBCS character
+        if (osl_Process_E_None == osl_getEnvironment(path.pData, &env_path.pData))
+            bfound = osl::searchPath(file_path, env_path, result);
 
-            int lp = strlen(env_path) + 1; // include final '\0'
-            sal_Unicode* env_path_unic = reinterpret_cast<sal_Unicode*>(
-                alloca(sizeof(sal_Unicode) * lp));
-
-            if (TextToUnicode(env_path, lp, env_path_unic, lp))
-                bfound = search_path_impl_(file_path.pData->buffer, env_path_unic, result);
-        }
         return bfound;
     }
 
@@ -1014,16 +871,16 @@ namespace /* private */
      could not be found in CDW
      ********************************************/
 
-    bool find_in_CWD(const rtl::OUString& file_path, sal_Unicode* result)
+    bool find_in_CWD(const rtl::OUString& file_path, rtl::OUString& result)
     {
         bool bfound = false;
-        char CWD[PATH_MAX];
+        rtl::OUString cwd_url;
 
-        if (getcwd(CWD, PATH_MAX))
+        if (osl_Process_E_None == osl_getProcessWorkingDir(&cwd_url.pData))
         {
-            sal_Unicode CWD_unic[PATH_MAX];
-            if (TextToUnicode(CWD, strlen(CWD) + 1, CWD_unic, PATH_MAX))
-                bfound = search_path_impl_(file_path.pData->buffer, CWD_unic, result);
+            rtl::OUString cwd;
+            FileBase::getSystemPathFromFileURL(cwd_url, cwd);
+            bfound = osl::searchPath(file_path, cwd, result);
         }
         return bfound;
     }
@@ -1032,9 +889,9 @@ namespace /* private */
 
      ********************************************/
 
-    bool find_in_searchPath(const rtl::OUString& file_path, rtl_uString* search_path, sal_Unicode* result)
+    bool find_in_searchPath(const rtl::OUString& file_path, rtl_uString* search_path, rtl::OUString& result)
     {
-        return (search_path && search_path_impl_(file_path.pData->buffer, search_path->buffer, result));
+        return (search_path && osl::searchPath(file_path, rtl::OUString(search_path), result));
     }
 
 } // end namespace private
@@ -1058,21 +915,19 @@ oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearc
     else if (FileBase::E_None != rc)
         return oslFileError(rc);
 
-    bool        bfound = false;
-    sal_Unicode result[PATH_MAX];
+    bool          bfound = false;
+    rtl::OUString result;
 
     if (find_in_searchPath(file_path, ustrSearchPath, result) ||
         find_in_PATH(file_path, result) ||
         find_in_CWD(file_path, result))
     {
-        sal_Unicode rp[PATH_MAX];
+        rtl::OUString resolved;
 
-        if (osl_realpath_impl_(result, rp))
+        if (osl::realpath(result, resolved))
         {
-            rtl::OUString fpf(rp, rtl_ustr_getLength(rp));
-            oslFileError osl_error = osl_getFileURLFromSystemPath(fpf.pData, pustrURL);
+            oslFileError osl_error = osl_getFileURLFromSystemPath(resolved.pData, pustrURL);
             OSL_ASSERT(osl_File_E_None == osl_error);
-
             bfound = true;
         }
     }
