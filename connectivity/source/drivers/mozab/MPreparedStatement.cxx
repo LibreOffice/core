@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MPreparedStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
+ *  last change: $Author: fs $ $Date: 2002-01-08 15:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::rtl::O
     ,m_bPrepared(sal_False)
     ,m_sSqlStatement(sql)
     ,m_nNumParams(0)
+    ,m_pResultSet( NULL )
 {
 }
 // -----------------------------------------------------------------------------
