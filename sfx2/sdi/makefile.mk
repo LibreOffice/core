@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mba $ $Date: 2002-03-28 15:44:51 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:27:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,9 +68,7 @@ TARGET=sfxslots
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 SDINAME=$(TARGET)
 SDIEXPORT=sfx
@@ -94,8 +92,8 @@ SVSDIDEPEND= \
         object.sdi \
         frmslots.sdi \
                 genslots.sdi
-
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         sfxslots.src
 
 # --- Targets -------------------------------------------------------
