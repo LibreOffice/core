@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-08 07:46:35 $
+ *  last change: $Author: ka $ $Date: 2001-05-08 16:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,12 @@ struct ImplCheckRect
 
 void ImplCheckRect::ImplCreate( MetaAction* pAct, OutputDevice* pOut, BOOL bSpecial )
 {
+    const long bLineTransparency = ( pOut->GetLineColor().GetTransparency() == 255 );
+    const long bFillTransparency = ( pOut->GetFillColor().GetTransparency() == 255 );
+
     mpAct = pAct;
     mpNext = NULL;
+    mpRect = NULL;
 
     switch( mpAct->GetType() )
     {
@@ -127,84 +131,117 @@ void ImplCheckRect::ImplCreate( MetaAction* pAct, OutputDevice* pOut, BOOL bSpec
         break;
 
         case( META_POINT_ACTION ):
-            mpRect = new Rectangle( ( (MetaPointAction*) mpAct )->GetPoint(), Size( 1, 1 ) );
+        {
+            if( !bLineTransparency )
+                mpRect = new Rectangle( ( (MetaPointAction*) mpAct )->GetPoint(), Size( 1, 1 ) );
+        }
         break;
 
         case( META_LINE_ACTION ):
         {
-            MetaLineAction* pA = (MetaLineAction*) mpAct;
-            mpRect = new Rectangle( pA->GetStartPoint(), pA->GetEndPoint() );
+            if( !bLineTransparency )
+            {
+                MetaLineAction* pA = (MetaLineAction*) mpAct;
+                mpRect = new Rectangle( pA->GetStartPoint(), pA->GetEndPoint() );
+            }
         }
         break;
 
         case( META_RECT_ACTION ):
-            mpRect = new Rectangle( ( (MetaRectAction*) mpAct )->GetRect() );
+        {
+            if( !bLineTransparency || !bFillTransparency )
+                mpRect = new Rectangle( ( (MetaRectAction*) mpAct )->GetRect() );
+        }
         break;
 
         case( META_ROUNDRECT_ACTION ):
         {
-            MetaRoundRectAction* pA = (MetaRoundRectAction*) mpAct;
-            mpRect = new Rectangle( Polygon( pA->GetRect(),
-                                             pA->GetHorzRound(),
-                                             pA->GetVertRound() ).GetBoundRect() );
+            if( !bLineTransparency || !bFillTransparency )
+            {
+                MetaRoundRectAction* pA = (MetaRoundRectAction*) mpAct;
+                mpRect = new Rectangle( Polygon( pA->GetRect(),
+                                                 pA->GetHorzRound(),
+                                                 pA->GetVertRound() ).GetBoundRect() );
+            }
         }
         break;
 
         case( META_ELLIPSE_ACTION ):
         {
-            MetaEllipseAction*  pA = (MetaEllipseAction*) mpAct;
-            const Rectangle&    rRect = pA->GetRect();
-            mpRect = new Rectangle( Polygon( rRect.Center(),
-                                             rRect.GetWidth() >> 1,
-                                             rRect.GetHeight() >> 1 ).GetBoundRect() );
+            if( !bLineTransparency || !bFillTransparency )
+            {
+                MetaEllipseAction*  pA = (MetaEllipseAction*) mpAct;
+                const Rectangle&    rRect = pA->GetRect();
+                mpRect = new Rectangle( Polygon( rRect.Center(),
+                                                 rRect.GetWidth() >> 1,
+                                                 rRect.GetHeight() >> 1 ).GetBoundRect() );
+            }
         }
         break;
 
         case( META_ARC_ACTION ):
         {
-            MetaArcAction* pA = (MetaArcAction*) mpAct;
-            mpRect = new Rectangle( Polygon( pA->GetRect(),
-                                             pA->GetStartPoint(),
-                                             pA->GetEndPoint(), POLY_ARC ).GetBoundRect() );
+            if( !bLineTransparency || !bFillTransparency )
+            {
+                MetaArcAction* pA = (MetaArcAction*) mpAct;
+                mpRect = new Rectangle( Polygon( pA->GetRect(),
+                                                 pA->GetStartPoint(),
+                                                 pA->GetEndPoint(), POLY_ARC ).GetBoundRect() );
+            }
         }
         break;
 
         case( META_PIE_ACTION ):
         {
-            MetaPieAction* pA = (MetaPieAction*) mpAct;
-            mpRect = new Rectangle( Polygon( pA->GetRect(),
-                                             pA->GetStartPoint(),
-                                             pA->GetEndPoint(), POLY_PIE ).GetBoundRect() );
+            if( !bLineTransparency || !bFillTransparency )
+            {
+                MetaPieAction* pA = (MetaPieAction*) mpAct;
+                mpRect = new Rectangle( Polygon( pA->GetRect(),
+                                                 pA->GetStartPoint(),
+                                                 pA->GetEndPoint(), POLY_PIE ).GetBoundRect() );
+            }
         }
         break;
 
         case( META_CHORD_ACTION ):
         {
-            MetaChordAction* pA = (MetaChordAction*) mpAct;
-            mpRect = new Rectangle( Polygon( pA->GetRect(),
-                                             pA->GetStartPoint(),
-                                             pA->GetEndPoint(), POLY_CHORD ).GetBoundRect() );
+            if( !bLineTransparency || !bFillTransparency )
+            {
+                MetaChordAction* pA = (MetaChordAction*) mpAct;
+                mpRect = new Rectangle( Polygon( pA->GetRect(),
+                                                 pA->GetStartPoint(),
+                                                 pA->GetEndPoint(), POLY_CHORD ).GetBoundRect() );
+            }
         }
         break;
 
         case( META_POLYLINE_ACTION ):
         {
-            MetaPolyLineAction* pA = (MetaPolyLineAction*) mpAct;
-            mpRect = new Rectangle( pA->GetPolygon().GetBoundRect() );
+            if( !bLineTransparency )
+            {
+                MetaPolyLineAction* pA = (MetaPolyLineAction*) mpAct;
+                mpRect = new Rectangle( pA->GetPolygon().GetBoundRect() );
+            }
         }
         break;
 
         case( META_POLYGON_ACTION ):
         {
-            MetaPolygonAction* pA = (MetaPolygonAction*) mpAct;
-            mpRect = new Rectangle( pA->GetPolygon().GetBoundRect() );
+            if( !bLineTransparency || !bFillTransparency )
+            {
+                MetaPolygonAction* pA = (MetaPolygonAction*) mpAct;
+                mpRect = new Rectangle( pA->GetPolygon().GetBoundRect() );
+            }
         }
         break;
 
         case( META_POLYPOLYGON_ACTION ):
         {
-            MetaPolyPolygonAction* pA = (MetaPolyPolygonAction*) mpAct;
-            mpRect = new Rectangle( pA->GetPolyPolygon().GetBoundRect() );
+            if( !bLineTransparency || !bFillTransparency )
+            {
+                MetaPolyPolygonAction* pA = (MetaPolyPolygonAction*) mpAct;
+                mpRect = new Rectangle( pA->GetPolyPolygon().GetBoundRect() );
+            }
         }
         break;
 
@@ -337,7 +374,6 @@ void ImplCheckRect::ImplCreate( MetaAction* pAct, OutputDevice* pOut, BOOL bSpec
         break;
 
         default:
-            mpRect = NULL;
         break;
     }
 
@@ -585,7 +621,7 @@ Bitmap Printer::GetPreparedBitmap( const Point& rDstPt, const Size& rDstSz,
 
     if( !aBmp.IsEmpty() )
     {
-        Point aPoint = Point();
+        Point           aPoint;
         const Rectangle aBmpRect( aPoint, aBmp.GetSizePixel() );
         Rectangle       aSrcRect( rSrcPt, rSrcSz );
 
@@ -650,7 +686,7 @@ BitmapEx Printer::GetPreparedBitmapEx( const Point& rDstPt, const Size& rDstSz,
 
     if( !aBmpEx.IsEmpty() )
     {
-        Point aPoint = Point();
+        Point           aPoint;
         const Rectangle aBmpRect( aPoint, aBmpEx.GetSizePixel() );
         Rectangle       aSrcRect( rSrcPt, rSrcSz );
 
