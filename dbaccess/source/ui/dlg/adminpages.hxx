@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-28 11:41:42 $
+ *  last change: $Author: fs $ $Date: 2000-11-28 13:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ private:
     Link                m_aTypeSelectHandler;   /// to be called if a new type is selected
     Link                m_aNameModifiedHandler; /// to be called whenever the name of the data source is changed by the user
 
-    sal_Bool            m_bDisplayingDeleted : 1;   // the currently displayed data source is deleted
+    sal_Bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
 
 public:
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& _rAttrSet);
@@ -460,6 +460,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2000/11/28 11:41:42  oj
+ *  #80827# check dbroot if dbconfig failed
+ *
  *  Revision 1.11  2000/11/22 15:44:05  oj
  *  #80269# remove property long names
  *
