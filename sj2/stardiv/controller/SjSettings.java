@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SjSettings.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-11-12 12:27:34 $
+ *  last change: $Author: jl $ $Date: 2001-11-22 13:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ import com.sun.star.lib.sandbox.SandboxSecurity;
  * @author     Markus Meyer
  *
  */
-public final class SjSettings {
+public class SjSettings {
     /**
      * The following properties are used to setup the environment for
      * the stardiv packages.<BR>
@@ -177,28 +177,6 @@ public final class SjSettings {
             props.put("java.protocol.handler.pkgs", "stardiv.net.protocol");
         }
 
-        boolean bHttpClientChanged = false;
-        boolean bFtpClientChanged = false;
-        boolean bSecurityChanged = false;
-        // detect changes
-        if( pChangeProps != null )
-        {
-            bHttpClientChanged =
-                 !equalsImpl( props.get( "http.proxyHost" ), pChangeProps.get( "http.proxyHost" ) )
-              || !equalsImpl( props.get( "http.proxyPort" ), pChangeProps.get( "http.proxyPort" ) )
-              || !equalsImpl( props.get( "http.maxConnections" ), pChangeProps.get( "http.maxConnections" ) )
-              || !equalsImpl( props.get( "http.keepAlive" ), pChangeProps.get( "http.keepAlive" ) )
-              || !equalsImpl( props.get( "http.nonProxyHosts" ), pChangeProps.get( "http.nonProxyHosts" ) );
-            bFtpClientChanged =
-                 !equalsImpl( props.get( "ftpProxySet" ), pChangeProps.get( "ftpProxySet" ) )
-              || !equalsImpl( props.get( "ftpProxyHost" ), pChangeProps.get( "ftpProxyHost" ) )
-              || !equalsImpl( props.get( "ftpProxyPort" ), pChangeProps.get( "ftpProxyPort" ) );
-            bSecurityChanged =
-                 !equalsImpl( props.get( "appletviewer.security.mode" ), pChangeProps.get( "appletviewer.security.mode" ) )
-              || !equalsImpl( props.get( "stardiv.security.disableSecurity" ), pChangeProps.get( "stardiv.security.disableSecurity" ) );
-        }
-
-
         // put new and changed properties to the property table
         if( pChangeProps != null )
         {
@@ -217,38 +195,13 @@ public final class SjSettings {
         if( !bInited )
         {
             // Security Manager setzten
-            if( Boolean.getBoolean( "stardiv.security.defaultSecurityManager" ) )
-            {
-                boolean bNoExit = Boolean.getBoolean( "stardiv.security.noExit" );
-                //Create and install the security manager
+            boolean bNoExit = Boolean.getBoolean( "stardiv.security.noExit" );
+            //Create and install the security manager
+            if (System.getSecurityManager() == null)
                 System.setSecurityManager(new SandboxSecurity(bNoExit));
-            }
+
             if( Boolean.getBoolean("stardiv.controller.installConsole") )
                 Console.installConsole();
-
-        }
-        // Not Documented, setting a try catch, for IncompatibleClassChangeException.
-        try
-        {
-            if( bHttpClientChanged )
-                sun.net.www.http.HttpClient.resetProperties();
-            if( bFtpClientChanged )
-            {
-                sun.net.ftp.FtpClient.useFtpProxy = Boolean.getBoolean("ftpProxySet");
-                sun.net.ftp.FtpClient.ftpProxyHost = System.getProperty("ftpProxyHost");
-                sun.net.ftp.FtpClient.ftpProxyPort = Integer.getInteger("ftpProxyPort", 80).intValue();
-            }
-        }
-        catch( Throwable e )
-        {
-        }
-        if( bSecurityChanged )
-        {
-            pSM = System.getSecurityManager();
-            if( pSM instanceof SandboxSecurity )
-            {
-                ((SandboxSecurity)pSM).reset();
-            }
         }
     }
 
