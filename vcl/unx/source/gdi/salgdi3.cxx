@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:13:25 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,8 +621,14 @@ bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLev
     bFontVertical_      = pEntry->mbVertical;
 
 #ifdef HDU_DEBUG
-    ByteString aName( pEntry->maName, osl_getThreadTextEncoding() );
-    fprintf( stderr, "SetFont(lvl=%d,\"%s\", %d*%d, naa=%d,b=%d,i=%d)\n", nFallbackLevel, aName.GetBuffer(), pEntry->mnWidth, pEntry->mnHeight, pEntry->mbNonAntialiased, pEntry->meWeight, pEntry->meItalic );
+    ByteString aReqName( pEntry->maName, RTL_TEXTENCODING_UTF8 );
+    ByteString aUseName( "UNKNOWN" );
+    if( pEntry->mpFontData )
+        aUseName = ByteString( pEntry->mpFontData->GetFamilyName(), RTL_TEXTENCODING_UTF8 );
+    fprintf( stderr, "SetFont(lvl=%d,\"%s\", %d*%d, naa=%d,b=%d,i=%d) => \"%s\"\n",
+        nFallbackLevel, aReqName.GetBuffer(), pEntry->mnWidth, pEntry->mnHeight,
+        pEntry->mbNonAntialiased, pEntry->meWeight, pEntry->meItalic,
+        aUseName.GetBuffer() );
 #endif
 
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
