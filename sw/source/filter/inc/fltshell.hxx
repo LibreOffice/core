@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *  last change: $Author: cmc $ $Date: 2002-02-04 09:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,12 +157,11 @@ class SwFltControlStack : public SwFltControlStackEntries
 
     BOOL IsAttrOpen(USHORT nAttrId);
 
-    void MoveAttrs( const SwPosition&  rPos );
-
 protected:
     SwDoc* pDoc;
     BOOL bIsEndStack;
 
+    void MoveAttrs( const SwPosition&  rPos );
     virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry* pEntry);
 
 public:
