@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:06:33 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XTABCONTROLLERMODEL_HPP_
+#include <com/sun/star/awt/XTabControllerModel.hpp>
+#endif
 
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
@@ -188,10 +191,6 @@
 #ifndef _SVX_SVXIDS_HRC
 #include "svxids.hrc"
 #endif
-
-//CHINA001 #ifndef _SVX_TABORDER_HXX
-//CHINA001 #include "taborder.hxx"
-//CHINA001 #endif
 
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
@@ -381,6 +380,7 @@ sal_uInt16 AutoSlotMap[] =
     0
 };
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
@@ -986,16 +986,8 @@ void FmFormShell::Execute(SfxRequest &rReq)
         }   break;
         case SID_FM_TAB_DIALOG:
         {
-            //CHINA001 FmTabOrderDlg aTabOrderDlg(::comphelper::getProcessServiceFactory(), GetpApp()->GetAppWindow(), this );
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            if(pFact)
-            {
-                VclAbstractDialog* aTabOrderDlg = pFact->CreateFmTabOrderDlg( ::comphelper::getProcessServiceFactory(), Application::GetDefDialogParent(), this, ResId(RID_SVXDLG_TAB_ORDER) );
-                DBG_ASSERT(aTabOrderDlg, "Dialogdiet fail!");//CHINA001
-                aTabOrderDlg->Execute(); //CHINA001 aTabOrderDlg.Execute();
-                rReq.Done();
-                delete aTabOrderDlg;
-            }
+            GetImpl()->ExecuteTabOrderDialog( Reference< XTabControllerModel >( GetImpl()->getCurForm(), UNO_QUERY ) );
+            rReq.Done();
         }   break;
         case SID_FM_DESIGN_MODE:
         {
