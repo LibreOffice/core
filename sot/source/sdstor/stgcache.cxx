@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgcache.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-22 12:28:40 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 11:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ StgCache::StgCache()
     bMyStream = FALSE;
     bFile = FALSE;
     pLRUCache = NULL;
+    pStorageStream = NULL;
 }
 
 StgCache::~StgCache()
@@ -378,10 +379,36 @@ void StgCache::Revert( StgDirEntry* )
 
 void StgCache::SetStrm( SvStream* p, BOOL bMy )
 {
+    if( pStorageStream )
+    {
+        pStorageStream->ReleaseRef();
+        pStorageStream = NULL;
+    }
+
     if( bMyStream )
         delete pStrm;
     pStrm = p;
     bMyStream = bMy;
+}
+
+void StgCache::SetStrm( UCBStorageStream* pStgStream )
+{
+    if( pStorageStream )
+        pStorageStream->ReleaseRef();
+    pStorageStream = pStgStream;
+
+    if( bMyStream )
+        delete pStrm;
+
+    pStrm = NULL;
+
+    if ( pStorageStream )
+    {
+        pStorageStream->AddRef();
+        pStrm = pStorageStream->GetModifySvStream();
+    }
+
+    bMyStream = FALSE;
 }
 
 // Open/close the disk file
