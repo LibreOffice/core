@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-05 09:19:35 $
+ *  last change: $Author: ssa $ $Date: 2002-04-18 08:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,7 @@ void PushButton::ImplInitData()
     mbPressed       = FALSE;
     mbInUserDraw    = FALSE;
     mpBitmapEx      = NULL;
+    mpBitmapExHC    = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -570,11 +571,29 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
 
         if ( IsImage() )
         {
+            nStyle = 0;
+
+            // check for HC mode
+            Image *pImage = &maImage;
+            BitmapEx **pBitmapEx = &mpBitmapEx;
+
+            Color aBackCol;
+            if( !!maImageHC && ImplGetCurrentBackgroundColor( aBackCol ) )
+            {
+                if( aBackCol.IsDark() )
+                {
+                    pImage = &maImageHC;
+                    pBitmapEx = &mpBitmapExHC;
+                }
+                if( aBackCol.IsBright() )
+                    nStyle |= IMAGE_DRAW_COLORTRANSFORM;
+            }
+
             // center image...
-            Size aImageSize( maImage.GetSizePixel() );
+            Size aImageSize( pImage->GetSizePixel() );
             aImageSize.Width()  = CalcZoom( aImageSize.Width() );
             aImageSize.Height() = CalcZoom( aImageSize.Height() );
-            if ( mpBitmapEx && ( pDev->GetOutDevType() == OUTDEV_PRINTER ) )
+            if ( *pBitmapEx && ( pDev->GetOutDevType() == OUTDEV_PRINTER ) )
             {
                 // Die Groesse richtet sich nach dem Bildschirm, soll auf
                 // dem Drucker genau so aussehen...
@@ -613,24 +632,23 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
                     aInRectText.SetEmpty();
             }
 
-            nStyle = 0;
             if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
             {
                 if ( !IsEnabled() )
                     nStyle |= IMAGE_DRAW_DISABLE;
             }
-            if ( mpBitmapEx && ( pDev->GetOutDevType() == OUTDEV_PRINTER ) )
+            if ( *pBitmapEx && ( pDev->GetOutDevType() == OUTDEV_PRINTER ) )
             {
                 // Fuer die BitmapEx ueberlegt sich KA noch, wie man die disablete
                 // Darstellung hinbekommt...
-                mpBitmapEx->Draw( pDev, aImagePos, aImageSize /*, nStyle*/ );
+                (*pBitmapEx)->Draw( pDev, aImagePos, aImageSize /*, nStyle*/ );
             }
             else
             {
                 if ( IsZoom() )
-                    pDev->DrawImage( aImagePos, aImageSize, maImage, nStyle );
+                    pDev->DrawImage( aImagePos, aImageSize, *pImage, nStyle );
                 else
-                    pDev->DrawImage( aImagePos, maImage, nStyle );
+                    pDev->DrawImage( aImagePos, *pImage, nStyle );
             }
         }
 
@@ -862,6 +880,7 @@ PushButton::PushButton( Window* pParent, const ResId& rResId ) :
 PushButton::~PushButton()
 {
     delete mpBitmapEx;
+    delete mpBitmapExHC;
 }
 
 // -----------------------------------------------------------------------
@@ -1136,14 +1155,35 @@ void PushButton::SetImage( const Image& rImage )
     }
 }
 
+// -----------------------------------------------------------------------
+
 BOOL PushButton::SetModeImage( const Image& rImage, BmpColorMode eMode )
 {
-    return FALSE;
+    if( eMode == BMP_COLOR_NORMAL )
+        SetImage( rImage );
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        delete mpBitmapExHC;
+        mpBitmapExHC = NULL;
+        if( maImageHC != rImage )
+        {
+            maImageHC = rImage;
+            StateChanged( STATE_CHANGE_DATA );
+        }
+    }
+    else
+        return FALSE;
+    return TRUE;
 }
+
+// -----------------------------------------------------------------------
 
 const Image& PushButton::GetModeImage( BmpColorMode eMode ) const
 {
-    return maImage;
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+        return maImageHC;
+    else
+        return maImage;
 }
 
 // -----------------------------------------------------------------------
@@ -1151,7 +1191,7 @@ const Image& PushButton::GetModeImage( BmpColorMode eMode ) const
 void PushButton::SetBitmap( const BitmapEx& rBmp )
 {
     SetImage( rBmp );
-    DBG_ASSERT( !mpBitmapEx, "BitmapEx nach SetImage?!" );
+    DBG_ASSERT( !mpBitmapEx, "BitmapEx after SetImage?!" );
     mpBitmapEx = new BitmapEx( rBmp );
 }
 
@@ -1165,14 +1205,35 @@ BitmapEx PushButton::GetBitmap() const
     return aBmp;
 }
 
+// -----------------------------------------------------------------------
+
 BOOL PushButton::SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode )
 {
-    return FALSE;
+    if( eMode == BMP_COLOR_NORMAL )
+        SetBitmap( rBitmap );
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        DBG_ASSERT( !mpBitmapExHC, "BitmapExHC after SetImage?!" );
+        mpBitmapExHC = new BitmapEx( rBitmap );
+    }
+    else
+        return FALSE;
+    return TRUE;
 }
+
+// -----------------------------------------------------------------------
 
 BitmapEx PushButton::GetModeBitmap( BmpColorMode eMode ) const
 {
-    return GetBitmap();
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        BitmapEx aBmp;
+        if ( mpBitmapExHC )
+            aBmp = *mpBitmapExHC;
+        return aBmp;
+    }
+    else
+        return GetBitmap();
 }
 
 // -----------------------------------------------------------------------
@@ -1581,13 +1642,25 @@ void RadioButton::ImplDrawRadioButtonState()
         nStyle = 0;
         if ( !bEnabled )
             nStyle |= IMAGE_DRAW_DISABLE;
+
+        // check for HC mode
+        Image *pImage = &maImage;
+        Color aBackCol;
+        if( !!maImageHC && ImplGetCurrentBackgroundColor( aBackCol ) )
+        {
+            if( aBackCol.IsDark() )
+                pImage = &maImageHC;
+            if( aBackCol.IsBright() )
+                nStyle |= IMAGE_DRAW_COLORTRANSFORM;
+        }
+
         Point aImagePos( aImageRect.TopLeft() );
         aImagePos.X() += (aImageRect.GetWidth()-aImageSize.Width())/2;
         aImagePos.Y() += (aImageRect.GetHeight()-aImageSize.Height())/2;
         if ( IsZoom() )
-            DrawImage( aImagePos, aImageSize, maImage, nStyle );
+            DrawImage( aImagePos, aImageSize, *pImage, nStyle );
         else
-            DrawImage( aImagePos, maImage, nStyle );
+            DrawImage( aImagePos, *pImage, nStyle );
 
         aImageRect.Left()++;
         aImageRect.Top()++;
@@ -2213,14 +2286,33 @@ void RadioButton::SetImage( const Image& rImage )
     }
 }
 
+// -----------------------------------------------------------------------
+
 BOOL RadioButton::SetModeImage( const Image& rImage, BmpColorMode eMode )
 {
-    return FALSE;
+    if( eMode == BMP_COLOR_NORMAL )
+        SetImage( rImage );
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        if( maImageHC != rImage )
+        {
+            maImageHC = rImage;
+            StateChanged( STATE_CHANGE_DATA );
+        }
+    }
+    else
+        return FALSE;
+    return TRUE;
 }
+
+// -----------------------------------------------------------------------
 
 const Image& RadioButton::GetModeImage( BmpColorMode eMode ) const
 {
-    return maImage;
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+        return maImageHC;
+    else
+        return maImage;
 }
 
 // -----------------------------------------------------------------------

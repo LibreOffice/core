@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-16 16:11:36 $
+ *  last change: $Author: ssa $ $Date: 2002-04-18 08:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2318,13 +2318,26 @@ ImplWin::ImplWin( Window* pParent, WinBits nWinStyle ) :
 
 BOOL ImplWin::SetModeImage( const Image& rImage, BmpColorMode eMode )
 {
-    return FALSE;
+    if( eMode == BMP_COLOR_NORMAL )
+        SetImage( rImage );
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+        maImageHC = rImage;
+    else
+        return FALSE;
+    return TRUE;
 }
+
+// -----------------------------------------------------------------------
 
 const Image& ImplWin::GetModeImage( BmpColorMode eMode ) const
 {
-    return maImage;
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+        return maImageHC;
+    else
+        return maImage;
 }
+
+// -----------------------------------------------------------------------
 
 void ImplWin::MBDown()
 {
@@ -2395,18 +2408,42 @@ void ImplWin::DrawEntry( BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImageP
     BOOL bImage = !!maImage;
     if( bDrawImage && bImage )
     {
+        USHORT nStyle = 0;
         Size aImgSz = maImage.GetSizePixel();
         Point aPtImg( nBorder, ( ( aOutSz.Height() - aImgSz.Height() ) / 2 ) );
 
+        // check for HC mode
+        Image *pImage = &maImage;
+
+        if( !!maImageHC )
+        {
+            // determine backgroundcolor as done in Paint()
+            Color aBackCol;
+            if( IsEnabled() )
+            {
+                if( HasFocus() )
+                    aBackCol = GetSettings().GetStyleSettings().GetHighlightColor();
+                else
+                    aBackCol = GetBackground().GetColor();
+            }
+            else // Disabled
+                aBackCol = GetBackground().GetColor();
+
+            if( aBackCol.IsDark() )
+                pImage = &maImageHC;
+            if( aBackCol.IsBright() )
+                nStyle |= IMAGE_DRAW_COLORTRANSFORM;
+        }
+
         if ( !IsZoom() )
         {
-            DrawImage( aPtImg, maImage );
+            DrawImage( aPtImg, *pImage, nStyle );
         }
         else
         {
             aImgSz.Width() = CalcZoom( aImgSz.Width() );
             aImgSz.Height() = CalcZoom( aImgSz.Height() );
-            DrawImage( aPtImg, aImgSz, maImage );
+            DrawImage( aPtImg, aImgSz, *pImage, nStyle );
         }
     }
 

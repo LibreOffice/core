@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-05 09:19:35 $
+ *  last change: $Author: ssa $ $Date: 2002-04-18 08:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,19 +105,53 @@ void ImageControl::Resize()
 
 void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    if ( mnDummy1_mbScaleImage )
+    USHORT nStyle = 0;
+    BitmapEx* pBitmap = &maBmp;
+    Color aCol;
+    if( !!maBmpHC && ImplGetCurrentBackgroundColor( aCol ) )
     {
-        maBmp.Draw( rUDEvt.GetDevice(),
-                    rUDEvt.GetRect().TopLeft(),
-                    rUDEvt.GetRect().GetSize() );
+        if( aCol.IsDark() )
+            pBitmap = &maBmpHC;
+        if( aCol.IsBright() )
+            nStyle |= IMAGE_DRAW_COLORTRANSFORM;
+    }
+
+    if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
+    {
+        // only images support IMAGE_DRAW_COLORTRANSFORM
+        Image aImage( maBmp );
+        if ( !!aImage )
+        {
+            if ( mnDummy1_mbScaleImage )
+                rUDEvt.GetDevice()->DrawImage( rUDEvt.GetRect().TopLeft(),
+                                                rUDEvt.GetRect().GetSize(),
+                                                aImage, nStyle );
+            else
+            {
+                // Center...
+                Point aPos( rUDEvt.GetRect().TopLeft() );
+                aPos.X() += ( rUDEvt.GetRect().GetWidth() - maBmp.GetSizePixel().Width() ) / 2;
+                aPos.Y() += ( rUDEvt.GetRect().GetHeight() - maBmp.GetSizePixel().Height() ) / 2;
+                rUDEvt.GetDevice()->DrawImage( aPos, aImage, nStyle );
+            }
+        }
     }
     else
     {
-        // Center...
-        Point aPos( rUDEvt.GetRect().TopLeft() );
-        aPos.X() += ( rUDEvt.GetRect().GetWidth() - maBmp.GetSizePixel().Width() ) / 2;
-        aPos.Y() += ( rUDEvt.GetRect().GetHeight() - maBmp.GetSizePixel().Height() ) / 2;
-        maBmp.Draw( rUDEvt.GetDevice(), aPos );
+        if ( mnDummy1_mbScaleImage )
+        {
+            maBmp.Draw( rUDEvt.GetDevice(),
+                        rUDEvt.GetRect().TopLeft(),
+                        rUDEvt.GetRect().GetSize() );
+        }
+        else
+        {
+            // Center...
+            Point aPos( rUDEvt.GetRect().TopLeft() );
+            aPos.X() += ( rUDEvt.GetRect().GetWidth() - maBmp.GetSizePixel().Width() ) / 2;
+            aPos.Y() += ( rUDEvt.GetRect().GetHeight() - maBmp.GetSizePixel().Height() ) / 2;
+            maBmp.Draw( rUDEvt.GetDevice(), aPos );
+        }
     }
 }
 
@@ -129,12 +163,28 @@ void ImageControl::SetBitmap( const BitmapEx& rBmp )
     StateChanged( STATE_CHANGE_DATA );
 }
 
+// -----------------------------------------------------------------------
+
 BOOL ImageControl::SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode )
 {
-    return FALSE;
+    if( eMode == BMP_COLOR_NORMAL )
+        SetBitmap( rBitmap );
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        maBmpHC = rBitmap;
+        StateChanged( STATE_CHANGE_DATA );
+    }
+    else
+        return FALSE;
+    return TRUE;
 }
+
+// -----------------------------------------------------------------------
 
 const BitmapEx& ImageControl::GetModeBitmap( BmpColorMode eMode ) const
 {
-    return maBmp;
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+        return maBmpHC;
+    else
+        return maBmp;
 }

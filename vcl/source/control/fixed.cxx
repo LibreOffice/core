@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-05 09:19:35 $
+ *  last change: $Author: ssa $ $Date: 2002-04-18 08:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,15 +727,44 @@ FixedBitmap::~FixedBitmap()
 void FixedBitmap::ImplDraw( OutputDevice* pDev, ULONG /* nDrawFlags */,
                             const Point& rPos, const Size& rSize )
 {
-    // Haben wir ueberhaupt eine Bitmap
-    if ( !(!maBitmap) )
+    USHORT nStyle = 0;
+    Bitmap* pBitmap = &maBitmap;
+    Color aCol;
+    if( !!maBitmapHC && ImplGetCurrentBackgroundColor( aCol ) )
     {
-        if ( GetStyle() & WB_SCALE )
-            pDev->DrawBitmap( rPos, rSize, maBitmap );
-        else
+        if( aCol.IsDark() )
+            pBitmap = &maBitmapHC;
+        if( aCol.IsBright() )
+            nStyle |= IMAGE_DRAW_COLORTRANSFORM;
+    }
+
+    if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
+    {
+        // only images support IMAGE_DRAW_COLORTRANSFORM
+        Image aImage( maBitmap );
+        if ( !(!aImage) )
         {
-            Point aPos = ImplCalcPos( GetStyle(), rPos, maBitmap.GetSizePixel(), rSize );
-            pDev->DrawBitmap( aPos, maBitmap );
+            if ( GetStyle() & WB_SCALE )
+                pDev->DrawImage( rPos, rSize, aImage, nStyle );
+            else
+            {
+                Point aPos = ImplCalcPos( GetStyle(), rPos, aImage.GetSizePixel(), rSize );
+                pDev->DrawImage( aPos, aImage, nStyle );
+            }
+        }
+    }
+    else
+    {
+        // Haben wir ueberhaupt eine Bitmap
+        if ( !(!(*pBitmap)) )
+        {
+            if ( GetStyle() & WB_SCALE )
+                pDev->DrawBitmap( rPos, rSize, *pBitmap );
+            else
+            {
+                Point aPos = ImplCalcPos( GetStyle(), rPos, pBitmap->GetSizePixel(), rSize );
+                pDev->DrawBitmap( aPos, *pBitmap );
+            }
         }
     }
 }
@@ -852,16 +881,6 @@ const Bitmap& FixedBitmap::GetModeBitmap( BmpColorMode eMode) const
         return maBitmap;
 }
 
-BOOL FixedImage::SetModeImage( const Image& rImage, BmpColorMode eMode )
-{
-    return FALSE;
-}
-
-const Image& FixedImage::GetModeImage( BmpColorMode eMode ) const
-{
-    return maImage;
-}
-
 // =======================================================================
 
 void FixedImage::ImplInit( Window* pParent, WinBits nStyle )
@@ -961,15 +980,25 @@ void FixedImage::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
             nStyle |= IMAGE_DRAW_DISABLE;
     }
 
+    Image *pImage = &maImage;
+    Color aCol;
+    if( !!maImageHC && ImplGetCurrentBackgroundColor( aCol ) )
+    {
+        if( aCol.IsDark() )
+            pImage = &maImageHC;
+        if( aCol.IsBright() )
+            nStyle |= IMAGE_DRAW_COLORTRANSFORM;
+    }
+
     // Haben wir ueberhaupt ein Image
-    if ( !(!maImage) )
+    if ( !(!(*pImage)) )
     {
         if ( GetStyle() & WB_SCALE )
-            pDev->DrawImage( rPos, rSize, maImage, nStyle );
+            pDev->DrawImage( rPos, rSize, *pImage, nStyle );
         else
         {
-            Point aPos = ImplCalcPos( GetStyle(), rPos, maImage.GetSizePixel(), rSize );
-            pDev->DrawImage( aPos, maImage, nStyle );
+            Point aPos = ImplCalcPos( GetStyle(), rPos, pImage->GetSizePixel(), rSize );
+            pDev->DrawImage( aPos, *pImage, nStyle );
         }
     }
 
@@ -1073,6 +1102,35 @@ void FixedImage::SetImage( const Image& rImage )
         maImage = rImage;
         StateChanged( STATE_CHANGE_DATA );
     }
+}
+
+// -----------------------------------------------------------------------
+
+BOOL FixedImage::SetModeImage( const Image& rImage, BmpColorMode eMode )
+{
+    if( eMode == BMP_COLOR_NORMAL )
+        SetImage( rImage );
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        if( maImageHC != rImage )
+        {
+            maImageHC = rImage;
+            StateChanged( STATE_CHANGE_DATA );
+        }
+    }
+    else
+        return FALSE;
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+const Image& FixedImage::GetModeImage( BmpColorMode eMode ) const
+{
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+        return maImageHC;
+    else
+        return maImage;
 }
 
 // -----------------------------------------------------------------------
