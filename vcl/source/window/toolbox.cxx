@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-07-03 14:02:25 $
+ *  last change: $Author: pl $ $Date: 2001-11-06 19:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,8 +426,8 @@ static Size ImplCalcSize( const ToolBox* pThis,
 
     if ( pThis->mbHorz )
     {
-        if ( pThis->mnWinHeight-2 > pThis->mnItemHeight )
-            aSize.Height() = nCalcLines * pThis->mnWinHeight-2;
+        if ( pThis->mnWinHeight > pThis->mnItemHeight )
+            aSize.Height() = nCalcLines * pThis->mnWinHeight;
         else
             aSize.Height() = nCalcLines * pThis->mnItemHeight;
 
@@ -595,8 +595,8 @@ static USHORT ImplCalcLines( ToolBox* pThis, long nToolSize )
 
     if ( pThis->mbHorz )
     {
-        if ( pThis->mnWinHeight-2 > pThis->mnItemHeight )
-            nLineHeight = pThis->mnWinHeight-2;
+        if ( pThis->mnWinHeight > pThis->mnItemHeight )
+            nLineHeight = pThis->mnWinHeight;
         else
             nLineHeight = pThis->mnItemHeight;
     }
@@ -1967,8 +1967,8 @@ void ToolBox::ImplFormat( BOOL bResize )
     {
         nLineSize = mnItemHeight;
 
-        if ( mnWinHeight-2 > mnItemHeight )
-            nLineSize = mnWinHeight-2;
+        if ( mnWinHeight > mnItemHeight )
+            nLineSize = mnWinHeight;
 
         if ( mbScroll )
         {
