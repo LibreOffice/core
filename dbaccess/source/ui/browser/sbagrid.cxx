@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:36:34 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,10 +174,6 @@
 
 #ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
 #include <svtools/itemset.hxx>
-#endif
-
-#ifndef _SV_SYSTEM_HXX //autogen wg. ::com::sun::star::chaos::System
-#include <vcl/system.hxx>
 #endif
 
 #ifndef _SFXRNGITEM_HXX
