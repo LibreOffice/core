@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CalcAddins.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:57:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 17:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -51,7 +51,6 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.lang.XInitialization;
-import com.sun.star.sheet.addin.XCalcAddins;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XServiceName;
@@ -59,6 +58,8 @@ import com.sun.star.sheet.XAddIn;
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.Type;
+
+import org.openoffice.sheet.addin.XCalcAddins;
 
 /** This outer class provides an inner class to implement the service
  * description, a method to instantiate the
@@ -80,7 +81,7 @@ public class CalcAddins {
 
 /** The component will be registered under this name.
  */
-        static private final String __serviceName = "com.sun.star.sheet.addin.CalcAddins";
+        static private final String __serviceName = "org.openoffice.sheet.addin.CalcAddins";
 
         static private final String ADDIN_SERVICE = "com.sun.star.sheet.AddIn";
 
