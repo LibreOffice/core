@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:39:18 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,7 +614,7 @@ void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, con
 
 ::rtl::OUString BasicIDE::ChooseMacro( BOOL bExecute, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc )
 {
-    BASIC_MOD()->Load();
+    BasicIDEDLL::Init();
 
     if ( rMacroDesc.getLength() )
         IDE_DLL()->GetExtraData()->GetLastMacro() = String( rMacroDesc );
