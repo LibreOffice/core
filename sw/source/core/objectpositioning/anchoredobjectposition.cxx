@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:02:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,9 +478,9 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
 /** adjust calculated vertical in order to keep object inside
     'page' alignment layout frame.
 
-    OD 2004-07-22 #i31805# - add 3rd parameter <_bCheckBottom>
-
-    --> OD 2004-07-01 #i28701# - parameter <_nTopOfAnch> and <_bVert> added
+    OD 2004-07-01 #i28701# - parameter <_nTopOfAnch> and <_bVert> added
+    OD 2004-07-22 #i31805# - add parameter <_bCheckBottom>
+    OD 2004-10-08 #i26945# - add parameter <_bFollowTextFlow>
 
     @author OD
 */
@@ -488,6 +488,7 @@ SwTwips SwAnchoredObjectPosition::_AdjustVertRelPos( const SwTwips _nTopOfAnch,
                                                      const bool _bVert,
                                                      const SwFrm&  _rPageAlignLayFrm,
                                                      const SwTwips _nProposedRelPosY,
+                                                     const bool _bFollowTextFlow,
                                                      const bool _bCheckBottom ) const
 {
     SwTwips nAdjustedRelPosY = _nProposedRelPosY;
@@ -504,7 +505,11 @@ SwTwips SwAnchoredObjectPosition::_AdjustVertRelPos( const SwTwips _nTopOfAnch,
     // to its environment (e.g. page header/footer).
     SwRect aPgAlignArea;
     {
-        if ( GetFrmFmt().GetDoc()->ConsiderWrapOnObjPos() )
+        // --> OD 2004-10-08 #i26945# - no extension of restricted area, if
+        // object's attribute follow text flow is set and its inside a table
+        if ( GetFrmFmt().GetDoc()->ConsiderWrapOnObjPos() &&
+             ( !_bFollowTextFlow ||
+               !GetAnchoredObj().GetAnchorFrm()->IsInTab() ) )
         {
             aPgAlignArea = _rPageAlignLayFrm.FindPageFrm()->Frm();
         }
