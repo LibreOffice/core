@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:35:35 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,9 @@
 #ifndef _GLOSHDL_HXX
 #include <gloshdl.hxx>
 #endif
-#ifndef _GLOSSARY_HXX
-#include <glossary.hxx>
-#endif
+//CHINA001 #ifndef _GLOSSARY_HXX
+//CHINA001 #include <glossary.hxx>
+//CHINA001 #endif
 #ifndef _GLOSDOC_HXX
 #include <glosdoc.hxx>
 #endif
@@ -129,6 +129,8 @@
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
+#include "swabstdlg.hxx" //CHINA001
+#include <misc.hrc> //CHINA001
 
 //JP 14.01.99: Size Abpruefung
 #define NAVI_ENTRIES 20
@@ -397,7 +399,13 @@ IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
         String sLongName(pGlossaryList->GetBlockName(nBlock - 1, nId - (100 * nBlock) - 1, sShortName));
 
         SwGlossaryHdl* pGlosHdl = pView->GetGlosHdl();
-        SwGlossaryDlg::SetActGroup(sGroup);
+        //CHINA001 SwGlossaryDlg::SetActGroup(sGroup);
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
+        if ( fnSetActGroup )
+            (*fnSetActGroup)( sGroup );
+        //CHINA001 end
         pGlosHdl->SetCurGroup(sGroup, TRUE);
         pGlosHdl->InsertGlossary(sShortName);
     }
