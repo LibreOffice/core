@@ -51,7 +51,7 @@
    Contributor(s): _______________________________________
    
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:draw="http://openoffice.org/2000/drawing" exclude-result-prefixes="style text office xlink draw">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:openoffice:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:openoffice:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:openoffice:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:openoffice:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:openoffice:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:openoffice:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:openoffice:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:openoffice:xmlns:dr3d:1.0"  xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:openoffice:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:openoffice:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:openoffice:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg   dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
 	<!-- the following are common used  fields -->
 	<xsl:template match="text:page-number | text:page-count | text:subject | text:initial-creator |  text:title  | text:date
      | text:time | text:page-variable-get | text:author-name | text:author-initials | text:file-name  | text:sender-company 
@@ -283,28 +283,28 @@ $field_number_format_style ='壹, 贰, 叁, ...' ">
 				<xsl:text> \* DBNUM1 </xsl:text>
 			</xsl:when>
 			<xsl:when test="$field_number_format_style ='ㄱ, ㄴ, ㄷ, ...' or $field_number_format_style = '㉠, ㉡, ㉢, ...' ">
-				<xsl:text>PAGE  \* Chosung  </xsl:text>
+				<xsl:text> \* Chosung  </xsl:text>
 			</xsl:when>
 			<xsl:when test="$field_number_format_style = '가, 나, 다, ...' or $field_number_format_style = '㉮, ㉯, ㉰, ...' ">
-				<xsl:text>PAGE  \* Ganada </xsl:text>
+				<xsl:text>  \* Ganada </xsl:text>
 			</xsl:when>
 			<xsl:when test="$field_number_format_style = 'ア, イ, ウ, ...' or $field_number_format_style = 'ｱ, ｲ, ｳ, ...' ">
-				<xsl:text> PAGE  \* Aiueo </xsl:text>
+				<xsl:text>  \* Aiueo </xsl:text>
 			</xsl:when>
 			<xsl:when test="$field_number_format_style ='a' ">
-				<xsl:text>  PAGE  \* alphabetic </xsl:text>
+				<xsl:text>  \* alphabetic </xsl:text>
 			</xsl:when>
 			<xsl:when test="$field_number_format_style ='A' ">
-				<xsl:text> PAGE  \* ALPHABETIC </xsl:text>
+				<xsl:text>  \* ALPHABETIC </xsl:text>
 			</xsl:when>
 			<xsl:when test="$field_number_format_style = 'א, ב, ג, ...' ">
-				<xsl:text>  PAGE  \* hebrew2  </xsl:text>
+				<xsl:text>  \* hebrew2  </xsl:text>
 			</xsl:when>
 			<xsl:when test="$field_number_format_style = 'أ, ب, ت, ...' ">
-				<xsl:text> PAGE  \* ArabicAlpha </xsl:text>
+				<xsl:text>  \* ArabicAlpha </xsl:text>
 			</xsl:when>
 			<xsl:when test="$field_number_format_style = 'ก, ข, ฃ, ...' ">
-				<xsl:text>  PAGE  \* ThaiLetter </xsl:text>
+				<xsl:text>  \* ThaiLetter </xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:text> </xsl:text>
@@ -518,7 +518,7 @@ $field_number_format_style ='壹, 贰, 叁, ...' ">
                                     | text:placeholder | text:drop-down | text:conditional-text
                                     | text:variable-set | text:table-formula | text:database-display 
                                     | text:database-next | text:database-select | text:database-row-number
-                                    | text:sequence-ref | text:expression | text:sheet-name ">
+                                    | text:sequence-ref | text:expression | text:sheet-name | text:dde-connection">
 		<!-- this template just export content of staroffice fields that do not have the corresponding fields in MS word  ATM -->
 		<w:r>
 			<w:rPr>
@@ -529,7 +529,7 @@ $field_number_format_style ='壹, 贰, 叁, ...' ">
 			</w:t>
 		</w:r>
 	</xsl:template>
-	<xsl:template match="text:execute-macro | text:variable-decls | text:variable-decl | text:user-field-decls | text:variable-decl | text:sequence-decls | text:sequence-decl | text:page-variable-set | text:dde-connection | text:bibliography-mark | text:script | text:page-continuation ">
+	<xsl:template match="text:execute-macro | text:variable-decls | text:variable-decl | text:user-field-decls | text:variable-decl | text:sequence-decls | text:sequence-decl | text:page-variable-set |  text:bibliography-mark | text:script | text:page-continuation ">
 		<!-- this template is to ignore matched elements when exporting writer to word -->
 	</xsl:template>
 	<xsl:template match="text:a ">
@@ -695,7 +695,7 @@ $field_number_format_style ='壹, 贰, 叁, ...' ">
 	</xsl:template>
 	<xsl:template name="unique_amlid_generator">
 		<!-- this template generate unique id for aml:id, ATM it only counts the office:annotation, some other elements might be added later -->
-		<xsl:number count="office:annotation" from="/office:document/office:body" level="any"/>
+		<xsl:number count="office:annotation" from="/office:document/office:body" level="any" format="1"/>
 	</xsl:template>
 	<xsl:template name="add_comments_style">
 		<w:style w:type="character" w:styleId="CommentReference">
