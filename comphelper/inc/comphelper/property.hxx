@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:34:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #include <functional>
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //=========================================================================
 //= property helper classes
@@ -116,7 +119,7 @@ namespace comphelper
 
 //------------------------------------------------------------------
 /// remove the property with the given name from the given sequence
-void RemoveProperty(staruno::Sequence<starbeans::Property>& seqProps, const ::rtl::OUString& _rPropName);
+COMPHELPER_DLLPUBLIC void RemoveProperty(staruno::Sequence<starbeans::Property>& seqProps, const ::rtl::OUString& _rPropName);
 
 //------------------------------------------------------------------
 /** within the given property sequence, modify attributes of a special property
@@ -125,18 +128,18 @@ void RemoveProperty(staruno::Sequence<starbeans::Property>& seqProps, const ::rt
     @param  _nAddAttrib     the attributes which should be added
     @param  _nRemoveAttrib  the attributes which should be removed
 */
-void ModifyPropertyAttributes(staruno::Sequence<starbeans::Property>& _rProps, const ::rtl::OUString& _sPropName, sal_Int16 _nAddAttrib, sal_Int16 _nRemoveAttrib);
+COMPHELPER_DLLPUBLIC void ModifyPropertyAttributes(staruno::Sequence<starbeans::Property>& _rProps, const ::rtl::OUString& _sPropName, sal_Int16 _nAddAttrib, sal_Int16 _nRemoveAttrib);
 
 //------------------------------------------------------------------
 /** check if the given set has the given property.
 */
-sal_Bool hasProperty(const rtl::OUString& _rName, const staruno::Reference<starbeans::XPropertySet>& _rxSet);
+COMPHELPER_DLLPUBLIC sal_Bool hasProperty(const rtl::OUString& _rName, const staruno::Reference<starbeans::XPropertySet>& _rxSet);
 
 //------------------------------------------------------------------
 /** copy properties between property sets, in compliance with the property
     attributes of the target object
 */
-void copyProperties(const staruno::Reference<starbeans::XPropertySet>& _rxSource,
+COMPHELPER_DLLPUBLIC void copyProperties(const staruno::Reference<starbeans::XPropertySet>& _rxSource,
                     const staruno::Reference<starbeans::XPropertySet>& _rxDest);
 
 //==================================================================
@@ -229,7 +232,7 @@ inline sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno:
                     sal_False, if the value could be converted and has not changed
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
-sal_Bool tryPropertyValue(staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, const staruno::Any& _rValueToSet, staruno::Any& _rCurrentValue, const staruno::Type& _rExpectedType);
+COMPHELPER_DLLPUBLIC sal_Bool tryPropertyValue(staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, const staruno::Any& _rValueToSet, staruno::Any& _rCurrentValue, const staruno::Type& _rExpectedType);
 
 //.........................................................................
 }
