@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:15:07 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1056,7 +1056,6 @@ void SwPagePreViewWin::SetWinSize( const Size& rNewSize )
 {
     // die Size wollen wir aber immer in Pixel-Einheiten haben
     maPxWinSize = LogicToPixel( rNewSize );
-    USHORT nRowCol = ( mnRow << 8 ) + mnCol; // Zeilen / DoppelSeiten
 
     if( USHRT_MAX == mnSttPage )
     {
@@ -2631,27 +2630,44 @@ void SwPagePreViewWin::RepaintCoreRect( const SwRect& rRect )
 /** method to adjust preview to a new zoom factor
 
     OD 02.12.2002 #103492#
+    OD 24.09.2003 #i19975# - also consider zoom type - adding parameter <_eZoomType>
 */
-void SwPagePreViewWin::AdjustPreviewToNewZoom( const sal_uInt16 nZoomFactor)
+void SwPagePreViewWin::AdjustPreviewToNewZoom( const sal_uInt16 _nZoomFactor,
+                                               const SvxZoomType _eZoomType )
 {
-    // calculate new scaling and set mapping mode appropriately.
-    Fraction aNewScale( nZoomFactor, 100 );
-    MapMode aNewMapMode = GetMapMode();
-    aNewMapMode.SetScaleX( aNewScale );
-    aNewMapMode.SetScaleY( aNewScale );
-    SetMapMode( aNewMapMode );
+    // OD 24.09.2003 #i19975# - consider zoom type
+    if ( _eZoomType == SVX_ZOOM_WHOLEPAGE )
+    {
+        mnRow = 1;
+        mnCol = 1;
+        mpPgPrevwLayout->Init( mnCol, mnRow, maPxWinSize, true );
+        mpPgPrevwLayout->Prepare( mnSttPage, Point(0,0), maPxWinSize,
+                                  mnSttPage, maPaintedPreviewDocRect );
+        SetSelectedPage( mnSttPage );
+        SetPagePreview(mnRow, mnCol);
+        maScale = GetMapMode().GetScaleX();
+    }
+    else if ( _nZoomFactor != 0 )
+    {
+        // calculate new scaling and set mapping mode appropriately.
+        Fraction aNewScale( _nZoomFactor, 100 );
+        MapMode aNewMapMode = GetMapMode();
+        aNewMapMode.SetScaleX( aNewScale );
+        aNewMapMode.SetScaleY( aNewScale );
+        SetMapMode( aNewMapMode );
 
-    // calculate new start position for preview paint
-    Size aNewWinSize = PixelToLogic( maPxWinSize );
-    Point aNewPaintStartPos =
-            mpPgPrevwLayout->GetPreviewStartPosForNewScale( aNewScale, maScale, aNewWinSize );
+        // calculate new start position for preview paint
+        Size aNewWinSize = PixelToLogic( maPxWinSize );
+        Point aNewPaintStartPos =
+                mpPgPrevwLayout->GetPreviewStartPosForNewScale( aNewScale, maScale, aNewWinSize );
 
-    // remember new scaling and prepare preview paint
-    // Note: paint of preview will be performed by a corresponding invalidate
-    //          due to property changes.
-    maScale = aNewScale;
-    mpPgPrevwLayout->Prepare( 0, aNewPaintStartPos, maPxWinSize,
-                              mnSttPage, maPaintedPreviewDocRect );
+        // remember new scaling and prepare preview paint
+        // Note: paint of preview will be performed by a corresponding invalidate
+        //          due to property changes.
+        maScale = aNewScale;
+        mpPgPrevwLayout->Prepare( 0, aNewPaintStartPos, maPxWinSize,
+                                  mnSttPage, maPaintedPreviewDocRect );
+    }
 
 }
 /* -----------------04.12.2002 10:46-----------------
@@ -2763,7 +2779,8 @@ void SwPagePreView::SetZoom(SvxZoomType eType, USHORT nFactor)
         rSh.ApplyViewOptions( aOpt );
         lcl_InvalidateZoomSlots(GetViewFrame()->GetBindings());
         // OD 02.12.2002 #103492#
-        aViewWin.AdjustPreviewToNewZoom( nFactor );
+        // OD 24.09.2003 #i19975# - also consider zoom type
+        aViewWin.AdjustPreviewToNewZoom( nFactor, eType );
         ScrollViewSzChg();
     }
 }
