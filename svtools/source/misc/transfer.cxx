@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-10 10:50:48 $
+ *  last change: $Author: obr $ $Date: 2001-04-10 13:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,8 +289,8 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() thr
     DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
     sal_uInt32                      nCurPos = 0;
 
-    while( aIter != aEnd )
-        aRet[ nCurPos++ ] = (DataFlavor&)(*aIter++);
+    for( ; aIter != aEnd; ++aIter )
+        aRet[ nCurPos++ ] = (DataFlavor&)(*aIter);
 
     return aRet;
 }
@@ -315,11 +315,13 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
 
     while( aIter != aEnd )
     {
-        if( TransferableDataHelper::IsEqual( rFlavor, *aIter++ ) )
+        if( TransferableDataHelper::IsEqual( rFlavor, *aIter ) )
         {
             bRet = sal_True;
             aIter = aEnd;
         }
+        else
+            ++aIter;
     }
 
     return bRet;
@@ -513,7 +515,7 @@ void TransferableHelper::RemoveFormat( SotFormatStringId nFormat )
             aEnd = mpFormats->end();
         }
         else
-            aIter++;
+            ++aIter;
     }
 }
 
@@ -531,7 +533,7 @@ void TransferableHelper::RemoveFormat( const DataFlavor& rFlavor )
             aEnd = mpFormats->end();
         }
         else
-            aIter++;
+            ++aIter;
     }
 }
 
@@ -544,11 +546,13 @@ sal_Bool TransferableHelper::HasFormat( SotFormatStringId nFormat )
 
     while( aIter != aEnd )
     {
-        if( nFormat == (*aIter++).mnSotId )
+        if( nFormat == (*aIter).mnSotId )
         {
             bRet = sal_True;
             aIter = aEnd;
         }
+        else
+            ++aIter;
     }
 
     return bRet;
