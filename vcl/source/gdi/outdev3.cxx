@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.170 $
+ *  $Revision: 1.171 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 12:15:07 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1165,7 +1165,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
     const char* s = "DEFAULTFONT_SANS_UNKNOWN";
     switch ( nType )
     {
@@ -4906,7 +4906,7 @@ void OutputDevice::SetFont( const Font& rNewFont )
         mpMetaFile->AddAction( new MetaTextFillColorAction( aFont.GetFillColor(), !aFont.IsTransparent() ) );
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
     fprintf( stderr, "   OutputDevice::SetFont() FontName=\"%s\"\n",
          OUStringToOString( aFont.GetName(), osl_getThreadTextEncoding() ).getStr() );
 #endif
@@ -5306,7 +5306,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
     DBG_TRACE( "OutputDevice::DrawText()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
     fprintf( stderr, "   OutputDevice::DrawText(\"%s\")\n",
          OUStringToOString( rStr, osl_getThreadTextEncoding() ).getStr() );
 #endif
@@ -5972,10 +5972,14 @@ void OutputDevice::DrawText( const Rectangle& rRect,
             SetTextColor( COL_LIGHTGREEN );
         else
         {
+            // draw disabled text always without shadow
+            // as it fits better with native look
+            /*
             SetTextColor( GetSettings().GetStyleSettings().GetLightColor() );
             Rectangle aRect = rRect;
             aRect.Move( 1, 1 );
             DrawText( aRect, rOrigStr, nStyle & ~TEXT_DRAW_DISABLE );
+            */
             SetTextColor( GetSettings().GetStyleSettings().GetShadowColor() );
         }
     }
