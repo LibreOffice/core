@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-30 12:07:22 $
+ *  last change: $Author: pl $ $Date: 2002-04-17 08:35:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.10 2001-11-30 12:07:22 hdu Exp $
+/* $Id: sft.c,v 1.11 2002-04-17 08:35:04 pl Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -2605,7 +2605,7 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, uint32 glyphID)
         d->lsb = GetInt16(hmtx, 4 * glyphID + 2, 1);
     } else {
         d->aw = GetUInt16(hmtx, 4 * (ttf->numberOfHMetrics - 1), 1);
-        d->lsb  = GetInt16(hmtx + n * 4, (glyphID - ttf->numberOfHMetrics) * 2, 1);
+        d->lsb  = GetInt16(hmtx + ttf->numberOfHMetrics * 4, (glyphID - ttf->numberOfHMetrics) * 2, 1);
     }
 
     return d;
