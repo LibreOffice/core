@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:44:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ class SwAutoFormat
 
 
     BOOL IsSpace( const sal_Unicode c ) const
-        { return (' ' == c || '\t' == c || 0x0a == c) ? TRUE : FALSE; }
+        { return (' ' == c || '\t' == c || 0x0a == c|| 0x3000 == c /* Jap. space */) ? TRUE : FALSE; }
 
     void SetColl( USHORT nId, BOOL bHdLineOrText = FALSE );
     String GoNextPara();
@@ -929,7 +929,8 @@ USHORT SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
     while( nPos < rTxt.Len() && nDigitLvl < MAXLEVEL - 1)
     {
         const sal_Unicode cCurrentChar = rTxt.GetChar( nPos );
-        if( '0' <= cCurrentChar &&  '9' >= cCurrentChar)
+        if( '0' <= cCurrentChar &&  '9' >= cCurrentChar ||
+            0xff10 <= cCurrentChar &&  0xff19 >= cCurrentChar)
         {
             if( eScan & DELIM )
             {
@@ -957,7 +958,7 @@ USHORT SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
                 return USHRT_MAX;
 
             nStart *= 10;
-            nStart += rTxt.GetChar( nPos ) - '0';
+            nStart += cCurrentChar <= '9' ? cCurrentChar - '0' : cCurrentChar - 0xff10;
         }
         else if( rCC.isAlpha( rTxt, nPos ) )
         {
@@ -1117,12 +1118,16 @@ CHECK_ROMAN_5:
             eScan |= eTmpScan;          // Digit rein
             ++nDigitCnt;
         }
-        else if( 256 > cCurrentChar &&
-                 strchr( ".)(", cCurrentChar ) )
+        else if( (256 > cCurrentChar &&
+                 strchr( ".)(", cCurrentChar )) ||
+                 0x3002 == cCurrentChar /* Chinese trad. dot */||
+                 0xff0e == cCurrentChar /* Japanese dot */||
+                 0xFF08 == cCurrentChar /* opening bracket Chin./Jap.*/||
+                 0xFF09 == cCurrentChar )/* closing bracket Chin./Jap. */
         {
-            if(cCurrentChar == '(')
+            if(cCurrentChar == '(' || cCurrentChar == 0xFF09)
                 nOpeningParentheses++;
-            else if(cCurrentChar == ')')
+            else if(cCurrentChar == ')'|| cCurrentChar == 0xFF08)
                 nClosingParentheses++;
             // nur wenn noch keine Zahlen gelesen wurden!
             if( pPreFix && !( eScan & ( NO_DELIM | CHG )) )
