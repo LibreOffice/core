@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:36:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,21 +285,37 @@ namespace dbaui
             aColumnTypes.push_back(xMeta->getColumnType(k));
 
         // create sql string and set column types
+        ::std::vector< ::rtl::OUString> aInsertList;
         Reference<XNameAccess> xNameAccess = xColsSup->getColumns();
         Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
         const ::rtl::OUString* pBegin = aSeq.getConstArray();
         const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
-        for(sal_Int32 i=1;pBegin != pEnd;++pBegin,++i)
+
+        aInsertList.resize(aSeq.getLength()+1);
+
+        sal_Int32 i = 0;
+        for(sal_Int32 j=0; j < aInsertList.size() ;++i,++j)
         {
             // create the sql string
-            if ( _rvColumns.end() != ::std::find_if(_rvColumns.begin(),_rvColumns.end(),
-                ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),i),::std::select1st<ODatabaseExport::TPositions::value_type>())) )
+            ODatabaseExport::TPositions::const_iterator aFind = ::std::find_if(_rvColumns.begin(),_rvColumns.end(),
+                ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),i+1),::std::select2nd<ODatabaseExport::TPositions::value_type>()));
+            if ( _rvColumns.end() != aFind && aFind->second != CONTAINER_ENTRY_NOTFOUND && aFind->first != CONTAINER_ENTRY_NOTFOUND )
             {
-                aSql += ::dbtools::quoteName( aQuote,*pBegin);
+                aInsertList[aFind->first] = ::dbtools::quoteName( aQuote,*(pBegin+i));
+            }
+        }
+
+        i = 1;
+        for (::std::vector< ::rtl::OUString>::iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertList.end(); ++aInsertIter)
+        {
+            if ( aInsertIter->getLength() )
+            {
+                aSql += *aInsertIter;
                 aSql += aComma;
                 aValues += aPara;
             }
         }
+
 
         aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
         aValues = aValues.replaceAt(aValues.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
@@ -344,7 +360,7 @@ namespace dbaui
                 ODatabaseExport::TPositions::const_iterator aPosIter = _rvColumns.begin();
                 for(sal_Int32 i = 1;aPosIter != _rvColumns.end();++aPosIter)
                 {
-                    sal_Int32 nPos = aPosIter->second;
+                    sal_Int32 nPos = aPosIter->first;
                     if ( nPos == CONTAINER_ENTRY_NOTFOUND )
                     {
                         ++i; // otherwise we don't get the correct value when only the 2nd source column was selected
