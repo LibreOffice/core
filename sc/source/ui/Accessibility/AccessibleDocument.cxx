@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2002-04-30 17:21:40 $
+ *  last change: $Author: af $ $Date: 2002-05-14 13:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_TREE_INFO_HXX
 #include <svx/AccessibleShapeTreeInfo.hxx>
+#endif
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
+#include <svx/AccessibleShapeInfo.hxx>
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -380,10 +383,12 @@ uno::Reference< XAccessible > ScChildrenShapes::Get(sal_Int32 nIndex) const
     {
         accessibility::ShapeTypeHandler& rShapeHandler = accessibility::ShapeTypeHandler::Instance();
         maShapes[nIndex]->pAccShape = rShapeHandler.CreateAccessibleObject(
-            maShapes[nIndex]->xShape, mpAccessibleDocument, maShapeTreeInfo);
+            ::accessibility::AccessibleShapeInfo (maShapes[nIndex]->xShape, mpAccessibleDocument),
+            maShapeTreeInfo);
         if (maShapes[nIndex]->pAccShape)
         {
             maShapes[nIndex]->pAccShape->acquire();
+            maShapes[nIndex]->pAccShape->Init();
             if (maShapes[nIndex]->bSelected)
                 maShapes[nIndex]->pAccShape->SetState(AccessibleStateType::SELECTED);
         }
