@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmcache.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:37 $
+ *  last change: $Author: ka $ $Date: 2001-09-24 13:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,24 +68,22 @@
 
 
 class SdPage;
-class Bitmap;
+class GraphicObject;
 
 class BitmapCache
 {
-    ULONG         nMaxSize;
-    ULONG         nCurSize;
-    List          aEntries;
+    ULONG                   nMaxSize;
+    ULONG                   nCurSize;
+    List                    aEntries;
 
 public:
-                  BitmapCache(ULONG nMaxSizeKB)
-                            : nMaxSize(nMaxSizeKB),
-                              nCurSize(0)            {}
-    virtual       ~BitmapCache();
+                            BitmapCache(ULONG nMaxSizeKB)
+                              : nMaxSize(nMaxSizeKB), nCurSize(0) {}
+    virtual                 ~BitmapCache();
 
-    void          Add(const SdPage* pPage, Bitmap* pBitmap, long nZoomPercent);
-    const Bitmap* Get(const SdPage* pPage, long& rZoomPercent,
-                      long nZoomTolerancePercent);
-    void Remove(const SdPage* pPage);
+    void                    Add(const SdPage* pPage, const Bitmap& rBmp, long nZoomPercent);
+    const GraphicObject*    Get(const SdPage* pPage, long& rZoomPercent, long nZoomTolerancePercent);
+    void                    Remove(const SdPage* pPage);
 };
 
 #endif  // _SD_BMCACHE_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuslsel.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: ka $ $Date: 2001-09-24 13:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,58 +80,57 @@ struct FSS_IsShowingEffectInfo
 
 class FuSlideSelection : public FuSlide
 {
-    BOOL         bSubstShown;
-    BOOL         bPageHit;
-    List         aSubstList;          // Liste mit Ertsatzdarstellungen
-    Point        aDragPos;            // hier wird die Seite angefasst
+private:
 
-    BOOL         bDragSelection;
-    Point        aDragSelRectAnchor;  // fester Punkt des Selektionsrechtecks
-    Rectangle    aDragSelRect;
-
-    Point        aPosOfInsertMarker;
-
-    Sound*       pSound;
-
+    BOOL                        bSubstShown;
+    BOOL                        bPageHit;
+    List                        aSubstList;       // Liste mit Ertsatzdarstellungen
+    Point                       aDragPos;             // hier wird die Seite angefasst
+    BOOL                        bDragSelection;
+    Point                       aDragSelRectAnchor;  // fester Punkt des Selektionsrechtecks
+    Rectangle                   aDragSelRect;
+    Point                       aPosOfInsertMarker;
+    Sound*                      pSound;
     FSS_IsShowingEffectInfo*    pIsShowingEffectInfo;
 
-    void   DrawInsertMarker(BOOL bShow);
-    Point  CalcPosOfInsertMarker(const Point& rPoint);
+    void                        DrawInsertMarker(BOOL bShow);
+    Point                       CalcPosOfInsertMarker(const Point& rPoint);
 
-    USHORT GetTargetPage(const Point& rPoint) const;
-    BOOL   MovePages(USHORT nTargetPage) const;
+    USHORT                      GetTargetPage(const Point& rPoint) const;
+    BOOL                        MovePages(USHORT nTargetPage) const;
 
-    void   CreateSubst();
-    void   DeleteSubst();
-    void   DrawSubst() const;
-    void   ChangeSubstPos(const Point& rVector);
+    void                        CreateSubst();
+    void                        DeleteSubst();
+    void                        DrawSubst() const;
+    void                        ChangeSubstPos(const Point& rVector);
+    void                        DrawDragSelectionRect() const;
+    void                        ShowEffect(USHORT nPageNo);
 
-    void   DrawDragSelectionRect() const;
+                                DECL_LINK( DragSlideHdl, Timer* );
 
-    void   ShowEffect(USHORT nPageNo);
+public:
 
- public:
-    TYPEINFO();
+                                TYPEINFO();
 
-    FuSlideSelection(SdSlideViewShell* pViewSh, SdWindow* pWin,
-                     SdSlideView* pView, SdDrawDocument* pDoc,
-                     SfxRequest& rReq);
+                                FuSlideSelection( SdSlideViewShell* pViewSh, SdWindow* pWin,
+                                                  SdSlideView* pView, SdDrawDocument* pDoc,
+                                                  SfxRequest& rReq );
 
-    virtual ~FuSlideSelection();
-                                       // Mouse- & Key-Events
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL MouseMove(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void Paint(const Rectangle& rRect, SdWindow* pWin);
+    virtual                     ~FuSlideSelection();
+                                                   // Mouse- & Key-Events
+    virtual BOOL                KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL                MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL                MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL                MouseButtonDown(const MouseEvent& rMEvt);
+    virtual void                Paint(const Rectangle& rRect, SdWindow* pWin);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void                Activate();        // Function aktivieren
+    virtual void                Deactivate();          // Function deaktivieren
 
-    virtual void ScrollStart();
-    virtual void ScrollEnd();
+    virtual void                ScrollStart();
+    virtual void                ScrollEnd();
 
-    BOOL    IsShowingEffect() const { return pIsShowingEffectInfo && pIsShowingEffectInfo->bIsShowingEffect; }
+    BOOL                        IsShowingEffect() const { return pIsShowingEffectInfo && pIsShowingEffectInfo->bIsShowingEffect; }
 };
 
 

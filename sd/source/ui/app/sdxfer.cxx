@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-13 11:04:32 $
+ *  last change: $Author: ka $ $Date: 2001-09-24 13:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 
 SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, SdView* pWorkView, BOOL bInitOnGetData ) :
     pObjDesc( NULL ),
+    pPageDocShell( NULL ),
     pSourceDoc( pSrcDoc ),
     pSdViewIntern( pWorkView ),
     pSdView( pWorkView ),
@@ -180,7 +181,9 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, SdView* pWorkView, BOOL
     pBookmark( NULL ),
     pGraphic( NULL ),
     pImageMap( NULL ),
-    bLateInit( bInitOnGetData )
+    bLateInit( bInitOnGetData ),
+    bPageTransferable( FALSE ),
+    bPageTransferablePersistent( FALSE )
 {
     if( !bLateInit )
         CreateData();
@@ -193,6 +196,9 @@ SdTransferable::~SdTransferable()
     Application::GetSolarMutex().acquire();
 
     ObjectReleased();
+
+    for( void* p = aPageBookmarks.First(); p; p = aPageBookmarks.Next() )
+        delete static_cast< String* >( p );
 
     if( bOwnView )
         delete pSdViewIntern;
@@ -389,48 +395,51 @@ void SdTransferable::CreateData()
 
 void SdTransferable::AddSupportedFormats()
 {
-    if( pOLEDataHelper )
+    if( !bPageTransferable || bPageTransferablePersistent )
     {
-        AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-
-        DataFlavorExVector              aVector( pOLEDataHelper->GetDataFlavorExVector() );
-        DataFlavorExVector::iterator    aIter( aVector.begin() ), aEnd( aVector.end() );
-
-        while( aIter != aEnd )
-            AddFormat( *aIter++ );
-    }
-    else if( pGraphic )
-    {
-        AddFormat( SOT_FORMATSTR_ID_SVXB );
-
-        if( pGraphic->GetType() == GRAPHIC_BITMAP )
+        if( pOLEDataHelper )
         {
-            AddFormat( SOT_FORMAT_BITMAP );
-            AddFormat( SOT_FORMAT_GDIMETAFILE );
+            AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
+            AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
+
+            DataFlavorExVector              aVector( pOLEDataHelper->GetDataFlavorExVector() );
+            DataFlavorExVector::iterator    aIter( aVector.begin() ), aEnd( aVector.end() );
+
+            while( aIter != aEnd )
+                AddFormat( *aIter++ );
+        }
+        else if( pGraphic )
+        {
+            AddFormat( SOT_FORMATSTR_ID_SVXB );
+
+            if( pGraphic->GetType() == GRAPHIC_BITMAP )
+            {
+                AddFormat( SOT_FORMAT_BITMAP );
+                AddFormat( SOT_FORMAT_GDIMETAFILE );
+            }
+            else
+            {
+                AddFormat( SOT_FORMAT_GDIMETAFILE );
+                AddFormat( SOT_FORMAT_BITMAP );
+            }
+        }
+        else if( pBookmark )
+        {
+            AddFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
+            AddFormat( FORMAT_STRING );
         }
         else
         {
+            AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
+            AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
+            AddFormat( SOT_FORMATSTR_ID_DRAWING );
             AddFormat( SOT_FORMAT_GDIMETAFILE );
             AddFormat( SOT_FORMAT_BITMAP );
         }
-    }
-    else if( pBookmark )
-    {
-        AddFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
-        AddFormat( FORMAT_STRING );
-    }
-    else
-    {
-        AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-        AddFormat( SOT_FORMATSTR_ID_DRAWING );
-        AddFormat( SOT_FORMAT_GDIMETAFILE );
-        AddFormat( SOT_FORMAT_BITMAP );
-    }
 
-    if( pImageMap )
-        AddFormat( SOT_FORMATSTR_ID_SVIM );
+        if( pImageMap )
+            AddFormat( SOT_FORMATSTR_ID_SVIM );
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -617,22 +626,46 @@ void SdTransferable::SetObjectDescriptor( const TransferableObjectDescriptor& rO
 
 // -----------------------------------------------------------------------------
 
-void SdTransferable::ResetPageView()
+void SdTransferable::SetPageBookmarks( const List& rPageBookmarks, BOOL bPersistent )
 {
-    if( pSdViewIntern )
-        pSdViewIntern->HideAllPages();
-}
-
-// -----------------------------------------------------------------------------
-
-void SdTransferable::UpdatePageView()
-{
-    if( pSdViewIntern && pSdDrawDocument )
+    if( pSourceDoc )
     {
-        SdPage* pPage = pSdDrawDocument->GetSdPage( 0, PK_STANDARD );
+        if( pSdViewIntern )
+            pSdViewIntern->HideAllPages();
 
-        if( pPage )
-            ( (SdrMarkView*) pSdViewIntern )->MarkAll( (SdrPageView*) pSdViewIntern->ShowPage( pPage, Point() ) );
+        pSdDrawDocument->Clear();
+        pPageDocShell = NULL;
+
+        for( void* p = aPageBookmarks.First(); p; p = aPageBookmarks.Next() )
+            delete static_cast< String* >( p );
+
+        if( bPersistent )
+        {
+            pSdDrawDocument->CreateFirstPages();
+            pSdDrawDocument->InsertBookmarkAsPage( const_cast< List* >( &rPageBookmarks ), NULL, FALSE, TRUE, 1, TRUE, pSourceDoc->GetDocSh(), TRUE, TRUE );
+        }
+        else
+        {
+            pPageDocShell = pSourceDoc->GetDocSh();
+
+            for( ULONG i = 0; i < rPageBookmarks.Count(); i++ )
+                aPageBookmarks.Insert( new String( *static_cast< String* >( rPageBookmarks.GetObject( i ) ) ), LIST_APPEND );
+        }
+
+        if( pSdViewIntern && pSdDrawDocument )
+        {
+            SdPage* pPage = pSdDrawDocument->GetSdPage( 0, PK_STANDARD );
+
+            if( pPage )
+            {
+                ( (SdrMarkView*) pSdViewIntern )->MarkAll( (SdrPageView*) pSdViewIntern->ShowPage( pPage, Point() ) );
+            }
+        }
+
+        // set flags for page transferable; if ( bPageTransferablePersistent == FALSE ),
+        // don't offer any formats => it's just for internal puposes
+        bPageTransferable = TRUE;
+        bPageTransferablePersistent = bPersistent;
     }
 }
 

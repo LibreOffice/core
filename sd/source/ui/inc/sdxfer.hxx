@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-29 12:22:35 $
+ *  last change: $Author: ka $ $Date: 2001-09-24 13:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,12 +81,15 @@ class SdDrawDocument;
 class INetBookmark;
 class ImageMap;
 class VirtualDevice;
+class SdDrawDocShell;
 
 class SdTransferable : public TransferableHelper
 {
 private:
 
     SvEmbeddedObjectRef             aDocShellRef;
+    SdDrawDocShell*                 pPageDocShell;
+    List                            aPageBookmarks;
     TransferableDataHelper*         pOLEDataHelper;
     TransferableObjectDescriptor*   pObjDesc;
     const SdView*                   pSdView;
@@ -100,10 +103,12 @@ private:
     ImageMap*                       pImageMap;
     Rectangle                       aVisArea;
     Point                           aStartPos;
-    BOOL                            bInternalMove   : 1;
-    BOOL                            bOwnDocument    : 1;
-    BOOL                            bOwnView        : 1;
-    BOOL                            bLateInit       : 1;
+    BOOL                            bInternalMove               : 1;
+    BOOL                            bOwnDocument                : 1;
+    BOOL                            bOwnView                    : 1;
+    BOOL                            bLateInit                   : 1;
+    BOOL                            bPageTransferable           : 1;
+    BOOL                            bPageTransferablePersistent : 1;
 
                                     // not available
                                     SdTransferable();
@@ -137,9 +142,6 @@ public:
 
     void                            SetObjectDescriptor( const TransferableObjectDescriptor& rObjDesc );
 
-    void                            ResetPageView();
-    void                            UpdatePageView();
-
     void                            SetStartPos( const Point& rStartPos ) { aStartPos = rStartPos; }
     const Point&                    GetStartPos() const { return aStartPos; }
 
@@ -147,6 +149,12 @@ public:
     BOOL                            IsInternalMove() const { return bInternalMove; }
 
     BOOL                            HasSourceDoc( const SdDrawDocument* pDoc ) const { return( pSourceDoc == pDoc ); }
+
+    void                            SetPageBookmarks( const List& rPageBookmarks, BOOL bPersistent );
+    BOOL                            IsPageTransferable() const { return bPageTransferable; }
+    BOOL                            HasPageBookmarks() const { return( pPageDocShell && ( aPageBookmarks.Count() > 0 ) ); }
+    const List&                     GetPageBookmarks() const { return aPageBookmarks; }
+    SdDrawDocShell*                 GetPageDocShell() const { return pPageDocShell; }
 
 public:
 
