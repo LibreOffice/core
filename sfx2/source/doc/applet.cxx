@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:52:12 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,12 +146,6 @@ sal_Bool SAL_CALL AppletObject::load( const uno::Sequence < com::sun::star::bean
 {
     if ( SvtJavaOptions().IsExecuteApplets() && SvtMiscOptions().IsPluginsEnabled() )
     {
-        uno::Reference < util::XCloseable > xClose( xFrame, uno::UNO_QUERY );
-        if ( xClose.is() )
-            xClose->addCloseListener( static_cast < util::XCloseListener* >(this) );
-        else
-            xFrame->addEventListener( static_cast < lang::XEventListener* >(this) );
-
         mpApplet = new AppletWrapper_Impl;
 
         Window* pParent = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
@@ -166,7 +160,18 @@ sal_Bool SAL_CALL AppletObject::load( const uno::Sequence < com::sun::star::bean
             maCmdList.Append( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "name" ) ), maName );
 
         if( maCodeBase.getLength() )
+        {
+            for ( sal_Int32 nParams=0; nParams<maCmdList.Count(); nParams++ )
+            {
+                if ( maCmdList[nParams].GetCommand().EqualsAscii("codebase") )
+                {
+                    maCmdList.Remove(nParams);
+                    break;
+                }
+            }
+
             maCmdList.Append( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "codebase" ) ), maCodeBase );
+        }
 
         if( maClass.getLength() )
             maCmdList.Append( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "code" ) ), maClass );
@@ -175,11 +180,12 @@ sal_Bool SAL_CALL AppletObject::load( const uno::Sequence < com::sun::star::bean
             maCmdList.Append( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "mayscript" ) ), String() );
 
         INetURLObject aDocBase( maDocBase );
-        // TODO/LATER: Get Container URL
-        //if ( !maDocBase.getLength() )
-            //GetClient()->GetContURL( aDocBase );
         mpApplet->Init( pWin, aDocBase, maCmdList );
         uno::Reference < awt::XWindow > xWindow( pWin->GetComponentInterface(), uno::UNO_QUERY );
+
+        // we must destroy the applet before the parent is destroyed
+        xWindow->addEventListener( this );
+
         xFrame->setComponent( xWindow, uno::Reference < frame::XController >() );
         return TRUE;
     }
@@ -206,15 +212,6 @@ void SAL_CALL AppletObject::addCloseListener( const com::sun::star::uno::Referen
 
 void SAL_CALL AppletObject::removeCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& xListener ) throw( com::sun::star::uno::RuntimeException )
 {
-}
-
-void SAL_CALL AppletObject::queryClosing( const com::sun::star::lang::EventObject& aEvent, sal_Bool bDeliverOwnership ) throw (com::sun::star::uno::RuntimeException)
-{
-}
-
-void SAL_CALL AppletObject::notifyClosing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException)
-{
-    cancel();
 }
 
 void SAL_CALL AppletObject::disposing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException)
