@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_asian.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2002-03-28 00:32:21 $
+ *  last change: $Author: khong $ $Date: 2002-05-24 22:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@ INDEXENTRYSUPPLIER_CJK( zh_TW_stroke )
 #endif
 #if defined( INDEXENTRYSUPPLIER_ko_dict ) || defined( INDEXENTRYSUPPLIER_ALL )
 INDEXENTRYSUPPLIER_CJK( ko_dict )
+#endif
+#if defined( INDEXENTRYSUPPLIER_ja_phonetic ) || defined( INDEXENTRYSUPPLIER_ALL )
+INDEXENTRYSUPPLIER_CJK( ja_phonetic )
 #endif
 #undef INDEXENTRYSUPPLIER_CJK
 
