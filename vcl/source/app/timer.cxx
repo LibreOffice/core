@@ -2,9 +2,9 @@
  *
  *  $RCSfile: timer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:32:46 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,8 @@
 #include <svsys.h>
 #endif
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SALTIMER_HXX
 #include <saltimer.hxx>
-#endif
-#else
-#include <rmevents.hxx>
 #endif
 
 #ifndef _TIME_HXX
@@ -93,7 +89,7 @@
 #endif
 #undef protected
 
-#pragma hdrstop
+
 
 // =======================================================================
 
@@ -270,49 +266,6 @@ void ImplTimerCallbackProc()
     pSVData->mnTimerUpdate--;
     pSVData->mbNotAllTimerCalled = FALSE;
 }
-
-// =======================================================================
-
-#ifdef REMOTE_APPSERVER
-
-VclOTimer::VclOTimer() :
-    maTimeoutHdl( LINK( this, VclOTimer, Timeout ) )
-{
-    mbSend = FALSE;
-}
-
-void SAL_CALL VclOTimer::onShot()
-{
-    stop(); // start wird durch ImplTimerCallbackProc() gerufen
-    if ( !mbSend )
-    {
-        mbSend = TRUE;
-        if ( !Application::PostUserEvent( maTimeoutHdl ) )
-        {
-            mbSend = FALSE;
-            start();
-        }
-    }
-}
-
-IMPL_LINK( VclOTimer, Timeout, void*, EMPTYARG )
-{
-    mbSend = FALSE;
-    ImplTimerCallbackProc();
-    return 0;
-}
-
-void VclOTimer::StartTimer()
-{
-    start();
-}
-
-void VclOTimer::StopTimer()
-{
-    stop();
-}
-
-#endif
 
 // =======================================================================
 
