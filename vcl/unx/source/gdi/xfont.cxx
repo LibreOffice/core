@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hdu $ $Date: 2002-10-29 13:16:02 $
+ *  last change: $Author: hdu $ $Date: 2002-12-13 15:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ CharExists( const XCharStruct* pChar )
     if ( pChar == NULL )
         return False;
 
-    return     pChar->width
+    return  pChar->width
             || pChar->ascent   || pChar->descent
             || pChar->lbearing || pChar->rbearing;
 }
@@ -338,26 +338,26 @@ GetCharinfo( const XFontStruct *pXFontStruct, sal_MultiByte nChar )
 
 static sal_Size
 QueryCharWidth16( Display* pDisplay, XLIB_Font nFontID, sal_MultiByte nChar,
-        sal_Size nDefaultWidth )
+    sal_Size nDefaultWidth )
 {
-       int nDirection, nFontAscent, nFontDescent;
+    int nDirection, nFontAscent, nFontDescent;
     XCharStruct aBoundingBox;
 
     XQueryTextExtents16( pDisplay, nFontID, (XChar2b*)&nChar, 1,
-            &nDirection, &nFontAscent, &nFontDescent, &aBoundingBox );
+        &nDirection, &nFontAscent, &nFontDescent, &aBoundingBox );
 
     return CharExists( &aBoundingBox ) ? aBoundingBox.width : nDefaultWidth;
 }
 
 static sal_Size
 QueryCharWidth8( XFontStruct* pXFontStruct, sal_Char nChar,
-        sal_Size nDefaultWidth )
+    sal_Size nDefaultWidth )
 {
-       int nDirection, nFontAscent, nFontDescent;
+    int nDirection, nFontAscent, nFontDescent;
     XCharStruct aBoundingBox;
 
     XTextExtents( pXFontStruct, &nChar, 1,
-            &nDirection, &nFontAscent, &nFontDescent, &aBoundingBox );
+        &nDirection, &nFontAscent, &nFontDescent, &aBoundingBox );
 
     return CharExists( &aBoundingBox ) ? aBoundingBox.width : nDefaultWidth;
 }
@@ -513,7 +513,7 @@ ExtendedFontStruct::GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
         // query font metrics
         if ( pFont && (nSize == 1 || nSize == 2) )
         {
-            nChar = nSize == 1 ? (sal_MultiByte)pBuffer[0] :
+            nChar = nSize == 1 ? (unsigned char)pBuffer[0] :
                 ((sal_MultiByte)pBuffer[0] << 8) + (sal_MultiByte)pBuffer[1];
 
             if (   nSpacing == PITCH_VARIABLE
@@ -672,13 +672,12 @@ bool X11FontLayout::LayoutText( ImplLayoutArgs& rArgs )
         if( !rArgs.GetNextPos( &nCharPos, &bRightToLeft ) )
             break;
         sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
+        if( bRightToLeft )
+            cChar = GetMirroredChar( cChar );
 
-#if 1
-        // TODO: find out if X font contains the char
-        // update fallback_runs if needed
+        // request fallback glyph if necessary
         if( IsNotdefGlyph( cChar ) )
             rArgs.NeedFallback( nCharPos, bRightToLeft );
-#endif
 
         long nGlyphWidth;
         mrFont.GetCharWidth( cChar, cChar, &nGlyphWidth, NULL );
