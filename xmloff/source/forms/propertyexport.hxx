@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 12:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,18 @@
 namespace xmloff
 {
 //.........................................................................
+
+#define BOOLATTR_DEFAULT_FALSE          0x00
+#define BOOLATTR_DEFAULT_TRUE           0x01
+#define BOOLATTR_DEFAULT_VOID           0x02
+#define BOOLATTR_DEFAULT_MASK           0x03
+
+#define BOOLATTR_INVERSE_SEMANTICS      0x04
+    // if sal_True, indicates that the semantic of the property refered by <arg>_pPropertyName</arg>
+    // is inverse to the semantic of the XML attribute.<br/>
+    // I.e. if the property value is <TRUE/>, <FALSE/> has to be written and vice versa.
+    // <p>Be careful with <arg>_bDefault</arg> and <arg>_bInverseSemantics</arg>: if <arg>_bInverseSemantics</arg>
+    // is <TRUE/>, the current property value is inverted <em>before</em> comparing it to the default.</p>
 
     class IFormsExportContext;
     //=====================================================================
@@ -174,22 +186,14 @@ namespace xmloff
                 the name of the attribute to add. Must not contain any namespace (it's added automatically)
             @param _pPropertyName
                 the name of the property to ask the control for
-            @param _bDefault
-                the default for the attribute. If the current property value equals this default, no
-                attribute is added. See also <arg>_bInverseSemantics</arg>
-            @param _bInverseSemantics
-                if sal_True, indicates that the semantic of the property refered by <arg>_pPropertyName</arg>
-                is inverse to the semantic of the XML attribute.<br/>
-                I.e. if the property value is <TRUE/>, <FALSE/> has to be written and vice versa.
-                <p>Be careful with <arg>_bDefault</arg> and <arg>_bInverseSemantics</arg>: if <arg>_bInverseSemantics</arg>
-                is <TRUE/>, the current property value is inverted <em>before</em> comparing it to the default.</p>
+            @param _nBooleanAttributeFlags
+                specifies the default and the "alignment" (inverse semantics) of the boolean property
         */
         void exportBooleanPropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
             const sal_Char* _pPropertyName,
-            const sal_Bool _bDefault,
-            const sal_Bool _bInverseSemantics);
+            const sal_Int8 _nBooleanAttributeFlags);
 
         /** add an attribute which is represented by a sal_Int16 property to the export context
 
@@ -396,6 +400,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/02/01 09:46:47  fs
+ *  no own style handling anymore - the shape exporter is responsible for our styles now
+ *
  *  Revision 1.9  2001/01/03 16:25:34  fs
  *  file format change (extra wrapper element for controls, similar to columns)
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 13:58:52 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 12:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,26 +402,39 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     void OPropertyExport::exportBooleanPropertyAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
-            const sal_Char* _pPropertyName, const sal_Bool _bDefault, const sal_Bool _bInverseSemantics)
+            const sal_Char* _pPropertyName, const sal_Int8 _nBooleanAttributeFlags)
     {
         DBG_CHECK_PROPERTY_NO_TYPE(_pPropertyName);
         // no check of the property value type: this method is allowed to be called with any interger properties
         // (e.g. sal_Int32, sal_uInt16 etc)
 
+        sal_Bool bDefault = (BOOLATTR_DEFAULT_TRUE == (BOOLATTR_DEFAULT_MASK & _nBooleanAttributeFlags));
+        sal_Bool bDefaultVoid = (BOOLATTR_DEFAULT_VOID == (BOOLATTR_DEFAULT_MASK & _nBooleanAttributeFlags));
+
         // get the value
-        sal_Bool bCurrentValue = _bDefault;
+        sal_Bool bCurrentValue = bDefault;
         ::rtl::OUString sPropertyName(::rtl::OUString::createFromAscii(_pPropertyName));
         Any aCurrentValue = m_xProps->getPropertyValue(sPropertyName);
         if (aCurrentValue.hasValue())
+        {
             bCurrentValue = ::cppu::any2bool(aCurrentValue);
             // this will extract a boolean value even if the Any contains a int or short or something like that ...
 
-        if (_bInverseSemantics)
-            bCurrentValue = !bCurrentValue;
+            if (_nBooleanAttributeFlags & BOOLATTR_INVERSE_SEMANTICS)
+                bCurrentValue = !bCurrentValue;
 
-        // add the attribute
-        if (_bDefault != bCurrentValue)
-            AddAttribute(_nNamespaceKey, _pAttributeName, bCurrentValue ? m_sValueTrue : m_sValueFalse);
+            // we have a non-void current value
+            if (bDefaultVoid || (bDefault != bCurrentValue))
+                // and (the default is void, or the non-void default does not equal the current value)
+                // -> write the attribute
+                AddAttribute(_nNamespaceKey, _pAttributeName, bCurrentValue ? m_sValueTrue : m_sValueFalse);
+        }
+        else
+            // we have a void current value
+            if (!bDefaultVoid)
+                // and we have a non-void default
+                // -> write the attribute
+                AddAttribute(_nNamespaceKey, _pAttributeName, bCurrentValue ? m_sValueTrue : m_sValueFalse);
 
         // the property does not need to be handled anymore
         exportedProperty(sPropertyName);
@@ -745,6 +758,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/03/28 13:58:52  fs
+ *  #85371# write target frame attribute even if the prop value is an empty string
+ *
  *  Revision 1.12  2001/03/16 14:36:39  sab
  *  did the required change (move of extract.hxx form cppuhelper to comphelper)
  *
