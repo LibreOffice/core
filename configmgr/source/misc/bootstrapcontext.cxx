@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrapcontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ ComponentContext::ComponentContext(Context const & _xContext)
 , m_aMutex()
 , m_xContext(_xContext)
 , m_hBootstrapData(NULL)
+, m_xServiceManager()
 {
 }
 // ---------------------------------------------------------------------------
@@ -192,11 +193,36 @@ uno::Reference< lang::XMultiComponentFactory > SAL_CALL
     ComponentContext::getServiceManager(  )
         throw (uno::RuntimeException)
 {
-    Context xBase = basecontext();
-    if (!xBase.is())
-        throw lang::DisposedException(OUSTR("Parent context has been disposed"),*this);
+    osl::MutexGuard lock(mutex());
 
-    return xBase->getServiceManager();
+    if (!m_xServiceManager.is())
+    {
+        Context xBase = basecontext();
+        if (!xBase.is())
+            throw lang::DisposedException(OUSTR("Parent context has been disposed"),*this);
+
+        ServiceManager xBaseServiceManager = xBase->getServiceManager();
+        OSL_ENSURE( xBaseServiceManager.is(), "Base context has no service manager");
+
+        if (xBaseServiceManager.is())
+        {
+            // create new smgr based on delegate's one
+            m_xServiceManager.set(
+                xBaseServiceManager->createInstanceWithContext( OUSTR("com.sun.star.comp.stoc.OServiceManagerWrapper"), xBase ),
+                uno::UNO_QUERY );
+            // patch DefaultContext property of new one
+            uno::Reference< beans::XPropertySet > xProps( m_xServiceManager, uno::UNO_QUERY );
+            OSL_ASSERT( xProps.is() );
+            if (xProps.is())
+            {
+                uno::Reference< XComponentContext > xThis( this );
+                xProps->setPropertyValue( OUSTR("DefaultContext"), uno::makeAny( xThis ) );
+            }
+            else
+                OSL_ENSURE(!m_xServiceManager.is(), "Cannot set Default Context of Service Manager Wrapper: no property set");
+        }
+    }
+    return m_xServiceManager;
 }
 // ---------------------------------------------------------------------------
 
