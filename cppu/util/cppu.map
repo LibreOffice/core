@@ -78,6 +78,7 @@ UDK_2_0_0 {
         uno_revokeMappingCallback;
 
         uno_getCurrentContext;
+        uno_setCurrentContext;
 
         uno_bindIdToCurrentThread;
         uno_getIdOfCurrentThread;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: dbo $ $Date: 2001-05-07 15:07:01 $
+#   last change: $Author: dbo $ $Date: 2001-05-08 12:03:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,7 @@ APP1OBJS=	\
 APP1STDLIBS+=	\
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
-        $(VOSLIB)		\
+        $(SALHELPERLIB)		\
         $(SALLIB)
 
 APP1DEF=	$(MISC)$/$(APP1TARGET).def
