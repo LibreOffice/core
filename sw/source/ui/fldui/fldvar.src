@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-30 20:21:13 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 23:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,3 +585,4 @@ TabPage TP_FLD_VAR
     Text[ catalan ] = "Variables";
     Text[ finnish ] = "Muuttujat";
 };
+
