@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-16 16:04:26 $
+#   last change: $Author: vg $ $Date: 2005-02-17 11:25:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
+            $(SLO)$/asyncnotification.obj \
             $(SLO)$/listenernotification.obj \
             $(SLO)$/evtlistenerhlp.obj \
             $(SLO)$/accessiblecomponenthelper.obj \
