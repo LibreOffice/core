@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofpageview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-13 08:54:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,38 +236,94 @@ namespace sdr
                         rVOContact.BuildClipRegion(rDisplayInfo, aExpandRegion);
                     }
 
-                    if(!(aExpandRegion.IsEmpty() || aExpandRegion.IsNull()))
+                    // #i42431#
+                    if(false)
                     {
-                        // #116639#
-                        //      aOriginalDrawArea.Union(aExpandRegion.GetBoundRect());
-                        // Because of a bug in Region which THB wants to take a look at,
-                        // the result of the previous command is WRONG when done in logical
-                        // coodinates, the Region gets a line to small (!). Thus, for
-                        // a workaround i have to do the union in pixel coordinates (!).
-                        const Region aExpandRegionPixel(pOut->LogicToPixel(aExpandRegion));
-                        Rectangle aExpandPixelRect(aExpandRegionPixel.GetBoundRect());
+                        // what should be here:
+                        if(!(aExpandRegion.IsEmpty() || aExpandRegion.IsNull()))
+                        {
+                            pWin->ExpandPaintClipRegion(aExpandRegion);
+                            aOriginalDrawArea.Union(aExpandRegion);
+                        }
 
-                        // #116639#, #i29132#
-                        // Since e.g. with connectors like in #i29132# still rounding
-                        // errors happen when converting to pixels, i choose now to handle
-                        // this here in expanding the expand rectangle by one pixel, that
-                        // means: device dependent.
-                        // The maximum rounding error is potentially 1/2 pixel, so with
-                        // one pixel the rect is then potentially up to 1/2 pixel too big.
-                        // I see no other way until we have more precise conversions, though.
-                        // All involved logic coordinates are correct.
-                        aExpandPixelRect.Left() -= 1;
-                        aExpandPixelRect.Top() -= 1;
-                        aExpandPixelRect.Right() += 1;
-                        aExpandPixelRect.Bottom() += 1;
+                        // #i42431#
+                        // copied comments from older fixes for documentation:
 
-                        // expand the window's ClipRegion
-                        pWin->ExpandPaintClipRegion(Region(pOut->PixelToLogic(aExpandPixelRect)));
+                            // #116639#
+                            //      aOriginalDrawArea.Union(aExpandRegion.GetBoundRect());
+                            // Because of a bug in Region which THB wants to take a look at,
+                            // the result of the previous command is WRONG when done in logical
+                            // coodinates, the Region gets a line to small (!). Thus, for
+                            // a workaround i have to do the union in pixel coordinates (!).
 
-                        // adapt expansion to OriginalDrawArea
-                        Region aOrigDrawAreaPixel(pOut->LogicToPixel(aOriginalDrawArea));
-                        aOrigDrawAreaPixel.Union(aExpandPixelRect);
-                        aOriginalDrawArea = pOut->PixelToLogic(aOrigDrawAreaPixel);
+                            //const Region aExpandRegionPixel(pOut->LogicToPixel(aExpandRegion));
+                            //Rectangle aExpandPixelRect(aExpandRegionPixel.GetBoundRect());
+
+                            // #116639#, #i29132#
+                            // Since e.g. with connectors like in #i29132# still rounding
+                            // errors happen when converting to pixels, i choose now to handle
+                            // this here in expanding the expand rectangle by one pixel, that
+                            // means: device dependent.
+                            // The maximum rounding error is potentially 1/2 pixel, so with
+                            // one pixel the rect is then potentially up to 1/2 pixel too big.
+                            // I see no other way until we have more precise conversions, though.
+                            // All involved logic coordinates are correct.
+
+                        // #i42431#
+                        // Real problem is: When regions/rectangles get converted from pixel to logic,
+                        // it should be a scale which expands single pixel lines to rectanges. That
+                        // does not happen. Example: In pixel, a region contains one horizontal region
+                        // which describes one pixel line. That region has no height. When scaled You
+                        // should get a logical region with the logic rectangle describing the line,
+                        // but Yot get just a logical line with no height.
+                        // So all pixel sources need to be expanded by on elogical pixel size in width
+                        // and height, that's now done below. Since the OriginalDrawArea was created
+                        // normally (in all cases?) by converting a rectangle from pixel to logic, it
+                        // is always corrected. In the cases it was not derived from pixels, it's safer
+                        // to do it. Same argument at the ExpandRegion.
+                    }
+                    else
+                    {
+                        const Size aPixelSizeInLogic(pOut->PixelToLogic(Size(1L, 1L)));
+
+                        // correct aOriginalDrawArea
+                        {
+                            Region aCorrectedDrawArea;
+                            Rectangle aCorrectRectangle;
+                            RegionHandle aRegionHandle = aOriginalDrawArea.BeginEnumRects();
+
+                            while(aOriginalDrawArea.GetEnumRects(aRegionHandle, aCorrectRectangle))
+                            {
+                                aCorrectRectangle.Bottom() += aPixelSizeInLogic.Height();
+                                aCorrectRectangle.Right() += aPixelSizeInLogic.Height();
+                                aCorrectedDrawArea.Union(aCorrectRectangle);
+                            }
+
+                            aOriginalDrawArea.EndEnumRects(aRegionHandle);
+                            aOriginalDrawArea = aCorrectedDrawArea;
+                        }
+
+                        if(!(aExpandRegion.IsEmpty() || aExpandRegion.IsNull()))
+                        {
+                            // correct expand region
+                            Region aCorrectedRegion;
+                            Rectangle aCorrectRectangle;
+                            RegionHandle aRegionHandle = aExpandRegion.BeginEnumRects();
+
+                            while(aExpandRegion.GetEnumRects(aRegionHandle, aCorrectRectangle))
+                            {
+                                aCorrectRectangle.Bottom() += aPixelSizeInLogic.Height();
+                                aCorrectRectangle.Right() += aPixelSizeInLogic.Height();
+                                aCorrectedRegion.Union(aCorrectRectangle);
+                            }
+
+                            aExpandRegion.EndEnumRects(aRegionHandle);
+                            aExpandRegion = aCorrectedRegion;
+
+                            // use corrected region
+                            pWin->ExpandPaintClipRegion(aExpandRegion);
+                            aOriginalDrawArea.Union(aExpandRegion);
+                        }
                     }
 
                     // restore original DrawArea
@@ -579,14 +635,10 @@ namespace sdr
         // getting visible
         void ObjectContactOfPageView::ObjectGettingPotentiallyVisible(const ViewObjectContact& rVOC) const
         {
+            // #i42815# Use new test method
             const Rectangle& rOrigObjectRectangle = rVOC.GetViewContact().GetPaintRectangle();
-            OutputDevice& rOutDev = GetPageViewWindow().GetOutputDevice();
-            const Point aEmptyPoint;
-            const Rectangle aVisiblePixel(aEmptyPoint, rOutDev.GetOutputSizePixel());
-            const Rectangle aObjectPixel(rOutDev.LogicToPixel(rOrigObjectRectangle));
 
-            // compare with the visible rectangle
-            if(aObjectPixel.IsOver(aVisiblePixel))
+            if(IsAreaVisible(rOrigObjectRectangle))
             {
                 // invalidate
                 GetPageViewWindow().Invalidate(rOrigObjectRectangle);
@@ -594,6 +646,25 @@ namespace sdr
 
             // call parent
             ObjectContact::ObjectGettingPotentiallyVisible(rVOC);
+        }
+
+        // #i42815#
+        // Get info if given Rectangle is visible in this view
+        sal_Bool ObjectContactOfPageView::IsAreaVisible(const Rectangle& rRectangle) const
+        {
+            OutputDevice& rOutDev = GetPageViewWindow().GetOutputDevice();
+            const Point aEmptyPoint;
+            const Rectangle aVisiblePixel(aEmptyPoint, rOutDev.GetOutputSizePixel());
+            const Rectangle aTestPixel(rOutDev.LogicToPixel(rRectangle));
+
+            // compare with the visible rectangle
+            if(!aTestPixel.IsOver(aVisiblePixel))
+            {
+                return sal_False;
+            }
+
+            // call parent
+            return ObjectContact::IsAreaVisible(rRectangle);
         }
 
         // Get info about the need to visualize GluePoints
