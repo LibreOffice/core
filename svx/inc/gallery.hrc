@@ -1,0 +1,277 @@
+/*************************************************************************
+ *
+ *  $RCSfile: gallery.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:24:03 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "galtheme.hrc"
+
+// -----------
+// - Defines -
+// -----------
+
+// Gallery-TabDialoge/-TabPages
+#define RID_SVXTABDLG_GALLERY                   (RID_SVX_GALLERY_START)
+#define RID_SVXTABPAGE_GALLERY_GENERAL          (RID_SVX_GALLERY_START + 1)
+
+#define RID_SVXTABDLG_GALLERYTHEME              (RID_SVX_GALLERY_START + 2)
+#define RID_SVXTABPAGE_GALLERYTHEME_GENERAL     (RID_SVX_GALLERY_START + 3)
+#define RID_SVXTABPAGE_GALLERYTHEME_FILES       (RID_SVX_GALLERY_START + 4)
+
+// Dialoge
+#define RID_SVXDLG_GALLERYBROWSER               (RID_SVX_GALLERY_START + 5)
+#define RID_SVXDLG_GALLERY_SEARCH_PROGRESS      (RID_SVX_GALLERY_START + 6)
+#define RID_SVXDLG_GALLERY_TAKE_PROGRESS        (RID_SVX_GALLERY_START + 7)
+#define RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS   (RID_SVX_GALLERY_START + 8)
+#define RID_SVXDLG_GALLERY_THEMEID              (RID_SVX_GALLERY_START + 9)
+
+// Gallery-Strings
+#define RID_SVXSTR_GALLERY_ACTUALIZE            (RID_SVX_GALLERY_START + 10)
+#define RID_SVXSTR_GALLERY_FOPENERROR           (RID_SVX_GALLERY_START + 11)
+#define RID_SVXSTR_GALLERY_NOFILES              (RID_SVX_GALLERY_START + 12)
+#define RID_SVXSTR_GALLERY_NOTHEME              (RID_SVX_GALLERY_START + 13)
+#define RID_SVXSTR_GALLERY_DELETEOBJ            (RID_SVX_GALLERY_START + 14)
+#define RID_SVXSTR_EXTFORMAT1_SYS               (RID_SVX_GALLERY_START + 15)
+#define RID_SVXSTR_EXTFORMAT1_UI                (RID_SVX_GALLERY_START + 16)
+#define RID_SVXSTR_EXTFORMAT2_SYS               (RID_SVX_GALLERY_START + 17)
+#define RID_SVXSTR_EXTFORMAT2_UI                (RID_SVX_GALLERY_START + 18)
+#define RID_SVXSTR_EXTFORMAT3_SYS               (RID_SVX_GALLERY_START + 19)
+#define RID_SVXSTR_EXTFORMAT3_UI                (RID_SVX_GALLERY_START + 20)
+#define RID_SVXSTR_EXTFORMAT4_SYS               (RID_SVX_GALLERY_START + 21)
+#define RID_SVXSTR_EXTFORMAT4_UI                (RID_SVX_GALLERY_START + 22)
+#define RID_SVXSTR_EXTFORMAT5_SYS               (RID_SVX_GALLERY_START + 23)
+#define RID_SVXSTR_EXTFORMAT5_UI                (RID_SVX_GALLERY_START + 24)
+#define RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS   (RID_SVX_GALLERY_START + 25)
+#define RID_SVXSTR_GALLERY_FILTER               (RID_SVX_GALLERY_START + 26)
+#define RID_SVXSTR_GALLERY_LENGTH               (RID_SVX_GALLERY_START + 27)
+#define RID_SVXSTR_GALLERY_SIZE                 (RID_SVX_GALLERY_START + 28)
+#define RID_SVXSTR_GALLERY_DELETEDD             (RID_SVX_GALLERY_START + 29)
+#define RID_SVXSTR_GALLERY_SEARCH               (RID_SVX_GALLERY_START + 30)
+#define RID_SVXSTR_GALLERY_SGIERROR             (RID_SVX_GALLERY_START + 31)
+#define RID_SVXSTR_GALLERY_NEWTHEME             (RID_SVX_GALLERY_START + 32)
+#define RID_SVXSTR_GALLERY_BROWSER              (RID_SVX_GALLERY_START + 33)
+#define RID_SVXSTR_GALLERY_THEMEERR             (RID_SVX_GALLERY_START + 34)
+
+// Controls fuer Gallery
+#define RID_SVXDLG_GALLERY_CBX                  (RID_SVX_GALLERY_START + 35)
+#define RID_SVXMN_GALLERY1                      (RID_SVX_GALLERY_START + 36)
+#define RID_SVXMN_GALLERY2                      (RID_SVX_GALLERY_START + 37)
+
+// zus. Strings
+#define RID_SVXSTR_GALLERYPROPS_THEME           (RID_SVX_GALLERY_START + 38)
+#define RID_SVXSTR_GALLERYPROPS_OBJECT          (RID_SVX_GALLERY_START + 39)
+#define RID_SVXSTR_GALLERYPROPS_GALTHEME        (RID_SVX_GALLERY_START + 40)
+#define RID_SVXSTR_GALLERY_IMPORTTHEME          (RID_SVX_GALLERY_START + 41)
+#define RID_SVXSTR_GALLERY_CREATETHEME          (RID_SVX_GALLERY_START + 42)
+#define RID_SVXSTR_GALLERY_READONLY             (RID_SVX_GALLERY_START + 43)
+#define RID_SVXSTR_GALLERY_ALLFILES             (RID_SVX_GALLERY_START + 44)
+
+// Images
+#define RID_SVXBMP_GALLERY                      (RID_SVX_GALLERY_START + 46)
+#define RID_SVXBMP_THEME                        (RID_SVX_GALLERY_START + 47)
+#define RID_SVXBMP_THEME_NORMAL                 (RID_SVX_GALLERY_START + 48)
+#define RID_SVXBMP_THEME_NORMAL_BIG             (RID_SVX_GALLERY_START + 49)
+#define RID_SVXBMP_THEME_IMPORTED               (RID_SVX_GALLERY_START + 50)
+#define RID_SVXBMP_THEME_IMPORTED_BIG           (RID_SVX_GALLERY_START + 51)
+#define RID_SVXBMP_THEME_READONLY               (RID_SVX_GALLERY_START + 52)
+#define RID_SVXBMP_THEME_READONLY_BIG           (RID_SVX_GALLERY_START + 53)
+#define RID_SVXBMP_THEME_DEFAULT                (RID_SVX_GALLERY_START + 54)
+#define RID_SVXBMP_THEME_DEFAULT_BIG            (RID_SVX_GALLERY_START + 55)
+#define RID_SVXIMG_GALLERY_VIEW_ICON            (RID_SVX_GALLERY_START + 56)
+#define RID_SVXIMG_GALLERY_VIEW_LIST            (RID_SVX_GALLERY_START + 57)
+#define RID_SVXIMG_GALLERY_VIEW_ICON_HC         (RID_SVX_GALLERY_START + 58)
+#define RID_SVXIMG_GALLERY_VIEW_LIST_HC         (RID_SVX_GALLERY_START + 59)
+
+// Gallery-Bitmaps fuer Sounds
+#define RID_SVXBMP_GALLERY_SOUND                (RID_SVX_GALLERY_START + 60)
+#define RID_SVXBMP_GALLERY_SOUND_0              (RID_SVX_GALLERY_START + 61)
+#define RID_SVXBMP_GALLERY_SOUND_1              (RID_SVX_GALLERY_START + 62)
+#define RID_SVXBMP_GALLERY_SOUND_2              (RID_SVX_GALLERY_START + 63)
+#define RID_SVXBMP_GALLERY_SOUND_3              (RID_SVX_GALLERY_START + 64)
+#define RID_SVXBMP_GALLERY_SOUND_4              (RID_SVX_GALLERY_START + 65)
+#define RID_SVXBMP_GALLERY_SOUND_5              (RID_SVX_GALLERY_START + 66)
+#define RID_SVXBMP_GALLERY_SOUND_6              (RID_SVX_GALLERY_START + 67)
+#define RID_SVXBMP_GALLERY_SOUND_7              (RID_SVX_GALLERY_START + 68)
+
+// weitere IDs
+#define RID_SVXSTR_GALLERY_DIALOGID             (RID_SVX_GALLERY_START + 80)
+#define RID_SVXSTR_GALLERY_ID_EXISTS            (RID_SVX_GALLERY_START + 81)
+#define RID_SVXDLG_GALLERY_TITLE                (RID_SVX_GALLERY_START + 82)
+#define RID_SVXSTR_GALLERY_DELETETHEME          (RID_SVX_GALLERY_START + 83)
+#define RID_SVXSTR_GALLERY_TITLE                (RID_SVX_GALLERY_START + 84)
+#define RID_SVXSTR_GALLERY_PATH                 (RID_SVX_GALLERY_START + 85)
+#define RID_SVXSTR_GALLERY_ICONVIEW             (RID_SVX_GALLERY_START + 86)
+#define RID_SVXSTR_GALLERY_LISTVIEW             (RID_SVX_GALLERY_START + 87)
+
+// lokale Defines
+#define BTN_OK 1
+#define BTN_CANCEL 1
+#define BTN_HELP 1
+
+#define CTL_GALLERY 1
+#define FL_THEMELIST 2
+#define LBX_THEMELIST 1
+#define FL_INFO 1
+#define FT_SIZE 1
+#define FT_DEPTH 2
+#define FT_MEMSIZE 3
+#define FT_FORMAT 4
+#define FT_CLIPART 5
+#define FT_BMPSIZE 6
+#define FT_BMPDEPTH 7
+#define FT_BMPMEM 8
+#define FT_BMPFORMAT 9
+#define BTN_BROWSER 1
+#define FL_THEME 1
+#define FL_PATH 4
+#define FL_FOUND 2
+#define FL_THEMEFILES 3
+#define EDT_PATH 1
+#define EDT_FILETYPE 1
+#define LBX_FOUND 1
+#define LBX_THEMEFILES 2
+#define BTN_TAKE 5
+#define BTN_CLEAR 6
+#define BTN_NEWTHEME 2
+#define BTN_IMPORT 5
+#define BTN_CLEARTHEME 3
+#define BTN_RENAMETHEME 7
+#define BTN_PATH 1
+#define BTN_SEARCH 4
+#define CBX_SUBDIRS 1
+#define CBX_TAKEALL 2
+#define CBX_PREVIEW 3
+#define CBX_CLEARALL 3
+#define FT_PATH 1
+#define FT_FILETYPE 2
+#define CBB_FILETYPE 1
+#define BTN_CLEARTHEMEFILE 6
+#define CTL_BROWSER 1
+#define FL_BROWSER 1
+#define FL_DRIVES 2
+#define LBX_DRIVE 1
+#define EDT_NEWTHEME 1
+#define FL_SEARCH_DIR 1
+#define FL_SEARCH_TYPE 2
+#define FT_SEARCH_DIR 1
+#define FT_SEARCH_TYPE 2
+#define FL_TAKE_PROGRESS 1
+#define FT_TAKE_FILE 1
+#define EDT_RENAMETHEME 1
+#define BTN_ADD 2
+#define CBX_LINKAGE 1
+#define WND_PREVIEW 1
+#define FT_FOUND 1
+#define BTN_TAKEALL 1
+#define BTN_PREVIEW 6
+#define WND_BRSPRV 1
+#define BTN_THEME 2
+#define BTN_RECOVER 3
+#define BTN_CLOSEBROWSER 7
+#define BTN_MADDIN1 8
+#define BTN_MADDIN2 9
+#define LBX_THEME2 1
+#define FL_THEME2 1
+#define BTN_NEWTHEME2 1
+#define BTN_RENAMETHEME2 3
+#define BTN_CLEARTHEME2 2
+#define BTN_CLOSETHEME 4
+#define MN_ADDMENU 2
+#define MN_ADD 6
+#define MN_ADD_LINK 8
+#define MN_PREVIEW 10
+#define MN_DELETE 12
+#define MN_BACKGROUND 14
+#define MN_TITLE 15
+#define MN_COPYCLIPBOARD 16
+#define MN_PASTECLIPBOARD 17
+
+#define MN_NEWTHEME 20
+#define MN_ACTUALIZE 21
+#define MN_RENAME 22
+#define MN_PROPERTIES 23
+#define MN_ASSIGN_ID 24
+
+#define FL_ACTUALIZE_PROGRESS 1
+#define FT_ACTUALIZE_FILE 1
+#define FL_ID                  1
+#define MTF_ID          1
+#define LB_RESNAME      1
+#define BTN_RESNAME     1
+#define EDT_TITLE       20
+#define FL_TITLE               21
+
+// Gallery-TabDialog
+#define FI_MS_IMAGE 1
+#define FT_MS_NAME 1
+#define EDT_MS_NAME 1
+#define FL_MS_GENERAL_FIRST 1
+#define FT_MS_TYPE 2
+#define FT_MS_SHOW_TYPE 3
+#define FT_MS_PATH 4
+#define FT_MS_SHOW_PATH 5
+#define FT_MS_CONTENT 6
+#define FT_MS_SHOW_CONTENT 7
+#define FL_MS_GENERAL_SECOND 2
+#define FT_MS_CHANGEDATE 10
+#define FT_MS_SHOW_CHANGEDATE 11
+
+// Gallery Browser
+#define GALLERY_BROWSER1    1
+#define GALLERY_BROWSER2    2
+#define GALLERY_SPLITTER    1
