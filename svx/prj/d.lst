@@ -133,6 +133,7 @@ hedabu: ..\inc\dialogs.hrc %_DEST%\inc%_EXT%\svx\dialogs.hrc
 hedabu: ..\inc\escpitem.hxx %_DEST%\inc%_EXT%\svx\escpitem.hxx
 hedabu: ..\inc\extrud3d.hxx %_DEST%\inc%_EXT%\svx\extrud3d.hxx
 hedabu: ..\inc\escherex.hxx %_DEST%\inc%_EXT%\svx\escherex.hxx
+hedabu: ..\inc\tbxcustomshapes.hxx %_DEST%\inc%_EXT%\svx\tbxcustomshapes.hxx
 hedabu: ..\inc\f3dchild.hxx %_DEST%\inc%_EXT%\svx\f3dchild.hxx
 hedabu: ..\inc\fhgtitem.hxx %_DEST%\inc%_EXT%\svx\fhgtitem.hxx
 hedabu: ..\inc\fillctrl.hxx %_DEST%\inc%_EXT%\svx\fillctrl.hxx
