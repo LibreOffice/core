@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-15 13:31:37 $
+ *  last change: $Author: dl $ $Date: 2000-11-27 08:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ __EXPORT SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocS
             AddTabPage( RID_SVXPAGE_AREA, SvxAreaTabPage::Create, 0);
             AddTabPage( RID_SVXPAGE_SHADOW, SvxShadowTabPage::Create, 0);
             AddTabPage( RID_SVXPAGE_TRANSPARENCE, SvxTransparenceTabPage::Create, 0);
-            AddTabPage( RID_SVXPAGE_CHAR_STD, SvxCharStdPage::Create, 0);
+            AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0);
             AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0);
         break;
 
@@ -250,7 +250,7 @@ __EXPORT SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocS
         break;
 
         case TAB_PRES_LAYOUT_TEMPLATE_3:
-            AddTabPage( RID_SVXPAGE_CHAR_STD, SvxCharStdPage::Create, 0);
+            AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0);
             AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0);
             if(IS_OUTLINE(ePO))
             {
@@ -384,12 +384,12 @@ void __EXPORT SdPresLayoutTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPag
             ( (SvxTransparenceTabPage&) rPage ).Construct();
         break;
 
-        case RID_SVXPAGE_CHAR_STD:
+        case RID_SVXPAGE_CHAR_NAME:
         {
             SvxFontListItem aItem(*( (const SvxFontListItem*)
                 ( pDocShell->GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
 
-            ( (SvxCharStdPage&) rPage ).SetFontList( aItem );
+            ( (SvxCharNamePage&) rPage ).SetFontList( aItem );
         }
         break;
 

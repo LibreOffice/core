@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_char.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: dl $ $Date: 2000-11-27 08:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ TabDialog TAB_CHAR
         {
             PageItem
             {
-                Identifier = RID_SVXPAGE_CHAR_STD ;
+                Identifier = RID_SVXPAGE_CHAR_NAME ;
                 Text = "Schrift" ;
                 Text [ ENGLISH ] = "Character" ;
                 Text [ norwegian ] = "Character" ;
@@ -104,7 +104,7 @@ TabDialog TAB_CHAR
                 Text [ dutch ] = "Lettertype" ;
                 Text [ spanish ] = "Fuente" ;
                 Text [ english_us ] = "Font" ;
-                PageResID = RID_SVXPAGE_CHAR_STD ;
+                PageResID = RID_SVXPAGE_CHAR_NAME ;
                 Text[ chinese_simplified ] = "×ÖÌå";
                 Text[ russian ] = "Øðèôò";
                 Text[ polish ] = "Czcionka";
@@ -118,7 +118,7 @@ TabDialog TAB_CHAR
             };
             PageItem
             {
-                Identifier = RID_SVXPAGE_CHAR_EXT ;
+                Identifier = RID_SVXPAGE_CHAR_EFFECTS ;
                 Text = "Schrifteffekt" ;
                 Text [ ENGLISH ] = "Character Extension" ;
                 Text [ norwegian ] = "Character Extension" ;
@@ -132,7 +132,7 @@ TabDialog TAB_CHAR
                 Text [ dutch ] = "Schrifteffecten" ;
                 Text [ spanish ] = "Efectos de fuente" ;
                 Text [ english_us ] = "Font Effects" ;
-                PageResID = RID_SVXPAGE_CHAR_EXT ;
+                PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
                 Text[ chinese_simplified ] = "×ÖÌåÐ§¹û";
                 Text[ russian ] = "Ýôôåêòû øðèôòà";
                 Text[ polish ] = "Efekt czcionki";

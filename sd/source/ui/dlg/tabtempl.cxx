@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: dl $ $Date: 2000-11-27 08:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,8 +152,8 @@ SdTabTemplateDlg::SdTabTemplateDlg( Window* pParent,
                                     SvxShadowTabPage::GetRanges );
     AddTabPage( RID_SVXPAGE_TRANSPARENCE, SvxTransparenceTabPage::Create,
                                     SvxTransparenceTabPage::GetRanges );
-    AddTabPage( RID_SVXPAGE_CHAR_STD, SvxCharStdPage::Create,
-                                    SvxCharStdPage::GetRanges );
+    AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create,
+                                    SvxCharNamePage::GetRanges );
     AddTabPage( RID_SVXPAGE_STD_PARAGRAPH,
                     SvxStdParagraphTabPage::Create,
                     SvxStdParagraphTabPage::GetRanges );
@@ -235,12 +235,12 @@ void __EXPORT SdTabTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             ( (SvxTransparenceTabPage&) rPage ).Construct();
         break;
 
-        case RID_SVXPAGE_CHAR_STD:
+        case RID_SVXPAGE_CHAR_NAME:
         {
             SvxFontListItem aItem(*( (const SvxFontListItem*)
                 ( rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
 
-            ( (SvxCharStdPage&) rPage ).SetFontList( aItem );
+            ( (SvxCharNamePage&) rPage ).SetFontList( aItem );
         }
         break;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 16:45:30 $
+ *  last change: $Author: dl $ $Date: 2000-11-27 08:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ TabDialog TAB_TEMPLATE
             };
             PageItem
             {
-                Identifier = RID_SVXPAGE_CHAR_STD ;
+                Identifier = RID_SVXPAGE_CHAR_NAME;
                 Text = "Schrift" ;
                 Text [ ENGLISH ] = "Font" ;
                 Text [ norwegian ] = "Skrift" ;
@@ -211,7 +211,7 @@ TabDialog TAB_TEMPLATE
                 Text [ dutch ] = "Lettertype" ;
                 Text [ spanish ] = "Fuente" ;
                 Text [ english_us ] = "Font" ;
-                PageResID = RID_SVXPAGE_CHAR_STD ;
+                PageResID = RID_SVXPAGE_CHAR_NAME ;
                 Text[ chinese_simplified ] = "×ÖÌå";
                 Text[ russian ] = "Øðèôò";
                 Text[ polish ] = "Czcionka";
