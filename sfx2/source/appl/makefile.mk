@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: mba $ $Date: 2001-05-03 17:02:12 $
+#   last change: $Author: ssa $ $Date: 2001-05-04 15:19:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,7 +133,9 @@ SLOFILES =  \
         $(SLO)$/pluginacceptthread.obj  \
         $(SLO)$/officeacceptthread.obj \
         $(SLO)$/newhelp.obj \
-        $(SLO)$/helpinterceptor.obj
+        $(SLO)$/helpinterceptor.obj \
+        $(SLO)$/shutdownicon.obj
+
 
 EXCEPTIONSFILES=\
                 $(SLO)$/imagemgr.obj\
@@ -147,7 +149,8 @@ EXCEPTIONSFILES=\
     $(SLO)$/appcfg.obj			\
     $(SLO)$/helpinterceptor.obj	\
     $(SLO)$/newhelp.obj			\
-    $(SLO)$/sfxhelp.obj
+    $(SLO)$/sfxhelp.obj			\
+    $(SLO)$/shutdownicon.obj
 
 .IF "$(GUI)" == "MAC"
 SLOFILES +=\
