@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:38:30 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,10 @@
 #ifndef _HINTS_HXX
 #include <hints.hxx>
 #endif
+// OD 26.06.2003 #108784#
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
+#endif
 
 // Inline Methode vom UndoIter
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
@@ -145,6 +149,18 @@ void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
     // ins Array wieder eintragen
     SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
     rFlyFmts.Insert( pFrmFmt, rFlyFmts.Count() );
+
+    // OD 26.06.2003 #108784# - insert 'master' drawing object into drawing page
+    if ( RES_DRAWFRMFMT == pFrmFmt->Which() )
+    {
+        SwDrawContact* pDrawContact =
+            static_cast<SwDrawContact*>(pFrmFmt->FindContactObj());
+        if ( pDrawContact )
+        {
+            pDrawContact->InsertMasterIntoDrawPage();
+        }
+    }
+
     SwFmtAnchor aAnchor( (RndStdIds)nRndId );
 
     if( FLY_PAGE == nRndId )
@@ -232,6 +248,16 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 
         SaveSection( pDoc, *rCntnt.GetCntntIdx() );
         ((SwFmtCntnt&)rCntnt).SetNewCntntIdx( (const SwNodeIndex*)0 );
+    }
+    // OD 02.07.2003 #108784# - remove 'master' drawing object from drawing page
+    else if ( RES_DRAWFRMFMT == pFrmFmt->Which() )
+    {
+        SwDrawContact* pDrawContact =
+            static_cast<SwDrawContact*>(pFrmFmt->FindContactObj());
+        if ( pDrawContact )
+        {
+            pDrawContact->RemoveMasterFromDrawPage();
+        }
     }
 
     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
