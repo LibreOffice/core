@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-07 09:32:09 $
+ *  last change: $Author: mba $ $Date: 2001-09-19 07:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,8 +685,11 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
                             nActiveItemId = nItemId;
 
                         Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
-                        aNewWindowListVector.push_back( pWin->GetText() );
-                        ++nItemId;
+                        if ( pWin && pWin->IsVisible() )
+                        {
+                            aNewWindowListVector.push_back( pWin->GetText() );
+                            ++nItemId;
+                        }
                     }
                 }
             }
