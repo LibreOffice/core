@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: kr $ $Date: 2001-05-04 07:05:17 $
-#*    $Revision: 1.1 $
+#*    last change   $Author: jbu $ $Date: 2001-07-04 08:41:23 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile: $
 #*
@@ -278,6 +278,7 @@ static sal_Bool performRecursiveCallTest( const Reference < XBridgeTest > & xLBT
 static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
 {
     OSL_ENSURE( xLBT.is(), "### no test interface!" );
+    sal_Bool bRet = sal_False;
     if (xLBT.is())
     {
         // this data is never ever granted access to by calls other than equals(), assign()!
@@ -391,10 +392,20 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
         // recursive call test
         OSL_ASSERT( performRecursiveCallTest( xLBT ) );
 
-        return (equals( aData, aRet ) && equals( aData, aRet2 ));
+        bRet = (equals( aData, aRet ) && equals( aData, aRet2 ));
+        }
+        {
+            // test queryInterface for an unknown type
+            typelib_TypeDescriptionReference *pTypeRef = 0;
+            OUString aName( RTL_CONSTASCII_USTRINGPARAM( "foo.MyInterface" ) );
+            typelib_typedescriptionreference_new(
+                &pTypeRef, typelib_TypeClass_INTERFACE,  aName.pData);
+            Any a = xLBT->queryInterface( Type( pTypeRef ) );
+            typelib_typedescriptionreference_release( pTypeRef );
+            bRet = bRet && ( a  == Any( ));
         }
     }
-    return sal_False;
+    return bRet;
 }
 static sal_Bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
 {
@@ -656,6 +667,9 @@ void * SAL_CALL component_getFactory(
 
 /**************************************************************************
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/05/04 07:05:17  kr
+    moved from grande to openoffice
+
     Revision 1.3  2001/03/12 16:22:44  jl
     OSL_ENSHURE replaced by OSL_ENSURE
 
