@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Insert.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:19 $
+ *  last change: $Author: bm $ $Date: 2003-12-10 16:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,28 +513,36 @@ void SAL_CALL ChartController::executeDispatch_InsertDataLabel()
 
 void SAL_CALL ChartController::executeDispatch_InsertStatistic()
 {
+    bool bChanged = false;
     try
     {
-        bool bChanged = false;
-
-        uno::Reference< beans::XPropertySet > xProp=NULL;
-        //@todo use correct ItemConverter if available
-//         wrapper::ChartTypeItemConverter aItemConverter( NULL, xProp, m_pDrawModelWrapper->GetItemPool() );
-//         SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
-        SfxItemSet aItemSet( m_pDrawModelWrapper->GetItemPool(), 1, 2 );
-        //aItemConverter.FillItemSet( aItemSet );
+        wrapper::AllSeriesStatisticsConverter aItemConverter(
+            m_aModel->getModel(), m_pDrawModelWrapper->GetItemPool() );
+        SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
+        aItemConverter.FillItemSet( aItemSet );
 
         //prepare and open dialog
         Window* pParent( NULL );
         SchDataStatisticsDlg aDlg( pParent, aItemSet);
+//         aDlg.EnableRegression( ChartTypeHelper::isSupportingRegressionProperties( xChartType ));
+        aDlg.EnableRegression( true );
+
         if( aDlg.Execute() == RET_OK )
         {
-//             SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
-            SfxItemSet aOutItemSet( m_pDrawModelWrapper->GetItemPool(), 1, 2 );
+            SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
             aDlg.GetAttr( aOutItemSet );
 
-//             bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
+            bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
         }
+    }
+    catch( uno::RuntimeException& e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
+    //make sure that all objects using  m_pDrawModelWrapper or m_pChartView are already deleted
+    if(bChanged) try
+    {
+        impl_rebuildView();
     }
     catch( uno::RuntimeException& e)
     {

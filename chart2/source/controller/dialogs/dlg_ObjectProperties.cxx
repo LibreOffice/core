@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 15:17:51 $
+ *  last change: $Author: bm $ $Date: 2003-12-10 16:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const rtl::OUS
         , m_bAffectsMultipleObjects(false)
         , m_bHasGeometryProperties(false)
         , m_bHasStatisticProperties(false)
+        , m_bHasRegressionProperties(false)
         , m_bProvidesSecondaryYAxis(false)
         , m_bHasAreaProperties(false)
         , m_bHasLineProperties(false)
@@ -176,8 +177,9 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
     if(    OBJECTTYPE_DATA_SERIES==m_eObjectType
         || OBJECTTYPE_DATA_LABELS==m_eObjectType )
     {
-        m_bHasStatisticProperties = ChartTypeHelper::isSupportingStatisticProperties( xChartType );
-        m_bProvidesSecondaryYAxis = ChartTypeHelper::isSupportingSecondaryYAxis( xChartType );
+        m_bHasStatisticProperties =  ChartTypeHelper::isSupportingStatisticProperties( xChartType );
+        m_bHasRegressionProperties = ChartTypeHelper::isSupportingRegressionProperties( xChartType );
+        m_bProvidesSecondaryYAxis =  ChartTypeHelper::isSupportingSecondaryYAxis( xChartType );
     }
 
     if( OBJECTTYPE_AXIS == m_eObjectType )
@@ -198,6 +200,10 @@ bool ObjectPropertiesDialogParameter::HasGeometryProperties() const
 bool ObjectPropertiesDialogParameter::HasStatisticProperties() const
 {
     return m_bHasStatisticProperties;
+}
+bool ObjectPropertiesDialogParameter::HasRegressionProperties() const
+{
+    return m_bHasRegressionProperties;
 }
 bool ObjectPropertiesDialogParameter::ProvidesSecondaryYAxis() const
 {
@@ -480,6 +486,12 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_AREA, SvxAreaTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_TRANSPARENCE, SvxTransparenceTabPage::Create, NULL);
             break;
+
+        case OBJECTTYPE_LEGEND_ENTRY:
+        case OBJECTTYPE_AXIS_UNITLABEL:
+        case OBJECTTYPE_UNKNOWN:
+            // nothing
+            break;
     }
 }
 
@@ -565,6 +577,11 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
 
         case RID_SVXPAGE_NUMBERFORMAT:
             ((SvxNumberFormatTabPage&)rPage).SetNumberFormatList(SvxNumberInfoItem(m_pViewElementListProvider->GetNumFormatter()));
+            break;
+
+        case TP_STAT:
+            static_cast< SchStatisticTabPage & >( rPage ).EnableRegression(
+                m_pParameter->HasRegressionProperties() );
             break;
     }
 }

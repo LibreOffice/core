@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultipleChartConverters.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-25 13:07:25 $
+ *  last change: $Author: bm $ $Date: 2003-12-10 16:51:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,19 @@ public:
         ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
             ::std::auto_ptr< ::com::sun::star::awt::Size >() );
     virtual ~AllDataLabelItemConverter();
+
+protected:
+    virtual const USHORT * GetWhichPairs() const;
+};
+
+class AllSeriesStatisticsConverter : public ::comphelper::MultipleItemConverter
+{
+public:
+    AllSeriesStatisticsConverter(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::frame::XModel > & xChartModel,
+        SfxItemPool& rItemPool );
+    virtual ~AllSeriesStatisticsConverter();
 
 protected:
     virtual const USHORT * GetWhichPairs() const;

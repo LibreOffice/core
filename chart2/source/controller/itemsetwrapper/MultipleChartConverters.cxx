@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultipleChartConverters.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-25 13:07:42 $
+ *  last change: $Author: bm $ $Date: 2003-12-10 16:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "SchSfxItemIds.hxx"
 #include "SchWhichPairs.hxx"
 #include "AxisItemConverter.hxx"
+#include "StatisticsItemConverter.hxx"
 #include "GraphicPropertyItemConverter.hxx"
 #include "DataPointItemConverter.hxx"
 #include "ChartModelHelper.hxx"
@@ -198,6 +199,32 @@ const USHORT * AllDataLabelItemConverter::GetWhichPairs() const
 }
 
 //-----------------------------------------------------------------------------
+
+AllSeriesStatisticsConverter::AllSeriesStatisticsConverter(
+    const uno::Reference< frame::XModel > & xChartModel,
+    SfxItemPool& rItemPool )
+        : MultipleItemConverter( rItemPool )
+{
+    ::std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
+        ::chart::ChartModelHelper::getDataSeries( xChartModel ));
+
+    ::std::vector< uno::Reference< chart2::XDataSeries > >::const_iterator aIt;
+    for( aIt = aSeriesList.begin(); aIt != aSeriesList.end(); ++aIt )
+    {
+        uno::Reference< beans::XPropertySet > xObjectProperties( *aIt, uno::UNO_QUERY);
+        m_aConverters.push_back( new ::chart::wrapper::StatisticsItemConverter(
+                                     xObjectProperties, rItemPool ));
+    }
+}
+
+AllSeriesStatisticsConverter::~AllSeriesStatisticsConverter()
+{}
+
+const USHORT * AllSeriesStatisticsConverter::GetWhichPairs() const
+{
+    // must span all used items!
+    return nStatWhichPairs;
+}
 
 } //  namespace wrapper
 } //  namespace chart

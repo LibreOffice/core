@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegressionCurveHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-09 16:28:31 $
+ *  last change: $Author: bm $ $Date: 2003-12-10 16:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,13 @@ public:
         createMeanValueLine(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext > & xContext );
+
+    static ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::chart2::XRegressionCurve >
+        createRegressionCurveByServiceName(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XComponentContext > & xContext,
+            ::rtl::OUString aServiceName );
 
 private:
     // not implemented

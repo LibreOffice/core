@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegressionCurveHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-09 16:29:35 $
+ *  last change: $Author: bm $ $Date: 2003-12-10 16:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,12 @@
  *
  ************************************************************************/
 #include "RegressionCurveHelper.hxx"
-#include "MeanValueRegressionCurve.hxx"
 #include "ContextHelper.hxx"
+#include "MeanValueRegressionCurve.hxx"
+#include "LinearRegressionCurve.hxx"
+#include "LogarithmicRegressionCurve.hxx"
+#include "ExponentialRegressionCurve.hxx"
+#include "PotentialRegressionCurve.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <drafts/com/sun/star/chart2/XChartDocument.hpp>
@@ -85,6 +89,62 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::createMeanValu
 
     return uno::Reference< chart2::XRegressionCurve >(
         new MeanValueRegressionCurve( ContextHelper::createContext( aContextValues, xContext ) ));
+}
+
+// static
+uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServiceName(
+    const uno::Reference< uno::XComponentContext > & xContext,
+    ::rtl::OUString aServiceName )
+{
+    uno::Reference< chart2::XRegressionCurve > xResult;
+
+    // todo: use factory methods with service name
+    if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                "com.sun.star.comp.chart2.LinearRegressionCurve" )))
+    {
+        ContextHelper::tContextEntryMapType aContextValues(
+            ContextHelper::MakeContextEntryMap(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Identifier" )), uno::makeAny(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "@linear-regression" )))));
+
+        xResult.set(
+            new LinearRegressionCurve( ContextHelper::createContext( aContextValues, xContext ) ));
+    }
+    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                     "com.sun.star.comp.chart2.LogarithmicRegressionCurve" )))
+    {
+        ContextHelper::tContextEntryMapType aContextValues(
+            ContextHelper::MakeContextEntryMap(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Identifier" )), uno::makeAny(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "@logarithmic-regression" )))));
+
+        xResult.set(
+            new LogarithmicRegressionCurve( ContextHelper::createContext( aContextValues, xContext ) ));
+    }
+    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                     "com.sun.star.comp.chart2.ExponentialRegressionCurve" )))
+    {
+        ContextHelper::tContextEntryMapType aContextValues(
+            ContextHelper::MakeContextEntryMap(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Identifier" )), uno::makeAny(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "@exponential-regression" )))));
+
+        xResult.set(
+            new ExponentialRegressionCurve( ContextHelper::createContext( aContextValues, xContext ) ));
+    }
+    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                     "com.sun.star.comp.chart2.PotentialRegressionCurve" )))
+    {
+        ContextHelper::tContextEntryMapType aContextValues(
+            ContextHelper::MakeContextEntryMap(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Identifier" )), uno::makeAny(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "@potential-regression" )))));
+
+        xResult.set(
+            new PotentialRegressionCurve( ContextHelper::createContext( aContextValues, xContext ) ));
+    }
+
+    return xResult;
 }
 
 //.............................................................................

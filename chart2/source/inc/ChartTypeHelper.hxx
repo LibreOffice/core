@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 10:18:18 $
+ *  last change: $Author: bm $ $Date: 2003-12-10 16:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ class ChartTypeHelper
 public:
     static sal_Bool isSupportingGeometryProperties(  const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
     static sal_Bool isSupportingStatisticProperties( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
+    static sal_Bool isSupportingRegressionProperties(const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
     static sal_Bool isSupportingSecondaryYAxis(      const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
     static sal_Bool isSupportingAreaProperties(      const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );
     static sal_Bool isSupportingSymbolProperties(    const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartType >& xChartType );

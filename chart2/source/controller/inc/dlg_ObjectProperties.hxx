@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 15:17:07 $
+ *  last change: $Author: bm $ $Date: 2003-12-10 16:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ public:
 
     bool HasGeometryProperties() const;
     bool HasStatisticProperties() const;
+    bool HasRegressionProperties() const;
     bool ProvidesSecondaryYAxis() const;
     bool HasAreaProperties() const;
     bool HasLineProperties() const;
@@ -101,6 +102,7 @@ private:
 
     bool m_bHasGeometryProperties;
     bool m_bHasStatisticProperties;
+    bool m_bHasRegressionProperties;
     bool m_bProvidesSecondaryYAxis;
     bool m_bHasAreaProperties;
     bool m_bHasLineProperties;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-09 12:46:18 $
+ *  last change: $Author: bm $ $Date: 2003-12-10 16:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,12 @@ sal_Bool ChartTypeHelper::isSupportingStatisticProperties( const uno::Reference<
             return sal_False;
     }
     return sal_True;
+}
+
+sal_Bool ChartTypeHelper::isSupportingRegressionProperties( const uno::Reference< XChartType >& xChartType )
+{
+    // note: old chart: only scatter chart
+    return isSupportingStatisticProperties( xChartType );
 }
 
 sal_Bool ChartTypeHelper::isSupportingSecondaryYAxis( const uno::Reference< XChartType >& xChartType )
