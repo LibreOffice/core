@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-12 09:45:02 $
+ *  last change: $Author: fs $ $Date: 2001-12-07 15:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,6 @@ private:
     Link                        aSendFocusHdl;
 
     Timer                       aSelectTimer;
-    Timer                       aResetTimer;
 
     String                      aFolderTitle;
 
@@ -284,7 +283,6 @@ private:
     DECL_LINK(          FileSelectHdl_Impl, SvtFileView* );
     DECL_LINK(          FileDblClickHdl_Impl, SvtFileView* );
     DECL_LINK(          NewFolderHdl_Impl, SvtFileView* );
-    DECL_LINK(          ResetHdl_Impl, Timer* );
     DECL_LINK(          TimeoutHdl_Impl, Timer* );
     DECL_LINK(          ClickHdl_Impl, ToolBox* );
     DECL_LINK(          ResizeHdl_Impl, SplitWindow* );     // used for split and initial setting of toolbar pos

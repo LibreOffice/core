@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-06 15:30:39 $
+ *  last change: $Author: fs $ $Date: 2001-12-07 15:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1030,8 +1030,6 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
     aSplitWin.Show();
 
     // initialize the timers
-    aResetTimer.SetTimeout( 100 );
-    aResetTimer.SetTimeoutHdl( LINK( this, SvtTemplateWindow, ResetHdl_Impl ) );
     aSelectTimer.SetTimeout( 200 );
     aSelectTimer.SetTimeoutHdl( LINK( this, SvtTemplateWindow, TimeoutHdl_Impl ) );
 
@@ -1110,7 +1108,6 @@ IMPL_LINK ( SvtTemplateWindow , FileDblClickHdl_Impl, SvtFileView *, pView )
     if ( ::utl::UCBContentHelper::IsFolder( aURL ) )
     {
         pFileWin->OpenFolder( aURL );
-        aResetTimer.Start();
     }
     else
     {
@@ -1127,15 +1124,6 @@ IMPL_LINK ( SvtTemplateWindow , NewFolderHdl_Impl, SvtFileView *, pView )
     pFrameWin->OpenFile( String(), sal_True, sal_False, sal_False );
     AppendHistoryURL( pFileWin->GetFolderURL() );
     aNewFolderHdl.Call( this );
-    return 0;
-}
-
-// ------------------------------------------------------------------------
-
-IMPL_LINK ( SvtTemplateWindow , ResetHdl_Impl, Timer *, EMPTYARG )
-{
-    pFileWin->ResetCursor();
-    aSelectHdl.Call( this );
     return 0;
 }
 
