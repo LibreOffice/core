@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-07 07:50:54 $
+ *  last change: $Author: mib $ $Date: 2001-05-16 11:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,12 +233,7 @@ void SvxXMLTabStopExport::Export( const uno::Any& rAny,
 
         for( sal_uInt16 nIndex = 0; nIndex < nTabs; nIndex++ )
         {
-            DBG_ASSERT( style::TabAlign_DEFAULT == pTabs[nIndex].Alignment ||
-                        nIndex == 0 ||
-                        style::TabAlign_DEFAULT != pTabs[nIndex-1].Alignment,
-                        "tab default distance unexpected" );
-            if( style::TabAlign_DEFAULT != pTabs[nIndex].Alignment ||
-                 0 == nIndex )
+            if( style::TabAlign_DEFAULT != pTabs[nIndex].Alignment )
                 exportTabStop( &(pTabs[nIndex]) );
         }
 
