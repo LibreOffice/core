@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_runtime.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2003-03-30 13:32:01 $
+ *  last change: $Author: jbu $ $Date: 2003-05-24 23:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         PyRef value = PyRef( PyUNO_new_UNCHECKED (a, getImpl()->cargo->xInvocation), SAL_NO_ACQUIRE);
         PyRef argsTuple( PyTuple_New( 1 ) , SAL_NO_ACQUIRE );
         PyTuple_SetItem( argsTuple.get() , 0 , value.getAcquired() );
-        PyRef ret( PyObject_CallObject( excClass.get() , argsTuple.getAcquired() ), SAL_NO_ACQUIRE );
+        PyRef ret( PyObject_CallObject( excClass.get() , argsTuple.get() ), SAL_NO_ACQUIRE );
         if( ! ret.is() )
         {
             OUStringBuffer buf;
@@ -572,7 +572,7 @@ static Sequence< Type > invokeGetTypes( const Runtime & r , PyObject * o )
     return ret;
 }
 
-Any Runtime::pyObject2Any ( const PyRef & source ) const
+Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) const
     throw ( com::sun::star::uno::RuntimeException )
 {
     if( ! impl->cargo->valid )
@@ -691,7 +691,7 @@ Any Runtime::pyObject2Any ( const PyRef & source ) const
         Sequence<Any> s (PyTuple_Size (o));
         for (int i = 0; i < PyTuple_Size (o); i++)
         {
-            s[i] = pyObject2Any (PyTuple_GetItem (o, i));
+            s[i] = pyObject2Any (PyTuple_GetItem (o, i), mode );
         }
         a <<= s;
     }
@@ -763,6 +763,32 @@ Any Runtime::pyObject2Any ( const PyRef & source ) const
         {
             sal_Unicode c = PyChar2Unicode( o,runtime );
             a.setValue( &c, getCharCppuType( ));
+        }
+        else if( PyObject_IsInstance( o, getAnyClass( runtime ).get() ) )
+        {
+            if( ACCEPT_UNO_ANY == mode )
+            {
+                a = pyObject2Any( PyRef( PyObject_GetAttrString( o , "value" ), SAL_NO_ACQUIRE) );
+                Type t;
+                pyObject2Any( PyRef( PyObject_GetAttrString( o, "type" ), SAL_NO_ACQUIRE ) ) >>= t;
+
+                try
+                {
+                    a = getImpl()->cargo->xTypeConverter->convertTo( a, t );
+                }
+                catch( com::sun::star::uno::Exception & e )
+                {
+                    throw RuntimeException( e.Message, e.Context );
+                }
+            }
+            else
+            {
+                throw RuntimeException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                  "uno.Any instance not accepted during method call, "
+                                  "use uno.invoke instead" ) ),
+                    Reference< XInterface > () );
+            }
         }
         else
         {
