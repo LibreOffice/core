@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:43:10 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,6 +538,7 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
     if ( aReturn.hasValue() == sal_False )
     {
         aReturn = ::cppu::queryInterface(   rType                                           ,
+                                            static_cast< XSTORABLE2*            > ( this )  ,
                                                static_cast< XSTORAGEBASEDDOCUMENT* > ( this )   );
     }
 
@@ -607,7 +608,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
                                                          ::getCppuType(( const REFERENCE< XMODEL                 >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XMODIFIABLE            >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XPRINTABLE             >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XSTORABLE              >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XSTORABLE2             >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XLOADABLE              >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XCLOSEABLE             >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XSTARBASICACCESS       >*)NULL ) ,
@@ -1967,10 +1968,13 @@ sal_Bool SAL_CALL SfxBaseModel::isReadonly() throw(::com::sun::star::uno::Runtim
 }
 
 //________________________________________________________________________________________________________
-//  XStorable
+//  XStorable2
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::store() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxBaseModel::storeSelf( const    SEQUENCE< PROPERTYVALUE >&  aSeqArgs )
+        throw ( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::RuntimeException )
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -1979,6 +1983,19 @@ void SAL_CALL SfxBaseModel::store() throw (::com::sun::star::io::IOException, ::
 
     if ( m_pData->m_pObjectShell.Is() )
     {
+        for ( sal_Int32 nInd = 0; nInd < aSeqArgs.getLength(); nInd++ )
+        {
+            // check that only acceptable parameters are provided here
+            if ( !aSeqArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VersionComment" ) ) )
+              && !aSeqArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Author" ) ) )
+              && !aSeqArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) ) )
+              && !aSeqArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StatusIndicator" ) ) ) )
+                throw lang::IllegalArgumentException();
+        }
+
+        SfxAllItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
+        TransformParameters( SID_SAVEDOC, aSeqArgs, *pParams );
+
         SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOC, m_pData->m_pObjectShell ) );
 
         sal_Bool bRet = sal_False;
@@ -1991,6 +2008,8 @@ void SAL_CALL SfxBaseModel::store() throw (::com::sun::star::io::IOException, ::
             // stored in normal way.
             if ( !hasLocation() || getLocation().compareToAscii( "private:", 8 ) == 0 )
             {
+                // actually in this very rare case only UI parameters have sence
+                // TODO/LATER: should be done later, after integration of sb19
                 if ( bRet = m_pData->m_pObjectShell->DoSave() )
                     bRet = m_pData->m_pObjectShell->DoSaveCompleted();
             }
@@ -2000,12 +2019,14 @@ void SAL_CALL SfxBaseModel::store() throw (::com::sun::star::io::IOException, ::
                 //             but for now it is unavoidable since the persistence part of the link document handling
                 //             must be done as for nonembedded document
                 m_pData->m_pObjectShell->SetCreateMode_Impl( SFX_CREATE_MODE_STANDARD );
-                bRet = m_pData->m_pObjectShell->Save_Impl();
+                bRet = m_pData->m_pObjectShell->Save_Impl( pParams );
                 m_pData->m_pObjectShell->SetCreateMode_Impl( SFX_CREATE_MODE_EMBEDDED );
             }
         }
         else
-            bRet = m_pData->m_pObjectShell->Save_Impl();
+            bRet = m_pData->m_pObjectShell->Save_Impl( pParams );
+
+        DELETEZ( pParams );
 
         sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetError() ? m_pData->m_pObjectShell->GetError()
                                                                     : ERRCODE_IO_CANTWRITE;
@@ -2022,6 +2043,16 @@ void SAL_CALL SfxBaseModel::store() throw (::com::sun::star::io::IOException, ::
         else
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), nErrCode );
     }
+
+}
+
+//________________________________________________________________________________________________________
+//  XStorable
+//________________________________________________________________________________________________________
+
+void SAL_CALL SfxBaseModel::store() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+{
+    storeSelf( uno::Sequence< beans::PropertyValue >() );
 }
 
 //________________________________________________________________________________________________________
