@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 15:05:53 $
+#   last change: $Author: rt $ $Date: 2004-09-17 13:01:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,60 +62,64 @@
 
 PRJ=..$/..$/..
 
-PRJINC=$(PRJ)$/source/
 PRJNAME=shell
 TARGET=gconfbe
+
+LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
-# Version
-GCONF_MAJOR=1
+COMP1TYPELIST=$(TARGET)
+COMPRDB=$(SOLARBINDIR)$/types.rdb
+UNOUCROUT=$(OUT)$/inc$/$(TARGET)
+INCPRE=$(UNOUCROUT)
 
 # --- Settings ---
 
 .INCLUDE : settings.mk
-INCPRE= ..\
-    -I/usr/include/gconf/2/
 
+# no "lib" prefix
 DLLPRE =
+
+.IF "$(ENABLE_GNOMEVFS)"!=""
+COMPILER_WARN_ALL=TRUE
+PKGCONFIG_MODULES=GConf-2.0
+.INCLUDE: pkg_config.mk
+
+.IF "$(OS)" == "SOLARIS"
+LINKFLAGS+=-z nodefs
+.ENDIF          # "$(OS)" == "SOLARIS"
+
+.IF "$(OS)" == "LINUX"
+# hack for faked SO environment
+CFLAGS+=-gdwarf-2
+PKGCONFIG_LIBS!:=-Wl,--export-dynamic $(PKGCONFIG_LIBS)
+.ENDIF
 
 # --- Files ---
 
 
 SLOFILES=\
+    $(SLO)$/gconfbecdef.obj \
     $(SLO)$/gconfbackend.obj \
-    $(SLO)$/componentdef.obj \
-    $(SLO)$/gconflayer.obj	
-
-
-.IF "$(OS)"!="WNT"
-GCONFLIB = -lgconf-2 -lglib-2.0 
-.ENDIF
-
-
-LIB1TARGET=$(SLB)$/_$(TARGET).lib        
-LIB1OBJFILES=$(SLOFILES)
-
-SHL1TARGET=$(TARGET)$(GCONF_MAJOR).uno   
+    $(SLO)$/gconflayer.obj
+        
+SHL1TARGET=$(TARGET)1.uno   
+SHL1OBJS=$(SLOFILES)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-
-SHL1LIBS=$(LIB1TARGET)
-#         $(SLB)$/backendhelpers.lib
 
 SHL1IMPLIB=i$(SHL1TARGET)
 SHL1STDLIBS=    \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
-        $(SALLIB)  \
-        $(VOSLIB)  \
-        $(GCONFLIB)
+        $(SALLIB)
+        
+SHL1STDLIBS+=$(PKGCONFIG_LIBS)
 
+SHL1VERSIONMAP=exports.map
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp    
-DEF1DES=Shell: Gconf Backend
 
-
-
-
+.ENDIF          # "$(ENABLE_GNOMEVFS)"!=""
 
 # --- Targets ---
 
