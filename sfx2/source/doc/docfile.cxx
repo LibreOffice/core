@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,28 +253,7 @@ void SfxLockBytesHandler_Impl::Handle( ::utl::UcbLockBytesHandler::LoadHandlerIt
     {
         switch( nWhich )
         {
-            case BEFOREWAIT :
-                if ( xLockBytes->IsSynchronMode() )
-                {
-                    DBG_ASSERT( !m_nAcquireCount, "BeforeWait inside beforewait!" );
-                    ::vos::IMutex& rMutex = Application::GetSolarMutex();
-                    if ( rMutex.tryToAcquire() )
-                        m_nAcquireCount = Application::ReleaseSolarMutex() - 1;
-                }
-
                 break;
-            case AFTERWAIT :
-                if ( xLockBytes->IsSynchronMode() )
-                {
-                    if ( m_nAcquireCount )
-                    {
-                        Application::AcquireSolarMutex( m_nAcquireCount );
-                        m_nAcquireCount = 0;
-                    }
-                }
-
-                break;
-
             case DATA_AVAILABLE :
                 m_pMedium->DataAvailable_Impl();
                 break;
