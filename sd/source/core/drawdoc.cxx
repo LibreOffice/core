@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-24 11:05:16 $
+ *  last change: $Author: thb $ $Date: 2002-07-19 12:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1237,6 +1237,18 @@ void SdDrawDocument::SetChanged(FASTBOOL bFlag)
         FmFormModel::SetChanged(bFlag);
     }
 #endif // !SVX_LIGHT
+}
+
+/*************************************************************************
+|*
+|* NbcSetChanged(), the model changed, don't call anybody else
+|*
+\************************************************************************/
+
+void SdDrawDocument::NbcSetChanged(FASTBOOL bFlag)
+{
+    // #100237# forward to baseclass
+    FmFormModel::SetChanged(bFlag);
 }
 
 /*************************************************************************
