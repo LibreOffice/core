@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
+ *  last change: $Author: jbu $ $Date: 2001-03-16 13:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,6 +525,16 @@ namespace bridges_urp
                         &(pSJE->m_pException) );
                 }
             }
+            if( pSJE->m_pRemoteI )
+            {
+                /**
+                   Do the release here, in case of ForceSynchronous=1, calls
+                   originated by the destructor of an UNO object must be sent BEFORE the
+                   release returns ( otherwise we don't own the thread anymore ! )
+                */
+                pSJE->m_pRemoteI->release( pSJE->m_pRemoteI );
+                pSJE->m_pRemoteI = 0;
+            }
 
             // now destruct parameters and marshal replies
             // Note : when call is synchron => m_nCalls == 1
@@ -644,12 +654,6 @@ namespace bridges_urp
                                       pMemberType->pMemberName );
                  }
 #endif
-
-                if( pSJE->m_pRemoteI )
-                {
-                    pSJE->m_pRemoteI->release( pSJE->m_pRemoteI );
-                    pSJE->m_pRemoteI = 0;
-                }
 
                 m_pBridgeImpl->m_nMarshaledMessages ++;
                 // put it on the wire
