@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 18:00:20 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,16 @@
 #ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
 #endif
+#ifndef _SVDPAGE_HXX
+#include <svx/svdpage.hxx>
+#endif
+#ifndef _SVDCAPT_HXX
+#include <svx/svdocapt.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
@@ -118,6 +128,9 @@
 #include "xcl97esc.hxx"
 #include "excupn.hxx"
 
+#ifndef SC_EDITUTIL_HXX
+#include "editutil.hxx"
+#endif
 #ifndef SC_FAPIHELPER_HXX
 #include "fapihelper.hxx"
 #endif
@@ -530,29 +543,73 @@ void XclObj::SaveTextRecs( XclExpStream& rStrm )
 
 // --- class XclObjComment -------------------------------------------
 
-XclObjComment::XclObjComment( const XclExpRoot& rRoot, const ScAddress& rPos, const String& rStr, bool bVisible )
+
+XclObjComment::XclObjComment( const XclExpRoot& rRoot, const Rectangle& rRect, const EditTextObject& rEditObj, SdrObject* pCaption, bool bVisible )
             :
             XclObj( rRoot, EXC_OBJ_CMO_NOTE, true )
 {
+    ProcessEscherObj(rRoot, rRect, pCaption, bVisible);
+    // TXO
+    pTxo = new XclTxo( rRoot, rEditObj, pCaption );
+}
+
+void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const Rectangle& rRect, SdrObject* pCaption, const bool bVisible )
+{
+    Reference<XShape> aXShape;
+    EscherPropertyContainer aPropOpt;
+
+    if(pCaption)
+    {
+        aXShape = GetXShapeForSdrObject(pCaption);
+        Reference< XPropertySet > aXPropSet( aXShape, UNO_QUERY );
+        if( aXPropSet.is() )
+        {
+            aPropOpt.CreateFillProperties( aXPropSet,  sal_True);
+
+            aPropOpt.AddOpt( ESCHER_Prop_lTxid, 0 );                        // undocumented
+        aPropOpt.AddOpt( 0x0158, 0x00000000 );                          // undocumented
+
+            sal_uInt32 nValue = 0;
+            if(!aPropOpt.GetOpt( ESCHER_Prop_FitTextToShape, nValue ))
+                aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );      // bool field
+
+            if(aPropOpt.GetOpt( ESCHER_Prop_fillColor, nValue ))
+            {
+                // If the Colour is the same as the 'ToolTip' System colour then
+                // use the default rather than the explicit colour value. This will
+                // be incorrect where user has chosen to use this colour explicity.
+                Color aColor = Color( (BYTE)nValue, (BYTE)( nValue >> 8 ), (BYTE)( nValue >> 16 ) );
+                const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
+                if(aColor == rSett.GetHelpColor().GetColor())
+                {
+                    aPropOpt.AddOpt( ESCHER_Prop_fillColor, 0x08000050 );
+                    aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0x08000050 );
+                }
+            }
+            else
+                aPropOpt.AddOpt( ESCHER_Prop_fillColor, 0x08000050 );
+
+            if(!aPropOpt.GetOpt( ESCHER_Prop_fillBackColor, nValue ))
+                aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0x08000050 );
+        if(!aPropOpt.GetOpt( ESCHER_Prop_fNoFillHitTest, nValue ))
+                aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00110010 );      // bool field
+        if(!aPropOpt.GetOpt( ESCHER_Prop_shadowColor, nValue ))
+                aPropOpt.AddOpt( ESCHER_Prop_shadowColor, 0x00000000 );
+        if(!aPropOpt.GetOpt( ESCHER_Prop_fshadowObscured, nValue ))     // bool field
+                aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured, 0x00030003 );     // bool field
+        }
+    }
+
     nGrbit = 0;     // all off: AutoLine, AutoFill, Printable, Locked
     XclEscherEx* pEx = pMsodrawing->GetEscherEx();
     pEx->OpenContainer( ESCHER_SpContainer );
     pEx->AddShape( ESCHER_ShpInst_TextBox, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
-    EscherPropertyContainer aPropOpt;
-    aPropOpt.AddOpt( ESCHER_Prop_lTxid, 0 );                        // undocumented
-    aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );      // bool field
-    aPropOpt.AddOpt( 0x0158, 0x00000000 );                          // undocumented
-    aPropOpt.AddOpt( ESCHER_Prop_fillColor, 0x08000050 );
-    aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0x08000050 );
-    aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00110010 );      // bool field
-    aPropOpt.AddOpt( ESCHER_Prop_shadowColor, 0x00000000 );
-    aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured, 0x00030003 );     // bool field
     sal_uInt32 nFlags = 0x000A0000;
     ::set_flag( nFlags, 2UL, !bVisible );
     aPropOpt.AddOpt( ESCHER_Prop_fPrint, nFlags );                  // bool field
     aPropOpt.Commit( pEx->GetStream() );
 
-    XclExpEscherNoteAnchor( rRoot, rPos ).WriteData( *pEx );
+    XclExpEscherNoteAnchor( rRoot, rRect ).WriteData( *pEx);
 
     pEx->AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     pMsodrawing->UpdateStopPos();
@@ -562,8 +619,6 @@ XclObjComment::XclObjComment( const XclExpRoot& rRoot, const ScAddress& rPos, co
     pClientTextbox->GetEscherEx()->AddAtom( 0, ESCHER_ClientTextbox );  // TXO record
     pClientTextbox->UpdateStopPos();
     pEx->CloseContainer();  // ESCHER_SpContainer
-    // TXO
-    pTxo = new XclTxo( rStr );
 }
 
 
@@ -632,6 +687,34 @@ void XclObjDropDown::WriteSubRecs( XclExpStream& rStrm )
 
 // --- class XclTxo --------------------------------------------------
 
+XclTxoHorAlign lcl_GetHorAlignFromItemSet( const SfxItemSet& rItemSet )
+{
+    XclTxoHorAlign eHorAlign = xlTxoHAlign_Default;
+
+    switch( static_cast< const SvxAdjustItem& >( rItemSet.Get( EE_PARA_JUST ) ).GetAdjust() )
+    {
+        case SVX_ADJUST_LEFT:           eHorAlign = xlTxoHAlignLeft;       break;
+        case SVX_ADJUST_CENTER:         eHorAlign = xlTxoHAlignCenter;     break;
+        case SVX_ADJUST_RIGHT:          eHorAlign = xlTxoHAlignRight;      break;
+        case SVX_ADJUST_BLOCK:          eHorAlign = xlTxoHAlignJustify;    break;
+    }
+    return eHorAlign;
+}
+
+XclTxoVerAlign lcl_GetVerAlignFromItemSet( const SfxItemSet& rItemSet )
+{
+    XclTxoVerAlign eVerAlign = xlTxoVAlign_Default;
+
+    switch( static_cast< const SdrTextVertAdjustItem& >( rItemSet.Get( SDRATTR_TEXT_VERTADJUST ) ).GetValue() )
+    {
+        case SDRTEXTVERTADJUST_TOP:     eVerAlign = xlTxoVAlignTop;     break;
+        case SDRTEXTVERTADJUST_CENTER:  eVerAlign = xlTxoVAlignCenter;  break;
+        case SDRTEXTVERTADJUST_BOTTOM:  eVerAlign = xlTxoVAlignBottom;  break;
+        case SDRTEXTVERTADJUST_BLOCK:   eVerAlign = xlTxoVAlignJustify; break;
+    }
+    return eVerAlign;
+}
+
 XclTxo::XclTxo( const String& rString, sal_uInt16 nFontIx ) :
     mpString( new XclExpString( rString ) ),
     meHorAlign( xlTxoHAlign_Default ),
@@ -656,22 +739,10 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rTextObj ) :
     const SfxItemSet& rItemSet = rTextObj.GetMergedItemSet();
 
     // horizontal alignment
-    switch( static_cast< const SvxAdjustItem& >( rItemSet.Get( EE_PARA_JUST ) ).GetAdjust() )
-    {
-        case SVX_ADJUST_LEFT:           meHorAlign = xlTxoHAlignLeft;       break;
-        case SVX_ADJUST_CENTER:         meHorAlign = xlTxoHAlignCenter;     break;
-        case SVX_ADJUST_RIGHT:          meHorAlign = xlTxoHAlignRight;      break;
-        case SVX_ADJUST_BLOCK:          meHorAlign = xlTxoHAlignJustify;    break;
-    }
+    SetHorAlign(lcl_GetHorAlignFromItemSet(rItemSet));
 
     // vertical alignment
-    switch( static_cast< const SdrTextVertAdjustItem& >( rItemSet.Get( SDRATTR_TEXT_VERTADJUST ) ).GetValue() )
-    {
-        case SDRTEXTVERTADJUST_TOP:     meVerAlign = xlTxoVAlignTop;        break;
-        case SDRTEXTVERTADJUST_CENTER:  meVerAlign = xlTxoVAlignCenter;     break;
-        case SDRTEXTVERTADJUST_BOTTOM:  meVerAlign = xlTxoVAlignBottom;     break;
-        case SDRTEXTVERTADJUST_BLOCK:   meVerAlign = xlTxoVAlignJustify;    break;
-    }
+    SetVerAlign(lcl_GetVerAlignFromItemSet(rItemSet));
 
     // rotation
     long nAngle = rTextObj.GetRotateAngle();
@@ -681,6 +752,24 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rTextObj ) :
         meRotation = xlTxoRot90cw;
     else
         meRotation = xlTxoNoRot;
+}
+
+XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObject* pCaption ) :
+    mpString( XclExpStringHelper::CreateString( rRoot, rEditObj ) ),
+    meHorAlign( xlTxoHAlign_Default ),
+    meVerAlign( xlTxoVAlign_Default ),
+    meRotation( xlTxoRot_Default )
+{
+    if(pCaption)
+    {
+        const SfxItemSet& rItemSet = pCaption->GetMergedItemSet();
+
+        // horizontal alignment
+        SetHorAlign(lcl_GetHorAlignFromItemSet(rItemSet));
+
+        // vertical alignment
+        SetVerAlign(lcl_GetVerAlignFromItemSet(rItemSet));
+    }
 }
 
 void XclTxo::SaveCont( XclExpStream& rStrm )
@@ -1397,20 +1486,47 @@ XclExpNote::XclExpNote(
     mnObjId( 0 ),
     mbVisible( pScNote && pScNote->IsShown() )
 {
+    ::std::auto_ptr <EditTextObject> pObj; ;
+    const EditTextObject* pEditObj;
     String aNoteText;
+    Rectangle aRect;
+    ::std::auto_ptr <SdrCaptionObj> pCaption;
+    ScDocument& rDoc = rRoot.GetDoc();
 
     // read strings from note object, if present
-    if( pScNote )
+    if( pScNote && ((pEditObj = pScNote->GetEditTextObject()) != 0))
     {
-        aNoteText = pScNote->GetText();
+        pObj.reset(pEditObj->Clone());
+        // append additional text if any
+        if(rAddText.Len())
+        {
+            ScGlobal::AddToken( aNoteText, rAddText, '\n', 2 );
+            EditEngine& rEE = rRoot.GetEditEngine();
+            rEE.SetText( aNoteText);
+            EditTextObject* pAddText = rEE.CreateTextObject();
+            pObj->Insert(*pAddText, pEditObj->GetParagraphCount());
+            delete pAddText;
+        }
         maAuthor.Assign( pScNote->GetAuthor() );
+        aRect = pScNote->GetRectangle();
+        const SfxItemSet& rSet = pScNote->GetItemSet();
+        Point aDummyTailPos;
+
+        // In order to transform the SfxItemSet to an EscherPropertyContainer
+        // and export the properties, we need to recreate the drawing object and
+        // pass this to XclObjComment() for processing.
+        pCaption.reset(new SdrCaptionObj( aRect, aDummyTailPos ));
+        (pCaption.get())->SetMergedItemSet(rSet);
+
+        pScNote->InsertObject(pCaption.get(), rDoc, rPos.Tab());
     }
 
-    // append additional text
-    ScGlobal::AddToken( aNoteText, rAddText, '\n', 2 );
-
     // create the Escher object
-    mnObjId = rRoot.mpRD->pObjRecs->Add( new XclObjComment( rRoot, maPos, aNoteText, mbVisible ) );
+    if(pObj.get())
+        mnObjId = rRoot.mpRD->pObjRecs->Add( new XclObjComment( rRoot, aRect, *pObj, pCaption.get(), mbVisible ) );
+
+    if( pScNote )
+        pScNote->RemoveObject(pCaption.get(), rDoc, rPos.Tab());
 
     SetRecSize( 9 + maAuthor.GetSize() );
 }
