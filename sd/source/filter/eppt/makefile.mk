@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: sj $ $Date: 2000-11-10 08:18:59 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:20:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,17 +67,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
-.INCLUDE :	$(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES=	eppt.cxx				\
-            epptso.cxx				\
-            escherex.cxx			\
-            dinfos2.cxx
 
 .IF "$(COM)"=="GCC"
 NOOPTFILES= $(SLO)$/epptso.obj
@@ -91,110 +83,30 @@ SLOFILES =	$(SLO)$/eppt.obj		\
 SHL1TARGET	=	emp$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB	=	eppt
 SHL1DEPN	=	$(LB)$/eppt.lib
+SHL1VERSIONMAP=exports.map
 SHL1DEF 	=	$(MISC)$/$(SHL1TARGET).def
-SHL1DEPN	=	$(LB)$/eppt.lib
 SHL1LIBS	=	$(SLB)$/eppt.lib
-SHL1BASE	=	0x1c000000
 
-SHL1STDLIBS = \
-                $(VOSLIB)			\
-                $(SALLIB)			\
-                $(SJLIB)			\
-                $(SOTLIB)			\
-                $(CPPULIB)			\
-                $(TKLIB)			\
+DEF1NAME=$(SHL1TARGET)
+
+SHL1STDLIBS = 	\
+                $(SVXLIB)			\
                 $(SO2LIB)			\
                 $(GOODIESLIB)		\
-                $(SVLLIB)			\
-                $(TOOLSLIB) 		\
-                $(SVTOOLLIB)		\
                 $(VCLLIB)			\
-                $(UCBHELPERLIB)		\
+                $(SOTLIB)			\
                 $(UNOTOOLSLIB)		\
-                $(SVXLIB)
+                $(TOOLSLIB) 		\
+                $(UCBHELPERLIB)		\
+                $(CPPULIB)			\
+                $(SALLIB)
+
+#				$(SVTOOLLIB)		\
+#				$(SVLLIB)			\
+#				$(TKLIB)			\
+#				$(SJLIB)			\
+#				$(VOSLIB)			\
 
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk
-
-# -------------------------------------------------------------------------
-
-$(MISC)$/$(SHL1TARGET).flt:
-    @echo ------------------------------
-    @echo Making: $@
-    @echo WEP>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@
-
-# -------------------------------------------------------------------------
-
-.IF "$(GUI)"=="MAC"
-
-$(MISC)$/$(SHL1TARGET).def:  $(MISC)$/$(SHL1TARGET).flt makefile.mk
-    @echo	ExportPPT											   > $@
-.ENDIF
-
-# ------------------
-
-.IF "$(GUI)"=="WIN"
-
-$(MISC)$/$(SHL1TARGET).def:  $(MISC)$/$(SHL1TARGET).flt makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY	  $(SHL1TARGET) 								 >$@
-    @echo DESCRIPTION 'Filter DLL'                                  >>$@
-    @echo EXETYPE	  WINDOWS										>>$@
-    @echo PROTMODE													>>$@
-    @echo CODE		  LOADONCALL MOVEABLE DISCARDABLE				>>$@
-    @echo DATA		  PRELOAD MOVEABLE SINGLE						>>$@
-    @echo HEAPSIZE	  0 											>>$@
-    @echo EXPORTS													>>$@
-    @echo	_ExportPPT												>>$@
-.ENDIF
-
-# ------------------
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(SHL1TARGET).def:\
-    makefile.mk \
-    $(MISC)$/$(SHL1TARGET).flt
-    @echo -------------------------------------------
-    @echo DEF-File erstellen
-.IF "$(COM)"!="WTC"
-    @echo LIBRARY	  $(DLLNAME) INITINSTANCE TERMINSTANCE			 >$@
-    @echo DESCRIPTION 'FILTER DLL'                                  >>$@
-.IF "$(COM)" == "ZTC"
-    @echo STUB		  'os2STUB.EXE'                                 >>$@
-.ENDIF
-    @echo PROTMODE													>>$@
-    @echo CODE		  LOADONCALL									>>$@
-    @echo DATA		  PRELOAD MULTIPLE NONSHARED					>>$@
-    @echo EXPORTS													>>$@
-.IF "$(COM)"=="ICC"
-    @echo	ExportPPT												>>$@
-.ELSE
-    @echo	_ExportPPT												>>$@
-.ENDIF
-.ELSE
-    @echo option DESCRIPTION 'Filter DLL'                           >$@
-    @echo name $(BIN)$/$(SHL1TARGET)								>>$@
-    @echo	ExportPPT_												>>$@
-    @gawk -f s:\util\exp.awk temp.def								>>$@
-    @del temp.def
-.ENDIF
-.ENDIF
-
-# ------------------
-
-.IF "$(GUI)"=="WNT"
-
-$(MISC)$/$(SHL1TARGET).def: makefile.mk $(MISC)$/$(SHL1TARGET).flt
-    @echo -------------------------------------------
-    @echo DEF-File erstellen
-    @echo LIBRARY	  $(DLLNAME)									>$@
-    @echo DESCRIPTION 'Filter DLL'                                  >>$@
-    @echo DATA READ WRITE NONSHARED 								>>$@
-    @echo EXPORTS													>>$@
-    @echo ExportPPT 												>>$@
-.ENDIF
