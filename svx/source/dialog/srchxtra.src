@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:35:39 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,7 +632,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text[ russian ] = "Οξθρκ οξυξζθυ";
     Text[ polish ] = "Szukaj podobnych";
     Text[ japanese ] = "—ή—½ΝίΩ‚Μυ";
-    Text[ chinese_traditional ] = "Γώ¦ό΄M§δ";
+    Text[ chinese_traditional ] = "¬Ϋ¦ό¦r·j΄M";
     Text[ arabic ] = "ΗαΘΝΛ Ϊδ ίαγΗΚ γΚΤΗΘεΙ";
     Text[ greek ] = "Αναζήτηση ομοιότητας";
     Text[ korean ] = "ΐ―»ηΌΊ Γ£±β";
