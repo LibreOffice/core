@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2001-09-21 15:31:55 $
+ *  last change: $Author: pl $ $Date: 2001-10-25 17:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,10 +609,15 @@ const char* SalDisplay::GetKeyboardName( BOOL bRefresh )
             // try X keyboard extension
             if( pXkbDesc = XkbGetKeyboard( GetDisplay(), XkbAllComponentsMask, XkbUseCoreKbd ) )
             {
-                const char* pAtom = XGetAtomName( GetDisplay(), pXkbDesc->names->groups[0] );
-                m_aKeyboardName = pAtom;
-                XFree( (void*)pAtom );
-
+                const char* pAtom = NULL;
+                if( pXkbDesc->names->groups[0] )
+                {
+                    pAtom = XGetAtomName( GetDisplay(), pXkbDesc->names->groups[0] );
+                    m_aKeyboardName = pAtom;
+                    XFree( (void*)pAtom );
+                }
+                else
+                    m_aKeyboardName = "<unknown keyboard>";
 #ifdef DEBUG
 #define PRINT_ATOM( x ) { if( pXkbDesc->names->x ) { pAtom = XGetAtomName( GetDisplay(), pXkbDesc->names->x ); fprintf( stderr, "%s: %s\n", #x, pAtom ); XFree( (void*)pAtom ); } else fprintf( stderr, "%s: <nil>\n", #x ); }
 
@@ -623,13 +628,14 @@ const char* SalDisplay::GetKeyboardName( BOOL bRefresh )
                 PRINT_ATOM( compat );
                 PRINT_ATOM( phys_symbols );
 
+#define PRINT_ATOM_2( x ) { if( pXkbDesc->names->x[i] ) { pAtom = XGetAtomName( GetDisplay(), pXkbDesc->names->x[i] ); fprintf( stderr, "%s[%d]: %s\n", #x, i, pAtom ); XFree( (void*)pAtom ); } else fprintf( stderr, "%s[%d]: <nil>\n", #x, i ); }
                 int i;
                 for( i = 0; i < XkbNumVirtualMods; i++ )
-                    PRINT_ATOM( vmods[i] );
+                    PRINT_ATOM_2( vmods );
                 for( i = 0; i < XkbNumIndicators; i++ )
-                    PRINT_ATOM( indicators[i] );
+                    PRINT_ATOM_2( indicators );
                 for( i = 0; i < XkbNumKbdGroups; i++ )
-                    PRINT_ATOM( groups[i] );
+                    PRINT_ATOM_2( groups );
 #endif
                 XkbFreeKeyboard( pXkbDesc, 0, True );
             }
