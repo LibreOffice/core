@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndarr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:36:12 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,11 @@ public:
         // Frames
     SwNode* FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                                 const SwNode* pEnd = 0 ) const;
+
+    //-> #112139#
+    SwNode * DocumentSectionStartNode(SwNode * pNode) const;
+    SwNode * DocumentSectionEndNode(SwNode * pNode) const;
+    //<- #112139#
 private:
     // privater Constructor, weil nie kopiert werden darf !!
     SwNodes( const SwNodes & rNodes );
