@@ -9073,3 +9073,4 @@ _real@8@4003a000000000000000
 ?acquire@?$WeakImplHelper1@VXAttributeList@sax@xml@star@sun@com@@@cppu@@WBE@AAXXZ
 ?queryInterface@?$WeakImplHelper1@VXAttributeList@sax@xml@star@sun@com@@@cppu@@WBE@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
 ?release@?$WeakImplHelper1@VXAttributeList@sax@xml@star@sun@com@@@cppu@@WBE@AAXXZ
+?processAttribute@SdXMLPageShapeContext@@UAEXGABVOUString@rtl@@0@Z
