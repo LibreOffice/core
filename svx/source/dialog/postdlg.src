@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-25 15:03:27 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ english_us ] = "Contents" ;
         Text[ chinese_simplified ] = "ÄÚÈÝ";
         Text[ russian ] = "Ñîäåðæèìîå";
-        Text[ polish ] = "Tre?æ";
+        Text[ polish ] = "Zawartoœæ";
         Text[ japanese ] = "“à—e";
         Text[ chinese_traditional ] = "¤º®e";
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -310,3 +310,4 @@ ModalDialog RID_SVXDLG_POSTIT
     Text[ catalan ] = "Nota";
 };
  // ********************************************************************** EOF
+
