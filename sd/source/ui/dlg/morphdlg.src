@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:39:16 $
+ *  last change: $Author: rt $ $Date: 2001-03-01 21:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ ModalDialog DLG_MORPH
         Text [ danish ] = "Trin" ;
         Text [ portuguese ] = "Passos" ;
         Text [ portuguese_brazilian ] = "Schritte" ;
-        Text[ chinese_simplified ] = "≤Ω÷Ë";
+        Text[ chinese_simplified ] = "Ω•‘ˆ";
         Text[ russian ] = "ÿ‡„Ë";
         Text[ polish ] = "Kroki";
         Text[ japanese ] = "Ω√ØÃﬂ";
