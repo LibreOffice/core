@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 14:12:26 $
+ *  last change: $Author: os $ $Date: 2001-01-23 10:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1743,13 +1743,13 @@ ULONG SwWW8Writer::StoreDoc()
     {
         UINT32 nSvxMSDffOLEConvFlags = 0;
         const OfaFilterOptions* pOpt = OFF_APP()->GetFilterOptions();
-        if( pOpt->IsStarMath2MathType() )
+        if( pOpt->IsMath2MathType() )
             nSvxMSDffOLEConvFlags |= OLE_STARMATH_2_MATHTYPE;
-        if( pOpt->IsStarWriter2WinWord() )
+        if( pOpt->IsWriter2WinWord() )
             nSvxMSDffOLEConvFlags |= OLE_STARWRITER_2_WINWORD;
-        if( pOpt->IsStarCalc2Excel() )
+        if( pOpt->IsCalc2Excel() )
             nSvxMSDffOLEConvFlags |= OLE_STARCALC_2_EXCEL;
-        if( pOpt->IsStarImpress2PowerPoint() )
+        if( pOpt->IsImpress2PowerPoint() )
             nSvxMSDffOLEConvFlags |= OLE_STARIMPRESS_2_POWERPOINT;
 
         pOLEExp = new SvxMSExportOLEObjects( nSvxMSDffOLEConvFlags );
@@ -2066,11 +2066,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.4 2000-11-20 14:12:26 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.5 2001-01-23 10:14:33 os Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/20 14:12:26  jp
+      ReadFilterFlags removed, use new class SwFilterOptions
+
       Revision 1.3  2000/11/13 17:30:15  jp
       new method PutCJKandCTLFontsInAttrPool
 
