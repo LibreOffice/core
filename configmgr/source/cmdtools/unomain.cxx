@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomain.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-24 15:29:25 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,8 @@ uno::Sequence< ::rtl::OUString > SAL_CALL unoapp::getAppCommandArgs()
     return aResult;
 }
 
+bool unoapp::g_bQuiet = false;
+
 SAL_IMPLEMENT_MAIN()
 {
     AutoDispose aDisposer;
@@ -162,7 +164,8 @@ SAL_IMPLEMENT_MAIN()
         OString sApp = OUStringToOString( unoapp::getAppCommandName(), osl_getThreadTextEncoding() );
         OString sMessage = OUStringToOString( e.Message, osl_getThreadTextEncoding() );
 
-        fprintf( stderr, "%s - Unhandled exception caught in main: \"%s\"\n", sApp.getStr(), sMessage.getStr() );
+        if (!unoapp::g_bQuiet)
+            fprintf( stderr, "%s - Unhandled exception caught in main: \"%s\"\n", sApp.getStr(), sMessage.getStr() );
 
         return 42;
     }

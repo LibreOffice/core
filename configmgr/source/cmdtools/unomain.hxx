@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomain.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-24 15:29:25 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@ namespace unoapp
     extern ::rtl::OUString SAL_CALL getAppCommandName();
     /// helper: retrieves all the commandline arguments of the application (skipping -env: arguments)
     extern uno::Sequence< ::rtl::OUString > SAL_CALL getAppCommandArgs();
+
+    /// global variable that allows to suppress all error output from the unoapp launcher, if set to <TRUE/>
+    extern bool g_bQuiet;
 
     /// entrypoint that must be implemented by the application
     extern int SAL_CALL uno_main( uno::Reference< uno::XComponentContext > const & xContext)
