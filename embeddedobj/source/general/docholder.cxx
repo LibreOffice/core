@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:38:03 $
+ *  last change: $Author: obo $ $Date: 2005-03-16 13:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,7 +874,7 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
 
     if ( m_xComponent.is() )
     {
-        uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xOwnLM;
+        uno::Reference< ::com::sun::star::frame::XLayoutManager > xOwnLM;
         try {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
             xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xOwnLM;
