@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:13:22 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,9 @@
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
@@ -412,7 +414,10 @@ const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, USHORT nSlot )
     const SfxItemPool* pPool = rSet.GetPool();
     USHORT nWh = pPool->GetWhich( nSlot );
     const SfxPoolItem* pItem = 0;
-    SfxItemState eState = rSet.GetItemState( nWh, TRUE, &pItem );
+#ifdef DEBUG
+    SfxItemState eState =
+#endif
+            rSet.GetItemState( nWh, TRUE, &pItem );  // -Wall required??
 
     if ( !pItem && nWh != nSlot )
         pItem = &pPool->GetDefaultItem( nWh );
@@ -487,13 +492,13 @@ void SfxTabPage::AddItemConnection( sfx::ItemConnectionBase* pConnection )
     aBaseFmtBtn ( this ),\
     pSet        ( ItemSetPtr ),\
     pOutSet     ( 0 ),\
-    pExampleSet ( 0 ),\
-    pRanges     ( 0 ),\
-    bItemsReset ( FALSE ),\
-    bFmt        ( bEditFmt ),\
+    pImpl       ( new TabDlg_Impl( (BYTE)aTabCtrl.GetPageCount() ) ), \
+    pRanges     ( 0 ), \
     nResId      ( rResId.GetId() ), \
     nAppPageId  ( USHRT_MAX ), \
-    pImpl       ( new TabDlg_Impl( (BYTE)aTabCtrl.GetPageCount() ) )
+    bItemsReset ( FALSE ),\
+    bFmt        ( bEditFmt ),\
+    pExampleSet ( 0 )
 
 // -----------------------------------------------------------------------
 
@@ -516,8 +521,8 @@ SfxTabDialog::SfxTabDialog
                                     // wenn != 0, wird der UserButton erzeugt
 ) :
     TabDialog( pParent, rResId ),
-    INI_LIST(pItemSet),
-    pFrame( pViewFrame )
+    pFrame( pViewFrame ),
+    INI_LIST(pItemSet)
 {
     Init_Impl( bFmt, pUserButtonText );
 }
@@ -542,8 +547,8 @@ SfxTabDialog::SfxTabDialog
                                     // wenn != 0, wird der UserButton erzeugt
 ) :
     TabDialog( pParent, rResId ),
-    INI_LIST(pItemSet),
-    pFrame( 0 )
+    pFrame( 0 ),
+    INI_LIST(pItemSet)
 {
     Init_Impl( bFmt, pUserButtonText );
     DBG_WARNING( "bitte den Ctor mit ViewFrame verwenden" );
@@ -567,8 +572,8 @@ SfxTabDialog::SfxTabDialog
                                     // wenn != 0, wird der UserButton erzeugt
 ) :
     TabDialog( pParent, rResId ),
-    INI_LIST(NULL),
-    pFrame( 0 )
+    pFrame( 0 ),
+    INI_LIST(NULL)
 {
     rBindings.ENTERREGISTRATIONS();
     pImpl->pController = new SfxTabDialogController( nSetId, rBindings, this );
@@ -789,7 +794,6 @@ PushButton* SfxTabDialog::GetApplyButton()
 void SfxTabDialog::Start_Impl()
 {
     DBG_ASSERT( pImpl->pData->Count() == aTabCtrl.GetPageCount(), "not all pages registered" );
-    Point aPos;
     USHORT nActPage = aTabCtrl.GetPageId( 0 );
 
     // load old settings, when exists
@@ -1377,7 +1381,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
     DBG_ASSERT( pImpl->pData->Count(), "keine Pages angemeldet" );
     const USHORT nId = pTabCtrl->GetCurPageId();
-    SfxApplication *pSfxApp = SFX_APP();
+    SFX_APP();
 
     // Tab Page schon da?
     SfxTabPage* pTabPage = (SfxTabPage *)pTabCtrl->GetTabPage( nId );
@@ -1452,7 +1456,7 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
 
 {
     USHORT nId = pTabCtrl->GetCurPageId();
-    SfxApplication *pSfxApp = SFX_APP();
+    SFX_APP();
     SfxTabPage *pPage = (SfxTabPage*)pTabCtrl->GetTabPage( nId );
     DBG_ASSERT( pPage, "keine aktive Page" );
 #ifdef DBG_UTIL
