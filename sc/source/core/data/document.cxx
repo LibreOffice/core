@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: er $ $Date: 2001-08-31 12:33:01 $
+ *  last change: $Author: sab $ $Date: 2001-09-06 10:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2384,11 +2384,11 @@ USHORT ScDocument::GetNextDifferentFlaggedCol( USHORT nTab, USHORT nStart) const
     if ( nTab<=MAXTAB && pTab[nTab] )
     {
         BYTE nStartFlags = GetColFlags(nStart, nTab);
-        USHORT nStartWidth = pTab[nTab]->GetColWidth(nStart);
+        USHORT nStartWidth = pTab[nTab]->GetOriginalWidth(nStart);
         for (USHORT nCol = nStart + 1; nCol <= MAXCOL; nCol++)
         {
             if (((nStartFlags & CR_MANUALBREAK) != (pTab[nTab]->GetColFlags(nCol) & CR_MANUALBREAK)) ||
-                (nStartWidth != pTab[nTab]->GetColWidth(nCol)))
+                (nStartWidth != pTab[nTab]->GetOriginalWidth(nCol)))
                 return nCol;
         }
         return MAXCOL;
