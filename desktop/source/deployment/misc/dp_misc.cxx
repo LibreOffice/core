@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_misc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:32:58 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,16 +79,14 @@ using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace dp_misc
-{
+namespace dp_misc {
 
 static OUString s_platform, s_os = OUSTR("$_OS"), s_arch = OUSTR("$_ARCH");
 
 //==============================================================================
 OUString const & getPlatformString()
 {
-    if (s_platform.getLength() == 0)
-    {
+    if (s_platform.getLength() == 0) {
         ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
         ::rtl::Bootstrap::expandMacros( s_os );
         ::rtl::Bootstrap::expandMacros( s_arch );
@@ -105,14 +103,12 @@ bool platform_fits( OUString const & platform_string )
 {
     OUString const & thisPlatform = getPlatformString();
     sal_Int32 index = 0;
-    for (;;)
-    {
+    for (;;) {
         OUString token( platform_string.getToken( 0, ',', index ).trim() );
         // check if this platform:
         if (token.equalsIgnoreAsciiCase( thisPlatform ) ||
             (token.indexOf( '_' ) < 0 && /* check OS part only */
-             token.equalsIgnoreAsciiCase( s_os )))
-        {
+             token.equalsIgnoreAsciiCase( s_os ))) {
             return true;
         }
         if (index < 0)
@@ -128,8 +124,7 @@ OUString make_url( OUString const & base_url, OUString const & url )
     ::rtl::OUStringBuffer buf;
     buf.append( base_url );
     if (base_url.getLength() > 0 &&
-        base_url[ base_url.getLength() - 1 ] != '/')
-    {
+        base_url[ base_url.getLength() - 1 ] != '/') {
         buf.append( static_cast< sal_Unicode >('/') );
     }
     if (url.getLength() > 0 && url[ 0 ] == '/')
@@ -143,11 +138,9 @@ OUString make_url( OUString const & base_url, OUString const & url )
 OUString expand_url( OUString const & url )
 {
     if (url.matchIgnoreAsciiCaseAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:") ))
-    {
+            RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:") )) {
         static ::rtl::Bootstrap * s_punorc = 0;
-        if (s_punorc == 0)
-        {
+        if (s_punorc == 0) {
             OUString unorc = OUSTR("$ORIGIN/" SAL_CONFIGFILE("uno"));
             ::rtl::Bootstrap::expandMacros( unorc );
             static ::rtl::Bootstrap s_unorc( unorc );
@@ -163,9 +156,7 @@ OUString expand_url( OUString const & url )
         // expand macro string:
         s_punorc->expandMacrosFrom( macro );
         return macro;
-    }
-    else
-    {
+    } else {
         return url;
     }
 }
@@ -174,8 +165,7 @@ OUString expand_url( OUString const & url )
 bool office_is_running()
 {
     static OUString s_pipeId;
-    if (s_pipeId.getLength() == 0)
-    {
+    if (s_pipeId.getLength() == 0) {
         OUString userPath = OUSTR("${$SYSBINDIR/" SAL_CONFIGFILE("bootstrap")
                                   ":UserInstallation}");
         ::rtl::Bootstrap::expandMacros( userPath );
@@ -191,8 +181,7 @@ bool office_is_running()
             !status.isValid( FileStatusMask_FileURL ) ||
             ::osl::FileBase::getAbsoluteFileURL(
                 OUString(), status.getFileURL(), userPath )
-            != ::osl::FileBase::E_None)
-        {
+            != ::osl::FileBase::E_None) {
             return false;
         }
 
@@ -249,8 +238,7 @@ oslProcess raiseProcess(
         &hProcess );
     delete [] parArgs;
 
-    switch (rc)
-    {
+    switch (rc) {
     case osl_Process_E_None:
         break;
     case osl_Process_E_NotFound:
@@ -297,18 +285,15 @@ Reference<XInterface> resolveUnoURL(
     Reference<bridge::XUnoUrlResolver> xUnoUrlResolver(
         bridge::UnoUrlResolver::create( xLocalContext ) );
 
-    for (;;)
-    {
+    for (;;) {
         if (abortChannel != 0 && abortChannel->isAborted())
             throw ucb::CommandAbortedException(
                 OUSTR("abort!"), Reference<XInterface>() );
 
-        try
-        {
+        try {
             return xUnoUrlResolver->resolve( connectString );
         }
-        catch (connection::NoConnectException &)
-        {
+        catch (connection::NoConnectException &) {
             TimeValue tv = { 0 /* secs */, 500000000 /* nanosecs */ };
             ::osl::Thread::wait( tv );
         }
