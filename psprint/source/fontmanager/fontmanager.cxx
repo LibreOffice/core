@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:22:51 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1301,6 +1301,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
             delete pFont;
     }
     else if( aExt.EqualsIgnoreCaseAscii( "ttf" )
+         ||  aExt.EqualsIgnoreCaseAscii( "tte" )   // #i33947# for Gaiji support
          ||  aExt.EqualsIgnoreCaseAscii( "otf" ) ) // #112957# allow GLYF-OTF
     {
         TrueTypeFontFile* pFont     = new TrueTypeFontFile();
@@ -1604,7 +1605,7 @@ void PrintFontManager::getFontAttributesFromXLFD( PrintFont* pFont, const std::l
 
 // -------------------------------------------------------------------------
 
-ByteString PrintFontManager::getXLFD( PrintFont* pFont ) const
+OString PrintFontManager::getXLFD( PrintFont* pFont ) const
 {
     if( pFont->m_eType == fonttype::Type1 )
     {
@@ -1617,55 +1618,65 @@ ByteString PrintFontManager::getXLFD( PrintFont* pFont ) const
             return static_cast<TrueTypeFontFile*>(pFont)->m_aXLFD;
     }
 
-    ByteString aXLFD( "-misc-" );
+    OStringBuffer aXLFD( 128 );
+
+    aXLFD.append( "-misc-" );
     ByteString aFamily( String( m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName ) ), RTL_TEXTENCODING_UTF8 );
     aFamily.SearchAndReplaceAll( '-',' ' );
     aFamily.SearchAndReplaceAll( '?',' ' );
     aFamily.SearchAndReplaceAll( '*',' ' );
-    aXLFD += aFamily;
-    aXLFD += '-';
+    aXLFD.append( OString( aFamily ) );
+    aXLFD.append( '-' );
     switch( pFont->m_eWeight )
     {
-        case weight::Thin:              aXLFD += "thin";break;
-        case weight::UltraLight:        aXLFD += "ultralight";break;
-        case weight::Light:         aXLFD += "light";break;
-        case weight::SemiLight:     aXLFD += "semilight";break;
-        case weight::Normal:            aXLFD += "normal";break;
-        case weight::Medium:            aXLFD += "medium";break;
-        case weight::SemiBold:          aXLFD += "semibold";break;
-        case weight::Bold:              aXLFD += "bold";break;
-        case weight::UltraBold:     aXLFD += "ultrabold";break;
-        case weight::Black:         aXLFD += "black";break;
+        case weight::Thin:          aXLFD.append("thin");break;
+        case weight::UltraLight:    aXLFD.append("ultralight");break;
+        case weight::Light:         aXLFD.append("light");break;
+        case weight::SemiLight:     aXLFD.append("semilight");break;
+        case weight::Normal:        aXLFD.append("normal");break;
+        case weight::Medium:        aXLFD.append("medium");break;
+        case weight::SemiBold:      aXLFD.append("semibold");break;
+        case weight::Bold:          aXLFD.append("bold");break;
+        case weight::UltraBold:     aXLFD.append("ultrabold");break;
+        case weight::Black:         aXLFD.append("black");break;
         default: break;
     }
-    aXLFD += '-';
+    aXLFD.append('-');
     switch( pFont->m_eItalic )
     {
-        case italic::Upright:           aXLFD += 'r';break;
-        case italic::Oblique:           aXLFD += 'o';break;
-        case italic::Italic:            aXLFD += 'i';break;
+        case italic::Upright:       aXLFD.append('r');break;
+        case italic::Oblique:       aXLFD.append('o');break;
+        case italic::Italic:        aXLFD.append('i');break;
         default: break;
     }
-    aXLFD += '-';
+    aXLFD.append('-');
     switch( pFont->m_eWidth )
     {
-        case width::UltraCondensed: aXLFD += "ultracondensed";break;
-        case width::ExtraCondensed: aXLFD += "extracondensed";break;
-        case width::Condensed:          aXLFD += "condensed";break;
-        case width::SemiCondensed:      aXLFD += "semicondensed";break;
-        case width::Normal:         aXLFD += "normal";break;
-        case width::SemiExpanded:       aXLFD += "semiexpanded";break;
-        case width::Expanded:           aXLFD += "expanded";break;
-        case width::ExtraExpanded:      aXLFD += "extraexpanded";break;
-        case width::UltraExpanded:      aXLFD += "ultraexpanded";break;
+        case width::UltraCondensed: aXLFD.append("ultracondensed");break;
+        case width::ExtraCondensed: aXLFD.append("extracondensed");break;
+        case width::Condensed:      aXLFD.append("condensed");break;
+        case width::SemiCondensed:  aXLFD.append("semicondensed");break;
+        case width::Normal:         aXLFD.append("normal");break;
+        case width::SemiExpanded:   aXLFD.append("semiexpanded");break;
+        case width::Expanded:       aXLFD.append("expanded");break;
+        case width::ExtraExpanded:  aXLFD.append("extraexpanded");break;
+        case width::UltraExpanded:  aXLFD.append("ultraexpanded");break;
         default: break;
     }
-    aXLFD += "-utf8-0-0-0-0-";
-    aXLFD += pFont->m_ePitch == pitch::Fixed ? "m" : "p";
-    aXLFD += "-0-";
-    aXLFD += rtl_getBestUnixCharsetFromTextEncoding( pFont->m_aEncoding );
+    aXLFD.append("-utf8-0-0-0-0-");
+    aXLFD.append( pFont->m_ePitch == pitch::Fixed ? "m" : "p" );
+    aXLFD.append("-0-");
+    const char* pEnc = rtl_getBestUnixCharsetFromTextEncoding( pFont->m_aEncoding );
+    if( ! pEnc )
+    {
+        if( pFont->m_aEncoding == RTL_TEXTENCODING_ADOBE_STANDARD )
+            pEnc = "adobe-standard";
+        else
+            pEnc = "iso8859-1";
+    }
+    aXLFD .append( pEnc );
 
-    return aXLFD;
+    return aXLFD.makeStringAndClear();
 }
 
 // -------------------------------------------------------------------------
@@ -3249,7 +3260,7 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
 
                     aLine = ByteString( aTo.GetName(), aEncoding );
                     aLine += ' ';
-                    aLine += getXLFD( *it );
+                    aLine += ByteString( getXLFD( *it ) );
 
                     int nTTCnumber = -1;
                     if( (*it)->m_eType == fonttype::TrueType )
