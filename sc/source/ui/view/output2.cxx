@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:16:40 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,9 @@ void ScDrawStringsVars::SetShrinkScale( long nScale, BYTE nScript )
         aFraction *= pOutput->aZoomY;
     Font aTmpFont;
     pPattern->GetFont( aTmpFont, SC_AUTOCOL_RAW, pFmtDevice, &aFraction, pCondSet, nScript );
-    aFont.SetHeight( aTmpFont.GetHeight() );
+    long nNewHeight = aTmpFont.GetHeight();
+    if ( nNewHeight > 0 )
+        aFont.SetHeight( nNewHeight );
 
     // set font and dependent variables as in SetPattern
 
@@ -330,6 +332,10 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
     {
         // "repeat" disables rotation (before constructing the font)
         eAttrOrient = SVX_ORIENTATION_STANDARD;
+
+        // #i31843# "repeat" with "line breaks" is treated as default alignment (but rotation is still disabled)
+        if ( bLineBreak )
+            eAttrHorJust = SVX_HOR_JUSTIFY_STANDARD;
     }
 
     short nRot;
@@ -451,6 +457,10 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
         nIndent = ((const SfxUInt16Item&)pPattern->GetItem( ATTR_INDENT, pCondSet )).GetValue();
     else
         nIndent = 0;
+
+    //  "Shrink to fit"
+
+    bShrink = static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet )).GetValue();
 }
 
 inline BOOL SameValue( ScBaseCell* pCell, ScBaseCell* pOldCell )    // pCell ist != 0
@@ -1241,7 +1251,8 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                 //  Part of a merged cell?
                 //
 
-                if ( pInfo->bHOverlapped || pInfo->bVOverlapped )
+                BOOL bOverlapped = ( pInfo->bHOverlapped || pInfo->bVOverlapped );
+                if ( bOverlapped )
                 {
                     bEmpty = TRUE;
 
@@ -1262,7 +1273,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                 //  Rest of a long text further to the left?
                 //
 
-                if ( bEmpty && !bMergeEmpty && nX < nX1 )
+                if ( bEmpty && !bMergeEmpty && nX < nX1 && !bOverlapped )
                 {
                     SCCOL nTempX=nX1;
                     while (nTempX > 0 && IsEmptyCellText( pThisRowInfo, nTempX, nY ))
@@ -1281,7 +1292,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                 //  Rest of a long text further to the right?
                 //
 
-                if ( bEmpty && !bMergeEmpty && nX == nX2 )
+                if ( bEmpty && !bMergeEmpty && nX == nX2 && !bOverlapped )
                 {
                     //  don't have to look further than nLastContentCol
 
@@ -1396,32 +1407,41 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                     *pPattern, eOutHorJust, bCellIsValue || bRepeat || bShrink, bBreak, FALSE,
                                     aAlignRect, aClipRect, bLeftClip, bRightClip );
 
-                    if ( bShrink && ( bLeftClip || bRightClip ) )
+                    if ( bShrink )
                     {
-                        long nAvailable = aAlignRect.GetWidth() - nTotalMargin;
-                        long nScaleSize = aVars.GetTextSize().Width();         // without margin
-                        long nScale = ( nAvailable * 100 ) / nScaleSize;
-
-                        aVars.SetShrinkScale( nScale, nOldScript );
-                        long nNewSize = aVars.GetTextSize().Width();
-
-                        USHORT nShrinkAgain = 0;
-                        while ( nNewSize > nAvailable && nShrinkAgain < SC_SHRINKAGAIN_MAX )
+                        if ( aVars.GetOrient() != SVX_ORIENTATION_STANDARD )
                         {
-                            // If the text is still too large, reduce the scale again by 10%, until it fits,
-                            // at most 7 times (it's less than 50% of the calculated scale then).
-
-                            nScale = ( nScale * 9 ) / 10;
-                            aVars.SetShrinkScale( nScale, nOldScript );
-                            nNewSize = aVars.GetTextSize().Width();
-                            ++nShrinkAgain;
+                            // Only horizontal scaling is handled here.
+                            // DrawEdit is used to vertically scale 90 deg rotated text.
+                            bNeedEdit = TRUE;
                         }
-                        // If even at half the size the font still isn't rendered smaller,
-                        // fall back to normal clipping (showing ### for numbers).
-                        if ( nNewSize <= nAvailable )
-                            bLeftClip = bRightClip = FALSE;
+                        else if ( bLeftClip || bRightClip )     // horizontal
+                        {
+                            long nAvailable = aAlignRect.GetWidth() - nTotalMargin;
+                            long nScaleSize = aVars.GetTextSize().Width();         // without margin
+                            long nScale = ( nAvailable * 100 ) / nScaleSize;
 
-                        pOldPattern = NULL;
+                            aVars.SetShrinkScale( nScale, nOldScript );
+                            long nNewSize = aVars.GetTextSize().Width();
+
+                            USHORT nShrinkAgain = 0;
+                            while ( nNewSize > nAvailable && nShrinkAgain < SC_SHRINKAGAIN_MAX )
+                            {
+                                // If the text is still too large, reduce the scale again by 10%, until it fits,
+                                // at most 7 times (it's less than 50% of the calculated scale then).
+
+                                nScale = ( nScale * 9 ) / 10;
+                                aVars.SetShrinkScale( nScale, nOldScript );
+                                nNewSize = aVars.GetTextSize().Width();
+                                ++nShrinkAgain;
+                            }
+                            // If even at half the size the font still isn't rendered smaller,
+                            // fall back to normal clipping (showing ### for numbers).
+                            if ( nNewSize <= nAvailable )
+                                bLeftClip = bRightClip = FALSE;
+
+                            pOldPattern = NULL;
+                        }
                     }
 
                     if ( bRepeat && !bLeftClip && !bRightClip )
@@ -1774,6 +1794,112 @@ void lcl_ScaleFonts( EditEngine& rEngine, long nPercent )
         rEngine.SetUpdateMode( TRUE );
 }
 
+long lcl_GetEditSize( EditEngine& rEngine, BOOL bWidth, BOOL bSwap, long nAttrRotate )
+{
+    if ( bSwap )
+        bWidth = !bWidth;
+
+    if ( nAttrRotate )
+    {
+        long nRealWidth  = (long) rEngine.CalcTextWidth();
+        long nRealHeight = rEngine.GetTextHeight();
+
+        // assuming standard mode, otherwise width isn't used
+
+        double nRealOrient = nAttrRotate * F_PI18000;   // 1/100th degrees
+        double nAbsCos = fabs( cos( nRealOrient ) );
+        double nAbsSin = fabs( sin( nRealOrient ) );
+        if ( bWidth )
+            return (long) ( nRealWidth * nAbsCos + nRealHeight * nAbsSin );
+        else
+            return (long) ( nRealHeight * nAbsCos + nRealWidth * nAbsSin );
+    }
+    else if ( bWidth )
+        return (long) rEngine.CalcTextWidth();
+    else
+        return rEngine.GetTextHeight();
+}
+
+
+void ScOutputData::ShrinkEditEngine( EditEngine& rEngine, const Rectangle& rAlignRect,
+            long nLeftM, long nTopM, long nRightM, long nBottomM,
+            BOOL bWidth, USHORT nOrient, long nAttrRotate, BOOL bPixelToLogic,
+            long& rEngineWidth, long& rEngineHeight, long& rNeededPixel, BOOL& rLeftClip, BOOL& rRightClip )
+{
+    if ( !bWidth )
+    {
+        // vertical
+
+        long nScaleSize = bPixelToLogic ?
+            pRefDevice->LogicToPixel(Size(0,rEngineHeight)).Height() : rEngineHeight;
+
+        // Don't scale if it fits already.
+        // Allowing to extend into the margin, to avoid scaling at optimal height.
+        if ( nScaleSize <= rAlignRect.GetHeight() )
+            return;
+
+        BOOL bSwap = ( nOrient == SVX_ORIENTATION_TOPBOTTOM || nOrient == SVX_ORIENTATION_BOTTOMTOP );
+        long nAvailable = rAlignRect.GetHeight() - nTopM - nBottomM;
+        long nScale = ( nAvailable * 100 ) / nScaleSize;
+
+        lcl_ScaleFonts( rEngine, nScale );
+        rEngineHeight = lcl_GetEditSize( rEngine, FALSE, bSwap, nAttrRotate );
+        long nNewSize = bPixelToLogic ?
+            pRefDevice->LogicToPixel(Size(0,rEngineHeight)).Height() : rEngineHeight;
+
+        USHORT nShrinkAgain = 0;
+        while ( nNewSize > nAvailable && nShrinkAgain < SC_SHRINKAGAIN_MAX )
+        {
+            // further reduce, like in DrawStrings
+            lcl_ScaleFonts( rEngine, 90 );     // reduce by 10%
+            rEngineHeight = lcl_GetEditSize( rEngine, FALSE, bSwap, nAttrRotate );
+            nNewSize = bPixelToLogic ?
+                pRefDevice->LogicToPixel(Size(0,rEngineHeight)).Height() : rEngineHeight;
+            ++nShrinkAgain;
+        }
+
+        // sizes for further processing (alignment etc):
+        rEngineWidth = lcl_GetEditSize( rEngine, TRUE, bSwap, nAttrRotate );
+        long nPixelWidth = bPixelToLogic ?
+            pRefDevice->LogicToPixel(Size(rEngineWidth,0)).Width() : rEngineWidth;
+        rNeededPixel = nPixelWidth + nLeftM + nRightM;
+    }
+    else if ( rLeftClip || rRightClip )
+    {
+        // horizontal
+
+        long nAvailable = rAlignRect.GetWidth() - nLeftM - nRightM;
+        long nScaleSize = rNeededPixel - nLeftM - nRightM;      // without margin
+
+        if ( nScaleSize <= nAvailable )
+            return;
+
+        long nScale = ( nAvailable * 100 ) / nScaleSize;
+
+        lcl_ScaleFonts( rEngine, nScale );
+        rEngineWidth = lcl_GetEditSize( rEngine, TRUE, FALSE, nAttrRotate );
+        long nNewSize = bPixelToLogic ?
+            pRefDevice->LogicToPixel(Size(rEngineWidth,0)).Width() : rEngineWidth;
+
+        USHORT nShrinkAgain = 0;
+        while ( nNewSize > nAvailable && nShrinkAgain < SC_SHRINKAGAIN_MAX )
+        {
+            // further reduce, like in DrawStrings
+            lcl_ScaleFonts( rEngine, 90 );     // reduce by 10%
+            rEngineWidth = lcl_GetEditSize( rEngine, TRUE, FALSE, nAttrRotate );
+            nNewSize = bPixelToLogic ?
+                pRefDevice->LogicToPixel(Size(rEngineWidth,0)).Width() : rEngineWidth;
+            ++nShrinkAgain;
+        }
+        if ( nNewSize <= nAvailable )
+            rLeftClip = rRightClip = FALSE;
+
+        // sizes for further processing (alignment etc):
+        rNeededPixel = nNewSize + nLeftM + nRightM;
+        rEngineHeight = lcl_GetEditSize( rEngine, FALSE, FALSE, nAttrRotate );
+    }
+}
+
 void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 {
     Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
@@ -1943,6 +2069,11 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             // ignore orientation/rotation if "repeat" is active
                             eOrient = SVX_ORIENTATION_STANDARD;
                             nAttrRotate = 0;
+
+                            // #i31843# "repeat" with "line breaks" is treated as default alignment
+                            // (but rotation is still disabled)
+                            if ( bBreak )
+                                eHorJust = SVX_HOR_JUSTIFY_STANDARD;
                         }
                         if ( eOrient==SVX_ORIENTATION_STANDARD && nAttrRotate )
                         {
@@ -2302,40 +2433,19 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                 nNeededPixel = pRefDevice->LogicToPixel(Size(nNeededPixel,0)).Width();
                             nNeededPixel += nLeftM + nRightM;
 
-                            if ( ( !bBreak && eOrient != SVX_ORIENTATION_STACKED ) || bAsianVertical )
+                            if ( ( !bBreak && eOrient != SVX_ORIENTATION_STACKED ) || bAsianVertical || bShrink )
                             {
                                 // for break, the first GetOutputArea call is sufficient
                                 GetOutputArea( nXForPos, nArrYForPos, nPosX, nPosY, nCellX, nCellY, nNeededPixel,
                                                 *pPattern, eOutHorJust, bCellIsValue || bRepeat || bShrink, FALSE, FALSE,
                                                 aAlignRect, aClipRect, bLeftClip, bRightClip );
 
-                                if ( bShrink && ( bLeftClip || bRightClip ) )
+                                if ( bShrink )
                                 {
-                                    long nAvailable = aAlignRect.GetWidth() - nLeftM - nRightM;
-                                    long nScaleSize = nNeededPixel - nLeftM - nRightM;      // without margin
-                                    long nScale = ( nAvailable * 100 ) / nScaleSize;
-
-                                    lcl_ScaleFonts( *pEngine, nScale );
-                                    nEngineWidth = (long) pEngine->CalcTextWidth();
-                                    long nNewSize = bPixelToLogic ?
-                                        pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width() : nEngineWidth;
-
-                                    USHORT nShrinkAgain = 0;
-                                    while ( nNewSize > nAvailable && nShrinkAgain < SC_SHRINKAGAIN_MAX )
-                                    {
-                                        // further reduce, like in DrawStrings
-                                        lcl_ScaleFonts( *pEngine, 90 );     // reduce by 10%
-                                        nEngineWidth = (long) pEngine->CalcTextWidth();
-                                        nNewSize = bPixelToLogic ?
-                                            pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width() : nEngineWidth;
-                                        ++nShrinkAgain;
-                                    }
-                                    if ( nNewSize <= nAvailable )
-                                        bLeftClip = bRightClip = FALSE;
-
-                                    // sizes for further processing (alignment etc):
-                                    nNeededPixel = nNewSize + nLeftM + nRightM;
-                                    nEngineHeight = pEngine->GetTextHeight();
+                                    BOOL bWidth = ( eOrient == SVX_ORIENTATION_STANDARD && !bAsianVertical );
+                                    ShrinkEditEngine( *pEngine, aAlignRect,
+                                        nLeftM, nTopM, nRightM, nBottomM, bWidth, eOrient, 0, bPixelToLogic,
+                                        nEngineWidth, nEngineHeight, nNeededPixel, bLeftClip, bRightClip );
                                 }
 
                                 if ( bRepeat && !bLeftClip && !bRightClip && pEngine->GetParagraphCount() == 1 )
@@ -2843,6 +2953,9 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                             pPattern->GetItem(ATTR_HOR_JUSTIFY, pCondSet)).GetValue();
                         BOOL bBreak = ( eHorJust == SVX_HOR_JUSTIFY_BLOCK ) ||
                                     ((const SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK, pCondSet)).GetValue();
+                        BOOL bRepeat = ( eHorJust == SVX_HOR_JUSTIFY_REPEAT && !bBreak );
+                        BOOL bShrink = !bBreak && !bRepeat && static_cast<const SfxBoolItem&>
+                                        (pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet )).GetValue();
                         SvxCellOrientation eOrient = pPattern->GetCellOrientation( pCondSet );
 
                         const ScMergeAttr* pMerge =
@@ -2951,10 +3064,12 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
 
                             long nLeftM = (long) ( (pMargin->GetLeftMargin() + nIndent) * nPPTX );
                             long nTopM  = (long) ( pMargin->GetTopMargin() * nPPTY );
+                            long nRightM  = (long) ( pMargin->GetRightMargin() * nPPTX );
+                            long nBottomM = (long) ( pMargin->GetBottomMargin() * nPPTY );
                             nStartX += nLeftM;
                             nStartY += nTopM;
-                            nOutWidth -= nLeftM + (long) ( pMargin->GetRightMargin() * nPPTX );
-                            nOutHeight -= nTopM + (long) ( pMargin->GetBottomMargin() * nPPTY );
+                            nOutWidth -= nLeftM + nRightM;
+                            nOutHeight -= nTopM + nBottomM;
 
                             //  Rotation schon hier, um bei Umbruch auch PaperSize anzupassen
                             long nAttrRotate = 0;
@@ -3160,6 +3275,36 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                 GetOutputArea( nX, nArrY, nCellStartX, nPosY, nCellX, nCellY, nNeededWidth,
                                                 *pPattern, eOutHorJust, FALSE, FALSE, TRUE,
                                                 aAlignRect, aClipRect, bLeftClip, bRightClip );
+
+                                if ( bShrink )
+                                {
+                                    long nPixelWidth = bPixelToLogic ?
+                                        pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width() : nEngineWidth;
+                                    long nNeededPixel = nPixelWidth + nLeftM + nRightM;
+
+                                    bLeftClip = bRightClip = TRUE;
+
+                                    // always do height
+                                    ShrinkEditEngine( *pEngine, aAlignRect, nLeftM, nTopM, nRightM, nBottomM,
+                                        FALSE, eOrient, nAttrRotate, bPixelToLogic,
+                                        nEngineWidth, nEngineHeight, nNeededPixel, bLeftClip, bRightClip );
+
+                                    if ( eRotMode == SVX_ROTATE_MODE_STANDARD )
+                                    {
+                                        // do width only if rotating within the cell (standard mode)
+                                        ShrinkEditEngine( *pEngine, aAlignRect, nLeftM, nTopM, nRightM, nBottomM,
+                                            TRUE, eOrient, nAttrRotate, bPixelToLogic,
+                                            nEngineWidth, nEngineHeight, nNeededPixel, bLeftClip, bRightClip );
+                                    }
+
+                                    // nEngineWidth/nEngineHeight is updated in ShrinkEditEngine
+                                    // (but width is only valid for standard mode)
+                                    nRealWidth  = (long) pEngine->CalcTextWidth();
+                                    nRealHeight = pEngine->GetTextHeight();
+
+                                    if ( eRotMode != SVX_ROTATE_MODE_STANDARD )
+                                        nEngineWidth = (long) ( nRealHeight / fabs( nSin ) );
+                                }
 
                                 // BOOL bVClip = ( nEngineHeight > aCellSize.Height() );
 
