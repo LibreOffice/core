@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-19 16:05:45 $
+#   last change: $Author: hjs $ $Date: 2002-05-06 10:59:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
                'lib', [ 'OUT:', 'EXTRACT:','out:', 'def:', 'machine:' ],
                'link', [ 'BASE:', 'DEBUG', 'DLL', 'LIBPATH', 'MACHINE:',
                          'MAP', 'NODEFAULTLIB', 'OPT', 'PDB', 'RELEASE',
-                         'SUBSYSTEM', 'STACK', 'out:', 'map:',
+                         'SUBSYSTEM', 'STACK', 'out:', 'map:', 'ENTRY:',
                          'implib:', 'def' ],
                'regmerge', [ '/UCR' ] );
 
