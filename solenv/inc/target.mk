@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.129 $
+#   $Revision: 1.130 $
 #
-#   last change: $Author: hjs $ $Date: 2002-10-23 17:52:52 $
+#   last change: $Author: hjs $ $Date: 2002-10-31 17:36:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2210,12 +2210,12 @@ $(IMGLSTTARGET): $(IMGLST_SRS)
 .IF "$(common_build_reslib)"!=""
     @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
     @-+$(MKDIR) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
-    +$(BMP) $(SRS)$/$(@:b:s/_img/ /:1).srs $(BMP_IN) $(BMP_OUT)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(lang_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) -f $@
+    +$(BMP) $(SRS)$/$(@:b:s/_img/ /:1).srs $(BMP_OUT)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(lang_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) -I $(BMP_IN) -I $(SOLARSRC)$/res -f $@
     -+$(GNUCOPY) -pub $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))})/* $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
     +-$(RM) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))})$/*.bmp~
 .ELSE			# "$(common_build_reslib)"!=""
     @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
-    +$(BMP) $(SRS)$/$(@:b:s/_img/ /:1).srs $(BMP_IN) $(BMP_OUT)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(lang_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) -f $@
+    +$(BMP) $(SRS)$/$(@:b:s/_img/ /:1).srs $(BMP_OUT)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(lang_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) -I $(BMP_IN) -I $(SOLARSRC)$/res -f $@
 .ENDIF			# "$(common_build_reslib)"!=""
 .IF "$(BMP_WRITES_FLAG)"==""
     @+echo > $@
