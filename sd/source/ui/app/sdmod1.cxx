@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:50:20 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,7 @@ void SdModule::Execute(SfxRequest& rReq)
                 //CHINA001 AssistentDlg* pPilotDlg=new AssistentDlg( DIALOG_NO_PARENT, !bNewDocDirect );
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-                AbstractAssistentDlg* pPilotDlg = pFact->CreateAssistentDlg(ResId( DLG_ASS ), DIALOG_NO_PARENT, !bNewDocDirect );
+                AbstractAssistentDlg* pPilotDlg = pFact->CreateAssistentDlg(ResId( DLG_ASS ), NULL, !bNewDocDirect );
                 DBG_ASSERT(pPilotDlg, "Dialogdiet fail!");//CHINA001
                 // Open the Pilot
                 if( pPilotDlg->Execute()==RET_CANCEL )
