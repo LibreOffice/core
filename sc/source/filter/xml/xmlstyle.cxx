@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:33:59 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,10 +243,11 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     XMLPropertyState* pDiagonalTLBRWidthState = NULL;
     XMLPropertyState* pDiagonalBLTRWidthState = NULL;
 
-    for( ::std::vector< XMLPropertyState >::iterator propertie = rProperties.begin();
-         propertie != rProperties.end();
-         propertie++ )
+    for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
+         aIter != rProperties.end();
+         ++aIter )
     {
+        XMLPropertyState* propertie = &(*aIter);
         if (propertie->mnIndex != -1)
         {
             switch( getPropertySetMapper()->GetEntryContextId( propertie->mnIndex ) )
