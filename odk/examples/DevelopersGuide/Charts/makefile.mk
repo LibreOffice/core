@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 16:11:26 $
+#   last change: $Author: rt $ $Date: 2005-01-31 17:07:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,7 @@ TARGET=copying
 #----------------------------------------------------------------
 
 #----------------------------------------------------
-# this makefile is only used for copying the example 
+# this makefile is only used for copying the example
 # files into the SDK
 #----------------------------------------------------
 
@@ -89,7 +89,7 @@ CHARTS_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/Charts$/Makefile
 
 DIR_FILE_LIST= \
-    $(CHARTS_FILES) \
+    $(CHARTS_FILES)
 
 DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
 DIR_CREATE_FLAG=$(MISC)$/devguide_charts_dirs_created.txt
@@ -104,7 +104,7 @@ all : \
 
 #--------------------------------------------------
 # use global rules
-#--------------------------------------------------   
+#--------------------------------------------------
 .INCLUDE: $(PRJ)$/util$/odk_rules.pmk
-    
+
 
