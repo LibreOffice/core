@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-19 20:33:49 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -992,7 +992,7 @@ ModalDialog RID_DISTANCEDIALOG
     Text [ norwegian ] = "Distances" ;
     Text [ italian ] = "Distanze" ;
     Text [ portuguese_brazilian ] = "Distâncias" ;
-    Text [ portuguese ] = "Espaços" ;
+    Text [ portuguese ] = "Espaçamento" ;
     Text [ finnish ] = "Etäisyydet" ;
     Text [ danish ] = "Afstand" ;
     Text [ french ] = "Écarts" ;
@@ -1276,7 +1276,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text [ norwegian ] = "Distances" ;
             Text [ italian ] = "Distanze" ;
             Text [ portuguese_brazilian ] = "Distâncias" ;
-            Text [ portuguese ] = "Espaços" ;
+            Text [ portuguese ] = "Espaçamento" ;
             Text [ finnish ] = "Etäisyydet" ;
             Text [ danish ] = "Afstand" ;
             Text [ french ] = "Écarts" ;
@@ -2822,7 +2822,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ russian ] = "~Íàáîğ ñèìâîëîâ:";
         Text[ polish ] = "Zbiór symboli:";
         Text[ japanese ] = "‹L†¾¯Ä(~S):";
-        Text[ chinese_traditional ] = "¹Ï¥Ü²Õ(~S)";
+        Text[ chinese_traditional ] = "¹Ï¥Ü¶°(~S)";
         Text[ arabic ] = ":ãÌãæÚÉ ÑãæÒ";
         Text[ greek ] = "Óıíïëï óõìâüëùí:";
         Text[ korean ] = "±âÈ£ ¼¼Æ®:(~S)";
@@ -3042,7 +3042,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text = "~Altes Symbol:" ;
         Text [ English ] = "~Old Symbol:" ;
         Text[ english_us ] = "~Old symbol:";
-        Text[ portuguese ] = "~Símbolo precedente:";
+        Text[ portuguese ] = "~Símbolo:";
         Text[ russian ] = "~Ñèìâîë:";
         Text[ dutch ] = "~Oud symbool:";
         Text[ french ] = "Actuel :";
@@ -3089,7 +3089,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ portuguese_brazilian ] = "S~ymbolset:";
         Text[ japanese ] = "ŒÃ‚¢‹L†¾¯Ä(~D):";
         Text[ chinese_simplified ] = "¾ÉÍ¼±ê×é(~D)";
-        Text[ chinese_traditional ] = "ÂÂ¹Ï¥Ü²Õ(~D)";
+        Text[ chinese_traditional ] = "ÂÂ¹Ï¥Ü¶°(~D)";
         Text[ arabic ] = ":ãÌãæÚÉ ÑãæÒ ŞÏíãÉ";
         Text[ greek ] = "ĞáëéÜ ó~åéñÜ óõìâüëùí:";
         Text[ korean ] = "ÀÌÀü ±âÈ£ ¼¼Æ®:(~D)";
@@ -3154,7 +3154,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text = "S~ymbolset:" ;
         Text [ English ] = "S~ymbolset:" ;
         Text[ chinese_simplified ] = "Í¼±ê×é(~E)";
-        Text[ chinese_traditional ] = "¹Ï¥Ü²Õ(~E)";
+        Text[ chinese_traditional ] = "¹Ï¥Ü¶°(~E)";
         Text[ russian ] = "Íàáîğ ñèìâîëîâ:";
         Text[ polish ] = "Zbiór symboli:";
         Text[ japanese ] = "‹L†¾¯Ä(~E)";
@@ -3786,7 +3786,7 @@ Menu RID_DISTANCEMENU
             Text [ norwegian ] = "Distances" ;
             Text [ italian ] = "Distanze" ;
             Text [ portuguese_brazilian ] = "Distâncias" ;
-            Text [ portuguese ] = "Espaços" ;
+            Text [ portuguese ] = "Espaçamento" ;
             Text [ finnish ] = "Etäisyydet" ;
             Text [ danish ] = "Afstand" ;
             Text [ french ] = "Écarts" ;
@@ -4913,7 +4913,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ russian ] = "äåëèòñÿ";
                 TEXT[ polish ] = "dzieli";
                 TEXT[ japanese ] = "Š„‚é";
-                TEXT[ chinese_traditional ] = "¥i³Q°£¤_";
+                TEXT[ chinese_traditional ] = "¥i³Q°£©ó";
                 TEXT[ arabic ] = "íŞÈá ÇáŞÓãÉ";
                 TEXT[ greek ] = "äéáéñåß";
                 TEXT[ korean ] = "³ª´©±â";
@@ -4939,7 +4939,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ russian ] = "íå äåëèòñÿ";
                 TEXT[ polish ] = "nie dzieli";
                 TEXT[ japanese ] = "Š„‚ç‚È‚¢";
-                TEXT[ chinese_traditional ] = "¤£¯à³Q°£¤_";
+                TEXT[ chinese_traditional ] = "¤£¯à³Q°£©ó";
                 TEXT[ arabic ] = "áÇ íŞÈá ÇáŞÓãÉ";
                 TEXT[ greek ] = "äåí äéáéñåß";
                 TEXT[ korean ] = "³ª´©¾î ÁöÁö ¾ÊÀ½";
@@ -6270,7 +6270,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ russian ] = "Êîñèíóñ";
                 Text[ polish ] = "Cosinus";
                 Text[ japanese ] = "º»²İ";
-                Text[ chinese_traditional ] = "§E©¶";
+                Text[ chinese_traditional ] = "¾l©¶";
                 Text[ arabic ] = "ÌíÈ ÊãÇã";
                 Text[ greek ] = "Óõíçìßôïíï";
                 Text[ korean ] = "ÄÚ»çÀÎ ÇÔ¼ö";
@@ -6404,7 +6404,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ russian ] = "Àğêêîñèíóñ";
                 Text[ polish ] = "Arcus cosinus";
                 Text[ japanese ] = "±°¸º»²İ";
-                Text[ chinese_traditional ] = "¤Ï§E©¶";
+                Text[ chinese_traditional ] = "¤Ï¾l©¶";
                 Text[ arabic ] = "ãŞÇÈá ÌíÈ ÇáÊãÇã";
                 Text[ greek ] = "Ôüîï óõíçìéôüíïõ";
                 Text[ korean ] = "¾ÆÅ©ÄÚ»çÀÎ ÇÔ¼ö";
@@ -6538,7 +6538,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ russian ] = "Ãèïåğáîëè÷åñêèé êîñèíóñ";
                 Text[ polish ] = "Cosinus hiperboliczny";
                 Text[ japanese ] = "‘o‹Èüº»²İ";
-                Text[ chinese_traditional ] = "§E©¶Âù¦±½u";
+                Text[ chinese_traditional ] = "¾l©¶Âù¦±½u";
                 Text[ arabic ] = "ÌíÈ ÊãÇã ŞØÚ ÒÇÆÏ";
                 Text[ greek ] = "Õğåñâïëéêü óõíçìßôïíï";
                 Text[ korean ] = "½Ö°î¼± ÄÚ»çÀÎ  ÇÔ¼ö";
@@ -6672,7 +6672,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ russian ] = "Àğåà-êîñèíóñ ãèïåğáîëè÷åñêèé";
                 Text[ polish ] = "Arcus cosinus hiperboliczny";
                 Text[ japanese ] = "‘o‹Èü‹tº»²İ";
-                Text[ chinese_traditional ] = "§E©¶Âù¦±­±";
+                Text[ chinese_traditional ] = "¾l©¶Âù¦±­±";
                 Text[ arabic ] = "ÌíÈ ÇáÊãÇã áŞØÚ ÒÇÆÏ áãäØŞÉ";
                 Text[ greek ] = "Áíôßóôñïöï õğåñâïëéêü óõíçìßôïíï";
                 Text[ korean ] = "½Ö°î¼± ¸éÀû ÄÚ»çÀÎ ÇÔ¼ö";
@@ -7628,7 +7628,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ russian ] = "Ëèíèÿ ñíèçó";
                 Text[ polish ] = "Linia pod";
                 Text[ japanese ] = "‰ºü";
-                Text[ chinese_traditional ] = "¤U¹º½u";
+                Text[ chinese_traditional ] = "©³½u";
                 Text[ arabic ] = "ÎØ ÊÍÊ";
                 Text[ greek ] = "ÃñáììŞ áğü êÜôù";
                 Text[ korean ] = "¾Æ·¡ ¼±";
@@ -8998,7 +8998,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ russian ] = "Äëÿ âñåõ";
                 TEXT[ polish ] = "Dla wszystkich";
                 TEXT[ japanese ] = "‘SÌì—p‘f";
-                TEXT[ chinese_traditional ] = "Óì¥Î¥ş³¡";
+                TEXT[ chinese_traditional ] = "¾A¥Î¥ş³¡";
                 TEXT[ arabic ] = "ááßá";
                 TEXT[ greek ] = "Ãéá üëá";
                 TEXT[ korean ] = "¸ğµÎ¿¡ ´ëÇØ";
@@ -9937,7 +9937,7 @@ String RID_ALLFILESSTR
     Text [ italian ] = "Tutti i file (*.*)" ;
     Text [ spanish ] = "Todos los archivos (*.*)" ;
     Text [ french ] = "Tous les fichiers (*.*)" ;
-    Text [ portuguese ] = "Ficheiros todos (*.*)" ;
+    Text [ portuguese ] = "Todos os ficheiros (*.*)" ;
     Text [ portuguese_brazilian ] = "Alle Dateien (*.*)" ;
     Text[ russian ] = "Âñå ôàéëû (*.*)";
     Text[ polish ] = "Wszystkie pliki (*.*)";
