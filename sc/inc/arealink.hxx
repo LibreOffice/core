@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-24 14:43:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #endif
 #ifndef SC_REFRESHTIMER_HXX
 #include "refreshtimer.hxx"
+#endif
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 #ifndef _LNKBASE_HXX //autogen
