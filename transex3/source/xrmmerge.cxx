@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xrmmerge.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:42:53 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ BOOL bEnableExport;
 BOOL bMergeMode;
 BOOL bErrorLog;
 BOOL bUTF8;
+bool bQuiet;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sInputFileName;
@@ -112,7 +113,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     sInputFileName = "";
     sActFileName = "";
     Export::sLanguages = "";
-
+    bQuiet = false;
     USHORT nState = STATE_NON;
     BOOL bInput = FALSE;
 
@@ -132,6 +133,9 @@ extern char *GetOutputFile( int argc, char* argv[])
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-M" ) {
             nState = STATE_MERGESRC; // next token specifies the merge database
+        }
+        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-QQ" ) {
+            bQuiet = true;
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-E" ) {
             nState = STATE_ERRORLOG;
@@ -223,6 +227,10 @@ int InitXrmExport( char *pOutput )
     return 1;
 }
 
+int isQuiet(){
+    if( bQuiet )    return 1;
+    else            return 0;
+}
 /*****************************************************************************/
 int EndXrmExport()
 /*****************************************************************************/
@@ -258,7 +266,8 @@ extern FILE *GetXrmFile()
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
 //          sActFileName.ToLowerAscii();
 
-            fprintf( stdout, "\nProcessing File %s ...\n", sInputFileName.GetBuffer());
+            if( !bQuiet )
+                fprintf( stdout, "\nProcessing File %s ...\n", sInputFileName.GetBuffer());
 
             sActFileName.SearchAndReplaceAll( "/", "\\" );
 
