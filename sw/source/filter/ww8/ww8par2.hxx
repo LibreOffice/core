@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ public:
     BYTE        nOutlineLevel;      // falls Gliederungs-Style
     BYTE        n81Flags;           // Fuer Bold, Italic, ...
     BYTE        n81BiDiFlags;       // Fuer Bold, Italic, ...
+    bool bInvisFlag;        // For invisibile
     bool bValid;            // leer oder Valid
     bool bImported;         // fuers rekursive Importieren
     bool bColl;             // true-> pFmt ist SwTxtFmtColl
@@ -212,6 +213,7 @@ public:
         nOutlineLevel( MAXLEVEL ),
         n81Flags( 0 ),
         n81BiDiFlags(0),
+        bInvisFlag(false),
         bValid(false),
         bImported(false),
         bColl(false),
