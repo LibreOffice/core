@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:38:29 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1275,7 +1275,7 @@ String STR_HORI_FULL
     Text [ english_us ] = "Full width" ;
     Text [ italian ] = "a tutta larghezza" ;
     Text [ spanish ] = "Ancho total" ;
-    Text [ french ] = "Sur toute la largeur" ;
+    Text [ french ] = "Pleine chasse" ;
     Text [ swedish ] = "full bredd" ;
     Text [ danish ] = "hele bredden" ;
     Text [ portuguese ] = "Largura completa" ;
