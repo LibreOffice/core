@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roadmapcontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:44:13 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,8 @@ static void lcl_throwIndexOutOfBoundsException( )
     {
         ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
         ImplRegisterProperty( BASEPROPERTY_BORDER );
-           ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
+        ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
+        ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
         ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
         ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
         ImplRegisterProperty( BASEPROPERTY_HELPURL );
