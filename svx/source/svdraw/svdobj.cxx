@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:25:04 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@
 #include "svdopage.hxx"  // Factory
 #include "svdouno.hxx"   // Factory
 #include "svdattrx.hxx" // NotPersistItems
+#include "svdoashp.hxx"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -5080,7 +5081,8 @@ SdrObject* SdrObjFactory::MakeNewObject(UINT32 nInvent, UINT16 nIdent, SdrPage* 
             case USHORT(OBJ_FRAME      ): pObj=new SdrOle2Obj(TRUE);            break;
             case USHORT(OBJ_CAPTION    ): pObj=new SdrCaptionObj;               break;
             case USHORT(OBJ_PAGE       ): pObj=new SdrPageObj;                  break;
-            case USHORT(OBJ_UNO        ): pObj=new SdrUnoObj(String());    break;
+            case USHORT(OBJ_UNO        ): pObj=new SdrUnoObj(String());         break;
+            case USHORT(OBJ_CUSTOMSHAPE  ): pObj=new SdrObjCustomShape();           break;
         }
     }
 
