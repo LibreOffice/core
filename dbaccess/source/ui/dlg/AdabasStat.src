@@ -1,0 +1,409 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AdabasStat.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2001-03-27 07:17:23 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef DBAUI_ADABASSTAT_HRC
+#include "AdabasStat.hrc"
+#endif
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+#define WINDOW_SIZE_X 260
+#define WINDOW_SIZE_Y 190
+
+ModalDialog DLG_ADABASSTAT
+{
+    OutputSize  = TRUE ;
+    Moveable    = TRUE ;
+    Closeable   = TRUE ;
+    SVLook      = TRUE ;
+    Size        = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+
+    GroupBox GB_FILES
+    {
+        Pos                 = MAP_APPFONT ( 6 , 3 ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 12, 93 ) ;
+        Text                = "Datenbankdateien" ;
+        Text[ENGLISH]       = "Database files" ;
+        Text[ english_us ] = "Database files";
+        Text[ portuguese ] = "Ficheiros da base de dados";
+        Text[ russian ] = "‘‡ÈÎ˚ ·‡Á˚ ‰‡ÌÌ˚ı";
+        Text[ greek ] = "¡Ò˜Âﬂ· ‚‹ÛÁÚ ‰Â‰ÔÏ›Ì˘Ì";
+        Text[ dutch ] = "Databasebestanden";
+        Text[ french ] = "Fichiers de base de donnÈes";
+        Text[ spanish ] = "Archivos de base de datos";
+        Text[ italian ] = "File database";
+        Text[ danish ] = "Databasefiler";
+        Text[ swedish ] = "Databasfiler";
+        Text[ polish ] = "Pliki bazy danych";
+        Text[ portuguese_brazilian ] = "Database files";
+        Text[ japanese ] = "√ﬁ∞¿Õﬁ∞Ω Ãß≤Ÿ";
+        Text[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫ ∆ƒ¿œ";
+        Text[ chinese_simplified ] = " ˝æ›ø‚Œƒº˛";
+        Text[ chinese_traditional ] = "º∆’uÆw¿…Æ◊";
+        Text[ arabic ] = "„·›«  ﬁ«⁄œ… »Ì«‰« ";
+        Text[ turkish ] = "Veritaban˝ dosyalar˝";
+    };
+
+    FixedText FT_SYSDEVSPACE
+    {
+        Pos                 = MAP_APPFONT ( 12 , 14 ) ;
+        Size                = MAP_APPFONT ( 102 , 10 ) ;
+        Text                = "S~YSDEVSPACE:" ;
+        Text[ENGLISH]       = "S~YSDEVSPACE:" ;
+        Text[ english_us ] = "S~YSDEVSPACE:";
+        Text[ portuguese ] = "S~YSDEVSPACE:";
+        Text[ russian ] = "S~YSDEVSPACE:";
+        Text[ greek ] = "S~YSDEVSPACE:";
+        Text[ dutch ] = "S~YSDEVSPACE:";
+        Text[ french ] = "S~YSDEVSPACE :";
+        Text[ spanish ] = "S~YSDEVSPACE:";
+        Text[ italian ] = "S~YSDEVSPACE:";
+        Text[ danish ] = "S~YSDEVSPACE:";
+        Text[ swedish ] = "S~YSDEVSPACE:";
+        Text[ polish ] = "S~YSDEVSPACE:";
+        Text[ portuguese_brazilian ] = "S~YSDEVSPACE:";
+        Text[ japanese ] = "S~YSDEVSPACE:";
+        Text[ korean ] = "S~YSDEVSPACE:";
+        Text[ chinese_simplified ] = "S~YSDEVSPACE£∫";
+        Text[ chinese_traditional ] = "S~YSDEVSPACE°G";
+        Text[ arabic ] = "S~YSDEVSPACE:";
+        Text[ turkish ] = "S~YSDEVSPACE:";
+    };
+
+    Edit ET_SYSDEVSPACE
+    {
+        Border      = TRUE ;
+        Pos         = MAP_APPFONT ( 120 , 14 ) ;
+        Size        = MAP_APPFONT ( 128 , 12 ) ;
+        TabStop     = TRUE ;
+        ReadOnly    = TRUE;
+    };
+
+    FixedText FT_TRANSACTIONLOG
+    {
+        Pos                 = MAP_APPFONT ( 12 , 32 ) ;
+        Size                = MAP_APPFONT ( 102 , 10 ) ;
+        Text                = "~TRANSACTIONLOG:" ;
+        Text [ ENGLISH ]    = "~TRANSACTIONLOG:" ;
+        Text[ english_us ] = "~TRANSACTIONLOG:";
+        Text[ portuguese ] = "~TRANSACTIONLOG:";
+        Text[ russian ] = "~TRANSACTIONLOG:";
+        Text[ greek ] = "~TRANSACTIONLOG:";
+        Text[ dutch ] = "~TRANSACTIONLOG:";
+        Text[ french ] = "~TRANSACTIONLOG :";
+        Text[ spanish ] = "~TRANSACTIONLOG:";
+        Text[ italian ] = "~TRANSACTIONLOG:";
+        Text[ danish ] = "~TRANSACTIONLOG:";
+        Text[ swedish ] = "~TRANSACTIONLOG:";
+        Text[ polish ] = "~TRANSACTIONLOG:";
+        Text[ portuguese_brazilian ] = "~TRANSACTIONLOG:";
+        Text[ japanese ] = "~TRANSACTIONLOG:";
+        Text[ korean ] = "~TRANSACTIONLOG:";
+        Text[ chinese_simplified ] = "~TRANSACTIONLOG£∫";
+        Text[ chinese_traditional ] = "~TRANSACTIONLOG:";
+        Text[ arabic ] = "~TRANSACTIONLOG:";
+        Text[ turkish ] = "~TRANSACTIONLOG:";
+    };
+
+    Edit ET_TRANSACTIONLOG
+    {
+        Border      = TRUE ;
+        Pos         = MAP_APPFONT ( 120 , 31 ) ;
+        Size        = MAP_APPFONT ( 128 , 12 ) ;
+        TabStop     = TRUE ;
+        ReadOnly    = TRUE;
+    };
+
+    FixedText FT_DATADEVSPACE
+    {
+        Pos                 = MAP_APPFONT ( 12 , 49 ) ;
+        Size                = MAP_APPFONT ( 102 , 10 ) ;
+        Text                = "DATAD~EVSPACE:" ;
+        Text [ ENGLISH ]    = "DATAD~EVSPACE:" ;
+        Text[ english_us ] = "DATAD~EVSPACE:";
+        Text[ portuguese ] = "DATAD~EVSPACE:";
+        Text[ russian ] = "DATAD~EVSPACE:";
+        Text[ greek ] = "DATAD~EVSPACE:";
+        Text[ dutch ] = "DATAD~EVSPACE:";
+        Text[ french ] = "DATAD~EVSPACE :";
+        Text[ spanish ] = "DATAD~EVSPACE:";
+        Text[ italian ] = "DATAD~EVSPACE:";
+        Text[ danish ] = "DATAD~EVSPACE:";
+        Text[ swedish ] = "DATAD~EVSPACE:";
+        Text[ polish ] = "DATAD~EVSPACE:";
+        Text[ portuguese_brazilian ] = "DATAD~EVSPACE:";
+        Text[ japanese ] = "DATAD~EVSPACE:";
+        Text[ korean ] = "DATAD~EVSPACE:";
+        Text[ chinese_simplified ] = "DATAD~EVSPACE£∫";
+        Text[ chinese_traditional ] = "DATAD~EVSPACE:";
+        Text[ arabic ] = "DATAD~EVSPACE:";
+        Text[ turkish ] = "DATAD~EVSPACE:";
+    };
+
+    ListBox LB_DATADEVS
+    {
+        Border      = TRUE ;
+        Pos         = MAP_APPFONT ( 120 , 48 ) ;
+        Size        = MAP_APPFONT ( 128 , 42 ) ;
+        TabStop     = TRUE;
+        AutoHScroll = TRUE;
+        VScroll     = TRUE;
+        HScroll     = TRUE;
+    };
+    GroupBox GB_SIZES
+    {
+        Pos                 = MAP_APPFONT ( 6 , 99 ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 12 , 65 ) ;
+        Text                = "Datenbankgrˆﬂen" ;
+        Text [ ENGLISH ]    = "database sizes" ;
+        Text[ english_us ] = "Database sizes";
+        Text[ portuguese ] = "Tamanhos de bases de dados";
+        Text[ russian ] = "–‡ÁÏÂ˚ ·‡Á˚ ‰‡ÌÌ˚ı";
+        Text[ greek ] = "ÃÂ„›ËÁ ‚‹ÛÁÚ ‰Â‰ÔÏ›Ì˘Ì";
+        Text[ dutch ] = "Grootte van database";
+        Text[ french ] = "Tailles de la base de donnÈes";
+        Text[ spanish ] = "TamaÒos de base de datos";
+        Text[ italian ] = "Dimensioni database";
+        Text[ danish ] = "Databasest¯rrelser";
+        Text[ swedish ] = "databasstorlekar";
+        Text[ polish ] = "Rozmiary bazy danych";
+        Text[ portuguese_brazilian ] = "database sizes";
+        Text[ japanese ] = "√ﬁ∞¿Õﬁ∞Ω ª≤Ωﬁ";
+        Text[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫ ≈©±‚";
+        Text[ chinese_simplified ] = " ˝æ›ø‚¥Û–°";
+        Text[ chinese_traditional ] = "º∆’uÆw§j§p";
+        Text[ arabic ] = "√ÕÃ«„ ﬁ«⁄œ… «·»Ì«‰« ";
+        Text[ turkish ] = "Veritaban˝ b¸y¸kl¸kleri";
+    };
+
+    FixedText FT_SIZE
+    {
+        Pos                 = MAP_APPFONT ( 12 , 110 ) ;
+        Size                = MAP_APPFONT ( 102 , 10 ) ;
+        Text                = "~Gesamtgrˆﬂe (MB):" ;
+        Text [ ENGLISH ]    = "S~ize (MB):" ;
+        Text[ english_us ] = "S~ize (MB):";
+        Text[ portuguese ] = "~Tamanho (MB):";
+        Text[ russian ] = "–‡ÁÏÂ (Ã¡):";
+        Text[ greek ] = "”ıÌÔÎÈÍ¸ Ï›„ÂËÔÚ (MB):";
+        Text[ dutch ] = "Totale gr~ootte (MB):";
+        Text[ french ] = "~Taille totale (Mo) :";
+        Text[ spanish ] = "TamaÒo ~total (MB):";
+        Text[ italian ] = "Dimensione (MB):";
+        Text[ danish ] = "Samlet st¯rrelse (MB):";
+        Text[ swedish ] = "Totalstorlek (MB):";
+        Text[ polish ] = "Rozmiar ≥πczny (MB):";
+        Text[ portuguese_brazilian ] = "S~ize (MB):";
+        Text[ japanese ] = "ëSëÃÇÃª≤Ωﬁ(MB):";
+        Text[ korean ] = "√— ≈©±‚(~I)";
+        Text[ chinese_simplified ] = "◊‹º∆¥Û–°(MB)£∫";
+        Text[ chinese_traditional ] = "§j§p(MB)°G";
+        Text[ arabic ] = "«·ÕÃ„ «·≈Ã„«·Ì (»«·„ÌÃ«»«Ì ):";
+        Text[ turkish ] = "Toplam b¸y¸kl¸k (MB):";
+    };
+
+    Edit ET_SIZE
+    {
+        Border      = TRUE ;
+        Pos         = MAP_APPFONT ( 120 , 109 ) ;
+        Size        = MAP_APPFONT ( 60 , 12 ) ;
+        TabStop     = TRUE ;
+        ReadOnly    = TRUE;
+    };
+
+    FixedText FT_FREESIZE
+    {
+        Pos                 = MAP_APPFONT ( 12 , 127 ) ;
+        Size                = MAP_APPFONT ( 102 , 10 ) ;
+        Text                = "~Freier Speicher (MB):" ;
+        Text [ ENGLISH ]    = "~Unused space (MB):" ;
+        Text[ english_us ] = "~Free space (MB):";
+        Text[ portuguese ] = "~MemÛria livre (MB):";
+        Text[ russian ] = "—‚Ó·Ó‰ÌÓÈ Ô‡ÏˇÚË (Ã¡):";
+        Text[ greek ] = "≈Î›ıËÂÒÁ ÏÌﬁÏÁ (MB):";
+        Text[ dutch ] = "~Vrij geheugen (MB):";
+        Text[ french ] = "~MÈmoire libre (Mo) :";
+        Text[ spanish ] = "~Memoria libre (MB):";
+        Text[ italian ] = "Spazio libero (MB):";
+        Text[ danish ] = "Ledig hukommelse (MB):";
+        Text[ swedish ] = "~Fritt minne (MB):";
+        Text[ polish ] = "~Wolna pamiÍÊ (MB):";
+        Text[ portuguese_brazilian ] = "~Unused space (MB):";
+        Text[ japanese ] = "ãÛÇ´óeó (MB):";
+        Text[ korean ] = "≥≤¿∫ ¿˙¿Â ∞¯∞£(~F)";
+        Text[ chinese_simplified ] = "ø…”√ø’º‰(MB)£∫";
+        Text[ chinese_traditional ] = "•i•Œ™≈∂°(MB)°G";
+        Text[ arabic ] = "«·„”«Õ… «·Õ—… (»«·„ÌÃ«»«Ì ):";
+        Text[ turkish ] = "Bo˛ bellek (MB):";
+    };
+
+    Edit ET_FREESIZE
+    {
+        Border      = TRUE ;
+        Pos         = MAP_APPFONT ( 120 , 126 ) ;
+        Size        = MAP_APPFONT ( 60 , 12 ) ;
+        TabStop     = TRUE ;
+        ReadOnly    = TRUE;
+    };
+
+    FixedText FT_MEMORYUSING
+    {
+        Pos                 = MAP_APPFONT ( 12 , 144 ) ;
+        Size                = MAP_APPFONT ( 102 , 10 ) ;
+        Text                = "S~peicherausnutzung (in %):" ;
+        Text [ ENGLISH ]    = "~Memory using (in %):" ;
+        Text[ english_us ] = "~Memory utilization (in %):";
+        Text[ portuguese ] = "~MemÛria utilizada (em %):";
+        Text[ russian ] = "~«‡ÌˇÚÓÈ Ô‡ÏˇÚË (‚ %):";
+        Text[ greek ] = " ·Ù‹ÎÁ¯Á ÏÌﬁÏÁÚ (ÛÂ %):";
+        Text[ dutch ] = "~Gebruikt geheugen (in %):";
+        Text[ french ] = "~MÈmoire utilisÈe (en %):";
+        Text[ spanish ] = "~Memoria usada (en %):";
+        Text[ italian ] = "Memoria utilizzata (in %):";
+        Text[ danish ] = "Hukommelsesudnyttelse (i %):";
+        Text[ swedish ] = "~Minnesutnyttjande (i %):";
+        Text[ polish ] = "~Wykorzystana pamiÍÊ (w %):";
+        Text[ portuguese_brazilian ] = "~Memory using (in %):";
+        Text[ japanese ] = "“”ÿÇÃégópó (%):";
+        Text[ korean ] = "∏ﬁ∏∏Æ ¿˙¿Â∑Æ(~M)";
+        Text[ chinese_simplified ] = "ƒ⁄¥Ê π”√¬ (%)£∫";
+        Text[ chinese_traditional ] = "•D∞Oæ–≈È•e•Œ(%)°G";
+        Text[ arabic ] = "«·–«ﬂ—… «·„” Œœ„… («·‰”»… «·„∆ÊÌ…):";
+        Text[ turkish ] = "Bellek kullan˝m˝ (% olarak):";
+    };
+
+    NumericField ET_MEMORYUSING
+    {
+        Border              = TRUE ;
+        Pos                 = MAP_APPFONT ( 120 , 144 ) ;
+        Size                = MAP_APPFONT ( 60 , 12 ) ;
+        TabStop             = TRUE ;
+        ReadOnly            = TRUE;
+    };
+
+    OKButton PB_OK
+    {
+        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 56,WINDOW_SIZE_Y - 20 ) ;
+        Size                = MAP_APPFONT (  50, 14 ) ;
+        TabStop             = TRUE ;
+        DefButton           = TRUE ;
+    };
+
+    Text                = "Datenbank Statistiken" ;
+    Text [ ENGLISH ]    = "Database statistics" ;
+    Text[ english_us ] = "Database Statistics";
+    Text[ portuguese ] = "EstatÌstica da base de dados";
+    Text[ russian ] = "—Ú‡ÚËÒÚËÍË ·‡Á˚ ‰‡ÌÌ˚ı";
+    Text[ greek ] = "”Ù·ÙÈÛÙÈÍ‹ ‚‹ÛÁÚ ‰Â‰ÔÏ›Ì˘Ì";
+    Text[ dutch ] = "Databasestatistieken";
+    Text[ french ] = "Statistiques de la base de donnÈes";
+    Text[ spanish ] = "EstadÌsticas de base de datos";
+    Text[ italian ] = "Statistiche database";
+    Text[ danish ] = "Database statistikker";
+    Text[ swedish ] = "Databas statistiker";
+    Text[ polish ] = "Statystyki bazy danych";
+    Text[ portuguese_brazilian ] = "Database statistics";
+    Text[ japanese ] = "√ﬁ∞¿Õﬁ∞ΩÇÃìùåv";
+    Text[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫ ≈Î∞Ë";
+    Text[ chinese_simplified ] = " ˝æ›ø‚Õ≥º∆";
+    Text[ chinese_traditional ] = "º∆’uÆw≤Œ≠p";
+    Text[ arabic ] = "≈Õ’«∆Ì«  ﬁ«⁄œ… «·»Ì«‰« ";
+    Text[ turkish ] = "Veritaban˝ istatistikleri";
+};
+
+String STR_ADABAS_HELP_SYSDEVSPACE
+{
+    Text = "Enth‰lt die Systemtabellen" ;
+    Text [ English ] = "Contains the system tables" ;
+};
+
+String STR_ADABAS_HELP_TRANSACT
+{
+    Text = "Enth‰lt Information ¸ber Transaktion" ;
+    Text [ English ] = "Contains information about transactions" ;
+};
+
+String STR_ADABAS_HELP_DATADEVSPACES
+{
+    Text = "Enth‰lt alle Daten Dateien" ;
+    Text [ English ] = "Contains all data files" ;
+};
+
+String STR_ADABAS_HELP_SIZE
+{
+    Text = "Gesamt Grˆﬂe der Datenbank Dateien" ;
+    Text [ English ] = "Overall Size of the database files" ;
+};
+
+String STR_ADABAS_HELP_FREESIZE
+{
+    Text = "Noch zur Verf¸gung stehender Speicher bevor ein neues Datadev Datei erzeugt werden muss." ;
+    Text [ English ] = "Currently free avaliable space bevor a new datadev must be created." ;
+};
+
+String STR_ADABAS_HELP_MEMORYUSING
+{
+    Text = "Zur Zeit verbrauchter Speicherplatz" ;
+    Text [ English ] = "Currently used memory" ;
+};
+
+
