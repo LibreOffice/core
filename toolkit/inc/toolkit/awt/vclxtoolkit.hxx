@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:53:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,12 @@
 #ifndef _COM_SUN_STAR_AWT_XEXTENDEDTOOLKIT_HPP_
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XRESCHEDULE_HPP_
+#include <com/sun/star/awt/XReschedule.hpp>
+#endif
 
-#ifndef _CPPUHELPER_COMPBASE5_HXX_
-#include <cppuhelper/compbase5.hxx>
+#ifndef _CPPUHELPER_COMPBASE6_HXX_
+#include <cppuhelper/compbase6.hxx>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include "cppuhelper/interfacecontainer.hxx"
@@ -134,12 +137,13 @@ protected:
 };
 
 class VCLXToolkit : public VCLXToolkit_Impl,
-                    public cppu::WeakComponentImplHelper5<
+                    public cppu::WeakComponentImplHelper6<
                     ::com::sun::star::awt::XToolkit,
                     ::com::sun::star::lang::XServiceInfo,
                     ::com::sun::star::awt::XSystemChildFactory,
                     ::com::sun::star::awt::XDataTransferProviderAccess,
-                    ::com::sun::star::awt::XExtendedToolkit >
+                    ::com::sun::star::awt::XExtendedToolkit,
+                    ::com::sun::star::awt::XReschedule >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxClipboard;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxSelection;
@@ -256,6 +260,12 @@ public:
         ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface > const & source)
         throw (::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XReschedule:
+    virtual void SAL_CALL reschedule()
+        throw (::com::sun::star::uno::RuntimeException);
+
+
 };
 
 #endif // _TOOLKIT_AWT_VCLXTOOLKIT_HXX_
