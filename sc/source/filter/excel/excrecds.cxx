@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-09 14:33:59 $
+ *  last change: $Author: dr $ $Date: 2002-07-09 15:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1790,9 +1790,9 @@ void ExcBlankMulblank::Add(
 
     nRecLen += 2 * nCount;
     nLastCol += nCount;
-    bMulBlank = TRUE;
-
     AddEntries( rPos, pAttr, rRootData, nCount, rExcTab );
+    bMulBlank = (ScfUInt32List::Count() > 1) ||
+        ((ScfUInt32List::Count() == 1) && (GetCount( ScfUInt32List::GetValue( 0 ) ) > 1));
 }
 
 
@@ -2563,19 +2563,10 @@ ExcRowBlock::~ExcRowBlock()
 
 ExcRowBlock* ExcRowBlock::Append( ExcRow* pNewRow )
 {
-    if( nNext < 32 )
-    {
-        ppRows[ nNext ] = pNewRow;
-        nNext++;
-        return NULL;
-    }
-    else
-    {
-        ExcRowBlock* pRet = new ExcRowBlock;
-        pRet->ppRows[ 0 ] = pNewRow;
-        pRet->nNext = 1;
-        return pRet;
-    }
+    DBG_ASSERT( nNext < 32, "ExcRowBlock::Append - overflow" );
+    ppRows[ nNext ] = pNewRow;
+    ++nNext;
+    return (nNext == 32) ? new ExcRowBlock : NULL;
 }
 
 
