@@ -2,9 +2,9 @@
  *
  *  $RCSfile: difimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: nn $ $Date: 2001-11-30 10:26:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,6 +472,22 @@ TOPIC DifParser::GetNextTopic( void )
 }
 
 
+void lcl_DeEscapeQuotesDif( ByteString& rString )
+{
+    //  Special handling for DIF import: Escaped (duplicated) quotes are resolved.
+    //  Single quote characters are left in place because older versions didn't
+    //  escape quotes in strings (and Excel doesn't when using the clipboard).
+    //  The quotes around the string are removed before this function is called.
+
+    xub_StrLen nPos = 0;
+    while ( (nPos = rString.Search( "\"\"", nPos )) != STRING_NOTFOUND )
+    {
+        rString.Erase( nPos, 1 );
+        ++nPos;
+    }
+}
+
+
 DATASET DifParser::GetNextDataset( void )
 {
     DATASET             eRet = D_UNKNOWN;
@@ -536,6 +552,7 @@ DATASET DifParser::GetNextDataset( void )
                 DBG_ASSERT( aLine.Len() >= 2,
                     "*DifParser::GetNextTopic(): Text ist zu kurz (mind. \"\")!" );
                 aData = aLine.Copy( 1, aLine.Len() - 2 );
+                lcl_DeEscapeQuotesDif( aData );
                 eRet = D_STRING;
             }
             break;

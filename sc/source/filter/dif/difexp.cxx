@@ -2,9 +2,9 @@
  *
  *  $RCSfile: difexp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: nn $ $Date: 2001-11-30 10:26:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,20 @@ FltError ScExportDif( SvStream& rStream, ScDocument* pDoc,
     aStart.PutInOrder( aEnd );
 
     return ScExportDif( rStream, pDoc, ScRange( aStart, aEnd ), eNach, nDifOption );
+}
+
+
+void lcl_EscapeQuotes( String& rString )
+{
+    //  Quotes in (quoted) strings have to be escaped (duplicated)
+    //  (at least Excel and Quattro do it that way)
+
+    xub_StrLen nPos = 0;
+    while( ( nPos = rString.Search( (sal_Unicode)'"', nPos ) ) != STRING_NOTFOUND )
+    {
+        rString.Insert( (sal_Unicode)'"', nPos );
+        nPos += 2;
+    }
 }
 
 
@@ -192,6 +206,7 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
                     case CELLTYPE_EDIT:
                         aOS = pStringData;
                         ( ( ScEditCell* ) pAkt )->GetString( aUniString );
+                        lcl_EscapeQuotes( aUniString );
                         aOS += ByteString( aUniString, eNach );
                         aOS += "\"\n";
                         pOutString = aOS.GetBuffer();
@@ -199,6 +214,7 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
                     case CELLTYPE_STRING:
                         aOS = pStringData;
                         ( ( ScStringCell* ) pAkt )->GetString( aUniString );
+                        lcl_EscapeQuotes( aUniString );
                         aOS += ByteString( aUniString, eNach );
                         aOS += "\"\n";
                         pOutString = aOS.GetBuffer();
@@ -225,6 +241,7 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
                         {
                             aOS = pStringData;
                             ( ( ScFormulaCell * ) pAkt )->GetString( aUniString );
+                            lcl_EscapeQuotes( aUniString );
                             aOS += ByteString( aUniString, eNach );
                             aOS += "\"\n";
                             pOutString = aOS.GetBuffer();
