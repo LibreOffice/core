@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lkovacs $ $Date: 2002-09-23 14:08:29 $
+ *  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,26 +70,19 @@
 
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfo.hpp>
 #include <drafts/com/sun/star/script/framework/storage/ScriptImplInfo.hpp>
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_XSCRIPTINVOCATIONPREP_HPP_
 #include <drafts/com/sun/star/script/framework/storage/XScriptInvocationPrep.hpp>
-#endif
 
 namespace scripting_impl {
 
-class ScriptInfo : public ::cppu::WeakImplHelper4< ::com::sun::star::lang::XServiceInfo, ::com::sun::star::lang::XInitialization, ::drafts::com::sun::star::script::framework::storage::XScriptInfo, ::drafts::com::sun::star::script::framework::storage::XScriptInvocationPrep >
+class ScriptInfo :
+public ::cppu::WeakImplHelper4<
+ ::com::sun::star::lang::XServiceInfo,
+ ::com::sun::star::lang::XInitialization,
+ ::drafts::com::sun::star::script::framework::storage::XScriptInfo,
+ ::drafts::com::sun::star::script::framework::storage::XScriptInvocationPrep >
 {
-    // private member
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
-
-    ::osl::Mutex     m_mutex;
-
-    ::drafts::com::sun::star::script::framework::storage::ScriptImplInfo m_scriptImplInfo;
-    sal_uInt16 m_storageID;
-
-    // public interface
 public:
-    explicit ScriptInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
+    explicit ScriptInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext);
     virtual ~ScriptInfo();
 
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -122,6 +115,14 @@ public:
 
     */
     virtual ::rtl::OUString SAL_CALL prepareForInvocation() throw (::com::sun::star::uno::RuntimeException);
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
+
+    ::osl::Mutex     m_mutex;
+
+    ::drafts::com::sun::star::script::framework::storage::ScriptImplInfo m_scriptImplInfo;
+    sal_uInt16 m_storageID;
 
 };
 

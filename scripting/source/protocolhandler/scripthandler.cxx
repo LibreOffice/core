@@ -1,65 +1,64 @@
 /*************************************************************************
- *
- *  $RCSfile: scripthandler.cxx,v $
- *
- *  $Revision: 1.1 $
- *
- *  last change: $Author: dfoster $ $Date: 2002-09-20 14:33:13 $
- *
- *  The Contents of this file are made available subject to the terms of
- *  either of the following licenses
- *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
- *
- *  Sun Microsystems Inc., October, 2000
- *
- *  GNU Lesser General Public License Version 2.1
- *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
- *
- *
- *  Sun Industry Standards Source License Version 1.1
- *  =================================================
- *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
- *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
- *
- *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
- *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
- *  See the License for the specific provisions governing your rights and
- *  obligations concerning the Software.
- *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
- *
- *  Copyright: 2000 by Sun Microsystems, Inc.
- *
- *  All Rights Reserved.
- *
- *  Contributor(s): _______________________________________
- *
- *
- ************************************************************************/
+*
+*  $RCSfile: scripthandler.cxx,v $
+*
+*  $Revision: 1.2 $
+*
+*  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:23 $
+*
+*  The Contents of this file are made available subject to the terms of
+*  either of the following licenses
+*
+*         - GNU Lesser General Public License Version 2.1
+*         - Sun Industry Standards Source License Version 1.1
+*
+*  Sun Microsystems Inc., October, 2000
+*
+*  GNU Lesser General Public License Version 2.1
+*  =============================================
+*  Copyright 2000 by Sun Microsystems, Inc.
+*  901 San Antonio Road, Palo Alto, CA 94303, USA
+*
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License version 2.1, as published by the Free Software Foundation.
+*
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+*  MA  02111-1307  USA
+*
+*
+*  Sun Industry Standards Source License Version 1.1
+*  =================================================
+*  The contents of this file are subject to the Sun Industry Standards
+*  Source License Version 1.1 (the "License"); You may not use this file
+*  except in compliance with the License. You may obtain a copy of the
+*  License at http://www.openoffice.org/license.html.
+*
+*  Software provided under this License is provided on an "AS IS" basis,
+*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+*  See the License for the specific provisions governing your rights and
+*  obligations concerning the Software.
+*
+*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+*
+*  Copyright: 2000 by Sun Microsystems, Inc.
+*
+*  All Rights Reserved.
+*
+*  Contributor(s): _______________________________________
+*
+*
+************************************************************************/
 
-#include <stdio.h>
 #include "scripthandler.hxx"
 
 #include <osl/mutex.hxx>
@@ -83,212 +82,267 @@ namespace scripting_protocolhandler
 {
 
 const sal_Char * const MYSERVICENAME = "com.sun.star.frame.ProtocolHandler";
-const sal_Char * const  MYIMPLNAME = "com.sun.star.comp.ScriptProtocolHandler";
+const sal_Char * const MYIMPLNAME = "com.sun.star.comp.ScriptProtocolHandler";
 const sal_Char * MYSCHEME = "script:";
 const sal_Int32 MYSCHEME_LEN = 7;
 
-void SAL_CALL ScriptProtocolHandler::initialize( const css::uno::Sequence < css::uno::Any >& aArguments ) throw ( css::uno::Exception )
+void SAL_CALL ScriptProtocolHandler::initialize(
+    const css::uno::Sequence < css::uno::Any >& aArguments )
+    throw ( css::uno::Exception )
 {
-    if (m_bInitialised)
+    if ( m_bInitialised )
     {
-        OSL_TRACE("ScriptProtocolHandler Already initialised");
-        return;
+        OSL_TRACE( "ScriptProtocolHandler Already initialised" );
+        return ;
     }
-    // first argument contains a reference to the frame (may be empty or the desktop, but usually it's a "real" frame)
-    aArguments[0] >>= m_xFrame;
+    // first argument contains a reference to the frame (may be empty or the desktop,
+    // but usually it's a "real" frame)
+    aArguments[ 0 ] >>= m_xFrame;
 
-    validateXRef(m_xFactory, "ScriptProtocolHandler::initialize: No Service Manager available");
-    OSL_TRACE("ScriptProtocolHandler::initialize\n " );
+    validateXRef( m_xFactory,
+        "ScriptProtocolHandler::initialize: No Service Manager available" );
+    OSL_TRACE( "ScriptProtocolHandler::initialize\n " );
     try
     {
-        css::uno::Sequence < css::uno::Any > args(1);
-        Reference < XModel > xModel;
+        css::uno::Sequence < css::uno::Any > args( 1 );
+        Reference< XModel > xModel;
         if ( m_xFrame.is() )
         {
-            Reference < XController > xController = m_xFrame->getController();
+            Reference< XController > xController = m_xFrame->getController();
             if ( xController .is() )
+            {
                 xModel = xController->getModel();
+            }
         }
 
-        args[0] <<= xModel;
-        Reference< XInterface > xXinterface = m_xFactory->createInstanceWithArguments(::rtl::OUString::createFromAscii(
-                                                  "drafts.com.sun.star.script.framework.provider.FunctionProvider"),args);
-        validateXRef(xXinterface, "ScriptProtocolHandler::initialize: cannot get instance of FunctionProvider" );
+        args[ 0 ] <<= xModel;
+        Reference< XInterface > xXinterface =
+            m_xFactory->createInstanceWithArguments(
+                ::rtl::OUString::createFromAscii(
+                "drafts.com.sun.star.script.framework.provider.FunctionProvider" ),
+                args );
+        validateXRef( xXinterface,
+            "ScriptProtocolHandler::initialize: cannot get instance of FunctionProvider" );
 
-        m_xFunctionProvider = Reference< provider::XFunctionProvider >(xXinterface, UNO_QUERY_THROW);
+        m_xFunctionProvider = Reference< provider::XFunctionProvider >( xXinterface,
+            UNO_QUERY_THROW );
         m_bInitialised = true;
     }
-    catch(RuntimeException &e)
+    catch ( RuntimeException & e )
     {
-        throw RuntimeException(OUSTR("ScriptProtocolHandler::initialize: ") + e.Message, Reference< XInterface >());
+        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::initialize: " );
+        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
-    catch (Exception &e)
+    catch ( Exception & e )
     {
-        throw RuntimeException(OUSTR("ScriptProtocolHandler::initialize: ") + e.Message, Reference< XInterface >());
-        OSL_TRACE("ScriptProtocolHandler::initialise: Caught Exception %s",::rtl::OUStringToOString(e.Message,RTL_TEXTENCODING_ASCII_US).pData->buffer);
+        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::initialize: " );
+        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+        OSL_TRACE( "ScriptProtocolHandler::initialise: Caught Exception %s",
+            ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer
+            );
     }
 #ifdef _DEBUG
     catch ( ... )
     {
-        throw RuntimeException(OUSTR("criptProtocolHandler::initialize: UnknownException: "),
-                               Reference<XInterface> ());
+        throw RuntimeException(
+            OUSTR( "ScriptProtocolHandler::initialize: UnknownException: " ),
+                    Reference< XInterface > () );
 
-        OSL_TRACE("ScriptProtocolHandler::initialize: Unknown exception caught");
+        OSL_TRACE( "ScriptProtocolHandler::initialize: Unknown exception caught" );
     }
 #endif
 
 }
 
-Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch( const URL& aURL, const ::rtl::OUString& sTargetFrameName,
-        sal_Int32 nSearchFlags ) throw( ::com::sun::star::uno::RuntimeException )
+Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
+    const URL& aURL, const ::rtl::OUString& sTargetFrameName, sal_Int32 nSearchFlags )
+    throw( ::com::sun::star::uno::RuntimeException )
 {
     Reference< XDispatch > xDispatcher;
-    OSL_TRACE("ScriptProtocolHandler::queryDispatch - 1\n" );
+    OSL_TRACE( "ScriptProtocolHandler::queryDispatch - 1\n" );
 
-    if( aURL.Complete.compareToAscii( ::scripting_protocolhandler::MYSCHEME,
-                                      ::scripting_protocolhandler::MYSCHEME_LEN ) == 0 )
+    if ( aURL.Complete.compareToAscii( ::scripting_protocolhandler::MYSCHEME,
+                                       ::scripting_protocolhandler::MYSCHEME_LEN ) == 0 )
+    {
         xDispatcher = this;
-    OSL_TRACE("ScriptProtocolHandler::queryDispatch - 2\n" );
-
+    }
+    OSL_TRACE( "ScriptProtocolHandler::queryDispatch - 2\n" );
 
     return xDispatcher;
 }
 
-Sequence< Reference < XDispatch > > SAL_CALL
-ScriptProtocolHandler::queryDispatches( const Sequence < DispatchDescriptor >& seqDescriptor )
+Sequence< Reference< XDispatch > > SAL_CALL
+ScriptProtocolHandler::queryDispatches(
+const Sequence < DispatchDescriptor >& seqDescriptor )
 throw( RuntimeException )
 {
     sal_Int32 nCount = seqDescriptor.getLength();
-    Sequence< Reference < XDispatch > > lDispatcher(nCount);
-    for( sal_Int32 i=0; i<nCount; ++i )
-        lDispatcher[i] = this->queryDispatch( seqDescriptor[i].FeatureURL,
-                                              seqDescriptor[i].FrameName,
-                                              seqDescriptor[i].SearchFlags );
-    OSL_TRACE("ScriptProtocolHandler::queryDispatches \n" );
+    Sequence< Reference< XDispatch > > lDispatcher( nCount );
+    for ( sal_Int32 i = 0; i < nCount; ++i )
+    {
+        lDispatcher[ i ] = this->queryDispatch( seqDescriptor[ i ].FeatureURL,
+                                                seqDescriptor[ i ].FrameName,
+                                                seqDescriptor[ i ].SearchFlags );
+    }
+    OSL_TRACE( "ScriptProtocolHandler::queryDispatches \n" );
 
     return lDispatcher;
 }
 
-void SAL_CALL ScriptProtocolHandler::dispatchWithNotification( const URL& aURL, const Sequence < PropertyValue >& lArgs,
-        const Reference< XDispatchResultListener >& xListener ) throw (RuntimeException)
+void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
+    const URL& aURL, const Sequence < PropertyValue >& lArgs,
+    const Reference< XDispatchResultListener >& xListener )
+    throw ( RuntimeException )
 {
     sal_Bool bSuccess = sal_False;
     Any invokeResult;
 
-    OSL_TRACE("ScriptProtocolHandler::dispatchWithNotification - start \nInput URL %s \n",
-              ::rtl::OUStringToOString(aURL.Complete,RTL_TEXTENCODING_ASCII_US).pData->buffer);
+    OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotification - start \nInput URL %s \n",
+    ::rtl::OUStringToOString( aURL.Complete, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     if ( m_bInitialised )
     {
         try
         {
-            Reference < provider::XFunction > xFunc = m_xFunctionProvider->getFunction(aURL.Complete);
-            validateXRef(xFunc, "ScriptProtocolHandler::dispatchWithNotification: validate xFunc - unable to obtain XFunction interface");
+            Reference< provider::XFunction > xFunc =
+                m_xFunctionProvider->getFunction( aURL.Complete );
+            validateXRef( xFunc,
+                "ScriptProtocolHandler::dispatchWithNotification: validate xFunc - unable to obtain XFunction interface" );
 
-            Sequence< Any > inArgs(0);
-            Sequence< Any > outArgs(0);
+            Sequence< Any > inArgs( 0 );
+            Sequence< Any > outArgs( 0 );
             Sequence< sal_Int16 > outIndex;
 
-            invokeResult = xFunc->invoke(inArgs,outIndex,outArgs);
+            invokeResult = xFunc->invoke( inArgs, outIndex, outArgs );
             bSuccess = sal_True;
         }
 
         // Office doesn't handle exceptions rethrown here very well, it cores,
         // all we can is log them and then set fail for the dispatch event!
         // (if there is a listener of course)
-        catch(RuntimeException &e)
+        catch ( RuntimeException & e )
         {
-            OSL_TRACE("ScriptProtocolHandler::dispatchWithNotificationn caught RuntimeException: %s",::rtl::OUStringToOString(e.Message,RTL_TEXTENCODING_ASCII_US).pData->buffer);
-            ::rtl::OUString reason;
-            reason.createFromAscii("ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException: ");
-            reason = reason + e.Message;
+            OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotificationn caught RuntimeException: %s",
+            ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer
+            );
+            ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
+            "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException: "
+            );
+            reason.concat( e.Message );
             invokeResult <<= reason;
         }
-        catch (Exception &e)
+        catch ( Exception & e )
         {
-            OSL_TRACE("ScriptProtocolHandler::dispatchWithNotificationn caught Exception: %s",::rtl::OUStringToOString(e.Message,RTL_TEXTENCODING_ASCII_US).pData->buffer);
-            ::rtl::OUString reason;
-            reason.createFromAscii("ScriptProtocolHandler::dispatchWithNotification: caught  Exception: ");
-            reason = reason + e.Message;
+            OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotificationn caught Exception: %s",
+            ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer
+            );
+            ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
+            "ScriptProtocolHandler::dispatchWithNotification: caught  Exception: "
+            );
+            reason.concat( e.Message );
             invokeResult <<= reason;
         }
 #ifdef _DEBUG
         catch ( ... )
         {
-            ::rtl::OUString reason;
-            reason.createFromAscii("ScriptProtocolHandler::dispatchWithNotification: caught unknown exception ");
+            ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
+            "ScriptProtocolHandler::dispatchWithNotification: caught unknown exception "
+            );
             invokeResult <<= reason;
         }
 #endif
+
     }
     else
     {
-        OSL_TRACE("ScriptProtocolHandler::dispatchWithNotification: failed, ScriptProtocolHandler not initialised");
-        ::rtl::OUString reason;
-        reason.createFromAscii("ScriptProtocolHandler::dispatchWithNotification failed, ScriptProtocolHandler not initialised");
+        OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotification: failed, ScriptProtocolHandler not initialised" );
+        ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
+        "ScriptProtocolHandler::dispatchWithNotification failed, ScriptProtocolHandler not initialised"
+        );
         invokeResult <<= reason;
     }
 
-    if( xListener.is() )
+    if ( xListener.is() )
     {
         // always call dispatchFinished(), because we didn't load a document but
         // executed a macro instead!
         ::com::sun::star::frame::DispatchResultEvent aEvent;
 
-        aEvent.Source = static_cast< ::cppu::OWeakObject* >(this);
+        aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
         aEvent.Result = invokeResult;
-        if( bSuccess )
+        if ( bSuccess )
+        {
             aEvent.State = ::com::sun::star::frame::DispatchResultState::SUCCESS;
+        }
         else
+        {
             aEvent.State = ::com::sun::star::frame::DispatchResultState::FAILURE;
+        }
 
-        xListener->dispatchFinished( aEvent ) ;
+        try
+        {
+            xListener->dispatchFinished( aEvent ) ;
+        }
+        catch(RuntimeException & e)
+        {
+            OSL_TRACE(
+            "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
+            "while dispatchFinished %s",
+            ::rtl::OUStringToOString( e.Message,
+            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        }
     }
-    OSL_TRACE("ScriptProtocolHandler::dispatchWithNotification - end\n" );
+    OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotification - end" );
 
 }
 
-void SAL_CALL ScriptProtocolHandler::dispatch( const URL& aURL, const Sequence< PropertyValue >& lArgs )
+void SAL_CALL ScriptProtocolHandler::dispatch(
+const URL& aURL, const Sequence< PropertyValue >& lArgs )
 throw ( RuntimeException )
 {
-    dispatchWithNotification( aURL, lArgs, Reference < XDispatchResultListener >() );
+    dispatchWithNotification( aURL, lArgs, Reference< XDispatchResultListener >() );
 }
 
-void SAL_CALL ScriptProtocolHandler::addStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL )
-throw (RuntimeException)
+void SAL_CALL ScriptProtocolHandler::addStatusListener(
+const Reference< XStatusListener >& xControl, const URL& aURL )
+throw ( RuntimeException )
 {
     // implement if status is supported
 }
 
-void SAL_CALL ScriptProtocolHandler::removeStatusListener( const Reference< XStatusListener >& xControl, const URL& aURL )
-throw (RuntimeException)
-{
-}
+void SAL_CALL ScriptProtocolHandler::removeStatusListener(
+const Reference< XStatusListener >& xControl, const URL& aURL )
+throw ( RuntimeException )
+{}
 
-ScriptProtocolHandler::ScriptProtocolHandler( Reference < css::lang::XMultiServiceFactory > const& rFact )
-        : m_xFactory( rFact ), m_bInitialised(false)
+ScriptProtocolHandler::ScriptProtocolHandler(
+Reference< css::lang::XMultiServiceFactory > const& rFact ) :
+m_xFactory( rFact ), m_bInitialised( false )
 {
-    OSL_TRACE("ScriptProtocolHandler::ScriptProtocolHandler - ctor\n" );
+    OSL_TRACE( "ScriptProtocolHandler::ScriptProtocolHandler - ctor" );
 }
 
 ScriptProtocolHandler::~ScriptProtocolHandler()
 {
-    OSL_TRACE("ScriptProtocolHandler::ScriptProtocolHandler - dtor\n" );
+    OSL_TRACE( "ScriptProtocolHandler::ScriptProtocolHandler - dtor" );
 }
 
 /* XServiceInfo */
-::rtl::OUString SAL_CALL ScriptProtocolHandler::getImplementationName() throw( RuntimeException )
+::rtl::OUString SAL_CALL ScriptProtocolHandler::getImplementationName( )
+throw( RuntimeException )
 {
     return impl_getStaticImplementationName();
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL ScriptProtocolHandler::supportsService( const ::rtl::OUString& sServiceName ) throw( RuntimeException )
+sal_Bool SAL_CALL ScriptProtocolHandler::supportsService(
+const ::rtl::OUString& sServiceName )
+throw( RuntimeException )
 {
     Sequence< ::rtl::OUString > seqServiceNames = getSupportedServiceNames();
     const ::rtl::OUString* pArray = seqServiceNames.getConstArray();
-    for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
+    for ( sal_Int32 nCounter = 0; nCounter < seqServiceNames.getLength(); nCounter++ )
     {
-        if ( pArray[nCounter] == sServiceName )
+        if ( pArray[ nCounter ] == sServiceName )
         {
             return sal_True ;
         }
@@ -298,7 +352,8 @@ sal_Bool SAL_CALL ScriptProtocolHandler::supportsService( const ::rtl::OUString&
 }
 
 /* XServiceInfo */
-Sequence< ::rtl::OUString > SAL_CALL ScriptProtocolHandler::getSupportedServiceNames() throw( RuntimeException )
+Sequence< ::rtl::OUString > SAL_CALL ScriptProtocolHandler::getSupportedServiceNames()
+throw( RuntimeException )
 {
     return impl_getStaticSupportedServiceNames();
 }
@@ -308,77 +363,90 @@ Sequence< ::rtl::OUString > ScriptProtocolHandler::impl_getStaticSupportedServic
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     Sequence< ::rtl::OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = ::rtl::OUString::createFromAscii( ::scripting_protocolhandler::MYSERVICENAME );
+    seqServiceNames.getArray() [ 0 ] =
+        ::rtl::OUString::createFromAscii( ::scripting_protocolhandler::MYSERVICENAME );
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 ::rtl::OUString ScriptProtocolHandler::impl_getStaticImplementationName()
 {
-    return ::rtl::OUString::createFromAscii( ::scripting_protocolhandler::MYIMPLNAME);
+    return ::rtl::OUString::createFromAscii( ::scripting_protocolhandler::MYIMPLNAME );
 }
 
 /* Helper for registry */
-Reference < XInterface > SAL_CALL ScriptProtocolHandler::impl_createInstance( const Reference < css::lang::XMultiServiceFactory >& xServiceManager ) throw( RuntimeException )
+Reference< XInterface > SAL_CALL ScriptProtocolHandler::impl_createInstance(
+const Reference< css::lang::XMultiServiceFactory >& xServiceManager )
+throw( RuntimeException )
 {
-    return Reference < XInterface > ( *new ScriptProtocolHandler( xServiceManager ) );
+    return Reference< XInterface > ( *new ScriptProtocolHandler( xServiceManager ) );
 }
 
 /* Factory for registration */
-Reference < XSingleServiceFactory > ScriptProtocolHandler::impl_createFactory( const Reference< XMultiServiceFactory >& xServiceManager )
+Reference< XSingleServiceFactory > ScriptProtocolHandler::impl_createFactory(
+const Reference< XMultiServiceFactory >& xServiceManager )
 {
-    Reference < XSingleServiceFactory > xReturn  (
+    Reference< XSingleServiceFactory > xReturn (
         cppu::createSingleFactory( xServiceManager,
-                                   ScriptProtocolHandler::impl_getStaticImplementationName(),
-                                   ScriptProtocolHandler::impl_createInstance,
-                                   ScriptProtocolHandler::impl_getStaticSupportedServiceNames() )
+            ScriptProtocolHandler::impl_getStaticImplementationName(),
+            ScriptProtocolHandler::impl_createInstance,
+            ScriptProtocolHandler::impl_getStaticSupportedServiceNames() )
     );
     return xReturn;
 }
 
-}// namespace scripting_protocolhandler
+} // namespace scripting_protocolhandler
 
 /* exported functions for registration */
-extern "C" {
+extern "C"
+{
 
-    void SAL_CALL component_getImplementationEnvironment( const sal_Char**   ppEnvironmentTypeName ,
-            uno_Environment** ppEnvironment   )
+    void SAL_CALL component_getImplementationEnvironment(
+        const sal_Char** ppEnvironmentTypeName, uno_Environment** ppEnvironment )
     {
         *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
     }
 
-    sal_Bool SAL_CALL component_writeInfo( void* pServiceManager ,
-                                           void* pRegistryKey )
+    sal_Bool SAL_CALL component_writeInfo( void * pServiceManager ,
+                                           void * pRegistryKey )
     {
-        Reference< css::registry::XRegistryKey > xKey( reinterpret_cast< css::registry::XRegistryKey* >( pRegistryKey ) ) ;
+        Reference< css::registry::XRegistryKey > xKey(
+            reinterpret_cast< css::registry::XRegistryKey* >( pRegistryKey ) ) ;
 
-        ::rtl::OUString aStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-        aStr += ::scripting_protocolhandler::ScriptProtocolHandler::impl_getStaticImplementationName();
+        ::rtl::OUString aStr = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+        aStr +=
+            ::scripting_protocolhandler::ScriptProtocolHandler::impl_getStaticImplementationName();
 
-        aStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+        aStr += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ) );
         Reference< css::registry::XRegistryKey > xNewKey = xKey->createKey( aStr );
-        xNewKey->createKey( ::rtl::OUString::createFromAscii(::scripting_protocolhandler::MYSERVICENAME) );
+        xNewKey->createKey(
+            ::rtl::OUString::createFromAscii( ::scripting_protocolhandler::MYSERVICENAME )
+            );
 
         return sal_True;
     }
 
-    void* SAL_CALL component_getFactory( const sal_Char* pImplementationName ,
-                                         void*  pServiceManager  ,
-                                         void*  pRegistryKey  )
+    void* SAL_CALL component_getFactory( const sal_Char * pImplementationName ,
+                                         void * pServiceManager ,
+                                         void * pRegistryKey )
     {
         // Set default return value for this operation - if it failed.
-        void* pReturn = NULL ;
+        void * pReturn = NULL ;
 
         if (
             ( pImplementationName != NULL ) &&
-            ( pServiceManager  != NULL )
+            ( pServiceManager != NULL )
         )
         {
             // Define variables which are used in following macros.
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory                        ;
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager( reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager ) ) ;
+            ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XSingleServiceFactory > xFactory ;
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+            xServiceManager( reinterpret_cast<
+            ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager ) ) ;
 
-            if ( ::scripting_protocolhandler::ScriptProtocolHandler::impl_getStaticImplementationName().equals( ::rtl::OUString::createFromAscii( pImplementationName ) ) )
+            if ( ::scripting_protocolhandler::ScriptProtocolHandler::impl_getStaticImplementationName().equals(
+                ::rtl::OUString::createFromAscii( pImplementationName ) ) )
             {
                 xFactory = ::scripting_protocolhandler::ScriptProtocolHandler::impl_createFactory( xServiceManager );
             }

@@ -1,63 +1,63 @@
 /*************************************************************************
- *
- *  $RCSfile: ScriptStorageManager.cxx,v $
- *
- *  $Revision: 1.2 $
- *
- *  last change: $Author: dfoster $ $Date: 2002-09-25 10:18:12 $
- *
- *  The Contents of this file are made available subject to the terms of
- *  either of the following licenses
- *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
- *
- *  Sun Microsystems Inc., October, 2000
- *
- *  GNU Lesser General Public License Version 2.1
- *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
- *
- *
- *  Sun Industry Standards Source License Version 1.1
- *  =================================================
- *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
- *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
- *
- *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
- *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
- *  See the License for the specific provisions governing your rights and
- *  obligations concerning the Software.
- *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
- *
- *  Copyright: 2000 by Sun Microsystems, Inc.
- *
- *  All Rights Reserved.
- *
- *  Contributor(s): _______________________________________
- *
- *
- ************************************************************************/
+*
+*  $RCSfile: ScriptStorageManager.cxx,v $
+*
+*  $Revision: 1.3 $
+*
+*  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:30 $
+*
+*  The Contents of this file are made available subject to the terms of
+*  either of the following licenses
+*
+*         - GNU Lesser General Public License Version 2.1
+*         - Sun Industry Standards Source License Version 1.1
+*
+*  Sun Microsystems Inc., October, 2000
+*
+*  GNU Lesser General Public License Version 2.1
+*  =============================================
+*  Copyright 2000 by Sun Microsystems, Inc.
+*  901 San Antonio Road, Palo Alto, CA 94303, USA
+*
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License version 2.1, as published by the Free Software Foundation.
+*
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+*  MA  02111-1307  USA
+*
+*
+*  Sun Industry Standards Source License Version 1.1
+*  =================================================
+*  The contents of this file are subject to the Sun Industry Standards
+*  Source License Version 1.1 (the "License"); You may not use this file
+*  except in compliance with the License. You may obtain a copy of the
+*  License at http://www.openoffice.org/license.html.
+*
+*  Software provided under this License is provided on an "AS IS" basis,
+*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+*  See the License for the specific provisions governing your rights and
+*  obligations concerning the Software.
+*
+*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+*
+*  Copyright: 2000 by Sun Microsystems, Inc.
+*
+*  All Rights Reserved.
+*
+*  Contributor(s): _______________________________________
+*
+*
+************************************************************************/
 
 #include <stdio.h>
 
@@ -80,89 +80,145 @@ using namespace ::drafts::com::sun::star::script::framework;
 namespace scripting_impl
 {
 
-static const sal_Char* const SERVICENAME="drafts.com.sun.star.script.framework.storage.ScriptStorageManager";
-static const sal_Char* const IMPLNAME="drafts.com.sun.star.script.framework.storage.ScriptStorageManager";
-
-static OUString s_implName = ::rtl::OUString::createFromAscii(IMPLNAME);
-static OUString s_serviceName = ::rtl::OUString::createFromAscii(SERVICENAME);
+static OUString s_implName =
+    ::rtl::OUString::createFromAscii(
+        "drafts.com.sun.star.script.framework.storage.ScriptStorageManager" );
+static OUString s_serviceName =
+    ::rtl::OUString::createFromAscii(
+        "drafts.com.sun.star.script.framework.storage.ScriptStorageManager" );
 static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
 
-::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
+extern ::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
 
 //*************************************************************************
 // ScriptStorageManager Constructor
-ScriptStorageManager::ScriptStorageManager(const Reference< XComponentContext > & xContext)
-        : m_xContext( xContext )
+ScriptStorageManager::ScriptStorageManager( const Reference< XComponentContext > & xContext )
+        : m_xContext( xContext ), m_count( 0 )
+        SAL_THROW ( ( RuntimeException ) )
 {
     OSL_TRACE( "< ScriptStorageManager ctor called >\n" );
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+
+    validateXRef( m_xContext, "ScriptStorageManager::ScriptStorageManager : cannot get component context" );
+
+    m_xMgr = m_xContext->getServiceManager();
+    validateXRef( m_xMgr, "ScriptStorageManager::ScriptStorageManager : cannot get service manager" );
+
     try
     {
-        count=0;
         // obtain the macro expander singleton to use in determining the
         // location of the application script storage
-        Any aAny = m_xContext->getValueByName(OUString::createFromAscii("/singletons/com.sun.star.util.theMacroExpander"));
+        Any aAny = m_xContext->getValueByName( OUString::createFromAscii(
+                                                   "/singletons/com.sun.star.util.theMacroExpander" ) );
         Reference<util::XMacroExpander> xME;
-        OSL_ASSERT(sal_False!=(aAny>>=xME));
-        OSL_ASSERT(xME.is());
-        validateXRef(xME,"ScriptStorageManager constructor: Can't get MacroExpander");
+        if ( sal_False == ( aAny >>= xME ) )
+        {
+            throw RuntimeException(
+                OUSTR( "ScriptStorageManager::ScriptStorageManager: can't get XMacroExpander" ),
+                Reference< XInterface >() );
+        }
+        validateXRef( xME, "ScriptStorageManager constructor: can't get MacroExpander" );
 
-        // get the MultiComponentFactory and use it to create a
-        // SimpleFileAccess component
-        Reference<lang::XMultiComponentFactory> xMCF = m_xContext->getServiceManager();
-        validateXRef(xMCF,"ScriptStorageManager::ScriptStorageManager : cannot get service manager");
-        Reference<XInterface> xx = xMCF->createInstanceWithContext(OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess"), m_xContext);
-        Reference<ucb::XSimpleFileAccess> xSFA(xx,UNO_QUERY);
+        OUString base = OUString::createFromAscii(
+                            SAL_CONFIGFILE( "${$SYSBINDIR/bootstrap" ) );
+
+        setupAppStorage( xME,
+                         base.concat( OUString::createFromAscii( "::BaseInstallation}/share" ) ) );
+        setupAppStorage( xME,
+                         base.concat( OUString::createFromAscii( "::UserInstallation}/user" ) ) );
+
+    }
+    catch ( Exception & e )
+    {
+        throw RuntimeException( OUSTR( "ScriptStorageManager::ScriptStorageManager: " ) + e.Message, Reference< XInterface >() );
+    }
+    OSL_ASSERT( m_count == 2 );
+}
+
+//*************************************************************************
+// ScriptStorageManager setupAppStorage
+void
+ScriptStorageManager::setupAppStorage(
+    const Reference<util::XMacroExpander> & xME,
+    const OUString & storageStr )
+SAL_THROW ( ( RuntimeException ) )
+{
+    try
+    {
+        Reference<XInterface> xInterface =
+            m_xMgr->createInstanceWithContext(
+                OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ), m_xContext );
+        validateXRef( xInterface,
+                      "ScriptStorageManager constructor: can't get SimpleFileAccess XInterface" );
+        Reference<ucb::XSimpleFileAccess> xSFA( xInterface, UNO_QUERY_THROW );
+
+        setupAnyStorage( xSFA, xME->expandMacros( storageStr ) );
+    }
+    catch ( Exception & e )
+    {
+        throw RuntimeException(
+            OUSTR( "ScriptStorageManager::setupAppStorage: " ).concat( e.Message ),
+            Reference< XInterface >() );
+    }
+}
+
+//*************************************************************************
+// ScriptStorageManager setupAnyStorage
+sal_uInt16
+ScriptStorageManager::setupAnyStorage(
+    const Reference< ucb::XSimpleFileAccess > & xSFA,
+    const OUString & storageStr )
+SAL_THROW ( ( RuntimeException ) )
+{
+    // Required for scope of fnc to protect all access read and writes to m_count
+    ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
+    try
+    {
 
         // create a ScriptingStorage using the SimpleFileAccess, the storageID          // (from the count), and the URL to the application's shared area
-        Sequence <Any> aArgs(3);
-        OUString base=OUString::createFromAscii( SAL_CONFIGFILE("${$SYSBINDIR/bootstrap"));
-        aArgs[0] <<= xSFA;
-        aArgs[1] <<= count;
-        aArgs[2] <<= xME->expandMacros(base.concat(OUString::createFromAscii("::BaseInstallation}/share")));
+        Sequence <Any> aArgs( 3 );
+        aArgs[ 0 ] <<= xSFA;
+        aArgs[ 1 ] <<= m_count;
+        aArgs[ 2 ] <<= storageStr;
+
 #ifdef _DEBUG
 
-        fprintf(stderr,"creating storage for: %s\n",::rtl::OUStringToOString(xME->expandMacros(base.concat(OUString::createFromAscii("::BaseInstallation}/share"))),RTL_TEXTENCODING_ASCII_US).pData->buffer);
+        fprintf( stderr, "creating storage for: %s\n",
+                 ::rtl::OUStringToOString(
+                     storageStr, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 #endif
 
-        xx  = xMCF->createInstanceWithArgumentsAndContext(OUString::createFromAscii("drafts.com.sun.star.script.framework.storage.ScriptStorage"), aArgs, m_xContext);
-        OSL_ASSERT(xx.is());
-        xx->acquire();
-        validateXRef(xx,"ScriptStorageManager constructor: Can't create ScriptStorage for share");
+        Reference<XInterface> xInterface =
+            m_xMgr->createInstanceWithArgumentsAndContext(
+                OUString::createFromAscii(
+                    "drafts.com.sun.star.script.framework.storage.ScriptStorage" ),
+                aArgs, m_xContext );
+
+        validateXRef( xInterface, "ScriptStorageManager:: setupAnyStorage: Can't create ScriptStorage for share" );
+
         // and place it in the hash_map. Increment the counter
-        m_ScriptStorageHash[count++]=xx;
+        m_ScriptStorageHash[ m_count++ ] = xInterface;
+
 #ifdef _DEBUG
 
-        fprintf(stderr,"\tcreated with ID=%d\n",count-1);
-#endif
-        //Repeat the procedure with the application user area
-        aArgs[1] <<= count;
-        aArgs[2] <<= xME->expandMacros(base.concat(OUString::createFromAscii("::UserInstallation}/user")));
-#ifdef _DEBUG
-
-        fprintf(stderr,"creating storage for: %s\n",::rtl::OUStringToOString(xME->expandMacros(base.concat(OUString::createFromAscii("::UserInstallation}/user"))),RTL_TEXTENCODING_ASCII_US).pData->buffer);
-#endif
-
-        xx  = xMCF->createInstanceWithArgumentsAndContext(OUString::createFromAscii("drafts.com.sun.star.script.framework.storage.ScriptStorage"), aArgs, m_xContext);
-        OSL_ASSERT(xx.is());
-        xx->acquire();
-        validateXRef(xx,"ScriptStorageManager constructor: Can't create ScriptStorage for share");
-        m_ScriptStorageHash[count++]=xx;
-#ifdef _DEBUG
-
-        fprintf(stderr,"\tcreated with ID=%d\n",count-1);
+        fprintf( stderr, "\tcreated with ID=%d\n", m_count - 1 );
 #endif
 
     }
-    catch (Exception &e)
+    catch ( Exception & e )
     {
-        throw RuntimeException(OUSTR("ScriptStorageManager::ScriptStorageManager: ").concat(e.Message), Reference< XInterface >());
+        throw RuntimeException(
+            OUSTR( "ScriptStorageManager::setupAnyStorage: " ).concat( e.Message ),
+            Reference< XInterface >() );
     }
+
+    return m_count -1;
 }
 
 //*************************************************************************
 // ScriptStorageManager Destructor
 ScriptStorageManager::~ScriptStorageManager()
+SAL_THROW ( () )
 {
     OSL_TRACE( "< ScriptStorageManager dtor called >\n" );
     s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
@@ -171,73 +227,68 @@ ScriptStorageManager::~ScriptStorageManager()
 //*************************************************************************
 // This method assumes that the XSimpleFileAccess knows it's on root URL
 // and can be used with relative URLs
-sal_uInt16 SAL_CALL ScriptStorageManager::createScriptStorage( const Reference< ucb::XSimpleFileAccess >& xSFA ) throw (RuntimeException)
+sal_uInt16 SAL_CALL
+ScriptStorageManager::createScriptStorage(
+    const Reference< ucb::XSimpleFileAccess >& xSFA )
+throw ( RuntimeException )
 {
-    OSL_TRACE("** ==> ScriptStorageManager in createScriptingStorage\n");
-    validateXRef(xSFA, "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid");
-    Sequence <Any> aArgs(2);
-    aArgs[0] <<= xSFA;
-    aArgs[1] <<= count;
-    Reference<lang::XMultiComponentFactory> xMCF  = m_xContext->getServiceManager();
-    validateXRef(xMCF,"ScriptStorageManager::createScriptStorage");
-    Reference<XInterface>xx = xMCF->createInstanceWithArgumentsAndContext(OUString::createFromAscii("drafts.com.sun.star.script.framework.storage.ScriptStorage"), aArgs, m_xContext);
-    OSL_ASSERT(xx.is());
-    m_ScriptStorageHash[count++]=xx;
-#ifdef _DEBUG
+    OSL_TRACE( "** ==> ScriptStorageManager in createScriptingStorage\n" );
+    validateXRef( xSFA,
+                  "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
 
-    fprintf(stderr,"\tcreated with ID=%d\n",count-1);
-#endif
-
-    return count-1;
+    return setupAnyStorage( xSFA, ::rtl::OUString::createFromAscii( "" ) );
 }
 
 //*************************************************************************
-sal_uInt16 SAL_CALL ScriptStorageManager::createScriptStorageWithURI( const Reference< ucb::XSimpleFileAccess >& xSFA, const OUString & stringURI ) throw (RuntimeException)
+sal_uInt16 SAL_CALL
+ScriptStorageManager::createScriptStorageWithURI(
+    const Reference< ucb::XSimpleFileAccess >& xSFA, const OUString & stringURI )
+throw ( RuntimeException )
 {
-    OSL_TRACE("** ==> ScriptStorageManager in createScriptingStorageWithURI\n");
-    validateXRef(xSFA, "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid");
-    Sequence <Any> aArgs(3);
-    aArgs[0] <<= xSFA;
-    aArgs[1] <<= count;
-    aArgs[2] <<= stringURI;
-    Reference<lang::XMultiComponentFactory> xMCF  = m_xContext->getServiceManager();
-    validateXRef(xMCF,"ScriptStorageManager::createScriptStorageWithURI");
-    Reference<XInterface> xx  = xMCF->createInstanceWithArgumentsAndContext(OUString::createFromAscii("drafts.com.sun.star.script.framework.storage.ScriptStorage"), aArgs, m_xContext);
-    OSL_ASSERT(xx.is());
-    m_ScriptStorageHash[count++]=xx;
-#ifdef _DEBUG
+    OSL_TRACE( "** ==> ScriptStorageManager in createScriptingStorageWithURI\n" );
+    validateXRef( xSFA, "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
 
-    fprintf(stderr,"\tcreated with ID=%d\n",count-1);
-#endif
-
-    return count-1;
+    return setupAnyStorage( xSFA, stringURI );
 }
 
 //*************************************************************************
-Reference <XInterface> SAL_CALL ScriptStorageManager::getScriptStorage(sal_uInt16 scriptStorageID)
-throw(RuntimeException)
+Reference <XInterface> SAL_CALL
+ScriptStorageManager::getScriptStorage( sal_uInt16 scriptStorageID )
+throw( RuntimeException )
 {
-    OSL_TRACE("** ==> ScriptStorageManager in getStorageInstance\n");
-    Reference<XInterface> result=m_ScriptStorageHash[scriptStorageID];
-    validateXRef(result, "ScriptStorageManager::getScriptStorage: Cannot get ScriptStorage from ScriptStorageHash");
-    return result;
+    OSL_TRACE( "** ==> ScriptStorageManager in getStorageInstance\n" );
+
+    ScriptStorage_hash::const_iterator itr =
+        m_ScriptStorageHash.find( scriptStorageID );
+
+    if ( itr == m_ScriptStorageHash.end() )
+    {
+        throw RuntimeException(
+            OUSTR( "ScriptStorageManager::getScriptStorage: invalid storage ID" ),
+            Reference< XInterface >() );
+    }
+    validateXRef( itr->second,
+                  "ScriptStorageManager::getScriptStorage: Cannot get ScriptStorage from ScriptStorageHash" );
+    return itr->second;
 }
 
 //*************************************************************************
-OUString SAL_CALL ScriptStorageManager::getImplementationName(  )
-throw(RuntimeException)
+OUString SAL_CALL
+ScriptStorageManager::getImplementationName( )
+throw( RuntimeException )
 {
     return s_implName;
 }
 
 //*************************************************************************
-sal_Bool SAL_CALL ScriptStorageManager::supportsService( const OUString& serviceName )
-throw(RuntimeException)
+sal_Bool SAL_CALL
+ScriptStorageManager::supportsService( const OUString& serviceName )
+throw( RuntimeException )
 {
     OUString const * pNames = s_serviceNames.getConstArray();
     for ( sal_Int32 nPos = s_serviceNames.getLength(); nPos--; )
     {
-        if (serviceName.equals( pNames[ nPos ] ))
+        if ( serviceName.equals( pNames[ nPos ] ) )
         {
             return sal_True;
         }
@@ -246,34 +297,40 @@ throw(RuntimeException)
 }
 
 //*************************************************************************
-Sequence<OUString> SAL_CALL ScriptStorageManager::getSupportedServiceNames(  )
-throw(RuntimeException)
+Sequence<OUString> SAL_CALL
+ScriptStorageManager::getSupportedServiceNames( )
+throw( RuntimeException )
 {
     return s_serviceNames;
 }
 
 //*************************************************************************
-void SAL_CALL ScriptStorageManager::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL
+ScriptStorageManager::disposing( const ::com::sun::star::lang::EventObject& Source )
+throw ( ::com::sun::star::uno::RuntimeException )
 {
-    OSL_TRACE("ScriptStorageManager::disposing started");
+    OSL_TRACE( "ScriptStorageManager::disposing started" );
 }
 
 //*************************************************************************
-static Reference<XInterface> SAL_CALL ssm_create(
+static Reference<XInterface> SAL_CALL
+ssm_create(
     const Reference< XComponentContext > & xCompC )
 {
-    return (cppu::OWeakObject *)new ScriptStorageManager( xCompC );
+    return ( cppu::OWeakObject * ) new ScriptStorageManager( xCompC );
 }
 
 //*************************************************************************
-static Sequence<OUString> ssm_getSupportedServiceNames(  )
+static Sequence<OUString>
+ssm_getSupportedServiceNames( )
 SAL_THROW( () )
 {
     return s_serviceNames;
 }
 
 //*************************************************************************
-static OUString ssm_getImplementationName(  )
+static OUString
+ssm_getImplementationName( )
 SAL_THROW( () )
 {
     return s_implName;
@@ -281,15 +338,15 @@ SAL_THROW( () )
 //*************************************************************************
 Reference<XInterface> SAL_CALL ss_create( const Reference< XComponentContext > & xCompC );
 //*************************************************************************
-Sequence<OUString> ss_getSupportedServiceNames(  ) SAL_THROW( () );
+Sequence<OUString> ss_getSupportedServiceNames( ) SAL_THROW( () );
 //*************************************************************************
-OUString ss_getImplementationName(  ) SAL_THROW( () );
+OUString ss_getImplementationName( ) SAL_THROW( () );
 //*************************************************************************
 Reference<XInterface> SAL_CALL si_create( const Reference< XComponentContext > & xCompC );
 //*************************************************************************
-Sequence<OUString> si_getSupportedServiceNames(  ) SAL_THROW( () );
+Sequence<OUString> si_getSupportedServiceNames( ) SAL_THROW( () );
 //*************************************************************************
-OUString si_getImplementationName(  ) SAL_THROW( () );
+OUString si_getImplementationName( ) SAL_THROW( () );
 //*************************************************************************
 static struct cppu::ImplementationEntry s_entries [] =
     {
@@ -321,7 +378,7 @@ static struct cppu::ImplementationEntry s_entries [] =
  */
 extern "C"
 {
-    void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv)
+    void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
@@ -333,9 +390,9 @@ extern "C"
      * @param pServiceManager   the service manager
      * @param pRegistryKey      the registry key
      */
-    sal_Bool SAL_CALL component_writeInfo(lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey)
+    sal_Bool SAL_CALL component_writeInfo( lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
     {
-        return ::cppu::component_writeInfoHelper(pServiceManager, pRegistryKey, ::scripting_impl::s_entries);
+        return ::cppu::component_writeInfoHelper( pServiceManager, pRegistryKey, ::scripting_impl::s_entries );
     }
 
     /**
@@ -346,8 +403,8 @@ extern "C"
      * @param pRegistryKey    the registry key for this component, need for persistent data
      * @return a component factory
      */
-    void * SAL_CALL component_getFactory(const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey)
+    void * SAL_CALL component_getFactory( const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
     {
-        return ::cppu::component_getFactoryHelper(pImplName, pServiceManager, pRegistryKey, ::scripting_impl::s_entries);
+        return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, ::scripting_impl::s_entries );
     }
 }

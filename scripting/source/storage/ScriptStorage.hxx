@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lkovacs $ $Date: 2002-09-23 14:17:49 $
+ *  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,11 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+
 #include <drafts/com/sun/star/script/framework/storage/XScriptAccessManager.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptImplAccess.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageExport.hpp>
@@ -77,25 +82,18 @@
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfo.hpp>
 #include <drafts/com/sun/star/script/framework/storage/NoSuchView.hpp>
 #include <drafts/com/sun/star/script/framework/scripturi/XScriptURI.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_STORAGE_XPARCELINVOCATIONPREP_HPP_
 #include <drafts/com/sun/star/script/framework/storage/XParcelInvocationPrep.hpp>
-#endif
 
 namespace scripting_impl
 {
 
 //Typedefs
 //=============================================================================
-typedef ::std::vector< ::drafts::com::sun::star::script::framework::storage::ScriptImplInfo >
-Impls_vec;
+typedef ::std::vector<
+ ::drafts::com::sun::star::script::framework::storage::ScriptImplInfo > Impls_vec;
 //-----------------------------------------------------------------------------
-typedef ::std::hash_map < ::rtl::OUString, Impls_vec,
-::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
-ScriptInfo_hash;
+typedef ::std::hash_map < ::rtl::OUString,
+    Impls_vec, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ScriptInfo_hash;
 //-----------------------------------------------------------------------------
 typedef ::std::hash_map < ::rtl::OUString,
 ::com::sun::star::uno::Reference<
@@ -113,36 +111,6 @@ class ScriptStorage
             ::drafts::com::sun::star::script::framework::storage::XScriptAccessManager,
             ::drafts::com::sun::star::script::framework::storage::XParcelInvocationPrep >
 {
-    // private member
-private:
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > m_xSimpleFileAccess;
-
-    ::std::vector < ::rtl::OUString >  mv_logicalNames;
-    ScriptInfo_hash mh_implementations;
-    ScriptOutput_hash mh_parcels;
-    sal_uInt16 m_scriptStorageID;
-
-    osl::Mutex     m_mutex;
-
-    void updateMaps(Impls_vec vScriptII);
-    void writeMetadataHeader(::com::sun::star::uno::Reference < ::com::sun::star::xml::sax::XExtendedDocumentHandler > & );
-    /**
-       This function copies the contents of the source folder into the
-       destination folder. If the destination folder does not exist, it
-       is created. If the destination folder exists, it is deleted and then
-       created. All URIs supported by the relevant XSimpleFileAccess
-       implementation are supported.
-
-        @params src
-            the source folder (file URI)
-
-        @params dest
-            the destination folder (file URI)
-    */
-    void copyFolder(const ::rtl::OUString & src, const ::rtl::OUString & dest) throw (::com::sun::star::uno::RuntimeException);
-
 public:
     //Constructors and Destructors
     //=========================================================================
@@ -154,26 +122,28 @@ public:
 
     // XServiceInfo impl
     //=========================================================================
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
-    throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL
+        getImplementationName()
+        throw (::com::sun::star::uno::RuntimeException);
     //-------------------------------------------------------------------------
-    virtual sal_Bool SAL_CALL supportsService(
-        const ::rtl::OUString & ServiceName )
-    throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL
+        supportsService( const ::rtl::OUString & ServiceName )
+        throw (::com::sun::star::uno::RuntimeException);
     //-------------------------------------------------------------------------
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
-    SAL_CALL getSupportedServiceNames()
-    throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        getSupportedServiceNames()
+        throw (::com::sun::star::uno::RuntimeException);
     //-------------------------------------------------------------------------
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString >
-    SAL_CALL getSupportedServiceNames_Static();
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        getSupportedServiceNames_Static();
     //=========================================================================
 
     // XInitialization impl
     //=========================================================================
-    virtual void SAL_CALL initialize( ::com::sun::star::uno::Sequence
-                                      < ::com::sun::star::uno::Any > const & args )
-    throw (::com::sun::star::uno::Exception);
+    virtual void SAL_CALL
+        initialize( ::com::sun::star::uno::Sequence<
+        ::com::sun::star::uno::Any > const & args )
+        throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::uno::Exception);
     //=========================================================================
 
     // XScriptAccessManager impl
@@ -189,11 +159,10 @@ public:
      *      A sequence of XScriptInfos which represent the implementations
      *      of the passed in logical name
      */
-    virtual ::com::sun::star::uno::Sequence<
-    ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::script::framework::storage::XScriptInfo > >
-    SAL_CALL getScriptInfoService( const ::rtl::OUString & name )
-    throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::script::framework::storage::XScriptInfo > > SAL_CALL
+        getScriptInfoService( const ::rtl::OUString & name )
+        throw (::com::sun::star::uno::RuntimeException);
     //=========================================================================
 
     //XScriptImplAccess
@@ -209,10 +178,11 @@ public:
      */
     virtual ::com::sun::star::uno::Sequence<
     ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::script::framework::scripturi::XScriptURI > >
-    SAL_CALL getImplementations( const ::com::sun::star::uno::Reference<
-                                 ::drafts::com::sun::star::script::framework::scripturi::XScriptURI >& queryURI )
-    throw (::com::sun::star::lang::IllegalArgumentException,
+    ::drafts::com::sun::star::script::framework::scripturi::XScriptURI > > SAL_CALL
+        getImplementations( const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::script::framework::scripturi::XScriptURI >&
+            queryURI )
+        throw (::com::sun::star::lang::IllegalArgumentException,
            ::com::sun::star::uno::RuntimeException);
     //=========================================================================
 
@@ -229,14 +199,15 @@ public:
      *      The view of the hierarchy
      */
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-    ScriptStorage::getView( const ::rtl::OUString& viewName )
-    throw (::drafts::com::sun::star::script::framework::storage::NoSuchView,
+        getView( const ::rtl::OUString& viewName )
+        throw (::drafts::com::sun::star::script::framework::storage::NoSuchView,
            ::com::sun::star::uno::RuntimeException);
     //=========================================================================
 
     // XScriptStorageExport
-    void SAL_CALL save()
-    throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL
+        save()
+        throw (::com::sun::star::uno::RuntimeException);
     //=========================================================================
 
     //XParcelInvocationPrep
@@ -250,9 +221,48 @@ public:
         @return
             <type>::rtl::OUString</type> the new location of the parcel (file URI)
     */
-    ::rtl::OUString SAL_CALL prepareForInvocation( const ::rtl::OUString& parcelURI )
-    throw (::com::sun::star::uno::RuntimeException);
+    ::rtl::OUString SAL_CALL
+        prepareForInvocation( const ::rtl::OUString& parcelURI )
+        throw (::com::sun::star::uno::RuntimeException);
     //=========================================================================
+private:
+
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XComponentContext > m_xContext;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::ucb::XSimpleFileAccess > m_xSimpleFileAccess;
+    ::com::sun::star::uno::Reference<
+    ::com::sun::star::lang::XMultiComponentFactory > m_xMgr;
+
+    ::std::vector < ::rtl::OUString >  mv_logicalNames;
+    ScriptInfo_hash mh_implementations;
+    ScriptOutput_hash mh_parcels;
+    sal_uInt16 m_scriptStorageID;
+
+    osl::Mutex     m_mutex;
+    bool m_bInitialised;
+
+    void updateMaps(const Impls_vec & vScriptImplInfos);
+    void writeMetadataHeader(
+        ::com::sun::star::uno::Reference <
+            ::com::sun::star::xml::sax::XExtendedDocumentHandler > & );
+    /**
+       This function copies the contents of the source folder into the
+       destination folder. If the destination folder does not exist, it
+       is created. If the destination folder exists, it is deleted and then
+       created. All URIs supported by the relevant XSimpleFileAccess
+       implementation are supported.
+
+        @params src
+            the source folder (file URI)
+
+        @params dest
+            the destination folder (file URI)
+    */
+    void
+    copyFolder(const ::rtl::OUString & src, const ::rtl::OUString & dest)
+    throw (::com::sun::star::uno::RuntimeException);
+
 }
 ; // class ScriptingStorage
 

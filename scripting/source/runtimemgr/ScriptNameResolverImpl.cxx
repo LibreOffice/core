@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aledoux $ $Date: 2002-09-24 12:59:31 $
+ *  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,10 @@
  *
  ************************************************************************/
 
-#include <stdio.h>
 #include <vector>
 
 #include <cppuhelper/implementationentry.hxx>
+
 #include <util/util.hxx>
 #include <util/scriptingconstants.hxx>
 
@@ -77,32 +77,37 @@ using namespace ::drafts::com::sun::star::script::framework;
 namespace scripting_runtimemgr
 {
 
-const sal_Char* const SERVICE_NAME="drafts.com.sun.star.script.framework.DefaultScriptNameResolver";
-const sal_Char* const IMPL_NAME="drafts.com.sun.star.script.framework.DefaultScriptNameResolver";
-const sal_Char* const LANGUAGE_TO_RESOLVE_ON="Java"; // should be configurable
-OUString nrs_implName = OUString::createFromAscii(IMPL_NAME);
-OUString nrs_serviceName = OUString::createFromAscii(SERVICE_NAME);
+const sal_Char* const LANGUAGE_TO_RESOLVE_ON = "Java"; // should be configurable
+OUString nrs_implName = OUString::createFromAscii(
+    "drafts.com.sun.star.script.framework.DefaultScriptNameResolver" );
+OUString nrs_serviceName = OUString::createFromAscii(
+    "drafts.com.sun.star.script.framework.DefaultScriptNameResolver" );
 Sequence< OUString > nrs_serviceNames = Sequence< OUString >( &nrs_serviceName, 1 );
 
-const sal_Int16 SHARED_STORAGE_ID = 1; // should be in constants def file!!!!???? TBD
-const sal_Int16 USER_STORAGE_ID = 0;
-const sal_Int16 DOC_STORAGE_ID_NOT_SET = -1;
 extern ::rtl_StandardModuleCount s_moduleCount;
 
 // define storages to search
-::std::vector< int > SEARCHSIDS;
+static ::std::vector< int >* m_pSearchIDs = NULL;
 
 //*************************************************************************
-ScriptNameResolverImpl::ScriptNameResolverImpl(const Reference< XComponentContext > & xContext ):m_xContext(xContext),mStorageFactory(xContext)
+ScriptNameResolverImpl::ScriptNameResolverImpl(
+    const Reference< XComponentContext > & xContext ) :
+    m_xContext( xContext ), m_StorageFactory( xContext )
 {
     OSL_TRACE( "< ScriptNameResolverImpl ctor called >\n" );
-    SEARCHSIDS.clear();
-    SEARCHSIDS.push_back(DOC_STORAGE_ID_NOT_SET);
-    SEARCHSIDS.push_back(USER_STORAGE_ID);
-    SEARCHSIDS.push_back(SHARED_STORAGE_ID);
+    if(!m_pSearchIDs)
+    {
+        osl::Guard< osl::Mutex > aGuard( m_mutex );
+        if(!m_pSearchIDs)
+        {
+            m_pSearchIDs = new ::std::vector< int >();
+            m_pSearchIDs->push_back( ::scripting_constants::DOC_STORAGE_ID_NOT_SET );
+            m_pSearchIDs->push_back( ::scripting_constants::USER_STORAGE_ID );
+            m_pSearchIDs->push_back( ::scripting_constants::SHARED_STORAGE_ID );
+        }
+    }
 
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
-
 }
 
 //*************************************************************************
@@ -113,18 +118,20 @@ ScriptNameResolverImpl::~ScriptNameResolverImpl()
 }
 
 //*************************************************************************
-Reference< scripturi::XScriptURI >
-ScriptNameResolverImpl::resolve(const Reference<scripturi::XScriptURI> & scriptURI, Any& invocationCtx)
-throw (lang::IllegalArgumentException, script::CannotConvertException, RuntimeException)
+Reference< scripturi::XScriptURI > ScriptNameResolverImpl::resolve(
+const Reference< scripturi::XScriptURI > & scriptURI, Any& invocationCtx )
+throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeException )
 {
 
-    Reference <scripturi::XScriptURI> resolvedName;
+    Reference< scripturi::XScriptURI > resolvedName;
     Reference< beans::XPropertySet > xPropSetScriptingContext;
     OSL_TRACE( "ScriptNameResolverImpl::resolve: in resolve - start" );
 
-    if (sal_False == (invocationCtx >>= xPropSetScriptingContext))
+    if ( sal_False == ( invocationCtx >>= xPropSetScriptingContext ) )
     {
-        throw RuntimeException(OUSTR("ScriptNameResolverImpl::resolve : unable to get XScriptingContext from invocationCtx in/out param"), Reference<XInterface> ());
+        throw RuntimeException( OUSTR(
+            "ScriptNameResolverImpl::resolve : unable to get XScriptingContext from param" ),
+            Reference< XInterface > () );
     }
 
     Any any;
@@ -136,73 +143,88 @@ throw (lang::IllegalArgumentException, script::CannotConvertException, RuntimeEx
         OSL_TRACE( "ScriptNameResolverImpl::resolve: in resolve - got anyUri" );
         if ( sal_False == ( any >>= docUri ) )
         {
-            throw RuntimeException(OUSTR("ScriptNameResolverImpl::resolve : unable to get doc Uri from xPropSetScriptingContext"), Reference<XInterface> ());
+            throw RuntimeException( OUSTR(
+            "ScriptNameResolverImpl::resolve : unable to get doc Uri from xPropSetScriptingContext" ),
+                Reference< XInterface > () );
         }
         any = xPropSetScriptingContext->getPropertyValue( scripting_constants::DOC_STORAGE_ID );
         if ( sal_False == ( any >>= docSid ) )
         {
-            throw RuntimeException(OUSTR("ScriptNameResolverImpl::resolve : unable to get doc storage id from xPropSetScriptingContext"), Reference<XInterface> ());
+            throw RuntimeException( OUSTR(
+                "ScriptNameResolverImpl::resolve : unable to get doc storage id from xPropSetScriptingContext" ),
+                Reference< XInterface > () );
         }
     }
-    catch (Exception & e)
+    catch ( Exception & e )
     {
-        OUString temp = OUSTR("ScriptNameResolverImpl::resolve : problem with getPropertyValue");
-        throw RuntimeException(temp.concat(e.Message),
-                               Reference<XInterface> ());
+        OUString temp = OUSTR(
+            "ScriptNameResolverImpl::resolve : problem with getPropertyValue" );
+        throw RuntimeException( temp.concat( e.Message ),
+                                Reference< XInterface > () );
     }
 #ifdef _DEBUG
     catch ( ... )
     {
-        throw RuntimeException(OUSTR("ScriptNameResolverImpl::resolve Unknown Exception caught - RuntimeException rethrown"), Reference<XInterface> ());
+        throw RuntimeException( OUSTR(
+            "ScriptNameResolverImpl::resolve Unknown Exception caught - RuntimeException rethrown" ),
+            Reference< XInterface > () );
     }
 #endif
 
 
 #ifdef _DEBUG
-    ::rtl::OString docUriO(::rtl::OUStringToOString(docUri ,RTL_TEXTENCODING_ASCII_US));
-    fprintf(stderr,"ScriptNameResolverImpl::resolve: *** >>> DOC URI: %s, doc sid is %d\n", docUriO.pData->buffer,docSid);
+    ::rtl::OString docUriO(
+        ::rtl::OUStringToOString( docUri , RTL_TEXTENCODING_ASCII_US ) );
+    fprintf( stderr,
+        "ScriptNameResolverImpl::resolve: *** >>> DOC URI: %s, doc sid is %d\n",
+        docUriO.pData->buffer, docSid );
 #endif
 
 
-    OSL_TRACE("ScriptNameResolverImpl::resolve Starting...");
-    SEARCHSIDS[0] = docSid;
+    OSL_TRACE( "ScriptNameResolverImpl::resolve Starting..." );
+    ::std::vector< int >& m_vSearchIDs = *m_pSearchIDs;
+    m_vSearchIDs[ 0 ] = docSid;
     ::std::vector< int >::const_iterator iter;
+    ::std::vector< int >::const_iterator iterEnd = m_vSearchIDs.end();
 
-
-    for ( iter = SEARCHSIDS.begin() ; iter != SEARCHSIDS.end(); ++iter)
+    for ( iter = m_vSearchIDs.begin() ; iter != iterEnd; ++iter )
     {
         try
         {
-            OSL_TRACE("** about to resolve from storage using id %d from vector of size %d",*iter,SEARCHSIDS.size());
-            if ( (resolvedName = resolveURIFromStorageID(*iter,scriptURI) ).is() )
+            OSL_TRACE( "** about to resolve from storage using id %d from vector of size %d",
+                *iter, m_vSearchIDs.size() );
+            if ( ( resolvedName = resolveURIFromStorageID( *iter, scriptURI ) ).is() )
             {
-                OSL_TRACE("found match in uri from storage %d",*iter);
+                OSL_TRACE( "found match in uri from storage %d", *iter );
                 break;
             }
 
         }
 
-        catch (Exception & e)
+        catch ( Exception & e )
         {
-            OSL_TRACE("Exception thrown by storage %d, failed to match uri: %s",*iter,::rtl::OUStringToOString(e.Message,RTL_TEXTENCODING_ASCII_US).pData->buffer);
+            OSL_TRACE( "Exception thrown by storage %d, failed to match uri: %s",
+                *iter,
+                ::rtl::OUStringToOString( e.Message,
+                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
 #ifdef _DEBUG
         catch ( ... )
         {
-            OSL_TRACE("unknown exception thrown by storage %d, failed to match uri",*iter);
+            OSL_TRACE( "unknown exception thrown by storage %d, failed to match uri",
+                *iter );
         }
 #endif
 
     }
-
 
     return resolvedName;
 }
 
 //*************************************************************************
 OUString SAL_CALL
-ScriptNameResolverImpl::getImplementationName(  )
-throw(RuntimeException)
+ScriptNameResolverImpl::getImplementationName( )
+throw( RuntimeException )
 {
     return nrs_implName;
 }
@@ -210,12 +232,12 @@ throw(RuntimeException)
 //*************************************************************************
 sal_Bool SAL_CALL
 ScriptNameResolverImpl::supportsService( const OUString& serviceName )
-throw(RuntimeException)
+throw( RuntimeException )
 {
     OUString const * pNames = nrs_serviceNames.getConstArray();
     for ( sal_Int32 nPos = nrs_serviceNames.getLength(); nPos--; )
     {
-        if (serviceName.equals( pNames[ nPos ] ))
+        if ( serviceName.equals( pNames[ nPos ] ) )
         {
             return sal_True;
         }
@@ -226,89 +248,114 @@ throw(RuntimeException)
 //*************************************************************************
 
 Reference< scripturi::XScriptURI >
-ScriptNameResolverImpl::resolveURIFromStorageID(sal_Int16 sid, const Reference< scripturi::XScriptURI >& scriptURI) SAL_THROW ( (lang::IllegalArgumentException, RuntimeException) )
+ScriptNameResolverImpl::resolveURIFromStorageID
+( sal_Int16 sid, const Reference< scripturi::XScriptURI >& scriptURI )
+SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
 {
 
 #ifdef _DEBUG
 
-    ::rtl::OString locationO(::rtl::OUStringToOString(scriptURI->getLocation(),RTL_TEXTENCODING_ASCII_US));
-    ::rtl::OString languageO(::rtl::OUStringToOString(scriptURI->getLanguage(),RTL_TEXTENCODING_ASCII_US));
-    ::rtl::OString functionName(::rtl::OUStringToOString(scriptURI->getFunctionName(),RTL_TEXTENCODING_ASCII_US));
-    ::rtl::OString logicalName(::rtl::OUStringToOString(scriptURI->getLogicalName(),RTL_TEXTENCODING_ASCII_US));
-    fprintf(stderr,"trying to resolve URI, {location = %s}, {language = %s}, {funtionName = %s}, {logicalName = %s}\n", locationO.pData->buffer, languageO.pData->buffer,functionName.pData->buffer, logicalName.pData->buffer);
+    ::rtl::OString locationO( ::rtl::OUStringToOString(
+        scriptURI->getLocation(), RTL_TEXTENCODING_ASCII_US ) );
+    ::rtl::OString languageO( ::rtl::OUStringToOString(
+        scriptURI->getLanguage(), RTL_TEXTENCODING_ASCII_US ) );
+    ::rtl::OString functionName( ::rtl::OUStringToOString(
+        scriptURI->getFunctionName(), RTL_TEXTENCODING_ASCII_US ) );
+    ::rtl::OString logicalName( ::rtl::OUStringToOString(
+        scriptURI->getLogicalName(), RTL_TEXTENCODING_ASCII_US ) );
+    fprintf( stderr,
+        "trying to resolve URI, {location = %s}, {language = %s}, {funtionName = %s}, {logicalName = %s}\n",
+        locationO.pData->buffer, languageO.pData->buffer,
+        functionName.pData->buffer, logicalName.pData->buffer );
 #endif
 
     Reference< scripturi::XScriptURI > resolvedName;
-    if ( sid == DOC_STORAGE_ID_NOT_SET )
+    if ( sid == ::scripting_constants::DOC_STORAGE_ID_NOT_SET )
     {
         return resolvedName;
-
     }
     try
     {
-        Reference<storage::XScriptImplAccess> storage = mStorageFactory.getStorageInstance(sid);
-        validateXRef(storage, "ScriptNameResolverImpl::resolveURIFromStorageID: cannot get XScriptImplAccess");
-        Sequence< Reference< scripturi::XScriptURI > > results = storage->getImplementations(scriptURI);
-        if ( !results.getLength() )
+        Reference< storage::XScriptImplAccess > storage =
+            m_StorageFactory.getStorageInstance( sid );
+        validateXRef( storage,
+        "ScriptNameResolverImpl::resolveURIFromStorageID: cannot get XScriptImplAccess" );
+        Sequence< Reference< scripturi::XScriptURI > > results =
+            storage->getImplementations( scriptURI );
+
+        const sal_Int32 lenght = results.getLength();
+
+        if ( !lenght )
         {
             return resolvedName;
         }
 
-        OSL_TRACE("ScriptNameResolverImpl::resolve Got some results...");
-        for(int index=0;index<results.getLength();index++)
+        OSL_TRACE( "ScriptNameResolverImpl::resolve Got some results..." );
+        for ( sal_Int32 index = 0;index < lenght;index++ )
         {
-            Reference< scripturi::XScriptURI > uri = results[index];
+            Reference< scripturi::XScriptURI > uri = results[ index ];
 #ifdef _DEBUG
 
-            ::rtl::OString locationO(::rtl::OUStringToOString(uri->getLocation(),RTL_TEXTENCODING_ASCII_US));
-            ::rtl::OString languageO(::rtl::OUStringToOString(uri->getLanguage(),RTL_TEXTENCODING_ASCII_US));
-            ::rtl::OString functionName(::rtl::OUStringToOString(uri->getFunctionName(),RTL_TEXTENCODING_ASCII_US));
-            ::rtl::OString logicalName(::rtl::OUStringToOString(uri->getLogicalName(),RTL_TEXTENCODING_ASCII_US));
-            fprintf(stderr,"[%d] URI, {location = %s}, {language = %s}, {funtionName = %s}, {logicalName = %s}\n",
-                    index, locationO.pData->buffer, languageO.pData->buffer,functionName.pData->buffer, logicalName.pData->buffer);
+            ::rtl::OString locationO( ::rtl::OUStringToOString( uri->getLocation(),
+                RTL_TEXTENCODING_ASCII_US ) );
+            ::rtl::OString languageO( ::rtl::OUStringToOString( uri->getLanguage(),
+                RTL_TEXTENCODING_ASCII_US ) );
+            ::rtl::OString functionName( ::rtl::OUStringToOString( uri->getFunctionName(),
+                RTL_TEXTENCODING_ASCII_US ) );
+            ::rtl::OString logicalName( ::rtl::OUStringToOString( uri->getLogicalName(),
+                RTL_TEXTENCODING_ASCII_US ) );
+            fprintf( stderr, "[%d] URI, {location = %s}, {language = %s}, {funtionName = %s}, {logicalName = %s}\n",
+                     index, locationO.pData->buffer, languageO.pData->buffer,
+                     functionName.pData->buffer, logicalName.pData->buffer );
 #endif
 
             // just choose first one that has language=LANGUAGE_TO_RESOLVE_ON
-            ::rtl::OUString language(uri->getLanguage());
+            ::rtl::OUString language( uri->getLanguage() );
 
-            if (( language.compareToAscii(LANGUAGE_TO_RESOLVE_ON)== 0))
+            if ( ( language.compareToAscii( LANGUAGE_TO_RESOLVE_ON ) == 0 ) )
             {
-                OSL_TRACE("Found desired language\n");
+                OSL_TRACE( "Found desired language\n" );
                 resolvedName = uri;
                 break;
             }
         }
     }
-    catch (lang::IllegalArgumentException & iae)
+    catch ( lang::IllegalArgumentException & iae )
     {
-        OUString temp = OUSTR("ScriptRuntimeManager::resolveURIFromStorageID IllegalArgumentException: ");
-        throw lang::IllegalArgumentException(temp.concat(iae.Message),
-                                             Reference<XInterface> (), iae.ArgumentPosition);
+        OUString temp = OUSTR(
+            "ScriptRuntimeManager::resolveURIFromStorageID IllegalArgumentException: " );
+        throw lang::IllegalArgumentException( temp.concat( iae.Message ),
+                                              Reference< XInterface > (),
+                                              iae.ArgumentPosition );
     }
-    catch (RuntimeException & re)
+    catch ( RuntimeException & re )
     {
-        OUString temp = OUSTR("ScriptRuntimeManager::resolveURIFromStorageID RuntimeException: ");
-        throw RuntimeException(temp.concat(re.Message),
-                               Reference<XInterface> ());
+        OUString temp = OUSTR(
+            "ScriptRuntimeManager::resolveURIFromStorageID RuntimeException: " );
+        throw RuntimeException( temp.concat( re.Message ),
+                                Reference< XInterface > () );
     }
-    catch (Exception & e)
+    catch ( Exception & e )
     {
-        OUString temp = OUSTR("ScriptNameResolverImpl::resolveURIFromStorageID : Unknown Exception caught - RuntimeException rethrown");
-        throw RuntimeException(temp.concat(e.Message),
-                               Reference<XInterface> ());
+        OUString temp = OUSTR(
+            "ScriptNameResolverImpl::resolveURIFromStorageID : Exception caught - RuntimeException rethrown" );
+        throw RuntimeException( temp.concat( e.Message ),
+                                Reference< XInterface > () );
     }
 #ifdef _DEBUG
     catch ( ... )
     {
-        throw RuntimeException(OUSTR("ScriptNameResolverImpl::resolveURIFromStorageID Unknown exception caught - RuntimeException rethrown"), Reference<XInterface> ());
+        throw RuntimeException( OUSTR(
+            "ScriptNameResolverImpl::resolveURIFromStorageID Unknown exception caught - RuntimeException rethrown" ),
+            Reference< XInterface > () );
     }
 #endif
     return resolvedName;
 }
 //*************************************************************************
 Sequence<OUString> SAL_CALL
-ScriptNameResolverImpl::getSupportedServiceNames(  )
-throw(RuntimeException)
+ScriptNameResolverImpl::getSupportedServiceNames( )
+throw( RuntimeException )
 {
     return nrs_serviceNames;
 }
@@ -316,9 +363,9 @@ throw(RuntimeException)
 //*************************************************************************
 Reference< XInterface > SAL_CALL scriptnri_create(
     Reference< XComponentContext > const & xComponentContext )
-SAL_THROW( (Exception) )
+SAL_THROW( ( Exception ) )
 {
-    return (cppu::OWeakObject *)new ScriptNameResolverImpl( xComponentContext );
+    return ( cppu::OWeakObject * ) new ScriptNameResolverImpl( xComponentContext );
 }
 
 //*************************************************************************

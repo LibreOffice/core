@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dsherwin $ $Date: 2002-09-23 16:30:52 $
+ *  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,24 +58,18 @@
  *
  *
  ************************************************************************/
-#include <stdio.h>
-
 #include <cppuhelper/implementationentry.hxx>
 
 #include <util/util.hxx>
 #include <ScriptInfo.hxx>
 #include <osl/file.hxx>
 
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_STORAGE_XSCRIPTSTORAGEMANAGER_HPP_
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_STORAGE_XPARCELINVOCATIONPREP_HPP_
 #include <drafts/com/sun/star/script/framework/storage/XParcelInvocationPrep.hpp>
-#endif
 
 using namespace ::rtl;
+using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace com::sun::star::beans;
 using namespace ::drafts::com::sun::star::script::framework;
 using namespace ::drafts::com::sun::star::script::framework::storage;
 
@@ -121,7 +115,7 @@ throw (RuntimeException, Exception)
     }
     catch (Exception &e)
     {
-    throw RuntimeException(OUSTR("ScriptInfo: initialize(): ") + e.Message, Reference< XInterface >());
+    throw RuntimeException(OUSTR("ScriptInfo: initialize(): ").concat(e.Message), Reference< XInterface >());
     }
 }
 
@@ -205,9 +199,9 @@ OUString SAL_CALL ScriptInfo::getRoot(  ) throw (RuntimeException)
 Sequence< OUString > SAL_CALL ScriptInfo::getDependencies(  ) throw (RuntimeException)
 {
     storage::ScriptDepFile *pArray = m_scriptImplInfo.scriptDependencies.getArray();
-    int len = m_scriptImplInfo.scriptDependencies.getLength();
+    sal_Int32 len = m_scriptImplInfo.scriptDependencies.getLength();
     Sequence< OUString > r_deps(len);
-    for(int i = 0; i < len; i++)
+    for(sal_Int32 i = 0; i < len; i++)
     {
         r_deps[i] = pArray[i].fileName;
     }
@@ -224,9 +218,9 @@ OUString SAL_CALL ScriptInfo::getLocation(  ) throw (RuntimeException)
 }
 
 //*************************************************************************
-Reference< XPropertySet > SAL_CALL ScriptInfo::extraProperties(  ) throw (RuntimeException)
+Reference< beans::XPropertySet > SAL_CALL ScriptInfo::extraProperties(  ) throw (RuntimeException)
 {
-    Reference <XPropertySet> x;
+    Reference < beans::XPropertySet > x;
 
     return x;
 }
@@ -251,7 +245,7 @@ throw(RuntimeException)
     {
         if (m_scriptImplInfo.parcelURI.compareToAscii(docUriPrefix, 16) != 0) {
         return m_scriptImplInfo.parcelURI;
-        } 
+        }
 
         validateXRef(m_xContext, "ScriptInfo::prepareForInvocation(): invalid context");
         Any aAny=m_xContext->getValueByName(
