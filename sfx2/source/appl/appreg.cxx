@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-11 15:14:20 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,6 @@
 #include "arrdecl.hxx"
 #include "intfrm.hxx"
 #include "ipfrm.hxx"
-#include "fsetobsh.hxx"
-#include "fsetview.hxx"
 #include "tbxcust.hxx"
 #include "sfxhelp.hxx"
 #include "templdlg.hxx"
@@ -251,8 +249,9 @@ void SfxApplication::SetInterfaceByIdImpl( SfxInterfaceId eId,
 
     pInterfaces[ USHORT(eId) ] = pIF;
 }
-
+/*
 const SfxObjectFactory& SfxApplication::GetDefaultFactory() const
 {
     return SfxObjectFactory::GetDefaultFactory();
 }
+*/
