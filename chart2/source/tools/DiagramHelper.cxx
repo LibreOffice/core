@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DiagramHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 15:35:08 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 17:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 #include "DiagramHelper.hxx"
+#include "LegendHelper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
 #include <drafts/com/sun/star/chart2/XTitled.hpp>
@@ -85,7 +86,10 @@ void DiagramHelper::changeDiagram(
         xDestTitled->setTitle( xSrcTitled->getTitle() );
     }
 
-    xDestination->setLegend( xSource->getLegend() );
+    uno::Reference< chart2::XLegend > xLegend( xSource->getLegend());
+    LegendHelper::flushLegend( xLegend );
+    LegendHelper::defaultFillEmptyLegend( xLegend, xDestination );
+    xDestination->setLegend( xLegend );
 }
 
 } //  namespace helper

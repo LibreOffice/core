@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:32 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 17:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,18 +106,6 @@ using ::com::sun::star::uno::Any;
 
 namespace
 {
-void lcl_FlushLegend( const Reference< chart2::XLegend > & xLegend )
-{
-    if( xLegend.is())
-    {
-        Sequence< Reference< chart2::XLegendEntry > > aEntries( xLegend->getEntries());
-        for( sal_Int32 i = 0; i < aEntries.getLength(); ++i )
-        {
-            xLegend->revokeEntry( aEntries[ i ] );
-        }
-    }
-}
-
 #if OSL_DEBUG_LEVEL > 1
 
 #include <drafts/com/sun/star/chart2/XChartTypeGroup.hpp>

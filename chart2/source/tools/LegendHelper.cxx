@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-09 16:46:44 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 17:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <drafts/com/sun/star/chart2/XChartDocument.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XLEGEND_HPP_
+#include <drafts/com/sun/star/chart2/XLegend.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
@@ -137,6 +140,19 @@ void LegendHelper::defaultFillEmptyLegend(
         catch( uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
+        }
+    }
+}
+
+// static
+void LegendHelper::flushLegend( const uno::Reference< chart2::XLegend > & xLegend )
+{
+    if( xLegend.is())
+    {
+        uno::Sequence< uno::Reference< chart2::XLegendEntry > > aEntries( xLegend->getEntries());
+        for( sal_Int32 i = 0; i < aEntries.getLength(); ++i )
+        {
+            xLegend->revokeEntry( aEntries[ i ] );
         }
     }
 }

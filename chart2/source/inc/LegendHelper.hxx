@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-09 16:46:41 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 17:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,12 @@ public:
             ::drafts::com::sun::star::chart2::XLegend > & xLegend,
         const ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::chart2::XDiagram > & xDiagram );
+
+    /** removes all legend entries
+     */
+    static void flushLegend(
+        const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XLegend > & xLegend );
 };
 
 //.............................................................................
