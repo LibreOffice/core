@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:52:58 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 11:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1093,6 +1093,9 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
 
                 SfxItemSet aSet(GetPool(), aFrmFmtSetRange );
                 pWrtShell->GetFlyFrmAttr( aSet );
+
+                SwFrmFmt* pFFmt = pWrtShell->GetCurFrmFmt();
+                pFrm->SetDerivedFrom( pFFmt );
 
                 // JP 10.06.98: nur automatische Orientierungen uebernehmen
 /*              #61359# jetzt auch wieder alle Orientierungen
