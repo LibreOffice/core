@@ -176,6 +176,8 @@ common
 		}
 		common
 		{
+            SO_GEN_ERROR
+            SO_GEN_ERROR2
 			NO_SRS_PATCH true
 		}
 		bsclient
