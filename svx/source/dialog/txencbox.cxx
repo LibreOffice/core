@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txencbox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:12:49 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
             // makes no sense here and would result in an empty string as list
             // entry.
             if ( bInsert && nEnc != RTL_TEXTENCODING_DONTKNOW )
-                InsertTextEncoding( nEnc, m_pEncTable->GetString( j ) );
+                InsertTextEncoding( nEnc );
         }
     }
 }
@@ -268,7 +268,16 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
 void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, USHORT nPos )
 {
     const String& rEntry = m_pEncTable->GetTextString( nEnc );
-    InsertTextEncoding( nEnc, rEntry, nPos );
+    if ( rEntry.Len() )
+        InsertTextEncoding( nEnc, rEntry, nPos );
+    else
+    {
+#ifdef DBG_UTIL
+        ByteString aMsg( "SvxTextEncodingBox::InsertTextEncoding: no resource string for text encoding: " );
+        aMsg += ByteString::CreateFromInt32( nEnc );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    }
 }
 
 //------------------------------------------------------------------------
