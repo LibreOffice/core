@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFrameActionListener.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-03-19 14:33:08 $
+ *  last change: $Date: 2005-03-01 20:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@ import com.sun.star.awt.XPopupMenu;
 import com.sun.star.frame.FrameActionEvent;
 import com.sun.star.frame.XFrameActionListener;
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.ui.ConfigurationEvent;
-import drafts.com.sun.star.ui.XUIConfigurationListener;
+import com.sun.star.ui.ConfigurationEvent;
+import com.sun.star.ui.XUIConfigurationListener;
 import lib.MultiMethodTest;
 
 public class _XFrameActionListener extends MultiMethodTest {
