@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-26 12:30:59 $
+ *  last change: $Author: iha $ $Date: 2003-12-04 16:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,12 +655,14 @@ void SAL_CALL ChartController::executeDispatch_ObjectToDefault()
         uno::Sequence< beans::Property > aProps( xObjectProperties->getPropertySetInfo()->getProperties() );
         uno::Reference< beans::XPropertyState > xState( xObjectProperties, uno::UNO_QUERY );
 
-        for( sal_Int32 i = 0; i < aProps.getLength(); ++i )
+        if( xState.is() )
         {
-            if( aProps[i].Attributes & beans::PropertyAttribute::MAYBEDEFAULT )
-                xState->setPropertyToDefault( aProps[i].Name );
+            for( sal_Int32 i = 0; i < aProps.getLength(); ++i )
+            {
+                if( aProps[i].Attributes & beans::PropertyAttribute::MAYBEDEFAULT )
+                    xState->setPropertyToDefault( aProps[i].Name );
+            }
         }
-
         impl_rebuildView();
     }
     catch( uno::Exception& e )
