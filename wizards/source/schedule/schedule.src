@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: bc $ $Date: 2001-12-06 10:53:33 $
+ *  last change: $Author: kz $ $Date: 2001-12-06 22:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,7 +741,7 @@ Text[ swedish ] = "År";
 String dlgBitmapFile
 {
 Text = "germany.wmf";
-Text[ language_user1 ] = " ";
+Text[ language_user1 ] = "Only for Germany we will use a '.wmf' file. For other localizations only bitmaps";
 Text[ English ] = "britain.bmp";
 Text[ English_us ] = "usa.bmp";
 Text[ french ] = "france.bmp";
@@ -763,7 +763,7 @@ Text[ swedish ] = "sweden.bmp";
     Text[ turkish ] = "turkiye.bmp";
     Text[ catalan ] = "spain.bmp";
     Text[ finnish ] = "usa.bmp";
-    Text[ language_user1 ] = "Only for Germany we will use a '.wmf' file. For other localizations only bitmaps. The name of the resource refers to the bitmap 'share/template/wizard/bitmap";
+    Text[ language_user1 ] = "Only for Germany we will use a '.wmf' file. For other localizations only bitmaps";
 
 };
 
@@ -1364,4 +1364,5 @@ Text[ English_us ] = "Progress:";
     Text[ catalan ] = "Progreso:";
     Text[ finnish ] = "Tilanne:";
 };
+
 
