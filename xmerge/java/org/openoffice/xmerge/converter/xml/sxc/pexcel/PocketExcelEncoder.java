@@ -262,7 +262,10 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
                 }
                 while(nextRef>='0' && nextRef<='9') { // Keep reading until we reach another operator or cell reference
                     interval++;
-                    nextRef = inputString.charAt(i+interval);
+                    if((i+interval)<inputString.length())
+                        nextRef = inputString.charAt(i+interval);
+                    else
+                        nextRef = 0;
                 }
                 nextChar = inputString.substring(i,i+interval); // if cell then read all of the cell reference
                 i += interval-1;
