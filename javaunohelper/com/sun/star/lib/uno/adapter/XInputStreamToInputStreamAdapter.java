@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInputStreamToInputStreamAdapter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aidan $ $Date: 2002-04-03 09:51:41 $
+ *  last change: $Author: aidan $ $Date: 2002-05-20 11:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,13 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         int count = 0;
         byte [][] tmp = new byte [1][b.length];
         try {
-            long bytesRead = xin.readBytes(tmp,len);
+        long bytesRead=0;
+        if (len >xin.available()) {
+          bytesRead = xin.readBytes(tmp, xin.available());
+        }
+        else{
+        bytesRead = xin.readBytes(tmp,len);
+        }
             // Casting bytesRead to an int is okay, since the user can
             // only pass in an integer length to read, so the bytesRead
             // must <= len.
