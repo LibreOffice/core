@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:36:45 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:40:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,8 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-
+#include <globals.hrc> //CHINA001
+#include "swabstdlg.hxx" //CHINA001
 
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
@@ -1153,12 +1154,20 @@ IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
                             FN_PARAM_TOX_TYPE, FN_PARAM_TOX_TYPE,
                             0);
 
-                SwMultiTOXTabDialog* pDlg = new SwMultiTOXTabDialog(this, aSet,
-                        *pActiveShell,
-                        0,
-                        USHRT_MAX,
-                        TRUE);
-
+//CHINA001              SwMultiTOXTabDialog* pDlg = new SwMultiTOXTabDialog(this, aSet,
+//CHINA001              *pActiveShell,
+//CHINA001              0,
+//CHINA001              USHRT_MAX,
+//CHINA001              TRUE);
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                AbstractMultiTOXTabDialog* pDlg = pFact->CreateMultiTOXTabDialog( ResId(DLG_MULTI_TOX),
+                                                        this, aSet,
+                                                        *pActiveShell,
+                                                        0,
+                                                        USHRT_MAX,
+                                                        TRUE);
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if(RET_OK == pDlg->Execute())
                 {
                     SwTOXDescription&  rDesc = pDlg->GetTOXDescription(
