@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxtr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-17 11:36:45 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,14 @@
 
 #ifndef _OUTLINER_HXX //autogen
 #include "outliner.hxx"
+#endif
+
+#ifndef _SDR_PROPERTIES_ITEMSETTOOLS_HXX
+#include <svx/sdr/properties/itemsettools.hxx>
+#endif
+
+#ifndef _SDR_PROPERTIES_PROPERTIES_HXX
+#include <svx/sdr/properties/properties.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,7 +169,7 @@ void SdrTextObj::NbcMove(const Size& rSiz)
     MoveRect(aRect,rSiz);
     MoveRect(aOutRect,rSiz);
     MoveRect(maSnapRect,rSiz);
-    SetRectsDirty(TRUE);
+    SetRectsDirty(sal_True);
 }
 
 void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
@@ -394,25 +402,6 @@ SdrObject* SdrTextObj::DoConvertToPolyObj(BOOL bBezier) const
     return ImpConvertObj(!bBezier);
 }
 
-void SdrTextObj::ImpConvertSetAttrAndLayer(SdrObject* pObj, FASTBOOL bNoSetAttr) const
-{
-    if (pObj!=NULL) {
-        pObj->ImpSetAnchorPos(aAnchor);
-        pObj->NbcSetLayer(SdrLayerID(nLayerId));
-        if (pModel!=NULL) {
-            pObj->SetModel(pModel);
-            if (!bNoSetAttr) {
-                SdrBroadcastItemChange aItemChange(*pObj);
-                pObj->ClearItem();
-                pObj->SetItemSet(GetItemSet());
-                pObj->BroadcastItemChange(aItemChange);
-
-                pObj->NbcSetStyleSheet(GetStyleSheet(),TRUE);
-            }
-        }
-    }
-}
-
 SdrObject* SdrTextObj::ImpConvertMakeObj(const XPolyPolygon& rXPP, FASTBOOL bClosed, FASTBOOL bBezier, FASTBOOL bNoSetAttr) const
 {
     SdrObjKind ePathKind=bClosed?OBJ_PATHFILL:OBJ_PATHLINE;
@@ -452,7 +441,30 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const XPolyPolygon& rXPP, FASTBOOL bClo
     if (bBezier) {
         pPathObj->ConvertAllSegments(SDRPATH_CURVE);
     }
-    ImpConvertSetAttrAndLayer(pPathObj,bNoSetAttr);
+
+    {
+        if (pPathObj!=NULL) {
+            pPathObj->ImpSetAnchorPos(aAnchor);
+            pPathObj->NbcSetLayer(SdrLayerID(nLayerId));
+            if (pModel!=NULL) {
+                pPathObj->SetModel(pModel);
+                if (!bNoSetAttr)
+                {
+                    sdr::properties::ItemChangeBroadcaster aC(*pPathObj);
+                    //SdrBroadcastItemChange aItemChange(*pPathObj);
+
+                    pPathObj->ClearMergedItem();
+                    pPathObj->SetMergedItemSet(GetObjectItemSet());
+
+                    //pPathObj->BroadcastItemChange(aItemChange);
+                    pPathObj->GetProperties().BroadcastItemChange(aC);
+
+                    pPathObj->NbcSetStyleSheet(GetStyleSheet(), sal_True);
+                }
+            }
+        }
+    }
+
     return pPathObj;
 }
 
