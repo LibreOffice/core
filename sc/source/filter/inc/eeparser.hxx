@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeparser.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:52:19 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ public:
                         ScEEParser( EditEngine* );
     virtual             ~ScEEParser();
 
-    virtual ULONG       Read( SvStream& ) = 0;
+    virtual ULONG       Read( SvStream&, const String& rBaseURL ) = 0;
 
     void                GetDimensions( SCCOL& nCols, SCROW& nRows ) const
                             { nCols = nColMax; nRows = nRowMax; }
