@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2000-11-13 16:43:56 $
+ *  last change: $Author: kr $ $Date: 2000-11-14 14:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 
-
 #include <bridges/java/jvmcontext.hxx>
 
 #include "jvmargs.hxx"
@@ -149,7 +148,7 @@ namespace stoc_javavm {
         OSL_TRACE("vm_abort\n");
     }
 
-    typedef ::std::hash_map<sal_uInt32, sal_uInt32/*, ::std::hash<sal_uInt32>, ::std::equal_to<sal_uInt32*/> UINT32_UINT32_HashMap;
+    typedef ::std::hash_map<sal_uInt32, sal_uInt32> UINT32_UINT32_HashMap;
 
     class JavaVirtualMachine_Impl;
 
@@ -182,9 +181,6 @@ namespace stoc_javavm {
         JavaVMContext                 * _pVMContext;
 
         Reference<XMultiServiceFactory> _xSMgr;
-
-//          void                            setLanguageAndCountrySection( XSimpleRegistry* pOfficeReg, JVM* pjvm );
-
 
         OModule    _javaLib;
 
@@ -309,36 +305,46 @@ namespace stoc_javavm {
     }
 
 
-// TEMPORARY DISABLED
-//      void JavaVirtualMachine_Impl::setLanguageAndCountrySection( XSimpleRegistry* pOfficeReg, JVM* pjvm) {
-//      OUString aValue;
+    static void getDefaultLocaleFromConfig(JVM * pjvm, const Reference<XMultiServiceFactory> & xSMgr) throw(Exception) {
+        Reference<XInterface> xConfRegistry = xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationRegistry")));
+        if(!xConfRegistry.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), Reference<XInterface>());
 
-//      Reference<XRegistryKey> xRegistryRootKey = pOfficeReg->getRootKey();
-//      aValue = getValue( xRegistryRootKey, OUString::createFromAscii("User/Language") );
+        Reference<XSimpleRegistry> xConfRegistry_simple(xConfRegistry, UNO_QUERY);
+        if(!xConfRegistry_simple.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), Reference<XInterface>());
 
-//      if ( aValue.len() )
-//      {
-//          OUString  aLanguage;
-//          OUString  aCountry;
+          xConfRegistry_simple->open(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.UserProfile")), sal_True, sal_False);
+          Reference<XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
-//          // LanguageType aLangNum = (LanguageType) String( OUStringToOString( aValue, RTL_TEXTENCODING_ASCII_US) );
-//          LanguageType aLangNum = (LanguageType) aValue.toInt32();
+        // read ftp proxy name
+        Reference<XRegistryKey> locale = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("International/Locale")));
+        if(locale.is() && locale->getStringValue().getLength()) {
+            OUString language;
+            OUString country;
 
-//          {
-//              String  langStr;
-//              String  countryStr;
+            sal_Int32 index = locale->getStringValue().indexOf((sal_Unicode) '-');
 
-//              ConvertLanguageToIsoNames( aLangNum, langStr, countryStr );
+            if(index >= 0) {
+                language = locale->getStringValue().copy(0, index);
+                country = locale->getStringValue().copy(index + 1);
 
-//              aLanguage = OUString( langStr );
-//              aCountry  = OUString( countryStr );
-//          }
+                if(language.getLength()) {
+                    OUString prop(RTL_CONSTASCII_USTRINGPARAM("user.language="));
+                    prop += language;
 
-//          if ( aLanguage.getLength() ) pjvm->pushProp( OUString::createFromAscii("user.language=") + aLanguage );
+                    pjvm->pushProp(prop);
+                }
 
-//          if ( aCountry.getLength() ) pjvm->pushProp( OUString::createFromAscii("user.region=") + aCountry );
-//      }
-//  }
+                if(country.getLength()) {
+                    OUString prop(RTL_CONSTASCII_USTRINGPARAM("user.region="));
+                    prop += country;
+
+                    pjvm->pushProp(prop);
+                }
+            }
+        }
+
+        xConfRegistry_simple->close();
+    }
 
     static void setTimeZone(JVM * pjvm) throw() {
         /* A Bug in the Java function
@@ -361,145 +367,87 @@ namespace stoc_javavm {
             pjvm->pushProp(OUString::createFromAscii("user.timezone=ECT"));
     }
 
-    static OUString getValue(const Reference<XRegistryKey> & xRegistryRootKey, const OUString& rKey) throw() {
-        OUString aEntryValue;
+    static void getINetPropsFromConfig(JVM * pjvm, const Reference<XMultiServiceFactory> & xSMgr) throw (Exception) {
+        Reference<XInterface> xConfRegistry = xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationRegistry")));
+        if(!xConfRegistry.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), Reference<XInterface>());
 
-          try   {
-            Reference<XRegistryKey> aEntry = xRegistryRootKey->openKey(rKey);
+        Reference<XSimpleRegistry> xConfRegistry_simple(xConfRegistry, UNO_QUERY);
+        if(!xConfRegistry_simple.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), Reference<XInterface>());
 
-            if (aEntry.is() && aEntry->isValid())
-                aEntryValue = aEntry->getStringValue();
-          }
-          catch (InvalidRegistryException e) {
-          }
-          catch (InvalidValueException e)   {
-           }
+          xConfRegistry_simple->open(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Inet")), sal_True, sal_False);
+          Reference<XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
-        return aEntryValue;
+        // read ftp proxy name
+        Reference<XRegistryKey> ftpProxy_name = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/FTP/Name")));
+        if(ftpProxy_name.is() && ftpProxy_name->getStringValue().getLength()) {
+            OUString ftpHost = OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyHost="));
+            ftpHost += ftpProxy_name->getStringValue();
+
+            // read ftp proxy port
+            Reference<XRegistryKey> ftpProxy_port = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/FTP/Port")));
+            if(ftpProxy_port.is() && ftpProxy_port->getLongValue()) {
+                OUString ftpPort = OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyPort="));
+                ftpPort += OUString::valueOf(ftpProxy_port->getLongValue());
+
+                pjvm->pushProp(ftpHost);
+                pjvm->pushProp(ftpPort);
+            }
+        }
+
+        // read http proxy name
+        Reference<XRegistryKey> httpProxy_name = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/HTTP/Name")));
+        if(httpProxy_name.is() && httpProxy_name->getStringValue().getLength()) {
+            OUString httpHost = OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyHost="));
+            httpHost += httpProxy_name->getStringValue();
+
+            // read http proxy port
+            Reference<XRegistryKey> httpProxy_port = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Proxy/HTTP/Port")));
+            if(httpProxy_port.is() && httpProxy_port->getLongValue()) {
+                OUString httpPort = OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyPort="));
+                httpPort += OUString::valueOf(httpProxy_port->getLongValue());
+
+                pjvm->pushProp(httpHost);
+                pjvm->pushProp(httpPort);
+            }
+        }
+
+        xConfRegistry_simple->close();
     }
 
-    static void readINetSection(const Reference<XSimpleRegistry> & xOfficeReg, JVM * pjvm) throw (RuntimeException) {
-        Reference<XRegistryKey> xRegistryRootKey = xOfficeReg->getRootKey();
-        if(!xRegistryRootKey.is())
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: readINetSection")), Reference<XInterface>());
+    static void getJavaPropsFromConfig(JVM * pjvm, const Reference<XMultiServiceFactory> & xSMgr) throw(Exception) {
+        Reference<XInterface> xConfRegistry = xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationRegistry")));
+        if(!xConfRegistry.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), Reference<XInterface>());
 
-        // HTTPProxyHost, HTTPProxyPort, FTPProxyHost, FTPProxyPort
-        // Reading proxy and port values in the INet section
+        Reference<XSimpleRegistry> xConfRegistry_simple(xConfRegistry, UNO_QUERY);
+        if(!xConfRegistry_simple.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), Reference<XInterface>());
 
-        OUString prop;
-        OUString right;
+        xConfRegistry_simple->open(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.UserProfile")), sal_True, sal_False);
+        Reference<XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
-        // HTTPProxy
-          right = getValue(xRegistryRootKey, OUString(RTL_CONSTASCII_USTRINGPARAM("INet/HTTPProxyName")));
-        if (right.getLength()) {
-            prop = OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyHost="));
-            prop += right;
-            pjvm->pushProp(prop);
-        }
+        Reference<XRegistryKey> key_InstallPath = xRegistryRootKey->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Office/InstallPath")));
+        if(!key_InstallPath.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: can not find key: Office/InstallPath in org.openoffice.UserProfile")),
+                                                         Reference<XInterface>());
 
-        // HTTPProxyPort
-        right = getValue(xRegistryRootKey, OUString(RTL_CONSTASCII_USTRINGPARAM("INet/HTTPProxyPort")));
-        if (right.getLength()) {
-            prop = OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyPort="));
-            prop += right;
-            pjvm->pushProp(prop);
-        }
+        OUString rcPath = key_InstallPath->getStringValue();
 
-        // FTPPProxy
-        right = getValue(xRegistryRootKey, OUString(RTL_CONSTASCII_USTRINGPARAM("INet/FTPProxyName")));
-        if (right.getLength()) {
-            prop = OUString(RTL_CONSTASCII_USTRINGPARAM("ftpProxyHost="));
-            prop += right;
-            pjvm->pushProp(prop);
-        }
+        // normalize the path
+        OUString norm_rcPath;
+        File::normalizePath(rcPath, norm_rcPath);
+        norm_rcPath += OUString(RTL_CONSTASCII_USTRINGPARAM("/config/" INI_FILE));
 
-        // FTPProxyPort
-        right = getValue(xRegistryRootKey, OUString(RTL_CONSTASCII_USTRINGPARAM("INet/FTPProxyPort")));
-        if (right.getLength()) {
-            prop = OUString(RTL_CONSTASCII_USTRINGPARAM("FTPProxyPort="));
-            prop += right;
-            pjvm->pushProp(prop);
-        }
-    }
-/*
-    static void getXfromConfiguration(JVM * pjvm, const Reference<XMultiServiceFactory> & xSMgr) throw(Exception) {
-        OSL_TRACE("trying configuration...");
+        Reference<XInterface> xIniManager(xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.config.INIManager"))));
+        if(!xIniManager.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get: com.sun.star.config.INIManager")), Reference<XInterface>());
 
-        Reference<XInterface>       xInterfaceRef_1(xSMgr->createInstance(OUString::createFromAscii("com.sun.star.config.SpecialConfigManager")));
-        Reference<XSimpleRegistry>  xSofficeReg(xInterfaceRef_1, UNO_QUERY);
+        Reference<XSimpleRegistry> xIniManager_simple(xIniManager, UNO_QUERY);
+        if(!xIniManager_simple.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get: com.sun.star.config.INIManager")), Reference<XInterface>());
 
-        if (!xSofficeReg.is() || !xSofficeReg->isValid())
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: 1")), Reference<XInterface>());
+        OUString tmpJavarc;
+        File::getFileURLFromNormalizedPath(norm_rcPath, tmpJavarc);
+        xIniManager_simple->open(tmpJavarc, sal_True, sal_False);
 
-        // read proxy data
-        readINetSection(xSofficeReg, pjvm);
-
-        Reference<XConfigManager> xConfigManager(xInterfaceRef_1, UNO_QUERY);
-
-        OUString iniFileName;
-        sal_Bool    bIniFound = sal_False;
-
-        Reference<XRegistryKey> xRegistryRootKey = xSofficeReg->getRootKey();
-
-        if (!xRegistryRootKey.is() || !xRegistryRootKey->isValid())
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: 2")), Reference<XInterface>());
-
-        ::osl::DirectoryItem aJavaIni;
-
-        try {
-            OUString    tmpFileName;
-            OUString    fileName;
-            tmpFileName = getValue( xRegistryRootKey, OUString::createFromAscii("Directories/UserConfig-Path") );
-            tmpFileName = xConfigManager->substituteVariables( tmpFileName );
-
-            File::normalizePath( tmpFileName, fileName );
-            fileName += OUString::createFromAscii("/" INI_FILE);
-            bIniFound = DirectoryItem::get( fileName, aJavaIni ) == FileBase::E_None;
-        }
-        catch(Exception e) {
-            bIniFound = sal_False;
-        }
-
-        if(!bIniFound) {
-            OUString    tmpFileName;
-            OUString    fileName;
-            tmpFileName = getValue( xRegistryRootKey, OUString::createFromAscii("Directories/Config-Dir") );
-            tmpFileName = xConfigManager->substituteVariables( tmpFileName );
-
-            File::normalizePath( tmpFileName, fileName );
-            fileName += OUString::createFromAscii("/" INI_FILE);
-            bIniFound = DirectoryItem::get( fileName, aJavaIni ) == FileBase::E_None;
-        }
-
-        if (bIniFound) {
-            FileStatus fileStatus(FileStatusMask_FilePath /*FileStatusMask_NativePath/);
-
-            if (FileBase::E_None == aJavaIni.getFileStatus(fileStatus ))
-                iniFileName = fileStatus.getFilePath();
-            //iniFileName = fileStatus.getNativePath();
-            else
-                bIniFound = sal_False;
-        }
-
-        if (!bIniFound) // search the java.ini beneath the executable
-            iniFileName = OUString::createFromAscii(INI_FILE);
-
-        if(!bIniFound)
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't find " INI_FILE)), Reference<XInterface>());
-
-        Reference<XInterface> xInterfaceRef_2(xSMgr->createInstance(OUString::createFromAscii("com.sun.star.config.ConfigManager")));
-        Reference<XSimpleRegistry> xJavaReg(xInterfaceRef_2, UNO_QUERY);
-
-        OUString tmpJavaIni;
-        File::getFileURLFromNormalizedPath(iniFileName, tmpJavaIni);
-        xJavaReg->open(tmpJavaIni, sal_True, sal_False);
-
-        if (!xJavaReg.is() || !xJavaReg->isValid())
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: 4")), Reference<XInterface>());
-
-        Reference<XRegistryKey> xJavaSection = xJavaReg->getRootKey()->openKey(OUString::createFromAscii("Java"));
+        Reference<XRegistryKey> xJavaSection = xIniManager_simple->getRootKey()->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Java")));
         if(!xJavaSection.is() || !xJavaSection->isValid())
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: 5")), Reference<XInterface>());
+            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: can not find java section in " INI_FILE)), Reference<XInterface>());
 
         Sequence<OUString> javaProperties = xJavaSection->getKeyNames();
         OUString * pSectionEntry = javaProperties.getArray();
@@ -509,96 +457,17 @@ namespace stoc_javavm {
             OUString entryValue = (xJavaSection->openKey(pSectionEntry[i]))->getStringValue();
 
             if(entryValue.len()) {
-                pSectionEntry[i] += OUString::createFromAscii("=");
+                pSectionEntry[i] += OUString(RTL_CONSTASCII_USTRINGPARAM("="));
                 pSectionEntry[i] += entryValue;
             }
 
             pjvm->pushProp(pSectionEntry[i]);
         }
 
-          xJavaReg->close();
-
-        // don't close soffice
-        //  xSofficeReg->close();
+          xIniManager_simple->close();
     }
-*/
 
-//  #include <windows.h>
-
-//      /*
-//       * Returns string data for the specified registry value name, or
-//       * NULL if not found.
-//       */
-//      static OUString getStringValue(HKEY key, const OUString & keyName)
-//      {
-//          DWORD type, size;
-//          OUString value;
-
-//          OString osKeyName = OUStringToOString(keyName, RTL_TEXTENCODING_ASCII_US);
-//          if (RegQueryValueEx(key, osKeyName.getStr(), 0, &type, 0, &size) == 0 && type == REG_SZ) {
-//              unsigned char * pValue;
-
-//              pValue = (unsigned char *)malloc(size);
-
-//              if (RegQueryValueEx(key, (const char *)osKeyName.getStr(), 0, 0, pValue, &size) == 0)
-//                  value = OUString::createFromAscii((char *)pValue);
-
-//              free(pValue);
-//          }
-//          return value;
-//      }
-
-//  #define JRE_KEY     "Software\\JavaSoft\\Java Runtime Environment"
-//  #define JDK_KEY     "Software\\JavaSoft\\Java Development Kit"
-//  #define MS_VM_KEY   "Software\\Mircosoft\\Java VM"
-
-//      static void getXfromRegistry(JVM * jvm) throw(RuntimeException) {
-//          OSL_TRACE("trying registry...");
-
-//          OUString version;
-//          OUString home;
-//          OUString runtimeLib;
-//          OUString systemClasspath;
-
-//          HKEY hKey;
-
-//          if (!RegOpenKeyEx(HKEY_LOCAL_MACHINE, JRE_KEY, 0, KEY_READ, &hKey)) {
-//              version = getStringValue(hKey, OUString(RTL_CONSTASCII_USTRINGPARAM("CurrentVersion")));
-
-//              OUString keyName(RTL_CONSTASCII_USTRINGPARAM(JRE_KEY));
-//              keyName += OUString(RTL_CONSTASCII_USTRINGPARAM("\\"));
-//              keyName += version;
-
-//              OString osKeyName = OUStringToOString(keyName, RTL_TEXTENCODING_ASCII_US);
-//              HKEY curr_key;
-//              if(!RegOpenKeyEx(HKEY_LOCAL_MACHINE, osKeyName.getStr(), 0, KEY_READ, &curr_key)) {
-
-//                  home = getStringValue(curr_key, OUString(RTL_CONSTASCII_USTRINGPARAM("JavaHome")));
-//                  runtimeLib = getStringValue(curr_key, OUString(RTL_CONSTASCII_USTRINGPARAM("RuntimeLib")));
-//                  RegCloseKey(curr_key);
-//              }
-
-//              RegCloseKey(hKey);
-//          }
-
-//          if(version.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("1.2")))
-//          || version.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("1.3"))))
-//          {
-//              systemClasspath += home;
-//              systemClasspath += OUString(RTL_CONSTASCII_USTRINGPARAM("\\rt.jar;"));
-
-//              systemClasspath += home;
-//              systemClasspath += OUString(RTL_CONSTASCII_USTRINGPARAM("\\i18n.jar;"));
-//          }
-
-//          jvm->setSystemClasspath(systemClasspath);
-//          jvm->setEnabled(1);
-//          jvm->setRuntimeLib(runtimeLib);
-//      }
-
-    static void getXfromEnvironment(JVM * pjvm) throw() {
-        OSL_TRACE("trying environment...");
-
+    static void getJavaPropsFromEnvironment(JVM * pjvm) throw() {
         // try some defaults for CLASSPATH and runtime lib
         const char * pClassPath = getenv("CLASSPATH");
         pjvm->setSystemClasspath(OUString::createFromAscii(pClassPath));
@@ -630,8 +499,35 @@ namespace stoc_javavm {
         try {
             JVM jvm;
 
-//          getXfromConfiguration(&jvm, xSMgr);
-            throw Exception(OUString::createFromAscii("under construction"), Reference<XInterface>());
+            getINetPropsFromConfig(&jvm, xSMgr);
+
+            *pjvm = jvm;
+        }
+        catch(Exception & exception) {
+#ifdef DEBUG
+            OString message = OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
+            OSL_TRACE("javavm.cxx: can not get INetProps cause of >%s<", message.getStr());
+#endif
+        }
+
+        try {
+            JVM jvm;
+
+            getDefaultLocaleFromConfig(&jvm, xSMgr);
+        }
+        catch(Exception & exception) {
+#ifdef DEBUG
+            OString message = OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
+            OSL_TRACE("javavm.cxx: can not get locale cause of >%s<", message.getStr());
+#endif
+        }
+
+        try {
+
+            JVM jvm;
+
+            getJavaPropsFromConfig(&jvm, xSMgr);
+
             *pjvm = jvm;
         }
         catch(Exception & exception) {
@@ -639,18 +535,10 @@ namespace stoc_javavm {
             OString message = OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
             OSL_TRACE("javavm.cxx: couldn't use configuration cause of >%s<", message.getStr());
 #endif
-//              try {
-//                  JVM jvm;
-//                  getXfromRegistry(&jvm);
+            JVM jvm;
 
-//                  *pjvm = jvm;
-//              }
-//              catch(RuntimeException & runtimeException) {
-                JVM jvm;
-
-                getXfromEnvironment(&jvm);
-                *pjvm = jvm;
-//              }
+            getJavaPropsFromEnvironment(&jvm);
+            *pjvm = jvm;
         }
         setTimeZone(pjvm);
 
@@ -675,17 +563,20 @@ namespace stoc_javavm {
 
 
     JavaVM * JavaVirtualMachine_Impl::createJavaVM(const JVM & jvm) throw(RuntimeException) {
-        if(!_javaLib.load(jvm.getRuntimeLib()))
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: cannot find java runtime")), Reference<XInterface>());
+        if(!_javaLib.load(jvm.getRuntimeLib())) {
+            OUString message(RTL_CONSTASCII_USTRINGPARAM("JavaVirtualMachine_Impl::createJavaVM - cannot find java runtime: "));
+            message += jvm.getRuntimeLib();
+
+            throw RuntimeException(message, Reference<XInterface>());
+        }
 
         JNI_InitArgs_Type * initArgs = (JNI_InitArgs_Type *)_javaLib.getSymbol(OUString::createFromAscii("JNI_GetDefaultJavaVMInitArgs"));
-        if(!initArgs)
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: 8")), Reference<XInterface>());
-
         JNI_CreateVM_Type * pCreateJavaVM = (JNI_CreateVM_Type *)_javaLib.getSymbol(OUString::createFromAscii("JNI_CreateJavaVM"));
-        if (!pCreateJavaVM)
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: 9")), Reference<XInterface>());
+        if (!initArgs || !pCreateJavaVM) {
+            OUString message(RTL_CONSTASCII_USTRINGPARAM("JavaVirtualMachine_Impl::createJavaVM - cannot find symbols: JNI_GetDefaultJavaVMInitArgs or JNI_CreateJavaVM "));
 
+            throw RuntimeException(message, Reference<XInterface>());
+        }
 
         JDK1_1InitArgs vm_args;
         initArgs(&vm_args);
@@ -696,9 +587,12 @@ namespace stoc_javavm {
         JavaVM * pJavaVM;
         jint err = pCreateJavaVM(&pJavaVM, &pJNIEnv, &vm_args);
 
-        OSL_TRACE("javavm.cxx: JavaVirtualMachine_Impl::createJavaVM: %d", err);
-        if(err)
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: 10")), Reference<XInterface>());
+        if(err) {
+            OUString message(RTL_CONSTASCII_USTRINGPARAM("JavaVirtualMachine_Impl::createJavaVM - can not create vm, cause of err:"));
+            message += OUString::valueOf((sal_Int32)err);
+
+            throw RuntimeException(message, Reference<XInterface>());
+        }
 
         return pJavaVM;
     }
@@ -760,8 +654,6 @@ namespace stoc_javavm {
             }
         }
 
-        OSL_TRACE("javavm.cxx: JavaVirtualMachine_Impl::getJavaVM: %x", any.getValue());
-
         return any;
     }
 
@@ -782,7 +674,7 @@ namespace stoc_javavm {
     // XJavaThreadRegister_11
     sal_Bool JavaVirtualMachine_Impl::isThreadAttached(void) throw (RuntimeException) {
         if(!_pVMContext)
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: 11")), Reference<XInterface>());
+            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JavaVirtualMachine_Impl::isThreadAttached - not vm context")), Reference<XInterface>());
 
         return _pVMContext->isThreadAttached();
     }
@@ -790,7 +682,7 @@ namespace stoc_javavm {
     // XJavaThreadRegister_11
     void JavaVirtualMachine_Impl::registerThread(void) throw (RuntimeException) {
         if(!_pVMContext)
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: 12")), Reference<XInterface>());
+            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JavaVirtualMachine_Impl::registerThread - not vm context")), Reference<XInterface>());
 
         _pVMContext->registerThread();
     }
@@ -798,7 +690,7 @@ namespace stoc_javavm {
     // XJavaThreadRegister_11
     void JavaVirtualMachine_Impl::revokeThread(void) throw (RuntimeException) {
         if(!_pVMContext)
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: 13")), Reference<XInterface>());
+            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JavaVirtualMachine_Impl::revokeThread - not vm context")), Reference<XInterface>());
 
         _pVMContext->revokeThread();
     }
