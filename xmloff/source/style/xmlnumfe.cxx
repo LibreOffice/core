@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 10:50:59 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,111 +894,6 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
 
 //-------------------------------------------------------------------------
 
-//  test if all date elements match the system settings
-
-sal_Bool lcl_MatchesSystemDate( const SvNumberformat& rFormat, sal_uInt16 nPart, sal_Bool bLongSysDate )
-{
-    sal_Bool bMatch = sal_True;
-    International aIntl( rFormat.GetLanguage() );
-
-    //  loop through elements (only look for date elements that depend on style attribute)
-
-    sal_uInt16 nPos = 0;
-    sal_Bool bEnd = sal_False;
-    while ( bMatch && !bEnd )
-    {
-        short nElemType = rFormat.GetNumForType( nPart, nPos, sal_False );
-        switch ( nElemType )
-        {
-            case 0:
-                bEnd = sal_True;                // end of format reached
-                break;
-
-            case NF_KEY_D:                      // short day
-                if ( SvXMLNumFmtDefaults::IsSystemLongDay( aIntl, bLongSysDate ) )
-                    bMatch = sal_False;
-                break;
-
-            case NF_KEY_DD:                     // long day
-                if ( !SvXMLNumFmtDefaults::IsSystemLongDay( aIntl, bLongSysDate ) )
-                    bMatch = sal_False;
-                break;
-
-            case NF_KEY_DDD:                    // short day of week
-            case NF_KEY_NN:
-            case NF_KEY_AAA:
-                if ( SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( aIntl, bLongSysDate ) )
-                    bMatch = sal_False;
-                break;
-
-            case NF_KEY_DDDD:                   // long day of week
-            case NF_KEY_NNN:
-            case NF_KEY_NNNN:
-            case NF_KEY_AAAA:
-                if ( !SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( aIntl, bLongSysDate ) )
-                    bMatch = sal_False;
-                break;
-
-            case NF_KEY_M:                      // short numerical month
-                if ( SvXMLNumFmtDefaults::IsSystemLongMonth( aIntl, bLongSysDate ) ||
-                     SvXMLNumFmtDefaults::IsSystemTextualMonth( aIntl, bLongSysDate ) )
-                    bMatch = sal_False;
-                break;
-
-            case NF_KEY_MM:                     // long numerical month
-                if ( !SvXMLNumFmtDefaults::IsSystemLongMonth( aIntl, bLongSysDate ) ||
-                     SvXMLNumFmtDefaults::IsSystemTextualMonth( aIntl, bLongSysDate ) )
-                    bMatch = sal_False;
-                break;
-
-            case NF_KEY_MMM:                    // short textual month
-            case NF_KEY_MMMMM:                  //! (first letter)
-                if ( SvXMLNumFmtDefaults::IsSystemLongMonth( aIntl, bLongSysDate ) ||
-                     !SvXMLNumFmtDefaults::IsSystemTextualMonth( aIntl, bLongSysDate ) )
-                    bMatch = sal_False;
-                break;
-
-            case NF_KEY_MMMM:                   // long textual month
-                if ( !SvXMLNumFmtDefaults::IsSystemLongMonth( aIntl, bLongSysDate ) ||
-                     !SvXMLNumFmtDefaults::IsSystemTextualMonth( aIntl, bLongSysDate ) )
-                    bMatch = sal_False;
-                break;
-
-            case NF_KEY_YY:                     // short year
-            case NF_KEY_EEC:
-                if ( SvXMLNumFmtDefaults::IsSystemLongYear( aIntl, bLongSysDate ) )
-                    bMatch = sal_False;
-                break;
-
-            case NF_KEY_YYYY:                   // long year
-            case NF_KEY_EC:
-            case NF_KEY_R:
-                if ( !SvXMLNumFmtDefaults::IsSystemLongYear( aIntl, bLongSysDate ) )
-                    bMatch = sal_False;
-                break;
-
-            case NF_KEY_G:                      // short era
-            case NF_KEY_GG:
-                if ( SvXMLNumFmtDefaults::IsSystemLongEra( aIntl, bLongSysDate ) )
-                    bMatch = sal_False;
-                break;
-
-            case NF_KEY_GGG:                    // long era
-            case NF_KEY_RR:
-                if ( !SvXMLNumFmtDefaults::IsSystemLongEra( aIntl, bLongSysDate ) )
-                    bMatch = sal_False;
-                break;
-
-            // quarter isn't changed by format-source
-        }
-        ++nPos;
-    }
-
-    return bMatch;
-}
-
-//-------------------------------------------------------------------------
-
 OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageType nLang )
 {
     //  get name of first non-gregorian calendar for the language
@@ -1036,6 +931,74 @@ sal_Bool lcl_IsInEmbedded( const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries, sa
             return sal_True;
 
     return sal_False;       // not found
+}
+
+BOOL lcl_IsDefaultDateFormat( const SvNumberformat& rFormat, sal_Bool bSystemDate, NfIndexTableOffset eBuiltIn )
+{
+    //  make an extra loop to collect date elements, to check if it is a default format
+    //  before adding the automatic-order attribute
+
+    SvXMLDateElementAttributes eDateDOW = XML_DEA_NONE;
+    SvXMLDateElementAttributes eDateDay = XML_DEA_NONE;
+    SvXMLDateElementAttributes eDateMonth = XML_DEA_NONE;
+    SvXMLDateElementAttributes eDateYear = XML_DEA_NONE;
+    SvXMLDateElementAttributes eDateHours = XML_DEA_NONE;
+    SvXMLDateElementAttributes eDateMins = XML_DEA_NONE;
+    SvXMLDateElementAttributes eDateSecs = XML_DEA_NONE;
+    sal_Bool bDateNoDefault = sal_False;
+
+    sal_uInt16 nPos = 0;
+    sal_Bool bEnd = sal_False;
+    short nLastType = 0;
+    while (!bEnd)
+    {
+        short nElemType = rFormat.GetNumForType( 0, nPos, sal_False );
+        switch ( nElemType )
+        {
+            case 0:
+                if ( nLastType == XMLNUM_SYMBOLTYPE_STRING )
+                    bDateNoDefault = sal_True;  // text at the end -> no default date format
+                bEnd = sal_True;                // end of format reached
+                break;
+            case XMLNUM_SYMBOLTYPE_STRING:
+                // text is ignored, except at the end
+                break;
+            // same mapping as in SvXMLNumFormatContext::AddNfKeyword:
+            case NF_KEY_NN:     eDateDOW = XML_DEA_SHORT;       break;
+            case NF_KEY_NNN:
+            case NF_KEY_NNNN:   eDateDOW = XML_DEA_LONG;        break;
+            case NF_KEY_D:      eDateDay = XML_DEA_SHORT;       break;
+            case NF_KEY_DD:     eDateDay = XML_DEA_LONG;        break;
+            case NF_KEY_M:      eDateMonth = XML_DEA_SHORT;     break;
+            case NF_KEY_MM:     eDateMonth = XML_DEA_LONG;      break;
+            case NF_KEY_MMM:    eDateMonth = XML_DEA_TEXTSHORT; break;
+            case NF_KEY_MMMM:   eDateMonth = XML_DEA_TEXTLONG;  break;
+            case NF_KEY_YY:     eDateYear = XML_DEA_SHORT;      break;
+            case NF_KEY_YYYY:   eDateYear = XML_DEA_LONG;       break;
+            case NF_KEY_H:      eDateHours = XML_DEA_SHORT;     break;
+            case NF_KEY_HH:     eDateHours = XML_DEA_LONG;      break;
+            case NF_KEY_MI:     eDateMins = XML_DEA_SHORT;      break;
+            case NF_KEY_MMI:    eDateMins = XML_DEA_LONG;       break;
+            case NF_KEY_S:      eDateSecs = XML_DEA_SHORT;      break;
+            case NF_KEY_SS:     eDateSecs = XML_DEA_LONG;       break;
+            case NF_KEY_AP:
+            case NF_KEY_AMPM:   break;          // AM/PM may or may not be in date/time formats -> ignore by itself
+            default:
+                bDateNoDefault = sal_True;      // any other element -> no default format
+        }
+        nLastType = nElemType;
+        ++nPos;
+    }
+
+    if ( bDateNoDefault )
+        return FALSE;                       // additional elements
+    else
+    {
+        NfIndexTableOffset eFound = (NfIndexTableOffset) SvXMLNumFmtDefaults::GetDefaultDateFormat(
+                eDateDOW, eDateDay, eDateMonth, eDateYear, eDateHours, eDateMins, eDateSecs, bSystemDate );
+
+        return ( eFound == eBuiltIn );
+    }
 }
 
 //
@@ -1148,7 +1111,23 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         eBuiltIn == NF_DATE_SYS_DDMMYYYY    || eBuiltIn == NF_DATE_SYS_DDMMYY ||
                         eBuiltIn == NF_DATE_SYS_DMMMYY      || eBuiltIn == NF_DATE_SYS_DMMMYYYY ||
                         eBuiltIn == NF_DATE_SYS_DMMMMYYYY   || eBuiltIn == NF_DATE_SYS_NNDMMMYY ||
-                        eBuiltIn == NF_DATE_SYS_NNDMMMMYYYY || eBuiltIn == NF_DATE_SYS_NNNNDMMMMYYYY );
+                        eBuiltIn == NF_DATE_SYS_NNDMMMMYYYY || eBuiltIn == NF_DATE_SYS_NNNNDMMMMYYYY ||
+                        eBuiltIn == NF_DATETIME_SYSTEM_SHORT_HHMM || eBuiltIn == NF_DATETIME_SYS_DDMMYYYY_HHMMSS );
+
+    //  format source (for date and time formats)
+    //  only used for some built-in formats
+    BOOL bSystemDate = ( eBuiltIn == NF_DATE_SYSTEM_SHORT ||
+                         eBuiltIn == NF_DATE_SYSTEM_LONG  ||
+                         eBuiltIn == NF_DATETIME_SYSTEM_SHORT_HHMM );
+    BOOL bLongSysDate = ( eBuiltIn == NF_DATE_SYSTEM_LONG );
+
+    // check if the format definition matches the key
+    if ( bAutoOrder && ( nFmtType == NUMBERFORMAT_DATE || nFmtType == NUMBERFORMAT_DATETIME ) &&
+            !lcl_IsDefaultDateFormat( rFormat, bSystemDate, eBuiltIn ) )
+    {
+        bAutoOrder = bSystemDate = bLongSysDate = FALSE;        // don't write automatic-order attribute then
+    }
+
     if ( bAutoOrder &&
         ( nFmtType == NUMBERFORMAT_CURRENCY || nFmtType == NUMBERFORMAT_DATE || nFmtType == NUMBERFORMAT_DATETIME ) )
     {
@@ -1159,16 +1138,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                               XML_TRUE );
     }
 
-    //  format source (for date and time formats)
-    //  only used for some built-in formats
-    BOOL bSystemDate = ( eBuiltIn == NF_DATE_SYSTEM_SHORT ||
-                         eBuiltIn == NF_DATE_SYSTEM_LONG  ||
-                         eBuiltIn == NF_DATETIME_SYSTEM_SHORT_HHMM ) && rFormat.GetComment().Len();
-    BOOL bLongSysDate = ( eBuiltIn == NF_DATE_SYSTEM_LONG ) && rFormat.GetComment().Len();
-    //  test if all date elements match the system settings
-    if ( bSystemDate && !lcl_MatchesSystemDate( rFormat, nPart, bLongSysDate ) )
-        bSystemDate = sal_False;
-    if ( bSystemDate &&
+    if ( bSystemDate && bAutoOrder &&
         ( nFmtType == NUMBERFORMAT_DATE || nFmtType == NUMBERFORMAT_DATETIME ) )
     {
         //  #85109# format type must be checked to avoid dtd errors if
