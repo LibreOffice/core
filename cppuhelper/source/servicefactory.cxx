@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-19 15:01:51 $
+ *  last change: $Author: dbo $ $Date: 2001-02-15 11:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,26 +94,17 @@ namespace cppu
 {
 
 //==================================================================================================
-static Reference< XSingleServiceFactory > loadLibComponentFactory(
+static inline Reference< XSingleServiceFactory > loadLibComponentFactory(
     const OUString & rLibName, const OUString & rImplName,
     const OUString & rBootstrapPath,
     const Reference< XMultiServiceFactory > & xSF, const Reference< XRegistryKey > & xKey )
-    throw ()
 {
-    try
-    {
-        return loadSharedLibComponentFactory(
-            rLibName, rBootstrapPath, rImplName, xSF, xKey );
-    }
-    catch (CannotActivateFactoryException &)
-    {
-        return Reference< XSingleServiceFactory >();
-    }
+    return loadSharedLibComponentFactory( rLibName, rBootstrapPath, rImplName, xSF, xKey );
 }
+
 //==================================================================================================
 static Reference< ::com::sun::star::lang::XSingleServiceFactory> SAL_CALL createLoaderFactory(
     const Reference< XMultiServiceFactory > & xSF, const OUString & rBootstrapPath )
-    throw ()
 {
       return loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("cpld") ),
@@ -123,7 +114,6 @@ static Reference< ::com::sun::star::lang::XSingleServiceFactory> SAL_CALL create
 //==================================================================================================
 static Reference< XSingleServiceFactory > SAL_CALL createSimpleRegistryFactory(
     const Reference< XMultiServiceFactory > & xSF, const OUString & rBootstrapPath )
-    throw ()
 {
     return loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("simreg") ),
@@ -133,7 +123,6 @@ static Reference< XSingleServiceFactory > SAL_CALL createSimpleRegistryFactory(
 //==================================================================================================
 static Reference< XSingleServiceFactory> SAL_CALL createDefaultRegistryFactory(
     const Reference< XMultiServiceFactory > & xSF, const OUString & rBootstrapPath )
-    throw ()
 {
     return loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("defreg") ),
@@ -143,7 +132,6 @@ static Reference< XSingleServiceFactory> SAL_CALL createDefaultRegistryFactory(
 //==================================================================================================
 static Reference< XSingleServiceFactory> SAL_CALL createNestedRegistryFactory(
     const Reference< XMultiServiceFactory > & xSF, const OUString & rBootstrapPath )
-    throw ()
 {
     return loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("defreg") ),
@@ -153,7 +141,6 @@ static Reference< XSingleServiceFactory> SAL_CALL createNestedRegistryFactory(
 //==================================================================================================
 static Reference< XSingleServiceFactory> SAL_CALL createImplRegFactory(
     const Reference< XMultiServiceFactory > & xSF, const OUString & rBootstrapPath )
-    throw ()
 {
     return loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("impreg") ),
@@ -163,7 +150,6 @@ static Reference< XSingleServiceFactory> SAL_CALL createImplRegFactory(
 //==================================================================================================
 static Reference< XSingleServiceFactory> SAL_CALL createRegTDProviderFactory(
     const Reference< XMultiServiceFactory > & xSF, const OUString & rBootstrapPath )
-    throw ()
 {
     return loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("rdbtdp") ),
@@ -173,7 +159,6 @@ static Reference< XSingleServiceFactory> SAL_CALL createRegTDProviderFactory(
 //==================================================================================================
 static Reference< XSingleServiceFactory> SAL_CALL createTDManagerFactory(
     const Reference< XMultiServiceFactory > & xSF, const OUString & rBootstrapPath )
-    throw ()
 {
     return loadLibComponentFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("tdmgr") ),
@@ -181,10 +166,11 @@ static Reference< XSingleServiceFactory> SAL_CALL createTDManagerFactory(
         rBootstrapPath, xSF, Reference< XRegistryKey >() );
 }
 //==================================================================================================
-static Reference< XMultiServiceFactory > createImplServiceFactory( const OUString & rWriteRegistry,
-                                                                   const OUString & rReadRegistry,
-                                                                   sal_Bool bReadOnly,
-                                                                   const OUString & rBootstrapPath )
+static Reference< XMultiServiceFactory > createImplServiceFactory(
+    const OUString & rWriteRegistry,
+    const OUString & rReadRegistry,
+    sal_Bool bReadOnly,
+    const OUString & rBootstrapPath )
     throw( ::com::sun::star::uno::Exception )
 {
     Reference< XSingleServiceFactory > xSMFac( loadLibComponentFactory(
@@ -379,10 +365,11 @@ static Reference< XMultiServiceFactory > createImplServiceFactory( const OUStrin
 }
 
 //==================================================================================================
-Reference< XMultiServiceFactory > SAL_CALL createRegistryServiceFactory( const OUString & rWriteRegistry,
-                                                                         const OUString & rReadRegistry,
-                                                                         sal_Bool bReadOnly,
-                                                                         const OUString & rBootstrapPath )
+Reference< XMultiServiceFactory > SAL_CALL createRegistryServiceFactory(
+    const OUString & rWriteRegistry,
+    const OUString & rReadRegistry,
+    sal_Bool bReadOnly,
+    const OUString & rBootstrapPath )
     throw( ::com::sun::star::uno::Exception )
 {
     return createImplServiceFactory( rWriteRegistry, rReadRegistry, bReadOnly, rBootstrapPath );
