@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: kz $ $Date: 2003-09-11 10:30:49 $
+#   last change: $Author: obo $ $Date: 2003-10-20 13:20:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,47 +140,36 @@ UNOIDLDBFILES= \
     $(UCR)$/cssframe.db \
 
 
-REFERENCE_SO_60_RDB=$(SOLARROOT)$/odk_reference$/SO-6.0$/applicat.rdb
-REFERENCE_SO_60_DOC_RDB=$(SOLARROOT)$/odk_reference$/SO-6.0$/applicat_doc.rdb
+REFERENCE_RDB=$(PRJ)$/type_reference$/OO_11$/types.rdb
+REFERENCE_DOC_RDB=$(PRJ)$/type_reference$/OO_11$/types_doc.rdb
 
 REGISTRYCHECKFLAG=$(MISC)$/registrycheck.flag
 
 # --- Targets ------------------------------------------------------
 
-ALLTAR : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
+ALLTAR : $(UCR)$/types.db \
+       $(OUT)$/ucrdoc$/types_doc.db \
+       $(REGISTRYCHECKFLAG)
 
 $(UCR)$/types.db : $(UCR)$/offapi.db $(SOLARBINDIR)$/udkapi.rdb
     +-$(RM) $(REGISTRYCHECKFLAG)
     +$(GNUCOPY) -f $(UCR)$/offapi.db $@
     +$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi.rdb
+
 $(OUT)$/ucrdoc$/types_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udkapi_doc.rdb
     +-$(RM) $(REGISTRYCHECKFLAG)
     +$(GNUCOPY) -f $(OUT)$/ucrdoc$/offapi_doc.db $@
     +$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi_doc.rdb
 
-.INCLUDE :  target.mk
-
-.IF "$(BUILD_SOSL)"==""
-
-ALLTAR: $(REGISTRYCHECKFLAG)
-
-# special work necessary for i18n reservedWords
-# ATTENTION: no special handling for other types is allowed.
-# JSC -> temporary special handling for sheet/SheetSortDescriptor and text/BaseIndex
-# only for build reasons, otherwise the build will break, the changes are not really incompatible
-# JB: configuration: services were documented, but not tagged, as optional
-# TBE, JSC: awt: lost changes from first IDL review are currently not checked until reference rdb is updated
+#JSC: The type library has changed, all temporary not checked types are removed
+#     and will be check from now on.
+# ATTENTION: no special handling for types is allowed.
 $(REGISTRYCHECKFLAG) : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
-    +$(REGCOMPARE) -f -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UCR)$/types.db -x /UCR/com/sun/star/i18n/reservedWords
-    +$(REGCOMPARE) -f -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(OUT)$/ucrdoc$/types_doc.db -x /UCR/com/sun/star/i18n/reservedWords \
-        -x /UCR/com/sun/star/sheet/SheetSortDescriptor -x /UCR/com/sun/star/text/BaseIndex \
-        -x /UCR/com/sun/star/configuration/ConfigurationAccess -x /UCR/com/sun/star/configuration/ConfigurationUpdateAccess \
-        -x /UCR/com/sun/star/awt/UnoControl -x /UCR/com/sun/star/awt/UnoControlCheckBox \
-        -x /UCR/com/sun/star/awt/UnoControlCurrencyFieldModel -x /UCR/com/sun/star/awt/UnoControlDialog \
-        -x /UCR/com/sun/star/awt/UnoControlDialogModel -x /UCR/com/sun/star/awt/UnoControlEdit \
-        -x /UCR/com/sun/star/awt/UnoControlFormattedFieldModel -x /UCR/com/sun/star/awt/UnoControlListBox \
-        -x /UCR/com/sun/star/awt/UnoControlNumericFieldModel -x /UCR/com/sun/star/awt/UnoControlPatternFieldModel \
-        -x /UCR/com/sun/star/configuration/SimpleSetUpdate \
+    +$(REGCOMPARE) -f -t -r1 $(REFERENCE_RDB) -r2 $(UCR)$/types.db
+    +$(REGCOMPARE) -f -t -r1 $(REFERENCE_DOC_RDB) -r2 $(OUT)$/ucrdoc$/types_doc.db \
         && echo > $(REGISTRYCHECKFLAG)
 
-.ENDIF
+.INCLUDE :  target.mk
+
+
+
