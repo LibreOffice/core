@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-12 22:06:23 $
+ *  last change: $Author: kz $ $Date: 2001-10-18 07:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1812,11 +1812,11 @@ ModelessDialog RID_PROGRESS_DLG
         Text [ English ] = "Processed";
         Text[ english_us ] = "Processed";
         Text[ portuguese ] = "Processed";
-        Text[ russian ] = "Processed";
+        Text[ russian ] = "Отредактирован";
         Text[ greek ] = "Processed";
         Text[ dutch ] = "Processed";
-        Text[ french ] = "Processed";
-        Text[ spanish ] = "Processed";
+        Text[ french ] = "Dйjа йditй";
+        Text[ spanish ] = "Ya modificado";
         Text[ finnish ] = "Processed";
         Text[ italian ] = "Processed";
         Text[ danish ] = "Processed";
@@ -1826,7 +1826,7 @@ ModelessDialog RID_PROGRESS_DLG
         Text[ japanese ] = "Processed";
         Text[ korean ] = "Processed";
         Text[ chinese_simplified ] = "е·Іе¤„зђ†";
-        Text[ chinese_traditional ] = "Processed";
+        Text[ chinese_traditional ] = "е·Із¶“е®Њж€ђж“ЌдЅњ";
         Text[ turkish ] = "Processed";
         Text[ arabic ] = "Processed";
         Text[ catalan ] = "Processed";
@@ -4028,6 +4028,7 @@ String RID_TXT_FONT_REGULAR
     Text[ arabic ] = "Regular";
     Text[ catalan ] = "Regular";
 };
+
 
 
 
