@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="OwnEvents" script:language="StarBasic">Option Explicit
 
 Sub Main
@@ -10,9 +10,9 @@ Sub CalSaveOwnData()
 	&apos;	Sichert die Daten, die im lbOwnData Control eingegeben wurden.
 	&apos;	Die Datei heißt Date.Dat und wird ins Unterverzeichnis Konfiguration
 	&apos;	des Office3 Verzeichnis geschrieben.
-
-	Dim FileName$
-	Dim FileChannel%, Count%
+Dim FileName$
+Dim FileChannel%
+	Dim i as Integer
 	FileName$ = GetPathSettings(&quot;Config&quot;, False)+ GetPathSeparator() + &quot;DATE.DAT&quot;
 	&apos;	Falls die Datei neu geschrieben wird, muß sie vorher gelöscht werden
 	If Dir$(FileName$) = &quot;DATE.DAT&quot; Then
@@ -29,20 +29,20 @@ Sub CalSaveOwnData()
 	Write #FileChannel%, &quot;It is not allowed to edit this file! Don&apos;t edit this file!&quot;
 	Write #FileChannel%, &quot;==========================================================&quot;
 	
-	For Count%=0 To DlgBuffer.lbOwnData.ListCount()-1
-		Write #FileChannel%, DlgBuffer.lbOwnData.List(Count%)
+	For i = 0 To Ubound(DlgCalModel.lstOwnData.StringItemList())
+		Write #FileChannel%, DlgCalModel.lstOwnData.StringItemList(i)
 	Next
 	
 	Close #FileChannel%
 End Sub
 
 
+&apos;	Lädt die Daten der persönlichen Ereignisse und
+&apos;	schreibt diese dann in das Control lbOwnData.
 Sub CalLoadOwnData()
-	&apos;	Lädt die Daten der persönlichen Ereignisse und
-	&apos;	schreibt diese dann in das Control lbOwnData.
-
-	Dim FileName$, tempStr$
-	Dim FileChannel%, Count%
+Dim FileName$, tempStr$
+Dim FileChannel%, Count%
+Dim i as Integer
 	FileName$ = GetPathSettings(&quot;Config&quot;, False)+ GetPathSeparator() + &quot;DATE.DAT&quot;
 
 	If Dir(FileName$) = &quot;DATE.DAT&quot; Then 
@@ -53,11 +53,12 @@ Sub CalLoadOwnData()
 		For Count% = 1 To 6
 			Line Input #FileChannel%, tempStr$
 		Next
-		
+		i = 0
 		&apos;	Einfügen nach Reihenfolge sortiert.
 		While (not eof(#FileChannel%))
 			Input #FileChannel%, tempStr$
-			DlgBuffer.lbOwnData.AddItem(tempStr$)
+			DlgCalModel.lstOwnData.AddItem(tempStr$, i)
+			i = i + 1
 		Wend		
 
 		Close #FileChannel%
@@ -65,284 +66,221 @@ Sub CalLoadOwnData()
 End Sub
 
 
-Function CalIsDataCorrect%()
-	&apos;	Verifiziert die Eingaben der persönlichen Ereignisseite
-	&apos;	und setzt, wenn ein Feld mit unsinnigen, oder fehlerhaften,
-	Dim sEvent$, sEvMonth$, sEvDay$, sEvYear$
-	Dim nEvMonth%
-	sEvent$ = txtEvent.Text
-	sEvMonth$ = txtOwnEventMonth.Text
-	sEvDay$ = txtOwnEventDay.Text
-	sEvYear$ = txtOwnEventYear.Text
-	
-	CalIsDataCorrect% = True
+Function SetFocusToControl(oTextControl as Object)
+	If oTextControl.Text = &quot;&quot; Then
+		Beep
+		oTextControl.DefaultButton = True
+		SetFocusToControl = True
+	Else
+		SetFocusToControl = False	
+	End If
+End Function
 
-	If &quot;&quot; = sEvent$ Then 
-		CalIsDataCorrect% = SetFocusToControl(txtEvent)
-		Exit Function
-	End If
-	
-	If &quot;&quot; = sEvMonth$ Then 
-		CalIsDataCorrect% = SetFocusToControl(txtOwnEventMonth)
-		Exit Function
-	End If
-	
-	If &quot;&quot; = sEvDay$ Then 
-		CalIsDataCorrect% = SetFocusToControl(txtOwnEventDay)
-		Exit Function
-	End If
-	
-	nEvMonth% = Val(sEvMonth$)
-	
-	If 0 = nEvMonth% Then
-		nEvMonth% = CalGetIntOfShortMonthName%(sEvMonth$)
-	End If
-		
-	If (nEvMonth% &lt; 1) Or (nEvMonth% &gt; 12) Then
-		CalIsDataCorrect% = SetFocusToControl(txtOwnEventMonth)
-		Exit Function
-	End If
 
-	If chkEventOnce.Value And (sEvYear$ &lt;&gt; &quot;&quot;) Then
-		If (Val(sEvYear$) &lt;= 1582) Or (Val(sEvYear$) &gt;= 9957) Then
-			CalIsDataCorrect% = SetFocusToControl(txtOwnEventMonth)
-			Exit Function
+Function CalCreateDateFromInput() as Date
+&apos;	Generiert aus den Eingabedaten der Ereignisseite 
+&apos;	ein Datum im Dateserial Format, 
+Dim newDate as Date
+Dim EvMonth as Integer
+Dim EvDay as Integer
+Dim EvYear as Integer
+	EvMonth = DlgCalModel.lstOwnEventMonth.SelectedItems(0)	
+	EvDay = Val(DlgCalModel.txtOwnEventDay.Text)	
+	If DlgCalModel.chkEventOnce.State = 1 Then
+		EvYear = Val(DlgCalModel.txtOwnEventYear.Text)
+		newDate = DateSerial(EvYear, EvMonth, EvDay)
+	Else
+		newDate = DateSerial(0, EvMonth, EvDay)
+	End If
+	CalCreateDateFromInput = newDate
+End Function
+
+
+Function CalCreateDateStrOfInput() as String
+Dim DateStr as String
+Dim EvMonth as Integer
+Dim EvDay as Integer
+	EvDay = Val(Trim(DlgCalModel.txtOwnEventDay.Text))
+	If EvDay &lt; 10 Then
+		DateStr = &quot;0&quot; &amp; EvDay &amp; &quot;. &quot;
+	Else
+		DateStr = Cstr(EvDay) &amp; &quot;. &quot;
+	End If
+	DateStr = DateStr &amp; DlgCalendar.GetControl(&quot;lstOwnEventMonth&quot;).GetSelectedItem()
+	
+	If DlgCalModel.chkEventOnce.State = 1 And DlgCalModel.txtOwnEventYear.Text &lt;&gt; &quot;&quot; Then
+		DateStr = DateStr &amp; &quot;  &quot; + Trim(DlgCalModel.txtOwnEventYear.Text)
+	Else
+		DateStr = DateStr + &quot;      &quot;
+	End If
+	DateStr = DateStr  + &quot;  &quot; + Trim(DlgCalModel.txtEvent.Text)
+	CalCreateDateStrOfInput = DateStr
+End Function
+
+
+Function CalGetDateWithoutYear&amp;(ByVal i as Integer)
+	CalGetDateWithoutYear&amp; = DateSerial(0, CalGetMonthOfEvent(i), CalGetDayOfEvent(i))
+End Function
+
+
+Sub CalcmdInsertData()
+Dim DateStr as String
+Dim LastIndex as Integer
+Dim bGetYear as Boolean
+Dim NewDate as Date
+Dim bInserted as Boolean
+Dim bDateDoubled as Boolean
+Dim EvYear as Integer
+Dim i as Integer
+Dim CurEvYear as Integer
+Dim CurEvMonth as Integer
+Dim CurEvDay as Integer
+
+	bGetYear = DlgCalModel.chkEventOnce.State = 1
+	LastIndex = Ubound(DlgCalModel.lstOwnData.StringItemList())			
+	If bGetYear Then
+		EvYear = Val(DlgCalModel.txtOwnEventYear.Text)
+		If (EvYear &lt;= 1582) OR (EvYear &gt;= 9957)	Then
+			SetFocusToControl(txtOwnEventMonth)
+			Exit Sub
 		End If
 	End If
 
-	If (Val (sEvDay$) &lt; 1) Or (Val (sEvDay$) &gt; CalMaxDayInMonth%(Val(sEvYear$), nEvMonth%)) Then
-		CalIsDataCorrect% = SetFocusToControl(txtOwnEventDay)
-		Exit Function
-	End If
-End Function
-
-
-Function SetFocusToControl(oControl as Object)
-	Beep
-	oControl.SetFocus
-	SetFocusToControl = False
-End Function
-
-
-Function CalCreateDateFromInput&amp;()
-	&apos;	Generiert aus den Eingabedaten der Ereignisseite 
-	&apos;	ein Datum im Dateserial Format, 
-	Dim newDate&amp;, nMonth%
-	
-	nMonth% = Val (txtOwnEventMonth.Text)
-	If 0 = nMonth% Then
-		nMonth% = CalGetIntOfShortMonthName% (txtOwnEventMonth.Text)
-	End If
-
-	newDate&amp; = DateSerial(0, nMonth%, Val(txtOwnEventDay.Text))
-	
-	If chkEventOnce.Value Then
-		newDate&amp; = DateSerial(Val(txtOwnEventYear.Text), Month(newDate&amp;), Day(newDate&amp;))
-	End If
-	CalCreateDateFromInput&amp; = newDate&amp;
-End Function
-
-
-Function CalCreateDateStrOfInput$()
-Dim DateStr$
-Dim nMonth%
-
-	If Not CalIsDataCorrect%() Then
-		CalCreateDateStrOfInput$ = &quot;&quot;
-		Exit Function
-	End If
-
-	If Val(txtOwnEventDay.Text) &lt; 10 Then
-		DateStr$ = &quot; &quot;
-	End If
-	
-	DateStr$ = DateStr$ + Trim(txtOwnEventDay.Text) + &quot;. &quot;
-	nMonth% = CalGetIntOfShortMonthName% (Trim(txtOwnEventMonth.Text))
-	DateStr$ = DateStr$ + cCalShortMonthNames$ (nMonth%)
-	
-	If chkEventOnce.Value And txtOwnEventYear.Text &lt;&gt; &quot;&quot; Then
-		DateStr$ = DateStr$ + &quot;  &quot; + Trim(txtOwnEventYear.Text)
-	Else
-		DateStr$ = DateStr$ + &quot;      &quot;
-	End If
-	DateStr$ = DateStr$  + &quot;  &quot; + Trim(txtEvent.Text)
-	CalCreateDateStrOfInput$ = DateStr$
-End Function
-
-
-Function CalGetDateWithoutYear&amp;(byval Pos%)
-	CalGetDateWithoutYear&amp; = DateSerial(0, CalGetMonthOfEvent(Pos%), CalGetDayOfEvent(Pos%))
-End Function
-
-
-Function CalExistDateInList%(byval newDate&amp;)
-
-	Dim Count%, lbActDate&amp;, lbActEvent$, Result%
-	Dim nEvYear%, nEvMonth%, nEvDay%
-	
-	Result% = False
-	For Count%=0 To lbOwnData.ListCount()-1
-		nEvYear% = CalGetYearOfEvent(Count%)
-		nEvMonth% = CalGetMonthOfEvent(Count%)
-		nEvDay% = CalGetDayOfEvent(Count%)
-		lbActDate&amp; = DateSerial(nEvYear%, nEvMonth%, nEvDay%)
-		Result% = (lbactDate&amp; = newDate&amp;)
-	Next
-	CalExistDateInList% = Result%	
-End Function
-
-
-Sub CalCmdInsertData()
-Dim DateStr$, newDate&amp;, Count%, Inserted%, Found%
-
-	Inserted% = False
-	DateStr$ = CalCreateDateStrOfInput$()
-	If DateStr$ = &quot;&quot; Then Exit Sub
+	If DlgCalModel.chkEventOnce.State = 1 Then
+		EvYear = Val(DlgCalModel.txtOwnEventYear.Text)
+	End If			
+	newDate = CalCreateDateFromInput()
+	DateStr = CalCreateDateStrOfInput()
+	If DateStr = &quot;&quot; Then Exit Sub
 
 	&apos;	Es ist noch garnichts vorhanden
-	If Not Inserted% And lbOwnData.ListCount()=0 Then
-		lbOwnData.AddItem(DateStr$)
-		Inserted% = True
-	End If
-
-	&apos;	Doppeltes Datum
-	newDate&amp; = CalCreateDateFromInput&amp;()
-	If ((False = Inserted%) And (True = CalExistDateInList (newDate))) Then
+	If Ubound(DlgCalModel.lstOwnData.StringItemList()) = -1 Then
+		DlgCalendar.GetControl(&quot;lstOwnData&quot;).AddItem(DateStr, 0 + 1)
+		bInserted = True
+	Else
 		&apos;	gleiche jahre(auch keine Jahre sind gleiche jahre)-&gt;alt löschen neu rein
-		Count% = 0
-		While (DateSerial(CalGetYearOfEvent(Count%), CalGetMonthOfEvent(Count%), CalGetDayOfEvent(Count%))&lt;&gt;DateSerial(Year(newDate&amp;), Month(newDate&amp;), Day(newDate&amp;)))
-			Count% = Count + 1
-		Wend
-		&apos;	beide Jahre gleich (auch: kein datum gesetzt) -&gt; alt löschen neu rein
-		If ((CalGetYearOfEvent(Count%)=0 And Not chkEventOnce.Value) Or (chkEventOnce.Value And Val(txtOwnEventYear.Text)=CalGetYearOfEvent%(Count%))) Then
-			lbOwnData.RemoveItem(Count%)
-			lbOwnData.AddItem(DateStr$, Count%)
-			Inserted% = True
+		i = 0
+		Do
+			CurEvYear = CalGetYearOfEvent(i)
+			CurEvMonth = CalGetMonthOfEvent(i)
+			CurEvDay = CalGetDayOfEvent(i)
+			If DateSerial(CurEvYear, CurEvMonth, CurEvDay) = NewDate Then
+				&apos; Todo: Abchecken wie das ist mit &apos;Ereignis einmalig&apos; oder nicht
+				DlgCalModel.GetControl(&quot;lstOwnData&quot;).RemoveItem(DateStr, i)
+				DlgCalModel.GetControl(&quot;lstOwnData&quot;).AddItem(DateStr, i)
+				bInserted = True
+			End If
+			i = i + 1
+		Loop Until bInserted Or i &gt; LastIndex
+		
+		&apos;	Es existiert ein Datum mit Jahreszahl. Es wird dasselbe Datum
+		&apos;	ohne Angabe der Jahreszahl angegeben.
+		If Not bInserted And Not bGetYear Then
+			i = 0
+			Do
+				bInserted = CalGetDateWithoutYear(i) = newDate
+				i = i + 1
+				If bInserted Then
+					If CalGetYearOfEvent(i) &lt;&gt; 0 Then
+						DlgCalModel.GetControl(&quot;lstOwnData&quot;).AddItem(DateStr, i)
+					End If
+				End If	
+			Loop Until bInserted Or i &gt; LastIndex
 		End If
-	End If
 	
-	&apos;	Es existiert ein Datum mit Jahreszahl. Es wird dasselbe Datum
-	&apos;	ohne Angabe der Jahreszahl angegeben.
-	newDate&amp; = CalCreateDateFromInput&amp;()
-	newDate&amp; = Dateserial(0, Month(newDate&amp;), Day(newDate&amp;))
-	If Not Inserted% And Not chkEventOnce.Value Then
-		Dim temp&amp;
-		Count% = 0
-		While (Not Found%) And (Count% &lt; lbOwnData.ListCount())
-			temp&amp; = CalGetDateWithoutYear%(Count%) 
-			If (temp&amp; = newDate&amp;) Then
-				Found% = True
-			Else
-				Count% = Count% + 1
-			End If
-		Wend
-		If Found% Then
-			If (CalGetYearOfEvent%(Count%)&lt;&gt;0) Then
-				lbOwnData.AddItem(DateStr$, Count%)
-				Inserted% = True
-			End If
-		End If	
-	End If
-	
-	&apos;	Das einzufügende Datum besitzt eine Jahreszahl, es gibt bereits
-	&apos;	das Datum in der Liste, jedoch ohne Datum.
-	newDate&amp; = CalCreateDateFromInput&amp;()
-	newDate&amp; = Dateserial(0, Month(newDate&amp;), Day(newDate&amp;))
-	If Not Inserted% And chkEventOnce.Value Then
-		Found% = False
-		Count% = 0
-		While (Not Found%) And (Count% &lt; lbOwnData.ListCount)
-			If (CalGetDateWithoutYear(Count%) = newDate&amp;) Then
-				Found% = True
-			Else
-				Count% = Count% + 1
-			End If		
-		Wend	
-		If Found% Then
-			Count% = Count% + 1
-			lbOwnData.AddItem(DateStr$, Count%)
-			Inserted% = True
+		&apos;	Das einzufügende Datum besitzt eine Jahreszahl, es gibt bereits
+		&apos;	das Datum in der Liste, jedoch ohne Datum.
+		If Not bInserted And bGetYear Then
+			i = 0
+			Do
+				bInserted = CalGetDateWithoutYear(i) = newDate
+				i = i + 1
+				If bInserted Then
+					DlgCalModel.GetControl(&quot;lstOwnData&quot;).AddItem(DateStr, i)
+				End If
+			Loop Until bInserted Or i &gt; LastIndex
 		End If
-	End If
 	
-	&apos;	Das Datum ist noch nicht vorhanden.
-	newDate&amp; = CalCreateDateFromInput&amp;()
-	newDate&amp; = Dateserial(0, Month(newDate&amp;), Day(newDate&amp;))
-	&apos;	newDate&amp; = Dateserial(0, Month(newDate&amp;), Day(newDate&amp;))
-	If (Inserted%=False And CalExistDateInList(newDate)=False) Then
-		Found% = False
-		Count% = 0
-		While (Count% &lt; lbOwnData.ListCount() And Found% = False)
-			If (newDate&amp; &gt; CalGetDateWithoutYear&amp;(Count%)) Then
-				Count% = Count% + 1
-			Else
-				Found% = True
-			End If
-		Wend
-		lbOwnData.AddItem(DateStr$, Count%)
-		Inserted% = True
+		&apos;	Das Datum ist noch nicht vorhanden und wir richtig einsortiert
+		If Not bInserted And Not bDateDoubled Then
+			i = 0
+			Do 
+				bInserted = newDate &gt; CalGetDateWithoutYear(i)
+				i = i + 1
+				If bInserted Then
+					DlgCalendar.GetControl(&quot;lstOwnData&quot;).AddItem(DateStr, i)
+				End If
+			Loop Until bInserted Or i &gt; LastIndex
+		End If
 	End If
 	
 	&apos;	Flag zum Speichern der neuen Daten.
-	If Inserted% = True Then
-		CalOwnDataChanged% = True
+	If bInserted = True Then
+		bCalOwnDataChanged = True
 	End If
 	
-	&apos;	Nachdem die Daten übernommen worden sind, werden sie aus 
-	&apos;	der Eingabe gelöscht
 	Call CalClearInputMask()
 End Sub
 
 
-Sub CalUpdateNewEventFrame()
-	Dim bEnable as Boolean
-	Dim Result%, actPos%, Count%
-	Dim sSelData$
+Function CalGetYearOfEvent(ByVal ListIndex as Integer) as Integer
+Dim YearStr as String
+	YearStr = DlgCalModel.lstOwnData.StringItemList(ListIndex)
+	CalGetYearOfEvent% = Val(Mid(YearStr, 10, 4))
+End Function
 
-	Result% = CalCountSelected%(DlgBuffer.lbOwnData, actPos%)
-	If Result% = 1 Then
-		&apos;	Daten unten anzeigen
-		sSelData$ = lbOwnData.List (actPos%)
-		txtEvent.Text = Trim (Mid$ (sSelData$, 16))
-		txtOwnEventDay.Text = Trim (Left$ (sSelData$, 2))
-		txtOwnEventMonth.Text = Str$ (Mid$ (sSelData$, 5, 3))
 
-		bEnable = Val (Trim (Mid$ (sSelData$, 10, 4))) &gt; 0
-		If bEnable Then
-			txtOwnEventYear.Text = Trim (Mid$ (sSelData$, 10, 4))
-		Else
-			txtOwnEventYear.Text = &quot;&quot;
-		End If
-		chkEventOnce.Value = bEnable
-		lblEventYear.Enabled = bEnable
-		txtownEventYear.Enabled = bEnable
-		SpinOwnEventYear.Enabled = bEnable
+Function CalGetDayOfEvent(ByVal ListIndex as Integer) as Integer
+Dim DayStr as String
+	DayStr = DlgCalModel.lstOwnData.StringItemList(ListIndex)
+	CalGetDayOfEvent = Val(Left(DayStr,2)) &apos;Mid(DayStr, 1, 2))
+End Function
+
+
+Function CalGetNameOfEvent(ByVal ListIndex as Integer) as Integer
+Dim NameStr as String
+	NameStr = DlgCalModel.lstOwnData.StringItemList(ListIndex)
+	NameStr = Trim (Mid(NameStr, 16))
+&apos;	If Val(NameStr) = 0 Then
+&apos;		NameStr = &quot;&quot;
+&apos;	End If
+	CalGetNameOfEvent = NameStr
+End Function
+
+
+Function CalGetMonthOfEvent(ByVal ListIndex as Integer) as Integer
+Dim MonthStr as String
+	MonthStr = DlgCalModel.lstOwnData.StringItemList(ListIndex)
+	MonthStr = Mid(MonthStr, 5, 3)
+	CalGetMonthOfEvent = CalGetIntOfShortMonthName(MonthStr)
+End Function
+
+
+Sub CheckInsertedDates()
+Dim EvYear as Long
+Dim EvMonth as Long
+Dim EvDay as Long
+Dim sEvMonth as String
+Dim bDoEnable as Boolean
+	bDoEnable = True
+	If DlgCalModel.chkEventOnce.State = 1 Then
+		EvYear = Val(DlgCalModel.txtOwnEventYear.Text)
+			&apos;(EvYear &gt;= 1582) AND (EvYear &lt;= 9957)
+		bDoEnable = EvYear &lt;&gt; 0
 	Else
-		Call CalClearInputMask()
+		EvYear = Year(Now())
 	End If
-
-	cmdDelete.Enabled = (1 &lt;= Result%)
+	If bDoEnable Then
+		EvDay = Val(DlgCalModel.txtOwnEventDay.Text)
+		bDoEnable = Ubound(DlgCalModel.lstOwnEventMonth.SelectedItems()) &gt; -1
+		If bDoEnable Then
+			EvMonth = DlgCalModel.lstOwnEventMonth.SelectedItems(0)
+			bDoEnable = (EvDay &gt; 1) AND (EvDay &lt; CalMaxDayInMonth(EvYear, EvMonth))
+			If bDoEnable Then
+				bDoEnable = LTrim(DlgCalModel.txtEvent.Text) &lt;&gt; &quot;&quot;	
+			End If
+		End If
+	End If
+	DlgCalModel.cmdInsert.Enabled = bDoEnable
 End Sub
-
-
-Function CalGetYearOfEvent%(byval Pos%)
-	CalGetYearOfEvent% = Val(Mid$(lbOwnData.List(Pos%), 10, 4))
-End Function
-
-
-Function CalGetDayOfEvent%(byval Pos%)
-	CalGetDayOfEvent% = Val(Mid$(lbOwnData.List(Pos%), 1, 2))
-End Function
-
-
-Function CalGetMonthOfEvent%(byval Pos%)
-	&apos;	Liefert den Monat eines Ereignisses aus dem
-	&apos;	Control lbOwnData als Zahl.
-	Dim sMonth$
-	
-	sMonth$ = Mid$ (lbOwnData.List(Pos%), 5, 3)
-	CalGetMonthOfEvent% = CalGetIntOfShortMonthName% (sMonth$)
-End Function
-
- 
 </script:module>

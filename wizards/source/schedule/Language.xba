@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Language" script:language="StarBasic">Option Explicit
 
 
-&apos; L a n g u a g e   c o n s t a n t s
-&apos; -----------------------------------
 Public Const cLANGUAGE_SYSTEM = &quot;&quot;, cLANGUAGE_CHINESE = &quot;zh&quot;, cLANGUAGE_DANISH = &quot;da&quot;
 Public Const cLANGUAGE_DUTCH = &quot;nl&quot;, cLANGUAGE_ENGLISH = &quot;en&quot;, cLANGUAGE_FINNISH = &quot;fi&quot;
 Public Const cLANGUAGE_FRENCH = &quot;fr&quot;, cLANGUAGE_GERMAN = &quot;de&quot;, cLANGUAGE_GREEK = &quot;el&quot;
@@ -12,72 +10,27 @@ Public Const cLANGUAGE_ITALIAN = &quot;it&quot;, cLANGUAGE_JAPANESE = &quot;ja&q
 Public Const cLANGUAGE_POLISH = &quot;pl&quot;, cLANGUAGE_PORTUGUESE = &quot;pt&quot;, cLANGUAGE_RUSSIAN = &quot;ru&quot;
 Public Const cLANGUAGE_SPANISH = &quot;es&quot;, cLANGUAGE_SWEDISH = &quot;sv&quot;, cLANGUAGE_TURKISH = &quot;tr&quot;
 
-Public BLNameList(1 To 16) as String
+Public BLNameList(0 To 16) as String
 
 
 &apos; R e s o u r c e   s t r i n g   c o n s t a n t s
 &apos; -------------------------------------------------
 &apos; Dialog labels start at 1000
-Const dlgCalTitle = 1000
-Const dlgCalTitleBack = 1001
-Const dlgCalTitleOwnData = 1002
-Const dlgSchdlTitle = 1003
-Const dlgOK = 1004
-Const dlgCancel = 1005
-Const dlgCalFrameOption = 1006
-Const dlgCalOptionYear = 1007
-Const dlgCalOptionMonth = 1008
-Const dlgSchdlDescription = 1009
-Const dlgSchdlCountry = 1010
-Const dlgTime = 1011
-Const dlgYear = 1012
-Const dlgCalMonth = 1013
-Const dlgSpecificBankholidays = 1014
-Const dlgCalOwnData = 1015
-Const dlgCalInsert = 1016
-Const dlgCalDelete = 1017
-Const dlgCalNewEvent = 1018
-Const dlgCalEvent = 1019
-Const dlgCalEventOnce = 1020
-Const dlgCalEventDay = 1021
-Const dlgCalEventMonth = 1022
-Const dlgCalEventYear = 1023
-&apos; Bitmap file is 1099
-Const dlgBitmapFile = 1099
-&apos; Names of states start at 1100
-Const dlgState = 1100
-&apos; Months start at 1200
+
+Sub LoadLanguage%(ByVal LangLocale)
+Dim Dummy$
+Dim i as Integer
 Const dlgMonth = 1200
 &apos; Abreviated months start 1225
 Const dlgShortMonth = 1225
-&apos; Messages start at 1300
-Const msgCalErrorTitle = 1300
-Const msgCalError = 1301
-Const msgCalRemoveTitle = 1302
-Const msgCalRemove = 1303
-&apos; Styles start at 1400
-Const stlWorkday = 1400
-Const stlWeekend = 1401
-&apos; Sheet names start at 1410
-Const nameCalYear = 1410
-Const nameCalMonth = 1411
-&apos; Misc. schedule data starts at 1500
-Const sProgess = 1500
-
-
-
-Sub LoadLanguage%(ByVal LangLocale)
-Dim Dummy$, i, Count%
 
 	If InitResources(&quot;Calendar-template&quot;, &quot;cal&quot;) Then
-
-		&apos; C o u n t r y   s p p e c i f i c   s e t t i n g s
-		&apos; ---------------------------------------------------
 		If LangLocale  = cLANGUAGE_GERMAN Then
-			DlgBuffer.lblSpecBankholidays.Visible = True
-			DlgBuffer.cmbState.Visible = True
+			DlgCalendar.GetControl(&quot;lblHolidays&quot;).Visible = True
+			DlgCalendar.GetControl(&quot;lstHolidays&quot;).Visible = True
 
 			&apos; Load all states
+			BLNameList(0) = GetResText(1100)
 			BLNameList(1) = &quot;Bayern&quot;
 			BLNameList(2) = &quot;Baden-Württemberg&quot;
 			BLNameList(3) = &quot;Berlin&quot;
@@ -94,62 +47,60 @@ Dim Dummy$, i, Count%
 			BLNameList(14) = &quot;Sachsen-Anhalt&quot;
 			BLNameList(15) = &quot;Schleswig Holstein&quot;
 			BLNameList(16) = &quot;Thüringen&quot;
-			Dim FirstItem as String
 
-			FirstItem = GetResText(dlgState)
-			DlgBuffer.cmbState.AddItem(FirstItem)
-			For i = 1 To Ubound(BLNameList())
-				DlgBuffer.cmbState.AddItem(BLNameList(i))
-			Next i 
+			DlgCalModel.lstHolidays.StringItemList() = BLNameList()
+&apos;			Dim FirstItem as String
+&apos;
+&apos;			FirstItem = GetResText(1100)
+&apos;			DlgCalModel.lstSpecBankholidays.AddItem(FirstItem)
+&apos;			For i = 1 To Ubound(BLNameList())
+&apos;				DlgCalModel.cmbState.AddItem(BLNameList(i))
+&apos;			Next i 
 		Else 
-			DlgBuffer.lblSpecBankholidays.Visible = False
-			DlgBuffer.cmbState.Visible = False
+&apos;			printdbgInfo DlgCalendar.GetControl(&quot;lblSpecBankholidays&quot;)
+&apos;			DlgCalendar.GetControl(&quot;lblSpecBankholidays&quot;).Visible = False
+&apos;			DlgCalendar.GetControl(&quot;lstSpecBankholidays&quot;).Visible = False
 		End If
+		sWizardTitle$ = GetResText(1300)
+		sError$ = GetResText(1301)
+		cCalSubcmdDeleteSelect_DeleteSelEntryTitle$ = GetResText(1302)
+		cCalSubcmdDeleteSelect_DeleteSelEntry$ = GetResText(1303)
+		DlgCalendar.Title = GetResText(1000)
 
-		&apos; L o a d   r e s o u r c e   s t r i n g s
-		&apos; -----------------------------------------
-		&apos; Load dialog captions
-		sWizardTitle$ = GetResText(msgCalErrorTitle)
-		sError$ = GetResText(msgCalError)
-		cCalSubCmdDeleteSelect_DeleteSelEntryTitle$ = GetResText(msgCalRemoveTitle)
-		cCalSubCmdDeleteSelect_DeleteSelEntry$ = GetResText(msgCalRemove)
-		cCalSubcmdSwitchOwnDataOrGeneral_OwnData$ = GetResText(dlgCalTitleOwnData)
-		cCalSubcmdSwitchOwnDataOrGeneral_Back$ = GetResText(dlgCalTitleBack)
-		DlgBuffer.frmTime.Caption = GetResText(dlgTime)
-		DlgBuffer.lblYear.Caption = GetResText(dlgYear)
-		DlgBuffer.DlgCmdCancel.Caption = GetResText(dlgCancel)
-		DlgBuffer.DlgCmdOk.Caption = GetResText(dlgOK)
-		DlgBuffer.lblSpecBankholidays.Caption = GetResText(dlgSpecificBankholidays)
-
-		&apos; Load bitmap file
-		sBitmapFilename$ = GetResText(dlgBitmapFile)
-
-		&apos; Load calendar specific strings
-		DlgBuffer.Caption = GetResText(dlgCalTitle)
-		DlgBuffer.frmCalender.Caption = GetResText(dlgCalFrameOption)
-		DlgBuffer.optYear.Caption = GetResText(dlgCalOptionYear)
-		DlgBuffer.optMonth.Caption = GetResText(dlgCalOptionMonth)
-		DlgBuffer.lblMonth.Caption = GetResText(dlgCalMonth)
-		DlgBuffer.DlgCmdOwnData.Caption = GetResText(dlgCalOwnData)
-		DlgBuffer.frmNewEvent.Caption = GetResText(dlgCalNewEvent)
-		DlgBuffer.lblEvent.Caption = GetResText(dlgCalEvent)
-		DlgBuffer.lblEventDay.Caption = GetResText(dlgCalEventDay)
-		DlgBuffer.lblEventMonth.Caption = GetResText(dlgCalEventMonth)
-		DlgBuffer.lblEventYear.Caption = GetResText(dlgCalEventYear)
-		DlgBuffer.chkEventOnce.Caption = GetResText(dlgCalEventOnce)
-		DlgBuffer.cmdInsert.Caption = GetResText(dlgCalInsert)
-		DlgBuffer.cmdDelete.Caption = GetResText(dlgCalDelete)
-		&apos; Load long month names
-		For Count% = 0 To 11
-			cCalLongMonthNames$(Count%+1) = GetResText(dlgMonth+Count%)
-			cCalShortMonthNames$(Count%+1)= Left$(cCalLongMonthNames$(Count%+1), 3)
-		Next
-		&apos; Load sheet names
-		sCalendarTitle$ = GetResText(nameCalYear)
-		sMonthTitle$ = GetResText(nameCalMonth)
-		&apos; Load names of styles
-		cCalStyleWorkday$ = GetResText(stlWorkday)
-		cCalStyleWeekend$ = GetResText(stlWeekend)
+		With DlgCalModel
+			cCalSubcmdSwitchOwnDataOrGeneral_OwnData$ = GetResText(1002)
+			cCalSubcmdSwitchOwnDataOrGeneral_Back$ = GetResText(1001)
+			.hlnTime.Label = GetResText(1011)
+			.lblYear.Label = GetResText(1012)
+			.cmdCancel.Label = GetResText(1005)
+			.cmdGoOn.Label = GetResText(1004)
+			.lblHolidays.Label = GetResText(1014)
+			sBitmapFilename$ = GetResText(1099)
+			DlgCalModel.hlnCalendar.Label = GetResText(1006)
+			.optYear.Label = GetResText(1007)
+			.optMonth.Label = GetResText(1008)
+			.lblMonth.Label = GetResText(1013)
+			.cmdOwnData.Label = GetResText(1015)
+			.hlnNewEvent.Label = GetResText(1019)
+			.lblEvent.Label = GetResText(1019)
+			.lblEventDay.Label = GetResText(1021)
+			.lblEventMonth.Label = GetResText(1022)
+			.lblEventYear.Label = GetResText(1023)
+			.chkEventOnce.Label = GetResText(1020)
+			.cmdInsert.Label = GetResText(1016)
+			.cmdDelete.Label = GetResText(1017)
+			&apos; Load long month names
+			For i = 0 To 11
+				cCalLongMonthNames(i+1) = GetResText(dlgMonth+i)
+				cCalShortMonthNames(i+1)= Left$(cCalLongMonthNames(i+1), 3)
+			Next
+			&apos; Load sheet names
+			sCalendarTitle$ = GetResText(1410)
+			sMonthTitle$ = GetResText(1411)
+			&apos; Load names of styles
+			cCalStyleWorkday$ = GetResText(1400)
+			cCalStyleWeekend$ = GetResText(1401)
+		End With
 	End If
 End Sub
 </script:module>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="BankHoliday" script:language="StarBasic">Option Explicit
 
 Sub Main()
@@ -32,11 +32,11 @@ End Function
 
 
 Sub CalInitGlobalVariablesDate()
-	Dim Count%
+Dim i as Integer
 
-	For Count% = 1 To 374
-		CalBankholidayName$(Count%) = &quot;&quot;
-		CalTypeOfBankHoliday%(Count%) = cHolidayType_None
+	For i = 1 To 374
+		CalBankholidayName$(i) = &quot;&quot;
+		CalTypeOfBankHoliday%(i) = cHolidayType_None
 	Next
 End Sub
 
@@ -93,21 +93,21 @@ End Function
 
 
 Function CalGetIntOfShortMonthName%(byval MonthName$)
-
-	Dim nCount%, nMonth%
+Dim i as Integer
+Dim nMonth as Integer
 	
-	nMonth% = Val(MonthName$)
+	nMonth = Val(MonthName$)
 	
-	If (1 &lt;= nMonth% And 12 &gt;= nMonth%) Then
-		CalGetIntOfShortMonthName% = nMonth%
+	If (1 &lt;= nMonth And 12 &gt;= nMonth) Then
+		CalGetIntOfShortMonthName% = nMonth
 		Exit Function
 	End If	
 	
 	MonthName$ = UCase(Trim(Left(MonthName, 3)))
 
-	For nCount% = 1 To 12 
-		If (UCase(cCalShortMonthNames$(nCount%)) = MonthName$) Then
-			CalGetIntOfShortMonthName% = nCount%
+	For i = 1 To 12 
+		If (UCase(cCalShortMonthNames$(i)) = MonthName$) Then
+			CalGetIntOfShortMonthName% = i
 			Exit Function
 		End If
 	Next
@@ -120,15 +120,20 @@ End Function
 Sub CalInsertOwnDataInTables(byval YearToInsert%)
 	&apos;	Fügt die eigenen Individuellen Daten aus der Tabelle in die
 	&apos;	bereits erstellte unsortierte Tabelle ein.	
-	Dim i%, actYear%, actMonth%, actDay%, theEvent$
-	
-	For i = 0 To lbOwnData.ListCount() - 1
-		actYear% = Val(Mid$(lbOwnData.List(i%), 10, 4))
-		If (actYear%=YearToInsert%) Or (actYear%=0) Then
-			actMonth% = CalGetIntOfShortMonthname%(Mid$(lbOwnData.List(i%), 5, 3))
-			actDay% = Val(Left$(lbOwnData.List(i%), 2))
-			theEvent$ = Trim(Mid$(lbOwnData.List(i%), 16))
-			CalInsertBankholiday(DateSerial(actYear%, actMonth%, actDay%), theEvent$, cHolidayType_Own)
+Dim CurEventName as String
+Dim CurYear as Integer
+Dim CurMonth as Integer
+Dim CurDay as Integer
+Dim LastIndex as Integer
+Dim i as Integer
+	LastIndex = Ubound(DlgCalModel.lstOwnData.StringItemList())
+	For i = 0 To LastIndex
+		CurYear = CalGetYearOfEvent(i)
+		If (CurYear = YearToInsert) Or (CurYear = 0) Then
+			CurMonth = CalGetMonthofEvent(i)
+			CurDay = CalGetDayofEvent(i)
+			CurEventName = CalGetNameOfEvent(i)
+			CalInsertBankholiday(DateSerial(CurYear, CurMonth, CurDay), CurEventName, cHolidayType_Own)
 		End If
 	Next
 End Sub
@@ -138,14 +143,15 @@ End Sub
 &apos; Note: in This Function the week starts with the Sunday
 Function GetMonthDate(iWeekDay, iMonth, iCount as Integer)
 Dim bFound as Boolean
-Dim nCount%,lDate as Integer
+Dim i as Integer
+Dim lDate as Integer
 	&apos;	1st Tue in Nov : Election Day, Half
 	bFound = False
-	nCount% = 0
+	i = 0
 	lDate = DateSerial(YearInt%, iMonth, 1)
 	While Not bFound
-		If (iWeekDay = WeekDay(lDate)) Then nCount% = nCount% + 1
-		If (nCount &lt; iCount) Then
+		If (iWeekDay = WeekDay(lDate)) Then i = i + 1
+		If (i &lt; iCount) Then
 			lDate = lDate + 1
 		Else
 			bFound = True

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="DlgControl" script:language="StarBasic">Option Explicit
 
 Dim CalBitmap As Object
+Public bDoSelect as Boolean
 
+&apos; Todo: Adjustmentlistener an der Scrollbar anmelden
 
 Sub Main()
 	Call CalAutopilotTable()
@@ -40,110 +42,27 @@ End Sub
 
 
 
-Sub CalCalcPictureData()
-	Dim bFittingX%, bFittingY%, DlgWidth%, DlgHeight%, nXMove%, nYMove%, Width%, Height%
-	Dim x#, y#
-
-	Width% = 152
-	Height% = 189
-	BitmapDir = GetBitmapDir()	
-
-	Set CalBitmap = LoadPicture(BitmapDir &amp; GetPathSeparator() &amp; sBitmapFilename$ &apos;(sCurLangLocale))
-	If 1 = GetGUIType() Then
-		DlgHeight% = CInt(DlgBuffer.Preview1.Height * GetDialogZoomFactorY(DlgBuffer.Preview1.Height))
-		DlgWidth% = CInt(DlgBuffer.Preview1.Width * GetDialogZoomFactorX(DlgBuffer.Preview1.Width))
-		nXMove% = TwipsPerPixelX() * 3
-		nYMove% = TwipsPerPixelX() * 3
-	Else
-		DlgHeight% = CInt((DlgBuffer.Preview1.Height - TwipsPerPixelY() * 3) * GetDialogZoomFactorY(DlgBuffer.Preview1.Height))
-		DlgWidth% = CInt((DlgBuffer.Preview1.Width - TwipsPerPixelX() * 3) * GetDialogZoomFactorX(DlgBuffer.Preview1.Width))
-		nXMove% = 0
-		nYMove% = 0
-	End If
-	
-	CalTWIPSPicWidth% = TwipsPerPixelX() * Width%
-	CalTWIPSPicHeight% = TwipsPerPixelY() * Height%
-	
-	&apos;       Beste Möglichkeit: Bild in Orignalgroesse zentrieren
-	&apos;       Alternative : Nach schlchechter passenden Faktor skalieren
-	If (Not ((CalTWIPSPicWidth% &lt;= DlgWidth%) And (CalTWIPSPicHeight% &lt;= DlgHeight%))) Then
-		x# = (CalTWIPSPicWidth% / DlgWidth%)
-		y# = (CalTWIPSPicHeight% / DlgHeight%)
-		If (x# &gt; y#) Then
-			CalTWIPSPicWidth% = CInt(DlgWidth%)
-			CalTWIPSPicHeight% = CInt(CalTWIPSPicHeight% / x#)
-		Else
-			CalTWIPSPicHeight% = CInt(DlgHeight%)
-			CalTWIPSPicWidth% = CInt(CalTWIPSPicWidth% / y#)
-		End If
-	End If
-
-	CalStartX% = CInt((DlgWidth% / 2) - (CalTWIPSPicWidth% / 2)) - nXMove%
-	CalStartY% = CInt((DlgHeight% / 2) - (CalTWIPSPicHeight% / 2)) - nYMove%
-End Sub
-
-
-
-Sub CalPreviewPaint()
-	Preview1.Cls()
-	Preview1.DrawPicture(CalBitmap, CalStartX%, CalStartY%, CalStartX% + CalTWIPSPicWidth%, CalStartY% + CalTWIPSPicHeight%)
-	Preview1.DrawBox(CalStartX%, CalStartY%, CalStartX% + CalTWIPSPicWidth%, CalStartY% + CalTWIPSPicHeight%)
-End Sub
-
-
-
 Sub CalcmdDeleteSelect()
-
-	Dim Count%, CountMarked%, MsgBoxResult%, AllSelected%
-	
-	AllSelected = False
-	CountMarked% = 0
-	For Count% = 0 To lbOwnData.ListCount-1
-		If (DlgBuffer.lbOwnData.Selected(Count%) = True) Then CountMarked% = CountMarked% + 1
-	Next
-
-	If (CountMarked% &gt; 0) Then
-		MsgBoxResult% = MsgBox(cCalSubCmdDeleteSelect_DeleteSelEntry$, 4+32, cCalSubCmdDeleteSelect_DeleteSelEntryTitle$)
-
-		If MsgBoxResult% = 6 Then
-			If Not AllSelected% Then
-				Call CalDeleteAllSelected()
-			Else
-				DlgBuffer.lbOwnData.Clear()
-			End If
-			&apos;       Flag zum Speichern der neuen Daten.
-			CalOwnDataChanged% = True
-
-			cmdDelete.Enabled = False
+Dim MsgBoxResult as Integer
+	If Ubound(DlgCalModel.lstOwnData.SelectedItems()) &gt; -1 Then
+		MsgBoxResult = MsgBox(cCalSubcmdDeleteSelect_DeleteSelEntry$, 4+32, cCalSubcmdDeleteSelect_DeleteSelEntryTitle$)
+		If MsgBoxResult = 6 Then
+			DlgCalModel.lstOwnData.StringItemList() = RemoveSelected(DlgCalModel.lstOwnData)
+			&apos; Flag zum Speichern der neuen Daten.
+			bCalOwnDataChanged = True
+			DlgCalModel.cmdDelete.Enabled = Ubound(DlgCalModel.lstOwnData.StringItemList()) &gt; -1
 			Call CalClearInputMask()
 		End If
 	End If
 End Sub
 
 
-
-Sub CalDeleteAllSelected()
-
-	Dim Count%, LastSelPos%
-
-	While LastSelPos% &lt;&gt; -1
-		LastSelPos% = -1
-		For Count%=0 To lbOwnData.ListCount()-1
-			If DlgBuffer.lbOwnData.Selected(Count%) Then LastSelPos% = Count%
-		Next
-		If LastSelPos% &lt;&gt; - 1 Then
-			DlgBuffer.lbOwnData.RemoveItem(LastSelPos%)
-		End If
-	Wend
-	DlgBuffer.lbOwnData.Refresh()
-End Sub
-
-
-
 Sub CalSaveOwnEventControls()
-	DlgBuffer.txtOwnEventDay.Tag = DlgBuffer.txtOwnEventDay.Text
-	DlgBuffer.txtOwnEventMonth.Tag = DlgBuffer.txtOwnEventMonth.Text
-	DlgBuffer.txtOwnEventYear.Tag = DlgBuffer.txtOwnEventYear.Text
+	With DlgCalModel
+		.txtOwnEventDay.Tag = .txtOwnEventDay.Text
+		.txtOwnEventMonth.Tag = .txtOwnEventMonth.Text
+		.DlgCalModel.txtOwnEventYear.Tag = .DlgCalModel.txtOwnEventYear.Text
+	End With
 End Sub
 
 
@@ -174,33 +93,118 @@ Sub ModIntTextBox (txtYear As Object, ByVal nMax%, ByVal nMin%, ByVal sDefault$,
 End Sub
 
 
-Sub CalSpinOwnEventDayUp()
-	Call ModIntTextBox(txtOwnEventDay, 31, 1, &quot;1&quot;, 1)
+
+Sub ToggleYearBox()
+&apos; Falls der RadioButton für einen Jahreskalender angeklickt
+&apos; worden ist, müssen die Controls für den Monat Disabled
+&apos; werden, da ihre Werte in einer Jahrestabelle aufgehen.
+	With DlgCalModel
+		.txtOwnEventYear.Enabled  = .chkEventOnce.State = 1
+		.lblEventYear.Enabled  = .chkEventOnce.State = 1
+		If .txtOwnEventYear.Text = &quot;&quot; And .lblEventYear.Enabled Then
+			.txtOwnEventYear.Text = Trim$(Str$(Year(Now())))
+		End If
+	End With
 End Sub
 
 
-Sub CalSpinOwnEventDayDown()
-	Call ModIntTextBox(txtOwnEventDay, 31, 1, &quot;1&quot;, -1)
+Sub CalMouseMoved(aEvent as object)
+Dim ListIndex as Integer
+	oStatusline.SetText(aEvent.ClickCount)
+&apos;	If aEvent.ClickCount = 2 Then
+&apos;		oStatusLine.SetText(&quot;Click&quot;)
+&apos;		bDoSelect = False
+&apos;	Else
+&apos;		oStatusLine.SetText(&quot;&quot;)
+&apos;	End If
+	&apos;       Nimmt Mousemoves ueber dem Bitmap entgegen, und wertet sie je nach
+	&apos;       Land aus.
+	Select Case sCurLangLocale
+		Case  cLANGUAGE_GERMAN
+		&apos; Ermittelt das Land auf dem sich der MausCursor befindet, und aktualisiert
+		&apos; die Textbox mit der Bundeslandbezeichnung, falls ein Mausklick stattfandt.
+&apos;			If bDoSelect Then 
+				ListIndex = CalGetGermanLandAtMousePos(aEvent.X, aEvent.Y, Land$)
+				DlgCalendar.GetControl(&quot;lstHolidays&quot;).SelectItemPos(ListIndex, True)
+				If aEvent.ClickCount = 2 Then
+					bDoSelect = False
+				End If
+&apos;			End If
+	End Select
+	
+	LastMousePosX = aEvent.X
+	LastMousePosY = aEvent.Y
 End Sub
 
 
-Sub CalSpinGeneralYearUp()
-	Call ModIntTextBox(txtYear, 9956, 1583, Trim(Str(Year(Now()))),1)
+Sub CalChangeGeneralMonth()
+
+	Dim MonthToCheck$
+	Dim ValMonthToCheck%
+
+	MonthToCheck$ = DlgCalModel.txtMonth.Text
+	ValMonthToCheck% = Val(MonthToCheck$)
+
+	If (ValMonthToCheck% &gt;= 1) And (ValMonthToCheck% &lt;=12) Then
+		DlgCalModel.txtMonth.Text = cCalShortMonthNames$(ValMonthToCheck%)
+		Exit Sub
+	End If
+
+	If CalGetIntOfShortMonthName%(Trim(Left(MonthToCheck$, 3))) = 0 Then
+		Beep
+		DlgCalModel.txtMonth.Text = DlgCalModel.txtMonth.Tag
+	Else
+		DlgCalModel.txtMonth.Text = Trim(Left(MonthToCheck, 3))
+	End If
+
 End Sub
 
 
-Sub CalSpinGeneralYearDown()
-	Call ModIntTextBox(txtYear, 9956, 1583, Trim(Str(Year(Now()))), -1 )
+
+Sub CalChkForChangeInsertAccept
+	&apos;       Aktualisiert die Label des Insert/Accept Buttons
+	If (DataSelectedFromList=True) And (ButtonLabelIsInsert) Then
+		DlgCalModel.cmdInsert.Label = cSubChkForChangeInsertAccept_Accpet$
+	End If
 End Sub
 
 
-Sub CalSpinOwnEventYearDown()
-	Call ModIntTextBox(txtOwnEventYear, 9956, 1583, Trim(Str(Year(Now()))), -1 )
+
+Sub CalClearInputMask()
+Dim NullList() as String
+&apos;  Löscht die Werte der Eingabe Controls für ein neues Ereignis.
+	With DlgCalModel
+		.chkEventOnce.State = 0
+		.lblEventYear.Enabled = False
+		.txtOwnEventYear.Enabled = False
+&apos;		SpinOwnEventYear.Enabled = False
+		.txtOwnEventYear.Text = &quot;&quot;
+		.txtEvent.Text = &quot;&quot;
+		.txtOwnEventDay.Text = &quot;&quot;
+&apos; Todo: Wie kriegt man den Focus auf dieses  verdammte Control?		
+&apos;		.txtEvent.DefaultButton = True
+	End With
+	DlgCalModel.lstOwnEventMonth.SelectedItems() = Nulllist()
 End Sub
 
 
-Sub CalSpinOwnEventYearUp()
-	Call ModIntTextBox(txtOwnEventYear, 9956, 1583, Trim(Str(Year(Now()))) , 1)
+Sub CalmdSwitchOwnDataOrGeneral()
+	&apos;Ändert den Titel der Dialogbox beim Seitenwechsel und die 
+	&apos;Beschriftungen der Knöpfe
+	If DlgCalModel.Step = 1 Then
+		DlgCalModel.Step = 2
+		DlgCalModel.cmdOwnData.Label = cCalSubcmdSwitchOwnDataOrGeneral_Back$
+		DlgCalModel.cmdInsert.Enabled = DlgCalModel.txtEvent.Text &lt;&gt; &quot;&quot;
+		ToggleYearBox()
+	Else
+		DlgCalModel.Step = 1
+		DlgCalModel.cmdOwnData.Label = cCalSubcmdSwitchOwnDataOrGeneral_OwnData$
+	End If
+End Sub
+
+
+Sub ToggleInsertButton()
+	DlgCalModel.cmdInsert.Enabled = LTrim(DlgCalModel.txtEvent.Text) &lt;&gt; &quot;&quot;	
 End Sub
 
 
@@ -222,148 +226,30 @@ Sub CalModMonthTextBox(txtMonth As Object,IncFactor as Integer)
 End Sub
 
 
-Sub CalSpinGeneralMonthUp()
-	CalModMonthTextBox(txtMonth, 1)
-End Sub
-
-
-Sub CalSpinGeneralMonthDown()
-	CalModMonthTextBox(txtMonth,-1)
-End Sub
-
-
-Sub CalSpinOwnEventMonthDown()
-	Call CalModMonthTextBox(txtOwnEventMonth, -1)
-End Sub
-
-
-Sub CalSpinOwnEventMonthUp()
-	Call CalModMonthTextBox(txtOwnEventMonth, 1)
-End Sub
-
-
-Sub CalChkYearEnDisabled()
-	&apos;       Falls der RadioButton für einen Jahreskalender angeklickt
-	&apos;       worden ist, müssen die Controls für den Monat Disabled
-	&apos;       werden, da ihre Werte in einer Jahrestabelle aufgehen.
-	lblEventYear.Enabled     = Not lblEventYear.Enabled
-	txtownEventYear.Enabled  = Not txtownEventYear.Enabled
-	SpinOwnEventYear.Enabled = Not SpinOwnEventYear.Enabled
-	If (txtOwnEventYear.Text = &quot;&quot;) And (lblEventYear.Enabled = True) Then
-		txtOwnEventYear.Text = Trim$(Str$(Year(Now())))
-	End If
-End Sub
-
-
-Sub CalMouseMoved(Button as integer, Shift as integer, X as single, Y as single)
-
-	&apos;       Nimmt Mousemoves ueber dem Bitmap entgegen, und wertet sie je nach
-	&apos;       Land aus.
-
-	Select Case sCurLangLocale
-		Case  &quot;de&quot; &apos;cLANGUAGE_GERMAN
-		&apos;       Ermittelt das Land auf dem sich der MausCursor befindet, und 
-		&apos;       aktualisiert die Textbox mit der Bundeslandbezeichnung, falls
-		&apos;       ein Mausklick stattfandt.
-			Dim Land$
-			If (Button = 1) Or (MouseClicked% = False)Then 
-				cmbState.ListIndex = CalGetGermanLandAtMousePos(X, Y, Land$)
-			End If
-	End Select
-	
-	LastMousePosX = X
-	LastMousePosY = Y
-End Sub
-
-
-Sub CalChangeGeneralMonth()
-
-	Dim MonthToCheck$
-	Dim ValMonthToCheck%
-
-	MonthToCheck$ = DlgBuffer.txtMonth.Text
-	ValMonthToCheck% = Val(MonthToCheck$)
-
-	If (ValMonthToCheck% &gt;= 1) And (ValMonthToCheck% &lt;=12) Then
-		DlgBuffer.txtMonth.Text = cCalShortMonthNames$(ValMonthToCheck%)
-		Exit Sub
-	End If
-
-	If CalGetIntOfShortMonthName%(Trim(Left(MonthToCheck$, 3))) = 0 Then
-		Beep
-		DlgBuffer.txtMonth.Text = DlgBuffer.txtMonth.Tag
-	Else
-		DlgBuffer.txtMonth.Text = Trim(Left(MonthToCheck, 3))
-	End If
-
-End Sub
-
-
-
-Sub CalChkForChangeInsertAccept
-	&apos;       Aktualisiert die Caption des Insert/Accept Buttons
-	If (DataSelectedFromList=True) And (ButtonCaptionIsInsert) Then
-		DlgBuffer.cmdInsert.Caption = cSubChkForChangeInsertAccept_Accpet$
-	End If
-End Sub
-
-
-
-Sub CalClearInputMask()
-	&apos;       Löscht die Werte der Eingabe Controls für ein 
-	&apos;       neues Ereignis.
-	chkEventOnce.Value = False
-	lblEventYear.Enabled = False
-	txtownEventYear.Enabled = False
-	SpinOwnEventYear.Enabled = False
-	txtOwnEventYear.Text = &quot;&quot;
-	txtEvent.Text = &quot;&quot;
-	txtOwnEventDay.Text = &quot;&quot;
-	txtOwnEventMonth.Text = &quot;&quot;
-	
-	txtEvent.SetFocus()
-End Sub
-
-
-
-Function CalCountSelected%(ByVal listBox as Object, PosSelect%)
-	&apos;       Zählt die selekierten Einträge im Control listBox.
-	&apos;       PosSelect liefert den Index des selektierten Eintrags 
-	&apos;       zurück. Dieser Wert ist natürlich nur zu gebrachen, 
-	&apos;       wenn nur ein Eintrag selektiert ist.
-	Dim Count%, Result%
-
-	Result% = 0
-	For Count% = 0 To listBox.ListCount-1
-		If ListBox.Selected(Count%) Then
-			Result% = Result% + 1
-			PosSelect% = Count%
+Sub CalUpdateNewEventFrame()
+Dim bDoEnable as Boolean
+Dim sSelectedItem
+Dim ListIndex as Integer
+Dim MaxSelIndex as Integer
+	bDoEnable = False
+	With DlgCalModel
+		MaxSelIndex = Ubound(DlgCalModel.lstOwnData.SelectedItems())
+		If MaxSelIndex &gt; -1 Then
+			ListIndex = .lstOwnData.SelectedItems(MaxSelIndex)
+			.txtEvent.Text = CalGetNameofEvent(ListIndex)
+			.txtOwnEventDay.Text = CalGetDayOfEvent(ListIndex)
+			DlgCalendar.GetControl(&quot;lstOwnEventMonth&quot;).SelectItem(CalGetMonthOfEvent(ListIndex), True)
+			.txtOwnEventYear.Text = CalGetYearofEvent(ListIndex)
+			bDoEnable = DlgCalModel.txtOwnEventYear.Text = &quot;&quot;
+			.chkEventOnce.State = Abs(bDoEnable)
+			.lblEventYear.Enabled = bDoEnable
+			.txtOwnEventYear.Enabled = bDoEnable
+			.cmdDelete.Enabled = True
+		Else
+			Call CalClearInputMask()
+			.cmdDelete.Enabled = False
 		End If
-	Next
-	CalCountSelected% = Result%     
-End Function
-
-
-
-Sub CalmdSwitchOwnDataOrGeneral()
-	
-	&apos;Ändert den Titel der Dialogbox beim Seitenwechsel und die 
-	&apos;Beschriftungen der Knöpfe
-	If DlgBuffer.CurrentStep = 1 Then
-		DlgBuffer.CurrentStep = 2
-		DlgBuffer.DlgCmdOwnData.Caption = cCalSubcmdSwitchOwnDataOrGeneral_Back$
-	Else
-		DlgBuffer.CurrentStep = 1
-		DlgBuffer.DlgCmdOwnData.Caption = cCalSubcmdSwitchOwnDataOrGeneral_OwnData$
-	End If
+	End With
 End Sub
 
-
-Sub LoadDialog()
-	DlgBuffer.load
-End Sub
-
-Sub ShowDialog()
-	DlgBuffer.Show
-End Sub
 </script:module>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="CreateTable" script:language="StarBasic">Option Explicit
 
 Public Const FirstDayRow = 5          &apos; Row on month sheet for first day of month
@@ -27,11 +27,11 @@ Dim sBlankStyle as String
 	On Error Goto ErrorHandling
 	oStatusLine.Start(GetResText(sProgress),140)
 
-	iDate = DateSerial(Val(DlgBuffer.txtYear.Text),1,1)
+	iDate = DateSerial(Val(DlgCalModel.txtYear.Text),1,1)
 
 	&apos; Insert year
 	oYearCell = oSheet.GetCellRangeByName(&quot;Year&quot;)
-	oYearCell.Value = Val(DlgBuffer.txtYear.Text)
+	oYearCell.Value = Val(DlgCalModel.txtYear.Text)
 	&apos; Insert holidays
 	CalMonth% = 1
 	CalDay% = 0
@@ -83,7 +83,7 @@ On Error Goto ErrorHandling
 	TargetMonth% = CalGetIntOfShortMonthName%(txtMonth.Text)
 	oMonthCell = oSheet.GetCellRangeByName(&quot;Month&quot;)
 
-	iDate = DateSerial(Val(DlgBuffer.txtYear.Text),TargetMonth%,1)
+	iDate = DateSerial(Val(DlgCalModel.txtYear.Text),TargetMonth%,1)
 	oMonthCell.Value = iDate
 	&apos; Inserting holidays
 	StartDay% = (TargetMonth% - 1) * 31 + 1
