@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuzoom.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:09:12 $
+ *  last change: $Author: aw $ $Date: 2002-03-01 10:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@ FuZoom::~FuZoom()
 
 BOOL FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     pWindow->CaptureMouse();
     bStartDrag = TRUE;
 
@@ -235,6 +238,9 @@ BOOL FuZoom::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     if (bVisible)
     {
         // Hide ZoomRect

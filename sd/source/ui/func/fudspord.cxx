@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudspord.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: aw $ $Date: 2002-03-01 09:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@ FuDisplayOrder::~FuDisplayOrder()
 
 BOOL FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     return TRUE;
 }
 
@@ -156,6 +159,9 @@ BOOL FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     SdrPageView* pPV = NULL;
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
     USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(HITPIX,0)).Width() );

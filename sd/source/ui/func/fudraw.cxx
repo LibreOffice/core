@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-26 14:28:41 $
+ *  last change: $Author: aw $ $Date: 2002-03-01 09:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,9 @@ FuDraw::~FuDraw()
 
 BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 {
+    // #95491# remember button state for creation of own MouseEvents
+    SetMouseButtonCode(rMEvt.GetButtons());
+
     BOOL bReturn = FALSE;
 
     bDragHelpLine = FALSE;
