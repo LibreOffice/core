@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 09:32:08 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 13:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1102,11 +1102,22 @@ void SwEditShell::TransliterateText( sal_uInt32 nType )
                         ::comphelper::getProcessServiceFactory(), nType );
     StartAllAction();
     SET_CURR_SHELL( this );
-    FOREACHPAM_START( this )
 
-        GetDoc()->TransliterateText( *PCURCRSR, aTrans );
+    SwPaM* pCrsr = GetCrsr();
+    if( pCrsr->GetNext() != pCrsr )
+    {
+        GetDoc()->StartUndo();
+        FOREACHPAM_START( this )
 
-    FOREACHPAM_END()
+        if( PCURCRSR->HasMark() )
+            GetDoc()->TransliterateText( *PCURCRSR, aTrans );
+
+        FOREACHPAM_END()
+        GetDoc()->EndUndo();
+    }
+    else
+        GetDoc()->TransliterateText( *pCrsr, aTrans );
+
     EndAllAction();
 }
 
