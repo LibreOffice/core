@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:57:35 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1068,9 +1068,9 @@ BOOL ScDocFunc::SetNoteText( const ScAddress& rPos, const String& rText, BOOL bA
     String aNewText = rText;
     aNewText.ConvertLineEnd();      //! ist das noetig ???
 
-    ScPostIt aNote;
+    ScPostIt aNote(pDoc);
     pDoc->GetNote( rPos.Col(), rPos.Row(), rPos.Tab(), aNote );
-    aNote.AutoSetText( aNewText );      // setzt auch Author und Date
+    aNote.SetText( aNewText );      // setzt auch Author und Date
     pDoc->SetNote( rPos.Col(), rPos.Row(), rPos.Tab(), aNote );
 
     if ( aNote.IsShown() )
@@ -3535,15 +3535,14 @@ BOOL ScDocFunc::SetNote( const ScAddress& rPos, const ScPostIt& rNote, BOOL bApi
     ScEditableTester aTester( pDoc, nTab, nCol,nRow, nCol,nRow );
     if (aTester.IsEditable())
     {
-        pDoc->SetNote( nCol, nRow, nTab, rNote );
-
         if (bUndo)
         {
-            ScPostIt aOld;
+            ScPostIt aOld(pDoc);
             pDoc->GetNote( nCol, nRow, nTab, aOld );
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoEditNote( &rDocShell, rPos, aOld, rNote ) );
         }
+        pDoc->SetNote( nCol, nRow, nTab, rNote );
 
         rDocShell.PostPaintCell( nCol, nRow, nTab );
         aModificator.SetDocumentModified();
