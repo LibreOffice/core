@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-03 12:42:09 $
+ *  last change: $Author: mt $ $Date: 2002-05-17 12:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1946,13 +1946,6 @@ void Outliner::StripPortions()
     bStrippingPortions = TRUE;
     pEditEngine->StripPortions();
     bStrippingPortions = FALSE;
-}
-
-void Outliner::DrawingText( const Point& rStartPos, const XubString& rText, const long* pDXArray,const SvxFont& rFont, USHORT nPara, USHORT nIndex )
-{
-    DBG_CHKTHIS(Outliner,0);
-    DrawPortionInfo aInfo( rStartPos, rText, rFont, nPara, nIndex, pDXArray );
-    aDrawPortionHdl.Call( &aInfo );
 }
 
 void Outliner::DrawingText( const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen, const long* pDXArray,const SvxFont& rFont, USHORT nPara, USHORT nIndex )

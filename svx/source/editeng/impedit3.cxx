@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-03 12:40:47 $
+ *  last change: $Author: mt $ $Date: 2002-05-17 12:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2587,7 +2587,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 {
                                     // VERT???
                                     GetEditEnginePtr()->DrawingText( aTmpPos, aText, nTextStart, nTextLen, pDXArray, aTmpFont, n, nIndex );
-                                    GetEditEnginePtr()->DrawingText( aTmpPos, aText, pDXArray, aTmpFont, n, nIndex );
                                 }
                                 else
                                 {

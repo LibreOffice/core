@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outleeng.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-03 12:42:09 $
+ *  last change: $Author: mt $ $Date: 2002-05-17 12:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,23 +166,6 @@ XubString OutlinerEditEng::GetUndoComment( USHORT nUndoId ) const
     XubString aString;
     return aString;
 #endif
-}
-
-void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rText, const long* pDXArray, const SvxFont& rFont, USHORT nPara, USHORT nIndex )
-{
-    if ( nIndex == 0 )
-    {
-        // Dann das Bullet 'malen', dort wird bStrippingPortions ausgewertet
-        // und Outliner::DrawingText gerufen
-
-        // DrawingText liefert die BaseLine, DrawBullet braucht Top().
-        Point aCorrectedPos( rStartPos );
-        aCorrectedPos.Y() = GetDocPosTopLeft( nPara ).Y();
-        aCorrectedPos.Y() += GetFirstLineOffset( nPara );
-        pOwner->PaintBullet( nPara, aCorrectedPos, Point(), 0, GetRefDevice() );
-    }
-
-    pOwner->DrawingText(rStartPos,rText,pDXArray,rFont,nPara,nIndex );
 }
 
 void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen, const long* pDXArray, const SvxFont& rFont, USHORT nPara, USHORT nIndex )
