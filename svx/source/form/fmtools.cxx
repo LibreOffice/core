@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-23 10:04:30 $
+ *  last change: $Author: fs $ $Date: 2001-07-23 10:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1808,6 +1808,7 @@ FmXDispatchInterceptorImpl::FmXDispatchInterceptorImpl(
     ,m_pMaster(_pMaster)
     ,m_nId(_nId)
     ,m_aInterceptedURLSchemes(_rInterceptedSchemes)
+    ,m_bListening(sal_False)
 {
     DBG_CTOR(FmXDispatchInterceptorImpl,NULL);
 
@@ -1820,7 +1821,10 @@ FmXDispatchInterceptorImpl::FmXDispatchInterceptorImpl(
         // setDispatchProvider we should have got an fallback for requests we (i.e. our master) cannot fullfill
         Reference< ::com::sun::star::lang::XComponent> xInterceptedComponent(_rxToIntercept, UNO_QUERY);
         if (xInterceptedComponent.is())
+        {
             xInterceptedComponent->addEventListener(this);
+            m_bListening = sal_True;
+        }
     }
     ::comphelper::decrement(m_refCount);
 }
@@ -1907,15 +1911,19 @@ Sequence< ::rtl::OUString > SAL_CALL FmXDispatchInterceptorImpl::getInterceptedU
 //------------------------------------------------------------------------------
 void SAL_CALL FmXDispatchInterceptorImpl::disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException )
 {
-    Reference< XDispatchProviderInterception > xIntercepted(m_xIntercepted.get(), UNO_QUERY);
-    if (Source.Source == xIntercepted)
-        ImplDetach();
+    if (m_bListening)
+    {
+        Reference< XDispatchProviderInterception > xIntercepted(m_xIntercepted.get(), UNO_QUERY);
+        if (Source.Source == xIntercepted)
+            ImplDetach();
+    }
 }
 
 //------------------------------------------------------------------------------
 void FmXDispatchInterceptorImpl::ImplDetach()
 {
     ::osl::MutexGuard aGuard(getAccessSafety());
+    OSL_ENSURE(m_bListening, "FmXDispatchInterceptorImpl::ImplDetach: invalid call!");
 
     // deregister ourself from the interception component
     Reference< XDispatchProviderInterception > xIntercepted(m_xIntercepted.get(), UNO_QUERY);
@@ -1927,19 +1935,22 @@ void FmXDispatchInterceptorImpl::ImplDetach()
         // responsible. As we hold the object with a weak reference only, this should be no problem.
         // 88936 - 23.07.2001 - frank.schoenheit@sun.com
     m_pMaster = NULL;
+    m_bListening = sal_False;
 }
 
 //------------------------------------------------------------------------------
 void FmXDispatchInterceptorImpl::disposing()
 {
     // remove ourself as event listener from the interception component
-    Reference< ::com::sun::star::lang::XComponent> xInterceptedComponent(m_xIntercepted.get(), UNO_QUERY);
-    if (xInterceptedComponent.is())
-        xInterceptedComponent->removeEventListener(static_cast<XEventListener*>(this));
+    if (m_bListening)
+    {
+        Reference< ::com::sun::star::lang::XComponent> xInterceptedComponent(m_xIntercepted.get(), UNO_QUERY);
+        if (xInterceptedComponent.is())
+            xInterceptedComponent->removeEventListener(static_cast<XEventListener*>(this));
 
-    // detach from the interception component
-    ImplDetach();
-
+        // detach from the interception component
+        ImplDetach();
+    }
 }
 
 //==============================================================================

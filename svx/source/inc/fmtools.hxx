@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-23 10:04:14 $
+ *  last change: $Author: fs $ $Date: 2001-07-23 10:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,9 @@ class FmXDispatchInterceptorImpl : public FmXDispatchInterceptorImpl_BASE
     ::form::OImplementationIdsRef   m_aHoldImplIdHelper;
 
     // the component which's dispatches we're intercepting
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProviderInterception>   m_xIntercepted;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProviderInterception>
+                    m_xIntercepted;
+    sal_Bool        m_bListening;
 
     // the real interceptor
     FmDispatchInterceptor*          m_pMaster;
