@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:32:37 $
+#  last change: $Author: rt $ $Date: 2005-01-31 17:17:16 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,41 +48,67 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT_NAME=JavaTextExamples
-OUT_COMP_CLASS = $(OUT_CLASS)/$(COMPONENT_NAME)
+EXAMPLE_NAME=JavaTextExamples
+OUT_APP_CLASS = $(OUT_CLASS)/$(EXAMPLE_NAME)
 
-JAVAFILES  = \
-	BookmarkInsertion.java \
-	HardFormatting.java \
-	StyleCreation.java \
-	StyleInitialization.java \
-	SWriter.java \
-	TextDocumentStructure.java \
-	TextReplace.java \
-	WriterSelector.java \
-	GraphicsInserter.java
-
-CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
+APP1_NAME=BookmarkInsertion
+APP1_JAR=$(OUT_APP_CLASS)/$(APP1_NAME).jar
+APP2_NAME=HardFormatting
+APP2_JAR=$(OUT_APP_CLASS)/$(APP2_NAME).jar
+APP3_NAME=StyleCreation
+APP3_JAR=$(OUT_APP_CLASS)/$(APP3_NAME).jar
+APP4_NAME=StyleInitialization
+APP4_JAR=$(OUT_APP_CLASS)/$(APP4_NAME).jar
+APP5_NAME=SWriter
+APP5_JAR=$(OUT_APP_CLASS)/$(APP5_NAME).jar
+APP6_NAME=TextDocumentStructure
+APP6_JAR=$(OUT_APP_CLASS)/$(APP6_NAME).jar
+APP7_NAME=TextReplace
+APP7_JAR=$(OUT_APP_CLASS)/$(APP7_NAME).jar
+APP8_NAME=WriterSelector
+APP8_JAR=$(OUT_APP_CLASS)/$(APP8_NAME).jar
+APP9_NAME=GraphicsInserter
+APP9_JAR=$(OUT_APP_CLASS)/$(APP9_NAME).jar
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
-		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
+		$(PATH_SEPARATOR)$(OUT_APP_CLASS))
 
 # Targets
 .PHONY: ALL
 ALL : \
-    JavaTextExamples
+    $(EXAMPLE_NAME)
 
 include $(SETTINGS)/stdtarget.mk
 
-$(CLASSFILES) : $(JAVAFILES)
+$(OUT_APP_CLASS)/%.class : %.java
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_APP_CLASS) $<
 
-JavaTextExamples : $(CLASSFILES)
+$(OUT_APP_CLASS)/%.mf :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo Main-Class: com.sun.star.lib.loader.Loader> $@
+	$(ECHOLINE)>> $@
+	@echo Name: com/sun/star/lib/loader/Loader.class>> $@
+	@echo Application-Class: $*>> $@
+
+$(OUT_APP_CLASS)/%.jar : $(OUT_APP_CLASS)/%.mf $(OUT_APP_CLASS)/%.class
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	+cd $(subst /,$(PS),$(OUT_APP_CLASS)) && $(SDK_JAR) cvfm $(@F) $*.mf $*.class
+	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
+
+
+$(APP1_JAR) : $(OUT_APP_CLASS)/$(APP1_NAME).mf $(OUT_APP_CLASS)/$(APP1_NAME).class
+$(APP2_JAR) : $(OUT_APP_CLASS)/$(APP2_NAME).mf $(OUT_APP_CLASS)/$(APP2_NAME).class
+$(APP3_JAR) : $(OUT_APP_CLASS)/$(APP3_NAME).mf $(OUT_APP_CLASS)/$(APP3_NAME).class
+$(APP4_JAR) : $(OUT_APP_CLASS)/$(APP4_NAME).mf $(OUT_APP_CLASS)/$(APP4_NAME).class
+$(APP5_JAR) : $(OUT_APP_CLASS)/$(APP5_NAME).mf $(OUT_APP_CLASS)/$(APP5_NAME).class
+$(APP6_JAR) : $(OUT_APP_CLASS)/$(APP6_NAME).mf $(OUT_APP_CLASS)/$(APP6_NAME).class
+$(APP7_JAR) : $(OUT_APP_CLASS)/$(APP7_NAME).mf $(OUT_APP_CLASS)/$(APP7_NAME).class
+$(APP8_JAR) : $(OUT_APP_CLASS)/$(APP8_NAME).mf $(OUT_APP_CLASS)/$(APP8_NAME).class
+$(APP9_JAR) : $(OUT_APP_CLASS)/$(APP9_NAME).mf $(OUT_APP_CLASS)/$(APP9_NAME).class
+
+$(EXAMPLE_NAME) : $(APP1_JAR) $(APP2_JAR) $(APP3_JAR) $(APP4_JAR) $(APP5_JAR) $(APP6_JAR) $(APP7_JAR) $(APP8_JAR) $(APP9_JAR)
 	@echo --------------------------------------------------------------------------------
-	@echo Before running the "$(QM)WriterSelector$(QM)" example, create a document, write 
-	@echo something, select something and then run the example to see what you have selected.
-	@echo -
 	@echo The GraphicsInserter example loads the graphic "$(QM)./oo_smiley.gif$(QM)" into a 
 	@echo new document.
 	@echo -
@@ -102,15 +128,15 @@ JavaTextExamples : $(CLASSFILES)
 	@echo start the demo if you do not want the default parameters specified in the 
 	@echo this makefile. Starting without parameters print a command line help:
 	@echo --- GraphicsInserter ---
-	@echo java -classpath "$(QM)$(SDK_CLASSPATH)$(QM)" GraphicsInserter "$(QM)graphic Url|path$(QM)"
+	@echo java -jar GraphicsInserter.jar "$(QM)graphic Url|path$(QM)"
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(OUT_COMP_CLASS)/%.class
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
+%.run: $(OUT_APP_CLASS)/%.jar
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<
 
-GraphicsInserter.run: $(OUT_COMP_CLASS)/GraphicsInserter.class
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@) oo_smiley.gif
+GraphicsInserter.run: $(OUT_APP_CLASS)/GraphicsInserter.jar
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $< oo_smiley.gif
 
 .PHONY: clean
 clean :
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_APP_CLASS))
