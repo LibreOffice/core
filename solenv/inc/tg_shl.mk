@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.84 $
+#   $Revision: 1.85 $
 #
-#   last change: $Author: hjs $ $Date: 2004-09-21 11:38:29 $
+#   last change: $Author: hjs $ $Date: 2004-09-21 15:37:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -332,19 +332,19 @@ $(SHL$(TNR)TARGETN) : \
     @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
     @-+echo \#define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
     @-+echo \#define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-     @-+echo \#include \"shlinfo.rc\" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo \#include \"shlinfo.rc\" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ELSE			# "$(USE_SHELL)"!="4nt"
 .IF "$(SHL$(TNR)ADD_VERINFO)"!=""
-     @-+echo #include "$(SHL$(TNR)ADD_VERINFO)" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo #include "$(SHL$(TNR)ADD_VERINFO)" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ELSE			# "$(SHL$(TNR)ADD_VERINFO)"!=""
-    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc	
+    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL$(TNR)ADD_VERINFO)"!=""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
     @-+echo #define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-     @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
