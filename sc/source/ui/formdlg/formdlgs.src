@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:14:12 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,7 @@ TabPage RID_SCTAB_FUNCTION
     };
     StringList [ korean ] =
     {
-            < "∏∂¡ˆ∏∑¿∏∑Œ ªÁøÎµ " ; Default ; > ;
+            < "∏∂¡ˆ∏∑¿∏∑Œ ªÁøÎµ»" ; Default ; > ;
         < "∏µŒ" ; Default ; > ;
         < "µ•¿Ã≈Õ∫£¿ÃΩ∫" ; Default ; > ;
         < "≥Ø¬•&Ω√∞£" ; Default ; > ;
@@ -452,9 +452,9 @@ TabPage RID_SCTAB_FUNCTION
         < "ºˆ«–" ; Default ; > ;
         < "«‡∑ƒ" ; Default ; > ;
         < "≈Î∞Ë" ; Default ; > ;
-        < "Ω∫«¡∑πµÂΩ√∆Æ" ; Default ; > ;
+        < "«•" ; Default ; > ;
         < "≈ÿΩ∫∆Æ" ; Default ; > ;
-        < "æ÷µÂ°°¿Œ" ; Default ; > ;
+        < "√ﬂ∞°" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -1008,8 +1008,8 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ chinese_simplified ] = "ºÃ–¯(~N)";
         Text[ russian ] = "~ƒ‡ÎÂÂ >>";
         Text[ polish ] = "Dalej >>";
-        Text[ japanese ] = "éüÇ÷ (~N) >>";
-        Text[ chinese_traditional ] = "ƒ~ƒÚ >>";
+        Text[ japanese ] = "éüÇ÷  (~N) >>";
+        Text[ chinese_traditional ] = "ƒ~ƒÚ (~N) >>";
         Text[ arabic ] = "«· «·Ì <<";
         Text[ greek ] = "≈¸ÏÂÌÔ >>";
         Text[ korean ] = "¥Ÿ¿Ω (~N) >>";
@@ -1077,6 +1077,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ catalan ] = "AutoPiloto de funciones  - ";
     };
 };
+
 
 
 
