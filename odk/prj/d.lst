@@ -1,0 +1,2 @@
+..\%__SRC%\bin\odk*.zip %_DEST%\bin%_EXT%\odk*.zip
+..\%__SRC%\bin\odk*_doc.tar.gz %_DEST%\bin%_EXT%\odk*_doc.tar.gz
