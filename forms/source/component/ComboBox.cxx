@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:49:48 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (Runtime
 DBG_NAME( OComboBoxModel )
 //------------------------------------------------------------------
 OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_CONTROL_COMBOBOX, sal_True, sal_True, sal_True )
+    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_SUN_CONTROL_COMBOBOX, sal_True, sal_True, sal_True )
                     // use the old control name for compytibility reasons
     ,OEntryListHelper( m_aMutex )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
@@ -462,6 +462,19 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
 {
     OBoundControlModel::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);
+
+    // since we are "overwriting" the StringItemList of our aggregate (means we have
+    // an own place to store the value, instead of relying on our aggregate storing it),
+    // we need to respect what the aggregate just read for the StringItemList property.
+    try
+    {
+        if ( m_xAggregateSet.is() )
+            setNewStringItemList( m_xAggregateSet->getPropertyValue( PROPERTY_STRINGITEMLIST ) );
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "OComboBoxModel::read: caught an exception while examining the aggregate's string item list!" );
+    }
 
     // Version
     sal_uInt16 nVersion = _rxInStream->readShort();
