@@ -232,5 +232,11 @@ fi
 export PATH
 
 # execute soffice binary
-exec "$sd_prog/$sd_binary" "$@"
+"$sd_prog/$sd_binary" "$@"
 
+while [ $? -eq 79 ]
+do
+    "$sd_prog/$sd_binary"
+done
+
+exit
