@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-14 10:34:12 $
+ *  last change: $Author: vg $ $Date: 2002-02-18 14:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,9 +174,9 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
                     bTblIsColMode   : 1, //
                     bChainMode      : 1, //Rahmen verbinden
                     bWasShdwCrsr    : 1, //ShadowCrsr war im MouseButtonDown an
-                    bLockInput      : 1, //Lock waehrend die Rechenleiste aktiv ist
+                    bLockInput      : 1; //Lock waehrend die Rechenleiste aktiv ist
 #ifdef ACCESSIBLE_LAYOUT
-                    bHasAccessible  : 1;
+    BOOL            bHasAccessible  : 1;
 #endif
 
 
