@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:34:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet: No parent set!");
     osl_incrementInterlockedCount( &m_refCount );
+    m_pConnection->acquire();
     m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
     osl_decrementInterlockedCount( &m_refCount );
     //  allocBuffer();
@@ -166,6 +167,7 @@ void ODatabaseMetaDataResultSet::disposing(void)
 
     m_aStatement    = NULL;
     m_xMetaData     = NULL;
+    m_pConnection->release();
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL ODatabaseMetaDataResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
