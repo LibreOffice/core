@@ -1,0 +1,28 @@
+SALHLP_1_0 {
+    global:
+GetVersionInfo;
+_fini;
+_init;
+__1cJsalhelperSORealDynamicLoaderLnewInstance6Fpp1rknDrtlIOUString_7_2_;
+__1cJsalhelperSORealDynamicLoader2t5B6Mpp1rknDrtlIOUString_7pv8_v_;
+__1cJsalhelperSORealDynamicLoader2t6Mpp1rknDrtlIOUString_7pv8_v_;
+__1cJsalhelperSORealDynamicLoaderG__vtbl_;
+__1cJsalhelperSORealDynamicLoader2T5B6M_v_;
+__1cJsalhelperSORealDynamicLoader2T6M_v_;
+__1cJsalhelperbR__RTTI__1CpknJsalhelperSORealDynamicLoader__;
+__1cJsalhelperbQ__RTTI__1CpnJsalhelperSORealDynamicLoader__;
+__1cJsalhelperbO__RTTI__1nJsalhelperSORealDynamicLoader__;
+__1cJsalhelperSORealDynamicLoaderHacquire6M_L_;
+__1cJsalhelperSORealDynamicLoaderHrelease6M_L_;
+__1cJsalhelperSORealDynamicLoaderGgetApi6kM_pv_;
+    local:
+        *;
+};
+
+
+
+
+
+
+
+

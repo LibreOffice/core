@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: jl $ $Date: 2001-04-23 09:11:08 $
+#   last change: $Author: jl $ $Date: 2001-04-23 09:12:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,44 +59,37 @@
 #
 #
 #*************************************************************************
+PRJ=..$/..
 
-PRJ=..$/..$/
-
-PRJNAME=salhelper
-TARGET=dynloader
-TARGET1=samplelib
-TARGETTYPE=CUI
+PRJNAME=	salhelper
+TARGET=		rtti
+TARGET1=samplelibrtti
 LIBTARGET=NO
+TARGETTYPE=CUI
+
 
 NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
-BOOTSTRAP_SERVICE=FALSE
 
-# --- Settings ---
+USE_DEFFILE=	TRUE
 
-.INCLUDE : settings.mk
+# --- Settings -----------------------------------------------------
 
-# --- Files ---
+.INCLUDE :  settings.mk
 
+# --- Files --------------------------------------------------------
 
 #RTTI on
 .IF "$(OS)" == "WNT"
 CFLAGS+= -GR
 .ENDIF
 
-
-# UNOTYPES= com.sun.star.lang.XInitialization \
-#---------------------------------------------------------------------------
-# Build the test library which is loaded by the 
-# RealDynamicLoader
-
-SLOFILES= \
-        $(SLO)$/samplelib.obj
+SLOFILES=	\
+        $(SLO)$/samplelibrtti.obj
 
 LIB1TARGET=$(SLB)$/$(TARGET1).lib
 LIB1OBJFILES= \
-        $(SLO)$/samplelib.obj
-
+        $(SLO)$/samplelibrtti.obj
 
 SHL1TARGET=	$(TARGET1)
 
@@ -105,51 +98,44 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(SALLIB)
 
+
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET1)
 SHL1LIBS=	$(SLB)$/$(TARGET1).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+DEF1EXPORTFILE=	exports.dxp
 
 DEF1NAME=	$(SHL1TARGET)
-DEFLIB1NAME =$(TARGET1)
-DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
 
-#DEF1EXPORTFILE=	exports.dxp
+.IF "$(OS)$(CPU)"=="SOLARISS"
+SHL1VERSIONMAP=	sols.map
+.ELIF "$(OS)$(CPU)"=="LINUXI"
+SHL1VERSIONMAP= lngi.map
+.ENDIF
 
-# ------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------
 
 APP1NOSAL=TRUE
 
 APP1TARGET=	$(TARGET)
 
-APP1OBJS=	$(OBJ)$/loader.obj
-
-#LIBCIMT=msvcrtd.lib
-            
+APP1OBJS=	$(OBJ)$/rttitest.obj
 
 APP1STDLIBS= \
     $(SALLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB)
 
-APP1LIBS=	$(LB)$/isalhelper.lib
+#LIBCIMT=msvcrtd.lib
 
-
+APP1LIBS=	$(LB)$/isamplelibrtti.lib
 
 .IF "$(GUI)"=="WNT"
 APP1STDLIBS += $(LIBCIMT)
 .ENDIF
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
+# --- Targets ------------------------------------------------------
 
-# --- Targets ---
-
-.INCLUDE : target.mk
-
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo __CT>>$@
-
-
+.INCLUDE :	target.mk
