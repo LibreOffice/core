@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:46:50 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ TabPage TP_ANIMATION
         Text [ italian ] = "Azione al clic del mouse" ;
         Text [ spanish ] = "Acci�n con pulsaci�n de rat�n" ;
         Text [ french ] = "Action par clic de souris" ;
-        Text [ dutch ] = "Activiteit per muisklik" ;
+        Text [ dutch ] = "Handeling per muisklik" ;
         Text [ swedish ] = "�tg�rd vid musklick" ;
         Text [ danish ] = "Handling ved museklik" ;
         Text [ portuguese ] = "Ac��o com clique no rato" ;
@@ -106,6 +106,8 @@ TabPage TP_ANIMATION
         Text[ hebrew ] = "Aktion bei Mausklick";
         Text[ hindi ] = "मौस क्लिक के समय कार्य";
         Text[ slovak ] = "Činnosť pri kliknutí myšou";
+        Text[ hungarian ] = "Az egérkattintáshoz rendelt művelet";
+        Text[ slovenian ] = "Dejanje na klik miške";
     };
     ListBox LB_ACTION
     {
@@ -129,7 +131,7 @@ TabPage TP_ANIMATION
         Text = "Effekt" ;
         Text [ ENGLISH ] = "Effect" ;
         Text [ NORWEGIAN ] = "Effect" ;
-        Text [ DANISH ] = "Effekt" ;
+        Text [ DANISH ] = "Effekter" ;
         Text [ ENGLISH_US ] = "Effects" ;
         Text [ SPANISH ] = "Efecto" ;
         Text [ FINNISH ] = "Tehosteet" ;
@@ -156,6 +158,8 @@ TabPage TP_ANIMATION
         Text[ hebrew ] = "‮אפקטים‬";
         Text[ hindi ] = "प्रभाव";
         Text[ slovak ] = "Efekty";
+        Text[ hungarian ] = "Hatások";
+        Text[ slovenian ] = "Učinki";
     };
 #define MA_Y1 (MA_Y0 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP)
     FixedText FT_ANIMATION
@@ -174,7 +178,7 @@ TabPage TP_ANIMATION
         Text[ spanish ] = "Animaci�n";
         Text[ finnish ] = "Animaatio";
         Text[ italian ] = "Animazione";
-        Text[ danish ] = "Tekstanimation";
+        Text[ danish ] = "Animation";
         Text[ swedish ] = "Animation";
         Text[ polish ] = "Animacja";
         Text[ portuguese_brazilian ] = "Anima��o";
@@ -190,6 +194,8 @@ TabPage TP_ANIMATION
         Text[ hebrew ] = "Animation";
         Text[ hindi ] = "हूलास";
         Text[ slovak ] = "Animácia";
+        Text[ hungarian ] = "Animáció";
+        Text[ slovenian ] = "Animacija";
     };
     ListBox LB_EFFECT
     {
@@ -212,7 +218,7 @@ TabPage TP_ANIMATION
         Text[ portuguese ] = "Velocidade";
         Text[ russian ] = "��������";
         Text[ greek ] = "��������";
-        Text[ dutch ] = "Speed";
+        Text[ dutch ] = "Snelheid";
         Text[ french ] = "Vitesse";
         Text[ spanish ] = "Velocidad";
         Text[ finnish ] = "Nopeus";
@@ -233,6 +239,8 @@ TabPage TP_ANIMATION
         Text[ hebrew ] = "Geschwindigkeit";
         Text[ hindi ] = "गति";
         Text[ slovak ] = "Rýchlosť";
+        Text[ hungarian ] = "Sebesség";
+        Text[ slovenian ] = "Hitrost";
     };
     RadioButton RBT_SLOW
     {
@@ -269,6 +277,8 @@ TabPage TP_ANIMATION
         Text[ hebrew ] = "~Langsam";
         Text[ hindi ] = "~धीमा";
         Text[ slovak ] = "~Pomalá";
+        Text[ hungarian ] = "~Lassú";
+        Text[ slovenian ] = "~Počasi";
     };
     RadioButton RBT_MEDIUM
     {
@@ -305,6 +315,8 @@ TabPage TP_ANIMATION
         Text[ hebrew ] = "~Mittel";
         Text[ hindi ] = "~मीडियम";
         Text[ slovak ] = "Stred~ná";
+        Text[ hungarian ] = "~Közepes";
+        Text[ slovenian ] = "~Srednje";
     };
     RadioButton RBT_FAST
     {
@@ -341,6 +353,8 @@ TabPage TP_ANIMATION
         Text[ hebrew ] = "S~chnell";
         Text[ hindi ] = "~तेज";
         Text[ slovak ] = "~Rýchla";
+        Text[ hungarian ] = "~Gyors";
+        Text[ slovenian ] = "~Hitro";
     };
 #define MA_Y3 (MA_Y2 + 3*(RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y))
 #define MA_Y4 (MA_Y3 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_GROUP_Y)
@@ -377,6 +391,8 @@ TabPage TP_ANIMATION
         Text[ hebrew ] = "Mit Klang ausblenden";
         Text[ hindi ] = "ध्वनी सहित फीका";
         Text[ slovak ] = "Vyblednúť so zvukom";
+        Text[ hungarian ] = "Hang hozzárendelése";
+        Text[ slovenian ] = "Zabriši z zvokom";
     };
     Edit EDT_SOUND
     {
@@ -402,7 +418,7 @@ TabPage TP_ANIMATION
         Text [ spanish ] = "~Buscar..." ;
         Text [ french ] = "Parcourir..." ;
         Text [ swedish ] = "Genom~s�k..." ;
-        Text [ danish ] = "Gennem~se..." ;
+        Text [ danish ] = "~Gennemse..." ;
         Text [ portuguese_brazilian ] = "E~xaminar..." ;
         Text [ portuguese ] = "~Pesquisar..." ;
         Text[ chinese_simplified ] = "浏览(~B)...";
@@ -422,6 +438,8 @@ TabPage TP_ANIMATION
         Text[ hebrew ] = "‮עיון...‬";
         Text[ hindi ] = "~ब्रउज़...";
         Text[ slovak ] = "~Listovať...";
+        Text[ hungarian ] = "~Tallózás...";
+        Text[ slovenian ] = "Pre~brskaj...";
     };
     TriStateBox TSB_PLAY_FULL
     {
@@ -437,7 +455,7 @@ TabPage TP_ANIMATION
         Text [ spanish ] = "Reproducir el sonido ~completo" ;
         Text [ french ] = "Jouer le son en entier" ;
         Text [ swedish ] = "Spela ~upp ljud fullst�ndigt" ;
-        Text [ danish ] = "Afspil lyd ful~dst�ndig" ;
+        Text [ danish ] = "Afspil lyd ~fuldst�ndig" ;
         Text [ portuguese_brazilian ] = "Re~produzir tudo" ;
         Text [ portuguese ] = "Tocar som ~completo" ;
         Text[ chinese_simplified ] = "完整地播放声音(~P)";
@@ -457,6 +475,8 @@ TabPage TP_ANIMATION
         Text[ hebrew ] = "Klang ~vollständig abspielen";
         Text[ hindi ] = "~पूरा बजाना";
         Text[ slovak ] = "~Prehrať celé";
+        Text[ hungarian ] = "~Lejátszás végig";
+        Text[ slovenian ] = "~Predvajaj v celoti";
     };
 
     //------------------------------------
@@ -565,6 +585,8 @@ TabPage TP_ANIMATION
         Text[ hebrew ] = "‮חיפוס‬";
         Text[ hindi ] = "~अन्वेषण करो";
         Text[ slovak ] = "~Nájsť";
+        Text[ hungarian ] = "~Keresés";
+        Text[ slovenian ] = "~Najdi";
     };
 
     Text = "Interaktion" ;
@@ -604,7 +626,10 @@ TabPage TP_ANIMATION
     Text[ hebrew ] = "Interaktion";
     Text[ hindi ] = "परस्पर सम्बन्ध का कार्य";
     Text[ slovak ] = "Interakcia";
+    Text[ hungarian ] = "Közjáték";
+    Text[ slovenian ] = "Interakcija";
 };
+
 
 
 
