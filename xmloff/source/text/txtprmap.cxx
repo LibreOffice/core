@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-01 13:34:16 $
+ *  last change: $Author: mib $ $Date: 2001-11-13 18:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@ using namespace ::xmloff::token;
 
 XMLPropertyMapEntry aXMLParaPropMap[] =
 {
+    // RES_UNKNOWNATR_CONTAINER
+    M_E( "ParaUserDefinedAttributes", TEXT, XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     // RES_LR_SPACE
     M_E( "ParaLeftMargin",          FO, MARGIN_LEFT,        XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARALEFTMARGIN ),
     M_E( "ParaLeftMarginRelative",  FO, MARGIN_LEFT,        XML_TYPE_PERCENT16, CTF_PARALEFTMARGIN_REL ),
@@ -356,8 +358,6 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // not required
     // RES_END_AT_TXTEND
     // not required
-    // RES_UNKNOWNATR_CONTAINER
-    M_E( "UserDefinedAttributes", TEXT, XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     M_ED( "ParaIsCharacterDistance", STYLE, TEXT_AUTOSPACE, XML_TYPE_TEXT_AUTOSPACE, 0 ),
     M_ED( "ParaIsHangingPunctuation", STYLE, PUNCTUATION_WRAP, XML_TYPE_TEXT_PUNCTUATION_WRAP, 0 ),
     M_ED( "ParaIsForbiddenRules", STYLE, LINE_BREAK, XML_TYPE_TEXT_LINE_BREAK, 0 ),
@@ -766,6 +766,9 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
         pMap = aXMLTextPropMap;
         break;
     case TEXT_PROP_MAP_SHAPE_PARA:
+        pMap = &(aXMLParaPropMap[1]);
+        DBG_ASSERT( pMap->meXMLName == XML_MARGIN_LEFT, "shape para map changed" );
+        break;
     case TEXT_PROP_MAP_PARA:
         pMap = aXMLParaPropMap;
         break;
