@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: tbe $ $Date: 2002-12-10 17:28:35 $
+ *  last change: $Author: tbe $ $Date: 2002-12-12 18:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_MENU_HXX
+#include <vcl/menu.hxx>
 #endif
 
 #ifndef VCLEVENT_WINDOW_FRAMETITLECHANGED
@@ -409,6 +412,38 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         case VCLEVENT_WINDOW_RESIZE:
         {
             NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_BOUNDRECT_EVENT, aOldValue, aNewValue );
+        }
+        break;
+        case VCLEVENT_WINDOW_MENUBARADDED:
+        {
+            MenuBar* pMenuBar = (MenuBar*) rVclWindowEvent.GetData();
+            if ( pMenuBar )
+            {
+                uno::Reference< accessibility::XAccessible > xChild( pMenuBar->GetAccessible() );
+                if ( xChild.is() )
+                {
+                    aNewValue <<= xChild;
+                    NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
+                }
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_MENUBARREMOVED:
+        {
+            MenuBar* pMenuBar = (MenuBar*) rVclWindowEvent.GetData();
+            if ( pMenuBar )
+            {
+                uno::Reference< accessibility::XAccessible > xChild( pMenuBar->GetAccessible() );
+                if ( xChild.is() )
+                {
+                    aOldValue <<= xChild;
+                    NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
+                }
+            }
+        }
+        break;
+        default:
+        {
         }
         break;
     }
