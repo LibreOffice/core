@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-13 22:40:02 $
+ *  last change: $Author: rt $ $Date: 2001-11-22 23:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1061,7 +1061,7 @@ String STR_QUERY_SAVEOWNFORMAT
     Text [ italian ] = "Il presente documento può contenere formattazioni e informazioni\nche non possono essere salvate nel formato \n$(FORMAT). Salvare le modifiche nel formato \n$(OWNFORMAT)?" ;
     Text [ spanish ] = "Este documento puede contener informaciones y formatos\nque no se pueden guardar en el formato $(FORMAT).\n¿Desea guardar los cambios en formato\n$(OWNFORMAT)?" ;
     Text [ french ] = "Ce document peut contenir des formatages et des informations,\nqui ne peuvent pas être enregistrés au format $(FORMAT).\nSouhaitez-vous enregistrer les modifications au format\n$(OWNFORMAT) ?" ;
-    Text [ swedish ] = "Detta dokument kan innehålla formateringar och information\nsom inte kan sparas i $(FORMAT)format.\nSkall ändringarna sparas i \n$(OWNFORMAT) format?" ;
+    Text [ swedish ] = "Det här dokument kan innehålla formateringar och information\nsom inte kan sparas i $(FORMAT)-format.\nSka ändringarna sparas i \n$(OWNFORMAT)-format?" ;
     Text [ danish ] = "Dette dokument kan indeholde formateringer og informationer\nsom ikke kan gemmes i $(FORMAT) format.\nVil du gemme ændringerne i $(OWNFORMAT) format?" ;
     Text [ portuguese ] = "Este documento poderá conter atributos e informações que não podem ser guardados no\nformato $(FORMAT). Guardar as modificações no\nformato $(OWNFORMAT)?" ;
     Text [ portuguese_brazilian ] = "Dieses Dokument kann Formatierungen und Informationen\nenthalten, die nicht im $(FORMAT) Format gespeichert\nwerden k?nen. M?hten Sie die ?nderungen im\n$(OWNFORMAT) Format speichern?" ;
@@ -2152,6 +2152,7 @@ String STR_OPENOBJECT
 };
 
 // ******************************************************************* EOF
+
 
 
 
