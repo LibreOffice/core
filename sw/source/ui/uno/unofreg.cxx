@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofreg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 12:40:53 $
+ *  last change: $Author: os $ $Date: 2001-04-17 11:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,15 @@ extern uno::Sequence< OUString > SAL_CALL SwXMLExportSettings_getSupportedServic
 extern OUString SAL_CALL SwXMLExportSettings_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwXMLExportSettings_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr)  throw( uno::Exception );
 
+//API objects
+extern uno::Sequence< OUString > SAL_CALL SwXAutoTextContainer_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SwXAutoTextContainer_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SwXAutoTextContainer_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+extern uno::Sequence< OUString > SAL_CALL SwXModule_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SwXModule_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SwXModule_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
 //
 #ifdef __cplusplus
 extern "C"
@@ -170,6 +179,11 @@ sal_Bool SAL_CALL component_writeInfo(
                                SwXMLExportSettings_getSupportedServiceNames() );
             lcl_uno_writeInfo( pKey, SwXMLImportSettings_getImplementationName(),
                                SwXMLImportSettings_getSupportedServiceNames() );
+            //API objects
+            lcl_uno_writeInfo( pKey, SwXAutoTextContainer_getImplementationName(),
+                               SwXAutoTextContainer_getSupportedServiceNames() );
+            lcl_uno_writeInfo( pKey, SwXModule_getImplementationName(),
+                               SwXModule_getSupportedServiceNames() );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -271,6 +285,22 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName,
                 SwXMLImportSettings_getImplementationName(),
                 SwXMLImportSettings_createInstance,
                 SwXMLImportSettings_getSupportedServiceNames() );
+        }
+        else if( SwXAutoTextContainer_getImplementationName().equalsAsciiL(
+                                                    pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SwXAutoTextContainer_getImplementationName(),
+                SwXAutoTextContainer_createInstance,
+                SwXAutoTextContainer_getSupportedServiceNames() );
+        }
+        else if( SwXModule_getImplementationName().equalsAsciiL(
+                                                    pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SwXModule_getImplementationName(),
+                SwXModule_createInstance,
+                SwXModule_getSupportedServiceNames() );
         }
         if( xFactory.is())
         {

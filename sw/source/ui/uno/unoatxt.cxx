@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-04 09:47:11 $
+ *  last change: $Author: os $ $Date: 2001-04-17 11:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,10 +166,27 @@ String lcl_FindGroupName(SwGlossaries* pGlossaries, const OUString& GroupName)
 /* -----------------30.03.99 14:31-------------------
  *
  * --------------------------------------------------*/
-Reference< uno::XInterface> SAL_CALL SwXAutoTextContainer_CreateInstance(const Reference< lang::XMultiServiceFactory>& )
+Reference< uno::XInterface > SAL_CALL SwXAutoTextContainer_createInstance(
+    const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
 {
     static Reference< uno::XInterface > xAText = (cppu::OWeakObject*)new SwXAutoTextContainer();;
     return xAText;
+}
+/* -----------------------------17.04.01 13:17--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence< OUString > SAL_CALL SwXAutoTextContainer_getSupportedServiceNames() throw()
+{
+    OUString sService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.AutoTextContainer"));
+    const Sequence< OUString > aSeq( &sService, 1 );
+    return aSeq;
+}
+/* -----------------------------17.04.01 13:18--------------------------------
+
+ ---------------------------------------------------------------------------*/
+OUString SAL_CALL SwXAutoTextContainer_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM("SwXAutoTextContainer" ) );
 }
 
 /*-- 21.12.98 12:42:16---------------------------------------------------
@@ -360,24 +377,27 @@ void SwXAutoTextContainer::removeByName(const OUString& aGroupName)
  ---------------------------------------------------------------------------*/
 OUString SwXAutoTextContainer::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXAutoTextContainer");
+    return SwXAutoTextContainer_getImplementationName();
 }
 /* -----------------------------06.04.00 11:11--------------------------------
 
  ---------------------------------------------------------------------------*/
 BOOL SwXAutoTextContainer::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.AutoTextContainer") == rServiceName;
+    const Sequence< OUString > aNames = SwXAutoTextContainer_getSupportedServiceNames();
+    for(sal_Int32 nService = 0; nService < aNames.getLength(); nService++)
+    {
+        if(aNames.getConstArray()[nService] == rServiceName)
+            return TRUE;
+    }
+    return FALSE;
 }
 /* -----------------------------06.04.00 11:11--------------------------------
 
  ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.AutoTextContainer");
-    return aRet;
+    return SwXAutoTextContainer_getSupportedServiceNames();
 }
 /******************************************************************
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-09 07:24:05 $
+ *  last change: $Author: os $ $Date: 2001-04-17 11:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,12 +320,6 @@
 #ifndef _FONTCFG_HXX //autogen
 #include <fontcfg.hxx>
 #endif
-#ifndef _UNOMOD_HXX
-#include <unomod.hxx>
-#endif
-#ifndef _UNOATXT_HXX
-#include <unoatxt.hxx>
-#endif
 #ifndef _SFX_EVENTCONF_HXX
 #include <sfx2/evntconf.hxx>
 #endif
@@ -407,10 +401,8 @@ SwModule::SwModule( SvFactory* pFact,
                                      ERRCODE_AREA_SW_END,
                                      pSwResMgr );
 
-#if SUPD>620
     SfxEventConfiguration::RegisterEvent(SW_EVENT_MAIL_MERGE, SW_RES(STR_PRINT_MERGE_MACRO), String::CreateFromAscii("OnMailMerge"));
     SfxEventConfiguration::RegisterEvent(SW_EVENT_PAGE_COUNT, SW_RES(STR_PAGE_COUNT_MACRO), String::CreateFromAscii("OnPageCountChange"));
-#endif
     pModuleConfig = new SwModuleOptions;
 
     //Die brauchen wie sowieso
@@ -508,33 +500,6 @@ void SwDLL::RegisterInterfaces()
     SwWebDrawBaseShell::RegisterInterface(pMod);
     SwWebDrawFormShell::RegisterInterface(pMod);
     SwWebOleShell::RegisterInterface(pMod);
-
-    uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-    uno::Reference< container::XSet >  xSet(xMgr, uno::UNO_QUERY);
-    if (xSet.is())
-    {
-        OUString sString = C2S("com.sun.star.text.AutoTextContainer");
-
-        uno::Reference< lang::XSingleServiceFactory >  xSingleFactory =
-            cppu::createOneInstanceFactory(
-                xMgr,
-                OUString(),
-                SwXAutoTextContainer_CreateInstance,
-                uno::Sequence<OUString>(&sString, 1));
-
-        if (xSingleFactory.is())
-            xSet->insert(uno::Any(&xSingleFactory, ::getCppuType((uno::Reference< lang::XSingleServiceFactory> *)0)));
-
-        sString = C2S("com.sun.star.text.StarWriter");
-        xSingleFactory = cppu::createOneInstanceFactory(
-                xMgr,
-                OUString(),
-                SwXModule_CreateInstance,
-                uno::Sequence<OUString>(&sString, 1));
-
-        if (xSingleFactory.is())
-            xSet->insert(uno::Any(&xSingleFactory, ::getCppuType((uno::Reference< lang::XSingleServiceFactory>*)0)));
-    }
 }
 
 //************************************************************************

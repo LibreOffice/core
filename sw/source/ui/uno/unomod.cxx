@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-03 14:55:05 $
+ *  last change: $Author: os $ $Date: 2001-04-17 11:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,12 +114,16 @@
 #ifndef _COM_SUN_STAR_TEXT_NOTEPRINTMODE_HPP_
 #include <com/sun/star/text/NotePrintMode.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HDL_
+#include <com/sun/star/lang/XMultiServiceFactory.hdl>
+#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
 /******************************************************************
@@ -128,10 +132,27 @@ using namespace ::rtl;
 /* -----------------30.03.99 15:10-------------------
  *
  * --------------------------------------------------*/
-Reference< uno::XInterface >  SAL_CALL SwXModule_CreateInstance(const Reference< lang::XMultiServiceFactory > & )
+Reference< uno::XInterface > SAL_CALL SwXModule_createInstance(
+    const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
 {
     static Reference< uno::XInterface >  xModule = (cppu::OWeakObject*)new SwXModule();;
     return xModule;
+}
+/* -----------------------------17.04.01 13:11--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence< OUString > SAL_CALL SwXModule_getSupportedServiceNames() throw()
+{
+    OUString sService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GlobalSettings"));
+    const Sequence< OUString > aSeq( &sService, 1 );
+    return aSeq;
+}
+/* -----------------------------17.04.01 13:11--------------------------------
+
+ ---------------------------------------------------------------------------*/
+OUString SAL_CALL SwXModule_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM("SwXModule" ) );
 }
 /*-- 17.12.98 12:19:01---------------------------------------------------
 
@@ -182,24 +203,27 @@ Reference< beans::XPropertySet >  SwXModule::getPrintSettings(void) throw( uno::
  ---------------------------------------------------------------------------*/
 OUString SwXModule::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXModule");
+    return SwXModule_getImplementationName();
 }
 /* -----------------------------06.04.00 10:59--------------------------------
 
  ---------------------------------------------------------------------------*/
 BOOL SwXModule::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.GlobalSettings") == rServiceName;
+    const Sequence< OUString > aNames = SwXModule_getSupportedServiceNames();
+    for(sal_Int32 nService = 0; nService < aNames.getLength(); nService++)
+    {
+        if(aNames.getConstArray()[nService] == rServiceName)
+            return TRUE;
+    }
+    return FALSE;
 }
 /* -----------------------------06.04.00 10:59--------------------------------
 
  ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXModule::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.GlobalSettings");
-    return aRet;
+    return SwXModule_getSupportedServiceNames();
 }
 
 /******************************************************************
@@ -668,6 +692,9 @@ Sequence< OUString > SwXViewSettings::getSupportedServiceNames(void) throw( Runt
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/04/03 14:55:05  mtg
+    #78699# add support for paper from setup and fax name
+
     Revision 1.2  2001/01/25 10:06:05  os
     #82876# support of com.sun.star.text.GlobalSettings
 
