@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: ama $ $Date: 2000-10-11 12:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,12 +580,17 @@ SwLayNotify::~SwLayNotify()
         pLay->SetCompletePaint();
 
     //Nachfolger benachrichtigen wenn sich die SSize geaendert hat.
-    if ( pLay->GetNext() && pLay->Frm().SSize() != aFrm.SSize() )
+    if ( pLay->Frm().SSize() != aFrm.SSize() )
     {
-        if ( pLay->GetNext()->IsLayoutFrm() )
-            pLay->GetNext()->_InvalidatePos();
-        else
-            pLay->GetNext()->InvalidatePos();
+        if( pLay->GetNext() )
+        {
+            if ( pLay->GetNext()->IsLayoutFrm() )
+                pLay->GetNext()->_InvalidatePos();
+            else
+                pLay->GetNext()->InvalidatePos();
+        }
+        else if( pLay->IsSctFrm() )
+            pLay->InvalidateNextPos();
     }
     if ( !IsLowersComplete() &&
          !((pLay->GetType()&FRM_FLY|FRM_SECTION) &&
