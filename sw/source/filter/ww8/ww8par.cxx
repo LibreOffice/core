@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-02 08:58:16 $
+ *  last change: $Author: cmc $ $Date: 2001-04-10 10:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,6 +752,10 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
             WW8DopTypography::aJapanNotEndLevel1);
         rDoc.SetForbiddenCharacters(LANGUAGE_JAPANESE,aForbidden);
     }
+
+    rDoc.SetKernAsianPunctuation(rTypo.fKerningPunct);
+    rDoc.SetCharCompressType(
+        static_cast<SwCharCompressType>(rTypo.iJustification));
 }
 
 
@@ -3086,11 +3090,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.16 2001-04-02 08:58:16 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.17 2001-04-10 10:51:11 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.16  2001/04/02 08:58:16  cmc
+      ##515## improve anchoring of graphics that are anchored to a character run ending in a pagebreak
+
       Revision 1.15  2001/03/30 15:20:23  cmc
       ##540## rework pagebreak insertion, to avoid bas pagebreak localtion due to handling fields before pagebreaks
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-14 15:54:34 $
+ *  last change: $Author: cmc $ $Date: 2001-04-10 10:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,6 +535,9 @@ void SwWW8Writer::ExportDopTypography(WW8DopTypography &rTypo)
         memcpy(rTypo.rgxchLPunct,pUseMe->endLine.getStr(),
             (rTypo.cchLeadingPunct+1)*2);
     }
+
+    rTypo.fKerningPunct = pDoc->IsKernAsianPunctuation();
+    rTypo.iJustification = pDoc->GetCharCompressType();
 }
 
 // HasItem ist fuer die Zusammenfassung der Doppel-Attribute
@@ -2275,11 +2278,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.13 2001-03-14 15:54:34 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.14 2001-04-10 10:51:11 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2001/03/14 15:54:34  jp
+      remove hard mapping of EditEngine- and Writer WhichIds
+
       Revision 1.12  2001/03/14 10:24:04  jp
       PieceTableCTOR: depends unicode flag on W95/W97 export
 
