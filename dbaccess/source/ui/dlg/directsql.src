@@ -1,0 +1,209 @@
+/*************************************************************************
+ *
+ *  $RCSfile: directsql.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2001-06-19 10:54:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBACCESS_UI_DIRECTSQL_HRC_
+#include "directsql.hrc"
+#endif
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+#define BUTTON_SIZE_X       50
+#define BUTTON_SIZE_Y       14
+
+#define WINDOW_SIZE_X       200
+#define WINDOW_SIZE_Y       210 + BUTTON_SIZE_Y + BUTTON_SIZE_Y
+
+ModalDialog DLG_DIRECTSQL
+{
+    OutputSize  = TRUE ;
+    Moveable    = TRUE ;
+    Closeable   = TRUE ;
+    SVLook      = TRUE ;
+    Size        = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+
+    FixedLine FL_SQL
+    {
+        Pos = MAP_APPFONT( 4, 3 );
+        Size = MAP_APPFONT( WINDOW_SIZE_X - 8, 8 );
+        Text = "SQL Kommando";
+        Text [ english ] = "SQL command";
+        Text [ english_us ] = "SQL command";
+    };
+    FixedText FT_SQL
+    {
+        Pos = MAP_APPFONT( 7, 15 );
+        Size = MAP_APPFONT( WINDOW_SIZE_X - 14, 8 );
+        Text = "auszuf¸hrendes Kommando";
+        Text [ english ] = "Command to execute";
+        Text [ english_us ] = "Command to execute";
+    };
+    MultiLineEdit ME_SQL
+    {
+        Pos = MAP_APPFONT( 7, 26 );
+        Size = MAP_APPFONT( WINDOW_SIZE_X - 14, 80 );
+        SVLook = TRUE;
+        Border = TRUE;
+        TabStop = TRUE;
+        IgnoreTab = TRUE;
+    };
+    PushButton PB_EXECUTE
+    {
+        Pos = MAP_APPFONT( WINDOW_SIZE_X - BUTTON_SIZE_X - 7, 109 );
+        Size = MAP_APPFONT( BUTTON_SIZE_X, BUTTON_SIZE_Y );
+        Text = "Ausf¸hren";
+        Text [ english ] = "Execute";
+        Text [ english_us ] = "Execute";
+        DefButton = TRUE;
+    };
+    FixedText FT_HISTORY
+    {
+        Pos = MAP_APPFONT( 7, 110 + BUTTON_SIZE_Y + 3 );
+        Size = MAP_APPFONT( WINDOW_SIZE_X - 14, 8 );
+        Text = "Vorherige Kommandos";
+        Text [ english ] = "Previous commands";
+        Text [ english_us ] = "Previous commands";
+    };
+    ListBox LB_HISTORY
+    {
+        Pos = MAP_APPFONT( 7, 121 + BUTTON_SIZE_Y + 3 );
+        Size = MAP_APPFONT( WINDOW_SIZE_X - 14, 14 );
+        SvLook = TRUE;
+        DropDown = TRUE;
+        Border = TRUE;
+    };
+    FixedLine FL_STATUS
+    {
+        Pos = MAP_APPFONT( 4, 138 + BUTTON_SIZE_Y + 4 );
+        Size = MAP_APPFONT( WINDOW_SIZE_X - 8, 8 );
+        Text = "Status";
+        Text [ english ] = "Status";
+        Text [ english_us ] = "Status";
+    };
+    MultiLineEdit ME_STATUS
+    {
+        Pos = MAP_APPFONT( 7, 153 + BUTTON_SIZE_Y );
+        Size = MAP_APPFONT( WINDOW_SIZE_X - 14, 41 );
+        Border = TRUE;
+        ReadOnly = TRUE;
+        VScroll = TRUE;
+    };
+    FixedLine FL_BUTTONS
+    {
+        Pos = MAP_APPFONT( 4, 193 + BUTTON_SIZE_Y + 4 );
+        Size = MAP_APPFONT( WINDOW_SIZE_X - 8, 8 );
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT( WINDOW_SIZE_X - 7 - BUTTON_SIZE_X - 3 - BUTTON_SIZE_X, 207 + BUTTON_SIZE_Y );
+        Size = MAP_APPFONT( BUTTON_SIZE_X, BUTTON_SIZE_Y );
+    };
+    PushButton PB_CLOSE
+    {
+        Pos = MAP_APPFONT( WINDOW_SIZE_X - 7 - BUTTON_SIZE_X, 207 + BUTTON_SIZE_Y );
+        Size = MAP_APPFONT( BUTTON_SIZE_X, BUTTON_SIZE_Y );
+        Text = "Schlieﬂen";
+        Text [ english ] = "Close";
+        Text [ english_us ] = "Close";
+    };
+
+    Text                = "SQL Statement ausf¸hren" ;
+    Text [ english ]    = "Excecute SQL statement" ;
+    Text [ english_us ] = "Excecute SQL statement" ;
+};
+
+String STR_COMMAND_EXECUTED_SUCCESSFULLY
+{
+    Text = "Befehl erfolgreich ausgef¸hrt." ;
+    Text [ English ] = "Command executed successfully." ;
+    Text [ portuguese ] = "Comando executado com Íxito." ;
+    Text [ english_us ] = "Command successfully executed." ;
+    Text [ portuguese_brazilian ] = "Befehl erfolgreich ausgef¸hrt." ;
+    Text [ swedish ] = "Kommando utfˆrt." ;
+    Text [ danish ] = "Kommando fuldf¯rt." ;
+    Text [ italian ] = "Comando eseguito con successo." ;
+    Text [ spanish ] = "Comando ejecutado satisfactoriamente." ;
+    Text [ french ] = "Commande exÈcutÈe avec succËs" ;
+    Text [ dutch ] = "Opdracht met succes uitgevoerd." ;
+    Text[ chinese_simplified ] = "÷¥––√¸¡Ó≥…π¶°£";
+    Text[ russian ] = " ÓÏ‡Ì‰‡ ‚˚ÔÓÎÌÂÌ‡ ÛÒÔÂ¯ÌÓ.";
+    Text[ polish ] = "Polecenie wykonano pomyúlnie.";
+    Text[ japanese ] = "∫œ›ƒﬁÇÕéÒîˆÇÊÇ≠é¿çsÇ≥ÇÍÇ‹ÇµÇΩÅB";
+    Text[ chinese_traditional ] = "∞ı¶Ê©R•O¶®•\\°C";
+    Text[ arabic ] = " „  ‰›Ì– «·√„— »‰Ã«Õ.";
+    Text[ greek ] = "« ÂÌÙÔÎﬁ ÂÍÙÂÎ›ÛÙÁÍÂ ÂÈÙı˜˛Ú.";
+    Text[ korean ] = "∏Ì∑…¿ª º∫∞¯¿˚¿∏∑Œ Ω««‡«œø¥Ω¿¥œ¥Ÿ.";
+};
+
+String STR_DIRECTSQL_CONNECTIONLOST
+{
+    Text = "Die Verbindung zur Datenbank wurde gelˆscht. Dieser Dialog wird geschlossen.";
+    Text [ english ] = "The connection to the database has been lost. This dialog will be closed.";
+    Text [ english_us ] = "The connection to the database has been lost. This dialog will be closed.";
+};
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 18.06.01 17:01:52  fs
+ ************************************************************************/
+
