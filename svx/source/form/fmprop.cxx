@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmprop.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-10 13:14:39 $
+ *  last change: $Author: fs $ $Date: 2001-01-23 16:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,7 @@ const FmPropertyInfo* FmPropertyInfoService::getPropertyInfo()
             FmPropertyInfo(FM_PROP_ALLOWEDITS,          FM_ATTR_ALLOWEDITS,         sal_True,  ::rtl::OUString(SVX_RES(RID_STR_ALLOW_EDITS)),       nPos++, HID_PROP_ALLOW_EDITS ) ,
             FmPropertyInfo(FM_PROP_ALLOWDELETIONS,      FM_ATTR_ALLOWDELETIONS,     sal_True,  ::rtl::OUString(SVX_RES(RID_STR_ALLOW_DELETIONS)),   nPos++, HID_PROP_ALLOW_DELETIONS) ,
             FmPropertyInfo(FM_PROP_INSERTONLY,          FM_ATTR_INSERTONLY,         sal_True,  ::rtl::OUString(SVX_RES(RID_STR_DATAENTRY)),         nPos++, HID_PROP_DATAENTRY) ,
-            FmPropertyInfo(FM_PROP_NAVIGATION,          FM_ATTR_NAVIGATION,         sal_True,  ::rtl::OUString(SVX_RES(RID_STR_NAVIGATION)),            nPos++, HID_PROP_NAVIGATION) ,
+            FmPropertyInfo(FM_PROP_NAVIGATION,          FM_ATTR_NAVIGATION,         sal_True,  ::rtl::OUString(SVX_RES(RID_STR_NAVIGATIONBAR)),         nPos++, HID_PROP_NAVIGATION) ,
             FmPropertyInfo(FM_PROP_CYCLE,               FM_ATTR_CYCLE,              sal_True,  ::rtl::OUString(SVX_RES(RID_STR_CYCLE)),             nPos++, HID_PROP_CYCLE) ,
             FmPropertyInfo(FM_PROP_CACHESIZE,           FM_ATTR_CACHESIZE,          sal_True,  ::rtl::OUString(),                                   nPos++, 0) ,
             FmPropertyInfo(FM_PROP_PRIVILEGES,          FM_ATTR_PRIVILEGES,         sal_False, ::rtl::OUString(),                                   nPos++, 0),
