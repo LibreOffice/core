@@ -1,6 +1,4 @@
-su	sysui	:	xml2cmp NULL
-su	sysui	:	offapi rdbmaker NULL
-su	sysui							usr1	-	all	su_mkout NULL
+su	sysui	:	xml2cmp drafts rdbmaker NULL
 su	sysui\win32\office\icons				nmake	-	w	su_iconsw NULL
 su	sysui\tools\lngconv				nmake	-	u	su_lngconv NULL
 su	sysui\unix\office 				nmake	-	u	su_iconsu NULL
