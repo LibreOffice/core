@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 11:38:10 $
+ *  last change: $Author: cd $ $Date: 2002-08-30 09:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ public:
     Image           MakeUserImage(USHORT nNewId, Image& aSourceImage, BOOL bHiContrast = FALSE );
     Image           GetImage(USHORT nId, SfxModule* pMod, BOOL bBig ) const;
     Image           GetImage(USHORT nId, SfxModule* pMod, BOOL bBig, BOOL bHiContrast ) const;
+    Image           GetDefaultImage(USHORT nId, SfxModule* pMod, BOOL bBig, BOOL bHiContrast ) const;
 
                     // add images to configurable user list
     void            ReplaceImage(USHORT nId, Bitmap* pBmp=0);

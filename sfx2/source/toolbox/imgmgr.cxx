@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:19:39 $
+ *  last change: $Author: cd $ $Date: 2002-08-30 09:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ public:
     void            RebuildUserList();
     Image           GetImage( USHORT nId, SfxModule*, BOOL bBig, BOOL bHiContrast ) const;
     Image           SeekImage(USHORT nId, SfxModule* pModule, BOOL bHiContrast ) const;
+    Image           GetDefaultImage( USHORT nId, SfxModule*, BOOL bBig, BOOL bHiContrast ) const;
 
     virtual BOOL    ReInitialize();
     int             Load( SvStream& );
@@ -895,6 +896,20 @@ Image SfxImageManager_Impl::GetImage( USHORT nId, SfxModule *pModule, BOOL bBig,
     }
 }
 
+Image SfxImageManager_Impl::GetDefaultImage(USHORT nId, SfxModule* pMod, BOOL bBig, BOOL bHiContrast ) const
+{
+    if ( !pMod )
+        pMod = SFX_APP()->GetActiveModule();
+    ImageList *pList=0;
+    if ( pMod )
+        pList = pMod->GetImageList_Impl( bBig, bHiContrast );
+
+    if ( pList && pList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+        return pList->GetImage( nId );
+    else
+        return GetImageList( bBig, bHiContrast )->GetImage( nId );
+}
+
 Image SfxImageManager_Impl::SeekImage( USHORT nId, SfxModule *pModule, BOOL bHiContrast ) const
 {
     BOOL bBig = ( m_aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE );
@@ -1138,7 +1153,16 @@ void SfxImageManager::SetSymbolSet_Impl( sal_Int16 nNewSet )
 }
 
 //-------------------------------------------------------------------------
+/* Retrieves the default image for an ID. The search order is
+   Module-Imagelist (if existing), Defaultlist
+*/
 
+Image SfxImageManager::GetDefaultImage(USHORT nId, SfxModule* pMod, BOOL bBig, BOOL bHiContrast ) const
+{
+    return pImp->GetDefaultImage( nId, pMod, bBig, bHiContrast );
+}
+
+//-------------------------------------------------------------------------
 /*  [Beschreibung]
 
     Sucht das Image der uebergebenen Id. Suchreihenfolge:
@@ -1336,13 +1360,8 @@ void SfxImageManager::ReplaceImage( USHORT nId, Bitmap* pBmp )
 
         Image aImage = GetImage( nId );
 
-        if ( aImage.GetSizePixel().Width() )
-        {
-            // F"ur die Id soll wieder ein Image aktiviert werden, das nicht
-            // defaultm"assig vorhanden ist
-            pUserImageList->AddImage( nId, aImage );
-        }
-        else if ( SfxMacroConfig::IsMacroSlot(nId) )
+        // Release slot id if we have no default image and this is a macro
+        if ( !aImage.GetSizePixel().Width() && SfxMacroConfig::IsMacroSlot(nId) )
             SfxMacroConfig::GetOrCreate()->ReleaseSlotId( nId );
 
         bReplaced = TRUE;
