@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:38:41 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ czech ] = "Text";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "टेक्स्ट्";
+        Text[ slovak ] = "Text";
     };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
@@ -146,6 +147,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ czech ] = "Přizpůsobit šířku textu";
         Text[ hebrew ] = "~Breite an Text anpassen";
         Text[ hindi ] = "टेक्स्ट् केलिए योग्य चौ~डाई";
+        Text[ slovak ] = "Prispôsobiť ší~rku na text";
     };
     TriStateBox TSB_AUTOGROW_HEIGHT
     {
@@ -179,6 +181,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ czech ] = "Přizpůsobit výšku textu";
         Text[ hebrew ] = "~Höhe an Text anpassen";
         Text[ hindi ] = "टेक्स्ट् केलिए योग्य ऊँ~चाई";
+        Text[ slovak ] = "Prispôsobiť ~výšku na text";
     };
     TriStateBox TSB_FIT_TO_SIZE
     {
@@ -212,6 +215,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ czech ] = "Přizpůsobit do rámce";
         Text[ hebrew ] = "Am Rahmen ~anpassen";
         Text[ hindi ] = "फ़्रेम केलिए ~योग्य";
+        Text[ slovak ] = "Prispôsobiť do ~rámca";
     };
     TriStateBox TSB_CONTOUR
     {
@@ -245,6 +249,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ czech ] = "Přizpůsobit křivce";
         Text[ hebrew ] = "~Konturfluss";
         Text[ hindi ] = "परिवेश केलिए ~ठीक करो";
+        Text[ slovak ] = "Prispôsobiť na ~krivku";
     };
     FixedLine FL_DISTANCE
     {
@@ -277,6 +282,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ czech ] = "Vzdálenost k okrajům";
         Text[ hebrew ] = "Abstand vom Rahmen";
         Text[ hindi ] = "किनारों के बीच अंतर देना";
+        Text[ slovak ] = "Vzdialenosť od okrajov";
     };
     FixedText FT_LEFT
     {
@@ -309,6 +315,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ czech ] = "Vlevo";
         Text[ hebrew ] = "~Links";
         Text[ hindi ] = "~बायाँ";
+        Text[ slovak ] = "Vľ~avo";
     };
     FixedText FT_RIGHT
     {
@@ -341,6 +348,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ czech ] = "Vpravo";
         Text[ hebrew ] = "~Rechts";
         Text[ hindi ] = "~दाहिना";
+        Text[ slovak ] = "Vp~ravo";
     };
     FixedText FT_TOP
     {
@@ -373,6 +381,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ czech ] = "Nahoře";
         Text[ hebrew ] = "~Oben";
         Text[ hindi ] = "~ऊपर";
+        Text[ slovak ] = "~Hore";
     };
     FixedText FT_BOTTOM
     {
@@ -405,6 +414,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ czech ] = "Dole";
         Text[ hebrew ] = "~Unten";
         Text[ hindi ] = "~नीचे";
+        Text[ slovak ] = "~Dole";
     };
     MetricField MTR_FLD_LEFT
     {
@@ -507,6 +517,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ czech ] = "Ukotvení textu";
         Text[ hebrew ] = "Textverankerung";
         Text[ hindi ] = "टेक्स्ट् ऐन्कर";
+        Text[ slovak ] = "Ukotvenie textu";
     };
     Control CTL_POSITION
     {
@@ -548,6 +559,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ czech ] = "Plná šířka";
         Text[ hebrew ] = "‮רוחב מלא‬";
         Text[ hindi ] = "सम्पूर्ण ~चौडाई";
+        Text[ slovak ] = "Plná ší~rka";
     };
     Text[ chinese_simplified ] = "文字";
     Text[ russian ] = "�����";
@@ -565,8 +577,11 @@ TabPage RID_SVXPAGE_TEXTATTR
     Text[ czech ] = "Text";
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
+    Text[ slovak ] = "Text";
 };
  // ********************************************************************** EOF
+
+
 
 
 
