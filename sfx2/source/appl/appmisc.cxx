@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-06 07:39:37 $
+ *  last change: $Author: mba $ $Date: 2002-03-07 18:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@
 #include <com/sun/star/frame/XTasksSupplier.hpp>
 #endif
 
+#include <unotools/ucbstreamhelper.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -583,70 +584,60 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
     if ( !pList )
     {
         // Gibt es eine Slotdatei ?
-        INetURLObject aObj( SvtPathOptions().GetConfigPath() );
-        aObj.insertName( DEFINE_CONST_UNICODE( "slots.cfg" ) );
-        SvFileStream aStrm( aObj.GetMainURL(), STREAM_STD_READ );
-
-        // Speziell f"ur AK: wenn in der INI "Slots=AK" steht, slots.cfg
-        // ignorieren und weitermachen
-#if SUPD<613//MUSTINI
-        String aSlotEntry = GetIniManager()->Get( SFX_KEY_SLOTLIST );
-        if ( aSlotEntry.CompareIgnoreCaseToAscii( "AK" ) == COMPARE_EQUAL )
-            return NULL;
-        sal_uInt16 nSlotEntry = (sal_uInt16) aSlotEntry.ToInt32();
-        if ( nSlotEntry )
+        INetURLObject aUserObj( SvtPathOptions().GetUserConfigPath() );
+        aUserObj.insertName( DEFINE_CONST_UNICODE( "slots.cfg" ) );
+        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aUserObj.GetMainURL(), STREAM_STD_READ );
+        if ( !pStream || pStream->GetError() == ERRCODE_IO_NOTEXISTS )
         {
-#else
-        if( SvtInternalOptions().SlotCFGEnabled() == sal_True )
-        {
-#endif
+            delete pStream;
+            INetURLObject aObj( SvtPathOptions().GetConfigPath() );
+            aObj.insertName( DEFINE_CONST_UNICODE( "slots.cfg" ) );
+            pStream = ::utl::UcbStreamHelper::CreateStream( aUserObj.GetMainURL(), STREAM_STD_READ );
+        }
 
-            // Gibt es einen "Slotlist"-Eintrag ??
-            if ( aStrm.GetError() )
+        BOOL bSlotsEnabled = SvtInternalOptions().SlotCFGEnabled();
+        BOOL bSlots = ( pStream && !pStream->GetError() );
+        if( bSlots && bSlotsEnabled )
+        {
+            // SlotDatei einlesen
+            String aTitle;
+            pStream->ReadByteString(aTitle);
+            if ( aTitle.CompareToAscii("SfxSlotFile" ) == COMPARE_EQUAL )
             {
-                bError = sal_True;
-            }
-            else
-            {
-                // SlotDatei einlesen
-                String aTitle;
-                aStrm.ReadByteString(aTitle);
-                if ( aTitle.CompareToAscii("SfxSlotFile" ) == COMPARE_EQUAL )
+                sal_uInt16 nCount;
+                (*pStream) >> nCount;
+                pList = pAppData_Impl->pDisabledSlotList =
+                        new SvUShorts( nCount < 255 ? (sal_Int8) nCount : 255, 255 );
+
+                sal_uInt16 nSlot;
+                for ( sal_uInt16 n=0; n<nCount; n++ )
                 {
-                    sal_uInt16 nCount;
-                    aStrm >> nCount;
-                    pList = pAppData_Impl->pDisabledSlotList =
-                            new SvUShorts( nCount < 255 ? (sal_Int8) nCount : 255, 255 );
-
-                    sal_uInt16 nSlot;
-                    for ( sal_uInt16 n=0; n<nCount; n++ )
-                    {
-                        aStrm >> nSlot;
-                        pList->Insert( nSlot, n );
-                    }
-
-                    aStrm.ReadByteString(aTitle);
-                    if ( aTitle.CompareToAscii("END" ) != COMPARE_EQUAL || aStrm.GetError() )
-                    {
-                        // Lesen schief gegangen
-                        DELETEZ( pList );
-                        bError = sal_True;
-                    }
+                    (*pStream) >> nSlot;
+                    pList->Insert( nSlot, n );
                 }
-                else
+
+                pStream->ReadByteString(aTitle);
+                if ( aTitle.CompareToAscii("END" ) != COMPARE_EQUAL || pStream->GetError() )
                 {
-                    // Streamerkennung  fehlgeschlagen
+                    // Lesen schief gegangen
+                    DELETEZ( pList );
                     bError = sal_True;
                 }
             }
+            else
+            {
+                // Streamerkennung  fehlgeschlagen
+                bError = sal_True;
+            }
         }
-        else
+        else if ( bSlots != bSlotsEnabled )
         {
             // Wenn kein Slotlist-Eintrag, dann darf auch keine SlotDatei
             // vorhanden sein
-            if ( !aStrm.GetError() )
-                bError = sal_True;
+            bError = sal_True;
         }
+
+        delete pStream;
     }
     else if ( pList == (SvUShorts*) -1L )
     {
@@ -661,8 +652,7 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
         // Wenn ein Sloteintrag vorhanden ist, aber keine oder eine fehlerhafte
         // SlotDatei, oder aber eine Slotdatei, aber kein Sloteintrag, dann
         // gilt dies als fehlerhafte Konfiguration
-        new SfxSpecialConfigError_Impl(
-            String( SfxResId( RID_SPECIALCONFIG_ERROR ) ) );
+        new SfxSpecialConfigError_Impl( String( SfxResId( RID_SPECIALCONFIG_ERROR ) ) );
     }
 
        return pList;
