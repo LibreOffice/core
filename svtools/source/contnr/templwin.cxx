@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-20 17:42:55 $
+ *  last change: $Author: tl $ $Date: 2001-07-30 10:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,44 +259,51 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 
     // insert the categories
     // "New Document"
+    Image aImage( SvtResId( IMG_SVT_NEWDOC ) );
+    nMaxTextLength = aImage.GetSizePixel().Width();
     String aEntryStr = String( SvtResId( STR_SVT_NEWDOC ) );
-    nMaxTextLength = GetTextWidth( aEntryStr );
     SvxIconChoiceCtrlEntry* pEntry =
-        aIconCtrl.InsertEntry( aEntryStr, Image( SvtResId( IMG_SVT_NEWDOC ) ), ICON_POS_NEWDOC );
+        aIconCtrl.InsertEntry( aEntryStr, aImage, ICON_POS_NEWDOC );
     String* pURL = new String( RTL_CONSTASCII_USTRINGPARAM("private:newdoc") );
     pEntry->SetUserData( pURL );
-    long nTemp = 0;
+    DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
+    long nTemp = pEntry->GetBoundRect().GetSize().Width();
+    if (nTemp > nMaxTextLength)
+        nMaxTextLength = nTemp;
 
     // "Templates"
     if ( aTemplateRootURL.Len() > 0 )
     {
         aEntryStr = String( SvtResId( STR_SVT_TEMPLATES ) );
-        nTemp = aIconCtrl.GetTextWidth( aEntryStr );
-        if ( nTemp > nMaxTextLength )
-            nMaxTextLength = nTemp;
         pEntry = aIconCtrl.InsertEntry( aEntryStr, Image( SvtResId( IMG_SVT_TEMPLATES ) ), ICON_POS_TEMPLATES );
         pURL = new String( aTemplateRootURL );
         pEntry->SetUserData( pURL );
+        DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
+        nTemp = pEntry->GetBoundRect().GetSize().Width();
+        if (nTemp > nMaxTextLength)
+            nMaxTextLength = nTemp;
     }
 
     // "My Documents"
     aEntryStr = String( SvtResId( STR_SVT_MYDOCS ) );
-    nTemp = aIconCtrl.GetTextWidth( aEntryStr );
-    if ( nTemp > nMaxTextLength )
-        nMaxTextLength = nTemp;
     pEntry = aIconCtrl.InsertEntry( aEntryStr, Image( SvtResId( IMG_SVT_MYDOCS ) ), ICON_POS_MYDOCS );
     pURL = new String( SvtPathOptions().GetWorkPath() );
     pEntry->SetUserData( pURL );
+    DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
+    nTemp = pEntry->GetBoundRect().GetSize().Width();
+    if (nTemp > nMaxTextLength)
+        nMaxTextLength = nTemp;
 
     // "Samples"
     aEntryStr = String( SvtResId( STR_SVT_SAMPLES ) );
-    nTemp = aIconCtrl.GetTextWidth( aEntryStr );
-    if ( nTemp > nMaxTextLength )
-        nMaxTextLength = nTemp;
     pEntry = aIconCtrl.InsertEntry( aEntryStr, Image( SvtResId( IMG_SVT_SAMPLES ) ), ICON_POS_SAMPLES );
     String aPath( RTL_CONSTASCII_USTRINGPARAM("$(insturl)/share/samples/$(vlang)") );
     pURL = new String( SvtPathOptions().SubstituteVariable( aPath ) );
     pEntry->SetUserData( pURL );
+    DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
+    nTemp = pEntry->GetBoundRect().GetSize().Width();
+    if (nTemp > nMaxTextLength)
+        nMaxTextLength = nTemp;
 }
 
 SvtIconWindow_Impl::~SvtIconWindow_Impl()
@@ -843,7 +850,7 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
 
     // create the split items
     aSplitWin.SetAlign( WINDOWALIGN_LEFT );
-    long nWidth = ( pIconWin->GetMaxTextLength() * 9 / 7 );
+    long nWidth = pIconWin->GetMaxTextLength() * 8 / 7;
     aSplitWin.InsertItem( ICONWIN_ID, pIconWin, nWidth, SPLITWINDOW_APPEND, 0, SWIB_FIXED );
     aSplitWin.InsertItem( FILEWIN_ID, pFileWin, 50, SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE );
     aSplitWin.InsertItem( FRAMEWIN_ID, pFrameWin, 50, SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE );
