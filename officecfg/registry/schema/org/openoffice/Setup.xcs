@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:40:32 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:03:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -971,7 +971,16 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-		</group>
+            <prop oor:name="DecimalSeparatorAsLocale" oor:type="xs:boolean" oor:nillable="false">
+                <info>
+                    <author>OS</author>
+                    <desc xml:lang="en-US">Indicates that the decimal separator (dot or commma) is used as appropriate for the selected locale instead of the one related to the default keyboard layout.</desc>
+                    <label xml:lang="en-US">Decimal separator key same as locale setting.</label>
+                </info>
+                <value>true</value>
+            </prop>
+
+        </group>
 		<group oor:name="Configuration">
 			<info>
 				<author>JB</author>
