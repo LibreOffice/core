@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-18 14:11:40 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 15:12:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,7 +109,11 @@ APP1OBJS=   $(OBJ)$/main.obj
 .IF "$(GUI)"=="WNT"
 APP1STDLIBS= $(LIBSTLPORT) cosv.lib udm.lib
 .ELSE
+.IF "$(OS)"=="MACOSX"
+APP1STDLIBS= $(LIBSTLPORT) -ludm -lcosv 
+.ELSE
 APP1STDLIBS= -lcosv -ludm
+.ENDIF
 .ENDIF
 
 APP1LIBS=$(LB)$/atdoc.lib
