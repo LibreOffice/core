@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 08:14:20 $
+ *  last change: $Author: fs $ $Date: 2001-05-16 14:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
 #include <com/sun/star/form/XFormComponent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
+#include <com/sun/star/awt/XFocusListener.hpp>
+#endif
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
 #endif
@@ -101,8 +104,8 @@
 #ifndef _SFXCANCEL_HXX
 #include <svtools/cancel.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
-#include <cppuhelper/implbase5.hxx>
+#ifndef _CPPUHELPER_IMPLBASE6_HXX_
+#include <cppuhelper/implbase6.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
@@ -124,12 +127,13 @@ namespace dbaui
 
     // =========================================================================
 
-    typedef ::cppu::ImplHelper5< ::com::sun::star::sdb::XSQLErrorListener
-                                , ::com::sun::star::form::XDatabaseParameterListener
-                                , ::com::sun::star::form::XConfirmDeleteListener
-                                , ::com::sun::star::form::XLoadListener
-                                , ::com::sun::star::form::XResetListener
-                                 > SbaXDataBrowserController_Base;
+    typedef ::cppu::ImplHelper6 <   ::com::sun::star::sdb::XSQLErrorListener
+                                ,   ::com::sun::star::form::XDatabaseParameterListener
+                                ,   ::com::sun::star::form::XConfirmDeleteListener
+                                ,   ::com::sun::star::form::XLoadListener
+                                ,   ::com::sun::star::form::XResetListener
+                                ,   ::com::sun::star::awt::XFocusListener
+                                >   SbaXDataBrowserController_Base;
 
     class SbaXDataBrowserController
                     :public OGenericUnoController
@@ -162,6 +166,13 @@ namespace dbaui
         bool        m_bErrorOccured;            // dito
 
         ::cppu::OBroadcastHelper    m_aPropertyBroadcastHelper;
+
+        // for implementing the XFormController
+        class FormControllerImpl;
+        friend class FormControllerImpl;
+        FormControllerImpl*         m_pFormControllerImpl;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
+                                    m_xFormControllerImpl;
 
     protected:
             // the RecordStatus of the form is insufficient for deciding whether the current record is modified
@@ -227,30 +238,14 @@ namespace dbaui
         virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException );
 
-//      // ::com::sun::star::frame::XController
-        //  virtual void SAL_CALL attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( ::com::sun::star::uno::RuntimeException );
-//      virtual sal_Bool SAL_CALL attachModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel) throw( ::com::sun::star::uno::RuntimeException ){ return sal_False; };
+        // ::com::sun::star::awt::XFocusListener
+        virtual void SAL_CALL focusGained(const ::com::sun::star::awt::FocusEvent& e) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL focusLost(const ::com::sun::star::awt::FocusEvent& e) throw( ::com::sun::star::uno::RuntimeException );
+
+        // ::com::sun::star::frame::XController
+        virtual void SAL_CALL attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
-//      virtual ::com::sun::star::uno::Any SAL_CALL getViewData(void) throw( ::com::sun::star::uno::RuntimeException ){ return ::com::sun::star::uno::Any(); };
-//      virtual void SAL_CALL restoreViewData(const ::com::sun::star::uno::Any& Data) throw( ::com::sun::star::uno::RuntimeException ){};
-//      virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  SAL_CALL getModel(void) throw( ::com::sun::star::uno::RuntimeException ){ return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > (); };
-//      virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  SAL_CALL getFrame(void) throw( ::com::sun::star::uno::RuntimeException ){ return m_xCurrentFrame; };
-//
-//      // ::com::sun::star::frame::XDispatch
-//      virtual void        SAL_CALL dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
-//      virtual void        SAL_CALL addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& aURL);
-//      virtual void        SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& aURL);
-//
-//      // ::com::sun::star::frame::XDispatchProviderInterceptor
-//      virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  SAL_CALL getSlaveDispatchProvider(void) throw( ::com::sun::star::uno::RuntimeException );
-//      virtual void SAL_CALL setSlaveDispatchProvider(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & _xNewProvider) throw( ::com::sun::star::uno::RuntimeException );
-//      virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  SAL_CALL getMasterDispatchProvider(void) throw( ::com::sun::star::uno::RuntimeException );
-//      virtual void SAL_CALL setMasterDispatchProvider(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & _xNewProvider) throw( ::com::sun::star::uno::RuntimeException );
-//
-//      // ::com::sun::star::frame::XDispatchProvider
-//      virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( ::com::sun::star::uno::RuntimeException );
-//      virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  > SAL_CALL queryDispatches(const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts) throw( ::com::sun::star::uno::RuntimeException );
-//
+
         // ::com::sun::star::lang::XComponent
         virtual void        SAL_CALL disposing();
 

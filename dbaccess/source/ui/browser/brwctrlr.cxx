@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-14 09:47:28 $
+ *  last change: $Author: fs $ $Date: 2001-05-16 14:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
+#endif
+#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
+#include <com/sun/star/form/XFormController.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -223,14 +226,23 @@
 #include "queryorder.hxx"
 #endif
 
+#ifdef FS_PRIV_DEBUG
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#endif
+using namespace ::com::sun::star::view;
+#endif
+
 #define GRID_NAME   "MyOneAndOnlyGrid"
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
@@ -287,23 +299,207 @@ void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyVal
 }
 
 
+//==============================================================================
+// a helper class implementing a ::com::sun::star::form::XFormController, will be aggregated by SbaXDataBrowserController
+// (we can't derive from ::com::sun::star::form::XFormController as it's base class is ::com::sun::star::awt::XTabController and the ::com::sun::star::awt::XTabController::getModel collides
+// with the ::com::sun::star::frame::XController::getModel implemented in our base class SbaXDataBrowserController)
+class SbaXDataBrowserController::FormControllerImpl
+    : public ::cppu::WeakAggImplHelper2< ::com::sun::star::form::XFormController,
+                                         ::com::sun::star::frame::XFrameActionListener>
+{
+    friend class SbaXDataBrowserController;
+    ::cppu::OInterfaceContainerHelper   m_aActivateListeners;
+    SbaXDataBrowserController*          m_pOwner;
+    sal_Bool                            m_bActive;
+
+public:
+    FormControllerImpl(SbaXDataBrowserController* pOwner);
+
+    // ::com::sun::star::form::XFormController
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  SAL_CALL getCurrentControl(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL addActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL removeActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( ::com::sun::star::uno::RuntimeException );
+
+    // ::com::sun::star::awt::XTabController
+    virtual void SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel > & Model) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >  SAL_CALL getModel(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL setContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & _Container) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  SAL_CALL getContainer(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  > SAL_CALL getControls(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL autoTabOrder(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL activateTabOrder(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL activateFirst(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL activateLast(void) throw( ::com::sun::star::uno::RuntimeException );
+
+    // ::com::sun::star::frame::XFrameActionListener
+    virtual void SAL_CALL frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
+
+    // ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
+
+protected:
+    ~FormControllerImpl();
+};
+
+
+//------------------------------------------------------------------
+SbaXDataBrowserController::FormControllerImpl::FormControllerImpl(SbaXDataBrowserController* m_pOwner)
+    :m_pOwner(m_pOwner)
+    ,m_bActive(sal_False)
+    ,m_aActivateListeners(m_pOwner->m_aPropertyMutex)
+{
+    OSL_ENSURE(m_pOwner, "SbaXDataBrowserController::FormControllerImpl::FormControllerImpl : invalid Owner !");
+}
+
+//------------------------------------------------------------------
+SbaXDataBrowserController::FormControllerImpl::~FormControllerImpl()
+{
+}
+
+//------------------------------------------------------------------
+Reference< ::com::sun::star::awt::XControl >  SbaXDataBrowserController::FormControllerImpl::getCurrentControl(void) throw( RuntimeException )
+{
+    return m_pOwner->getBrowserView() ? m_pOwner->getBrowserView()->getGridControl() : Reference< ::com::sun::star::awt::XControl > ();
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addActivateListener(const Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( RuntimeException )
+{
+    m_aActivateListeners.addInterface(l);
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeActivateListener(const Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( RuntimeException )
+{
+    m_aActivateListeners.removeInterface(l);
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setModel(const Reference< ::com::sun::star::awt::XTabControllerModel > & Model) throw( RuntimeException )
+{
+    OSL_ENSURE(sal_False, "SbaXDataBrowserController::FormControllerImpl::setModel : invalid call, can't change my model !");
+}
+
+//------------------------------------------------------------------
+Reference< ::com::sun::star::awt::XTabControllerModel >  SAL_CALL SbaXDataBrowserController::FormControllerImpl::getModel(void) throw( RuntimeException )
+{
+    return Reference< XTabControllerModel >(m_pOwner->getRowSet(), UNO_QUERY);
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContainer(const Reference< ::com::sun::star::awt::XControlContainer > & _Container) throw( RuntimeException )
+{
+    OSL_ENSURE(sal_False, "SbaXDataBrowserController::FormControllerImpl::setContainer : invalid call, can't change my container !");
+}
+
+//------------------------------------------------------------------
+Reference< ::com::sun::star::awt::XControlContainer >  SAL_CALL SbaXDataBrowserController::FormControllerImpl::getContainer(void) throw( RuntimeException )
+{
+    if (m_pOwner->getBrowserView())
+        return m_pOwner->getBrowserView()->getContainer();
+    return Reference< ::com::sun::star::awt::XControlContainer > ();
+}
+
+//------------------------------------------------------------------
+Sequence< Reference< ::com::sun::star::awt::XControl > > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getControls(void) throw( RuntimeException )
+{
+    if (m_pOwner->getBrowserView())
+    {
+        Reference< ::com::sun::star::awt::XControl >  xGrid = m_pOwner->getBrowserView()->getGridControl();
+        return Sequence< Reference< ::com::sun::star::awt::XControl > >(&xGrid, 1);
+    }
+    return Sequence< Reference< ::com::sun::star::awt::XControl > >();
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::autoTabOrder(void) throw( RuntimeException )
+{
+    OSL_ENSURE(sal_False, "SbaXDataBrowserController::FormControllerImpl::autoTabOrder : nothing to do (always have only one control) !");
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateTabOrder(void) throw( RuntimeException )
+{
+    OSL_ENSURE(sal_False, "SbaXDataBrowserController::FormControllerImpl::activateTabOrder : nothing to do (always have only one control) !");
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateFirst(void) throw( RuntimeException )
+{
+    if (m_pOwner->getBrowserView())
+        m_pOwner->getBrowserView()->getVclControl()->ActivateCell();
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateLast(void) throw( RuntimeException )
+{
+    if (m_pOwner->getBrowserView())
+        m_pOwner->getBrowserView()->getVclControl()->ActivateCell();
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( RuntimeException )
+{
+    OSL_ENSURE(aEvent.Source == m_pOwner->m_xCurrentFrame, "SbaXDataBrowserController::FormControllerImpl::frameAction : where did this come frome ?");
+
+    ::com::sun::star::lang::EventObject aEvt(*m_pOwner);
+    ::cppu::OInterfaceIteratorHelper aIter(m_aActivateListeners);
+    switch (aEvent.Action)
+    {
+        case ::com::sun::star::frame::FrameAction_FRAME_ACTIVATED:
+            // as the frame sends more ACTIVATED than DEACTIVATING events we check this with our own flag, so the listeners
+            // will be notified only when the first activation occurs
+//          if (!m_bActive)
+                // TODO : when de DEACTIVATED-event is implemented (MBA) reinsert this line
+//          {
+//              while (aIter.hasMoreElements())
+//                  ((::com::sun::star::form::XFormControllerListener*)aIter.next())->formActivated(aEvt);
+//          }
+//          m_bActive = sal_True;
+            break;
+
+        case ::com::sun::star::frame::FrameAction_FRAME_DEACTIVATING:
+//          while (aIter.hasMoreElements())
+//              ((::com::sun::star::form::XFormControllerListener*)aIter.next())->formDeactivated(aEvt);
+//          m_bActive = sal_False;
+            break;
+    }
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException )
+{
+    // nothing to do
+    // we don't add ourself as listener to any broadcasters, so we are not resposible for removing us
+}
+
 //==================================================================
 //= SbaXDataBrowserController
 //==================================================================
 Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw (RuntimeException)
 {
+    // check for our additional interfaces
     Any aRet = SbaXDataBrowserController_Base::queryInterface(_rType);
-    if(aRet.hasValue())
-        return aRet;
-    aRet = OGenericUnoController::queryInterface(_rType);
-    if(aRet.hasValue())
-        return aRet;
-    return OPropertySetHelper::queryInterface(_rType);
+
+    // check for the base controllers interfaces
+    if (!aRet.hasValue())
+        aRet = OGenericUnoController::queryInterface(_rType);
+
+    // check for our aggregate (implementing the XFormController)
+    if (!aRet.hasValue())
+        aRet = m_xFormControllerImpl->queryAggregation(_rType);
+
+    // check for the property set interfaces
+    if (!aRet.hasValue())
+        aRet = OPropertySetHelper::queryInterface(_rType);
+
+    // no more to offer
+    return aRet;
 }
 
 //------------------------------------------------------------------------------
 SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
-    : OGenericUnoController(_rM)
+    :OGenericUnoController(_rM)
     ,::comphelper::OPropertyContainer(m_aPropertyBroadcastHelper)
     ,m_aPropertyBroadcastHelper(m_aPropertyMutex)
     ,m_pLoadThread(NULL)
@@ -316,12 +512,22 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
     ,m_aAsynClose(LINK(this, SbaXDataBrowserController, OnAsyncClose))
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
+    ,m_pFormControllerImpl(NULL)
 {
     DBG_ASSERT(m_xUrlTransformer.is(), "SbaXDataBrowserController::SbaXDataBrowserController: no URLTransformer!");
     static ::rtl::OUString s_sHelpFileName(::rtl::OUString::createFromAscii("database.hlp"));
     sal_Int32 nAttrib = PropertyAttribute::READONLY | PropertyAttribute::TRANSIENT;
     registerProperty(PROPERTY_HELPFILENAME, PROPERTY_ID_HELPFILENAME,nAttrib,&s_sHelpFileName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     DBG_ASSERT(m_xUrlTransformer.is(), "SbaXDataBrowserController::SbaXDataBrowserController : could not create the url transformer !");
+
+    // create the form controller aggregate
+    ::comphelper::increment(m_refCount);
+    {
+        m_pFormControllerImpl = new FormControllerImpl(this);
+        m_xFormControllerImpl = m_pFormControllerImpl;
+        m_xFormControllerImpl->setDelegator(*this);
+    }
+    ::comphelper::decrement(m_refCount);
 }
 
 //------------------------------------------------------------------------------
@@ -329,7 +535,33 @@ SbaXDataBrowserController::~SbaXDataBrowserController()
 {
     delete m_pView;
     m_pView = NULL;
+
+    // release the aggregated form controller
+    if (m_xFormControllerImpl.is())
+    {
+        Reference< XInterface >  xEmpty;
+        m_xFormControllerImpl->setDelegator(xEmpty);
+    }
 }
+
+// -----------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::attachFrame(const Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( RuntimeException )
+{
+    Reference< ::com::sun::star::frame::XFrameActionListener >  xAggListener;
+    if (m_xFormControllerImpl.is())
+        m_xFormControllerImpl->queryAggregation(::getCppuType((const Reference< ::com::sun::star::frame::XFrameActionListener>*)0)) >>= xAggListener;
+
+    // log off my aggregated object
+    if (m_xCurrentFrame.is() && xAggListener.is())
+        m_xCurrentFrame->removeFrameActionListener(xAggListener);
+
+    OGenericUnoController::attachFrame(xFrame);
+
+    // and log on to the new frame
+    if (m_xCurrentFrame.is() && xAggListener.is())
+        m_xCurrentFrame->addFrameActionListener(xAggListener);
+}
+
 // -----------------------------------------------------------------------------
 void SbaXDataBrowserController::initFormatter()
 {
@@ -569,26 +801,79 @@ void SbaXDataBrowserController::removeModelListeners(const Reference< ::com::sun
 void SbaXDataBrowserController::addControlListeners(const Reference< ::com::sun::star::awt::XControl > & _xGridControl)
 {
     // to ge the 'modified' for the current cell
-    Reference< ::com::sun::star::util::XModifyBroadcaster >  xBroadcaster(getBrowserView()->getGridControl(), UNO_QUERY);
+    Reference< XModifyBroadcaster >  xBroadcaster(getBrowserView()->getGridControl(), UNO_QUERY);
     if (xBroadcaster.is())
-        xBroadcaster->addModifyListener((::com::sun::star::util::XModifyListener*)this);
+        xBroadcaster->addModifyListener((XModifyListener*)this);
 
     // introduce ourself as dispatch provider for the grid
-    Reference< ::com::sun::star::frame::XDispatchProviderInterception >  xInterception(getBrowserView()->getGridControl(), UNO_QUERY);
+    Reference< XDispatchProviderInterception >  xInterception(getBrowserView()->getGridControl(), UNO_QUERY);
     if (xInterception.is())
-        xInterception->registerDispatchProviderInterceptor((::com::sun::star::frame::XDispatchProviderInterceptor*)this);
+        xInterception->registerDispatchProviderInterceptor((XDispatchProviderInterceptor*)this);
+
+    // add as focus listener to the control (needed for the form controller functionality)
+    Reference< XWindow >  xWindow(_xGridControl, UNO_QUERY);
+    if (xWindow.is())
+        xWindow->addFocusListener(this);
 }
 
 // -------------------------------------------------------------------------
 void SbaXDataBrowserController::removeControlListeners(const Reference< ::com::sun::star::awt::XControl > & _xGridControl)
 {
-    Reference< ::com::sun::star::util::XModifyBroadcaster >  xBroadcaster(_xGridControl, UNO_QUERY);
+    Reference< XModifyBroadcaster >  xBroadcaster(_xGridControl, UNO_QUERY);
     if (xBroadcaster.is())
-        xBroadcaster->removeModifyListener((::com::sun::star::util::XModifyListener*)this);
+        xBroadcaster->removeModifyListener((XModifyListener*)this);
 
-    Reference< ::com::sun::star::frame::XDispatchProviderInterception >  xInterception(_xGridControl, UNO_QUERY);
+    Reference< XDispatchProviderInterception >  xInterception(_xGridControl, UNO_QUERY);
     if (xInterception.is())
-        xInterception->releaseDispatchProviderInterceptor((::com::sun::star::frame::XDispatchProviderInterceptor*)this);
+        xInterception->releaseDispatchProviderInterceptor((XDispatchProviderInterceptor*)this);
+
+    Reference< XWindow >  xWindow(_xGridControl, UNO_QUERY);
+    if (xWindow.is())
+        xWindow->removeFocusListener(this);
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::focusGained(const FocusEvent& e) throw( RuntimeException )
+{
+    // notify our activate listeners (registered on the form controller aggregate)
+    EventObject aEvt(*this);
+    ::cppu::OInterfaceIteratorHelper aIter(m_pFormControllerImpl->m_aActivateListeners);
+    while (aIter.hasMoreElements())
+        ((XFormControllerListener*)aIter.next())->formActivated(aEvt);
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e) throw( RuntimeException )
+{
+    // some general checks
+    if (!getBrowserView() || !getBrowserView()->getGridControl().is())
+        return;
+    Reference< XVclWindowPeer >  xMyGridPeer(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
+    if (!xMyGridPeer.is())
+        return;
+    Reference< XWindowPeer >  xNextControlPeer(e.NextFocus, UNO_QUERY);
+    if (!xNextControlPeer.is())
+        return;
+
+    // don't do a notification if it remains in the family (i.e. a child of the grid control gets the focus)
+    if (xMyGridPeer->isChild(xNextControlPeer))
+        return;
+
+    if (xMyGridPeer == xNextControlPeer)
+        return;
+
+    // notify the listeners that the "form" we represent has been deactivated
+    EventObject aEvt(*this);
+    ::cppu::OInterfaceIteratorHelper aIter(m_pFormControllerImpl->m_aActivateListeners);
+    while (aIter.hasMoreElements())
+        ((XFormControllerListener*)aIter.next())->formDeactivated(aEvt);
+
+    // commit the changes of the grid control (as we're deactivated)
+    Reference< XBoundComponent >  xCommitable(getBrowserView()->getGridControl(), UNO_QUERY);
+    if (xCommitable.is())
+        xCommitable->commit();
+    else
+        OSL_ENSURE(sal_False, "SbaXDataBrowserController::focusLost : why is my control not commitable ?");
 }
 
 // -------------------------------------------------------------------------
@@ -638,8 +923,29 @@ void SbaXDataBrowserController::disposingColumnModel(const ::com::sun::star::lan
 }
 
 // -------------------------------------------------------------------------
-void SbaXDataBrowserController::disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException )
+void SbaXDataBrowserController::disposing(const EventObject& Source) throw( RuntimeException )
 {
+    // if it's a component other than our aggregate, forward it to the aggregate
+    if (m_xFormControllerImpl != Source.Source)
+    {
+        Reference< XEventListener >  xAggListener;
+        m_xFormControllerImpl->queryAggregation(::getCppuType(&xAggListener)) >>= xAggListener;
+        if (xAggListener.is())
+            xAggListener->disposing(Source);
+    }
+
+    // if it's our frame, remove the aggregate as listener
+    if (Source.Source == m_xCurrentFrame)
+    {
+        // our aggregated object doesn't handle its frame action listening itself, so we have to log it off
+        Reference< XFrameActionListener >  xAggListener;
+        if (m_xFormControllerImpl.is())
+        {
+            m_xFormControllerImpl->queryAggregation(::getCppuType(&xAggListener)) >>= xAggListener;
+            m_xCurrentFrame->removeFrameActionListener(xAggListener);
+        }
+    }
+
     // is it the grid control ?
     if (getBrowserView())
     {
@@ -824,6 +1130,24 @@ sal_Bool SbaXDataBrowserController::suspend(sal_Bool bSuspend) throw( RuntimeExc
 // -----------------------------------------------------------------------
 void SbaXDataBrowserController::disposing()
 {
+    // our aggregated object doesn't handle its frame action listening itself, so we have to log it off
+    Reference< XFrameActionListener >  xAggListener;
+    if (m_xFormControllerImpl.is())
+    {
+        m_xFormControllerImpl->queryAggregation(::getCppuType(&xAggListener)) >>= xAggListener;
+        m_xCurrentFrame->removeFrameActionListener(xAggListener);
+    }
+
+    // and dispose the aggregate
+    if (m_xFormControllerImpl.is())
+    {
+        Reference< XComponent >  xAggComp;
+        m_xFormControllerImpl->queryAggregation(::getCppuType(&xAggComp)) >>= xAggComp;
+        if (xAggComp.is())
+            xAggComp->dispose();
+    }
+
+    // the base class
     OGenericUnoController::disposing();
 
     if (!PendingLoad())
