@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ExportStreamInfo.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ module com { module sun { module star { module ucb {
 /** information needed to export an object in mbx format (supplying an output
     stream to export into).
 */
-struct ExportStreamInfo
+published struct ExportStreamInfo
 {
     //-------------------------------------------------------------------------
     /** the output stream to export into.
