@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:26 $
+ *  last change: $Author: pluby $ $Date: 2000-10-28 23:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,19 @@
 #include <sv.h>
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
+// Instantialize application's global GUI objects
+void NSApp_init();
+
+// Release applications's global GUI objects
+void NSApp_release();
+
+#ifdef __cplusplus
+}
+
 #ifdef _VOS_NO_NAMESPACE
 class OMutex;
 #else
@@ -104,5 +117,7 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst, HWND hWndParent, ULONG nSalFra
 SalObject* ImplSalCreateObject( SalInstance* pInst, SalFrame* pParent );
 void ImplSalStartTimer( ULONG nMS, BOOL bMutex = FALSE );
 void ImplSalPrinterAbortJobAsync( HDC hPrnDC );
+
+#endif // __cplusplus
 
 #endif // _SV_SALINST_H
