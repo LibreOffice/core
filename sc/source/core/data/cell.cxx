@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:29:25 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1671,8 +1671,19 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                     fabs( p->GetNumResult() - nErgValue ) <=
                     pDocument->GetDocOptions().GetIterEps())
             {
-                bDirty = FALSE;
-                bTableOpDirty = FALSE;
+                // A convergence in the first iteration doesn't necessarily
+                // mean that it's done, it may be because not all related cells
+                // of a circle changed their values yet. If the set really
+                // converges it will do so also during the next iteration. This
+                // fixes situations like of #i44115#. If this wasn't wanted an
+                // initial "uncalculated" value would be needed for all cells
+                // of a circular dependency => graph needed before calculation.
+                if (nSeenInIteration > 1 ||
+                        pDocument->GetDocOptions().GetIterCount() == 1)
+                {
+                    bDirty = FALSE;
+                    bTableOpDirty = FALSE;
+                }
             }
         }
 
