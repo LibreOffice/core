@@ -1,0 +1,12 @@
+    <node oor:name="writer8" oor:op="replace">
+        <prop oor:name="DetectService"><value>com.sun.star.text.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"><value>private:factory/swriter</value></prop>
+        <prop oor:name="Extensions"><value>oxt</value></prop>
+        <prop oor:name="MediaType"><value>application/x-vnd.oasis.openoffice.text</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>writer8</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Writer 8</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>Writer 8</value></prop>
+    </node>
