@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:34 $
+ *  last change: $Author: kr $ $Date: 2000-09-28 17:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,170 +59,106 @@
  *
  ************************************************************************/
 
-#ifndef __JVM
-#define __JVM
 
-#if STLPORT_VERSION < 321
-#include <tools/presys.h>
-#include <vector.h>
-#include <tools/postsys.h>
-#else
+#ifndef __JVM_HXX
+#define __JVM_HXX
+
 #include <cstdarg>
 #include <stl/vector>
-#endif
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
+
+#include <rtl/ustring>
 
 #include "jni.h"
 
-using namespace ::rtl;
-
-#ifndef JNI_VERSION_1_2
-
-#define JNI_VERSION_1_1 0x00010001
-#define JNI_VERSION_1_2 0x00010002
-
-#define JNI_EDETACHED    (-2)              /* thread detached from the VM */
-#define JNI_EVERSION     (-3)              /* JNI version error */
-#define JNI_ENOMEM       (-4)              /* not enough memory */
-#define JNI_EEXIST       (-5)              /* VM already created */
-#define JNI_EINVAL       (-6)              /* invalid arguments */
-
-
-struct JNIInvokeInterface12_;
-struct JavaVM12_;
-
-typedef JavaVM12_ JavaVM12;
-#define JAVAVM JavaVM12
-
-struct JNIInvokeInterface12_
-{
-    void *reserved0;
-    void *reserved1;
-    void *reserved2;
-
-    jint (JNICALL *DestroyJavaVM)(JavaVM12 *vm);
-    jint (JNICALL *AttachCurrentThread)(JavaVM12 *vm, void **penv, void *args);
-    jint (JNICALL *DetachCurrentThread)(JavaVM12 *vm);
-    jint (JNICALL *GetEnv)(JavaVM12 *vm, void **penv, jint version);
-};
-
-struct JavaVM12_
-{
-    const struct JNIInvokeInterface12_ *functions;
-
-    jint DestroyJavaVM()
-    {
-        return functions->DestroyJavaVM(this);
-    }
-
-    jint AttachCurrentThread(void **penv, void *args)
-    {
-        return functions->AttachCurrentThread(this, penv, args);
-    }
-
-    jint DetachCurrentThread()
-    {
-        return functions->DetachCurrentThread(this);
-    }
-
-    jint GetEnv(void **penv, jint version)
-    {
-        return functions->GetEnv(this, penv, version);
-    }
-};
-
-typedef struct JavaVMOption
-{
-    char *optionString;
-    void *extraInfo;
-} JavaVMOption;
-
-typedef struct JavaVMInitArgs
-{
-    jint version;
-
-    jint nOptions;
-    JavaVMOption *options;
-    jboolean ignoreUnrecognized;
-} JavaVMInitArgs;
-
-typedef struct JavaVMAttachArgs
-{
-    jint version;
-
-    char *name;
-    jobject group;
-} JavaVMAttachArgs;
-
-#else
-#define JAVAVM JavaVM
-#endif
 
 typedef    jint (JNICALL *JNIvfprintf)(FILE *fp, const char *format, va_list args);
 typedef    void (JNICALL *JNIexit)(jint code);
 typedef    void (JNICALL *JNIabort)(void);
 
 extern "C" {
-
-#ifdef OS2
-typedef jint JNICALL0 JNI_InitArgs_Type(void *);
-typedef jint JNICALL0 JNI_CreateVM_Type(JAVAVM **, JNIEnv **, void *);
-#else
-typedef jint JNICALL JNI_InitArgs_Type(void *);
-typedef jint JNICALL JNI_CreateVM_Type(JAVAVM **, JNIEnv **, void *);
-#endif
+    typedef jint JNICALL JNI_InitArgs_Type(void *);
+    typedef jint JNICALL JNI_CreateVM_Type(JavaVM **, JNIEnv **, void *);
 
 }
 
-class JVM
-{
-    ::std::vector<JavaVMOption> p_props;
+namespace stoc_javavm {
 
-    JavaVMInitArgs javaVMInitArgs;
-    JDK1_1InitArgs  jDK1_1InitArgs;
+    class JVM {
+        ::std::vector<rtl::OUString> _props;
 
-    ::std::vector<OUString> props;
+        ::rtl::OUString _runtimeLib;
+        ::rtl::OUString _systemClasspath;
+        ::rtl::OUString _userClasspath;
+        sal_Bool _enabled;
 
-    sal_Bool debug;
-    jint jiDebugPort;
-    OUString usCompiler;
+        sal_Bool _is_debugPort;
+        jint     _debugPort;
 
-protected:
-    void pushPProp(OUString uString, void * extraInfo = NULL);
+        sal_Bool _is_disableAsyncGC;
+        jint      _disableAsyncGC;
 
-public:
-    JVM(JNI_InitArgs_Type * pVMInitArgs) ;
-    ~JVM() ;
+        sal_Bool _is_enableClassGC;
+        jint     _enableClassGC;
 
-    void pushProp(const OUString & uString);
+        sal_Bool _is_enableVerboseGC;
+        jint     _enableVerboseGC;
 
-    void disableAsyncGC(jboolean jbFlag);
-    void enableClassGC(jboolean jbFlag);
-    void enableVerboseGC(jboolean jbFlag);
-    void verbose(jboolean jbFlag);
+        sal_Bool _is_checkSource;
+        jint     _checkSource;
 
-    void setCompiler(const OUString & usCompiler);
-    void nativeStackSize(jint jiSize);
-    void javaStackSize(jint jiSize);
-    void verifyMode(OUString uStr);
-    void minHeapSize(jint jiSize);
-    void maxHeapSize(jint jiSize);
-    void setDebug(sal_Bool flag);
-    void setDebugPort(jint jiDebugPort);
-    void classPath(OString str);
-    void vfprintf(JNIvfprintf vfprintf);
-    void exit(JNIexit exit);
-    void abort(JNIabort abort);
+        sal_Bool _is_nativeStackSize;
+        jint     _nativeStackSize;
 
-    sal_Bool getDebug();
-    OUString getCompiler();
+        sal_Bool _is_javaStackSize;
+        jint     _javaStackSize;
 
-    const JavaVMInitArgs * getJavaVMInitArgs();
+        sal_Bool _is_minHeapSize;
+        jint     _minHeapSize;
 
-    const JDK1_1InitArgs * getJDK1_1InitArgs();
-};
+        sal_Bool _is_maxHeapSize;
+        jint     _maxHeapSize;
+
+        sal_Bool _is_verifyMode;
+        jint     _verifyMode;
+
+        sal_Bool _is_print;
+        JNIvfprintf _print;
+
+        sal_Bool _is_exit;
+        JNIexit  _exit;
+
+        sal_Bool _is_abort;
+        JNIabort _abort;
+
+    public:
+        JVM() throw();
+
+        void pushProp(const ::rtl::OUString & uString) throw();
+
+        void setEnabled(sal_Bool sbFlag) throw();
+        void setDisableAsyncGC(jint jiFlag) throw();
+        void setEnableClassGC(jint jiFlag) throw();
+        void setEnableVerboseGC(jint jiFlag) throw();
+        void setCheckSource(jint jiFlag) throw();
+        void setNativeStackSize(jint jiSize) throw();
+        void setJavaStackSize(jint jiSize) throw();
+        void setVerifyMode(const ::rtl::OUString & mode) throw();
+        void setMinHeapSize(jint jiSize) throw();
+        void setMaxHeapSize(jint jiSize) throw();
+        void setDebugPort(jint jiDebugPort) throw();
+        void setSystemClasspath(const ::rtl::OUString & str) throw();
+        void setUserClasspath(const ::rtl::OUString & str) throw();
+        void setPrint(JNIvfprintf vfprintf) throw();
+        void setExit(JNIexit exit) throw();
+        void setAbort(JNIabort abort) throw();
+        void setRuntimeLib(const ::rtl::OUString & libName) throw();
+
+        void setArgs(JDK1_1InitArgs * pargs) const throw();
+
+        const ::rtl::OUString & getRuntimeLib() const throw();
+        sal_Bool isEnabled() const throw();
+    };
+}
 
 #endif
