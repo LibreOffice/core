@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:25:27 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _SV_SALFRAME_H
 #include <salframe.h>
+#endif
+#ifndef _SV_SALVD_H
+#include <salvd.h>
 #endif
 
 #ifndef _USE_PRINT_EXTENSION_
@@ -624,7 +627,12 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
     SalDisplay*     pSalDisp = GetDisplay();
     Display*        pXDisp = pSalDisp->GetDisplay();
     Drawable        aDrawable( GetDrawable() );
-    const USHORT    nDepth = pSalDisp->GetVisual()->GetDepth();
+    // figure work mode depth. If this is a VDev Drawable, use its
+    // bitdepth to create pixmaps for, otherwise, XCopyArea will
+    // refuse to work.
+    const USHORT    nDepth( m_pVDev ?
+                            m_pVDev->GetDepth() :
+                            pSalDisp->GetVisual()->GetDepth() );
     Pixmap          aFG( XCreatePixmap( pXDisp, aDrawable, pPosAry->mnDestWidth,
                                         pPosAry->mnDestHeight, nDepth ) );
     Pixmap          aBG( XCreatePixmap( pXDisp, aDrawable, pPosAry->mnDestWidth,
