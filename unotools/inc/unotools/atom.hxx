@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atom.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-14 11:23:12 $
+ *  last change: $Author: pl $ $Date: 2000-11-15 11:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ namespace utl {
     {
         int                                     m_nAtoms;
         ::std::hash_map< int, ::rtl::OUString, ::std::hash< int > > m_aStringMap;
-        ::std::hash_map< ::rtl::OUString, int, OUStringHash >   m_aAtomMap;
+        ::std::hash_map< ::rtl::OUString, int, ::rtl::OUStringHash >    m_aAtomMap;
     public:
         AtomProvider();
         ~AtomProvider();

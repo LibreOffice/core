@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atom.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-14 11:23:12 $
+ *  last change: $Author: pl $ $Date: 2000-11-15 11:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ AtomProvider::~AtomProvider()
 
 int AtomProvider::getAtom( const ::rtl::OUString& rString, sal_Bool bCreate )
 {
-    ::std::hash_map< ::rtl::OUString, int, OUStringHash >::iterator it = m_aAtomMap.find( rString );
+    ::std::hash_map< ::rtl::OUString, int, ::rtl::OUStringHash >::iterator it = m_aAtomMap.find( rString );
     if( it != m_aAtomMap.end() )
         return it->second;
     if( ! bCreate )
@@ -91,7 +91,7 @@ int AtomProvider::getAtom( const ::rtl::OUString& rString, sal_Bool bCreate )
 void AtomProvider::getAll( ::std::list< ::utl::AtomDescription >& atoms )
 {
     atoms.clear();
-    ::std::hash_map< ::rtl::OUString, int, OUStringHash >::const_iterator it = m_aAtomMap.begin();
+    ::std::hash_map< ::rtl::OUString, int, ::rtl::OUStringHash >::const_iterator it = m_aAtomMap.begin();
 
     ::utl::AtomDescription aDesc;
     while( it != m_aAtomMap.end() )
@@ -107,7 +107,7 @@ void AtomProvider::getRecent( int atom, ::std::list< ::utl::AtomDescription >& a
 {
     atoms.clear();
 
-    ::std::hash_map< ::rtl::OUString, int, OUStringHash >::const_iterator it = m_aAtomMap.begin();
+    ::std::hash_map< ::rtl::OUString, int, ::rtl::OUStringHash >::const_iterator it = m_aAtomMap.begin();
 
     ::utl::AtomDescription aDesc;
     while( it != m_aAtomMap.end() )
