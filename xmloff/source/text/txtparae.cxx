@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-21 09:21:53 $
+ *  last change: $Author: mib $ $Date: 2001-06-07 07:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1233,6 +1233,10 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
         sal_Bool bExportParagraph,
         const Reference < XPropertySet > *pRangePropSet )
 {
+    sal_Bool bHasMoreElements = rContEnum->hasMoreElements();
+    if( !bHasMoreElements )
+        return;
+
     XMLTextNumRuleInfo aPrevNumInfo;
     XMLTextNumRuleInfo aNextNumInfo;
 
@@ -1241,9 +1245,10 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
 
     MultiPropertySetHelper aPropSetHelper( aParagraphPropertyNames );
 
+    Any aAny;
     sal_Bool bHoldElement = sal_False;
     Reference < XTextContent > xTxtCntnt;
-    while( bHoldElement || rContEnum->hasMoreElements() )
+    while( bHoldElement || bHasMoreElements )
     {
         if (bHoldElement)
         {
@@ -1251,7 +1256,7 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
         }
         else
         {
-            Any aAny = rContEnum->nextElement();
+            aAny = rContEnum->nextElement();
             aAny >>= xTxtCntnt;
         }
 
@@ -1274,7 +1279,7 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
                        pSectionExport->IsInSection( xCurrentTextSection,
                                                     xTxtCntnt, sal_True ))
                 {
-                    Any aAny = rContEnum->nextElement();
+                    aAny = rContEnum->nextElement();
                     aAny >>= xTxtCntnt;
                 }
                 // the first non-mute element still needs to be processed
@@ -1334,6 +1339,8 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
         {
             aPrevNumInfo = aNextNumInfo;
         }
+
+        bHasMoreElements = rContEnum->hasMoreElements();
     }
 
     if( bHasContent && !bAutoStyles )
@@ -1482,9 +1489,10 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
 {
     sal_Bool bPrevCharIsSpace = sal_True;
 
+    Any aAny;
     while( rTextEnum->hasMoreElements() )
     {
-        Any aAny = rTextEnum->nextElement();
+        aAny = rTextEnum->nextElement();
         Reference < XTextRange > xTxtRange;
         aAny >>= xTxtRange;
 
@@ -1494,7 +1502,6 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
 
         if (xPropInfo->hasPropertyByName(sTextPortionType))
         {
-            Any aAny;
             aAny = xPropSet->getPropertyValue(sTextPortionType);
             OUString sType;
             aAny >>= sType;
