@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 23:14:27 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4647,9 +4647,9 @@ void PDFWriterImpl::registerGlyphs(
                     }
                 }
                 else
-                    cChar = 0;
+                    pEncoding = NULL;
             }
-            else
+            if( ! pEncoding )
             {
                 if( cChar & 0xff00 )
                 {
