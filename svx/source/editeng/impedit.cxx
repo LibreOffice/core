@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mt $ $Date: 2002-01-29 08:50:52 $
+ *  last change: $Author: cdt $ $Date: 2002-04-29 11:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1540,8 +1540,6 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
 
     if ( pDragAndDropInfo )
     {
-        // Falls Drag&Move in einer Engine, muessen Copy&Del geklammert sein!
-        GetCursor()->Hide();
 
         pDragAndDropInfo->bStarterOfDD = sal_True;
 
@@ -1560,6 +1558,9 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
         sal_Int8 nActions = bReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
 
         rDGE.DragSource->startDrag( rDGE, nActions, 0 /*cursor*/, 0 /*image*/, xData, mxDnDListener );
+        // Falls Drag&Move in einer Engine, muessen Copy&Del geklammert sein!
+        GetCursor()->Hide();
+
     }
 }
 
