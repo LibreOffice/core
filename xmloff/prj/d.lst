@@ -72,3 +72,4 @@ hedabu: ..\inc\shapeexport.hxx %_DEST%\inc%_EXT%\xmloff\shapeexport.hxx
 hedabu: ..\inc\shapeimport.hxx %_DEST%\inc%_EXT%\xmloff\shapeimport.hxx
 hedabu: ..\inc\SchXMLExportHelper.hxx %_DEST%\inc%_EXT%\xmloff\SchXMLExportHelper.hxx
 hedabu: ..\inc\SchXMLImportHelper.hxx %_DEST%\inc%_EXT%\xmloff\SchXMLImportHelper.hxx
+hedabu: ..\inc\functional.hxx %_DEST%\inc%_EXT%\xmloff\functional.hxx
