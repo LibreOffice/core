@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 09:44:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,8 @@
 #ifndef _SVX_CHARROTATEITEM_HXX
 #include <charrotateitem.hxx>
 #endif
-
+#include "svxdlg.hxx" //CHINA001
+#include "dialogs.hrc" //CHINA001
 using namespace ::com::sun::star;
 
 // define ----------------------------------------------------------------
@@ -3692,14 +3693,21 @@ void SvxCharTwoLinesPage::Initialize()
 
 void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
 {
-    SvxCharacterMap aDlg( this );
-    aDlg.DisableFontSelection();
-
-    if ( aDlg.Execute() == RET_OK )
+    //CHINA001 SvxCharacterMap aDlg( this );
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    if(pFact)
     {
-        sal_Unicode cChar = aDlg.GetChar();
-        USHORT nPos = pBox->InsertEntry( String( cChar ) );
-        pBox->SelectEntryPos( nPos );
+        AbstractSvxCharacterMap* aDlg = pFact->CreateSvxCharacterMap( this,  ResId(RID_SVXDLG_CHARMAP) );
+        DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
+        aDlg->DisableFontSelection();//CHINA001 aDlg.DisableFontSelection();
+
+        if ( aDlg->Execute() == RET_OK )//CHINA001 ( aDlg.Execute() == RET_OK )
+        {
+            sal_Unicode cChar = aDlg->GetChar();//CHINA001 aDlg.GetChar();
+            USHORT nPos = pBox->InsertEntry( String( cChar ) );
+            pBox->SelectEntryPos( nPos );
+        }
+        delete aDlg; //add CHINA001
     }
 }
 
