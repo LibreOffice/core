@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popmenu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:50 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 15:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,21 +67,11 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "popmenu.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
-SEG_EOFGLOBALS()
-
 //------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(popmenu_01)
 
 void __EXPORT ScPopupMenu::Select()
 {
@@ -89,6 +79,5 @@ void __EXPORT ScPopupMenu::Select()
     bHit = TRUE;
 }
 
-#pragma SEG_EOFMODULE
 
 
