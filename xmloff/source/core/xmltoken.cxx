@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
+ *  last change: $Author: bm $ $Date: 2001-10-23 09:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2073,6 +2073,9 @@ namespace xmloff { namespace token {
         TOKEN( "spline-order" ),               // XML_SPLINE_ORDER
         TOKEN( "spline-resolution" ),          // XML_SPLINE_RESOLUTION
         TOKEN( "paper-tray-name" ),            // XML_PAPER_TRAY_NAME
+
+        TOKEN( "column-mapping" ),             // XML_COLUMN_MAPPING
+        TOKEN( "row-mapping" ),                // XML_ROW_MAPPING
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };

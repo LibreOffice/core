@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: bm $ $Date: 2001-09-28 14:56:18 $
+ *  last change: $Author: bm $ $Date: 2001-10-23 10:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,57 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
 
             if( sAddInName.getLength())
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_ADD_IN_NAME, sAddInName );
+
+            // translated rows/columns
+            if( xDocPropSet.is())
+            {
+                sal_Bool bTranslate = sal_False;
+                ::rtl::OUString aTransPropName;
+                enum XMLTokenEnum eTransToken;
+
+                uno::Any aAny = xDocPropSet->getPropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasTranslatedColumns" )));
+                aAny >>= bTranslate;
+                if( bTranslate )
+                {
+                    aTransPropName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TranslatedColumns" ));
+                    eTransToken = ::xmloff::token::XML_COLUMN_MAPPING;
+                }
+                else
+                {
+                    aAny = xDocPropSet->getPropertyValue(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasTranslatedRows" )));
+                    aAny >>= bTranslate;
+                    if( bTranslate )
+                    {
+                        aTransPropName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TranslatedRows" ));
+                        eTransToken = ::xmloff::token::XML_ROW_MAPPING;
+                    }
+                }
+
+                if( bTranslate )
+                {
+                    uno::Sequence< sal_Int32 > aSeq;
+                    aAny = xDocPropSet->getPropertyValue( aTransPropName );
+                    if( aAny >>= aSeq )
+                    {
+                        const sal_Int32* pArray = aSeq.getConstArray();
+                        const sal_Int32 nSize = aSeq.getLength();
+                        sal_Int32 i = 0;
+                        ::rtl::OUStringBuffer aBuf;
+                        for( i = 0; i < nSize; ++i )
+                        {
+                            aBuf.append( pArray[ i ], 10 );
+                            if( i != (nSize - 1))
+                                aBuf.append( static_cast< sal_Unicode >( ' ' ));
+                        }
+
+                        mrExport.AddAttribute( XML_NAMESPACE_CHART,
+                                               ::xmloff::token::GetXMLToken( eTransToken ),
+                                               aBuf.makeStringAndClear() );
+                    }
+                }
+            }
         }
         // write style name
         AddAutoStyleAttribute( aPropertyStates );

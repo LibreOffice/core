@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: bm $ $Date: 2001-10-22 10:38:33 $
+ *  last change: $Author: bm $ $Date: 2001-10-23 10:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@
 #ifndef _XMLOFF_PRSTYLEI_HXX_
 #include "prstylei.hxx"
 #endif
+
+#include "vector"
 
 #ifndef _COM_SUN_STAR_CHART_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -274,6 +276,13 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
             case XML_TOK_CHART_ADDIN_NAME:
                 aServiceName = aValue;
+                break;
+
+            case XML_TOK_CHART_COL_MAPPING:
+                msColTrans = aValue;
+                break;
+            case XML_TOK_CHART_ROW_MAPPING:
+                msRowTrans = aValue;
                 break;
         }
     }
@@ -470,6 +479,22 @@ void SchXMLChartContext::EndElement()
                     aAny <<= maSeriesAddresses;
                     xProp->setPropertyValue( rtl::OUString::createFromAscii( "SeriesAddresses" ), aAny );
                 }
+            }
+
+            // row / col translations
+            bool bHasColTrans = (msColTrans.getLength() > 0);
+            bool bHasRowTrans = (msRowTrans.getLength() > 0);
+            if( bHasColTrans )
+            {
+                uno::Sequence< sal_Int32 > aSeq = GetNumberSequenceFromString( msColTrans );
+                aAny <<= aSeq;
+                xProp->setPropertyValue( ::rtl::OUString::createFromAscii( "TranslatedColumns" ), aAny );
+            }
+            else if( bHasRowTrans )
+            {
+                uno::Sequence< sal_Int32 > aSeq = GetNumberSequenceFromString( msRowTrans );
+                aAny <<= aSeq;
+                xProp->setPropertyValue( ::rtl::OUString::createFromAscii( "TranslatedRows" ), aAny );
             }
         }
         catch( beans::UnknownPropertyException )
@@ -744,6 +769,41 @@ void    SchXMLChartContext::InitChart   (awt::Size aChartSize,
         xModel->unlockControllers();
 }
 
+uno::Sequence< sal_Int32 > SchXMLChartContext::GetNumberSequenceFromString( const ::rtl::OUString& rStr )
+{
+    const sal_Unicode aSpace( ' ' );
+
+    // count number of entries
+    ::std::vector< sal_Int32 > aVec;
+    sal_Int32 nLastPos = 0;
+    sal_Int32 nPos = 0;
+    const sal_Int32 nSize = rStr.getLength();
+    while( nPos != -1 )
+    {
+        nPos = rStr.indexOf( aSpace, nLastPos );
+        if( nPos > nLastPos )
+        {
+            aVec.push_back( rStr.copy( nLastPos, (nPos - nLastPos) ).toInt32() );
+        }
+        if( nPos != -1 )
+            nLastPos = nPos + 1;
+    }
+    // last entry
+    if( nLastPos != 0 &&
+        rStr.getLength() > nLastPos )
+    {
+        aVec.push_back( rStr.copy( nLastPos, (rStr.getLength() - nLastPos) ).toInt32() );
+    }
+
+    const sal_Int32 nVecSize = aVec.size();
+    uno::Sequence< sal_Int32 > aSeq( nVecSize );
+    sal_Int32* pSeqArr = aSeq.getArray();
+    for( nPos = 0; nPos < nVecSize; ++nPos )
+    {
+        pSeqArr[ nPos ] = aVec[ nPos ];
+    }
+    return aSeq;
+}
 
 // ----------------------------------------
 
@@ -942,7 +1002,3 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
 SchXMLLegendContext::~SchXMLLegendContext()
 {
 }
-
-
-
-

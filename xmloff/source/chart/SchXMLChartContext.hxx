@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2001-09-28 14:56:18 $
+ *  last change: $Author: bm $ $Date: 2001-10-23 10:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,10 @@ private:
     ::rtl::OUString msTableNumberList;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxDrawPage;
+    ::rtl::OUString msColTrans;
+    ::rtl::OUString msRowTrans;
+
+    ::com::sun::star::uno::Sequence< sal_Int32 > GetNumberSequenceFromString( const ::rtl::OUString& rStr );
 
 public:
     SchXMLChartContext( SchXMLImportHelper& rImpHelper,
