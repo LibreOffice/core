@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-28 12:06:17 $
+ *  last change: $Author: sab $ $Date: 2001-06-11 05:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,22 @@
 #endif
 
 using namespace com::sun::star;
+
+void ScMyStyleNumberFormats::AddStyleNumberFormat(const rtl::OUString& rStyleName, const sal_Int32 nNumberFormat)
+{
+    ScMyStyleNumberFormat aFormat(rStyleName, nNumberFormat);
+    aSet.insert(aFormat);
+}
+
+sal_Int32 ScMyStyleNumberFormats::GetStyleNumberFormat(const rtl::OUString& rStyleName)
+{
+    ScMyStyleNumberFormat aStyleNumberFormat(rStyleName);
+    ScMyStyleNumberFormatSet::iterator aItr = aSet.find(aStyleNumberFormat);
+    if (aItr == aSet.end())
+        return -1;
+    else
+        return aItr->nNumberFormat;
+}
 
 ScMyStyleRanges::ScMyStyleRanges()
     :
@@ -210,6 +226,7 @@ void ScMyStyleRanges::InsertColRow(const ScRange& rRange, const sal_Int16 nDx, c
         while (aItr != pCurrencyList->end())
         {
             aItr->xRanges->UpdateReference(aRefMode, pDoc, rRange, nDx, nDy, nDz);
+            aItr++;
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-01 10:09:54 $
+ *  last change: $Author: sab $ $Date: 2001-06-11 05:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1480,7 +1480,8 @@ ScXMLImport::ScXMLImport(const sal_uInt16 nImportFlag) :
     sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(SC_STANDARDFORMAT)),
     sType(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)),
     bNullDateSetted(sal_False),
-    pNumberFormatAttributesExportHelper(NULL)
+    pNumberFormatAttributesExportHelper(NULL),
+    pStyleNumberFormats(NULL)
 
 //  pParaItemMapper( 0 ),
 {
@@ -1576,6 +1577,12 @@ ScXMLImport::~ScXMLImport()
         xActionLockable->removeActionLock();
     if (pChangeTrackingImportHelper)
         delete pChangeTrackingImportHelper;
+    if (pNumberFormatAttributesExportHelper)
+        delete pNumberFormatAttributesExportHelper;
+    if (pStyleNumberFormats)
+        delete pStyleNumberFormats;
+    if (pStylesImportHelper)
+        delete pStylesImportHelper;
 
     if (getImportFlags() & IMPORT_CONTENT)
     {
@@ -1913,80 +1920,79 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
        return nKey;
 }
 
-void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties, const sal_Int16 nCellType,
+void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
+    sal_Int32& rNumberFormat,
+    const sal_Int16 nCellType,
     const rtl::OUString& rCurrency)
 {
     if (nCellType != util::NumberFormat::TEXT)
     {
-        uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetNumberFormatsSupplier();
-        if (xNumberFormatsSupplier.is())
+        if (rNumberFormat == -1)
         {
-            uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
-            if (xNumberFormats.is())
+            uno::Any aKey = rProperties->getPropertyValue( sNumberFormat );
+            aKey >>= rNumberFormat;
+        }
+        DBG_ASSERT(rNumberFormat != -1, "no NumberFormat");
+        sal_Bool bIsStandard;
+        rtl::OUString sCurrentCurrency;
+        sal_Int32 nCurrentCellType(
+            GetNumberFormatAttributesExportHelper()->GetCellType(
+                rNumberFormat, sCurrentCurrency, bIsStandard) & ~util::NumberFormat::DEFINED);
+        if ((nCellType != nCurrentCellType) && !(nCellType == util::NumberFormat::NUMBER &&
+            ((nCurrentCellType == util::NumberFormat::SCIENTIFIC) ||
+            (nCurrentCellType == util::NumberFormat::FRACTION) ||
+            (nCurrentCellType == 0))) && !((nCellType == util::NumberFormat::DATETIME) &&
+            (nCurrentCellType == util::NumberFormat::DATE)))
+        {
+            if (!xNumberFormats.is())
             {
-                uno::Reference <util::XNumberFormatTypes> xNumberFormatTypes (xNumberFormats, uno::UNO_QUERY);
-                if (xNumberFormatTypes.is())
+                uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetNumberFormatsSupplier();
+                if (xNumberFormatsSupplier.is())
+                    xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
+            }
+            try
+            {
+                uno::Reference < beans::XPropertySet> xNumberFormatProperties = xNumberFormats->getByKey(rNumberFormat);
+                if (xNumberFormatProperties.is())
                 {
-                    uno::Any aKey = rProperties->getPropertyValue( sNumberFormat );
-                    sal_Int32 nKey;
-                    if ( aKey >>= nKey )
+                    if (nCellType != util::NumberFormat::CURRENCY)
                     {
-                        sal_Bool bIsStandard;
-                        rtl::OUString sCurrentCurrency;
-                        sal_Int32 nCurrentCellType(
-                            GetNumberFormatAttributesExportHelper()->GetCellType(
-                                nKey, sCurrentCurrency, bIsStandard) & ~util::NumberFormat::DEFINED);
-                        if ((nCellType != nCurrentCellType) && !(nCellType == util::NumberFormat::NUMBER &&
-                            ((nCurrentCellType == util::NumberFormat::SCIENTIFIC) ||
-                            (nCurrentCellType == util::NumberFormat::FRACTION) ||
-                            (nCurrentCellType == 0))) && !((nCellType == util::NumberFormat::DATETIME) &&
-                            (nCurrentCellType == util::NumberFormat::DATE)))
+                        uno::Any aNumberLocale = xNumberFormatProperties->getPropertyValue(sLocale);
+                        lang::Locale aLocale;
+                        if ( aNumberLocale >>= aLocale )
                         {
-                            try
-                            {
-                                uno::Reference < beans::XPropertySet> xNumberFormatProperties = xNumberFormats->getByKey(nKey);
-                                if (xNumberFormatProperties.is())
-                                {
-                                    if (nCellType != util::NumberFormat::CURRENCY)
-                                    {
-                                        uno::Any aNumberLocale = xNumberFormatProperties->getPropertyValue(sLocale);
-                                        lang::Locale aLocale;
-                                        if ( aNumberLocale >>= aLocale )
-                                        {
-                                            sal_Int32 nNumberFormatPropertyKey = xNumberFormatTypes->getStandardFormat(nCellType, aLocale);
-                                            uno::Any aNumberFormatPropertyKey;
-                                            aNumberFormatPropertyKey <<= nNumberFormatPropertyKey;
-                                            rProperties->setPropertyValue( sNumberFormat, aNumberFormatPropertyKey );
-                                        }
-                                    }
-                                    else if (rCurrency.getLength())
-                                    {
-                                        nKey = SetCurrencySymbol(nKey, rCurrency);
-                                        uno::Any aAny;
-                                        aAny <<= nKey;
-                                        rProperties->setPropertyValue( sNumberFormat, aAny);
-                                    }
-                                }
-                            }
-                            catch ( uno::Exception& )
-                            {
-                                DBG_ERROR("Numberformat not found");
-                            }
-                        }
-                        else
-                        {
-                            if ((nCellType == util::NumberFormat::CURRENCY) && rCurrency.getLength() && sCurrentCurrency.getLength())
-                            {
-                                if (!sCurrentCurrency.equals(rCurrency))
-                                {
-                                    nKey = SetCurrencySymbol(nKey, rCurrency);
-                                    uno::Any aAny;
-                                    aAny <<= nKey;
-                                    rProperties->setPropertyValue( sNumberFormat, aAny);
-                                }
-                            }
+                            if (!xNumberFormatTypes.is())
+                                xNumberFormatTypes = uno::Reference <util::XNumberFormatTypes>(xNumberFormats, uno::UNO_QUERY);
+                            sal_Int32 nNumberFormatPropertyKey = xNumberFormatTypes->getStandardFormat(nCellType, aLocale);
+                            uno::Any aNumberFormatPropertyKey;
+                            aNumberFormatPropertyKey <<= nNumberFormatPropertyKey;
+                            rProperties->setPropertyValue( sNumberFormat, aNumberFormatPropertyKey );
                         }
                     }
+                    else if (rCurrency.getLength())
+                    {
+                        sal_Int32 nKey = SetCurrencySymbol(rNumberFormat, rCurrency);
+                        uno::Any aAny;
+                        aAny <<= nKey;
+                        rProperties->setPropertyValue( sNumberFormat, aAny);
+                    }
+                }
+            }
+            catch ( uno::Exception& )
+            {
+                DBG_ERROR("Numberformat not found");
+            }
+        }
+        else
+        {
+            if ((nCellType == util::NumberFormat::CURRENCY) && rCurrency.getLength() && sCurrentCurrency.getLength())
+            {
+                if (!sCurrentCurrency.equals(rCurrency))
+                {
+                    sal_Int32 nKey = SetCurrencySymbol(rNumberFormat, rCurrency);
+                    uno::Any aAny;
+                    aAny <<= nKey;
+                    rProperties->setPropertyValue( sNumberFormat, aAny);
                 }
             }
         }
@@ -2010,14 +2016,22 @@ void ScXMLImport::SetStyleToRange(const ScRange& rRange, const rtl::OUString& rS
                 XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
                     XML_STYLE_FAMILY_TABLE_CELL, rStyleName, sal_True);
                 if (pStyle)
+                {
                     pStyle->FillPropertySet(xProperties);
+                    sal_Int32 nNumberFormat(pStyle->GetNumberFormat());
+                    SetType(xProperties, nNumberFormat, nCellType, rCurrency);
+                }
                 else
                 {
                     uno::Any aStyleName;
                     aStyleName <<= rStyleName;
                     xProperties->setPropertyValue(sCellStyle, aStyleName);
+                    sal_Int32 nNumberFormat(GetStyleNumberFormats()->GetStyleNumberFormat(rStyleName));
+                    sal_Bool bInsert(nNumberFormat == -1);
+                    SetType(xProperties, nNumberFormat, nCellType, rCurrency);
+                    if (bInsert)
+                        GetStyleNumberFormats()->AddStyleNumberFormat(rStyleName, nNumberFormat);
                 }
-                SetType(xProperties, nCellType, rCurrency);
             }
         }
     }
@@ -2038,3 +2052,9 @@ XMLNumberFormatAttributesExportHelper* ScXMLImport::GetNumberFormatAttributesExp
     return pNumberFormatAttributesExportHelper;
 }
 
+ScMyStyleNumberFormats* ScXMLImport::GetStyleNumberFormats()
+{
+    if (!pStyleNumberFormats)
+        pStyleNumberFormats = new ScMyStyleNumberFormats();
+    return pStyleNumberFormats;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-07 10:07:37 $
+ *  last change: $Author: sab $ $Date: 2001-06-11 05:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,8 @@ public:
     virtual void SetDefaults();
 
       void AddProperty(sal_Int16 nContextID, const com::sun::star::uno::Any& aValue);
+
+    sal_Int32 GetNumberFormat() { return nNumberFormat; }
 };
 
 class XMLTableStylesContext : public SvXMLStylesContext

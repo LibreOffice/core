@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
+ *  last change: $Author: sab $ $Date: 2001-06-11 05:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,37 @@
 #endif
 
 class ScXMLImport;
+
+struct ScMyStyleNumberFormat
+{
+    rtl::OUString       sStyleName;
+    sal_Int32           nNumberFormat;
+
+    ScMyStyleNumberFormat() : nNumberFormat(-1) {}
+    ScMyStyleNumberFormat(const rtl::OUString& rStyleName) :
+        sStyleName(rStyleName), nNumberFormat(-1) {}
+    ScMyStyleNumberFormat(const rtl::OUString& rStyleName, const sal_Int32 nFormat) :
+        sStyleName(rStyleName), nNumberFormat(nFormat) {}
+};
+
+struct LessStyleNumberFormat
+{
+    sal_Bool operator() (const ScMyStyleNumberFormat& rValue1, const ScMyStyleNumberFormat& rValue2) const
+    {
+        return rValue1.sStyleName < rValue2.sStyleName;
+    }
+};
+
+typedef std::set< ScMyStyleNumberFormat, LessStyleNumberFormat >    ScMyStyleNumberFormatSet;
+
+class ScMyStyleNumberFormats
+{
+    ScMyStyleNumberFormatSet    aSet;
+
+public:
+    void AddStyleNumberFormat(const rtl::OUString& rStyleName, const sal_Int32 nNumberFormat);
+    sal_Int32 GetStyleNumberFormat(const rtl::OUString& rStyleName);
+};
 
 struct ScMyCurrencyStyle
 {

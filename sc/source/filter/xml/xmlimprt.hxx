@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-23 11:46:16 $
+ *  last change: $Author: sab $ $Date: 2001-06-11 05:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,12 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
+#include <com/sun/star/util/XNumberFormatTypes.hpp>
+#endif
 
 class ScRangeList;
+class ScMyStyleNumberFormats;
 class XMLNumberFormatAttributesExportHelper;
 
 using namespace rtl;
@@ -758,6 +762,9 @@ class ScXMLImport: public SvXMLImport
 
     rtl::OUString           sFirstTableStyle;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
+    ScMyStyleNumberFormats* pStyleNumberFormats;
+    com::sun::star::uno::Reference <com::sun::star::util::XNumberFormats> xNumberFormats;
+    com::sun::star::uno::Reference <com::sun::star::util::XNumberFormatTypes> xNumberFormatTypes;
 
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
     sal_Bool                bLoadDoc : 1;   // Load doc or styles only
@@ -928,12 +935,15 @@ public:
     rtl::OUString GetFirstTableStyle() { return sFirstTableStyle; }
     ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper; }
     sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUString& rCurrency);
-    void SetType(com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet>& rProperties, const sal_Int16 nCellType,
+    void SetType(com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet>& rProperties,
+        sal_Int32& rNumberFormat,
+        const sal_Int16 nCellType,
         const rtl::OUString& rCurrency);
     void SetStyleToRange(const ScRange& rRange, const rtl::OUString& rStyleName,
         const sal_Int16 nCellType, const rtl::OUString& rCurrency);
     sal_Bool SetNullDateOnUnitConverter();
     XMLNumberFormatAttributesExportHelper* GetNumberFormatAttributesExportHelper();
+    ScMyStyleNumberFormats* GetStyleNumberFormats();
 };
 
 #endif
