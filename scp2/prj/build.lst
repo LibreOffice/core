@@ -3,7 +3,6 @@ cp    scp2                        usr1     -    all    cp_mkout NULL
 cp    scp2\source\activex         nmake    -    all    cp_activex NULL
 cp    scp2\source\calc            nmake    -    all    cp_calc NULL
 cp    scp2\source\canvas          nmake    -    all    cp_canvas NULL
-cp    scp2\source\cde             nmake    -    all    cp_cde NULL
 cp    scp2\source\crashrep        nmake    -    all    cp_crashrep NULL
 cp    scp2\source\draw            nmake    -    all    cp_draw NULL
 cp    scp2\source\gnome           nmake    -    all    cp_gnome NULL
@@ -20,4 +19,4 @@ cp    scp2\source\testtool        nmake    -    all    cp_testtool NULL
 cp    scp2\source\writer          nmake    -    all    cp_writer NULL
 cp    scp2\source\xsltfilter      nmake    -    all    cp_xsltfilter NULL
 cp    scp2\source\winexplorerext  nmake    -    all    cp_winexplorerext NULL
-cp    scp2\util                   nmake    -    all    cp_util cp_activex cp_calc cp_canvas cp_cde cp_crashrep cp_draw cp_gnome cp_graphicfilter cp_impress cp_javafilter cp_kde cp_lingu cp_mailcap cp_math cp_ooo cp_python cp_testtool cp_writer cp_xsltfilter cp_winexplorerext NULL
+cp    scp2\util                   nmake    -    all    cp_util cp_activex cp_calc cp_canvas cp_crashrep cp_draw cp_gnome cp_graphicfilter cp_impress cp_javafilter cp_kde cp_lingu cp_mailcap cp_math cp_ooo cp_python cp_testtool cp_writer cp_xsltfilter cp_winexplorerext NULL
