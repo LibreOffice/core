@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODateModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:41:37 $
+ *  last change:$Date: 2003-09-08 11:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,20 +58,10 @@
  *
  *
  ************************************************************************/
-
 package mod._forms;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
-import com.sun.star.form.XBoundComponent;
-import com.sun.star.form.XLoadable;
-import com.sun.star.sdbc.XResultSetUpdate;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -79,6 +69,19 @@ import lib.TestParameters;
 import util.DBTools;
 import util.FormTools;
 import util.WriterTools;
+
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.drawing.XControlShape;
+import com.sun.star.drawing.XShape;
+import com.sun.star.form.XBoundComponent;
+import com.sun.star.form.XLoadable;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdbc.XResultSetUpdate;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
+
 
 /**
 * Test for object which is represented by service
@@ -150,24 +153,31 @@ import util.WriterTools;
 * @see ifc.container._XChild
 */
 public class ODateModel extends TestCase {
-
     XTextDocument xTextDoc;
 
     /**
     * Creates Writer document where controls are placed.
     */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-
-        log.println( "creating a textdocument" );
-        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        log.println("creating a textdocument");
+        xTextDoc = WriterTools.createTextDoc(((XMultiServiceFactory) tParam.getMSF()));
     }
 
     /**
     * Disposes Writer document.
     */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
+
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xTextDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
     }
 
     /**
@@ -202,115 +212,130 @@ public class ODateModel extends TestCase {
     * </ul>
     * @see ifc.form._XUpdateBroadcaster
     */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                                 PrintWriter log) {
         XInterface oObj = null;
 
-        XControlShape aShape = FormTools.createControlShape(
-                                xTextDoc,3000,4500,15000,10000,"DateField");
+        XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000,
+                                                            4500, 15000, 10000,
+                                                            "DateField");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
         oObj = aShape.getControl();
 
-        XLoadable formLoader = null ;
-        try {
-            DBTools dbTools = new DBTools((XMultiServiceFactory)Param.getMSF()) ;
-            dbTools.registerTestDB((String) System.getProperty("DOCPTH")) ;
+        XLoadable formLoader = null;
 
-            formLoader = FormTools.bindForm(xTextDoc,
-                "APITestDatabase", "TestDB");
+        try {
+            DBTools dbTools = new DBTools(((XMultiServiceFactory) Param.getMSF()));
+            dbTools.registerTestDB((String) System.getProperty("DOCPTH"));
+
+            formLoader = FormTools.bindForm(xTextDoc, "APITestDatabase",
+                                            "TestDB");
         } catch (com.sun.star.uno.Exception e) {
-            log.println("!!! Can't access TestDB !!!") ;
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't access TestDB", e) ;
+            log.println("!!! Can't access TestDB !!!");
+            e.printStackTrace(log);
+            throw new StatusException("Can't access TestDB", e);
         }
 
-        log.println( "creating a new environment for ODateModel object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        log.println("creating a new environment for ODateModel object");
+
+        TestEnvironment tEnv = new TestEnvironment(oObj);
         String objName = "DateField";
-        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." + objName);
-        aShape = FormTools.createControlShape(
-                                xTextDoc,6000,4500,15000,10000,"FixedText");
+        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." +
+                            objName);
+        aShape = FormTools.createControlShape(xTextDoc, 6000, 4500, 15000,
+                                              10000, "FixedText");
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
 
-        final XPropertySet ps = (XPropertySet)UnoRuntime.queryInterface
-            (XPropertySet.class, oObj);
+        final XPropertySet ps = (XPropertySet) UnoRuntime.queryInterface(
+                                        XPropertySet.class, oObj);
+
         try {
             //ps.setPropertyValue("DefaultDate", new Integer(777));
-            ps.setPropertyValue("DataField", DBTools.TST_DATE_F) ;
-            ps.setPropertyValue("Date", new Integer(20010101)) ;
+            ps.setPropertyValue("DataField", DBTools.TST_DATE_F);
+            ps.setPropertyValue("Date", new Integer(20010101));
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't set Default Date", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't set Default Date", e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't set Default Date", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't set Default Date", e);
         } catch (com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't set Default Date", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't set Default Date", e);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't set Default Date", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't set Default Date", e);
         }
 
 
         // added LabelControl for 'DataAwareControlModel'
-        tEnv.addObjRelation("LC",aShape.getControl());
+        tEnv.addObjRelation("LC", aShape.getControl());
+
 
         // added FormLoader for 'DataAwareControlModel'
-        tEnv.addObjRelation("FL",formLoader);
+        tEnv.addObjRelation("FL", formLoader);
+
 
         //adding ObjRelation for XPersistObject
         tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true));
 
         // adding relation for XUpdateBroadcaster
-        final XInterface ctrl = oObj ;
-        final XLoadable formLoaderF = formLoader ;
+        final XInterface ctrl = oObj;
+        final XLoadable formLoaderF = formLoader;
 
         tEnv.addObjRelation("XUpdateBroadcaster.Checker",
-            new ifc.form._XUpdateBroadcaster.UpdateChecker() {
-                private int lastDate = 0 ;
-                public void update() throws com.sun.star.uno.Exception {
-                    if (!formLoaderF.isLoaded()) {
-                        formLoaderF.load() ;
-                    }
-                    Integer dat = (Integer)ps.getPropertyValue("Date") ;
-                    if (dat != null)
-                        lastDate = dat.intValue() + 1 ;
-                    ps.setPropertyValue("Date", new Integer(lastDate)) ;
-                }
-                public void commit() throws com.sun.star.sdbc.SQLException {
-                    XBoundComponent bound = (XBoundComponent) UnoRuntime.
-                        queryInterface(XBoundComponent.class, ctrl) ;
-                    XResultSetUpdate update = (XResultSetUpdate) UnoRuntime.
-                        queryInterface(XResultSetUpdate.class, formLoaderF) ;
+                            new ifc.form._XUpdateBroadcaster.UpdateChecker() {
+            private int lastDate = 0;
 
-                    bound.commit() ;
-                    update.updateRow() ;
+            public void update() throws com.sun.star.uno.Exception {
+                if (!formLoaderF.isLoaded()) {
+                    formLoaderF.load();
                 }
-                public boolean wasCommited() throws com.sun.star.uno.Exception {
-                    formLoaderF.reload() ;
 
-                    Integer getD = (Integer) ps.getPropertyValue("Date") ;
-                    return getD != null && getD.intValue() == lastDate ;
+                Integer dat = (Integer) ps.getPropertyValue("Date");
+
+                if (dat != null) {
+                    lastDate = dat.intValue() + 1;
                 }
-            }) ;
+
+                ps.setPropertyValue("Date", new Integer(lastDate));
+            }
+
+            public void commit() throws com.sun.star.sdbc.SQLException {
+                XBoundComponent bound = (XBoundComponent) UnoRuntime.queryInterface(
+                                                XBoundComponent.class, ctrl);
+                XResultSetUpdate update = (XResultSetUpdate) UnoRuntime.queryInterface(
+                                                  XResultSetUpdate.class,
+                                                  formLoaderF);
+
+                bound.commit();
+                update.updateRow();
+            }
+
+            public boolean wasCommited() throws com.sun.star.uno.Exception {
+                formLoaderF.reload();
+
+                Integer getD = (Integer) ps.getPropertyValue("Date");
+
+                return (getD != null) && (getD.intValue() == lastDate);
+            }
+        });
+
 
         // adding relation for DataAwareControlModel service
         tEnv.addObjRelation("DataAwareControlModel.NewFieldName",
-            DBTools.TST_DATE_F) ;
+                            DBTools.TST_DATE_F);
+
 
         //adding ObjRelation for XPersistObject
         tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true));
 
         // adding relation for XFastPropertySet
-        java.util.HashSet exclude = new java.util.HashSet() ;
-        exclude.add("FormatKey") ;
+        java.util.HashSet exclude = new java.util.HashSet();
+        exclude.add("FormatKey");
         tEnv.addObjRelation("XFastPropertySet.ExcludeProps", exclude);
 
         return tEnv;
-
     } // finish method getTestEnvironment
-
-}    // finish class ODateModel
-
+} // finish class ODateModel
