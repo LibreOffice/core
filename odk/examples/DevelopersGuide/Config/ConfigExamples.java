@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigExamples.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:19:00 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -527,10 +527,6 @@ public class ConfigExamples
         XHierarchicalName xElementPath =
             (XHierarchicalName) UnoRuntime.queryInterface(XHierarchicalName.class, xElement);
 
-        // temporary check, we have to check why XHierarchicalName isn't supported
-        if ( xElementPath == null )
-            return;
-
         String sPath = xElementPath.getHierarchicalName();
 
         aProcessor.processStructuralElement( sPath, xElement);
@@ -548,7 +544,7 @@ public class ConfigExamples
             Object aChild = xChildAccess.getByName( aElementNames[i] );
             AnyConverter aAnyConv = new AnyConverter();
             // is it a structural element (object) ...
-            if ( aAnyConv.isObject(aChild) )
+            if ( aAnyConv.isObject(aChild) && !aAnyConv.isArray(aChild) )
             {
                 // then get an interface
                 XInterface xChildElement = (XInterface)UnoRuntime.queryInterface(XInterface.class, aChild);
@@ -608,8 +604,22 @@ public class ConfigExamples
            new IConfigurationProcessor () {
                /// prints Path and Value of properties
                public void processValueElement( String sPath_, Object aValue_ ) {
-                   System.out.println("\tValue: " + sPath_ + " = " + aValue_);
+                   if (new AnyConverter().isArray(aValue_))
+                   {
+                       final Object [] aArray = (Object [])aValue_;
+
+                       System.out.print("\tValue: " + sPath_ + " = { ");
+                       for (int i=0; i<aArray.length; ++i)
+                       {
+                           if (i != 0) System.out.print(", ");
+                           System.out.print(aArray[i]);
+                       }
+                       System.out.println(" }");
+                   }
+                   else
+                        System.out.println("\tValue: " + sPath_ + " = " + aValue_);
                }
+
                /// prints the Filter entries
                public void processStructuralElement( String sPath_, XInterface xElement_) {
                    // get template information, to detect instances of the 'Filter' template
@@ -912,11 +922,25 @@ public class ConfigExamples
 
 
 // SET UPDATE EXAMPLE
-    /** This method stores a sample data source given some connection data
+    private static boolean SET_EXAMPLE_BROKEN_IN_THIS_RELEASE = true;
+
+    /** This method stores a sample data source given some connection data.
+
+        ATTENTION: This example requires an older version of the
+                   org.openoffice.Office.DataAccess schema.
+                   It does not work with the current schema.
+                   Because of this, the method currenty does nothing.
+                   You can still use the techniques shown in the example code.
     */
     void storeSampleDataSource()
         throws com.sun.star.uno.Exception
     {
+        if (SET_EXAMPLE_BROKEN_IN_THIS_RELEASE)
+        {
+            System.out.println("-  DISABLED: (the existing example does not work with this version) -");
+            return; // this function does not work
+        }
+
         String sSampleDataSourceName = "SampleTextDatabase";
 
         String sSampleDataSourceURL = "sdbc:flat:$(userurl)/database/SampleTextDatabase";
@@ -1115,6 +1139,8 @@ public class ConfigExamples
                 xSettingsContainer.insertByName( aSettings[i].Name, xSetting );
         }
     }
+
+// HELPER FUNCTIONS
 
     /// This method get the view root node given an interface to any node in the view
     public static Object getViewRoot(Object xElement)
