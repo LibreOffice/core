@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_graphicfilter.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 12:58:31 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,20 +61,6 @@
 
 #include "macros.inc"
 
-File gid_File_Registry_Spool_Oo_TypeDetection_InternalGraphics_Types_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name = "/registry/spool/fcfg_internalgraphics_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_InternalGraphics_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name = "/registry/spool/fcfg_internalgraphics_filters.xcu";
-End
-
 File gid_File_Registry_Spool_Oo_TypeDetection_ImpressGraphics_Types_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -103,55 +89,7 @@ File gid_File_Registry_Spool_Oo_TypeDetection_DrawGraphics_Filters_Xcu
     Name = "/registry/spool/fcfg_drawgraphics_filters.xcu";
 End
 
-STD_FILTER_FILE( gid_File_Filter_Egi, egi)
-
-STD_FILTER_FILE( gid_File_Filter_Epb, epb)
-
-STD_FILTER_FILE( gid_File_Filter_Epg, epg)
-
-STD_FILTER_FILE( gid_File_Filter_Epp, epp)
-
-STD_FILTER_FILE( gid_File_Filter_Eps, eps)
-
-STD_FILTER_FILE( gid_File_Filter_Ept, ept)
-
-STD_FILTER_FILE( gid_File_Filter_Era, era)
-
-STD_FILTER_FILE( gid_File_Filter_Eti, eti)
-
-STD_FILTER_FILE( gid_File_Filter_Exp, exp)
-
-STD_FILTER_FILE( gid_File_Filter_Icd, icd)
-
-STD_FILTER_FILE( gid_File_Filter_Idx, idx)
-
-STD_FILTER_FILE( gid_File_Filter_Ime, ime)
-
-STD_FILTER_FILE( gid_File_Filter_Ipb, ipb)
-
-STD_FILTER_FILE( gid_File_Filter_Ipd, ipd)
-
-STD_FILTER_FILE( gid_File_Filter_Ips, ips)
-
-STD_FILTER_FILE( gid_File_Filter_Ipt, ipt)
-
-STD_FILTER_FILE( gid_File_Filter_Ipx, ipx)
-
-STD_FILTER_FILE( gid_File_Filter_Ira, ira)
-
-STD_FILTER_FILE( gid_File_Filter_Itg, itg)
-
-STD_FILTER_FILE( gid_File_Filter_Iti, iti)
-
 STD_UNO_LIB_FILE( gid_File_Lib_Flash, flash )
 
 STD_UNO_LIB_FILE( gid_File_Lib_Svg, svg )
-
-STD_RES_FILE( gid_File_Res_Eps, eps )
-
-STD_RES_FILE( gid_File_Res_Egi, egi )
-
-STD_RES_FILE( gid_File_Res_Ept, ept )
-
-STD_RES_FILE( gid_File_Res_Eme, eme )
 
