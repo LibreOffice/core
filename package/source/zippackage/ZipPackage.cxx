@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-26 12:41:36 $
+ *  last change: $Author: mtg $ $Date: 2001-10-02 22:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
+#include <com/sun/star/io/XTruncate.hpp>
+#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -129,6 +132,9 @@
 #endif
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
 #endif
 #include <memory>
 
@@ -213,13 +219,11 @@ char * ImplGetChars( const OUString & rString )
 #endif
 
 ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
-: pZipFile(NULL)
-, pRootFolder(NULL)
-, xContentStream (NULL)
-, xContentSeek (NULL)
-, xRootFolder (NULL)
-, xFactory(xNewFactory)
+: pZipFile( NULL )
+, pRootFolder( NULL )
+, xFactory( xNewFactory )
 , bHasEncryptedEntries ( sal_False )
+, eMode ( e_IMode_None )
 , nSegmentSize ( 0 )
 {
     xRootFolder = pRootFolder = new ZipPackageFolder();
@@ -402,35 +406,73 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException)
 {
     RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "{ ZipPackage::initialize" );
-    if (! (aArguments[0] >>= sURL))
+    sal_Bool bBadZipFile = sal_False, bHaveZipFile = sal_True, bSpanned = sal_False;
+
+    if ( (aArguments[0] >>= sURL))
+    {
+        eMode = e_IMode_URL;
+#ifdef MTG_DEBUG
+        fprintf ( stderr, "MTG: initialise called on %s\n", ImplGetChars ( sURL ) );
+#endif
+        try
+        {
+            Content aContent (sURL, Reference < XCommandEnvironment >() );
+            Reference < XActiveDataSink > xSink = new ZipPackageSink;
+            if (aContent.openStream ( xSink ) )
+                xContentStream = xSink->getInputStream();
+        }
+        catch (com::sun::star::uno::Exception&)
+        {
+            // Exception derived from uno::Exception thrown. This probably
+            // means the file doesn't exist...we'll create it at
+            // commitChanges time
+            bHaveZipFile = sal_False;
+        }
+    }
+    else if ( (aArguments[0] >>= xContentStream) )
+    {
+        eMode = e_IMode_XInputStream;
+#ifdef MTG_DEBUG
+        fprintf ( stderr, "MTG: initialise called with an XInputStream\n" );
+#endif
+    }
+    else if ( (aArguments[0] >>= xStream ) )
+    {
+        eMode = e_IMode_XStream;
+        xContentStream = xStream->getInputStream();
+#ifdef MTG_DEBUG
+        fprintf ( stderr, "MTG: initialise called with an XInputStream\n" );
+#endif
+    }
+    else
+        // The URL is not acceptable
         throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Bad URL." ) ),
             static_cast < ::cppu::OWeakObject * > ( this ) );
-    Content aContent (sURL, Reference < XCommandEnvironment >() );
-    sal_Bool bBadZipFile = sal_False, bHaveZipFile = sal_True;
 
-#ifdef MTG_DEBUG
-    fprintf ( stderr, "MTG: initialise called on %s\n", ImplGetChars ( sURL ) );
-#endif
-
-    sal_Bool bSpanned = sal_False;
     try
     {
-        Reference < XActiveDataSink > xSink = new ZipPackageSink;
-        if (aContent.openStream ( xSink ) )
-            xContentStream = xSink->getInputStream();
         if (xContentStream.is())
         {
-            xContentSeek = Reference < XSeekable > (xContentStream, UNO_QUERY);
-            Sequence < sal_Int8 > aSequence ( 4 );
-            xContentStream->readBytes( aSequence, 4 );
-            xContentSeek->seek ( 0 );
-            const sal_Int8 *pSeq = aSequence.getConstArray();
-            if (pSeq[0] == 'P' &&
-                pSeq[1] == 'K' &&
-                pSeq[2] == 7 &&
-                pSeq[3] == 8 )
-                bSpanned = sal_True;
-       }
+            xContentSeek = Reference < XSeekable > ( xContentStream, UNO_QUERY );
+            if ( ! xContentSeek.is() )
+                throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "The package component _requires_ an XSeekable interface!" ) ),
+                    static_cast < ::cppu::OWeakObject * > ( this ) );
+
+            if ( eMode == e_IMode_URL) // spanned files only supported if initialised with a URL
+            {
+                Sequence < sal_Int8 > aSequence ( 4 );
+                if ( 4 == xContentStream->readBytes( aSequence, 4 ) )
+                {
+                    xContentSeek->seek ( 0 );
+                    const sal_Int8 *pSeq = aSequence.getConstArray();
+                    if (pSeq[0] == 'P' &&
+                        pSeq[1] == 'K' &&
+                        pSeq[2] == 7 &&
+                        pSeq[3] == 8 )
+                        bSpanned = sal_True;
+                }
+            }
+        }
         else
             bHaveZipFile = sal_False;
     }
@@ -445,7 +487,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
     {
         try
         {
-            if ( bSpanned)
+            if ( bSpanned )
                 // after unSpanFile, xContentStream will refer to the tempfile containing
                 // the unspanned file
                 unSpanFile ();
@@ -655,6 +697,7 @@ void ZipPackage::writeTempFile()
     // First, create a temporary file to write to:
     const OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
     Reference < XOutputStream > xTempOut = Reference < XOutputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
+
 #ifdef MTG_DEBUG
     fprintf(stderr, "We have a %s tempfile!\n", xTempOut.is() ? "good" : "bad" );
 #endif
@@ -750,6 +793,41 @@ void ZipPackage::writeTempFile()
         VOS_ENSURE( 0, "Error writing ZIP file to disk" );
     }
 
+    if ( eMode == e_IMode_XStream )
+    {
+        // First truncate our output stream
+        Reference < XOutputStream > xOutputStream = xStream->getOutputStream();
+        Reference < XTruncate > xTruncate ( xOutputStream, UNO_QUERY );
+        if ( !xTruncate.is() )
+        {
+            IOException aException;
+            throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "This package is read only!" ) ),
+                    static_cast < OWeakObject * > ( this ), makeAny ( aException ) );
+        }
+        xTruncate->truncate();
+
+        // Then set up the tempfile to be read from
+        Reference < XInputStream > xTempIn ( xTempOut, UNO_QUERY );
+        Reference < XSeekable > xTempSeek ( xTempOut, UNO_QUERY );
+        xTempSeek->seek ( 0 );
+        sal_Int32 nRead;
+        Sequence < sal_Int8 > aSequence ( n_ConstBufferSize );
+
+        // then copy the contents of the tempfile to our output stream
+        do
+        {
+            nRead = xTempIn->readBytes ( aSequence, n_ConstBufferSize );
+            if ( nRead < n_ConstBufferSize )
+            {
+                Sequence < sal_Int8 > aTempBuf ( aSequence.getConstArray(), nRead );
+                xOutputStream->writeBytes ( aTempBuf );
+            }
+            else
+                xOutputStream->writeBytes ( aSequence );
+        }
+        while ( nRead == n_ConstBufferSize );
+    }
+
     // Update our References to point to the new temp file
     xContentStream = Reference < XInputStream > ( xTempOut, UNO_QUERY );
     xContentSeek = Reference < XSeekable > ( xTempOut, UNO_QUERY );
@@ -763,136 +841,110 @@ void ZipPackage::writeTempFile()
 void SAL_CALL ZipPackage::commitChanges(  )
         throw(WrappedTargetException, RuntimeException)
 {
+    if ( eMode == e_IMode_XInputStream )
+    {
+        IOException aException;
+        throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "This package is read only!" ) ),
+                static_cast < OWeakObject * > ( this ), makeAny ( aException ) );
+    }
     RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "{ ZipPackage::commitChanges" );
     // First we write the entire package to a temporary file. After writeTempFile,
     // xContentSeek and xContentStream will reference the new temporary file.
     writeTempFile();
 
-    if (!nSegmentSize )
+    if ( eMode == e_IMode_URL )
     {
-        Reference < XPropertySet > xPropSet ( xContentStream, UNO_QUERY );
-        Content aContent ( sURL, Reference < XCommandEnvironment > () );
-        if ( xPropSet.is() )
+        if (!nSegmentSize )
         {
-            OUString sTempURL;
-            Any aAny = xPropSet->getPropertyValue ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Uri" ) ) );
-            aAny >>= sTempURL;
-            TransferInfo aInfo;
-            aInfo.NameClash = NameClash::OVERWRITE;
-            aInfo.MoveData = sal_False;
-            aInfo.SourceURL = sTempURL;
-            aInfo.NewTitle = sURL.copy ( 1 + sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
-            aAny <<= aInfo;
-            try
+            Reference < XPropertySet > xPropSet ( xContentStream, UNO_QUERY );
+            Content aContent ( sURL, Reference < XCommandEnvironment > () );
+            if ( xPropSet.is() )
             {
-                aContent.executeCommand ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "transfer" ) ), aAny );
+                OUString sTempURL;
+                Any aAny = xPropSet->getPropertyValue ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Uri" ) ) );
+                aAny >>= sTempURL;
+                TransferInfo aInfo;
+                aInfo.NameClash = NameClash::OVERWRITE;
+                aInfo.MoveData = sal_False;
+                aInfo.SourceURL = sTempURL;
+                aInfo.NewTitle = sURL.copy ( 1 + sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
+                aAny <<= aInfo;
+                try
+                {
+                    aContent.executeCommand ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "transfer" ) ), aAny );
+                }
+                catch (::com::sun::star::uno::Exception& r)
+                {
+                    throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Unable to write Zip File to disk!" ) ),
+                            static_cast < OWeakObject * > ( this ), makeAny( r ) );
+                }
             }
-            catch (::com::sun::star::uno::Exception& r)
+            else
             {
-                throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Unable to write Zip File to disk!" ) ),
-                        static_cast < OWeakObject * > ( this ), makeAny( r ) );
+                // not quite sure how it could happen that xContentStream WOULDN'T support
+                // XPropertySet, but just in case... :)
+                try
+                {
+                    aContent.writeStream ( xContentStream, sal_True );
+                }
+                catch (::com::sun::star::uno::Exception& r)
+                {
+                    throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Unable to write Zip File to disk!" ) ),
+                            static_cast < OWeakObject * > ( this ), makeAny( r ) );
+                }
             }
         }
         else
         {
-            // not quite sure how it could happen that xContentStream WOULDN'T support
-            // XPropertySet, but just in case... :)
-            try
-            {
-                aContent.writeStream ( xContentStream, sal_True );
-            }
-            catch (::com::sun::star::uno::Exception& r)
-            {
-                throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Unable to write Zip File to disk!" ) ),
-                        static_cast < OWeakObject * > ( this ), makeAny( r ) );
-            }
-        }
-    }
-    else
-    {
-        // We want to span...first, make sure we have an interaction handler...
-        getInteractionHandler();
+            // We want to span...first, make sure we have an interaction handler...
+            getInteractionHandler();
 
-        sal_Int16 nDiskNum = 0;
-        VolumeInfo aInfo ( osl_VolumeInfo_Mask_FreeSpace | osl_VolumeInfo_Mask_DeviceHandle | osl_VolumeInfo_Mask_Attributes );
-        FileBase::RC aRC = Directory::getVolumeInfo ( sURL, aInfo );
+            sal_Int16 nDiskNum = 0;
+            VolumeInfo aInfo ( osl_VolumeInfo_Mask_FreeSpace | osl_VolumeInfo_Mask_DeviceHandle | osl_VolumeInfo_Mask_Attributes );
+            FileBase::RC aRC = Directory::getVolumeInfo ( sURL, aInfo );
 #ifdef MTG_DEBUG
-        fprintf(stderr, "MTG: url is %s getVolumeInfo returned %d\n", ImplGetChars ( sURL), aRC);
-        fprintf(stderr, "MTG: isRemovable returned %d\n", aInfo.getRemoveableFlag() );
-        fprintf(stderr, "MTG: isValid osl_VolumeInfo_Mask_FreeSpace returned %d\n", aInfo.isValid(osl_VolumeInfo_Mask_FreeSpace) );
-        fprintf(stderr, "MTG: isValid osl_VolumeInfo_Mask_DeviceHandle returned %d\n", aInfo.isValid(osl_VolumeInfo_Mask_DeviceHandle) );
-        fprintf(stderr, "MTG: isValid osl_VolumeInfo_Mask_Attributes returned %d\n", aInfo.isValid(osl_VolumeInfo_Mask_Attributes) );
-        fprintf(stderr, "MTG: getFreeSpace returned %ld\n", static_cast < sal_Int32 > ( aInfo.getFreeSpace() ) );
-        fprintf(stderr, "MTG: getUsedSpace returned %ld\n", static_cast < sal_Int32 > ( aInfo.getUsedSpace() ) );
-        fprintf(stderr, "MTG: getTotalSpace returned %ld\n", static_cast < sal_Int32 > ( aInfo.getTotalSpace() ) );
+            fprintf(stderr, "MTG: url is %s getVolumeInfo returned %d\n", ImplGetChars ( sURL), aRC);
+            fprintf(stderr, "MTG: isRemovable returned %d\n", aInfo.getRemoveableFlag() );
+            fprintf(stderr, "MTG: isValid osl_VolumeInfo_Mask_FreeSpace returned %d\n", aInfo.isValid(osl_VolumeInfo_Mask_FreeSpace) );
+            fprintf(stderr, "MTG: isValid osl_VolumeInfo_Mask_DeviceHandle returned %d\n", aInfo.isValid(osl_VolumeInfo_Mask_DeviceHandle) );
+            fprintf(stderr, "MTG: isValid osl_VolumeInfo_Mask_Attributes returned %d\n", aInfo.isValid(osl_VolumeInfo_Mask_Attributes) );
+            fprintf(stderr, "MTG: getFreeSpace returned %ld\n", static_cast < sal_Int32 > ( aInfo.getFreeSpace() ) );
+            fprintf(stderr, "MTG: getUsedSpace returned %ld\n", static_cast < sal_Int32 > ( aInfo.getUsedSpace() ) );
+            fprintf(stderr, "MTG: getTotalSpace returned %ld\n", static_cast < sal_Int32 > ( aInfo.getTotalSpace() ) );
 #endif
-        VolumeDevice aDevice = aInfo.getDeviceHandle();
-        OUString sFileName, sMountPath = aDevice.getMountPath();
+            VolumeDevice aDevice = aInfo.getDeviceHandle();
+            OUString sFileName, sMountPath = aDevice.getMountPath();
 #ifdef MTG_DEBUG
-        fprintf(stderr, "MTG: mount path is %s %d\n", ImplGetChars ( sMountPath ), aRC);
+            fprintf(stderr, "MTG: mount path is %s %d\n", ImplGetChars ( sMountPath ), aRC);
 #endif
-        sal_Int32 nLastSlash = sURL.lastIndexOf ( '/' );
-        OUString sFilePrefix = sURL.copy ( 1 + nLastSlash,  sURL.lastIndexOf ( '.' ) - nLastSlash );
+            sal_Int32 nLastSlash = sURL.lastIndexOf ( '/' );
+            OUString sFilePrefix = sURL.copy ( 1 + nLastSlash,  sURL.lastIndexOf ( '.' ) - nLastSlash );
 
 #ifdef MTG_DEBUG
-        fprintf(stderr, "MTG: url is %s first getVolumeInfo on %s returned %d\n", ImplGetChars ( sURL), ImplGetChars ( sMountPath), aRC);
+            fprintf(stderr, "MTG: url is %s first getVolumeInfo on %s returned %d\n", ImplGetChars ( sURL), ImplGetChars ( sMountPath), aRC);
 #endif
-        sal_Bool bIsRemovable = aInfo.getRemoveableFlag();
+            sal_Bool bIsRemovable = aInfo.getRemoveableFlag();
 #ifdef MTG_DEBUG
-        fprintf(stderr, "MTG: Removable flag is %d\n", bIsRemovable);
+            fprintf(stderr, "MTG: Removable flag is %d\n", bIsRemovable);
 #endif
-        SegmentEnum eRet = e_Finished;
-        SuffixGenerator aGenerator;
-        do
-        {
-            nDiskNum++;
-            sal_Int64 nCurrentPos = xContentSeek->getPosition();
-            if ( nDiskNum == 1 )
-                sFileName = sURL.copy ( 1 + nLastSlash );
-            else
-                aGenerator.generateFileName ( sFileName, sFilePrefix, nDiskNum );
-            if ( bIsRemovable )
+            SegmentEnum eRet = e_Finished;
+            SuffixGenerator aGenerator;
+            do
             {
-                if ( nDiskNum > 1 && RequestDisk( sMountPath, nDiskNum ) < 0 )
-                    return;
-
-                do
-                {
-                    eRet = writeSegment ( sFileName, sMountPath, xContentStream, nDiskNum );
-                    if (eRet == e_Aborted)
-                        return;
-                    else if ( eRet == e_Retry )
-                        xContentSeek->seek ( nCurrentPos );
-                }
-                while ( eRet == e_Retry );
-            }
-            else
-            {
-                OUString sFullPath = sURL.copy ( 0, nLastSlash + 1 ) + sFileName;
-                if ( xContentSeek->getLength() > static_cast < sal_Int64 > ( aInfo.getFreeSpace() ) )
-                {
-                    // no room on the hard drive, display a message and return
-                    HandleError (  osl_File_E_NOSPC, EC_YES, sFullPath );
-                    return;
-                }
-                else if ( nSegmentSize < 0 )
-                {
-                    try
-                    {
-                        Content aContent (sURL, Reference < XCommandEnvironment >() );
-                        aContent.writeStream ( xContentStream, sal_True );
-                    }
-                    catch (::com::sun::star::uno::Exception& r)
-                    {
-                        throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Unable to write Zip File to disk!" ) ),
-                                static_cast < OWeakObject * > ( this ), makeAny( r ) );
-                    }
-                }
+                nDiskNum++;
+                sal_Int64 nCurrentPos = xContentSeek->getPosition();
+                if ( nDiskNum == 1 )
+                    sFileName = sURL.copy ( 1 + nLastSlash );
                 else
+                    aGenerator.generateFileName ( sFileName, sFilePrefix, nDiskNum );
+                if ( bIsRemovable )
                 {
+                    if ( nDiskNum > 1 && RequestDisk( sMountPath, nDiskNum ) < 0 )
+                        return;
+
                     do
                     {
-                        eRet = writeSegment ( sFullPath, xContentStream );
+                        eRet = writeSegment ( sFileName, sMountPath, xContentStream, nDiskNum );
                         if (eRet == e_Aborted)
                             return;
                         else if ( eRet == e_Retry )
@@ -900,9 +952,44 @@ void SAL_CALL ZipPackage::commitChanges(  )
                     }
                     while ( eRet == e_Retry );
                 }
+                else
+                {
+                    OUString sFullPath = sURL.copy ( 0, nLastSlash + 1 ) + sFileName;
+                    if ( xContentSeek->getLength() > static_cast < sal_Int64 > ( aInfo.getFreeSpace() ) )
+                    {
+                        // no room on the hard drive, display a message and return
+                        HandleError (  osl_File_E_NOSPC, EC_YES, sFullPath );
+                        return;
+                    }
+                    else if ( nSegmentSize < 0 )
+                    {
+                        try
+                        {
+                            Content aContent (sURL, Reference < XCommandEnvironment >() );
+                            aContent.writeStream ( xContentStream, sal_True );
+                        }
+                        catch (::com::sun::star::uno::Exception& r)
+                        {
+                            throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Unable to write Zip File to disk!" ) ),
+                                    static_cast < OWeakObject * > ( this ), makeAny( r ) );
+                        }
+                    }
+                    else
+                    {
+                        do
+                        {
+                            eRet = writeSegment ( sFullPath, xContentStream );
+                            if (eRet == e_Aborted)
+                                return;
+                            else if ( eRet == e_Retry )
+                                xContentSeek->seek ( nCurrentPos );
+                        }
+                        while ( eRet == e_Retry );
+                    }
+                }
             }
+            while ( eRet != e_Finished );
         }
-        while ( eRet != e_Finished );
     }
 #ifdef MTG_DEBUG
     fprintf ( stderr, "MTG: ZipPackage Commit finished\n");
@@ -1279,34 +1366,6 @@ Reference < XSingleServiceFactory > ZipPackage::createServiceFactory( Reference 
                                            getImplementationName(),
                                            ZipPackage_createInstance,
                                            getSupportedServiceNames());
-}
-
-//XInterface
-Any SAL_CALL ZipPackage::queryInterface( const Type& rType )
-    throw(RuntimeException)
-{
-        return ::cppu::queryInterface ( rType                                       ,
-                                        // OWeakObject interfaces
-                                        reinterpret_cast< XInterface*       > ( this )  ,
-                                        static_cast< XWeak*         > ( this )  ,
-                                        // my own interfaces
-                                        static_cast< XInitialization*       > ( this )  ,
-                                        static_cast< XSingleServiceFactory*     > ( this )  ,
-                                        static_cast< XUnoTunnel*        > ( this )  ,
-                                        static_cast< XHierarchicalNameAccess*       > ( this )  ,
-                                        static_cast< XPropertySet*      > ( this )  ,
-                                        static_cast< XChangesBatch* > ( this ) );
-}
-
-void SAL_CALL ZipPackage::acquire(  )
-    throw()
-{
-    OWeakObject::acquire();
-}
-void SAL_CALL ZipPackage::release(  )
-    throw()
-{
-    OWeakObject::release();
 }
 
 // XUnoTunnel
