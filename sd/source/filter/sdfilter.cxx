@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdfilter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:17:59 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,8 @@ SdFilter::~SdFilter()
     ::rtl::OUString aNormalizedPath;
     ::vos::OModule* pRet;
 
-    if ( ::osl::FileBase::getFileURLFromSystemPath( SvtPathOptions().GetFilterPath(), aDest ) != ::osl::FileBase::E_None )
-        aDest = SvtPathOptions().GetFilterPath();
+    if ( ::osl::FileBase::getFileURLFromSystemPath( SvtPathOptions().GetModulePath(), aDest ) != ::osl::FileBase::E_None )
+        aDest = SvtPathOptions().GetModulePath();
     aDest += ::rtl::OUString( sal_Unicode( '/' ) );
     aDest += ::rtl::OUString( ImplGetFullLibraryName( rLibraryName ) );
     ::osl::FileBase::getSystemPathFromFileURL( aDest, aNormalizedPath );
