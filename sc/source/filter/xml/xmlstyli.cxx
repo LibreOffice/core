@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-26 10:41:37 $
+ *  last change: $Author: sab $ $Date: 2000-10-26 11:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ ScXMLImportPropertyMapper::~ScXMLImportPropertyMapper()
 
 void ScXMLImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
-    SvXMLImportPropertyMapper::finished(rProperties);
+    SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex);
     XMLPropertyState* pAllPaddingProperty = NULL;
     XMLPropertyState* pAllBorderProperty = NULL;
     XMLPropertyState* pAllBorderWidthProperty = NULL;
