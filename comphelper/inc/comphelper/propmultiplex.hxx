@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propmultiplex.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:35:15 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //=========================================================================
 //= property helper classes
@@ -82,7 +85,7 @@ namespace comphelper
     //= OPropertyChangeListener
     //==================================================================
     /// simple listener adapter for property sets
-    class OPropertyChangeListener
+    class COMPHELPER_DLLPUBLIC OPropertyChangeListener
     {
         friend class OPropertyChangeMultiplexer;
 
@@ -111,7 +114,7 @@ namespace comphelper
     //= OPropertyChangeMultiplexer
     //==================================================================
     /// multiplexer for property changes
-    class OPropertyChangeMultiplexer    :public cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
+    class COMPHELPER_DLLPUBLIC OPropertyChangeMultiplexer   :public cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
     {
         friend class OPropertyChangeListener;
          ::com::sun::star::uno::Sequence< ::rtl::OUString >     m_aProperties;
