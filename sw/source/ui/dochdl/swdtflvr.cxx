@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:44:19 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,9 +118,6 @@
 #endif
 #ifndef _MIECLIP_HXX
 #include <sfx2/mieclip.hxx>
-#endif
-#ifndef _OFF_APP_HXX
-#include <offmgr/app.hxx>
 #endif
 #ifndef _SVDETC_HXX
 #include <svx/svdetc.hxx>
