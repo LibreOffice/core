@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-28 14:45:28 $
+ *  last change: $Author: pl $ $Date: 2002-06-03 11:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1195,6 +1195,31 @@ KeyCode Menu::GetAccelKey( USHORT nItemId ) const
         return pData->aAccelKey;
     else
         return KeyCode();
+}
+
+KeyEvent Menu::GetActivationKey( USHORT nItemId ) const
+{
+    KeyEvent aRet;
+    MenuItemData* pData = pItemList->GetData( nItemId );
+    if( pData )
+    {
+        USHORT nPos = pData->aText.Search( '~' );
+        if( nPos != STRING_NOTFOUND && nPos < pData->aText.Len()-1 )
+        {
+            USHORT nCode = 0;
+            sal_Unicode cAccel = pData->aText.GetChar( nPos+1 );
+            if( cAccel >= 'a' && cAccel <= 'z' )
+                nCode = KEY_A + (cAccel-'a');
+            else if( cAccel >= 'A' && cAccel <= 'Z' )
+                nCode = KEY_A + (cAccel-'A');
+            else if( cAccel >= '0' && cAccel <= '9' )
+                nCode = KEY_0 + (cAccel-'0');
+            if(nCode )
+                aRet = KeyEvent( cAccel, KeyCode( nCode, KEY_MOD2 ) );
+        }
+
+    }
+    return aRet;
 }
 
 void Menu::CheckItem( USHORT nItemId, BOOL bCheck )
@@ -3843,8 +3868,8 @@ void MenuBarWindow::ChangeHighlightItem( USHORT n, BOOL bSelectEntry, BOOL bAllo
     HighlightItem( nHighlightedItem, TRUE );
     pMenu->ImplCallHighlight( nHighlightedItem );
 
-    if ( mbAutoPopup )
-        ImplCreatePopup( bSelectEntry );
+    // #99705# always popup the selected menu
+    ImplCreatePopup( bSelectEntry );
 
     // #58935# #73659# Focus, wenn kein Popup drunter haengt...
     if ( bJustActivated && !pActivePopup )
