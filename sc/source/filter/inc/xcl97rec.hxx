@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-17 13:07:38 $
+ *  last change: $Author: dr $ $Date: 2001-02-14 11:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1272,7 +1272,7 @@ public:
 //___________________________________________________________________
 // page breaks
 
-class XclExpPageBreaks : public ExcPageBreaks
+class XclExpPageBreaks8 : public XclExpPageBreaks
 {
 private:
     UINT16                  nRangeMax;
@@ -1280,8 +1280,8 @@ private:
     virtual void            SaveCont( SvStream& rStrm );
 
 public:
-                            XclExpPageBreaks( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient );
-    virtual                 ~XclExpPageBreaks();
+                            XclExpPageBreaks8( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient );
+    virtual                 ~XclExpPageBreaks8();
 
     virtual UINT16          GetLen() const;
 };

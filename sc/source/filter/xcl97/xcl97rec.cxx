@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-05 07:58:38 $
+ *  last change: $Author: dr $ $Date: 2001-02-14 11:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,9 +580,6 @@ void XclSupbookList::StoreCellRange( const ScRange& rRange )
 
 void XclSupbookList::WriteXtiInfo( SvStream& rStrm, UINT16 nTabFirst, UINT16 nTabLast )
 {
-    DBG_ASSERT( (nTabFirst < nRefdCnt) && (nTabLast < nRefdCnt),
-        "XclSupbookList::WriteXtiInfo - out of range!" );
-
     if( (nTabFirst >= nRefdCnt) || (nTabLast >= nRefdCnt) )
     {
         rStrm << (UINT16) 0 << (UINT16) 0xFFFF << (UINT16) 0xFFFF;
@@ -2994,24 +2991,24 @@ UINT16 XclBGPic::GetLen() const
 
 //___________________________________________________________________
 
-XclExpPageBreaks::XclExpPageBreaks( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient ) :
-    ExcPageBreaks( rRootData, nScTab, eOrient ),
+XclExpPageBreaks8::XclExpPageBreaks8( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient ) :
+    XclExpPageBreaks( rRootData, nScTab, eOrient ),
     nRangeMax( (eOrient == pbHorizontal) ? rRootData.nColMax : rRootData.nRowMax )
 {
 }
 
-XclExpPageBreaks::~XclExpPageBreaks()
+XclExpPageBreaks8::~XclExpPageBreaks8()
 {
 }
 
-void XclExpPageBreaks::SaveCont( SvStream& rStrm )
+void XclExpPageBreaks8::SaveCont( SvStream& rStrm )
 {
     rStrm << (UINT16) aPageBreaks.Count();
     for( UINT32 nIndex = 0; nIndex < aPageBreaks.Count(); nIndex++ )
         rStrm << aPageBreaks.Get( nIndex ) << (UINT16) 0x0000 << nRangeMax;
 }
 
-UINT16 XclExpPageBreaks::GetLen() const
+UINT16 XclExpPageBreaks8::GetLen() const
 {
     return (UINT16)(2 + aPageBreaks.Count() * 6);
 }
