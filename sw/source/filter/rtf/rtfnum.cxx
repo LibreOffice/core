@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,10 +829,15 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
                                                     : BYTE( nTokenValue-1 );
                                 break;
 
-        case RTF_PNLVLBODY:     nListNo = 2;    break;
-        case RTF_PNLVLBLT:      nListNo = 1;    break;
-        case RTF_PNLVLCONT:     nListNo = 4;    break;
-
+        case RTF_PNLVLBODY:
+            nListNo = 2;
+            break;
+        case RTF_PNLVLBLT:
+            nListNo = 1;
+            break;
+        case RTF_PNLVLCONT:
+            SkipGroup();
+            return 0;
         default:
             SkipGroup();
             return 0;
