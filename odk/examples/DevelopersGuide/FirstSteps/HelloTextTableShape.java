@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HelloTextTableShape.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:58:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -82,12 +82,6 @@ import com.sun.star.container.XNamed;
 import com.sun.star.text.XBookmarksSupplier;
 import com.sun.star.text.XTextRange;
 
-/*
- * HelloTextTableShape.java
- *
- * Created on 5. April 2002, 21:25
- */
-
 /**
  *
  * @author  dschulten
@@ -96,8 +90,6 @@ public class HelloTextTableShape {
 
     private XComponentContext xRemoteContext = null;
     private XMultiComponentFactory xRemoteServiceManager = null;
-    private String unoUrl =
-        "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
 
     /** Creates a new instance of HelloTextTableShape */
     public HelloTextTableShape() {
@@ -112,7 +104,7 @@ public class HelloTextTableShape {
             helloTextTableShape1.useDocuments();
         }
         catch (java.lang.Exception e){
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             e.printStackTrace();
         }
         finally {
@@ -431,22 +423,24 @@ public class HelloTextTableShape {
         theLine = bord.TopLine;
         int col = theLine.Color;
         System.out.println(col);
-
-
-
     }
+
     protected void manipulateShape(XShape xShape) throws com.sun.star.uno.Exception {
         XPropertySet xShapeProps = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xShape);
         xShapeProps.setPropertyValue("FillColor", new Integer(0x99CCFF));
         xShapeProps.setPropertyValue("LineColor", new Integer(0x000099));
         xShapeProps.setPropertyValue("RotateAngle", new Integer(3000));
 
+        xShapeProps.setPropertyValue("TextLeftDistance", new Integer(0));
+        xShapeProps.setPropertyValue("TextRightDistance", new Integer(0));
+        xShapeProps.setPropertyValue("TextUpperDistance", new Integer(0));
+        xShapeProps.setPropertyValue("TextLowerDistance", new Integer(0));
     }
 
 
     protected XComponent newDocComponent(String docType) throws java.lang.Exception {
         String loadUrl = "private:factory/" + docType;
-        xRemoteServiceManager = this.getRemoteServiceManager(unoUrl);
+        xRemoteServiceManager = this.getRemoteServiceManager();
         Object desktop = xRemoteServiceManager.createInstanceWithContext(
             "com.sun.star.frame.Desktop", xRemoteContext);
         XComponentLoader xComponentLoader = (XComponentLoader)UnoRuntime.queryInterface(
@@ -455,31 +449,20 @@ public class HelloTextTableShape {
         return xComponentLoader.loadComponentFromURL(loadUrl, "_blank", 0, loadProps);
     }
 
-    protected XMultiComponentFactory getRemoteServiceManager(String unoUrl) throws java.lang.Exception {
-        if (xRemoteContext == null) {
-            // First step: create local component context, get local servicemanager and
-            // ask it to create a UnoUrlResolver object with an XUnoUrlResolver interface
-            XComponentContext xLocalContext =
-                com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(null);
+    protected XMultiComponentFactory getRemoteServiceManager() throws java.lang.Exception {
+        if (xRemoteContext == null && xRemoteServiceManager == null) {
+            try {
+                // First step: get the remote office component context
+                xRemoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+                System.out.println("Connected to a running office ...");
 
-            XMultiComponentFactory xLocalServiceManager = xLocalContext.getServiceManager();
-
-            Object urlResolver  = xLocalServiceManager.createInstanceWithContext(
-                "com.sun.star.bridge.UnoUrlResolver", xLocalContext );
-            // query XUnoUrlResolver interface from urlResolver object
-            XUnoUrlResolver xUnoUrlResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
-                XUnoUrlResolver.class, urlResolver );
-
-            // Second step: use xUrlResolver interface to import the remote StarOffice.ServiceManager,
-            // retrieve its property DefaultContext and get the remote servicemanager
-            Object initialObject = xUnoUrlResolver.resolve( unoUrl );
-            XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(
-                XPropertySet.class, initialObject);
-            Object context = xPropertySet.getPropertyValue("DefaultContext");
-            xRemoteContext = (XComponentContext)UnoRuntime.queryInterface(
-                XComponentContext.class, context);
+                xRemoteServiceManager = xRemoteContext.getServiceManager();
+            }
+            catch( Exception e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
         }
-        return xRemoteContext.getServiceManager();
+        return xRemoteServiceManager;
     }
-
 }
