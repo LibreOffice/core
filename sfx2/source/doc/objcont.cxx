@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-10 15:38:51 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 17:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,7 +499,23 @@ void SfxObjectShell::UpdateDocInfoForSave()
         // Keine Unterschiede mehr zwischen Save, SaveAs
         String aUserName = SvtUserOptions().GetFullName();
         if ( !rDocInfo.IsUseUserData() )
+        {
+            SfxStamp aCreated = rDocInfo.GetCreated();
+            if ( aUserName == aCreated.GetName() )
+            {
+                aCreated.SetName( String() );
+                rDocInfo.SetCreated( aCreated );
+            }
+
+            SfxStamp aPrinted = rDocInfo.GetPrinted();
+            if ( aUserName == aPrinted.GetName() )
+            {
+                aPrinted.SetName( String() );
+                rDocInfo.SetPrinted( aPrinted );
+            }
+
             aUserName.Erase();
+        }
 
         rDocInfo.SetChanged( aUserName );
         if ( !HasName() || pImp->bIsSaving )
