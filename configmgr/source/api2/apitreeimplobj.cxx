@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-04 19:34:55 $
+ *  last change: $Author: jb $ $Date: 2000-12-06 12:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,17 +166,12 @@ void ApiTreeImpl::setNodeInstance(configuration::NodeRef const& aNode, UnoInterf
 
 bool ApiTreeImpl::isAlive() const
 {
-    return m_aNotifier->m_aListeners.checkAlive();
+    return m_aNotifier->m_aListeners.isAlive();
 }
 //-------------------------------------------------------------------------
 void ApiTreeImpl::checkAlive() const
 {
-    bool bAlive = this->isAlive();
-    if (!bAlive)
-    {
-        OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("CONFIGURATION: Object was disposed"));
-        throw com::sun::star::lang::DisposedException(sMessage, getUnoInstance());
-    }
+    OSL_VERIFY( m_aNotifier->m_aListeners.checkAlive( getUnoInstance()) ); //, "Object is being disposed" );
 }
 //-------------------------------------------------------------------------
 
@@ -213,16 +208,21 @@ bool ApiTreeImpl::disposeTree(bool bForce)
     else if (m_pParentTree)
         setParentTree(NULL);
 
-    implDisposeTree();
-    return true;
+    checkAlive();
+    return implDisposeTree(); // may throw in checkAlive
 }
+//-------------------------------------------------------------------------
 
+bool ApiTreeImpl::disposeTreeNow()
+{
+    return isAlive() && implDisposeTree();
+}
 //-------------------------------------------------------------------------
 bool ApiRootTreeImpl::disposeTree()
 {
     implSetNotificationSource(0);
 
-    bool bDisposed = m_aTreeImpl.disposeTree(true);
+    bool bDisposed = m_aTreeImpl.disposeTreeNow();
 
     if (bDisposed) releaseData();
 
@@ -231,7 +231,7 @@ bool ApiRootTreeImpl::disposeTree()
     return bDisposed;
 }
 //-------------------------------------------------------------------------
-void ApiTreeImpl::implDisposeTree()
+bool ApiTreeImpl::implDisposeTree()
 {
     OSL_ENSURE(m_pParentTree == 0,"WARNING: Disposing a tree that still has a parent tree set");
 
@@ -263,13 +263,21 @@ void ApiTreeImpl::implDisposeTree()
         aContainer.endDisposing();
 
         OSL_ASSERT(aContainer.isDisposed());
+
+        return true;
     }
+    else
+        return false;
 }
 //-------------------------------------------------------------------------
 void ApiTreeImpl::disposeNode(NodeRef const& aNode, UnoInterface* pInstance)
 {
-    OWriteSynchronized aLocalGuard(getDataLock());
-    implDisposeNode(aNode,pInstance);
+    if (isAlive())
+    {
+        OWriteSynchronized aLocalGuard(getDataLock());
+        if (isAlive())
+            implDisposeNode(aNode,pInstance);
+    }
 }
 //-------------------------------------------------------------------------
 void ApiTreeImpl::implDisposeNode(NodeRef const& aNode, UnoInterface* pInstance)
@@ -448,8 +456,10 @@ void ApiRootTreeImpl::implSetLocation()
     }
     else
     {
+        OSL_ENSURE(false, "Setting up a RootTree without data");
         m_aLocationPath = OUString();
     }
+    OSL_ENSURE(m_aLocationPath.getLength() > 0, "Setting up a RootTree without location");
 
     if (m_pNotificationSource)
     {
@@ -488,7 +498,7 @@ void ApiRootTreeImpl::disposing(IConfigBroadcaster* pSource)
 
     m_pNotificationSource = 0;
 
-    if (m_aTreeImpl.disposeTree(true))
+    if (m_aTreeImpl.disposeTreeNow())
         releaseData(); // not really needed: the whole data is going away anyways
 }
 // ---------------------------------------------------------------------------------------------------
@@ -645,7 +655,7 @@ void ApiRootTreeImpl::nodeDeleted(OUString const& sPath, IConfigBroadcaster* pSo
 
     OSL_VERIFY( implSetNotificationSource(0) == pSource || !m_aTreeImpl.isAlive());
 
-    if (m_aTreeImpl.disposeTree(true))
+    if (m_aTreeImpl.disposeTreeNow())
         releaseData();
 }
 

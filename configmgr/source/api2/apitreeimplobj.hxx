@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 09:11:39 $
+ *  last change: $Author: jb $ $Date: 2000-12-06 12:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@ namespace configmgr
             bool isAlive()  const;
             void checkAlive()   const;
             bool disposeTree(bool bForce);
+            bool disposeTreeNow();
             void disposeNode(configuration::NodeRef const& aNode, UnoInterface* pInstance);
 
         // api object handling
@@ -180,7 +181,7 @@ namespace configmgr
             void setParentTree(ApiTreeImpl* pNewParentTree);
             void deinit();
 
-            void implDisposeTree();
+            bool implDisposeTree();
             void implDisposeNode(configuration::NodeRef const& aNode, UnoInterface* pInstance);
 
             ComponentRef getParentComponent();
