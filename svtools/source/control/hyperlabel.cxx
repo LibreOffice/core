@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperlabel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:22:53 $
+ *  last change: $Author: kz $ $Date: 2004-11-26 20:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,15 +133,23 @@ namespace svt
         implInit(_pParent);
     }
 
-    void HyperLabel::SetLabelAndSize( ::rtl::OUString _rText, const Size& _rNewSize) //, sal_Bool _bInvalidate )
+
+    sal_Int32 HyperLabel::GetLogicWidth()
+    {
+        Size rLogicLocSize = PixelToLogic( m_pImpl->m_aMinSize, MAP_APPFONT );
+        return rLogicLocSize.Width();
+    }
+
+
+    void HyperLabel::SetLabelAndSize(::rtl::OUString _rText, const Size& _rNewSize )
     {
         Size rLocSize = _rNewSize;
         Size rLogicLocSize = PixelToLogic( _rNewSize, MAP_APPFONT );
         SetLabel( _rText );
-        if ( ImplCalcMinimumSize( rLocSize ) == sal_True )
-            rLocSize.Height() = ( m_pImpl->m_aMinSize.Height() * 2 );
-        else
-            rLocSize = LogicToPixel( Size( rLogicLocSize.Width(), LABELBASEMAPHEIGHT ), MAP_APPFONT ) ;
+        ImplCalcMinimumSize( rLocSize );
+        rLocSize.Height() = ( m_pImpl->m_aMinSize.Height());
+//        else
+//            rLocSize = LogicToPixel( Size( rLogicLocSize.Width(), LABELBASEMAPHEIGHT ), MAP_APPFONT );
         SetSizePixel( rLocSize );
         Show();
     }
@@ -153,19 +161,31 @@ namespace svt
         if ( m_pImpl->m_aMinSize.Width() >= _rCompSize.Width() )    // the MinimumSize is used to size the FocusRectangle
         {
             m_pImpl->m_aMinSize.Width() = _rCompSize.Width();       // and for the MouseMove method
+            m_pImpl->m_aMinSize = CalcMinimumSize(_rCompSize.Width() );
             b_AdjustMinWidth = sal_True;
         }
+        m_pImpl->m_aMinSize.Height() += 2;
+        m_pImpl->m_aMinSize.Width() += 1;
         return b_AdjustMinWidth;
     }
 
 
     void HyperLabel::implInit(Window* _pParent)
     {
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         m_pImpl = new HyperLabelImpl;
-        SetTextColor( Color( 89, 79, 191 ) );
-        ToggleBackgroundColor( COL_WHITE );
+        ToggleBackgroundColor( COL_TRANSPARENT );
         Show();
+    }
 
+    void HyperLabel::ToggleBackgroundColor( const Color& _rGBColor )
+    {
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        SetControlBackground( _rGBColor );
+        if (_rGBColor == COL_TRANSPARENT)
+            SetTextColor( rStyleSettings.GetFieldTextColor( ) );
+        else
+            SetTextColor( rStyleSettings.GetHighlightTextColor( ) );
     }
 
 
@@ -250,7 +270,7 @@ namespace svt
         SetPosPixel( LogicToPixel( Point( XPos, YPos ), MAP_APPFONT ) );
     }
 
-    Point HyperLabel::GetHyperLabelPosition()
+    Point HyperLabel::GetLogicalPosition()
     {
         Point aPoint = GetPosPixel( );
         return PixelToLogic( aPoint, MAP_APPFONT );
@@ -288,7 +308,26 @@ namespace svt
     }
 
 
-
+    //------------------------------------------------------------------------------
+    void HyperLabel::DataChanged( const DataChangedEvent& rDCEvt )
+    {
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        FixedText::DataChanged( rDCEvt );
+        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
+            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
+            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+        {
+            const Color& rGBColor = GetControlBackground();
+            if (rGBColor == COL_TRANSPARENT)
+                SetTextColor( rStyleSettings.GetFieldTextColor( ) );
+            else
+            {
+                SetControlBackground(rStyleSettings.GetHighlightColor());
+                SetTextColor( rStyleSettings.GetHighlightTextColor( ) );
+            }
+            Invalidate();
+        }
+    }
 
 //.........................................................................
 }   // namespace svt
