@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlencryption_nssimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:21 $
+ *  last change: $Author: mmi $ $Date: 2004-07-23 03:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLEncryption ;
 using ::com::sun::star::xml::crypto::XXMLEncryptionTemplate ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
+using ::com::sun::star::xml::crypto::XMLEncryptionException ;
 
 XMLEncryption_NssImpl :: XMLEncryption_NssImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_xServiceManager( aFactory ) {
 }
@@ -147,7 +148,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     //Create Encryption context
     pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
     if( pEncCtx == NULL )
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
 
 
     //Get the encryption template
@@ -182,7 +183,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
 
     if( pCipherData == NULL ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
     }
 
     xmlNodePtr pCipherValue = pCipherData->children;
@@ -193,7 +194,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
 
     if( pCipherValue == NULL ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
     }
 
     pContent = pCipherValue->children;
@@ -203,13 +204,13 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     Reference< XXMLElementWrapper > xTarget = aTemplate->getTarget() ;
     if( !xTarget.is() ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
     }
 
     Reference< XUnoTunnel > xTgtTunnel( xTarget , UNO_QUERY ) ;
     if( !xTgtTunnel.is() ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
     }
 
     XMLElementWrapper_XmlSecImpl* pTarget = ( XMLElementWrapper_XmlSecImpl* )xTgtTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ) ;
@@ -223,7 +224,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
 
     if( pContent == NULL ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
     }
 
     /* MM : remove the following 2 lines
@@ -249,7 +250,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     //Encrypt the template
     if( xmlSecEncCtxXmlEncrypt( pEncCtx , pEncryptedData , pContent ) < 0 ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
     }
 
     xmlSecEncCtxDestroy( pEncCtx ) ;
@@ -301,7 +302,7 @@ XMLEncryption_NssImpl :: decrypt(
     //Create Encryption context
     pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
     if( pEncCtx == NULL )
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
 
 
     //Get the encryption template
@@ -343,7 +344,7 @@ XMLEncryption_NssImpl :: decrypt(
     //Decrypt the template
     if( xmlSecEncCtxDecrypt( pEncCtx , pEncryptedData ) < 0 || pEncCtx->result == NULL ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
     }
     /*----------------------------------------
     if( pEncCtx->resultReplaced != 0 ) {
@@ -363,7 +364,7 @@ XMLEncryption_NssImpl :: decrypt(
         pNode->setNativeElement( pContent ) ;
     } else {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
     }
     ----------------------------------------*/
 

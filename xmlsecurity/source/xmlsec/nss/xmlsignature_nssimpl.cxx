@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignature_nssimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:21 $
+ *  last change: $Author: mmi $ $Date: 2004-07-23 03:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ using ::com::sun::star::xml::crypto::XXMLSignature ;
 using ::com::sun::star::xml::crypto::XXMLSignatureTemplate ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 using ::com::sun::star::xml::crypto::XUriBinding ;
+using ::com::sun::star::xml::crypto::XMLSignatureException ;
 
 XMLSignature_NssImpl :: XMLSignature_NssImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_xServiceManager( aFactory ) {
 }
@@ -170,7 +171,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
     //Create Signature context
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
     if( pDsigCtx == NULL )
-        throw RuntimeException() ;
+        throw XMLSignatureException() ;
 
     //Sign the template
     if( xmlSecDSigCtxSign( pDsigCtx , pNode ) < 0 ) {
@@ -180,7 +181,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
         if( xUriBinding.is() )
             xmlUnregisterStreamInputCallbacks() ;
 
-        throw RuntimeException() ;
+        throw XMLSignatureException() ;
     }
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
@@ -259,7 +260,7 @@ XMLSignature_NssImpl :: validate(
     //Create Signature context
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
     if( pDsigCtx == NULL )
-        throw RuntimeException() ;
+        throw XMLSignatureException() ;
 
 
     //Verify signature
@@ -270,7 +271,7 @@ XMLSignature_NssImpl :: validate(
         if( xUriBinding.is() )
             xmlUnregisterStreamInputCallbacks() ;
 
-        throw RuntimeException() ;
+        throw XMLSignatureException() ;
     }
 
     valid = ( pDsigCtx->status == xmlSecDSigStatusSucceeded ) ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlencryption_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: mmi $ $Date: 2004-07-23 03:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLEncryption ;
 using ::com::sun::star::xml::crypto::XXMLEncryptionTemplate ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
+using ::com::sun::star::xml::crypto::XMLEncryptionException ;
 
 XMLEncryption_MSCryptImpl :: XMLEncryption_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_xServiceManager( aFactory ) {
 }
@@ -147,7 +148,7 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
     //Create Encryption context
     pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
     if( pEncCtx == NULL )
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
 
 
     //Get the encryption template
@@ -181,7 +182,7 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
 
     if( pCipherData == NULL ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
     }
 
     xmlNodePtr pCipherValue = pCipherData->children;
@@ -192,14 +193,14 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
 
     if( pCipherValue == NULL ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
     }
 
     pContent = pCipherValue->children;
 
     if( pContent == NULL ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
     }
 
     xmlUnlinkNode(pContent);
@@ -223,7 +224,7 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
     //Encrypt the template
     if( xmlSecEncCtxXmlEncrypt( pEncCtx , pEncryptedData , pContent ) < 0 ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
     }
 
     xmlSecEncCtxDestroy( pEncCtx ) ;
@@ -275,7 +276,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
     //Create Encryption context
     pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
     if( pEncCtx == NULL )
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
 
 
     //Get the encryption template
@@ -317,7 +318,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
     //Decrypt the template
     if( xmlSecEncCtxDecrypt( pEncCtx , pEncryptedData ) < 0 || pEncCtx->result == NULL ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw RuntimeException() ;
+        throw XMLEncryptionException() ;
     }
     /*----------------------------------------
     if( pEncCtx->resultReplaced != 0 ) {
