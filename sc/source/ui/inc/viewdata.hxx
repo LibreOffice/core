@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:50:20 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,7 @@ private:
     SCCOL               nTabStartCol;               // fuer Enter nach Tab
     ScRange             aDelRange;                  // fuer AutoFill-Loeschen
 
+    ScSplitPos          eEditActivePart;            // the part that was active when edit mode was started
     BOOL                bEditActive[4];             // aktiv?
     BOOL                bActive;                    // aktives Fenster ?
     BOOL                bIsRefMode;                 // Referenzeingabe
@@ -415,6 +416,7 @@ public:
     void            EditGrowX();
     void            EditGrowY( BOOL bInitial = FALSE );
 
+    ScSplitPos      GetEditActivePart() const       { return eEditActivePart; }
     SCCOL           GetEditViewCol() const          { return nEditCol; }
     SCROW           GetEditViewRow() const          { return nEditRow; }
     SCCOL           GetEditStartCol() const         { return nEditStartCol; }
