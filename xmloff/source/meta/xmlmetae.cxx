@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:04:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@
 #include "xmlexp.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include "xmluconv.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #endif
@@ -154,46 +158,6 @@ rtl::OUString SfxXMLMetaExport::GetISODateTimeString( const util::DateTime& rDat
     lcl_AddTwoDigits( sTmp, rDateTime.Minutes );
     sTmp.append( sal_Unicode(':') );
     lcl_AddTwoDigits( sTmp, rDateTime.Seconds );
-
-    return sTmp.makeStringAndClear();
-}
-
-// static
-rtl::OUString SfxXMLMetaExport::GetISODurationString( const Time& rTime )
-{
-    //  return ISO time period string
-
-    rtl::OUStringBuffer sTmp;
-    sTmp.append( sal_Unicode('P') );                // "period"
-
-    sal_uInt16 nHours = rTime.GetHour();
-    sal_Bool bHasHours = ( nHours > 0 );
-    if ( nHours >= 24 )
-    {
-        //  add days
-
-        sal_uInt16 nDays = nHours / 24;
-        sTmp.append( (sal_Int32) nDays );
-        sTmp.append( sal_Unicode('D') );            // "days"
-
-        nHours -= nDays * 24;
-    }
-    sTmp.append( sal_Unicode('T') );                // "time"
-
-    if ( bHasHours )
-    {
-        sTmp.append( (sal_Int32) nHours );
-        sTmp.append( sal_Unicode('H') );            // "hours"
-    }
-    sal_uInt16 nMinutes = rTime.GetMin();
-    if ( bHasHours || nMinutes > 0 )
-    {
-        sTmp.append( (sal_Int32) nMinutes );
-        sTmp.append( sal_Unicode('M') );            // "minutes"
-    }
-    sal_uInt16 nSeconds = rTime.GetSec();
-    sTmp.append( (sal_Int32) nSeconds );
-    sTmp.append( sal_Unicode('S') );                // "seconds"
 
     return sTmp.makeStringAndClear();
 }
@@ -465,7 +429,7 @@ void SfxXMLMetaExport::Export()
     if ( aPropVal >>= nDurVal )
     {
         Time aDurTime( nDurVal );
-        sValue = GetISODurationString( aDurTime );
+        sValue = SvXMLUnitConverter::convertTimeDuration( aDurTime );
 
         SvXMLElementExport aElem( rExport,
                                   XML_NAMESPACE_META, XML_EDITING_DURATION,
@@ -519,7 +483,7 @@ void SfxXMLMetaExport::Export()
         {
             Time aTime;
             aTime.MakeTimeFromMS( nSecs * 1000 );
-            rtl::OUString sReloadTime = GetISODurationString( aTime );
+            rtl::OUString sReloadTime = SvXMLUnitConverter::convertTimeDuration( aTime );
 
             rExport.AddAttribute( XML_NAMESPACE_META, XML_DELAY, sReloadTime );
         }
