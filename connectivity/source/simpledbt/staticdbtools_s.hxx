@@ -2,9 +2,9 @@
  *
  *  $RCSfile: staticdbtools_s.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:50 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,8 @@ namespace connectivity
         virtual ::rtl::OUString quoteTableName(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta,
             const ::rtl::OUString& _rName
+            , sal_Bool _bUseCatalogInSelect = sal_True
+            , sal_Bool _bUseSchemaInSelect = sal_True
         ) const;
 
         // ------------------------------------------------
@@ -221,6 +223,9 @@ namespace connectivity
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
             )   SAL_THROW( ( ) );
 
+        virtual sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
+                                        ,const ::rtl::OUString& _sProperty,
+                                        sal_Bool _bDefault = sal_False) const;
         // disambiguate IReference
         // ------------------------------------------------
         virtual oslInterlockedCount SAL_CALL acquire();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: staticdbtools_s.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:50 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,9 +189,11 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
-    ::rtl::OUString ODataAccessStaticTools::quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName) const
+    ::rtl::OUString ODataAccessStaticTools::quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName
+                                , sal_Bool _bUseCatalogInSelect
+                                , sal_Bool _bUseSchemaInSelect) const
     {
-        return ::dbtools::quoteTableName(_rxMeta, _rName,::dbtools::eInDataManipulation);
+        return ::dbtools::quoteTableName(_rxMeta, _rName,::dbtools::eInDataManipulation,_bUseCatalogInSelect,_bUseSchemaInSelect);
     }
 
     //----------------------------------------------------------------
@@ -241,6 +243,14 @@ namespace connectivity
     {
         return ::dbtools::getFieldNamesByCommandDescriptor( _rxConnection, _nCommandType,
             _rCommand, _pErrorInfo );
+    }
+
+    //----------------------------------------------------------------
+    sal_Bool ODataAccessStaticTools::isDataSourcePropertyEnabled(const Reference< XInterface>& _xProp
+                                        ,const ::rtl::OUString& _sProperty,
+                                        sal_Bool _bDefault) const
+    {
+        return ::dbtools::isDataSourcePropertyEnabled( _xProp,_sProperty ,_bDefault );
     }
 
 //........................................................................
