@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polysc3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:37:36 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ void E3dPolyScene::TakeContour3D(XPolyPolygon& rPoly)
 |*
 \************************************************************************/
 
-sal_Bool E3dPolyScene::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool E3dPolyScene::DoPaintObject(XOutputDevice& rOut,   const SdrPaintInfoRec& rInfoRec) const
 {
     FASTBOOL bOk=TRUE;
     if(GetSubList() && GetSubList()->GetObjCount())
@@ -234,7 +234,7 @@ sal_Bool E3dPolyScene::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRe
     return bOk;
 }
 
-BOOL E3dPolyScene::LocalPaint3D(ExtOutputDevice& rOut,
+BOOL E3dPolyScene::LocalPaint3D(XOutputDevice& rOut,
     const SdrPaintInfoRec& rInfoRec)
 {
     Time aStartTime;
@@ -379,7 +379,7 @@ BOOL E3dPolyScene::LocalPaint3D(ExtOutputDevice& rOut,
 |*
 \************************************************************************/
 
-void E3dPolyScene::DrawPolySceneClip(ExtOutputDevice& rOut,
+void E3dPolyScene::DrawPolySceneClip(XOutputDevice& rOut,
     const E3dObject* p3DObj, Base3D* pBase3D, const SdrPaintInfoRec& rInfoRec)
 {
     // spezielles Clipping fuer OpenGL, um keine floating windows ueberzumalen
@@ -497,7 +497,7 @@ void E3dPolyScene::DrawPolySceneClip(ExtOutputDevice& rOut,
 |*
 \************************************************************************/
 
-void E3dPolyScene::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
+void E3dPolyScene::Paint3D(XOutputDevice& rOut, Base3D* pBase3D,
     const SdrPaintInfoRec& rInfoRec, UINT16 nDrawFlags)
 {
     if(GetScene() != this)
@@ -536,7 +536,7 @@ void E3dPolyScene::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
 |*
 \************************************************************************/
 
-void E3dPolyScene::DrawAllShadows(Base3D* pBase3D, ExtOutputDevice& rXOut,
+void E3dPolyScene::DrawAllShadows(Base3D* pBase3D, XOutputDevice& rXOut,
     const Rectangle& rBound, const Volume3D& rVolume,
     const SdrPaintInfoRec& rInfoRec)
 {
@@ -553,7 +553,7 @@ void E3dPolyScene::DrawAllShadows(Base3D* pBase3D, ExtOutputDevice& rXOut,
 |*
 \************************************************************************/
 
-void E3dPolyScene::DrawWireframe(Base3D* pBase3D, ExtOutputDevice& rXOut)
+void E3dPolyScene::DrawWireframe(Base3D* pBase3D, XOutputDevice& rXOut)
 {
     // Farben setzen
     rXOut.GetOutDev()->SetLineColor(Color(COL_BLACK));
