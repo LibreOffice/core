@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdrw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-04-29 12:29:06 $
+ *  last change: $Author: oj $ $Date: 2002-12-02 14:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,10 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
             form::FormButtonType eButtonType = form::FormButtonType_URL;
             aTmp.setValue( &eButtonType, ::getCppuType((const form::FormButtonType*)0));
             xPropSet->setPropertyValue( C2U("ButtonType"), aTmp );
+
+            // #105638# OJ
+            aTmp <<= sal_True;
+            xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aTmp );
         }
 
         if (rSh.IsObjSelected())
