@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:50 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ String STR_TITLE
     Text [ ENGLISH ] = "Titel" ;
     Text [ norwegian ] = "Tittel" ;
     Text [ italian ] = "Titolo" ;
-    Text [ portuguese_brazilian ] = "T?tilo" ;
+    Text [ portuguese_brazilian ] = "T�tulo" ;
     Text [ portuguese ] = "T�tulo" ;
     Text [ finnish ] = "Otsikko" ;
     Text [ danish ] = "Titel" ;
@@ -92,6 +92,9 @@ String STR_TITLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "T�tol";
     Text[ thai ] = "ชื่อ";
+    Text[ czech ] = "Titulek";
+    Text[ hebrew ] = "‮כותרת‬";
+    Text[ hindi ] = "शीर्षक";
 };
 String STR_ALPHA
 {
@@ -99,7 +102,7 @@ String STR_ALPHA
     Text [ ENGLISH ] = "Delimiter" ;
     Text [ norwegian ] = "Skilletegn" ;
     Text [ italian ] = "Separatore" ;
-    Text [ portuguese_brazilian ] = "Delimitador" ;
+    Text [ portuguese_brazilian ] = "Separador" ;
     Text [ portuguese ] = "Separador" ;
     Text [ finnish ] = "Erotin" ;
     Text [ danish ] = "Skilletegn" ;
@@ -116,10 +119,13 @@ String STR_ALPHA
     Text[ korean ] = "구분기호";
     Text[ chinese_traditional ] = "分隔符";
     Text[ arabic ] = "������";
-    Text[ turkish ] = "Ay�rma i�areti";
+    Text[ turkish ] = "Ayra�";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Separador";
     Text[ thai ] = "ตัวแยก";
+    Text[ czech ] = "Oddělovač";
+    Text[ hebrew ] = "Trennzeichen";
+    Text[ hindi ] = "अलगानेवाला";
 };
 String STR_LEVEL
 {
@@ -127,7 +133,7 @@ String STR_LEVEL
     Text [ ENGLISH ] = "Level " ;
     Text [ norwegian ] = "Niv� " ;
     Text [ italian ] = "Livello  " ;
-    Text [ portuguese_brazilian ] = "N?vel" ;
+    Text [ portuguese_brazilian ] = "N�vel" ;
     Text [ portuguese ] = "N�vel " ;
     Text [ finnish ] = "Taso " ;
     Text [ danish ] = "Niveau " ;
@@ -148,6 +154,9 @@ String STR_LEVEL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nivell";
     Text[ thai ] = "ระดับ ";
+    Text[ czech ] = "Úroveň ";
+    Text[ hebrew ] = "Ebene";
+    Text[ hindi ] = "स्तर ";
 };
 String STR_FILE_NOT_FOUND
 {
@@ -164,16 +173,19 @@ String STR_FILE_NOT_FOUND
     Text[ danish ] = "Det var ikke muligt at finde filen \"%1\" p� sti \"%2\".";
     Text[ swedish ] = "Filen \"%1\" kunde inte hittas i s�kv�g \"%2\".";
     Text[ polish ] = "Nie znaleziono pliku \"%1\" w �cie�ce \"%2\".";
-    Text[ portuguese_brazilian ] = "The file \"%1\" could not be found.";
+    Text[ portuguese_brazilian ] = "O arquivo, '%1' no caminho '%2' n�o foi encontrado.";
     Text[ japanese ] = "ファイル「%1」はパス「%2」に見つかりませんでした。";
     Text[ korean ] = "\"%1\" 파일을\"%2\" 경로에서 찾지　못했습니다.";
     Text[ chinese_simplified ] = "在路径\"%2\"中无法找到文件\"%1\"。";
     Text[ chinese_traditional ] = "無法在路徑<%2>內找到檔案<%1>。";
     Text[ arabic ] = "���� ������ ��� ����� \"%1\" �� ������ \"%2\".";
-    Text[ turkish ] = "Dosya \"%1\" \"%2\" veri yolunda bulunamad�.";
+    Text[ turkish ] = "\"%2\"da olan \"%1% dosya veri yolu bulunamad�.";
     Text[ catalan ] = "No s'ha pogut trobar el fitxer \"%1\" en el cam� \"%2\".";
     Text[ finnish ] = "Tiedostoa %1 hakemistopolusta %2 ei l�ytynyt.";
     Text[ thai ] = "ไม่สามารถพบแฟ้ม, \"%1\" ในเส้นทาง \"%2\" ";
+    Text[ czech ] = "Nelze najít soubor \"%1\" v cestě \"%2\".";
+    Text[ hebrew ] = "Die Datei \"%1\" konnte im Pfad \"%2\" nicht gefunden werden.";
+    Text[ hindi ] = "फाइल, \"%1\" \"%2\" मार्ग में नहीं मिला ।";
 };
 /*************************************************************************
 
@@ -209,17 +221,20 @@ TabDialog DLG_MULTI_TOX
                 Text[ italian ] = "Indice";
                 Text[ danish ] = "Indeks";
                 Text[ swedish ] = "F�rteckning";
-                Text[ polish ] = "Indeks";
-                Text[ portuguese_brazilian ] = "Index";
+                Text[ polish ] = "Indeks/spis tre�ci";
+                Text[ portuguese_brazilian ] = "�ndice / Tabela";
                 Text[ japanese ] = "目次と索引";
                 Text[ korean ] = "색인/목차";
                 Text[ chinese_simplified ] = "目录";
                 Text[ chinese_traditional ] = "目錄";
                 Text[ arabic ] = "����";
-                Text[ turkish ] = "Dizin";
+                Text[ turkish ] = "Dizin/tablo";
                 Text[ catalan ] = "�ndex";
                 Text[ finnish ] = "Hakemisto/luettelo";
                 Text[ thai ] = "ดัชนี";
+                Text[ czech ] = "Rejstřík/tabulka";
+                Text[ hebrew ] = "Verzeichnis";
+                Text[ hindi ] = "अनुक्रमणिका/सारणी";
             };
             PageItem
             {
@@ -238,7 +253,7 @@ TabDialog DLG_MULTI_TOX
                 Text[ danish ] = "Elementer";
                 Text[ swedish ] = "Poster";
                 Text[ polish ] = "Wpisy";
-                Text[ portuguese_brazilian ] = "Entries";
+                Text[ portuguese_brazilian ] = "Entradas";
                 Text[ japanese ] = "項目";
                 Text[ korean ] = "항목";
                 Text[ chinese_simplified ] = "条目";
@@ -249,6 +264,9 @@ TabDialog DLG_MULTI_TOX
                 Text[ catalan ] = "Entrades";
                 Text[ finnish ] = "Merkinn�t";
                 Text[ thai ] = "รายการ";
+                Text[ czech ] = "Položky";
+                Text[ hebrew ] = "Einträge";
+                Text[ hindi ] = "प्रविष्टियाँ";
             };
             PageItem
             {
@@ -266,7 +284,7 @@ TabDialog DLG_MULTI_TOX
                 Text[ danish ] = "Typografier";
                 Text[ swedish ] = "Mallar";
                 Text[ polish ] = "Style";
-                Text[ portuguese_brazilian ] = "Styles";
+                Text[ portuguese_brazilian ] = "Estilos";
                 Text[ japanese ] = "スタイル";
                 Text[ chinese_simplified ] = "样式";
                 Text[ chinese_traditional ] = "樣式";
@@ -278,6 +296,9 @@ TabDialog DLG_MULTI_TOX
                 Text[ catalan ] = "Estils";
                 Text[ finnish ] = "Tyylit";
                 Text[ thai ] = "ลักษณะ";
+                Text[ czech ] = "Styly";
+                Text[ hebrew ] = "‮סגנונות‬";
+                Text[ hindi ] = "शैलियाँ";
             };
             PageItem
             {
@@ -308,6 +329,9 @@ TabDialog DLG_MULTI_TOX
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Columnes";
                 Text[ thai ] = "คอลัมน์";
+                Text[ czech ] = "Sloupce";
+                Text[ hebrew ] = "‮טורים‬";
+                Text[ hindi ] = "स्तंभें";
             };
             PageItem
             {
@@ -317,7 +341,7 @@ TabDialog DLG_MULTI_TOX
                 Text [ ENGLISH ] = "Background" ;
                 Text [ norwegian ] = "Background" ;
                 Text [ italian ] = "Sfondo" ;
-                Text [ portuguese_brazilian ] = "Fundo" ;
+                Text [ portuguese_brazilian ] = "Plano de Fundo" ;
                 Text [ portuguese ] = "Plano de fundo" ;
                 Text [ finnish ] = "Tausta" ;
                 Text [ danish ] = "Baggrund" ;
@@ -338,6 +362,9 @@ TabDialog DLG_MULTI_TOX
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Fons";
                 Text[ thai ] = "พื้นหลัง";
+                Text[ czech ] = "Pozadí";
+                Text[ hebrew ] = "‮רקע‬";
+                Text[ hindi ] = "पृष्ठभाग";
             };
         };
     };
@@ -360,8 +387,8 @@ TabDialog DLG_MULTI_TOX
         Text[ italian ] = "Indice personalizzato";
         Text[ danish ] = "Brugerdefineret indeks";
         Text[ swedish ] = "Anv�ndardefinierad f�rteckning";
-        Text[ polish ] = "Indeks indywidualny";
-        Text[ portuguese_brazilian ] = "User-define index";
+        Text[ polish ] = "Indeks zdefiniowany przez u�ytkownika";
+        Text[ portuguese_brazilian ] = "�ndice Definido pelo Usu�rio";
         Text[ japanese ] = "ユーザー定義の索引";
         Text[ korean ] = "사용자 정의 색인";
         Text[ chinese_simplified ] = "使用者定义的目录";
@@ -371,6 +398,9 @@ TabDialog DLG_MULTI_TOX
         Text[ catalan ] = "�ndex de l'usuari";
         Text[ finnish ] = "K�ytt�j�n m��ritt�m� hakemisto";
         Text[ thai ] = "ดัชนีระบุผู้ใช้";
+        Text[ czech ] = "Uživatelem definovaný rejstřík";
+        Text[ hebrew ] = "Benutzerdefiniertes Verzeichnis";
+        Text[ hindi ] = "उपभोक्ता से परिभाषित अनुक्रमणिका";
     };
     CheckBox CB_SHOWEXAMPLE
     {
@@ -389,15 +419,18 @@ TabDialog DLG_MULTI_TOX
         Text[ danish ] = "~Vis eksempel";
         Text[ swedish ] = "F~�rhandsvisning";
         Text[ polish ] = "Podgl�d";
-        Text[ portuguese_brazilian ] = "Show ~preview";
+        Text[ portuguese_brazilian ] = "Visualizar";
         Text[ japanese ] = "プレビューの表示";
-        Text[ korean ] = "미리보기";
+        Text[ korean ] = "미리 보기";
         Text[ chinese_simplified ] = "预览";
         Text[ chinese_traditional ] = "預覽";
-        Text[ turkish ] = "�nizlemeyi g�r�nt�le";
+        Text[ turkish ] = "�nizleme";
         Text[ arabic ] = "����� ��������";
         Text[ catalan ] = "Previsuali~tzaci�";
         Text[ thai ] = "แสดงตัวอย่าง";
+        Text[ czech ] = "Náhled";
+        Text[ hebrew ] = "~Vorschau";
+        Text[ hindi ] = "पूर्वदृश्य";
     };
     Text[ english_us ] = "Insert Index/Table";
     Text[ portuguese ] = "Inserir �ndice";
@@ -409,8 +442,8 @@ TabDialog DLG_MULTI_TOX
     Text[ italian ] = "Inserisci indice";
     Text[ danish ] = "Inds�t indeks";
     Text[ swedish ] = "Infoga f�rteckning";
-    Text[ polish ] = "Wstaw indeks";
-    Text[ portuguese_brazilian ] = "Insert index";
+    Text[ polish ] = "Wstaw indeks/spis tre�ci";
+    Text[ portuguese_brazilian ] = "Inserir �ndice/Tabela";
     Text[ japanese ] = "目次と索引の挿入";
     Text[ korean ] = "색인 및 목차 삽입";
     Text[ chinese_simplified ] = "插入目录";
@@ -426,18 +459,21 @@ TabDialog DLG_MULTI_TOX
     Text[ italian ] = "Inserisci indice";
     Text[ danish ] = "Inds�t indeks";
     Text[ swedish ] = "Infoga f�rteckning";
-    Text[ polish ] = "Wstaw indeks";
-    Text[ portuguese_brazilian ] = "Insert index";
+    Text[ polish ] = "Wstaw indeks/spis tre�ci";
+    Text[ portuguese_brazilian ] = "Inserir �ndice/Tabela";
     Text[ japanese ] = "目次と索引の挿入";
     Text[ korean ] = "색인 및 목차 삽입";
     Text[ chinese_simplified ] = "插入目录";
     Text[ chinese_traditional ] = "插入目錄";
     Text[ arabic ] = "����� ����";
-    Text[ turkish ] = "Dizin ekle";
+    Text[ turkish ] = "Dizin/tablo ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix �ndex";
     Text[ finnish ] = "Lis�� hakemisto tai luettelo";
     Text[ thai ] = "แทรกดัชนี";
+    Text[ czech ] = "Vložit rejstřík/tabulku";
+    Text[ hebrew ] = "Verzeichnis einfügen";
+    Text[ hindi ] = "अनुक्रमणिका/सारणी जोड़ो";
 };
 //------------------------------------------------------------------
 TabPage TP_TOX_SELECT
@@ -463,17 +499,20 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "Type og overskrift";
         Text[ swedish ] = "Typ och rubrik";
         Text[ polish ] = "Typ i tytu�";
-        Text[ portuguese_brazilian ] = "Type and title";
+        Text[ portuguese_brazilian ] = "Tipo e T�tulo";
         Text[ japanese ] = "種類とタイトル";
         Text[ korean ] = "유형 및 제목";
         Text[ chinese_simplified ] = "类型和标题";
         Text[ chinese_traditional ] = "類型和標題";
         Text[ arabic ] = "����� ��������";
-        Text[ turkish ] = "Tip ve ba�l�k";
+        Text[ turkish ] = "T�r ve ba�l�k";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus i t�tol";
         Text[ finnish ] = "Tyyppi ja otsikko";
         Text[ thai ] = "ชนิดและชื่อ";
+        Text[ czech ] = "Druh a titulek";
+        Text[ hebrew ] = "Typ und Titel";
+        Text[ hindi ] = "वर्ग और शीर्षक";
     };
     FixedText       FT_TITLE
     {
@@ -491,18 +530,21 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Titolo";
         Text[ danish ] = "Overskrift";
         Text[ swedish ] = "Rubr~ik";
-        Text[ polish ] = "Tytu�";
-        Text[ portuguese_brazilian ] = "Title";
+        Text[ polish ] = "~Tytu�";
+        Text[ portuguese_brazilian ] = "~T�tulo";
         Text[ japanese ] = "タイトル(~T)";
         Text[ korean ] = "제목(~T)";
         Text[ chinese_simplified ] = "标题(~T)";
         Text[ chinese_traditional ] = "標題(~T)";
         Text[ arabic ] = "�������";
-        Text[ turkish ] = "Ba�l�k";
+        Text[ turkish ] = "~Ba�l�k";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "T�to~l";
         Text[ finnish ] = "~Otsikko";
         Text[ thai ] = "~ชื่อ";
+        Text[ czech ] = "Titulek";
+        Text[ hebrew ] = "‮כותרת‬";
+        Text[ hindi ] = "~शीर्षक";
     };
     Edit            ED_TITLE
     {
@@ -527,7 +569,7 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "T~ype";
         Text[ swedish ] = "T~yp";
         Text[ polish ] = "Typ";
-        Text[ portuguese_brazilian ] = "Type";
+        Text[ portuguese_brazilian ] = "Tipo";
         Text[ japanese ] = "種類";
         Text[ korean ] = "유형";
         Text[ chinese_simplified ] = "类型";
@@ -538,6 +580,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Tipus";
         Text[ finnish ] = "Tyyppi";
         Text[ thai ] = "ชนิด";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "‮סוג‬";
+        Text[ hindi ] = "वर्ग";
     };
     ListBox         LB_TYPE
     {
@@ -678,22 +723,22 @@ TabPage TP_TOX_SELECT
     StringList [ polish ] =
     {
             < "Spis tre�ci" ;   TO_CONTENT      ;> ;
-        < "Skorowidz" ;     TO_INDEX        ;> ;
-        < "Spis obraz�w" ; TO_ILLUSTRATION ;> ;
-        < "Spis tabel" ;    TO_TABLE        ;> ;
-        < "Ustawienia indywidualne" ;   TO_USER         ;> ;
+        < "Indeks alfabetyczny" ;   TO_INDEX        ;> ;
+        < "Indeks ilustracji" ; TO_ILLUSTRATION ;> ;
+        < "Indeks tabel" ;  TO_TABLE        ;> ;
+        < "U�ytkownika" ;   TO_USER         ;> ;
         < "Spis obiekt�w" ;     TO_OBJECT       ;> ;
         < "Bibliografia" ;  TO_AUTHORITIES  ;> ;
     };
     StringList [ portuguese_brazilian ] =
     {
-            < "Inhaltsverzeichnis" ;    TO_CONTENT      ;> ;
-        < "Stichwortverzeichnis" ;  TO_INDEX        ;> ;
-        < "Abbildungsverzeichnis" ; TO_ILLUSTRATION ;> ;
-        < "Tabellenverzeichnis" ;   TO_TABLE        ;> ;
-        < "Benutzerverzeichnis" ;   TO_USER         ;> ;
-        < "Objektverzeichnis" ;     TO_OBJECT       ;> ;
-        < "Literaturverzeichnis" ;  TO_AUTHORITIES  ;> ;
+            < "�ndice" ;    TO_CONTENT      ;> ;
+        < "�ndice Alfab�tico" ;     TO_INDEX        ;> ;
+        < "�ndice de Ilustra��es" ; TO_ILLUSTRATION ;> ;
+        < "�ndice de Tabelas" ;     TO_TABLE        ;> ;
+        < "Definido pelo usu�rio" ;     TO_USER         ;> ;
+        < "�ndice de Objetos" ;     TO_OBJECT       ;> ;
+        < "Bibliografia" ;  TO_AUTHORITIES  ;> ;
     };
     StringList [ japanese ] =
     {
@@ -713,7 +758,7 @@ TabPage TP_TOX_SELECT
         < "표 색인" ;    TO_TABLE        ;> ;
         < "사용자 정의" ;  TO_USER         ;> ;
         < "개체 색인" ;     TO_OBJECT       ;> ;
-        < "참고문헌 색인" ;   TO_AUTHORITIES  ;> ;
+        < "참고 문헌" ; TO_AUTHORITIES  ;> ;
     };
     StringList [ chinese_simplified ] =
     {
@@ -785,6 +830,36 @@ TabPage TP_TOX_SELECT
         < "ตารางวัตถุ" ;    TO_OBJECT       ;> ;
         < "บรรณานุกรม" ;    TO_AUTHORITIES  ;> ;
     };
+    StringList [ czech ] =
+    {
+         < "Obsah" ;    TO_CONTENT      ;> ;
+        < "Abecední rejstřík" ;  TO_INDEX        ;> ;
+        < "Seznam ilustrací" ; TO_ILLUSTRATION ;> ;
+        < "Seznam tabulek" ;    TO_TABLE        ;> ;
+        < "Definované uživatelem" ;   TO_USER         ;> ;
+        < "Tabulka objektů" ;  TO_OBJECT       ;> ;
+        < "Seznam použité literatury" ;   TO_AUTHORITIES  ;> ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "Inhaltsverzeichnis" ;   TO_CONTENT      ;> ;
+        < "Stichwortverzeichnis" ;  TO_INDEX        ;> ;
+        < "Abbildungsverzeichnis" ; TO_ILLUSTRATION ;> ;
+        < "Tabellenverzeichnis" ;   TO_TABLE        ;> ;
+        < "Benutzerdefiniert" ;     TO_USER         ;> ;
+        < "Objektverzeichnis" ;     TO_OBJECT       ;> ;
+        < "Literaturverzeichnis" ;  TO_AUTHORITIES  ;> ;
+    };
+    StringList [ hindi ] =
+    {
+         < "विषयसूची की सारणी" ;  TO_CONTENT      ;> ;
+        < "वर्णमाला अनुक्रमणिका" ;    TO_INDEX        ;> ;
+        < "दृष्टान्त अनुक्रमणिका" ; TO_ILLUSTRATION ;> ;
+        < "सारणियों का अनुक्रमणिका " ;    TO_TABLE        ;> ;
+        < "उपभोक्ता से परिभाषित" ;  TO_USER         ;> ;
+        < "वस्तुओं की सारणी" ;  TO_OBJECT       ;> ;
+        < "ग्रन्थ-सूची" ;   TO_AUTHORITIES  ;> ;
+    };
     };
     CheckBox        CB_READONLY
     {
@@ -804,17 +879,20 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "Beskyttet mod manuelle �ndringer";
         Text[ swedish ] = "Skyddad mot manuella �ndringar";
         Text[ polish ] = "Chroniony przed r�cznymi zmianami";
-        Text[ portuguese_brazilian ] = "Protected against manual changes";
+        Text[ portuguese_brazilian ] = "Protegido contra altera��es manuais";
         Text[ japanese ] = "任意変更から保護";
         Text[ korean ] = "임의 변경으로부터 보호";
         Text[ chinese_simplified ] = "防止手动更改";
         Text[ chinese_traditional ] = "不允許手動變更";
         Text[ arabic ] = "���� �� ��������� �������";
-        Text[ turkish ] = "Man�el de�i�ikliklere kar�� koru";
+        Text[ turkish ] = "Man�el de�i�ikliklere kar�� korunmal�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Protegit contra els canvis manuals";
         Text[ finnish ] = "Suojattu manuaalisilta muutoksilta";
         Text[ thai ] = "ป้องกันการเปลี่ยนแปลงด้วยตนเอง";
+        Text[ czech ] = "Zamknuto proti ručním změnám";
+        Text[ hebrew ] = "G~eschützt vor manuellen Änderungen";
+        Text[ hindi ] = "मान्युवल परिवर्तनों से रक्षित";
     };
     FixedLine  FL_AREA
     {
@@ -833,16 +911,19 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Crea indice";
         Text[ danish ] = "Opret ~indeks";
         Text[ swedish ] = "Skapa f�rte~ckning";
-        Text[ polish ] = "Utw�rz indeks";
-        Text[ portuguese_brazilian ] = "Create index of";
+        Text[ polish ] = "Utw�rz indeks/spis tre�ci";
+        Text[ portuguese_brazilian ] = "Criar �ndice/tabela";
         Text[ japanese ] = "目次と索引の作成";
         Text[ korean ] = "색인 및 목차 만들기";
         Text[ chinese_simplified ] = "新增目录";
         Text[ chinese_traditional ] = "新增目錄";
-        Text[ turkish ] = "Create index of";
+        Text[ turkish ] = "Dizin/tablo yarat";
         Text[ arabic ] = "Create index of";
         Text[ catalan ] = "Crea un �ndex de";
         Text[ thai ] = "สร้างดัชนี";
+        Text[ czech ] = "Vytvořit rejstřík/tabulku";
+        Text[ hebrew ] = "~Verzeichnis erstellen";
+        Text[ hindi ] = "अनुक्रमणिका/सारणी उत्पन्न करो";
     };
     FixedText       FT_AREA
     {
@@ -862,15 +943,18 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "For";
         Text[ swedish ] = "F�r";
         Text[ polish ] = "Dotyczy";
-        Text[ portuguese_brazilian ] = "Type";
+        Text[ portuguese_brazilian ] = "para";
         Text[ japanese ] = "対象";
         Text[ korean ] = "대상";
         Text[ chinese_simplified ] = "用于";
         Text[ chinese_traditional ] = "用於";
-        Text[ turkish ] = "Type";
+        Text[ turkish ] = "i�in";
         Text[ arabic ] = "Type";
         Text[ catalan ] = "Tipus";
         Text[ thai ] = "สำหรับ";
+        Text[ czech ] = "pro";
+        Text[ hebrew ] = "Für";
+        Text[ hindi ] = "केलिए";
     };
     ListBox         LB_AREA
     {
@@ -950,8 +1034,8 @@ TabPage TP_TOX_SELECT
     };
     StringList [ portuguese_brazilian ] =
     {
-            < "Gesamtes Dokument" ;     AREA_DOCUMENT       ;> ;
-        < "Kapitel" ;               AREA_CHAPTER        ;> ;
+            < "Documento inteiro" ;     AREA_DOCUMENT       ;> ;
+        < "Cap�tulo" ;              AREA_CHAPTER        ;> ;
     };
     StringList [ japanese ] =
     {
@@ -998,6 +1082,21 @@ TabPage TP_TOX_SELECT
          < "ทั้งเอกสาร" ;   AREA_DOCUMENT       ;> ;
         < "บท" ;                AREA_CHAPTER        ;> ;
     };
+    StringList [ czech ] =
+    {
+         < "Celý dokument" ;   AREA_DOCUMENT       ;> ;
+        < "Kapitola" ;              AREA_CHAPTER        ;> ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "Gesamtes Dokument" ;    AREA_DOCUMENT       ;> ;
+        < "Kapitel" ;               AREA_CHAPTER        ;> ;
+    };
+    StringList [ hindi ] =
+    {
+         < "सम्पूर्ण लेखपत्र" ;   AREA_DOCUMENT       ;> ;
+        < "अध्याय" ;                AREA_CHAPTER        ;> ;
+    };
     };
     FixedText       FT_LEVEL
     {
@@ -1016,17 +1115,20 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Val~uta fino a livello";
         Text[ danish ] = "Evaluer indtil niveau";
         Text[ swedish ] = "Utv�rdera till niv�";
-        Text[ polish ] = "Ewaluuj do poziomu";
-        Text[ portuguese_brazilian ] = "Evaluation level";
+        Text[ polish ] = "Oszacuj do poziomu";
+        Text[ portuguese_brazilian ] = "Avaliar at� o n�vel";
         Text[ japanese ] = "次のレベルまで適用";
         Text[ korean ] = "다음 수준까지 적용";
         Text[ chinese_simplified ] = "包括级别";
         Text[ chinese_traditional ] = "包括級別";
-        Text[ turkish ] = "�u d�zeye kadar:";
+        Text[ turkish ] = "�u d�zeye kadar de�erlendir";
         Text[ arabic ] = "����� ��� �������";
         Text[ catalan ] = "E~valua fins al nivell";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "ประเมินขึ้นกับระดับ";
+        Text[ czech ] = "Vyhodnotit až do úrovně";
+        Text[ hebrew ] = "Auswerten bis Ebene";
+        Text[ hindi ] = "एक सतह ऊपर तक परीक्षा करो";
     };
     NumericField    NF_LEVEL
     {
@@ -1059,17 +1161,20 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "Opret ud fra";
         Text[ swedish ] = "Skapa fr�n";
         Text[ polish ] = "Utw�rz z";
-        Text[ portuguese_brazilian ] = "Create from";
+        Text[ portuguese_brazilian ] = "Criar a partir de";
         Text[ japanese ] = "内容";
         Text[ korean ] = "내용";
         Text[ chinese_simplified ] = "新建采用";
         Text[ chinese_traditional ] = "製作從";
         Text[ arabic ] = "����� ��";
-        Text[ turkish ] = "Kaynak";
+        Text[ turkish ] = "dan yarat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Crea de";
         Text[ finnish ] = "Luo";
         Text[ thai ] = "สร้างจาก";
+        Text[ czech ] = "Vytvořit z";
+        Text[ hebrew ] = "Erzeugen aus";
+        Text[ hindi ] = "से उत्पन्न करो";
     };
     CheckBox        CB_FROMHEADINGS
     {
@@ -1089,7 +1194,7 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "Disposition";
         Text[ swedish ] = "~Disposition";
         Text[ polish ] = "Konspekt";
-        Text[ portuguese_brazilian ] = "Outline";
+        Text[ portuguese_brazilian ] = "Estrutura de T�picos";
         Text[ japanese ] = "アウトライン";
         Text[ korean ] = "제목 차례";
         Text[ chinese_simplified ] = "大纲";
@@ -1100,6 +1205,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Contorn";
         Text[ finnish ] = "J�sennys";
         Text[ thai ] = "เค้าร่าง";
+        Text[ czech ] = "Osnova";
+        Text[ hebrew ] = "‮מסגרת‬";
+        Text[ hindi ] = "बाहरी रूपरेखा";
     };
     PushButton  PB_CHAPTERDLG
     {
@@ -1124,18 +1232,21 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Altri modelli";
         Text[ danish ] = "Yderli~gere typografier";
         Text[ swedish ] = "Ytterligare ~mallar";
-        Text[ polish ] = "Inne style";
-        Text[ portuguese_brazilian ] = "additional styles";
+        Text[ polish ] = "Dod~atkowe style";
+        Text[ portuguese_brazilian ] = "Estilos ~Adicionais";
         Text[ japanese ] = "その他のスタイル(~A)";
         Text[ korean ] = "스타일 옵션(~A)";
         Text[ chinese_simplified ] = "其它样式(~A)";
         Text[ chinese_traditional ] = "其他樣式(~A)";
         Text[ arabic ] = "����� ������";
-        Text[ turkish ] = "Di�er bi�imler";
+        Text[ turkish ] = "~Di�er bi�imler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estils ~addicionals";
         Text[ finnish ] = "~Lis�tyylit";
         Text[ thai ] = "ลักษณะเ~พิ่มเติม";
+        Text[ czech ] = "Další styly";
+        Text[ hebrew ] = "~weiteren Vorlagen";
+        Text[ hindi ] = "~अधिकतर शैलियाँ";
     };
     String ST_USER_ADDSTYLE
     {
@@ -1152,7 +1263,7 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "Typografier";
         Text[ swedish ] = "~Mallar";
         Text[ polish ] = "Style";
-        Text[ portuguese_brazilian ] = "Styles";
+        Text[ portuguese_brazilian ] = "Esti~los";
         Text[ japanese ] = "スタイル(~E)";
         Text[ korean ] = "스타일(~E)";
         Text[ chinese_simplified ] = "样式(~E)";
@@ -1163,6 +1274,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Estil~s";
         Text[ finnish ] = "T~yylit";
         Text[ thai ] = "ลักษ~ณะ";
+        Text[ czech ] = "Styly";
+        Text[ hebrew ] = "~Vorlagen";
+        Text[ hindi ] = "~शैलियाँ";
     };
     PushButton      PB_ADDSTYLES
     {
@@ -1187,8 +1301,8 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Contrasse~gni indice";
         Text[ danish ] = "Indeksmarkeringer";
         Text[ swedish ] = "F�rteckningsm~arkeringar";
-        Text[ polish ] = "Zaz~naczanie indeks�w";
-        Text[ portuguese_brazilian ] = "Index entries";
+        Text[ polish ] = "Z~naczniki indeksu";
+        Text[ portuguese_brazilian ] = "Marcas do �nd~ice";
         Text[ japanese ] = "目次と索引の項目(~X)";
         Text[ korean ] = "색인 표시(~X)";
         Text[ chinese_simplified ] = "目录标记(~X)";
@@ -1198,6 +1312,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Mar~ques de l'�ndex";
         Text[ finnish ] = "Hake~mistomerkit";
         Text[ thai ] = "เครื่องหมายดัช~นี";
+        Text[ czech ] = "Značky rejstříku";
+        Text[ hebrew ] = "Verzeichnism~arkierungen";
+        Text[ hindi ] = "अनुक्र~मणिका चिह्न";
     };
 
     RadioButton     RB_FROMCAPTIONS
@@ -1216,8 +1333,8 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Diciture";
         Text[ danish ] = "Billedtekster";
         Text[ swedish ] = "Bi~ldtexter";
-        Text[ polish ] = "Ety~kiety";
-        Text[ portuguese_brazilian ] = "Captions";
+        Text[ polish ] = "Podpisy";
+        Text[ portuguese_brazilian ] = "Legendas";
         Text[ japanese ] = "図表番号";
         Text[ korean ] = "캡션";
         Text[ chinese_simplified ] = "标签";
@@ -1228,6 +1345,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Llegendes";
         Text[ finnish ] = "Kuvaotsikot";
         Text[ thai ] = "คำบรรยายภาพ";
+        Text[ czech ] = "Popisky";
+        Text[ hebrew ] = "Bes~chriftungen";
+        Text[ hindi ] = "कॉप्शन्";
     };
     FixedText FT_CAPTIONSEQUENCE
     {
@@ -1245,8 +1365,8 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "C~ategoria";
         Text[ danish ] = "Kategori";
         Text[ swedish ] = "~Kategori";
-        Text[ polish ] = "Kategorie";
-        Text[ portuguese_brazilian ] = "Category";
+        Text[ polish ] = "Kategoria";
+        Text[ portuguese_brazilian ] = "Categoria";
         Text[ japanese ] = "カテゴリー";
         Text[ korean ] = "범주";
         Text[ chinese_simplified ] = "分类";
@@ -1257,6 +1377,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Categoria";
         Text[ finnish ] = "Luokka";
         Text[ thai ] = "ประเภท";
+        Text[ czech ] = "Kategorie";
+        Text[ hebrew ] = "~Kategorie";
+        Text[ hindi ] = "वर्ग";
     };
     ListBox LB_CAPTIONSEQUENCE
     {
@@ -1281,8 +1404,8 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "~Visualizzazione";
         Text[ danish ] = "Visning";
         Text[ swedish ] = "Visning";
-        Text[ polish ] = "Poka�";
-        Text[ portuguese_brazilian ] = "Display";
+        Text[ polish ] = "Wy�wietl";
+        Text[ portuguese_brazilian ] = "Exibir";
         Text[ japanese ] = "表示";
         Text[ korean ] = "표시";
         Text[ chinese_simplified ] = "显示";
@@ -1293,6 +1416,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Visualitza";
         Text[ finnish ] = "N�yt�";
         Text[ thai ] = "แสดงผล";
+        Text[ czech ] = "Zobrazit";
+        Text[ hebrew ] = "~Anzeige";
+        Text[ hindi ] = "दिखाओ";
     };
     ListBox LB_DISPLAYTYPE
     {
@@ -1380,15 +1506,15 @@ TabPage TP_TOX_SELECT
     };
     StringList [ polish ] =
     {
-            < "Tekst odwo�a�" ; > ;
+            < "Odwo�ania" ; > ;
         < "Kategoria i numer" ; > ;
-        < "Tekst etykiety" ; > ;
+        < "Tekst podpisu" ; > ;
     };
     StringList [ portuguese_brazilian ] =
     {
-            < "Referenztext" ; > ;
-        < "Kategorie und Nummer" ; > ;
-        < "Beschriftungstext" ; > ;
+            < "Refer�ncias" ; > ;
+        < "Categoria e N�mero" ; > ;
+        < "Texto da Legenda" ; > ;
     };
     StringList [ japanese ] =
     {
@@ -1422,7 +1548,7 @@ TabPage TP_TOX_SELECT
     };
     StringList [ turkish ] =
     {
-            < "Referans metni" ; > ;
+            < "Referanslar" ; > ;
         < "Kategori ve numara" ; > ;
         < "Resim yaz�s�" ; > ;
     };
@@ -1444,6 +1570,24 @@ TabPage TP_TOX_SELECT
         < "ประเภทและตัวเลข" ; > ;
         < "ข้อความคำอธิบาย" ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Odkazy" ; > ;
+        < "Kategorie a číslo" ; > ;
+        < "Text popisku" ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "Referenztext" ; > ;
+        < "Kategorie und Nummer" ; > ;
+        < "Beschriftungstext" ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "रेफरेन्स" ; > ;
+        < "वर्ग और संख्या" ; > ;
+        < "कॉप्शन् टेक्स्ट्" ; > ;
+    };
     };
     RadioButton        RB_FROMOBJECTNAMES
     {
@@ -1462,7 +1606,7 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "Objektnavne";
         Text[ swedish ] = "Objektnamn";
         Text[ polish ] = "Nazwy obiekt�w";
-        Text[ portuguese_brazilian ] = "Object names";
+        Text[ portuguese_brazilian ] = "Nomes de Objeto";
         Text[ japanese ] = "オブジェクト名";
         Text[ korean ] = "개체 이름";
         Text[ chinese_simplified ] = "对象名称";
@@ -1473,6 +1617,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Noms d'objecte";
         Text[ finnish ] = "Objektien nimet";
         Text[ thai ] = "ชื่อวัตถุ";
+        Text[ czech ] = "Názvy objektů";
+        Text[ hebrew ] = "Obje~ktnamen";
+        Text[ hindi ] = "वस्तु नाम";
     };
     CheckBox        CB_COLLECTSAME
     {
@@ -1490,17 +1637,20 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Riunisci voci ~uguali";
         Text[ danish ] = "Kombiner identiske elementer";
         Text[ swedish ] = "Kom~binera likadana poster";
-        Text[ polish ] = "Sc~al takie same wpisy";
-        Text[ portuguese_brazilian ] = "Combine identical entries";
+        Text[ polish ] = "P~o��cz takie same wpisy";
+        Text[ portuguese_brazilian ] = "Combinar entradas id�nticas";
         Text[ japanese ] = "同じ項目をまとめて表示";
-        Text[ korean ] = "동일항목 하나로 묶음";
+        Text[ korean ] = "동일 항목 하나로 묶음";
         Text[ chinese_simplified ] = "合并相同的条目";
         Text[ chinese_traditional ] = "合併同一條目";
         Text[ arabic ] = "����� ��������� ���������";
-        Text[ turkish ] = "~E� giri�leri birle�tir";
+        Text[ turkish ] = "E� giri�leri birle�tir";
         Text[ catalan ] = "Com~bina entrades id�ntiques";
         Text[ finnish ] = "Yhdist� identtiset merkinn�t";
         Text[ thai ] = "เชื่อมรายการที่เหมือนกัน";
+        Text[ czech ] = "Zkombinovat stejné položky";
+        Text[ hebrew ] = "Zusammenfassen ~gleicher Einträge";
+        Text[ hindi ] = "समान प्रविष्टियों को मिलाओ";
     };
     CheckBox        CB_USEFF
     {
@@ -1518,8 +1668,8 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Riunisci con ~seg. o segg.";
         Text[ danish ] = "Kombiner med f. eller ff.";
         Text[ swedish ] = "Kombinera med ~f eller ff";
-        Text[ polish ] = "Stre�� za pomoc� s lub ss";
-        Text[ portuguese_brazilian ] = "Combine identical entries with ~pp.";
+        Text[ polish ] = "Po��cz takie same wpisy znakiem s lub ~ss";
+        Text[ portuguese_brazilian ] = "Combinar entradas id�nticas com p ou ~pp";
         Text[ japanese ] = "続きページを ~p または pp で表示";
         Text[ korean ] = "f 또는 ff 동일 항목을 하나로 묶음(~P)";
         Text[ chinese_simplified ] = "合并带 f 或 ff 的条目(~P)";
@@ -1529,6 +1679,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Combina entrades amb les ~sig�ent(s)";
         Text[ finnish ] = "Yhdist� identtiset merkinn�t kirjaimilla p tai ~pp";
         Text[ thai ] = "เชื่อมรายการที่เหมือนกันด้วย p หรือ ~pp";
+        Text[ czech ] = "Zkombinovat stejné položky s p nebo pp";
+        Text[ hebrew ] = "Zusammenfassen mit ~f oder ff";
+        Text[ hindi ] = "p अथवा ~pp सहित समान प्रविष्टियों को मिलाओ ";
     };
     CheckBox CB_USE_DASH
     {
@@ -1546,8 +1699,8 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Riunisci ~con -";
         Text[ danish ] = "Kombiner med -";
         Text[ swedish ] = "Kombinera ~med -";
-        Text[ polish ] = "~Scal z -";
-        Text[ portuguese_brazilian ] = "Combine identical entries with -";
+        Text[ polish ] = "Po��cz przy u�yciu znaku -";
+        Text[ portuguese_brazilian ] = "Combinar com -";
         Text[ japanese ] = "続きページを - で表示";
         Text[ korean ] = "동일 항목 하나로 묶음";
         Text[ chinese_simplified ] = "用 - 合并";
@@ -1557,6 +1710,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Combina amb -";
         Text[ finnish ] = "Yhdist� merkinn�ll�";
         Text[ thai ] = "เชื่อมด้วย -";
+        Text[ czech ] = "Zkombinovat do intervalu";
+        Text[ hebrew ] = "Zusammenfassen ~mit -";
+        Text[ hindi ] = "- सहित मिलाओ";
     };
     CheckBox        CB_CASESENSITIVE
     {
@@ -1574,8 +1730,8 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Maiuscole/minu~scole";
         Text[ danish ] = "Forskel p� store og sm� bogstaver";
         Text[ swedish ] = "Versal~k�nslig";
-        Text[ polish ] = "Uwzgl�d~nij wielkie i ma�e litery";
-        Text[ portuguese_brazilian ] = "Case sensitive";
+        Text[ polish ] = "Uwzgl�dnij wi~elko�� liter";
+        Text[ portuguese_brazilian ] = "Diferenciar mai�sculas/min�sculas";
         Text[ japanese ] = "大文字と小文字を区別する";
         Text[ korean ] = "대문자 및 소문자 구분";
         Text[ chinese_simplified ] = "区分字母大小写";
@@ -1586,6 +1742,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "~Maj�scules/min�scules";
         Text[ finnish ] = "Kirjainkoon erottelu";
         Text[ thai ] = "ตรงตามตัวพิมพ์ใหญ่-เล็ก";
+        Text[ czech ] = "Rozlišovat velká a malá písmena";
+        Text[ hebrew ] = "Groß- und ~Kleinschreibung beachten";
+        Text[ hindi ] = "केस सचेतन";
     };
     CheckBox        CB_INITIALCAPS
     {
@@ -1603,8 +1762,8 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Scrivi le voci maiusc~ole";
         Text[ danish ] = "Skriv elementer automatisk med stort";
         Text[ swedish ] = "Skriv ~automatiskt poster med stor bokstav";
-        Text[ polish ] = "Zaczynaj wpisy autom. od wielkiej litery";
-        Text[ portuguese_brazilian ] = "Capitalize entries";
+        Text[ polish ] = "Wpisy automatycznie z wielkiej litery";
+        Text[ portuguese_brazilian ] = "Entradas em mai�sculas autom�ticas";
         Text[ japanese ] = "語頭を自動的に大文字にする";
         Text[ korean ] = "어두를 자동으로 대문자로 바꿈";
         Text[ chinese_simplified ] = "自动转换成大写条目";
@@ -1615,6 +1774,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Escriu les entrades autom�ticament en maj�scula";
         Text[ finnish ] = "Isot kirjaimet merkint�hin automaattisesti";
         Text[ thai ] = "รายการทำให้เป็นตัวพิมพ์ใหญ่อัตโนมัติ";
+        Text[ czech ] = "Položka bude vypsána velkými písmeny";
+        Text[ hebrew ] = "Einträge ~automatisch großschreiben";
+        Text[ hindi ] = "प्रविष्टियों को स्वयं बड़े अक्षर में बदलो";
     };
     CheckBox        CB_KEYASENTRY
     {
@@ -1632,8 +1794,8 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "~Chiavi come voci separate";
         Text[ danish ] = "N�gle som separat element";
         Text[ swedish ] = "~Nyckel som egen post";
-        Text[ polish ] = "Klucz ja~ko wpis w�asny";
-        Text[ portuguese_brazilian ] = "Keys as separate entries";
+        Text[ polish ] = "Klucze ja~ko osobne wpisy";
+        Text[ portuguese_brazilian ] = "Chaves como entradas separadas";
         Text[ japanese ] = "分類タイトルを項目表示";
         Text[ korean ] = "키를 고유 입력으로";
         Text[ chinese_simplified ] = "键码作为单独的条目";
@@ -1643,6 +1805,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Claus com a entrades separades";
         Text[ finnish ] = "Avainmerkit erillisin� merkint�n�";
         Text[ thai ] = "พิมพ์เป็นรายการแยกกัน";
+        Text[ czech ] = "Klíče jako oddělené položky";
+        Text[ hebrew ] = "~Schlüssel als eigener Eintrag";
+        Text[ hindi ] = "की अलग प्रविष्टियों जैसे";
     };
     CheckBox    CB_FROMFILE
     {
@@ -1660,17 +1825,20 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "File di conco~rdanza";
         Text[ danish ] = "Konkordansfil";
         Text[ swedish ] = "Konkordansfil";
-        Text[ polish ] = "Plik konkordancji";
-        Text[ portuguese_brazilian ] = "Create entries from file";
+        Text[ polish ] = "Plik konkor~dancji";
+        Text[ portuguese_brazilian ] = "Arquivo de ~concord�ncia";
         Text[ japanese ] = "コンコーダンスファイル(~C)";
         Text[ korean ] = "일치하는 파일(~C)";
         Text[ chinese_simplified ] = "由文件汇编出条目(~C)";
         Text[ chinese_traditional ] = "從檔案匯編條目(~C)";
         Text[ arabic ] = "��� ���� �����";
-        Text[ turkish ] = "Uyumluluk dosyas�";
+        Text[ turkish ] = "~Uyumluluk dosyas�";
         Text[ catalan ] = "Fitxer ~concordant";
         Text[ finnish ] = "~Konkordanssitiedosto";
         Text[ thai ] = "แฟ้มที่~สัมพันธ์กัน";
+        Text[ czech ] = "Rejstříkový soubor";
+        Text[ hebrew ] = "Konko~rdanzdatei";
+        Text[ hindi ] = "~कोनकोर्डेन्स फाइल";
     };
     MenuButton  MB_AUTOMARK
     {
@@ -1699,7 +1867,7 @@ TabPage TP_TOX_SELECT
                     Text[ danish ] = "�bn";
                     Text[ swedish ] = "�ppna";
                     Text[ polish ] = "Otw�rz";
-                    Text[ portuguese_brazilian ] = "Open";
+                    Text[ portuguese_brazilian ] = "Abrir";
                     Text[ japanese ] = "開く";
                     Text[ korean ] = "열기";
                     Text[ chinese_simplified ] = "打开";
@@ -1709,6 +1877,9 @@ TabPage TP_TOX_SELECT
                     Text[ catalan ] = "Obre";
                     Text[ finnish ] = "Avaa";
                     Text[ thai ] = "เปิด";
+                    Text[ czech ] = "Otevřít";
+                    Text[ hebrew ] = "‮פתיחה‬";
+                    Text[ hindi ] = "खोलो";
                 };
                 MenuItem
                 {
@@ -1726,16 +1897,19 @@ TabPage TP_TOX_SELECT
                     Text[ danish ] = "~Ny...";
                     Text[ swedish ] = "~Ny...";
                     Text[ polish ] = "~Nowy...";
-                    Text[ portuguese_brazilian ] = "New...";
+                    Text[ portuguese_brazilian ] = "~Novo...";
                     Text[ japanese ] = "新規作成(~N)...";
                     Text[ korean ] = "새로 만들기(~N)...";
                     Text[ chinese_simplified ] = "新建(~N)...";
                     Text[ chinese_traditional ] = "開啟新檔(~N)...";
                     Text[ arabic ] = "����...";
-                    Text[ turkish ] = "Yeni...";
+                    Text[ turkish ] = "~Yeni...";
                     Text[ catalan ] = "~Nou...";
                     Text[ finnish ] = "~Uusi...";
                     Text[ thai ] = "ใ~หม่...";
+                    Text[ czech ] = "Nový...";
+                    Text[ hebrew ] = "‮חדש...‬";
+                    Text[ hindi ] = "~नया...";
                 };
                 MenuItem
                 {
@@ -1753,16 +1927,19 @@ TabPage TP_TOX_SELECT
                     Text[ danish ] = "~Rediger...";
                     Text[ swedish ] = "~Redigera...";
                     Text[ polish ] = "~Edytuj...";
-                    Text[ portuguese_brazilian ] = "Edit...";
+                    Text[ portuguese_brazilian ] = "~Editar...";
                     Text[ japanese ] = "編集(~E)...";
                     Text[ korean ] = "편집(~E)...";
                     Text[ chinese_simplified ] = "编辑(~E)...";
                     Text[ chinese_traditional ] = "編輯(~E)...";
                     Text[ arabic ] = "�����...";
-                    Text[ turkish ] = "D�zenle...";
+                    Text[ turkish ] = "~D�zenle...";
                     Text[ catalan ] = "~Edita...";
                     Text[ finnish ] = "~Muokkaa...";
                     Text[ thai ] = "แ~ก้ไข...";
+                    Text[ czech ] = "Upravit...";
+                    Text[ hebrew ] = "‮עריכה...‬";
+                    Text[ hindi ] = "~संपादन...";
                 };
             };
         };
@@ -1777,16 +1954,19 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "~Filer";
         Text[ swedish ] = "~Fil";
         Text[ polish ] = "~Plik";
-        Text[ portuguese_brazilian ] = "File";
+        Text[ portuguese_brazilian ] = "~Arquivo";
         Text[ japanese ] = "ファイル(~F)";
         Text[ korean ] = "파일(~F)";
         Text[ chinese_simplified ] = "文件(~F)";
         Text[ chinese_traditional ] = "檔案(~F)";
         Text[ arabic ] = "���";
-        Text[ turkish ] = "Dosya";
+        Text[ turkish ] = "~Dosya";
         Text[ catalan ] = "~Fitxer";
         Text[ finnish ] = "~Tiedosto";
         Text[ thai ] = "แ~ฟ้ม";
+        Text[ czech ] = "Soubor";
+        Text[ hebrew ] = "‮קובץ‬";
+        Text[ hindi ] = "~फाइल";
     };
     CheckBox    CB_FROMTABLES
     {
@@ -1805,7 +1985,7 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "Tabeller";
         Text[ swedish ] = "~Tabeller";
         Text[ polish ] = "Tabele";
-        Text[ portuguese_brazilian ] = "Tables";
+        Text[ portuguese_brazilian ] = "Tabelas";
         Text[ japanese ] = "表";
         Text[ korean ] = "표";
         Text[ chinese_simplified ] = "表格";
@@ -1816,6 +1996,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Taules";
         Text[ finnish ] = "Taulukot";
         Text[ thai ] = "ตาราง";
+        Text[ czech ] = "Tabulky";
+        Text[ hebrew ] = "‮טבלאות‬";
+        Text[ hindi ] = "सारणियाँ";
     };
     CheckBox    CB_FROMFRAMES
     {
@@ -1833,18 +2016,21 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Cornici";
         Text[ danish ] = "Tekstboks";
         Text[ swedish ] = "Textramar";
-        Text[ polish ] = "Ramki tekstu";
-        Text[ portuguese_brazilian ] = "Text frames";
+        Text[ polish ] = "Ramki te~kstowe";
+        Text[ portuguese_brazilian ] = "Molduras de te~xto";
         Text[ japanese ] = "テキスト枠(~X)";
         Text[ korean ] = "텍스트 프레임(~X)";
         Text[ chinese_simplified ] = "文本框(~X)";
         Text[ chinese_traditional ] = "文字方塊(~X)";
         Text[ arabic ] = "����� ��";
-        Text[ turkish ] = "Metin �er�evesi";
+        Text[ turkish ] = "Met~in �er�evesi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Marcs del te~xt";
         Text[ finnish ] = "Teksti~kehykset";
         Text[ thai ] = "กรอบข้อ~ความ";
+        Text[ czech ] = "Textové rámce";
+        Text[ hebrew ] = "Te~xtrahmen";
+        Text[ hindi ] = "~टेक्स्ट्";
     };
     CheckBox    CB_FROMGRAPHICS
     {
@@ -1862,8 +2048,8 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Immagini";
         Text[ danish ] = "Grafik";
         Text[ swedish ] = "~Grafik";
-        Text[ polish ] = "Grafiki";
-        Text[ portuguese_brazilian ] = "Graphics";
+        Text[ polish ] = "Gra~fika";
+        Text[ portuguese_brazilian ] = "Figura";
         Text[ japanese ] = "図";
         Text[ korean ] = "그림";
         Text[ chinese_simplified ] = "图形";
@@ -1874,6 +2060,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Imatge~s";
         Text[ finnish ] = "Grafiikka";
         Text[ thai ] = "กราฟิค";
+        Text[ czech ] = "Obrázky";
+        Text[ hebrew ] = "‮גרפיקה‬";
+        Text[ hindi ] = "सुचित्र";
     };
     CheckBox        CB_FROMOLE
     {
@@ -1892,7 +2081,7 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "OLE-objekter";
         Text[ swedish ] = "~OLE-objekt";
         Text[ polish ] = "Obiekty OLE";
-        Text[ portuguese_brazilian ] = "OLE objects";
+        Text[ portuguese_brazilian ] = "Objetos OLE ";
         Text[ japanese ] = "OLE オブジェクト";
         Text[ korean ] = "OLE 개체";
         Text[ chinese_simplified ] = "OLE 对象";
@@ -1903,6 +2092,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Objectes OLE";
         Text[ finnish ] = "OLE-objektit";
         Text[ thai ] = "วัตถุ OLE ";
+        Text[ czech ] = "Objekty OLE";
+        Text[ hebrew ] = "~OLE-Objekten";
+        Text[ hindi ] = "OLE वस्तु";
     };
     CheckBox        CB_LEVELFROMCHAPTER
     {
@@ -1920,8 +2112,8 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Livello dal capitolo ~sorgente";
         Text[ danish ] = "Niveau fra kildekapitel";
         Text[ swedish ] = "Niv� fr�n urs~prungskapitel";
-        Text[ polish ] = "Poziom ze �r�d�a";
-        Text[ portuguese_brazilian ] = "Use level from source";
+        Text[ polish ] = "~Poziom z rozdzia�u �r�d�owego";
+        Text[ portuguese_brazilian ] = "Usar o n�vel do cap�tulo de origem";
         Text[ japanese ] = "もとの章のレベル";
         Text[ korean ] = "원래 장으로부터 수준 사용";
         Text[ chinese_simplified ] = "使用源章节的级";
@@ -1931,6 +2123,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Nivell del cap�tol d'orige~n";
         Text[ finnish ] = "K�yt� l�hdeluvun tasoa";
         Text[ thai ] = "ใช้ระดับจากแหล่งบท";
+        Text[ czech ] = "Použít úroveň zdrojové kapitoly";
+        Text[ hebrew ] = "Ebene aus Urs~prungskapitel";
+        Text[ hindi ] = "मूल अध्याय से सतह का उपयोग करो";
     };
     FixedLine        FL_IDXOPTIONS
     {
@@ -1949,7 +2144,7 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "Flere";
         Text[ swedish ] = "Till�gg";
         Text[ polish ] = "Opcje";
-        Text[ portuguese_brazilian ] = "Options";
+        Text[ portuguese_brazilian ] = "Op��es";
         Text[ japanese ] = "オプション";
         Text[ korean ] = "옵션";
         Text[ chinese_simplified ] = "其他";
@@ -1960,6 +2155,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
         Text[ thai ] = "ตัวเลือก";
+        Text[ czech ] = "Volby";
+        Text[ hebrew ] = "‮אפשריות‬";
+        Text[ hindi ] = "विकल्प";
     };
     Control CLB_FROMOBJ
     {
@@ -2096,9 +2294,9 @@ TabPage TP_TOX_SELECT
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
             < "%PRODUCTNAME Chart" ;            2;> ;
-            < "%PRODUCTNAME Image" ;                8;> ;
-            < "%PRODUCTNAME Calc" ;     16;> ;
-            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress";     128;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
+            < "Outros objetos OLE";     128;> ;
             };
         ItemList [ japanese ] =
         {
@@ -2142,11 +2340,11 @@ TabPage TP_TOX_SELECT
             };
         ItemList [ turkish ] =
         {
-            < "%PRODUCTNAME Math" ;                 1;> ;
-            < "%PRODUCTNAME Chart" ;            2;> ;
-            < "%PRODUCTNAME Image" ;                8;> ;
-            < "%PRODUCTNAME Calc" ;     16;> ;
-            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress";     128;> ;
+            < "%PRODUCTNAME Matematik" ;                1;> ;
+            < "%PRODUCTNAME �ema" ;             2;> ;
+            < "%PRODUCTNAME Hesaplama" ;                8;> ;
+            < "%PRODUCTNAME �izim" ;    16;> ;
+            < "Di�er OLE nesneleri";    128;> ;
             };
         ItemList [ catalan ] =
         {
@@ -2164,6 +2362,38 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Muut OLE-objektit";  128;> ;
             };
+        ItemList [ czech ] =
+        {
+         < "%PRODUCTNAME Math" ;                1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
+            < "Ostatní OLE objekty";   128;> ;
+        };
+        ItemList [ hebrew ] =
+        {
+         < "%PRODUCTNAME Math" ;                1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
+            < "Andere OLE-Objekte";     128;> ;
+        };
+        ItemList [ thai ] =
+        {
+         < "%PRODUCTNAME Math" ;                1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
+            < "วัตถุ OLE อื่น ๆ";   128;> ;
+        };
+        ItemList [ hindi ] =
+        {
+         < "%PRODUCTNAME गणित" ;                1;> ;
+            < "%PRODUCTNAME चार्ट" ;          2;> ;
+            < "%PRODUCTNAME गणना" ;                 8;> ;
+            < "%PRODUCTNAME रेखाचित्र/%PRODUCTNAME इम्प्रेस्स" ;  16;> ;
+            < "अन्य OLE वस्तु";   128;> ;
+        };
     };
     };
     FixedLine FL_FROMOBJ
@@ -2183,17 +2413,20 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "Opret ud fra f�lgende objekter";
         Text[ swedish ] = "Skapa fr�n f�ljande objekt";
         Text[ polish ] = "Utw�rz z nast�puj�cych obiekt�w";
-        Text[ portuguese_brazilian ] = "Create from the following objects";
+        Text[ portuguese_brazilian ] = "Criar a partir dos seguintes objetos";
         Text[ japanese ] = "次のオブジェクトから作成";
         Text[ korean ] = "다음의 개체로 부터 만들기";
         Text[ chinese_simplified ] = "从以下的对象来新建";
         Text[ chinese_traditional ] = "從下列物件製作";
         Text[ arabic ] = "����� �� �������� �������";
-        Text[ turkish ] = "�u nesnelerden olu�tur:";
+        Text[ turkish ] = "Takip eden nesnelerden olu�tur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Crea dels seg�ents objectes";
         Text[ finnish ] = "Luo seuraavista objekteista";
         Text[ thai ] = "สร้างจากวัตถุตามนี้";
+        Text[ czech ] = "Vytvořit z následujících objektů";
+        Text[ hebrew ] = "Aus folgenden Objekten erzeugen";
+        Text[ hindi ] = "निम्नलिखित वस्तु से उत्पन्न करो";
     };
     CheckBox CB_SEQUENCE
     {
@@ -2211,18 +2444,21 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Num~era voci";
         Text[ danish ] = "Nummerer elementer";
         Text[ swedish ] = "Numrera poster";
-        Text[ polish ] = "Numeruj wpisy";
-        Text[ portuguese_brazilian ] = "Number entries";
+        Text[ polish ] = "N~umeruj wpisy";
+        Text[ portuguese_brazilian ] = "~Numerar entradas";
         Text[ japanese ] = "項目に番号を付ける(~N)";
         Text[ korean ] = "항목 번호 매기기(~N)";
         Text[ chinese_simplified ] = "编排条目(~N)";
         Text[ chinese_traditional ] = "條目編號(~N)";
         Text[ arabic ] = "����� ���������";
-        Text[ turkish ] = "Giri�leri numarala";
+        Text[ turkish ] = "~Giri�leri numarala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Numera entrades";
         Text[ finnish ] = "~Numeromerkinn�t";
         Text[ thai ] = "รายการ~ตัวเลข";
+        Text[ czech ] = "Očíslovat položky";
+        Text[ hebrew ] = "~Einträge nummerieren";
+        Text[ hindi ] = "~संख्या प्रविष्टियाँ";
     };
     FixedText FT_BRACKET
     {
@@ -2240,18 +2476,21 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Parentesi";
         Text[ danish ] = "Parenteser";
         Text[ swedish ] = "Parenteser";
-        Text[ polish ] = "Nawiasy";
-        Text[ portuguese_brazilian ] = "Brackets";
+        Text[ polish ] = "~Nawiasy";
+        Text[ portuguese_brazilian ] = "~Colchetes";
         Text[ japanese ] = "かっこ(~B)";
         Text[ korean ] = "괄호(~B)";
         Text[ chinese_simplified ] = "括号(~B)";
         Text[ chinese_traditional ] = "括號(~B)";
         Text[ arabic ] = "�����";
-        Text[ turkish ] = "Ayra�lar";
+        Text[ turkish ] = "~Ayra�lar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Par�ntesi";
         Text[ finnish ] = "~Sulkeet";
         Text[ thai ] = "~วงเล็บก้ามปู";
+        Text[ czech ] = "Závorky";
+        Text[ hebrew ] = "~Klammern";
+        Text[ hindi ] = "~कोष्ठकें";
     };
     ListBox LB_BRACKET
     {
@@ -2272,26 +2511,29 @@ TabPage TP_TOX_SELECT
         Text = "[keine]" ;
         Text [ ENGLISH ] = "[none]" ;
         Text[ english_us ] = "[none]";
-        Text[ portuguese ] = "[none]";
-        Text[ russian ] = "[none]";
-        Text[ greek ] = "[none]";
-        Text[ dutch ] = "[none]";
+        Text[ portuguese ] = "[nenhum(a)]";
+        Text[ russian ] = "[���]";
+        Text[ greek ] = "[������]";
+        Text[ dutch ] = "[Geen]";
         Text[ french ] = "[aucun(e)]";
         Text[ spanish ] = "[Ninguno]";
-        Text[ finnish ] = "[none]";
+        Text[ finnish ] = "[Ei mit��n]";
         Text[ italian ] = "[nessuno]";
-        Text[ danish ] = "[none]";
+        Text[ danish ] = "[Ingen]";
         Text[ swedish ] = "[ingen]";
-        Text[ polish ] = "[none]";
-        Text[ portuguese_brazilian ] = "[none]";
+        Text[ polish ] = "[Brak]";
+        Text[ portuguese_brazilian ] = "[Nenhum]";
         Text[ japanese ] = "[なし]";
         Text[ korean ] = "[없음]";
         Text[ chinese_simplified ] = "[无]";
         Text[ chinese_traditional ] = "[無]";
-        Text[ turkish ] = "[none]";
-        Text[ arabic ] = "[none]";
-        Text[ catalan ] = "[none]";
-        Text[ thai ] = "[none]";
+        Text[ turkish ] = "[ hi�biri] ";
+        Text[ arabic ] = "[����]";
+        Text[ catalan ] = "[Cap]";
+        Text[ thai ] = "[ไม่มี]";
+        Text[ czech ] = "[žádné]";
+        Text[ hebrew ] = "[keine]";
+        Text[ hindi ] = "[कोई नहीं]";
     };
     FixedLine FL_AUTHORITY
     {
@@ -2310,17 +2552,20 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "Elementernes formatering";
         Text[ swedish ] = "Formatering av poster";
         Text[ polish ] = "Formatowanie wpis�w";
-        Text[ portuguese_brazilian ] = "Formatting of the marks";
+        Text[ portuguese_brazilian ] = "Formata��o das entradas";
         Text[ japanese ] = "項目の書式";
         Text[ korean ] = "항목 서식";
         Text[ chinese_simplified ] = "条目的格式化";
         Text[ chinese_traditional ] = "項目的格式化";
         Text[ arabic ] = "����� ���������";
-        Text[ turkish ] = "Giri� formatlama";
+        Text[ turkish ] = "Giri�leri formatlama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Formatat de les entrades";
         Text[ finnish ] = "Merkint�jen muotoilu";
         Text[ thai ] = "จัดรูปแบบของรายการ";
+        Text[ czech ] = "Formátování položek";
+        Text[ hebrew ] = "Formatierung der Einträge";
+        Text[ hindi ] = "प्रविष्टियों का रचना";
     };
     String ST_AUTOMARK_TYPE
     {
@@ -2336,8 +2581,8 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "File di selezione per indice analitico (*.sdi)";
         Text[ danish ] = "Markeringsfil for stikordsregister (*.sdi)";
         Text[ swedish ] = "Markeringsfil f�r sakregister (*.sdi)";
-        Text[ polish ] = "Plik selekcyjny, przeznaczony dla skorowidza (*.sdi)";
-        Text[ portuguese_brazilian ] = "Mark up file for index";
+        Text[ polish ] = "Plik wyboru dla indeksu alfabetycznego (*.sdi)";
+        Text[ portuguese_brazilian ] = "Arquivo de sele��o para �ndice alfab�tico (*.sdi)";
         Text[ japanese ] = "索引用の選択ファイル (*.sdi)";
         Text[ korean ] = "색인용 선택 파일 (*.sdi)";
         Text[ chinese_simplified ] = "用于索引目录的标记文件(*.sdi)";
@@ -2347,6 +2592,9 @@ TabPage TP_TOX_SELECT
         Text[ catalan ] = "Fitxer de marques per a �ndex alfab�tic (*.sdi)";
         Text[ finnish ] = "Aakkostetun hakemiston (*.sdi) luontitiedosto";
         Text[ thai ] = "เลือกแฟ้มสำหรับดัชนีเรียงตามตัวอักษร (*.sdi)";
+        Text[ czech ] = "Soubor abecedního rejstříku (*.sdi)";
+        Text[ hebrew ] = "Markierungsdatei für Stichwortverzeichnis (*.sdi)";
+        Text[ hindi ] = "वर्णमाला अनुक्रमणी केलिए चुनाव फाइल (*.sdi)";
     };
     FixedLine FL_SORTOPTIONS
     {
@@ -2357,7 +2605,7 @@ TabPage TP_TOX_SELECT
         Text[ english_us ] = "Sort";
         Text[ portuguese ] = "Ordenar";
         Text[ russian ] = "�����������";
-        Text[ greek ] = "Sort";
+        Text[ greek ] = "����������";
         Text[ dutch ] = "Sorteren";
         Text[ french ] = "Trier";
         Text[ spanish ] = "Ordenar";
@@ -2366,15 +2614,18 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "Sorter";
         Text[ swedish ] = "Sortera";
         Text[ polish ] = "Sortuj";
-        Text[ portuguese_brazilian ] = "Sort";
+        Text[ portuguese_brazilian ] = "Ordenar";
         Text[ japanese ] = "並べ替え";
         Text[ korean ] = "정렬";
         Text[ chinese_simplified ] = "排序";
         Text[ chinese_traditional ] = "排序";
-        Text[ turkish ] = "Sort";
-        Text[ arabic ] = "Sort";
+        Text[ turkish ] = "S�ralama";
+        Text[ arabic ] = "���";
         Text[ catalan ] = "Ordena";
         Text[ thai ] = "เรียง";
+        Text[ czech ] = "Seřadit";
+        Text[ hebrew ] = "‮מיון‬";
+        Text[ hindi ] = "सोर्ट";
     };
     FixedText FT_LANGUAGE
     {
@@ -2385,7 +2636,7 @@ TabPage TP_TOX_SELECT
         Text[ english_us ] = "Language";
         Text[ portuguese ] = "L�ngua";
         Text[ russian ] = "����";
-        Text[ greek ] = "Language";
+        Text[ greek ] = "������";
         Text[ dutch ] = "Taal";
         Text[ french ] = "Langue";
         Text[ spanish ] = "Idioma";
@@ -2393,16 +2644,19 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Lingua";
         Text[ danish ] = "Sprog";
         Text[ swedish ] = "Spr�k";
-        Text[ polish ] = "J�zyk";
-        Text[ portuguese_brazilian ] = "Language";
+        Text[ polish ] = "J�~zyk";
+        Text[ portuguese_brazilian ] = "Idioma";
         Text[ japanese ] = "言語";
         Text[ korean ] = "언어";
         Text[ chinese_simplified ] = "语言";
         Text[ chinese_traditional ] = "語言";
-        Text[ turkish ] = "Language";
-        Text[ arabic ] = "Language";
+        Text[ turkish ] = "Dil";
+        Text[ arabic ] = "�����";
         Text[ catalan ] = "Idioma";
         Text[ thai ] = "ภาษา";
+        Text[ czech ] = "Jazyk";
+        Text[ hebrew ] = "‮שפה‬";
+        Text[ hindi ] = "भाषा";
     };
     ListBox LB_LANGUAGE
     {
@@ -2420,7 +2674,7 @@ TabPage TP_TOX_SELECT
         Text[ english_us ] = "Key type";
         Text[ portuguese ] = "Tipo de chave";
         Text[ russian ] = "��� �����";
-        Text[ greek ] = "Key type";
+        Text[ greek ] = "����� ��������";
         Text[ dutch ] = "Sleuteltype";
         Text[ french ] = "Type de cl�";
         Text[ spanish ] = "Tipo de clave";
@@ -2428,16 +2682,19 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Tipo chiave";
         Text[ danish ] = "N�gletype";
         Text[ swedish ] = "Nyckeltyp";
-        Text[ polish ] = "Typ klucza";
-        Text[ portuguese_brazilian ] = "Key type";
+        Text[ polish ] = "Typ k~lucza";
+        Text[ portuguese_brazilian ] = "Tipo de chave";
         Text[ japanese ] = "キーの種類";
         Text[ korean ] = "키 유형";
         Text[ chinese_simplified ] = "关键字类型";
         Text[ chinese_traditional ] = "關鍵字類型";
-        Text[ turkish ] = "Key type";
-        Text[ arabic ] = "Key type";
+        Text[ turkish ] = "Anahtar t�r�";
+        Text[ arabic ] = "��� �������";
         Text[ catalan ] = "Tipus de clau";
         Text[ thai ] = "ชนิดคีย์";
+        Text[ czech ] = "Druh klíče";
+        Text[ hebrew ] = "Schlüsseltyp";
+        Text[ hindi ] = "की वर्ग";
     };
     ListBox LB_SORTALG
     {
@@ -2469,18 +2726,21 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Livello";
         Text[ danish ] = "Niveau";
         Text[ swedish ] = "~Niv�";
-        Text[ polish ] = "Poziom";
-        Text[ portuguese_brazilian ] = "Level";
+        Text[ polish ] = "P~oziom";
+        Text[ portuguese_brazilian ] = "~N�vel";
         Text[ japanese ] = "レベル(~L)";
         Text[ korean ] = "수준(~L)";
         Text[ chinese_simplified ] = "级(~L)";
         Text[ chinese_traditional ] = "級(~L)";
         Text[ arabic ] = "�������";
-        Text[ turkish ] = "D�zey";
+        Text[ turkish ] = "~D�zey";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nivell";
         Text[ finnish ] = "~Taso";
         Text[ thai ] = "~ระดับ";
+        Text[ czech ] = "Úroveň";
+        Text[ hebrew ] = "E~bene";
+        Text[ hindi ] = "~स्तर";
     };
     Control LB_LEVEL
     {
@@ -2503,17 +2763,20 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Tipo";
         Text[ danish ] = "Type";
         Text[ swedish ] = "Ty~p";
-        Text[ polish ] = "Typ";
-        Text[ portuguese_brazilian ] = "Type";
+        Text[ polish ] = "~Typ";
+        Text[ portuguese_brazilian ] = "T~ipo";
         Text[ japanese ] = "タイプ(~T)";
         Text[ korean ] = "형식(~T)";
         Text[ chinese_simplified ] = "类型(~T)";
         Text[ chinese_traditional ] = "類型(~T)";
         Text[ arabic ] = "�����";
-        Text[ turkish ] = "T�r";
+        Text[ turkish ] = "~T�r";
         Text[ catalan ] = "~Tipus";
         Text[ finnish ] = "~Tyyppi";
         Text[ thai ] = "~ชนิด";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "‮סוג‬";
+        Text[ hindi ] = "~वर्ग";
     };
     FixedText FT_TOKEN
     {
@@ -2522,25 +2785,29 @@ TabPage TP_TOX_ENTRY
         Text = "~Struktur";
         Text[English] = "~Structure";
         Text[ english_us ] = "~Structure";
-        Text[ portuguese ] = "~Structure";
-        Text[ russian ] = "~Structure";
-        Text[ greek ] = "~Structure";
-        Text[ dutch ] = "~Structure";
+        Text[ portuguese ] = "~Estrutura";
+        Text[ russian ] = "���������";
+        Text[ greek ] = "����";
+        Text[ dutch ] = "~Structuur";
         Text[ french ] = "Structure";
         Text[ spanish ] = "~Estructura";
-        Text[ finnish ] = "~Structure";
+        Text[ finnish ] = "~Rakenne";
         Text[ italian ] = "Struttura";
-        Text[ danish ] = "~Structure";
+        Text[ danish ] = "Struktur";
         Text[ swedish ] = "~Struktur";
-        Text[ polish ] = "~Structure";
+        Text[ polish ] = "Struktura";
         Text[ japanese ] = "~Structure";
         Text[ korean ] = "구조";
         Text[ chinese_simplified ] = "结构(~S)";
         Text[ chinese_traditional ] = "結構(~S)";
-        Text[ turkish ] = "~Structure";
-        Text[ arabic ] = "~Structure";
+        Text[ turkish ] = "~Yap�";
+        Text[ arabic ] = "������";
         Text[ catalan ] = "~Estructura";
         Text[ thai ] = "โ~ครงสร้าง";
+        Text[ czech ] = "Struktura";
+        Text[ hebrew ] = "~Struktur";
+        Text[ portuguese_brazilian ] = "~Structure";
+        Text[ hindi ] = "~Structure";
     };
     Window WIN_TOKEN
     {
@@ -2590,9 +2857,13 @@ TabPage TP_TOX_ENTRY
             Text[ chinese_simplified ] = "E#";
             Text[ chinese_traditional ] = "E#";
             Text[ arabic ] = "E#";
-            Text[ turkish ] = "B#";
+            Text[ turkish ] = "E#";
             Text[ catalan ] = "E#";
             Text[ finnish ] = "E#";
+            Text[ czech ] = "E#";
+            Text[ hebrew ] = "E#";
+            Text[ thai ] = "E#";
+            Text[ hindi ] = "E#";
         };
         String STR_TOKEN_ENTRY
         {
@@ -2615,9 +2886,13 @@ TabPage TP_TOX_ENTRY
             Text[ chinese_simplified ] = "E";
             Text[ chinese_traditional ] = "E";
             Text[ arabic ] = "E";
-            Text[ turkish ] = "G";
+            Text[ turkish ] = "E";
             Text[ catalan ] = "E";
             Text[ finnish ] = "E";
+            Text[ czech ] = "E";
+            Text[ hebrew ] = "E";
+            Text[ thai ] = "E";
+            Text[ hindi ] = "E";
         };
         String STR_TOKEN_TAB_STOP
         {
@@ -2643,6 +2918,10 @@ TabPage TP_TOX_ENTRY
             Text[ turkish ] = "T";
             Text[ catalan ] = "T";
             Text[ finnish ] = "T";
+            Text[ czech ] = "T";
+            Text[ hebrew ] = "T";
+            Text[ thai ] = "T";
+            Text[ hindi ] = "T";
         };
         String STR_TOKEN_TEXT
         {
@@ -2674,6 +2953,10 @@ TabPage TP_TOX_ENTRY
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "#";
             Text[ finnish ] = "#";
+            Text[ czech ] = "#";
+            Text[ hebrew ] = "#";
+            Text[ thai ] = "#";
+            Text[ hindi ] = "#";
         };
         String STR_TOKEN_CHAPTER_INFO
         {
@@ -2696,10 +2979,14 @@ TabPage TP_TOX_ENTRY
             Text[ chinese_simplified ] = "CI";
             Text[ chinese_traditional ] = "CI";
             Text[ arabic ] = "CI";
-            Text[ turkish ] = "Bh";
+            Text[ turkish ] = "CI";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "CI";
             Text[ finnish ] = "CI";
+            Text[ czech ] = "CI";
+            Text[ hebrew ] = "KI";
+            Text[ thai ] = "CI";
+            Text[ hindi ] = "CI";
         };
         String STR_TOKEN_LINK_START
         {
@@ -2722,9 +3009,13 @@ TabPage TP_TOX_ENTRY
             Text[ chinese_simplified ] = "LS";
             Text[ chinese_traditional ] = "LS";
             Text[ arabic ] = "LS";
-            Text[ turkish ] = "Bb";
+            Text[ turkish ] = "LS";
             Text[ catalan ] = "LS";
             Text[ finnish ] = "LS";
+            Text[ czech ] = "LS";
+            Text[ hebrew ] = "LS";
+            Text[ thai ] = "LS";
+            Text[ hindi ] = "LS";
         };
         String STR_TOKEN_LINK_END
         {
@@ -2740,16 +3031,20 @@ TabPage TP_TOX_ENTRY
             Text[ italian ] = "LE";
             Text[ danish ] = "HS";
             Text[ swedish ] = "LE";
-            Text[ polish ] = "HK";
+            Text[ polish ] = "LE";
             Text[ portuguese_brazilian ] = "LE";
             Text[ japanese ] = "LE";
             Text[ korean ] = "LE";
             Text[ chinese_simplified ] = "LE";
             Text[ chinese_traditional ] = "LE";
             Text[ arabic ] = "LE";
-            Text[ turkish ] = "Bs";
+            Text[ turkish ] = "LE";
             Text[ catalan ] = "LE";
             Text[ finnish ] = "LE";
+            Text[ czech ] = "LE";
+            Text[ hebrew ] = "LE";
+            Text[ thai ] = "LE";
+            Text[ hindi ] = "LE";
         };
         String STR_TOKEN_AUTHORITY
         {
@@ -2776,6 +3071,10 @@ TabPage TP_TOX_ENTRY
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "A";
             Text[ finnish ] = "A";
+            Text[ czech ] = "A";
+            Text[ hebrew ] = "A";
+            Text[ thai ] = "A";
+            Text[ hindi ] = "A";
         };
         String STR_TOKEN_HELP_ENTRY_NO
         {
@@ -2792,7 +3091,7 @@ TabPage TP_TOX_ENTRY
             Text[ danish ] = "Kapitelnummer";
             Text[ swedish ] = "Kapitelnummer";
             Text[ polish ] = "Numer rozdzia�u";
-            Text[ portuguese_brazilian ] = "Chapter number";
+            Text[ portuguese_brazilian ] = "N�mero do cap�tulo";
             Text[ japanese ] = "章番号";
             Text[ korean ] = "장 번호";
             Text[ chinese_simplified ] = "章节编号";
@@ -2803,6 +3102,9 @@ TabPage TP_TOX_ENTRY
             Text[ catalan ] = "N�mero de cap�tol";
             Text[ finnish ] = "Luvun numero";
             Text[ thai ] = "เลขบท";
+            Text[ czech ] = "Číslo kapitoly";
+            Text[ hebrew ] = "Kapitelnummer";
+            Text[ hindi ] = "अध्याय संख्या";
         };
         String STR_TOKEN_HELP_ENTRY
         {
@@ -2819,7 +3121,7 @@ TabPage TP_TOX_ENTRY
             Text[ danish ] = "Element";
             Text[ swedish ] = "Post";
             Text[ polish ] = "Wpis";
-            Text[ portuguese_brazilian ] = "Entry";
+            Text[ portuguese_brazilian ] = "Entrada";
             Text[ japanese ] = "項目";
             Text[ korean ] = "항목";
             Text[ chinese_simplified ] = "条目";
@@ -2830,6 +3132,9 @@ TabPage TP_TOX_ENTRY
             Text[ catalan ] = "Entrada";
             Text[ finnish ] = "Merkint�";
             Text[ thai ] = "รายการ";
+            Text[ czech ] = "Položka";
+            Text[ hebrew ] = "‮שורה‬";
+            Text[ hindi ] = "प्रविष्टि";
         };
         String STR_TOKEN_HELP_TAB_STOP
         {
@@ -2846,7 +3151,7 @@ TabPage TP_TOX_ENTRY
             Text[ danish ] = "Tabulator";
             Text[ swedish ] = "Tabulator";
             Text[ polish ] = "Tabulator";
-            Text[ portuguese_brazilian ] = "Tab stop";
+            Text[ portuguese_brazilian ] = "Tabula��o";
             Text[ japanese ] = "タブ";
             Text[ korean ] = "탭 설정 위치";
             Text[ chinese_simplified ] = "制表符";
@@ -2857,6 +3162,9 @@ TabPage TP_TOX_ENTRY
             Text[ catalan ] = "Tabulaci�";
             Text[ finnish ] = "Sarkainkohta";
             Text[ thai ] = "หยุดระยะกั้น";
+            Text[ czech ] = "Krok tabulátoru";
+            Text[ hebrew ] = "Tabulator";
+            Text[ hindi ] = "टॉब रुकावट";
         };
         String STR_TOKEN_HELP_TEXT
         {
@@ -2872,8 +3180,8 @@ TabPage TP_TOX_ENTRY
             Text[ italian ] = "Testo";
             Text[ danish ] = "Tekst";
             Text[ swedish ] = "Text";
-            Text[ polish ] = "Text";
-            Text[ portuguese_brazilian ] = "Text";
+            Text[ polish ] = "Tekst";
+            Text[ portuguese_brazilian ] = "Texto";
             Text[ japanese ] = "文字列";
             Text[ korean ] = "텍스트";
             Text[ chinese_simplified ] = "文字";
@@ -2884,6 +3192,9 @@ TabPage TP_TOX_ENTRY
             Text[ catalan ] = "Text";
             Text[ finnish ] = "Teksti";
             Text[ thai ] = "ข้อความ";
+            Text[ czech ] = "Text";
+            Text[ hebrew ] = "‮טקסט‬";
+            Text[ hindi ] = "टेक्स्ट्";
         };
         String STR_TOKEN_HELP_PAGE_NUMS
         {
@@ -2900,7 +3211,7 @@ TabPage TP_TOX_ENTRY
             Text[ danish ] = "Sidetal";
             Text[ swedish ] = "Sidnummer";
             Text[ polish ] = "Numer strony";
-            Text[ portuguese_brazilian ] = "Page number";
+            Text[ portuguese_brazilian ] = "N�mero da p�gina";
             Text[ japanese ] = "ページ番号";
             Text[ korean ] = "페이지 번호";
             Text[ chinese_simplified ] = "页码";
@@ -2911,6 +3222,9 @@ TabPage TP_TOX_ENTRY
             Text[ catalan ] = "N�mero de p�gina";
             Text[ finnish ] = "Sivunumero";
             Text[ thai ] = "เลขหน้า";
+            Text[ czech ] = "Číslo stránky";
+            Text[ hebrew ] = "Seitennummer";
+            Text[ hindi ] = "पृष्ठ संख्या";
         };
         String STR_TOKEN_HELP_CHAPTER_INFO
         {
@@ -2926,8 +3240,8 @@ TabPage TP_TOX_ENTRY
             Text[ italian ] = "Informazioni capitolo";
             Text[ danish ] = "Kapitelinformation";
             Text[ swedish ] = "Kapitelinformation";
-            Text[ polish ] = "Informacja o rozdziale";
-            Text[ portuguese_brazilian ] = "Chapter information";
+            Text[ polish ] = "Informacje o rozdziale";
+            Text[ portuguese_brazilian ] = "Info. do cap�tulo";
             Text[ japanese ] = "章の情報";
             Text[ korean ] = "장 정보";
             Text[ chinese_simplified ] = "章节信息";
@@ -2938,6 +3252,9 @@ TabPage TP_TOX_ENTRY
             Text[ catalan ] = "Informaci� sobre el cap�tol";
             Text[ finnish ] = "Luvun tiedot";
             Text[ thai ] = "ข้อมูลบท";
+            Text[ czech ] = "Informace o kapitole";
+            Text[ hebrew ] = "Kapitelinformation";
+            Text[ hindi ] = "अध्याय का विषय";
         };
         String STR_TOKEN_HELP_LINK_START
         {
@@ -2954,17 +3271,20 @@ TabPage TP_TOX_ENTRY
             Text[ danish ] = "Hyperlink start";
             Text[ swedish ] = "Hyperl�nk start";
             Text[ polish ] = "Pocz�tek hiper��cza";
-            Text[ portuguese_brazilian ] = "Hyperlink start";
+            Text[ portuguese_brazilian ] = "In�cio de hiperlink";
             Text[ japanese ] = "ハイパーリンク開始";
             Text[ korean ] = "하이퍼링크 시작";
             Text[ chinese_simplified ] = "超链接开始处";
             Text[ chinese_traditional ] = "超連結 開始";
             Text[ arabic ] = "����� �������� �������";
-            Text[ turkish ] = "Hyperlink ba�lang�c�";
+            Text[ turkish ] = "Hiperlink ba�lang�c�";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Inici d'hiperenlla�";
             Text[ finnish ] = "Hyperlinkin alku";
             Text[ thai ] = "เริ่มเชื่อมโยงหลายมิติ";
+            Text[ czech ] = "Začátek hypertextového odkazu";
+            Text[ hebrew ] = "Hyperlink Anfang";
+            Text[ hindi ] = "हाइपरलिंक प्रारंभ";
         };
         String STR_TOKEN_HELP_LINK_END
         {
@@ -2981,17 +3301,20 @@ TabPage TP_TOX_ENTRY
             Text[ danish ] = "Hyperlink slut";
             Text[ swedish ] = "Hyperl�nk slut";
             Text[ polish ] = "Koniec hiper��cza";
-            Text[ portuguese_brazilian ] = "Hyperlink End";
+            Text[ portuguese_brazilian ] = "Final de hiperlink";
             Text[ japanese ] = "ハイパーリンク終了";
             Text[ korean ] = "하이퍼링크 끝";
             Text[ chinese_simplified ] = "超链接终止处";
             Text[ chinese_traditional ] = "超連結 結束";
             Text[ arabic ] = "����� �������� �������";
-            Text[ turkish ] = "Hyperlink sonu";
+            Text[ turkish ] = "Hiperlink sonu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Final d'hiperenlla�";
             Text[ finnish ] = "Hyperlinkin loppu";
             Text[ thai ] = "จบการเชื่อมโยงหลายมิติ";
+            Text[ czech ] = "Konec hypertextového odkazu";
+            Text[ hebrew ] = "Hyperlink Ende";
+            Text[ hindi ] = "हाइपरलिंक अंत";
         };
         String STR_TOKEN_HELP_AUTHORITY
         {
@@ -3007,10 +3330,10 @@ TabPage TP_TOX_ENTRY
             Text[ italian ] = "Voce bibliografica: ";
             Text[ danish ] = "Litteraturlisteelement: ";
             Text[ swedish ] = "Litteraturpost:  ";
-            Text[ polish ] = "Wpis bibliograficzny:  ";
-            Text[ portuguese_brazilian ] = "Authority entry: ";
+            Text[ polish ] = "Pozycja bibliograficzna: ";
+            Text[ portuguese_brazilian ] = "Entrada de bibliografia:";
             Text[ japanese ] = "参考文献項目: ";
-            Text[ korean ] = "참고문헌 항목: ";
+            Text[ korean ] = "참고 문헌 항목: ";
             Text[ chinese_simplified ] = "文献条目： ";
             Text[ chinese_traditional ] = "參考文獻條目 ";
             Text[ arabic ] = "����� �� ���� �������:";
@@ -3018,6 +3341,9 @@ TabPage TP_TOX_ENTRY
             Text[ catalan ] = "Entrada de bibliografia:  ";
             Text[ finnish ] = "L�hdeluettelomerkint?: ";
             Text[ thai ] = "รายการบรรณานุกรม: ";
+            Text[ czech ] = "Položka v seznamu použité literatury: ";
+            Text[ hebrew ] = ":‮שורת בבליוגרפיה‬";
+            Text[ hindi ] = "ग्रन्थ-सूची प्रविष्टि: ";
         };
         String STR_CHARSTYLE
         {
@@ -3033,8 +3359,8 @@ TabPage TP_TOX_ENTRY
             Text[ italian ] = "Modello di carattere:  ";
             Text[ danish ] = "Tegntypografi: ";
             Text[ swedish ] = "Teckenformatmall:  ";
-            Text[ polish ] = "Styl znak�w:  ";
-            Text[ portuguese_brazilian ] = "Character style: ";
+            Text[ polish ] = "Styl znaku:";
+            Text[ portuguese_brazilian ] = "Estilo de Caracter:";
             Text[ japanese ] = "文字スタイル: ";
             Text[ korean ] = "문자 스타일: ";
             Text[ chinese_simplified ] = "字符样式： ";
@@ -3045,6 +3371,9 @@ TabPage TP_TOX_ENTRY
             Text[ catalan ] = "Estil de car�cter:  ";
             Text[ finnish ] = "Merkin tyyli: ";
             Text[ thai ] = "ลักษณะตัวอักขระ: ";
+            Text[ czech ] = "Znakový styl: ";
+            Text[ hebrew ] = "Zeichenvorlage:";
+            Text[ hindi ] = "अक्षर शैली: ";
         };
     };
     PushButton PB_ALL_LEVELS
@@ -3064,16 +3393,19 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "~Tutto";
         Text[ danish ] = "Alle niveauer";
         Text[ swedish ] = "~Alla";
-        Text[ polish ] = "Wszystkie poziomy";
-        Text[ portuguese_brazilian ] = "All levels";
+        Text[ polish ] = "~Wszystkie poziomy";
+        Text[ portuguese_brazilian ] = "Todos os ~n�veis";
         Text[ japanese ] = "すべて(~A)";
         Text[ korean ] = "모든 수준";
         Text[ chinese_simplified ] = "全部";
         Text[ chinese_traditional ] = "全部";
-        Text[ turkish ] = "T�m d�zeyler";
+        Text[ turkish ] = "~T�m d�zeyler";
         Text[ arabic ] = "�� ���������";
         Text[ catalan ] = "~Tots els nivells";
         Text[ thai ] = "ระดับ~ทั้งหมด";
+        Text[ czech ] = "Všechny úrovně";
+        Text[ hebrew ] = "‮הכל‬";
+        Text[ hindi ] = "~सब स्तरें";
     };
     PushButton PB_ENTRYNO
     {
@@ -3091,8 +3423,8 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Capitolo no.";
         Text[ danish ] = "Kapitelnr.";
         Text[ swedish ] = "~Kapitelnr";
-        Text[ polish ] = "Rozdzia� nr.";
-        Text[ portuguese_brazilian ] = "Chapter no.";
+        Text[ polish ] = "Nr rozdzia�u";
+        Text[ portuguese_brazilian ] = "Cap�tulo n�.";
         Text[ japanese ] = "章番号";
         Text[ korean ] = "장 번호";
         Text[ chinese_simplified ] = "章节编号";
@@ -3103,6 +3435,9 @@ TabPage TP_TOX_ENTRY
         Text[ catalan ] = "N�~m. cap�tol";
         Text[ finnish ] = "Luku";
         Text[ thai ] = "เลขบท";
+        Text[ czech ] = "Kapitola č.";
+        Text[ hebrew ] = "~Kapitelnr.";
+        Text[ hindi ] = "अध्याय संख्या";
     };
     PushButton PB_ENTRY
     {
@@ -3121,17 +3456,20 @@ TabPage TP_TOX_ENTRY
         Text[ danish ] = "Ele~menttekst";
         Text[ swedish ] = "~Posttext";
         Text[ polish ] = "Tekst wpisu";
-        Text[ portuguese_brazilian ] = "Entry text";
-        Text[ japanese ] = "項目テキスト";
+        Text[ portuguese_brazilian ] = "Texto de entrada";
+        Text[ japanese ] = "項目";
         Text[ korean ] = "항목 텍스트";
         Text[ chinese_simplified ] = "条目文字";
         Text[ chinese_traditional ] = "條目文字";
         Text[ arabic ] = "�� �������";
         Text[ turkish ] = "Giri� metni";
-        Text[ language_user1 ] = " ";
+        Text[ language_user1 ] = "nk: 07.04.03 I shortened this string because the button in dialog has not enough space for whole Japanese string. It stays \"Entry\" in Japanese.";
         Text[ catalan ] = "Text d'entrada";
         Text[ finnish ] = "Merkint�teksti";
         Text[ thai ] = "รายการข้อความ";
+        Text[ czech ] = "Text položky";
+        Text[ hebrew ] = "~Eintragstext";
+        Text[ hindi ] = "प्रविष्टि टेक्स्ट्";
     };
     PushButton PB_CHAPTERINFO
     {
@@ -3149,18 +3487,21 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Info capitolo";
         Text[ danish ] = "Kapitelinfo";
         Text[ swedish ] = "~Kapitelinfo";
-        Text[ polish ] = "Informacja o rozdziale";
-        Text[ portuguese_brazilian ] = "Chapter info";
+        Text[ polish ] = "R~ozdzia�";
+        Text[ portuguese_brazilian ] = "Info. do ~cap�tulo";
         Text[ japanese ] = "章の情報(~C)";
         Text[ korean ] = "장 정보(~C)";
         Text[ chinese_simplified ] = "章节信息(~C)";
         Text[ chinese_traditional ] = "章節資訊(~C)";
         Text[ arabic ] = "������� �����";
-        Text[ turkish ] = "B�l�m bilgileri";
+        Text[ turkish ] = "~B�l�m bilgileri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Informaci� ~cap.";
         Text[ finnish ] = "~Luvun tiedot";
         Text[ thai ] = "ข้อมูล~บท";
+        Text[ czech ] = "Informace o kapitole";
+        Text[ hebrew ] = "~Kapitelinfo";
+        Text[ hindi ] = "~अध्याय विषय";
     };
     PushButton PB_PAGENO
     {
@@ -3178,8 +3519,8 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Pag. no.";
         Text[ danish ] = "Sidetal";
         Text[ swedish ] = "~Sidnr";
-        Text[ polish ] = "Numer str.";
-        Text[ portuguese_brazilian ] = "Page no.";
+        Text[ polish ] = "Nr strony";
+        Text[ portuguese_brazilian ] = "P�gina n�.";
         Text[ japanese ] = "ページ番号";
         Text[ korean ] = "페이지 번호";
         Text[ chinese_simplified ] = "页码";
@@ -3190,6 +3531,9 @@ TabPage TP_TOX_ENTRY
         Text[ catalan ] = "N�~m. p�gina";
         Text[ finnish ] = "Sivunumero";
         Text[ thai ] = "เลขหน้า";
+        Text[ czech ] = "Číslo str.";
+        Text[ hebrew ] = "~Seitennr.";
+        Text[ hindi ] = "पृष्ठ संख्या";
     };
     PushButton PB_TAB
     {
@@ -3208,7 +3552,7 @@ TabPage TP_TOX_ENTRY
         Text[ danish ] = "Tab~ulator";
         Text[ swedish ] = "~Tabulator";
         Text[ polish ] = "Tabulator";
-        Text[ portuguese_brazilian ] = "Tab stop";
+        Text[ portuguese_brazilian ] = "Tabula��o";
         Text[ japanese ] = "タブ";
         Text[ korean ] = "탭";
         Text[ chinese_simplified ] = "制表符";
@@ -3219,6 +3563,9 @@ TabPage TP_TOX_ENTRY
         Text[ catalan ] = "~Tabulaci�";
         Text[ finnish ] = "Sarkainkohta";
         Text[ thai ] = "หยุดระยะกั้น";
+        Text[ czech ] = "Krok tabulátoru";
+        Text[ hebrew ] = "~Tabulator";
+        Text[ hindi ] = "टॉब रुकावट";
     };
     PushButton PB_HYPERLINK
     {
@@ -3236,18 +3583,21 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "H~yperlink";
         Text[ danish ] = "H~yperlink";
         Text[ swedish ] = "H~yperl�nk";
-        Text[ polish ] = "Hiper��cze";
-        Text[ portuguese_brazilian ] = "Hyperlink";
-        Text[ japanese ] = "ハイパーリンク(~Y)";
+        Text[ polish ] = "~Hiper��cze";
+        Text[ portuguese_brazilian ] = "H~iperlink";
+        Text[ japanese ] = "リンク(~Y)";
         Text[ korean ] = "하이퍼링크(~Y)";
         Text[ chinese_simplified ] = "超链接(~Y)";
         Text[ chinese_traditional ] = "超連結(~Y)";
         Text[ arabic ] = "������ �����";
-        Text[ turkish ] = "Hyperlink";
-        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "H~iperlink";
+        Text[ language_user1 ] = "nk: 07.04.03 I shorten this string because the button in dialog has not enough place for whole Japanese string. Japasese string here stays just \"Link\".  ";
         Text[ catalan ] = "~Hiperenlla�";
         Text[ finnish ] = "H~yperlinkki";
         Text[ thai ] = "เชื่~อมโยงหลายมิติ";
+        Text[ czech ] = "Hypertextový odkaz";
+        Text[ hebrew ] = "H~yperlink";
+        Text[ hindi ] = "हा~इपरलिंक";
     };
     ListBox LB_AUTHFIELD
     {
@@ -3273,18 +3623,21 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Inserisci";
         Text[ danish ] = "Inds�t";
         Text[ swedish ] = "~Infoga";
-        Text[ polish ] = "Wstaw";
-        Text[ portuguese_brazilian ] = "Insert";
+        Text[ polish ] = "W~staw";
+        Text[ portuguese_brazilian ] = "~Inserir";
         Text[ japanese ] = "挿入(~I)";
         Text[ korean ] = "삽입(~I)";
         Text[ chinese_simplified ] = "插入(~I)";
         Text[ chinese_traditional ] = "插入(~I)";
         Text[ arabic ] = "�����";
-        Text[ turkish ] = "Ekle";
+        Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Insereix";
         Text[ finnish ] = "~Lis��";
         Text[ thai ] = "แ~ทรก";
+        Text[ czech ] = "Vložit";
+        Text[ hebrew ] = "‮הוספה‬";
+        Text[ hindi ] = "~जोड़ो";
     };
     PushButton PB_AUTHREMOVE
     {
@@ -3302,18 +3655,21 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Ri~muovi";
         Text[ danish ] = "Fjern";
         Text[ swedish ] = "~Ta bort";
-        Text[ polish ] = "Usu�";
-        Text[ portuguese_brazilian ] = "Remove";
+        Text[ polish ] = "~Usu�";
+        Text[ portuguese_brazilian ] = "~Remover";
         Text[ japanese ] = "削除(~R)";
         Text[ korean ] = "제거(~R)";
         Text[ chinese_simplified ] = "删除(~R)";
         Text[ chinese_traditional ] = "刪除(~R)";
         Text[ arabic ] = "�����";
-        Text[ turkish ] = "Kald�r";
+        Text[ turkish ] = "~Kald�r";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Extreu";
         Text[ finnish ] = "~Poista";
         Text[ thai ] = "เ~อาออก";
+        Text[ czech ] = "Odstranit";
+        Text[ hebrew ] = "‮הסרה‬";
+        Text[ hindi ] = "~हटाओ";
     };
     FixedText FT_CHARSTYLE
     {
@@ -3332,7 +3688,7 @@ TabPage TP_TOX_ENTRY
         Text[ danish ] = "Tegntypografi";
         Text[ swedish ] = "T~eckenformatmall";
         Text[ polish ] = "Styl znaku";
-        Text[ portuguese_brazilian ] = "Character style";
+        Text[ portuguese_brazilian ] = "Estilo de Caracter";
         Text[ japanese ] = "文字スタイル";
         Text[ korean ] = "문자 스타일";
         Text[ chinese_simplified ] = "字符样式";
@@ -3343,6 +3699,9 @@ TabPage TP_TOX_ENTRY
         Text[ catalan ] = "Estil de ~car�cter";
         Text[ finnish ] = "Merkkityyli";
         Text[ thai ] = "ลักษณะตัวอักขระ";
+        Text[ czech ] = "Styl znaku";
+        Text[ hebrew ] = "Zeichen~vorlage";
+        Text[ hindi ] = "अक्षर शैली";
     };
     ListBox LB_CHARSTYLE
     {
@@ -3367,18 +3726,21 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "~Modifica...";
         Text[ danish ] = "Rediger...";
         Text[ swedish ] = "~Redigera...";
-        Text[ polish ] = "Edytuj...";
-        Text[ portuguese_brazilian ] = "Edit...";
+        Text[ polish ] = "Edyt~uj...";
+        Text[ portuguese_brazilian ] = "~Editar...";
         Text[ japanese ] = "編集(~E)...";
         Text[ korean ] = "편집(~E)...";
         Text[ chinese_simplified ] = "编辑(~E)...";
         Text[ chinese_traditional ] = "編輯(~E)...";
         Text[ arabic ] = "�����...";
-        Text[ turkish ] = "D�zenle...";
+        Text[ turkish ] = "~D�zenle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Edita...";
         Text[ finnish ] = "~Muokkaa...";
         Text[ thai ] = "แ~ก้ไข...";
+        Text[ czech ] = "Upravit...";
+        Text[ hebrew ] = "‮עריכה...‬";
+        Text[ hindi ] = "~संपादन...";
     };
     FixedText FT_FILLCHAR
     {
@@ -3396,18 +3758,21 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Caratteri riempitivi";
         Text[ danish ] = "Fyldtegn";
         Text[ swedish ] = "Ut~fyllnadstecken";
-        Text[ polish ] = "Wype�niacze";
-        Text[ portuguese_brazilian ] = "Fill character";
+        Text[ polish ] = "Znak-wype�niacz";
+        Text[ portuguese_brazilian ] = "Caracter de preenchimento";
         Text[ japanese ] = "リーダー";
         Text[ korean ] = "채움 문자";
         Text[ chinese_simplified ] = "充填字符";
         Text[ chinese_traditional ] = "充填字元";
         Text[ arabic ] = "���� �����";
-        Text[ turkish ] = "�nc�";
+        Text[ turkish ] = "Dolgu karakteri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Car�cter d'~emplenament";
         Text[ finnish ] = "T�ytt�merkki";
         Text[ thai ] = "เติมตัวอักขระ";
+        Text[ czech ] = "Vyplnit znakem";
+        Text[ hebrew ] = "~Füllzeichen";
+        Text[ hindi ] = "भरने का अक्षर ";
     };
     ComboBox CB_FILLCHAR
     {
@@ -3432,8 +3797,8 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Voce capitolo";
         Text[ danish ] = "Kapitelelement";
         Text[ swedish ] = "Ka~pitelpost";
-        Text[ polish ] = "Wpis do rozdzia�u";
-        Text[ portuguese_brazilian ] = "Chapter entry";
+        Text[ polish ] = "Wp~is w rozdziale";
+        Text[ portuguese_brazilian ] = "Entrada de cap�tulo";
         Text[ japanese ] = "章項目";
         Text[ korean ] = "장 항목";
         Text[ chinese_simplified ] = "章节条目";
@@ -3444,6 +3809,9 @@ TabPage TP_TOX_ENTRY
         Text[ catalan ] = "E~ntrada de cap�tol";
         Text[ finnish ] = "Luvun merkint�";
         Text[ thai ] = "รายการบท";
+        Text[ czech ] = "Položka kapitoly";
+        Text[ hebrew ] = "Ka~piteleintrag";
+        Text[ hindi ] = "अध्याय प्रविष्टि";
     };
     ListBox LB_CHAPTERENTRY
     {
@@ -3537,9 +3905,9 @@ TabPage TP_TOX_ENTRY
     };
     StringList [ portuguese_brazilian ] =
     {
-            < "Nummernkreis und Beschreibung" ; > ;
-        < "Nur Nummernkreis" ; > ;
-        < "Nur Beschreibung" ; > ;
+            < "Somente intervalo num�rico" ; > ;
+        < "Somente descri��o" ; > ;
+        < "Intervalo num�rico e descri��o" ; > ;
     };
     StringList [ japanese ] =
     {
@@ -3595,6 +3963,24 @@ TabPage TP_TOX_ENTRY
         < "คำอธิบายเท่านั้น" ; > ;
         < "ช่วงตัวเลขและคำอธิบาย" ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Pouze interval" ; > ;
+        < "Pouze popis" ; > ;
+        < "Číselný interval a popis" ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "Nur Nummernkreis" ; > ;
+        < "Nur Beschreibung" ; > ;
+        < "Nummernkreis und Beschreibung" ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "केवल संख्या फैलाव" ; > ;
+        < "केवल विवरण" ; > ;
+        < "संख्या फैलाव और विवरण " ; > ;
+    };
     };
     FixedText FT_TABPOS
     {
@@ -3613,7 +3999,7 @@ TabPage TP_TOX_ENTRY
         Text[ danish ] = "Tabulatorposition";
         Text[ swedish ] = "Tab~ulatorposition";
         Text[ polish ] = "Pozycja tabulatora";
-        Text[ portuguese_brazilian ] = "Tab stop position";
+        Text[ portuguese_brazilian ] = "Posi��o da tabula��o";
         Text[ japanese ] = "タブ位置";
         Text[ korean ] = "탭 설정 위치";
         Text[ chinese_simplified ] = "制表符位置";
@@ -3624,6 +4010,9 @@ TabPage TP_TOX_ENTRY
         Text[ catalan ] = "Po~sici� de tabulaci�";
         Text[ finnish ] = "Sarkainkohdan sijainti";
         Text[ thai ] = "ตำแหน่งหยุดระยะกั้น";
+        Text[ czech ] = "Umístění kroku tabulátoru";
+        Text[ hebrew ] = "Tab~ulatorposition";
+        Text[ hindi ] = "टॉब रुकावट स्थान";
     };
     MetricField MF_TABPOS
     {
@@ -3660,17 +4049,20 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Bordo dest~ro";
         Text[ danish ] = "H�jrejusteret";
         Text[ swedish ] = "H�gerjusterad";
-        Text[ polish ] = "Z prawej";
-        Text[ portuguese_brazilian ] = "Right border";
+        Text[ polish ] = "Wyr�wnaj do prawej";
+        Text[ portuguese_brazilian ] = "Alinhar � direita";
         Text[ japanese ] = "右揃え";
         Text[ korean ] = "오른쪽 맞춤";
         Text[ chinese_simplified ] = "右对齐";
         Text[ chinese_traditional ] = "向右對齊";
-        Text[ turkish ] = "Sa� kenar";
+        Text[ turkish ] = "Sa�a do�ru ayarla";
         Text[ arabic ] = "��� ������ ������";
         Text[ catalan ] = "A~l marge dret";
         Text[ language_user1 ] = " ";
         Text[ thai ] = "ชิดขวา";
+        Text[ czech ] = "Zarovnat vpravo";
+        Text[ hebrew ] = "Rechtsbündig";
+        Text[ hindi ] = "दाहिनी ओर पंक्तिकरण";
     };
     FixedLine FL_ENTRY
     {
@@ -3689,17 +4081,20 @@ TabPage TP_TOX_ENTRY
         Text[ danish ] = "Struktur";
         Text[ swedish ] = "Struktur och formatering";
         Text[ polish ] = "Struktura";
-        Text[ portuguese_brazilian ] = "Structure";
+        Text[ portuguese_brazilian ] = "Estrutura";
         Text[ japanese ] = "構成と書式";
         Text[ korean ] = "구조 및 서식";
         Text[ chinese_simplified ] = "结构和格式";
         Text[ chinese_traditional ] = "結構和格式";
         Text[ arabic ] = "������";
-        Text[ turkish ] = "Yap�";
+        Text[ turkish ] = "Yap� ve Bi�imlendirme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estructura";
         Text[ finnish ] = "Rakenne";
         Text[ thai ] = "โครงสร้าง";
+        Text[ czech ] = "Struktura";
+        Text[ hebrew ] = "Struktur und Formatierung";
+        Text[ hindi ] = "बनावट";
     };
     CheckBox CB_RELTOSTYLE
     {
@@ -3717,8 +4112,8 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "P~osizione relativa al rientro del modello di paragrafo";
         Text[ danish ] = "Ta~bulatorernes position relativ til indrykningen fra afsnitstypografien";
         Text[ swedish ] = "Tabbarnas p~osition relativ till indraget fr�n styckeformatmallen";
-        Text[ polish ] = "Pozycja relatywna do wci�cia ze stylu akapitu";
-        Text[ portuguese_brazilian ] = "Position relativ to the paragraph style indent";
+        Text[ polish ] = "Pozycja tabulatora wzgl�dem wci�cia ze stylu akapitu";
+        Text[ portuguese_brazilian ] = "~Posi��o da tabula��o relativa ao Estilo do Recuo do Par�grafo";
         Text[ japanese ] = "タブ位置は段落スタイルのインデントから(~V)";
         Text[ korean ] = "탭의 위치는 단락 스타일의 들여쓰기에 기준하여 지정(~V)";
         Text[ chinese_simplified ] = "调整制表符和段落样式缩进的位置(~V)";
@@ -3729,6 +4124,9 @@ TabPage TP_TOX_ENTRY
         Text[ catalan ] = "Posici� relati~va a la sagnia d'estil de par�graf";
         Text[ finnish ] = "Suhteessa kappaletyylin sisennykseen";
         Text[ thai ] = "ตำแหน่งระยะกั้นสัมพัทธ์กับระยะเยื้องของลักษณะย่อหน้า";
+        Text[ czech ] = "Pozice tabulátoru relativní k odsazení stylu odstavce";
+        Text[ hebrew ] = "P~osition der Tabulatoren relativ zum Einzug aus der Absatzvorlage";
+        Text[ hindi ] = "परिच्छे~द शैली इन्डेन्ट से सम्बन्धित टॉब स्थान";
     };
     FixedText FT_MAIN_ENTRY_STYLE
     {
@@ -3747,7 +4145,7 @@ TabPage TP_TOX_ENTRY
         Text[ danish ] = "Tegntypografi til hovedelementer";
         Text[ swedish ] = "Te~ckenformatmall f�r huvudposter";
         Text[ polish ] = "Styl znaku wpis�w g��wnych";
-        Text[ portuguese_brazilian ] = "Character style of main entries";
+        Text[ portuguese_brazilian ] = "Estilo de Caracter para as entradas principais";
         Text[ japanese ] = "主項目の文字スタイル";
         Text[ korean ] = "주 항목의 문자 스타일";
         Text[ chinese_simplified ] = "主条目的字符样式";
@@ -3758,6 +4156,9 @@ TabPage TP_TOX_ENTRY
         Text[ catalan ] = "~Estil de car�cters per entrades principals";
         Text[ finnish ] = "P��merkint�jen merkkityyli";
         Text[ thai ] = "ลักษณะตัวอักขระสำหรับรายการหลัก";
+        Text[ czech ] = "Znakový styl pro hlavní položky";
+        Text[ hebrew ] = "Zeichenvorla~ge für Haupteinträge";
+        Text[ hindi ] = "प्रधान प्रविष्टियों केलिए अक्षर शैली";
     };
     ListBox LB_MAIN_ENTRY_STYLE
     {
@@ -3784,8 +4185,8 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Separatori alfabetici";
         Text[ danish ] = "Alfabetisk skilletegn";
         Text[ swedish ] = "Alfabetiskt skiljetecken";
-        Text[ polish ] = "Alfabetyczny separator";
-        Text[ portuguese_brazilian ] = "Alphabetical delimiter";
+        Text[ polish ] = "Separator alfabetyczny";
+        Text[ portuguese_brazilian ] = "Delimitador alfab�tico";
         Text[ japanese ] = "アルファベット分類文字";
         Text[ korean ] = "알파벳 구분 기호";
         Text[ chinese_simplified ] = "字母分隔符";
@@ -3796,6 +4197,9 @@ TabPage TP_TOX_ENTRY
         Text[ catalan ] = "Separador alfa~b�tic";
         Text[ finnish ] = "Aakkosrajoitin";
         Text[ thai ] = "ตัวคั่นเรียงตามตัวอักษร";
+        Text[ czech ] = "Abecední oddělovač";
+        Text[ hebrew ] = "Alphabet~isches Trennzeichen";
+        Text[ hindi ] = "वर्णमाला परिसीमित करनेवाला";
     };
     CheckBox CB_COMMASEPARATED
     {
@@ -3813,8 +4217,8 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "~Chiavi separate da virgola";
         Text[ danish ] = "Kommasepareret n�gle";
         Text[ swedish ] = "Nyckel, kommaseparerad";
-        Text[ polish ] = "Klucz odseparowany przecinkiem";
-        Text[ portuguese_brazilian ] = "Comma separated keys";
+        Text[ polish ] = "Klu~cz rozdzielony przecinkami";
+        Text[ portuguese_brazilian ] = "Chaves separadas por v�rgulas";
         Text[ japanese ] = "コンマ付きで連続表示";
         Text[ korean ] = "쉼표로 구분된 키";
         Text[ chinese_simplified ] = "键码用逗号分开";
@@ -3825,6 +4229,9 @@ TabPage TP_TOX_ENTRY
         Text[ catalan ] = "Clau separada per comes";
         Text[ finnish ] = "Pilkuilla erotettu avainsana";
         Text[ thai ] = "คีย์แยกโดยจุลภาค";
+        Text[ czech ] = "Klíče oddělené čárkami";
+        Text[ hebrew ] = "S~chlüssel kommasepariert";
+        Text[ hindi ] = "की कोम्मा से अलग की हुयी";
     };
     FixedLine FL_FORMAT
     {
@@ -3843,17 +4250,20 @@ TabPage TP_TOX_ENTRY
         Text[ danish ] = "Formatering";
         Text[ swedish ] = "Formatering";
         Text[ polish ] = "Format";
-        Text[ portuguese_brazilian ] = "Format";
+        Text[ portuguese_brazilian ] = "Formato";
         Text[ japanese ] = "書式";
         Text[ korean ] = "서식";
         Text[ chinese_simplified ] = "格式化";
         Text[ chinese_traditional ] = "格式化";
         Text[ arabic ] = "�������";
-        Text[ turkish ] = "Formatlama";
+        Text[ turkish ] = "Bi�em";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Format";
         Text[ finnish ] = "Muotoilu";
         Text[ thai ] = "รูปแบบ";
+        Text[ czech ] = "Formát";
+        Text[ hebrew ] = "‮עיצוב‬";
+        Text[ hindi ] = "रचना";
     };
     RadioButton RB_DOCPOS
     {
@@ -3871,17 +4281,20 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "~Posizione del documento  ";
         Text[ danish ] = "Dokumentets placering ";
         Text[ swedish ] = "Dokument~position   ";
-        Text[ polish ] = "Pozycja dokumentu ";
-        Text[ portuguese_brazilian ] = "by document position";
+        Text[ polish ] = "~Pozycja dokumentu";
+        Text[ portuguese_brazilian ] = "~Posi��o do documento";
         Text[ japanese ] = "登場順(~P)";
         Text[ korean ] = "문서 위치 (~P)";
         Text[ chinese_simplified ] = "文档位置 (~P)";
         Text[ chinese_traditional ] = "文件位置 (~P)";
         Text[ arabic ] = "������ �� ������� ";
-        Text[ turkish ] = "Belge konumu ";
+        Text[ turkish ] = "Belge ~konumu ";
         Text[ catalan ] = "P~osici� del document ";
         Text[ finnish ] = "Asiakirjan ~sijainti ";
         Text[ thai ] = "~ตำแหน่งเอกสาร ";
+        Text[ czech ] = "Pozice dokumentu ";
+        Text[ hebrew ] = "Dokument~position";
+        Text[ hindi ] = "लेखपत्र ~स्थान ";
     };
     RadioButton RB_SORTCONTENT
     {
@@ -3899,18 +4312,21 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Contenuto";
         Text[ danish ] = "Indhold";
         Text[ swedish ] = "I~nneh�ll";
-        Text[ polish ] = "Zawarto��";
-        Text[ portuguese_brazilian ] = "Sort by content";
+        Text[ polish ] = "~Zawarto��";
+        Text[ portuguese_brazilian ] = "~Conte�do";
         Text[ japanese ] = "内容順(~C)";
         Text[ korean ] = "내용(~C)";
         Text[ chinese_simplified ] = "内容(~C)";
         Text[ chinese_traditional ] = "內容(~C)";
         Text[ arabic ] = "���������";
-        Text[ turkish ] = "��erik";
+        Text[ turkish ] = "~��erik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Contingut";
         Text[ finnish ] = "~Sis�lt�";
         Text[ thai ] = "เ~นื้อหา";
+        Text[ czech ] = "Obsah";
+        Text[ hebrew ] = "~Inhalt";
+        Text[ hindi ] = "~विषय";
     };
     FixedLine FL_SORTING
     {
@@ -3928,18 +4344,21 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Ordine per";
         Text[ danish ] = "Sortering efter";
         Text[ swedish ] = "Sortering efter";
-        Text[ polish ] = "Sortuj wed�ug";
-        Text[ portuguese_brazilian ] = "Sort by ...";
+        Text[ polish ] = "Sortuj wg";
+        Text[ portuguese_brazilian ] = "Ordenar por";
         Text[ japanese ] = "表示順序";
         Text[ korean ] = "정렬 기준";
         Text[ chinese_simplified ] = "排序按照";
         Text[ chinese_traditional ] = "編排按照";
         Text[ arabic ] = "����� ���";
-        Text[ turkish ] = "S�ralama �l��t�:";
+        Text[ turkish ] = "S�rala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ordena segons";
         Text[ finnish ] = "Lajitteluperuste";
         Text[ thai ] = "เรียงโดย";
+        Text[ czech ] = "Seřadit podle";
+        Text[ hebrew ] = "Sortierung nach";
+        Text[ hindi ] = "से सोर्ट करो";
     };
     FixedText FT_FIRSTKEY
     {
@@ -3983,12 +4402,12 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ greek ] = "�������";
         QuickHelpText[ dutch ] = "Aplopend";
         QuickHelpText[ french ] = "Croissant";
-        QuickHelpText[ spanish ] = "Ascendiente";
+        QuickHelpText[ spanish ] = "Ascendente";
         QuickHelpText[ italian ] = "Crescente";
         QuickHelpText[ danish ] = "Stigende";
         QuickHelpText[ swedish ] = "Stigande";
         QuickHelpText[ polish ] = "Rosn�co";
-        QuickHelpText[ portuguese_brazilian ] = "Ascending";
+        QuickHelpText[ portuguese_brazilian ] = "Ascendente";
         QuickHelpText[ japanese ] = "昇順";
         QuickHelpText[ korean ] = "오름차순";
         QuickHelpText[ chinese_simplified ] = "Ascending";
@@ -4000,6 +4419,10 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ turkish ] = "Aufsteigend";
         QuickHelpText[ catalan ] = "Ascendent";
         QuickHelpText[ finnish ] = "Nouseva";
+        QuickHelpText[ czech ] = "Vzestupně";
+        QuickHelpText[ hebrew ] = "Aufsteigend";
+        QuickHelpText[ thai ] = "Ascending";
+        QuickHelpText[ hindi ] = "आरोहण क्रम";
     };
     ImageRadioButton RB_SORTDOWN1
     {
@@ -4019,12 +4442,12 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ greek ] = "��������";
         QuickHelpText[ dutch ] = "Aflopend";
         QuickHelpText[ french ] = "D�croissant";
-        QuickHelpText[ spanish ] = "Descendiente";
+        QuickHelpText[ spanish ] = "Descendente";
         QuickHelpText[ italian ] = "Decrescente";
         QuickHelpText[ danish ] = "Faldende";
         QuickHelpText[ swedish ] = "Fallande";
         QuickHelpText[ polish ] = "Malej�co";
-        QuickHelpText[ portuguese_brazilian ] = "Descending";
+        QuickHelpText[ portuguese_brazilian ] = "Descendente";
         QuickHelpText[ japanese ] = "降順";
         QuickHelpText[ korean ] = "내림차순";
         QuickHelpText[ chinese_simplified ] = "Descending";
@@ -4036,6 +4459,10 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ turkish ] = "Absteigend";
         QuickHelpText[ catalan ] = "Descendent";
         QuickHelpText[ finnish ] = "Laskeva";
+        QuickHelpText[ czech ] = "Sestupně";
+        QuickHelpText[ hebrew ] = "Absteigend";
+        QuickHelpText[ thai ] = "Descending";
+        QuickHelpText[ hindi ] = "अवरोहण क्रम";
     };
     ImageRadioButton RB_SORTUP2
     {
@@ -4056,12 +4483,12 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ greek ] = "�������";
         QuickHelpText[ dutch ] = "Oplopend";
         QuickHelpText[ french ] = "Croissant";
-        QuickHelpText[ spanish ] = "Ascendiente";
+        QuickHelpText[ spanish ] = "Ascendente";
         QuickHelpText[ italian ] = "Crescente";
         QuickHelpText[ danish ] = "Stigende";
         QuickHelpText[ swedish ] = "Stigande";
         QuickHelpText[ polish ] = "Rosn�co";
-        QuickHelpText[ portuguese_brazilian ] = "Ascending";
+        QuickHelpText[ portuguese_brazilian ] = "Ascendente";
         QuickHelpText[ japanese ] = "昇順";
         QuickHelpText[ korean ] = "오름차순";
         QuickHelpText[ chinese_simplified ] = "Ascending";
@@ -4073,6 +4500,10 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ turkish ] = "Aufsteigend";
         QuickHelpText[ catalan ] = "Ascendent";
         QuickHelpText[ finnish ] = "Nouseva";
+        QuickHelpText[ czech ] = "Vzestupně";
+        QuickHelpText[ hebrew ] = "Aufsteigend";
+        QuickHelpText[ thai ] = "Ascending";
+        QuickHelpText[ hindi ] = "आरोहण क्रम";
     };
     ImageRadioButton RB_SORTDOWN2
     {
@@ -4092,12 +4523,12 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ greek ] = "��������";
         QuickHelpText[ dutch ] = "Aflopend";
         QuickHelpText[ french ] = "D�croissant";
-        QuickHelpText[ spanish ] = "Descendiente";
+        QuickHelpText[ spanish ] = "Descendente";
         QuickHelpText[ italian ] = "Decrescente";
         QuickHelpText[ danish ] = "Faldende";
         QuickHelpText[ swedish ] = "Fallande";
         QuickHelpText[ polish ] = "Malej�co";
-        QuickHelpText[ portuguese_brazilian ] = "Descending";
+        QuickHelpText[ portuguese_brazilian ] = "Descendente";
         QuickHelpText[ japanese ] = "降順";
         QuickHelpText[ korean ] = "내림차순";
         QuickHelpText[ chinese_simplified ] = "Descending";
@@ -4109,6 +4540,10 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ turkish ] = "Absteigend";
         QuickHelpText[ catalan ] = "Descendent";
         QuickHelpText[ finnish ] = "Laskeva";
+        QuickHelpText[ czech ] = "Sestupně";
+        QuickHelpText[ hebrew ] = "Absteigend";
+        QuickHelpText[ thai ] = "Descending";
+        QuickHelpText[ hindi ] = "अवरोहण क्रम";
     };
     ImageRadioButton RB_SORTUP3
     {
@@ -4129,12 +4564,12 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ greek ] = "�������";
         QuickHelpText[ dutch ] = "Oplopend";
         QuickHelpText[ french ] = "Croissant";
-        QuickHelpText[ spanish ] = "Ascendiente";
+        QuickHelpText[ spanish ] = "Ascendente";
         QuickHelpText[ italian ] = "Crescente";
         QuickHelpText[ danish ] = "Stigende";
         QuickHelpText[ swedish ] = "Stigande";
         QuickHelpText[ polish ] = "Rosn�co";
-        QuickHelpText[ portuguese_brazilian ] = "Ascending";
+        QuickHelpText[ portuguese_brazilian ] = "Ascendente";
         QuickHelpText[ japanese ] = "昇順";
         QuickHelpText[ korean ] = "오름차순";
         QuickHelpText[ chinese_simplified ] = "Ascending";
@@ -4146,6 +4581,10 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ turkish ] = "Aufsteigend";
         QuickHelpText[ catalan ] = "Ascendent";
         QuickHelpText[ finnish ] = "Nouseva";
+        QuickHelpText[ czech ] = "Vzestupně";
+        QuickHelpText[ hebrew ] = "Aufsteigend";
+        QuickHelpText[ thai ] = "Ascending";
+        QuickHelpText[ hindi ] = "आरोहण क्रम";
     };
     ImageRadioButton RB_SORTDOWN3
     {
@@ -4165,12 +4604,12 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ greek ] = "��������";
         QuickHelpText[ dutch ] = "Aflopend";
         QuickHelpText[ french ] = "D�croissant";
-        QuickHelpText[ spanish ] = "Descendiente";
+        QuickHelpText[ spanish ] = "Descendente";
         QuickHelpText[ italian ] = "Decrescente";
         QuickHelpText[ danish ] = "Faldende";
         QuickHelpText[ swedish ] = "Fallande";
         QuickHelpText[ polish ] = "Malej�co";
-        QuickHelpText[ portuguese_brazilian ] = "Descending";
+        QuickHelpText[ portuguese_brazilian ] = "Descendente";
         QuickHelpText[ japanese ] = "降順";
         QuickHelpText[ korean ] = "내림차순";
         QuickHelpText[ chinese_simplified ] = "Descending";
@@ -4182,6 +4621,10 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ turkish ] = "Absteigend";
         QuickHelpText[ catalan ] = "Descendent";
         QuickHelpText[ finnish ] = "Laskeva";
+        QuickHelpText[ czech ] = "Sestupně";
+        QuickHelpText[ hebrew ] = "Absteigend";
+        QuickHelpText[ thai ] = "Descending";
+        QuickHelpText[ hindi ] = "अवरोहण क्रम";
     };
     FixedText FT_SECONDKEY
     {
@@ -4226,17 +4669,20 @@ TabPage TP_TOX_ENTRY
         Text[ danish ] = "Sorteringsn�gle";
         Text[ swedish ] = "Sorteringsnyckel";
         Text[ polish ] = "Klucz sortowania";
-        Text[ portuguese_brazilian ] = "Sort keys";
+        Text[ portuguese_brazilian ] = "Crit�rios de ordena��o";
         Text[ japanese ] = "並べ替えキー";
         Text[ korean ] = "정렬 키";
         Text[ chinese_simplified ] = "排序的关键字";
         Text[ chinese_traditional ] = "排序的關鍵字";
         Text[ arabic ] = "������ �����";
-        Text[ turkish ] = "S�ralama anahtar�";
+        Text[ turkish ] = "S�ralama anahtarlar�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Criteris d'ordenaci�";
         Text[ finnish ] = "Lajitteluavaimet";
         Text[ thai ] = "เรียงคีย์";
+        Text[ czech ] = "Klíč pro seřazení";
+        Text[ hebrew ] = "Sortierschlüssel";
+        Text[ hindi ] = "सोर्ट करने का की";
     };
 
     String STR_NOSORTKEY
@@ -4254,7 +4700,7 @@ TabPage TP_TOX_ENTRY
         Text[ danish ] = "<Ingen>";
         Text[ swedish ] = "<Ingen>";
         Text[ polish ] = "<Brak>";
-        Text[ portuguese_brazilian ] = "<None>";
+        Text[ portuguese_brazilian ] = "<nenhum>";
         Text[ japanese ] = "<なし>";
         Text[ korean ] = "<없음>";
         Text[ chinese_simplified ] = "<无>";
@@ -4264,6 +4710,9 @@ TabPage TP_TOX_ENTRY
         Text[ catalan ] = "<Cap>";
         Text[ finnish ] = "<Ei mit��n>";
         Text[ thai ] = "<ไม่มี>";
+        Text[ czech ] = "<nic>";
+        Text[ hebrew ] = "‮(ללא)‬";
+        Text[ hindi ] = "<कोई नहीं>";
     };
     String STR_NO_CHAR_STYLE
     {
@@ -4280,7 +4729,7 @@ TabPage TP_TOX_ENTRY
         Text[ danish ] = "<Ingen>";
         Text[ swedish ] = "<Ingen>";
         Text[ polish ] = "<Brak>";
-        Text[ portuguese_brazilian ] = "<None>";
+        Text[ portuguese_brazilian ] = "<Nenhum>";
         Text[ japanese ] = "<なし>";
         Text[ korean ] = "<없음>";
         Text[ chinese_simplified ] = "<无>";
@@ -4291,6 +4740,9 @@ TabPage TP_TOX_ENTRY
         Text[ catalan ] = "<Cap>";
         Text[ finnish ] = "<Ei mit��n>";
         Text[ thai ] = "<ไม่มี>";
+        Text[ czech ] = "<žádný>";
+        Text[ hebrew ] = "‮(ללא)‬";
+        Text[ hindi ] = "<कोई नहीं>";
     };
     String STR_DELIM
     {
@@ -4314,9 +4766,13 @@ TabPage TP_TOX_ENTRY
         Text[ chinese_simplified ] = "S";
         Text[ chinese_traditional ] = "S";
         Text[ arabic ] = "�";
-        Text[ turkish ] = "T";
+        Text[ turkish ] = "S";
         Text[ catalan ] = "S";
         Text[ finnish ] = "S";
+        Text[ czech ] = "S";
+        Text[ hebrew ] = "T";
+        Text[ thai ] = "S";
+        Text[ hindi ] = "S";
     };
 };
 TabPage TP_TOX_STYLES
@@ -4332,7 +4788,7 @@ TabPage TP_TOX_STYLES
         Text [ ENGLISH ] = "~Levels" ;
         Text [ norwegian ] = "~Niv�er" ;
         Text [ italian ] = "~Livelli" ;
-        Text [ portuguese_brazilian ] = "~N?veis" ;
+        Text [ portuguese_brazilian ] = "~N�veis" ;
         Text [ portuguese ] = "~N�veis" ;
         Text [ finnish ] = "~Tasot" ;
         Text [ danish ] = "Niveauer" ;
@@ -4344,16 +4800,19 @@ TabPage TP_TOX_STYLES
         Left = TRUE ;
         Text[ chinese_simplified ] = "级(~L)";
         Text[ russian ] = "������";
-        Text[ polish ] = "Poziomy";
+        Text[ polish ] = "P~oziomy";
         Text[ japanese ] = "レベル(~L)";
         Text[ chinese_traditional ] = "級(~L)";
         Text[ arabic ] = "���������";
         Text[ greek ] = "�������";
         Text[ korean ] = "수준(~L)";
-        Text[ turkish ] = "D�zeyler";
+        Text[ turkish ] = "~D�zeyler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nivells";
         Text[ thai ] = "~ระดับ";
+        Text[ czech ] = "Úrovně";
+        Text[ hebrew ] = "Stu~fen";
+        Text[ hindi ] = "~स्तरें";
     };
     ListBox LB_LEVEL
     {
@@ -4371,7 +4830,7 @@ TabPage TP_TOX_STYLES
         Text [ ENGLISH ] = "~Paragraph styles" ;
         Text [ norwegian ] = "~Avsnittsmaler" ;
         Text [ italian ] = "Mo~delli di paragrafo" ;
-        Text [ portuguese_brazilian ] = "~Estilos de par?grafo" ;
+        Text [ portuguese_brazilian ] = "Estilo~s do Par�grafo" ;
         Text [ portuguese ] = "Estilo~s de par�grafo" ;
         Text [ finnish ] = "Kappalet~yylit" ;
         Text [ danish ] = "Afsnitstypografier" ;
@@ -4383,16 +4842,19 @@ TabPage TP_TOX_STYLES
         Left = TRUE ;
         Text[ chinese_simplified ] = "段落样式(~S)";
         Text[ russian ] = "����� �������";
-        Text[ polish ] = "Style akapit�w";
+        Text[ polish ] = "~Style akapit�w";
         Text[ japanese ] = "段落スタイル(~S)";
         Text[ chinese_traditional ] = "段落樣式(~S)";
         Text[ arabic ] = "����� ����";
         Text[ greek ] = "������~� ����������";
         Text[ korean ] = "단락 스타일(~S)";
-        Text[ turkish ] = "Paragraf �ablonlar�";
+        Text[ turkish ] = "Paragraf ~�ablonlar�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estils de par�gra~f";
         Text[ thai ] = "~ลักษณะย่อหน้า";
+        Text[ czech ] = "Styly odstavce";
+        Text[ hebrew ] = "~Absatzvorlagen";
+        Text[ hindi ] = "परिच्छेद ~शैलियाँ";
     };
     ListBox LB_PARALAY
     {
@@ -4418,20 +4880,23 @@ TabPage TP_TOX_STYLES
         Text [ swedish ] = "Sta~ndard" ;
         Text [ danish ] = "Standard" ;
         Text [ portuguese ] = "~Padr�o" ;
-        Text [ portuguese_brazilian ] = "Sta~ndard" ;
+        Text [ portuguese_brazilian ] = "~Padr�o" ;
         Text[ chinese_simplified ] = "标准(~D)";
         Text[ russian ] = "��������";
-        Text[ polish ] = "Domy�lnie";
+        Text[ polish ] = "~Domy�lnie";
         Text[ japanese ] = "標準(~D)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "標準(~D)";
         Text[ arabic ] = "�������";
         Text[ greek ] = "����������";
         Text[ korean ] = "기본값(~D)";
-        Text[ turkish ] = "Standart";
+        Text[ turkish ] = "~�nde�er";
         Text[ catalan ] = "~Per defecte";
         Text[ finnish ] = "~Oletus";
         Text[ thai ] = "~ค่าเริ่มต้น";
+        Text[ czech ] = "Výchozí";
+        Text[ hebrew ] = "‮ברירת צחדל‬";
+        Text[ hindi ] = "~अनुपस्थिति";
     };
     ImageButton BT_ASSIGN
     {
@@ -4463,19 +4928,22 @@ TabPage TP_TOX_STYLES
         Text[ italian ] = "~Modifica";
         Text[ danish ] = "Rediger";
         Text[ swedish ] = "~Redigera";
-        Text[ polish ] = "~Edytuj";
-        Text[ portuguese_brazilian ] = "~Edit";
+        Text[ polish ] = "Edyt~uj";
+        Text[ portuguese_brazilian ] = "~Editar";
         Text[ japanese ] = "編集(~E)";
         Text[ chinese_simplified ] = "编辑(~E)";
         Text[ chinese_traditional ] = "編輯(~E)";
         Text[ arabic ] = "�����";
         Text[ greek ] = "�����������";
         Text[ korean ] = "편집(~E)";
-        Text[ turkish ] = "D�zenle";
+        Text[ turkish ] = "~D�zenle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Edita";
         Text[ finnish ] = "~Muokkaa";
         Text[ thai ] = "แ~ก้ไข";
+        Text[ czech ] = "Upravit";
+        Text[ hebrew ] = "‮עריכה‬";
+        Text[ hindi ] = "~संपादन";
     };
     FixedLine FL_FORMAT
     {
@@ -4493,7 +4961,7 @@ TabPage TP_TOX_STYLES
         Text[ danish ] = "Tildel";
         Text[ swedish ] = "Tilldelning";
         Text[ polish ] = "Przypisanie";
-        Text[ portuguese_brazilian ] = "Layout";
+        Text[ portuguese_brazilian ] = "Atribui��o";
         Text[ japanese ] = "適用";
         Text[ chinese_simplified ] = "指定";
         Text[ chinese_traditional ] = "指定";
@@ -4505,6 +4973,9 @@ TabPage TP_TOX_STYLES
         Text[ catalan ] = "Assignaci�";
         Text[ finnish ] = "M��ritys";
         Text[ thai ] = "กำหนด";
+        Text[ czech ] = "Přiřazení";
+        Text[ hebrew ] = "‮השמה‬";
+        Text[ hindi ] = "निर्दिष्ट करना";
     };
 };
 ModalDialog DLG_ADD_IDX_STYLES
@@ -4578,18 +5049,21 @@ ModalDialog DLG_ADD_IDX_STYLES
         Text[ italian ] = "~Modelli";
         Text[ danish ] = "~Typografier";
         Text[ swedish ] = "~Mallar";
-        Text[ polish ] = "Style";
-        Text[ portuguese_brazilian ] = "Styles";
+        Text[ polish ] = "~Style";
+        Text[ portuguese_brazilian ] = "E~stilos";
         Text[ japanese ] = "スタイル(~E)";
         Text[ korean ] = "스타일(~E)";
         Text[ chinese_simplified ] = "样式(~E)";
         Text[ chinese_traditional ] = "樣式(~E)";
         Text[ arabic ] = "�����";
-        Text[ turkish ] = "Bi�imler";
+        Text[ turkish ] = "~Bi�emler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Estils";
         Text[ finnish ] = "T~yylit";
         Text[ thai ] = "ลักษ~ณะ";
+        Text[ czech ] = "Styly";
+        Text[ hebrew ] = "~Vorlagen";
+        Text[ hindi ] = "शैलि~याँ";
     };
     OKButton PB_OK
     {
@@ -4624,8 +5098,8 @@ ModalDialog DLG_ADD_IDX_STYLES
         Text[ italian ] = "Non applicato";
         Text[ danish ] = "Ikke tildelt";
         Text[ swedish ] = "Inte tilldelat";
-        Text[ polish ] = "Nie przypisany";
-        Text[ portuguese_brazilian ] = "Not applied";
+        Text[ polish ] = "Nieprzypisany";
+        Text[ portuguese_brazilian ] = "N�o aplicado";
         Text[ japanese ] = "適用なし";
         Text[ korean ] = "적용 안됨";
         Text[ chinese_simplified ] = "不要指定";
@@ -4636,6 +5110,9 @@ ModalDialog DLG_ADD_IDX_STYLES
         Text[ catalan ] = "No aplicat";
         Text[ finnish ] = "Ei k�yt�s�";
         Text[ thai ] = "ไม่ประยุกต์";
+        Text[ czech ] = "Nepoužito";
+        Text[ hebrew ] = "Nicht zugewiesen";
+        Text[ hindi ] = "लागू नहीं किया";
     };
     Text[ english_us ] = "Assign Styles";
     Text[ portuguese ] = "Aplicar estilos";
@@ -4647,18 +5124,21 @@ ModalDialog DLG_ADD_IDX_STYLES
     Text[ italian ] = "Assegna modello";
     Text[ danish ] = "Tildel typografi";
     Text[ swedish ] = "Tilldela mall";
-    Text[ polish ] = "Przypisz styl";
-    Text[ portuguese_brazilian ] = "Assign styles";
+    Text[ polish ] = "Przypisz style";
+    Text[ portuguese_brazilian ] = "Atribuir Estilos";
     Text[ japanese ] = "スタイルの適用";
     Text[ korean ] = "스타일 적용";
     Text[ chinese_simplified ] = "指定样式";
     Text[ chinese_traditional ] = "指定樣式";
     Text[ arabic ] = "����� �������";
-    Text[ turkish ] = "Bi�im uygula";
+    Text[ turkish ] = "Bi�im ata";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Assigna els estils";
     Text[ finnish ] = "M��rit� tyylit";
     Text[ thai ] = "กำหนดลักษณะ";
+    Text[ czech ] = "Přiřadit styly";
+    Text[ hebrew ] = "Vorlage zuweisen";
+    Text[ hindi ] = "शैलियाँ निर्दिष्ट करो";
 };
 /*-----------------------------------------------------------
 
@@ -4712,7 +5192,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ danish ] = "S�geord";
             Text[ swedish ] = "S�kord";
             Text[ polish ] = "Szukany wyraz";
-            Text[ portuguese_brazilian ] = "Search entry";
+            Text[ portuguese_brazilian ] = "Pesquisar termo";
             Text[ japanese ] = "検索語句";
             Text[ korean ] = "검색 용어";
             Text[ chinese_simplified ] = "搜寻条目";
@@ -4722,6 +5202,9 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ catalan ] = "Terme de cerca";
             Text[ finnish ] = "Etsitt�v� termi";
             Text[ thai ] = "ค้นหาเงื่อนไข";
+            Text[ czech ] = "Hledaný výraz";
+            Text[ hebrew ] = "Suchbegriff";
+            Text[ hindi ] = "खोज का विषय";
         };
         String ST_ALTERNATIVE
         {
@@ -4738,7 +5221,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ danish ] = "Alternativt element";
             Text[ swedish ] = "Alternativpost";
             Text[ polish ] = "Wpis alternatywny";
-            Text[ portuguese_brazilian ] = "Alternative entry";
+            Text[ portuguese_brazilian ] = "Entrada alternativa";
             Text[ japanese ] = "項目";
             Text[ korean ] = "대체 항목";
             Text[ chinese_simplified ] = "选择条目";
@@ -4748,6 +5231,9 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ catalan ] = "Entrada alternativa";
             Text[ finnish ] = "Vaihtoehtoinen merkint�";
             Text[ thai ] = "ทดแทนรายการ";
+            Text[ czech ] = "Alternativní položka";
+            Text[ hebrew ] = "Alternativeintrag";
+            Text[ hindi ] = "विकल्प प्रविष्टि";
         };
         String ST_PRIMKEY
         {
@@ -4763,8 +5249,8 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ italian ] = "1� criterio";
             Text[ danish ] = "1. n�gle";
             Text[ swedish ] = "1 nyckel";
-            Text[ polish ] = "1 klucz";
-            Text[ portuguese_brazilian ] = "1. Key";
+            Text[ polish ] = "Pierwszy klucz";
+            Text[ portuguese_brazilian ] = "1�. Chave";
             Text[ japanese ] = "分類タイトル1";
             Text[ korean ] = "1. 키";
             Text[ chinese_simplified ] = "第一个关键字";
@@ -4774,6 +5260,9 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ catalan ] = "1a clau";
             Text[ finnish ] = "1. avain";
             Text[ thai ] = "คีย์ที่1";
+            Text[ czech ] = "První klíč";
+            Text[ hebrew ] = "1. Schlüssel";
+            Text[ hindi ] = "पहिला की";
         };
         String ST_SECKEY
         {
@@ -4789,8 +5278,8 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ italian ] = "2� criterio";
             Text[ danish ] = "2. n�gle";
             Text[ swedish ] = "2 nyckel";
-            Text[ polish ] = "2 klucz";
-            Text[ portuguese_brazilian ] = "2. Key";
+            Text[ polish ] = "Drugi klucz";
+            Text[ portuguese_brazilian ] = "2� Chave";
             Text[ japanese ] = "分類タイトル2";
             Text[ korean ] = "2. 키";
             Text[ chinese_simplified ] = "第二个关键字";
@@ -4800,6 +5289,9 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ catalan ] = "2a clau";
             Text[ finnish ] = "2. avain";
             Text[ thai ] = "คีย์ที่2";
+            Text[ czech ] = "Druhý klíč";
+            Text[ hebrew ] = "2. Schlüssel";
+            Text[ hindi ] = "दूसरा की";
         };
         String ST_COMMENT
         {
@@ -4816,7 +5308,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ danish ] = "Kommentar";
             Text[ swedish ] = "Kommentar";
             Text[ polish ] = "Komentarz";
-            Text[ portuguese_brazilian ] = "Comment";
+            Text[ portuguese_brazilian ] = "Coment�rio";
             Text[ japanese ] = "コメント";
             Text[ korean ] = "설명";
             Text[ chinese_simplified ] = "注解";
@@ -4826,6 +5318,9 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ catalan ] = "Comentari";
             Text[ finnish ] = "Huomautus";
             Text[ thai ] = "ข้อคิดเห็น";
+            Text[ czech ] = "Komentář";
+            Text[ hebrew ] = "‮הערות‬";
+            Text[ hindi ] = "अपवाद";
         };
         String ST_CASESENSITIVE
         {
@@ -4841,17 +5336,20 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ italian ] = "Ricerca esatta";
             Text[ danish ] = "Eksakt";
             Text[ swedish ] = "Exakt";
-            Text[ polish ] = "Dok�adnie";
-            Text[ portuguese_brazilian ] = "Match case";
+            Text[ polish ] = "Uwzgl�dniaj wielko�� liter";
+            Text[ portuguese_brazilian ] = "Diferenciar Mai�sculas/Min�sculas";
             Text[ japanese ] = "文字区別";
             Text[ korean ] = "대문자 및 소문자를 구분";
             Text[ chinese_simplified ] = "精确";
             Text[ chinese_traditional ] = "精確";
             Text[ arabic ] = "������ ���� ������";
-            Text[ turkish ] = "B�y�k/k���k harf duyarl�";
+            Text[ turkish ] = "B�y�k/k���k harf duyarl� olarak ayn�";
             Text[ catalan ] = "Coincid�ncia exacta";
             Text[ finnish ] = "Sama kirjainkoko";
             Text[ thai ] = "ตัวพิมพ์ที่ตรงกัน";
+            Text[ czech ] = "Rozlišovat velikost";
+            Text[ hebrew ] = "‮התאמת אותיות גדולות/קטנות‬";
+            Text[ hindi ] = "केस तुलना";
         };
         String ST_WORDONLY
         {
@@ -4867,17 +5365,20 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ italian ] = "Parole intere";
             Text[ danish ] = "Hele ord";
             Text[ swedish ] = "Hela ord";
-            Text[ polish ] = "Ca�e s�owa";
-            Text[ portuguese_brazilian ] = "Whole words";
+            Text[ polish ] = "Ca�e wyrazy";
+            Text[ portuguese_brazilian ] = "Somente palavra";
             Text[ japanese ] = "単語として";
             Text[ korean ] = "전체 단어";
             Text[ chinese_simplified ] = "整个字";
             Text[ chinese_traditional ] = "完整的字詞";
             Text[ arabic ] = "����� �����";
-            Text[ turkish ] = "Tam s�zc�kler";
+            Text[ turkish ] = "Sadece s�zc�k";
             Text[ catalan ] = "Paraules completes";
             Text[ finnish ] = "Vain sana";
             Text[ thai ] = "คำอย่างเดียว";
+            Text[ czech ] = "Celá slova";
+            Text[ hebrew ] = "Ganze Wörter";
+            Text[ hindi ] = "केवल शब्द";
         };
         String ST_TRUE
         {
@@ -4894,7 +5395,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ danish ] = "Ja";
             Text[ swedish ] = "Ja";
             Text[ polish ] = "Tak";
-            Text[ portuguese_brazilian ] = "Yes";
+            Text[ portuguese_brazilian ] = "Sim";
             Text[ japanese ] = "はい";
             Text[ korean ] = "예";
             Text[ chinese_simplified ] = "是";
@@ -4904,6 +5405,9 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ catalan ] = "S�";
             Text[ finnish ] = "Kyll�";
             Text[ thai ] = "ใช่";
+            Text[ czech ] = "Ano";
+            Text[ hebrew ] = "‮כן‬";
+            Text[ hindi ] = "हाँ";
         };
         String ST_FALSE
         {
@@ -4920,7 +5424,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ danish ] = "Nej";
             Text[ swedish ] = "Nej";
             Text[ polish ] = "Nie";
-            Text[ portuguese_brazilian ] = "No";
+            Text[ portuguese_brazilian ] = "N�o";
             Text[ japanese ] = "いいえ";
             Text[ korean ] = "아니오";
             Text[ chinese_simplified ] = "否";
@@ -4930,6 +5434,9 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ catalan ] = "No";
             Text[ finnish ] = "Ei";
             Text[ thai ] = "ไม่ใช่";
+            Text[ czech ] = "Ne";
+            Text[ hebrew ] = "‮לא‬";
+            Text[ hindi ] = "नहीं";
         };
     };
     FixedLine        FL_ENTRIES
@@ -4949,7 +5456,7 @@ ModalDialog DLG_CREATE_AUTOMARK
         Text[ danish ] = "Elementer";
         Text[ swedish ] = "Poster";
         Text[ polish ] = "Wpisy";
-        Text[ portuguese_brazilian ] = "Entries";
+        Text[ portuguese_brazilian ] = "Entradas";
         Text[ japanese ] = "項目";
         Text[ korean ] = "항목";
         Text[ chinese_simplified ] = "条目";
@@ -4959,6 +5466,9 @@ ModalDialog DLG_CREATE_AUTOMARK
         Text[ catalan ] = "Entrades";
         Text[ finnish ] = "Merkinn�t";
         Text[ thai ] = "รายการ";
+        Text[ czech ] = "Položky";
+        Text[ hebrew ] = "Einträge";
+        Text[ hindi ] = "प्रविष्टियाँ";
     };
 
     Text[ english_us ] = "Edit Concordance File";
@@ -4972,7 +5482,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ danish ] = "Rediger konkordansfil";
     Text[ swedish ] = "Redigera konkordansfil";
     Text[ polish ] = "Edytuj plik konkordancji";
-    Text[ portuguese_brazilian ] = "Edit concordance file";
+    Text[ portuguese_brazilian ] = "Editar arquivo de concord�ncia";
     Text[ japanese ] = "コンコーダンスファイルの編集";
     Text[ korean ] = "참조목록 파일 편집";
     Text[ chinese_simplified ] = "编辑语汇索引文件";
@@ -4982,8 +5492,28 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Edita el fitxer de concord�ncia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
     Text[ thai ] = "แก้ไขแฟ้มที่สัมพันธ์กัน";
+    Text[ czech ] = "Upravit rejstříkový soubor";
+    Text[ hebrew ] = "Konkordanzdatei bearbeiten";
+    Text[ hindi ] = "कोनकोर्डेन्स फाइल संपादन";
 };
 // -----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
