@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.2 $
+  *  $Revision: 1.3 $
   *
-  *  last change: $Author: pl $ $Date: 2001-05-09 12:26:55 $
+  *  last change: $Author: cp $ $Date: 2001-05-11 12:25:02 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -83,6 +83,49 @@
 #include <math.h>
 
 using namespace psp ;
+
+namespace psp {
+/*
+ container for a font and its helper fonts:
+ 1st font is the font substitute e.g. helvetica substitutes arial on the printer
+ 2nd is the font itself
+ 3rd is a fallback font, usually a font with unicode glyph repertoir (e.g. andale)
+ symbol fonts (adobe-fontspecific) may need special glyphmapping
+ (symbol page vc. latin page)
+*/
+class Font3
+{
+    private:
+
+        #define Font3Size 3
+
+        fontID  mpFont [Font3Size];
+        bool    mbSymbol;
+
+    public:
+
+        fontID  GetFont (int nIdx) const
+                    { return nIdx < Font3Size ? mpFont[nIdx] : -1 ; }
+        bool    IsSymbolFont () const
+                    { return mbSymbol; }
+
+        Font3 (const PrinterGfx &rGfx);
+        ~Font3 () {}
+};
+
+Font3::Font3(const PrinterGfx &rGfx)
+{
+    mpFont[0] = rGfx.getFontSubstitute();
+    mpFont[1] = rGfx.GetFontID();
+    mpFont[2] = rGfx.getFallbackID();
+    // mpFont[2] = rGfx.GetFontID();
+
+       PrintFontManager &rMgr = PrintFontManager::get();
+    mbSymbol = mpFont[1] != -1 ?
+                rMgr.getFontEncoding(mpFont[1]) == RTL_TEXTENCODING_SYMBOL : false;
+}
+
+} // namespace psp
 
 static int getVerticalDeltaAngle( sal_Unicode nChar )
 {
@@ -194,8 +237,20 @@ PrinterGfx::DrawText (
 {
     fontID nRestoreFont = mnFontID;
 
-    // get a fontid and a char metric for each character
-    fontID pFont3[3] = { getFontSubstitute(), mnFontID, mnFallbackID };
+    // setup font[substitutes] and map the string into the symbol area in case of
+    // symbol font
+    Font3 aFont(*this);
+    sal_Unicode *pEffectiveStr;
+    if ( aFont.IsSymbolFont() )
+    {
+        pEffectiveStr = (sal_Unicode*)alloca(nLen * sizeof(pStr[0]));
+        for (int i = 0; i < nLen; i++)
+            pEffectiveStr[i] = pStr[i] < 256 ? pStr[i] + 0xF000 : pStr[i];
+    }
+    else
+    {
+        pEffectiveStr = const_cast<sal_Unicode*>(pStr);
+    }
 
     fontID    *pFontMap   = (fontID*)    alloca(nLen * sizeof(fontID));
     sal_Int32 *pCharWidth = (sal_Int32*) alloca(nLen * sizeof(sal_Int32));
@@ -204,8 +259,8 @@ PrinterGfx::DrawText (
     for( int n = 0; n < nLen; n++ )
     {
         CharacterMetric aBBox;
-        pFontMap[n]   = getCharMetric (pFont3, pStr[n], &aBBox);
-        pCharWidth[n] = getCharWidth  (mbTextVertical, pStr[n], &aBBox) * nScale;
+        pFontMap[n]   = getCharMetric (aFont, pEffectiveStr[n], &aBBox);
+        pCharWidth[n] = getCharWidth  (mbTextVertical, pEffectiveStr[n], &aBBox) * nScale;
     }
 
     // setup a new delta array, use virtual resolution of 1000
@@ -251,12 +306,12 @@ PrinterGfx::DrawText (
 
         if (mbTextVertical)
         {
-            drawVerticalizedText( Point(nDelta, 0), pStr + nFrom, nTo - nFrom,
+            drawVerticalizedText( Point(nDelta, 0), pEffectiveStr + nFrom, nTo - nFrom,
                                   pNewDeltaArray + nFrom );
         }
         else
         {
-            drawText( Point(nDelta, 0), pStr + nFrom, nTo - nFrom,
+            drawText( Point(nDelta, 0), pEffectiveStr + nFrom, nTo - nFrom,
                       pDeltaArray == NULL ? NULL : pNewDeltaArray + nFrom );
         }
         nDelta += pNewDeltaArray[ nTo - 1 ];
@@ -420,28 +475,27 @@ PrinterGfx::getCharWidth (sal_Bool b_vert, sal_Unicode n_char, CharacterMetric *
 }
 
 fontID
-PrinterGfx::getCharMetric (fontID p_font[3], sal_Unicode n_char, CharacterMetric *p_bbox)
+PrinterGfx::getCharMetric (const Font3 &rFont, sal_Unicode n_char, CharacterMetric *p_bbox)
 {
     p_bbox->width  = -1;
     p_bbox->height = -1;
 
     for (fontID n = 0; n < 3; n++)
     {
-        fontID n_font = p_font[n];
-
+        fontID n_font = rFont.GetFont(n);
         if (n_font != -1)
             mrFontMgr.getMetrics( n_font, n_char, n_char, p_bbox );
         if (p_bbox->width >= 0 && p_bbox->height >= 0)
             return n_font;
     }
     if (n_char != '?')
-        return getCharMetric (p_font, '?', p_bbox);
+        return getCharMetric (rFont, '?', p_bbox);
 
-    return p_font[0] != -1 ? p_font[0] : p_font[1];
+    return rFont.GetFont(0) != -1 ? rFont.GetFont(0) : rFont.GetFont(1);
 }
 
 fontID
-PrinterGfx::getFontSubstitute ()
+PrinterGfx::getFontSubstitute () const
 {
     if( mpFontSubstitutes )
     {
@@ -457,21 +511,18 @@ PrinterGfx::getFontSubstitute ()
 sal_Int32
 PrinterGfx::GetCharWidth (sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray)
 {
-    // XXX compatibility code, symbol area is 0xf020 and up but application is
-    // perhaps not aware of this and ask metrics in the range of 0 ... 256
-    rtl_TextEncoding nEnc = mrFontMgr.getFontEncoding( mnFontID );
-    if ( nEnc == RTL_TEXTENCODING_SYMBOL && nTo < 256 )
+    Font3 aFont(*this);
+    if (aFont.IsSymbolFont() && (nFrom < 256) && (nTo < 256))
     {
-        nTo   += 0xf000;
-        nFrom += 0xf000;
+        nFrom += 0xF000;
+        nTo   += 0xF000;
     }
 
-    fontID pFont3[3] = { getFontSubstitute(), mnFontID, mnFallbackID };
     int nScale = mnTextWidth ? mnTextWidth : mnTextHeight;
     for( int n = 0; n < (nTo - nFrom + 1); n++ )
     {
         CharacterMetric aBBox;
-        getCharMetric (pFont3, n + nFrom, &aBBox);
+        getCharMetric (aFont, n + nFrom, &aBBox);
         pWidthArray[n] = getCharWidth (mbTextVertical, n + nFrom, &aBBox) * nScale;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printergfx.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:45:33 $
+ *  last change: $Author: cp $ $Date: 2001-05-11 12:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,12 +269,14 @@ private:
     PrinterColor    maLineColor;
 
     /* font / font substitution */
+    friend class Font3;
     const ::std::hash_map< fontID, fontID >*    mpFontSubstitutes;
     int             getCharWidth (sal_Bool b_vert, sal_Unicode n_char,
                                   CharacterMetric *p_bbox);
-    fontID          getCharMetric (fontID p_font[3], sal_Unicode n_char,
+    fontID          getCharMetric (const Font3 &rFont, sal_Unicode n_char,
                                    CharacterMetric *p_bbox);
-    fontID          getFontSubstitute ();
+    fontID          getFontSubstitute () const;
+    fontID          getFallbackID () const { return mnFallbackID; }
 
 public:
 
