@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-08 13:58:22 $
+ *  last change: $Author: mtg $ $Date: 2001-05-29 11:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,10 @@ protected:
     sal_Bool bRawStream, bHaveInMemory, bEncrypted;
     com::sun::star::uno::Sequence < sal_Int8 > aBuffer;
     const vos::ORef < EncryptionData > xEncryptionData;
-    const com::sun::star::packages::ZipEntry & rEntry;
+    const com::sun::star::packages::ZipEntry aEntry;
     Inflater aInflater;
-    void readIntoMemory();
+    void readIntoMemory()
+        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 public:
              EntryInputStream( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xInput,
                                 const com::sun::star::packages::ZipEntry &rNewEntry,

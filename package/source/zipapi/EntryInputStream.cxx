@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-08 13:57:41 $
+ *  last change: $Author: mtg $ $Date: 2001-05-29 11:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ EntryInputStream::EntryInputStream( Reference < io::XInputStream > xNewInput,
                                     sal_Bool bGetRawStream)
 : xStream( xNewInput )
 , xSeek( xNewInput, UNO_QUERY )
-, rEntry (rNewEntry )
+, aEntry (rNewEntry )
 , nCurrent( 0 )
 , bHaveInMemory ( sal_False )
 , aInflater( sal_True )
@@ -104,22 +104,27 @@ EntryInputStream::EntryInputStream( Reference < io::XInputStream > xNewInput,
 {
     if (bGetRawStream)
     {
-        nUncompressedSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
-        nEnd = rEntry.nOffset + nUncompressedSize;
+        nUncompressedSize = aEntry.nMethod == DEFLATED ? aEntry.nCompressedSize : aEntry.nSize;
+        nEnd = aEntry.nOffset + nUncompressedSize;
     }
     else
     {
-        nEnd = rEntry.nMethod == DEFLATED ? rEntry.nOffset + rEntry.nCompressedSize : rEntry.nOffset + rEntry.nSize;
-        nUncompressedSize = rEntry.nSize;
+        nEnd = aEntry.nMethod == DEFLATED ? aEntry.nOffset + aEntry.nCompressedSize : aEntry.nOffset + aEntry.nSize;
+        nUncompressedSize = aEntry.nSize;
     }
 }
 void EntryInputStream::readIntoMemory()
+    throw(io::NotConnectedException, io::BufferSizeExceededException, io::IOException, RuntimeException)
 {
     if (!bHaveInMemory)
     {
         Sequence < sal_Int8 > aReadBuffer;
-        xSeek->seek(rEntry.nOffset);
-        sal_Int32 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
+        xSeek->seek(aEntry.nOffset);
+        sal_Int32 nSize = aEntry.nMethod == DEFLATED ? aEntry.nCompressedSize : aEntry.nSize;
+
+        if (nSize <0)
+            throw io::BufferSizeExceededException(::rtl::OUString(), *this);
+
         xStream->readBytes( aReadBuffer, nSize ); // Now it holds the raw stuff from disk
 
         if (xEncryptionData->aSalt.getLength())
@@ -153,12 +158,12 @@ void EntryInputStream::readIntoMemory()
             OSL_ASSERT (aResult == rtl_Cipher_E_None);
             aReadBuffer = aDecryptBuffer; // Now it holds the decrypted data
         }
-        if (bRawStream || rEntry.nMethod == STORED)
+        if (bRawStream || aEntry.nMethod == STORED)
             aBuffer = aReadBuffer; // bRawStream means the caller doesn't want it decompressed
         else
         {
             aInflater.setInputSegment(aReadBuffer, 0, nSize );
-            aBuffer.realloc( rEntry.nSize );
+            aBuffer.realloc( aEntry.nSize );
             aInflater.doInflate(aBuffer);
             aInflater.end();
         }
