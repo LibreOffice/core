@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:19:54 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,14 @@ class XclImpFontBuffer;
 class XclImpNumFmtBuffer;
 class XclImpXFBuffer;
 class XclImpXFIndexBuffer;
+class XclImpPageSettings;
+class _ScRangeListTabs;
 class XclImpTabIdBuffer;
+class XclImpNameBuffer;
 class XclImpLinkManager;
 class XclImpObjectManager;
 class XclImpCondFormatManager;
+class XclImpAutoFilterBuffer;
 class XclImpWebQueryBuffer;
 
 /** Stores global buffers and data needed for Excel import filter. */
@@ -92,7 +96,9 @@ struct XclImpRootData : public XclRootData
     typedef ::std::auto_ptr< XclImpNumFmtBuffer >       XclImpNumFmtBufferPtr;
     typedef ::std::auto_ptr< XclImpXFBuffer >           XclImpXFBufferPtr;
     typedef ::std::auto_ptr< XclImpXFIndexBuffer >      XclImpXFIndexBufferPtr;
+    typedef ::std::auto_ptr< XclImpPageSettings >       XclImpPageSettingsPtr;
     typedef ::std::auto_ptr< XclImpTabIdBuffer >        XclImpTabIdBufferPtr;
+    typedef ::std::auto_ptr< XclImpNameBuffer >         XclImpNameBufferPtr;
     typedef ::std::auto_ptr< XclImpLinkManager >        XclImpLinkManagerPtr;
     typedef ::std::auto_ptr< XclImpObjectManager >      XclImpObjectManagerPtr;
     typedef ::std::auto_ptr< XclImpCondFormatManager >  XclImpCondFormatManagerPtr;
@@ -106,7 +112,10 @@ struct XclImpRootData : public XclRootData
     XclImpXFBufferPtr           mpXFBuffer;         /// All XF record data in the file.
     XclImpXFIndexBufferPtr      mpXFIndexBuffer;    /// Buffer of XF indexes in a sheet.
 
+    XclImpPageSettingsPtr       mpPageSettings;     /// Page settings for current sheet.
+
     XclImpTabIdBufferPtr        mpTabIdBuffer;      /// Sheet creation order list.
+    XclImpNameBufferPtr         mpNameBuffer;       /// Internal defined names.
     XclImpLinkManagerPtr        mpLinkManager;      /// Manager for internal/external links.
 
     XclImpObjectManagerPtr      mpObjManager;       /// All drawing objects.
@@ -133,10 +142,6 @@ private:
     mutable XclImpRootData&     mrImpData;      /// Reference to the global import data struct.
 
 public:
-                                XclImpRoot( const XclImpRoot& rRoot );
-
-    XclImpRoot&                 operator=( const XclImpRoot& rRoot );
-
     /** Returns this root instance - for code readability in derived classes. */
     inline const XclImpRoot&    GetRoot() const { return *this; }
 
@@ -154,8 +159,17 @@ public:
     /** Returns the buffer of XF indexes for a sheet. */
     XclImpXFIndexBuffer&        GetXFIndexBuffer() const;
 
+    /** Returns the page settings of the current sheet. */
+    XclImpPageSettings&         GetPageSettings() const;
+    /** Returns the buffer that contains all print areas in the document. */
+    _ScRangeListTabs&           GetPrintAreaBuffer() const;
+    /** Returns the buffer that contains all print areas in the document. */
+    _ScRangeListTabs&           GetTitleAreaBuffer() const;
+
     /** Returns the buffer that contains the sheet creation order. */
     XclImpTabIdBuffer&          GetTabIdBuffer() const;
+    /** Returns the buffer that contains internal defined names. */
+    XclImpNameBuffer&           GetNameBuffer() const;
     /** Returns the link manager. */
     XclImpLinkManager&          GetLinkManager() const;
 
@@ -163,6 +177,8 @@ public:
     XclImpObjectManager&        GetObjectManager() const;
     /** Returns the conditional formattings manager. */
     XclImpCondFormatManager&    GetCondFormatManager() const;
+    /** Returns the filter manager. */
+    XclImpAutoFilterBuffer&     GetFilterManager() const;
     /** Returns the web query buffer. */
     XclImpWebQueryBuffer&       GetWebQueryBuffer() const;
 
