@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 19:04:33 $
+#   last change: $Author: obo $ $Date: 2004-04-27 15:49:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..
 
 PRJNAME=svx
@@ -113,6 +112,7 @@ SLOFILES =	\
             $(SLO)$/impedit3.obj \
             $(SLO)$/impedit4.obj \
             $(SLO)$/impedit5.obj \
+            $(SLO)$/textconv.obj \
             $(SLO)$/unolingu.obj
 
 SVXLIGHTOBJFILES= \
