@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scslots.sdi,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:35:36 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-import "ofa.ilb"
+import "svxslots.ilb"
 
 module
 "ADC7D7A1-2341-101C-A55A-04021C007002"
