@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 09:47:47 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,62 +80,154 @@
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
 
 
 using namespace dbaui;
+using namespace dbtools;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
 
 //==================================================================
 OSaveAsDlg::OSaveAsDlg( Window * pParent,
                         const sal_Int32& _rType,
                         const Reference<XNameAccess>& _rxNames,
+                        const Reference< XDatabaseMetaData>& _rxMetaData,
                         const String& rDefault)
              :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
+             ,m_aCatalogLbl(this, ResId (FT_CATALOG))
+             ,m_aCatalog(this, ResId (ET_CATALOG))
+             ,m_aSchemaLbl(this, ResId (FT_SCHEMA))
+             ,m_aSchema(this, ResId (ET_SCHEMA))
              ,m_aLabel(this, ResId (FT_TITLE))
              ,m_aTitle(this, ResId (ET_TITLE))
              ,m_aPB_OK(this, ResId( PB_OK ) )
              ,m_aPB_CANCEL(this, ResId( PB_CANCEL ))
              ,m_aPB_HELP(this, ResId( PB_HELP))
              ,m_aQryLabel(ResId(STR_QRY_LABEL))
+             ,m_sTblLabel(ResId(STR_TBL_LABEL))
              ,m_aExists(ResId(STR_OBJECT_EXISTS_ALREADY))
              ,m_aName(rDefault)
              ,m_xNames(_rxNames)
+             ,m_xMetaData(_rxMetaData)
+             ,m_nType(_rType)
 {
     switch (_rType)
     {
         case CommandType::QUERY:
-            m_aLabel.SetText(m_aQryLabel);
+            {
+                m_aLabel.SetText(m_aQryLabel);
+                m_aCatalogLbl.Hide();
+                m_aCatalog.Hide();
+                m_aSchemaLbl.Hide();
+                m_aSchema.Hide();
+
+                Point aPos(m_aSchemaLbl.GetPosPixel());
+                m_aLabel.SetPosPixel(m_aCatalogLbl.GetPosPixel());
+                m_aTitle.SetPosPixel(m_aCatalog.GetPosPixel());
+
+                m_aPB_OK.SetPosPixel(Point(m_aPB_OK.GetPosPixel().X(),aPos.Y()));
+                m_aPB_CANCEL.SetPosPixel(Point(m_aPB_CANCEL.GetPosPixel().X(),aPos.Y()));
+                m_aPB_HELP.SetPosPixel(Point(m_aPB_HELP.GetPosPixel().X(),aPos.Y()));
+
+                SetSizePixel(Size(GetSizePixel().Width(),aPos.Y()+m_aPB_OK.GetSizePixel().Height()+m_aTitle.GetSizePixel().Height()*0.5));
+                m_aTitle.SetText(m_aName);
+            }
+            break;
+        case CommandType::TABLE:
+            {
+                if(m_aName.Search('.') != STRING_NOTFOUND)
+                {
+                    ::rtl::OUString sCatalog,sSchema,sTable;
+                    ::dbtools::qualifiedNameComponents(_rxMetaData,
+                                                        m_aName,
+                                                        sCatalog,
+                                                        sSchema,
+                                                        sTable);
+
+                    m_aCatalog.SetText(sCatalog);
+                    m_aSchema.SetText(sSchema);
+                    m_aTitle.SetText(sTable);
+                }
+                else
+                    m_aTitle.SetText(m_aName);
+
+
+                m_aLabel.SetText(m_sTblLabel);
+                Point aPos(m_aPB_OK.GetPosPixel());
+                if(!_rxMetaData->supportsCatalogsInTableDefinitions())
+                {
+                    m_aCatalogLbl.Hide();
+                    m_aCatalog.Hide();
+
+                    aPos = m_aLabel.GetPosPixel();
+
+                    m_aLabel.SetPosPixel(m_aSchemaLbl.GetPosPixel());
+                    m_aTitle.SetPosPixel(m_aSchema.GetPosPixel());
+
+                    m_aSchemaLbl.SetPosPixel(m_aCatalogLbl.GetPosPixel());
+                    m_aSchema.SetPosPixel(m_aCatalog.GetPosPixel());
+                }
+
+                if(!_rxMetaData->supportsSchemasInTableDefinitions())
+                {
+                    m_aSchemaLbl.Hide();
+                    m_aSchema.Hide();
+
+                    aPos = m_aLabel.GetPosPixel();
+
+                    m_aLabel.SetPosPixel(m_aSchemaLbl.GetPosPixel());
+                    m_aTitle.SetPosPixel(m_aSchema.GetPosPixel());
+                }
+                m_aPB_OK.SetPosPixel(Point(m_aPB_OK.GetPosPixel().X(),aPos.Y()));
+                m_aPB_CANCEL.SetPosPixel(Point(m_aPB_CANCEL.GetPosPixel().X(),aPos.Y()));
+                m_aPB_HELP.SetPosPixel(Point(m_aPB_HELP.GetPosPixel().X(),aPos.Y()));
+
+                SetSizePixel(Size(GetSizePixel().Width(),aPos.Y()+m_aPB_OK.GetSizePixel().Height()+m_aTitle.GetSizePixel().Height()*0.5));
+            }
             break;
         default:
             OSL_ENSURE(0,"Type not supported yet!");
     }
 
-    m_aTitle.SetText(m_aName);
+
     m_aPB_OK.SetClickHdl(LINK(this,OSaveAsDlg,ButtonClickHdl));
     m_aTitle.SetModifyHdl(LINK(this,OSaveAsDlg,EditModifyHdl));
+    m_aTitle.GrabFocus();
     FreeResource();
 }
+// -----------------------------------------------------------------------------
 
 IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
 {
     if (pButton == &m_aPB_OK)
     {
         m_aName = m_aTitle.GetText();
-
-        if(m_xNames->hasByName(m_aName))
+        sal_Bool bError = m_xNames->hasByName(m_aName);
+        if(m_nType == CommandType::TABLE)
+        {
+            ::rtl::OUString sComposedName;
+            ::dbtools::composeTableName(m_xMetaData,getCatalog(),getSchema(),m_aName,sComposedName,sal_False);
+            bError = m_xNames->hasByName(sComposedName);
+        }
+        if(bError)
         {
             m_aTitle.GrabFocus();
             String aText(m_aExists);
             aText.SearchAndReplace(String::CreateFromAscii("'$Name: not supported by cvs2svn $'"),m_aName);
             OSQLMessageBox aDlg(this, String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)), aText, WB_OK, OSQLMessageBox::Query);
+            aDlg.Execute();
         }
         else
             EndDialog(RET_OK);
     }
     return 0;
 }
+// -----------------------------------------------------------------------------
 
 IMPL_LINK(OSaveAsDlg, EditModifyHdl, Edit *, pEdit )
 {
@@ -143,4 +235,6 @@ IMPL_LINK(OSaveAsDlg, EditModifyHdl, Edit *, pEdit )
         m_aPB_OK.Enable(m_aTitle.GetText().Len());
     return 0;
 }
+// -----------------------------------------------------------------------------
+
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: fs $ $Date: 2001-01-30 08:30:21 $
+#   last change: $Author: oj $ $Date: 2001-02-14 14:34:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,11 +83,12 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
-        $(SLO)$/listviewitems.obj	\
-        $(SLO)$/undosqledit.obj	\
-        $(SLO)$/sqledit.obj		\
-        $(SLO)$/tabletree.obj	\
-        $(SLO)$/marktree.obj	\
+        $(SLO)$/FieldDescControl.obj	\
+        $(SLO)$/listviewitems.obj		\
+        $(SLO)$/undosqledit.obj			\
+        $(SLO)$/sqledit.obj				\
+        $(SLO)$/tabletree.obj			\
+        $(SLO)$/marktree.obj			\
         $(SLO)$/curledit.obj
 
 # --- Targets ----------------------------------

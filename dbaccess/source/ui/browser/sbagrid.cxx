@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-17 16:25:28 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,7 +744,7 @@ void SAL_CALL SbaXGridPeer::selectionChanged(const EventObject& aEvent)
         Reference< XIndexContainer >  xColumns = getColumns();
         Reference< XSelectionSupplier >  xSelSupplier(aEvent.Source, UNO_QUERY);
         Reference< XPropertySet >  xSelection;
-        xSelSupplier->getSelection() >>= xSelection;
+        ::cppu::extractInterface(xSelection,xSelSupplier->getSelection());
 
         sal_uInt16 nSelectedCol = (sal_uInt16)-1;
         if (xSelection.is())
@@ -752,7 +752,7 @@ void SAL_CALL SbaXGridPeer::selectionChanged(const EventObject& aEvent)
             Reference< XPropertySet >  xCol;
             for (sal_Int32 i = 0; i < xColumns->getCount(); i++)
             {
-                xColumns->getByIndex(i) >>= xCol;
+                ::cppu::extractInterface(xCol,xColumns->getByIndex(i));
                 if (xCol == xSelection)
                 {
                     nSelectedCol = (sal_uInt16)i;
@@ -867,7 +867,7 @@ void SbaGridHeader::ImplSelect(sal_uInt16 nId)
     if (nPos < xColumns->getCount())
     {
         Reference< XPropertySet >  xColumn;
-        xColumns->getByIndex(nPos) >>= xColumn;
+        ::cppu::extractInterface(xColumn,xColumns->getByIndex(nPos));
         Reference< XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
         if (xSelSupplier.is())
             xSelSupplier->select(makeAny(xColumn));
@@ -1067,7 +1067,7 @@ void SbaGridControl::SetColWidth(sal_uInt16 nColId)
     Reference< XIndexAccess >  xCols(GetPeer()->getColumns(), UNO_QUERY);
     Reference< XPropertySet >  xAffectedCol;
     if (xCols.is() && (nModelPos != (sal_uInt16)-1))
-        xCols->getByIndex(nModelPos) >>= xAffectedCol;
+        ::cppu::extractInterface(xAffectedCol,xCols->getByIndex(nModelPos));
 
     if (xAffectedCol.is())
     {
@@ -1148,7 +1148,7 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
     Reference< XIndexAccess >  xCols(GetPeer()->getColumns(), UNO_QUERY);
     Reference< XPropertySet >  xAffectedCol;
     if (xCols.is() && (nModelPos != (sal_uInt16)-1))
-        xCols->getByIndex(nModelPos) >>= xAffectedCol;
+        ::cppu::extractInterface(xAffectedCol,xCols->getByIndex(nModelPos));
 
     // get the field the column is bound to
     Reference< XPropertySet >  xField = getField(nModelPos);
@@ -1413,7 +1413,7 @@ void SbaGridControl::Select()
                     if (nSelectedColumn != -1)
                     {
                         Reference< XPropertySet >  xColumn;
-                        xColumns->getByIndex(nSelectedColumn) >>= xColumn;
+                        ::cppu::extractInterface(xColumn,xColumns->getByIndex(nSelectedColumn));
                         xSelSupplier->select(makeAny(xColumn));
                     }
                     else
@@ -1507,9 +1507,9 @@ Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
         if (xCols.is())
         {
             Reference< XPropertySet >  xCol;
-            xCols->getByIndex(nModelPos) >>= xCol;
+            ::cppu::extractInterface(xCol,xCols->getByIndex(nModelPos));
             if (xCol.is())
-                xCol->getPropertyValue(PROPERTY_BOUNDFIELD) >>= xEmptyReturn;
+                ::cppu::extractInterface(xEmptyReturn,xCol->getPropertyValue(PROPERTY_BOUNDFIELD));
         }
     }
     catch(Exception&)
@@ -1731,7 +1731,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
         sal_uInt16 nModelPos = GetModelColumnPos(GetColumnIdFromViewPos(nColumnPos));
         Reference< XIndexContainer >  xCols(GetPeer()->getColumns(), UNO_QUERY);
         Reference< XPropertySet >  xAffectedCol;
-        xCols->getByIndex(nModelPos) >>= xAffectedCol;
+        ::cppu::extractInterface(xAffectedCol,xCols->getByIndex(nModelPos));
         sField = (const sal_Unicode*)::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_CONTROLSOURCE));
     }
     catch(Exception&)
@@ -1898,7 +1898,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
     {
         sal_uInt16 nModelPos = GetModelColumnPos(GetColumnIdFromViewPos(nColumnPos));
         Reference< XIndexContainer >  xCols(GetPeer()->getColumns(), UNO_QUERY);
-        xCols->getByIndex(nModelPos) >>= xAffectedCol;
+        ::cppu::extractInterface(xAffectedCol,xCols->getByIndex(nModelPos));
         sField = (const sal_Unicode*)::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_CONTROLSOURCE));
     }
     catch(Exception&)
@@ -2094,7 +2094,7 @@ sal_Bool SbaGridControl::QueryDrop(const BrowserDropEvent& rEvt)
         if (xColumnControls.is())
         {
             Reference< ::com::sun::star::awt::XTextComponent >  xColControl;
-            xColumnControls->getByIndex(GetViewColumnPos(nCol)) >>= xColControl;
+            ::cppu::extractInterface(xColControl,xColumnControls->getByIndex(GetViewColumnPos(nCol)));
             if (xColControl.is())
             {
                 m_bActivatingForDrop = sal_True;

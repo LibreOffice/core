@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-25 07:16:20 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,10 @@
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
+
 
 using namespace dbaui;
 using namespace connectivity;
@@ -159,8 +163,8 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
     Reference<XPropertySet> xColumn;
     for(;pBegin != pEnd;++pBegin)
     {
-        m_xColumns->getByName(*pBegin) >>= xColumn;
-        OSL_ENSHURE(xColumn.is(),"Column is null!");
+        ::cppu::extractInterface(xColumn,m_xColumns->getByName(*pBegin));
+        OSL_ENSURE(xColumn.is(),"Column is null!");
         sal_Int32 nDataType;
         xColumn->getPropertyValue(PROPERTY_TYPE) >>= nDataType;
         sal_Int32 eColumnSearch = dbtools::getSearchColumnFlag(m_xConnection,nDataType);

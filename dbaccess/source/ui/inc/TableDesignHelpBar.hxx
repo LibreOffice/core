@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: dlgsave.hrc,v $
+ *  $RCSfile: TableDesignHelpBar.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:34:01 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,29 +58,54 @@
  *
  *
  ************************************************************************/
+#ifndef DBAUI_TABLEDESIGNHELPBAR_HXX
+#define DBAUI_TABLEDESIGNHELPBAR_HXX
 
-#ifndef DBAUI_DLGSAVE_HRC
-#define DBAUI_DLGSAVE_HRC
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+#ifndef _SV_TABCTRL_HXX
+#include <vcl/tabctrl.hxx>
+#endif
+#ifndef _SV_TABPAGE_HXX
+#include <vcl/tabpage.hxx>
+#endif
 
-// defines ------------------------------------------------------------------
+class MultiLineEdit;
+namespace dbaui
+{
+    //==================================================================
+    // Ableitung von TabPage ist ein Trick von TH,
+    // um Aenderungen der Systemfarben zu bemerken (Bug #53905)
+    class OTableDesignHelpBar : public TabPage
+    {
+    private:
+        String          m_sHelpText;
+        MultiLineEdit*  m_pTextWin;
+        USHORT          m_nDummy;
 
-#define PB_OK                       1
-#define PB_CANCEL                   1
-#define PB_HELP                     1
+    protected:
+        virtual void Resize();
 
-#define ET_CATALOG                  1
-#define ET_SCHEMA                   2
-#define ET_TITLE                    3
-#define FT_CATALOG                  1
-#define FT_SCHEMA                   2
-#define FT_TITLE                    3
+    public:
+        OTableDesignHelpBar( Window* pParent );
+        virtual ~OTableDesignHelpBar();
 
-#define STR_TBL_LABEL               1
-#define STR_VW_LABEL                2
-#define STR_QRY_LABEL               3
-#define STR_FRM_LABEL               4
-#define STR_RPT_LABEL               5
-#define STR_OBJECT_EXISTS_ALREADY   6
+        void SetHelpText( const String& rText );
+        String GetHelpText() const { return m_sHelpText; }
 
-#endif // DBAUI_DLGSAVE_HRC
+        virtual long PreNotify( NotifyEvent& rNEvt );
+    };
+
+    //==================================================================
+    class OFieldPropTabCtrl : public TabControl
+    {
+    public:
+        OFieldPropTabCtrl( Window* pParent, WinBits nWinStyle = WB_STDTABCONTROL );
+        virtual ~OFieldPropTabCtrl();
+
+    };
+
+}
+#endif // DBAUI_TABLEDESIGNHELPBAR_HXX
 

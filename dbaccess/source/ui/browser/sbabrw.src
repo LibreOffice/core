@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:20:07 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,17 +605,17 @@ Menu MENU_BROWSERTREE_CONTEXT
         {
             Identifier = ID_TREE_QUERY_CREATE_DESIGN ;
             HelpId = HID_BROWSER_QUERY_CREATE_DESIGN ;
-            Text = "~Abfrageentwurf" ;
-            Text [ english ] = "~querydesign" ;
-            Text [ english_us ] = "~querydesign" ;
+            Text = "neuer ~Abfrageentwurf" ;
+            Text [ english ] = "new ~querydesign" ;
+            Text [ english_us ] = "new ~querydesign" ;
         };
         MenuItem
         {
             Identifier = ID_TREE_QUERY_CREATE_TEXT ;
             HelpId = HID_BROWSER_QUERY_CREATE_TEXT ;
-            Text = "~SQL Befehl eingeben" ;
-            Text [ english ] = "~SQL command" ;
-            Text [ english_us ] = "~SQL command" ;
+            Text = "neuen ~SQL Befehl eingeben" ;
+            Text [ english ] = "new ~SQL command" ;
+            Text [ english_us ] = "new ~SQL command" ;
         };
         MenuItem
         {
@@ -633,6 +633,34 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text [ english ] = "de~lete query" ;
             Text [ english_us ] = "de~lete query" ;
         };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_TABLE_CREATE_DESIGN ;
+            HelpId = HID_BROWSER_TABLE_CREATE_DESIGN ;
+            Text = "neuer ~Tabellenentwurf" ;
+            Text [ english ] = "new ~tabledesign" ;
+            Text [ english_us ] = "new ~tabledesign" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_TABLE_EDIT ;
+            HelpId = HID_BROWSER_TABLE_EDIT ;
+            Text = "Tabelle ~bearbeiten" ;
+            Text [ english ] = "edit ta~ble" ;
+            Text [ english_us ] = "edit ta~ble" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_TABLE_DELETE ;
+            HelpId = HID_BROWSER_TABLE_DELETE ;
+            Text = "Tabelle ~löschen" ;
+            Text [ english ] = "de~lete table" ;
+            Text [ english_us ] = "de~lete table" ;
+        };
     };
 };
 
@@ -642,6 +670,14 @@ QueryBox QUERY_BRW_DELETE_QUERY
     Message = "Soll die Abfrage gelöscht werden?" ;
     Message [ English ] = "Delete selected query?" ;
     Message [ english_us ] = "Do you want to delete the selected query?" ;
+};
+
+QueryBox QUERY_BRW_DELETE_TABLE
+{
+    Buttons = WB_YES_NO ;
+    Message = "Soll die Tabelle gelöscht werden?" ;
+    Message [ English ] = "Delete selected table?" ;
+    Message [ english_us ] = "Do you want to delete the selected table?" ;
 };
 
 QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-27 08:07:57 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,6 +542,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/27 08:07:57  fs
+ *  OSQLParser interface was changed - adjustments
+ *
  *  Revision 1.1  2000/10/26 18:06:51  fs
  *  initial checkin - parameter dialog
  *

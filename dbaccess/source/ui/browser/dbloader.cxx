@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 15:52:33 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
+#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
+#include "dbustrings.hrc"
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -114,6 +117,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
+using namespace dbaui;
 
 class DBContentLoader : public ::cppu::WeakImplHelper2< XFrameLoader, XServiceInfo>
 {
@@ -240,8 +244,10 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OFormGridView")),UNO_QUERY);
     else if(aParser.GetMainURL().EqualsAscii(".component:DB/DataSourceBrowser"))// construct the control
         xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ODatasourceBrowser")),UNO_QUERY);
-    else if(aParser.GetMainURL().EqualsAscii(".component:DB/QueryDesign"))// construct the control
+    else if(aParser.GetMainURL() == String(URL_COMPONENT_QUERYDESIGN))// construct the control
         xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OQueryDesign")),UNO_QUERY);
+    else if(aParser.GetMainURL() == String(URL_COMPONENT_TABLEDESIGN))// construct the control
+        xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OTableDesign")),UNO_QUERY);
     else
         OSL_ENSHURE(0,"wrong dispatch url!");
 

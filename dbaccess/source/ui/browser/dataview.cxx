@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:20:23 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@ using namespace ::com::sun::star::lang;
 //  using namespace ::com::sun::star::container;
 
 // -------------------------------------------------------------------------
-ODataView::ODataView(Window* pParent, const Reference< XMultiServiceFactory >& _rFactory)
-    :Window(pParent)
+ODataView::ODataView(Window* pParent, const Reference< XMultiServiceFactory >& _rFactory, WinBits nStyle)
+    :Window(pParent,nStyle)
     ,m_pToolBox(NULL)
     ,m_xServiceFactory(_rFactory)
 {

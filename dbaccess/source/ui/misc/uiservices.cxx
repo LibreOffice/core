@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 16:11:54 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ extern "C" void SAL_CALL writeDBLoaderInfo(void* pRegistryKey);
 extern "C" void SAL_CALL createRegistryInfo_OInteractionHandler();
 extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl();
 extern "C" void SAL_CALL createRegistryInfo_OQueryControl();
+extern "C" void SAL_CALL createRegistryInfo_OTableControl();
 
 //***************************************************************************************
 extern "C" void SAL_CALL createRegistryInfo_DBU()
@@ -104,6 +105,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
         createRegistryInfo_OInteractionHandler();
         createRegistryInfo_SbaXGridControl();
         createRegistryInfo_OQueryControl();
+        createRegistryInfo_OTableControl();
         bInit = sal_True;
     }
 }

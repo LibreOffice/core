@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-25 08:26:08 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
+
 
 using namespace dbaui;
 using namespace connectivity;
@@ -178,7 +182,7 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
         {
             if (m_xColumns->hasByName(*pBegin))
             {
-                m_xColumns->getByName(*pBegin) >>= xColumn;
+                ::cppu::extractInterface(xColumn,m_xColumns->getByName(*pBegin));
                 OSL_ENSHURE(xColumn.is(),"DlgFilterCrit::DlgFilterCrit: Column is null!");
             }
             else
@@ -201,7 +205,7 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
         aLB_WHEREFIELD3.SelectEntryPos(0);
 
         // Jetzt die Felder mit den Kriterien des SQL-Strings fuellen
-        m_xColumns->getByName(rFieldName) >>= xColumn;
+        ::cppu::extractInterface(xColumn,m_xColumns->getByName(rFieldName));
         m_xQueryComposer->appendFilterByColumn(xColumn);
 
         // insert the criteria into the dialog
@@ -209,7 +213,7 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
         const Sequence<PropertyValue >* pOrBegin = aValues.getConstArray();
         const Sequence<PropertyValue >* pOrEnd   = pOrBegin + aValues.getLength();
         sal_Bool bOr = sal_True;
-        for(sal_uInt32 i=0;pOrBegin != pOrEnd; ++pOrBegin)
+        for(sal_uInt16 i=0;pOrBegin != pOrEnd; ++pOrBegin)
         {
             bOr = sal_True;
             const PropertyValue* pAndBegin  = pOrBegin->getConstArray();
@@ -707,7 +711,7 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
 
     Reference<XPropertySet> xColumn;
     if (m_xColumns->hasByName(aName))
-        m_xColumns->getByName(aName) >>= xColumn;
+        ::cppu::extractInterface(xColumn,m_xColumns->getByName(aName));
     if(xColumn.is())
     {
         sal_Int32 nDataType;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 16:05:38 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 14:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,19 +74,21 @@ ModalDialog DLG_SAVE_AS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     HelpId = HID_DLG_SAVE_AS ;
-    Size = MAP_APPFONT ( 174 , 45 ) ;
+    Size = MAP_APPFONT ( 174 , 56 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text = "Speichern unter" ;
     Text [ ENGLISH ] = "Save as" ;
     Text [ english_us ] = "Save As" ;
-    FixedText FT_TITLE
+
+    FixedText FT_CATALOG
     {
         Pos = MAP_APPFONT ( 6 , 7 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "" ;
+        Text = "~Catalog" ;
+        Text[ENGLISH] = "~Catalog" ;
     };
-    Edit ET_TITLE
+    Edit ET_CATALOG
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 77 , 6 ) ;
@@ -94,22 +96,51 @@ ModalDialog DLG_SAVE_AS
         Text = "" ;
         TabStop = TRUE ;
     };
+    FixedText FT_SCHEMA
+    {
+        Pos = MAP_APPFONT ( 6 , 24 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "~Schema" ;
+        Text[ENGLISH] = "~Schema" ;
+    };
+    Edit ET_SCHEMA
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 77 , 23 ) ;
+        Size = MAP_APPFONT ( 89 , 12 ) ;
+        Text = "" ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_TITLE
+    {
+        Pos = MAP_APPFONT ( 6 , 41 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "" ;
+    };
+    Edit ET_TITLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 77 , 40 ) ;
+        Size = MAP_APPFONT ( 89 , 12 ) ;
+        Text = "" ;
+        TabStop = TRUE ;
+    };
     OKButton PB_OK
     {
-        Pos = MAP_APPFONT ( 6 , 25 ) ;
+        Pos = MAP_APPFONT ( 6 , 58 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton PB_CANCEL
     {
-        Pos = MAP_APPFONT ( 62 , 25 ) ;
+        Pos = MAP_APPFONT ( 62 , 58 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton PB_HELP
     {
-        Pos = MAP_APPFONT ( 118 , 25 ) ;
+        Pos = MAP_APPFONT ( 118 , 58 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
