@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jb $ $Date: 2001-06-20 20:55:05 $
+#   last change: $Author: jb $ $Date: 2001-09-28 13:32:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
+
+.IF "$(COM)"=="MSC"
+CFLAGS += -Ob0
+.ENDIF
 
 # ... common for all test executables ..............................
 APPSTDLIBS=\

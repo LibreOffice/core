@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-19 13:03:20 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 13:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ using namespace std;
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
 #include <com/sun/star/util/XChangesBatch.hpp>
 #endif
@@ -203,25 +204,15 @@ void commit()
 
 // -----------------------------------------------------------------------------
 static sal_Bool             s_bInitialized  =   sal_False;
-#ifdef LLA_PRIVAT_DEBUG
-static const sal_Char*      s_pSourcePath   =   "l:/src625/configmgr/workben/local_io/share";
-static const sal_Char*      s_pUpdatePath   =   "l:/src625/configmgr/workben/local_io/user";
-static const sal_Char*      s_pRootNode     =   "org.openoffice.ucb.Hierarchy"; // "org.openoffice.test";
+
+static const sal_Char*      s_pSourcePath   =   "../share";
+static const sal_Char*      s_pUpdatePath   =   "../user";
+static const sal_Char*      s_pRootNode     =   "org.openoffice.Office.Common";
 static const sal_Char*      s_pServerType   =   "local";
-static const sal_Char*      s_pLocale       =   "de-DE";
-static const sal_Char*      s_pServer       =   "";
-static const sal_Char*      s_pUser         =   "";
-static const sal_Char*      s_pPassword     =   "";
-#else
-static const sal_Char*      s_pSourcePath   =   "g:/src/configmgr/workben/local_io/share";
-static const sal_Char*      s_pUpdatePath   =   "g:/src/configmgr/workben/local_io/user";
-static const sal_Char*      s_pRootNode     =   "org.openoffice.Office.TypeDetection";
-static const sal_Char*      s_pServerType   =   "setup";
-static const sal_Char*      s_pLocale       =   "de-DE";
-static const sal_Char*      s_pServer       =   "lautrec-3108:48205";
+static const sal_Char*      s_pLocale       =   "en-US";
+static const sal_Char*      s_pServer       =   "lautrec:48205";
 static const sal_Char*      s_pUser         =   "nobody";
 static const sal_Char*      s_pPassword     =   "";
-#endif
 
 
 // -----------------------------------------------------------------------------
@@ -426,7 +417,7 @@ int _cdecl main( int argc, char * argv[] )
             );
         if (!xORB.is())
         {
-            ::flush(cout);
+            cout.flush();
             cerr << "Could not create the service factory !\n\n";
             return 1;
         }
@@ -500,7 +491,7 @@ int _cdecl main( int argc, char * argv[] )
             UNO_QUERY);
         if (!xCfgProvider.is())
         {
-            ::flush(cout);
+            cout.flush();
             cerr << "Could not create the configuration provider !\n\n";
             return 3;
         }
@@ -553,7 +544,7 @@ int _cdecl main( int argc, char * argv[] )
     }
     catch (Exception& e)
     {
-        ::flush(cout);
+        cout.flush();
         cerr << "Caught exception: " << e.Message << endl;
     }
 /*
@@ -636,6 +627,7 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
 {
     cout << "\n[ Q ] -> <Quit>";
     cout << "\n[ S ] -> <SetValue> ";
+    cout << "\n[ D ] -> <SetToDefault> ";
     cout << endl;
 
     cout << "\n:> " << flush;
@@ -644,6 +636,7 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
     {
         bool bHandled = false;
         bool bInserted = false;
+        bool bDefaulted = false;
 
         if (cin.getline(buf,sizeof buf))
         {
@@ -656,31 +649,31 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
             {
                 return true;
             }
-            else if((buf[0] == 0 || buf[0] == 'o' || buf[0] == 'O') && (0 == buf[1]))
-            {
-/*
-                cout << "work Offline" << endl;
-                Reference<com::sun::star::configuration::XConfigurationSync> xSync(xMSF, UNO_QUERY);
-
-                Sequence< Any > aArgs2(5);
-                sal_Int32 n=0;
-                aArgs2[n++] <<= configmgr::createPropertyValue(ASCII("path"), ASCII("org.openoffice.Setup"));
-                // aArgs2[n++] <<= configmgr::createPropertyValue(ASCII("path"), ASCII("org.openoffice.Office.Common"));
-                // aArgs2[n++] <<= configmgr::createPropertyValue(ASCII("path"), ASCII("org.openoffice.Office.Java"));
-                // aArgs2[n++] <<= configmgr::createPropertyValue(ASCII("path"), ASCII("org.openoffice.Office.Writer"));
-                // aArgs2[n++] <<= configmgr::createPropertyValue(ASCII("path"), ASCII("org.openoffice.Office.ucb.Hierarchy"));
-                xSync->offline(aArgs2);
-                bHandled = true;
-*/
-            }
-            else if((buf[0] == 0 || buf[0] == 's' || buf[0] == 'S') && (0 == buf[1]))
+            else if( (buf[0] == 's' || buf[0] == 'S') && (0 == buf[1]))
             {
                 // Replace a Value
-                Reference< XNameAccess > xAccess(xIface, UNO_QUERY);
+                Reference< XNameReplace > xAccess(xIface, UNO_QUERY);
 
-                cout << "SetMode, insert a Number" << endl;
-                cin.getline(buf,sizeof buf);
-                bInserted = true;
+                if (xAccess.is())
+                {
+                    cout << "Select a Value" << endl;
+                    bInserted = !!(cin.getline(buf,sizeof buf));
+                }
+                else
+                    bHandled = true;
+            }
+            else if( (buf[0] == 'd' || buf[0] == 'D') && (0 == buf[1]))
+            {
+                // Replace a Value
+                Reference< XPropertyState > xAccess(xIface, UNO_QUERY);
+
+                if (xAccess.is())
+                {
+                    cout << "Select a Value" << endl;
+                    bDefaulted = !!(cin.getline(buf,sizeof buf));
+                }
+                else
+                    bHandled = true;
             }
 
             else if ((buf[0] == 'p' || buf[0] == 'P') && (0 == buf[1]))
@@ -719,9 +712,9 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                     }
                     else if ('0' <= buf[0] && buf[0] <= '9' && xAccess.is())
                     {
-                        unsigned int n = unsigned(atoi(buf));
+                        int n = (atoi(buf));
                         Sequence<OUString> aNames = xAccess->getElementNames();
-                        if (n < aNames.getLength())
+                        if (0 <= n && n < aNames.getLength())
                             aName = aNames[n];
                     }
 
@@ -833,62 +826,74 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                                 cout << "Error: ELEMENT '" << aName << "' is of unknown or unrecognized type" << endl;
                             break;
                         }
+                        if (bDefaulted)
+                        {
+                            Reference< XPropertyState > xReset(xAccess, UNO_QUERY);
+                            if (xReset.is())
+                            {
+                                xReset->setPropertyToDefault(aName);
+                                commit();
+                            }
+                        }
+                        else if (bValue && bInserted)
+                        {
+                            if (aElement.getValueTypeClass() == TypeClass_BOOLEAN ||
+                                aElement.getValueTypeClass() == TypeClass_VOID)
+                            {
+                                cout << "Set Value (Type=BOOL) to :";
+                                cout.flush();
+                                cin.getline(buf,sizeof buf);
+                                OUString aInput = OUString::createFromAscii(buf);
+                                sal_Bool bValue = false;
+                                if (aInput.equalsIgnoreAsciiCase(ASCII("true")))
+                                    bValue = true;
+
+                                OUString aStr = ASCII("false");
+                                Any aValueAny;
+                                aValueAny <<= bValue;
+
+                                Reference< XNameReplace > xNameReplace(xAccess, UNO_QUERY);
+                                if (xNameReplace.is())
+                                {
+                                    xNameReplace->replaceByName(aName, aValueAny);
+                                    commit();
+                                }
+                                bInserted = false;
+                            }
+                            else if (aElement.getValueTypeClass() == TypeClass_STRING)
+                            {
+                                cout << "set value (type = string) to : ";
+                                cout.flush();
+                                cin.getline(buf,sizeof buf);
+                                Any aValue;
+                                aValue <<= buf;
+
+                                Reference< XNameReplace > xNameReplace(xAccess, UNO_QUERY);
+                                if (xNameReplace.is())
+                                {
+                                    xNameReplace->replaceByName(aName, aValue);
+                                    commit();
+                                }
+                                bInserted = false;
+                            }
+                            else
+                            {
+                                cout << "Sorry, only BOOLEAN Values can changed today." << endl;
+                            }
+                        }
+
                         if (bValue)
                         {
-                            if (bInserted)
-                            {
-                                if (aElement.getValueTypeClass() == TypeClass_BOOLEAN ||
-                                    aElement.getValueTypeClass() == TypeClass_VOID)
-                                {
-                                    cout << "Set Value (Type=BOOL) to :";
-                                    cout.flush();
-                                    cin.getline(buf,sizeof buf);
-                                    OUString aInput = OUString::createFromAscii(buf);
-                                    sal_Bool bValue = false;
-                                    if (aInput.equalsIgnoreAsciiCase(ASCII("true")))
-                                        bValue = true;
-
-                                    OUString aStr = ASCII("false");
-                                    Any aValueAny;
-                                    aValueAny <<= bValue;
-
-                                    Reference< XNameReplace > xNameReplace(xAccess, UNO_QUERY);
-                                    if (xNameReplace.is())
-                                    {
-                                        xNameReplace->replaceByName(aName, aValueAny);
-                                        commit();
-                                    }
-                                    bInserted = false;
-                                }
-                                else if (aElement.getValueTypeClass() == TypeClass_STRING)
-                                {
-                                    cout << "set value (type = string) to : ";
-                                    cout.flush();
-                                    cin.getline(buf,sizeof buf);
-                                    Any aValue;
-                                    aValue <<= buf;
-
-                                    Reference< XNameReplace > xNameReplace(xAccess, UNO_QUERY);
-                                    if (xNameReplace.is())
-                                    {
-                                        xNameReplace->replaceByName(aName, aValue);
-                                        commit();
-                                    }
-                                    bInserted = false;
-                                }
-                                else
-                                {
-                                    cout << "Sorry, only BOOLEAN Values can changed today." << endl;
-                                }
-                            }
                             prompt_and_wait();
                             return bValueOk ? true : false;
                         }
-
-                        if (aElement >>= xNext)
-                            cout << "Got an Interface for '" << aName << "'" << endl;
                         else
-                            cout << "Error: Cannot get an Interface for '" << aName << "'" << endl;
+                        {
+                            if (aElement >>= xNext)
+                                cout << "Got an Interface for '" << aName << "'" << endl;
+                            else
+                                cout << "Error: Cannot get an Interface for '" << aName << "'" << endl;
+                        }
                     }
                     else
                     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgadduser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-25 06:51:47 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 13:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
 #endif
+
+#include <iostream>
+using std::cout;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
