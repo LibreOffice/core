@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 23:28:39 $
+ *  last change: $Author: gt $ $Date: 2001-06-11 15:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4167,7 +4167,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description GeStep
         {
-            Text = "Rundet eine Zahl auf die nächstkleinere ganze Zahl ab.";
+            Text = "Überprüft, ob eine Zahl größer als ein Schwellenwert ist.";
             Text[ english ] = "Tests wether a number is greater than a threshold value";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Tests wether a number is greater than a threshold value";
