@@ -1,0 +1,42 @@
+    <node oor:name="HTML (StarCalc)" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>writer_web_HTML</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">Strona WWW (%productname% Calc)</value>
+            <value xml:lang="hu">HTML-dokumentum (%productname% Calc)</value>
+            <value xml:lang="ja">HTML ドキュメント (%productname% Calc)</value>
+            <value xml:lang="es">Documento HTML (%productname% Calc)</value>
+            <value xml:lang="tr">HTML Belgesi (%productname% Calc)</value>
+            <value xml:lang="ru">Web-страница (%productname% Calc)</value>
+            <value xml:lang="th">HTML Document (%productname% Calc)</value>
+            <value xml:lang="x-comment">HTML-Document (%productname% Calc)</value>
+            <value xml:lang="ca">HTML Document (%productname% Calc)</value>
+            <value xml:lang="el">Έγγραφο HTML (%productname% Calc)</value>
+            <value xml:lang="zh-CN">HTML 文档 (%productname% Calc)</value>
+            <value xml:lang="pt">Página Web (%productname% Calc)</value>
+            <value xml:lang="cs">HTML dokument (%productname% Calc)</value>
+            <value xml:lang="fr">Document HTLM (%productname% Calc)</value>
+            <value xml:lang="ar">HTML (StarOffice Calc)</value>
+            <value xml:lang="zh-TW">HTML 文件 (%productname% Calc)</value>
+            <value xml:lang="sl">Dokument HTML (%productname% Calc)</value>
+            <value xml:lang="fi">HTML (StarOffice Calc)</value>
+            <value xml:lang="hi-IN">HTML Document (%productname% Calc)</value>
+            <value xml:lang="en-US">HTML Document (%productname% Calc)</value>
+            <value xml:lang="sk">HTML dokument (%productname% Calc)</value>
+            <value xml:lang="he">‮מסמך HTML (%productname% Calc)‬</value>
+            <value xml:lang="sv">HTML-dokument (%productname% Calc)</value>
+            <value xml:lang="da">HTML-dokument (%productname% Calc)</value>
+            <value xml:lang="de">HTML-Dokument (%productname% Calc)</value>
+            <value xml:lang="ko">HTML 문서 (%productname% Calc)</value>
+            <value xml:lang="nl">Webpagina (%productname% Calc)</value>
+            <value xml:lang="pt-BR">HTML (StarOffice Calc)</value>
+            <value xml:lang="it">Documento HTML (%productname% Calc)</value>
+            <value xml:lang="x-translate">HTML-Document (%productname% Calc)</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN</value></prop>
+    </node>
