@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnectionData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 16:17:40 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,10 +106,7 @@ void OTableConnectionData::Init()
 void OTableConnectionData::Init(const String& rSourceWinName, const String& rDestWinName, const String& rConnName)
 {
     // erst mal alle LineDatas loeschen
-    for(::std::vector<OConnectionLineData*>::iterator aIter = m_vConnLineData.begin();aIter != m_vConnLineData.end();++aIter)
-        delete *aIter;
-
-    m_vConnLineData.clear();
+    OConnectionLineDataVec().swap(m_vConnLineData);
     // dann die Strings
     m_aSourceWinName = rSourceWinName;
     m_aDestWinName = rDestWinName;
@@ -155,9 +152,9 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
     ResetConnLines(FALSE);
 
     // und kopieren
-    ::std::vector<OConnectionLineData*>* pLineData = const_cast<OTableConnectionData*>(&rConnData)->GetConnLineDataList();
+    OConnectionLineDataVec* pLineData = const_cast<OTableConnectionData*>(&rConnData)->GetConnLineDataList();
 
-    ::std::vector<OConnectionLineData*>::const_iterator aIter = pLineData->begin();
+    OConnectionLineDataVec::const_iterator aIter = pLineData->begin();
     for(;aIter != pLineData->end();++aIter)
         m_vConnLineData.push_back(new OConnectionLineData(**aIter));
 
@@ -174,7 +171,7 @@ BOOL OTableConnectionData::SetConnLine( USHORT nIndex, const String& rSourceFiel
     if (m_vConnLineData.size() == nIndex)
         return AppendConnLine(rSourceFieldName, rDestFieldName);
 
-    OConnectionLineData* pConnLineData = m_vConnLineData[nIndex];
+    OConnectionLineDataRef pConnLineData = m_vConnLineData[nIndex];
     DBG_ASSERT(pConnLineData != NULL, "OTableConnectionData::SetConnLine : habe ungueltiges LineData-Objekt");
 
     pConnLineData->SetSourceFieldName( rSourceFieldName );
@@ -186,7 +183,7 @@ BOOL OTableConnectionData::SetConnLine( USHORT nIndex, const String& rSourceFiel
 //------------------------------------------------------------------------
 BOOL OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName )
 {
-    ::std::vector<OConnectionLineData*>::iterator aIter = m_vConnLineData.begin();
+    OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
     for(;aIter != m_vConnLineData.end();++aIter)
     {
         if((*aIter)->GetDestFieldName() == rDestFieldName && (*aIter)->GetSourceFieldName() == rSourceFieldName)
@@ -194,8 +191,8 @@ BOOL OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFieldNa
     }
     if(aIter == m_vConnLineData.end())
     {
-        OConnectionLineData* pNew = new OConnectionLineData(rSourceFieldName, rDestFieldName);
-        if (!pNew)
+        OConnectionLineDataRef pNew = new OConnectionLineData(rSourceFieldName, rDestFieldName);
+        if (!pNew.isValid())
             return FALSE;
 
         m_vConnLineData.push_back(pNew);
@@ -206,9 +203,7 @@ BOOL OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFieldNa
 //------------------------------------------------------------------------
 void OTableConnectionData::ResetConnLines( BOOL bUseDefaults )
 {
-    for(::std::vector<OConnectionLineData*>::iterator aIter = m_vConnLineData.begin();aIter != m_vConnLineData.end();++aIter)
-        delete *aIter;
-    m_vConnLineData.clear();
+    OConnectionLineDataVec().swap(m_vConnLineData);
 
     if (bUseDefaults)
     {
@@ -218,13 +213,13 @@ void OTableConnectionData::ResetConnLines( BOOL bUseDefaults )
 }
 
 //------------------------------------------------------------------------
-OConnectionLineData* OTableConnectionData::CreateLineDataObj()
+OConnectionLineDataRef OTableConnectionData::CreateLineDataObj()
 {
     return new OConnectionLineData();
 }
 
 //------------------------------------------------------------------------
-OConnectionLineData* OTableConnectionData::CreateLineDataObj( const OConnectionLineData& rConnLineData )
+OConnectionLineDataRef OTableConnectionData::CreateLineDataObj( const OConnectionLineData& rConnLineData )
 {
     return new OConnectionLineData( rConnLineData );
 }

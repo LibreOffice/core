@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableConnectionData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@ namespace dbaui
 
     protected:
         // fuer das Anlegen und Duplizieren von Lines vom eigenen Typ
-        virtual OConnectionLineData* CreateLineDataObj();
-        virtual OConnectionLineData* CreateLineDataObj( const OConnectionLineData& rConnLineData );
+        virtual OConnectionLineDataRef CreateLineDataObj();
+        virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData );
 
     public:
         TYPEINFO();

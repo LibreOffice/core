@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,8 @@ void OTableConnection::Init()
 {
     //////////////////////////////////////////////////////////////////////
     // Linienliste mit Defaults initialisieren
-    ::std::vector<OConnectionLineData*>* pLineData = GetData()->GetConnLineDataList();
-    ::std::vector<OConnectionLineData*>::const_iterator aIter = pLineData->begin();
+    OConnectionLineDataVec* pLineData = GetData()->GetConnLineDataList();
+    OConnectionLineDataVec::const_iterator aIter = pLineData->begin();
     for(;aIter != pLineData->end();++aIter)
     {
         OConnectionLine* pConnLine = new OConnectionLine(this, *aIter);

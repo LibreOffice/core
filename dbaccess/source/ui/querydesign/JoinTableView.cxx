@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 14:24:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1175,15 +1175,22 @@ BOOL OJoinTableView::IsAddAllowed()
     if (m_pView->getController()->isReadOnly())
         return FALSE;
 
-    Reference< XConnection> xConnection = m_pView->getController()->getConnection();
-    if(!xConnection.is())
-        return FALSE;
-    // nicht wenn schon zuviele Tabellen
-    Reference < XDatabaseMetaData > xMetaData( xConnection->getMetaData() );
+    try
+    {
+        Reference< XConnection> xConnection = m_pView->getController()->getConnection();
+        if(!xConnection.is())
+            return FALSE;
+        // nicht wenn schon zuviele Tabellen
+        Reference < XDatabaseMetaData > xMetaData( xConnection->getMetaData() );
 
-    sal_Int32 nMax = xMetaData->getMaxTablesInSelect();
-    if (nMax && nMax <= (sal_Int32)m_aTableMap.size())
+        sal_Int32 nMax = xMetaData->getMaxTablesInSelect();
+        if (nMax && nMax <= (sal_Int32)m_aTableMap.size())
+            return FALSE;
+    }
+    catch(SQLException&)
+    {
         return FALSE;
+    }
 
     // nicht wenn keine Joins moeglich
 //  if (!GetDatabase()->IsCapable(SDB_CAP_JOIN) && nMax <= GetTabWinCount())
@@ -1208,7 +1215,7 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
                 return;
             }
 
-            if( !m_vTableConnection.size() )
+            if( m_vTableConnection.empty() )
                 return;
             DeselectConn(GetSelectedConn());
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,20 +599,20 @@ extern ::rtl::OUString ConvertAlias(const ::rtl::OUString& rName);
     return aErg;
 }
 //------------------------------------------------------------------------------
-::rtl::OUString OQueryDesignView::BuildJoinCriteria(::std::vector<OConnectionLineData*>* pLineDataList,OQueryTableConnectionData* pData)
+::rtl::OUString OQueryDesignView::BuildJoinCriteria(OConnectionLineDataVec* pLineDataList,OQueryTableConnectionData* pData)
 {
     ::rtl::OUString aCondition;
     Reference< XConnection> xConnection = static_cast<OQueryController*>(getController())->getConnection();
     if(!xConnection.is())
         return aCondition;
 
-    ::std::vector<OConnectionLineData*>::iterator aIter = pLineDataList->begin();
+    OConnectionLineDataVec::iterator aIter = pLineDataList->begin();
     Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
     ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
 
     for(;aIter != pLineDataList->end();++aIter)
     {
-        OConnectionLineData* pLineData = *aIter;
+        OConnectionLineDataRef pLineData = *aIter;
         if(pLineData->IsValid())
         {
             if(aCondition.getLength())
@@ -1624,8 +1624,8 @@ int OQueryDesignView::ComparsionPredicate(const ::connectivity::OSQLParseNode * 
                                                                                                         static_cast<OQueryTableWindow*>(aDragRight->GetTabWindow())));
             if(pConn)
             {
-                ::std::vector<OConnectionLineData*>* pLineDataList = pConn->GetData()->GetConnLineDataList();
-                ::std::vector<OConnectionLineData*>::iterator aIter = pLineDataList->begin();
+                OConnectionLineDataVec* pLineDataList = pConn->GetData()->GetConnLineDataList();
+                OConnectionLineDataVec::iterator aIter = pLineDataList->begin();
                 for(;aIter != pLineDataList->end();++aIter)
                 {
                     if((*aIter)->GetSourceFieldName() == aDragLeft->GetField() ||

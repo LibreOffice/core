@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableConnectionData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ OQueryTableConnectionData::~OQueryTableConnectionData()
 }
 
 //------------------------------------------------------------------------
-OConnectionLineData* OQueryTableConnectionData::CreateLineDataObj()
+OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj()
 {
     DBG_CHKTHIS(OQueryTableConnectionData,NULL);
     // keine Spezialisierung bei den LineDatas, also eine Instanz der Standard-Klasse
@@ -129,7 +129,7 @@ OConnectionLineData* OQueryTableConnectionData::CreateLineDataObj()
 }
 
 //------------------------------------------------------------------------
-OConnectionLineData* OQueryTableConnectionData::CreateLineDataObj( const OConnectionLineData& rConnLineData )
+OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj( const OConnectionLineData& rConnLineData )
 {
     DBG_CHKTHIS(OQueryTableConnectionData,NULL);
     return new OConnectionLineData( rConnLineData );

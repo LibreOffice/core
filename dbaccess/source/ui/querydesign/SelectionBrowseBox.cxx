@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,14 +294,23 @@ void OSelectionBrowseBox::Init()
             m_nVisibleCount++;
     }
     RowInserted(0, m_nVisibleCount, sal_False);
-    Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
-    if(xConnection.is())
+    try
     {
-        Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
-        m_nMaxColumns = xMetaData->getMaxColumnsInSelect();
+        Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
+        if(xConnection.is())
+        {
+            Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+            m_nMaxColumns = xMetaData->getMaxColumnsInSelect();
+
+        }
+        else
+            m_nMaxColumns = 0;
     }
-    else
+    catch(const SQLException&)
+    {
+        OSL_ENSURE(0,"Catched Exception when asking for database metadata options!");
         m_nMaxColumns = 0;
+    }
 }
 
 //------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,9 +558,11 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
         m_bDesign = sal_False;
         if(m_bCreateView)
         {
-            String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
-            ODataView* pWindow = getView();
-            InfoBox(pWindow, aMessage).Execute();
+            {
+                String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
+                ODataView* pWindow = getView();
+                InfoBox(pWindow, aMessage).Execute();
+            }
             throw SQLException();
         }
     }
@@ -701,11 +703,18 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
             xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sName));
         }
     }
-    catch(SQLException&)
+    catch(SQLException& e)
     {
         OSL_ENSURE(sal_False, "OQueryController::initialize: caught an exception!");
+        // we caught an exception so we switch to text only mode
+        {
+            m_bDesign = sal_False;
+            getContainer()->initialize();
+            ODataView* pWindow = getView();
+            OSQLMessageBox(pWindow,e).Execute();
+        }
+        throw;
     }
-
 }
 // -----------------------------------------------------------------------------
 void OQueryController::setQueryComposer()

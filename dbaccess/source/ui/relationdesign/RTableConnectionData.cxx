@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RTableConnectionData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:24:04 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ void ORelationTableConnectionData::ChangeOrientation()
     //////////////////////////////////////////////////////////////////////
     // Source- und DestFieldName der Linien austauschen
     ::rtl::OUString sTempString;
-    ::std::vector<OConnectionLineData*>::iterator aIter = m_vConnLineData.begin();
+    OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
     for(;aIter != m_vConnLineData.end();++aIter)
     {
         sTempString = (*aIter)->GetSourceFieldName();
@@ -313,7 +313,7 @@ BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet
 
         for(;pKeyBegin != pKeyEnd;++pKeyBegin)
         {
-            ::std::vector<OConnectionLineData*>::const_iterator aIter = m_vConnLineData.begin();
+            OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
             for(;aIter != m_vConnLineData.end();++aIter)
             {
                 if( (*aIter)->IsValid() )
@@ -354,13 +354,13 @@ BOOL ORelationTableConnectionData::IsConnectionPossible()
 }
 
 //------------------------------------------------------------------------
-OConnectionLineData* ORelationTableConnectionData::CreateLineDataObj()
+OConnectionLineDataRef ORelationTableConnectionData::CreateLineDataObj()
 {
     return new OConnectionLineData();
 }
 
 //------------------------------------------------------------------------
-OConnectionLineData* ORelationTableConnectionData::CreateLineDataObj( const OConnectionLineData& rConnLineData )
+OConnectionLineDataRef ORelationTableConnectionData::CreateLineDataObj( const OConnectionLineData& rConnLineData )
 {
     return new OConnectionLineData( rConnLineData );
 }
@@ -468,7 +468,7 @@ BOOL ORelationTableConnectionData::Update()
         Reference<XDataDescriptorFactory> xColumnFactory(xColumns,UNO_QUERY);
         Reference<XAppend> xColumnAppend(xColumns,UNO_QUERY);
 
-        ::std::vector<OConnectionLineData*>::iterator aIter = m_vConnLineData.begin();
+        OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
         for(;aIter != m_vConnLineData.end();++aIter)
         {
             if((*aIter)->GetSourceFieldName().getLength() && (*aIter)->GetDestFieldName().getLength())
@@ -518,10 +518,7 @@ BOOL ORelationTableConnectionData::Update()
     if(xColSup.is())
     {
         // The fields the relation marks may not be the same as our LineDatas mark after the relation has been updated
-        ::std::vector<OConnectionLineData*>::iterator aIter = m_vConnLineData.begin();
-        for(;aIter != m_vConnLineData.end();++aIter)
-            delete *aIter;
-        m_vConnLineData.clear();
+        OConnectionLineDataVec().swap(m_vConnLineData);
 
         Reference<XNameAccess> xColumns = xColSup->getColumns();
         Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
@@ -533,7 +530,7 @@ BOOL ORelationTableConnectionData::Update()
             xColumns->getByName(*pBegin) >>= xColumn;
             if (xColumn.is())
             {
-                OConnectionLineData* pNewData = CreateLineDataObj();
+                OConnectionLineDataRef pNewData = CreateLineDataObj();
 
                 ::rtl::OUString sName,sRelatedColumn;
 
