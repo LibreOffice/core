@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-28 15:18:56 $
+ *  last change: $Author: pl $ $Date: 2001-08-29 13:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,8 +340,10 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 #endif
                 }
             }
+#ifdef DEBUG
             else
                 fprintf( stderr, "query subsets failed\n" );
+#endif
 #else
                 mbMultiLingual = False;
 #endif
