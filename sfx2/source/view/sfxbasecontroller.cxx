@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-29 13:35:17 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,6 @@
 #include <childwin.hxx>
 #include <sfxsids.hrc>
 #include <workwin.hxx>
-#include <stbmgr.hxx>
 #include <objface.hxx>
 
 #include <vos/mutex.hxx>
@@ -985,15 +984,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                 else
                     pSlot = rSlotPool.GetUnoSlot( aURL.Path );
                 if ( pSlot && ( !pAct->GetFrame()->IsInPlace() || !pSlot->IsMode( SFX_SLOT_CONTAINER ) ) )
-                {
-                    SfxOfficeDispatch* pDispatch = new SfxOfficeDispatch(
-                                                            pAct->GetBindings(),
-                                                            pAct->GetDispatcher(),
-                                                            pSlot->GetSlotId(),
-                                                            aURL );
-                    pDispatch->SetMasterUnoCommand( bMasterCommand );
-                    return REFERENCE< XDISPATCH >( pDispatch );
-                }
+                    return pAct->GetBindings().GetDispatch( pSlot, aURL, bMasterCommand );
                 else
                 {
                     // try to find parent SfxViewFrame
@@ -1031,15 +1022,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                                 pSlot = rSlotPool.GetUnoSlot( aURL.Path );
 
                             if ( pSlot )
-                            {
-                                SfxOfficeDispatch* pDispatch = new SfxOfficeDispatch(
-                                                                        pParentFrame->GetBindings(),
-                                                                        pParentFrame->GetDispatcher(),
-                                                                        pSlot->GetSlotId(),
-                                                                        aURL );
-                                pDispatch->SetMasterUnoCommand( bMasterCommand );
-                                return REFERENCE< XDISPATCH >( pDispatch );
-                            }
+                                return pParentFrame->GetBindings().GetDispatch( pSlot, aURL, bMasterCommand );
                         }
                     }
                 }
@@ -1053,13 +1036,13 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                 {
                     const SfxSlot* pSlot = m_pData->m_pViewShell->GetVerbSlot_Impl(nId);
                     if ( pSlot )
-                        return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), nId, aURL) );
+                        return pAct->GetBindings().GetDispatch( pSlot, aURL, sal_False );
                 }
 
                 SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pAct );
                 const SfxSlot* pSlot = rSlotPool.GetSlot( nId );
                 if ( pSlot && ( !pAct->GetFrame()->IsInPlace() || !pSlot->IsMode( SFX_SLOT_CONTAINER ) ) )
-                    return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot->GetSlotId(), aURL ) );
+                    return pAct->GetBindings().GetDispatch( pSlot, aURL, sal_False );
                 else
                 {
                     // try to find parent SfxViewFrame
@@ -1092,7 +1075,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                             SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pParentFrame );
                             const SfxSlot* pSlot = rSlotPool.GetUnoSlot( aURL.Path );
                             if ( pSlot )
-                                return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pParentFrame->GetBindings(), pParentFrame->GetDispatcher(), pSlot->GetSlotId(), aURL) );
+                                return pParentFrame->GetBindings().GetDispatch( pSlot, aURL, sal_False );
                         }
                     }
                 }
@@ -1103,8 +1086,10 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                 REFERENCE< XMODEL > xModel = getModel();
                 if( xModel.is() && aURL.Mark.getLength() )
                 {
-                    if( aURL.Main.getLength() && aURL.Main == xModel->getURL() )
-                        return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), SID_JUMPTOMARK, aURL) );
+                    SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pAct );
+                    const SfxSlot* pSlot = rSlotPool.GetSlot( SID_JUMPTOMARK );
+                    if( aURL.Main.getLength() && aURL.Main == xModel->getURL() && pSlot )
+                        return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot, aURL) );
                 }
             }
         }
@@ -1434,7 +1419,6 @@ throw (::com::sun::star::uno::RuntimeException)
 
     ::com::sun::star::uno::Sequence< sal_Int16 > aSeq =
         comphelper::containerToSequence< sal_Int16 >( aGroupList );
-
     return aSeq;
 }
 
