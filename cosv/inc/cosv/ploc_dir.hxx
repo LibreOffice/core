@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ploc_dir.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:39 $
+ *  last change: $Author: np $ $Date: 2002-05-02 12:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ class Directory : public Persistent
 
     // OPERATIONS
     bool                PhysicalCreate(
-                            bool                i_bCreateParentsIfNecessary = true );
+                            bool                i_bCreateParentsIfNecessary = true ) const;
 
     // INQUIRY
     void                GetContainedDirectories(
@@ -133,7 +133,7 @@ class Directory : public Persistent
         true, if parent(!) directory exists or could be created.
         false, if this is a root directory.
     */
-    bool                Check_Parent();
+    bool                Check_Parent() const;
     bool                PhysicalCreate_Dir(
                             const char *        i_sStr ) const;
     // DATA

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plocroot.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:40 $
+ *  last change: $Author: np $ $Date: 2002-05-02 12:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 // NOT FULLY DECLARED SERVICES
 // #include <cosv/bstream.hxx>
-// #include <ctype.h>
+#include <ctype.h>
 
 
 namespace csv

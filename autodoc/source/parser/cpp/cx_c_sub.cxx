@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_c_sub.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:29 $
+ *  last change: $Author: np $ $Date: 2002-05-02 12:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
+#include <ctype.h>
 #include "c_dealer.hxx"
 #include <tokens/parseinc.hxx>
 #include <x_parse.hxx>

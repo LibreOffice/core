@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ploc_dir.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-03-22 10:28:16 $
+ *  last change: $Author: np $ $Date: 2002-05-02 12:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ Directory::operator-=( uintt i_nLevels )
 }
 
 bool
-Directory::PhysicalCreate( bool i_bCreateParentsIfNecessary )
+Directory::PhysicalCreate( bool i_bCreateParentsIfNecessary ) const
 {
     bool ret = PhysicalCreate_Dir( StrPath() );
     if ( ret OR NOT i_bCreateParentsIfNecessary )
@@ -139,7 +139,7 @@ Directory::PhysicalCreate( bool i_bCreateParentsIfNecessary )
 }
 
 bool
-Directory::Check_Parent()
+Directory::Check_Parent() const
 {
     // There is no parent of root directories:
     if ( aPath.DirChain().Size() == 0 )
@@ -147,7 +147,7 @@ Directory::Check_Parent()
 
     // Become my own parent:
     String sLastToken = aPath.DirChain().Back();
-    operator-=(1);
+    const_cast< Directory* >(this)->operator-=(1);
 
     // Begin behaving as parent:
     bool ret = Exists();
@@ -160,7 +160,7 @@ Directory::Check_Parent()
     // End behaving as parent.
 
     // Become myself again:
-    operator+=(sLastToken);
+    const_cast< Directory* >(this)->operator+=(sLastToken);
     return ret;
 }
 
@@ -267,13 +267,21 @@ Directory::PhysicalCreate_Dir( const char * i_sStr ) const
 void
 Directory::GetContainedDirectories( StringVector & o_rResult ) const
 {
+    StreamStr       sNew(240);
+    sNew << aPath;
+    StreamStr::size_type
+                    nStartFilename = sNew.tellp();
+
     DIR *           pDir = opendir( StrPath() );
     dirent *        pEntry = 0;
     struct stat     aEntryStatus;
 
     while ( (pEntry = readdir(pDir)) != 0 )
     {
-        stat(pEntry->d_name, &aEntryStatus);
+        sNew.seekp(nStartFilename);
+        sNew << pEntry->d_name;
+
+        stat(sNew.c_str(), &aEntryStatus);
         if ( (aEntryStatus.st_mode & S_IFDIR) == S_IFDIR
              AND *pEntry->d_name != '.' )
         {
@@ -304,7 +312,10 @@ Directory::GetContainedFiles( StringVector &    o_rResult,
 
     while ( (pEntry = readdir(pDir)) != 0 )
     {
-        stat(pEntry->d_name, &aEntryStatus);
+        sNew.seekp(nStartFilename);
+        sNew << pEntry->d_name;
+
+        stat(sNew.c_str(), &aEntryStatus);
         if ( (aEntryStatus.st_mode & S_IFDIR) == S_IFDIR )
             continue;   // Don't gather directories.
 

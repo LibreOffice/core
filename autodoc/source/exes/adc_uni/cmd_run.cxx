@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmd_run.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:27 $
+ *  last change: $Author: np $ $Date: 2002-05-02 12:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <cosv/x.hxx>
+#include <cosv/ploc.hxx>
 #include <ary/ary.hxx>
 #include <ary/ary.hxx>
 #include <ary/cpp/c_rwgate.hxx>
@@ -346,7 +347,7 @@ CommandRunner::GatherFiles( FileCollector_Ifc &            o_rFiles,
     i_rProject.aRootDirectory.Get( aDir );
 
     uintt nProjectDir_AddPosition =
-            (strcmp(aDir.c_str(),".\\") == 0)
+            ( strcmp(aDir.c_str(),".\\") == 0 OR strcmp(aDir.c_str(),"./") == 0 )
                 ?   0
                 :   uintt( aDir.tellp() );
 
@@ -457,7 +458,7 @@ Recursive_PutOutNamespace( csi::uidl::Display &             o_rDisplay,
 {
     static StreamStr  sPath(512);
     sPath.seekp(0);
-    i_rNamespace.GetFullName( sPath, "\\");
+    i_rNamespace.GetFullName( sPath, csv::ploc::Delimiter() );
     o_rDisplay.InitModule( i_rNamespace.Name(),
                            sPath.c_str(),
                            i_rNamespace.Depth() );
