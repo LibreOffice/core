@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:24:52 $
+ *  last change: $Author: kz $ $Date: 2001-04-07 19:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9979,7 +9979,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Matrix of celverwijzing naar cellen waarvan de inhoud overeenkomt met de betalingen.  ";
             Text[ french ] = "Une matrice ou une référence à des cellules dont le contenu correspond aux paiements.";
             Text[ spanish ] = "Matriz o referencia de celda a celdas cuyo contenido corresponde a los pagos. ";
-            Text[ italian ] = "È una matrice o un riferimento a celle il cui contenuto corrisponde ai pagamenti. ";
+            Text[ italian ] = "È una matrice o un riferimento a celle il cui contenuto corrisponde ai pagamenti.";
             Text[ danish ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return.";
             Text[ swedish ] = "Matris eller cellreferens till celler vars innehåll motsvarar betalningarna.";
             Text[ polish ] = "Macierz lub odwo³anie komórek do komórek, których zawartoœci odpowiadaj¹ p³atnoœciom.  ";
@@ -10098,7 +10098,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Berekent de hoogte van de rente bij gelijkblijvende aflossingstermijnen.";
             Text[ french ] = "Calcule le montant des intérêts pour un emprunt à remboursement constant.";
             Text[ spanish ] = "Returns the amount of interest for constant redemption rates.";
-            Text[ italian ] = "Returns the amount of interest for constant redemption rates.";
+            Text[ italian ] = "Calcola gli interessi per ammortamenti costanti";
             Text[ danish ] = "Returns the amount of interest for constant redemption rates.";
             Text[ swedish ] = "Beräknar andelen räntor vid konstanta amorteringar.";
             Text[ polish ] = "Oblicza wysokoœæ odsetków w przypadku sta³ych rat amortyzacyjnych.";
@@ -10127,7 +10127,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "rente";
             Text[ french ] = "Taux";
             Text[ spanish ] = "rate";
-            Text[ italian ] = "rate";
+            Text[ italian ] = "TASSO";
             Text[ danish ] = "rate";
             Text[ swedish ] = "Ränta";
             Text[ polish ] = "Odsetek";
@@ -10150,7 +10150,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Rentevoet voor een aflossingstermijn.";
             Text[ french ] = "Taux d'intérêt pour une période d'amortissement.";
             Text[ spanish ] = "Interest rate of a single redemption rate.";
-            Text[ italian ] = "Interest rate of a single redemption rate.";
+            Text[ italian ] = "Interessi equivalenti a una rata di ammortamento";
             Text[ danish ] = "Interest rate of a single redemption rate.";
             Text[ swedish ] = "Räntesats för en amortering.";
             Text[ polish ] = "Stopa procentowa raty amortyzacjynej.";
@@ -10173,7 +10173,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "termijn";
             Text[ french ] = "Périodes";
             Text[ spanish ] = "period";
-            Text[ italian ] = "period";
+            Text[ italian ] = "Periodo";
             Text[ danish ] = "period";
             Text[ swedish ] = "Period";
             Text[ polish ] = "Okres";
@@ -10196,7 +10196,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Aantal aflossingstermijnen voor de berekening van de rente.";
             Text[ french ] = "Nombre de périodes d'amortissement pour le calcul des intérêts.";
             Text[ spanish ] = "Count of amortization periods for the calculation of the interest.";
-            Text[ italian ] = "Count of amortization periods for the calculation of the interest.";
+            Text[ italian ] = "Periodo di ammortamento per il calcolo degli interessi";
             Text[ danish ] = "Count of amortization periods for the calculation of the interest.";
             Text[ swedish ] = "Antal amorteringar för beräkningen av räntor.";
             Text[ polish ] = "Liczba okresów amortyzacji do obliczenia odsetków.";
@@ -10219,7 +10219,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "gehele_termijn";
             Text[ french ] = "Durée_totale";
             Text[ spanish ] = "total_periods";
-            Text[ italian ] = "total_periods";
+            Text[ italian ] = "Periodo_totale";
             Text[ danish ] = "total_periods";
             Text[ swedish ] = "Total_period";
             Text[ polish ] = "suma_okresów";
@@ -10242,7 +10242,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Ttotaal aantal aflossingstermijnen.";
             Text[ french ] = "Nombre total de périodes d'amortissement.";
             Text[ spanish ] = "Sum total of amortization periods.";
-            Text[ italian ] = "Sum total of amortization periods.";
+            Text[ italian ] = "Calcolo totale del periodo di ammortamento";
             Text[ danish ] = "Sum total of amortization periods.";
             Text[ swedish ] = "Totalt antal amorteringsperioder.";
             Text[ polish ] = "£¹czna suma okresów amortyzacji.";
@@ -10265,7 +10265,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "investering";
             Text[ french ] = "Investissement";
             Text[ spanish ] = "invest";
-            Text[ italian ] = "invest";
+            Text[ italian ] = "investimento";
             Text[ danish ] = "invest";
             Text[ swedish ] = "Investering";
             Text[ polish ] = "Inwestycja";
@@ -10288,7 +10288,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Bedrag van de investering.";
             Text[ french ] = "Montant de l'investissement.";
             Text[ spanish ] = "Amount of the investment.";
-            Text[ italian ] = "Amount of the investment.";
+            Text[ italian ] = "Cifra d'investimento";
             Text[ danish ] = "Amount of the investment.";
             Text[ swedish ] = "Investeringsbelopp.";
             Text[ polish ] = "Kwota inwestycji.";
@@ -38655,7 +38655,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÌáÈ¡×Ö´®ÖĞ×îºóÒ»¸ö»ò¶à¸ö×Ö·û¡£";
             Text[ russian ] = "Îïğåäåëÿåò êîíå÷íóş ÷àñòü ñëîâà â òåêñòå.";
             Text[ polish ] = "Okreœla ostatni znak w ci¹gu znaków.";
-            Text[ japanese ] = "•¶š—ñ‚Ì––”ö(‰E’[)‚©‚çw’è‚³‚ê‚½”‚Ì•¶š‚ğ•Ô‚µ‚Ü‚·B";
+            Text[ japanese ] = "•¶š—ñ‚Ì––(‰E)‚©‚çAw’è”‚Ì•¶š‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "´£¨ú¦r¦ê¤¤³Ì«á¤@­Ó©Î¦h­Ó¦r¤¸¡C";
             Text[ arabic ] = "ÊÍÏÏ ÇáÍÑİ ÇáÃÎíÑ Ãæ ÇáÃÍÑİ ÇáÃÎíÑÉ áäÕ ãÇ.";
             Text[ dutch ] = "Geeft als resultaat de tekens aan het einde van een tekenreeks in een tekst.";
@@ -38774,7 +38774,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "ÒªÌáÈ¡µÄ×Ö´®µÄ³¤¶È¡£";
             Text[ russian ] = "Êîëè÷åñòâî ñèìâîëîâ â êîíå÷íîé ÷àñòè ñëîâà.";
             Text[ polish ] = "Liczba znaków dla koñcowej czêœci s³owa.";
-            Text[ japanese ] = "æ‚èo‚·•¶š”(•¶š—ñ‚Ì––”ö‚©‚ç‚Ì•¶š”)B";
+            Text[ japanese ] = "æ‚èo‚·•¶š”(‰E‚©‚ç‚Ì•¶š”)B";
             Text[ chinese_traditional ] = "­n´£¨úªº¦r¦êªºªø«×¡C";
             Text[ arabic ] = "ÚÏÏ ÇáÃÍÑİ ÇáãÑÇÏ ÅÑÌÇÚåÇ ãä Text.";
             Text[ dutch ] = "Het aantal eindtekens in de tekenreeks.";
