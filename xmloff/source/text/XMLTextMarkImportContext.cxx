@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMarkImportContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: rt $ $Date: 2004-11-02 14:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ void XMLTextMarkImportContext::StartElement(
                                                                 sName))
                     {
                         Reference<XTextRange> xEndRange(
-                            rHelper.GetCursorAsRange()->getEnd());
+                            rHelper.GetCursorAsRange()->getStart());
 
                         // check if beginning and end are in same XText
                         if (xStartRange->getText() == xEndRange->getText())
