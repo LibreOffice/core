@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-11 14:10:35 $
+#   last change: $Author: pjunck $ $Date: 2004-11-03 08:07:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,10 +75,10 @@ TARGETTYPE=CUI
 SCP_PRODUCT_TYPE=osl
 
 .IF "$(GUI)"=="WNT"
-#PARFILES= \
-#        module_activex.par        \
-#        file_activex.par          \
-#        custom_activex.par
+PARFILES= \
+        module_winexplorerext.par        \
+        file_winexplorerext.par          \
+        registryitem_winexplorerext.par
 .ENDIF
 
 ULFFILES= \
