@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-31 12:44:55 $
+#   last change: $Author: kz $ $Date: 2005-03-01 17:20:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,14 +77,17 @@ dummy:
     @echo "Nothing to build for OS $(OS)"
 
 .ELSE	"$(OS)" == "MACOSX"
-
 .INCLUDE :  target.mk
 
+.IF "$(BUILD_MOZAB)"=="TRUE"
+ALLTAR:
+    @echo "Does not need build mozab zipped!"
+.ELSE
 ALLTAR: \
     $(MISC)$/unpacked_$(TARGET)_inc \
     $(MISC)$/unpacked_$(TARGET)_lib \
     $(BIN)$/mozruntime.zip
-
+.ENDIF
 .IF "$(GUI)" == "UNX"
 
 $(MISC)$/unpacked_$(TARGET)_lib : $(OS)$(COM)$(CPU)lib.zip $(OS)$(COM)$(CPU)runtime.zip
@@ -109,5 +112,6 @@ $(MISC)$/unpacked_$(TARGET)_inc : $(OS)$(COM)$(CPU)inc.zip
 $(BIN)$/mozruntime.zip : $(OS)$(COM)$(CPU)runtime.zip
     +$(COPY) $(OS)$(COM)$(CPU)runtime.zip $(BIN)$/mozruntime.zip
 
+    
 .ENDIF	# "$(OS)" == "MACOSX"
 
