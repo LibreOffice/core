@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:53:43 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 15:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,8 @@
 #include "nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLEVENTEXPORT_HXX
@@ -129,6 +129,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 using ::comphelper::getProcessServiceFactory;
 using ::rtl::OUString;
@@ -154,7 +155,7 @@ const sal_Char sAPI_AutoText[] = "com.sun.star.text.AutoTextContainer";
 
 
 XMLAutoTextEventExport::XMLAutoTextEventExport() :
-        SvXMLExport( MAP_INCH, sXML_auto_text ),
+        SvXMLExport( MAP_INCH, XML_AUTO_TEXT ),
         sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
         sNone(RTL_CONSTASCII_USTRINGPARAM("None"))
 {
@@ -223,7 +224,7 @@ sal_uInt32 XMLAutoTextEventExport::exportDoc(
         {
             // container element
             SvXMLElementExport aContainerElement(
-                *this, XML_NAMESPACE_OFFICE, sXML_auto_text_events,
+                *this, XML_NAMESPACE_OFFICE, XML_AUTO_TEXT_EVENTS,
                 sal_True, sal_True);
 
             exportEvents();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-15 14:37:16 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 15:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _LANG_HXX
@@ -245,6 +249,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::presentation;
+using namespace ::xmloff::token;
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -538,7 +543,7 @@ DECLARE_LIST(ImpXMLAutoLayoutInfoList, ImpXMLAutoLayoutInfo*);
 //////////////////////////////////////////////////////////////////////////////
 
 SdXMLExport::SdXMLExport( sal_Bool bIsDraw, sal_uInt16 nExportFlags )
-:   SvXMLExport( MAP_CM, bIsDraw ? sXML_drawing : sXML_presentation, nExportFlags ),
+:   SvXMLExport( MAP_CM, bIsDraw ? XML_DRAWING : XML_PRESENTATION, nExportFlags ),
     mpPageMasterInfoList(new ImpXMLEXPPageMasterList(1, 4, 4)),
     mpPageMaterUsageList(new ImpXMLEXPPageMasterList(1, 4, 4)),
     mpAutoLayoutInfoList(new ImpXMLAutoLayoutInfoList(1, 4, 4)),

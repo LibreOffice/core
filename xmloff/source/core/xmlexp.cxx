@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-12 16:29:46 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 15:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,8 +312,8 @@ void SvXMLExport::_InitCtor()
     sEmbeddedObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
 }
 
-SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const sal_Char * pClass, sal_uInt16 nExportFlags ) :
-    pImpl( 0 ), mpClass( pClass ),
+SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const enum XMLTokenEnum eClass, sal_uInt16 nExportFlags ) :
+    pImpl( 0 ), meClass( eClass ),
     sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
     sWS( OUString::createFromAscii( sXML_WS ) ),
     pNamespaceMap( new SvXMLNamespaceMap ),
@@ -334,7 +334,7 @@ SvXMLExport::SvXMLExport(
         const OUString &rFileName,
         const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
         MapUnit eDfltUnit   ) :
-    pImpl( 0 ), mpClass( NULL ),
+    pImpl( 0 ), meClass( XML_TOKEN_INVALID ),
     sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
     sWS( OUString::createFromAscii( sXML_WS ) ),
     sOrigFileName( rFileName ),
@@ -362,7 +362,7 @@ SvXMLExport::SvXMLExport(
         const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
         const Reference< XModel >& rModel,
         sal_Int16 eDfltUnit ) :
-    pImpl( 0 ), mpClass( NULL ),
+    pImpl( 0 ), meClass( XML_TOKEN_INVALID ),
     sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
     sWS( OUString::createFromAscii( sXML_WS ) ),
     sOrigFileName( rFileName ),
@@ -393,7 +393,7 @@ SvXMLExport::SvXMLExport(
         const Reference< XModel >& rModel,
         const Reference< document::XGraphicObjectResolver >& rEmbeddedGraphicObjects,
         sal_Int16 eDfltUnit ) :
-    pImpl( 0 ), mpClass( NULL ),
+    pImpl( 0 ), meClass( XML_TOKEN_INVALID ),
     sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
     sWS( OUString::createFromAscii( sXML_WS ) ),
     sOrigFileName( rFileName ),
@@ -558,7 +558,7 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
             }
         }
 
-        exportDoc( mpClass );
+        exportDoc( meClass );
 
         return sal_True;
     }
@@ -778,7 +778,7 @@ void SvXMLExport::SetBodyAttributes()
 {
 }
 
-sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
+sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 {
     xHandler->startDocument();
 
@@ -802,8 +802,8 @@ sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
     }
 
     // office:class = ... (only for stream containing the content)
-    if( (pClass != NULL) && ((mnExportFlags & EXPORT_CONTENT) != 0) )
-        AddAttributeASCII( XML_NAMESPACE_OFFICE, sXML_class, pClass );
+    if( (eClass != XML_TOKEN_INVALID) && ((mnExportFlags & EXPORT_CONTENT) != 0) )
+        AddAttribute( XML_NAMESPACE_OFFICE, XML_CLASS, eClass );
 
     // office:version = ...
     if( !bExtended )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaExportComponent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-02 17:24:39 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 15:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 #include "xmlkywd.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLKYWD_HXX
+#include "xmlkywd.hxx"
+#endif
+
 #ifndef _XMLOFF_XMLMETAE_HXX
 #include "xmlmetae.hxx"
 #endif
@@ -117,9 +121,10 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 XMLMetaExportComponent::XMLMetaExportComponent() :
-    SvXMLExport( MAP_INCH, sXML_meta )
+    SvXMLExport( MAP_INCH, XML_META )
 {
 }
 

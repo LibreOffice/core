@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: bm $ $Date: 2001-06-15 15:22:22 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 15:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1867,7 +1867,7 @@ void SchXMLExportHelper::AddAutoStyleAttribute( const std::vector< XMLPropertySt
 // ========================================
 
 SchXMLExport::SchXMLExport( sal_uInt16 nExportFlags ) :
-        SvXMLExport( MAP_CM, sXML_chart, nExportFlags ),
+        SvXMLExport( MAP_CM, ::xmloff::token::XML_CHART, nExportFlags ),
         maAutoStylePool( *this ),
         maExportHelper( *this, maAutoStylePool )
 {
