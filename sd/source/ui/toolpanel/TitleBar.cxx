@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitleBar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:39:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "TitleBar.hxx"
 
 #include "ControlContainerDescriptor.hxx"
+#include "tools/IconCache.hxx"
 
 #ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
@@ -119,16 +120,6 @@
 namespace sd { namespace toolpanel {
 
 const int TitleBar::snIndentationWidth = 16;
-Image TitleBar::saTriangleRight;
-Image TitleBar::saTriangleRightHC;
-Image TitleBar::saTriangleDown;
-Image TitleBar::saTriangleDownHC;
-Image TitleBar::saExpanded;
-Image TitleBar::saExpandedHC;
-Image TitleBar::saCollapsed;
-Image TitleBar::saCollapsedHC;
-bool TitleBar::sbImagesInitialized = false;
-
 
 TitleBar::TitleBar (
     ::Window* pParent,
@@ -146,7 +137,6 @@ TitleBar::TitleBar (
       mbIsExpandable (bIsExpandable)
 {
     EnableMapMode (FALSE);
-    InitializeImages();
 
     SetBackground (Wallpaper());
 
@@ -308,50 +298,78 @@ void TitleBar::SetMouseOver (bool bFlag)
 
 
 
-Image* TitleBar::GetExpansionIndicator (void) const
+bool TitleBar::HasExpansionIndicator (void) const
 {
-    Image* pIndicator = NULL;
-    bool bHighContrastMode (
-        GetSettings().GetStyleSettings().GetHighContrastMode() != 0);
+    bool bHasExpansionIndicator (false);
     if (mbIsExpandable)
     {
         switch (meType)
         {
             case TBT_CONTROL_TITLE:
+            case TBT_SUB_CONTROL_HEADLINE:
+                bHasExpansionIndicator = true;
+                break;
+
+            default:
+            case TBT_WINDOW_TITLE:
+                // bHasExpansionIndicator remains false
+                break;
+        }
+    }
+    return bHasExpansionIndicator;
+}
+
+
+
+
+Image TitleBar::GetExpansionIndicator (void) const
+{
+    Image aIndicator;
+    bool bHighContrastMode (
+        GetSettings().GetStyleSettings().GetHighContrastMode() != 0);
+    if (mbIsExpandable)
+    {
+        USHORT nResourceId = 0;
+        switch (meType)
+        {
+            case TBT_CONTROL_TITLE:
                 if (mbExpanded)
                     if (bHighContrastMode)
-                        pIndicator = &saTriangleDownHC;
+                        nResourceId = BMP_TRIANGLE_DOWN_H;
                     else
-                        pIndicator = &saTriangleDown;
+                        nResourceId = BMP_TRIANGLE_DOWN;
                 else
                     if (bHighContrastMode)
-                        pIndicator = &saTriangleRightHC;
+                        nResourceId = BMP_TRIANGLE_RIGHT_H;
                     else
-                        pIndicator = &saTriangleRight;
+                        nResourceId = BMP_TRIANGLE_RIGHT;
 
+                aIndicator = IconCache::Instance().GetIcon(nResourceId);
                 break;
 
             case TBT_SUB_CONTROL_HEADLINE:
                 if (mbExpanded)
                     if (bHighContrastMode)
-                        pIndicator = &saExpandedHC;
+                        nResourceId = BMP_COLLAPSE_H;
                     else
-                        pIndicator = &saExpanded;
+                        nResourceId = BMP_COLLAPSE;
                 else
                     if (bHighContrastMode)
-                        pIndicator = &saCollapsedHC;
+                        nResourceId = BMP_EXPAND_H;
                     else
-                        pIndicator = &saCollapsed;
+                        nResourceId = BMP_EXPAND;
+
+                aIndicator = IconCache::Instance().GetIcon(nResourceId);
                 break;
 
             default:
             case TBT_WINDOW_TITLE:
-                pIndicator = NULL;
+                // aIndicator remains empty Image.
                 break;
         }
     }
 
-    return pIndicator;
+    return aIndicator;
 }
 
 
@@ -461,21 +479,27 @@ void TitleBar::PaintMouseOverIndicator (const Rectangle& rTextBox)
 
 Rectangle TitleBar::PaintExpansionIndicator (const Rectangle& rTextBox)
 {
-    const Image* pImage = GetExpansionIndicator();
-    if (pImage != NULL)
-    {
-        Point aPosition (
-            0,
-            rTextBox.Top()
-            + (GetTextHeight() - pImage->GetSizePixel().Height()) / 2);
-        if (meType == TBT_SUB_CONTROL_HEADLINE)
-            aPosition.X() += 3;
-        mpDevice->DrawImage (aPosition, *pImage);
+    Rectangle aExpansionIndicatorArea;
 
-        return Rectangle (aPosition, pImage->GetSizePixel());
+    if (HasExpansionIndicator())
+    {
+        Image aImage = GetExpansionIndicator();
+        int nHeight (aImage.GetSizePixel().Height());
+        if (nHeight > 0)
+        {
+            Point aPosition (
+                0,
+                rTextBox.Top() + (GetTextHeight() - nHeight) / 2);
+            if (meType == TBT_SUB_CONTROL_HEADLINE)
+                aPosition.X() += 3;
+            mpDevice->DrawImage (aPosition, aImage);
+
+            aExpansionIndicatorArea = Rectangle (
+                aPosition, aImage.GetSizePixel());
+        }
     }
-    else
-        return Rectangle (Point(0,0), Size(0,0));
+
+    return aExpansionIndicatorArea;
 }
 
 
@@ -592,7 +616,7 @@ Rectangle TitleBar::CalculateTextBoundingBox (
         Size (nAvailableWidth,
             Application::GetSettings().GetStyleSettings().GetTitleHeight()));
     aTextBox.Top() += (aTextBox.GetHeight() - GetTextHeight()) / 2;
-    if (GetExpansionIndicator() != NULL)
+    if (HasExpansionIndicator())
         aTextBox.Left() += snIndentationWidth;
     else
         aTextBox.Left() += 3;
@@ -654,29 +678,21 @@ void TitleBar::MouseMove (const MouseEvent& rEvent)
 
 
 
-void TitleBar::MouseButtonDown (const MouseEvent& rMEvt)
+void TitleBar::MouseButtonDown (const MouseEvent& rEvent)
 {
-    Window::MouseButtonDown (rMEvt);
+    // Do not forward to parent window so that the mouse button handler of
+    // the docking window is not invoked.
 }
 
 
 
 
-void TitleBar::InitializeImages (void)
+void TitleBar::MouseButtonUp (const MouseEvent& rEvent)
 {
-    if ( ! sbImagesInitialized)
-    {
-        saTriangleRight = Image(BitmapEx(SdResId (BMP_TRIANGLE_RIGHT)));
-        saTriangleRightHC = Image(BitmapEx(SdResId (BMP_TRIANGLE_RIGHT_H)));
-        saTriangleDown = Image(BitmapEx(SdResId (BMP_TRIANGLE_DOWN)));
-        saTriangleDownHC = Image(BitmapEx(SdResId (BMP_TRIANGLE_DOWN_H)));
-        saExpanded = Image(BitmapEx(SdResId(BMP_COLLAPSE)));
-        saCollapsed = Image(BitmapEx(SdResId(BMP_EXPAND)));
-        saExpandedHC = Image(BitmapEx(SdResId(BMP_COLLAPSE_H)));
-        saCollapsedHC = Image(BitmapEx(SdResId(BMP_EXPAND_H)));
-        sbImagesInitialized = true;
-    }
+    // Do not forward to parent window so that the mouse button handler of
+    // the docking window is not invoked.
 }
+
 
 
 } } // end of namespace ::sd::toolpanel
