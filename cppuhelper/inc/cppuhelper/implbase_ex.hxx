@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase_ex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,17 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+
+/* If you need to define implementation helper classes that deal with more than
+   12 interfaces, then use macros as follows, e.g. for 3 interfaces:
+
+#include <cppuhelper/implbase_ex_pre.hxx>
+#define __IFC_EX_TYPE_INIT3( class_cast ) \
+    __IFC_EX_TYPE_INIT( class_cast, 1 ), __IFC_EX_TYPE_INIT( class_cast, 2 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 3 )
+#include <cppuhelper/implbase_ex_post.hxx>
+__DEF_IMPLHELPER_EX( 3 )
+*/
 
 
 namespace cppu
