@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:57:10 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5992,7 +5992,7 @@ String STR_TEMPLATE
     Text [ dutch ] = "StarImpress 4.0 Sjabloon" ;
     Text [ swedish ] = "StarImpress 4.0 mall" ;
     Text [ danish ] = "StarImpress 4.0 skabelon" ;
-    Text [ portuguese ] = "StarImpress 4.0 - Modelo" ;
+    Text [ portuguese ] = "StarImpress 4.0 Modelo" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME Draw 3.0 Vorlage" ;
     Text[ chinese_simplified ] = "StarImpress 4.0 ÑùÊ½";
     Text[ russian ] = "StarImpress 4.0 Øàáëîí";
@@ -6470,7 +6470,7 @@ String STR_WARN_SCALE_FAIL
     Text [ danish ] = "Den angivne målestok er ugyldig.\nVil du indtasteen ny?" ;
     Text [ portuguese ] = "A escala indicada não é válida. \nIntroduzir outra?" ;
     Text [ portuguese_brazilian ] = "Der eingegebene Maßstab ist ungültig.\nWollen Sie einen neuen eingeben?" ;
-    Text[ chinese_simplified ] = "ÄúÖ¸¶¨µÄ¿Ì¶ÈÊÇÎŞĞ§µÄ¡£\nÄúÒªÊäÈëÒ»¸öĞÂµÄ¿Ì¶ÈÂğ£¿";
+    Text[ chinese_simplified ] = "Ö¸¶¨µÄÏÔÊ¾±ÈÁĞÊÇÎŞĞ§µÄ¡£\nÒªÊäÈëÒ»¸öĞÂµÄÏÔÊ¾±ÈÁĞ£¿";
     Text[ russian ] = "Ââåäåííûé ìàñøòàá ÿâëÿåòñÿ íåïğàâèëüíûì.\nÂâåñòè íîâûé ìàñøòàá?";
     Text[ polish ] = "Podana skala jest nieprawid³owa.\nChcesz podaæ now¹ skalê?";
     Text[ japanese ] = "“ü—Í‚µ‚½–Ú·‚Í–³Œø‚Å‚·B\nV‚µ‚¢‚Ì‚ğ“ü—Í‚µ‚Ü‚·‚©B";
