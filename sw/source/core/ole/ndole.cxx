@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:20:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XLINKAGESUPPORT_HPP_
+#include <com/sun/star/embed/XLinkageSupport.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
@@ -143,6 +146,7 @@
 #endif
 
 #include <vcl/graph.hxx>
+#include <sot/formats.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/filter.hxx>
 #ifndef _COMCORE_HRC
@@ -238,6 +242,89 @@ void SAL_CALL SwOLEListener_Impl::disposing( const ::com::sun::star::lang::Event
 }
 
 // --------------------
+// SwEmbedObjectLink
+// --------------------
+// TODO/LATER: actually SwEmbedObjectLink should be used here, but because different objects are used to control
+//             embedded object different link objects with the same functionality had to be implemented
+
+class SwEmbedObjectLink : public sfx2::SvBaseLink
+{
+    SwOLENode*          pOleNode;
+
+public:
+                        SwEmbedObjectLink(SwOLENode* pNode);
+    virtual             ~SwEmbedObjectLink();
+
+    virtual void        Closed();
+    virtual void        DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue );
+
+    sal_Bool            Connect() { return GetRealObject() != NULL; }
+};
+
+// -----------------------------------------------------------------------------
+
+SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode):
+    ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
+    pOleNode(pNode)
+{
+    SetSynchron( FALSE );
+}
+
+// -----------------------------------------------------------------------------
+
+SwEmbedObjectLink::~SwEmbedObjectLink()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SwEmbedObjectLink::DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue )
+{
+    if ( !pOleNode->UpdateLinkURL_Impl() )
+    {
+        // the link URL was not changed
+        uno::Reference< embed::XEmbeddedObject > xObject = pOleNode->GetOLEObj().GetOleRef();
+        OSL_ENSURE( xObject.is(), "The object must exist always!\n" );
+        if ( xObject.is() )
+        {
+            // let the object reload the link
+            // TODO/LATER: reload call could be used for this case
+
+            try
+            {
+                sal_Int32 nState = xObject->getCurrentState();
+                if ( nState == embed::EmbedStates::LOADED )
+                    xObject->changeState( embed::EmbedStates::RUNNING );
+                else
+                {
+                    // in some cases the linked file probably is not locked so it could be changed
+                    xObject->changeState( embed::EmbedStates::LOADED );
+                    xObject->changeState( nState );
+                }
+            }
+            catch ( uno::Exception& )
+            {
+            }
+        }
+    }
+
+    pOleNode->GetNewReplacement();
+    // Initiate repainting
+    // pObj->SetChanged();
+}
+
+// -----------------------------------------------------------------------------
+
+void SwEmbedObjectLink::Closed()
+{
+    pOleNode->BreakFileLink_Impl();
+    SvBaseLink::Closed();
+}
+
+
+// --------------------
 // SwOLENode
 // --------------------
 
@@ -249,7 +336,8 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
     aOLEObj( xObj ),
     pGraphic(0),
     nViewAspect( embed::Aspects::MSOLE_CONTENT ),
-    bOLESizeInvalid( FALSE )
+    bOLESizeInvalid( FALSE ),
+    mpObjectLink( NULL )
 {
     aOLEObj.SetNode( this );
 }
@@ -262,13 +350,15 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
     aOLEObj( rString ),
     pGraphic(0),
     nViewAspect( embed::Aspects::MSOLE_CONTENT ),
-    bOLESizeInvalid( FALSE )
+    bOLESizeInvalid( FALSE ),
+    mpObjectLink( NULL )
 {
     aOLEObj.SetNode( this );
 }
 
 SwOLENode::~SwOLENode()
 {
+    DisconnectFileLink_Impl();
     delete pGraphic;
 }
 
@@ -314,6 +404,7 @@ BOOL SwOLENode::RestorePersistentData()
         {
             aOLEObj.aName = aObjName;
             aOLEObj.xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aObjName );
+            CheckFileLink_Impl();
         }
     }
 
@@ -340,6 +431,8 @@ BOOL SwOLENode::SavePersistentData()
             }
         }
     }
+
+    DisconnectFileLink_Impl();
 
     return TRUE;
 }
@@ -467,6 +560,120 @@ BOOL SwOLENode::IsOLEObjectDeleted() const
     return bRet;
 }
 
+void SwOLENode::GetNewReplacement()
+{
+    if ( aOLEObj.xOLERef.is() )
+        aOLEObj.xOLERef.UpdateReplacement();
+}
+
+sal_Bool SwOLENode::UpdateLinkURL_Impl()
+{
+    sal_Bool bResult = sal_False;
+
+    if ( mpObjectLink )
+    {
+        String aNewLinkURL;
+        GetDoc()->GetLinkManager().GetDisplayNames( mpObjectLink, 0, &aNewLinkURL, 0, 0 );
+        if ( !aNewLinkURL.EqualsIgnoreCaseAscii( maLinkURL ) )
+        {
+            if ( !aOLEObj.xOLERef.is() )
+                aOLEObj.GetOleRef();
+
+            uno::Reference< embed::XEmbeddedObject > xObj = aOLEObj.xOLERef.GetObject();
+            uno::Reference< embed::XCommonEmbedPersist > xPersObj( xObj, uno::UNO_QUERY );
+            OSL_ENSURE( xPersObj.is(), "The object must exist!\n" );
+            if ( xPersObj.is() )
+            {
+                try
+                {
+                    sal_Int32 nCurState = xObj->getCurrentState();
+                    if ( nCurState != embed::EmbedStates::LOADED )
+                        xObj->changeState( embed::EmbedStates::LOADED );
+
+                    // TODO/LATER: there should be possible to get current mediadescriptor settings from the object
+                    uno::Sequence< beans::PropertyValue > aArgs( 1 );
+                    aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+                    aArgs[0].Value <<= ::rtl::OUString( aNewLinkURL );
+                    xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
+
+                    maLinkURL = aNewLinkURL;
+                    bResult = sal_True;
+
+                    if ( nCurState != embed::EmbedStates::LOADED )
+                        xObj->changeState( nCurState );
+                }
+                catch( uno::Exception& )
+                {}
+            }
+
+            if ( !bResult )
+            {
+                // TODO/LATER: return the old name to the link manager, is it possible?
+            }
+        }
+    }
+
+    return bResult;
+}
+
+void SwOLENode::BreakFileLink_Impl()
+{
+    SfxObjectShell* pPers = GetDoc()->GetPersist();
+
+    if ( pPers )
+    {
+        uno::Reference< embed::XStorage > xStorage = pPers->GetStorage();
+        if ( xStorage.is() )
+        {
+            try
+            {
+                uno::Reference< embed::XLinkageSupport > xLinkSupport( aOLEObj.GetOleRef(), uno::UNO_QUERY_THROW );
+                xLinkSupport->breakLink( xStorage, aOLEObj.GetCurrentPersistName() );
+                DisconnectFileLink_Impl();
+                maLinkURL = String();
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+    }
+}
+
+void SwOLENode::DisconnectFileLink_Impl()
+{
+    if ( mpObjectLink )
+    {
+        GetDoc()->GetLinkManager().Remove( mpObjectLink );
+        mpObjectLink = NULL;
+    }
+}
+
+void SwOLENode::CheckFileLink_Impl()
+{
+    if ( aOLEObj.xOLERef.GetObject().is() && !mpObjectLink )
+    {
+        try
+        {
+            uno::Reference< embed::XLinkageSupport > xLinkSupport( aOLEObj.xOLERef.GetObject(), uno::UNO_QUERY_THROW );
+            if ( xLinkSupport->isLink() )
+            {
+                String aLinkURL = xLinkSupport->getLinkURL();
+                if ( aLinkURL.Len() )
+                {
+                    // this is a file link so the model link manager should handle it
+                    mpObjectLink = new SwEmbedObjectLink( this );
+                    maLinkURL = aLinkURL;
+                    GetDoc()->GetLinkManager().InsertFileLink( *mpObjectLink, OBJECT_CLIENT_OLE, aLinkURL, NULL, NULL );
+                    mpObjectLink->Connect();
+                }
+            }
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+}
+
 SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     xOLERef( xObj ),
     pOLENd( 0 ),
@@ -554,6 +761,8 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
         else
             xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aObjName );
 
+        ( (SwOLENode*)pOLENd )->CheckFileLink_Impl(); // for this notification nonconst access is required
+
         aName = aObjName;
     }
 }
@@ -618,6 +827,8 @@ uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
             pListener->acquire();
             xObj->addStateChangeListener( pListener );
         }
+
+        ( (SwOLENode*)pOLENd )->CheckFileLink_Impl(); // for this notification nonconst access is required
     }
     else if ( xOLERef->getCurrentState() == embed::EmbedStates::RUNNING )
     {
@@ -701,6 +912,7 @@ String SwOLEObj::GetDescription()
 
     return aResult;
 }
+
 
 SwOLELRUCache::SwOLELRUCache()
     : SvPtrarr( 64, 16 ),
