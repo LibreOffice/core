@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-11-03 09:03:20 $
+ *  last change: $Author: th $ $Date: 2000-11-06 20:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -971,7 +971,8 @@ ImplWinData* Window::ImplGetWinData() const
     if ( !mpWinData )
     {
         ((Window*)this)->mpWinData = new ImplWinData;
-        mpWinData->mnExtOldTextLen  = 0;
+        mpWinData->mpExtOldText     = NULL;
+        mpWinData->mpExtOldAttrAry  = NULL;
         mpWinData->mpCursorRect     = 0;
         mpWinData->mnCursorExtWidth = 0;
         mpWinData->mpFocusRect      = NULL;
@@ -3714,17 +3715,8 @@ void Window::ImplNewInputContext()
             if ( pFontEntry )
                 aNewContext.mpFont = &pFontEntry->maFontSelData;
         }
-        aNewContext.meLanguage = rFont.GetLanguage();
-        // !!! Must be changed in the future in the Applications )
-        if ( rInputContext.GetOptions() )
-        {
-            aNewContext.mnOptions = SAL_INPUTCONTEXT_TEXT |
-                                    SAL_INPUTCONTEXT_EXTTEXTINPUT |
-                                    SAL_INPUTCONTEXT_EXTTEXTINPUT_ON;
-        }
-        else
-            aNewContext.mnOptions = 0;
-//        aNewContext.mnOptions       = rInputContext.GetOptions();
+        aNewContext.meLanguage  = rFont.GetLanguage();
+        aNewContext.mnOptions   = rInputContext.GetOptions();
         pFocusWin->ImplGetFrame()->SetInputContext( &aNewContext );
 
         if ( pFontEntry )
@@ -3981,6 +3973,10 @@ Window::~Window()
     // Extra Window Daten loeschen
     if ( mpWinData )
     {
+        if ( mpWinData->mpExtOldText )
+            delete mpWinData->mpExtOldText;
+        if ( mpWinData->mpExtOldAttrAry )
+            delete mpWinData->mpExtOldAttrAry;
         if ( mpWinData->mpCursorRect )
             delete mpWinData->mpCursorRect;
         if ( mpWinData->mpFocusRect )
