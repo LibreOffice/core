@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-03 12:39:31 $
+ *  last change: $Author: tbe $ $Date: 2002-07-10 18:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,9 @@
 #ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
@@ -621,6 +623,14 @@ Menu::~Menu()
     DBG_DTOR( Menu, NULL );
 
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
+
+    // dispose accessible components
+    if ( mxAccessible.is() )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xComponent( mxAccessible, ::com::sun::star::uno::UNO_QUERY );
+        if ( xComponent.is() )
+            xComponent->dispose();
+    }
 
     if ( nEventId )
         Application::RemoveUserEvent( nEventId );
@@ -1328,6 +1338,7 @@ void Menu::EnableItem( USHORT nItemId, BOOL bEnable )
                 nX += pData->aSz.Width();
             }
         }
+        ImplCallEventListeners( VCLEVENT_MENU_ENABLE );
     }
 }
 
@@ -1664,9 +1675,14 @@ void Menu::SelectItem( USHORT nItemId )
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > Menu::GetAccessible()
 {
-    // TODO
+    if ( !mxAccessible.is() )
+    {
+        UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
+        if ( pWrapper )
+            mxAccessible = pWrapper->CreateAccessible( this, bIsMenuBar );
+    }
 
-    return ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >();
+    return mxAccessible;
 }
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > Menu::GetAccessible( BOOL bCreate ) const
@@ -2535,6 +2551,9 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     {
         pWin->StartPopupMode( aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS );
         bNativeFrameRegistered = pWin->registerAccessibleParent();
+        // notify parent, needed for accessibility
+        if( pSFrom )
+            pSFrom->ImplCallEventListeners( VCLEVENT_MENU_SELECT );
     }
     if ( bPreSelectFirst )
     {
@@ -2693,6 +2712,8 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
 
 MenuFloatingWindow::~MenuFloatingWindow()
 {
+    SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >() );
+
     if( Application::GetAccessHdlCount() )
         Application::AccessNotify( AccessNotification( ACCESS_EVENT_POPUPMENU_END, pMenu ) );
 
@@ -2980,6 +3001,8 @@ void MenuFloatingWindow::StopExecute( ULONG nFocusId )
     {
         KillActivePopup();
     }
+    if( pMenu->pStartedFrom )
+        pMenu->pStartedFrom->ImplCallEventListeners( VCLEVENT_MENU_SELECT );
 }
 
 void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
@@ -3650,11 +3673,22 @@ void MenuFloatingWindow::Command( const CommandEvent& rCEvt )
 {
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
 
+    if ( pMenu )
+        xAcc = pMenu->GetAccessible();
+
+    return xAcc;
+
+    // old
+
+    /*
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+
     UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
     if ( pWrapper )
         xAcc = pWrapper->CreateAccessible( this, pMenu );
 
     return xAcc;
+    */
 }
 
 
@@ -3726,6 +3760,7 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
 
 MenuBarWindow::~MenuBarWindow()
 {
+    SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >() );
 }
 
 void MenuBarWindow::SetMenu( MenuBar* pMen )
@@ -4344,9 +4379,20 @@ void MenuBarWindow::GetFocus()
 {
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
 
+    if ( pMenu )
+        xAcc = pMenu->GetAccessible();
+
+    return xAcc;
+
+    // old
+
+    /*
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+
     UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
     if ( pWrapper )
         xAcc = pWrapper->CreateAccessible( this, pMenu );
 
     return xAcc;
+    */
 }
