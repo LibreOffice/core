@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 14:16:18 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
+#endif
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
 #endif
 
 #define ITEMID_LINESPACING  0
@@ -1080,7 +1083,7 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
         String sLeft(ResId(ST_LEFTALIGN_ASIAN));
         aLeft.SetText(sLeft);
         aRight.SetText(String(ResId(ST_RIGHTALIGN_ASIAN)));
-        sLeft.EraseAllChars( '~' );
+        sLeft = MnemonicGenerator::EraseAllMnemonicChars( sLeft );
 
         if ( aLastLineLB.GetEntryCount() == LASTLINECOUNT_OLD )
         {
