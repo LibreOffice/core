@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:39:47 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 10:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,8 +567,7 @@
 				<!-- OldPath: Service User/[username] -->
 				<!-- OldLocation: userdb.ini -->
 				<info>
-					<deprecated/>
-					<author>IS/BEI</author>
+                    <author>LO</author>
 					<desc xml:lang="en-US">Indicates if the user data is copied successfully.</desc>
 					<desc xml:lang="el">Indicates if the user data is copied successfully.</desc>
 					<desc xml:lang="nl">Indicates if the user data is copied successfully.</desc>
