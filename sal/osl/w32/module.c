@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:30:33 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,7 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_Windows( void *pv, rtl_uString
                             rtl_uString *ustrSysPath = NULL;
 
                             rtl_string2UString( &ustrSysPath, me32.szExePath, strlen(me32.szExePath), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+                            OSL_ASSERT(ustrSysPath != NULL);
                             osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );
                             rtl_uString_release( ustrSysPath );
 
@@ -328,6 +329,7 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT4( void *pv, rtl_uString **p
                     rtl_uString *ustrSysPath = NULL;
 
                     rtl_string2UString( &ustrSysPath, ModuleInfo.LoadedImageName, strlen(ModuleInfo.LoadedImageName), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+                    OSL_ASSERT(ustrSysPath != NULL);
                     osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );
                     rtl_uString_release( ustrSysPath );
                 }
