@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-25 16:41:24 $
+ *  last change: $Author: cmc $ $Date: 2002-11-04 14:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,13 +239,10 @@ bool SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
             const SvInPlaceObjectRef rO2(rSObj.GetOleRef());
             GDIMetaFile aNewMtf;
             rO2->GetGDIMetaFile( aNewMtf );
-#if 0
-            //The compare in gdimtf.cxx isn't good #94067#
-            if (aMtf == aNewMtf)
-#else
-            if (aMtf.GetChecksum() == aNewMtf.GetChecksum())
-#endif
+
+            if (aMtf.IsEqual(aNewMtf)) //New method (#94067#)
                 bGraphicNeeded = false;
+
             delete pRet;
         }
     }
