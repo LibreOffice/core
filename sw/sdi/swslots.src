@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:14:11 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8504,6 +8504,12 @@ SfxSlotInfo FN_SHOW_TWO_PAGES
     SlotName[ slovak ] = "Náhľad: dve stránky";
     SlotName[ hungarian ] = "Nyomtatási kép: kétoldalas";
     SlotName[ slovenian ] = "Predogled strani: dve strani";
+};
+SfxSlotInfo FN_SHOW_BOOKVIEW
+{
+    SlotName = "Buchansicht";
+    SlotName [ english ] =  "Book Preview";
+    SlotName[ english_us ] = "Book Preview";
 };
 SfxSlotInfo FN_SHRINK_FONT_SIZE
 {
