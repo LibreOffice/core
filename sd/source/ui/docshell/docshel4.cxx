@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-14 13:36:06 $
+ *  last change: $Author: ka $ $Date: 2001-02-14 16:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,14 +351,10 @@ BOOL SdDrawDocShell::InitNew( SvStorage * pStor )
 
 BOOL SdDrawDocShell::Load( SvStorage* pStore )
 {
-    ULONG   nStoreFmt = pStore->GetFormat();
+    ULONG   nStoreVer = pStore->GetVersion();
     BOOL    bRet = FALSE;
-    BOOL    bXML = ( nStoreFmt == SOT_FORMATSTR_ID_STARIMPRESS_60 ||
-                     nStoreFmt == SOT_FORMATSTR_ID_STARDRAW_60 );
-    BOOL    bBinary = ( nStoreFmt == SOT_FORMATSTR_ID_STARIMPRESS_50 ||
-                        nStoreFmt == SOT_FORMATSTR_ID_STARDRAW_50    ||
-                        nStoreFmt == SOT_FORMATSTR_ID_STARDRAW_40    ||
-                        nStoreFmt == SOT_FORMATSTR_ID_STARDRAW );
+    BOOL    bXML = ( nStoreVer >= SOFFICE_FILEFORMAT_60 );
+    BOOL    bBinary = ( nStoreVer < SOFFICE_FILEFORMAT_60 );
 
     if( bBinary || bXML )
     {
