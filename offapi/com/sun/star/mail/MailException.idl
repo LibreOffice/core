@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MailException.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:29:48 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com { module sun { module star { module mail {
    An MailException is the base of all mail related
    exceptions.
 
-   @since #116332#
+   @since OOo 2.0.0
  */
 exception MailException: com::sun::star::uno::Exception
 {
