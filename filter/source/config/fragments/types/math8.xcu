@@ -1,0 +1,12 @@
+    <node oor:name="math8" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="DetectService"><value>com.sun.star.comp.math.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"><value>private:factory/smath*</value></prop>
+        <prop oor:name="Extensions"><value>oxf</value></prop>
+        <prop oor:name="MediaType"><value>application/x-vnd.oasis.openoffice.math</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>math8</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Math 8</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>Math 8</value></prop>
+    </node>
