@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-19 10:43:35 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,47 +652,47 @@ Bitmap BMP_EFFECT_ROTATE_VERTICAL
 Image IMG_EMBEDDED
 {
     ImageBitmap = Bitmap { File = "kopie.bmp" ; };
-    MaskColor = IMAGE_STDBTN_COLOR ;
+    MaskColor = IMAGE_MASK_STDCOLOR;
 };
 Image IMG_LINK
 {
     ImageBitmap = Bitmap { File = "verknpf.bmp" ; };  // Bitmaps getauscht
-    MaskColor = IMAGE_STDBTN_COLOR ;
+    MaskColor = IMAGE_MASK_STDCOLOR;
 };
 Image IMG_HYPERLINK
 {
     ImageBitmap = Bitmap { File = "link.bmp" ; };  // Bitmaps getauscht
-    MaskColor = IMAGE_STDBTN_COLOR ;
+    MaskColor = IMAGE_MASK_STDCOLOR;
 };
 Image IMG_EFFECT
 {
     ImageBitmap = Bitmap { File = "objekt.bmp" ; };
-    MaskColor = IMAGE_STDBTN_COLOR ;
+    MaskColor = IMAGE_MASK_STDCOLOR;
 };
 Image IMG_EFFECT_ACTIVE
 {
     ImageBitmap = Bitmap { File = "objekt2.bmp" ; };
-    MaskColor = IMAGE_STDBTN_COLOR ;
+    MaskColor = IMAGE_MASK_STDCOLOR;
 };
 Image IMG_EXTRAS
 {
     ImageBitmap = Bitmap { File = "vtextras.bmp" ; };
-    MaskColor = IMAGE_STDBTN_COLOR ;
+    MaskColor = IMAGE_MASK_STDCOLOR;
 };
 Image IMG_TEXT
 {
     ImageBitmap = Bitmap { File = "text.bmp" ; };
-    MaskColor = IMAGE_STDBTN_COLOR ;
+    MaskColor = IMAGE_MASK_STDCOLOR;
 };
 Image IMG_TEXT_ACTIVE
 {
     ImageBitmap = Bitmap { File = "text2.bmp" ; };
-    MaskColor = IMAGE_STDBTN_COLOR ;
+    MaskColor = IMAGE_MASK_STDCOLOR;
 };
 Image IMG_ORDER
 {
     ImageBitmap = Bitmap { File = "vtextras.bmp" ; };
-    MaskColor = IMAGE_STDBTN_COLOR ;
+    MaskColor = IMAGE_MASK_STDCOLOR;
 };
 SfxStyleFamilies DLG_STYLE_DESIGNER
 {
@@ -724,7 +724,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             StyleImage = Image
             {
                 ImageBitmap = Bitmap { File = "sco206.bmp" ; };
-                MaskColor = IMAGE_STDBTN_COLOR ;
+                MaskColor = IMAGE_MASK_STDCOLOR;
             };
             FilterList =
             {
@@ -759,7 +759,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             StyleImage = Image
             {
                 ImageBitmap = Bitmap { File = "presobjs.bmp" ; };
-                MaskColor = IMAGE_STDBTN_COLOR ;
+                MaskColor = IMAGE_MASK_STDCOLOR;
             };
             FilterList =
             {

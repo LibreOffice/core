@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ka $ $Date: 2001-01-19 19:10:22 $
+#   last change: $Author: ka $ $Date: 2001-03-08 11:04:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,6 @@ SLOFILES =	\
         $(SLO)$/sddll1.obj      \
         $(SLO)$/sddll2.obj      \
         $(SLO)$/tbxww.obj		\
-        $(SLO)$/dragserv.obj	\
         $(SLO)$/optsitem.obj	\
         $(SLO)$/sdresid.obj		\
         $(SLO)$/sdpopup.obj		\

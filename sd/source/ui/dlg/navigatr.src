@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:55:59 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ Window FLT_NAVIGATOR
                 ItemImage = Image
                 {
                     ImageBitmap = Bitmap { File = "live.bmp" ; };
-                    MaskColor = IMAGE_STDBTN_COLOR ;
+                    MaskColor = IMAGE_MASK_STDCOLOR ;
                 };
                 Text = "Livemodus" ;
                 Text [ ENGLISH ] = "Live mode" ;
@@ -127,7 +127,7 @@ Window FLT_NAVIGATOR
                 ItemImage = Image
                 {
                     ImageBitmap = Bitmap { File = "pen.bmp" ; };
-                    MaskColor = IMAGE_STDBTN_COLOR ;
+                    MaskColor = IMAGE_MASK_STDCOLOR ;
                 };
                 Text = "Stift" ;
                 Text [ ENGLISH ] = "Pen" ;
@@ -163,7 +163,7 @@ Window FLT_NAVIGATOR
                 ItemImage = Image
                 {
                     ImageBitmap = Bitmap { File = "first.bmp" ; };
-                    MaskColor = IMAGE_STDBTN_COLOR ;
+                    MaskColor = IMAGE_MASK_STDCOLOR ;
                 };
                 Text = "Erste Seite" ;
                 Text [ ENGLISH ] = "First page" ;
@@ -195,7 +195,7 @@ Window FLT_NAVIGATOR
                 ItemImage = Image
                 {
                     ImageBitmap = Bitmap { File = "prev.bmp" ; };
-                    MaskColor = IMAGE_STDBTN_COLOR ;
+                    MaskColor = IMAGE_MASK_STDCOLOR ;
                 };
                 Text = "vorherige Seite" ;
                 Text [ ENGLISH ] = "Previous page" ;
@@ -227,7 +227,7 @@ Window FLT_NAVIGATOR
                 ItemImage = Image
                 {
                     ImageBitmap = Bitmap { File = "next.bmp" ; };
-                    MaskColor = IMAGE_STDBTN_COLOR ;
+                    MaskColor = IMAGE_MASK_STDCOLOR ;
                 };
                 /* ### ACHTUNG: Neuer Text in Resource? Nächste Seite : Nõchste Seite */
                 Text = "Nächste Seite" ;
@@ -261,7 +261,7 @@ Window FLT_NAVIGATOR
                 ItemImage = Image
                 {
                     ImageBitmap = Bitmap { File = "last.bmp" ; };
-                    MaskColor = IMAGE_STDBTN_COLOR ;
+                    MaskColor = IMAGE_MASK_STDCOLOR ;
                 };
                 Text = "Letzte Seite" ;
                 Text [ ENGLISH ] = "Last page" ;

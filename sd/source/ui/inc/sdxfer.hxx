@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-19 19:08:37 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ protected:
     virtual void                    AddSupportedFormats();
     virtual sal_Bool                GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     virtual sal_Bool                WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual void                    DragFinished( sal_Int8 nDropAction );
     virtual void                    ObjectReleased();
 
 public:

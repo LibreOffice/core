@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-27 08:15:40 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,8 +425,8 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet()
                 {
                     SvxNumberFormat aFrmt( pNumRule->GetLevel( GetOutlineLevel() ));
 
-                    aFrmt.SetLSpace( rLRItem.GetTxtLeft() );
-                    aFrmt.SetAbsLSpace( rLRItem.GetTxtLeft() );
+                    aFrmt.SetLSpace( (short) rLRItem.GetTxtLeft() );
+                    aFrmt.SetAbsLSpace( (short) rLRItem.GetTxtLeft() );
                     aFrmt.SetFirstLineOffset( rLRItem.GetTxtFirstLineOfst() );
                     pNumRule->SetLevel( GetOutlineLevel(), aFrmt );
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-19 19:15:01 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,8 +134,6 @@ public:
                         SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact);
     virtual             ~SdModule();
 
-    SvDataObject*       pDragData;
-    SvDataObject*       pClipboardData;
     SdTransferable*     pTransferClip;
     SdTransferable*     pTransferDrag;
 

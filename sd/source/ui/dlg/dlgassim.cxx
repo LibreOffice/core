@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgassim.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 18:07:51 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,6 @@ SdPageListControl::SdPageListControl( Window* pParent, const ResId& rResId ) :
     EnableCheckButton( m_pCheckButton );
 
     SetCheckButtonHdl( LINK(this,SdPageListControl,CheckButtonClickHdl) );
-    // Drag&Drop im Navigator zulassen
-    // EnableDrop( TRUE );
 }
 
 IMPL_LINK( SdPageListControl, CheckButtonClickHdl, SvLBoxButtonData *, EMPTYARG )
@@ -193,7 +191,7 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
                     for (ULONG nPara = 0; nPara < nCount; nPara++)
                     {
                         pPara = pOutliner->GetParagraph(nPara);
-                        if(pPara && pOutliner->GetDepth( nPara ) == 1 )
+                        if(pPara && pOutliner->GetDepth( (USHORT) nPara ) == 1 )
                         {
                             String aParaText = pOutliner->GetText(pPara);
                             if(aParaText.Len() != 0)
@@ -399,7 +397,7 @@ void TemplateCache::Save()
     UINT16 nCheck = nMagic;
     *pStream << nCheck;
 
-    const UINT16 nDirs = m_aDirs.Count();
+    const UINT16 nDirs = (UINT16) m_aDirs.Count();
     *pStream << nDirs;
 
     for( TemplateCacheDirEntry* pDir = m_aDirs.First();
@@ -408,7 +406,7 @@ void TemplateCache::Save()
     {
         pStream->WriteByteString( pDir->m_aPath, RTL_TEXTENCODING_UTF8 );
 
-        const UINT16 nFiles = pDir->m_aFiles.Count();
+        const UINT16 nFiles = (UINT16) pDir->m_aFiles.Count();
         *pStream << nFiles;
 
         for( TemplateCacheInfo* pEntry = pDir->m_aFiles.First();

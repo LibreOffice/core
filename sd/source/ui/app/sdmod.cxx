@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-19 19:10:22 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,8 +139,6 @@ SdModule::SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact)
 :   SdModuleDummy(SFX_APP()->CreateResManager("sd"), FALSE,
                   pDrawObjFact, pGraphicObjFact),
     bWaterCan(FALSE),
-    pDragData(NULL),
-    pClipboardData(NULL),
     pTransferClip(NULL),
     pTransferDrag(NULL),
     pImpressOptions(NULL),

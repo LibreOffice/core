@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
 
     if( pCustomShowList )
     {
-        USHORT nPosToSelect = pCustomShowList->GetCurPos();
+        USHORT nPosToSelect = (USHORT) pCustomShowList->GetCurPos();
         SdCustomShow* pCustomShow;
         // Listbox mit CustomShows fuellen
         for( pCustomShow = (SdCustomShow*) pCustomShowList->First();

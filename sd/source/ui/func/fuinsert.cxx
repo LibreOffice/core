@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-13 12:14:55 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ FuInsertGraphic::FuInsertGraphic(SdViewShell* pViewSh, SdWindow* pWin, SdView* p
 
             if ( nError == 0 && pViewSh->ISA(SdDrawViewShell) )
             {
-                DropAction eAction = DROP_COPY;    // Objekt einfuegen
+                sal_Int8    nAction = DND_ACTION_COPY;
                 SdrGrafObj* pEmptyGrafObj = NULL;
 
                 if ( pView->HasMarkedObj() )
@@ -218,7 +218,7 @@ FuInsertGraphic::FuInsertGraphic(SdViewShell* pViewSh, SdWindow* pWin, SdView* p
                         if (pObj->GetObjInventor() == SdrInventor &&
                             pObj->GetObjIdentifier() == OBJ_GRAF)
                         {
-                            eAction = DROP_LINK;   // Attribute austauschen
+                            nAction = DND_ACTION_LINK;
                             pEmptyGrafObj = (SdrGrafObj*) pObj;
                         }
                     }
@@ -228,8 +228,7 @@ FuInsertGraphic::FuInsertGraphic(SdViewShell* pViewSh, SdWindow* pWin, SdView* p
                 Rectangle aRect(aPos, pWindow->GetOutputSizePixel() );
                 aPos = aRect.Center();
                 aPos = pWindow->PixelToLogic(aPos);
-                SdrGrafObj* pGrafObj = pView->InsertGraphic(aGraphic, eAction, aPos,
-                                                            pEmptyGrafObj, NULL);
+                SdrGrafObj* pGrafObj = pView->InsertGraphic(aGraphic, nAction, aPos, pEmptyGrafObj, NULL);
 
                 if (pGrafObj && pDlg->AsLink())
                 {
@@ -299,11 +298,11 @@ FuInsertClipboard::FuInsertClipboard(SdViewShell* pViewSh, SdWindow* pWin, SdVie
 
         if( aDataHelper.GetTransferable().is() )
         {
-            DropAction eAction = DROP_COPY;
+            sal_Int8 nAction = DND_ACTION_COPY;
 
             pView->InsertData( aDataHelper.GetTransferable(),
                                pWindow->PixelToLogic( Rectangle( Point(), pWindow->GetOutputSizePixel() ).Center() ),
-                               eAction, FALSE, nFormatId );
+                               nAction, FALSE, nFormatId );
         }
     }
 

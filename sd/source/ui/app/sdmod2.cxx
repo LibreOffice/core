@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-19 19:10:22 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,6 @@
 #include "docshell.hxx"
 #include "drawdoc.hxx"
 #include "sdoutl.hxx"
-#include "dragserv.hxx"
 #include "sdresid.hxx"
 #include "pres.hxx"
 #include "drviewsh.hxx"
@@ -261,7 +260,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
                     for( Paragraph* pPara = pOutl->GetParagraph( 0 ); pPara && nPos >= 0; pPara = pOutl->GetParagraph( ++nParaPos ), nPos-- )
                     {
-                        if( pOutl->GetDepth( nParaPos ) == 0 )
+                        if( pOutl->GetDepth( (USHORT) nParaPos ) == 0 )
                             nPgNum++;
                     }
                 }

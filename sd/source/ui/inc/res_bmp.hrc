@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-19 10:43:47 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,13 @@
  ************************************************************************/
 #include "sfx2/sfx.hrc"
 #include "cfgids.hxx"
+
+// -----------
+// - Defines -
+// -----------
+
+#define IMAGE_MASK_STDCOLOR Color{ Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
+
 #define RID_TIME_BUTTON           RID_APP_START
 #define RID_ALIGNMENT             RID_APP_START+1
 #define RID_ZOOM                  RID_APP_START+2
@@ -356,8 +363,3 @@
 #define RID_DRAW_GLUEPOINT_POPUP            RID_APP_START+392
 #define RID_DRAW_CONTROL_POPUP              RID_APP_START+393
 #define RID_FORM_CONTROL_POPUP              RID_APP_START+394
-
-#ifndef IMAGE_STDBTN_COLOR
-#define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
-#endif
-

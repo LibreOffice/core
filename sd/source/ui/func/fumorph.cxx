@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fumorph.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:46:16 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,9 +157,9 @@ FuMorph::FuMorph(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                     aPolyPoly2.FlipDirections();
 
                 // force same point counts
-                for(sal_uInt32 a(0L); a < aPolyPoly1.Count(); a++)
+                for( USHORT a = 0; a < aPolyPoly1.Count(); a++ )
                 {
-                    if(aPolyPoly1[a].GetPointCount() < aPolyPoly2[a].GetPointCount())
+                    if(aPolyPoly1[ a].GetPointCount() < aPolyPoly2[ a].GetPointCount())
                         ImpEqualizePolyPointCount(aPolyPoly1[a], aPolyPoly2[a]);
                     else if(aPolyPoly2[a].GetPointCount() < aPolyPoly1[a].GetPointCount())
                         ImpEqualizePolyPointCount(aPolyPoly2[a], aPolyPoly1[a]);

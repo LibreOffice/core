@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuzoom.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:55 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 11:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ BOOL FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
         Size aZoomSizePixel = pWindow->LogicToPixel(aZoomRect).GetSize();
         ULONG nTol = DRGPIX + DRGPIX;
 
-        if ( aZoomSizePixel.Width() < nTol && aZoomSizePixel.Height() < nTol )
+        if ( aZoomSizePixel.Width() < (long) nTol && aZoomSizePixel.Height() < (long) nTol )
         {
             // Klick auf der Stelle: Zoomfaktor verdoppeln
             Point aPos = pWindow->PixelToLogic(aPosPix);
