@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:48:06 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,16 +93,16 @@ TabPage RID_SCTAB_FUNCTION
         QuickHelpText [ dutch ] = "Functie overnemen" ;
         QuickHelpText [ portuguese ] = "Aplicar funзгo" ;
         QuickHelpText[ russian ] = "ѕрименить функцию";
-        QuickHelpText[ polish ] = "Zastosuj funkcjк!";
-        QuickHelpText[ japanese ] = "К÷РФВћУKЧp!";
+        QuickHelpText[ polish ] = "Zastosuj funkcjк";
+        QuickHelpText[ japanese ] = "К÷РФВћУKЧp";
         QuickHelpText[ chinese_simplified ] = "љ” №Їѓ э";
         QuickHelpText[ chinese_traditional ] = "±µ¶ђ®зЉ∆";
         QuickHelpText[ arabic ] = " Ў»нё «бѕ«б…";
         QuickHelpText[ greek ] = "≈цбсмпгё ухн№сфзузт";
-        QuickHelpText[ korean ] = "«‘Љц°°јыњл!";
+        QuickHelpText[ korean ] = "«‘Љц°°јыњл";
         QuickHelpText[ turkish ] = "Funktion ьbernehmen";
         QuickHelpText[ catalan ] = "Aplicar funciуn";
-        QuickHelpText[ finnish ] = "Kдytд funktiota!";
+        QuickHelpText[ finnish ] = "Kдytд funktiota";
     };
     ListBox LB_CATEGORY
     {
@@ -358,7 +358,7 @@ TabPage RID_SCTAB_FUNCTION
         < "—татистические" ; Default ; > ;
         < "“аблица" ; Default ; > ;
         < "“екст" ; Default ; > ;
-        < "ƒополнительно" ; Default ; > ;
+        < "ƒополнительно (Add-in)" ; Default ; > ;
     };
     StringList [ polish ] =
     {
@@ -374,7 +374,7 @@ TabPage RID_SCTAB_FUNCTION
         < "Statystyka" ; Default ; > ;
         < "Arkusz kalkulacyjny" ; Default ; > ;
         < "Tekst" ; Default ; > ;
-        < "Dodatki (Ad-In)" ; Default ; > ;
+        < "Add-in" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -933,13 +933,13 @@ ModelessDialog RID_SCDLG_FORMULA
         QuickHelpText [ dutch ] = "Vergroten" ;
         QuickHelpText [ portuguese ] = "Aproximar" ;
     QuickHelpText[ russian ] = "”величить";
-        QuickHelpText[ polish ] = "Powiкksz!";
-        QuickHelpText[ japanese ] = "КgСе!";
+        QuickHelpText[ polish ] = "Powiкksz";
+        QuickHelpText[ japanese ] = "КgСе";
         QuickHelpText[ chinese_simplified ] = "„оіуїѓ";
         QuickHelpText[ chinese_traditional ] = "©с§j";
         QuickHelpText[ arabic ] = " я»н—";
         QuickHelpText[ greek ] = "ћегЁихнуз";
-        QuickHelpText[ korean ] = "»Ѓіл!";
+        QuickHelpText[ korean ] = "»Ѓіл";
         QuickHelpText[ turkish ] = "Vergrцяern";
         QuickHelpText[ catalan ] = "Aumentar";
         QuickHelpText[ finnish ] = "Maximize";
@@ -1077,5 +1077,6 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ catalan ] = "AutoPiloto de funciones  - ";
     };
 };
+
 
 
