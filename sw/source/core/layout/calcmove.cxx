@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:46:54 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,11 @@
 #ifndef _LAYOUTER_HXX
 #include <layouter.hxx>
 #endif
+// --> OD 2004-11-01 #i36347#
+#ifndef _FLYFRMS_HXX
+#include <flyfrms.hxx>
+#endif
+// <--
 
 //------------------------------------------------------------------------
 //              Move-Methoden
@@ -317,6 +322,9 @@ bool lcl_IsCalcUpperAllowed( const SwFrm& rFrm )
 {
     return !rFrm.GetUpper()->IsSctFrm() &&
            !rFrm.GetUpper()->IsFooterFrm() &&
+           // --> OD 2004-11-02 #i23129#, #i36347# - no format of upper Writer fly frame
+           !rFrm.GetUpper()->IsFlyFrm() &&
+           // <--
            !( rFrm.GetUpper()->IsTabFrm() && rFrm.GetUpper()->GetUpper()->IsInTab() ) &&
            !( rFrm.IsTabFrm() && rFrm.GetUpper()->IsInTab() );
 }
@@ -423,7 +431,10 @@ void SwFrm::PrepareMake()
 
 void SwFrm::OptPrepareMake()
 {
-    if ( GetUpper() && !GetUpper()->IsFooterFrm() )
+    // --> OD 2004-11-02 #i23129#, #i36347# - no format of upper Writer fly frame
+    if ( GetUpper() && !GetUpper()->IsFooterFrm() &&
+         !GetUpper()->IsFlyFrm() )
+    // <--
     {
         GetUpper()->Calc();
         ASSERT( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
@@ -607,23 +618,25 @@ void SwFrm::MakePos()
         }
         else if ( GetUpper() )
         {
-            /// OD 15.10.2002 #103517# - add safeguard for <SwFooterFrm::Calc()>
-            /// If parent frame is a footer frame and its <ColLocked()>, then
-            /// do *not* calculate it.
-            /// NOTE: Footer frame is <ColLocked()> during its
-            ///     <FormatSize(..)>, which is called from <Format(..)>, which
-            ///     is called from <MakeAll()>, which is called from <Calc()>.
+            // OD 15.10.2002 #103517# - add safeguard for <SwFooterFrm::Calc()>
+            // If parent frame is a footer frame and its <ColLocked()>, then
+            // do *not* calculate it.
+            // NOTE: Footer frame is <ColLocked()> during its
+            //     <FormatSize(..)>, which is called from <Format(..)>, which
+            //     is called from <MakeAll()>, which is called from <Calc()>.
+            // --> OD 2004-11-02 #i23129#, #i36347#
+            // - no format of upper Writer fly frame.
             if ( !GetUpper()->IsTabFrm() &&
                  !( IsTabFrm() && GetUpper()->IsInTab() ) &&
                  !GetUpper()->IsSctFrm() &&
+                 !GetUpper()->IsFlyFrm() &&
                  !( GetUpper()->IsFooterFrm() &&
                     GetUpper()->IsColLocked() )
                )
             {
-                SwFlyFrm* pTmpFly = FindFlyFrm();
-                if( !pTmpFly || !pTmpFly->IsFlyInCntFrm() )
-                    GetUpper()->Calc();
+                GetUpper()->Calc();
             }
+            // <--
             pPrv = lcl_Prev( this, FALSE );
             if ( !bUseUpper && pPrv )
             {
