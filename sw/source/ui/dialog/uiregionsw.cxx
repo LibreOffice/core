@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiregionsw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:22:40 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1630,6 +1630,8 @@ void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox )
             break;
         case SOT_FORMATSTR_ID_STARWRITER_60:
         case SOT_FORMATSTR_ID_STARWRITERGLOB_60:
+        case SOT_FORMATSTR_ID_STARWRITER_8:
+        case SOT_FORMATSTR_ID_STARWRITERGLOB_8:
             ReadXML->GetSectionList( rMedium, (SvStrings&) aArr );
             break;
         }
