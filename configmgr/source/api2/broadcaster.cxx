@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
+ *  last change: $Author: dg $ $Date: 2000-11-20 12:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -914,7 +914,8 @@ namespace configmgr
         else
         {
             NotifierData aAffectedNotifier( findNotifier(aChange, pTreeImpl) );
-            pRet = SingleChangeBroadcaster_Impl::create( aAffectedNotifier, aChange);
+            if (aAffectedNotifier.second) // only if we found a notifier we are able to create a broadcaster (DG)
+                pRet = SingleChangeBroadcaster_Impl::create( aAffectedNotifier, aChange);
         }
 
         if (pRet.isEmpty())
