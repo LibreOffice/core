@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-21 11:14:20 $
+ *  last change: $Author: fme $ $Date: 2001-10-09 09:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,10 @@ public:
 class SwKernPortion : public SwLinePortion
 {
     short nKern;
+    sal_Bool bBackground;
 public:
-            SwKernPortion( SwLinePortion &rPortion, short nKrn );
+    SwKernPortion( SwLinePortion &rPortion, short nKrn,
+                   sal_Bool bBG = sal_False );
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     OUTPUT_OPERATOR

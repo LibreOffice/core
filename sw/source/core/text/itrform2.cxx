@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-02 13:48:52 $
+ *  last change: $Author: fme $ $Date: 2001-10-09 09:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,7 +552,8 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                     nLstHeight && rInf.X() + nLstHeight <= rInf.Width() )
                 {
                     SwKernPortion* pKrn =
-                        new SwKernPortion( *rInf.GetLast(), nLstHeight );
+                        new SwKernPortion( *rInf.GetLast(), nLstHeight,
+                                           pLast->InFldGrp() && pPor->InFldGrp() );
                     rInf.GetLast()->SetPortion( NULL );
                     InsertPortion( rInf, pKrn );
                 }

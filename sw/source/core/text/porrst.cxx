@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
+ *  last change: $Author: fme $ $Date: 2001-10-09 09:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,8 +245,8 @@ sal_Bool SwBreakPortion::Format( SwTxtFormatInfo &rInf )
     return sal_True;
 }
 
-SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn ) :
-    nKern( nKrn )
+SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn, sal_Bool bBG ) :
+    nKern( nKrn ), bBackground( bBG )
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
@@ -261,6 +261,10 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( Width() )
     {
+        // bBackground is set for Kerning Portions between two fields
+        if ( bBackground )
+            rInf.DrawViewOpt( *this, POR_FLD );
+
         rInf.DrawBackBrush( *this );
 
         // do we have to repaint a post it portion?
