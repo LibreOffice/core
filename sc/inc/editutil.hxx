@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-25 17:30:32 $
+ *  last change: $Author: nn $ $Date: 2001-07-11 18:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,10 @@ public:
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const String& rText,
                         const SfxItemSet& rDefaults, BOOL bRememberCopy = TRUE );
+
+                    /// Paragraph attributes that are not defaults are copied to
+                    /// character attributes and all paragraph attributes reset
+    void            RemoveParaAttribs();
 };
 
 
