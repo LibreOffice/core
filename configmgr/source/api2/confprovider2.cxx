@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-08 17:14:55 $
+ *  last change: $Author: hr $ $Date: 2000-12-08 19:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ namespace configmgr
 
         {
             for (int i= 0; i<getCreateServiceDataCount(); ++i)
-                nCount += ServiceComponentImpl::countServices(getCreateServiceData()[i].info);
+                nCount += countServices(getCreateServiceData()[i].info);
         }
 
         uno::Sequence< OUString > aNames(nCount);
