@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 08:43:48 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,9 +381,6 @@ class SwFrm: public SwClient
     SwFrm       *pNext;
     SwFrm       *pPrev;
 
-        //Schatten und Umrandung painten
-    void PaintShadow( const SwRect&, SwRect&, const SwPageFrm *,
-                      const SwBorderAttrs& ) const;
     SwFrm *_FindNext();
     SwFrm *_FindPrev();
     SwCntntFrm *_FindNextCnt();
@@ -466,6 +463,11 @@ protected:
     SwFrm( SwModify* );
 
     void CheckDir( UINT16 nDir, BOOL bVert, BOOL bOnlyBiDi, BOOL bBrowse );
+
+        //Schatten und Umrandung painten
+    void PaintShadow( const SwRect&, SwRect&, const SwPageFrm *,
+                      const SwBorderAttrs& ) const;
+
 public:
     TYPEINFO(); //Bereits in Basisklasse Client drin.
 
