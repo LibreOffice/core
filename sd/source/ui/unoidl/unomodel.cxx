@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-30 14:24:29 $
+ *  last change: $Author: cl $ $Date: 2002-08-02 12:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,7 @@ const sal_Int32 WID_MODEL_MAPUNIT  = 4;
 const sal_Int32 WID_MODEL_FORBCHARS= 5;
 const sal_Int32 WID_MODEL_CONTFOCUS = 6;
 const sal_Int32 WID_MODEL_DSGNMODE  = 7;
+const sal_Int32 WID_MODEL_BASICLIBS = 8;
 
 const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
 {
@@ -265,6 +266,7 @@ const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
         { MAP_CHAR_LEN(sUNO_Prop_ForbiddenCharacters),  WID_MODEL_FORBCHARS,&::getCppuType((const uno::Reference< i18n::XForbiddenCharacters > *)0), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN(sUNO_Prop_AutomContFocus ),  WID_MODEL_CONTFOCUS,    &::getBooleanCppuType(),                    0,  0},
         { MAP_CHAR_LEN(sUNO_Prop_ApplyFrmDsgnMode), WID_MODEL_DSGNMODE,     &::getBooleanCppuType(),                    0,  0},
+        { MAP_CHAR_LEN("BasicLibraries"),               WID_MODEL_BASICLIBS,&::getCppuType((const uno::Reference< script::XLibraryContainer > *)0), beans::PropertyAttribute::READONLY, 0 },
         { 0,0,0,0,0 }
     };
 
@@ -1235,6 +1237,8 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
             }
             break;
         case WID_MODEL_MAPUNIT:
+        case WID_MODEL_BASICLIBS:
+            throw beans::PropertyVetoException();
         default:
             throw beans::UnknownPropertyException();
             break;
@@ -1301,6 +1305,9 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
             break;
         case WID_MODEL_DSGNMODE:
             aAny <<= pDoc->GetOpenInDesignMode();
+            break;
+        case WID_MODEL_BASICLIBS:
+            aAny <<= pDocShell->GetBasicContainer();
             break;
         default:
             throw beans::UnknownPropertyException();
