@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-13 14:33:04 $
+ *  last change: $Author: jp $ $Date: 2001-01-18 15:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,7 +474,7 @@ inline USHORT lcl_SetScriptFlags( USHORT nType )
 // returns the scripttpye of the selection
 USHORT SwEditShell::GetScriptType() const
 {
-    USHORT nRet = 0;
+    USHORT nRet = SCRIPTTYPE_LATIN;     // which is the correct init value???
     if( pBreakIt->xBreak.is() )
     {
         FOREACHPAM_START(this)
