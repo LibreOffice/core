@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:40:08 $
+ *  last change: $Author: rt $ $Date: 2003-05-13 12:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,12 @@ private:
     DECL_LINK( ModifyScaleHdl, void * );
     DECL_LINK( ModifyOriginalScaleHdl, void * );
     DECL_LINK( SelectMetricHdl_Impl, ListBox * );
+
+    /** Enable or disable the controls in the compatibility section of the
+        'general' tab page depending on whether there is at least one
+        document.
+    */
+    void UpdateCompatibilityControls (void);
 
 protected:
     virtual void ActivatePage( const SfxItemSet& rSet );
