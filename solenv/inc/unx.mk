@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: svesik $ $Date: 2000-11-08 18:47:51 $
+#   last change: $Author: hr $ $Date: 2000-11-23 17:24:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,10 @@ OLE2DEF=-DOLE2
 
 .IF "$(COM)$(OS)$(CPU)" == "C52SOLARISS"
 .INCLUDE : unxsols3.mk
+.ENDIF
+
+.IF "$(COM)$(OS)$(CPU)" == "C52SOLARISI"
+.INCLUDE : unxsoli3.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCSOLARISS"
