@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_util.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:52:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,16 +100,8 @@ PyRef ustring2PyUnicode( const OUString & str )
 #if Py_UNICODE_SIZE == 2
     ret = PyRef( PyUnicode_FromUnicode( str.getStr(), str.getLength() ), SAL_NO_ACQUIRE );
 #else
-#if Py_UNICODE_SIZE == 4
-    OString o = OUStringToOString( str, RTL_TEXTENCODING_UCS4 );
-    ret = PyRef( PyUnicode_FromUnicode( (Py_UNICODE*)o.getStr(), o.getLength() ), SAL_NO_ACQUIRE );
-#else
-#error Py_UNICODE_SIZE
-    OUStringBuffer buf;
-    buf.appendAscii( "pyuno string conversion routines can't deal with sizeof(Py_UNICODE) ==" );
-    buf.append( (sal_Int32) sizeof( Py_UNICODE ) );
-    throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > ( ) );
-#endif
+    OString sUtf8(OUStringToOString(str, RTL_TEXTENCODING_UTF8));
+    ret = PyRef( PyUnicode_DecodeUTF8( sUtf8.getStr(), sUtf8.getLength(), NULL) , SAL_NO_ACQUIRE );
 #endif
     return ret;
 }
@@ -125,7 +117,13 @@ OUString pyString2ustring( PyObject *pystr )
     OUString ret;
     if( PyUnicode_Check( pystr ) )
     {
-        ret = OUString( (sal_Unicode * ) PyUnicode_AS_UNICODE( pystr ) );
+#if Py_UNICODE_SIZE == 2
+    ret = OUString( (sal_Unicode * ) PyUnicode_AS_UNICODE( pystr ) );
+#else
+    PyObject* pUtf8 = PyUnicode_AsUTF8String(pystr);
+    ret = OUString(PyString_AsString(pUtf8), PyString_Size(pUtf8), RTL_TEXTENCODING_UTF8);
+    Py_DECREF(pUtf8);
+#endif
     }
     else
     {
