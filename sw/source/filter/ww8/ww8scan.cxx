@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-22 15:06:26 $
+ *  last change: $Author: cmc $ $Date: 2002-09-19 14:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1967,6 +1967,7 @@ String WW8Read_xstz(SvStream& rStrm, USHORT nChars, bool bAtEndSeekRel1)
         {
             b = static_cast<UINT16>(nWasRead / 2);
             aStr.ReleaseBufferAccess( b );
+            pData = aStr.GetBufferAccess();
         }
 
 #ifdef __BIGENDIAN
