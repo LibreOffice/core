@@ -8632,3 +8632,4 @@ lpfnInsertMenuItemW
 ?s_pType_com_sun_star_container_XNameContainer@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXNameContainer@container@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?GetImportFilterTypeName@FilterConfigCache@@QAE?AVString@@G@Z
 ??0?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?MailUIEnabled@SvtInternalOptions@@QBEEXZ
