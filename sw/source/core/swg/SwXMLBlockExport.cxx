@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockExport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-26 18:14:26 $
+ *  last change: $Author: mtg $ $Date: 2002-01-23 14:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,9 @@ sal_uInt32 SwXMLTextBlockExport::exportDoc(const String &rText)
     AddAttribute ( XML_NAMESPACE_NONE,
                    _GetNamespaceMap().GetAttrNameByKey ( XML_NAMESPACE_TEXT ),
                    _GetNamespaceMap().GetNameByKey ( XML_NAMESPACE_TEXT ) );
+    AddAttribute ( XML_NAMESPACE_NONE,
+                   _GetNamespaceMap().GetAttrNameByKey ( XML_NAMESPACE_OFFICE ),
+                   _GetNamespaceMap().GetNameByKey ( XML_NAMESPACE_OFFICE ) );
     AddAttribute( XML_NAMESPACE_BLOCKLIST,
                   XML_LIST_NAME,
                   OUString (rBlockList.GetName()));
