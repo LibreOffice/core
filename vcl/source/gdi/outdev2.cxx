@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-24 15:24:50 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,8 +433,8 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
         {
             ImplDrawOutDevDirect( &rOutDev, &aPosAry );
 
-            // make destination rectangle opaque - source has no alpha
-            mpAlphaVDev->DrawRect( Rectangle(rDestPt, rDestSize) );
+            // #i32109#: make destination rectangle opaque - source has no alpha
+            mpAlphaVDev->ImplFillOpaqueRectangle( Rectangle(rDestPt, rDestSize) );
         }
     }
     else
@@ -597,7 +597,10 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
     ImplDrawBitmap( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, META_BMP_ACTION );
 
     if( mpAlphaVDev )
-        mpAlphaVDev->DrawRect( Rectangle(rDestPt, PixelToLogic( aSizePix )) );
+    {
+        // #i32109#: Make bitmap area opaque
+        mpAlphaVDev->ImplFillOpaqueRectangle( Rectangle(rDestPt, PixelToLogic( aSizePix )) );
+    }
 }
 
 // ------------------------------------------------------------------
@@ -612,7 +615,10 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize, cons
     ImplDrawBitmap( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, META_BMPSCALE_ACTION );
 
     if( mpAlphaVDev )
-        mpAlphaVDev->DrawRect( Rectangle(rDestPt, rDestSize) );
+    {
+        // #i32109#: Make bitmap area opaque
+        mpAlphaVDev->ImplFillOpaqueRectangle( Rectangle(rDestPt, rDestSize) );
+    }
 }
 
 // ------------------------------------------------------------------
@@ -629,7 +635,10 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
     ImplDrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmap, META_BMPSCALEPART_ACTION );
 
     if( mpAlphaVDev )
-        mpAlphaVDev->DrawRect( Rectangle(rDestPt, rDestSize) );
+    {
+        // #i32109#: Make bitmap area opaque
+        mpAlphaVDev->ImplFillOpaqueRectangle( Rectangle(rDestPt, rDestSize) );
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -976,7 +985,10 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
                 mpGraphics->DrawBitmap( &aPosAry, *pImpBmp->ImplGetSalBitmap(), this );
 
                 if( mpAlphaVDev )
-                    mpAlphaVDev->DrawRect( Rectangle(rDestPt, rDestSize) );
+                {
+                    // #i32109#: Make bitmap area opaque
+                    mpAlphaVDev->ImplFillOpaqueRectangle( Rectangle(rDestPt, rDestSize) );
+                }
             }
         }
     }
@@ -995,9 +1007,19 @@ void OutputDevice::DrawMask( const Point& rDestPt,
     const Size aSizePix( rBitmap.GetSizePixel() );
     ImplDrawMask( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, rMaskColor, META_MASK_ACTION );
 
-    // TODO: Use mask here
     if( mpAlphaVDev )
-        mpAlphaVDev->DrawRect( Rectangle(rDestPt, PixelToLogic( aSizePix )) );
+    {
+        const Bitmap& rMask( rBitmap.CreateMask( rMaskColor ) );
+
+        // #i25167# Restrict mask painting to _opaque_ areas
+        // of the mask, otherwise we spoil areas where no
+        // bitmap content was ever visible. Interestingly
+        // enough, this can be achieved by taking the mask as
+        // the transparency mask of itself
+        mpAlphaVDev->DrawBitmapEx( rDestPt,
+                                   PixelToLogic( aSizePix ),
+                                   BitmapEx( rMask, rMask ) );
+    }
 }
 
 // ------------------------------------------------------------------
@@ -1014,7 +1036,18 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
 
     // TODO: Use mask here
     if( mpAlphaVDev )
-        mpAlphaVDev->DrawRect( Rectangle(rDestPt, rDestSize) );
+    {
+        const Bitmap& rMask( rBitmap.CreateMask( rMaskColor ) );
+
+        // #i25167# Restrict mask painting to _opaque_ areas
+        // of the mask, otherwise we spoil areas where no
+        // bitmap content was ever visible. Interestingly
+        // enough, this can be achieved by taking the mask as
+        // the transparency mask of itself
+        mpAlphaVDev->DrawBitmapEx( rDestPt,
+                                   rDestSize,
+                                   BitmapEx( rMask, rMask ) );
+    }
 }
 
 // ------------------------------------------------------------------
@@ -1032,7 +1065,20 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
 
     // TODO: Use mask here
     if( mpAlphaVDev )
-        mpAlphaVDev->DrawRect( Rectangle(rDestPt, rDestSize) );
+    {
+        const Bitmap& rMask( rBitmap.CreateMask( rMaskColor ) );
+
+        // #i25167# Restrict mask painting to _opaque_ areas
+        // of the mask, otherwise we spoil areas where no
+        // bitmap content was ever visible. Interestingly
+        // enough, this can be achieved by taking the mask as
+        // the transparency mask of itself
+        mpAlphaVDev->DrawBitmapEx( rDestPt,
+                                   rDestSize,
+                                   rSrcPtPixel,
+                                   rSrcSizePixel,
+                                   BitmapEx( rMask, rMask ) );
+    }
 }
 
 // ------------------------------------------------------------------
@@ -1798,7 +1844,7 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
             // #110958# Perform merging of bitmap and VDev alpha channel
             if( mpAlphaVDev )
             {
-                BOOL bOldMapMode( IsMapModeEnabled() );
+                BOOL bOldMapMode( mpAlphaVDev->IsMapModeEnabled() );
                 mpAlphaVDev->EnableMapMode(FALSE);
                 Bitmap aBitmap( mpAlphaVDev->GetBitmap( aDstRect.TopLeft(), aDstRect.GetSize() ) );
                 BitmapWriteAccess*  pW = aBitmap.AcquireWriteAccess();
