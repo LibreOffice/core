@@ -130,3 +130,5 @@ LibMain
 ??_H
 ??_I
 __CT
+union_impl
+alternative
