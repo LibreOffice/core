@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:45:42 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,9 +204,6 @@
 #include <SwStyleNameMapper.hxx>
 #endif
 
-#ifndef SW_WRITERHELPER
-#include "writerhelper.hxx"
-#endif
 
 #ifndef _WW8SCAN_HXX
 #include "ww8scan.hxx"          // WW8FieldDesc
@@ -219,8 +216,12 @@
 #endif
 
 #ifndef SW_MS_MSFILTER_HXX
-#include "../inc/msfilter.hxx"
+#include <msfilter.hxx>
 #endif
+#ifndef SW_WRITERHELPER
+#include "writerhelper.hxx"
+#endif
+
 
 #define MAX_FIELDLEN 64000
 
@@ -1520,7 +1521,7 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
     bool bFormat    = false;
     bool bShowLast  = false;
     bool bCountOn   = true;
-    String sStart, sLevel;
+    String sStart;
     SvxExtNumType eNumFormat = SVX_NUM_ARABIC;
     long nRet;
     _ReadFieldParams aReadParam( rStr );
@@ -1567,8 +1568,7 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
             break;
 
         case 's':                       // Outline Level
-            if( -2 == aReadParam.SkipToNextToken() )
-                sLevel = aReadParam.GetResult();
+            //#i19682, what am I to do with this value
             break;
         }
     }
@@ -1584,21 +1584,9 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
     else if (!bCountOn)
         aFld.SetFormula(aSequenceName);
 
-    if( sLevel.Len() )
-    {
-        BYTE nLvl = (BYTE)sLevel.ToInt32();
-        if( nLvl )
-        {
-            if( MAXLEVEL <= --nLvl )
-                nLvl = MAXLEVEL - 1;
-            pFT->SetOutlineLvl( nLvl );
-        }
-    }
-
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    rDoc.Insert(*pPaM, SwFmtFld(aFld));
     return FLD_OK;
 }
-
 
 eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
 {
@@ -1940,10 +1928,11 @@ eF_ResT SwWW8ImplReader::Read_F_CurPage( WW8FieldDesc*, String& rStr )
 }
 
 eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, String& rStr )
-{                                               // Symbol-Zeichensatz
+{
+    //e.g. #i20118#
     String aQ;
     String aName;
-    String aSiz;
+    sal_Int32 nSize = 0;
     long nRet;
     _ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
@@ -1965,9 +1954,12 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, String& rStr )
         case 's':
         case 'S':
             {
+                String aSiz;
                 xub_StrLen n = aReadParam.GoToTokenParam();
-                if( STRING_NOTFOUND != n )
+                if (STRING_NOTFOUND != n)
                     aSiz = aReadParam.GetResult();
+                if (aSiz.Len())
+                    nSize = aSiz.ToInt32() * 20; // pT -> twip
             }
             break;
         }
@@ -1975,26 +1967,32 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, String& rStr )
     if( !aQ.Len() )
         return FLD_TAGIGN;                      // -> kein 0-Zeichen in Text
 
-    if( aName.Len() )                           // Font Name angegeben ?
+    if (sal_Unicode cChar = static_cast<sal_Unicode>(aQ.ToInt32()))
     {
-        SvxFontItem aFont(  FAMILY_DONTKNOW, aName, // "WingDings",
-                            aEmptyStr,
-                            PITCH_DONTKNOW, RTL_TEXTENCODING_SYMBOL );
-        NewAttr( aFont );                       // neuer Font
-    }
+        if (aName.Len())                           // Font Name set ?
+        {
+            SvxFontItem aFont(FAMILY_DONTKNOW, aName, aEmptyStr,
+                PITCH_DONTKNOW, RTL_TEXTENCODING_SYMBOL);
+            NewAttr(aFont);                       // new Font
+        }
 
-    if( aSiz.Len() )                            // Size angegeben ?
+        if (nSize > 0)  //#i20118#
+        {
+            SvxFontHeightItem aSz(nSize);
+            NewAttr(aSz);
+        }
+
+        rDoc.Insert(*pPaM, cChar);
+
+        if (nSize > 0)
+            pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_CHRATR_FONTSIZE);
+        if (aName.Len())
+            pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_CHRATR_FONT);
+    }
+    else
     {
-        SvxFontHeightItem aSz( aSiz.ToInt32() * 20 ); // pT -> twip
-        NewAttr( aSz );
+        rDoc.Insert(*pPaM, CREATE_CONST_ASC("###"));
     }
-
-    rDoc.Insert( *pPaM, aQ.GetChar( 0 ) );
-
-    if( aSiz.Len() )
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_FONTSIZE );
-    if( aName.Len() )
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_FONT );
 
     return FLD_OK;
 }
@@ -2874,7 +2872,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     const SwTOXType* pType = rDoc.GetTOXType( eTox, 0 );
     SwForm aOrigForm(eTox);
     SwTOXBase* pBase = new SwTOXBase( pType, aOrigForm, nCreateOf, aEmptyStr );
-                                // Name des Verzeichnisses
+    pBase->SetProtected(maSectionManager.CurrentSectionIsProtected());
     switch( eTox ){
     case TOX_INDEX:
         {
