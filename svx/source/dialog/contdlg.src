@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:13:47 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,7 +720,7 @@ String STR_CONTOURDLG_NEWPIPETTE
     Text[ russian ] = "Βϋ υξςθςε ρξηδΰςό νξβϋι κξνςσπ?";
     Text[ polish ] = "Czy chcesz utworzyζ nowy kontur?";
     Text[ japanese ] = "V‚µ‚­—Φsό‚πμ¬‚µ‚ά‚·‚©?";
-    Text[ chinese_traditional ] = "±z­n¨ξ§@¤@­Σ·sªΊ½όΉψ΅H";
+    Text[ chinese_traditional ] = "±z­n»s§@¤@­Σ·sªΊ½όΉψ΅H";
     Text[ arabic ] = "εα ΚΡνΟ ΕδΤΗΑ ΞΨ ίέΗέν ΜΟνΟΏ";
     Text[ greek ] = "Θέλετε να δημιουργήσετε ένα νέο περίγραμμα;";
     Text[ korean ] = "»υ·ΞΏξ ΏάΗόΌ±ΐ» ΈΈµε½Γ°Ϊ½ΐ΄Ο±ξ?";
