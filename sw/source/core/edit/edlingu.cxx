@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 13:18:01 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,12 @@
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
 #endif
+#ifndef _REDLINE_HXX
+#include <redline.hxx>      // SwRedline
+#endif
+#ifndef _DOCARY_HXX
+#include <docary.hxx>       // SwRedlineTbl
+#endif
 
 
 using namespace ::svx;
@@ -219,8 +225,10 @@ class SwSpellIter : public SwLinguIter
     SpellContentPositions               aLastPositions;
 
 
-    void    CreatePortion(uno::Reference< XSpellAlternatives > xAlt, bool bIsField);
-    void    AddPortion(uno::Reference< XSpellAlternatives > xAlt);
+    void    CreatePortion(uno::Reference< XSpellAlternatives > xAlt,
+                bool bIsField, bool bIsHidden);
+    void    AddPortion(uno::Reference< XSpellAlternatives > xAlt,
+                       const SpellContentPositions& rDeletedRedlines);
 public:
     SwSpellIter() {}
 
@@ -1213,6 +1221,21 @@ void lcl_AddToTempAutoCorrect(const String& rOld, const String& rNew, LanguageTy
         pTempAuto->Insert( pCorr );
     }
 }
+/*-- 02.02.2005 14:34:41---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_uInt32 lcl_CountRedlines(
+                            const ::svx::SpellPortions& rLastPortions)
+{
+    sal_uInt32 nRet = 0;
+    SpellPortions::const_iterator aIter = rLastPortions.begin();
+    for( ; aIter != rLastPortions.end(); ++aIter)
+    {
+        if( aIter->bIsHidden )
+            ++nRet;
+    }
+    return nRet;
+}
 /*-- 18.09.2003 15:08:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1236,7 +1259,8 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions)
         SwPaM *pCrsr = GetCrsr();
         pDoc->StartUndo( UNDO_OVERWRITE );
         StartAction();
-        if(rLastPortions.size() == rNewPortions.size())
+        sal_uInt32 nRedlinePortions = lcl_CountRedlines(rLastPortions);
+        if((rLastPortions.size() - nRedlinePortions) == rNewPortions.size())
         {
             //the simple case: the same number of elements on both sides
             //each changed element has to be applied to the corresponding source element
@@ -1248,6 +1272,12 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions)
                 --aCurrentNewPortion;
                 --aCurrentOldPortion;
                 --aCurrentOldPosition;
+                //jump over redline portions
+                while(aCurrentOldPortion->bIsHidden)
+                {
+                    --aCurrentOldPortion;
+                    --aCurrentOldPosition;
+                }
                 if ( !pCrsr->HasMark() )
                     pCrsr->SetMark();
                 pCrsr->GetPoint()->nContent = aCurrentOldPosition->nLeft;
@@ -1262,7 +1292,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions)
                 if(aCurrentNewPortion->sText != aCurrentOldPortion->sText)
                 {
                     //change text ...
-                    pDoc->Delete(*pCrsr);
+                    pDoc->DeleteAndJoin(*pCrsr);
                     // ... and apply language if necessary
                     if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
                         SetAttr( SvxLanguageItem(aCurrentNewPortion->eLanguage), nLangWhichId );
@@ -1292,7 +1322,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions)
             pCrsr->GetMark()->nContent = aCurrentEndPosition->nRight;
 
             //delete the sentence completely
-            pDoc->Delete(*pCrsr);
+            pDoc->DeleteAndJoin(*pCrsr);
             svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.begin();
             while(aCurrentNewPortion != rNewPortions.end())
             {
@@ -1323,6 +1353,85 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions)
         pDoc->EndUndo( UNDO_OVERWRITE );
         EndAction();
     }
+}
+/*-- 02.02.2005 10:46:45---------------------------------------------------
+    collect all deleted redlines of the current text node beginning at the
+    start of the cursor position
+  -----------------------------------------------------------------------*/
+SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell* pSh)
+{
+    SpellContentPositions aRedlines;
+    SwDoc* pDoc = pSh->GetDoc();
+    const sal_Bool bShowChg = ::IsShowChanges( pDoc->GetRedlineMode() );
+    if ( bShowChg )
+    {
+        SwPaM *pCrsr = pSh->GetCrsr();
+        const SwPosition* pStartPos = pCrsr->Start();
+        const SwTxtNode* pTxtNode = pCrsr->GetNode()->GetTxtNode();
+
+        USHORT nAct = pDoc->GetRedlinePos( *pTxtNode );
+        const xub_StrLen nStartIndex = pStartPos->nContent.GetIndex();
+        for ( ; nAct < pDoc->GetRedlineTbl().Count(); nAct++ )
+        {
+            const SwRedline* pRed = pDoc->GetRedlineTbl()[ nAct ];
+
+            if ( pRed->Start()->nNode > pTxtNode->GetIndex() )
+                break;
+
+            if( REDLINE_DELETE == pRed->GetType() )
+            {
+                xub_StrLen nStart, nEnd;
+                pRed->CalcStartEnd( pTxtNode->GetIndex(), nStart, nEnd );
+                if(nStart >= nStartIndex || nEnd >= nStartIndex)
+                {
+                    SpellContentPosition aAdd;
+                    aAdd.nLeft = nStart;
+                    aAdd.nRight = nEnd;
+                    aRedlines.push_back(aAdd);
+                }
+            }
+        }
+    }
+    return aRedlines;
+}
+/*-- 02.02.2005 11:06:12---------------------------------------------------
+    remove the redline positions after the current selection
+  -----------------------------------------------------------------------*/
+void lcl_CutRedlines( SpellContentPositions& aDeletedRedlines, SwEditShell* pSh )
+{
+    if(!aDeletedRedlines.empty())
+    {
+        SwPaM *pCrsr = pSh->GetCrsr();
+        const SwPosition* pEndPos = pCrsr->End();
+        xub_StrLen nEnd = pEndPos->nContent.GetIndex();
+        while(!aDeletedRedlines.empty() &&
+                aDeletedRedlines.back().nLeft > nEnd)
+        {
+            aDeletedRedlines.pop_back();
+        }
+    }
+}
+/*-- 02.02.2005 11:43:00---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SpellContentPosition  lcl_FindNextDeletedRedline(
+        const SpellContentPositions& rDeletedRedlines,
+        xub_StrLen nSearchFrom )
+{
+    SpellContentPosition aRet;
+    aRet.nLeft = aRet.nRight = STRING_MAXLEN;
+    if(!rDeletedRedlines.empty())
+    {
+        SpellContentPositions::const_iterator aIter = rDeletedRedlines.begin();
+        for( ; aIter != rDeletedRedlines.end(); ++aIter)
+        {
+            if(aIter->nLeft < nSearchFrom)
+                continue;
+            aRet = *aIter;
+            break;
+        }
+    }
+    return aRet;
 }
 /*-- 18.09.2003 15:08:20---------------------------------------------------
 
@@ -1389,15 +1498,16 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions)
         if ( *pCrsr->GetPoint() < *pCrsr->GetMark() )
             pCrsr->Exchange();
         BOOL bStartSent = pSh->GoStartSentence();
+        SpellContentPositions aDeletedRedlines = lcl_CollectDeletedRedlines(pSh);
         if(bStartSent)
         {
             //create a portion from the start part
-            AddPortion(0);
+            AddPortion(0, aDeletedRedlines);
         }
         //Set the cursor to the error already found
         *pCrsr->GetPoint() = *GetCurrX();
         *pCrsr->GetMark() = *GetCurr();
-        AddPortion(xSpellRet);
+        AddPortion(xSpellRet, aDeletedRedlines);
 
 
         //determine the end of the current sentence
@@ -1408,7 +1518,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions)
         SwPosition aSaveStartPos = *pCrsr->GetMark();
 
         BOOL bEndSent = pSh->GoEndSentence();
-
+        lcl_CutRedlines( aDeletedRedlines, pSh );
         //save the 'global' end of the spellchecking
         const SwPosition aSaveEndPos = *GetEnd();
         //set the sentence end as 'local' end
@@ -1436,13 +1546,13 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions)
                 *pCrsr->GetMark() = *GetCurr();
             }
             //add the portion
-            AddPortion(0);
+            AddPortion(0, aDeletedRedlines);
 
             if(xSpellRet.is())
             {
                 *pCrsr->GetPoint() = *GetCurr();
                 *pCrsr->GetMark() = *GetCurrX();
-                AddPortion(xSpellRet);
+                AddPortion(xSpellRet, aDeletedRedlines);
                 //move the cursor to the end of the error string
                 *pCrsr->GetPoint() = *GetCurrX();
                 //and save the end of the error as new start position
@@ -1460,7 +1570,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions)
         *pSh->GetCrsr()->GetPoint() = *GetEnd();
         if(*GetCurrX() < *GetEnd())
         {
-            AddPortion(0);
+            AddPortion(0, aDeletedRedlines);
         }
         //set the shell cursor to the end of the sentence to prevent a visible selection
         *pCrsr->GetMark() = *GetEnd();
@@ -1501,16 +1611,23 @@ LanguageType lcl_GetLanguage(SwEditShell& rSh)
 /*-- 08.10.2003 08:53:27---------------------------------------------------
     create a text portion at the given position
   -----------------------------------------------------------------------*/
-void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > xAlt, bool bIsField)
+void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > xAlt,
+        bool bIsField, bool bIsHidden)
 {
     svx::SpellPortion aPortion;
     String sText;
     GetSh()->GetSelectedText( sText );
     if(sText.Len())
     {
-        aPortion.sText = sText;
+        //in case of redlined deletions the selection of an error is not
+        //the same as the _real_ word
+        if(xAlt.is())
+            aPortion.sText = xAlt->getWord();
+        else
+            aPortion.sText = sText;
         aPortion.eLanguage = lcl_GetLanguage(*GetSh());
         aPortion.bIsField = bIsField;
+        aPortion.bIsHidden = bIsHidden;
         aPortion.xAlternatives = xAlt;
         SpellContentPosition aPosition;
         SwPaM *pCrsr = GetSh()->GetCrsr();
@@ -1523,7 +1640,8 @@ void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > xAlt, bool 
 /*-- 19.09.2003 13:05:43---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt)
+void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
+                                const SpellContentPositions& rDeletedRedlines)
 {
     SwEditShell *pSh = GetSh();
     String sText;
@@ -1532,7 +1650,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt)
     {
         if(xAlt.is())
         {
-            CreatePortion(xAlt, false);
+            CreatePortion(xAlt, false, false);
         }
         else
         {
@@ -1545,9 +1663,23 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt)
             //iterate over the text to find changes in language
             //set the mark equal to the point
             *pCrsr->GetMark() = aStart;
-            const SwTxtNode* pTxtNode = pCrsr->GetNode()->GetTxtNode();
+            SwTxtNode* pTxtNode = pCrsr->GetNode()->GetTxtNode();
             LanguageType eStartLanguage = lcl_GetLanguage(*GetSh());
-            do
+            SpellContentPosition  aNextRedline = lcl_FindNextDeletedRedline(
+                        rDeletedRedlines, aStart.nContent.GetIndex() );
+            if( aNextRedline.nLeft == aStart.nContent.GetIndex() )
+            {
+                //select until the end of the current redline
+                xub_StrLen nEnd = aEnd.nContent.GetIndex() < aNextRedline.nRight ?
+                            aEnd.nContent.GetIndex() : aNextRedline.nRight;
+                pCrsr->GetPoint()->nContent.Assign( pTxtNode, nEnd );
+                CreatePortion(xAlt, false, true);
+                aStart = *pCrsr->End();
+                //search for next redline
+                aNextRedline = lcl_FindNextDeletedRedline(
+                            rDeletedRedlines, aStart.nContent.GetIndex() );
+            }
+            while(*pCrsr->GetPoint() < aEnd)
             {
                 GetSh()->Right(1, CRSR_SKIP_CELLS);
                 bool bField = false;
@@ -1573,34 +1705,54 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt)
                 }
 
                 LanguageType eCurLanguage = lcl_GetLanguage(*GetSh());
-                if(bField || eCurLanguage != eStartLanguage)
+                bool bRedline = aNextRedline.nLeft == pCrsr->GetPoint()->nContent.GetIndex();
+                // create a portion if the next character
+                //  - is a field,
+                //  - is at the beginning of a deleted redline
+                //  - has a different language
+                if(bField || bRedline || eCurLanguage != eStartLanguage)
                 {
                     eStartLanguage = eCurLanguage;
                     //go one step back - the cursor currently selects the first character
                     //with a different language
-                    *pCrsr->GetPoint() = *pCrsr->GetMark();
+                    //in the case of redlining it's different
+                    if(eCurLanguage != eStartLanguage || bField)
+                        *pCrsr->GetPoint() = *pCrsr->GetMark();
                     //set to the last start
                     *pCrsr->GetMark() = aStart;
                     //create portion should only be called if a selection exists
                     //there's no selection if there's a field at the beginning
                     if(*pCrsr->Start() != *pCrsr->End())
-                        CreatePortion(xAlt, false);
+                        CreatePortion(xAlt, false, false);
                     aStart = *pCrsr->End();
                     //now export the field - if there is any
                     if(bField)
                     {
                         *pCrsr->GetMark() = *pCrsr->GetPoint();
                         GetSh()->Right(1, CRSR_SKIP_CELLS);
-                        CreatePortion(xAlt, true);
+                        CreatePortion(xAlt, true, false);
                         aStart = *pCrsr->End();
                     }
                 }
+                // if a redline start then create a portion for it
+                if(bRedline)
+                {
+                    *pCrsr->GetMark() = *pCrsr->GetPoint();
+                    //select until the end of the current redline
+                    xub_StrLen nEnd = aEnd.nContent.GetIndex() < aNextRedline.nRight ?
+                                aEnd.nContent.GetIndex() : aNextRedline.nRight;
+                    pCrsr->GetPoint()->nContent.Assign( pTxtNode, nEnd );
+                    CreatePortion(xAlt, false, true);
+                    aStart = *pCrsr->End();
+                    //search for next redline
+                    aNextRedline = lcl_FindNextDeletedRedline(
+                                rDeletedRedlines, aStart.nContent.GetIndex() );
+                }
                 *pCrsr->GetMark() = *pCrsr->GetPoint();
             }
-            while(*pCrsr->GetPoint() < aEnd);
             pCrsr->SetMark();
             *pCrsr->GetMark() = aStart;
-            CreatePortion(xAlt, false);
+            CreatePortion(xAlt, false, false);
         }
     }
 }
