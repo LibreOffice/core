@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-15 17:35:27 $
+ *  last change: $Author: cl $ $Date: 2001-02-21 18:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@ class SdXMLExport : public SvXMLExport
     const rtl::OUString         msStartShape;
     const rtl::OUString         msEndShape;
 
+    virtual void _ExportViewSettings();
     virtual void _ExportStyles(BOOL bUsed);
     virtual void _ExportAutoStyles();
     virtual void _ExportMasterStyles();

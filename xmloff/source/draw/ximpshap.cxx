@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-09 13:38:53 $
+ *  last change: $Author: cl $ $Date: 2001-02-21 18:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_CIRCLEKIND_HPP_
@@ -1680,3 +1684,121 @@ SvXMLImportContext * SdXMLChartShapeContext::CreateChildContext( USHORT nPrefix,
     return NULL;
 }
 
+//////////////////////////////////////////////////////////////////////////////
+
+TYPEINIT1( SdXMLObjectShapeContext, SdXMLShapeContext );
+
+SdXMLObjectShapeContext::SdXMLObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes)
+: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
+  mbPlaceHolder( sal_False ), mbUserTransformed( sal_False )
+{
+}
+
+SdXMLObjectShapeContext::~SdXMLObjectShapeContext()
+{
+}
+
+void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+{
+    char* pService = "com.sun.star.drawing.OLE2Shape";
+
+    sal_Bool bIsPresShape = maPresentationClass.getLength() != 0;
+    if( bIsPresShape )
+    {
+        if( maPresentationClass.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_presentation_chart)) )
+        {
+            pService = "com.sun.star.presentation.ChartShape";
+        }
+        else if( maPresentationClass.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_presentation_table)) )
+        {
+            pService = "com.sun.star.presentation.TableShape";
+        }
+        else if( maPresentationClass.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_presentation_object)) )
+        {
+            pService = "com.sun.star.presentation.OLE2Shape";
+        }
+    }
+
+    AddShape( pService );
+
+    if( mxShape.is() )
+    {
+        SetLayer();
+
+        if(bIsPresShape)
+        {
+            uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+            if(xProps.is())
+            {
+                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+                if( xPropsInfo.is() )
+                {
+                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") )))
+                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ), ::cppu::bool2any( sal_False ) );
+
+                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") )))
+                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") ), ::cppu::bool2any( sal_False ) );
+                }
+            }
+        }
+
+        if( !mbIsPlaceholder && maHref.getLength() )
+        {
+            uno::Reference< container::XNamed > xNamed( mxShape, uno::UNO_QUERY );
+            if( xNamed.is() )
+            {
+                OUString aName( GetImport().ResolveEmbeddedObjectURL( maHref, maCLSID ) );
+                const OUString sURL(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ));
+                aName = aName.copy( sURL.getLength() );
+                xNamed->setName( aName );
+            }
+        }
+
+        // set pos, size, shear and rotate
+        SetTransformation();
+    }
+}
+
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    switch( nPrefix )
+    {
+    case XML_NAMESPACE_DRAW:
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_class_id)) )
+        {
+            maCLSID = rValue;
+            return;
+        }
+        break;
+    case XML_NAMESPACE_PRESENTATION:
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_class)) )
+        {
+            maClass = rValue;
+            return;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_placeholder)) )
+        {
+            mbPlaceHolder = rValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_true));
+            return;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_user_transformed)) )
+        {
+            mbUserTransformed = rValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_true));
+            return;
+        }
+        break;
+    case XML_NAMESPACE_XLINK:
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_href)) )
+        {
+            maHref = rValue;
+            return;
+        }
+        break;
+    }
+
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
+}

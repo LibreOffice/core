@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-09 13:38:53 $
+ *  last change: $Author: cl $ $Date: 2001-02-21 18:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,6 +434,33 @@ public:
     virtual void Characters( const ::rtl::OUString& rChars );
     virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+};
+
+//////////////////////////////////////////////////////////////////////////////
+// draw:object and draw:object_ole context
+
+class SdXMLObjectShapeContext : public SdXMLShapeContext
+{
+private:
+    rtl::OUString maCLSID;
+    rtl::OUString maClass;
+    rtl::OUString maHref;
+    sal_Bool mbPlaceHolder;
+    sal_Bool mbUserTransformed;
+
+public:
+    TYPEINFO();
+
+    SdXMLObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+    virtual ~SdXMLObjectShapeContext();
+
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
 };
 
 #endif  //  _XIMPSHAPE_HXX

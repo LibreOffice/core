@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-09 13:38:53 $
+ *  last change: $Author: cl $ $Date: 2001-02-21 18:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_CHART_XCHARTDOCUMENT_HPP_
@@ -958,15 +962,8 @@ void XMLShapeExport::ImpExportChartShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
-    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
-    {
-        uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-
-        sal_Bool bIsEmptyPresObj = sal_False;
-        if(eShapeType == XmlShapeTypePresChartShape)
-            bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_chart)) );
-
+    ImpExportOLE2Shape( xShape, eShapeType, nFeatures, pRefPoint );
+/*
         // Transformation
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
@@ -986,6 +983,7 @@ void XMLShapeExport::ImpExportChartShape(
             SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_CHART, sXML_chart, sal_True, sal_True);
         }
     }
+*/
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -994,18 +992,7 @@ void XMLShapeExport::ImpExportSpreadsheetShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
-    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
-    {
-        uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-
-        if(eShapeType == XmlShapeTypePresTableShape)
-            ImpExportPresentationAttributes( xPropSet, OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_table)) );
-
-        DBG_ERROR( "presentation spreadsheets not yet implemented!" );
-        // write spreadsheet object (fake for now, replace later)
-        SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML__unknown_, sal_True, sal_True);
-    }
+    ImpExportOLE2Shape( xShape, eShapeType, nFeatures, pRefPoint );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1261,18 +1248,52 @@ void XMLShapeExport::ImpExportOLE2Shape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
-    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    uno::Reference< container::XNamed > xNamed(xShape, uno::UNO_QUERY);
+
+    DBG_ASSERT( xPropSet.is() && xNamed.is(), "ole shape is not implementing needed interfaces");
+    if(xPropSet.is() && xNamed.is())
     {
-        uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
+        // Transformation
+        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
+        sal_Bool bIsEmptyPresObj = sal_False;
+
+        // presentation settings
         if(eShapeType == XmlShapeTypePresOLE2Shape)
-            ImpExportPresentationAttributes( xPropSet, OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_object)));
+            bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_object)));
+        else if(eShapeType == XmlShapeTypePresChartShape)
+            bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_chart)) );
+        else if(eShapeType == XmlShapeTypePresTableShape)
+            bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_table)) );
 
-        DBG_ERROR("presentation ole2 not yet supported");
+        OUString sClassId;
 
-        // write object
-        SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML__unknown_, sal_True, sal_True);
+        if( !bIsEmptyPresObj )
+        {
+            // xlink:href
+            OUString sURL(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ));
+            sURL += xNamed->getName();
+
+            sal_Bool bInternal;
+            xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("IsInternal"))) >>= bInternal;
+
+            if( !bInternal )
+                xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID"))) >>= sClassId;
+
+            if( sClassId.getLength() )
+                rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_class_id, sClassId );
+
+            sURL = rExport.AddEmbeddedObject( sURL );
+
+            rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sURL );
+            rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
+            rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_embed );
+            rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
+        }
+
+        const sal_Char *pElem = sClassId.getLength() ? sXML_object_ole : sXML_object;
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, pElem, sal_False, sal_True );
 
         ImpExportEvents( xShape );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-15 17:35:27 $
+ *  last change: $Author: cl $ $Date: 2001-02-21 18:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,9 @@ static __FAR_DATA SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
 
     { XML_NAMESPACE_CHART,          sXML_chart,         XML_TOK_GROUP_CHART         },
     { XML_NAMESPACE_DRAW,           sXML_image,         XML_TOK_GROUP_IMAGE         },
-    { XML_NAMESPACE_DR3D,           sXML_scene,     XML_TOK_GROUP_3DSCENE       },
+    { XML_NAMESPACE_DR3D,           sXML_scene,         XML_TOK_GROUP_3DSCENE       },
+    { XML_NAMESPACE_DRAW,           sXML_object,        XML_TOK_GROUP_OBJECT        },
+    { XML_NAMESPACE_DRAW,           sXML_object_ole,    XML_TOK_GROUP_OBJECT_OLE    },
 
     XML_TOKEN_MAP_END
 };
@@ -773,6 +775,13 @@ SvXMLImportContext* XMLShapeImportHelper::CreateGroupChildContext(
         {
             // office:image inside group context
             pContext = new SdXMLGraphicObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_GROUP_OBJECT:
+        case XML_TOK_GROUP_OBJECT_OLE:
+        {
+            // draw:object or draw:object_ole
+            pContext = new SdXMLObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
             break;
         }
         // add other shapes here...

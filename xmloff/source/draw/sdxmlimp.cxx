@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-15 17:35:27 $
+ *  last change: $Author: cl $ $Date: 2001-02-21 18:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@
 #include "xmluconv.hxx"
 #endif
 
+#ifndef _SD_XMLVIEWSETTINGSCONTEXT_HXX
+#include "viewcontext.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #endif
@@ -146,6 +150,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDocElemTokenMap[] =
     { XML_NAMESPACE_OFFICE, sXML_meta,              XML_TOK_DOC_META            },
     { XML_NAMESPACE_OFFICE, sXML_script,            XML_TOK_DOC_SCRIPT          },
     { XML_NAMESPACE_OFFICE, sXML_body,              XML_TOK_DOC_BODY            },
+    { XML_NAMESPACE_DRAW,   sXML_view_settings,     XML_TOK_DOC_VIEWSETTINGS    },
     XML_TOKEN_MAP_END
 };
 
@@ -273,6 +278,12 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
     const SvXMLTokenMap& rTokenMap = GetSdImport().GetDocElemTokenMap();
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
+        case XML_TOK_DOC_VIEWSETTINGS:
+        {
+            // draw:view-settings inside office:document
+            pContext = GetSdImport().CreateViewSettingsContext(rLocalName, xAttrList);
+            break;
+        }
         case XML_TOK_DOC_STYLES:
         {
             // office:styles inside office:document
@@ -574,6 +585,14 @@ SvXMLImportContext *SdXMLImport::CreateContext(USHORT nPrefix,
     }
 
     return pContext;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+SvXMLImportContext* SdXMLImport::CreateViewSettingsContext(const rtl::OUString& rLocalName,
+    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList)
+{
+    return new SdXMLViewSettingsContext( *this, XML_NAMESPACE_DRAW, rLocalName, xAttrList );
 }
 
 //////////////////////////////////////////////////////////////////////////////

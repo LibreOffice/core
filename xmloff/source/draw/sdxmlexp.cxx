@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-15 17:35:26 $
+ *  last change: $Author: cl $ $Date: 2001-02-21 18:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,11 @@
 
 #ifndef _XMLOFF_LAYEREXP_HXX
 #include "layerexp.hxx"
+#endif
+
+
+#ifndef _XMLOFF_VISAREAEXPORT_HXX
+#include "VisAreaExport.hxx"
 #endif
 
 using namespace ::rtl;
@@ -1499,6 +1504,25 @@ void SdXMLExport::SetProgress(sal_Int32 nProg)
 
 //////////////////////////////////////////////////////////////////////////////
 
+void SdXMLExport::_ExportViewSettings()
+{
+    SvXMLElementExport aViewSettingsElem(*this, XML_NAMESPACE_DRAW, sXML_view_settings, sal_True, sal_True);
+
+    uno::Reference< beans::XPropertySet > xPropSet( GetModel(), uno::UNO_QUERY );
+    if( !xPropSet.is() )
+        return;
+
+    awt::Rectangle aVisArea;
+    xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ) ) >>= aVisArea;
+
+    sal_Int16 nMapUnit;
+    xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MapUnit" ) ) ) >>= nMapUnit;
+
+    XMLVisAreaExport aVisAreaExport(*this, sXML_embedded_visible_area, aVisArea, nMapUnit );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 void SdXMLExport::_ExportContent()
 {
     // page export
@@ -1658,12 +1682,6 @@ void SdXMLExport::exportPresentationSettings()
                 OUStringBuffer aOut;
                 SvXMLUnitConverter::convertTime( aOut, aTime );
                 AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_pause, aOut.makeStringAndClear() );
-            }
-
-            xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsShowLogo" ) ) ) >>= bTemp;
-            if( bTemp )
-            {
-                AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_show_logo, sXML_true );
             }
         }
 
