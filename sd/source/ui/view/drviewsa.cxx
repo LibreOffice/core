@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-08 08:07:24 $
+ *  last change: $Author: fs $ $Date: 2002-10-14 08:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,15 +429,6 @@ void SdDrawViewShell::Construct(SdDrawDocShell* pDocSh)
     aShellTable.Insert( RID_DRAW_TEXT_TOOLBOX, pObjBarShell );
 
     aShellTable.Insert( RID_FORMLAYER_TOOLBOX, new FmFormShell( this, pDrView ) );
-    FmFormShell* pFormShell = GetFormShell();
-    if( pFormShell && pDocSh->GetMedium()->GetName().Len() == 0 )
-    {
-        // new document: turn on design mode
-        SfxItemSet aSet( pDoc->GetItemPool() );
-        aSet.Put( SfxBoolItem( SID_FM_DESIGN_MODE, TRUE ) );
-        SfxRequest aReq( SID_FM_DESIGN_MODE, 0, aSet);
-        pFormShell->ExecuteSlot( aReq );
-    }
 
     aShellTable.Insert( RID_DRAW_GRAF_TOOLBOX, new SdDrawGrafObjectBar( this, pDrView ) );
 
