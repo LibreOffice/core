@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Text.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: cl $ $Date: 2000-12-20 16:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ service Text
     /** optional interface to compere postions of <type>TextRange</type>
                 instances within this text.
      */
-    interface XTextRangeCompare;
+    [optional] interface XTextRangeCompare;
 
 
     // DocMerge from xml: service com::sun::star::text::Text: interface com::sun::star::text::XTextRangeMover
@@ -129,7 +129,7 @@ service Text
 
                    @deprecated hack
      */
-    interface XRelativeTextContentInsert;
+    [optional] interface XRelativeTextContentInsert;
 
 };
 
@@ -140,6 +140,9 @@ service Text
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.3  2000/10/11 08:30:59  mi
     #73107# XTextRangeMover is optional now
 
