@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redline.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-19 13:56:02 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 13:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,8 @@ public:
     // das es noch weitere geben kann!
     USHORT GetSeqNo() const                     { return nSeqNo; }
     void SetSeqNo( USHORT nNo )                 { nSeqNo = nNo; }
+
+    String GetDescr() const;
 };
 
 
@@ -254,11 +256,7 @@ public:
     // liegt eine gueltige Selektion vor?
     BOOL HasValidRange() const;
 
-    USHORT GetAuthor() const { return pRedlineData->GetAuthor(); }
-    const DateTime& GetTimeStamp() const { return pRedlineData->GetTimeStamp(); }
-    SwRedlineType GetType() const { return pRedlineData->GetType(); }
-    SwRedlineType GetRealType() const { return pRedlineData->GetRealType(); }
-    const SwRedlineData& GetRedlineData() const { return *pRedlineData; }
+    const SwRedlineData& GetRedlineData(USHORT nPos = 0) const;
     int operator==( const SwRedlineData& rCmp ) const
         { return *pRedlineData == rCmp; }
     int operator!=( const SwRedlineData& rCmp ) const
@@ -266,15 +264,14 @@ public:
     void SetAutoFmtFlag()               { pRedlineData->SetAutoFmtFlag(); }
 
     USHORT GetStackCount() const;
-    USHORT GetAuthor( USHORT nPos ) const;
+    USHORT GetAuthor( USHORT nPos = 0) const;
     const String& GetAuthorString( USHORT nPos = 0 ) const;
-    const DateTime& GetTimeStamp( USHORT nPos ) const;
-    SwRedlineType GetRealType( USHORT nPos ) const;
-    SwRedlineType GetType( USHORT nPos ) const
+    const DateTime& GetTimeStamp( USHORT nPos = 0) const;
+    SwRedlineType GetRealType( USHORT nPos = 0 ) const;
+    SwRedlineType GetType( USHORT nPos = 0) const
         { return SwRedlineType( GetRealType( nPos ) & REDLINE_NO_FLAG_MASK); }
-    const String& GetComment( USHORT nPos ) const;
+    const String& GetComment( USHORT nPos = 0 ) const;
 
-    const String& GetComment() const    { return pRedlineData->GetComment(); }
     void SetComment( const String& rS ) { pRedlineData->SetComment( rS ); }
 
     // ExtraData wird kopiert, der Pointer geht also NICHT in den Besitz
@@ -310,6 +307,20 @@ public:
 
     void PushData( const SwRedline& rRedl, BOOL bOwnAsNext = TRUE );
     BOOL PopData();
+
+    // #111827#
+    /**
+       Returns textual description of this a redline data element of
+       this redline.
+
+       @param nPos index of the redline data element to describe
+
+       The textual description of the selected element contains the
+       kind of redline and the possibly shortened text of the redline.
+
+       @return textual description of the selected redline data element
+     */
+    String GetDescr(USHORT nPos = 0) const;
 
     int operator==( const SwRedline& ) const;
     int operator<( const SwRedline& ) const;
