@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:51:50 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,11 +233,11 @@ ModalDialog DLG_MORPH
     Text [ danish ] = "Ton over" ;
     Text [ portuguese ] = "Dissolver" ;
     Text [ portuguese_brazilian ] = "?berblenden" ;
-    Text[ chinese_simplified ] = "»­Ãæ½»Ìæ";
+    Text[ chinese_simplified ] = "½¥½¥Òş³ö";
     Text[ russian ] = "Ìîğôèíã";
     Text[ polish ] = "Przenikaj";
     Text[ japanese ] = "Ìª°ÄŞµ°ÊŞ°";
-    Text[ chinese_traditional ] = "µe­±¥æ´À";
+    Text[ chinese_traditional ] = "º¥º¥Áô¥X";
     Text[ arabic ] = "ÊÛØíÉ";
     Text[ greek ] = "Âáèìéáßïò áğï÷ñùìáôéóìüò";
     Text[ korean ] = "³¯¾Æ¿À±â";
@@ -246,6 +246,7 @@ ModalDialog DLG_MORPH
     Text[ catalan ] = "Disolvencia";
     Text[ finnish ] = "Ristihäivytys";
 };
+
 
 
 
