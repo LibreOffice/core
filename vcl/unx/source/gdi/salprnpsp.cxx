@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-09 10:00:28 $
+ *  last change: $Author: pl $ $Date: 2001-02-14 13:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,6 +810,7 @@ BOOL SalPrinter::StartJob(
     ImplJobSetup* pJobSetup )
 {
     maPrinterData.m_bFax        = false;
+    maPrinterData.m_bPdf        = false;
     maPrinterData.m_aFileName   = pFileName ? *pFileName : String();
     maPrinterData.m_aTmpFile    = String();
 
