@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:34:14 $
+ *  last change: $Author: cl $ $Date: 2001-10-22 14:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -732,7 +732,8 @@ void SdPage::DisconnectLink()
 \************************************************************************/
 
 SdPage::SdPage(const SdPage& rSrcPage) :
-    FmFormPage(rSrcPage)
+    FmFormPage(rSrcPage),
+    mpItems(NULL)
 {
     ePageKind           = rSrcPage.ePageKind;
     eAutoLayout         = rSrcPage.eAutoLayout;
