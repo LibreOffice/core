@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SysShExec.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:16:09 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,10 +329,18 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
         sign '#' is a valid file name character we remove
         the jump mark, else ShellExecuteEx fails */
     OUString preprocessed_command(aCommand);
-    if (is_system_path(preprocessed_command) &&
-        has_jump_mark(preprocessed_command) &&
-        !is_existing_file(preprocessed_command))
-        remove_jump_mark(&preprocessed_command);
+    if (is_system_path(preprocessed_command))
+    {
+        if (has_jump_mark(preprocessed_command) && !is_existing_file(preprocessed_command))
+            remove_jump_mark(&preprocessed_command);
+    }
+    /* Convert file uris to system paths */
+    else
+    {
+        OUString aSystemPath;
+        if (::osl::FileBase::E_None == ::osl::FileBase::getSystemPathFromFileURL(preprocessed_command, aSystemPath))
+            preprocessed_command = aSystemPath;
+    }
 
     SHELLEXECUTEINFOW sei;
     ZeroMemory(&sei, sizeof( sei));
