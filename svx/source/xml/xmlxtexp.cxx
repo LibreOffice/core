@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtexp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:51:55 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,12 +87,12 @@
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
 
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -156,6 +156,8 @@
 #endif
 
 #include "xmlxtexp.hxx"
+
+#include <comphelper/storagehelper.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::container;
@@ -272,7 +274,7 @@ SvxXMLXTableExportComponent::~SvxXMLXTableExportComponent()
 
 sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Reference<container::XNameContainer >& xTable ) throw()
 {
-    SvStorageRef aStorage;
+    uno::Reference < embed::XStorage > xStorage;
     SfxMedium* pMedium = NULL;
     sal_Bool bRet = sal_False;
 
@@ -283,15 +285,12 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
     {
         do
         {
-            SvStorage* pStorage = NULL;
-            uno::Reference<io::XOutputStream> xOut;
-
-            SvStorageStreamRef xStream;
+            uno::Reference < io::XOutputStream > xOut;
+            uno::Reference < io::XStream > xStream;
 
             sal_Bool bNeedStorage = xTable->getElementType() == ::getCppuType((const OUString*)0);
 
             uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
-
             if( !xServiceFactory.is() )
             {
                 DBG_ERROR( "got no service manager" );
@@ -299,7 +298,6 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
             }
 
             uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
-
             if( !xWriter.is() )
             {
                 DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
@@ -310,22 +308,20 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
 
             if( bNeedStorage )
             {
-                pStorage = new SvStorage( sal_True, rURL, STREAM_WRITE | STREAM_TRUNC, 0 );
-                aStorage = pStorage;
+                xStorage =
+                  ::comphelper::OStorageHelper::GetStorageFromURL( rURL, embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
-                if( NULL == pStorage )
+                if( !xStorage.is() )
                 {
                     DBG_ERROR( "no storage!" );
                     break;
                 }
 
                 OUString sMetaName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
-                xStream = pStorage->OpenStream( sMetaName, STREAM_WRITE | STREAM_SHARE_DENYWRITE );
-                xStream->SetBufferSize( 16*1024 );
-
-                pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_WRITE );
+                xStream = xStorage->openStreamElement( sMetaName, embed::ElementModes::WRITE );
+                pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_WRITE );
                 xGrfResolver = pGraphicHelper;
-                xOut = new utl::OOutputStreamWrapper( *xStream );
+                xOut = xStream->getOutputStream();
             }
             else
             {
@@ -338,9 +334,9 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
                     DBG_ERROR( "no output stream!" );
                     break;
                 }
+
                 xOut = new utl::OOutputStreamWrapper( *pStream );
             }
-
 
             uno::Reference<io::XActiveDataSource> xMetaSrc( xWriter, uno::UNO_QUERY );
             xMetaSrc->setOutputStream( xOut );
