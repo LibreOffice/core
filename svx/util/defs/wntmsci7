@@ -18822,3 +18822,9 @@ _real@8@400d8ca0000000000000
 ?writeBytes@SvXMLGraphicOutputStream@@EAAXABV?$Sequence@C@uno@star@sun@com@@@Z
 _TI3?AVNotConnectedException@io@star@sun@com@@
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Sequence@G@2345@@Z
+??1?$Reference@VXExecutableDialog@dialogs@ui@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?__query@?$Reference@VXExecutableDialog@dialogs@ui@star@sun@com@@@uno@star@sun@com@@CAPAVXExecutableDialog@dialogs@ui@345@PAVXInterface@2345@@Z
+?s_pType_com_sun_star_ui_dialogs_XExecutableDialog@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXExecutableDialog@dialogs@ui@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?set@?$Reference@VXExecutableDialog@dialogs@ui@star@sun@com@@@uno@star@sun@com@@QAAEPAVXExecutableDialog@dialogs@ui@345@@Z
+?Create@SvXMLGraphicHelper@@SAPAV1@W4SvXMLGraphicHelperMode@@@Z
+?Init@SvXMLGraphicHelper@@IAEXPAVSotStorage@@W4SvXMLGraphicHelperMode@@E@Z
