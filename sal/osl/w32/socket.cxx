@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:24:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,7 @@ static sal_Bool __osl_attemptSocketDialupImpl (void)
 /*****************************************************************************/
 static sal_uInt32 g_nSocketImpl = 0;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 static sal_uInt32 g_nSocketAddr = 0;
 struct LeakWarning
 {
@@ -595,7 +595,7 @@ static oslSocketAddr __osl_createSocketAddr(  )
 {
     oslSocketAddr pAddr = (oslSocketAddr) rtl_allocateZeroMemory( sizeof( struct oslSocketAddrImpl ));
     pAddr->m_nRefCount = 1;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_nSocketAddr ++;
 #endif
     return pAddr;
@@ -633,7 +633,7 @@ static oslSocketAddr __osl_createSocketAddrFromSystem( struct sockaddr *pSystemS
 
 static void __osl_destroySocketAddr( oslSocketAddr addr )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_nSocketAddr --;
 #endif
     rtl_freeMemory( addr );
@@ -839,9 +839,6 @@ static oslHostAddr __osl_hostentToHostAddr (const struct hostent *he)
     oslSocketAddr pSocketAddr = 0;
 
     rtl_uString     *cn= NULL;
-#ifdef _DEBUG
-    const sal_Char fct[] = "_osl_hostentToHostAddr()";
-#endif /* _DEBUG */
 
     if ((he == NULL) || (he->h_name == NULL) || (he->h_addr_list[0] == NULL))
         return ((oslHostAddr)NULL);
@@ -872,9 +869,7 @@ static oslHostAddr __osl_hostentToHostAddr (const struct hostent *he)
         /* unknown address family */
         /* future extensions for new families might be implemented here */
 
-#ifdef DEBUG
-        OSL_TRACE("%s: unknown address family.\n", fct);
-#endif
+        OSL_TRACE("_osl_hostentToHostAddr(): unknown address family.\n");
         OSL_ASSERT(sal_False);
 
         __osl_destroySocketAddr( pSocketAddr );
