@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:07:17 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,7 +609,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ portuguese_brazilian ] = "Addr. form";
     Text[ japanese ] = "åhèÃ";
     Text[ korean ] = "»£ƒ™";
-    Text[ chinese_simplified ] = "≥∆ŒΩ";
+    Text[ chinese_simplified ] = "≥∆∫Ù";
     Text[ chinese_traditional ] = "∫Ÿ©I";
     Text[ turkish ] = "Addr. form";
     Text[ arabic ] = "·ﬁ» «·„Œ«ÿ»…";
