@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcolect.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-04-23 09:42:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include "refreshtimer.hxx"
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 //------------------------------------------------------------------------
 
 class ScDocument;
@@ -92,11 +96,11 @@ class ScDBData : public DataObject, public ScRefreshTimer
 private:
     // DBParam
     String          aName;
-    USHORT          nTable;
-    USHORT          nStartCol;
-    USHORT          nStartRow;
-    USHORT          nEndCol;
-    USHORT          nEndRow;
+    SCTAB           nTable;
+    SCCOL           nStartCol;
+    SCROW           nStartRow;
+    SCCOL           nEndCol;
+    SCROW           nEndRow;
     BOOL            bByRow;
     BOOL            bHasHeader;
     BOOL            bDoSize;
@@ -108,11 +112,11 @@ private:
     BOOL            bSortInplace;
     BOOL            bSortUserDef;
     USHORT          nSortUserIndex;
-    USHORT          nSortDestTab;
-    USHORT          nSortDestCol;
-    USHORT          nSortDestRow;
+    SCTAB           nSortDestTab;
+    SCCOL           nSortDestCol;
+    SCROW           nSortDestRow;
     BOOL            bDoSort[MAXSORT];
-    USHORT          nSortField[MAXSORT];
+    SCCOLROW        nSortField[MAXSORT];
     BOOL            bAscending[MAXSORT];
     ::com::sun::star::lang::Locale aSortLocale;
     String          aSortAlgorithm;
@@ -121,11 +125,11 @@ private:
     BOOL            bQueryCaseSens;
     BOOL            bQueryRegExp;
     BOOL            bQueryDuplicate;
-    USHORT          nQueryDestTab;
-    USHORT          nQueryDestCol;
-    USHORT          nQueryDestRow;
+    SCTAB           nQueryDestTab;
+    SCCOL           nQueryDestCol;
+    SCROW           nQueryDestRow;
     BOOL            bDoQuery[MAXQUERY];
-    USHORT          nQueryField[MAXQUERY];
+    SCCOLROW        nQueryField[MAXQUERY];
     ScQueryOp       eQueryOp[MAXQUERY];
     BOOL            bQueryByString[MAXQUERY];
     String*         pQueryStr[MAXQUERY];
@@ -144,9 +148,9 @@ private:
     BOOL            bSubUserDef;
     USHORT          nSubUserIndex;
     BOOL            bDoSubTotal[MAXSUBTOTAL];
-    USHORT          nSubField[MAXSUBTOTAL];
-    USHORT          nSubTotals[MAXSUBTOTAL];
-    USHORT*         pSubTotals[MAXSUBTOTAL];
+    SCCOL           nSubField[MAXSUBTOTAL];
+    SCCOL           nSubTotals[MAXSUBTOTAL];
+    SCCOL*          pSubTotals[MAXSUBTOTAL];
     ScSubTotalFunc* pFunctions[MAXSUBTOTAL];
     // Datenbank-Import
     BOOL            bDBImport;
@@ -164,8 +168,8 @@ private:
 
 public:
             ScDBData(const String& rName,
-                     USHORT nTab,
-                     USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
+                     SCTAB nTab,
+                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                      BOOL bByR = TRUE, BOOL bHasH = TRUE);
             ScDBData(const ScDBData& rData);
             ScDBData( SvStream& rStream, ScMultipleReadHeader& rHdr );
@@ -182,10 +186,10 @@ public:
             const String& GetName() const               { return aName; }
             void        GetName(String& rName) const    { rName = aName; }
             void        SetName(const String& rName)    { aName = rName; }
-            void        GetArea(USHORT& rTab, USHORT& rCol1, USHORT& rRow1, USHORT& rCol2, USHORT& rRow2) const;
+            void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
             void        GetArea(ScRange& rRange) const;
-            void        SetArea(USHORT nTab, USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2);
-            void        MoveTo(USHORT nTab, USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2);
+            void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+            void        MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
             BOOL        IsByRow() const                 { return bByRow; }
             void        SetByRow(BOOL bByR)             { bByRow = bByR; }
             BOOL        HasHeader() const               { return bHasHeader; }
@@ -199,7 +203,7 @@ public:
             BOOL        IsStripData() const             { return bStripData; }
             void        SetStripData(BOOL bSet)         { bStripData = bSet; }
 
-            BOOL        IsBeyond(USHORT nMaxRow) const;
+            BOOL        IsBeyond(SCROW nMaxRow) const;
 
             String      GetSourceString() const;
             String      GetOperations() const;
@@ -218,8 +222,8 @@ public:
             void        GetImportParam(ScImportParam& rImportParam) const;
             void        SetImportParam(const ScImportParam& rImportParam);
 
-            BOOL        IsDBAtCursor(USHORT nCol, USHORT nRow, USHORT nTab, BOOL bStartOnly) const;
-            BOOL        IsDBAtArea(USHORT nTab, USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2) const;
+            BOOL        IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bStartOnly) const;
+            BOOL        IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
             String      GetTargetName(const String& rDocName) const;
 
@@ -268,8 +272,8 @@ public:
             ScDBData*   operator[]( const USHORT nIndex) const {return (ScDBData*)At(nIndex);}
     virtual short       Compare(DataObject* pKey1, DataObject* pKey2) const;
     virtual BOOL        IsEqual(DataObject* pKey1, DataObject* pKey2) const;
-            ScDBData*   GetDBAtCursor(USHORT nCol, USHORT nRow, USHORT nTab, BOOL bStartOnly) const;
-            ScDBData*   GetDBAtArea(USHORT nTab, USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2) const;
+            ScDBData*   GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bStartOnly) const;
+            ScDBData*   GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
     BOOL    Load( SvStream& rStream );
     BOOL    Store( SvStream& rStream ) const;
@@ -277,10 +281,10 @@ public:
     BOOL    SearchName( const String& rName, USHORT& rIndex ) const;
 
     void    UpdateReference(UpdateRefMode eUpdateRefMode,
-                                USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                                USHORT nCol2, USHORT nRow2, USHORT nTab2,
-                                short nDx, short nDy, short nDz );
-    void    UpdateMoveTab( USHORT nOldPos, USHORT nNewPos );
+                                SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
+                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
     ScDBData* FindIndex(USHORT nIndex);
     USHORT  GetEntryIndex()                 { return nEntryIndex; }
