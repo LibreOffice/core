@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaFop.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:15:44 $
+ *  last change: $Author: tra $ $Date: 2001-07-10 14:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #ifndef _RTL_USTRING_
 #include <rtl/ustring>
+#endif
+
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 #include <utility>
@@ -162,15 +166,15 @@ protected:
 
 private:
     // helper functions
-    LPITEMIDLIST SAL_CALL getItemIdListFromPath( const rtl::OUString& aDirectory );
-    rtl::OUString SAL_CALL getPathFromIdList( LPCITEMIDLIST lpItemIdList );
+    LPITEMIDLIST  SAL_CALL getItemIdListFromPath( const rtl::OUString& aDirectory );
+    rtl::OUString SAL_CALL getPathFromItemIdList( LPCITEMIDLIST lpItemIdList );
     void SAL_CALL releaseItemIdList( LPITEMIDLIST lpItemIdList );
 
     unsigned int run( );
 
     // create a hidden windows which serves as an request
     // target; so we guarantee synchronization
-    void createMtaFolderPickerReqWnd( );
+    sal_Bool SAL_CALL createStaRequestWindow( );
 
     //---------------------------------------------------------------
     // message handler functions; remeber these functions are called
@@ -179,22 +183,23 @@ private:
 
     sal_Bool SAL_CALL onBrowseForFolder( );
 
-    static LRESULT CALLBACK mtaFolderPickerReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
-    static unsigned int WINAPI oleThreadProc( LPVOID pParam );
-    static int CALLBACK folderPickerCallback( HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData );
+    static LRESULT CALLBACK StaWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+    static unsigned int WINAPI StaThreadProc( LPVOID pParam );
 
-    sal_Bool WaitForThreadReady( ) const;
+    static int CALLBACK FolderPickerCallback( HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData );
 
 protected:
     HWND m_hwnd;
-    static CMtaFolderPicker*    s_mtaFolderPickerInst;
+
+private:
+    ATOM SAL_CALL RegisterStaRequestWindowClass( );
+    void SAL_CALL UnregisterStaRequestWindowClass( );
 
 private:
     HANDLE                      m_hStaThread;
     unsigned                    m_uStaThreadId;
     HANDLE                      m_hEvtThrdReady;
-    HWND                        m_hwndMtaFolderPickerReqWnd;
-    ATOM                        m_MtaFolderPickerReqWndClassAtom;
+    HWND                        m_hwndStaRequestWnd;
     HWND                        m_hwndFolderPicker;
     rtl::OUString               m_dialogTitle;
     rtl::OUString               m_Description;
@@ -202,13 +207,19 @@ private:
     rtl::OUString               m_SelectedDir;
     BROWSEINFOW                 m_bi;
     CAutoPathBuff               m_pathBuff;
+    HINSTANCE                   m_hInstance;
 
-// not allowed
+    // the request window class has to be registered only
+    // once per process, so multiple instance of this class
+    // share the registered window class
+    static ATOM       s_ClassAtom;
+    static osl::Mutex s_Mutex;
+    static sal_Int32  s_StaRequestWndRegisterCount;
+
+// prevent copy and assignment
 private:
     CMtaFolderPicker( const CMtaFolderPicker& );
     CMtaFolderPicker& operator=( const CMtaFolderPicker& );
-
-    friend LRESULT CALLBACK mtaFolderPickerReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 };
 
 #endif

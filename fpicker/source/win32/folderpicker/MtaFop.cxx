@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaFop.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-10 13:31:54 $
+ *  last change: $Author: tra $ $Date: 2001-07-10 14:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <osl/diagnose.h>
 #endif
 
+#ifndef _OSL_CONDITN_HXX_
+#include <osl/conditn.hxx>
+#endif
+
 #include "MtaFop.hxx"
 #include <wchar.h>
 #include <process.h>
@@ -83,6 +87,7 @@
 //----------------------------------------------------------------
 
 using rtl::OUString;
+using osl::Condition;
 
 //----------------------------------------------------------------
 //  defines
@@ -90,8 +95,15 @@ using rtl::OUString;
 
 namespace
 {
-    char FOLDERPICKER_SRV_DLL_NAME[] = "fop.dll";
-    char g_szWndClsName[]            = "MtaOleReqWnd###";
+    const char* FOLDERPICKER_SRV_DLL_NAME = "fop.dll";
+    const char g_szWndClsName[]           = "FopStaReqWnd###";
+    const char* CURRENT_INSTANCE          = "CurrInst";
+
+    typedef struct _RequestContext
+    {
+        HANDLE   hEvent;
+        sal_Bool bRet;
+    } RequestContext;
 }
 
 //--------------------------------------------------------
@@ -101,7 +113,7 @@ namespace
 const sal_uInt32 MSG_BROWSEFORFOLDER = WM_USER + 1;
 const sal_uInt32 MSG_SHUTDOWN        = WM_USER + 2;
 
-const sal_uInt32 MAX_WAITTIME        = 10000; // msec
+const sal_uInt32 MAX_WAITTIME        = 2000; // msec
 
 const sal_Bool MANUAL_RESET     = sal_True;
 const sal_Bool AUTO_RESET       = sal_False;
@@ -111,7 +123,9 @@ const sal_Bool INIT_NONSIGNALED = sal_False;
 //  static member initialization
 //----------------------------------------------------------------
 
-CMtaFolderPicker* CMtaFolderPicker::s_mtaFolderPickerInst = NULL;
+ATOM CMtaFolderPicker::s_ClassAtom = 0;
+osl::Mutex CMtaFolderPicker::s_Mutex;
+sal_Int32 CMtaFolderPicker::s_StaRequestWndRegisterCount = 0;
 
 //--------------------------------------------------------------------
 // ctor
@@ -121,10 +135,12 @@ CMtaFolderPicker::CMtaFolderPicker( sal_uInt32 Flags ) :
     m_hStaThread( NULL ),
     m_uStaThreadId( 0 ),
     m_hEvtThrdReady( NULL ),
-    m_hwndMtaFolderPickerReqWnd( NULL ),
-    m_MtaFolderPickerReqWndClassAtom( 0 ),
+    m_hwndStaRequestWnd( NULL ),
     m_hwndFolderPicker( NULL )
 {
+    m_hInstance = GetModuleHandleA( FOLDERPICKER_SRV_DLL_NAME );
+    OSL_ENSURE( m_hInstance, "The name of the FolderPicker service dll must have changed" );
+
     ZeroMemory( &m_bi, sizeof( m_bi ) );
 
     m_bi.hwndOwner = GetForegroundWindow( );
@@ -143,7 +159,7 @@ CMtaFolderPicker::CMtaFolderPicker( sal_uInt32 Flags ) :
     */
     m_bi.ulFlags = Flags;
 
-    m_bi.lpfn    = CMtaFolderPicker::folderPickerCallback;
+    m_bi.lpfn    = CMtaFolderPicker::FolderPickerCallback;
     m_bi.lParam  = reinterpret_cast< LPARAM >( this );
 
     //---------------------------------------
@@ -155,32 +171,28 @@ CMtaFolderPicker::CMtaFolderPicker( sal_uInt32 Flags ) :
     m_dialogTitle = ResProvider.getResString( 500 );
     m_Description = ResProvider.getResString( 501 );
 
-#pragma message( "###############################" )
-#pragma message( "fix this" )
-#pragma message( "###############################" )
-
-    /*
-        !!! this has to be fixed, we should connect
-            the class instances with the window using
-            SetProp
-        !!!
-
-    // signals that the thread was
-    // successfully set up
+    // signals that the thread was successfully set up
     m_hEvtThrdReady  = CreateEventA(
         0,
         MANUAL_RESET,
         INIT_NONSIGNALED,
         NULL );
-    OSL_ASSERT( NULL != m_hEvtThrdReady );
 
-    s_mtaFolderPickerInst = this;
+    if ( m_hEvtThrdReady )
+    {
+        // setup the sta thread
+        m_hStaThread = (HANDLE)_beginthreadex(
+            NULL,
+            0,
+            CMtaFolderPicker::StaThreadProc,
+            this,
+            0,
+            &m_uStaThreadId );
 
-    // setup the sta thread
-    m_hStaThread = (HANDLE)_beginthreadex(
-        NULL, 0, CMtaFolderPicker::oleThreadProc, this, 0, &m_uStaThreadId );
-    OSL_ASSERT( NULL != m_hStaThread );
-    */
+        OSL_ASSERT( m_hStaThread );
+    }
+
+    OSL_ASSERT( m_hEvtThrdReady );
 }
 
 //--------------------------------------------------------------------
@@ -189,40 +201,50 @@ CMtaFolderPicker::CMtaFolderPicker( sal_uInt32 Flags ) :
 
 CMtaFolderPicker::~CMtaFolderPicker( )
 {
-    /*
-    // block calling threads out
-    if ( NULL != m_hEvtThrdReady )
+    // only if the is a valid event handle
+    // there may also be a thread a hidden
+    // target request window and so on
+    // see ctor
+    if ( m_hEvtThrdReady )
+    {
+        // block calling threads because we
+        // are about to shutdown
         ResetEvent( m_hEvtThrdReady );
 
-    // end the thread
-    // because DestroyWindow can only be called
-    // from within the thread that created the window
-    SendMessageA(
-        m_hwndMtaFolderPickerReqWnd,
-        MSG_SHUTDOWN,
-        static_cast< WPARAM >( 0 ),
-        static_cast< LPARAM >( 0 ) );
+        // force the destruction of the sta thread request window
+        // and the end of the thread
+        // remeber: DestroyWindow may only be called from within
+        // the thread that created the window
+        if ( IsWindow( m_hwndStaRequestWnd ) )
+        {
+            SendMessageA( m_hwndStaRequestWnd, MSG_SHUTDOWN, 0, 0 );
 
-    // wait for thread shutdown
-    sal_uInt32 dwResult =
-        WaitForSingleObject( m_hStaThread, MAX_WAITTIME );
-    OSL_ENSURE( dwResult == WAIT_OBJECT_0, "Sta-Thread could not terminate" );
+            // we place unregister class here because
+            // if we have a valid window we must have
+            // sucessfully registered a window class
+            // if the creation of the window itself
+            // failed after registering the window
+            // class we have unregistered it immediately
+            // in createStaRequestWindow below
+            UnregisterStaRequestWindowClass( );
+        }
 
-    // terminate the thread if it doesn't shutdown itself
-    if ( WAIT_OBJECT_0 != dwResult )
-        TerminateThread( m_hStaThread, 0 );
+        if ( m_hStaThread )
+        {
+            // wait for thread shutdown
+            sal_uInt32 dwResult = WaitForSingleObject( m_hStaThread, MAX_WAITTIME );
+            OSL_ENSURE( dwResult == WAIT_OBJECT_0, "sta thread could not terminate" );
 
-    if ( NULL != m_hStaThread )
-        CloseHandle( m_hStaThread );
+            // terminate the thread if it
+            // doesn't shutdown itself
+            if ( WAIT_OBJECT_0 != dwResult )
+                TerminateThread( m_hStaThread, -1 );
 
-    if ( NULL != m_hEvtThrdReady )
+            CloseHandle( m_hStaThread );
+        }
+
         CloseHandle( m_hEvtThrdReady );
-    */
-
-    if ( m_MtaFolderPickerReqWndClassAtom )
-        UnregisterClassA( g_szWndClsName, NULL );
-
-    s_mtaFolderPickerInst = NULL;
+    }
 }
 
 //--------------------------------------------------------------------
@@ -231,18 +253,69 @@ CMtaFolderPicker::~CMtaFolderPicker( )
 
 sal_Bool CMtaFolderPicker::browseForFolder( )
 {
-    /*
-    if ( !WaitForThreadReady( ) )
+    OSL_ASSERT( m_hEvtThrdReady );
+
+    if ( WaitForSingleObject( m_hEvtThrdReady, MAX_WAITTIME ) != WAIT_OBJECT_0 )
+    {
+        OSL_ENSURE( sal_False, "sta thread not ready" );
         return sal_False;
+    }
+
+    RequestContext  aReqCtx;
+
+    aReqCtx.hEvent = CreateEventA(
+        0,
+        AUTO_RESET,
+        INIT_NONSIGNALED,
+        NULL );
+
+    if ( !aReqCtx.hEvent )
+    {
+        OSL_ASSERT( sal_False );
+        return sal_False;
+    }
+
+    aReqCtx.bRet = sal_False;
 
     // marshall request into the sta thread
-    return static_cast< sal_Bool >( SendMessageA(
-        m_hwndMtaFolderPickerReqWnd,
+    PostMessageA(
+        m_hwndStaRequestWnd,
         MSG_BROWSEFORFOLDER,
         0,
-        0 ) );
-    */
-    return onBrowseForFolder( );
+        reinterpret_cast< LPARAM >( &aReqCtx ) );
+
+    sal_Bool bContinue = sal_True;
+
+    // waiting for the event to be signaled or
+    // window messages so that we don't block
+    // our parent window
+    while ( bContinue )
+    {
+        DWORD dwResult = MsgWaitForMultipleObjects(
+            1, &aReqCtx.hEvent, FALSE, INFINITE, QS_ALLEVENTS );
+
+        switch ( dwResult )
+        {
+        case WAIT_OBJECT_0:
+            bContinue = sal_False;
+            break;
+
+        case WAIT_OBJECT_0 + 1:
+            {
+                MSG msg;
+                while ( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
+                    DispatchMessage(&msg);
+            }
+            break;
+
+        default:
+            OSL_ASSERT( sal_False );
+        }
+    }
+
+    CloseHandle( aReqCtx.hEvent );
+
+    return aReqCtx.bRet;
 }
 
 //--------------------------------------------------------------------
@@ -321,7 +394,7 @@ sal_Bool SAL_CALL CMtaFolderPicker::onBrowseForFolder( )
 
     // post SHBrowseForFolder
 
-    m_SelectedDir = getPathFromIdList( lpiid );
+    m_SelectedDir = getPathFromItemIdList( lpiid );
     releaseItemIdList( lpiid );
 
     return bRet;
@@ -394,7 +467,7 @@ LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const rtl::OUStri
 //
 //--------------------------------------------------------------------
 
-OUString SAL_CALL CMtaFolderPicker::getPathFromIdList( LPCITEMIDLIST lpItemIdList )
+OUString SAL_CALL CMtaFolderPicker::getPathFromItemIdList( LPCITEMIDLIST lpItemIdList )
 {
     OUString path;
 
@@ -497,25 +570,25 @@ sal_uInt32 SAL_CALL CMtaFolderPicker::onValidateFailed( sal_Unicode* lpInvalidPa
 //
 //--------------------------------------------------------------------
 
-int CALLBACK CMtaFolderPicker::folderPickerCallback( HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData )
+int CALLBACK CMtaFolderPicker::FolderPickerCallback( HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData )
 {
     CMtaFolderPicker* pImpl = reinterpret_cast< CMtaFolderPicker* >( lpData );
     OSL_ASSERT( pImpl );
-
-    pImpl->m_hwnd = hwnd;
 
     int nRC = 0;
 
     switch( uMsg )
     {
         case BFFM_INITIALIZED:
+            pImpl->m_hwnd = hwnd;
             pImpl->onInitialized( );
             SetWindowTextW( hwnd, pImpl->m_dialogTitle );
         break;
 
         case BFFM_SELCHANGED:
+            pImpl->m_hwnd = hwnd;
             pImpl->onSelChanged(
-                pImpl->getPathFromIdList(
+                pImpl->getPathFromItemIdList(
                     reinterpret_cast< LPITEMIDLIST >( lParam ) ) );
         break;
 
@@ -534,34 +607,62 @@ int CALLBACK CMtaFolderPicker::folderPickerCallback( HWND hwnd, UINT uMsg, LPARA
 // the window proc
 //--------------------------------------------------------------------
 
-LRESULT CALLBACK CMtaFolderPicker::mtaFolderPickerReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK CMtaFolderPicker::StaWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-    LRESULT lResult = 0;
+    LRESULT           lResult = 0;
+    CMtaFolderPicker* pImpl   = NULL;
 
-    __try
+    /*
+        we connect to the belonging class instance of this
+        window using SetProp, GetProp etc.
+        this may fail if somehow the class instance destroyed
+        before the window
+    */
+
+    switch( uMsg )
     {
-        // get a connection to the class-instance via the static member
-        CMtaFolderPicker* pImpl = CMtaFolderPicker::s_mtaFolderPickerInst;
-        OSL_ASSERT( NULL != pImpl );
+        case WM_CREATE:
+            {
+                LPCREATESTRUCT lpcs =
+                    reinterpret_cast< LPCREATESTRUCT >( lParam );
 
-        switch( uMsg )
-        {
+                OSL_ASSERT( lpcs->lpCreateParams );
+
+                // connect the instance handle to the window
+                SetPropA( hWnd, CURRENT_INSTANCE, lpcs->lpCreateParams );
+            }
+            break;
+
+        case WM_NCDESTROY:
+                // RemoveProp returns the saved value on success
+                pImpl = reinterpret_cast< CMtaFolderPicker* >(
+                    RemovePropA( hWnd, CURRENT_INSTANCE ) );
+
+                OSL_ASSERT( pImpl && !IsBadReadPtr( pImpl, sizeof( CMtaFolderPicker ) ) );
+            break;
+
         case MSG_BROWSEFORFOLDER:
-            lResult = pImpl->onBrowseForFolder( );
+            {
+                RequestContext* aReqCtx = reinterpret_cast< RequestContext* >( lParam );
+                OSL_ASSERT( aReqCtx );
+
+                pImpl = reinterpret_cast< CMtaFolderPicker* >(
+                    GetPropA( hWnd, CURRENT_INSTANCE ) );
+
+                OSL_ASSERT( pImpl && !IsBadReadPtr( pImpl, sizeof( CMtaFolderPicker ) ) );
+
+                aReqCtx->bRet = pImpl->onBrowseForFolder( );
+                SetEvent( aReqCtx->hEvent );
+            }
             break;
 
         case MSG_SHUTDOWN:
-            DestroyWindow( pImpl->m_hwndMtaFolderPickerReqWnd );
-            break;
+            pImpl = reinterpret_cast< CMtaFolderPicker* >(
+                GetPropA( hWnd, CURRENT_INSTANCE ) );
 
-        // under windows 95/98 the creation of the
-        // hidden target request window fails if
-        // we don't handle this message ourself
-        // because the DefWindowProc returns 0 as
-        // a result of handling WM_NCCREATE what
-        // leads to a failure of CreateWindow[Ex]!!!
-        case WM_NCCREATE:
-            lResult = TRUE;
+            OSL_ASSERT( pImpl && !IsBadReadPtr( pImpl, sizeof( CMtaFolderPicker ) ) );
+
+            DestroyWindow( pImpl->m_hwndStaRequestWnd );
             break;
 
         case WM_DESTROY:
@@ -569,13 +670,8 @@ LRESULT CALLBACK CMtaFolderPicker::mtaFolderPickerReqWndProc( HWND hWnd, UINT uM
             break;
 
         default:
-            lResult = DefWindowProc( hWnd, uMsg, wParam, lParam );
+            lResult = DefWindowProcA( hWnd, uMsg, wParam, lParam );
             break;
-        }
-    }
-    __except( EXCEPTION_EXECUTE_HANDLER )
-    {
-        OSL_ENSURE( sal_False, "Kernel exception in window-proc caught!" );
     }
 
     return lResult;
@@ -585,33 +681,31 @@ LRESULT CALLBACK CMtaFolderPicker::mtaFolderPickerReqWndProc( HWND hWnd, UINT uM
 //
 //--------------------------------------------------------------------
 
-void CMtaFolderPicker::createMtaFolderPickerReqWnd( )
+sal_Bool SAL_CALL CMtaFolderPicker::createStaRequestWindow( )
 {
-    WNDCLASSEXA  wcex;
+    sal_Bool bIsWnd = sal_False;
 
-    HINSTANCE hInst = GetModuleHandleA( FOLDERPICKER_SRV_DLL_NAME );
-    OSL_ENSURE( NULL != hInst, "The name of the FolderPicker service dll must have changed" );
+    if ( RegisterStaRequestWindowClass( ) )
+    {
+        m_hwndStaRequestWnd = CreateWindowA(
+            g_szWndClsName, NULL,
+            0, 0, 0, 0, 0,
+            NULL, NULL, m_hInstance,
+            (LPVOID)this // provide the instance of the class
+        );
 
-    ZeroMemory( &wcex, sizeof( WNDCLASSEXA ) );
+        bIsWnd = IsWindow( m_hwndStaRequestWnd );
 
-    wcex.cbSize         = sizeof(WNDCLASSEXA);
-    wcex.style          = 0;
-    wcex.lpfnWndProc    = static_cast< WNDPROC >( CMtaFolderPicker::mtaFolderPickerReqWndProc );
-    wcex.cbClsExtra     = 0;
-    wcex.cbWndExtra     = 0;
-    wcex.hInstance      = hInst;
-    wcex.hIcon          = NULL;
-    wcex.hCursor        = NULL;
-    wcex.hbrBackground  = NULL;
-    wcex.lpszMenuName   = NULL;
-    wcex.lpszClassName  = g_szWndClsName;
-    wcex.hIconSm        = NULL;
+        // we do immediately unregister the window class
+        // if the creation of the window fails because we
+        // don't want to spoil the register class counter
+        if ( !bIsWnd )
+            UnregisterStaRequestWindowClass( );
 
-    m_MtaFolderPickerReqWndClassAtom = RegisterClassExA( &wcex );
+        OSL_ENSURE( bIsWnd, "sta request window creation failed" );
+    }
 
-    if ( 0 != m_MtaFolderPickerReqWndClassAtom )
-        m_hwndMtaFolderPickerReqWnd = CreateWindowA(
-            g_szWndClsName, NULL, 0, 0, 0, 0, 0, NULL, NULL, hInst, NULL );
+    return bIsWnd;
 }
 
 //--------------------------------------------------------------------
@@ -620,17 +714,24 @@ void CMtaFolderPicker::createMtaFolderPickerReqWnd( )
 
 unsigned int CMtaFolderPicker::run( )
 {
-    HRESULT hr = CoInitialize( NULL );
-    OSL_ASSERT( SUCCEEDED( hr ) );
+    OSL_ASSERT( m_hEvtThrdReady );
 
-    createMtaFolderPickerReqWnd( );
+    // setup an sta environment
+    HRESULT hr = CoInitialize( NULL );
+
+    // if we can't setup an sta environment
+    // we stop here and return
+    if ( FAILED( hr ) )
+    {
+        OSL_ENSURE( sal_False, "CoInitialize failed" );
+        return -1;
+    }
 
     unsigned int nRet;
 
-    if ( IsWindow( m_hwndMtaFolderPickerReqWnd ) )
+    if ( createStaRequestWindow( ) )
     {
-        if ( NULL != m_hEvtThrdReady )
-            SetEvent( m_hEvtThrdReady );
+        SetEvent( m_hEvtThrdReady );
 
         // pumping messages
         MSG msg;
@@ -640,8 +741,12 @@ unsigned int CMtaFolderPicker::run( )
         nRet = 0;
     }
     else
+    {
+        OSL_ENSURE( sal_False, "failed to create sta thread" );
         nRet = -1;
+    }
 
+    // shutdown sta environment
     CoUninitialize( );
 
     return nRet;
@@ -651,30 +756,80 @@ unsigned int CMtaFolderPicker::run( )
 //
 //--------------------------------------------------------------------
 
-unsigned int WINAPI CMtaFolderPicker::oleThreadProc( LPVOID pParam )
+unsigned int WINAPI CMtaFolderPicker::StaThreadProc( LPVOID pParam )
 {
     CMtaFolderPicker* pInst =
         reinterpret_cast<CMtaFolderPicker*>( pParam );
-    OSL_ASSERT( NULL != pInst );
+
+    OSL_ASSERT( pInst );
 
     return pInst->run( );
 }
 
-//--------------------------------------------------------------------
+//---------------------------------------------------
 //
-//--------------------------------------------------------------------
+//---------------------------------------------------
 
-inline
-sal_Bool CMtaFolderPicker::WaitForThreadReady( ) const
+ATOM SAL_CALL CMtaFolderPicker::RegisterStaRequestWindowClass( )
 {
-    sal_Bool bRet = sal_False;
+    osl::MutexGuard aGuard( s_Mutex );
 
-    if ( NULL != m_hEvtThrdReady )
+    if ( 0 == s_ClassAtom )
     {
-        DWORD dwResult = WaitForSingleObject( m_hEvtThrdReady, MAX_WAITTIME );
-        bRet = ( dwResult == WAIT_OBJECT_0 );
+        WNDCLASSEXA  wcex;
+
+        ZeroMemory( &wcex, sizeof( WNDCLASSEXA ) );
+
+        wcex.cbSize         = sizeof(WNDCLASSEXA);
+        wcex.style          = 0;
+        wcex.lpfnWndProc    = static_cast< WNDPROC >( CMtaFolderPicker::StaWndProc );
+        wcex.cbClsExtra     = 0;
+        wcex.cbWndExtra     = 0;
+        wcex.hInstance      = m_hInstance;
+        wcex.hIcon          = NULL;
+        wcex.hCursor        = NULL;
+        wcex.hbrBackground  = NULL;
+        wcex.lpszMenuName   = NULL;
+        wcex.lpszClassName  = g_szWndClsName;
+        wcex.hIconSm        = NULL;
+
+        s_ClassAtom = RegisterClassExA( &wcex );
+        OSL_ASSERT( s_ClassAtom );
     }
 
-    return bRet;
+    // increment the register class counter
+    // so that we keep track of the number
+    // of class registrations
+    if ( 0 != s_ClassAtom )
+        s_StaRequestWndRegisterCount++;
+
+    return s_ClassAtom;
 }
 
+//---------------------------------------------------
+//
+//---------------------------------------------------
+
+void SAL_CALL CMtaFolderPicker::UnregisterStaRequestWindowClass( )
+{
+    osl::MutexGuard aGuard( s_Mutex );
+
+    OSL_ASSERT( 0 != s_ClassAtom );
+
+    // update the register class counter
+    // and unregister the window class if
+    // counter drops to zero
+    if ( 0 != s_ClassAtom )
+    {
+        s_StaRequestWndRegisterCount--;
+        OSL_ASSERT( s_StaRequestWndRegisterCount >= 0 );
+    }
+
+    if ( 0 == s_StaRequestWndRegisterCount )
+    {
+        UnregisterClass(
+            (LPCTSTR)MAKELONG( s_ClassAtom, 0 ), m_hInstance );
+
+        s_ClassAtom = 0;
+    }
+}
