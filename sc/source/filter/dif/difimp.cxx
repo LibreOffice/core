@@ -2,9 +2,9 @@
  *
  *  $RCSfile: difimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-10-31 18:18:14 $
+ *  last change: $Author: er $ $Date: 2002-10-31 19:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,6 +540,16 @@ DATASET DifParser::GetNextDataset( void )
                         eRet = D_SYNT_ERROR;
                 }
                 rIn.ReadLine( aData );
+                if ( eRet == D_SYNT_ERROR )
+                {   // for broken records write "#ERR: data" to cell
+                    ByteString aTmp( "#ERR: " );
+                    aTmp += pAkt;
+                    aTmp += " (";
+                    aTmp += aData;
+                    aTmp += ')';
+                    aData = aTmp;
+                    eRet = D_STRING;
+                }
             }
             break;
         case '1':                   // String Data
