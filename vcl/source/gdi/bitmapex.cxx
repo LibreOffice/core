@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 10:03:56 $
+ *  last change: $Author: ka $ $Date: 2002-04-22 08:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,17 @@ Bitmap BitmapEx::GetBitmap( const Color* pTransReplaceColor ) const
     }
 
     return aRetBmp;
+}
+
+// ------------------------------------------------------------------
+
+BitmapEx BitmapEx::GetColorTransformedBitmapEx( BmpColorMode eColorMode ) const
+{
+    BitmapEx aRet( *this );
+
+    aRet.aBitmap = aBitmap.GetColorTransformedBitmap( eColorMode );
+
+    return aRet;
 }
 
 // ------------------------------------------------------------------

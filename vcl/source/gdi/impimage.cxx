@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-05 13:20:07 $
+ *  last change: $Author: ka $ $Date: 2002-04-22 08:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,19 +512,7 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
                     aTmpMsk.Crop( aCropRect );
 
                     if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
-                    {
-                        Color*  pSrcColors = NULL;
-                        Color*  pDstColors = NULL;
-                        ULONG   nColorCount = 0;
-
-                        Image::GetColorTransformArrays( IMAGECOLORTRANSFORM_HIGHCONTRAST, pSrcColors, pDstColors, nColorCount );
-
-                        if( nColorCount && pSrcColors && pDstColors )
-                            aTmpBmp.Replace( pSrcColors, pDstColors, nColorCount );
-
-                        delete[] pSrcColors;
-                        delete[] pDstColors;
-                    }
+                        aTmpBmp = aTmpBmp.GetColorTransformedBitmap( BMP_COLOR_HIGHCONTRAST );
 
                     if( nStyle & ( IMAGE_DRAW_HIGHLIGHT | IMAGE_DRAW_DEACTIVE ) )
                     {
@@ -619,10 +607,20 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
             bFastTransparent = bTmp;
 #endif
         }
-        else if( pSize )
-            pOutDev->DrawBitmap( rPos, *pSize, aPos, aSize, aBmpEx.GetBitmap() );
         else
-            pOutDev->DrawBitmap( rPos, pOutDev->PixelToLogic( aSize ), aPos, aSize, aBmpEx.GetBitmap() );
+        {
+            BitmapEx aTmpBmpEx;
+
+            if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
+                aTmpBmpEx = aBmpEx.GetColorTransformedBitmapEx( BMP_COLOR_HIGHCONTRAST );
+            else
+                aTmpBmpEx = aBmpEx;
+
+            if( pSize )
+                pOutDev->DrawBitmap( rPos, *pSize, aPos, aSize, aTmpBmpEx.GetBitmap() );
+            else
+                pOutDev->DrawBitmap( rPos, pOutDev->PixelToLogic( aSize ), aPos, aSize, aTmpBmpEx.GetBitmap() );
+        }
     }
 }
 

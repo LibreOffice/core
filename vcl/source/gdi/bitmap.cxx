@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: ka $ $Date: 2002-04-22 08:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
+#endif
+#ifndef _SV_IMAGE_HXX
+#include <image.hxx>
 #endif
 
 // ------------------------------------------------------------------
@@ -1763,6 +1766,26 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay )
 #endif
 
     return aDispBmp;
+}
+
+// ------------------------------------------------------------------
+
+Bitmap Bitmap::GetColorTransformedBitmap( BmpColorMode eColorMode ) const
+{
+    Bitmap  aRet( *this );
+    Color*  pSrcColors = NULL;
+    Color*  pDstColors = NULL;
+    ULONG   nColorCount = 0;
+
+    Image::GetColorTransformArrays( static_cast< ImageColorTransform >( eColorMode ), pSrcColors, pDstColors, nColorCount );
+
+    if( nColorCount && pSrcColors && pDstColors )
+        aRet.Replace( pSrcColors, pDstColors, nColorCount );
+
+    delete[] pSrcColors;
+    delete[] pDstColors;
+
+    return aRet;
 }
 
 // ------------------------------------------------------------------
