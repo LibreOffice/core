@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_Ignore.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:10:22 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,10 +191,14 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
             for (m = map; m->replaceChar; m++) {
                 if (previousChar == m->previousChar &&  currentChar == m->currentChar ) {
                     if (useOffset) {
+                        if (! m->two2one)
+                            *p++ = position;
                         position++;
                         *p++ = position++;
                     }
-                    *dst++ = m->replaceChar;\
+                    *dst++ = m->replaceChar;
+                    if (!m->two2one)
+                        *dst++ = currentChar;
                     previousChar = *src++;
                     nCount--;
                     break;
@@ -221,9 +225,14 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
         // Translation
         while (nCount -- > 0) {
             sal_Unicode c = *src++;
-            *dst ++ = func ? func( c) : (*table)[ c ];
-            if (useOffset)
-                *p ++ = position ++;
+            c = func ? func( c) : (*table)[ c ];
+            if (c != 0xffff)
+                *dst ++ = c;
+            if (useOffset) {
+                if (c != 0xffff)
+                    *p ++ = position;
+                position++;
+            }
         }
     }
     *dst = (sal_Unicode) 0;
