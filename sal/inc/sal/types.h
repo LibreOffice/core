@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:09:53 $
+ *  last change: $Author: kz $ $Date: 2004-01-19 18:23:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,17 +103,19 @@ typedef unsigned long       sal_uInt32;
 #endif
 
 /* The following SAL_MIN_INTn defines codify the assumption that the signed
-   sal_Int types use two's complement representation. */
-#define SAL_MIN_INT8 ((sal_Int8) -0x80)
+   sal_Int types use two's complement representation.  Defining them as
+   "-0x7F... - 1" instead of as "-0x80..." prevents warnings about applying the
+   unary minus operator to unsigned quantities. */
+#define SAL_MIN_INT8 ((sal_Int8) (-0x7F - 1))
 #define SAL_MAX_INT8 ((sal_Int8) 0x7F)
 #define SAL_MAX_UINT8 ((sal_uInt8) 0xFF)
-#define SAL_MIN_INT16 ((sal_Int16) -0x8000)
+#define SAL_MIN_INT16 ((sal_Int16) (-0x7FFF - 1))
 #define SAL_MAX_INT16 ((sal_Int16) 0x7FFF)
 #define SAL_MAX_UINT16 ((sal_uInt16) 0xFFFF)
-#define SAL_MIN_INT32 ((sal_Int32) -0x80000000)
+#define SAL_MIN_INT32 ((sal_Int32) (-0x7FFFFFFF - 1))
 #define SAL_MAX_INT32 ((sal_Int32) 0x7FFFFFFF)
 #define SAL_MAX_UINT32 ((sal_uInt32) 0xFFFFFFFF)
-#define SAL_MIN_INT64 ((sal_Int64) -0x8000000000000000)
+#define SAL_MIN_INT64 ((sal_Int64) (-0x7FFFFFFFFFFFFFFF - 1))
 #define SAL_MAX_INT64 ((sal_Int64) 0x7FFFFFFFFFFFFFFF)
 #define SAL_MAX_UINT64 ((sal_uInt64) 0xFFFFFFFFFFFFFFFF)
 
