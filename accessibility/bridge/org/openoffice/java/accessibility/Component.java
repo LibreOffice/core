@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Component.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 18:49:33 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,7 +789,7 @@ public abstract class Component extends java.awt.Component {
                 XAccessibleAction unoAccessibleAction = (XAccessibleAction)
                     UnoRuntime.queryInterface(XAccessibleAction.class, unoAccessibleComponent);
                 if (unoAccessibleAction != null) {
-                    XAccessibleKeyBinding unoAccessibleKeyBinding = unoAccessibleAction.getAccessibleKeyBinding(0);
+                    XAccessibleKeyBinding unoAccessibleKeyBinding = unoAccessibleAction.getAccessibleActionKeyBinding(0);
                     if (unoAccessibleKeyBinding != null) {
                         return new AccessibleKeyBinding(unoAccessibleKeyBinding);
                     }
