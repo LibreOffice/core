@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:10:55 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 07:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,7 +799,7 @@ ModalDialog RID_DLG_NEWLIB
         Text[ chinese_traditional ] = "¦WºÙ(~N)¡G";
         Text[ arabic ] = "ÇáÇÓã:";
         Text[ greek ] = "¼~íïìá:";
-        Text[ korean ] = "ÀÌ¸§:(~N)";
+        Text[ korean ] = "ÀÌ¸§(~N):";
         Text[ turkish ] = "Ad:";
     };
     Edit RID_ED_LIBNAME
@@ -826,14 +826,14 @@ ModalDialog RID_DLG_NEWLIB
         Text [ french ] = "~Créer un fichier distinct" ;
         Text [ dutch ] = "~Apart bestand maken" ;
         Hide = TRUE ;
-        Text[ chinese_simplified ] = "½¨Á¢Ò»¸öÁíÍâµÄÎÄ¼ş(~A)";
+        Text[ chinese_simplified ] = "½¨Á¢Ò»¸öÁíÍâµÄÎÄ¼ş(~C)";
         Text[ russian ] = "Ñîçäàòü îòäåëüíûé ôàéë";
         Text[ polish ] = "Utwórz oddzielny plik";
-        Text[ japanese ] = "•Ê‚ÌÌ§²Ù‚ğì¬(~A)";
-        Text[ chinese_traditional ] = "¥t¶}±Ò·sÀÉ(~A)";
+        Text[ japanese ] = "•Ê‚ÌÌ§²Ù‚ğì¬(~C)";
+        Text[ chinese_traditional ] = "¥t¶}±Ò·sÀÉ(~C)";
         Text[ arabic ] = "ÅäÔÇÁ ãáİ ãäİÕá";
         Text[ greek ] = "Äçìéïõñãßá îå÷ùñé~óôïı áñ÷åßïõ";
-        Text[ korean ] = "º°µµ ÆÄÀÏ ÀÛ¼º(~A)";
+        Text[ korean ] = "º°µµ ÆÄÀÏ ÀÛ¼º(~C)";
         Text[ turkish ] = "Ayrı dosya oluştur";
     };
 };
