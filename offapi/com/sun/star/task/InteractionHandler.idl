@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InteractionHandler.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-20 07:44:52 $
+ *  last change: $Author: sb $ $Date: 2001-08-27 08:48:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,24 +74,46 @@ module com { module sun { module star { module task {
     known requests via GUI dialogs (and the
     <type>com::sun::star::task::PasswordContainer</type> service).
 
-    <p>The well known requests handled by this service include
-    <type>com::sun::star::java::WrongJavaVersionException</type>,
-    <type>com::sun::star::sync2::BadPartnershipException</type>,
+    <P>The well known requests handled by this service include
+    <type>com::sun::star::java::WrongJavaVersionException</type>*,
+    <type>com::sun::star::sync2::BadPartnershipException</type>*,
     <type>com::sun::star::task::PasswordRequest</type>,
     <type>com::sun::star::ucb::AuthenticationRequest</type>,
     <type>com::sun::star::ucb::HandleCookiesRequest</type>,
-    <type>com::sun::star::ucb::InteractiveAugmentedIOException</type>,
-    <type>com::sun::star::ucb::InteractiveCHAOSException</type>,
-    <type>com::sun::star::ucb::InteractiveFileIOException</type>,
-    <type>com::sun::star::ucb::InteractiveIOException</type>,
-    <type>com::sun::star::ucb::InteractiveNetworkConnectException</type>,
-    <type>com::sun::star::ucb::InteractiveNetworkException</type>,
-    <type>com::sun::star::ucb::InteractiveNetworkGeneralException</type>,
-    <type>com::sun::star::ucb::InteractiveNetworkOffLineException</type>,
-    <type>com::sun::star::ucb::InteractiveNetworkReadException</type>,
-    <type>com::sun::star::ucb::InteractiveNetworkResolveNameException</type>,
-    <type>com::sun::star::ucb::InteractiveNetworkWriteException</type>, and
-    <type>com::sun::star::ucb::InteractiveWrongMediumException</type>.</p>
+    <type>com::sun::star::ucb::InteractiveAugmentedIOException</type>*,
+    <type>com::sun::star::ucb::InteractiveCHAOSException</type>*,
+    <type>com::sun::star::ucb::InteractiveFileIOException</type>*,
+    <type>com::sun::star::ucb::InteractiveIOException</type>*,
+    <type>com::sun::star::ucb::InteractiveNetworkConnectException</type>*,
+    <type>com::sun::star::ucb::InteractiveNetworkException</type>*,
+    <type>com::sun::star::ucb::InteractiveNetworkGeneralException</type>*,
+    <type>com::sun::star::ucb::InteractiveNetworkOffLineException</type>*,
+    <type>com::sun::star::ucb::InteractiveNetworkReadException</type>*,
+    <type>com::sun::star::ucb::InteractiveNetworkResolveNameException</type>*,
+    <type>com::sun::star::ucb::InteractiveNetworkWriteException</type>*, and
+    <type>com::sun::star::ucb::InteractiveWrongMediumException</type>*.  The
+    requests marked with an asterisk are only handled if (a) their
+    continuations match certain restrictions (see below), and (b) the
+    necessary resource strings are available (this can be exploited by
+    applications that carry only a subset of all resource files with
+    them).</P>
+
+    <P>The continuation restrictions are as follows:  Let C be the subset of
+    the provided continuations that are of type
+    <type>com::sun::star::task::XInteractionApprove</type>,
+    <type>com::star::task::XInteractionDisapprove</type>,
+    <type>com::star::task::XInteractionRetry</type>, or
+    <type>com::star::task::XInteractionAbort</type> (or of a derived type).
+    All other continuations are ignored for these requests.  The request is
+    only handled if the set C is any of the following:
+    <UL>
+        <IL>Abort</IL>
+        <IL>Retry, Abort</IL>
+        <IL>Approve</IL>
+        <IL>Approve, Abort</IL>
+        <IL>Approve, Disapprove</IL>
+        <IL>Approve, Disapprove, Abort</IL>
+    </UL></P>
  */
 service InteractionHandler
 {
