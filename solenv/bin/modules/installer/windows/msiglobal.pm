@@ -165,7 +165,7 @@ sub generate_cab_file_list
 
             # Writing the makecab system call
 
-            my $oneline = "makecab.exe /F " . $ddffilename . "\n";
+            my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
 
             push(@cabfilelist, $oneline);
         }
@@ -851,14 +851,13 @@ sub copy_child_projects_into_installset
 {
     my ($installdir) = @_;
 
-    # the source directory is defined with the parameter "-msichild"
-    # in the variable $installer::globals::msichildpath
-
-    if ( $installer::globals::msichildpath eq "" ) { installer::exiter::exit_program("ERROR: Path for child products not set!", "copy_child_projects_into_installset"); }
+    my $sopackpath = "";
+    if ( $ENV{'SO_PACK'} ) { $sopackpath  = $ENV{'SO_PACK'}; }
+    else { installer::exiter::exit_program("ERROR: Environment variable SO_PACK not set!", "copy_child_projects_into_installset"); }
 
     # adding Java
 
-    my $sourcefile = $installer::globals::msichildpath . $installer::globals::separator . "java2" . $installer::globals::separator . $installer::globals::javafilename;
+    my $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "jre" . $installer::globals::separator . $installer::globals::javafilename;
     if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java child project file not found: $sourcefile !", "copy_child_projects_into_installset"); }
     my $destdir = $installdir . $installer::globals::separator . "java";
     if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
@@ -866,11 +865,12 @@ sub copy_child_projects_into_installset
 
     # adding Adabas ( complete directory )
 
-    my $sourcedir = $installer::globals::msichildpath . $installer::globals::separator . "adabas2" . $installer::globals::separator . $installer::globals::adafilename;
+    my $sourcedir = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "adabas" . $installer::globals::separator . $installer::globals::adafilename;
     if ( ! -d $sourcedir ) { installer::exiter::exit_program("ERROR: Adabas child project file not found: $sourcedir !", "copy_child_projects_into_installset"); }
     $destdir = $installdir . $installer::globals::separator . "adabas";
     if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
     installer::systemactions::copy_directory($sourcedir, $destdir);
+
 }
 
 #################################################################
@@ -970,15 +970,28 @@ sub execute_packaging
     {
         my $systemcall = ${$localpackjobref}[$i];
 
-        my $returnvalue = system($systemcall);
+        my $callscounter = $i + 1;
+
+        print "... makecab.exe ($callscounter) ... \n";
+
+        # my $returnvalue = system($systemcall);
+
+        my @ddfoutput = ();
 
         my $infoline = "Systemcall: $systemcall";
         push( @installer::globals::logfileinfo, $infoline);
+
+        open (DDF, "$systemcall");
+        while (<DDF>) {push(@ddfoutput, $_); }
+        close (DDF);
+
+        my $returnvalue = $?;   # $? contains the return value of the systemcall
 
         if ($returnvalue)
         {
             $infoline = "ERROR: $systemcall !";
             push( @installer::globals::logfileinfo, $infoline);
+            for ( my $j = 0; $j <= $#ddfoutput; $j++ ) { push( @installer::globals::logfileinfo, "$ddfoutput[$j]"); }
         }
         else
         {
