@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pathanalyzer.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:28:35 $
+#   last change: $Author: hr $ $Date: 2004-11-09 18:32:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,8 @@ sub make_absolute_filename_to_relative_filename
 
     if ( $installer::globals::iswin )
     {
-        if ( $$longfilenameref =~ /^.*\\(\S.+\S?)/ )
+        # Either '/' or '\'. It would be possible to use $installer::globals::separator.
+        if ( $$longfilenameref =~ /^.*[\/\\](\S.+\S?)/ )
         {
             $$longfilenameref = $1;
         }
