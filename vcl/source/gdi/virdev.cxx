@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:59:40 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,12 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     mnDPIX          = pOutDev->mnDPIX;
     mnDPIY          = pOutDev->mnDPIY;
     maFont          = pOutDev->maFont;
+
+    if( maTextColor != pOutDev->maTextColor )
+    {
+        maTextColor = pOutDev->maTextColor;
+        mbInitTextColor = true;
+    }
 
     // Virtuelle Devices haben defaultmaessig einen weissen Hintergrund
     SetBackground( Wallpaper( Color( COL_WHITE ) ) );
