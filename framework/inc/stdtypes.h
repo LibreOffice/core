@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtypes.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-06-13 05:56:58 $
+ *  last change: $Author: as $ $Date: 2001-07-02 13:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
-#include <cppuhelper/interfacecontainer.h>
+#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
+#include <cppuhelper/interfacecontainer.hxx>
 #endif
 
 #ifndef _RTL_USTRING_HXX_
