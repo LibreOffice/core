@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2001-02-01 13:38:01 $
+#   last change: $Author: os $ $Date: 2001-02-02 12:00:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -364,6 +364,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/hldocntp.obj	\
         $(SLO)$/hlmarkwn.obj	\
         $(SLO)$/hyphen.obj		\
+        $(SLO)$/rubydialog.obj \
         $(SLO)$/thesdlg.obj		\
         $(SLO)$/spldlg.obj		\
         $(SLO)$/numpages.obj	\
