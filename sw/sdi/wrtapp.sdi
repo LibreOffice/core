@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtapp.sdi,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:43:53 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,25 +110,6 @@ interface StarWriter : Module
     [
         ExecMethod = ExecWizzard ;
         StateMethod = NoState ;
-    ]
-
-/*  SID_SW_EDITOPTIONS
-    [
-        ExecMethod = ExecOptionsDialog ;
-        StateMethod = NoState ;
-    ]
-
-    SID_SW_ONLINEOPTIONS
-    [
-        ExecMethod = ExecOptionsDialog ;
-        StateMethod = NoState ;
-    ]*/
-
-
-    SID_ATTR_UNDO_COUNT // ole(no) api(final/play)
-    [
-        ExecMethod = ExecOther ;
-        StateMethod = StateOther ;
     ]
 
     SID_AUTOSPELL_CHECK
