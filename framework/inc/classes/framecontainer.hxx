@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 13:00:39 $
+ *  last change: $Author: as $ $Date: 2001-05-04 10:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,13 +472,11 @@ class FrameContainer : private FairRWLockBase
         }
 
         //*********************************************************************************************************
-        // - check for NULL pointer or invalid references
+        // - check for NULL pointer
+        // - a null reference is allowed - because sometimes we must deactivate path to bottom
         inline sal_Bool implcp_setActive( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
         {
-            return  (
-                        ( &xFrame       ==  NULL        )   ||
-                        ( xFrame.is()   ==  sal_False   )
-                    );
+            return( &xFrame == NULL );
         }
 
         //*********************************************************************************************************

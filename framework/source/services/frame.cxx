@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-03 13:21:51 $
+ *  last change: $Author: as $ $Date: 2001-05-04 10:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,15 @@ css::uno::Reference< css::frame::XFrames > SAL_CALL Frame::getFrames() throw( cs
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+/*TODO
+    This is a temp. HACK!
+    Our parent (a Task!) stand in close/dispose and set working mode to E_BEFOERECLOSE
+    and call dispose on us! We tra to get this xFramesHelper and are reject by an "already closed" pranet instance ....
+    => We use SOFTEXCEPTIONS here ... but we should make it right in further times ....
+ */
+
+    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
@@ -442,16 +450,15 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
+    WriteGuard aWriteLock( m_aLock );
 
     // Copy neccessary member for threadsafe access!
     // m_aChildFrameContainer is threadsafe himself and he live if we live!!!
     // ...and our transaction is non breakable too ...
     css::uno::Reference< css::frame::XFrame > xActiveChild = m_aChildFrameContainer.getActive();
     EActiveState                              eActiveState = m_eActiveState                    ;
-    sal_Bool                                  bChanged     = sal_False                         ;
 
-    aReadLock.unlock();
+    aWriteLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     // Don't work, if "new" active frame is'nt different from current one!
@@ -475,8 +482,10 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
         // ... reset state to ACTIVE and send right FrameActionEvent for focus lost.
         if( eActiveState == E_FOCUS )
         {
-            eActiveState= E_ACTIVE;
-            bChanged    = sal_True;
+            aWriteLock.lock();
+            eActiveState   = E_ACTIVE    ;
+            m_eActiveState = eActiveState;
+            aWriteLock.unlock();
             implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_DEACTIVATING );
         }
 
@@ -495,17 +504,11 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
     // If this frame is active and has no active subframe anymore it is UI active too
     if( eActiveState == E_ACTIVE )
     {
-        eActiveState= E_FOCUS ;
-        bChanged    = sal_True;
-        implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_ACTIVATED );
-    }
-
-    // Don't forget to write changes back!
-    if( bChanged == sal_True )
-    {
-        /* SAFE AREA ------------------------------------------------------------------------------------------- */
-        WriteGuard aWriteLock( m_aLock );
+        aWriteLock.lock();
+        eActiveState   = E_FOCUS     ;
         m_eActiveState = eActiveState;
+        aWriteLock.unlock();
+        implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_ACTIVATED );
     }
 }
 
@@ -884,7 +887,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
+    WriteGuard aWriteLock( m_aLock );
 
     // Copy neccessary member and free the lock.
     // It's not neccessary for m_aChildFrameContainer ... because
@@ -896,9 +899,8 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
     css::uno::Reference< css::frame::XFrame >           xThis           ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XWindow >            xComponentWindow( m_xComponentWindow, css::uno::UNO_QUERY )                       ;
     EActiveState                                        eState          = m_eActiveState                                                  ;
-    sal_Bool                                            bChanged        = sal_False                                                       ;
 
-    aReadLock.unlock();
+    aWriteLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     //_________________________________________________________________________________________________________
@@ -906,8 +908,10 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
     if( eState == E_INACTIVE )
     {
         // ... do it then.
-        eState  = E_ACTIVE;
-        bChanged= sal_True;
+        aWriteLock.lock();
+        eState         = E_ACTIVE;
+        m_eActiveState = eState;
+        aWriteLock.unlock();
         // Deactivate sibling path and forward activation to parent ... if any parent exist!
         if( xParent.is() == sal_True )
         {
@@ -953,22 +957,16 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
             ( xActiveChild.is() ==  sal_False   )
         )
     {
-        eState  = E_FOCUS ;
-        bChanged= sal_True;
+        aWriteLock.lock();
+        eState         = E_FOCUS;
+        m_eActiveState = eState;
+        aWriteLock.unlock();
         implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_ACTIVATED );
         Window* pWindow = VCLUnoHelper::GetWindow( xComponentWindow );
         if( pWindow != NULL )
         {
             Application::SetDefModalDialogParent( pWindow );
         }
-    }
-
-    // Don't forget to write changes back!
-    if( bChanged == sal_True )
-    {
-        /* SAFE AREA ------------------------------------------------------------------------------------------- */
-        WriteGuard aWriteLock( m_aLock );
-        m_eActiveState = eState;
     }
 }
 
@@ -994,16 +992,15 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException )
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
+    WriteGuard aWriteLock( m_aLock );
 
     // Copy neccessary member and free the lock.
     css::uno::Reference< css::frame::XFrame >           xActiveChild    = m_aChildFrameContainer.getActive()                              ;
     css::uno::Reference< css::frame::XFramesSupplier >  xParent         ( m_xParent, css::uno::UNO_QUERY )                                ;
     css::uno::Reference< css::frame::XFrame >           xThis           ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     EActiveState                                        eState          = m_eActiveState                                                  ;
-    sal_Bool                                            bStateChanged   = sal_False                                                       ;
 
-    aReadLock.unlock();
+    aWriteLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     // Work only, if there something to do!
@@ -1025,8 +1022,10 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException )
         {
             // Set new state INACTIVE(!) and send message to all listener.
             // Don't set ACTIVE as new state. This frame is deactivated for next time - due to activate().
+            aWriteLock.lock();
             eState          = E_ACTIVE;
-            bStateChanged   = sal_True;
+            m_eActiveState  = eState  ;
+            aWriteLock.unlock();
             implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_DEACTIVATING );
         }
 
@@ -1035,8 +1034,10 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException )
         if( eState == E_ACTIVE )
         {
             // Set new state and send message to all listener.
+            aWriteLock.lock();
             eState          = E_INACTIVE;
-            bStateChanged   = sal_True  ;
+            m_eActiveState  = eState    ;
+            aWriteLock.unlock();
             implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_DEACTIVATING );
         }
 
@@ -1054,14 +1055,6 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException )
             // Attention: Ouer parent don't call us again - WE ARE NOT ACTIVE YET!
             // [ see step 3 and condition "if ( m_eActiveState!=INACTIVE ) ..." in this method! ]
             xParent->deactivate();
-        }
-
-        // Don't forget to write changes back!
-        if( bStateChanged == sal_True )
-        {
-            /* SAFE AREA --------------------------------------------------------------------------------------- */
-            WriteGuard aWriteLock( m_aLock );
-            m_eActiveState = eState;
         }
     }
 }
@@ -1313,23 +1306,14 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     css::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
-    // Free references of our frame tree.
-    // Force parent container to forget this frame too ...
-    // ( It's contained in m_xParent and so no css::lang::XEventListener for m_xParent! )
-    m_aChildFrameContainer.clear();
-    if( m_xParent.is() == sal_True )
-    {
-        m_xParent->getFrames()->remove( xThis );
-        m_xParent = css::uno::Reference< css::frame::XFramesSupplier >();
-    }
-
-    // We must release our helper before we free our windows ...
-    // because some of them use it as parent too!
-    m_xFramesHelper             =   css::uno::Reference< css::frame::XFrames >               ();
-    m_xDispatchHelper           =   css::uno::Reference< css::frame::XDispatchProvider >     ();
-    m_xIndicatorFactoryHelper   =   css::uno::Reference< css::task::XStatusIndicatorFactory >();
-
-    // Delete current component and controller.
+    // Delete current component/window and controller.
+    /*ATTENTION
+        It's neccessary to release our StatusIndicatorFactory-helper before!
+        He share our container window as parent for any created status indicator ...
+        and if we dispose this container window before we release this helper ...
+        we will get some trouble!
+     */
+    m_xIndicatorFactoryHelper = css::uno::Reference< css::task::XStatusIndicatorFactory >();
     implts_setComponent( css::uno::Reference< css::awt::XWindow >      () ,
                          css::uno::Reference< css::frame::XController >() );
     if( m_xContainerWindow.is() == sal_True )
@@ -1337,8 +1321,31 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
         implts_setContainerWindow( css::uno::Reference< css::awt::XWindow >() );
     }
 
+    // Free references of our frame tree.
+    // Force parent container to forget this frame too ...
+    // ( It's contained in m_xParent and so no css::lang::XEventListener for m_xParent! )
+    if( m_xParent.is() == sal_True )
+    {
+        m_xParent->getFrames()->remove( xThis );
+        m_xParent = css::uno::Reference< css::frame::XFramesSupplier >();
+    }
+    /*ATTENTION
+        Clear container after successful removing from parent container ...
+        because our parent could be a task and stand in dispose too!
+        If we have already cleared our own container we lost our child before this could be
+        remove himself at this instance ...
+        Release m_xFramesHelper after that ... it's the same problem between parent and child!
+        "m_xParent->getFrames()->remove( xThis );" needs this helper ...
+        Otherwise we get a null reference and could finish removing successfuly.
+        => You see: Order of calling operations is important!!!
+     */
+    m_aChildFrameContainer.clear();
+    m_xFramesHelper = css::uno::Reference< css::frame::XFrames >();
+
     // Release some other references.
-    m_xFactory = css::uno::Reference< css::lang::XMultiServiceFactory >();
+    // This calls should be easy ... I hope it :-)
+    m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >  ();
+    m_xFactory        = css::uno::Reference< css::lang::XMultiServiceFactory >();
 
     // Disable this instance for further working realy!
     m_aTransactionManager.setWorkingMode( E_CLOSE );
