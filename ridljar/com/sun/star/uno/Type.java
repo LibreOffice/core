@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-30 11:10:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 15:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,28 +61,35 @@
 
 package com.sun.star.uno;
 
-
-
-import java.util.Hashtable;
+import java.util.HashMap;
 
 /**
- * The Type class represents the IDL builtin type <code>type</code>.
- * <p>
- * The IDL type is not directly mapped to <code>java.lang.Class</code>,
- * because it can be necessary to describe a type which is unknown
- * to the java runtime system, e.g. for delaying the need of a class,
- * so that it is possible to generate it on the fly.
- * <p>
- * @version     $Revision: 1.8 $ $ $Date: 2002-10-30 11:10:41 $
- * @since       UDK1.0
+ * Represents the UNO built-in type <code>TYPE</code>.
+ *
+ * <p>The UNO type is not directly mapped to <code>java.lang.Class</code> for at
+ * least two reasons.  For one, some UNO types (like <code>UNSIGNED
+ * SHORT</code>) do not have a matching Java class.  For another, it can be
+ * necessary to describe a type which is unknown to the Java runtime system
+ * (for example, for delaying the need of a class, so that it is possible to
+ * generate it on the fly.)</p>
+ *
+ * <p>A <code>Type</code> is uniquely determined by its type class (a
+ * <code>TypeClass</code>) and its type name (a <code>String</code>); these two
+ * will never be <code>null</code>.  A <code>Type</code> may have an additional
+ * "z class" (a <code>java.lang.Class</code>), giving a Java class type that
+ * corresponds to the UNO type.  Also, a <code>Type</code> can cache a type
+ * description (a <code>com.sun.star.uno.ITypeDescription</code>), which can be
+ * computed and set by <code>TypeDescription.getTypeDescription</code>.
+ *
+ * @since UDK1.0
  */
 public class Type {
-    /**
-     * When set to true, enables various debugging output.
-     */
-    private static final boolean DEBUG = false;
+    // The following private static members and static initializer must come
+    // first in the class definition, so that the class can be initialized
+    // sucessfully:
 
-    static private final String[] __typeClassToTypeName = new String[]{
+    // must be sorted same as TypeClass:
+    private static final String[] __typeClassToTypeName = new String[] {
         "void",
         "char",
         "boolean",
@@ -100,67 +107,90 @@ public class Type {
         "any"
     };
 
-    static private final Hashtable __javaClassToTypeName = new Hashtable();
+    private static final HashMap __javaClassToTypeName = new HashMap();
 
-    static private final Hashtable __typeNameToTypeClass = new Hashtable();
+    private static final HashMap __typeNameToTypeClass = new HashMap();
 
     static {
-        for(int i = 0; i < __typeClassToTypeName.length; ++ i)
-            __typeNameToTypeClass.put(__typeClassToTypeName[i], TypeClass.fromInt(i));
-
-        __javaClassToTypeName.put(Void.class,      "void");
-        __javaClassToTypeName.put(void.class,      "void");
+        for (int i = 0; i < __typeClassToTypeName.length; ++i) {
+            __typeNameToTypeClass.put(__typeClassToTypeName[i],
+                                      TypeClass.fromInt(i));
+        }
+        __javaClassToTypeName.put(Void.class, "void");
+        __javaClassToTypeName.put(void.class, "void");
         __javaClassToTypeName.put(Character.class, "char");
         __javaClassToTypeName.put(char.class, "char");
-        __javaClassToTypeName.put(Boolean.class,   "boolean");
-        __javaClassToTypeName.put(boolean.class,   "boolean");
-        __javaClassToTypeName.put(Byte.class,      "byte");
-        __javaClassToTypeName.put(byte.class,      "byte");
-        __javaClassToTypeName.put(Short.class,     "short");
-        __javaClassToTypeName.put(short.class,     "short");
-        __javaClassToTypeName.put(Integer.class,   "long");
-        __javaClassToTypeName.put(int.class,       "long");
-        __javaClassToTypeName.put(Long.class,      "hyper");
-        __javaClassToTypeName.put(long.class,      "hyper");
-        __javaClassToTypeName.put(Float.class,     "float");
-        __javaClassToTypeName.put(float.class,     "float");
-        __javaClassToTypeName.put(Double.class,    "double");
-        __javaClassToTypeName.put(double.class,    "double");
-        __javaClassToTypeName.put(String.class,    "string");
-        __javaClassToTypeName.put(Type.class,      "type");
-        __javaClassToTypeName.put(Any.class,       "any");
-        __javaClassToTypeName.put(Object.class,       "any");
+        __javaClassToTypeName.put(Boolean.class, "boolean");
+        __javaClassToTypeName.put(boolean.class, "boolean");
+        __javaClassToTypeName.put(Byte.class, "byte");
+        __javaClassToTypeName.put(byte.class, "byte");
+        __javaClassToTypeName.put(Short.class, "short");
+        __javaClassToTypeName.put(short.class, "short");
+        __javaClassToTypeName.put(Integer.class, "long");
+        __javaClassToTypeName.put(int.class, "long");
+        __javaClassToTypeName.put(Long.class, "hyper");
+        __javaClassToTypeName.put(long.class, "hyper");
+        __javaClassToTypeName.put(Float.class, "float");
+        __javaClassToTypeName.put(float.class, "float");
+        __javaClassToTypeName.put(Double.class, "double");
+        __javaClassToTypeName.put(double.class, "double");
+        __javaClassToTypeName.put(String.class, "string");
+        __javaClassToTypeName.put(Type.class, "type");
+        __javaClassToTypeName.put(Any.class, "any");
+        __javaClassToTypeName.put(Object.class, "any");
     }
 
-    static private boolean __isTypeClassPrimitive(TypeClass typeClass) {
-        return typeClass.getValue() < 15;
-    }
-
-
-    protected String           _typeName;
-    protected Class            _class;
-    protected TypeClass        _typeClass;
-
-    protected ITypeDescription _iTypeDescription;
-
+    public static final Type VOID = new Type(void.class);
+    public static final Type CHAR = new Type(char.class);
+    public static final Type BOOLEAN = new Type(boolean.class);
+    public static final Type BYTE = new Type(byte.class);
+    public static final Type SHORT = new Type(short.class);
+    public static final Type UNSIGNED_SHORT = new Type(
+        "unsigned short", TypeClass.UNSIGNED_SHORT);
+    public static final Type LONG = new Type(int.class);
+    public static final Type UNSIGNED_LONG = new Type(
+        "unsigned long", TypeClass.UNSIGNED_LONG);
+    public static final Type HYPER = new Type(long.class);
+    public static final Type UNSIGNED_HYPER = new Type(
+        "unsigned hyper", TypeClass.UNSIGNED_HYPER);
+    public static final Type FLOAT = new Type(float.class);
+    public static final Type DOUBLE = new Type(double.class);
+    public static final Type STRING = new Type(String.class);
+    public static final Type TYPE = new Type(Type.class);
+    public static final Type ANY = new Type(Any.class);
 
     /**
-     * Constructs a new <code>Type</code> which defaults
-     * to <code>void</code>
-     * <p>
-     * @since       UDK3.0
+     * Constructs a new <code>Type</code> which defaults to <code>VOID</code>.
+     *
+     * @since UDK3.0
      */
     public Type() {
         this(void.class);
     }
 
+    /**
+     * Constructs a new <code>Type</code> with the given type class and type
+     * name.
+     *
+     * @param typeName the type name.  Must not be <code>null</code>.
+     * @param typeClass the type class.  Must not be <code>null</code>, and must
+     *     match the <code>typeName</code> (for example, it is illegal to
+     *     combine a <code>typeName</code> of <code>"void"</code> with a
+     *     <code>typeClass</code> of <code>BOOLEAN</code>).
+     */
+    public Type(String typeName, TypeClass typeClass) {
+        _typeClass = typeClass;
+        _typeName = typeName;
+    }
 
     /**
-     * Constructs a new <code>Type</code> with
-     * the given <code>class</code>.
-     * <p>
-     * @since       UDK3.0
-     * @param zClass   the java class of this type
+     * Constructs a new <code>Type</code> from the given
+     * <code>java.lang.Class</code>.
+     *
+     * @param zClass the Java class of this type.  Must not be
+     *     <code>null</code>.
+     *
+     * @since UDK3.0
      */
     public Type(Class zClass) {
         _class = zClass;
@@ -202,27 +232,37 @@ public class Type {
     }
 
     /**
-     * Constructs a new <code>Type</code> with
-     * the given type description.
-     * <p>
-     * @since       UDK3.0
-     * @param typeDescription   a type description
+     * Constructs a new <code>Type</code> from the given type description.
+     *
+     * @param typeDescription a type description.  Must not be
+     *     <code>null</code>.
+     *
+     * @since UDK3.0
      */
-    public Type(ITypeDescription iTypeDescription) {
-        _typeName         = iTypeDescription.getTypeName();
-        _typeClass        = iTypeDescription.getTypeClass();
-        _iTypeDescription = iTypeDescription;
+    public Type(ITypeDescription typeDescription) {
+        _typeName         = typeDescription.getTypeName();
+        _typeClass        = typeDescription.getTypeClass();
+        _iTypeDescription = typeDescription;
     }
 
     /**
-     * Constructs a new <code>Type</code> with
-     * the given type name.
-     * <p>
-     * @since       UDK3.0
-     * @param typeName   the name of this type. For simple types
-     *                   (numbers,string,type,any), the typeclass is calculated,
-     *                   for complex types (structs,interfaces), the
-     *                   typeclass of this object is set to UNKNOWN
+     * Constructs a new <code>Type</code> with the given type name.
+     *
+     * <p>TODO:  This constructor is dangerous, as it can create a
+     * <code>Type</code> with an <code>UNKNOWN</code> type class.  It would be
+     * better if this constructor threw a <code>IllegalArgumentException</code>
+     * instead.</p>
+     *
+     * @param typeName the name of this type; must not be <code>null</code>.
+     *     For simple types (<code>VOID</code>, <code>BOOLEAN</code>,
+     *     <code>CHAR</code>, <code>BYTE</code>, <code>SHORT</code>,
+     *     <code>UNSIGNED SHORT</code>, <code>LONG</code>, <code>UNSIGNED
+     *     LONG</code>, <code>HYPER</code>, <code>UNSIGNED HYPER</code>,
+     *     <code>FLOAT</code>, <code>DOUBLE</code>, <code>STRING</code>,
+     *     <code>TYPE</code>, <code>ANY</code>), the type class is calculated;
+     *     for other types, the type class is set to <code>UNKNOWN</code>.
+     *
+     * @since UDK3.0
      */
     public Type(String typeName) {
         _typeClass = (TypeClass)__typeNameToTypeClass.get(typeName);
@@ -233,26 +273,20 @@ public class Type {
         _typeName = typeName;
     }
 
-    public Type( String type_name, TypeClass type_class )
-    {
-        _typeClass = type_class;
-        _typeName = type_name;
-    }
-
-
     /**
-     * Constructs a new <code>Type</code> with
-     * the given <code>TypeClass</code>.
-     * <p>
-     * @since       UDK3.0
-     * @param typeClass   the <code>TypeClass</code> of this type. Only typeclass for
-     *                    simple types is allowed.
+     * Constructs a new <code>Type</code> with the given type class.
      *
-     * @throws IllegalArgumentException when the typeClass is not simple (e.g.
-               a struct or an interface. The Constructor cannot find out the
-               name of the type in this case.
+     * @param typeClass the type class of this type; must not be
+     *     <code>null</code>.  Only type classes for simple types are allowed
+     *     here.
+     *
+     * @throws IllegalArgumentException if the given <code>typeClass</code> is
+     *     not simple (for example, a struct or an interface type).  This
+     *     constructor could not find out the type name in such a case.
+     *
+     * @since UDK3.0
      */
-    public Type(TypeClass typeClass) throws IllegalArgumentException {
+    public Type(TypeClass typeClass) {
         if(__isTypeClassPrimitive(typeClass)) {
             _typeClass = typeClass;
             _typeName = __typeClassToTypeName[typeClass.getValue()];
@@ -262,10 +296,48 @@ public class Type {
     }
 
     /**
+     * Gets the type class.
+     *
+     * @return the type class.  Will never be <code>null</code>, but might be
+     *     <code>UNKNOWN</code>.
+     *
+     * @since UDK1.0
+     */
+    public TypeClass getTypeClass() {
+        return _typeClass;
+    }
+
+    /**
+     * Gets the type name.
+     *
+     * @return the type name; will never be <code>null</code>
+     *
+     * @since UDK1.0
+     */
+    public String getTypeName() {
+        return _typeName;
+    }
+
+    /**
+     * Gets the Java class.
+     *
+     * <p>Returns <code>null</code> if this type has not been constructed by
+     * <code>Class</code>.</p>
+     *
+     * @return the type name; may be <code>null</code>
+     *
+     * @since UDK1.0
+     */
+    public Class getZClass() {
+        return _class;
+    }
+
+    /**
      * Gives the type description of this type.
-     * <p>
-     * @since       UDK3.0
-     * @return the type description
+     *
+     * @return the type description; may be <code>null</code>
+     *
+     * @since UDK3.0
      */
     public ITypeDescription getTypeDescription() {
         return _iTypeDescription;
@@ -273,82 +345,39 @@ public class Type {
 
     /**
      * Sets the type description for this type.
-     * <p>
-     * @since       UDK3.0
-     * @return the type description
+     *
+     * @param typeDescription the type description
+     *
+     * @since UDK3.0
      */
-    public void setTypeDescription(ITypeDescription iTypeDescription) {
-        _iTypeDescription = iTypeDescription;
+    public void setTypeDescription(ITypeDescription typeDescription) {
+        _iTypeDescription = typeDescription;
     }
 
-    /**
-     * Gets the type name.
-     * Returns <code>null</code> if this
-     * type has not been constructed by name.
-     * <p>
-     * @since       UDK1.0
-     * @return  the type name.
-     */
-    public String getTypeName() {
-        return _typeName;
+    // @see java.lang.Object#equals
+    public boolean equals(Object obj) {
+        return this == obj
+            || (obj instanceof Type
+                && _typeName.equals(((Type) obj)._typeName));
     }
 
-    /**
-     * Gets the java class.
-     * Returns <code>null</code> if this
-     * type has not been constructed by <code>Class</code>.
-     * <p>
-     * @since       UDK1.0
-     * @return  the type name. Maybe null.
-     */
-    public Class getZClass() {
-        return _class;
-    }
-
-    /**
-     * Gets the typeClass.
-     * Returns <code>null</code> if this
-     * type has not been constructed by <code>TypeClass</code>.
-     * <p>
-     * @since       UDK1.0
-     * @return  the type class. May be TypeClass.UNKNOWN.
-     */
-    public TypeClass getTypeClass() {
-        return _typeClass;
-    }
-
-    /**
-     * Compares two types.
-     * <p>
-     * @return    true, if the given type and this type are equal
-     */
-    public boolean equals(Object object) {
-        boolean result = false;
-
-        Type type = (Type)object;
-
-        if(type != null)
-            result = _typeName.equals(type._typeName);
-
-        return result;
-    }
-
-    /**
-     * Calculates the hash code.
-     * <p>
-     * @return    the hash code
-     */
+    // @see java.lang.Object#hashCode
     public int hashCode() {
         return _typeName.hashCode();
     }
 
-    /**
-     * Constructs a descriptive <code>String</code> for the type.
-     * <p>
-     * @return   a descriptive <code>String</code>
-     */
+    // @see java.lang.Object#toString
     public String toString() {
-        return "Type<" + _typeName + ">";
+        return "Type[" + _typeName + "]";
     }
-}
 
+    private static boolean __isTypeClassPrimitive(TypeClass typeClass) {
+        return typeClass.getValue() < __typeClassToTypeName.length;
+    }
+
+    protected TypeClass _typeClass; // TODO should be final
+    protected String _typeName; // TODO should be final
+    protected Class _class; // TODO should be final
+
+    protected ITypeDescription _iTypeDescription;
+}

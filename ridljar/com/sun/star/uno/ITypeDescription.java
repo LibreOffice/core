@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ITypeDescription.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:34:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 15:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ package com.sun.star.uno;
  * The <code>ITypeDescription</code> allows to examine a type
  * in detail (e.g. it is used for marshaling/unmarshaling).
  * <p>
- * @version     $Revision: 1.1 $ $ $Date: 2001-05-08 09:34:18 $
+ * @version     $Revision: 1.2 $ $ $Date: 2003-03-26 15:44:54 $
  * @author      Kay Ramme
  * @since       UDK3.0
  */
@@ -139,16 +139,77 @@ public interface ITypeDescription {
     ITypeDescription getComponentType();
 
     /**
-     * Gets the type name.
-     * <p>
-     * @return  the type name.
+     * Gets the (UNO) type name.
+     *
+     * <p>The following table lists how UNO types map to type names:</p>
+     * <table>
+     *   <thead>
+     *     <tr><th>UNO type</th><th>type name</th></tr>
+     *   </thead>
+     *   <tbody>
+     *     <tr><td>VOID</td><td><code>"void"</code></td></tr>
+     *     <tr><td>BOOLEAN</td><td><code>"boolean"</code></td></tr>
+     *     <tr><td>CHAR</td><td><code>"char"</code></td></tr>
+     *     <tr><td>BYTE</td><td><code>"byte"</code></td></tr>
+     *     <tr><td>SHORT</td><td><code>"short"</code></td></tr>
+     *     <tr>
+     *       <td>UNSIGNED SHORT</td><td><code>"unsigned short"</code></td>
+     *     </tr>
+     *     <tr><td>LONG</td><td><code>"long"</code></td></tr>
+     *     <tr><td>UNSIGNED LONG</td><td><code>"unsigned long"</code></td></tr>
+     *     <tr><td>HYPER</td><td></td><code>"hyper"</code></tr>
+     *     <tr>
+     *       <td>UNSIGNED HYPER</td><td></td><code>"unsigned hyper"</code>
+     *     </tr>
+     *     <tr><td>FLOAT</td><td></td><code>"float"</code></tr>
+     *     <tr><td>DOUBLE</td><td></td><code>"double"</code></tr>
+     *     <tr><td>STRING</td><td></td><code>"string"</code></tr>
+     *     <tr><td>TYPE</td><td></td><code>"type"</code></tr>
+     *     <tr><td>ANY</td><td></td><code>"any"</code></tr>
+     *     <tr>
+     *       <td>sequence type of base type <var>T</var></td>
+     *       <td><code>"[]"</code> followed by type name for <var>T</var></td>
+     *     </tr>
+     *     <tr>
+     *       <td>enum type named <var>N</var></td>
+     *       <td><var>N</var> (see below)</td>
+     *     </tr>
+     *     <tr>
+     *       <td>struct type named <var>N</var></td>
+     *       <td><var>N</var> (see below)</td>
+     *     </tr>
+     *     <tr>
+     *       <td>exception type named <var>N</var>
+     *       </td><td><var>N</var> (see below)</td>
+     *     </tr>
+     *     <tr>
+     *       <td>interface type named <var>N</var></td>
+     *       <td><var>N</var> (see below)</td>
+     *     </tr>
+     *   <tbody>
+     * </table>
+     * <p>For a UNO type named <var>N</var>, consisting of a sequence of module
+     * names <var>M<sub>1</sub></var>, ..., <var>M<sub>n</sub></var> followed by
+     * a simple name <var>S</var>, the corresponding type name consists of the
+     * same sequence of module names and simple name, with <code>"."</code>
+     * seperating the individual elements.</p>
+     *
+     * @return the type name.
      */
     String getTypeName();
 
     /**
-     * Gets the array type name.
-     * <p>
-     * @return  the array type name.
+     * Gets the (Java) array type name.
+     *
+     * <p>The array type name is defined to be the Java class name (as returned
+     * by <code>Class.forName</code>) of the Java array class that corresponds
+     * to the UNO sequence type with this type (the UNO type represented by this
+     * <code>ITypeDescription</code> instance) as base type.  For an
+     * <code>ITypeDescription</code> instance representing the UNO type VOID,
+     * the array type name is defined to be
+     * <code>"[Ljava.lang.Void;"</code>.</p>
+     *
+     * @return the array type name.
      */
     String getArrayTypeName();
 

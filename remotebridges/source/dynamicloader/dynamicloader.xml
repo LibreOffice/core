@@ -12,7 +12,7 @@
         </description>
         <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
         <language>  c++ </language>
-        <status value="experimental"/>
+        <status value="final"/>
         <supported-service> com.sun.star.loader.Dynamic </supported-service>
         <service-dependency>    com.sun.star.bridge.UnoUrlResolver  </service-dependency>
         <type>  com.sun.star.bridge.XUnoUrlResolver       </type>

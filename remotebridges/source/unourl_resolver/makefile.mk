@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-22 16:39:16 $
+#   last change: $Author: hr $ $Date: 2003-03-26 15:41:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,9 +102,9 @@ SHL1TARGET=	$(TARGET)
 SHL1VERSIONMAP=	$(TARGET).map
 
 SHL1STDLIBS= \
+        $(SALLIB)		\
         $(CPPULIB)		\
-        $(CPPUHELPERLIB)	\
-        $(SALLIB)
+        $(CPPUHELPERLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)

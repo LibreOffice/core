@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checksingleton.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 11:03:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 15:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 #include <stdio.h>
-#include <string.h>
 
 #include <set>
 

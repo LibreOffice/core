@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-26 11:43:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 15:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@ package com.sun.star.lib.uno.typedesc;
 
 
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 
 import java.lang.reflect.Field;
@@ -97,7 +98,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.13 $ $ $Date: 2001-10-26 11:43:05 $
+ * @version     $Revision: 1.14 $ $ $Date: 2003-03-26 15:44:53 $
  * @author      Kay Ramme
  * @since       UDK2.0
  */
@@ -123,71 +124,75 @@ public class TypeDescription implements ITypeDescription {
     public static final TypeDescription __type_TypeDescription    = new TypeDescription(TypeClass.TYPE,           "type", "[Lcom.sun.star.uno.Type;", Type.class);     // TYPE
     public static final TypeDescription __any_TypeDescription     = new TypeDescription(TypeClass.ANY,            "any", "[Ljava.lang.Object;", Object.class);       // ANY
 
-
-      static private final Hashtable __classToTypeDescription = new Hashtable();
-    static private final Hashtable __typeNameToTypeDescription = new Hashtable();
-    static private final Hashtable __typeClassToTypeName = new Hashtable();
-
-    static private final Object[][] __typeClassToTypeDescription = new Object[][]{
-        new Object[]{"java.lang.Void",        "V",                       __void_TypeDescription},     // VOID
-        new Object[]{"java.lang.Character",   "C",                       __char_TypeDescription},     // CHAR
-        new Object[]{"java.lang.Boolean",     "Z",                       __boolean_TypeDescription},  // BOOLEAN
-        new Object[]{"java.lang.Byte",        "B",                       __byte_TypeDescription},     // BYTE
-        new Object[]{"java.lang.Short",       "S",                       __short_TypeDescription},    // SHORT
-        new Object[]{"java.lang.Short",       "S",                       __ushort_TypeDescription},    // UNSIGNED SHORT
-        new Object[]{"java.lang.Integer",     "I",                       __long_TypeDescription},     // LONG
-        new Object[]{"java.lang.Integer",     "I",                       __ulong_TypeDescription},     // UNSIGNED_LONG
-        new Object[]{"java.lang.Long",        "J",                       __hyper_TypeDescription},    // HYPER
-        new Object[]{"java.lang.Long",        "J",                       __uhyper_TypeDescription},    // UNSIGNED_HYPER
-        new Object[]{"java.lang.Float",       "F",                       __float_TypeDescription},    // FLOAT
-        new Object[]{"java.lang.Double",      "D",                       __double_TypeDescription},   // DOUBLE
-        new Object[]{"java.lang.String",      "Ljava.lang.String;",      __string_TypeDescription},   // STRING
-        new Object[]{"com.sun.star.uno.Type", "Lcom.sun.star.uno.Type;", __type_TypeDescription},     // TYPE
-        new Object[]{"java.lang.Object",      "Ljava.lang.Object;",      __any_TypeDescription}       // ANY
-    };
-
+    static private final HashMap __typeNameToTypeDescription = new HashMap();
     static {
-        __typeNameToTypeDescription.put("boolean",        __boolean_TypeDescription);
-        __typeNameToTypeDescription.put("short",          __short_TypeDescription);
-        __typeNameToTypeDescription.put("unsigned short", __ushort_TypeDescription);
-        __typeNameToTypeDescription.put("long",           __long_TypeDescription);
-        __typeNameToTypeDescription.put("unsigned long",  __ulong_TypeDescription);
-        __typeNameToTypeDescription.put("hyper",          __hyper_TypeDescription);
-        __typeNameToTypeDescription.put("unsigned hyper", __uhyper_TypeDescription);
-        __typeNameToTypeDescription.put("float",          __float_TypeDescription);
-        __typeNameToTypeDescription.put("double",         __double_TypeDescription);
-        __typeNameToTypeDescription.put("char",           __char_TypeDescription);
-        __typeNameToTypeDescription.put("byte",           __byte_TypeDescription);
-        __typeNameToTypeDescription.put("string",         __string_TypeDescription);
-        __typeNameToTypeDescription.put("any",            __any_TypeDescription);
-        __typeNameToTypeDescription.put("void",           __void_TypeDescription);
-        __typeNameToTypeDescription.put("type",           __type_TypeDescription);
-
-        __classToTypeDescription.put(Void.class,      __void_TypeDescription);
-        __classToTypeDescription.put(void.class,      __void_TypeDescription);
-        __classToTypeDescription.put(Character.class, __char_TypeDescription);
-        __classToTypeDescription.put(char.class,      __char_TypeDescription);
-        __classToTypeDescription.put(Boolean.class,   __boolean_TypeDescription);
-        __classToTypeDescription.put(boolean.class,   __boolean_TypeDescription);
-        __classToTypeDescription.put(Byte.class,      __byte_TypeDescription);
-        __classToTypeDescription.put(byte.class,      __byte_TypeDescription);
-        __classToTypeDescription.put(Short.class,     __short_TypeDescription);
-        __classToTypeDescription.put(short.class,     __short_TypeDescription);
-        __classToTypeDescription.put(Integer.class,   __long_TypeDescription);
-        __classToTypeDescription.put(int.class,       __long_TypeDescription);
-        __classToTypeDescription.put(Long.class,      __hyper_TypeDescription);
-        __classToTypeDescription.put(long.class,      __hyper_TypeDescription);
-        __classToTypeDescription.put(Float.class,     __float_TypeDescription);
-        __classToTypeDescription.put(float.class,     __float_TypeDescription);
-        __classToTypeDescription.put(Double.class,    __double_TypeDescription);
-        __classToTypeDescription.put(double.class,    __double_TypeDescription);
-        __classToTypeDescription.put(String.class,    __string_TypeDescription);
-        __classToTypeDescription.put(Type.class,      __type_TypeDescription);
-        __classToTypeDescription.put(Any.class,       __any_TypeDescription);
-        __classToTypeDescription.put(Object.class,    __any_TypeDescription);
+        __typeNameToTypeDescription.put("void", __void_TypeDescription);
+        __typeNameToTypeDescription.put("boolean", __boolean_TypeDescription);
+        __typeNameToTypeDescription.put("char", __char_TypeDescription);
+        __typeNameToTypeDescription.put("byte", __byte_TypeDescription);
+        __typeNameToTypeDescription.put("short", __short_TypeDescription);
+        __typeNameToTypeDescription.put("unsigned short",
+                                        __ushort_TypeDescription);
+        __typeNameToTypeDescription.put("long", __long_TypeDescription);
+        __typeNameToTypeDescription.put("unsigned long",
+                                        __ulong_TypeDescription);
+        __typeNameToTypeDescription.put("hyper", __hyper_TypeDescription);
+        __typeNameToTypeDescription.put("unsigned hyper",
+                                        __uhyper_TypeDescription);
+        __typeNameToTypeDescription.put("float", __float_TypeDescription);
+        __typeNameToTypeDescription.put("double", __double_TypeDescription);
+        __typeNameToTypeDescription.put("string", __string_TypeDescription);
+        __typeNameToTypeDescription.put("type", __type_TypeDescription);
+        __typeNameToTypeDescription.put("any", __any_TypeDescription);
     }
 
-    static public boolean isTypeClassSimple(TypeClass typeClass) {
+    static private final HashMap __classToTypeDescription = new HashMap();
+    static {
+        __classToTypeDescription.put(void.class, __void_TypeDescription);
+        __classToTypeDescription.put(Void.class, __void_TypeDescription);
+        __classToTypeDescription.put(boolean.class, __boolean_TypeDescription);
+        __classToTypeDescription.put(Boolean.class, __boolean_TypeDescription);
+        __classToTypeDescription.put(char.class, __char_TypeDescription);
+        __classToTypeDescription.put(Character.class, __char_TypeDescription);
+        __classToTypeDescription.put(byte.class, __byte_TypeDescription);
+        __classToTypeDescription.put(Byte.class, __byte_TypeDescription);
+        __classToTypeDescription.put(short.class, __short_TypeDescription);
+        __classToTypeDescription.put(Short.class, __short_TypeDescription);
+        __classToTypeDescription.put(int.class, __long_TypeDescription);
+        __classToTypeDescription.put(Integer.class, __long_TypeDescription);
+        __classToTypeDescription.put(long.class, __hyper_TypeDescription);
+        __classToTypeDescription.put(Long.class, __hyper_TypeDescription);
+        __classToTypeDescription.put(float.class, __float_TypeDescription);
+        __classToTypeDescription.put(Float.class, __float_TypeDescription);
+        __classToTypeDescription.put(double.class, __double_TypeDescription);
+        __classToTypeDescription.put(Double.class, __double_TypeDescription);
+        __classToTypeDescription.put(String.class, __string_TypeDescription);
+        __classToTypeDescription.put(Type.class, __type_TypeDescription);
+        __classToTypeDescription.put(Object.class, __any_TypeDescription);
+        __classToTypeDescription.put(Any.class, __any_TypeDescription);
+    }
+
+    // must be sorted same as TypeClass:
+    private static final TypeDescription[] __typeClassToTypeDescription
+    = new TypeDescription[] {
+        __void_TypeDescription,
+        __char_TypeDescription,
+        __boolean_TypeDescription,
+        __byte_TypeDescription,
+        __short_TypeDescription,
+        __ushort_TypeDescription,
+        __long_TypeDescription,
+        __ulong_TypeDescription,
+        __hyper_TypeDescription,
+        __uhyper_TypeDescription,
+        __float_TypeDescription,
+        __double_TypeDescription,
+        __string_TypeDescription,
+        __type_TypeDescription,
+        __any_TypeDescription
+    };
+
+    public static boolean isTypeClassSimple(TypeClass typeClass) {
         return typeClass.getValue() < __typeClassToTypeDescription.length;
     }
 
@@ -424,6 +429,23 @@ public class TypeDescription implements ITypeDescription {
     static private void addToCache(TypeDescription typeDescription) {
           if(DEBUG_CACHE) System.err.println("addToCache:" + typeDescription.getTypeName());
 
+        // If typeDescription is a sequence type whose base component type is
+        // any of SHORT, UNSIGNED SHORT, LONG, UNSIGNED LONG, HYPER, UNSIGNED
+        // HYPER, ANY or com::sun::star::uno::XInterface, do not add it to the
+        // cache.  Those UNO types have corresponding Java types that are not
+        // unique (e.g., both a sequence of SHORT and a sequence of UNSIGNED
+        // SHORT map to the Java type short[]), so using __typeCache_class to
+        // map from such a Java type to a type description could give a wrong
+        // result:
+        String n = typeDescription.getTypeName();
+        if (n.endsWith("[]short") || n.endsWith("[]unsigned short")
+            || n.endsWith("[]long") || n.endsWith("[]unsigned long")
+            || n.endsWith("[]hyper") || n.endsWith("[]unsigned hyper")
+            || n.endsWith("[]any")
+            || n.endsWith("[]com.sun.star.uno.XInterface")) {
+            return;
+        }
+
         synchronized(__cacheEntrys) {
               if(DEBUG_CACHE) listCache();
 
@@ -533,34 +555,29 @@ public class TypeDescription implements ITypeDescription {
         return typeDescription;
     }
 
-    static public ITypeDescription getTypeDescription(Type type) throws ClassNotFoundException {
-        ITypeDescription iTypeDescription = type.getTypeDescription();
-
-        if(iTypeDescription == null) {
-            if(type.getZClass() != null)
-                iTypeDescription = getTypeDescription(type.getZClass());
-
-            else if(type.getTypeClass() != null && type.getTypeClass() != TypeClass.UNKNOWN)
-                iTypeDescription = getTypeDescription(type.getTypeClass());
-
-            else if(type.getTypeName() != null)
-                iTypeDescription = getTypeDescription(type.getTypeName());
-
-            type.setTypeDescription(iTypeDescription);
+    public static ITypeDescription getTypeDescription(Type type)
+        throws ClassNotFoundException
+    {
+        ITypeDescription td = type.getTypeDescription();
+        if (td == null) {
+            if (type.getZClass() != null) {
+                td = getTypeDescription(type.getZClass());
+            } else {
+                td = getTypeDescription(type.getTypeClass());
+                if (td == null) {
+                    td = getTypeDescription(type.getTypeName());
+                }
+            }
+            type.setTypeDescription(td);
         }
-
-        return iTypeDescription;
+        return td;
     }
 
-    static public TypeDescription getTypeDescription(TypeClass typeClass) {
-        TypeDescription typeDescription = null;
-
-        if(typeClass.getValue() < __typeClassToTypeDescription.length)
-            typeDescription = (TypeDescription)__typeClassToTypeDescription[typeClass.getValue()][2];
-
-        return typeDescription;
+    public static TypeDescription getTypeDescription(TypeClass typeClass) {
+        int n = typeClass.getValue();
+        return n < __typeClassToTypeDescription.length
+            ? __typeClassToTypeDescription[n] : null;
     }
-
 
     protected TypeClass _typeClass;
     protected String    _typeName;
@@ -659,6 +676,8 @@ public class TypeDescription implements ITypeDescription {
         _typeName      = typeName;
         _arrayTypeName = arrayTypeName;
         _class         = zClass;
+        // _componentType == null is ok, since only primitive TypeDescriptions
+        // are created with this constructor
     }
 
     private TypeDescription(Class zClass) {
@@ -887,19 +906,14 @@ public class TypeDescription implements ITypeDescription {
     }
 
     /**
-     * Gets the component <code>TypeDescription</code> if
-     * this is an array type.
-     * <p>
-     * @return the <code>TypeDescription</code>
+     * Gets the component <code>TypeDescription</code> if this is a sequence
+     * type.
+     *
+     * @return the component <code>TypeDescription</code>, or <code>null</code>
+     *     if this is not a sequence type
      */
     public ITypeDescription getComponentType() {
-        ITypeDescription iTypeDescription = null;
-
-        Class componentClass = getZClass().getComponentType();
-        if(componentClass != null)
-            iTypeDescription = getTypeDescription(componentClass);
-
-        return iTypeDescription;
+        return _componentType;
     }
 
     /**

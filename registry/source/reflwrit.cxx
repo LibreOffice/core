@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflwrit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mh $ $Date: 2002-04-23 14:30:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 15:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ using namespace rtl;
 using namespace salhelper;
 
 #ifdef MAC
-#define strdup(str) strcpy((sal_Char*)malloc(strlen(str)+1),str)
+#define strdup(str) strcpy((sal_Char*)malloc(strlen(str)+1),str) /* #100211# - checked */
 #endif
 
 static sal_Char NULL_STRING[1] = { 0 };
@@ -88,10 +88,6 @@ static sal_Unicode NULL_WSTRING[1] = { 0 };
 
 #if defined ( GCC ) && ( defined ( SCO ) || defined ( OS2 ) )
 ORealDynamicLoader* ODynamicLoader<RegistryTypeWriter_Api>::m_pLoader = NULL;
-#endif
-
-#if defined(MACOSX)
-ORealDynamicLoader* ODynamicLoader<RegistryTypeWriter_Api>::m_pStaticLoader = NULL;
 #endif
 
 #define BLOP_OFFSET_MAGIC       0

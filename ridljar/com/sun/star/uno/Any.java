@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-18 14:04:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 15:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ package com.sun.star.uno;
  * an explicit interface type, so the remote counterpart doesn't need to invoke
  * a queryInterface).
  * <p>
- * @version     $Revision: 1.4 $ $ $Date: 2002-01-18 14:04:55 $
+ * @version     $Revision: 1.5 $ $ $Date: 2003-03-26 15:44:54 $
  * @since       UDK1.0
  */
 public class Any {
@@ -90,6 +90,10 @@ public class Any {
      */
     protected Object _object;
 
+    public static final Any VOID = new Any(new Type("void", TypeClass.VOID),
+                                           null);
+        // do not use Type.VOID here to avoid circular dependencies between
+        // static members of Any and Type
 
     /**
      * Constructs a new any.
@@ -129,6 +133,9 @@ public class Any {
     public Object getObject() {
         return _object;
     }
+
+    // @see java.lang.Object#toString
+    public String toString() {
+        return "Any[" + _type + ", " + _object + "]";
+    }
 }
-
-

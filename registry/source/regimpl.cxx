@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jbu $ $Date: 2002-11-12 16:22:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 15:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include    <stdio.h>
 #ifdef MAC
 #include    <unistd.h>
-#define strdup(str) strcpy((sal_Char*)malloc(strlen(str)+1),str)
+#define strdup(str) strcpy((sal_Char*)malloc(strlen(str)+1),str) /* #100211# - checked */
 #endif
 #ifdef UNX
 #include    <unistd.h>
