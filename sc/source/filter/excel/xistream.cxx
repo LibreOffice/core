@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:36:41 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,6 +926,15 @@ void XclImpStream::IgnoreUniString( sal_uInt16 nChars, sal_uInt8 nFlags )
     sal_uInt32 nExtSize = ReadUniStringExtHeader( b16Bit, nFlags );
     IgnoreRawUniString( nChars, b16Bit );
     SkipUniStringExtData( nExtSize );
+}
+
+void XclImpStream::AppendRawByteString( String& rString, sal_uInt16 nChars )
+{
+    sal_Char* pcBuffer = new sal_Char[ nChars + 1 ];
+    sal_uInt32 nCharsRead = ReadData( pcBuffer, nChars );
+    pcBuffer[ nCharsRead ] = '\0';
+    rString.Append( String( pcBuffer, mrRoot.GetCharSet() ) );
+    delete[] pcBuffer;
 }
 
 String XclImpStream::ReadRawByteString( sal_uInt16 nChars )
