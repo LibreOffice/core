@@ -19992,3 +19992,8 @@ writeInfo
 ?_M_erase@?$_Rb_tree@VOUString@rtl@@V12@U?$_Identity@VOUString@rtl@@@_STL@@U?$less@VOUString@rtl@@@4@V?$allocator@VOUString@rtl@@@4@@_STL@@AAEXPAU?$_Rb_tree_node@VOUString@rtl@@@2@@Z
 ?_M_insert@?$_Rb_tree@VOUString@rtl@@V12@U?$_Identity@VOUString@rtl@@@_STL@@U?$less@VOUString@rtl@@@4@V?$allocator@VOUString@rtl@@@4@@_STL@@AAE?AU?$_Rb_tree_iterator@VOUString@rtl@@U?$_Nonconst_traits@VOUString@rtl@@@_STL@@@2@PAU_Rb_tree_node_base@2@0ABVOUString@rtl@@@Z
 ?find@?$_Rb_tree@VOUString@rtl@@V12@U?$_Identity@VOUString@rtl@@@_STL@@U?$less@VOUString@rtl@@@4@V?$allocator@VOUString@rtl@@@4@@_STL@@QBE?AU?$_Rb_tree_iterator@VOUString@rtl@@U?$_Const_traits@VOUString@rtl@@@_STL@@@2@ABVOUString@rtl@@@Z
+??0?$_List_iterator@VString@@U?$_Nonconst_traits@VString@@@_STL@@@_STL@@QAE@ABU01@@Z
+??E?$_List_iterator@VString@@U?$_Nonconst_traits@VString@@@_STL@@@_STL@@QAE?AU01@H@Z
+?end@?$list@VString@@V?$allocator@VString@@@_STL@@@_STL@@QAE?AU?$_List_iterator@VString@@U?$_Nonconst_traits@VString@@@_STL@@@2@XZ
+?erase@?$list@VString@@V?$allocator@VString@@@_STL@@@_STL@@QAE?AU?$_List_iterator@VString@@U?$_Nonconst_traits@VString@@@_STL@@@2@U32@@Z
+?insert@?$list@VString@@V?$allocator@VString@@@_STL@@@_STL@@QAE?AU?$_List_iterator@VString@@U?$_Nonconst_traits@VString@@@_STL@@@2@U32@ABVString@@@Z
