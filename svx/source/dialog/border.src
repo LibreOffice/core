@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:13:09 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 19:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ swedish ] = "Linjeplacering" ;
         Text [ dutch ] = "Voorbeeld" ;
         Text [ spanish ] = "Marco" ;
-        Text [ english_us ] = "Frame" ;
+        Text [ english_us ] = "Line arrangement" ;
         Text[ chinese_simplified ] = "ПЯМхЕЕРт";
         Text[ russian ] = "Расположение линий";
         Text[ polish ] = "Rozmieszczenie linii";
@@ -135,7 +135,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ greek ] = "ДйЬфбоз гсбммюн";
         Text[ korean ] = "ЗБ·№АУ";
         Text[ turkish ] = "Зerзeve";
-        Text[ language_user1 ] = " ";
+        Text[ language_user1 ] = "EM6April01: Found in Text doc under Format - Page - Borders tab.";
     };
     ListBox LB_LINESTYLE
     {
@@ -375,7 +375,7 @@ TabPage RID_SVXPAGE_BORDER
         Size = MAP_APPFONT ( 96 , 8 ) ;
         Text = "Abstand zum Inhalt" ;
         Text [ ENGLISH ] = "Distance to Content" ;
-        Text[ english_us ] = "Settings";
+        Text[ english_us ] = "Spacing to contents";
         Text[ portuguese ] = "Predefiniзхes";
         Text[ russian ] = "Расстояние от содержимого";
         Text[ greek ] = "Брьуфбуз брь ресйечьменб";
