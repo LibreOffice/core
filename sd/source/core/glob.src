@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-15 20:11:36 $
+ *  last change: $Author: kz $ $Date: 2001-08-17 20:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1046,9 +1046,9 @@ String STR_PREVIEWVIEWSHELL
 {
     Text = "Vorschaufenster" ;
     Text [ ENGLISH ] = "Preview window" ;
-    Text[ english_us ] = "Preview window";
+    Text[ english_us ] = "Preview Window";
     Text[ portuguese ] = "Preview window";
-    Text[ russian ] = "Preview window";
+    Text[ russian ] = "Окно просмотра";
     Text[ greek ] = "Preview window";
     Text[ dutch ] = "Preview window";
     Text[ french ] = "Fenкtre d'aperзu";
@@ -1061,7 +1061,7 @@ String STR_PREVIEWVIEWSHELL
     Text[ portuguese_brazilian ] = "Preview window";
     Text[ japanese ] = "пѕЊпѕџпѕљпѕ‹пѕћпЅ­пЅ°пЅіпЅЁпѕќпѕ„пѕћпЅі";
     Text[ korean ] = "Preview window";
-    Text[ chinese_simplified ] = "Preview window";
+    Text[ chinese_simplified ] = "йў„и§€и§†зЄ—";
     Text[ chinese_traditional ] = "й ђи¦Ѕи¦–зЄ—";
     Text[ turkish ] = "Preview window";
     Text[ arabic ] = "Preview window";
@@ -2174,7 +2174,7 @@ String STR_LOAD_DOC
     Text [ swedish ] = "Ladda dokument" ;
     Text [ dutch ] = "Document laden" ;
     Text [ spanish ] = "Cargar documento" ;
-    Text [ english_us ] = "Load document" ;
+    Text [ english_us ] = "Load Document" ;
     Text[ chinese_simplified ] = "иЈ…е…Ґж–‡жЎЈ";
     Text[ russian ] = "Загрузить документ";
     Text[ polish ] = "Јaduj dokument";
@@ -2201,7 +2201,7 @@ String STR_SAVE_DOC
     Text [ swedish ] = "Spara dokument" ;
     Text [ dutch ] = "Document opslaan" ;
     Text [ spanish ] = "Guardar documento" ;
-    Text [ english_us ] = "Save document" ;
+    Text [ english_us ] = "Save Document" ;
     Text[ chinese_simplified ] = "е­з›ж–‡жЎЈ";
     Text[ russian ] = "Сохранить документ";
     Text[ polish ] = "Zapisz dokument";
@@ -2214,6 +2214,7 @@ String STR_SAVE_DOC
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Guardar documento";
 };
+
 
 
 
