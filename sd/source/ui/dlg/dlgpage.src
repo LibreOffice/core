@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgpage.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ TabDialog TAB_PAGE
                 Text[ chinese_traditional ] = "­¶­±";
                 Text[ arabic ] = "ÕİÍÉ";
                 Text[ greek ] = "Óåëßäá";
-                Text[ korean ] = "ÆäÀÌÁö";
+                Text[ korean ] = "ÂÊ";
                 Text[ turkish ] = "Sayfa";
                 Text[ language_user1 ] = " ";
             };
@@ -200,7 +200,7 @@ TabDialog TAB_PAGE
     Text[ chinese_traditional ] = "³]©w­¶­±";
     Text[ arabic ] = "ÅÚÏÇÏ ÇáÕİÍÉ";
     Text[ greek ] = "Äéáìüñöùóç óåëßäáò";
-    Text[ korean ] = "ÆäÀÌÁö ¼³Á¤";
+    Text[ korean ] = "ÂÊ ¼³Á¤";
     Text[ turkish ] = "Sayfa yapısı";
     Text[ language_user1 ] = " ";
 };
