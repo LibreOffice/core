@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 14:09:51 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:07:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,14 +75,12 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        grfatr.cxx \
-        ndgrf.cxx
-
 SLOFILES =	\
         $(SLO)$/grfatr.obj \
         $(SLO)$/ndgrf.obj
 
+EXCEPTIONSFILES= \
+        $(SLO)$/ndgrf.obj
 
 # --- Tagets -------------------------------------------------------
 
