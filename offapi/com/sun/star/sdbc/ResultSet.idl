@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:25 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,8 +243,6 @@ service ResultSet
         which generated the ResultSet being used for positioning. Also,
         cursor names must be unique within a connection.
         </p>
-
-        @optional
      */
     [optional, readonly, property] string CursorName;
 
