@@ -1,0 +1,422 @@
+*** misc/STLport-4.5/src/dll_main.cpp	Fri Aug 24 21:14:19 2001
+--- misc/build/STLport-4.5/src/dll_main.cpp	Fri Oct 31 12:11:56 2003
+***************
+*** 147,152 ****
+--- 147,156 ----
+  template struct _STLP_CLASS_DECLSPEC __stl_debug_engine<bool>;
+  # endif
+  
++ #ifdef __APPLE__
++ template class _STLP_CLASS_DECLSPEC _Node_Alloc_Lock<false,0>;
++ template class _STLP_CLASS_DECLSPEC _Node_Alloc_Lock<true,0>;
++ #endif
+  template class _STLP_CLASS_DECLSPEC __node_alloc<false,0>;
+  template class _STLP_CLASS_DECLSPEC __node_alloc<true,0>;
+  template class _STLP_CLASS_DECLSPEC __debug_alloc< __node_alloc<true,0> >;
+*** misc/STLport-4.5/src/gcc-3.0-freebsd.mak	Mon Nov 10 18:30:01 2003
+--- misc/build/STLport-4.5/src/gcc-3.0-freebsd.mak	Fri Oct 31 12:11:56 2003
+***************
+*** 1 ****
+! dummy
+--- 1,59 ----
+! #
+! # Note : this makefile is for gcc-3 !
+! #
+! 
+! #
+! # compiler
+! #
+! CC+= ${PTHREAD_CFLAGS} -D_REENTRANT
+! CXX+= ${PTHREAD_CFLAGS} -D_REENTRANT -fexceptions
+! 
+! #
+! # Basename for libraries
+! #
+! LIB_BASENAME = libstlport_gcc
+! 
+! #
+! # guts for common stuff
+! #
+! #
+! LINK=ar cr
+! DYN_LINK=${CXX} ${PTHREAD_LIBS} --fexceptions -shared -o
+! 
+! OBJEXT=o
+! DYNEXT=so
+! STEXT=a
+! RM=rm -rf
+! PATH_SEP=/
+! MKDIR=mkdir -p
+! COMP=GCC-FREEBSD
+! INSTALL_STEP = install_unix 
+! 
+! all:  all_dynamic all_static symbolic_links 
+! 
+! include common_macros.mak
+! 
+! WARNING_FLAGS= -Wall -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -ftemplate-depth-32
+! 
+! CXXFLAGS_COMMON = -I${STLPORT_DIR} -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} ${WARNING_FLAGS}
+! 
+! CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) ${CXXFLAGS}
+! CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) ${CXXFLAGS} -fPIC
+! 
+! CXXFLAGS_DEBUG_static = $(CXXFLAGS_COMMON) -g
+! CXXFLAGS_DEBUG_dynamic = $(CXXFLAGS_COMMON) -g -fPIC
+! 
+! CXXFLAGS_STLDEBUG_static = $(CXXFLAGS_DEBUG_static) -D_STLP_DEBUG
+! CXXFLAGS_STLDEBUG_dynamic = $(CXXFLAGS_DEBUG_dynamic) -D_STLP_DEBUG
+! 
+! include common_percent_rules.mak
+! include common_rules.mak
+! 
+! 
+! #install: all
+! #	cp -p $(LIB_TARGET) ${D_LIB_TARGET} ../lib
+! 
+! #%.s: %.cpp
+! #	$(CXX) $(CXXFLAGS) -O4 -S -pto $<  -o $@
+! 
+! 
+*** misc/STLport-4.5/src/gcc-3.0-macosx.mak	Mon Nov 10 18:30:01 2003
+--- misc/build/STLport-4.5/src/gcc-3.0-macosx.mak	Fri Oct 31 12:11:56 2003
+***************
+*** 1 ****
+! dummy
+--- 1,59 ----
+! #
+! # Note : this makefile is for gcc-3, Mac OS X only !
+! #
+! 
+! #
+! # compiler
+! # take these from the OOo build environment
+! CC*= gcc 
+! CXX*= g++
+! 
+! #
+! # Basename for libraries
+! #
+! LIB_BASENAME = libstlport_gcc
+! 
+! #
+! # guts for common stuff
+! #
+! #
+! LINK=libtool -static -o
+! DYN_LINK=g++ -dynamiclib -single_module -install_name @executable_path/libstlport_gcc.dylib -o
+! 
+! OBJEXT=o
+! DYNEXT=dylib
+! STEXT=a
+! RM=rm -rf
+! PATH_SEP=/
+! MKDIR=mkdir -p
+! COMP=GCC$(ARCH)
+! INSTALL_STEP = install_unix 
+! 
+! all:  all_dynamic all_static symbolic_links 
+! 
+! include common_macros.mak
+! 
+! WARNING_FLAGS= -Wall -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -Wno-long-double
+! 
+! CXXFLAGS_COMMON =  -I${STLPORT_DIR} -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} -D_REENTRANT -D_PTHREADS -ftemplate-depth-32 -malign-natural -no-cpp-precomp -fexceptions ${WARNING_FLAGS}
+! 
+! CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -O2 -fPIC
+! CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -O2 -fPIC
+! 
+! CXXFLAGS_DEBUG_static = $(CXXFLAGS_COMMON) -g -fPIC
+! CXXFLAGS_DEBUG_dynamic = $(CXXFLAGS_COMMON) -g -fPIC
+! 
+! CXXFLAGS_STLDEBUG_static = $(CXXFLAGS_DEBUG_static) -D_STLP_DEBUG
+! CXXFLAGS_STLDEBUG_dynamic = $(CXXFLAGS_DEBUG_dynamic) -D_STLP_DEBUG
+! 
+! include common_percent_rules.mak
+! include common_rules.mak
+! 
+! 
+! #install: all
+! #	cp -p $(LIB_TARGET) ${D_LIB_TARGET} ../lib
+! 
+! #%.s: %.cpp
+! #	$(CXX) $(CXXFLAGS) -O4 -S -pto $<  -o $@
+! 
+! 
+*** misc/STLport-4.5/src/gcc-3.0.mak	Mon Nov 10 18:30:01 2003
+--- misc/build/STLport-4.5/src/gcc-3.0.mak	Fri Oct 31 12:11:56 2003
+***************
+*** 1 ****
+! dummy
+--- 1,59 ----
+! #
+! # Note : this makefile is for gcc-3 !
+! #
+! 
+! #
+! # compiler
+! # take these from the OOo build environment
+! CC*= gcc 
+! CXX*= g++
+! 
+! #
+! # Basename for libraries
+! #
+! LIB_BASENAME = libstlport_gcc
+! 
+! #
+! # guts for common stuff
+! #
+! #
+! LINK=ar cr
+! DYN_LINK=$(CXX) --fexceptions -shared -o
+! 
+! OBJEXT=o
+! DYNEXT=so
+! STEXT=a
+! RM=rm -rf
+! PATH_SEP=/
+! MKDIR=mkdir -p
+! COMP=GCC$(ARCH)
+! INSTALL_STEP = install_unix 
+! 
+! all:  all_dynamic all_static symbolic_links 
+! 
+! include common_macros.mak
+! 
+! WARNING_FLAGS= -Wall -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -ftemplate-depth-32
+! 
+! CXXFLAGS_COMMON =  -D_REENTRANT -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} -fexceptions -I${STLPORT_DIR} ${WARNING_FLAGS}
+! 
+! CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -O2 -fPIC
+! CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -O2 -fPIC
+! 
+! CXXFLAGS_DEBUG_static = $(CXXFLAGS_COMMON) -g -fPIC
+! CXXFLAGS_DEBUG_dynamic = $(CXXFLAGS_COMMON) -g -fPIC
+! 
+! CXXFLAGS_STLDEBUG_static = $(CXXFLAGS_DEBUG_static) -D_STLP_DEBUG
+! CXXFLAGS_STLDEBUG_dynamic = $(CXXFLAGS_DEBUG_dynamic) -D_STLP_DEBUG
+! 
+! include common_percent_rules.mak
+! include common_rules.mak
+! 
+! 
+! #install: all
+! #	cp -p $(LIB_TARGET) ${D_LIB_TARGET} ../lib
+! 
+! #%.s: %.cpp
+! #	$(CXX) $(CXXFLAGS) -O4 -S -pto $<  -o $@
+! 
+! 
+*** misc/STLport-4.5/src/gcc-freebsd.mak	Sat Jul 28 23:36:25 2001
+--- misc/build/STLport-4.5/src/gcc-freebsd.mak	Fri Oct 31 12:11:56 2003
+***************
+*** 5,12 ****
+  #
+  # compiler
+  #
+! CC = gcc -pthread
+! CXX = c++ -pthread -fexceptions
+  
+  #
+  # Basename for libraries
+--- 5,12 ----
+  #
+  # compiler
+  #
+! CC+= ${PTHREAD_CFLAGS} -D_REENTRANT
+! CXX+= ${PTHREAD_CFLAGS} -D_REENTRANT -fexceptions
+  
+  #
+  # Basename for libraries
+***************
+*** 19,25 ****
+  #
+  LINK=ar cr
+  # 2.95 flag
+! DYN_LINK=c++ -pthread -fexceptions -shared -o
+  
+  OBJEXT=o
+  DYNEXT=so
+--- 19,25 ----
+  #
+  LINK=ar cr
+  # 2.95 flag
+! DYN_LINK=${CXX} ${PTHREAD_LIBS} -fexceptions -shared -o
+  
+  OBJEXT=o
+  DYNEXT=so
+***************
+*** 39,48 ****
+  
+  WARNING_FLAGS= -Wall -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -ftemplate-depth-32
+  
+! CXXFLAGS_COMMON = -I${STLPORT_DIR} ${WARNING_FLAGS}
+  
+! CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -O2
+! CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -O2 -fPIC
+  
+  CXXFLAGS_DEBUG_static = $(CXXFLAGS_COMMON) -g
+  CXXFLAGS_DEBUG_dynamic = $(CXXFLAGS_COMMON) -g -fPIC
+--- 39,48 ----
+  
+  WARNING_FLAGS= -Wall -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -ftemplate-depth-32
+  
+! CXXFLAGS_COMMON = -I${STLPORT_DIR} -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} ${WARNING_FLAGS}
+  
+! CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) ${CXXFLAGS}
+! CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) ${CXXFLAGS} -fPIC
+  
+  CXXFLAGS_DEBUG_static = $(CXXFLAGS_COMMON) -g
+  CXXFLAGS_DEBUG_dynamic = $(CXXFLAGS_COMMON) -g -fPIC
+*** misc/STLport-4.5/stlport/config/stl_gcc.h	Tue Sep  4 13:10:16 2001
+--- misc/build/STLport-4.5/stlport/config/stl_gcc.h	Fri Oct 31 12:11:56 2003
+***************
+*** 71,80 ****
+   * static data members in template classes */
+  # if defined (__APPLE__)
+  /* Mac OS X is missing a required typedef and standard macro */
+! typedef unsigned int wint_t;
+  
+  #  define __unix
+  
+   /* Mac OS X needs one and only one source file to initialize all static data
+    * members in template classes. Only one source file in an executable or
+    * library can declare instances for such data members, otherwise duplicate
+--- 71,82 ----
+   * static data members in template classes */
+  # if defined (__APPLE__)
+  /* Mac OS X is missing a required typedef and standard macro */
+! /* typedef int wint_t; */
+  
+  #  define __unix
+  
++ # if ( __GNUC__ < 3 )
++ 
+   /* Mac OS X needs one and only one source file to initialize all static data
+    * members in template classes. Only one source file in an executable or
+    * library can declare instances for such data members, otherwise duplicate
+***************
+*** 97,103 ****
+  #  define _STLP_NATIVE_CPP_C_HEADER(header) <../g++/##header##>
+  #  define _STLP_NATIVE_OLD_STREAMS_HEADER(header) <../g++/##header##>
+  #  define _STLP_NATIVE_CPP_RUNTIME_HEADER(header) <../g++/##header##>
+! # endif
+  
+  
+  # if defined(__BEOS__) && defined(__INTEL__)
+--- 99,121 ----
+  #  define _STLP_NATIVE_CPP_C_HEADER(header) <../g++/##header##>
+  #  define _STLP_NATIVE_OLD_STREAMS_HEADER(header) <../g++/##header##>
+  #  define _STLP_NATIVE_CPP_RUNTIME_HEADER(header) <../g++/##header##>
+! 
+! # else
+! /* Mac OS X using gcc 3.3 handles all well */
+! #   undef  _STLP_NO_STATIC_TEMPLATE_DATA
+! #   define _STLP_STATIC_TEMPLATE_DATA 1
+! #   define _STLP_WEAK_ATTRIBUTE 1
+! #   undef _STLP_NO_LONG_DOUBLE
+! 
+! #if 0
+!  /* Mac OS X needs all "::" scope references to be "std::" */
+!  #  define _STLP_NO_CSTD_FUNCTION_IMPORTS
+!  #  undef _STLP_VENDOR_GLOBAL_STD
+!  #  undef _STLP_VENDOR_GLOBAL_CSTD
+! #endif
+! 
+! # endif   /* __GNUC__ < 3 */
+! # endif   /* __APPLE__ */
+  
+  
+  # if defined(__BEOS__) && defined(__INTEL__)
+***************
+*** 226,233 ****
+  
+  # if (__GNUC__ >= 3)
+  
+! #  define _STLP_NATIVE_INCLUDE_PATH ../g++-v3
+! #  define _STLP_NATIVE_OLD_STREAMS_INCLUDE_PATH ../g++-v3/backward
+  
+  # elif (__GNUC_MINOR__ < 8)
+  
+--- 244,254 ----
+  
+  # if (__GNUC__ >= 3)
+  
+! /* properly determine the STLP_NATIVE_INCLUDE_PATH */
+! #undef i386
+! #  define _STLP_NATIVE_INCLUDE_PATH GXX_INCLUDE_PATH
+! #  define _STLP_NATIVE_OLD_STREAMS_INCLUDE_PATH \
+!           GXX_INCLUDE_PATH/backward
+  
+  # elif (__GNUC_MINOR__ < 8)
+  
+*** misc/STLport-4.5/stlport/cwchar	Fri Jan 26 20:39:42 2001
+--- misc/build/STLport-4.5/stlport/cwchar	Fri Oct 31 12:11:56 2003
+***************
+*** 21,26 ****
+--- 21,29 ----
+  #  include <stl/_prolog.h>
+  # endif
+  
++ #ifdef __FreeBSD__
++ #include _STLP_NATIVE_C_HEADER(wchar.h)
++ #endif
+  # include <stl/_cwchar.h>
+  
+  # if (_STLP_OUTERMOST_HEADER_ID == 0x120)
+*** misc/STLport-4.5/stlport/stdexcept	Mon May 21 20:50:21 2001
+--- misc/build/STLport-4.5/stlport/stdexcept	Fri Oct 31 12:11:56 2003
+***************
+*** 49,54 ****
+--- 49,61 ----
+  
+  _STLP_BEGIN_NAMESPACE
+  
++ 
++ #if defined( __GNUC__)
++ #undef _STLP_NOTHROW_INHERENTLY
++ #define _STLP_NOTHROW_INHERENTLY throw()
++ #endif
++  
++ 
+  class _STLP_CLASS_DECLSPEC __Named_exception : public _STLP_EXCEPTION_BASE {
+  public:
+    __Named_exception(const string& __str) 
+*** misc/STLport-4.5/stlport/stl/_threads.h	Tue Sep  4 13:10:20 2001
+--- misc/build/STLport-4.5/stlport/stl/_threads.h	Fri Oct 31 12:11:56 2003
+***************
+*** 42,49 ****
+  #  include <cstdlib>
+  # endif
+  
+! // On SUN and Mac OS X gcc, zero-initialization works just fine...
+! # if defined (__sun) || ( defined(__GNUC__) && defined(__APPLE__) )
+  # define _STLP_MUTEX_INITIALIZER
+  # endif
+  
+--- 42,49 ----
+  #  include <cstdlib>
+  # endif
+  
+! // On SUN zero-initialization works just fine...
+! # if defined (__sun)
+  # define _STLP_MUTEX_INITIALIZER
+  # endif
+  
+*** misc/STLport-4.5/stlport/wchar.h	Fri Jan 26 20:40:06 2001
+--- misc/build/STLport-4.5/stlport/wchar.h	Mon Nov 10 18:29:44 2003
+***************
+*** 28,38 ****
+  using _STLP_VENDOR_CSTD::strspn;
+  # endif
+  
+- # if defined (__GNUC__) && defined (__APPLE__)
+- #  include _STLP_NATIVE_C_HEADER(stddef.h)
+- # else
+  #  include _STLP_NATIVE_C_HEADER(wchar.h)
+- # endif
+  
+  # endif /* WINCE */
+  
+--- 28,34 ----
