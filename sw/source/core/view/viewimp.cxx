@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-29 15:05:09 $
+ *  last change: $Author: mib $ $Date: 2002-08-09 12:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,8 @@ void SwViewImp::InvalidateAccessibleCursorPosition( const SwFrm *pFrm )
         GetAccessibleMap().InvalidateCursorPosition( pFrm );
 }
 
-void SwViewImp::InvalidateAccessibleEditableState( sal_Bool bAllShells )
+void SwViewImp::InvalidateAccessibleEditableState( sal_Bool bAllShells,
+                                                      const SwFrm *pFrm )
 {
     if( bAllShells )
     {
@@ -458,13 +459,13 @@ void SwViewImp::InvalidateAccessibleEditableState( sal_Bool bAllShells )
         do
         {
             if( pTmp->Imp()->IsAccessible() )
-                pTmp->Imp()->GetAccessibleMap().InvalidateStates( ACC_STATE_EDITABLE );
+                pTmp->Imp()->GetAccessibleMap().InvalidateStates( ACC_STATE_EDITABLE, pFrm );
             pTmp = (ViewShell *)pTmp->GetNext();
         } while ( pTmp != pVSh );
     }
     else if( IsAccessible() )
     {
-        GetAccessibleMap().InvalidateStates( ACC_STATE_EDITABLE );
+        GetAccessibleMap().InvalidateStates( ACC_STATE_EDITABLE, pFrm );
     }
 }
 

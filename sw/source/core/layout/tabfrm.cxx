@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-24 09:37:40 $
+ *  last change: $Author: mib $ $Date: 2002-08-09 12:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3454,6 +3454,17 @@ void SwCellFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
             InvalidatePrt();
         }
     }
+
+#ifdef ACCESSIBLE_LAYOUT
+    if( (bAttrSetChg &&
+         SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_PROTECT, FALSE )) ||
+        RES_PROTECT == pNew->Which() )
+    {
+        ViewShell *pSh = GetShell();
+        if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
+            pSh->Imp()->InvalidateAccessibleEditableState( sal_True, this );
+    }
+#endif
 
     SwLayoutFrm::Modify( pOld, pNew );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-24 09:38:29 $
+ *  last change: $Author: mib $ $Date: 2002-08-09 12:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #include "ftnfrm.hxx"       // SwFtnFrm
 #include "layouter.hxx"     // SwLayouter
 #include "dbg_lay.hxx"
+#include "viewsh.hxx"
+#include "viewimp.hxx"
+#include "frmsh.hxx"
 #ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
 #endif
@@ -2575,6 +2578,14 @@ void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
         case RES_FRAMEDIR :
             SetDerivedR2L( sal_False );
             CheckDirChange();
+            break;
+
+        case RES_PROTECT:
+            {
+                ViewShell *pSh = GetShell();
+                if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
+                    pSh->Imp()->InvalidateAccessibleEditableState( sal_True, this );
+            }
             break;
 
         default:

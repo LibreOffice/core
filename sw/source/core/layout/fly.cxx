@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-08 08:22:48 $
+ *  last change: $Author: mib $ $Date: 2002-08-09 12:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -781,6 +781,10 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             const SvxProtectItem *pP = (SvxProtectItem*)pNew;
             GetVirtDrawObj()->SetMoveProtect( pP->IsPosProtected()  );
             GetVirtDrawObj()->SetResizeProtect( pP->IsSizeProtected() );
+#ifdef ACCESSIBLE_LAYOUT
+            if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
+                pSh->Imp()->InvalidateAccessibleEditableState( sal_True, this );
+#endif
             break;
             }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-29 14:59:50 $
+ *  last change: $Author: mib $ $Date: 2002-08-09 12:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ public:
 
     // Invalidate state of whole tree. If an action is open, this call
     // is processed when the last action ends.
-    void InvalidateStates( sal_uInt8 nStates );
+    void InvalidateStates( sal_uInt8 nStates, const SwFrm *pFrm=0 );
 
     void InvalidateRelationSet( const SwFrm* pMaster, const SwFrm* pFollow );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-09 08:37:59 $
+ *  last change: $Author: mib $ $Date: 2002-08-09 12:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1740,9 +1740,17 @@ void SwAccessibleMap::SetCursorContext(
     mxCursorContext = xAcc;
 }
 
-void SwAccessibleMap::InvalidateStates( sal_uInt8 nStates )
+void SwAccessibleMap::InvalidateStates( sal_uInt8 nStates, const SwFrm *pFrm )
 {
-    Reference< XAccessible > xAcc( GetDocumentView() );
+    // Start with the frame or the first upper that is accessible
+    SwFrmOrObj aFrmOrObj( pFrm );
+    while( aFrmOrObj.GetSwFrm() &&
+            !aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
+        aFrmOrObj = aFrmOrObj.GetSwFrm()->GetUpper();
+    if( !aFrmOrObj.GetSwFrm() )
+        aFrmOrObj = GetShell()->GetLayout();
+
+    Reference< XAccessible > xAcc( GetContext( aFrmOrObj.GetSwFrm(), sal_True ) );
     SwAccessibleContext *pAccImpl =
         static_cast< SwAccessibleContext *>( xAcc.get() );
     if( GetShell()->ActionPend() )
