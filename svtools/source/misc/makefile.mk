@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: ka $ $Date: 2001-01-19 18:31:49 $
+#   last change: $Author: tl $ $Date: 2001-02-02 10:49:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,6 +131,7 @@ LIB3OBJFILES=\
     $(SLO)$/imap3.obj		\
     $(SLO)$/iniman.obj		\
     $(SLO)$/iniprop.obj		\
+    $(SLO)$/lingucfg.obj	\
     $(SLO)$/lngmisc.obj		\
     $(SLO)$/ownlist.obj		\
     $(SLO)$/pver.obj		\
