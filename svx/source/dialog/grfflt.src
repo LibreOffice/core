@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:48:47 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,11 +320,11 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
     Text[ dutch ] = "Solarisatie" ;
     Text[ spanish ] = "Solarización" ;
     Text[ english_us ] = "Solarization" ;
-    Text[ chinese_simplified ] = "¹ı¶ÈÆØ¹â";
+    Text[ chinese_simplified ] = "ÆØ¹â";
     Text[ russian ] = "Ñîëÿğèçàöèÿ";
     Text[ polish ] = "Solaryzacja";
     Text[ japanese ] = "¿×Ø¾Ş°¼®İ";
-    Text[ chinese_traditional ] = "¹L´çÃn¥ú";
+    Text[ chinese_traditional ] = "Ãn¥ú";
     Text[ arabic ] = "ÇáÊÔãøÓ";
     Text[ greek ] = "¸êèåóç óôï öùò";
     Text[ korean ] = "¼Ö¶ó·¯¸®Á¦ÀÌ¼Ç";
