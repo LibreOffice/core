@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsize.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:15:11 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  // JN
  //
  // Letzte Aenderung:
- // $Author: vg $ $Date: 2003-12-17 15:15:11 $ $Revision: 1.27 $
+ // $Author: hjs $ $Date: 2004-06-26 17:30:11 $ $Revision: 1.28 $
  //
  //---------------------------------------------------------------------------
 
@@ -86,43 +86,15 @@ ModalDialog DLG_ROWHEIGHT
     SVLook = TRUE ;
     HelpId = HID_DLG_ROWHEIGHT ;
     Size = MAP_APPFONT ( 159 , 59 ) ;
-    Text = "Zeilenhöhe" ;
-    Text [ ENGLISH ] = "Row height" ;
+    Text [ de ] = "Zeilenhöhe" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     FixedText FT_VALUE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 23 , 10 ) ;
-        Text = "H~öhe" ;
-        Text [ ENGLISH ] = "Height" ;
-        Text [ english_us ] = "~Height" ;
-        Text [ italian ] = "Alte~zza" ;
-        Text [ spanish ] = "~Altura" ;
-        Text [ french ] = "Hauteur" ;
-        Text [ dutch ] = "H~oogte" ;
-        Text [ swedish ] = "H~öjd" ;
-        Text [ danish ] = "~Højde" ;
-        Text [ portuguese_brazilian ] = "~Altura" ;
-        Text [ portuguese ] = "~Altura" ;
-        Text[ chinese_simplified ] = "é«˜åº¦(~H)";
-        Text[ russian ] = "Âûñîòà";
-        Text[ polish ] = "~Wysokoœæ";
-        Text[ japanese ] = "é«˜ã•(~H)";
-        Text[ chinese_traditional ] = "é«˜åº¦(~H)";
-        Text[ arabic ] = "ÇáÇÑÊİÇÚ";
-        Text[ greek ] = "¾~øïò";
-        Text[ korean ] = "ë†’ì´(~H)";
-        Text[ turkish ] = "~Yükseklik";
-        Text[ catalan ] = "~Alçada";
-        Text[ finnish ] = "~Korkeus";
-        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸ªà¸¹à¸‡";
-        Text[ czech ] = "VÃ½Å¡ka";
-        Text[ hebrew ] = "â€®×’×•×‘×”â€¬";
-        Text[ hindi ] = "~à¤Šà¤à¤šà¤¾à¤ˆ";
-        Text[ slovak ] = "~VÃ½Å¡ka";
-        Text[ hungarian ] = "~MagassÃ¡g";
-        Text[ slovenian ] = "~ViÅ¡ina";
+        Text [ de ] = "H~öhe" ;
+        Text [ en-US ] = "~Height" ;
     };
     MetricField MF_VALUE
     {
@@ -142,35 +114,8 @@ ModalDialog DLG_ROWHEIGHT
         Pos = MAP_APPFONT ( 36 , 25 ) ;
         Size = MAP_APPFONT ( 62 , 12 ) ;
         TabStop = TRUE ;
-        Text = "~Automatisch" ;
-        Text [ ENGLISH ] = "~automatically" ;
-        Text[ english_us ] = "~Automatic";
-        Text[ portuguese ] = "~Automático";
-        Text[ russian ] = "~Àâòîìàòè÷åñêè";
-        Text[ greek ] = "~Áõôüìáôá";
-        Text[ dutch ] = "~Automatisch";
-        Text[ french ] = "Automatique";
-        Text[ spanish ] = "~Automático";
-        Text[ italian ] = "Automatico";
-        Text[ danish ] = "~Automatisk";
-        Text[ swedish ] = "~Automatiskt";
-        Text[ polish ] = "~Automatycznie";
-        Text[ portuguese_brazilian ] = "~Automático";
-        Text[ japanese ] = "è‡ªå‹•(~A)";
-        Text[ korean ] = "ìë™(~A)";
-        Text[ chinese_simplified ] = "è‡ªåŠ¨(~A)";
-        Text[ chinese_traditional ] = "è‡ªå‹•(~A)";
-        Text[ arabic ] = "ÊáŞÇÆí";
-        Text[ turkish ] = "~Otomatik";
-        Text[ catalan ] = "~Automàtic";
-        Text[ finnish ] = "~Automaattinen";
-        Text[ thai ] = "~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-        Text[ czech ] = "Automaticky";
-        Text[ hebrew ] = "â€®××•×˜×•××˜×™â€¬";
-        Text[ hindi ] = "~à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤";
-        Text[ slovak ] = "~Automaticky";
-        Text[ hungarian ] = "~Automatikus";
-        Text[ slovenian ] = "S~amodejno";
+        Text [ de ] = "~Automatisch" ;
+        Text [ en-US ] = "~Automatic";
     };
     OKButton PB_OK
     {
@@ -191,33 +136,7 @@ ModalDialog DLG_ROWHEIGHT
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text [ english_us ] = "Row Height" ;
-    Text [ italian ] = "Altezza riga" ;
-    Text [ spanish ] = "Altura de fila" ;
-    Text [ french ] = "Hauteur de ligne" ;
-    Text [ dutch ] = "Rijhoogte" ;
-    Text [ swedish ] = "Radhöjd" ;
-    Text [ danish ] = "Rækkehøjde" ;
-    Text [ portuguese ] = "Altura da linha" ;
-    Text [ portuguese_brazilian ] = "Altura da linha" ;
-    Text[ chinese_simplified ] = "è¡Œé«˜";
-    Text[ russian ] = "Âûñîòà ñòğîê";
-    Text[ polish ] = "Wysokoœæ wierszy";
-    Text[ japanese ] = "è¡Œã®é«˜ã•";
-    Text[ chinese_traditional ] = "åˆ—é«˜";
-    Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİ";
-    Text[ greek ] = "¾øïò ãñáììŞò";
-    Text[ korean ] = "í–‰ ë†’ì´";
-    Text[ turkish ] = "Satır yüksekliği";
-    Text[ catalan ] = "Alçada de la fila";
-    Text[ finnish ] = "Rivin korkeus";
-    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡à¸‚à¸­à¸‡à¹à¸–à¸§";
-    Text[ czech ] = "VÃ½Å¡ka Å™Ã¡dku";
-    Text[ hebrew ] = "â€®×’×•×‘×” ×©×•×¨×”â€¬";
-    Text[ hindi ] = "à¤ªà¤‚à¤•à¥à¤¤à¤¿ à¤Šà¤à¤šà¤¾à¤ˆ";
-    Text[ slovak ] = "VÃ½Å¡ka riadku";
-    Text[ hungarian ] = "SormagassÃ¡g";
-    Text[ slovenian ] = "ViÅ¡ina vrstice";
+    Text [ en-US ] = "Row Height" ;
 };
 ModalDialog DLG_COLWIDTH
 {
@@ -225,43 +144,15 @@ ModalDialog DLG_COLWIDTH
     SVLook = TRUE ;
     HelpId = HID_DLG_COLWIDTH ;
     Size = MAP_APPFONT ( 159 , 59 ) ;
-    Text = "Spaltenbreite" ;
-    Text [ ENGLISH ] = "Column width" ;
+    Text [ de ] = "Spaltenbreite" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     FixedText FT_VALUE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 23 , 10 ) ;
-        Text = "~Breite" ;
-        Text [ ENGLISH ] = "Width" ;
-        Text [ english_us ] = "~Width" ;
-        Text [ italian ] = "~Larghezza" ;
-        Text [ spanish ] = "Ancho" ;
-        Text [ french ] = "Largeur" ;
-        Text [ dutch ] = "~Breedte" ;
-        Text [ swedish ] = "~Bredd" ;
-        Text [ danish ] = "~Bredde" ;
-        Text [ portuguese_brazilian ] = "~Largura" ;
-        Text [ portuguese ] = "~Largura" ;
-        Text[ chinese_simplified ] = "å®½åº¦(~W)";
-        Text[ russian ] = "Øèğèíà";
-        Text[ polish ] = "~Szerokoœæ";
-        Text[ japanese ] = "å¹…(~W)";
-        Text[ chinese_traditional ] = "å¯¬åº¦(~W)";
-        Text[ arabic ] = "ÇáÚÑÖ";
-        Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "ë„ˆë¹„(~W)";
-        Text[ turkish ] = "~Genişlik";
-        Text[ catalan ] = "~Amplada";
-        Text[ finnish ] = "~Leveys";
-        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸à¸§à¹‰à¸²à¸‡";
-        Text[ czech ] = "Å Ã­Å™ka";
-        Text[ hebrew ] = "â€®×¨×•×—×‘â€¬";
-        Text[ hindi ] = "~à¤šà¥Œà¤¡à¤¼à¤¾à¤ˆ";
-        Text[ slovak ] = "Å Ã­~rka";
-        Text[ hungarian ] = "~SzÃ©lessÃ©g";
-        Text[ slovenian ] = "~Å irina";
+        Text [ de ] = "~Breite" ;
+        Text [ en-US ] = "~Width" ;
     };
     MetricField MF_VALUE
     {
@@ -280,36 +171,9 @@ ModalDialog DLG_COLWIDTH
     {
         Pos = MAP_APPFONT ( 36 , 25 ) ;
         Size = MAP_APPFONT ( 62 , 12 ) ;
-        Text = "~Automatisch" ;
-        Text [ ENGLISH ] = "~automatically" ;
+        Text [ de ] = "~Automatisch" ;
         TabStop = TRUE ;
-        Text[ english_us ] = "~Automatic";
-        Text[ portuguese ] = "~Automático";
-        Text[ russian ] = "~Àâòîìàòè÷åñêè";
-        Text[ greek ] = "~Áõôüìáôá";
-        Text[ dutch ] = "~Automatisch";
-        Text[ french ] = "Automatique";
-        Text[ spanish ] = "~Automático";
-        Text[ italian ] = "Automatico";
-        Text[ danish ] = "~Automatisk";
-        Text[ swedish ] = "~Automatiskt";
-        Text[ polish ] = "~Automatycznie";
-        Text[ portuguese_brazilian ] = "~Automático";
-        Text[ japanese ] = "è‡ªå‹•(~A)";
-        Text[ korean ] = "ìë™(~A)";
-        Text[ chinese_simplified ] = "è‡ªåŠ¨(~A)";
-        Text[ chinese_traditional ] = "è‡ªå‹•(~A)";
-        Text[ arabic ] = "ÊáŞÇÆí";
-        Text[ turkish ] = "~Otomatik";
-        Text[ catalan ] = "~Automàtic";
-        Text[ finnish ] = "~Automaattinen";
-        Text[ thai ] = "~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-        Text[ czech ] = "Automaticky";
-        Text[ hebrew ] = "â€®××•×˜×•××˜×™â€¬";
-        Text[ hindi ] = "~à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤";
-        Text[ slovak ] = "~Automaticky";
-        Text[ hungarian ] = "~Automatikus";
-        Text[ slovenian ] = "S~amodejno";
+        Text [ en-US ] = "~Automatic";
     };
     OKButton PB_OK
     {
@@ -330,33 +194,7 @@ ModalDialog DLG_COLWIDTH
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text [ english_us ] = "Column Width" ;
-    Text [ italian ] = "Larghezza colonna" ;
-    Text [ spanish ] = "Ancho de columna" ;
-    Text [ french ] = "Largeur de colonne" ;
-    Text [ dutch ] = "Kolombreedte" ;
-    Text [ swedish ] = "Kolumnbredd" ;
-    Text [ danish ] = "Kolonnebredde" ;
-    Text [ portuguese_brazilian ] = "Largura da coluna" ;
-    Text [ portuguese ] = "Largura da coluna" ;
-    Text[ chinese_simplified ] = "åˆ—å®½";
-    Text[ russian ] = "Øèğèíà ñòîëáöà";
-    Text[ polish ] = "Szerokoœæ kolumny";
-    Text[ japanese ] = "åˆ—å¹…";
-    Text[ chinese_traditional ] = "æ¬„å¯¬";
-    Text[ arabic ] = "ÚÑÖ ÇáÚãæÏ";
-    Text[ greek ] = "ĞëÜôïò óôŞëçò";
-    Text[ korean ] = "ì—´ ë„ˆë¹„";
-    Text[ turkish ] = "Sütun genişliği";
-    Text[ catalan ] = "Amplada de la columna";
-    Text[ finnish ] = "Sarakkeen leveys";
-    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡à¸‚à¸­à¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
-    Text[ czech ] = "Å Ã­Å™ka sloupce";
-    Text[ hebrew ] = "Spaltenbreite";
-    Text[ hindi ] = "à¤¸à¥à¤¤à¤‚à¤­ à¤šà¥Œà¤¡à¤¼à¤¾à¤ˆ";
-    Text[ slovak ] = "Å Ã­rka stÄºpca";
-    Text[ hungarian ] = "OszlopszÃ©lessÃ©g";
-    Text[ slovenian ] = "Å irina stolpca";
+    Text [ en-US ] = "Column Width" ;
 };
 
 
