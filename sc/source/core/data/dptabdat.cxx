@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabdat.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-08-06 10:13:30 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ BOOL ScDPItemData::IsCaseInsEqual( const ScDPItemData& r ) const
 ScDPTableIteratorParam::ScDPTableIteratorParam(
                             long nCCount, const long* pC, ScDPItemData* pCDat,
                             long nRCount, const long* pR, ScDPItemData* pRDat,
+                            long nPCount, const long* pP, ScDPItemData* pPDat,
                             long nDCount, const long* pD, ScDPValueData* pV ) :
     nColCount( (USHORT)nCCount ),
     pCols    ( pC ),
@@ -100,6 +101,9 @@ ScDPTableIteratorParam::ScDPTableIteratorParam(
     nRowCount( (USHORT)nRCount ),
     pRows    ( pR ),
     pRowData ( pRDat ),
+    nPageCount( (USHORT)nPCount ),
+    pPages   ( pP ),
+    pPageData( pPDat ),
     nDatCount( (USHORT)nDCount ),
     pDats    ( pD ),
     pValues  ( pV )
