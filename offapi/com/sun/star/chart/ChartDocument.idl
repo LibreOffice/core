@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDocument.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2002-10-15 11:57:01 $
+ *  last change: $Author: bm $ $Date: 2002-10-21 13:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+#ifndef __com_sun_star_container_XNameContainer_idl__
+#include <com/sun/star/container/XNameContainer.idl>
+#endif
+
 
 //=============================================================================
 
@@ -113,11 +117,11 @@ service ChartDocument
     /** contains additional XML attributes that become persistent in
         the XML file to which this component is saved.
 
-        The <type scope="com.sun.star.container">XNameContainer</type>
+        The <type scope="com::sun::star::container">XNameContainer</type>
         supports the service
-        <type scope="com.sun.star.xml">UserDefinedAttributeContainer</type>
+        <type scope="com::sun::star::xml">UserDefinedAttributeContainer</type>
      */
-    [optional, property] com.sun.star.container.XNameContainer UserDefinedAttributes;
+    [optional, property] com::sun::star::container::XNameContainer UserDefinedAttributes;
 };
 
 //=============================================================================
