@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regpathhelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jsc $ $Date: 2001-07-23 10:14:42 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ using namespace rtl;
 
 #define USER_REGISTRY_NAME_ENV      "STAR_USER_REGISTRY"
 #define SYSTEM_REGISTRY_NAME_ENV    "STAR_REGISTRY"
-#define REGISTRY_SYSTEM_NAME    "applicat.rdb"
+#define REGISTRY_SYSTEM_NAME    "services.rdb"
 
 #define REGISTRY_LOCAL_NAME     "user60.rdb"
 
