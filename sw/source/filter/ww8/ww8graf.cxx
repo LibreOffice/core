@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-27 12:38:09 $
+ *  last change: $Author: cmc $ $Date: 2001-03-08 10:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2336,38 +2336,48 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                         pF->nXaRight, pF->nYaBottom);
         SvxMSDffImportData aData( aRect );
 
-        if(     pMSDffManager->GetShape( pF->nSpId, pObject, aData )
-            &&  pObject )
+        if( pMSDffManager->GetShape( pF->nSpId, pObject, aData ) && pObject )
         {
             const SdrObject* pOrgShapeObject = pObject;
             SvxMSDffImportRec* pRecord;
             BOOL bDone = FALSE;
             SdrObject* pOurNewObject = 0;
             BOOL bSetCrop     = FALSE;
-            BOOL bOrgObjectWasReplace
-                = (    (SdrInventor == pObject->GetObjInventor())
-                    && (    (UINT16( OBJ_GRAF ) == pObject->GetObjIdentifier())
-                         || (UINT16( OBJ_OLE2 ) == pObject->GetObjIdentifier()) ) );
+            BOOL bOrgObjectWasReplace =
+            (
+                (SdrInventor == pObject->GetObjInventor()) &&
+                (
+                    (UINT16( OBJ_GRAF ) == pObject->GetObjIdentifier())
+                    || (UINT16(OBJ_OLE2 ) == pObject->GetObjIdentifier())
+                )
+            );
 
 
             // Umfluss-Modus ermitteln
-            SfxItemSet aFlySet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
+            SfxItemSet aFlySet( rDoc.GetAttrPool(),
+                RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
             SwSurround eSurround = SURROUND_PARALLEL;
             BOOL bContour = FALSE;
             switch( pF->nwr )
             {
-            case 0: ;                                       //0 like 2, but doesn't require absolute object
-            case 2: eSurround = SURROUND_PARALLEL;  break;  //2 wrap around absolute object
-            case 1: eSurround = SURROUND_NONE;      break;  //1 no text next to shape
-            case 3: eSurround = SURROUND_THROUGHT;  break;  //3 wrap as if no object present
-            case 4: ;                                       //4 wrap tightly around object
+            //0 like 2, but doesn't require absolute object
+            case 0: ;
+            //2 wrap around absolute object
+            case 2: eSurround = SURROUND_PARALLEL;  break;
+            //1 no text next to shape
+            case 1: eSurround = SURROUND_NONE;      break;
+            //3 wrap as if no object present
+            case 3: eSurround = SURROUND_THROUGHT;  break;
+            //4 wrap tightly around object
+            case 4: ;       //Intentional fallthrough ?
+            //5 wrap tightly, but allow holes
             case 5:
                 {
-                    eSurround = SURROUND_PARALLEL;          //5 wrap tightly, but allow holes
+                    eSurround = SURROUND_PARALLEL;
 
-                    // ensure the object will be conterted
-                    // into a Writer structure!
-                    // the Writer doesn't support Contour on Sdr objects
+                    // ensure the object will be conterted into a Writer
+                    // structure!  the Writer doesn't support Contour on Sdr
+                    // objects
                     if( bOrgObjectWasReplace )
                         bContour = TRUE;
                 }
@@ -2378,10 +2388,14 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             {
                 switch( pF->nwrk )
                 {
-                case 0: eSurround = SURROUND_PARALLEL;  break;  //0 wrap both sides
-                case 1: eSurround = SURROUND_LEFT;      break;  //1 wrap only on left
-                case 2: eSurround = SURROUND_RIGHT;     break;  //2 wrap only on right
-                case 3: eSurround = SURROUND_IDEAL;     break;  //3 wrap only on largest side
+                //0 wrap both sides
+                case 0: eSurround = SURROUND_PARALLEL;  break;
+                //1 wrap only on left
+                case 1: eSurround = SURROUND_LEFT;      break;
+                //2 wrap only on right
+                case 2: eSurround = SURROUND_RIGHT;     break;
+                //3 wrap only on largest side
+                case 3: eSurround = SURROUND_IDEAL;     break;
                 }
             }
             SwFmtSurround aSur( eSurround );
@@ -2422,35 +2436,19 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 #if 0
                 }
 #endif
-/*
-                RndStdIds        eAnchor;
-                SwHoriOrient     eHori;
-                SwVertOrient     eVert;
-                SwRelationOrient eRel;
-
-                aFlySet.Put( SwFmtAnchor( eAnchor ) );//FLY_AT_CNTNT ) );
-
-                aFlySet.Put(
-                    SwFmtHoriOrient( pF->nXaLeft, eHori, eRel ) );//HORI_NONE, FRAME ) );
-                aFlySet.Put(
-                    SwFmtVertOrient( pF->nYaTop,  eVert, eRel ) );//VERT_NONE, FRAME ) );
-*/
                 ProcessEscherAlign( pRecord, *pF, aFlySet );
 
-                aFlySet.Put( SwFmtFrmSize( ATT_VAR_SIZE, nWidthTw, nHeightTw ));
+                aFlySet.Put(SwFmtFrmSize( ATT_VAR_SIZE, nWidthTw, nHeightTw));
 
                 if( pRecord )
                 {
                     Rectangle aInnerDist(   pRecord->nDxTextLeft,
-                                            pRecord->nDyTextTop,
-                                            pRecord->nDxTextRight,
-                                            pRecord->nDyTextBottom  );
+                        pRecord->nDyTextTop, pRecord->nDxTextRight,
+                        pRecord->nDyTextBottom  );
 
-                    MatchSdrItemsIntoFlySet( pObject,
-                                             aFlySet,
-                                             pRecord->eLineStyle,
-                                             aInnerDist,
-                                             !pRecord->bLastBoxInChain );
+                    MatchSdrItemsIntoFlySet( pObject, aFlySet,
+                        pRecord->eLineStyle, aInnerDist,
+                        !pRecord->bLastBoxInChain );
                 }
 
                 XubString aObjectName( pObject->GetName() );
@@ -2458,13 +2456,14 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 if( UINT16( OBJ_OLE2 ) == pObject->GetObjIdentifier() )
                 {
 
-                    SvInPlaceObjectRef xIPRef(((SdrOle2Obj*)pObject)->GetObjRef());
+                    SvInPlaceObjectRef xIPRef(
+                        ((SdrOle2Obj*)pObject)->GetObjRef());
 
-                    // kein GrafSet uebergeben, da nur fuer Cropping sinnvoll, was die
-                    // UI derzeit (27.1.99) noch nicht kann khz.
+                    // kein GrafSet uebergeben, da nur fuer Cropping sinnvoll,
+                    // was die UI derzeit (27.1.99) noch nicht kann khz.
                     pRetFrmFmt = rDoc.Insert( *pPaM, &xIPRef, &aFlySet );
                 }
-                else //if (*/(UINT16( OBJ_GRAF ) == pObject->GetObjIdentifier())
+                else
                 {
                     const Graphic& rGraph =
                         ((SdrGrafObj*)pObject)->GetGraphic();
@@ -2473,9 +2472,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
                     if( ((SdrGrafObj*)pObject)->IsLinkedGraphic() )
                     {
-                        String aGrfName(
-                            INetURLObject::RelToAbs(
-                                ((SdrGrafObj*)pObject)->GetFileName() ) );
+                        String aGrfName( INetURLObject::RelToAbs(
+                                ((SdrGrafObj*)pObject)->GetFileName()) );
 
                         BOOL bExist = FALSE;
                         INetURLObject aGrURL(URIHelper::SmartRelToAbs(
@@ -2489,26 +2487,19 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                         }
                         catch(...){}
 
-
-                        if(    bExist
-                            || (GRAPHIC_NONE == rGraph.GetType()))
+                        if( bExist || (GRAPHIC_NONE == rGraph.GetType()))
                         {
-                            pRetFrmFmt = rDoc.Insert( *pPaM,
-                                                aGrfName,
-                                                aEmptyStr,
-                                                0,          // Graphic*
-                                                &aFlySet,
-                                                0 );        // SwFrmFmt*
+                            pRetFrmFmt = rDoc.Insert( *pPaM, aGrfName,
+                                aEmptyStr, 0 /*Graphic*/, &aFlySet,
+                                0 /*SwFrmFmt*/);
                             bDone2 = TRUE;
                         }
                     }
                     if( !bDone2 )
-                        pRetFrmFmt = rDoc.Insert( *pPaM,
-                                            aEmptyStr,
-                                            aEmptyStr,
-                                            &rGraph,
-                                            &aFlySet,
-                                            0 );        // SwFrmFmt*
+                    {
+                        pRetFrmFmt = rDoc.Insert( *pPaM, aEmptyStr, aEmptyStr,
+                            &rGraph, &aFlySet, 0 /* SwFrmFmt*/ );
+                    }
                     bDone = TRUE;
                 }
 
@@ -2517,8 +2508,9 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 {
                     if( pRecord )
                     {
-                        MatchWrapDistancesIntoFlyFmt(    pRecord, pRetFrmFmt );
-                        if( bSetCrop ) SetCropAtGrfNode( pRecord, pRetFrmFmt, pF );
+                        MatchWrapDistancesIntoFlyFmt( pRecord, pRetFrmFmt );
+                        if( bSetCrop )
+                            SetCropAtGrfNode( pRecord, pRetFrmFmt, pF );
                     }
                     // mehrfaches Auftreten gleicher Grafik-Namen vermeiden
                     if( aObjectName.Len() )
@@ -2528,8 +2520,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                             pRetFrmFmt->SetName( aName );
                     }
                 }
-                // falls alles Ok, Zeiger auf neues Objekt ermitteln und
-                // Z-Order-Liste entsprechend korrigieren (oder Eintrag loeschen)
+                //falls alles Ok, Zeiger auf neues Objekt ermitteln und
+                //Z-Order-Liste entsprechend korrigieren (oder Eintrag loeschen)
                 pOurNewObject = CreateContactObject( (SwFlyFrmFmt*)pRetFrmFmt );
 
                 // altes Objekt aus der Z-Order-Liste entfernen
@@ -2549,7 +2541,10 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 if( pOurNewObject )
                 {
                     if( !bHdFtFtnEdn )
-                        pMSDffManager->StoreShapeOrder( pF->nSpId, 0, pOurNewObject, 0 );
+                    {
+                        pMSDffManager->StoreShapeOrder(pF->nSpId, 0,
+                            pOurNewObject, 0 );
+                    }
                     // Das Kontakt-Objekt MUSS in die Draw-Page gesetzt werden,
                     // damit in SwWW8ImplReader::LoadDoc1() die Z-Order
                     // festgelegt werden kann !!!
@@ -2560,9 +2555,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             {
                 // eingelesenes Objekt (kann eine ganze Gruppe sein)
                 // jetzt korrekt positionieren usw.
-                pRecord = (    aData.HasRecords()
-                            && (1 == aData.GetRecCount() ) )
-                        ? aData.GetRecord( 0 ) : 0;
+                pRecord = ( aData.HasRecords() && (1 == aData.GetRecCount() ) )
+                    ? aData.GetRecord( 0 ) : 0;
 
 
                 if( pF->bRcaSimple )
@@ -2603,9 +2597,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 aFlySet.Put( aAnchor );
 
 
-
-                //  Hilfs-Attribute setzen, damit MA die Werte im Layout umrechnen kann
-                //  ( bugdoc:59640 )
+                //  Hilfs-Attribute setzen, damit MA die Werte im Layout
+                //  umrechnen kann ( bugdoc:59640 )
 
                 static SwRelationOrient __READONLY_DATA aRelOrientTab[] = {
                         REL_PG_PRTAREA,         // == nbxRelPgMargin
@@ -2621,47 +2614,48 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 aFlySet.Put( aHoriOri );
 */
 
-
-                if( !(nIniFlags1 & WW8FL_NO_FLY_FOR_TXBX) ) // Wer nicht will, der hat gewollt!
+                // Wer nicht will, der hat gewollt!
+                if( !(nIniFlags1 & WW8FL_NO_FLY_FOR_TXBX) )
                 {
                     BOOL bTextThere = FALSE;
                     long nStartCpFly;
                     long nEndCpFly;
                     if( pRecord && pRecord->bReplaceByFly )
                     {
-                        // Pruefen, ob in dieser Textbox-Kette denn Text enthalten ist.
-                        //   ( Umwandeln einer leeren Kette in Rahmen waere Unsinn. )
-                        //
-                        bTextThere = TxbxChainContainsRealText( pRecord->aTextId.nTxBxS,
-                                                                nStartCpFly,
-                                                                nEndCpFly );
+                        // Pruefen, ob in dieser Textbox-Kette denn Text
+                        // enthalten ist.  ( Umwandeln einer leeren Kette in
+                        // Rahmen waere Unsinn. )
+                        bTextThere = TxbxChainContainsRealText(
+                                pRecord->aTextId.nTxBxS, nStartCpFly,
+                                nEndCpFly );
                         if( bTextThere )
                         {
-                            // Der Text wird nicht in das SdrTextObj eingelesen!
-                            // Stattdessen wird ein Rahmen eingefuegt und der Text
-                            // von nStartCpFly bis nEndCpFy dort hinein gelesen.
+                            // Der Text wird nicht in das SdrTextObj
+                            // eingelesen!  Stattdessen wird ein Rahmen
+                            // eingefuegt und der Text von nStartCpFly bis
+                            // nEndCpFy dort hinein gelesen.
                             //
-                            // Vorteil: im Rahmen sind viel mehr Attribute moeglich
-                            //          als in der Edit-Enging, und es koennen
-                            //          auch Felder, OLEs oder Grafiken darin sein...
+                            // Vorteil: im Rahmen sind viel mehr Attribute
+                            // moeglich als in der Edit-Enging, und es koennen
+                            // auch Felder, OLEs oder Grafiken darin sein...
 
                             Rectangle aInnerDist(   pRecord->nDxTextLeft,
-                                                    pRecord->nDyTextTop,
-                                                    pRecord->nDxTextRight,
-                                                    pRecord->nDyTextBottom  );
-                            MatchSdrItemsIntoFlySet( pObject,
-                                                     aFlySet,
-                                                     pRecord->eLineStyle,
-                                                     aInnerDist,
-                                                     !pRecord->bLastBoxInChain );
+                                pRecord->nDyTextTop, pRecord->nDxTextRight,
+                                pRecord->nDyTextBottom  );
+                            MatchSdrItemsIntoFlySet( pObject, aFlySet,
+                                pRecord->eLineStyle, aInnerDist,
+                                !pRecord->bLastBoxInChain );
 
-                            pRetFrmFmt = rDoc.MakeFlySection( eAnchor, pPaM->GetPoint(), &aFlySet );
+                            pRetFrmFmt = rDoc.MakeFlySection( eAnchor,
+                                pPaM->GetPoint(), &aFlySet );
 
                             MatchWrapDistancesIntoFlyFmt( pRecord, pRetFrmFmt );
 
-                            // falls alles Ok, Zeiger auf neues Objekt ermitteln und
-                            // Z-Order-Liste entsprechend korrigieren (oder Eintrag loeschen)
-                            pOurNewObject = CreateContactObject( (SwFlyFrmFmt*)pRetFrmFmt );
+                            // falls alles Ok, Zeiger auf neues Objekt
+                            // ermitteln und Z-Order-Liste entsprechend
+                            // korrigieren (oder Eintrag loeschen)
+                            pOurNewObject = CreateContactObject(
+                                (SwFlyFrmFmt*)pRetFrmFmt );
 
                             // altes Objekt aus der Z-Order-Liste entfernen
                             pMSDffManager->RemoveFromShapeOrder( pObject );
@@ -2669,88 +2663,56 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                             // und das Objekt loeschen
                             DELETEZ( pObject );
                             /*
-                                Achtung: ab jetzt nur noch pOrgShapeObject abfragen!
+                                Achtung: ab jetzt nur noch pOrgShapeObject
+                                abfragen!
                             */
 
 
                             if( pOurNewObject )
                             {
-                                pMSDffManager->StoreShapeOrder(
-                                    pF->nSpId,
-                                      (((ULONG)pRecord->aTextId.nTxBxS) << 16)
-                                    + pRecord->aTextId.nSequence,
-                                    pOurNewObject,
-                                    (SwFlyFrmFmt*)pRetFrmFmt,
-                                      nActSectionNo
-                                    + bIsHeader ? 1 : 0
-                                    + bIsFooter ? 2 : 0 );
-                                // Das Kontakt-Objekt MUSS in die Draw-Page gesetzt werden,
-                                // damit in SwWW8ImplReader::LoadDoc1() die Z-Order
+                                pMSDffManager->StoreShapeOrder( pF->nSpId,
+                                    (((ULONG)pRecord->aTextId.nTxBxS) << 16) +
+                                    pRecord->aTextId.nSequence, pOurNewObject,
+                                    (SwFlyFrmFmt*)pRetFrmFmt, nActSectionNo +
+                                    bIsHeader ? 1 : 0 + bIsFooter ? 2 : 0 );
+
+                                // Das Kontakt-Objekt MUSS in die Draw-Page
+                                // gesetzt werden, damit in
+                                // SwWW8ImplReader::LoadDoc1() die Z-Order
                                 // festgelegt werden kann !!!
                                 pDrawPg->InsertObject( pOurNewObject );
                             }
 
-                            // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden,
-                            // wird in fltshell.cxx beim Setzen des FltAnchor-Attributes
+                            // Damit die Frames bei Einfuegen in existierendes
+                            // Doc erzeugt werden, wird in fltshell.cxx beim
+                            // Setzen des FltAnchor-Attributes
                             // pFlyFrm->MakeFrms() gerufen
                             if( FLY_IN_CNTNT != eAnchor )
-                                pCtrlStck->NewAttr( *pPaM->GetPoint(), SwFltAnchor( pRetFrmFmt ) );
+                                pCtrlStck->NewAttr( *pPaM->GetPoint(),
+                                    SwFltAnchor( pRetFrmFmt ) );
 
                             // Box-0 erhaelt den Text fuer die ganze Kette!
                             if( !pRecord->aTextId.nSequence )
                             {
-#if 0
-                                // merke Pos im Haupttext
-                                SwPosition aMainTextPos( *pPaM->GetPoint() );
-
-                                // schliesse Attribute auf dem End-Stack
-                                pEndStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
-
-                                SwWW8FltControlStack* pOldStck = pCtrlStck;
-                                pCtrlStck = new SwWW8FltControlStack( &rDoc, nFieldFlags );
-
-                                // rette die Attributverwaltung
-                                WW8PLCFxSaveAll aPLCFxSave;
-                                pPlcxMan->SaveAllPLCFx( &aPLCFxSave );
-                                WW8PLCFMan* pOldPlcxMan = pPlcxMan;
-
-#endif
                                 // rette Flags u.ae. und setze sie zurueck
                                 WW8ReaderSave aSave( this );
                                 // setze Pam in den FlyFrame
-                                const SwFmtCntnt& rCntnt = pRetFrmFmt->GetCntnt();
-                                ASSERT( rCntnt.GetCntntIdx(), "Kein Inhalt vorbereitet." );
-                                pPaM->GetPoint()->nNode = rCntnt.GetCntntIdx()->GetIndex() + 1;
-                                pPaM->GetPoint()->nContent.Assign( pPaM->GetCntntNode(), 0 );
-
+                                const SwFmtCntnt& rCntnt =
+                                    pRetFrmFmt->GetCntnt();
+                                ASSERT( rCntnt.GetCntntIdx(),
+                                    "Kein Inhalt vorbereitet." );
+                                pPaM->GetPoint()->nNode =
+                                    rCntnt.GetCntntIdx()->GetIndex() + 1;
+                                pPaM->GetPoint()->nContent.Assign(
+                                    pPaM->GetCntntNode(), 0 );
 
                                 // lies den Text ein
                                 bTxbxFlySection = TRUE;
-                                ReadText( nStartCpFly,
-                                          (nEndCpFly-nStartCpFly),
-                                          MAN_MAINTEXT == pPlcxMan->GetManType()
-                                        ? MAN_TXBX
-                                        : MAN_TXBX_HDFT );
+                                ReadText( nStartCpFly, (nEndCpFly-nStartCpFly),
+                                    MAN_MAINTEXT == pPlcxMan->GetManType()
+                                    ? MAN_TXBX : MAN_TXBX_HDFT );
 
-#if 0
-                                // schliesse alle Attribute, da sonst Attribute
-                                // entstehen koennen, die aus dem Fly rausragen
-                                pCtrlStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
-                                pEndStck->SetAttr(  *pPaM->GetPoint(), 0, FALSE );
-
-                                // stelle  die Writer-Flags wieder her
                                 aSave.Restore( this );
-                                DeleteCtrlStk();
-                                pCtrlStck = pOldStck;
-
-                                *pPaM->GetPoint() = aMainTextPos;
-
-                                // restauriere die Attributverwaltung
-                                pPlcxMan = pOldPlcxMan;
-                                pPlcxMan->RestoreAllPLCFx( &aPLCFxSave );
-#else
-                                aSave.Restore( this );
-#endif
                             }
                             bDone = TRUE;
                         }
@@ -2833,41 +2795,40 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
                         if( pTrueObject == pRecord->pObj )
                         {
-                            MatchWrapDistancesIntoFlyFmt(    pRecord, pRetFrmFmt );
-                            if( bSetCrop ) SetCropAtGrfNode( pRecord, pRetFrmFmt, pF );
-
-                            /*
-                            if( pRecord->pClientDataBuffer )
-                            {
-                                //Auswertung des  Client Data Puffers
-
-                            }
-                            */
+                            MatchWrapDistancesIntoFlyFmt(pRecord, pRetFrmFmt);
+                            if( bSetCrop )
+                                SetCropAtGrfNode( pRecord, pRetFrmFmt, pF );
                         }
 
                         if( pRecord->aTextId.nTxBxS && !bOrgObjectWasReplace )
                         {
                             SdrTextObj* pSdrTextObj;
-                            // Pruefen, ob Gruppenobjekt (z.B. zwei Klammern) vorliegt
+                            // Pruefen, ob Gruppenobjekt (z.B. zwei Klammern)
+                            // vorliegt
                             SdrObjGroup* pThisGroup
                                 = PTR_CAST(SdrObjGroup, pRecord->pObj);
                             //if(pRecord->pObj->ISA(SdrObjGroup))
                             if( pThisGroup )
                             {
-                                // Gruppenobjekte haben keinen Text. Fuege ein Textobjekt in die
-                                // Gruppe ein, um den Text zu halten.
-                                pSdrTextObj =
-                                    new SdrRectObj(OBJ_TEXT, pThisGroup->GetBoundRect());
+                                // Gruppenobjekte haben keinen Text. Fuege ein
+                                // Textobjekt in die Gruppe ein, um den Text
+                                // zu halten.
+                                pSdrTextObj = new SdrRectObj(
+                                    OBJ_TEXT, pThisGroup->GetBoundRect());
 
                                 SfxItemSet aSet(pDrawModel->GetItemPool());
                                 aSet.Put(XFillStyleItem(XFILL_NONE));
                                 aSet.Put(XLineStyleItem(XLINE_NONE));
-                                //SdrFitToSizeType eFTS = SDRTEXTFIT_PROPORTIONAL;
+                                //SdrFitToSizeType eFTS =
+                                //  SDRTEXTFIT_PROPORTIONAL;
                                 /*
-                                aSet.Put(SdrTextVertAdjustItem( SDRTEXTVERTADJUST_TOP ));
-                                aSet.Put(SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_LEFT ));
+                                aSet.Put(SdrTextVertAdjustItem(
+                                    SDRTEXTVERTADJUST_TOP ));
+                                aSet.Put(SdrTextHorzAdjustItem(
+                                    SDRTEXTHORZADJUST_LEFT ));
                                 */
-                                aSet.Put(SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ));
+                                aSet.Put(SdrTextFitToSizeTypeItem(
+                                    SDRTEXTFIT_NONE ));
                                 aSet.Put(SdrTextAutoGrowHeightItem( FALSE ));
                                 aSet.Put(SdrTextAutoGrowWidthItem(  FALSE ));
 //-/                                pSdrTextObj->NbcSetAttributes(aSet, FALSE);
@@ -2877,29 +2838,36 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                                 if(  nAngle )
                                 {
                                     double a = nAngle*nPi180;
-                                    pSdrTextObj->NbcRotate( pSdrTextObj->GetBoundRect().Center(),
-                                                            nAngle, sin(a), cos(a) );
+                                    pSdrTextObj->NbcRotate(
+                                        pSdrTextObj->GetBoundRect().Center(),
+                                        nAngle, sin(a), cos(a) );
                                 }
 
-                                pSdrTextObj->NbcSetLayer( pThisGroup->GetLayer() );
-                                pThisGroup->GetSubList()->NbcInsertObject( pSdrTextObj );
+                                pSdrTextObj->NbcSetLayer(
+                                        pThisGroup->GetLayer() );
+                                pThisGroup->GetSubList()->NbcInsertObject(
+                                        pSdrTextObj );
                             }
                             else
                             {
-                                pSdrTextObj = PTR_CAST(SdrTextObj, pRecord->pObj);
+                                pSdrTextObj =
+                                    PTR_CAST(SdrTextObj, pRecord->pObj);
                                 /*
-                                    Die Frage: was tun, wenn hier FALSE hereuskommt,
-                                                z.B. bei 3D-Objekten (nicht von SdrTextObj abgeleitet)
+                                    Die Frage: was tun, wenn hier FALSE
+                                    hereuskommt, z.B. bei 3D-Objekten (nicht
+                                    von SdrTextObj abgeleitet)
 
-                                    Wunsch: neues SdrTextObj hinzufuegen, das mit dem alten
-                                            in einer neu zu schaffenden Gruppe geklammert wird.
+                                    Wunsch: neues SdrTextObj hinzufuegen, das
+                                    mit dem alten in einer neu zu schaffenden
+                                    Gruppe geklammert wird.
 
-                                    Implementierung: nicht zur 5.1 (jp und khz am 11.02.1999)
+                                    Implementierung: nicht zur 5.1 (jp und khz
+                                    am 11.02.1999)
 
-                                if( !pSdrTextObj )
-                                {
-                                    ...
-                                }
+                                    if( !pSdrTextObj )
+                                    {
+                                        ...
+                                    }
                                 */
                             }
 
@@ -2910,21 +2878,17 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                                         pSdrTextObj->GetSnapRect().GetHeight());
 
                                 // Objekt ist Bestandteil einer Gruppe?
-                                SdrObject* pGroupObject = pSdrTextObj->GetUpGroup();
+                                SdrObject* pGroupObject =
+                                    pSdrTextObj->GetUpGroup();
 
                                 UINT32 nOrdNum = pSdrTextObj->GetOrdNum();
                                 BOOL bEraseThisObject;
-                                InsertTxbxText( pSdrTextObj,
-                                                &aObjSize,
-                                                pRecord->aTextId.nTxBxS,
-                                                pRecord->aTextId.nSequence,
-                                                nGrafAnchorCp,
-                                                pRetFrmFmt,
-                                                   (pSdrTextObj != pTrueObject)
-                                                || (0 != pGroupObject),
-                                                bEraseThisObject,
-                                                FALSE,0,0,
-                                                pRecord );
+                                InsertTxbxText( pSdrTextObj, &aObjSize,
+                                    pRecord->aTextId.nTxBxS,
+                                    pRecord->aTextId.nSequence, nGrafAnchorCp,
+                                    pRetFrmFmt, (pSdrTextObj != pTrueObject)
+                                    || (0 != pGroupObject), bEraseThisObject,
+                                    FALSE,0,0, pRecord);
 
                                 // wurde dieses Objekt ersetzt ??
                                 if( bEraseThisObject )
@@ -2932,15 +2896,14 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                                     if(    pGroupObject
                                         || (pSdrTextObj != pTrueObject) )
                                     {
-                                        // Objekt wurde bereits (in der Gruppe und)
+                                        // Objekt wurde bereits (in der Gruppe
+                                        // und)
                                         // der Drawing-Page durch ein neues
                                         // SdrGrafObj ersetzt.
 
-                                        SdrObject* pNewObj =
-                                              pGroupObject
-                                            ? pGroupObject->GetSubList()->GetObj(
-                                                nOrdNum )
-                                            : pTrueObject;
+                                        SdrObject* pNewObj = pGroupObject ?
+                                            pGroupObject->GetSubList()->GetObj(
+                                                nOrdNum) : pTrueObject;
                                         // Objekt in der Z-Order-Liste ersetzen
                                         pMSDffManager->ExchangeInShapeOrder(
                                             pSdrTextObj, 0,0, pNewObj );
@@ -2952,12 +2915,16 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                                     else
                                     {
                                         // Objekt aus der Z-Order-Liste loeschen
-                                        pMSDffManager->RemoveFromShapeOrder( pSdrTextObj );
-                                        // Objekt aus der Drawing-Page rausnehmen
+                                        pMSDffManager->RemoveFromShapeOrder(
+                                            pSdrTextObj );
+                                        // Objekt aus der Drawing-Page
+                                        // rausnehmen
                                         if( pSdrTextObj->GetPage() )
-                                            pDrawPg->RemoveObject( pSdrTextObj->GetOrdNum() );
-                                        // und FrameFormat entfernen, da durch Grafik
-                                        // ersetzt (dies loescht auch das Objekt)
+                                            pDrawPg->RemoveObject(
+                                            pSdrTextObj->GetOrdNum() );
+                                        // und FrameFormat entfernen, da durch
+                                        // Grafik ersetzt (dies loescht auch
+                                        // das Objekt)
                                         rDoc.DelFrmFmt( pRetFrmFmt );
                                         // auch den Objektmerker loeschen
                                         pRecord->pObj = 0;
@@ -2966,15 +2933,21 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                                 else
                                 {
                                     // ww8-default Randabstand einsetzen
-                                    SfxItemSet aItemSet( pDrawModel->GetItemPool(),
-                                                         SDRATTR_TEXT_LEFTDIST,
-                                                         SDRATTR_TEXT_LOWERDIST );
-                                    aItemSet.Put( SdrTextLeftDistItem(  pRecord->nDxTextLeft   ) );
-                                    aItemSet.Put( SdrTextRightDistItem( pRecord->nDxTextRight  ) );
-                                    aItemSet.Put( SdrTextUpperDistItem( pRecord->nDyTextTop    ) );
-                                    aItemSet.Put( SdrTextLowerDistItem( pRecord->nDyTextBottom ) );
-//-/                                    pSdrTextObj->SetAttributes( aItemSet, FALSE );
-                                    pSdrTextObj->SetItemSetAndBroadcast(aItemSet);
+                                    SfxItemSet aItemSet(
+                                        pDrawModel->GetItemPool(),
+                                        SDRATTR_TEXT_LEFTDIST,
+                                        SDRATTR_TEXT_LOWERDIST );
+                                    aItemSet.Put( SdrTextLeftDistItem(
+                                        pRecord->nDxTextLeft ) );
+                                    aItemSet.Put( SdrTextRightDistItem(
+                                        pRecord->nDxTextRight  ) );
+                                    aItemSet.Put( SdrTextUpperDistItem(
+                                        pRecord->nDyTextTop    ) );
+                                    aItemSet.Put( SdrTextLowerDistItem(
+                                        pRecord->nDyTextBottom ) );
+//                                  pSdrTextObj->SetAttributes(aItemSet,FALSE);
+                                    pSdrTextObj->SetItemSetAndBroadcast(
+                                        aItemSet);
                                 }
                             }
                         }
@@ -3013,11 +2986,14 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.12 2001-02-27 12:38:09 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.13 2001-03-08 10:09:29 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/02/27 12:38:09  cmc
+      #74920# enable SdrTextObj to FlyFrame conversion for WW6
+
       Revision 1.11  2001/02/19 18:00:38  cmc
       #74188# Documented FSPA anchor values should override escher attributes when different
 
