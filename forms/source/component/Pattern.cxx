@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Pattern.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:09:52 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,6 @@ StringSequence OPatternControl::getSupportedServiceNames() throw()
 //==================================================================
 // OPatternModel
 //==================================================================
-sal_Int32   OPatternModel::nTextHandle = -1;
-
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OPatternModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -136,15 +134,13 @@ Sequence<Type> OPatternModel::_getTypes()
 DBG_NAME( OPatternModel )
 //------------------------------------------------------------------
 OPatternModel::OPatternModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_PATTERNFIELD, FRM_CONTROL_PATTERNFIELD)
+    :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_PATTERNFIELD, FRM_CONTROL_PATTERNFIELD, sal_False )
                                     // use the old control name for compytibility reasons
 {
     DBG_CTOR( OPatternModel, NULL );
 
     m_nClassId = FormComponentType::PATTERNFIELD;
-    m_sDataFieldConnectivityProperty = PROPERTY_TEXT;
-    if (OPatternModel::nTextHandle == -1)
-        OPatternModel::nTextHandle = getOriginalHandle(PROPERTY_ID_TEXT);
+    initValueProperty( PROPERTY_TEXT, PROPERTY_ID_TEXT );
 }
 
 //------------------------------------------------------------------
@@ -219,56 +215,45 @@ void OPatternModel::fillProperties(
     return FRM_COMPONENT_PATTERNFIELD;  // old (non-sun) name for compatibility !
 }
 
-// XBoundComponent
 //------------------------------------------------------------------------------
-sal_Bool OPatternModel::_commit()
+sal_Bool OPatternModel::commitControlValueToDbColumn( bool _bPostReset )
 {
-    ::rtl::OUString aNewValue = getString(m_xAggregateFastSet->getFastPropertyValue( OPatternModel::nTextHandle ));
-    if (aNewValue != m_aSaveValue)
+    ::rtl::OUString sNewValue;
+    m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) >>= sNewValue;
+
+    if ( sNewValue != m_aSaveValue )
     {
-        if (!aNewValue.getLength() && !m_bRequired && m_bEmptyIsNull)
+        if ( !sNewValue.getLength() && !m_bRequired && m_bEmptyIsNull )
             m_xColumnUpdate->updateNull();
         else
         {
             try
             {
-                m_xColumnUpdate->updateString(aNewValue);
+                m_xColumnUpdate->updateString( sNewValue );
             }
             catch(Exception&)
             {
                 return sal_False;
             }
         }
-        m_aSaveValue = aNewValue;
+        m_aSaveValue = sNewValue;
     }
     return sal_True;
 }
 
 // XPropertyChangeListener
 //------------------------------------------------------------------------------
-void OPatternModel::_onValueChanged()
+Any OPatternModel::translateDbColumnToControlValue()
 {
     m_aSaveValue = m_xColumn->getString();
-    {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-        // our own mutex locked
-        // FS - 72451 - 31.01.00
-        MutexRelease aRelease(m_aMutex);
-        m_xAggregateFastSet->setFastPropertyValue(OPatternModel::nTextHandle, makeAny(m_aSaveValue));
-    }
+    return makeAny( m_aSaveValue );
 }
 
 // XReset
 //------------------------------------------------------------------------------
-void OPatternModel::_reset( void )
+Any OPatternModel::getDefaultForReset() const
 {
-    {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-        // our own mutex locked
-        // FS - 72451 - 31.01.00
-        MutexRelease aRelease(m_aMutex);
-        m_xAggregateFastSet->setFastPropertyValue(OPatternModel::nTextHandle, makeAny(m_aDefaultText));
-    }
+    return makeAny( m_aDefaultText );
 }
 
 //.........................................................................
