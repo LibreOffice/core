@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-12 18:04:48 $
+ *  last change: $Author: er $ $Date: 2002-09-18 12:22:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,6 +896,25 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                 {
                     String aCode = ((const SfxStringItem*)pItem)->GetValue();
                     pTabViewShell->SetNumFmtByStr( aCode );
+                }
+            }
+            break;
+
+        case SID_ATTR_NUMBERFORMAT_VALUE:
+            if ( pReqArgs )
+            {
+                const SfxPoolItem* pItem;
+                if ( pReqArgs->GetItemState( ATTR_VALUE_FORMAT, TRUE, &pItem ) == SFX_ITEM_SET )
+                {
+                    // We have to accomplish this using ApplyAttributes()
+                    // because we also need the language information to be
+                    // considered.
+                    const SfxItemSet& rOldSet =
+                        pTabViewShell->GetSelectionPattern()->GetItemSet();
+                    SfxItemPool* pPool = GetViewData()->GetDocument()->GetPool();
+                    SfxItemSet aNewSet( *pPool, ATTR_PATTERN_START, ATTR_PATTERN_END );
+                    aNewSet.Put( *pItem );
+                    pTabViewShell->ApplyAttributes( &aNewSet, &rOldSet, TRUE );
                 }
             }
             break;
