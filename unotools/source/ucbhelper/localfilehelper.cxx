@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 16:59:43 $
+ *  last change: $Author: mba $ $Date: 2001-07-18 11:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ sal_Bool LocalFileHelper::ConvertSystemPathToURL( const String& rName, const Str
         }
         catch ( ::com::sun::star::uno::RuntimeException& )
         {
+            return sal_False;
         }
     }
 
@@ -142,11 +143,12 @@ sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& r
         }
         catch ( ::com::sun::star::uno::RuntimeException& )
         {
+            return sal_False;
         }
     }
 
     rReturn = aRet;
-    return sal_True;
+    return ( aRet.getLength() != 0 );
 }
 
 sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String& rReturn )
@@ -176,6 +178,7 @@ sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String&
         }
         catch ( ::com::sun::star::uno::RuntimeException& )
         {
+            return sal_False;
         }
     }
 
@@ -210,18 +213,18 @@ sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String&
         }
         catch ( ::com::sun::star::uno::RuntimeException& )
         {
+            return sal_False;
         }
     }
 
     rReturn = aRet;
-    return sal_True;
+    return ( aRet.getLength() != 0 );
 }
 
 sal_Bool LocalFileHelper::IsLocalFile( const String& rName )
 {
     String aTmp;
-    ConvertURLToPhysicalName( rName, aTmp );
-    return ( aTmp.Len() != 0 );
+    return ConvertURLToPhysicalName( rName, aTmp );
 }
 
 DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
