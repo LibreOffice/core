@@ -3,9 +3,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-28 08:25:29 $
+ *  last change: $Author: nf $ $Date: 2001-05-28 12:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,13 +70,13 @@
 //
 
 const char *ExeTable[][5] = {
-    { "src", "transex3", "-UTF8", "negative", "noiso" },
-    { "hrc", "transex3", "-UTF8", "positive", "noiso" },
-    { "lng", "lngex", "-UTF8", "negative", "noiso" },
-    { "xrb", "xmlex", "-UTF8", "negative", "iso" },
-    { "xxl", "xmlex", "-UTF8", "negative", "iso" },
-    { "xgf", "xmlex", "-UTF8 -t:xgf", "negative", "iso" },
-    { "xcd", "cfgex", "-UTF8", "negative", "iso" },
+    { "src", "transex3", "-UTF8 -e", "negative", "noiso" },
+    { "hrc", "transex3", "-UTF8 -e", "positive", "noiso" },
+    { "lng", "lngex", "-UTF8 -e", "negative", "noiso" },
+    { "xrb", "xmlex", "-UTF8 -e", "negative", "iso" },
+    { "xxl", "xmlex", "-UTF8 -e", "negative", "iso" },
+    { "xgf", "xmlex", "-UTF8 -e -t:xgf", "negative", "iso" },
+    { "xcd", "cfgex", "-UTF8 -e", "negative", "iso" },
     { "NULL", "NULL", "NULL", "NULL", "NULL" }
 };
 
@@ -136,6 +136,12 @@ private:
         const ByteString &rIso
     );
     void WorkOnDirectory( const ByteString &rDirectory );
+    BOOL ExecuteMerge();
+    BOOL MergeSingleFile(
+        const ByteString &rPrj,
+        const ByteString &rFile,
+        const ByteString &rSDFFile
+    );
 
 public:
     SourceTreeLocalizer( const ByteString &rRoot, const ByteString &rVersion );
@@ -285,7 +291,7 @@ void SourceTreeLocalizer::WorkOnFile(
                 sCommand += sLanguageRestriction;
             }
             if ( rIso == "iso" ) {
-                sCommand += "-ISO99";
+                sCommand += " -ISO99 ";
                 sCommand += sIsoCode99;
             }
 
@@ -458,6 +464,129 @@ BOOL SourceTreeLocalizer::Extract( const ByteString &rDestinationFile )
 }
 
 /*****************************************************************************/
+BOOL SourceTreeLocalizer::MergeSingleFile(
+    const ByteString &rPrj,
+    const ByteString &rFile,
+    const ByteString &rSDFFile
+)
+/*****************************************************************************/
+{
+    if ( !rFile.Len())
+        return TRUE;
+
+    ByteString sRoot( GetEnv( "SOLARVERSION" ));
+    DirEntry aEntry( String( sRoot, RTL_TEXTENCODING_ASCII_US ));
+    aEntry += DirEntry( String::CreateFromAscii( "src" ));
+    aEntry += DirEntry( String( rPrj, RTL_TEXTENCODING_ASCII_US ));
+
+    ByteString sDelimiter(
+        DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
+
+    ByteString sCur( rFile );
+    sCur.SearchAndReplaceAll( "/", sDelimiter );
+
+    aEntry += DirEntry( String( sCur, RTL_TEXTENCODING_ASCII_US ));
+    ByteString sFile( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
+
+    ULONG nIndex = 0;
+    ByteString sExtension( aEntry.GetExtension(), RTL_TEXTENCODING_ASCII_US );
+    ByteString sCandidate( ExeTable[ nIndex ][ 0 ] );
+
+    while( sCandidate != "NULL" && sCandidate != sExtension )
+        sCandidate = ExeTable[ ++nIndex ][ 0 ];
+
+    ByteString sIso( ExeTable[ nIndex ][ 4 ] );
+    if ( sCandidate != "NULL" && aEntry.Exists()) {
+        DirEntry aOut( GetTempFile());
+        ByteString sOutput( aOut.GetFull(), RTL_TEXTENCODING_ASCII_US );
+
+        ByteString sCommand( ExeTable[ nIndex ][ 1 ] );
+        sCommand += " -i ";
+        sCommand += ByteString( aEntry.GetName(), RTL_TEXTENCODING_ASCII_US );
+        sCommand += " -m ";
+        sCommand += rSDFFile;
+        sCommand += " -o ";
+        sCommand += sOutput;
+        sCommand += " ";
+        sCommand += ByteString( ExeTable[ nIndex ][ 2 ] );
+        if ( sIso == "iso" ) {
+            sCommand += " -ISO99 ";
+            sCommand += sIsoCode99;
+        }
+        if ( sLanguageRestriction.Len()) {
+            sCommand += " -l ";
+            sCommand += sLanguageRestriction;
+        }
+
+        DirEntry aPath( aEntry.GetPath());
+        DirEntry aOldCWD;
+        aPath.SetCWD();
+
+        system( sCommand.GetBuffer());
+
+        FileCopier aCopier( aOut, aEntry );
+        if( aCopier.Execute() != FSYS_ERR_OK )
+            fprintf( stderr, "ERROR: Unable to write file %s\n", sFile.GetBuffer());
+
+        aOldCWD.SetCWD();
+        aOut.Kill();
+    }
+
+    return TRUE;
+}
+
+/*****************************************************************************/
+BOOL SourceTreeLocalizer::ExecuteMerge()
+/*****************************************************************************/
+{
+    DirEntry aEntry( GetTempFile());
+    BOOL bReturn = TRUE;
+
+    ByteString sFileName;
+    ByteString sLine;
+
+    SvFileStream aFile;
+
+    while ( !aSDF.IsEof()) {
+        aSDF.ReadLine( sLine );
+        ByteString sOldFileName( sFileName );
+        sFileName = sLine.GetToken( 0, '\t' );
+        sFileName += "#";
+        sFileName += sLine.GetToken( 1, '\t' );
+        if ( sFileName.Len() && ( sOldFileName != sFileName )) {
+            if ( aFile.IsOpen()) {
+                aFile.Close();
+
+                ByteString sPrj( sOldFileName.GetToken( 0, '#' ));
+                ByteString sFile( sOldFileName.GetToken( 1, '#' ));
+                ByteString sSDFFile( aFile.GetFileName(), RTL_TEXTENCODING_ASCII_US );
+
+                if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
+                    bReturn = FALSE;
+            }
+            aFile.Open( aEntry.GetFull(),
+                STREAM_STD_WRITE |STREAM_TRUNC );
+        }
+        if ( aFile.IsOpen() && sLine.Len())
+            aFile.WriteLine( sLine );
+    }
+    if ( aFile.IsOpen()) {
+        aFile.Close();
+
+        ByteString sPrj( sLine.GetToken( 0, '\t' ));
+        ByteString sFile( sLine.GetToken( 1, '\t' ));
+        ByteString sSDFFile( aFile.GetFileName(), RTL_TEXTENCODING_ASCII_US );
+
+        if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
+            bReturn = FALSE;
+    }
+
+    aEntry.Kill();
+
+    return bReturn;
+}
+
+/*****************************************************************************/
 BOOL SourceTreeLocalizer::Merge( const ByteString &rSourceFile )
 /*****************************************************************************/
 {
@@ -467,7 +596,7 @@ BOOL SourceTreeLocalizer::Merge( const ByteString &rSourceFile )
 
     BOOL bReturn = aSDF.IsOpen();
     if ( bReturn ) {
-        bReturn = StartExecute();
+        bReturn = ExecuteMerge();
         aSDF.Close();
     }
 
@@ -497,7 +626,8 @@ int _cdecl main( int argc, char *argv[] )
     SourceTreeLocalizer aIter( sRoot, sVersion );
     aIter.SetLanguageRestriction( "01,99=35" );
      aIter.SetIsoCode99( "de-CH" );
-      aIter.Extract( "x:\\nf\\test.txt" );
+//      aIter.Extract( "x:\\nf\\test.txt" );
+    aIter.Merge( "x:\\nf\\test.txt" );
 
     return 0;
 }
