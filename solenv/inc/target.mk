@@ -5,8 +5,8 @@
 #*	  Beschreibung		TARGET-Rules
 #*
 #*	  Ersterstellung	TH 28.03.94
-#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-10-19 16:02:20 $
-#*	  $Revision: 1.14 $
+#*	  Letzte Aenderung	$Author: er $ $Date: 2000-10-20 19:19:25 $
+#*	  $Revision: 1.15 $
 #*
 #*	  $Logfile:   T:/solar/inc/target.mkv  $
 #*
@@ -1608,6 +1608,11 @@ DEF5 ?= TNR!:=5
 .IF "$(DEF6NAME)"!=""
 DEF6TARGETN=$(MISC)$/$(DEF6NAME).def
 DEF6 ?= TNR!:=6
+.ENDIF
+
+.IF "$(DEF7NAME)"!=""
+DEF7TARGETN=$(MISC)$/$(DEF7NAME).def
+DEF7 ?= TNR!:=7
 .ENDIF
 
 # MISCX for NO_REC_RES uncritical here
