@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:19:04 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1245,7 +1245,7 @@ String STR_INSERTSECTION
     TEXT[ czech ] = "Vložit sekci";
     TEXT[ hebrew ] = "Bereich einfügen";
     TEXT[ hindi ] = "विभाग जोड़ो";
-    TEXT[ slovak ] = "Vložiť sekciu";
+    TEXT[ slovak ] = "Vložiť oblasť";
 };
 String STR_DELETESECTION
 {
@@ -3303,6 +3303,14 @@ String STR_DDEERROR_LINK2
     TEXT[ hindi ] = "] स्थापित नहीं कर सकते है";
     TEXT[ slovak ] = "] nemožno vykonať";
 };
+
+
+
+
+
+
+
+
 
 
 
