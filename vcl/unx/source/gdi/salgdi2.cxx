@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-31 11:47:46 $
+ *  last change: $Author: cp $ $Date: 2001-06-28 13:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,8 +468,10 @@ SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer) :
             mpFncGetPixel = BitmapReadAccess::GetPixelFor_8BIT_PAL;      break;
         case BMP_FORMAT_8BIT_TC_MASK:
             mpFncGetPixel = BitmapReadAccess::GetPixelFor_8BIT_TC_MASK;  break;
-        case BMP_FORMAT_16BIT_TC_MASK:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_16BIT_TC_MASK; break;
+        case BMP_FORMAT_16BIT_TC_MSB_MASK:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_16BIT_TC_MSB_MASK; break;
+        case BMP_FORMAT_16BIT_TC_LSB_MASK:
+            mpFncGetPixel = BitmapReadAccess::GetPixelFor_16BIT_TC_LSB_MASK; break;
         case BMP_FORMAT_24BIT_TC_BGR:
             mpFncGetPixel = BitmapReadAccess::GetPixelFor_24BIT_TC_BGR;  break;
         case BMP_FORMAT_24BIT_TC_RGB:

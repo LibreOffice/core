@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-29 13:20:51 $
+ *  last change: $Author: cp $ $Date: 2001-06-28 13:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,7 +608,7 @@ BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWri
 
                         for( long nX = 0L; nX < nWidth; nX++ )
                         {
-                            aMask.GetColorFor16Bit( aColor, (BYTE*) pTmp16++ );
+                            aMask.GetColorFor16BitLSB( aColor, (BYTE*) pTmp16++ );
                             rAcc.SetPixel( nY, nX, aColor );
                         }
                     }
@@ -721,10 +721,10 @@ BOOL Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompre
 
     switch( rAcc.GetScanlineFormat() )
     {
-        case( BMP_FORMAT_16BIT_TC_MASK ):
+        case( BMP_FORMAT_16BIT_TC_LSB_MASK ):
         case( BMP_FORMAT_32BIT_TC_MASK ):
         {
-            aHeader.nBitCount = ( rAcc.GetScanlineFormat() == BMP_FORMAT_16BIT_TC_MASK ) ? 16 : 32;
+            aHeader.nBitCount = ( rAcc.GetScanlineFormat() == BMP_FORMAT_16BIT_TC_LSB_MASK ) ? 16 : 32;
             nCompression = BITFIELDS;
         }
         break;

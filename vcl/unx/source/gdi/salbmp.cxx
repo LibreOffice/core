@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oisin $ $Date: 2001-01-31 15:01:50 $
+ *  last change: $Author: cp $ $Date: 2001-06-28 13:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,13 +265,18 @@ BitmapBuffer* SalBitmap::ImplCreateDIB( Drawable aDrawable,
 
                 case( 16 ):
                 {
-                    aSrcBuf.mnFormat |= BMP_FORMAT_16BIT_TC_MASK;
                     nDstFormat |= BMP_FORMAT_24BIT_TC_BGR;
+                        aSrcBuf.maColorMask = ColorMask( pImage->red_mask, pImage->green_mask, pImage->blue_mask );
 
                     if( LSBFirst == pImage->byte_order )
-                        aSrcBuf.maColorMask = ColorMask( pImage->red_mask, pImage->green_mask, pImage->blue_mask );
+                    {
+                        aSrcBuf.mnFormat |= BMP_FORMAT_16BIT_TC_LSB_MASK;
+                    }
                     else
-                        aSrcBuf.maColorMask = ColorMask( SWAPSHORT( pImage->red_mask ), SWAPSHORT( pImage->green_mask ), SWAPSHORT( pImage->blue_mask ) );
+                    {
+                        aSrcBuf.mnFormat |= BMP_FORMAT_16BIT_TC_MSB_MASK;
+                        // aSrcBuf.maColorMask = ColorMask( pImage->red_mask ), SWAPSHORT( pImage->green_mask ), SWAPSHORT( pImage->blue_mask ) );
+                    }
                 }
                 break;
 
@@ -386,12 +391,22 @@ XImage* SalBitmap::ImplCreateXImage( SalDisplay *pSalDisp, long nDepth, const Sa
 
                 case( 16 ):
                 {
-                    nDstFormat |= BMP_FORMAT_16BIT_TC_MASK;
+                    #ifdef __BIGENDIAN
 
-                    if( LSBFirst == pImage->byte_order )
-                        pMask = new ColorMask( pImage->red_mask, pImage->green_mask, pImage->blue_mask );
+                    if( MSBFirst == pImage->byte_order )
+                        nDstFormat |= BMP_FORMAT_16BIT_TC_MSB_MASK;
                     else
-                        pMask = new ColorMask( SWAPSHORT( pImage->red_mask ), SWAPSHORT( pImage->green_mask ), SWAPSHORT( pImage->blue_mask ) );
+                        nDstFormat |= BMP_FORMAT_16BIT_TC_LSB_MASK;
+
+                    #else /* __LITTLEENDIAN */
+
+                    nDstFormat |= BMP_FORMAT_16BIT_TC_LSB_MASK;
+                    if( MSBFirst == pImage->byte_order )
+                        pImage->byte_order = LSBFirst;
+
+                    #endif
+
+                    pMask = new ColorMask( pImage->red_mask, pImage->green_mask, pImage->blue_mask );
                 }
                 break;
 

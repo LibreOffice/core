@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpacc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: cp $ $Date: 2001-06-28 13:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,8 @@ BOOL BitmapReadAccess::ImplSetAccessPointers( ULONG nFormat )
         CASE_FORMAT( _4BIT_LSN_PAL )
         CASE_FORMAT( _8BIT_PAL )
         CASE_FORMAT( _8BIT_TC_MASK )
-        CASE_FORMAT( _16BIT_TC_MASK )
+        CASE_FORMAT( _16BIT_TC_MSB_MASK )
+        CASE_FORMAT( _16BIT_TC_LSB_MASK )
         CASE_FORMAT( _24BIT_TC_BGR )
         CASE_FORMAT( _24BIT_TC_RGB )
         CASE_FORMAT( _24BIT_TC_MASK )
@@ -257,7 +258,8 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
                 nBits = 8;
             break;
 
-            case( BMP_FORMAT_16BIT_TC_MASK ):
+            case( BMP_FORMAT_16BIT_TC_MSB_MASK ):
+            case( BMP_FORMAT_16BIT_TC_LSB_MASK ):
                 nBits = 16;
             break;
 
@@ -387,7 +389,8 @@ void BitmapWriteAccess::CopyScanline( long nY, const Scanline aSrcScanline,
             HMEMCPY( mpScanBuf[ nY ], aSrcScanline, nCount );
         else
         {
-            BMP_ASSERT( nFormat != BMP_FORMAT_8BIT_TC_MASK && nFormat != BMP_FORMAT_16BIT_TC_MASK &&
+            BMP_ASSERT( nFormat != BMP_FORMAT_8BIT_TC_MASK &&
+                        nFormat != BMP_FORMAT_16BIT_TC_MSB_MASK && nFormat != BMP_FORMAT_16BIT_TC_LSB_MASK &&
                         nFormat != BMP_FORMAT_24BIT_TC_MASK && nFormat != BMP_FORMAT_32BIT_TC_MASK,
                         "No support for pixel formats with color masks yet!" );
 
@@ -401,7 +404,8 @@ void BitmapWriteAccess::CopyScanline( long nY, const Scanline aSrcScanline,
                 case( BMP_FORMAT_4BIT_LSN_PAL ):    pFncGetPixel = GetPixelFor_4BIT_LSN_PAL; break;
                 case( BMP_FORMAT_8BIT_PAL ):        pFncGetPixel = GetPixelFor_8BIT_PAL; break;
                 case( BMP_FORMAT_8BIT_TC_MASK ):    pFncGetPixel = GetPixelFor_8BIT_TC_MASK; break;
-                case( BMP_FORMAT_16BIT_TC_MASK ):   pFncGetPixel = GetPixelFor_16BIT_TC_MASK; break;
+                case( BMP_FORMAT_16BIT_TC_MSB_MASK ):   pFncGetPixel = GetPixelFor_16BIT_TC_MSB_MASK; break;
+                case( BMP_FORMAT_16BIT_TC_LSB_MASK ):   pFncGetPixel = GetPixelFor_16BIT_TC_LSB_MASK; break;
                 case( BMP_FORMAT_24BIT_TC_BGR ):    pFncGetPixel = GetPixelFor_24BIT_TC_BGR; break;
                 case( BMP_FORMAT_24BIT_TC_RGB ):    pFncGetPixel = GetPixelFor_24BIT_TC_RGB; break;
                 case( BMP_FORMAT_24BIT_TC_MASK ):   pFncGetPixel = GetPixelFor_24BIT_TC_MASK; break;

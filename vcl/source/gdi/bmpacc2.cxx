@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpacc2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: cp $ $Date: 2001-06-28 13:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,18 +170,34 @@ IMPL_FORMAT_SETPIXEL( _8BIT_TC_MASK )
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_GETPIXEL( _16BIT_TC_MASK )
+IMPL_FORMAT_GETPIXEL( _16BIT_TC_MSB_MASK )
 {
     BitmapColor aColor;
-    rMask.GetColorFor16Bit( aColor, pScanline + ( nX << 1UL ) );
+    rMask.GetColorFor16BitMSB( aColor, pScanline + ( nX << 1UL ) );
     return aColor;
 }
 
 // ------------------------------------------------------------------
 
-IMPL_FORMAT_SETPIXEL( _16BIT_TC_MASK )
+IMPL_FORMAT_SETPIXEL( _16BIT_TC_MSB_MASK )
 {
-    rMask.SetColorFor16Bit( rBitmapColor, pScanline + ( nX << 1UL ) );
+    rMask.SetColorFor16BitMSB( rBitmapColor, pScanline + ( nX << 1UL ) );
+}
+
+// ------------------------------------------------------------------
+
+IMPL_FORMAT_GETPIXEL( _16BIT_TC_LSB_MASK )
+{
+    BitmapColor aColor;
+    rMask.GetColorFor16BitLSB( aColor, pScanline + ( nX << 1UL ) );
+    return aColor;
+}
+
+// ------------------------------------------------------------------
+
+IMPL_FORMAT_SETPIXEL( _16BIT_TC_LSB_MASK )
+{
+    rMask.SetColorFor16BitLSB( rBitmapColor, pScanline + ( nX << 1UL ) );
 }
 
 // ------------------------------------------------------------------

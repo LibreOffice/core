@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salmisc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: cp $ $Date: 2001-06-28 13:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,8 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
         IMPL_CASE_GET_FORMAT( _4BIT_LSN_PAL );
         IMPL_CASE_GET_FORMAT( _8BIT_PAL );
         IMPL_CASE_GET_FORMAT( _8BIT_TC_MASK );
-        IMPL_CASE_GET_FORMAT( _16BIT_TC_MASK );
+        IMPL_CASE_GET_FORMAT( _16BIT_TC_MSB_MASK );
+        IMPL_CASE_GET_FORMAT( _16BIT_TC_LSB_MASK );
         IMPL_CASE_GET_FORMAT( _24BIT_TC_BGR );
         IMPL_CASE_GET_FORMAT( _24BIT_TC_RGB );
         IMPL_CASE_GET_FORMAT( _24BIT_TC_MASK );
@@ -371,7 +372,8 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
         IMPL_CASE_SET_FORMAT( _4BIT_LSN_PAL, 4 );
         IMPL_CASE_SET_FORMAT( _8BIT_PAL, 8 );
         IMPL_CASE_SET_FORMAT( _8BIT_TC_MASK, 8 );
-        IMPL_CASE_SET_FORMAT( _16BIT_TC_MASK, 16 );
+        IMPL_CASE_SET_FORMAT( _16BIT_TC_MSB_MASK, 16 );
+        IMPL_CASE_SET_FORMAT( _16BIT_TC_LSB_MASK, 16 );
         IMPL_CASE_SET_FORMAT( _24BIT_TC_BGR, 24 );
         IMPL_CASE_SET_FORMAT( _24BIT_TC_RGB, 24 );
         IMPL_CASE_SET_FORMAT( _24BIT_TC_MASK, 24 );
@@ -405,7 +407,8 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
         pDstBuffer->maPalette = *pDstPal;
     }
     else if( ( nDstScanlineFormat == BMP_FORMAT_8BIT_TC_MASK ) ||
-             ( nDstScanlineFormat == BMP_FORMAT_16BIT_TC_MASK ) ||
+             ( nDstScanlineFormat == BMP_FORMAT_16BIT_TC_MSB_MASK ) ||
+             ( nDstScanlineFormat == BMP_FORMAT_16BIT_TC_LSB_MASK ) ||
              ( nDstScanlineFormat == BMP_FORMAT_24BIT_TC_MASK ) ||
              ( nDstScanlineFormat == BMP_FORMAT_32BIT_TC_MASK ) )
     {
