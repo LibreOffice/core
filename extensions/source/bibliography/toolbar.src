@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:36:49 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ japanese ] = "ŒŸõ·°";
             Text[ korean ] = "°Ë»ö Å°";
             Text[ chinese_simplified ] = "ËÑÑ°ÄÚÈİ";
-            Text[ chinese_traditional ] = "·j´MÃöÁä¦r";
+            Text[ chinese_traditional ] = "·j´M¶µ¥Ø";
             Text[ arabic ] = "ãÕØáÍ ÇáÈÍË";
             Text[ turkish ] = "Arama ölçütü";
         };
@@ -201,7 +201,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ japanese ] = "•W€Ì¨ÙÀ";
             Text[ korean ] = "±âº» ÇÊÅÍ";
             Text[ chinese_simplified ] = "±ê×¼É¸Ñ¡";
-            Text[ chinese_traditional ] = "¼Ğ­ã¿z¿ï";
+            Text[ chinese_traditional ] = "¼Ğ·Ç¿z¿ï";
             Text[ arabic ] = "İáÊÑ ŞíÇÓí";
             Text[ turkish ] = "Standart filtre";
             Text[ language_user1 ] = " ";
@@ -287,7 +287,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ japanese ] = "ÃŞ°À¿°½";
             Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º(D)";
             Text[ chinese_simplified ] = "Êı¾İÀ´Ô´(D)";
-            Text[ chinese_traditional ] = "¸ê®Æ·½(D)";
+            Text[ chinese_traditional ] = "¸ê®Æ¨Ó·½(D)";
             Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
             Text[ turkish ] = "Veri kaynağı";
             Text[ language_user1 ] = " ";
