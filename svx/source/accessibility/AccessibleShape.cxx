@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-19 14:49:56 $
+ *  last change: $Author: af $ $Date: 2002-11-22 15:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1164,6 +1164,9 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             {
                 uno::Any aZOrder (xSet->getPropertyValue (::rtl::OUString::createFromAscii ("ZOrder")));
                 aZOrder >>= nIndex;
+
+                // Add one to be not zero based.
+                nIndex += 1;
             }
         }
         catch (beans::UnknownPropertyException)
