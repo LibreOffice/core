@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-13 13:52:46 $
+ *  last change: $Author: sj $ $Date: 2001-11-27 10:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@
 
 #ifndef _SVDETC_HXX
 #include <svx/svdetc.hxx>
+#endif
+#ifndef _SVX_FHGTITEM_HXX
+#include <svx/fhgtitem.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -483,10 +486,8 @@ void SwDoc::InitDrawModel()
     //zerstoert.
     // 17.2.99: for Bug 73110 - for loading the drawing items. This must
     //                          be loaded without RefCounts!
-     SdrEngineDefaults::SetFontHeight(240);
-     SfxItemPool *pSdrPool = new SdrItemPool( &aAttrPool, SDRATTR_START,
+    SfxItemPool *pSdrPool = new SdrItemPool( &aAttrPool, SDRATTR_START,
                                             SDRATTR_END, FALSE );
-
     // #75371# change DefaultItems for the SdrEdgeObj distance items
     // to TWIPS.
     if(pSdrPool)
@@ -497,13 +498,15 @@ void SwDoc::InitDrawModel()
         pSdrPool->SetPoolDefaultItem(SdrEdgeNode2HorzDistItem(nDefEdgeDist));
         pSdrPool->SetPoolDefaultItem(SdrEdgeNode2VertDistItem(nDefEdgeDist));
     }
-
     SfxItemPool *pEEgPool = EditEngine::CreatePool( FALSE );
     pSdrPool->SetSecondaryPool( pEEgPool );
      if ( !aAttrPool.GetFrozenIdRanges () )
         aAttrPool.FreezeIdRanges();
     else
         pSdrPool->FreezeIdRanges();
+
+    // SJ: #95129# set FontHeight pool defaults without changing static SdrEngineDefaults
+     aAttrPool.SetPoolDefaultItem(SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT ));
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create DrawDocument" );
     //Das SdrModel gehoert dem Dokument, wir haben immer zwei Layer und eine
