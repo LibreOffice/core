@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BFunctions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-16 13:20:54 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ sal_Bool LoadLibrary_ADABAS(::rtl::OUString &_rPath)
     if(osl_getEnvironment(sTemp.pData,&pPath) == osl_Process_E_None && pPath)
     {
 
-#if ( defined(SOLARIS) && defined(SPARC)) || defined(LINUX)
+#if ( defined(SOLARIS) && defined(SPARC)) || defined(LINUX) || defined(MACOSX)
         _rPath = ::rtl::OUString(pPath);
         _rPath += ::rtl::OUString::createFromAscii("/lib/");
 #endif
@@ -160,6 +160,8 @@ sal_Bool LoadLibrary_ADABAS(::rtl::OUString &_rPath)
     _rPath += ::rtl::OUString::createFromAscii("SQLOD32.DLL");
 #elif ( defined(SOLARIS) && defined(SPARC)) || defined(LINUX)
     _rPath += ::rtl::OUString::createFromAscii("odbclib.so");
+#elif defined(MACOSX)
+    _rPath += ::rtl::OUString::createFromAscii("odbclib.dylib");
 #else
     return sal_False;
 #endif
