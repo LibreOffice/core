@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-23 06:53:35 $
+ *  last change: $Author: ka $ $Date: 2002-08-20 13:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,6 +645,14 @@
       </prop>
       <prop oor:name="Data">
         <value>0,image/x-pcx,,,pcx,0,</value>
+      </prop>
+    </node>
+    <node oor:name="pdf_Portable_Document_Format" oor:op="replace">
+      <prop oor:name="UIName">
+        <value xml:lang="en-US">PDF - Portable Document Format</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,application/pdf,,,pdf,0,</value>
       </prop>
     </node>
     <node oor:name="pgm_Portable_Graymap" oor:op="replace">
@@ -6649,6 +6657,28 @@
       <prop oor:name="Data">
         <value>0,xpm_XPM,,,1,OO;SVIXPM;false,0,,</value>
       </prop>
+    </node>
+    <node oor:name="draw_pdf_Export" oor:op="replace">
+        <prop oor:name="Installed">
+            <value>false</value>
+        </prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">PDF - Portable Document Format</value>
+        </prop>
+        <prop oor:name="Data">
+            <value>2,pdf_Portable_Document_Format,com.sun.star.drawing.DrawingDocument,com.sun.star.comp.PDF.PDFFilter,524354,,0,,com.sun.star.comp.PDF.PDFDialog</value>
+        </prop>
+    </node>
+    <node oor:name="impress_pdf_Export" oor:op="replace">
+        <prop oor:name="Installed">
+            <value>false</value>
+        </prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">PDF - Portable Document Format</value>
+        </prop>
+        <prop oor:name="Data">
+            <value>2,pdf_Portable_Document_Format,com.sun.star.presentation.PresentationDocument,com.sun.star.comp.PDF.PDFFilter,524354,,0,,com.sun.star.comp.PDF.PDFDialog</value>
+        </prop>
     </node>
   </node>
   <node oor:name="ContentHandlers">
