@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 13:15:17 $
+ *  last change: $Author: ka $ $Date: 2001-10-25 10:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,8 +738,12 @@ void GalleryTransferable::CopyToClipboard( Window* pWindow )
 void GalleryTransferable::StartDrag( Window* pWindow, sal_Int8 nDragSourceActions,
                                      sal_Int32 nDragPointer, sal_Int32 nDragImage )
 {
-    mpTheme->SetDragging( sal_True );
-    mpTheme->SetDragPos( mnObjectPos );
+    INetURLObject aURL;
 
-    TransferableHelper::StartDrag( pWindow, nDragSourceActions, nDragPointer, nDragImage );
+    if( mpTheme->GetURL( mnObjectPos, aURL ) && ( aURL.GetProtocol() != INET_PROT_NOT_VALID ) )
+    {
+        mpTheme->SetDragging( sal_True );
+        mpTheme->SetDragPos( mnObjectPos );
+        TransferableHelper::StartDrag( pWindow, nDragSourceActions, nDragPointer, nDragImage );
+    }
 }

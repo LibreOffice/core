@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-19 12:21:22 $
+ *  last change: $Author: ka $ $Date: 2001-10-25 10:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,10 +208,16 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, ULONG nObjectP
     const SgaObjKind    eObjKind = mpTheme->GetObjectKind( mnObjectPos );
     PopupMenu*          pAddMenu = GetPopupMenu( MN_ADDMENU );
     SfxBindings&        rBindings = SfxViewFrame::Current()->GetBindings();
+    INetURLObject       aURL;
 
-    pAddMenu->EnableItem( MN_ADD, SGA_OBJ_SOUND != eObjKind );
-    pAddMenu->EnableItem( MN_ADD_LINK, SGA_OBJ_SVDRAW != eObjKind && SGA_OBJ_SOUND != eObjKind );
+    const_cast< GalleryTheme* >( mpTheme )->GetURL( mnObjectPos, aURL );
+    const BOOL bValidURL = ( aURL.GetProtocol() != INET_PROT_NOT_VALID );
+
+    pAddMenu->EnableItem( MN_ADD, bValidURL && SGA_OBJ_SOUND != eObjKind );
+    pAddMenu->EnableItem( MN_ADD_LINK, bValidURL && SGA_OBJ_SVDRAW != eObjKind && SGA_OBJ_SOUND != eObjKind );
+
     EnableItem( MN_ADDMENU, pAddMenu->IsItemEnabled( MN_ADD ) || pAddMenu->IsItemEnabled( MN_ADD_LINK ) );
+    EnableItem( MN_PREVIEW, bValidURL );
 
     CheckItem( MN_PREVIEW, mbPreview );
 
