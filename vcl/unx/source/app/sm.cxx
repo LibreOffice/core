@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:57:54 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 13:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 #include <string.h>
 #include <unistd.h>
+#include <sys/poll.h>
+#include <fcntl.h>
 
 // [ed] 6/15/02 Use the poll replacement on OS X
 #ifdef MACOSX
@@ -85,11 +87,14 @@
 #ifndef _SV_SALDISP_HXX
 #include <saldisp.hxx>
 #endif
-#ifndef _SV_SALFRAME_HXX
+#ifndef _SV_SALFRAME_H
 #include <salframe.h>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
+#endif
+#ifndef _SV_SALINST_H
+#include <salinst.h>
 #endif
 
 #include <osl/conditn.h>
@@ -114,6 +119,73 @@ inline void SMprintf( const char* pFormat, ... )
 #endif
 };
 
+static IceSalSession* pOneInstance = NULL;
+
+SalSession* X11SalInstance::CreateSalSession()
+{
+    if( ! pOneInstance )
+        pOneInstance = new IceSalSession();
+    return pOneInstance;
+}
+
+/*
+ *  class IceSalSession
+ */
+
+static X11SalFrame* pOldStyleSaveFrame = NULL;
+
+IceSalSession::IceSalSession()
+{
+}
+
+IceSalSession::~IceSalSession()
+{
+    if( pOneInstance == this )
+        pOneInstance = NULL;
+}
+
+void IceSalSession::queryInteraction()
+{
+    if( ! SessionManagerClient::queryInteraction() )
+    {
+        SalSessionInteractionEvent aEvent( false );
+        CallCallback( &aEvent );
+    }
+}
+
+void IceSalSession::interactionDone()
+{
+    SessionManagerClient::interactionDone();
+}
+
+void IceSalSession::saveDone()
+{
+    SessionManagerClient::saveDone();
+    if( pOldStyleSaveFrame )
+    {
+        // note: does nothing if not running in generic plugin
+        X11SalFrame::SaveYourselfDone( pOldStyleSaveFrame );
+    }
+}
+
+bool IceSalSession::cancelShutdown()
+{
+    return false;
+}
+
+void IceSalSession::handleOldX11SaveYourself( SalFrame* pFrame )
+{
+    // do this only once
+    if( ! pOldStyleSaveFrame )
+    {
+        pOldStyleSaveFrame = static_cast<X11SalFrame*>(pFrame);
+        if( pOneInstance )
+        {
+            SalSessionSaveRequestEvent aEvent( true, false );
+            pOneInstance->CallCallback( &aEvent );
+        }
+    }
+}
 
 extern "C" void SAL_CALL ICEConnectionWorker( void* );
 
@@ -127,26 +199,28 @@ class ICEConnectionObserver
     static struct pollfd* pFilehandles;
     static IceConn* pConnections;
     static int nConnections;
+    static int nWakeupFiles[2];
     static oslMutex ICEMutex;
     static oslThread ICEThread;
 public:
 
     static void activate();
-    static void deactivate();
     static void lock();
     static void unlock();
+    static void wakeup();
 };
 
 
-BOOL ICEConnectionObserver::bIsWatching = FALSE;
-SmcConn SessionManagerClient::aSmcConnection = NULL;
-ByteString SessionManagerClient::aClientID;
-struct pollfd* ICEConnectionObserver::pFilehandles = NULL;
-IceConn* ICEConnectionObserver::pConnections = NULL;
-int ICEConnectionObserver::nConnections = 0;
-oslMutex ICEConnectionObserver::ICEMutex = NULL;
-oslThread ICEConnectionObserver::ICEThread = NULL;
-oslCondition SessionManagerClient::aSaveCond = NULL;
+SmcConn             SessionManagerClient::aSmcConnection            = NULL;
+ByteString          SessionManagerClient::aClientID;
+BOOL                ICEConnectionObserver::bIsWatching              = FALSE;
+struct pollfd*  ICEConnectionObserver::pFilehandles             = NULL;
+IceConn*            ICEConnectionObserver::pConnections             = NULL;
+int                 ICEConnectionObserver::nConnections             = 0;
+oslMutex            ICEConnectionObserver::ICEMutex                 = NULL;
+oslThread           ICEConnectionObserver::ICEThread                = NULL;
+int                 ICEConnectionObserver::nWakeupFiles[2]          = { 0, 0 };
+
 // HACK
 bool SessionManagerClient::bDocSaveDone = false;
 
@@ -221,36 +295,38 @@ bool SessionManagerClient::checkDocumentsSaved()
 IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, pDummy )
 {
     SMprintf( "posting save documents event\n" );
+    if( pOneInstance )
+    {
+        SalSessionSaveRequestEvent aEvent( pDummy != 0, false );
+        pOneInstance->CallCallback( &aEvent );
+    }
+    else
+        saveDone();
 
-    Application::EnableDialogCancel( TRUE );
-    ApplicationEvent aEvent( String( RTL_CONSTASCII_USTRINGPARAM( "SessionManager" ) ),
-                             ApplicationAddress(),
-                             ByteString( APPEVENT_SAVEDOCUMENTS_STRING ),
-                             String( RTL_CONSTASCII_USTRINGPARAM( "All" ) ) );
-
-    if( GetpApp() )
-        GetpApp()->AppEvent( aEvent );
-    bDocSaveDone = true;
-    if( aSaveCond )
-        osl_setCondition( aSaveCond );
     return 0;
 }
 
-void SessionManagerClient::checkSaveYourselfCond()
+IMPL_STATIC_LINK( SessionManagerClient, InteractionHdl, void*, pDummy )
 {
-    if( aSaveCond )
+    if( pOneInstance )
     {
-        if( osl_checkCondition( aSaveCond ) )
-        {
-            osl_waitCondition( aSaveCond, NULL );
-            SMprintf( "wakeup on save yourself condition\n" );
-            osl_destroyCondition( aSaveCond );
-            aSaveCond = NULL;
-            SmcSetProperties( aSmcConnection, nSmProps, ppSmProps );
-            SmcSaveYourselfDone( aSmcConnection, True );
-            SMprintf( "sent SaveYourselfDone\n" );
-        }
+        SalSessionInteractionEvent aEvent( true );
+        pOneInstance->CallCallback( &aEvent );
     }
+
+    return 0;
+}
+
+IMPL_STATIC_LINK( SessionManagerClient, ShutDownCancelHdl, void*, pDummy )
+{
+    SMprintf( "shutdown cancel\n" );
+    if( pOneInstance )
+    {
+        SalSessionShutdownCancelEvent aEvent;
+        pOneInstance->CallCallback( &aEvent );
+    }
+
+    return 0;
 }
 
 void SessionManagerClient::SaveYourselfProc(
@@ -274,26 +350,9 @@ void SessionManagerClient::SaveYourselfProc(
               );
     BuildSmPropertyList();
 #ifdef USE_SM_EXTENSION
-    if( shutdown )
-    {
-        if( ! aSaveCond )
-        {
-            bDocSaveDone = false;
-            aSaveCond = osl_createCondition();
-            if( aSaveCond )
-            {
-                osl_resetCondition( aSaveCond );
-                Application::PostUserEvent( STATIC_LINK( NULL, SessionManagerClient, SaveYourselfHdl ) );
-                SMprintf( "waiting for save yourself event to be processed\n" );
-            }
-        }
-    }
-    else
-    {
-        SmcSetProperties( aSmcConnection, nSmProps, ppSmProps );
-        SmcSaveYourselfDone( aSmcConnection, True );
-        SMprintf( "sent SaveYourselfDone (no shutdown)\n" );
-    }
+    bDocSaveDone = false;
+    Application::PostUserEvent( STATIC_LINK( (void*)(shutdown ? 0xffffffff : 0x0), SessionManagerClient, SaveYourselfHdl ) );
+    SMprintf( "waiting for save yourself event to be processed\n" );
 #endif
 }
 
@@ -332,7 +391,32 @@ void SessionManagerClient::ShutdownCanceledProc(
     SmPointer client_data )
 {
     SMprintf( "Session: shutdown canceled\n" );
+    if( connection == aSmcConnection )
+        Application::PostUserEvent( STATIC_LINK( NULL, SessionManagerClient, ShutDownCancelHdl ) );
 }
+
+void SessionManagerClient::InteractProc(
+                                        SmcConn connection,
+                                        SmPointer client_data )
+{
+    SMprintf( "Session: interaction request completed\n" );
+    if( connection == aSmcConnection )
+        Application::PostUserEvent( STATIC_LINK( NULL, SessionManagerClient, InteractionHdl ) );
+}
+
+void SessionManagerClient::saveDone()
+{
+    if( aSmcConnection )
+    {
+        ICEConnectionObserver::lock();
+        SmcSetProperties( aSmcConnection, nSmProps, ppSmProps );
+        SmcSaveYourselfDone( aSmcConnection, True );
+        SMprintf( "sent SaveYourselfDone\n" );
+        bDocSaveDone = true;
+        ICEConnectionObserver::unlock();
+    }
+}
+
 
 void SessionManagerClient::open()
 {
@@ -402,15 +486,37 @@ void SessionManagerClient::close()
 {
     if( aSmcConnection )
     {
-        ICEConnectionObserver::deactivate();
 #ifdef USE_SM_EXTENSION
-        // shut down the listening thread
-        ICEConnectionObserver::deactivate();
-        // close the connection
+        ICEConnectionObserver::lock();
+        SMprintf( "attempting SmcCloseConnection\n" );
         SmcCloseConnection( aSmcConnection, 0, NULL );
         SMprintf( "SmcConnection closed\n" );
+        ICEConnectionObserver::unlock();
 #endif
         aSmcConnection = NULL;
+    }
+}
+
+bool SessionManagerClient::queryInteraction()
+{
+    bool bRet = false;
+    if( aSmcConnection )
+    {
+        ICEConnectionObserver::lock();
+        if( SmcInteractRequest( aSmcConnection, SmDialogNormal, InteractProc, NULL ) )
+            bRet = true;
+        ICEConnectionObserver::unlock();
+    }
+    return bRet;
+}
+
+void SessionManagerClient::interactionDone()
+{
+    if( aSmcConnection )
+    {
+        ICEConnectionObserver::lock();
+        SmcInteractDone( aSmcConnection, False );
+        ICEConnectionObserver::unlock();
     }
 }
 
@@ -461,6 +567,7 @@ void ICEConnectionObserver::activate()
 {
     if( ! bIsWatching )
     {
+        nWakeupFiles[0] = nWakeupFiles[1] = 0;
         ICEMutex = osl_createMutex();
         bIsWatching = TRUE;
 #ifdef USE_SM_EXTENSION
@@ -469,47 +576,60 @@ void ICEConnectionObserver::activate()
     }
 }
 
-void ICEConnectionObserver::deactivate()
+void ICEConnectionObserver::wakeup()
 {
-    if( bIsWatching )
-    {
-        bIsWatching = FALSE;
-#ifdef USE_SM_EXTENSION
-        IceRemoveConnectionWatch( ICEWatchProc, NULL );
-#endif
-        if( ICEThread )
-        {
-            osl_terminateThread( ICEThread );
-            osl_joinWithThread( ICEThread );
-            osl_destroyThread( ICEThread );
-            ICEThread = NULL;
-        }
-        osl_destroyMutex( ICEMutex );
-        ICEMutex = NULL;
-    }
+    char cChar = 'w';
+    write( nWakeupFiles[1], &cChar, 1 );
 }
 
 void ICEConnectionWorker( void* pData )
 {
 #ifdef USE_SM_EXTENSION
-    while( ICEConnectionObserver::nConnections && osl_scheduleThread( ICEConnectionObserver::ICEThread) )
+    while( osl_scheduleThread(ICEConnectionObserver::ICEThread) && ICEConnectionObserver::nConnections )
     {
-        osl_acquireMutex( ICEConnectionObserver::ICEMutex );
-        int nRet = poll( ICEConnectionObserver::pFilehandles,
-                         ICEConnectionObserver::nConnections,
-                         400 );
-        if( nRet > 0 )
+        ICEConnectionObserver::lock();
+        int nConnectionsBefore = ICEConnectionObserver::nConnections;
+        int nBytes = sizeof( struct pollfd )*(nConnectionsBefore+1);
+        struct pollfd* pLocalFD = (struct pollfd*)rtl_allocateMemory( nBytes );
+        rtl_copyMemory( pLocalFD, ICEConnectionObserver::pFilehandles, nBytes );
+        ICEConnectionObserver::unlock();
+
+        int nRet = poll( pLocalFD,nConnectionsBefore+1,-1 );
+        bool bWakeup = (pLocalFD[0].revents & POLLIN);
+        rtl_freeMemory( pLocalFD );
+
+        if( nRet < 1 )
+            continue;
+
+        // clear wakeup pipe
+        if( bWakeup )
         {
-            SMprintf( "IceProcessMessages\n" );
-            Bool bReply;
-            for( int i = 0; i < ICEConnectionObserver::nConnections; i++ )
-                if( ICEConnectionObserver::pFilehandles[i].revents & POLLIN )
-                    IceProcessMessages( ICEConnectionObserver::pConnections[i], NULL, &bReply );
+            char buf[4];
+            while( read( ICEConnectionObserver::nWakeupFiles[0], buf, sizeof( buf ) ) > 0 )
+                ;
+            SMprintf( "file handles active in wakeup: %d\n", nRet );
+            if( nRet == 1 )
+                continue;
         }
-        SessionManagerClient::checkSaveYourselfCond();
-        osl_releaseMutex( ICEConnectionObserver::ICEMutex );
+
+        // check fd's after we obtained the lock
+        ICEConnectionObserver::lock();
+        if( ICEConnectionObserver::nConnections > 0 && ICEConnectionObserver::nConnections == nConnectionsBefore )
+        {
+            nRet = poll( ICEConnectionObserver::pFilehandles+1, ICEConnectionObserver::nConnections, 0 );
+            if( nRet > 0 )
+            {
+                SMprintf( "IceProcessMessages\n" );
+                Bool bReply;
+                for( int i = 0; i < ICEConnectionObserver::nConnections; i++ )
+                    if( ICEConnectionObserver::pFilehandles[i+1].revents & POLLIN )
+                        IceProcessMessages( ICEConnectionObserver::pConnections[i], NULL, &bReply );
+            }
+        }
+        ICEConnectionObserver::unlock();
     }
 #endif
+    SMprintf( "shutting donw ICE dispatch thread\n" );
 }
 
 void ICEConnectionObserver::ICEWatchProc(
@@ -519,27 +639,56 @@ void ICEConnectionObserver::ICEWatchProc(
     IcePointer* watch_data
     )
 {
+    // note: this is a callback function for ICE
+    // this implicitly means that a call into ICE lib is calling this
+    // so the ICEMutex MUST already be locked by the caller
+
 #ifdef USE_SM_EXTENSION
     if( opening )
     {
-        osl_acquireMutex( ICEMutex );
         int fd = IceConnectionNumber( connection );
         nConnections++;
         pConnections = (IceConn*)rtl_reallocateMemory( pConnections, sizeof( IceConn )*nConnections );
-        pFilehandles = (struct pollfd*)rtl_reallocateMemory( pFilehandles, sizeof( struct pollfd )*nConnections );
-        pConnections[ nConnections-1 ] = connection;
-        pFilehandles[ nConnections-1 ].fd       = fd;
-        pFilehandles[ nConnections-1 ].events   = POLLIN;
-        osl_releaseMutex( ICEMutex );
+        pFilehandles = (struct pollfd*)rtl_reallocateMemory( pFilehandles, sizeof( struct pollfd )*(nConnections+1) );
+        pConnections[ nConnections-1 ]      = connection;
+        pFilehandles[ nConnections ].fd     = fd;
+        pFilehandles[ nConnections ].events = POLLIN;
         if( nConnections == 1 )
         {
-            ICEThread = osl_createSuspendedThread( ICEConnectionWorker, NULL );
-            osl_resumeThread( ICEThread );
+            if( ! pipe( nWakeupFiles ) )
+            {
+                int flags;
+                pFilehandles[0].fd      = nWakeupFiles[0];
+                pFilehandles[0].events  = POLLIN;
+                // set close-on-exec and nonblock descriptor flag.
+                if ((flags = fcntl (nWakeupFiles[0], F_GETFD)) != -1)
+                {
+                    flags |= FD_CLOEXEC;
+                    fcntl (nWakeupFiles[0], F_SETFD, flags);
+                }
+                if ((flags = fcntl (nWakeupFiles[0], F_GETFL)) != -1)
+                {
+                    flags |= O_NONBLOCK;
+                    fcntl (nWakeupFiles[0], F_SETFL, flags);
+                }
+                // set close-on-exec and nonblock descriptor flag.
+                if ((flags = fcntl (nWakeupFiles[1], F_GETFD)) != -1)
+                {
+                    flags |= FD_CLOEXEC;
+                    fcntl (nWakeupFiles[1], F_SETFD, flags);
+                }
+                if ((flags = fcntl (nWakeupFiles[1], F_GETFL)) != -1)
+                {
+                    flags |= O_NONBLOCK;
+                    fcntl (nWakeupFiles[1], F_SETFL, flags);
+                }
+                ICEThread = osl_createSuspendedThread( ICEConnectionWorker, NULL );
+                osl_resumeThread( ICEThread );
+            }
         }
     }
     else
     {
-        osl_acquireMutex( ICEMutex );
         for( int i = 0; i < nConnections; i++ )
         {
             if( pConnections[i] == connection )
@@ -547,19 +696,25 @@ void ICEConnectionObserver::ICEWatchProc(
                 if( i < nConnections-1 )
                 {
                     rtl_moveMemory( pConnections+i, pConnections+i+1, sizeof( IceConn )*(nConnections-i-1) );
-                    rtl_moveMemory( pFilehandles+i, pFilehandles+i+1, sizeof( struct pollfd )*(nConnections-i-1) );
+                    rtl_moveMemory( pFilehandles+i+1, pFilehandles+i+2, sizeof( struct pollfd )*(nConnections-i-1) );
                 }
                 nConnections--;
                 pConnections = (IceConn*)rtl_reallocateMemory( pConnections, sizeof( IceConn )*nConnections );
-                pFilehandles = (struct pollfd*)rtl_reallocateMemory( pFilehandles, sizeof( struct pollfd )*nConnections );
+                pFilehandles = (struct pollfd*)rtl_reallocateMemory( pFilehandles, sizeof( struct pollfd )*(nConnections+1) );
                 break;
             }
         }
-        osl_releaseMutex( ICEMutex );
-        if( nConnections == 0 )
+        if( nConnections == 0 && ICEThread )
         {
+            SMprintf( "terminating ICEThread\n" );
             osl_terminateThread( ICEThread );
+            wakeup();
+            // must release the mutex here
+            osl_releaseMutex( ICEMutex );
+            osl_joinWithThread( ICEThread );
             osl_destroyThread( ICEThread );
+            close( nWakeupFiles[1] );
+            close( nWakeupFiles[0] );
             ICEThread = NULL;
         }
     }
