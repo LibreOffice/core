@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_runtime.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:30:44 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     case typelib_TypeClass_UNSIGNED_SHORT:
     case typelib_TypeClass_LONG:
     {
-        long l;
+        sal_Int32 l;
         a >>= l;
         return PyRef( PyInt_FromLong (l), SAL_NO_ACQUIRE );
     }
@@ -427,7 +427,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     }
     case typelib_TypeClass_ENUM:
     {
-        long l = *(long *) a.getValue();
+        sal_Int32 l = *(sal_Int32 *) a.getValue();
         TypeDescription desc( a.getValueType() );
         if( desc.is() )
         {
