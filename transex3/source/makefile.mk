@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nf $ $Date: 2000-11-20 13:49:48 $
+#   last change: $Author: nf $ $Date: 2000-11-22 14:22:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,12 +117,12 @@ APP6STACK=  16000
 APP6OBJS=   $(OBJ)$/xmlmerge.obj $(OBJ)$/xml_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 APP6STDLIBS=$(STATIC_LIBS)
 
-APP6TARGET= cfgex
-APP6STACK=  16000
-APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
-APP6STDLIBS=$(STATIC_LIBS)
+APP7TARGET= cfgex
+APP7STACK=  16000
+APP7OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+APP7STDLIBS=$(STATIC_LIBS)
 
-DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS)
+DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS)
 
 .IF "$(depend)" == ""
 ALL : 	$(MISC)$/src_yy.c 	\
