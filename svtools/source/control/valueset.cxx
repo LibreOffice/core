@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-03 13:37:39 $
+ *  last change: $Author: os $ $Date: 2002-05-28 12:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1392,6 +1392,8 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
         nCurPos = VALUESET_ITEM_NONEITEM;
     nCalcPos = nCurPos;
 
+    //switch off selection mode if key travelling is used
+    BOOL bDefault = FALSE;
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
         case KEY_HOME:
@@ -1523,12 +1525,17 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
             while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE );
         }
         break;
-
+        case KEY_RETURN:
+            Select();
+        break;
         default:
             Control::KeyInput( rKEvt );
+            bDefault = TRUE;
             break;
     }
 
+    if(!bDefault)
+        EndSelection();
     if ( nItemPos != VALUESET_ITEM_NOTFOUND )
     {
         USHORT nItemId;
@@ -1539,7 +1546,9 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
         if ( nItemId != mnSelItemId )
         {
             SelectItem( nItemId );
-            Select();
+            //select only if WB_NO_DIRECTSELECT is not set
+            if(0 == (GetStyle()&WB_NO_DIRECTSELECT))
+                Select();
         }
     }
 }
