@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:09:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ String STR_SOLID
     Text[ korean ] = "¿¬¼Ó";
     Text[ turkish ] = "Düz";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Continuo";
 };
 String STR_GRADIENT
 {
@@ -112,6 +113,7 @@ String STR_GRADIENT
     Text[ korean ] = "±×¶óµ¥ÀÌ¼Ç";
     Text[ turkish ] = "Gradyan";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Gradiente  de color";
 };
 String STR_DESC_GRADIENT
 {
@@ -139,6 +141,7 @@ String STR_DESC_GRADIENT
     Text[ korean ] = "»õ ±×¶óµ¥ÀÌ¼ÇÀÇ ÀÌ¸§À» ¿©±â¿¡ ÀÔ·ÂÇÏ½Ê½Ã¿À:";
     Text[ turkish ] = "Yeni gradyan için bir ad girin:";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Inserte aquí el nombre para el nuevo gradiente de color:";
 };
 String STR_DEL_GRADIENT
 {
@@ -166,6 +169,7 @@ String STR_DEL_GRADIENT
     Text[ korean ] = "±×¶óµ¥ÀÌ¼Ç »èÁ¦";
     Text[ turkish ] = "Gradyanı sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar gradiente";
 };
 String STR_ASK_DEL_GRADIENT
 {
@@ -193,6 +197,7 @@ String STR_ASK_DEL_GRADIENT
     Text[ korean ] = "±×¶óµ¥ÀÌ¼ÇÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Gradyanı gerçekten silmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea realmente eliminar el gradiente de color?";
 };
 String STR_ASK_CHANGE_GRADIENT
 {
@@ -220,6 +225,7 @@ String STR_ASK_CHANGE_GRADIENT
     Text[ korean ] = "±×¶óµ¥ÀÌ¼ÇÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù. \n¼±ÅÃµÈ ±×¶óµ¥ÀÌ¼ÇÀ» º¯°æÇÏ°Å³ª \n»õ ±×¶óµ¥ÀÌ¼ÇÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Gradyan değiştirildi, ancak kaydedilmedi. \nSeçilen gradyanı değiştirebilir \nya da yeni bir gradyan ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El gradiente de color ha sido modificado sin guardar.\nUsted puede modificar el gradiente seleccionado\no añadir uno nuevo.";
 };
 String STR_BITMAP
 {
@@ -246,6 +252,7 @@ String STR_BITMAP
     Text[ korean ] = "ºñÆ®¸Ê";
     Text[ turkish ] = "Bit eşlem";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Bitmap";
 };
 String STR_DESC_NEW_BITMAP
 {
@@ -273,6 +280,7 @@ String STR_DESC_NEW_BITMAP
     Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ãéá ôï íİï bitmap:";
     Text[ korean ] = "»õ ºñÆ®¸ÊÀÇ ÀÌ¸§À» ¿©±â¿¡ ÀÔ·ÂÇÏ½Ê½Ã¿À:";
     Text[ turkish ] = "Yeni bit eşlem için bir ad girin:";
+    Text[ catalan ] = "Inserte aquí el nombre para la nueva bitmap:";
 };
 String STR_DESC_EXT_BITMAP
 {
@@ -300,6 +308,7 @@ String STR_DESC_EXT_BITMAP
     Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ãéá ôï åîùôåñéêü bitmap:";
     Text[ korean ] = "¿ÜºÎ ºñÆ®¸ÊÀÇ ÀÌ¸§À» ¿©±â¿¡ ÀÔ·ÂÇÏ½Ê½Ã¿À:";
     Text[ turkish ] = "Harici bit eşlemin adını girin:";
+    Text[ catalan ] = "Inserte aquí el nombre para la bitmap externa:";
 };
 String STR_DEL_BITMAP
 {
@@ -327,6 +336,7 @@ String STR_DEL_BITMAP
     Text[ korean ] = "ºñÆ®¸Ê »èÁ¦";
     Text[ turkish ] = "Bit eşlemi sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar bitmap";
 };
 String STR_ASK_DEL_BITMAP
 {
@@ -354,6 +364,7 @@ String STR_ASK_DEL_BITMAP
     Text[ korean ] = "ºñÆ®¸ÊÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Bit eşlemi gerçekten silmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea realmente eliminar la bitmap?";
 };
 String STR_ASK_CHANGE_BITMAP
 {
@@ -381,6 +392,7 @@ String STR_ASK_CHANGE_BITMAP
     Text[ korean ] = "ºñÆ®¸ÊÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù. \n¼±ÅÃµÈ ºñÆ®¸ÊÀ» º¯°æÇÏ°Å³ª \n »õ ºñÆ®¸ÊÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Bit eşlem değiştirildi, ancak kaydedilmedi.\nSeçilen bit eşlemi değiştirebilir \nya da yeni bir bit eşlem ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El bitmap ha sido modificado sin guardar.\nPuede modificar el bitmap seleccionado\no añadir uno nuevo.";
 };
 String STR_LINESTYLE
 {
@@ -407,6 +419,7 @@ String STR_LINESTYLE
     Text[ korean ] = "¼± À¯Çü";
     Text[ turkish ] = "Çizgi biçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilo de línea";
 };
 String STR_DESC_LINESTYLE
 {
@@ -434,6 +447,7 @@ String STR_DESC_LINESTYLE
     Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ãéá ôï íİï óôõë ãñáììŞò:";
     Text[ korean ] = "»õ ¼± À¯ÇüÀÇ ÀÌ¸§À» ¿©±â¿¡ ÀÔ·ÂÇÏ½Ê½Ã¿À:";
     Text[ turkish ] = "Yeni çizgi biçimi için bir ad girin:";
+    Text[ catalan ] = "Inserte aquí el nombre para el nuevo estilo de línea:";
 };
 String STR_DEL_LINESTYLE
 {
@@ -461,6 +475,7 @@ String STR_DEL_LINESTYLE
     Text[ korean ] = "¼± À¯Çü »èÁ¦";
     Text[ turkish ] = "Çizgi biçimini sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar estilo de línea";
 };
 String STR_ASK_DEL_LINESTYLE
 {
@@ -488,6 +503,7 @@ String STR_ASK_DEL_LINESTYLE
     Text[ korean ] = "¼± À¯ÇüÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Çizgi biçimini gerçekten silmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea realmente eliminar el estilo de línea?";
 };
 String STR_ASK_CHANGE_LINESTYLE
 {
@@ -515,6 +531,7 @@ String STR_ASK_CHANGE_LINESTYLE
     Text[ korean ] = "¼± À¯ÇüÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù. \n¼±ÅÃµÈ ¼± À¯ÇüÀ» º¯°æÇÏ°Å³ª \n»õ ¼± À¯ÇüÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Çizgi biçimi değiştirildi, ancak kaydedilmedi. \nSeçilen çizgi biçimini değiştirebilir \nya da yeni bir çizgi biçimi ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El estilo de línea ha sido modificado sin guardar.\nUsted puede modificar el estilo de línea seleccionado\no añadir uno nuevo.";
 };
 String STR_INVISIBLE
 {
@@ -541,6 +558,7 @@ String STR_INVISIBLE
     Text[ korean ] = "º¸ÀÌÁö ¾Ê°Ô";
     Text[ turkish ] = "Görünmez";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Invisible";
 };
 String STR_COLOR
 {
@@ -567,6 +585,7 @@ String STR_COLOR
     Text[ korean ] = "»ö»ó";
     Text[ turkish ] = "Renk";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Color";
 };
 String STR_HATCH
 {
@@ -593,6 +612,7 @@ String STR_HATCH
     Text[ korean ] = "ÇØÄª";
     Text[ turkish ] = "Tarama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Trama";
 };
 String STR_CHANGE
 {
@@ -620,6 +640,7 @@ String STR_CHANGE
     Text[ korean ] = "º¯°æ";
     Text[ turkish ] = "Değiştir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar";
 };
 String STR_ADD
 {
@@ -647,4 +668,5 @@ String STR_ADD
     Text[ korean ] = "Ãß°¡";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Añadir";
 };
