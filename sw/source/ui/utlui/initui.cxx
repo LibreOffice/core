@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:39:19 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 
 #pragma hdrstop
 
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
@@ -250,15 +250,15 @@ ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( SvStringsDtor& rLst )
         String* p = new String( ResId( n + 1, pSwResMgr) );
         if(STR_AUTOFMTREDL_TYPO == n)
         {
-            const International& rInt = Application::GetAppInternational();
+            LocaleDataWrapper& rLclD = GetAppLocaleData();
 #ifdef WNT
             //fuer Windows Sonderbehandlung, da MS hier ein paar Zeichen im Dialogfont vergessen hat
             p->SearchAndReplace(C2S("%1"), C2S(",,"));
             p->SearchAndReplace(C2S("%2"), C2S("''"));
 #else
             //unter richtigen Betriebssystemen funktioniert es auch so
-            p->SearchAndReplace(C2S("%1"), rInt.GetDoubleQuotationMarkStartChar());
-            p->SearchAndReplace(C2S("%2"), rInt.GetDoubleQuotationMarkEndChar());
+            p->SearchAndReplace(C2S("%1"), rLclD.getDoubleQuotationMarkStartChar());
+            p->SearchAndReplace(C2S("%2"), rLclD.getDoubleQuotationMarkEndChar());
 #endif
         }
         rLst.Insert( p, n );
@@ -302,6 +302,9 @@ const String&   SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
 /*************************************************************************
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/06 13:39:19  jp
+    should changes: don't use IniManager
+
     Revision 1.1.1.1  2000/09/18 17:14:50  hr
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,25 @@
 #ifndef _MySVXACORR_HXX //autogen
 #include <svx/svxacorr.hxx>
 #endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 
-#include "swtypes.hxx"
-#include "viewopt.hxx"
-#include "wdocsh.hxx"
-#include "swrect.hxx"
-#include "crstate.hxx"
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
+#ifndef _WDOCSH_HXX
+#include <wdocsh.hxx>
+#endif
+#ifndef _SWRECT_HXX
+#include <swrect.hxx>
+#endif
+#ifndef _CRSTATE_HXX
+#include <crstate.hxx>
+#endif
 
 
 #ifndef PRODUCT
@@ -444,7 +457,7 @@ SwViewOption::SwViewOption() :
     nUIOptions    = VIEWOPT_2_MODIFIED | VIEWOPT_2_EXECHYPERLINKS;
 
     MeasurementSystem eSys = Application::GetAppInternational().GetMeasurementSystem();
-    if(MEASURE_METRIC != eSys)
+    if(MEASURE_METRIC != GetAppLocaleData().getMeasurementSystemEnum())
         aSnapSize.Width() = aSnapSize.Height() = 720;   // 1/2"
     else
         aSnapSize.Width() = aSnapSize.Height() = 567;   // 1 cm
@@ -611,6 +624,9 @@ USHORT      GetHtmlMode(const SwDocShell* pShell)
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:33  hr
+      initial import
+
       Revision 1.57  2000/09/18 16:05:18  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,19 @@
 
 #pragma hdrstop
 
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
+#ifndef _UIPARAM_HXX
+#include <uiparam.hxx>
+#endif
+
 #ifndef _REF_HXX //to avoid internal compiler errors
 #include <tools/ref.hxx>
 #endif
-
-#include "cmdid.h"
-#include "hintids.hxx"
-#include "uiparam.hxx"
-
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
@@ -82,16 +87,33 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 
 
-#include "uitool.hxx"
-#include "globals.hrc"
-#include "pagedesc.hxx"
-#include "pgfnote.hxx"
-#include "uiitems.hxx"
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
+#endif
+#ifndef _PGFNOTE_HXX
+#include <pgfnote.hxx>
+#endif
+#ifndef _UIITEMS_HXX
+#include <uiitems.hxx>
+#endif
 
-#include "misc.hrc"
-#include "pgfnote.hrc"
+#ifndef _GLOBALS_HRC
+#include <globals.hrc>
+#endif
+#ifndef _MISC_HRC
+#include <misc.hrc>
+#endif
+#ifndef _PGFNOTE_HRC
+#include <pgfnote.hrc>
+#endif
 
 #define TWIP_TO_LBOX 5
 /*-----------------------------------------------------#---------------
@@ -211,7 +233,7 @@ SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet) :
     SetMetric( aMaxHeightEdit,  aMetric );
     SetMetric( aDistEdit,       aMetric );
     SetMetric( aLineDistEdit,   aMetric );
-    MeasurementSystem eSys = Application::GetAppInternational().GetMeasurementSystem();
+    MeasurementSystem eSys = GetAppLocaleData().getMeasurementSystemEnum();
     long nHeightValue = MEASURE_METRIC != eSys ? 1440 : 1134;
     aMaxHeightEdit.SetValue(aMaxHeightEdit.Normalize(nHeightValue),FUNIT_TWIP);;
 }
@@ -385,6 +407,9 @@ USHORT* SwFootNotePage::GetRanges()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:45  hr
+    initial import
+
     Revision 1.79  2000/09/18 16:05:59  willem.vandorp
     OpenOffice header added.
 

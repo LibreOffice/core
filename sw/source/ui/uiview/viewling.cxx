@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-19 11:41:10 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,12 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"
-#include "uiparam.hxx"      // fuer ITEMID_SPELLCHECK (muss _vor_ sfxdlg.hxx!)
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
+#ifndef _UIPARAM_HXX
+#include <uiparam.hxx>      // fuer ITEMID_SPELLCHECK (muss _vor_ sfxdlg.hxx!)
+#endif
 
 
 #ifndef _SVSTDARR_HXX
@@ -85,6 +89,9 @@
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 
 
@@ -580,7 +587,7 @@ void SwView::StartThesaurus()
                                             RES_CHRATR_LANGUAGE );
     LanguageType eLang = rLang.GetLanguage();
     if ( ( eLang == LANGUAGE_SYSTEM ) &&
-         ( ((eLang=GetpApp()->GetAppInternational().GetLanguage())==LANGUAGE_SYSTEM )
+         ( ((eLang=SvxLocaleToLanguage( GetAppLocaleData().getLocale() ))==LANGUAGE_SYSTEM )
          && ( ( eLang=::GetSystemLanguage() ) == LANGUAGE_SYSTEM ) ) )
         eLang = LANGUAGE_DONTKNOW;
 

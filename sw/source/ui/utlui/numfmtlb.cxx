@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:18:07 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -73,8 +75,11 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 #ifndef _LANG_HXX //autogen
 #include <tools/lang.hxx>
@@ -105,19 +110,32 @@
 #ifndef _SVX_NUMFMT_HXX //autogen
 #include <svx/numfmt.hxx>
 #endif
-#ifndef _SV_SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
+
+#ifndef _TBLNUMFM_HXX
+#include <tblnumfm.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _NUMFMTLB_HXX
+#include <numfmtlb.hxx>
 #endif
 
-#include "tblnumfm.hxx"
-#include "docsh.hxx"
-#include "swtypes.hxx"
-#include "swmodule.hxx"
-#include "view.hxx"
-#include "wrtsh.hxx"
-
-#include "utlui.hrc"
-#include "numfmtlb.hxx"
+#ifndef _UTLUI_HRC
+#include <utlui.hrc>
+#endif
 
 
 using namespace ::com::sun::star::uno;
@@ -181,7 +199,7 @@ void NumFormatListBox::Init(short nFormatType, BOOL bUsrFmts)
         eCurLanguage = ((const SvxLanguageItem&)aSet.Get( RES_CHRATR_LANGUAGE ) ).GetLanguage();
     }
     else
-        eCurLanguage = Application::GetAppInternational().GetLanguage();
+        eCurLanguage = SvxLocaleToLanguage( GetAppLocaleData().getLocale() );
 
     if (bUsrFmts == FALSE)
        {
@@ -601,6 +619,9 @@ void NumFormatListBox::Clear()
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/10/20 14:18:07  os
+      use comphelper methods
+
       Revision 1.2  2000/10/20 09:51:30  os
       change: use SvNumberFormatter ctor using XMultiServiceFactory
 
