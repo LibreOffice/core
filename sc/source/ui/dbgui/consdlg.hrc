@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 17:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,31 +62,34 @@
 #include "sc.hrc"
 
 #define BTN_OK                      1
-#define BTN_CANCEL                  1
-#define BTN_HELP                    1
-#define BTN_MORE                    1
+#define BTN_CANCEL                  2
+#define BTN_HELP                    3
+#define BTN_MORE                    4
 
-#define BTN_ADD                     1
-#define BTN_REMOVE                  2
+#define BTN_ADD                     5
+#define BTN_REMOVE                  6
 
-#define FT_FUNC                     1
-#define LB_FUNC                     1
+#define FT_FUNC                     11
+#define LB_FUNC                     12
 
-#define FT_CONSAREAS                2
-#define LB_CONSAREAS                2
+#define FT_CONSAREAS                21
+#define LB_CONSAREAS                22
 
-#define FT_DATA_AREA                3
-#define LB_DATA_AREA                3
-#define ED_DATA_AREA                3
-#define RB_DATA_AREA                3
+#define FT_DATA_AREA                31
+#define LB_DATA_AREA                32
+#define ED_DATA_AREA                33
+#define RB_DATA_AREA                34
 
-#define FT_DEST_AREA                4
-#define LB_DEST_AREA                4
-#define ED_DEST_AREA                4
-#define RB_DEST_AREA                4
+#define FT_DEST_AREA                41
+#define LB_DEST_AREA                42
+#define ED_DEST_AREA                43
+#define RB_DEST_AREA                44
 
-#define BTN_BYROW                   1
-#define BTN_BYCOL                   2
-#define BTN_REFS                    3
-#define GB_CONSBY                   1
+#define FL_CONSBY                   50
+#define BTN_BYROW                   51
+#define BTN_BYCOL                   52
+#define FL_SEP                      59
+
+#define FL_OPTIONS                  60
+#define BTN_REFS                    61
 

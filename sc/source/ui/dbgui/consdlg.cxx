@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 15:51:29 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 17:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,10 +151,12 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
         aEdDestArea     ( this, ScResId( ED_DEST_AREA ) ),
         aRbDestArea     ( this, ScResId( RB_DEST_AREA ), &aEdDestArea ),
 
+        aFlConsBy       ( this, ScResId( FL_CONSBY ) ),
         aBtnByRow       ( this, ScResId( BTN_BYROW ) ),
         aBtnByCol       ( this, ScResId( BTN_BYCOL) ),
 
-        aGbConsBy       ( this, ScResId( GB_CONSBY ) ),
+        aFlSep          ( this, ScResId( FL_SEP ) ),
+        aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
         aBtnRefs        ( this, ScResId( BTN_REFS ) ),
 
         aBtnOk          ( this, ScResId( BTN_OK ) ),
@@ -219,9 +221,11 @@ void ScConsolidateDlg::Init()
     aBtnAdd     .SetClickHdl    ( LINK( this, ScConsolidateDlg, ClickHdl ) );
     aBtnRemove  .SetClickHdl    ( LINK( this, ScConsolidateDlg, ClickHdl ) );
 
-    aBtnMore.AddWindow( &aGbConsBy );
+    aBtnMore.AddWindow( &aFlConsBy );
     aBtnMore.AddWindow( &aBtnByRow );
     aBtnMore.AddWindow( &aBtnByCol );
+    aBtnMore.AddWindow( &aFlSep );
+    aBtnMore.AddWindow( &aFlOptions );
     aBtnMore.AddWindow( &aBtnRefs );
 
     aBtnAdd.Disable();
@@ -291,6 +295,8 @@ void ScConsolidateDlg::Init()
     aLbDataArea.SelectEntryPos( 0 );
     aEdDataArea.SetText( EMPTY_STRING );
     aEdDataArea.GrabFocus();
+
+    aFlSep.SetStyle( aFlSep.GetStyle() | WB_VERT );
 
     //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
     //SFX_APPWINDOW->Enable();

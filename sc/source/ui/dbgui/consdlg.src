@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:49:48 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 17:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     ListBox LB_FUNC
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 15 ) ;
-        Size = MAP_APPFONT ( 209 , 90 ) ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 212 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList =
@@ -430,22 +430,22 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     Edit ED_DATA_AREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 111 , 106 ) ;
-        Size = MAP_APPFONT ( 90 , 12 ) ;
+        Pos = MAP_APPFONT ( 100 , 106 ) ;
+        Size = MAP_APPFONT ( 104 , 12 ) ;
         TabStop = TRUE ;
     };
     Edit ED_DEST_AREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 111 , 136 ) ;
-        Size = MAP_APPFONT ( 90 , 12 ) ;
+        Pos = MAP_APPFONT ( 100 , 135 ) ;
+        Size = MAP_APPFONT ( 104 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_DATA_AREA
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 203 , 106 ) ;
+        Pos = MAP_APPFONT ( 206 , 106 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -475,7 +475,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 203 , 136 ) ;
+        Pos = MAP_APPFONT ( 206 , 135 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -505,15 +505,15 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 106 ) ;
-        Size = MAP_APPFONT ( 100 , 90 ) ;
+        Size = MAP_APPFONT ( 90 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     ListBox LB_DEST_AREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 136 ) ;
-        Size = MAP_APPFONT ( 100 , 90 ) ;
+        Pos = MAP_APPFONT ( 6 , 135 ) ;
+        Size = MAP_APPFONT ( 90 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
@@ -521,14 +521,14 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     {
         SimpleMode = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 45 ) ;
-        Size = MAP_APPFONT ( 209 , 43 ) ;
+        Pos = MAP_APPFONT ( 6 , 46 ) ;
+        Size = MAP_APPFONT ( 212 , 43 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_FUNC
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 212 , 8 ) ;
         Text = "Be~rechnungsvorschrift" ;
         Text [ ENGLISH ] = "Fun~ction" ;
         Text [ norwegian ] = "Fu~nksjon" ;
@@ -556,8 +556,8 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     FixedText FT_CONSAREAS
     {
-        Pos = MAP_APPFONT ( 6 , 33 ) ;
-        Size = MAP_APPFONT ( 91 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Size = MAP_APPFONT ( 212 , 8 ) ;
         Text = "~Konsolidierungsbereiche" ;
         Text [ ENGLISH ] = "Consoli~dation areas" ;
         Text [ norwegian ] = "Konsoli~derings områder" ;
@@ -585,8 +585,8 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     FixedText FT_DATA_AREA
     {
-        Pos = MAP_APPFONT ( 6 , 94 ) ;
-        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 95 ) ;
+        Size = MAP_APPFONT ( 212 , 8 ) ;
         Text = "Quelldaten~bereich" ;
         Text [ ENGLISH ] = "~Source data area" ;
         Text [ norwegian ] = "~Kildedataområder" ;
@@ -615,7 +615,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     FixedText FT_DEST_AREA
     {
         Pos = MAP_APPFONT ( 6 , 124 ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Size = MAP_APPFONT ( 212 , 8 ) ;
         Text = "Er~gebnis ausgeben ab" ;
         Text [ ENGLISH ] = "Result  a~t" ;
         Text [ norwegian ] = "Resultat ~ved" ;
@@ -643,8 +643,8 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     CheckBox BTN_BYROW
     {
-        Pos = MAP_APPFONT ( 14 , 165 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 165 ) ;
+        Size = MAP_APPFONT ( 94 , 10 ) ;
         Text = "Ze~ilenbeschriftung" ;
         Text [ ENGLISH ] = "by ro~ws" ;
         Text [ norwegian ] = "etter ra~der" ;
@@ -673,8 +673,8 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     CheckBox BTN_BYCOL
     {
-        Pos = MAP_APPFONT ( 14 , 178 ) ;
-        Size = MAP_APPFONT ( 74 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 179 ) ;
+        Size = MAP_APPFONT ( 94 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? S~paltenköpfen : S~paltenk÷pfen */
         Text = "S~paltenköpfen" ;
         Text [ ENGLISH ] = "by colum~ns" ;
@@ -702,10 +702,10 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Títulos de ~columnas";
     };
-    GroupBox GB_CONSBY
+    FixedLine FL_CONSBY
     {
         Pos = MAP_APPFONT ( 6 , 154 ) ;
-        Size = MAP_APPFONT ( 100 , 40 ) ;
+        Size = MAP_APPFONT ( 103 , 8 ) ;
         Text = "Konsolidieren nach" ;
         Text [ ENGLISH ] = "Consolidate by" ;
         Text [ norwegian ] = "Konsolidere ved " ;
@@ -731,10 +731,44 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Consolidar según";
     };
+    FixedLine FL_SEP
+    {
+        Pos = MAP_APPFONT ( 112 , 165 ) ;
+        Size = MAP_APPFONT ( 1 , 24 ) ;
+    };
+    FixedLine FL_OPTIONS
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 115 , 154 ) ;
+        Size = MAP_APPFONT ( 103 , 8 ) ;
+        Text = "Optionen" ;
+        Text [ ENGLISH ] = "Options" ;
+        Text [ english_us ] = "Options" ;
+        Text [ portuguese_brazilian ] = "Optionen" ;
+        Text [ swedish ] = "Alternativ" ;
+        Text [ danish ] = "Indstillinger" ;
+        Text [ italian ] = "Opzioni" ;
+        Text [ spanish ] = "Opciones" ;
+        Text [ french ] = "Options" ;
+        Text [ dutch ] = "Opties" ;
+        Text [ portuguese ] = "Opções" ;
+        Text[ chinese_simplified ] = "Ñ¡Ïî";
+        Text[ russian ] = "Ïàðàìåòðû";
+        Text[ polish ] = "Opcje";
+        Text[ japanese ] = "µÌß¼®Ý";
+        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ arabic ] = "ÇáÎíÇÑÇÊ";
+        Text[ greek ] = "ÅðéëïãÝò";
+        Text[ korean ] = "¿É¼Ç";
+        Text[ turkish ] = "Seçenekler";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones";
+        Text[ finnish ] = "Asetukset";
+    };
     CheckBox BTN_REFS
     {
-        Pos = MAP_APPFONT ( 111 , 157 ) ;
-        Size = MAP_APPFONT ( 104 , 10 ) ;
+        Pos = MAP_APPFONT ( 121 , 165 ) ;
+        Size = MAP_APPFONT ( 94 , 10 ) ;
         Text = "Mit Quelldaten ~verbinden" ;
         Text [ ENGLISH ] = "Re~ference source data" ;
         Text [ norwegian ] = "Re~feranse kildedata" ;
@@ -763,49 +797,34 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 222 , 6 ) ;
+        Pos = MAP_APPFONT ( 224 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 222 , 23 ) ;
+        Pos = MAP_APPFONT ( 224 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 222 , 43 ) ;
+        Pos = MAP_APPFONT ( 224 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     MoreButton BTN_MORE
     {
-        Pos = MAP_APPFONT ( 223 , 135 ) ;
-        Size = MAP_APPFONT ( 50 , 15 ) ;
-        /*
-            Text = "~Zusätze";
-            Text[ ENGLISH ] = "~More";
-            Text[norwegian] = "~Mer";
-            Text[italian] = "~Altro";
-            Text[portuguese_brazilian] = "~Mais";
-            Text[portuguese] = "~Mais";
-            Text[finnish] = "~Enemmän";
-            Text[danish] = "~Flere";
-            Text[french] = " S~uite";
-            Text[swedish] = "~Fler";
-            Text[dutch] = "~Overige";
-            Text[spanish] = "~Más";
-            Text[english_us] = "~More";
-            */
+        Pos = MAP_APPFONT ( 224 , 134 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         MapUnit = MAP_APPFONT ;
-        Delta = 45 ;
+        Delta = 41 ;
     };
     PushButton BTN_REMOVE
     {
-        Pos = MAP_APPFONT ( 223 , 74 ) ;
+        Pos = MAP_APPFONT ( 224 , 114 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text = "~Löschen" ;
@@ -836,7 +855,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     PushButton BTN_ADD
     {
-        Pos = MAP_APPFONT ( 223 , 105 ) ;
+        Pos = MAP_APPFONT ( 224 , 96 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Hinzufügen : ~Hinzuf³gen */
         Text = "Hinzu~fügen" ;
