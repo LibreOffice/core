@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edundo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:18:04 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,12 @@
 #endif
 
 
+/** helper function to select all objects in an SdrMarkList;
+ * implementation: see below */
+void lcl_SelectSdrMarkList( SwEditShell* pShell,
+                            const SdrMarkList* pSdrMarkList );
+
+
 BOOL SwEditShell::Undo( USHORT nUndoId, USHORT nCnt )
 {
     SET_CURR_SHELL( this );
@@ -171,20 +177,7 @@ BOOL SwEditShell::Undo( USHORT nUndoId, USHORT nCnt )
         }
         else if( aUndoIter.pMarkList )
         {
-            if( this->ISA( SwFEShell ) )
-            {
-                const SdrMarkList& rLst = *aUndoIter.pMarkList;
-                for( USHORT i = 0; i < rLst.GetMarkCount(); ++i )
-                    ((SwFEShell*)this)->SelectObj(
-                        Point(),
-                        (i==0) ? 0 : SW_ADD_SELECT,
-                        rLst.GetMark( i )->GetObj() );
-
-                // the old implementation would always unselect
-                // objects, even if no new ones were selected. If this
-                // is a problem, we need to re-work this a little.
-                ASSERT( rLst.GetMarkCount() != 0, "empty mark list" );
-            }
+            lcl_SelectSdrMarkList( this, aUndoIter.pMarkList );
         }
         else if( GetCrsr()->GetNext() != GetCrsr() )    // gehe nach einem
             GoNextCrsr();               // Undo zur alten Undo-Position !!
@@ -201,7 +194,6 @@ BOOL SwEditShell::Undo( USHORT nUndoId, USHORT nCnt )
     GetDoc()->DoUndo( bSaveDoesUndo );
     return bRet;
 }
-
 
 USHORT SwEditShell::Redo( USHORT nCnt )
 {
@@ -271,15 +263,7 @@ USHORT SwEditShell::Redo( USHORT nCnt )
         }
         else if( aUndoIter.pMarkList )
         {
-            if( HasDrawView() )
-            {
-                SdrView *pView = GetDrawView();
-                pView->UnmarkAll();
-                const SdrMarkList& rLst = *aUndoIter.pMarkList;
-                for( USHORT i = 0; i < rLst.GetMarkCount(); ++i )
-                    pView->MarkObj( rLst.GetMark( i )->GetObj(),
-                                    Imp()->GetPageView() );
-            }
+            lcl_SelectSdrMarkList( this, aUndoIter.pMarkList );
         }
         else if( GetCrsr()->GetNext() != GetCrsr() )    // gehe nach einem
             GoNextCrsr();                   // Redo zur alten Undo-Position !!
@@ -327,4 +311,26 @@ void SwEditShell::SetUndoActionCount( USHORT nNew )
 }
 
 
+
+
+void lcl_SelectSdrMarkList( SwEditShell* pShell,
+                            const SdrMarkList* pSdrMarkList )
+{
+    ASSERT( pShell != NULL, "need shell!" );
+    ASSERT( pSdrMarkList != NULL, "need mark list" );
+
+    if( pShell->ISA( SwFEShell ) )
+    {
+        SwFEShell* pFEShell = static_cast<SwFEShell*>( pShell );
+        for( USHORT i = 0; i < pSdrMarkList->GetMarkCount(); ++i )
+            pFEShell->SelectObj( Point(),
+                                 (i==0) ? 0 : SW_ADD_SELECT,
+                                 pSdrMarkList->GetMark( i )->GetObj() );
+
+        // the old implementation would always unselect
+        // objects, even if no new ones were selected. If this
+        // is a problem, we need to re-work this a little.
+        ASSERT( pSdrMarkList->GetMarkCount() != 0, "empty mark list" );
+    }
+}
 
