@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-07 14:55:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1374,6 +1374,15 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     sal_Bool bOk = sal_False;
     // TODO/LATER: get rid of bOk
 
+    sal_Bool bCopyTo = sal_False;
+    SfxItemSet *pMedSet = rMedium.GetItemSet();
+    if( pMedSet )
+    {
+        SFX_ITEMSET_ARG( pMedSet, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
+        bCopyTo =   GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
+                    pSaveToItem && pSaveToItem->GetValue();
+    }
+
     if( bOwnTarget && !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
     {
         uno::Reference< embed::XStorage > xMedStorage = rMedium.GetStorage();
@@ -1435,9 +1444,10 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         {
                if ( pImp->bIsSaving )
             {
-                try {
-                    const SfxVersionTableDtor *pList = rMedium.GetVersionList();
-                    if ( pList && pList->Count() )
+                try
+                {
+                    Sequence < util::RevisionTag > aVersions = rMedium.GetVersionList();
+                    if ( aVersions.getLength() )
                     {
                         // copy the version streams
                         ::rtl::OUString aVersionsName( RTL_CONSTASCII_USTRINGPARAM( "Versions" ) );
@@ -1450,14 +1460,10 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                         if ( !xNewVerStor.is() || !xOldVerStor.is() )
                             throw uno::RuntimeException();
 
-                        sal_uInt32 n = 0;
-                        SfxVersionInfo* pInfo = pList->GetObject(n++);
-                        while( pInfo )
+                        for ( sal_Int32 n=0; n<aVersions.getLength(); n++ )
                         {
-                            const String& rName = pInfo->aName;
-                            if ( xOldVerStor->hasByName( rName ) )
-                                xOldVerStor->copyElementTo( rName, xNewVerStor, rName );
-                            pInfo = pList->GetObject(n++);
+                            if ( xOldVerStor->hasByName( aVersions[n].Identifier ) )
+                                xOldVerStor->copyElementTo( aVersions[n].Identifier, xNewVerStor, aVersions[n].Identifier );
                         }
 
                         uno::Reference< embed::XTransactedObject > xTransact( xNewVerStor, uno::UNO_QUERY );
@@ -1484,19 +1490,25 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     SfxRequest::GetItem( pSet, SID_DOCINFO_AUTHOR, sal_False, TYPE(SfxStringItem) ) : NULL;
 
                 // version comment
-                SfxVersionInfo aInfo;
-                aInfo.aComment = pVersionItem->GetValue();
+                util::RevisionTag aInfo;
+                aInfo.Comment = pVersionItem->GetValue();
 
                 // version author
                 String aAuthor;
                 if ( pAuthorItem )
-                    aAuthor = pAuthorItem->GetValue();
+                    aInfo.Author = pAuthorItem->GetValue();
                 else
                     // if not transferred as a parameter, get it from user settings
-                    aAuthor = SvtUserOptions().GetFullName();
+                    aInfo.Author = SvtUserOptions().GetFullName();
 
-                // time stamp for version
-                aInfo.aCreateStamp.SetName( aAuthor );
+                TimeStamp aStamp;
+                DateTime aTime = aStamp.GetTime();
+                aInfo.TimeStamp.Day = aTime.GetDay();
+                aInfo.TimeStamp.Month = aTime.GetMonth();
+                aInfo.TimeStamp.Year = aTime.GetYear();
+                aInfo.TimeStamp.Hours = aTime.GetHour();
+                aInfo.TimeStamp.Minutes = aTime.GetMin();
+                aInfo.TimeStamp.Seconds = aTime.GetSec();
 
                 if ( bOk )
                 {
@@ -1504,8 +1516,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     // the version list must have been transferred from the "old" medium before
                     rMedium.AddVersion_Impl( aInfo );
                     rMedium.SaveVersionList_Impl( sal_True );
-
-                    bOk = CreateVersionByName_Impl( rMedium, aInfo.aName, aPasswd );
+                    bOk = CreateVersionByName_Impl( rMedium, aInfo.Identifier, aPasswd );
                 }
             }
                else if ( bOk && pImp->bIsSaving )
@@ -1529,18 +1540,10 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         // ( same as on loading, where these objects are copied to the temporary storage )
         // but don't commit these changes, because in the case when the old object storage is not a temporary one,
         // all changes will be written into the original file !
-        // we also don't touch any graphical replacements here
-        if( bOk )
-            bOk = SaveChildren( TRUE );
-    }
 
-    sal_Bool bCopyTo = sal_False;
-    SfxItemSet *pMedSet = rMedium.GetItemSet();
-    if( pMedSet )
-    {
-        SFX_ITEMSET_ARG( pMedSet, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
-        bCopyTo =   GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
-                    pSaveToItem && pSaveToItem->GetValue();
+        if( bOk && !bCopyTo )
+            // we also don't touch any graphical replacements here
+            bOk = SaveChildren( TRUE );
     }
 
     if ( bOk )
@@ -1565,7 +1568,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 }
             }
         }
-        else
+        else if ( !bCopyTo )
         {
             // if commit is failed the objectshell must be based on the storage that contains all the changes
             // so just do not switch
@@ -1941,12 +1944,13 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
         rMedium.GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, rMedium.GetName() ) );
         TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), lDescriptor );
 
-        com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aArgs ( lDescriptor.getLength() + 1);
+        com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aArgs ( lDescriptor.getLength() );
         com::sun::star::beans::PropertyValue * pNewValue = aArgs.getArray();
         const com::sun::star::beans::PropertyValue * pOldValue = lDescriptor.getConstArray();
         const OUString sInputStream ( RTL_CONSTASCII_USTRINGPARAM ( "InputStream" ) );
 
         sal_Bool bHasInputStream = sal_False;
+        BOOL bHasBaseURL = FALSE;
         sal_Int32 i;
         sal_Int32 nEnd = lDescriptor.getLength();
 
@@ -1955,14 +1959,23 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
             pNewValue[i] = pOldValue[i];
             if ( pOldValue [i].Name == sInputStream )
                 bHasInputStream = sal_True;
+            else if ( pOldValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "DocumentBaseURL" ) ) )
+                bHasBaseURL = sal_True;
         }
+
         if ( !bHasInputStream )
         {
-            pNewValue[i].Name = sInputStream;
-            pNewValue[i].Value <<= com::sun::star::uno::Reference < com::sun::star::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
+            aArgs.realloc ( ++nEnd );
+            aArgs[nEnd-1].Name = sInputStream;
+            aArgs[nEnd-1].Value <<= com::sun::star::uno::Reference < com::sun::star::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
         }
-        else
-            aArgs.realloc ( i );
+
+        if ( !bHasBaseURL )
+        {
+            aArgs.realloc ( ++nEnd );
+            aArgs[nEnd-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "DocumentBaseURL" ) );
+            aArgs[nEnd-1].Value <<= rMedium.GetBaseURL();
+        }
 
         return xLoader->filter( aArgs );
     }
@@ -2019,12 +2032,13 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         TransformItems( SID_SAVEASDOC, *pItems, aOldArgs );
 
         const com::sun::star::beans::PropertyValue * pOldValue = aOldArgs.getConstArray();
-        com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aArgs ( aOldArgs.getLength() + 1 );
+        com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aArgs ( aOldArgs.getLength() );
         com::sun::star::beans::PropertyValue * pNewValue = aArgs.getArray();
 
         // put in the REAL file name, and copy all PropertyValues
         const OUString sOutputStream ( RTL_CONSTASCII_USTRINGPARAM ( "OutputStream" ) );
         BOOL bHasStream = FALSE;
+        BOOL bHasBaseURL = FALSE;
         sal_Int32 i;
         sal_Int32 nEnd = aOldArgs.getLength();
 
@@ -2033,17 +2047,25 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             pNewValue[i] = pOldValue[i];
             if ( pOldValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "FileName" ) ) )
                 pNewValue[i].Value <<= OUString ( rMedium.GetName() );
-            if ( pOldValue[i].Name == sOutputStream )
+            else if ( pOldValue[i].Name == sOutputStream )
                 bHasStream = sal_True;
+            else if ( pOldValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "DocumentBaseURL" ) ) )
+                bHasBaseURL = sal_True;
         }
 
         if ( !bHasStream )
         {
-            pNewValue[i].Name = sOutputStream;
-            pNewValue[i].Value <<= com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
+            aArgs.realloc ( ++nEnd );
+            aArgs[nEnd-1].Name = sOutputStream;
+            aArgs[nEnd-1].Value <<= com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
         }
-        else
-            aArgs.realloc ( i );
+
+        if ( !bHasBaseURL )
+        {
+            aArgs.realloc ( ++nEnd );
+            aArgs[nEnd-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "DocumentBaseURL" ) );
+            aArgs[nEnd-1].Value <<= rMedium.GetBaseURL( sal_True );
+        }
 
         return xFilter->filter( aArgs );
     }
@@ -2564,11 +2586,10 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         DELETEZ( pNewFile );
     }
 
-    if( !bOk )
-        SetModified( sal_True );
-
     if ( bCopyTo )
         DELETEZ( pNewFile );
+    else if( !bOk )
+        SetModified( sal_True );
 
     return bOk;
 }
@@ -2628,8 +2649,7 @@ sal_uInt16 SfxObjectShell::GetHiddenInformationState( sal_uInt16 nStates )
     sal_uInt16 nState = 0;
     if ( nStates & HIDDENINFORMATION_DOCUMENTVERSIONS )
     {
-        const SfxVersionTableDtor* pTable = GetMedium()->GetVersionList();
-        if ( pTable )
+        if ( GetMedium()->GetVersionList().getLength() )
             nState |= HIDDENINFORMATION_DOCUMENTVERSIONS;
     }
 
@@ -2856,84 +2876,86 @@ void InsertStreamIntoPicturesStorage_Impl( const uno::Reference< embed::XStorage
 sal_Bool SfxObjectShell::SaveChildren( BOOL bObjectsOnly )
 {
     sal_Bool bResult = sal_True;
-
-    sal_Bool bOasis = ( SotStorage::GetVersion( GetStorage() ) > SOFFICE_FILEFORMAT_60 );
-    uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
-
-    for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
+    if ( pImp->mpObjectContainer )
     {
-        uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
-        OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
-        if ( xObj.is() )
+        sal_Bool bOasis = ( SotStorage::GetVersion( GetStorage() ) > SOFFICE_FILEFORMAT_60 );
+        uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+
+        for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
         {
-            sal_Int32 nCurState = xObj->getCurrentState();
-            if ( bOasis && nCurState != embed::EmbedStates::LOADED && nCurState != embed::EmbedStates::RUNNING )
+            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
+            OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
+            if ( xObj.is() )
             {
-                // means that the object is active
-                // the image must be regenerated
-                ::rtl::OUString aMediaType;
-
-                // TODO/LATER: another aspect could be used
-                uno::Reference < io::XInputStream > xStream =
-                            svt::EmbeddedObjectRef::GetGraphicReplacementStream(
-                                                        embed::Aspects::MSOLE_CONTENT,
-                                                        xObj,
-                                                        &aMediaType );
-                   if ( xStream.is() )
-                       GetEmbeddedObjectContainer().InsertGraphicStream( xStream, aNames[n], aMediaType );
-            }
-
-            uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
-            if ( xPersist.is() )
-            {
-                try
+                sal_Int32 nCurState = xObj->getCurrentState();
+                if ( bOasis && nCurState != embed::EmbedStates::LOADED && nCurState != embed::EmbedStates::RUNNING )
                 {
-                    //TODO/LATER: only storing if changed!
-                    xPersist->storeOwn();
+                    // means that the object is active
+                    // the image must be regenerated
+                    ::rtl::OUString aMediaType;
+
+                    // TODO/LATER: another aspect could be used
+                    uno::Reference < io::XInputStream > xStream =
+                                svt::EmbeddedObjectRef::GetGraphicReplacementStream(
+                                                            embed::Aspects::MSOLE_CONTENT,
+                                                            xObj,
+                                                            &aMediaType );
+                    if ( xStream.is() )
+                        GetEmbeddedObjectContainer().InsertGraphicStream( xStream, aNames[n], aMediaType );
                 }
-                catch( uno::Exception& )
-                {
-                    // TODO/LATER: error handling
-                    bResult = sal_False;
-                    break;
-                }
-            }
 
-            if ( !bOasis && !bObjectsOnly )
-            {
-                // copy replacement images for linked objects
-                try
+                uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+                if ( xPersist.is() )
                 {
-                    uno::Reference< embed::XLinkageSupport > xLink( xObj, uno::UNO_QUERY );
-                    if ( xLink.is() && xLink->isLink() )
+                    try
                     {
-                        ::rtl::OUString aMediaType;
-                        uno::Reference < io::XInputStream > xInStream =
-                                GetEmbeddedObjectContainer().GetGraphicStream( xObj, &aMediaType );
-                        if ( xInStream.is() )
-                            InsertStreamIntoPicturesStorage_Impl( GetStorage(), xInStream, aNames[n] );
+                        //TODO/LATER: only storing if changed!
+                        xPersist->storeOwn();
+                    }
+                    catch( uno::Exception& )
+                    {
+                        // TODO/LATER: error handling
+                        bResult = sal_False;
+                        break;
                     }
                 }
-                catch( uno::Exception& )
+
+                if ( !bOasis && !bObjectsOnly )
                 {
+                    // copy replacement images for linked objects
+                    try
+                    {
+                        uno::Reference< embed::XLinkageSupport > xLink( xObj, uno::UNO_QUERY );
+                        if ( xLink.is() && xLink->isLink() )
+                        {
+                            ::rtl::OUString aMediaType;
+                            uno::Reference < io::XInputStream > xInStream =
+                                    GetEmbeddedObjectContainer().GetGraphicStream( xObj, &aMediaType );
+                            if ( xInStream.is() )
+                                InsertStreamIntoPicturesStorage_Impl( GetStorage(), xInStream, aNames[n] );
+                        }
+                    }
+                    catch( uno::Exception& )
+                    {
+                    }
                 }
             }
         }
-    }
 
-    if ( bResult && !bObjectsOnly )
-    {
-        try
+        if ( bResult && !bObjectsOnly )
         {
-            GetEmbeddedObjectContainer().ReleaseImageSubStorage();
-            ::rtl::OUString aObjReplElement( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
-            if ( !bOasis && GetStorage()->hasByName( aObjReplElement ) && GetStorage()->isStorageElement( aObjReplElement ) )
-                GetStorage()->removeElement( aObjReplElement );
-        }
-        catch( uno::Exception& )
-        {
-            // TODO/LATER: error handling
-            bResult = sal_False;
+            try
+            {
+                GetEmbeddedObjectContainer().ReleaseImageSubStorage();
+                ::rtl::OUString aObjReplElement( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
+                if ( !bOasis && GetStorage()->hasByName( aObjReplElement ) && GetStorage()->isStorageElement( aObjReplElement ) )
+                    GetStorage()->removeElement( aObjReplElement );
+            }
+            catch( uno::Exception& )
+            {
+                // TODO/LATER: error handling
+                bResult = sal_False;
+            }
         }
     }
 
@@ -2952,96 +2974,99 @@ sal_Bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
         return SaveChildren();
 
     sal_Bool bOasis = sal_True;
-    try
-    {
-        bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
-
-        comphelper::EmbeddedObjectContainer aCnt( xStorage );
-        uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
-        for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
-        {
-            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
-            OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
-            if ( xObj.is() )
-            {
-                sal_Bool bSwitchBackToLoaded = sal_False;
-                uno::Reference< embed::XLinkageSupport > xLink( xObj, uno::UNO_QUERY );
-                if ( bOasis || xLink.is() && xLink->isLink() )
-                {
-                    uno::Reference < io::XInputStream > xStream;
-                    ::rtl::OUString aMediaType;
-
-                    sal_Int32 nCurState = xObj->getCurrentState();
-                    if ( nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING )
-                    {
-                        // means that the object is not active
-                        // copy replacement image from old to new container
-                        xStream = GetEmbeddedObjectContainer().GetGraphicStream( xObj, &aMediaType );
-                    }
-
-                    if ( !xStream.is() )
-                    {
-                        // the image must be regenerated
-                        // TODO/LATER: another aspect could be used
-                        if ( xObj->getCurrentState() == embed::EmbedStates::LOADED )
-                                bSwitchBackToLoaded = sal_True;
-
-                        xStream = svt::EmbeddedObjectRef::GetGraphicReplacementStream(
-                                                                embed::Aspects::MSOLE_CONTENT,
-                                                                xObj,
-                                                                &aMediaType );
-                    }
-
-                    if ( xStream.is() )
-                    {
-                        if ( bOasis )
-                            aCnt.InsertGraphicStream( xStream, aNames[n], aMediaType );
-                        else
-                        {
-                            // it is a linked object exported into SO7 format
-                            InsertStreamIntoPicturesStorage_Impl( xStorage, xStream, aNames[n] );
-                        }
-                    }
-                }
-
-                uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
-                if ( xPersist.is() )
-                {
-                    uno::Sequence< beans::PropertyValue > aArgs(1);
-                    aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StoreVisualReplacement" ) );
-                    aArgs[0].Value <<= (sal_Bool)( !bOasis );
-                    xPersist->storeAsEntry( xStorage,
-                                            xPersist->getEntryName(),
-                                            uno::Sequence< beans::PropertyValue >(),
-                                            aArgs );
-                }
-
-                if ( bSwitchBackToLoaded )
-                    // switch back to loaded state; that way we have a minimum cache confusion
-                    xObj->changeState( embed::EmbedStates::LOADED );
-            }
-        }
-    }
-    catch ( uno::Exception& )
-    {
-        // TODO/LATER: error handling
-        bResult = sal_False;
-    }
-
-    // the old SO6 format does not store graphical replacements
-    if ( !bOasis && bResult )
+    if ( pImp->mpObjectContainer )
     {
         try
         {
-            // the substorage still can not be locked by the embedded object conteiner
-            ::rtl::OUString aObjReplElement( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
-            if ( xStorage->hasByName( aObjReplElement ) && xStorage->isStorageElement( aObjReplElement ) )
-                xStorage->removeElement( aObjReplElement );
+            bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
+
+            comphelper::EmbeddedObjectContainer aCnt( xStorage );
+            uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+            for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
+            {
+                uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
+                OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
+                if ( xObj.is() )
+                {
+                    sal_Bool bSwitchBackToLoaded = sal_False;
+                    uno::Reference< embed::XLinkageSupport > xLink( xObj, uno::UNO_QUERY );
+                    if ( bOasis || xLink.is() && xLink->isLink() )
+                    {
+                        uno::Reference < io::XInputStream > xStream;
+                        ::rtl::OUString aMediaType;
+
+                        sal_Int32 nCurState = xObj->getCurrentState();
+                        if ( nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING )
+                        {
+                            // means that the object is not active
+                            // copy replacement image from old to new container
+                            xStream = GetEmbeddedObjectContainer().GetGraphicStream( xObj, &aMediaType );
+                        }
+
+                        if ( !xStream.is() )
+                        {
+                            // the image must be regenerated
+                            // TODO/LATER: another aspect could be used
+                            if ( xObj->getCurrentState() == embed::EmbedStates::LOADED )
+                                    bSwitchBackToLoaded = sal_True;
+
+                            xStream = svt::EmbeddedObjectRef::GetGraphicReplacementStream(
+                                                                    embed::Aspects::MSOLE_CONTENT,
+                                                                    xObj,
+                                                                    &aMediaType );
+                        }
+
+                        if ( xStream.is() )
+                        {
+                            if ( bOasis )
+                                aCnt.InsertGraphicStream( xStream, aNames[n], aMediaType );
+                            else
+                            {
+                                // it is a linked object exported into SO7 format
+                                InsertStreamIntoPicturesStorage_Impl( xStorage, xStream, aNames[n] );
+                            }
+                        }
+                    }
+
+                    uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+                    if ( xPersist.is() )
+                    {
+                        uno::Sequence< beans::PropertyValue > aArgs(1);
+                        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StoreVisualReplacement" ) );
+                        aArgs[0].Value <<= (sal_Bool)( !bOasis );
+                        xPersist->storeAsEntry( xStorage,
+                                                xPersist->getEntryName(),
+                                                uno::Sequence< beans::PropertyValue >(),
+                                                aArgs );
+                    }
+
+                    if ( bSwitchBackToLoaded )
+                        // switch back to loaded state; that way we have a minimum cache confusion
+                        xObj->changeState( embed::EmbedStates::LOADED );
+                }
+            }
         }
         catch ( uno::Exception& )
         {
-            // TODO/LATER: error handling;
+            // TODO/LATER: error handling
             bResult = sal_False;
+        }
+
+        // the old SO6 format does not store graphical replacements
+        if ( !bOasis && bResult )
+        {
+            try
+            {
+                // the substorage still can not be locked by the embedded object conteiner
+                ::rtl::OUString aObjReplElement( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
+                if ( xStorage->hasByName( aObjReplElement ) && xStorage->isStorageElement( aObjReplElement ) )
+                    xStorage->removeElement( aObjReplElement );
+            }
+            catch ( uno::Exception& )
+            {
+                // TODO/LATER: error handling;
+                bResult = sal_False;
+            }
         }
     }
 
@@ -3055,25 +3080,28 @@ sal_Bool SfxObjectShell::SaveCompletedChildren( sal_Bool bSuccess )
 {
     sal_Bool bResult = sal_True;
 
-    uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
-    for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
+    if ( pImp->mpObjectContainer )
     {
-        uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
-        OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
-        if ( xObj.is() )
+        uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+        for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
         {
-            uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
-            if ( xPersist.is() )
+            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
+            OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
+            if ( xObj.is() )
             {
-                try
+                uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+                if ( xPersist.is() )
                 {
-                    xPersist->saveCompleted( bSuccess );
-                }
-                catch( uno::Exception& )
-                {
-                    // TODO/LATER: error handling
-                    bResult = sal_False;
-                    break;
+                    try
+                    {
+                        xPersist->saveCompleted( bSuccess );
+                    }
+                    catch( uno::Exception& )
+                    {
+                        // TODO/LATER: error handling
+                        bResult = sal_False;
+                        break;
+                    }
                 }
             }
         }
@@ -3092,30 +3120,33 @@ sal_Bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed:
 
     sal_Bool bResult = sal_True;
 
-    uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
-    for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
+    if ( pImp->mpObjectContainer )
     {
-        uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
-        OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
-        if ( xObj.is() )
+        uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+        for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
         {
-            uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
-            if ( xPersist.is() )
+            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
+            OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
+            if ( xObj.is() )
             {
-                try
+                uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
+                if ( xPersist.is() )
                 {
-                    xPersist->setPersistentEntry( xStorage,
-                                                  aNames[n],
-                                                  embed::EntryInitModes::NO_INIT,
-                                                  uno::Sequence< beans::PropertyValue >(),
-                                                  uno::Sequence< beans::PropertyValue >() );
+                    try
+                    {
+                        xPersist->setPersistentEntry( xStorage,
+                                                    aNames[n],
+                                                    embed::EntryInitModes::NO_INIT,
+                                                    uno::Sequence< beans::PropertyValue >(),
+                                                    uno::Sequence< beans::PropertyValue >() );
 
-                }
-                catch( uno::Exception& )
-                {
-                    // TODO/LATER: error handling
-                    bResult = sal_False;
-                    break;
+                    }
+                    catch( uno::Exception& )
+                    {
+                        // TODO/LATER: error handling
+                        bResult = sal_False;
+                        break;
+                    }
                 }
             }
         }
@@ -3131,6 +3162,11 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
     sal_Bool bSendNotification = sal_False;
     uno::Reference< embed::XStorage > xOldStorageHolder;
 
+#ifdef DBG_UTIL
+    // check for wrong creation of object container
+    BOOL bHasContainer = ( pImp->mpObjectContainer != 0 );
+#endif
+
     if ( !xStorage.is() || xStorage == GetStorage() )
     {
         // no persistence change
@@ -3140,6 +3176,7 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
     {
         if ( pImp->mpObjectContainer )
             GetEmbeddedObjectContainer().SwitchPersistence( xStorage );
+
         bResult = SwitchChildrenPersistance( xStorage );
     }
 
@@ -3147,6 +3184,8 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
     {
         if ( xStorage.is() && pImp->m_xDocStorage != xStorage )
         {
+            // make sure that until the storage is assigned the object container is not created by accident!
+            DBG_ASSERT( bHasContainer == (pImp->mpObjectContainer != 0), "Wrong storage in object container!" );
             xOldStorageHolder = pImp->m_xDocStorage;
             pImp->m_xDocStorage = xStorage;
             bSendNotification = sal_True;
@@ -3154,6 +3193,11 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
             if ( IsEnableSetModified() )
                 SetModified( sal_False );
         }
+    }
+    else
+    {
+        if ( pImp->mpObjectContainer )
+            GetEmbeddedObjectContainer().SwitchPersistence( pImp->m_xDocStorage );
     }
 
     if ( bSendNotification )
@@ -3250,6 +3294,10 @@ sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::
 sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorage >& xStorage )
 {
     sal_Bool bResult = sal_False;
+#ifdef DBG_UTIL
+    // check for wrong creation of object container
+    BOOL bHasContainer = ( pImp->mpObjectContainer != 0 );
+#endif
     if ( xStorage.is() )
     {
         if ( pImp->mpObjectContainer )
@@ -3263,6 +3311,8 @@ sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorag
 
     if ( bResult )
     {
+        // make sure that until the storage is assigned the object container is not created by accident!
+        DBG_ASSERT( bHasContainer == (pImp->mpObjectContainer != 0), "Wrong storage in object container!" );
         if ( pImp->m_xDocStorage != xStorage )
             DoSaveCompleted( new SfxMedium( xStorage, GetMedium()->GetBaseURL() ) );
 
