@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:37:04 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,7 +507,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text = "Rückgängig " ;
                 Text [ English ] = "Undo " ;
                 Text [ norwegian ] = "Angre " ;
-                Text [ italian ] = "Annulla " ;
+                Text [ italian ] = "Annulla  " ;
                 Text [ portuguese_brazilian ] = "Widerrufen" ;
                 Text [ portuguese ] = "Anular  " ;
                 Text [ finnish ] = "Kumoa " ;
@@ -546,7 +546,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ portuguese_brazilian ] = "Wiederholen" ;
                 Text [ swedish ] = "Återställ " ;
                 Text [ danish ] = "Gendan " ;
-                Text [ italian ] = "Ripristina " ;
+                Text [ italian ] = "Ripristina  " ;
                 Text [ spanish ] = "Restaurar  " ;
                 Text [ french ] = "Restaurer " ;
                 Text [ dutch ] = "Herstellen  " ;
