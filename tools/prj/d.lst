@@ -67,6 +67,7 @@ hedabu: ..\inc\cachestr.hxx %_DEST%\inc%_EXT%\tools\cachestr.hxx
 hedabu: ..\inc\chapi.hxx %_DEST%\inc%_EXT%\tools\chapi.hxx
 hedabu: ..\inc\color.hxx %_DEST%\inc%_EXT%\tools\color.hxx
 hedabu: ..\inc\commdefines.hxx %_DEST%\inc%_EXT%\tools\commdefines.hxx
+hedabu: ..\inc\commtypes.hxx %_DEST%\inc%_EXT%\tools\commtypes.hxx
 hedabu: ..\inc\contnr.hxx %_DEST%\inc%_EXT%\tools\contnr.hxx
 hedabu: ..\inc\date.hxx %_DEST%\inc%_EXT%\tools\date.hxx
 hedabu: ..\inc\datetime.hxx %_DEST%\inc%_EXT%\tools\datetime.hxx
