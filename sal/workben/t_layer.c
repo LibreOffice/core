@@ -2,9 +2,9 @@
  *
  *  $RCSfile: t_layer.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:47:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ static oslSocketResult SAL_CALL __osl_socket_create (
     oslSocketType        type,
     oslProtocol          protocol)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     const oslSocketMethods *debug = osl_debug_getSocketMethods();
     if (!(socket->m_upper || socket->m_upper->m_methods == debug))
     {
@@ -272,7 +272,7 @@ static oslSocketResult SAL_CALL __osl_socket_create (
 
         return (upper->m_methods->m_create)(upper, family, type, protocol);
     }
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
     if (!(socket->m_private))
     {
         /* ... */
