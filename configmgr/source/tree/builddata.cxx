@@ -2,9 +2,9 @@
  *
  *  $RCSfile: builddata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-18 18:25:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,14 +351,14 @@ namespace configmgr
         }
 
         std::auto_ptr<INode>        buildNode(TreeAccessor  const& _aTree, bool _bUseTreeName);
-        std::auto_ptr<INode>        buildNode(NodeAccess  const& _aTree);
+        std::auto_ptr<INode>        buildNode(NodeAccessRef  const& _aTree);
 
         std::auto_ptr<ISubtree>     buildNodeTree(GroupNodeAccess const& _aGroupNode) const;
         std::auto_ptr<ISubtree>     buildNodeTree(SetNodeAccess const& _aSetNode) const;
         std::auto_ptr<OValueNode>   buildNodeTree(ValueNodeAccess const& _aValueNode) const
         { return this->convertNode(_aValueNode); }
 
-        static node::Attributes convertAttributes(NodeAccess const& _aNode)
+        static node::Attributes convertAttributes(NodeAccessRef const& _aNode)
         { return _aNode.getAttributes(); }
     private:
         std::auto_ptr<ISubtree>     convertNode(GroupNodeAccess const& _aGroupNode) const;
@@ -386,7 +386,7 @@ namespace configmgr
         void addChildren(GroupNodeAccess const & _aGroup)   { this->visitChildren(_aGroup); }
     private:
         Result handle(TreeAccessor const & _aElement);
-        Result handle(NodeAccess const & _aMember);
+        Result handle(NodeAccessRef const & _aMember);
     };
 //-----------------------------------------------------------------------------
 
@@ -541,7 +541,7 @@ NodeVisitor::Result TreeNodeBuilder::LinkSetNodes::linkTree(TreeAddress const & 
     Offset nCount = rTreeData.header.count;
     for(Offset i=0; i < nCount; ++i)
     {
-        NodeAccess aNode(aTreeAccess.accessor(),&rTreeData.nodes[i]);
+        NodeAccessRef aNode(&aTreeAccess.accessor(),&rTreeData.nodes[i]);
         eResult =this->visitNode( aNode );
 
         if (eResult == DONE) break;
@@ -968,8 +968,14 @@ State::Field ConvertingDataTreeBuilder::makeState(node::Attributes const & _aAtt
     default: OSL_ASSERT(false); state = 0; break;
     }
 
-    if (!_aAttributes.bWritable)
+    if (_aAttributes.isReadonly())
         state |= State::flag_readonly;
+    //Map mandatory and Removable
+    if (_aAttributes.isMandatory())
+        state |= State::flag_mandatory;
+
+    if (_aAttributes.isRemovable())
+        state |= State::flag_removable;
 
     if ( m_bWithDefaults )
         state |= State::flag_default_avail;
@@ -982,16 +988,16 @@ Flags::Field ConvertingDataTreeBuilder::makeFlags(node::Attributes const & _aAtt
 {
     Flags::Field flags = 0;
 
-    if (!_aAttributes.bWritable)
+    if ( _aAttributes.isReadonly())
         flags |= Flags::readonly;
 
-    if ( _aAttributes.bFinalized)
+    if ( _aAttributes.isFinalized())
         flags |= Flags::finalized;
 
-    if ( _aAttributes.bNullable)
+    if ( _aAttributes.isNullable())
         flags |= Flags::nullable;
 
-    if ( _aAttributes.bLocalized)
+    if ( _aAttributes.isLocalized())
         flags |= Flags::localized;
 
     if (_aAttributes.isDefault())
@@ -1064,7 +1070,7 @@ std::auto_ptr<INode> ConvertingNodeBuilder::buildNode(TreeAccessor const & _aSou
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<INode> ConvertingNodeBuilder::buildNode(NodeAccess const & _aSourceNode)
+std::auto_ptr<INode> ConvertingNodeBuilder::buildNode(NodeAccessRef const & _aSourceNode)
 {
     OSL_ENSURE( !m_pNode.get(), "Old node tree will be dropped");
     this->visitNode(_aSourceNode);
@@ -1166,7 +1172,7 @@ NodeVisitor::Result ConvertingSubnodeBuilder::handle(TreeAccessor const & _aElem
 }
 //-----------------------------------------------------------------------------
 
-NodeVisitor::Result ConvertingSubnodeBuilder::handle(NodeAccess const & _aMember)
+NodeVisitor::Result ConvertingSubnodeBuilder::handle(NodeAccessRef const & _aMember)
 {
     OSL_ASSERT(!m_rParentNode.isSetNode());
     m_rParentNode.addChild( m_aSubnodeBuilder.buildNode(_aMember) );
