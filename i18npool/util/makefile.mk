@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.12 $
+#*  $Revision: 1.13 $
 #*
-#*  last change: $Author: hr $ $Date: 2003-03-26 10:54:59 $
+#*  last change: $Author: rt $ $Date: 2003-04-08 16:09:52 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -89,6 +89,8 @@ LIB1FILES=	$(SLB)$/defaultnumberingprovider.lib	\
         $(SLB)$/transliterationImpl.lib \
         $(SLB)$/characterclassification.lib \
         $(SLB)$/collator.lib \
+        $(SLB)$/search.lib \
+        $(SLB)$/regexp.lib \
         $(SLB)$/inputchecker.lib
 
 SHL1TARGET= $(TARGET)$(VERSION)$(DLLPOSTFIX)
@@ -100,7 +102,8 @@ SHL1STDLIBS=\
         $(COMPHELPERLIB)			\
         $(CPPUHELPERLIB)			\
         $(SALLIB)				\
-        $(ICUI18NLIB)
+        $(ICUI18NLIB)                           \
+                $(I18NUTILLIB)
 
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
