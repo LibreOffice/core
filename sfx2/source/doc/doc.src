@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:20:09 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ QueryBox MSG_CONFIRM_FILTER
     Message[ korean ] = "¿ÜºÎ ¼­½ÄÀ» ÀúÀåÇÒ ¶§ \n Á¤º¸°¡ ¼Õ½ÇµÉ ¼öµµ ÀÖ½À´Ï´Ù. ±×·¡µµ ´ÝÀ¸½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Yabancý formatla kaydederken verin\nkaybý oluþmuþ olabilir. Yine de kapatmak istiyor musunuz?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Al guardar en formatos extraños podría haberse provocado una pérdida\nde información. ¿Desea cerrar de todas formas?";
 };
 QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
 {
@@ -124,6 +125,7 @@ QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
     Message[ korean ] = "ÀÌ ÀÌ¸§À» °¡Áø ¼­½Ä ÆÄÀÏÀÌ ÀÌ¹Ì ÀÖ½À´Ï´Ù.\nµ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Ayný adý taþýyan bir þablon zaten mevcut.\nBu þablonun üzerine yazýlsýn mý?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Ya existe una plantilla con este nombre.\n¿Desea sobrescribirla?";
 };
 QueryBox MSG_QUERY_LOAD_TEMPLATE
 {
@@ -154,6 +156,7 @@ QueryBox MSG_QUERY_LOAD_TEMPLATE
     MESSAGE[ korean ] = "ÀÌ ¹®¼­ÀÇ ¼­½Ä À¯ÇüÀº ÇöÀç À¯Çü°ú ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù. ÇöÀç À¯ÇüÀ» ÀÌ ¹®¼­¿¡ Àû¿ëÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ turkish ] = "Bu belgenin biçimleri, yürürlükteki biçimlerle örtüþmüyor. Yürürlükteki biçimler bu belgenize uygulansýn mý?";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "Los estilos de este documento no coinciden con sus estilos actuales.\n¿Desea aplicar sus estilos actuales a este documento?";
 };
 String STR_DELETE_REGION
 {
@@ -180,6 +183,7 @@ String STR_DELETE_REGION
     Text[ korean ] = "¿µ¿ª$1À»£¨¸¦£© »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "\"$1\" bölümü silinsin mi?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea eliminar el área \"$1\"?";
 };
 String STR_DELETE_TEMPLATE
 {
@@ -206,6 +210,7 @@ String STR_DELETE_TEMPLATE
     Text[ korean ] = "Ç×¸ñ$1À»£¨¸¦£© »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "\"$1\" giriþi silinsin mi?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea eliminar la entrada \"$1\"?";
 };
 QueryBox MSG_REGION_NOTEMPTY
 {
@@ -236,6 +241,7 @@ QueryBox MSG_REGION_NOTEMPTY
     Message[ korean ] = "¿µ¿ªÀÌ ºñ¾î ÀÖÁö ¾Ê½À´Ï´Ù.\n±×·¡µµ »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Kategori boþ deðil.\nYine de silinsin mi?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "El área no está vacía.\n¿Desea eliminarla de todas formas?";
 };
 String STR_QUERY_SAVE_DOCUMENT
 {
@@ -263,6 +269,7 @@ String STR_QUERY_SAVE_DOCUMENT
     Text[ greek ] = "Ôï áñ÷åßï '$(DOC)' ôñïðïðïéÞèçêå.\nÈÝëåôå íá áðïèçêåõôïýí ïé áëëáãÝò;";
     Text[ korean ] = "¹®¼­'$(DOC)'ÀÌ£¨°¡£© º¯°æµÇ¾ú½À´Ï´Ù.\nº¯°æ »çÇ×À» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Belge \"$(DOC)\" deðiþtirildi.\nDeðiþiklikler kaydedilsin mi?";
+    Text[ catalan ] = "El documento \"$(DOC)\" ha sido modificado.\n¿Desea guardar las modificaciones?";
 };
 Bitmap BMP_STYLES_CLOSED { File = "newex.bmp" ; };
 Bitmap BMP_STYLES_OPENED { File = "newex.bmp" ; };
@@ -293,6 +300,7 @@ String STR_STYLES
     Text[ korean ] = "À¯Çü";
     Text[ turkish ] = "Biçimler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilos";
 };
 String STR_MACROS
 {
@@ -321,6 +329,7 @@ String STR_MACROS
     Text[ korean ] = "¸ÅÅ©·Î";
     Text[ turkish ] = "Makro";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Macros";
 };
 String STR_CONFIG
 {
@@ -349,6 +358,7 @@ String STR_CONFIG
     Text[ korean ] = "±¸¼º";
     Text[ turkish ] = "Konfigürasyon";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Configuración";
 };
 String STR_PRINT_STYLES_HEADER
 {
@@ -377,6 +387,7 @@ String STR_PRINT_STYLES_HEADER
     Text[ korean ] = "¼­½Ä À¯Çü ";
     Text[ turkish ] = "Biçimler: ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilos en  ";
 };
 String STR_PRINT_STYLES
 {
@@ -405,6 +416,7 @@ String STR_PRINT_STYLES
     Text[ korean ] = "¼­½Ä À¯ÇüÀ» ÀÎ¼âÃâ·Â";
     Text[ turkish ] = "Biçimler yazdýrýlýyor";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imprimiento estilos de impresión";
 };
 Bitmap BMP_STYLES_FAMILY1 { File = "styfam1.bmp" ; };
 Bitmap BMP_STYLES_FAMILY2 { File = "styfam2.bmp" ; };
@@ -439,6 +451,7 @@ ErrorBox MSG_PRINT_ERROR
     Message[ korean ] = "ÀÎ¼â°úÁ¤À» ½ÃÀÛÇÏÁö ¸øÇß½À´Ï´Ù.";
     Message[ turkish ] = "Yazdýrma iþlemi baþlatýlamadý.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "No se pudo inicializar la impresión.";
 };
 String STR_BACKUP_COPY
 {
@@ -467,6 +480,7 @@ String STR_BACKUP_COPY
     Text[ korean ] = "º¹»ç";
     Text[ turkish ] = "Kopya";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Copia";
 };
 WarningBox MSG_WARNING_BACKUP
 {
@@ -497,6 +511,7 @@ WarningBox MSG_WARNING_BACKUP
     Message[ korean ] = "¹é¾÷ º¹»ç¸¦ ÇÏÁö ¸øÇß½À´Ï´Ù.";
     Message[ turkish ] = "Yedekleme kopyasý oluþturulamadý.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "No se pudo crear la copia de seguridad.";
 };
 InfoBox MSG_CANT_OPEN_TEMPLATE
 {
@@ -525,6 +540,7 @@ InfoBox MSG_CANT_OPEN_TEMPLATE
     Message[ korean ] = "¹®¼­ ¼­½ÄÆÄÀÏÀ» ¿­Áö ¸øÇß½À´Ï´Ù.";
     Message[ turkish ] = "Belge þablonu açýlamýyor.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "No se puede abrir la plantilla del documento.";
 };
 InfoBox MSG_VIEW_OPEN_CANT_SAVE
 {
@@ -555,6 +571,7 @@ InfoBox MSG_VIEW_OPEN_CANT_SAVE
     MESSAGE[ korean ] = "¹®¼­°¡ ÆíÁýÀ» À§ÇØ ÀÌ¹Ì ¿­·Á ÀÖ½À´Ï´Ù.";
     MESSAGE[ turkish ] = "Belge zaten düzenlenmek üzere açýldý.";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "Este documento ya está abierto para editar.";
 };
 String STR_ERROR_SAVE
 {
@@ -583,6 +600,7 @@ String STR_ERROR_SAVE
     Text[ korean ] = "¹®¼­ ¾²±â¿¡¼­ ¿À·ù ¹ß»ý. ";
     Text[ turkish ] = "Belge yazýlýrken hata oluþtu ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Error al escribir documento  ";
 };
 String STR_TEMPLATE_FILTER
 {
@@ -611,6 +629,7 @@ String STR_TEMPLATE_FILTER
     Text[ korean ] = "¹®¼­ ¼­½ÄÆÄÀÏ";
     Text[ turkish ] = "Belge þablonlarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Plantillas";
 };
 String STR_ERROR_COPY_TEMPLATE
 {
@@ -639,6 +658,7 @@ String STR_ERROR_COPY_TEMPLATE
     Text[ korean ] = "¼­½ÄÆÄÀÏ\"$1\" º¹»ç½Ã¿¡ ¿À·ù. \nÀÌ ¼­½ÄÆÄÀÏÀÌ ÀÌ¹Ì Á¸ÀçÇÒ¼öµµ ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "\"$1\" þablonu kopyalanýrken hata oluþtu.\nBu þablon zaten mevcut olabilir.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Error al copiar la plantilla \"$1\".\nEs posible que esta ya exista.";
 };
 String STR_ERROR_DELETE_TEMPLATE
 {
@@ -665,6 +685,7 @@ String STR_ERROR_DELETE_TEMPLATE
     Text[ korean ] = "¼­½Ä ÆÄÀÏ\"$1\"À»£¨¸¦£© »èÁ¦ÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "\"$1\" þablonu silinemiyor.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No es posible eliminar la plantilla \"$1\".";
 };
 String STR_ERROR_MOVE_TEMPLATE
 {
@@ -693,6 +714,7 @@ String STR_ERROR_MOVE_TEMPLATE
     Text[ korean ] = "¼­½ÄÆÄÀÏ \"$1\" ÀÌµ¿½Ã ¿À·ù.";
     Text[ turkish ] = "\"$1\" þablonu taþýnýrken hata oluþtu.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Error al desplazar la plantilla \"$1\" ";
 };
 ErrorBox MSG_ERROR_RESCAN
 {
@@ -723,6 +745,7 @@ ErrorBox MSG_ERROR_RESCAN
     Message[ korean ] = "¾÷µ¥ÀÌÆ®¸¦ ÀúÀåÇÏÁö ¸øÇß½À´Ï´Ù.";
     Message[ turkish ] = "Güncellemeler kaydedilemedi.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "No se pudieron guardar las actualizaciones.";
 };
 String STR_ERROR_SAVE_TEMPLATE
 {
@@ -751,6 +774,7 @@ String STR_ERROR_SAVE_TEMPLATE
     Text[ korean ] = "¼­½ÄÆÄÀÏ ¾²±â¿¡¼­ ¿À·ù ¹ß»ý ";
     Text[ turkish ] = "Þablon yazýlýrken hata oluþtu ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Error de escritura de plantilla  ";
 };
 ErrorBox MSG_ERROR_RENAME_TEMPLATE
 {
@@ -781,6 +805,7 @@ ErrorBox MSG_ERROR_RENAME_TEMPLATE
     Message[ korean ] = "¼­½ÄÆÄÀÏ ÀÌ¸§ º¯°æ½Ã ¿À·ù ¹ß»ý.";
     Message[ turkish ] = "Þablon yeniden adlandýrýlýrken hata oluþtu.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Error al cambiar el nombre de la plantilla.";
 };
 ErrorBox MSG_ERROR_RENAME_TEMPLATE_REGION
 {
@@ -811,6 +836,7 @@ ErrorBox MSG_ERROR_RENAME_TEMPLATE_REGION
     Message[ korean ] = "¿µ¿ª ÀÌ¸§ º¯°æ½Ã ¿À·ù ¹ß»ý.";
     Message[ turkish ] = "Kategori yeniden adlandýrýlýrken hata oluþtu.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Error al cambiar el nombre del área.";
 };
 ErrorBox MSG_ERROR_EMPTY_NAME
 {
@@ -841,6 +867,7 @@ ErrorBox MSG_ERROR_EMPTY_NAME
     Message[ korean ] = "ÀÌ¸§À» ÁöÁ¤ÇØ¾ß ÇÕ´Ï´Ù.";
     Message[ turkish ] = "Bir ad girin.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Es necesario introducir un nombre.";
 };
 ErrorBox MSG_ERROR_UNIQ_NAME
 {
@@ -871,6 +898,7 @@ ErrorBox MSG_ERROR_UNIQ_NAME
     Message[ korean ] = "ºÐ¸íÇÑ ÀÌ¸§À» ÁöÁ¤ÇØ¾ß ÇÕ´Ï´Ù.\n´ë¹®ÀÚ¿Í ¼Ò¹®ÀÚ ±¸ºÐ¾øÀÌ ÀÔ·ÂÇÕ´Ï´Ù.";
     Message[ turkish ] = "Benzersiz bir ad girin.\nGirilen ad büyük/küçük harf duyarlý olmamalýdýr.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Debe especificar un nombre único.\nNo se distingue entre mayúsculas y minúsculas.";
 };
 String STR_QUERY_DEFAULT_TEMPLATE
 {
@@ -899,6 +927,7 @@ String STR_QUERY_DEFAULT_TEMPLATE
     TEXT[ korean ] = "¼­½ÄÆÄÀÏ$(TEXT)À» ±âº» ¼­½ÄÆÄÀÏ·Î ¸¸µå½Ã°Ú½À´Ï±î?";
     TEXT[ turkish ] = "\"$(TEXT)\" þablonu, standart þablon olarak belirlensin mi?";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "¿Desea convertir la plantilla \"$(TEXT)\" en una plantilla predeterminada?";
 };
 QueryBox MSG_QUERY_RESET_DEFAULT_TEMPLATE
 {
@@ -929,6 +958,7 @@ QueryBox MSG_QUERY_RESET_DEFAULT_TEMPLATE
     Message[ korean ] = "±âº» ¼­½Ä ÆÄÀÏÀ» ¿ø·¡´ë·Î µÇµ¹¸®½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Standart þablonu baþa almak istiyor musunuz?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "¿Desea usted restablecer la plantilla predeterminada?";
 };
 InfoBox MSG_TEMPLATE_DIR_NOT_EXIST
 {
@@ -957,6 +987,7 @@ InfoBox MSG_TEMPLATE_DIR_NOT_EXIST
     Message[ korean ] = "¼­½ÄÆÄÀÏ µð·ºÅä¸®\n$(DIR)\nÀÌ£¨°¡£© ¾ø½À´Ï´Ù.";
     Message[ turkish ] = "\n$(DIR)\nþablon dizini mevcut deðil.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "El directorio de plantillas\n$(DIR)\nno existe.";
 };
 InfoBox MSG_DOCINFO_CANTREAD
 {
@@ -983,6 +1014,7 @@ InfoBox MSG_DOCINFO_CANTREAD
     Message[ korean ] = "¹®¼­ µî·ÏÁ¤º¸¸¦ ÀÐÀ» ¼ö ¾ø½À´Ï´Ù.";
     Message[ turkish ] = "Belge özellikleri okunamýyor.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "No se pueden leer las informaciones sobre el documento.";
 };
 String STR_ERROR_NOSTORAGE
 {
@@ -1013,6 +1045,7 @@ String STR_ERROR_NOSTORAGE
     Text[ korean ] = "¼±ÅÃÇÑ ÆÄÀÏÀº Æ²¸° ¼­½ÄÀ» °¡Áö°í ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Seçilen dosyanýn formatý yanlýþ.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El archivo seleccionado tiene un formato incorrecto.";
 };
 String STR_QUERY_SAVEOWNFORMAT
 {
@@ -1039,6 +1072,7 @@ String STR_QUERY_SAVEOWNFORMAT
     Text[ korean ] = "ÀÌ ¹®¼­¿¡´Â $(FORMAT) ¼­½Ä¿¡ ÀúÀåÇÒ ¼ö ¾ø´Â Æ÷¸Ë°ú Á¤º¸°¡ \nÆ÷ÇÔµÇ¾î¡¡ÀÖÀ»¼ö ÀÖ½À´Ï´Ù. º¯°æ»çÇ×À» \n$(OWNFORMAT) ¼­½Ä¿¡ ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Bu belgede, $(FORMAT) formatýnda kaydedilemeyen\n formatlamalar ve bilgiler bulunabilir. Deðiþiklikleri \n$(OWNFORMAT) formatýnda kaydetmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Este documento puede contener informaciones y formatos\nque no se pueden guardar en el formato $(FORMAT).\n¿Desea guardar los cambios en formato\n$(OWNFORMAT)?";
 };
 String STR_QUERY_MUSTOWNFORMAT
 {
@@ -1064,6 +1098,7 @@ String STR_QUERY_MUSTOWNFORMAT
     Text[ greek ] = "Ôá Ýããñáöá äåí åßíáé äõíáôüí íá áðïèçêåõôïýí ìå ôç ìïñöÞ $(FORMAT).\n ÈÝëåôå íá áðïèçêåõôåß ôï Ýããñáöï ìå ôç ìïñöÞ $(OWNFORMAT);";
     Text[ korean ] = "¹®¼­¸¦ $(FORMAT) ¼­½Ä¿¡ ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù. ¹®¼­¸¦ $(OWNFORMAT) ¼­½Ä¿¡ \nÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Belgeler $(FORMAT) formatýnda kaydedilemiyor\n. Belgeyi $(OWNFORMAT) formatýnda\nkaydetmek ister misiniz?";
+    Text[ catalan ] = "Los documentos no se pueden guardar en el formato $(FORMAT).\n¿Desea guardar el documento en formato $(OWNFORMAT)?";
 };
 String STR_SAVEDOC
 {
@@ -1090,6 +1125,7 @@ String STR_SAVEDOC
     Text[ korean ] = "ÀúÀå(~S)";
     Text[ turkish ] = "~Kaydet";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Guardar";
 };
 String STR_UPDATEDOC
 {
@@ -1116,6 +1152,7 @@ String STR_UPDATEDOC
     Text[ korean ] = "¾÷µ¥ÀÌÆ®(~U)";
     Text[ turkish ] = "Gün~celle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Actuali~zación";
 };
 String STR_SAVEASDOC
 {
@@ -1142,6 +1179,7 @@ String STR_SAVEASDOC
     Text[ korean ] = "´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀå(~A)...";
     Text[ turkish ] = "~Farklý kaydet...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "G~uardar como...";
 };
 String STR_SAVECOPYDOC
 {
@@ -1168,6 +1206,7 @@ String STR_SAVECOPYDOC
     Text[ korean ] = "º¹»ç¸¦ ´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀå(~A)...";
     Text[ turkish ] = "Kopyasýný farklý  ka~ydet...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Guardar copia ~como...";
 };
 String STR_CLOSEDOC
 {
@@ -1194,6 +1233,7 @@ String STR_CLOSEDOC
     Text[ korean ] = "´Ý±â(~C)";
     Text[ turkish ] = "~Kapat";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Cerrar";
 };
 String STR_CLOSEDOC_ANDRETURN
 {
@@ -1222,6 +1262,7 @@ String STR_CLOSEDOC_ANDRETURN
     Text[ korean ] = "´Ý°í µÇµ¹¾Æ°¥ ´ë»ó (~C)";
     Text[ turkish ] = "Kapat ve geri dön ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "C~errar y regresar a  ";
 };
 String STR_WIZARD
 {
@@ -1248,6 +1289,7 @@ String STR_WIZARD
     Text[ korean ] = "¸¶¹ý»ç";
     Text[ turkish ] = "Sihirbaz";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "asistente";
 };
 String RID_STR_FILTCONFIG
 {
@@ -1274,6 +1316,7 @@ String RID_STR_FILTCONFIG
     Text[ korean ] = "±¸¼º";
     Text[ turkish ] = "Konfigürasyonlar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Configuraciones";
 };
 String RID_STR_FILTBASIC
 {
@@ -1300,6 +1343,7 @@ String RID_STR_FILTBASIC
     Text[ korean ] = "StarBasic ¶óÀÌºê·¯¸®";
     Text[ turkish ] = "%PRODUCTNAME Basic kitaplýklarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Bibliotecas %PRODUCTNAME Basic";
 };
 String RID_STR_WARNSTYLEOVERWRITE
 {
@@ -1326,6 +1370,7 @@ String RID_STR_WARNSTYLEOVERWRITE
     Text[ korean ] = "À¯Çü $(ARG1)À»(¸¦)  ´ëÃ¼ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "\"$(ARG1)\" biçimi baþkasý ile deðiþtirilsin mi?";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+    Text[ catalan ] = "¿Desea substituir el estilo \"$(ARG1)\"?";
 };
 String STR_DOC_LOADING
 {
@@ -1352,6 +1397,7 @@ String STR_DOC_LOADING
     Text[ korean ] = "¹®¼­ ·Îµå Áß";
     Text[ turkish ] = "Belge yükleniyor";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cargando el documento";
 };
 Resource RID_DLSTATUS
 {
@@ -1380,6 +1426,7 @@ Resource RID_DLSTATUS
         Text[ korean ] = "¿¬°á ´ë»ó: $(HOST). È¸´äÀ» ±â´Ù¸®½Ê½Ã¿À...";
         Text[ turkish ] = "Baðlanýlan: $(HOST). Yanýt bekleniyor...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Conexión con: $(HOST). Esperando respuesta...";
     };
     String INET_CONNECT_START
     {
@@ -1406,6 +1453,7 @@ Resource RID_DLSTATUS
         Text[ korean ] = "$(HOST)¿¡¼­ $(TARGET)¸¦ ¿©´Â Áß";
         Text[ turkish ] = "Açýlan:  $(HOST) üzerinde bulunan $(TARGET)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Abriendo: $(TARGET) en $(HOST)";
     };
     String INET_READ_STATUS
     {
@@ -1432,6 +1480,7 @@ Resource RID_DLSTATUS
         Text[ korean ] = "Àü¼Û Áß: $(HOST)·Î ºÎÅÍ $(TARGET) . ÀÐ¾úÀ½: $(BYTE)";
         Text[ turkish ] = "Aktarýlan:  $(HOST) sunucusundan $(TARGET). Okunan: $(BYTE)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Transfiriendo: $(TARGET) desde $(HOST). Leído: $(BYTE)";
     };
     String INET_CONNECTION_CLOSED
     {
@@ -1458,6 +1507,7 @@ Resource RID_DLSTATUS
         Text[ korean ] = "¿¬°á ÇØÁ¦";
         Text[ turkish ] = "Baðlantý kesildi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Desconectado";
     };
 };
 QueryBox MSG_OPEN_READONLY
@@ -1489,6 +1539,7 @@ QueryBox MSG_OPEN_READONLY
     MESSAGE[ korean ] = "¹®¼­¸¦ ¿­¾î ÆíÁýÇÒ ¼ö ¾ø½À´Ï´Ù.\n¹®¼­¸¦ ¿­¾î ÀÐÀ¸½Ã°Ú½À´Ï±î?";
     MESSAGE[ turkish ] = "Belge düzenleme için açýlamýyor.\nBelge okuma için açýlsýn mý?";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "El documento no se puede abrir para editar.\n¿Desea abrirlo solo para leer?";
 };
 String STR_EDIT
 {
@@ -1515,6 +1566,7 @@ String STR_EDIT
     Text[ korean ] = "ÆíÁý";
     Text[ turkish ] = "Düzenle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Editar";
 };
 String RID_OFFICEFILTER
 {
@@ -1541,6 +1593,7 @@ String RID_OFFICEFILTER
     Text[ korean ] = "%PRODUCTNAME ¹®¼­";
     Text[ turkish ] = "%PRODUCTNAME belgeleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%PRODUCTNAME Documentos";
 };
 String RID_OFFICEFILTER_WILDCARD
 {
@@ -1579,6 +1632,7 @@ String STR_FRAMEOBJECT_PROPERTIES
     Text[ korean ] = "µî·ÏÁ¤º¸(~I)...";
     Text[ turkish ] = "~Özellikler ...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Prop~iedades...";
 };
 String STR_FSET_FILTERNAME0
 {
@@ -1605,6 +1659,7 @@ String STR_FSET_FILTERNAME0
     Text[ korean ] = "HTML (ÇÁ·¹ÀÓ¼Â£©";
     Text[ turkish ] = "HTML (FrameSet)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "HTML (FrameSet)";
 };
 String STR_FSET_FILTERNAME1
 {
@@ -1632,6 +1687,7 @@ String STR_FSET_FILTERNAME1
     Text[ korean ] = "%PRODUCTNAME Frame ¹®¼­";
     Text[ turkish ] = "%PRODUCTNAME frame belgesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%PRODUCTNAME Frame Documento";
 };
 String STR_TEMPL_MOVED
 {
@@ -1658,6 +1714,7 @@ String STR_TEMPL_MOVED
     Text[ korean ] = "¼­½ÄÆÄÀÏ$(TEMPLATE)À» ¿ø·¡ À§Ä¡¿¡¼­ Ã£Áö ¸øÇß½À´Ï´Ù. ÀÌ¸§ÀÌ °°Àº ¼­½ÄÆÄÀÏÀÌ $(FOUND)¿¡ ÀÖ½À´Ï´Ù. ¾ÕÀ¸·Î ÀÌ ÆÄÀÏÀ» µ¿±âÈ­¿¡ ÀÌ¿ëÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "\"$(TEMPLATE)\" þablonu asýl yerinde bulunamadý. Ayný adlý þablonun bulunduðu yerin adý: \"$(FOUND)\". Bu þablon gelecekte karþýlaþtýrma için kullanýlsýn mý?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "La plantilla \"$(TEMPLATE)\" no se encontró en su ubicación original. Una plantilla con el mismo nombre se encontró en \"$(FOUND)\". ¿Desea utilizar esta plantilla al sincronizar en el futuro?";
 };
 String STR_TEMPL_RESET
 {
@@ -1684,6 +1741,7 @@ String STR_TEMPL_RESET
     Text[ korean ] = "¼­½Ä ÆÄÀÏ$(TEMPLATE)À» Ã£Áö ¸øÇß½À´Ï´Ù. ¾ÕÀ¸·Îµµ °è¼Ó ÀÌ ÆÄÀÏÀ» Ã£À¸½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "\"$(TEMPLATE)\" þablonu bulunamadý. Bu þablon gelecekte de aransýn mý?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No se encontró la plantilla \"$(TEMPLATE)\". ¿Desea que se busque la próxima vez que abra el documento?";
 };
 String STR_AUTOMATICVERSION
 {
@@ -1710,6 +1768,7 @@ String STR_AUTOMATICVERSION
     Text[ korean ] = "ÀÚµ¿ ÀúÀåµÈ ¹öÀü";
     Text[ turkish ] = "Otomatik kaydedilen sürüm";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Versión guardada automáticamente";
 };
 
 String STR_DOCTYPENAME_SW
@@ -1734,6 +1793,7 @@ String STR_DOCTYPENAME_SW
     Text[ chinese_traditional ] = "¤å¦r¤å¥ó";
     Text[ turkish ] = "Metin belgesi";
     Text[ arabic ] = "ãÓÊäÏ äÕ";
+    Text[ catalan ] = "Documento de texto";
 };
 
 String STR_DOCTYPENAME_SWWEB
@@ -1758,6 +1818,7 @@ String STR_DOCTYPENAME_SWWEB
     Text[ chinese_traditional ] = "HTML ¤å¥ó";
     Text[ turkish ] = "HTML belgesi";
     Text[ arabic ] = "ãÓÊäÏHTML ";
+    Text[ catalan ] = "Documento HTML";
 };
 
 String STR_DOCTYPENAME_SWGLOB
@@ -1782,6 +1843,7 @@ String STR_DOCTYPENAME_SWGLOB
     Text[ chinese_traditional ] = "¥D±±¤å¥ó";
     Text[ turkish ] = "Ana belge";
     Text[ arabic ] = "ãÓÊäÏ ÔÇãá";
+    Text[ catalan ] = "Documento maestro";
 };
 
 String STR_DOCTYPENAME_SC
@@ -1806,6 +1868,7 @@ String STR_DOCTYPENAME_SC
     Text[ chinese_traditional ] = "¤u§@ªí¤å¥ó";
     Text[ turkish ] = "Hesap tablosu";
     Text[ arabic ] = "ãÓÊäÏ ÌÏæá";
+    Text[ catalan ] = "Hoja de cálculo";
 };
 
 String STR_DOCTYPENAME_SI
@@ -1830,6 +1893,7 @@ String STR_DOCTYPENAME_SI
     Text[ chinese_traditional ] = "Â²³ø¤å¥ó";
     Text[ turkish ] = "Sunu";
     Text[ arabic ] = "ÚÑÖ ÊÞÏíãí";
+    Text[ catalan ] = "Presentación";
 };
 
 String STR_DOCTYPENAME_SD
@@ -1854,6 +1918,7 @@ String STR_DOCTYPENAME_SD
     Text[ chinese_traditional ] = "Ã¸¹Ï¤å¥ó";
     Text[ turkish ] = "Çizim";
     Text[ arabic ] = "ÑÓãÉ";
+    Text[ catalan ] = "Dibujo";
 };
 
 String STR_DOCTYPENAME_MESSAGE
@@ -1878,6 +1943,7 @@ String STR_DOCTYPENAME_MESSAGE
     Text[ chinese_traditional ] = "¹q¤l¶l¥ó";
     Text[ turkish ] = "Ýleti";
     Text[ arabic ] = "ÑÓÇáÉ";
+    Text[ catalan ] = "Mensaje";
 };
 
 String STR_NOSAVEANDCLOSE
@@ -1905,6 +1971,7 @@ String STR_NOSAVEANDCLOSE
     Text[ korean ] = "¾Æ´Ï¿À(~D)";
     Text[ turkish ] = "~Sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Rechazar";
 };
 
 String STR_PACKNGO_NOACCESS
@@ -1929,6 +1996,7 @@ String STR_PACKNGO_NOACCESS
     Text[ chinese_traditional ] = "µLªkÅª¨ú·í«eªº¼Æ¾Ú¸üÅé¡C";
     Text[ arabic ] = "ÊÚÐÑ ÇáæÕæá Åáì ÇáÞÑÕ ÇáÍÇáí.";
     Text[ turkish ] = "Kullanýlan veri taþýyýcýsýna eriþim saðlanamadý.";
+    Text[ catalan ] = "No se pudo acceder al medio actual.";
 };
 
 String STR_PACKNGO_NEWMEDIUM
@@ -1953,6 +2021,7 @@ String STR_PACKNGO_NEWMEDIUM
     Text[ chinese_traditional ] = "½Ð±z©ñ¤J¤U¤@­ÓºÏ¤ù¡AµM¦Z«ö¤@¤U½T©w¡C";
     Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇáÞÑÕ ÇáÊÇáí¡ Ëã ÇáäÞÑ ÝæÞ ÇáÒÑ \"ÍÓäÇð\".";
     Text[ turkish ] = "Bir sonraki veri taþýyýcýsýný takýp Tamam düðmesine týklayýnýz.";
+    Text[ catalan ] = "Inserte el siguiente medio y pulse el botón Aceptar.";
 };
 
 // ******************************************************************* EOF
