@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpnote.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-04 13:58:45 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@ SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
+    OUString sStyleName;
+
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
     {
@@ -96,8 +98,15 @@ SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
                 msPageMasterName = sValue;
                 break;
             }
+            case XML_TOK_MASTERPAGE_STYLE_NAME:
+            {
+                sStyleName = sValue;
+                break;
+            }
         }
     }
+
+    SetStyle( sStyleName );
 
     // now delete all up-to-now contained shapes from this notes page
     uno::Reference< drawing::XShape > xShape;
