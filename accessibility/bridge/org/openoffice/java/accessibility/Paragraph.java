@@ -58,6 +58,7 @@
 package org.openoffice.java.accessibility;
 
 import javax.accessibility.AccessibleContext;
+import javax.accessibility.AccessibleText;
 
 import com.sun.star.uno.*;
 import com.sun.star.accessibility.*;
@@ -81,42 +82,6 @@ public class Paragraph extends Container implements javax.accessibility.Accessib
             super();
         }
 
-        /** Fires the appropriate PropertyChangeEvent */
-        protected void handleTextChangedEvent(Object any1, Object any2) {
-            Object[] values = new Object[2];
-            try {
-                if (AnyConverter.isObject(any1)) {
-                    com.sun.star.awt.Selection s = (com.sun.star.awt.Selection)
-                        AnyConverter.toObject(Component.SelectionType, any1);
-                    if (s != null) {
-                        // Since there is nothing like a "range" object in the JAA yet,
-                        // the Integer[2] is a private negotiation with the JABG
-                        Integer[] deleted = { new Integer(s.Min), new Integer(s.Max) };
-                        values[0] = deleted;
-                        if (Build.DEBUG) {
-                            System.err.println("text range (" + s.Min + "," + s.Max + ") deleted");
-                        }
-                    }
-                }
-
-                if (AnyConverter.isObject(any2)) {
-                    com.sun.star.awt.Selection s = (com.sun.star.awt.Selection)
-                        AnyConverter.toObject(Component.SelectionType, any2);
-                    if (s != null) {
-                        // Since there is nothing like a "range" object in the JAA yet,
-                        // the Integer[2] is a private negotiation with the JABG
-                        Integer[] inserted = { new Integer(s.Min), new Integer(s.Max) };
-                        values[1] = inserted;
-                        if (Build.DEBUG) {
-                            System.err.println("text range (" + s.Min + "," + s.Max + ") inserted");
-                        }
-                    }
-                }
-                firePropertyChange(AccessibleContext.ACCESSIBLE_TEXT_PROPERTY, values[0], values[1]);
-            } catch (com.sun.star.lang.IllegalArgumentException e) {
-            }
-        }
-
         protected void setComponentState(short state, boolean enable) {
             switch (state) {
                 case AccessibleStateType.EDITABLE:
@@ -135,18 +100,39 @@ public class Paragraph extends Container implements javax.accessibility.Accessib
             }
         }
 
+
+        protected void handleVisibleDataChanged() {
+            if (Paragraph.this.isFocusOwner()) {
+                AccessibleContext ac = accessibleContext;
+                if (ac != null) {
+                    AccessibleText at = ac.getAccessibleText();
+                    if (at != null) {
+                        int pos = at.getCaretPosition();
+                        // Simulating a caret event here should help at tools
+                        // that re not aware of the paragraph approach of OOo.
+                        firePropertyChange(ac.ACCESSIBLE_CARET_PROPERTY,
+                            new Integer(-1), new Integer(pos));
+                    }
+                }
+            }
+        }
+
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
-                case AccessibleEventId.TEXT_CHANGED:
-                    handleTextChangedEvent(event.OldValue, event.NewValue);
-                    break;
                 case AccessibleEventId.CARET_CHANGED:
-                    firePropertyChange(accessibleContext.ACCESSIBLE_CARET_PROPERTY, Component.toNumber(event.OldValue), Component.toNumber(event.NewValue));
+                    firePropertyChange(accessibleContext.ACCESSIBLE_CARET_PROPERTY,
+                        Component.toNumber(event.OldValue),
+                        Component.toNumber(event.NewValue));
                     break;
+                case AccessibleEventId.VISIBLE_DATA_CHANGED:
+                case AccessibleEventId.BOUNDRECT_CHANGED:
+                    // Whenever a paragraph gets inserted above the currently
+                    // focused one, this is the only event that will occur for.
+                    handleVisibleDataChanged();
                 default:
                     super.notifyEvent(event);
-                    break;
+                break;
             }
         }
     }
@@ -155,21 +141,21 @@ public class Paragraph extends Container implements javax.accessibility.Accessib
         return new AccessibleParagraphListener();
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            accessibleContext = new AccessibleParagraph();
-        }
-        return accessibleContext;
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleParagraph();
     }
 
     protected class AccessibleParagraph extends AccessibleContainer {
 
-        /**
-        * Though the class is abstract, this should be called by all sub-classes
-        */
         protected AccessibleParagraph() {
-            super();
+            // Don't do the queryInterface on XAccessibleText already ..
+            super(false);
+            /* Since getAccessibleText() is heavily used by the java access
+             * bridge for gnome and the gnome at-tools, we do a query interface
+             * here and remember the result.
+             */
+            accessibleText = AccessibleHypertextImpl.get(unoAccessibleContext);
         }
 
         /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
@@ -197,26 +183,12 @@ public class Paragraph extends Container implements javax.accessibility.Accessib
             return javax.accessibility.AccessibleRole.TEXT;
         }
 
-        /** Gets the AccessibleText associated with this object presenting text on the display */
-        public javax.accessibility.AccessibleText getAccessibleText() {
-            try {
-                XAccessibleText unoAccessibleText = (XAccessibleText)
-                    UnoRuntime.queryInterface(XAccessibleText.class,unoAccessibleComponent);
-                if (unoAccessibleText != null) {
-                    return new AccessibleTextImpl(unoAccessibleText);
-                } else {
-                    return null;
-                }
-            } catch (com.sun.star.uno.RuntimeException e) {
-                return null;
-            }
-        }
-
         /** Gets the AccessibleEditableText associated with this object presenting text on the display */
         public javax.accessibility.AccessibleEditableText getAccessibleEditableText() {
             try {
                 XAccessibleEditableText unoAccessibleText = (XAccessibleEditableText)
-                    UnoRuntime.queryInterface(XAccessibleEditableText.class,unoAccessibleComponent);
+                    UnoRuntime.queryInterface(XAccessibleEditableText.class,
+                    unoAccessibleComponent);
                 if (unoAccessibleText != null) {
                     return new AccessibleEditableTextImpl(unoAccessibleText);
                 } else {
