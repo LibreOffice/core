@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:42:12 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,12 +267,12 @@ void _FinitFilter()
 
 /*  */
 
-void SwIoSystem::GetWriter( const String& rFltName, WriterRef& xRet )
+void SwIoSystem::GetWriter( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
     for( USHORT n = 0; n < MAXFILTER; ++n )
         if( aReaderWriter[n].IsFilter( rFltName ) )
         {
-            aReaderWriter[n].GetWriter( rFltName, xRet );
+            aReaderWriter[n].GetWriter( rFltName, rBaseURL, xRet );
             break;
         }
 }
@@ -327,16 +327,9 @@ const SfxFilter* SwIoSystem::GetFilterOfFilterTxt( const String& rFilterNm,
 
 /////////////// die Storage Reader/Writer ////////////////////////////////
 
-#if 0   // SH: WW8-Writer als Fake ueber WW6-Writer
-Writer* GetWW8Writer( const String& )
+void GetSw3Writer( const String&, const String& rBaseURL, WriterRef& xRet )
 {
-    ASSERT( FALSE, "WinWord 97 - Writer ist noch nicht implementiert" );
-    return 0;
-}
-#endif
-
-void GetSw3Writer( const String&, WriterRef& xRet )
-{
+    DBG_ERROR( "Shouldn't happen!");
     xRet = new Sw3Writer;
 }
 
@@ -452,7 +445,7 @@ BOOL StgWriter::IsStgWriter() const { return TRUE; }
 /*  */
 
 
-ULONG SwgReader::Read( SwDoc &rDoc, SwPaM &rPam, const String& rFileName )
+ULONG SwgReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const String& rFileName )
 {
     if( !pStrm )
     {
