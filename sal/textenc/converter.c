@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
 #include "tenchelp.h"
 #endif
+#ifndef INCLUDED_RTL_TEXTENC_UNICHARS_H
+#include "unichars.h"
+#endif
 
 #ifndef _RTL_TEXTCVT_H
 #include "rtl/textcvt.h"
@@ -99,7 +102,7 @@ ImplHandleBadInputMbTextToUnicodeConversion(sal_Bool bUndefined,
                 RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT */
         if (*pDestBufPtr != pDestBufEnd)
         {
-            *(*pDestBufPtr)++ = RTL_UNICODE_CHAR_DEFAULT;
+            *(*pDestBufPtr)++ = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
             return IMPL_BAD_INPUT_CONTINUE;
         }
         else
@@ -109,11 +112,33 @@ ImplHandleBadInputMbTextToUnicodeConversion(sal_Bool bUndefined,
 
 ImplBadInputConversionAction
 ImplHandleBadInputUnicodeToTextConversion(sal_Bool bUndefined,
+                                          sal_uInt32 nUtf32,
                                           sal_uInt32 nFlags,
                                           sal_Char ** pDestBufPtr,
                                           sal_Char * pDestBufEnd,
                                           sal_uInt32 * pInfo)
 {
+    /* TODO! RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE
+             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR */
+
+    if (bUndefined)
+        if (ImplIsControlOrFormat(nUtf32))
+        {
+            if ((nFlags & RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE) != 0)
+                nFlags = RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE;
+        }
+        else if (ImplIsPrivateUse(nUtf32))
+        {
+            if ((nFlags & RTL_UNICODETOTEXT_FLAGS_PRIVATE_IGNORE) != 0)
+                nFlags = RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE;
+            else if ((nFlags & RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0) != 0)
+                nFlags = RTL_UNICODETOTEXT_FLAGS_UNDEFINED_0;
+        }
+        else if (ImplIsZeroWidth(nUtf32))
+        {
+            if ((nFlags & RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE) != 0)
+                nFlags = RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE;
+        }
     *pInfo |= bUndefined ? RTL_UNICODETOTEXT_INFO_UNDEFINED :
                            RTL_UNICODETOTEXT_INFO_INVALID;
     switch (nFlags & (bUndefined ? RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK :

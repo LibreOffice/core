@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtutf7.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
 #include "tenchelp.h"
+#endif
+#ifndef INCLUDED_RTL_TEXTENC_UNICHARS_H
+#include "unichars.h"
 #endif
 
 #ifndef _RTL_ALLOC_H
@@ -360,8 +363,8 @@ sal_Size ImplUTF7ToUnicode( const ImplTextConverterData* pData, void* pContext,
                                 *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
                                 break;
                             }
-                            *pDestBuf = RTL_UNICODE_CHAR_DEFAULT;
-                            pDestBuf++;
+                            *pDestBuf++
+                                = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
                         }
                     }
 
@@ -401,8 +404,8 @@ sal_Size ImplUTF7ToUnicode( const ImplTextConverterData* pData, void* pContext,
                                 *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
                                 break;
                             }
-                            *pDestBuf = RTL_UNICODE_CHAR_DEFAULT;
-                            pDestBuf++;
+                            *pDestBuf++
+                                = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
                         }
                     }
 

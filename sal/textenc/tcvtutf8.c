@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtutf8.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,13 @@
 #ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
 #include "tenchelp.h"
 #endif
+#ifndef INCLUDED_RTL_TEXTENC_UNICHARS_H
+#include "unichars.h"
+#endif
 
 #ifndef _RTL_TEXTCVT_H
 #include "rtl/textcvt.h"
 #endif
-
-#define RTL_UNICODE_SURROGATES_HALFMASK 0x3FFUL
-#define RTL_UNICODE_SURROGATES_HALFBASE 0x10000UL
-#define RTL_UNICODE_SURROGATES_HALFSHIFT 10
 
 /* ----------------------------------------------------------------------- */
 
@@ -146,8 +145,7 @@ sal_Size ImplUTF8ToUnicode( const ImplTextConverterData* pData, void* pContext,
                         *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
                         break;
                     }
-                    *pDestBuf = RTL_UNICODE_CHAR_DEFAULT;
-                    pDestBuf++;
+                    *pDestBuf++ = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
                 }
                 pSrcBuf++;
                 continue;
@@ -171,10 +169,7 @@ sal_Size ImplUTF8ToUnicode( const ImplTextConverterData* pData, void* pContext,
                     break;
                 }
                 else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) != RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
-                {
-                    *pDestBuf = RTL_UNICODE_CHAR_DEFAULT;
-                    pDestBuf++;
-                }
+                    *pDestBuf++ = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
                 continue;
             }
             else
@@ -196,10 +191,8 @@ sal_Size ImplUTF8ToUnicode( const ImplTextConverterData* pData, void* pContext,
                         break;
                     }
                     else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) != RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
-                    {
-                        *pDestBuf = RTL_UNICODE_CHAR_DEFAULT;
-                        pDestBuf++;
-                    }
+                        *pDestBuf++
+                            = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
                     continue;
                 }
                 else
@@ -233,8 +226,7 @@ sal_Size ImplUTF8ToUnicode( const ImplTextConverterData* pData, void* pContext,
                         *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
                         break;
                     }
-                    *pDestBuf = RTL_UNICODE_CHAR_DEFAULT;
-                    pDestBuf++;
+                    *pDestBuf++ = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
                 }
                 pSrcBuf++;
                 continue;
@@ -268,10 +260,7 @@ sal_Size ImplUTF8ToUnicode( const ImplTextConverterData* pData, void* pContext,
                     break;
                 }
                 else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK) != RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE )
-                {
-                    *pDestBuf = RTL_UNICODE_CHAR_DEFAULT;
-                    pDestBuf++;
-                }
+                    *pDestBuf++ = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
                 pSrcBuf++;
                 continue;
             }
@@ -287,10 +276,8 @@ sal_Size ImplUTF8ToUnicode( const ImplTextConverterData* pData, void* pContext,
                         break;
                     }
                     else if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK) != RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_IGNORE )
-                    {
-                        *pDestBuf = RTL_UNICODE_CHAR_DEFAULT;
-                        pDestBuf++;
-                    }
+                        *pDestBuf++
+                            = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
                 }
                 else if ( pDestBuf+2 > pEndDestBuf )
                 {
@@ -299,11 +286,8 @@ sal_Size ImplUTF8ToUnicode( const ImplTextConverterData* pData, void* pContext,
                 }
                 else
                 {
-                    cConv -= RTL_UNICODE_SURROGATES_HALFBASE;
-                    *pDestBuf = ((sal_Unicode)(cConv >> RTL_UNICODE_SURROGATES_HALFSHIFT)) + RTL_UNICODE_START_HIGH_SURROGATES;
-                    pDestBuf++;
-                    *pDestBuf = ((sal_Unicode)(cConv & RTL_UNICODE_SURROGATES_HALFMASK)) + RTL_UNICODE_START_LOW_SURROGATES;
-                    pDestBuf++;
+                    *pDestBuf++ = (sal_Unicode) ImplGetHighSurrogate(cConv);
+                    *pDestBuf++ = (sal_Unicode) ImplGetLowSurrogate(cConv);
                 }
             }
         }
@@ -359,8 +343,7 @@ sal_Size ImplUnicodeToUTF8( const ImplTextConverterData* pData, void* pContext,
                 nBytes = 2;
             else
             {
-                if ( (c >= RTL_UNICODE_START_HIGH_SURROGATES) &&
-                     (c <= RTL_UNICODE_END_HIGH_SURROGATES) )
+                if (ImplIsHighSurrogate(c))
                 {
                     if ( pSrcBuf == pEndSrcBuf )
                     {
@@ -369,12 +352,9 @@ sal_Size ImplUnicodeToUTF8( const ImplTextConverterData* pData, void* pContext,
                     }
 
                     c2 = *(pSrcBuf+1);
-                    if ( (c2 >= RTL_UNICODE_START_LOW_SURROGATES) &&
-                         (c2 <= RTL_UNICODE_END_LOW_SURROGATES) )
+                    if (ImplIsLowSurrogate(c2))
                     {
-                        nUCS4Char = (c-RTL_UNICODE_START_HIGH_SURROGATES);
-                        nUCS4Char <<= RTL_UNICODE_SURROGATES_HALFSHIFT;
-                        nUCS4Char += (c2-RTL_UNICODE_START_LOW_SURROGATES) + RTL_UNICODE_SURROGATES_HALFBASE;
+                        nUCS4Char = ImplCombineSurrogates(c, c2);
                         pSrcBuf++;
                     }
                     else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertgb18030.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #endif
 #ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
 #include "tenchelp.h"
+#endif
+#ifndef INCLUDED_RTL_TEXTENC_UNICHARS_H
+#include "unichars.h"
 #endif
 
 #ifndef _RTL_ALLOC_H_
@@ -213,15 +216,11 @@ sal_Size ImplConvertGb18030ToUnicode(ImplTextConverterData const * pData,
                 if (nCode >= 189000 && nCode <= 1237575)
                     if (pDestBufEnd - pDestBufPtr >= 2)
                     {
-                        nCode -= 189000;
+                        nCode -= 189000 - 0x10000;
                         *pDestBufPtr++
-                            = (sal_Unicode)
-                                  (RTL_UNICODE_START_HIGH_SURROGATES
-                                       | (nCode >> 10));
+                            = (sal_Unicode) ImplGetHighSurrogate(nCode);
                         *pDestBufPtr++
-                            = (sal_Unicode)
-                                  (RTL_UNICODE_START_LOW_SURROGATES
-                                       | (nCode & 0x3FF));
+                            = (sal_Unicode) ImplGetLowSurrogate(nCode);
                     }
                     else
                         goto no_output;
@@ -344,14 +343,6 @@ sal_Size ImplConvertUnicodeToGb18030(ImplTextConverterData const * pData,
                                      sal_uInt32 * pInfo,
                                      sal_Size * pSrcCvtChars)
 {
-    /* TODO! RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE
-             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR
-             RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0
-             RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE
-             RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE
-             RTL_UNICODETOTEXT_FLAGS_PRIVATE_IGNORE
-             RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE */
-
     sal_uInt32 const * pGb18030Data
         = ((ImplGb18030ConverterData const *) pData)->
               m_pUnicodeToGb18030Data;
@@ -373,107 +364,96 @@ sal_Size ImplConvertUnicodeToGb18030(ImplTextConverterData const * pData,
         sal_Bool bUndefined = sal_True;
         sal_uInt32 nChar = *pSrcBuf++;
         if (nHighSurrogate == 0)
-            if (nChar < 0x80)
-                if (pDestBufPtr != pDestBufEnd)
-                    *pDestBufPtr++ = (sal_Char) nChar;
-                else
-                    goto no_output;
-            else if (nChar >= RTL_UNICODE_START_HIGH_SURROGATES
-                     && nChar <= RTL_UNICODE_END_HIGH_SURROGATES)
+        {
+            if (ImplIsHighSurrogate(nChar))
+            {
                 nHighSurrogate = (sal_Unicode) nChar;
-            else if ((nChar < RTL_UNICODE_START_LOW_SURROGATES
-                          || nChar > RTL_UNICODE_END_LOW_SURROGATES)
-                     && (nChar < 0xFDD0 || nChar > 0xFDEF)
-                     && nChar < 0xFFFE)
-            {
-                ImplUnicodeToGb180302000Range const * pRange
-                    = pGb18030Ranges;
-                sal_Unicode nFirstNonRange = 0x80;
-                for (;;)
-                {
-                    if (nChar < pRange->m_nFirstUnicode)
-                    {
-                        sal_uInt32 nCode
-                            = pGb18030Data[pRange->m_nNonRangeDataIndex
-                                               + (nChar - nFirstNonRange)];
-                        if (pDestBufEnd - pDestBufPtr
-                                >= (nCode <= 0xFFFF ? 2 : 4))
-                        {
-                            if (nCode > 0xFFFF)
-                            {
-                                *pDestBufPtr++ = (sal_Char) (nCode >> 24);
-                                *pDestBufPtr++ = (sal_Char) (nCode >> 16
-                                                                 & 0xFF);
-                            }
-                            *pDestBufPtr++ = (sal_Char) (nCode >> 8 & 0xFF);
-                            *pDestBufPtr++ = (sal_Char) (nCode & 0xFF);
-                        }
-                        else
-                            goto no_output;
-                        break;
-                    }
-                    else if (nChar <= pRange->m_nLastUnicode)
-                    {
-                        if (pDestBufEnd - pDestBufPtr >= 4)
-                        {
-                            sal_uInt32 nCode
-                                = pRange->m_nFirstLinear
-                                      + (nChar - pRange->m_nFirstUnicode);
-                            *pDestBufPtr++ = (sal_Char) (nCode / 12600
-                                                             + 0x81);
-                            *pDestBufPtr++ = (sal_Char) (nCode / 1260 % 10
-                                                             + 0x30);
-                            *pDestBufPtr++ = (sal_Char) (nCode / 10 % 126
-                                                             + 0x81);
-                            *pDestBufPtr++ = (sal_Char) (nCode % 10 + 0x30);
-                        }
-                        else
-                            goto no_output;
-                        break;
-                    }
-                    nFirstNonRange = (sal_Unicode) ((pRange++)->m_nLastUnicode
-                                                        + 1);
-                }
-                nHighSurrogate = 0;
+                continue;
             }
-            else
-            {
-                bUndefined = sal_False;
-                goto bad_input;
-            }
+        }
+        else if (ImplIsLowSurrogate(nChar))
+            nChar = ImplCombineSurrogates(nHighSurrogate, nChar);
         else
-            if (nChar >= RTL_UNICODE_START_LOW_SURROGATES
-                && nChar <= RTL_UNICODE_END_LOW_SURROGATES)
+        {
+            bUndefined = sal_False;
+            goto bad_input;
+        }
+
+        if (ImplIsLowSurrogate(nChar) || ImplIsNoncharacter(nChar))
+        {
+            bUndefined = sal_False;
+            goto bad_input;
+        }
+
+        if (nChar < 0x80)
+            if (pDestBufPtr != pDestBufEnd)
+                *pDestBufPtr++ = (sal_Char) nChar;
+            else
+                goto no_output;
+        else if (nChar < 0x10000)
+        {
+            ImplUnicodeToGb180302000Range const * pRange = pGb18030Ranges;
+            sal_Unicode nFirstNonRange = 0x80;
+            for (;;)
             {
-                sal_uInt32 nCode = (nHighSurrogate & 0x3FF) << 10
-                                       | nChar & 0x3FF;
-                if ((nCode & 0xFFFF) < 0xFFFE)
-                    if (pDestBufEnd - pDestBufPtr >= 4)
+                if (nChar < pRange->m_nFirstUnicode)
+                {
+                    sal_uInt32 nCode
+                        = pGb18030Data[pRange->m_nNonRangeDataIndex
+                                           + (nChar - nFirstNonRange)];
+                    if (pDestBufEnd - pDestBufPtr
+                            >= (nCode <= 0xFFFF ? 2 : 4))
                     {
-                        *pDestBufPtr++ = (sal_Char) (nCode / 12600 + 0x90);
-                        *pDestBufPtr++ = (sal_Char) (nCode / 1260 % 10
-                                                         + 0x30);
-                        *pDestBufPtr++ = (sal_Char) (nCode / 10 % 126 + 0x81);
-                        *pDestBufPtr++ = (sal_Char) (nCode % 10 + 0x30);
-                        nHighSurrogate = 0;
+                        if (nCode > 0xFFFF)
+                        {
+                            *pDestBufPtr++ = (sal_Char) (nCode >> 24);
+                            *pDestBufPtr++ = (sal_Char) (nCode >> 16 & 0xFF);
+                        }
+                        *pDestBufPtr++ = (sal_Char) (nCode >> 8 & 0xFF);
+                        *pDestBufPtr++ = (sal_Char) (nCode & 0xFF);
                     }
                     else
                         goto no_output;
-                else
-                {
-                    bUndefined = sal_False;
-                    goto bad_input;
+                    break;
                 }
+                else if (nChar <= pRange->m_nLastUnicode)
+                {
+                    if (pDestBufEnd - pDestBufPtr >= 4)
+                    {
+                        sal_uInt32 nCode
+                            = pRange->m_nFirstLinear
+                                  + (nChar - pRange->m_nFirstUnicode);
+                        *pDestBufPtr++ = (sal_Char) (nCode / 12600 + 0x81);
+                        *pDestBufPtr++
+                            = (sal_Char) (nCode / 1260 % 10 + 0x30);
+                        *pDestBufPtr++ = (sal_Char) (nCode / 10 % 126 + 0x81);
+                        *pDestBufPtr++ = (sal_Char) (nCode % 10 + 0x30);
+                    }
+                    else
+                        goto no_output;
+                    break;
+                }
+                nFirstNonRange
+                    = (sal_Unicode) ((pRange++)->m_nLastUnicode + 1);
+            }
+        }
+        else
+            if (pDestBufEnd - pDestBufPtr >= 4)
+            {
+                sal_uInt32 nCode = nChar - 0x10000;
+                *pDestBufPtr++ = (sal_Char) (nCode / 12600 + 0x90);
+                *pDestBufPtr++ = (sal_Char) (nCode / 1260 % 10 + 0x30);
+                *pDestBufPtr++ = (sal_Char) (nCode / 10 % 126 + 0x81);
+                *pDestBufPtr++ = (sal_Char) (nCode % 10 + 0x30);
             }
             else
-            {
-                bUndefined = sal_False;
-                goto bad_input;
-            }
+                goto no_output;
+        nHighSurrogate = 0;
         continue;
 
     bad_input:
         switch (ImplHandleBadInputUnicodeToTextConversion(bUndefined,
+                                                          nChar,
                                                           nFlags,
                                                           &pDestBufPtr,
                                                           pDestBufEnd,
@@ -506,6 +486,7 @@ sal_Size ImplConvertUnicodeToGb18030(ImplTextConverterData const * pData,
             nInfo |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
         else
             switch (ImplHandleBadInputUnicodeToTextConversion(sal_False,
+                                                              0,
                                                               nFlags,
                                                               &pDestBufPtr,
                                                               pDestBufEnd,

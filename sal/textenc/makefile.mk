@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+#   last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,8 @@ SLOFILES = \
     $(SLO)$/tenchelp.obj \
     $(SLO)$/tencinfo.obj \
     $(SLO)$/textcvt.obj \
-    $(SLO)$/textenc.obj
+    $(SLO)$/textenc.obj \
+    $(SLO)$/unichars.obj
 
 .IF "$(UPDATER)" != ""
 
@@ -93,7 +94,8 @@ OBJFILES = \
     $(OBJ)$/tenchelp.obj \
     $(OBJ)$/tencinfo.obj \
     $(OBJ)$/textcvt.obj \
-    $(OBJ)$/textenc.obj
+    $(OBJ)$/textenc.obj \
+    $(OBJ)$/classification.obj
 
 .ENDIF # UPDATER
 

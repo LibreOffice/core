@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tenchelp.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
 #include "tenchelp.h"
+#endif
+
+#ifndef INCLUDED_RTL_TEXTENC_UNICHARS_H
+#include "unichars.h"
 #endif
 
 #ifndef _RTL_TEXTCVT_H
@@ -130,23 +134,12 @@ sal_Bool ImplGetInvalidAsciiMultiByte(sal_uInt32 nFlags,
 
 int ImplIsUnicodeIgnoreChar( sal_Unicode c, sal_uInt32 nFlags )
 {
-    if ( nFlags & RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE )
-    {
-        /* !!! */
-    }
-
-    if ( nFlags & RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE )
-    {
-        /* !!! */
-    }
-
-    if ( nFlags & RTL_UNICODETOTEXT_FLAGS_PRIVATE_IGNORE )
-    {
-        if ( (c >= 0xE000) && (c <= 0xF8FF) )
-            return sal_True;
-    }
-
-    return sal_False;
+    return (nFlags & RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE) != 0
+               && ImplIsZeroWidth(c)
+           || (nFlags & RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE) != 0
+                  && ImplIsControlOrFormat(c)
+           || (nFlags & RTL_UNICODETOTEXT_FLAGS_PRIVATE_IGNORE) != 0
+                  && ImplIsPrivateUse(c);
 }
 
 /* ======================================================================= */
@@ -156,7 +149,7 @@ sal_Unicode ImplGetUndefinedUnicodeChar(sal_uChar cChar, sal_uInt32 nFlags)
     return ((nFlags & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK)
                    == RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE) ?
                RTL_TEXTCVT_BYTE_PRIVATE_START + cChar :
-               RTL_UNICODE_CHAR_DEFAULT;
+               RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -193,8 +186,7 @@ ImplHandleUndefinedUnicodeToTextChar(ImplTextConverterData const * pData,
 
     /* Surrogates Characters should result in */
     /* one replacement character */
-    if ( (c >= RTL_UNICODE_START_HIGH_SURROGATES) &&
-         (c <= RTL_UNICODE_END_HIGH_SURROGATES) )
+    if (ImplIsHighSurrogate(c))
     {
         if ( *ppSrcBuf == pEndSrcBuf )
         {
@@ -203,8 +195,7 @@ ImplHandleUndefinedUnicodeToTextChar(ImplTextConverterData const * pData,
         }
 
         c = *((*ppSrcBuf)+1);
-        if ( (c >= RTL_UNICODE_START_LOW_SURROGATES) &&
-             (c <= RTL_UNICODE_END_LOW_SURROGATES) )
+        if (ImplIsLowSurrogate(c))
             (*ppSrcBuf)++;
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tenchelp.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,13 +75,6 @@
 #if defined __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-#define RTL_UNICODE_START_HIGH_SURROGATES 0xD800
-#define RTL_UNICODE_END_HIGH_SURROGATES 0xDBFF
-#define RTL_UNICODE_START_LOW_SURROGATES 0xDC00
-#define RTL_UNICODE_END_LOW_SURROGATES 0xDFFF
-
-#define RTL_UNICODE_CHAR_DEFAULT 0xFFFD
 
 #define RTL_TEXTCVT_BYTE_PRIVATE_START 0xF100
 #define RTL_TEXTCVT_BYTE_PRIVATE_END 0xF1FF

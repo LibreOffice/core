@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtkr1.tab,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:28 $
+ *  last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,26 @@
  *
  ************************************************************************/
 
-/* ======================================================================= */
+/* Mapping tables from KS X 1001:1992 (formerly known as KS C 5601-1992) to
+   Unicode.
 
-/* This file contain the DBCS to UniCode tables for the following */
-/* korean charsets: */
-/* KSC_5601, EUC-KR, MS_949, APPLE_KOREAN */
+   The mappings are suitable for the EUC-KR encoding (first and second byte
+   each ranging from 0xA1 to 0xFE), and for ISO-2022-KR if you subtract
+   accordingly.  But note that the tables are too "large" for both EUC-KR and
+   ISO-2022-KR (and map undefined input to Unicode code points), because they
+   also support UHC.
 
-/* ======================================================================= */
+   The mappings also include UHC encoding (Unified Hangul Code, also known as
+   Microsoft Code Page 949), which is a superset of EUC-KR (extra first byte
+   range 0x81 to 0xA0, extra second byte ranges 0x41 to 0x5A, 0x61 to 0x7A,
+   and 0x81 to 0xA0, even within the original EUC-KR area).
+
+   The mappings are also used for the HangulTalk encoding (Macintosh), altough
+   this contains some other EUC-KR extensions (that are thus not supported):
+   special single byte characters 0x81, 0x82, 0x83, 0xFE, and 0xFF; extra
+   double byte characters within first byte range 0xA1 to 0xAD and second byte
+   range 0x41 to 0xFE, even within the original EUC-KR area).
+ */
 
 /* ----------------------------------------------------------------------- */
 

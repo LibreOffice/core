@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtmb.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
 #include "tenchelp.h"
+#endif
+#ifndef INCLUDED_RTL_TEXTENC_UNICHARS_H
+#include "unichars.h"
 #endif
 
 #ifndef _RTL_TEXTCVT_H
@@ -213,7 +216,7 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
                             continue;
                         }
                         else
-                            cConv = RTL_UNICODE_CHAR_DEFAULT;
+                            cConv = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
                     }
                     else
                     {
@@ -229,7 +232,7 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
                             continue;
                         }
                         else
-                            cConv = RTL_UNICODE_CHAR_DEFAULT;
+                            cConv = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
                     }
                 }
             }
@@ -518,7 +521,7 @@ sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
                         continue;
                     }
                     else
-                        cConv = RTL_UNICODE_CHAR_DEFAULT;
+                        cConv = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
                 }
                 else
                 {
@@ -534,7 +537,7 @@ sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
                         continue;
                     }
                     else
-                        cConv = RTL_UNICODE_CHAR_DEFAULT;
+                        cConv = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
                 }
             }
         }
