@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote_bridge.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-28 08:47:31 $
+ *  last change: $Author: jbu $ $Date: 2000-10-27 09:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,9 +392,10 @@ namespace remotebridges_bridge
             MutexGuard guard( Mutex::getGlobalMutex() );
             if( !pNames )
             {
-                static Sequence< OUString > seqNames(2);
-                seqNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.bridge.Bridge.iiop" );
-                seqNames.getArray()[1] = OUString::createFromAscii( "com.sun.star.bridge.Bridge.urp" );
+                static Sequence< OUString > seqNames(3);
+                seqNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.bridge.Bridge" );
+                seqNames.getArray()[1] = OUString::createFromAscii( "com.sun.star.bridge.Iiop" );
+                seqNames.getArray()[2] = OUString::createFromAscii( "com.sun.star.bridge.Urp" );
 
                 pNames = &seqNames;
             }

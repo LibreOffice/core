@@ -21,8 +21,8 @@
 
 <Status StatusValue="final"/>
 
-<SupportedService>  com.sun.star.bridge.Bridge.iiop </SupportedService>
-<SupportedService>  com.sun.star.bridge.Bridge.urp  </SupportedService>
+<SupportedService>  com.sun.star.bridge.Iiop    </SupportedService>
+<SupportedService>  com.sun.star.bridge.Urp     </SupportedService>
 
 <ServiceDependency> ... </ServiceDependency>
 
