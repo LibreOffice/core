@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 22:28:16 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ danish ] = "Deaktiver" ;
                 Text [ portuguese ] = "Desactivar" ;
                 Text [ portuguese_brazilian ] = "Aus" ;
-                Text[ chinese_simplified ] = "失活";
+                Text[ chinese_simplified ] = "不使用";
                 Text[ russian ] = "蔓觌.";
                 Text[ polish ] = "Wy彻cz";
                 Text[ japanese ] = "堤";
@@ -862,61 +862,61 @@ DockingWindow RID_SVXDLG_FONTWORK
         Size = MAP_APPFONT ( 71 , 60 ) ;
         DropDown = TRUE ;
         QuickHelpText = "Schattenfarbe" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ english_us ] = "Shadow Color" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
         QuickHelpText [ spanish ] = "Color sombra" ;
         QuickHelpText [ french ] = "Couleur d'ombre" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
         QuickHelpText [ dutch ] = "Schaduwkleur" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ swedish ] = "Skuggans f鋜g" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
         QuickHelpText [ italian ] = "Colore dell'ombra" ;
-        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese ] = "Cor da sombra!" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
         QuickHelpText [ danish ] = "Skyggefarve" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
