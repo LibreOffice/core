@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:18:43 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2173,10 +2173,116 @@ namespace xmloff { namespace token {
         // DVO, OD 01.10.2003 #i18732#
         TOKEN( "flow-with-text" ),   // XML_FLOW_WITH_TEXT
 
-        // DVO, OD 01.10.2003 #i18732#
-        TOKEN( "flow-with-text" ),   // XML_FLOW_WITH_TEXT
+        TOKEN( "custom-shape" ),                    // XML_CUSTOM_SHAPE
+        TOKEN( "engine" ),                          // XML_ENGINE
+        TOKEN( "enhanced-geometry" ),               // XML_ENHANCED_GEOMETRY
+        TOKEN( "predefined-type" ),                 // XML_PREDEFINED_TYPE
+        TOKEN( "coordinate-origin-x" ),             // XML_COORDINATE_ORIGIN_X
+        TOKEN( "coordinate-origin-y" ),             // XML_COORDINATE_ORIGIN_Y
+        TOKEN( "coordinate-width" ),                // XML_COORDINATE_WIDTH
+        TOKEN( "coordinate-height" ),               // XML_COORDINATE_HEIGHT
+        TOKEN( "text-rotate-angle" ),               // XML_TEXT_ROTATE_ANGLE
+        TOKEN( "mirror-vertical" ),                 // XML_MIRROR_VERTICAL
+        TOKEN( "mirror-horizontal" ),               // XML_MIRROR_HORIZONTAL
+        TOKEN( "extrusion-allowed" ),               // XML_EXTRUSION_ALLOWED
+        TOKEN( "text-path-allowed" ),               // XML_TEXT_PATH_ALLOWED
+        TOKEN( "conentric-gradient-fill-allowed" ), // XML_CONCENTRIC_GRADIENT_FILL_ALLOWED
+        TOKEN( "extrusion" ),                       // XML_EXTRUSION
+        TOKEN( "extrusion-auto-rotation-center" ),  // XML_EXTRUSION_AUTO_ROTATION_CENTER
+        TOKEN( "extrusion-backward-depth" ),        // XML_EXTRUSION_BACKWARD_DEPTH
+        TOKEN( "extrusion-brightness" ),            // XML_EXTRUSION_BRIGHTNESS
+        TOKEN( "extrusion-diffusity" ),             // XML_EXTRUSION_DIFFUSITY
+        TOKEN( "extrusion-edge" ),                  // XML_EXTRUSION_EDGE
+        TOKEN( "extrusion-facet" ),                 // XML_EXTRUSION_FACET
+        TOKEN( "extrusion-foreward-depth" ),        // XML_EXTRUSION_FOREWARD_DEPTH
+        TOKEN( "extrusion-light-face" ),            // XML_EXTRUSION_LIGHT_FACE
+        TOKEN( "extrusion-light-harsh1" ),          // XML_EXTRUSION_LIGHT_HARSH1
+        TOKEN( "extrusion-light-harsh2" ),          // XML_EXTRUSION_LIGHT_HARSH2
+        TOKEN( "extrusion-light-level1" ),          // XML_EXTRUSION_LIGHT_LEVEL1
+        TOKEN( "extrusion-light-level2" ),          // XML_EXTRUSION_LIGHT_LEVEL2
+        TOKEN( "extrusion-light-direction1" ),      // XML_EXTRUSION_LIGHT_DIRECTION1
+        TOKEN( "extrusion-light-direction2" ),      // XML_EXTRUSION_LIGHT_DIRECTION2
+        TOKEN( "extrusion-metal" ),                 // XML_EXTRUSION_METAL
+        TOKEN( "extrusion-plane" ),                 // XML_EXTRUSION_PLANE
+        TOKEN( "extrusion-render-mode" ),           // XML_EXTRUSION_RENDER_MODE
+        TOKEN( "extrusion-rotation-angle-x" ),      // XML_EXTRUSION_ROTATION_ANGLE_X
+        TOKEN( "extrusion-rotation-angle-y" ),      // XML_EXTRUSION_ROTATION_ANGLE_Y
+        TOKEN( "extrusion-rotation-center-x" ),     // XML_EXTRUSION_ROTATION_CENTER_X
+        TOKEN( "extrusion-rotation-center-y" ),     // XML_EXTRUSION_ROTATION_CENTER_Y
+        TOKEN( "extrusion-rotation-center-z" ),     // XML_EXTRUSION_ROTATION_CENTER_Z
+        TOKEN( "extrusion-shininess" ),             // XML_EXTRUSION_SHININESS
+        TOKEN( "extrusion-skew" ),                  // XML_EXTRUSION_SKEW
+        TOKEN( "extrusion-skew-angle" ),            // XML_EXTRUSION_SKEW_ANGLE
+        TOKEN( "extrusion-specularity" ),           // XML_EXTRUSION_SPECULARITY
+        TOKEN( "extrusion-parallel" ),              // XML_EXTRUSION_PARALLEL
+        TOKEN( "extrusion-viewpoint" ),             // XML_EXTRUSION_VIEWPOINT
+        TOKEN( "extrusion-origin-x" ),              // XML_EXTRUSION_ORIGIN_X
+        TOKEN( "extrusion-origin-y" ),              // XML_EXTRUSION_ORIGIN_Y
+        TOKEN( "extrusion-color" ),                 // XML_EXTRUSION_COLOR
+        TOKEN( "secondary-fill-color" ),            // XML_SECONDARY_FILL_COLOR
+        TOKEN( "enhanced-path" ),                   // XML_ENHANCED_PATH
+        TOKEN( "path-stretchpoint-x" ),             // XML_PATH_STRETCHPOINT_X
+        TOKEN( "path-stretchpoint-y" ),             // XML_PATH_STRETCHPOINT_Y
+        TOKEN( "text-frames" ),                     // XML_TEXT_FRAMES
+        TOKEN( "glue-points" ),                     // XML_GLUE_POINTS
+        TOKEN( "glue-point-type" ),                 // XML_GLUE_POINT_TYPE
+        TOKEN( "glue-point-leaving-direction" ),    // XML_GLUE_POINT_LEAVING_DIRECTIONS
+        TOKEN( "text-path" ),                       // XML_TEXT_PATH
+        TOKEN( "text-path-fit-text" ),              // XML_TEXT_PATH_FIT_TEXT
+        TOKEN( "text-path-fit-shape" ),             // XML_TEXT_PATH_FIT_SHAPE
+        TOKEN( "text-path-scale-x" ),               // XML_TEXT_PATH_SCALE_X
+        TOKEN( "text-path-same-letter-heights" ),   // XML_TEXT_PATH_SAME_LETTER_HEIGHTS
+        TOKEN( "adjustments" ),                     // XML_ADJUSTMENTS
+        TOKEN( "equation" ),                        // XML_EQUATION
+        TOKEN( "handle" ),                          // XML_HANDLE
+        TOKEN( "handle-mirror-vertical" ),          // XML_HANDLE_MIRROR_VERTICAL
+        TOKEN( "handle-mirror-horizontal" ),        // XML_HANDLE_MIRROR_HORIZONTAL
+        TOKEN( "handle-switched" ),                 // XML_HANDLE_SWITCHED
+        TOKEN( "handle-position" ),                 // XML_HANDLE_POSITION
+        TOKEN( "handle-range-x-minimum" ),          // XML_HANDLE_RANGE_X_MINIMUM
+        TOKEN( "handle-range-x-maximum" ),          // XML_HANDLE_RANGE_X_MAXIMUM
+        TOKEN( "handle-range-y-minimum" ),          // XML_HANDLE_RANGE_Y_MINIMUM
+        TOKEN( "handle-range-y-maximum" ),          // XML_HANDLE_RANGE_Y_MAXIMUM
+        TOKEN( "handle-polar" ),                    // XML_HANDLE_POLAR
+        TOKEN( "handle-radius-range-minimum" ),     // XML_HANDLE_RADIUS_RANGE_MINIMUM
+        TOKEN( "handle-radius-range-maximum" ),     // XML_HANDLE_RADIUS_RANGE_MAXIMUM
+        TOKEN( "callout" ),                         // XML_CALLOUT
+        TOKEN( "callout-accent-bar" ),              // XML_CALLOUT_ACCENT_BAR
+        TOKEN( "callout-angle" ),                   // XML_CALLOUT_ANGLE
+        TOKEN( "callout-drop-distance" ),           // XML_CALLOUT_DROP_DISTANCE
+        TOKEN( "callout-drop" ),                    // XML_CALLOUT_DROP
+        TOKEN( "callout-drop-automatic" ),          // XML_CALLOUT_DROP_AUTOMATIC
+        TOKEN( "callout-gap" ),                     // XML_CALLOUT_GAP
+        TOKEN( "callout-length" ),                  // XML_CALLOUT_LENGTH
+        TOKEN( "callout-length-specified" ),        // XML_CALLOUT_LENGTH_SPECIFIED
+        TOKEN( "callout-flip-x" ),                  // XML_CALLOUT_FLIP_X
+        TOKEN( "callout-flip-y" ),                  // XML_CALLOUT_FLIP_Y
+        TOKEN( "callout-text-border" ),             // XML_CALLOUT_TEXT_BORDER
+        TOKEN( "callout-type" ),                    // XML_CALLOUT_TYPE
+        TOKEN( "rectangle" ),                       // XML_RECTANGLE
+        TOKEN( "roundrectangle" ),                  // XML_ROUNDRECTANGLE
+        TOKEN( "oval" ),                            // XML_OVAL
+        TOKEN( "cloud" ),                           // XML_CLOUD
+        TOKEN( "on" ),                              // XML_ON
+        TOKEN( "off" ),                             // XML_OFF
+        TOKEN( "xy" ),                              // XML_XY
+        TOKEN( "zx" ),                              // XML_ZX
+        TOKEN( "yz" ),                              // XML_YZ
+        TOKEN( "boundingcube" ),                    // XML_BOUNDINGCUBE
+        TOKEN( "wireframe" ),                       // XML_WIREFRAME
+        TOKEN( "mid" ),                             // XML_MID
+        TOKEN( "if" ),                              // XML_IF
+        TOKEN( "mod" ),                             // XML_MOD
+        TOKEN( "atan2" ),                           // XML_ATAN2
+        TOKEN( "cosatan2" ),                        // XML_COSATAN2
+        TOKEN( "sinatan2" ),                        // XML_SINATAN2
+        TOKEN( "sqrt" ),                            // XML_SQRT
+        TOKEN( "sumangle" ),                        // XML_SUMANGLE
+        TOKEN( "segments" ),                        // XML_SEGMENTS
+        TOKEN( "word-wrap" ),                       // XML_WORD_WRAP
+        TOKEN( "auto-grow-size" ),                  // XML_AUTO_GROW_SIZE
 
-        { 0, NULL, NULL }                      // XML_TOKEN_END
+        { 0, NULL, NULL }                       // XML_TOKEN_END
     };
 
 
