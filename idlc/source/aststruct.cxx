@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aststruct.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:08:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,12 +149,11 @@ sal_Bool AstStruct::dump(RegistryKey& rKey)
     if ( getNodeType() == NT_exception )
         typeClass = RT_TYPE_EXCEPTION;
 
+    OUString emptyStr;
     typereg::Writer aBlob(
         (m_typeParameters.empty() && !m_bPublished
          ? TYPEREG_VERSION_0 : TYPEREG_VERSION_1),
-        getDocumentation(),
-        OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8), typeClass,
-        m_bPublished,
+        getDocumentation(), emptyStr, typeClass, m_bPublished,
         OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
         m_pBaseType == 0 ? 0 : 1, nMember, 0,
         static_cast< sal_uInt16 >(m_typeParameters.size()));
@@ -188,7 +187,7 @@ sal_Bool AstStruct::dump(RegistryKey& rKey)
                     typeName = pMember->getType()->getRelativName();
                 }
                 aBlob.setFieldData(
-                    index++, pMember->getDocumentation(), OUString(), flags,
+                    index++, pMember->getDocumentation(), emptyStr, flags,
                     OStringToOUString(
                         pMember->getLocalName(), RTL_TEXTENCODING_UTF8),
                     OStringToOUString(typeName, RTL_TEXTENCODING_UTF8),
@@ -203,7 +202,7 @@ sal_Bool AstStruct::dump(RegistryKey& rKey)
          i != m_typeParameters.end(); ++i)
     {
         aBlob.setReferenceData(
-            index++, OUString(), RT_REF_TYPE_PARAMETER, RT_ACCESS_INVALID,
+            index++, emptyStr, RT_REF_TYPE_PARAMETER, RT_ACCESS_INVALID,
             OStringToOUString(
                 (*i)->getLocalName(), RTL_TEXTENCODING_UTF8));
     }
@@ -211,7 +210,7 @@ sal_Bool AstStruct::dump(RegistryKey& rKey)
     sal_uInt32 aBlobSize;
     void const * pBlob = aBlob.getBlob(&aBlobSize);
 
-    if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY,
+    if (localKey.setValue(emptyStr, RG_VALUETYPE_BINARY,
                             (RegValue)pBlob, aBlobSize))
     {
         fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
