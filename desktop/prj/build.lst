@@ -1,4 +1,4 @@
-dt	desktop	:	sc sd sw NULL
+dt	desktop	:	offmgr NULL
 dt	desktop									usr1	-	all	dt_mkout NULL
 dt	desktop\inc								get		-	all	dt_inc NULL
 dt	desktop\prj								get		-	all	dt_prj NULL
