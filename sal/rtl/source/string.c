@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:40 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,7 @@ sal_Bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
                 if ( *pTarget )
                     IMPL_RTL_STRINGNAME( release )( *pTarget );
                 *pTarget = IMPL_RTL_STRINGNAME( ImplAlloc )( nLength );
+                OSL_ASSERT(*pTarget != NULL);
                 pBuffer = (*pTarget)->buffer;
                 do
                 {
@@ -303,6 +304,7 @@ sal_Bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
         for (;;)
         {
             pTemp = IMPL_RTL_STRINGNAME( ImplAlloc )( nNewLen );
+            OSL_ASSERT(pTemp != NULL);
             nDestBytes = rtl_convertUnicodeToText( hConverter, 0,
                                                    pSource, nLength,
                                                    pTemp->buffer, nNewLen,
@@ -332,6 +334,7 @@ sal_Bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
         if ( nNewLen > nDestBytes+8 )
         {
             rtl_String* pTemp2 = IMPL_RTL_STRINGNAME( ImplAlloc )( nDestBytes );
+            OSL_ASSERT(pTemp2 != NULL);
             rtl_str_ImplCopy( pTemp2->buffer, pTemp->buffer, nDestBytes );
             rtl_freeMemory( pTemp );
             pTemp = pTemp2;
