@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 13:29:31 $
+ *  last change: $Author: oj $ $Date: 2002-10-15 13:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #endif
 #ifdef UNX
 #define ODBC_LIBRARY    "libodbc.so"
-#define ODBC_UI_LIBRARY "libodbc.so"
+#define ODBC_UI_LIBRARY "libodbcinst.so"
 #endif
 
 // just to go with calling convention of windows
@@ -336,6 +336,9 @@ void OOdbcManagement::manageDataSources(void* _pParentSysWindowHandle)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/03/23 13:29:31  jl
+ *  replaced: OSL_ENSHURE->OSL_ENSURE
+ *
  *  Revision 1.5  2001/01/10 12:09:37  oj
  *  #82620# calling convention of windows changed
  *
