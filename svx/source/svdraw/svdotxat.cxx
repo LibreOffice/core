@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-02 10:24:40 $
+ *  last change: $Author: dl $ $Date: 2001-04-02 10:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ void SdrTextObj::ItemSetChanged(const SfxItemSet& rSet)
         {
             SfxItemSet aSet( pOutliner->GetParaAttribs(nPara) );
             aSet.Put( rSet );
-            pOutliner->SetParaAttribs(nPara, aSet);
+            pOutliner->SetParaAttribs(nPara, aSet);
         }
 
         if(!pEdtOutl)
@@ -637,7 +637,7 @@ void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& 
             if (nAbsHgt>0xFFFF) nAbsHgt=0xFFFF;
 
             // und nun attributieren
-            SetItem(SvxCharScaleWidthItem(nRelWdt));
+            SetItem(SvxCharScaleWidthItem( (USHORT) nRelWdt));
             SetItem(SvxFontHeightItem(nAbsHgt,(USHORT)nRelHgt));
             // Zeichen- und Absatzattribute innerhalb des OutlinerParaObjects
             Outliner& rOutliner=ImpGetDrawOutliner();
