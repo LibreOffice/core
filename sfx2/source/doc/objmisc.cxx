@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-28 12:34:17 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,7 @@ sal_Bool SfxObjectShell::IsTemplate() const
 void SfxObjectShell::SetTemplate(sal_Bool bIs)
 {
     pImp->bIsTemplate=bIs;
-    SfxFilterMatcher aMatcher( GetFactory().GetFilterContainer() );
+    SfxFilterMatcher aMatcher( GetFactory().GetFactoryName() );
     SfxFilterMatcherIter aIter( &aMatcher, SFX_FILTER_TEMPLATEPATH );
     SfxMedium* pMed = GetMedium();
     if( pMed ) pMed->SetFilter( aIter.First() );
