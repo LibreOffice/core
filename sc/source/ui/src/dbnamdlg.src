@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:05:09 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 15:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@ ModelessDialog RID_SCDLG_DBNAMES
     ImageButton RB_DBAREA
     {
         QuickHelpText [ de ] = "Verkleinern" ;
-        Pos = MAP_APPFONT ( 145 , 123 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 145 , 122 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
         QuickHelpText [ x-comment ] = " ";
