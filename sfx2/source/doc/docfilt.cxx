@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfilt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:13:00 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,9 +326,9 @@ String SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
     if ( rStg.IsStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "WordDocument" ) ) ) )
     {
         if ( rStg.IsStream( String::CreateFromAscii("0Table" ) ) || rStg.IsStream( String::CreateFromAscii("1Table" ) ) )
-            pType = "MS Word 97";
+            pType = "writer_MS_Word_97";
         else
-            pType = "MS Word 95";
+            pType = "writer_MS_Word_95";
     }
     else if ( rStg.IsStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Book" ) ) ) )
     {
