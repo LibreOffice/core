@@ -12,6 +12,7 @@
 ..\source\drivers\jdbc\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\odbc\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\mozab\*.xml %_DEST%\xml%_EXT%\*.xml
+..\source\drivers\evoab\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\calc\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\mysql\*.xml %_DEST%\xml%_EXT%\*.xml
 
