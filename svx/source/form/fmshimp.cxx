@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-21 12:31:31 $
+ *  last change: $Author: kz $ $Date: 2000-09-26 11:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@
 #include <sfx2/dispatch.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
 #endif
