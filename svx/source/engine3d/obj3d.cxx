@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-20 09:51:03 $
+ *  last change: $Author: aw $ $Date: 2001-01-12 16:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1731,29 +1731,14 @@ void E3dObject::operator=(const SdrObject& rObj)
 
 const SfxItemSet& E3dObject::GetItemSet() const
 {
+    // include Items of scene this object belongs to
     E3dScene* pScene = GetScene();
     if(pScene && pScene != this)
     {
         SfxItemSet& rSet = (SfxItemSet&)SdrAttrObj::GetItemSet();
         SfxItemSet aSet(*rSet.GetPool(), SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST);
         aSet.Put(pScene->E3dObject::GetItemSet());
-//-/        rSet.MergeValues(aSet, TRUE);
-        SfxWhichIter aIter(aSet);
-        sal_uInt16 nWhich(aIter.FirstWhich());
-        while(nWhich)
-        {
-            const SfxPoolItem* pItem = NULL;
-            aSet.GetItemState(nWhich, TRUE, &pItem);
-
-            if(pItem)
-            {
-                if(pItem == (SfxPoolItem *)-1)
-                    rSet.InvalidateItem(nWhich);
-                else
-                    rSet.MergeValue(*pItem, TRUE);
-            }
-            nWhich = aIter.NextWhich();
-        }
+        rSet.Put(aSet);
     }
 
     return SdrAttrObj::GetItemSet();
@@ -1781,9 +1766,7 @@ void E3dObject::SetItem( const SfxPoolItem& rItem )
     {
         E3dScene* pScene = GetScene();
         if(pScene && pScene != this)
-        {
             pScene->E3dObject::SetItem(rItem);
-        }
     }
 
     SdrAttrObj::SetItem(rItem);
@@ -1843,9 +1826,7 @@ void E3dObject::SetItemSet( const SfxItemSet& rSet )
 {
     E3dScene* pScene = GetScene();
     if(pScene && pScene != this)
-    {
         pScene->E3dObject::SetItemSet(rSet);
-    }
 
     // set base items
     SdrAttrObj::SetItemSet(rSet);
@@ -3912,7 +3893,6 @@ void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
 |* Transformation auf die Geometrie anwenden
 |*
 \************************************************************************/
-
 //void E3dCompoundObject::ApplyTransform(const Matrix4D& rMatrix)
 //{
 //  // call parent
