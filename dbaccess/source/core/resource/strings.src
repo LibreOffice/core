@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:20:12 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ String RID_STR_TRIED_OPEN_TABLE
     Text[ czech ] = "Pokus o otevření tabulky $name$.";
     Text[ hebrew ] = "Es wurde versucht, die Tabelle $name$ zu öffnen.";
     Text[ hindi ] = "$name$ सारणी को खोलने का प्रयत्न किया ।";
+    Text[ slovak ] = "Pokus o otvorenie tabuľky $name$.";
 };
 String RID_STR_CONNECTION_INVALID
 {
@@ -118,6 +119,7 @@ String RID_STR_CONNECTION_INVALID
     Text[ czech ] = "Nepodařilo se vytvořit připojení.";
     Text[ hebrew ] = "Es konnte keine Verbindung erstellt werden.";
     Text[ hindi ] = "कोई कनेक्शन स्थापित नहीं कर सकते है ।";
+    Text[ slovak ] = "Nemohlo byť vytvorené spojenie.";
 };
 
 String RID_STR_TABLE_IS_FILTERED
@@ -148,6 +150,7 @@ String RID_STR_TABLE_IS_FILTERED
     Text[ czech ] = "Tabulka $name$ již existuje. Není viditelná, protože byla odfiltrována.";
     Text[ hebrew ] = "Die Tabelle $name$ existiert bereits. Sie ist nicht sichtbar, da sie ausgefiltert wurde.";
     Text[ hindi ] = "सारणी $name$ पहिले से ही अस्तित्व में है । यह दृष्टिगोचर नहीं है, क्यों कि इसको फिल्टर किया है ।";
+    Text[ slovak ] = "Tabuľka $name$ už existuje. Nieje viditeľná, pretože bola odfiltrovaná.";
 };
 
 String RID_STR_NEED_CONFIG_WRITE_ACCESS
@@ -178,6 +181,7 @@ String RID_STR_NEED_CONFIG_WRITE_ACCESS
     Text[ czech ] = "Nemáte přístup pro zápis do konfiguračních dat, na nichž je tento objekt založen.";
     Text[ hebrew ] = "Sie haben keinen Schreibzugriff auf die Konfigurationsdaten des Objektes.";
     Text[ hindi ] = "आपको वस्तु के आधारित रूपरेखा ड़ॉटा में लिखने का अधिकार नहीं है ।";
+    Text[ slovak ] = "Nemáte prístup na zapisovanie ku konfiguračným dátam, na ktorých je založený objekt.";
 };
 
 
@@ -209,6 +213,7 @@ String RID_STR_COULDNOTCONNECT_UNSPECIFIED
     Text[ czech ] = "Nepodařilo se vytvořit připojení k externímu zdroji dat. Došlo k neznámé chybě. Pravděpodobně je poškozen ovladač.";
     Text[ hebrew ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Ein unbekannter Fehler trat auf. Wahrscheinlich ist der Treiber fehlerhaft.";
     Text[ hindi ] = "बाहरी ड़ॉटा मूल को कनेक्शन स्थापित नहीं कर सकते है । एक अज्ञात गलती घटित हुआ । शायद ड्रइवर दोषयुक्त है ।";
+    Text[ slovak ] = "Spojenie k externému zdroju dát nemohlo byť vytvorené. Objavila sa neznáma chyba. Driver je pravdepodobne chybný.";
 };
 
 String RID_STR_COULDNOTCONNECT_NODRIVER
@@ -239,6 +244,7 @@ String RID_STR_COULDNOTCONNECT_NODRIVER
     Text[ czech ] = "Nepodařilo se vytvořit připojení k externímu zdroji dat. Pro zadané URL nebyl nalezen žádný SDBC ovladač.";
     Text[ hebrew ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Es wurde kein SDBC-Treiber für die angegebene URL gefunden.";
     Text[ hindi ] = "बाहरी ड़ॉटा मूल को कनेक्शन स्थापित नहीं कर सकते है । दी हुयी URL केलिए कोई SDBC ड्रइवर प्राप्त नहीं हुआ ।";
+    Text[ slovak ] = "Spojenie k externému zdroju dát nemohlo byť vytvorené. Pre zadanú URL adresu nebol nájdený SDBC driver.";
 };
 
 String RID_STR_COULDNOTLOAD_MANAGER
@@ -269,7 +275,10 @@ String RID_STR_COULDNOTLOAD_MANAGER
     Text[ czech ] = "Nepodařilo se vytvořit připojení k externímu zdroji dat. Nepodařilo se načíst manažer SDBC ovladačů.";
     Text[ hebrew ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Der SDBC-Treiber-Manager konnte nicht geladen werden.";
     Text[ hindi ] = "बाहरी ड़ॉटा मूल को कनेक्शन स्थापित नहीं कर सकते है । SDBC ड्रइवर प्रबंधक को लोड़ नहीं कर सकते है ।";
+    Text[ slovak ] = "Spojenie k externému zdroju dát nemohlo byť vytvorené. Nemohol byť spustený SDBC driver manager.";
 };
+
+
 
 
 
