@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:50 $
+ *  last change: $Author: jbu $ $Date: 2000-10-19 14:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,16 @@ void Remote2RemoteStub::thisFree( uno_ExtEnvironment *pEnvUno , void *pThis )
 }
 void Remote2RemoteStub::releaseRemote()
 {
+    sal_Bool bNeedsRelease = sal_False;
+    if( ! m_pType->aBase.bComplete )
+    {
+        // m_pType may be exchanged during complete, so it needs to be acquired
+        // (MT : Another thread may use m_pType during e.g. dispatch ! ).
+        typelib_typedescription_acquire( (typelib_TypeDescription*)m_pType );
+        bNeedsRelease = sal_True;
+        typelib_typedescription_complete( (typelib_TypeDescription **) &m_pType );
+    }
+
     uno_Any any;
     uno_Any *pAny = &any;
 
@@ -124,6 +134,10 @@ void Remote2RemoteStub::releaseRemote()
                   &pAny );
 
     typelib_typedescription_release( pReleaseMethod );
+    if( bNeedsRelease )
+    {
+        typelib_typedescription_release( (typelib_TypeDescription * ) m_pType );
+    }
 }
 
 void Remote2RemoteStub::thisAcquire( remote_Interface *pThis )
