@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbnames.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
+ *  last change: $Author: dbo $ $Date: 2001-10-11 14:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 */
 #define UNO_LB_GCC2_NAMESPACE   gcc2
 #define UNO_LB_GCC2             "gcc2"
+/** GCC 3 with RTTI or compatible; RTTI is not supported
+*/
+#define UNO_LB_GCC3_NAMESPACE   gcc3
+#define UNO_LB_GCC3             "gcc3"
 /** WorkShop Compiler 5.0 or compatible; RTTI is not supported
 */
 #define UNO_LB_SUNPRO5_NAMESPACE sunpro5
