@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 12:20:54 $
+ *  last change: $Author: kz $ $Date: 2001-05-11 05:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ turkish ] = "new index";
                 Text[ arabic ] = "›Â—” ÃœÌœ";
                 Text[ catalan ] = "new index";
+                Text[ finnish ] = "neuer Index";
             };
             ToolBoxItem
             {
@@ -147,6 +148,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ turkish ] = "drop current index";
                 Text[ arabic ] = "Õ–› «·›Â—” «·Õ«·Ì";
                 Text[ catalan ] = "drop current index";
+                Text[ finnish ] = "aktuellen Index lˆschen";
             };
             ToolBoxItem
             {
@@ -174,6 +176,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ turkish ] = "rename current index";
                 Text[ arabic ] = "≈⁄«œ…  ”„Ì… «·›Â—” «·Õ«·Ì";
                 Text[ catalan ] = "rename current index";
+                Text[ finnish ] = "aktuellen Index umbenennen";
             };
             ToolBoxItem
             {
@@ -201,6 +204,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ turkish ] = "save current index";
                 Text[ arabic ] = "Õ›Ÿ «·›Â—” «·Õ«·Ì";
                 Text[ catalan ] = "save current index";
+                Text[ finnish ] = "aktuellen Index speichern";
             };
             ToolBoxItem
             {
@@ -228,6 +232,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ turkish ] = "reset current index";
                 Text[ arabic ] = "≈⁄«œ…  ⁄ÌÌ‰ «·›Â—” «·Õ«·Ì";
                 Text[ catalan ] = "reset current index";
+                Text[ finnish ] = "aktuellen Index zur¸cksetzen";
             };
         };
     };
@@ -263,6 +268,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ turkish ] = "Index details";
         Text[ arabic ] = " ›«’Ì· «·›Â—”";
         Text[ catalan ] = "Index details";
+        Text[ finnish ] = "Index-Details";
     };
     FixedText FT_DESC_LABEL
     {
@@ -291,6 +297,7 @@ ModalDialog DLG_INDEXDESIGN
         Text [ korean ] = "¿Œµ¶Ω∫ »Æ¿Œ¿⁄:";
         Text[ turkish ] = "Index identifier:";
         Text[ catalan ] = "Identificador de Ìndice:";
+        Text[ finnish ] = "Indexbezeichner:";
     };
     FixedText FT_DESCRIPTION
     {
@@ -304,7 +311,7 @@ ModalDialog DLG_INDEXDESIGN
         SVLook = TRUE;
         Text = "~Eindeutig";
         Text [ english ] = "~Unique";
-        Text [ english_us ] = "~Unique";
+        Text [ english_us ] = "Unique";
         Text[ portuguese ] = "⁄nico";
         Text[ russian ] = "Œ‰ÌÓÁÌ‡˜ÌÓ";
         Text[ greek ] = "ÃÔÌ·‰ÈÍ¸";
@@ -313,7 +320,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ spanish ] = "⁄nico";
         Text[ italian ] = "Univoco";
         Text[ danish ] = "Unique";
-        Text[ swedish ] = "Entydig";
+        Text[ swedish ] = "~Entydig";
         Text[ polish ] = "Unikatowy";
         Text[ portuguese_brazilian ] = "Unique";
         Text[ japanese ] = "å≈óL";
@@ -323,6 +330,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ turkish ] = "Unique";
         Text[ arabic ] = "Ê«÷Õ";
         Text[ catalan ] = "Unique";
+        Text[ finnish ] = "Eindeutig";
     };
     FixedText FT_FIELDS
     {
@@ -350,6 +358,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ turkish ] = "Fields";
         Text[ arabic ] = "ÕﬁÊ·";
         Text[ catalan ] = "Fields";
+        Text[ finnish ] = "Felder";
     };
     Control CTR_FIELDS
     {
@@ -385,6 +394,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ turkish ] = "~Close";
         Text[ arabic ] = "≈€·«ﬁ";
         Text[ catalan ] = "~Close";
+        Text[ finnish ] = "S~chlieﬂen";
     };
     HelpButton HB_HELP
     {
@@ -409,6 +419,7 @@ ModalDialog DLG_INDEXDESIGN
     Text[ turkish ] = "Indexes";
     Text[ arabic ] = "›Â«—”";
     Text[ catalan ] = "Indexes";
+    Text[ finnish ] = "Indizes";
 };
 
 String STR_TAB_INDEX_SORTORDER
@@ -436,6 +447,7 @@ String STR_TAB_INDEX_SORTORDER
     Text [ korean ] = "¡§∑ƒº¯º≠";
     Text[ turkish ] = "Sort order";
     Text[ catalan ] = "Orden de clasificaciÛn";
+    Text[ finnish ] = "Sortierreihenfolge";
 };
 String STR_TAB_INDEX_FIELD
 {
@@ -460,6 +472,7 @@ String STR_TAB_INDEX_FIELD
     Text[ turkish ] = "Index field";
     Text[ arabic ] = "Õﬁ· ›Â—”";
     Text[ catalan ] = "Index field";
+    Text[ finnish ] = "Indexfeld";
 };
 String STR_ORDER_ASCENDING
 {
@@ -486,6 +499,7 @@ String STR_ORDER_ASCENDING
     Text [ korean ] = "ø¿∏ß ¬˜º¯";
     Text[ turkish ] = "Ascending";
     Text[ catalan ] = "Ascendente";
+    Text[ finnish ] = "Aufsteigend";
 };
 String STR_ORDER_DESCENDING
 {
@@ -512,6 +526,7 @@ String STR_ORDER_DESCENDING
     Text [ korean ] = "≥ª∏≤¬˜º¯";
     Text[ turkish ] = "Descending";
     Text[ catalan ] = "Descendente";
+    Text[ finnish ] = "Absteigend";
 };
 
 String STR_CONFIRM_DROP_INDEX
@@ -537,6 +552,7 @@ String STR_CONFIRM_DROP_INDEX
     Text[ turkish ] = "Do you really want to drop the index '$name$'?";
     Text[ arabic ] = "Â·  —Ìœ »«·›⁄· Õ–› «·›Â—” '$name$'ø";
     Text[ catalan ] = "Do you really want to drop the index '$name$'?";
+    Text[ finnish ] = "Wollen Sie den Index '$name$' wirklich lˆschen?";
 };
 
 String STR_LOGICAL_INDEX_NAME
@@ -597,6 +613,8 @@ ErrorBox ERR_NEED_INDEX_FIELDS
     Title[ arabic ] = "Õ›Ÿ «·›Â—”!";
     Message[ catalan ] = "Der Index muﬂ mindestens ein Feld enthalten.";
     Title[ catalan ] = "Save Index";
+    Message[ finnish ] = "Der Index muss mindestens ein Feld enthalten.";
+    Title[ finnish ] = "Index speichern";
 };
 
 QueryBox QUERY_SAVE_CURRENT_INDEX
@@ -647,6 +665,8 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     Title[ arabic ] = "≈€·«ﬁ  ’„Ì„ «·›Â—”!";
     Message[ catalan ] = "Do you want to save the changes made on the current index?";
     Title[ catalan ] = "close index design";
+    Message[ finnish ] = "Wollen Sie die ƒnderungen am aktuellen Index noch speichern?";
+    Title[ finnish ] = "Index-Entwurf verlassen";
 };
 
 String STR_INDEX_NAME_ALREADY_USED
@@ -654,8 +674,8 @@ String STR_INDEX_NAME_ALREADY_USED
     Text = "Es gibt schon einen anderen Index namens \"$name$\".";
     Text [ english ] = "There's already another index named \"$name$\".";
     Text [ english_us ] = "There is already another index named \"$name$\".";
-    Text[ portuguese ] = "There's already another index named \"$name$\".";
-    Text[ russian ] = "There's already another index named \"$name$\".";
+    Text[ portuguese ] = "J· existe um Ìndice com o nome \"$name$\".";
+    Text[ russian ] = "œÓ‰ ËÏÂÌÂÏ \"$name$\" ÛÊÂ ËÏÂÂÚÒˇ ‰Û„ÓÈ ËÌ‰ÂÍÒ.";
     Text[ greek ] = "There's already another index named \"$name$\".";
     Text[ dutch ] = "Er bestaat reeds een andere index met de naam \"$name$\".";
     Text[ french ] = "Un autre index nommÈ \"$name$\" existe dÈj‡.";
@@ -665,13 +685,14 @@ String STR_INDEX_NAME_ALREADY_USED
     Text[ swedish ] = "Det finns redan ett annat index med namnet \"$name$\".";
     Text[ polish ] = "Istnieje juø inny indeks o nazwie \"$name$\".";
     Text[ portuguese_brazilian ] = "There's already another index named \"$name$\".";
-    Text[ japanese ] = "There's already another index named \"$name$\".";
+    Text[ japanese ] = "\"$name$\" ÇÃ≤›√ﬁØ∏ΩñºÇÕÇ∑Ç≈Ç…Ç†ÇËÇ‹Ç∑ÅB";
     Text[ korean ] = "There's already another index named \"$name$\".";
     Text[ chinese_simplified ] = "There's already another index named \"$name$\".";
-    Text[ chinese_traditional ] = "There's already another index named \"$name$\".";
+    Text[ chinese_traditional ] = "§w∏g¶s¶b§@≠”Ø¡§ﬁ \"$name$\"°C";
     Text[ turkish ] = "There's already another index named \"$name$\".";
     Text[ arabic ] = "There's already another index named \"$name$\".";
     Text[ catalan ] = "There's already another index named \"$name$\".";
+    Text[ finnish ] = "Es gibt schon einen anderen Index namens \"$name$\".";
 };
 
 String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
@@ -698,11 +719,15 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
     Text[ turkish ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
     Text[ arabic ] = "·« Ìı”„Õ »«” Œœ«„ ⁄„Êœ ÃœÊ· √ﬂÀ— „‰ „—… ›Ì  ⁄—Ì› «·›Â—”° ≈·« √‰ﬂ «” Œœ„  «·⁄„Êœ \"$name$\" „— Ì‰.";
     Text[ catalan ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
+    Text[ finnish ] = "In einer Index-Definition darf jede Tabellen-Spalte hˆchstens einmal vorkommen, Sie jedoch haben die Spalte \"$name$\"zweimal benutzt.";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/05/07 12:20:54  oj
+ *  insert mnemonic
+ *
  *  Revision 1.9  2001/05/04 20:07:30  rt
  *  Merge SRC630: 04.05.01 - 22:07:37 (NoBranch)
  *
