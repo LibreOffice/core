@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mtrindlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-12-18 11:29:23 $
+ *  last change: $Author: dr $ $Date: 2002-09-19 08:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,7 @@ ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
                                     long            nMaximum,
                                     long            nMinimum,
                                     long            nFirst,
-                                    long            nLast,
-                                    long            nSpinSize )
+                                    long            nLast )
 
     :   ModalDialog     ( pParent, ScResId( nResId ) ),
         //
@@ -102,16 +101,16 @@ ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
     aBtnDefVal.SetClickHdl ( LINK( this, ScMetricInputDlg, SetDefValHdl ) );
     aEdValue.  SetModifyHdl( LINK( this, ScMetricInputDlg, ModifyHdl    ) );
 
-    aEdValue.SetUnit             ( eFUnit );
-    aEdValue.SetDecimalDigits ( nDecimals );
-    aEdValue.SetMax          ( aEdValue.Normalize( nMaximum ), FUNIT_TWIP );
-    aEdValue.SetMin          ( aEdValue.Normalize( nMinimum ), FUNIT_TWIP );
-    aEdValue.SetLast             ( aEdValue.Normalize( nLast ),    FUNIT_TWIP );
-    aEdValue.SetFirst        ( aEdValue.Normalize( nFirst ),   FUNIT_TWIP );
-    aEdValue.SetSpinSize         ( aEdValue.Normalize( nSpinSize ) );
-    aEdValue.SetValue            ( aEdValue.Normalize( nDefault ), FUNIT_TWIP );
+    aEdValue.SetUnit            ( eFUnit );
+    aEdValue.SetDecimalDigits   ( nDecimals );
+    aEdValue.SetMax             ( aEdValue.Normalize( nMaximum ), FUNIT_TWIP );
+    aEdValue.SetMin             ( aEdValue.Normalize( nMinimum ), FUNIT_TWIP );
+    aEdValue.SetLast            ( aEdValue.Normalize( nLast ),    FUNIT_TWIP );
+    aEdValue.SetFirst           ( aEdValue.Normalize( nFirst ),   FUNIT_TWIP );
+    aEdValue.SetSpinSize        ( aEdValue.Normalize( 1 ) / 10 );
+    aEdValue.SetValue           ( aEdValue.Normalize( nDefault ), FUNIT_TWIP );
     nDefaultValue = aEdValue.GetValue();
-    aEdValue.SetValue            ( aEdValue.Normalize( nCurrent ), FUNIT_TWIP );
+    aEdValue.SetValue           ( aEdValue.Normalize( nCurrent ), FUNIT_TWIP );
     nCurrentValue = aEdValue.GetValue();
     aBtnDefVal.Check( nCurrentValue == nDefaultValue );
 

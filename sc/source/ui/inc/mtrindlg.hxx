@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mtrindlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: dr $ $Date: 2002-09-19 08:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,7 @@ public:
                               long          nMaximum  = 1000,
                               long          nMinimum  = 0,
                               long          nFirst    = 1,
-                              long          nLast     = 100,
-                              long          nSpinSize = 1 );
+                              long          nLast     = 100 );
             ~ScMetricInputDlg();
 
     long GetInputValue( FieldUnit eUnit = FUNIT_TWIP ) const;
