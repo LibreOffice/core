@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-21 12:31:31 $
+ *  last change: $Author: fs $ $Date: 2000-09-21 15:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,7 +895,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_ADD_FIELD:
         case SID_FM_FILTER_NAVIGATOR:
         {
-            GetViewShell()->GetViewFrame()->ExecuteSlot(rReq);
+            GetViewShell()->GetViewFrame()->ChildWindowExecute(rReq);
             rReq.Done();
         }   break;
         case SID_FM_SHOW_FMEXPLORER:
@@ -903,7 +903,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             if (!m_pFormView)   // setzen der ::com::sun::star::sdbcx::View Forcieren
                 GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_CREATE_SW_DRAWVIEW);
 
-            GetViewShell()->GetViewFrame()->ExecuteSlot(rReq);
+            GetViewShell()->GetViewFrame()->ChildWindowExecute(rReq);
             rReq.Done();
         }   break;
         case SID_FM_TAB_DIALOG:
