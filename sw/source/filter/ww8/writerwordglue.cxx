@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:54:25 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,50 +75,70 @@
 #   include "writerhelper.hxx"
 #endif
 
-#include <algorithm>            //std::find_if
-#include <functional>           //std::unary_function
+#include <algorithm>                //std::find_if
+#include <functional>               //std::unary_function
 
+#include <unicode/ubidi.h>          //ubidi_getLogicalRun
+
+#ifndef _TOOLS_TENCCVT_HXX
+#   include <tools/tenccvt.hxx>     //GetExtendedTextEncoding
+#endif
+#ifndef INCLUDED_I18NUTIL_UNICODE_HXX
+#   include <i18nutil/unicode.hxx>  //unicode::getUnicodeScriptType
+#endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#   include <com/sun/star/i18n/ScriptType.hdl> //ScriptType
+#endif
 #ifndef _RTL_TENCINFO_H
-#   include <rtl/tencinfo.h>    //rtl_getBestWindowsCharsetFromTextEncoding
+#   include <rtl/tencinfo.h>        //rtl_getBestWindowsCharsetFromTextEncoding
 #endif
 #ifndef _HINTIDS_HXX
-#   include <hintids.hxx>       //ITEMID_LRSPACE...
+#   include <hintids.hxx>           //ITEMID_LRSPACE...
 #endif
 #ifndef _SVX_PAPERINF_HXX
-#   include <svx/paperinf.hxx>  //lA0Width...
+#   include <svx/paperinf.hxx>      //lA0Width...
 #endif
 #ifndef _SVX_LRSPITEM_HXX
-#   include <svx/lrspitem.hxx>  //SvxLRSpaceItem
+#   include <svx/lrspitem.hxx>      //SvxLRSpaceItem
 #endif
 #ifndef _SVX_ULSPITEM_HXX
-#   include <svx/ulspitem.hxx>  //SvxULSpaceItem
+#   include <svx/ulspitem.hxx>      //SvxULSpaceItem
 #endif
 #ifndef _SVX_BOXITEM_HXX
-#   include <svx/boxitem.hxx>   //SvxBoxItem
+#   include <svx/boxitem.hxx>       //SvxBoxItem
+#endif
+#ifndef _SVX_FONTITEM_HXX
+#   include <svx/fontitem.hxx>      //SvxFontItem
 #endif
 #ifndef _FRMFMT_HXX
-#   include <frmfmt.hxx>        //SwFrmFmt
+#   include <frmfmt.hxx>            //SwFrmFmt
 #endif
 #ifndef _FMTCLDS_HXX
-#   include <fmtclds.hxx>       //SwFmtCol
+#   include <fmtclds.hxx>           //SwFmtCol
 #endif
 #ifndef _SW_HF_EAT_SPACINGITEM_HXX
-#   include <hfspacingitem.hxx> //SwHeaderAndFooterEatSpacingItem
+#   include <hfspacingitem.hxx>     //SwHeaderAndFooterEatSpacingItem
 #endif
 #ifndef _FMTFSIZE_HXX
-#   include <fmtfsize.hxx>      //SwFmtFrmSize
+#   include <fmtfsize.hxx>          //SwFmtFrmSize
 #endif
 #ifndef _SWRECT_HXX
-#   include <swrect.hxx>        //SwRect
+#   include <swrect.hxx>            //SwRect
 #endif
 #ifndef _FMTHDFT_HXX
-#   include <fmthdft.hxx>       //SwFmtHeader/SwFmtFooter
+#   include <fmthdft.hxx>           //SwFmtHeader/SwFmtFooter
 #endif
 #ifndef _POOLFMT_HXX
-#   include <poolfmt.hxx>       //RES_POOL_COLLFMT_TYPE
+#   include <poolfmt.hxx>           //RES_POOL_COLLFMT_TYPE
 #endif
 #ifndef _FRMATR_HXX
-#   include <frmatr.hxx>    //GetLRSpace...
+#   include <frmatr.hxx>            //GetLRSpace...
+#endif
+#ifndef _NDTXT_HXX
+#   include <ndtxt.hxx>             //SwTxtNode
+#endif
+#ifndef _BREAKIT_HXX
+#   include <breakit.hxx>           //pBreakIt
 #endif
 
 namespace
@@ -131,7 +151,7 @@ namespace
     public:
         closeenough(long nValue, long nWriggleRoom)
             : mnValue(nValue), mnWriggleRoom(nWriggleRoom) {}
-        bool operator() (long nTest) const
+        bool operator()(long nTest) const
         {
             return (
                     (mnValue - nTest < mnWriggleRoom) &&
@@ -400,6 +420,47 @@ namespace
 
         return pColl ? 0 : maHelper.MakeStyle(aName);
     }
+
+    /*
+     Utility to categorize unicode characters into the best fit windows charset
+     range for exporting to ww6, or as a hint to non \u unicode token aware rtf
+     readers
+    */
+    rtl_TextEncoding getScriptClass(sal_Unicode cChar)
+    {
+        using namespace com::sun::star::i18n;
+
+        static ScriptTypeList aScripts[] =
+        {
+            { UnicodeScript_kBasicLatin, RTL_TEXTENCODING_MS_1252},
+            { UnicodeScript_kLatin1Supplement, RTL_TEXTENCODING_MS_1252},
+            { UnicodeScript_kLatinExtendedA, RTL_TEXTENCODING_MS_1250},
+            { UnicodeScript_kLatinExtendedB, RTL_TEXTENCODING_MS_1257},
+            { UnicodeScript_kGreek, RTL_TEXTENCODING_MS_1253},
+            { UnicodeScript_kCyrillic, RTL_TEXTENCODING_MS_1251},
+            { UnicodeScript_kHebrew, RTL_TEXTENCODING_MS_1255},
+            { UnicodeScript_kArabic, RTL_TEXTENCODING_MS_1256},
+            { UnicodeScript_kThai, RTL_TEXTENCODING_MS_1258},
+            { UnicodeScript_kScriptCount, RTL_TEXTENCODING_MS_1252}
+        };
+
+        return unicode::getUnicodeScriptType(cChar, aScripts,
+            RTL_TEXTENCODING_MS_1252);
+    }
+
+    //Utility to remove entries before a given starting position
+    class IfBeforeStart
+        : public std::unary_function<const sw::util::CharRunEntry&, bool>
+    {
+    private:
+        xub_StrLen mnStart;
+    public:
+        IfBeforeStart(xub_StrLen nStart) : mnStart(nStart) {}
+        bool operator()(const sw::util::CharRunEntry &rEntry) const
+        {
+            return rEntry.mnEndPos < mnStart;
+        }
+    };
 }
 
 namespace sw
@@ -539,6 +600,216 @@ namespace sw
             const String& rName, ww::sti eSti)
         {
             return mpImpl->GetStyle(rName, eSti);
+        }
+
+        bool ItemSort::operator()(sal_uInt16 nA, sal_uInt16 nB) const
+        {
+            /*
+             #i24291#
+             All we want to do is ensure for now is that if a charfmt exist
+             in the character properties that it rises to the top and is
+             exported first.  In the future we might find more ordering
+             depandancies for export, in which case this is the place to do
+             it
+            */
+            if (nA == nB)
+                return false;
+            if (nA == RES_TXTATR_CHARFMT)
+                return true;
+            if (nB == RES_TXTATR_CHARFMT)
+                return false;
+            return nA < nB;
+        }
+
+        CharRuns GetPseudoCharRuns(const SwTxtNode& rTxtNd,
+            xub_StrLen nTxtStart, bool bSplitOnCharSet)
+        {
+            const String &rTxt = rTxtNd.GetTxt();
+
+            bool bParaIsRTL = false;
+            ASSERT(rTxtNd.GetDoc(), "No document for node?, suspicious");
+            if (rTxtNd.GetDoc())
+            {
+                if (FRMDIR_HORI_RIGHT_TOP ==
+                    rTxtNd.GetDoc()->GetTextDirection(SwPosition(rTxtNd)))
+                {
+                    bParaIsRTL = true;
+                }
+            }
+
+            using namespace com::sun::star::i18n;
+
+            sal_uInt16 nScript = ScriptType::LATIN;
+            if (rTxt.Len() && pBreakIt && pBreakIt->xBreak.is())
+                nScript = pBreakIt->xBreak->getScriptType(rTxt, 0);
+
+            rtl_TextEncoding eChrSet = ItemGet<SvxFontItem>(rTxtNd,
+                GetWhichOfScript(RES_CHRATR_FONT, nScript)).GetCharSet();
+            eChrSet = GetExtendedTextEncoding(eChrSet);
+
+            CharRuns aRunChanges;
+
+            if (!rTxt.Len())
+            {
+                aRunChanges.push_back(CharRunEntry(0, nScript, eChrSet,
+                    bParaIsRTL));
+                return aRunChanges;
+            }
+
+            typedef std::pair<int32_t, bool> DirEntry;
+            typedef std::vector<DirEntry> DirChanges;
+            typedef DirChanges::const_iterator cDirIter;
+
+            typedef std::pair<xub_StrLen, sal_Int16> CharSetEntry;
+            typedef std::vector<CharSetEntry> CharSetChanges;
+            typedef CharSetChanges::const_iterator cCharSetIter;
+
+            typedef std::pair<xub_StrLen, sal_uInt16> ScriptEntry;
+            typedef std::vector<ScriptEntry> ScriptChanges;
+            typedef ScriptChanges::const_iterator cScriptIter;
+
+            DirChanges aDirChanges;
+            CharSetChanges aCharSets;
+            ScriptChanges aScripts;
+
+            UBiDiDirection eDefaultDir = bParaIsRTL ? UBIDI_RTL : UBIDI_LTR;
+            UErrorCode nError = U_ZERO_ERROR;
+            UBiDi* pBidi = ubidi_openSized(rTxt.Len(), 0, &nError);
+            ubidi_setPara(pBidi, rTxt.GetBuffer(), rTxt.Len(), eDefaultDir,
+                0, &nError);
+
+            sal_Int32 nCount = ubidi_countRuns(pBidi, &nError);
+            aDirChanges.reserve(nCount);
+
+            int32_t nStart = 0;
+            int32_t nEnd;
+            UBiDiLevel nCurrDir;
+
+            for (sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx)
+            {
+                ubidi_getLogicalRun(pBidi, nStart, &nEnd, &nCurrDir);
+                /*
+                UBiDiLevel is the type of the level values in this BiDi
+                implementation.
+
+                It holds an embedding level and indicates the visual direction
+                by its bit 0 (even/odd value).
+
+                The value for UBIDI_DEFAULT_LTR is even and the one for
+                UBIDI_DEFAULT_RTL is odd
+                */
+                aDirChanges.push_back(DirEntry(nEnd, nCurrDir & 0x1));
+                nStart = nEnd;
+            }
+            ubidi_close(pBidi);
+
+            if (bSplitOnCharSet)
+            {
+                //Split unicode text into plausable 8bit ranges for export to
+                //older non unicode aware format
+                xub_StrLen nLen = rTxt.Len();
+                xub_StrLen nPos = 0;
+                while (nPos != nLen)
+                {
+                    rtl_TextEncoding ScriptType =
+                        getScriptClass(rTxt.GetChar(nPos++));
+                    while (
+                            (nPos != nLen) &&
+                            (ScriptType == getScriptClass(rTxt.GetChar(nPos)))
+                          )
+                    {
+                        ++nPos;
+                    }
+
+                    aCharSets.push_back(CharSetEntry(nPos, ScriptType));
+                }
+            }
+
+            using sw::types::writer_cast;
+
+            if (pBreakIt && pBreakIt->xBreak.is())
+            {
+                xub_StrLen nLen = rTxt.Len();
+                xub_StrLen nPos = 0;
+                while (nPos < nLen)
+                {
+                    sal_Int32 nEnd = pBreakIt->xBreak->endOfScript(rTxt, nPos,
+                        nScript);
+                    if (nEnd < 0)
+                        break;
+//                    nPos = writer_cast<xub_StrLen>(nEnd);
+                    nPos = nEnd;
+                    aScripts.push_back(ScriptEntry(nPos, nScript));
+                    nScript = pBreakIt->xBreak->getScriptType(rTxt, nPos);
+                }
+            }
+
+            cDirIter aBiDiEnd = aDirChanges.end();
+            cCharSetIter aCharSetEnd = aCharSets.end();
+            cScriptIter aScriptEnd = aScripts.end();
+
+            cDirIter aBiDiIter = aDirChanges.begin();
+            cCharSetIter aCharSetIter = aCharSets.begin();
+            cScriptIter aScriptIter = aScripts.begin();
+
+            bool bCharIsRTL = bParaIsRTL;
+
+            while (
+                    aBiDiIter != aBiDiEnd ||
+                    aCharSetIter != aCharSetEnd ||
+                    aScriptIter != aScriptEnd
+                  )
+            {
+                xub_StrLen nMinPos = rTxt.Len();
+
+                if (aBiDiIter != aBiDiEnd)
+                {
+                    if (aBiDiIter->first < nMinPos)
+//                        nMinPos = writer_cast<xub_StrLen>(aBiDiIter->first);
+                        nMinPos = aBiDiIter->first;
+                    bCharIsRTL = aBiDiIter->second;
+                }
+
+                if (aCharSetIter != aCharSetEnd)
+                {
+                    if (aCharSetIter->first < nMinPos)
+                        nMinPos = aCharSetIter->first;
+                    eChrSet = aCharSetIter->second;
+                }
+
+                if (aScriptIter != aScriptEnd)
+                {
+                    if (aScriptIter->first < nMinPos)
+                        nMinPos = aScriptIter->first;
+                    nScript = aScriptIter->second;
+                }
+
+                aRunChanges.push_back(
+                    CharRunEntry(nMinPos, nScript, eChrSet, bCharIsRTL));
+
+                if (aBiDiIter != aBiDiEnd)
+                {
+                    if (aBiDiIter->first == nMinPos)
+                        ++aBiDiIter;
+                }
+
+                if (aCharSetIter != aCharSetEnd)
+                {
+                    if (aCharSetIter->first == nMinPos)
+                        ++aCharSetIter;
+                }
+
+                if (aScriptIter != aScriptEnd)
+                {
+                    if (aScriptIter->first == nMinPos)
+                        ++aScriptIter;
+                }
+            }
+
+            aRunChanges.erase(std::remove_if(aRunChanges.begin(),
+                aRunChanges.end(), IfBeforeStart(nTxtStart)), aRunChanges.end());
+
+            return aRunChanges;
         }
     }
 
