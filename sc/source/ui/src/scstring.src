@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-23 10:38:00 $
+ *  last change: $Author: vg $ $Date: 2002-05-28 20:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3180,6 +3180,26 @@ String STR_DLG_SELECTTABLES_TITLE
     Text = "Tabellen ausw�hlen";
     Text[ ENGLISH ] = "Select Sheets";
     Text[ english_us ] = "Select Sheets";
+    Text[ portuguese ] = "Select Sheets";
+    Text[ russian ] = "Select Sheets";
+    Text[ greek ] = "Select Sheets";
+    Text[ dutch ] = "Select Sheets";
+    Text[ french ] = "Select Sheets";
+    Text[ spanish ] = "Seleccionar hojas";
+    Text[ finnish ] = "Select Sheets";
+    Text[ italian ] = "Select Sheets";
+    Text[ danish ] = "Select Sheets";
+    Text[ swedish ] = "Markera tabeller";
+    Text[ polish ] = "Select Sheets";
+    Text[ portuguese_brazilian ] = "Select Sheets";
+    Text[ japanese ] = "Select Sheets";
+    Text[ korean ] = "테이블 선택";
+    Text[ chinese_simplified ] = "选择工作表";
+    Text[ chinese_traditional ] = "選取工作表";
+    Text[ turkish ] = "Select Sheets";
+    Text[ arabic ] = "Select Sheets";
+    Text[ catalan ] = "Select Sheets";
+    Text[ thai ] = "Select Sheets";
 };
 
 // Select tables dialog listbox
@@ -3188,4 +3208,24 @@ String STR_DLG_SELECTTABLES_LBNAME
     Text = "~Ausgew�hlte Tabellen";
     Text[ ENGLISH ] = "~Selected sheets";
     Text[ english_us ] = "~Selected sheets";
+    Text[ portuguese ] = "~Selected sheets";
+    Text[ russian ] = "~Selected sheets";
+    Text[ greek ] = "~Selected sheets";
+    Text[ dutch ] = "~Selected sheets";
+    Text[ french ] = "~Selected sheets";
+    Text[ spanish ] = "~Hojas seleccionadas";
+    Text[ finnish ] = "~Selected sheets";
+    Text[ italian ] = "~Selected sheets";
+    Text[ danish ] = "~Selected sheets";
+    Text[ swedish ] = "~Markerade tabeller";
+    Text[ polish ] = "~Selected sheets";
+    Text[ portuguese_brazilian ] = "~Selected sheets";
+    Text[ japanese ] = "~Selected sheets";
+    Text[ korean ] = "선택된 테이블";
+    Text[ chinese_simplified ] = "选择工作表(~S)";
+    Text[ chinese_traditional ] = "選取工作表(~S)";
+    Text[ turkish ] = "~Selected sheets";
+    Text[ arabic ] = "~Selected sheets";
+    Text[ catalan ] = "~Selected sheets";
+    Text[ thai ] = "~Selected sheets";
 };
