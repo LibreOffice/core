@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-29 16:59:43 $
+ *  last change: $Author: mt $ $Date: 2001-11-29 19:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,13 @@
 #include <vcl/window.hxx>
 #include <tools/color.hxx>
 
+
+struct AccessibilityInfos
+{
+    String  aAccName;
+    String  aAccDescription;
+};
+
 // Mit Out-Parameter besser als Rueckgabewert, wegen Ref-Objekt...
 
 void ImplInitWindowEvent( ::com::sun::star::awt::WindowEvent& rEvent, Window* pWindow )
@@ -169,15 +176,18 @@ VCLXWindow::VCLXWindow()
 {
     mbDisposing = sal_False;
     mbDesignMode = sal_False;
+    mpAccessibilityInfos = NULL;
 }
 
 VCLXWindow::~VCLXWindow()
 {
     if ( GetWindow() )
     {
-        GetWindow()->SetWindowPeer( NULL, NULL );
         GetWindow()->RemoveEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
+        GetWindow()->SetWindowPeer( NULL, NULL );
+        GetWindow()->SetAccessible( NULL );
     }
+    delete mpAccessibilityInfos;
 }
 
 void VCLXWindow::SetWindow( Window* pWindow )
@@ -1363,6 +1373,9 @@ void VCLXWindow::setZoom( float fZoomX, float fZoomY ) throw(::com::sun::star::u
 // ::drafts::com::sun::star::accessibility::XAccessible
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXWindow::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if ( mpAccessibilityInfos )
+        mpAccessibilityInfos = new AccessibilityInfos;
+
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xAcc( (::cppu::OWeakObject*)this, ::com::sun::star::uno::UNO_QUERY );
     return xAcc;
 }
@@ -1371,19 +1384,37 @@ void VCLXWindow::setZoom( float fZoomX, float fZoomY ) throw(::com::sun::star::u
 sal_Int32 VCLXWindow::getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-    return 0;
+
+    sal_Int32 nChildren = 0;
+    if ( GetWindow() )
+        nChildren = GetWindow()->GetChildCount();
+    return nChildren;
 }
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > VCLXWindow::getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-    return NULL;
+
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    if ( GetWindow() )
+    {
+        Window* pChild = GetWindow()->GetChild( (USHORT)i );
+        if ( pChild )
+            xAcc = pChild->GetAccessible();
+    }
+
+    return xAcc;
 }
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > VCLXWindow::getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-    return NULL;
+
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    if ( GetWindow() && GetWindow()->GetParent() )
+        xAcc = GetWindow()->GetParent()->GetAccessible();
+
+    return xAcc;
 }
 
 sal_Int32 VCLXWindow::getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException)
@@ -1401,13 +1432,21 @@ sal_Int16 VCLXWindow::getAccessibleRole(  ) throw (::com::sun::star::uno::Runtim
 ::rtl::OUString VCLXWindow::getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-    return ::rtl::OUString();
+
+    ::rtl::OUString aDescription;
+    if ( GetWindow() )
+        aDescription = GetWindow()->GetText();
+    return aDescription;
 }
 
 ::rtl::OUString VCLXWindow::getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-    return ::rtl::OUString();
+
+    ::rtl::OUString aName;
+    if ( GetWindow() )
+        aName = GetWindow()->GetText();
+    return aName;
 }
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleRelationSet > VCLXWindow::getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException)

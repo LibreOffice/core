@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-29 16:57:48 $
+ *  last change: $Author: mt $ $Date: 2001-11-29 19:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@
 class Window;
 class VclSimpleEvent;
 class VclWindowEvent;
+struct AccessibilityInfos;
 
 
 //  ----------------------------------------------------
@@ -140,6 +141,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer>  mxPointer;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> mxViewGraphics;
 
+    AccessibilityInfos*             mpAccessibilityInfos;
+
     ULONG                           nDummy1;
     ULONG                           nDummy2;
     void*                           pDummy1;
@@ -164,6 +167,7 @@ public:
     virtual void    SetWindow( Window* pWindow );
     Window*         GetWindow() const                                   { return (Window*)GetOutputDevice(); }
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> GetViewGraphics() const { return mxViewGraphics; }
+    BOOL            IsAccessible() const { return mpAccessibilityInfos != NULL; }
 
     EventListenerMultiplexer&       GetEventListeners()     { return maEventListeners; }
     FocusListenerMultiplexer&       GetFocusListeners()     { return maFocusListeners; }
