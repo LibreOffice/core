@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-12 15:53:42 $
+ *  last change: $Author: dv $ $Date: 2001-03-20 14:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,12 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
 
+#ifndef  _COM_SUN_STAR_UCB_NAMECLASH_HPP_
+#include <com/sun/star/ucb/NameClash.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
+#include <com/sun/star/ucb/TransferInfo.hpp>
+#endif
 #ifndef  _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #endif
@@ -210,7 +216,7 @@ class SfxDocTplService_Impl
                                             Content& rFolder );
     void                        getTemplates( Content& rTargetFolder,
                                               Content& rParentFolder );
-    void                        addEntry( Content& rParentFolder,
+    sal_Bool                    addEntry( Content& rParentFolder,
                                           const OUString& rTitle,
                                           const OUString& rTargetURL );
     void                        addToStandard( Content& rRoot,
@@ -219,21 +225,31 @@ class SfxDocTplService_Impl
     sal_Bool                    createFolder( const OUString& rNewFolderURL,
                                               sal_Bool  bCreateParent,
                                               Content   &rNewFolder );
-    sal_Bool                    removeFolder( const OUString& rNewFolderURL );
+    sal_Bool                    removeContent( Content& rContent );
+    sal_Bool                    removeContent( const OUString& rContentURL );
 
     sal_Bool                    setProperty( Content& rContent,
                                              const OUString& rPropName,
                                              const Any& rPropValue );
+    sal_Bool                    getProperty( Content& rContent,
+                                             const OUString& rPropName,
+                                             Any& rPropValue );
 
 public:
                                  SfxDocTplService_Impl( Reference< XMultiServiceFactory > xFactory );
                                 ~SfxDocTplService_Impl();
 
     sal_Bool                    init() { if ( !mbIsInitialized ) init_Impl(); return mbIsInitialized; }
-    Content                     getContent();
+    Content                     getContent() { return maRootContent; }
 
     void                        setLocale( const LOCALE & rLocale );
     Locale                      getLocale();
+
+    sal_Bool                    addTemplate( const ::rtl::OUString& rGroupName,
+                                             const ::rtl::OUString& rTemplateName,
+                                             const ::rtl::OUString& rSourceURL );
+    sal_Bool                    removeTemplate( const ::rtl::OUString& rGroupName,
+                                                const ::rtl::OUString& rTemplateName );
 
     sal_Bool                    addGroup( const OUString& rGroupName );
     sal_Bool                    removeGroup( const OUString& rGroupName );
@@ -351,23 +367,13 @@ void SfxDocTplService_Impl::getDirList()
     Any      aValue;
 
     // Get the template dir list
-    try
-    {
-        Reference< XPropertySetInfo > aPropSet = maRootContent.getProperties();
-
-        if ( aPropSet.is() && aPropSet->hasPropertyByName( aPropName ) )
-        {
-            aValue = maRootContent.getPropertyValue( aPropName );
-            aValue >>= maTemplateDirs;
-            bHasProperty = sal_True;
-        }
-    }
-    catch ( CommandAbortedException& ) {}
-    catch ( RuntimeException& ) {}
-    catch ( Exception& ) {}
+    bHasProperty = getProperty( maRootContent, aPropName, aValue );
 
     if ( bHasProperty )
+    {
+        aValue >>= maTemplateDirs;
         return;
+    }
 
     INetURLObject   aURL;
     String          aDirs = SvtPathOptions().GetTemplatePath();
@@ -550,10 +556,12 @@ void SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTi
 }
 
 // -----------------------------------------------------------------------
-void SfxDocTplService_Impl::addEntry( Content& rParentFolder,
-                                      const OUString& rTitle,
-                                      const OUString& rTargetURL )
+sal_Bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
+                                          const OUString& rTitle,
+                                          const OUString& rTargetURL )
 {
+    sal_Bool bAddedEntry = sal_False;
+
     INetURLObject aLinkObj( rParentFolder.getURL() );
     aLinkObj.insertName( rTitle, false,
                       INetURLObject::LAST_SEGMENT, true,
@@ -581,12 +589,14 @@ void SfxDocTplService_Impl::addEntry( Content& rParentFolder,
         try
         {
             rParentFolder.insertNewContent( aType, aNames, aValues, aLink );
+            bAddedEntry = sal_True;
         }
         catch( CommandAbortedException& )
         {
             DBG_ERRORFILE( "CommandAbortedException" );
         }
     }
+    return bAddedEntry;
 }
 
 // -----------------------------------------------------------------------
@@ -687,27 +697,33 @@ sal_Bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SfxDocTplService_Impl::removeFolder( const OUString& rFolderURL )
+sal_Bool SfxDocTplService_Impl::removeContent( Content& rContent )
 {
-    Content     aFolder;
-    sal_Bool    bRemovedFolder = sal_False;
-
-    if ( Content::create( rFolderURL, maCmdEnv, aFolder ) )
+    sal_Bool bRemoved = sal_False;
+    try
     {
-        try
-        {
-            OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( COMMAND_DELETE ) );
-            Any aArg = makeAny( sal_Bool( sal_True ) );
+        OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( COMMAND_DELETE ) );
+        Any aArg = makeAny( sal_Bool( sal_True ) );
 
-            aFolder.executeCommand( aCmd, aArg );
-            bRemovedFolder = sal_True;
-        }
-        catch ( CommandAbortedException& ) {}
-        catch ( RuntimeException& ) {}
-        catch ( Exception& ) {}
+        rContent.executeCommand( aCmd, aArg );
+        bRemoved = sal_True;
     }
+    catch ( CommandAbortedException& ) {}
+    catch ( RuntimeException& ) {}
+    catch ( Exception& ) {}
 
-    return bRemovedFolder;
+    return bRemoved;
+}
+
+// -----------------------------------------------------------------------
+sal_Bool SfxDocTplService_Impl::removeContent( const OUString& rContentURL )
+{
+    Content aContent;
+
+    if ( Content::create( rContentURL, maCmdEnv, aContent ) )
+        return removeContent( aContent );
+    else
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -750,6 +766,36 @@ sal_Bool SfxDocTplService_Impl::setProperty( Content& rContent,
     return bPropertySet;
 }
 
+// -----------------------------------------------------------------------
+sal_Bool SfxDocTplService_Impl::getProperty( Content& rContent,
+                                             const OUString& rPropName,
+                                             Any& rPropValue )
+{
+    sal_Bool bGotProperty = sal_False;
+
+    // Get the property
+    try
+    {
+        Reference< XPropertySetInfo > aPropInfo = rContent.getProperties();
+
+        // check, wether or not the property exists
+        if ( !aPropInfo.is() || !aPropInfo->hasPropertyByName( rPropName ) )
+        {
+            return sal_False;
+        }
+
+        // now get the property
+
+        rPropValue = rContent.getPropertyValue( rPropName );
+        bGotProperty = sal_True;
+    }
+    catch ( CommandAbortedException& ) {}
+    catch ( RuntimeException& ) {}
+    catch ( Exception& ) {}
+
+    return bGotProperty;
+}
+
 //-----------------------------------------------------------------------------
 // public SfxDocTplService_Impl
 //-----------------------------------------------------------------------------
@@ -788,18 +834,8 @@ void SfxDocTplService_Impl::setLocale( const Locale &rLocale )
 }
 
 //-----------------------------------------------------------------------------
-Content SfxDocTplService_Impl::getContent()
-{
-    init();
-
-    return maRootContent;
-}
-
-//-----------------------------------------------------------------------------
 void SfxDocTplService_Impl::update()
 {
-    init();
-
     sal_Int32   nCount = maTemplateDirs.getLength();
     OUString*   pDirs = maTemplateDirs.getArray();
     Content     aDirContent;
@@ -815,10 +851,6 @@ void SfxDocTplService_Impl::update()
 //-----------------------------------------------------------------------------
 sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
 {
-    // no init, no new group!
-    if ( ! init() )
-        return sal_False;
-
     // Check, wether or not there is a group with this name
     Content         aNewGroup;
     OUString        aNewGroupURL;
@@ -846,6 +878,8 @@ sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
     nIndex = maTemplateDirs.getLength();
     if ( nIndex )
         nIndex--;
+    else
+        return sal_False;   // We don't know where to add the group
 
     aUserPath = maTemplateDirs[ nIndex ];
 
@@ -865,7 +899,7 @@ sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
     {
         // we could not create the folder, so we delete the group in the
         // hierarchy and return
-        removeFolder( aNewGroupURL );
+        removeContent( aNewGroup );
         return sal_False;
     }
 
@@ -875,7 +909,8 @@ sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
 
     if ( ! setProperty( aNewGroup, aPropName, aValue ) )
     {
-        removeFolder( aNewGroupURL );
+        removeContent( aNewGroup );
+        removeContent( aNewFolder );
         return sal_False;
     }
 
@@ -885,16 +920,150 @@ sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
 //-----------------------------------------------------------------------------
 sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
 {
-    if ( ! init() )
-        return sal_False;
-
+    // create the group url
     INetURLObject aGroupObj( maRootURL );
-
     aGroupObj.insertName( rGroupName, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
 
-    return removeFolder( aGroupObj.GetMainURL() );
+    // Get the target url
+    Content     aGroup;
+    OUString    aGroupURL = aGroupObj.GetMainURL();
+    OUString    aTargetURL;
+
+    if ( Content::create( aGroupURL, maCmdEnv, aGroup ) )
+    {
+        OUString    aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
+        Any         aValue;
+
+        if ( getProperty( aGroup, aPropName, aValue ) )
+            aValue >>= aTargetURL;
+    }
+    else
+    {
+        // could not create a content, so probably the group doesn't exist
+        return sal_False;
+    }
+
+    // delete the group in the hierarchy
+    if ( removeContent( aGroup ) && aTargetURL.getLength() )
+    {
+        // delete the folder associated with the group
+        return removeContent( aTargetURL );
+    }
+    else
+        return sal_False;
+}
+
+//-----------------------------------------------------------------------------
+sal_Bool SfxDocTplService_Impl::addTemplate( const ::rtl::OUString& rGroupName,
+                                             const ::rtl::OUString& rTemplateName,
+                                             const ::rtl::OUString& rSourceURL )
+{
+    // Check, wether or not there is a group with this name
+    // Return false, if there is no group with the given name
+    Content         aGroup, aTemplate;
+    OUString        aGroupURL, aTemplateURL;
+    INetURLObject   aGroupObj( maRootURL );
+
+    aGroupObj.insertName( rGroupName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+    aGroupURL = aGroupObj.GetMainURL();
+
+    if ( ! Content::create( aGroupURL, maCmdEnv, aGroup ) )
+        return sal_False;
+
+    // Check, if there's a template with the given name in this group
+    // Return false, if there already is a template
+    aGroupObj.insertName( rTemplateName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+    aTemplateURL = aGroupObj.GetMainURL();
+
+    if ( Content::create( aTemplateURL, maCmdEnv, aTemplate ) )
+        return sal_False;
+
+    // get the target url of the group
+    OUString    aTargetURL;
+    OUString    aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
+    Any         aValue;
+
+    if ( getProperty( aGroup, aPropName, aValue ) )
+        aValue >>= aTargetURL;
+
+    if ( !aTargetURL.getLength() )
+        return sal_False;
+
+    // copy the template into the new group (targeturl)
+    try
+    {
+        TransferInfo aTransferInfo;
+        aTransferInfo.MoveData = sal_False;
+        aTransferInfo.SourceURL = rSourceURL;
+        aTransferInfo.NewTitle = rTemplateName;
+        aTransferInfo.NameClash = NameClash::RENAME;
+
+        Any aArg = makeAny( aTransferInfo );
+        OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( COMMAND_TRANSFER ) );
+
+        aGroup.executeCommand( aCmd, aArg );
+    }
+    catch ( ContentCreationException& )
+    { return FALSE; }
+    catch ( CommandAbortedException& )
+    { return FALSE; }
+    catch ( Exception& )
+    { return FALSE; }
+
+    // create a new entry in the hierarchy
+    return addEntry( aGroup, rTemplateName, rSourceURL );
+}
+
+//-----------------------------------------------------------------------------
+sal_Bool SfxDocTplService_Impl::removeTemplate( const ::rtl::OUString& rGroupName,
+                                                const ::rtl::OUString& rTemplateName )
+{
+    // Check, wether or not there is a group with this name
+    // Return false, if there is no group with the given name
+    Content         aGroup, aTemplate;
+    OUString        aGroupURL, aTemplateURL;
+    INetURLObject   aGroupObj( maRootURL );
+
+    aGroupObj.insertName( rGroupName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+    aGroupURL = aGroupObj.GetMainURL();
+
+    if ( ! Content::create( aGroupURL, maCmdEnv, aGroup ) )
+        return sal_False;
+
+    // Check, if there's a template with the given name in this group
+    // Return false, if there is no template
+    aGroupObj.insertName( rTemplateName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+    aTemplateURL = aGroupObj.GetMainURL();
+
+    if ( !Content::create( aTemplateURL, maCmdEnv, aTemplate ) )
+        return sal_False;
+
+    // get the target URL from the template
+    OUString    aTargetURL;
+    OUString    aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ) );
+    Any         aValue;
+
+    if ( getProperty( aTemplate, aPropName, aValue ) )
+        aValue >>= aTargetURL;
+
+    // delete the target template
+    if ( aTargetURL.getLength() )
+    {
+        removeContent( aTargetURL );
+    }
+
+    // delete the template entry
+    return removeContent( aTemplate );
 }
 
 //-----------------------------------------------------------------------------
@@ -941,7 +1110,10 @@ void SAL_CALL SfxDocTplService::setLocale( const LOCALE & rLocale )
 Reference< XCONTENT > SAL_CALL SfxDocTplService::getContent()
     throw( RUNTIMEEXCEPTION )
 {
-    return pImp->getContent().get();
+    if ( pImp->init() )
+        return pImp->getContent().get();
+    else
+        return NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -954,12 +1126,15 @@ sal_Bool SAL_CALL SfxDocTplService::storeTemplate( const ::rtl::OUString& GroupN
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool SAL_CALL SfxDocTplService::addTemplate( const ::rtl::OUString& GroupName,
-                                                 const ::rtl::OUString& TemplateName,
-                                                 const ::rtl::OUString& SourceURL )
+sal_Bool SAL_CALL SfxDocTplService::addTemplate( const ::rtl::OUString& rGroupName,
+                                                 const ::rtl::OUString& rTemplateName,
+                                                 const ::rtl::OUString& rSourceURL )
     throw( RUNTIMEEXCEPTION )
 {
-    return sal_False;
+    if ( pImp->init() )
+        return pImp->addTemplate( rGroupName, rTemplateName, rSourceURL );
+    else
+        return sal_False;
 }
 
 //-----------------------------------------------------------------------------
@@ -967,27 +1142,37 @@ sal_Bool SAL_CALL SfxDocTplService::removeTemplate( const ::rtl::OUString& rGrou
                                                     const ::rtl::OUString& rTemplateName )
     throw( RUNTIMEEXCEPTION )
 {
-    return sal_False;
+    if ( pImp->init() )
+        return pImp->removeTemplate( rGroupName, rTemplateName );
+    else
+        return sal_False;
 }
 
 //-----------------------------------------------------------------------------
 sal_Bool SAL_CALL SfxDocTplService::addGroup( const ::rtl::OUString& rGroupName )
     throw( RUNTIMEEXCEPTION )
 {
-    return pImp->addGroup( rGroupName );
+    if ( pImp->init() )
+        return pImp->addGroup( rGroupName );
+    else
+        return sal_False;
 }
 
 //-----------------------------------------------------------------------------
 sal_Bool SAL_CALL SfxDocTplService::removeGroup( const ::rtl::OUString& rGroupName )
     throw( RUNTIMEEXCEPTION )
 {
-    return pImp->removeGroup( rGroupName );
+    if ( pImp->init() )
+        return pImp->removeGroup( rGroupName );
+    else
+        return sal_False;
 }
 
 //-----------------------------------------------------------------------------
 void SAL_CALL SfxDocTplService::update()
     throw( RUNTIMEEXCEPTION )
 {
-    pImp->update();
+    if ( pImp->init() )
+        pImp->update();
 }
 
