@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-27 12:32:16 $
+ *  last change: $Author: mba $ $Date: 2001-06-29 11:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,15 @@ SfxTopFrame::~SfxTopFrame()
     RemoveTopFrame_Impl( this );
     DELETEZ( pWindow );
     delete pImp;
+}
+
+void SfxTopFrame::SetPresentationMode( BOOL bSet )
+{
+    SetMenuBarOn_Impl( !bSet );
+    if ( GetWorkWindow_Impl() )
+        GetWorkWindow_Impl()->SetDockingAllowed( !bSet );
+    if ( GetCurrentViewFrame() )
+        GetCurrentViewFrame()->GetDispatcher()->Update_Impl( TRUE );
 }
 
 SystemWindow* SfxTopFrame::GetTopWindow_Impl() const
@@ -936,6 +945,43 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
 
     switch ( rReq.GetSlot() )
     {
+        case SID_SHOWPOPUPS :
+        {
+            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, SID_SHOWPOPUPS, FALSE);
+            BOOL bShow = pShowItem ? pShowItem->GetValue() : TRUE;
+            SFX_REQUEST_ARG(rReq, pIdItem, SfxUInt16Item, SID_CONFIGITEMID, FALSE);
+            USHORT nId = pIdItem ? pIdItem->GetValue() : 0;
+
+            // ausfuehren
+            SfxWorkWindow *pWorkWin = GetFrame()->GetWorkWindow_Impl();
+            if ( bShow )
+            {
+                // Zuerst die Floats auch anzeigbar machen
+                pWorkWin->MakeChildsVisible_Impl( bShow );
+                GetDispatcher()->Update_Impl( TRUE );
+
+                // Dann anzeigen
+                GetBindings().HidePopups( !bShow );
+            }
+            else
+            {
+                // Alles hiden
+                SfxBindings *pBind = &GetBindings();
+                while ( pBind )
+                {
+                    pBind->HidePopupCtrls_Impl( !bShow );
+                    pBind = pBind->GetSubBindings_Impl();
+                }
+
+                pWorkWin->HidePopups_Impl( !bShow, TRUE, nId );
+                pWorkWin->MakeChildsVisible_Impl( bShow );
+            }
+
+            Invalidate( rReq.GetSlot() );
+            rReq.Done();
+            break;
+        }
+
         case SID_ACTIVATE:
         {
             MakeActive_Impl( TRUE );
