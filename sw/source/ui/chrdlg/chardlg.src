@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-29 21:02:01 $
+ *  last change: $Author: rt $ $Date: 2001-10-22 20:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,7 +574,7 @@ TabPage TP_CHAR_URL
         Text[ chinese_simplified ] = "äº‹ä»¶(~E)...";
         Text[ russian ] = "Ñîáûòèÿ...";
         Text[ polish ] = "Wy~darzenia...";
-        Text[ japanese ] = "å®Ÿè¡Œå¥‘æ©Ÿ(~E)...";
+        Text[ japanese ] = "ï½²ï¾ï¾ï¾ï¾„(~E)...";
         Text[ chinese_traditional ] = "å‹•ä½œ(~E)...";
         Text[ arabic ] = "ÃÍÏÇË...";
         Text[ dutch ] = "~Gebeurtenissen";
@@ -693,6 +693,7 @@ TabPage TP_CHAR_URL
         Group = TRUE ;
     };
 };
+
 
 
 
