@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:21 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 #include <unowrap.hxx>
 #include <salframe.hxx>
 
-#pragma hdrstop
+
 
 // =======================================================================
 
