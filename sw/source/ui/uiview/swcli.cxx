@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcli.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:29:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,7 @@ void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
         // size has changed, so first change visual area of the object before we resize its view
         // without this the object always would be scaled - now it has the choice
 
-        // TODO/LEAN: getMapUnit still needs running state
-        svt::EmbeddedObjectRef::TryRunningState( GetObject() );
+        // TODO/LEAN: getMapUnit can switch object to running state
         MapMode aObjectMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( GetObject()->getMapUnit( GetAspect() ) ) );
         MapMode aClientMap( GetEditWin()->GetMapMode().GetMapUnit() );
 
@@ -177,8 +176,7 @@ void SwOleClient::ViewChanged()
     //CalcAndSetScale() der WrtShell beruecksichtig, wenn die Groesse/Pos des
     //Rahmens in der Core sich veraendert.
 
-    // TODO/LEAN: getMapUnit still needs running state
-    svt::EmbeddedObjectRef::TryRunningState( GetObject() );
+    // TODO/LEAN: getMapUnit can switch object to running state
     awt::Size aSz = GetObject()->getVisualAreaSize( GetAspect() );
     Size aVisSize( aSz.Width, aSz.Height );
 
