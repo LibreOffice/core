@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 07:32:49 $
+ *  last change: $Author: rt $ $Date: 2002-07-23 12:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _FILEDLGHELPER_HXX
-#include <sfx2/filedlghelper.hxx>
+#include <filedlghelper.hxx>
 #endif
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
