@@ -2,9 +2,9 @@
  *
  *  $RCSfile: closedispatcher.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:36 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ void SAL_CALL CloseDispatcher::addStatusListener( const css::uno::Reference< css
         xSet->getPropertyValue(FRAME_PROPNAME_ISBACKINGMODE)>>=bIsTargetAlreadyBackingWindow;
 
     sal_Bool bIsEnabled = (
-                            (aURL.Complete.equalsAscii(URL_CLOSEDOC) && xModel.is())
+                            ( aURL.Complete.equalsAscii(URL_CLOSEDOC) && ( xModel.is() || xController.is() ) )
                             ||
                             (aURL.Complete.equalsAscii(URL_CLOSEWIN) && !bIsTargetAlreadyBackingWindow)
                           );
@@ -414,10 +414,18 @@ void CloseDispatcher::impl_dispatchCloseDoc( /*IN*/ const css::uno::Sequence< cs
     // no model -> no close doc!
     if (!xTargetModel.is())
     {
-        impl_notifyResultListener(
-            xListener,
-            css::frame::DispatchResultState::FAILURE,
-            css::uno::Any());
+        if ( xTargetController.is() )
+        {
+            impl_dispatchCloseWin( lArguments, xListener );
+        }
+        else
+        {
+            impl_notifyResultListener(
+                xListener,
+                css::frame::DispatchResultState::FAILURE,
+                css::uno::Any());
+        }
+
         return;
     }
 
