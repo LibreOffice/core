@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-30 15:54:34 $
+ *  last change: $Author: mt $ $Date: 2002-09-04 08:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8299,6 +8299,9 @@ BOOL Window::IsScrollable() const
 
 BOOL Window::IsTopWindow() const
 {
+    if ( mbInDtor )
+        return FALSE;
+
     // topwindows must be frames or they must have a borderwindow which is a frame
     if( !mbFrame && (!mpBorderWindow || (mpBorderWindow && !mpBorderWindow->mbFrame) ) )
         return FALSE;
