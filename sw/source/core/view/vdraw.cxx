@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-22 10:05:31 $
+ *  last change: $Author: ama $ $Date: 2002-02-01 14:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,7 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
 
             const SwFrm *pAnchor = ((SwDrawContact*)pCont)->GetAnchor();
             if ( !pAnchor || pAnchor->IsInFly() || !pAnchor->IsValid() ||
-                 !pAnchor->GetUpper() ||
+                 !pAnchor->GetUpper() || !pAnchor->FindPageFrm() ||
                  FLY_IN_CNTNT == pCont->GetFmt()->GetAnchor().GetAnchorId() )
                 continue;
 
@@ -476,6 +476,9 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
 /****************************************************************************
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2002/01/22 10:05:31  ama
+    Fix #96779#: Fly frames in page styles with header/footer
+
     Revision 1.1.1.1  2000/09/19 00:08:29  hr
     initial import
 
