@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dg $ $Date: 2001-09-26 15:42:55 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 17:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include <tools/wldcrd.hxx>
 #endif
 
+#ifdef min
+#undef min
+#endif
 #include <algorithm>
 #include <map>
 #include <set>
