@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editwin.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 11:17:26 $
+ *  last change: $Author: gh $ $Date: 2002-11-20 11:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ GHEditWindow::GHEditWindow(Window * pParent, String aName, WinBits iWstyle)
 : FloatingWindow(pParent)
 , aInhalt(this,iWstyle)
 {
+    SetOutputSizePixel( Size( 120,80 ) );
     Show();
     Resize();
     aInhalt.Show();
@@ -150,7 +151,7 @@ void EditFileWindow::LoadFile()
 BOOL EditFileWindow::Close()
 {
 
-    if (aInhalt.IsModified() && QueryBox(this,WB_DEF_YES | WB_YES_NO_CANCEL, String(aFileName).AppendAscii("\nwurde verändert.\n\nDatei Speichern?")).Execute())
+    if (aInhalt.IsModified() && QueryBox(this,WB_DEF_YES | WB_YES_NO_CANCEL, String(aFileName).AppendAscii("\nhas been changed.\n\nSave file?")).Execute())
     {
 
     }

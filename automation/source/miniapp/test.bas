@@ -1,7 +1,7 @@
+'encoding UTF-8  Do not remove or change this line!
 sub main
-
-wintree
 '  cMassentest
+'  DisplayHid
   cTestdialog
   cSysDlgTest
   cFileOpenTest
@@ -11,6 +11,7 @@ wintree
 end sub
 
 testcase cMassentest
+
 DisplayHid
 resetapplication
 FileDialog
@@ -27,10 +28,6 @@ lang = lang + lang
 
 lang = lang + lang
 lang = lang + lang
-'lang = lang + lang
-'lang = lang + lang
-'lang = lang + lang
-'print len(lang)
 nodebug
 while 1
   c = c + 1
@@ -48,7 +45,7 @@ endcase
 testcase cFileOpenTest
 
   FileOpenTest
-  wintree
+  setclipboard wintree
   kontext
   active.cancel
 
@@ -58,10 +55,10 @@ endcase
 testcase cSysDlgTest
 
   SysDialogs
-  wintree
+  setclipboard wintree
   kontext 
   active.yes
-  wintree
+  setclipboard wintree
   active.ok
   active.Cancel
 
@@ -93,9 +90,8 @@ endcase
 
 
 sub LoadIncludeFiles
-'  start "d:\prj\actual\basic\source\testtool\server\debug\server.exe"
-  start "d:\office40.vcl\miniapp.exe"
 
+  start "miniapp.exe", "-enableautomation"
 
   use "test.win"
   use "test.sid"
@@ -108,13 +104,8 @@ sub testenter
 end sub
 
 sub testexit
-'  if GrosserTestDlg.exists (1) then
-'    GrosserTestDlg.ok
-'  endif
 
   dim xx
-  xx = GetNextError
-  if xx > "" then print xx
   xx = resetapplication
   if xx > "" then warnlog xx
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testapp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 11:18:30 $
+ *  last change: $Author: gh $ $Date: 2002-11-20 11:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,14 +75,42 @@
 #ifndef _SVTOOLS_TTPROPS_HXX // handmade
 #include <svtools/ttprops.hxx>
 #endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+#include <ucbhelper/contentbroker.hxx>
+#include <ucbhelper/configurationkeys.hxx>
+#ifndef _COMPHELPER_REGPATHHELPER_HXX_
+#include <comphelper/regpathhelper.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#include <cppuhelper/servicefactory.hxx>
+#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ucb/XContentProviderManager.hpp>
 
 #include "servres.hrc"
 #include "servres.hxx"
 #include "testapp.hxx"
 
+using namespace comphelper;
+using namespace cppu;
+using namespace rtl;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::registry;
+using namespace com::sun::star::ucb;
 
 MainWindow::MainWindow(MyApp *pAppl)
-: WorkWindow(NULL, WB_APP | WB_STDWORK)
+: WorkWindow(NULL, WB_STDWORK)
 , pApp(pAppl)
 {}
 
@@ -163,17 +191,16 @@ void MainWindow::WinTree()
 
 void MainWindow::SysDlg()
 {
-
-    switch (QueryBox(this,WB_YES_NO_CANCEL | WB_DEF_YES, CUniString("Soll noch ein Dialog geöffnet werden?")).Execute())
-    {
-        case RET_YES:
-            while ( WarningBox(this,WB_OK_CANCEL | WB_DEF_OK,CUniString("Das ist jetzt aber die letzte Box")).Execute() == RET_OK );
-            break;
-        case RET_NO:
-            break;
-        case RET_CANCEL:InfoBox(this,CUniString("Schade")).Execute();
-            break;
-    }
+    switch (QueryBox(this,WB_YES_NO_CANCEL | WB_DEF_YES, CUniString("Want to open another Dialog?")).Execute())
+      {
+          case RET_YES:
+            while ( WarningBox(this,WB_OK_CANCEL | WB_DEF_OK,CUniString("Well this is the last box now!")).Execute() == RET_OK );
+              break;
+          case RET_NO:
+              break;
+        case RET_CANCEL:InfoBox(this,CUniString("Oh well..")).Execute();
+              break;
+      }
 
 /*
 
@@ -287,18 +314,76 @@ PlugInDispatcher* MyApp::GetDispatcher()
     return pMyDispatcher;
 }
 
+Reference< XContentProviderManager > InitializeUCB( void )
+{
+    OUString path;
+    if( osl_Process_E_None != osl_getExecutableFile( (rtl_uString**)&path ) )
+    {
+        InfoBox( NULL, String::CreateFromAscii( "Couldn't retrieve directory of executable" ) ).Execute();
+        exit( 1 );
+    }
+    OSL_ASSERT( path.lastIndexOf( '/' ) >= 0 );
+
+
+    ::rtl::OUStringBuffer bufServices( path.copy( 0, path.lastIndexOf( '/' )+1 ) );
+    bufServices.appendAscii("services.rdb");
+    OUString services = bufServices.makeStringAndClear();
+
+    ::rtl::OUStringBuffer bufTypes( path.copy( 0, path.lastIndexOf( '/' )+1 ) );
+    bufTypes.appendAscii("types.rdb");
+    OUString types = bufTypes.makeStringAndClear();
+
+
+    Reference< XMultiServiceFactory > xSMgr;
+    try
+    {
+        xSMgr = createRegistryServiceFactory( types, services, sal_True );
+    }
+    catch( com::sun::star::uno::Exception & exc )
+    {
+        fprintf( stderr, "Couldn't bootstrap uno servicemanager for reason : %s\n" ,
+                 OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        InfoBox( NULL, String( exc.Message ) ).Execute();
+        throw ;
+    }
+
+
+    //////////////////////////////////////////////////////////////////////
+    // set global factory
+    setProcessServiceFactory( xSMgr );
+
+//  Create unconfigured Ucb:
+    Sequence< Any > aArgs;
+    ucb::ContentBroker::initialize( xSMgr, aArgs );
+    Reference< XContentProviderManager > xUcb =
+        ucb::ContentBroker::get()->getContentProviderManagerInterface();
+
+    Reference< XContentProvider > xFileProvider
+        ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ) ), UNO_QUERY );
+    xUcb->registerContentProvider( xFileProvider, OUString::createFromAscii( "file" ), sal_True );
+
+    return xUcb;
+}
 
 void MyApp::Main()
 {
-    ResMgr *pRes = new ResMgr( CUniString("miniapp.res") );
-    Resource::SetResManager( pRes );
+    Reference< XContentProviderManager > xUcb = InitializeUCB();
+    LanguageType aRequestedLanguage;
+    aRequestedLanguage = LanguageType( LANGUAGE_GERMAN );
+
+    AllSettings aSettings = GetSettings();
+    aSettings.SetUILanguage( aRequestedLanguage );
+    aSettings.SetLanguage( aRequestedLanguage );
+    SetSettings( aSettings );
+    Resource::SetResManager( CREATEVERSIONRESMGR( tma ) );
 
     MainWindow  MainWin(this);
     pMainWin = &MainWin;
 
     MenuBar aMenu(ResId(MENU_CLIENT));
     MainWin.SetMenuBar( &aMenu );
-    aMenu.SetSelectHdl(LINK(&MainWin, MainWindow, MenuSelectHdl));
+    aMenu.GetPopupMenu( IDM_FILE )->SetSelectHdl(LINK(&MainWin, MainWindow, MenuSelectHdl));
+    aMenu.GetPopupMenu( IDM_TEST )->SetSelectHdl(LINK(&MainWin, MainWindow, MenuSelectHdl));
 
     MyDispatcher MyDsp(pMainWin);
     pMyDispatcher = &MyDsp;
