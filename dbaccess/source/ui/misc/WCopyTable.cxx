@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
+ *  last change: $Author: oj $ $Date: 2001-12-05 09:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,10 +744,18 @@ Reference< XPropertySet > OCopyTableWizard::createView()
     m_xDestObject->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
     m_xDestObject->setPropertyValue(PROPERTY_NAME,makeAny(sTable));
 
-    ::rtl::OUString sCommand = ::rtl::OUString::createFromAscii("SELECT * FROM ");
-    ::rtl::OUString sComposedName;
-    ::dbaui::composeTableName(m_xConnection->getMetaData(),m_xSourceObject,sComposedName,sal_True);
-    sCommand += sComposedName;
+    ::rtl::OUString sCommand;
+    if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND))
+    {
+        m_xSourceObject->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
+    }
+    else
+    {
+        sCommand = ::rtl::OUString::createFromAscii("SELECT * FROM ");
+        ::rtl::OUString sComposedName;
+        ::dbaui::composeTableName(m_xConnection->getMetaData(),m_xSourceObject,sComposedName,sal_True);
+        sCommand += sComposedName;
+    }
     m_xDestObject->setPropertyValue(PROPERTY_COMMAND,makeAny(sCommand));
 
     Reference<XAppend> xAppend(xViews,UNO_QUERY);
