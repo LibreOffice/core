@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-26 20:33:53 $
+ *  last change: $Author: vg $ $Date: 2001-10-11 20:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,7 +452,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text [ russian ] = "Поле из таблицы списка";
         Text [ dutch ] = "Veld uit de ~lijsttabel";
         Text [ french ] = "Champ de la table de ~liste";
-        Text [ spanish ] = "Campo del list&ado";
+        Text [ spanish ] = "Campo del listado";
         Text [ italian ] = "Campo dalla tabella di ~elenco";
         Text [ danish ] = "Felt fra &listetabellen";
         Text [ swedish ] = "Fдlt frеn ~listtabellen";
@@ -515,6 +515,9 @@ String RID_STR_COMBOWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.27  2001/09/26 20:33:53  kz
+ *  Merge SRC638: 26.09.01 - 22:33:07
+ *
  *  Revision 1.26  2001/08/29 20:59:39  kz
  *  Merge SRC638: 29.08.01 - 22:58:39
  *
@@ -557,6 +560,7 @@ String RID_STR_COMBOWIZ_DBFIELD
  *
  *  Revision 1.0 21.02.01 16:16:18  fs
  ************************************************************************/
+
 
 
 
