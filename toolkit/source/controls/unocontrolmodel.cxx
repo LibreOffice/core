@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-16 13:57:20 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 18:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,12 @@ UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
     {
         ImplControlProperty* pProp = rModel.mpData->GetObject( --n );
         ImplControlProperty* pNew = new ImplControlProperty( *pProp );
+
+#ifdef DBG_UTIL
+        BOOL bSuccess =
+#endif
         mpData->Insert( pNew->GetId(), pNew );
+        DBG_ASSERT( bSuccess, "UnoControlModel::UnoControlModel: property was already known!" );
     }
 }
 
@@ -469,6 +474,18 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
 
 void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId, const ::com::sun::star::uno::Any& rDefault )
 {
+    if ( mpData->Get( nPropId ) )
+    {
+        // property is already known
+        DBG_ASSERT( ( BASEPROPERTY_TEXTCOLOR == nPropId )
+                ||  ( BASEPROPERTY_TEXTLINECOLOR == nPropId )
+                ||  ( BASEPROPERTY_FONTRELIEF == nPropId )
+                ||  ( BASEPROPERTY_FONTEMPHASISMARK == nPropId ),
+            "UnoControlModel::ImplRegisterProperty: property was already known!"
+        );
+        return;
+    }
+
     ImplControlProperty* pProp = new ImplControlProperty( nPropId, rDefault );
     mpData->Insert( nPropId, pProp );
 }
