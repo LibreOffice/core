@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfact.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:49:09 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#pragma hdrstop
 
 #ifndef _REF_HXX
 #include <tools/ref.hxx>
