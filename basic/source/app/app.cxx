@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gh $ $Date: 2000-11-30 14:35:37 $
+ *  last change: $Author: ab $ $Date: 2000-12-06 15:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,10 +155,7 @@ Reference< XContentProviderManager > InitializeUCB( void )
 
     //////////////////////////////////////////////////////////////////////
     // Bootstrap readonly service factory
-//  Reference< XMultiServiceFactory > xSMgr( createRegistryServiceFactory( getPathToSystemRegistry() ) );
     Reference< XMultiServiceFactory > xSMgr( createRegistryServiceFactory( getPathToSystemRegistry(), sal_True ) );
-//  xSMgr.clear();
-//  xSMgr = createRegistryServiceFactory( getPathToSystemRegistry(), sal_True );
 
     //////////////////////////////////////////////////////////////////////
     // Register libraries, check first if already registered
@@ -191,11 +188,13 @@ Reference< XContentProviderManager > InitializeUCB( void )
     setProcessServiceFactory( xSMgr );
 
     // Create unconfigured Ucb:
-    Sequence< Any > aArgs(2);
-    aArgs[0] <<= OUString::createFromAscii(UCB_CONFIGURATION_KEY1_LOCAL);
-    aArgs[1] <<= OUString::createFromAscii(UCB_CONFIGURATION_KEY2_OFFICE);
+    Sequence< Any > aArgs;
     ucb::ContentBroker::initialize( xSMgr, aArgs );
     xUcb = ucb::ContentBroker::get()->getContentProviderManagerInterface();
+
+    Reference< XContentProvider > xFileProvider
+        ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ) ), UNO_QUERY );
+    xUcb->registerContentProvider( xFileProvider, OUString::createFromAscii( "file" ), sal_True );
 
     }
     catch( Exception & rEx)
