@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-02 13:04:08 $
+ *  last change: $Author: mba $ $Date: 2001-04-09 15:39:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,14 +463,14 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
 
         SfxAllItemSet aSet( SFX_APP()->GetPool() );
         TransformParameters( GetId(), aArgs, aSet );
-        aSet.Put( SfxBoolItem( SID_INTERCEPTOR, sal_False ) );
+//        aSet.Put( SfxBoolItem( SID_INTERCEPTOR, sal_False ) );
         if ( !pDispatcher && pBindings )
             pDispatcher = GetBindings().GetDispatcher_Impl();
 
         SfxCallMode nCall = SFX_CALLMODE_SLOT;
-        sal_uInt16 nCount = aArgs.getLength();
+        sal_Int32 nCount = aArgs.getLength();
         const ::com::sun::star::beans::PropertyValue* pPropsVal = aArgs.getConstArray();
-        for ( sal_uInt16 n=0; n<nCount; n++ )
+        for ( sal_Int32 n=0; n<nCount; n++ )
         {
             const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
             String aName = rProp.Name;
@@ -482,7 +482,11 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             }
         }
 
-        pDispatcher->Execute( GetId(), nCall, aSet );
+        if ( aSet.Count() )
+            pDispatcher->Execute( GetId(), nCall, aSet );
+        else
+            // SfxRequests take empty sets as argument sets, GetArgs() returning non-zero!
+            pDispatcher->Execute( GetId(), nCall );
     }
 }
 
