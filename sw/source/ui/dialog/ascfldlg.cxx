@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2002-07-29 15:17:09 $
+ *  last change: $Author: os $ $Date: 2002-08-14 14:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,9 +328,6 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
 
     // initialisiere Zeichensatz
     aCharSetLB.FillFromTextEncodingTable( pStream != NULL );
-    rtl_TextEncoding eSystem = gsl_getSystemTextEncoding();
-    aCharSetLB.RemoveTextEncoding( eSystem );
-    aCharSetLB.InsertTextEncoding( eSystem, sSystemCharSet );
     aCharSetLB.SelectTextEncoding( aOpt.GetCharSet()  );
 
     aCharSetLB.SetSelectHdl( LINK( this, SwAsciiFilterDlg, CharSetSelHdl ));
@@ -554,6 +551,9 @@ IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2002/07/29 15:17:09  er
+      #100289# exclude subsets of RTL_TEXTENCODING_GB_18030 in import dialogs
+
       Revision 1.9  2002/06/26 08:29:59  os
       #99863# get default font and language on import from configuration
 
