@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-03 11:36:52 $
+#   last change: $Author: rt $ $Date: 2004-08-23 09:30:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -138,7 +138,6 @@ LIB1OBJFILES =  \
     $(SLO)$/fieldwnd.obj	\
     $(SLO)$/pvlaydlg.obj	\
     $(SLO)$/pvfundlg.obj	\
-    $(SLO)$/dpgroupdlg.obj	\
     $(SLO)$/consdlg.obj		\
     $(SLO)$/imoptdlg.obj	\
     $(SLO)$/csvsplits.obj	\
