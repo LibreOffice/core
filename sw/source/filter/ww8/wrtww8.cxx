@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-16 15:30:19 $
+ *  last change: $Author: cmc $ $Date: 2002-07-19 16:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1454,11 +1454,17 @@ void SwWW8Writer::AppendBookmark( const String& rName, USHORT nOffset )
 
 USHORT WW8_WrtRedlineAuthor::AddName( const String& rNm )
 {
+    USHORT nRet;
     typedef ::std::vector<String>::iterator myiter;
     myiter aIter = ::std::find(maAuthors.begin(), maAuthors.end(), rNm);
-    if (aIter == maAuthors.end())
+    if (aIter != maAuthors.end())
+        nRet = aIter - maAuthors.begin();
+    else
+    {
+        nRet = maAuthors.size();
         maAuthors.push_back(rNm);
-    return aIter - maAuthors.begin();
+    }
+    return nRet;
 }
 
 void WW8_WrtRedlineAuthor::Write( SwWW8Writer& rWrt )
