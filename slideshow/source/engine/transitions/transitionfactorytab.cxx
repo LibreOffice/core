@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transitionfactorytab.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:09:45 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,16 +59,15 @@
  *
  ************************************************************************/
 
-#include <cstdlib>
-
 #include "basegfx/numeric/ftools.hxx"
 #include "transitionfactory.hxx"
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <algorithm>
 
+#include "tools.hxx"
 
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 namespace presentation {
@@ -863,7 +862,7 @@ static const TransitionInfo lcl_transitionInfo[] =
         0.0, // no rotation
         1.0, // no scaling
         1.0, // no scaling
-        TransitionInfo::REVERSEMETHOD_ROTATE_180,
+        TransitionInfo::REVERSEMETHOD_FLIP_X,
         true, // 'out' by parameter sweep inversion
         false // scale isotrophically to target size
     },
@@ -1451,7 +1450,7 @@ static const TransitionInfo lcl_transitionInfo[] =
         0.0, // no rotation
         1.0, // no scaling
         1.0, // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE,
+        TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
         true, // 'out' by parameter sweep inversion
         false // scale isotrophically to target size
     },
@@ -1463,7 +1462,7 @@ static const TransitionInfo lcl_transitionInfo[] =
         90.0, // rotation
         1.0, // no scaling
         1.0, // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE,
+        TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
         true, // 'out' by parameter sweep inversion
         false // scale isotrophically to target size
     },
@@ -1475,7 +1474,7 @@ static const TransitionInfo lcl_transitionInfo[] =
         180.0, // rotation
         1.0, // no scaling
         1.0, // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE,
+        TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
         true, // 'out' by parameter sweep inversion
         false // scale isotrophically to target size
     },
@@ -1487,7 +1486,7 @@ static const TransitionInfo lcl_transitionInfo[] =
         270.0, // rotation
         1.0, // no scaling
         1.0, // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE,
+        TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
         true, // 'out' by parameter sweep inversion
         false // scale isotrophically to target size
     },
@@ -1499,7 +1498,7 @@ static const TransitionInfo lcl_transitionInfo[] =
         90.0, // rotation
         1.0, // no scaling
         1.0, // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE,
+        TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
         true, // 'out' by parameter sweep inversion
         false // scale isotrophically to target size
     },
@@ -1511,7 +1510,7 @@ static const TransitionInfo lcl_transitionInfo[] =
         180.0, // rotation
         1.0, // no scaling
         1.0, // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE,
+        TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
         true, // 'out' by parameter sweep inversion
         false // scale isotrophically to target size
     },
@@ -1523,7 +1522,7 @@ static const TransitionInfo lcl_transitionInfo[] =
         270.0, // rotation
         1.0, // no scaling
         1.0, // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE,
+        TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
         true, // 'out' by parameter sweep inversion
         false // scale isotrophically to target size
     },
@@ -1535,7 +1534,7 @@ static const TransitionInfo lcl_transitionInfo[] =
         0.0, // no rotation
         1.0, // no scaling
         1.0, // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE,
+        TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
         true, // 'out' by parameter sweep inversion
         false // scale isotrophically to target size
     },
@@ -2156,10 +2155,9 @@ const TransitionInfo* TransitionFactory::getTransitionInfo(
 
 const TransitionInfo* TransitionFactory::getRandomTransitionInfo()
 {
-    static const ::std::size_t lcl_randomTableSize(
-        sizeof(lcl_transitionInfo)/sizeof(TransitionInfo) - 2);
-
-    return lcl_transitionInfo + lcl_randomTableSize * rand() / RAND_MAX;
+    return lcl_transitionInfo + getRandomOrdinal(
+        sizeof(lcl_transitionInfo) / sizeof(TransitionInfo)
+        - 1 /* exclude random transition at end of table */ );
 }
 
 } // namespace internal
