@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellManager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:13:35 $
+ *  last change: $Author: rt $ $Date: 2004-12-16 10:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,13 @@ private:
         blocks.
     */
     bool mbTakeShellsFromStackPending;
+
+    /** The PushShellsOnStack() method can be called recursively.  This flag
+        is used to communicate between different levels of invocation: if
+        the stack has been updated in an inner call the outer call can (has
+        to) stop and return immediately.
+    */
+    bool mbShellStackIsUpToDate;
 
     void GatherActiveShells (::std::vector<SfxShell*>& aShellsList);
 
