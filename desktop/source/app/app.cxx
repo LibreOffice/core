@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-12 11:16:21 $
+ *  last change: $Author: mba $ $Date: 2000-12-12 14:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <setup2/installer.hxx>
 #include <svtools/pathoptions.hxx>
 #include <unotools/configmgr.hxx>
+#include <vcl/msgbox.hxx>
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII##))
 
@@ -95,9 +96,7 @@ void ReplaceStringHookProc( UniString& rStr )
         aBrandName = aTmp;
     }
 
-    xub_StrLen nPos = rStr.SearchAndReplaceAscii( "%PRODUCTNAME", aBrandName );
-    while ( nPos != STRING_NOTFOUND )
-        nPos = rStr.SearchAndReplaceAscii( "%PRODUCTNAME", aBrandName );
+    rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", aBrandName );
 }
 
 Desktop aDesktop;
@@ -117,7 +116,9 @@ void Desktop::Main()
     {
         String aMsg;
         aMsg += DEFINE_CONST_UNICODE("This Early Access Version has expired!\n");
-        Application::Abort( aMsg );
+        InfoBox aBox( NULL, aMsg );
+        aBox.Execute();
+        return;
     }
 
     Installer* pInstaller = new Installer;
