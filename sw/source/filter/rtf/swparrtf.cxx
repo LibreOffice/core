@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:25:21 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -997,7 +997,9 @@ void rtfSections::InsertSegments(bool bNewDoc)
                 SetSegmentToPageDesc(*aIter, true, bIgnoreCols);
             }
 
-            if (bNewDoc && aIter == aStart)
+            if (!bNewDoc && aIter == aStart)
+                continue;
+            else if (bNewDoc && aIter == aStart)
             {
                 aIter->mpPage =
                     mrReader.pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD);
