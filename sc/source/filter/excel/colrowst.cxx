@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:41:40 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 08:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,6 +487,7 @@ void ScExtDocOptions::Reset()
     bChanged = TRUE;
 
     SetWinProtection(false);
+    SetWinEncryption(false);
 }
 
 
@@ -576,6 +577,7 @@ ScExtDocOptions& ScExtDocOptions::operator =( const ScExtDocOptions& rCpy )
 
     bChanged = rCpy.bChanged;
     bWinProtection = rCpy.bWinProtection;
+    bWinEncryption = rCpy.bWinEncryption;
 
     return *this;
 }
