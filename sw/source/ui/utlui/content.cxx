@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:55:07 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,11 +563,6 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
         {
             sTypeToken = aEmptyStr;
             nMemberCount = 0;
-            if(!pMember)
-                pMember = new SwContentArr;
-            else if(pMember->Count())
-                pMember->DeleteAndDestroy(0, pMember->Count());
-
             SdrModel* pModel = pWrtShell->GetDoc()->GetDrawModel();
             if(pModel)
             {
@@ -926,8 +921,13 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                                             this,
                                             pTemp->GetName(),
                                             nYPos);
+                        if(!pContact->GetFmt()->GetDoc()->IsVisibleLayerId(pTemp->GetLayer()))
+                            pCnt->SetInvisible();
                         pMember->Insert(pCnt);
                         nMemberCount++;
+                        if(nOldMemberCount > (int)i &&
+                            (pOldMember->GetObject(i))->IsInvisible() != pCnt->IsInvisible())
+                                *pbLevelOrVisibiblityChanged = sal_True;
                     }
                 }
             }
@@ -1143,8 +1143,12 @@ void  SwContentTree::Command( const CommandEvent& rCEvt )
                 const SwContentType* pContType = ((SwContent*)pEntry->GetUserData())->GetParent();
                 const sal_uInt16 nContentType = pContType->GetType();
                 sal_Bool bReadonly = pActiveShell->GetView().GetDocShell()->IsReadOnly();
-                sal_Bool bEditable = pContType->IsEditable();
-                sal_Bool bDeletable = pContType->IsDeletable();
+                sal_Bool bVisible = !((SwContent*)pEntry->GetUserData())->IsInvisible();
+                sal_Bool bProtected = ((SwContent*)pEntry->GetUserData())->IsProtect();
+                sal_Bool bEditable = pContType->IsEditable() &&
+                    ((bVisible && !bProtected) ||CONTENT_TYPE_REGION == nContentType);
+                sal_Bool bDeletable = pContType->IsDeletable() &&
+                    ((bVisible && !bProtected) ||CONTENT_TYPE_REGION == nContentType);
                 sal_Bool bRenamable = bEditable && !bReadonly &&
                     (CONTENT_TYPE_TABLE == nContentType ||
                         CONTENT_TYPE_FRAME == nContentType ||
@@ -1183,7 +1187,7 @@ void  SwContentTree::Command( const CommandEvent& rCEvt )
                         aSubPop4.EnableItem(404, bProt );
                         aSubPop4.InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
                     }
-                    else if(!((SwContent*)pEntry->GetUserData())->IsProtect())
+                    else if(bEditable || bDeletable)
                     {
                         if(bEditable && bDeletable)
                         {
