@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-22 13:46:40 $
+#   last change: $Author: obo $ $Date: 2004-11-19 11:41:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.10 $ ';
+my $id_str = ' $Revision: 1.11 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -122,8 +122,8 @@ my $platform_resynced_flag = ".cwsresync_complete";
 # modules to be obligatory copied to each cws
 my %obligatory_modules = ();
 $obligatory_modules{'solenv'}++;
-$obligatory_modules{'res'}++;
-$obligatory_modules{'so_res'}++;
+$obligatory_modules{'default_images'}++;
+$obligatory_modules{'custom_images'}++;
 $obligatory_modules{'instset_native'}++;
 $obligatory_modules{'instsetoo_native'}++;
 $obligatory_modules{'smoketest_native'}++;
