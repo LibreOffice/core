@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 09:31:55 $
+ *  last change: $Author: jp $ $Date: 2001-02-09 17:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2048,8 +2048,10 @@ SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
                 AppendUndo( new SwUndoRedlineDelete( aDelPam, UNDO_REPLACE ));
             AppendRedline( new SwRedline( REDLINE_DELETE, aDelPam ));
 
+            *rPam.GetMark() = *aDelPam.GetMark();
             if( DoesUndo() )
             {
+                *aDelPam.GetPoint() = *rPam.GetPoint();
                 EndUndo();
 
                 // Bug 68584 - if any Redline will change (split!) the node
