@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: os $ $Date: 2002-10-21 07:57:12 $
+ *  last change: $Author: os $ $Date: 2002-10-21 14:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4773,8 +4773,10 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
             if(pTLBox)
             {
-                // hier muessen die Actions aufgehoben werden
-                UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
+                {
+                    // hier muessen die Actions aufgehoben werden
+                    UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
+                }
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
                 SwPosition aPos(*pSttNd);
                 // Cursor in die obere linke Zelle des Ranges setzen
@@ -4796,8 +4798,10 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
                         delete pUnoCrsr;
                         bSuccess = TRUE;
                     }
-                    // hier muessen die Actions aufgehoben werden
-                    UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
+                    {
+                        // hier muessen die Actions aufgehoben werden
+                        UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
+                    }
                 }
             }
         }
@@ -4983,8 +4987,10 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
             if(pTLBox)
             {
-                // hier muessen die Actions aufgehoben werden
-                UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
+                {
+                    // hier muessen die Actions aufgehoben werden
+                    UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
+                }
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
                 SwPosition aPos(*pSttNd);
                 // Cursor in die obere linke Zelle des Ranges setzen
@@ -5006,8 +5012,10 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
                         delete pUnoCrsr;
                         bSuccess = TRUE;
                     }
-                    // hier muessen die Actions aufgehoben werden
-                    UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
+                    {
+                        // hier muessen die Actions aufgehoben werden
+                        UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
+                    }
                 }
             }
         }
