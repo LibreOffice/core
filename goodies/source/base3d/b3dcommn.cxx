@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dcommn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: aw $ $Date: 2001-10-18 10:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,6 +702,9 @@ void Base3DCommon::Create3DTriangle(UINT32 nInd1, UINT32 nInd2, UINT32 nInd3)
     // Dreieck an Einheitswuerfel clippen
     if(Clip3DPolygon(aEdgeIndex))
     {
+        // #93184# set flag for polygon normal direction
+        bNormalPointsAway = BOOL(aNormal.Z() < 0.0);
+
         UINT32 nNumPoints = aEdgeIndex.Count();
 
         // einige Beleuchtungsdinge koennen hier schon geklaert
@@ -1238,7 +1241,8 @@ B3dColor Base3DCommon::SolveColorModel(B3dMaterial& rMat, Vector3D& rVec, const 
         // Falls die Normale vom Betrachter weg zeigt und das Beleuchtungs-
         // modell doppelseitig ist, Normale umdrehen
         Vector3D aVec(rVec);
-        if(rVec.Z() < 0.0 && GetLightGroup()->GetModelTwoSide())
+        // #93184# use flag from polygon normal direction to switch local normal eventually
+        if(bNormalPointsAway && GetLightGroup()->GetModelTwoSide())
             aVec = -rVec;
 
         // Die einzelnen Lichtquellen einbeziehen

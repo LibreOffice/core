@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dcommn.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: aw $ $Date: 2001-10-18 10:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@ protected:
 
     // Remember if last primitive was rejected
     BOOL                    bLastPrimitiveRejected  : 1;
+
+    // #93184# flag for polygon normal direction
+    BOOL                    bNormalPointsAway       : 1;
 
 public:
     Base3DCommon(OutputDevice* pOutDev);
