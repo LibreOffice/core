@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-01 11:14:43 $
+ *  last change: $Author: mib $ $Date: 2000-12-03 10:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,31 @@ SvXMLExport::SvXMLExport(
     pProgressBarHelper( NULL )
 {
     _InitCtor();
+}
+
+SvXMLExport::SvXMLExport(
+        const OUString &rFileName,
+        const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
+        const Reference< XModel >& rModel,
+        sal_Int16 eDfltUnit ) :
+    pImpl( 0 ),
+    sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
+    sWS( OUString::createFromAscii( sXML_WS ) ),
+    sOrigFileName( rFileName ),
+    pNamespaceMap( new SvXMLNamespaceMap ),
+    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit) ) ),
+    pAttrList( new SvXMLAttributeList ),
+    bExtended( sal_False ),
+    xHandler( rHandler ),
+    xExtHandler( rHandler, uno::UNO_QUERY ),
+    xModel( rModel ),
+    pNumExport(0L),
+    xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
+    pProgressBarHelper( NULL )
+{
+    _InitCtor();
+    if (xNumberFormatsSupplier.is())
+        pNumExport = new SvXMLNumFmtExport(rHandler, xNumberFormatsSupplier);
 }
 
 SvXMLExport::SvXMLExport(

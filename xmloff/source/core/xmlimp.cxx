@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 10:25:08 $
+ *  last change: $Author: mib $ $Date: 2000-12-03 10:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,21 @@ SvXMLImport::SvXMLImport() throw () :
     pProgressBarHelper( NULL )
 {
     _InitCtor();
+}
+
+SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
+    pImpl( 0 ),
+    pNamespaceMap( new SvXMLNamespaceMap ),
+    pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
+    pContexts( new SvXMLImportContexts_Impl ),
+    pNumImport( NULL ),
+    xModel( rModel ),
+    xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
+    pProgressBarHelper( NULL )
+{
+    _InitCtor();
+    if (xNumberFormatsSupplier.is())
+        pNumImport = new SvXMLNumFmtHelper(xNumberFormatsSupplier);
 }
 
 SvXMLImport::SvXMLImport( const Reference< XModel > & rModel,
