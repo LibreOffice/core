@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-10 09:31:26 $
+ *  last change: $Author: cmc $ $Date: 2001-07-10 13:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2633,12 +2633,12 @@ nWwNumLevel( 0 ), pStyRule( 0 )
 
 void WW8RStyle::Set1StyleDefaults()
 {
-    if( !bFontChanged )     // Style has no Font? set the default
-        pIo->SetNewFontAttr( ftcStandardChpStsh, TRUE, RES_CHRATR_FONT );
-
     if( !bCJKFontChanged )  // Style no CJK Font? set the default
         pIo->SetNewFontAttr( ftcStandardChpCJKStsh, TRUE, RES_CHRATR_CJK_FONT );
 
+    //#88976# western 2nd to make western charset conversion the default
+    if( !bFontChanged )     // Style has no Font? set the default,
+        pIo->SetNewFontAttr( ftcStandardChpStsh, TRUE, RES_CHRATR_FONT );
 
     if( !pIo->bNoAttrImport )
     {
@@ -3131,11 +3131,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.13 2001-07-10 09:31:26 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.14 2001-07-10 13:05:39 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2001/07/10 09:31:26  cmc
+      #89439# calculate style's even-byte offset relative to style start, not absolute
+
       Revision 1.12  2001/06/06 12:46:32  cmc
       #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
 
