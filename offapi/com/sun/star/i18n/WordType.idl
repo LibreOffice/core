@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WordType.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module i18n {
     <member>XBreakIterator::isBeginWord()</member>,
     <member>XBreakIterator::isEndWord()</member> </p>
 */
-constants WordType
+published constants WordType
 {
     /** Any "words" - words in the meaning of same character types,
         collection of alphanumeric characters, or collection of
