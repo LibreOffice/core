@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-22 11:23:57 $
+ *  last change: $Author: cl $ $Date: 2001-08-24 13:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,32 +386,37 @@ SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
     {
         case XML_TOK_BODY_PAGE:
         {
-            uno::Reference< drawing::XDrawPage > xNewDrawPage;
-            uno::Reference< drawing::XDrawPages > xDrawPages(GetSdImport().GetLocalDrawPages(), uno::UNO_QUERY);
-
-            if(GetSdImport().GetNewPageCount() + 1 > xDrawPages->getCount())
+            // only read the first page in preview mode
+            if( (GetSdImport().GetNewPageCount() == 0) || !GetSdImport().IsPreview() )
             {
-                // new page, create and insert
-                xNewDrawPage = xDrawPages->insertNewByIndex(xDrawPages->getCount());
-            }
-            else
-            {
-                // existing page, use it
-                uno::Any aAny(xDrawPages->getByIndex(GetSdImport().GetNewPageCount()));
-                aAny >>= xNewDrawPage;
-            }
+                // import this page
+                uno::Reference< drawing::XDrawPage > xNewDrawPage;
+                uno::Reference< drawing::XDrawPages > xDrawPages(GetSdImport().GetLocalDrawPages(), uno::UNO_QUERY);
 
-            // increment global import page counter
-            GetSdImport().IncrementNewPageCount();
-
-            if(xNewDrawPage.is())
-            {
-                uno::Reference< drawing::XShapes > xNewShapes(xNewDrawPage, uno::UNO_QUERY);
-                if(xNewShapes.is())
+                if(GetSdImport().GetNewPageCount() + 1 > xDrawPages->getCount())
                 {
-                    // draw:page inside office:body context
-                    pContext = new SdXMLDrawPageContext(GetSdImport(), nPrefix, rLocalName, xAttrList,
-                        xNewShapes);
+                    // new page, create and insert
+                    xNewDrawPage = xDrawPages->insertNewByIndex(xDrawPages->getCount());
+                }
+                else
+                {
+                    // existing page, use it
+                    uno::Any aAny(xDrawPages->getByIndex(GetSdImport().GetNewPageCount()));
+                    aAny >>= xNewDrawPage;
+                }
+
+                // increment global import page counter
+                GetSdImport().IncrementNewPageCount();
+
+                if(xNewDrawPage.is())
+                {
+                    uno::Reference< drawing::XShapes > xNewShapes(xNewDrawPage, uno::UNO_QUERY);
+                    if(xNewShapes.is())
+                    {
+                        // draw:page inside office:body context
+                        pContext = new SdXMLDrawPageContext(GetSdImport(), nPrefix, rLocalName, xAttrList,
+                            xNewShapes);
+                    }
                 }
             }
             break;

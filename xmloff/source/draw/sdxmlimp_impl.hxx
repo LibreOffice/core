@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-31 16:30:15 $
+ *  last change: $Author: cl $ $Date: 2001-08-24 13:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,10 +248,12 @@ class SdXMLImport: public SvXMLImport
 
     sal_Bool                    mbIsDraw;
     sal_Bool                    mbLoadDoc;
+    sal_Bool                    mbPreview;
 
     DrawPageIdMap               maDrawPageIds;
 
     ::rtl::OUString             msPageLayouts;
+    ::rtl::OUString             msPreview;
 
 protected:
     // This method is called after the namespace map has been updated, but
@@ -335,6 +337,8 @@ public:
 
     // #80365#
     virtual void SetStatisticAttributes(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs);
+
+    sal_Bool IsPreview() const { return mbPreview; }
 };
 
 #endif  //  _SDXMLIMP_HXX

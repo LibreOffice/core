@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-01 11:44:09 $
+ *  last change: $Author: cl $ $Date: 2001-08-24 13:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,7 +559,9 @@ SdXMLImport::SdXMLImport( sal_Bool bIsDraw, sal_uInt16 nImportFlags )
     mnNewMasterPageCount(0L),
     mbLoadDoc(sal_True),
     mbIsDraw(bIsDraw),
-    msPageLayouts( RTL_CONSTASCII_USTRINGPARAM( "PageLayouts" ) )
+    mbPreview(sal_False),
+    msPageLayouts( RTL_CONSTASCII_USTRINGPARAM( "PageLayouts" ) ),
+    msPreview( RTL_CONSTASCII_USTRINGPARAM( "Preview" ) )
 {
     // add namespaces
     GetNamespaceMap().Add(
@@ -629,6 +631,9 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
 
         if( xInfoSetInfo->hasPropertyByName( msPageLayouts ) )
             xInfoSet->getPropertyValue( msPageLayouts ) >>= mxPageLayouts;
+
+        if( xInfoSetInfo->hasPropertyByName( msPreview ) )
+            xInfoSet->getPropertyValue( msPreview ) >>= mbPreview;
     }
 }
 
