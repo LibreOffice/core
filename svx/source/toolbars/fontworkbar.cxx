@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkbar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:25:13 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,7 @@ static Window* ImpGetViewWin(SdrView* pView)
     return 0L;
 }
 
+namespace svx {
 bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
 {
     if ( nCheckStatus & 2 )
@@ -326,6 +327,7 @@ bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
         nCheckStatus |= 1;
     nCheckStatus |= 2;
     return bFound;
+}
 }
 
 static void impl_execute( SdrView* pSdrView, SfxRequest& rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
