@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-05 07:51:27 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 10:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,11 +183,11 @@ namespace dbaccess
         // fire a notification for all that are listening on column::VALUE property
         void firePropertyChange(const ORowSetMatrix::iterator& _rOldRow);
         virtual void fireRowcount() { }                             // fire if rowcount changed
-        virtual void notifyAllListenersRowBeforeChange(const ::com::sun::star::sdb::RowChangeEvent &rEvt)
-            { }                                                     // fire if rowcount changed
+        virtual sal_Bool notifyAllListenersRowBeforeChange(const ::com::sun::star::sdb::RowChangeEvent &rEvt)
+            {return sal_True; }                                                     // fire if rowcount changed
         virtual void notifyAllListenersRowChanged(const ::com::sun::star::sdb::RowChangeEvent &rEvt)
-            { }                                                     // notify row changed
-        virtual void notifyAllListenersCursorBeforeMove() { }       // notify row changed
+            {}                                                      // notify row changed
+        virtual sal_Bool notifyAllListenersCursorBeforeMove() {return sal_True; }       // notify row changed
 
         virtual void notifyAllListenersCursorMoved() { }            // notify cursor moved
         virtual void notifyAllListeners() { }                       // notify all that rowset changed

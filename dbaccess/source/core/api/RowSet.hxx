@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-05 07:51:27 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 10:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,9 +211,9 @@ namespace dbaccess
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
 
         virtual void fireRowcount();
-        virtual void notifyAllListenersRowBeforeChange(const ::com::sun::star::sdb::RowChangeEvent &rEvt);
+        virtual sal_Bool notifyAllListenersRowBeforeChange(const ::com::sun::star::sdb::RowChangeEvent &rEvt);
         virtual void notifyAllListenersRowChanged(const ::com::sun::star::sdb::RowChangeEvent &rEvt);
-        virtual void notifyAllListenersCursorBeforeMove();
+        virtual sal_Bool notifyAllListenersCursorBeforeMove();
         virtual void notifyAllListenersCursorMoved();
         virtual void notifyAllListeners();
         virtual void checkInsert();
@@ -454,6 +454,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.18  2001/04/05 07:51:27  oj
+    #85735# insert more exceptions when using in wrong order
+
     Revision 1.17  2001/02/23 15:22:32  oj
     import export changes
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-05 14:14:41 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 10:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1095,28 +1095,27 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
 
         ORowSetMatrix::iterator aOldValues = m_aCurrentRow;
         RowChangeEvent aEvt(*this,RowChangeAction::INSERT,1);
-        notifyAllListenersRowBeforeChange(aEvt);
+        if(notifyAllListenersRowBeforeChange(aEvt))
         {
             ::osl::MutexGuard aCacheGuard( m_rMutex);
             m_pCache->insertRow();
             m_aBookmark     = m_pCache->getBookmark();
             OSL_ENSURE(m_aBookmark.hasValue(),"ORowSet::insertRow bookmark has no value!");
             m_aCurrentRow   = m_pCache->m_aMatrixIter;
+            m_bAfterLast = m_bBeforeFirst = sal_False;   // we are on a valid row so this must be set to false
+
+            notifyAllListenersRowChanged(aEvt);
+            // fire PROPERTY_ID_ISNEW
+            if(m_bNew != bOld)
+                fireProperty(PROPERTY_ID_ISNEW,m_bNew,bOld);
+
+            // fire property modified
+            if(!m_bModified)
+                fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
+
+            ORowSetBase::firePropertyChange(aOldValues);
+            fireRowcount();
         }
-
-        m_bAfterLast = m_bBeforeFirst = sal_False;   // we are on a valid row so this must be set to false
-
-        notifyAllListenersRowChanged(aEvt);
-        // fire PROPERTY_ID_ISNEW
-        if(m_bNew != bOld)
-            fireProperty(PROPERTY_ID_ISNEW,m_bNew,bOld);
-
-        // fire property modified
-        if(!m_bModified)
-            fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
-
-        ORowSetBase::firePropertyChange(aOldValues);
-        fireRowcount();
     }
 }
 // -------------------------------------------------------------------------
@@ -1149,16 +1148,18 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
         ORowSetMatrix::iterator aOldValues = m_aCurrentRow;
 
         RowChangeEvent aEvt(*this,RowChangeAction::UPDATE,1);
-        notifyAllListenersRowBeforeChange(aEvt);
-        m_pCache->updateRow(m_aCurrentRow.operator ->());
-        m_aBookmark     = m_pCache->getBookmark();
-        m_aCurrentRow   = m_pCache->m_aMatrixIter;
-        notifyAllListenersRowChanged(aEvt);
+        if(notifyAllListenersRowBeforeChange(aEvt))
+        {
+            m_pCache->updateRow(m_aCurrentRow.operator ->());
+            m_aBookmark     = m_pCache->getBookmark();
+            m_aCurrentRow   = m_pCache->m_aMatrixIter;
+            notifyAllListenersRowChanged(aEvt);
 
-        ORowSetBase::firePropertyChange(aOldValues);
-        // fire property modified
-        if(!m_bModified)
-            fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
+            ORowSetBase::firePropertyChange(aOldValues);
+            // fire property modified
+            if(!m_bModified)
+                fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
+        }
     }
 }
 // -------------------------------------------------------------------------
@@ -1193,18 +1194,20 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
     ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
     RowChangeEvent aEvt(*this,RowChangeAction::DELETE,1);
-    notifyAllListenersRowBeforeChange(aEvt);
-    m_nPosition = m_pCache->getRow();
-    m_pCache->deleteRow();
-    notifyClonesRowDeleted(m_aBookmark);
+    if(notifyAllListenersRowBeforeChange(aEvt))
+    {
+        m_nPosition = m_pCache->getRow();
+        m_pCache->deleteRow();
+        notifyClonesRowDeleted(m_aBookmark);
 
-    m_aBookmark     = Any();
-    m_aCurrentRow   = NULL;
-    m_aCurrentRow.setBookmark(Any());
+        m_aBookmark     = Any();
+        m_aCurrentRow   = NULL;
+        m_aCurrentRow.setBookmark(Any());
 
-    notifyAllListenersRowChanged(aEvt);
-    ORowSetBase::firePropertyChange(aOldValues);
-    fireRowcount();
+        notifyAllListenersRowChanged(aEvt);
+        ORowSetBase::firePropertyChange(aOldValues);
+        fireRowcount();
+    }
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
@@ -1282,19 +1285,23 @@ void ORowSet::notifyAllListenersRowChanged(const RowChangeEvent &rEvt)
         ((XRowSetListener*)aIter.next())->rowChanged(rEvt);
 }
 // -------------------------------------------------------------------------
-void ORowSet::notifyAllListenersCursorBeforeMove()
+sal_Bool ORowSet::notifyAllListenersCursorBeforeMove()
 {
     EventObject aEvt(*m_pMySelf);
     OInterfaceIteratorHelper aIter(m_aApproveListeners);
-    while (aIter.hasMoreElements())
-        ((XRowSetApproveListener*)aIter.next())->approveCursorMove(aEvt);
+    sal_Bool bReturn = sal_True;
+    while (aIter.hasMoreElements() && bReturn)
+        bReturn =((XRowSetApproveListener*)aIter.next())->approveCursorMove(aEvt);
+    return bReturn;
 }
 // -------------------------------------------------------------------------
-void ORowSet::notifyAllListenersRowBeforeChange(const RowChangeEvent &rEvt)
+sal_Bool ORowSet::notifyAllListenersRowBeforeChange(const RowChangeEvent &rEvt)
 {
+    sal_Bool bReturn = sal_True;
     OInterfaceIteratorHelper aIter(m_aApproveListeners);
-    while (aIter.hasMoreElements())
-        ((XRowSetApproveListener*)aIter.next())->approveRowChange(rEvt);
+    while (aIter.hasMoreElements() && bReturn)
+        bReturn = ((XRowSetApproveListener*)aIter.next())->approveRowChange(rEvt);
+    return bReturn;
 }
 // -------------------------------------------------------------------------
 void ORowSet::fireRowcount()
@@ -1327,23 +1334,27 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    // remember old value for fire
-    if(m_aBookmark.hasValue())
-        m_pCache->moveToBookmark(m_aBookmark);
 
-    ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
-    sal_Bool bOld = m_bNew;
+    if(notifyAllListenersCursorBeforeMove())
+    {
+        // remember old value for fire
+        if(m_aBookmark.hasValue())
+            m_pCache->moveToBookmark(m_aBookmark);
 
-    notifyAllListenersCursorBeforeMove();
-    m_pCache->moveToInsertRow();
-    m_aCurrentRow = m_pCache->m_aInsertRow;
-    notifyAllListenersCursorMoved();
-    ORowSetBase::firePropertyChange(aOldValues);
+        ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
-    // fire PROPERTY_ID_ISNEW
-    if(m_bNew != bOld)
-        fireProperty(PROPERTY_ID_ISNEW,m_bNew,bOld);
+        sal_Bool bOld = m_bNew;
+
+        m_pCache->moveToInsertRow();
+        m_aCurrentRow = m_pCache->m_aInsertRow;
+        notifyAllListenersCursorMoved();
+        ORowSetBase::firePropertyChange(aOldValues);
+
+        // fire PROPERTY_ID_ISNEW
+        if(m_bNew != bOld)
+            fireProperty(PROPERTY_ID_ISNEW,m_bNew,bOld);
+    }
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
@@ -1358,14 +1369,15 @@ void SAL_CALL ORowSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
 
     if(m_pCache && m_pCache->m_bInserted)
     {
-        if(m_aBookmark.hasValue())
-            m_pCache->moveToBookmark(m_aBookmark);
+        if(notifyAllListenersCursorBeforeMove())
+        {
+            if(m_aBookmark.hasValue())
+                m_pCache->moveToBookmark(m_aBookmark);
+            m_pCache->moveToCurrentRow();
+            notifyAllListenersCursorMoved();
 
-        notifyAllListenersCursorBeforeMove();
-        m_pCache->moveToCurrentRow();
-        notifyAllListenersCursorMoved();
-
-        checkInsert();
+            checkInsert();
+        }
     }
 }
 // -------------------------------------------------------------------------
@@ -2080,49 +2092,52 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
 
     ::osl::MutexGuard aGuard( m_rMutex );
 
+    Sequence< sal_Int32 > aRet;
     RowChangeEvent aEvt(*this,RowChangeAction::DELETE,rows.getLength());
     // notify the rowset listeners
-    notifyAllListenersRowBeforeChange(aEvt);
-
-    // first notify the clones so that they can save their position
-    const Any* pBegin = rows.getConstArray();
-    const Any* pEnd   = pBegin + rows.getLength();
-    for(;pBegin != pEnd;++pBegin)
+    if(notifyAllListenersRowBeforeChange(aEvt))
     {
-        notifyClonesRowDelete(*pBegin);
-        if(compareBookmarks( m_aBookmark,*pBegin) == 0)
-        {
-            if(m_aBookmark.hasValue())
-                m_pCache->moveToBookmark(m_aBookmark);
-            m_nPosition = m_pCache->getRow();
-        }
-    }
-    // now delete the rows
-    Sequence< sal_Int32 > aRet = m_pCache->deleteRows(rows);
 
-    // now notify that we have deleted
-    pBegin = rows.getConstArray();
-
-    const sal_Int32* pRetBegin  = aRet.getConstArray();
-    const sal_Int32* pRetEnd    = pRetBegin + aRet.getLength();
-    OSL_ENSURE(aRet.getLength() == rows.getLength(),"ORowSet::deleteRows: The length of the rows and returnstatus is not equal!");
-    for(;pBegin != pEnd;++pBegin)
-    {
-        if(*pRetBegin)
+        // first notify the clones so that they can save their position
+        const Any* pBegin = rows.getConstArray();
+        const Any* pEnd   = pBegin + rows.getLength();
+        for(;pBegin != pEnd;++pBegin)
         {
-            notifyClonesRowDeleted(*pBegin);
+            notifyClonesRowDelete(*pBegin);
             if(compareBookmarks( m_aBookmark,*pBegin) == 0)
             {
-                m_aBookmark     = Any();
-                m_aCurrentRow   = NULL;
-                m_aCurrentRow.setBookmark(Any());
+                if(m_aBookmark.hasValue())
+                    m_pCache->moveToBookmark(m_aBookmark);
+                m_nPosition = m_pCache->getRow();
             }
         }
-    }
+        // now delete the rows
+        aRet = m_pCache->deleteRows(rows);
 
-    aEvt.Rows = aRet.getLength();
-    notifyAllListenersRowChanged(aEvt);
-    fireRowcount();
+        // now notify that we have deleted
+        pBegin = rows.getConstArray();
+
+        const sal_Int32* pRetBegin  = aRet.getConstArray();
+        const sal_Int32* pRetEnd    = pRetBegin + aRet.getLength();
+        OSL_ENSURE(aRet.getLength() == rows.getLength(),"ORowSet::deleteRows: The length of the rows and returnstatus is not equal!");
+        for(;pBegin != pEnd;++pBegin)
+        {
+            if(*pRetBegin)
+            {
+                notifyClonesRowDeleted(*pBegin);
+                if(compareBookmarks( m_aBookmark,*pBegin) == 0)
+                {
+                    m_aBookmark     = Any();
+                    m_aCurrentRow   = NULL;
+                    m_aCurrentRow.setBookmark(Any());
+                }
+            }
+        }
+
+        aEvt.Rows = aRet.getLength();
+        notifyAllListenersRowChanged(aEvt);
+        fireRowcount();
+    }
     return aRet;
 }
 // -----------------------------------------------------------------------------
