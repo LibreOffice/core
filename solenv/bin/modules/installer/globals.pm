@@ -124,6 +124,7 @@ BEGIN
     $temppathdefined = 0;
     $packageversion = 1;
     $packagerevision = 1;
+    $rpmcommand = "";
 
     $is_special_epm = 0;
     $epm_in_path = 0;
