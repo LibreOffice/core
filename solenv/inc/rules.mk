@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-12 17:35:14 $
+#   last change: $Author: hjs $ $Date: 2001-02-13 11:32:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -435,13 +435,13 @@ $(MISC)$/o_%.dpcc :
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @+echo $@ : $(OBJ)$/$(@:b:s/o_//).obj > $@
+    @+echo $@ : $(OBJ)$/$(@:b:^"__":s/__o_//).obj > $@
    
 $(MISC)$/s_%.dpcc :
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    @+echo $@ : $(SLO)$/$(@:b:s/s_//).obj > $@
+    @+echo $@ : $(SLO)$/$(@:b::^"__":s/__s_//).obj > $@
 
 # dependencies script files
 
