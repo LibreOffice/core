@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskcreator.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-08-10 11:54:25 $
+ *  last change: $Author: as $ $Date: 2001-08-16 09:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,10 +193,13 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createSystemTask( const T
                 // (task member xParent will automaticly set by "append()" call!)
 
                 // ! sTaskName already filtered by TaskInfo structure! Special targets are not allowed here ...
+
+                // Disable task window first! Otherwise it's visible during showing of any progress
+                // and user interaction could make some trouble ... GPF is possible!
+                // So we disable it here ... and our loading proccess enable it after successfully operation.
                 xTask->initialize  ( xWindow         );
                 xTask->setName     ( aInfo.sTaskName );
                 xContainer->append ( xTask           );
-                xWindow->setVisible( aInfo.bVisible  );
             }
         }
     }
