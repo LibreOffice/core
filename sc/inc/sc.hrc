@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 18:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,8 @@
 //  wrong group - HID_SC_DLG_START is full
 #define HID_SC_RENAME_AUTOFMT   ( HID_SC_TOOLBOX_START + 5 )
 #define HID_SC_REN_AFMT_NAME    ( HID_SC_TOOLBOX_START + 6 )
+
+#define HID_SC_TOOLBOX_GRAPHIC  ( HID_SC_TOOLBOX_START + 7 )
 
 // Hilfe IDs fuer Submenus (max.50) ------------------------------------------
 #define HID_SCMENU_EDIT         ( HID_SC_MENU_START )
@@ -709,9 +711,6 @@
 
 #define DRAW_BAR_END            (DRAW_BAR_START+50)
 
-#define DRAW_OBJECTBAR_START    (DRAW_BAR_END)
-#define RID_DRAW_OBJECTBAR      DRAW_OBJECTBAR_START
-
 #define DRAWTEXTBAR_START       (DRAW_BAR_END)
 #define SID_TEXT_LINESPACING_1  (DRAWTEXTBAR_START)
 #define SID_TEXT_LINESPACING_2  (DRAWTEXTBAR_START+1)
@@ -1009,6 +1008,8 @@
 #define RID_SC_ADDIN_ROT13      (SC_RESOURCE_START+50)
 #define RID_SC_ADDIN_DFA        (SC_RESOURCE_START+51)
 #define RID_IMAGELIST_NAVCONT   (SC_RESOURCE_START+52)
+#define RID_DRAW_OBJECTBAR      (SC_RESOURCE_START+53)
+#define RID_GRAPHIC_OBJECTBAR   (SC_RESOURCE_START+54)
 
 
 #define STR_START               (SC_RESOURCE_START+100)
