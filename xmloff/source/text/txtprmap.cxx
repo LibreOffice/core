@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-04 13:42:32 $
+ *  last change: $Author: dvo $ $Date: 2002-04-05 09:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,6 +736,8 @@ XMLPropertyMapEntry aXMLSectionPropMap[] =
 
     // move protect-flag into section element
 //  M_E( "IsProtected",         STYLE,  PROTECT,    XML_TYPE_BOOL, 0 ),
+
+    M_E( "DontBalanceTextColumns", TEXT, DONT_BALANCE_TEXT_COLUMNS, XML_TYPE_BOOL, 0 ),
 
     // section footnote settings
     M_E( "FootnoteIsOwnNumbering",      TEXT,   _EMPTY, MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL,    CTF_SECTION_FOOTNOTE_NUM_OWN ),
