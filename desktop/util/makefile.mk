@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:15:12 $
+#   last change: $Author: cd $ $Date: 2000-10-23 08:27:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,7 +122,8 @@ APP1STDLIBS= 		\
                 $(SCLIB)                \
                 $(SBALIB)               \
                 $(SVXLIB)               \
-    $(UNOTOOLSLIB)
+    $(UNOTOOLSLIB)						\
+    $(COMPHELPERLIB)
 
 .IF "$(OS)" == "SOLARIS"
 # for Java applets
