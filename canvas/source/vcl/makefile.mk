@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: thb $ $Date: 2004-03-18 10:38:43 $
+#   last change: $Author: rt $ $Date: 2004-11-26 17:13:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,24 +79,31 @@ CDEFS+= -DVERBOSE
 
 SLOFILES =	$(SLO)$/spritecanvas.obj \
             $(SLO)$/linepolypolygon.obj \
+            $(SLO)$/backbuffer.obj \
+            $(SLO)$/bitmapbackbuffer.obj \
             $(SLO)$/canvasfont.obj \
-            $(SLO)$/graphicdevice.obj \
+            $(SLO)$/windowgraphicdevice.obj \
             $(SLO)$/canvasbitmap.obj \
-            $(SLO)$/canvasbase.obj \
-            $(SLO)$/bitmapcanvas.obj \
+            $(SLO)$/canvasbitmaphelper.obj \
+            $(SLO)$/canvashelper.obj \
+            $(SLO)$/textlayout.obj \
             $(SLO)$/canvascustomsprite.obj \
             $(SLO)$/redrawmanager.obj \
-            $(SLO)$/impltools.obj
+            $(SLO)$/impltools.obj \
+            $(SLO)$/parametricpolypolygon.obj
 
 SHL1TARGET=$(TARGET).uno
 
 SHL1STDLIBS= $(TOOLSLIB) $(CPPULIB) $(SALLIB) $(VCLLIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(BASEGFXLIB) $(CANVASTOOLSLIB)
 
-#SHL1VERSIONMAP=$(TARGET).map
-
 SHL1IMPLIB=i$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+
+.IF "$(OS)"=="MACOSX"
+.ELSE
+SHL1VERSIONMAP=exports.map
+.ENDIF 
 
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
