@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: rt $ $Date: 2004-10-28 16:29:35 $
+#   last change: $Author: hr $ $Date: 2004-12-10 18:39:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 
 # --- Files --------------------------------------------------------
 
