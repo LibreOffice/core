@@ -117,6 +117,8 @@
 "ORowSet";"com::sun::star::sdb::RowSet";"UpdateTableName#optional"
 "ORowSet";"com::sun::star::sdb::RowSet";"UpdateCatalogName#optional"
 "ORowSet";"com::sun::star::sdb::RowSet";"UpdateSchemaName#optional"
+"ORowSet";"com::sun::star::sdb::RowSet";"HavingClause#optional"
+"ORowSet";"com::sun::star::sdb::RowSet";"GroupBy#optional"
 "ORowSet";"com::sun::star::sdbc::XRow";"wasNull()"
 "ORowSet";"com::sun::star::sdbc::XRow";"getString()"
 "ORowSet";"com::sun::star::sdbc::XRow";"getBoolean()"
