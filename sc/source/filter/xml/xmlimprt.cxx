@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-27 17:01:19 $
+ *  last change: $Author: sab $ $Date: 2002-12-02 12:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1679,6 +1679,8 @@ SvXMLImportContext *ScXMLImport::CreateScriptContext(
 
 void ScXMLImport::SetStatisticAttributes( const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
+    SvXMLImport::SetStatisticAttributes(xAttrList);
+
     sal_uInt32 nCount(0);
     INT16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( INT16 i=0; i < nAttrCount; i++ )
