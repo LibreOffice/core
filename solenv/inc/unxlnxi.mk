@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlnxi.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 08:39:11 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:30:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,13 +89,14 @@ CFLAGS=-c -I. -I/usr/solar/inc/pthread_provenzano -I$(INC) -I$(INCLOCAL) -I$(INC
 CFLAGSCC=-pipe -mpentium -fguiding-decls
 CFLAGSCXX=-pipe -mpentium -fguiding-decls
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
+PICSWITCH:=-fpic
 #STDOBJVCL=$(L)$/salmain.o
 CFLAGSOBJGUIST=
 CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
 CFLAGSOBJCUIMT=
-CFLAGSSLOGUIMT=-fpic
-CFLAGSSLOCUIMT=-fpic
+CFLAGSSLOGUIMT=$(PICSWITCH)
+CFLAGSSLOCUIMT=$(PICSWITCH)
 CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
