@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-19 16:50:12 $
+ *  last change: $Author: bm $ $Date: 2003-11-20 17:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include "ColumnLineChartTypeTemplate.hxx"
 #include "AreaChartTypeTemplate.hxx"
 #include "PieChartTypeTemplate.hxx"
+#include "ScatterChartTypeTemplate.hxx"
 
 #ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
 #include <cppuhelper/component_context.hxx>
@@ -124,7 +125,7 @@ enum
 {
     PROP_TEMPLATE_MANAGER_CHART_TEMPLATE_NAME,
     PROP_TEMPLATE_MANAGER_SOLID_TYPE,
-    PROP_TEMPLATE_MANAGER_NUMBER_OF_LINES,
+//     PROP_TEMPLATE_MANAGER_NUMBER_OF_LINES,
     PROP_TEMPLATE_MANAGER_SPLINE_ORDER,
     PROP_TEMPLATE_MANAGER_SPLINE_RESOLUTION
 };
@@ -148,12 +149,12 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    rOutProperties.push_back(
-        Property( C2U( "NumberOfLines" ),
-                  PROP_TEMPLATE_MANAGER_NUMBER_OF_LINES,
-                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+//     rOutProperties.push_back(
+//         Property( C2U( "NumberOfLines" ),
+//                   PROP_TEMPLATE_MANAGER_NUMBER_OF_LINES,
+//                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+//                   beans::PropertyAttribute::BOUND
+//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( C2U( "SplineOrder" ),
@@ -182,9 +183,9 @@ void lcl_AddDefaultsToMap(
     rOutMap[ PROP_TEMPLATE_MANAGER_SOLID_TYPE ] =
         uno::makeAny( ::com::sun::star::chart::ChartSolidType::RECTANGULAR_SOLID );
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TEMPLATE_MANAGER_NUMBER_OF_LINES ));
-    rOutMap[ PROP_TEMPLATE_MANAGER_NUMBER_OF_LINES ] =
-        uno::makeAny( sal_Int32( 0 ));
+//     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TEMPLATE_MANAGER_NUMBER_OF_LINES ));
+//     rOutMap[ PROP_TEMPLATE_MANAGER_NUMBER_OF_LINES ] =
+//         uno::makeAny( sal_Int32( 0 ));
 
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TEMPLATE_MANAGER_SPLINE_ORDER ));
     rOutMap[ PROP_TEMPLATE_MANAGER_SPLINE_ORDER ] =
@@ -278,7 +279,7 @@ enum TemplateId
     TEMPLATE_SURFACE,
     TEMPLATE_THREEDSCATTER,
     TEMPLATE_THREEDSCATTERSYMBOL,
-    TEMPLATE_ADDIN,
+//     TEMPLATE_ADDIN,
     TEMPLATE_NOT_FOUND = 0xffff
 };
 
@@ -346,7 +347,7 @@ const tTemplateMapType & lcl_DefaultChartTypeMap()
         ( C2U( "com.sun.star.chart2.template.Surface" ),                        TEMPLATE_SURFACE )
         ( C2U( "com.sun.star.chart2.template.ThreeDScatter" ),                  TEMPLATE_THREEDSCATTER )
         ( C2U( "com.sun.star.chart2.template.ThreeDScatterSymbol" ),            TEMPLATE_THREEDSCATTERSYMBOL )
-        ( C2U( "com.sun.star.chart2.template.Addin" ),                          TEMPLATE_ADDIN )
+//         ( C2U( "com.sun.star.chart2.template.Addin" ),                          TEMPLATE_ADDIN )
         );
 
     return aMap;
@@ -515,10 +516,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
                 chart2::StackMode eMode = ( nId == TEMPLATE_COLUMNWITHLINE )
                     ? chart2::StackMode_NONE
                     : chart2::StackMode_STACKED;
-                sal_Int32 nNumOfLines = 1;
-                getFastPropertyValue( PROP_TEMPLATE_MANAGER_NUMBER_OF_LINES ) >>= nNumOfLines;
 
-                xTemplate.set( new ColumnLineChartTypeTemplate( m_xContext, aServiceSpecifier, eMode, nNumOfLines ));
+                xTemplate.set( new ColumnLineChartTypeTemplate( m_xContext, aServiceSpecifier, eMode, 1 ));
             }
             break;
 
@@ -564,12 +563,33 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
                 break;
 
             case TEMPLATE_SCATTERLINESYMBOL:
+                xTemplate.set( new ScatterChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::CurveStyle_LINES, true ));
+                break;
             case TEMPLATE_CUBICSPLINESCATTER:
+                xTemplate.set( new ScatterChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::CurveStyle_CUBIC_SPLINES, false ));
+                break;
             case TEMPLATE_CUBICSPLINESCATTERSYMBOL:
+                xTemplate.set( new ScatterChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::CurveStyle_CUBIC_SPLINES, true ));
+                break;
             case TEMPLATE_BSPLINESCATTER:
+                xTemplate.set( new ScatterChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::CurveStyle_B_SPLINES, false ));
+                break;
             case TEMPLATE_BSPLINESCATTERSYMBOL:
+                xTemplate.set( new ScatterChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::CurveStyle_B_SPLINES, true ));
+                break;
             case TEMPLATE_SCATTERLINE:
+                xTemplate.set( new ScatterChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::CurveStyle_LINES, false ));
+                break;
             case TEMPLATE_SCATTERSYMBOL:
+                xTemplate.set( new ScatterChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::CurveStyle_NONE, true ));
+                break;
 
             // TEST !!!
             case TEMPLATE_NET:
@@ -599,7 +619,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
             case TEMPLATE_SURFACE:
             case TEMPLATE_THREEDSCATTER:
             case TEMPLATE_THREEDSCATTERSYMBOL:
-            case TEMPLATE_ADDIN:
+//             case TEMPLATE_ADDIN:
                 break;
 
             case TEMPLATE_NOT_FOUND:

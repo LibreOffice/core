@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnLineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:33 $
+ *  last change: $Author: bm $ $Date: 2003-11-20 17:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "LineChartType.hxx"
 #include "BarChartType.hxx"
 #include "algohelper.hxx"
+#include "DataSeriesTreeHelper.hxx"
 
 #ifndef CHART_PROPERTYHELPER_HXX
 #include "PropertyHelper.hxx"
@@ -166,7 +167,6 @@ ColumnLineChartTypeTemplate::ColumnLineChartTypeTemplate(
 
 ColumnLineChartTypeTemplate::~ColumnLineChartTypeTemplate()
 {}
-
 
 // ____ OPropertySet ____
 uno::Any ColumnLineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
@@ -296,10 +296,56 @@ Reference< chart2::XDataSeriesTreeParent > ColumnLineChartTypeTemplate::createDa
     return aRoot;
 }
 
+chart2::StackMode ColumnLineChartTypeTemplate::getStackMode() const
+{
+    return m_eStackMode;
+}
+
 uno::Reference< chart2::XChartType > ColumnLineChartTypeTemplate::getDefaultChartType()
     throw (uno::RuntimeException)
 {
     return new LineChartType();
+}
+
+
+// ____ XChartTypeTemplate ____
+sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
+    const uno::Reference< chart2::XDiagram >& xDiagram )
+    throw (uno::RuntimeException)
+{
+    sal_Bool bResult = sal_False;
+
+    if( ! xDiagram.is())
+        return bResult;
+
+    try
+    {
+        uno::Reference< chart2::XDataSeriesTreeParent > xParent( xDiagram->getTree(), uno::UNO_QUERY_THROW );
+        ::std::vector< uno::Reference< chart2::XChartTypeGroup > > aChartTypeGroups(
+            helper::DataSeriesTreeHelper::getChartTypes( xParent ));
+
+        if( aChartTypeGroups.size() == 2 &&
+            aChartTypeGroups[0].is() &&
+            aChartTypeGroups[1].is() &&
+            aChartTypeGroups[0]->getChartType().is() &&
+            aChartTypeGroups[1]->getChartType().is() &&
+            aChartTypeGroups[0]->getChartType()->getChartType().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.BarChart" )) &&
+            aChartTypeGroups[1]->getChartType()->getChartType().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.LineChart" )) )
+        {
+            bResult = ( helper::DataSeriesTreeHelper::getStackMode(
+                            uno::Reference< chart2::XDataSeriesTreeParent >(
+                                aChartTypeGroups[0], uno::UNO_QUERY )) ==
+                        getStackMode() );
+        }
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return bResult;
 }
 
 // ----------------------------------------

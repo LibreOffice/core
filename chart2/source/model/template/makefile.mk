@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: bm $ $Date: 2003-11-04 12:37:36 $
+#   last change: $Author: bm $ $Date: 2003-11-20 17:07:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,9 @@ SLOFILES=	\
     $(SLO)$/LineChartType.obj \
     $(SLO)$/LineChartTypeTemplate.obj \
     $(SLO)$/PieChartType.obj \
-    $(SLO)$/PieChartTypeTemplate.obj
+    $(SLO)$/PieChartTypeTemplate.obj \
+    $(SLO)$/ScatterChartType.obj \
+    $(SLO)$/ScatterChartTypeTemplate.obj
 
 # --- Targets -----------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 17:18:22 $
+ *  last change: $Author: bm $ $Date: 2003-11-20 17:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,54 @@ Reference< chart2::XDiagram > SAL_CALL ChartTypeTemplate::createDiagram(
     }
 
     return xDia;
+}
+
+sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
+    const uno::Reference< chart2::XDiagram >& xDiagram )
+    throw (uno::RuntimeException)
+{
+    sal_Bool bResult = sal_False;
+
+    if( ! xDiagram.is())
+        return bResult;
+
+    try
+    {
+        uno::Reference< chart2::XDataSeriesTreeParent > xParent( xDiagram->getTree(), uno::UNO_QUERY_THROW );
+
+        ::std::vector< uno::Reference< chart2::XChartTypeGroup > > aChartTypes(
+            helper::DataSeriesTreeHelper::getChartTypes( xParent ));
+
+        if( aChartTypes.size() == 1 &&
+            aChartTypes[0].is() &&
+            aChartTypes[0]->getChartType().is() )
+        {
+            if( aChartTypes[0]->getChartType()->getChartType().equals(
+                    getDefaultChartType()->getChartType()))
+            {
+                uno::Reference< beans::XPropertySet > xProp( aChartTypes[0], uno::UNO_QUERY );
+                sal_Int32 nDim;
+                if( xProp.is() &&
+                    (xProp->getPropertyValue( C2U( "Dimension" )) >>= nDim ))
+                {
+                    bResult = (nDim == getDimension());
+                }
+                else
+                    // correct chart type, but without Dimension property
+                    bResult = sal_True;
+
+                if( bResult )
+                    bResult = ( helper::DataSeriesTreeHelper::getStackMode( xParent ) ==
+                                getStackMode() );
+            }
+        }
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return bResult;
 }
 
 // ____ XServiceName ____

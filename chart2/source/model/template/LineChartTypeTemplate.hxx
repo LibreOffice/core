@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-19 16:50:13 $
+ *  last change: $Author: bm $ $Date: 2003-11-20 17:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@ protected:
         createDiagram( const ::com::sun::star::uno::Sequence<
                            ::com::sun::star::uno::Reference<
                                ::drafts::com::sun::star::chart2::XDataSeries > >& aSeriesSeq )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL matchesTemplate(
+        const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XDiagram >& xDiagram )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ ChartTypeTemplate ____

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ChartType.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 13:28:37 $
+ *  last change: $Author: bm $ $Date: 2003-11-20 17:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,9 @@
 //#define CHTYPE_DONUT          9
 #define CHTYPE_STOCK           10
 //#define CHTYPE_ADDIN         11
+
+using namespace ::com::sun::star;
+using namespace ::drafts::com::sun::star;
 
 //.............................................................................
 namespace
@@ -304,10 +307,42 @@ bool lcl_IsCombiChart( SvxChartStyle eStyle )
     return false;
 }
 
-} // anonymous namespace
+::rtl::OUString lcl_getTemplateForTree(
+    const uno::Reference< chart2::XDiagram > & xDiagram,
+    const uno::Reference< lang::XMultiServiceFactory > & xCTManager )
+{
+    ::rtl::OUString aResult;
 
-using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
+    if( ! (xCTManager.is() && xDiagram.is()))
+        return aResult;
+
+    uno::Sequence< ::rtl::OUString > aServiceNames( xCTManager->getAvailableServiceNames());
+    const sal_Int32 nLength = aServiceNames.getLength();
+
+    for( sal_Int32 i = 0; i < nLength; ++i )
+    {
+        try
+        {
+            OSL_TRACE( U2C( aServiceNames[i] ));
+            uno::Reference< chart2::XChartTypeTemplate > xTempl(
+                xCTManager->createInstance( aServiceNames[ i ] ), uno::UNO_QUERY_THROW );
+
+            if( xTempl->matchesTemplate( xDiagram ))
+            {
+                aResult = aServiceNames[ i ];
+                break;
+            }
+        }
+        catch( uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+    }
+
+    return aResult;
+}
+
+} // anonymous namespace
 
 //.............................................................................
 namespace chart
@@ -401,7 +436,7 @@ void SchDiagramTypeDlg::Reset()
 
     uno::Reference< chart2::XDataSeriesTreeParent > xTree( m_xDiagram->getTree());
     SvxChartStyle eStyle = lcl_GetChartStyleForTemplateServiceName(
-        helper::DataSeriesTreeHelper::getChartTypeTemplateServiceName( xTree ));
+        lcl_getTemplateForTree( m_xDiagram, m_xTemplateManager ));
 
     USHORT nType;
     ChartDimension eDim;
@@ -548,18 +583,34 @@ void SchDiagramTypeDlg::Reset()
         aMtrFldNumLines.SetValue( nNumLines );
     }
 
+    sal_Int32 nReso = 20;
+    sal_Int32 nDepth = 3;
     if( lcl_IsBSplineChart( eStyle ) ||
         lcl_IsCubicSplineChart( eStyle ))
     {
-        // todo: take model value (XChartType)
-        SetGranularity( 20 );
-
-        if( lcl_IsBSplineChart( eStyle ))
+        try
         {
-            // todo: take model value (XChartType)
-            SetDepth( 3 );
+            uno::Reference< beans::XPropertySet > xChartTypeProp(
+                helper::DataSeriesTreeHelper::getChartTypeByIndex(
+                    xTree, 0 ), uno::UNO_QUERY_THROW );
+
+            if( ! (xChartTypeProp->getPropertyValue( C2U( "CurveResolution" )) >>= nReso) )
+                nReso = 20;
+
+            if( lcl_IsBSplineChart( eStyle ))
+            {
+                if( ! (xChartTypeProp->getPropertyValue( C2U( "SplineOrder" )) >>= nDepth) )
+                    nDepth = 3;
+            }
         }
+        catch( uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+
     }
+    SetGranularity( nReso );
+    SetDepth( nDepth );
 }
 
 /*************************************************************************
@@ -570,7 +621,7 @@ void SchDiagramTypeDlg::Reset()
 
 void SchDiagramTypeDlg::FillTypeSet(ChartDimension eDim, bool bForce /* default: false */ )
 {
-    if (eDim != eDimension || bForce)
+    if (eDim != eDimension )//|| bForce)
     {
         eDimension = eDim;
 
@@ -968,9 +1019,8 @@ void SchDiagramTypeDlg::FillVariantSet(USHORT nType)
 
     USHORT nSelId = aCtlVariant.GetItemId(0);
 
-    uno::Reference< chart2::XDataSeriesTreeParent > xTree( m_xDiagram->getTree());
     SvxChartStyle eStyle = lcl_GetChartStyleForTemplateServiceName(
-        helper::DataSeriesTreeHelper::getChartTypeTemplateServiceName( xTree ));
+        lcl_getTemplateForTree( m_xDiagram, m_xTemplateManager ));
 
     USHORT nId = static_cast< USHORT >( eStyle ) + 1;
 //         (USHORT)((const SvxChartStyleItem*)pPoolItem)->GetValue() + 1;
@@ -1128,7 +1178,8 @@ void SchDiagramTypeDlg::SwitchDepth( SvxChartStyle eID )
         aMtrFldDeep.Show ();
     }
 
-    if( lcl_IsCubicSplineChart( eID ))
+    if( lcl_IsCubicSplineChart( eID ) ||
+        lcl_IsBSplineChart( eID ) )
     {
         aFtGran.Show ();
         aMtrFldGran.Show ();

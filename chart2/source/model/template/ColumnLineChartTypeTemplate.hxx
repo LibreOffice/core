@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnLineChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:34 $
+ *  last change: $Author: bm $ $Date: 2003-11-20 17:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,12 @@ protected:
         getPropertySetInfo()
         throw (::com::sun::star::uno::RuntimeException);
 
+    // ____ XChartTypeTemplate ____
+    virtual sal_Bool SAL_CALL matchesTemplate(
+        const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XDiagram >& xDiagram )
+        throw (::com::sun::star::uno::RuntimeException);
+
     // ____ ChartTypeTemplate ____
     virtual ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::chart2::XDataSeriesTreeParent > createDataSeriesTree(
@@ -119,6 +125,8 @@ protected:
             const ::com::sun::star::uno::Reference<
                 ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys
             );
+
+    virtual ::drafts::com::sun::star::chart2::StackMode getStackMode() const;
 
     virtual ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::chart2::XChartType > getDefaultChartType()

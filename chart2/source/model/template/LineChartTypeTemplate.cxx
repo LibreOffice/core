@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-19 17:26:38 $
+ *  last change: $Author: bm $ $Date: 2003-11-20 17:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #include "LineChartTypeTemplate.hxx"
 #include "LineChartType.hxx"
 #include "macros.hxx"
+#include "DataSeriesTreeHelper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLSTYLE_HPP_
 #include <drafts/com/sun/star/chart2/SymbolStyle.hpp>
@@ -143,6 +144,66 @@ uno::Reference< chart2::XDiagram > SAL_CALL
     // todo: set symbol type at data points
 
     return ChartTypeTemplate::createDiagram( aSeriesSeq );
+}
+
+sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
+    const uno::Reference< chart2::XDiagram >& xDiagram )
+    throw (uno::RuntimeException)
+{
+    sal_Bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram );
+
+    // check curve-style
+    if( bResult )
+    {
+        try
+        {
+            uno::Reference< beans::XPropertySet > xCTProp(
+                helper::DataSeriesTreeHelper::getChartTypeByIndex( xDiagram->getTree(), 0 ),
+                uno::UNO_QUERY_THROW );
+            chart2::CurveStyle eCurveStyle;
+            if( xCTProp->getPropertyValue( C2U( "CurveStyle" )) >>= eCurveStyle )
+            {
+                bResult = ( eCurveStyle == m_eCurveStyle );
+            }
+        }
+        catch( uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+    }
+
+    // check symbol-style
+    if( bResult )
+    {
+        uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesSeq(
+            helper::DataSeriesTreeHelper::getDataSeriesFromDiagram( xDiagram ));
+        chart2::SymbolStyle eStyle = m_bHasSymbols
+            ? chart2::SymbolStyle_STANDARD
+            : chart2::SymbolStyle_NONE;
+
+        for( sal_Int32 i = 0; i < aSeriesSeq.getLength(); ++i )
+        {
+            try
+            {
+                chart2::SymbolProperties aSymbProp;
+                uno::Reference< beans::XPropertySet > xProp( aSeriesSeq[i], uno::UNO_QUERY_THROW );
+                if( (xProp->getPropertyValue( C2U( "SymbolProperties" )) >>= aSymbProp ) )
+                {
+                    if( aSymbProp.aStyle != eStyle )
+                    {
+                        bResult = false;
+                        break;
+                    }
+                }
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+        }
+    }
+
+    return bResult;
 }
 
 } //  namespace chart
