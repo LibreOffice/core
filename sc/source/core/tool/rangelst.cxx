@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangelst.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:10:21 $
+ *  last change: $Author: dr $ $Date: 2001-04-24 14:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,6 +376,17 @@ BOOL ScRangeList::Intersects( const ScRange& rRange ) const
     ULONG nCount = Count();
     for ( ULONG j = 0; j < nCount; j++ )
         if ( GetObject(j)->Intersects( rRange ) )
+            return TRUE;
+
+    return FALSE;
+}
+
+
+BOOL ScRangeList::In( const ScRange& rRange ) const
+{
+    ULONG nCount = Count();
+    for ( ULONG j = 0; j < nCount; j++ )
+        if ( GetObject(j)->In( rRange ) )
             return TRUE;
 
     return FALSE;

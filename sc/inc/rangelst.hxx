@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangelst.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: dr $ $Date: 2001-04-24 14:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ public:
     BOOL            Store( SvStream& ) const;
     BOOL            operator==( const ScRangeList& ) const;
     BOOL            Intersects( const ScRange& ) const;
+    BOOL            In( const ScRange& ) const;
     ULONG           GetCellCount() const;
 };
 SV_DECL_IMPL_REF( ScRangeList );
