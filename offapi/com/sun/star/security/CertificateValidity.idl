@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CertificateValidity.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:50:27 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,77 +81,77 @@ constants CertificateValidity
     /**
      * The certificate is invalid.
      */
-    const long CERT_VALIDITY_INVALID = 0x00000001 ;
+    const long INVALID = 0x00000001 ;
 
     /**
      * The certificate itself is untrusted.
      */
-    const long CERT_VALIDITY_UNTRUSTED = 0x00000002 ;
+    const long UNTRUSTED = 0x00000002 ;
 
     /**
      * It is a time-out certificate.
      */
-    const long CERT_VALIDITY_TIMEOUT = 0x00000004 ;
+    const long TIMEOUT = 0x00000004 ;
 
     /**
      * It is a revoked certificate.
      */
-    const long CERT_VALIDITY_REVOKED = 0x00000008 ;
+    const long REVOKED = 0x00000008 ;
 
     /**
      * The certificate revocation status is unknown.
      */
-    const long CERT_VALIDITY_UNKNOWN_REVOKATION = 0x00000010 ;
+    const long UNKNOWN_REVOKATION = 0x00000010 ;
 
     /**
      * The certificate signature is invalid.
      */
-    const long CERT_VALIDITY_SIGNATURE_INVALID = 0x00000020 ;
+    const long SIGNATURE_INVALID = 0x00000020 ;
 
     /**
      * The certificate has invalid extensions.
      */
-    const long CERT_VALIDITY_EXTENSION_INVALID = 0x00000040 ;
+    const long EXTENSION_INVALID = 0x00000040 ;
 
     /**
      * The certificate has critical unknown extensions.
      */
-    const long CERT_VALIDITY_EXTENSION_UNKNOWN = 0x00000080 ;
+    const long EXTENSION_UNKNOWN = 0x00000080 ;
 
     /**
      * The certificate issuer is unknown.
      */
-    const long CERT_VALIDITY_ISSUER_UNKNOWN = 0x00000100 ;
+    const long ISSUER_UNKNOWN = 0x00000100 ;
 
     /**
      * The certificate issuer is untrusted.
      */
-    const long CERT_VALIDITY_ISSUER_UNTRUSTED = 0x00000200 ;
+    const long ISSUER_UNTRUSTED = 0x00000200 ;
 
     /**
      * The certificate issuer is invalid.
      */
-    const long CERT_VALIDITY_ISSUER_INVALID = 0x00000400 ;
+    const long ISSUER_INVALID = 0x00000400 ;
 
     /**
      * The root certificate is unknown.
      */
-    const long CERT_VALIDITY_ROOT_UNKNOWN = 0x00001000 ;
+    const long ROOT_UNKNOWN = 0x00001000 ;
 
     /**
      * The root certificate is untrusted.
      */
-    const long CERT_VALIDITY_ROOT_UNTRUSTED = 0x00002000 ;
+    const long ROOT_UNTRUSTED = 0x00002000 ;
 
     /**
      * The root certificate is invalid.
      */
-    const long CERT_VALIDITY_ROOT_INVALID = 0x00004000 ;
+    const long ROOT_INVALID = 0x00004000 ;
 
     /**
      * The certificate chain is incomplete.
      */
-    const long CERT_VALIDITY_CHAIN_INCOMPLETE = 0x00010000 ;
+    const long CHAIN_INCOMPLETE = 0x00010000 ;
 } ;
 
 } ; } ; } ; } ;
