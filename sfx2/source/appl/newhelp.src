@@ -142,12 +142,14 @@ TabPage TP_HELP_SEARCH
         Border = TRUE ;
         DropDown = TRUE;
         Pos = MAP_APPFONT ( 6 , 19 ) ;
-        Size = MAP_APPFONT ( 93 , 40 ) ;
+        Size = MAP_APPFONT ( 72 , 40 ) ;
     };
     PushButton PB_OPERATOR
     {
-        Pos = MAP_APPFONT ( 102 , 19 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 81 , 19 ) ;
+        Size = MAP_APPFONT ( 33 , 12 ) ;
+        Text = "~Suchen";
+        Text [ english_us ] = "Search";
     };
     FixedText FT_RESULT
     {
