@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAppletImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:27:41 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SW_APPLET_IMPL_HXX
 #include <SwAppletImpl.hxx>
 #endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
+#endif
+
 
 #ifndef _COM_SUN_STAR_EMBED_XCOMPONENTSUPPLIER_HPP_
 #include <com/sun/star/embed/XComponentSupplier.hpp>
@@ -169,7 +173,9 @@ SwApplet_Impl::SwApplet_Impl( SfxItemPool& rPool, USHORT nWhich1, USHORT nWhich2
 }
 
 void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
-                                      BOOL bMayScript, const String& rCodeBase)
+                                      BOOL bMayScript, const String& rCodeBase,
+                                      const String& rBaseURL )
+                                      //const String& rAlt )
 {
     comphelper::EmbeddedObjectContainer aCnt;
     ::rtl::OUString aName;
@@ -192,12 +198,12 @@ void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
         }
         else
         {
-            sCodeBase = INetURLObject::RelToAbs( rCodeBase );
+            sCodeBase = URIHelper::SmartRel2Abs(INetURLObject( rBaseURL ), rCodeBase );
         }
     }
     else
     {
-        INetURLObject aTmpURL( INetURLObject::GetBaseURL() );
+        INetURLObject aTmpURL( rBaseURL );
         sCodeBase = aTmpURL.GetPartBeforeLastName();
     }
 
@@ -209,12 +215,11 @@ void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
         xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletName"), uno::makeAny( ::rtl::OUString( rName ) ) );
         xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletIsScript"), uno::makeAny( sal_Bool(bMayScript) ) );
         xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletDocBase"), uno::makeAny( ::rtl::OUString(
-                INetURLObject::GetBaseURL() ) ) );
+                 ) ) );
     }
 }
-
 #ifdef SOLAR_JAVA
-sal_Bool SwApplet_Impl::CreateApplet()
+sal_Bool SwApplet_Impl::CreateApplet( const String& rBaseURL )
 {
     String aCode, aName, aCodeBase;
     sal_Bool bMayScript = sal_False;
@@ -236,8 +241,7 @@ sal_Bool SwApplet_Impl::CreateApplet()
 
     if( !aCode.Len() )
         return sal_False;
-
-    CreateApplet( aCode, aName, bMayScript, aCodeBase );
+    CreateApplet( aCode, aName, bMayScript, aCodeBase, rBaseURL );
     return sal_True;
 }
 #endif
