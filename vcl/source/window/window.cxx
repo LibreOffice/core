@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-18 17:13:43 $
+ *  last change: $Author: ssa $ $Date: 2002-11-20 12:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8204,7 +8204,10 @@ USHORT Window::GetAccessibleRole() const
                 else if( IsScrollable() )
                     nRole = accessibility::AccessibleRole::SCROLLPANE;
                 else
-                    nRole = accessibility::AccessibleRole::WINDOW;
+                    // #104051# WINDOW seems to be a bad default role, use LAYEREDPANE instead
+                    // a WINDOW is interpreted as a top-level window, which is typically not the case
+                    //nRole = accessibility::AccessibleRole::WINDOW;
+                    nRole = accessibility::AccessibleRole::LAYEREDPANE;
         }
     }
     return nRole;
