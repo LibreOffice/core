@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:59:45 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,8 @@ ModelessDialog DLG_JOIN_TABADD
     Text[ hindi ] = "सारणियों को जोड़ो";
     Text[ slovak ] = "Pridať tabuľky";
 };
+
+
 
 
 
