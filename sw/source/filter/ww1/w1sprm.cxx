@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1sprm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-06 16:36:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,7 +508,7 @@ void Ww1SingleSprmPDyaLine::Start(
 void Ww1SingleSprmPChgTabsPapx::Start(
     Ww1Shell& rOut, BYTE nId, BYTE* pSprm, USHORT nSize, Ww1Manager& rMan)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //  rOut << 'T';
 #endif
     short nLeftPMgn = 0;    // Koordinaten etwa gleich ??
