@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-24 08:49:02 $
+ *  last change: $Author: ssa $ $Date: 2001-10-24 10:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5977,6 +5977,7 @@ void Window::SetPosSizePixel( long nX, long nY,
         long nOldWidth  = pWindow->mnOutWidth;
         long nOldHeight = pWindow->mnOutHeight;
 
+#ifndef REMOTE_APPSERVER
         USHORT nSysFlags=0;
         if( nFlags & WINDOW_POSSIZE_WIDTH )
             nSysFlags |= SAL_FRAME_POSSIZE_WIDTH;
@@ -5987,6 +5988,9 @@ void Window::SetPosSizePixel( long nX, long nY,
         if( nFlags & WINDOW_POSSIZE_Y )
             nSysFlags |= SAL_FRAME_POSSIZE_Y;
         pWindow->mpFrame->SetPosSize( nX, nY, nWidth, nHeight, nSysFlags );
+#else
+        pWindow->mpFrame->SetClientSize( nWidth, nHeight );
+#endif
         // Resize should be called directly. If we havn't
         // set the correct size, we get a second resize from
         // the system with the correct size. This can be happend
@@ -6006,7 +6010,11 @@ void Window::SetPosSizePixel( long nX, long nY,
 Rectangle Window::GetDesktopRectPixel() const
 {
     Rectangle rRect;
+#ifndef REMOTE_APPSERVER
     mpFrameWindow->mpFrame->GetWorkArea( rRect );
+#else
+    rRect = Rectangle( ScreenToOutputPixel( Point() ), mpFrameWindow->GetOutputSizePixel() );
+#endif
     return rRect;
 }
 
@@ -6032,9 +6040,11 @@ Point Window::OutputToAbsoluteScreenPixel( const Point& rPos ) const
 {
     // relative to the screen
     Point p = OutputToScreenPixel( rPos );
+#ifndef REMOTE_APPSERVER
     SalFrame::Geometry g = mpFrame->GetGeometry();
     p.X() += g.nX;
     p.Y() += g.nY;
+#endif
     return p;
 }
 
@@ -6044,9 +6054,11 @@ Point Window::AbsoluteScreenToOutputPixel( const Point& rPos ) const
 {
     // relative to the screen
     Point p = ScreenToOutputPixel( rPos );
+#ifndef REMOTE_APPSERVER
     SalFrame::Geometry g = mpFrame->GetGeometry();
     p.X() -= g.nX;
     p.Y() -= g.nY;
+#endif
     return p;
 }
 
