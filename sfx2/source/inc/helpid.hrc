@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-17 06:17:25 $
+ *  last change: $Author: pb $ $Date: 2001-09-18 08:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #include <svtools/solar.hrc>
 
 // Help-Ids -----------------------------------------------------------------
+
+#define HID_GLOBAL_FALLBACK                         0xFFFFFFFF
 
 #define HID_FILTER_SELECT                           (HID_SFX_START +   0)
 #define HID_USERDEFBMP                              (HID_SFX_START +   1)
@@ -358,6 +360,9 @@
 #define HID_ORGANIZE_STDTEMPLATE_ADD                (HID_SFX_START + 293)
 #define HID_ORGANIZE_STDTEMPLATE_DEL                (HID_SFX_START + 294)
 #define HID_HELP_TOOLBOXITEM_SEARCHDIALOG           (HID_SFX_START + 295)
+#define HID_HELP_BOOKMARKS_OPEN                     (HID_SFX_START + 296)
+#define HID_HELP_BOOKMARKS_RENAME                   (HID_SFX_START + 297)
+#define HID_HELP_BOOKMARKS_DELETE                   (HID_SFX_START + 298)
 
 #define ACT_SFX_HID_END HID_HELP_TOOLBOXITEM_SEARCHDIALOG
 
