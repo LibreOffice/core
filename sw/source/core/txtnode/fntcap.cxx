@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 16:22:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,20 +68,30 @@
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_CHARTYPE_HDL
-#include <com/sun/star/text/CharType.hdl>
+#ifndef _COM_SUN_STAR_I18N_CHARTYPE_HDL
+#include <com/sun/star/i18n/CharType.hdl>
 #endif
 #ifndef _PRINT_HXX //autogen
 #include <vcl/print.hxx>
 #endif
 
-#include "errhdl.hxx"
-#include "fntcache.hxx"
-#include "swfont.hxx"
-#include "drawfont.hxx"
-#include "breakit.hxx"
+#ifndef _ERRHDL_HXX
+#include <errhdl.hxx>
+#endif
+#ifndef _FNTCACHE_HXX
+#include <fntcache.hxx>
+#endif
+#ifndef _SWFONT_HXX
+#include <swfont.hxx>
+#endif
+#ifndef _DRAWFONT_HXX
+#include <drawfont.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
 
-using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::i18n;
 
 
 #define KAPITAELCHENPROP 66
