@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:35:35 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:34:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,8 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     pRenamedArr(0),
     pGlosHdl(pHdl)
 {
+    USHORT i;
+
     FreeResource();
 
     long nTabs[] =
@@ -163,7 +165,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     aNameED.SetModifyHdl(LINK(this, SwGlossaryGroupDlg, ModifyHdl));
     aPathLB.SetSelectHdl(LINK(this, SwGlossaryGroupDlg, ModifyHdl));
     aRenamePB.SetClickHdl(LINK(this, SwGlossaryGroupDlg, RenameHdl));
-    for(USHORT i = 0; i < pPathArr->Count(); i++)
+    for( i = 0; i < pPathArr->Count(); i++)
     {
         String sPath(*(*pPathArr)[i]);
         aPathLB.InsertEntry(sPath);
