@@ -6151,6 +6151,28 @@ SfxBoolItem ActivateRedlining FN_REDLINE_ON
     ToolBoxConfig = TRUE,
     GroupId = GID_EDIT;
 ]
+//--------------------------------------------------------------------------
+SfxVoidItem ProtectTraceChangeMode FN_REDLINE_PROTECT
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
 
 //--------------------------------------------------------------------------
 SfxVoidItem RemoveTableOf FN_REMOVE_CUR_TOX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-04-09 09:46:32 $
+ *  last change: $Author: os $ $Date: 2001-04-27 11:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 
 
+#define FN_REDLINE_PROTECT           (FN_EDIT2 + 23) /* Redlining password */
 #define FN_UPDATE_ALL_LINKS          (FN_EDIT2 + 24) /* alle Links updaten */
 
 #define FN_REDLINE_ON                (FN_EDIT2 + 25) /* Redlining anschalten */

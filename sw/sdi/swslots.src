@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:02:56 $
+ *  last change: $Author: os $ $Date: 2001-04-27 11:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6004,6 +6004,13 @@ SfxSlotInfo FN_REDLINE_ON
     SlotName[ greek ] = "Åíåñãïðïßçóç åðáíåîÝôáóçò";
     SlotName[ korean ] = "¼öÁ¤º¸¿Ï Àû¿ë";
     SlotName[ turkish ] = "Redaksiyonu çalýþtýr";
+    SlotName[ language_user1 ] = " ";
+};
+SfxSlotInfo FN_REDLINE_PROTECT
+{
+    SlotName = "Änderungsaufzeichnung schützen";
+    SlotName [ english ] =  "Protect changes trace mode";
+    SlotName[ english_us ] = "Protect changes trace mode";
     SlotName[ language_user1 ] = " ";
 };
 SfxSlotInfo FN_REDLINE_SHOW

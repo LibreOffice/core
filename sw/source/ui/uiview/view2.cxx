@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 10:05:10 $
+ *  last change: $Author: os $ $Date: 2001-04-27 11:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,12 @@
 #include <uiparam.hxx>
 #endif
 
+#ifndef _SVTOOLS_PASSWORDHELPER_HXX
+#include <svtools/PasswordHelper.hxx>
+#endif
+#ifndef _SFX_PASSWD_HXX
+#include <sfx2/passwd.hxx>
+#endif
 #ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
 #endif
@@ -368,6 +374,33 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem ))
             {
                 USHORT nOn = ((const SfxBoolItem*)pItem)->GetValue() ? REDLINE_ON : 0;
+                USHORT nMode = pWrtShell->GetRedlineMode();
+                pWrtShell->SetRedlineMode( (nMode & ~REDLINE_ON) | nOn);
+            }
+        }
+        break;
+        case FN_REDLINE_PROTECT :
+        {
+            Sequence <sal_Int8> aPasswd =
+                        pWrtShell->GetDoc()->GetRedlinePasswd();
+            SfxPasswordDialog aPasswdDlg(&GetViewFrame()->GetWindow());
+            if(!aPasswd.getLength())
+                aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
+            if (aPasswdDlg.Execute())
+            {
+                USHORT nOn;
+                if(!aPasswd.getLength())
+                {
+                    String sNewPasswd( aPasswdDlg.GetPassword() );
+                    SvPasswordHelper::GetHashPassword( aPasswd, sNewPasswd );
+                    pWrtShell->GetDoc()->SetRedlinePasswd(aPasswd);
+                    nOn = REDLINE_ON;
+                }
+                else
+                {
+                    pWrtShell->GetDoc()->SetRedlinePasswd(Sequence <sal_Int8> ());
+                    nOn = 0;
+                }
                 USHORT nMode = pWrtShell->GetRedlineMode();
                 pWrtShell->SetRedlineMode( (nMode & ~REDLINE_ON) | nOn);
             }

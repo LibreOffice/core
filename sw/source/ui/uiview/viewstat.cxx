@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-04-23 08:00:07 $
+ *  last change: $Author: os $ $Date: 2001-04-27 11:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 #endif
 #ifndef _SWGLOBDOCSH_HXX //autogen
 #include <globdoc.hxx>
+#endif
+#ifndef _DOC_HXX //autogen
+#include <doc.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -325,7 +328,8 @@ void SwView::GetState(SfxItemSet &rSet)
             }
             break;
         case FN_REDLINE_ON:
-            if( pWrtShell->IsInsMode() )
+            if( !pWrtShell->GetDoc()->GetRedlinePasswd().getLength() &&
+                pWrtShell->IsInsMode() )
             {
                 rSet.Put( SfxBoolItem( nWhich,
                     (pWrtShell->GetRedlineMode() & REDLINE_ON) != 0));
@@ -333,6 +337,11 @@ void SwView::GetState(SfxItemSet &rSet)
             else
                 rSet.DisableItem( nWhich );
             break;
+        case FN_REDLINE_PROTECT :
+        {
+            rSet.Put( SfxBoolItem( nWhich, pWrtShell->GetDoc()->GetRedlinePasswd().getLength() > 0 ) );
+        }
+        break;
         case FN_REDLINE_SHOW:
             {
                 sal_uInt16 nMask = REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE;
@@ -379,7 +388,8 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_DOCUMENT_COMPARE:
             case SID_DOCUMENT_MERGE:
                 if( GetDocShell()->IsA( SwGlobalDocShell::StaticType() ) ||
-                    pWrtShell->IsAnySectionInDoc( sal_True, sal_True, sal_True ))
+                    pWrtShell->IsAnySectionInDoc( sal_True, sal_True, sal_True )||
+                    (SID_DOCUMENT_MERGE == nWhich && pWrtShell->GetDoc()->GetRedlinePasswd().getLength()))
                     rSet.DisableItem(nWhich);
             break;
         }
