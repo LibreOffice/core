@@ -3,7 +3,7 @@
         <prop oor:name="Type"><value>calc_MS_Excel_2003_XML</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
         <prop oor:name="UIComponent"/>
-        <prop oor:name="UserData"><value oor:separator=",">com.sun.star.documentconversion.XSLTFilter,,com.sun.star.comp.Calc.XMLImporter,com.sun.star.comp.Calc.XMLExporter,../share/xslt/import/excelml/excelml2ooo.xsl,../share/xslt/export/excelml/ooo2excelml.xsl</value></prop>
+        <prop oor:name="UserData"><value oor:separator=",">com.sun.star.documentconversion.XSLTFilter,,com.sun.star.comp.Calc.XMLOasisImporter,com.sun.star.comp.Calc.XMLOasisExporter,../share/xslt/import/spreadsheetml/spreadsheetml2ooo.xsl,../share/xslt/export/spreadsheetml/ooo2spreadsheetml.xsl</value></prop>
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
