@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ama $ $Date: 2002-09-11 15:21:04 $
+ *  last change: $Author: ama $ $Date: 2002-09-13 15:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1695,7 +1695,8 @@ void SwFlyFrm::MakeFlyPos()
         SwTwips nRelX;
         if ( aHori.GetHoriOrient() == HORI_NONE )
         {
-            if( bToggle )
+            if( bToggle ||
+                ( !aHori.IsPosToggle() && GetAnchor()->IsRightToLeft() ) )
                 nRelX = nRel - nFrmWidth - aHori.GetPos();
             else
                 nRelX = aHori.GetPos();
