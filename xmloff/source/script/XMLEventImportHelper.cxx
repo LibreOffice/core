@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventImportHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 16:37:26 $
+ *  last change: $Author: dvo $ $Date: 2001-01-22 19:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ void XMLEventImportHelper::AddTranslationTable(
             OUString rName(OUString::createFromAscii(pTrans->sXMLName));
 
             // check for conflicting entries
-            DBG_ASSERT(aEventNameMap.find(rName) != aEventNameMap.end(),
+            DBG_ASSERT(aEventNameMap.find(rName) == aEventNameMap.end(),
                        "conflicting event translations");
 
             // assign new translation
