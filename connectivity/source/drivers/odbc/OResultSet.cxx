@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-22 12:42:29 $
+ *  last change: $Author: fs $ $Date: 2001-06-25 13:50:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,9 +241,6 @@ void OResultSet::allocBuffer(sal_Bool _bAllocRow)
             case DataType::BIGINT:
                 m_aBindVector.push_back((sal_Int64)new ::rtl::OString());
                 break;
-            case DataType::FLOAT:
-                m_aBindVector.push_back((sal_Int64)new float(0.0));
-                break;
             case DataType::DOUBLE:
                 m_aBindVector.push_back((sal_Int64)new double(0.0));
                 break;
@@ -272,6 +269,7 @@ void OResultSet::allocBuffer(sal_Bool _bAllocRow)
             case DataType::INTEGER:
                 m_aBindVector.push_back((sal_Int64)new sal_Int32(0));
                 break;
+            case DataType::FLOAT:
             case DataType::REAL:
                 m_aBindVector.push_back((sal_Int64)new float(0));
                 break;
@@ -308,9 +306,6 @@ void OResultSet::releaseBuffer()
             case DataType::BIGINT:
                 delete static_cast< ::rtl::OString* >((void*)*pValue);
                 break;
-            case DataType::FLOAT:
-                delete static_cast< float* >((void*)*pValue);
-                break;
             case DataType::DOUBLE:
                 delete static_cast< double* >((void*)*pValue);
                 break;
@@ -339,6 +334,7 @@ void OResultSet::releaseBuffer()
             case DataType::INTEGER:
                 delete static_cast< sal_Int32* >((void*)*pValue);
                 break;
+            case DataType::FLOAT:
             case DataType::REAL:
                 delete static_cast< float* >((void*)*pValue);
                 break;
@@ -1713,6 +1709,7 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
             case DataType::INTEGER:
                 *pColumn = getInt(nColumn);
                 break;
+            case DataType::FLOAT:
             case DataType::REAL:
                 *pColumn = getFloat(nColumn);
                 break;
