@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 14:16:24 $
+#   last change: $Author: rt $ $Date: 2004-11-26 16:36:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,6 @@ XCSFILES= \
     Scripting.xcs \
     Security.xcs \
     WebWizard.xcs \
-    TypeDetection.xcs \
     Recovery.xcs \
     FormWizard.xcs \
     TypeDetection.xcs
