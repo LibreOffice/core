@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: bc $ $Date: 2002-11-26 11:12:14 $
+ *  last change: $Author: bc $ $Date: 2002-12-03 10:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1635,14 +1635,14 @@ public class ReportWizard {
         sSortDescend[3] = tools.getResText(xResInvoke, RID_REPORT + 58);
 
         WizardHeaderText[0] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 28);
-        WizardHeaderText[1] = (char) 13 +  " " + "Welche Beschriftungen möchten Sie den Datenfeldern geben?";
+        WizardHeaderText[1] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 69);
         WizardHeaderText[2] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 29);
         WizardHeaderText[3] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 30);
         WizardHeaderText[4] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 31);
         WizardHeaderText[5] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 32);
 
         WizardTitle[0] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_FORM + 45);
-        WizardTitle[1] = sMsgWizardName + " - " + "Beschriftungen setzen";
+        WizardTitle[1] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 68);
         WizardTitle[2] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 11);
         WizardTitle[3] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 12);
         WizardTitle[4] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 13);
@@ -1674,11 +1674,11 @@ public class ReportWizard {
     sMsgQueryCreationImpossible =  tools.getResText(xResInvoke, RID_REPORT + 65);
     sMsgHiddenControlMissing = tools.getResText(xResInvoke, RID_REPORT + 66);
     sProgressDataImport = tools.getResText(xResInvoke, RID_REPORT + 67);
-    slblColumnTitles = "Beschriftung";
-    slblColumnNames = "Feldname";
-    sMsgInvalidTextField = "Es ist ein ungültiges Benutzerfeld in einer Tabelle vorhanden!";
-    sMsgCommonReportError = "Es ist ein Fehler im Autopiloten aufgetreten.<BR>Möglicherweise ist Ihre Vorlage '%PATH' fehlerhaft.<BR>Dies kann folgende Ursache haben:<BR>Die benötigten Bereiche oder Tabellen sind nicht oder unter einem falschen Namen vorhanden.<BR>Bitte schauen Sie in der Hilfe nach genaueren Hinweisen.<BR>Bitte wählen Sie eine andere Vorlage aus.";
+    slblColumnTitles = tools.getResText(xResInvoke, RID_REPORT + 70);
+    slblColumnNames = tools.getResText(xResInvoke, RID_REPORT + 71);
+    sMsgCommonReportError = tools.getResText(xResInvoke, RID_REPORT + 72);
     sMsgCommonReportError = tools.replaceSubString(sMsgCommonReportError, String.valueOf((char)13), "<BR>");
+    sMsgInvalidTextField = tools.getResText(xResInvoke, RID_REPORT + 73);
     sMsgNoConnection = tools.getResText(xResInvoke, RID_COMMON + 14);
     ReportMessages[0] = sMsgTableNotExisting;
     ReportMessages[1] = sMsgCommonReportError;
