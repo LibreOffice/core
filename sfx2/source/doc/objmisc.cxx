@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:21:45 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1068,7 +1068,86 @@ sal_Bool SfxObjectShell::IsAutoLoadLocked() const
 }
 
 //-------------------------------------------------------------------------
+void SfxObjectShell::CheckMacrosOnLoading_Impl()
+{
+    const SfxFilter* pFilter = pMedium->GetFilter();
+    sal_Bool bHasStorage = IsOwnStorageFormat_Impl( *pMedium );
 
+    if ( GetError() != ERRCODE_NONE )
+        return;
+
+    bool bShowBrokenSignatureWarningAlready = sal_False;
+    if ( bHasStorage && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
+    {
+        uno::Reference< embed::XStorage > xStorage = pMedium->GetStorage();
+        if ( xStorage.is() )
+        {
+            BOOL bHasMacros = StorageHasMacros( xStorage );
+
+            if ( bHasMacros )
+            {
+                // --> PB 2004-11-09 #i35190#
+                if ( GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
+                {
+                    // if the signature is broken, show here the warning before
+                    // the macro warning
+                    WarningBox aBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
+                    aBox.Execute();
+                    bShowBrokenSignatureWarningAlready = true;
+                }
+                // <--
+                AdjustMacroMode( String() );
+                if ( SvtSecurityOptions().GetMacroSecurityLevel() >= 2
+                    && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
+                {
+                    WarningBox aBox( NULL, SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
+                    aBox.Execute();
+                }
+            }
+            else
+            {
+                // if macros will be added by the user later, the security check is obsolete
+                pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+            }
+        }
+        else
+            SetError( ERRCODE_IO_GENERAL );
+    }
+    else
+    {
+        if ( HasMacrosLib_Impl() )
+        {
+            // no signing in alien formats!
+            AdjustMacroMode( String() );
+            if ( SvtSecurityOptions().GetMacroSecurityLevel() >= 2
+              && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
+            {
+                WarningBox aBox( NULL, SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
+                aBox.Execute();
+            }
+        }
+        else
+        {
+            // if macros will be added by the user later, the security check is obsolete
+            pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+        }
+    }
+
+    // MAV: the code below is moved here since this is the only central place where the object shell is visible
+    //      in case of pick list for example OpenDocExec_Impl() is not used.
+
+    // xmlsec05, check with SFX team
+    // Check if there is a broken signature...
+    // After EA change to interaction handler...
+    if ( !bShowBrokenSignatureWarningAlready
+    && GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
+    {
+        WarningBox aBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
+        aBox.Execute();
+    }
+}
+
+//-------------------------------------------------------------------------
 void SfxObjectShell::SetAutoLoad(
     const INetURLObject& rUrl, sal_uInt32 nTime, sal_Bool bReload )
 /*  [Beschreibung ]
@@ -1086,6 +1165,11 @@ void SfxObjectShell::SetAutoLoad(
                                 nTime, bReload, this );
         pImp->pReloadTimer->Start();
     }
+}
+
+sal_Bool SfxObjectShell::IsLoadingFinished() const
+{
+    return ( pImp->nLoadedFlags == SFX_LOADED_ALL );
 }
 
 void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
@@ -1137,6 +1221,8 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
     if ( (pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT )
       && (pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
     {
+        CheckMacrosOnLoading_Impl();
+
         // closing the streams on loading should be under control of SFX!
         DBG_ASSERT( pMedium->IsOpen(), "Don't close the medium when loading documents!" );
         if( !(pMedium->GetOpenMode() & STREAM_WRITE) )
