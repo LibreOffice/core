@@ -63,7 +63,7 @@ SALLIB=isal.lib
 CPPULIB=icppu.lib
 CPPUHELPERLIB=icppuhelper.lib
 SALHELPERLIB=isalhelper.lib
-STLPORTLIB=stlport_vc6.lib
+STLPORTLIB=stlport_vc7.lib
 
 BLANK= 
 EMPTYSTRING=
