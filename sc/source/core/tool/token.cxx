@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-02-09 14:26:41 $
+ *  last change: $Author: dr $ $Date: 2001-02-14 11:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,6 +627,107 @@ BOOL ScTokenArray::IsReference( ScRange& rRange ) const
         }
     }
     return bIs;
+}
+
+inline void lcl_GetAddress( ScAddress& rAddress, const ScToken& rToken )    // rToken must be a svSingleRef
+{
+    rAddress.Set( rToken.aRef.Ref1.nCol, rToken.aRef.Ref1.nRow, rToken.aRef.Ref1.nTab );
+}
+
+BOOL ScTokenArray::GetTableOpRefs(
+        ScAddress& rFormula,
+        ScAddress& rColFirstPos, ScAddress& rColRelPos,
+        ScAddress& rRowFirstPos, ScAddress& rRowRelPos,
+        BOOL& rbIsMode2 ) const
+{
+    ScToken* pToken;
+    BOOL bRet = FALSE;
+    rbIsMode2 = FALSE;
+    if( pCode && nLen )
+    {
+        enum
+        {
+            stBegin, stTableOp, stOpen, stFormula, stFormulaSep,
+            stColFirst, stColFirstSep, stColRel, stColRelSep,
+            stRowFirst, stRowFirstSep, stRowRel, stClose, stError
+        } eState = stBegin;     // last read token
+
+        USHORT nIndex = 0;
+        while( (eState != stError) && (nIndex < nLen) )
+        {
+            pToken = pCode[ nIndex ];
+            if( pToken )
+            {
+                OpCode eOpCode = pToken->GetOpCode();
+                BOOL bIsSingleRef = (eOpCode == ocPush) && (pToken->GetType() == svSingleRef);
+                BOOL bIsSep = (eOpCode == ocSep);
+
+                if( eOpCode != ocSpaces )
+                {
+                    switch( eState )
+                    {
+                        case stBegin:
+                            eState = (eOpCode == ocTableOp) ? stTableOp : stError;
+                        break;
+                        case stTableOp:
+                            eState = (eOpCode == ocOpen) ? stOpen : stError;
+                        break;
+                        case stOpen:
+                            eState = bIsSingleRef ? stFormula : stError;
+                            if( bIsSingleRef )
+                                lcl_GetAddress( rFormula, *pToken );
+                        break;
+                        case stFormula:
+                            eState = bIsSep ? stFormulaSep : stError;
+                        break;
+                        case stFormulaSep:
+                            eState = bIsSingleRef ? stColFirst : stError;
+                            if( bIsSingleRef )
+                                lcl_GetAddress( rColFirstPos, *pToken );
+                        break;
+                        case stColFirst:
+                            eState = bIsSep ? stColFirstSep : stError;
+                        break;
+                        case stColFirstSep:
+                            eState = bIsSingleRef ? stColRel : stError;
+                            if( bIsSingleRef )
+                                lcl_GetAddress( rColRelPos, *pToken );
+                        break;
+                        case stColRel:
+                            eState = bIsSep ? stColRelSep : ((eOpCode == ocClose) ? stClose : stError);
+                        break;
+                        case stColRelSep:
+                            eState = bIsSingleRef ? stRowFirst : stError;
+                            if( bIsSingleRef )
+                            {
+                                lcl_GetAddress( rRowFirstPos, *pToken );
+                                rbIsMode2 = TRUE;
+                            }
+                        break;
+                        case stRowFirst:
+                            eState = bIsSep ? stRowFirstSep : stError;
+                        break;
+                        case stRowFirstSep:
+                            eState = bIsSingleRef ? stRowRel : stError;
+                            if( bIsSingleRef )
+                                lcl_GetAddress( rRowRelPos, *pToken );
+                        break;
+                        case stRowRel:
+                            eState = (eOpCode == ocClose) ? stClose : stError;
+                        break;
+                        default:
+                            eState = stError;
+                    }
+                }
+            }
+            else
+                eState = stError;
+
+            nIndex++;
+        }
+        bRet = (eState == stClose);
+    }
+    return bRet;
 }
 
 void ScTokenArray::Load30( SvStream& rStream, const ScAddress& rPos )
