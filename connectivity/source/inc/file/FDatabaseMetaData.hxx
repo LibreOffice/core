@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:31:17 $
+ *  last change: $Author: oj $ $Date: 2002-07-04 06:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,20 @@ namespace connectivity
         {
         protected:
             OConnection* m_pConnection; // I need the native class not only the interface
+            virtual ~ODatabaseMetaData();
         public:
 
             ODatabaseMetaData(OConnection* _pCon);
-            ~ODatabaseMetaData();
+
+
+            inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+                { return ::rtl_allocateMemory( nSize ); }
+            inline static void * SAL_CALL operator new( size_t nSize,const void* _pHint ) SAL_THROW( () )
+                { return const_cast<void*>(_pHint); }
+            inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+                { ::rtl_freeMemory( pMem ); }
+            inline static void SAL_CALL operator delete( void * pMem,const void* _pHint ) SAL_THROW( () )
+                {  }
             // XDatabaseMetaData
             virtual sal_Bool SAL_CALL allProceduresAreCallable(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL allTablesAreSelectable(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:52:08 $
+ *  last change: $Author: oj $ $Date: 2002-07-04 06:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,20 @@ namespace connectivity
             OFileTable*         m_pTable;
 
             void checkColumnIndex(sal_Int32 column) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        protected:
+            virtual ~OResultSetMetaData();
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable*  _pTable);
 
-            ~OResultSetMetaData();
+            inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+                { return ::rtl_allocateMemory( nSize ); }
+            inline static void * SAL_CALL operator new( size_t nSize,const void* _pHint ) SAL_THROW( () )
+                { return const_cast<void*>(_pHint); }
+            inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+                { ::rtl_freeMemory( pMem ); }
+            inline static void SAL_CALL operator delete( void * pMem,const void* _pHint ) SAL_THROW( () )
+                {  }
 
             /// Avoid ambigous cast error from the compiler.
             inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()

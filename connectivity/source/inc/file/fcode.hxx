@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:17:58 $
+ *  last change: $Author: oj $ $Date: 2002-07-04 06:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ namespace connectivity
         class OCode
         {
         public:
+            OCode();
             virtual ~OCode();
 
             TYPEINFO();
@@ -113,7 +114,7 @@ namespace connectivity
 
 
         // operands that the parsetree generate
-        class SAL_NO_VTABLE OOperand : public OCode
+        class OOperand : public OCode
         {
         protected:
             sal_Int32 m_eDBType;
@@ -157,10 +158,6 @@ namespace connectivity
         public:
             OOperandAttr(sal_uInt16 _nPos,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);
-            ~OOperandAttr()
-            {
-                m_xColumn = NULL;
-            }
 
             virtual sal_Bool isIndexed() const;
             virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0);
@@ -319,7 +316,7 @@ namespace connectivity
         public:
             TYPEINFO();
         public:
-            OOp_NOTLIKE(const char cEsc = '\0'):OOp_LIKE(cEsc){};
+            OOp_NOTLIKE(const sal_Unicode cEsc = L'\0'):OOp_LIKE(cEsc){};
 
             virtual sal_Bool operate(const OOperand*, const OOperand*) const;
         };
@@ -333,7 +330,7 @@ namespace connectivity
             OOp_COMPARE(connectivity::OSQLPredicateType aPType)
                          :aPredicateType(aPType) {}
 
-            connectivity::OSQLPredicateType getPredicateType() const {return aPredicateType;}
+            inline connectivity::OSQLPredicateType getPredicateType() const { return aPredicateType; }
             virtual sal_Bool operate(const OOperand*, const OOperand*) const;
         };
 

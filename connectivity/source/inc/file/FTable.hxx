@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-16 08:46:20 $
+ *  last change: $Author: oj $ $Date: 2002-07-04 06:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,15 @@ namespace connectivity
                     const ::rtl::OUString& _CatalogName = ::rtl::OUString()
                 );
             ~OFileTable( );
+
+            inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+                { return ::rtl_allocateMemory( nSize ); }
+            inline static void * SAL_CALL operator new( size_t nSize,const void* _pHint ) SAL_THROW( () )
+                { return const_cast<void*>(_pHint); }
+            inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+                { ::rtl_freeMemory( pMem ); }
+            inline static void SAL_CALL operator delete( void * pMem,const void* _pHint ) SAL_THROW( () )
+                {  }
 
             //XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

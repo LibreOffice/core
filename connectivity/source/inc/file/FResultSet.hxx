@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 15:20:06 $
+ *  last change: $Author: oj $ $Date: 2002-07-04 06:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,15 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator& _aSQLIterator);
+
+            inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
+                { return ::rtl_allocateMemory( nSize ); }
+            inline static void * SAL_CALL operator new( size_t nSize,const void* _pHint ) SAL_THROW( () )
+                { return const_cast<void*>(_pHint); }
+            inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
+                { ::rtl_freeMemory( pMem ); }
+            inline static void SAL_CALL operator delete( void * pMem,const void* _pHint ) SAL_THROW( () )
+                {  }
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
             {
