@@ -2,8 +2,8 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.9 $
- *  last change: $Author: hro $ $Date: 2001-06-07 11:06:13 $
+ *  $Revision: 1.10 $
+ *  last change: $Author: svesik $ $Date: 2001-07-13 16:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ void FSysRedirector::Register( FSysRedirector *pRedirector )
 BOOL FSysRedirector::DoRedirect( String &rPath )
 {
         ByteString aURL(rPath, osl_getThreadTextEncoding());
+      String sURL = String(aURL, osl_getThreadTextEncoding());
 
         // if redirection is disabled or not even registered do nothing
         if ( !_bEnabled || !pRedirectMutex )
@@ -256,7 +257,7 @@ BOOL FSysRedirector::DoRedirect( String &rPath )
 
         // do redirection
         Redirector();
-        BOOL bRedirected = Redirector()->Redirect( String(aURL, osl_getThreadTextEncoding()) );
+        BOOL bRedirected = Redirector()->Redirect( sURL );
 
         // if redirected transform URL to file name
         if ( bRedirected )
