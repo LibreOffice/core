@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_ja_phonetic.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khong $Date: 2002/07/25 11:19:59 $
+ *  last change: $Author: obo $Date$
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,14 +93,10 @@ sal_Int16 SAL_CALL IndexEntrySupplier_ja_phonetic::compareIndexEntry(
         IndexEntrySupplier_ja_phonetic::getIndexKey(IndexEntry2, PhoneticEntry2, rLocale2));
 
     if (result == 0)
-        result = collator->compareString(
-            PhoneticEntry1.getLength() > 0 ? PhoneticEntry1 : IndexEntry1,
-            PhoneticEntry2.getLength() > 0 ? PhoneticEntry2 : IndexEntry2);
-
-    if (result == 0 && (PhoneticEntry1.getLength() > 0 || PhoneticEntry2.getLength()))
-        return collator->compareString(IndexEntry1, IndexEntry2);
-    else
-        return result;
+        return IndexEntrySupplier_Common::compareIndexEntry(
+                    IndexEntry1, PhoneticEntry1, rLocale1,
+                    IndexEntry2, PhoneticEntry2, rLocale2);
+    return result;
 }
 
 static sal_Char first[] = "ja_phonetic (alphanumeric first)";
@@ -108,7 +104,6 @@ sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable:
     const com::sun::star::lang::Locale& rLocale, const rtl::OUString& SortAlgorithm,
     sal_Int32 collatorOptions ) throw (com::sun::star::uno::RuntimeException)
 {
-    aSortAlgorithm = SortAlgorithm;
     aLocale = rLocale;
     return collator->loadCollatorAlgorithm(rtl::OUString::createFromAscii(first), rLocale, collatorOptions) == 0;
 }
@@ -116,7 +111,6 @@ sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant
     const com::sun::star::lang::Locale& rLocale, const rtl::OUString& SortAlgorithm,
     sal_Int32 collatorOptions ) throw (com::sun::star::uno::RuntimeException)
 {
-    aSortAlgorithm = SortAlgorithm;
     aLocale = rLocale;
     return collator->loadCollatorAlgorithm(rtl::OUString::createFromAscii(first), rLocale, collatorOptions) == 0;
 }
@@ -126,7 +120,6 @@ sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable::
     const com::sun::star::lang::Locale& rLocale, const rtl::OUString& SortAlgorithm,
     sal_Int32 collatorOptions ) throw (com::sun::star::uno::RuntimeException)
 {
-    aSortAlgorithm = SortAlgorithm;
     aLocale = rLocale;
     return collator->loadCollatorAlgorithm(rtl::OUString::createFromAscii(last), rLocale, collatorOptions) == 0;
 }
@@ -134,7 +127,6 @@ sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant:
     const com::sun::star::lang::Locale& rLocale, const rtl::OUString& SortAlgorithm,
     sal_Int32 collatorOptions ) throw (com::sun::star::uno::RuntimeException)
 {
-    aSortAlgorithm = SortAlgorithm;
     aLocale = rLocale;
     return collator->loadCollatorAlgorithm(rtl::OUString::createFromAscii(last), rLocale, collatorOptions) == 0;
 }
