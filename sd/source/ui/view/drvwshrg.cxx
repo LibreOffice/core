@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drvwshrg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:49:48 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <svx/galbrws.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/colrctrl.hxx>
+#include <sfx2/objface.hxx>
 
 #ifndef _SVX_F3DCHILD_HXX //autogen
 #include <svx/f3dchild.hxx>
