@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectImport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 13:20:00 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,16 @@ using namespace ::rtl;
 
 static OUString sBlockList ( RTL_CONSTASCII_USTRINGPARAM ( "_block-list" ) );
 
-SvXMLAutoCorrectImport::SvXMLAutoCorrectImport ( SvxAutocorrWordList *pNewAutocorr_List, SvxAutoCorrect &rNewAutoCorrect, SvStorageRef &rNewStorage)
-: pAutocorr_List (pNewAutocorr_List), rAutoCorrect ( rNewAutoCorrect ), rStorage ( rNewStorage )
+// #110680#
+SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    SvxAutocorrWordList *pNewAutocorr_List,
+    SvxAutoCorrect &rNewAutoCorrect,
+    SvStorageRef &rNewStorage)
+:   SvXMLImport( xServiceFactory ),
+    pAutocorr_List (pNewAutocorr_List),
+    rAutoCorrect ( rNewAutoCorrect ),
+    rStorage ( rNewStorage )
 {
     GetNamespaceMap().Add(
             sBlockList,
@@ -191,8 +199,13 @@ SvXMLWordContext::SvXMLWordContext(
 SvXMLWordContext::~SvXMLWordContext ( void )
 {
 }
-SvXMLExceptionListImport::SvXMLExceptionListImport ( SvStringsISortDtor & rNewList )
-: rList (rNewList)
+
+// #110680#
+SvXMLExceptionListImport::SvXMLExceptionListImport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    SvStringsISortDtor & rNewList )
+:   SvXMLImport( xServiceFactory ),
+    rList (rNewList)
 {
     GetNamespaceMap().Add(
             sBlockList,
