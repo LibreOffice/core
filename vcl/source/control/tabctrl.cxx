@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:36 $
+ *  last change: $Author: pl $ $Date: 2001-03-30 14:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1496,8 +1496,15 @@ void TabControl::RemovePage( USHORT nPageId )
     {
         // Item-Daten loeschen und Windows-Item entfernen
         ImplTabItem* pItem = mpItemList->Remove( nPos );
+        // If current page is removed, than first page gets the current page
         if ( pItem->mnId == mnCurPageId )
-            mnCurPageId = 0;
+        {
+            ImplTabItem* pFirstItem = mpItemList->GetObject( 0 );
+            if ( pFirstItem )
+                mnCurPageId = pFirstItem->mnId;
+            else
+                mnCurPageId = 0;
+        }
         delete pItem;
 
         mbFormat = TRUE;
