@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:29:39 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,8 @@
 #include <svx/svdtypes.hxx>
 #endif
 
+#include <tools/string.hxx>
+
 #include "swtypes.hxx"
 #include "swrect.hxx"
 
@@ -139,6 +141,8 @@ class SwViewImp
     SwAccessibleMap *pAccMap;       // Accessible Wrappers
 #endif
 
+    mutable const SdrObject * pSdrObjCached;
+    mutable String sSdrObjCachedComment;
 
     AutoTimer     aScrollTimer;  //Fuer das Aufraeumen nach dem Scrollen.
 
@@ -365,6 +369,8 @@ public:
     // Fire all accessible events that have been collected so far
     void FireAccessibleEvents();
 #endif
+
+    String GetMarkListDescription() const;
 };
 
 //Kann auf dem Stack angelegt werden, wenn etwas ausgegeben oder
