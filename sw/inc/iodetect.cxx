@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:36:03 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,9 @@ struct SwIoDetect
 
 
 #ifdef _DLL_
-#define SwIoEntry(sNm, cCharLen, pWrt, bDel)    sNm, cCharLen, 0, pWrt, bDel
+#define SwIoEntry(sNm, cCharLen, pWrt, bDel)    { sNm, cCharLen, 0, pWrt, bDel }
 #else
-#define SwIoEntry(sNm, cCharLen, pWrt, bDel)    sNm, cCharLen
+#define SwIoEntry(sNm, cCharLen, pWrt, bDel)    { sNm, cCharLen }
 #endif
 
 #ifdef DEBUG_SH
@@ -201,7 +201,8 @@ sal_Char __FAR_DATA FILTER_XMLVW[]  = "CXMLVWEB";
 sal_Char __FAR_DATA sSwDos[]        = "SW6";
 
 
-SwIoDetect aReaderWriter[ MAXFILTER ] = {
+SwIoDetect aReaderWriter[ MAXFILTER ] =
+{
 /*  0*/ SwIoEntry(FILTER_SW5,       4,          &::GetSw3Writer,    TRUE),
 /*  1*/ SwIoEntry(FILTER_SW4,       4,          &::GetSw3Writer,    FALSE),
 /*  2*/ SwIoEntry(FILTER_SW3,       4,          &::GetSw3Writer,    FALSE),
