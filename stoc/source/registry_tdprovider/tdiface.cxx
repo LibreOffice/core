@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdiface.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:04:03 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@ namespace stoc_rdbtdp
 //==================================================================================================
 class MethodParameterImpl : public WeakImplHelper1< XMethodParameter >
 {
-    Mutex                           _aMutex;
     Reference< XHierarchicalNameAccess > _xTDMgr;
 
     OUString                        _aName;
@@ -139,11 +138,9 @@ Reference<XTypeDescription > MethodParameterImpl::getType()
             Reference< XTypeDescription > xType;
             if (_xTDMgr->getByHierarchicalName( _aTypeName ) >>= xType)
             {
-                MutexGuard aGuard( _aMutex );
+                MutexGuard aGuard( getMutex() );
                 if (! _xType.is())
-                {
                     _xType = xType;
-                }
                 return _xType;
             }
         }
@@ -183,7 +180,6 @@ sal_Int32 MethodParameterImpl::getPosition()
 //==================================================================================================
 class InterfaceMethodImpl : public WeakImplHelper1< XInterfaceMethodTypeDescription >
 {
-    Mutex                                 _aMutex;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
 
     OUString                              _aTypeName;
@@ -286,11 +282,9 @@ Reference<XTypeDescription > InterfaceMethodImpl::getReturnType()
             Reference< XTypeDescription > xReturnTD;
             if (_xTDMgr->getByHierarchicalName( _aReturnType ) >>= xReturnTD)
             {
-                MutexGuard aGuard( _aMutex );
+                MutexGuard aGuard( getMutex() );
                 if (! _xReturnTD.is())
-                {
                     _xReturnTD = xReturnTD;
-                }
                 return _xReturnTD;
             }
         }
@@ -337,7 +331,7 @@ Sequence<Reference<XMethodParameter > > InterfaceMethodImpl::getParameters()
                 nParams );
         }
 
-        ClearableMutexGuard aGuard( _aMutex );
+        ClearableMutexGuard aGuard( getMutex() );
         if (_pParams)
         {
             aGuard.clear();
@@ -380,7 +374,7 @@ Sequence<Reference<XTypeDescription > > InterfaceMethodImpl::getExceptions()
             OSL_ENSURE( pExc[nExc].is(), "### exception type unknown!" );
         }
 
-        ClearableMutexGuard aGuard( _aMutex );
+        ClearableMutexGuard aGuard( getMutex() );
         if (_pExceptions)
         {
             aGuard.clear();
@@ -403,7 +397,6 @@ Sequence<Reference<XTypeDescription > > InterfaceMethodImpl::getExceptions()
 //==================================================================================================
 class InterfaceAttributeImpl : public WeakImplHelper1< XInterfaceAttributeTypeDescription >
 {
-    Mutex                                 _aMutex;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
 
     OUString                              _aTypeName;
@@ -496,11 +489,9 @@ Reference<XTypeDescription > InterfaceAttributeImpl::getType()
             Reference< XTypeDescription > xMemberTD;
             if (_xTDMgr->getByHierarchicalName( _aMemberTypeName ) >>= xMemberTD)
             {
-                MutexGuard aGuard( _aMutex );
+                MutexGuard aGuard( getMutex() );
                 if (! _xMemberTD.is())
-                {
                     _xMemberTD = xMemberTD;
-                }
                 return _xMemberTD;
             }
         }
@@ -675,7 +666,7 @@ Sequence< Reference< XInterfaceMemberTypeDescription > > InterfaceTypeDescriptio
             rInit.bReadOnly       = (aReader.getFieldAccess( nFields ) == RT_ACCESS_READONLY);
         }
 
-        ClearableMutexGuard aGuard( _aMutex );
+        ClearableMutexGuard aGuard( getMutex() );
         if (_pMethods)
         {
             aGuard.clear();
@@ -737,7 +728,7 @@ Sequence< Reference< XInterfaceTypeDescription2 > > InterfaceTypeDescriptionImpl
             }
             if (bSuccess)
             {
-                MutexGuard aGuard( _aMutex );
+                MutexGuard aGuard( getMutex() );
                 if (_xBaseTDs.getLength() == 0)
                 {
                     _xBaseTDs = xBaseTDs;
