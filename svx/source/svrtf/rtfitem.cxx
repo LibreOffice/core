@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-03 11:49:05 $
+ *  last change: $Author: hr $ $Date: 2001-10-16 17:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,10 +668,11 @@ SET_FONTALIGNMENT:
             case RTF_B:
                 if( IsAttrSttPos() )    // nicht im Textfluss ?
                 {
-                    SetScriptAttr( eCharType, *pSet,
-                                SvxWeightItem(
+
+                    SvxWeightItem aTmpItem(
                                     nTokenValue ? WEIGHT_BOLD : WEIGHT_NORMAL,
-                                    SID_ATTR_CHAR_WEIGHT ));
+                                    SID_ATTR_CHAR_WEIGHT );
+                    SetScriptAttr( eCharType, *pSet, aTmpItem);
                 }
                 break;
 
@@ -768,11 +769,11 @@ SET_FONTALIGNMENT:
             case RTF_AF:
                 {
                     const Font& rSVFont = GetFont( USHORT(nTokenValue) );
-                    SetScriptAttr( eCharType, *pSet,
-                                SvxFontItem( rSVFont.GetFamily(),
+                    SvxFontItem aTmpItem( rSVFont.GetFamily(),
                                     rSVFont.GetName(), rSVFont.GetStyleName(),
                                     rSVFont.GetPitch(), rSVFont.GetCharSet(),
-                                    SID_ATTR_CHAR_FONT ));
+                                    SID_ATTR_CHAR_FONT );
+                    SetScriptAttr( eCharType, *pSet, aTmpItem );
                 }
                 break;
 
@@ -785,20 +786,20 @@ SET_FONTALIGNMENT:
                         nTokenValue *= 10;
                     if( IsCalcValue() )
                         CalcValue();
-                    SetScriptAttr( eCharType, *pSet,
-                                    SvxFontHeightItem(
-                                        (const USHORT)nTokenValue, 100,
-                                        SID_ATTR_CHAR_FONTHEIGHT ));
+                    SvxFontHeightItem aTmpItem(
+                            (const USHORT)nTokenValue, 100,
+                            SID_ATTR_CHAR_FONTHEIGHT );
+                    SetScriptAttr( eCharType, *pSet, aTmpItem );
                 }
                 break;
 
             case RTF_I:
                 if( IsAttrSttPos() )        // nicht im Textfluss ?
                 {
-                    SetScriptAttr( eCharType, *pSet,
-                                SvxPostureItem(
+                    SvxPostureItem aTmpItem(
                                     nTokenValue ? ITALIC_NORMAL : ITALIC_NONE,
-                                    SID_ATTR_CHAR_POSTURE ));
+                                    SID_ATTR_CHAR_POSTURE );
+                    SetScriptAttr( eCharType, *pSet, aTmpItem );
                 }
                 break;
 
@@ -993,9 +994,9 @@ ATTR_SETUNDERLINE:
                 break;
             case RTF_ALANG:
                 {
-                    SetScriptAttr( eCharType, *pSet,
-                                SvxLanguageItem( (LanguageType)nTokenValue,
-                                    SID_ATTR_CHAR_LANGUAGE ));
+                    SvxLanguageItem aTmpItem( (LanguageType)nTokenValue,
+                                    SID_ATTR_CHAR_LANGUAGE );
+                    SetScriptAttr( eCharType, *pSet, aTmpItem );
                 }
                 break;
 
@@ -1893,11 +1894,11 @@ void SvxRTFParser::SetDefault( int nToken, short nValue )
             if( -1 == nValue )
                 nValue = 0;
             const Font& rSVFont = GetFont( USHORT(nValue) );
-            SetScriptAttr( 0, aTmp,
-                            SvxFontItem(
+            SvxFontItem aTmpItem(
                                 rSVFont.GetFamily(), rSVFont.GetName(),
                                 rSVFont.GetStyleName(), rSVFont.GetPitch(),
-                                rSVFont.GetCharSet(), SID_ATTR_CHAR_FONT ));
+                                rSVFont.GetCharSet(), SID_ATTR_CHAR_FONT );
+            SetScriptAttr( 0, aTmp, aTmpItem );
         }
         break;
 
@@ -1906,9 +1907,9 @@ void SvxRTFParser::SetDefault( int nToken, short nValue )
         // default Language merken
         if( -1 != nValue )
         {
-            SetScriptAttr( 0, aTmp,
-                            SvxLanguageItem( (const LanguageType)nValue,
-                                            SID_ATTR_CHAR_LANGUAGE ));
+            SvxLanguageItem aTmpItem( (const LanguageType)nValue,
+                                        SID_ATTR_CHAR_LANGUAGE );
+            SetScriptAttr( 0, aTmp, aTmpItem );
         }
         break;
 
