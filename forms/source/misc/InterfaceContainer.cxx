@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-04 11:28:20 $
+ *  last change: $Author: oj $ $Date: 2001-07-11 10:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,7 @@ void SAL_CALL OInterfaceContainer::disposing(const EventObject& _rSource) throw(
 //------------------------------------------------------------------------------
 void OInterfaceContainer::propertyChange(const PropertyChangeEvent& evt)
 {
-    if (evt.PropertyName == (rtl::OUString) PROPERTY_NAME)
+    if (evt.PropertyName == PROPERTY_NAME)
     {
         ::osl::MutexGuard aGuard( m_rMutex );
         OInterfaceMap::iterator i = find(m_aMap.begin(), m_aMap.end(),

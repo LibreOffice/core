@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 09:08:00 $
+ *  last change: $Author: oj $ $Date: 2001-07-11 10:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,7 +827,7 @@ void OListBoxModel::loadData()
                 if (!bHaveFormat)
                 {
                     String sLanguage, sCountry;
-                    ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
+                    ConvertLanguageToIsoNames(Application::GetSettings().GetUILanguage(), sLanguage, sCountry);
                     Locale aAppLanguage(
                         sLanguage,
                         sCountry,

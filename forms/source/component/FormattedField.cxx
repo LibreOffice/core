@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-25 10:30:09 $
+ *  last change: $Author: oj $ $Date: 2001-07-11 10:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,6 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
-
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
@@ -270,7 +269,7 @@ protected:
 //------------------------------------------------------------------
 StandardFormatsSupplier::StandardFormatsSupplier(const Reference< XMultiServiceFactory > & _rxFactory)
     :SvNumberFormatsSupplierObj()
-    ,m_pMyPrivateFormatter(new SvNumberFormatter(_rxFactory, Application::GetAppInternational().GetLanguage()))
+    ,m_pMyPrivateFormatter(new SvNumberFormatter(_rxFactory, Application::GetSettings().GetUILanguage()))
 {
     SetNumberFormatter(m_pMyPrivateFormatter);
 }
@@ -851,7 +850,7 @@ void OFormattedModel::_loaded(const EventObject& rEvent)
                     if (xTypes.is())
                     {
                         UniString sLanguage, sCountry;
-                        ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
+                        ConvertLanguageToIsoNames(Application::GetSettings().GetUILanguage(), sLanguage, sCountry);
                         Locale aApplicationLocale(sLanguage, sCountry, ::rtl::OUString());
 
                         sal_Int32 nNewKey = 0;

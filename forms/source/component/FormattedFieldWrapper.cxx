@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedFieldWrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-31 13:59:50 $
+ *  last change: $Author: oj $ $Date: 2001-07-11 10:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ void SAL_CALL OFormattedFieldWrapper::write(const Reference<XObjectOutputStream>
     query_interface(static_cast<XWeak*>(m_pEditPart), xEditProps);
 
     UniString sLanguage, sCountry;
-    ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
+    ConvertLanguageToIsoNames(Application::GetSettings().GetUILanguage(), sLanguage, sCountry);
     Locale aAppLanguage(
         sLanguage,
         sCountry,
