@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:39:01 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,13 +102,13 @@ String STR_GRFILTER_FILTERERROR
 };
 String STR_GRFILTER_TOOBIG
 {
-    Text [ de ] = "Nicht genug Speicher zum Einfügen der Grafik" ;
+    Text [ de ] = "Nicht genug Speicher zum Einfügen des Bildes" ;
     Text [ en-US ] = "Not enough memory to insert the picture." ;
     Text [ x-comment ] = " ";
 };
 String STR_INSERT_GRAPHIC
 {
-    Text [ de ] = "Grafik einfügen" ;
+    Text [ de ] = "Bild einfügen" ;
     Text [ en-US ] = "Insert picture" ;
 };
 String STR_NO_ADDRESSBOOK
