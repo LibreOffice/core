@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-14 09:15:43 $
+#   last change: $Author: hjs $ $Date: 2001-08-22 18:39:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -675,9 +675,12 @@ $(MISC)$/%.hid : %.src
 # make *.xml descriptions available in $(MISC)
 $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml : %.xml
     +$(COPY) $< $@
+    +-$(RM) $(MISC)$/$(<:b).mk >& $(NULLDEV)
+    @+dmake $(MFLAGS) $(CALLMACROS)
+    @+echo back from nowhere...
 
-##generate typelists from xml
-$(MISC)$/%.mk : $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml 
+#generate typelists from xml
+$(MISC)$/%.mk : $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml
     +xml2cmp -types $(MISC)$/$*.mk $*.xml
 
 #generate descriptions from xml

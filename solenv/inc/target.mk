@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-20 18:12:19 $
+#   last change: $Author: hjs $ $Date: 2001-08-22 18:39:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1941,15 +1941,6 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(LOCALDOCDBTARGET)	\
         $(UNOIDLDBTARGET)	\
         $(UNOIDLDBDOCTARGET)	\
-        $(COMP1TYPELISTN) \
-        $(COMP2TYPELISTN) \
-        $(COMP3TYPELISTN) \
-        $(COMP4TYPELISTN) \
-        $(COMP5TYPELISTN) \
-        $(COMP6TYPELISTN) \
-        $(COMP7TYPELISTN) \
-        $(COMP8TYPELISTN) \
-        $(COMP9TYPELISTN) \
         $(COMP1RDBTARGETN) \
         $(COMP2RDBTARGETN) \
         $(COMP3RDBTARGETN) \
@@ -1959,15 +1950,6 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(COMP7RDBTARGETN) \
         $(COMP8RDBTARGETN) \
         $(COMP9RDBTARGETN) \
-        $(COMP1TYPELISTN) \
-        $(COMP2TYPELISTN) \
-        $(COMP3TYPELISTN) \
-        $(COMP4TYPELISTN) \
-        $(COMP5TYPELISTN) \
-        $(COMP6TYPELISTN) \
-        $(COMP7TYPELISTN) \
-        $(COMP8TYPELISTN) \
-        $(COMP9TYPELISTN) \
         $(IDL1TARGET)	$(IDL2TARGET)	$(IDL3TARGET)		\
         $(IDL4TARGET)	$(IDL5TARGET)		\
         $(SDI1TARGET)	$(SDI2TARGET)	$(SDI3TARGET)		\
