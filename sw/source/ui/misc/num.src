@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 07:00:44 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,10 +266,10 @@ TabPage TP_NUM_POSITION
         Text [ english_us ] = "~Minimum space numbering <-> text" ;
         Text [ swedish ] = "~Minimiavst錸d nummer <-> text" ;
         Text [ danish ] = "Min. afstand nummer <-> tekst" ;
-        Text [ italian ] = "Distanza testo <-> numerazione" ;
+        Text [ italian ] = "Distanza minima testo <-> numerazione" ;
         Text [ spanish ] = "Distancia m韓ima N鷐ero <-> Texto" ;
         Text [ french ] = "蒫art ~minimum num閞o <-> texte" ;
-        Text [ dutch ] = "Min. afstand nummer <-> tekst" ;
+        Text [ dutch ] = "~Minimale afstand nummer <-> tekst" ;
         Text [ portuguese_brazilian ] = "Abstand Te~xt <-> Numerierung" ;
         Text [ portuguese ] = "Dist鈔cia m韓ima n鷐ero <-> texto" ;
         Text[ chinese_simplified ] = "编号至正文的最小间隔(~M)";
@@ -730,7 +730,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
     };
     Text [ english_us ] = "Numbering/Bullets" ;
     Text [ portuguese_brazilian ] = "Numerierung/Aufz鋒lung" ;
-    Text [ swedish ] = "Numrering/punktmarkering" ;
+    Text [ swedish ] = "Numrering/punktuppst鋖lning" ;
     Text [ danish ] = "Nummerering/punkttegn" ;
     Text [ italian ] = "Elenchi puntati e numerati" ;
     Text [ spanish ] = "Numeraci髇/Vi馿tas" ;
