@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 06:37:46 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ TabDialog TAB_OUTLINEBULLET
     };
     Text [ english ] = "Numbering/Bullets" ;
     Text [ english_us ] = "Numbering/Bullets" ;
-    Text [ portuguese_brazilian ] = "Numerierung/Aufzählung" ;
+    Text [ portuguese_brazilian ] = "Numerierung/Aufz?hlung" ;
     Text [ swedish ] = "Numrering/punktuppställning" ;
     Text [ danish ] = "Nummerering/punkttegn" ;
     Text [ italian ] = "Elenchi puntati e numerati" ;
