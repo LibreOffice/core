@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:53:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,14 +286,13 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
                         Reference<container::XNameAccess> xModuleConfig(
                             xModuleManager, UNO_QUERY_THROW );
                         // get the long name of the document:
-                        ::rtl::OUString appModule( xModuleManager->identify(
-                                            xDocumentModel ) );
                         Sequence<beans::PropertyValue> moduleDescr;
-                        Any aAny = xModuleConfig->getByName(appModule);
-                        if( sal_True != ( aAny >>= moduleDescr ) )
-                        {
-                            throw RuntimeException(::rtl::OUString::createFromAscii("SFTreeListBox::Init: failed to get PropertyValue"), Reference< XInterface >());
-                        }
+                        try{
+                            ::rtl::OUString appModule = xModuleManager->identify( xDocumentModel );
+                            xModuleConfig->getByName(appModule) >>= moduleDescr;
+                        } catch(const uno::Exception&)
+                            {}
+
                         beans::PropertyValue const * pmoduleDescr =
                             moduleDescr.getConstArray();
                         for ( sal_Int32 pos = moduleDescr.getLength(); pos--; )
