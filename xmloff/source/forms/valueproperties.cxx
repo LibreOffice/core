@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueproperties.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:27 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,19 +102,23 @@ namespace xmloff
                     _rpValuePropertyName = PROPERTY_DEFAULT_TEXT;
                 }
                 break;
+
             case FormComponentType::DATEFIELD:
                 _rpCurrentValuePropertyName = PROPERTY_DATE;
                 _rpValuePropertyName = PROPERTY_DEFAULT_DATE;
                 break;
+
             case FormComponentType::TIMEFIELD:
                 _rpCurrentValuePropertyName = PROPERTY_TIME;
                 _rpValuePropertyName = PROPERTY_DEFAULT_TIME;
                 break;
+
             case FormComponentType::NUMERICFIELD:
             case FormComponentType::CURRENCYFIELD:
                 _rpCurrentValuePropertyName = PROPERTY_VALUE;
                 _rpValuePropertyName = PROPERTY_DEFAULT_VALUE;
                 break;
+
             case FormComponentType::PATTERNFIELD:
             case FormComponentType::FILECONTROL:
             case FormComponentType::COMBOBOX:
@@ -123,12 +127,24 @@ namespace xmloff
             case FormComponentType::COMMANDBUTTON:
                 _rpCurrentValuePropertyName = PROPERTY_TEXT;
                 break;
+
             case FormComponentType::CHECKBOX:
             case FormComponentType::RADIOBUTTON:
                 _rpValuePropertyName = PROPERTY_REFVALUE;
                 break;
+
             case FormComponentType::HIDDENCONTROL:
                 _rpValuePropertyName = PROPERTY_HIDDEN_VALUE;
+                break;
+
+            case FormComponentType::SCROLLBAR:
+                _rpCurrentValuePropertyName = PROPERTY_SCROLLVALUE;
+                _rpValuePropertyName = PROPERTY_SCROLLVALUE_DEFAULT;
+                break;
+
+            case FormComponentType::SPINBUTTON:
+                _rpCurrentValuePropertyName = PROPERTY_SPINVALUE;
+                _rpValuePropertyName = PROPERTY_DEFAULT_SPINVALUE;
                 break;
         }
     }
@@ -145,21 +161,31 @@ namespace xmloff
                 _rpMinValuePropertyName = PROPERTY_DATE_MIN;
                 _rpMaxValuePropertyName = PROPERTY_DATE_MAX;
                 break;
+
             case FormComponentType::TIMEFIELD:
                 _rpMinValuePropertyName = PROPERTY_TIME_MIN;
                 _rpMaxValuePropertyName = PROPERTY_TIME_MAX;
                 break;
+
             case FormComponentType::NUMERICFIELD:
             case FormComponentType::CURRENCYFIELD:
                 _rpMinValuePropertyName = PROPERTY_VALUE_MIN;
                 _rpMaxValuePropertyName = PROPERTY_VALUE_MAX;
                 break;
-            case FormComponentType::PATTERNFIELD:
-                // no min/max value for the pattern field
-                break;
+
             case FormComponentType::TEXTFIELD:
                 _rpMinValuePropertyName = PROPERTY_EFFECTIVE_MIN;
                 _rpMaxValuePropertyName = PROPERTY_EFFECTIVE_MAX;
+                break;
+
+            case FormComponentType::SCROLLBAR:
+                _rpMinValuePropertyName = PROPERTY_SCROLLVALUE_MIN;
+                _rpMaxValuePropertyName = PROPERTY_SCROLLVALUE_MAX;
+                break;
+
+            case FormComponentType::SPINBUTTON:
+                _rpMinValuePropertyName = PROPERTY_SPINVALUE_MIN;
+                _rpMaxValuePropertyName = PROPERTY_SPINVALUE_MAX;
                 break;
         }
     }
@@ -193,6 +219,8 @@ namespace xmloff
             case FormComponentType::PATTERNFIELD:
             case FormComponentType::FILECONTROL:
             case FormComponentType::COMBOBOX:
+            case FormComponentType::SCROLLBAR:
+            case FormComponentType::SPINBUTTON:
                 // For these types, the runtime properties are the same as the ones which in the XML
                 // stream are named "value properties"
                 getValuePropertyNames( _eType, _nFormComponentType, _rpValuePropertyName, _rpDefaultValuePropertyName );
