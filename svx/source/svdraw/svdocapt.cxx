@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-08 09:31:58 $
+ *  last change: $Author: aw $ $Date: 2002-05-21 13:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,8 @@ FASTBOOL SdrCaptionObj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInf
         XFillStyle eStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
 
         SfxItemSet aSet(rSet);
+        // #99001# Hide lines for special calc shadow
+        aSet.Put(XLineStyleItem(XLINE_NONE));
 
         if(eStyle == XFILL_HATCH) // #41666#
         {
@@ -284,6 +286,8 @@ FASTBOOL SdrCaptionObj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInf
         }
 
         rOut.SetFillAttr(aSet);
+        // #99001# Hide lines for special calc shadow
+        rOut.SetLineAttr(aSet);
 
         sal_Int32 nEckRad(GetEckenradius());
         if(PaintNeedsXPoly(nEckRad))
