@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:54:14 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
@@ -342,8 +345,14 @@ void ORelationController::impl_initialize( const Sequence< Any >& aArguments )
         {
             {
                 String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
-                ODataView* pWindow = getView();
-                InfoBox(pWindow, aMessage).Execute();
+                Reference< ::com::sun::star::awt::XWindow> xWindow = getTopMostContainerWindow();
+                Window* pWin = NULL;
+                if ( xWindow.is() )
+                    pWin = VCLUnoHelper::GetWindow(xWindow);
+                if ( !pWin )
+                    pWin = getView()->Window::GetParent();
+
+                InfoBox(pWin, aMessage).Execute();
             }
             throw SQLException();
         }
