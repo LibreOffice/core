@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleselectionhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ namespace comphelper
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
-    using namespace ::drafts::com::sun::star::accessibility;
+    using namespace ::com::sun::star::accessibility;
 
     //=====================================================================
     //= OCommonAccessibleSelection
@@ -142,7 +142,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OCommonAccessibleSelection::deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+    void SAL_CALL OCommonAccessibleSelection::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         implSelect( nSelectedChildIndex, sal_False );
     }
@@ -214,10 +214,10 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OAccessibleSelectionHelper::deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+    void SAL_CALL OAccessibleSelectionHelper::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         OExternalLockGuard aGuard( this );
-        OCommonAccessibleSelection::deselectSelectedAccessibleChild( nSelectedChildIndex );
+        OCommonAccessibleSelection::deselectAccessibleChild( nSelectedChildIndex );
     }
 
 //.........................................................................
