@@ -1,0 +1,18 @@
+Various unresolved issues with configure:
+
+* Providing the location of perl5 with --with-perl-home does not work.
+Please make sure that perl5 is on your path.
+
+* --with-gcc-home may cause a warning message to be displayed even if the
+correct version of gcc is found. This should be harmless.
+
+* It is at present time not possible to use --with-local-solenv to point
+to a solvenv residing at a non-standard location.
+
+Running configure on Windows NT:
+
+* The path to the Microsoft C/C++ compiler home directory must be given as
+an MS-DOS format path on the command line with --with-cl-home or entered 
+interactively when prompted. MS-DOS format names are <8 characters in length
+and don't contain spaces. To get the MS-DOS format of a Windows pathname select
+the directory in a window and right-click and choose properties.   
