@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:16:54 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,9 +123,6 @@
 #ifndef _SCH_DLL_HXX
 #include <sch/schdll.hxx>
 #endif
-#ifndef _SCHDLL0_HXX
-#include <sch/schdll0.hxx>
-#endif
 #ifndef _SCH_MEMCHRT_HXX
 #include <sch/memchrt.hxx>
 #endif
@@ -178,6 +175,8 @@
 #include "XclImpCharts.hxx"
 #endif
 #include "excform.hxx"
+
+#include <sot/clsids.hxx>
 
 #include <stdio.h>
 
@@ -935,13 +934,11 @@ void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
     SfxObjectShell* pDocShell = GetDocShell();
     if( !pDocShell ) return;
 
-    SvStorageRef xStorage = new SvStorage( String() );
     SvInPlaceObjectRef xIPObj;
 
     // do not access uninstalled Chart module
     if( SvtModuleOptions().IsChart() )
-        xIPObj = &static_cast< SvFactory* >( SvInPlaceObject::ClassFactory() )->CreateAndInit(
-            *SCH_MOD()->pSchChartDocShellFactory, xStorage );
+        xIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
 
     if( xIPObj.Is() )
     {
