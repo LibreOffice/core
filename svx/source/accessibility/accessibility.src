@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:09:59 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ String RID_SVXSTR_A11Y_3D_MATERIAL_COLOR
     Text[ danish ] = "3D material color";
     Text[ swedish ] = "3D-materialf�rg";
     Text[ polish ] = "3D material color";
-    Text[ portuguese_brazilian ] = "3D material color";
+    Text[ portuguese_brazilian ] = "Cor do material 3D";
     Text[ japanese ] = "3D マテリアルカラー";
     Text[ korean ] = "3D 재료 색상";
     Text[ chinese_simplified ] = "3 维材料颜色";
@@ -137,7 +137,7 @@ String RID_SVXSTR_A11Y_BACKGROUND_COLOR
     Text[ danish ] = "Baggrundsfarve";
     Text[ swedish ] = "Bakgrundsf�rg";
     Text[ polish ] = "Kolor t�a";
-    Text[ portuguese_brazilian ] = "Cor de fundo";
+    Text[ portuguese_brazilian ] = "Cor do plano de fundo";
     Text[ japanese ] = "背景色";
     Text[ korean ] = "배경 색상";
     Text[ chinese_simplified ] = "背景颜色";
@@ -227,7 +227,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_HATCH
     Text[ danish ] = "hatch";
     Text[ swedish ] = "Skrafferat";
     Text[ polish ] = "hatch";
-    Text[ portuguese_brazilian ] = "With hatching";
+    Text[ portuguese_brazilian ] = "Hachurado";
     Text[ japanese ] = "ハッチング";
     Text[ korean ] = "해칭";
     Text[ chinese_simplified ] = "阴影线的";
@@ -257,7 +257,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT
     Text[ danish ] = "~Graduering";
     Text[ swedish ] = "Gradient";
     Text[ polish ] = "~Gradient";
-    Text[ portuguese_brazilian ] = "~Gradiente";
+    Text[ portuguese_brazilian ] = "Gradiente";
     Text[ japanese ] = "グラデーション";
     Text[ korean ] = "그라디언트";
     Text[ chinese_simplified ] = "透明图案";
@@ -266,7 +266,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT
     Text[ arabic ] = "���� �����";
     Text[ catalan ] = "~Gradient transpar�ncia";
     Text[ thai ] = "ไล่ระดับสี";
-    Text[ language_user1 ] = "Corr; Correct German is \"Verlauf\"";
+    Text[ language_user1 ] = "; Corr; Correct German is \"Verlauf\"";
     Text[ czech ] = "Přechod";
     Text[ hebrew ] = "‮שיפוע‬";
     Text[ hindi ] = "Gradient";
@@ -297,7 +297,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_BITMAP
     Text[ arabic ] = "���� �����";
     Text[ catalan ] = "Mapa de bits";
     Text[ thai ] = "บิทแมป";
-    Text[ language_user1 ] = "Corr; Correct German is \"Bitmap\"";
+    Text[ language_user1 ] = "; Corr; Correct German is \"Bitmap\"";
     Text[ czech ] = "Rastr";
     Text[ hebrew ] = "‮מפת סיביות‬";
     Text[ hindi ] = "Bitmap";
@@ -319,7 +319,7 @@ String RID_SVXSTR_A11Y_WITH
     Text[ danish ] = "with";
     Text[ swedish ] = "med";
     Text[ polish ] = "with";
-    Text[ portuguese_brazilian ] = "with";
+    Text[ portuguese_brazilian ] = "com";
     Text[ japanese ] = "対象";
     Text[ korean ] = "설정 대상";
     Text[ chinese_simplified ] = "带";
@@ -379,7 +379,7 @@ String RID_SVXSTR_A11Y_AND
     Text[ danish ] = "OG ";
     Text[ swedish ] = "och";
     Text[ polish ] = "ORAZ";
-    Text[ portuguese_brazilian ] = "and";
+    Text[ portuguese_brazilian ] = "e";
     Text[ japanese ] = "および";
     Text[ korean ] = "와(과)";
     Text[ chinese_simplified ] = "和";
@@ -412,7 +412,7 @@ String RID_SVXSTR_RECTCTL_ACC_CORN_NAME
     Text[ danish ] = "Corner control";
     Text[ swedish ] = "H�rnkontrollelement";
     Text[ polish ] = "Corner control";
-    Text[ portuguese_brazilian ] = "Corner control";
+    Text[ portuguese_brazilian ] = "Elemento de controle de canto";
     Text[ japanese ] = "コーナーコントロール";
     Text[ korean ] = "모서리 컨트롤";
     Text[ chinese_simplified ] = "角控制";
@@ -442,7 +442,7 @@ String RID_SVXSTR_RECTCTL_ACC_CORN_DESCR
     Text[ danish ] = "Selection of a corner point.";
     Text[ swedish ] = "Urval av en h�rnpunkt.";
     Text[ polish ] = "Selection of a corner point.";
-    Text[ portuguese_brazilian ] = "Selection of a corner point.";
+    Text[ portuguese_brazilian ] = "Sele��o de um ponto de canto.";
     Text[ japanese ] = "隅を選択。";
     Text[ korean ] = "모서리점 선택";
     Text[ chinese_simplified ] = "选择一个角点。";
@@ -472,7 +472,7 @@ String RID_SVXSTR_RECTCTL_ACC_ANGL_NAME
     Text[ danish ] = "Angle control";
     Text[ swedish ] = "Vinkelkontrollelement";
     Text[ polish ] = "Angle control";
-    Text[ portuguese_brazilian ] = "Angle control";
+    Text[ portuguese_brazilian ] = "Elemento de controle de �ngulo";
     Text[ japanese ] = "アングルコントロール";
     Text[ korean ] = "각도 컨트롤";
     Text[ chinese_simplified ] = "角度控制";
@@ -502,7 +502,7 @@ String RID_SVXSTR_RECTCTL_ACC_ANGL_DESCR
     Text[ danish ] = "Selection of a major angle";
     Text[ swedish ] = "Markering av en (huvud)vinkel.";
     Text[ polish ] = "Selection of a major angle";
-    Text[ portuguese_brazilian ] = "Selection of a major angle.";
+    Text[ portuguese_brazilian ] = "Sele��o de um �ngulo principal";
     Text[ japanese ] = "メインの角を選択";
     Text[ korean ] = "중심각 선택";
     Text[ chinese_simplified ] = "选择一个主角度。";
@@ -533,7 +533,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_LT
     Text[ danish ] = "Top left";
     Text[ swedish ] = "Uppe till v�nster";
     Text[ polish ] = "Top left";
-    Text[ portuguese_brazilian ] = "Top left";
+    Text[ portuguese_brazilian ] = "Em cima � esquerda";
     Text[ japanese ] = "左上方";
     Text[ korean ] = "왼쪽 위";
     Text[ chinese_simplified ] = "左上";
@@ -563,7 +563,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MT
     Text[ danish ] = "Top middle";
     Text[ swedish ] = "Uppe i mitten";
     Text[ polish ] = "Top middle";
-    Text[ portuguese_brazilian ] = "Top middle";
+    Text[ portuguese_brazilian ] = "Em cima no meio";
     Text[ japanese ] = "中央上";
     Text[ korean ] = "위 가운데";
     Text[ chinese_simplified ] = "中上";
@@ -593,7 +593,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_RT
     Text[ danish ] = "Top right";
     Text[ swedish ] = "Uppe till h�ger";
     Text[ polish ] = "Top right";
-    Text[ portuguese_brazilian ] = "Top right";
+    Text[ portuguese_brazilian ] = "Em cima � direita";
     Text[ japanese ] = "右上方";
     Text[ korean ] = "오른쪽 위";
     Text[ chinese_simplified ] = "右上";
@@ -623,7 +623,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_LM
     Text[ danish ] = "Left center";
     Text[ swedish ] = "Till v�nster i mitten";
     Text[ polish ] = "Left center";
-    Text[ portuguese_brazilian ] = "Left center";
+    Text[ portuguese_brazilian ] = "No centro � esquerda";
     Text[ japanese ] = "左中央";
     Text[ korean ] = "왼쪽 중간";
     Text[ chinese_simplified ] = "左中";
@@ -653,7 +653,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MM
     Text[ danish ] = "Midte";
     Text[ swedish ] = "Mitten";
     Text[ polish ] = "Po�rodku";
-    Text[ portuguese_brazilian ] = "Center";
+    Text[ portuguese_brazilian ] = "No centro";
     Text[ japanese ] = "中央";
     Text[ korean ] = "가운데";
     Text[ chinese_simplified ] = "中";
@@ -683,7 +683,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_RM
     Text[ danish ] = "Right center";
     Text[ swedish ] = "Till h�ger i mitten";
     Text[ polish ] = "Right center";
-    Text[ portuguese_brazilian ] = "Right center";
+    Text[ portuguese_brazilian ] = "No centro � direita";
     Text[ japanese ] = "右中央";
     Text[ korean ] = "오른쪽 중간";
     Text[ chinese_simplified ] = "右中";
@@ -713,7 +713,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_LB
     Text[ danish ] = "Bottom left";
     Text[ swedish ] = "Nere till v�nster";
     Text[ polish ] = "Bottom left";
-    Text[ portuguese_brazilian ] = "Bottom left";
+    Text[ portuguese_brazilian ] = "Em baixo � esquerda";
     Text[ japanese ] = "左下方";
     Text[ korean ] = "왼쪽 아래";
     Text[ chinese_simplified ] = "左下";
@@ -743,7 +743,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MB
     Text[ danish ] = "Bottom middle";
     Text[ swedish ] = "Nere i mitten";
     Text[ polish ] = "Bottom middle";
-    Text[ portuguese_brazilian ] = "Bottom middle";
+    Text[ portuguese_brazilian ] = "Em baixo no meio";
     Text[ japanese ] = "中央下";
     Text[ korean ] = "아래 가운데";
     Text[ chinese_simplified ] = "中下";
@@ -773,7 +773,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_RB
     Text[ danish ] = "Bottom right";
     Text[ swedish ] = "Nere till h�ger";
     Text[ polish ] = "Bottom right";
-    Text[ portuguese_brazilian ] = "Bottom right";
+    Text[ portuguese_brazilian ] = "Em baixo � direita";
     Text[ japanese ] = "右下方";
     Text[ korean ] = "오른쪽 아래";
     Text[ chinese_simplified ] = "右下";
@@ -804,7 +804,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A000
     Text[ danish ] = "0 degrees";
     Text[ swedish ] = "0 grader";
     Text[ polish ] = "0 degrees";
-    Text[ portuguese_brazilian ] = "0 degrees";
+    Text[ portuguese_brazilian ] = "0 graus";
     Text[ japanese ] = "0 度";
     Text[ korean ] = "0 도";
     Text[ chinese_simplified ] = "0 度";
@@ -834,7 +834,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A045
     Text[ danish ] = "45 grader";
     Text[ swedish ] = "45 grader";
     Text[ polish ] = "45 stopni";
-    Text[ portuguese_brazilian ] = "45 degrees";
+    Text[ portuguese_brazilian ] = "45 graus";
     Text[ japanese ] = "45 度";
     Text[ korean ] = "45 도";
     Text[ chinese_simplified ] = "45 度";
@@ -864,7 +864,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A090
     Text[ danish ] = "90 grader";
     Text[ swedish ] = "90 grader";
     Text[ polish ] = "90 stopni";
-    Text[ portuguese_brazilian ] = "90 degrees";
+    Text[ portuguese_brazilian ] = "90 graus";
     Text[ japanese ] = "90 度";
     Text[ korean ] = "90 도";
     Text[ chinese_simplified ] = "90 度";
@@ -894,7 +894,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A135
     Text[ danish ] = "135 degrees";
     Text[ swedish ] = "135 grader";
     Text[ polish ] = "135 degrees";
-    Text[ portuguese_brazilian ] = "135 degrees";
+    Text[ portuguese_brazilian ] = "135 graus";
     Text[ japanese ] = "135 度";
     Text[ korean ] = "135 도";
     Text[ chinese_simplified ] = "135 度";
@@ -924,7 +924,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A180
     Text[ danish ] = "180 degrees";
     Text[ swedish ] = "180 grader";
     Text[ polish ] = "180 degrees";
-    Text[ portuguese_brazilian ] = "180 degrees";
+    Text[ portuguese_brazilian ] = "180 graus";
     Text[ japanese ] = "180 度";
     Text[ korean ] = "180 도";
     Text[ chinese_simplified ] = "180 度";
@@ -954,7 +954,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A225
     Text[ danish ] = "225 degrees";
     Text[ swedish ] = "225 grader";
     Text[ polish ] = "225 degrees";
-    Text[ portuguese_brazilian ] = "225 degrees";
+    Text[ portuguese_brazilian ] = "225 graus";
     Text[ japanese ] = "225 度";
     Text[ korean ] = "225 도";
     Text[ chinese_simplified ] = "225 度";
@@ -984,7 +984,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A270
     Text[ danish ] = "270 degrees";
     Text[ swedish ] = "270 grader";
     Text[ polish ] = "270 degrees";
-    Text[ portuguese_brazilian ] = "270 degrees";
+    Text[ portuguese_brazilian ] = "270 graus";
     Text[ japanese ] = "270 度";
     Text[ korean ] = "270 도";
     Text[ chinese_simplified ] = "270 度";
@@ -1014,7 +1014,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A315
     Text[ danish ] = "315 degrees";
     Text[ swedish ] = "315 grader";
     Text[ polish ] = "315 degrees";
-    Text[ portuguese_brazilian ] = "315 degrees";
+    Text[ portuguese_brazilian ] = "315 graus";
     Text[ japanese ] = "315 度";
     Text[ korean ] = "315 도";
     Text[ chinese_simplified ] = "315 度";
@@ -1045,7 +1045,7 @@ String RID_SVXSTR_GRAPHCTRL_ACC_NAME
     Text[ danish ] = "Graph control";
     Text[ swedish ] = "Kontrollelement f�r kontur";
     Text[ polish ] = "Graph control";
-    Text[ portuguese_brazilian ] = "Contour control";
+    Text[ portuguese_brazilian ] = "Elementos de controle de contornos";
     Text[ japanese ] = "輪郭コントロール";
     Text[ korean ] = "윤곽 컨트롤";
     Text[ chinese_simplified ] = "轮廓控制";
@@ -1075,7 +1075,7 @@ String RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION
     Text[ danish ] = "Editing of a graph";
     Text[ swedish ] = "H�r kan du redigera konturen.";
     Text[ polish ] = "Editing of a graph";
-    Text[ portuguese_brazilian ] = "This is where you can edit the contour.";
+    Text[ portuguese_brazilian ] = "Edi��o do contorno";
     Text[ japanese ] = "ここで輪郭の編集ができます。";
     Text[ korean ] = "여기에서 윤곽을 편집할 수 있습니다.";
     Text[ chinese_simplified ] = "在此您能够编辑轮廓。";
@@ -1106,7 +1106,7 @@ String RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION
     Text[ danish ] = "Paragraph: $(ARG) ";
     Text[ swedish ] = "Stycke: $(ARG) ";
     Text[ polish ] = "Paragraph: $(ARG) ";
-    Text[ portuguese_brazilian ] = "Paragraph: $(ARG) ";
+    Text[ portuguese_brazilian ] = "Par�grafo: $(ARG) ";
     Text[ japanese ] = "段落: $(ARG) ";
     Text[ korean ] = "단락: $(ARG) ";
     Text[ chinese_simplified ] = "段落：$(ARG) ";
@@ -1137,7 +1137,7 @@ String RID_SVXSTR_A11Y_PARAGRAPH_NAME
     Text[ danish ] = "Paragraph $(ARG)";
     Text[ swedish ] = "Stycke $(ARG)";
     Text[ polish ] = "Paragraph $(ARG)";
-    Text[ portuguese_brazilian ] = "Paragraph $(ARG)";
+    Text[ portuguese_brazilian ] = "Par�grafo: $(ARG) ";
     Text[ japanese ] = "段落 $(ARG)";
     Text[ korean ] = "단락 $(ARG)";
     Text[ chinese_simplified ] = "段落 $(ARG)";
@@ -1168,7 +1168,7 @@ String RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION
     Text[ danish ] = "Image bullet in paragraph: $(ARG)";
     Text[ swedish ] = "Grafiskt punktuppst�llningstecken i stycke: $(ARG)";
     Text[ polish ] = "Image bullet in paragraph: $(ARG)";
-    Text[ portuguese_brazilian ] = "Image bullet in paragraph: $(ARG)";
+    Text[ portuguese_brazilian ] = "Marca imagem no par�grafo: $(ARG)";
     Text[ japanese ] = "段落の箇条書きシンボル: $(ARG)";
     Text[ korean ] = "단락 내 글머리 기호 이미지: $(ARG)";
     Text[ chinese_simplified ] = "段落之中的图形式项目符号：$(ARG)";
@@ -1199,7 +1199,7 @@ String RID_SVXSTR_A11Y_IMAGEBULLET_NAME
     Text[ danish ] = "Image bullet";
     Text[ swedish ] = "Grafiskt punktuppst�llningstecken";
     Text[ polish ] = "Image bullet";
-    Text[ portuguese_brazilian ] = "Image bullet";
+    Text[ portuguese_brazilian ] = "Marca imagem";
     Text[ japanese ] = "箇条書きシンボル";
     Text[ korean ] = "글머리 기호 이미지";
     Text[ chinese_simplified ] = "图形式的项目符号";
@@ -1230,7 +1230,7 @@ String RID_SVXSTR_CHARACTER_SELECTION
     Text[ danish ] = "Special character selection";
     Text[ swedish ] = "Urval av specialtecken";
     Text[ polish ] = "Special character selection";
-    Text[ portuguese_brazilian ] = "Special character selection";
+    Text[ portuguese_brazilian ] = "Sele��o de caracter especial";
     Text[ japanese ] = "記号と特殊文字の選択";
     Text[ korean ] = "기호 및 특수 문자 선택";
     Text[ chinese_simplified ] = "选择特殊字符";
@@ -1261,7 +1261,7 @@ String RID_SVXSTR_CHAR_SEL_DESC
     Text[ danish ] = "Select special characters in this area.";
     Text[ swedish ] = "V�lj ut specialtecken i det h�r omr�det.";
     Text[ polish ] = "Select special characters in this area.";
-    Text[ portuguese_brazilian ] = "Select special characters in this area.";
+    Text[ portuguese_brazilian ] = "�rea de sele��o de caracteres";
     Text[ japanese ] = "この範囲で記号と特殊文字を選択します。";
     Text[ korean ] = "이 영역에서 기호 및 특수 문자를 선택하십시오.";
     Text[ chinese_simplified ] = "在这个区域内选择特殊字符。";
@@ -1293,7 +1293,7 @@ String RID_SVXSTR_CHARACTER_CODE
     Text[ danish ] = "Character code ";
     Text[ swedish ] = "Teckenkod ";
     Text[ polish ] = "Character code ";
-    Text[ portuguese_brazilian ] = "Character code ";
+    Text[ portuguese_brazilian ] = "C�digo do caracter";
     Text[ japanese ] = "文字コード";
     Text[ korean ] = "문자 코드";
     Text[ chinese_simplified ] = "字符码";
@@ -1307,6 +1307,7 @@ String RID_SVXSTR_CHARACTER_CODE
     Text[ hindi ] = "Character code ";
     Text[ slovak ] = "Kód znaku ";
 };
+
 
 
 
