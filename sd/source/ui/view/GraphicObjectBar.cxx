@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicObjectBar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:37:24 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ void GraphicObjectBar::Execute( SfxRequest& rReq )
 
 void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
 {
-    const SdrMarkList&  rMarkList = pView->GetMarkList();
+    const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
     BOOL                bEnable = FALSE;
 
     if( rMarkList.GetMarkCount() == 1 )
@@ -203,7 +203,7 @@ void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
 
 void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
 {
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
     {
@@ -221,7 +221,7 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
                 if( pPageView )
                 {
                     SdrGrafObj* pFilteredObj = (SdrGrafObj*) pObj->Clone();
-                    String      aStr( pView->GetMarkDescription() );
+                    String      aStr( pView->GetDescriptionOfMarkedObjects() );
 
                     aStr.Append( sal_Unicode(' ') );
                     aStr.Append( String( SdResId( STR_UNDO_GRAFFILTER ) ) );
