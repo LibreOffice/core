@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-06 13:27:19 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,10 @@
 #include "xmlkywd.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
 #endif
@@ -143,95 +147,96 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 //////////////////////////////////////////////////////////////////////////////
 
 static __FAR_DATA SvXMLTokenMapEntry aDocElemTokenMap[] =
 {
-    { XML_NAMESPACE_OFFICE, sXML_styles,            XML_TOK_DOC_STYLES          },
-    { XML_NAMESPACE_OFFICE, sXML_automatic_styles,  XML_TOK_DOC_AUTOSTYLES      },
-    { XML_NAMESPACE_OFFICE, sXML_master_styles,     XML_TOK_DOC_MASTERSTYLES    },
-    { XML_NAMESPACE_OFFICE, sXML_meta,              XML_TOK_DOC_META            },
-    { XML_NAMESPACE_OFFICE, sXML_script,            XML_TOK_DOC_SCRIPT          },
-    { XML_NAMESPACE_OFFICE, sXML_body,              XML_TOK_DOC_BODY            },
-    { XML_NAMESPACE_OFFICE, sXML_settings,          XML_TOK_DOC_SETTINGS        },
+    { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES          },
+    { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES      },
+    { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES    },
+    { XML_NAMESPACE_OFFICE, XML_META,               XML_TOK_DOC_META            },
+    { XML_NAMESPACE_OFFICE, XML_SCRIPT,             XML_TOK_DOC_SCRIPT          },
+    { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_DOC_BODY            },
+    { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS        },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aBodyElemTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW,   sXML_page,              XML_TOK_BODY_PAGE   },
-    { XML_NAMESPACE_PRESENTATION, sXML_settings,    XML_TOK_BODY_SETTINGS   },
+    { XML_NAMESPACE_DRAW,   XML_PAGE,               XML_TOK_BODY_PAGE   },
+    { XML_NAMESPACE_PRESENTATION, XML_SETTINGS,     XML_TOK_BODY_SETTINGS   },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aStylesElemTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,  sXML_page_master,               XML_TOK_STYLES_PAGE_MASTER              },
-    { XML_NAMESPACE_STYLE,  sXML_presentation_page_layout,  XML_TOK_STYLES_PRESENTATION_PAGE_LAYOUT },
-    { XML_NAMESPACE_STYLE,  sXML_style,                     XML_TOK_STYLES_STYLE    },
-    { XML_NAMESPACE_NUMBER, sXML_date_style,                XML_TOK_STYLES_DATE_STYLE },
-    { XML_NAMESPACE_NUMBER, sXML_time_style,                XML_TOK_STYLES_TIME_STYLE },
+    { XML_NAMESPACE_STYLE,  XML_PAGE_MASTER,                XML_TOK_STYLES_PAGE_MASTER              },
+    { XML_NAMESPACE_STYLE,  XML_PRESENTATION_PAGE_LAYOUT,   XML_TOK_STYLES_PRESENTATION_PAGE_LAYOUT },
+    { XML_NAMESPACE_STYLE,  XML_STYLE,                      XML_TOK_STYLES_STYLE    },
+    { XML_NAMESPACE_NUMBER, XML_DATE_STYLE,                 XML_TOK_STYLES_DATE_STYLE },
+    { XML_NAMESPACE_NUMBER, XML_TIME_STYLE,                 XML_TOK_STYLES_TIME_STYLE },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aMasterPageElemTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,          sXML_style,     XML_TOK_MASTERPAGE_STYLE    },
-    { XML_NAMESPACE_PRESENTATION,   sXML_notes,     XML_TOK_MASTERPAGE_NOTES    },
+    { XML_NAMESPACE_STYLE,          XML_STYLE,      XML_TOK_MASTERPAGE_STYLE    },
+    { XML_NAMESPACE_PRESENTATION,   XML_NOTES,      XML_TOK_MASTERPAGE_NOTES    },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aMasterPageAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,  sXML_name,                      XML_TOK_MASTERPAGE_NAME },
-    { XML_NAMESPACE_STYLE,  sXML_page_master_name,          XML_TOK_MASTERPAGE_PAGE_MASTER_NAME },
-    { XML_NAMESPACE_DRAW,   sXML_style_name,                XML_TOK_MASTERPAGE_STYLE_NAME       },
-    { XML_NAMESPACE_PRESENTATION,   sXML_presentation_page_layout_name, XML_TOK_MASTERPAGE_PAGE_LAYOUT_NAME },
+    { XML_NAMESPACE_STYLE,  XML_NAME,                       XML_TOK_MASTERPAGE_NAME },
+    { XML_NAMESPACE_STYLE,  XML_PAGE_MASTER_NAME,           XML_TOK_MASTERPAGE_PAGE_MASTER_NAME },
+    { XML_NAMESPACE_DRAW,   XML_STYLE_NAME,                 XML_TOK_MASTERPAGE_STYLE_NAME       },
+    { XML_NAMESPACE_PRESENTATION,   XML_PRESENTATION_PAGE_LAYOUT_NAME,  XML_TOK_MASTERPAGE_PAGE_LAYOUT_NAME },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aPageMasterAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,          sXML_name,              XML_TOK_PAGEMASTER_NAME                 },
+    { XML_NAMESPACE_STYLE,          XML_NAME,               XML_TOK_PAGEMASTER_NAME                 },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aPageMasterStyleAttrTokenMap[] =
 {
-    { XML_NAMESPACE_FO,             sXML_margin_top,        XML_TOK_PAGEMASTERSTYLE_MARGIN_TOP          },
-    { XML_NAMESPACE_FO,             sXML_margin_bottom,     XML_TOK_PAGEMASTERSTYLE_MARGIN_BOTTOM       },
-    { XML_NAMESPACE_FO,             sXML_margin_left,       XML_TOK_PAGEMASTERSTYLE_MARGIN_LEFT         },
-    { XML_NAMESPACE_FO,             sXML_margin_right,      XML_TOK_PAGEMASTERSTYLE_MARGIN_RIGHT        },
-    { XML_NAMESPACE_FO,             sXML_page_width,        XML_TOK_PAGEMASTERSTYLE_PAGE_WIDTH          },
-    { XML_NAMESPACE_FO,             sXML_page_height,       XML_TOK_PAGEMASTERSTYLE_PAGE_HEIGHT         },
-    { XML_NAMESPACE_STYLE,          sXML_print_orientation, XML_TOK_PAGEMASTERSTYLE_PAGE_ORIENTATION    },
+    { XML_NAMESPACE_FO,             XML_MARGIN_TOP,         XML_TOK_PAGEMASTERSTYLE_MARGIN_TOP          },
+    { XML_NAMESPACE_FO,             XML_MARGIN_BOTTOM,      XML_TOK_PAGEMASTERSTYLE_MARGIN_BOTTOM       },
+    { XML_NAMESPACE_FO,             XML_MARGIN_LEFT,        XML_TOK_PAGEMASTERSTYLE_MARGIN_LEFT         },
+    { XML_NAMESPACE_FO,             XML_MARGIN_RIGHT,       XML_TOK_PAGEMASTERSTYLE_MARGIN_RIGHT        },
+    { XML_NAMESPACE_FO,             XML_PAGE_WIDTH,         XML_TOK_PAGEMASTERSTYLE_PAGE_WIDTH          },
+    { XML_NAMESPACE_FO,             XML_PAGE_HEIGHT,        XML_TOK_PAGEMASTERSTYLE_PAGE_HEIGHT         },
+    { XML_NAMESPACE_STYLE,          XML_PRINT_ORIENTATION,  XML_TOK_PAGEMASTERSTYLE_PAGE_ORIENTATION    },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aDrawPageAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW,           sXML_name,                          XML_TOK_DRAWPAGE_NAME               },
-    { XML_NAMESPACE_DRAW,           sXML_style_name,                    XML_TOK_DRAWPAGE_STYLE_NAME         },
-    { XML_NAMESPACE_DRAW,           sXML_master_page_name,              XML_TOK_DRAWPAGE_MASTER_PAGE_NAME   },
-    { XML_NAMESPACE_PRESENTATION,   sXML_presentation_page_layout_name, XML_TOK_DRAWPAGE_PAGE_LAYOUT_NAME   },
-    { XML_NAMESPACE_DRAW,           sXML_id,                            XML_TOK_DRAWPAGE_ID                 },
+    { XML_NAMESPACE_DRAW,           XML_NAME,                           XML_TOK_DRAWPAGE_NAME               },
+    { XML_NAMESPACE_DRAW,           XML_STYLE_NAME,                     XML_TOK_DRAWPAGE_STYLE_NAME         },
+    { XML_NAMESPACE_DRAW,           XML_MASTER_PAGE_NAME,               XML_TOK_DRAWPAGE_MASTER_PAGE_NAME   },
+    { XML_NAMESPACE_PRESENTATION,   XML_PRESENTATION_PAGE_LAYOUT_NAME,  XML_TOK_DRAWPAGE_PAGE_LAYOUT_NAME   },
+    { XML_NAMESPACE_DRAW,           XML_ID,                         XML_TOK_DRAWPAGE_ID                 },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aDrawPageElemTokenMap[] =
 {
-    { XML_NAMESPACE_PRESENTATION,   sXML_notes,             XML_TOK_DRAWPAGE_NOTES      },
+    { XML_NAMESPACE_PRESENTATION,   XML_NOTES,              XML_TOK_DRAWPAGE_NOTES      },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aPresentationPlaceholderAttrTokenMap[] =
 {
-    { XML_NAMESPACE_PRESENTATION,   sXML_object,    XML_TOK_PRESENTATIONPLACEHOLDER_OBJECTNAME  },
-    { XML_NAMESPACE_SVG,            sXML_x,         XML_TOK_PRESENTATIONPLACEHOLDER_X           },
-    { XML_NAMESPACE_SVG,            sXML_y,         XML_TOK_PRESENTATIONPLACEHOLDER_Y           },
-    { XML_NAMESPACE_SVG,            sXML_width,     XML_TOK_PRESENTATIONPLACEHOLDER_WIDTH       },
-    { XML_NAMESPACE_SVG,            sXML_height,    XML_TOK_PRESENTATIONPLACEHOLDER_HEIGHT      },
+    { XML_NAMESPACE_PRESENTATION,   XML_OBJECT,     XML_TOK_PRESENTATIONPLACEHOLDER_OBJECTNAME  },
+    { XML_NAMESPACE_SVG,            XML_X,          XML_TOK_PRESENTATIONPLACEHOLDER_X           },
+    { XML_NAMESPACE_SVG,            XML_Y,          XML_TOK_PRESENTATIONPLACEHOLDER_Y           },
+    { XML_NAMESPACE_SVG,            XML_WIDTH,      XML_TOK_PRESENTATIONPLACEHOLDER_WIDTH       },
+    { XML_NAMESPACE_SVG,            XML_HEIGHT,     XML_TOK_PRESENTATIONPLACEHOLDER_HEIGHT      },
     XML_TOKEN_MAP_END
 };
 

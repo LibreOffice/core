@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-23 09:38:47 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 // ---
 
@@ -115,10 +116,10 @@ enum SvXMLTokenMapAttrs
 
 static __FAR_DATA SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE, sXML_position,    XML_TOK_TABSTOP_POSITION },
-    { XML_NAMESPACE_STYLE, sXML_type,        XML_TOK_TABSTOP_TYPE },
-    { XML_NAMESPACE_STYLE, sXML_char,        XML_TOK_TABSTOP_CHAR },
-    { XML_NAMESPACE_STYLE, sXML_leader_char, XML_TOK_TABSTOP_LEADER },
+    { XML_NAMESPACE_STYLE, XML_POSITION,     XML_TOK_TABSTOP_POSITION },
+    { XML_NAMESPACE_STYLE, XML_TYPE,         XML_TOK_TABSTOP_TYPE },
+    { XML_NAMESPACE_STYLE, XML_CHAR,         XML_TOK_TABSTOP_CHAR },
+    { XML_NAMESPACE_STYLE, XML_LEADER_CHAR,  XML_TOK_TABSTOP_LEADER },
     XML_TOKEN_MAP_END
 };
 

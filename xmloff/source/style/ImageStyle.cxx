@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageStyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-06 20:11:54 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
+using namespace ::xmloff::token;
 
 enum SvXMLTokenMapAttrs
 {
@@ -128,13 +129,13 @@ enum SvXMLTokenMapAttrs
 
 static __FAR_DATA SvXMLTokenMapEntry aHatchAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW, sXML_name, XML_TOK_IMAGE_NAME },
-    { XML_NAMESPACE_XLINK, sXML_href, XML_TOK_IMAGE_URL },
-    { XML_NAMESPACE_XLINK, sXML_type, XML_TOK_IMAGE_TYPE },
-    { XML_NAMESPACE_XLINK, sXML_show, XML_TOK_IMAGE_SHOW },
-    { XML_NAMESPACE_XLINK, sXML_actuate, XML_TOK_IMAGE_ACTUATE },
-    /*{ XML_NAMESPACE_XLINK, sXML_href, XML_TOK_IMAGE_URL },
-    { XML_NAMESPACE_XLINK, sXML_href, XML_TOK_IMAGE_URL },*/
+    { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_IMAGE_NAME },
+    { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },
+    { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_IMAGE_TYPE },
+    { XML_NAMESPACE_XLINK, XML_SHOW, XML_TOK_IMAGE_SHOW },
+    { XML_NAMESPACE_XLINK, XML_ACTUATE, XML_TOK_IMAGE_ACTUATE },
+    /*{ XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },
+    { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },*/
     XML_TOKEN_MAP_END
 };
 

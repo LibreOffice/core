@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,71 +310,71 @@ static ColorData aNumFmtStdColors[XML_NUMF_COLORCOUNT] =
 static __FAR_DATA SvXMLTokenMapEntry aStylesElemMap[] =
 {
     //  style elements
-    { XML_NAMESPACE_NUMBER, sXML_number_style,     XML_TOK_STYLES_NUMBER_STYLE      },
-    { XML_NAMESPACE_NUMBER, sXML_currency_style,   XML_TOK_STYLES_CURRENCY_STYLE    },
-    { XML_NAMESPACE_NUMBER, sXML_percentage_style, XML_TOK_STYLES_PERCENTAGE_STYLE  },
-    { XML_NAMESPACE_NUMBER, sXML_date_style,       XML_TOK_STYLES_DATE_STYLE        },
-    { XML_NAMESPACE_NUMBER, sXML_time_style,       XML_TOK_STYLES_TIME_STYLE        },
-    { XML_NAMESPACE_NUMBER, sXML_boolean_style,    XML_TOK_STYLES_BOOLEAN_STYLE     },
-    { XML_NAMESPACE_NUMBER, sXML_text_style,       XML_TOK_STYLES_TEXT_STYLE        },
+    { XML_NAMESPACE_NUMBER, XML_NUMBER_STYLE,      XML_TOK_STYLES_NUMBER_STYLE      },
+    { XML_NAMESPACE_NUMBER, XML_CURRENCY_STYLE,    XML_TOK_STYLES_CURRENCY_STYLE    },
+    { XML_NAMESPACE_NUMBER, XML_PERCENTAGE_STYLE,  XML_TOK_STYLES_PERCENTAGE_STYLE  },
+    { XML_NAMESPACE_NUMBER, XML_DATE_STYLE,        XML_TOK_STYLES_DATE_STYLE        },
+    { XML_NAMESPACE_NUMBER, XML_TIME_STYLE,        XML_TOK_STYLES_TIME_STYLE        },
+    { XML_NAMESPACE_NUMBER, XML_BOOLEAN_STYLE,     XML_TOK_STYLES_BOOLEAN_STYLE     },
+    { XML_NAMESPACE_NUMBER, XML_TEXT_STYLE,        XML_TOK_STYLES_TEXT_STYLE        },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aStyleElemMap[] =
 {
     //  elements in a style
-    { XML_NAMESPACE_NUMBER, sXML_text,              XML_TOK_STYLE_TEXT              },
-    { XML_NAMESPACE_NUMBER, sXML_number,            XML_TOK_STYLE_NUMBER            },
-    { XML_NAMESPACE_NUMBER, sXML_scientific_number, XML_TOK_STYLE_SCIENTIFIC_NUMBER },
-    { XML_NAMESPACE_NUMBER, sXML_fraction,          XML_TOK_STYLE_FRACTION          },
-    { XML_NAMESPACE_NUMBER, sXML_currency_symbol,   XML_TOK_STYLE_CURRENCY_SYMBOL   },
-    { XML_NAMESPACE_NUMBER, sXML_day,               XML_TOK_STYLE_DAY               },
-    { XML_NAMESPACE_NUMBER, sXML_month,             XML_TOK_STYLE_MONTH             },
-    { XML_NAMESPACE_NUMBER, sXML_year,              XML_TOK_STYLE_YEAR              },
-    { XML_NAMESPACE_NUMBER, sXML_era,               XML_TOK_STYLE_ERA               },
-    { XML_NAMESPACE_NUMBER, sXML_day_of_week,       XML_TOK_STYLE_DAY_OF_WEEK       },
-    { XML_NAMESPACE_NUMBER, sXML_week_of_year,      XML_TOK_STYLE_WEEK_OF_YEAR      },
-    { XML_NAMESPACE_NUMBER, sXML_quarter,           XML_TOK_STYLE_QUARTER           },
-    { XML_NAMESPACE_NUMBER, sXML_hours,             XML_TOK_STYLE_HOURS             },
-    { XML_NAMESPACE_NUMBER, sXML_am_pm,             XML_TOK_STYLE_AM_PM             },
-    { XML_NAMESPACE_NUMBER, sXML_minutes,           XML_TOK_STYLE_MINUTES           },
-    { XML_NAMESPACE_NUMBER, sXML_seconds,           XML_TOK_STYLE_SECONDS           },
-    { XML_NAMESPACE_NUMBER, sXML_boolean,           XML_TOK_STYLE_BOOLEAN           },
-    { XML_NAMESPACE_NUMBER, sXML_text_content,      XML_TOK_STYLE_TEXT_CONTENT      },
-    { XML_NAMESPACE_STYLE,  sXML_properties,        XML_TOK_STYLE_PROPERTIES        },
-    { XML_NAMESPACE_STYLE,  sXML_map,               XML_TOK_STYLE_MAP               },
+    { XML_NAMESPACE_NUMBER, XML_TEXT,               XML_TOK_STYLE_TEXT              },
+    { XML_NAMESPACE_NUMBER, XML_NUMBER,             XML_TOK_STYLE_NUMBER            },
+    { XML_NAMESPACE_NUMBER, XML_SCIENTIFIC_NUMBER,  XML_TOK_STYLE_SCIENTIFIC_NUMBER },
+    { XML_NAMESPACE_NUMBER, XML_FRACTION,           XML_TOK_STYLE_FRACTION          },
+    { XML_NAMESPACE_NUMBER, XML_CURRENCY_SYMBOL,    XML_TOK_STYLE_CURRENCY_SYMBOL   },
+    { XML_NAMESPACE_NUMBER, XML_DAY,                XML_TOK_STYLE_DAY               },
+    { XML_NAMESPACE_NUMBER, XML_MONTH,              XML_TOK_STYLE_MONTH             },
+    { XML_NAMESPACE_NUMBER, XML_YEAR,               XML_TOK_STYLE_YEAR              },
+    { XML_NAMESPACE_NUMBER, XML_ERA,                XML_TOK_STYLE_ERA               },
+    { XML_NAMESPACE_NUMBER, XML_DAY_OF_WEEK,        XML_TOK_STYLE_DAY_OF_WEEK       },
+    { XML_NAMESPACE_NUMBER, XML_WEEK_OF_YEAR,       XML_TOK_STYLE_WEEK_OF_YEAR      },
+    { XML_NAMESPACE_NUMBER, XML_QUARTER,            XML_TOK_STYLE_QUARTER           },
+    { XML_NAMESPACE_NUMBER, XML_HOURS,              XML_TOK_STYLE_HOURS             },
+    { XML_NAMESPACE_NUMBER, XML_AM_PM,              XML_TOK_STYLE_AM_PM             },
+    { XML_NAMESPACE_NUMBER, XML_MINUTES,            XML_TOK_STYLE_MINUTES           },
+    { XML_NAMESPACE_NUMBER, XML_SECONDS,            XML_TOK_STYLE_SECONDS           },
+    { XML_NAMESPACE_NUMBER, XML_BOOLEAN,            XML_TOK_STYLE_BOOLEAN           },
+    { XML_NAMESPACE_NUMBER, XML_TEXT_CONTENT,       XML_TOK_STYLE_TEXT_CONTENT      },
+    { XML_NAMESPACE_STYLE,  XML_PROPERTIES,         XML_TOK_STYLE_PROPERTIES        },
+    { XML_NAMESPACE_STYLE,  XML_MAP,                XML_TOK_STYLE_MAP               },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aStyleAttrMap[] =
 {
     //  attributes for a style
-    { XML_NAMESPACE_STYLE,  sXML_name,                 XML_TOK_STYLE_ATTR_NAME                  },
-    { XML_NAMESPACE_NUMBER, sXML_language,             XML_TOK_STYLE_ATTR_LANGUAGE              },
-    { XML_NAMESPACE_NUMBER, sXML_country,              XML_TOK_STYLE_ATTR_COUNTRY               },
-    { XML_NAMESPACE_NUMBER, sXML_title,                XML_TOK_STYLE_ATTR_TITLE                 },
-    { XML_NAMESPACE_NUMBER, sXML_automatic_order,      XML_TOK_STYLE_ATTR_AUTOMATIC_ORDER       },
-    { XML_NAMESPACE_NUMBER, sXML_format_source,        XML_TOK_STYLE_ATTR_FORMAT_SOURCE         },
-    { XML_NAMESPACE_NUMBER, sXML_truncate_on_overflow, XML_TOK_STYLE_ATTR_TRUNCATE_ON_OVERFLOW  },
-    { XML_NAMESPACE_STYLE,  sXML_volatile,             XML_TOK_STYLE_ATTR_VOLATILE              },
+    { XML_NAMESPACE_STYLE,  XML_NAME,                  XML_TOK_STYLE_ATTR_NAME                  },
+    { XML_NAMESPACE_NUMBER, XML_LANGUAGE,              XML_TOK_STYLE_ATTR_LANGUAGE              },
+    { XML_NAMESPACE_NUMBER, XML_COUNTRY,               XML_TOK_STYLE_ATTR_COUNTRY               },
+    { XML_NAMESPACE_NUMBER, XML_TITLE,                 XML_TOK_STYLE_ATTR_TITLE                 },
+    { XML_NAMESPACE_NUMBER, XML_AUTOMATIC_ORDER,       XML_TOK_STYLE_ATTR_AUTOMATIC_ORDER       },
+    { XML_NAMESPACE_NUMBER, XML_FORMAT_SOURCE,         XML_TOK_STYLE_ATTR_FORMAT_SOURCE         },
+    { XML_NAMESPACE_NUMBER, XML_TRUNCATE_ON_OVERFLOW,  XML_TOK_STYLE_ATTR_TRUNCATE_ON_OVERFLOW  },
+    { XML_NAMESPACE_STYLE,  XML_VOLATILE,              XML_TOK_STYLE_ATTR_VOLATILE              },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aStyleElemAttrMap[] =
 {
     //  attributes for an element within a style
-    { XML_NAMESPACE_NUMBER, sXML_decimal_places,         XML_TOK_ELEM_ATTR_DECIMAL_PLACES       },
-    { XML_NAMESPACE_NUMBER, sXML_min_integer_digits,     XML_TOK_ELEM_ATTR_MIN_INTEGER_DIGITS   },
-    { XML_NAMESPACE_NUMBER, sXML_grouping,               XML_TOK_ELEM_ATTR_GROUPING             },
-    { XML_NAMESPACE_NUMBER, sXML_decimal_replacement,    XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT  },
-    { XML_NAMESPACE_NUMBER, sXML_min_exponent_digits,    XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS  },
-    { XML_NAMESPACE_NUMBER, sXML_min_numerator_digits,   XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS },
-    { XML_NAMESPACE_NUMBER, sXML_min_denominator_digits, XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS },
-    { XML_NAMESPACE_NUMBER, sXML_language,               XML_TOK_ELEM_ATTR_LANGUAGE             },
-    { XML_NAMESPACE_NUMBER, sXML_country,                XML_TOK_ELEM_ATTR_COUNTRY              },
-    { XML_NAMESPACE_NUMBER, sXML_style,                  XML_TOK_ELEM_ATTR_STYLE                },
-    { XML_NAMESPACE_NUMBER, sXML_textual,                XML_TOK_ELEM_ATTR_TEXTUAL              },
-    { XML_NAMESPACE_NUMBER, sXML_calendar,               XML_TOK_ELEM_ATTR_CALENDAR             },
+    { XML_NAMESPACE_NUMBER, XML_DECIMAL_PLACES,          XML_TOK_ELEM_ATTR_DECIMAL_PLACES       },
+    { XML_NAMESPACE_NUMBER, XML_MIN_INTEGER_DIGITS,      XML_TOK_ELEM_ATTR_MIN_INTEGER_DIGITS   },
+    { XML_NAMESPACE_NUMBER, XML_GROUPING,                XML_TOK_ELEM_ATTR_GROUPING             },
+    { XML_NAMESPACE_NUMBER, XML_DECIMAL_REPLACEMENT,     XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT  },
+    { XML_NAMESPACE_NUMBER, XML_MIN_EXPONENT_DIGITS,     XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS  },
+    { XML_NAMESPACE_NUMBER, XML_MIN_NUMERATOR_DIGITS,    XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS },
+    { XML_NAMESPACE_NUMBER, XML_MIN_DENOMINATOR_DIGITS,  XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS },
+    { XML_NAMESPACE_NUMBER, XML_LANGUAGE,                XML_TOK_ELEM_ATTR_LANGUAGE             },
+    { XML_NAMESPACE_NUMBER, XML_COUNTRY,                 XML_TOK_ELEM_ATTR_COUNTRY              },
+    { XML_NAMESPACE_NUMBER, XML_STYLE,                   XML_TOK_ELEM_ATTR_STYLE                },
+    { XML_NAMESPACE_NUMBER, XML_TEXTUAL,                 XML_TOK_ELEM_ATTR_TEXTUAL              },
+    { XML_NAMESPACE_NUMBER, XML_CALENDAR,                XML_TOK_ELEM_ATTR_CALENDAR             },
     XML_TOKEN_MAP_END
 };
 

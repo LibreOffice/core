@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionSourceDDEImportContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-16 16:20:41 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
@@ -123,6 +123,7 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
+using namespace ::xmloff::token;
 
 const sal_Char sAPI_DDECommandFile[] = "DDECommandFile";
 const sal_Char sAPI_DDECommandType[] = "DDECommandType";
@@ -160,11 +161,11 @@ enum XMLSectionSourceDDEToken
 
 static __FAR_DATA SvXMLTokenMapEntry aSectionSourceDDETokenMap[] =
 {
-    { XML_NAMESPACE_OFFICE, sXML_dde_application,
+    { XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
           XML_TOK_SECTION_DDE_APPLICATION },
-    { XML_NAMESPACE_OFFICE, sXML_dde_topic, XML_TOK_SECTION_DDE_TOPIC },
-    { XML_NAMESPACE_OFFICE, sXML_dde_item, XML_TOK_SECTION_DDE_ITEM },
-    { XML_NAMESPACE_OFFICE, sXML_automatic_update,
+    { XML_NAMESPACE_OFFICE, XML_DDE_TOPIC, XML_TOK_SECTION_DDE_TOPIC },
+    { XML_NAMESPACE_OFFICE, XML_DDE_ITEM, XML_TOK_SECTION_DDE_ITEM },
+    { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_UPDATE,
           XML_TOK_SECTION_IS_AUTOMATIC_UPDATE },
     XML_TOKEN_MAP_END
 };

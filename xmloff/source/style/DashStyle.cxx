@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DashStyle.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,13 +129,13 @@ enum SvXMLTokenMapAttrs
 
 static __FAR_DATA SvXMLTokenMapEntry aDashStyleAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW, sXML_name,            XML_TOK_DASH_NAME },
-    { XML_NAMESPACE_DRAW, sXML_style,           XML_TOK_DASH_STYLE },
-    { XML_NAMESPACE_DRAW, sXML_dots1,           XML_TOK_DASH_DOTS1 },
-    { XML_NAMESPACE_DRAW, sXML_dots1_length,    XML_TOK_DASH_DOTS1LEN },
-    { XML_NAMESPACE_DRAW, sXML_dots2,           XML_TOK_DASH_DOTS2 },
-    { XML_NAMESPACE_DRAW, sXML_dots2_length,    XML_TOK_DASH_DOTS2LEN },
-    { XML_NAMESPACE_DRAW, sXML_distance,        XML_TOK_DASH_DISTANCE },
+    { XML_NAMESPACE_DRAW, XML_NAME,             XML_TOK_DASH_NAME },
+    { XML_NAMESPACE_DRAW, XML_STYLE,            XML_TOK_DASH_STYLE },
+    { XML_NAMESPACE_DRAW, XML_DOTS1,            XML_TOK_DASH_DOTS1 },
+    { XML_NAMESPACE_DRAW, XML_DOTS1_LENGTH,     XML_TOK_DASH_DOTS1LEN },
+    { XML_NAMESPACE_DRAW, XML_DOTS2,            XML_TOK_DASH_DOTS2 },
+    { XML_NAMESPACE_DRAW, XML_DOTS2_LENGTH,     XML_TOK_DASH_DOTS2LEN },
+    { XML_NAMESPACE_DRAW, XML_DISTANCE,         XML_TOK_DASH_DISTANCE },
     XML_TOKEN_MAP_END
 };
 

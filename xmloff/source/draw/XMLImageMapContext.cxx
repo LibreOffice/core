@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLImageMapContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-30 13:53:39 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -176,19 +177,19 @@ enum XMLImageMapToken
 
 static __FAR_DATA SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
 {
-    { XML_NAMESPACE_XLINK,  sXML_href,          XML_TOK_IMAP_URL            },
-    { XML_NAMESPACE_OFFICE, sXML_name,          XML_TOK_IMAP_NAME           },
-    { XML_NAMESPACE_DRAW,   sXML_nohref,        XML_TOK_IMAP_NOHREF         },
-    { XML_NAMESPACE_SVG,    sXML_x,             XML_TOK_IMAP_X              },
-    { XML_NAMESPACE_SVG,    sXML_y,             XML_TOK_IMAP_Y              },
-    { XML_NAMESPACE_SVG,    sXML_cx,            XML_TOK_IMAP_CENTER_X       },
-    { XML_NAMESPACE_SVG,    sXML_cy,            XML_TOK_IMAP_CENTER_Y       },
-    { XML_NAMESPACE_SVG,    sXML_width,         XML_TOK_IMAP_WIDTH          },
-    { XML_NAMESPACE_SVG,    sXML_height,        XML_TOK_IMAP_HEIGTH         },
-    { XML_NAMESPACE_SVG,    sXML_r,             XML_TOK_IMAP_RADIUS         },
-    { XML_NAMESPACE_SVG,    sXML_viewBox,       XML_TOK_IMAP_VIEWBOX        },
-    { XML_NAMESPACE_SVG,    sXML_points,        XML_TOK_IMAP_POINTS         },
-    { XML_NAMESPACE_OFFICE, sXML_target_frame_name, XML_TOK_IMAP_TARGET     },
+    { XML_NAMESPACE_XLINK,  XML_HREF,           XML_TOK_IMAP_URL            },
+    { XML_NAMESPACE_OFFICE, XML_NAME,           XML_TOK_IMAP_NAME           },
+    { XML_NAMESPACE_DRAW,   XML_NOHREF,         XML_TOK_IMAP_NOHREF         },
+    { XML_NAMESPACE_SVG,    XML_X,              XML_TOK_IMAP_X              },
+    { XML_NAMESPACE_SVG,    XML_Y,              XML_TOK_IMAP_Y              },
+    { XML_NAMESPACE_SVG,    XML_CX,             XML_TOK_IMAP_CENTER_X       },
+    { XML_NAMESPACE_SVG,    XML_CY,             XML_TOK_IMAP_CENTER_Y       },
+    { XML_NAMESPACE_SVG,    XML_WIDTH,          XML_TOK_IMAP_WIDTH          },
+    { XML_NAMESPACE_SVG,    XML_HEIGHT,         XML_TOK_IMAP_HEIGTH         },
+    { XML_NAMESPACE_SVG,    XML_R,              XML_TOK_IMAP_RADIUS         },
+    { XML_NAMESPACE_SVG,    XML_VIEWBOX,        XML_TOK_IMAP_VIEWBOX        },
+    { XML_NAMESPACE_SVG,    XML_POINTS,         XML_TOK_IMAP_POINTS         },
+    { XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME, XML_TOK_IMAP_TARGET      },
     XML_TOKEN_MAP_END
 };
 

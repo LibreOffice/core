@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransGradientStyle.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,14 +122,14 @@ enum SvXMLTokenMapAttrs
 
 static __FAR_DATA SvXMLTokenMapEntry aTrGradientAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW, sXML_name, XML_TOK_GRADIENT_NAME },
-    { XML_NAMESPACE_DRAW, sXML_style, XML_TOK_GRADIENT_STYLE },
-    { XML_NAMESPACE_DRAW, sXML_cx, XML_TOK_GRADIENT_CX },
-    { XML_NAMESPACE_DRAW, sXML_cy, XML_TOK_GRADIENT_CY },
-    { XML_NAMESPACE_DRAW, sXML_start, XML_TOK_GRADIENT_START },
-    { XML_NAMESPACE_DRAW, sXML_end, XML_TOK_GRADIENT_END },
-    { XML_NAMESPACE_DRAW, sXML_gradient_angle, XML_TOK_GRADIENT_ANGLE },
-    { XML_NAMESPACE_DRAW, sXML_gradient_border, XML_TOK_GRADIENT_BORDER },
+    { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME },
+    { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_GRADIENT_STYLE },
+    { XML_NAMESPACE_DRAW, XML_CX, XML_TOK_GRADIENT_CX },
+    { XML_NAMESPACE_DRAW, XML_CY, XML_TOK_GRADIENT_CY },
+    { XML_NAMESPACE_DRAW, XML_START, XML_TOK_GRADIENT_START },
+    { XML_NAMESPACE_DRAW, XML_END, XML_TOK_GRADIENT_END },
+    { XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, XML_TOK_GRADIENT_ANGLE },
+    { XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, XML_TOK_GRADIENT_BORDER },
     XML_TOKEN_MAP_END
 };
 

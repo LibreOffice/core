@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionSourceImportContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-17 09:42:34 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
@@ -111,6 +111,7 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
+using namespace ::xmloff::token;
 
 
 TYPEINIT1(XMLSectionSourceImportContext, SvXMLImportContext);
@@ -138,9 +139,9 @@ enum XMLSectionSourceToken
 
 static __FAR_DATA SvXMLTokenMapEntry aSectionSourceTokenMap[] =
 {
-    { XML_NAMESPACE_XLINK, sXML_href, XML_TOK_SECTION_XLINK_HREF },
-    { XML_NAMESPACE_TEXT, sXML_filter_name, XML_TOK_SECTION_TEXT_FILTER_NAME },
-    { XML_NAMESPACE_TEXT, sXML_section_name,
+    { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_SECTION_XLINK_HREF },
+    { XML_NAMESPACE_TEXT, XML_FILTER_NAME, XML_TOK_SECTION_TEXT_FILTER_NAME },
+    { XML_NAMESPACE_TEXT, XML_SECTION_NAME,
                                         XML_TOK_SECTION_TEXT_SECTION_NAME },
     XML_TOKEN_MAP_END
 };

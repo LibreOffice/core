@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 16:11:12 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include "nmspmap.hxx"
 
 using namespace com::sun::star;
+using namespace ::xmloff::token;
 
 //-------------------------------------------------------------------------
 
@@ -165,24 +166,24 @@ enum SfxXMLMetaElemTokens
 
 static __FAR_DATA SvXMLTokenMapEntry aMetaElemTokenMap[] =
 {
-    { XML_NAMESPACE_DC,     sXML_title,             XML_TOK_META_TITLE },
-    { XML_NAMESPACE_DC,     sXML_description,       XML_TOK_META_DESCRIPTION },
-    { XML_NAMESPACE_DC,     sXML_subject,           XML_TOK_META_SUBJECT },
-    { XML_NAMESPACE_META,   sXML_keywords,          XML_TOK_META_KEYWORDS },
-    { XML_NAMESPACE_META,   sXML_initial_creator,   XML_TOK_META_INITIALCREATOR },
-    { XML_NAMESPACE_META,   sXML_creation_date,     XML_TOK_META_CREATIONDATE },
-    { XML_NAMESPACE_DC,     sXML_creator,           XML_TOK_META_CREATOR },
-    { XML_NAMESPACE_DC,     sXML_date,              XML_TOK_META_DATE },
-    { XML_NAMESPACE_META,   sXML_printed_by,        XML_TOK_META_PRINTEDBY },
-    { XML_NAMESPACE_META,   sXML_print_date,        XML_TOK_META_PRINTDATE },
-    { XML_NAMESPACE_META,   sXML_template,          XML_TOK_META_TEMPLATE },
-    { XML_NAMESPACE_META,   sXML_auto_reload,       XML_TOK_META_AUTORELOAD },
-    { XML_NAMESPACE_META,   sXML_hyperlink_behaviour,XML_TOK_META_HYPERLINKBEHAVIOUR },
-    { XML_NAMESPACE_DC,     sXML_language,          XML_TOK_META_LANGUAGE },
-    { XML_NAMESPACE_META,   sXML_editing_cycles,    XML_TOK_META_EDITINGCYCLES },
-    { XML_NAMESPACE_META,   sXML_editing_duration,  XML_TOK_META_EDITINGDURATION },
-    { XML_NAMESPACE_META,   sXML_user_defined,      XML_TOK_META_USERDEFINED },
-    { XML_NAMESPACE_META,   sXML_document_statistic,XML_TOK_META_DOCUMENT_STATISTIC },
+    { XML_NAMESPACE_DC,     XML_TITLE,             XML_TOK_META_TITLE },
+    { XML_NAMESPACE_DC,     XML_DESCRIPTION,       XML_TOK_META_DESCRIPTION },
+    { XML_NAMESPACE_DC,     XML_SUBJECT,           XML_TOK_META_SUBJECT },
+    { XML_NAMESPACE_META,   XML_KEYWORDS,          XML_TOK_META_KEYWORDS },
+    { XML_NAMESPACE_META,   XML_INITIAL_CREATOR,   XML_TOK_META_INITIALCREATOR },
+    { XML_NAMESPACE_META,   XML_CREATION_DATE,     XML_TOK_META_CREATIONDATE },
+    { XML_NAMESPACE_DC,     XML_CREATOR,           XML_TOK_META_CREATOR },
+    { XML_NAMESPACE_DC,     XML_DATE,              XML_TOK_META_DATE },
+    { XML_NAMESPACE_META,   XML_PRINTED_BY,        XML_TOK_META_PRINTEDBY },
+    { XML_NAMESPACE_META,   XML_PRINT_DATE,        XML_TOK_META_PRINTDATE },
+    { XML_NAMESPACE_META,   XML_TEMPLATE,          XML_TOK_META_TEMPLATE },
+    { XML_NAMESPACE_META,   XML_AUTO_RELOAD,       XML_TOK_META_AUTORELOAD },
+    { XML_NAMESPACE_META,   XML_HYPERLINK_BEHAVIOUR,XML_TOK_META_HYPERLINKBEHAVIOUR },
+    { XML_NAMESPACE_DC,     XML_LANGUAGE,          XML_TOK_META_LANGUAGE },
+    { XML_NAMESPACE_META,   XML_EDITING_CYCLES,    XML_TOK_META_EDITINGCYCLES },
+    { XML_NAMESPACE_META,   XML_EDITING_DURATION,  XML_TOK_META_EDITINGDURATION },
+    { XML_NAMESPACE_META,   XML_USER_DEFINED,      XML_TOK_META_USERDEFINED },
+    { XML_NAMESPACE_META,   XML_DOCUMENT_STATISTIC,XML_TOK_META_DOCUMENT_STATISTIC },
     XML_TOKEN_MAP_END
 };
 
@@ -196,9 +197,9 @@ enum SfxXMLMetaTemplateTokens
 
 static __FAR_DATA SvXMLTokenMapEntry aMetaTemplateTokenMap[] =
 {
-    { XML_NAMESPACE_XLINK,  sXML_href,              XML_TOK_META_TEMPLATE_HREF },
-    { XML_NAMESPACE_XLINK,  sXML_title,             XML_TOK_META_TEMPLATE_TITLE },
-    { XML_NAMESPACE_META,   sXML_date,              XML_TOK_META_TEMPLATE_DATE },
+    { XML_NAMESPACE_XLINK,  XML_HREF,              XML_TOK_META_TEMPLATE_HREF },
+    { XML_NAMESPACE_XLINK,  XML_TITLE,             XML_TOK_META_TEMPLATE_TITLE },
+    { XML_NAMESPACE_META,   XML_DATE,              XML_TOK_META_TEMPLATE_DATE },
     XML_TOKEN_MAP_END
 };
 
@@ -211,8 +212,8 @@ enum SfxXMLMetaReloadTokens
 
 static __FAR_DATA SvXMLTokenMapEntry aMetaReloadTokenMap[] =
 {
-    { XML_NAMESPACE_XLINK,  sXML_href,              XML_TOK_META_RELOAD_HREF },
-    { XML_NAMESPACE_META,   sXML_delay,             XML_TOK_META_RELOAD_DELAY },
+    { XML_NAMESPACE_XLINK,  XML_HREF,              XML_TOK_META_RELOAD_HREF },
+    { XML_NAMESPACE_META,   XML_DELAY,             XML_TOK_META_RELOAD_DELAY },
     XML_TOKEN_MAP_END
 };
 

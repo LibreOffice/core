@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,13 +110,13 @@ enum SvXMLTokenMapAttrs
 
 static __FAR_DATA SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
 {
-    { XML_NAMESPACE_XLINK, sXML_href,       XML_TOK_BGIMG_HREF      },
-    { XML_NAMESPACE_XLINK, sXML_type,       XML_TOK_BGIMG_TYPE      },
-    { XML_NAMESPACE_XLINK, sXML_actuate,    XML_TOK_BGIMG_ACTUATE   },
-    { XML_NAMESPACE_XLINK, sXML_show,       XML_TOK_BGIMG_SHOW      },
-    { XML_NAMESPACE_STYLE, sXML_position,   XML_TOK_BGIMG_POSITION  },
-    { XML_NAMESPACE_STYLE, sXML_repeat,     XML_TOK_BGIMG_REPEAT    },
-    { XML_NAMESPACE_STYLE, sXML_filter_name,XML_TOK_BGIMG_FILTER    },
+    { XML_NAMESPACE_XLINK, XML_HREF,        XML_TOK_BGIMG_HREF      },
+    { XML_NAMESPACE_XLINK, XML_TYPE,        XML_TOK_BGIMG_TYPE      },
+    { XML_NAMESPACE_XLINK, XML_ACTUATE,     XML_TOK_BGIMG_ACTUATE   },
+    { XML_NAMESPACE_XLINK, XML_SHOW,        XML_TOK_BGIMG_SHOW      },
+    { XML_NAMESPACE_STYLE, XML_POSITION,    XML_TOK_BGIMG_POSITION  },
+    { XML_NAMESPACE_STYLE, XML_REPEAT,      XML_TOK_BGIMG_REPEAT    },
+    { XML_NAMESPACE_STYLE, XML_FILTER_NAME, XML_TOK_BGIMG_FILTER    },
     XML_TOKEN_MAP_END
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteImportContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-09 07:23:23 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::xmloff::token;
 
 TYPEINIT1(XMLFootnoteImportContext, SvXMLImportContext);
 
@@ -137,12 +138,12 @@ enum XMLFootnoteChildToken {
 
 static __FAR_DATA SvXMLTokenMapEntry aFootnoteChildTokenMap[] =
 {
-    { XML_NAMESPACE_TEXT, sXML_footnote_citation,
+    { XML_NAMESPACE_TEXT, XML_FOOTNOTE_CITATION,
       XML_TOK_FTN_FOOTNOTE_CITATION },
-    { XML_NAMESPACE_TEXT, sXML_endnote_citation,
+    { XML_NAMESPACE_TEXT, XML_ENDNOTE_CITATION,
       XML_TOK_FTN_ENDNOTE_CITATION },
-    { XML_NAMESPACE_TEXT, sXML_footnote_body, XML_TOK_FTN_FOOTNOTE_BODY },
-    { XML_NAMESPACE_TEXT, sXML_endnote_body, XML_TOK_FTN_ENDNOTE_BODY },
+    { XML_NAMESPACE_TEXT, XML_FOOTNOTE_BODY, XML_TOK_FTN_FOOTNOTE_BODY },
+    { XML_NAMESPACE_TEXT, XML_ENDNOTE_BODY, XML_TOK_FTN_ENDNOTE_BODY },
     XML_TOKEN_MAP_END
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 15:04:56 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,8 @@ using ::com::sun::star::container::XNamed;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
+using namespace ::xmloff::token;
+
 
 TYPEINIT1( XMLSectionImportContext, SvXMLImportContext );
 
@@ -158,14 +160,14 @@ enum XMLSectionToken {
 
 static __FAR_DATA SvXMLTokenMapEntry aSectionTokenMap[] =
 {
-    { XML_NAMESPACE_TEXT, sXML_style_name, XML_TOK_SECTION_STYLE_NAME },
-    { XML_NAMESPACE_TEXT, sXML_name, XML_TOK_SECTION_NAME },
-    { XML_NAMESPACE_TEXT, sXML_condition, XML_TOK_SECTION_CONDITION },
-    { XML_NAMESPACE_TEXT, sXML_display, XML_TOK_SECTION_DISPLAY },
-    { XML_NAMESPACE_TEXT, sXML_protected, XML_TOK_SECTION_PROTECT },
-    { XML_NAMESPACE_TEXT, sXML_protection_key, XML_TOK_SECTION_PROTECTION_KEY},
+    { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_SECTION_STYLE_NAME },
+    { XML_NAMESPACE_TEXT, XML_NAME, XML_TOK_SECTION_NAME },
+    { XML_NAMESPACE_TEXT, XML_CONDITION, XML_TOK_SECTION_CONDITION },
+    { XML_NAMESPACE_TEXT, XML_DISPLAY, XML_TOK_SECTION_DISPLAY },
+    { XML_NAMESPACE_TEXT, XML_PROTECTED, XML_TOK_SECTION_PROTECT },
+    { XML_NAMESPACE_TEXT, XML_PROTECTION_KEY, XML_TOK_SECTION_PROTECTION_KEY},
     // compatibility with SRC629 (or earlier) versions
-    { XML_NAMESPACE_TEXT, sXML_protect, XML_TOK_SECTION_PROTECT },
+    { XML_NAMESPACE_TEXT, XML_PROTECT, XML_TOK_SECTION_PROTECT },
     XML_TOKEN_MAP_END
 };
 

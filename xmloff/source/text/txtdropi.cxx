@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdropi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,8 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
+using namespace ::xmloff::token;
+
 
 enum SvXMLTokenMapDropAttrs
 {
@@ -100,10 +102,10 @@ enum SvXMLTokenMapDropAttrs
 
 static __FAR_DATA SvXMLTokenMapEntry aDropAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE, sXML_lines,      XML_TOK_DROP_LINES  },
-    { XML_NAMESPACE_STYLE, sXML_length,     XML_TOK_DROP_LENGTH },
-    { XML_NAMESPACE_STYLE, sXML_distance,   XML_TOK_DROP_DISTANCE   },
-    { XML_NAMESPACE_STYLE, sXML_style_name, XML_TOK_DROP_STYLE  },
+    { XML_NAMESPACE_STYLE, XML_LINES,       XML_TOK_DROP_LINES  },
+    { XML_NAMESPACE_STYLE, XML_LENGTH,      XML_TOK_DROP_LENGTH },
+    { XML_NAMESPACE_STYLE, XML_DISTANCE,    XML_TOK_DROP_DISTANCE   },
+    { XML_NAMESPACE_STYLE, XML_STYLE_NAME,  XML_TOK_DROP_STYLE  },
     XML_TOKEN_MAP_END
 };
 

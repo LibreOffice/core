@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltkmap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:31:44 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,12 @@
 #include "xmltkmap.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
 using namespace rtl;
+using namespace ::xmloff::token;
 
 class SvXMLTokenMapEntry_Impl
 {
@@ -96,7 +101,7 @@ public:
 
     SvXMLTokenMapEntry_Impl( const SvXMLTokenMapEntry& rEntry ) :
         nPrefixKey( rEntry.nPrefixKey ),
-        sLocalName( OUString::createFromAscii(rEntry.pLocalName) ),
+        sLocalName( GetXMLToken( rEntry.eLocalName ) ),
         nToken( rEntry.nToken )
     {}
 
@@ -138,7 +143,7 @@ SvXMLTokenMapEntry_Impl *SvXMLTokenMap::_Find( sal_uInt16 nKeyPrefix,
 SvXMLTokenMap::SvXMLTokenMap( SvXMLTokenMapEntry *pMap ) :
     pImpl( new SvXMLTokenMap_Impl )
 {
-    while( pMap->pLocalName )
+    while( pMap->eLocalName != XML_TOKEN_INVALID )
     {
         pImpl->Insert( new SvXMLTokenMapEntry_Impl( *pMap ) );
         pMap++;

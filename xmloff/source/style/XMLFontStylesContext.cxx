@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFontStylesContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 16:36:55 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
+using namespace ::xmloff::token;
 
 #define XML_STYLE_FAMILY_FONT 1
 
@@ -113,15 +114,15 @@ enum XMLFontStyleAttrTokens
 
 static __FAR_DATA SvXMLTokenMapEntry aFontStyleAttrTokenMap[] =
 {
-    { XML_NAMESPACE_FO, sXML_font_family,
+    { XML_NAMESPACE_FO, XML_FONT_FAMILY,
             XML_TOK_FONT_STYLE_ATTR_FAMILY },
-    { XML_NAMESPACE_STYLE, sXML_font_family_generic,
+    { XML_NAMESPACE_STYLE, XML_FONT_FAMILY_GENERIC,
             XML_TOK_FONT_STYLE_ATTR_FAMILY_GENERIC },
-    { XML_NAMESPACE_STYLE, sXML_font_style_name,
+    { XML_NAMESPACE_STYLE, XML_FONT_STYLE_NAME,
             XML_TOK_FONT_STYLE_ATTR_STYLENAME },
-    { XML_NAMESPACE_STYLE, sXML_font_pitch,
+    { XML_NAMESPACE_STYLE, XML_FONT_PITCH,
             XML_TOK_FONT_STYLE_ATTR_PITCH },
-    { XML_NAMESPACE_STYLE, sXML_font_charset,
+    { XML_NAMESPACE_STYLE, XML_FONT_CHARSET,
             XML_TOK_FONT_STYLE_ATTR_CHARSET },
 
     XML_TOKEN_MAP_END

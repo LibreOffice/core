@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,18 +127,18 @@ enum SvXMLSepTokenMapAttrs
 
 static __FAR_DATA SvXMLTokenMapEntry aColAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,  sXML_rel_width,     XML_TOK_COLUMN_WIDTH },
-    { XML_NAMESPACE_FO,     sXML_margin_left,   XML_TOK_COLUMN_MARGIN_LEFT },
-    { XML_NAMESPACE_FO,     sXML_margin_right,  XML_TOK_COLUMN_MARGIN_RIGHT },
+    { XML_NAMESPACE_STYLE,  XML_REL_WIDTH,      XML_TOK_COLUMN_WIDTH },
+    { XML_NAMESPACE_FO,     XML_MARGIN_LEFT,    XML_TOK_COLUMN_MARGIN_LEFT },
+    { XML_NAMESPACE_FO,     XML_MARGIN_RIGHT,   XML_TOK_COLUMN_MARGIN_RIGHT },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aColSepAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,  sXML_width,         XML_TOK_COLUMN_SEP_WIDTH },
-    { XML_NAMESPACE_STYLE,  sXML_color,         XML_TOK_COLUMN_SEP_COLOR },
-    { XML_NAMESPACE_STYLE,  sXML_height,        XML_TOK_COLUMN_SEP_HEIGHT },
-    { XML_NAMESPACE_STYLE,  sXML_vertical_align,XML_TOK_COLUMN_SEP_ALIGN },
+    { XML_NAMESPACE_STYLE,  XML_WIDTH,          XML_TOK_COLUMN_SEP_WIDTH },
+    { XML_NAMESPACE_STYLE,  XML_COLOR,          XML_TOK_COLUMN_SEP_COLOR },
+    { XML_NAMESPACE_STYLE,  XML_HEIGHT,         XML_TOK_COLUMN_SEP_HEIGHT },
+    { XML_NAMESPACE_STYLE,  XML_VERTICAL_ALIGN, XML_TOK_COLUMN_SEP_ALIGN },
     XML_TOKEN_MAP_END
 };
 

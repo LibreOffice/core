@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-11 18:17:56 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,30 +185,27 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
+using namespace ::xmloff::token;
 
 // ---------------------------------------------------------------------
 
 static __FAR_DATA SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,  sXML_style,         XML_TOK_STYLE_STYLE                },
-    { XML_NAMESPACE_STYLE,  sXML_page_master,   XML_TOK_STYLE_PAGE_MASTER          },
-    { XML_NAMESPACE_TEXT,   sXML_list_style,    XML_TOK_TEXT_LIST_STYLE            },
-    { XML_NAMESPACE_TEXT,   sXML_outline_style, XML_TOK_TEXT_OUTLINE               },
-    { XML_NAMESPACE_STYLE,  sXML_default_style, XML_TOK_STYLE_DEFAULT_STYLE        },
-    { XML_NAMESPACE_DRAW,   sXML_gradient,      XML_TOK_STYLES_GRADIENTSTYLES      },
-    { XML_NAMESPACE_DRAW,   sXML_hatch,         XML_TOK_STYLES_HATCHSTYLES         },
-    { XML_NAMESPACE_DRAW,   sXML_fill_image,    XML_TOK_STYLES_BITMAPSTYLES        },
-    { XML_NAMESPACE_DRAW,   sXML_transparency,  XML_TOK_STYLES_TRANSGRADIENTSTYLES },
-    { XML_NAMESPACE_DRAW,   sXML_marker,        XML_TOK_STYLES_MARKERSTYLES        },
-    { XML_NAMESPACE_DRAW,   sXML_stroke_dash,   XML_TOK_STYLES_DASHSTYLES        },
-    { XML_NAMESPACE_TEXT,   sXML_footnotes_configuration,
-      XML_TOK_TEXT_FOOTNOTE_CONFIG },
-    { XML_NAMESPACE_TEXT,   sXML_endnotes_configuration,
-      XML_TOK_TEXT_ENDNOTE_CONFIG },
-    { XML_NAMESPACE_TEXT,   sXML_bibliography_configuration,
-      XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG },
-    { XML_NAMESPACE_TEXT,   sXML_linenumbering_configuration,
-      XML_TOK_TEXT_LINENUMBERING_CONFIG },
+    { XML_NAMESPACE_STYLE,  XML_STYLE,          XML_TOK_STYLE_STYLE                },
+    { XML_NAMESPACE_STYLE,  XML_PAGE_MASTER,    XML_TOK_STYLE_PAGE_MASTER          },
+    { XML_NAMESPACE_TEXT,   XML_LIST_STYLE,     XML_TOK_TEXT_LIST_STYLE            },
+    { XML_NAMESPACE_TEXT,   XML_OUTLINE_STYLE,  XML_TOK_TEXT_OUTLINE               },
+    { XML_NAMESPACE_STYLE,  XML_DEFAULT_STYLE,  XML_TOK_STYLE_DEFAULT_STYLE        },
+    { XML_NAMESPACE_DRAW,   XML_GRADIENT,       XML_TOK_STYLES_GRADIENTSTYLES      },
+    { XML_NAMESPACE_DRAW,   XML_HATCH,          XML_TOK_STYLES_HATCHSTYLES         },
+    { XML_NAMESPACE_DRAW,   XML_FILL_IMAGE,     XML_TOK_STYLES_BITMAPSTYLES        },
+    { XML_NAMESPACE_DRAW,   XML_TRANSPARENCY,   XML_TOK_STYLES_TRANSGRADIENTSTYLES },
+    { XML_NAMESPACE_DRAW,   XML_MARKER,         XML_TOK_STYLES_MARKERSTYLES        },
+    { XML_NAMESPACE_DRAW,   XML_STROKE_DASH,    XML_TOK_STYLES_DASHSTYLES        },
+    { XML_NAMESPACE_TEXT,   XML_FOOTNOTES_CONFIGURATION,    XML_TOK_TEXT_FOOTNOTE_CONFIG },
+    { XML_NAMESPACE_TEXT,   XML_ENDNOTES_CONFIGURATION,     XML_TOK_TEXT_ENDNOTE_CONFIG },
+    { XML_NAMESPACE_TEXT,   XML_BIBLIOGRAPHY_CONFIGURATION, XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG },
+    { XML_NAMESPACE_TEXT,   XML_LINENUMBERING_CONFIGURATION,XML_TOK_TEXT_LINENUMBERING_CONFIG },
     XML_TOKEN_MAP_END
 };
 
