@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:03:39 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,12 +403,12 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
 
 
                 KernPair aPair;
-                for( i = 0; i < pImplTTFont->nkern; i++ )
+                for( i = 0; i < (int)pImplTTFont->nkern; i++ )
                 {
                     const sal_uInt8* pTable = pImplTTFont->kerntables[i];
 
-                    sal_uInt16 nVersion     = getUInt16BE( pTable );
-                    sal_uInt16 nLength      = getUInt16BE( pTable );
+                    /*sal_uInt16 nVersion     =*/ getUInt16BE( pTable );
+                    /*sal_uInt16 nLength      =*/ getUInt16BE( pTable );
                     sal_uInt16 nCoverage    = getUInt16BE( pTable );
 
                     aPair.kern_x    = 0;
@@ -570,10 +570,10 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
                         case 2:
                         {
                             const sal_uInt8* pSubTable = pTable;
-                            sal_uInt16 nRowWidth    = getUInt16BE( pTable );
+                            /*sal_uInt16 nRowWidth    =*/ getUInt16BE( pTable );
                             sal_uInt16 nOfLeft      = getUInt16BE( pTable );
                             sal_uInt16 nOfRight     = getUInt16BE( pTable );
-                            sal_uInt16 nOfArray     = getUInt16BE( pTable );
+                            /*sal_uInt16 nOfArray     =*/ getUInt16BE( pTable );
                             const sal_uInt8* pTmp = pSubTable + nOfLeft;
                             sal_uInt16 nFirstLeft   = getUInt16BE( pTmp );
                             sal_uInt16 nLastLeft    = getUInt16BE( pTmp ) + nFirstLeft - 1;
@@ -581,7 +581,6 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
                             sal_uInt16 nFirstRight  = getUInt16BE( pTmp );
                             sal_uInt16 nLastRight   = getUInt16BE( pTmp ) + nFirstRight -1;
 
-                            int nPairs = (int)(nLastLeft-nFirstLeft+1)*(int)(nLastRight-nFirstRight+1);
                             for( aPair.first = nFirstLeft; aPair.first < nLastLeft; aPair.first++ )
                             {
                                 for( aPair.second = 0; aPair.second < nLastRight; aPair.second++ )
@@ -635,7 +634,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     if( ! fp )
         return false;
     FontInfo* pInfo = NULL;
-    int nResult = parseFile( fp, &pInfo, P_ALL );
+    parseFile( fp, &pInfo, P_ALL );
     fclose( fp );
     if( ! pInfo || ! pInfo->numOfChars )
     {
@@ -723,7 +722,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
                 RTL_TEXTENCODING_JIS_X_0208
             };
 
-        for( int enc = 0; enc < sizeof( aEncs )/sizeof(aEncs[0]) && m_aEncoding == RTL_TEXTENCODING_DONTKNOW; enc++ )
+        for( unsigned int enc = 0; enc < sizeof( aEncs )/sizeof(aEncs[0]) && m_aEncoding == RTL_TEXTENCODING_DONTKNOW; enc++ )
         {
             sal_Int32 nIndex = 0, nOffset = 1;
             do
@@ -994,12 +993,12 @@ PrintFontManager& PrintFontManager::get()
  */
 
 PrintFontManager::PrintFontManager() :
-        m_pAtoms( new MultiAtomProvider() ),
         m_nNextFontID( 1 ),
+        m_pAtoms( new MultiAtomProvider() ),
         m_nNextDirAtom( 1 ),
         m_pFontCache( NULL )
 {
-    for( int i = 0; i < sizeof( aAdobeCodes )/sizeof( aAdobeCodes[0] ); i++ )
+    for( unsigned int i = 0; i < sizeof( aAdobeCodes )/sizeof( aAdobeCodes[0] ); i++ )
     {
         m_aUnicodeToAdobename.insert( ::std::hash_multimap< sal_Unicode, ::rtl::OString >::value_type( aAdobeCodes[i].aUnicode, aAdobeCodes[i].pAdobename ) );
         m_aAdobenameToUnicode.insert( ::std::hash_multimap< ::rtl::OString, sal_Unicode, ::rtl::OStringHash >::value_type( aAdobeCodes[i].pAdobename, aAdobeCodes[i].aUnicode ) );
@@ -1090,7 +1089,6 @@ int PrintFontManager::addFontFile( const ::rtl::OString& rFileName, int nFaceNum
 bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bool bReadFile, const ::std::list<OString>& rXLFDs, ::std::list< PrintFontManager::PrintFont* >& rNewFonts ) const
 {
     rNewFonts.clear();
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
     OString aDir( getDirectory( nDirID ) );
 
@@ -1371,6 +1369,7 @@ void PrintFontManager::getFontAttributesFromXLFD( PrintFont* pFont, const ByteSt
         case fonttype::TrueType:
             static_cast<TrueTypeFontFile*>(pFont)->m_aXLFD = rXLFD;
             break;
+        default: break;
     }
 }
 
@@ -1408,6 +1407,7 @@ ByteString PrintFontManager::getXLFD( PrintFont* pFont ) const
         case weight::Bold:              aXLFD += "bold";break;
         case weight::UltraBold:     aXLFD += "ultrabold";break;
         case weight::Black:         aXLFD += "black";break;
+        default: break;
     }
     aXLFD += '-';
     switch( pFont->m_eItalic )
@@ -1415,6 +1415,7 @@ ByteString PrintFontManager::getXLFD( PrintFont* pFont ) const
         case italic::Upright:           aXLFD += 'r';break;
         case italic::Oblique:           aXLFD += 'o';break;
         case italic::Italic:            aXLFD += 'i';break;
+        default: break;
     }
     aXLFD += '-';
     switch( pFont->m_eWidth )
@@ -1428,6 +1429,7 @@ ByteString PrintFontManager::getXLFD( PrintFont* pFont ) const
         case width::Expanded:           aXLFD += "expanded";break;
         case width::ExtraExpanded:      aXLFD += "extraexpanded";break;
         case width::UltraExpanded:      aXLFD += "ultraexpanded";break;
+        default: break;
     }
     aXLFD += "-utf8-0-0-0-0-";
     aXLFD += pFont->m_ePitch == pitch::Fixed ? "m" : "p";
@@ -1715,7 +1717,7 @@ void PrintFontManager::getServerDirectories()
     };
     ::std::list< ByteString > aLines;
 
-    for( int i = 0; i < sizeof(pCommands)/sizeof(pCommands[0]); i++ )
+    for( unsigned int i = 0; i < sizeof(pCommands)/sizeof(pCommands[0]); i++ )
     {
         FILE* pPipe = popen( pCommands[i], "r" );
         aLines.clear();
@@ -2477,6 +2479,7 @@ OString PrintFontManager::getAfmFile( PrintFont* pFont ) const
                 aMetricPath += pBuiltinFont->m_aMetricFile;
             }
             break;
+            default: break;
         }
     }
     return aMetricPath;
@@ -2944,6 +2947,7 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
                             if( static_cast<TrueTypeFontFile*>(current->second)->m_aFontFile == aFileName )
                                 bRemove = true;
                             break;
+                        default: break;
                     }
                     if( bRemove )
                     {
@@ -3071,6 +3075,7 @@ bool PrintFontManager::checkChangeFontPropertiesPossible( fontID nFontID ) const
             case fonttype::TrueType:
                 aFontsDirPath = getDirectory( static_cast< TrueTypeFontFile* >(pFont)->m_nDirectory );
                 break;
+            default: break;
         }
         if( aFontsDirPath.getLength() )
         {
@@ -3111,6 +3116,7 @@ bool PrintFontManager::changeFontProperties( fontID nFontID, const ::rtl::OUStri
             aFontFile = static_cast< TrueTypeFontFile* >(pFont)->m_aFontFile;
             nTTCnumber = static_cast< TrueTypeFontFile* >(pFont)->m_nCollectionEntry;
             break;
+        default: break;
     }
     OUString aUniPath, aFDPath;
     FileBase::getFileURLFromSystemPath( OStringToOUString( aFontsDirPath, aEncoding ), aUniPath );
@@ -3336,6 +3342,7 @@ bool PrintFontManager::isPrivateFontFile( fontID nFont ) const
         {
             case fonttype::Type1: nDirID = static_cast< Type1FontFile* >(pFont)->m_nDirectory;break;
             case fonttype::TrueType: nDirID = static_cast< TrueTypeFontFile* >(pFont)->m_nDirectory;break;
+            default: break;
         }
     }
     if( nDirID != -1 )
@@ -3514,8 +3521,8 @@ std::list< OString > PrintFontManager::getAdobeNameFromUnicode( sal_Unicode aCha
     if( aRet.begin() == aRet.end() && aChar != 0 )
     {
         sal_Char aBuf[8];
-        snprintf( (char*)aBuf, sizeof( aBuf ), "uni%.4hX\0", aChar );
-        aRet.push_back( aBuf );
+        sal_Int32 nChars = snprintf( (char*)aBuf, sizeof( aBuf ), "uni%.4hX", aChar );
+        aRet.push_back( OString( aBuf, nChars ) );
     }
 
     return aRet;
