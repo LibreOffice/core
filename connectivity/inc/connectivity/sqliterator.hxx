@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 06:58:32 $
+ *  last change: $Author: oj $ $Date: 2002-07-15 12:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,10 +333,42 @@ namespace connectivity
 
         ::vos::ORef<OSQLColumns> getSelectColumns() const { return m_aSelectColumns;}
         ::vos::ORef<OSQLColumns> getParameters()    const { return m_aParameters; }
-        // gibt den Aliasnamen der Column zur"uck, Leer falls nicht vorhanden
-        ::rtl::OUString getColumnAlias(const OSQLParseNode* pDerivedColumn) const;
+
+        /** return the columname and the table range
+            @param  _pColumnRef
+                The column ref parse node.
+            @param  _rColumnName
+                The column name to be set.
+            @param  _rTableRange
+                The table range to be set.
+        */
+        void getColumnRange(    const OSQLParseNode* _pColumnRef,
+                                ::rtl::OUString &_rColumnName,
+                                ::rtl::OUString& _rTableRange) const;
+
+        /** return the alias name of a column
+            @param  _pDerivedColumn
+                The parse node where SQL_ISRULE(_pDerivedColumn,derived_column) must be true
+            @return
+                The alias name of the column or an empty string.
+        */
+        static ::rtl::OUString getColumnAlias(const OSQLParseNode* _pDerivedColumn);
         // gibt den Columnnamen und die Tablerange (falls vorhanden) zur"uck
-        void getColumnRange(const OSQLParseNode* pColumnRef,::rtl::OUString &rColumnName,::rtl::OUString &rTableRange) const;
+
+        /** return the columname and the table range
+            @param  _pColumnRef
+                The column ref parse node.
+            @param  _xMetaData
+                The database meta data.
+            @param  _rColumnName
+                The column name to be set.
+            @param  _rTableRange
+                The table range to be set.
+        */
+        static void getColumnRange( const OSQLParseNode* _pColumnRef,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
+                                    ::rtl::OUString &_rColumnName,
+                                    ::rtl::OUString& _rTableRange);
 
         // Ermittelt fuer eine Funktion, Spalten den zugehoeren TableRange,
         // wenn nicht eindeutig, dann leer

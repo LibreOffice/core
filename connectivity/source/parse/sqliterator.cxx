@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 08:02:12 $
+ *  last change: $Author: oj $ $Date: 2002-07-15 12:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,19 +468,29 @@ void OSQLParseTreeIterator::traverseTableNames()
     }
 }
 //-----------------------------------------------------------------------------
-::rtl::OUString OSQLParseTreeIterator::getColumnAlias(const OSQLParseNode* pDerivedColumn) const
+::rtl::OUString OSQLParseTreeIterator::getColumnAlias(const OSQLParseNode* _pDerivedColumn)
 {
-
-    ::rtl::OUString aColumnAlias;
-    if(pDerivedColumn->getChild(1)->count() == 2)
-        aColumnAlias = pDerivedColumn->getChild(1)->getChild(1)->getTokenValue();
-    else if(!pDerivedColumn->getChild(1)->isRule())
-        aColumnAlias = pDerivedColumn->getChild(1)->getTokenValue();
-    return aColumnAlias;
+    OSL_ENSURE(SQL_ISRULE(_pDerivedColumn,derived_column),"No derived column!");
+    ::rtl::OUString sColumnAlias;
+    if(_pDerivedColumn->getChild(1)->count() == 2)
+        sColumnAlias = _pDerivedColumn->getChild(1)->getChild(1)->getTokenValue();
+    else if(!_pDerivedColumn->getChild(1)->isRule())
+        sColumnAlias = _pDerivedColumn->getChild(1)->getTokenValue();
+    return sColumnAlias;
+}
+// -----------------------------------------------------------------------------
+void OSQLParseTreeIterator::getColumnRange( const OSQLParseNode* _pColumnRef,
+                        ::rtl::OUString &_rColumnName,
+                        ::rtl::OUString& _rTableRange) const
+{
+    getColumnRange( _pColumnRef,m_xDatabaseMetaData,_rColumnName,_rTableRange);
 }
 
 //-----------------------------------------------------------------------------
-void OSQLParseTreeIterator::getColumnRange(const OSQLParseNode* pColumnRef,::rtl::OUString &rColumnName,::rtl::OUString &rTableRange) const
+void OSQLParseTreeIterator::getColumnRange(const OSQLParseNode* pColumnRef,
+                                           const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
+                                           ::rtl::OUString &rColumnName,
+                                           ::rtl::OUString &rTableRange)
 {
 
     rColumnName = ::rtl::OUString();
@@ -490,7 +500,7 @@ void OSQLParseTreeIterator::getColumnRange(const OSQLParseNode* pColumnRef,::rtl
         if(pColumnRef->count() > 1)
         {
             for(sal_Int32 i=0;i<((sal_Int32)pColumnRef->count())-2;i++)  // mu"s signed sein, falls count == 1
-                pColumnRef->getChild(i)->parseNodeToStr(rTableRange,m_xDatabaseMetaData,NULL,sal_False,sal_False);
+                pColumnRef->getChild(i)->parseNodeToStr(rTableRange,_xMetaData,NULL,sal_False,sal_False);
             // Spaltenname
             rColumnName = pColumnRef->getChild(pColumnRef->count()-1)->getChild(0)->getTokenValue();
         }
@@ -499,7 +509,7 @@ void OSQLParseTreeIterator::getColumnRange(const OSQLParseNode* pColumnRef,::rtl
     }
     else if(SQL_ISRULE(pColumnRef,general_set_fct) || SQL_ISRULE(pColumnRef,set_fct_spec))
     { // Funktion
-        pColumnRef->parseNodeToStr(rColumnName,m_xDatabaseMetaData);
+        pColumnRef->parseNodeToStr(rColumnName,_xMetaData);
     }
     else  if(pColumnRef->getNodeType() == SQL_NODE_NAME)
         rColumnName = pColumnRef->getTokenValue();
