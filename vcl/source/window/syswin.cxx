@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-12 10:52:50 $
+ *  last change: $Author: tbe $ $Date: 2002-12-12 18:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,10 +818,16 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
                 pOldWindow = pOldMenuBar->ImplGetWindow();
             else
                 pOldWindow = NULL;
+            if ( pOldWindow )
+            {
+                ImplCallEventListeners( VCLEVENT_WINDOW_MENUBARREMOVED, (void*) pOldMenuBar );
+                pOldWindow->SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >() );
+            }
             if ( pMenuBar )
             {
                 DBG_ASSERT( !pMenuBar->pWindow, "SystemWindow::SetMenuBar() - MenuBars can only set in one SystemWindow at time" );
                 ((ImplBorderWindow*)mpBorderWindow)->SetMenuBarWindow( pNewWindow = MenuBar::ImplCreate( mpBorderWindow, pOldWindow, pMenuBar ) );
+                ImplCallEventListeners( VCLEVENT_WINDOW_MENUBARADDED, (void*) pMenuBar );
             }
             else
                 ((ImplBorderWindow*)mpBorderWindow)->SetMenuBarWindow( NULL );
