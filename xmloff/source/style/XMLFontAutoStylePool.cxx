@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFontAutoStylePool.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-14 10:19:45 $
+ *  last change: $Author: sab $ $Date: 2001-05-03 12:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #endif
 #ifndef _CNTRSRT_HXX
 #include <svtools/cntnrsrt.hxx>
+#endif
+#ifndef _VCL_VCLENUM_HXX
+#include <vcl/vclenum.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -170,8 +173,10 @@ int XMLFontAutoStylePoolEntryCmp_Impl(
         const XMLFontAutoStylePoolEntry_Impl& r1,
         const XMLFontAutoStylePoolEntry_Impl& r2 )
 {
-    if( r1.GetEncoding() != r2.GetEncoding() )
-        return (int)r1.GetEncoding() - (int)r2.GetEncoding();
+    sal_Int8 nEnc1(r1.GetEncoding() != RTL_TEXTENCODING_SYMBOL);
+    sal_Int8 nEnc2(r2.GetEncoding() != RTL_TEXTENCODING_SYMBOL);
+    if( nEnc1 != nEnc2 )
+        return nEnc1 - nEnc2;
     else if( r1.GetPitch() != r2.GetPitch() )
         return (int)r1.GetPitch() - (int)r2.GetPitch();
     else if( r1.GetFamily() != r2.GetFamily() )
