@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinbutton.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:31:00 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ namespace frm
                                 translateExternalValueToControlValue( );
         virtual ::com::sun::star::uno::Any
                                 translateControlValueToExternalValue( );
-        virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >& _rxBinding );
+        virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding );
 
         // XCoponent and related helpers
         virtual void SAL_CALL disposing();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinbutton.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:30:46 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _COMPHELPER_STREAMSECTION_HXX_
 #include <comphelper/streamsection.hxx>
 #endif
+#ifndef _COMPHELPER_BASIC_IO_HXX_
+#include <comphelper/basicio.hxx>
+#endif
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_OSpinButtonModel()
@@ -84,7 +87,7 @@ namespace frm
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::io;
-    using namespace ::drafts::com::sun::star::form;
+    using namespace ::com::sun::star::form::binding;
 
     //====================================================================
     //= OSpinButtonModel
@@ -102,7 +105,7 @@ namespace frm
     DBG_NAME( OSpinButtonModel )
     //--------------------------------------------------------------------
     OSpinButtonModel::OSpinButtonModel( const Reference<XMultiServiceFactory>& _rxFactory )
-        :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_SPINBUTTON, VCL_CONTROL_SPINBUTTON, sal_True, sal_True )
+        :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_SPINBUTTON, VCL_CONTROL_SPINBUTTON, sal_True, sal_True, sal_False )
         ,m_nDefaultSpinValue( 0 )
     {
         DBG_CTOR( OSpinButtonModel, NULL );
@@ -156,14 +159,11 @@ namespace frm
     //--------------------------------------------------------------------
     void OSpinButtonModel::fillProperties( Sequence< Property >& _rProps, Sequence< Property >& _rAggregateProps ) const
     {
-        FRM_BEGIN_PROP_HELPER( 6 )
-            DECL_PROP2( CLASSID,              sal_Int16,       READONLY, TRANSIENT );
+        BEGIN_DESCRIBE_PROPERTIES( 3, OControlModel )
             DECL_PROP1( DEFAULT_SPIN_VALUE,   sal_Int32,       BOUND );
-            DECL_PROP1( NAME,                 ::rtl::OUString, BOUND );
             DECL_PROP1( TABINDEX,             sal_Int16,       BOUND );
-            DECL_PROP1( TAG,                  ::rtl::OUString, BOUND );
             DECL_PROP2( CONTROLSOURCEPROPERTY,::rtl::OUString, READONLY, TRANSIENT );
-        FRM_END_PROP_HELPER();
+        END_DESCRIBE_PROPERTIES();
     }
 
     //------------------------------------------------------------------------------
