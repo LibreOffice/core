@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:41:25 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,8 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
-#include <bridges/cpp_uno/bridge.hxx>
+#include <com/sun/star/uno/genfunc.hxx>
+#include "com/sun/star/uno/RuntimeException.hpp"
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
 
@@ -147,7 +148,7 @@ public:
 };
 //__________________________________________________________________________________________________
 RTTI::RTTI() SAL_THROW( () )
-    : m_hApp( dlopen( 0, RTLD_LAZY ) )
+    : m_hApp( dlopen( 0, RTLD_NOW | RTLD_GLOBAL ) )
 {
 }
 //__________________________________________________________________________________________________
@@ -182,7 +183,8 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         buf.append( 'E' );
 
         OString symName( buf.makeStringAndClear() );
-        rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
+//#iZ 22253
+        rtti = (type_info *)dlsym( RTLD_DEFAULT, symName.getStr() );
 
         if (rtti)
         {
@@ -253,7 +255,7 @@ static void deleteException( void * pExc )
 //==================================================================================================
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OString cstr(
         OUStringToOString(
             *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
@@ -321,7 +323,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
             Reference< XInterface >() );
         Type const & rType = ::getCppuType( &aRE );
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
-#if defined _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_ENSURE( 0, cstr.getStr() );
 #endif
@@ -330,7 +332,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
 
     typelib_TypeDescription * pExcTypeDescr = 0;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OString cstr_unoName( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
     fprintf( stderr, "> c++ exception occured: %s\n", cstr_unoName.getStr() );
 #endif
@@ -342,7 +344,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
             Reference< XInterface >() );
         Type const & rType = ::getCppuType( &aRE );
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
-#if defined _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_ENSURE( 0, cstr.getStr() );
 #endif
