@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:08:51 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ namespace xmloff
         faCommandType,
         faEscapeProcessing,
         faDatasource,
+        faConnectionResource,
         faDetailFiels,
         faFilter,
         faIgnoreResult,
@@ -191,14 +192,7 @@ namespace xmloff
     */
     class OAttributeMetaData
     {
-    protected:
-        /** ctor.
-            <p>This default constructor is protected, 'cause this class is not intended to be instantiated
-            directly. Instead, the derived classes should be used.</p>
-        */
-        OAttributeMetaData() { }
-
-    protected:
+    public:
         /** calculates the xml attribute representation of a common control attribute.
             @param _nId
                 the id of the attribute. Has to be one of the CCA_* constants.
