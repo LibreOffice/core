@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lateinitthread.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-12 08:00:08 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,19 +94,17 @@ LateInitThread::~LateInitThread()
 -----------------------------------------------*/
 void SAL_CALL LateInitThread::run()
 {
-    try
-    {
-        // sal_True => It indicates using of this method by this thread
-        // The filter cache use this information to show an assertion
-        // for "optimization failure" in case the first calli of loadAll()
-        // was not this thread ...
-        ::salhelper::SingletonRef< FilterCache > rCache;
-        rCache->load(FilterCache::E_CONTAINS_ALL);
-    }
-    catch(const css::uno::Exception&)
-    {
-        OSL_ENSURE(sal_False, "Filter cache could not be filled successfully! Might this office will run into some trouble ...");
-    }
+    // sal_True => It indicates using of this method by this thread
+    // The filter cache use this information to show an assertion
+    // for "optimization failure" in case the first calli of loadAll()
+    // was not this thread ...
+
+    // Further please dont catch any exception here.
+    // May be they show the problem of a corrupted filter
+    // configuration, which is handled inside our event loop or desktop.main()!
+
+    ::salhelper::SingletonRef< FilterCache > rCache;
+    rCache->load(FilterCache::E_CONTAINS_ALL, sal_True);
 }
 
     } // namespace config
