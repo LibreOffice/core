@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPluginInstanceNotifySink.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
     about status of new document opening.
     This interface is oriented for communication with browsers plugins.
  */
-interface XPluginInstanceNotifySink: com::sun::star::uno::XInterface
+published interface XPluginInstanceNotifySink: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
