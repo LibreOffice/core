@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-05 11:21:20 $
+ *  last change: $Author: cl $ $Date: 2001-07-26 09:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 #pragma hdrstop
 
-#ifndef _SV_EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
-#endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif

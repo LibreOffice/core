@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-10 08:02:15 $
+ *  last change: $Author: cl $ $Date: 2001-07-26 09:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,6 @@
 #endif
 #ifndef _SO_CLSIDS_HXX
 #include <so3/clsids.hxx>
-#endif
-#ifndef _SV_EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
 #endif
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
