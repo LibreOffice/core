@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:28:11 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 17:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ HelpInterceptor_Impl::~HelpInterceptor_Impl()
 
 void HelpInterceptor_Impl::addURL( const String& rURL )
 {
-    if ( !m_pHistory )
+  if ( !m_pHistory )
         m_pHistory = new HelpHistoryList_Impl;
     ULONG nCount = m_pHistory->Count();
     if ( nCount && m_nCurPos < ( nCount - 1 ) )
@@ -204,8 +204,10 @@ Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
     if ( m_xSlaveDispatcher.is() )
         xResult = m_xSlaveDispatcher->queryDispatch( aURL, aTargetFrameName, nSearchFlags );
 
-    INetURLObject aObj( aURL.Complete );
-    sal_Bool bHelpURL = ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP );
+    // INetURLObject aObj( aURL.Complete );
+    // sal_Bool bHelpURL = ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP );
+    BOOL bHelpURL = aURL.Complete.toAsciiLowerCase().match(rtl::OUString::createFromAscii("vnd.sun.star.help"),0);
+
     if ( bHelpURL )
     {
         DBG_ASSERT( xResult.is(), "invalid dispatch" );
