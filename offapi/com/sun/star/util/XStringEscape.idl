@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStringEscape.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:11:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ module com {  module sun {  module star {  module util {
     Strings that already conform to the naming conventions should be left
     unchanged or minimally modified.</p>
  */
-interface XStringEscape: com::sun::star::uno::XInterface
+published interface XStringEscape: com::sun::star::uno::XInterface
 {
     /** encodes an arbitrary string into an escaped form compatible with some naming rules.
      */
