@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-05 13:00:44 $
+ *  last change: $Author: ab $ $Date: 2001-09-04 10:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,9 @@ static const char* pOp3[] = {
     "STATIC",           // Objekt kreieren (+StringId+StringId)
     "TCREATE",          // User defined Objekt kreieren (+StringId+StringId)
     "DCREATE",          // User defined Objekt-Array kreieren (+StringId+StringId)
+    "GLOBAL_P",         // Globale Variable definieren, die beim Neustart von Basic
+                        // nicht ueberschrieben wird, P=PERSIST (+StringID+Typ)
+    "FIND_G",           // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
 };
 
 #ifdef MACOSX
@@ -254,7 +257,11 @@ static const Func pOperand3[] = {
     MEMBER(SbiDisas::VarDefOp), // Statische Variable definieren (+StringID+Typ)
     MEMBER(SbiDisas::Str2Op),   // User defined Objekt kreieren (+StringId+StringId)
     MEMBER(SbiDisas::Str2Op),   // User defined Objekt-Array kreieren (+StringId+StringId)
+    MEMBER(SbiDisas::VarDefOp), // Globale Variable definieren, die beim Neustart von Basic
+                                // nicht ueberschrieben wird, P=PERSIST (+StringID+Typ)
+    MEMBER(SbiDisas::VarOp),    // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
 };
+
 
 static const char* _crlf()
 {
