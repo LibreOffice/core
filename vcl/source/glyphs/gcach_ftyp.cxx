@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.21 $
- *  last change: $Author: vg $ $Date: 2001-03-15 18:11:05 $
+ *  $Revision: 1.22 $
+ *  last change: $Author: hdu $ $Date: 2001-03-29 16:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ long FreetypeManager::AddFontDir( const String& rNormalizedName )
 
         rcOSL = aDirItem.getFileStatus( aFileStatus );
         ::rtl::OUString aUFileName = aFileStatus.getNativePath();
-        ::rtl::OString aCFileName = rtl::OUStringToOString( aUFileName, RTL_TEXTENCODING_DONTKNOW );
+        ::rtl::OString aCFileName = rtl::OUStringToOString( aUFileName, RTL_TEXTENCODING_UTF8 );
         const char* pszFontFileName = aCFileName.getStr();
 
         FT_FaceRec_* aFaceFT = NULL;
@@ -203,17 +203,17 @@ long FreetypeManager::AddFontDir( const String& rNormalizedName )
             for( int i = aFaceFT->num_charmaps; --i >= 0; )
             {
                 const FT_CharMap aCM = aFaceFT->charmaps[i];
-                if(
-                // TODO for FT>=2.0: "(aCM->platform_id == TT_PLATFORM_MICROSOFT) &&"
-                    (aCM->encoding_id == TT_MS_ID_SYMBOL_CS) )
+                if( aCM->encoding == ft_encoding_none )
+                    // TODO for FT>=2.0: "(aCM->platform_id == TT_PLATFORM_MICROSOFT) &&"
+                    // TODO for FT>=2.0: (aCM->encoding_id == TT_MS_ID_SYMBOL_CS) )
                     rData.meCharSet = RTL_TEXTENCODING_SYMBOL;
             }
 
             rData.meScript      = SCRIPT_DONTKNOW;
             rData.mePitch       = FT_IS_FIXED_WIDTH( aFaceFT ) ? PITCH_FIXED : PITCH_VARIABLE;
             rData.meWidthType   = WIDTH_DONTKNOW;
-            rData.meWeight      = (aFaceFT->style_flags & FT_STYLE_FLAG_BOLD) ? WEIGHT_BOLD : WEIGHT_NORMAL;
-            rData.meItalic      = (aFaceFT->style_flags & FT_STYLE_FLAG_ITALIC) ? ITALIC_NORMAL : ITALIC_NONE;
+            rData.meWeight      = FT_STYLE_FLAG_BOLD & aFaceFT->style_flags ? WEIGHT_BOLD : WEIGHT_NORMAL;
+            rData.meItalic      = FT_STYLE_FLAG_ITALIC & aFaceFT->style_flags ? ITALIC_NORMAL : ITALIC_NONE;
 
             rData.mnVerticalOrientation = 0;
             rData.mbOrientation = true;
@@ -952,6 +952,7 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPol
 
     if( aGlyphFT->format != ft_glyph_format_outline )
         return false;
+
 
     FT_Outline& rOutline = reinterpret_cast<FT_OutlineGlyphRec*>( aGlyphFT ) -> outline;
     const long nMaxPoints = rOutline.n_points * 2;
