@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-02 05:38:28 $
+ *  last change: $Author: cd $ $Date: 2001-05-03 08:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,17 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
+#ifndef __FRAMEWORK_CLASSES_MENUMANAGER_HXX_
 #include <classes/menumanager.hxx>
+#endif
+
+#ifndef __FRAMEWORK_CLASSES_BMKMENU_HXX
 #include <classes/bmkmenu.hxx>
+#endif
+
+#ifndef __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
+#include <helper/imageproducer.hxx>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -151,6 +160,9 @@ namespace framework
 #define SID_NEWDOCDIRECT        (SID_SFX_START + 537)
 #define SID_AUTOPILOTMENU       (SID_SFX_START + 1381)
 
+#define SFX_REFERER_USER        "private:user"
+#define BOOKMARK_NEWMENU        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_new" ))
+#define BOOKMARK_WIZARDMENU     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_wizard" ))
 #define DESKTOP_SERVICE         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))
 
 const USHORT START_ITEMID_PICKLIST      = 4500;
@@ -165,7 +177,7 @@ const ::rtl::OUString aSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "file" ));
 const ::rtl::OUString aSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "window" ));
 
 
-MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren, sal_Bool bIsBookmarkMenu ) :
+MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren ) :
     OMutexMember(), OWeakObject()
 {
     m_bActive           = sal_False;
@@ -174,7 +186,7 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
     m_pVCLMenu          = pMenu;
     m_xFrame            = rFrame;
     m_bInitialized      = sal_False;
-    m_bIsBookmarkMenu   = bIsBookmarkMenu;
+    m_bIsBookmarkMenu   = sal_False;
     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
 
     int nItemCount = pMenu->GetItemCount();
@@ -209,11 +221,9 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
             if ( nItemId == SID_NEWDOCDIRECT ||
                  aItemCommand == aSlotNewDocDirect )
             {
-                String sKey = SvtPathOptions().GetNewMenuPath();
-                ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sKey, sKey );
-                PopupMenu* pSubMenu = CreateBookmarkMenu( sKey, sKey );
+                BmkMenu* pSubMenu = CreateBookmarkMenu( rFrame, BOOKMARK_NEWMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
-                MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False, sal_True );
+                MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                             nItemId,
                                                             pSubMenuManager,
@@ -222,18 +232,23 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
             else if ( nItemId == SID_AUTOPILOTMENU ||
                       aItemCommand == aSlotAutoPilot )
             {
-                String sKey = SvtPathOptions().GetAutoPilotPath();
-                ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sKey, sKey );
-                PopupMenu* pSubMenu = CreateBookmarkMenu( sKey, sKey );
+                BmkMenu* pSubMenu = CreateBookmarkMenu( rFrame, BOOKMARK_WIZARDMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
-                MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False, sal_True );
+                MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                             nItemId,
                                                             pSubMenuManager,
                                                             REFERENCE< XDISPATCH >() );
             }
             else if ( pMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
+            {
+                Image* pImage = GetImageFromURL( rFrame, aItemCommand );
+
+                if ( pImage )
+                    pMenu->SetItemImage( nItemId, *pImage );
+
                 m_aMenuItemHandlerVector.push_back( new MenuItemHandler( nItemId, NULL, REFERENCE< XDISPATCH >() ));
+            }
         }
     }
 
@@ -242,6 +257,77 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
     m_pVCLMenu->SetDeactivateHdl( LINK( this, MenuManager, Deactivate ));
     m_pVCLMenu->SetSelectHdl( LINK( this, MenuManager, Select ));
 }
+
+
+MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, BmkMenu* pBmkMenu, sal_Bool bDelete, sal_Bool bDeleteChildren ) :
+    OMutexMember(), OWeakObject()
+{
+    m_bActive           = sal_False;
+    m_bDeleteMenu       = bDelete;
+    m_bDeleteChildren   = bDeleteChildren;
+    m_pVCLMenu          = pBmkMenu;
+    m_xFrame            = rFrame;
+    m_bInitialized      = sal_False;
+    m_bIsBookmarkMenu   = sal_True;
+    SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
+
+    int nItemCount = pBmkMenu->GetItemCount();
+    for ( int i = 0; i < nItemCount; i++ )
+    {
+        USHORT nItemId = pBmkMenu->GetItemId( i );
+
+        ::rtl::OUString aItemCommand = pBmkMenu->GetItemCommand( nItemId );
+        if ( !aItemCommand.getLength() )
+        {
+            aItemCommand = aSlotString;
+            aItemCommand += ::rtl::OUString::valueOf( (sal_Int32)nItemId );
+            pBmkMenu->SetItemCommand( nItemId, aItemCommand );
+        }
+
+        PopupMenu* pPopupMenu = pBmkMenu->GetPopupMenu( nItemId );
+        if ( pPopupMenu )
+        {
+            MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
+
+            // store menu item command as we later have to know which menu is active (see Acivate handler)
+            pSubMenuManager->m_aMenuItemCommand = aItemCommand;
+
+            MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
+                                                        nItemId,
+                                                        pSubMenuManager,
+                                                        REFERENCE< XDISPATCH >() );
+            m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
+        }
+        else
+        {
+            if ( pBmkMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
+            {
+                BmkMenu::Attributes* pBmkAttributes = (BmkMenu::Attributes *)(pBmkMenu->GetUserValue( nItemId ));
+                MenuItemHandler* pMenuItemHandler = new MenuItemHandler( nItemId, NULL, REFERENCE< XDISPATCH >() );
+
+                if ( pBmkAttributes )
+                {
+                    // read additional attributes from attributes struct and delete it afterwards
+                    pMenuItemHandler->aTargetFrame = pBmkAttributes->aTargetFrame;
+                    delete pBmkAttributes;
+                    pBmkMenu->SetUserValue( nItemId, 0 );
+                }
+/*
+                Image aImage = GetImage( aItemCommand, Reference< XFrame >() );
+                pMenu->SetItemImage( nItemId, aImage );
+*/
+
+                m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
+            }
+        }
+    }
+
+    m_pVCLMenu->SetHighlightHdl( LINK( this, MenuManager, Highlight ));
+    m_pVCLMenu->SetActivateHdl( LINK( this, MenuManager, Activate ));
+    m_pVCLMenu->SetDeactivateHdl( LINK( this, MenuManager, Deactivate ));
+    m_pVCLMenu->SetSelectHdl( LINK( this, MenuManager, Select ));
+}
+
 
 Any SAL_CALL MenuManager::queryInterface( const ::com::sun::star::uno::Type & rType ) throw ( RuntimeException )
 {
@@ -393,9 +479,16 @@ void SAL_CALL MenuManager::disposing( const EVENTOBJECT& Source ) throw ( RUNTIM
 }
 
 
-PopupMenu* MenuManager::CreateBookmarkMenu( const ::rtl::OUString aURL, const ::rtl::OUString aReferer )
+BmkMenu* MenuManager::CreateBookmarkMenu(
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    const ::rtl::OUString& aURL )
 {
-    return new BmkMenu( aURL, aReferer );
+    if ( aURL == BOOKMARK_NEWMENU )
+        return new BmkMenu( rFrame, BmkMenu::BMK_NEWMENU );
+    else if ( aURL == BOOKMARK_WIZARDMENU )
+        return new BmkMenu( rFrame, BmkMenu::BMK_WIZARDMENU );
+    else
+        return NULL;
 }
 
 
@@ -588,6 +681,43 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu )
     }
 }
 
+
+void MenuManager::CreatePicklistArguments( Sequence< PropertyValue >& aArgsList, const MenuItemHandler* pMenuItemHandler )
+{
+    const int NUM_OF_PICKLIST_ARGS = 4;
+
+    Any a;
+    aArgsList.realloc( NUM_OF_PICKLIST_ARGS );
+
+    aArgsList[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ));
+    a <<= pMenuItemHandler->aMenuItemURL;
+    aArgsList[0].Value = a;
+
+    aArgsList[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
+    a <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER ));
+    aArgsList[1].Value = a;
+
+    ::rtl::OUString aFilter( pMenuItemHandler->aFilter );
+    ::rtl::OUString aFilterOptions;
+
+    sal_Int32 nPos = aFilter.indexOf( '|' );
+    if( nPos >= 0 )
+    {
+        if ( nPos < ( aFilter.getLength() - 1 ))
+            aFilterOptions = aFilter.copy( nPos+1 );
+        aFilter = aFilter.copy( 0, nPos-1 );
+    }
+
+    aArgsList[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
+    a <<= aFilterOptions;
+    aArgsList[2].Value = a;
+
+    aArgsList[3].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
+    a <<= aFilter;
+    aArgsList[3].Value = a;
+}
+
+
 //_________________________________________________________________________________________________________________
 // vcl handler
 //_________________________________________________________________________________________________________________
@@ -656,12 +786,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
 
                             REFERENCE< XDISPATCH > xMenuItemDispatch;
                             if ( m_bIsBookmarkMenu )
-                            {
-                                if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
-                                    xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-                                else
-                                    xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_blank"), 0 );
-                            }
+                                xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, pMenuItemHandler->aTargetFrame, 0 );
                             else
                                 xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 
@@ -745,11 +870,22 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                     if ( m_aMenuItemCommand == aSpecialFileMenu )
                     {
                         Sequence<PropertyValue> aArgs;
+                        CreatePicklistArguments( aArgs, pMenuItemHandler );
                         pMenuItemHandler->xMenuItemDispatch->dispatch( aTargetURL, aArgs );
                     }
                     else
                     {
                         Sequence<PropertyValue> aArgs;
+
+                        if ( m_bIsBookmarkMenu )
+                        {
+                            Any a;
+                            aArgs.realloc( 1 );
+                            aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
+                            a <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER ));
+                            aArgs[0].Value = a;
+                        }
+
                         pMenuItemHandler->xMenuItemDispatch->dispatch( aTargetURL, aArgs );
                     }
                 }
@@ -767,4 +903,3 @@ IMPL_LINK( MenuManager, Highlight, Menu *, pMenu )
 }
 
 }
-
