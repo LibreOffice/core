@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:00:43 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ namespace abp
     //= AddressBookSourcePage
     //=====================================================================
     typedef ::svt::OWizardPage AddressBookSourcePage_Base;
-    /// the base class for all tab pages in the address book source auto pilot
+    /// the base class for all tab pages in the address book source wizard
     class AddressBookSourcePage : public AddressBookSourcePage_Base
     {
     protected:
