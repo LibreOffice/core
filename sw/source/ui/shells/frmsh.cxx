@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:01:07 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,6 @@ SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell, SW_RES(STR_SHELLNAME_FRAME))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_FRM_POPUPMENU));
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_FRAME_TOOLBOX));
-    SFX_OBJECTMENU_REGISTRATION(SID_OBJECTMENU0, SW_RES(MN_OBJECTMENU_FRAME));
 }
 
 
@@ -349,14 +348,15 @@ void SwFrameShell::Execute(SfxRequest &rReq)
     BOOL bCopyToFmt = FALSE;
     switch ( nSlot )
     {
+        case SID_OBJECT_ALIGN_MIDDLE:
         case FN_FRAME_ALIGN_VERT_CENTER:
             aMgr.SetVertOrientation( SVX_VERT_CENTER );
             break;
-
+        case SID_OBJECT_ALIGN_DOWN :
         case FN_FRAME_ALIGN_VERT_BOTTOM:
             aMgr.SetVertOrientation( SVX_VERT_BOTTOM );
             break;
-
+        case SID_OBJECT_ALIGN_UP :
         case FN_FRAME_ALIGN_VERT_TOP:
             aMgr.SetVertOrientation( SVX_VERT_TOP );
             break;
@@ -384,15 +384,15 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         case FN_FRAME_ALIGN_VERT_ROW_TOP:
             aMgr.SetVertOrientation( SVX_VERT_LINE_TOP );
             break;
-
+        case SID_OBJECT_ALIGN_CENTER :
         case FN_FRAME_ALIGN_HORZ_CENTER:
             aMgr.SetHorzOrientation( HORI_CENTER );
             break;
-
+        case SID_OBJECT_ALIGN_RIGHT:
         case FN_FRAME_ALIGN_HORZ_RIGHT:
             aMgr.SetHorzOrientation( HORI_RIGHT );
             break;
-
+        case SID_OBJECT_ALIGN_LEFT:
         case FN_FRAME_ALIGN_HORZ_LEFT:
             aMgr.SetHorzOrientation( HORI_LEFT );
             break;
@@ -709,12 +709,15 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                     rSet.Put(aSet.Get(GetPool().GetWhich(nWhich), TRUE ));
                 }
                 break;
+                case SID_OBJECT_ALIGN_LEFT   :
+                case SID_OBJECT_ALIGN_CENTER :
+                case SID_OBJECT_ALIGN_RIGHT  :
                 case FN_FRAME_ALIGN_HORZ_CENTER:
                 case FN_FRAME_ALIGN_HORZ_RIGHT:
                 case FN_FRAME_ALIGN_HORZ_LEFT:
                     if ( (eFrmType & FRMTYPE_FLY_INCNT) ||
                             bProtect ||
-                            nWhich == FN_FRAME_ALIGN_HORZ_CENTER && bHtmlMode )
+                            (nWhich == FN_FRAME_ALIGN_HORZ_CENTER  || nWhich == SID_OBJECT_ALIGN_CENTER)&& bHtmlMode )
                         rSet.DisableItem( nWhich );
                 break;
                 case FN_FRAME_ALIGN_VERT_ROW_TOP:
@@ -727,6 +730,11 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                             || bHtmlMode && FN_FRAME_ALIGN_VERT_CHAR_BOTTOM == nWhich )
                         rSet.DisableItem( nWhich );
                 break;
+
+                case SID_OBJECT_ALIGN_UP     :
+                case SID_OBJECT_ALIGN_MIDDLE :
+                case SID_OBJECT_ALIGN_DOWN :
+
                 case FN_FRAME_ALIGN_VERT_TOP:
                 case FN_FRAME_ALIGN_VERT_CENTER:
                 case FN_FRAME_ALIGN_VERT_BOTTOM:
@@ -739,10 +747,13 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                         {
                             switch (nWhich)
                             {
+                                case SID_OBJECT_ALIGN_UP     :
                                 case FN_FRAME_ALIGN_VERT_TOP:
                                     nId = STR_TOP_BASE; break;
+                                case SID_OBJECT_ALIGN_MIDDLE :
                                 case FN_FRAME_ALIGN_VERT_CENTER:
                                     nId = STR_CENTER_BASE;  break;
+                                case SID_OBJECT_ALIGN_DOWN :
                                 case FN_FRAME_ALIGN_VERT_BOTTOM:
                                     if(!bHtmlMode)
                                         nId = STR_BOTTOM_BASE;
@@ -753,8 +764,8 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                         }
                         else
                         {
-                            if (nWhich == FN_FRAME_ALIGN_VERT_CENTER ||
-                                nWhich == FN_FRAME_ALIGN_VERT_BOTTOM)
+                            if (nWhich != FN_FRAME_ALIGN_VERT_TOP &&
+                                    nWhich != SID_OBJECT_ALIGN_UP )
                             {
                                 if (aMgr.GetAnchor() == FLY_AT_FLY)
                                 {
@@ -772,10 +783,13 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                             }
                             switch (nWhich)
                             {
+                                case SID_OBJECT_ALIGN_UP :
                                 case FN_FRAME_ALIGN_VERT_TOP:
                                     nId = STR_TOP; break;
+                                case SID_OBJECT_ALIGN_MIDDLE:
                                 case FN_FRAME_ALIGN_VERT_CENTER:
                                     nId = STR_CENTER_VERT; break;
+                                case SID_OBJECT_ALIGN_DOWN:
                                 case FN_FRAME_ALIGN_VERT_BOTTOM:
                                     nId = STR_BOTTOM; break;
                             }
@@ -849,11 +863,16 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case SID_FRAME_TO_BOTTOM:
                 case FN_FRAME_UP:
                 case FN_FRAME_DOWN:
-                case FN_FORMAT_FRAME_DLG:
                     if ( bParentCntProt )
                         rSet.DisableItem( nWhich );
-                    break;
-
+                break;
+                case FN_FORMAT_FRAME_DLG:
+                {
+                    const int nSel = rSh.GetSelectionType();
+                    if ( bParentCntProt || nSel & SwWrtShell::SEL_GRF)
+                        rSet.DisableItem( nWhich );
+                }
+                break;
                 default:
                     /* do nothing */;
                     break;
