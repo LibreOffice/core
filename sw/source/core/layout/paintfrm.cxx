@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:10:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,18 +242,22 @@
     (pGlobalShell->GetViewOptions()->IsTable() && \
     !pGlobalShell->GetViewOptions()->IsPagePreview()&&\
     !pGlobalShell->GetViewOptions()->IsReadonly()&&\
+    !pGlobalShell->GetViewOptions()->IsFormView() &&\
      SwViewOption::IsTableBoundaries())
 //sonstige Hilfslinien an?
 #define IS_SUBS (!pGlobalShell->GetViewOptions()->IsPagePreview() && \
         !pGlobalShell->GetViewOptions()->IsReadonly() && \
-        SwViewOption::IsDocBoundaries())
+        !pGlobalShell->GetViewOptions()->IsFormView() &&\
+         SwViewOption::IsDocBoundaries())
 //Hilfslinien fuer Bereiche
 #define IS_SUBS_SECTION (!pGlobalShell->GetViewOptions()->IsPagePreview() && \
-                            !pGlobalShell->GetViewOptions()->IsReadonly()&&\
-                            SwViewOption::IsSectionBoundaries())
+                         !pGlobalShell->GetViewOptions()->IsReadonly()&&\
+                         !pGlobalShell->GetViewOptions()->IsFormView() &&\
+                          SwViewOption::IsSectionBoundaries())
 #define IS_SUBS_FLYS (!pGlobalShell->GetViewOptions()->IsPagePreview() && \
-                            !pGlobalShell->GetViewOptions()->IsReadonly()&&\
-                                SwViewOption::IsObjectBoundaries())
+                      !pGlobalShell->GetViewOptions()->IsReadonly()&&\
+                      !pGlobalShell->GetViewOptions()->IsFormView() &&\
+                       SwViewOption::IsObjectBoundaries())
 
 #define SW_MAXBORDERCACHE 20
 
@@ -6051,7 +6055,11 @@ BOOL SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
                 (rBack.GetColor() == COL_TRANSPARENT) &&
                 ///rBack.GetColor().GetTransparency() &&
                 rBack.GetGraphicPos() == GPOS_NONE &&
-                !pOpt->IsPagePreview() && !pOpt->IsReadonly() &&
+                !pOpt->IsPagePreview() &&
+                !pOpt->IsReadonly() &&
+                // --> FME 2004-06-29 #114856# Formular view
+                !pOpt->IsFormView() &&
+                // <--
                 SwViewOption::IsIndexShadings() &&
                 !pOpt->IsPDFExport() &&
                 pSh->GetOut()->GetOutDevType() != OUTDEV_PRINTER )
