@@ -2,9 +2,9 @@
  *
  *  $RCSfile: historyoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2000-11-07 11:42:53 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ class SvtHistoryOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        Sequence< OUString > impl_GetPropertyNames();
+        Sequence< OUString > impl_GetPropertyNames( sal_uInt32& nPicklistCount, sal_uInt32& nHistoryCount );
 
         /*-****************************************************************************************************//**
             @short      convert routine
@@ -296,8 +296,10 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
 {
     // Use our list snapshot of configuration keys to get his values.
     // See impl_GetPropertyNames() for further informations.
-    Sequence< OUString >    seqNames    = impl_GetPropertyNames (           );
-    Sequence< Any >         seqValues   = GetProperties         ( seqNames  );
+    sal_uInt32 nPicklistCount   = 0;
+    sal_uInt32 nHistoryCount    = 0;
+    Sequence< OUString >    seqNames    = impl_GetPropertyNames ( nPicklistCount, nHistoryCount );
+    Sequence< Any >         seqValues   = GetProperties         ( seqNames                      );
 
     // Safe impossible cases.
     // We need values from ALL configuration keys.
@@ -337,7 +339,7 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
     sal_uInt32 nPosition = PROPERTYHANDLE_HISTORYSIZE+1;
     // Get names/values for picklist.
     // 4 subkeys for every item!
-    for( sal_Int32 nItem=0; nItem<m_nPicklistSize; ++nItem )
+    for( sal_Int32 nItem=0; nItem<nPicklistCount; ++nItem )
     {
         seqValues[nPosition+OFFSET_URL      ] >>= aItem.sURL        ;
         seqValues[nPosition+OFFSET_FILTER   ] >>= aItem.sFilter     ;
@@ -351,7 +353,7 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
 
     // Get names/values for picklist.
     // 4 subkeys for every item!
-    for( nItem=0; nItem<m_nHistorySize; ++nItem )
+    for( nItem=0; nItem<nHistoryCount; ++nItem )
     {
         seqValues[nPosition+OFFSET_URL      ] >>= aItem.sURL        ;
         seqValues[nPosition+OFFSET_FILTER   ] >>= aItem.sFilter     ;
@@ -411,7 +413,7 @@ void SvtHistoryOptions_Impl::Commit()
     ClearNodeSet( PROPERTYNAME_PICKLIST );
     ClearNodeSet( PROPERTYNAME_HISTORY  );
 
-    IMPL_THistoryItem               aItem                   ;
+    IMPL_THistoryItem           aItem                   ;
     OUString                    sNode                   ;
     Sequence< PropertyValue >   seqPropertyValues( 4 )  ;
 
@@ -600,14 +602,14 @@ void SvtHistoryOptions_Impl::AppendItem(            EHistoryType    eHistory    
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-Sequence< OUString > SvtHistoryOptions_Impl::impl_GetPropertyNames()
+Sequence< OUString > SvtHistoryOptions_Impl::impl_GetPropertyNames( sal_uInt32& nPicklistCount, sal_uInt32& nHistoryCount )
 {
     // First get ALL names of current existing list items in configuration!
     Sequence< OUString > seqPicklistItems = GetNodeNames( PROPERTYNAME_PICKLIST );
     Sequence< OUString > seqHistoryItems  = GetNodeNames( PROPERTYNAME_HISTORY  );
     // Get information about list counts ...
-    sal_uInt32 nPicklistCount = seqPicklistItems.getLength();
-    sal_uInt32 nHistoryCount  = seqHistoryItems.getLength ();
+    nPicklistCount = seqPicklistItems.getLength();
+    nHistoryCount  = seqHistoryItems.getLength ();
     // ... and create a property list with right size! (+2...see fix properties below!)
     Sequence< OUString > seqProperties( 2 + (nPicklistCount*4) + (nHistoryCount*4) );
 
