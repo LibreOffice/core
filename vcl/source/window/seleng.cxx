@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seleng.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-04 09:22:32 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include <seleng.hxx>
 #include <tools/debug.hxx>
 
-#pragma hdrstop
+
 
 
 inline BOOL SelectionEngine::ShouldDeselect( BOOL bModifierKey1 ) const
