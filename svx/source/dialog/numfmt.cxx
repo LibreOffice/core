@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-16 11:52:02 $
+ *  last change: $Author: er $ $Date: 2001-05-29 12:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@ static USHORT pRanges[] =
     SID_ATTR_NUMBERFORMAT_INFO,
     SID_ATTR_NUMBERFORMAT_NOLANGUAGE,
     SID_ATTR_NUMBERFORMAT_NOLANGUAGE,
+    SID_ATTR_NUMBERFORMAT_ONE_AREA,
+    SID_ATTR_NUMBERFORMAT_ONE_AREA,
+    SID_ATTR_NUMBERFORMAT_SOURCE,
+    SID_ATTR_NUMBERFORMAT_SOURCE,
     0
 };
 
@@ -303,6 +307,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
         aEdDecimals     ( this, ResId( ED_DECIMALS ) ),
         aFtLanguage     ( this, ResId( FT_LANGUAGE ) ),
         aLbLanguage     ( this, ResId( LB_LANGUAGE ), FALSE ),
+        aCbSourceFormat ( this, ResId( CB_SOURCEFORMAT ) ),
         aFlOptions      ( this, ResId( FL_OPTIONS ) ),
         aFtComment      ( this, ResId( FT_COMMENT ) ),
         aStrEurope      ( ResId( STR_EUROPE) ),
@@ -380,6 +385,10 @@ void SvxNumberFormatTabPage::Init_Impl()
                                                         //holen
     aEdComment.Hide();
 
+    aCbSourceFormat.Check( FALSE );
+    aCbSourceFormat.Disable();
+    aCbSourceFormat.Hide();
+
 // Handler verbinden
     Link aLink = LINK( this, SvxNumberFormatTabPage, SelFormatHdl_Impl );
 
@@ -387,6 +396,7 @@ void SvxNumberFormatTabPage::Init_Impl()
     aLbFormat       .SetSelectHdl( aLink );
     aLbLanguage     .SetSelectHdl( aLink );
     aLbCurrency     .SetSelectHdl( aLink );
+    aCbSourceFormat .SetClickHdl( aLink );
 
     aLink = LINK( this, SvxNumberFormatTabPage, OptHdl_Impl );
 
@@ -482,8 +492,6 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxUInt32Item*        pValFmtAttr     = NULL;
     const SfxPoolItem*          pItem           = NULL;
-    const SfxBoolItem*          pBoolItem       = NULL;
-    const SfxBoolItem*          pBoolLangItem   = NULL;
 
     USHORT                      nCatLbSelPos    = 0;
     USHORT                      nFmtLbSelPos    = 0;
@@ -501,7 +509,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
 
     if(eState==SFX_ITEM_SET)
     {
-        pBoolLangItem = (const SfxBoolItem*)
+        const SfxBoolItem* pBoolLangItem = (const SfxBoolItem*)
                       GetItem( rSet, SID_ATTR_NUMBERFORMAT_NOLANGUAGE);
 
         if(pBoolLangItem!=NULL && pBoolLangItem->GetValue())
@@ -539,7 +547,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
 
     if(eState==SFX_ITEM_SET)
     {
-        pBoolItem = (const SfxBoolItem*)
+        const SfxBoolItem* pBoolItem = (const SfxBoolItem*)
                       GetItem( rSet, SID_ATTR_NUMBERFORMAT_ONE_AREA);
 
         if(pBoolItem!=NULL)
@@ -548,6 +556,27 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
         }
     }
     //bOneAreaFlag=TRUE; //@@ Debug-Test
+
+    eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_SOURCE ) );
+
+    if ( eState == SFX_ITEM_SET )
+    {
+        const SfxBoolItem* pBoolItem = (const SfxBoolItem*)
+                      GetItem( rSet, SID_ATTR_NUMBERFORMAT_SOURCE );
+        if ( pBoolItem )
+            aCbSourceFormat.Check( pBoolItem->GetValue() );
+        else
+            aCbSourceFormat.Check( FALSE );
+        aCbSourceFormat.Enable();
+        aCbSourceFormat.Show();
+    }
+    else
+    {
+        BOOL bInit = FALSE;     // set to TRUE for debug test
+        aCbSourceFormat.Check( bInit );
+        aCbSourceFormat.Enable( bInit );
+        aCbSourceFormat.Show( bInit );
+    }
 
     // pNumItem muss von aussen gesetzt worden sein!
     DBG_ASSERT( pNumItem, "No NumberInfo, no NumberFormatter, good bye.CRASH. :-(" );
@@ -632,12 +661,17 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     if ( pValFmtAttr )
     {
         EditHdl_Impl( &aEdFormat ); // UpdateOptions_Impl() als Seiteneffekt
-
     }
     else    // DONT_KNOW
     {
         // Kategoriewechsel und direkte Eingabe sind moeglich, sonst nix:
         Obstructing();
+    }
+
+    if ( aCbSourceFormat.IsChecked() )
+    {
+        // everything disabled except SourceFormat checkbox
+        EnableBySourceFormat_Impl();
     }
 
     DeleteEntryList_Impl(aFmtEntryList);
@@ -690,6 +724,40 @@ void SvxNumberFormatTabPage::Obstructing()
     aEdFormat       .GrabFocus();
 }
 
+
+/*************************************************************************
+#* Enable/Disable dialog parts depending on the value of the SourceFormat
+#* checkbox.
+#************************************************************************/
+void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
+{
+    BOOL bEnable = !aCbSourceFormat.IsChecked();
+    aFtCategory     .Enable( bEnable );
+    aLbCategory     .Enable( bEnable );
+    aFtFormat       .Enable( bEnable );
+    aLbCurrency     .Enable( bEnable );
+    aLbFormat       .Enable( bEnable );
+    aFtLanguage     .Enable( bEnable );
+    aLbLanguage     .Enable( bEnable );
+    aFtDecimals     .Enable( bEnable );
+    aEdDecimals     .Enable( bEnable );
+    aFtLeadZeroes   .Enable( bEnable );
+    aEdLeadZeroes   .Enable( bEnable );
+    aBtnNegRed      .Enable( bEnable );
+    aBtnThousand    .Enable( bEnable );
+    aFlOptions      .Enable( bEnable );
+    aFtEdFormat     .Enable( bEnable );
+    aEdFormat       .Enable( bEnable );
+    aIbAdd          .Enable( bEnable );
+    aIbRemove       .Enable( bEnable );
+    aIbInfo         .Enable( bEnable );
+    aFtComment      .Enable( bEnable );
+    aEdComment      .Enable( bEnable );
+    if ( !bEnable )
+        aCbSourceFormat.GetFocus();
+}
+
+
 /*************************************************************************
 #*  Methode:    HideLanguage                                Datum:14.05.98
 #*------------------------------------------------------------------------
@@ -741,16 +809,15 @@ void SvxNumberFormatTabPage::HideLanguage(BOOL nFlag)
 
 BOOL SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 {
-    BOOL bDataChanged   = aFtLanguage.IsEnabled();
-    BOOL bDeleted       = FALSE;
+    BOOL bDataChanged   = aFtLanguage.IsEnabled() || aCbSourceFormat.IsEnabled();
     if ( bDataChanged )
     {
+        const SfxItemSet& rMyItemSet = GetItemSet();
         USHORT          nWhich       = GetWhich( SID_ATTR_NUMBERFORMAT_VALUE );
-        SfxItemState    eItemState   = GetItemSet().GetItemState( nWhich, FALSE );
+        SfxItemState    eItemState   = rMyItemSet.GetItemState( nWhich, FALSE );
 
-        // OK angewaehlt - wurde eingegebenes Zahlenformat schon
-        // uebernommen? Wenn nein Add simulieren. Bei Syntaxfehler
-        // Eingabe ignorieren und Put unterbinden
+        // OK chosen - Is format code input entered already taken over?
+        // If not, simulate Add. Upon syntax error ignore input and prevent Put.
         String      aFormat = aEdFormat.GetText();
         ULONG nCurKey = pNumFmtShell->GetCurNumFmtKey();
 
@@ -770,25 +837,26 @@ BOOL SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 
             if(bOneAreaFlag && (nFixedCategory!=nCatLbSelPos))
             {
-                if(bDataChanged) DeleteEntryList_Impl(aEntryList);
-                bDeleted = pNumFmtShell->RemoveFormat( aFormat,
+                if(bDataChanged)
+                    DeleteEntryList_Impl(aEntryList);
+                BOOL bDeleted = pNumFmtShell->RemoveFormat( aFormat,
                                                nCatLbSelPos,
                                                nFmtLbSelPos,
                                                a2EntryList);
-                if(bDeleted) DeleteEntryList_Impl(a2EntryList);
+                if(bDeleted)
+                    DeleteEntryList_Impl(a2EntryList);
                 bDataChanged=FALSE;
             }
             nCurKey = pNumFmtShell->GetCurNumFmtKey();
         }
-        else if(nCurKey == NUMKEY_UNDEFINED)            // Wohl was falsch gelaufen!
-        {                                               // z.B. im Writer #70281#
+        else if(nCurKey == NUMKEY_UNDEFINED)
+        {   // something went wrong, e.g. in Writer #70281#
             pNumFmtShell->FindEntry(aFormat, &nCurKey);
         }
 
         //---------------------------------------------------------------
-        // Ausgewaehltes Format:
-        // ----------------------
-
+        // Chosen format:
+        // --------------
         if ( bDataChanged )
         {
             bDataChanged = ( nInitFormat != nCurKey );
@@ -804,8 +872,8 @@ BOOL SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         }
 
         // --------------------------------------------------------------
-        // Liste veraenderter benutzerdefinierter Formate:
-        // -----------------------------------------------
+        // List of changed user defined formats:
+        // -------------------------------------
         const ULONG nDelCount = pNumFmtShell->GetUpdateDataCount();
 
         if ( nDelCount > 0 )
@@ -832,10 +900,24 @@ BOOL SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             delete [] pDelArr;
         }
 
-        // FillItemSet wird nur bei OK gerufen, d.h. an dieser
-        // Stelle kann der NumberFormat-Shell mitgeteilt werden,
-        // dass alle neuen benutzerdefinierten Formate gueltig sind:
+        //---------------------------------------------------------------
+        // Whether source format is to be taken or not:
+        // --------------------------------------------
+        if ( aCbSourceFormat.IsEnabled() )
+        {
+            USHORT nWhich = GetWhich( SID_ATTR_NUMBERFORMAT_SOURCE );
+            SfxItemState eItemState = rMyItemSet.GetItemState( nWhich, FALSE );
+            const SfxBoolItem* pBoolItem = (const SfxBoolItem*)
+                        GetItem( rMyItemSet, SID_ATTR_NUMBERFORMAT_SOURCE );
+            BOOL bOld = (pBoolItem ? pBoolItem->GetValue() : FALSE);
+            rCoreAttrs.Put( SfxBoolItem( nWhich, aCbSourceFormat.IsChecked() ) );
+            if ( !bDataChanged )
+                bDataChanged = (bOld != aCbSourceFormat.IsChecked() ||
+                    eItemState != SFX_ITEM_SET);
+        }
 
+        // FillItemSet is only called on OK, here we can notify the
+        // NumberFormatShell that all new user defined formats are valid.
         pNumFmtShell->ValidateNewEntries();
     }
 
@@ -1316,6 +1398,24 @@ IMPL_LINK( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvxFontListBox*, pLb )
 
 IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
 {
+    if ( (CheckBox*)pLb == &aCbSourceFormat )
+    {
+        EnableBySourceFormat_Impl();    // enable/disable everything else
+        if ( aCbSourceFormat.IsChecked() )
+            return 0;   // just disabled everything else
+
+        // Reinit options enable/disable for current selection.
+
+        // Current category may be UserDefined with no format entries defined.
+        // And yes, aLbFormat is a SvxFontListBox with ULONG list positions,
+        // implementation returns a LIST_APPEND if empty, comparison with
+        // USHORT LISTBOX_ENTRY_NOTFOUND wouldn't match.
+        if ( aLbFormat.GetSelectEntryPos() == LIST_APPEND )
+            pLb = &aLbCategory; // continue with the current category selected
+        else
+            pLb = &aLbFormat;   // continue with the current format selected
+    }
+
     short       nTmpCatPos;
 
     if(bOneAreaFlag)
