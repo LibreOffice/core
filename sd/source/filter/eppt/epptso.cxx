@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-05 09:07:19 $
+ *  last change: $Author: sj $ $Date: 2002-07-09 16:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3603,27 +3603,12 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
         }
         break;
         case ::com::sun::star::presentation::AnimationEffect_SPIRALIN_LEFT :
-        {
-            nFlyDirection = 1;
-            nFlyMethod = 3;
-        }
-        break;
         case ::com::sun::star::presentation::AnimationEffect_SPIRALIN_RIGHT :
-        {
-            nFlyDirection = 0;
-            nFlyMethod = 3;
-        }
-        break;
         case ::com::sun::star::presentation::AnimationEffect_SPIRALOUT_LEFT :
-        {
-            nFlyDirection = 0;
-            nFlyMethod = 3;
-        }
-        break;
         case ::com::sun::star::presentation::AnimationEffect_SPIRALOUT_RIGHT :
         {
-            nFlyDirection = 0;
-            nFlyMethod = 3;
+            nFlyDirection = 0x1c;
+            nFlyMethod = 0xc;
         }
         break;
         case ::com::sun::star::presentation::AnimationEffect_DISSOLVE :
