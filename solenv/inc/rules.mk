@@ -614,12 +614,12 @@ $(SLO)$/%.obj : %.asm
        @echo Making: $@
 .IF "$(COM)"=="WTC"
        $(ASM) $(AFLAGS) -D$(COM) $*.asm -fo=$(SLO)\$*.obj
-       +-if exist $*.err @del $*.err
+       +-$(IFEXIST) $*.err $(THEN) $(RM) $*.err
 .ELSE
 .IF "$(COM)"=="MSC"
 .IF "$(ASM)"=="ml"
        $(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)\$*.obj $*.asm
-       +-if exist $*.err @del $*.err
+       +-$(IFEXIST) $*.err $(THEN) $(RM) $*.err
 .ELSE			# "$(ASM)"=="ml"
         @+-$(RM) $@ >& $(NULLDEV)
         $(ASM) $(AFLAGS) $*.asm,$(SLO)\$*.obj;
@@ -633,9 +633,9 @@ $(OBJ)$/%.obj : %.asm
 .IF "$(COM)"=="MSC"
 .IF "$(ASM)"=="ml"
        $(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)\$*.obj $*.asm
-       +-if exist $*.err @del $*.err
+       +-$(IFEXIST) $*.err $(THEN) $(RM) $*.err
 .ELSE			# "$(ASM)"=="ml"
-        @+if exist $@ $(RM) $@ >& $(NULLDEV)
+        @+$(IFEXIST) $@ $(THEN) $(RM) $@ >& $(NULLDEV)
         $(ASM) $(AFLAGS) $*.asm,$(OBJ)\$*.obj;
 .ENDIF			# "$(ASM)"=="ml"
 .ENDIF			 "$(COM)"=="MSC"
