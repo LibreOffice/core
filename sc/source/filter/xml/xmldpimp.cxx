@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:57:16 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDLAYOUTMODE_HPP_
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDGROUPBY_HPP_
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #endif
 
 //#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -768,7 +771,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
     pDataPilotTable(pTempDataPilotTable),
     pDim(NULL),
     bDateValue(sal_False),
-    bGroupField(sal_False),
+    bIsGroupField(sal_False),
     bAutoStart(sal_False),
     bAutoEnd(sal_False),
     fStart(0.0),
@@ -822,73 +825,6 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
             case XML_TOK_DATA_PILOT_FIELD_ATTR_USED_HIERARCHY :
             {
                 nUsedHierarchy = sValue.toInt32();
-            }
-            break;
-            case XML_TOK_DATA_PILOT_FIELD_ATTR_IS_GROUP_FIELD :
-            {
-                bGroupField = IsXMLToken(sValue, XML_TRUE);
-            }
-            break;
-            case XML_TOK_DATA_PILOT_FIELD_ATTR_GROUP_SOURCE_FIELD_NAME :
-            {
-                sGroupSource = sValue;
-            }
-            break;
-            case XML_TOK_DATA_PILOT_FIELD_ATTR_DATE_START :
-            {
-                bDateValue = sal_True;
-                if (IsXMLToken(sValue, XML_AUTO))
-                    bAutoStart = sal_True;
-                else
-                    GetScImport().GetMM100UnitConverter().convertDateTime(fStart, sValue);
-            }
-            break;
-            case XML_TOK_DATA_PILOT_FIELD_ATTR_DATE_END :
-            {
-                bDateValue = sal_True;
-                if (IsXMLToken(sValue, XML_AUTO))
-                    bAutoEnd = sal_True;
-                else
-                    GetScImport().GetMM100UnitConverter().convertDateTime(fEnd, sValue);
-            }
-            break;
-            case XML_TOK_DATA_PILOT_FIELD_ATTR_START :
-            {
-                if (IsXMLToken(sValue, XML_AUTO))
-                    bAutoStart = sal_True;
-                else
-                    GetScImport().GetMM100UnitConverter().convertDouble(fStart, sValue);
-            }
-            break;
-            case XML_TOK_DATA_PILOT_FIELD_ATTR_END :
-            {
-                if (IsXMLToken(sValue, XML_AUTO))
-                    bAutoEnd = sal_True;
-                else
-                    GetScImport().GetMM100UnitConverter().convertDouble(fEnd, sValue);
-            }
-            break;
-            case XML_TOK_DATA_PILOT_FIELD_ATTR_STEP :
-            {
-                GetScImport().GetMM100UnitConverter().convertDouble(fStep, sValue);
-            }
-            break;
-            case XML_TOK_DATA_PILOT_FIELD_ATTR_GROUP_PART :
-            {
-                if (IsXMLToken(sValue, XML_SECONDS))
-                    nGroupPart = SC_DP_DATE_SECONDS;
-                else if (IsXMLToken(sValue, XML_MINUTES))
-                    nGroupPart = SC_DP_DATE_MINUTES;
-                else if (IsXMLToken(sValue, XML_HOURS))
-                    nGroupPart = SC_DP_DATE_HOURS;
-                else if (IsXMLToken(sValue, XML_DAYS))
-                    nGroupPart = SC_DP_DATE_DAYS;
-                else if (IsXMLToken(sValue, XML_MONTHS))
-                    nGroupPart = SC_DP_DATE_MONTHS;
-                else if (IsXMLToken(sValue, XML_QUARTERS))
-                    nGroupPart = SC_DP_DATE_QUARTERS;
-                else if (IsXMLToken(sValue, XML_YEARS))
-                    nGroupPart = SC_DP_DATE_YEARS;
             }
             break;
         }
@@ -949,7 +885,7 @@ void ScXMLDataPilotFieldContext::EndElement()
             pDim->SetCurrentPage(&sPage);
         }
         pDataPilotTable->AddDimension(pDim);
-        if (bGroupField)
+        if (bIsGroupField)
         {
             ScDPNumGroupInfo aInfo;
             aInfo.Enable = sal_True;
@@ -1514,6 +1450,78 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pDataPilotField(pTempDataPilotField)
 {
+    rtl::OUString               sGroupSource;
+    double                      fStart(0.0);
+    double                      fEnd(0.0);
+    double                      fStep(0.0);
+    sal_Int32                   nGroupPart(0);
+    sal_Bool                    bDateValue(sal_False);
+    sal_Bool                    bAutoStart(sal_True);
+    sal_Bool                    bAutoEnd(sal_True);
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotMemberAttrTokenMap();
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        rtl::OUString aLocalName;
+        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                            sAttrName, &aLocalName );
+        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+
+        if (IsXMLToken(aLocalName, XML_SOURCE_FIELD_NAME))
+                sGroupSource = sValue;
+        else if (IsXMLToken(aLocalName, XML_DATE_START))
+        {
+            bDateValue = sal_True;
+            if (IsXMLToken(sValue, XML_AUTO))
+                bAutoStart = sal_True;
+            else
+                GetScImport().GetMM100UnitConverter().convertDateTime(fStart, sValue);
+        }
+        else if (IsXMLToken(aLocalName, XML_DATE_END))
+        {
+            bDateValue = sal_True;
+            if (IsXMLToken(sValue, XML_AUTO))
+                bAutoEnd = sal_True;
+            else
+                GetScImport().GetMM100UnitConverter().convertDateTime(fEnd, sValue);
+        }
+        else if (IsXMLToken(aLocalName, XML_START))
+        {
+            if (IsXMLToken(sValue, XML_AUTO))
+                bAutoStart = sal_True;
+            else
+                GetScImport().GetMM100UnitConverter().convertDouble(fStart, sValue);
+        }
+        else if (IsXMLToken(aLocalName, XML_END))
+        {
+            if (IsXMLToken(sValue, XML_AUTO))
+                bAutoEnd = sal_True;
+            else
+                GetScImport().GetMM100UnitConverter().convertDouble(fEnd, sValue);
+        }
+        else if (IsXMLToken(aLocalName, XML_STEP))
+                GetScImport().GetMM100UnitConverter().convertDouble(fStep, sValue);
+        else if (IsXMLToken(aLocalName, XML_GROUPED_BY))
+        {
+            if (IsXMLToken(sValue, XML_SECONDS))
+                nGroupPart = com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS;
+            else if (IsXMLToken(sValue, XML_MINUTES))
+                nGroupPart = com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES;
+            else if (IsXMLToken(sValue, XML_HOURS))
+                nGroupPart = com::sun::star::sheet::DataPilotFieldGroupBy::HOURS;
+            else if (IsXMLToken(sValue, XML_DAYS))
+                nGroupPart = com::sun::star::sheet::DataPilotFieldGroupBy::DAYS;
+            else if (IsXMLToken(sValue, XML_MONTHS))
+                nGroupPart = com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS;
+            else if (IsXMLToken(sValue, XML_QUARTERS))
+                nGroupPart = com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS;
+            else if (IsXMLToken(sValue, XML_YEARS))
+                nGroupPart = com::sun::star::sheet::DataPilotFieldGroupBy::YEARS;
+        }
+    }
+    pDataPilotField->SetGrouping(sGroupSource, fStart, fEnd, fStep, nGroupPart, bDateValue, bAutoStart, bAutoEnd);
 }
 
 ScXMLDataPilotGroupsContext::~ScXMLDataPilotGroupsContext()
