@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:05:04 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ swedish ] = "Asiatisk layout";
                 Text[ polish ] = "Layout azjatycki";
                 Text[ portuguese_brazilian ] = "Asian layout";
-                Text[ japanese ] = "±¼Ş±®Ú²±³Ä";
+                Text[ japanese ] = "˜a•¶Ú²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ  ·¹ÀÌ¾Æ¿ô";
                 Text[ chinese_simplified ] = "ÑÇÖŞÎÄ×ÖµÄ°æÊ½";
                 Text[ chinese_traditional ] = "¨È¬w¤å¦rª©¦¡";
@@ -347,6 +347,24 @@ TabDialog DLG_TEMPLATE_2
                 Identifier = TP_PARA_ASIAN;
                 Text = "Asiatische Typographie" ;
                 Text [ ENGLISH ] = "Asian typography" ;
+                Text[ english_us ] = "Asian typography";
+                Text[ portuguese ] = "Asian typography";
+                Text[ russian ] = "Asian typography";
+                Text[ greek ] = "Asian typography";
+                Text[ dutch ] = "Asian typography";
+                Text[ french ] = "Asian typography";
+                Text[ spanish ] = "Asian typography";
+                Text[ italian ] = "Asian typography";
+                Text[ danish ] = "Asian typography";
+                Text[ swedish ] = "Asian typography";
+                Text[ polish ] = "Typografia azjatycka";
+                Text[ portuguese_brazilian ] = "Asian typography";
+                Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
+                Text[ korean ] = "¾Æ½Ã¾Æ ÀÎ¼âÃ¼";
+                Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
+                Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
+                Text[ turkish ] = "Asian typography";
+                Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
             };
             PageItem
             {
@@ -447,7 +465,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ swedish ] = "Asiatisk layout";
                 Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian layout";
-                Text[ japanese ] = "±¼Ş±®Ú²±³Ä";
+                Text[ japanese ] = "˜a•¶Ú²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ  ·¹ÀÌ¾Æ¿ô";
                 Text[ chinese_simplified ] = "ÑÇÖŞÎÄ×ÖµÄ°æÊ½";
                 Text[ chinese_traditional ] = "¨È¬w¤å¦rª©¦¡";
