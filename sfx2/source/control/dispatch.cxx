@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:26:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,10 @@ DBG_NAME(SfxDispatcherFlush);
 DBG_NAME(SfxDispatcherFillState);
 
 //==================================================================
+typedef SfxRequest* SfxRequestPtr;
 SV_IMPL_PTRARR( SfxItemPtrArray, SfxPoolItemPtr );
+SV_DECL_PTRARR_DEL( SfxRequestPtrArray, SfxRequestPtr, 4, 4 );
+SV_IMPL_PTRARR( SfxRequestPtrArray, SfxRequestPtr );
 
 DECL_PTRSTACK(SfxShellStack_Impl, SfxShell*, 8, 4 );
 //==================================================================
@@ -187,6 +190,7 @@ struct SfxObjectBars_Impl
 
 struct SfxDispatcher_Impl
 {
+    SfxRequestPtrArray      aReqArr;
     const SfxSlotServer* pCachedServ1;       // zuletzt gerufene Message
     const SfxSlotServer* pCachedServ2;       // vorletzt gerufene Message
     SfxShellStack_Impl      aStack;             // aktive Funktionalitaet
@@ -1586,7 +1590,10 @@ IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
         else
         {
 //            pImp->xPoster->Post(pExec);
-            pImp->xPoster->Post(new SfxRequest(*pReq));
+            if ( pImp->bLocked )
+                pImp->aReqArr.Insert( new SfxRequest(*pReq), pImp->aReqArr.Count() );
+            else
+                pImp->xPoster->Post(new SfxRequest(*pReq));
         }
     }
 //    else
@@ -2864,6 +2871,13 @@ void SfxDispatcher::Lock( sal_Bool bLock )
     else if ( pBindings )
         pBindings->InvalidateAll(sal_False);
     pImp->bLocked = bLock;
+    if ( !bLock )
+    {
+        USHORT nCount = pImp->aReqArr.Count();
+        for ( USHORT i=0; i<nCount; i++ )
+            pImp->xPoster->Post( pImp->aReqArr[i] );
+        pImp->aReqArr.Remove( 0, nCount );
+    }
 }
 
 //--------------------------------------------------------------------
