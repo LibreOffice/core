@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 08:41:47 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:50:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,8 +118,7 @@ $(SLOFILES) $(JAVACLASSFILES): $(MISC)$/$(TARGET).rdb
 $(BIN)$/testequals$(SCRIPTEXT): $(BIN)$/testequals_services.rdb
     echo java -classpath \
         ..$/class$/test$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)\
-..$/class$/java_uno.jar$(PATH_SEPERATOR)$(EXEC_CLASSPATH)$(PATH_SEPERATOR)\
-$(SOLARBINDIR)$/sandbox.jar \
+..$/class$/java_uno.jar$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \
         test.java_uno.equals.TestEquals $(SOLARBINDIR)$/types.rdb \
         testequals_services.rdb > $@
     $(GIVE_EXEC_RIGHTS) $@
