@@ -2,9 +2,9 @@
  *
  *  $RCSfile: advapi9x.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2000-12-11 16:35:18 $
+ *  last change: $Author: hro $ $Date: 2001-12-19 09:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@ extern "C"{
 #ifdef RegDeleteValueW
 #undef RegDeleteValueW
 #endif
+#ifdef RegQueryInfoKeyW
+#undef RegQueryInfoKeyW
+#endif
 
 //------------------------------------------------------------------------
 // set the compiler directives for the function pointer we declare below
@@ -198,6 +201,28 @@ ADVAPI9X_API LONG (WINAPI *lpfnRegDeleteValueW) (
   LPCWSTR lpValueName   // value name
 );
 
+ADVAPI9X_API LONG (WINAPI *lpfnRegQueryInfoKeyW) (
+    HKEY hKey,                      // handle to key to query
+    LPWSTR lpClassW,                // address of buffer for class string
+    LPDWORD lpcbClass,              // address of size of class string buffer
+    LPDWORD lpReserved,             // reserved
+    LPDWORD lpcSubKeys,             // address of buffer for number of
+                                    // subkeys
+    LPDWORD lpcbMaxSubKeyLen,       // address of buffer for longest subkey
+                                    // name length
+    LPDWORD lpcbMaxClassLen,        // address of buffer for longest class
+                                    // string length
+    LPDWORD lpcValues,              // address of buffer for number of value
+                                    // entries
+    LPDWORD lpcbMaxValueNameLen,    // address of buffer for longest
+                                    // value name length
+    LPDWORD lpcbMaxValueLen,        // address of buffer for longest value
+                                    // data length
+    LPDWORD lpcbSecurityDescriptor, // address of buffer for security
+                                    // descriptor length
+    PFILETIME lpftLastWriteTime     // address of buffer for last write time
+);
+
 //------------------------------------------------------------------------
 // redefine the above undefined macros so that the preprocessor replaces
 // all occurrences of this macros with our function pointer
@@ -211,6 +236,7 @@ ADVAPI9X_API LONG (WINAPI *lpfnRegDeleteValueW) (
 #define RegQueryValueExW lpfnRegQueryValueExW
 #define RegSetValueExW   lpfnRegSetValueExW
 #define RegDeleteValueW  lpfnRegDeleteValueW
+#define RegQueryInfoKeyW lpfnRegQueryInfoKeyW
 
 #ifdef __cplusplus
 }
