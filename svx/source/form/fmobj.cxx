@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-24 07:01:26 $
+ *  last change: $Author: fs $ $Date: 2000-11-24 08:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ void FmFormObj::clonedFrom(const FmFormObj* _pSource)
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xSourceContainer = xSourceAsChild->getParent();
 
     m_xEnvironmentHistory = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >(
-        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.FormsCollection")),
+        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.Forms")),
         ::com::sun::star::uno::UNO_QUERY);
     DBG_ASSERT(m_xEnvironmentHistory.is(), "FmFormObj::clonedFrom : could not create a forms collection !");
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-24 07:01:26 $
+ *  last change: $Author: fs $ $Date: 2000-11-24 08:32:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
+#ifndef _VCL_STDTEXT_HXX
+#include <vcl/stdtext.hxx>
+#endif
 
 #ifndef _SVX_DIALMGR_HXX
 #include "dialmgr.hxx"
@@ -236,10 +239,13 @@ void FmFormPageImpl::Init()
         m_sPageId = pDrawModel->GetUniquePageId();
     }
 
+    static const ::rtl::OUString sFormsCollectionServiceName = ::rtl::OUString::createFromAscii("com.sun.star.form.Forms");
     xForms = Reference< ::com::sun::star::container::XNameContainer > (
         ::comphelper::getProcessServiceFactory()->createInstance(
-        ::rtl::OUString::createFromAscii("com.sun.star.form.FormsCollection")), UNO_QUERY);
+        sFormsCollectionServiceName), ::com::sun::star::uno::UNO_QUERY);
     DBG_ASSERT(xForms.is(), "FmFormPageImpl::Init : could not create a forms collection !");
+    if (!xForms.is())
+        ShowServiceNotAvailableError(NULL, sFormsCollectionServiceName, sal_True);
 
     Reference< ::com::sun::star::container::XChild >  xAsChild(xForms, UNO_QUERY);
     if (xAsChild.is())
