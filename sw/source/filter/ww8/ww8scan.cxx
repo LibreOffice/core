@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:59:23 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4936,9 +4936,10 @@ void WW8PLCFxDesc::Restore( const WW8PLCFxSave1& rSave )
 //-----------------------------------------
 
 
-WW8Fib::WW8Fib( SvStream& rSt, BYTE nWantedVersion,UINT32 nOffset )
+WW8Fib::WW8Fib(SvStream& rSt, BYTE nWantedVersion, UINT32 nOffset)
     : nFibError( 0 )
 {
+    memset(this, 0, sizeof(*this));
     BYTE aBits1;
     BYTE aBits2;
     BYTE aVer8Bits1;    // nur ab WinWord 8 benutzt
