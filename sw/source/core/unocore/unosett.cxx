@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-17 16:00:44 $
+ *  last change: $Author: os $ $Date: 2001-10-26 11:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2137,7 +2137,8 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                     if(!pSetSize->Width() || !pSetSize->Height())
                     {
                         const Graphic* pGraphic = pSetBrush->GetGraphic();
-                        *pSetSize = ::GetGraphicSizeTwip(*pGraphic, 0);
+                        if(pGraphic)
+                            *pSetSize = ::GetGraphicSizeTwip(*pGraphic, 0);
                     }
                 }
                 SvxFrameVertOrient eOrient = pSetVOrient ?
