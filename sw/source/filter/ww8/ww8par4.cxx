@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-22 09:45:13 $
+ *  last change: $Author: cmc $ $Date: 2001-05-23 13:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 
             else
             {
-                ULONG nOldObjLocFc = nOldObjLocFc;
+                ULONG nOldObjLocFc = nObjLocFc;
                 nObjLocFc = 0;
 
                 SwFrmFmt* pGrfFmt = ImportGraf();
@@ -697,11 +697,14 @@ void SwWW8ImplReader::Read_CPropRMark( USHORT nId, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.10 2001-05-22 09:45:13 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.11 2001-05-23 13:07:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/05/22 09:45:13  cmc
+      #87317# ##928## Redlining: Allow deletions after property changes to occur
+
       Revision 1.9  2001/05/21 15:45:50  cmc
       ##897## #87014# #75277# Better inline (FLY_IN_CNTNT) graphics and ole2 object exporting (sideeffects add ole2 support to WW6 export)
 
