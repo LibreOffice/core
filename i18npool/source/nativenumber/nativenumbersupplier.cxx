@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: khong $ $Date: 2002-10-11 02:04:21 $
+ *  last change: $Author: khong $ $Date: 2002-10-19 00:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/string.hxx>
 #include <nativenumbersupplier.hxx>
+#include <localedata.hxx>
 #include <data/numberchar.h>
 #include <x_rtl_ustring.h>
 
@@ -99,12 +100,13 @@ typedef struct {
 
 
 #define NUMBER_COMMA    0x002C
-#define isComma(ch)     (ch == NUMBER_COMMA)
+#define isSeparator(ch)     (ch == thousandSeparator || ch == (thousandSeparator + 0xFEE0))
 #define MAX_SAL_UINT32  0xFFFFFFFF
 #define MAX_VALUE       (MAX_SAL_UINT32 - 9) / 10
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
+static sal_Unicode thousandSeparator = NUMBER_COMMA;    // default separator
 
 OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     Sequence< sal_Int32 >& offset, sal_Int16 number ) throw(RuntimeException)
@@ -210,7 +212,7 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
             srcStr->buffer[len++] = str[i];
         } else {
             if (len > 0) {
-            if (isComma(str[i]) && i < nCount-1 && isNumber(str[i+1]))
+            if (isSeparator(str[i]) && i < nCount-1 && isNumber(str[i+1]))
                 continue; // skip comma inside number string
             sal_Bool notZero = sal_False;
             for (sal_Int32 begin = 0, end = len % number->multiplierExponent[0];
@@ -308,15 +310,15 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
         const sal_Unicode *str = inStr.getStr() + startPos;
         rtl_uString *newStr = x_rtl_uString_new_WithLength(nCount * MultiplierExponent_7_CJK[0] + 1);
         offset.realloc( nCount * MultiplierExponent_7_CJK[0] + 1 );
-        sal_Int32 i = 0, count = 0, index;
+        sal_Int32 count = 0, index;
 
         OUString numberChar, multiplierChar, decimalChar, minusChar;
         numberChar = OUString((sal_Unicode*)NumberChar, 10*NumberChar_Count);
         multiplierChar = OUString((sal_Unicode*) MultiplierChar_7_CJK, ExponentCount_7_CJK*Multiplier_Count);
-        decimalChar = OUString(DecimalChar);
-        minusChar = OUString(MinusChar);
+        decimalChar = OUString(DecimalChar, NumberChar_Count);
+        minusChar = OUString(MinusChar, NumberChar_Count);
 
-        while (i < nCount) {
+        for (sal_Int32 i = 0; i < nCount; i++) {
         if ((index = multiplierChar.indexOf(str[i])) >= 0) {
             if (count == 0 || !isNumber(newStr->buffer[count-1])) { // add 1 in front of multiplier
             newStr->buffer[count] = NUMBER_ONE;
@@ -328,6 +330,10 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
         } else {
             if ((index = numberChar.indexOf(str[i])) >= 0)
             newStr->buffer[count] = (index % 10) + NUMBER_ZERO;
+            else if (isSeparator(str[i]) &&
+                (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
+                        multiplierChar.indexOf(str[i+1]) >= 0)))
+            newStr->buffer[count] = thousandSeparator;
             else if ((index = decimalChar.indexOf(str[i])) >= 0 &&
                 (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
                         multiplierChar.indexOf(str[i+1]) >= 0)))
@@ -342,7 +348,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
             newStr->buffer[count] = NUMBER_MINUS;
             else
             newStr->buffer[count] = str[i];
-            offset[count++] = i++;
+            offset[count++] = i;
         }
         }
 
@@ -441,15 +447,26 @@ static sal_Int16 SAL_CALL getLanguageNumber( const Locale& rLocale)
     return -1;
 }
 
-OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aNumberString, const Locale& aLocale,
+OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
                 sal_Int16 nNativeNumberMode) throw (RuntimeException)
 {
         Sequence< sal_Int32 > offset;
         Number *number = 0;
         sal_Int16 num = -1;
+    if (!aLocale.Language.equals(rLocale.Language) ||
+        !aLocale.Country.equals(rLocale.Country) ||
+        !aLocale.Variant.equals(rLocale.Variant)) {
+        LocaleDataItem item = LocaleData().getLocaleItem( rLocale );
+        aLocale = rLocale;
+        DecimalChar[NumberChar_HalfWidth] = item.decimalSeparator.toChar();
+        if (DecimalChar[NumberChar_HalfWidth] > 0x7E || DecimalChar[NumberChar_HalfWidth] < 0x21)
+        DecimalChar[NumberChar_HalfWidth] = 0x002C;
+        DecimalChar[NumberChar_FullWidth] = DecimalChar[NumberChar_HalfWidth] + 0xFEE0;
+        thousandSeparator = item.thousandSeparator.toChar();
+    }
 
-        if (isValidNatNum(aLocale, nNativeNumberMode)) {
-            sal_Int16 langnum = getLanguageNumber(aLocale);
+        if (isValidNatNum(rLocale, nNativeNumberMode)) {
+            sal_Int16 langnum = getLanguageNumber(rLocale);
             switch (nNativeNumberMode) {
                 case NativeNumberMode::NATNUM0: // Ascii
                     return NativeToAscii(aNumberString,  0, aNumberString.getLength(), offset);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: khong $ $Date: 2002-06-20 02:36:39 $
+ *  last change: $Author: khong $ $Date: 2002-10-19 00:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@ public:
         throw( com::sun::star::uno::RuntimeException );
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
         throw( com::sun::star::uno::RuntimeException );
+
+private:
+    ::com::sun::star::lang::Locale aLocale;
 };
 
 } } } }
