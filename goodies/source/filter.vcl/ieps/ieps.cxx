@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ieps.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:11:36 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,6 @@
 #include <svtools/fltcall.hxx>
 #include <tools/urlobj.hxx>
 
-// we will parse only 4kb for graphic information
-#define PS_BUF_SIZE 0x1000
 
 /*************************************************************************
 |*
@@ -182,12 +180,13 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
     if ( rStream.GetError() )
         return FALSE;
 
-    Graphic aGraphic;
-    BOOL    bRetValue = FALSE;
-    BOOL    bHasPreview = FALSE;
-    UINT32  nSignature, nPSStreamPos, nPSSize, nSize, nPos;
-    UINT32  nOrigPos = nPSStreamPos = rStream.Tell();
-    USHORT  nOldFormat = rStream.GetNumberFormatInt();
+    Graphic     aGraphic;
+    sal_Bool    bRetValue = sal_False;
+    sal_Bool    bHasPreview = sal_False;
+    sal_Bool    bGraphicLinkCreated = sal_False;
+    sal_uInt32  nSignature, nPSStreamPos, nPSSize, nSize, nPos;
+    sal_uInt32  nOrigPos = nPSStreamPos = rStream.Tell();
+    sal_uInt16  nOldFormat = rStream.GetNumberFormatInt();
     rStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     rStream >> nSignature;
     if ( nSignature == 0xc6d3d0c5 )
@@ -245,17 +244,19 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
         nPSStreamPos = nOrigPos;            // no preview available _>so we must get the size manually
         nPSSize = rStream.Seek( STREAM_SEEK_TO_END ) - nOrigPos;
     }
+    sal_uInt8* pHeader = new sal_uInt8[ 22 ];
     rStream.Seek( nPSStreamPos );
-    BYTE* pBuf = new BYTE[ PS_BUF_SIZE ];
-    if ( pBuf )
+    rStream.Read( pHeader, 22 );    // check PostScript header
+    if ( ImplSearchEntry( pHeader, (BYTE*)"%!PS-Adobe", 10, 10 ) &&
+        ImplSearchEntry( &pHeader[ 15 ], (BYTE*)"EPS", 3, 3 ) )
     {
-        rStream.Read( pBuf, 22 );   // check PostScript header
-        if ( ImplSearchEntry( pBuf, (BYTE*)"%!PS-Adobe", 10, 10 ) &&
-            ImplSearchEntry( &pBuf[15], (BYTE*)"EPS", 3, 3 ) )
+        rStream.Seek( nPSStreamPos );
+        sal_uInt8* pBuf = new sal_uInt8[ nPSSize ];
+        if ( pBuf )
         {
-            ULONG nBufStartPos = rStream.Tell();
-            ULONG nBytesRead = rStream.Read( pBuf, PS_BUF_SIZE );
-            if ( nBytesRead > 64 )      // assuming a eps file is greater than 64 bytes
+            sal_uInt32  nBufStartPos = rStream.Tell();
+            sal_uInt32  nBytesRead = rStream.Read( pBuf, nPSSize );
+            if ( nBytesRead == nPSSize )
             {
                 int nSecurityCount = 32;
                 if ( !bHasPreview )     // if there is no tiff/wmf preview, we will parse for an preview in the eps prolog
@@ -373,120 +374,113 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
                     }
                     if ( nSecurityCount)
                     {
-                        BYTE* pLinkBuf = new BYTE[ nPSSize ];
-                        if ( pLinkBuf )
+                        bGraphicLinkCreated = sal_True;
+                        GfxLink     aGfxLink( pBuf, nPSSize, GFX_LINK_TYPE_EPS_BUFFER, TRUE ) ;
+                        GDIMetaFile aMtf;
+
+                        long nWidth =  nNumb[2] - nNumb[0] + 1;
+                        long nHeight = nNumb[3] - nNumb[1] + 1;
+
+                        if( !bHasPreview )      // if there is no preview -> make a red box
                         {
-                            rStream.Seek( nPSStreamPos );
-                            if ( rStream.Read( pLinkBuf, nPSSize ) == nPSSize )
-                            {
-                                GfxLink     aGfxLink( pLinkBuf, nPSSize, GFX_LINK_TYPE_EPS_BUFFER, TRUE ) ;
-                                GDIMetaFile aMtf;
+                            VirtualDevice   aVDev;
+                            GDIMetaFile     aMtf2;
+                            Font            aFont;
 
-                                long nWidth =  nNumb[2] - nNumb[0] + 1;
-                                long nHeight = nNumb[3] - nNumb[1] + 1;
+                            aVDev.EnableOutput( FALSE );
+                            aMtf2.Record( &aVDev );
+                            aVDev.SetLineColor( Color( COL_RED ) );
+                            aVDev.SetFillColor();
 
-                                if( !bHasPreview )      // if there is no preview -> make a red box
-                                {
-                                    VirtualDevice   aVDev;
-                                    GDIMetaFile     aMtf2;
-                                    Font            aFont;
-
-                                    aVDev.EnableOutput( FALSE );
-                                    aMtf2.Record( &aVDev );
-                                    aVDev.SetLineColor( Color( COL_RED ) );
-                                    aVDev.SetFillColor();
-
-                                    aFont.SetColor( COL_LIGHTRED );
+                            aFont.SetColor( COL_LIGHTRED );
 //                                  aFont.SetSize( Size( 0, 32 ) );
 
-                                    aVDev.Push( PUSH_FONT );
-                                    aVDev.SetFont( aFont );
+                            aVDev.Push( PUSH_FONT );
+                            aVDev.SetFont( aFont );
 
-                                    Rectangle aRect( Point( 1, 1 ), Size( nWidth - 2, nHeight - 2 ) );
-                                    aVDev.DrawRect( aRect );
+                            Rectangle aRect( Point( 1, 1 ), Size( nWidth - 2, nHeight - 2 ) );
+                            aVDev.DrawRect( aRect );
 
-                                    String aString;
-                                    int nLen;
-                                    pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Title:", nBytesRead - 32, 8 );
-                                    if ( pDest )
-                                    {
-                                        pDest += 8;
-                                        if ( *pDest == ' ' )
-                                            pDest++;
-                                        nLen = ImplGetLen( pDest, 32 );
-                                        pDest[ nLen ] = 0;
-                                        if ( strcmp( (const char*)pDest, "none" ) != 0 )
-                                        {
-                                            aString.AppendAscii( " Title:" );
-                                            aString.AppendAscii( (char*)pDest );
-                                            aString.AppendAscii( "\n" );
-                                        }
-                                    }
-                                    pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Creator:", nBytesRead - 32, 10 );
-                                    if ( pDest )
-                                    {
-                                        pDest += 10;
-                                        if ( *pDest == ' ' )
-                                            pDest++;
-                                        nLen = ImplGetLen( pDest, 32 );
-                                        pDest[ nLen ] = 0;
-                                        aString.AppendAscii( " Creator:" );
-                                        aString.AppendAscii( (char*)pDest );
-                                        aString.AppendAscii( "\n" );
-                                    }
-                                    pDest = ImplSearchEntry( pBuf, (BYTE*)"%%CreationDate:", nBytesRead - 32, 15 );
-                                    if ( pDest )
-                                    {
-                                        pDest += 15;
-                                        if ( *pDest == ' ' )
-                                            pDest++;
-                                        nLen = ImplGetLen( pDest, 32 );
-                                        pDest[ nLen ] = 0;
-                                        if ( strcmp( (const char*)pDest, "none" ) != 0 )
-                                        {
-                                            aString.AppendAscii( " CreationDate:" );
-                                            aString.AppendAscii( (char*)pDest );
-                                            aString.AppendAscii( "\n" );
-                                        }
-                                    }
-                                    pDest = ImplSearchEntry( pBuf, (BYTE*)"%%LanguageLevel:", nBytesRead - 4, 16 );
-                                    if ( pDest )
-                                    {
-                                        pDest += 16;
-                                        int nCount = 4;
-                                        long nNumber = ImplGetNumber( &pDest, nCount );
-                                        if ( nCount && ( (UINT32)nNumber < 10 ) )
-                                        {
-                                            aString.AppendAscii( " LanguageLevel:" );
-                                            aString.Append( UniString::CreateFromInt32( nNumber ) );
-                                        }
-                                    }
-                                    aVDev.DrawText( aRect, aString, TEXT_DRAW_CLIP | TEXT_DRAW_MULTILINE );
-                                    aVDev.Pop();
-                                    aMtf2.Stop();
-                                    aMtf2.WindStart();
-                                    aMtf2.SetPrefMapMode( MAP_POINT );
-                                    aMtf2.SetPrefSize( Size( nWidth, nHeight ) );
-                                    aGraphic = aMtf2;
+                            String aString;
+                            int nLen;
+                            pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Title:", nBytesRead - 32, 8 );
+                            if ( pDest )
+                            {
+                                pDest += 8;
+                                if ( *pDest == ' ' )
+                                    pDest++;
+                                nLen = ImplGetLen( pDest, 32 );
+                                pDest[ nLen ] = 0;
+                                if ( strcmp( (const char*)pDest, "none" ) != 0 )
+                                {
+                                    aString.AppendAscii( " Title:" );
+                                    aString.AppendAscii( (char*)pDest );
+                                    aString.AppendAscii( "\n" );
                                 }
-
-                                aMtf.AddAction( (MetaAction*)( new MetaEPSAction( Point(), Size( nWidth, nHeight ),
-                                                                                  aGfxLink, aGraphic.GetGDIMetaFile() ) ) );
-                                aMtf.WindStart();
-                                aMtf.SetPrefMapMode( MAP_POINT );
-                                aMtf.SetPrefSize( Size( nWidth, nHeight ) );
-                                rGraphic = aMtf;
-                                bRetValue = TRUE;
                             }
-                            else
-                                delete[] pLinkBuf;
+                            pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Creator:", nBytesRead - 32, 10 );
+                            if ( pDest )
+                            {
+                                pDest += 10;
+                                if ( *pDest == ' ' )
+                                    pDest++;
+                                nLen = ImplGetLen( pDest, 32 );
+                                pDest[ nLen ] = 0;
+                                aString.AppendAscii( " Creator:" );
+                                aString.AppendAscii( (char*)pDest );
+                                aString.AppendAscii( "\n" );
+                            }
+                            pDest = ImplSearchEntry( pBuf, (BYTE*)"%%CreationDate:", nBytesRead - 32, 15 );
+                            if ( pDest )
+                            {
+                                pDest += 15;
+                                if ( *pDest == ' ' )
+                                    pDest++;
+                                nLen = ImplGetLen( pDest, 32 );
+                                pDest[ nLen ] = 0;
+                                if ( strcmp( (const char*)pDest, "none" ) != 0 )
+                                {
+                                    aString.AppendAscii( " CreationDate:" );
+                                    aString.AppendAscii( (char*)pDest );
+                                    aString.AppendAscii( "\n" );
+                                }
+                            }
+                            pDest = ImplSearchEntry( pBuf, (BYTE*)"%%LanguageLevel:", nBytesRead - 4, 16 );
+                            if ( pDest )
+                            {
+                                pDest += 16;
+                                int nCount = 4;
+                                long nNumber = ImplGetNumber( &pDest, nCount );
+                                if ( nCount && ( (UINT32)nNumber < 10 ) )
+                                {
+                                    aString.AppendAscii( " LanguageLevel:" );
+                                    aString.Append( UniString::CreateFromInt32( nNumber ) );
+                                }
+                            }
+                            aVDev.DrawText( aRect, aString, TEXT_DRAW_CLIP | TEXT_DRAW_MULTILINE );
+                            aVDev.Pop();
+                            aMtf2.Stop();
+                            aMtf2.WindStart();
+                            aMtf2.SetPrefMapMode( MAP_POINT );
+                            aMtf2.SetPrefSize( Size( nWidth, nHeight ) );
+                            aGraphic = aMtf2;
                         }
+
+                        aMtf.AddAction( (MetaAction*)( new MetaEPSAction( Point(), Size( nWidth, nHeight ),
+                                                                          aGfxLink, aGraphic.GetGDIMetaFile() ) ) );
+                        aMtf.WindStart();
+                        aMtf.SetPrefMapMode( MAP_POINT );
+                        aMtf.SetPrefSize( Size( nWidth, nHeight ) );
+                        rGraphic = aMtf;
+                        bRetValue = sal_True;
                     }
                 }
             }
         }
-        delete[] pBuf;
+        if ( !bGraphicLinkCreated )
+            delete[] pBuf;
     }
+    delete[] pHeader;
     rStream.SetNumberFormatInt(nOldFormat);
     rStream.Seek( nOrigPos );
     return ( bRetValue );
