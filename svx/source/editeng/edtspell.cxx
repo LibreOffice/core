@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtspell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:57 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:34:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,8 @@ sal_Bool EditSpellWrapper::SpellContinue()
 
 void __EXPORT EditSpellWrapper::SpellEnd()
 {
-    // Keine weitere Aktion noetig...
+    // Base class will show language errors...
+    SvxSpellWrapper::SpellEnd();
 }
 
 sal_Bool __EXPORT EditSpellWrapper::HasOtherCnt()
