@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-24 21:12:43 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,7 @@ TabPage TP_HELP_SEARCH
         Text[ russian ] = "~Только все слово";
         Text[ greek ] = "~Complete words only";
         Text[ dutch ] = "~Alleen hele woorden";
-        Text[ french ] = "Que les mots entiers";
+        Text[ french ] = "Uniquement les mots entiers";
         Text[ spanish ] = "~Sуlo palabras completas";
         Text[ finnish ] = "~Complete words only";
         Text[ italian ] = "~Solo parole intere";
