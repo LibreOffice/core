@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:37:45 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,9 @@
 #ifndef _BGFX_TUPLE_B2DTUPLE_HXX
 #include <basegfx/tuple/b2dtuple.hxx>
 #endif
-
 #ifndef _BGFX_VECTOR_B2IVECTOR_HXX
 #include <basegfx/vector/b2ivector.hxx>
 #endif
-
 #ifndef _BGFX_VECTOR_B2ENUMS_HXX
 #include <basegfx/vector/b2enums.hxx>
 #endif
