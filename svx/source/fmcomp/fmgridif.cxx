@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:13:45 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 11:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,7 +526,7 @@ void SAL_CALL FmXGridControl::createPeer(const ::com::sun::star::uno::Reference<
         pPeer = FmXGridPeer::getImplementation(mxPeer);
 
         ::com::sun::star::awt::Rectangle rArea = getPosSize();
-        if (!rArea.Width && !rArea.Height)
+        if (!VCLUnoHelper::IsZero(rArea))
             pPeer->setPosSize(rArea.X, rArea.Y, rArea.Width, rArea.Height, ::com::sun::star::awt::PosSize::POSSIZE);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xColumns(getModel(), ::com::sun::star::uno::UNO_QUERY);
@@ -569,7 +569,7 @@ void SAL_CALL FmXGridControl::createPeer(const ::com::sun::star::uno::Reference<
         // forward the design mode
         sal_Bool bForceAlivePeer = m_bInDraw && !maComponentInfos.bVisible;
             // (we force a alive-mode peer if we're in "draw", cause in this case the peer will be used for drawing in
-            // foreign devices. We secure this with the visibility check as an living peer is assumed to be noncritical
+            // foreign devices. We ensure this with the visibility check as an living peer is assumed to be noncritical
             // only if invisible)
         ::com::sun::star::uno::Any aOldCursorBookmark;
         if (!mbDesignMode || bForceAlivePeer)
