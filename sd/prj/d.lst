@@ -22,7 +22,7 @@ touch: ..\%__SRC%\misc\sd.hid %_DEST%\bin%_EXT%\sd.hid
 ..\%__SRC%\lib\libsdl.a %_DEST%\lib%_EXT%\libsdl.a
 ..\%__SRC%\srs\core.srs %_DEST%\res%_EXT%\sdcore.srs
 
-dos: mkdir %_DEST%\pck%_EXT%
+mkdir: %_DEST%\pck%_EXT%
 ..\res\webview\common.inc %_DEST%\pck%_EXT%\common.inc
 ..\res\webview\common.pl %_DEST%\pck%_EXT%\common.pl
 ..\res\webview\edit.asp %_DEST%\pck%_EXT%\edit.asp
@@ -39,7 +39,7 @@ dos: mkdir %_DEST%\pck%_EXT%
 ..\res\webview\webview.asp %_DEST%\pck%_EXT%\webcast.asp
 ..\res\webview\webview.pl %_DEST%\pck%_EXT%\webcast.pl
 
-dos: mkdir %_DEST%\inc%_EXT%\sd
+mkdir: %_DEST%\inc%_EXT%\sd
 hedabu: ..\inc\sddll.hxx %_DEST%\inc%_EXT%\sd\sddll.hxx
 hedabu: ..\inc\fadedef.h %_DEST%\inc%_EXT%\sd\fadedef.h
 hedabu: ..\inc\pres.hxx %_DEST%\inc%_EXT%\sd\pres.hxx
