@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-17 10:41:10 $
+ *  last change: $Author: kso $ $Date: 2001-06-18 08:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,11 +168,7 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
     // Check URL scheme...
 
     const OUString aScheme
-#if SUPD>631
         = Identifier->getContentProviderScheme().toAsciiLowerCase();
-#else
-        = Identifier->getContentProviderScheme().toLowerCase();
-#endif
     if ( !aScheme.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( HTTP_URL_SCHEME ) ) &&
          !aScheme.equalsAsciiL(
@@ -183,13 +179,19 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
 
     // Normalize URL and create new Id, if nessacary.
     OUString aURL = Identifier->getContentIdentifier();
-    sal_Int32 nPos = aURL.lastIndexOf( '/' );
 
-    if ( nPos == -1 )
+    // At least: <scheme> + "://"
+    if ( aURL.getLength() < ( aScheme.getLength() + 3 ) )
+        throw IllegalIdentifierException();
+
+    if ( ( aURL.getStr()[ aScheme.getLength() ]     != sal_Unicode( ':' ) ) ||
+         ( aURL.getStr()[ aScheme.getLength() + 1 ] != sal_Unicode( '/' ) ) ||
+         ( aURL.getStr()[ aScheme.getLength() + 2 ] != sal_Unicode( '/' ) ) )
         throw IllegalIdentifierException();
 
     Reference< XContentIdentifier > xCanonicId;
 
+    sal_Int32 nPos = aURL.lastIndexOf( '/' );
     if ( nPos != aURL.getLength() - 1 )
     {
         // Find second slash in URL.
