@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-27 13:04:38 $
+ *  last change: $Author: jl $ $Date: 2001-12-03 18:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,11 +210,11 @@ STDMETHODIMP ProviderOleWrapper_Impl::CreateInstance(IUnknown FAR* punkOuter,
 
             if (oleAny.getValueTypeClass() == getCppuType( (sal_uInt32 *)0).getTypeClass())
             {
-                VARIANT* pVariant = (VARIANT*)oleAny.getValue();
+                VARIANT* pVariant = *(VARIANT**)oleAny.getValue();
 
-                if ((pVariant->vt == VT_UNKNOWN) || (pVariant->vt == VT_DISPATCH))
+                if (pVariant->vt == VT_DISPATCH)
                 {
-                    ret = pVariant->punkVal->QueryInterface(riid, ppv);
+                    ret = pVariant->pdispVal->QueryInterface(riid, ppv);
                 }
 
                 VariantClear(pVariant);

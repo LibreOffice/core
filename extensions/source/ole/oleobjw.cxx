@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-27 10:56:03 $
+ *  last change: $Author: jl $ $Date: 2001-12-03 18:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,13 @@ Any SAL_CALL IUnknownWrapper_Impl::invoke( const OUString& aFunctionName,
 
     }
     else
-        throw IllegalArgumentException();
+    {
+        OUString message= OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "OleBridge: coult not get DISPID for ")) + aFunctionName;
+        throw RuntimeException( message, Reference<XInterface>());
+
+//      throw IllegalArgumentException();
+    }
 
     return ret;
 }

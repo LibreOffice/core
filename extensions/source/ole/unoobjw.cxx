@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-10-22 14:38:53 $
+ *  last change: $Author: jl $ $Date: 2001-12-03 18:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,11 +351,11 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID riid,
 // The parameters "id", "wFlags" and "pdispparams" equal those as used in
 // IDispatch::Invoke. The function handles special JavaScript
 // cases where a VARIANT of type VT_DISPATCH is ambiguous and could represent
-// an object, array ( JavaScript Array object), out ( JavaScript Array object) and in/out
-// (JavaScript Array object)
+// an object, array ( JavaScript Array object), out parameter and in/out ( JavaScript Array object)
+//  parameter (JavaScript Array object)
 // parameter. Because all those VT_DISPATCH objects need a different conversion
 // we have to find out what the object is supposed to be. The function does this
-// by either using type information or by help of a specialized JavaScript object.
+// by either using type information or by help of a specialized ValueObject object.
 
 // A. Type Information
 // -----------------------------------------------------------------------------
@@ -369,10 +369,10 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID riid,
 
 // B. JavaScript Value Object ( class JScriptValue )
 // -----------------------------------------------------------------------------
-// A JScriptValue object is a COM object in that it implements IDispatch and the
+// A JScriptValue (ValueObject) object is a COM object in that it implements IDispatch and the
 // IJScriptValue object interface. Such objects are provided by all UNO wrapper
 // objects used within a JScript script. To obtain an instance one has to call
-// "_GetValueObject()" on an UNO wrapper object (class InterfaceOleWrapper_Impl).
+// "_GetValueObject() or Bridge_GetValueObject()" on an UNO wrapper object (class InterfaceOleWrapper_Impl).
 // A value object is appropriately initialized within the script and passed as
 // parameter to an UNO object method or property. The convertDispparamsArgs function
 // can easily find out that a param is such an object by queriing for the
@@ -396,8 +396,8 @@ HRESULT InterfaceOleWrapper_Impl::convertDispparamsArgs(  DISPID id, unsigned sh
         return S_OK;
     sal_Bool convOk = sal_True;
 
-    // If a parameter is a JScript Value Object then it is being converted
-    // by  convertValueObject function and the result is stored in this Sequence.
+
+    // The sequence will hold information whether a param at a certain index has already been converted.
     Sequence< sal_Bool > seqConvertedParams( countArgs);
     rSeq.realloc( countArgs);
     Any*    pParams = rSeq.getArray();
@@ -406,31 +406,29 @@ HRESULT InterfaceOleWrapper_Impl::convertDispparamsArgs(  DISPID id, unsigned sh
     Any anyParam;
     sal_Bool bHandled= sal_False;
 
-    // iterate over all parameter and check for special JScript value objects that originated in this bridge.
+    // iterate over all parameter and check for special JScriptValue objects that originated in this bridge.
     // Those can be converted straight away. The index in the sequence "seqConvertedParams" matches the index in the
     // DISPPARAMS.rgvarg array. If the value is true then the corresponding VARIANT has been converted
-    // and the any has been written to the Sequence that holds  the converted values.
+    // and the any has been written to the Sequence that holds the converted values.
     for( int i= 0; i < countArgs; i++)
     {
         if( sal_False == convertValueObject( &pdispparams->rgvarg[i], anyParam, bHandled) )
-        {
-            convOk= sal_False;
-            break;
-        }
-        else if( bHandled)
-        {// a param is a JScriptValue and could be converted
+            return DISP_E_BADVARTYPE;
+        if( bHandled)
+        {// a param is a ValueObject and could be converted
             pParams[countArgs - i - 1]= anyParam;
             seqConvertedParams[i]= sal_True;
             continue;
-        }// also take care of VBasic ( VT_BYREF)
-        else if( (pdispparams->rgvarg[i].vt & VT_DISPATCH )== VT_DISPATCH )
-            allDispHandled= sal_False;
+        }
+        else
+        {
+            // if the param is no ValueObject although it is an IDispatch then we must
+            // set a flag that indicates that we have to examine those objects further
+            CComVariant var;
+            if( SUCCEEDED( var.ChangeType(VT_DISPATCH, &pdispparams->rgvarg[i])))
+                allDispHandled= sal_False;
+        }
     }
-
-    if( ! convOk)
-        return DISP_E_BADVARTYPE;
-    // ----------------------
-
     // If there is a VT_DISPATCH  and if it is no JScriptValue object then
     // we need to know if it represents a Sequence, out or in/out parameter
     // or an actual object. Therefore we obtain type information
@@ -498,35 +496,33 @@ HRESULT InterfaceOleWrapper_Impl::convertDispparamsArgs(  DISPID id, unsigned sh
             }
         }
 
-        // Used within the following "for" loop. If the param is a IDispatch and the reqired parameter
-        // is an in/out parameter, then this uno wrapper is likely used in JScript. Then we
+        // Used within the following "for" loop. If the param is an out, in/out parameter in
+        // JScript (Array object, with value at index 0) then we
         // extract Array[0] and put the value into varParam. At the end of the loop varParam
         // is converted if it contains a value otherwise the VARIANT from
         // DISPPARAMS is converted.
         CComVariant varParam;
 
         // In this loop all params are converted except for those which are already converted
-        // by convertValueObject ( see above ). If a parameter is converted or is can be infered
-        // from the Sequence seqConvertedParams. Its values relate to the VARIANT params in DISPPARAMS
-        // at the same index.
+        // by convertValueObject ( see above ). The Sequence seqConvertedParams contains information
+        // about which params are already converted (convertValueObject). A value in seqConvertedParams
+        // at a particular index relates to the VARIANTARGS param at the same index in DISPPARAMS.
         for (int i = 0; convOk && (i < countArgs); i++)
         {
             if( seqConvertedParams[i] == sal_True)
                 continue;
             sal_Bool bDoConversion= TRUE;
             varParam.Clear();
-            // Check for dispatch
-            // If the param is one and is not refereced ( VT_BYREF) then it could be an object
-            // from JScript like an Array used for Squences and out-params
-            if( (pdispparams->rgvarg[i].vt & VT_TYPEMASK )== VT_DISPATCH )
+            // Check for JScript out and in/out paramsobjects (VT_DISPATCH).
+            // To find them out we use typeinformation of the function being called.
+            if( pdispparams->rgvarg[i].vt == VT_DISPATCH )
             {
-
                 if( info.eMemberType == MemberType_METHOD && info.aParamModes[ countArgs - i -1 ]  == ParamMode_INOUT)
                 {
-                    // An INOUT-param in JSCript must be VT_DISPATCH since JScript Array objects are used
-                    // for OUT-params. Index ( property) "0" contains the actual IN-param.
-                    // It can also be an JScript Array or an other object (Interface).
-                    // First get the IN-param at index "0"
+                    // INOUT-param
+                    // Index ( property) "0" contains the actual IN-param. The object is a JScript
+                    // Array object.
+                    // Get the IN-param at index "0"
                     IDispatch* pdisp= pdispparams->rgvarg[i].pdispVal;
 
                     OLECHAR* sindex= L"0";
@@ -562,17 +558,24 @@ HRESULT InterfaceOleWrapper_Impl::convertDispparamsArgs(  DISPID id, unsigned sh
                             info.aParamTypes[ countArgs - i - 1]);
                 else if( bTypesAvailable && info.eMemberType == MemberType_PROPERTY)
                     convOk= variantToAny2( & varParam,theParam, info.aType);
-
                 else
+                {
+//                      if(0)
+//                      {
+//                      VARIANT* data;
+//                      for( long i=0; i < 2; i++)
+//                      {
+//                      HRESULT hr= SafeArrayGetElement( *pdispparams->rgvarg[0].pparray, &i ,(void**)data);
+
+//                      }
+//                      }
                     convOk = variantToAny( & varParam, theParam);
+                }
 
                 if( convOk)
                     pParams[countArgs - (i + 1)]= theParam;
             }
-
         }// end for / iterating over all parameters
-
-
     }catch( IllegalArgumentException ) // XInvocation2::getInfoForName
     {
         hr= DISP_E_BADVARTYPE;
@@ -581,10 +584,8 @@ HRESULT InterfaceOleWrapper_Impl::convertDispparamsArgs(  DISPID id, unsigned sh
     {
         hr= DISP_E_EXCEPTION;
     }
-
     if( SUCCEEDED( hr) && convOk == sal_False)
         hr= DISP_E_EXCEPTION;
-
     return hr;
 }
 
@@ -693,13 +694,13 @@ Type getType( const BSTR type)
     return retType;
 }
 
-
 static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
 {
     sal_Bool ret = sal_False;
     HRESULT hr;
 
-    if( !(pDest->vt & VT_BYREF)  && (pDest->vt == VT_DISPATCH) ||
+    // Handle JScriptValue objects and JScript out params ( Array object )
+    if( (pDest->vt ==  VT_DISPATCH) ||
         (pDest->vt == (VT_VARIANT | VT_BYREF) &&
         pDest->pvarVal->vt == VT_DISPATCH) )
     {
@@ -714,7 +715,6 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
         // special Handling for a JScriptValue object
         if( SUCCEEDED( spDisp->QueryInterface( __uuidof( IJScriptValueObject),
             reinterpret_cast<void**> (&spValue))))
-
         {
             VARIANT_BOOL varBool= VARIANT_FALSE;
             if( SUCCEEDED( hr= spValue->IsOutParam( &varBool) )
@@ -726,29 +726,33 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
                     ret= sal_True;
             }
         }
-        else//  // no VT_BYREF but VT_DISPATCH -> JScript out param
+        else// VT_DISPATCH -> JScript out param
         {
-            // prepare DISPPARAMS for PROPERTYPUT operation
-            DISPID namedArgs = DISPID_PROPERTYPUT;
-            DISPPARAMS dispparamsPut;
-            dispparamsPut.rgdispidNamedArgs= &namedArgs;
-            dispparamsPut.cArgs = 1;
-            dispparamsPut.cNamedArgs = 1;
-
-            CComBSTR bstrNullIndex= SysAllocString( L"0");
-            if(  bstrNullIndex)
+            // We use IDispatchEx because its GetDispID function causes the creation
+            // of a property if it does not exist already. This is convenient for
+            // out parameters in JScript. Then the user must not specify propery "0"
+            // explicitly
+            CComQIPtr<IDispatchEx> spDispEx( spDisp);
+            if( spDispEx)
             {
-                CComPtr<IDispatchEx> pdispEx;
-                if( SUCCEEDED( hr= spDisp->QueryInterface( IID_IDispatchEx, (void**)&pdispEx)))
+                CComBSTR nullProp(L"0");
+                DISPID dwDispID;
+                if( SUCCEEDED( spDispEx->GetDispID( nullProp, fdexNameEnsure, &dwDispID)))
                 {
-                    DISPID dispid;
-                    if( SUCCEEDED(hr= pdispEx->GetDispID( bstrNullIndex, fdexNameEnsure, &dispid)))
-                    {
-                        dispparamsPut.rgvarg= pSource;
-                        if( SUCCEEDED( hr= pdispEx->InvokeEx(dispid, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYPUT,
-                                                &dispparamsPut, NULL, NULL, NULL)))
-                            ret= sal_True;
-                    } // if( bstrIndex)
+                    DISPPARAMS dispparams = {NULL, NULL, 1, 1};
+                    dispparams.rgvarg = pSource;
+                    DISPID dispidPut = DISPID_PROPERTYPUT;
+                    dispparams.rgdispidNamedArgs = &dispidPut;
+
+                    if (pSource->vt == VT_UNKNOWN || pSource->vt == VT_DISPATCH ||
+                        (pSource->vt & VT_ARRAY) || (pSource->vt & VT_BYREF))
+                        hr = spDispEx->InvokeEx(dwDispID, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYPUTREF,
+                                                &dispparams, NULL, NULL, NULL);
+                    else
+                        hr= spDispEx->InvokeEx(dwDispID, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYPUT,
+                                               &dispparams, NULL, NULL, NULL);
+                    if( SUCCEEDED(hr))
+                        ret= sal_True;
                 }
             }
         }
@@ -757,13 +761,12 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
     {   // param. The function checks itself for correct VBScript params
         ret= writeBackOutParameter( pDest, pSource);
     }
-
-
     return ret;
 }
 // VisualBasic Script passes arguments as VT_VARIANT | VT_BYREF be it in or out parameter.
 // Thus we are in charge of freeing an eventual value contained by the inner VARIANT
 // Please note: VariantCopy doesn't free a VT_BYREF value
+// The out parameters are expected to have always a valid type
 static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
 {
     HRESULT hr;
@@ -776,31 +779,27 @@ static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
         // if caller accept VARIANT as out parameter, any value must be converted
         if (V_VT(pDest) == (VT_VARIANT | VT_BYREF))
         {
-            if (oleTypeFlags == (VT_VARIANT | VT_BYREF))
-            {
-                if (V_VARIANTREF(pSource) != NULL)
-                    VariantCopy(V_VARIANTREF(pDest), V_VARIANTREF(pSource));
-                ret = sal_True;
-            }
-            else
-            {
-                VariantCopy(V_VARIANTREF(pDest), pSource);
-                ret = sal_True;
-            }
+            // When the user provides a VARIANT rather then a concrete type
+            // we just copy the source to the out, in/out parameter
+            // VT_DISPATCH, VT_UNKNOWN, VT_ARRAY, VT_BSTR in the VARIANT that
+            // is contained in pDest are released by VariantCopy
+            VariantCopy(V_VARIANTREF(pDest), pSource);
+            ret = sal_True;
         }
         else
         {
             // variantarg and variant must have same type
-            if ((V_VT(pDest) & oleTypeFlags) == oleTypeFlags)
+              if ((V_VT(pDest) & oleTypeFlags) == oleTypeFlags)
             {
                 if ((oleTypeFlags & VT_ARRAY) != 0)
                 {
-                    // copy safearray
-                    // if VT_ARRAY | VT_BYREF then VariantCopy doesn't destroy the array
-                    if (*V_ARRAYREF(pDest) != NULL)
-                        SafeArrayDestroy(*V_ARRAYREF(pDest));
-
-                    if (SafeArrayCopy(V_ARRAY(pSource), V_ARRAYREF(pDest)) == NOERROR)
+                    // In / Out Param
+                    if( *V_ARRAYREF(pDest) != NULL)
+                        hr= SafeArrayCopyData( V_ARRAY(pSource), *V_ARRAYREF(pDest));
+                    else
+                        // Out Param
+                        hr= SafeArrayCopy(V_ARRAY(pSource), V_ARRAYREF(pDest)) == NOERROR;
+                    if( SUCCEEDED( hr))
                         ret = sal_True;
                 }
                 else
@@ -808,99 +807,118 @@ static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
                     // copy base type
                     switch (V_VT(pSource))
                     {
-                        case VT_I2:
-                            *V_I2REF(pDest) = V_I2(pSource);
-                            ret = sal_True;
-                            break;
-                        case VT_I4:
-                            *V_I4REF(pDest) = V_I4(pSource);
-                            ret = sal_True;
-                            break;
-                        case VT_R4:
-                            *V_R4REF(pDest) = V_R4(pSource);
-                            ret = sal_True;
-                            break;
-                        case VT_R8:
-                            *V_R8REF(pDest) = V_R8(pSource);
-                            ret = sal_True;
-                            break;
-                        case VT_CY:
-                            *V_CYREF(pDest) = V_CY(pSource);
-                            ret = sal_True;
-                            break;
-                        case VT_DATE:
-                            *V_DATEREF(pDest) = V_DATE(pSource);
-                            ret = sal_True;
-                            break;
-                        case VT_BSTR:
-                            *V_BSTRREF(pDest) = SysAllocString(V_BSTR(pSource));
-                            ret = sal_True;
-                            break;
-                        case VT_DISPATCH:
-                            if (*V_DISPATCHREF(pDest) != NULL)
-                                (*V_DISPATCHREF(pDest))->Release();
-
-                            *V_DISPATCHREF(pDest) = V_DISPATCH(pSource);
-
-                            if (*V_DISPATCHREF(pDest) != NULL)
-                                (*V_DISPATCHREF(pDest))->AddRef();
-
-                            ret = sal_True;
-                            break;
-                        case VT_ERROR:
-                            *V_ERRORREF(pDest) = V_ERROR(pSource);
-                            ret = sal_True;
-                            break;
-                        case VT_BOOL:
-                            *V_BOOLREF(pDest) = V_BOOL(pSource);
-                            ret = sal_True;
-                            break;
-                        case VT_UNKNOWN:
-                            if (*V_UNKNOWNREF(pDest) != NULL)
-                                (*V_UNKNOWNREF(pDest))->Release();
-
-                            *V_UNKNOWNREF(pDest) = V_UNKNOWN(pSource);
-
-                            if (*V_UNKNOWNREF(pDest) != NULL)
-                                (*V_UNKNOWNREF(pDest))->AddRef();
-
-                            ret = sal_True;
-                            break;
-                        case VT_I1:
-                            *V_I1REF(pDest) = V_I1(pSource);
-                            ret = sal_True;
-                            break;
-                        case VT_UI1:
-                            *V_UI1REF(pDest) = V_UI1(pSource);
-                            ret = sal_True;
-                            break;
-                        case VT_UI2:
-                            *V_UI2REF(pDest) = V_UI2(pSource);
-                            ret = sal_True;
-                            break;
-                        case VT_UI4:
-                            *V_UI4REF(pDest) = V_UI4(pSource);
-                            ret = sal_True;
-                            break;
-                        case VT_INT:
-                            *V_INTREF(pDest) = V_INT(pSource);
-                            ret = sal_True;
-                            break;
-                        case VT_UINT:
-                            *V_UINTREF(pDest) = V_UINT(pSource);
-                            ret = sal_True;
-                            break;
-                        default:
-                            break;
+                    case VT_I2:
+                    {
+                        *V_I2REF(pDest) = V_I2(pSource);
+                        ret = sal_True;
+                        break;
                     }
+                    case VT_I4:
+                        *V_I4REF(pDest) = V_I4(pSource);
+                        ret = sal_True;
+                        break;
+                    case VT_R4:
+                        *V_R4REF(pDest) = V_R4(pSource);
+                        ret = sal_True;
+                        break;
+                    case VT_R8:
+                        *V_R8REF(pDest) = V_R8(pSource);
+                        ret = sal_True;
+                        break;
+                    case VT_CY:
+                        *V_CYREF(pDest) = V_CY(pSource);
+                        ret = sal_True;
+                        break;
+                    case VT_DATE:
+                        *V_DATEREF(pDest) = V_DATE(pSource);
+                        ret = sal_True;
+                        break;
+                    case VT_BSTR:
+                        SysFreeString( *pDest->pbstrVal);
+
+                        *V_BSTRREF(pDest) = SysAllocString(V_BSTR(pSource));
+                        ret = sal_True;
+                        break;
+                    case VT_DISPATCH:
+                        if (*V_DISPATCHREF(pDest) != NULL)
+                            (*V_DISPATCHREF(pDest))->Release();
+
+                        *V_DISPATCHREF(pDest) = V_DISPATCH(pSource);
+
+                        if (*V_DISPATCHREF(pDest) != NULL)
+                            (*V_DISPATCHREF(pDest))->AddRef();
+
+                        ret = sal_True;
+                        break;
+                    case VT_ERROR:
+                        *V_ERRORREF(pDest) = V_ERROR(pSource);
+                        ret = sal_True;
+                        break;
+                    case VT_BOOL:
+                        *V_BOOLREF(pDest) = V_BOOL(pSource);
+                        ret = sal_True;
+                        break;
+                    case VT_UNKNOWN:
+                        if (*V_UNKNOWNREF(pDest) != NULL)
+                            (*V_UNKNOWNREF(pDest))->Release();
+
+                        *V_UNKNOWNREF(pDest) = V_UNKNOWN(pSource);
+
+                        if (*V_UNKNOWNREF(pDest) != NULL)
+                            (*V_UNKNOWNREF(pDest))->AddRef();
+
+                        ret = sal_True;
+                        break;
+                    case VT_I1:
+                        *V_I1REF(pDest) = V_I1(pSource);
+                        ret = sal_True;
+                        break;
+                    case VT_UI1:
+                        *V_UI1REF(pDest) = V_UI1(pSource);
+                        ret = sal_True;
+                        break;
+                    case VT_UI2:
+                        *V_UI2REF(pDest) = V_UI2(pSource);
+                        ret = sal_True;
+                        break;
+                    case VT_UI4:
+                        *V_UI4REF(pDest) = V_UI4(pSource);
+                        ret = sal_True;
+                        break;
+                    case VT_INT:
+                        *V_INTREF(pDest) = V_INT(pSource);
+                        ret = sal_True;
+                        break;
+                    case VT_UINT:
+                        *V_UINTREF(pDest) = V_UINT(pSource);
+                        ret = sal_True;
+                        break;
+                    default:
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                // Handling of special cases
+                // Destination and source types are different
+                if( pDest->vt == (VT_BSTR | VT_BYREF)
+                    && pSource->vt == VT_I2)
+                {
+                    // When the user provides a String as out our in/out parameter
+                    // and the type is char (TypeClass_CHAR) then we convert to a BSTR
+                    // instead of VT_I2 as is done otherwise
+                    OLECHAR buff[]= {0,0};
+                    buff[0]= pSource->iVal;
+
+                    SysFreeString( *pDest->pbstrVal);
+                    *pDest->pbstrVal= SysAllocString( buff);
                 }
             }
         }
     }
     return ret;
 }
-
-
 
 STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
                                               REFIID riid,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-10-22 14:38:53 $
+ *  last change: $Author: jl $ $Date: 2001-12-03 18:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,10 @@
 #define IUNKNOWN_WRAPPER_IMPL           1
 
 #define INTERFACE_ADAPTER_FACTORY  L"com.sun.star.script.InvocationAdapterFactory"
-// COM or JScript objects implementing UNO interfaces have to implement this interface as well
+// COM or JScript objects implementing UNO interfaces have to implement this property
 #define SUPPORTED_INTERFACES_PROP L"_implementedInterfaces"
+// Second property without leading underscore for use in VB
+#define SUPPORTED_INTERFACES_PROP2 L"Bridge_ImplementedInterfaces"
 
 using namespace com::sun::star::script;
 using namespace com::sun::star::beans;
@@ -220,12 +222,13 @@ sal_Bool UnoConversionUtilities<T>::variantToAny2( const VARIANTARG* pArg, Any& 
         return sal_False;
 
     sal_Bool bHandled= sal_False;
-    if( pArg->vt == VT_DISPATCH )
-    {
-        convertValueObject( &var, rAny, bHandled);
-        if( bHandled)
-            OSL_ENSURE(  rAny.getValueType() == ptype, "type in Value Object must tally with the type parameter");
-    }
+//      if( pArg->vt == VT_DISPATCH )
+//      {
+    if( !convertValueObject( &var, rAny, bHandled))
+        return sal_False;
+    if( bHandled)
+        OSL_ENSURE(  rAny.getValueType() == ptype, "type in Value Object must match the type parameter");
+//  }
 
 
     if( ! bHandled)
@@ -1418,16 +1421,7 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown, const 
                 else
                 {
                     Reference< XInterface> xIntAdapterFac;
-//                      if( m_smgr.is())
-//                      {
-                        xIntAdapterFac= m_smgr->createInstance( INTERFACE_ADAPTER_FACTORY);
-
-//                      }
-//                      else
-//                      {
-//                          xIntAdapterFac= o2u_getMultiServiceFactory()->createInstance( INTERFACE_ADAPTER_FACTORY);
-//                      }
-
+                    xIntAdapterFac= m_smgr->createInstance( INTERFACE_ADAPTER_FACTORY);
                     // We create an adapter object that does not only implement the required type but also
                     // all types that the COM object pretends to implement. An COM object must therefore
                     // support the property "_implementedInterfaces".
@@ -1435,8 +1429,15 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown, const 
                     if( disp)
                     {
                         CComVariant var;
-                        if( SUCCEEDED( disp.GetPropertyByName( SUPPORTED_INTERFACES_PROP, &var)))
-                        {// we exspect an array( SafeArray or IDispatch) of Strings.
+                        HRESULT hr= S_OK;
+                        // There are two different property names possible.
+                        if( FAILED( hr= disp.GetPropertyByName( SUPPORTED_INTERFACES_PROP, &var)))
+                        {
+                            hr= disp.GetPropertyByName( SUPPORTED_INTERFACES_PROP2, &var);
+                        }
+                        if (SUCCEEDED( hr))
+                        {
+                            // we exspect an array( SafeArray or IDispatch) of Strings.
                             Any anyNames;
                             if( variantToAny2( &var, anyNames, getCppuType( (Sequence<Any>*) 0)))
                             {
@@ -1509,67 +1510,51 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown, const 
 // "convertValueObject" converts a JScriptValue object contained in "var" into
 // an any. The type contained in the any is stipulated by a "type value" thas
 // was set within the JScript script on the value object ( see JScriptValue).
+// return bHandled = true - it was a ValueObject
+// return true - no errors, false - errors
 template<class T>
 sal_Bool UnoConversionUtilities<T>::convertValueObject( const VARIANTARG *var, Any& any, sal_Bool& bHandled)
 {
-    sal_Bool ret= sal_True;
+    sal_Bool retVal= sal_True;
     bHandled= sal_False;
     HRESULT hr= S_OK;
+    CComVariant varDisp;
 
-    // jscript and Visual Basic
-    if( (var->vt == VT_DISPATCH)  ||
-        (var->vt == (VT_VARIANT | VT_BYREF) &&
-        var->pvarVal->vt == VT_DISPATCH ))
+    if( SUCCEEDED( varDisp.ChangeType( VT_DISPATCH, var)))
     {
         CComPtr <IJScriptValueObject> spValue;
         VARIANT_BOOL varBool;
         CComBSTR bstrType;
         CComVariant varValue;
-
-        CComPtr<IDispatch> spDisp;
-        if( var->vt == VT_DISPATCH)
-            spDisp= var->pdispVal;
-        else
-            spDisp= var->pvarVal->pdispVal;
-
-        if( SUCCEEDED( spDisp->QueryInterface( __uuidof( IJScriptValueObject),
-            reinterpret_cast<void**> (&spValue))))
+        CComPtr<IDispatch> spDisp( varDisp.pdispVal);
+        if( spDisp)
         {
-            // Out Parameter --------------------------------------------------
-            if( SUCCEEDED( hr= spValue->IsOutParam( &varBool) )
-                && varBool == VARIANT_TRUE )
-            {// no conversion necessary
-                bHandled= sal_True;
-            }
-            // In / Out Parameter ---------------------------------------------
-            else if( SUCCEEDED( hr= spValue->IsInOutParam( &varBool) )
-                                && varBool == VARIANT_TRUE)
+            if( SUCCEEDED( spDisp->QueryInterface( __uuidof( IJScriptValueObject),
+                                                   reinterpret_cast<void**> (&spValue))))
             {
-                if( SUCCEEDED( hr= spValue->GetValue( &bstrType, &varValue)))
+                bHandled= sal_True; // is is a ValueObject
+                //If it is an out - param then it does not need to be converted. In/out and
+                // in params does so.
+                if ( SUCCEEDED ( hr= spValue->IsOutParam( &varBool)))
                 {
-                    if(  variantToAny2( &varValue, any, getType( bstrType)))
+                    // if varBool == true then no conversion needed because out param
+                    if( varBool == VARIANT_FALSE)
                     {
-                        bHandled= sal_True;
-                    }
-                } //IJScriptValueObject::GetValue()
-            } // in/out parameter
-            // In Parameter
-            else
-            {
-                if( SUCCEEDED( hr= spValue->GetValue( &bstrType, &varValue)))
-                {
-                    if(  variantToAny2(&varValue, any, getType( bstrType)))
-                    {
-                        bHandled= sal_True;
+                        if( SUCCEEDED( hr= spValue->GetValue( &bstrType, &varValue)))
+                        {
+                            if( !  variantToAny2( &varValue, any, getType( bstrType)))
+                                retVal= sal_False;
+                        }
+                        else
+                            retVal= sal_False;
                     }
                 }
+                else
+                    retVal= sal_False;
             }
-
-        }// if IJScriptValueObject
-    }// if IDispatch
-    if( FAILED( hr) )
-        ret= sal_False;
-    return ret;
+        }
+    }
+    return retVal;
 }
 template<class T>
 sal_Bool UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pvar, Any& anySeq, const Type& type)
