@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implfont.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 21:01:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <canvas/canvastools.hxx>
 
 
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 /* Definition of Font class */
