@@ -16,6 +16,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\daemons
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\document
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\drawing
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\form
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\formula
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\frame
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\i18n
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\installation
@@ -23,6 +24,8 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\io
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\java
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\lang
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\linguistic2
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\packages
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\packages\manifest
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\presentation
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\reflection
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\registry
@@ -86,6 +89,8 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\mozilla
 ..\%__SRC%\inc\com\sun\star\drawing\*.hpp %_DEST%\inc%_EXT%\com\sun\star\drawing\*.hpp
 ..\%__SRC%\inc\com\sun\star\form\*.hdl %_DEST%\inc%_EXT%\com\sun\star\form\*.hdl
 ..\%__SRC%\inc\com\sun\star\form\*.hpp %_DEST%\inc%_EXT%\com\sun\star\form\*.hpp
+..\%__SRC%\inc\com\sun\star\formula\*.hdl %_DEST%\inc%_EXT%\com\sun\star\formula\*.hdl
+..\%__SRC%\inc\com\sun\star\formula\*.hpp %_DEST%\inc%_EXT%\com\sun\star\formula\*.hpp
 ..\%__SRC%\inc\com\sun\star\frame\*.hdl %_DEST%\inc%_EXT%\com\sun\star\frame\*.hdl
 ..\%__SRC%\inc\com\sun\star\frame\*.hpp %_DEST%\inc%_EXT%\com\sun\star\frame\*.hpp
 ..\%__SRC%\inc\com\sun\star\i18n\*.hdl %_DEST%\inc%_EXT%\com\sun\star\i18n\*.hdl
@@ -100,6 +105,10 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\mozilla
 ..\%__SRC%\inc\com\sun\star\lang\*.hpp %_DEST%\inc%_EXT%\com\sun\star\lang\*.hpp
 ..\%__SRC%\inc\com\sun\star\linguistic2\*.hdl %_DEST%\inc%_EXT%\com\sun\star\linguistic2\*.hdl
 ..\%__SRC%\inc\com\sun\star\linguistic2\*.hpp %_DEST%\inc%_EXT%\com\sun\star\linguistic2\*.hpp
+..\%__SRC%\inc\com\sun\star\packages\*.hdl %_DEST%\inc%_EXT%\com\sun\star\packages\*.hdl
+..\%__SRC%\inc\com\sun\star\packages\*.hpp %_DEST%\inc%_EXT%\com\sun\star\packages\*.hpp
+..\%__SRC%\inc\com\sun\star\packages\manifest\*.hdl %_DEST%\inc%_EXT%\com\sun\star\packages\manifest\*.hdl
+..\%__SRC%\inc\com\sun\star\packages\manifest\*.hpp %_DEST%\inc%_EXT%\com\sun\star\packages\manifest\*.hpp
 ..\%__SRC%\inc\com\sun\star\presentation\*.hdl %_DEST%\inc%_EXT%\com\sun\star\presentation\*.hdl
 ..\%__SRC%\inc\com\sun\star\presentation\*.hpp %_DEST%\inc%_EXT%\com\sun\star\presentation\*.hpp
 ..\%__SRC%\inc\com\sun\star\reflection\*.hdl %_DEST%\inc%_EXT%\com\sun\star\reflection\*.hdl
