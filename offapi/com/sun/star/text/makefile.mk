@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: os $ $Date: 2001-06-25 11:34:18 $
+#   last change: $Author: mtg $ $Date: 2001-09-25 17:08:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ IDLFILES=\
     Bookmark.idl\
     Bookmarks.idl\
     CellProperties.idl\
+    CellRange.idl\
     ChainedTextFrame.idl\
     ChapterFormat.idl\
     ChapterNumberingRule.idl\
