@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:05:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ public:
     const FT_Size_Metrics&      GetMetricsFT() const { return maSizeFT->metrics; }
 
 protected:
-friend GlyphCache;
+    friend class GlyphCache;
 
     int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* ) const;
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
