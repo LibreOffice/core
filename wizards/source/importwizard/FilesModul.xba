@@ -791,8 +791,10 @@ End Function
 
 
 Sub OpenLogDocument()
-Dim NoArgs() as New com.sun.star.beans.PropertyValue
-	OpenDocument(sLogUrl, NoArgs())
+
+	bShowLogFile = True
+	ImportDialogArea.endexecute()
+	
 End Sub
 
 
