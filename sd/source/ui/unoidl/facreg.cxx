@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:18:13 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@ extern uno::Reference< uno::XInterface > SAL_CALL SdHtmlOptionsDialog_CreateInst
 extern OUString SdHtmlOptionsDialog_getImplementationName() throw( uno::RuntimeException );
 extern uno::Sequence< OUString > SAL_CALL SdHtmlOptionsDialog_getSupportedServiceNames() throw( uno::RuntimeException );
 
+extern uno::Reference< uno::XInterface > SAL_CALL SdUnoModule_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory );
+extern OUString SdUnoModule_getImplementationName() throw( uno::RuntimeException );
+extern uno::Sequence< OUString > SAL_CALL SdUnoModule_getSupportedServiceNames() throw( uno::RuntimeException );
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -118,6 +122,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             writeInfo( pKey, SdHtmlOptionsDialog_getImplementationName(), SdHtmlOptionsDialog_getSupportedServiceNames() );
             writeInfo( pKey, SdDrawingDocument_getImplementationName(), SdDrawingDocument_getSupportedServiceNames() );
             writeInfo( pKey, SdPresentationDocument_getImplementationName(), SdPresentationDocument_getSupportedServiceNames() );
+            writeInfo( pKey, SdUnoModule_getImplementationName(), SdUnoModule_getSupportedServiceNames() );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -158,6 +163,13 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 SdPresentationDocument_getImplementationName(),
                 SdPresentationDocument_createInstance,
                 SdPresentationDocument_getSupportedServiceNames() );
+        }
+        else if( SdUnoModule_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SdUnoModule_getImplementationName(),
+                SdUnoModule_createInstance,
+                SdUnoModule_getSupportedServiceNames() );
         }
 
 
