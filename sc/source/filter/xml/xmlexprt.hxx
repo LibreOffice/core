@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:51:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ class ScXMLExport : public SvXMLExport
     rtl::OUString               sAttrStyleName;
     rtl::OUString               sAttrColumnsRepeated;
     rtl::OUString               sAttrFormula;
+    rtl::OUString               sAttrValueType;
     rtl::OUString               sAttrStringValue;
     rtl::OUString               sElemCell;
     rtl::OUString               sElemCoveredCell;
