@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localdataimportsvc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:29:11 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,8 @@ namespace
         OUString aComponent;
         OUString aEntity;
 
+        uno::Reference< backend::XLayer > xLayerFilter;
+
         sal_Bool overwrite;
         sal_Bool truncate;
 
@@ -168,6 +170,7 @@ namespace
     , aImporterService()
     , aComponent()
     , aEntity()
+    , xLayerFilter()
     , overwrite(true)
     , truncate(false)
     , use_component(false)
@@ -209,6 +212,13 @@ namespace
                 bKnown = true;
                 bGood  = (aArguments[i].Value >>= aEntity);
                 use_entity = bGood && (aEntity.getLength() != 0);
+            }
+            else if (aArguments[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LayerFilter")))
+            {
+                bKnown = true;
+                bGood  = (aArguments[i].Value >>= xLayerFilter);
+                if (xLayerFilter.is() && !uno::Reference<lang::XInitialization>::query(xLayerFilter).is())
+                    bGood = false;
             }
             else if (aArguments[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OverwriteExisting")))
             {
@@ -282,6 +292,21 @@ uno::Any SAL_CALL
     {
         OUString sMessage = OUSTRING("LocalDataImportService - Cannot create layer to import from");
         throw lang::NullPointerException(sMessage,*this);
+    }
+
+    uno::Reference< lang::XInitialization > xFilterInit(aJob.xLayerFilter,uno::UNO_QUERY);
+    if (xFilterInit.is())
+    {
+        beans::NamedValue argvalue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("Source") ),
+            uno::makeAny( xLayer) );
+
+        uno::Sequence< uno::Any > args(1);
+        args[0] <<= argvalue;
+
+        xFilterInit->initialize(args);
+
+        xLayer = aJob.xLayerFilter;
     }
 
     uno::Reference< backend::XLayerImporter > xImporter;
