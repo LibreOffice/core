@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:02:20 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 16:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,9 +747,11 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
         {
             BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-            pIDEShell->GetViewFrame()->GetWindow().EnterWait();
+            if ( pIDEShell )
+                pIDEShell->GetViewFrame()->GetWindow().EnterWait();
             xModLibContainer->loadLibrary( aOULibName );
-            pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
+            if ( pIDEShell )
+                pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
         }
 
         // load dialog library (if not loaded)
@@ -757,9 +759,11 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
         {
             BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-            pIDEShell->GetViewFrame()->GetWindow().EnterWait();
+            if ( pIDEShell )
+                pIDEShell->GetViewFrame()->GetWindow().EnterWait();
             xDlgLibContainer->loadLibrary( aOULibName );
-            pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
+            if ( pIDEShell )
+                pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
         }
 
         // check, if library is password protected
