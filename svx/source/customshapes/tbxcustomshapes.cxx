@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxcustomshapes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:12:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,10 @@
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
-#include <svtools/stritem.hxx>
+// header for class SfxBoolItem
+#ifndef _SFXENUMITEM_HXX
+#include <svtools/eitem.hxx>
+#endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
@@ -83,7 +86,7 @@
 #include "tbxcustomshapes.hxx"
 #endif
 
-SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlCustomShapes, SfxStringItem);
+SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlCustomShapes, SfxBoolItem);
 
 /*************************************************************************
 |*
@@ -92,17 +95,9 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlCustomShapes, SfxStringItem);
 \************************************************************************/
 
 SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
-    aSubTbxResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ) ),
-    SfxToolBoxControl( nSlotId, nId, rTbx ),
-    nSlotId( nSlotId )
+    m_aSubTbxResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ) ),
+    SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    const rtl::OUString sBasicShape     ( RTL_CONSTASCII_USTRINGPARAM( "diamond" ) ) ;
-    const rtl::OUString sSymbolShape    ( RTL_CONSTASCII_USTRINGPARAM( "smiley" ) ) ;
-    const rtl::OUString sArrowShape     ( RTL_CONSTASCII_USTRINGPARAM( "left-right-arrow" ) ) ;
-    const rtl::OUString sFlowChartShape ( RTL_CONSTASCII_USTRINGPARAM( "flowchart-internal-storage" ) ) ;
-    const rtl::OUString sCalloutShape   ( RTL_CONSTASCII_USTRINGPARAM( "round-rectangular-callout" ) ) ;
-    const rtl::OUString sStarShape      ( RTL_CONSTASCII_USTRINGPARAM( "star5" ) ) ;
-
     switch( nSlotId )
     {
         default :
@@ -111,43 +106,44 @@ SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( USHORT nSlotId, USHORT nId, ToolBo
         }
         case SID_DRAWTBX_CS_BASIC :
         {
-            aLastAction = sBasicShape;
-            aSubTbxResName += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "basicshapes" ) );
+            m_aCommand = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:BasicShapes.diamond" ) );
+            m_aSubTbName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "basicshapes" ) );
         }
         break;
 
         case SID_DRAWTBX_CS_SYMBOL :
         {
-            aLastAction = sSymbolShape;
-            aSubTbxResName += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "symbolshapes" ) );
+            m_aCommand = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SymbolShapes.smiley" ) );
+            m_aSubTbName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "symbolshapes" ) );
         }
         break;
 
         case SID_DRAWTBX_CS_ARROW :
         {
-            aLastAction = sArrowShape;
-            aSubTbxResName += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "arrowshapes" ) );
+            m_aCommand = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ArrowShapes.left-right-arrow" ) );
+            m_aSubTbName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "arrowshapes" ) );
         }
         break;
         case SID_DRAWTBX_CS_FLOWCHART :
         {
-            aLastAction = sFlowChartShape;
-            aSubTbxResName += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "flowchartshapes" ) );
+            m_aCommand = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FlowChartShapes.flowchart-internal-storage" ) );
+            m_aSubTbName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "flowchartshapes" ) );
         }
         break;
         case SID_DRAWTBX_CS_CALLOUT :
         {
-            aLastAction = sCalloutShape;
-            aSubTbxResName += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calloutshapes" ) );
+            m_aCommand = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CalloutShapes.round-rectangular-callout" ) );
+            m_aSubTbName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calloutshapes" ) );
         }
         break;
         case SID_DRAWTBX_CS_STAR :
         {
-            aLastAction = sStarShape;
-            aSubTbxResName += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "starshapes" ) );
+            m_aCommand = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StarShapes.star5" ) );
+            m_aSubTbName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "starshapes" ) );
         }
         break;
     }
+    m_aSubTbxResName += m_aSubTbName;
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
 }
@@ -161,33 +157,6 @@ SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( USHORT nSlotId, USHORT nId, ToolBo
 void SvxTbxCtlCustomShapes::StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
-/*
-    GetToolBox().EnableItem( GetId(), ( eState != SFX_ITEM_DISABLED ) );
-    if ( SFX_ITEM_AVAILABLE == eState )
-    {
-        USHORT nTemp = ( (SfxEnumItem*)pState )->GetValue();
-
-        if( GetSlotId() == SID_INSERT_DRAW && nTemp != USHRT_MAX )
-        {
-            // Check whether we are in high contrast mode or not!
-            BOOL bHiContrast = GetToolBox().GetBackground().GetColor().IsDark();
-
-            nLastAction = nTemp;
-
-            USHORT nImage = nLastAction ? nLastAction : GetSlotId();
-            rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
-            aSlotURL += rtl::OUString::valueOf( sal_Int32( nImage ));
-            Image aImage = GetImage( m_xFrame,
-                                     aSlotURL,
-                                     hasBigImages(),
-                                     GetToolBox().GetDisplayBackground().GetColor().IsDark() );
-
-//            SfxViewFrame* pFrame = GetBindings().GetDispatcher()->GetFrame();
-//            Image aImage = pFrame->GetImageManager()->GetImage( nImage, bHiContrast );
-            GetToolBox().SetItemImage( GetId(), aImage );
-        }
-    }
-*/
     SfxToolBoxControl::StateChanged( nSID, eState, pState );
 }
 
@@ -199,7 +168,7 @@ void SvxTbxCtlCustomShapes::StateChanged( USHORT nSID, SfxItemState eState,
 
 SfxPopupWindowType SvxTbxCtlCustomShapes::GetPopupWindowType() const
 {
-    return( aLastAction.getLength() == 0 ? SFX_POPUPWINDOW_ONCLICK : SFX_POPUPWINDOW_ONTIMEOUT);
+    return( m_aCommand.getLength() == 0 ? SFX_POPUPWINDOW_ONCLICK : SFX_POPUPWINDOW_ONTIMEOUT);
 }
 
 /*************************************************************************
@@ -212,7 +181,7 @@ SfxPopupWindowType SvxTbxCtlCustomShapes::GetPopupWindowType() const
 
 SfxPopupWindow* SvxTbxCtlCustomShapes::CreatePopupWindow()
 {
-    createAndPositionSubToolBar( aSubTbxResName );
+    createAndPositionSubToolBar( m_aSubTbxResName );
     return NULL;
 }
 
@@ -220,12 +189,61 @@ SfxPopupWindow* SvxTbxCtlCustomShapes::CreatePopupWindow()
 
 void SvxTbxCtlCustomShapes::Select( BOOL bMod1 )
 {
-     if ( aLastAction.getLength() > 0 )
+     if ( m_aCommand.getLength() > 0 )
     {
-        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aParamSeq( 1 );
-        aParamSeq[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomShape" ) );
-        aParamSeq[ 0 ].Value <<= aLastAction;
-        Dispatch( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CustomShape" ) ), aParamSeq );
+        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aParamSeq( 0 );
+        Dispatch( m_aCommand, aParamSeq );
     }
 }
 
+
+::sal_Bool SAL_CALL SvxTbxCtlCustomShapes::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException)
+{
+    // We control a sub-toolbar therefor, we have to return true.
+    return sal_True;
+}
+
+::rtl::OUString SAL_CALL SvxTbxCtlCustomShapes::getSubToolbarName() throw (::com::sun::star::uno::RuntimeException)
+{
+    // Provide the controlled sub-toolbar name, so we are notified whenever
+    // this toolbar executes a function.
+    return m_aSubTbName;
+}
+
+void SAL_CALL SvxTbxCtlCustomShapes::functionSelected( const ::rtl::OUString& rCommand ) throw (::com::sun::star::uno::RuntimeException)
+{
+    //add this if you want to remind the last command
+    // m_aCommand = rCommand;
+    /*
+    // Our sub-toolbar wants to executes a function. We have to change
+    // the image of our toolbar button to reflect the new function.
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( !m_bDisposed )
+    {
+        if ( aCommand.getLength() > 0 )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
+            Image aImage = GetImage( xFrame, aCommand, hasBigImages(), isHighContrast() );
+            if ( !!aImage )
+                GetToolBox().SetItemImage( GetId(), aImage );
+        }
+    }
+    */
+}
+
+void SAL_CALL SvxTbxCtlCustomShapes::updateImage(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    //add code here to change the image according to the last command
+    /*
+    // We should update the button image of our parent (toolbar). Use the stored
+    // command to set the correct current image.
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( m_aCommand.getLength() > 0 )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
+        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages(), isHighContrast() );
+        if ( !!aImage )
+            GetToolBox().SetItemImage( GetId(), aImage );
+    }
+    */
+}
