@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-22 18:22:48 $
+ *  last change: $Author: mt $ $Date: 2001-03-15 11:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,39 +111,15 @@
 #endif
 
 //  ----------------------------------------------------
-//  class ExtUnoWrapper
+//  help function for the toolkit...
 //  ----------------------------------------------------
 
-ExtUnoWrapper::ExtUnoWrapper()
-    : UnoWrapper( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>() )
-{}
+extern "C" {
 
-void ExtUnoWrapper::RegisterUnoServices()
-{
-/*
-    UnoWrapper::RegisterUnoServices();
-
-    // ImageProducer registrieren...
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMSF = ::usr::getProcessServiceManager();
-
-    ::rtl::OUString aServiceName( L"stardiv.uno.awt.ImageProducer" );
-    ::com::sun::star::uno::Sequence< ::rtl::OUString> aServiceNames( &aServiceName, 1 );
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >  xSSF = ::usr::createOneInstanceFactory
-            ( xMSF, L"ImageProducer", ImageProducer_CreateInstance, aServiceNames );
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XSet >  xS( xMSF, UNO_QUERY );
-    ::com::sun::star::uno::Any aAny( &xSSF, ::getCppuType((const ::com::sun::star::container::XSet*)0) );
-    xS->insert( aAny );
-*/
-}
-
-//  ----------------------------------------------------
-//  class ExtVCLXToolkit
-//  ----------------------------------------------------
-Window* ExtVCLXToolkit::CreateComponent( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor& rDescriptor, Window* pParent, sal_uInt32 nWinBits )
+Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, Window* pParent, sal_uInt32 nWinBits )
 {
     Window* pWindow = NULL;
-    String aServiceName( rDescriptor.WindowServiceName );
+    String aServiceName( pDescriptor->WindowServiceName );
     if ( aServiceName.EqualsIgnoreCaseAscii( "MultiLineEdit" ) )
     {
         if ( pParent )
@@ -157,18 +133,6 @@ Window* ExtVCLXToolkit::CreateComponent( VCLXWindow** ppNewComp, const ::com::su
             return NULL;
         }
     }
-    // irgendwas muss ich mir noch fuer 'Custom-Bits' einfallen lassen,
-    // jetzt erstmal verschiedene Service-Namen:
-//  else if ( aServiceName.ICompare( "FileDialog_open" ) == COMPARE_EQUAL )
-//  {
-//      pWindow = new FileDialog( pParent, nWinBits|WB_OPEN );
-//      *ppNewComp = new VCLXFileDialog;
-//  }
-//  else if ( aServiceName.ICompare( "FileDialog_save" ) == COMPARE_EQUAL )
-//  {
-//      pWindow = new FileDialog( pParent, nWinBits|WB_SAVEAS );
-//      *ppNewComp = new VCLXFileDialog;
-//  }
     else if ( aServiceName.EqualsIgnoreCaseAscii( "FileControl" ) )
     {
         if ( pParent )
@@ -206,25 +170,12 @@ Window* ExtVCLXToolkit::CreateComponent( VCLXWindow** ppNewComp, const ::com::su
         *ppNewComp = new VCLXDateField;
         ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(DateField*)pWindow );
     }
-
-    if ( !pWindow )
-        pWindow = VCLXToolkit::CreateComponent( ppNewComp, rDescriptor, pParent, nWinBits );
-
     return pWindow;
 }
 
-//  ----------------------------------------------------
-//  INIT
-//  ----------------------------------------------------
-void InitExtVclToolkit()
-{
-    ExtUnoWrapper* pWrapper = new ExtUnoWrapper;
-//  pWrapper->SetToolkitCreateFunction( ExtVCLXToolkit_CreateInstance );
-    Application::SetUnoWrapper( pWrapper );
-}
+};  // extern "C"
 
-
-// ----------------------------------------------------
+//  ----------------------------------------------------
 //  class VCLXMultiLineEdit
 //  ----------------------------------------------------
 VCLXMultiLineEdit::VCLXMultiLineEdit() : maTextListeners( *this )
@@ -1384,7 +1335,7 @@ void SVTXFormattedField::NotifyTextListeners()
     }
 }
 
-// ----------------------------------------------------
+//  ----------------------------------------------------
 //  class SVTXNumericField
 //  ----------------------------------------------------
 SVTXNumericField::SVTXNumericField()
@@ -1547,7 +1498,7 @@ sal_Bool SVTXNumericField::isStrictFormat() throw(::com::sun::star::uno::Runtime
 }
 
 
-// ----------------------------------------------------
+//  ----------------------------------------------------
 //  class SVTXCurrencyField
 //  ----------------------------------------------------
 SVTXCurrencyField::SVTXCurrencyField()
