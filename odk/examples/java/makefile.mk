@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-03 07:40:25 $
+#   last change: $Author: rt $ $Date: 2005-01-31 17:08:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,7 @@ SPREADSHEET_FILES= \
     $(DESTDIRJAVAEXAMPLES)$/Spreadsheet$/EuroAdaption.java		\
     $(DESTDIRJAVAEXAMPLES)$/Spreadsheet$/ChartTypeChange.java   	\
     $(DESTDIRJAVAEXAMPLES)$/Spreadsheet$/CalcAddins.java	   	\
-    $(DESTDIRJAVAEXAMPLES)$/Spreadsheet$/CalcAddins.sxc	   	\
+    $(DESTDIRJAVAEXAMPLES)$/Spreadsheet$/CalcAddins.ods	   	\
     $(DESTDIRJAVAEXAMPLES)$/Spreadsheet$/XCalcAddins.idl	   	\
     $(DESTDIRJAVAEXAMPLES)$/Spreadsheet$/Makefile
 
@@ -106,7 +106,7 @@ DOCUMENTHANDLING_FILES= \
     $(DESTDIRJAVAEXAMPLES)$/DocumentHandling$/DocumentPrinter.java	\
     $(DESTDIRJAVAEXAMPLES)$/DocumentHandling$/DocumentSaver.java	\
     $(DESTDIRJAVAEXAMPLES)$/DocumentHandling$/Makefile \
-    $(DESTDIRJAVAEXAMPLES)$/DocumentHandling$/test$/test1.sxw
+    $(DESTDIRJAVAEXAMPLES)$/DocumentHandling$/test$/test1.odt
 
 CONVERTERSERVLET_FILES= \
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/ConverterServlet.html	\
@@ -118,12 +118,13 @@ CONVERTERSERVLET_FILES= \
 INSPECTOR_FILES= \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/Inspector.jpg \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/InspectorThumbnail.jpg \
-    $(DESTDIRJAVAEXAMPLES)$/Inspector$/InstanceInspector.java \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/Inspector.uno.xml \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/Inspector.java \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/Makefile \
-    $(DESTDIRJAVAEXAMPLES)$/Inspector$/Test.java \
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/TestInspector.java \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/XInstanceInspector.idl \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/InstanceInspector.idl \
-    $(DESTDIRJAVAEXAMPLES)$/Inspector$/InstanceInspectorTest.sxw
+    $(DESTDIRJAVAEXAMPLES)$/Inspector$/InstanceInspectorTest.odt
 
 NOTESACCESS_FILES= \
     $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/NotesAccess.java \
@@ -132,9 +133,9 @@ NOTESACCESS_FILES= \
 
 TODO_FILES= \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.java \
-    $(DESTDIRJAVAEXAMPLES)$/ToDo$/Test.java \
-    $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.sxc  \
+    $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.ods  \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.uno.xml  \
+    $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.idl  \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/XToDo.idl  \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/Makefile
 
@@ -147,13 +148,8 @@ MINIMALCOMPONENT_FILES= \
 
 PROPERTYSET_FILES= \
     $(DESTDIRJAVAEXAMPLES)$/PropertySet$/PropTest.java \
-    $(DESTDIRJAVAEXAMPLES)$/PropertySet$/PropertySet.sxw \
+    $(DESTDIRJAVAEXAMPLES)$/PropertySet$/PropertySet.odt \
     $(DESTDIRJAVAEXAMPLES)$/PropertySet$/Makefile
-
-SIMPLEBOOTSTRAP_FILES= \
-    $(DESTDIRJAVAEXAMPLES)$/SimpleBootstrap$/SimpleBootstrap.java \
-    $(DESTDIRJAVAEXAMPLES)$/SimpleBootstrap$/manifest.mf \
-    $(DESTDIRJAVAEXAMPLES)$/SimpleBootstrap$/Makefile
 
 DIR_FILE_LIST= \
     $(DRAWING_FILES) \
@@ -165,8 +161,7 @@ DIR_FILE_LIST= \
     $(NOTESACCESS_FILES) \
     $(TODO_FILES) \
     $(MINIMALCOMPONENT_FILES) \
-    $(PROPERTYSET_FILES) \
-    $(SIMPLEBOOTSTRAP_FILES)
+    $(PROPERTYSET_FILES)
 
 DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
 DIR_CREATE_FLAG=$(MISC)$/ex_java_dirs_created.txt
