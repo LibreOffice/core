@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-20 09:32:09 $
+ *  last change: $Author: mba $ $Date: 2001-06-22 09:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,8 @@ using namespace ::com::sun::star::ucb;
 #include <svtools/pathoptions.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/ucbhelper.hxx>
+#include <ucbhelper/content.hxx>
 
 #include "ucbhelp.hxx"
 #include "helper.hxx"
@@ -1279,6 +1281,17 @@ void SfxMedium::Transfer_Impl()
             }
             else
                 eError = ERRCODE_IO_GENERAL;
+            return;
+        }
+
+        SFX_ITEMSET_ARG( GetItemSet(), p, SfxInt32Item, SID_SEGMENTSIZE, sal_False);
+        if ( pSegmentSize )
+        if ( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() )
+        {
+            ::utl::UCBContentHelper::MakeFolder( GetName() );
+            ::ucb::Content aContent( GetName(), Reference < XCommandEnvironment >() );
+            SotStorageRef xStor = new SotStorage( aContent, GetName() );
+            GetStorage()->CopyTo( xStor );
             return;
         }
 
