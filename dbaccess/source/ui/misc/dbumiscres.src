@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-21 15:01:37 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ String STR_GENERAL_SDB_ERROR
     Text[ polish ] = "B彻d w 彻czeniu ze 焤骴砮m danych";
     Text[ portuguese_brazilian ] = "Error while connecting to the data source";
     Text[ japanese ] = "棉袄堪絺謵趹睅瀭檀装";
-    Text[ korean ] = "Error while connecting to the data source";
+    Text[ korean ] = "单捞磐 家胶俊 楷搬矫俊 坷幅";
     Text[ chinese_simplified ] = "在和数据源连接时发生一个错误";
     Text[ chinese_traditional ] = "硈絬戈方祇ネ岿粇";
     Text[ turkish ] = "Error while connecting to the data source";
@@ -171,6 +171,9 @@ String STR_GENERAL_SDB_ERROR
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/11/21 15:01:37  oj
+ *  #80549# wrong dsn for text
+ *
  *  Revision 1.3  2000/10/27 15:17:01  kz
  *  Merge SRC610: 27.10.00 - 17:16:44 (NoBranch)
  *
