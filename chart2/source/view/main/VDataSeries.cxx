@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-05 14:46:41 $
+ *  last change: $Author: iha $ $Date: 2004-01-05 17:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ rtl::OUString VDataSeries::getCategoryString( sal_Int32 index ) const
     if( 0<=index && index<m_nPointCount )
     {
         aRet+=C2U("index ");
-        aRet+=rtl::OUString::valueOf(index);
+        aRet+=rtl::OUString::valueOf(index+1);//first category (index 0) matches with real number 1.0
     }
     return aRet;
 }
