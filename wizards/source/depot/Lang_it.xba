@@ -55,9 +55,9 @@ Sub LoadItalianLanguage()
 	sMarket(0,1) = &quot;$&quot;
 	sMarket(0,2) = &quot;New York&quot;
 	sMarket(0,3) = &quot;http://quote.yahoo.com/d/quotes.csv?s=&lt;StockID&gt;&amp;f=sl1d1t1c1ohgv&amp;e=.csv&quot;
-	sMarket(0,4) = &quot;http://chart.yahoo.com/table.csv?s=&lt;StockID&gt;&amp;&quot; &amp;_
-					&quot;a=&lt;StartMonth&gt;&amp;b=&lt;StartDay&gt;&amp;c=&lt;Startyear&gt;&amp;d=&lt;EndMonth&gt;&amp;e=&lt;EndDay&gt;&amp;f=&lt;Endyear&gt;&amp;&quot; &amp;_
-					&quot;g=&lt;interval&gt;&amp;q=q&amp;y=0&amp;z=&lt;StockID&gt;&amp;x=.csv&quot;
+	sMarket(0,4) = &quot;http://table.finance.yahoo.com/table.csv?&quot; &amp;_
+					&quot;a=&lt;StartMonth&gt;&amp;b=&lt;StartDay&gt;&amp;c=&lt;Startyear&gt;&amp;d=&lt;EndMonth&gt;&amp;&quot; &amp;_
+					&quot;e=&lt;EndDay&gt;&amp;f=&lt;Endyear&gt;&amp;s=&lt;StockID&gt;&amp;y=0&amp;g=&lt;interval&gt;&amp;ignore=.csv&quot;
 	sMarket(0,5) = &quot;Simbolo&quot;
 	sMarket(0,6) = &quot;en&quot;
 	sMarket(0,7) = &quot;US&quot;
