@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: th $ $Date: 2000-11-03 09:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,6 +484,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         pSVData->maWinData.mpFirstFrame = this;
         mpFrameData->mpFirstOverlap     = NULL;
         mpFrameData->mpFocusWin         = NULL;
+        mpFrameData->mpExtTextInputWin  = NULL;
         mpFrameData->mpMouseMoveWin     = NULL;
         mpFrameData->mpMouseDownWin     = NULL;
         mpFrameData->mpFirstBackWin     = NULL;
@@ -970,10 +971,9 @@ ImplWinData* Window::ImplGetWinData() const
     if ( !mpWinData )
     {
         ((Window*)this)->mpWinData = new ImplWinData;
-        mpWinData->mpExtPosAry      = NULL;
-        mpWinData->mnExtPosStart    = 0;
-        mpWinData->mnExtPosCount    = 0;
         mpWinData->mnExtOldTextLen  = 0;
+        mpWinData->mpCursorRect     = 0;
+        mpWinData->mnCursorExtWidth = 0;
         mpWinData->mpFocusRect      = NULL;
         mpWinData->mpTrackRect      = NULL;
         mpWinData->mnTrackFlags     = 0;
@@ -3649,6 +3649,11 @@ void Window::ImplGrabFocus( USHORT nFlags )
 
         if ( pSVData->maWinData.mpFocusWin == this )
         {
+            // EndExtTextInput if it is not the same window
+            if ( mpFrameData->mpExtTextInputWin &&
+                 mpFrameData->mpExtTextInputWin != this )
+                mpFrameData->mpExtTextInputWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
+
 #ifndef REMOTE_APPSERVER
             if ( mpSysObj )
             {
@@ -3683,35 +3688,48 @@ void Window::ImplGrabFocus( USHORT nFlags )
 void Window::ImplNewInputContext()
 {
 #ifndef REMOTE_APPSERVER
-    SalInputContext         aNewContext;
-    const InputContext&     rInputContext = GetInputContext();
-    const Font&             rFont = rInputContext.GetFont();
-    const XubString&        rFontName = rFont.GetName();
-    ImplFontEntry*          pFontEntry = NULL;
-    if ( rFontName.Len() )
+    ImplSVData* pSVData = ImplGetSVData();
+    Window*     pFocusWin = pSVData->maWinData.mpFocusWin;
+    if ( pFocusWin )
     {
-        Size aSize = ImplLogicToDevicePixel( rFont.GetSize() );
-        if ( !aSize.Height() )
-        {
-            // Nur dann Defaultgroesse setzen, wenn Fonthoehe auch in logischen
-            // Koordinaaten 0 ist
-            if ( rFont.GetSize().Height() )
-                aSize.Height() = 1;
-            else
-                aSize.Height() = (12*mnDPIY)/72;
-        }
-        pFontEntry = mpFontCache->Get( mpFontList, rFont, aSize );
-        aNewContext.mpFont = &(mpFontEntry->maFontSelData);
-    }
-    else
+        SalInputContext         aNewContext;
+        const InputContext&     rInputContext = pFocusWin->GetInputContext();
+        const Font&             rFont = rInputContext.GetFont();
+        const XubString&        rFontName = rFont.GetName();
+        ImplFontEntry*          pFontEntry = NULL;
         aNewContext.mpFont = NULL;
-    aNewContext.meCharSet       = rFont.GetCharSet();
-    aNewContext.meLanguage      = rFont.GetLanguage();
-    aNewContext.mnOptions       = rInputContext.GetOptions();
-    ImplGetFrame()->SetInputContext( &aNewContext );
+        if ( rFontName.Len() )
+        {
+            Size aSize = pFocusWin->ImplLogicToDevicePixel( rFont.GetSize() );
+            if ( !aSize.Height() )
+            {
+                // Nur dann Defaultgroesse setzen, wenn Fonthoehe auch in logischen
+                // Koordinaaten 0 ist
+                if ( rFont.GetSize().Height() )
+                    aSize.Height() = 1;
+                else
+                    aSize.Height() = (12*pFocusWin->mnDPIY)/72;
+            }
+            pFontEntry = pFocusWin->mpFontCache->Get( pFocusWin->mpFontList, rFont, aSize );
+            if ( pFontEntry )
+                aNewContext.mpFont = &pFontEntry->maFontSelData;
+        }
+        aNewContext.meLanguage = rFont.GetLanguage();
+        // !!! Must be changed in the future in the Applications )
+        if ( rInputContext.GetOptions() )
+        {
+            aNewContext.mnOptions = SAL_INPUTCONTEXT_TEXT |
+                                    SAL_INPUTCONTEXT_EXTTEXTINPUT |
+                                    SAL_INPUTCONTEXT_EXTTEXTINPUT_ON;
+        }
+        else
+            aNewContext.mnOptions = 0;
+//        aNewContext.mnOptions       = rInputContext.GetOptions();
+        pFocusWin->ImplGetFrame()->SetInputContext( &aNewContext );
 
-    if ( pFontEntry )
-        mpFontCache->Release( pFontEntry );
+        if ( pFontEntry )
+            pFocusWin->mpFontCache->Release( pFontEntry );
+    }
 #endif
 }
 
@@ -3903,6 +3921,8 @@ Window::~Window()
     // gemerkte Fenster zuruecksetzen
     if ( mpFrameData->mpFocusWin == this )
         mpFrameData->mpFocusWin = NULL;
+    if ( mpFrameData->mpExtTextInputWin == this )
+        mpFrameData->mpExtTextInputWin = NULL;
     if ( mpFrameData->mpMouseMoveWin == this )
         mpFrameData->mpMouseMoveWin = NULL;
     if ( mpFrameData->mpMouseDownWin == this )
@@ -3961,8 +3981,8 @@ Window::~Window()
     // Extra Window Daten loeschen
     if ( mpWinData )
     {
-        if ( mpWinData->mpExtPosAry )
-            delete [] mpWinData->mpExtPosAry;
+        if ( mpWinData->mpCursorRect )
+            delete mpWinData->mpCursorRect;
         if ( mpWinData->mpFocusRect )
             delete mpWinData->mpFocusRect;
         if ( mpWinData->mpTrackRect )
@@ -4690,18 +4710,6 @@ void Window::SetInputContext( const InputContext& rInputContext )
 
 // -----------------------------------------------------------------------
 
-void Window::UpdateExtTextInputArea()
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-#ifndef REMOTE_APPSERVER
-    if ( mbExtTextInput )
-        ImplGetFrame()->UpdateExtTextInputArea();
-#endif
-}
-
-// -----------------------------------------------------------------------
-
 void Window::EndExtTextInput( USHORT nFlags )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
@@ -4714,53 +4722,75 @@ void Window::EndExtTextInput( USHORT nFlags )
 
 // -----------------------------------------------------------------------
 
-void Window::SetExtTextInputPos( USHORT nStart, USHORT nCount, const Rectangle* pPosAry )
+void Window::SetCursorRect( const Rectangle* pRect, long nExtTextInputWidth )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     ImplWinData* pWinData = ImplGetWinData();
-
-    if ( pWinData->mpExtPosAry )
-        delete [] pWinData->mpExtPosAry;
-    if ( nCount )
+    if ( pWinData->mpCursorRect )
     {
-        pWinData->mpExtPosAry   = new Rectangle[nCount];
-        pWinData->mnExtPosStart = nStart;
-        pWinData->mnExtPosCount = nCount;
-        memcpy( pWinData->mpExtPosAry, pPosAry, nCount*sizeof( Rectangle ) );
+        if ( pRect )
+            *pWinData->mpCursorRect = *pRect;
+        else
+        {
+            delete pWinData->mpCursorRect;
+            pWinData->mpCursorRect = NULL;
+        }
     }
     else
-        pWinData->mpExtPosAry = NULL;
+    {
+        if ( pRect )
+            pWinData->mpCursorRect = new Rectangle( *pRect );
+    }
+
+    pWinData->mnCursorExtWidth = nExtTextInputWidth;
+}
+
+// -----------------------------------------------------------------------
+
+const Rectangle* Window::GetCursorRect() const
+{
+    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+
+    ImplWinData* pWinData = ImplGetWinData();
+    return pWinData->mpCursorRect;
+}
+
+// -----------------------------------------------------------------------
+
+long Window::GetCursorExtTextInputWidth() const
+{
+    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+
+    ImplWinData* pWinData = ImplGetWinData();
+    return pWinData->mnCursorExtWidth;
+}
+
+// -----------------------------------------------------------------------
+
+void Window::SetExtTextInputPos( USHORT nStart, USHORT nCount, const Rectangle* pPosAry )
+{
 }
 
 // -----------------------------------------------------------------------
 
 const Rectangle* Window::GetExtTextInputPosAry() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    ImplWinData* pWinData = ImplGetWinData();
-    return pWinData->mpExtPosAry;
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
 
 USHORT Window::GetExtTextInputPosStart() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    ImplWinData* pWinData = ImplGetWinData();
-    return pWinData->mnExtPosStart;
+    return 0;
 }
 
 // -----------------------------------------------------------------------
 
 USHORT Window::GetExtTextInputPosCount() const
 {
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    ImplWinData* pWinData = ImplGetWinData();
-    return pWinData->mnExtPosCount;
+    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -5114,6 +5144,11 @@ void Window::SetParent( Window* pNewParent )
         {
             if ( IsWindowOrChild( mpFrameData->mpFocusWin ) )
                 mpFrameData->mpFocusWin = NULL;
+        }
+        if ( mpFrameData->mpExtTextInputWin )
+        {
+            if ( IsWindowOrChild( mpFrameData->mpExtTextInputWin ) )
+                mpFrameData->mpExtTextInputWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
         }
         if ( mpFrameData->mpMouseMoveWin )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: th $ $Date: 2000-11-03 09:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1213,125 +1213,102 @@ static long ImplCallExtTextInput( Window* pChild, USHORT nEvt,
 
     return FALSE;
 }
-
 // -----------------------------------------------------------------------
 
-static long ImplHandleStartExtTextInput( Window* pWindow )
+static long ImplHandleExtTextInput( Window* pWindow, ULONG nTime,
+                                    const XubString& rText,
+                                    const USHORT* pTextAttr,
+                                    ULONG nCursorPos, USHORT nCursorFlags,
+                                    ULONG nDeltaStart, BOOL bOnlyCursor )
 {
-    Window* pChild = ImplGetKeyInputWindow( pWindow );
-    long    nRet = 0;
-    if ( pChild )
+    Window* pChild;
+
+    if ( pWindow->mpFrameData->mpExtTextInputWin )
+        pChild = pWindow->mpFrameData->mpExtTextInputWin;
+    else
+    {
+        pChild = ImplGetKeyInputWindow( pWindow );
+        if ( !pChild )
+            return 0;
+    }
+
+    if ( !pChild->mbExtTextInput )
     {
         pChild->mbExtTextInput = TRUE;
         pChild->ImplGetWinData()->mnExtOldTextLen = 0;
-        nRet = ImplCallExtTextInput( pChild, COMMAND_STARTEXTTEXTINPUT );
+        pChild->mpFrameData->mpExtTextInputWin = pChild;
+        ImplCallExtTextInput( pChild, COMMAND_STARTEXTTEXTINPUT );
     }
-    return nRet;
+
+    // For kompatibility through the next version
+    if ( nCursorFlags & EXTTEXTINPUT_CURSOR_INVISIBLE )
+        nCursorFlags = 0;
+    else
+        nCursorFlags = TRUE;
+    CommandExtTextInputData aData( rText, pTextAttr,
+                                   (USHORT)nCursorPos, nCursorFlags,
+                                   (USHORT)nDeltaStart,
+                                   pChild->ImplGetWinData()->mnExtOldTextLen,
+                                   bOnlyCursor );
+    pChild->ImplGetWinData()->mnExtOldTextLen = rText.Len();
+    return ImplCallExtTextInput( pChild, COMMAND_EXTTEXTINPUT, &aData );
 }
 
 // -----------------------------------------------------------------------
 
 static long ImplHandleEndExtTextInput( Window* pWindow )
 {
-    Window* pChild = ImplGetKeyInputWindow( pWindow );
+    Window* pChild = pWindow->mpFrameData->mpExtTextInputWin;
     long    nRet = 0;
+
     if ( pChild )
     {
         pChild->mbExtTextInput = FALSE;
+        pChild->mpFrameData->mpExtTextInputWin = NULL;
         pChild->ImplGetWinData()->mnExtOldTextLen = 0;
         nRet = ImplCallExtTextInput( pChild, COMMAND_ENDEXTTEXTINPUT );
     }
+
     return nRet;
 }
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleExtTextInput( Window* pWindow, ULONG nTime,
-                                    const XubString& rText,
-                                    const USHORT* pTextAttr,
-                                    ULONG nCursorPos, BOOL bCursorVisible,
-                                    ULONG nDeltaStart, BOOL bOnlyCursor )
+static void ImplHandleExtTextInputPos( Window* pWindow,
+                                       Rectangle& rRect, long& rInputWidth )
 {
-    Window* pChild = ImplGetKeyInputWindow( pWindow );
-    long    nRet = 0;
+    Window* pChild = pWindow->mpFrameData->mpExtTextInputWin;
+    if ( !pChild )
+        pChild = ImplGetKeyInputWindow( pWindow );
+
     if ( pChild )
     {
-        BOOL bSmartMode = FALSE;
-        if ( !pChild->mbExtTextInput )
+        const Rectangle* pRect = pChild->GetCursorRect();
+        if ( pRect )
+            rRect = pChild->ImplLogicToDevicePixel( *pRect );
+        else
         {
-            bSmartMode = TRUE;
-            ImplHandleStartExtTextInput( pWindow );
-        }
-        CommandExtTextInputData aData( rText, pTextAttr,
-                                       (USHORT)nCursorPos, bCursorVisible,
-                                       (USHORT)nDeltaStart,
-                                       pChild->ImplGetWinData()->mnExtOldTextLen,
-                                       bOnlyCursor );
-        pChild->ImplGetWinData()->mnExtOldTextLen = rText.Len();
-        nRet = ImplCallExtTextInput( pChild, COMMAND_EXTTEXTINPUT, &aData );
-        if ( bSmartMode )
-        {
-            // TextAttribute muessen zum Schluss restauriert ausgegeben werden
-            if ( pTextAttr )
+            Cursor* pCursor = pChild->GetCursor();
+            if ( pCursor )
             {
-                ImplHandleExtTextInput( pWindow, nTime, rText, NULL,
-                                        nCursorPos, bCursorVisible,
-                                        nDeltaStart, bOnlyCursor );
+                Point aPos = pChild->ImplLogicToDevicePixel( pCursor->GetPos() );
+                Size aSize = pChild->LogicToPixel( pCursor->GetSize() );
+                if ( !aSize.Width() )
+                    aSize.Width() = pChild->GetSettings().GetStyleSettings().GetCursorSize();
+                rRect = Rectangle( aPos, aSize );
             }
-            ImplHandleEndExtTextInput( pWindow );
         }
+        rInputWidth = pChild->ImplLogicWidthToDevicePixel( pChild->GetCursorExtTextInputWidth() );
+        if ( !rInputWidth )
+            rInputWidth = rRect.GetWidth();
     }
-    return nRet;
 }
 
 // -----------------------------------------------------------------------
 
-static Window* ImplHandleExtTextInputPos( Window* pWindow, ULONG nFirst,
-                                          ULONG nChars )
-{
-    Window* pChild = ImplGetKeyInputWindow( pWindow );
-    if ( pChild )
-    {
-        CommandExtTextInputPosData aData( (USHORT)nFirst, (USHORT)nChars, EXTTEXTINPUTPOS_NOSHOWPOS );
-        ImplCallExtTextInput( pChild, COMMAND_EXTTEXTINPUTPOS, &aData );
-    }
-    return pChild;
-}
-
-// -----------------------------------------------------------------------
-
-static long ImplHandleInputContextChange( Window* pWindow )
+static long ImplHandleInputContextChange( Window* pWindow, LanguageType eNewLang )
 {
     return 0;
-}
-
-// -----------------------------------------------------------------------
-
-static void ImplHandleICursorPos( Window* pWindow, long& rX, long& rY,
-                                  long& rWidth, long& rHeight )
-{
-    rX      = 0;
-    rY      = 0;
-    rWidth  = 0;
-    rHeight = 0;
-
-    Window* pChild = ImplGetKeyInputWindow( pWindow );
-    if ( pChild )
-    {
-        ImplCallExtTextInput( pChild, COMMAND_CURSORPOS );
-        Cursor* pCursor = pChild->GetCursor();
-        if ( pCursor )
-        {
-            Point aPos = pChild->ImplLogicToDevicePixel( pCursor->GetPos() );
-            rX = aPos.X();
-            rY = aPos.Y();
-            Size aSize = pChild->LogicToPixel( pCursor->GetSize() );
-            rWidth  = aSize.Width();
-            rHeight = aSize.Height();
-            if ( !aSize.Width() )
-                rWidth = pChild->GetSettings().GetStyleSettings().GetCursorSize();
-        }
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -1539,7 +1516,8 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
                 }
 
                 // TrackingMode is ended in ImplHandleLoseFocus
-                pFocusWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
+// To avoid problems with the Unix IME
+//                pFocusWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
                 NotifyEvent aNEvt( EVENT_LOSEFOCUS, pFocusWin );
                 if ( !ImplCallPreNotify( aNEvt ) )
                     pFocusWin->LoseFocus();
@@ -1858,26 +1836,21 @@ static void ImplHandleSalSettings( Window* pWindow, USHORT nEvent )
 
 static void ImplHandleSalExtTextInputPos( Window* pWindow, SalExtTextInputPosEvent* pEvt )
 {
-    Window* pChild = ImplHandleExtTextInputPos( pWindow, pEvt->mnFirstPos, pEvt->mnChars );
-    if ( pChild )
+    Rectangle aCursorRect;
+    ImplHandleExtTextInputPos( pWindow, aCursorRect, pEvt->mnExtWidth );
+    if ( aCursorRect.IsEmpty() )
     {
-        USHORT              nStart = pChild->GetExtTextInputPosStart();
-        USHORT              nCount = pChild->GetExtTextInputPosCount();
-        const Rectangle*    pAry = pChild->GetExtTextInputPosAry();
-        USHORT              nPos;
-        for ( USHORT i = 0; i < pEvt->mnChars; i++ )
-        {
-            nPos = i+(USHORT)pEvt->mnFirstPos;
-            if ( (nPos >= nStart) && (nPos < nStart+nCount) )
-            {
-                SalExtCharPos*      pSalPos = pEvt->mpPosAry+i;
-                const Rectangle*    pPos = pAry+(nPos-nStart);
-                pSalPos->mnX        = pChild->ImplLogicXToDevicePixel( pPos->Left() );
-                pSalPos->mnY        = pChild->ImplLogicYToDevicePixel( pPos->Top() );
-                pSalPos->mnWidth    = pChild->ImplLogicWidthToDevicePixel( pPos->GetWidth() );
-                pSalPos->mnHeight   = pChild->ImplLogicHeightToDevicePixel( pPos->GetHeight() );
-            }
-        }
+        pEvt->mnX       = -1;
+        pEvt->mnY       = -1;
+        pEvt->mnWidth   = -1;
+        pEvt->mnHeight  = -1;
+    }
+    else
+    {
+        pEvt->mnX       = aCursorRect.Left();
+        pEvt->mnY       = aCursorRect.Top();
+        pEvt->mnWidth   = aCursorRect.GetWidth();
+        pEvt->mnHeight  = aCursorRect.GetHeight();
     }
 }
 
@@ -2001,37 +1974,23 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
             ImplHandleUserEvent( (ImplSVEvent*)pEvent );
             break;
 
-        case SALEVENT_STARTEXTTEXTINPUT:
-            ImplHandleStartExtTextInput( (Window*)pInst );
-            break;
         case SALEVENT_EXTTEXTINPUT:
             {
             SalExtTextInputEvent* pEvt = (SalExtTextInputEvent*)pEvent;
-            ImplHandleExtTextInput( (Window*)pInst, pEvt->mnTime,
-                                    pEvt->maText, pEvt->mpTextAttr,
-                                    pEvt->mnCursorPos, pEvt->mbCursorVisible,
-                                    pEvt->mnDeltaStart, pEvt->mbOnlyCursor );
+            nRet = ImplHandleExtTextInput( (Window*)pInst, pEvt->mnTime,
+                                           pEvt->maText, pEvt->mpTextAttr,
+                                           pEvt->mnCursorPos, pEvt->mnCursorFlags,
+                                           pEvt->mnDeltaStart, pEvt->mbOnlyCursor );
             }
             break;
         case SALEVENT_ENDEXTTEXTINPUT:
-            ImplHandleEndExtTextInput( (Window*)pInst );
+            nRet = ImplHandleEndExtTextInput( (Window*)pInst );
             break;
         case SALEVENT_EXTTEXTINPUTPOS:
             ImplHandleSalExtTextInputPos( (Window*)pInst, (SalExtTextInputPosEvent*)pEvent );
             break;
         case SALEVENT_INPUTCONTEXTCHANGE:
-            {
-            ImplHandleInputContextChange( (Window*)pInst );
-            }
-            break;
-
-        case SALEVENT_CURSORPOS:
-            {
-            SalCursorPosEvent* pEvt = (SalCursorPosEvent*)pEvent;
-            ImplHandleICursorPos( (Window*)pInst,
-                                  pEvt->mnX, pEvt->mnY,
-                                  pEvt->mnWidth, pEvt->mnHeight );
-            }
+            nRet = ImplHandleInputContextChange( (Window*)pInst, ((SalInputContextChangeEvent*)pEvent)->meLanguage );
             break;
 
 #ifdef DBG_UTIL
