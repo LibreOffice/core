@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 11:14:28 $
+ *  last change: $Author: oj $ $Date: 2002-11-01 10:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,14 +168,9 @@ int SDB_JRE_InitJava(const Reference<XMultiServiceFactory >& _rxFactory)
 //      }
 
     }
-    catch (Exception e)
+    catch (Exception& e)
     {
-        if (pEnv && pEnv->ExceptionOccurred())
-        {
-            pEnv->ExceptionDescribe();
-            pEnv->ExceptionClear();
-        }
-
+        isExceptionOccured(pEnv,sal_True);
         result = -1;
     }
 
@@ -194,25 +189,19 @@ int SDB_JRE_InitJava(const Reference<XMultiServiceFactory >& _rxFactory)
 SDBThreadAttach::SDBThreadAttach() : bDetach(sal_False), pEnv(NULL)
 {
     attachThread(pEnv);
-    if(pEnv && pEnv->ExceptionOccurred())
-        pEnv->ExceptionClear();
+    isExceptionOccured(pEnv,sal_True);
 }
 
 SDBThreadAttach::SDBThreadAttach(const Reference<XMultiServiceFactory >& _rxFactory) : bDetach(sal_False), pEnv(NULL)
 {
     attachThread(pEnv,_rxFactory);
-    if(pEnv && pEnv->ExceptionOccurred())
-        pEnv->ExceptionClear();
+    isExceptionOccured(pEnv,sal_True);
 }
 
 SDBThreadAttach::~SDBThreadAttach()
 {
-    if(pEnv && pEnv->ExceptionOccurred())
-    {
-        OSL_ENSURE(0,"Exception occured in JNI!");
-        pEnv->ExceptionClear();
-    }
-
+    sal_Bool bOk = isExceptionOccured(pEnv,sal_True);
+    OSL_ENSURE(!bOk,"Exception occured in JNI!");
     detachThread();
 }
 

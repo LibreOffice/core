@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-01 07:15:16 $
+ *  last change: $Author: oj $ $Date: 2002-11-01 10:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,32 @@ jobject connectivity::XNameAccess2Map(JNIEnv *pEnv,const Reference< ::com::sun::
     {
     }
     return 0;
+}
+// -----------------------------------------------------------------------------
+sal_Bool connectivity::isExceptionOccured(JNIEnv *pEnv,sal_Bool _bClear)
+{
+    OSL_ENSURE(pEnv,"Java env not valid! Prepare for GPF. For performace reason there is not check for NULL here. :-(");
+    jthrowable pThrowable = pEnv->ExceptionOccurred();
+    sal_Bool bRet = pThrowable != NULL;
+    if ( pThrowable )
+    {
+        if ( _bClear )
+            pEnv->ExceptionClear();
+#ifdef DEBUG
+        if(pEnv->IsInstanceOf(pThrowable,java_sql_SQLException_BASE::getMyClass()))
+        {
+
+            java_sql_SQLException_BASE* pException = new java_sql_SQLException_BASE(pEnv,pThrowable);
+            ::rtl::OUString sError = pException->getMessage();
+            delete pException;
+        }
+#else
+        pEnv->DeleteLocalRef(pThrowable);
+#endif
+
+    }
+
+    return bRet;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-01 07:16:22 $
+ *  last change: $Author: oj $ $Date: 2002-11-01 10:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,16 @@ namespace connectivity
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > Map2XNameAccess(JNIEnv *pEnv,jobject _pMap);
     jobject XNameAccess2Map(JNIEnv *pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & _rMap);
+
+    /** return if a exception occured
+        @param  pEnv
+            The native java env
+        @param  _bClear
+            <TRUE/> if the execption should be cleared
+        @return
+            <TRUE/> if an exception is occured
+    */
+    sal_Bool isExceptionOccured(JNIEnv *pEnv,sal_Bool _bClear);
 }
 
 #endif // _CONNECTIVITY_JAVA_TOOLS_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-13 15:07:00 $
+ *  last change: $Author: oj $ $Date: 2002-11-01 10:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1518,8 +1518,8 @@ sal_Int32 java_sql_ResultSet::getResultSetConcurrency() const throw(::com::sun::
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
             // special case here most JDBC 1.x doesn't support this feature so we just clear the exception when they occured
-            if(t.pEnv->ExceptionOccurred())
-                t.pEnv->ExceptionClear();
+            isExceptionOccured(t.pEnv,sal_True);
+
         } //mID
     } //t.pEnv
     return (sal_Int32)out;
@@ -1539,8 +1539,8 @@ sal_Int32 java_sql_ResultSet::getResultSetType() const throw(::com::sun::star::s
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
             // special case here most JDBC 1.x doesn't support this feature so we just clear the exception when they occured
-            if(t.pEnv->ExceptionOccurred())
-                t.pEnv->ExceptionClear();
+            isExceptionOccured(t.pEnv,sal_True);
+
         } //mID
     } //t.pEnv
     return (sal_Int32)out;
@@ -1559,8 +1559,8 @@ sal_Int32 java_sql_ResultSet::getFetchDirection() const throw(::com::sun::star::
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
             // special case here most JDBC 1.x doesn't support this feature so we just clear the exception when they occured
-            if(t.pEnv->ExceptionOccurred())
-                t.pEnv->ExceptionClear();
+            isExceptionOccured(t.pEnv,sal_True);
+
         } //mID
     } //t.pEnv
     return (sal_Int32)out;
@@ -1579,8 +1579,8 @@ sal_Int32 java_sql_ResultSet::getFetchSize() const throw(::com::sun::star::sdbc:
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
             // special case here most JDBC 1.x doesn't support this feature so we just clear the exception when they occured
-            if(t.pEnv->ExceptionOccurred())
-                t.pEnv->ExceptionClear();
+            isExceptionOccured(t.pEnv,sal_True);
+
         } //mID
     } //t.pEnv
     return (sal_Int32)out;
@@ -1621,8 +1621,8 @@ void java_sql_ResultSet::setFetchDirection(sal_Int32 _par0) throw(::com::sun::st
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID,_par0);
             // special case here most JDBC 1.x doesn't support this feature so we just clear the exception when they occured
-            if(t.pEnv->ExceptionOccurred())
-                t.pEnv->ExceptionClear();
+            isExceptionOccured(t.pEnv,sal_True);
+
         } //mID
     } //t.pEnv
 
@@ -1658,8 +1658,7 @@ void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(::com::sun::star::s
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID,_par0);
             // special case here most JDBC 1.x doesn't support this feature so we just clear the exception when they occured
-            if(t.pEnv->ExceptionOccurred())
-                t.pEnv->ExceptionClear();
+            isExceptionOccured(t.pEnv,sal_True);
         } //mID
     } //t.pEnv
 
