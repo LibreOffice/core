@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:46:04 $
+ *  last change: $Author: armin $ $Date: 2001-03-07 17:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #define TRACE(x)
 
 #pragma warning( disable : 4237 )
-#include <stl/list>
+#include <list>
 #include <malloc.h>
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>

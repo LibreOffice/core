@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:46:05 $
+ *  last change: $Author: armin $ $Date: 2001-03-07 17:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define LEAK_STATIC_DATA
 
 #pragma warning( disable : 4237 )
-#include <stl/hash_map>
+#include <hash_map>
 #include <sal/config.h>
 #include <malloc.h>
 #include <new.h>
