@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextVerticalAdjust.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-15 16:57:04 $
+ *  last change: $Author: cl $ $Date: 2000-11-28 14:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,27 +76,24 @@ enum TextVerticalAdjust
 {
     //-------------------------------------------------------------------------
 
+    // DocMerge from xml: value com::sun::star::drawing::TextAdjust::LEFT
     /** The left edge of the text is adjusted to the left edge of the shape.
      */
-    LEFT,
+    TOP,
 
     //-------------------------------------------------------------------------
 
+    // DocMerge from xml: value com::sun::star::drawing::TextAdjust::CENTER
     /** The text is centered inside the shape.
      */
     CENTER,
 
     //-------------------------------------------------------------------------
 
+    // DocMerge from xml: value com::sun::star::drawing::TextAdjust::RIGHT
     /** The right edge of the text is adjusted to the right edge of the shape.
      */
-    RIGHT,
-
-    //-------------------------------------------------------------------------
-
-    /** The text extends from the left to the right edge of the shape.
-     */
-    BLOCK
+    BOTTOM
  };
 
 //=============================================================================
@@ -106,6 +103,9 @@ enum TextVerticalAdjust
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/15 16:57:04  cl
+    #79743# replaced TextAdjust with TextHorizontalAdjust and TextVerticalAdjust
+
 
 =============================================================================*/
 #endif
