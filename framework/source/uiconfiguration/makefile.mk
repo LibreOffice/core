@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-06 16:58:53 $
+#   last change: $Author: obo $ $Date: 2004-11-16 14:54:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,8 @@ SLOFILES=			\
                     $(SLO)$/windowstateconfiguration.obj        \
                     $(SLO)$/moduleimagemanager.obj              \
                     $(SLO)$/imagemanager.obj                    \
-                    $(SLO)$/graphicnameaccess.obj
+                    $(SLO)$/graphicnameaccess.obj               \
+                    $(SLO)$/uicategorydescription.obj
 
 # --- Targets ------------------------------------------------------
 
