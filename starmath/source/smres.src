@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-17 08:28:20 $
+ *  last change: $Author: tl $ $Date: 2001-07-17 09:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7479,57 +7479,15 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_ACUTEX ;
                 HelpId = HID_SMA_ACUTEX ;
-                Text = "Accent nach rechts" ;
-                Text [ ENGLISH ] = "???" ;
-                Text [ english_us ] = "Accent To The Right" ;
-                Text [ portuguese_brazilian ] = "Accent nach rechts" ;
-                Text [ swedish ] = "Accent till höger" ;
-                Text [ danish ] = "accent aigu" ;
-                Text [ italian ] = "Accento verso destra" ;
-                Text [ spanish ] = "Acento hacia la derecha" ;
-                Text [ french ] = "Accent aigu" ;
-                Text [ dutch ] = "Accent naar rechts" ;
-                Text [ portuguese ] = "Acento para a direita" ;
-                Text[ chinese_simplified ] = "ÓÒÏòÖØÒô×ÖÄ¸";
-                Text[ russian ] = "Óäàğåíèå âïğàâî";
-                Text[ polish ] = "Akcent w prawo";
-                Text[ japanese ] = "±·­°Ä";
-                Text[ chinese_traditional ] = "¥k¦V­«­µ¦r¥À";
-                Text[ arabic ] = "ÇáÚáÇãÉ ÇáäØŞíÉ Åáì Çáíãíä";
-                Text[ greek ] = "Ôüíïò ğñïò ôá äåîéÜ";
-                Text[ korean ] = "¿À¸¥ÂÊÀ¸·Î ¾Ç¼¾Æ®";
-                Text[ turkish ] = "Sağa vurgu";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Acento hacia la derecha";
-                Text[ finnish ] = "Aksenttimerkki oikealla";
+                Text = "Akzent nach rechts oben" ;
+                Text [ ENGLISH ] = "Accent to the upper-right" ;
             };
             ToolBoxItem
             {
                 Identifier = RID_GRAVEX ;
                 HelpId = HID_SMA_GRAVEX ;
-                Text = "Accent nach links" ;
-                Text [ ENGLISH ] = "???" ;
-                Text [ english_us ] = "Accent To The Left" ;
-                Text [ portuguese_brazilian ] = "Accent nach links" ;
-                Text [ swedish ] = "Accent till vänster" ;
-                Text [ danish ] = "accent grave" ;
-                Text [ italian ] = "Accento verso sinistra" ;
-                Text [ spanish ] = "Acento hacia la izquierda" ;
-                Text [ french ] = "Accent grave" ;
-                Text [ dutch ] = "Accent naar links" ;
-                Text [ portuguese ] = "Acento grave" ;
-                Text[ chinese_simplified ] = "×óÏòÖØÒô·ûºÅ";
-                Text[ russian ] = "Óäàğåíèå âëåâî";
-                Text[ polish ] = "Akcent w lewo";
-                Text[ japanese ] = "¸ŞÚ°ÌŞ";
-                Text[ chinese_traditional ] = "¥ª¦V­«­µ²Å¸¹";
-                Text[ arabic ] = "ÇáÚáÇãÉ ÇáäØŞíÉ Åáì ÇáíÓÇÑ";
-                Text[ greek ] = "Ôüíïò ğñïò ôá áñéóôåñÜ";
-                Text[ korean ] = "¾Ç¼¾Æ® ¿ŞÂÊÀ¸·Î";
-                Text[ turkish ] = "Sola vurgu";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Acento hacia la izquierda";
-                Text[ finnish ] = "Aksenttimerkki vasemmalla";
+                Text = "Akzent nach rechts unten" ;
+                Text [ ENGLISH ] = "Accent to the lower-right" ;
             };
             ToolBoxItem
             {
