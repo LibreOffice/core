@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:29:56 $
+ *  last change: $Author: nn $ $Date: 2001-02-28 19:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,12 +228,16 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
     if (!pPage)
         return;
 
-    //! Name muss fuer OLE ueber alle Tabellen eindeutig sein !?!?!
-    //! Fehler, wenn Name schon vorhanden ????
+    //  chart can't be inserted if any ole object with that name exists on any table
+    //  (empty string: generate valid name)
 
     String aNameString = aName;
-    if ( lcl_FindChartObj( pDocShell, nTab, aNameString ) )
-        aNameString.Erase();    // dann neu generieren
+    USHORT nDummy;
+    if ( aNameString.Len() && pModel->GetNamedObject( aNameString, OBJ_OLE2, nDummy ) )
+    {
+        //  object exists - only RuntimeException is specified
+        throw uno::RuntimeException();
+    }
 
     ScRangeList* pList = new ScRangeList;
     USHORT nRangeCount = (USHORT)aRanges.getLength();
