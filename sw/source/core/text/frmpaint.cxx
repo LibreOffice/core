@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-18 08:04:53 $
+ *  last change: $Author: fme $ $Date: 2002-04-24 12:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,33 @@
 
 #pragma hdrstop
 
+#ifdef VERTICAL_LAYOUT
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
+#endif
+
 #ifndef _SV_SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
 
 #ifndef _SHL_HXX
 #include <tools/shl.hxx> // SW_MOD
+#endif
+
+#ifdef VERTICAL_LAYOUT
+#ifndef _SVX_PGRDITEM_HXX
+#include <svx/pgrditem.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx> // SwPageDesc
+#endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
+#endif
+#ifndef _PARATR_HXX
+#include <paratr.hxx>
+#endif
 #endif
 
 #ifndef _FMTLINE_HXX
@@ -137,6 +158,7 @@
 #include <tabfrm.hxx>   // SwTabFrm (Redlining)
 #endif
 #include "scrrect.hxx"
+
 
 // steht im number.cxx
 extern const sal_Char __FAR_DATA sBulletFntName[];
@@ -637,6 +659,23 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                     pClip = NULL;
 
                 aPos.Y() += pFnt->GetAscent( pSh, pSh->GetOut() );
+
+#ifdef VERTICAL_LAYOUT
+                if ( GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
+                     IsInDocBody() )
+                {
+                    GETGRID( FindPageFrm() )
+                    if ( pGrid )
+                    {
+                        // center character in grid line
+                        aPos.Y() += ( pGrid->GetBaseHeight() -
+                                      pFnt->GetHeight( pSh, pSh->GetOut() ) ) / 2;
+
+                        if ( ! pGrid->GetRubyTextBelow() )
+                            aPos.Y() += pGrid->GetRubyHeight();
+                    }
+                }
+#endif
 
                 const XubString aTmp( CH_PAR );
                 SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, 1 );
