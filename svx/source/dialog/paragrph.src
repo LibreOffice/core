@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-12 09:26:19 $
+ *  last change: $Author: os $ $Date: 2000-12-19 12:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1996,7 +1996,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ turkish ] = "Options";
         Text[ arabic ] = "ŒÌ«—« ";
     };
-    CheckBox CB_AS_HANG_PUNC
+    TriStateBox CB_AS_HANG_PUNC
     {
         Pos = MAP_APPFONT ( 6 , 16 ) ;
         Size = MAP_APPFONT ( 245 , 12 ) ;
@@ -2021,7 +2021,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ turkish ] = "Hanging punctuation";
         Text[ arabic ] = "«·”„«Õ »⁄·«„«  «· ‰ﬁÌÿ «·„⁄·ﬁ…";
     };
-    CheckBox CB_AS_SCRIPT_SPACE
+    TriStateBox CB_AS_SCRIPT_SPACE
     {
         Pos = MAP_APPFONT ( 6 , 29 ) ;
         Size = MAP_APPFONT ( 245 , 12 ) ;
@@ -2046,7 +2046,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ turkish ] = "Apply distance between asian, latin and complex text";
         Text[ arabic ] = "«” Œœ«„ „”«›… »Ì‰ «·‰’Ê’ «·¬”ÌÊÌ… Ê«··« Ì‰Ì… Ê«·„⁄ﬁœ….";
     };
-    CheckBox CB_AS_FORBIDDEN
+    TriStateBox CB_AS_FORBIDDEN
     {
         Pos = MAP_APPFONT ( 6 , 42 ) ;
         Size = MAP_APPFONT ( 245 , 12 ) ;

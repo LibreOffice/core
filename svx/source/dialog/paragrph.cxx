@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:07:07 $
+ *  last change: $Author: os $ $Date: 2000-12-19 12:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2126,6 +2126,11 @@ SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aForbiddenRulesCB(  this, ResId(CB_AS_FORBIDDEN     ))
 {
     FreeResource();
+
+    Link aLink = LINK( this, SvxAsianTabPage, ClickHdl_Impl );
+    aHangingPunctCB.SetClickHdl( aLink );
+    aScriptSpaceCB.SetClickHdl( aLink );
+    aForbiddenRulesCB.SetClickHdl( aLink );
 }
 /*-- 29.11.00 11:36:24---------------------------------------------------
 
@@ -2198,26 +2203,49 @@ void SvxAsianTabPage::Reset( const SfxItemSet& rSet )
     SfxItemPool* pPool = rSet.GetPool();
     USHORT nWhich = pPool->GetWhich(SID_ATTR_PARA_SCRIPTSPACE);
     SfxItemState eState = rSet.GetItemState(nWhich, TRUE);
-    if(eState < SFX_ITEM_AVAILABLE)
+    if(!eState)
         aScriptSpaceCB.Enable(FALSE);
-    else
+    else if(eState >= SFX_ITEM_AVAILABLE)
+    {
+        aScriptSpaceCB.EnableTriState( FALSE );
         aScriptSpaceCB.Check(((const SfxBoolItem&)rSet.Get(nWhich)).GetValue());
+    }
+    else
+        aScriptSpaceCB.SetState( STATE_DONTKNOW );
 
     nWhich = pPool->GetWhich(SID_ATTR_PARA_HANGPUNCTUATION);
     eState = rSet.GetItemState(nWhich, TRUE);
-    if(eState < SFX_ITEM_AVAILABLE)
+    if(!eState)
         aHangingPunctCB.Enable(FALSE);
-    else
+    else if(eState >= SFX_ITEM_AVAILABLE)
+    {
+        aHangingPunctCB.EnableTriState( FALSE );
         aHangingPunctCB.Check(((const SfxBoolItem&)rSet.Get(nWhich)).GetValue());
+    }
+    else
+        aHangingPunctCB.SetState( STATE_DONTKNOW );
 
     nWhich = pPool->GetWhich(SID_ATTR_PARA_FORBIDDEN_RULES);
     eState = rSet.GetItemState(nWhich, TRUE);
-    if(eState < SFX_ITEM_AVAILABLE)
+    if(!eState)
         aForbiddenRulesCB.Enable(FALSE);
-    else
+    else if(eState >= SFX_ITEM_AVAILABLE)
+    {
+        aForbiddenRulesCB.EnableTriState( FALSE );
         aForbiddenRulesCB.Check(((const SfxBoolItem&)rSet.Get(nWhich)).GetValue());
+    }
+    else
+        aForbiddenRulesCB.SetState( STATE_DONTKNOW );
 
     aScriptSpaceCB.SaveValue();
     aHangingPunctCB.SaveValue();
     aForbiddenRulesCB.SaveValue();
+}
+/* -----------------------------19.12.00 12:59--------------------------------
+
+ ---------------------------------------------------------------------------*/
+IMPL_LINK( SvxAsianTabPage, ClickHdl_Impl, TriStateBox*, pBox )
+{
+    pBox->EnableTriState( FALSE );
+    return 0;
 }
