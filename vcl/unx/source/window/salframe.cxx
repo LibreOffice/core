@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-14 13:31:25 $
+ *  last change: $Author: cp $ $Date: 2001-06-26 11:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2109,23 +2109,11 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         nSize = 1;
     }
 
-    // PreeditCallback preedit style: commit the string and close preedit mode
     if (   mpInputContext != NULL
         && mpInputContext->UseContext()
-        && mpInputContext->IsPreeditMode()
-        && KeyRelease != pEvent->type )
-    {
-        if (nLen > 0) // cs00 IME does not filter cursor keyevents but sends them
-                      // to the application while in preedit mode (#86335#)
-            mpInputContext->CommitStringCallback( pString, nSize );
-    }
-    else
-    // PreeditPosition preedit style: not in preedit mode, but event is just
-    // longer than 1 unicode char
-    if (   mpInputContext != NULL
-        && mpInputContext->UseContext()
-        && nSize > 1
-        && KeyRelease != pEvent->type )
+        && KeyRelease != pEvent->type
+        && (   (nSize >  1)
+            || (nSize >  0 && mpInputContext->IsPreeditMode())) )
     {
         mpInputContext->CommitKeyEvent(pString, nSize);
     }
