@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_lib_container.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:09:49 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,8 @@ typedef ::std::list< ::xmlscript::LibDescriptor > t_descr_list;
 //==============================================================================
 class LibraryContainer
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    bool m_immediateFlush;
 
     typedef ::std::hash_map<
         ::rtl::OUString,
@@ -97,7 +98,7 @@ class LibraryContainer
     mutable bool m_inited;
     mutable bool m_modified;
     void verify_init(
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv )
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         const;
 
 public:
@@ -106,37 +107,39 @@ public:
     inline LibraryContainer(
         ::rtl::OUString const & container_url,
         ::osl::Mutex & mutex,
-        css::uno::Reference< css::uno::XComponentContext > const & xContext )
+        css::uno::Reference<css::uno::XComponentContext> const & xContext,
+        bool immediateFlush = true )
         : m_xContext( xContext ),
           m_container_url( container_url ),
           m_mutex( mutex ),
           m_inited( false ),
-          m_modified( false )
+          m_modified( false ),
+          m_immediateFlush( immediateFlush )
         {}
 
     static ::rtl::OUString get_libname(
         ::rtl::OUString const & url,
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
-        css::uno::Reference< css::uno::XComponentContext > const & xContext );
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+        css::uno::Reference<css::uno::XComponentContext> const & xContext );
 
-    bool flush(
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv )
+    void flush(
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         const;
     bool insert(
         ::rtl::OUString const & libname,
         ::rtl::OUString const & url,
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv );
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
     bool remove(
         ::rtl::OUString const & libname,
         ::rtl::OUString const & url,
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
         bool exact = true );
     bool has(
         ::rtl::OUString const & libname,
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv )
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         const;
     t_descr_list getLibs(
-        css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv )
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         const;
 };
 
