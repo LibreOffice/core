@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:17:18 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ ENGLISH ] = "~Userdefined" ;
         Text [ norwegian ] = "~Brukerdefinert " ;
         Text [ italian ] = "Definito dall'utente" ;
-        Text [ portuguese_brazilian ] = "~Definido pelo usu·rio" ;
+        Text [ portuguese_brazilian ] = "~Definido pelo usu?rio" ;
         Text [ portuguese ] = "Definido pelo ~utilizador" ;
         Text [ finnish ] = "~K‰ytt‰j‰n m‰‰ritt‰m‰t" ;
         Text [ danish ] = "Brugerdefineret" ;
@@ -390,16 +390,16 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     StringList [ polish ] =
     {
             < "Suma" ; Default ; > ;
-        < "IloúÊ" ; Default ; > ;
-        < "årednia wartoúÊ" ; Default ; > ;
+        < "Ilo?Ê" ; Default ; > ;
+        < "?rednia warto?Ê" ; Default ; > ;
         < "Max" ; Default ; > ;
         < "Min" ; Default ; > ;
         < "Iloczyn" ; Default ; > ;
-        < "IloúÊ (tylko liczby)" ; Default ; > ;
+        < "Ilo?Ê (tylko liczby)" ; Default ; > ;
         < "Odchylenie standardowe (PrÛbka)" ; Default ; > ;
         < "Odch.stdc (populacja)" ; Default ; > ;
         < "Wariancja (PrÛbka)" ; Default ; > ;
-        < "Wariancja (ZbiorowoúÊ generalna)" ; Default ; > ;
+        < "Wariancja (Zbiorowo?Ê generalna)" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -618,7 +618,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ english_us ] = "Subtotals" ;
         Text[ chinese_simplified ] = "∑÷¿‡ª„◊‹";
         Text[ russian ] = "œÓÏÂÊÛÚÓ˜Ì˚Â ËÚÓ„Ë";
-        Text[ polish ] = "Sumy poúrednie";
+        Text[ polish ] = "Sumy po?rednie";
         Text[ japanese ] = "è¨åv";
         Text[ chinese_traditional ] = "§p≠p";
         Text[ arabic ] = "Subtotals";
@@ -634,7 +634,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ ENGLISH ] = "Function" ;
         Text [ norwegian ] = "Funksjon" ;
         Text [ italian ] = "Funzione" ;
-        Text [ portuguese_brazilian ] = "FunÁ„o" ;
+        Text [ portuguese_brazilian ] = "Fun??o" ;
         Text [ portuguese ] = "FunÁ„o" ;
         Text [ finnish ] = "Toiminto" ;
         Text [ danish ] = "Funktion" ;
