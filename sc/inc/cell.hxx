@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-31 17:17:22 $
+ *  last change: $Author: nn $ $Date: 2000-11-23 20:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 #define USE_MEMPOOL
 #define TEXTWIDTH_DIRTY     0xffff
 
+// in addition to SCRIPTTYPE_... flags from scripttypeitem.hxx:
+// set (in nScriptType) if type has not been determined yet
+#define SC_SCRIPTTYPE_UNKNOWN   0x08
+
 class ScDocument;
 class EditTextObject;
 class ScMatrix;
@@ -99,10 +103,14 @@ protected:
     ScBroadcasterList*  pBroadcaster;
     USHORT          nTextWidth;
     BYTE            eCellType;      // enum CellType - BYTE spart Speicher
+    BYTE            nScriptType;
 
 public: // fuer Idle-Berechnung
     USHORT  GetTextWidth() const        { return nTextWidth; }
     void    SetTextWidth( USHORT nNew ) { nTextWidth = nNew; }
+
+    BYTE    GetScriptType() const       { return nScriptType; }
+    void    SetScriptType( BYTE nNew )  { nScriptType = nNew; }
 
 protected:
                     ~ScBaseCell();  // nicht virtuell -> darf nicht direkt aufgerufen werden
@@ -437,13 +445,13 @@ public:
 inline ScBaseCell::ScBaseCell( CellType eNewType ) :
     eCellType( eNewType ),
     pNote( NULL ),
-    pBroadcaster( NULL ), nTextWidth( TEXTWIDTH_DIRTY )
+    pBroadcaster( NULL ), nTextWidth( TEXTWIDTH_DIRTY ), nScriptType( SC_SCRIPTTYPE_UNKNOWN )
 {
 }
 
 inline ScBaseCell::ScBaseCell( const ScBaseCell& rBaseCell ) :
     eCellType( rBaseCell.eCellType ),
-    pBroadcaster( NULL ), nTextWidth( rBaseCell.nTextWidth )
+    pBroadcaster( NULL ), nTextWidth( rBaseCell.nTextWidth ), nScriptType( SC_SCRIPTTYPE_UNKNOWN )
 {
     if (rBaseCell.pNote)
         pNote = new ScPostIt( *rBaseCell.pNote );
