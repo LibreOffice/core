@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:57:31 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ String STR_MENU_CFGITEM
     TEXT[ czech ] = "Konfigurační menu";
     TEXT[ hebrew ] = "‮תפריט תצורה‬";
     TEXT[ hindi ] = "रूप-रेखा मेनु";
+    TEXT[ slovak ] = "Konfiguračné menu";
 };
 
 String STR_MENU_ADDONS
@@ -123,6 +124,7 @@ String STR_MENU_ADDONS
     TEXT[ czech ] = "~Add-Ons";
     TEXT[ hebrew ] = "~Add-Ons";
     TEXT[ hindi ] = "~Add-Ons";
+    TEXT[ slovak ] = "~Add-Ons";
 };
 
 Menu MN_CLIPBOARDFUNCS
@@ -162,6 +164,7 @@ Menu MN_CLIPBOARDFUNCS
             Text[ czech ] = "Vyjmout";
             Text[ hebrew ] = "‮גזירה‬";
             Text[ hindi ] = "काटो";
+            Text[ slovak ] = "Vys~trihnúť";
         };
         MenuItem
         {
@@ -196,6 +199,7 @@ Menu MN_CLIPBOARDFUNCS
             Text[ czech ] = "Kopírovat";
             Text[ hebrew ] = "‮העתקה‬";
             Text[ hindi ] = "~प्रतिलिपि";
+            Text[ slovak ] = "~Kopírovať";
         };
         MenuItem
         {
@@ -230,6 +234,7 @@ Menu MN_CLIPBOARDFUNCS
             Text[ czech ] = "Vložit";
             Text[ hebrew ] = "‮הדבקה‬";
             Text[ hindi ] = "~छिपकाओ";
+            Text[ slovak ] = "~Vložiť";
         };
     };
 };
@@ -418,6 +423,7 @@ String SID_WIN_FULLSCREEN
     Text[ czech ] = "Opustit celoobrazovkový režim";
     Text[ hebrew ] = "‮עזיבת מצב חלון מלא‬";
     Text[ hindi ] = "Leave Full-Screen Mode";
+    Text[ slovak ] = "Opustiť Full-Screen mód";
 };
 
 String STR_MENU_ADDONHELP
@@ -432,7 +438,10 @@ String STR_MENU_ADDONHELP
     TEXT[ korean ] = "추가 기능(Add-On) 도움말";
     TEXT[ chinese_simplified ] = "Add-~On 帮助";
     TEXT[ chinese_traditional ] = "Add-~On 說明";
+    TEXT[ slovak ] = "Add-~On Pomocník";
 };
 
 // ******************************************************************* EOF
+
+
 
