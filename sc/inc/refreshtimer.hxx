@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refreshtimer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2001-04-21 20:21:05 $
+ *  last change: $Author: er $ $Date: 2001-04-25 14:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,11 @@ public:
     virtual                     ~ScRefreshTimer();
 
             ScRefreshTimer&     operator=( const ScRefreshTimer& r )
-                                    { SetRefreshControl(0); AutoTimer::operator=( r ); }
+                                    {
+                                        SetRefreshControl(0);
+                                        AutoTimer::operator=( r );
+                                        return *this;
+                                    }
 
             BOOL                operator==( const ScRefreshTimer& r ) const
                                     { return GetTimeout() == r.GetTimeout(); }
