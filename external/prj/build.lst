@@ -1,1 +1,4 @@
 es	external_stub							usr1	-	all	es_mkout NULL
+ef      external\psprint             nmake   -       all     ef_psprint NULL
+ef      external\psprint\afm             nmake   -       all     ef_afm NULL
+ef      external\psprint\ppds             nmake   -       all     ef_ppds NULL
