@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:34 $
+ *  last change: $Author: mba $ $Date: 2001-02-19 11:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,6 @@ public:
     BOOL                IsFadeIn() const;
     BOOL                IsAutoHide( BOOL bSelf = FALSE ) const;
     SplitWindow*        GetSplitWindow();
-    static void         EndAutoShow_Impl();
 
     virtual void        AutoHide();
     virtual void        FadeOut();

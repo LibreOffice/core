@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:58 $
+ *  last change: $Author: mba $ $Date: 2001-02-19 11:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,13 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
 long SfxTopWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
-        SfxSplitWindow::EndAutoShow_Impl();
+    {
+        Window* pWindow = rNEvt.GetWindow();
+        const MouseEvent* pMEvent = rNEvt.GetMouseEvent();
+        Point aPos = pWindow->OutputToScreenPixel( pMEvent->GetPosPixel() );
+        SfxWorkWindow *pWorkWin = pFrame->GetWorkWindow_Impl();
+        pWorkWin->EndAutoShow_Impl( aPos );
+    }
 
     return Window::PreNotify( rNEvt );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:54 $
+ *  last change: $Author: mba $ $Date: 2001-02-19 11:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,13 +303,14 @@ public:
     BOOL                    PrepareClose_Impl();
     virtual void            ArrangeChilds_Impl();
     void                    DeleteControllers_Impl();
+    void                    SaveStatus_Impl();
     void                    HidePopups_Impl(BOOL bHide, BOOL bParent=FALSE, USHORT nId=0);
     void                    ConfigChild_Impl(SfxChildIdentifier,
                                              SfxDockingConfig, USHORT);
     void                    MakeChildsVisible_Impl( BOOL bVis );
     void                    ArrangeAutoHideWindows( SfxSplitWindow *pSplit );
     BOOL                    IsAutoHideMode( const SfxSplitWindow *pSplit );
-    void                    EndAutoShow_Impl();
+    void                    EndAutoShow_Impl( Point aPos );
 
     // Methoden f"ur Objectbars
     virtual void            UpdateObjectBars_Impl();
