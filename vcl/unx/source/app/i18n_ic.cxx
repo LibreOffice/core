@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:55:36 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,7 +822,8 @@ SalI18N_InputContext::EndExtTextInput( USHORT nFlags )
         XFree(preedit_attr);
 
         char *pPendingChars = XmbResetIC( maContext );
-        if (pPendingChars == NULL && CallDoneAfterResetIC() )
+
+        if (pPendingChars == NULL && maClientData.eState != ePreeditStatusStartPending )
             PreeditDoneCallback (maContext, (char*)&maClientData, NULL);
 
         preedit_attr = XVaCreateNestedList(0,
