@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 08:16:16 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,6 +683,17 @@ Reference< XPropertySet > ODBTable::createEmptyObject()
     OTableColumnDescriptor* pRet = new OTableColumnDescriptor();
     Reference< XPropertySet > xRet = pRet;
     return xRet;
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void SAL_CALL ODBTable::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    OTable_Base::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL ODBTable::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    OTable_Base::release();
 }
 // -----------------------------------------------------------------------------
 

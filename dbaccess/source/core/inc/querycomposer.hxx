@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 11:04:49 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,6 @@ namespace dbaccess
 
         ~OQueryComposer();
 
-        DECLARE_CTY_DEFAULTS(OSubComponent);  // impl acquire and release
-
         void SAL_CALL disposing(void);
         // ::com::sun::star::lang::XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
@@ -178,6 +176,8 @@ namespace dbaccess
         // ::com::sun::star::uno::XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
                 throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:09:12 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,15 +180,14 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
 
     // com::sun::star::uno::XInterface
-        //  virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
 
     // OComponentHelper
         virtual void SAL_CALL disposing(void);
 
     // ::com::sun::star::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
-        // XInterface
-        DECLARE_CTY_DEFAULTS(OTable_Base);
 
     // com::sun::star::beans::XPropertySet
         //  virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);

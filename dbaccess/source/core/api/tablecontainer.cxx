@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 12:06:09 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 10:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,4 +804,14 @@ void SAL_CALL OTableContainer::dropByIndex( sal_Int32 index ) throw(SQLException
     dropByName((*m_aElements[index]).first);
 }
 // -------------------------------------------------------------------------
+void SAL_CALL OTableContainer::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    m_rParent.acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OTableContainer::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    m_rParent.release();
+}
+// -----------------------------------------------------------------------------
 
