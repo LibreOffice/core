@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:07:42 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ String STR_CENTER_HORI
     TEXT [ dutch ] = "~Gecentreerd" ;
     TEXT [ spanish ] = "~Centro" ;
     TEXT [ english_us ] = "~Center" ;
-    TEXT[ chinese_simplified ] = "å±…ä¸­(~C)";
+    TEXT[ chinese_simplified ] = "å±…ä¸­";
     TEXT[ russian ] = "Ïî öåíòğó";
     TEXT[ polish ] = "~Poœrodku";
     TEXT[ japanese ] = "ä¸­å¤®(~C)";
@@ -552,7 +552,7 @@ String STR_REL_PRTAREA
     Text [ spanish ] = "Área de texto del párrafo" ;
     Text [ french ] = "Zone de texte de paragraphe" ;
     Text [ dutch ] = "Tekstbereik" ;
-    Text[ chinese_simplified ] = "æ®µè½æ–‡å­—åŒºåŸŸ";
+    Text[ chinese_simplified ] = "æ–‡å­—åŒºåŸŸ";
     Text[ russian ] = "Îáëàñòü òåêñòà";
     Text[ polish ] = "Obszar tekstu";
     Text[ japanese ] = "æ®µè½ç¯„å›²";
@@ -612,6 +612,7 @@ String STR_REL_LINE
 {
     TEXT = "Textzeile" ;
     Text [ english_us ] = "Line of text" ;
+    Text[ chinese_simplified ] = "æ–‡å­—çº¿æ¡";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: H-Rel
