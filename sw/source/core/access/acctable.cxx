@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 08:05:57 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -1447,6 +1446,14 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
     if( pCrsrShell == NULL )
         return;
 
+    // --> OD 2004-11-16 #111714# - assure, that child, indentified by the given
+    // index, isn't already selected.
+    if ( IsChildSelected( nChildIndex ) )
+    {
+        return;
+    }
+    // <--
+
     // now we can start to do the work: check whether we already have
     // a table selection (in 'our' table). If so, extend the
     // selection, else select the current cell.
@@ -1602,8 +1609,9 @@ Reference<XAccessible> SAL_CALL SwAccessibleTable::getSelectedAccessibleChild(
     return getAccessibleChild( nChildIndex );
 }
 
+// --> OD 2004-11-16 #111714# - index has to be treated as global child index.
 void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
-    sal_Int32 nSelectedChildIndex )
+    sal_Int32 nChildIndex )
     throw ( IndexOutOfBoundsException,
             RuntimeException )
 {
@@ -1612,15 +1620,18 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
 
     SwCrsrShell* pCrsrShell = GetCrsrShell();
 
-    // paremter checking (part 1): index lower 0
-    if( nSelectedChildIndex < 0 || !pCrsrShell )
+    // --> OD 2004-11-16 #111714# - index has to be treated as global child index
+    if ( !pCrsrShell )
         throw IndexOutOfBoundsException();
 
-    sal_Int32 nChildIndex = GetIndexOfSelectedChild( nSelectedChildIndex );
-
-    // parameter checking (part 2): index higher than selected children?
-    if( nChildIndex < 0 )
+    // assure, that given child index is in bounds.
+    if ( nChildIndex < 0 || nChildIndex >= GetChildCount() )
         throw IndexOutOfBoundsException();
+
+    // assure, that child, identified by the given index, is selected.
+    if ( !IsChildSelected( nChildIndex ) )
+        return;
+    // <--
 
     const SwTableBox* pBox = GetTableBox( nChildIndex );
     DBG_ASSERT( pBox != NULL, "We need the table box." );
