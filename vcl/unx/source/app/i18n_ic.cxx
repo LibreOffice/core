@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:27:15 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     maClientData.aText.pCharStyle     = NULL;
 
     SalI18N_InputMethod *pInputMethod;
-    pInputMethod = GetSalData()->GetDefDisp()->GetInputMethod();
+    pInputMethod = GetSalData()->GetDisplay()->GetInputMethod();
     mbMultiLingual = pInputMethod->IsMultiLingual();
 
     mnSupportedPreeditStyle =   XIMPreeditCallbacks | XIMPreeditPosition
@@ -337,7 +337,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                 // XCreateIC() fails on Redflag Linux 2.0 if there is no
                 // fontset though the data itself is not evaluated nor is
                 // it required according to the X specs.
-                Display* pDisplay = GetSalData()->GetDefDisp()->GetDisplay();
+                Display* pDisplay = GetSalData()->GetDisplay()->GetDisplay();
                 XFontSet pFontSet = get_font_set(pDisplay);
 
                 if (pFontSet != NULL)
@@ -489,7 +489,7 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
             if ( maContext == NULL )
             {
                 SalI18N_InputMethod *pInputMethod;
-                pInputMethod = GetSalData()->GetDefDisp()->GetInputMethod();
+                pInputMethod = GetSalData()->GetDisplay()->GetInputMethod();
 
                 maContext = XCreateIC( pInputMethod->GetMethod(),
                                        XNVaNestedList, mpAttributes,
