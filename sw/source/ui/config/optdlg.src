@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-16 14:49:16 $
+ *  last change: $Author: os $ $Date: 2002-05-31 07:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_CROSS
     {
-        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Hilf~slinien beim Verschieben" ;
         Text [ ENGLISH ] = "Guides while moving" ;
@@ -141,7 +141,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_HANDLE
     {
-        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Einfa~che Griffe" ;
         Text [ ENGLISH ] = "Simple control points" ;
@@ -169,7 +169,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_BIGHANDLE
     {
-        Pos = MAP_APPFONT ( 12 , 79 ) ;
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "G~roße Griffe" ;
         Text [ ENGLISH ] = "Large control points" ;
@@ -413,7 +413,7 @@ TabPage TP_CONTENT_OPT
     };
     FixedLine FL_DISP
     {
-        Pos = MAP_APPFONT ( 6 , 95 ) ;
+        Pos = MAP_APPFONT ( 6 , 56 ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
         Text = "Anzeigen" ;
         Text [ ENGLISH ] = "Display" ;
@@ -444,7 +444,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_GRF
     {
-        Pos = MAP_APPFONT ( 12 , 106 ) ;
+        Pos = MAP_APPFONT ( 12 , 67 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Grafiken und Objekte" ;
         Text [ ENGLISH ] = "Gra~phics and Objects" ;
@@ -476,7 +476,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_TBL
     {
-        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Pos = MAP_APPFONT ( 12 , 80 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Tabellen          " ;
         Text [ ENGLISH ] = "~Tables" ;
@@ -506,7 +506,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_DRWFAST
     {
-        Pos = MAP_APPFONT ( 12 , 132 ) ;
+        Pos = MAP_APPFONT ( 12 , 93 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "Zeichnungen und ~Kontrollfelder" ;
         Text [ ENGLISH ] = "Dra~wings and controls" ;
@@ -536,7 +536,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_FIELD
     {
-        Pos = MAP_APPFONT ( 12 , 145 ) ;
+        Pos = MAP_APPFONT ( 12 , 106 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "F~eldnamen" ;
         Text [ ENGLISH ] = "~Field names" ;
@@ -565,7 +565,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_POSTIT
     {
-        Pos = MAP_APPFONT ( 12 , 158 ) ;
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "N~otizen" ;
         Text [ ENGLISH ] = "N~otes" ;
@@ -2734,7 +2734,7 @@ TabPage TP_OPTSHDWCRSR
     FixedLine FL_SEPARATOR_SHDW
     {
         Pos = MAP_APPFONT ( 125 , 14 ) ;
-        Size = MAP_APPFONT ( 4 , 93 ) ;
+        Size = MAP_APPFONT ( 4 , 79 ) ;
         Vert = TRUE;
     };
     FixedLine FL_SHDWCRSFLAG
@@ -2947,7 +2947,7 @@ TabPage TP_OPTSHDWCRSR
     };
     FixedLine FL_CRSR_OPT
     {
-        Pos = MAP_APPFONT ( 130 , 110 ) ;
+        Pos = MAP_APPFONT ( 130 , 96 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
         Text = "Cursor in geschützten Zonen" ;
         Text [ ENGLISH ] = "Cursor in protected areas" ;
@@ -2975,7 +2975,7 @@ TabPage TP_OPTSHDWCRSR
     };
     CheckBox CB_ALLOW_IN_PROT
     {
-        Pos = MAP_APPFONT ( 136 , 121 ) ;
+        Pos = MAP_APPFONT ( 136 , 107 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
