@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:17:07 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,9 +188,12 @@ FloatingWindow RID_BASICIDE_OBJCAT
                 Text[ arabic ] = "ÚÑÖ";
                 Text[ greek ] = "ÅìöÜíéóç";
                 Text[ korean ] = "í‘œì‹œ";
-                Text[ turkish ] = "Görüntüle";
+                Text[ turkish ] = "Göster";
                 Text[ catalan ] = "Mostra";
                 Text[ thai ] = "à¹à¸ªà¸”à¸‡";
+                Text[ czech ] = "Zobrazit";
+                Text[ hebrew ] = "â€®×”×¦×’×”â€¬";
+                Text[ hindi ] = "à¤¦à¤¿à¤–à¤¾à¤“";
             };
             /*
             ToolBoxItem
@@ -276,6 +279,19 @@ FloatingWindow RID_BASICIDE_OBJCAT
     Text[ turkish ] = "Nesneler";
     Text[ catalan ] = "Objectes";
     Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸";
+    Text[ czech ] = "Objekty";
+    Text[ hebrew ] = "Objekte";
+    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥";
 };
+
+
+
+
+
+
+
+
+
+
 
 
