@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-26 20:35:55 $
+ *  last change: $Author: kz $ $Date: 2001-11-16 23:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,6 +736,7 @@ ModalDialog DLG_ORDERCRIT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Orden";
 };
+
 
 
 
