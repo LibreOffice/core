@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcnitm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-05 13:47:47 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,8 +173,9 @@ BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
             const INT32 nCount = aNameSequence.getLength();
             Any aAny;
             AttributeData* pData;
+            INT32 nAttr;
 
-            for( INT32 nAttr = 0; nAttr < nCount; nAttr++ )
+            for( nAttr = 0; nAttr < nCount; nAttr++ )
             {
                 const OUString aName( *pNames++ );
 
