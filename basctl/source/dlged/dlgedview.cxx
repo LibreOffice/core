@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:49:59 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,6 @@
 #include <sfx2/viewfrm.hxx>
 #endif
 
-#ifndef _BASCTL_PROPBRW_HXX
-#include "propbrw.hxx"
-#endif
-
 #include <basidesh.hxx>
 #include <iderdll.hxx>
 
@@ -109,15 +105,12 @@ void DlgEdView::MarkListHasChanged()
 {
     SdrView::MarkListHasChanged();
 
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : NULL;
-    if( pChildWin )
-        ((PropBrw*)(pChildWin->GetWindow()))->Update( this );
-
     DlgEdHint aHint( DLGED_HINT_SELECTIONCHANGED );
     if ( pDlgEditor )
+    {
         pDlgEditor->Broadcast( aHint );
+        pDlgEditor->UpdatePropertyBrowserDelayed();
+    }
 }
 
 //----------------------------------------------------------------------------
