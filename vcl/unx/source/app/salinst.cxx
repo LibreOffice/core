@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 10:12:20 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,10 @@ void DestroySalInstance( SalInstance *pInst )
 {
     SessionManagerClient::close();
     SalData *pSalData = GetSalData();
+    // dispose SalDisplay list from SalData
+    // would be done in a static destructor else which is
+    // a little late
+    pSalData->DeleteDisplays();
 
     // reset instance (only one instance in this version !!!)
     if( pSalData->pFirstInstance_ == pInst )
