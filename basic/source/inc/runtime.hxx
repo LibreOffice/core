@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-09-26 09:02:02 $
+ *  last change: $Author: ab $ $Date: 2000-10-12 14:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ public:
     ::osl::Directory* pDir;
 #endif
     INT16   nDirFlags;
-    USHORT  nCurDirPos;
+    short   nCurDirPos;
 
 #ifdef _USE_UNO
     Sequence< OUString > aDirSeq;
