@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:19:32 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,13 @@
 #include "outlobj.hxx"
 #include "sdtfchim.hxx"
 
+#ifndef _ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
+#include "../customshapes/EnhancedCustomShapeGeometry.hxx"
+#endif
+#ifndef _ENHANCED_CUSTOMSHAPE_TYPE_NAMES_HXX
+#include "../customshapes/EnhancedCustomShapeTypeNames.hxx"
+#endif
+
 
 //      textitem.hxx        editdata.hxx
 #define ITEMID_COLOR        EE_CHAR_COLOR
@@ -224,34 +231,41 @@ Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine( const S
 }
 const SdrObject* SdrObjCustomShape::GetSdrObjectFromCustomShape() const
 {
-    if ( !pRenderedCustomShape )
+    if ( !mXRenderedCustomShape.is() )
     {
         Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine( this ) );
         if ( xCustomShapeEngine.is() )
-        {
-            Reference< XShape > xRenderedShape = xCustomShapeEngine->render();
-            if ( xRenderedShape.is() )
-            {
-                ((SdrObjCustomShape*)this)->pRenderedCustomShape = GetSdrObjectFromXShape( xRenderedShape );
-
-                uno::Reference< lang::XComponent > xComponent( xRenderedShape, uno::UNO_QUERY );
-                xComponent->dispose();
-            }
-        }
+            ((SdrObjCustomShape*)this)->mXRenderedCustomShape = xCustomShapeEngine->render();
     }
+    SdrObject* pRenderedCustomShape = mXRenderedCustomShape.is()
+                ? GetSdrObjectFromXShape( mXRenderedCustomShape )
+                : NULL;
     return pRenderedCustomShape;
 }
 
 const sal_Bool SdrObjCustomShape::IsTextPath() const
 {
     const rtl::OUString sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
-    const rtl::OUString sOn( RTL_CONSTASCII_USTRINGPARAM ( "On" ) );
     sal_Bool bTextPathOn = sal_False;
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-    Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sOn );
+    Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
     if ( pAny )
         *pAny >>= bTextPathOn;
     return bTextPathOn;
+}
+
+const sal_Bool SdrObjCustomShape::UseNoFillStyle() const
+{
+    sal_Bool bRet = sal_False;
+    rtl::OUString sShapeType;
+    const rtl::OUString sPredefinedType( RTL_CONSTASCII_USTRINGPARAM ( "PredefinedType" ) );
+    SdrCustomShapeGeometryItem& rGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+    Any* pAny = rGeometryItem.GetPropertyValueByName( sPredefinedType );
+    if ( pAny )
+        *pAny >>= sShapeType;
+    bRet = IsCustomShapeFilledByDefault( EnhancedCustomShapeTypeNames::Get( sShapeType ) ) == 0;
+
+    return bRet;
 }
 
 const sal_Bool SdrObjCustomShape::IsMirroredX() const
@@ -384,20 +398,18 @@ sdr::properties::BaseProperties* SdrObjCustomShape::CreateObjectSpecificProperti
 TYPEINIT1(SdrObjCustomShape,SdrTextObj);
 SdrObjCustomShape::SdrObjCustomShape() :
     SdrTextObj(),
-    fObjectRotation( 0.0 ),
-    pRenderedCustomShape( NULL )
+    fObjectRotation( 0.0 )
 {
     bTextFrame = TRUE;
 }
 
 SdrObjCustomShape::~SdrObjCustomShape()
 {
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
 }
 
 void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bResizeFreeAllowed=TRUE;
+    rInfo.bResizeFreeAllowed=fObjectRotation == 0.0;
     rInfo.bResizePropAllowed=TRUE;
     rInfo.bRotateFreeAllowed=TRUE;
     rInfo.bRotate90Allowed  =TRUE;
@@ -488,12 +500,12 @@ void SdrObjCustomShape::NbcSetSnapRect( const Rectangle& rRect )
     ImpCheckShear();
     SetRectsDirty();
     SetChanged();
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+    mXRenderedCustomShape = NULL;
 }
 void SdrObjCustomShape::SetSnapRect( const Rectangle& rRect )
 {
     NbcSetSnapRect( rRect );
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+    mXRenderedCustomShape = NULL;
 }
 void SdrObjCustomShape::NbcSetLogicRect( const Rectangle& rRect )
 {
@@ -515,36 +527,47 @@ void SdrObjCustomShape::NbcSetLogicRect( const Rectangle& rRect )
     }
     SetRectsDirty();
     SetChanged();
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+    mXRenderedCustomShape = NULL;
 }
 void SdrObjCustomShape::SetLogicRect( const Rectangle& rRect )
 {
     NbcSetLogicRect(rRect);
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+    mXRenderedCustomShape = NULL;
 }
-
 void SdrObjCustomShape::Move( const Size& rSiz )
 {
-    SdrTextObj::Move( rSiz );
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+    if ( rSiz.Width() || rSiz.Height() )
+    {
+        Rectangle aBoundRect0;
+        if ( pUserCall )
+            aBoundRect0 = GetLastBoundRect();
+        // #110094#-14 SendRepaintBroadcast();
+        NbcMove(rSiz);
+        SetChanged();
+        BroadcastObjectChange();
+        SendUserCall(SDRUSERCALL_MOVEONLY,aBoundRect0);
+    }
 }
 void SdrObjCustomShape::NbcMove( const Size& rSiz )
 {
     SdrTextObj::NbcMove( rSiz );
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+    if ( mXRenderedCustomShape.is() )
+    {
+        SdrObject* pRenderedCustomShape = GetSdrObjectFromXShape( mXRenderedCustomShape );
+        if ( pRenderedCustomShape )
+            pRenderedCustomShape->NbcMove( rSiz );
+    }
 }
-
 void SdrObjCustomShape::Resize( const Point& rRef, const Fraction& xFact, const Fraction& yFact )
 {
     SdrTextObj::Resize( rRef, xFact, yFact );
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+    mXRenderedCustomShape = NULL;
 }
 void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& xFact, const Fraction& yFact )
 {
     SdrTextObj::NbcResize( rRef, xFact, yFact );
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+    mXRenderedCustomShape = NULL;
 }
-
 void SdrObjCustomShape::NbcRotate( const Point& rRef, long nWink, double sn, double cs )
 {
     sal_Bool bMirroredX = IsMirroredX();
@@ -587,7 +610,7 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, long nWink, double sn, dou
         fObjectRotation = 360 + fObjectRotation;
 
     SdrTextObj::NbcRotate( rRef, nWink, sn, cs );                           // applying text rotation
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+    mXRenderedCustomShape = NULL;
 }
 
 void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
@@ -653,18 +676,18 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
         SetMergedItem( aGeometryItem );
     }
     SdrTextObj::NbcMirror( rRef1, rRef2 );
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+    mXRenderedCustomShape = NULL;
 }
 
 void SdrObjCustomShape::Shear( const Point& rRef, long nWink, double tn, FASTBOOL bVShear )
 {
     SdrTextObj::Shear( rRef, nWink, tn, bVShear );
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+    mXRenderedCustomShape = NULL;
 }
 void SdrObjCustomShape::NbcShear( const Point& rRef, long nWink, double tn, FASTBOOL bVShear )
 {
     SdrTextObj::NbcShear(rRef,nWink,tn,bVShear);
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+    mXRenderedCustomShape = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -876,7 +899,7 @@ FASTBOOL SdrObjCustomShape::EndDrag( SdrDragStat& rDrag )
         }
 
         SetRectsDirty();
-        delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+        mXRenderedCustomShape = NULL;
         SetChanged();
     //  SendRepaintBroadcast();
         BroadcastObjectChange();
@@ -904,10 +927,15 @@ void SdrObjCustomShape::BrkDrag( SdrDragStat& rDrag ) const
         SdrTextObj::BrkDrag( rDrag );
 }
 
+void SdrObjCustomShape::TakeCreatePoly( const SdrDragStat& rDrag, XPolyPolygon& rXPP ) const
+{
+    rXPP.Clear();
+    GetLineGeometry( rXPP, this, sal_False );
+}
+
 void SdrObjCustomShape::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) const
 {
     rXPP.Clear();
-    FASTBOOL bRet = TRUE;
     const SdrHdl* pHdl = rDrag.GetHdl();
     if ( pHdl && ( pHdl->GetKind() == HDL_CUSTOMSHAPE1 ) )
         GetLineGeometry( rXPP, (SdrObjCustomShape*)rDrag.GetUser(), sal_False );
@@ -924,7 +952,7 @@ void SdrObjCustomShape::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXP
 FASTBOOL SdrObjCustomShape::IsAutoGrowHeight() const
 {
     const SfxItemSet& rSet = GetMergedItemSet();
-    FASTBOOL bIsAutoGrowHeight = ((SdrTextAutoGrowSizeItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWSIZE))).GetValue();
+    FASTBOOL bIsAutoGrowHeight = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
     if ( bIsAutoGrowHeight && IsVerticalWriting() )
         bIsAutoGrowHeight = ((SdrTextWordWrapItem&)(rSet.Get(SDRATTR_TEXT_WORDWRAP))).GetValue() == FALSE;
     return bIsAutoGrowHeight;
@@ -932,7 +960,7 @@ FASTBOOL SdrObjCustomShape::IsAutoGrowHeight() const
 FASTBOOL SdrObjCustomShape::IsAutoGrowWidth() const
 {
     const SfxItemSet& rSet = GetMergedItemSet();
-    FASTBOOL bIsAutoGrowWidth = ((SdrTextAutoGrowSizeItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWSIZE))).GetValue();
+    FASTBOOL bIsAutoGrowWidth = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
     if ( bIsAutoGrowWidth && !IsVerticalWriting() )
         bIsAutoGrowWidth = ((SdrTextWordWrapItem&)(rSet.Get(SDRATTR_TEXT_WORDWRAP))).GetValue() == FALSE;
     return bIsAutoGrowWidth;
@@ -1164,7 +1192,7 @@ FASTBOOL SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FAST
 
             SetRectsDirty();
             SetChanged();
-            delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+            mXRenderedCustomShape = NULL;
         }
     }
     return bRet;
@@ -1197,7 +1225,7 @@ FASTBOOL SdrObjCustomShape::AdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOO
             aRect.Bottom() += (sal_Int32)fBottomDiff;
 
             SetRectsDirty();
-            delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+            mXRenderedCustomShape = NULL;
             SetChanged();
     //      SendRepaintBroadcast();
             BroadcastObjectChange();
@@ -1308,7 +1336,7 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Recta
 void SdrObjCustomShape::EndTextEdit( SdrOutliner& rOutl )
 {
     SdrTextObj::EndTextEdit( rOutl );
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+    mXRenderedCustomShape = NULL;
 }
 void SdrObjCustomShape::TakeTextAnchorRect( Rectangle& rAnchorRect ) const
 {
@@ -1482,7 +1510,7 @@ void SdrObjCustomShape::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject
     SdrTextObj::NbcSetOutlinerParaObject( pTextObject );
     bBoundRectDirty = TRUE;
     SetRectsDirty(TRUE);
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+    mXRenderedCustomShape = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1564,6 +1592,17 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(BOOL bBezier) const
     return pGroup;
 }
 
+void SdrObjCustomShape::NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr )
+{
+    SdrObject::NbcSetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
+    if ( mXRenderedCustomShape.is() )
+    {
+        SdrObject* pRenderedCustomShape = GetSdrObjectFromXShape( mXRenderedCustomShape );
+        if ( pRenderedCustomShape )
+            pRenderedCustomShape->SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
+    }
+}
+
 void SdrObjCustomShape::SetPage( SdrPage* pNewPage )
 {
     SdrTextObj::SetPage( pNewPage );
@@ -1596,7 +1635,7 @@ void SdrObjCustomShape::RestGeoData(const SdrObjGeoData& rGeo)
     fObjectRotation = rAGeo.fObjectRotation;
     SetMirroredX( rAGeo.bMirroredX );
     SetMirroredY( rAGeo.bMirroredY );
-    delete pRenderedCustomShape, pRenderedCustomShape = NULL;
+    mXRenderedCustomShape = NULL;
 }
 
 void SdrObjCustomShape::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPolyPolygon)
