@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binarywritehandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:46:00 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,6 @@ namespace configmgr
             for (sal_Int32 i = 0 ; i < nNumLayers ; ++ i)
             {
                 uno::Reference<util::XTimeStamped> xTimeStamp = uno::Reference<util::XTimeStamped>(pLayers[i], uno::UNO_QUERY);
-                OSL_ENSURE(xTimeStamp.is(), "BackendAccess::writeMergedTree: No xTimeStamped Interface for layer");
 
                 OUString aTimeStamp = xTimeStamp.is() ? xTimeStamp->getTimestamp() : OUString();
                 m_BinaryWriter.write(aTimeStamp);
