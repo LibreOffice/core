@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntszctl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: pb $ $Date: 2001-03-19 13:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,8 +170,8 @@ void SvxFontSizeMenuControl::StateChanged(
                 const SfxItemPool& rPool = pSh->GetPool();
                 USHORT nWhich = rPool.GetWhich( SID_ATTR_CHAR_FONTHEIGHT );
                 const SfxMapUnit eUnit = rPool.GetMetric( nWhich );
-                long nH = pItem->GetHeight();
-                nVal = LOGIC( nH, (MapUnit)eUnit, MAP_POINT ) * 10;
+                long nH = pItem->GetHeight() * 10;
+                nVal = LOGIC( nH, (MapUnit)eUnit, MAP_POINT );
             }
             pMenu->SetCurHeight( nVal );
         }

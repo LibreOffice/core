@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-03-14 15:37:29 $
+ *  last change: $Author: pb $ $Date: 2001-03-19 13:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,10 +826,8 @@ void SvxFontSizeBox::StateChanged_Impl( SfxItemState eState, const SfxPoolItem* 
     if ( SFX_ITEM_AVAILABLE == eState )
     {
         // Metric Umrechnen
-        long nVal = 10 * LogicToLogic(
-                            ((const SvxFontHeightItem*)pState)->GetHeight(),
-                            (MapUnit)pCtrl->GetCoreMetric(),
-                            MAP_POINT );
+        long nH = ( (const SvxFontHeightItem*)pState )->GetHeight() * 10;
+        long nVal = LogicToLogic( nH, (MapUnit)pCtrl->GetCoreMetric(), MAP_POINT );
 
         // ge"andert => neuen Wert setzen
         if ( GetValue() != nVal )
