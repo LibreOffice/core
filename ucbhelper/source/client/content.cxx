@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:20:46 $
+ *  last change: $Author: vg $ $Date: 2003-07-25 11:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,7 @@ friend class ContentEventListener_Impl;
 
 private:
     void reinit( const Reference< XContent >& xContent );
+    void disposing(const EventObject& Source);
 
 public:
     Content_Impl() : m_nCommandId( 0 ) {};
@@ -1564,6 +1565,36 @@ Content_Impl::~Content_Impl()
     }
 }
 
+
+void Content_Impl::disposing( const EventObject& Source )
+{
+    Reference<XContent> xContent;
+
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+        if(Source.Source != m_xContent)
+            return;
+
+        xContent = m_xContent;
+
+        m_nCommandId = 0;
+        m_aURL = rtl::OUString();
+        m_xCommandProcessor = 0;
+        m_xContent = 0;
+    }
+
+    if ( xContent.is() )
+    {
+        try
+        {
+            xContent->removeContentEventListener( m_xContentEventListener );
+        }
+        catch ( RuntimeException const & )
+        {
+        }
+    }
+}
+
 //=========================================================================
 const rtl::OUString& Content_Impl::getURL() const
 {
@@ -1690,8 +1721,16 @@ Any Content_Impl::executeCommand( const Command& rCommand )
 //=========================================================================
 void Content_Impl::abortCommand()
 {
-    if ( ( m_nCommandId != 0 ) && m_xCommandProcessor.is() )
-        m_xCommandProcessor->abort( m_nCommandId );
+    sal_Int32 nCommandId;
+    Reference< XCommandProcessor > xCommandProcessor;
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+        nCommandId = m_nCommandId;
+        xCommandProcessor = m_xCommandProcessor;
+    }
+
+    if ( ( nCommandId != 0 ) && xCommandProcessor.is() )
+        xCommandProcessor->abort( nCommandId );
 }
 
 //=========================================================================
@@ -1765,11 +1804,7 @@ void SAL_CALL ContentEventListener_Impl::contentEvent( const ContentEvent& evt )
 void SAL_CALL ContentEventListener_Impl::disposing( const EventObject& Source )
     throw( RuntimeException )
 {
-    if ( Source.Source == m_rContent.m_xContent )
-    {
-        m_rContent.reinit( Reference< XContent >() );
-        m_rContent.m_aURL = rtl::OUString();
-    }
+    m_rContent.disposing(Source);
 }
 
 } /* namespace ucb */
