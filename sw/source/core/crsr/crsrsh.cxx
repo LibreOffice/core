@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:13:48 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:51:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2579,7 +2579,37 @@ FASTBOOL SwCrsrShell::FindValidCntntNode( BOOL bOnlyText )
 
     BOOL bOk = TRUE;
 
-    // was ist mit Tabelle?
+    // #i9059# cursor may not stand in protected cells
+    //         (unless cursor in protected areas is OK.)
+    const SwTableNode* pTableNode = rNdIdx.GetNode().FindTableNode();
+    if( !IsReadOnlyAvailable()  &&
+        pTableNode != NULL  &&  rNdIdx.GetNode().IsProtect() )
+    {
+        // we're in a table, and we're in a protected area, so we're
+        // probably in a protected cell.
+
+        // move forward into non-protected area.
+        SwPaM aPam( rNdIdx.GetNode(), 0 );
+        while( aPam.GetNode()->IsProtect() &&
+               aPam.Move( fnMoveForward, fnGoCntnt ) )
+            ; // nothing to do in the loop; the aPam.Move does the moving!
+
+        // didn't work? then go backwards!
+        if( aPam.GetNode()->IsProtect() )
+        {
+            SwPaM aTmpPaM( rNdIdx.GetNode(), 0 );
+            aPam = aTmpPaM;
+            while( aPam.GetNode()->IsProtect() &&
+                   aPam.Move( fnMoveBackward, fnGoCntnt ) )
+                ; // nothing to do in the loop; the aPam.Move does the moving!
+        }
+
+        // if we're successful, set the new position
+        if( ! aPam.GetNode()->IsProtect() )
+        {
+            *pCurCrsr->GetPoint() = *aPam.GetPoint();
+        }
+    }
 
     // in einem geschuetzten Bereich
     const SwSectionNode* pSectNd = rNdIdx.GetNode().FindSectionNode();
