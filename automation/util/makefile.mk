@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2004-01-20 16:17:45 $
+#   last change: $Author: rt $ $Date: 2004-06-17 11:42:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,7 +159,8 @@ APP1STDLIBS+=$(CPPULIB)
 
 .IF "$(GUI)"=="WNT"
 APP1STDLIBS += \
-        shell32.lib
+        shell32.lib \
+        advapi32.lib
 .ENDIF # "$(GUI)"=="WNT"
 
 
