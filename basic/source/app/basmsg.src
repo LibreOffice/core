@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmsg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:08:13 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ String S_PROG_START
     Text[ chinese_traditional ] = "Program start: ($Arg1); ($Arg2)";
     Text[ arabic ] = "Program start: ($Arg1); ($Arg2)";
     Text[ turkish ] = "Program baþlatma: ($Arg1); ($Arg2)";
+    Text[ catalan ] = "Inicio de programa: ($Arg1); ($Arg2)";
 };
 String S_ERROR_OUTSIDE_TESTCASE
 {
@@ -117,6 +118,7 @@ String S_ERROR_OUTSIDE_TESTCASE
     Text[ chinese_traditional ] = "Error outside of test case";
     Text[ arabic ] = "Error outside of test case";
     Text[ turkish ] = "Error outside of test case";
+    Text[ catalan ] = "Error fuera de un Testcase.";
 };
 String S_WARNING_PREFIX
 {
@@ -139,4 +141,5 @@ String S_WARNING_PREFIX
     Text[ chinese_traditional ] = "Warning: ";
     Text[ arabic ] = "Warning:";
     Text[ turkish ] = "Uyarý: ";
+    Text[ catalan ] = "Advertencia: ";
 };
