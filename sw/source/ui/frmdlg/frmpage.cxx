@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-21 17:52:33 $
+ *  last change: $Author: jp $ $Date: 2002-01-23 11:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2800,7 +2800,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
                                 ? ((SvxFrameDirectionItem*)pItem)->GetValue()
                                 : 0;
         for( nPos = aTextFlowLB.GetEntryCount(); nPos; )
-            if( (sal_uInt16)(long*)aTextFlowLB.GetEntryData( --nPos ) == nVal )
+            if( (sal_uInt16)(long)aTextFlowLB.GetEntryData( --nPos ) == nVal )
                 break;
         aTextFlowLB.SelectEntryPos( nPos );
         aTextFlowLB.SaveValue();
@@ -2846,7 +2846,7 @@ BOOL SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
         sal_uInt16 nPos = aTextFlowLB.GetSelectEntryPos();
         if( nPos != aTextFlowLB.GetSavedValue() )
         {
-            nPos = (sal_uInt16)(long*)aTextFlowLB.GetEntryData( nPos );
+            nPos = (sal_uInt16)(long)aTextFlowLB.GetEntryData( nPos );
             bRet |= 0 != rSet.Put( SvxFrameDirectionItem(
                                     (SvxFrameDirection)nPos, RES_FRAMEDIR ));
         }
