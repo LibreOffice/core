@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:40:18 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 14:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,8 @@
 #ifndef _SCRIPTINFO_HXX
 #include <scriptinfo.hxx>
 #endif
+
+namespace cssii = ::com::sun::star::i18n::InputSequenceCheckMode;
 
 SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0, 4 )
 
@@ -1626,13 +1628,12 @@ SwTxtNode& SwTxtNode::Insert( const XubString   &rStr,
             xub_StrLen nI = 0;
             xub_StrLen nTmpPos = aPos;
             xub_Unicode cChar;
+            sal_Int16 nCheckMode = rCTLOptions.IsCTLSequenceCheckingRestricted()? cssii::STRICT : cssii::BASIC;
 
             while ( nI < rStr.Len() )
             {
                 cChar = rStr.GetChar( nI++ );
-                if ( pCheckIt->xCheck->checkInputSequence(
-                        aText, nTmpPos - 1, cChar,
-                        ::com::sun::star::i18n::InputSequenceCheckMode::BASIC ) )
+                if ( pCheckIt->xCheck->checkInputSequence( aText, nTmpPos - 1, cChar, nCheckMode ) )
                 {
                     // character can be inserted
                     aText.Insert( cChar, nTmpPos++ );
