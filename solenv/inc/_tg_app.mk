@@ -108,6 +108,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP1LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP1LINKRES:b).rc >& $(NULLDEV)
+.IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP1ICON)" != ""
     @-+echo 1 ICON $(APP1ICON) >> $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF
@@ -115,6 +116,15 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP1LINKRES:b).rc
     @-+echo #include  "$(APP1VERINFO)" >> $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF
+.ELSE			# "$(USE_SHELL)"=="4nt"
+.IF "$(APP1ICON)" != ""
+    @-+guw.pl echo 1 ICON $(APP1ICON) >> $(MISC)$/$(APP1LINKRES:b).rc
+.ENDIF
+.IF "$(APP1VERINFO)" != ""
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP1LINKRES:b).rc
+    @-+echo #include  \"$(APP1VERINFO)\" >> $(MISC)$/$(APP1LINKRES:b).rc
+.ENDIF
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF			# "$(APP1LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -153,10 +163,13 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         +if exist $(MISC)\$(APP1TARGET).lst type $(MISC)\$(APP1TARGET).lst  >> $(MISC)\$(APP1TARGET).lnk
         $(LINK) @$(MISC)\$(APP1TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
-
 .IF "$(APP1TARGET)" == "loader"
     +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -183,8 +196,8 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .IF "$(MAPSYM)" != ""
     mapfix $(MISC)\$(@B).map
     $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP1TARGET).map
-    @copy $(APP1TARGET).sym $(BIN)\$(APP1TARGET).sym
-    @del $(APP1TARGET).sym
+    @$(COPY) $(APP1TARGET).sym $(BIN)\$(APP1TARGET).sym
+    @$(RM) $(APP1TARGET).sym
 .ENDIF			# "$(MAPSYM)" != ""
 .ENDIF			# "$(TARGETTYPE)" == "GUI"
 .ENDIF			# "$(GUI)" == "WIN"
@@ -303,6 +316,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP2LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP2LINKRES:b).rc >& $(NULLDEV)
+.IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP2ICON)" != ""
     @-+echo 1 ICON $(APP2ICON) >> $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF
@@ -310,6 +324,15 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP2LINKRES:b).rc
     @-+echo #include  "$(APP2VERINFO)" >> $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF
+.ELSE			# "$(USE_SHELL)"=="4nt"
+.IF "$(APP2ICON)" != ""
+    @-+guw.pl echo 1 ICON $(APP2ICON) >> $(MISC)$/$(APP2LINKRES:b).rc
+.ENDIF
+.IF "$(APP2VERINFO)" != ""
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP2LINKRES:b).rc
+    @-+echo #include  \"$(APP2VERINFO)\" >> $(MISC)$/$(APP2LINKRES:b).rc
+.ENDIF
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF			# "$(APP2LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -348,10 +371,13 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         +if exist $(MISC)\$(APP2TARGET).lst type $(MISC)\$(APP2TARGET).lst  >> $(MISC)\$(APP2TARGET).lnk
         $(LINK) @$(MISC)\$(APP2TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
-
 .IF "$(APP2TARGET)" == "loader"
     +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -378,8 +404,8 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .IF "$(MAPSYM)" != ""
     mapfix $(MISC)\$(@B).map
     $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP2TARGET).map
-    @copy $(APP2TARGET).sym $(BIN)\$(APP2TARGET).sym
-    @del $(APP2TARGET).sym
+    @$(COPY) $(APP2TARGET).sym $(BIN)\$(APP2TARGET).sym
+    @$(RM) $(APP2TARGET).sym
 .ENDIF			# "$(MAPSYM)" != ""
 .ENDIF			# "$(TARGETTYPE)" == "GUI"
 .ENDIF			# "$(GUI)" == "WIN"
@@ -498,6 +524,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP3LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP3LINKRES:b).rc >& $(NULLDEV)
+.IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP3ICON)" != ""
     @-+echo 1 ICON $(APP3ICON) >> $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF
@@ -505,6 +532,15 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP3LINKRES:b).rc
     @-+echo #include  "$(APP3VERINFO)" >> $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF
+.ELSE			# "$(USE_SHELL)"=="4nt"
+.IF "$(APP3ICON)" != ""
+    @-+guw.pl echo 1 ICON $(APP3ICON) >> $(MISC)$/$(APP3LINKRES:b).rc
+.ENDIF
+.IF "$(APP3VERINFO)" != ""
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP3LINKRES:b).rc
+    @-+echo #include  \"$(APP3VERINFO)\" >> $(MISC)$/$(APP3LINKRES:b).rc
+.ENDIF
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF			# "$(APP3LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -543,10 +579,13 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         +if exist $(MISC)\$(APP3TARGET).lst type $(MISC)\$(APP3TARGET).lst  >> $(MISC)\$(APP3TARGET).lnk
         $(LINK) @$(MISC)\$(APP3TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
-
 .IF "$(APP3TARGET)" == "loader"
     +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -573,8 +612,8 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .IF "$(MAPSYM)" != ""
     mapfix $(MISC)\$(@B).map
     $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP3TARGET).map
-    @copy $(APP3TARGET).sym $(BIN)\$(APP3TARGET).sym
-    @del $(APP3TARGET).sym
+    @$(COPY) $(APP3TARGET).sym $(BIN)\$(APP3TARGET).sym
+    @$(RM) $(APP3TARGET).sym
 .ENDIF			# "$(MAPSYM)" != ""
 .ENDIF			# "$(TARGETTYPE)" == "GUI"
 .ENDIF			# "$(GUI)" == "WIN"
@@ -693,6 +732,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP4LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP4LINKRES:b).rc >& $(NULLDEV)
+.IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP4ICON)" != ""
     @-+echo 1 ICON $(APP4ICON) >> $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF
@@ -700,6 +740,15 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP4LINKRES:b).rc
     @-+echo #include  "$(APP4VERINFO)" >> $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF
+.ELSE			# "$(USE_SHELL)"=="4nt"
+.IF "$(APP4ICON)" != ""
+    @-+guw.pl echo 1 ICON $(APP4ICON) >> $(MISC)$/$(APP4LINKRES:b).rc
+.ENDIF
+.IF "$(APP4VERINFO)" != ""
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP4LINKRES:b).rc
+    @-+echo #include  \"$(APP4VERINFO)\" >> $(MISC)$/$(APP4LINKRES:b).rc
+.ENDIF
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF			# "$(APP4LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -738,10 +787,13 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         +if exist $(MISC)\$(APP4TARGET).lst type $(MISC)\$(APP4TARGET).lst  >> $(MISC)\$(APP4TARGET).lnk
         $(LINK) @$(MISC)\$(APP4TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
-
 .IF "$(APP4TARGET)" == "loader"
     +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -768,8 +820,8 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .IF "$(MAPSYM)" != ""
     mapfix $(MISC)\$(@B).map
     $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP4TARGET).map
-    @copy $(APP4TARGET).sym $(BIN)\$(APP4TARGET).sym
-    @del $(APP4TARGET).sym
+    @$(COPY) $(APP4TARGET).sym $(BIN)\$(APP4TARGET).sym
+    @$(RM) $(APP4TARGET).sym
 .ENDIF			# "$(MAPSYM)" != ""
 .ENDIF			# "$(TARGETTYPE)" == "GUI"
 .ENDIF			# "$(GUI)" == "WIN"
@@ -888,6 +940,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP5LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP5LINKRES:b).rc >& $(NULLDEV)
+.IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP5ICON)" != ""
     @-+echo 1 ICON $(APP5ICON) >> $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF
@@ -895,6 +948,15 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP5LINKRES:b).rc
     @-+echo #include  "$(APP5VERINFO)" >> $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF
+.ELSE			# "$(USE_SHELL)"=="4nt"
+.IF "$(APP5ICON)" != ""
+    @-+guw.pl echo 1 ICON $(APP5ICON) >> $(MISC)$/$(APP5LINKRES:b).rc
+.ENDIF
+.IF "$(APP5VERINFO)" != ""
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP5LINKRES:b).rc
+    @-+echo #include  \"$(APP5VERINFO)\" >> $(MISC)$/$(APP5LINKRES:b).rc
+.ENDIF
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF			# "$(APP5LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -933,10 +995,13 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         +if exist $(MISC)\$(APP5TARGET).lst type $(MISC)\$(APP5TARGET).lst  >> $(MISC)\$(APP5TARGET).lnk
         $(LINK) @$(MISC)\$(APP5TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
-
 .IF "$(APP5TARGET)" == "loader"
     +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -963,8 +1028,8 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .IF "$(MAPSYM)" != ""
     mapfix $(MISC)\$(@B).map
     $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP5TARGET).map
-    @copy $(APP5TARGET).sym $(BIN)\$(APP5TARGET).sym
-    @del $(APP5TARGET).sym
+    @$(COPY) $(APP5TARGET).sym $(BIN)\$(APP5TARGET).sym
+    @$(RM) $(APP5TARGET).sym
 .ENDIF			# "$(MAPSYM)" != ""
 .ENDIF			# "$(TARGETTYPE)" == "GUI"
 .ENDIF			# "$(GUI)" == "WIN"
@@ -1083,6 +1148,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP6LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP6LINKRES:b).rc >& $(NULLDEV)
+.IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP6ICON)" != ""
     @-+echo 1 ICON $(APP6ICON) >> $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF
@@ -1090,6 +1156,15 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP6LINKRES:b).rc
     @-+echo #include  "$(APP6VERINFO)" >> $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF
+.ELSE			# "$(USE_SHELL)"=="4nt"
+.IF "$(APP6ICON)" != ""
+    @-+guw.pl echo 1 ICON $(APP6ICON) >> $(MISC)$/$(APP6LINKRES:b).rc
+.ENDIF
+.IF "$(APP6VERINFO)" != ""
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP6LINKRES:b).rc
+    @-+echo #include  \"$(APP6VERINFO)\" >> $(MISC)$/$(APP6LINKRES:b).rc
+.ENDIF
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF			# "$(APP6LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -1128,10 +1203,13 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         +if exist $(MISC)\$(APP6TARGET).lst type $(MISC)\$(APP6TARGET).lst  >> $(MISC)\$(APP6TARGET).lnk
         $(LINK) @$(MISC)\$(APP6TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
-
 .IF "$(APP6TARGET)" == "loader"
     +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -1158,8 +1236,8 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .IF "$(MAPSYM)" != ""
     mapfix $(MISC)\$(@B).map
     $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP6TARGET).map
-    @copy $(APP6TARGET).sym $(BIN)\$(APP6TARGET).sym
-    @del $(APP6TARGET).sym
+    @$(COPY) $(APP6TARGET).sym $(BIN)\$(APP6TARGET).sym
+    @$(RM) $(APP6TARGET).sym
 .ENDIF			# "$(MAPSYM)" != ""
 .ENDIF			# "$(TARGETTYPE)" == "GUI"
 .ENDIF			# "$(GUI)" == "WIN"
@@ -1278,6 +1356,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP7LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP7LINKRES:b).rc >& $(NULLDEV)
+.IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP7ICON)" != ""
     @-+echo 1 ICON $(APP7ICON) >> $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF
@@ -1285,6 +1364,15 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP7LINKRES:b).rc
     @-+echo #include  "$(APP7VERINFO)" >> $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF
+.ELSE			# "$(USE_SHELL)"=="4nt"
+.IF "$(APP7ICON)" != ""
+    @-+guw.pl echo 1 ICON $(APP7ICON) >> $(MISC)$/$(APP7LINKRES:b).rc
+.ENDIF
+.IF "$(APP7VERINFO)" != ""
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP7LINKRES:b).rc
+    @-+echo #include  \"$(APP7VERINFO)\" >> $(MISC)$/$(APP7LINKRES:b).rc
+.ENDIF
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF			# "$(APP7LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -1323,10 +1411,13 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         +if exist $(MISC)\$(APP7TARGET).lst type $(MISC)\$(APP7TARGET).lst  >> $(MISC)\$(APP7TARGET).lnk
         $(LINK) @$(MISC)\$(APP7TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
-
 .IF "$(APP7TARGET)" == "loader"
     +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -1353,8 +1444,8 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .IF "$(MAPSYM)" != ""
     mapfix $(MISC)\$(@B).map
     $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP7TARGET).map
-    @copy $(APP7TARGET).sym $(BIN)\$(APP7TARGET).sym
-    @del $(APP7TARGET).sym
+    @$(COPY) $(APP7TARGET).sym $(BIN)\$(APP7TARGET).sym
+    @$(RM) $(APP7TARGET).sym
 .ENDIF			# "$(MAPSYM)" != ""
 .ENDIF			# "$(TARGETTYPE)" == "GUI"
 .ENDIF			# "$(GUI)" == "WIN"
@@ -1473,6 +1564,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP8LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP8LINKRES:b).rc >& $(NULLDEV)
+.IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP8ICON)" != ""
     @-+echo 1 ICON $(APP8ICON) >> $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF
@@ -1480,6 +1572,15 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP8LINKRES:b).rc
     @-+echo #include  "$(APP8VERINFO)" >> $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF
+.ELSE			# "$(USE_SHELL)"=="4nt"
+.IF "$(APP8ICON)" != ""
+    @-+guw.pl echo 1 ICON $(APP8ICON) >> $(MISC)$/$(APP8LINKRES:b).rc
+.ENDIF
+.IF "$(APP8VERINFO)" != ""
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP8LINKRES:b).rc
+    @-+echo #include  \"$(APP8VERINFO)\" >> $(MISC)$/$(APP8LINKRES:b).rc
+.ENDIF
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF			# "$(APP8LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -1518,10 +1619,13 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         +if exist $(MISC)\$(APP8TARGET).lst type $(MISC)\$(APP8TARGET).lst  >> $(MISC)\$(APP8TARGET).lnk
         $(LINK) @$(MISC)\$(APP8TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
-
 .IF "$(APP8TARGET)" == "loader"
     +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -1548,8 +1652,8 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .IF "$(MAPSYM)" != ""
     mapfix $(MISC)\$(@B).map
     $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP8TARGET).map
-    @copy $(APP8TARGET).sym $(BIN)\$(APP8TARGET).sym
-    @del $(APP8TARGET).sym
+    @$(COPY) $(APP8TARGET).sym $(BIN)\$(APP8TARGET).sym
+    @$(RM) $(APP8TARGET).sym
 .ENDIF			# "$(MAPSYM)" != ""
 .ENDIF			# "$(TARGETTYPE)" == "GUI"
 .ENDIF			# "$(GUI)" == "WIN"
@@ -1668,6 +1772,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP9LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP9LINKRES:b).rc >& $(NULLDEV)
+.IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP9ICON)" != ""
     @-+echo 1 ICON $(APP9ICON) >> $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF
@@ -1675,6 +1780,15 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP9LINKRES:b).rc
     @-+echo #include  "$(APP9VERINFO)" >> $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF
+.ELSE			# "$(USE_SHELL)"=="4nt"
+.IF "$(APP9ICON)" != ""
+    @-+guw.pl echo 1 ICON $(APP9ICON) >> $(MISC)$/$(APP9LINKRES:b).rc
+.ENDIF
+.IF "$(APP9VERINFO)" != ""
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP9LINKRES:b).rc
+    @-+echo #include  \"$(APP9VERINFO)\" >> $(MISC)$/$(APP9LINKRES:b).rc
+.ENDIF
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF			# "$(APP9LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -1713,10 +1827,13 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         +if exist $(MISC)\$(APP9TARGET).lst type $(MISC)\$(APP9TARGET).lst  >> $(MISC)\$(APP9TARGET).lnk
         $(LINK) @$(MISC)\$(APP9TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
-
 .IF "$(APP9TARGET)" == "loader"
     +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -1743,8 +1860,8 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .IF "$(MAPSYM)" != ""
     mapfix $(MISC)\$(@B).map
     $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP9TARGET).map
-    @copy $(APP9TARGET).sym $(BIN)\$(APP9TARGET).sym
-    @del $(APP9TARGET).sym
+    @$(COPY) $(APP9TARGET).sym $(BIN)\$(APP9TARGET).sym
+    @$(RM) $(APP9TARGET).sym
 .ENDIF			# "$(MAPSYM)" != ""
 .ENDIF			# "$(TARGETTYPE)" == "GUI"
 .ENDIF			# "$(GUI)" == "WIN"
@@ -1863,6 +1980,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP10LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP10LINKRES:b).rc >& $(NULLDEV)
+.IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP10ICON)" != ""
     @-+echo 1 ICON $(APP10ICON) >> $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF
@@ -1870,6 +1988,15 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP10LINKRES:b).rc
     @-+echo #include  "$(APP10VERINFO)" >> $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF
+.ELSE			# "$(USE_SHELL)"=="4nt"
+.IF "$(APP10ICON)" != ""
+    @-+guw.pl echo 1 ICON $(APP10ICON) >> $(MISC)$/$(APP10LINKRES:b).rc
+.ENDIF
+.IF "$(APP10VERINFO)" != ""
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP10LINKRES:b).rc
+    @-+echo #include  \"$(APP10VERINFO)\" >> $(MISC)$/$(APP10LINKRES:b).rc
+.ENDIF
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF			# "$(APP10LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -1908,10 +2035,13 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         +if exist $(MISC)\$(APP10TARGET).lst type $(MISC)\$(APP10TARGET).lst  >> $(MISC)\$(APP10TARGET).lnk
         $(LINK) @$(MISC)\$(APP10TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
-
 .IF "$(APP10TARGET)" == "loader"
     +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -1938,8 +2068,8 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .IF "$(MAPSYM)" != ""
     mapfix $(MISC)\$(@B).map
     $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP10TARGET).map
-    @copy $(APP10TARGET).sym $(BIN)\$(APP10TARGET).sym
-    @del $(APP10TARGET).sym
+    @$(COPY) $(APP10TARGET).sym $(BIN)\$(APP10TARGET).sym
+    @$(RM) $(APP10TARGET).sym
 .ENDIF			# "$(MAPSYM)" != ""
 .ENDIF			# "$(TARGETTYPE)" == "GUI"
 .ENDIF			# "$(GUI)" == "WIN"

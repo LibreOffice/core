@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-26 18:23:25 $
+#   last change: $Author: hjs $ $Date: 2002-04-10 11:34:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -203,6 +203,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP$(TNR)LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP$(TNR)LINKRES:b).rc >& $(NULLDEV)
+.IF "$(USE_SHELL)"=="4nt"
 .IF "$(APP$(TNR)ICON)" != ""
     @-+echo 1 ICON $(APP$(TNR)ICON) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF
@@ -210,6 +211,15 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
     @-+echo #include  "$(APP$(TNR)VERINFO)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF
+.ELSE			# "$(USE_SHELL)"=="4nt"
+.IF "$(APP$(TNR)ICON)" != ""
+    @-+guw.pl echo 1 ICON $(APP$(TNR)ICON) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+.ENDIF
+.IF "$(APP$(TNR)VERINFO)" != ""
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+    @-+echo #include  \"$(APP$(TNR)VERINFO)\" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+.ENDIF
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF			# "$(APP$(TNR)LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -248,10 +258,13 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         +if exist $(MISC)\$(APP$(TNR)TARGET).lst type $(MISC)\$(APP$(TNR)TARGET).lst  >> $(MISC)\$(APP$(TNR)TARGET).lnk
         $(LINK) @$(MISC)\$(APP$(TNR)TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
-
 .IF "$(APP$(TNR)TARGET)" == "loader"
     +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
     +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -278,8 +291,8 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .IF "$(MAPSYM)" != ""
     mapfix $(MISC)\$(@B).map
     $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP$(TNR)TARGET).map
-    @copy $(APP$(TNR)TARGET).sym $(BIN)\$(APP$(TNR)TARGET).sym
-    @del $(APP$(TNR)TARGET).sym
+    @$(COPY) $(APP$(TNR)TARGET).sym $(BIN)\$(APP$(TNR)TARGET).sym
+    @$(RM) $(APP$(TNR)TARGET).sym
 .ENDIF			# "$(MAPSYM)" != ""
 .ENDIF			# "$(TARGETTYPE)" == "GUI"
 .ENDIF			# "$(GUI)" == "WIN"

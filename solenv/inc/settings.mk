@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.106 $
+#   $Revision: 1.107 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-08 17:05:05 $
+#   last change: $Author: hjs $ $Date: 2002-04-10 11:34:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1074,7 +1074,11 @@ YACCFLAGS*=-d -o
 .IF "$(GUI)"=="UNX"
 SVIDL=svidl
 .ELSE
+.IF "$(USE_SHELL)"!="4nt"
+SVIDL=guw.pl svidl.exe
+.ELSE
 SVIDL=svidl.exe
+.ENDIF
 .ENDIF
 
 .IF "$(GUI)"=="WIN"
