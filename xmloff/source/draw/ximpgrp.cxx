@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpgrp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
+ *  last change: $Author: cl $ $Date: 2001-02-02 11:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,10 +118,11 @@ void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
     // create new group shape and add it to rShapes, use it
     // as base for the new group import
     AddShape( "com.sun.star.drawing.GroupShape" );
-    SdXMLShapeContext::StartElement(xAttrList);
 
     if(mxShape.is())
     {
+        SetStyle();
+
         SdXMLShapeContext::StartElement(xAttrList);
         mxChilds = uno::Reference< drawing::XShapes >::query( mxShape );
         if( mxChilds.is() )
