@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdmailmsg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-26 08:48:36 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,58 @@
 #ifndef _CMDMAILMSG_HXX_
 #include "cmdmailmsg.hxx"
 #endif
+
+//#############################################################
+// <HACK> #110368#
+// Mozilla and Co. expect file urls but not UTF8 encoded as we
+// do but in the current system encoding, so we have to recode
+// our file urls to this encoding
+#ifndef _RTL_URI_H_
+#include <rtl/uri.hxx>
+#endif
+
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
+
+/* a slightly modified version of Pchar in rtl/source/uri.c */
+const sal_Bool uriCharClass[128] =
+{
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* Pchar but without encoding slashes */
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* !"#$%&'()*+,-./  */
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, /* 0123456789:;<=>? */
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* @ABCDEFGHIJKLMNO */
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, /* PQRSTUVWXYZ[\]^_ */
+  0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* `abcdefghijklmno */
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0  /* pqrstuvwxyz{|}~  */
+};
+
+//-------------------------------------
+rtl::OUString reencode_file_url(
+    const rtl::OUString& file_url,
+    rtl_TextEncoding from_textenc,
+    rtl_TextEncoding to_textenc)
+{
+    rtl::OUString tmp = rtl::Uri::decode(
+        file_url, rtl_UriDecodeWithCharset, from_textenc);
+
+    return rtl::Uri::encode(
+        tmp, uriCharClass, rtl_UriEncodeIgnoreEscapes, to_textenc);
+}
+
+//-------------------------------------
+void reencode_file_url_list(/*inout*/ com::sun::star::uno::Sequence<rtl::OUString>& file_url_list)
+{
+    sal_uInt32 nmax = file_url_list.getLength();
+    for (sal_uInt32 i = 0; i < nmax; i++)
+        file_url_list[i] = reencode_file_url(
+            file_url_list[i], RTL_TEXTENCODING_UTF8, osl_getThreadTextEncoding());
+}
+//
+// </HACK> #110368#
+//#############################################################
+
 
 //------------------------------------------------------------------------
 // namespace directives
@@ -205,6 +257,12 @@ void SAL_CALL CmdMailMsg::setAttachement( const Sequence< ::rtl::OUString >& aAt
 {
     MutexGuard aGuard( m_aMutex );
     m_Attachments = aAttachment;
+
+    //#######################################
+    //#110368#
+    reencode_file_url_list(m_Attachments);
+    //#110368#
+    //#######################################
 }
 
 //------------------------------------------------
