@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_marshal.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #include <string.h>
 #include <osl/diagnose.h>
-
 #include <rtl/alloc.h>
 
 #include <uno/any2.h>
@@ -80,11 +79,11 @@ char g_bMarshalSystemIsLittleEndian = ((char*)&g_nDetectLittleEndian)[0];
 Marshal::Marshal( urp_BridgeImpl *pBridgeImpl,
                   sal_Int32 nBufferSize,
                   urp_extractOidCallback callback) :
-    m_callback( callback ),
     m_nBufferSize( nBufferSize ),
     m_base( (sal_Int8*)rtl_allocateMemory( nBufferSize ) ),
     m_pos( m_base + 2*sizeof( sal_Int32 ) ),
-    m_pBridgeImpl( pBridgeImpl )
+    m_pBridgeImpl( pBridgeImpl ),
+    m_callback( callback )
 {}
 
 Marshal::~Marshal( )
@@ -112,7 +111,7 @@ void Marshal::packOid( const ::rtl::OUString & oid )
     else
     {
         // null reference
-        sal_uInt16 nIndex = 0xffff;
+        nIndex = 0xffff;
         OUString dummy;
         packString( &dummy );
     }
