@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumberwrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2002-06-26 16:57:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 #define LOCALEDATA_SERVICENAME "com.sun.star.i18n.NativeNumberSupplier"
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 
 NativeNumberWrapper::NativeNumberWrapper(
