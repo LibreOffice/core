@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:14:58 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,45 +66,6 @@
 #pragma hdrstop
 
 //------------------------------------------------------------------
-
-#define _SI_DLL_HXX
-#define _SIDLL_HXX
-#define _SI_NOITEMS
-#define _SI_NOOTHERFORMS
-#define _SI_NOSBXCONTROLS
-#define _SINOSBXCONTROLS
-#define _SI_NODRW         //
-#define _SI_NOCONTROL
-#define _SVBOXITM_HXX
-//#define _SVCONTNR_HXX
-#define _SVDATTR_HXX
-#define _SVDXOUT_HXX
-#define _SVDEC_HXX
-#define _SVDIO_HXX
-#define _SVDLAYER_HXX
-#define _SVDRAG_HXX
-#define _SVINCVW_HXX
-#define _SV_MULTISEL_HXX
-#define _SVRTV_HXX
-//#define _SVTABBX_HXX
-//#define _SVTREEBOX_HXX
-//#define _SVTREELIST_HXX
-
-#define _SVX_DAILDLL_HXX
-#define _SVX_HYPHEN_HXX
-#define _SVX_IMPGRF_HXX
-#define _SVX_OPTITEMS_HXX
-#define _SVX_OPTGERL_HXX
-#define _SVX_OPTSAVE_HXX
-#define _SVX_OPTSPELL_HXX
-#define _SVX_OPTPATH_HXX
-#define _SVX_OPTLINGU_HXX
-#define _SVX_RULER_HXX
-#define _SVX_RULRITEM_HXX
-#define _SVX_SPLWRAP_HXX
-#define _SVX_SPLDLG_HXX
-#define _SVX_THESDLG_HXX
-
 
 // INCLUDE ---------------------------------------------------------------
 #include "scitems.hxx"
