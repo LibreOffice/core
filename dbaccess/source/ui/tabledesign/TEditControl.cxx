@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:26:21 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 11:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,6 +500,7 @@ void OTableEditorCtrl::InitController(CellControllerRef&, long nRow, sal_uInt16 
             if( pActFieldDescr )
                 aInitString = pActFieldDescr->GetName();
             pNameCell->SetText( aInitString );
+            pNameCell->SaveValue();
             break;
         case FIELD_TYPE:
             {
