@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:06:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 
 
 class ScRangeList;
-class ScfUInt16List;
 
 
 class ExcelToSc : public ExcelConverterBase, protected XclImpRoot
