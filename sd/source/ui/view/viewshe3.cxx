@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:05:50 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1305,13 +1305,12 @@ void SdViewShell::PrintHandout(SfxPrinter& rPrinter,
                     nPageCount += nCopies;
 
                     SdPage* pPg = pDoc->GetSdPage(nPage, PK_STANDARD);
-                    USHORT nRealPage = pPg->GetPageNum();
 
                     if ( !pPg->IsExcluded() || bPrintExcluded )
                     {
                         if ( pObj->ISA(SdrPageObj) )
                         {
-                            ((SdrPageObj*) pObj)->NbcSetPageNum(nRealPage);
+                            ((SdrPageObj*) pObj)->SetReferencedPage(pPg);
                             pObj = (SdrObject*) pList->Next();
                         }
                     }
@@ -1323,7 +1322,7 @@ void SdViewShell::PrintHandout(SfxPrinter& rPrinter,
             {   // restliche SdrPageObjs durch Angabe einer
                 // ungueltigen Seitennummer ausblenden
                 if ( pObj->ISA(SdrPageObj) )
-                    ((SdrPageObj*) pObj)->NbcSetPageNum(nAbsPageCnt);
+                    ((SdrPageObj*) pObj)->SetReferencedPage( 0L );
                 pObj = (SdrObject*) pList->Next();
             }
 
@@ -1357,7 +1356,7 @@ void SdViewShell::PrintHandout(SfxPrinter& rPrinter,
         {   // Seitenobjekte wieder auf erste Seite setzen
             if ( pObj->ISA(SdrPageObj) )
             {
-                ((SdrPageObj*) pObj)->NbcSetPageNum(nRealPage);
+                ((SdrPageObj*) pObj)->SetReferencedPage(pDoc->GetPage(nRealPage));
                 nRealPage += 2;
             }
 
