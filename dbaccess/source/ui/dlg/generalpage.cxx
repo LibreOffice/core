@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 09:42:43 $
+ *  last change: $Author: fs $ $Date: 2001-06-20 13:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,6 +1023,7 @@ namespace dbaui
                     String(ModuleRes(STR_ADDRESSBOOK_LDAP)),
                     String(ModuleRes(STR_ADDRESSBOOK_MOZILLA))
                 };
+                static sal_Int32 s_nTypes = sizeof(sAddressBookTypes)/sizeof(::rtl::OUString);
                 StringBag aAddressBooks;
                 Reference< XDriverAccess> xManager(m_pAdminDialog->getORB()->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
                 for(sal_Int32 i=0;i<sizeof(sAddressBookTypes)/sizeof(::rtl::OUString);++i)
@@ -1032,11 +1033,19 @@ namespace dbaui
                 }
 
                 ODatasourceSelectDialog aSelector(GetParent(), aAddressBooks, GetSelectedType());
+
+                // initial selection
+                String sType = m_aConnection.GetText();
+                for (sal_Int32 nPos = 0; nPos < s_nTypes && sType != String(sAddressBookTypes[nPos]); ++nPos)
+                    ;
+                if (nPos < s_nTypes)
+                    aSelector.Select(sAddressBookTypesTrans[nPos]);
+
                 if (RET_OK == aSelector.Execute())
                 {
                     String sType = aSelector.GetSelected();
                     sal_Int32 nPos=0;
-                    for(;nPos < sizeof(sAddressBookTypes)/sizeof(::rtl::OUString) && sType != sAddressBookTypesTrans[nPos];++nPos)
+                    for(;nPos < s_nTypes && sType != sAddressBookTypesTrans[nPos];++nPos)
                         ;
                     m_aConnection.SetText(sAddressBookTypes[nPos]);
                     if(nPos == 2)
@@ -1165,6 +1174,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/06/15 09:42:43  fs
+ *  #86986# moved css/ui/* to css/ui/dialogs/*
+ *
  *  Revision 1.9  2001/06/06 12:24:47  fs
  *  #87187# MUST changes regarding the exceptions thrown by the ucbhelper classes
  *
