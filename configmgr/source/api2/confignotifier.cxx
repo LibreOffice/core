@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignotifier.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #include "apitreeaccess.hxx"
 #include "apitreeimplobj.hxx"
 
-#include <stl/set>
-#include <stl/functional>
+#include <set>
+#include <functional>
 
 namespace configmgr
 {
