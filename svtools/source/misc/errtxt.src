@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 18:16:35 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ Resource RID_ERRCTX
         Text [ english_us ] = "Warning" ;
         Text [ italian ] = "Avvertenza" ;
         Text [ spanish ] = "Advertencia" ;
-        Text [ french ] = "Message d'avertissement" ;
+        Text [ french ] = "Avertissement" ;
         Text [ swedish ] = "Varning" ;
         Text [ danish ] = "Advarsel" ;
         Text [ portuguese ] = "Aviso" ;
@@ -427,7 +427,7 @@ Resource RID_ERRCTX
         Text [ ENGLISH ] = "$(ERR) searching for an address" ;
         Text[ english_us ] = "$(ERR) searching for an address";
         Text[ portuguese ] = "$(ERR) ao procurar o endereço";
-        Text[ russian ] = "$(ERR) searching for an address";
+        Text[ russian ] = "$(ERR) ïğè ïîèñêå àäğåñà";
         Text[ greek ] = "$(ERR) êáôÜ ôçí áíáæŞôçóç äéåıèõíóçò";
         Text[ dutch ] = "$(ERR) bij zoeken naar een adres";
         Text[ french ] = "$(ERR) lors de la recherche d'adresse";
@@ -435,7 +435,7 @@ Resource RID_ERRCTX
         Text[ italian ] = "$(ERR) searching for an address";
         Text[ danish ] = "$(ERR) under adressesøgningen";
         Text[ swedish ] = "$(ERR) vid adressökning";
-        Text[ polish ] = "$(ERR) searching for an address";
+        Text[ polish ] = "$(ERR) w trakcie wyszukiwania adresu";
         Text[ portuguese_brazilian ] = "$(ERR) searching for an address";
         Text[ japanese ] = "$(ERR) ±ÄŞÚ½ŒŸõ’†‚É”­¶‚µ‚Ü‚µ‚½";
         Text[ korean ] = "$(ERR) searching for an address";
@@ -1249,7 +1249,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Îòêğûòî ñëèøêîì ìíîãî ôàéëîâ";
         Text[ polish ] = "Jest otworzonych za du¿o plików";
         Text[ japanese ] = "‚·‚Å‚ÉÌ§²Ù‚ğ‚½‚­‚³‚ñŠJ‚«‚·‚¬‚Ä‚¢‚Ü‚·";
-        Text[ chinese_traditional ] = "¥´¶}¤F¤Ó¦hÀÉ®×";
+        Text[ chinese_traditional ] = "¶}±Ò¤F¤Ó¦hÀÉ®×";
         Text[ arabic ] = "ÚÏÏ ÇáãÓÊäÏÇÊ ÇáãİÊæÍÉ ßÈíÑ ÌÏÇğ";
         Text[ dutch ] = "Te veel bestanden geopend";
         Text[ chinese_simplified ] = "ÒÑ¾­´ò¿ªµÄÎÄ¼şÌ«¶à";
@@ -1291,7 +1291,7 @@ Resource RID_ERRHDL
         Text [ spanish ] = "No se pudo guardar el archivo" ;
         Text [ french ] = "Impossible d'écrire le fichier" ;
         Text [ dutch ] = "Bestand kon niet worden opgeslagen" ;
-        Text [ swedish ] = "Filen kunde inte skrivas" ;
+        Text [ swedish ] = "Det gick inte att skriva filen" ;
         Text [ danish ] = "Det var ikke muligt at skrive filen" ;
         Text [ portuguese ] = "Foi impossível escrever o ficheiro." ;
         Text [ portuguese_brazilian ] = "Auf die Datei konnte nicht gespeicherwerden" ;
@@ -1642,7 +1642,7 @@ Resource RID_ERRHDL
         Text [ italian ] = "Non è stato possibile aprire il modello standard" ;
         Text [ spanish ] = "No se pudo abrir la plantilla estándar." ;
         Text [ french ] = "Impossible d'ouvrir le modèle par défaut" ;
-        Text [ swedish ] = "Standardmallen kunde inte öppnas" ;
+        Text [ swedish ] = "Det gick inte att öppna standardmallen" ;
         Text [ danish ] = "Det var ikke muligt at åbne standardskabelonen" ;
         Text [ portuguese ] = "Foi impossível abrir o modelo padrão." ;
         Text [ portuguese_brazilian ] = "Die Standardvorlage konnte nicht geöffnet werden" ;
@@ -1717,7 +1717,7 @@ Resource RID_ERRHDL
         Text [ italian ] = "Non è stato possibile leggere l'informazione sul documento dal file\npoiché il formato del file è sconosciuto o perché non c'è un'informazione sul\ndocumento" ;
         Text [ spanish ] = "La información del documento no se pudo leer del\narchivo ya que su formato es desconocido o no\nexiste ninguna información acerca del documento." ;
         Text [ french ] = "Impossible de lire les informations sur le document à partir du fichier :\nsoit le format du fichier d'information est inconnu,\nsoit il n'existe pas d'informations de ce type\n" ;
-        Text [ swedish ] = "Dokumentinformationen kunde inte läsas från\nfilen eftersom dokumentinformationsformatet är\nobekant eller ingen dokumentinformation existerar" ;
+        Text [ swedish ] = "Det gick inte att läsa dokumentinformationen från\nfilen eftersom dokumentinformationsformatet är\nobekant eller ingen dokumentinformation existerar" ;
         Text [ danish ] = "Det var ikke muligt at læse dokumentinformationen\nfra filen, fordi dokumentinformationens format er ukendt\neller der ikke er nogen tilgængelig dokumentinformation." ;
         Text [ portuguese ] = "Impossível ler as informações sobre o documento no ficheiro\n por terem um formato desconhecido ou \npor não existirem." ;
         Text [ portuguese_brazilian ] = "Die Dokumentinformation konnte nicht aus der Datei\ngelesen werden, da das Dokumentinformationsformat\nunbekannt ist oder da keine Dokumentinformation vorhanden\nist" ;
@@ -1844,7 +1844,7 @@ Resource RID_ERRHDL
         Text [ italian ] = "Non è stato possibile risolvere il nome dell'host $(ARG1)" ;
         Text [ spanish ] = "No se pudo resolver el nombre del ordenador $(ARG1)" ;
         Text [ french ] = "Impossible de résoudre le nom $(ARG1) de l'ordinateur" ;
-        Text [ swedish ] = "Datornamnet $(ARG1) kunde inte lösas upp" ;
+        Text [ swedish ] = "Det gick inte att lösa upp datornamnet $(ARG1)" ;
         Text [ danish ] = "Det var ikke muligt at fortolke computernavnet $(ARG1)" ;
         Text [ portuguese ] = "Impossível resolver o nome do computador $(ARG1)" ;
         Text [ portuguese_brazilian ] = "Der Rechnername $(ARG1) konnte nicht aufgelöst werden" ;
@@ -1869,7 +1869,7 @@ Resource RID_ERRHDL
         Text [ italian ] = "Non è stato possibile stabilire la connessione a Internet a $(ARG1)" ;
         Text [ spanish ] = "No se pudo establecer la conexión de Internet a $(ARG1)" ;
         Text [ french ] = "Impossible d'établir la connexion Internet avec $(ARG1)" ;
-        Text [ swedish ] = "Internetförbindelsen till $(ARG1) kunde inte upprättas" ;
+        Text [ swedish ] = "Det gick inte att upprätta Internetförbindelsen till $(ARG1)" ;
         Text [ danish ] = "Det var ikke muligt at oprette en Internetforbindelse til $(ARG1)" ;
         Text [ portuguese ] = "Foi impossível estabelecer a ligação à Internet com $(ARG1)." ;
         Text [ portuguese_brazilian ] = "Die Internetverbindung zu $(ARG1) konnte nicht hergestellt werden" ;
@@ -1894,7 +1894,7 @@ Resource RID_ERRHDL
         Text [ spanish ] = "Los datos no se pudieron leer a través de Internet.\nMensaje de error del servidor: $(ARG1)" ;
         Text [ french ] = "Erreur de lecture des données à partir de l'Internet.\nMessage d'erreur du serveur : $(ARG1)" ;
         Text [ dutch ] = "Fout bij lezen van gegevens uit internet\n.Foutmelding van server: $(ARG1)" ;
-        Text [ swedish ] = "Data kunde inte läsas via Internet.\nServerfelmeddelande: $(ARG1)" ;
+        Text [ swedish ] = "Det gick inte att läsa data via Internet.\nServerfelmeddelande: $(ARG1)" ;
         Text [ danish ] = "Det var ikke muligt at læses dataene over Internettet\nServerfejlmelding: $(ARG1)" ;
         Text [ portuguese ] = "Foi impossível ler os dados via Internet.\nMensagem de erro do servidor: $(ARG1)" ;
         Text [ portuguese_brazilian ] = "Daten konnten nicht über das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)" ;
@@ -1920,7 +1920,7 @@ Resource RID_ERRHDL
         Text [ spanish ] = "No se pudieron transferir los datos a Internet.\nMensaje de error del servidor: $(ARG1)" ;
         Text [ french ] = "Erreur de transfert de données sur l'Internet.\nMessage d'erreur du serveur : $(ARG1)" ;
         Text [ dutch ] = "Fout bij gegevenstransfer naar Internet.\nFoutmelding server: $(ARG1)" ;
-        Text [ swedish ] = "Data kunde inte överföras till Internet.\nServerfelmeddelande: $(ARG1)" ;
+        Text [ swedish ] = "Det gick inte att överföra data till Internet.\nServerfelmeddelande: $(ARG1)" ;
         Text [ danish ] = "Det var ikke muligt at overføre dataene til Internettet.\nServerfejlmelding: $(ARG1)" ;
         Text [ portuguese ] = "Foi impossível transferir dados para a Internet.\nMensagem de erro do servidor: $(ARG1)" ;
         Text [ portuguese_brazilian ] = "Daten konnten nicht ins Internet übertragen werden.\nServerfehlermeldung: $(ARG1)" ;
@@ -2050,7 +2050,7 @@ Resource RID_ERRHDL
         Text [ English ] = "The original could not be detected" ;
         Text [ dutch ] = "Het origineel kon niet als zodanig worden herkend." ;
         Text [ english_us ] = "The original could not be determined." ;
-        Text [ swedish ] = "Originalet kunde inte bestämmas." ;
+        Text [ swedish ] = "Det gick inte att bestämma originalet." ;
         Text [ danish ] = "Det var ikke muligt at bestemme originalen" ;
         Text [ italian ] = "Impossibile determinare l'originale" ;
         Text [ spanish ] = "No se pudo determinar el original." ;
@@ -2075,7 +2075,7 @@ Resource RID_ERRHDL
         Text [ English ] = "The content could not be created" ;
         Text [ dutch ] = "Er kon geen inhoud worden gecreëerd." ;
         Text [ english_us ] = "The contents could not be created." ;
-        Text [ swedish ] = "Innehållet kunde inte skapas" ;
+        Text [ swedish ] = "Det gick inte att skapa innehållet" ;
         Text [ danish ] = "Det var ikke muligt at oprette indholdet" ;
         Text [ italian ] = "Impossibile creare il contenuto" ;
         Text [ spanish ] = "No se pudo crear el contenido." ;
@@ -2100,11 +2100,11 @@ Resource RID_ERRHDL
         Text [ English ] = "The link could not be created" ;
         Text [ dutch ] = "Er kon geen link worden gecreëerd." ;
         Text [ english_us ] = "The link could not be created." ;
-        Text [ swedish ] = "Länken kunde inte skapas" ;
+        Text [ swedish ] = "Det gick inte att skapa länken" ;
         Text [ danish ] = "Det var ikke muligt at oprette kæden" ;
         Text [ italian ] = "Impossibile creare il collegamento" ;
         Text [ spanish ] = "No se pudo crear el vínculo." ;
-        Text [ french ] = "Impossible de créer le lien" ;
+        Text [ french ] = "Impossible de créer le lien !" ;
         Text [ portuguese ] = "Foi impossível criar a ligação." ;
         Text [ portuguese_brazilian ] = "Die Verknüpfung konnte nicht erzeugt werden" ;
         Text[ chinese_simplified ] = "ÎŞ·¨Éú³ÉÁ´½Ó";
@@ -2161,7 +2161,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Íåïğàâèëüíàÿ êîíôèãóğàöèÿ ïîêàçà ñèìâîëîâ";
         Text[ polish ] = "Konfiguracja wyœwietlania symboli jest nieprawid³owa.";
         Text[ japanese ] = "¼İÎŞÙ•\\¦‚Ìİ’è‚ª–³Œø‚Å‚·";
-        Text[ chinese_traditional ] = "¥Î©ó¹Ï¼ĞÅã¥Üªº°t¸mÀÉ®×µL®Ä";
+        Text[ chinese_traditional ] = "¥Î©ó¹Ï¥ÜÅã¥Üªº°t¸mÀÉ®×µL®Ä";
         Text[ arabic ] = "Êßæíä ÚÑÖ ÇáÑãæÒ ÛíÑ ÕÇáÍ";
         Text[ dutch ] = "Ongeldige configuratie van pictogramweergave";
         Text[ chinese_simplified ] = "Í¼±êÏÔÊ¾µÄÅäÖÃÎÄ¼şÎŞĞ§";
@@ -2186,7 +2186,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Ñîõğàíèòü êîíôèãóğàöèş ïîêàçà ñèìâîëà íåâîçìîæíî";
         Text[ polish ] = "Konfiguracji wyœwietlania symboli nie mo¿na by³o zapisaæ.";
         Text[ japanese ] = "¼İÎŞÙ•\\¦‚Ìİ’è‚Í•Û‘¶‚Å‚«‚Ü‚¹‚ñ";
-        Text[ chinese_traditional ] = "µLªkÀx¦s¹Ï¼ĞÅã¥Üªº°t¸mÀÉ®×";
+        Text[ chinese_traditional ] = "µLªkÀx¦s¹Ï¥ÜÅã¥Üªº°t¸mÀÉ®×";
         Text[ arabic ] = "ÊÚĞÑÍİÙ Êßæíä ÚÑÖ ÇáÑãæÒ";
         Text[ dutch ] = "Configuration van pictogram kan niet worden opgeslagen";
         Text[ chinese_simplified ] = "ÎŞ·¨´æÅÌÍ¼±êÏÔÊ¾µÄÅäÖÃÎÄ¼ş";
@@ -2211,7 +2211,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Óäàëèòü êîíôèãóğàöèş ïîêàçà ñèìâîëà íåâîçìîæíî";
         Text[ polish ] = "Konfiguracja wyœwietlania symboli nie mo¿e zostaæ usuniêta.";
         Text[ japanese ] = "¼İÎŞÙ•\\¦‚Ìİ’è‚Ííœ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
-        Text[ chinese_traditional ] = "µLªk§R°£¹Ï¼ĞÅã¥Üªº°t¸mÀÉ®×";
+        Text[ chinese_traditional ] = "µLªk§R°£¹Ï¥ÜÅã¥Üªº°t¸mÀÉ®×";
         Text[ arabic ] = "ÊÚĞÑ ÍĞİ Êßæíä ÚÑÖ ÇáÑãæÒ.";
         Text[ dutch ] = "Configuratie van pictogram kon niet worden gewist.";
         Text[ chinese_simplified ] = "ÎŞ·¨É¾³ıÍ¼±êÏÔÊ¾µÄÅäÖÃÎÄ¼ş";
