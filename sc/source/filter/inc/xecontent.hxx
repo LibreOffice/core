@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:43:56 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ private:
 // Data Validation ============================================================
 
 class ScValidationData;
-class ExcUPN;
+class XclExpTokenArray;
 
 /** Provides export of the data of a DV record.
     @descr  This record contains the settings for a data validation. In detail
@@ -302,7 +302,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    typedef ::std::auto_ptr< ExcUPN > XclExpTokArrPtr;
+    typedef ScfRef< XclExpTokenArray > XclExpTokArrRef;
 
     ScRangeList         maRanges;       /// A list with all affected cells.
     XclExpString        maPromptTitle;  /// The prompt title.
@@ -310,8 +310,8 @@ private:
     XclExpString        maErrorTitle;   /// The error title.
     XclExpString        maErrorText;    /// The error text.
     XclExpStringRef     mxString1;      /// String for first condition formula.
-    XclExpTokArrPtr     mxTokArr1;      /// Formula for first condition.
-    XclExpTokArrPtr     mxTokArr2;      /// Formula for second condition.
+    XclExpTokArrRef     mxTokArr1;      /// Formula for first condition.
+    XclExpTokArrRef     mxTokArr2;      /// Formula for second condition.
     sal_uInt32          mnFlags;        /// Miscellaneous flags.
     ULONG               mnScHandle;     /// The core handle for quick list search.
 };
