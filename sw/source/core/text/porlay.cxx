@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-22 12:59:59 $
+ *  last change: $Author: fme $ $Date: 2001-10-26 14:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,6 +568,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
     // weak characters
     if( WEAK == nScript )
     {
+        ASSERT( 0 == nChg, "WEAK in ScriptInfo at non 0 position" );
         xub_StrLen nWeakEnd =
                 (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
         if( nWeakEnd < rTxt.Len() )
@@ -602,12 +603,24 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
     const USHORT nSkipScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
     nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nSkipScript );
 
+    // If first characters are weak, nScript is the language which has been
+    // assigned to them by default. If the next script is the same as the default
+    // script for the weak characters, we have to call endOfScript once more
+    if ( WEAK == nSkipScript )
+    {
+        const USHORT nNextScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+        if ( nNextScript == nScript )
+            nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+    }
+
     do
     {
         ASSERT( i18n::ScriptType::WEAK != nScript,
                 "Inserting WEAK into SwScriptInfo structure" );
         if ( nChg > rTxt.Len() )
             nChg = rTxt.Len();
+
+        ASSERT( STRING_LEN != nChg, "65K? Strange length of script section" );
 
         aScriptChg.Insert( nChg, nCnt );
         aScriptType.Insert( nScript, nCnt++ );
@@ -688,10 +701,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
         if ( nChg >= rTxt.Len() )
             break;
 
-        const USHORT nOldScript = nScript;
         nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
         nLastChg = nChg;
-        nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nOldScript );
+        nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
 
     } while( TRUE );
 
