@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:05:06 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:10:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ void ProgressCommandEnv::handle(
             // late init:
             Sequence<Any> handlerArgs( 1 );
             handlerArgs[ 0 ] <<= beans::PropertyValue(
-                OUSTR("Context"), -1, makeAny(m_title),
+                OUSTR("Context"), -1, Any(m_title),
                 beans::PropertyState_DIRECT_VALUE );
             Reference<XComponentContext> const & xContext =
                 m_mainDialog->m_xComponentContext;
