@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scwarngs.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:31:32 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 23:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ Resource RID_WRNHDLSC
         Text[ chinese_traditional ] = "¤wΈg¶WΉL¦CªΊ³Μ¤jΌΖ¥Ψ΅A¨S¦³¶Χ¤J¶WΉLªΊ¦C΅I";
         Text[ arabic ] = "Κγ ΚΜΗζÒ ΗαΪΟΟ ΗαΓήΥμ ααΥέζέ΅ αεΠΗ αγ νΚγ ΗΣΚνΡΗΟ ΗαΥέζέ ΗαÒΗΖΟΙ!";
         Text[ greek ] = "Έγινε υπέρβαση του μέγιστου αριθμού γραμμών. Δεν θα γίνει εισαγωγή των γραμμών που ξεπερνούν το όριο!";
-        Text[ korean ] = "ΗΰΐΗ ΓΦ΄λ΅΅°³ΌφΈ¦ ΓΚ°ϊΗί½ΐ΄Ο΄Ω. Γί°΅ΐϋΐΞ ΗΰΐΊ΅΅ΗΤ²²΅΅µιΏ©ΏΝΑφΑφ΅΅ΎΚΎÒ½ΐ΄Ο΄Ω !";
+        Text[ korean ] = "ΗΰΐΗ ΓΦ΄λ °³ΌφΈ¦ ΓΚ°ϊΗί½ΐ΄Ο΄Ω. ΗΰΐΜ Γί°΅µΗΑφ ΈψΗί½ΐ΄Ο΄Ω.!";
         Text[ turkish ] = "Azami satύr sayύsύ aώύldύ. Fazla satύrlar iηe aktarύlmadύ!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "΅Se ha excedido el nϊmero mαximo de filas, las filas adicionales no se importaron!";
@@ -129,5 +129,6 @@ Resource RID_WRNHDLSC
         };
 */
 };
+
 
 
