@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-07 08:53:03 $
+ *  last change: $Author: sj $ $Date: 2001-06-12 14:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1596,9 +1596,8 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
     // Menuoption: Edit->Hyperlink
     // Disable, if there is no hyperlink
     //
-    if( !pDrView->HasMarked() || pDrView->GetMarkList().GetMarkCount() > 1 )
-        rSet.DisableItem( SID_EDIT_HYPERLINK );
-    else
+    sal_Bool bDisableEditHyperlink = sal_True;
+    if( pDrView->HasMarked() && ( pDrView->GetMarkList().GetMarkCount() == 1 ) )
     {
         if( pDrView->IsTextEdit() )
         {
@@ -1608,9 +1607,13 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
                 const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
                 if (pFieldItem)
                 {
-                    const SvxFieldData* pField = pFieldItem->GetField();
-                    if (!pField->ISA(SvxURLField))
-                        rSet.DisableItem( SID_EDIT_HYPERLINK );
+                    ESelection aSel = pOLV->GetSelection();
+                    if ( abs( aSel.nEndPos - aSel.nStartPos ) == 1 )
+                    {
+                        const SvxFieldData* pField = pFieldItem->GetField();
+                        if ( pField->ISA(SvxURLField) )
+                            bDisableEditHyperlink = sal_False;
+                    }
                 }
             }
         }
@@ -1627,17 +1630,17 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
                     if( xPropSet.is() )
                     {
                         uno::Reference< beans::XPropertySetInfo > xPropInfo( xPropSet->getPropertySetInfo() );
-                        if( xPropInfo.is() && !xPropInfo->hasPropertyByName(
+                        if( xPropInfo.is() && xPropInfo->hasPropertyByName(
                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL"))))
                         {
-                            rSet.DisableItem( SID_EDIT_HYPERLINK );
+                            bDisableEditHyperlink = sal_False;
                         }
                     }
                 }
             }
-            else
-                rSet.DisableItem( SID_EDIT_HYPERLINK );
         }
+        if ( bDisableEditHyperlink )
+            rSet.DisableItem( SID_EDIT_HYPERLINK );
     }
 
 #if defined WIN || defined WNT || defined UNX
