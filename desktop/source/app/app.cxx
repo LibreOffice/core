@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-24 14:11:24 $
+ *  last change: $Author: mba $ $Date: 2001-08-27 08:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,6 +697,7 @@ USHORT Desktop::Exception(USHORT nError)
     }
 
     bInException = TRUE;
+    BOOL bRecovery = FALSE;
 
     // save all modified documents
     if( Application::IsInExecute() )
@@ -774,6 +775,7 @@ USHORT Desktop::Exception(USHORT nError)
 
                         // remember original name and filter
                         aOpt.PushRecoveryItem(  aOldName, aOrigFilterName, aSaveURL );
+                        bRecovery = TRUE;
                     }
                 }
             }
@@ -818,7 +820,7 @@ USHORT Desktop::Exception(USHORT nError)
 
         default:
         {
-            if( !pPluginAcceptThread && !Application::IsRemoteServer() )
+            if( bRecovery && !pPluginAcceptThread && !Application::IsRemoteServer() )
             {
                 OfficeIPCThread::DisableOfficeIPCThread();
                 if( pSignalHandler )
@@ -837,10 +839,15 @@ USHORT Desktop::Exception(USHORT nError)
                     if ( nError == ::osl::FileBase::E_None )
                          xSystemShellExecute->execute( aSysPathFileName, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
                 }
+
+                exit( 333 );
+            }
+            else
+            {
+                bInException = sal_False;
+                return Application::Exception( nError );
             }
 
-            exit( 333 );
-//            Application::Abort( String() );
             break;
         }
     }
@@ -848,8 +855,6 @@ USHORT Desktop::Exception(USHORT nError)
     return TRUE;
 
     // ConfigManager is disposed, so no way to continue
-    // bInException = sal_False;
-    // return Application::Exception( nError );
 }
 
 void Desktop::AppEvent( const ApplicationEvent& rAppEvent )
