@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 14:00:08 $
+ *  last change: $Author: obo $ $Date: 2004-07-07 13:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4381,7 +4381,6 @@ BOOL StatementControl::Execute()
 #endif
     }
 
-
     if (   nRT == C_Window &&       // Search for WorkWindow to satisfy these commands
          ( nMethodId == M_Close
 //      || nMethodId == M_Size
@@ -4403,8 +4402,6 @@ BOOL StatementControl::Execute()
             nRT = C_WorkWin;
         }
     }
-
-
 
 
     if ( (!ControlOK( pControl, "" )) && ( nMethodId != M_SnapShot ) && (nRetryCount--))
@@ -4670,13 +4667,7 @@ BOOL StatementControl::Execute()
                             pRet->GenReturn ( RET_Value, aUId, ((ListBox*)pControl)->GetSelectEntry(nNr1-1));
                             break;
                         case M_GetItemCount :
-#if OSL_DEBUG_LEVEL > 1
-                            if ( nUId == 1334644259 && ((ListBox*)pControl)->GetEntryCount() != 102 )
-                            {
-                                nUId = ((ListBox*)pControl)->GetEntryCount();
-                            }
-#endif
-                            pRet->GenReturn ( RET_Value, nUId, ULONG(((ListBox*)pControl)->GetEntryCount()));
+                            pRet->GenReturn ( RET_Value, aUId, ULONG(((ListBox*)pControl)->GetEntryCount()));
                             break;
                         case M_GetItemText :
                             pRet->GenReturn ( RET_Value, aUId, ((ListBox*)pControl)->GetEntry(nNr1-1));
@@ -4972,11 +4963,11 @@ BOOL StatementControl::Execute()
                         {
                             if ( nParams == PARAM_NONE )
                             {           // Wir fälschen einen Parameter
-                                nParams = PARAM_STR_1;
-                                                                aSmartId = aUId;
 //                              nParams = PARAM_USHORT_1;
 //                              DBG_ASSERT( nUId <= 0xFFFF, "ID on ToolBox > 0xFFFF" );
 //                              nNr1 = USHORT(nUId);
+                                nParams = PARAM_STR_1;
+                                aSmartId = aUId;
                             }
                             else
                                 ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
@@ -5597,33 +5588,33 @@ SvLBoxString* pItem = NULL;\
                                         switch ( nMethodId )
                                         {
                                         case M_GetItemCount:
-                                            pRet->GenReturn ( RET_Value, nUId, ULONG( pVS->GetItemCount()));
+                                            pRet->GenReturn ( RET_Value, aUId, ULONG( pVS->GetItemCount()));
                                             break;
                                         case M_GetItemText:
-                                            if ( ValueOK( nUId, MethodString( nMethodId ), nNr1, pVS->GetItemCount() ))
-                                                 pRet->GenReturn ( RET_Value, nUId, pVS->GetItemText( pVS->GetItemId( nNr1-1 ) ) );
+                                            if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pVS->GetItemCount() ))
+                                                 pRet->GenReturn ( RET_Value, aUId, pVS->GetItemText( pVS->GetItemId( nNr1-1 ) ) );
                                             break;
                                         case M_Select:
-                                            if ( ValueOK( nUId, MethodString( nMethodId ), nNr1, pVS->GetItemCount() ))
+                                            if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pVS->GetItemCount() ))
                                                  pVS->SelectItem( pVS->GetItemId( nNr1-1 ) );
                                             break;
                                         case M_GetSelIndex :
                                             if ( pVS->IsNoSelection() )
-                                                pRet->GenReturn ( RET_Value, nUId, ULONG(0));
+                                                pRet->GenReturn ( RET_Value, aUId, ULONG(0));
                                             else
-                                                pRet->GenReturn ( RET_Value, nUId, ULONG( pVS->GetItemPos( pVS->GetSelectItemId() ) +1));
+                                                pRet->GenReturn ( RET_Value, aUId, ULONG( pVS->GetItemPos( pVS->GetSelectItemId() ) +1));
                                             break;
                                         case M_GetSelText :
                                             if ( pVS->IsNoSelection() )
-                                                pRet->GenReturn ( RET_Value, nUId, String() );
+                                                pRet->GenReturn ( RET_Value, aUId, String() );
                                             else
-                                                pRet->GenReturn ( RET_Value, nUId, pVS->GetItemText( pVS->GetSelectItemId() ) );
+                                                pRet->GenReturn ( RET_Value, aUId, pVS->GetItemText( pVS->GetSelectItemId() ) );
                                             break;
                                         case M_SetNoSelection :
                                             pVS->SetNoSelection();
                                             break;
                                         default:
-                                            ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "ValueSet" ) );
+                                            ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "ValueSet" ) );
                                             break;
                                         }
                                     }
@@ -5653,13 +5644,13 @@ SvLBoxString* pItem = NULL;\
 //                                  {
                                         // Erstmal nichts, da sowiso nur Prozente abgefragt werden k"onnten
 //                                      default:
-                                            ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "ProgressBar" ) );
+                                            ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "ProgressBar" ) );
 //                                          break;
 //                                  }
                                     break;
                                 case CONST_CTBrowseBox:
                                 case CONST_CTValueSet:
-                                    ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "Window" ) );
+                                    ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "Window" ) );
                                     break;
                                 default:
                                     ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
@@ -5839,13 +5830,13 @@ SvLBoxString* pItem = NULL;\
                             goto FloatWin;
                             break;
                         case M_IsMax :
-                            pRet->GenReturn ( RET_Value, nUId, ((WorkWindow*)pControl)->IsMaximized() );
+                            pRet->GenReturn ( RET_Value, aUId, ((WorkWindow*)pControl)->IsMaximized() );
                             break;
                         case M_IsMin :
-                            pRet->GenReturn ( RET_Value, nUId, ((WorkWindow*)pControl)->IsMinimized() );
+                            pRet->GenReturn ( RET_Value, aUId, ((WorkWindow*)pControl)->IsMinimized() );
                             break;
                         case M_IsRestore :
-                            pRet->GenReturn ( RET_Value, nUId, BOOL (!((WorkWindow*)pControl)->IsMaximized() && !((WorkWindow*)pControl)->IsMinimized()) );
+                            pRet->GenReturn ( RET_Value, aUId, BOOL (!((WorkWindow*)pControl)->IsMaximized() && !((WorkWindow*)pControl)->IsMinimized()) );
                             break;
                         case M_Minimize :
                             ((WorkWindow*)pControl)->Maximize( FALSE );
@@ -5866,7 +5857,7 @@ SvLBoxString* pItem = NULL;\
                     }
                     break;
                 case C_TabPage:
-                    ReportError( nUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
+                    ReportError( aUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
                     break;
                 case C_MessBox:
                 case C_InfoBox:
