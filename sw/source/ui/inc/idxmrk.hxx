@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-10-15 11:57:37 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ class SwIndexMarkDlg : public Window //SvxStandardDialog
     ImageButton     aNextBT;
 
     String          aOrgStr;
+    sal_Int32       nOptionsId;
     sal_Bool            bDel;
     sal_Bool            bNewMark;
     sal_Bool            bSelected;
@@ -211,7 +212,8 @@ public:
 
     SwIndexMarkDlg( Window *pParent,
                        sal_Bool bNewDlg,
-                    const ResId& rResId);
+                    const ResId& rResId,
+                    sal_Int32 _nOptionsId );
 
 
     ~SwIndexMarkDlg();
