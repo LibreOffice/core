@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-21 16:32:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _XMLSTYLI_HXX
 #define _XMLSTYLI_HXX
 
@@ -152,8 +151,8 @@ class XMLTableStyleContext : public XMLPropStyleContext
     std::vector<ScXMLMapContent>    aMaps;
     com::sun::star::uno::Any    aConditionalFormat;
     sal_Int32                   nNumberFormat;
-    sal_Bool                    bConditionalFormatCreated : 1;
-    sal_Bool                    bParentSet : 1;
+    sal_Bool                    bConditionalFormatCreated;
+    sal_Bool                    bParentSet;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -223,7 +222,7 @@ class XMLTableStylesContext : public SvXMLStylesContext
     sal_Int32 nConditionalFormatIndex;
     sal_Int32 nCellStyleIndex;
     sal_Int32 nMasterPageNameIndex;
-    sal_Bool bAutoStyles : 1;
+    sal_Bool bAutoStyles;
 
     UniReference < SvXMLImportPropertyMapper > xCellImpPropMapper;
     UniReference < SvXMLImportPropertyMapper > xColumnImpPropMapper;
@@ -311,8 +310,8 @@ class ScMasterPageContext : public XMLTextMasterPageContext
 {
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet;
     const rtl::OUString     sEmpty;
-    sal_Bool                bContainsRightHeader : 1;
-    sal_Bool                bContainsRightFooter : 1;
+    sal_Bool                bContainsRightHeader;
+    sal_Bool                bContainsRightFooter;
 
     void ClearContent(const rtl::OUString& rContent);
 public:
