@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-24 18:00:14 $
+ *  last change: $Author: cd $ $Date: 2002-09-24 08:36:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,7 @@ class SfxMenuConfigPage : public SfxTabPage
 {
 private:
     SfxMenuCfgTabListBox_Impl       aEntriesBox;
+    const SfxMacroInfoItem*         m_pMacroInfoItem;
     FixedLine                        aMenuGroup;
     PushButton                      aNewButton;
     PushButton                      aNewPopupButton;
@@ -286,6 +287,8 @@ public:
     void                        Apply( SfxMenuManager*, BOOL );
     void                        SetModified( BOOL bSet ) { bModified = bSet; }
     void                        SetDefault( BOOL bSet ) { bDefault = bSet; }
+
+    void                        SelectMacro(const SfxMacroInfoItem*);
 };
 
 
@@ -325,6 +328,7 @@ class SfxAcceleratorConfigPage : public SfxTabPage
 {
     friend SfxAccCfgTabListBox_Impl;
 private:
+    const SfxMacroInfoItem*         m_pMacroInfoItem;
     SfxAccCfgTabListBox_Impl        aEntriesBox;
     FixedLine                       aKeyboardGroup;
     PushButton                      aChangeButton;
