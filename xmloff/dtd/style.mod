@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.12 2000-11-23 12:39:22 mib Exp $
+	$Id: style.mod,v 1.13 2000-12-01 16:45:15 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -185,6 +185,9 @@
 							dot-dot-dash|wave|bold|bold-dotted|bold-dash|
 							bold-long-dash|bold-dot-dash|bold-dot-dot-dash|
 							bold-wave|double-wave|small-wave) #IMPLIED>
+<!ATTLIST style:properties style:text-autospace (none | ideograph-alpha) #IMPLIED>
+<!ATTLIST style:properties style:punctuation-wrap (simple | hanging) #IMPLIED>
+<!ATTLIST style:properties style:line-break (normal | strict) #IMPLIED>
 <!ENTITY % fontColorOrColor "CDATA">
 <!ATTLIST style:properties style:text-underline-color %fontColorOrColor;
 						   #IMPLIED>
