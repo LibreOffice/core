@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-03 10:46:33 $
+ *  last change: $Author: sj $ $Date: 2002-04-05 12:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1740,7 +1740,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
                                     }
                                 }
                                 // office xp is supporting more than one stylesheet
-                                if ( ( pE->ePageKind == PPT_MASTERPAGE ) && ( pE->aSlideAtom.nMasterId == 0 ) )
+                                if ( ( pE->ePageKind == PPT_MASTERPAGE ) && ( pE->aSlideAtom.nMasterId == 0 ) && ( pE->bNotesMaster == 0 ) )
                                 {
                                     PPTTextSpecInfo aTxSI( 0 );
                                     if ( aTxSIStyle.bValid && aTxSIStyle.aList.Count() )
