@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_c_std.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ void
 Context_CppStd::SetupStateMachine()
 {
     // Besondere Array-Stati (kein Tokenabschluss oder Kontextwechsel):
-    const INT16 top = 0;        // Top-Status
+//  const INT16 top = 0;        // Top-Status
     const INT16 wht = 1;        // Whitespace-überlese-Status
     const INT16 bez = 2;        // Bezeichner-lese-Status
 
