@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.158 $
+ *  $Revision: 1.159 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-18 14:30:43 $
+ *  last change: $Author: sab $ $Date: 2002-07-23 12:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,7 +956,13 @@ void ScXMLExport::ExportColumns(const sal_uInt16 nTable, const table::CellRangeA
             bIsFirst = sal_False;
             WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
             if (pGroupColumns->IsGroupEnd(nColumn - 1))
+            {
+                if (bIsHeader)
+                    CloseHeaderColumn();
                 pGroupColumns->CloseGroups(nColumn - 1);
+                if (bIsHeader)
+                    OpenHeaderColumn();
+            }
             if (pGroupColumns->IsGroupStart(nColumn))
             {
                 if (bIsHeader)
