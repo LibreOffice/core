@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-30 09:04:15 $
+ *  last change: $Author: sab $ $Date: 2000-12-01 17:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,11 +245,19 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
             case CTF_SC_ROWOPTIMALHEIGHT            : pOptimalHeight = property; break;
         }
     }
-    if (!pOptimalHeight)
+    if (pOptimalHeight)
     {
-        pOptimalHeight = new XMLPropertyState(0, ::cppu::bool2any( sal_True ));
-        if (pHeight)
-            pOptimalHeight->maValue = ::cppu::bool2any( sal_False );
+        sal_Bool bOptimalHeight = ::cppu::any2bool(pOptimalHeight->maValue);
+        if (bOptimalHeight)
+        {
+            if (pHeight)
+                pHeight->mnIndex = -1;
+            pOptimalHeight->mnIndex = -1;
+        }
+    }
+    else if (pHeight)
+    {
+        pOptimalHeight = new XMLPropertyState(0, ::cppu::bool2any( sal_False ));
         rProperties.push_back(*pOptimalHeight);
         delete pOptimalHeight;
     }
