@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset ) SAL_THR
     {
         OString msg( "### cannot get type description for " );
         msg += OUStringToOString( rType.getTypeName(), RTL_TEXTENCODING_ASCII_US );
-        OSL_ENSHURE( sal_False, msg.getStr() );
+        OSL_ENSURE( sal_False, msg.getStr() );
     }
 #endif
 }

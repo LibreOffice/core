@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,12 +188,12 @@ static Reference< XMultiServiceFactory > createImplServiceFactory(
     Reference< XMultiServiceFactory > xSF( xSMFac->createInstance(), UNO_QUERY );
     Reference< XInitialization > xInit( xSF, UNO_QUERY );
 
-    OSL_ENSHURE( xInit.is() && xSF.is(), "### failed loading servicemanager!" );
+    OSL_ENSURE( xInit.is() && xSF.is(), "### failed loading servicemanager!" );
     if (xInit.is() && xSF.is())
     {
         Reference< XSingleServiceFactory > xSimRegFac( createSimpleRegistryFactory( xSF, rBootstrapPath ) );
         Reference< XSingleServiceFactory > xNesRegFac( createNestedRegistryFactory( xSF, rBootstrapPath ) );
-        OSL_ENSHURE( xSimRegFac.is() && xNesRegFac.is(), "### cannot get registry factories!" );
+        OSL_ENSURE( xSimRegFac.is() && xNesRegFac.is(), "### cannot get registry factories!" );
 
         // write initial shared lib loader, simple registry, default registry, impl reg
         Reference< XSet > xSet( xSF, UNO_QUERY );
@@ -207,7 +207,7 @@ static Reference< XMultiServiceFactory > createImplServiceFactory(
                              Reference< XInterface >() );
         }
         xSet->insert( makeAny( xFac ) );
-        OSL_ENSHURE( xSet->has( makeAny( xFac ) ), "### failed registering loader!" );
+        OSL_ENSURE( xSet->has( makeAny( xFac ) ), "### failed registering loader!" );
         }
         // simple registry
         {
@@ -217,7 +217,7 @@ static Reference< XMultiServiceFactory > createImplServiceFactory(
                              Reference< XInterface >() );
         }
         xSet->insert( makeAny( xSimRegFac ) );
-        OSL_ENSHURE( xSet->has( makeAny( xSimRegFac ) ), "### failed registering simple registry!" );
+        OSL_ENSURE( xSet->has( makeAny( xSimRegFac ) ), "### failed registering simple registry!" );
         }
         // nested registry
         {
@@ -227,7 +227,7 @@ static Reference< XMultiServiceFactory > createImplServiceFactory(
                              Reference< XInterface >() );
         }
         xSet->insert( makeAny( xNesRegFac ) );
-        OSL_ENSHURE( xSet->has( makeAny( xNesRegFac ) ), "### failed registering default registry!" );
+        OSL_ENSURE( xSet->has( makeAny( xNesRegFac ) ), "### failed registering default registry!" );
         }
         // implementation registration
         {
@@ -238,7 +238,7 @@ static Reference< XMultiServiceFactory > createImplServiceFactory(
                              Reference< XInterface >() );
         }
         xSet->insert( makeAny( xFac ) );
-        OSL_ENSHURE( xSet->has( makeAny( xFac ) ), "### failed registering impl reg!" );
+        OSL_ENSURE( xSet->has( makeAny( xFac ) ), "### failed registering impl reg!" );
         }
 
         Reference< XSimpleRegistry > xRegistry;
@@ -309,7 +309,7 @@ static Reference< XMultiServiceFactory > createImplServiceFactory(
                              Reference< XInterface >() );
         }
 
-//      OSL_ENSHURE( xRegistry.is(), "### got no registry!" );
+//      OSL_ENSURE( xRegistry.is(), "### got no registry!" );
         Reference< XInterface > xInst;
         if (xRegistry.is())
         {
@@ -334,7 +334,7 @@ static Reference< XMultiServiceFactory > createImplServiceFactory(
                                      Reference< XInterface >() );
                 }
                 xSet->insert( makeAny( xFac ) );
-                OSL_ENSHURE( xSet->has( makeAny( xFac ) ), "### failed registering registry td provider!" );
+                OSL_ENSURE( xSet->has( makeAny( xFac ) ), "### failed registering registry td provider!" );
             }
             // stoc td manager registration
             {
@@ -345,7 +345,7 @@ static Reference< XMultiServiceFactory > createImplServiceFactory(
                                      Reference< XInterface >() );
                 }
                 xSet->insert( makeAny( xFac ) );
-                OSL_ENSHURE( xSet->has( makeAny( xFac ) ), "### failed registering td manager!" );
+                OSL_ENSURE( xSet->has( makeAny( xFac ) ), "### failed registering td manager!" );
             }
             xInst = xSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager")) );
         }

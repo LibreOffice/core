@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ Reference< XSingleServiceFactory > ORegistryFactoryHelper::createModuleFactory()
                 catch( CannotActivateFactoryException& e)
                 {
                     OString msg( OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US) );
-                    OSL_ENSHURE( !msg.getLength(), msg.getStr() );
+                    OSL_ENSURE( !msg.getLength(), msg.getStr() );
                 }
             }
             xFactory = Reference<XSingleServiceFactory >( xMF, UNO_QUERY );

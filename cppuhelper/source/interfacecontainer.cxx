@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ OInterfaceIteratorHelper::~OInterfaceIteratorHelper() SAL_THROW( () )
     bShared = pData == rCont.pData && rCont.bIsList;
     if( bShared )
     {
-        OSL_ENSHURE( rCont.bInUse, "OInterfaceContainerHelper must be in use" );
+        OSL_ENSURE( rCont.bInUse, "OInterfaceContainerHelper must be in use" );
         rCont.bInUse = sal_False;
     }
     }
@@ -224,7 +224,7 @@ OInterfaceContainerHelper::OInterfaceContainerHelper( Mutex & rMutex_ ) SAL_THRO
 
 OInterfaceContainerHelper::~OInterfaceContainerHelper() SAL_THROW( () )
 {
-    OSL_ENSHURE( !bInUse, "~OInterfaceContainerHelper but is in use" );
+    OSL_ENSURE( !bInUse, "~OInterfaceContainerHelper but is in use" );
     if( bIsList )
         delete (Sequence< Reference< XInterface > >*)pData;
     else if( pData )
@@ -256,7 +256,7 @@ Sequence< Reference<XInterface> > OInterfaceContainerHelper::getElements() const
 
 void OInterfaceContainerHelper::copyAndResetInUse() SAL_THROW( () )
 {
-    OSL_ENSHURE( bInUse, "OInterfaceContainerHelper not in use" );
+    OSL_ENSURE( bInUse, "OInterfaceContainerHelper not in use" );
     if( bInUse )
     {
         // this should be the worst case. If a iterator is active
@@ -365,7 +365,7 @@ void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt ) SAL_
     ClearableMutexGuard aGuard( rMutex );
     OInterfaceIteratorHelper aIt( *this );
     // Container freigeben, falls im disposing neue Einträge kommen
-    OSL_ENSHURE( !bIsList || bInUse, "OInterfaceContainerHelper not in use" );
+    OSL_ENSURE( !bIsList || bInUse, "OInterfaceContainerHelper not in use" );
     if( !bIsList && pData )
         ((XInterface *)pData)->release();
     // set the member to null, the iterator delete the values
@@ -395,7 +395,7 @@ void OInterfaceContainerHelper::clear() SAL_THROW( () )
     ClearableMutexGuard aGuard( rMutex );
     OInterfaceIteratorHelper aIt( *this );
     // Container freigeben, falls im disposing neue Einträge kommen
-    OSL_ENSHURE( !bIsList || bInUse, "OInterfaceContainerHelper not in use" );
+    OSL_ENSURE( !bIsList || bInUse, "OInterfaceContainerHelper not in use" );
     if( !bIsList && pData )
         ((XInterface *)pData)->release();
     // set the member to null, the iterator delete the values

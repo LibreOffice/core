@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propshlp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:21:00 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,8 +256,8 @@ void OPropertySetHelper::addPropertyChangeListener(
            ::com::sun::star::uno::RuntimeException)
 {
     MutexGuard aGuard( rBHelper.rMutex );
-    OSL_ENSHURE( !rBHelper.bInDispose, "do not addPropertyChangeListener in the dispose call" );
-    OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" );
+    OSL_ENSURE( !rBHelper.bInDispose, "do not addPropertyChangeListener in the dispose call" );
+    OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
     if( !rBHelper.bInDispose && !rBHelper.bDisposed )
     {
         // only add listeners if you are not disposed
@@ -277,7 +277,7 @@ void OPropertySetHelper::addPropertyChangeListener(
             rPH.fillPropertyMembersByHandle( NULL, &nAttributes, nHandle );
             if( !(nAttributes & ::com::sun::star::beans::PropertyAttribute::BOUND) )
             {
-                OSL_ENSHURE( sal_False, "add listener to an unbound property" );
+                OSL_ENSURE( sal_False, "add listener to an unbound property" );
                 // silent ignore this
                 return;
             }
@@ -304,7 +304,7 @@ void OPropertySetHelper::removePropertyChangeListener(
           ::com::sun::star::uno::RuntimeException)
 {
     MutexGuard aGuard( rBHelper.rMutex );
-    OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" );
+    OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
     // all listeners are automaticly released in a dispose call
     if( !rBHelper.bInDispose && !rBHelper.bDisposed )
     {
@@ -338,8 +338,8 @@ void OPropertySetHelper::addVetoableChangeListener(
           ::com::sun::star::uno::RuntimeException)
 {
     MutexGuard aGuard( rBHelper.rMutex );
-    OSL_ENSHURE( !rBHelper.bInDispose, "do not addVetoableChangeListener in the dispose call" );
-    OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" );
+    OSL_ENSURE( !rBHelper.bInDispose, "do not addVetoableChangeListener in the dispose call" );
+    OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
     if( !rBHelper.bInDispose && !rBHelper.bDisposed )
     {
         // only add listeners if you are not disposed
@@ -359,7 +359,7 @@ void OPropertySetHelper::addVetoableChangeListener(
             rPH.fillPropertyMembersByHandle( NULL, &nAttributes, nHandle );
             if( !(nAttributes & PropertyAttribute::CONSTRAINED) )
             {
-                OSL_ENSHURE( sal_False, "addVetoableChangeListener, and property is not constrained" );
+                OSL_ENSURE( sal_False, "addVetoableChangeListener, and property is not constrained" );
                 // silent ignore this
                 return;
             }
@@ -384,7 +384,7 @@ void OPropertySetHelper::removeVetoableChangeListener(
           ::com::sun::star::uno::RuntimeException)
 {
     MutexGuard aGuard( rBHelper.rMutex );
-    OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" );
+    OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
     // all listeners are automaticly released in a dispose call
     if( !rBHelper.bInDispose && !rBHelper.bDisposed )
     {
@@ -418,8 +418,8 @@ void OPropertySetHelper::setFastPropertyValue( sal_Int32 nHandle, const Any& rVa
            ::com::sun::star::lang::WrappedTargetException,
            ::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSHURE( !rBHelper.bInDispose, "do not setFastPropertyValue in the dispose call" );
-    OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" );
+    OSL_ENSURE( !rBHelper.bInDispose, "do not setFastPropertyValue in the dispose call" );
+    OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
 
     IPropertyArrayHelper & rInfo = getInfoHelper();
     sal_Int16 nAttributes;
@@ -602,8 +602,8 @@ void OPropertySetHelper::setFastPropertyValues(
     sal_Int32 nHitCount )
     SAL_THROW( (::com::sun::star::uno::Exception) )
 {
-    OSL_ENSHURE( !rBHelper.bInDispose, "do not getFastPropertyValue in the dispose call" );
-    OSL_ENSHURE( !rBHelper.bDisposed, "object is disposed" );
+    OSL_ENSURE( !rBHelper.bInDispose, "do not getFastPropertyValue in the dispose call" );
+    OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
 
     Any * pConvertedValues = NULL;
     Any * pOldValues = NULL;
@@ -864,7 +864,7 @@ void OPropertyArrayHelper::init( sal_Bool bSorted ) SAL_THROW( () )
     {
         if(  pProperties[i-1].Name >= pProperties[i].Name )
         {
-            OSL_ENSHURE( !bSorted, "Property array is not sorted" );
+            OSL_ENSURE( !bSorted, "Property array is not sorted" );
             // not sorted
             qsort( aInfos.getArray(), nElements, sizeof( Property ),
                     compare_Property_Impl );

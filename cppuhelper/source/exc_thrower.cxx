@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exc_thrower.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ static void SAL_CALL ExceptionThrower_dispatch(
         break;
     }
     default:
-        OSL_ENSHURE( sal_False, "### illegal member called!" );
+        OSL_ENSURE( sal_False, "### illegal member called!" );
     }
 }
 } // extern "C"
@@ -262,7 +262,7 @@ void SAL_CALL throwException( const Any & rExc ) SAL_THROW( (Exception) )
             {
                 Mapping aUno2Cpp( OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ),
                                   OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ) );
-                OSL_ENSHURE( aUno2Cpp.is(), "### cannot get uno to cpp mapping!" );
+                OSL_ENSURE( aUno2Cpp.is(), "### cannot get uno to cpp mapping!" );
                 if (aUno2Cpp.is())
                 {
                     uno_Interface * pUnoI = new ExceptionThrower();

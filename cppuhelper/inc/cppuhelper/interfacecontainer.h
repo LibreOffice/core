@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 13:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,8 +374,8 @@ struct OBroadcastHelperVar
         SAL_THROW( () )
     {
         ::osl::MutexGuard guard( rMutex );
-        OSL_ENSHURE( !bInDispose, "do not add listeners in the dispose call" );
-        OSL_ENSHURE( !bDisposed, "object is disposed" );
+        OSL_ENSURE( !bInDispose, "do not add listeners in the dispose call" );
+        OSL_ENSURE( !bDisposed, "object is disposed" );
         if( ! bInDispose && ! bDisposed  )
             aLC.addInterface( key , r );
     }
@@ -389,7 +389,7 @@ struct OBroadcastHelperVar
         SAL_THROW( () )
     {
         ::osl::MutexGuard guard( rMutex );
-        OSL_ENSHURE( !bDisposed, "object is disposed" );
+        OSL_ENSURE( !bDisposed, "object is disposed" );
         if( ! bInDispose && ! bDisposed  )
             aLC.removeInterface( key , r );
     }
