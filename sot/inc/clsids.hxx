@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clsids.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-06 10:46:57 $
+ *  last change: $Author: mba $ $Date: 2001-03-05 12:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,9 @@
 
 #define SO3_SM_CLASSID  SO3_SM_CLASSID_60
 
+#define SO3_OUT_CLASSID \
+    0x970b1e82, 0xcf2d, 0x11cf, 0x89, 0xca, 0x00, \
+    0x80, 0x29, 0xe4, 0xb0, 0xb1
 
 
 #endif
