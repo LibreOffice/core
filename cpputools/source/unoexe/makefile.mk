@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-19 17:31:37 $
+#   last change: $Author: vg $ $Date: 2003-10-06 13:08:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,8 +77,8 @@ NO_BSYMBOLIC=TRUE
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
-UNOUCROUT=$(OUT)$/inc
-INCPRE+=$(OUT)$/inc
+UNOUCROUT = $(OUT)$/inc$/$(TARGET)
+INCPRE += $(UNOUCROUT)
 CPPUMAKERFLAGS+= -C
 
 UNOTYPES= \
