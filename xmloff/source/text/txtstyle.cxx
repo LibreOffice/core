@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-22 15:30:20 $
+ *  last change: $Author: mtg $ $Date: 2001-03-22 21:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed )
         {
             Reference < XPropertySet > xPropSet (xInt, UNO_QUERY);
             if (xPropSet.is())
-                exportDefaultStyle( xPropSet, sXML_text, GetParaPropMapper());
+                exportDefaultStyle( xPropSet, sXML_paragraph, GetParaPropMapper());
         }
     }
     exportStyleFamily( "ParagraphStyles", sXML_paragraph, GetParaPropMapper(),
