@@ -64,12 +64,13 @@ private keyAllocationMap(6,25) as new com.sun.star.beans.PropertyValue
 private AllKeyGroupsArray(6) as String
 
 
-&apos;Array to store all event bindings for the Applications
+&apos;Array of props to store all event bindings for the Applications
 private	allEventTypesApp( 14 ) as new com.sun.star.beans.PropertyValue
-&apos;Array to store all event types
-private allEventTypes( 14 ) as string
-&apos;Array to store textual description for all event types
-private allEventTypesAsText( 14 ) as string
+&apos;Array of props to store all event bindings for the Document
+private	allEventTypesDoc( 14 ) as new com.sun.star.beans.PropertyValue
+&apos;Array of props to store all event types (Name) and textual description (Value)
+private allEventTypes( 14 ) as new com.sun.star.beans.PropertyValue
+
 REM ------ Storage Refresh Function ------
 
 
@@ -232,9 +233,13 @@ Sub ExecuteEventBinding
 	createAllEventTypes()
 	createAllEventBindings()
 	
+	&apos;Populate application event bindings array (from config xml file)
 	if not (ReadXMLToArray( &quot;Event&quot; )) then
 		Exit Sub
 	endif
+	&apos;Populate document event bindings array (using Office API calls)
+	ReadEventsFromDoc()
+		
 	bindingDialog = LoadDialog( &quot;ScriptBindingLibrary&quot;, &quot;EventsBinding&quot; )
 	initialiseNavigationComboArrays()
     PopulateLanguageCombo()
@@ -287,7 +292,6 @@ end function
 
 function GetDocumentType( bindingType as string ) as string
 	document = StarDesktop.ActiveFrame.Controller.Model
-	&apos;msgbox document.dbg_supportedinterfaces
 	Dim errornumber As Integer
 	errornumber = 111
 	Error errornumber
@@ -433,7 +437,7 @@ function ReadXMLToArray( bindingType as string ) as boolean
 		elseif bindingType = &quot;Key&quot; then
 			processKeyXMLLine( lineCount, xmlline )
 		elseif bindingType = &quot;Event&quot; then
-				evaluateForEvent( xmlline, lineCount )
+			evaluateForEvent( xmlline, lineCount )
 		else
 			MsgBox (&quot;Error: Couldn&apos;t determine file type&quot; + chr$(10) + chr$(10) + &quot;Action: Please reinstall Scripting Framework&quot;,0,&quot;Error&quot; )
 		end if
@@ -472,26 +476,110 @@ end sub
 sub evaluateForEvent( xmlline as string, lineCount as integer )
 	dim eventName as String
 	&apos;if the xml line identifies a script or SB macro
-	dim scriptProp as new com.sun.star.beans.PropertyValue
+	dim scriptName as string
+	dim lineNumber as integer
 	if instr( xmlline, &quot;event:language=&quot; + chr$(34) + &quot;Script&quot; ) &gt; 0 then 
-	
 		eventName = ExtractEventNameFromXMLLine( xmlline ) 
-		scriptProp.Name = ExtractEventScriptFromXMLLine( xmlline )
-		scriptProp.Value = lineCount
-
+		scriptName = ExtractEventScriptFromXMLLine( xmlline )
+		lineNumber = lineCount
 	elseif instr( xmlline, &quot;event:language=&quot; + chr$(34) + &quot;StarBasic&quot; ) &gt; 0 then
-		 eventName = ExtractEventNameFromXMLLine( xmlline )
-		 scriptProp.Name = &quot;Allocated to Office function&quot;
-		 scriptProp.Value = 1
+		eventName = ExtractEventNameFromXMLLine( xmlline )
+		scriptName = &quot;Allocated to Office function&quot;
+		lineNumber = 1
 	end if
+	
+	&apos;Need to sequence to find the corresponding index for the event type
 	for n = 0 to ubound( allEventTypesApp() )
-		if ( eventName = allEventTypes( n ) ) then
-			allEventTypesApp( n ).Value = scriptProp
+		if ( eventName = allEventTypes( n ).Name ) then
+			allEventTypesApp( n ).Name = scriptName
+			allEventTypesApp( n ).Value = lineNumber
 		end if
 	next n	
 end sub
 
 
+sub ReadEventsFromDoc()
+	On Error Goto ErrorHandler
+	
+	eventSupplier = ThisComponent
+	for n = 0 to ubound( allEventTypes() )
+		scriptProps = eventSupplier.getEvents().getByName( allEventTypes( n ).Name )
+		if ( ubound( scriptProps ) &gt; 0 ) then
+			if ( scriptProps(0).Value = &quot;Script&quot; ) then
+				&apos;Script binding
+				allEventTypesDoc(n).Name = scriptProps(1).Value
+				allEventTypesDoc(n).value = 2
+			elseif( scriptProps(0).Value = &quot;StarBasic&quot; ) then
+				&apos;StarBasic macro
+				allEventTypesDoc(n).Name = &quot;Allocated to Office function&quot;
+				allEventTypesDoc(n).value = 1
+			end if
+		end if
+	next n
+	
+	exit sub
+	
+	&apos; eventProps is undefined if there are no event bindings in the doc
+	ErrorHandler:
+	reset
+end sub
+
+
+sub WriteEventsToDoc()
+	On Error Goto ErrorHandler
+	
+	eventSupplier = ThisComponent
+	for n = 0 to ubound( allEventTypes() )
+		scriptName = allEventTypesDoc( n ).Name
+		eventName = allEventTypes( n ).Name
+		if( allEventTypesDoc( n ).Value &gt; 1 ) then &apos;script
+			&apos;add to doc
+			AddEventToDocViaAPI( scriptName, eventName )
+		elseif( allEventTypesDoc( n ).Value = 0 ) then &apos;blank (this will &quot;remove&quot; already blank entries)
+			&apos;remove from doc
+			RemoveEventFromDocViaAPI( eventName )
+		endif
+		&apos;Otherwise it is a StarBasic binding - leave alone
+	next n
+
+	exit sub
+
+	ErrorHandler:
+	reset
+	msgbox( &quot;Error calling UNO API for writing event bindings to the document&quot; )
+end sub
+
+
+sub RemoveEventFromDocViaAPI( event as string )
+	dim document   as object
+	dim dispatcher as object
+	dim parser     as object
+	dim url        as new com.sun.star.util.URL
+	
+	document = ThisComponent.CurrentController.Frame
+	parser   = createUnoService(&quot;com.sun.star.util.URLTransformer&quot;)
+	dim args(0) as new com.sun.star.beans.PropertyValue
+	args(0).Name = &quot;&quot;
+	args(0).Value = event
+	url.Complete = &quot;script://ScriptFrmwrkHelper.removeEvent?language=Java+function=ScriptFrmwrkHelper.removeEvent+location=user&quot;
+	parser.parseStrict(url)
+	disp = document.queryDispatch(url,&quot;&quot;,0)
+	disp.dispatch(url,args())
+end sub
+
+
+sub AddEventToDocViaAPI( scriptName as string, eventName as string )
+	dim properties( 1 ) as new com.sun.star.beans.PropertyValue
+	properties( 0 ).Name = &quot;EventType&quot;
+	properties( 0 ).Value = &quot;Script&quot;
+	properties( 1 ).Name = &quot;URL&quot;
+	properties( 1 ).Value = scriptName
+		
+	eventSupplier = ThisComponent
+	&apos;eventSupplier = StarDesktop.ActiveFrame.Controller.Model
+	nameReplace = eventSupplier.getEvents()
+	nameReplace.replaceByName( eventName, properties() )
+end sub
 
 
 &apos; returns 0 for Fkey
@@ -640,50 +728,28 @@ sub UpdateConfig( a$ )
 
 End Sub
 
-sub AddNewEventBindingDoc( scriptName as string, eventName as string )
-	dim properties( 1 ) as new com.sun.star.beans.PropertyValue
-	properties( 0 ).Name = &quot;EventType&quot;
-	properties( 0 ).Value = &quot;Script&quot;
-	properties( 1 ).Name = &quot;URL&quot;
-	properties( 1 ).Value = scriptName
-		
-	eventSupplier = ThisComponent
-	&apos;eventSupplier = StarDesktop.ActiveFrame.Controller.Model
-	nameReplace = eventSupplier.getEvents()
-	nameReplace.replaceByName( eventName, properties() )
-end sub
 
-
-sub AddNewEventBindingApp( scriptName as string, eventBinding as string )
+sub AddNewEventBinding( scriptName as string, eventPosition as integer, isApp as boolean )
+	event = allEventTypes( eventPosition ).Name
+	&apos;dim scriptProp as new com.sun.star.beans.PropertyValue
+	if isApp then
+		&apos;scriptProp.Name = scriptName
+		&apos;scriptProp.Value = numberOfLines
+		allEventTypesApp( eventPosition ).Name = scriptName
+		allEventTypesApp( eventPosition ).Value = numberOfLines
 	
-	for n = 0 to ubound( allEventTypesApp() )
-		if strcomp( allEventTypesApp( n ).Name, eventBinding, 1 ) = 0 then
-			dim scriptProp as new com.sun.star.beans.PropertyValue
-			scriptProp.Name = scriptName
-			scriptProp.Value = numberOfLines
-			allEventTypesApp( n ).Value = scriptProp
-			exit for
-		end if
-	next n	
-	
-	newline = &quot; &lt;event:event event:name=&quot; + chr$(34) + eventBinding + chr$(34)
-	newline = newline + &quot; event:language=&quot; + chr$(34) + &quot;Script&quot; + chr$(34) + &quot; xlink:href=&quot; + chr$(34)
-	newline = newline + scriptName + chr$(34) + &quot; xlink:type=&quot; + chr$(34) + &quot;simple&quot; + chr$(34) + &quot;/&gt;&quot;
-	
-	&apos;msgbox ( &quot;numberOfLines is &quot; + numberOfLines )
-	for n = 1 to numberOfLines
-		if n = numberOfLines then
-			&apos;msgbox ( &quot;Adding new line: &quot; + newline + &quot; &quot; + n)
-			&apos;msgbox ( &quot;Adding last line: &lt;/event:events&gt;&quot;+ n )
-			xmlFile( n ) = newline
-			xmlFile( n + 1 ) = &quot;&lt;/event:events&gt;&quot;
-			exit for
-		else
-			&apos;msgbox ( &quot;Adding line: &quot; + xmlFile( n )+ &quot; &quot; + n )
-			xmlFile( n ) = xmlFile( n )	
-		end if
-	next n
-	numberOfLines = numberOfLines + 1
+		newline = &quot; &lt;event:event event:name=&quot; + chr$(34) + event + chr$(34)
+		newline = newline + &quot; event:language=&quot; + chr$(34) + &quot;Script&quot; + chr$(34) + &quot; xlink:href=&quot; + chr$(34)
+		newline = newline + scriptName + chr$(34) + &quot; xlink:type=&quot; + chr$(34) + &quot;simple&quot; + chr$(34) + &quot;/&gt;&quot;	
+		xmlFile( numberOfLines ) = newline
+		xmlFile( numberOfLines + 1 ) = &quot;&lt;/event:events&gt;&quot;	
+		numberOfLines = numberOfLines + 1
+	else
+		&apos;scriptProp.Name = scriptName
+		&apos;scriptProp.Value = 2
+		allEventTypesDoc( eventPosition ).Name = scriptName
+		allEventTypesDoc( eventPosition ).Value = 2
+	end if	
 end sub
 
 REM ----- Array update functions -----
@@ -1032,57 +1098,39 @@ sub PopulateKeyBindingList( keyGroupIndex as Integer )
 end sub
 
 sub populateEventList( focusPosition as integer )
-	on error goto ErrorHandler
-	
 	allApps = bindingDialog.getControl( &quot;AllAppsOption&quot; )
 	eventList = bindingDialog.getControl( &quot;EventList&quot; )
 	eventList.removeItems( 0, eventList.getItemCount() )
-	
-	&apos; use allEventTypes() to fill list box 
-	&apos; for each element compare with allEventTypesApp	
-	
-	if allApps.state = true then &apos; Application event
-		for n = 0 to ubound( allEventTypesAsText() ) 
-			stringToAdd = &quot;&quot;
-			scriptProp = allEventTypesApp( n ).Value
-			&apos; If the line number is 1 then SB macro
-			&apos; more than 1 it is the line number of the script
-			if ( scriptProp.Value = 1 ) then
-				stringToAdd = stringToAdd + &quot; [Allocated to Office function]&quot;
-			elseif ( scriptProp.Value &gt; 1 ) then
-				stringToAdd = stringToAdd + &quot; [&quot; + scriptProp.Name + &quot;]&quot;
-			end if
-			eventList.addItem( allEventTypesAsText( n ) + &quot; &quot; + stringToAdd, n )
-		next n
-	else &apos;Document event
-	    		for n = 0 to ubound( allEventTypes() )
-			displayLine = allEventTypesAsText( n )
-			eventSupplier = ThisComponent
-			scriptProps = eventSupplier.getEvents().getByName( allEventTypes( n ) )
-			if ( UBOUND( scriptProps ) &gt; 0 ) then
-				if ( UBOUND( scriptProps ) = 2 ) then
-					&apos; Starbasic script
-					displayLine = displayLine + &quot; [Allocated to Office function]&quot;
-				else
-					displayLine = displayLine + &quot; [&quot; + scriptProps(1).Value + &quot;]&quot;
-				end if
-			end if
-			eventList.addItem( displayLine, n ) &apos;add doc event info later
-		next n
-		
+
+	dim isApp as boolean
+	if allApps.state = true then  &apos; Application event	
+		isApp = true	
+	else
+		isApp = false
 	end if
+
+	&apos; use allEventTypes() to fill list box 
+	&apos; for each element compare with allEventTypesApp
+	dim scriptName as string
+	dim lineNumber as integer	
+	for n = 0 to ubound( allEventTypes() ) 	
+		&apos; If the line number is 1 then SB macro
+		&apos; more than 1 it is the line number of the script
+		if isApp then
+			lineNumber = allEventTypesApp( n ).Value
+			scriptName = allEventTypesApp( n ).Name
+		else
+			lineNumber = allEventTypesDoc( n ).Value
+			scriptName = allEventTypesDoc( n ).Name			
+		end if
+		stringToAdd = &quot;&quot;
+		if ( lineNumber &gt;= 1 ) then
+			stringToAdd = &quot; [&quot; + scriptName + &quot;]&quot;
+		end if
+		eventList.addItem( allEventTypes( n ).Value + &quot; &quot; + stringToAdd, n )
+	next n
 	
 	eventList.selectItemPos( focusPosition, true )
-	Exit Sub
-	
-	&apos; eventProps is undefined if there are no event bindings in the doc
-	ErrorHandler:
-	reset
-	for n = 0 to ubound( allEventTypesAsText() )	
-		eventList.addItem( allEventTypesAsText(n), n )
-	next n
-	eventList.selectItemPos( focusPosition, true )	
-	
 end sub
 
 
@@ -1125,92 +1173,53 @@ end sub
 
 
 sub createAllEventTypes()
-	allEventTypes( 0 ) = &quot;OnStartApp&quot;
-	allEventTypes( 1 ) = &quot;OnCloseApp&quot;
-	allEventTypes( 2 ) = &quot;OnNew&quot;
-	allEventTypes( 3 ) = &quot;OnLoad&quot;
-	allEventTypes( 4 ) = &quot;OnSaveAs&quot;
-	allEventTypes( 5 ) = &quot;OnSaveAsDone&quot;
-	allEventTypes( 6 ) = &quot;OnSave&quot;
-	allEventTypes( 7 ) = &quot;OnSaveDone&quot;
-	allEventTypes( 8 ) = &quot;OnPrepareUnload&quot;
-	allEventTypes( 9 ) = &quot;OnUnload&quot;
-	allEventTypes( 10 ) = &quot;OnFocus&quot;
-	allEventTypes( 11 ) = &quot;OnUnfocus&quot;
-	allEventTypes( 12 ) = &quot;OnPrint&quot;
-	allEventTypes( 13 ) = &quot;OnError&quot;
-	allEventTypes( 14 ) = &quot;OnNewMail&quot;
-	
-	allEventTypesAsText(0) = &quot;Start Application&quot;
-	allEventTypesAsText(1) = &quot;Close Application&quot;
-	allEventTypesAsText(2) = &quot;Create Document&quot;
-	allEventTypesAsText(3) = &quot;Open Document&quot;
-	allEventTypesAsText(4) = &quot;Save Document As&quot;
-	allEventTypesAsText(5) = &quot;Document has been saved as&quot;
-	allEventTypesAsText(6) = &quot;Save Document&quot;
-	allEventTypesAsText(7) = &quot;Document has been saved&quot;
-	allEventTypesAsText(8) = &quot;Close Document&quot;
-	allEventTypesAsText(9) = &quot;Close Document&quot;
-	allEventTypesAsText(10) = &quot;Activate document&quot;
-	allEventTypesAsText(11) = &quot;DeActivate document&quot;
-	allEventTypesAsText(12) = &quot;Print Document&quot;
-	allEventTypesAsText(13) = &quot;JavaScript Error&quot;
-	allEventTypesAsText(14) = &quot;Message received&quot;
-		
+	allEventTypes( 0 ).Name = &quot;OnStartApp&quot;
+	allEventTypes( 0 ).Value = &quot;Start Application&quot;
+	allEventTypes( 1 ).Name = &quot;OnCloseApp&quot;
+	allEventTypes( 1 ).Value = &quot;Close Application&quot;
+	allEventTypes( 2 ).Name = &quot;OnNew&quot;
+	allEventTypes( 2 ).Value = &quot;Create Document&quot;
+	allEventTypes( 3 ).Name = &quot;OnLoad&quot;
+	allEventTypes( 3 ).Value = &quot;Open Document&quot;
+	allEventTypes( 4 ).Name = &quot;OnSaveAs&quot;
+	allEventTypes( 4 ).Value = &quot;Save Document As&quot;
+	allEventTypes( 5 ).Name = &quot;OnSaveAsDone&quot;
+	allEventTypes( 5 ).Value = &quot;Document has been saved as&quot;
+	allEventTypes( 6 ).Name = &quot;OnSave&quot;
+	allEventTypes( 6 ).Value = &quot;Save Document&quot;
+	allEventTypes( 7 ).Name = &quot;OnSaveDone&quot;
+	allEventTypes( 7 ).Value = &quot;Document has been saved&quot;
+	allEventTypes( 8 ).Name = &quot;OnPrepareUnload&quot;
+	allEventTypes( 8 ).Value = &quot;Close Document&quot;
+	allEventTypes( 9 ).Name = &quot;OnUnload&quot;
+	allEventTypes( 9 ).Value = &quot;Close Document&quot;
+	allEventTypes( 10 ).Name = &quot;OnFocus&quot;
+	allEventTypes( 10 ).Value = &quot;Activate document&quot;
+	allEventTypes( 11 ).Name = &quot;OnUnfocus&quot;
+	allEventTypes( 11 ).Value = &quot;DeActivate document&quot;
+	allEventTypes( 12 ).Name = &quot;OnPrint&quot;
+	allEventTypes( 12 ).Value = &quot;Print Document&quot;
+	allEventTypes( 13 ).Name = &quot;OnError&quot;
+	allEventTypes( 13 ).Value = &quot;JavaScript Error&quot;
+	allEventTypes( 14 ).Name = &quot;OnNewMail&quot;
+	allEventTypes( 14 ).Value = &quot;Message received&quot;
 end sub
 
 
 sub createAllEventBindings()
-	dim props as new com.sun.star.beans.PropertyValue
-	props.Name = &quot;&quot;
-	props.Value = 0
+	&apos;dim props as new com.sun.star.beans.PropertyValue
+	&apos;props.Name = &quot;&quot; &apos;Name = script name
+	&apos;props.Value = 0 &apos;Value = 0 for empty, 1 for macro, linenumber for script
 	
 	&apos; Creates all types of event bindings for both Application and Document
 	&apos; Initially both arrays have no bindings allocated to the events
-	allEventTypesApp( 0 ).Name = &quot;OnStartApp&quot;
-	allEventTypesApp( 0 ).Value = props
-
-	allEventTypesApp( 1 ).Name = &quot;OnCloseApp&quot;
-	allEventTypesApp( 1 ).Value = props
-		
-	allEventTypesApp( 2 ).Name = &quot;OnNew&quot;
-	allEventTypesApp( 2 ).Value = props	
-		
-	allEventTypesApp( 3 ).Name = &quot;OnLoad&quot;
-	allEventTypesApp( 3 ).Value = props
-		
-	allEventTypesApp( 4 ).Name = &quot;OnSaveAs&quot;
-	allEventTypesApp( 4 ).Value = props	
-		
-	allEventTypesApp( 5 ).Name = &quot;OnSaveAsDone&quot;
-	allEventTypesApp( 5 ).Value = props	
-		
-	allEventTypesApp( 6 ).Name = &quot;OnSave&quot;
-	allEventTypesApp( 6 ).Value = props	
-		
-	allEventTypesApp( 7 ).Name = &quot;OnSaveDone&quot;
-	allEventTypesApp( 7 ).Value = props	
-		
-	allEventTypesApp( 8 ).Name = &quot;OnPrepareLoad&quot;
-	allEventTypesApp( 8 ).Value = props	
-		
-	allEventTypesApp( 9 ).Name = &quot;OnUnload&quot;
-	allEventTypesApp( 9 ).Value = props	
-		
-	allEventTypesApp( 10 ).Name = &quot;OnFocus&quot;
-	allEventTypesApp( 10 ).Value = props	
-		
-	allEventTypesApp( 11 ).Name = &quot;OnUnfocus&quot;
-	allEventTypesApp( 11 ).Value = props	
-		
-	allEventTypesApp( 12 ).Name = &quot;OnPrint&quot;
-	allEventTypesApp( 12 ).Value = props	
-		
-	allEventTypesApp( 13 ).Name = &quot;OnError&quot;
-	allEventTypesApp( 13 ).Value = props
-		
-	allEventTypesApp( 14 ).Name = &quot;OnNewMail&quot;
-	allEventTypesApp( 14 ).Value = props	
+	&apos; The value for Doc is only Script/macro name (no need for line number)
+	for n = 0 to ubound( allEventTypes() )
+		allEventTypesApp( n ).Name = &quot;&quot;
+		allEventTypesApp( n ).Value = 0
+		allEventTypesDoc( n ).Name = &quot;&quot;
+		allEventTypesDoc( n ).Value = 0
+	next n
 end sub
 
 
@@ -1271,7 +1280,6 @@ function ExtractEventNameFromXMLLine(  xmlline as string )
 	idEnd = instr( xmlline, chr$(34)+&quot; event:language&quot; )
 	idLength = idEnd - idStart
 	event =  mid( xmlline, idStart, idLength )
-	&apos;msgbox ( &quot;event: &quot; + event )
 	
 	ExtractEventNameFromXMLLine() = event
 end function
@@ -1473,41 +1481,24 @@ sub EventListListener()
     eventPos = eventList.getSelectedItemPos()
 
     allApps = bindingDialog.getControl( &quot;AllAppsOption&quot; )
-    if allApps.state = true then
-    	&apos;if the name is blank then the event is unassigned or assigned to a macro
-        binding = allEventTypesApp( eventPos ).Value.Value
 
-        if ( binding &gt; 1 ) then
-        	bindingDialog.Model.Delete.enabled = true
-        else
-        	bindingDialog.Model.Delete.enabled = false
-        end if
+    dim binding as integer
+    if allApps.state = true then
+    	binding = allEventTypesApp( eventPos ).Value
     else
-    	event = allEventTypes( eventPos )
-        &apos;if doc bindings
-        &apos;sequence through doc bindings using api
-        &apos;when find matching event - see if script or macro
-        dim prop as new com.sun.star.beans.PropertyValue
-        eventSupplier = StarDesktop.ActiveFrame.Controller.Model
-		scriptProps = eventSupplier.getEvents().getByName( event )
-		&apos;msgbox (&quot;listener scriptprops has  &quot; +  UBOUND( scriptProps ) + &quot;elems&quot;)
-		if ( UBOUND( scriptProps ) &gt;= 0 ) then
-			if ( UBOUND( scriptProps ) = 2 ) then
-				&apos; Starbasic script
-				bindingDialog.Model.Delete.enabled = false
-			else
-				bindingDialog.Model.Delete.enabled = true
-			end if
-		else 
-			bindingDialog.Model.Delete.enabled = false
-		end if
-    end if 
-    
+	    binding = allEventTypesDoc( eventPos ).Value
+    endif
+
+    if ( binding &gt; 1 ) then
+       	bindingDialog.Model.Delete.enabled = true
+    else
+       	bindingDialog.Model.Delete.enabled = false
+    end if
+
     exit sub
 
     ErrorHandler:
     reset
-    &apos;msgbox ( &quot;EventListListener: ErrorHandler called&quot; )
     bindingDialog.Model.Delete.enabled = false
 
 end sub
@@ -1653,16 +1644,16 @@ sub EventNewButton()
 	scriptURI = getScriptURI( selectedScript )
 	eventList = bindingDialog.getControl( &quot;EventList&quot; )
 	eventPosition = eventList.getSelectedItemPos()
-	event = allEventTypes( eventPosition )
-	&apos;msgbox ( &quot;script is: &quot; + scriptLogical + &quot; and event is &quot; + event )
 
 	allApps = bindingDialog.getControl( &quot;AllAppsOption&quot; )
+	dim isApp as boolean
 	if allApps.state = true then &apos;Application	
-		AddNewEventBindingApp( scriptURI, event )
+		isApp = true
 	else &apos;Document
-		AddNewEventBindingDoc( scriptURI, event )
+		isApp = false
 	end if
-	
+	AddNewEventBinding( scriptURI, eventPosition, isApp )
+
 	populateEventList( eventPosition )
 	EventListListener()
 end sub
@@ -1675,39 +1666,32 @@ sub EventDeleteButton()
 
 	allApps = bindingDialog.getControl( &quot;AllAppsOption&quot; )
 	if allApps.state = true then &apos;Application
-		eventProp = allEventTypesApp( eventPosition ).Value
-		linePosition = eventProp.Value
-		eventProp.Name = &quot;&quot;
-		eventProp.Value = 0
-		allEventTypesApp( eventPosition ).Value = eventProp
+		linePosition = allEventTypesApp( eventPosition ).Value
+		&apos;dim eventProp as new com.sun.star.beans.PropertyValue
+		&apos;eventProp.Name = &quot;&quot;
+		&apos;eventProp.Value = 0
+		allEventTypesApp( eventPosition ).Name = &quot;&quot;
+		allEventTypesApp( eventPosition ).Value = 0		
 		RemoveBinding( linePosition )
 	else &apos;Document
-		DeleteEvent( allEventTypes( eventPosition ) )
+		&apos;DeleteEvent( allEventTypes( eventPosition ) )
+		allEventTypesDoc( eventPosition ).Name = &quot;&quot;		
+		allEventTypesDoc( eventPosition ).Value = 0
 	end if
 	
 	PopulateEventList( eventPosition )
 	EventListListener()
-	
 end sub
+
+
+sub EventOKButton
+	WriteEventsToDoc()
+	WriteXMLFromArray()
+	bindingDialog.endExecute()
+end sub
+
 
 sub HelpOKButton()
 	helpDialog.endExecute()
 end sub
-
-sub DeleteEvent( event as String )
-	dim document   as object
-	dim dispatcher as object
-	dim parser     as object
-	dim url        as new com.sun.star.util.URL
-	document = ThisComponent.CurrentController.Frame
-	parser   = createUnoService(&quot;com.sun.star.util.URLTransformer&quot;)
-	dim args(0) as new com.sun.star.beans.PropertyValue
-	args(0).Name = &quot;&quot;
-	args(0).Value = event
-	url.Complete = &quot;script://ScriptFrmwrkHelper.removeEvent?language=Java+function=ScriptFrmwrkHelper.removeEvent+location=user&quot;
-	parser.parseStrict(url)
-	disp = document.queryDispatch(url,&quot;&quot;,0)
-	disp.dispatch(url,args())
-end sub 
-
 </script:module>

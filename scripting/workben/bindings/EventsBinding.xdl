@@ -13,7 +13,7 @@
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.MenuCancelButton" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="OK" dlg:tab-index="3" dlg:left="57" dlg:top="192" dlg:width="36" dlg:height="13" dlg:value="OK">
-   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.MenuOKButton" script:language="StarBasic"/>
+   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.EventOKButton" script:language="StarBasic"/>
   </dlg:button>
   <dlg:fixedline dlg:id="FixedLine4" dlg:tab-index="4" dlg:left="76" dlg:top="99" dlg:width="98" dlg:height="5"/>
   <dlg:text dlg:id="Label4" dlg:tab-index="5" dlg:left="5" dlg:top="97" dlg:width="71" dlg:height="8" dlg:value="Choose Event to assign to"/>
