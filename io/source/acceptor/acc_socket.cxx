@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acc_socket.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-06 12:08:43 $
+ *  last change: $Author: svesik $ $Date: 2000-11-23 14:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 #include "acceptor.hxx"
 
-#include <stl/hash_set>
+#include <hash_set>
 
 #include <com/sun/star/connection/XConnectionBroadcaster.hpp>
 #include <com/sun/star/connection/ConnectionSetupException.hpp>

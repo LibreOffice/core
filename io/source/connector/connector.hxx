@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2000-11-07 15:11:35 $
+ *  last change: $Author: svesik $ $Date: 2000-11-23 14:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/connection/XConnectionBroadcaster.hpp>
 
-#include <stl/hash_set>
+#include <hash_set>
 
 #ifndef _VOS_SOCKET_HXX_
 #       include <vos/socket.hxx>

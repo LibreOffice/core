@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opump.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:18 $
+ *  last change: $Author: svesik $ $Date: 2000-11-23 14:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 #include <cppuhelper/factory.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <stl/list>
+#include <list>
 
 using namespace osl;
 using namespace std;
