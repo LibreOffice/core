@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: th $ $Date: 2000-11-29 20:13:43 $
+ *  last change: $Author: th $ $Date: 2000-12-15 13:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,13 +574,11 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
             }
         }
 
-        // ExtTextInput-Modus beenden, wenn in das Fenster geklickt wird
-        if ( pChild->IsExtTextInput() )
-        {
-            if ( (nSVEvent == EVENT_MOUSEBUTTONDOWN) ||
-                 (nSVEvent == EVENT_MOUSEBUTTONUP) )
-                pChild->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
-        }
+        // End ExtTextInput-Mode, if the user click in the same TopLevel Window
+        if ( pChild->mpFrameData->mpExtTextInputWin &&
+             ((nSVEvent == EVENT_MOUSEBUTTONDOWN) ||
+              (nSVEvent == EVENT_MOUSEBUTTONUP)) )
+            pChild->mpFrameData->mpExtTextInputWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
     }
 
     // determine mouse event data
