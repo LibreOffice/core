@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-24 11:30:28 $
+ *  last change: $Author: mt $ $Date: 2000-12-05 11:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,10 @@ void EditView::SetVisArea( const Rectangle& rRec )
 const Rectangle& EditView::GetVisArea() const
 {
     DBG_CHKTHIS( EditView, 0 );
-    return pImpEditView->GetVisDocArea();
+    // Change return value to Rectangle in next incompatible build !!!
+    static Rectangle aRect;
+    aRect = pImpEditView->GetVisDocArea();
+    return aRect;
 }
 
 void EditView::SetOutputArea( const Rectangle& rRec )
@@ -878,20 +881,13 @@ void EditView::CompleteAutoCorrect()
 
 EESpellState EditView::StartSpeller( LanguageType eLang, sal_Bool bMultipleDoc )
 {
-#ifdef SVX_LIGHT
-    return EE_SPELL_NOSPELLER;
-#else
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    if ( !PIMPEE->GetSpeller().is() )
-        return EE_SPELL_NOSPELLER;
-    PIMPEE->eDefaultLanguage = eLang;
-    SvxSpellWrapper::CheckSpellLang( PIMPEE->GetSpeller(), eLang );
-    return PIMPEE->Spell( this, bMultipleDoc );
+#if SUPD >= 615
+    DBG_ERROR( "DefaultLanguage not longer supported" );
 #endif
+    return StartSpeller( bMultipleDoc );
 }
 
-EESpellState EditView::StartThesaurus( LanguageType eLang )
+EESpellState EditView::StartSpeller( sal_Bool bMultipleDoc )
 {
 #ifdef SVX_LIGHT
     return EE_SPELL_NOSPELLER;
@@ -900,7 +896,29 @@ EESpellState EditView::StartThesaurus( LanguageType eLang )
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     if ( !PIMPEE->GetSpeller().is() )
         return EE_SPELL_NOSPELLER;
-    PIMPEE->eDefaultLanguage = eLang;
+    SvxSpellWrapper::CheckSpellLang( PIMPEE->GetSpeller(), PIMPEE->GetLanguage( EditPaM( PIMPEE->GetEditDoc().SaveGetObject( 0 ), 0 ) ) );
+    return PIMPEE->Spell( this, bMultipleDoc );
+#endif
+}
+
+EESpellState EditView::StartThesaurus( LanguageType eLang )
+{
+#if SUPD >= 615
+    DBG_ERROR( "DefaultLanguage not longer supported" );
+#endif
+    return StartThesaurus();
+}
+
+EESpellState EditView::StartThesaurus()
+{
+#ifdef SVX_LIGHT
+    return EE_SPELL_NOSPELLER;
+#else
+    DBG_CHKTHIS( EditView, 0 );
+    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
+    if ( !PIMPEE->GetSpeller().is() )
+        return EE_SPELL_NOSPELLER;
+
     return PIMPEE->StartThesaurus( this );
 #endif
 }
@@ -951,16 +969,18 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         PopupMenu *pAutoMenu = aPopupMenu.GetPopupMenu( MN_AUTOCORR );
         PopupMenu *pInsertMenu = aPopupMenu.GetPopupMenu( MN_INSERT );
 
+        EditPaM aPaM2( aPaM );
+        aPaM2.GetIndex()++;
+
         // Gibt es Replace-Vorschlaege?
         String aSelected( GetSelected() );
         Reference< XSpellAlternatives >  xSpellAlt =
-                xSpeller->spell( aSelected, PIMPEE->GetLanguage(),
-                                 Sequence< PropertyValue >() );
+                xSpeller->spell( aSelected, PIMPEE->GetLanguage( aPaM2 ), Sequence< PropertyValue >() );
         Sequence< OUString > aAlt;
         if (xSpellAlt.is())
             aAlt = xSpellAlt->getAlternatives();
         const OUString *pAlt = aAlt.getConstArray();
-        sal_uInt16 nWords = aAlt.getLength();
+        sal_uInt16 nWords = (USHORT) aAlt.getLength();
         if ( nWords )
         {
             for ( sal_uInt16 nW = 0; nW < nWords; nW++ )
@@ -980,8 +1000,8 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         if (xDicList.is())
             aDics = xDicList->getDictionaries();
         const Reference< XDictionary >  *pDic = aDics.getConstArray();
-        sal_uInt16 nLanguage = PIMPEE->eDefaultLanguage;
-        sal_uInt16 nDicCount = aDics.getLength();
+        sal_uInt16 nLanguage = PIMPEE->GetLanguage( aPaM2 );
+        sal_uInt16 nDicCount = (USHORT)aDics.getLength();
         for ( sal_uInt16 i = 0; i < nDicCount; i++ )
         {
             Reference< XDictionary1 >  xDic( pDic[i], UNO_QUERY );
@@ -1045,7 +1065,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             String aWord = pAlt[nId - MN_AUTOSTART];
             SvxAutoCorrect* pAutoCorrect = EE_DLL()->GetGlobalData()->GetAutoCorrect();
             if ( pAutoCorrect )
-                pAutoCorrect->PutText( aSelected, aWord, PIMPEE->GetLanguage() );
+                pAutoCorrect->PutText( aSelected, aWord, PIMPEE->GetLanguage( aPaM2 ) );
             InsertText( aWord );
         }
         else if ( nId >= MN_ALTSTART )  // Replace

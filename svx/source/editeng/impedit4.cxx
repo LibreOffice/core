@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-30 12:42:14 $
+ *  last change: $Author: mt $ $Date: 2000-12-05 11:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1455,7 +1455,7 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
     return aSel;
 }
 
-::com::sun::star::lang::Locale ImpEditEngine::GetLocale( const EditPaM& rPaM )
+LanguageType ImpEditEngine::GetLanguage( const EditPaM& rPaM ) const
 {
     short nScriptType = GetScriptType( rPaM );
     USHORT nLangId = GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType );
@@ -1464,28 +1464,13 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
     if ( pAttr )
         pLangItem = (const SvxLanguageItem*)pAttr->GetItem();
 
-    ::com::sun::star::lang::Locale aLocale;
-    String aLanguage, aCountry;
-    ConvertLanguageToIsoNames( pLangItem->GetLanguage(), aLanguage, aCountry );
-    aLocale.Language = aLanguage;
-    aLocale.Country = aCountry;
-
-    return aLocale;
+    return pLangItem->GetLanguage();
 }
 
-/*
-::com::sun::star::lang::Locale ImpEditEngine::GetLocale()
+::com::sun::star::lang::Locale ImpEditEngine::GetLocale( const EditPaM& rPaM ) const
 {
-    if ( !aDefaultLocale.Language.getLength() )
-    {
-        String aLanguage, aCountry;
-        ConvertLanguageToIsoNames( GetLanguage(), aLanguage, aCountry );
-        aDefaultLocale.Language = aLanguage;
-        aDefaultLocale.Country = aCountry;
-    }
-    return aDefaultLocale;
+    return SvxCreateLocale( GetLanguage( rPaM ) );
 }
-*/
 
 Reference< XSpellChecker1 > ImpEditEngine::GetSpeller()
 {
@@ -1506,8 +1491,6 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
 
     if ( !xSpeller.is() )
         return EE_SPELL_NOSPELLER;
-    if ( eDefaultLanguage == LANGUAGE_NONE )
-        return EE_SPELL_NOLANGUAGE;
 
     aOnlineSpellTimer.Stop();
 
@@ -1577,7 +1560,8 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
         aCurSel.Max() = aCurSel.Min();
 
     String aWord;
-    Reference< XSpellAlternatives >  xSpellAlt;
+    Reference< XSpellAlternatives > xSpellAlt;
+    Sequence< PropertyValue > aEmptySeq;
     while (!xSpellAlt.is())
     {
 
@@ -1623,8 +1607,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
         }
 
         if ( aWord.Len() > 1 )
-            xSpellAlt = xSpeller->spell( aWord, eDefaultLanguage,
-                                         Sequence< PropertyValue >() );
+            xSpellAlt = xSpeller->spell( aWord, GetLanguage( aCurSel.Max() ), aEmptySeq );
 
         if ( bForward && !xSpellAlt.is() )
             aCurSel = WordRight( aCurSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
@@ -1669,6 +1652,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
     ContentNode* pLastNode = aEditDoc.SaveGetObject( aEditDoc.Count() - 1 );
     sal_uInt16 nNodes = GetEditDoc().Count();
     sal_uInt16 nInvalids = 0;
+    Sequence< PropertyValue > aEmptySeq;
     for ( sal_uInt16 n = 0; n < nNodes; n++ )
     {
         ContentNode* pNode = GetEditDoc().GetObject( n );
@@ -1683,11 +1667,6 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
 
             sal_uInt16 nWrongs = 0; // Auch im Absatz mal die Kontrolle abgeben...
 //          sal_Bool bStop = sal_False;
-
-            // Alle WrongRanges im Unguetigkeitsbereich loeschen
-            // Zu Testzwecken erstmal plaetten:
-//          pWrongList->ResetRanges();
-//          nInvStart = 0; nInvEnd = pNode->Len();
 
             sal_uInt16 nPaintFrom = 0xFFFF, nPaintTo;
             sal_Bool bSimpleRepaint = sal_True;
@@ -1725,8 +1704,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                 {
                     sal_uInt16 nWStart = aSel.Min().GetIndex();
                     sal_uInt16 nWEnd= aSel.Max().GetIndex();
-                    if ( !xSpeller->isValid( aWord, eDefaultLanguage,
-                                             Sequence< PropertyValue >() ) )
+                    if ( !xSpeller->isValid( aWord, GetLanguage( EditPaM( aSel.Min().GetNode(), nWStart+1 ) ), aEmptySeq ) )
                     {
                         // Pruefen, ob schon richtig markiert...
                         nWrongs++;
@@ -1869,7 +1847,8 @@ EESpellState ImpEditEngine::HasSpellErrors()
     EditSelection aCurSel( aEditDoc.GetStartPaM() );
 
     String aWord;
-    Reference< XSpellAlternatives >  xSpellAlt;
+    Reference< XSpellAlternatives > xSpellAlt;
+    Sequence< PropertyValue > aEmptySeq;
     while ( !xSpellAlt.is() )
     {
         if ( ( aCurSel.Max().GetNode() == pLastNode ) &&
@@ -1881,8 +1860,7 @@ EESpellState ImpEditEngine::HasSpellErrors()
         aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
         aWord = GetSelected( aCurSel );
         if ( aWord.Len() > 1 )
-            xSpellAlt = xSpeller->spell( aWord, eDefaultLanguage,
-                                         Sequence< PropertyValue >() );
+            xSpellAlt = xSpeller->spell( aWord, GetLanguage( aCurSel.Max() ), aEmptySeq );
         aCurSel = WordRight( aCurSel.Max(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
     }
 #endif
@@ -1893,9 +1871,6 @@ EESpellState ImpEditEngine::HasSpellErrors()
 EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
 {
 #ifndef SVX_LIGHT
-    if ( eDefaultLanguage == LANGUAGE_NONE )
-        return EE_SPELL_NOLANGUAGE;
-
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     if ( !aCurSel.HasRange() )
         aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
@@ -1905,7 +1880,7 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
     if (!xThes.is())
         return EE_SPELL_ERRORFOUND;
 
-    SvxThesaurusDialog aDialog( pEditView->GetWindow(), xThes, aWord, eDefaultLanguage );
+    SvxThesaurusDialog aDialog( pEditView->GetWindow(), xThes, aWord, GetLanguage( aCurSel.Max() ) );
 
     if ( aDialog.Execute() == RET_OK )
     {

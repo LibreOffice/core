@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtspell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-19 11:29:36 $
+ *  last change: $Author: mt $ $Date: 2000-12-05 11:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,9 +739,8 @@ sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
     if( !aShort.Len() )
         return bRet;
 
-    LanguageType eLang = pImpEE->GetLanguage();
-    const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList( *pCurNode,
-                                            rSttPos, nEndPos, *this, eLang );
+    LanguageType eLang = pImpEE->GetLanguage( EditPaM( pCurNode, rSttPos+1 ) );
+    const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList( *pCurNode, rSttPos, nEndPos, *this, eLang );
     if( pFnd && pFnd->IsTextOnly() )
     {
         // dann mal ersetzen
@@ -762,7 +761,7 @@ sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
 
 LanguageType EdtAutoCorrDoc::GetLanguage( sal_uInt16 nPos, sal_Bool bPrevPara ) const
 {
-    return pImpEE->GetLanguage();
+    return pImpEE->GetLanguage( EditPaM( pCurNode, nPos+1 ) );
 }
 
 void EdtAutoCorrDoc::ImplStartUndoAction()

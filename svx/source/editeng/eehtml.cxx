@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eehtml.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: mt $ $Date: 2000-12-05 11:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,7 +492,7 @@ void EditHTMLParser::NextToken( int nToken )
     {
         ImportInfo aImportInfo( HTMLIMP_NEXTTOKEN, this, pImpEditEngine->CreateESel( aCurSel ) );
         aImportInfo.nToken = nToken;
-        aImportInfo.nTokenValue = nTokenValue;
+        aImportInfo.nTokenValue = (short)nTokenValue;
         if ( nToken == HTML_TEXTTOKEN )
             aImportInfo.aText = aToken;
         pImpEditEngine->aImportHdl.Call( &aImportInfo );

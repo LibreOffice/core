@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-29 15:55:47 $
+ *  last change: $Author: mt $ $Date: 2000-12-05 11:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     pVirtDev            = NULL;
     pEmptyItemSet       = NULL;
     pActiveView         = NULL;
-    eDefaultLanguage    = LANGUAGE_NONE;
     pSpellInfo          = NULL;
     pTextObjectPool     = NULL;
     pDragAndDropInfo    = NULL;

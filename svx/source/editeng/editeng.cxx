@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-04 13:53:18 $
+ *  last change: $Author: mt $ $Date: 2000-12-05 11:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,9 +526,9 @@ void EditEngine::SetPolygon( const XPolyPolygon& rPoly, const XPolyPolygon* pXor
     {
         // Handelt es sich um eine offene Kurve?
         const XPolygon& rP = rPoly[0];
-        sal_uInt32 nCnt = rP.GetPointCount();
+        USHORT nCnt = rP.GetPointCount();
 
-        if( nCnt == 0 || ( rP[0] != rP[nCnt - 1] ) )
+        if( ( nCnt == 0 ) || ( rP[0] != rP[nCnt - 1] ) )
             // Offene Kurve
             bSimple = sal_True;
     }
@@ -910,9 +910,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                             {
                                 String aComplete;
 
-                                International aInt( Application::GetAppInternational() );
-                                if (pImpEditEngine)
-                                    aInt = International( pImpEditEngine->eDefaultLanguage );
+                                International aInt = International( pImpEditEngine->GetLanguage( EditPaM( aStart.GetNode(), aStart.GetIndex()+1 ) ) );
                                 for( int n = MONDAY; n <= SUNDAY; ++n )
                                 {
                                     const String& rDay = aInt.GetDayText( (DayOfWeek)n );
@@ -1724,12 +1722,17 @@ void EditEngine::SetHyphenator( Reference< XHyphenator > & xHyph )
 
 void EditEngine::SetDefaultLanguage( LanguageType eLang )
 {
-    pImpEditEngine->SetLanguage( eLang );
+#if SUPD >= 615
+    DBG_ERROR( "DefaultLanguage not longer supported" );
+#endif
 }
 
 LanguageType EditEngine::GetDefaultLanguage() const
 {
-    return pImpEditEngine->GetLanguage();
+#if SUPD >= 615
+    DBG_ERROR( "DefaultLanguage not longer supported" );
+#endif
+    return pImpEditEngine->GetLanguage( EditPaM( pImpEditEngine->GetEditDoc().SaveGetObject( 0 ), 0 ) );
 }
 
 sal_Bool __EXPORT EditEngine::SpellNextDocument()
@@ -1740,6 +1743,14 @@ sal_Bool __EXPORT EditEngine::SpellNextDocument()
 
 EESpellState EditEngine::HasSpellErrors( LanguageType eLang )
 {
+#if SUPD >= 615
+    DBG_ERROR( "DefaultLanguage not longer supported" );
+#endif
+    return HasSpellErrors();
+}
+
+EESpellState EditEngine::HasSpellErrors()
+{
 #ifdef SVX_LIGHT
     return EE_SPELL_NOSPELLER;
 #else
@@ -1747,7 +1758,6 @@ EESpellState EditEngine::HasSpellErrors( LanguageType eLang )
     if ( !pImpEditEngine->GetSpeller().is()  )
         return EE_SPELL_NOSPELLER;
 
-    pImpEditEngine->eDefaultLanguage = eLang;
     return pImpEditEngine->HasSpellErrors();
 #endif
 }
