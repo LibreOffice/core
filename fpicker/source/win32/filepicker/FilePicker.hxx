@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
+ *  last change: $Author: tra $ $Date: 2002-11-26 09:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,6 +293,11 @@ public:
     rtl::OUString SAL_CALL helpRequested( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
     void SAL_CALL controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
     void SAL_CALL dialogSizeChanged( );
+
+    bool startupEventNotification(bool bStartupSuspended);
+    void shutdownEventNotification();
+    void suspendEventNotification();
+    void resumeEventNotification();
 
 private:
     // prevent copy and assignment

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
+ *  last change: $Author: tra $ $Date: 2002-11-26 09:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,10 @@ using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 
 namespace
 {
+    // controling event notifications
+    const bool STARTUP_SUSPENDED = true;
+    const bool STARTUP_ALIVE     = false;
+
     uno::Sequence<rtl::OUString> SAL_CALL FilePicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(2);
@@ -287,6 +291,42 @@ rtl::OUString SAL_CALL CFilePicker::helpRequested(FilePickerEvent aEvent) const
     return aHelpText;
 }
 
+//-------------------------------------
+//
+//-------------------------------------
+
+bool CFilePicker::startupEventNotification(bool bStartupSuspended)
+{
+    return m_aAsyncEventNotifier.startup(bStartupSuspended);
+}
+
+//-------------------------------------
+//
+//-------------------------------------
+
+void CFilePicker::shutdownEventNotification()
+{
+    m_aAsyncEventNotifier.shutdown();
+}
+
+//-------------------------------------
+//
+//-------------------------------------
+
+void CFilePicker::suspendEventNotification()
+{
+    m_aAsyncEventNotifier.suspend();
+}
+
+//-------------------------------------
+//
+//-------------------------------------
+
+void CFilePicker::resumeEventNotification()
+{
+    m_aAsyncEventNotifier.resume();
+}
+
 //------------------------------------------------------------------------------------
 // XFilePicker functions
 //------------------------------------------------------------------------------------
@@ -412,7 +452,7 @@ sal_Int16 SAL_CALL CFilePicker::execute() throw(uno::RuntimeException)
 
     sal_Int16 ret;
 
-    if (m_aAsyncEventNotifier.start())
+    if (startupEventNotification(STARTUP_SUSPENDED))
     {
         // we should not block in this call else
         // in the case of an event the client can't
@@ -420,7 +460,7 @@ sal_Int16 SAL_CALL CFilePicker::execute() throw(uno::RuntimeException)
         // deadlock !!!!!
         ret = m_pImpl->execute( );
 
-        m_aAsyncEventNotifier.stop();
+        shutdownEventNotification();
     }
     else
     {

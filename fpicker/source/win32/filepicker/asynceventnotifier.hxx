@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynceventnotifier.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
+ *  last change: $Author: tra $ $Date: 2002-11-26 09:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,17 @@ public:
     CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelper);
     ~CAsyncEventNotifier();
 
-    bool SAL_CALL start();
-    void SAL_CALL stop();
+    bool SAL_CALL startup(bool bCreateSuspended = true);
+    void SAL_CALL shutdown();
+
+    // notifications may be added the
+    // the event queue but will only
+    // be notified to the clients after
+    // resume was called
+    void suspend();
+
+    // resume notifying events
+    void resume();
 
     // this class is responsible for the memory management of
     // the CEventNotification instance
@@ -120,7 +129,9 @@ private:
     bool                            m_bRun;
     unsigned                        m_ThreadId;
     ::cppu::OBroadcastHelper&       m_rBroadcastHelper;
-    osl::Condition                  m_NotifyEvent;
+    HANDLE                          m_hEvents[2];
+    HANDLE&                         m_NotifyEvent;
+    HANDLE&                         m_ResumeNotifying;
     osl::Mutex                      m_Mutex;
 
 // prevent copy and assignment

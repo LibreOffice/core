@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynceventnotifier.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
+ *  last change: $Author: tra $ $Date: 2002-11-26 09:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,21 @@ CAsyncEventNotifier::CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelpe
     m_hThread(0),
     m_bRun(false),
     m_ThreadId(0),
-    m_rBroadcastHelper(rBroadcastHelper)
+    m_rBroadcastHelper(rBroadcastHelper),
+    m_NotifyEvent(m_hEvents[0]),
+    m_ResumeNotifying(m_hEvents[1])
 {
+    // m_NotifyEvent
+    m_hEvents[0] = CreateEvent(0,       /* no security */
+                               true,    /* manual reset */
+                               false,   /* initial state not signaled */
+                               0);      /* automatic name */
+
+    // m_ResumeNotifying
+    m_hEvents[1] = CreateEvent(0,       /* no security */
+                               true,    /* manual reset */
+                               false,   /* initial state not signaled */
+                               0);      /* automatic name */
 }
 
 //------------------------------------------------
@@ -108,13 +121,16 @@ CAsyncEventNotifier::CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelpe
 CAsyncEventNotifier::~CAsyncEventNotifier()
 {
     OSL_ENSURE(0 == m_hThread,"Thread not stopped, destroying this instance leads to desaster");
+
+    CloseHandle(m_hEvents[0]);
+    CloseHandle(m_hEvents[1]);
 }
 
 //------------------------------------------------
 //
 //------------------------------------------------
 
-bool SAL_CALL CAsyncEventNotifier::start()
+bool SAL_CALL CAsyncEventNotifier::startup(bool bCreateSuspended)
 {
     osl::MutexGuard aGuard(m_Mutex);
 
@@ -125,6 +141,9 @@ bool SAL_CALL CAsyncEventNotifier::start()
     // not be overwritten
     if (!m_bRun)
     {
+        if (!bCreateSuspended)
+            SetEvent(m_ResumeNotifying);
+
         m_hThread = (HANDLE)_beginthreadex(
             NULL, 0, CAsyncEventNotifier::ThreadProc, this, 0, &m_ThreadId);
 
@@ -143,7 +162,7 @@ bool SAL_CALL CAsyncEventNotifier::start()
 //
 //------------------------------------------------
 
-void SAL_CALL CAsyncEventNotifier::stop()
+void SAL_CALL CAsyncEventNotifier::shutdown()
 {
     OSL_PRECOND(GetCurrentThreadId() != m_ThreadId, "Method called in wrong thread context!");
 
@@ -153,7 +172,10 @@ void SAL_CALL CAsyncEventNotifier::stop()
 
     m_bRun = false;
     m_EventList.clear();
-    m_NotifyEvent.set( );
+
+    // awake the the notifier thread
+    SetEvent(m_ResumeNotifying);
+    SetEvent(m_NotifyEvent);
 
     // releas the mutex here because the event
     // notifier thread may need it to finish
@@ -177,6 +199,24 @@ void SAL_CALL CAsyncEventNotifier::stop()
 //
 //------------------------------------------------
 
+void CAsyncEventNotifier::suspend()
+{
+    ResetEvent(m_ResumeNotifying);
+}
+
+//------------------------------------------------
+//
+//------------------------------------------------
+
+void CAsyncEventNotifier::resume()
+{
+    SetEvent(m_ResumeNotifying);
+}
+
+//------------------------------------------------
+//
+//------------------------------------------------
+
 void SAL_CALL CAsyncEventNotifier::notifyEvent(CEventNotification* EventNotification)
 {
     osl::MutexGuard aGuard(m_Mutex);
@@ -186,7 +226,7 @@ void SAL_CALL CAsyncEventNotifier::notifyEvent(CEventNotification* EventNotifica
     if (m_bRun)
     {
         m_EventList.push_back(EventNotification);
-        m_NotifyEvent.set();
+        SetEvent(m_NotifyEvent);
     }
 }
 
@@ -208,7 +248,7 @@ void SAL_CALL CAsyncEventNotifier::resetNotifyEvent()
 {
     osl::MutexGuard aGuard(m_Mutex);
     if (0 == m_EventList.size())
-        m_NotifyEvent.reset();
+        ResetEvent(m_NotifyEvent);
 }
 
 //------------------------------------------------
@@ -239,7 +279,7 @@ void SAL_CALL CAsyncEventNotifier::run()
 {
     while (m_bRun)
     {
-        m_NotifyEvent.wait();
+        WaitForMultipleObjects(2, m_hEvents, true, INFINITE);
 
         if (m_bRun)
         {
