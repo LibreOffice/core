@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetSortDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:40 $
+ *  last change: $Author: mi $ $Date: 2001-03-14 16:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,17 @@
 #ifndef __com_sun_star_sheet_SheetSortDescriptor_idl__
 #define __com_sun_star_sheet_SheetSortDescriptor_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
+#ifndef __com_sun_star_util_SortDescriptor_idl__
+#include <com/sun/star/util/SortDescriptor.idl>
 #endif
 
 #ifndef __com_sun_star_table_CellAddress_idl__
 #include <com/sun/star/table/CellAddress.idl>
 #endif
 
-
 //=============================================================================
 
- module com {  module sun {  module star {  module sheet {
+module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
@@ -81,16 +80,7 @@
  */
 service SheetSortDescriptor
 {
-    // DocMerge: empty anyway
-    interface com::sun::star::beans::XPropertySet;
-
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR SheetSortDescriptor::IsCaseSensitive
-
-    // DocMerge from xml: property com::sun::star::sheet::SheetSortDescriptor::IsCaseSensitive
-    /** specifies if the case of letters is important when comparing entries.
-     */
-    [property] boolean IsCaseSensitive;
+    service com::sun::star::util::SortDescriptor;
 
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR SheetSortDescriptor::BindFormatsToContent
@@ -123,14 +113,6 @@ service SheetSortDescriptor
     [property] long UserListIndex;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR SheetSortDescriptor::SortAscending
-
-    // DocMerge from xml: property com::sun::star::sheet::SheetSortDescriptor::SortAscending
-    /** specifies the sorting order.
-     */
-    [property] boolean SortAscending;
-
-    //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::sheet::SheetSortDescriptor::CopyOutputData
     /** specifies if the sorted data should be
@@ -159,6 +141,9 @@ service SheetSortDescriptor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:40  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:46  mi
     moved from api
 

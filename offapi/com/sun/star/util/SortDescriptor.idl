@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SortDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:27 $
+ *  last change: $Author: mi $ $Date: 2001-03-14 16:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,17 @@
 #ifndef __com_sun_star_util_SortDescriptor_idl__
 #define __com_sun_star_util_SortDescriptor_idl__
 
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
 
 //=============================================================================
 
- module com {  module sun {  module star {  module util {
+module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
@@ -74,8 +81,25 @@
  */
 service SortDescriptor
 {
-    //-------------------------------------------------------------------------
+     interface com::sun::star::beans::XPropertySet;
 
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR SheetSortDescriptor::IsCaseSensitive
+
+    // DocMerge from xml: property com::sun::star::sheet::SheetSortDescriptor::IsCaseSensitive
+    /** specifies if the case of letters is important when comparing entries.
+     */
+    [property] boolean IsCaseSensitive;
+
+     //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR SheetSortDescriptor::SortAscending
+
+    // DocMerge from xml: property com::sun::star::sheet::SheetSortDescriptor::SortAscending
+    /** specifies the sorting order.
+     */
+    [property] boolean SortAscending;
+
+     //-------------------------------------------------------------------------
     // DocMerge from xml: property com::sun::star::util::SortDescriptor::SortColumns
     /** specifies if the columns are sorted.
 
@@ -95,6 +119,17 @@ service SortDescriptor
      */
     [property] boolean SortColumns;
 
+     //-------------------------------------------------------------------------
+    /** specifies the locale for the compare operator (collator).
+     */
+    [property] com::sun::star::lang::Locale CollatorLocale;
+
+     //-------------------------------------------------------------------------
+    /** specifies the algorith for the compare operator (collator).
+
+        @see com::sun::star::i18n::XCollator
+     */
+    [property] string CollatorAlgorithm;
 };
 
 //=============================================================================
@@ -104,6 +139,9 @@ service SortDescriptor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/21 08:35:27  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.4  2000/12/14 12:53:46  mi
     <true></true> -> <TRUE/> and same with FALSE
 
