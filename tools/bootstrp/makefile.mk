@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2000-12-12 18:34:56 $
+#   last change: $Author: nf $ $Date: 2001-04-18 09:13:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ OBJFILES=                       \
     $(OBJ)$/command.obj     \
     $(OBJ)$/prj.obj         \
     $(OBJ)$/dlvclass.obj    \
-    $(OBJ)$/hashtbl.obj     \
     $(OBJ)$/errdumm.obj     \
     $(OBJ)$/errhdl.obj      \
     $(OBJ)$/hedabu.obj      \
@@ -107,7 +106,6 @@ SLOFILES=                   \
     $(SLO)$/command.obj     \
     $(SLO)$/prj.obj         \
     $(SLO)$/dlvclass.obj    \
-    $(SLO)$/hashtbl.obj     \
     $(SLO)$/errdumm.obj     \
     $(SLO)$/errhdl.obj      \
     $(SLO)$/hedabu.obj      \

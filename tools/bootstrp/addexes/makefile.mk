@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nf $ $Date: 2000-12-11 14:00:04 $
+#   last change: $Author: nf $ $Date: 2001-04-18 09:13:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@ PRJ=..$/..
 PRJNAME=tools
 TARGET=addexes
 TARGETTYPE=CUI
-ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -82,48 +81,47 @@ LIB1TARGET= $(LB)$/btstrp.lib
 LIB1ARCHIV= $(LB)$/libbtstrp.a
 LIB1FILES=  $(LB)$/bootstrp.lib
 
-APP1TARGET=	dirsync
+#APP1TARGET=	dirsync
 APP1STACK=	16000
 APP1OBJS=   $(OBJ)$/dirsync.obj
 APP1STDLIBS=$(STATIC_LIBS)
 APP1LIBS=	$(LB)$/bootstrp.lib
 APP1DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
-APP2TARGET=	include
+#APP2TARGET=	include
 APP2STACK=	16000
 APP2OBJS=   $(OBJ)$/include.obj
 APP2STDLIBS=$(STATIC_LIBS)
 APP2LIBS=	$(LB)$/bootstrp.lib
 APP2DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
-APP3TARGET=	ldump
+#APP3TARGET=	ldump
 APP3STACK=	16000
-APP3OBJS=   $(OBJ)$/ldump.obj
-APP3STDLIBS=$(STATIC_LIBS) $(LIBCIMT)
-APP3LIBS=	$(LB)$/bootstrp.lib
-APP3DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
+APP3OBJS=   $(OBJ)$/ldump.obj $(OBJ)$/hashtbl.obj
+APP3STDLIBS=gnu_getopt.lib
+APP3DEPN=   $(OBJ)$/ldump.obj $(OBJ)$/hashtbl.obj
 
-APP4TARGET=	readmap
+#APP4TARGET=	readmap
 APP4STACK=	16000
 APP4OBJS=   $(OBJ)$/readmap.obj $(OBJ)$/deco.obj
 APP4STDLIBS=$(STATIC_LIBS) $(LIBCIMT)
 APP4LIBS=	$(LB)$/bootstrp.lib
 APP4DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
-APP5TARGET=	deco
+#APP5TARGET=	deco
 APP5STACK=	16000
 APP5OBJS=   $(OBJ)$/deco.obj $(OBJ)$/deco2.obj
 APP5STDLIBS=$(STATIC_LIBS) $(LIBCIMT)
 APP5LIBS=	$(LB)$/bootstrp.lib
 APP5DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
-APP6TARGET= urlconv
+#APP6TARGET= urlconv
 APP6OBJS= $(OBJ)$/urlconv.obj
 APP6STDLIBS=\
     $(TOOLSLIB)	\
     $(SALLIB)
 
-APP7TARGET= replace
+#APP7TARGET= replace
 APP7OBJS= $(OBJ)$/replace.obj
 APP7STDLIBS=$(STATIC_LIBS)
 APP7DEPN=   $(LB)$/atools.lib 
