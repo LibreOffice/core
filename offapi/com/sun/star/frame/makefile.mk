@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:54:32 $
+#   last change: $Author: hr $ $Date: 2003-04-04 19:28:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ IDLFILES=\
     DispatchResultEvent.idl\
     DispatchStatement.idl\
     DocumentTemplates.idl\
+    DoubleInitializationException.idl\
     FeatureStateEvent.idl\
     Frame.idl\
     FrameAction.idl\
@@ -134,6 +135,7 @@ IDLFILES=\
     XFrameSetModel.idl\
     XFramesSupplier.idl\
     XInterceptorInfo.idl\
+    XLoadable.idl\
     XLoadEventListener.idl\
     XModel.idl\
     XNotifyingDispatch.idl\
