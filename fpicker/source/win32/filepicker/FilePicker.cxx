@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-02 08:09:14 $
+ *  last change: $Author: tra $ $Date: 2001-08-03 13:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,8 +147,17 @@ CFilePicker::CFilePicker( const Reference< XMultiServiceFactory >& xServiceMgr )
         XEventListener,
         XServiceInfo >( m_rbHelperMtx )
 {
+    HINSTANCE hInstance = GetModuleHandleA( FILE_PICKER_DLL_NAME );
+    OSL_POSTCOND( hInstance, "The name of the service dll must have changed" );
+
     // create a default FileOpen dialog without any additional ui elements
-    m_pImpl = std::auto_ptr< CWinFileOpenImpl >( new CWinFileOpenImpl( this ) );
+    m_pImpl = std::auto_ptr< CWinFileOpenImpl >(
+        new CWinFileOpenImpl(
+            this,
+            true,
+            0,
+            0,
+            hInstance ) );
 }
 
 //------------------------------------------------------------------------------------
