@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:38:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1376,7 +1376,7 @@ XclImpObjData* XclImpEscherObjList::FindObjData( ULONG nStrmPos ) const
 XclImpDffManager::XclImpDffManager(
         const XclImpRoot& rRoot, XclImpObjectManager& rObjManager,
         long nOffsDgg, SvStream* pStData, SdrModel* pSdrModel, long nApplicationScale ) :
-    SvxMSDffManager( rObjManager.GetEscherStream(), nOffsDgg, pStData, pSdrModel, nApplicationScale, COL_DEFAULT, 24, 0, &rRoot.GetTracer().GetBaseTracer() ),
+    SvxMSDffManager( rObjManager.GetEscherStream(), rRoot.GetBasePath(), nOffsDgg, pStData, pSdrModel, nApplicationScale, COL_DEFAULT, 24, 0, &rRoot.GetTracer().GetBaseTracer() ),
     XclImpRoot( rRoot ),
     mrObjManager( rObjManager ),
     mnOleImpFlags( 0 )
@@ -1848,6 +1848,7 @@ void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
 
 XclImpDffManager& XclImpObjectManager::GetDffManager()
 {
+    //TODO/MBA: needs to be fixed!
     if( !mxDffManager.get() )
         mxDffManager.reset( new XclImpDffManager( GetRoot(), *this, 0, 0, GetDoc().GetDrawLayer(), 1440 ) );
     return *mxDffManager;
