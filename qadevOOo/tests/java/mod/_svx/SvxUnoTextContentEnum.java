@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxUnoTextContentEnum.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:38:50 $
+ *  last change:$Date: 2003-09-08 12:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,15 @@
 
 package mod._svx;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.DrawTools;
+import util.SOfficeFactory;
+
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XComponent;
@@ -70,13 +79,6 @@ import com.sun.star.text.XSimpleText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.DrawTools;
-import util.SOfficeFactory;
 
 public class SvxUnoTextContentEnum extends TestCase {
 

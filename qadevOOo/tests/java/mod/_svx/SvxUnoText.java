@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxUnoText.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:38:28 $
+ *  last change:$Date: 2003-09-08 12:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,17 @@
 
 package mod._svx;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.DefaultDsc;
+import util.DrawTools;
+import util.InstCreator;
+import util.SOfficeFactory;
+
 import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -70,15 +81,6 @@ import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextRange;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.DefaultDsc;
-import util.DrawTools;
-import util.InstCreator;
-import util.SOfficeFactory;
 
 public class SvxUnoText extends TestCase {
 
