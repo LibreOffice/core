@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFontWork.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 11:03:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,26 +590,23 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
         SdrObject* pPartObj = aObjListIter.Next();
         if ( pPartObj->ISA( SdrPathObj ) )
         {
-            if (!((SdrShadowItem&)pPartObj->GetMergedItem( SDRATTR_SHADOW )).GetValue())
+            const XPolyPolygon& rXPolyPoly = ((SdrPathObj*)pPartObj)->GetPathPoly();
+            ::basegfx::B2DPolyPolygon aCandidate(rXPolyPoly.getB2DPolyPolygon());
+            if(aCandidate.areControlPointsUsed())
             {
-                const XPolyPolygon& rXPolyPoly = ((SdrPathObj*)pPartObj)->GetPathPoly();
-                ::basegfx::B2DPolyPolygon aCandidate(rXPolyPoly.getB2DPolyPolygon());
-                if(aCandidate.areControlPointsUsed())
-                {
-                    aCandidate = ::basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
-                }
-                aOutlines2d.append(aCandidate);
-
-//BFS09             sal_uInt16 i, nCount = rXPolyPoly.Count();
-//BFS09             for ( i = 0; i < nCount; i++ )
-//BFS09             {
-//BFS09//BFS09                  Polygon aPoly( XOutCreatePolygonBezier( rXPolyPoly.GetObject( i ), NULL ) );
-//BFS09                 Polygon aPoly( XOutCreatePolygonBezier( rXPolyPoly.GetObject( i )) );
-//BFS09                 Polygon aSimplePoly;
-//BFS09                 aPoly.GetSimple( aSimplePoly );
-//BFS09                 aOutlines2d.Insert( aSimplePoly, POLYPOLY_APPEND );
-//BFS09             }
+                aCandidate = ::basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
             }
+            aOutlines2d.append(aCandidate);
+
+//BFS09         sal_uInt16 i, nCount = rXPolyPoly.Count();
+//BFS09         for ( i = 0; i < nCount; i++ )
+//BFS09         {
+//BFS09//BFS09      Polygon aPoly( XOutCreatePolygonBezier( rXPolyPoly.GetObject( i ), NULL ) );
+//BFS09             Polygon aPoly( XOutCreatePolygonBezier( rXPolyPoly.GetObject( i )) );
+//BFS09             Polygon aSimplePoly;
+//BFS09             aPoly.GetSimple( aSimplePoly );
+//BFS09             aOutlines2d.Insert( aSimplePoly, POLYPOLY_APPEND );
+//BFS09         }
         }
     }
 
