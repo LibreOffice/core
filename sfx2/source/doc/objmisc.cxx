@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-12 15:28:48 $
+ *  last change: $Author: mba $ $Date: 2001-12-13 10:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <svtools/securityoptions.hxx>
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -1162,36 +1163,8 @@ ErrCode SfxObjectShell::CallBasic( const String& rMacro,
     const String& rBasic, SbxObject* pVCtrl, SbxArray* pArgs,
     SbxValue* pRet )
 {
-    SvtSecurityOptions aOpt;
-    EBasicSecurityMode eMode = aOpt.GetBasicMode();
-    if ( eMode == eNEVER_EXECUTE )
-        return sal_False;
-
-    String aReferer( GetMedium()->GetName() );
-    if ( !aReferer.Len() )
-    {
-        // if document was created from template, take the templates' name for the checks
-        String aTempl( GetDocInfo().GetTemplateFileName() );
-        if ( aTempl.Len() )
-            aReferer = INetURLObject( aTempl ).GetMainURL();
-    }
-
-    if ( aReferer.Len() )
-    {
-        // new documents from scratch are safe
-        sal_Bool bConfirm = aOpt.IsConfirmationEnabled();
-        sal_Bool bWarn = aOpt.IsWarningEnabled();
-        sal_Bool bSecure = aOpt.IsSecureURL( rMacro, aReferer );
-        if ( bSecure && bWarn || !bSecure && bConfirm )
-        {
-            SfxMacroQueryDlg_Impl aBox ( rMacro, bSecure );
-            int nRet = aBox.Execute();
-            if ( !nRet )
-                return ERRCODE_IO_ACCESSDENIED;
-        }
-        else
-            return ERRCODE_IO_ACCESSDENIED;
-    }
+    if ( !IsSecure() )
+        return ERRCODE_IO_ACCESSDENIED;
 
     SfxApplication* pApp = SFX_APP();
     pApp->EnterBasicCall();
