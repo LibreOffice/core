@@ -23,7 +23,7 @@ original target interfaces on queryInterface() calls.
 
 <Status StatusValue="final"/>
 
-<SupportedService>  com.sun.star.util.ProxyFactory  </SupportedService>
+<SupportedService>  com.sun.star.reflection.ProxyFactory    </SupportedService>
 
 <ServiceDependency>     </ServiceDependency>
 
