@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-30 11:13:38 $
+ *  last change: $Author: oj $ $Date: 2002-09-20 10:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1710,9 +1710,8 @@ namespace
             {
                 if(aColumnName.toChar() != '*')
                     _raInfo->SetFieldAlias(aColumnAlias);
-            }
-            else
                 bFound = sal_True;
+            }
         }
         if (!bFound)
         {
