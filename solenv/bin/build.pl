@@ -94,6 +94,7 @@ sub BuildAll {
             print "\nBuild project $Prj\n";
             $PrjDir = CorrectPath($StandDir.$Prj);
             BuildPrj($PrjDir);
+            system ("deliver");
             RemoveFromDependencies($Prj, \%ParentDepsHash);
         };
     } else {
@@ -138,6 +139,9 @@ sub GetParentsString {
     $Arr[0] =~ /(\:)([\t | \s]+)/;
     $ParentPrjs = $';
     close PrjBuildFile;
+    if (!$') {
+        return "NULL";
+    };
     return $';
 };
 
@@ -176,10 +180,10 @@ sub BuildPrj {
             my ($Platform, $Dependencies, $Dir, $DirAlias, @Array);
             $Dependencies = $';
             $dummy = $`;
-            $dummy =~ /(\w+)\t([\w | \\ | \.]+)/;
-            $Dir = $2;
-            $Dependencies =~ /(\t\-\t)(\w+)/; #(\t)(\S+)(\s)/;
-            $Platform = $2;
+            $dummy =~ /(\w+)([\t | \s]+)([\w | \\ | \.]+)/;
+            $Dir = $3;
+            $Dependencies =~ /(\w+)/; #/(\t\-\t)(\w+)/; #(\t)(\S+)(\s)/;
+            $Platform = $1;
             $Dependencies = $';
             while ($Dependencies =~ /,(\w+)/) {
                 $Dependencies = $';
@@ -267,13 +271,13 @@ sub GetQuantityToBuild {
 sub IsRootDir {
     my ($Dir);
     $Dir = $_[0];
-    if ((($ENV{GUI} eq "UNX") ||
-                ($ENV{GUI} eq "MACOSX")) &&
+    if (        (($ENV{GUI} eq "UNX") ||
+                 ($ENV{GUI} eq "MACOSX")) &&
                 ($Dir eq "\/")) {
         return 1;
     } elsif (   (($ENV{GUI} eq "WNT") ||
-                ($ENV{GUI} eq "WIN") ||
-                ($ENV{GUI} eq "OS2")) &&
+                 ($ENV{GUI} eq "WIN") ||
+                 ($ENV{GUI} eq "OS2")) &&
                 ($Dir =~ /\S:\/$/)) {
         return 1;
     } else {
