@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-02 11:55:32 $
+ *  last change: $Author: dbo $ $Date: 2001-09-06 10:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,6 @@
 
 
 namespace CPPU_CURRENT_NAMESPACE
-{
-extern "C"
 {
 
 //--------------------------------------------------------------------------------------------------
@@ -553,7 +551,6 @@ inline void SAL_CALL cppu_cppenv_initEnvironment( uno_Environment * pCppEnv ) th
     pCppEnv->environmentDisposing                            = CPPU_CURRENT_NAMESPACE::cppu_cppenv_environmentDisposing;
 }
 
-}
 }
 
 #endif

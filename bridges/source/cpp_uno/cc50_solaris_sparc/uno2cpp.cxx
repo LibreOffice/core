@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-05 14:36:39 $
+ *  last change: $Author: dbo $ $Date: 2001-09-06 10:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,17 +87,15 @@ using namespace com::sun::star::uno;
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-extern "C" {
-    void callVirtualMethod(
+void callVirtualMethod(
         void * pThis,
         sal_Int32 nVtableIndex,
         void * pRegisterReturn,
         typelib_TypeClass eReturnType,
         sal_Int32 * pStackLongs,
         sal_Int32 nStackLongs
-        );
-    extern void* callVirtualMethodExceptionHandler;
-}
+    );
+extern void* callVirtualMethodExceptionHandler;
 
 //==================================================================================================
 static void cpp_call(
@@ -302,7 +300,7 @@ static void cpp_call(
 }
 
 //==================================================================================================
-extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
+void SAL_CALL cppu_unoInterfaceProxy_dispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
     throw ()
