@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-26 07:43:32 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:19:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
 #include <com/sun/star/util/Time.hpp>
 #endif
@@ -163,6 +167,12 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
 #endif
 //undef to prevent error (from sfx2/docfile.cxx)
 #undef SEQUENCE
@@ -231,6 +241,12 @@
 #endif
 #ifndef _DATETIME_HXX
 #include <tools/datetime.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
 #endif
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
@@ -733,6 +749,12 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
         }
         if( bSetValue )
         {
+            // nothing special to be done here for the properties
+            // UNO_NAME_DATA_BASE_NAME, UNO_NAME_DATA_BASE_URL and
+            // UNO_NAME_DATA_BASE_RESOURCE.
+            // We just call PutValue (empty string is allowed).
+            // Thus the last property set will be used as Data Source.
+
             BYTE nMId = GetFieldTypeMId( rPropertyName, *pType  );
             if( UCHAR_MAX != nMId )
                 pType->PutValue( rValue, nMId );
@@ -831,8 +853,13 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
                 ::GetString( rValue, sParam3 );
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE)))
                 rValue >>= nParam2;
+            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
+                ::GetString( rValue, sParam5 );
+            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_RESOURCE)))
+                ::GetString( rValue, sParam6 );
 
-            if(sParam1.Len() && sParam2.Len() && sParam3.Len())
+            if((sParam1.Len() || sParam5.Len() || sParam6.Len())
+                    && sParam2.Len() && sParam3.Len())
                 GetFldType();
             break;
         case  RES_SETEXPFLD:
@@ -874,7 +901,18 @@ SwFieldType* SwXFieldMaster::GetFldType(sal_Bool bDontCreate) const
     if(!bDontCreate && RES_DBFLD == nResTypeId && m_bIsDescriptor && m_pDoc)
     {
         SwDBData aData;
-        aData.sDataSource = sParam1;
+
+        // set DataSource
+        svx::ODataAccessDescriptor aAcc;
+        if( sParam1.Len() > 0 )
+            aAcc[ svx::daDataSource ]       <<= OUString(sParam1); // DataBaseName
+        else if( sParam5.Len() > 0 )
+            aAcc[ svx::daDatabaseLocation]  <<= OUString(sParam5); // DataBaseURL
+        String aDataSrc( aAcc.getDataSource() );
+        if (aDataSrc.Len() == 0)
+            aDataSrc = sParam6; // DataBaseResource
+        aData.sDataSource = aDataSrc;
+
         aData.sCommand = sParam2;
         aData.nCommandType = nParam2;
         SwDBFieldType aType(m_pDoc, sParam3,  aData);
@@ -955,7 +993,39 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
             //TODO: Properties fuer die uebrigen Feldtypen einbauen
             BYTE nMId = GetFieldTypeMId( rPropertyName, *pType );
             if( UCHAR_MAX != nMId )
+            {
                 pType->QueryValue( aRet, nMId );
+
+                if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
+                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL))  ||
+                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_RESOURCE)))
+                {
+                    OUString aDataSource;
+                    aRet >>= aDataSource;
+                    aRet <<= OUString();
+
+                    OUString *pStr = 0;     // only one of this properties will return
+                                            // a non-empty string.
+                    Reference< XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
+                    Reference< XInterface > xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ) );
+                    Reference< XNameAccess > xDBContext( xInstance, UNO_QUERY ) ;
+                    if ( xDBContext->hasByName( aDataSource ) &&
+                         rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) )
+                        pStr = &aDataSource;            // DataBaseName
+                    else
+                    {
+                        INetURLObject aObj;
+                        aObj.SetURL( aDataSource );
+                        BOOL bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+                        if (bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
+                            pStr = &aDataSource;        // DataBaseURL
+                        else if (!bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_RESOURCE)))
+                            pStr = &aDataSource;        // DataBaseResource
+                    }
+                    if (pStr)
+                        aRet <<= *pStr;
+                }
+            }
             else
                 throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         }
@@ -989,8 +1059,29 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
                     aRet.setValue(&bParam1, ::getBooleanCppuType());
                 break;
             case RES_DBFLD:
-                if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
-                    pStr = &sParam1;
+                if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
+                   rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL))  ||
+                   rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_RESOURCE)))
+                {
+                    pStr = 0;   // only one of this properties will return
+                                // a non-empty string.
+                    Reference< XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
+                    Reference< XInterface > xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ) );
+                    Reference< XNameAccess > xDBContext( xInstance, UNO_QUERY ) ;
+                    if ( xDBContext->hasByName( sParam1 ) &&
+                         rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
+                        pStr = &sParam1;            // DataBaseName
+                    else
+                    {
+                        INetURLObject aObj;
+                        aObj.SetURL( sParam5 );  // SetSmartURL
+                        BOOL bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+                        if (bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
+                            pStr = &sParam5;        // DataBaseURL
+                        else if (!bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_RESOURCE)))
+                            pStr = &sParam6;        // DataBaseResource
+                    }
+                }
                 else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME)))
                     pStr = &sParam2;
                 else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME)))
@@ -1199,6 +1290,8 @@ struct SwFieldProperties_Impl
     String      sPar2;
     String      sPar3;
     String      sPar4;
+    String      sPar5;
+    String      sPar6;
     Date            aDate;
     double          fDouble;
     Sequence<PropertyValue> aPropSeq;
@@ -2002,6 +2095,8 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         sal_uInt16 nWhich = pField->Which();
         if( RES_DBFLD == nWhich &&
             (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
+            rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL))||
+            rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_RESOURCE))||
             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME))||
             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME))))
         {
