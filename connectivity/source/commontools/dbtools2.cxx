@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:58:00 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,6 +417,109 @@ namespace
     }
     return aSql;
 }
+namespace
+{
+    Reference<XPropertySet> lcl_createSDBCXColumn(
+                                          const Reference<XConnection>& _xConnection,
+                                          const Any& _aCatalog,
+                                          const ::rtl::OUString& _aSchema,
+                                          const ::rtl::OUString& _aTable,
+                                          const ::rtl::OUString& _rQueryName,
+                                          const ::rtl::OUString& _rName,
+                                          sal_Bool _bCase,
+                                          sal_Bool _bQueryForInfo,
+                                          sal_Bool _bIsAutoIncrement,
+                                          sal_Bool _bIsCurrency,
+                                          sal_Int32 _nDataType)
+    {
+        Reference<XPropertySet> xProp;
+        Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
+        Reference< XResultSet > xResult = xMetaData->getColumns(_aCatalog, _aSchema, _aTable, _rQueryName);
+
+        if ( xResult.is() )
+        {
+            UStringMixEqual aMixCompare(_bCase);
+            Reference< XRow > xRow(xResult,UNO_QUERY);
+            while( xResult->next() )
+            {
+                if ( aMixCompare(xRow->getString(4),_rName) )
+                {
+                    sal_Int32       nField5 = xRow->getInt(5);
+                    ::rtl::OUString aField6 = xRow->getString(6);
+                    sal_Int32       nField7 = xRow->getInt(7)
+                                ,   nField9 = xRow->getInt(9)
+                                ,   nField11= xRow->getInt(11);
+                    ::rtl::OUString sField13 = xRow->getString(13);
+                    ::comphelper::disposeComponent(xRow);
+
+                    sal_Bool bAutoIncrement = _bIsAutoIncrement
+                            ,bIsCurrency    = _bIsCurrency;
+                    if ( _bQueryForInfo )
+                    {
+                        const ::rtl::OUString sQuote = xMetaData->getIdentifierQuoteString();
+                        ::rtl::OUString sQuotedName  = ::dbtools::quoteName(sQuote,_rName);
+                        ::rtl::OUString sComposedName;
+                        ::dbtools::composeTableName(xMetaData,getString(_aCatalog),_aSchema,_aTable,sComposedName,sal_True,::dbtools::eInDataManipulation);
+
+                        ColumnInformationMap aInfo(_bCase);
+                        collectColumnInformation(_xConnection,sComposedName,sQuotedName,aInfo);
+                        ColumnInformationMap::iterator aIter = aInfo.begin();
+                        if ( aIter != aInfo.end() )
+                        {
+                            bAutoIncrement  = aIter->second.first.first;
+                            bIsCurrency     = aIter->second.first.second;
+                            if ( DataType::OTHER == nField5 )
+                                nField5     = aIter->second.second;
+                        }
+                    }
+                    else if ( DataType::OTHER == nField5 )
+                        nField5 = _nDataType;
+
+                    if ( nField11 != ColumnValue::NO_NULLS )
+                    {
+                        try
+                        {
+                            Reference< XResultSet > xResult = xMetaData->getPrimaryKeys(_aCatalog, _aSchema, _aTable);
+                            Reference< XRow > xRow(xResult,UNO_QUERY);
+                            if ( xRow.is() )
+                            {
+                                while( xResult->next() ) // there can be only one primary key
+                                {
+                                    ::rtl::OUString sKeyColumn = xRow->getString(4);
+                                    if ( aMixCompare(_rName,sKeyColumn) )
+                                    {
+                                        nField11 = ColumnValue::NO_NULLS;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        catch(SQLException&)
+                        {
+                        }
+                    }
+
+                    connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(_rName,
+                                                aField6,
+                                                sField13,
+                                                nField11,
+                                                nField7,
+                                                nField9,
+                                                nField5,
+                                                bAutoIncrement,
+                                                sal_False,
+                                                bIsCurrency,
+                                                _bCase);
+
+                    xProp = pRet;
+                    break;
+                }
+            }
+        }
+
+        return xProp;
+    }
+}
 // -----------------------------------------------------------------------------
 Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable,
                                           const Reference<XConnection>& _xConnection,
@@ -441,87 +544,24 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
     _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= aSchema;
     _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= aTable;
 
-    Reference< XResultSet > xResult = xMetaData->getColumns(aCatalog, aSchema, aTable, _rName);
-
-    if ( xResult.is() )
+    xProp = lcl_createSDBCXColumn(_xConnection,aCatalog, aSchema, aTable, _rName,_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
+    if ( !xProp.is() )
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        while( xResult->next() )
-        {
-            if ( xRow->getString(4) == _rName )
-            {
-                sal_Int32       nField5 = xRow->getInt(5);
-                ::rtl::OUString aField6 = xRow->getString(6);
-                sal_Int32       nField7 = xRow->getInt(7)
-                            ,   nField9 = xRow->getInt(9)
-                            ,   nField11= xRow->getInt(11);
-                ::rtl::OUString sField13 = xRow->getString(13);
-                ::comphelper::disposeComponent(xRow);
+        xProp = lcl_createSDBCXColumn(_xConnection,aCatalog, aSchema, aTable, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
+        if ( !xProp.is() )
+            xProp = new connectivity::sdbcx::OColumn(_rName,
+                                                ::rtl::OUString(),::rtl::OUString(),
+                                                ColumnValue::NULLABLE_UNKNOWN,
+                                                0,
+                                                0,
+                                                DataType::VARCHAR,
+                                                _bIsAutoIncrement,
+                                                sal_False,
+                                                _bIsCurrency,
+                                                _bCase);
 
-                sal_Bool bAutoIncrement = _bIsAutoIncrement
-                        ,bIsCurrency    = _bIsCurrency;
-                if ( _bQueryForInfo )
-                {
-                    const ::rtl::OUString sQuote = xMetaData->getIdentifierQuoteString();
-                    ::rtl::OUString sQuotedName  = ::dbtools::quoteName(sQuote,_rName);
-                    ::rtl::OUString sComposedName;
-                    ::dbtools::composeTableName(xMetaData,getString(aCatalog),aSchema,aTable,sComposedName,sal_True,::dbtools::eInDataManipulation);
-
-                    ColumnInformationMap aInfo(_bCase);
-                    collectColumnInformation(_xConnection,sComposedName,sQuotedName,aInfo);
-                    ColumnInformationMap::iterator aIter = aInfo.begin();
-                    if ( aIter != aInfo.end() )
-                    {
-                        bAutoIncrement  = aIter->second.first.first;
-                        bIsCurrency     = aIter->second.first.second;
-                        if ( DataType::OTHER == nField5 )
-                            nField5     = aIter->second.second;
-                    }
-                }
-                else if ( DataType::OTHER == nField5 )
-                    nField5 = _nDataType;
-
-                if ( nField11 != ColumnValue::NO_NULLS )
-                {
-                    try
-                    {
-                        Reference< XResultSet > xResult = xMetaData->getPrimaryKeys(aCatalog, aSchema, aTable);
-                        Reference< XRow > xRow(xResult,UNO_QUERY);
-                        if ( xRow.is() )
-                        {
-                            while( xResult->next() ) // there can be only one primary key
-                            {
-                                ::rtl::OUString sKeyColumn = xRow->getString(4);
-                                if ( _rName == sKeyColumn )
-                                {
-                                    nField11 = ColumnValue::NO_NULLS;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    catch(SQLException&)
-                    {
-                    }
-                }
-
-                connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(_rName,
-                                            aField6,
-                                            sField13,
-                                            nField11,
-                                            nField7,
-                                            nField9,
-                                            nField5,
-                                            bAutoIncrement,
-                                            sal_False,
-                                            bIsCurrency,
-                                            _bCase);
-
-                xProp = pRet;
-                break;
-            }
-        }
     }
+
     return xProp;
 }
 // -----------------------------------------------------------------------------
@@ -712,6 +752,14 @@ void collectColumnInformation(const Reference< XConnection>& _xConnection,
     }
     catch(SQLException&)
     {
+    }
+    catch(DisposedException&)
+    {
+        OSL_ENSURE(0,"Exception catched!");
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(0,"Exception catched!");
     }
 }
 //.........................................................................
