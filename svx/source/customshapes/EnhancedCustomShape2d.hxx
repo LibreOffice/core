@@ -1,0 +1,231 @@
+/*************************************************************************
+ *
+ *  $RCSfile: EnhancedCustomShape2d.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:03:00 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _ENHANCEDCUSTOMSHAPE2D_HXX
+#define _ENHANCEDCUSTOMSHAPE2D_HXX
+
+#ifndef _MSDFFDEF_HXX
+#include <msdffdef.hxx>
+#endif
+#ifndef _MSDFFIMP_HXX
+#include <msdffimp.hxx>
+#endif
+#ifndef _SDASITM_HXX
+#include <sdasitm.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+#ifndef _com_sun_star_beans_PropertyValues_hpp__
+#include <com/sun/star/beans/PropertyValues.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_POINT_HPP_
+#include <com/sun/star/awt/Point.hpp>
+#endif
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
+#ifndef __drafts_com_sun_star_drawing_EnhancedCustomShapeParameterPair_hpp__
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENT_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETER_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
+#endif
+#ifndef __drafts_com_sun_star_drawing_EnhancedCustomShapeTextFrame_hpp__
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
+#endif
+#ifndef __drafts_com_sun_star_drawing_EnhancedCustomShapeEquation_hpp__
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeEquation.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#endif
+#include <vector>
+
+#define DFF_CUSTOMSHAPE_FLIP_V      1
+#define DFF_CUSTOMSHAPE_FLIP_H      2
+#define DFF_CUSTOMSHAPE_EXCH            4
+
+class SdrModel;
+class SfxItemSet;
+struct SvxMSDffVertPair;
+struct SvxMSDffCalculationData;
+struct SvxMSDffTextRectangles;
+class SvxMSDffAdjustmentHandle;
+
+#define HANDLE_FLAGS_MIRRORED_X             0x0001
+#define HANDLE_FLAGS_MIRRORED_Y             0x0002
+#define HANDLE_FLAGS_SWITCHED               0x0004
+#define HANDLE_FLAGS_POLAR                  0x0008
+#define HANDLE_FLAGS_MAP                    0x0010
+#define HANDLE_FLAGS_RANGE_X_MINIMUM        0x0020
+#define HANDLE_FLAGS_RANGE_X_MAXIMUM        0x0040
+#define HANDLE_FLAGS_RANGE_Y_MINIMUM        0x0080
+#define HANDLE_FLAGS_RANGE_Y_MAXIMUM        0x0100
+#define HANDLE_FLAGS_RADIUS_RANGE_MINIMUM   0x0200
+#define HANDLE_FLAGS_RADIUS_RANGE_MAXIMUM   0x0400
+
+// MSDFF_HANDLE_FLAGS_RANGE_Y seems to be not defined in
+// escher, but we are using it internally in to differentiate
+// between X_RANGE and Y_RANGE
+
+class SdrPathObj;
+class EnhancedCustomShape2d : public SfxItemSet
+{
+        SdrObject*                  pCustomShapeObj;
+        MSO_SPT                     eSpType;
+
+        sal_Int32                   nCoordWidth;
+        sal_Int32                   nCoordHeight;
+        Rectangle                   aLogicRect;
+
+        double                      fXScale;
+        double                      fYScale;
+
+        sal_Int32                   nXRef;
+        sal_Int32                   nYRef;
+        sal_uInt32                  nFlags;
+        sal_uInt32                  nColorData;
+
+        com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeEquation >           seqEquations;
+        com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeSegment >            seqSegments;
+        com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair>       seqCoordinates;
+        com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame >          seqTextFrames;
+        com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair>       seqGluePoints;
+        com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue >    seqAdjustmentValues;
+        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValues >                                  seqHandles;
+
+        sal_Bool                    bTextFlow       : 1;
+        sal_Bool                    bFilled         : 1;
+
+        sal_Bool                    bFlipH;
+        sal_Bool                    bFlipV;
+        sal_Int32                   nRotateAngle;
+
+        double                      GetAdjustValueAsDouble( const sal_Int32 nIndex ) const;
+        sal_Int32                   GetAdjustValueAsInteger( const sal_Int32 nIndex, const sal_Int32 nDefault = 0 ) const;
+        sal_Bool                    SetAdjustValueAsDouble( const double& rValue, const sal_Int32 nIndex );
+        Color                       GetColorData( const Color& rFillColor, sal_uInt32 nIndex );
+        sal_Bool                    GetParameter( double& rParameterReturnValue, sal_uInt32& nGeometryFlags,
+                                        const drafts::com::sun::star::drawing::EnhancedCustomShapeParameter& ) const;
+        sal_Bool                    GetEquationParameter( double& rParameterReturnValue, sal_uInt32& nGeometryFlags,
+                                        const drafts::com::sun::star::drawing::EnhancedCustomShapeEquation&, const sal_Int32 nIndex ) const;
+        double                      GetEquationValue( sal_Int32 nIndex, sal_uInt32& nGeometryFlags ) const;
+        Point                       GetPoint( const drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair&, sal_Bool bScale = sal_True ) const;
+
+        static void                 SwapStartAndEndArrow( SdrObject* pObj );
+
+        void                        CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegmentInd, std::vector< SdrPathObj* >& rObjectList,
+                                                                                                sal_Bool bLineGeometryNeededOnly, sal_Bool bSortFilledObjectsToBack );
+        SdrObject*                  CreatePathObj( sal_Bool bLineGeometryNeededOnly );
+        const sal_Int32*            ApplyShapeAttributes( const SdrCustomShapeGeometryItem& rItem );
+
+    public :
+
+        struct Handle
+        {
+            sal_uInt32  nFlags;
+
+            sal_Bool    bMirroredX;
+            sal_Bool    bMirroredY;
+            sal_Bool    bSwitched;
+
+            drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aPosition;
+            drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair   aPolar;
+
+            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter       aRadiusRangeMinimum;
+            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter       aRadiusRangeMaximum;
+            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter       aXRangeMinimum;
+            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter       aXRangeMaximum;
+            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter       aYRangeMinimum;
+            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter       aYRangeMaximum;
+        };
+
+        sal_Bool                    IsFlipVert() { return bFlipV; };
+        sal_Bool                    IsFlipHorz() { return bFlipH; };
+        sal_Int32                   GetRotateAngle() { return nRotateAngle; };
+
+        SdrObject*                  CreateLineGeometry();
+        SdrObject*                  CreateObject( sal_Bool bLineGeometryNeededOnly );
+        Rectangle                   GetTextRect() const;
+
+        sal_uInt32                  GetHdlCount() const;
+        sal_Bool                    GetHandlePosition( const sal_uInt32 nIndex, Point& rReturnPosition ) const;
+        sal_Bool                    SetHandleControllerPosition( const sal_uInt32 nIndex, const com::sun::star::awt::Point& rPosition );
+
+        EnhancedCustomShape2d( SdrObject* pSdrObjCustomShape );
+        ~EnhancedCustomShape2d();
+
+        // just two helper functions which are also used by the import filter:
+        static void                 SetEnhancedCustomShapeEquationParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeParameter&
+                                        rParameter, const sal_Int16 nPara, const sal_Bool bIsSpecialValue );
+        static void                 SetEnhancedCustomShapeParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeParameter&
+                                        rParameter, const sal_Int32 nValue );
+        static void                 SetEnhancedCustomShapeHandleParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeParameter&
+                                        rParameter, const sal_Int32 nPara, const sal_Bool bIsSpecialValue, sal_Bool bHorz );
+        static sal_Bool             ConvertSequenceToEnhancedCustomShape2dHandle( const com::sun::star::beans::PropertyValues& rHandleProperties,
+                                        EnhancedCustomShape2d::Handle& rDestinationHandle );
+};
+#endif
+
