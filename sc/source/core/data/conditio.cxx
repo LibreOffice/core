@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:21:07 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,29 +1444,7 @@ void ScConditionalFormat::DoRepaint( const ScRange* pModified )
         //  (alle Bedingungen testen)
         BOOL bExtend = FALSE;
         BOOL bRotate = FALSE;
-        for (i=0; i<nEntryCount; i++)
-        {
-            String aStyle = ppEntries[i]->GetStyle();
-            if (aStyle.Len())
-            {
-                SfxStyleSheetBase* pStyleSheet =
-                    pDoc->GetStyleSheetPool()->Find( aStyle, SFX_STYLE_FAMILY_PARA );
-                if ( pStyleSheet )
-                {
-                    const SfxItemSet& rSet = pStyleSheet->GetItemSet();
-                    if (rSet.GetItemState( ATTR_BORDER, TRUE ) == SFX_ITEM_SET ||
-                        rSet.GetItemState( ATTR_SHADOW, TRUE ) == SFX_ITEM_SET)
-                    {
-                        bExtend = TRUE;
-                    }
-                    if (rSet.GetItemState( ATTR_ROTATE_VALUE, TRUE ) == SFX_ITEM_SET ||
-                        rSet.GetItemState( ATTR_ROTATE_MODE, TRUE ) == SFX_ITEM_SET)
-                    {
-                        bRotate = TRUE;
-                    }
-                }
-            }
-        }
+        BOOL bAttrTested = FALSE;
 
         if (!pAreas)        //  RangeList ggf. holen
         {
@@ -1485,6 +1463,37 @@ void ScConditionalFormat::DoRepaint( const ScRange* pModified )
             }
             if (bDo)
             {
+                if ( !bAttrTested )
+                {
+                    // #116562# Look at the style's content only if the repaint is necessary
+                    // for any condition, to avoid the time-consuming Find() if there are many
+                    // conditional formats and styles.
+                    for (USHORT nEntry=0; nEntry<nEntryCount; nEntry++)
+                    {
+                        String aStyle = ppEntries[nEntry]->GetStyle();
+                        if (aStyle.Len())
+                        {
+                            SfxStyleSheetBase* pStyleSheet =
+                                pDoc->GetStyleSheetPool()->Find( aStyle, SFX_STYLE_FAMILY_PARA );
+                            if ( pStyleSheet )
+                            {
+                                const SfxItemSet& rSet = pStyleSheet->GetItemSet();
+                                if (rSet.GetItemState( ATTR_BORDER, TRUE ) == SFX_ITEM_SET ||
+                                    rSet.GetItemState( ATTR_SHADOW, TRUE ) == SFX_ITEM_SET)
+                                {
+                                    bExtend = TRUE;
+                                }
+                                if (rSet.GetItemState( ATTR_ROTATE_VALUE, TRUE ) == SFX_ITEM_SET ||
+                                    rSet.GetItemState( ATTR_ROTATE_MODE, TRUE ) == SFX_ITEM_SET)
+                                {
+                                    bRotate = TRUE;
+                                }
+                            }
+                        }
+                    }
+                    bAttrTested = TRUE;
+                }
+
                 lcl_Extend( aRange, pDoc, bExtend );        // zusammengefasste und bExtend
                 if ( bRotate )
                 {
