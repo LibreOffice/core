@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-03 12:39:37 $
+ *  last change: $Author: mt $ $Date: 2002-05-17 10:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2976,15 +2976,14 @@ EditPaM ImpEditEngine::GetPaM( ParaPortion* pPortion, Point aDocPos, BOOL bSmart
 
     // Wenn Zeile gefunden, nur noch X-Position => Index
     nCurIndex = GetChar( pPortion, pLine, aDocPos.X(), bSmart );
-
-    if ( ( nCurIndex == pLine->GetEnd() ) &&
-         ( pLine != pPortion->GetLines().GetObject( pPortion->GetLines().Count()-1) ) )
-     {
-        if ( nCurIndex )
-            nCurIndex--;
-     }
-
     aPaM.SetIndex( nCurIndex );
+
+    if ( nCurIndex && ( nCurIndex == pLine->GetEnd() ) &&
+         ( pLine != pPortion->GetLines().GetObject( pPortion->GetLines().Count()-1) ) )
+    {
+        aPaM = CursorLeft( aPaM, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL );
+    }
+
     return aPaM;
 }
 
