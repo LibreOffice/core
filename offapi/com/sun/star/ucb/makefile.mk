@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: sb $ $Date: 2001-05-03 10:09:28 $
+#   last change: $Author: kso $ $Date: 2001-05-29 09:32:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ IDLFILES=\
     ChaosContentProvider.idl\
     Command.idl\
     CommandAbortedException.idl\
+        CommandFailedException.idl\
     CommandInfo.idl\
     CommandInfoChange.idl\
     CommandInfoChangeEvent.idl\
@@ -116,6 +117,7 @@ IDLFILES=\
     DuplicateProviderException.idl\
     DynamicResultSet.idl\
     Error.idl\
+        ExistsNotSupportedException.idl\
     ExportStreamInfo.idl\
     FetchError.idl\
     FetchResult.idl\
@@ -156,7 +158,10 @@ IDLFILES=\
     LockEntry.idl\
     LockScope.idl\
     LockType.idl\
+        MissingInputStreamException.idl\
+        MissingPropertiesException.idl\
     NameClash.idl\
+        NameClashResolveRequest.idl\
     NumberedSortingInfo.idl\
     OpenCommandArgument.idl\
     OpenCommandArgument2.idl\
@@ -202,6 +207,9 @@ IDLFILES=\
     TransferResult.idl\
     UniversalContentBroker.idl\
     UnsupportedCommandException.idl\
+        UnsupportedDataSinkException.idl\
+        UnsupportedNameClashException.idl\
+        UnsupportedOpenModeException.idl\
     VerificationMode.idl\
     WebDAVContentProvider.idl\
     WebDAVDocumentContent.idl\
@@ -238,7 +246,9 @@ IDLFILES=\
     XFileIdentifierConverter.idl\
     XInteractionCookieHandling.idl\
     XInteractionHandlerSupplier.idl\
+        XInteractionReplaceExistingData.idl\
     XInteractionSupplyAuthentication.idl\
+        XInteractionSupplyName.idl\
     XParameterizedContentProvider.idl\
     XPersistentPropertySet.idl\
     XProgressHandler.idl\
