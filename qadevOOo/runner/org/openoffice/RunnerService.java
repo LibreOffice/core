@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RunnerService.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-05-03 08:48:18 $
+ *  last change:$Date: 2004-11-02 11:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,10 +253,10 @@ public class RunnerService implements XJob, XServiceInfo,
             // get Jar file from connection
             java.util.jar.JarFile f = con.getJarFile();
             // Enumerate over all entries
-            java.util.Enumeration enum = f.entries();
+            java.util.Enumeration aEnum = f.entries();
 
-            while (enum.hasMoreElements()) {
-                String entry = enum.nextElement().toString();
+            while (aEnum.hasMoreElements()) {
+                String entry = aEnum.nextElement().toString();
                 if (entry.endsWith(".csv")) {
 
                     String module = null;
