@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:05:11 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2001-05-10 07:05:11 $ $Revision: 1.16 $
+ // $Author: kz $ $Date: 2001-05-17 08:42:53 $ $Revision: 1.17 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -135,7 +135,7 @@ String SCSTR_QHELP_POSWND
     Text [ english ] = "Table Area" ;
     Text [ norwegian ] = "Table Area" ;
     Text [ italian ] = "Area tabella" ;
-    Text [ portuguese_brazilian ] = "Área da Tabela" ;
+    Text [ portuguese_brazilian ] = "?rea da Tabela" ;
     Text [ portuguese ] = "Área da folha" ;
     Text [ finnish ] = "Lomakealue" ;
     Text [ danish ] = "Regnearksområde" ;
@@ -191,7 +191,7 @@ String SCSTR_QHELP_BTNCALC
     Text [ english ] = "Function Autopilot" ;
     Text [ norwegian ] = "Function Autopilot" ;
     Text [ italian ] = "Pilota automatico di funzione" ;
-    Text [ portuguese_brazilian ] = "Função Piloto Automático" ;
+    Text [ portuguese_brazilian ] = "Fun??o Piloto Autom?tico" ;
     Text [ portuguese ] = "Função AutoPiloto" ;
     Text [ finnish ] = "Automaattinen ohjaus: toiminnot" ;
     Text [ danish ] = "FunktionsAutoPilot" ;
@@ -304,7 +304,7 @@ String SCSTR_QHELP_BTNEQUAL
     Text [ english ] = "Funktion" ;
     Text [ norwegian ] = "Funktion" ;
     Text [ italian ] = "Funzione" ;
-    Text [ portuguese_brazilian ] = "Função" ;
+    Text [ portuguese_brazilian ] = "Fun??o" ;
     Text [ portuguese ] = "Função" ;
     Text [ finnish ] = "Funktio" ;
     Text [ danish ] = "Funktion" ;
@@ -336,7 +336,7 @@ String RID_OBJECTBAR_APP
     Text [ english ] = "Function Bar" ;
     Text [ norwegian ] = "Function Bar" ;
     Text [ italian ] = "Barra delle funzioni" ;
-    Text [ portuguese_brazilian ] = "Barra de Funções" ;
+    Text [ portuguese_brazilian ] = "Barra de Fun??s" ;
     Text [ portuguese ] = "Barra de funções" ;
     Text [ finnish ] = "Toimintopalkki" ;
     Text [ danish ] = "Funktionslinje" ;
@@ -529,7 +529,7 @@ String RID_PLUGINTOOLBOX
     Text [ swedish ] = "Funktionslist för plug-ins" ;
     Text [ danish ] = "Funktionslinje for PlugIns" ;
     Text [ portuguese ] = "Barra para Plugins" ;
-    Text [ portuguese_brazilian ] = "Funktionsleiste für PlugIns" ;
+    Text [ portuguese_brazilian ] = "Funktionsleiste f? PlugIns" ;
     Text[ chinese_simplified ] = "Plug-In ¹¦ÄÜÀ¸";
     Text[ russian ] = "Ïàíåëü ôóíêöèé äëÿ Plug-Ins";
     Text[ polish ] = "Pasek funkcji dla wtyczek Plug-In";
@@ -960,7 +960,7 @@ String RID_OBJECTBAR_PREVIEW
     Text [ english ] = "Page Preview Object Bar" ;
     Text [ norwegian ] = "Forhåndsvisning av side" ;
     Text [ italian ] = "Barra degli oggetti dell'anteprima stampa" ;
-    Text [ portuguese_brazilian ] = "Examinar Página" ;
+    Text [ portuguese_brazilian ] = "Examinar P?gina" ;
     Text [ portuguese ] = "Previsualização" ;
     Text [ finnish ] = "Sivunäkymän objektirivipalkki" ;
     Text [ danish ] = "Sidevisningobjektlinje" ;
@@ -1260,7 +1260,7 @@ FloatingWindow RID_TBXCTL_INSERT
     Text [ swedish ] = "Infoga" ;
     Text [ danish ] = "Indsæt" ;
     Text [ portuguese ] = "Inserir" ;
-    Text [ portuguese_brazilian ] = "Einfügen" ;
+    Text [ portuguese_brazilian ] = "Einf?en" ;
     Text[ chinese_simplified ] = "²åÈë";
     Text[ russian ] = "Âñòàâèòü";
     Text[ polish ] = "Wstaw";
@@ -1312,7 +1312,7 @@ FloatingWindow RID_TBXCTL_INSCELLS
     Text [ dutch ] = "Cellen invoegen" ;
     Text [ swedish ] = "Infoga celler" ;
     Text [ danish ] = "Indsæt celler" ;
-    Text [ portuguese_brazilian ] = "Zellen einfügen" ;
+    Text [ portuguese_brazilian ] = "Zellen einf?en" ;
     Text [ portuguese ] = "Inserir células" ;
     Text[ chinese_simplified ] = "²åÈëµ¥Ôª¸ñ";
     Text[ russian ] = "Âñòàâèòü ÿ÷åéêè";
@@ -1419,7 +1419,7 @@ FloatingWindow RID_TBXCTL_INSOBJ
         };
     };
     Text [ portuguese ] = "Inserir objecto" ;
-    Text [ portuguese_brazilian ] = "Objekt einfügen" ;
+    Text [ portuguese_brazilian ] = "Objekt einf?en" ;
     Text[ chinese_simplified ] = "²åÈë¶ÔÏó";
     Text[ russian ] = "Âñòàâèòü îáúåêò";
     Text[ polish ] = "Wstaw obiekt";
