@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:17:21 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:29:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,27 +66,18 @@ PRJNAME=sfx2
 TARGET=statbar
 ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-AUTOSEG=true
-
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
 IMGLST_SRS=$(SRS)$/statbar.srs
 BMP_IN=$(PRJ)$/win/res
 
-CXXFILES =			\
-    stbmgr.cxx		\
-    stbitem.cxx		\
-    progind.cxx		\
-    $(PROJECTPCHSOURCE).cxx
-
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         statbar.src
 
 SLOFILES =						\

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2001-02-13 10:57:02 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:29:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,22 +65,12 @@ PRJ=..$/..
 PRJNAME=sfx2
 TARGET=notify
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-AUTOSEG=true
-
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-        eventsupplier.cxx \
-        hintpost.cxx \
-        linkhdl.cxx \
-        $(PROJECTPCHSOURCE).cxx
 
 SLOFILES =	\
         $(SLO)$/eventsupplier.obj \
