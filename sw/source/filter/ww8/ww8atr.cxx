@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-23 11:16:23 $
+ *  last change: $Author: cmc $ $Date: 2001-04-24 10:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,10 @@
 #ifndef _SVX_CHARRELIEFITEM_HXX
 #include <svx/charreliefitem.hxx>
 #endif
+#ifndef _SVX_PARAVERTALIGNITEM_HXX
+#include <svx/paravertalignitem.hxx>
+#endif
+
 
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
@@ -2050,6 +2054,47 @@ static Writer& OutWW8_SfxBoolItem( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutWW8_SvxParaVertAlignItem( Writer& rWrt,
+    const SfxPoolItem& rHt )
+{
+// sprmPWAlignFont
+
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    //97+ only
+    if( !rWrtWW8.bWrtWW8 )
+        return rWrt;
+
+    rWrtWW8.InsUInt16( 0x4439 );
+    const SvxParaVertAlignItem & rAttr = (const SvxParaVertAlignItem&)rHt;
+
+    INT16 nVal = rAttr.GetValue();
+    switch (nVal)
+    {
+        case SvxParaVertAlignItem::BASELINE:
+            nVal = 2;
+            break;
+        case SvxParaVertAlignItem::TOP:
+            nVal = 0;
+            break;
+        case SvxParaVertAlignItem::CENTER:
+            nVal = 1;
+            break;
+        case SvxParaVertAlignItem::BOTTOM:
+            nVal = 3;
+            break;
+        case SvxParaVertAlignItem::AUTOMATIC:
+            nVal = 4;
+            break;
+        default:
+            nVal = 4;
+            ASSERT(FALSE,"Unknown vert alignment");
+            break;
+    }
+    rWrtWW8.InsUInt16( nVal );
+    return rWrt;
+}
+
+
 // NoHyphen: ich habe keine Entsprechung in der SW-UI und WW-UI gefunden
 
 static Writer& OutWW8_SwHardBlank( Writer& rWrt, const SfxPoolItem& rHt )
@@ -2234,7 +2279,7 @@ static Writer& OutWW8_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutWW8_SvxTwoLinesItem( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
-    //2000 only
+    //97+ only
     if( !rWrtWW8.bWrtWW8 )
         return rWrt;
 
@@ -3627,10 +3672,10 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_PARATR_DROP */               0,
 /* RES_PARATR_REGISTER */           0, // neu:  Registerhaltigkeit
 /* RES_PARATR_NUMRULE */            OutWW8_SwNumRuleItem,
-/* RES_PARATR_SCRIPTSPACE */        OutWW8_SfxBoolItem, // Dummy:
-/* RES_PARATR_HANGINGPUNCTUATION */ OutWW8_SfxBoolItem, // Dummy:
-/* RES_PARATR_DUMMY1 */             OutWW8_SfxBoolItem, // Dummy:
-/* RES_PARATR_DUMMY2 */             0, // Dummy:
+/* RES_PARATR_SCRIPTSPACE */        OutWW8_SfxBoolItem,
+/* RES_PARATR_HANGINGPUNCTUATION */ OutWW8_SfxBoolItem,
+/* RES_PARATR_FORBIDDEN_RULES */    OutWW8_SfxBoolItem,
+/* RES_PARATR_VERTALIGN */          OutWW8_SvxParaVertAlignItem,
 /* RES_PARATR_DUMMY3 */             0, // Dummy:
 /* RES_PARATR_DUMMY4 */             0, // Dummy:
 /* RES_PARATR_DUMMY5 */             0, // Dummy:
@@ -3704,6 +3749,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2001/04/23 11:16:23  cmc
+      Enable automatic text foreground color {im|ex}port
+
       Revision 1.12  2001/03/16 17:15:59  jp
       new: im-/export emboss / engrave attribute
 

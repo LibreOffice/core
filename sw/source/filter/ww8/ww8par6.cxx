@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-23 11:16:23 $
+ *  last change: $Author: cmc $ $Date: 2001-04-24 10:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,9 @@
 
 #ifndef _SVX_HYZNITEM_HXX //autogen
 #include <svx/hyznitem.hxx>
+#endif
+#ifndef _SVX_PARAVERTALIGNITEM_HXX
+#include <svx/paravertalignitem.hxx>
 #endif
 
 #ifndef _RTL_TENCINFO_H
@@ -4325,6 +4328,43 @@ void SwWW8ImplReader::Read_WidowControl( USHORT, BYTE* pData, short nLen )
     }
 }
 
+
+void SwWW8ImplReader::Read_AlignFont( USHORT, BYTE* pData, short nLen )
+{
+    if( nLen <= 0 )
+    {
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_PARATR_VERTALIGN);
+    }
+    else
+    {
+        sal_uInt16 nVal = SVBT16ToShort( pData );
+        switch (nVal)
+        {
+            case 0:
+                nVal = SvxParaVertAlignItem::TOP;
+                break;
+            case 1:
+                nVal = SvxParaVertAlignItem::CENTER;
+                break;
+            case 2:
+                nVal = SvxParaVertAlignItem::BASELINE;
+                break;
+            case 3:
+                nVal = SvxParaVertAlignItem::BOTTOM;
+                break;
+            case 4:
+                nVal = SvxParaVertAlignItem::AUTOMATIC;
+                break;
+            default:
+                nVal = SvxParaVertAlignItem::AUTOMATIC;
+                ASSERT(!this,"Unknown paragraph vertical align");
+                break;
+        }
+        NewAttr( SvxParaVertAlignItem( nVal ) );
+    }
+}
+
+
 void SwWW8ImplReader::Read_KeepLines( USHORT, BYTE* pData, short nLen )
 {
     if( nLen <= 0 )
@@ -4743,7 +4783,7 @@ SprmReadInfo aSprmReadTab[] = {
     0x2436, (FNReadRecord)0, //"sprmPFTopLinePunct" // pap.fTopLinePunct;0 or 1;byte;
     0x2437, &SwWW8ImplReader::Read_BoolItem, //"sprmPFAutoSpaceDE" // pap.fAutoSpaceDE;0 or 1;byte;
     0x2438, (FNReadRecord)0, //"sprmPFAutoSpaceDN" // pap.fAutoSpaceDN;0 or 1;byte;
-    0x4439, (FNReadRecord)0, //"sprmPWAlignFont" // pap.wAlignFont;iFa (see description of PAP for definition);word;
+    0x4439, &SwWW8ImplReader::Read_AlignFont, //"sprmPWAlignFont" // pap.wAlignFont;iFa (see description of PAP for definition);word;
     0x443A, (FNReadRecord)0, //"sprmPFrameTextFlow" // pap.fVertical pap.fBackward pap.fRotateFont;complex (see description of PAP for definition);word;
     0x243B, (FNReadRecord)0, //"sprmPISnapBaseLine" // obsolete: not applicable in Word97 and later versions;;byte;
     0xC63E, &SwWW8ImplReader::Read_ANLevelDesc, //"sprmPAnld" // pap.anld;;variable length;
@@ -5039,12 +5079,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.21 2001-04-23 11:16:23 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.22 2001-04-24 10:26:11 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.21  2001/04/23 11:16:23  cmc
+      Enable automatic text foreground color {im|ex}port
+
       Revision 1.20  2001/04/20 14:49:03  cmc
       Missing sprms and bad WW6 fontselection sprm id
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-23 11:16:23 $
+ *  last change: $Author: cmc $ $Date: 2001-04-24 10:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1018,6 +1018,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_Justify(          USHORT, BYTE*, short nLen );
     void Read_Hyphenation(      USHORT, BYTE* pData, short nLen );
     void Read_WidowControl(     USHORT, BYTE* pData, short nLen );
+    void Read_AlignFont(        USHORT, BYTE* pData, short nLen );
     void Read_KeepLines(        USHORT, BYTE* pData, short nLen );
     void Read_KeepParas(        USHORT, BYTE* pData, short nLen );
     void Read_BreakBefore(      USHORT, BYTE* pData, short nLen );
@@ -1154,11 +1155,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.22 2001-04-23 11:16:23 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.23 2001-04-24 10:26:11 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.22  2001/04/23 11:16:23  cmc
+      Enable automatic text foreground color {im|ex}port
+
       Revision 1.21  2001/04/20 14:54:47  cmc
       base table handling on logical character positions and by using new property finding algorithm
 
