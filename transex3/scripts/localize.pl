@@ -6,9 +6,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: localize.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-02 16:24:26 $
+#   last change: $Author: kz $ $Date: 2004-08-30 17:30:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,7 @@ my $languages;
          #        (                          leftpart                                                     )        (         rightpart                                   )
          #           prj      file     dummy     type      gid        lid        helpid   pform     width     lang      text     helptext  qhelptext  title    timestamp
 my $sdf_regex  = "((([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t])*\t([^\t]*)\t([^\t]*))\t([^\t]*)\t(([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t)([^\t]*))";
-my $file_types = "(src|hrc|xcs|xcu|lng|ulf|xrm|xml|xcd|xgf|xxl|xrb)";
+my $file_types = "(src|hrc|xcs|xcu|lng|ulf|xrm|xhp|xcd|xgf|xxl|xrb)";
 
 
 #### main ####
