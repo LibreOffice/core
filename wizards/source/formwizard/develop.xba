@@ -43,7 +43,7 @@ Dim i as Integer
 		InsertDBControl(oDBModel, i)
 		bIsVeryFirstRun = False
 &apos; Todo: Klären, wieso er bei der folgenden Zeile abstürzt
-&apos;		oDBModel.LabelControl = oTCModel
+		oDBModel.LabelControl = oTCModel
 		ResetPosSizes(i)
 		oProgressbar.Value = i
 	Next i
@@ -209,7 +209,7 @@ Dim iColRightX as Long
 	Else
 		aSize = GetSize(nDBWidth,nDBHeight)
 		oDBModel = CreateUnoService(oModelService(CurControlType))
-		oDBModel.Name = CurControlName
+&apos;		oDBModel.Name = CurControlName
 		SetNumerics(oDBModel)
 		oShape = InsertControl(oDBModel, aPoint, aSize)
 		Set oDBShapeList(i)= oShape
@@ -385,8 +385,8 @@ Dim nWidth as Long
 	
 	nWidth = 0
 	For n = 0 to MaxIndex
-		CurType = FieldMetaValues(n,0)
-		CurControlType = FieldMetaValues(n,2)
+		CurFieldType = FieldMetaValues(n,0)
+&apos;		CurControlType = FieldMetaValues(n,2)
 	    CurFieldName = FieldNames(n)
 		If CurControlType = cImageControl Then
 			CurControlName = &quot;TextField&quot;			

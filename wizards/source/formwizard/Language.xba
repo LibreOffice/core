@@ -281,8 +281,7 @@ Sub InitializeWidthList()
 	oModelService(cCheckBox) = &quot;com.sun.star.form.component.CheckBox&quot;
 	oModelService(cDateBox) = &quot;com.sun.star.form.component.DateField&quot;
 	oModelService(cTimeBox) = &quot;com.sun.star.form.component.TimeField&quot;
-	oModelService(cNumericBox) = &quot;com.sun.star.form.component.NumericField&quot;
-	oModelService(cCurrencyBox) = &quot;com.sun.star.form.component.CurrencyField&quot;
+	oModelService(cNumericBox) = &quot;com.sun.star.form.component.FormattedField&quot;
 	oModelService(cGridControl) = &quot;com.sun.star.form.component.GridControl&quot;
 	oModelService(cImageControl) = &quot;com.sun.star.form.component.DatabaseImageControl&quot;
 End Sub</script:module>

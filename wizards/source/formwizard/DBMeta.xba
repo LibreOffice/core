@@ -18,7 +18,8 @@ Dim bGetMetaData as Boolean
 	If Ubound(oDialogModel.lstDatabases.SelectedItems()) &gt; -1 Then
 		ToggleDatabasePage(False)
 		DBIndex = oDialogModel.lstDatabases.SelectedItems(0)
-		If GetConnection(sDatabaseList(DBIndex)) Then
+		sDBName = sDatabaseList(DBIndex)
+		If GetConnection(sDBName) Then
 		bGetMetaData = GetDBMetaData()
 		End If
 		If bGetMetaData Then
@@ -49,7 +50,7 @@ Dim iMsg as Integer
 	Else
 		oInteractionHandler = createUnoService(&quot;com.sun.star.sdb.InteractionHandler&quot;)
 		oDataSource = oDBContext.GetByName(sDBName)
-&apos;		On Local Error Goto NOCONNECTION
+		On Local Error Goto NOCONNECTION
 		Do
 			bExitLoop = True
 			oDBConnection = oDataSource.ConnectWithCompletion(oInteractionHandler) 
@@ -61,8 +62,8 @@ Dim iMsg as Integer
 			End If
 			On Local Error Goto 0		
 		Loop Until bExitLoop
+		GetConnection() = bGetConnection
 	End If
-	GetConnection() = bGetConnection
 End Function
 
 

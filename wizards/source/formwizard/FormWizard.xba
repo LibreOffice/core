@@ -39,6 +39,8 @@ Sub MainWithDefault(Optional DatasourceName as String, Optional Contenttype as I
 &apos;On Local Error Goto GlobalError
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;WebWizard&quot;)
+&apos; Todo: Variable is initialized due to Bug#88329
+	CurArrangement = 0
 	bControlsareCreated = False
 	MaxIndex = -1
 	If Not InitResources(&quot;Formwizard&quot;,&quot;dbw&quot;) Then
@@ -97,7 +99,8 @@ Dim i as Integer
 	ImportStyles()
 	ToggleWindow(True)
 	oDialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
-	DlgFormDB.Execute()
+&apos;	DlgFormDB.Execute()
+	DlgFormDB.Visible = True
 	Exit Sub
 
 GlobalError:
@@ -216,7 +219,7 @@ End Sub
 
 
 Sub SwitchDialogHeight()
-	SwitchWizardDialogHeight(DlgFormDB, sHeightenDialog, sReduceDialog)
+	SwitchWizardDialogHeight(DlgFormDB, FormPath)
 End Sub
 
 
@@ -234,13 +237,12 @@ Dim ListAny(0)
 	oFileDialog.SetCurrentFilter(&quot;Writer 6.0&quot;)
 	oFileDialog.Initialize(ListAny())
 	oFileDialog.SetDisplayDirectory(WorkPath)
-&apos; Todo: Vorschlag für Namen: &quot;Form_DatasourceName.ContentName	
+	oFileDialog.SetDefaultName(&quot;Form_&quot; &amp; sDBName &amp; &quot;.&quot; &amp; TableName
 	iAccept = oFileDialog.Execute()
 	If iAccept = 1 Then
 		sPath = oFileDialog.Path(0)
 		oStoreProperties(0).Name = &quot;FilterName&quot;
 		oStoreProperties(0).Value = oFileDialog.GetCurrentFilter
-		RemoveShapes()
 		oDocument.StoreAsUrl(sPath, oStoreProperties())
 		DlgFormDB.EndExecute()
 	End If
