@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mav $ $Date: 2001-06-26 13:33:22 $
+ *  last change: $Author: mba $ $Date: 2001-06-27 16:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ void Desktop::Main()
 
 #ifdef TIMEBOMB
     Date aDate;
-    Date aFinalDate( 31, 8, 2001 );
+    Date aFinalDate( 31, 10, 2001 );
     if ( aFinalDate < aDate )
     {
         String aMsg;
