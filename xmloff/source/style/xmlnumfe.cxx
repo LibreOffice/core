@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-01 13:34:58 $
+ *  last change: $Author: nn $ $Date: 2002-10-23 17:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1638,13 +1638,44 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     //  mapping (conditions) must be last elements
     //
 
-    SvNumberformatLimitOps eOp1, eOp2;
-    double fLimit1, fLimit2;
-    rFormat.GetConditions( eOp1, fLimit1, eOp2, fLimit2 );
     if (bDefPart)
     {
+        SvNumberformatLimitOps eOp1, eOp2;
+        double fLimit1, fLimit2;
+        rFormat.GetConditions( eOp1, fLimit1, eOp2, fLimit2 );
+
         WriteMapElement_Impl( eOp1, fLimit1, nKey, 0 );
         WriteMapElement_Impl( eOp2, fLimit2, nKey, 1 );
+
+        if ( rFormat.HasTextFormat() )
+        {
+            //  4th part is for text -> make an "all other numbers" condition for the 3rd part
+            //  by reversing the 2nd condition
+
+            SvNumberformatLimitOps eOp3 = NUMBERFORMAT_OP_NO;
+            double fLimit3 = fLimit2;
+            switch ( eOp2 )
+            {
+                case NUMBERFORMAT_OP_EQ: eOp3 = NUMBERFORMAT_OP_NE; break;
+                case NUMBERFORMAT_OP_NE: eOp3 = NUMBERFORMAT_OP_EQ; break;
+                case NUMBERFORMAT_OP_LT: eOp3 = NUMBERFORMAT_OP_GE; break;
+                case NUMBERFORMAT_OP_LE: eOp3 = NUMBERFORMAT_OP_GT; break;
+                case NUMBERFORMAT_OP_GT: eOp3 = NUMBERFORMAT_OP_LE; break;
+                case NUMBERFORMAT_OP_GE: eOp3 = NUMBERFORMAT_OP_LT; break;
+            }
+
+            if ( fLimit1 == fLimit2 &&
+                    ( ( eOp1 == NUMBERFORMAT_OP_LT && eOp2 == NUMBERFORMAT_OP_GT ) ||
+                      ( eOp1 == NUMBERFORMAT_OP_GT && eOp2 == NUMBERFORMAT_OP_LT ) ) )
+            {
+                //  For <x and >x, add =x as last condition
+                //  (just for readability, <=x would be valid, too)
+
+                eOp3 = NUMBERFORMAT_OP_EQ;
+            }
+
+            WriteMapElement_Impl( eOp3, fLimit3, nKey, 2 );
+        }
     }
 }
 
@@ -1661,6 +1692,19 @@ void SvXMLNumFmtExport::ExportFormat_Impl( const SvNumberformat& rFormat, sal_uI
     for (nPart=0; nPart<XMLNUM_MAX_PARTS; nPart++)
         if (rFormat.GetNumForType( nPart, 0, sal_False ) != 0)
             nUsedParts = nPart+1;
+
+    SvNumberformatLimitOps eOp1, eOp2;
+    double fLimit1, fLimit2;
+    rFormat.GetConditions( eOp1, fLimit1, eOp2, fLimit2 );
+
+    //  if conditions are set, even empty formats must be written
+
+    if ( eOp1 != NUMBERFORMAT_OP_NO && nUsedParts < 2 )
+        nUsedParts = 2;
+    if ( eOp2 != NUMBERFORMAT_OP_NO && nUsedParts < 3 )
+        nUsedParts = 3;
+    if ( rFormat.HasTextFormat() && nUsedParts < 4 )
+        nUsedParts = 4;
 
     for (nPart=0; nPart<nUsedParts; nPart++)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: er $ $Date: 2002-10-08 16:11:19 $
+ *  last change: $Author: nn $ $Date: 2002-10-23 17:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1961,8 +1961,15 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
         //! collect all conditions first and adjust default to >=0, >0 or <0 depending on count
         //! allow blanks in conditions
         sal_Bool bFirstCond = ( aConditions.getLength() == 0 );
-        if ( bFirstCond && sRealCond.compareToAscii( ">=0" ) == 0 )
+        if ( bFirstCond && aMyConditions.size() == 1 && sRealCond.compareToAscii( ">=0" ) == 0 )
             bDefaultCond = sal_True;
+
+        if ( nType == XML_TOK_STYLES_TEXT_STYLE && nIndex == 2 )
+        {
+            //  The third condition in a number format with a text part can only be
+            //  "all other numbers", the condition string must be empty.
+            bDefaultCond = sal_True;
+        }
 
         if (!bDefaultCond)
         {
@@ -2003,8 +2010,15 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex, const rtl::OUS
         //! collect all conditions first and adjust default to >=0, >0 or <0 depending on count
         //! allow blanks in conditions
         sal_Bool bFirstCond = ( aConditions.getLength() == 0 );
-        if ( bFirstCond && sRealCond.compareToAscii( ">=0" ) == 0 )
+        if ( bFirstCond && aMyConditions.size() == 1 && sRealCond.compareToAscii( ">=0" ) == 0 )
             bDefaultCond = sal_True;
+
+        if ( nType == XML_TOK_STYLES_TEXT_STYLE && nIndex == 2 )
+        {
+            //  The third condition in a number format with a text part can only be
+            //  "all other numbers", the condition string must be empty.
+            bDefaultCond = sal_True;
+        }
 
         if (!bDefaultCond)
         {
