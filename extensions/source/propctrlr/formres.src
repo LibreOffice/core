@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-16 21:17:52 $
+ *  last change: $Author: rt $ $Date: 2002-02-28 16:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2935,7 +2935,7 @@ String RID_STR_DEFAULTVALUE
     Text[ japanese ] = "ζ¨™ζΊ–ε€¤";
     Text[ chinese_traditional ] = "ι»θªε€Ό";
     Text[ greek ] = "Προεπιλεγμένη τιμή";
-    Text[ korean ] = "κΈ°λ³Έκ°’";
+    Text[ korean ] = "κΈ°λ³Έ κ°’";
     Text[ arabic ] = "ήνγΙ ΗέΚΡΗΦνΙ";
     Text[ turkish ] = "Standart deπer";
     Text[ language_user1 ] = " ";
@@ -4860,6 +4860,9 @@ String RID_STR_TEXT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.42  2002/01/16 21:17:52  kz
+ *  Merge SRC641: 16.01.02 - 22:12:40
+ *
  *  Revision 1.41  2001/12/21 21:16:17  kz
  *  Merge SRC641: 21.12.01 - 22:10:32
  *
