@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:29:31 $
+ *  last change: $Author: sj $ $Date: 2001-03-12 16:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,7 @@
 #endif
 #endif
 #include <vcl/virdev.hxx>
+#include <algorithm>
 #pragma hdrstop
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1062,6 +1063,36 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         PPTTextObj aTextObj( rSt, (SdrPowerPointImport&)*this, rPersistEntry, &rObjData );
         if ( ( aTextObj.Count() || aTextObj.GetOEPlaceHolderAtom() ) )
         {
+            INT32 nTextRotationAngle = ( rObjData.nSpFlags & SP_FFLIPV ) ? 18000 : 0;       // #72116# vertical flip
+            if ( IsProperty( DFF_Prop_txflTextFlow ) )
+            {
+                MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow ) & 0xFFFF );
+                switch( eTextFlow )
+                {
+                    case mso_txflBtoT :                     // Bottom to Top non-@, unten -> oben
+                        nTextRotationAngle += 9000;
+                    break;
+                    case mso_txflTtoBA :    /* #68110# */   // Top to Bottom @-font, oben -> unten
+                    case mso_txflTtoBN :                    // Top to Bottom non-@, oben -> unten
+                    case mso_txflVertN :                    // Vertical, non-@, oben -> unten
+                        aTextObj.SetVertical( sal_True );   // nTextRotationAngle += 27000;
+                    break;
+//                  case mso_txflHorzN :                    // Horizontal non-@, normal
+//                  case mso_txflHorzA :                    // Horizontal @-font, normal
+                }
+                if ( nTextRotationAngle )
+                {
+                    Point nCenter( rTextRect.Center() );
+                    long nDX = rTextRect.Right() - rTextRect.Left();
+                    long nDY = rTextRect.Bottom() - rTextRect.Top();
+                    rTextRect.Left()       = nCenter.X() - nDY/2;
+                    rTextRect.Top()        = nCenter.Y() - nDX/2;
+                    rTextRect.Right()      = rTextRect.Left() + nDY;
+                    rTextRect.Bottom()     = rTextRect.Top()  + nDX;
+                }
+            }
+            nTextRotationAngle -= GetPropertyValue( DFF_Prop_cdirFont, mso_cdir0 ) * 9000;
+
             if ( pRet )
             {
                 BOOL bDeleteSource = FALSE;
@@ -1078,7 +1109,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                             && ( pRet->ISA( SdrOle2Obj ) == FALSE ) )
                     delete pRet, pRet = NULL;
             }
-
 
             SdrObject* pTObj = NULL;
             SdrObjKind eTextKind = OBJ_TEXT;
@@ -1120,16 +1150,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             }
             aTextObj.SetMappedInstance( (sal_uInt16)nInstanceInSheet );
 
-            // Abstaende an den Raendern der Textbox lesen
-            INT32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 92076 );
-            INT32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 92076 );
-            INT32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 46038 );
-            INT32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 46038 );
-            ScaleEmu( nTextLeft );
-            ScaleEmu( nTextRight );
-            ScaleEmu( nTextTop );
-            ScaleEmu( nTextBottom );
-
             switch ( aTextObj.GetInstance() )
             {
                 case TSS_TYPE_PAGETITLE :
@@ -1139,155 +1159,211 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 case TSS_TYPE_HALFBODY :
                 case TSS_TYPE_QUARTERBODY : eTextKind = OBJ_OUTLINETEXT; break;
             }
-            INT32 nTextRotationAngle = ( rObjData.nSpFlags & SP_FFLIPV ) ? 18000 : 0;       // #72116# vertical flip
-            if ( IsProperty( DFF_Prop_txflTextFlow ) )
-            {
-                MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow ) & 0xFFFF );
-                switch( eTextFlow )
-                {
-                    case mso_txflBtoT :                     // Bottom to Top non-@, unten -> oben
-                        nTextRotationAngle += 9000;
-                    break;
-                    case mso_txflTtoBA :    /* #68110# */   // Top to Bottom @-font, oben -> unten
-                    case mso_txflTtoBN :                    // Top to Bottom non-@, oben -> unten
-                    case mso_txflVertN :                    // Vertical, non-@, oben -> unten
-                        nTextRotationAngle += 27000;
-                    break;
-//                  case mso_txflHorzN :                    // Horizontal non-@, normal
-//                  case mso_txflHorzA :                    // Horizontal @-font, normal
-                }
-                if ( nTextRotationAngle )
-                {
-                    Point nCenter( rTextRect.Center() );
-                    long nDX = rTextRect.Right() - rTextRect.Left();
-                    long nDY = rTextRect.Bottom() - rTextRect.Top();
-                    rTextRect.Left()       = nCenter.X() - nDY/2;
-                    rTextRect.Top()        = nCenter.Y() - nDX/2;
-                    rTextRect.Right()      = rTextRect.Left() + nDY;
-                    rTextRect.Bottom()     = rTextRect.Top()  + nDX;
-                }
-            }
-            nTextRotationAngle -= GetPropertyValue( DFF_Prop_cdirFont, mso_cdir0 ) * 9000;
-
             pTObj = new SdrRectObj( eTextKind, rTextRect );
-
             if ( nTextRotationAngle )
             {
                 double a = nTextRotationAngle * nPi180;
                 pTObj->NbcRotate( rTextRect.Center(), nTextRotationAngle, sin( a ), cos( a ) );
             }
-
             SfxItemSet aSet( pSdrModel->GetItemPool() );
-
             if ( !pRet )
                 ((SdrEscherImport*)this)->ApplyAttributes( rSt, aSet, pTObj );
 
-            UINT32 nMod = ( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ) ? 1 : 0;
-            nMod += ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) ? 2 : 0;
-            switch ( nMod )
-            {
-                case 0 :        // - this appends just only one obj
-                case 2 :        // - we have to get a single textobj
-                {
-                    aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
-                    aSet.Put( SdrTextAutoGrowHeightItem( TRUE ) );
-                }
-                break;
+            sal_Bool  bVerticalText = aTextObj.GetVertical();
+            sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 92076 );
+            sal_Int32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 92076 );
+            sal_Int32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 46038 );
+            sal_Int32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 46038 );
+            ScaleEmu( nTextLeft );
+            ScaleEmu( nTextRight );
+            ScaleEmu( nTextTop );
+            ScaleEmu( nTextBottom );
 
-                case 1 :
-                case 3 :        // - we have to get a single textobj
+            sal_Int32   nMinFrameWidth = 0;
+            sal_Int32   nMinFrameHeight = 0;
+            sal_Bool    bAutoGrowWidth, bAutoGrowHeight;
+            SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_CENTER;
+            SdrTextHorzAdjust eTHA = SDRTEXTHORZADJUST_CENTER;
+
+            if ( bVerticalText )
+            {
+                sal_Int32 nMod = ( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ) ? 1 : 0;
+                nMod += ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) ? 2 : 0;
+                switch ( nMod )
                 {
-                    aSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
-                    aSet.Put( SdrTextAutoGrowHeightItem( TRUE ) );
+                    case 0 :        // - this appends just only one obj
+                    case 2 :        // - we have to get a single textobj
+                    {
+                        bAutoGrowHeight = sal_True;
+                        bAutoGrowWidth = sal_True;
+                    }
+                    break;
+
+                    case 1 :
+                    case 3 :        // - we have to get a single textobj
+                    {
+                        bAutoGrowHeight = sal_False;
+                        bAutoGrowWidth = sal_True;
+                    }
+                    break;
                 }
-                break;
+                // Textverankerung lesen
+                MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
+
+                switch( eTextAnchor )
+                {
+                    case mso_anchorTop:
+                    case mso_anchorTopCentered:
+                        eTHA = SDRTEXTHORZADJUST_RIGHT;
+                    break;
+
+                    case mso_anchorMiddle :
+                    case mso_anchorMiddleCentered:
+                        eTHA = SDRTEXTHORZADJUST_BLOCK;
+                    break;
+
+                    case mso_anchorBottom:
+                    case mso_anchorBottomCentered:
+                        eTHA = SDRTEXTHORZADJUST_LEFT;
+                    break;
+                }
+                switch( eTextAnchor )
+                {
+                    case mso_anchorTop :
+                    case mso_anchorMiddle :
+                    case mso_anchorBottom :
+                    {
+                        eTVA = SDRTEXTVERTADJUST_CENTER;
+                        PPTParagraphObj* pPara = aTextObj.First();
+                        if ( pPara )
+                        {
+                            UINT32 nParaAdjust = 0;
+                            pPara->GetAttrib( PPT_ParaAttr_Adjust, nParaAdjust, aTextObj.GetInstance() );
+                            switch ( nParaAdjust )
+                            {
+                                case 0 : eTVA = SDRTEXTVERTADJUST_TOP; break;
+                                case 2 : eTVA = SDRTEXTVERTADJUST_BOTTOM; break;
+                            }
+                        }
+                    }
+                    break;
+                }
+                sal_Int32   nMinFrameWidth = rTextRect.GetWidth() - ( nTextLeft + nTextRight );
+            }
+            else
+            {
+                sal_Int32 nMod = ( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ) ? 1 : 0;
+                nMod += ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) ? 2 : 0;
+                switch ( nMod )
+                {
+                    case 0 :        // - this appends just only one obj
+                    case 2 :        // - we have to get a single textobj
+                    {
+                        bAutoGrowWidth = sal_True;
+                        bAutoGrowHeight = sal_True;
+                    }
+                    break;
+
+                    case 1 :
+                    case 3 :        // - we have to get a single textobj
+                    {
+                        bAutoGrowWidth = sal_False;
+                        bAutoGrowHeight = sal_True;
+                    }
+                    break;
+                }
+    /*
+                switch ( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
+                {
+                    case mso_wrapNone :
+                    {
+                        if ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 )  // be sure this is FitShapeToText
+                            aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
+                    }
+                    break;
+
+                    case mso_wrapByPoints :
+                        aSet.Put( SdrTextContourFrameItem( TRUE ) );
+                    break;
+                }
+    */
+
+                // Textverankerung lesen
+                MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
+
+                switch( eTextAnchor )
+                {
+                    case mso_anchorTop:
+                    case mso_anchorTopCentered:
+                        eTVA = SDRTEXTVERTADJUST_TOP;
+                    break;
+
+                    case mso_anchorMiddle :
+                    case mso_anchorMiddleCentered:
+                        eTVA = SDRTEXTVERTADJUST_CENTER;
+                    break;
+
+                    case mso_anchorBottom:
+                    case mso_anchorBottomCentered:
+                        eTVA = SDRTEXTVERTADJUST_BOTTOM;
+                    break;
+    /*
+                    case mso_anchorTopBaseline:
+                    case mso_anchorBottomBaseline:
+                    case mso_anchorTopCenteredBaseline:
+                    case mso_anchorBottomCenteredBaseline:
+                    break;
+    */
+                }
+                switch( eTextAnchor )
+                {
+                    case mso_anchorTop :
+                    case mso_anchorMiddle :
+                    case mso_anchorBottom :
+                    {
+                        eTHA = SDRTEXTHORZADJUST_BLOCK;
+                        PPTParagraphObj* pPara = aTextObj.First();
+                        if ( pPara )
+                        {
+                            UINT32 nParaAdjust = 0;
+                            pPara->GetAttrib( PPT_ParaAttr_Adjust, nParaAdjust, aTextObj.GetInstance() );
+                            switch ( nParaAdjust )
+                            {
+                                case 0 : eTHA = SDRTEXTHORZADJUST_LEFT; break;
+                                case 2 : eTHA = SDRTEXTHORZADJUST_RIGHT; break;
+                            }
+                        }
+                    }
+                    break;
+                }
+                sal_Int32   nMinFrameHeight = rTextRect.GetHeight() - ( nTextTop + nTextBottom );
             }
 
 
-/*
-            switch ( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
-            {
-                case mso_wrapNone :
-                {
-                    if ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 )  // be sure this is FitShapeToText
-                        aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
-                }
-                break;
+            aSet.Put( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, bVerticalText != sal_False ) );
 
-                case mso_wrapByPoints :
-                    aSet.Put( SdrTextContourFrameItem( TRUE ) );
-                break;
-            }
-*/
+            aSet.Put( SdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
+            aSet.Put( SdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
+
+            aSet.Put( SdrTextVertAdjustItem( eTVA ) );
+            aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
+
+            if ( nMinFrameHeight < 0 )
+                nMinFrameHeight = 0;
+            aSet.Put( SdrTextMinFrameHeightItem( nMinFrameHeight ) );
+
+            if ( nMinFrameWidth < 0 )
+                nMinFrameWidth = 0;
+            aSet.Put( SdrTextMinFrameWidthItem( nMinFrameWidth ) );
+
             // Abstaende an den Raendern der Textbox setzen
             aSet.Put( SdrTextLeftDistItem( nTextLeft ) );
             aSet.Put( SdrTextRightDistItem( nTextRight ) );
             aSet.Put( SdrTextUpperDistItem( nTextTop ) );
             aSet.Put( SdrTextLowerDistItem( nTextBottom ) );
 
-            // Textverankerung lesen
-            MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
-
-            SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_CENTER;
-            switch( eTextAnchor )
-            {
-                case mso_anchorTop:
-                case mso_anchorTopCentered:
-                    eTVA = SDRTEXTVERTADJUST_TOP;
-                break;
-
-                case mso_anchorMiddle :
-                case mso_anchorMiddleCentered:
-                    eTVA = SDRTEXTVERTADJUST_CENTER;
-                break;
-
-                case mso_anchorBottom:
-                case mso_anchorBottomCentered:
-                    eTVA = SDRTEXTVERTADJUST_BOTTOM;
-                break;
-/*
-                case mso_anchorTopBaseline:
-                case mso_anchorBottomBaseline:
-                case mso_anchorTopCenteredBaseline:
-                case mso_anchorBottomCenteredBaseline:
-                break;
-*/
-            }
-            SdrTextHorzAdjust eTHA = SDRTEXTHORZADJUST_CENTER;
-            switch( eTextAnchor )
-            {
-                case mso_anchorTop :
-                case mso_anchorMiddle :
-                case mso_anchorBottom :
-                {
-                    eTHA = SDRTEXTHORZADJUST_BLOCK;
-                    PPTParagraphObj* pPara = aTextObj.First();
-                    if ( pPara )
-                    {
-                        UINT32 nParaAdjust = 0;
-                        pPara->GetAttrib( PPT_ParaAttr_Adjust, nParaAdjust, aTextObj.GetInstance() );
-                        switch ( nParaAdjust )
-                        {
-                            case 0 : eTHA = SDRTEXTHORZADJUST_LEFT; break;
-                            case 2 : eTHA = SDRTEXTHORZADJUST_RIGHT; break;
-                        }
-                    }
-                }
-                break;
-            }
-            aSet.Put( SdrTextVertAdjustItem( eTVA ) );
-            aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
-
-
-            INT32 nMinFrameHeight = rTextRect.GetHeight() - ( nTextTop + nTextBottom );
-            if ( nMinFrameHeight < 0 )
-                nMinFrameHeight = 0;
-
-            aSet.Put( SdrTextMinFrameHeightItem( nMinFrameHeight ) );
             pTObj->SetModel( pSdrModel );
-
             pTObj->SetItemSet(aSet);
-
             pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
             if ( pTObj )
             {   // rotate text with shape ?
@@ -2233,7 +2309,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
             if ( rOutliner.GetStyleSheet( 0 ) != pSheet )
                 rOutliner.SetStyleSheet( 0, pSheet );
         }
-
+        rOutliner.SetVertical( pTextObj->GetVertical() );
         const PPTParagraphObj* pPreviousParagraph = NULL;
         for ( PPTParagraphObj* pPara = pTextObj->First(); pPara; pPara = pTextObj->Next() )
         {
@@ -5996,6 +6072,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
     mpImplTextObj->mnCurrentObject = 0;
     mpImplTextObj->mnParagraphCount = 0;
     mpImplTextObj->mpParagraphList = NULL;
+    mpImplTextObj->mbVertical = sal_False;
     mpImplTextObj->meShapeType = ( pObjData && pObjData->bShapeType ) ? pObjData->eShapeType : mso_sptMin;
 
     DffRecordHeader aExtParaHd;
