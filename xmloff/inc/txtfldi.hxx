@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-08 14:35:54 $
+ *  last change: $Author: cl $ $Date: 2000-11-12 15:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 
 #ifndef _COM_SUN_STAR_TEXT_PAGENUMBERTYPE_HPP_
 #include <com/sun/star/text/PageNumberType.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLICTXT_HXX
@@ -366,10 +370,12 @@ protected:
     const ::rtl::OUString sPropertyNumberFormat;
     const ::rtl::OUString sPropertyFixed;
     const ::rtl::OUString sPropertyDateTimeValue;
+    const ::rtl::OUString sPropertyDateTime;
     const ::rtl::OUString sPropertyAdjust;
     const ::rtl::OUString sPropertyIsDate;
 
     double fTimeValue;
+    ::com::sun::star::util::DateTime aDateTimeValue;
     sal_Int32 nAdjust;
     sal_Int32 nFormatKey;
     sal_Bool bTimeOK;

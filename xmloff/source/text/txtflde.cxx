@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-10 11:51:15 $
+ *  last change: $Author: cl $ $Date: 2000-11-12 15:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
  *
  *  export of all text fields
  */
+
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
 
 #ifndef _XMLOFF_TXTFLDE_HXX
 #include "txtflde.hxx"
@@ -349,6 +353,8 @@ inline sal_Int16 const GetInt16Property(const OUString&,
                                         const Reference<XPropertySet> &);
 inline sal_Int8 const GetInt8Property(const OUString&,
                                       const Reference<XPropertySet> &);
+inline DateTime const GetDateTimeProperty( const OUString& sPropName,
+                                           const Reference<XPropertySet> & xPropSet);
 
 
 
@@ -390,7 +396,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp )
       sPropertySetNumber(RTL_CONSTASCII_USTRINGPARAM("SetNumber")),
       sPropertyIsDataBaseFormat(RTL_CONSTASCII_USTRINGPARAM("DataBaseFormat")),
       sPropertyDataColumnName(RTL_CONSTASCII_USTRINGPARAM("DataColumnName")),
-      sPropertyDateTime(RTL_CONSTASCII_USTRINGPARAM("DateTimeValue")),
+      sPropertyDateTime(RTL_CONSTASCII_USTRINGPARAM("DateTime")),
       sPropertyTrueContent(RTL_CONSTASCII_USTRINGPARAM("TrueContent")),
       sPropertyFalseContent(RTL_CONSTASCII_USTRINGPARAM("FalseContent")),
       sPropertyRevision(RTL_CONSTASCII_USTRINGPARAM("Revision")),
@@ -1058,6 +1064,13 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
                             GetDoubleProperty(sPropertyDateTimeValue,xPropSet),
                             sal_False, sal_False);
         }
+        if (xPropSetInfo->hasPropertyByName(sPropertyDateTime))
+        {
+            // no value -> current time
+            ProcessDateTime(sXML_time_value,
+                            GetDateTimeProperty(sPropertyDateTime,xPropSet),
+                            sal_False );
+        }
         if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
         {
             ProcessBoolean(sXML_fixed,
@@ -1089,6 +1102,12 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
             ProcessDateTime(sXML_date_value,
                             GetDoubleProperty(sPropertyDateTimeValue,xPropSet),
                             sal_True, sal_False);
+        }
+        if (xPropSetInfo->hasPropertyByName(sPropertyDateTime))
+        {
+            ProcessDateTime(sXML_date_value,
+                            GetDateTimeProperty(sPropertyDateTime,xPropSet),
+                            sal_True );
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
         {
@@ -2024,6 +2043,26 @@ void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
     ProcessString(sXMLName, aBuffer.makeStringAndClear());
 }
 
+/// export a date or time
+void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
+                                         const DateTime& rTime,
+                                         sal_Bool bIsDate)
+{
+    OUStringBuffer aBuffer;
+    if (bIsDate)
+    {
+        // date/time value
+        rExport.GetMM100UnitConverter().convertDateTime(aBuffer, rTime);
+    }
+    else
+    {
+        // time only
+        rExport.GetMM100UnitConverter().convertTime( aBuffer, rTime );
+    }
+
+    // output attribute
+    ProcessString(sXMLName, aBuffer.makeStringAndClear());
+}
 
 /// export a date, time, or duration
 void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
@@ -2691,4 +2730,14 @@ inline sal_Int8 const GetInt8Property(
     sal_Int8 nInt;
     aAny >>= nInt;
     return nInt;
+}
+
+inline DateTime const GetDateTimeProperty(
+    const OUString& sPropName,
+    const Reference<XPropertySet> & xPropSet)
+{
+    Any aAny = xPropSet->getPropertyValue(sPropName);
+    DateTime aTime;
+    aAny >>= aTime;
+    return aTime;
 }

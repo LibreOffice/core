@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-10 11:51:18 $
+ *  last change: $Author: cl $ $Date: 2000-11-12 15:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 
 class SvXMLExport;
 class SvXMLNumFmtExport;
+
+namespace com { namespace sun { namespace star { namespace util {
+struct DateTime;
+}}}}
 
 /// field IDs,
 //   including translation between UNO speak and XML speak if appropriate
@@ -307,6 +311,12 @@ protected:
         sal_Bool bIsDate,           /// export as date?
         sal_Bool bIsDuration,       /// export as duration?
         sal_Bool bOmitDurationIfZero);  /// omit zero-length durations
+
+    /// export times, dates and durations according to ISO 8601
+    void ProcessDateTime(
+        const sal_Char* sXMLName,   /// name of attribute
+        const ::com::sun::star::util::DateTime& rTime,      /// date/time value
+        sal_Bool bIsDate );             /// export as date (rather than date/time)?
 
     /// for XDependentTextFields, get PropertySet of FieldMaster
     ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >

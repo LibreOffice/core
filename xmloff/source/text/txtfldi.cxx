@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-10 15:24:58 $
+ *  last change: $Author: cl $ $Date: 2000-11-12 15:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1183,6 +1183,8 @@ XMLTimeFieldImportContext::XMLTimeFieldImportContext(
         sPropertyFixed(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed)),
         sPropertyDateTimeValue(RTL_CONSTASCII_USTRINGPARAM(
             sAPI_date_time_value)),
+        sPropertyDateTime(RTL_CONSTASCII_USTRINGPARAM(
+            sAPI_date_time)),
         sPropertyAdjust(RTL_CONSTASCII_USTRINGPARAM(sAPI_adjust)),
         sPropertyIsDate(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_date))
 {
@@ -1269,6 +1271,13 @@ void XMLTimeFieldImportContext::PrepareField(
         xPropertySet->setPropertyValue(sPropertyDateTimeValue, aAny);
     }
 
+    if (bIsDate && bFixed && bTimeOK &&
+        xPropertySetInfo->hasPropertyByName(sPropertyDateTime))
+    {
+        aAny <<= aDateTimeValue;
+        xPropertySet->setPropertyValue(sPropertyDateTime, aAny);
+    }
+
     if (bFormatOK &&
         xPropertySetInfo->hasPropertyByName(sPropertyNumberFormat))
     {
@@ -1307,6 +1316,12 @@ void XMLDateFieldImportContext::ProcessAttribute(
                 convertDateTime(fTmp, sAttrValue))
             {
                 fTimeValue = SolarMath::ApproxFloor(fTmp);
+                bTimeOK = sal_True;
+            }
+
+            if (GetImport().GetMM100UnitConverter().
+                convertDateTime(aDateTimeValue, sAttrValue ))
+            {
                 bTimeOK = sal_True;
             }
             break;
