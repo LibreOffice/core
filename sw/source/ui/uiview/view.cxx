@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-16 17:08:38 $
+ *  last change: $Author: jp $ $Date: 2001-05-22 16:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1630,7 +1630,8 @@ BOOL SwView::IsPasteAllowed()
     if( nLastPasteDestination != nPasteDestination )
     {
         TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard() );
+                        TransferableDataHelper::CreateFromSystemClipboard(
+                                                        &GetEditWin()) );
         if( aDataHelper.GetTransferable().is() )
         {
             bPasteState = SwTransferable::IsPaste( *pWrtShell, aDataHelper );
@@ -1653,7 +1654,8 @@ BOOL SwView::IsPasteSpecialAllowed()
     if( nLastPasteDestination != nPasteDestination )
     {
         TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard() );
+                        TransferableDataHelper::CreateFromSystemClipboard(
+                                                        &GetEditWin()) );
         if( aDataHelper.GetTransferable().is() )
         {
             bPasteState = SwTransferable::IsPaste( *pWrtShell, aDataHelper );
