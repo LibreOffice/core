@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:43:44 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,16 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
+#ifndef _DBAUI_DSSELECT_HXX_
+#include "dsselect.hxx"
+#endif
+#ifndef _DBAUI_ODBC_CONFIG_HXX_
+#include "odbcconfig.hxx"
+#endif
+#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
+#include <svtools/localresaccess.hxx>
+#endif
+
 
 //.........................................................................
 namespace dbaui
@@ -116,6 +126,8 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
     using namespace ::dbtools;
+    using namespace ::svt;
+
 
     //=========================================================================
     //= OPageSettings
@@ -297,6 +309,34 @@ namespace dbaui
         callModifiedHdl();
         return 0L;
     }
+    // -----------------------------------------------------------------------
+    sal_Bool OGenericAdministrationPage::getSelectedDataSource(DATASOURCE_TYPE _eType,::rtl::OUString& _sReturn)
+    {
+        // collect all ODBC data source names
+        StringBag aOdbcDatasources;
+        OOdbcEnumeration aEnumeration;
+        if (!aEnumeration.isLoaded())
+        {
+            // show an error message
+            ModuleRes aModuleRes(PAGE_GENERAL);
+            OLocalResourceAccess aLocRes(aModuleRes, RSC_TABPAGE);
+            String sError(ResId(STR_COULDNOTLOAD_ODBCLIB));
+            sError.SearchAndReplaceAscii("#lib#", aEnumeration.getLibraryName());
+            ErrorBox aDialog(this, WB_OK, sError);
+            aDialog.Execute();
+            return sal_False;
+        }
+        else
+        {
+            aEnumeration.getDatasourceNames(aOdbcDatasources);
+            // excute the select dialog
+            ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources, _eType);
+            if ( RET_OK == aSelector.Execute() )
+                _sReturn = aSelector.GetSelected();
+        }
+        return sal_True;
+    }
+
 
 //.........................................................................
 }   // namespace dbaui
@@ -305,6 +345,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.32  2002/08/19 07:43:44  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.31  2001/08/15 08:49:16  fs
  *  #89822# added functionality to accelerate toolbox functions with key codes
  *

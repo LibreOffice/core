@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsitems.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 07:00:13 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@
 #define DSID_AUTORETRIEVEVALUE      38
 #define DSID_AUTORETRIEVEENABLED    39
 
+
 //========================================================================
 //= item range. Adjust this if you introduce new items above
 
@@ -116,6 +117,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2002/07/25 07:00:13  oj
+ *  #95146# new defines for auto fields
+ *
  *  Revision 1.11  2002/07/09 12:39:11  oj
  *  #99921# check if datasource allows to check names
  *

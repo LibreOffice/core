@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-15 12:28:32 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,7 +822,7 @@ namespace dbaui
     //========================================================================
     OOdbcDetailsPage::OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET | CBTP_USE_OPTIONS | CBTP_USE_SQL92CHECK| CBTP_USE_AUTOINCREMENT)
-        ,m_aSeparator1  (this, ResId(FL_SEPARATOR1))
+        ,m_aSeparator1  (this, ResId(FL_SEPARATOR2))
         ,m_aUseCatalog  (this, ResId(CB_USECATALOG))
     {
         m_aUseCatalog.SetToggleHdl(getControlModifiedLink());
@@ -881,6 +881,165 @@ namespace dbaui
 
         if (bReadonly)
             m_aUseCatalog.Disable();
+    }
+    //========================================================================
+    //= OMySQLDetailsPage
+    //========================================================================
+    OMySQLDetailsPage::OMySQLDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+        :OCommonBehaviourTabPage(pParent, PAGE_MYSQL, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET )
+        ,m_aSeparator1          (this, ResId(FL_SEPARATOR1))
+        ,m_aUseODBC             (this, ResId(RB_USEMYODBC))
+        ,m_aUseJDBC             (this, ResId(RB_USECONNECTORJ3))
+        ,m_aFTDriverClass       (this, ResId(FT_JDBCDRIVERCLASS))
+        ,m_aEDDriverClass       (this, ResId(ET_JDBCDRIVERCLASS))
+        ,m_aSeparator2          (this, ResId(FL_SEPARATOR2))
+        ,m_aUrlLabel            (this, ResId(FT_CONNECTURL))
+        ,m_aUrl                 (this, ResId(ET_CONNECTURL))
+        ,m_aBrowseConnection    (this, ResId(PB_BROWSECONNECTION))
+        ,m_sJDBCDefaultUrl      (ResId(STR_JDBC_DEFAULT_URL))
+    {
+        m_aUseODBC.SetToggleHdl(LINK(this, OMySQLDetailsPage,OnToggle));
+
+        m_aUrl.SetModifyHdl(getControlModifiedLink());
+        m_aEDDriverClass.SetModifyHdl(getControlModifiedLink());
+        m_aBrowseConnection.SetClickHdl(LINK(this, OMySQLDetailsPage, OnBrowseConnections));
+
+        Window* pWindows[] = {  &m_aUseODBC, &m_aUseJDBC,
+                                &m_aFTDriverClass, &m_aEDDriverClass,
+                                &m_aUrlLabel,&m_aUrl,
+                                &m_aBrowseConnection,
+                                m_pUserNameLabel, m_pUserName,
+                                m_pPasswordRequired,
+                                m_pCharsetLabel, m_pCharset };
+
+        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        for (sal_Int32 i=1; i < nCount; ++i)
+            pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
+
+        FreeResource();
+    }
+
+    // -----------------------------------------------------------------------
+    SfxTabPage* OMySQLDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
+    {
+        return ( new OMySQLDetailsPage( pParent, _rAttrSet ) );
+    }
+
+    // -----------------------------------------------------------------------
+    sal_Int32* OMySQLDetailsPage::getDetailIds()
+    {
+        static sal_Int32* pRelevantIds = NULL;
+        if (!pRelevantIds)
+        {
+            static sal_Int32 nRelevantIds[] =
+            {
+                DSID_CHARSET,
+                DSID_JDBCDRIVERCLASS,
+                DSID_CONNECTURL,
+                0
+            };
+            pRelevantIds = nRelevantIds;
+        }
+        return pRelevantIds;
+    }
+    // -----------------------------------------------------------------------
+    sal_Bool OMySQLDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    {
+        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+        FILL_STRING_ITEM(m_aEDDriverClass, _rSet, DSID_JDBCDRIVERCLASS, bChangedSomething);
+
+        if ( m_aUrl.GetText() != m_aUrl.GetSavedValue() )
+        {
+            _rSet.Put(SfxStringItem(DSID_CONNECTURL, m_aUrl.GetText()));
+            bChangedSomething = sal_True;
+        }
+        return bChangedSomething;
+    }
+    // -----------------------------------------------------------------------
+    void OMySQLDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    {
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+
+        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        sal_Bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
+
+        SFX_ITEMSET_GET(_rSet, pDrvItem, SfxStringItem, DSID_JDBCDRIVERCLASS, sal_True);
+        SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
+
+        sal_Bool bODBC = pUrlItem->GetValue().EqualsIgnoreCaseAscii("sdbc:mysql:odbc:",0,16);
+        m_aUseODBC.Check(bODBC);
+        m_aUseJDBC.Check(!bODBC);
+
+        m_aBrowseConnection.Enable( bODBC );
+        m_aFTDriverClass.Enable( !bODBC );
+        m_aEDDriverClass.Enable( !bODBC );
+
+
+        String sURL;
+        if ( bValid )
+        {
+            sURL = pUrlItem->GetValue();
+            m_aEDDriverClass.SetText(pDrvItem->GetValue());
+        }
+        m_aUrl.SetText(sURL);
+        m_aUrl.ClearModifyFlag();
+
+        if ( !m_aEDDriverClass.GetText().Len() )
+            m_aEDDriverClass.SetText(String::CreateFromAscii("com.mysql.jdbc.Driver"));
+        m_aEDDriverClass.ClearModifyFlag();
+
+        if ( !bODBC && !sURL.Len() )
+            m_aUrl.SetTextNoPrefix(m_sJDBCDefaultUrl);
+
+        if ( _bSaveValue )
+        {
+            m_aUseODBC.SaveValue();
+            m_aUseJDBC.SaveValue();
+            m_aUrl.SaveValue();
+            m_aUrl.SaveValueNoPrefix();
+        }
+
+        if ( bReadonly )
+        {
+            m_aUseODBC.Disable();
+            m_aUseJDBC.Disable();
+            m_aUrlLabel.Disable();
+            m_aUrl.Disable();
+        }
+    }
+    //------------------------------------------------------------------------
+    IMPL_LINK( OMySQLDetailsPage, OnToggle, RadioButton*, pRadioButton )
+    {
+        sal_Bool bODBC = &m_aUseODBC == pRadioButton && pRadioButton->IsChecked();
+        m_aBrowseConnection.Enable(  bODBC );
+        m_aFTDriverClass.Enable(    !bODBC );
+        m_aEDDriverClass.Enable(    !bODBC );
+
+        if ( bODBC )
+            m_aUrl.SetText(String::CreateFromAscii("sdbc:mysql:odbc:"));
+        else
+        {
+            String sUrl = String::CreateFromAscii("sdbc:mysql:jdbc:");
+            sUrl += m_sJDBCDefaultUrl;
+            m_aUrl.SetText(sUrl);
+        }
+        callModifiedHdl();
+
+        return 0;
+    }
+    //-------------------------------------------------------------------------
+    IMPL_LINK(OMySQLDetailsPage, OnBrowseConnections, PushButton*, _pButton)
+    {
+        // collect all ODBC data source names
+        ::rtl::OUString sDataSource;
+        if ( getSelectedDataSource(DST_MYSQL_ODBC,sDataSource) && sDataSource.getLength() )
+        {
+            m_aUrl.SetTextNoPrefix(sDataSource);
+            callModifiedHdl();
+        }
+        else
+            return 1L;
     }
 
     //========================================================================
@@ -1362,6 +1521,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2002/11/15 12:28:32  oj
+ *  #105175# insert none for empty string
+ *
  *  Revision 1.19  2002/10/15 09:52:21  oj
  *  #98982# disable thousand seperator
  *

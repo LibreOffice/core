@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:40:33 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,20 +224,6 @@ namespace dbaui
 
         DBG_ASSERT(m_pCollection, "OGeneralPage::OGeneralPage : really need a DSN type collection !");
 
-        // initially fill the listbox
-        if (m_pCollection)
-        {
-            for (   ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
-                    aTypeLoop != m_pCollection->end();
-                    ++aTypeLoop
-                )
-            {
-                DATASOURCE_TYPE eType = aTypeLoop.getType();
-                sal_Int32 nPos = m_aDatasourceType.InsertEntry(aTypeLoop.getDisplayName());
-                m_aDatasourceType.SetEntryData((sal_uInt16)nPos, reinterpret_cast<void*>(eType));
-            }
-        }
-
         // do some knittings
         m_aDatasourceType.SetSelectHdl(LINK(this, OGeneralPage, OnDatasourceTypeSelected));
         m_aName.SetModifyHdl(LINK(this, OGeneralPage, OnNameModified));
@@ -389,7 +375,7 @@ namespace dbaui
                 ShowServiceNotAvailableError(GetParent(), String(SERVICE_SDBC_DRIVERMANAGER), sal_True);
         }
 
-        if (m_pCollection)
+        if ( m_pCollection )
         {
             for (   ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
                     aTypeLoop != m_pCollection->end();
@@ -398,7 +384,7 @@ namespace dbaui
             {
                 DATASOURCE_TYPE eType = aTypeLoop.getType();
 
-                if (xDriverManager.is())
+                if ( xDriverManager.is() )
                 {   // we have a driver manager to check
                     ::rtl::OUString sURLPrefix = m_pCollection->getDatasourcePrefix(eType);
                     if (!xDriverManager->getDriverByURL(sURLPrefix).is())
@@ -407,8 +393,12 @@ namespace dbaui
                         continue;
                 }
 
-                sal_Int32 nPos = m_aDatasourceType.InsertEntry(aTypeLoop.getDisplayName());
-                m_aDatasourceType.SetEntryData((sal_uInt16)nPos, reinterpret_cast<void*>(eType));
+                String sDisplayName = aTypeLoop.getDisplayName();
+                if ( m_aDatasourceType.GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND )
+                {
+                    sal_Int32 nPos = m_aDatasourceType.InsertEntry(sDisplayName);
+                    m_aDatasourceType.SetEntryData((sal_uInt16)nPos, reinterpret_cast<void*>(eType));
+                }
             }
         }
     }
@@ -448,6 +438,13 @@ namespace dbaui
             case DST_CALC:
             case DST_ADDRESSBOOK:
                 return sal_True;
+//          case DST_MYSQL:
+//              {
+//                  const SfxItemSet& rItemSet = GetItemSet();
+//                  SFX_ITEMSET_GET(rItemSet, pURL, SfxStringItem, DSID_CONNECTURL, sal_True);
+//                  return pURL->GetValue().EqualsIgnoreCaseAscii("sdbc:mysql:odbc:",0,16);
+//              }
+
         }
         return sal_False;
     }
@@ -482,35 +479,48 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    void OGeneralPage::previousMessage()
+    void OGeneralPage::switchMessage(sal_Bool _bDeleted,const DATASOURCE_TYPE _eType)
     {
-        SPECIAL_MESSAGE eSwitchPrevious = m_eLastMessage;
-        switchMessage(smNone);
-    }
-
-    //-------------------------------------------------------------------------
-    void OGeneralPage::switchMessage(const SPECIAL_MESSAGE _eType)
-    {
-        if (_eType == m_eLastMessage)
-            return;
-
-        sal_uInt16 nResId = 0;
-        switch (_eType)
+        SPECIAL_MESSAGE eMessage = smNone;
+        if ( _eType == m_eNotSupportedKnownType )
         {
-            case smInvalidName:         nResId = STR_NAMEINVALID; break;
-            case smDatasourceDeleted:   nResId = STR_DATASOURCEDELETED; break;
-            case smUnsupportedType:     nResId = STR_UNSUPPORTED_DATASOURCE_TYPE; break;
+            eMessage = smUnsupportedType;
         }
-        String sMessage;
-        if (nResId)
+        else if ( _bDeleted )
         {
-            ModuleRes aModuleRes(PAGE_GENERAL);
-            OLocalResourceAccess aStringResAccess(aModuleRes, RSC_TABPAGE);
-            sMessage = String(ResId(nResId));
+            eMessage = smDatasourceDeleted;
         }
-        m_aSpecialMessage.SetText(sMessage);
+        else if ( m_aName.IsEnabled() && ( 0L == m_aNameValidator.Call( this ) ) )
+        {
+            eMessage = smInvalidName;
+        }
+        else if ( (_eType == DST_MYSQL_ODBC) || (_eType == DST_MYSQL_JDBC) )
+        {
+            eMessage = smMySQL;
+        }
 
-        m_eLastMessage = _eType;
+
+        if ( eMessage != m_eLastMessage )
+        {
+            sal_uInt16 nResId = 0;
+            switch (eMessage)
+            {
+                case smInvalidName:         nResId = STR_NAMEINVALID; break;
+                case smDatasourceDeleted:   nResId = STR_DATASOURCEDELETED; break;
+                case smUnsupportedType:     nResId = STR_UNSUPPORTED_DATASOURCE_TYPE; break;
+                case smMySQL:               nResId = STR_MYSQL_CONFIG_NEXT_PAGE; break;
+            }
+            String sMessage;
+            if ( nResId )
+            {
+                ModuleRes aModuleRes(PAGE_GENERAL);
+                OLocalResourceAccess aStringResAccess(aModuleRes, RSC_TABPAGE);
+                sMessage = String(ResId(nResId));
+            }
+            m_aSpecialMessage.SetText(sMessage);
+
+            m_eLastMessage = eMessage;
+        }
     }
 
     //-------------------------------------------------------------------------
@@ -522,12 +532,11 @@ namespace dbaui
         // the the new URL text as indicated by the selection history
         implSetCurrentType( _eType );
 
-        if (_eType == m_eNotSupportedKnownType)
-            switchMessage(smUnsupportedType);
-        else
-            switchMessage(smNone);
+        m_aConnection.Enable( (_eType != DST_MYSQL_ODBC) && (_eType != DST_MYSQL_JDBC) );
 
-        if (m_aTypeSelectHandler.IsSet())
+        switchMessage(sal_False,_eType);
+
+        if ( m_aTypeSelectHandler.IsSet() )
             m_aTypeSelectHandler.Call(this);
     }
 
@@ -570,7 +579,7 @@ namespace dbaui
         m_aBrowseConnection.Enable(bValid);
 
         String sConnectURL, sName;
-        SPECIAL_MESSAGE eSpecialMessage = smNone;
+        sal_Bool bDeleted = sal_False;
         m_bDisplayingInvalid = !bValid;
         if (bValid)
         {
@@ -585,10 +594,7 @@ namespace dbaui
         else
         {
             SFX_ITEMSET_GET(_rSet, pDeleted, SfxBoolItem, DSID_DELETEDDATASOURCE, sal_True);
-            if (pDeleted && pDeleted->GetValue())
-            {
-                eSpecialMessage = smDatasourceDeleted;
-            }
+            bDeleted = pDeleted && pDeleted->GetValue();
         }
 
         DATASOURCE_TYPE eOldSelection = m_eCurrentSelection;
@@ -613,7 +619,7 @@ namespace dbaui
             if (sDisplayName.Len())
             {   // this indicates it's really a type which is known in general, but not supported on the current platform
                 // show a message saying so
-                eSpecialMessage = smUnsupportedType;
+                //  eSpecialMessage = smUnsupportedType;
 
                 // insert a (temporary) entry
                 sal_uInt16 nPos = m_aDatasourceType.InsertEntry(sDisplayName);
@@ -631,16 +637,22 @@ namespace dbaui
         setURL(sConnectURL);
 
         // notify our listener that our type selection has changed (if so)
-        if (eOldSelection != m_eCurrentSelection)
+        sal_Bool bTypeChanged = eOldSelection != m_eCurrentSelection;
+        if ( m_pCollection && bTypeChanged )
+            bTypeChanged = !m_pCollection->areTypesRelated(eOldSelection,m_eCurrentSelection);
+
+        if ( bTypeChanged )
             onTypeSelected(m_eCurrentSelection);
 
         // are we allowed to change the data source type?
         sal_Bool bSingleTypeEdit = ODbAdminDialog::omSingleEditFixedType == m_pAdminDialog->getMode();
         // is the current data source type "AddressBook"?
-        sal_Bool bEditingAddressBook = (DST_ADDRESSBOOK == m_eCurrentSelection);
+        sal_Bool bBrowseNotAllowed = (  DST_ADDRESSBOOK == m_eCurrentSelection
+                                    ||  DST_MYSQL_ODBC == m_eCurrentSelection
+                                    ||  DST_MYSQL_JDBC == m_eCurrentSelection);
 
         // don't allow sub-type changes in case of the address book in single-edit mode
-        if ( bSingleTypeEdit && bEditingAddressBook )
+        if ( bSingleTypeEdit && bBrowseNotAllowed )
             m_aBrowseConnection.Disable( );
 
         if (_bSaveValue)
@@ -654,12 +666,15 @@ namespace dbaui
         if (_bSaveValue)
             m_aName.SaveValue();
 
-        // is the very current name valid?
-        if ( m_aName.IsEnabled() && ( 0L == m_aNameValidator.Call( this ) ) )
-            eSpecialMessage = smInvalidName;
+//      // is the very current name valid?
+//      if ( m_aName.IsEnabled() && ( 0L == m_aNameValidator.Call( this ) ) )
+//          eSpecialMessage = smInvalidName;
+//
+//      if ( eSpecialMessage == smNone && (DST_MYSQL_ODBC == m_eCurrentSelection || DST_MYSQL_JDBC == m_eCurrentSelection) )
+//          eSpecialMessage = smMySQL;
 
         // a special message for the current page state
-        switchMessage(eSpecialMessage);
+        switchMessage(bDeleted,m_eCurrentSelection);
     }
 
     //-------------------------------------------------------------------------
@@ -760,14 +775,8 @@ namespace dbaui
         if (m_aNameModifiedHandler.IsSet())
             bNewNameValid = (0L != m_aNameModifiedHandler.Call(this));
 
-        if (m_aName.IsEnabled())
-        {   // (this way we prevent overwriting a "this datasource is deleted" message)
-            // show a text if the name is invalid
-            if (bNewNameValid)
-                previousMessage();
-            else
-                switchMessage(smInvalidName);
-        }
+        if ( m_aName.IsEnabled() )
+            switchMessage(sal_False, m_eCurrentSelection);
 
         return 0L;
     }
@@ -1222,33 +1231,18 @@ namespace dbaui
                 }
             }
             break;
+            case DST_MYSQL_ODBC:
             case DST_ODBC:
             {
                 // collect all ODBC data source names
-                StringBag aOdbcDatasources;
-                OOdbcEnumeration aEnumeration;
-                if (!aEnumeration.isLoaded())
+                ::rtl::OUString sDataSource;
+                if ( getSelectedDataSource(GetSelectedType(),sDataSource) && sDataSource.getLength() )
                 {
-                    // show an error message
-                    ModuleRes aModuleRes(PAGE_GENERAL);
-                    OLocalResourceAccess aLocRes(aModuleRes, RSC_TABPAGE);
-                    String sError(ResId(STR_COULDNOTLOAD_ODBCLIB));
-                    sError.SearchAndReplaceAscii("#lib#", aEnumeration.getLibraryName());
-                    ErrorBox aDialog(this, WB_OK, sError);
-                    aDialog.Execute();
-                    return 1L;
+                    setURLNoPrefix(sDataSource);
+                    callModifiedHdl();
                 }
                 else
-                {
-                    aEnumeration.getDatasourceNames(aOdbcDatasources);
-                    // excute the select dialog
-                    ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources, GetSelectedType());
-                    if (RET_OK == aSelector.Execute())
-                    {
-                        setURLNoPrefix(aSelector.GetSelected());
-                        callModifiedHdl();
-                    }
-                }
+                    return 1L;
             }
             break;
             case DST_ADDRESSBOOK:
@@ -1417,6 +1411,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28  2002/08/19 07:40:33  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.27  2001/10/26 16:14:39  hr
  *  #92924#: gcc-3.0.1 needs lvalue
  *

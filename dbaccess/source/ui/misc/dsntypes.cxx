@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:51:11 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,10 @@ ODsnTypeCollection::ODsnTypeCollection()
         m_aDsnPrefixes.push_back(sCurrentType);
         m_aDsnTypes.push_back(implDetermineType(sCurrentType));
     }
+
+    // insert related types here
+    m_aRelatedTypes.insert(TRelatedTypes::value_type(DST_MYSQL_ODBC,DST_MYSQL_JDBC));
+
     FreeResource();
 }
 
@@ -177,6 +181,8 @@ sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType)
     {
         case DST_ADABAS:
         case DST_JDBC:
+        case DST_MYSQL_ODBC:
+        case DST_MYSQL_JDBC:
         case DST_ODBC:
         case DST_ADO:
         case DST_ADDRESSBOOK:
@@ -235,12 +241,31 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
         return DST_UNKNOWN;
     }
 
+    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:mysql:odbc", 0, nSeparator))
+        return DST_MYSQL_ODBC;
+    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:mysql:jdbc", 0, nSeparator))
+        return DST_MYSQL_JDBC;
 
 
     DBG_ERROR("ODsnTypeCollection::implDetermineType : unrecognized data source type !");
     return DST_UNKNOWN;
 }
-
+// -----------------------------------------------------------------------------
+sal_Bool ODsnTypeCollection::areTypesRelated(DATASOURCE_TYPE _eType1,DATASOURCE_TYPE _eType2)
+{
+    OSL_ENSURE(_eType1 != _eType2,"Type are identical!");
+    sal_Bool bRelated = sal_False;
+    TRelatedTypes::iterator aFind = m_aRelatedTypes.find(_eType1);
+    if ( aFind != m_aRelatedTypes.end() )
+        bRelated = aFind->second == _eType2;
+    if ( !bRelated )
+    {
+        aFind = m_aRelatedTypes.find(_eType2);
+        if ( aFind != m_aRelatedTypes.end() )
+            bRelated = aFind->second == _eType1;
+    }
+    return bRelated;
+}
 //-------------------------------------------------------------------------
 sal_Int32 ODsnTypeCollection::implDetermineTypeIndex(DATASOURCE_TYPE _eType)
 {
@@ -252,7 +277,6 @@ sal_Int32 ODsnTypeCollection::implDetermineTypeIndex(DATASOURCE_TYPE _eType)
     // the type of the datasource described by the DSN string
     if (DST_UNKNOWN == _eType)
     {
-        DBG_ERROR("ODsnTypeCollection::implDetermineTypeIndex : invalid argument !");
         return -1;
     }
 
@@ -435,6 +459,9 @@ ADDRESSBOOK_TYPE AddressBookTypes::getAddressType( const String& _rAddressURL )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2002/08/19 07:51:11  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.13  2001/08/16 13:00:02  hr
  *  #65293#: syntax
  *

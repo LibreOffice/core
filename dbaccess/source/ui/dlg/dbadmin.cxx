@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-15 12:29:30 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,6 +459,8 @@ IMPL_LINK( ODbAdminDialog, OnAsyncSelectDetailsPage, void*, NOTINTERESTEDIN )
         case DST_ODBC       : nDetailPageId = PAGE_ODBC; break;
         case DST_ADABAS     : nDetailPageId = PAGE_ADABAS; break;
         case DST_ADDRESSBOOK: nDetailPageId = PAGE_LDAP; /* juest a guess */ break;
+        case DST_MYSQL_ODBC :
+        case DST_MYSQL_JDBC : nDetailPageId = PAGE_MYSQL; break;
     }
     if (nDetailPageId)
     {
@@ -728,6 +730,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_AUTORETRIEVEENABLED, sal_False);
 
 
+
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
@@ -956,6 +959,11 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
 
         case DST_ODBC:
             addDetailPage(PAGE_ODBC, STR_PAGETITLE_ODBC, OOdbcDetailsPage::Create);
+            break;
+
+        case DST_MYSQL_ODBC:
+        case DST_MYSQL_JDBC:
+            addDetailPage(PAGE_MYSQL, STR_PAGETITLE_MYSQL, OMySQLDetailsPage::Create);
             break;
 
         case DST_ADABAS:
@@ -1523,6 +1531,8 @@ const sal_Int32* ODbAdminDialog::getRelevantItems(const SfxItemSet& _rSet) const
                 pRelevantItems = pAdabasItems;
             }
             break;
+        case DST_MYSQL_ODBC:
+        case DST_MYSQL_JDBC:    pRelevantItems = OMySQLDetailsPage::getDetailIds(); break;
         case DST_JDBC:          pRelevantItems = OJdbcDetailsPage::getDetailIds(); break;
         case DST_ADO:           pRelevantItems = OAdoDetailsPage::getDetailIds(); break;
         case DST_ODBC:          pRelevantItems = OOdbcDetailsPage::getDetailIds(); break;
@@ -2151,6 +2161,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.82  2002/11/15 12:29:30  oj
+ *  #105175# check size of poolitems
+ *
  *  Revision 1.81  2002/08/19 07:40:36  oj
  *  #99473# change string resource files
  *

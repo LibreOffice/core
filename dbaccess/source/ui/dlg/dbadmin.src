@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-15 12:28:31 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #define RELATED_CONTROLS    4
 #define UNRELATED_CONTROLS  7
 #define EDIT_HEIGHT        12
+#define BUTTON_HEIGHT       14
 
 #define IL_TABLESUBCRIPTION \
 \
@@ -682,6 +683,12 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ catalan ] = "Estad�stiques de l'Adabas D";
         Text[ thai ] = "สถิติ Adabas D ";
     };
+
+    String STR_PAGETITLE_MYSQL
+    {
+        Text = "MySQL" ;
+    };
+
     String STR_PAGETITLE_USERADMIN
     {
         Text = "Benutzereinstellungen" ;
@@ -1270,6 +1277,10 @@ TabPage PAGE_GENERAL
         Text[ arabic ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text[ catalan ] = "Aquest tipus de font de dades no se soporta en aquesta plataforma.\nTot i que podeu canviar els par�metres �s molt probable que no pugueu connectar-vos a la base de dades.";
         Text[ thai ] = "ไม่สนับสนุนชนิดแหล่งข้อมูลนี้บนแพลตฟอร์มนี้\nอนุญาตให้คุณเปลี่ยนแปลงการตั้งค่า  แต่คุณไม่อาจจะสามารถเชื่อมต่อกับฐานข้อมูลได้";
+    };
+    String STR_MYSQL_CONFIG_NEXT_PAGE
+    {
+        Text = "Die Einstellungen f�r MySQL k�nnen auf der n�chsten Seite vorgenommen werden.";
     };
 };
 
@@ -1998,7 +2009,7 @@ TabPage PAGE_ODBC
         HelpId = HID_DSADMIN_CHARSET_ODBC;
     };
 
-    FixedLine FL_SEPARATOR1
+    FixedLine FL_SEPARATOR2
     {
         Pos = MAP_APPFONT ( 4 , 68 ) ;
         Size = MAP_APPFONT ( 252 , 8 ) ;
@@ -2089,6 +2100,129 @@ TabPage PAGE_ODBC
         Text[ thai ] = "ใช้ส่วนแสดงรายการสำหรับฐานข้อมูลแฟ้มพื้นฐาน";
     };
 };
+//.........................................................................
+#define MYSQL_YDIST 53
+#define MYSQL_FL_Y  8
+#define MYSQL_DRIVERCLASS_Y 8
+
+TabPage PAGE_MYSQL
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
+    Hide = TRUE;
+    HelpId = HID_DSADMIN_PAGE_MYSQL;
+
+    FixedLine FL_SEPARATOR1
+    {
+        Pos = MAP_APPFONT ( 4 , 4 ) ;
+        Size = MAP_APPFONT ( 252 , FIXEDTEXT_HEIGHT ) ;
+        Text = "Art der Verbindung";
+    };
+
+    RadioButton RB_USEMYODBC
+    {
+        Pos                 = MAP_APPFONT ( 6 , 4 + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
+        Size                = MAP_APPFONT ( 150 , CHECKBOX_HEIGHT ) ;
+        Text                = "Existierende My~ODBC Datenquelle verwenden" ;
+    };
+
+    RadioButton RB_USECONNECTORJ3
+    {
+        Pos                 = MAP_APPFONT ( 6 , 4 + FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT + 2*RELATED_CONTROLS ) ;
+        Size                = MAP_APPFONT ( 150 , CHECKBOX_HEIGHT ) ;
+        Text                = "Connector/~J3 verwenden" ;
+    };
+
+    FixedText FT_JDBCDRIVERCLASS
+    {
+        Pos = MAP_APPFONT ( 15 , 4 + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + 3*RELATED_CONTROLS) ;
+        Size = MAP_APPFONT ( 80 , FIXEDTEXT_HEIGHT ) ;
+        Text = "MySQL JDBC ~Treiberklasse" ;
+    };
+    Edit ET_JDBCDRIVERCLASS
+    {
+        Pos = MAP_APPFONT ( 101 , 4 + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + 3*RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( 134 , EDIT_HEIGHT ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( 4 , 4 + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + UNRELATED_CONTROLS + 3*RELATED_CONTROLS + EDIT_HEIGHT) ;
+        Size = MAP_APPFONT ( 252 , FIXEDTEXT_HEIGHT ) ;
+        Text = "Allgemein";
+    };
+
+    FixedText FT_CONNECTURL
+    {
+        HelpId = HID_DSADMIN_URL_GENERAL;
+        Pos = MAP_APPFONT ( 6 , 4 + 2*FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + UNRELATED_CONTROLS + 4*RELATED_CONTROLS + EDIT_HEIGHT ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "D~atenquellen-URL" ;
+    };
+    Edit ET_CONNECTURL
+    {
+        Pos = MAP_APPFONT ( 101 , 4 + 2*FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + UNRELATED_CONTROLS + 4*RELATED_CONTROLS + EDIT_HEIGHT -1) ;
+        Size = MAP_APPFONT ( 134 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+
+    PushButton PB_BROWSECONNECTION
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 241 , 4 + 2*FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + UNRELATED_CONTROLS + 4*RELATED_CONTROLS + EDIT_HEIGHT -2 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
+        HelpId = HID_DSADMIN_BROWSECONN;
+        Text = "~..." ;
+    };
+
+    FixedText FT_USERNAME
+    {
+        Pos = MAP_APPFONT ( 6 , 4 + 2*FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + 2*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + EDIT_HEIGHT + BUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( 80 , FIXEDTEXT_HEIGHT ) ;
+        Text = "~Benutzername" ;
+    };
+    Edit ET_USERNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 101 , 4 + 2*FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + 2*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + EDIT_HEIGHT -1 + BUTTON_HEIGHT) ;
+        Size = MAP_APPFONT ( 134 , EDIT_HEIGHT ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_USER_ODBC;
+    };
+    CheckBox CB_PASSWORD_REQUIRED
+    {
+        Pos = MAP_APPFONT ( 101 , 4 + 2*FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + 2*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + 2*EDIT_HEIGHT + BUTTON_HEIGHT) ;
+        Size = MAP_APPFONT ( 134 , CHECKBOX_HEIGHT ) ;
+        Text = "Kennwort ~erforderlich";
+    };
+    FixedText FT_CHARSET
+    {
+        Pos = MAP_APPFONT ( 6 , 4 + 2*FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + 3*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + 2*EDIT_HEIGHT + BUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Zeichensatz" ;
+    };
+    ListBox LB_CHARSET
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 101 , 4 + 2*FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + 3*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + 2*EDIT_HEIGHT + BUTTON_HEIGHT ) ;
+        Size = MAP_APPFONT ( 134 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        HelpId = HID_DSADMIN_CHARSET_ODBC;
+    };
+
+    String STR_JDBC_DEFAULT_URL
+    {
+        Text = "<Rechnername>:<3306>/<DBNAME>" ;
+    };
+
+};
+
 //.........................................................................
 TabPage PAGE_LDAP
 {
@@ -3964,6 +4098,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.113  2002/11/15 12:28:31  oj
+ *  #105175# insert none for empty string
+ *
  *  Revision 1.112  2002/11/04 18:07:16  rt
  *  Merge SRX644: 04.11.02 - 19:03:18
  *

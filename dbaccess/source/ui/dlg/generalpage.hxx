@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 16:12:30 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,8 @@ namespace dbaui
             smNone,
             smInvalidName,
             smDatasourceDeleted,
-            smUnsupportedType
+            smUnsupportedType,
+            smMySQL
         };
         SPECIAL_MESSAGE     m_eLastMessage;
 
@@ -176,8 +177,7 @@ namespace dbaui
 
         void implSetCurrentType( const DATASOURCE_TYPE _eType );
 
-        void switchMessage(const SPECIAL_MESSAGE _eType);
-        void previousMessage();
+        void switchMessage(sal_Bool _bDeleted,const DATASOURCE_TYPE _eType);
 
         sal_Int32       checkPathExistence(const String& _rURL);
         sal_Bool        commitURL();
@@ -215,6 +215,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/08/30 16:12:30  fs
+ *  #88427# check for a valid name in implInitControls
+ *
  *  Revision 1.6  2001/08/07 15:56:26  fs
  *  #88431# centralized methods for setting/retrieving the URL in m_aConnection - this way we can translate URLs so that they're displayed in a decoded version
  *

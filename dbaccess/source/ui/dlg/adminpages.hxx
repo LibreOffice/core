@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 08:49:16 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,18 @@ namespace dbaui
         */
         virtual void            restoreViewSettings(const OPageSettings* _pSettings);
 
+        /** opens a dialog filled with all data sources available for this type and
+            returns the selected on.
+            @param  _eType
+                The type for which the data source dialog should be opened.
+            @param  _sReturn
+                <OUT/> contains the selected name.
+            @return
+                <FALSE/> if an error occured, otherwise <TRUE/>
+        */
+        sal_Bool getSelectedDataSource(DATASOURCE_TYPE _eType,::rtl::OUString& _sReturn);
+
+
     protected:
         /// default implementation: call FillItemSet, call checkItems,
         virtual int DeactivatePage(SfxItemSet* pSet);
@@ -249,6 +261,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2001/08/15 08:49:16  fs
+ *  #89822# added functionality to accelerate toolbox functions with key codes
+ *
  *  Revision 1.22  2001/05/29 10:17:26  fs
  *  #86082# +OToolboxedPageViewSettings
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:40:34 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
     fillListBox(_rDatasources);
 
     // allow ODBC datasource managenment
-    if (DST_ODBC == _eType)
+    if ( DST_ODBC == _eType || DST_MYSQL_ODBC == _eType )
     {
         m_aManageDatasources.Show();
         m_aManageDatasources.Enable();
@@ -216,6 +216,9 @@ void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2002/08/19 07:40:34  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.3  2001/10/18 06:50:39  oj
  *  #93260# reload odbc datasources
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-15 12:28:32 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
 #endif
+#ifndef _SV_BUTTON_HXX
+#include <vcl/imagebtn.hxx>
+#endif
+
 
 //.........................................................................
 namespace dbaui
@@ -236,6 +240,38 @@ namespace dbaui
     };
 
     //========================================================================
+    //= OMySQLDetailsPage
+    //========================================================================
+    class OMySQLDetailsPage : public OCommonBehaviourTabPage
+    {
+    public:
+        static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
+        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+
+        /// get the SfxPoolItem ids used by this tab page
+        static sal_Int32* getDetailIds();
+
+    private:
+        FixedLine           m_aSeparator1;
+        RadioButton         m_aUseODBC;
+        RadioButton         m_aUseJDBC;
+        FixedText           m_aFTDriverClass;
+        Edit                m_aEDDriverClass;
+        FixedLine           m_aSeparator2;
+        FixedText           m_aUrlLabel;
+        OConnectionURLEdit  m_aUrl;
+        PushButton          m_aBrowseConnection;
+        String              m_sJDBCDefaultUrl;
+
+        OMySQLDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+
+        DECL_LINK( OnToggle, RadioButton * );
+        DECL_LINK(OnBrowseConnections, PushButton*);
+    };
+
+    //========================================================================
     //= OAdabasDetailsPage
     //========================================================================
     class OAdabasDetailsPage : public OCommonBehaviourTabPage
@@ -332,6 +368,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2002/11/15 12:28:32  oj
+ *  #105175# insert none for empty string
+ *
  *  Revision 1.12  2002/07/26 09:33:29  oj
  *  #95146# new controls inserted for auto retrieving
  *

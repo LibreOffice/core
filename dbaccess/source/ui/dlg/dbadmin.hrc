@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-15 12:28:32 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,9 @@
 #define NF_PORTNUMBER           1
 #define NF_LDAPROWCOUNT         2
 
+#define RB_USEMYODBC            1
+#define RB_USECONNECTORJ3       2
+
 
 //========================================================================
 // string ids (usually relative to other resources, that's why not necessarily unique)
@@ -174,6 +177,10 @@
 #define STR_UNSUPPORTED_DATASOURCE_TYPE     22
 #define STR_PAGETITLE_USERADMIN             23
 #define STR_TEXT_FIELD_SEP_NONE             24
+#define STR_PAGETITLE_MYSQL                 25
+#define STR_MYSQL_CONFIG_NEXT_PAGE          26
+#define STR_JDBC_DEFAULT_URL                27
+
 
 //========================================================================
 // menu item ids
@@ -186,6 +193,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2002/11/15 12:28:32  oj
+ *  #105175# insert none for empty string
+ *
  *  Revision 1.22  2002/07/25 06:59:03  oj
  *  #95146# new defines for auto fields
  *
