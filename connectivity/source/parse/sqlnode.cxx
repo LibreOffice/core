@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-09 14:39:42 $
+ *  last change: $Author: oj $ $Date: 2002-07-01 07:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,6 +714,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                         case DataType::SMALLINT:
                         case DataType::INTEGER:
                         case DataType::BIGINT:
+                        case DataType::FLOAT:
                         case DataType::REAL:
                         case DataType::DOUBLE:
                             // kill thousand seperators if any
@@ -741,6 +742,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                     {
                         case DataType::DECIMAL:
                         case DataType::NUMERIC:
+                        case DataType::FLOAT:
                         case DataType::REAL:
                         case DataType::DOUBLE:
                             if (inPredicateCheck())
