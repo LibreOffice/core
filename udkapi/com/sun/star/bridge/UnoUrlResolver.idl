@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoUrlResolver.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:30:11 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,11 @@
 #ifndef __com_sun_star_bridge_UnoUrlResolver_idl__
 #define __com_sun_star_bridge_UnoUrlResolver_idl__
 
-#include <com/sun/star/bridge/XUnoUrlResolver.idl>
-
 //=============================================================================
 
  module com {  module sun {  module star {  module bridge {
+
+published interface XUnoUrlResolver;
 
 //=============================================================================
 
@@ -73,13 +73,7 @@
     resolving them by an UNO url.
     <br>
  */
-published service UnoUrlResolver
-{
-
-    /** resolve objects via this interface.
-     */
-    interface com::sun::star::bridge::XUnoUrlResolver;
-};
+published service UnoUrlResolver: XUnoUrlResolver;
 
 //=============================================================================
 
