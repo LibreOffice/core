@@ -23704,3 +23704,6 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?GetExpColorString@SvxNumberFormatTabPage@@AAE?AVString@@AAPAVColor@@ABV2@F@Z
 ?MakePreviewText@SvxNumberFormatTabPage@@AAEXABVString@@@Z
 ?XOutCreatePolygonBezier@@YA?AVPolygon@@ABVXPolygon@@PAVOutputDevice@@@Z
+??R?$WeakChildAdapter@VAccessibleParaManager_DisposeChildren@accessibility@@@AccessibleParaManager@accessibility@@QAEXABU?$pair@V?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VAccessibleEditableTextPara@2@@accessibility@@URectangle@awt@star@sun@com@@@_STL@@@Z
+?Dispose@AccessibleParaManager@accessibility@@QAEXXZ
+?Dispose@AccessibleEditableTextPara@accessibility@@QAEXXZ
