@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:13:40 $
+ *  last change: $Author: mtg $ $Date: 2001-05-28 12:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,6 @@ ByteChucker::ByteChucker(uno::Reference<io::XOutputStream> xOstream)
 }
 ByteChucker::~ByteChucker()
 {
-    if ( xStream.is() )
-        xStream->closeOutput();
 }
 
 // XOutputStream chained...

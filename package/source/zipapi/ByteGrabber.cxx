@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteGrabber.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-20 12:36:37 $
+ *  last change: $Author: mtg $ $Date: 2001-05-28 12:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,6 @@ ByteGrabber::ByteGrabber(uno::Reference  < io::XInputStream > xIstream)
 }
 ByteGrabber::~ByteGrabber()
 {
-    if ( xStream.is() )
-        xStream->closeInput();
 }
 void ByteGrabber::setInputStream (uno::Reference < io::XInputStream > xNewStream)
 {
