@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-15 10:05:28 $
+ *  last change: $Author: kso $ $Date: 2002-08-22 11:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,113 +96,10 @@ using namespace std;
 using namespace webdav_ucp;
 
 // -------------------------------------------------------------------
-// Constructor
-// -------------------------------------------------------------------
-
-NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
-                                          const char* inPath,
-                                          const Depth inDepth,
-                                          const vector< OUString >& inPropNames,
-                                          vector< DAVResource >& ioResources,
-                                          int & nError )
-{
-    // Generate the list of properties we're looking for
-    int thePropCount = inPropNames.size();
-    if ( thePropCount > 0 )
-    {
-        NeonPropName* thePropNames = new NeonPropName[ thePropCount + 1 ];
-        for ( int theIndex = 0; theIndex < thePropCount; theIndex ++ )
-        {
-            // Split fullname into namespace and name!
-            DAVProperties::createNeonPropName(
-                             inPropNames[ theIndex ], thePropNames[ theIndex ] );
-        }
-        thePropNames[ theIndex ].nspace = NULL;
-        thePropNames[ theIndex ].name   = NULL;
-
-        nError = ne_simple_propfind( inSession,
-                                          inPath,
-                                          inDepth,
-                                          thePropNames,
-                                          propfind_results,
-                                          &ioResources );
-
-        for ( theIndex = 0; theIndex < thePropCount; theIndex ++ )
-            free( (void *)thePropNames[ theIndex ].name );
-
-        delete [] thePropNames;
-    }
-    else
-    {
-        // ALLPROP
-        nError = ne_simple_propfind( inSession,
-                                          inPath,
-                                          inDepth,
-                                          NULL, // 0 == allprop
-                                          propfind_results,
-                                          &ioResources );
-    }
-
-    // #87585# - Sometimes neon lies (because some servers lie).
-    if ( ( nError == NE_OK ) && ioResources.empty() )
-        nError = NE_ERROR;
-}
-
-// -------------------------------------------------------------------
-// Constructor
-// - obtains property names
-// -------------------------------------------------------------------
-
-NeonPropFindRequest::NeonPropFindRequest(
-                            HttpSession* inSession,
-                            const char* inPath,
-                                const Depth inDepth,
-                            std::vector< DAVResourceInfo > & ioResInfo,
-                            int & nError )
-{
-    nError = ne_propnames( inSession,
-                            inPath,
-                            inDepth,
-                            propnames_results,
-                            &ioResInfo );
-
-    // #87585# - Sometimes neon lies (because some servers lie).
-    if ( ( nError == NE_OK ) && ioResInfo.empty() )
-        nError = NE_ERROR;
-}
-
-// -------------------------------------------------------------------
-// Destructor
-// -------------------------------------------------------------------
-NeonPropFindRequest::~NeonPropFindRequest( )
-{
-}
-
-// -------------------------------------------------------------------
-// static
-void NeonPropFindRequest::propfind_results( void* userdata,
-                                            const char* href,
-                                             const NeonPropFindResultSet* set )
-{
-    // @@@ href is not the uri! DAVResource ctor wants uri!
-
-    DAVResource theResource(
-                        OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
-
-    ne_propset_iterate( set, propfind_iter, &theResource );
-
-    // Add entry to resources list.
-    vector< DAVResource > * theResources
-        = static_cast< vector< DAVResource > * >( userdata );
-    theResources->push_back( theResource );
-}
-
-// -------------------------------------------------------------------
-// static
-int NeonPropFindRequest::propfind_iter( void* userdata,
-                                        const NeonPropName* pname,
-                                        const char* value,
-                                        const HttpStatus* status )
+extern "C" static int propfind_iter( void* userdata,
+                                     const NeonPropName* pname,
+                                     const char* value,
+                                     const HttpStatus* status )
 {
     /*
         HTTP Response Status Classes:
@@ -305,8 +202,41 @@ int NeonPropFindRequest::propfind_iter( void* userdata,
 }
 
 // -------------------------------------------------------------------
-// static
-void NeonPropFindRequest::propnames_results(
+extern "C" static void propfind_results( void* userdata,
+                                         const char* href,
+                                         const NeonPropFindResultSet* set )
+{
+    // @@@ href is not the uri! DAVResource ctor wants uri!
+
+    DAVResource theResource(
+                        OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
+
+    ne_propset_iterate( set, propfind_iter, &theResource );
+
+    // Add entry to resources list.
+    vector< DAVResource > * theResources
+        = static_cast< vector< DAVResource > * >( userdata );
+    theResources->push_back( theResource );
+}
+
+// -------------------------------------------------------------------
+extern "C" static int propnames_iter( void* userdata,
+                                      const NeonPropName* pname,
+                                      const char* value,
+                                      const HttpStatus* status )
+{
+    OUString aFullName;
+    DAVProperties::createUCBPropName( pname->nspace,
+                                      pname->name,
+                                      aFullName );
+
+    DAVResourceInfo* theResource = static_cast< DAVResourceInfo * >( userdata );
+    theResource->properties.push_back( aFullName );
+    return 0;
+}
+
+// -------------------------------------------------------------------
+extern "C" static void propnames_results(
                                       void* userdata,
                                       const char* href,
                                          const NeonPropFindResultSet* results )
@@ -326,18 +256,84 @@ void NeonPropFindRequest::propnames_results(
 }
 
 // -------------------------------------------------------------------
-// static
-int NeonPropFindRequest::propnames_iter( void* userdata,
-                                         const NeonPropName* pname,
-                                         const char* value,
-                                         const HttpStatus* status )
-{
-    OUString aFullName;
-    DAVProperties::createUCBPropName( pname->nspace,
-                                      pname->name,
-                                      aFullName );
+// Constructor
+// -------------------------------------------------------------------
 
-    DAVResourceInfo* theResource = static_cast< DAVResourceInfo * >( userdata );
-    theResource->properties.push_back( aFullName );
-    return 0;
+NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
+                                          const char* inPath,
+                                          const Depth inDepth,
+                                          const vector< OUString >& inPropNames,
+                                          vector< DAVResource >& ioResources,
+                                          int & nError )
+{
+    // Generate the list of properties we're looking for
+    int thePropCount = inPropNames.size();
+    if ( thePropCount > 0 )
+    {
+        NeonPropName* thePropNames = new NeonPropName[ thePropCount + 1 ];
+        for ( int theIndex = 0; theIndex < thePropCount; theIndex ++ )
+        {
+            // Split fullname into namespace and name!
+            DAVProperties::createNeonPropName(
+                             inPropNames[ theIndex ], thePropNames[ theIndex ] );
+        }
+        thePropNames[ theIndex ].nspace = NULL;
+        thePropNames[ theIndex ].name   = NULL;
+
+        nError = ne_simple_propfind( inSession,
+                                          inPath,
+                                          inDepth,
+                                          thePropNames,
+                                          propfind_results,
+                                          &ioResources );
+
+        for ( theIndex = 0; theIndex < thePropCount; theIndex ++ )
+            free( (void *)thePropNames[ theIndex ].name );
+
+        delete [] thePropNames;
+    }
+    else
+    {
+        // ALLPROP
+        nError = ne_simple_propfind( inSession,
+                                          inPath,
+                                          inDepth,
+                                          NULL, // 0 == allprop
+                                          propfind_results,
+                                          &ioResources );
+    }
+
+    // #87585# - Sometimes neon lies (because some servers lie).
+    if ( ( nError == NE_OK ) && ioResources.empty() )
+        nError = NE_ERROR;
+}
+
+// -------------------------------------------------------------------
+// Constructor
+// - obtains property names
+// -------------------------------------------------------------------
+
+NeonPropFindRequest::NeonPropFindRequest(
+                            HttpSession* inSession,
+                            const char* inPath,
+                                const Depth inDepth,
+                            std::vector< DAVResourceInfo > & ioResInfo,
+                            int & nError )
+{
+    nError = ne_propnames( inSession,
+                            inPath,
+                            inDepth,
+                            propnames_results,
+                            &ioResInfo );
+
+    // #87585# - Sometimes neon lies (because some servers lie).
+    if ( ( nError == NE_OK ) && ioResInfo.empty() )
+        nError = NE_ERROR;
+}
+
+// -------------------------------------------------------------------
+// Destructor
+// -------------------------------------------------------------------
+NeonPropFindRequest::~NeonPropFindRequest( )
+{
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-15 10:05:29 $
+ *  last change: $Author: kso $ $Date: 2002-08-22 11:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,17 @@ class NeonSession : public DAVSession
                                 com::sun::star::ucb::XCommandEnvironment >& inEnv )
             throw ( DAVException );
 
+        DAVAuthListener * getServerAuthListener() const
+        { return m_pListener; }
+
+        const com::sun::star::uno::Reference<
+            com::sun::star::ucb::XCommandEnvironment > &
+        getCommandEnvironment() const { return m_xEnv; }
+
+        const rtl::OUString & getHostName() const { return m_aHostName; }
+
+        const void * getRequestData() const { return m_pRequestData; }
+
         // allprop & named
         virtual void PROPFIND( const ::rtl::OUString &                inPath,
                                   const Depth                             inDepth,
@@ -250,42 +261,12 @@ class NeonSession : public DAVSession
                                        const ::rtl::OUString & inUserInfo )
             throw( DAVException );
 
-        // A simple Neon response_block_reader for use with an XInputStream
-        static void ResponseBlockReader( void * inUserData,
-                                         const char * inBuf,
-                                         size_t       inLen );
-
-        // A simple Neon response_block_reader for use with an XOutputStream
-        static void ResponseBlockWriter( void *       inUserData,
-                                         const char * inBuf,
-                                         size_t       inLen );
-
         // Note: Uncomment the following if locking support is required
         // void         Lockit( const Lock & inLock, bool inLockit )
         //  throw ( DAVException );
 
-        // Authentication callback.
-        static int NeonAuth( void * inUserData,
-                             const char * inRealm,
-                             int attempt,
-                             char * inoutUserName,
-                             char * inoutPassWord );
 
-        // Progress / Status callbacks.
-        static void NeonSession::ProgressNotify( void * userdata,
-                                                 off_t progress,
-                                                 off_t total );
-
-        static void NeonSession::StatusNotify( void * userdata,
-                                               ne_conn_status status,
-                                               const char *info );
-
-        // pre-send-request callback
-        static void PreSendRequest( ne_request * req,
-                                    void * userdata,
-                                    ne_buffer * headers );
-
-        // low level GET implementation, used by both public GET implementations
+        // low level GET implementation, used by public GET implementations
         static int GET( ne_session * sess,
                         const char * uri,
                         ne_block_reader reader,

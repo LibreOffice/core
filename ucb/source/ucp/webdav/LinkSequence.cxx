@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinkSequence.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-15 10:05:25 $
+ *  last change: $Author: kso $ $Date: 2002-08-22 11:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,40 @@ struct LinkSequenceParseContext
 };
 
 //////////////////////////////////////////////////////////////////////////
+extern "C" static int validate_callback(
+            void * userdata, ne_xml_elmid parent, ne_xml_elmid child )
+{
+    // @@@
+    return NE_XML_VALID;
+}
+
+//////////////////////////////////////////////////////////////////////////
+extern "C" static int endelement_callback( void * userdata,
+                                           const struct ne_xml_elm * s,
+                                           const char * cdata )
+{
+    LinkSequenceParseContext * pCtx
+                    = static_cast< LinkSequenceParseContext * >( userdata );
+    if ( !pCtx->pLink )
+        pCtx->pLink = new ucb::Link;
+
+    switch ( s->id )
+    {
+        case DAV_ELM_src:
+            pCtx->pLink->Source = rtl::OUString::createFromAscii( cdata );
+            break;
+
+        case DAV_ELM_dst:
+            pCtx->pLink->Destination = rtl::OUString::createFromAscii( cdata );
+            break;
+
+        default:
+            break;
+    }
+    return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////
 // static
 bool LinkSequence::createFromXML( const rtl::OString & rInData,
                                   uno::Sequence< ucb::Link > & rOutData )
@@ -173,40 +207,4 @@ bool LinkSequence::toXML( const uno::Sequence< ucb::Link > & rInData,
         return true;
     }
     return false;
-}
-
-//////////////////////////////////////////////////////////////////////////
-// static
-int LinkSequence::validate_callback(
-            void * userdata, ne_xml_elmid parent, ne_xml_elmid child )
-{
-    // @@@
-    return NE_XML_VALID;
-}
-
-//////////////////////////////////////////////////////////////////////////
-// static
-int LinkSequence::endelement_callback( void * userdata,
-                                       const struct ne_xml_elm * s,
-                                        const char * cdata )
-{
-    LinkSequenceParseContext * pCtx
-                    = static_cast< LinkSequenceParseContext * >( userdata );
-    if ( !pCtx->pLink )
-        pCtx->pLink = new ucb::Link;
-
-    switch ( s->id )
-    {
-        case DAV_ELM_src:
-            pCtx->pLink->Source = rtl::OUString::createFromAscii( cdata );
-            break;
-
-        case DAV_ELM_dst:
-            pCtx->pLink->Destination = rtl::OUString::createFromAscii( cdata );
-            break;
-
-        default:
-            break;
-    }
-    return 0;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UCBDeadPropertyValue.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-15 10:05:30 $
+ *  last change: $Author: kso $ $Date: 2002-08-22 11:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,62 @@ struct UCBDeadPropertyValueParseContext
     UCBDeadPropertyValueParseContext() : pType( 0 ), pValue( 0 ) {}
     ~UCBDeadPropertyValueParseContext() { delete pType; delete pValue; }
 };
+
+//////////////////////////////////////////////////////////////////////////
+extern "C" static int validate_callback( void * userdata,
+                                         ne_xml_elmid parent,
+                                         ne_xml_elmid child )
+{
+    switch ( parent )
+    {
+        case 0:
+            if ( child == DAV_ELM_ucbprop )
+                return NE_XML_VALID;
+
+            break;
+
+        case DAV_ELM_ucbprop:
+            return NE_XML_VALID;
+
+        default:
+            break;
+    }
+
+    return NE_XML_DECLINE;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// static
+extern "C" static int endelement_callback( void * userdata,
+                                           const struct ne_xml_elm * s,
+                                           const char * cdata )
+{
+    UCBDeadPropertyValueParseContext * pCtx
+            = static_cast< UCBDeadPropertyValueParseContext * >( userdata );
+
+    switch ( s->id )
+    {
+        case DAV_ELM_type:
+            OSL_ENSURE( !pCtx->pType,
+                        "UCBDeadPropertyValue::endelement_callback - "
+                        "Type already set!" );
+            pCtx->pType = new rtl::OUString(
+                                rtl::OUString::createFromAscii( cdata ) );
+            break;
+
+        case DAV_ELM_value:
+            OSL_ENSURE( !pCtx->pValue,
+                        "UCBDeadPropertyValue::endelement_callback - "
+                        "Value already set!" );
+            pCtx->pValue = new rtl::OUString(
+                                rtl::OUString::createFromAscii( cdata ) );
+            break;
+
+        default:
+            break;
+    }
+    return 0;
+}
 
 //////////////////////////////////////////////////////////////////////////
 static rtl::OUString encodeValue( const rtl::OUString & rValue )
@@ -497,61 +553,4 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     rOutData += aXMLEnd;
 
     return true;
-}
-
-//////////////////////////////////////////////////////////////////////////
-// static
-int UCBDeadPropertyValue::validate_callback( void * userdata,
-                                             ne_xml_elmid parent,
-                                             ne_xml_elmid child )
-{
-    switch ( parent )
-    {
-        case 0:
-            if ( child == DAV_ELM_ucbprop )
-                return NE_XML_VALID;
-
-            break;
-
-        case DAV_ELM_ucbprop:
-            return NE_XML_VALID;
-
-        default:
-            break;
-    }
-
-    return NE_XML_DECLINE;
-}
-
-//////////////////////////////////////////////////////////////////////////
-// static
-int UCBDeadPropertyValue::endelement_callback( void * userdata,
-                                               const struct ne_xml_elm * s,
-                                                const char * cdata )
-{
-    UCBDeadPropertyValueParseContext * pCtx
-            = static_cast< UCBDeadPropertyValueParseContext * >( userdata );
-
-    switch ( s->id )
-    {
-        case DAV_ELM_type:
-            OSL_ENSURE( !pCtx->pType,
-                        "UCBDeadPropertyValue::endelement_callback - "
-                        "Type already set!" );
-            pCtx->pType = new rtl::OUString(
-                                rtl::OUString::createFromAscii( cdata ) );
-            break;
-
-        case DAV_ELM_value:
-            OSL_ENSURE( !pCtx->pValue,
-                        "UCBDeadPropertyValue::endelement_callback - "
-                        "Value already set!" );
-            pCtx->pValue = new rtl::OUString(
-                                rtl::OUString::createFromAscii( cdata ) );
-            break;
-
-        default:
-            break;
-    }
-    return 0;
 }

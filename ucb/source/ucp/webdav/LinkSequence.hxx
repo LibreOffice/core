@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinkSequence.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-15 10:05:25 $
+ *  last change: $Author: kso $ $Date: 2002-08-22 11:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,13 +95,6 @@ public:
     static bool toXML( const com::sun::star::uno::Sequence<
                                 com::sun::star::ucb::Link > & rInData,
                        rtl::OUString & rOutData );
-
-    static int  validate_callback( void * userdata,
-                                   ne_xml_elmid parent,
-                                   ne_xml_elmid child );
-    static int  endelement_callback( void * userdata,
-                                     const struct ne_xml_elm * s,
-                                      const char * cdata );
 };
 
 }

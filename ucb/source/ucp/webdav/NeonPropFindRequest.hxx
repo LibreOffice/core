@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
+ *  last change: $Author: kso $ $Date: 2002-08-22 11:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,26 +99,6 @@ public:
                          int & nError );
 
     ~NeonPropFindRequest();
-
-private:
-    // Neon callback functions
-    static void  propfind_results( void* userdata,
-                                   const char* href,
-                                    const NeonPropFindResultSet* set );
-
-    static int   propfind_iter( void* userdata,
-                                const NeonPropName* pname,
-                                const char* value,
-                                const HttpStatus* status );
-
-    static void  propnames_results( void* userdata,
-                                    const char* href,
-                                    const NeonPropFindResultSet* results );
-
-    static int   propnames_iter( void* userdata,
-                                 const NeonPropName* pname,
-                                 const char* value,
-                                 const HttpStatus* status );
 };
 
 }; // namespace webdav_ucp

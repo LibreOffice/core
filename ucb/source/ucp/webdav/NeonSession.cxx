@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-21 07:34:53 $
+ *  last change: $Author: kso $ $Date: 2002-08-22 11:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,160 @@ static sal_uInt16 makeStatusCode( const rtl::OUString & rStatusText )
     }
 
     return sal_uInt16( rStatusText.copy( 0, nPos ).toInt32() );
+}
+
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+//
+// Callback functions
+//
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+// ResponseBlockReader
+// A simple Neon response_block_reader for use with an XInputStream
+// -------------------------------------------------------------------
+extern "C" static void ResponseBlockReader( void *       inUserData,
+                                            const char * inBuf,
+                                            size_t       inLen )
+{
+    // neon calls this function with (inLen == 0)...
+    if ( inLen > 0 )
+    {
+        NeonInputStream * theInputStream
+            = static_cast< NeonInputStream *>( inUserData );
+        theInputStream->AddToStream( inBuf, inLen );
+    }
+}
+
+// -------------------------------------------------------------------
+// ResponseBlockWriter
+// A simple Neon response_block_reader for use with an XOutputStream
+// -------------------------------------------------------------------
+extern "C" static void ResponseBlockWriter( void *       inUserData,
+                                            const char * inBuf,
+                                            size_t       inLen )
+{
+    // neon calls this function with (inLen == 0)...
+    if ( inLen > 0 )
+    {
+        uno::Reference< io::XOutputStream > * theOutputStreamPtr
+            = static_cast< uno::Reference< io::XOutputStream > * >(
+                inUserData );
+        uno::Reference< io::XOutputStream > theOutputStream
+            = *theOutputStreamPtr;
+
+        const uno::Sequence< sal_Int8 > theSequence(
+            (sal_Int8 *)inBuf, inLen );
+        theOutputStream->writeBytes( theSequence );
+    }
+}
+
+extern "C" static int NeonAuth( void *      inUserData,
+                                const char *    inRealm,
+                                int          attempt,
+                                char *       inoutUserName,
+                                char *       inoutPassWord )
+{
+    NeonSession * theSession = static_cast< NeonSession * >( inUserData );
+    if ( !theSession->getServerAuthListener() )
+    {
+        // abort
+        return -1;
+    }
+
+    // username buffer is prefilled with user name from last attempt.
+    rtl::OUString theUserName(
+                    rtl::OUString::createFromAscii( inoutUserName ) );
+    rtl::OUString thePassWord; /*(
+                    // @@@ Neon does not initialize password buffer
+                    //   (last checked: 0.22.0).
+                    rtl::OUString::createFromAscii( inoutPassWord ) ); */
+
+    int theRetVal = theSession->getServerAuthListener()->authenticate(
+                            rtl::OUString::createFromAscii( inRealm ),
+                            theSession->getHostName(),
+                            theUserName,
+                            thePassWord,
+                            theSession->getCommandEnvironment() );
+    strcpy( inoutUserName,
+            rtl::OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ) );
+
+    strcpy( inoutPassWord,
+            rtl::OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
+
+    return theRetVal;
+}
+
+
+extern "C" static void ProgressNotify( void * userdata,
+                                       off_t progress,
+                                       off_t total )
+{
+    // progress: bytes read so far
+    // total:    total bytes to read, -1 -> total count not known
+}
+
+extern "C" static void StatusNotify( void * userdata,
+                                     ne_conn_status status,
+                                     const char *info )
+{
+#if 0
+    typedef enum {
+        ne_conn_namelookup, /* lookup up hostname (info = hostname) */
+        ne_conn_connecting, /* connecting to host (info = hostname) */
+        ne_conn_connected, /* connected to host (info = hostname) */
+        ne_conn_secure /* connection now secure (info = crypto level) */
+    } ne_conn_status;
+#endif
+
+    // info: hostname
+}
+
+extern "C" static void PreSendRequest( ne_request * req,
+                                       void * userdata,
+                                       ne_buffer * headers )
+{
+    // userdata -> value returned by 'create'
+
+    NeonSession * pSession = static_cast< NeonSession * >( userdata );
+    if ( pSession )
+    {
+        const RequestDataMap * pRequestData
+            = static_cast< const RequestDataMap* >(
+                pSession->getRequestData() );
+
+        RequestDataMap::const_iterator it = pRequestData->find( req );
+        if ( it != pRequestData->end() )
+        {
+            if ( (*it).second.aContentType.getLength() )
+            {
+                char * pData = headers->data;
+                if ( strstr( pData, "Content-Type:" ) == NULL )
+                {
+                    rtl::OString aType
+                        = rtl::OUStringToOString( (*it).second.aContentType,
+                                                  RTL_TEXTENCODING_UTF8 );
+                    ne_buffer_concat( headers, "Content-Type: ",
+                                    aType.getStr(), EOL, NULL );
+                }
+            }
+
+            if ( (*it).second.aReferer.getLength() )
+            {
+                char * pData = headers->data;
+                if ( strstr( pData, "Referer:" ) == NULL )
+                {
+                    rtl::OString aReferer
+                        = rtl::OUStringToOString( (*it).second.aReferer,
+                                                  RTL_TEXTENCODING_UTF8 );
+                    ne_buffer_concat( headers, "Referer: ",
+                                    aReferer.getStr(), EOL, NULL );
+                }
+            }
+        }
+    }
 }
 
 // -------------------------------------------------------------------
@@ -504,7 +658,8 @@ uno::Reference< io::XInputStream > NeonSession::GET(
 
     NeonInputStream * theInputStream = new NeonInputStream;
     int theRetVal = GET( m_pHttpSession,
-                         rtl::OUStringToOString( inPath, RTL_TEXTENCODING_UTF8 ),
+                         rtl::OUStringToOString(
+                             inPath, RTL_TEXTENCODING_UTF8 ),
                          ResponseBlockReader,
                          theInputStream );
     HandleError( theRetVal );
@@ -525,7 +680,8 @@ void NeonSession::GET( const rtl::OUString &                 inPath,
     m_xEnv = inEnv;
 
     int theRetVal = GET( m_pHttpSession,
-                         rtl::OUStringToOString( inPath, RTL_TEXTENCODING_UTF8 ),
+                         rtl::OUStringToOString(
+                             inPath, RTL_TEXTENCODING_UTF8 ),
                          ResponseBlockWriter,
                          &ioOutputStream );
     HandleError( theRetVal );
@@ -938,44 +1094,6 @@ HttpSession * NeonSession::CreateSession( const ::rtl::OUString & inScheme,
     return theHttpSession;
 }
 
-// -------------------------------------------------------------------
-// ResponseBlockReader
-// A simple Neon response_block_reader for use with an XInputStream
-// -------------------------------------------------------------------
-void NeonSession::ResponseBlockReader( void *       inUserData,
-                                       const char * inBuf,
-                                       size_t       inLen )
-{
-    // neon calls this function with (inLen == 0)...
-    if ( inLen > 0 )
-    {
-        NeonInputStream * theInputStream
-            = static_cast< NeonInputStream *>( inUserData );
-        theInputStream->AddToStream( inBuf, inLen );
-    }
-}
-
-// -------------------------------------------------------------------
-// ResponseBlockWriter
-// A simple Neon response_block_reader for use with an XOutputStream
-// -------------------------------------------------------------------
-void NeonSession::ResponseBlockWriter( void *       inUserData,
-                                       const char * inBuf,
-                                       size_t       inLen )
-{
-    // neon calls this function with (inLen == 0)...
-    if ( inLen > 0 )
-    {
-        uno::Reference< io::XOutputStream > * theOutputStreamPtr
-            = static_cast< uno::Reference< io::XOutputStream > * >( inUserData );
-        uno::Reference< io::XOutputStream > theOutputStream
-            = *theOutputStreamPtr;
-
-        const uno::Sequence< sal_Int8 > theSequence( (sal_Int8 *)inBuf, inLen );
-        theOutputStream->writeBytes( theSequence );
-    }
-}
-
 // Note: Uncomment the following if locking support is required
 /*
 void NeonSession::Lockit( const Lock & inLock, bool inLockit )
@@ -1047,110 +1165,6 @@ void NeonSession::Lockit( const Lock & inLock, bool inLockit )
     HandleError( theRetVal );
 }
 */
-
-int NeonSession::NeonAuth( void *       inUserData,
-                           const char * inRealm,
-                           int          attempt,
-                           char *       inoutUserName,
-                           char *       inoutPassWord )
-{
-    NeonSession * theSession = static_cast< NeonSession * >( inUserData );
-    if ( !theSession->m_pListener )
-    {
-        // abort
-        return -1;
-    }
-
-    // username buffer is prefilled with user name from last attempt.
-    rtl::OUString theUserName(
-                    rtl::OUString::createFromAscii( inoutUserName ) );
-    rtl::OUString thePassWord; /*(
-                    // @@@ Neon does not initialize password buffer
-                    //   (last checked: 0.22.0).
-                    rtl::OUString::createFromAscii( inoutPassWord ) ); */
-
-    int theRetVal = theSession->m_pListener->authenticate(
-                            rtl::OUString::createFromAscii( inRealm ),
-                            theSession->m_aHostName,
-                            theUserName,
-                            thePassWord,
-                            theSession->m_xEnv );
-    strcpy( inoutUserName,
-            rtl::OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ) );
-
-    strcpy( inoutPassWord,
-            rtl::OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
-
-    return theRetVal;
-}
-
-// static
-void NeonSession::ProgressNotify( void * userdata, off_t progress, off_t total )
-{
-    // progress: bytes read so far
-    // total:    total bytes to read, -1 -> total count not known
-}
-
-// static
-void NeonSession::StatusNotify(
-            void * userdata, ne_conn_status status, const char *info )
-{
-#if 0
-    typedef enum {
-        ne_conn_namelookup, /* lookup up hostname (info = hostname) */
-        ne_conn_connecting, /* connecting to host (info = hostname) */
-        ne_conn_connected, /* connected to host (info = hostname) */
-        ne_conn_secure /* connection now secure (info = crypto level) */
-    } ne_conn_status;
-#endif
-
-    // info: hostname
-}
-
-// static
-void NeonSession::PreSendRequest( ne_request * req,
-                                  void * userdata,
-                                  ne_buffer * headers )
-{
-    // userdata -> value returned by 'create'
-
-    NeonSession * pSession = static_cast< NeonSession * >( userdata );
-    if ( pSession )
-    {
-        RequestDataMap * pRequestData
-            = static_cast< RequestDataMap* >( pSession->m_pRequestData );
-
-        RequestDataMap::const_iterator it = pRequestData->find( req );
-        if ( it != pRequestData->end() )
-        {
-            if ( (*it).second.aContentType.getLength() )
-            {
-                char * pData = headers->data;
-                if ( strstr( pData, "Content-Type:" ) == NULL )
-                {
-                    rtl::OString aType
-                        = rtl::OUStringToOString( (*it).second.aContentType,
-                                                  RTL_TEXTENCODING_UTF8 );
-                    ne_buffer_concat( headers, "Content-Type: ",
-                                    aType.getStr(), EOL, NULL );
-                }
-            }
-
-            if ( (*it).second.aReferer.getLength() )
-            {
-                char * pData = headers->data;
-                if ( strstr( pData, "Referer:" ) == NULL )
-                {
-                    rtl::OString aReferer
-                        = rtl::OUStringToOString( (*it).second.aReferer,
-                                                  RTL_TEXTENCODING_UTF8 );
-                    ne_buffer_concat( headers, "Referer: ",
-                                    aReferer.getStr(), EOL, NULL );
-                }
-            }
-        }
-    }
-}
 
 // static
 int NeonSession::GET( ne_session * sess,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LockSequence.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-15 10:05:26 $
+ *  last change: $Author: kso $ $Date: 2002-08-22 11:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,67 +108,9 @@ struct LockSequenceParseContext
 };
 
 //////////////////////////////////////////////////////////////////////////
-// static
-bool LockSequence::createFromXML( const rtl::OString & rInData,
-                                  uno::Sequence< ucb::Lock > & rOutData )
-{
-    const sal_Int32 TOKEN_LENGTH = 13; // </activelock>
-    bool success = true;
-
-    // rInData may contain multiple <activelock>...</activelock> tags.
-    sal_Int32 nCount = 0;
-    sal_Int32 nStart = 0;
-    sal_Int32 nEnd   = rInData.indexOf( "</activelock>" );
-    while ( nEnd > -1 )
-    {
-        ne_xml_parser * parser = ne_xml_create();
-        if ( !parser )
-        {
-            success = false;
-            break;
-        }
-
-        LockSequenceParseContext aCtx;
-        ne_xml_push_handler( parser,
-                                  elements,
-                                  validate_callback,
-                                  0, // startelement_callback
-                                  endelement_callback,
-                                  &aCtx );
-
-        ne_xml_parse( parser,
-                       rInData.getStr() + nStart,
-                       nEnd - nStart + TOKEN_LENGTH );
-
-        success = !!ne_xml_valid( parser );
-
-        ne_xml_destroy( parser );
-
-        if ( !success )
-            break;
-
-        if ( aCtx.pLock )
-        {
-            nCount++;
-            if ( nCount > rOutData.getLength() )
-                rOutData.realloc( rOutData.getLength() + 1 );
-
-            rOutData[ nCount - 1 ] = *aCtx.pLock;
-        }
-
-        nStart = nEnd + TOKEN_LENGTH + 1;
-        nEnd   = rInData.indexOf( "</activelock>", nStart );
-    }
-
-//  rOutData.realloc( nCount );
-    return success;
-}
-
-//////////////////////////////////////////////////////////////////////////
-// static
-int LockSequence::validate_callback( void * userdata,
-                                     ne_xml_elmid parent,
-                                     ne_xml_elmid child )
+extern "C" static int validate_callback( void * userdata,
+                                         ne_xml_elmid parent,
+                                         ne_xml_elmid child )
 {
     // @@@
     return NE_XML_VALID;
@@ -176,9 +118,9 @@ int LockSequence::validate_callback( void * userdata,
 
 //////////////////////////////////////////////////////////////////////////
 // static
-int LockSequence::endelement_callback( void * userdata,
-                                       const struct ne_xml_elm * s,
-                                        const char * cdata )
+extern "C" static int endelement_callback( void * userdata,
+                                           const struct ne_xml_elm * s,
+                                           const char * cdata )
 {
     LockSequenceParseContext * pCtx
                     = static_cast< LockSequenceParseContext * >( userdata );
@@ -266,4 +208,61 @@ int LockSequence::endelement_callback( void * userdata,
             break;
     }
     return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// static
+bool LockSequence::createFromXML( const rtl::OString & rInData,
+                                  uno::Sequence< ucb::Lock > & rOutData )
+{
+    const sal_Int32 TOKEN_LENGTH = 13; // </activelock>
+    bool success = true;
+
+    // rInData may contain multiple <activelock>...</activelock> tags.
+    sal_Int32 nCount = 0;
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd   = rInData.indexOf( "</activelock>" );
+    while ( nEnd > -1 )
+    {
+        ne_xml_parser * parser = ne_xml_create();
+        if ( !parser )
+        {
+            success = false;
+            break;
+        }
+
+        LockSequenceParseContext aCtx;
+        ne_xml_push_handler( parser,
+                                  elements,
+                                  validate_callback,
+                                  0, // startelement_callback
+                                  endelement_callback,
+                                  &aCtx );
+
+        ne_xml_parse( parser,
+                       rInData.getStr() + nStart,
+                       nEnd - nStart + TOKEN_LENGTH );
+
+        success = !!ne_xml_valid( parser );
+
+        ne_xml_destroy( parser );
+
+        if ( !success )
+            break;
+
+        if ( aCtx.pLock )
+        {
+            nCount++;
+            if ( nCount > rOutData.getLength() )
+                rOutData.realloc( rOutData.getLength() + 1 );
+
+            rOutData[ nCount - 1 ] = *aCtx.pLock;
+        }
+
+        nStart = nEnd + TOKEN_LENGTH + 1;
+        nEnd   = rInData.indexOf( "</activelock>", nStart );
+    }
+
+//  rOutData.realloc( nCount );
+    return success;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LockEntrySequence.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-15 10:05:25 $
+ *  last change: $Author: kso $ $Date: 2002-08-22 11:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,45 @@ struct LockEntrySequenceParseContext
 };
 
 //////////////////////////////////////////////////////////////////////////
+extern "C" static int validate_callback( void * userdata,
+                                         ne_xml_elmid parent,
+                                         ne_xml_elmid child )
+{
+    // @@@
+    return NE_XML_VALID;
+}
+
+//////////////////////////////////////////////////////////////////////////
+extern "C" static int endelement_callback( void * userdata,
+                                           const struct ne_xml_elm * s,
+                                           const char * cdata )
+{
+    LockEntrySequenceParseContext * pCtx
+                = static_cast< LockEntrySequenceParseContext * >( userdata );
+    if ( !pCtx->pEntry )
+        pCtx->pEntry = new ucb::LockEntry;
+
+    switch ( s->id )
+    {
+        case DAV_ELM_exclusive:
+            pCtx->pEntry->Scope = ucb::LockScope_EXCLUSIVE;
+            break;
+
+        case DAV_ELM_shared:
+            pCtx->pEntry->Scope = ucb::LockScope_SHARED;
+            break;
+
+        case DAV_ELM_write:
+            pCtx->pEntry->Type = ucb::LockType_WRITE;
+            break;
+
+        default:
+            break;
+    }
+    return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////
 // static
 bool LockEntrySequence::createFromXML( const rtl::OString & rInData,
                                        uno::Sequence<
@@ -154,45 +193,3 @@ bool LockEntrySequence::createFromXML( const rtl::OString & rInData,
     rOutData.realloc( nCount );
     return success;
 }
-
-//////////////////////////////////////////////////////////////////////////
-// static
-int LockEntrySequence::validate_callback( void * userdata,
-                                          ne_xml_elmid parent,
-                                          ne_xml_elmid child )
-{
-    // @@@
-    return NE_XML_VALID;
-}
-
-//////////////////////////////////////////////////////////////////////////
-// static
-int LockEntrySequence::endelement_callback( void * userdata,
-                                            const struct ne_xml_elm * s,
-                                             const char * cdata )
-{
-    LockEntrySequenceParseContext * pCtx
-                = static_cast< LockEntrySequenceParseContext * >( userdata );
-    if ( !pCtx->pEntry )
-        pCtx->pEntry = new ucb::LockEntry;
-
-    switch ( s->id )
-    {
-        case DAV_ELM_exclusive:
-            pCtx->pEntry->Scope = ucb::LockScope_EXCLUSIVE;
-            break;
-
-        case DAV_ELM_shared:
-            pCtx->pEntry->Scope = ucb::LockScope_SHARED;
-            break;
-
-        case DAV_ELM_write:
-            pCtx->pEntry->Type = ucb::LockType_WRITE;
-            break;
-
-        default:
-            break;
-    }
-    return 0;
-}
-
