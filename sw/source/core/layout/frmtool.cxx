@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:08:56 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ SwFrmNotify::~SwFrmNotify()
                 {
                     //Wenn der Vorgaenger das Attribut fuer Zusammenhalten traegt
                     //muss er angestossen werden.
-                    // But only if it has an prev.
+                    // But only if it has a prev.
                     SwFrm *pPre;
                     if ( 0 != (pPre = pFrm->FindPrev()) &&
                          pPre->GetAttrSet()->GetKeep().GetValue() &&
@@ -450,6 +450,26 @@ SwFrmNotify::~SwFrmNotify()
             pRootFrm->GetCurrShell() )
         {
             pRootFrm->GetCurrShell()->Imp()->InvalidateAccessibleFrmContent( pFrm );
+        }
+    }
+
+    // #i9046# Automatic frame width
+    SwFlyFrm* pFly = 0;
+    if ( pFrm->IsInFly() && !pFrm->IsFlyFrm() && ( pFly = pFrm->FindFlyFrm() ) )
+    {
+        const SwFmtFrmSize &rFrmSz = pFly->GetFmt()->GetFrmSize();
+
+        // This could be optimized. Basically the fly frame only has to
+        // be invalidated, if the first line of pFrm (if pFrm is a content
+        // frame, for other frame types its the print area) has changed its
+        // size and pFrm was responsible for the current width of pFly. On
+        // the other hand, this is only rarely used and re-calculation of
+        // the fly frame does not cause too much trouble. So we keep it this
+        // way:
+        if ( ATT_FIX_SIZE != rFrmSz.GetWidthSizeType() )
+        {
+            pFly->InvalidatePos();
+            pFly->InvalidateSize();
         }
     }
 }
