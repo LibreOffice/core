@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSecurityEnvironment.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 17:52:58 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ interface XSecurityEnvironment : com::sun::star::uno::XInterface
      * The validation status will returned as a bit-wise long, please refer to
      * CertificateValidity definition.
      */
-    long verifyCertificate( [in] com::sun::star::security::XCertificate xCert ) raises( com::sun::star::uno::SecurityException ) ;
+    long verifyCertificate( [in] com::sun::star::security::XCertificate xCertificate ) raises( com::sun::star::uno::SecurityException ) ;
 
     /**
      * Get a certificate characters.
@@ -129,12 +129,12 @@ interface XSecurityEnvironment : com::sun::star::uno::XInterface
      * The certificate characters is defined as bit-wise long, please refer to
      * CertificateCharacters definition.
      */
-    long getCertificateCharacters( [in] com::sun::star::security::XCertificate xCert ) raises( com::sun::star::uno::SecurityException ) ;
+    long getCertificateCharacters( [in] com::sun::star::security::XCertificate xCertificate ) raises( com::sun::star::uno::SecurityException ) ;
 
     /**
      * Get the Environment detail infos
      */
-    string getSecurityEnvironmentInfo ( );
+    string getSecurityEnvironmentInformation ( );
 
 } ;
 
