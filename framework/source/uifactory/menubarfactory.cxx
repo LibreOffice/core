@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:53:04 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,12 +103,12 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPLLIER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPLLIER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -138,7 +138,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
-using namespace drafts::com::sun::star::ui;
+using namespace ::com::sun::star::ui;
 
 namespace framework
 {
@@ -150,13 +150,13 @@ DEFINE_XINTERFACE_3                    (    MenuBarFactory                      
                                             OWeakObject                                                     ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider                      ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo                       ),
-                                            DIRECT_INTERFACE( drafts::com::sun::star::ui::XUIElementFactory )
+                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElementFactory )
                                         )
 
 DEFINE_XTYPEPROVIDER_3                  (   MenuBarFactory                                  ,
                                             css::lang::XTypeProvider                        ,
                                             css::lang::XServiceInfo                         ,
-                                            drafts::com::sun::star::ui::XUIElementFactory
+                                            ::com::sun::star::ui::XUIElementFactory
                                         )
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   MenuBarFactory                                  ,
@@ -237,7 +237,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
                 rtl::OUString aModuleIdentifier = m_xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ));
                 if ( aModuleIdentifier.getLength() )
                 {
-                    Reference< ::drafts::com::sun::star::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(
+                    Reference< ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(
                         m_xServiceManager->createInstance( SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ), UNO_QUERY );
                     xCfgMgr = xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier );
                     bHasSettings = xCfgMgr->hasSettings( aResourceURL );
@@ -266,7 +266,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
 
     vos::OGuard aGuard( Application::GetSolarMutex() );
     MenuBarWrapper* pMenuBarWrapper = new MenuBarWrapper( m_xServiceManager );
-    Reference< drafts::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pMenuBarWrapper, UNO_QUERY );
+    Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pMenuBarWrapper, UNO_QUERY );
     Reference< XInitialization > xInit( xMenuBar, UNO_QUERY );
     xInit->initialize( aPropSeq );
     return xMenuBar;
