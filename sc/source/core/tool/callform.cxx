@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callform.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: nn $ $Date: 2000-11-03 11:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svtools/libcall.hxx>
 #include <tools/intn.hxx>
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
