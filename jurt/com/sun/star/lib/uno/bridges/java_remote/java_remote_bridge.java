@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:53:56 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ import com.sun.star.uno.Any;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.35 $ $ $Date: 2004-03-25 14:53:56 $
+ * @version     $Revision: 1.36 $ $ $Date: 2004-03-30 16:19:12 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -599,31 +599,19 @@ public class java_remote_bridge
         this(UnoRuntime.getEnvironment("java", null), UnoRuntime.getEnvironment("remote", null), args);
     }
 
-    /**
-     * Maps an object from the source environment to the destination environment.
-     * <p>
-     * @return     the object in the destination environment
-     * @param      object     the object to map
-     * @param      type       the interface under which is to be mapped
-     * @see                   com.sun.star.uno.IBridge#mapInterfaceTo
-     */
+    // @see com.sun.star.uno.IBridge#mapInterfaceTo
     public Object mapInterfaceTo(Object object, Type type) {
         checkDisposed();
-
-        String oid[] = new String[1];
-
-        // if object is a string, than it is already mapped as a virtuell proxy
-        if(object instanceof String)
-            oid[0] = (String)object;
-        else {
+        if (object == null) {
+            return null;
+        } else {
+            String[] oid = new String[1];
             object = _java_environment.registerInterface(object, oid, type);
             if (!proxyFactory.isProxy(object)) {
                 addRefHolder(object, type, oid[0]);
             }
+            return oid[0];
         }
-          if(DEBUG) System.err.println("##### " + getClass() + " - mapInterfaceTo:" + object + " interface:" + type + " " + oid[0]);
-
-        return oid[0];
     }
 
     /**
@@ -797,41 +785,18 @@ public class java_remote_bridge
         }
     }
 
-    /**
-     * Asks to map a remote object of name sInstanceName.
-     * <p>
-     * @param   sInstanceName   the name of the instance
-     * @see     com.sun.star.bridge.XBridge#getInstance
-     */
-    public Object getInstance(String sInstanceName) {
-        Object object = null;
-
-
-        Type xInterface_type = null;
+    // @see com.sun.star.bridge.XBridge#getInstance
+    public Object getInstance(String instanceName) {
+        Type t = new Type(XInterface.class);
         try {
-            xInterface_type = new Type(XInterface.class);
+            return sendRequest(
+                instanceName, t, "queryInterface", new Object[] { t }, null,
+                null);
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Throwable e) {
+            throw new RuntimeException("Unexpected " + e);
         }
-        catch(Exception exception) {
-              throw new com.sun.star.uno.RuntimeException(exception.getMessage());
-          }
-
-
-        try {
-            object = sendRequest(sInstanceName,
-                             xInterface_type,
-                             "queryInterface",
-                             new Object[]{xInterface_type},
-                             null,
-                             null);
-        }
-        catch(RuntimeException runtimeException) {
-            throw runtimeException;
-        }
-        catch(Throwable throwable) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".getInstance - unexpected:" + throwable);
-        }
-
-        return object;
     }
 
     /**
@@ -888,8 +853,11 @@ public class java_remote_bridge
             _forceSynchronous ? new Boolean[] { Boolean.TRUE } : null);
     }
 
-    private Object sendRequest(Object object, Type type, String operation, Object params[], Boolean synchron[], Boolean mustReply[]) throws Throwable {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".sendRequest:" + object + " " + type +" " + operation + " " + synchron + " " + mustReply);
+    private Object sendRequest(
+        String oid, Type type, String operation, Object[] params,
+        Boolean[] synchron, Boolean[] mustReply)
+        throws Throwable
+    {
         Object result = null;
 
         if(synchron == null)
@@ -908,7 +876,9 @@ public class java_remote_bridge
         Object handle = null;
         try {
             synchronized(_outputStream) {
-                _iProtocol.writeRequest((String)object, TypeDescription.getTypeDescription(type), operation, threadId , params, synchron, mustReply);
+                _iProtocol.writeRequest(
+                    oid, TypeDescription.getTypeDescription(type), operation,
+                    threadId , params, synchron, mustReply);
 
                 goThroughThreadPool = synchron[0].booleanValue()  && Thread.currentThread() != _messageDispatcher;
 
