@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:37:50 $
+ *  last change: $Author: cmc $ $Date: 2002-12-06 12:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PRECOMPILED
 #include "filt_pch.hxx"
@@ -361,6 +364,12 @@ void SwRTFParser::Continue( int nToken )
     if( bFirstContinue )
     {
         bFirstContinue = FALSE;
+
+        if (IsNewDoc())
+        {
+            pDoc->SetParaSpaceMax(true, true);
+            pDoc->SetTabCompat(true);
+        }
 
         // einen temporaeren Index anlegen, auf Pos 0 so wird er nicht bewegt!
         pSttNdIdx = new SwNodeIndex( pDoc->GetNodes() );
