@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-03 15:54:37 $
+ *  last change: $Author: jb $ $Date: 2002-07-12 16:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,7 +701,7 @@ namespace configmgr
     {
         bool bCheckResult = true;
 
-    #if defined(_DEBUG) || defined(CFG_ENABLE_TRACING)
+    #if 0 // defined(_DEBUG) || defined(CFG_ENABLE_TRACING)
         const int cKnownSettingsCount = sizeof(pKnownSettings)/sizeof(pKnownSettings[0]);
 
         // check if we know all the settings
