@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:08:48 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:47:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1657,6 +1657,10 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 }
 #ifdef VERTICAL_LAYOUT
                 Point aTmpPoint( rPoint );
+
+                if ( pFrm->IsRightToLeft() )
+                    pFrm->SwitchLTRtoRTL( aTmpPoint );
+
                 if ( pFrm->IsVertical() )
                     pFrm->SwitchHorizontalToVertical( aTmpPoint );
 
