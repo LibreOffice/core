@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jl $ $Date: 2001-10-31 16:03:47 $
+ *  last change: $Author: jl $ $Date: 2001-11-06 09:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,13 +739,6 @@ static void getJavaPropsFromSafetySettings(JVM * pjvm,
         {
             sal_Bool bEnableVal= key_Enable->getLongValue();
             pjvm->setEnabled( bEnableVal);
-        }
-        Reference<XRegistryKey> key_NetAccess = xRegistryRootKey->openKey(OUString(
-            RTL_CONSTASCII_USTRINGPARAM("VirtualMachine/NetAccess")));
-        if (key_NetAccess.is())
-        {
-            //????
-            sal_Int32 nNetAccess= key_NetAccess->getLongValue();
         }
         Reference<XRegistryKey> key_UserClasspath = xRegistryRootKey->openKey(OUString(
             RTL_CONSTASCII_USTRINGPARAM("VirtualMachine/UserClassPath")));
