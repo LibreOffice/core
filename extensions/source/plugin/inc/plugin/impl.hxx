@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-02 11:34:07 $
+ *  last change: $Author: kso $ $Date: 2002-11-12 14:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_KEYFUNCTION_HPP_
 #include <com/sun/star/awt/KeyFunction.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 #ifndef _COM_SUN_STAR_PLUGIN_PLUGINMODE_HPP_
 #include <com/sun/star/plugin/PluginMode.hpp>
