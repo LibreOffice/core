@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checklbx.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:07 $
+ *  last change: $Author: pb $ $Date: 2002-06-21 05:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,9 @@
 // class SvxCheckListBox -------------------------------------------------
 
 SvxCheckListBox::SvxCheckListBox( Window* pParent, WinBits nWinStyle ) :
-        SvTreeListBox( pParent, nWinStyle )
+
+    SvTreeListBox( pParent, nWinStyle )
+
 {
     Init_Impl();
 }
@@ -85,14 +87,16 @@ SvxCheckListBox::SvxCheckListBox( Window* pParent, WinBits nWinStyle ) :
 // -----------------------------------------------------------------------
 
 SvxCheckListBox::SvxCheckListBox( Window* pParent, const ResId& rResId ) :
-        SvTreeListBox( pParent, rResId )
+
+    SvTreeListBox( pParent, rResId )
+
 {
     Init_Impl();
 }
 
 // -----------------------------------------------------------------------
 
-__EXPORT SvxCheckListBox::~SvxCheckListBox()
+SvxCheckListBox::~SvxCheckListBox()
 {
     delete pCheckButton;
 }
@@ -101,15 +105,7 @@ __EXPORT SvxCheckListBox::~SvxCheckListBox()
 
 void SvxCheckListBox::Init_Impl()
 {
-    SvxCheckListBoxBitmaps theBmps;
-
-    pCheckButton = new SvLBoxButtonData();
-    pCheckButton->aBmps[SV_BMP_UNCHECKED]   = theBmps.GetUncheckedBmp();
-    pCheckButton->aBmps[SV_BMP_CHECKED]     = theBmps.GetCheckedBmp();
-    pCheckButton->aBmps[SV_BMP_HICHECKED]   = theBmps.GetHiCheckedBmp();
-    pCheckButton->aBmps[SV_BMP_HIUNCHECKED] = theBmps.GetHiUncheckedBmp();
-    pCheckButton->aBmps[SV_BMP_TRISTATE]    = theBmps.GetTriStateBmp();
-    pCheckButton->aBmps[SV_BMP_HITRISTATE]  = theBmps.GetHiTriStateBmp();
+    pCheckButton = new SvLBoxButtonData( this );
     EnableCheckButton( pCheckButton );
 }
 
@@ -125,9 +121,7 @@ void SvxCheckListBox::InsertEntry( const String& rStr, USHORT nPos )
 void SvxCheckListBox::RemoveEntry( USHORT nPos )
 {
     if ( nPos < GetEntryCount() )
-    {
         SvTreeListBox::GetModel()->Remove( GetEntry( nPos ) );
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -135,9 +129,7 @@ void SvxCheckListBox::RemoveEntry( USHORT nPos )
 void SvxCheckListBox::SelectEntryPos( USHORT nPos, BOOL bSelect )
 {
     if ( nPos < GetEntryCount() )
-    {
         Select( GetEntry( nPos ), bSelect );
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -170,8 +162,10 @@ USHORT SvxCheckListBox::GetCheckedEntryCount() const
     USHORT nCount = (USHORT)GetEntryCount();
 
     for ( USHORT i = 0; i < nCount; ++i )
+    {
         if ( IsChecked( i ) )
             nCheckCount++;
+    }
     return nCheckCount;
 }
 
@@ -224,8 +218,7 @@ void* SvxCheckListBox::GetEntryData( USHORT nPos ) const
 void SvxCheckListBox::ToggleCheckButton( SvLBoxEntry* pEntry )
 {
     if ( pEntry && IsSelected( pEntry ) )
-        CheckEntryPos( GetSelectEntryPos(),
-                       !IsChecked( GetSelectEntryPos() ) );
+        CheckEntryPos( GetSelectEntryPos(), !IsChecked( GetSelectEntryPos() ) );
 }
 
 // -----------------------------------------------------------------------
@@ -239,8 +232,7 @@ void SvxCheckListBox::MouseButtonDown( const MouseEvent& rMEvt )
 
         if ( pEntry )
         {
-            BOOL bCheck =
-                ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
+            BOOL bCheck = ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
             SvLBoxItem* pItem = GetItem( pEntry, aPnt.X() );
 
             if ( pItem && pItem->IsA() == SV_ITEM_ID_LBOXBUTTON )
@@ -253,9 +245,7 @@ void SvxCheckListBox::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 ToggleCheckButton( pEntry );
                 SvTreeListBox::MouseButtonDown( rMEvt );
-
-                if ( bCheck !=
-                     ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) )
+                if ( bCheck != ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) )
                     CheckButtonHdl();
                 return;
             }
@@ -276,12 +266,9 @@ void SvxCheckListBox::KeyInput( const KeyEvent& rKEvt )
 
         if ( pEntry )
         {
-            BOOL bCheck = ( GetCheckButtonState( pEntry ) ==
-                            SV_BUTTON_CHECKED );
+            BOOL bCheck = ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
             ToggleCheckButton( pEntry );
-
-            if ( bCheck != ( GetCheckButtonState( pEntry ) ==
-                             SV_BUTTON_CHECKED ) )
+            if ( bCheck != ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) )
                 CheckButtonHdl();
         }
     }
@@ -305,5 +292,4 @@ SvxCheckListBoxBitmaps::SvxCheckListBoxBitmaps() :
 {
     FreeResource();
 }
-
 
