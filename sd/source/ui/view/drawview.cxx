@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-03 14:38:25 $
+ *  last change: $Author: ka $ $Date: 2001-08-17 10:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,35 +777,25 @@ void SdDrawView::PresPaint(const Region& rRegion)
         }
 
         // Clipping auf angezeigten Seitenbereich
-        SdPage*   pPage         = pDoc->GetSdPage(0, PK_STANDARD);
-        BOOL      bIsClipRegion = pWindow->IsClipRegion();
-        Region    aOldClipRegion(pWindow->GetClipRegion());
+        SdPage*     pPage = pDoc->GetSdPage( 0, PK_STANDARD );
+        BOOL        bIsClipRegion = pWindow->IsClipRegion();
+        Region      aOldClipRegion( pWindow->GetClipRegion() );
+        Point       aUpperLeft(pPage->GetLftBorder(), pPage->GetUppBorder());
+        Point       aLowerRight( pPage->GetSize().Width() - pPage->GetRgtBorder(),
+                                pPage->GetSize().Height() - pPage->GetLwrBorder());
+        Rectangle   aClipRect( aUpperLeft, aLowerRight );
 
-        Point aUpperLeft(pPage->GetLftBorder(),
-                         pPage->GetUppBorder());
-        Point aLowerRight(pPage->GetSize().Width() -
-                          pPage->GetRgtBorder(),
-                          pPage->GetSize().Height() -
-                          pPage->GetLwrBorder());
-        Rectangle aClipRect(aUpperLeft, aLowerRight);
+        pWindow->SetClipRegion( aClipRect );
 
-        // untere und rechte Pixelreihe nicht darstellen
-        Size aPixelSize(pWindow->PixelToLogic(Size(1,1)));
-        aClipRect.Bottom() -= aPixelSize.Height();
-        aClipRect.Right()  -= aPixelSize.Width();
+        Link            aPaintProcLink( LINK( this, SdDrawView, PaintProc ) );
+        SdrPageView*    pPageView = GetPageViewPvNum(0);
 
-        Region    aClipRegion(aClipRect);
-        pWindow->SetClipRegion(aClipRegion);
-
-        Link aPaintProcLink = LINK(this, SdDrawView, PaintProc);
-        SdrPageView* pPageView = GetPageViewPvNum(0);
-
-        if (pPageView)
-            pPageView->InitRedraw((USHORT)0, rRegion, 0, &aPaintProcLink);
+        if( pPageView )
+            pPageView->InitRedraw( (USHORT) 0, rRegion, 0, &aPaintProcLink );
 
         // altes Clipping restaurieren
-        if (bIsClipRegion)
-            pWindow->SetClipRegion(aOldClipRegion);
+        if( bIsClipRegion )
+            pWindow->SetClipRegion( aOldClipRegion );
         else
             pWindow->SetClipRegion();
 
@@ -1102,8 +1092,13 @@ void SdDrawView::SetAnimationMode(BOOL bStart)
 
         if( pSlideShow )
         {
+            SdWindow*       pWindow = (SdWindow*) GetWin( 0 );
+            const MapMode   aMapMode( pWindow->GetMapMode() );
+
             pSlideShow->Destroy();
             pSlideShow = NULL;
+
+            pWindow->SetMapMode( aMapMode );
         }
 
         if (bStart)
