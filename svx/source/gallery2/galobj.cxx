@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:07:05 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ const String SgaObject::GetTitle() const
                 ByteString aMgrName( aResourceName, RTL_TEXTENCODING_UTF8 );
                 aMgrName += ByteString::CreateFromInt32( SOLARUPD );
                 ResMgr* pResMgr = ResMgr::CreateResMgr( aMgrName.GetBuffer(),
-                            Application::GetSettings().GetUILanguage() );
+                            Application::GetSettings().GetUILocale() );
                 if ( pResMgr )
                 {
                     ResId aResId( (sal_uInt16)nResId, pResMgr );
