@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-07 14:16:41 $
+ *  last change: $Author: fs $ $Date: 2000-12-14 08:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,6 +641,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_FIELDDELIMITER, ::rtl::OUString::createFromAscii("FieldDelimiter")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_TEXTDELIMITER, ::rtl::OUString::createFromAscii("StringDelimiter")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_DECIMALDELIMITER, ::rtl::OUString::createFromAscii("DecimalDelimiter")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_THOUSANDSDELIMITER, ::rtl::OUString::createFromAscii("ThousandDelimiter")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_SHOWDELETEDROWS, ::rtl::OUString::createFromAscii("ShowDeleted")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ALLOWLONGTABLENAMES, ::rtl::OUString::createFromAscii("NoNameLengthLimit")));
 
@@ -2207,6 +2208,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2000/12/07 14:16:41  fs
+ *  #80186# reset the 'password required' flag when changing the data source type to one without passwords
+ *
  *  Revision 1.24  2000/12/03 10:29:23  fs
  *  #79820# SetSavePassword on the login dialog
  *
