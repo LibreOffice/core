@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 14:36:36 $
+ *  last change: $Author: fs $ $Date: 2001-08-10 09:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,12 @@ public:
 
     String              GetSelectedIconURL() const;
     String              GetSelectedIconText() const;
+    String              GetCursorPosIconURL() const;
     String              GetIconText( const String& rURL ) const;
     String              GetTemplateRootURL() const { return aTemplateRootURL; }
     void                InvalidateIconControl();
     void                SetCursorPos( ULONG nPos );
+    ULONG               GetCursorPos();
     void                SetFocus();
 };
 
@@ -249,6 +251,9 @@ public:
     void                SetDoubleClickHdl( const Link& rLink ) { aDoubleClickHdl = rLink; }
     void                SetNewFolderHdl( const Link& rLink ) { aNewFolderHdl = rLink; }
     void                SetSendFocusHdl( const Link& rLink ) { aSendFocusHdl = rLink; }
+
+    void                ReadViewSettings( );
+    void                WriteViewSettings( );
 
     sal_Bool            IsFileSelected() const;
     String              GetSelectedFile() const;

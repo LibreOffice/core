@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 14:37:11 $
+ *  last change: $Author: fs $ $Date: 2001-08-10 09:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,19 +59,42 @@
  *
  ************************************************************************/
 
+#ifndef _SVTOOLS_TEMPLWIN_HXX
 #include "templwin.hxx"
+#endif
+#ifndef _SVTOOLS_TEMPLDLG_HXX
 #include "templdlg.hxx"
+#endif
+#ifndef _SVTOOLS_SVTDATA_HXX
 #include "svtdata.hxx"
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include "pathoptions.hxx"
+#endif
+#ifndef INCLUDED_SVTOOLS_DYNAMICMENUOPTIONS_HXX
 #include "dynamicmenuoptions.hxx"
+#endif
+#ifndef _XTEXTEDT_HXX
 #include "xtextedt.hxx"
+#endif
+#ifndef _TXTATTR_HXX
 #include "txtattr.hxx"
+#endif
+#ifndef _INETTYPE_HXX
 #include "inettype.hxx"
+#endif
 
+#ifndef _SVTOOLS_HRC
 #include "svtools.hrc"
+#endif
 #include "templwin.hrc"
+#ifndef _SVT_HELPID_HRC
 #include "helpid.hrc"
+#endif
 
+#ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
+#include "viewoptions.hxx"
+#endif
 #ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
 #endif
@@ -360,11 +383,23 @@ void SvtIconWindow_Impl::Resize()
     aIconCtrl.ArrangeIcons();
 }
 
+String SvtIconWindow_Impl::GetCursorPosIconURL() const
+{
+    String aURL;
+    SvxIconChoiceCtrlEntry* pEntry = aIconCtrl.GetCursor( );
+    if ( pEntry )
+        aURL = *static_cast<String*>(pEntry->GetUserData());
+    return aURL;
+
+}
+
 String SvtIconWindow_Impl::GetSelectedIconURL() const
 {
     ULONG nPos;
     SvxIconChoiceCtrlEntry* pEntry = aIconCtrl.GetSelectedEntry( nPos );
-    String aURL = *(String*)pEntry->GetUserData();
+    String aURL;
+    if ( pEntry )
+        aURL = *static_cast<String*>(pEntry->GetUserData());
     return aURL;
 }
 
@@ -387,6 +422,17 @@ String SvtIconWindow_Impl::GetIconText( const String& rURL ) const
 void SvtIconWindow_Impl::InvalidateIconControl()
 {
     aIconCtrl.Invalidate();
+}
+
+ULONG SvtIconWindow_Impl::GetCursorPos()
+{
+    ULONG nPos = -1;
+
+    SvxIconChoiceCtrlEntry* pCursorEntry = aIconCtrl.GetCursor( );
+    if ( pCursorEntry )
+        nPos = aIconCtrl.GetEntryListPos( pCursorEntry );
+
+    return nPos;
 }
 
 void SvtIconWindow_Impl::SetCursorPos( ULONG nPos )
@@ -795,6 +841,7 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
         {
             if ( bPreview )
             {
+                WaitObject aWaitCursor( GetParent() );
                 // disabling must be done here, does not work in ctor because
                 // execute of the dialog will overwrite it
                 // ( own execute method would help )
@@ -900,22 +947,15 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
     aFileViewTB.Show();
 
     aFrameWinTB.SetClickHdl( aLink );
-    aFrameWinTB.CheckItem( TI_DOCTEMPLATE_DOCINFO, TRUE );
     aFrameWinTB.Show();
 
-    pFrameWin->ToggleView( sal_True );
-
-    // open the template icon for default
-    String aRootURL = pIconWin->GetTemplateRootURL();
-    if ( aRootURL.Len() > 0 )
-    {
-        pFileWin->OpenRoot( aRootURL );
-        pIconWin->SetCursorPos( ICON_POS_TEMPLATES );
-    }
+    ReadViewSettings( );
 }
 
 SvtTemplateWindow::~SvtTemplateWindow()
 {
+    WriteViewSettings( );
+
     delete pIconWin;
     delete pFileWin;
     delete pFrameWin;
@@ -930,6 +970,8 @@ SvtTemplateWindow::~SvtTemplateWindow()
 IMPL_LINK ( SvtTemplateWindow , IconClickHdl_Impl, SvtIconChoiceCtrl *, pCtrl )
 {
     String aURL = pIconWin->GetSelectedIconURL();
+    if ( !aURL.Len() )
+        aURL = pIconWin->GetCursorPosIconURL();
     pFileWin->OpenRoot( aURL );
     pIconWin->InvalidateIconControl();
     return 0;
@@ -1178,6 +1220,86 @@ void SvtTemplateWindow::SetFocus( sal_Bool bIconWin )
         pFileWin->SetFocus();
 }
 
+// ------------------------------------------------------------------------
+void SvtTemplateWindow::ReadViewSettings( )
+{
+    // defaults
+    sal_Int32 nSelectedGroup    =   ICON_POS_TEMPLATES;
+    sal_Int32 nSelectedView     =   TI_DOCTEMPLATE_DOCINFO;
+    double nSplitRatio          =   0.5;
+
+    SvtViewOptions aViewSettings( E_DIALOG, ::rtl::OUString::createFromAscii( "NewFromTemplate" ) );
+    if ( aViewSettings.Exists() )
+    {
+        // read the settings
+        Sequence< PropertyValue > aSettings = aViewSettings.GetAnyData( );
+        const PropertyValue* pSettings      =                   aSettings.getConstArray();
+        const PropertyValue* pSettingsEnd   =   pSettings   +   aSettings.getLength();
+        for (; pSettings != pSettingsEnd; ++pSettings)
+        {
+            if ( 0 == pSettings->Name.compareToAscii( "SelectedGroup" ) )
+                pSettings->Value >>= nSelectedGroup;
+            else if ( 0 == pSettings->Name.compareToAscii( "SelectedView" ) )
+                pSettings->Value >>= nSelectedView;
+            else if ( 0 == pSettings->Name.compareToAscii( "SplitRatio" ) )
+                pSettings->Value >>= nSplitRatio;
+        }
+    }
+    // normalize
+    if ( nSelectedGroup < ICON_POS_NEWDOC )     nSelectedGroup = ICON_POS_NEWDOC;
+    if ( nSelectedGroup > ICON_POS_SAMPLES )    nSelectedGroup = ICON_POS_SAMPLES;
+
+    if ( ( TI_DOCTEMPLATE_DOCINFO != nSelectedView ) && ( TI_DOCTEMPLATE_PREVIEW != nSelectedView ) )
+        nSelectedView = TI_DOCTEMPLATE_DOCINFO;
+
+    if ( nSplitRatio < 0.2 ) nSplitRatio = 0.2;
+    if ( nSplitRatio > 0.8 ) nSplitRatio = 0.8;
+
+    // change our view according to the settings
+
+    // the selected view (details or preview)
+    pFrameWin->ToggleView( TI_DOCTEMPLATE_DOCINFO == nSelectedView );
+    aFrameWinTB.CheckItem( (sal_uInt16)nSelectedView, TRUE );
+
+    // the split ratio
+    sal_Int32 nSplitFileAndFrameSize = aSplitWin.GetItemSize( FILEWIN_ID ) + aSplitWin.GetItemSize( FRAMEWIN_ID );
+    sal_Int32 nSplitFileSize = (sal_Int32)(nSplitFileAndFrameSize * nSplitRatio);
+    sal_Int32 nSplitFrameSize = nSplitFileAndFrameSize - nSplitFileSize;
+    aSplitWin.SetItemSize( FILEWIN_ID, nSplitFileSize );
+    aSplitWin.SetItemSize( FRAMEWIN_ID, nSplitFrameSize );
+    Resize();
+
+    // the selected folder
+    pIconWin->SetCursorPos( nSelectedGroup );
+    IconClickHdl_Impl( NULL );
+}
+
+// ------------------------------------------------------------------------
+void SvtTemplateWindow::WriteViewSettings( )
+{
+    // collect
+    Sequence< PropertyValue > aSettings(3);
+
+    // the selected group
+    aSettings[0].Name   =   ::rtl::OUString::createFromAscii( "SelectedGroup" );
+    pIconWin->SetFocus();
+    aSettings[0].Value  <<= (sal_Int32)pIconWin->GetCursorPos( );
+
+    // the selected view mode
+    aSettings[1].Name   =   ::rtl::OUString::createFromAscii( "SelectedView" );
+    aSettings[1].Value  <<= sal_Int32( aFrameWinTB.IsItemChecked( TI_DOCTEMPLATE_DOCINFO ) ? TI_DOCTEMPLATE_DOCINFO : TI_DOCTEMPLATE_PREVIEW );
+
+    // the split ratio
+    aSettings[2].Name   =   ::rtl::OUString::createFromAscii( "SplitRatio" );
+    sal_Int32 nSplitFileSize = aSplitWin.GetItemSize( FILEWIN_ID );
+    sal_Int32 nSplitFileAndFrameSize = nSplitFileSize + aSplitWin.GetItemSize( FRAMEWIN_ID );
+    aSettings[2].Value  <<= double( 1.0 * nSplitFileSize / nSplitFileAndFrameSize );
+
+    // write
+    SvtViewOptions aViewSettings( E_DIALOG, ::rtl::OUString::createFromAscii( "NewFromTemplate" ) );
+    aViewSettings.SetAnyData( aSettings );
+}
+
 // struct SvtTmplDlg_Impl ------------------------------------------------
 
 struct SvtTmplDlg_Impl
@@ -1187,7 +1309,8 @@ struct SvtTmplDlg_Impl
     Timer               aUpdateTimer;
     sal_Bool            bSelectNoOpen;
 
-    SvtTmplDlg_Impl( Window* pParent ) : pWin( new SvtTemplateWindow( pParent ) ), bSelectNoOpen( sal_False ) {}
+    SvtTmplDlg_Impl( Window* pParent ) : pWin( new SvtTemplateWindow( pParent ) ) ,bSelectNoOpen( sal_False ) {}
+
     ~SvtTmplDlg_Impl() { delete pWin; }
 };
 
@@ -1229,7 +1352,7 @@ SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
     InitImpl( );
 }
 
-
+// ------------------------------------------------------------------------
 void SvtDocumentTemplateDialog::InitImpl( )
 {
     pImpl = new SvtTmplDlg_Impl( this );
