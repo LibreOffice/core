@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:46:43 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XIHELPER_HXX
 #define SC_XIHELPER_HXX
 
@@ -126,8 +125,13 @@ public:
         @param nXFIndex  Index to XF for first text portion (for escapement). */
     static EditTextObject* CreateTextObject(
                             const XclImpRoot& rRoot,
-                            const XclImpString& rString,
-                            sal_uInt16 nXFIndex = 0 );
+                            const XclImpString& rString );
+
+    /** Returns a new edit engine text object for a cell note.
+        @param nXFIndex  Index to XF for first text portion (for escapement). */
+    static EditTextObject* CreateNoteObject(
+                            const XclImpRoot& rRoot,
+                            const XclImpString& rString );
 
     /** Creates a new text cell or edit cell for a Calc document.
         @param nXFIndex  Index to XF for first text portion (for escapement). */
