@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:44:14 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:51:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,7 +842,10 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
         GetDoc()->EndUndo( UNDO_INSLAYFMT );
     }
     else
-        pRet = GetDoc()->MakeFlySection( eRndId, &rPos, &rSet, pParent );
+        /* #109161# If called from a shell try to propagate an
+            existing adjust item from rPos to the content node of the
+            new frame. */
+        pRet = GetDoc()->MakeFlySection( eRndId, &rPos, &rSet, pParent, TRUE );
 
     if( pRet )
     {
