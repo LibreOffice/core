@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:31:37 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,10 +483,11 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
         }
     }
 
-    if( ! bLoaderExplicitlyGiven && rOptions.sComponentUrls.getLength() > 4 )
+    if( ! bLoaderExplicitlyGiven )
     {
-        if ( rOptions.sComponentUrls.matchAsciiL(
-            ".jar" , 4 , rOptions.sComponentUrls.getLength() - 4 ) )
+        if ( rOptions.sComponentUrls.getLength() > 4 &&
+             rOptions.sComponentUrls.matchAsciiL(
+                 ".jar" , 4 , rOptions.sComponentUrls.getLength() - 4 ) )
         {
             if( ! rOptions.bSilent )
             {
@@ -710,12 +711,14 @@ static void bootstrap(
         // we know our java loader, so we check, whether a java-loader is
         // registered
         Reference< XInterface > r = loadSharedLibComponentFactory(
-            OUString::createFromAscii( "jen" ), OUString(),
+            OUString::createFromAscii( "javavm.uno" SAL_DLLEXTENSION ),
+            OUString(),
             OUString::createFromAscii( "com.sun.star.comp.stoc.JavaVirtualMachine" ),
             xSMgr,
             Reference< XRegistryKey > () );
         Reference< XInterface > r2 = loadSharedLibComponentFactory(
-            OUString::createFromAscii( "javaloader" ), OUString(),
+            OUString::createFromAscii( "javaloader.uno" SAL_DLLEXTENSION ),
+            OUString(),
             OUString::createFromAscii(( "com.sun.star.comp.stoc.JavaComponentLoader" ) ),
             xSMgr,
             Reference< XRegistryKey > () );
