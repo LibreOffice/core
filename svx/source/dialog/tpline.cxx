@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:29:13 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,13 +962,11 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
                     pView->MarkObj(pObj,pPageView);
                     if(pSymbolAttr)
                     {
-//-/                        pObj->NbcSetAttributes(*pSymbolAttr,FALSE);
-                        pObj->SetItemSet(*pSymbolAttr);
+                        pObj->SetMergedItemSet(*pSymbolAttr);
                     }
                     else
                     {
-//-/                        pObj->NbcSetAttributes(rOutAttrs,FALSE);
-                        pObj->SetItemSet(rOutAttrs);
+                        pObj->SetMergedItemSet(rOutAttrs);
                     }
                     GDIMetaFile aMeta(pView->GetAllMarkedMetaFile());
 
@@ -1118,7 +1116,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
             if(rItemPolygon == rEntryPolygon)
             {
                 // select this entry
-                aLbStartStyle.SelectEntryPos(a + 1);
+                aLbStartStyle.SelectEntryPos((sal_uInt16)a + 1);
                 bSelected = TRUE;
             }
         }
@@ -1151,7 +1149,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
             if(rItemPolygon == rEntryPolygon)
             {
                 // select this entry
-                aLbEndStyle.SelectEntryPos(a + 1);
+                aLbEndStyle.SelectEntryPos((sal_uInt16)a + 1);
                 bSelected = TRUE;
             }
         }
@@ -1594,13 +1592,11 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             pView->MarkObj(pObj,pPageView);
             if(pSymbolAttr)
             {
-//-/                pObj->NbcSetAttributes(*pSymbolAttr,FALSE);
-                pObj->SetItemSet(*pSymbolAttr);
+                pObj->SetMergedItemSet(*pSymbolAttr);
             }
             else
             {
-//-/                pObj->NbcSetAttributes(rOutAttrs,FALSE);
-                pObj->SetItemSet(rOutAttrs);
+                pObj->SetMergedItemSet(rOutAttrs);
             }
 
             Bitmap aBitmap(pView->GetAllMarkedBitmap());
