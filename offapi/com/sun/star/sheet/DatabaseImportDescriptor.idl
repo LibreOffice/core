@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseImportDescriptor.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:07:18 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ published service DatabaseImportDescriptor
     /** specifies whether the SQL statement is given directly to the database
         or is parsed before.
 
-        @since #111775#
+        @since OOo 2.0.0
 
      */
     [optional, property] boolean IsNative;
@@ -114,7 +114,7 @@ published service DatabaseImportDescriptor
     //-------------------------------------------------------------------------
 
     /** indicates a connection URL, which locates a database driver.
-        @since #i25410#
+        @since OOo 2.0.0
      */
     [optional, property] string ConnectionResource;
 
