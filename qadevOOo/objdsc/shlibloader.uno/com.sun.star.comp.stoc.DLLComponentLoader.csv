@@ -1,0 +1,5 @@
+"DLLComponentLoader";"com::sun::star::lang::XServiceInfo";"getImplementationName()"
+"DLLComponentLoader";"com::sun::star::lang::XServiceInfo";"supportsService()"
+"DLLComponentLoader";"com::sun::star::lang::XServiceInfo";"getSupportedServiceNames()"
+"DLLComponentLoader";"com::sun::star::loader::XImplementationLoader";"activate()"
+"DLLComponentLoader";"com::sun::star::loader::XImplementationLoader";"writeRegistryInfo()"
