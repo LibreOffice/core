@@ -360,7 +360,7 @@
                     <value xml:lang="en-US">Pre~view</value>
                 </prop>
             </node>
-            <node oor:name=".uno:EffectWindow" oor:op="replace">
+            <node oor:name=".uno:CustomAnimation" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Benutzerdefinierte Animation...</value>
                     <value xml:lang="en-US">Custom Animation...</value>
@@ -373,9 +373,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Animationsschemas...</value>
                     <value xml:lang="en-US">Animation Schemes...</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:SlideChangeWindow" oor:op="replace">
@@ -916,15 +913,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Verbinder</value>
                     <value xml:lang="en-US">Connector</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:AnimationMode" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Effekte zulassen</value>
-                    <value xml:lang="en-US">Allow Effects</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
