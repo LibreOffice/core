@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:20:11 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,6 +592,9 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
             break;
         }
     }
+    //#111173# the destination item is missing when the parent style has been changed
+    if(USHRT_MAX == nDestValue && (aParaLBox.IsVisible()||aTblLBox.IsVisible()))
+        nDestValue = 0;
     USHORT nWhich = GetWhich( nSlot );
 
     if ( rSet.GetItemState( nWhich, FALSE ) >= SFX_ITEM_AVAILABLE )
@@ -1023,9 +1026,12 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         {
             const SfxPoolItem* pOldChar =
                 GetOldItem( rCoreSet, SID_ATTR_BRUSH_CHAR );
-
-            if ( pOldChar && *pParaBck_Impl->pCharBrush != *pOldChar ||
-                *pParaBck_Impl->pCharBrush != SvxBrushItem(SID_ATTR_BRUSH_CHAR))
+            DBG_ASSERT(pParaBck_Impl, "pParaBck_Impl == NULL ?")
+            if ( pOldChar &&
+                    //#111173#  crash report shows that pParaBck_Impl can be NULL, the cause is unknown
+                    pParaBck_Impl &&
+                        (*pParaBck_Impl->pCharBrush != *pOldChar ||
+                *pParaBck_Impl->pCharBrush != SvxBrushItem(SID_ATTR_BRUSH_CHAR)))
             {
                 rCoreSet.Put( *pParaBck_Impl->pCharBrush );
                 bModified |= TRUE;
@@ -1724,6 +1730,7 @@ void SvxBackgroundTabPage::ShowTblControl()
 
 {
     aTblLBox            .SetSelectHdl( HDL(TblDestinationHdl_Impl) );
+    aTblLBox            .SelectEntryPos(0);
     aTblDesc.Show();
     aTblLBox.Show();
 }
@@ -1733,6 +1740,7 @@ void SvxBackgroundTabPage::ShowTblControl()
 void SvxBackgroundTabPage::ShowParaControl(BOOL bCharOnly)
 {
     aParaLBox.SetSelectHdl(HDL(ParaDestinationHdl_Impl));
+    aParaLBox.SelectEntryPos(0);
     if(!bCharOnly)
     {
         aTblDesc.Show();
