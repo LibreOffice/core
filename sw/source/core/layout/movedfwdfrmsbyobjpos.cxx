@@ -2,9 +2,9 @@
  *
  *  $RCSfile: movedfwdfrmsbyobjpos.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:47:56 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #ifndef _MOVEDFWDFRMSBYOBJPOS_HXX
 #include <movedfwdfrmsbyobjpos.hxx>
 #endif
-
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
 #endif
@@ -139,7 +138,10 @@ bool SwMovedFwdFrmsByObjPos::DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm
                  pTxtFrm;
                  pTxtFrm = (SwTxtFrm*)aIter.Next() )
             {
-                if ( _rRowFrm.IsAnLower( pTxtFrm ) )
+                // --> OD 2004-12-03 #115759# - assure that found text frame
+                // is the first one.
+                if ( _rRowFrm.IsAnLower( pTxtFrm ) && !pTxtFrm->GetIndPrev() )
+                // <--
                 {
                     bDoesRowContainMovedFwdFrm = true;
                     break;
