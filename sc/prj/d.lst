@@ -25,7 +25,7 @@ touch: ..\%__SRC%\misc\sc.hid %_DEST%\bin%_EXT%\sc.hid
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\inc\sc.hrc %_DEST%\inc%_EXT%\sc.hrc
 ..\source\convert.ini %_DEST%\pck%_EXT%\convert.ini
-dos: mkdir %_DEST%\inc\%_EXT%\sc
+mkdir: %_DEST%\inc\%_EXT%\sc
 hedabu: ..\inc\scdll.hxx %_DEST%\inc%_EXT%\sc\scdll.hxx
 mkdir: %_DEST%\ucr%_EXT%\sc
 ..\%__SRC%\ucr\*.ucr %_DEST%\ucr%_EXT%\sc\*.ucr
