@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-11-05 12:15:24 $
+ *  last change: $Author: er $ $Date: 2001-11-05 19:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ void ScAttrArray::SetPatternArea(USHORT nStartRow, USHORT nEndRow, const ScPatte
                     if ( ni == 0 || (pData[ni-1].nRow < nStartRow - 1) )
                     {   // may be a split or a simple insert or just a shrink,
                         // row adjustment is done further down
-                        if ( pData[ni].nRow != nEndRow )
+                        if ( pData[ni].nRow > nEndRow )
                             bSplit = TRUE;
                         ni++;
                         nInsert = ni;
@@ -442,7 +442,7 @@ void ScAttrArray::SetPatternArea(USHORT nStartRow, USHORT nEndRow, const ScPatte
             USHORT nj = ni;     // stop position of range to replace
             while ( nj < nCount && pData[nj].nRow <= nEndRow )
                 nj++;
-            if ( nj < nCount && pData[nj].pPattern == pPattern )
+            if ( !bSplit && nj < nCount && pData[nj].pPattern == pPattern )
             {   // combine
                 if ( ni > 0 )
                 {
