@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:48:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
 #include <svtools/saveopt.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 
 #ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
@@ -207,9 +210,28 @@ sal_uInt32 SwXMLWriter::_Write()
         { "ShowChanges", sizeof("ShowChanges")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "RedlineProtectionKey", sizeof("RedlineProtectionKey")-1, 0,
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
+              new uno::Type(::getCppuType((Sequence<sal_Int8>*)0)),
+#else
+              &::getCppuType((Sequence<sal_Int8>*)0),
+#endif
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "BaseURI", sizeof("BaseURI")-1, 0,
+              &::getCppuType( (OUString *)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StreamRelPath", sizeof("StreamRelPath")-1, 0,
+              &::getCppuType( (OUString *)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StreamName", sizeof("StreamName")-1, 0,
+              &::getCppuType( (OUString *)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
                 comphelper::GenericPropertySet_CreateInstance(
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
 
@@ -279,6 +301,21 @@ sal_uInt32 SwXMLWriter::_Write()
     nRedlineMode |= REDLINE_SHOW_INSERT;
     pDoc->SetRedlineMode( nRedlineMode );
 
+    // Set base URI
+    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+    xInfoSet->setPropertyValue( sPropName,
+                            makeAny( OUString(INetURLObject::GetBaseURL()) ) );
+    if( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocShell()->GetCreateMode() )
+    {
+        OUString aName( pStg->GetName() );
+        if( aName.getLength() )
+        {
+            sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+            xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
+        }
+    }
+
+
 
     // filter arguments
     // - graphics + object resolver for styles + content
@@ -291,9 +328,9 @@ sal_uInt32 SwXMLWriter::_Write()
 
     Sequence < Any > aEmptyArgs( nArgs );
     Any *pArgs = aEmptyArgs.getArray();
+    *pArgs++ <<= xInfoSet;
     if( xStatusIndicator.is() )
         *pArgs++ <<= xStatusIndicator;
-    *pArgs++ <<= xInfoSet;
 
     if( xGraphicResolver.is() )
         nArgs++;
@@ -302,13 +339,13 @@ sal_uInt32 SwXMLWriter::_Write()
 
     Sequence < Any > aFilterArgs( nArgs );
     pArgs = aFilterArgs.getArray();
+    *pArgs++ <<= xInfoSet;
     if( xGraphicResolver.is() )
         *pArgs++ <<= xGraphicResolver;
     if( xObjectResolver.is() )
         *pArgs++ <<= xObjectResolver;
     if( xStatusIndicator.is() )
         *pArgs++ <<= xStatusIndicator;
-    *pArgs++ <<= xInfoSet;
 
     //Get model
     Reference< lang::XComponent > xModelComp(
@@ -332,13 +369,15 @@ sal_uInt32 SwXMLWriter::_Write()
     // export sub streams for package, else full stream into a file
     sal_Bool bWarn = sal_False, bErr = sal_False;
     String sWarnFile, sErrFile;
+    sal_Bool bOASIS = pStg->GetVersion() > SOFFICE_FILEFORMAT_60;
 
     if( !bOrganizerMode && !bBlock &&
         SFX_CREATE_MODE_EMBEDDED != pDoc->GetDocShell()->GetCreateMode() )
     {
         if( !WriteThroughComponent(
                 xModelComp, "meta.xml", xServiceFactory,
-                "com.sun.star.comp.Writer.XMLMetaExporter",
+                (bOASIS ? "com.sun.star.comp.Writer.XMLOasisMetaExporter"
+                        : "com.sun.star.comp.Writer.XMLMetaExporter"),
                 aEmptyArgs, aProps, sal_True ) )
         {
             bWarn = sal_True;
@@ -347,23 +386,14 @@ sal_uInt32 SwXMLWriter::_Write()
         }
     }
 
-    if( !WriteThroughComponent(
-            xModelComp, "styles.xml", xServiceFactory,
-            "com.sun.star.comp.Writer.XMLStylesExporter",
-            aFilterArgs, aProps, sal_False ) )
-    {
-        bErr = sal_True;
-        sErrFile = String( RTL_CONSTASCII_STRINGPARAM("styles.xml"),
-                           RTL_TEXTENCODING_ASCII_US );
-    }
-
     if( !bErr )
     {
         if( !bBlock )
         {
             if( !WriteThroughComponent(
                 xModelComp, "settings.xml", xServiceFactory,
-                "com.sun.star.comp.Writer.XMLSettingsExporter",
+                (bOASIS ? "com.sun.star.comp.Writer.XMLOasisSettingsExporter"
+                        : "com.sun.star.comp.Writer.XMLSettingsExporter"),
                 aEmptyArgs, aProps, sal_False ) )
             {
                 if( !bWarn )
@@ -376,11 +406,24 @@ sal_uInt32 SwXMLWriter::_Write()
         }
     }
 
+    if( !WriteThroughComponent(
+            xModelComp, "styles.xml", xServiceFactory,
+            (bOASIS ? "com.sun.star.comp.Writer.XMLOasisStylesExporter"
+                    : "com.sun.star.comp.Writer.XMLStylesExporter"),
+            aFilterArgs, aProps, sal_False ) )
+    {
+        bErr = sal_True;
+        sErrFile = String( RTL_CONSTASCII_STRINGPARAM("styles.xml"),
+                           RTL_TEXTENCODING_ASCII_US );
+    }
+
+
     if( !bOrganizerMode && !bErr )
     {
         if( !WriteThroughComponent(
                 xModelComp, "content.xml", xServiceFactory,
-                "com.sun.star.comp.Writer.XMLContentExporter",
+                (bOASIS ? "com.sun.star.comp.Writer.XMLOasisContentExporter"
+                        : "com.sun.star.comp.Writer.XMLContentExporter"),
                 aFilterArgs, aProps, sal_False ) )
         {
             bErr = sal_True;
@@ -522,6 +565,17 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     // set buffer and create outputstream
     xDocStream->SetBufferSize( 16*1024 );
     xOutputStream = new utl::OOutputStreamWrapper( *xDocStream );
+
+    // set Base URL
+    uno::Reference< beans::XPropertySet > xInfoSet;
+    if( rArguments.getLength() > 0 )
+        rArguments.getConstArray()[0] >>= xInfoSet;
+    DBG_ASSERT( xInfoSet.is(), "missing property set" );
+    if( xInfoSet.is() )
+    {
+        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+        xInfoSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
+    }
 
     // write the stuff
     sal_Bool bRet = WriteThroughComponent(
