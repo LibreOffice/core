@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2000-11-08 13:06:42 $
+#   last change: $Author: sb $ $Date: 2002-10-07 13:16:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -57,27 +57,21 @@
 #   Contributor(s): _______________________________________
 #
 #
-#
 #*************************************************************************
 
-PRJ		= ..$/..$/..$/..$/..
+PRJ = ..$/..$/..$/..$/..
 PRJNAME = jurt
+TARGET = com_sun_star_comp_connections
+
 PACKAGE = com$/sun$/star$/comp$/connections
-TARGET  = com_sun_star_comp_connections
 
-# --- Settings -----------------------------------------------------
+.INCLUDE: $(PRJ)$/util$/makefile.pmk
 
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
+JAVACLASSFILES = \
+    $(CLASSDIR)$/$(PACKAGE)$/Acceptor.class \
+    $(CLASSDIR)$/$(PACKAGE)$/Connector.class \
+    $(CLASSDIR)$/$(PACKAGE)$/ConstantInstanceProvider.class \
+    $(CLASSDIR)$/$(PACKAGE)$/Implementation.class \
+    $(CLASSDIR)$/$(PACKAGE)$/PipedConnection.class
 
-# --- Files --------------------------------------------------------
-
-JAVACLASSFILES= 									\
-    $(CLASSDIR)$/$(PACKAGE)$/Acceptor.class			\
-    $(CLASSDIR)$/$(PACKAGE)$/Connector.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/PipedConnection.class	\
-    $(CLASSDIR)$/$(PACKAGE)$/ConstantInstanceProvider.class
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+.INCLUDE:  target.mk

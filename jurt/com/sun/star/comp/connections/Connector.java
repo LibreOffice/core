@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Connector.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:51 $
+ *  last change: $Author: sb $ $Date: 2002-10-07 13:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,163 +61,125 @@
 
 package com.sun.star.comp.connections;
 
-
 import com.sun.star.comp.loader.FactoryHelper;
-
+import com.sun.star.connection.ConnectionSetupException;
+import com.sun.star.connection.NoConnectException;
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnector;
-
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleServiceFactory;
-
 import com.sun.star.registry.XRegistryKey;
 
-import com.sun.star.uno.UnoRuntime;
-
 /**
- * The Connector class is a component that implements the <code>XConnector</code> Interface.
- * <p>
- * The Connector is a general component, which uses less
- * general components (like <code>SocketConnector</code>) to
- * implement its functionality.
- * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:51 $
- * @author      Kay Ramme
- * @see         com.sun.star.connections.XAcceptor
- * @see         com.sun.star.connections.XConnector
- * @see         com.sun.star.connections.XConnection
- * @see         com.sun.star.loader.JavaLoader
- * @since       UDK1.0
+ * A component that implements the <code>XConnector</code> interface.
+ *
+ * <p>The <code>Connector</code> is a general component, that uses less general
+ * components (like <code>com.sun.star.connection.socketConnector</code>) to
+ * implement its functionality.</p>
+ *
+ * @see com.sun.star.connections.XAcceptor
+ * @see com.sun.star.connections.XConnection
+ * @see com.sun.star.connections.XConnector
+ * @see com.sun.star.loader.JavaLoader
+ *
+ * @since UDK 1.0
  */
 public class Connector implements XConnector {
     /**
-     * When set to true, enables various debugging output.
+     * The name of the service.
+     *
+     * <p>The <code>JavaLoader</code> acceses this through reflection.</p>
+     *
+     * @see com.sun.star.comp.loader.JavaLoader
      */
-    static public final boolean DEBUG = false;
+    public static final String __serviceName
+    = "com.sun.star.connection.Connector";
 
     /**
-     * The name of the service, the <code>JavaLoader</code> acceses this through reflection.
+     * Returns a factory for creating the service.
+     *
+     * <p>This method is called by the <code>JavaLoader</code>.</p>
+     *
+     * @param implName the name of the implementation for which a service is
+     *     requested.
+     * @param multiFactory the service manager to be used (if needed).
+     * @param regKey the registry key.
+     * @return an <code>XSingleServiceFactory</code> for creating the component.
+     *
+     * @see com.sun.star.comp.loader.JavaLoader
      */
-     static private final String __serviceName = "com.sun.star.connection.Connector";
-
-    /**
-     * Gives a factory for creating the service.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns a <code>XSingleServiceFactory</code> for creating the component
-     * @param   implName     the name of the implementation for which a service is desired
-     * @param   multiFactory the service manager to be uses if needed
-     * @param   regKey       the registryKey
-     * @see                  com.sun.star.comp.loader.JavaLoader
-     */
-    public static XSingleServiceFactory __getServiceFactory(String implName,
-                                                          XMultiServiceFactory multiFactory,
-                                                          XRegistryKey regKey)
+    public static XSingleServiceFactory __getServiceFactory(
+        String implName, XMultiServiceFactory multiFactory, XRegistryKey regKey)
     {
-        XSingleServiceFactory xSingleServiceFactory = null;
-
-        if (implName.equals(Connector.class.getName()) )
-            xSingleServiceFactory = FactoryHelper.getServiceFactory(Connector.class,
-                                                                    __serviceName,
-                                                                    multiFactory,
-                                                                    regKey);
-
-        return xSingleServiceFactory;
+        return implName.equals(Connector.class.getName())
+            ? FactoryHelper.getServiceFactory(Connector.class, __serviceName,
+                                              multiFactory, regKey)
+            : null;
     }
 
     /**
      * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey       the registryKey
-     * @see                  com.sun.star.comp.loader.JavaLoader
+     *
+     * <p>This method is called by the <code>JavaLoader</code>.</p>
+     *
+     * @param regKey the registry key.
+     * @return <code>true</code> if the operation succeeded.
+     *
+     * @see com.sun.star.comp.loader.JavaLoader
      */
     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return FactoryHelper.writeRegistryServiceInfo(Connector.class.getName(), __serviceName, regKey);
-    }
-
-
-    protected XMultiServiceFactory _xMultiServiceFactory;
-    protected String               _description;
-    protected String               _mech;
-    protected XConnector           _connector;
-
-
-    /**
-     * Constructs a new <code>SocketConnector</code>,
-     * which uses the given <code>XMultiServiceFactory</code>
-     * as its service manager.
-     * <p>
-     * @param xMultiServiceFactory  the service manager
-     */
-    public Connector(XMultiServiceFactory xMultiServiceFactory) {
-        _xMultiServiceFactory = xMultiServiceFactory;
+        return FactoryHelper.writeRegistryServiceInfo(Connector.class.getName(),
+                                                      __serviceName, regKey);
     }
 
     /**
-     * Connect through the described mechanism to a waiting server.
-     * <p>
-     * The description has the following format:
-     * &lt;interface_type&gt;[,attribute_name=attribute_value]
-     * The interface type is searched for in <code>com.sun.star.lib.connections</code>
-     * <p>
-     * @return  an <code>XConnection</code> to the client
-     * @param   description    the description of the network interface
-     * @see     com.sun.star.connections.XAcceptor
-     * @see     com.sun.star.connections.XConnection
+     * Constructs a new <code>Connector</code> that uses the given service
+     * factory to create a specific <code>XConnector</code>.
+     *
+     * @param serviceFactory the service factory to use.
      */
-    public synchronized XConnection connect(String description)
-        throws com.sun.star.connection.NoConnectException,
-               com.sun.star.connection.ConnectionSetupException,
-               com.sun.star.uno.RuntimeException
+    public Connector(XMultiServiceFactory serviceFactory) {
+        this.serviceFactory = serviceFactory;
+    }
+
+    /**
+     * Connects via the given connection type to a waiting server.
+     *
+     * <p>The connection description has the following format:
+     * <code><var>type</var></code><!--
+     *     -->*(<code><var>key</var>=<var>value</var></code>).
+     * The specific <code>XConnector</code> implementation is instantiated
+     * through the service factory as
+     * <code>com.sun.star.connection.<var>type</var>Connector</code> (with
+     * <code><var>type</var></code> in lower case).</p>
+     *
+     * @param connectionDescription the description of the connection.
+     * @return an <code>XConnection</code> to the server.
+     *
+     * @see com.sun.star.connections.XAcceptor
+     * @see com.sun.star.connections.XConnection
+     */
+    public synchronized XConnection connect(String connectionDescription)
+        throws NoConnectException, ConnectionSetupException
     {
-        if (DEBUG) System.err.println("##### " + getClass().getName() + ".connect:" + description);
-
-        if(_description != null)
-            throw new com.sun.star.connection.ConnectionSetupException(getClass().getName() + ".connect - alread connected");
-
-        _description = description.trim();
-
-        // find mechanism - try old style (e.g.: socket:localhost:6001) first
-        int index = _description.indexOf(':');
-        if(index >= 0) {
-            _mech = _description.substring(0, index);
-            _description = _description.substring(index + 1).trim();
+        if (DEBUG) {
+            System.err.println("##### " + getClass().getName() + ".connect("
+                               + connectionDescription + ")");
         }
-        else { // must be new style (e.g.: socket, name=sdfas, ...)
-            index = _description.indexOf(',');
-            if(index >= 0) { // there are parameters
-                _mech = _description.substring(0, index);
-                _description = _description.substring(index + 1).trim();
-            }
-            else {
-                _mech = description;
-                _description = "";
-            }
+        if (connected) {
+            throw new ConnectionSetupException("already connected");
         }
-        _mech = _mech.trim().toLowerCase();
-
-        try {
-            // try to get a service to which we can delegate
-              _connector = (XConnector)UnoRuntime.queryInterface(XConnector.class, _xMultiServiceFactory.createInstance("com.sun.star.connection.Connector." + _mech));
-        }
-          catch(com.sun.star.uno.Exception exception) {
-            // if this does not work, we a fall back (this is also old style)
-
-            try { // try to find the class in out package structure
-                Class connectorClass = Class.forName("com.sun.star.lib.connections." + _mech + "." + _mech + "Connector");
-                _connector = (XConnector)connectorClass.newInstance();
-            }
-            catch(Exception e) {
-            }
-        }
-
-        if(_connector == null)
-            throw new com.sun.star.connection.ConnectionSetupException(getClass().getName() + ".connect - can not find delegatee:" + _mech);
-
-        return _connector.connect(_description);
+        XConnection con
+            = ((XConnector) Implementation.getConnectionService(
+                   serviceFactory, connectionDescription, XConnector.class,
+                   "Connector")).connect(connectionDescription);
+        connected = true;
+        return con;
     }
-}
 
+    private static final boolean DEBUG = false;
+
+    private final XMultiServiceFactory serviceFactory;
+
+    private boolean connected = false;
+}
