@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hhcwrp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:53:20 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:34:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,11 +172,9 @@ SwHHCWrapper::SwHHCWrapper(
     bIsConvSpecial  = sal_True;
     bIsSelection    = bSelection;
     bInfoBox        = sal_False;
-    bReverse        = sal_False;
-    bStartDone = bOther || ( !bReverse && bStart );
-    bEndDone   = bReverse && bStart && !bOther;
+    bStartDone = bOther || bStart;
+    bEndDone   = sal_False;
     nPageCount = nPageStart = 0;
-    bIsCrsrSelection    = sal_False;
 }
 
 
@@ -194,18 +192,8 @@ SwHHCWrapper::~SwHHCWrapper()
 
 void SwHHCWrapper::GetNextPortion( OUString& /* [out] */ rNextPortion )
 {
-    if (bIsCrsrSelection)
-    {
-        rNextPortion = aConvText;
-        aConvText = OUString();  // make iteraton stop next time
-        //bIsCrsrSelection = sal_False;
-    }
-    else
-    {
-        FindConvText_impl();
-        rNextPortion = aConvText;
-    }
-
+    FindConvText_impl();
+    rNextPortion = aConvText;
     nUnitOffset  = 0;
 
     // build last pos from currently selected text
@@ -217,12 +205,9 @@ void SwHHCWrapper::GetNextPortion( OUString& /* [out] */ rNextPortion )
 void SwHHCWrapper::SelectNewUnit_impl( sal_Int32 nUnitStart, sal_Int32 nUnitEnd )
 {
     SwPaM *pCrsr = rWrtShell.GetCrsr();
-    //DBG_ASSERT( pLastPos, "last pos not set" );
-    //if (pLastPos)
-    {
-        pCrsr->GetPoint()->nContent = nLastPos;
-        pCrsr->DeleteMark();
-    }
+    pCrsr->GetPoint()->nContent = nLastPos;
+    pCrsr->DeleteMark();
+
     rWrtShell.Right( CRSR_SKIP_CHARS, /*bExpand*/ sal_False,
                   (USHORT) (nUnitOffset + nUnitStart), sal_True );
     pCrsr->SetMark();
@@ -362,24 +347,12 @@ void SwHHCWrapper::ReplaceUnit(
 
 void SwHHCWrapper::Convert()
 {
-    if (rWrtShell.HasSelection())
-    {
-        //!! workaround for selected text (works in one paragraph only)
-        String aTxt;
-        rWrtShell.GetSelectedText( aTxt, GETSELTXT_PARABRK_KEEP );
-        xub_StrLen nPos = aTxt.Search( CHAR_PAR_BRK );
-        if (STRING_NOTFOUND != nPos)
-            aTxt.Erase( nPos );
-        aConvText = aTxt;
-        bIsCrsrSelection = sal_True;;
-    }
-
     if ( bIsOtherCntnt )
         ConvStart_impl( SVX_SPELL_OTHER );
     else
     {
-        bStartChk = bReverse;
-        ConvStart_impl( bReverse ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
+        bStartChk = sal_False;
+        ConvStart_impl( SVX_SPELL_BODY_END );
     }
 
     ConvertDocument();
@@ -392,25 +365,13 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
 {
     //! modified version of SvxSpellWrapper::SpellNext
 
-    sal_Bool bActRev = sal_False;
+    // Keine Richtungsaenderung, also ist der gewuenschte Bereich ( bStartChk )
+    // vollstaendig abgearbeitet.
+    if( bStartChk )
+        bStartDone = sal_True;
+    else
+        bEndDone = sal_True;
 
-    // bActRev ist die Richtung nach dem Spellen, bReverse die am Anfang.
-    if( bActRev == bReverse )
-    {                           // Keine Richtungsaenderung, also ist
-        if( bStartChk )         // der gewuenschte Bereich ( bStartChk )
-            bStartDone = sal_True;  // vollstaendig abgearbeitet.
-        else
-            bEndDone = sal_True;
-    }
-    else if( bReverse == bStartChk ) // Bei einer Richtungsaenderung kann
-    {                          // u.U. auch ein Bereich abgearbeitet sein.
-        if( bStartChk )        // Sollte der vordere Teil rueckwaerts gespellt
-            bEndDone = sal_True;   // werden und wir kehren unterwegs um, so ist
-        else                   // der hintere Teil abgearbeitet (und umgekehrt).
-            bStartDone = sal_True;
-    }
-
-    bReverse = bActRev;
     if( bIsOtherCntnt && bStartDone && bEndDone ) // Dokument komplett geprueft?
     {
         bInfoBox = sal_True;
@@ -443,7 +404,7 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
 /*
         //pWin->LeaveWait();
 
-        sal_uInt16 nResId = bReverse ? RID_SVXQB_BW_CONTINUE : RID_SVXQB_CONTINUE;
+        sal_uInt16 nResId = RID_SVXQB_CONTINUE;
         QueryBox aBox( pWin, ResId( nResId, pMgr ) );
         if ( aBox.Execute() != RET_YES )
         {
