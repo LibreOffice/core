@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-11 15:22:18 $
+ *  last change: $Author: mtg $ $Date: 2001-10-16 11:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,9 @@
 #endif
 #ifndef _E3D_SCENE3D_HXX
 #include <svx/scene3d.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -1340,6 +1343,8 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
                                         _pMap, rPropertyName);
         if(pMap)
         {
+            if ( pMap->nFlags & PropertyAttribute::READONLY)
+                throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if(pFmt)
             {
                 const SfxItemSet& rSet = pFmt->GetAttrSet();
@@ -1392,6 +1397,8 @@ Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
                                         _pMap, rPropertyName);
         if(pMap)
         {
+            if ( pMap->nFlags & PropertyAttribute::READONLY)
+                throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if(pMap->nWID < RES_FRMATR_END && pFmt)
             {
                 const SfxPoolItem& rDefItem =
