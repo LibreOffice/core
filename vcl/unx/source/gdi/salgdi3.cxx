@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-06 08:13:36 $
+ *  last change: $Author: cp $ $Date: 2001-04-06 08:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1240,7 +1240,7 @@ void SalGraphicsData::DrawServerFontString(
         pFGlyph[i] = mpServerSideFont->GetGlyphIndex( pStr[i] );
     }
 
-    if ((mpSrvFallbackFont == NULL) || (pDXAry == 0) || (mnOrientation != 0))
+    if ((mpSrvFallbackFont == NULL) || (pDXAry == 0) || (nFontOrientation_ != 0))
     {
         DispatchServerFontString (nX, nY, mpServerSideFont, pFGlyph, nLength, pDXAry);
         return;
