@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jbu $ $Date: 2002-03-07 13:10:16 $
+ *  last change: $Author: jbu $ $Date: 2002-04-30 16:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1424,6 +1424,15 @@ void ImplementationRegistration::registerImplementation(
                 {
                     doRegister(m_xSMgr, m_xCtx, xAct, xRegistry, implLoaderUrl, locationUrl);
                 }
+            }
+            else
+            {
+                OUStringBuffer buf( 128 );
+                buf.appendAscii( "ImplementationRegistration::registerImplementation() - The service " );
+                buf.append( activatorName );
+                buf.appendAscii( " cannot be instantiated\n" );
+                throw CannotRegisterImplementationException(
+                    buf.makeStringAndClear(), Reference< XInterface > () );
             }
         }
         catch( CannotRegisterImplementationException & )
