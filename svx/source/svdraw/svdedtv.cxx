@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:53:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,15 +346,16 @@ void SdrEditView::EndUndo()
 
 void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
 {
-    ForceEdgesOfMarkedNodes();
+    const List& rAllMarkedObjects = GetTransitiveHullOfMarkedObjects();
+//  ForceEdgesOfMarkedNodes();
 
     // #i13033#
     // New mechanism to search for necessary disconnections for
     // changed connectors inside the transitive hull of all at
     // the beginning of UNDO selected objects
-    for(sal_uInt32 a(0L); a < maAllMarkedObjects.Count(); a++)
+    for(sal_uInt32 a(0L); a < rAllMarkedObjects.Count(); a++)
     {
-        SdrEdgeObj* pEdge = PTR_CAST(SdrEdgeObj, (SdrObject*)maAllMarkedObjects.GetObject(a));
+        SdrEdgeObj* pEdge = PTR_CAST(SdrEdgeObj, (SdrObject*)rAllMarkedObjects.GetObject(a));
 
         if(pEdge)
         {
@@ -362,7 +363,7 @@ void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
             SdrObject* pObj2 = pEdge->GetConnectedNode(sal_True);
 
             if(pObj1
-                && LIST_ENTRY_NOTFOUND == maAllMarkedObjects.GetPos(pObj1)
+                && LIST_ENTRY_NOTFOUND == rAllMarkedObjects.GetPos(pObj1)
                 && !pEdge->CheckNodeConnection(sal_False))
             {
                 AddUndo(new SdrUndoGeoObj(*pEdge));
@@ -370,7 +371,7 @@ void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
             }
 
             if(pObj2
-                && LIST_ENTRY_NOTFOUND == maAllMarkedObjects.GetPos(pObj2)
+                && LIST_ENTRY_NOTFOUND == rAllMarkedObjects.GetPos(pObj2)
                 && !pEdge->CheckNodeConnection(sal_True))
             {
                 AddUndo(new SdrUndoGeoObj(*pEdge));
@@ -379,11 +380,11 @@ void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
         }
     }
 
-    ULONG nMarkedEdgeAnz=aMarkedEdgesOfMarkedNodes.GetMarkCount();
+    ULONG nMarkedEdgeAnz = GetMarkedEdgesOfMarkedNodes().GetMarkCount();
     USHORT i;
 
     for (i=0; i<nMarkedEdgeAnz; i++) {
-        SdrMark* pEM=aMarkedEdgesOfMarkedNodes.GetMark(i);
+        SdrMark* pEM = GetMarkedEdgesOfMarkedNodes().GetMark(i);
         SdrObject* pEdgeTmp=pEM->GetObj();
         SdrEdgeObj* pEdge=PTR_CAST(SdrEdgeObj,pEdgeTmp);
         if (pEdge!=NULL) {
@@ -514,8 +515,8 @@ void SdrEditView::CheckPossibilities()
 
     if (bPossibilitiesDirty) {
         ImpResetPossibilityFlags();
-        aMark.ForceSort();
-        ULONG nMarkAnz=aMark.GetMarkCount();
+        SortMarkedObjects();
+        ULONG nMarkAnz=GetMarkedObjectCount();
         if (nMarkAnz!=0) {
             bReverseOrderPossible=nMarkAnz>=2;
 
@@ -525,7 +526,7 @@ void SdrEditView::CheckPossibilities()
             if (nMarkAnz==1) {
                 // bCombinePossible gruendlicher checken
                 // fehlt noch ...
-                const SdrObject* pObj=aMark.GetMark(0)->GetObj();
+                const SdrObject* pObj=GetMarkedObjectByIndex(0);
                 const SdrPathObj* pPath=PTR_CAST(SdrPathObj,pObj);
                 BOOL bGroup=pObj->GetSubList()!=NULL;
                 BOOL bHasText=pObj->GetOutlinerParaObject()!=NULL;
@@ -558,7 +559,7 @@ void SdrEditView::CheckPossibilities()
             if(bGradientAllowed)
             {
                 // gradient depends on fillstyle
-                const SdrMark* pM = aMark.GetMark(0);
+                const SdrMark* pM = GetSdrMarkByIndex(0);
                 const SdrObject* pObj = pM->GetObj();
 
                 // maybe group object, so get merged ItemSet
@@ -588,7 +589,7 @@ void SdrEditView::CheckPossibilities()
             const SdrPageView* pPV0=NULL;
 
             for (ULONG nm=0; nm<nMarkAnz; nm++) {
-                const SdrMark* pM=aMark.GetMark(nm);
+                const SdrMark* pM=GetSdrMarkByIndex(nm);
                 const SdrObject* pObj=pM->GetObj();
                 const SdrPageView* pPV=pM->GetPageView();
                 if (pPV!=pPV0) {
@@ -681,7 +682,7 @@ void SdrEditView::CheckPossibilities()
             // Verschieben von angeklebten Verbindern unterbinden
             // Derzeit nur fuer Einfachselektion implementiert.
             if (nMarkAnz==1) {
-                SdrObject* pObj=aMark.GetMark(0)->GetObj();
+                SdrObject* pObj=GetMarkedObjectByIndex(0);
                 SdrEdgeObj* pEdge=PTR_CAST(SdrEdgeObj,pObj);
                 if (pEdge!=NULL) {
                     SdrObject* pNode1=pEdge->GetConnectedNode(TRUE);
@@ -698,8 +699,8 @@ void SdrEditView::CheckPossibilities()
 void SdrEditView::ForceMarkedObjToAnotherPage()
 {
     BOOL bFlg=FALSE;
-    for (ULONG nm=0; nm<aMark.GetMarkCount(); nm++) {
-        SdrMark* pM=aMark.GetMark(nm);
+    for (ULONG nm=0; nm<GetMarkedObjectCount(); nm++) {
+        SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetObj();
         Rectangle aObjRect(pObj->GetCurrentBoundRect());
         aObjRect+=pM->GetPageView()->GetOffset(); // auf View-Koordinaten
@@ -729,7 +730,7 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
     }
 }
 
-void SdrEditView::DeleteMarked(SdrMarkList& rMark)
+void SdrEditView::DeleteMarked(const SdrMarkList& rMark)
 {
     if (rMark.GetMarkCount()!=0) {
         rMark.ForceSort();
@@ -759,13 +760,13 @@ void SdrEditView::DeleteMarked(SdrMarkList& rMark)
 
 void SdrEditView::DeleteMarkedObj()
 {
-    if (aMark.GetMarkCount()!=0) {
+    if (GetMarkedObjectCount()!=0) {
         nSpecialCnt=0;
         BrkAction();
         HideMarkHdl(NULL);
-        BegUndo(ImpGetResStr(STR_EditDelete),aMark.GetMarkDescription(),SDRREPFUNC_OBJ_DELETE);
-        DeleteMarked(aMark);
-        aMark.Clear();
+        BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_DELETE);
+        DeleteMarked(GetMarkedObjectList());
+        GetMarkedObjectListWriteAccess().Clear();
         aHdl.Clear();
         EndUndo();
         MarkListHasChanged();
@@ -774,15 +775,15 @@ void SdrEditView::DeleteMarkedObj()
 
 void SdrEditView::CopyMarkedObj()
 {
-    aMark.ForceSort();
-    ForceEdgesOfMarkedNodes();
+    SortMarkedObjects();
+    //ForceEdgesOfMarkedNodes();
 
-    SdrMarkList aSourceObjectsForCopy(aMark);
+    SdrMarkList aSourceObjectsForCopy(GetMarkedObjectList());
     // Folgende Schleife Anstatt MarkList::Merge(), damit
     // ich jeweils mein Flag an die MarkEntries setzen kann.
-    ULONG nEdgeAnz=aEdgesOfMarkedNodes.GetMarkCount();
+    ULONG nEdgeAnz = GetEdgesOfMarkedNodes().GetMarkCount();
     for (ULONG nEdgeNum=0; nEdgeNum<nEdgeAnz; nEdgeNum++) {
-        SdrMark aM(*aEdgesOfMarkedNodes.GetMark(nEdgeNum));
+        SdrMark aM(*GetEdgesOfMarkedNodes().GetMark(nEdgeNum));
         aM.SetUser(1);
         aSourceObjectsForCopy.InsertEntry(aM);
     }
@@ -792,7 +793,7 @@ void SdrEditView::CopyMarkedObj()
     // New mechanism to re-create the connections of cloned connectors
     CloneList aCloneList;
 
-    aMark.Clear();
+    GetMarkedObjectListWriteAccess().Clear();
     ULONG nCloneErrCnt=0;
     ULONG nMarkAnz=aSourceObjectsForCopy.GetMarkCount();
     ULONG nm;
@@ -809,8 +810,10 @@ void SdrEditView::CopyMarkedObj()
             // aCopiedObjects.InsertEntry(aME);
             aCloneList.AddPair(pM->GetObj(), pO);
 
-            if (pM->GetUser()==0) { // Sonst war's nur eine mitzukierende Edge
-                aMark.InsertEntry(aME);
+            if (pM->GetUser()==0)
+            {
+                // Sonst war's nur eine mitzukierende Edge
+                GetMarkedObjectListWriteAccess().InsertEntry(aME);
             }
         } else {
             nCloneErrCnt++;
