@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 13:11:58 $
+ *  last change: $Author: oj $ $Date: 2001-08-10 08:10:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,7 +666,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
         sal_Int32 nPos = (*m_aInsertRow)[0];
         m_pFileSet->push_back(nPos);
         clearInsertRow();
-        //  *m_aRow = *m_aInsertRow;
+
         m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
     }
 }
@@ -1370,13 +1370,13 @@ sal_Bool OResultSet::moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData)
     sal_Int32 nNewOffset = _nOffset;
     if(nNewOffset > 0)
     {
-        if((sal_Int32)m_aBookmarksPositions.size() < nNewOffset)
+        if((sal_Int32)m_aBookmarks.size() < nNewOffset)
         {
             // bookmark isn't known yet
             // start at the last position
             sal_Int32 nCurPos = 0,nLastBookmark = 1;
             OFileTable::FilePosition eFilePos = OFileTable::FILE_FIRST;
-            if(m_aBookmarks.size())
+            if(!m_aBookmarks.empty())
             {
                 nLastBookmark   = (*m_aBookmarksPositions.rbegin())->first;
                 nCurPos         = (*m_aBookmarksPositions.rbegin())->second;
@@ -2476,14 +2476,15 @@ void OResultSet::doTableSpecials(const OSQLTable& _xTable)
 // -----------------------------------------------------------------------------
 void OResultSet::clearInsertRow()
 {
+    m_aRow->setDeleted(sal_False); // set to false here because this is the new row
     OValueVector::iterator aIter = m_aInsertRow->begin();
     for(sal_Int32 nPos = 0;aIter != m_aInsertRow->end();++aIter,++nPos)
     {
-        if (aIter->isBound() )
+        if (aIter->isBound())
         {
             (*m_aRow)[nPos] = (*aIter);
         }
-        aIter->setBound(sal_False);
+        aIter->setBound(nPos == 0);
         aIter->setModified(sal_False);
         aIter->setNull();
     }
