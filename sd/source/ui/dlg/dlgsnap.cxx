@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2001-05-16 15:53:32 $
+ *  last change: $Author: cl $ $Date: 2002-05-21 13:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@ SdSnapLineDlg::SdSnapLineDlg(Window* pWindow, const SfxItemSet& rInAttrs,
     eUIUnit(pView->GetDoc()->GetUIUnit()),
     aUIScale(pView->GetDoc()->GetUIScale())
 {
+    aRbPoint.SetModeImage( Image( SdResId( BMP_POINT_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aRbVert.SetModeImage( Image( SdResId( BMP_VERTICAL_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aRbHorz.SetModeImage( Image( SdResId( BMP_HORIZONTAL_H ) ), BMP_COLOR_HIGHCONTRAST );
+
     FreeResource();
 
     aRbHorz.SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));
