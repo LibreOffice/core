@@ -2,9 +2,9 @@
 #
 #   $RCSfile: lang.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: nf $ $Date: 2001-08-07 11:11:39 $
+#   last change: $Author: nf $ $Date: 2001-08-24 07:26:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -227,7 +227,7 @@ LANGEXT=47
 .ENDIF
 .IF "$(solarlang)" == "suom"
 RSCLANG=FINNISH $(IBM_PC_850)
-LANGEXT=05
+LANGEXT=35
 .ENDIF
 .IF "$(solarlang)" == "hung"
 RSCLANG=HUNGARIAN $(IBM_PC_852)
