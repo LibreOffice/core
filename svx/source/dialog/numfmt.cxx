@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-05-29 12:32:24 $
+ *  last change: $Author: er $ $Date: 2001-08-28 12:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,32 +821,12 @@ BOOL SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         String      aFormat = aEdFormat.GetText();
         ULONG nCurKey = pNumFmtShell->GetCurNumFmtKey();
 
-        if ( aIbAdd.IsEnabled()|| pNumFmtShell->IsTmpCurrencyFormat(aFormat) )
-        {
-            ULONG       nErrPos;
-            USHORT      nCatLbSelPos = 0;
-            short       nFmtLbSelPos = SELPOS_NONE;
-            SvxDelStrgs aEntryList;
-            SvxDelStrgs a2EntryList;
-
-            bDataChanged = pNumFmtShell->AddFormat( aFormat, nErrPos,
-                                                    nCatLbSelPos, nFmtLbSelPos,
-                                                    aEntryList );
-
-            pNumFmtShell->SetComment4Entry(nFmtLbSelPos,aEdComment.GetText());
-
-            if(bOneAreaFlag && (nFixedCategory!=nCatLbSelPos))
-            {
-                if(bDataChanged)
-                    DeleteEntryList_Impl(aEntryList);
-                BOOL bDeleted = pNumFmtShell->RemoveFormat( aFormat,
-                                               nCatLbSelPos,
-                                               nFmtLbSelPos,
-                                               a2EntryList);
-                if(bDeleted)
-                    DeleteEntryList_Impl(a2EntryList);
-                bDataChanged=FALSE;
-            }
+        if ( aIbAdd.IsEnabled() || pNumFmtShell->IsTmpCurrencyFormat(aFormat) )
+        {   // #79599# It is not sufficient to just add the format code (or
+            // delete it in case of bOneAreaFlag and resulting category change).
+            // Upon switching tab pages we need all settings to be consistent
+            // in case this page will be redisplayed later.
+            bDataChanged = (ClickHdl_Impl( &aIbAdd ) != 0);
             nCurKey = pNumFmtShell->GetCurNumFmtKey();
         }
         else if(nCurKey == NUMKEY_UNDEFINED)
@@ -1542,9 +1522,14 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, ImageButton*, pIB)
 {
     BOOL        bAdded = FALSE;
     BOOL        bDeleted = FALSE;
+    ULONG       nReturn = 0;
+    const ULONG nReturnChanged  = 0x1;  // THE boolean return value
+    const ULONG nReturnAdded    = 0x2;  // temp: format added
+    const ULONG nReturnOneArea  = 0x4;  // temp: one area but category changed => ignored
 
     if(pIB==&aIbAdd)
-    {
+    {   // Also called from FillItemSet() if a temporary currency format has
+        // to be added, not only if the Add button is enabled.
         String      aFormat = aEdFormat.GetText();
         SvxDelStrgs aEntryList;
         SvxDelStrgs a2EntryList;
@@ -1556,6 +1541,8 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, ImageButton*, pIB)
         bAdded = pNumFmtShell->AddFormat( aFormat, nErrPos,
                                           nCatLbSelPos, nFmtLbSelPos,
                                           aEntryList);
+        if ( bAdded )
+            nReturn |= nReturnChanged | nReturnAdded;
 
         if(pLastActivWindow== (Window *) &aEdComment)
         {
@@ -1582,6 +1569,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, ImageButton*, pIB)
                 if(bDeleted) DeleteEntryList_Impl(a2EntryList);
                 aEdFormat.GrabFocus();
                 aEdFormat.SetSelection( Selection( (short)nErrPos, SELECTION_MAX ) );
+                nReturn |= nReturnOneArea;
             }
             else
             {
@@ -1627,6 +1615,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, ImageButton*, pIB)
             aEdFormat.SetSelection( Selection( (short)nErrPos, SELECTION_MAX ) );
         }
         EditHdl_Impl( &aEdFormat );
+        nReturn = ((nReturn & nReturnOneArea) ? 0 : (nReturn & nReturnChanged));
     }
     else if(pIB==&aIbRemove)
     {
@@ -1691,9 +1680,8 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, ImageButton*, pIB)
             aFtComment.Show();
         }
     }
-    else return 0;
 
-    return 0;
+    return nReturn;
 }
 
 
