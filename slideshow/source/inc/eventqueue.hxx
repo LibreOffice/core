@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventqueue.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:16:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,9 @@
 #endif
 
 #include <queue>
-
 #include <event.hxx>
+
+#include "boost/utility.hpp" // for boost::noncopyable
 
 
 /* Definition of ActivitiesQueue class */
@@ -80,10 +81,12 @@ namespace presentation
         /** This class handles events in a presentation. Events are
             time instants where e.g. effects start.
          */
-        class EventQueue
+        class EventQueue : private ::boost::noncopyable
         {
         public:
-            EventQueue();
+            EventQueue(
+                ::boost::shared_ptr< ::canvas::tools::ElapsedTime >
+                const & pPresTimer );
 
             ~EventQueue();
 
@@ -98,12 +101,15 @@ namespace presentation
                 possible on the queue (typically, this means one event
                 get processed).
 
-                @param pTimeoutForNextCall
-                Timeout in seconds, until the next event is ready. The
-                interval can be used by the caller to perform other
-                tasks. This is permitted to be NULL.
+                @return Timeout in seconds, until the next event is
+                ready. The time returned here is relative to the pres
+                timer (i.e. the timer specified at the EventQueue
+                constructor). When the queue is empty (i.e. isEmpty()
+                returns true), the returned value is the highest
+                representable double value
+                (::std::numeric_limits<double>::max()).
              */
-            void process( double* pTimeoutForNextCall );
+            double process();
 
             /** Query state of the queue
 
@@ -115,11 +121,12 @@ namespace presentation
              */
             void clear();
 
-        private:
-            // default: disabled copy/assignment
-            EventQueue(const EventQueue&);
-            EventQueue& operator=( const EventQueue& );
+            /** Gets the queue's timer object.
+             */
+            ::boost::shared_ptr< ::canvas::tools::ElapsedTime > const &
+            getTimer() const { return mpTimer; }
 
+        private:
             struct EventEntry
             {
                 EventSharedPtr  pEvent;
@@ -131,10 +138,11 @@ namespace presentation
             typedef ::std::priority_queue< EventEntry > ImplQueueType;
 
             ImplQueueType                   maEvents;
+
             // perform timing of events via relative time
             // measurements. The world time starts, when the
             // EventQueue object is created
-            ::canvas::tools::ElapsedTime    maElapsedTime;
+            ::boost::shared_ptr< ::canvas::tools::ElapsedTime > mpTimer;
         };
 
     }
