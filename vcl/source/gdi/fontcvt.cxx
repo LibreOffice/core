@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2001-08-03 16:33:06 $
+ *  last change: $Author: th $ $Date: 2001-08-03 16:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
