@@ -25,6 +25,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\task
 ..\%__SRC%\ucr\udkapi.db %_DEST%\bin%_EXT%\udkapi.rdb
 ..\%__SRC%\ucrdoc\udkapi_doc.db %_DEST%\bin%_EXT%\udkapi_doc.rdb
 
+..\com\sun\star\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star
 ..\com\sun\star\beans\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\beans
 ..\com\sun\star\bridge\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\bridge
 ..\com\sun\star\connection\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\connection
