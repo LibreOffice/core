@@ -14,8 +14,13 @@ OpenOffice.org desktop integration
 %triggerin -- openofficeorg-core01
 # create file in /etc that contains the office installation path
 cat > /tmp/install.$$ << EOF
-sleep 2
-ln -sf \`rpm -q --qf '%{INSTALLPREFIX}' openofficeorg-core01\` /etc/%PREFIX
+while [ "\$TARGET" == "" ]
+do
+  sleep 2
+  TARGET=\`rpm -q --qf '%{INSTALLPREFIX}' openofficeorg-core01 2>&1\` && ln -sf \$TARGET /etc/%PREFIX
+  # some rpm versions do not wait for the shared lock
+  echo \$TARGET | grep '/var/lib/rpm' && TARGET=""
+done
 rm -f /tmp/install.$$
 EOF
 
