@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtsecte.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-09-05 08:32:07 $
+ *  last change: $Author: dvo $ $Date: 2001-11-08 19:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             while ((aOldForward != aOldStack.end()) &&
                    (*aOldForward != *aOld))
             {
-                if (NULL != pRedlineExport)
+                if ( !bAutoStyles && (NULL != pRedlineExport) )
                     pRedlineExport->ExportStartOrEndRedline(*aOldForward,
                                                                 sal_False);
                 pSectionExport->ExportSectionEnd(*aOldForward, bAutoStyles);
@@ -324,7 +324,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             }
             if (aOldForward != aOldStack.end())
             {
-                if (NULL != pRedlineExport)
+                if ( !bAutoStyles && (NULL != pRedlineExport) )
                     pRedlineExport->ExportStartOrEndRedline(*aOldForward,
                                                             sal_False);
                 pSectionExport->ExportSectionEnd(*aOldForward, bAutoStyles);
@@ -335,7 +335,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
         // (order: oldest to newest)
         while (aNew != aNewStack.rend())
         {
-            if (NULL != pRedlineExport)
+            if ( !bAutoStyles && (NULL != pRedlineExport) )
                 pRedlineExport->ExportStartOrEndRedline(*aNew, sal_True);
             pSectionExport->ExportSectionStart(*aNew, bAutoStyles);
             aNew++;
