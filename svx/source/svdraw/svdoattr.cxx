@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-08 15:03:11 $
+ *  last change: $Author: aw $ $Date: 2001-10-26 11:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1258,7 +1258,16 @@ FASTBOOL SdrAttrObj::ImpSetShadowAttributes(ExtOutputDevice& rXOut, FASTBOOL bNo
                 }
 
                 aSet.Put(XFillColorItem(String(),aShadCol));
-                aSet.Put(XFillTransparenceItem(nTransp));
+
+                // #92183# set XFillTransparenceItem only when no FloatTransparence is used,
+                // else the OutDev will use the wrong method
+                if(nTransp)
+                {
+                    const XFillFloatTransparenceItem& rFillFloatTransparence =
+                        (const XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE);
+                    if(!rFillFloatTransparence.IsEnabled())
+                        aSet.Put(XFillTransparenceItem(nTransp));
+                }
             }
 
             rXOut.SetFillAttr(aSet);
