@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: os $ $Date: 2002-10-08 13:18:36 $
+ *  last change: $Author: fme $ $Date: 2002-10-10 14:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1242,10 +1242,15 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             pStr = &aStr;
 
             xub_Unicode cBulletChar = CH_BULLET;
+
             if ( rInf.GetFont() )
             {
+                // Some Asian fonts do not have the middot (0xB7),
+                // others do not have the Asian middot (0xFF65).
+                // Until we find a better solution we do not paint
+                // middots with Asian fonts.
                 if ( SW_CJK == rInf.GetFont()->GetActual() )
-                    cBulletChar = 0xFF65;
+                    cBulletChar = CH_BLANK; // 0xFF65;
             }
 
             for( xub_StrLen i = 0; i < aStr.Len(); ++i )
