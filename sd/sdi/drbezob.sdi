@@ -1,5 +1,5 @@
 
-shell SdDrawBezierObjectBar
+shell BezierObjectBar
 {
     SID_BEZIER_MOVE // ole : no, status : ?
     [
