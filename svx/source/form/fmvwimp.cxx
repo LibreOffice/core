@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-09 09:48:40 $
+ *  last change: $Author: fs $ $Date: 2001-08-22 15:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
+#include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -1126,7 +1129,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     }
     catch(const Exception&)
     {
-        DBG_ERROR("FmXFormView::implCreateFieldControl : catched an exception while creating the control !");
+        DBG_ERROR("FmXFormView::implCreateFieldControl: caught an exception while creating the control !");
         ::comphelper::disposeComponent(xStatement);
     }
 
@@ -1261,9 +1264,11 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
         }
 
         if (_nObjID == OBJ_FM_CHECKBOX)
-            xControlSet->setPropertyValue(FM_PROP_TRISTATE,
-                makeAny(_rxField->getPropertyValue(FM_PROP_ISNULLABLE))
-            );
+        {
+            sal_Int32 nNullable = ColumnValue::NULLABLE_UNKNOWN;
+            _rxField->getPropertyValue( FM_PROP_ISNULLABLE ) >>= nNullable;
+            xControlSet->setPropertyValue( FM_PROP_TRISTATE, makeAny( sal_Bool( ColumnValue::NULLABLE == nNullable ) ) );
+        }
     }
 
     // announce the label to the control
