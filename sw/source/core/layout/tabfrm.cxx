@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:09:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3214,7 +3214,14 @@ BOOL SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReform
             }
             // <--
             SwTwips nTmpHeight = CalcHeightOfFirstContentLine();
-            return nTmpHeight < nSpace;
+
+            // --> FME 2005-01-17 #118840#
+            // For some mysterious reason, I changed the good old
+            // 'return nHeight <= nSpace' to 'return nTmpHeight < nSpace'.
+            // This obviously results in problems with table frames in
+            // sections. Remember: Every twip is sacred.
+            return nTmpHeight <= nSpace;
+            // <--
         }
     }
     return FALSE;
