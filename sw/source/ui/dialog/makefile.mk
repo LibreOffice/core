@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-14 11:15:17 $
+#   last change: $Author: rt $ $Date: 2004-05-21 16:21:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,8 +64,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=dialog
 LIBTARGET=no
-IMGLST_SRS=$(SRS)$/dialog.srs
-BMP_IN=$(PRJ)$/win/imglst
 
 # future: DEMO\dialog.srs
 
