@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-26 09:02:41 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,10 @@
 #endif
 #ifndef _FRMSH_HXX
 #include <frmsh.hxx>
+#endif
+// OD 2004-04-06 #i26791#
+#ifndef _ANCHOREDOBJECT_HXX
+#include <anchoredobject.hxx>
 #endif
 // OD 2004-03-10 #i11860#
 #ifndef _FLOWFRM_HXX
@@ -357,6 +361,7 @@ void SwFrm::CheckDirChange()
                     pBody = ((SwPageFrm*)this)->FindBodyCont();
                     if(pBody && pBody->Lower() && pBody->Lower()->IsColumnFrm())
                         pCol = &((SwPageFrm*)this)->GetFmt()->GetCol();
+
                     SwSortDrawObjs *pObjs = ((SwPageFrm*)this)->GetSortedObjs();
                     if( pObjs )
                     {
@@ -368,22 +373,20 @@ void SwFrm::CheckDirChange()
                             {
                                 SwFlyFrm *pFly =
                                          ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-                                if( pFly->GetAnchor() == this )
+                                if( pFly->GetAnchorFrm() == this )
                                     pFly->CheckDirChange();
                             }
                             else
                             {
-                                const SwDrawContact* pContact =
-                                    (SwDrawContact*)GetUserCall(pObj);
-                                if ( pContact && pContact->GetAnchor() == this )
+                                SwDrawContact* pDrawContact =
+                                    static_cast<SwDrawContact*>(::GetUserCall( pObj ));
+                                if ( pDrawContact &&
+                                     pDrawContact->GetAnchorFrm( pObj ) == this )
                                 {
-                                    // OD 30.06.2003 #108784# - Note: only 'at page'
-                                    // anchored drawing objects are considered here.
-                                    // change anchor position
-                                    pObj->SetAnchorPos( GetFrmAnchorPos( ::HasWrap( pObj ) ) );
-                                    // check if the new position
-                                    // would not exceed the margins of the page
-                                    CaptureDrawObj( *pObj, Frm() );
+                                    // OD 2004-04-06 #i26791# - direct object
+                                    // positioning no longer needed. Instead
+                                    // invalidate
+                                    pDrawContact->GetAnchoredObj( pObj )->InvalidateObjPos();
                                 }
                             }
                         }
@@ -419,31 +422,11 @@ void SwFrm::CheckDirChange()
                     ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->CheckDirChange();
                 else
                 {
-                    // change anchor position
-                    pObj->SetAnchorPos( GetFrmAnchorPos( ::HasWrap( pObj ) ) );
-                    // OD 30.06.2003 #108784# - consider 'virtual' drawing objects:
-                    if ( pObj->ISA(SwDrawVirtObj) )
-                    {
-                        static_cast<SwDrawVirtObj*>(pObj)->AdjustRelativePosToReference();
-                    }
-                    else
-                    {
-                        SwPageFrm* pPage = FindPageFrm();
-                        if ( pPage )
-                        {
-                            // check if the new position
-                            // would not exceed the margins of the page
-                            CaptureDrawObj( *pObj, pPage->Frm() );
-                        }
-                        // OD 30.06.2003 #108784# - correct relative position
-                        // of 'virtual' drawing objects.
-                        SwDrawContact* pDrawContact =
-                            static_cast<SwDrawContact*>(pObj->GetUserCall());
-                        if ( pDrawContact )
-                        {
-                            pDrawContact->CorrectRelativePosOfVirtObjs();
-                        }
-                    }
+                    // OD 2004-04-06 #i26791# - direct object
+                    // positioning no longer needed. Instead
+                    // invalidate
+                    SwContact* pContact = ::GetUserCall( pObj );
+                    pContact->GetAnchoredObj( pObj )->InvalidateObjPos();
                 }
             }
         }
@@ -451,7 +434,7 @@ void SwFrm::CheckDirChange()
 }
 
 /*-----------------13.9.2002 11:11------------------
- * SwFrm::GetAnchorPos(..)
+ * SwFrm::GetFrmAnchorPos(..)
  * returns the position for anchors based on frame direction
  * --------------------------------------------------*/
 // OD 2004-03-10 #i11860# - consider lower space and line spacing of
