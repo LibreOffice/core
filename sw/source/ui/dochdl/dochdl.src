@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:43:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ Bitmap BMP_SW_TEAM_MUGSHOT
 
 String STR_SW_TEAM_NAMES
 {
-    TEXT = "Back row: Aidan Butler, Hans-Peter Burow, Caolán McNamara, Michael Brauer, Martin Maher, Gunnar Timm\nFront row: Thomas Lange, Oliver-Rainer Düsterhöft, Henning Brinkmann, Andreas Martens, Oliver Specht, Frank Meies, Daniel Vogelheim";
+    Text [ x-comment ] = "pb: don't use special characters (like german umlauts) here";
+    Text = "Back row: Aidan Butler, Hans-Peter Burow, Caolan McNamara, Michael Brauer, Martin Maher, Gunnar Timm\nFront row: Thomas Lange, Oliver-Rainer Duesterhoeft, Henning Brinkmann, Andreas Martens, Oliver Specht, Frank Meies, Daniel Vogelheim";
 };
 
