@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:24:26 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -945,9 +945,9 @@ String RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION
     Text[ polish ] = "Editing of a graph";
     Text[ portuguese_brazilian ] = "Editing of a graph";
     Text[ japanese ] = "輪郭エディタ";
-    Text[ korean ] = "윤곽 편집";
+    Text[ korean ] = "여기에서 윤곽을 편집할 수 있습니다.";
     Text[ chinese_simplified ] = "编辑轮廓";
-    Text[ chinese_traditional ] = "編輯輪廓";
+    Text[ chinese_traditional ] = "在此您能夠編輯輪廓。";
     Text[ turkish ] = "Editing of a graph";
     Text[ arabic ] = "Editing of a graph";
     Text[ catalan ] = "Editing of a graph";
@@ -1080,9 +1080,9 @@ String RID_SVXSTR_CHARACTER_SELECTION
     Text[ polish ] = "Special character selection";
     Text[ portuguese_brazilian ] = "Special character selection";
     Text[ japanese ] = "Special character selection";
-    Text[ korean ] = "Special character selection";
+    Text[ korean ] = "특수 문자 선택";
     Text[ chinese_simplified ] = "Special character selection";
-    Text[ chinese_traditional ] = "Special character selection";
+    Text[ chinese_traditional ] = "選擇特殊字元";
     Text[ turkish ] = "Special character selection";
     Text[ arabic ] = "Special character selection";
     Text[ catalan ] = "Special character selection";
@@ -1107,9 +1107,9 @@ String RID_SVXSTR_CHAR_SEL_DESC
     Text[ polish ] = "Select special characters in this area.";
     Text[ portuguese_brazilian ] = "Select special characters in this area.";
     Text[ japanese ] = "Select special characters in this area.";
-    Text[ korean ] = "Select special characters in this area.";
+    Text[ korean ] = "이 영역에서 특수 문자를 선택하십시오.";
     Text[ chinese_simplified ] = "Select special characters in this area.";
-    Text[ chinese_traditional ] = "Select special characters in this area.";
+    Text[ chinese_traditional ] = "在這個區域選擇特殊字元。";
     Text[ turkish ] = "Select special characters in this area.";
     Text[ arabic ] = "Select special characters in this area.";
     Text[ catalan ] = "Select special characters in this area.";
@@ -1135,9 +1135,9 @@ String RID_SVXSTR_CHARACTER_CODE
     Text[ polish ] = "Character code ";
     Text[ portuguese_brazilian ] = "Character code ";
     Text[ japanese ] = "Character code ";
-    Text[ korean ] = "Character code ";
+    Text[ korean ] = "문자 코드";
     Text[ chinese_simplified ] = "Character code ";
-    Text[ chinese_traditional ] = "Character code ";
+    Text[ chinese_traditional ] = "字元碼";
     Text[ turkish ] = "Character code ";
     Text[ arabic ] = "Character code ";
     Text[ catalan ] = "Character code ";
