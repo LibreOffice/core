@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:26:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,6 +557,7 @@ USHORT SwFEShell::GetPageOffset() const
 
 void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt,
                              const BOOL bBefore, const USHORT nId,
+                             const String& rCharacterStyle,
                              const BOOL bCpyBrd )
 {
     //NodeIndex der CrsrPosition besorgen, den Rest kann das Dokument
@@ -631,7 +632,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt,
 
         if( nIdx )
             pFlyFmt = GetDoc()->InsertLabel( eType, rTxt, bBefore, nId,
-                                             nIdx, bCpyBrd );
+                                             nIdx, rCharacterStyle, bCpyBrd );
 
         SwFlyFrm* pFrm;
         const Point aPt( GetCrsrDocPos() );
