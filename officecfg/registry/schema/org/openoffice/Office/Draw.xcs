@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Draw.xcs,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:37:16 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@
 						<desc>Indicates whether to show help lines that can be created by dragging them from the rulers.</desc>
 						<label>Helplines visible</label>
 					</info>
-					<value>true</value>
+					<value>false</value>
 				</prop>
 				<prop oor:name="Guide" oor:type="xs:boolean">
 					<!-- OldPath: Draw/Layout/Display -->
@@ -568,7 +568,7 @@
 						<desc>Indicates whether to snap at snap lines.</desc>
 						<label>Snap lines</label>
 					</info>
-					<value>true</value>
+					<value>false</value>
 				</prop>
 				<prop oor:name="PageMargin" oor:type="xs:boolean">
 					<!-- OldPath: Draw/Snap/Objects -->
@@ -756,7 +756,7 @@
 						<desc>Indicates whether to force frames and drawing elements on grid points.</desc>
 						<label>Snap to grid</label>
 					</info>
-					<value>false</value>
+					<value>true</value>
 				</prop>
 				<prop oor:name="VisibleGrid" oor:type="xs:boolean">
 					<!-- OldPath: Draw/Grid/Options -->
