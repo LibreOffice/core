@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_sdi.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:47:38 $
+#   last change: $Author: obo $ $Date: 2003-09-04 11:58:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,6 +114,7 @@ $(HIDSID$(TNR)PARTICLE): $(MISCX)$/$(SDI$(TNR)NAME).sid
 .ELSE
     @$(TYPE) $(MISCX)$/$(SDI$(TNR)NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
 .ENDIF
+    @+$(RM) $@
     @+$(RENAME) $@.$(ROUT).tmp $@
 
 
