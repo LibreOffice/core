@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:09:02 $
+ *  last change: $Author: fs $ $Date: 2000-10-19 13:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ Resource RSC_DATASOURCE_TYPES
 {
     String STR_CONNTYPES
     {
-        Text = "sdbc:adabas:;jdbc:;sdbc:odbc:;sdbc:dbase:;sdbc:text:" ;
+        Text = "sdbc:adabas:;jdbc:;sdbc:odbc:;sdbc:dbase:;sdbc:flat:file:" ;
     };
     String STR_CONNUINAMES
     {
@@ -137,6 +137,9 @@ String STR_GENERAL_SDB_ERROR
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:09:02  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 26.09.00 08:26:13  fs
  ************************************************************************/
