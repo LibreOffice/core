@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:34:38 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,8 +232,10 @@
 #define STR_HIDDENINFO_CONTINUE_SIGNING     (RID_SFX_DOC_START+118)
 #define STR_HIDDENINFO_CONTINUE_CREATEPDF   (RID_SFX_DOC_START+119)
 
+#define MSG_WARNING_MACRO_ISDISABLED        (RID_SFX_DOC_START+120)
+
 // please update to the last id
-#define ACT_SFX_DOC_END STR_HIDDENINFO_CONTINUE_CREATEPDF
+#define ACT_SFX_DOC_END MSG_WARNING_MACRO_ISDISABLED
 #if ACT_SFX_DOC_END > RID_SFX_DOC_END
 #error resource overflow in #line, #file
 #endif
