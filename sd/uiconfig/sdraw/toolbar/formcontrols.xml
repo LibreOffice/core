@@ -19,8 +19,8 @@
  <toolbar:toolbaritem xlink:href=".uno:ComboBox" toolbar:helpid="helpid:10601" toolbar:text="" toolbar:style="radio auto" />
  <toolbar:toolbaritem xlink:href=".uno:Label" toolbar:helpid="helpid:10597" toolbar:text="" toolbar:style="radio auto" />
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:MoreControls" toolbar:helpid="helpid:11016" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:FormDesignTools" toolbar:helpid="helpid:11017" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:MoreControls" toolbar:helpid="helpid:11045" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:FormDesignTools" toolbar:helpid="helpid:11046" toolbar:text="" />
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:UseWizards" toolbar:helpid="helpid:10727" toolbar:text="" />
 </toolbar:toolbar>
