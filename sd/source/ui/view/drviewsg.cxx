@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:48:32 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
 
     if ( rReq.GetSlot() == SID_IMAP_EXEC )
     {
-        SdrMark* pMark = pDrView->GetMarkList().GetMark(0);
+        SdrMark* pMark = pDrView->GetMarkedObjectList().GetMark(0);
 
         if ( pMark )
         {
@@ -151,7 +151,7 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 
     if( GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
     {
-        const SdrMarkList&  rMarkList = pDrView->GetMarkList();
+        const SdrMarkList&  rMarkList = pDrView->GetMarkedObjectList();
         const SdrObject*    pObj = NULL;
         ULONG               nMarkCount = rMarkList.GetMarkCount();
 
