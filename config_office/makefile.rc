@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: svesik $ $Date: 2000-10-26 21:18:04 $
+#   last change: $Author: svesik $ $Date: 2000-10-31 12:11:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,6 +122,7 @@ RC_SUBDIRS =  \
 	javaunohelper \
 	jtools \
 	jurt \
+	jut \
 	ldapber \
 	lingu \
 	officecfg \
@@ -170,6 +171,7 @@ RC_SUBDIRS =  \
 	vos \
 	wizards \
 	xml2cmp \
+	xmlhelp \
 	xmloff \
 	xprinter
 
@@ -221,7 +223,7 @@ goodies : so3
 i18n : bridges stoc svtools unotools
 idl : tools
 inet : tools ldapber
-instsetoo : UnoControls chaos configmgr cpputools dbaccess desktop eventattacher extensions extras forms framework i18n io remotebridges sax scaddins scp wizards readlicense
+instsetoo : UnoControls chaos configmgr cpputools dbaccess desktop eventattacher extensions extras forms framework i18n io remotebridges sax scaddins scp wizards readlicense xmlhelp
 io : rdbmaker xml2cmp
 javaunohelper : bridges cppuhelper unoil
 jurt : codemaker sandbox
@@ -267,6 +269,7 @@ vcl : rsc sot ucbhelper unotools xprinter
 vos : sal
 wizards : offmgr
 xmloff : lingu
+xmlhelp : jut
 
 # 
 # central target makefile
