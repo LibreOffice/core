@@ -4,7 +4,7 @@ PRJ=..
 .INCLUDE : settings.mk
 .INCLUDE : pyversion.mk
 
-VERSION=0.9.3
+VERSION=0.9.4
 PYDIRNAME=python-$(PYVERSION)
 .IF "$(GUI)"=="WNT"
 INISUFFIX=.ini
@@ -59,7 +59,7 @@ PYRUNTIME_DIRS=\
 
 FILES=\
     $(DESTROOT)$/program$/$(DLLPRE)pyuno$(DLLPOST) 		\
-    $(DESTROOT)$/program$/$(DLLPRE)pythonloader.uno$(DLLPOST)	\
+    $(DESTROOT)$/program$/pythonloader.uno$(DLLPOST)	\
     $(DESTROOT)$/program$/pyuno$(INISUFFIX)			\
     $(DESTROOT)$/program$/uno.py				\
     $(DESTROOT)$/program$/unohelper.py			\
@@ -140,7 +140,7 @@ $(DESTROOT)$/program$/pyuno_setup$(BATCHSUFFIX) : makefile.mk
 $(DESTROOT)$/program$/$(DLLPRE)python$(DLLPOST).$(PYVERSION) : $(SOLARLIBDIR)$/$(DLLPRE)python$(DLLPOST).$(PYVERSION)
     cp $? $@
 
-$(DESTROOT)$/program$/$(DLLPRE)pycpld$(DLLPOST) : $(DLLDEST)$/$(DLLPRE)pycpld$(DLLPOST)
+$(DESTROOT)$/program$/pythonloader.uno$(DLLPOST) : $(DLLDEST)$/pythonloader.uno$(DLLPOST)
     cp $? $@
 
 $(DESTROOT)$/program$/%.py : $(DLLDEST)$/%.py

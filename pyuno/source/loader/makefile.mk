@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2003-04-06 17:15:52 $
+#   last change: $Author: khendricks $ $Date: 2003-05-18 13:31:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,9 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+DLLPRE = 
+
 .INCLUDE :  pyversion.mk
 #-------------------------------------------------------------------
 
@@ -97,14 +100,23 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 SLOFILES=       $(SLO)$/pyuno_loader.obj
 
+#COMPONENTS= \
+#	tcv		\
+#	inv		\
+#	corefl		\
+#	insp		\
+#	invadp		\
+#	proxyfac 	\
+#	pythonloader.uno \
+
 COMPONENTS= \
-    tcv		\
-    inv		\
-    corefl		\
-    insp		\
-    invadp		\
-    proxyfac 	\
-    pythonloader.uno \
+    typeconverter.uno	\
+    invocation.uno		\
+    corereflection.uno	\
+    introspection.uno	\
+    invocadapt.uno		\
+    proxyfac.uno 		\
+    pythonloader.uno
 
 # --- Targets ------------------------------------------------------
 

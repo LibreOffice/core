@@ -1,5 +1,5 @@
 # the path to the office installation (e.g. /home/joe/OpenOffice.org1.1Beta)
-setenv OOOHOME
+setenv OOOHOME /src4/OpenOffice.org1.1Beta2
 
 # don't modify anything beyond these lines
 #---------------------------------------------
