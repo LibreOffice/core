@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:38:56 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,14 +144,14 @@ void lclGetRowFromY(
         nRowH = *aIter;
         if( rnStartH + nRowH > nTwipsY )
         {
-            rnXclRow = aIter.GetPos();
+            rnXclRow = static_cast< sal_uInt16 >( aIter.GetPos() );
             break;
         }
         rnStartH += nRowH;
     }
     if (!aIter)
-        rnXclRow = aIter.GetIterEnd();  // down to the bottom..
-    rnOffset = nRowH ? static_cast< sal_uInt16 >( (nTwipsY - rnStartH) * 256.0 / nRowH + 0.5 ) : 0;
+        rnXclRow = static_cast< sal_uInt16 >( aIter.GetIterEnd() );  // down to the bottom..
+    rnOffset = static_cast< sal_uInt16 >( nRowH ? ((nTwipsY - rnStartH) * 256.0 / nRowH + 0.5) : 0 );
 }
 
 /** Mirrors a rectangle (from LTR to RTL layout or vice versa). */
