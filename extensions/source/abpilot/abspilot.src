@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:14:41 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1255,7 +1255,7 @@ String RID_STR_ABP_SUCCESS
     Text[ portuguese_brazilian ] = "O seu livro de endere�os externo foi registrado no %PRODUCTNAME.\nOs dados dos endere�os podem ser agora utilizados como qualquer outra fonte de dados.";
     Text[ japanese ] = "これで %PRODUCTNAME からアドレス帳データへアクセスできるようになりました。例えば、F4キーを押してデータソースビューを開くと、そこからアドレス帳データにアクセスすることができます。";
     Text[ korean ] = "이제 %PRODUCTNAME에서 사용자의 주소 데이터로 액세스할 수 있습니다.\n예를 들어 F4를 눌러 데이터 원본 보기를 여십시오. 이제 주소 데이터로 원하시는 작업을 할 수 있습니다. ";
-    Text[ chinese_simplified ] = "现在，外来的通讯簿已经成功地登记到 %PRODUCTNAME 里。\n这样，您就能够如同使用任何一个其他的数据源一样随意使用您的通讯簿，例如按 F4 就可以打开数据源。";
+    Text[ chinese_simplified ] = "您可以访问 %PRODUCTNAME 中的地址数据。例如，按 F4 时将打开数据源视图，在该视图中可以使用地址数据。";
     Text[ chinese_traditional ] = "現在您將可以從 %PRODUCTNAME 中存取您的地址資料。例如，按一下 F4 會開啟資料源檢視，您可以使用其中的地址資料。";
     Text[ turkish ] = "�imdi adres verilerinize %PRODUCTNAME i�inden eri�ebilirsiniz.";
     Text[ arabic ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
