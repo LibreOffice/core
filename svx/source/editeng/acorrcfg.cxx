@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acorrcfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:03:14 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ SvxAutoCorrCfg::SvxAutoCorrCfg() :
     for( USHORT n = 0; n < 2; ++n, pS = &sUserPath )
     {
         *pS = sAutoPath.GetToken( n, ';' );
-        INetURLObject aPath( URIHelper::SmartRelToAbs( *pS ));
+        INetURLObject aPath( *pS );
         aPath.insertName( String::CreateFromAscii("acor") );
         *pS = aPath.GetMainURL(INetURLObject::DECODE_TO_IURI);
     }
