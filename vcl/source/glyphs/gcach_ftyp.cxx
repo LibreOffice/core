@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.9 $
- *  last change: $Author: hdu $ $Date: 2001-02-26 10:58:40 $
+ *  $Revision: 1.10 $
+ *  last change: $Author: vg $ $Date: 2001-02-26 16:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,27 +407,6 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
         rTo.mnStrikeoutSize     = Min( 1L, (long)( pOS2->yStrikeoutSize * fScale + 0.5 ) );
         rTo.mnStrikeoutOffset   = (long)( pOS2->yStrikeoutPosition * fScale + 0.5 );
     }
-
-    // TODO: improve these metrics
-    rTo.mnSuperscriptSize   = rTo.mnAscent / 2;
-    rTo.mnSuperscriptOffset = +rTo.mnAscent / 2;
-    rTo.mnSubscriptSize     = rTo.mnAscent / 2;
-    rTo.mnSubscriptOffset   = rTo.mnDescent;
-    rTo.mnUnderlineSize     = 0;    // TODO
-    rTo.mnUnderlineOffset   = rTo.mnDescent;
-    rTo.mnBUnderlineSize    = 0;    // TODO
-
-    rTo.mnBUnderlineOffset  = rTo.mnDescent;
-    rTo.mnDUnderlineSize    = 0;    // TODO
-    rTo.mnDUnderlineOffset1 = rTo.mnDescent;
-    rTo.mnDUnderlineOffset2 = 0;    // TODO
-    rTo.mnWUnderlineSize    = rTo.mnDescent;
-    rTo.mnWUnderlineOffset  = 0;    // TODO
-    rTo.mnBStrikeoutSize    = rTo.mnStrikeoutSize * 2;
-    rTo.mnBStrikeoutOffset  = -rTo.mnStrikeoutOffset;
-    rTo.mnDStrikeoutSize    = rTo.mnStrikeoutSize;
-    rTo.mnDStrikeoutOffset1 = -rTo.mnStrikeoutOffset - rTo.mnStrikeoutSize;
-    rTo.mnDStrikeoutOffset2 = -rTo.mnStrikeoutOffset + rTo.mnStrikeoutSize;
 }
 
 // -----------------------------------------------------------------------
