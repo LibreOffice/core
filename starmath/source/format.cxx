@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:21:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ BOOL SmFormat::operator == (const SmFormat &rFormat) const
 
 SvStream & operator << (SvStream &rStream, const SmFormat &rFormat)
 {
-    //Da hier keinerlei Kompatibilit„t vorgesehen ist muessen wir leider
+    //Da hier keinerlei Kompatibilitaet vorgesehen ist muessen wir leider
     //heftig tricksen. Gluecklicherweise sind offenbar einige Informationen
     //ueberfluessig geworden. In diese quetschen wir jetzt vier neue
     //Einstellungen fuer die Rander.
@@ -370,9 +370,9 @@ SvStream & operator >> (SvStream &rStream, SmFormat &rFormat)
     }
     rFormat.vFont[FNT_MATH].SetSize(aTmp);
 
-    // Für Version 4.0 (und älter) sollen auch die normalen Klammern skalierbar
+    // Fuer Version 4.0 (und aelter) sollen auch die normalen Klammern skalierbar
     // sein und wachsen (so wie es der Fall war), in der 5.0 Version jedoch nicht.
-    // In späteren Versionen (>= 5.1) ist das Verhalten nun durch den Anwender
+    // In spaeteren Versionen (>= 5.1) ist das Verhalten nun durch den Anwender
     // festzulegen (bleibt also wie aus dem Stream gelesen).
     if (rFormat.nVersion < SM_FMT_VERSION_51)
     {
