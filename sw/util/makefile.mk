@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-12 10:19:45 $
+#   last change: $Author: rt $ $Date: 2004-08-23 10:49:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,7 @@ PRJNAME=sw
 TARGET=sw
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
-LIBTARGET=NO
+USE_DEFFILE=TRUE
 
 # --- Settings ------------------------------------------------------------
 
@@ -112,7 +112,7 @@ RESLIB1SRSFILES= \
     $(sw_res_files)
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
-#SHL1VERSIONMAP= $(TARGET).map
+SHL1USE_EXPORTS=ordinal
 SHL1IMPLIB= _$(TARGET)
 SHL1LIBS= $(SLB)$/swall.lib
 
@@ -122,18 +122,11 @@ LIB1OBJFILES= $(OUT)$/slo$/swmodule.obj \
     $(OUT)$/slo$/swdll.obj
 
 LIB1FILES       = \
-                $(LIBPRE) $(SLB)$/core1.lib	\
+        $(LIBPRE) $(SLB)$/core1.lib	\
         $(LIBPRE) $(SLB)$/core2.lib	\
         $(LIBPRE) $(SLB)$/filter.lib	\
         $(LIBPRE) $(SLB)$/ui1.lib	\
         $(LIBPRE) $(SLB)$/ui2.lib
-        
-#SHL1LIBS= \
-#	$(SLB)$/core1.lib\
-#	$(SLB)$/core2.lib\
-#	$(SLB)$/filter.lib\
-#	$(SLB)$/ui1.lib\
-#	$(SLB)$/ui2.lib
 
 .IF "$(OS)"!="MACOSX"
 # static libraries
@@ -174,23 +167,9 @@ SHL1STDLIBS+= $(SCHLIB)
 SHL1STDLIBS+= advapi32.lib
 .ENDIF # WNT
 
-SHL1DEPN=   \
-    $(SLB)$/core1.lib\
-    $(SLB)$/core2.lib\
-    $(SLB)$/filter.lib\
-    $(SLB)$/ui1.lib\
-    $(SLB)$/ui2.lib 
-
-
-#SHL1OBJS= \
-#	$(OUT)$/slo$/swmodule.obj \
-#	$(OUT)$/slo$/swdll.obj
-#	$(SLO)$/.obj		  ^ \ nicht vergessen!
-
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 SHL1BASE=	0x1e000000
-DEF1DEPN        =$(MISC)$/$(SHL1TARGET).flt
 DEF1NAME	=$(SHL1TARGET)
 DEFLIB1NAME=swall
 
@@ -236,24 +215,19 @@ SHL3STDLIBS= \
         $(ISWLIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
-            $(GOODIESLIB) \
             $(SO2LIB) \
+            $(BASICLIB) \
             $(SVTOOLLIB) \
             $(TKLIB) \
             $(VCLLIB) \
             $(SVLLIB) \
-            $(SOTLIB) \
             $(UNOTOOLSLIB) \
             $(TOOLSLIB) \
             $(COMPHELPERLIB) \
             $(UCBHELPERLIB)	\
             $(CPPUHELPERLIB)	\
             $(CPPULIB) \
-            $(VOSLIB) \
-            $(SALLIB) \
-            $(ICUUCLIB)	\
-            $(BASICLIB)	\
-            $(AVMEDIALIB)	
+            $(SALLIB)
             
 SHL3LIBS=   $(SLB)$/swui.lib
 LIB3TARGET = $(SLB)$/swui.lib
@@ -335,20 +309,10 @@ LIB3OBJFILES = \
         $(SLO)$/numpara.obj \
         $(SLO)$/swdialmgr.obj \
         $(SLO)$/swuiidxmrk.obj \
-                $(SLO)$/wordcountdialog.obj
-
-#SHL3OBJS= \
-#        $(SLO)$/swuiexp.obj     \
-#        $(SLO)$/swabstdlg.obj	\
-#        $(SLO)$/swdlgfact.obj
-
+                $(SLO)$/wordcountdialog.obj \
+    $(SLO)$/DropDownFieldDialog.obj \
+    $(SLO)$/macassgn.obj
 
 
 .INCLUDE :  target.mk
-
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @+$(TYPE) sw.flt > $@
 
