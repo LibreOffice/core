@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:25:32 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ ModalDialog DLG_DOC_TEMPLATE
     Text [ italian ] = "Modelli" ;
     Text [ portuguese_brazilian ] = "Editar o modelo do documento" ;
     Text [ portuguese ] = "Modelos de documentos" ;
-    Text [ finnish ] = "Muokkaa asiakirjamallia" ;
+    Text [ finnish ] = "Mallipohjat" ;
     Text [ danish ] = "Dokumentskabeloner" ;
     Text [ french ] = "Modèles de document" ;
     Text [ swedish ] = "Dokumentmallar" ;
@@ -117,6 +117,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ turkish ] = "Yeni belge þablonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nueva plantilla";
+        Text[ finnish ] = "Uusi mallipohja";
     };
     FixedText FT_SECTION
     {
@@ -128,7 +129,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ italian ] = "~Categorie" ;
         Text [ portuguese_brazilian ] = "~Grupos" ;
         Text [ portuguese ] = "~Categorias" ;
-        Text [ finnish ] = "~Ryhmät" ;
+        Text [ finnish ] = "~Luokat" ;
         Text [ danish ] = "Områder" ;
         Text [ french ] = "~Catégories" ;
         Text [ swedish ] = "~Kategorier" ;
@@ -163,7 +164,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ italian ] = "~Modelli" ;
         Text [ portuguese_brazilian ] = "~Modelos" ;
         Text [ portuguese ] = "Modelos" ;
-        Text [ finnish ] = "~Mallit" ;
+        Text [ finnish ] = "~Mallipohjat" ;
         Text [ danish ] = "Skabeloner" ;
         Text [ french ] = "~Modèles" ;
         Text [ swedish ] = "~Mallar" ;
@@ -198,7 +199,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ italian ] = "Modelli" ;
         Text [ portuguese_brazilian ] = "Modelos" ;
         Text [ portuguese ] = "Modelos" ;
-        Text [ finnish ] = "Mallit" ;
+        Text [ finnish ] = "Mallipohjat" ;
         Text [ danish ] = "Skabeloner" ;
         Text [ french ] = "Modèles" ;
         Text [ swedish ] = "Mallar" ;
@@ -260,6 +261,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ turkish ] = "~Düzenle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Editar";
+        Text[ finnish ] = "~Muokkaa";
     };
     PushButton BT_ORGANIZE
     {
@@ -271,7 +273,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ italian ] = "Gestisci..." ;
         Text [ portuguese_brazilian ] = "~Gerenciar..." ;
         Text [ portuguese ] = "~Gerir..." ;
-        Text [ finnish ] = "~Käsittele..." ;
+        Text [ finnish ] = "~Järjestelytyökalu" ;
         Text [ danish ] = "Administrer..." ;
         Text [ french ] = "~Gérer..." ;
         Text [ swedish ] = "~Administrera..." ;
