@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-02 06:43:26 $
+ *  last change: $Author: bmahbod $ $Date: 2000-11-16 19:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,29 +189,102 @@ void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 // -----------------------------------------------------------------------
 
 void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
-{
-    VCLVIEW hView = maGraphicsData.mhDC;
-    if ( hView )
-        VCLGraphics_drawLine( hView, nX1, nY1, nX2, nY2 );
-}
+    {
+        VCLVIEW hView = maGraphicsData.mhDC;
+
+        if ( hView )
+            {
+                VCLGraphics_drawLine ( hView,
+                                       nX1,
+                                       nY1,
+                                       nX2,
+                                       nY2
+                                     );
+            } // if
+    } // SalGraphics::DrawLine
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
-{
-}
+    {
+        VCLVIEW hView = maGraphicsData.mhDC;
+
+        if ( hView )
+            {
+                VCLGraphics_drawRect ( hView,
+                                       nX,
+                                       nY,
+                                       nWidth,
+                                       nHeight
+                                     );
+            } // if
+    } // SalGraphics::DrawRect
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint* pPtAry )
-{
-}
+void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
+    {
+        if  ( nPoints > 1 )
+            {
+                long     i;
+                long     pXPtsArray[nPoints];
+                long     pYPtsArray[nPoints];
+                VCLVIEW  hView = maGraphicsData.mhDC;
+
+                for ( i = 0; i < nPoints; i++ )
+                    {
+                        pXPtsArray[i] = pPtAry[i].mnX;
+                        pYPtsArray[i] = pPtAry[i].mnY;
+                    } // for
+
+                if ( hView )
+                    {
+                        VCLGraphics_drawPolyLine
+                            (
+                                hView,
+                                nPoints,
+                                pXPtsArray,
+                                pYPtsArray
+                            );
+                    } // if
+            } // if
+    } // SalGraphics::DrawPolyLine
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
-{
-}
+    {
+        // Temporary implementation until a proper method
+        // is determined to do a color polygon fill
+
+        // This implementation is identical to that of
+        // method SalGraphics::DrawPolyLine
+
+        if  ( nPoints > 1 )
+            {
+                long     i;
+                long     pXPtsArray[nPoints];
+                long     pYPtsArray[nPoints];
+                VCLVIEW  hView = maGraphicsData.mhDC;
+
+                for ( i = 0; i < nPoints; i++ )
+                    {
+                        pXPtsArray[i] = pPtAry[i].mnX;
+                        pYPtsArray[i] = pPtAry[i].mnY;
+                    } // for
+
+                if ( hView )
+                    {
+                        VCLGraphics_drawPolyLine
+                            (
+                                hView,
+                                nPoints,
+                                pXPtsArray,
+                                pYPtsArray
+                            );
+                    } // if
+            } // if
+    } // SalGraphics::DrawPolygon
 
 // -----------------------------------------------------------------------
 

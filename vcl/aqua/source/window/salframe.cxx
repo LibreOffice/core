@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-16 06:41:23 $
+ *  last change: $Author: bmahbod $ $Date: 2000-11-16 19:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,24 +189,61 @@ void SalFrame::SetIcon( USHORT nIcon )
 // -----------------------------------------------------------------------
 
 void SalFrame::Show( BOOL bVisible )
-{
-    if ( bVisible )
-        VCLWindow_makeKeyAndOrderFront( maFrameData.mhWnd );
-    else
-        VCLWindow_close( maFrameData.mhWnd );
+    {
+        if ( bVisible )
+            {
+                VCLWindow_makeKeyAndOrderFront( maFrameData.mhWnd );
+            } // if
+        else
+            {
+                VCLWindow_close( maFrameData.mhWnd );
+            } // else
 
-    // This is temporary code for testing only and should be removed when
-    // development of the SalObject class is complete. This code allows
-    // us to test our SalGraphics drawing methods.
+        // This is temporary code for testing only and should be removed
+        // when development of the SalObject class is complete. This code
+        // allows us to test our SalGraphics drawing methods.
 
-    // Get this window's cached handle to its native content view
-    VCLVIEW hView = VCLWindow_contentView( maFrameData.mhWnd );
+        // Get this window's cached handle to its native content view
 
-    // Draw a line on the native content view
+        VCLVIEW hView = VCLWindow_contentView ( maFrameData.mhWnd );
 
-    VCLGraphics_drawLine ( hView, 0L, 0L, 1000L, 1000L );
-    VCLGraphics_drawRect ( hView, 75L, 75L, 150L, 150L );
-}
+        // Draw a line on the native content view
+
+        VCLGraphics_drawLine ( hView, 15L, 15L, 150L, 150L );
+
+        // Draw a rectangle on the native content view
+
+        VCLGraphics_drawRect ( hView, 200L, 15L, 100L, 150L );
+
+        // Draw a polygon on the native content view (no color)
+
+        ULONG  nPoints = 7;
+        long   pXPtsAry[nPoints];
+        long   pYPtsAry[nPoints];
+
+        pXPtsAry[0] = 15;
+        pYPtsAry[0] = 250;
+
+        pXPtsAry[1] = 145;
+        pYPtsAry[1] = 250;
+
+        pXPtsAry[2] = 165;
+        pYPtsAry[2] = 200;
+
+        pXPtsAry[3] = 185;
+        pYPtsAry[3] = 250;
+
+        pXPtsAry[4] = 325;
+        pYPtsAry[4] = 250;
+
+        pXPtsAry[5] = 215;
+        pYPtsAry[5] = 320;
+
+        pXPtsAry[6] = 125;
+        pYPtsAry[6] = 320;
+
+        VCLGraphics_drawPolyLine ( hView, nPoints, pXPtsAry, pYPtsAry );
+    } // SalFrame::Show
 
 // -----------------------------------------------------------------------
 
