@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:34:30 $
+ *  last change: $Author: kz $ $Date: 2002-05-02 23:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ chinese_traditional ] = "細節";
         Text[ arabic ] = "��������";
         Text[ turkish ] = "Ayr�nt�lar";
-        Text[ catalan ] = "Detalles";
+        Text[ catalan ] = "Detalls";
         Text[ finnish ] = "Lis�tiedot";
+        Text[ thai ] = "รายละเอียด";
     };
     FixedText FT_ERRORLIST
     {
@@ -162,14 +163,15 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ swedish ] = "~Fellista:";
         Text[ polish ] = "~Lista b��d�w:";
         Text[ portuguese_brazilian ] = "error ~list:";
-        Text[ japanese ] = "ｴﾗｰﾘｽﾄ(~L):";
+        Text[ japanese ] = "エラーリスト(~L):";
         Text[ korean ] = "오류 목록(~L)";
         Text[ chinese_simplified ] = "错误列单(~L)：";
         Text[ chinese_traditional ] = "錯誤清單(~L)：";
         Text[ arabic ] = "����� �������:";
         Text[ turkish ] = "Hata listesi:";
-        Text[ catalan ] = "Lista de ~errores:";
+        Text[ catalan ] = "~Llista d'errors:";
         Text[ finnish ] = "Virhe~luettelo:";
+        Text[ thai ] = " ~รายการผิดพลาด:";
     };
     Control CTL_ERRORLIST
     {
@@ -204,8 +206,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ chinese_traditional ] = "描述(~D)：";
         Text[ arabic ] = "�����:";
         Text[ turkish ] = "A��klama:";
-        Text[ catalan ] = "~Descripci�n:";
+        Text[ catalan ] = "~Descripci�";
         Text[ finnish ] = "~Kuvaus:";
+        Text[ thai ] = "~คำอธิบาย:";
     };
     MultiLineEdit ME_DESCRIPTION
     {
@@ -240,7 +243,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ swedish ] = "Fel";
         Text[ polish ] = "B��d";
         Text[ portuguese_brazilian ] = "Error";
-        Text[ japanese ] = "ｴﾗｰ";
+        Text[ japanese ] = "エラー";
         Text[ korean ] = "오류";
         Text[ chinese_simplified ] = "错误";
         Text[ chinese_traditional ] = "錯誤";
@@ -248,6 +251,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ arabic ] = "���";
         Text[ catalan ] = "Error";
         Text[ finnish ] = "Virhe";
+        Text[ thai ] = "ผิดพลาด";
     };
     String STR_EXCEPTION_WARNING
     {
@@ -271,8 +275,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ chinese_traditional ] = "警告";
         Text[ turkish ] = "Warning";
         Text[ arabic ] = "�����";
-        Text[ catalan ] = "Advertencia";
+        Text[ catalan ] = "Advertiment";
         Text[ finnish ] = "Varoitus";
+        Text[ thai ] = "คำเตือน";
     };
     String STR_EXCEPTION_INFO
     {
@@ -296,8 +301,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ chinese_traditional ] = "資訊";
         Text[ turkish ] = "Bilgi";
         Text[ arabic ] = "�������";
-        Text[ catalan ] = "Informaci�n";
+        Text[ catalan ] = "Informaci�";
         Text[ finnish ] = "Tiedot";
+        Text[ thai ] = "ข้อมูล";
     };
     String STR_EXCEPTION_DETAILS
     {
@@ -316,13 +322,14 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ polish ] = "Szczeg�y";
         Text[ portuguese_brazilian ] = "Details";
         Text[ japanese ] = "詳細";
-        Text[ korean ] = "상세";
+        Text[ korean ] = "자세히";
         Text[ chinese_simplified ] = "细节";
         Text[ chinese_traditional ] = "細節";
         Text[ turkish ] = "Ayr�nt�lar";
         Text[ arabic ] = "������";
-        Text[ catalan ] = "Detalles";
+        Text[ catalan ] = "Detalls";
         Text[ finnish ] = "Lis�tiedot";
+        Text[ thai ] = "รายละเอียด";
     };
     String STR_EXCEPTION_STATUS
     {
@@ -340,14 +347,15 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ swedish ] = "SQL-status";
         Text[ polish ] = "Stan SQL";
         Text[ portuguese_brazilian ] = "SQL State";
-        Text[ japanese ] = "SQL ｽﾃｰﾀｽ";
+        Text[ japanese ] = "SQL ステータス";
         Text[ korean ] = "SQL-상태";
         Text[ chinese_simplified ] = "SQL 状态";
         Text[ chinese_traditional ] = "SQL 狀態";
         Text[ turkish ] = "SQL State";
         Text[ arabic ] = "����SQL";
-        Text[ catalan ] = "Estado SQL";
+        Text[ catalan ] = "Estat de l'SQL";
         Text[ finnish ] = "SQL-tila";
+        Text[ thai ] = "สถานะ SQL ";
     };
     String STR_EXCEPTION_ERRORCODE
     {
@@ -365,14 +373,15 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ swedish ] = "Felkod";
         Text[ polish ] = "Kod b��du";
         Text[ portuguese_brazilian ] = "Error code";
-        Text[ japanese ] = "ｴﾗｰｺｰﾄﾞ";
+        Text[ japanese ] = "エラーコード";
         Text[ korean ] = "오류 코드";
         Text[ chinese_simplified ] = "错误码";
         Text[ chinese_traditional ] = "錯誤碼";
         Text[ turkish ] = "Error code";
         Text[ arabic ] = "��� �����";
-        Text[ catalan ] = "C�digo de error";
+        Text[ catalan ] = "Codi d'error";
         Text[ finnish ] = "Virhekoodi";
+        Text[ thai ] = "รหัสผิดพลาด";
     };
     Text[ portuguese ] = "%PRODUCTNAME Base";
     Text[ russian ] = "%PRODUCTNAME Base";
@@ -393,12 +402,16 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
     Text[ turkish ] = "%PRODUCTNAME Base";
     Text[ arabic ] = "%PRODUCTNAME Base";
     Text[ catalan ] = "%PRODUCTNAME Base";
+    Text[ thai ] = "ฐาน %PRODUCTNAME ";
 };
 
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.32  2002/04/29 08:34:30  oj
+ *  #98772# new resource
+ *
  *  Revision 1.31  2001/11/16 23:05:35  kz
  *  Merge SRC638: 16.11.01 - 23:04:00
  *
