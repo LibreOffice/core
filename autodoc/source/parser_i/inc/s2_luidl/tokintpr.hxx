@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokintpr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,4 +130,3 @@ class TokenInterpreter
 }   // namespace csi
 
 #endif
-
