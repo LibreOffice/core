@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:28:29 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ private:
 
 class EditEngine;
 class SdrTextObj;
+class ScStringCell;
 class ScEditCell;
 class ScPatternAttr;
 
@@ -203,6 +204,23 @@ public:
                             const XclExpRoot& rRoot,
                             sal_Unicode cChar );
 
+    /** Creates a new formatted string from a Calc string cell.
+        @descr  Creates a Unicode string or a byte string, depending on the
+                current BIFF version contained in the passed XclExpRoot object.
+                May create a formatted string object, if the cell text contains
+                different script types.
+        @param rStringCell  The Calc string cell object.
+        @param pCellAttr  The set item containing the cell formatting.
+        @param nFlags  Modifiers for string export.
+        @param nMaxLen  The maximum number of characters to store in this string.
+        @return  The new string object (shared pointer). */
+    static XclExpStringRef CreateCellString(
+                            const XclExpRoot& rRoot,
+                            const ScStringCell& rStringCell,
+                            const ScPatternAttr* pCellAttr,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
+
     /** Creates a new formatted string from a Calc edit cell.
         @descr  Creates a Unicode string or a byte string, depending on the
                 current BIFF version contained in the passed XclExpRoot object.
@@ -212,7 +230,7 @@ public:
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string.
         @return  The new string object (shared pointer). */
-    static XclExpStringRef CreateString(
+    static XclExpStringRef CreateCellString(
                             const XclExpRoot& rRoot,
                             const ScEditCell& rEditCell,
                             const ScPatternAttr* pCellAttr,
