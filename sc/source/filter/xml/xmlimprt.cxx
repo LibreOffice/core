@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-05 09:12:43 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ using namespace ::xmloff::token;
 
 OUString SAL_CALL ScXMLImport_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLImporter" ) );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLOasisImporter" ) );
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw()
@@ -216,7 +216,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
 
 OUString SAL_CALL ScXMLImport_Meta_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLMetaImporter" ) );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLOasisMetaImporter" ) );
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Meta_getSupportedServiceNames() throw()
@@ -236,7 +236,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Meta_createInstance(
 
 OUString SAL_CALL ScXMLImport_Styles_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLStylesImporter" ) );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLOasisStylesImporter" ) );
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Styles_getSupportedServiceNames() throw()
@@ -256,7 +256,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Styles_createInstance(
 
 OUString SAL_CALL ScXMLImport_Content_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLContentImporter" ) );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLOasisContentImporter" ) );
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Content_getSupportedServiceNames() throw()
@@ -271,12 +271,12 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Content_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META|IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS);
-    return (cppu::OWeakObject*)new ScXMLImport( rSMgr, IMPORT_META|IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS);
+    return (cppu::OWeakObject*)new ScXMLImport( rSMgr, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS);
 }
 
 OUString SAL_CALL ScXMLImport_Settings_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLSettingsImporter" ) );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLOasisSettingsImporter" ) );
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Settings_getSupportedServiceNames() throw()
@@ -501,7 +501,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTableRowAttrTokenMap[] =
 static __FAR_DATA SvXMLTokenMapEntry aTableRowCellTokenMap[] =
 {
     { XML_NAMESPACE_TEXT,   XML_P,                  XML_TOK_TABLE_ROW_CELL_P                    },
-    { XML_NAMESPACE_TABLE,  XML_SUB_TABLE,          XML_TOK_TABLE_ROW_CELL_SUBTABLE             },
+    { XML_NAMESPACE_TABLE,  XML_SUB_TABLE,          XML_TOK_TABLE_ROW_CELL_TABLE                },
     { XML_NAMESPACE_OFFICE, XML_ANNOTATION,         XML_TOK_TABLE_ROW_CELL_ANNOTATION           },
     { XML_NAMESPACE_TABLE,  XML_DETECTIVE,          XML_TOK_TABLE_ROW_CELL_DETECTIVE            },
     { XML_NAMESPACE_TABLE,  XML_CELL_RANGE_SOURCE,  XML_TOK_TABLE_ROW_CELL_CELL_RANGE_SOURCE    },
@@ -895,6 +895,43 @@ ScXMLDocContext_Impl::~ScXMLDocContext_Impl()
 {
 }
 
+class ScXMLBodyContext_Impl : public SvXMLImportContext
+{
+    const ScXMLImport& GetScImport() const
+        { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+public:
+
+    ScXMLBodyContext_Impl( ScXMLImport& rImport, sal_uInt16 nPrfx,
+                const OUString& rLName,
+                const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+    virtual ~ScXMLBodyContext_Impl();
+
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+                const OUString& rLocalName,
+                const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+};
+
+ScXMLBodyContext_Impl::ScXMLBodyContext_Impl( ScXMLImport& rImport,
+                sal_uInt16 nPrfx, const OUString& rLName,
+                const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
+    SvXMLImportContext( rImport, nPrfx, rLName )
+{
+}
+
+ScXMLBodyContext_Impl::~ScXMLBodyContext_Impl()
+{
+}
+
+SvXMLImportContext *ScXMLBodyContext_Impl::CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    return GetScImport().CreateBodyContext( rLocalName, xAttrList );
+}
+
 SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
                                      const rtl::OUString& rLocalName,
                                      const uno::Reference<xml::sax::XAttributeList>& xAttrList )
@@ -932,7 +969,8 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
         break;
     case XML_TOK_DOC_BODY:
         if (GetScImport().getImportFlags() & IMPORT_CONTENT)
-            pContext = GetScImport().CreateBodyContext( rLocalName, xAttrList );
+            pContext = new ScXMLBodyContext_Impl( GetScImport(), nPrefix,
+                                              rLocalName, xAttrList );
         break;
     case XML_TOK_DOC_SETTINGS:
         if (GetScImport().getImportFlags() & IMPORT_SETTINGS)
@@ -1947,6 +1985,32 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
         if (xMultiServiceFactory.is())
         {
+            sal_Int32 nCount(aConfigProps.getLength());
+            rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("TrackedChangesProtectionKey"));
+            for (sal_Int32 i = nCount - 1; i >= 0; --i)
+            {
+                if (aConfigProps[i].Name == sName)
+                {
+                    rtl::OUString sKey;
+                    if (aConfigProps[i].Value >>= sKey)
+                    {
+                        uno::Sequence<sal_Int8> aPass;
+                        SvXMLUnitConverter::decodeBase64(aPass, sKey);
+                        if (aPass.getLength())
+                        {
+                            if (pDoc->GetChangeTrack())
+                                pDoc->GetChangeTrack()->SetProtection(aPass);
+                            else
+                            {
+                                StrCollection aUsers;
+                                ScChangeTrack* pTrack = new ScChangeTrack(pDoc, aUsers);
+                                pTrack->SetProtection(aPass);
+                                pDoc->SetChangeTrack(pTrack);
+                            }
+                        }
+                    }
+                }
+            }
             uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.SpreadsheetSettings")));
             uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
             if (xProperties.is())
@@ -2160,7 +2224,7 @@ void ScXMLImport::SetStyleToRanges()
             else
             {
                 uno::Any aStyleName;
-                aStyleName <<= sPrevStyleName;
+                aStyleName <<= GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, sPrevStyleName );
                 xProperties->setPropertyValue(sCellStyle, aStyleName);
                 sal_Int32 nNumberFormat(GetStyleNumberFormats()->GetStyleNumberFormat(sPrevStyleName));
                 sal_Bool bInsert(nNumberFormat == -1);
