@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slot.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-17 12:53:07 $
+ *  last change: $Author: mba $ $Date: 2002-04-18 14:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1932,6 +1932,7 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
     WriteBool( GetHasCoreId(), rStrm );
     WriteBool( GetHasDialog(), rStrm );
     WriteBool( GetReadOnlyDoc(), rStrm );
+    WriteBool( GetImageRotation(), rStrm );
 
     rStrm << GetDisableFlags().GetBuffer() << ',';
 
@@ -1943,10 +1944,14 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
     WriteBool( GetToggle(), rStrm );
     WriteBool( GetReadonly(), rStrm );
     WriteBool( GetExport(), rStrm );
-    if( GetRecordPerSet() )
-        rStrm << "RecordPerSet" << ',';
-    else
+    if( GetRecordPerItem() )
         rStrm << "RecordPerItem" << ',';
+    else if ( GetNoRecord() )
+        rStrm << "NoRecord" << ',';
+    else if ( GetRecordManual() )
+        rStrm << "RecordManual" << ',';
+    else
+        rStrm << "RecordPerSet" << ',';
 
     WriteBool( GetRecordAbsolute(), rStrm );
 
