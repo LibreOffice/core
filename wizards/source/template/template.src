@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-19 12:03:10 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 21:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ String STYLES + 2
 {
     Text = "&Abbrechen";
     Text[English] = "Cancel";
-    Text[ english_us ] = "Cancel";
+    Text[ english_us ] = "&Cancel";
     Text[ portuguese ] = "Cancelar";
     Text[ russian ] = "Отмена";
     Text[ greek ] = "&Бкэсщуз";
@@ -197,7 +197,7 @@ String STYLES + 3
 {
     Text = "&OK";
     Text[English] = "OK";
-    Text[ english_us ] = "OK";
+    Text[ english_us ] = "&OK";
     Text[ portuguese ] = "OK";
     Text[ russian ] = "OK";
     Text[ greek ] = "&OK";
@@ -478,7 +478,7 @@ String TextField
 {
     Text = "Benutzerdatenfeld ist nicht definiert!";
     Text[English] = "Textfield is not defined!";
-    Text[ english_us ] = "Textfield is not defined!";
+    Text[ english_us ] = "User data field is not defined!";
     Text[ language_user1 ] = "Mitteilung in einer Messagebox";
 
     Text[ portuguese ] = "Textfield is not defined!";
