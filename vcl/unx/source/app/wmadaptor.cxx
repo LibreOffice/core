@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 16:53:24 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ struct WMAdaptorProtocol
  */
 static const WMAdaptorProtocol aProtocolTab[] =
 {
+    { "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE", WMAdaptor::KDE_NET_WM_WINDOW_TYPE_OVERRIDE },
     { "_NET_CURRENT_DESKTOP", WMAdaptor::NET_CURRENT_DESKTOP },
     { "_NET_NUMBER_OF_DESKTOPS", WMAdaptor::NET_NUMBER_OF_DESKTOPS },
     { "_NET_WM_ICON_NAME", WMAdaptor::NET_WM_ICON_NAME },
@@ -203,6 +204,7 @@ static const WMAdaptorProtocol aAtomTab[] =
     { "_MOTIF_WM_HINTS", WMAdaptor::MOTIF_WM_HINTS },
     { "WM_PROTOCOLS", WMAdaptor::WM_PROTOCOLS },
     { "WM_DELETE_WINDOW", WMAdaptor::WM_DELETE_WINDOW },
+    { "WM_TAKE_FOCUS", WMAdaptor::WM_TAKE_FOCUS },
     { "WM_SAVE_YOURSELF", WMAdaptor::WM_SAVE_YOURSELF },
     { "WM_COMMAND", WMAdaptor::WM_COMMAND },
     { "WM_CLIENT_LEADER", WMAdaptor::WM_CLIENT_LEADER },
@@ -484,7 +486,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "supported protocols:\n" );
 #endif
-                for( int i = 0; i < nItems; i++ )
+                for( unsigned int i = 0; i < nItems; i++ )
                 {
                     int nProtocol = -1;
                     WMAdaptorProtocol aSearch;
@@ -551,7 +553,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                                        &nBytesLeft,
                                        &pProperty
                                        ) == 0
-                && nItems == 4*m_nDesktops
+                && nItems == 4*(unsigned)m_nDesktops
                 )
             {
                 m_aWMWorkAreas = ::std::vector< Rectangle > ( m_nDesktops );
@@ -567,7 +569,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                     if( aWorkArea != m_aWMWorkAreas[0] )
                         m_bEqualWorkAreas = false;
 #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "workarea %d: %dx%d+%d+%d\n",
+                    fprintf( stderr, "workarea %d: %ldx%ld+%ld+%ld\n",
                              i,
                              m_aWMWorkAreas[i].GetWidth(),
                              m_aWMWorkAreas[i].GetHeight(),
@@ -579,7 +581,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             else
             {
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "%d workareas for %d desktops !\n", nItems/4, m_nDesktops );
+                fprintf( stderr, "%ld workareas for %d desktops !\n", nItems/4, m_nDesktops );
 #endif
                 if( pProperty )
                 {
@@ -736,7 +738,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "supported protocols:\n" );
 #endif
-                for( int i = 0; i < nItems; i++ )
+                for( unsigned int i = 0; i < nItems; i++ )
                 {
                     int nProtocol = -1;
                     WMAdaptorProtocol aSearch;
@@ -968,7 +970,7 @@ bool GnomeWMAdaptor::isValid() const
 void WMAdaptor::initAtoms()
 {
     // get basic atoms
-    for( int i = 0; i < sizeof( aAtomTab )/sizeof( aAtomTab[0] ); i++ )
+    for( unsigned int i = 0; i < sizeof( aAtomTab )/sizeof( aAtomTab[0] ); i++ )
         m_aWMAtoms[ aAtomTab[i].nProtocol ] = XInternAtom( m_pDisplay, aAtomTab[i].pProtocol, False );
     m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ]   = XInternAtom( m_pDisplay, "_NET_SUPPORTING_WM_CHECK", True );
     m_aWMAtoms[ NET_WM_NAME ]               = XInternAtom( m_pDisplay, "_NET_WM_NAME", True );
@@ -1388,9 +1390,11 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
         unsigned long status;
     } aHint;
 
-    aHint.flags = 7; /* flags for functions, decoration and input mode */
+    aHint.flags = 15; /* flags for functions, decoration, input mode and status */
     aHint.deco = 0;
     aHint.func = 1L << 2;
+    aHint.status = 0;
+    aHint.input_mode = 0;
 
     // evaluate decoration flags
     if( nDecorationFlags & decoration_All )
@@ -1417,7 +1421,6 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
             aHint.input_mode = 1;
             break;
         default:
-            aHint.input_mode = 0;
             break;
     }
 
@@ -1471,21 +1474,37 @@ void NetWMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType 
     // set NET_WM_WINDOW_TYPE
     if( m_aWMAtoms[ NET_WM_WINDOW_TYPE ] )
     {
-        WMAtom eWMType;
+        Atom aWindowTypes[4];
+        int nWindowTypes = 0;
         switch( eType )
         {
             case windowType_Utility:
-                eWMType = m_aWMAtoms[ NET_WM_WINDOW_TYPE_UTILITY ] ? NET_WM_WINDOW_TYPE_UTILITY : NET_WM_WINDOW_TYPE_DIALOG;
+                aWindowTypes[nWindowTypes++] =
+                    m_aWMAtoms[ NET_WM_WINDOW_TYPE_UTILITY ] ?
+                    m_aWMAtoms[ NET_WM_WINDOW_TYPE_UTILITY ] :
+                    m_aWMAtoms[ NET_WM_WINDOW_TYPE_DIALOG ];
                 break;
             case windowType_ModelessDialogue:
             case windowType_ModalDialogue:
-                eWMType = NET_WM_WINDOW_TYPE_DIALOG;
+                aWindowTypes[nWindowTypes++] =
+                    m_aWMAtoms[ NET_WM_WINDOW_TYPE_DIALOG ];
                 break;
             case windowType_Splash:
-                eWMType = m_aWMAtoms[ NET_WM_WINDOW_TYPE_SPLASH ] ? NET_WM_WINDOW_TYPE_SPLASH : NET_WM_WINDOW_TYPE_NORMAL;
+                aWindowTypes[nWindowTypes++] =
+                    m_aWMAtoms[ NET_WM_WINDOW_TYPE_SPLASH ] ?
+                    m_aWMAtoms[ NET_WM_WINDOW_TYPE_SPLASH ] :
+                    m_aWMAtoms[ NET_WM_WINDOW_TYPE_NORMAL ];
+                break;
+            case windowType_Toolbar:
+                if( m_aWMAtoms[ KDE_NET_WM_WINDOW_TYPE_OVERRIDE ] )
+                    aWindowTypes[nWindowTypes++] = m_aWMAtoms[ KDE_NET_WM_WINDOW_TYPE_OVERRIDE ];
+                aWindowTypes[nWindowTypes++] =
+                    m_aWMAtoms[ NET_WM_WINDOW_TYPE_TOOLBAR ] ?
+                    m_aWMAtoms[ NET_WM_WINDOW_TYPE_TOOLBAR ] :
+                    m_aWMAtoms[ NET_WM_WINDOW_TYPE_NORMAL];
                 break;
             default:
-                eWMType = NET_WM_WINDOW_TYPE_NORMAL;
+                aWindowTypes[nWindowTypes++] = m_aWMAtoms[ NET_WM_WINDOW_TYPE_NORMAL ];
                 break;
         }
         XChangeProperty( m_pDisplay,
@@ -1493,9 +1512,9 @@ void NetWMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType 
                          m_aWMAtoms[ NET_WM_WINDOW_TYPE ],
                          XA_ATOM,
                          32,
-                             PropModeReplace,
-                         (unsigned char*)&m_aWMAtoms[ eWMType ],
-                         1 );
+                         PropModeReplace,
+                         (unsigned char*)aWindowTypes,
+                         nWindowTypes );
     }
     if( ( eType == windowType_ModalDialogue ||
           eType == windowType_ModelessDialogue )
@@ -1541,7 +1560,7 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
         {
             Point aMed( aTL.X() + rGeom.nWidth/2, aTL.Y() + rGeom.nHeight/2 );
             const std::vector< Rectangle >& rScreens = m_pSalDisplay->GetXineramaScreens();
-            for( int i = 0; i < rScreens.size(); i++ )
+            for( unsigned int i = 0; i < rScreens.size(); i++ )
                 if( rScreens[i].IsInside( aMed ) )
                 {
                     aTL += rScreens[i].TopLeft();
@@ -1862,8 +1881,9 @@ void GnomeWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) cons
  */
 void WMAdaptor::changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame* pReferenceFrame ) const
 {
-    if( ! ( pFrame->nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) )
+    if( ! ( pFrame->nStyle_ & SAL_FRAME_STYLE_CHILD )
         && ! pFrame->IsOverrideRedirect()
+        && ! pFrame->IsFloatGrabWindow()
         )
     {
         XLIB_Window aTransient = pFrame->pDisplay_->GetRootWindow();
