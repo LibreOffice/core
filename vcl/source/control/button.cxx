@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-04 18:17:19 $
+ *  last change: $Author: pl $ $Date: 2002-07-08 16:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2701,8 +2701,10 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
         rFocusRect.Right()++;
 
         rMouseRect.Left()   = rPos.X();
-        rStateRect.Left()   = rPos.X();
-        rStateRect.Top()    = rMouseRect.Top();
+        // add 1 so that checkboxes with and without text are aligned
+        rStateRect.Left()   = rPos.X()+1;
+        rStateRect.Top()    = rMouseRect.Top()+1;
+
         long nTextHeight = GetTextHeight();
         if ( nTextHeight > rImageSize.Height() )
             rStateRect.Top() += (nTextHeight-rImageSize.Height())/2;
@@ -2716,27 +2718,24 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
         if ( nWinStyle & WB_CENTER )
             rStateRect.Left() = rPos.X()+((rSize.Width()-rImageSize.Width())/2);
         else if ( nWinStyle & WB_RIGHT )
-            rStateRect.Left() = rPos.X()+rSize.Width()-rImageSize.Width(); //-1;
+            rStateRect.Left() = rPos.X()+rSize.Width()-rImageSize.Width()-1;
         else
-            rStateRect.Left() = rPos.X(); //+1;
+            rStateRect.Left() = rPos.X()+1;
         if ( nWinStyle & WB_VCENTER )
             rStateRect.Top() = rPos.Y()+((rSize.Height()-rImageSize.Height())/2);
         else if ( nWinStyle & WB_BOTTOM )
-            rStateRect.Top() = rPos.Y()+rSize.Height()-rImageSize.Height(); //-1;
+            rStateRect.Top() = rPos.Y()+rSize.Height()-rImageSize.Height()-1;
         else
-            rStateRect.Top() = rPos.Y(); //+1;
+            rStateRect.Top() = rPos.Y()+1;
         rStateRect.Right()  = rStateRect.Left()+rImageSize.Width()-1;
         rStateRect.Bottom() = rStateRect.Top()+rImageSize.Height()-1;
         rMouseRect          = rStateRect;
-        rFocusRect          = Rectangle();
-/*  und oben -1, da CalcSize() auch Focus-Rechteck nicht mit einrechnet,
-da im Writer ansonsten die Images noch weiter oben haengen
+
         rFocusRect          = rStateRect;
-        rFocusRect.Left()--;
-        rFocusRect.Top()--;
-        rFocusRect.Right()++;
-        rFocusRect.Bottom()++;
-*/
+        rFocusRect.Left()  -= 1;
+        rFocusRect.Top()   -= 1;
+        rFocusRect.Right() += 1;
+        rFocusRect.Bottom()+= 1;
     }
 }
 
@@ -2755,9 +2754,9 @@ void CheckBox::ImplDrawCheckBox( bool bLayout )
               bLayout );
     if( !bLayout )
     {
+        ImplDrawCheckBoxState();
         if ( HasFocus() && !maFocusRect.IsEmpty() )
             ShowFocus( maFocusRect );
-        ImplDrawCheckBoxState();
     }
 }
 
@@ -3164,7 +3163,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, USHORT nFlags )
          (pSVData->maCtrlData.mnCheckStyle != nStyle) ||
          (pSVData->maCtrlData.mnLastCheckFColor != rStyleSettings.GetFaceColor().GetColor()) ||
          (pSVData->maCtrlData.mnLastCheckWColor != rStyleSettings.GetWindowColor().GetColor()) ||
-         (pSVData->maCtrlData.mnLastCheckWTextColor != rStyleSettings.GetWindowTextColor().GetColor()) ||
+//         (pSVData->maCtrlData.mnLastCheckWTextColor != rStyleSettings.GetWindowTextColor().GetColor()) ||
          (pSVData->maCtrlData.mnLastCheckLColor != rStyleSettings.GetLightColor().GetColor()) )
     {
         if ( pSVData->maCtrlData.mpCheckImgList )
@@ -3172,7 +3171,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, USHORT nFlags )
 
         pSVData->maCtrlData.mnLastCheckFColor = rStyleSettings.GetFaceColor().GetColor();
         pSVData->maCtrlData.mnLastCheckWColor = rStyleSettings.GetWindowColor().GetColor();
-        pSVData->maCtrlData.mnLastCheckWTextColor = rStyleSettings.GetWindowTextColor().GetColor();
+//        pSVData->maCtrlData.mnLastCheckWTextColor = rStyleSettings.GetWindowTextColor().GetColor();
         pSVData->maCtrlData.mnLastCheckLColor = rStyleSettings.GetLightColor().GetColor();
 
         long    aTempAry1[(6*sizeof(Color))/sizeof(long)];
@@ -3253,6 +3252,8 @@ Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
     }
     else
     {
+        // is this still correct ? since the checkbox now
+        // shows a focus rect it should be 2 pixels wider and longer
 /* da ansonsten im Writer die Control zu weit oben haengen
         aSize.Width() += 2;
         aSize.Height() += 2;
