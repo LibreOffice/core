@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-27 12:08:41 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,8 @@
 #define STATE_BREAKHELP 0x0008
 #define STATE_UNMERGE   0x0009
 #define STATE_UTF8      0x000A
-#define STATE_LANGUAGES 0x000B
+#define STATE_ULF       0x000B
+#define STATE_LANGUAGES 0x000C
 
 // set of global variables
 ByteString sInputFile;
@@ -82,6 +83,7 @@ BOOL bEnableExport;
 BOOL bMergeMode;
 BOOL bErrorLog;
 BOOL bUTF8;
+BOOL bULF; // ULF = Unicode Language File
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sOutputFile;
@@ -95,6 +97,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
     bMergeMode = FALSE;
     bErrorLog = TRUE;
     bUTF8 = TRUE;
+    bULF = FALSE;
     sPrj = "";
     sPrjRoot = "";
     Export::sLanguages = "";
@@ -130,6 +133,10 @@ BOOL ParseCommandLine( int argc, char* argv[])
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-NOUTF8" ) {
             nState = STATE_UTF8;
             bUTF8 = FALSE;
+        }
+        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-ULF" ) {
+            nState = STATE_ULF;
+            bULF = TRUE;
         }
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-L" ) {
             nState = STATE_LANGUAGES;
@@ -186,7 +193,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
 void Help()
 /*****************************************************************************/
 {
-    fprintf( stdout, "Syntax:LNGEX[-p Prj][-r PrjRoot]-i FileIn -o FileOut[-m DataBase][-e][-b][-u][-NOUTF8][-L l1,l2,...]\n" );
+    fprintf( stdout, "Syntax:LNGEX[-p Prj][-r PrjRoot]-i FileIn -o FileOut[-m DataBase][-e][-b][-u][-NOUTF8][-ULF][-L l1,l2,...]\n" );
     fprintf( stdout, " Prj:      Project\n" );
     fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
     fprintf( stdout, " FileIn:   Source file (*.lng)\n" );
@@ -196,6 +203,7 @@ void Help()
     fprintf( stdout, " -b: no function\n" );
     fprintf( stdout, " -u: no function\n" );
     fprintf( stdout, " -NOUTF8: disable UTF8 as language independent encoding\n" );
+    fprintf( stdout, " -ULF: enables Unicode Language File format, leads to UTF8 encoded version of lng files" );
     fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (01,33,46,49...)\n" );
     fprintf( stdout, "     A fallback language can be defined like this: l1=f1.\n" );
     fprintf( stdout, "     f1, f2,... are also elements of (01,33,46,49...)\n" );
@@ -222,7 +230,7 @@ int _cdecl main( int argc, char *argv[] )
     fprintf( stdout, "\nProcessing File %s ...\n", sInputFile.GetBuffer());
 
     if ( sOutputFile.Len()) {
-        LngParser aParser( sInputFile, bUTF8 );
+        LngParser aParser( sInputFile, bUTF8, bULF );
         if ( bMergeMode )
             aParser.Merge( sMergeSrc, sOutputFile );
         else
