@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Database.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-04-20 11:39:08 $
+ *  last change: $Author: tl $ $Date: 2002-07-10 11:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ service Database
      can be the name of a data base table, a data query or a statement.
      (0 = table, 1 = query, 2 = statement)
      */
-    [property]  short CommandType;
+    [property]  long CommandType;
     //------------------------------------------------------------------------
     /** contains the command string. Depending on the CommandType property this
      can be the name of a data base table, a data query or a statement.
