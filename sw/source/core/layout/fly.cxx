@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1320,7 +1320,14 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
     ColUnlock();
 }
 
-void CalcCntnt( SwLayoutFrm *pLay, BOOL bNoColl )
+// OD 14.03.2003 #i11760# - change parameter <bNoColl>: type <bool>;
+//                          default value = false.
+// OD 14.03.2003 #i11760# - add new parameter <bNoCalcFollow> with
+//                          default value = false.
+//void CalcCntnt( SwLayoutFrm *pLay, BOOL bNoColl )
+void CalcCntnt( SwLayoutFrm *pLay,
+                bool bNoColl,
+                bool bNoCalcFollow )
 {
     SwSectionFrm* pSect;
     BOOL bCollect = FALSE;
@@ -1388,7 +1395,15 @@ void CalcCntnt( SwLayoutFrm *pLay, BOOL bNoColl )
                     ((SwTabFrm*)pFrm)->bLockBackMove = TRUE;
             }
 
+            // OD 14.03.2003 #i11760# - forbid format of follow, if requested.
+            if ( bNoCalcFollow && pFrm->IsTxtFrm() )
+                static_cast<SwTxtFrm*>(pFrm)->ForbidFollowFormat();
             pFrm->Calc();
+            // OD 14.03.2003 #i11760# - reset control flag for follow format.
+            if ( pFrm->IsTxtFrm() )
+            {
+                static_cast<SwTxtFrm*>(pFrm)->AllowFollowFormat();
+            }
 
             //Dumm aber wahr, die Flys muessen mitkalkuliert werden.
             BOOL bAgain = FALSE;
