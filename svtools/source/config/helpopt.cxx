@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-09-28 13:08:49 $
+ *  last change: $Author: cd $ $Date: 2000-10-06 05:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,23 @@ static Sequence< OUString > GetPropertyNames()
     return aNames;
 }
 
+static ::osl::Mutex & getInitMutex()
+{
+    static ::osl::Mutex *pMutex = 0;
+
+    if( ! pMutex )
+    {
+        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
+        if( ! pMutex )
+        {
+            static ::osl::Mutex mutex;
+            pMutex = &mutex;
+        }
+    }
+    return *pMutex;
+}
+
+
 // -----------------------------------------------------------------------
 
 SvtHelpOptions_Impl::SvtHelpOptions_Impl()
@@ -230,7 +247,7 @@ void SvtHelpOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames 
 SvtHelpOptions::SvtHelpOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
+    ::osl::MutexGuard aGuard( getInitMutex() );
     if ( !pOptions )
         pOptions = new SvtHelpOptions_Impl;
     ++nRefCount;
@@ -242,7 +259,7 @@ SvtHelpOptions::SvtHelpOptions()
 SvtHelpOptions::~SvtHelpOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    ::osl::MutexGuard aGuard( getInitMutex() );
     if ( !--nRefCount )
         DELETEZ( pOptions );
 }
