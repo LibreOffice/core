@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-23 08:22:42 $
+ *  last change: $Author: fme $ $Date: 2002-09-05 12:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1100,15 +1100,15 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     FreeResource();
 
     pIndexEntryWrapper = new IndexEntrySupplierWrapper();
-    Sequence< Locale > sLocaleList = pIndexEntryWrapper->GetLocaleList();
-    const sal_Int32 nCnt = sLocaleList.getLength();
+//    Sequence< Locale > sLocaleList = pIndexEntryWrapper->GetLocaleList();
+//    const sal_Int32 nCnt = sLocaleList.getLength();
 
-    const Locale* psLocaleList = sLocaleList.getConstArray();
-    for ( sal_Int32 nI = 0; nI < nCnt; ++nI )
-        aLanguageLB.InsertLanguage( SvxLocaleToLanguage( psLocaleList[ nI ] ) );
+//    const Locale* psLocaleList = sLocaleList.getConstArray();
+//    for ( sal_Int32 nI = 0; nI < nCnt; ++nI )
+//        aLanguageLB.InsertLanguage( SvxLocaleToLanguage( psLocaleList[ nI ] ) );
 
-//    aLanguageLB.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN,
-//                                 FALSE, FALSE, FALSE );
+    aLanguageLB.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN,
+                                 FALSE, FALSE, FALSE );
 
     sAddStyleContent = aAddStylesCB.GetText();
 
