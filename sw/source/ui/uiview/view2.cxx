@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-28 16:29:26 $
+ *  last change: $Author: mib $ $Date: 2001-11-27 13:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1193,7 +1193,7 @@ BOOL SwView::JumpToSwMark( const String& rMark )
 
         const SwFmtINetFmt* pINet;
         String sCmp, sMark( INetURLObject::decode( rMark, INET_HEX_ESCAPE,
-                                           INetURLObject::DECODE_UNAMBIGUOUS,
+                                           INetURLObject::DECODE_WITH_CHARSET,
                                         RTL_TEXTENCODING_UTF8 ));
 
         xub_StrLen nLastPos, nPos = sMark.Search( cMarkSeperator );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
+ *  last change: $Author: mib $ $Date: 2001-11-27 13:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1331,14 +1331,13 @@ ANCHOR_SETEVENT:
     // wir hier ganz rigoros raus.
     if( aName.Len() )
     {
-        xub_StrLen nLastPos, nPos = aName.Search( cMarkSeperator );
+        String sDecoded( INetURLObject::decode( aName, INET_HEX_ESCAPE,
+                                           INetURLObject::DECODE_UNAMBIGUOUS,
+                                        RTL_TEXTENCODING_UTF8 ));
+        xub_StrLen nPos = sDecoded.SearchBackward( cMarkSeperator );
         if( STRING_NOTFOUND != nPos )
         {
-            while( STRING_NOTFOUND !=
-                        ( nLastPos = aName.Search( cMarkSeperator, nPos + 1 )) )
-                nPos = nLastPos;
-
-            String sCmp( aName.Copy( nPos+1 ) );
+            String sCmp( sDecoded.Copy( nPos+1 ) );
             sCmp.EraseAllChars();
             if( sCmp.Len() )
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-10-02 11:22:27 $
+ *  last change: $Author: mib $ $Date: 2001-11-27 13:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 
 #ifndef _TOOLS_RESID_HXX
 #include <tools/resid.hxx>
-#endif
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -730,8 +727,7 @@ String SwTOXPara::GetURL() const
                         ( aTxt += String::CreateFromInt32( nNum )) += '.';
                     }
                 }
-                aTxt += INetURLObject::createFragment(
-                                    ((SwTxtNode*)pNd)->GetExpandTxt() );
+                aTxt += ((SwTxtNode*)pNd)->GetExpandTxt();
                 ( aTxt += cMarkSeperator ).AppendAscii( pMarkToOutline );
             }
         }

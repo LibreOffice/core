@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:12 $
+ *  last change: $Author: mib $ $Date: 2001-11-27 13:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@
 #endif
 #ifndef _TOOLS_RESID_HXX //autogen
 #include <tools/resid.hxx>
-#endif
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
 #endif
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
@@ -450,11 +447,10 @@ USHORT lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
 {
     USHORT nSavePos = USHRT_MAX;
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
-    String sName( INetURLObject::createFragment( rName ) );
     for( USHORT n = 0; n < rOutlNds.Count(); ++n )
     {
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
-        String sTxt( INetURLObject::createFragment( pTxtNd->GetExpandTxt() ));
+        String sTxt( pTxtNd->GetExpandTxt() );
         if( sTxt.Equals( rName ) )
         {
             // "exact" gefunden, setze Pos auf den Node
@@ -596,8 +592,7 @@ BOOL SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
         if( USHRT_MAX != nFndPos )
         {
             SwTxtNode* pNd = rOutlNds[ nFndPos ]->GetTxtNode();
-            String sTxt( pNd->GetExpandTxt() );
-            if( sTxt.Equals( sName ) )
+            if( !pNd->GetExpandTxt().Equals( sName ) )
             {
                 USHORT nTmp = ::lcl_FindOutlineName( GetNodes(), sName, TRUE );
                 if( USHRT_MAX != nTmp )             // ueber den Namen gefunden
