@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-03 14:27:55 $
+ *  last change: $Author: pb $ $Date: 2001-07-09 11:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,32 +289,39 @@ String GetImageExtensionByFactory_Impl( const String& rURL )
 {
     String aExtension;
 
-    // get the TypeDetection service to access all registered types
-    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >  xFac = ::comphelper::getProcessServiceFactory();
-    ::com::sun::star::uno::Reference < ::com::sun::star::document::XTypeDetection > xTypeDetector(
-        xFac->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection") ) ), ::com::sun::star::uno::UNO_QUERY );
-
-    ::rtl::OUString aInternalType = xTypeDetector->queryTypeByURL( rURL );
-    ::com::sun::star::uno::Reference < ::com::sun::star::container::XNameAccess > xAccess( xTypeDetector, ::com::sun::star::uno::UNO_QUERY );
-    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aTypeProps;
-    if ( xAccess->hasByName( aInternalType ) )
+    try
     {
-        xAccess->getByName( aInternalType ) >>= aTypeProps;
-        sal_Int32 nProps = aTypeProps.getLength();
-        for ( sal_Int32 i = 0; i < nProps; ++i )
+        // get the TypeDetection service to access all registered types
+        ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >  xFac = ::comphelper::getProcessServiceFactory();
+        ::com::sun::star::uno::Reference < ::com::sun::star::document::XTypeDetection > xTypeDetector(
+            xFac->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection") ) ), ::com::sun::star::uno::UNO_QUERY );
+
+        ::rtl::OUString aInternalType = xTypeDetector->queryTypeByURL( rURL );
+        ::com::sun::star::uno::Reference < ::com::sun::star::container::XNameAccess > xAccess( xTypeDetector, ::com::sun::star::uno::UNO_QUERY );
+        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aTypeProps;
+        if ( aInternalType.getLength() > 0 && xAccess->hasByName( aInternalType ) )
         {
-            const ::com::sun::star::beans::PropertyValue& rProp = aTypeProps[i];
-            if ( rProp.Name.compareToAscii("Extensions") == COMPARE_EQUAL )
+            xAccess->getByName( aInternalType ) >>= aTypeProps;
+            sal_Int32 nProps = aTypeProps.getLength();
+            for ( sal_Int32 i = 0; i < nProps; ++i )
             {
-                ::com::sun::star::uno::Sequence < ::rtl::OUString > aExtensions;
-                if ( ( rProp.Value >>= aExtensions ) && aExtensions.getLength() > 0 )
+                const ::com::sun::star::beans::PropertyValue& rProp = aTypeProps[i];
+                if ( rProp.Name.compareToAscii("Extensions") == COMPARE_EQUAL )
                 {
-                    const ::rtl::OUString* pExtensions = aExtensions.getConstArray();
-                    aExtension = String( pExtensions[0] );
-                    break;
+                    ::com::sun::star::uno::Sequence < ::rtl::OUString > aExtensions;
+                    if ( ( rProp.Value >>= aExtensions ) && aExtensions.getLength() > 0 )
+                    {
+                        const ::rtl::OUString* pExtensions = aExtensions.getConstArray();
+                        aExtension = String( pExtensions[0] );
+                        break;
+                    }
                 }
             }
         }
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+        // type detection failed -> no extension
     }
 
     return aExtension;
