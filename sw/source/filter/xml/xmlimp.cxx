@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:59:50 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1169,6 +1169,8 @@ void main()
     // below, and set them if not found
     bool bPrinterIndependentLayout = false;
     bool bAddExternalLeading = false;
+    // DVO, OD 12.01.2004 #i11859#
+    bool bUseFormerLineSpacing = false;
 
     while( nCount-- )
     {
@@ -1200,6 +1202,9 @@ void main()
                     bPrinterIndependentLayout = true;
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AddExternalLeading")) )
                     bAddExternalLeading = true;
+                // DVO, OD 12.01.2004 #i11859#
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseFormerLineSpacing")) )
+                    bUseFormerLineSpacing = true;
             }
             catch( Exception& )
             {
@@ -1222,11 +1227,15 @@ void main()
 
     if( ! bAddExternalLeading )
     {
-        Any aAny;
-        sal_Bool bTmp = sal_False;
-        aAny.setValue( &bTmp, ::getBooleanCppuType() );
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("AddExternalLeading")), aAny);
+            OUString( RTL_CONSTASCII_USTRINGPARAM("AddExternalLeading")), makeAny( false ) );
+    }
+
+    // OD 12.01.2004 #i11859#
+    if( ! bUseFormerLineSpacing )
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("UseFormerLineSpacing")), makeAny( true ) );
     }
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
