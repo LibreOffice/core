@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: fs $ $Date: 2001-04-19 16:14:04 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 13:22:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,24 +76,6 @@ UNOTYPES+= com.sun.star.util.XAtomServer
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
-
-# --- Types -------------------------------------
-
-
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-
-UNOUCROUT=$(OUT)$/inc
-#INCPRE+=$(UNOUCROUT)
-
-# --- Types -------------------------------------
-
-#UNOTYPES+=	\
-#	com.sun.star.util.XNumberFormatTypes	\
-#	com.sun.star.awt.FontDescriptor			\
-#	com.sun.star.awt.FontUnderline			\
-#	com.sun.star.awt.FontStrikeout			\
-#	com.sun.star.awt.FontSlant				\
 
 # --- Files -------------------------------------
 

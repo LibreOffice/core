@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2001-11-20 17:08:11 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 13:22:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,19 +85,6 @@ UNOTYPES+= com.sun.star.configuration.XTemplateContainer \
 
 .INCLUDE : settings.mk
 
-# --- Types -------------------------------------
-
-
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-
-UNOUCROUT=$(OUT)$/inc
-#INCPRE+=$(UNOUCROUT)
-
-# --- Types -------------------------------------
-
-#UNOTYPES+=	\
-#		com.sun.star.container.XEnumeration		\
 
 
 # --- Files -------------------------------------
