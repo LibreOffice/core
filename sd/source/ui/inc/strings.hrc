@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-18 09:15:56 $
+ *  last change: $Author: dl $ $Date: 2001-05-30 15:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,6 @@
  */
 
 #define STR_PLUGIN_TOOLBOX          RID_PLUGINTOOLBOX
-#define STR_DRAW_DEFAULTTOOLBOX     RID_DRAW_DEFAULTTOOLBOX
 #define STR_DRAW_TOOLBOX            RID_DRAW_TOOLBOX
 #define STR_SLIDE_TOOLBOX           RID_SLIDE_TOOLBOX
 #define STR_DRAW_OBJ_TOOLBOX        RID_DRAW_OBJ_TOOLBOX

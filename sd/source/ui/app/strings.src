@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-18 09:21:16 $
+ *  last change: $Author: dl $ $Date: 2001-05-30 15:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,32 +60,6 @@
  ************************************************************************/
 
 #include "strings.hrc"
-String STR_DRAW_DEFAULTTOOLBOX
-{
-    Text = "Funktionsleiste" ;
-    Text [ English ] = "Functionbar" ;
-    Text [ norwegian ] = "Funksjonslinje" ;
-    Text [ italian ] = "Barra delle funzioni" ;
-    Text [ portuguese_brazilian ] = "Barra de fun??s" ;
-    Text [ portuguese ] = "Barra de funções" ;
-    Text [ finnish ] = "Toimintopalkki" ;
-    Text [ danish ] = "Funktionslinje" ;
-    Text [ french ] = "Barre de fonctions" ;
-    Text [ swedish ] = "Funktionslist" ;
-    Text [ dutch ] = "Werkbalk" ;
-    Text [ spanish ] = "Barra de funciones" ;
-    Text [ english_us ] = "Function Bar" ;
-    Text[ chinese_simplified ] = "¹¤¾ßÀ¸";
-    Text[ russian ] = "Ïàíåëü ôóíêöèé";
-    Text[ polish ] = "Pasek funkcji";
-    Text[ japanese ] = "Ì§İ¸¼®İÊŞ°";
-    Text[ greek ] = "ÃñáììŞ ëåéôïõñãéşí";
-    Text[ korean ] = "±â´É ¸ğÀ½";
-    Text[ chinese_traditional ] = "¤u¨ã¦C";
-    Text[ arabic ] = "ÔÑíØ ÇáãåÇã";
-    Text[ turkish ] = "İşlev çubuğu";
-    Text[ catalan ] = "Barra de funciones";
-};
 String STR_DRAW_TOOLBOX
 {
     Text = "Zeichenwerkzeugleiste" ;
