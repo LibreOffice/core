@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:11:22 $
+#   last change: $Author: mh $ $Date: 2002-11-18 16:00:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -12,11 +12,11 @@
 #          - GNU Lesser General Public License Version 2.1
 #          - Sun Industry Standards Source License Version 1.1
 #
-#   Sun Microsystems Inc., October, 2000
+#   Sun Microsystems Inc., October, 2002
 #
 #   GNU Lesser General Public License Version 2.1
 #   =============================================
-#   Copyright 2000 by Sun Microsystems, Inc.
+#   Copyright 2002 by Sun Microsystems, Inc.
 #   901 San Antonio Road, Palo Alto, CA 94303, USA
 #
 #   This library is free software; you can redistribute it and/or
@@ -42,15 +42,15 @@
 #   License at http://www.openoffice.org/license.html.
 #
 #   Software provided under this License is provided on an "AS IS" basis,
-#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
 #   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
 #   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
 #   See the License for the specific provisions governing your rights and
 #   obligations concerning the Software.
 #
-#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc..
 #
-#   Copyright: 2000 by Sun Microsystems, Inc.
+#   Copyright: 2002 by Sun Microsystems, Inc.
 #
 #   All Rights Reserved.
 #
@@ -64,28 +64,15 @@ PRJ=..
 
 PRJNAME=automation
 TARGET=automation
+TARGETTYPE=GUI
 #basic.hid generieren
 GEN_HID=TRUE
 
 # --- Settings ---------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
-.IF "$(GUI)"=="WIN"
-.IF "$(product)" != ""
-LINKFLAGS=$(LINKFLAGS) /NOPACKC
-.ENDIF
-.ENDIF
-
-.IF "$(depend)" == ""
 
 # --- Allgemein ---------------------------------------------------
-
-USE_LDUMP2=TRUE
-
-.IF "$(header)" == ""
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=              \
@@ -94,36 +81,38 @@ LIB1FILES=              \
 SHL1TARGET= sts$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= $(TARGET)
 
-#SHL1STDLIBS= \
-#			$(TOOLSLIB) \
-#			$(SVTOOLLIB) \
-#			$(SVLLIB)       \
-#			$(SVLIB) \
-#			$(VOSLIB) \
-#			$(SALLIB) \
-            $(SVMEMLIB)     \
+SHL1STDLIBS= \
+            $(TOOLSLIB) \
+            $(SVTOOLLIB) \
+            $(SVLLIB)       \
+            $(SVLIB) \
+            $(BASICLIB) \
+            $(VOSLIB) \
+            $(SALLIB) \
+            $(CPPUHELPERLIB) \
+            $(CPPULIB) \
+            $(COMPHELPERLIB) \
+            $(SVMEMLIB) \
+            $(SOTLIB) \
+            $(VOSLIB)
 
 
-#			$(SJLIB) \
-#			$(UNOTOOLSLIB)
+.IF "$(GUI)" == "UNX"
+SHL1STDLIBS+= -lapp
+.ENDIF
 
-#.IF "$(GUI)"=="WNT"
-#SHL1STDLIBS+=$(LIBCIMT) \
-#		$(LIBPRE) advapi32.lib	\
-#		$(LIBPRE) gdi32.lib
-#.ENDIF
-
-#.IF "$(SO3)" != ""
-#SHL1STDLIBS+=\
-#			$(SOTLIB) \
-#			$(VOSLIB)
-#.ENDIF
+.IF "$(GUI)"=="WNT"
+SHL1STDLIBS+=$(LIBCIMT) \
+        $(LIBPRE) app.lib \
+        $(LIBPRE) advapi32.lib	\
+        $(LIBPRE) gdi32.lib
+.ENDIF
 
 #SHL1DEPN=       $(L)$/itools.lib $(SVLIBDEPEND) $(L)$/so2.lib $(L)$/svtool.lib
 
 
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-SHL1LIBS=       $(SLB)$/$(TARGET).lib
+SHL1LIBS=       $(SLB)$/$(TARGET).lib 
 
 DEF1NAME        =$(SHL1TARGET)
 DEF1DEPN        =       \
@@ -132,78 +121,113 @@ DEF1DEPN        =       \
 DEFLIB1NAME     =$(TARGET)
 DEF1DES         =TestToolServer
 
+# --- TESTTOOL IDE ------------------------------------------------------
+
+APP1TARGET=testtool
+APP1STDLIBS= \
+            $(CPPUHELPERLIB) \
+            $(TOOLSLIB) \
+            $(UNOTOOLSLIB) \
+            $(SVTOOLLIB) \
+            $(SVLLIB) \
+            $(SVLIB) \
+            $(SVMEMLIB) \
+            $(SALLIB) \
+            $(SJLIB) \
+            $(VOSLIB) \
+            $(SO2LIB) \
+            $(UCBHELPERLIB) \
+            $(COMPHELPERLIB) \
+            $(SOTLIB) \
+            $(BASICLIB) \
+            $(VOSLIB)
+
+.IF "$(GUI)"=="UNX"
+APP1STDLIBS+= \
+            $(VOSLIB) $(SALLIB) $(BASICLIB)
+APP1STDLIBS+=$(CPPULIB)
+.ENDIF
+.IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
+APP1STDLIBS+=$(CPPULIB)
+.ENDIF
+
+
+.IF "$(OS)" == "SOLARIS"
+APP1STDLIBS+= -lXm
+.ENDIF
+
+.IF "$(GUI)" == "UNX"
+.IF "$(OS)" == "LINUX"
+
+APP1STDLIBS+= -lXext -lX11 -lSM -lICE
+
+.ENDIF
+.ENDIF
+
+
+
+APP1LIBS=\
+        $(LIBPRE) $(LB)$/testtool.lib
+
+.IF "$(GUI)" == "UNX"
+APP1STDLIBS+= -lapp -lsample
+.ELSE
+APP1STDLIBS+= \
+        app.lib \
+        sample.lib
+.ENDIF
+    
+APP1DEPN=\
+        $(L)$/itools.lib \
+        $(SVLIBDEPEND) \
+        $(LB)$/testtool.lib   \
+
+APP1OBJS=       $(OBJ)$/testbasi.obj \
+                $(OBJ)$/cmdbasestream.obj \
+                $(OBJ)$/svcommstream.obj
+
+# --- TESTTOOL MINIAPP ------------------------------------------------------
+
+SRS3FILES= $(SRS)$/miniapp.srs
+RES3TARGET=miniapp
+
+APP3TARGET=miniapp
+APP3STDLIBS= \
+            $(AUTOMATIONLIB) \
+            $(SALLIB) \
+            $(TOOLSLIB) \
+            $(SVTOOLLIB) \
+            $(SVLIB) \
+            $(SVMEMLIB) \
+            $(SJLIB) \
+            $(SO2LIB)
+.IF "$(GUI)"=="UNX"
+APP3STDLIBS+= \
+            $(VOSLIB) $(SALLIB)
+.ENDIF
+.IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
+APP3STDLIBS+=$(CPPULIB)
+.ENDIF
+
+
+APP3LIBS= \
+        $(LIBPRE) $(LB)$/miniapp.lib
+
+APP3DEPN=\
+        $(L)$/itools.lib \
+        $(SVLIBDEPEND) \
+        $(LB)$/miniapp.lib
+
+.IF "$(GUI)" != "UNX"
+#		win16 braucht ein appobj
+APP3OBJS=		$(OBJ)$/testapp.obj
+.ENDIF
+
 # --- Targets -----------------------------------------------------------
 
 ALL: $(LIB1TARGET)                 \
      ALLTAR
 
-
-#-------------------------------------------------------------------------
-#                                                               Windows 3.x
-#-------------------------------------------------------------------------
-
-
-.IF "$(GUI)" == "WIN"
-
-LINKFLAGS+=/NOCV /IG
-LINK=$(DEVROOT)$/bin\optlinks\optlinks
-
-$(MISC)$/$(PRJNAME).def: makefile.mk
-    echo NAME                BASIC                                                                                   >$@
-    echo DESCRIPTION 'StarBASIC DevSystem (C)1994 STAR DIVISION GmbH'>>$@
-    echo EXETYPE     WINDOWS                                                                                 >>$@
-    echo PROTMODE                                                                                                    >>$@
-    echo STUB                'winSTUB.EXE'                                   >>$@
-    echo CODE                LOADONCALL MOVEABLE                                                     >>$@
-    echo DATA                PRELOAD MULTIPLE MOVEABLE                                               >>$@
-    echo HEAPSIZE    4096                                                                                    >>$@
-    echo STACKSIZE   30000                                                                                   >>$@
-.ENDIF # GUI == WIN
-
-#-------------------------------------------------------------------------
-#                                                               MAC
-#-------------------------------------------------------------------------
-
-.IF "$(GUI)" == "MAC"
-
-$(MISC)$/$(PRJNAME).def: makefile.mk
-    echo Kein def-File fuer Applikationen auf Mac
-.ENDIF # GUI == MAC
-
-#-------------------------------------------------------------------------
-#                                                                               OS/2
-#-------------------------------------------------------------------------
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(PRJNAME).def: makefile.mk
-.IF "$(COM)"!="WTC"
-    echo NAME                BASIC WINDOWAPI                                                                  >$@
-    echo DESCRIPTION 'StarBASIC DevSystem (C)1993 STAR DIVISION GmbH' >>$@
-    echo EXETYPE     OS2                                                                                      >>$@
-    echo PROTMODE                                                                                                     >>$@
-    echo STUB                'OS2STUB.EXE'                                    >>$@
-    echo CODE                LOADONCALL                                                                       >>$@
-    echo DATA                PRELOAD MULTIPLE                                                                 >>$@
-    echo HEAPSIZE    4096                                                                                     >>$@
-    echo STACKSIZE   30000                                                                                    >>$@
-.ELSE
-    @echo option DESCRIPTION 'StarBasic DLL'                           >$@
-    @echo name $(BIN)$/$(SHL1TARGET).dll                             >>$@
-#    @ldump -E1 -A -F$(MISC)$/$(SHL1TARGET).flt $(SLB)$/sb.lib    >>temp.def
-    @ldump -E1 -A -F$(MISC)$/$(SHL1TARGET).flt $(LIB1TARGET)    >>temp.def
-    @awk -f s:\util\exp.awk temp.def
-    del temp.def
-.ENDIF
-
-.ENDIF # GUI == OS2
-
-#-------------------------------------------------------------------------
-#                                                               Windows NT
-#-------------------------------------------------------------------------
-#
-#                                       default targets aus target.mk
-#
 
 # --- Basic-Filter-Datei ---
 
@@ -217,15 +241,8 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo exception >> $@
     @echo bad_alloc >> $@
     @echo __CT >> $@
-.IF "$(GUI)"=="OS2"
-    @echo __alloc   >> $@
-    @echo __malloc  >> $@
-.ENDIF
-
-.ENDIF
 
 # ------------------------------------------------------------------------
-.ENDIF
 
 .INCLUDE :  target.mk
 
