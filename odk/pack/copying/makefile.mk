@@ -385,6 +385,8 @@ all : 	\
     $(DOCUFILES) \
     $(INSTALLSCRIPT) \
     $(DESTIDLLIST)  \
+    $(DESTDIRBIN)$/pkgchk$(PKGCHK_POSTFIX)  \
+    $(DESTDIRDLL)$/$(MY_DLLPREFIX)pkgchk$(UPD)$(DLLPOSTFIX)$(MY_DLLPOSTFIX)  \
     $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)  \
     $(DESTDIR)$/settings$/dk.mk \
     $(DESTDIRCLASSES)$/officebean.jar \
