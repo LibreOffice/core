@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:32:25 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 22:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
+#endif
+#ifndef _COMPHELPER_DOCUMENTCONSTANTS_HXX
+#include <comphelper/documentconstants.hxx>
 #endif
 
 using namespace::com::sun::star::uno;
@@ -228,14 +231,14 @@ namespace
             /*104 SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR*/ { "application/x-openoffice-uniformresourcelocator;windows_formatname=\"UniformResourceLocator\"", "UniformResourceLocator", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*105 SOT_FORMATSTR_ID_STARCHARTDOCUMENT_50*/   { "application/x-openoffice-starchartdocument-50;windows_formatname=\"StarChartDocument 5.0\"", "StarChartDocument 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*106 SOT_FORMATSTR_ID_GRAPHOBJ*/               { "application/x-openoffice-graphobj;windows_formatname=\"Graphic Object\"", "Graphic Object", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*107 SOT_FORMATSTR_ID_STARWRITER_60*/          { "application/vnd.sun.xml.writer", "Writer 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*108 SOT_FORMATSTR_ID_STARWRITERWEB_60*/       { "application/vnd.sun.xml.writer.web", "Writer/Web 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*109 SOT_FORMATSTR_ID_STARWRITERGLOB_60*/      { "application/vnd.sun.xml.writer.global", "Writer/Global 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*110 SOT_FORMATSTR_ID_STARWDRAW_60*/           { "application/vnd.sun.xml.draw", "Draw 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*111 SOT_FORMATSTR_ID_STARIMPRESS_60*/         { "application/vnd.sun.xml.impress", "Impress 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*112 SOT_FORMATSTR_ID_STARCALC_60*/            { "application/vnd.sun.xml.calc", "Calc 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*113 SOT_FORMATSTR_ID_STARCHART_60*/           { "application/vnd.sun.xml.chart", "Chart 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*114 SOT_FORMATSTR_ID_STARMATH_60*/            { "application/vnd.sun.xml.math", "Math 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*107 SOT_FORMATSTR_ID_STARWRITER_60*/          { MIMETYPE_VND_SUN_XML_WRITER_ASCII, "Writer 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*108 SOT_FORMATSTR_ID_STARWRITERWEB_60*/       { MIMETYPE_VND_SUN_XML_WRITER_WEB_ASCII, "Writer/Web 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*109 SOT_FORMATSTR_ID_STARWRITERGLOB_60*/      { MIMETYPE_VND_SUN_XML_WRITER_GLOBAL_ASCII, "Writer/Global 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*110 SOT_FORMATSTR_ID_STARWDRAW_60*/           { MIMETYPE_VND_SUN_XML_DRAW_ASCII, "Draw 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*111 SOT_FORMATSTR_ID_STARIMPRESS_60*/         { MIMETYPE_VND_SUN_XML_IMPRESS_ASCII, "Impress 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*112 SOT_FORMATSTR_ID_STARCALC_60*/            { MIMETYPE_VND_SUN_XML_CALC_ASCII, "Calc 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*113 SOT_FORMATSTR_ID_STARCHART_60*/           { MIMETYPE_VND_SUN_XML_CHART_ASCII, "Chart 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*114 SOT_FORMATSTR_ID_STARMATH_60*/            { MIMETYPE_VND_SUN_XML_MATH_ASCII, "Math 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*115 SOT_FORMATSTR_ID_WMF*/                    { "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"", "Windows MetaFile", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*116 SOT_FORMATSTR_ID_DBACCESS_QUERY*/         { "application/x-openoffice-dbaccess-query;windows_formatname=\"Data source Query Object\"", "Data source Query Object", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*117 SOT_FORMATSTR_ID_DBACCESS_TABLE*/         { "application/x-openoffice-dbaccess-table;windows_formatname=\"Data source Table\"", "Data source Table", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
@@ -245,15 +248,16 @@ namespace
             /*121 SOT_FORMATSTR_ID_BIFF_8*/                 { "application/x-openoffice-biff-8;windows_formatname=\"Biff8\"", "Biff8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*122 SOT_FORMATSTR_ID_BMP*/                    { "image/bmp", "Windows Bitmap", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*123 SOT_FORMATSTR_ID_HTML_NO_COMMENT */       { "application/x-openoffice-html-no-comment;windows_formatname=\"HTML Format\"", "HTML (no comment)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*124 SOT_FORMATSTR_ID_STARWRITER_8*/          { "application/x-vnd.oasis.openoffice.text", "Writer 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*125 SOT_FORMATSTR_ID_STARWRITERWEB_8*/       { "application/x-vnd.oasis.openoffice.text-web", "Writer/Web 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*126 SOT_FORMATSTR_ID_STARWRITERGLOB_8*/      { "application/x-vnd.oasis.openoffice.text-master", "Writer/Global 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*127 SOT_FORMATSTR_ID_STARWDRAW_8*/           { "application/x-vnd.oasis.openoffice.drawing", "Draw 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*128 SOT_FORMATSTR_ID_STARIMPRESS_8*/         { "application/x-vnd.oasis.openoffice.presentation", "Impress 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*129 SOT_FORMATSTR_ID_STARCALC_8*/            { "application/x-vnd.oasis.openoffice.spreadsheet", "Calc 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*130 SOT_FORMATSTR_ID_STARCHART_8*/           { "application/x-vnd.oasis.openoffice.chart", "Chart 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*131 SOT_FORMATSTR_ID_STARMATH_8*/            { "application/x-vnd.oasis.openoffice.math", "Math 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*132 SOT_FORMATSTR_ID_XFORMS */                { "application/x-openoffice-xforms;windows_formatname=\"??? Format\"", "???", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
+            /*124 SOT_FORMATSTR_ID_STARWRITER_8*/          { MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII, "Writer 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*125 SOT_FORMATSTR_ID_STARWRITERWEB_8*/       { MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII, "Writer/Web 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*126 SOT_FORMATSTR_ID_STARWRITERGLOB_8*/      { MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII, "Writer/Global 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*127 SOT_FORMATSTR_ID_STARWDRAW_8*/           { MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII, "Draw 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*128 SOT_FORMATSTR_ID_STARIMPRESS_8*/         { MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII, "Impress 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*129 SOT_FORMATSTR_ID_STARCALC_8*/            { MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII, "Calc 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*130 SOT_FORMATSTR_ID_STARCHART_8*/           { MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII, "Chart 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*131 SOT_FORMATSTR_ID_STARMATH_8*/            { MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII, "Math 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*132 SOT_FORMATSTR_ID_STARBASE_8*/            { MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII, "StarBase 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
+            /*133 SOT_FORMATSTR_ID_XFORMS */               { "application/x-openoffice-xforms;windows_formatname=\"??? Format\"", "???", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
             };
         return &aInstance[0];
         }
