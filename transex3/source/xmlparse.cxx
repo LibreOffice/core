@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlparse.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 17:31:58 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 16:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,55 +326,7 @@ BOOL XMLFile::Write( String &rFileName )
     return FALSE;
 }
 
-/*****************************************************************************/
-//void XMLFile::QuotHTML( String &rString )
-/*****************************************************************************/
-// \t \n ersetzen durch ???
-/*{
-    ByteString sString( rString, RTL_TEXTENCODING_UTF8 );
 
-    ByteString sReturn;
-    BOOL bBreak = FALSE;
-    for ( USHORT i = 0; i < sString.Len(); i++ ) {
-        if ( i < sString.Len()) {
-            switch ( sString.GetChar( i )) {
-            /*  case '\n':  sReturn +="\\n";
-                            break;
-                case '\t':  sReturn +="\\t";
-                            break;*/
-/*              case '<':
-                    sReturn += "&lt;";
-                break;
-
-                case '>':
-                    sReturn += "&gt;";
-                break;
-
-                case '\"':
-                    sReturn += "&quot;";
-                break;
-
-                case '\'':
-                    sReturn += "&apos;";
-                break;
-
-                case '&':
-                    if ((( i + 4 ) < sString.Len()) &&
-                        ( sString.Copy( i, 5 ) == "&amp;" ))
-                            sReturn += sString.GetChar( i );
-                    else
-                        sReturn += "&amp;";
-                break;
-
-                default:
-                    sReturn += sString.GetChar( i );
-                break;
-            }
-        }
-    }
-    rString = String( sReturn, RTL_TEXTENCODING_UTF8 );
-}
-*/
 /*****************************************************************************/
 void XMLFile::WriteString( SvStream &rStream, const String &sString )
 /*****************************************************************************/
@@ -609,70 +561,6 @@ void XMLFile::showType(XMLParentNode* node){
         default: break;
     }
 }
-
-/*****************************************************************************/
-//XMLFile& XMLFile::operator=(const XMLFile& obj){
-/*****************************************************************************/
-/*    if( this!=&obj ){
-
-        sElementName    =obj.sElementName;
-        project         =obj.project;
-        filename        =obj.filename;
-        id              =obj.id;
-        sOldRef         =obj.sOldRef;
-        resourceType    =obj.resourceType;
-        languageId      =obj.languageId;
-        nPos            =obj.nPos;
-
-        sFileName       = obj.sFileName;
-        ID              = obj.ID;           //const
-        XML_LANG        = obj.XML_LANG;     //const
-        OLDREF          = obj.OLDREF;       //const
-        nodes_localize  = obj.nodes_localize;
-
-
-        LangHashMap* elem;
-        LangHashMap* elemCopy;
-        XMLElement*  pElement;
-        if( XMLStrings ) {// removeall
-         }
-        if( obj.XMLStrings ) { //copyall
-            XMLHashMap::iterator pos = obj.XMLStrings->begin();
-            while( pos != obj.XMLStrings->end() ){
-                elem=pos->second;
-                elemCopy = new LangHashMap();
-                LangHashMap::iterator pos2 = elem->begin();
-                while( pos2 != elem->end() ){
-                    elemCopy
-                }
-/**************
-ACHTUNG! Die Zeiger müssen auf die "kopierte" Objektstruktur zeigen, nix copyconstructor
-***************/
- /*               elem = new LangHashMap();
-        //(*elem)[langid]=pElement;
-        (*elem)[ language ]=pElement;
-        XMLStrings->insert( XMLHashMap::value_type( id , elem ) );
-    }else{                                  // Already there
-        elem=pos->second;
-        //(*elem)[langid]=pElement;
-        (*elem)[ language ]=pElement;
-    }
-        }
-        //XMLHashMap* XMLStrings;
-/*
-        if ( pAttributes ){
-            for ( ULONG i = 0; i < pAttributes->Count(); i++ )
-                delete pAttributes->GetObject( i );
-            delete pAttributes;
-        }
-        if ( obj.pAttributes ){
-            pAttributes         =new XMLAttributeList();
-            for ( ULONG i = 0; i < obj.pAttributes->Count(); i++ )
-                AddAttribute( *obj.pAttributes->GetObject( i ) , obj.pAttributes->GetObject( i )->GetValue() );
-        } *//*
-    }
-    return *this;
-}*/
 /*****************************************************************************/
 void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
 /*****************************************************************************/
@@ -800,24 +688,6 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur , int pos)
     return bStatusExport;
 }
 
-/*****************************************************************************/
-//ByteString* XMLFile::GetGroupID(std::deque<ByteString> &groupid){
-/*****************************************************************************/
-/*  ByteString *tmpStr = new ByteString();
-    BOOL firstElement=true;
-    for(std::deque<ByteString>::iterator pos=groupid.begin();pos<groupid.end();++pos){
-        if(firstElement){
-            tmpStr->Append(*pos);
-            firstElement=false;
-        }
-        else{
-            tmpStr->Append( ByteString(String::CreateFromAscii("."),RTL_TEXTENCODING_UTF8) );
-            tmpStr->Append( *pos );
-        }
-
-    }
-    return tmpStr;      // don't forget to delete !
-}*/
 /*****************************************************************************/
 USHORT XMLElement::GetNodeType()
 /*****************************************************************************/
@@ -1468,42 +1338,7 @@ void XMLUtil::UnQuotData( String &rString_in ){
     }
     rString_in = String(sReturn , RTL_TEXTENCODING_UTF8 );
 
-/*  ByteString sOld(rString,RTL_TEXTENCODING_UTF8);
 
-//    static String ret(        String::CreateFromAscii("\n")     );
-//    static String ret_char(   String::CreateFromAscii("")       );
-
-//    static String tab(        String::CreateFromAscii("\t")     );
-//    static String tab_char(   String::CreateFromAscii("")       );
-
-    static String lt(         String::CreateFromAscii("&lt;")   );
-    static String lt_char(    String::CreateFromAscii("<")      );
-
-    static String gt(         String::CreateFromAscii("&gt;")   );
-    static String gt_char(    String::CreateFromAscii(">")      );
-
-    static String quot(       String::CreateFromAscii("&quot;") );
-    static String quot_char(  String::CreateFromAscii("\"")     );
-
-    static String apos(       String::CreateFromAscii("&apos;") );
-    static String apos_char(  String::CreateFromAscii("\'")     );
-
-    static String amp(        String::CreateFromAscii("&amp;")  );
-    static String amp_char(   String::CreateFromAscii("&")      );
-
-    static String bsl(        String::CreateFromAscii("\\")  );
-    static String bsl_char(   String::CreateFromAscii("\\\\")      );
-
-
-    rString.SearchAndReplaceAll(bsl,bsl_char);
-    //rString.SearchAndReplaceAll(ret,ret_char);
-    //rString.SearchAndReplaceAll(tab,tab_char);
-    rString.SearchAndReplaceAll(lt,lt_char);
-    rString.SearchAndReplaceAll(gt,gt_char);
-    rString.SearchAndReplaceAll(quot,quot_char);
-    rString.SearchAndReplaceAll(apos,apos_char);
-    rString.SearchAndReplaceAll(amp,amp_char);
-*/
 }
 /*****************************************************************************/
 USHORT XMLUtil::GetLangByIsoLang( const ByteString &rIsoLang )
@@ -1513,94 +1348,6 @@ USHORT XMLUtil::GetLangByIsoLang( const ByteString &rIsoLang )
 }
 
 XMLUtil::XMLUtil(){
-// Hash all ISO Codes
-/*    lMap[ByteString(COMMENT_ISO).ToLowerAscii()]          =COMMENT;
-    lMap[ByteString(ENGLISH_US_ISO).ToLowerAscii()]         =ENGLISH_US;
-    lMap[ByteString(PORTUGUESE_ISO).ToLowerAscii()]         =PORTUGUESE;
-    lMap[ByteString(RUSSIAN_ISO).ToLowerAscii()]            =RUSSIAN;
-    lMap[ByteString(GREEK_ISO).ToLowerAscii()]              =GREEK;
-    lMap[ByteString(DUTCH_ISO).ToLowerAscii()]              =DUTCH;
-    lMap[ByteString(FRENCH_ISO).ToLowerAscii()]             =FRENCH;
-    lMap[ByteString(SPANISH_ISO).ToLowerAscii()]            =SPANISH;
-    lMap[ByteString(FINNISH_ISO).ToLowerAscii()]            =FINNISH;
-    lMap[ByteString(HUNGARIAN_ISO).ToLowerAscii()]          =HUNGARIAN;
-    lMap[ByteString(ITALIAN_ISO).ToLowerAscii()]            =ITALIAN;
-    lMap[ByteString(CZECH_ISO).ToLowerAscii()]              =CZECH;
-    lMap[ByteString(SLOVAK_ISO).ToLowerAscii()]             =SLOVAK;
-    lMap[ByteString(ENGLISH_ISO).ToLowerAscii()]            =ENGLISH;
-    lMap[ByteString(DANISH_ISO).ToLowerAscii()]             =DANISH;
-    lMap[ByteString(SWEDISH_ISO).ToLowerAscii()]            =SWEDISH;
-    lMap[ByteString(NORWEGIAN_ISO).ToLowerAscii()]          =NORWEGIAN;
-    lMap[ByteString(POLISH_ISO).ToLowerAscii()]             =POLISH;
-    lMap[ByteString(GERMAN_ISO).ToLowerAscii()]             =GERMAN;
-    lMap[ByteString(PORTUGUESE_BRAZILIAN_ISO).ToLowerAscii()]=PORTUGUESE_BRAZILIAN;
-    lMap[ByteString(JAPANESE_ISO).ToLowerAscii()]           =JAPANESE;
-    lMap[ByteString(KOREAN_ISO).ToLowerAscii()]             =KOREAN;
-    lMap[ByteString(CHINESE_SIMPLIFIED_ISO).ToLowerAscii()] =CHINESE_SIMPLIFIED;
-    lMap[ByteString(CHINESE_TRADITIONAL_ISO).ToLowerAscii()]=CHINESE_TRADITIONAL;
-    lMap[ByteString(TURKISH_ISO).ToLowerAscii()]            =TURKISH;
-    lMap[ByteString(ARABIC_ISO).ToLowerAscii()]             =ARABIC;
-    lMap[ByteString(HEBREW_ISO).ToLowerAscii()]             =HEBREW;
-    lMap[ByteString(CATALAN_ISO).ToLowerAscii()]            =CATALAN;
-    lMap[ByteString(THAI_ISO).ToLowerAscii()]               =THAI;
-
-
-    lMap[ByteString(PORTUGUESE_ISO2).ToLowerAscii()]        =PORTUGUESE;
-    lMap[ByteString(RUSSIAN_ISO2).ToLowerAscii()]           =RUSSIAN;
-    lMap[ByteString(GREEK_ISO2).ToLowerAscii()]             =GREEK;
-    lMap[ByteString(DUTCH_ISO2).ToLowerAscii()]             =DUTCH;
-    lMap[ByteString(FRENCH_ISO2).ToLowerAscii()]            =FRENCH;
-    lMap[ByteString(SPANISH_ISO2).ToLowerAscii()]           =SPANISH;
-    lMap[ByteString(FINNISH_ISO2).ToLowerAscii()]           =FINNISH;
-    lMap[ByteString(HUNGARIAN_ISO2).ToLowerAscii()]         =HUNGARIAN;
-    lMap[ByteString(ITALIAN_ISO2).ToLowerAscii()]           =ITALIAN;
-    lMap[ByteString(CZECH_ISO2).ToLowerAscii()]             =CZECH;
-    lMap[ByteString(SLOVAK_ISO2).ToLowerAscii()]            =SLOVAK;
-    lMap[ByteString(DANISH_ISO2).ToLowerAscii()]            =DANISH;
-    lMap[ByteString(SWEDISH_ISO2).ToLowerAscii()]           =SWEDISH;
-    lMap[ByteString(NORWEGIAN_ISO2).ToLowerAscii()]         =NORWEGIAN;
-    lMap[ByteString(POLISH_ISO2).ToLowerAscii()]            =POLISH;
-    lMap[ByteString(GERMAN_ISO2).ToLowerAscii()]            =GERMAN;
-    lMap[ByteString(PORTUGUESE_BRAZILIAN_ISO2).ToLowerAscii()]=PORTUGUESE_BRAZILIAN;
-    lMap[ByteString(JAPANESE_ISO2).ToLowerAscii()]          =JAPANESE;
-    lMap[ByteString(KOREAN_ISO2).ToLowerAscii()]            =KOREAN;
-    lMap[ByteString(CHINESE_SIMPLIFIED_ISO2).ToLowerAscii()]=CHINESE_SIMPLIFIED;
-    lMap[ByteString(CHINESE_TRADITIONAL_ISO2).ToLowerAscii()]=CHINESE_TRADITIONAL;
-    lMap[ByteString(TURKISH_ISO2).ToLowerAscii()]           =TURKISH;
-    lMap[ByteString(HEBREW_ISO2).ToLowerAscii()]            =HEBREW;
-    lMap[ByteString(CATALAN_ISO2).ToLowerAscii()]           =CATALAN;
-    lMap[ByteString(THAI_ISO2).ToLowerAscii()]              =THAI;
-
-
-    isoArray[COMMENT_INDEX]             =COMMENT_ISO;
-    isoArray[ENGLISH_US_INDEX]          =ENGLISH_US_ISO;
-    isoArray[PORTUGUESE_INDEX]          =PORTUGUESE_ISO2;
-    isoArray[RUSSIAN_INDEX]             =RUSSIAN_ISO2;
-    isoArray[GREEK_INDEX]               =GREEK_ISO2;
-    isoArray[DUTCH_INDEX]               =DUTCH_ISO2;
-    isoArray[FRENCH_INDEX]              =FRENCH_ISO2;
-    isoArray[SPANISH_INDEX]             =SPANISH_ISO2;
-    isoArray[FINNISH_INDEX]             =FINNISH_ISO2;
-    isoArray[HUNGARIAN_INDEX]           =HUNGARIAN_ISO2;
-    isoArray[ITALIAN_INDEX]             =ITALIAN_ISO2;
-    isoArray[CZECH_INDEX]               =CZECH_ISO2;
-    isoArray[SLOVAK_INDEX]              =SLOVAK_ISO2;
-    isoArray[ENGLISH_INDEX]             =ENGLISH_ISO;
-    isoArray[DANISH_INDEX]              =DANISH_ISO2;
-    isoArray[SWEDISH_INDEX]             =SWEDISH_ISO2;
-    isoArray[NORWEGIAN_INDEX]           =NORWEGIAN_ISO2;
-    isoArray[POLISH_INDEX]              =POLISH_ISO2;
-    isoArray[GERMAN_INDEX]              =GERMAN_ISO2;
-    isoArray[PORTUGUESE_BRAZILIAN_INDEX]=PORTUGUESE_BRAZILIAN_ISO2;
-    isoArray[JAPANESE_INDEX]            =JAPANESE_ISO2;
-    isoArray[KOREAN_INDEX]              =KOREAN_ISO2;
-    isoArray[CHINESE_SIMPLIFIED_INDEX]  =CHINESE_SIMPLIFIED_ISO2;
-    isoArray[CHINESE_TRADITIONAL_INDEX] =CHINESE_TRADITIONAL_ISO2;
-    isoArray[TURKISH_INDEX]             =TURKISH_ISO2;
-    isoArray[ARABIC_INDEX]              =ARABIC_ISO;
-    isoArray[HEBREW_INDEX]              =HEBREW_ISO2;
-    isoArray[CATALAN_INDEX]             =CATALAN_ISO2;
-    isoArray[THAI_INDEX]                =THAI_ISO2; */
 }
 
 
