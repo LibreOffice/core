@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:43:22 $
+#   last change: $Author: rt $ $Date: 2005-01-31 16:11:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ TARGET=copying
 #----------------------------------------------------
 
 CHARTS_FILES=\
-    $(DESTDIRDEVGUIDEEXAMPLES)$/Charts$/AddInChart.sxc \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Charts$/AddInChart.ods \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Charts$/CalcHelper.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Charts$/ChartHelper.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Charts$/ChartInCalc.java \
