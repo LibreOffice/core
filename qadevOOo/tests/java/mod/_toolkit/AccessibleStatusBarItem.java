@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStatusBarItem.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-04-28 11:22:07 $
+ *  last change:$Date: 2003-05-22 13:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,8 @@ public class AccessibleStatusBarItem extends TestCase {
 
         tEnv.addObjRelation("EditOnly","Can't change or select Text in StatusBarItem");
         tEnv.addObjRelation("XAccessibleText", secondItem);
+
+        tEnv.addObjRelation("LimitedBounds", "yes");
 
         final XTextDocument doc = xTextDoc;
 
