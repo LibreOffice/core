@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:45:10 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ SwXRedlinePortion::~SwXRedlinePortion()
 /* -----------------------------19.12.00 11:46--------------------------------
 
  ---------------------------------------------------------------------------*/
-util::DateTime lcl_DateTimeToUno(const DateTime& rDT)
+static util::DateTime lcl_DateTimeToUno(const DateTime& rDT)
 {
     util::DateTime aRetDT;
     aRetDT.Year = rDT.GetYear();
@@ -315,8 +315,9 @@ util::DateTime lcl_DateTimeToUno(const DateTime& rDT)
     aRetDT.HundredthSeconds = rDT.Get100Sec();
     return aRetDT;
 }
+#if 0
 // ---------------------------------------------------------------------------
-DateTime lcl_DateTimeFromUno(const util::DateTime& rDT)
+static DateTime lcl_DateTimeFromUno(const util::DateTime& rDT)
 {
     DateTime aRetDT;
     aRetDT.SetYear(rDT.Year);
@@ -328,8 +329,9 @@ DateTime lcl_DateTimeFromUno(const util::DateTime& rDT)
     aRetDT.Set100Sec(rDT.HundredthSeconds);
     return aRetDT;
 }
+#endif
 // ---------------------------------------------------------------------------
-OUString lcl_RedlineTypeToOUString(SwRedlineType eType)
+static OUString lcl_RedlineTypeToOUString(SwRedlineType eType)
 {
     OUString sRet;
     switch(eType & REDLINE_NO_FLAG_MASK)
@@ -342,6 +344,7 @@ OUString lcl_RedlineTypeToOUString(SwRedlineType eType)
     }
     return sRet;
 }
+#if 0
 // ---------------------------------------------------------------------------
 SwRedlineType  lcl_OUStringToRedlineType(const OUString& rType)
 {
@@ -357,8 +360,9 @@ SwRedlineType  lcl_OUStringToRedlineType(const OUString& rType)
 //  else if(!rType.compareToAscii("Insert"))
     return eType;
 }
+#endif
 // ---------------------------------------------------------------------------
-Sequence<PropertyValue> lcl_GetSuccessorProperties(const SwRedline& rRedline)
+static Sequence<PropertyValue> lcl_GetSuccessorProperties(const SwRedline& rRedline)
 {
     Sequence<PropertyValue> aValues(4);
 
