@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2001-06-08 13:44:14 $
+ *  last change: $Author: gh $ $Date: 2002-03-20 09:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,6 +567,8 @@ USHORT AppWin::QuerySave( QueryBits nBits )
     else
         nResult = RET_NO;
 
+    BOOL bAlwaysEnableInput = pFrame->IsAlwaysEnableInput();
+    pFrame->AlwaysEnableInput( FALSE );
     if( ( ( IsModified() || bSaveNotDirty ) && bQueryDirty ) || ( DiskFileChanged( SINCE_LAST_LOAD ) && bQueryDiskChanged ) )
     {
         ToTop();
@@ -578,7 +580,7 @@ USHORT AppWin::QuerySave( QueryBits nBits )
         else
             nResult = QueryBox( this, ResId( IDS_ASK_DISKCHANGE_SAVE ) ).Execute();
     }
-
+    pFrame->AlwaysEnableInput( bAlwaysEnableInput );
 
     USHORT nReturn;
     switch( nResult )
