@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:33:18 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2954,7 +2954,7 @@ void SbaXDataBrowserController::AfterDrop()
         xFormError->addSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
 }
 // -----------------------------------------------------------------------------
-void SbaXDataBrowserController::onLoadedMenu(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
+void SbaXDataBrowserController::onLoadedMenu(const Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
 {
     OGenericUnoController::onLoadedMenu( _xLayoutManager );
 
