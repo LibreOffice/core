@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:36:46 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,13 +94,13 @@ ProgressDialog::ProgressDialog( Window* pParent,
                                 BOOL bCancelable,
                                 int nMin, int nMax ) :
         ModelessDialog( pParent, PaResId( RID_PROGRESS_DLG ) ),
-        maCancelButton( this, PaResId( RID_PROGRESS_BTN_CANCEL ) ),
         maOperation( this, PaResId( RID_PROGRESS_OPERATION_TXT ) ),
         maFilename( this, PaResId( RID_PROGRESS_FILENAME_TXT ) ),
         maProgressTxt( this, PaResId( RID_PROGRESS_PROGRESS_TXT ) ),
+        maCancelButton( this, PaResId( RID_PROGRESS_BTN_CANCEL ) ),
         maProgressBar( this, PaResId( RID_PROGRESS_STATUSBAR ) ),
-        mnMin( nMin ),
         mnMax( nMax ),
+        mnMin( nMin ),
         mbCanceled( FALSE )
 {
     maFilename.SetStyle( maFilename.GetStyle() | WB_PATHELLIPSIS );
