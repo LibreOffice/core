@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-27 07:28:00 $
+ *  last change: $Author: mib $ $Date: 2000-09-27 07:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2103,6 +2103,9 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         // The Cursor already is in the first section
         pStNd = pTxtCrsr->GetCrsr()->GetNode()->FindTableBoxStartNode();
         bFirstSection = sal_False;
+        OUString sStyleName( RTL_CONSTASCII_USTRINGPARAM("Standard") );
+        GetImport().GetTextImport()->SetStyleAndAttrs(
+            GetImport().GetTextImport()->GetCursor(), sStyleName, sal_True );
     }
     else
     {
@@ -2197,11 +2200,14 @@ XMLTextImportHelper* SwXMLImport::CreateTextImport()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmltbli.cxx,v 1.3 2000-09-27 07:28:00 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmltbli.cxx,v 1.4 2000-09-27 07:52:50 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/09/27 07:28:00  mib
+      align=margins now works without also specifying a width
+
       Revision 1.2  2000/09/27 06:16:11  mib
       #78246#: Calculation of relative column widths now works correctly even if
                the summ of all column widths is smaller than the page width.
