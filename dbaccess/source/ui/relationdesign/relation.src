@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:26:02 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ czech ] = "Upravit";
             Text[ hebrew ] = "‮עריכה‬";
             Text[ hindi ] = "संपादन";
+            Text[ slovak ] = "Upraviť";
         };
         ToolBoxItem
         {
@@ -165,6 +166,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ czech ] = "Uložit";
             Text[ hebrew ] = "‮שמירה‬";
             Text[ hindi ] = "संचित करो";
+            Text[ slovak ] = "Uložiť";
         };
         ToolBoxItem
         {
@@ -197,6 +199,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ czech ] = "Tisk";
             Text[ hebrew ] = "‮הדפסה‬";
             Text[ hindi ] = "छपाई";
+            Text[ slovak ] = "Tlač";
         };
         ToolBoxItem
         {
@@ -272,6 +275,7 @@ String STR_QUERY_REL_EDIT_RELATION
     Text[ czech ] = "Tato relace již existuje. Chcete ji upravit?";
     Text[ hebrew ] = "Diese Relation existiert bereits. Möchten Sie sie bearbeiten?";
     Text[ hindi ] = "इस सम्बन्ध पहिले से ही अस्तित्व में है । आप इसको संपादन करना चाहते है?";
+    Text[ slovak ] = "Táto relácia už existuje. Chcete ju upraviť?";
 };
 String STR_RELATIONDESIGN
 {
@@ -301,6 +305,7 @@ String STR_RELATIONDESIGN
     Text[ czech ] = "Návrh relace";
     Text[ hebrew ] = "Relationenentwurf";
     Text[ hindi ] = "संबन्ध डिसैन";
+    Text[ slovak ] = "Návrh relácie";
 };
 String STR_RELATIONDESIGN_NOT_AVAILABLE
 {
@@ -330,6 +335,7 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
     Text[ czech ] = "Databáze nepodporuje relace.";
     Text[ hebrew ] = "Die Datenbank unterstützt keine Relationen";
     Text[ hindi ] = "लेखासंचय सम्बन्धों को समर्थन नहीं करता है ।";
+    Text[ slovak ] = "Databáza nepodporuje relácie.";
 };
 QueryBox RELATION_DESIGN_SAVEMODIFIED
 {
@@ -361,6 +367,7 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message[ czech ] = "Návrh relace byl změněn.\nChcete změny uložit?";
     Message[ hebrew ] = "Der Relationeneentwurf wurde geändert.\nSollen die Änderungen gespeichert werden?";
     Message[ hindi ] = "रिलेशन डिसैन में परिवर्तन किया है ।\nआप परिवर्तनों को संचित करना चाहते है ?";
+    Message[ slovak ] = "Návrh relácie bol zmenený.\nChcete uložiť zmeny?";
 };
 
 Menu RID_RELATION_DESIGN_MAIN_MENU
@@ -461,6 +468,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                         Text[ czech ] = "Zpět";
                         Text[ hebrew ] = "‮ביטול פעולה‬";
                         Text[ hindi ] = "अनावृत्ति";
+                        Text[ slovak ] = "Späť";
                     };
                 MenuItem
                 {
@@ -494,6 +502,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                         Text[ czech ] = "Znovu";
                         Text[ hebrew ] = "‮שחזור פעולה‬";
                         Text[ hindi ] = "फिर से करो";
+                        Text[ slovak ] = "Znovu";
                     };
                 MenuItem
                 {
@@ -516,6 +525,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ czech ] = "Upravit";
             Text[ hebrew ] = "‮עריכה‬";
             Text[ hindi ] = "~संपादन";
+            Text[ slovak ] = "~Upraviť";
         };
 
     MenuItem
@@ -565,6 +575,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ czech ] = "Vložit";
             Text[ hebrew ] = "~Einfügen";
             Text[ hindi ] = "~Insert";
+            Text[ slovak ] = "Vlož~iť";
         };
 
     MenuItem
@@ -615,6 +626,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ czech ] = "Nástroje";
             Text[ hebrew ] = "‮כלים‬";
             Text[ hindi ] = "~औज़ार";
+            Text[ slovak ] = "Nás~troje";
         };
         GLOBLMN_WINMN
         {
@@ -653,7 +665,10 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ czech ] = "Pokud zrušíte tuto tabulku, budou všechny k ní vztažené relace zrušeny také. Pokračovat?";
     Text[ hebrew ] = "Wenn Sie diese Tabelle löschen werden alle zugehörigen Relationen ebenfalls gelöscht. Fortfahren?";
     Text[ hindi ] = "इस सारणी को मिटाने के समय इसके सब सम्बन्ध भी मिट जाएगा । जारी रखना है?";
+    Text[ slovak ] = "Zmazaním tejto tabuľky zmažete tiež všetky zodpovedajúce relácie.Pokračovať?";
 };
+
+
 
 
 
