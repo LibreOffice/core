@@ -15,6 +15,7 @@
 <LC_FORMAT ref="hi_IN" replaceTo="[$रु.-44e]"/>
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
+<LC_INDEX ref="en_US"/>
 <LC_CALENDAR ref="hi_IN"/>
 <LC_CURRENCY ref="hi_IN"/>
 <LC_TRANSLITERATION ref="en_US"/>
