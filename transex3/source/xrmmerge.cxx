@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xrmmerge.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:41:07 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,9 +487,9 @@ void XRMResParser::ConvertStringToDBFormat( ByteString &rString )
     do {
         sResult = rString;
         rString.EraseLeadingChars( _LF );
-        rString.EraseLeadingChars( ' ' );
+    //  rString.EraseLeadingChars( ' ' );
         rString.EraseLeadingChars( '\t' );
-        rString.EraseTrailingChars( ' ' );
+    //  rString.EraseTrailingChars( ' ' );
         rString.EraseTrailingChars( '\t' );
     } while ( sResult != rString );
 
