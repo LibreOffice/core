@@ -27,7 +27,7 @@ class AccessibleComponentHandler
     public AccessibleComponentHandler (XAccessibleComponent xComponent)
     {
         if (xComponent != null)
-            maChildList.setSize (5);
+            maChildList.setSize (4);
     }
 
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
@@ -67,20 +67,6 @@ class AccessibleComponentHandler
                             + aBBox.Width + ", " + aBBox.Height,
                             aParent);
                         break;
-                    case 4:
-                        boolean bVisible = xComponent.isVisible();
-                        boolean bShowing = xComponent.isShowing();
-                        String sText;
-                        if (bVisible && bShowing)
-                            sText = new String ("visible and showing");
-                        else if (bVisible)
-                            sText = new String ("visible but not showing");
-                        else if (bShowing)
-                            sText = new String ("showing but not visible");
-                        else
-                            sText = new String ("neither visible nor showing");
-                        aChild = new StringNode (sText, aParent);
-                        break;
                 }
             }
         }
@@ -92,6 +78,6 @@ class AccessibleComponentHandler
         maChildList.clear();
         if (aNode instanceof AccTreeNode)
             if (((AccTreeNode)aNode).getComponent() != null)
-                maChildList.setSize (5);
+                maChildList.setSize (4);
     }
 }
