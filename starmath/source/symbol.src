@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:28:37 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,8 +237,8 @@ Resource RID_LOCALIZED_NAMES
         };
     ItemList [ language_user1 ] =
     {
-             < "Griechisch" ; > ;
-        < "Spezial" ; > ;
+             < "; Griechisch" ; > ;
+        < "; Spezial" ; > ;
     };
     ItemList [ english_us ] =
     {
@@ -258,7 +258,7 @@ Resource RID_LOCALIZED_NAMES
     ItemList [ greek ] =
     {
              < "ÅëëçíéêÜ" ; > ;
-        < "Specialized" ; > ;
+        < "Åéäéêü" ; > ;
     };
     ItemList [ dutch ] =
     {
@@ -581,72 +581,72 @@ Resource RID_LOCALIZED_NAMES
         };
     ItemList [ language_user1 ] =
     {
-        < "alpha" ; > ;
-        < "ALPHA" ; > ;
-        < "beta" ; > ;
-        < "BETA" ; > ;
-        < "gamma" ; > ;
-        < "GAMMA" ; > ;
-        < "delta" ; > ;
-        < "DELTA" ; > ;
-        < "epsilon" ; > ;
-        < "EPSILON" ; > ;
-        < "zeta" ; > ;
-        < "ZETA" ; > ;
-        < "eta" ; > ;
-        < "ETA" ; > ;
-        < "theta" ; > ;
-        < "THETA" ; > ;
-        < "jota" ; > ;
-        < "JOTA" ; > ;
-        < "kappa" ; > ;
-        < "KAPPA" ; > ;
-        < "lambda" ; > ;
-        < "LAMBDA" ; > ;
-        < "my" ; > ;
-        < "MY" ; > ;
-        < "ny" ; > ;
-        < "NY" ; > ;
-        < "xi" ; > ;
-        < "XI" ; > ;
-        < "omikron" ; > ;
-        < "OMIKRON" ; > ;
-        < "pi" ; > ;
-        < "PI" ; > ;
-        < "rho" ; > ;
-        < "RHO" ; > ;
-        < "sigma" ; > ;
-        < "SIGMA" ; > ;
-        < "tau" ; > ;
-        < "TAU" ; > ;
-        < "ypsilon" ; > ;
-        < "YPSILON" ; > ;
-        < "phi" ; > ;
-        < "PHI" ; > ;
-        < "chi" ; > ;
-        < "CHI" ; > ;
-        < "psi" ; > ;
-        < "PSI" ; > ;
-        < "omega" ; > ;
-        < "OMEGA" ; > ;
-        < "varepsilon" ; > ;
-        < "vartheta" ; > ;
-        < "varpi" ; > ;
-        < "varrho" ; > ;
-        < "varsigma" ; > ;
-        < "varphi" ; > ;
-        < "element" ; > ;
-        < "keinelement" ; > ;
-        < "kleingegen" ; > ;
-        < "großgegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
-        < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
-        < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "; alpha" ; > ;
+        < "; ALPHA" ; > ;
+        < "; beta" ; > ;
+        < "; BETA" ; > ;
+        < "; gamma" ; > ;
+        < "; GAMMA" ; > ;
+        < "; delta" ; > ;
+        < "; DELTA" ; > ;
+        < "; epsilon" ; > ;
+        < "; EPSILON" ; > ;
+        < "; zeta" ; > ;
+        < "; ZETA" ; > ;
+        < "; eta" ; > ;
+        < "; ETA" ; > ;
+        < "; theta" ; > ;
+        < "; THETA" ; > ;
+        < "; jota" ; > ;
+        < "; JOTA" ; > ;
+        < "; kappa" ; > ;
+        < "; KAPPA" ; > ;
+        < "; lambda" ; > ;
+        < "; LAMBDA" ; > ;
+        < "; my" ; > ;
+        < "; MY" ; > ;
+        < "; ny" ; > ;
+        < "; NY" ; > ;
+        < "; xi" ; > ;
+        < "; XI" ; > ;
+        < "; omikron" ; > ;
+        < "; OMIKRON" ; > ;
+        < "; pi" ; > ;
+        < "; PI" ; > ;
+        < "; rho" ; > ;
+        < "; RHO" ; > ;
+        < "; sigma" ; > ;
+        < "; SIGMA" ; > ;
+        < "; tau" ; > ;
+        < "; TAU" ; > ;
+        < "; ypsilon" ; > ;
+        < "; YPSILON" ; > ;
+        < "; phi" ; > ;
+        < "; PHI" ; > ;
+        < "; chi" ; > ;
+        < "; CHI" ; > ;
+        < "; psi" ; > ;
+        < "; PSI" ; > ;
+        < "; omega" ; > ;
+        < "; OMEGA" ; > ;
+        < "; varepsilon" ; > ;
+        < "; vartheta" ; > ;
+        < "; varpi" ; > ;
+        < "; varrho" ; > ;
+        < "; varsigma" ; > ;
+        < "; varphi" ; > ;
+        < "; element" ; > ;
+        < "; keinelement" ; > ;
+        < "; kleingegen" ; > ;
+        < "; großgegen" ; > ;
+        < "; ungleich" ; > ;
+        < "; identisch" ; > ;
+        < "; strebt" ; > ;
+        < "; unendlich" ; > ;
+        < "; winkel" ; > ;
+        < "; promille" ; > ;
+        < "; und" ; > ;
+        < "; oder" ; > ;
     };
     ItemList [ english_us ] =
     {
@@ -857,72 +857,72 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ greek ] =
     {
-        < "¢ëöá" ; > ;
-        < "¢ëöá" ; > ;
-        < "ÂÞôá" ; > ;
-        < "ÂÞôá" ; > ;
-        < "ÃÜììá" ; > ;
-        < "ÃÜììá" ; > ;
-        < "delta" ; > ;
-        < "DELTA" ; > ;
-        < "epsilon" ; > ;
-        < "EPSILON" ; > ;
-        < "zeta" ; > ;
-        < "ZETA" ; > ;
-        < "eta" ; > ;
-        < "ETA" ; > ;
-        < "theta" ; > ;
-        < "THETA" ; > ;
-        < "iota" ; > ;
-        < "IOTA" ; > ;
-        < "kappa" ; > ;
-        < "KAPPA" ; > ;
-        < "ë" ; > ;
-        < "ë" ; > ;
-        < "mu" ; > ;
-        < "MU" ; > ;
-        < "nu" ; > ;
-        < "NU" ; > ;
-        < "xi" ; > ;
-        < "XI" ; > ;
-        < "omicron" ; > ;
-        < "OMICRON" ; > ;
-        < "pi" ; > ;
-        < "PI" ; > ;
-        < "rho" ; > ;
-        < "RHO" ; > ;
-        < "sigma" ; > ;
-        < "SIGMA" ; > ;
-        < "tau" ; > ;
-        < "TAU" ; > ;
-        < "upsilon" ; > ;
-        < "UPSILON" ; > ;
-        < "phi" ; > ;
-        < "PHI" ; > ;
-        < "chi" ; > ;
-        < "CHI" ; > ;
-        < "psi" ; > ;
-        < "PSI" ; > ;
-        < "omega" ; > ;
-        < "OMEGA" ; > ;
-        < "varepsilon" ; > ;
-        < "vartheta" ; > ;
-        < "varpi" ; > ;
-        < "varrho" ; > ;
-        < "varsigma" ; > ;
-        < "varphi" ; > ;
-        < "element" ; > ;
+        < "Üëöá" ; > ;
+        < "ÁËÖÁ" ; > ;
+        < "âÞôá" ; > ;
+        < "ÂÇÔÁ" ; > ;
+        < "ãÜììá" ; > ;
+        < "ÃÁÌÌÁ" ; > ;
+        < "äÝëôá" ; > ;
+        < "ÄÅËÔÁ" ; > ;
+        < "Ýøéëïí" ; > ;
+        < "ÅØÉËÏÍ" ; > ;
+        < "æÞôá" ; > ;
+        < "ÆÇÔÁ" ; > ;
+        < "Þôá" ; > ;
+        < "ÇÔÁ" ; > ;
+        < "èÞôá" ; > ;
+        < "ÈÇÔÁ" ; > ;
+        < "ãéþôá" ; > ;
+        < "ÃÉÙÔÁ" ; > ;
+        < "êÜðá" ; > ;
+        < "ÊÁÐÁ" ; > ;
+        < "ëÜìäá" ; > ;
+        < "ËÁÌÄÁ" ; > ;
+        < "ìé" ; > ;
+        < "ÌÉ" ; > ;
+        < "íé" ; > ;
+        < "ÍÉ" ; > ;
+        < "îé" ; > ;
+        < "ÎÉ" ; > ;
+        < "üìéêñïí" ; > ;
+        < "ÏÌÉÊÑÏÍ" ; > ;
+        < "ðé" ; > ;
+        < "ÐÉ" ; > ;
+        < "ñï" ; > ;
+        < "ÑÏ" ; > ;
+        < "óßãìá" ; > ;
+        < "ÓÉÃÌÁ" ; > ;
+        < "ôáõ" ; > ;
+        < "ÔÁÕ" ; > ;
+        < "ýøéëïí" ; > ;
+        < "ÕØÉËÏÍ" ; > ;
+        < "öé" ; > ;
+        < "ÖÉ" ; > ;
+        < "÷é" ; > ;
+        < "×É" ; > ;
+        < "øé" ; > ;
+        < "ØÉ" ; > ;
+        < "ùìÝãá" ; > ;
+        < "ÙÌÅÃÁ" ; > ;
+        < "êáëëéãñáöéêü Ýøéëïí" ; > ;
+        < "êáëëéãñáöéêü èÞôá" ; > ;
+        < "êáëëéãñáöéêü ðé" ; > ;
+        < "êáëëéãñáöéêü ñï" ; > ;
+        < "ôåëéêü óßãìá" ; > ;
+        < "êáëëéãñáöéêü öé" ; > ;
+        < "óôïé÷åßï" ; > ;
         < "noelement" ; > ;
         < "strictlylessthan" ; > ;
-        < "großgegen" ; > ;
-        < "ÄéÜöïñï" ; > ;
-        < "EXACT" ; > ;
+        < "strictlygreaterthan" ; > ;
+        < "notequal" ; > ;
+        < "identical" ; > ;
         < "tendto" ; > ;
-        < "¢ðåéñï" ; > ;
-        < "Ãùíßá" ; > ;
+        < "infinite" ; > ;
+        < "angle" ; > ;
         < "perthousand" ; > ;
-        < "KAI" ; > ;
-        < "¹" ; > ;
+        < "êáé" ; > ;
+        < "Þ" ; > ;
     };
     ItemList [ dutch ] =
     {
@@ -1425,8 +1425,8 @@ Resource RID_LOCALIZED_NAMES
         < "ETA" ; > ;
         < "teta" ; > ;
         < "TETA" ; > ;
-        < "jota" ; > ;
-        < "JOTA" ; > ;
+        < "iota" ; > ;
+        < "IOTA" ; > ;
         < "kapa" ; > ;
         < "KAPA" ; > ;
         < "lambda" ; > ;
@@ -1465,11 +1465,11 @@ Resource RID_LOCALIZED_NAMES
         < "varfi" ; > ;
         < "elemento" ; > ;
         < "não-elemento" ; > ;
-        < "estritamentemenorque" ; > ;
-        < "estritamentemaiorque" ; > ;
+        < "muito.menor.que" ; > ;
+        < "muito.maior.que" ; > ;
         < "diferente" ; > ;
         < "idêntico" ; > ;
-        < "tendea" ; > ;
+        < "tende.a" ; > ;
         < "infinito" ; > ;
         < "ângulo" ; > ;
         < "pormil" ; > ;
@@ -1961,10 +1961,10 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ finnish ] =
     {
-        < "alfa" ; > ; 
-        < "alfa" ; > ; 
-        < "beeta" ; > ; 
-        < "beeta" ; > ; 
+        < "alfa" ; > ;
+        < "alfa" ; > ;
+        < "beeta" ; > ;
+        < "beeta" ; > ;
         < "Gamma" ; > ;
         < "Gamma" ; > ;
         < "Delta" ; > ;
@@ -2011,7 +2011,7 @@ Resource RID_LOCALIZED_NAMES
         < "Omega" ; > ;
         < "Varepsilon" ; > ;
         < "Vartheeta" ; > ;
-        < "Varpii" ; > ; 
+        < "Varpii" ; > ;
         < "Varrhoo" ; >  ;
         < "Varsigma" ; > ;
         < "Varfii" ; > ;
@@ -2375,6 +2375,7 @@ Resource RID_LOCALIZED_NAMES
     };
     };
 };
+
 
 
 
