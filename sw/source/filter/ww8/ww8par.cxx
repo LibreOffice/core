@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2001-10-17 10:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1658,12 +1658,18 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
     case 0xb:   cInsert = '\xa';    // Hard NewLine
                 break;
 
-    case 0xc:   bPgSecBreak = TRUE;
-                // new behavior: insert additional node only WHEN the Pagebreak
-                // ( #74468# )   is in a NODE that is NOT EMPTY
-                if( 0 < pPaM->GetPoint()->nContent.GetIndex() )
-                    bRet = TRUE;
-                pCtrlStck->KillUnlockedAttrs( *pPaM->GetPoint() );
+    case 0xc:
+                //#i1909# section/page breaks should not occur in tables, word
+                //itself ignores them in this case.
+                if (!bTable)
+                {
+                    bPgSecBreak = TRUE;
+                    // new behavior: insert additional node only WHEN the
+                    // Pagebreak ( #74468# )   is in a NODE that is NOT EMPTY
+                    if( 0 < pPaM->GetPoint()->nContent.GetIndex() )
+                        bRet = TRUE;
+                    pCtrlStck->KillUnlockedAttrs( *pPaM->GetPoint() );
+                }
                 break;
 
     case 0x1e:
