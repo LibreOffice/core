@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:12:33 $
+ *  last change: $Author: fs $ $Date: 2001-04-06 08:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,7 +452,7 @@ DBG_NAME(OColumns);
 //--------------------------------------------------------------------------
 OColumns::OColumns(::cppu::OWeakObject& _rParent,
                    ::osl::Mutex& _rMutex,
-                   sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector,
+                   sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector, IColumnFactory* _pColFactory,
                    sal_Bool _bAddColumn,sal_Bool _bDropColumn)
                    : connectivity::sdbcx::OCollection(_rParent,_bCaseSensitive,_rMutex,_rVector)
     ,m_pTable(NULL)
@@ -460,6 +460,7 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
     ,m_bAddColumn(_bAddColumn)
     ,m_bDropColumn(_bDropColumn)
     ,m_xDrvColumns(NULL)
+    ,m_pColFactoryImpl(_pColFactory)
 {
     //  m_pColMap = new OColumnMap(17, ::utl::UStringMixHash(_bCaseSensitive), ::utl::UStringMixEqual(_bCaseSensitive));
     DBG_CTOR(OColumns, NULL);
@@ -467,7 +468,7 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
 // -------------------------------------------------------------------------
 OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxDrvColumns,
-        sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector,
+        sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector, IColumnFactory* _pColFactory,
         sal_Bool _bAddColumn,sal_Bool _bDropColumn)
        : connectivity::sdbcx::OCollection(_rParent,_bCaseSensitive,_rMutex,_rVector)
     ,m_pTable(NULL)
@@ -475,6 +476,7 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
     ,m_bAddColumn(_bAddColumn)
     ,m_bDropColumn(_bDropColumn)
     ,m_xDrvColumns(_rxDrvColumns)
+    ,m_pColFactoryImpl(_pColFactory)
 {
     DBG_CTOR(OColumns, NULL);
 }
@@ -536,14 +538,14 @@ void SAL_CALL OColumns::disposing(void)
     OColumns_BASE::disposing();
 }
 //------------------------------------------------------------------------------
-void OColumns::loadSettings(const OConfigurationNode& _rLocation, const IColumnFactory* _pColFactory)
+void OColumns::loadSettings(const OConfigurationNode& _rLocation)
 {
     MutexGuard aGuard(m_rMutex);
 
-    OSL_ENSURE(_pColFactory != NULL, "OColumns::loadSettings : invalid factory !");
-
     OConfigurationNode aLocation(_rLocation);
     aLocation.setEscape(aLocation.isSetNode());
+
+    OSL_ENSURE(m_pColFactoryImpl, "OColumns::loadSettings: need a factory to create columns!");
 
     Sequence< ::rtl::OUString > aColumNames = aLocation.getNodeNames();
     const ::rtl::OUString* pColumNames = aColumNames.getConstArray();
@@ -554,7 +556,9 @@ void OColumns::loadSettings(const OConfigurationNode& _rLocation, const IColumnF
         // create the column if neccessary
         if (!hasByName(*pColumNames))
         {
-            pExistent = _pColFactory->createColumn(*pColumNames);
+            if (m_pColFactoryImpl)
+                pExistent = m_pColFactoryImpl->createColumn(*pColumNames);
+
             if (pExistent)
                 append(*pColumNames, pExistent);
             else
@@ -676,77 +680,16 @@ void OColumns::storeSettings(const OConfigurationNode& _rLocation)
 void OColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
 {
 }
+
 // -------------------------------------------------------------------------
 Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
 {
-    OSL_ENSURE(m_pTable,"OColumns::createObject: ParentTable wasn't set");
-    if(!m_pTable)
-        return Reference< XNamed >();
+    OSL_ENSURE(m_pColFactoryImpl, "OColumns::createObject: no column factory!");
 
-    Reference< XNamed > xRet = NULL;
-    if(m_xDrvColumns.is() && m_xDrvColumns->hasByName(_rName))
-    {
-        Reference<XPropertySet> xProp;
-        ::cppu::extractInterface(xProp,m_xDrvColumns->getByName(_rName));
-        Reference<XColumnLocate> xColumnLocate(m_xDrvColumns,UNO_QUERY);
-        sal_Int32 nPos = -1;
-        if(xColumnLocate.is())
-            nPos = xColumnLocate->findColumn(_rName);
-        OSL_ENSURE(nPos != -1,"OColumns::createObjectname not found!");
-//      else
-//      {
-//          Sequence< ::rtl::OUString> aNames = m_xDrvColumns->getElementNames();
-//          const ::rtl::OUString* pBegin   = aNames.getConstArray();
-//          const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-//          for(nPos = 0;pBegin != pEnd;++pBegin,++nPos)
-//              if(*pBegin == _rName)
-//                  break;
-//      }
-
-        OTableColumnWrapper* pColumn = new OTableColumnWrapper(xProp,nPos);
-        xRet = pColumn;
-    }
+    if (m_pColFactoryImpl)
+        return m_pColFactoryImpl->createColumn(_rName);
     else
-    {
-        ::rtl::OUString aSchema,aTable;
-        m_pTable->getPropertyValue(PROPERTY_SCHEMANAME) >>= aSchema;
-        m_pTable->getPropertyValue(PROPERTY_NAME)       >>= aTable;
-
-        Reference< XResultSet > xResult = m_pTable->getMetaData()->getColumns(m_pTable->getPropertyValue(PROPERTY_CATALOGNAME),
-                aSchema,aTable,_rName);
-
-        if(xResult.is())
-        {
-            Reference< XRow > xRow(xResult,UNO_QUERY);
-            while(xResult->next())
-            {
-                if(xRow->getString(4) == _rName)
-                {
-                    sal_Int32       nField5 = xRow->getInt(5);
-                    ::rtl::OUString aField6 = xRow->getString(6);
-                    sal_Int32       nField7 = xRow->getInt(7)
-                                ,   nField9 = xRow->getInt(9)
-                                ,   nField11= xRow->getInt(11);
-
-
-                    connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(_rName,
-                                                aField6,
-                                                xRow->getString(13),
-                                                nField11,
-                                                nField7,
-                                                nField9,
-                                                nField5,
-                                                sal_False,sal_False,sal_False,isCaseSensitive());
-
-                    Reference<XPropertySet> xProp = pRet;
-                    OTableColumnWrapper* pColumn = new OTableColumnWrapper(xProp,xRow->getInt(17));
-                    xRet = pColumn;
-                    break;
-                }
-            }
-        }
-    }
-    return xRet;
+        return Reference< XNamed >();
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OColumns::createEmptyObject()
