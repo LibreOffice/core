@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<oor:component-schema oor:name="Substitution" oor:package="org.openoffice.Office" 
+     xsi:schemaLocation="http://openoffice.org/2001/registry component-schema.xsd" 
+     xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+     xmlns:oor="http://openoffice.org/2001/registry" 
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+     xml:lang='en-US'>
+	<!--Responsible: CD-->
+    <info>
+		<desc>Stores rules for user defined path variables called SharePoint. These rules are evaluated when a user defined 
+		path variable is found and must be substituted to a real path.</desc>
+	</info>
+    <templates>
+        <group oor:name="SharePointMapping">
+            <info><desc>Is one mapping for a share point to an existing path or to another shar point defined in the Directory property.</desc></info> 
+            <prop oor:name="Directory" oor:type="xs:string" oor:nillable='false'>
+                <info><desc> A physical directory location stored as a valid encoded file URL or with other path variables.</desc></info>
+            </prop>
+            <group oor:name="Environment">
+                <info><desc>A rule parameter which restrict the appliance of mappings to a certain environment.</desc></info>
+                <prop oor:name="OS" oor:type="xs:string">
+                    <info><desc>The needed operating system for this share point mapping to be valid. This makes it possible 
+					to define system depedent settings.</desc></info>
+                    <value xsi:nil='true'/>
+                </prop>
+                <prop oor:name="Host" oor:type="xs:string">
+                    <info><desc>A name of a host for which the Directory property setting is valid. It is possible to 
+					use the wildcard character '*' which matches none or many characters.</desc></info>
+                    <value xsi:nil='true'/>
+                </prop>
+                <prop oor:name="Domain" oor:type="xs:string">
+                    <info><desc>A name of the domain for which the Directory property variable is valid. It is possible to 
+					use the wildcard character '*' which matches none or many characters.</desc></info>
+                    <value xsi:nil='true'/>
+                </prop>
+            </group> 
+        </group> 
+        <set oor:name="SharePoint" oor:node-type="SharePointMapping" >
+            <info>
+				<desc>The name of this set is used as the path variable name. It must be defined using only ascii characters and is not
+				case sensitive. It's a placeholder within path settings, can be substituted during runtime with an existing path defined in one of the 
+				defined mappings.</desc>
+			</info> 
+        </set> 
+    </templates>
+    <component>
+		<info>
+			<desc>Contains the root of all substitution rules defined in the SharePoints set.</desc>
+		</info>
+        <set oor:name="SharePoints" oor:node-type="SharePoint">
+            <info><desc>A table of SharePoints, which are used as path variables (placeholder) within path settings.</desc></info>
+        </set>
+    </component>
+</oor:component-schema> 
