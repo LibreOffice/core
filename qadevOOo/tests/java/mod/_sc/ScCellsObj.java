@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellsObj.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:03:30 $
+ *  last change:$Date: 2003-09-08 12:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,17 @@
 
 package mod._sc;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+
 import com.sun.star.container.XIndexAccess;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XCellRangesQuery;
 import com.sun.star.sheet.XSheetCellRanges;
 import com.sun.star.sheet.XSpreadsheetDocument;
@@ -73,17 +79,10 @@ import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
 import com.sun.star.text.XTextRange;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
-
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
 * Test for object which is represented by service
@@ -142,11 +141,7 @@ public class ScCellsObj extends TestCase {
     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        XInterface oInterface = null;
         XInterface oObj = null;
-        XComponentLoader oCLoader = null;
-        XDesktop oDesktop = null;
-        XSpreadsheetDocument oSheetDoc = null ;
         Object cellArr[] = new Object[3];
 
         // creation of testobject here
