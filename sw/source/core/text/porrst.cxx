@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-22 13:04:55 $
+ *  last change: $Author: fme $ $Date: 2001-12-06 08:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,7 +418,13 @@ SwTwips SwTxtFrm::EmptyHeight() const
 
     SwTwips nRet;
     if( !pOut )
+#ifdef VERTICAL_LAYOUT
+        nRet = IsVertical() ?
+               Prt().SSize().Width() + 1 :
+               Prt().SSize().Height() + 1;
+#else
         nRet = Prt().SSize().Height() + 1;
+#endif
     else
     {
         pFnt->SetFntChg( sal_True );
