@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:12:33 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,7 +544,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleAt
         if ( mpTableInfo )
         {
             USHORT nCols = mpTableInfo->GetCols();
-            USHORT nRows = mpTableInfo->GetCols();
+            USHORT nRows = mpTableInfo->GetRows();
             const ScPreviewColRowInfo* pColInfo = mpTableInfo->GetColInfo();
             const ScPreviewColRowInfo* pRowInfo = mpTableInfo->GetRowInfo();
 
