@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:56:20 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ TabDialog DLG_TEMPLATE_2
                 Text [ ENGLISH ] = "Indent and Spacing" ;
                 Text [ norwegian ] = "Indent and Spacing" ;
                 Text [ italian ] = "Rientro e spaziatura" ;
-                Text [ portuguese_brazilian ] = "Recuos & Afastamento" ;
+                Text [ portuguese_brazilian ] = "Recuo & Afastamento" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
                 Text [ finnish ] = "Sisennykset ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -407,7 +407,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ english_us ] = "Asian Typography";
                 Text[ portuguese ] = "Tipografia asiática";
                 Text[ russian ] = "Àçèàòñêîå îôîğìëåíèå";
-                Text[ greek ] = "ÁóéÜôéêç ôõğïãñáößá";
+                Text[ greek ] = "ÁóéáôéêŞ ôõğïãñáößá";
                 Text[ dutch ] = "Aziatische typografie";
                 Text[ french ] = "Typographie asiatique";
                 Text[ spanish ] = "Tipografía asiática";
@@ -1120,11 +1120,11 @@ String STR_PAGE_TEXTGRID
     Text[ danish ] = "Tekstgitter";
     Text[ swedish ] = "Textraster";
     Text[ polish ] = "Text Grid";
-    Text[ portuguese_brazilian ] = "Text Grid";
+    Text[ portuguese_brazilian ] = "Grade do texto";
     Text[ japanese ] = "è¡Œæ•°ã¨æ–‡å­—æ•°";
     Text[ korean ] = "í…ìŠ¤íŠ¸ ê·¸ë¦¬ë“œ";
-    Text[ chinese_simplified ] = "æ–‡å­—æ ¼å­çº¿";
-    Text[ chinese_traditional ] = "æ–‡å­—æ ¼å­ç·š";
+    Text[ chinese_simplified ] = "ç¨¿çº¸";
+    Text[ chinese_traditional ] = "ç¨¿ç´™";
     Text[ turkish ] = "Metin Izgarası";
     Text[ arabic ] = "Text Grid";
     Text[ catalan ] = "Text Grid";
@@ -1133,6 +1133,7 @@ String STR_PAGE_TEXTGRID
     Text[ hebrew ] = "Textraster";
     Text[ hindi ] = "Text Grid";
     Text[ slovak ] = "TextovÃ¡ mrieÅ¾ka";
+    Text[ language_user1 ] = "ZL: translation changed because of bug from Jack";
 };
 String STR_PAGE_COLUMN
 {
@@ -1549,7 +1550,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ japanese ] = "ç•ªå·ä»˜ã‘ã®ç¨®é¡";
                 Text[ chinese_traditional ] = "ç·¨è™Ÿé¡å‹";
                 Text[ arabic ] = "ØÑíŞÉ ÇáÊÑŞíã";
-                Text[ language_user1 ] = "MS W; MS Word, KeyID23136";
+                Text[ language_user1 ] = "; MS W; MS Word, KeyID23136";
                 Text[ greek ] = "Óôõë áñßèìçóçò";
                 Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ìŠ¤íƒ€ì¼";
                 Text[ turkish ] = "Numaralama türü";
@@ -1675,7 +1676,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ russian ] = "Ïàğàìåòğû";
                 Text[ polish ] = "Opcje";
                 Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-                Text[ language_user1 ] = "KW:T; KW:Tilde entfernen falls noch vorhanden";
+                Text[ language_user1 ] = "; KW:T; KW:Tilde entfernen falls noch vorhanden";
                 Text[ chinese_traditional ] = "é¸é …";
                 Text[ arabic ] = "ÎíÇÑÇÊ";
                 Text[ greek ] = "Åğéëïãİò";
@@ -1718,6 +1719,7 @@ TabDialog DLG_TEMPLATE_5
     Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¥‡ à¤•à¤¾ à¤¶à¥ˆà¤²à¥€";
     Text[ slovak ] = "Å tÃ½l ÄÃ­slovania";
 };
+
 
 
 
