@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-16 16:29:58 $
+ *  last change: $Author: thb $ $Date: 2001-05-18 10:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,8 @@
 #define BTN_OK                              101
 #define BTN_CANCEL                          102
 #define BTN_HELP                            103
-#define GRP_PREVIEW                         104
 #define CTL_PREVIEW                         105
-#define GRP_PARAMETER                       106
+#define FL_PARAMETER                        106
 
 // --------------------
 // - DLG_FILTERMOSAIC -

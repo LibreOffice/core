@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 15:45:25 $
+ *  last change: $Author: thb $ $Date: 2001-05-18 10:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <svtools/controldims.hrc>
 #include "dialogs.hrc"
 #include "grfflt.hrc"
 
@@ -102,43 +103,10 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
     Text[ turkish ] = "Mozaik";
     Text[ language_user1 ] = " ";
 
-    GroupBox GRP_PREVIEW
+    FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 93, 91 ) ;
-
-        Text = "Vorschau" ;
-        Text[ ENGLISH ] = "Preview" ;
-        Text[ english_us ] = "Preview" ;
-        Text[ portuguese ] = "Previsualizar";
-        Text[ russian ] = "Ïðåäâ. ïðîñìîòð";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ dutch ] = "Voorbeeld";
-        Text[ french ] = "Aperçu";
-        Text[ spanish ] = "Previsualización";
-        Text[ italian ] = "Anteprima";
-        Text[ danish ] = "Eksempel";
-        Text[ swedish ] = "Förhandsvisning";
-        Text[ polish ] = "Podgl¹d";
-        Text[ portuguese_brazilian ] = "Preview";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ turkish ] = "Preview";
-        Text[ arabic ] = "ãÚÇíäÉ";
-        Text[ catalan ] = "Previsualización";
-        Text[ finnish ] = "Esikatselu";
-    };
-    Control CTL_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 81, 73 ) ;
-    };
-    GroupBox GRP_PARAMETER
-    {
-        Pos = MAP_APPFONT ( 102, 3 );
-        Size = MAP_APPFONT ( 89, 91 );
+        Size = MAP_APPFONT ( 182, RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Parameter";
         Text[ ENGLISH ] = "Parameter";
         Text[ english_us ] = "Parameters";
@@ -162,9 +130,15 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ catalan ] = "Parámetros";
         Text[ finnish ] = "Parametrit";
     };
+    Control CTL_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 104 , 3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP ) ;
+        Size = MAP_APPFONT ( 81, 73 ) ;
+    };
+#define MA_Y0   3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     FixedText DLG_FILTERMOSAIC_FT_WIDTH
     {
-        Pos = MAP_APPFONT ( 108, 15 ) ;
+        Pos = MAP_APPFONT ( 12, MA_Y0 ) ;
         Size = MAP_APPFONT ( 77, 10 ) ;
         Text = "~Breite" ;
         Text[ ENGLISH ] = "~Width" ;
@@ -191,11 +165,12 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~ncho";
     };
+#define MA_Y1   MA_Y0 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERMOSAIC_MTR_WIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 120 , 28 ) ;
-        Size = MAP_APPFONT ( 65 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , MA_Y1 ) ;
+        Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -208,9 +183,10 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Last = 999 ;
         SpinSize = 1 ;
     };
+#define MA_Y2   MA_Y1 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     FixedText DLG_FILTERMOSAIC_FT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 108, 43 ) ;
+        Pos = MAP_APPFONT ( 12, MA_Y2 ) ;
         Size = MAP_APPFONT ( 77, 10 ) ;
         Text = "~Höhe" ;
         Text[ ENGLISH ] = "~Height" ;
@@ -237,11 +213,12 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~ltura";
     };
+#define MA_Y3   MA_Y2 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERMOSAIC_MTR_HEIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 120, 56 ) ;
-        Size = MAP_APPFONT ( 65, 12 ) ;
+        Pos = MAP_APPFONT ( 12, MA_Y3 ) ;
+        Size = MAP_APPFONT ( 35, 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -254,9 +231,10 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Last = 999 ;
         SpinSize = 1 ;
     };
+#define MA_Y4   MA_Y3 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     CheckBox DLG_FILTERMOSAIC_CBX_EDGES
     {
-        Pos = MAP_APPFONT ( 108, 74 ) ;
+        Pos = MAP_APPFONT ( 12, MA_Y4 ) ;
         Size = MAP_APPFONT ( 77, 12 ) ;
         TabStop = TRUE ;
         Text = "~Kanten hervorheben" ;
@@ -340,43 +318,10 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
     Text[ turkish ] = "Yüksek pozlama";
     Text[ language_user1 ] = " ";
 
-    GroupBox GRP_PREVIEW
+    FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 93, 91 ) ;
-
-        Text = "Vorschau" ;
-        Text[ ENGLISH ] = "Preview" ;
-        Text[ english_us ] = "Preview" ;
-        Text[ portuguese ] = "Previsualizar";
-        Text[ russian ] = "Ïðåäâ. ïðîñìîòð";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ dutch ] = "Voorbeeld";
-        Text[ french ] = "Aperçu";
-        Text[ spanish ] = "Previsualización";
-        Text[ italian ] = "Anteprima";
-        Text[ danish ] = "Eksempel";
-        Text[ swedish ] = "Förhandsvisning";
-        Text[ polish ] = "Podgl¹d";
-        Text[ portuguese_brazilian ] = "Preview";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ turkish ] = "Preview";
-        Text[ arabic ] = "ãÚÇíäÉ";
-        Text[ catalan ] = "Previsualización";
-        Text[ finnish ] = "Esikatselu";
-    };
-    Control CTL_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 81, 73 ) ;
-    };
-    GroupBox GRP_PARAMETER
-    {
-        Pos = MAP_APPFONT ( 102, 3 );
-        Size = MAP_APPFONT ( 89, 91 );
+        Size = MAP_APPFONT ( 182, RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Parameter";
         Text[ ENGLISH ] = "Parameter";
         Text[ english_us ] = "Parameters";
@@ -400,9 +345,15 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ catalan ] = "Parámetros";
         Text[ finnish ] = "Parametrit";
     };
+    Control CTL_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 104 , 3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP ) ;
+        Size = MAP_APPFONT ( 81, 73 ) ;
+    };
+#define MA_Y5   3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     FixedText DLG_FILTERSOLARIZE_FT_THRESHOLD
     {
-        Pos = MAP_APPFONT ( 108 , 15 ) ;
+        Pos = MAP_APPFONT ( 12, MA_Y5 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
         Text = "~Schwellenwert" ;
         Text[ ENGLISH ] = "Threshold" ;
@@ -429,11 +380,12 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Valor ~umbral";
     };
+#define MA_Y6   MA_Y5 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERSOLARIZE_MTR_THRESHOLD
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 120 , 28 ) ;
-        Size = MAP_APPFONT ( 65 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , MA_Y6 ) ;
+        Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -444,9 +396,10 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Last = 100 ;
         SpinSize = 1 ;
     };
+#define MA_Y7   MA_Y6 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     CheckBox DLG_FILTERSOLARIZE_CBX_INVERT
     {
-        Pos = MAP_APPFONT ( 108, 46 ) ;
+        Pos = MAP_APPFONT ( 12, 46 ) ;
         Size = MAP_APPFONT ( 77, 12 ) ;
         TabStop = TRUE ;
         Text = "~Invertieren" ;
@@ -533,55 +486,22 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
     Text[ korean ] = "³°À½È¿°ú";
     Text[ turkish ] = "Eskitme";
 
-    GroupBox GRP_PREVIEW
+    FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 93, 91 ) ;
-
-        Text = "Vorschau" ;
-        Text[ ENGLISH ] = "Preview" ;
-        Text[ english_us ] = "Preview" ;
-        Text[ portuguese ] = "Previsualizar";
-        Text[ russian ] = "Ïðåäâ. ïðîñìîòð";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ dutch ] = "Voorbeeld";
-        Text[ french ] = "Aperçu";
-        Text[ spanish ] = "Previsualización";
-        Text[ italian ] = "Anteprima";
-        Text[ danish ] = "Eksempel";
-        Text[ swedish ] = "Förhandsvisning";
-        Text[ polish ] = "Podgl¹d";
-        Text[ portuguese_brazilian ] = "Preview";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ turkish ] = "Preview";
-        Text[ arabic ] = "ãÚÇíäÉ";
-        Text[ catalan ] = "Previsualización";
-        Text[ finnish ] = "Esikatselu";
-    };
-    Control CTL_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 81, 73 ) ;
-    };
-    GroupBox GRP_PARAMETER
-    {
-        Pos = MAP_APPFONT ( 102, 3 );
-        Size = MAP_APPFONT ( 89, 91 );
+        Size = MAP_APPFONT ( 182, RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Parameter";
         Text[ ENGLISH ] = "Parameter";
         Text[ english_us ] = "Parameters";
-        Text[ portuguese ] = "Parâmetro";
+        Text[ portuguese ] = "Parâmetros";
         Text[ russian ] = "Ïàðàìåòðû";
-        Text[ greek ] = "ÐáñÜìåôñïò";
+        Text[ greek ] = "ÐáñÜìåôñïé";
         Text[ dutch ] = "Parameter";
-        Text[ french ] = "Paramètre";
+        Text[ french ] = "Paramètres";
         Text[ spanish ] = "Parámetros";
         Text[ italian ] = "Parametri";
         Text[ danish ] = "Parametre";
-        Text[ swedish ] = "Parameter";
+        Text[ swedish ] = "Parametrar";
         Text[ polish ] = "Parametry";
         Text[ portuguese_brazilian ] = "Parameter";
         Text[ japanese ] = "Êß×Ò°À";
@@ -593,9 +513,15 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ catalan ] = "Parámetros";
         Text[ finnish ] = "Parametrit";
     };
+    Control CTL_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 104 , 3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP ) ;
+        Size = MAP_APPFONT ( 81, 73 ) ;
+    };
+#define MA_Y8   3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     FixedText DLG_FILTERSEPIA_FT_SEPIA
     {
-        Pos = MAP_APPFONT ( 108 , 15 ) ;
+        Pos = MAP_APPFONT ( 12 , MA_Y8 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
         Text = "Alterungsgrad" ;
         Text[ ENGLISH ] = "Age value" ;
@@ -623,11 +549,12 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ turkish ] = "Eskitme derecesi";
         Text[ catalan ] = "Grado de envejecim.";
     };
+#define MA_Y9   MA_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERSEPIA_MTR_SEPIA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 120 , 28 ) ;
-        Size = MAP_APPFONT ( 65 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , MA_Y9 ) ;
+        Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
         Right = TRUE ;
         Repeat = TRUE ;
@@ -698,55 +625,22 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
     Text[ korean ] = "Æ÷½ºÅÍ";
     Text[ turkish ] = "Afiþ";
 
-    GroupBox GRP_PREVIEW
+    FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 93, 91 ) ;
-
-        Text = "Vorschau" ;
-        Text[ ENGLISH ] = "Preview" ;
-        Text[ english_us ] = "Preview" ;
-        Text[ portuguese ] = "Previsualizar";
-        Text[ russian ] = "Ïðåäâ. ïðîñìîòð";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ dutch ] = "Voorbeeld";
-        Text[ french ] = "Aperçu";
-        Text[ spanish ] = "Previsualización";
-        Text[ italian ] = "Anteprima";
-        Text[ danish ] = "Eksempel";
-        Text[ swedish ] = "Förhandsvisning";
-        Text[ polish ] = "Podgl¹d";
-        Text[ portuguese_brazilian ] = "Preview";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ turkish ] = "Preview";
-        Text[ arabic ] = "ãÚÇíäÉ";
-        Text[ catalan ] = "Previsualización";
-        Text[ finnish ] = "Esikatselu";
-    };
-    Control CTL_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 81, 73 ) ;
-    };
-    GroupBox GRP_PARAMETER
-    {
-        Pos = MAP_APPFONT ( 102, 3 );
-        Size = MAP_APPFONT ( 89, 91 );
+        Size = MAP_APPFONT ( 182, RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Parameter";
         Text[ ENGLISH ] = "Parameter";
         Text[ english_us ] = "Parameters";
         Text[ portuguese ] = "Parâmetros";
         Text[ russian ] = "Ïàðàìåòðû";
-        Text[ greek ] = "ÐáñÜìåôñïò";
+        Text[ greek ] = "ÐáñÜìåôñïé";
         Text[ dutch ] = "Parameter";
-        Text[ french ] = "Paramètre";
+        Text[ french ] = "Paramètres";
         Text[ spanish ] = "Parámetros";
         Text[ italian ] = "Parametri";
         Text[ danish ] = "Parametre";
-        Text[ swedish ] = "Parameter";
+        Text[ swedish ] = "Parametrar";
         Text[ polish ] = "Parametry";
         Text[ portuguese_brazilian ] = "Parameter";
         Text[ japanese ] = "Êß×Ò°À";
@@ -758,9 +652,15 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ catalan ] = "Parámetros";
         Text[ finnish ] = "Parametrit";
     };
+    Control CTL_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 104 , 3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP ) ;
+        Size = MAP_APPFONT ( 81, 73 ) ;
+    };
+#define MA_Y10  3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     FixedText DLG_FILTERPOSTER_FT_POSTER
     {
-        Pos = MAP_APPFONT ( 108 , 15 ) ;
+        Pos = MAP_APPFONT ( 12 , MA_Y10 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
         Text = "Posterfarben" ;
         Text[ ENGLISH ] = "Poster colors" ;
@@ -786,11 +686,12 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ turkish ] = "Afiþ renkleri";
         Text[ catalan ] = "Colores del póster";
     };
+#define MA_Y11  MA_Y10 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     NumericField DLG_FILTERPOSTER_NUM_POSTER
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 120 , 28 ) ;
-        Size = MAP_APPFONT ( 65 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , MA_Y11 ) ;
+        Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -865,51 +766,18 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     Text[ turkish ] = "Rölyef";
     Text[ language_user1 ] = " ";
 
-    GroupBox GRP_PREVIEW
+    FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 93, 91 ) ;
-
-        Text = "Vorschau" ;
-        Text[ ENGLISH ] = "Preview" ;
-        Text[ english_us ] = "Preview" ;
-        Text[ portuguese ] = "Previsualizar";
-        Text[ russian ] = "Ïðåäâ. ïðîñìîòð";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ dutch ] = "Voorbeeld";
-        Text[ french ] = "Aperçu";
-        Text[ spanish ] = "Previsualización";
-        Text[ italian ] = "Anteprima";
-        Text[ danish ] = "Eksempel";
-        Text[ swedish ] = "Förhandsvisning";
-        Text[ polish ] = "Podgl¹d";
-        Text[ portuguese_brazilian ] = "Preview";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ turkish ] = "Preview";
-        Text[ arabic ] = "ãÚÇíäÉ";
-        Text[ catalan ] = "Previsualización";
-        Text[ finnish ] = "Esikatselu";
-    };
-    Control CTL_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 81, 73 ) ;
-    };
-    GroupBox GRP_PARAMETER
-    {
-        Pos = MAP_APPFONT ( 102, 3 );
-        Size = MAP_APPFONT ( 89, 91 );
+        Size = MAP_APPFONT ( 182, RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Parameter";
         Text[ ENGLISH ] = "Parameter";
         Text[ english_us ] = "Parameters";
-        Text[ portuguese ] = "Parâmetro";
+        Text[ portuguese ] = "Parâmetros";
         Text[ russian ] = "Ïàðàìåòðû";
-        Text[ greek ] = "ÐáñÜìåôñïò";
+        Text[ greek ] = "ÐáñÜìåôñïé";
         Text[ dutch ] = "Parameter";
-        Text[ french ] = "Paramètre";
+        Text[ french ] = "Paramètres";
         Text[ spanish ] = "Parámetros";
         Text[ italian ] = "Parametri";
         Text[ danish ] = "Parametre";
@@ -925,9 +793,15 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ catalan ] = "Parámetros";
         Text[ finnish ] = "Parametrit";
     };
+    Control CTL_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 104 , 3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP ) ;
+        Size = MAP_APPFONT ( 81, 73 ) ;
+    };
+#define MA_Y12  3 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     FixedText DLG_FILTEREMBOSS_FT_LIGHT
     {
-        Pos = MAP_APPFONT ( 108 , 15 ) ;
+        Pos = MAP_APPFONT ( 12 , MA_Y12 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
         Text = "Lichtquelle" ;
         Text[ ENGLISH ] = "Source of light" ;
@@ -953,10 +827,11 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ turkish ] = "Iþýk kaynaðý";
         Text[ catalan ] = "Fuente de luz";
     };
+#define MA_Y13  MA_Y12 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     Control DLG_FILTEREMBOSS_CTL_LIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 108 , 28 ) ;
+        Pos = MAP_APPFONT ( 12 , MA_Y13 ) ;
         Size = MAP_APPFONT ( 77 , 60 ) ;
         TabStop = TRUE ;
     };

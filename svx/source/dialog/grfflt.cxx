@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-21 14:15:13 $
+ *  last change: $Author: thb $ $Date: 2001-05-18 10:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,9 +411,8 @@ GraphicFilterDialog::GraphicFilterDialog( Window* pParent, const ResId& rResId, 
     mfScaleY        ( 0.0 ),
     maSizePixel     ( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) ),
     maModifyHdl     ( LINK( this, GraphicFilterDialog, ImplModifyHdl ) ),
-    maGrpPreview    ( this, SVX_RES( GRP_PREVIEW ) ),
     maPreview       ( this, SVX_RES( CTL_PREVIEW ) ),
-    maGrpParameter  ( this, SVX_RES( GRP_PARAMETER ) ),
+    maFlParameter   ( this, SVX_RES( FL_PARAMETER ) ),
     maBtnOK         ( this, SVX_RES( BTN_OK ) ),
     maBtnCancel     ( this, SVX_RES( BTN_CANCEL ) ),
     maBtnHelp       ( this, SVX_RES( BTN_HELP ) )
