@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-01-09 15:04:44 $
+ *  last change: $Author: os $ $Date: 2002-02-26 12:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,8 @@ long SvxStyleBox::Notify( NotifyEvent& rNEvt )
             {
                 if ( KEY_TAB == nCode )
                     bRelease = FALSE;
-                nHandled = 1;
+                else
+                    nHandled = 1;
                 Select();
                 break;
             }
