@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cd $ $Date: 2001-06-05 08:29:18 $
+ *  last change: $Author: vg $ $Date: 2001-06-07 16:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@
 #include <unotools/streamhelper.hxx>
 #endif
 
-#include "mailmodel.hxx"
+#include <mailmodel.hxx>
 #include "bindings.hxx"
 #include "dispatch.hxx"
 #include "viewfrm.hxx"
