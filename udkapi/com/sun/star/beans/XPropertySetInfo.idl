@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertySetInfo.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ module com {  module sun {  module star {  module beans {
     <p>The specification only describes the properties, it does not contain
     any values.</p>
  */
-interface XPropertySetInfo: com::sun::star::uno::XInterface
+published interface XPropertySetInfo: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
