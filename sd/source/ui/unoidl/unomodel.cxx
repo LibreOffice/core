@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 10:31:52 $
+ *  last change: $Author: rt $ $Date: 2004-07-15 08:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1719,7 +1719,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                         SdrOutliner& rOutl = pDoc->GetDrawOutliner( NULL );
                         rOutl.SetBackgroundColor( pPage->GetBackgroundColor( pPV ) );
                     }
-                    pPV->InitRedraw( pOut, aRegion, 0, &aRenderPaintProc );
+                    pPV->CompleteRedraw( pOut, aRegion, 0, &aImplRenderPaintProc );
                 }
                 else
                 {
