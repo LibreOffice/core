@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentAction.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-01-15 09:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,76 +69,76 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** specifies actions which can be transported with content events.
 
+    <p>
     The situations under which contents will send ContentEvents of the various
     action types are described below.  The description is broken into a list of
     useful definitions, a list of events that happen to contents, and a list of
     reactions taken by contents in response to those events.
+    </p>
 
+    <p>
     The definitions are as follows:
+    </p>
 
-    D1  A content C has an identifier id(C).
+    <table border =1>
+    <tr><td>D1</td><td>A content C has an identifier id(C).</td></tr>
+    <tr><td>D2</td><td>A content C is in one of two states, Alive or Deleted.
+                       </td></tr>
+    <tr><td>D3</td><td>A folder content F has a set of children H(F) that is a
+                       set of content identifiers. For example, an "open"
+                       command will usualy return a subset of the contents
+                       denoted by H(F).</td></tr>
+    </table>
 
-    D2  A content C is in one of two states, Alive or Deleted.
-
-    D3  A folder content F has a set of children H(F) that is a set of content
-        identifiers.  (For example, an "open" command will usualy return a
-        subset of the contents denoted by H(F).)
-
+    <p>
     The events that can happen to contents (and that are of interest in this
     context) are listed next.  Note that 'event' here does not mean an
     ContentEvent, but rather some event that occurs either because some content
     processes a command, or because a content gets informed about a relevant
     change in the underlying system it represents.
+    </p>
 
-    E1  The identifier of a content C changes from id1(C) == A to id2(C) == B,
-        denoted as
+    <table border =1>
+    <tr><td>E1</td><td>The identifier of a content C changes from id1(C) == A
+                       to id2(C) == B, denoted as E1(C: A->B). For example,
+                       this event may occur when content C processes a
+                       "setPropertyValues" command changing its "Title" propery,
+                       or when afolder that hierarchicaly contains C changes
+                       its identity.</td></tr>
+    <tr><td>E2</td><td>The state of a content C changes from Alive to Deleted,
+                       denoted as E2(C). For example, this event may occur when
+                       content C processes a "delete"   command, or when a content
+                       representing an IMAP message gets informed   by the IMAP
+                       server that the message has been deleted.</td></tr>
+    <tr><td>E3</td><td>The set of children of a folder content F is enlarged by
+                       some identifier A (that was not previously in that set,
+                       i.e., !(A in H1(F)) && (A in H2(F))), denoted as E3(F, A).
+                       For example, this event may occur when a new content
+                       created at folder F processes its "insert" command, or
+                       when a folder representing   an IMAP mailbox gets informed
+                       by the IMAP server that a new message has arrived at that
+                       mailbox.</td></tr>
+    </table>
 
-            E1(C: A->B).
-
-        For example, this event may occur when content C processes a
-        "setPropertyValues" command changing its "Title" propery, or when a
-        folder that hierarchicaly contains C changes its identity.
-
-    E2  The state of a content C changes from Alive to Deleted, denoted as
-
-            E2(C).
-
-        For example, this event may occur when content C processes a "delete"
-        command, or when a content representing an IMAP message gets informed
-        by the IMAP server that the message has been deleted.
-
-    E3  The set of children of a folder content F is enlarged by some
-        identifier A (that was not previously in that set, i.e.,
-        !(A in H1(F)) && (A in H2(F))), denoted as
-
-            E3(F, A).
-
-        For example, this event may occur when a new content created at
-        folder F processes its "insert" command, or when a folder representing
-        an IMAP mailbox gets informed by the IMAP server that a new message has
-        arrived at that mailbox.
-
+    <p>
     Finally, the list of reactions taken by contents in response to the above
     events gives a description of what kinds of ContentEvents are sent in which
     situations:
+    </p>
 
-    R1  E1(C: A->B)  results in C sending an EXCHANGED ContentEvent,
-        which then results in the following:  All folders F that used to have A
-        as a child, but will not have B as a child, i.e.,
-
-            (A in H1(F)) && !(B in H2(F)),
-
-        send a REMOVED ContentEvent.
-
-    R2  E2(C)  results in C sending a DELETED ContentEvent,
-        which then results in the following:  All folders F that used to have A
-        as a child, but will not continue to have A as a child, i.e.,
-
-            (A in H1(F)) && !(A in H2(F)),
-
-        send a REMOVED event.
-
-    R3  E3(F, A)  results in F sending an INSERTED event.
+    <table border =1>
+    <tr><td>R1</td><td>E1(C: A->B) results in C sending an EXCHANGED
+                       ContentEvent, which then results in the following: All
+                       folders F that used to have A as a child, but will not
+                       have B as a child, i.e., (A in H1(F)) && !(B in H2(F)),
+                       send a REMOVED ContentEvent.</td></tr>
+    <tr><td>R2</td><td>E2(C) results in C sending a DELETED ContentEvent,
+                       which then results in the following:  All folders F that
+                       used to have A as a child, but will not continue to have
+                       A as a child, i.e., (A in H1(F)) && !(A in H2(F)), send
+                       a REMOVED event.</td></tr>
+    <tr><td>R3</td><td>E3(F, A) results in F sending an INSERTED event.</td></tr>
+    </table>
 */
 constants ContentAction
 {
