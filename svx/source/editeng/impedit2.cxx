@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 11:04:03 $
+ *  last change: $Author: mt $ $Date: 2000-10-20 13:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1284,6 +1284,13 @@ EditPaM ImpEditEngine::WordRight( const EditPaM& rPaM, sal_Int16 nWordType )
 {
     xub_StrLen nMax = rPaM.GetNode()->Len();
     EditPaM aNewPaM( rPaM );
+    if ( aNewPaM.GetIndex() < nMax )
+    {
+        uno::Reference < text::XBreakIterator > xBI = ImplGetBreakIterator();
+        text::Boundary aBoundary = xBI->nextWord( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale(), nWordType );
+        aNewPaM.SetIndex( aBoundary.startPos );
+    }
+    // not 'else', maybe the index reached nMax now...
     if ( aNewPaM.GetIndex() >= nMax )
     {
         // Naechster Absatz...
@@ -1294,12 +1301,6 @@ EditPaM ImpEditEngine::WordRight( const EditPaM& rPaM, sal_Int16 nWordType )
             aNewPaM.SetNode( pNextNode );
             aNewPaM.SetIndex( 0 );
         }
-    }
-    else
-    {
-        uno::Reference < text::XBreakIterator > xBI = ImplGetBreakIterator();
-        text::Boundary aBoundary = xBI->nextWord( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale(), nWordType );
-        aNewPaM.SetIndex( aBoundary.startPos );
     }
     return aNewPaM;
 }
