@@ -62,7 +62,8 @@ package installer::windows::language;
 use installer::exiter;
 
 ####################################################
-# Determining the Windows language of a file (LCID)
+# Determining the Windows language (LCID)
+# English: 1033
 ####################################################
 
 sub get_windows_language
@@ -79,7 +80,8 @@ sub get_windows_language
 }
 
 ####################################################
-# Determining the Windows language of a file (LCID)
+# Determining the Windows language ANSI-Codepage
+# English: 1252
 ####################################################
 
 sub get_windows_encoding
@@ -93,6 +95,9 @@ sub get_windows_encoding
     if ( $windowsencoding eq "" ) { installer::exiter::exit_program("ERROR: Unknown language $language in function get_windows_encoding", "get_windows_encoding"); }
 
     if ( $windowsencoding eq "0" ) { $windowsencoding = "65001"; }  # languages with "0" have to be available in UTF-8 (65001)
+
+    # Asian multilingual installation sets need a code neutral Windows Installer database -> $windowsencoding = 0
+    if (( $language eq "en-US" ) && (( $installer::globals::product =~ /suitemulti/i ) || ( $installer::globals::product =~ /officemulti/i ))) { $windowsencoding = "0"; }
 
     return $windowsencoding;
 }
