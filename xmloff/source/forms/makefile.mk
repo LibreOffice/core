@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: ganaya $ $Date: 2001-01-31 18:20:00 $
+#   last change: $Author: sab $ $Date: 2001-02-02 09:03:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ CXXFILES = \
         formlayerimport.cxx \
         formattributes.cxx \
         formenums.cxx \
+        formsimp.cxx \
         strings.cxx
 
 SLOFILES =	\
@@ -116,6 +117,7 @@ SLOFILES =	\
         $(SLO)$/formlayerimport.obj \
         $(SLO)$/formattributes.obj \
         $(SLO)$/formenums.obj \
+        $(SLO)$/formsimp.obj \
         $(SLO)$/strings.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.

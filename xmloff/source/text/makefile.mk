@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: ganaya $ $Date: 2001-01-31 18:22:17 $
+#   last change: $Author: sab $ $Date: 2001-02-02 09:02:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -145,6 +145,8 @@ CXXFILES = \
         XMLTextShapeImportHelper.cxx \
         XMLTextShapeStyleContext.cxx \
         XMLTextTableContext.cxx \
+        XMLChangeImportContext.cxx \
+        XMLStringBufferImportContext.cxx \
         XMLTrackedChangesImportContext.cxx
 
 SLOFILES =	\
@@ -216,6 +218,8 @@ SLOFILES =	\
         $(SLO)$/XMLTextShapeImportHelper.obj \
         $(SLO)$/XMLTextShapeStyleContext.obj \
         $(SLO)$/XMLTextTableContext.obj \
+        $(SLO)$/XMLChangeImportContext.obj \
+        $(SLO)$/XMLStringBufferImportContext.obj \
         $(SLO)$/XMLTrackedChangesImportContext.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.
