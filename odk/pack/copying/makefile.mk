@@ -60,6 +60,7 @@ DIRLIST = \
     $(DESTDIROLEEXAMPLES)$/vbscript		 	\
     $(DESTDIROLEEXAMPLES)$/delphi		 	\
     $(DESTDIROLEEXAMPLES)$/delphi$/InsertTables		 	\
+    $(DESTDIROLEEXAMPLES)$/activex		 	\
     {$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLDIRLIST))}
 
 CPP_OFFICECLIENT= \
@@ -283,6 +284,24 @@ OLE_EXAMPLES_DELPHI_INSERTTABLES= \
     $(DESTDIROLEEXAMPLES)$/delphi$/InsertTables$/SampleUI.dfm	\
     $(DESTDIROLEEXAMPLES)$/delphi$/InsertTables$/SampleUI.pas
 
+OLE_EXAMPLES_ACTIVEX= \
+    $(DESTDIROLEEXAMPLES)$/activex$/example.html \
+    $(DESTDIROLEEXAMPLES)$/activex$/Makefile \
+    $(DESTDIROLEEXAMPLES)$/activex$/README.txt \
+    $(DESTDIROLEEXAMPLES)$/activex$/resource.h \
+    $(DESTDIROLEEXAMPLES)$/activex$/SOActiveX.cpp \
+    $(DESTDIROLEEXAMPLES)$/activex$/SOActiveX.h \
+    $(DESTDIROLEEXAMPLES)$/activex$/SOActiveX.rgs \
+    $(DESTDIROLEEXAMPLES)$/activex$/SOComWindowPeer.cpp \
+    $(DESTDIROLEEXAMPLES)$/activex$/SOComWindowPeer.h \
+    $(DESTDIROLEEXAMPLES)$/activex$/SOComWindowPeer.rgs \
+    $(DESTDIROLEEXAMPLES)$/activex$/so_activex.cpp \
+    $(DESTDIROLEEXAMPLES)$/activex$/so_activex.def \
+    $(DESTDIROLEEXAMPLES)$/activex$/so_activex.idl \
+    $(DESTDIROLEEXAMPLES)$/activex$/so_activex.rc \
+    $(DESTDIROLEEXAMPLES)$/activex$/StdAfx2.cpp \
+    $(DESTDIROLEEXAMPLES)$/activex$/StdAfx2.h
+
 EXAMPLESLIST= \
     $(CPP_OFFICECLIENT) \
     $(CPP_DOCUMENTLOADER) \
@@ -313,6 +332,7 @@ EXAMPLESLIST= \
     $(OLE_EXAMPLES)                \
     $(OLE_EXAMPLES_DELPHI)                \
     $(OLE_EXAMPLES_DELPHI_INSERTTABLES)                \
+    $(OLE_EXAMPLES_ACTIVEX)                \
     $(DESTDIRJAVAEXAMPLES)$/debugging_java.html
 
 DOCUHTMLFILES= \
