@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:09:02 $
+ *  last change: $Author: cmc $ $Date: 2002-01-15 11:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,8 +382,10 @@ const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
     // Is there some frame data here
     BOOL bNowApo = rbNowStyleApo || pSprm29 || pSprm37 || pTabPos;
 
-    rbStartApo = bNowApo && !bApo && !bTableRowEnd; // normal APO-start
-    rbStopApo  = bApo && !bNowApo && !bTableRowEnd; // normal APO-end
+    BOOL bTestAllowed = (!bTableRowEnd) && (!(bInTable && pTableDesc && pTableDesc->GetAktCol()));
+
+    rbStartApo = bNowApo && !bApo && bTestAllowed;  // normal APO-start
+    rbStopApo  = bApo && !bNowApo && bTestAllowed;  // normal APO-end
 
     //If it happens that we are in a table, then if its not the first cell
     //then any attributes that might otherwise cause the contents to jump
@@ -393,7 +395,7 @@ const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
     //data is the same as the current one
     if( bApo && bNowApo && !bTableRowEnd)
     {
-        if (!(bInTable && pTableDesc && pTableDesc->GetAktCol()))
+        if (bTestAllowed)
         {
             // two bordering eachother
             if (!TestSameApo( pSprm29, rbNowStyleApo, pTabPos))
