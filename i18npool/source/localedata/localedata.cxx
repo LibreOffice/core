@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-09-16 15:22:59 $
+ *  last change: $Author: er $ $Date: 2001-11-12 16:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,103 +67,107 @@
 
 
 
+static const sal_Char clocaledata[] = "com.sun.star.i18n.LocaleData";
+
 typedef sal_Unicode ** (SAL_CALL * MyFunc_Type)( sal_Int16&);
 typedef sal_Unicode  *** (SAL_CALL * MyFunc_Type2)( sal_Int16&, sal_Int16& );
 typedef sal_Unicode **** (SAL_CALL * MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
 
 
-static const ::rtl::OUString
-    lcl_ASCII( ::rtl::OUString::createFromAscii("localedata_ascii" )),
-    lcl_CJK( ::rtl::OUString::createFromAscii("localedata_CJK" )),
-    lcl_CTL( ::rtl::OUString::createFromAscii("localedata_ctl" ));
+static const char
+    *lcl_ASCII = "localedata_ascii",
+    *lcl_CJK = "localedata_CJK",
+    *lcl_CTL = "localedata_ctl";
 
-const TableElement
-LocaleData::dllsTable[] = {
-    TableElement(::rtl::OUString::createFromAscii("en_US"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("de_DE"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("fr_FR"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("sv_SE"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_ES"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("it_IT"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("af_ZA"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("be_BY"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("bg_BG"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("br_AE"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("ca_ES"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("cs_CZ"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("da_DK"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("de_AT"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("de_CH"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("de_LI"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("de_LU"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("el_GR"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("en_AU"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("en_BZ"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("en_CA"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("en_GB"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("en_IE"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("en_JM"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("en_NZ"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("en_PH"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("en_TT"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("en_ZA"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("en_ZW"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_AR"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_BO"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_CL"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_CO"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_CR"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_DO"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_EC"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_GT"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_HN"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_MX"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_NI"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_PA"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_PE"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_PR"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_PY"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_SV"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_UY"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("es_VE"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("fi_FI"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("fr_BE"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("fr_CA"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("fr_CH"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("fr_LU"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("fr_MC"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("hu_HU"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("id_ID"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("is_IS"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("it_CH"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("nb_NO"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("nl_BE"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("nl_NL"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("no_NO"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("nn_NO"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("pl_PL"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("pt_BR"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("pt_PT"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("ru_RU"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("sv_FI"), lcl_ASCII),
-    TableElement(::rtl::OUString::createFromAscii("tr_TR"), lcl_ASCII),
+static const struct {
+    const char * pLocale;
+    const char* pDLL;
+} aDllsTable[] = {
+    { "en_US",  lcl_ASCII },
+    { "de_DE",  lcl_ASCII },
+    { "fr_FR",  lcl_ASCII },
+    { "sv_SE",  lcl_ASCII },
+    { "es_ES",  lcl_ASCII },
+    { "it_IT",  lcl_ASCII },
+    { "af_ZA",  lcl_ASCII },
+    { "be_BY",  lcl_ASCII },
+    { "bg_BG",  lcl_ASCII },
+    { "br_AE",  lcl_ASCII },
+    { "ca_ES",  lcl_ASCII },
+    { "cs_CZ",  lcl_ASCII },
+    { "da_DK",  lcl_ASCII },
+    { "de_AT",  lcl_ASCII },
+    { "de_CH",  lcl_ASCII },
+    { "de_LI",  lcl_ASCII },
+    { "de_LU",  lcl_ASCII },
+    { "el_GR",  lcl_ASCII },
+    { "en_AU",  lcl_ASCII },
+    { "en_BZ",  lcl_ASCII },
+    { "en_CA",  lcl_ASCII },
+    { "en_GB",  lcl_ASCII },
+    { "en_IE",  lcl_ASCII },
+    { "en_JM",  lcl_ASCII },
+    { "en_NZ",  lcl_ASCII },
+    { "en_PH",  lcl_ASCII },
+    { "en_TT",  lcl_ASCII },
+    { "en_ZA",  lcl_ASCII },
+    { "en_ZW",  lcl_ASCII },
+    { "es_AR",  lcl_ASCII },
+    { "es_BO",  lcl_ASCII },
+    { "es_CL",  lcl_ASCII },
+    { "es_CO",  lcl_ASCII },
+    { "es_CR",  lcl_ASCII },
+    { "es_DO",  lcl_ASCII },
+    { "es_EC",  lcl_ASCII },
+    { "es_GT",  lcl_ASCII },
+    { "es_HN",  lcl_ASCII },
+    { "es_MX",  lcl_ASCII },
+    { "es_NI",  lcl_ASCII },
+    { "es_PA",  lcl_ASCII },
+    { "es_PE",  lcl_ASCII },
+    { "es_PR",  lcl_ASCII },
+    { "es_PY",  lcl_ASCII },
+    { "es_SV",  lcl_ASCII },
+    { "es_UY",  lcl_ASCII },
+    { "es_VE",  lcl_ASCII },
+    { "fi_FI",  lcl_ASCII },
+    { "fr_BE",  lcl_ASCII },
+    { "fr_CA",  lcl_ASCII },
+    { "fr_CH",  lcl_ASCII },
+    { "fr_LU",  lcl_ASCII },
+    { "fr_MC",  lcl_ASCII },
+    { "hu_HU",  lcl_ASCII },
+    { "id_ID",  lcl_ASCII },
+    { "is_IS",  lcl_ASCII },
+    { "it_CH",  lcl_ASCII },
+    { "nb_NO",  lcl_ASCII },
+    { "nl_BE",  lcl_ASCII },
+    { "nl_NL",  lcl_ASCII },
+    { "no_NO",  lcl_ASCII },
+    { "nn_NO",  lcl_ASCII },
+    { "pl_PL",  lcl_ASCII },
+    { "pt_BR",  lcl_ASCII },
+    { "pt_PT",  lcl_ASCII },
+    { "ru_RU",  lcl_ASCII },
+    { "sv_FI",  lcl_ASCII },
+    { "tr_TR",  lcl_ASCII },
 
-    TableElement(::rtl::OUString::createFromAscii("ja_JP"), lcl_CJK),
-    TableElement(::rtl::OUString::createFromAscii("ko_KR"), lcl_CJK),
-    TableElement(::rtl::OUString::createFromAscii("zh_CN"), lcl_CJK),
-    TableElement(::rtl::OUString::createFromAscii("zh_HK"), lcl_CJK),
-    TableElement(::rtl::OUString::createFromAscii("zh_SG"), lcl_CJK),
-    TableElement(::rtl::OUString::createFromAscii("zh_TW"), lcl_CJK),
-    TableElement(::rtl::OUString::createFromAscii("zh_MO"), lcl_CJK),
+    { "ja_JP",  lcl_CJK },
+    { "ko_KR",  lcl_CJK },
+    { "zh_CN",  lcl_CJK },
+    { "zh_HK",  lcl_CJK },
+    { "zh_SG",  lcl_CJK },
+    { "zh_TW",  lcl_CJK },
+    { "zh_MO",  lcl_CJK },
 
-    TableElement(::rtl::OUString::createFromAscii("ar"), lcl_CTL),
-    TableElement(::rtl::OUString::createFromAscii("th"), lcl_CTL),
-    TableElement(::rtl::OUString::createFromAscii("he"), lcl_CTL),
+    { "ar",  lcl_CTL },
+    { "th",  lcl_CTL },
+    { "he",  lcl_CTL }
 
 };
 
 const sal_Int16
-LocaleData::nbOfLocales = sizeof(dllsTable) / sizeof(TableElement);
+LocaleData::nbOfLocales = sizeof(aDllsTable) / sizeof(aDllsTable[0]);
 
 
 
@@ -874,17 +878,21 @@ LocaleData::getDLLName( const ::com::sun::star::lang::Locale& rLocale,
     }
 
     //could not find a match, return the default one (en_US)
-    if(!found)
-            return TableElement(::rtl::OUString::createFromAscii("en_US"), lcl_ASCII);
+    if( !found )
+            return TableElement(
+                ::rtl::OUString::createFromAscii("en_US"),
+                ::rtl::OUString::createFromAscii(lcl_ASCII));
     return dllEntry;
 }
 
 sal_Bool  SAL_CALL
-LocaleData::lookupDLLName(const ::rtl::OUString& localeName, TableElement& element) {
-
+LocaleData::lookupDLLName(const ::rtl::OUString& localeName, TableElement& element)
+{
     for(sal_Int16 i = 0; i < nbOfLocales; i++) {
-        if(dllsTable[i].name.equals(localeName)) {
-            element = dllsTable[i];
+        if( localeName.equalsAscii(aDllsTable[i].pLocale ) )
+        {
+            element.name = rtl::OUString::createFromAscii( aDllsTable[i].pLocale );
+            element.value = rtl::OUString::createFromAscii( aDllsTable[i].pDLL );
             return true;
         }
     }
@@ -902,7 +910,7 @@ LocaleData::getAllInstalledLocaleNames() throw(::com::sun::star::uno::RuntimeExc
     for( sal_Int16 i=0; i<nbOfLocales; i++ )
     {
         com::sun::star::lang::Locale tmpLocale;
-        rtl::OUString name = dllsTable[i].name;
+        rtl::OUString name = rtl::OUString::createFromAscii( aDllsTable[i].pLocale );
 
         int start = 0;
         int stop  = name.indexOf( '_', start );
@@ -1027,3 +1035,26 @@ sal_Bool OutlineNumbering::hasElements(  ) throw(RuntimeException)
 {
     return m_nCount > 0;
 }
+
+::rtl::OUString SAL_CALL
+LocaleData::getImplementationName(void)
+                throw( RuntimeException )
+{
+    return ::rtl::OUString::createFromAscii(clocaledata);
+}
+
+sal_Bool SAL_CALL
+LocaleData::supportsService(const rtl::OUString& rServiceName)
+                throw( RuntimeException )
+{
+    return !rServiceName.compareToAscii(clocaledata);
+}
+
+Sequence< ::rtl::OUString > SAL_CALL
+LocaleData::getSupportedServiceNames(void) throw( RuntimeException )
+{
+    Sequence< ::rtl::OUString > aRet(1);
+    aRet[0] = ::rtl::OUString::createFromAscii(clocaledata);
+    return aRet;
+}
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-09-16 15:22:59 $
+ *  last change: $Author: er $ $Date: 2001-11-12 16:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <com/sun/star/i18n/XLocaleData.hpp>
 
 
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <cppu/macros.hxx>
 #include <com/sun/star/uno/Reference.h>
 
@@ -109,7 +109,15 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
 
-class LocaleData : public cppu::WeakImplHelper1< ::com::sun::star::i18n::XLocaleData>
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+
+class LocaleData : public cppu::WeakImplHelper2
+<
+    ::com::sun::star::i18n::XLocaleData,
+    ::com::sun::star::lang::XServiceInfo
+>
 {
 
 
@@ -133,6 +141,15 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCollationOptions( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > SAL_CALL getContinuousNumberingLevels( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > > SAL_CALL getOutlineNumberingLevels( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
+
+    //XServiceInfo
+    virtual rtl::OUString SAL_CALL getImplementationName(void)
+                throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+                throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
+                throw( ::com::sun::star::uno::RuntimeException );
+
 private :
     struct lookupTableItem {
         ::rtl::OUString adllName;
@@ -141,7 +158,7 @@ private :
 
     List lookupTable;
 
-    static const TableElement  dllsTable[];
+//  static const TableElement  dllsTable[];
     static const sal_Int16 nbOfLocales;
     void* getFunctionSymbol( const ::com::sun::star::lang::Locale& rLocale,
             const sal_Char* pFunction, sal_Bool bFallBack = sal_True );
