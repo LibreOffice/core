@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 11:08:45 $
+#   last change: $Author: obo $ $Date: 2004-03-17 13:43:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -174,6 +174,7 @@ APP1RES=    $(RES)$/desktop.res
 APP1ICON=$(SOLARRESDIR)$/icons/001_star_main.ico
 APP1VERINFO=verinfo.rc
 APP1LINKRES=$(MISC)$/$(TARGET).res
+APP1STACK=10000000
 
 # create a manifest file with the same name as the
 #office executable file soffice.exe.manifest
@@ -262,6 +263,7 @@ APP5RES=    $(RES)$/oodesktop.res
 APP5ICON=$(SOLARRESDIR)$/icons/ooo_gulls.ico
 APP5VERINFO=ooverinfo.rc
 APP5LINKRES=$(MISC)$/ooffice.res
+APP5STACK=10000000
 .ENDIF # WNT
 
 
