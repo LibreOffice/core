@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2003-04-02 17:17:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1601,7 +1601,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
             if( MAXLEVEL > pNum->GetLevel() )
             {
-                aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
+                aLR.SetTxtFirstLineOfst(GetWordFirstLineOffset(*pFmt));
                 if( pNum == pNd->GetNum() && SFX_ITEM_SET !=
                    pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
                 {
