@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:59:44 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ hebrew ] = "Zahlen";
                 Text[ hindi ] = "संख्या";
                 Text[ slovak ] = "Čísla";
+                Text[ hungarian ] = "Számok";
+                Text[ slovenian ] = "Številke";
             };
             PageItem
             {
@@ -154,6 +156,8 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट्";
                 Text[ slovak ] = "Písmo";
+                Text[ hungarian ] = "Betűkészlet";
+                Text[ slovenian ] = "Pisava";
             };
             PageItem
             {
@@ -168,7 +172,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ french ] = "Effets de caract�res";
                 Text[ spanish ] = "Efecto de fuente";
                 Text[ italian ] = "Effetto carattere";
-                Text[ danish ] = "Skrifteffekt";
+                Text[ danish ] = "Skrifteffekter";
                 Text[ swedish ] = "Teckeneffekt";
                 Text[ polish ] = "Efekty czcionki";
                 Text[ portuguese_brazilian ] = "Efeitos da Fonte";
@@ -185,6 +189,8 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ hebrew ] = "‮אפקטים לגופים‬";
                 Text[ hindi ] = "फ़ॉन्ट् प्रभाव";
                 Text[ slovak ] = "Efekty pre písmo";
+                Text[ hungarian ] = "Betűhatások";
+                Text[ slovenian ] = "Učinki pisave";
             };
             PageItem
             {
@@ -218,6 +224,8 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ hebrew ] = "‮ישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
                 Text[ slovak ] = "Zarovnanie";
+                Text[ hungarian ] = "Igazítás";
+                Text[ slovenian ] = "Poravnava";
             };
             PageItem
             {
@@ -249,6 +257,8 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ hebrew ] = "Asiatische Typographie";
                 Text[ hindi ] = "Asian Typography";
                 Text[ slovak ] = "Ázijská typografia";
+                Text[ hungarian ] = "Ázsiai tipográfia";
+                Text[ slovenian ] = "Azijska tipografija";
             };
             PageItem
             {
@@ -260,7 +270,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text [ portuguese_brazilian ] = "Bordas" ;
                 Text [ portuguese ] = "Contornos" ;
                 Text [ finnish ] = "Reunat" ;
-                Text [ danish ] = "Ramme" ;
+                Text [ danish ] = "Kanter" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
                 Text [ dutch ] = "Omranding" ;
@@ -282,6 +292,8 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ hebrew ] = "‮מסגרות‬";
                 Text[ hindi ] = "किनारें";
                 Text[ slovak ] = "Okraje";
+                Text[ hungarian ] = "Szegélyek";
+                Text[ slovenian ] = "Obrobe";
             };
             PageItem
             {
@@ -315,6 +327,8 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
                 Text[ slovak ] = "Pozadie";
+                Text[ hungarian ] = "Háttér";
+                Text[ slovenian ] = "Ozadje";
             };
             PageItem
             {
@@ -348,6 +362,8 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ hebrew ] = "Zellschutz";
                 Text[ hindi ] = "कोष्ठ रक्षा";
                 Text[ slovak ] = "Ochrana bunky";
+                Text[ hungarian ] = "Cellavédelem";
+                Text[ slovenian ] = "Zaščita celice";
             };
         };
     };
@@ -367,6 +383,8 @@ TabDialog RID_SCDLG_STYLES_PAR
     Text[ hebrew ] = "Zellvorlage";
     Text[ hindi ] = "कोष्ठ शैली";
     Text[ slovak ] = "Štýl bunky";
+    Text[ hungarian ] = "Cellastílus";
+    Text[ slovenian ] = "Slog celice";
 };
 TabDialog RID_SCDLG_STYLES_PAGE
 {
@@ -427,6 +445,8 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ hebrew ] = "‮דף‬";
                 Text[ hindi ] = "पृष्ठ";
                 Text[ slovak ] = "Stránka";
+                Text[ hungarian ] = "Oldal";
+                Text[ slovenian ] = "Stran";
             };
             PageItem
             {
@@ -438,7 +458,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ portuguese_brazilian ] = "Bordas" ;
                 Text [ portuguese ] = "Contornos" ;
                 Text [ finnish ] = "Reunat" ;
-                Text [ danish ] = "Ramme" ;
+                Text [ danish ] = "Kanter" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
                 Text [ dutch ] = "Omranding" ;
@@ -460,6 +480,8 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ hebrew ] = "‮מסגרות‬";
                 Text[ hindi ] = "किनारें";
                 Text[ slovak ] = "Okraje";
+                Text[ hungarian ] = "Szegélyek";
+                Text[ slovenian ] = "Obrobe";
             };
             PageItem
             {
@@ -493,6 +515,8 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
                 Text[ slovak ] = "Pozadie";
+                Text[ hungarian ] = "Háttér";
+                Text[ slovenian ] = "Ozadje";
             };
             PageItem
             {
@@ -526,6 +550,8 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ hebrew ] = "‮כותרת עליונה‬";
                 Text[ hindi ] = "पृष्ठ के ऊपर की टीका";
                 Text[ slovak ] = "Záhlavie";
+                Text[ hungarian ] = "Élőfej";
+                Text[ slovenian ] = "Glava";
             };
             PageItem
             {
@@ -559,6 +585,8 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ hebrew ] = "‮כותרת תחתונה‬";
                 Text[ hindi ] = "पृष्ठ के नीचे की टीका";
                 Text[ slovak ] = "Zápätie";
+                Text[ hungarian ] = "Élőláb";
+                Text[ slovenian ] = "Noga";
             };
             PageItem
             {
@@ -592,6 +620,8 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ hebrew ] = "Tabelle";
                 Text[ hindi ] = "शीट्";
                 Text[ slovak ] = "List";
+                Text[ hungarian ] = "Munkalap";
+                Text[ slovenian ] = "Delovni list";
             };
         };
     };
@@ -611,7 +641,11 @@ TabDialog RID_SCDLG_STYLES_PAGE
     Text[ hebrew ] = "‮סגנון‬";
     Text[ hindi ] = "पृष्ठ शैली";
     Text[ slovak ] = "Štýl stránky";
+    Text[ hungarian ] = "Oldalstílus";
+    Text[ slovenian ] = "Slog strani";
 };
+
+
 
 
 
