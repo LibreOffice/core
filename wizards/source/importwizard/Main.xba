@@ -7,7 +7,7 @@ Public HeaderPreviews(4) as Object
 Public ImportDialog as Object
 Public ImportDialogArea as Object
 Public oFactoryKey as Object
-
+Public bShowLogFile as Boolean
 
 &apos; If the ProgressPage ist already on Top The Dialog will be immediately closed when this flag is
 &apos; set to False
@@ -15,6 +15,8 @@ Public bConversionIsRunning as Boolean
 Public RetValue as Integer
 
 Sub Main()
+	Dim NoArgs() as New com.sun.star.beans.PropertyValue
+	bShowLogFile=FALSE
 	If Not bDebugWizard Then
 		On Local Error Goto RTError
 	End If
@@ -42,6 +44,9 @@ Sub Main()
 	ImportDialog.cmdGoOn.DefaultButton = True
 	ImportDialogArea.GetControl(&quot;optSODocuments&quot;).SetFocus()
 	RetValue = ImportDialogArea.Execute()
+	If bShowLogFile=TRUE Then 
+		OpenDocument(sLogUrl, NoArgs())
+	End if
 	If RetValue = 0 Then
 		CancelTask()
 	End If
