@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-05-22 14:51:59 $
+ *  last change: $Author: ssa $ $Date: 2002-09-18 08:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,13 @@ void Ruler::ImplInit( WinBits nWinBits )
 
     // Default WinBits setzen
     if ( !(nWinBits & WB_VERT) )
+    {
         nWinBits |= WB_HORZ;
+
+        // --- RTL --- no UI mirroring for horizontal rulers, because
+        // the document is also not mirrored
+        EnableRTL( FALSE );
+    }
 
     // Variablen initialisieren
     mnWinStyle      = nWinBits;             // Window-Style
