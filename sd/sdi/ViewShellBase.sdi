@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.sdi,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:42:00 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ SfxInt32Item SwitchViewShellPane SID_SWITCH_SHELL_PANE
     GroupId = GID_VIEW;
 ]
 
-SfxBoolItem LeftPaneChildWindow SID_LEFT_PANE
+SfxBoolItem LeftPaneImpress SID_LEFT_PANE_IMPRESS
 
 [
     /* flags: */
@@ -143,7 +143,33 @@ SfxBoolItem LeftPaneChildWindow SID_LEFT_PANE
     GroupId = GID_MODIFY;
 ]
 
-SfxBoolItem RightPaneChildWindow SID_RIGHT_PANE
+SfxBoolItem LeftPaneDraw SID_LEFT_PANE_DRAW
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_MODIFY;
+]
+
+SfxBoolItem RightPane SID_RIGHT_PANE
 
 [
     /* flags: */
@@ -253,7 +279,12 @@ interface ViewShellBaseView : View
     [
         ExecMethod = Execute;
     ]
-    SID_LEFT_PANE
+    SID_LEFT_PANE_IMPRESS
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_LEFT_PANE_DRAW
     [
         ExecMethod = Execute;
         StateMethod = GetState;
