@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltxtexp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-24 11:49:33 $
+ *  last change: $Author: thb $ $Date: 2002-02-11 15:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
+#endif
+
+#ifndef _SFXBRDCST_HXX
+#include <svtools/brdcst.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
@@ -170,7 +174,7 @@ class SvxEditEngineSourceImpl;
 
 ///////////////////////////////////////////////////////////////////////
 
-class SvxEditEngineSourceImpl
+class SvxEditEngineSourceImpl : public SfxBroadcaster
 {
 private:
     oslInterlockedCount maRefCount;
@@ -269,16 +273,18 @@ SvxEditSource* SvxEditEngineSource::Clone() const
 
 SvxTextForwarder* SvxEditEngineSource::GetTextForwarder()
 {
-    if( mpImpl )
-        return mpImpl->GetTextForwarder();
-    else
-        return NULL;
+    return mpImpl->GetTextForwarder();
 }
 
 //------------------------------------------------------------------------
 
 void SvxEditEngineSource::UpdateData()
 {
+}
+
+SfxBroadcaster& SvxEditEngineSource::GetBroadcaster() const
+{
+    return *mpImpl;
 }
 
 
