@@ -14,3 +14,5 @@ mkdir: %_DEST%\inc%_EXT%\store
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
 dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
+
+linklib: libstore.so.3.0.0

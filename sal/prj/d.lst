@@ -46,3 +46,5 @@ mkdir: %_DEST%\inc%_EXT%\systools\unx
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
 dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
+
+linklib: libsal.so.3.0.0
