@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:52:27 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,8 @@
 
 #include "glyphset.hxx"
 
-using namespace psp ;
+using namespace psp;
+using namespace rtl;
 
 #ifdef MACOSX
 // Prototype our MacOS X printing help function
@@ -503,7 +504,7 @@ PrinterJob::StartJob (
     WritePS (mpJobHeader, "%%EndComments\n");
 
     // write Prolog
-    writeProlog (mpJobHeader);
+    writeProlog (mpJobHeader, rSetupData);
 
     // mark last job setup as not set
     m_aLastJobData.m_pParser = NULL;
@@ -823,7 +824,7 @@ void macxp_ProcessAndPrintDocument( sal_Int32 applePrintSysType,
                  */
                 strncpy( pdfFileNameMacFormat, pdfFileName, kPDFFileNameBufferLen-1 );
                 if ( *pdfFileNameMacFormat == '/' )
-                    sprintf( pdfFileNameMacFormat, "%s", (pdfFileNameMacFormat+1) );
+                    strncpy( pdfFileNameMacFormat, pdfFileName+1, kPDFFileNameBufferLen-2 );
                 while ( (c=strchr(pdfFileNameMacFormat,'/')) != NULL )
                     *c = ':';
 
@@ -966,18 +967,19 @@ int macxp_ConvertPSFileToPDF( char *psFileName, char *pdfFileName, int pdfFileNa
 
         /* Create the file name for the converted PDF and assemble the conversion command */
         snprintf( pdfFileName, pdfFileNameBufferLen-1, "%s%s", psFileName, kPDFFileExtension );
-
-       sysCommandBuffer = (char *)malloc( sizeof(char) * ( strlen(kSysPrintSetupString) +
+       int nBufferSize = sizeof(char) * ( strlen(kSysPrintSetupString) +
                                                    strlen(kApplePS2PDFLocation) +
                                                     10 +    /* For " -r<DPI>" */
                                                     strlen(psFileName) +
                                                     strlen(pdfFileName) +
-                                                    10) );  /*  10 bytes fudge factor */
+                                          10);  /*  10 bytes fudge factor */
+
+       sysCommandBuffer = (char *)malloc( nBufferSize );
         if ( sysCommandBuffer == NULL )
             returnVal = -1;
         else
        {
-            sprintf( sysCommandBuffer, "%s;%s -r%d \"%s\" \"%s\"'", kSysPrintSetupString, kApplePS2PDFLocation, jobDPI, psFileName, pdfFileName );
+            snprintf( sysCommandBuffer, nBufferSize, "%s;%s -r%d \"%s\" \"%s\"'", kSysPrintSetupString, kApplePS2PDFLocation, jobDPI, psFileName, pdfFileName );
           #ifdef DEBUG
                 fprintf( stderr, "printerjob.cxx: converting document to PDF with command '%s'\n", sysCommandBuffer );
           #endif
@@ -1273,10 +1275,55 @@ bool PrinterJob::writePageSetup( osl::File* pFile, const JobData& rJob )
     return bSuccess;
 }
 
-bool PrinterJob::writeProlog (osl::File* pFile)
+void PrinterJob::writeJobPatch( osl::File* pFile, const JobData& rJobData )
 {
+    const PPDKey* pKey = NULL;
+
+    if( rJobData.m_pParser )
+        pKey = rJobData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "JobPatchFile" ) ) );
+    if( ! pKey )
+        return;
+
+    // order the patch files
+    // according to PPD spec the JobPatchFile options must be int
+    // and should be emitted in order
+    std::list< sal_Int32 > patch_order;
+    int nValueCount = pKey->countValues();
+    for( int i = 0; i < nValueCount; i++ )
+    {
+        const PPDValue* pVal = pKey->getValue( i );
+        patch_order.push_back( pVal->m_aOption.ToInt32() );
+        if( patch_order.back() == 0 && ! pVal->m_aOption.EqualsAscii( "0" ) )
+        {
+            WritePS( pFile, "% Warning: left out JobPatchFile option \"" );
+            OString aOption = OUStringToOString( pVal->m_aOption, RTL_TEXTENCODING_ASCII_US );
+            WritePS( pFile, aOption.getStr() );
+            WritePS( pFile,
+                     "\"\n% as it violates the PPD spec;\n"
+                     "% JobPatchFile options need to be numbered for ordering.\n" );
+        }
+    }
+
+    patch_order.sort();
+    patch_order.unique();
+
+    while( patch_order.begin() != patch_order.end() )
+    {
+        // note: this discards patch files not adhering to the "int" scheme
+        // as there won't be a value for them
+        writeFeature( pFile, pKey, pKey->getValue( OUString::valueOf( patch_order.front() ) ) );
+        patch_order.pop_front();
+    }
+}
+
+bool PrinterJob::writeProlog (osl::File* pFile, const JobData& rJobData )
+{
+    WritePS( pFile, "%%BeginProlog\n" );
+
+    // JobPatchFile feature needs to be emitted at begin of prolog
+    writeJobPatch( pFile, rJobData );
+
     const sal_Char pProlog[] = {
-        "%%BeginProlog\n"
         "%%BeginResource: procset PSPrint-Prolog 1.0 0\n"
         "/ISO1252Encoding [\n"
         "/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef\n"
