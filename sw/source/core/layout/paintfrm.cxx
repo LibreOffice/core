@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-22 11:55:39 $
+ *  last change: $Author: ama $ $Date: 2002-01-23 13:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,6 +458,7 @@ SwSavePaintStatics::~SwSavePaintStatics()
 //----------------- Implementierungen fuer Tabellenumrandung --------------
 
 SV_IMPL_VARARR( SwLRects, SwLineRect );
+
 
 SwLineRect::SwLineRect( const SwRect &rRect, const Color *pCol,
                         const SwTabFrm *pT, const BYTE nSCol ) :
@@ -2242,7 +2243,11 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 if ( bBottom )
                     aOut.Bottom( aOut.Bottom() - nHeight );
                 if ( bCnt && (!bTop || !bBottom) )
+#ifdef VERTICAL_LAYOUT
                     ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
+#else
+                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs );
+#endif
                 aRegion.Insert( aOut, aRegion.Count() );
 
                 rOutRect.Right ( rOutRect.Right() - nWidth );
@@ -2260,7 +2265,11 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 if ( bTop )
                     aOut.Top( aOut.Top() + nHeight );
                 if ( bCnt && (!bBottom || !bTop) )
+#ifdef VERTICAL_LAYOUT
                     ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
+#else
+                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs );
+#endif
                 aRegion.Insert( aOut, aRegion.Count() );
 
                 rOutRect.Left( rOutRect.Left() + nWidth );
@@ -2278,7 +2287,11 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 if ( bTop )
                     aOut.Top( aOut.Top() + nHeight );
                 if ( bCnt && (!bBottom || bTop) )
+#ifdef VERTICAL_LAYOUT
                     ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
+#else
+                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs );
+#endif
                 aRegion.Insert( aOut, aRegion.Count() );
 
                 rOutRect.Right( rOutRect.Right() - nWidth );
@@ -2296,7 +2309,11 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 if ( bBottom )
                     aOut.Bottom( aOut.Bottom() - nHeight );
                 if ( bCnt && (!bTop || !bBottom) )
+#ifdef VERTICAL_LAYOUT
                     ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
+#else
+                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs );
+#endif
                 aRegion.Insert( aOut, aRegion.Count() );
 
                 rOutRect.Left( rOutRect.Left() + nWidth );
@@ -2696,6 +2713,7 @@ void MA_FASTCALL lcl_PaintBottomLine( const SwFrm *pFrm, const SwPageFrm *pPage,
 void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
                          const SwBorderAttrs &rAttrs ) const
 {
+
     //fuer (Row,Body,Ftn,Root,Column,NoTxt) gibt's hier nix zu tun
     if ( (GetType() & 0x90C5) || (Prt().SSize() == Frm().SSize()) )
         return;
@@ -2982,6 +3000,148 @@ void SwPageFrm::PaintAllBorders( const SwRect &rRect ) const
 {
     ::lcl_PaintLowerBorders( this, rRect, this );
 }
+
+#ifdef VERTICAL_LAYOUT
+void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
+{
+    const SwPageDesc* pDesc = GetPageDesc();
+    if( pDesc && OUTDEV_PRINTER != pOut->GetOutDevType() )
+    {
+        long nRegDiff = pDesc->GetRegHeight();
+        if( nRegDiff )
+        {
+            SwRect aGrid( Prt() );
+            aGrid += Frm().Pos();
+            SwRect aInter( aGrid );
+            aInter.Intersection( rRect );
+            if( aInter.HasArea() )
+            {
+                long aAdd[3];
+                aAdd[0] = nRegDiff;
+                aAdd[1] = nRegDiff / 4;
+                aAdd[2] = nRegDiff / 2;
+                USHORT nIdx = 3;
+                long nRegSum = nRegDiff + aAdd[1] + aAdd[2];
+                pOut->Push( PUSH_FILLCOLOR );
+                const Color aStandard( COL_LIGHTGRAY );
+                pOut->SetFillColor( aStandard );
+
+                SwTwips nRight = aInter.Left() + aInter.Width();
+                SwTwips nBottom = aInter.Top() + aInter.Height();
+                if( IsVertical() )
+                {
+                    SwTwips nOrig = aGrid.Left() + aGrid.Width() + aAdd[1];
+                    SwTwips nY = nOrig + nRegSum *
+                                 ( ( nOrig - aInter.Left() ) / nRegSum );
+                    SwRect aTmp( Point( nY + aAdd[2], aInter.Top() ),
+                                Size( 1, aInter.Height() ) );
+                    SwTwips nX = aGrid.Top() + nRegDiff *
+                                ( ( aInter.Top() - aGrid.Top() )/ nRegDiff );
+                    if( nX < aInter.Top() )
+                        nX += nRegDiff;
+                    while( nY > nRight )
+                    {
+                        aTmp.Pos().X() = nY;
+                        nY -= aAdd[ --nIdx ];
+                        if( !nIdx )
+                        {
+                            nIdx = 3;
+                            SwTwips nPosY = Max( aInter.Left(), nY );
+                            SwTwips nHeight = Min(nRight, aTmp.Pos().Y())-nPosY;
+                            if( nHeight > 0 )
+                            {
+                                SwRect aVert( Point( nPosY, nX ),
+                                            Size( nHeight, 1 ) );
+                                while( aVert.Top() < nBottom )
+                                {
+                                    pOut->DrawRect( aVert.SVRect() );
+                                    aVert.Pos().Y() += nRegDiff;
+                                }
+                            }
+                        }
+                    }
+                    while( nY > aInter.Left() )
+                    {
+                        aTmp.Pos().X() = nY;
+                        pOut->DrawRect( aTmp.SVRect() );
+                        nY -= aAdd[ --nIdx ];
+                        if( !nIdx )
+                        {
+                            nIdx = 3;
+                            SwTwips nHeight = Min(nRight, aTmp.Pos().Y()) - nY;
+                            if( nHeight > 0 )
+                            {
+                                SwRect aVert( Point( nY, nX ),
+                                            Size( nHeight, 1 ) );
+                                while( aVert.Top() < nBottom )
+                                {
+                                    pOut->DrawRect( aVert.SVRect() );
+                                    aVert.Pos().Y() += nRegDiff;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    SwTwips nOrig = aGrid.Top() - aAdd[2];
+                    SwTwips nY = nOrig + nRegSum *( (aInter.Top()-nOrig)/nRegSum );
+                    SwRect aTmp( Point( aInter.Left(), nY - aAdd[2] ),
+                                Size( aInter.Width(), 1 ) );
+                    SwTwips nX = aGrid.Left() + nRegDiff *
+                                ( ( aInter.Left() - aGrid.Left() )/ nRegDiff );
+                    if( nX < aInter.Left() )
+                        nX += nRegDiff;
+                    while( nY < aInter.Top() )
+                    {
+                        aTmp.Pos().Y() = nY;
+                        nY += aAdd[ --nIdx ];
+                        if( !nIdx )
+                        {
+                            nIdx = 3;
+                            SwTwips nPosY = Max( aInter.Top(), aTmp.Pos().Y() );
+                            SwTwips nHeight = Min( nBottom, nY ) - nPosY;
+                            if( nHeight )
+                            {
+                                SwRect aVert( Point( nX, nPosY ),
+                                            Size( 1, nHeight ) );
+                                while( aVert.Left() < nRight )
+                                {
+                                    pOut->DrawRect( aVert.SVRect() );
+                                    aVert.Pos().X() += nRegDiff;
+                                }
+                            }
+                        }
+                    }
+                    while( nY <= nBottom )
+                    {
+                        aTmp.Pos().Y() = nY;
+                        pOut->DrawRect( aTmp.SVRect() );
+                        nY += aAdd[ --nIdx ];
+                        if( !nIdx )
+                        {
+                            nIdx = 3;
+                            SwTwips nHeight = Min( nBottom, nY ) - aTmp.Pos().Y();
+                            if( nHeight )
+                            {
+                                SwRect aVert( Point( nX, aTmp.Pos().Y() ),
+                                            Size( 1, nHeight ) );
+                                while( aVert.Left() < nRight )
+                                {
+                                    pOut->DrawRect( aVert.SVRect() );
+                                    aVert.Pos().X() += nRegDiff;
+                                }
+                            }
+                        }
+                    }
+                }
+                pOut->Pop();
+            }
+        }
+    }
+}
+#endif
+
 /*************************************************************************
 |*
 |*  SwFrm::PaintBaBo()
@@ -3017,6 +3177,10 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
     PaintBackground( rRect, pPage, rAttrs, FALSE, bLowerBorder );
     SwRect aRect( rRect );
     ::SizeBorderRect( aRect );
+#ifdef VERTICAL_LAYOUT
+    if( IsPageFrm() )
+        ((SwPageFrm*)this)->PaintGrid( pOut, aRect );
+#endif
     PaintBorder( aRect, pPage, rAttrs );
 /*  if ( bUnlock )
         bLockFlyBackground = FALSE;
