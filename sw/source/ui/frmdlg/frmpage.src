@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:02:29 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1486,7 +1486,7 @@ TabPage TP_FRM_STD
         Text[ arabic ] = "Åáì";
         Text[ greek ] = "ðñïò";
         Text[ korean ] = "¸ÂÃâ ¹æÇâ";
-        Text[ turkish ] = "->";
+        Text[ turkish ] = "Hedef";
         Text[ language_user1 ] = "\"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
     };
     ListBox LB_HORI_RELATION
@@ -1626,7 +1626,7 @@ TabPage TP_FRM_STD
         Text[ arabic ] = "Åáì";
         Text[ greek ] = "ðñïò";
         Text[ korean ] = "¸ÂÃâ ¹æÇâ";
-        Text[ turkish ] = "->";
+        Text[ turkish ] = "Hedef";
         Text[ language_user1 ] = "\"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
     };
     ListBox LB_VERT_RELATION
