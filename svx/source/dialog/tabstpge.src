@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-21 07:30:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,10 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ finnish ] = "Sijainti" ;
         Text [ danish ] = "Placering" ;
         Text [ french ] = "Position" ;
-        Text [ swedish ] = "Position" ;
+        Text [ swedish ] = "~Position" ;
         Text [ dutch ] = "Positie" ;
         Text [ spanish ] = "Posición" ;
-        Text [ english_us ] = "~Position" ;
+        Text [ english_us ] = "Position" ;
         Text[ chinese_simplified ] = "Î»ÖÃ";
         Text[ russian ] = "Ïîëîæåíèå";
         Text[ polish ] = "Pozycja";
@@ -178,7 +178,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ swedish ] = "Höge~r" ;
         Text [ dutch ] = "~Rechts" ;
         Text [ spanish ] = "~Derecha" ;
-        Text [ english_us ] = "~Right" ;
+        Text [ english_us ] = "Righ~t" ;
         Text[ chinese_simplified ] = "ÏòÓÒ(~T)";
         Text[ russian ] = "Ñïðàâà";
         Text[ polish ] = "Prawy";
@@ -209,13 +209,13 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ finnish ] = "~Keskitetty" ;
         Text [ danish ] = "Centreret" ;
         Text [ french ] = "~Centré" ;
-        Text [ swedish ] = "C~entrerat" ;
+        Text [ swedish ] = "~Centrerad" ;
         Text [ dutch ] = "~Centreren" ;
         Text [ spanish ] = "Cen~trado" ;
-        Text [ english_us ] = "~Centered" ;
+        Text [ english_us ] = "C~entered" ;
         Text[ chinese_simplified ] = "¾ÓÖÐ(~E)";
         Text[ russian ] = "Ïî öåíòðó";
-        Text[ polish ] = "Wyœrodk.";
+        Text[ polish ] = "Poœrodku";
         Text[ japanese ] = "’†‰›‘µ‚¦(~E)";
         Text[ chinese_traditional ] = "¸m¤¤(~E)";
         Text[ arabic ] = "ÊæÓíØ";
@@ -246,7 +246,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ swedish ] = "~Decimal" ;
         Text [ dutch ] = "~Decimaal" ;
         Text [ spanish ] = "Deci~mal" ;
-        Text [ english_us ] = "~Decimal" ;
+        Text [ english_us ] = "Deci~mal" ;
         Text[ chinese_simplified ] = "Ê®½øÖÆ(~M)";
         Text[ russian ] = "Äåñÿòè÷íûé";
         Text[ polish ] = "Dziesiê~tny";
@@ -277,14 +277,14 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ finnish ] = "~Merkki" ;
         Text [ danish ] = "Tegn" ;
         Text [ french ] = "~Caractère" ;
-        Text [ swedish ] = "Te~cken" ;
+        Text [ swedish ] = "T~ecken" ;
         Text [ dutch ] = "T~eken" ;
         Text [ spanish ] = "~Carácter" ;
         Text [ english_us ] = "~Character" ;
         Text[ chinese_simplified ] = "×Ö·û(~C)";
         Text[ russian ] = "Çíàê";
         Text[ polish ] = "Znak";
-        Text[ japanese ] = "•¶Žš(~C)";
+        Text[ japanese ] = "•¶Žš—ñ(~C)";
         Text[ chinese_traditional ] = "¦r¤¸(~C)";
         Text[ arabic ] = "ÍÑÝ";
         Text[ greek ] = "×áñáêôÞñåò";
@@ -351,7 +351,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ swedish ] = "~Inga" ;
         Text [ dutch ] = "~Geen" ;
         Text [ spanish ] = "Nin~guno" ;
-        Text [ english_us ] = "~None" ;
+        Text [ english_us ] = "N~one" ;
         Check = TRUE ;
         Text[ chinese_simplified ] = "ÎÞ(~O)";
         Text[ russian ] = "Áåç";
@@ -399,7 +399,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ swedish ] = "Tec~ken" ;
         Text [ dutch ] = "~Teken" ;
         Text [ spanish ] = "C~arácter" ;
-        Text [ english_us ] = "Ch~aracter" ;
+        Text [ english_us ] = "Character" ;
         Text[ chinese_simplified ] = "×Ö·û(~H)";
         Text[ russian ] = "Çíàê";
         Text[ polish ] = "Znak";
@@ -438,7 +438,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ english_us ] = "Fill character" ;
         Text[ chinese_simplified ] = "³äÌî×Ö·û";
         Text[ russian ] = "Çàïîëíèòåëü";
-        Text[ polish ] = "Symbol wieloznaczny";
+        Text[ polish ] = "Wype³niacze";
         Text[ japanese ] = "Ø°ÀÞ°";
         Text[ chinese_traditional ] = "¥R¶ñ¦r¤¸";
         Text[ arabic ] = "ÍÑÝ ÓÇÈÞ";
@@ -548,5 +548,6 @@ TabPage RID_SVXPAGE_TABULATOR
     Text[ catalan ] = "Tabulaciones";
 };
  // ********************************************************************** EOF
+
 
 
