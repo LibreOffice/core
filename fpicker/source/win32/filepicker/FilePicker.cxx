@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:13:15 $
+ *  last change: $Author: tra $ $Date: 2001-07-02 08:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,7 @@ sal_Int16 SAL_CALL CFilePicker::execute( ) throw(RuntimeException)
 //------------------------------------------------------------------------------------
 
 void SAL_CALL CFilePicker::setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const Any& aValue )
-    throw(IllegalArgumentException, RuntimeException)
+    throw(RuntimeException)
 {
     OSL_ASSERT( 0 != m_pImpl.get( ) );
     m_pImpl->setValue( aControlId, aControlAction, aValue );
@@ -433,7 +433,7 @@ void SAL_CALL CFilePicker::setValue( sal_Int16 aControlId, sal_Int16 aControlAct
 //-----------------------------------------------------------------------------------------
 
 Any  SAL_CALL CFilePicker::getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
-    throw(IllegalArgumentException, RuntimeException)
+    throw(RuntimeException)
 {
     OSL_ASSERT( 0 != m_pImpl.get( ) );
     return m_pImpl->getValue( aControlId, aControlAction );
@@ -444,7 +444,7 @@ Any  SAL_CALL CFilePicker::getValue( sal_Int16 aControlId, sal_Int16 aControlAct
 //-----------------------------------------------------------------------------------------
 
 void SAL_CALL CFilePicker::enableControl( sal_Int16 aControlId, sal_Bool bEnable )
-    throw(IllegalArgumentException, RuntimeException)
+    throw(RuntimeException)
 {
     OSL_ASSERT( 0 != m_pImpl.get( ) );
     m_pImpl->enableControl( aControlId, bEnable );
@@ -455,7 +455,7 @@ void SAL_CALL CFilePicker::enableControl( sal_Int16 aControlId, sal_Bool bEnable
 //-----------------------------------------------------------------------------------------
 
 void SAL_CALL CFilePicker::setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel )
-    throw (IllegalArgumentException, RuntimeException)
+    throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
     m_pImpl->setLabel( aControlId, aLabel );
@@ -466,7 +466,7 @@ void SAL_CALL CFilePicker::setLabel( sal_Int16 aControlId, const ::rtl::OUString
 //-----------------------------------------------------------------------------------------
 
 OUString SAL_CALL CFilePicker::getLabel( sal_Int16 aControlId )
-    throw ( IllegalArgumentException, RuntimeException)
+    throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
     return m_pImpl->getLabel( aControlId );
@@ -621,6 +621,13 @@ void SAL_CALL CFilePicker::initialize( const Sequence< Any >& aArguments )
             winResTemplateId = TMPL2000_FILEOPEN_READONLY_VERSION_BOX_ID;
         else
             winResTemplateId = TMPL95_FILEOPEN_READONLY_VERSION_BOX_ID;
+        break;
+
+    case FILEOPEN_LINK_PREVIEW:
+        if ( bIsWin2000 )
+            winResTemplateId = TMPL2000_FILEOPEN_LINK_PREVIEW_BOX_SIMPLE_ID;
+        else
+            winResTemplateId = TMPL95_FILEOPEN_LINK_PREVIEW_BOX_SIMPLE_ID;
         break;
 
     default:

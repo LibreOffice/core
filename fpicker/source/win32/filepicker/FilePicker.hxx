@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:13:03 $
+ *  last change: $Author: tra $ $Date: 2001-07-02 08:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,19 +199,19 @@ public:
     //------------------------------------------------------------------------------------
 
     virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const ::com::sun::star::uno::Any& aValue )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL enableControl( sal_Int16 aControlId, sal_Bool bEnable )
-        throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+        throw(::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::rtl::OUString SAL_CALL getLabel( sal_Int16 aControlId )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
     // XFilePreview
