@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:21:30 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 21:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,8 @@
 #include <svtools/svstdarr.hxx>
 #include <svtools/helpopt.hxx>
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1718,7 +1718,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
 
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame = pBindings->GetActiveFrame();
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, com::sun::star::uno::UNO_QUERY );
-    com::sun::star::uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
     if ( xPropSet.is() )
     {
         try
@@ -1770,18 +1770,10 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
 
     //if ( pTask && bSet )
     {
-// <<<<<<< dispatch.cxx
         //pTaskWin = pTask->GetWorkWindow_Impl();
         pTaskWin = pImp->pFrame->GetTopFrame()->GetWorkWindow_Impl();
         pTaskWin->ResetStatusBar_Impl();
     }
-// =======
-//      pTaskWin = pTask->GetWorkWindow_Impl();
-//        //pTaskWin->ResetStatusBar_Impl();
-//    }
-//
-//    pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->ResetStatusBar_Impl();
-// >>>>>>> 1.27
 
     SfxDispatcher *pDispat = this;
     while ( pDispat )
