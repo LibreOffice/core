@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue_Test.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-09 10:15:08 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,9 @@ public final class JobQueue_Test extends ComplexTestCase {
     }
 
     public void testDynamicThreadExecutesJob() throws InterruptedException {
-        testExecuteJobs(new JobQueue(__javaThreadPoolFactory, new ThreadId(),
-                                     true));
+        testExecuteJobs(
+            new JobQueue(
+                __javaThreadPoolFactory, ThreadId.createFresh(), true));
     }
 
     public void testStaticThreadExecutesAsyncs() throws InterruptedException {
@@ -170,7 +171,7 @@ public final class JobQueue_Test extends ComplexTestCase {
     }
 
     public void testDynamicThreadExecutesAsyncs() throws InterruptedException {
-        ThreadId threadId = new ThreadId();
+        ThreadId threadId = ThreadId.createFresh();
         JobQueue async_jobQueue = new JobQueue(__javaThreadPoolFactory,
                                                threadId);
         TestWorkAt workAt = new TestWorkAt();
