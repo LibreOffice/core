@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-23 09:57:21 $
+ *  last change: $Author: jp $ $Date: 2001-03-16 17:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,9 @@
 #endif
 #ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
+#endif
+#ifndef _SVX_CHARRELIEFITEM_HXX
+#include <svx/charreliefitem.hxx>
 #endif
 
 #ifndef _FMTFLD_HXX //autogen
@@ -946,6 +949,39 @@ static Writer& OutWW8_ScaleWidth( Writer& rWrt, const SfxPoolItem& rHt )
     }
     return rWrt;
 }
+
+static Writer& OutWW8_Relief( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    if( rWrtWW8.bWrtWW8 )
+    {
+        const SvxCharReliefItem& rAttr = (const SvxCharReliefItem&)rHt;
+        USHORT nId;
+        switch ( rAttr.GetValue() )
+        {
+        case RELIEF_EMBOSSED:   nId = 0x858;    break;
+        case RELIEF_ENGRAVED:   nId = 0x854;    break;
+        default:                nId = 0;        break;
+        }
+
+        if( nId )
+        {
+            rWrtWW8.InsUInt16( nId );
+            rWrtWW8.pO->Insert( (BYTE)0x81, rWrtWW8.pO->Count() );
+        }
+        else
+        {
+            // switch both flags off
+            rWrtWW8.InsUInt16( 0x858 );
+            rWrtWW8.pO->Insert( (BYTE)0x0, rWrtWW8.pO->Count() );
+            rWrtWW8.InsUInt16( 0x854 );
+            rWrtWW8.pO->Insert( (BYTE)0x0, rWrtWW8.pO->Count() );
+        }
+    }
+    return rWrt;
+}
+
+
 static Writer& OutWW8_CharRotate( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
@@ -3558,7 +3594,7 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_CHRATR_EMPHASIS_MARK*/       OutWW8_EmphasisMark,
 /* RES_TXTATR_TWO_LINES */          OutWW8_SvxTwoLinesItem,
 /* RES_CHRATR_DUMMY4 */             OutWW8_ScaleWidth,
-/* RES_CHRATR_DUMMY5 */             0,
+/* RES_CHRATR_DUMMY5 */             OutWW8_Relief,
 /* RES_CHRATR_DUMMY1 */             0, // Dummy:
 
 /* RES_TXTATR_INETFMT */            OutSwFmtINetFmt,
@@ -3667,6 +3703,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2001/02/23 09:57:21  cmc
+      Test if CJK combined characters are western or asian
+
       Revision 1.10  2001/02/21 12:45:24  os
       use database struct instead of a combined string
 

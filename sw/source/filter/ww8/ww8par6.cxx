@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-16 14:19:41 $
+ *  last change: $Author: jp $ $Date: 2001-03-16 17:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,9 @@
 #endif
 #ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
+#endif
+#ifndef _SVX_CHARRELIEFITEM_HXX
+#include <svx/charreliefitem.hxx>
 #endif
 
 #ifndef _SVX_HYZNITEM_HXX //autogen
@@ -3983,6 +3986,33 @@ void SwWW8ImplReader::Read_ScaleWidth( USHORT, BYTE* pData, short nLen )
     }
 }
 
+void SwWW8ImplReader::Read_Relief( USHORT nId, BYTE* pData, short nLen )
+{
+    if( nLen < 0 )
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_RELIEF );
+    else
+    {
+        if( *pData )
+        {
+// JP 16.03.2001 - not so eays because this is also a toggle attribute!
+//  2 x emboss on -> no emboss !!!
+// the actual value must be searched over the stack / template
+
+            const SvxCharReliefItem* pOld = (SvxCharReliefItem*)
+                                            GetFmtAttr( RES_CHRATR_RELIEF );
+            FontRelief nNewValue = 0x854 == nId ? RELIEF_ENGRAVED
+                                         : ( 0x858 == nId ? RELIEF_EMBOSSED
+                                                            : RELIEF_NONE );
+            if( pOld->GetValue() == nNewValue )
+            {
+                if( RELIEF_NONE != nNewValue )
+                    nNewValue = RELIEF_NONE;
+            }
+            NewAttr( SvxCharReliefItem( nNewValue ));
+        }
+    }
+}
+
 
 SwWW8Shade::SwWW8Shade( BOOL bVer67, const WW8_SHD& rSHD )
 {
@@ -4733,11 +4763,11 @@ SprmReadInfo aSprmReadTab[] = {
     0x4A51, &SwWW8ImplReader::Read_FontCode, //"sprmCRgFtc2" // chp.rgftc[2];ftc for non-Far East text (see below);short;
     0x4852, &SwWW8ImplReader::Read_ScaleWidth,  // ? ? ?  , "sprmCCharScale", // ;;;
     0x2A53, &SwWW8ImplReader::Read_BoldUsw, //"sprmCFDStrike" // chp.fDStrike;;byte;
-    0x0854, (FNReadRecord)0, //"sprmCFImprint" // chp.fImprint;1 or 0;bit;
+    0x0854, &SwWW8ImplReader::Read_Relief, //"sprmCFImprint" // chp.fImprint;1 or 0;bit;
     0x0855, &SwWW8ImplReader::Read_Special, //"sprmCFSpec" // chp.fSpec ;1 or 0;bit;
     0x0856, &SwWW8ImplReader::Read_Obj, //"sprmCFObj" // chp.fObj;1 or 0;bit;
     0xCA57, &SwWW8ImplReader::Read_CPropRMark, //"sprmCPropRMark" // chp.fPropRMark, chp.ibstPropRMark, chp.dttmPropRMark;Complex (see below);variable length always recorded as 7 bytes;
-    0x0858, (FNReadRecord)0, //"sprmCFEmboss" // chp.fEmboss;1 or 0;bit;
+    0x0858, &SwWW8ImplReader::Read_Relief, //"sprmCFEmboss" // chp.fEmboss;1 or 0;bit;
     0x2859, (FNReadRecord)0, //"sprmCSfxText" // chp.sfxtText;text animation;byte;
 //0x085A, ? ? ?  , "sprmCFBiDi", // ;;;
 //0x085B, ? ? ?  , "sprmCFDiacColor", // ;;;
@@ -4953,12 +4983,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.16 2001-03-16 14:19:41 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.17 2001-03-16 17:15:59 jp Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.16  2001/03/16 14:19:41  cmc
+      Add some undocumented sprms
+
       Revision 1.15  2001/03/13 16:21:22  cmc
       ##503##, #84126#. Incorrect endnote setting, and duplicate code
 

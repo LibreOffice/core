@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-13 16:21:22 $
+ *  last change: $Author: jp $ $Date: 2001-03-16 17:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1005,6 +1005,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_Invisible(        USHORT, BYTE* pData, short nLen );
     void Read_Emphasis(         USHORT, BYTE* pData, short nLen );
     void Read_ScaleWidth(       USHORT, BYTE* pData, short nLen );
+    void Read_Relief(           USHORT, BYTE* pData, short nLen);
 
     void Read_NoLineNumb(       USHORT nId, BYTE* pData, short nLen );
 
@@ -1150,11 +1151,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.16 2001-03-13 16:21:22 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.17 2001-03-16 17:16:00 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.16  2001/03/13 16:21:22  cmc
+      ##503##, #84126#. Incorrect endnote setting, and duplicate code
+
       Revision 1.15  2001/02/27 10:59:05  cmc
       #84122# Missing Cropping on DirectBLIP import
 
