@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmdocumentclassification.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:50:33 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 10:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,14 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
 /** === end UNO includes === **/
+
+#ifndef SVX_DBTOOLSCLIENT_HXX
+#include "dbtoolsclient.hxx"
+#endif
 
 //........................................................................
 namespace svxform
@@ -112,6 +119,7 @@ namespace svxform
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::sdbc;
 
     //====================================================================
     //= DocumentClassification
@@ -127,21 +135,25 @@ namespace svxform
 
         try
         {
-            // TODO: check for eForms and database forms before asking the service info
-
-            Reference< XServiceInfo > xSI( _rxDocumentModel, UNO_QUERY_THROW );
-            if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ) ) ) )
-                eType = eWebDocument;
-            else if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ) ) )
-                eType = eTextDocument;
-            else if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) ) )
-                eType = eSpreadsheetDocument;
-            else if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
+            Reference< XConnection > xContextConnection = OStaticDataAccessTools().getComponentContextConnection( _rxDocumentModel );
+            if ( xContextConnection.is() )
+                eType = eDatabaseForm;
+            else
             {
-                if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ) )
-                    eType = ePresentationDocument;
-                else
-                    eType = eDrawingDocument;
+                Reference< XServiceInfo > xSI( _rxDocumentModel, UNO_QUERY_THROW );
+                if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ) ) ) )
+                    eType = eWebDocument;
+                else if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ) ) )
+                    eType = eTextDocument;
+                else if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) ) )
+                    eType = eSpreadsheetDocument;
+                else if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
+                {
+                    if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ) )
+                        eType = ePresentationDocument;
+                    else
+                        eType = eDrawingDocument;
+                }
             }
         }
         catch( const Exception& )
