@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-25 20:37:11 $
+ *  last change: $Author: nn $ $Date: 2001-08-10 14:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1553,6 +1553,29 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
 
 //  -------------------------------------------------------------------------------
 
+Size lcl_GetVertPaperSize( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab )
+{
+    const double nPPTY = HMM_PER_TWIPS;
+
+    const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, nTab );
+    const ScMergeAttr& rMerge = (const ScMergeAttr&)pPattern->GetItem(ATTR_MERGE);
+
+    long nCellY = (long) ( pDoc->GetRowHeight(nRow,nTab) * nPPTY );
+    if ( rMerge.GetRowMerge() > 1 )
+    {
+        USHORT nCountY = rMerge.GetRowMerge();
+        for (USHORT i=1; i<nCountY; i++)
+            nCellY += (long) ( pDoc->GetRowHeight(nRow+i,nTab) * nPPTY );
+    }
+
+    //  only top/bottom margin are interesting
+    const SvxMarginItem& rMargin = (const SvxMarginItem&)pPattern->GetItem(ATTR_MARGIN);
+    nCellY -= (long) ( rMargin.GetTopMargin() * nPPTY );
+    nCellY -= (long) ( rMargin.GetBottomMargin() * nPPTY );
+
+    return Size( nCellY - 1, 1000000 );     // cell height as width for PaperSize
+}
+
 void lcl_ClearEdit( EditEngine& rEngine )       // Text und Attribute
 {
     rEngine.SetUpdateMode( FALSE );
@@ -1948,13 +1971,18 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     //  calculate PaperSize for automatic line breaks from logic size,
                                     //  not pixel sizes, to get the same breaks at all scales
 
-                                    Fraction aFract(1,1);
-                                    Rectangle aUtilRect = ScEditUtil( pDoc,nX,nY,nTab,
-                                                            Point(nStartX,nStartY), pDev,
-                                                            HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract )
-                                                        .GetEditArea( pPattern, FALSE );
-                                    Size aLogic = aUtilRect.GetSize();
-                                    pEngine->SetPaperSize( aLogic );
+                                    if ( eOrient == SVX_ORIENTATION_STANDARD )
+                                    {
+                                        Fraction aFract(1,1);
+                                        Rectangle aUtilRect = ScEditUtil( pDoc,nX,nY,nTab,
+                                                                Point(nStartX,nStartY), pDev,
+                                                                HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract )
+                                                            .GetEditArea( pPattern, FALSE );
+                                        Size aLogic = aUtilRect.GetSize();
+                                        pEngine->SetPaperSize( aLogic );
+                                    }
+                                    else
+                                        pEngine->SetPaperSize( lcl_GetVertPaperSize(pDoc,nX,nY,nTab) );
                                 }
                                 else
                                     pEngine->SetPaperSize(pRefDevice->PixelToLogic(aPaperSize));
