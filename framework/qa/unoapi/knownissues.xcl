@@ -1,12 +1,6 @@
 ### 107961 ###
 fwk.Desktop::com::sun::star::frame::XComponentLoader
 
-### 110850 ###
-fwk.Desktop::com::sun::star::document::XEventBroadcaster
-
-### 112249 ###
-fwk.DocumentProperties::com::sun::star::document::DocumentInfo
-
 ### 112305 ###
 fwk.DispatchRecorder::com::sun::star::frame::XDispatchRecorder
 
