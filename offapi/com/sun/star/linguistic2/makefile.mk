@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:54:41 $
+#   last change: $Author: vg $ $Date: 2003-04-17 17:58:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,12 +73,17 @@ PACKAGE=com$/sun$/star$/linguistic2
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    ConversionDictionary.idl \
+    ConversionDictionaryList.idl \
+    ConversionDictionaryType.idl \
+    ConversionDirection.idl \
     DictionaryEvent.idl\
     DictionaryEventFlags.idl\
     DictionaryList.idl\
     DictionaryListEvent.idl\
     DictionaryListEventFlags.idl\
     DictionaryType.idl\
+    HangulHanjaConversionDictionary.idl \
     Hyphenator.idl\
     LinguProperties.idl\
     LinguServiceEvent.idl\
@@ -88,6 +93,8 @@ IDLFILES=\
     SpellFailure.idl\
     Thesaurus.idl\
     XAvailableLocales.idl\
+    XConversionDictionary.idl \
+    XConversionDictionaryList.idl \
     XDictionary.idl\
     XDictionary1.idl\
     XDictionaryEntry.idl\
