@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblnumfm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:16:36 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:19:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,12 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _SVX_NUMFMT_HXX
-#include <svx/numfmt.hxx>
+//CHINA001 #ifndef _SVX_NUMFMT_HXX
+//CHINA001 #include <svx/numfmt.hxx>
+//CHINA001 #endif
+#define ITEMID_NUMBERINFO SID_ATTR_NUMBERFORMAT_INFO
+#ifndef _SVX_NUMINF_HXX
+#include <svx/numinf.hxx>
 #endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
@@ -80,6 +84,12 @@
 #include <chrdlg.hrc>
 #endif
 
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
+#include <svtools/itemset.hxx> //CHINA001
+#ifndef _SFXTABDLG_HXX
+#include <sfx2/tabdlg.hxx>
+#endif
 
 SwNumFmtDlg::SwNumFmtDlg(Window* pParent, SfxItemSet& rSet)
     : SfxSingleTabDialog( pParent, rSet, 0 )
@@ -87,11 +97,22 @@ SwNumFmtDlg::SwNumFmtDlg(Window* pParent, SfxItemSet& rSet)
 //    SetText(SW_RESSTR(STR_NUMFMT));
 
     // TabPage erzeugen
-    SvxNumberFormatTabPage* pPage = (SvxNumberFormatTabPage*)
-                                SvxNumberFormatTabPage::Create( this, rSet );
-    pPage->SetNumberFormatList( (const SvxNumberInfoItem&)pPage->
-                            GetItemSet().Get( SID_ATTR_NUMBERFORMAT_INFO ) );
-    SetTabPage( pPage );
+    //CHINA001 SvxNumberFormatTabPage* pPage = (SvxNumberFormatTabPage*)
+                                //CHINA001 SvxNumberFormatTabPage::Create( this, rSet );
+    //CHINA001 pPage->SetNumberFormatList( (const SvxNumberInfoItem&)pPage->
+                            //CHINA001 GetItemSet().Get( SID_ATTR_NUMBERFORMAT_INFO ) );
+    //CHINA001 SetTabPage( pPage );
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );
+    if ( fnCreatePage )
+    {
+        SfxTabPage* pPage = (*fnCreatePage)( this, rSet );
+        SfxAllItemSet aSet(*(rSet.GetPool())); //CHINA001
+        aSet.Put ( SvxNumberInfoItem( (const SvxNumberInfoItem&)pPage->GetItemSet().Get( SID_ATTR_NUMBERFORMAT_INFO )));
+        pPage->PageCreated(aSet);
+        SetTabPage(pPage);
+    }
 }
 
 
