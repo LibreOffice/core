@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2001-10-17 21:13:18 $
+ *  last change: $Author: kz $ $Date: 2001-10-19 21:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1128,7 +1128,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ french ] = "ESTBISSEXTILE";
         Text[ spanish ] = "ESAÑOBISIESTO";
         Text[ finnish ] = "ISLEAPYEAR";
-        Text[ italian ] = "AnnoBisestile";
+        Text[ italian ] = "ANNO.BISESTILE";
         Text[ danish ] = "ISLEAPYEAR";
         Text[ swedish ] = "ÄRSKOTTÅR";
         Text[ polish ] = "ROKPRZESTÊPNY";
@@ -1154,7 +1154,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ french ] = "JOURSDANSMOIS";
         Text[ spanish ] = "DÍASENMES";
         Text[ finnish ] = "DAYSINMONTH";
-        Text[ italian ] = "GiorniMese";
+        Text[ italian ] = "GIORNI.MESE";
         Text[ danish ] = "DAYSINMONTH";
         Text[ swedish ] = "DAGARIMÅNADEN";
         Text[ polish ] = "DNIWMIESI¥CU";
@@ -1180,7 +1180,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ french ] = "JOURSDANSANNEE";
         Text[ spanish ] = "DÍASENAÑO";
         Text[ finnish ] = "DAYSINYEAR";
-        Text[ italian ] = "GiorniAnno";
+        Text[ italian ] = "GIORNI.ANNO";
         Text[ danish ] = "DAYSINYEAR";
         Text[ swedish ] = "DAGARPÅÅRET";
         Text[ polish ] = "DNIWROKU";
@@ -1206,7 +1206,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ french ] = "SEMAINESDANSANNEE";
         Text[ spanish ] = "SEMANASENAÑO";
         Text[ finnish ] = "WEEKSINYEAR";
-        Text[ italian ] = "SettimaneAnno";
+        Text[ italian ] = "SETTIMANE.ANNO";
         Text[ danish ] = "WEEKSINYEAR";
         Text[ swedish ] = "VECKORPERÅR";
         Text[ polish ] = "TYGODNIEWROKU";
@@ -1316,6 +1316,7 @@ Resource RID_DATE_DEFFUNCTION_NAMES
         };
     };
 };
+
 
 
 
