@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optmemory.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:00:46 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,10 +96,11 @@ TabPage OFA_TP_MEMORY
         Spin = TRUE ;
         Minimum = 1 ;
         First = 1 ;
-        Maximum = 100 ;
+        Maximum = 1000 ;
         Value = 100 ;
         Last = 100 ;
         SpinSize = 1 ;
+        MaxTextLength = 4;
     };
     FixedLine GB_GRAPHICCACHE
     {
