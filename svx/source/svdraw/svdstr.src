@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:32:05 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2863,7 +2863,7 @@ String STR_ObjNameSingulUno
     Text[ portuguese ] = "Campo de controlo";
     Text[ russian ] = "İëåìåíò óïğàâëåíèÿ";
     Text[ dutch ] = "Controleveld";
-    Text[ french ] = "Champ de contrôle";
+    Text[ french ] = "Contrôle";
     Text[ spanish ] = "Campo de control";
     Text[ italian ] = "Campo di controllo";
     Text[ danish ] = "Kontrolelement";
@@ -3139,7 +3139,7 @@ String STR_ObjNameSingulCAPTION
     Text[ chinese_simplified ] = "Í¼Àı";
     Text[ russian ] = "Ëåãåíäà";
     Text[ polish ] = "Legenda";
-    Text[ japanese ] = "‚«o‚µ";
+    Text[ japanese ] = "–}—á";
     Text[ chinese_traditional ] = "¹Ï¨Ò";
     Text[ arabic ] = "ÊÚáíŞ ÊİÓíÑí";
     Text[ dutch ] = "Legenda";
@@ -3167,7 +3167,7 @@ String STR_ObjNamePluralCAPTION
     Text[ chinese_simplified ] = "Í¼Àı";
     Text[ russian ] = "Ëåãåíäû";
     Text[ polish ] = "Legendy";
-    Text[ japanese ] = "‚«o‚µ";
+    Text[ japanese ] = "–}—á";
     Text[ chinese_traditional ] = "¹Ï¨Ò";
     Text[ arabic ] = "ÊÚáíŞÇÊ ÊİÓíÑíÉ";
     Text[ dutch ] = "Legenda's";
@@ -8606,7 +8606,7 @@ String STR_ItemNam_CAPTIONTYPE
     Text[ chinese_simplified ] = "Í¼ÀıÀàĞÍ";
     Text[ russian ] = "Òèï ëåãåíäû";
     Text[ polish ] = "Typ legendy";
-    Text[ japanese ] = "‚«o‚µ‚Ìí—Ş";
+    Text[ japanese ] = "–}—á‚Ìí—Ş";
     Text[ chinese_traditional ] = "¹Ï¨ÒÃş«¬";
     Text[ arabic ] = "äæÚ ÇáÊÚáíŞ ÇáÊİÓíÑí";
     Text[ dutch ] = "Legendatype";
@@ -8875,7 +8875,7 @@ String STR_ItemNamSET_CAPTION
     Text[ chinese_simplified ] = "Í¼ÀıÊôĞÔ";
     Text[ russian ] = "Àòğèáóòû ëåãåíäû";
     Text[ polish ] = "Atrybuty legendy";
-    Text[ japanese ] = "‚«o‚µ‚Ì‘®«";
+    Text[ japanese ] = "–}—á‚Ì‘®«";
     Text[ chinese_traditional ] = "¹Ï¨ÒÄİ©Ê";
     Text[ arabic ] = "ÓãÇÊ ÇáÊÚáíŞ ÇáÊİÓíÑí";
     Text[ dutch ] = "Legenda-attributen";
@@ -10429,7 +10429,7 @@ String SIP_XA_FILLCOLOR
     Text[ english_us ] = "Fillcolor";
     Text[ portuguese ] = "Cor";
     Text[ russian ] = "Öâåò çàëèâêè";
-    Text[ dutch ] = "Vulllingskleur";
+    Text[ dutch ] = "Opvulkleur";
     Text[ french ] = "Couleur de remplissage";
     Text[ spanish ] = "Color de relleno";
     Text[ italian ] = "Colore di riempimento";
@@ -10441,7 +10441,7 @@ String SIP_XA_FILLCOLOR
     Text[ chinese_simplified ] = "³äÌîµÄÑÕÉ«";
     Text[ chinese_traditional ] = "¥R¶ñÃC¦â";
     Text[ arabic ] = "áæä ÇáÊÚÈÆÉ";
-    Text[ dutch ] = "Vulllingskleur";
+    Text[ dutch ] = "Opvulkleur";
     Text[ chinese_simplified ] = "³äÌîµÄÑÕÉ«";
     Text[ greek ] = "Ãİìéóìá ìå ÷ñşìá";
     Text[ korean ] = "Ã¤¿ì±â »ö»ó";
@@ -12689,7 +12689,7 @@ String SIP_SA_TEXT_VERTADJUST
     Text[ swedish ] = "Vertikal textförankring";
     Text[ polish ] = "Pionowe zakotwiczenie tekstu";
     Text[ portuguese_brazilian ] = "Vertical text anchor";
-    Text[ japanese ] = "‚’¼‚ÈÃ·½Ä ±İ¶°";
+    Text[ japanese ] = "‚’¼‚ÈÃ·½Ä‚Ì±İ¶°";
     Text[ chinese_simplified ] = "´¹Ö±·½ÏòÎÄ×ÖËø¶¨";
     Text[ chinese_traditional ] = "««ª½¤è¦V¤å¦rÂê©w";
     Text[ arabic ] = "ÅÑÓÇÁ ÇáäÕ ÑÃÓíÇğ";
@@ -12820,7 +12820,7 @@ String SIP_SA_TEXT_HORZADJUST
     Text[ swedish ] = "Horisontal textförankring";
     Text[ polish ] = "Poziome zakotwiczenie tekstu";
     Text[ portuguese_brazilian ] = "Horizontal text anchor";
-    Text[ japanese ] = "…•½‚ÈÃ·½Ä ±İ¶°";
+    Text[ japanese ] = "…•½‚ÈÃ·½Ä‚Ì±İ¶°";
     Text[ chinese_simplified ] = "Ë®Æ½·½ÏòÎÄ×ÖËø¶¨";
     Text[ chinese_traditional ] = "¤ô¥­¤è¦V¤å¦rÂê©w";
     Text[ arabic ] = "ÅÑÓÇÁ ÇáäÕ ÃİŞíÇğ";
@@ -15809,7 +15809,7 @@ String SIP_EE_CHAR_COLOR
     Text[ spanish ] = "Color de fuente";
     Text[ italian ] = "Colore carattere";
     Text[ danish ] = "Skriftfarve";
-    Text[ swedish ] = "Teckensnittsfärg";
+    Text[ swedish ] = "Teckenfärg";
     Text[ polish ] = "Kolor czcionki";
     Text[ portuguese_brazilian ] = "Text color";
     Text[ japanese ] = "Ì«İÄ‚ÌF";
@@ -15829,7 +15829,7 @@ String SIP_EE_CHAR_FONTINFO
     Text = "Zeichensatz";
     Text [ ENGLISH ] = "Font" ;
     Text[ english_us ] = "Character set";
-    Text[ portuguese ] = "Tipos de caracteres";
+    Text[ portuguese ] = "Conjunto de caracteres";
     Text[ russian ] = "Øğèôò";
     Text[ dutch ] = "Tekenset";
     Text[ french ] = "Police";
@@ -16206,7 +16206,7 @@ String SIP_EE_FEATURE_LINEBR
     Text[ russian ] = "Ìÿãêèé ğàçğûâ ñòğîêè";
     Text[ dutch ] = "Zachte woordafbreking";
     Text[ french ] = "Renvoi à la ligne souple";
-    Text[ spanish ] = "Salto de línea, suave";
+    Text[ spanish ] = "Salto de línea manual";
     Text[ italian ] = "A capo morbido";
     Text[ danish ] = "Blødt linjeskift";
     Text[ swedish ] = "Mjuk radbrytning";
