@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-27 10:55:29 $
+ *  last change: $Author: mib $ $Date: 2001-04-30 08:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@ using namespace ::com::sun::star::uno;
 
 XMLPropertyMapEntry aXMLParaPropMap[] =
 {
+    M_E( "ParaLeftMargin",          FO, margin_left,        XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARALEFTMARGIN ),
+    M_E( "ParaLeftMarginRelative",  FO, margin_left,        XML_TYPE_PERCENT, CTF_PARALEFTMARGIN_REL ),
+    M_E( "ParaRightMargin",         FO, margin_right,       XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARARIGHTMARGIN ),
+    M_E( "ParaRightMarginRelative", FO, margin_right,       XML_TYPE_PERCENT, CTF_PARARIGHTMARGIN_REL ),
     // RES_CHRATR_CASEMAP
     M_E( "CharCaseMap",     FO,     font_variant,       XML_TYPE_TEXT_CASEMAP_VAR,  0 ),
     M_E( "CharCaseMap",     FO,     text_transform,     XML_TYPE_TEXT_CASEMAP,  0 ),
@@ -252,10 +256,6 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // not required
     // RES_LR_SPACE
 
-    M_E( "ParaLeftMargin",          FO, margin_left,        XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARALEFTMARGIN ),
-    M_E( "ParaLeftMarginRelative",  FO, margin_left,        XML_TYPE_PERCENT, CTF_PARALEFTMARGIN_REL ),
-    M_E( "ParaRightMargin",         FO, margin_right,       XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARARIGHTMARGIN ),
-    M_E( "ParaRightMarginRelative", FO, margin_right,       XML_TYPE_PERCENT, CTF_PARARIGHTMARGIN_REL ),
     M_E( "ParaFirstLineIndent",     FO, text_indent,        XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARAFIRSTLINE ),
     M_E( "ParaFirstLineIndentRelative", FO, text_indent,    XML_TYPE_PERCENT, CTF_PARAFIRSTLINE_REL ),
     M_E( "ParaLastLineAdjust",  STYLE, auto_text_indent,    XML_TYPE_BOOL, 0 ),
@@ -751,6 +751,11 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
         break;
     case TEXT_PROP_MAP_RUBY:
         pMap = aXMLRubyPropMap;
+        break;
+    case TEXT_PROP_MAP_SHAPE_PARA:
+        pMap = &aXMLParaPropMap[4];
+        DBG_ASSERT( pMap->msXMLName == sXML_font_variant,
+                    "paragraph map changed" );
         break;
     }
     DBG_ASSERT( pMap, "illegal map type" );
