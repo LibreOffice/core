@@ -14,7 +14,7 @@ Dim MaxIndex as Integer
 	oDocument.CurrentController.Select(oSelRanges)
 	If (DialogModel.optSheetRanges.State = 1) AND (DialogModel.chkComplete.State &lt;&gt; 1) Then
 		&apos; Ist das Sheet Grundlage für die Bearbeitung?
-		oStatusline.SetText(sStsRELRANGES)        		&apos;&quot;Erfassung der relevanten Bereiche...&quot;
+		SetStatusLineText(sStsRELRANGES)
 		osheet = oDocument.CurrentController.GetActiveSheet
 		oRanges = osheet.CellFormatRanges.createEnumeration()
 		MaxIndex = AddSheetRanges(oRanges, MaxIndex, oSheet, False)
@@ -26,7 +26,7 @@ Dim MaxIndex as Integer
 		bRangeListDefined = True
 	End If
 	EnableStep1DialogControls(True, True, True)
-	oStatusline.SetText(&quot;&quot;)
+	SetStatusLineText(&quot;&quot;)
 End Sub
 
 
@@ -45,14 +45,14 @@ Dim sStatustext as String
 			Else
 				sStatustext = ReplaceString(sStsRELSHEETRANGES,Str(i+1),&quot;%1Number%1&quot;)
 				sStatustext = ReplaceString(sStatusText,oSheets.Count,&quot;%2TotPageCount%2&quot;)
-				oStatusline.SetText(sStatusText)
+				SetStatusLineText(sStatusText)
 			End If
 			oRanges = osheet.CellFormatRanges.createEnumeration
 			MaxIndex = AddSheetRanges(oRanges, MaxIndex, oSheet, bAutopilot)
 		Next i
 	Else
 		If Not bAutoPilot Then
-			oStatusline.SetText(sStsRELRANGES)  	&apos;&quot;Erfassung der relevanten Bereiche...&quot;
+			SetStatusLineText(sStsRELRANGES)
 			&apos; Die Ranges sind schon definiert
 			For i = 0 To Ubound(RangeList())
 				If RangeList(i) &lt;&gt; &quot;&quot; Then

@@ -306,4 +306,12 @@ Sub	SetOptionValuestoNull()
 		.optSelRange.State = 0
 	End With
 End Sub
+
+
+
+Sub	SetStatusLineText(sStsREPROTECT as String)
+	If Not IsNull(oStatusLine) Then
+		oStatusline.SetText(sStsREPROTECT)
+	End If
+End Sub
 </script:module>

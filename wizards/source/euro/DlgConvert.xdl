@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="DialogConvert" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="1" dlg:help-url="HID:34660">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="DialogConvert" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="3" dlg:help-url="HID:34660" dlg:closeable="true" dlg:moveable="true">
  <dlg:bulletinboard>
   <dlg:button dlg:id="cmdCancel" dlg:tab-index="0" dlg:left="6" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34673" dlg:value="cmdCancel">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Euro.Common.CancelTask" script:language="StarBasic"/>
@@ -33,7 +33,7 @@
   <dlg:checkbox dlg:id="chkComplete" dlg:tab-index="10" dlg:left="12" dlg:top="43" dlg:width="129" dlg:height="10" dlg:page="1" dlg:help-url="HID:34661" dlg:value="chkComplete" dlg:checked="true">
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="Euro.ConvertRun.RetrieveEnableValue" script:language="StarBasic"/>
   </dlg:checkbox>
-  <dlg:text dlg:id="lblHint" dlg:tab-index="11" dlg:left="6" dlg:top="164" dlg:width="258" dlg:height="22" dlg:value="lblHint" dlg:multiline="true"/>
+  <dlg:text dlg:id="lblHint" dlg:tab-index="11" dlg:left="6" dlg:top="166" dlg:width="258" dlg:height="20" dlg:value="lblHint" dlg:multiline="true"/>
   <dlg:textfield dlg:id="txtTarget" dlg:tab-index="12" dlg:left="80" dlg:top="143" dlg:width="165" dlg:height="12" dlg:page="2" dlg:help-url="HID:34672"/>
   <dlg:button dlg:id="cmdCallTargetDialog" dlg:tab-index="13" dlg:left="249" dlg:top="142" dlg:width="15" dlg:height="14" dlg:page="2" dlg:help-url="HID:34678" dlg:value="...">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Euro.AutoPilotRun.CallFolderPicker" script:language="StarBasic"/>
@@ -71,5 +71,7 @@
   <dlg:fixedline dlg:id="hlnExtent" dlg:tab-index="32" dlg:left="6" dlg:top="39" dlg:width="156" dlg:height="8" dlg:page="2" dlg:value="hlnExtent"/>
   <dlg:fixedline dlg:id="hlnProgress" dlg:tab-index="33" dlg:left="6" dlg:top="108" dlg:width="258" dlg:height="8" dlg:page="3" dlg:value="hlnProgress"/>
   <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="34" dlg:left="6" dlg:top="152" dlg:width="258" dlg:height="9" dlg:page="1"/>
+  <dlg:progressmeter dlg:id="ProgressBar" dlg:tab-index="35" dlg:left="85" dlg:top="152" dlg:width="179" dlg:height="10" dlg:page="3"/>
+  <dlg:text dlg:id="lblProgress" dlg:tab-index="36" dlg:left="6" dlg:top="153" dlg:width="79" dlg:height="8" dlg:page="3" dlg:value="lblProgress"/>
  </dlg:bulletinboard>
 </dlg:window>

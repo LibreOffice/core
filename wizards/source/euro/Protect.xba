@@ -124,7 +124,7 @@ Dim ProtectList() as String
 Dim SheetName as String
 Dim SheetPassword as String
 	If PWIndex &gt; -1 Then
-		oStatusline.SetText(sStsREPROTECT)
+		SetStatusLineText(sStsREPROTECT)
 		For i = 0 To PWIndex
 			ProtectList() = ArrayOutOfString(UnProtectList(i),&quot;;&quot;)
 			SheetName = ProtectList(0)
@@ -138,7 +138,7 @@ Dim SheetPassword as String
 				oProtectSheet.Protect(SheetPassWord)
 			End If
 		Next i
-		oStatusline.SetText(&quot;&quot;)		
+		SetStatusLineText(&quot;&quot;)
 	End If
 	PWIndex = -1
 	ReDim UnProtectList()

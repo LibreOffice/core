@@ -33,12 +33,10 @@ Dim oCell as Object
 End Sub
 
 
-
 Sub ModifyObjectValuewithCurrFactor(oDocObject as Object)
 	oDocObjectValue = oDocObject.Value
 	oDocObject.Value = oDocObjectValue/CurrFactor
 End Sub
-
 
 
 Sub ConvertTextFields()

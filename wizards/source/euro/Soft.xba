@@ -54,7 +54,7 @@ Dim CurStyleName as String
 Dim AssignString as String
 	LastIndex = Ubound(StyleList())
 	StatusValue = 0
-	oStatusLine.SetText(sStsRELRANGES)       &apos;&quot;Erfassung der relevanten Bereiche...&quot;
+	SetStatusLineText(sStsRELRANGES)
 	For i = 0 To LastIndex
 		CurStyleName = StyleList(i)
 		n = PartStringInArray(StyleRangeAssignmentList(), CurStyleName, 0)

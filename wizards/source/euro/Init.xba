@@ -150,45 +150,6 @@ Sub InitializeResources()
 		sHelp = GetResText(1001)
 		sCANCEL = GetResText(1418)
 		sEnd = GetResText(1000)
-		.cmdCancel.Label =  sCANCEL
-		.cmdHelp.Label =  sHELP
-		.cmdBack.Label =  GetResText(1002)
-		.cmdGoOn.Label =  sGOON
-		.lblHint.Label =  GetResText(1004)
-		.lblCurrencies.Label = GetResText(1006)
-		If .Step = 1 Then
-			.chkComplete.Label = GetResText(1100)
-			.hlnSelection.Label = GetResText(1101)
-			.optCellTemplates.Label = GetResText(1102)
-			.optSheetRanges.Label = GetResText(1103)
-			.optDocRanges.Label = GetResText(1104)
-			.optSelRange.Label = GetResText(1105)
-			sCURRRANGES = GetResText(1108)
-			.lblSelection.Label = sCURRRANGES
-		Else
-		 	.hlnExtent.Label = GetResText(1200)
-			.optSingleFile.Label = GetResText(1201) &apos;&quot;Einzelnes StarOffice -Dokument&quot;&apos;GetResText(1201)
- 			.optWholeDir.Label = GetResText(1202)
- 			.chkProtect.Label = GetResText(1207)
- 			.chkTextDocuments.Label = GetResText(1210) 	&apos; &quot;Auch Feldbefehle und Tabellen in Textdokumenten konvertieren&quot;&apos; Todo: Dieses Model später am Control unsichtbar machen	
-
-			sSOURCEFILE = GetResText(1203)
-			sSOURCEDIR = GetResText(1204)
- 			.lblSource.Label = sSOURCEDIR
- 			sInclusiveSubDir = GetResText(1205)
- 			.chkRecursive.Label = sInclusiveSubDir
-			sTARGETDIR = GetResText(1206)
- 			.lblTarget.Label = STARGETDIR 
-			.txtSource.Text = ConvertfromUrl(GetPathSettings(&quot;Work&quot;))
-			SubstDir = .txtSource.Text
-			.txtTarget.Text = .txtSource.Text
-			.hlnProgress.Label = GetResText(1600)
-			.lblConfig.Label = GetResText(1603)
-			sPrgsRETRIEVAL = GetResText(1601)
-			sPrgsCONVERTING = GetResText(1602)
-			sPrgsUNPROTECT = GetResText(1604)
-		End If
-		.cmdBack.Enabled = False
 		sPROTECT = GetResText(1005)
 		sCONTINUE = GetResText(1007)
 		sSELTEMPL = GetResText(1106)
@@ -237,7 +198,47 @@ Sub InitializeResources()
 		sCurrFINNISH = GetResText(1510)
 		sCurrGREEK = GetResText(1511)
 		sCurrUNKNOWN = GetResText(1511)
-		sCurrSYSUNKNOWN = GetResText(1512)
+		sCurrSYSUNKNOWN = GetResText(1512)		
+		.cmdCancel.Label =  sCANCEL
+		.cmdHelp.Label =  sHELP
+		.cmdBack.Label =  GetResText(1002)
+		.cmdGoOn.Label =  sGOON
+		.lblHint.Label =  GetResText(1004)
+		.lblCurrencies.Label = GetResText(1006)
+		.cmdBack.Enabled = False		
+		If .Step = 1 Then
+			.chkComplete.Label = GetResText(1100)
+			.hlnSelection.Label = GetResText(1101)
+			.optCellTemplates.Label = GetResText(1102)
+			.optSheetRanges.Label = GetResText(1103)
+			.optDocRanges.Label = GetResText(1104)
+			.optSelRange.Label = GetResText(1105)
+			sCURRRANGES = GetResText(1108)
+			.lblSelection.Label = sCURRRANGES
+		Else
+			.lblProgress.Label = sStsPROGRESS
+		 	.hlnExtent.Label = GetResText(1200)
+			.optSingleFile.Label = GetResText(1201) &apos;&quot;Einzelnes StarOffice -Dokument&quot;&apos;GetResText(1201)
+ 			.optWholeDir.Label = GetResText(1202)
+ 			.chkProtect.Label = GetResText(1207)
+ 			.chkTextDocuments.Label = GetResText(1210) 	&apos; &quot;Auch Feldbefehle und Tabellen in Textdokumenten konvertieren&quot;&apos; Todo: Dieses Model später am Control unsichtbar machen	
+
+			sSOURCEFILE = GetResText(1203)
+			sSOURCEDIR = GetResText(1204)
+ 			.lblSource.Label = sSOURCEDIR
+ 			sInclusiveSubDir = GetResText(1205)
+ 			.chkRecursive.Label = sInclusiveSubDir
+			sTARGETDIR = GetResText(1206)
+ 			.lblTarget.Label = STARGETDIR 
+			.txtSource.Text = ConvertfromUrl(GetPathSettings(&quot;Work&quot;))
+			SubstDir = .txtSource.Text
+			.txtTarget.Text = .txtSource.Text
+			.hlnProgress.Label = GetResText(1600)
+			.lblConfig.Label = GetResText(1603)
+			sPrgsRETRIEVAL = GetResText(1601)
+			sPrgsCONVERTING = GetResText(1602)
+			sPrgsUNPROTECT = GetResText(1604)
+		End If
 	End With
 End Sub
 
@@ -461,15 +462,17 @@ End Sub
 
 Sub InitializeConverter(oLocale, iDialogPage as Integer)
 Dim Isthere as Boolean
-	ToggleWindow(False)
 	bCancelProtection = False
 &apos;	bMacroStopped = False
 	bRangeListDefined = False
 	PWIndex = -1
-	sDocType = GetDocumentType(ThisComponent)
-    oStatusline = ThisComponent.GetCurrentController.GetFrame.CreateStatusIndicator()
-	If sDocType = &quot;sCalc&quot; Then
-		bDocHasProtectedSheets = CheckSheetProtection(oSheets)
+	If iDialogPage = 1 Then
+		ToggleWindow(False)
+		sDocType = GetDocumentType(ThisComponent)
+		If sDocType = &quot;sCalc&quot; Then
+			bDocHasProtectedSheets = CheckSheetProtection(oSheets)
+		End If
+	    oStatusline = ThisComponent.GetCurrentController.GetFrame.CreateStatusIndicator()
 	End If
 	DialogConvert = LoadDialog(&quot;Euro&quot;, &quot;DlgConvert&quot;)
 	DialogModel = DialogConvert.Model
@@ -486,7 +489,9 @@ Dim Isthere as Boolean
 	DialogModel.imgPreview.ImageUrl = BitmapDir &amp; &quot;euro_&quot; &amp; DialogModel.Step &amp; &quot;.bmp&quot;	
 	DialogConvert.Title = sMsgDLGTITLE
 	DialogModel.cmdGoOn.DefaultButton = True	
-	ToggleWindow(True)
+	If iDialogPage = 1 Then
+		ToggleWindow(True)
+	End If
 End Sub
 
 

@@ -61,12 +61,12 @@ Function ConvertDocument()
 			bRangeListDefined = False
 		End If
 	Else
-		oStatusline.SetValue(10)
+		DialogModel.ProgressBar.ProgressValue = 10  &apos; oStatusline.SetValue(10)
 		ConvertTextFields()
-		oStatusline.SetValue(80)
+		DialogModel.ProgressBar.ProgressValue = 80  &apos; oStatusline.SetValue(80)
 		ConvertWriterTables()
 	End If
-	oStatusline.End
+	EndStatusLine()
 	On Local Error Goto 0
 End Function
 
@@ -201,7 +201,11 @@ End Sub
 
 Sub IncreaseStatusValue(AddStatusValue as Integer)
 	StatusValue = Int(StatusValue + AddStatusValue)
-	oStatusline.SetValue(StatusValue)
+	If DialogModel.Step = 3 Then
+		DialogModel.ProgressBar.ProgressValue = StatusValue
+	Else
+		oStatusline.SetValue(StatusValue)
+	End If
 End Sub
 
 
@@ -255,6 +259,19 @@ End Sub
 
 Sub InitializeProgressbar()
 	CurCellCount = 0
-	oStatusline.Start(sStsPROGRESS,100) 			&apos;&quot;Konvertierungsfortschritt:&quot;
+	If Not IsNull(oStatusLine) Then
+		oStatusline.Start(sStsPROGRESS, 100)
+	Else
+		DialogModel.ProgressBar.ProgressValue = 0
+	End If
 	StatusValue = 0
+End Sub
+
+
+Sub	EndStatusLine()
+	If Not IsNull(oStatusLine) Then
+		oStatusline.End
+	Else
+		DialogModel.ProgressBar.ProgressValue = 100
+	End If
 End Sub</script:module>
