@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuconfiguration.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-11 13:17:46 $
+ *  last change: $Author: as $ $Date: 2001-07-20 08:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 
 const USHORT START_ITEMID_PICKLIST      = 4500;
 const USHORT END_ITEMID_PICKLIST        = 4599;
+const USHORT MAX_ITEMCOUNT_PICKLIST     =   99; // difference between START_... & END_... for picklist / must be changed too, if these values are changed!
 const USHORT START_ITEMID_WINDOWLIST    = 4600;
 const USHORT END_ITEMID_WINDOWLIST      = 4699;
 
