@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:40:45 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 10:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,6 +456,7 @@ using namespace ::com::sun::star::form::binding;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::frame;
 using namespace ::svxform;
 using namespace ::svx;
 
@@ -681,6 +682,7 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
         ,m_bUseWizards(sal_True)
         ,m_bPreparedClose( sal_False )
         ,m_pTextShell( new ::svx::FmTextControlShell( _pViewFrame ) )
+        ,m_eDocumentType( eUnknownDocumentType )
 {
     DBG_CTOR(FmXFormShell,NULL);
     m_aMarkTimer.SetTimeout(100);
@@ -690,10 +692,8 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
     // a chance for frame-spanning communication (via UNO, not slots)
     SfxFrame* pFrame = _pViewFrame ? _pViewFrame->GetFrame() : NULL;
     Reference< ::com::sun::star::frame::XFrame> xUnoFrame;
-    if( pFrame)
+    if ( pFrame )
         xUnoFrame = pFrame->GetFrameInterface();
-    else
-        xUnoFrame = Reference< ::com::sun::star::frame::XFrame>(NULL);
 
     // to prevent deletion of this we acquire our refcounter once
     ::comphelper::increment(FmXFormShell_BASE::m_refCount);
@@ -705,6 +705,14 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
 
     // correct the refcounter
     ::comphelper::decrement(FmXFormShell_BASE::m_refCount);
+
+    // determine the type of document we live in
+    Reference< XController > xController;
+    if ( xUnoFrame.is() )
+        xController = xUnoFrame->getController();
+    OSL_ENSURE( xController.is() && xController->getModel().is(), "FmXFormShell::FmXFormShell: can't determine the document type!" );
+    if ( xController.is() )
+        m_eDocumentType = DocumentClassification::classifyDocument( xController->getModel() );
 
     // cache the current configuration settings we're interested in
     implAdjustConfigCache();
@@ -4044,6 +4052,31 @@ void FmXFormShell::ForgetActiveControl()
 void FmXFormShell::SetControlActivationHandler( const Link& _rHdl )
 {
     m_pTextShell->SetControlActivationHandler( _rHdl );
+}
+
+//------------------------------------------------------------------------
+void FmXFormShell::handleShowPropertiesRequest()
+{
+//    if ( onlyControlsAreMarked() )
+//        ShowSelectionProperties( sal_True );
+    if ( getCurControl().is() )
+        ShowProperties( getCurControl(), sal_True );
+}
+
+//------------------------------------------------------------------------
+void FmXFormShell::handleMouseButtonDown( const SdrViewEvent& _rViewEvent )
+{
+    // catch simple double clicks
+    if ( ( _rViewEvent.nMouseClicks == 2 ) && ( _rViewEvent.nMouseCode == MOUSE_LEFT ) )
+    {
+        if ( _rViewEvent.eHit == SDRHIT_MARKEDOBJECT )
+        {
+//            if ( onlyControlsAreMarked() )
+//                ShowSelectionProperties( sal_True );
+            if ( getCurControl().is() )
+                ShowProperties( getCurControl(), sal_True );
+        }
+    }
 }
 
 //==============================================================================
