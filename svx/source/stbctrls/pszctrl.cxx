@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pszctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 09:32:02 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 11:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,13 @@
 
 #include "dialogs.hrc"
 
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+
 // -----------------------------------------------------------------------
 
 /*  [Beschreibung]
@@ -136,7 +143,8 @@ String GetMetricStr_Impl( long nVal, SfxMapUnit eUnit )
         eInUnit = FUNIT_100TH_MM;
 
     String sMetric;
-    char cSep = GetpApp()->GetAppInternational().GetNumDecimalSep();
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
     long nConvVal = MetricField::ConvertValue( nVal * 100, 0L, 0,
                                                eInUnit, eOutUnit );
 

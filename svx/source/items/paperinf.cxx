@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paperinf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 11:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,21 +246,7 @@ Size SvxPaperInfo::GetPaperSize( const Printer* pPrinter )
         const Size aInvalidSize;
 
         if ( aPaperSize == aInvalidSize )
-        {
-#ifdef OS2
-            // Workaround fuer OS/2, da class Printer unter OS/2 Macken hat
-            LanguageType eLType =
-                GetpApp()->GetAppInternational().GetLanguage();
-
-            if ( eLType == LANGUAGE_ENGLISH_US ||
-                 eLType == LANGUAGE_ENGLISH_UK )
-                return GetPaperSize(SVX_PAPER_LETTER);
-            else
-                return GetPaperSize(SVX_PAPER_A4);
-#else
             return GetPaperSize(SVX_PAPER_A4);
-#endif
-        }
         MapMode aMap1 = pPrinter->GetMapMode();
         MapMode aMap2;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-05 09:36:38 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 11:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,13 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+
 #include <comphelper/types.hxx>
 
 using namespace ::rtl;
@@ -874,7 +881,8 @@ SvxTabStop::SvxTabStop()
 {
     nTabPos = 0;
     eAdjustment = SVX_TAB_ADJUST_LEFT;
-    cDecimal = GetpApp()->GetAppInternational().GetNumDecimalSep();
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    cDecimal = aLocaleWrapper.getNumDecimalSep().GetChar(0);
     cFill = cDfltFillChar;
 }
 
@@ -887,8 +895,10 @@ SvxTabStop::SvxTabStop( const long nPos, const SvxTabAdjust eAdjst,
     eAdjustment = eAdjst;
 
     if ( cDfltDecimalChar == cDec )
-        // default aus der International-Klasse besorgen
-        cDecimal = GetpApp()->GetAppInternational().GetNumDecimalSep();
+    {
+        LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+        cDecimal = aLocaleWrapper.getNumDecimalSep().GetChar(0);
+    }
     else
         cDecimal = cDec;
     cFill = cFil;

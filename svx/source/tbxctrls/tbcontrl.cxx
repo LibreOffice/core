@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-22 10:41:32 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 11:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1693,7 +1693,7 @@ void SvxTbxButtonColorUpdater::Update( const Color& rColor )
 void SvxTbxButtonColorUpdater::DrawChar( VirtualDevice& rVirDev, const Color& rCol )
 {
     Font aOldFont = rVirDev.GetFont();
-    Font aFont( System::GetStandardFont( STDFONT_ROMAN ) );
+    Font aFont = aOldFont;
     Size aSz = aFont.GetSize();
     aSz.Height() = theBmpSize.Height();
     aFont.SetSize( aSz );
