@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-17 08:43:30 $
+ *  last change: $Author: mba $ $Date: 2001-07-20 10:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <moduldlg.hxx>
 #include <basidesh.hxx>
 #include <baside2.hxx>
+#include <basicmod.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -229,6 +230,7 @@ void BasicIDE::DecBasicDialogCount()
 
 String BasicIDE::SelectMacro( BOOL bExecute, BOOL bChooseOnly, const String& rPreferredMacroDesciption )
 {
+    BASIC_MOD()->Load();
     if ( rPreferredMacroDesciption.Len() )
         IDE_DLL()->GetExtraData()->GetLastMacro() = rPreferredMacroDesciption;
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: tbe $ $Date: 2001-07-03 16:33:31 $
+#   last change: $Author: mba $ $Date: 2001-07-20 10:49:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -125,7 +125,36 @@ EXCEPTIONSFILES=$(SLO)$/basidesh.obj	\
 
 SRCFILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src tbxctl.src
 
+LIB2TARGET =    $(SLB)$/ybctl.lib
+LIB2ARCHIV =    $(LB)$/libybctl.a
+LIB2OBJFILES  =    $(SLO)$/basiclib.obj
 
+DEPOBJFILES = $(SLO)$/basiclib.obj
+
+
+.IF "$(depend)" == ""
+
+ALL:	\
+        $(INCCOM)$/dllname.hxx	\
+        ALLTAR
+
+$(INCCOM)$/dllname.hxx: makefile.mk
+.IF "$(GUI)"=="OS2"
+        echo #define DLL_NAME "basctl$(UPD)$(DLLPOSTFIX)" >$@
+.ELSE
+.IF "$(GUI)"=="MAC"
+        echo "$(HASHMARK)define DLL_NAME ¶"basctl$(UPD)$(DLLPOSTFIX).dll¶"" > $@
+.ELSE
+.IF "$(GUI)"=="UNX"
+    $(RM) $@
+        echo #define DLL_NAME \"libbasctl$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+.ELSE
+        echo #define DLL_NAME "basctl$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
+.ENDIF
+.ENDIF
+.ENDIF
+
+.ENDIF
 .INCLUDE :  target.mk
 
 .IF "$(depend)" == ""

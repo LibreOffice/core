@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basdoc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
+ *  last change: $Author: mba $ $Date: 2001-07-20 10:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,14 @@
 #define BasicDocShell
 #include <baside.hxx>
 
+#include "basicmod.hxx"
 
 TYPEINIT1(BasicDocShell, SfxObjectShell);
 DBG_NAME(BasicDocShell);
 
-
-SFX_IMPL_SIMPLE_OBJECTFACTORY( BasicDocShell, SFXOBJECTSHELL_STD_SPECIAL | SFXOBJECTSHELL_DONTREPLACE, sbasic )
+SFX_IMPL_SIMPLE_OBJECTFACTORY_LOD( BasicDocShell, BasicIDE, BASIC_MOD() )
+//SFX_IMPL_SIMPLE_OBJECTFACTORY( BasicDocShell, SFXOBJECTSHELL_STD_SPECIAL | SFXOBJECTSHELL_DONTREPLACE, sbasic )
+/*
 {
     Factory().SetExplorerImageId( IMG_MACROLIB );
     Factory().RegisterHelpFile( String( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ) ) );
@@ -91,7 +93,7 @@ SFX_IMPL_SIMPLE_OBJECTFACTORY( BasicDocShell, SFXOBJECTSHELL_STD_SPECIAL | SFXOB
     Factory().RegisterMenuBar( ResId(RID_DEFAULTMENU) );
     Factory().RegisterPluginMenuBar( ResId(RID_DEFAULTPLUGINMENU) );
 }
-
+*/
 
 SFX_IMPL_INTERFACE( BasicDocShell, SfxObjectShell, IDEResId( 0 ) )
 {
@@ -105,6 +107,7 @@ BasicDocShell::BasicDocShell( SfxObjectCreateMode eMode ) : SfxObjectShell( eMod
 {
     pPrinter = 0;
     SetPool( &SFX_APP()->GetPool() );
+    SetTitle( String( RTL_CONSTASCII_USTRINGPARAM("BASIC") ) );
 }
 
 

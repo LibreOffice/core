@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: basdoc.hxx,v $
+ *  $RCSfile: basicmod.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: mba $ $Date: 2001-07-20 10:49:36 $
  *
@@ -59,39 +59,35 @@
  *
  ************************************************************************/
 
-#ifndef _BASDOC_HXX
-#define _BASDOC_HXX
 
-#include <svx/ifaceids.hxx>
-#include <iderid.hxx>
+#ifndef BASICMOD_HXX
+#define BASICMOD_HXX
 
-#ifndef _SFX_OBJSH_HXX //autogen
-#include <sfx2/objsh.hxx>
+#ifndef _SFXMODULE_HXX //autogen
+#include <sfx2/module.hxx>
+#endif
+#ifndef _SHL_HXX //autogen
+#include <tools/shl.hxx>
 #endif
 
-class SfxPrinter;
-
-class BasicDocShell: public SfxObjectShell
+class BasicIDEModuleDummy : public SfxModule
 {
-    SfxPrinter*         pPrinter;
-
-protected:
-    virtual void        FillStatusBar( StatusBar& rBar);
-
-
 public:
-                        TYPEINFO();
+                // SvFactory name convention:
+                // 'p' + SfxObjectShell-subclass + 'Factory'
+    SfxObjectFactory *pBasicDocShellFactory;
 
-                        SFX_DECL_SIMPLE_OBJECTFACTORY_DLL( BasicDocShell );
-                        SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_DOCSH );
-                        BasicDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_STANDARD );
-                        ~BasicDocShell();
+    BasicIDEModuleDummy(ResMgr    *pMgr,
+                  BOOL      bDummy,
+                  SfxObjectFactory *pObjFact) :
+       SfxModule(pMgr, bDummy, (SfxObjectFactory*) pObjFact, NULL),
+       pBasicDocShellFactory(pObjFact)
+    {
+    }
 
-    void                Execute( SfxRequest& rReq );
-    void                GetState( SfxItemSet& rSet );
-
-    SfxPrinter*         GetPrinter( BOOL bCreate );
-    void                SetPrinter( SfxPrinter* pPrinter );
+    virtual SfxModule *Load ();
 };
 
-#endif  // _BASDOC_HXX
+#define BASIC_MOD() ( *(BasicIDEModuleDummy**) GetAppData(SHL_IDE) )
+
+#endif

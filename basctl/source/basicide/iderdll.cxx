@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-10 09:02:59 $
+ *  last change: $Author: mba $ $Date: 2001-07-20 10:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,26 +92,52 @@
 #include <basidesh.hrc>
 #include <basobj.hxx>
 #include <bastypes.hxx>
+#include <basdoc.hxx>
+#include <basicmod.hxx>
 
 #define ITEMID_SEARCH   0
 #include <svx/srchitem.hxx>
 
+class BasicIDEModule : public BasicIDEModuleDummy
+{
+public:
+    BasicIDEModule( ResMgr *pMgr, SfxObjectFactory *pObjFact) :
+       BasicIDEModuleDummy( pMgr, FALSE, (SfxObjectFactory*) pObjFact )
+       {}
+
+    virtual SfxModule *Load ();
+};
+
+SfxModule* BasicIDEModuleDummy::Load ()
+{
+    return 0;
+}
+
+SfxModule* BasicIDEModule::Load ()
+{
+    return this;
+}
+
+static BasicIDEDLL* pBasicIDEDLL = 0;
+
+BasicIDEDLL* BasicIDEDLL::GetDLL()
+{
+    return pBasicIDEDLL;
+}
+
+SFX_IMPL_MODULE_DLL( BasicIDE )
+
 IDEResId::IDEResId( USHORT nId ):
-    ResId( nId, (*(BasicIDEDLL**)GetAppData(SHL_IDE))->GetResMgr() )
+    ResId( nId, (*(BasicIDEModuleDummy**)GetAppData(SHL_IDE))->GetResMgr() )
 {
 }
 
-
 BasicIDEDLL::BasicIDEDLL()
 {
-    *(BasicIDEDLL**)GetAppData(SHL_IDE) = this;
-
-    ByteString aResMgrName( "basctl" );
-    aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
-    pResMgr = ResMgr::CreateResMgr(
-        aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
+    pBasicIDEDLL = this;
     pShell = 0;
     pExtraData = 0;
+
     GetExtraData(); // damit GlobalErrorHdl gesetzt wird.
 }
 
@@ -120,6 +146,38 @@ BasicIDEDLL::~BasicIDEDLL()
     delete pResMgr;
     delete pExtraData;
     *(BasicIDEDLL**)GetAppData(SHL_IDE) = NULL;
+}
+
+void BasicIDEDLL::Init()
+{
+    BasicIDEModuleDummy** ppShlPtr = (BasicIDEModuleDummy**) GetAppData(SHL_IDE);
+
+    SfxObjectFactory* pFact = (*ppShlPtr)->pBasicDocShellFactory;
+    delete (*ppShlPtr);
+
+    ByteString aResMgrName( "basctl" );
+    aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
+    ResMgr* pMgr = ResMgr::CreateResMgr(
+        aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
+
+    (*ppShlPtr) = new BasicIDEModule( pMgr, pFact );
+    (*ppShlPtr)->pBasicDocShellFactory = pFact;
+
+    new BasicIDEDLL;
+    SfxModule* pMod = (*ppShlPtr );
+    BasicDocShell::RegisterInterface( pMod );
+    BasicIDEShell::RegisterFactory( SVX_INTERFACE_BASIDE_VIEWSH );
+    BasicIDEShell::RegisterInterface( pMod );
+}
+
+/*************************************************************************
+|*
+|* Deinitialisierung
+|*
+\************************************************************************/
+void BasicIDEDLL::Exit()
+{
+    DELETEZ( pBasicIDEDLL );
 }
 
 BasicIDEData* BasicIDEDLL::GetExtraData()
