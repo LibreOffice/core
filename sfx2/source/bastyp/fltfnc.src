@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:52:59 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ String STR_FILTER_CHANNELON_OFFLINE
     Text[ czech ] = "Tato položka je nastavena pro čtení offline.\n\n%PRODUCTNAME se právě nachází v režimu online. Přejete si ihned přejít do režimu offline?";
     Text[ hebrew ] = "‮מנוי זה מיועד לקריאה במצב לא מקוון.\n\n%PRODUCTNAME כעת במצב מקוון. האם לעבור למצב לא מקוון?‬";
     Text[ hindi ] = "इस सबस्क्रिप्शन् को ऑफलैन प्रकार में पढ़ने के लिए सेट्ट किया गया है ।\n\n%PRODUCTNAME अभी ऑनलैन् प्रकार में है । अभी ऑफलैन प्रकार केलिए स्विच् करना चाहते है?";
+    Text[ slovak ] = "Táto položka je nastavená na čítanie offline.\n\n%PRODUCTNAME sa práve nachádza v režime online. Prajete si ihneď prejsť do režimu offline?";
 };
 String STR_FILTER_EXTERNAL
 {
@@ -121,6 +122,7 @@ String STR_FILTER_EXTERNAL
     Text[ czech ] = "Jiná aplikace";
     Text[ hebrew ] = "‮יישום אחר‬";
     Text[ hindi ] = "अन्य कार्यक्रम";
+    Text[ slovak ] = "Ostatné aplikácie";
 };
 
 String STR_FILTER_COMPONENT
@@ -151,6 +153,7 @@ String STR_FILTER_COMPONENT
     Text[ czech ] = "Komponenta %PRODUCTNAME";
     Text[ hebrew ] = "‮רכיב %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME Component";
+    Text[ slovak ] = "Komponent %PRODUCTNAME";
 };
 
 String STR_FILTER_NOT_INSTALLED
@@ -182,6 +185,7 @@ String STR_FILTER_NOT_INSTALLED
     Text[ czech ] = "Vybraný filtr $(FILTER) nebyl nainstalován.\nPřejete si ho doinstalovat nyní ?";
     Text[ hebrew ] = "‮המסנן שנבחר, $(FILTER), תרם הותקן.\nהאם להתקינו עכשיו?‬";
     Text[ hindi ] = "चुना हुआ फ़िल्टर $(FILTER) का प्रतिष्ठापन नहीं किया है ।\nअभी आप प्रतिष्ठापन करना चाहते है ?";
+    Text[ slovak ] = "Vybraný filter $(FILTER) nebol nainštalovaný.\nPrejete si ho doinštalovať teraz ?";
 };
 
 String STR_FILTER_CONSULT_SERVICE
@@ -201,7 +205,7 @@ String STR_FILTER_CONSULT_SERVICE
     Text[ portuguese_brazilian ] = "O filtro selecionado $(FILTER) n�o est� inclu�do na sua edi��o\nVoc� pode encontrar informa��es sobre como adquir�-las na nossa p�gina principal.";
     Text[ japanese ] = "選択されたフィルタ$(FILTER)はユーザーの使用版に含まれてません。\n注文可能な情報はわが社のホームペーシで手に入れられます。";
     Text[ chinese_simplified ] = "这个版本还没有提供您所选择的转换器 $(FILTER)。\n您参阅我们公司的网页提供定购软件的信息。";
-    Text[ chinese_traditional ] = "這個版本還沒有提供您選擇的轉換器 $(FILTER)。\n請參閱我們的網頁提供的定購軟體的資訊。";
+    Text[ chinese_traditional ] = "這個版本還沒有提供您選擇的篩選器 $(FILTER)。\n請參閱我們的網頁提供的定購軟體的資訊。";
     Text[ arabic ] = "�� ����� ����� ��� ������ $(FILTER)� ���� �� �������.\n����� ������ ��� ������� �� ������� ��� ������ �� ������ ��� ��������.";
     Text[ greek ] = "�� ���������� ������ $(FILTER) ��� ���������� ���� ������ ���.\n����������� ��� ����������� ����������� �� ������ ���� ������ ��� ������.";
     Text[ korean ] = "선택한 필터$(FILTER)은(는) 이 버전에 들어 있지 않습니다.\n주문 신청 방법에 대한 정보를 얻으려면 저희 홈페이지를 보십시오.";
@@ -213,7 +217,10 @@ String STR_FILTER_CONSULT_SERVICE
     Text[ czech ] = "Vybraný filtr $(FILTER) nebyl zahrnut ve vaší verzi programu.\nInformace o objednávkách můžete najít na našich domovských stránkách.";
     Text[ hebrew ] = "‮המסנן שנבחר, $(FILTER), אינו כלול בגרסה זו של התוכנית.\nמידע באשר להזמנת גרסה אחרת ניתן למצוא באתר האינטרנט שלנו.‬";
     Text[ hindi ] = "चुना हुआ फ़िल्टर $(FILTER) को आपके प्रकाशन में सम्मिलित नहीं किया है ।\nहम्हारे मुख्य पृष्ठ में आप ऑर्डर के बार में विषय अन्वेषण कर सकते है ।";
+    Text[ slovak ] = "Vybraný filter $(FILTER) nebol zahrnutý vo vašej verzii programu.\nInformácie o objednávkach môžete nájsť na našich domovských stránkach.";
 };
+
+
 
 
 
