@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-17 08:57:20 $
+ *  last change: $Author: jbu $ $Date: 2001-05-18 15:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ void SAL_CALL rtl_getGlobalProcessId( sal_uInt8 *pTargetUUID );
     @see osl_getCommandArg
     @see rtl_getCommandArgCount
 */
-oslProcessError SAL_CALL rtl_getCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg);
+oslProcessError SAL_CALL rtl_getAppCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg);
 
 /** Returns the number of command line arguments at process start.
 
@@ -106,7 +106,7 @@ oslProcessError SAL_CALL rtl_getCommandArg(sal_uInt32 nArg, rtl_uString **strCom
     @see osl_getCommandArgCount
     @see rtl_getCommandArg
 */
-sal_uInt32 SAL_CALL rtl_getCommandArgCount();
+sal_uInt32 SAL_CALL rtl_getAppCommandArgCount();
 
 #ifdef __cplusplus
 }

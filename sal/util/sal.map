@@ -449,8 +449,8 @@ UDK_2_0_0 {
 
         rtl_bootstrap_get;
         rtl_bootstrap_setIniFileName;
-        rtl_getCommandArgCount;
-        rtl_getCommandArg;
+        rtl_getAppCommandArgCount;
+        rtl_getAppCommandArg;
     local:
         *;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdargs.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-17 09:01:51 $
+ *  last change: $Author: jbu $ $Date: 2001-05-18 15:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ void impl_rtl_initCommandArgs()
 
 extern "C"
 {
-    oslProcessError SAL_CALL rtl_getCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg)
+    oslProcessError SAL_CALL rtl_getAppCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg)
     {
         if( !g_pCommandArgs )
             impl_rtl_initCommandArgs();
@@ -130,7 +130,7 @@ extern "C"
         return err;
     }
 
-    sal_uInt32 SAL_CALL rtl_getCommandArgCount()
+    sal_uInt32 SAL_CALL rtl_getAppCommandArgCount()
     {
         if( !g_pCommandArgs )
             impl_rtl_initCommandArgs();
