@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertymap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-18 13:51:30 $
+ *  last change: $Author: mh $ $Date: 2001-02-01 17:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include "xmltypes.hxx"
 #endif
 #ifndef __SGI_STL_ALGORITHM
-#include <stl/algorithm>
+#include <algorithm>
 #endif
 
 #ifndef _XMLOFF_FORMS_STRINGS_HXX_
@@ -146,6 +146,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/01/18 13:51:30  fs
+ *  the background-color is part of the fo (not style) namespace
+ *
  *  Revision 1.3  2000/12/19 12:13:57  fs
  *  some changes ... now the exported styles are XSL conform
  *
