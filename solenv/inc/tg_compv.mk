@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_compv.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-01 13:21:33 $
+#   last change: $Author: hr $ $Date: 2002-07-31 10:49:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,7 @@ CFLAGSVERSION_CMD= |& $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
 CFLAGSNUMVERSION_CMD= |& $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
 .ENDIF
 
-.IF "$(COM)"=="C52" || "$(COM)"=="C40" || "$(COM)"=="sunpro"
+.IF "$(COM)"=="C54" || "$(COM)"=="C52" || "$(COM)"=="C40" || "$(COM)"=="sunpro"
 CFLAGSVERSION= -V
 CFLAGSVERSION_CMD= -V |& nawk -f $(SOLARENV)$/bin$/getcompver.awk
 CFLAGSNUMVERSION_CMD= -V |& nawk -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
@@ -113,7 +113,7 @@ COMNAME=gcc3
 .ENDIF
 .ENDIF
 
-.IF "$(COM)"=="C52" || "$(COM)"=="C40" || "$(COM)"=="sunpro"
+.IF "$(COM)" == "C54" || "$(COM)"=="C52" || "$(COM)"=="C40" || "$(COM)"=="sunpro"
 .IF "$(CCNUMVER)">="00050002"
 COMID=C52
 COMNAME=sunpro5
