@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:05:15 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1361,10 +1361,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                 aTempAttr.Put(XLineStyleItem(XLINE_NONE));
                 aTempAttr.Put(XFillStyleItem(XFILL_NONE));
 
-//-/                pTO->SetAttributes(aTempAttr, FALSE);
-//-/                SdrBroadcastItemChange aItemChange(*pTO);
-                pTO->SetItemSetAndBroadcast(aTempAttr);
-//-/                pTO->BroadcastItemChange(aItemChange);
+                pTO->SetMergedItemSetAndBroadcast(aTempAttr);
 
                 // als Listener anmelden
                 for (USHORT i = 1; i < 10; i++)
@@ -1434,7 +1431,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                     SfxItemSet aSet(pDoc->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE);
 
 //-/                    pTO->TakeAttributes(aSet, TRUE, FALSE);
-                    aSet.Put(pTO->GetItemSet());
+                    aSet.Put(pTO->GetMergedItemSet());
 
                     if (aSet.GetItemState(EE_PARA_LRSPACE) != SFX_ITEM_SET)
                     {
@@ -1444,7 +1441,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                         aSet.Put(aNewLRItem);
 
 //-/                        pTO->NbcSetAttributes(aSet, FALSE);
-                        pTO->SetItemSet(aSet);
+                        pTO->SetMergedItemSet(aSet);
                     }
                 }
             }
@@ -1492,7 +1489,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                             SfxItemSet aSet(pDoc->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE);
 
 //-/                            pTO->TakeAttributes(aSet, TRUE, FALSE);
-                            aSet.Put(pTO->GetItemSet());
+                            aSet.Put(pTO->GetMergedItemSet());
 
                             const SvxLRSpaceItem& rLRItem = (const SvxLRSpaceItem&) aSet.Get(EE_PARA_LRSPACE);
                             SvxLRSpaceItem aNewLRItem(rLRItem);
@@ -1500,7 +1497,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                             aSet.Put(aNewLRItem);
 
 //-/                            pTO->NbcSetAttributes(aSet, FALSE);
-                            pTO->SetItemSet(aSet);
+                            pTO->SetMergedItemSet(aSet);
                         }
 
                         pTO->SetEmptyPresObj(TRUE);
