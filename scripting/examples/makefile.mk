@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 12:06:44 $
+#   last change: $Author: rt $ $Date: 2004-04-15 08:31:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,7 @@ no_common_build_zip=true
 .IF "$(SOLAR_JAVA)"!=""
 ZIP1FLAGS=-r
 ZIP1TARGET=ScriptsJava
-ZIP1DIR=$(OUT)$/class/examples
+ZIP1DIR=$(OUT)$/class$/examples
 ZIP1LIST=java
 .ENDIF
 
@@ -88,7 +88,7 @@ ZIP4LIST=python
 
 ZIP5FLAGS=-r
 ZIP5TARGET=scriptbindinglib
-ZIP5DIR=$(PRJ)$/workben/bindings
+ZIP5DIR=$(PRJ)$/workben$/bindings
 ZIP5LIST=*.xlb *.xdl *.xba
 
 .INCLUDE : target.mk
