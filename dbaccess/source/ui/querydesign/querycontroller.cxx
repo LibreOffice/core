@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-26 14:24:46 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 11:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1082,7 +1082,14 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                             if(xAppend.is())
                             {
                                 xAppend->appendByDescriptor(xProp);
-                                xElements->getByName(m_sName) >>= xProp;
+//                              if(!xElements->hasByName(m_sName))
+//                              {
+//                                  Reference<XNamed> xName(xProp,UNO_QUERY);
+//                                  if(xName.is()) // it could be that the name changed
+//                                      m_sName = xName->getName();
+//                              }
+//                              if(xElements->hasByName(m_sName))
+//                                  xElements->getByName(m_sName) >>= xProp;
                             }
                             else
                             {
