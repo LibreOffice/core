@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:13:06 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:29:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,19 +75,8 @@ ModelessDialog DLG_JOIN_TABADD
     HelpID = DLG_JOIN_TABADD ;
     Size = MAP_APPFONT ( 178 , 147 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Tabellen hinzuf¸gen : Tabellen hinzuf≥gen */
-    Text = "Tabellen hinzuf¸gen" ;
-    Text [ ENGLISH ] = "Add tables" ;
-    Text [ NORWEGIAN ] = "Add tables" ;
-    Text [ DANISH ] = "Tilf¯j tabeller" ;
-    Text [ ENGLISH_US ] = "Add Tables" ;
-    Text [ SPANISH ] = "AÒadir tablas" ;
-    Text [ FINNISH ] = "Lis‰‰ tauluja" ;
-    Text [ FRENCH ] = "Ajouter des tables" ;
-    Text [ ITALIAN ] = "Aggiungi tabelle" ;
-    Text [ DUTCH ] = "Tabellen toevoegen" ;
-    Text [ PORTUGUESE_BRAZILIAN ] = "Adicionar tabelas" ;
-    Text [ SWEDISH ] = "L‰gg till tabeller" ;
-    Text [ PORTUGUESE ] = "Adicionar tabelas" ;
+    Text [ de ] = "Tabellen hinzuf¸gen" ;
+    Text [ en-US ] = "Add Tables" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Hide = TRUE ;
@@ -96,39 +85,9 @@ ModelessDialog DLG_JOIN_TABADD
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text = "~Tabellenname" ;
-        Text [ ENGLISH ] = "~Table name" ;
-        Text [ NORWEGIAN ] = "~Table name" ;
-        Text [ DANISH ] = "~Tabelnavn" ;
-        Text [ ENGLISH_US ] = "~Table name" ;
-        Text [ SPANISH ] = "~Nombre de la tabla" ;
-        Text [ FINNISH ] = "~Taulun nimi" ;
-        Text [ FRENCH ] = "~Nom de la table" ;
-        Text [ ITALIAN ] = "Nome ~tabella" ;
-        Text [ DUTCH ] = "~Tabelnaam" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Nome da tabela" ;
-        Text [ SWEDISH ] = "~Tabellnamn" ;
-        Text [ PORTUGUESE ] = "~Nome da tabela" ;
-        Text[ chinese_simplified ] = "Ë°®Ê†ºÂêçÁß∞(~T)";
-        Text[ russian ] = "»Ïˇ Ú‡·ÎËˆ˚";
-        Text[ polish ] = "Nazwa ~tabeli";
-        Text[ japanese ] = "„ÉÜ„Éº„Éñ„É´Âêç(~T)";
-        Text[ chinese_traditional ] = "Ë°®Ê†ºÂêçÁ®±(~T)";
-        Text[ arabic ] = "«”„ «·ÃœÊ·";
-        Text[ dutch ] = "~Tabelnaam";
-        Text[ chinese_simplified ] = "Ë°®Ê†ºÂêçÁß∞(~T)";
-        Text[ greek ] = "ºÌÔÏ· ﬂÌ·Í·";
-        Text[ korean ] = "ÌÖåÏù¥Î∏î Ïù¥Î¶Ñ(~T)";
-        Text[ turkish ] = "~Tablo ismi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nom de la ~taula";
-        Text[ thai ] = "‡∏ä‡∏∑‡πà‡∏≠~‡∏ï‡∏≤‡∏£‡∏≤‡∏á";
-        Text[ czech ] = "Jm√©no tabulky";
-        Text[ hebrew ] = "~Tabellenname";
-        Text[ hindi ] = "~‡§∏‡§æ‡§∞‡§£‡•Ä ‡§®‡§æ‡§Æ";
-        Text[ slovak ] = "N√°zov ~tabuƒæky";
-        Text[ hungarian ] = "~T√°bla neve";
-        Text[ slovenian ] = "Ime ~tabele";
+        Text [ de ] = "~Tabellenname" ;
+        Text [ en-US ] = "~Table name" ;
+        Text [ x-comment ] = " ";
     };
     Control LB_TABLE
     {
@@ -142,41 +101,11 @@ ModelessDialog DLG_JOIN_TABADD
         Pos = MAP_APPFONT ( 123 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Hinzu~f¸gen : Hinzu~f≥gen */
-        Text = "Hinzu~f¸gen" ;
-        Text [ ENGLISH ] = "Add" ;
-        Text [ NORWEGIAN ] = "Add" ;
-        Text [ DANISH ] = "~Tilf¯j" ;
-        Text [ ENGLISH_US ] = "~Add" ;
-        Text [ SPANISH ] = "~AÒadir" ;
-        Text [ FINNISH ] = "~Lis‰‰" ;
-        Text [ FRENCH ] = "Ajouter" ;
-        Text [ ITALIAN ] = "~Aggiungi" ;
-        Text [ DUTCH ] = "Toe~voegen" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Adicionar" ;
-        Text [ SWEDISH ] = "L‰g~g till" ;
-        Text [ PORTUGUESE ] = "A~dicionar" ;
+        Text [ de ] = "Hinzu~f¸gen" ;
+        Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text[ chinese_simplified ] = "Êñ∞Â¢û(~A)";
-        Text[ russian ] = "ƒÓ·‡‚ËÚ¸";
-        Text[ polish ] = "~Dodaj";
-        Text[ japanese ] = "ËøΩÂä†(~A)";
-        Text[ chinese_traditional ] = "Êñ∞Â¢û(~A)";
-        Text[ arabic ] = "≈÷«›…";
-        Text[ dutch ] = "Toe~voegen";
-        Text[ chinese_simplified ] = "Êñ∞Â¢û(~A)";
-        Text[ greek ] = "–ÒÔÛËﬁÍÁ";
-        Text[ korean ] = "Ï∂îÍ∞Ä(~A)";
-        Text[ turkish ] = "~Ekle";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Afegeix";
-        Text[ thai ] = "‡πÄ~‡∏û‡∏¥‡πà‡∏°";
-        Text[ czech ] = "P≈ôidat";
-        Text[ hebrew ] = "‚ÄÆ◊î◊ï◊°◊§◊î‚Ä¨";
-        Text[ hindi ] = "~‡§ú‡•ã‡§°‡§º‡•ã";
-        Text[ slovak ] = "Prid~a≈•";
-        Text[ hungarian ] = "~Hozz√°ad√°s";
-        Text[ slovenian ] = "~Dodaj";
+        Text [ x-comment ] = " ";
     };
     CancelButton PB_CLOSE
     {
@@ -184,40 +113,10 @@ ModelessDialog DLG_JOIN_TABADD
         Size = MAP_APPFONT ( 50 , 14 ) ;
         HelpId = HID_JOINSH_ADDTAB_CLOSE;
         /* ### ACHTUNG: Neuer Text in Resource? Schlieﬂen : Schlieòen */
-        Text = "S~chlieﬂen" ;
-        Text [ ENGLISH ] = "Close" ;
-        Text [ norwegian ] = "Lukk" ;
-        Text [ italian ] = "~Chiudi" ;
-        Text [ portuguese_brazilian ] = "~Fechar" ;
-        Text [ portuguese ] = "~Fechar" ;
-        Text [ finnish ] = "~Sulje" ;
-        Text [ danish ] = "~Luk" ;
-        Text [ french ] = "Fermer" ;
-        Text [ swedish ] = "St‰~ng" ;
-        Text [ dutch ] = "~Sluiten" ;
-        Text [ spanish ] = "~Cerrar" ;
-        Text [ english_us ] = "~Close" ;
+        Text [ de ] = "S~chlieﬂen" ;
+        Text [ en-US ] = "~Close" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÂÖ≥Èó≠(~C)";
-        Text[ russian ] = "~«‡Í˚Ú¸";
-        Text[ polish ] = "~Zamknij";
-        Text[ japanese ] = "Èñâ„Åò„Çã(~C)";
-        Text[ chinese_traditional ] = "ÈóúÈñâ(~C)";
-        Text[ arabic ] = "≈€·«ﬁ";
-        Text[ dutch ] = "~Sluiten";
-        Text[ chinese_simplified ] = "ÂÖ≥Èó≠(~C)";
-        Text[ greek ] = " ÎÂﬂÛÈÏÔ";
-        Text[ korean ] = "Îã´Í∏∞(~C)";
-        Text[ turkish ] = "~Kapat";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tanca";
-        Text[ thai ] = "~‡∏õ‡∏¥‡∏î";
-        Text[ czech ] = "Zav≈ô√≠t";
-        Text[ hebrew ] = "‚ÄÆ◊°◊í◊ô◊®◊î‚Ä¨";
-        Text[ hindi ] = "~‡§¨‡§®‡•ç‡§¶ ‡§ï‡§∞‡•ã";
-        Text[ slovak ] = "~Zavrie≈•";
-        Text[ hungarian ] = "~Bez√°r√°s";
-        Text[ slovenian ] = "~Zapri";
+        Text [ x-comment ] = " ";
     };
     HelpButton PB_HELP
     {
@@ -229,96 +128,17 @@ ModelessDialog DLG_JOIN_TABADD
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 111 , 8 ) ;
-        Text = "Tabelle" ;
-        Text [ ENGLISH ] = "Table" ;
-        Text [ NORWEGIAN ] = "Table" ;
-        Text [ DANISH ] = "Tabel" ;
-        Text [ ENGLISH_US ] = "Table" ;
-        Text [ SPANISH ] = "Tabla" ;
-        Text [ FINNISH ] = "Taulu" ;
-        Text [ FRENCH ] = "Table" ;
-        Text [ ITALIAN ] = "Tabella" ;
-        Text [ DUTCH ] = "Tabel" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Tabela" ;
-        Text [ SWEDISH ] = "Tabell" ;
-        Text [ PORTUGUESE ] = "Tabela" ;
-        Text[ chinese_simplified ] = "Ë°®Ê†º";
-        Text[ russian ] = "“‡·ÎËˆ‡";
-        Text[ polish ] = "Tabela";
-        Text[ japanese ] = "„ÉÜ„Éº„Éñ„É´";
-        Text[ chinese_traditional ] = "Ë°®Ê†º";
-        Text[ arabic ] = "«·ÃœÊ·";
-        Text[ dutch ] = "Tabel";
-        Text[ chinese_simplified ] = "Ë°®Ê†º";
-        Text[ greek ] = "–ﬂÌ·Í·Ú";
-        Text[ korean ] = "ÌÖåÏù¥Î∏î";
-        Text[ turkish ] = "Tablo";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Taula";
-        Text[ thai ] = "‡∏ï‡∏≤‡∏£‡∏≤‡∏á";
-        Text[ czech ] = "Tabulka";
-        Text[ hebrew ] = "‚ÄÆ◊ò◊ë◊ú◊î‚Ä¨";
-        Text[ hindi ] = "‡§∏‡§æ‡§∞‡§£‡•Ä";
-        Text[ slovak ] = "Tabuƒæka";
-        Text[ hungarian ] = "T√°bla";
-        Text[ slovenian ] = "Tabela";
+        Text [ de ] = "Tabelle" ;
+        Text [ en-US ] = "Table" ;
+        Text [ x-comment ] = " ";
     };
     String STR_DEFAULT
     {
-        Text = "<Standard>" ;
-        Text [ ENGLISH ] = "<default>" ;
-        Text [ NORWEGIAN ] = "<default>" ;
-        Text [ DANISH ] = "<Standard>" ;
-        Text [ ENGLISH_US ] = "<default>" ;
-        Text [ SPANISH ] = "<predeterminado>" ;
-        Text [ FINNISH ] = "<oletus>" ;
-        Text [ FRENCH ] = "<Par dÈfaut>" ;
-        Text [ ITALIAN ] = "<standard>" ;
-        Text [ DUTCH ] = "<Standaard>" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "<padr„o>" ;
-        Text [ SWEDISH ] = "<standard>" ;
-        Text [ PORTUGUESE ] = "<padr„o>" ;
-        Text[ chinese_simplified ] = "<ÈªòËÆ§>";
-        Text[ russian ] = "<ÒÚ‡Ì‰‡Ú>";
-        Text[ polish ] = "<Domyúlnie>";
-        Text[ japanese ] = "<Ê®ôÊ∫ñ>";
-        Text[ chinese_traditional ] = "<ÈªòË™ç>";
-        Text[ arabic ] = "<«› —«÷Ì>";
-        Text[ dutch ] = "<Standaard>";
-        Text[ chinese_simplified ] = "<ÈªòËÆ§>";
-        Text[ greek ] = "<–ÒÔÂÈÎÔ„ﬁ>";
-        Text[ korean ] = "<Í∏∞Î≥∏Í∞í>";
-        Text[ turkish ] = "<varsay˝lan>";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "<per defecte>";
-        Text[ thai ] = "<‡∏Ñ‡πà‡∏≤‡πÄ‡∏£‡∏¥‡πà‡∏°‡∏ï‡πâ‡∏ô>";
-        Text[ czech ] = "<v√Ωchoz√≠>";
-        Text[ hebrew ] = "<Standard>";
-        Text[ hindi ] = "<‡§Ö‡§®‡•Å‡§™‡§∏‡•ç‡§•‡§ø‡§§‡§ø>";
-        Text[ slovak ] = "<v√Ωchodzie>";
-        Text[ hungarian ] = "<alap√©rtelmezett>";
-        Text[ slovenian ] = "<privzeto>";
+        Text [ de ] = "<Standard>" ;
+        Text [ en-US ] = "<default>" ;
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "Êñ∞Â¢ûË°®Ê†º";
-    Text[ russian ] = "ƒÓ·‡‚ËÚ¸ Ú‡·ÎËˆ˚";
-    Text[ polish ] = "Dodaj tabele";
-    Text[ japanese ] = "„ÉÜ„Éº„Éñ„É´„ÅÆËøΩÂä†";
-    Text[ chinese_traditional ] = "Êñ∞Â¢ûË°®Ê†º";
-    Text[ arabic ] = "≈÷«›… Ãœ«Ê·";
-    Text[ dutch ] = "Tabellen toevoegen";
-    Text[ chinese_simplified ] = "Êñ∞Â¢ûË°®Ê†º";
-    Text[ greek ] = "–ÒÔÛËﬁÍÁ ﬂÌ·Í·";
-    Text[ korean ] = "ÌÖåÏù¥Î∏î Ï∂îÍ∞Ä";
-    Text[ turkish ] = "Tablo ekle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Afegeix taules";
-    Text[ thai ] = "‡πÄ‡∏û‡∏¥‡πà‡∏°‡∏ï‡∏≤‡∏£‡∏≤‡∏á";
-    Text[ czech ] = "P≈ôidat tabulky";
-    Text[ hebrew ] = "Tabellen hinzuf√ºgen";
-    Text[ hindi ] = "‡§∏‡§æ‡§∞‡§£‡§ø‡§Ø‡•ã‡§Ç ‡§ï‡•ã ‡§ú‡•ã‡§°‡§º‡•ã";
-    Text[ slovak ] = "Prida≈• tabuƒæky";
-    Text[ hungarian ] = "T√°bl√°k hozz√°ad√°sa";
-    Text[ slovenian ] = "Dodaj tabele";
+    Text [ x-comment ] = " ";
 };
 
 
