@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:10:22 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,8 @@ protected:
     // SHOWING(0/1), OPAQUE(0/1) and VISIBLE(1).
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
+     sal_Bool IsEditableState();
+
     virtual ::com::sun::star::awt::Rectangle SAL_CALL
         getBoundsImpl(sal_Bool bRelative)
         throw (::com::sun::star::uno::RuntimeException);
@@ -432,15 +434,18 @@ const sal_Char sMissingWindow[] = "window is missing";
                               xThis );                                      \
     throw aExcept;
 
-#define CHECK_FOR_DEFUNC( ifc )                                             \
+#define CHECK_FOR_DEFUNC_THIS( ifc, ths )                                   \
     if( !(GetFrm() && GetMap()) )                                           \
     {                                                                       \
-        Reference < ifc > xThis( this );                                    \
+        Reference < ifc > xThis( ths );                                     \
         ::com::sun::star::lang::DisposedException aExcept(                  \
                     OUString( RTL_CONSTASCII_USTRINGPARAM(sDefunc) ),       \
                     xThis );                                                \
         throw aExcept;                                                      \
     }
+
+#define CHECK_FOR_DEFUNC( ifc )                                             \
+    CHECK_FOR_DEFUNC_THIS( ifc, this )
 
 #define CHECK_FOR_WINDOW( i, w )                                            \
     if( !(w) )                                                              \
