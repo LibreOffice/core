@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-17 11:48:47 $
+ *  last change: $Author: gh $ $Date: 2002-05-29 10:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2739,6 +2739,7 @@ uno::Reference< i18n::XBreakIterator > TextEngine::GetBreakIterator()
 {
     if ( !mxBreakIterator.is() )
         mxBreakIterator = vcl::unohelper::CreateBreakIterator();
+    DBG_ASSERT( mxBreakIterator.is(), "Could not create BreakIterator" );
     return mxBreakIterator;
 }
 
