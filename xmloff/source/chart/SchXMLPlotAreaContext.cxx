@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-08 12:54:25 $
+ *  last change: $Author: bm $ $Date: 2001-01-09 14:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,40 +319,8 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         }
     }
 
-    // set rotation - before size!
-    uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
-    if( xProp.is() &&
-        aTransMatrixAny.hasValue())
-    {
-        // set 3d flag before, so that property is available
-        // if chart is 2d with transform matrix the flag will be
-        // reset in the FillPropertySet method
-        try
-        {
-            uno::Any aTrueAny;
-            aTrueAny <<= (sal_Bool)(sal_True);
-
-            xProp->setPropertyValue(
-                ::rtl::OUString::createFromAscii( "Dim3D" ),
-                aTrueAny );
-            xProp->setPropertyValue(
-                ::rtl::OUString::createFromAscii( "D3DTransformMatrix" ),
-                aTransMatrixAny );
-        }
-        catch( beans::UnknownPropertyException )
-        {
-            DBG_ERROR( "Transform-Matrix cannot be set" );
-        }
-    }
-
-    // set changed size and position
-    if( xDiaShape.is())
-    {
-        xDiaShape->setSize( aSize );
-        xDiaShape->setPosition( aPosition );
-    }
-
     // set properties
+    uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
     if( sAutoStyleName.getLength())
     {
         if( xProp.is())
@@ -367,6 +335,48 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                     (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
             }
         }
+    }
+
+    // set rotation - before size!
+    if( xProp.is() &&
+        aTransMatrixAny.hasValue())
+    {
+        // set 3d flag before, so that property is available
+        // if chart is 2d with transform matrix the flag will be
+        // reset in the FillPropertySet method
+        try
+        {
+            uno::Any aTrueAny;
+            aTrueAny <<= (sal_Bool)(sal_True);
+
+            // perform build so that 3d scene is available
+            sal_Bool bHasControllersLocked = sal_False;
+            uno::Reference< chart::XChartDocument > xDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
+            if( xDoc.is() &&
+                (bHasControllersLocked = xDoc->hasControllersLocked()) == sal_True )
+                xDoc->unlockControllers();
+
+            xProp->setPropertyValue(
+                ::rtl::OUString::createFromAscii( "Dim3D" ),
+                aTrueAny );
+            xProp->setPropertyValue(
+                ::rtl::OUString::createFromAscii( "D3DTransformMatrix" ),
+                aTransMatrixAny );
+
+            if( bHasControllersLocked )
+                xDoc->lockControllers();
+        }
+        catch( beans::UnknownPropertyException )
+        {
+            DBG_ERROR( "Transform-Matrix cannot be set" );
+        }
+    }
+
+    // set changed size and position
+    if( xDiaShape.is())
+    {
+        xDiaShape->setSize( aSize );
+        xDiaShape->setPosition( aPosition );
     }
 }
 
