@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:05:23 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_HELP_CXX
-
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
 #endif
@@ -108,6 +106,10 @@
 // =======================================================================
 
 Help::Help()
+{
+}
+
+Help::~Help()
 {
 }
 
