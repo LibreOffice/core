@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:08:21 $
+ *  last change: $Author: obo $ $Date: 2003-12-03 14:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ SdModule::SdModule(SfxObjectFactory* pDrawObjFact, SfxObjectFactory* pGraphicObj
     VirtualDevice* pDevice = new VirtualDevice;
     mpVirtualRefDevice = pDevice;
     pDevice->SetMapMode( MAP_100TH_MM );
-    pDevice->SetReferenceDevice ();
+    pDevice->SetReferenceDevice ( VirtualDevice::REFDEV_MODE06 );
 }
 
 
