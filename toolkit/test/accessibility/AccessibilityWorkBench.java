@@ -100,7 +100,7 @@ public class AccessibilityWorkBench
         mbInitialized = false;
 
         Layout ();
-        //        EventLogger.Instance();
+        EventLogger.Instance();
 
         MessageArea.println (System.getProperty ("os.name") + " / "
             + System.getProperty ("os.arch") + " / "
@@ -269,6 +269,18 @@ public class AccessibilityWorkBench
         aCBItem = new JCheckBoxMenuItem ("Antialiased Rendering", maCanvas.getAntialiasing());
         aOptionsMenu.add (aCBItem);
         aCBItem.addActionListener (this);
+
+        // Help menu.
+        JMenu aHelpMenu = new JMenu ("Help");
+        maMenuBar.add (aHelpMenu);
+
+        aItem = new JMenuItem ("Help");
+        aHelpMenu.add (aItem);
+        aItem.addActionListener (this);
+
+        aItem = new JMenuItem ("About");
+        aHelpMenu.add (aItem);
+        aItem.addActionListener (this);
 
         return maMenuBar;
     }
@@ -484,6 +496,14 @@ public class AccessibilityWorkBench
         {
             maCanvas.setAntialiasing ( ! maCanvas.getAntialiasing());
             SaveOptions ();
+        }
+        else if (e.getActionCommand().equals ("Help"))
+        {
+            HelpWindow.Instance().loadURL ("file://help.html");
+        }
+        else if (e.getActionCommand().equals ("About"))
+        {
+            HelpWindow.Instance().loadURL ("file://about.html");
         }
         else
         {

@@ -61,6 +61,7 @@ JAVA_FILES = 								\
     EventQueue.java							\
     FrameActionListener.java				\
     GeometryEventHandler.java				\
+    HelpWindow.java							\
     InformationWriter.java					\
     MessageArea.java						\
     NameProvider.java						\

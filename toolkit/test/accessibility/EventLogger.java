@@ -1,4 +1,5 @@
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 
 class EventLogger
 {
@@ -11,12 +12,17 @@ class EventLogger
 
     private EventLogger ()
     {
-        maFrame = new JFrame ();
-        maLogger = new TextLogger ();
-        maFrame.getContentPane().add (maLogger);
+        try
+        {
+            maFrame = new JFrame ();
+            maLogger = new TextLogger ();
+            maFrame.setContentPane (new JScrollPane (maLogger));
 
-        maFrame.pack ();
-        maFrame.setVisible (true);
+            maFrame.setSize (400,300);
+            maFrame.setVisible (true);
+        }
+        catch (Exception e)
+        {}
     }
 
     private static EventLogger maInstance = null;
