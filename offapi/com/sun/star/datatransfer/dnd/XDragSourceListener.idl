@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragSourceListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ module com { module sun { module star { module datatransfer { module dnd {
     @see com::sun::star::datatransfer::dnd::XDragSource
 */
 
-interface XDragSourceListener: com::sun::star::lang::XEventListener
+published interface XDragSourceListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
     /** This method is invoked to signify that the Drag and Drop operation is
