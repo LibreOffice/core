@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-10 10:38:28 $
+ *  last change: $Author: mba $ $Date: 2002-08-23 11:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,8 +268,12 @@ SfxFrame::~SfxFrame()
 sal_Bool SfxFrame::DoClose()
 {
     // Eigentlich wird noch ein PrepareClose gebraucht !!!
+    BOOL bRet = FALSE;
     if ( !pImp->bClosing )
     {
+        pImp->bClosing = sal_True;
+        CancelTransfers();
+
         // wenn jetzt gelockt, dann sp"ater wiederholen
         if ( IsLocked_Impl() )
         {
@@ -277,88 +281,51 @@ sal_Bool SfxFrame::DoClose()
             return sal_False;
         }
 
-        pImp->bClosing = sal_True;
-        CancelTransfers();
-
-        // Bei FrameSets verhindern, da\s das Closen der Childs zu st"andigen
-        // ReCalcs im SplitWindow f"uhrt; SetUpdateMode am FrameWindow wirkt
-        // leider nicht auf dem MAC
-        Window *pWin = NULL;
-        SfxViewShell *pViewSh;
-        if ( pImp->pCurrentViewFrame && 0 != ( pViewSh = pImp->pCurrentViewFrame->GetViewShell() ) )
-        {
-            // disconnect saves all objects, let viewframe discard the clients ( #89692# )
-//            pViewSh->DisconnectClients_Impl( NULL );
-            pWin = pViewSh->GetWindow();
-            if ( pWin )
-            {
-                if ( pWin->GetType() ==  RSC_SPLITWINDOW )
-                    ((SplitWindow*)pWin)->SetUpdateMode( sal_False );
-                pWin->Hide();
-            }
-        }
-
-        sal_Bool bRet = sal_True;
-        SfxBindings* pBindings = NULL;
-        if ( pImp->pCurrentViewFrame )
-            pBindings = &pImp->pCurrentViewFrame->GetBindings();
-
-        // Bei internen Tasks m"ussen Controller und Tools abger"aumt werden
-        if ( pImp->pWorkWin )
-            pImp->pWorkWin->DeleteControllers_Impl();
-
-        if ( pImp->pCurrentViewFrame )
-            bRet = pImp->pCurrentViewFrame->Close();
-
-        if ( pImp->bOwnsBindings )
-            DELETEZ( pBindings );
-
         // now close frame; it will be deleted if this call is successful, so don't use any members after that!
-        Reference < XFrame > xFrame( pImp-> xFrame );
-        bRet = Close();
-
-        if ( bRet )
+        bRet = TRUE;
+        try
         {
-            if ( xFrame.is() )
-            {
-                try
-                {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > xCloseable  ( xFrame, ::com::sun::star::uno::UNO_QUERY );
-                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDisposeable( xFrame, ::com::sun::star::uno::UNO_QUERY );
-                    if (xCloseable.is())
-                        xCloseable->close(sal_True);
-                    else
-                    if (xDisposeable.is())
-                        xDisposeable->dispose();
-                }
-                catch( ::com::sun::star::util::CloseVetoException& )
-                {
-                }
-                catch( ::com::sun::star::lang::DisposedException& )
-                {
-                }
-            }
+            Reference< XCloseable > xCloseable  ( pImp->xFrame, UNO_QUERY );
+            if (xCloseable.is())
+                xCloseable->close(sal_True);
+            else if ( pImp->xFrame.is() )
+                pImp->xFrame->dispose();
+            else
+                bRet = DoClose_Impl();
         }
-        else
+        catch( ::com::sun::star::util::CloseVetoException& )
         {
-            if ( pWin )
-            {
-                if ( pWin->GetType() ==  RSC_SPLITWINDOW )
-                {
-                    ((SplitWindow*)pWin)->SetUpdateMode( sal_True );
-                    ((SplitWindow*)pWin)->Show();
-                }
-                else
-                    pWin->Show();
-            }
-
             pImp->bClosing = sal_False;
+            bRet = FALSE;
         }
-
-        return bRet;
+        catch( ::com::sun::star::lang::DisposedException& )
+        {
+        }
     }
 
-    return sal_True;
+    return bRet;
+}
+
+sal_Bool SfxFrame::DoClose_Impl()
+{
+    sal_Bool bRet = sal_True;
+    SfxBindings* pBindings = NULL;
+    if ( pImp->pCurrentViewFrame )
+        pBindings = &pImp->pCurrentViewFrame->GetBindings();
+
+    // Bei internen Tasks m"ussen Controller und Tools abger"aumt werden
+    if ( pImp->pWorkWin )
+        pImp->pWorkWin->DeleteControllers_Impl();
+
+    if ( pImp->pCurrentViewFrame )
+        bRet = pImp->pCurrentViewFrame->Close();
+
+    if ( pImp->bOwnsBindings )
+        DELETEZ( pBindings );
+
+    bRet = Close();
+    DBG_ASSERT( bRet, "Impossible state: frame closes, but controller refuses!");
+    return bRet;
 }
 
 void SfxFrame::Clear_Impl()
