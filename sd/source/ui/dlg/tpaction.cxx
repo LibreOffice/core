@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:05:23 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,9 +347,10 @@ BOOL SdTPAction::FillItemSet( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem( ATTR_ACTION_FILENAME );
     else
     {
+        String aBaseURL = pDoc->GetDocSh()->GetMedium()->GetBaseURL();
         if( eCA == presentation::ClickAction_DOCUMENT ||
             eCA == presentation::ClickAction_PROGRAM )
-            aFileName = ::URIHelper::SmartRelToAbs( aFileName, FALSE,
+            aFileName = ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aFileName, URIHelper::GetMaybeFileHdl(), true, false,
                                                     INetURLObject::WAS_ENCODED,
                                                     INetURLObject::DECODE_UNAMBIGUOUS );
 
@@ -846,9 +847,9 @@ String SdTPAction::GetEditText( BOOL bFullDocDestination )
 
     // validate file URI
     INetURLObject aURL( aStr );
-
+    String aBaseURL = pDoc->GetDocSh()->GetMedium()->GetBaseURL();
     if( aStr.Len() && aURL.GetProtocol() == INET_PROT_NOT_VALID )
-        aURL = INetURLObject( ::URIHelper::SmartRelToAbs( aStr ) );
+        aURL = INetURLObject( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aStr, URIHelper::GetMaybeFileHdl(), true, false ) );
 
     // get adjusted file name
     aStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
