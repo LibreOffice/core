@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:11:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,7 +555,7 @@ void SwXMLTextBlocks::ReadInfo( void )
     {
     const OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( XMLN_BLOCKLIST ) );
     uno::Reference < container::XNameAccess > xAccess( xBlkRoot, uno::UNO_QUERY );
-    if ( xAccess->hasByName( sDocName ) && xBlkRoot->isStreamElement( sDocName ) )
+    if ( xAccess.is() && xAccess->hasByName( sDocName ) && xBlkRoot->isStreamElement( sDocName ) )
     {
         Reference< lang::XMultiServiceFactory > xServiceFactory =
                 comphelper::getProcessServiceFactory();
