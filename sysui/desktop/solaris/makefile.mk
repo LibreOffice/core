@@ -109,10 +109,11 @@ PKGFLAGFILE = $(MISC)$/$(TARGET)pkg.flag
    
 PKGDATESTRING = `date -u '+%Y.%m.%d'`
 PKGARCH=sparc,i386
+
+ULFDIR = $(COMMONMISC)$/desktopshare
     
 .ENDIF
-   
-
+    
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
@@ -127,30 +128,26 @@ ALLTAR : $(PKGFLAGFILE)
 # Copy/patch the .desktop files to the output tree and 
 # merge-in the translations. 
 #
-$(LAUNCHERFLAGFILES) : $(LAUNCHERDEPN) ../share/brand.pl ../share/translate.pl ../share/launcher_name.ulf ../share/launcher_comment.ulf
+$(LAUNCHERFLAGFILES) : $(LAUNCHERDEPN) ../share/brand.pl ../share/translate.pl $(ULFDIR)/launcher_name.ulf $(ULFDIR)/launcher_comment.ulf
     @$(MKDIRHIER) $(@:db)
     @echo Creating desktop entries ..
     @echo ---------------------------------
-    @$(PERL) ../share/brand.pl -p "$(LONGPRODUCTNAME)" -u $(UNIXFILENAME) --prefix "$(UNIXFILENAME)-" --iconprefix "$(UNIXFILENAME)-" --category "X-Red-Hat-Base" $(LAUNCHERDEPN) $(@:db)
-    @$(PERL) ../share/translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Name" ../share/launcher_name.ulf
+    @$(PERL) ../share/brand.pl -p "$(LONGPRODUCTNAME)" -u $(UNIXFILENAME) --prefix "$(UNIXFILENAME)-" --iconprefix "$(UNIXFILENAME)-" $(LAUNCHERDEPN) $(@:db)
+    @$(PERL) ../share/translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Name" $(ULFDIR)/launcher_name.ulf
+    @$(PERL) ../share/translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Comment" $(ULFDIR)/launcher_comment.ulf
 .IF "$(WITH_LIBSN)"=="YES"
     @$(foreach,i,$(LAUNCHERLIST) $(shell echo "StartupNotify=true" >> $(@:db)/$(UNIXFILENAME)-$i.desktop))
 .ENDIF
     @touch $@
 
-#
-# FIXME: disabled comments for now due to missing string review
-#	@$(PERL) translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Comment" ../share/launcher_comment.ulf
-#
-
 # --- mime types ---------------------------------------------------
 
-$(MISC)/$(TARGET)/usr/share/gnome/mime-info/$(UNIXFILENAME).keys : $(GNOMEMIMEDEPN) ../share/brand.pl ../share/translate.pl ../share/documents.ulf
+$(MISC)/$(TARGET)/usr/share/gnome/mime-info/$(UNIXFILENAME).keys : $(GNOMEMIMEDEPN) ../share/brand.pl ../share/translate.pl $(ULFDIR)/documents.ulf
     @$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .keys file ..
     @echo ---------------------------------
     @$(PERL) ../share/brand.pl -p $(PRODUCTNAME) -u $(UNIXFILENAME) --iconprefix "$(UNIXFILENAME)-" $(GNOMEMIMEDEPN) $(MISC)/$(TARGET)
-    @$(PERL) ../share/translate.pl -p $(PRODUCTNAME) -d $(MISC)/$(TARGET) --ext "keys" --key "description"  ../share/documents.ulf
+    @$(PERL) ../share/translate.pl -p $(PRODUCTNAME) -d $(MISC)/$(TARGET) --ext "keys" --key "description"  $(ULFDIR)/documents.ulf
     @cat $(MISC)/$(TARGET)/{$(MIMELIST)}.keys > $@
 
 $(MISC)/$(TARGET)/usr/share/gnome/application-registry/$(UNIXFILENAME).applications : ../mimetypes/openoffice.applications
