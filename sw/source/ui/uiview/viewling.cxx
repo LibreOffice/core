@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 08:18:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,7 @@ void SwView::SpellStart( SvxSpellArea eWhich, sal_Bool bStartDone, sal_Bool bEnd
 // Der uebergebene Pointer nLang ist selbst der Wert
 IMPL_LINK( SwView, SpellError, void *, nLang )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool bFocus = GetEditWin().HasFocus();
 #endif
     sal_uInt16 nPend = 0;
@@ -402,7 +402,7 @@ IMPL_LINK( SwView, SpellError, void *, nLang )
     String aErr(::GetLanguageString( eLang ) );
 
     SwEditWin &rEditWin = GetEditWin();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     bFocus = rEditWin.HasFocus();
 #endif
     sal_uInt16 nWaitCnt = 0;
@@ -421,7 +421,7 @@ IMPL_LINK( SwView, SpellError, void *, nLang )
         rEditWin.EnterWait();
         --nWaitCnt;
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     bFocus = GetEditWin().HasFocus();
 #endif
 
@@ -431,7 +431,7 @@ IMPL_LINK( SwView, SpellError, void *, nLang )
             pWrtShell->StartAction();
         pWrtShell->Combine();
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if( !bFocus )
         GetEditWin().GrabFocus();
 #endif
