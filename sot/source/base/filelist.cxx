@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelist.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-04 15:46:38 $
+ *  last change: $Author: jp $ $Date: 2001-09-06 13:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,35 +241,53 @@ SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
     rFileList.pStrList = new FileStringList();
 
     // String-Liste aufbauen
-    ByteString aStr;
-    char c, cLast;
-
-    // 1. Zeichen lesen
-    rIStm >> c;
-    do
+    // Unicode ?
+    if( aSv_DROPFILES.fWide )
     {
-        aStr = ByteString();
+        // no, only ANSI
+        String aStr;
+        sal_uInt16 c;
 
-        // String bis '\0' lesen
-        do
-        {
-            if( c )
-                aStr += c;
-            cLast = c;      // Zeichen merken
+        // 1. Zeichen lesen
+        rIStm >> c;
+        do {
+            aStr.Erase();
 
-            // Bei Unicode eins mehr weg
-            if( aSv_DROPFILES.fWide )
+            // String bis '\0' lesen
+            while( c && !rIStm.IsEof() )
+            {
+                aStr += (sal_Unicode)c;
                 rIStm >> c;
+            }
 
-            rIStm >> c;
+            // String in die Liste stopfen
+            rFileList.AppendFile( aStr );
         }
-        while( cLast && !rIStm.IsEof() );
-
-        // String in die Liste stopfen
-        rFileList.AppendFile( String(aStr, RTL_TEXTENCODING_ASCII_US));
+        while( c  && !rIStm.IsEof() );      // c == 0 && cLast == 0 -> Ende
     }
-    while( c  && !rIStm.IsEof() );      // c == 0 && cLast == 0 -> Ende
+    else
+    {
+        // no, only ANSI
+        ByteString aStr;
+        sal_Char c;
 
+        // 1. Zeichen lesen
+        rIStm >> c;
+        do {
+            aStr.Erase();
+
+            // String bis '\0' lesen
+            while( c && !rIStm.IsEof() )
+            {
+                aStr += c;
+                rIStm >> c;
+            }
+
+            // String in die Liste stopfen
+            rFileList.AppendFile( String(aStr, RTL_TEXTENCODING_ASCII_US));
+        }
+        while( c  && !rIStm.IsEof() );      // c == 0 && cLast == 0 -> Ende
+    }
     return rIStm;
 }
 
