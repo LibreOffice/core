@@ -1,0 +1,155 @@
+/*************************************************************************
+ *
+ *  $RCSfile: accel_tmpl.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 14:26:58 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef SD_ACCELERATOR
+#define SD_ACCELERATOR RID_DRAW_DEFAULTACCEL
+#include "accelids.src"
+#endif
+
+#ifndef _GLOBALACC_SRC
+#include <svx/globlac.hrc>
+#endif
+
+/** For the presentation we change some accelerator keys:
+    The navigator is moved from F5 to Shift-F5.
+    The presentation is started for F5, F9, Control-F2. The later two are
+    defined in svx/globalac.hrc.
+*/
+#define AI_SD_NAVIGATOR ACC_CODE(SID_NAVIGATOR, KEY_F5, TRUE, FALSE, FALSE )
+#define AI_PRESENTATION_F5 ACC_CODE(SID_PRESENTATION, KEY_F5, FALSE, FALSE, FALSE )
+
+Accelerator SD_ACCELERATOR
+{
+    ItemList =
+    {
+         // Funktionstasten
+        AI_ATTR_CHAR
+#if SD_ACCELERATOR != RID_GRAPHIC_DEFAULTACCEL
+        AI_PRESENTATION_F5
+        AI_PRESENTATION
+        AI_PRESENTATION_COMPAT
+#endif
+        AI_ENTER_GROUP
+        AI_COPYOBJECTS
+        AI_LEAVE_GROUP
+        AI_ATTR_TRANSFORM
+        //      AI_NAVIGATOR
+        AI_SD_NAVIGATOR
+        AI_SPELLING
+        AI_THESAURUS
+        AI_BEZIER_EDIT
+        AI_ATTR_TEXT_FITTOSIZE
+        AI_STYLE_DESIGNER
+#if SD_ACCELERATOR != RID_GRAPHIC_DEFAULTACCEL
+        AI_OUTLINEMODE
+        AI_DRAWINGMODE
+#endif
+         // A-Z Acceleratoren
+        AI_ATTR_PARA_LINESPACE_10
+        AI_ATTR_PARA_LINESPACE_20
+        AI_ATTR_PARA_LINESPACE_15
+        AI_SHOW_ITEMBROWSER
+        AI_ATTR_PARA_ADJUST_BLOCK
+        AI_ATTR_PARA_ADJUST_CENTER
+        AI_ATTR_CHAR_WEIGHT
+        AI_GROUP
+        AI_UNGROUP
+         // Weitersuchen ...
+        AI_SET_SUPER_SCRIPT
+        AI_ATTR_CHAR_POSTURE
+        AI_COMBINE
+        AI_DISMANTLE
+        AI_ATTR_PARA_ADJUST_LEFT
+        AI_ATTR_PARA_ADJUST_RIGHT
+        AI_SET_SUB_SCRIPT
+        AI_ATTR_CHAR_UNDERLINE
+        AI_STYLE_CATALOG
+#if SD_ACCELERATOR != RID_PLUGINACCEL
+// Ob das wirklich richtig ist (PlugIn-Accel) sollte mal geprueft werden !!!
+         // Anordnung
+        AI_FRAME_TO_TOP
+        AI_MOREFRONT
+        AI_FRAME_TO_BOTTOM
+        AI_MOREBACK
+         // sonstige Acceleratoren
+        AI_NEWDOC
+        AI_OPENDOC
+#endif
+        AI_SAVEDOC
+        AI_PRINTDOC
+        AI_QUITAPP
+        AI_CUT
+        AI_COPY
+        AI_PASTE
+        AI( SID_PASTE2, KEY_V, TRUE, TRUE, FALSE )
+        AI_UNDO
+        AI_REDO
+        AI_REPEAT
+        AI_DELETE
+#ifndef PRODUCT
+        AI_PIXELMODE
+        AI_ANIMATIONMODE
+#endif
+    };
+};
+
+
+
