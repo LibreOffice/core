@@ -42,13 +42,13 @@ public class Test09 implements StorageTest {
                 return false;
             }
 
-            byte pPass1[] = { 1, 2, 3 };
-            byte pPass2[] = { 3, 2, 1 };
+            String sPass1 = "123";
+            String sPass2 = "321";
             byte pBytes[] = { 1, 1, 1, 1, 1 };
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             // the stream will not be encrypted
-            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "SubStream1", "MediaType1", false, pBytes, pPass1 ) )
+            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "SubStream1", "MediaType1", false, pBytes, sPass1 ) )
                 return false;
 
             // create temporary file
@@ -62,7 +62,7 @@ public class Test09 implements StorageTest {
             // create temporary storage based on a previously created temporary file
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) sTempFileURL;
-            pArgs[1] = new Integer( ElementModes.ELEMENT_WRITE );
+            pArgs[1] = new Integer( ElementModes.WRITE );
 
             Object oTempFileStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xTempFileStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oTempFileStorage );
@@ -78,7 +78,7 @@ public class Test09 implements StorageTest {
                 return false;
 
             // change password of the substream of new storage based on file
-            int nResult = m_aTestHelper.ChangeStreamPass( xTempFileStorage, "SubStream1", pPass1, pPass2 );
+            int nResult = m_aTestHelper.ChangeStreamPass( xTempFileStorage, "SubStream1", sPass1, sPass2 );
             if ( nResult == 0 )
                 return false; // test failed
             else if ( nResult == -1 )
@@ -96,7 +96,7 @@ public class Test09 implements StorageTest {
             // ================================================
 
             // the temporary file must not be locked any more after storage disposing
-            pArgs[1] = new Integer( ElementModes.ELEMENT_READ );
+            pArgs[1] = new Integer( ElementModes.READ );
             Object oResultStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xResultStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oResultStorage );
             if ( xResultStorage == null )
@@ -105,7 +105,7 @@ public class Test09 implements StorageTest {
                 return false;
             }
 
-            if ( !m_aTestHelper.checkEncrStream( xResultStorage, "SubStream1", "MediaType1", pBytes, pPass2 ) )
+            if ( !m_aTestHelper.checkEncrStream( xResultStorage, "SubStream1", "MediaType1", pBytes, sPass2 ) )
                 return false;
 
             // dispose used storages to free resources
