@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:43:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -942,7 +942,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         }
 
         delete pDocTemplDlg;
-        if ( bNewWin )
+        if ( bNewWin && pTopWin )
             // after the destruction of the dialogue its parent comes to top,
             // but we want that the new document is on top
             pTopWin->ToTop();
