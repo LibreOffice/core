@@ -80,28 +80,6 @@ public abstract class AbstractButton extends Component {
             super();
         }
 
-        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
-        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
-            javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
-
-            try {
-                if (unoAS != null) {
-                    if (unoAS.contains(AccessibleStateType.ARMED)) {
-                        states.add(AccessibleState.ARMED);
-                    }
-                    if (unoAS.contains(AccessibleStateType.PRESSED)) {
-                        states.add(AccessibleState.PRESSED);
-                    }
-                    if (unoAS.contains(AccessibleStateType.CHECKED)) {
-                        states.add(AccessibleState.CHECKED);
-                    }
-                }
-            } catch (com.sun.star.uno.RuntimeException e) {
-            }
-
-            return states;
-        }
-
         /*
         * AccessibleContext
         */
