@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-06 14:34:13 $
+ *  last change: $Author: nf $ $Date: 2001-12-19 15:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ String STR_SVT_NEWDOC
     Text[ swedish ] = "Nytt dokument";
     Text[ polish ] = "Nowy dokument";
     Text[ portuguese_brazilian ] = "New Document";
-    Text[ japanese ] = "新しいﾄﾞｷｭﾒﾝﾄ";
+    Text[ japanese ] = "新しいドキュメント";
     Text[ korean ] = "새 문서";
     Text[ chinese_simplified ] = "新建文档";
     Text[ chinese_traditional ] = "新增文件";
@@ -114,13 +114,13 @@ String STR_SVT_MYDOCS
     Text[ dutch ] = "Eigen bestanden";
     Text[ french ] = "Mes documents";
     Text[ spanish ] = "Mis documentos";
-    Text[ finnish ] = "Eigene Dateien";
+    Text[ finnish ] = "Omat asiakirjat";
     Text[ italian ] = "Documenti";
     Text[ danish ] = "My Documents";
     Text[ swedish ] = "Mina dokument";
     Text[ polish ] = "Moje dokumenty";
     Text[ portuguese_brazilian ] = "My Documents";
-    Text[ japanese ] = "ﾏｲﾄﾞｷｭﾒﾝﾄ";
+    Text[ japanese ] = "マイドキュメント";
     Text[ korean ] = "고유 문서";
     Text[ chinese_simplified ] = "我的文档";
     Text[ chinese_traditional ] = "我的文件夾";
@@ -145,13 +145,13 @@ String STR_SVT_TEMPLATES
     Text[ dutch ] = "Sjablonen";
     Text[ french ] = "Mod�les";
     Text[ spanish ] = "Plantillas";
-    Text[ finnish ] = "Tyylit";
+    Text[ finnish ] = "Mallipohjat";
     Text[ italian ] = "Modelli";
     Text[ danish ] = "Templates";
     Text[ swedish ] = "Mallar";
     Text[ polish ] = "Szablony";
     Text[ portuguese_brazilian ] = "Templates";
-    Text[ japanese ] = "ﾃﾝﾌﾟﾚｰﾄ";
+    Text[ japanese ] = "テンプレート";
     Text[ korean ] = "템플릿";
     Text[ chinese_simplified ] = "样式";
     Text[ chinese_traditional ] = "樣式";
@@ -181,7 +181,7 @@ String STR_SVT_SAMPLES
     Text[ swedish ] = "Exempel";
     Text[ polish ] = "Przyk�ady";
     Text[ portuguese_brazilian ] = "Samples";
-    Text[ japanese ] = "ｻﾝﾌﾟﾙ文書";
+    Text[ japanese ] = "サンプル文書";
     Text[ korean ] = "예";
     Text[ chinese_simplified ] = "示例文档";
     Text[ chinese_traditional ] = "示例";
@@ -207,7 +207,7 @@ String STR_SVT_CATEGORY
     Text[ dutch ] = "Categorie";
     Text[ french ] = "Cat�gorie";
     Text[ spanish ] = "Categor�a";
-    Text[ finnish ] = "Category";
+    Text[ finnish ] = "Luokka";
     Text[ italian ] = "Categoria";
     Text[ danish ] = "Category";
     Text[ swedish ] = "Kategori";
@@ -254,7 +254,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ turkish ] = "Back";
             Text[ arabic ] = "Back";
             Text[ catalan ] = "Back";
-            Text[ finnish ] = "Backward";
+            Text[ finnish ] = "Edellinen";
         };
         ToolBoxItem
         {
@@ -275,14 +275,14 @@ ToolBox TB_SVT_FILEVIEW
             Text[ swedish ] = "Upp en niv�";
             Text[ polish ] = "Katalog wy�ej";
             Text[ portuguese_brazilian ] = "Higher";
-            Text[ japanese ] = "１つ上のﾌｫﾙﾀﾞへ";
-            Text[ korean ] = "한 디렉토리 위로";
+            Text[ japanese ] = "１つ上のフォルダへ";
+            Text[ korean ] = "한 레벨 위로";
             Text[ chinese_simplified ] = "目录向上一层";
             Text[ chinese_traditional ] = "目錄向上一層";
             Text[ turkish ] = "Higher";
             Text[ arabic ] = "Higher";
             Text[ catalan ] = "Higher";
-            Text[ finnish ] = "Up One Level";
+            Text[ finnish ] = "Taso yl�sp�in";
         };
         ToolBoxItem
         {
@@ -314,7 +314,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ turkish ] = "Print";
             Text[ arabic ] = "Print";
             Text[ catalan ] = "Print";
-            Text[ finnish ] = "Print";
+            Text[ finnish ] = "Tulosta";
         };
     };
 };
@@ -340,13 +340,13 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ dutch ] = "Documenteigenschappen";
             Text[ french ] = "Propri�t�s du document";
             Text[ spanish ] = "Propiedades del documento";
-            Text[ finnish ] = "Docinfo";
+            Text[ finnish ] = "Asiakirjan ominaisuudet";
             Text[ italian ] = "Propriet� documento";
             Text[ danish ] = "Docinfo";
             Text[ swedish ] = "Dokumentegenskaper";
             Text[ polish ] = "W�a�ciwo�ci dokumentu";
             Text[ portuguese_brazilian ] = "Docinfo";
-            Text[ japanese ] = "ﾄﾞｷｭﾒﾝﾄの属性";
+            Text[ japanese ] = "ドキュメントの属性";
             Text[ korean ] = "문서 등록정보";
             Text[ chinese_simplified ] = "文档属性";
             Text[ chinese_traditional ] = "文件屬性";
@@ -369,13 +369,13 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ dutch ] = "Voorbeeld";
             Text[ french ] = "Aper�u";
             Text[ spanish ] = "Previsualizaci�n";
-            Text[ finnish ] = "Preview";
+            Text[ finnish ] = "Esikatselu";
             Text[ italian ] = "Anteprima";
             Text[ danish ] = "Preview";
             Text[ swedish ] = "F�rhandsvisning";
             Text[ polish ] = "Podgl�d";
             Text[ portuguese_brazilian ] = "Preview";
-            Text[ japanese ] = "ﾌﾟﾚﾋﾞｭｰ";
+            Text[ japanese ] = "プレビュー";
             Text[ korean ] = "미리보기";
             Text[ chinese_simplified ] = "预览";
             Text[ chinese_traditional ] = "預覽";
@@ -405,14 +405,14 @@ ModalDialog DLG_DOCTEMPLATE
     Text[ swedish ] = "Mallar och dokument";
     Text[ polish ] = "Szablony i dokumenty";
     Text[ portuguese_brazilian ] = "Templates and Documents";
-    Text[ japanese ] = "ﾃﾝﾌﾟﾚｰﾄとﾄﾞｷｭﾒﾝﾄ";
+    Text[ japanese ] = "テンプレートとドキュメント";
     Text[ korean ] = "템플릿과 문서";
     Text[ chinese_simplified ] = "样式和文档";
     Text[ chinese_traditional ] = "樣式和文件";
     Text[ turkish ] = "Templates and Documents";
     Text[ arabic ] = "Templates and Documents";
     Text[ catalan ] = "Templates and Documents";
-    Text[ finnish ] = "Vorlagen und Dokumente";
+    Text[ finnish ] = "Mallipohjat ja asiakirjat";
     Moveable = TRUE ;
     FixedLine FL_DOCTEMPLATE
     {
@@ -649,16 +649,16 @@ StringArray STRARY_SVT_DOCINFO
     };
     ItemList [ finnish ] =
     {
-        < "Nimi�" ; DI_TITLE ; > ;
-        < "Teksti -> Tietue" ; DI_FROM ; > ;
+        < "Otsikko" ; DI_TITLE ; > ;
+        < "L�hett�j�" ; DI_FROM ; > ;
         < "P�iv�m��r�" ; DI_DATE ; > ;
         < "Avainsanat" ; DI_KEYWORDS ; > ;
-        < "Kommentti" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "�nderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Ge�ndert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "Kuvaus" ; DI_DESCRIPTION ; > ;
+        < "Tyyppi" ; DI_MIMETYPE ; > ;
+        < "Muokkausaika" ; DI_MODIFIEDDATE ; > ;
+        < "Muokkaaja" ; DI_MODIFIEDBY ; > ;
+        < "Tulostusaika" ; DI_PRINTDATE ; > ;
+        < "Tulostaja" ; DI_PRINTBY ; > ;
         < "Aihe" ; DI_THEME ; > ;
         < "Koko" ; DI_SIZE ; > ;
     };
@@ -739,18 +739,18 @@ StringArray STRARY_SVT_DOCINFO
     };
     ItemList [ japanese ] =
     {
-        < "ﾀｲﾄﾙ" ; DI_TITLE ; > ;
+        < "タイトル" ; DI_TITLE ; > ;
         < "作成者" ; DI_FROM ; > ;
         < "日時" ; DI_DATE ; > ;
-        < "ｷｰﾜｰﾄﾞ" ; DI_KEYWORDS ; > ;
+        < "キーワード" ; DI_KEYWORDS ; > ;
         < "概要" ; DI_DESCRIPTION ; > ;
         < "構成内容" ; DI_MIMETYPE ; > ;
         < "更新日時" ; DI_MODIFIEDDATE ; > ;
         < "更新者" ; DI_MODIFIEDBY ; > ;
         < "印刷日時" ; DI_PRINTDATE ; > ;
         < "印刷日時" ; DI_PRINTBY ; > ;
-        < "ﾃｰﾏ" ; DI_THEME ; > ;
-        < "ｻｲｽﾞ" ; DI_SIZE ; > ;
+        < "テーマ" ; DI_THEME ; > ;
+        < "サイズ" ; DI_SIZE ; > ;
     };
     ItemList [ korean ] =
     {
@@ -830,8 +830,8 @@ StringArray STRARY_SVT_DOCINFO
     ItemList [ catalan ] =
     {
          < "T�tol" ; DI_TITLE ; > ;
-        < "Von" ; DI_FROM ; > ;
-        < "Datum" ; DI_DATE ; > ;
+        < "per" ; DI_FROM ; > ;
+        < "Data" ; DI_DATE ; > ;
         < "Paraules clau" ; DI_KEYWORDS ; > ;
         < "Descripci�" ; DI_DESCRIPTION ; > ;
         < "Inhaltstyp" ; DI_MIMETYPE ; > ;
@@ -839,10 +839,11 @@ StringArray STRARY_SVT_DOCINFO
         < "Ge�ndert von" ; DI_MODIFIEDBY ; > ;
         < "Druckdatum" ; DI_PRINTDATE ; > ;
         < "Gedruckt von" ; DI_PRINTBY ; > ;
-        < "Thema" ; DI_THEME ; > ;
+        < "Assumpte" ; DI_THEME ; > ;
         < "Mida" ; DI_SIZE ; > ;
     };
 };
+
 
 
 
