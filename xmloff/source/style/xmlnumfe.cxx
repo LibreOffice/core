@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-15 18:54:34 $
+ *  last change: $Author: er $ $Date: 2000-11-24 19:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,21 +1059,21 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
 
                 // date elements:
 
-                case NF_KEY_T:
-                case NF_KEY_TT:
+                case NF_KEY_D:
+                case NF_KEY_DD:
                     {
-                        sal_Bool bLong = ( nElemType == NF_KEY_TT );
+                        sal_Bool bLong = ( nElemType == NF_KEY_DD );
                         WriteDayElement_Impl( bSystemDate ? bLongSysDate : bLong );
                     }
                     break;
-                case NF_KEY_TTT:
-                case NF_KEY_TTTT:
+                case NF_KEY_DDD:
+                case NF_KEY_DDDD:
                 case NF_KEY_NN:
                 case NF_KEY_NNN:
                 case NF_KEY_NNNN:
                     {
                         sal_Bool bLong = ( nElemType == NF_KEY_NNN || nElemType == NF_KEY_NNNN ||
-                                           nElemType == NF_KEY_TTTT );
+                                           nElemType == NF_KEY_DDDD );
                         WriteDayOfWeekElement_Impl( bSystemDate ? bLongSysDate : bLong );
                         if ( nElemType == NF_KEY_NNNN )
                         {
@@ -1093,10 +1093,10 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                         WriteMonthElement_Impl( ( bSystemDate ? bLongSysDate : bLong ), bText );
                     }
                     break;
-                case NF_KEY_JJ:
-                case NF_KEY_JJJJ:
+                case NF_KEY_YY:
+                case NF_KEY_YYYY:
                     {
-                        sal_Bool bLong = ( nElemType == NF_KEY_JJJJ );
+                        sal_Bool bLong = ( nElemType == NF_KEY_YYYY );
                         WriteYearElement_Impl( bSystemDate ? bLongSysDate : bLong );
                     }
                     break;

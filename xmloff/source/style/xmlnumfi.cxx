@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: er $ $Date: 2000-11-24 19:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,7 +755,7 @@ void SvXMLNumFmtElementContext::EndElement()
             if ( rParent.IsFromSystem() )
                 bEffLong = bLong ? rParent.GetInternational().IsLongDateDayLeadingZero() :
                                    rParent.GetInternational().IsDateDayLeadingZero();
-            rParent.AddNfKeyword( bEffLong ? NF_KEY_TT : NF_KEY_T );
+            rParent.AddNfKeyword( bEffLong ? NF_KEY_DD : NF_KEY_D );
             break;
         case XML_TOK_STYLE_MONTH:
             if ( rParent.IsFromSystem() )
@@ -776,7 +776,7 @@ void SvXMLNumFmtElementContext::EndElement()
             if ( rParent.IsFromSystem() )
                 bEffLong = bLong ? rParent.GetInternational().IsLongDateCentury() :
                                    rParent.GetInternational().IsDateCentury();
-            rParent.AddNfKeyword( bEffLong ? NF_KEY_JJJJ : NF_KEY_JJ );
+            rParent.AddNfKeyword( bEffLong ? NF_KEY_YYYY : NF_KEY_YY );
             break;
         case XML_TOK_STYLE_DAY_OF_WEEK:
             if ( rParent.IsFromSystem() && bLong )
