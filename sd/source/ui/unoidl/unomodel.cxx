@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-24 09:02:34 $
+ *  last change: $Author: cl $ $Date: 2002-04-26 12:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,8 +536,6 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         sal_uInt16 nNotesPageNum = nStandardPageNum + 1;
         String aStandardPageName;
         String aNotesPageName;
-        AutoLayout eStandardLayout = pPreviousStandardPage->GetAutoLayout();
-        AutoLayout eNotesLayout = pPreviousNotesPage->GetAutoLayout();
 
         /**************************************************************
         * Standardseite
@@ -564,7 +562,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
             sal_uInt16 nPgNum = pPreviousStandardPage->GetMasterPageNum(nPos=0);
             pStandardPage->InsertMasterPage(nPgNum);
             pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
-            pStandardPage->SetAutoLayout(eStandardLayout, sal_True, sal_True);
+            pStandardPage->SetAutoLayout(AUTOLAYOUT_NONE, sal_True, sal_True);
         }
 
         aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
@@ -600,7 +598,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
             sal_uInt16 nPgNum = pPreviousNotesPage->GetMasterPageNum(nPos=0);
             pNotesPage->InsertMasterPage(nPgNum);
             pNotesPage->SetLayoutName( pPreviousNotesPage->GetLayoutName() );
-            pNotesPage->SetAutoLayout(eNotesLayout, sal_True, sal_True);
+            pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True);
         }
     }
 
