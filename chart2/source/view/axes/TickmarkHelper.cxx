@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TickmarkHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-19 13:11:03 $
+ *  last change: $Author: iha $ $Date: 2003-11-26 12:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,6 +429,8 @@ sal_Int32 TickmarkHelper::getMaxTickCount( sal_Int32 nDepth ) const
     if( nDepth >= getTickDepth() )
         return 0;
     if( m_fOuterMajorTickBorderMax < m_fOuterMajorTickBorderMin )
+        return 0;
+    if( m_rIncrement.Distance<=0.0)
         return 0;
 
     sal_Int32 nIntervalCount;
