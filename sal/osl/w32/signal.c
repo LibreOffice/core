@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:33:53 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 11:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,9 +132,13 @@ static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
 /* SignalHandlerFunction    */
 /*****************************************************************************/
 
+#define REPORTENV_PARAM     "-crashreportenv:"
+#define REPORTENV_PARAM2    "/crashreportenv:"
+
 static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
 {
     BOOL    fSuccess = FALSE;
+    BOOL    fAutoReport = FALSE;
     TCHAR   szBuffer[1024];
     TCHAR   szPath[MAX_PATH];
     LPTSTR  lpFilePart;
@@ -151,6 +155,51 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
             0 == stricmp( __argv[argi], "/nocrashreport" )
             )
             return FALSE;
+        else if (
+            0 == stricmp( __argv[argi], "-autocrashreport" ) ||
+            0 == stricmp( __argv[argi], "/autocrashreport" )
+            )
+            fAutoReport = TRUE;
+        else if (
+            0 == strnicmp( __argv[argi], REPORTENV_PARAM, strlen(REPORTENV_PARAM) ) ||
+            0 == strnicmp( __argv[argi], REPORTENV_PARAM2, strlen(REPORTENV_PARAM2) )
+            )
+        {
+            const char *envparam = __argv[argi] + strlen(REPORTENV_PARAM);
+            const char *delim = strchr(envparam, '=' );
+
+            if ( delim )
+            {
+                CHAR    *lpVariable;
+                CHAR    *lpValue;
+                const char *variable = envparam;
+                size_t variable_len = delim - envparam;
+                const char *value = delim + 1;
+                size_t value_len = strlen(envparam) - variable_len - 1;
+
+                if ( '\"' == *value )
+                {
+                    const char *quote;
+
+                    value++;
+                    value_len--;
+
+                    quote = strchr( value, '\"' );
+                    if ( quote )
+                        value_len = quote - value;
+                }
+
+                lpVariable = _alloca( variable_len + 1 );
+                memcpy( lpVariable, variable, variable_len );
+                lpVariable[variable_len] = 0;
+
+                lpValue = _alloca( value_len + 1);
+                memcpy( lpValue, value, value_len );
+                lpValue[value_len] = 0;
+
+                SetEnvironmentVariable( lpVariable, lpValue );
+            }
+        }
     }
 
     if ( SearchPath( NULL, TEXT("crashrep.exe"), NULL, MAX_PATH, szPath, &lpFilePart ) )
@@ -160,11 +209,12 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
 
 
         sntprintf( szBuffer, elementsof(szBuffer),
-            _T("%s -p %u -excp 0x%p -t %u"),
+            _T("%s -p %u -excp 0x%p -t %u%s"),
             szPath,
             GetCurrentProcessId(),
             lpEP,
-            GetCurrentThreadId() );
+            GetCurrentThreadId(),
+            fAutoReport ? _T(" -noui") : _T("") );
 
         if (
             CreateProcess(
