@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-28 11:38:11 $
+ *  last change: $Author: cl $ $Date: 2001-02-28 11:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,6 +805,14 @@ SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateCharExtPropMapper(
 {
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT );
+    return new XMLTextExportPropertySetMapper( pPropMapper, rExport );
+}
+
+SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateParaExtPropMapper(
+        SvXMLExport& rExport)
+{
+    XMLPropertySetMapper *pPropMapper =
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );
     return new XMLTextExportPropertySetMapper( pPropMapper, rExport );
 }
 
