@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 16:26:42 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,3 +497,31 @@ hidspecial HID_COLORPAGE_BASICSTRING_CB                { HelpID =  HID_COLORPAGE
 hidspecial HID_COLORPAGE_BASICOPERATOR_CB              { HelpID =  HID_COLORPAGE_BASICOPERATOR_CB               ; };
 hidspecial HID_COLORPAGE_BASICKEYWORD_CB               { HelpID =  HID_COLORPAGE_BASICKEYWORD_CB                ; };
 hidspecial HID_COLORPAGE_BASICERROR_CB                 { HelpID =  HID_COLORPAGE_BASICERROR_CB                  ; };
+
+hidspecial HID_OFAPAGE_AUTOCORR_CLB                 { HelpId = HID_OFAPAGE_AUTOCORR_CLB; };
+hidspecial HID_OFAPAGE_AUTOFORMAT_CLB               { HelpId = HID_OFAPAGE_AUTOFORMAT_CLB; };
+hidspecial HID_OFA_MAILATTACH_TABBAR                { HelpId = HID_OFA_MAILATTACH_TABBAR; };
+hidspecial HID_OFA_MAILATTACH_ATTACH_LB             { HelpId = HID_OFA_MAILATTACH_ATTACH_LB; };
+hidspecial HID_OFA_FONT_SUBST_CLB                   { HelpId = HID_OFA_FONT_SUBST_CLB; };
+
+hidspecial HID_REGISTRATION_REGISTER                { HelpId = HID_REGISTRATION_REGISTER  ; };
+hidspecial HID_REGISTRATION_ENABLE_KEY              { HelpId = HID_REGISTRATION_ENABLE_KEY; };
+
+hidspecial HID_AUTOCORR_LANGUAGE                    { HelpId = HID_AUTOCORR_LANGUAGE; };
+
+hidspecial HID_OFADLG_TREELISTBOX                   { HelpId = HID_OFADLG_TREELISTBOX; };
+
+hidspecial HID_OFADLG_TREE_GENERAL                  { HelpId = HID_OFADLG_TREE_GENERAL              ; };
+hidspecial HID_OFADLG_TREE_INTERNET                 { HelpId = HID_OFADLG_TREE_INTERNET             ; };
+hidspecial HID_OFADLG_TREE_BROWSER                  { HelpId = HID_OFADLG_TREE_BROWSER              ; };
+hidspecial HID_OFADLG_TREE_TEXT                     { HelpId = HID_OFADLG_TREE_TEXT                 ; };
+hidspecial HID_OFADLG_TREE_HTML                     { HelpId = HID_OFADLG_TREE_HTML                 ; };
+hidspecial HID_OFADLG_TREE_CALC                     { HelpId = HID_OFADLG_TREE_CALC                 ; };
+hidspecial HID_OFADLG_TREE_PRESENTATION             { HelpId = HID_OFADLG_TREE_PRESENTATION         ; };
+hidspecial HID_OFADLG_TREE_DRAWING                  { HelpId = HID_OFADLG_TREE_DRAWING              ; };
+hidspecial HID_OFADLG_TREE_IMAGE                    { HelpId = HID_OFADLG_TREE_IMAGE                ; };
+hidspecial HID_OFADLG_TREE_FORMULA                  { HelpId = HID_OFADLG_TREE_FORMULA              ; };
+hidspecial HID_OFAPAGE_MSFLTR2_CLB                   { HelpId = HID_OFAPAGE_MSFLTR2_CLB             ; };
+
+hidspecial UID_OFA_CONNPOOL_DRIVERLIST_BACK         { HelpId = UID_OFA_CONNPOOL_DRIVERLIST_BACK; };
+hidspecial HID_OFA_CONNPOOL_DRIVERLIST              { HelpId = HID_OFA_CONNPOOL_DRIVERLIST; };
