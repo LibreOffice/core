@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 08:23:06 $
+ *  last change: $Author: os $ $Date: 2000-10-13 11:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,7 +813,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
 
         case FN_BUSINESS_CARD:
         case FN_LABEL:
-            InsertLab(nWhich == FN_LABEL);
+            InsertLab(rReq, nWhich == FN_LABEL);
             break;
 
         case SID_SW_DOCMAN_PATH:

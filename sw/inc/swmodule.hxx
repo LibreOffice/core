@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-28 15:21:23 $
+ *  last change: $Author: os $ $Date: 2000-10-13 11:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ class SwModule: public SwModuleDummy , public SfxListener
 protected:
     // Briefumschlaege, Etiketten
     void                InsertEnv();
-    void                InsertLab(sal_Bool bLabel);
+    void                InsertLab(SfxRequest&, sal_Bool bLabel);
 
 public:
     TYPEINFO();

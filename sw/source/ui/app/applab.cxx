@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-26 11:56:49 $
+ *  last change: $Author: os $ $Date: 2000-10-13 11:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
 // ----------------------------------------------------------------------------
 
 
-void SwModule::InsertLab(sal_Bool bLabel)
+void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
 {
 static sal_uInt16 nLabelTitleNo = 0;
 static sal_uInt16 nBCTitleNo = 0;
@@ -333,7 +333,17 @@ static sal_uInt16 nBCTitleNo = 0;
             pDocSh->GetDoc()->SetJobsetup(pPrt->GetJobSetup());
         }
 
-        SfxViewFrame *pFrame = SFX_APP()->CreateViewFrame( *xDocSh, 0, sal_True );
+        const SfxItemSet *pArgs = rReq.GetArgs();
+        DBG_ASSERT( pArgs, "no arguments in SfxRequest")
+        const SfxPoolItem* pFrameItem = 0;
+        if(pArgs)
+            pArgs->GetItemState(SID_DOCFRAME, FALSE, &pFrameItem);
+        if(!pFrameItem)
+            return ;
+        SfxFrame* pFr = ((const SfxFrameItem*)pFrameItem)->GetFrame();
+        xDocSh->PutItem(SfxBoolItem(SID_HIDDEN, TRUE));
+        pFr->InsertDocument(xDocSh);
+        SfxViewFrame *pFrame = pFr->GetCurrentViewFrame();
         SwView      *pView = (SwView*) pFrame->GetViewShell();
         pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
 
