@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: thb $ $Date: 2001-07-17 07:04:31 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:39:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,24 +73,10 @@ PROJECTPCHSOURCE=outl_pch
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Allgemein ----------------------------------------------------------
-
-.IF "$(header)" == ""
-
-CXXFILES=	\
-            outlundo.cxx	\
-            outliner.cxx	\
-            outlin2.cxx		\
-            paralist.cxx	\
-            outlobj.cxx 	\
-            outlvw.cxx		\
-            outleeng.cxx	\
-            outl_pch.cxx
 
 SLOFILES=	\
             $(SLO)$/outlundo.obj	\
@@ -109,8 +95,8 @@ SVXLIGHTOBJFILES= \
             $(OBJ)$/outleeng.obj 	\
             $(OBJ)$/outlobj.obj
 
-.ENDIF
-
-SRCFILES=	outliner.src
+SRS1NAME=$(TARGET)
+SRC1FILES=	outliner.src
 
 .INCLUDE :  target.mk
+
