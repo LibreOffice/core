@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:11:32 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@
 #include "global.hxx"
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
+#include "markdata.hxx"
+
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
 // STATIC DATA -----------------------------------------------------------
@@ -249,6 +251,59 @@ BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,
     }
 
     return TRUE;
+}
+
+// static
+void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
+{
+    rMark.MarkToMulti();
+
+    ScRange aMultiArea;
+    rMark.GetMultiMarkArea( aMultiArea );
+    SCCOL nStartCol = aMultiArea.aStart.Col();
+    SCROW nStartRow = aMultiArea.aStart.Row();
+    SCCOL nEndCol = aMultiArea.aEnd.Col();
+    SCROW nEndRow = aMultiArea.aEnd.Row();
+
+    bool bChanged = false;
+    SCTAB nTabCount = pDoc->GetTableCount();
+    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+        if ( rMark.GetTableSelect(nTab ) )
+        {
+            ScCompressedArrayIterator<SCROW, BYTE> aIter(pDoc->GetRowFlagsArray(nTab), nStartRow, nEndRow);
+            do
+            {
+                if (*aIter & CR_FILTERED)
+                {
+                    // use nStartCol/nEndCol, so the multi mark area isn't extended to all columns
+                    // (visible in repaint for indentation)
+
+                    rMark.SetMultiMarkArea( ScRange( nStartCol, aIter.GetRangeStart(), nTab,
+                                                     nEndCol, aIter.GetRangeEnd(), nTab ), FALSE );
+                    bChanged = true;
+                }
+            }
+            while (aIter.NextRange());
+        }
+
+    if ( bChanged && !rMark.HasAnyMultiMarks() )
+        rMark.ResetMark();
+
+    rMark.MarkToSimple();
+}
+
+bool ScViewUtil::HasFiltered( const ScRange& rRange, ScDocument* pDoc )
+{
+    SCROW nStartRow = rRange.aStart.Row();
+    SCROW nEndRow = rRange.aEnd.Row();
+    for (SCTAB nTab=rRange.aStart.Tab(); nTab<=rRange.aEnd.Tab(); nTab++)
+    {
+        if ( ValidRow( pDoc->GetRowFlagsArray(nTab).
+                GetFirstForCondition( nStartRow, nEndRow, CR_FILTERED, CR_FILTERED ) ) )
+            return true;
+    }
+
+    return false;
 }
 
 //==================================================================
