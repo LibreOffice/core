@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 16:32:05 $
+#   last change: $Author: obo $ $Date: 2005-03-15 09:06:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,12 +67,10 @@ no_common_build_zip=true
 .INCLUDE : settings.mk
 
 .IF "$(SOLAR_JAVA)"!=""
-.IF "$(JDK)"!="gcj"
 ZIP1FLAGS=-r
 ZIP1TARGET=ScriptsJava
 ZIP1DIR=$(OUT)$/class$/examples
 ZIP1LIST=java
-.ENDIF
 .ENDIF
 
 ZIP2FLAGS=-r
