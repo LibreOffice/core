@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 19:32:01 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -883,6 +883,21 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
                 maPageLayoutName = sValue;
                 break;
             }
+            case XML_TOK_MASTERPAGE_USE_HEADER_NAME:
+            {
+                maUseHeaderDeclName =  sValue;
+                break;
+            }
+            case XML_TOK_MASTERPAGE_USE_FOOTER_NAME:
+            {
+                maUseFooterDeclName =  sValue;
+                break;
+            }
+            case XML_TOK_MASTERPAGE_USE_DATE_TIME_NAME:
+            {
+                maUseDateTimeDeclName =  sValue;
+                break;
+            }
         }
     }
 
@@ -1077,6 +1092,16 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
                 pContext = new SvXMLNumFormatContext( GetSdImport(), nPrefix, rLocalName,
                                                         mpNumFmtHelper->getData(), nToken, xAttrList, *this );
                 break;
+        }
+    }
+
+    if(!pContext && nPrefix == XML_NAMESPACE_PRESENTATION )
+    {
+        if( IsXMLToken( rLocalName, XML_HEADER_DECL ) ||
+            IsXMLToken( rLocalName, XML_FOOTER_DECL ) ||
+            IsXMLToken( rLocalName, XML_DATE_TIME_DECL ) )
+        {
+            pContext = new SdXMLHeaderFooterDeclContext( GetImport(), nPrefix, rLocalName, xAttrList );
         }
     }
 
@@ -1585,4 +1610,65 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
     return pContext;
 }
 
+///////////////////////////////////////////////////////////////////////
+
+SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const ::rtl::OUString& rLName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+: SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList )
+{
+    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for(sal_Int16 i=0; i < nAttrCount; i++)
+    {
+        OUString aLocalName;
+        const OUString aValue( xAttrList->getValueByIndex(i) );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(xAttrList->getNameByIndex(i), &aLocalName);
+
+        if( nPrefix == XML_NAMESPACE_PRESENTATION )
+        {
+            if( IsXMLToken( aLocalName, XML_NAME ) )
+            {
+                maStrName = aValue;
+            }
+            else if( IsXMLToken( aLocalName, XML_SOURCE ) )
+            {
+                mbFixed = IsXMLToken( aValue, XML_FIXED );
+            }
+        }
+        else if( nPrefix == XML_NAMESPACE_STYLE )
+        {
+            if( IsXMLToken( aLocalName, XML_DATA_STYLE_NAME ) )
+            {
+                maStrDateTimeFormat = aValue;
+            }
+        }
+    }
+}
+
+BOOL SdXMLHeaderFooterDeclContext::IsTransient() const
+{
+    return TRUE;
+}
+
+void SdXMLHeaderFooterDeclContext::EndElement()
+{
+    SdXMLImport& rImport = *dynamic_cast< SdXMLImport* >( &GetImport() );
+    if( IsXMLToken( GetLocalName(), XML_HEADER_DECL ) )
+    {
+        rImport.AddHeaderDecl( maStrName, maStrText );
+    }
+    else if( IsXMLToken( GetLocalName(), XML_FOOTER_DECL ) )
+    {
+        rImport.AddFooterDecl( maStrName, maStrText );
+    }
+    else if( IsXMLToken( GetLocalName(), XML_DATE_TIME_DECL ) )
+    {
+        rImport.AddDateTimeDecl( maStrName, maStrText, mbFixed, maStrDateTimeFormat );
+    }
+}
+
+void SdXMLHeaderFooterDeclContext::Characters( const ::rtl::OUString& rChars )
+{
+    maStrText += rChars;
+}
 
