@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="DBMeta" script:language="StarBasic">REM  *****  BASIC  *****
+Option Explicit
+
 Public sDatabaseList()
 
 
@@ -15,6 +17,7 @@ Sub GetSelectedDBMetaData()
 Dim NullList()
 Dim OldsDBname as String
 Dim bGetMetaData as Boolean
+Dim DBIndex as Integer
 	If Ubound(oDialogModel.lstDatabases.SelectedItems()) &gt; -1 Then
 		ToggleDatabasePage(False)
 		DBIndex = oDialogModel.lstDatabases.SelectedItems(0)
@@ -83,6 +86,10 @@ Sub GetTableMetaData()
 Dim iType as Long
 Dim m as Integer
 Dim Found as Boolean
+Dim i as Integer
+Dim sFieldName as String
+Dim n as Integer
+
 	MaxIndex = Ubound(oDialogModel.lstSelFields.StringItemList())
 	Dim ColumnMap(MaxIndex)as Integer
 	

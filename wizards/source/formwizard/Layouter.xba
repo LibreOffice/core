@@ -104,7 +104,7 @@ Dim i as Integer
 &apos;	nFieldPostfixes() = nFldLabelPostfixes$()
 	oProgressbar = oDocument.GetCurrentController.GetFrame.CreateStatusIndicator
 	oProgressbar.Start(&quot;&quot;, MaxIndex)
-	If OldArrangement = cTabled Then
+	If oDBForm.HasbyName(&quot;Grid1&quot;) Then
 		oGridshape.Dispose
 	End If
 	ToggleLayoutPage(False)

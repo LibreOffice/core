@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Language" script:language="StarBasic">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Language" script:language="StarBasic">Option Explicit
+
+
 Global Const RID_COMMON	= 1000
 Global Const RID_FORM	= 2200
 
@@ -36,6 +38,8 @@ Public sReady as String
 Public sMsgNoConnection as String
 Public sReduceDialog as String
 Public sHeightenDialog as String
+Public sWriterFilterName as String		
+Public sWriterTemplateFiltername as String		
 
 
 Sub LoadLanguage ()
@@ -130,6 +134,9 @@ Sub SetDialogLanguage ()
 
 		.cmdSwitchHeight.HelpText = sReduceDialog
 		.cmdSwitchHeight.Label = CHR(9653)
+
+		sWriterFilterName = GetResText(RID_FORM + 70)
+		sWriterTemplateFilterName = GetResText(RID_FORM + 71)
 	End With
 End Sub
 
@@ -235,10 +242,11 @@ Sub InitializeWidthList()
 	
 &apos; Todo: Die folgenden Felder auffüllen!	
 	WidthList(15,0) = com.sun.star.sdbc.DataType.TIMESTAMP		&apos; =  93;
-&apos;	WidthList(15,1) = Datum-Zeit Feld
-&apos;	WidthList(15,2) = 
+	WidthList(15,1) = 20
+&apos; Todo: Dieses Control ist keine cDatebox sondern Kollektion aus Time und Datefield
+	WidthList(15,2) = cDateBox
 	WidthList(15,3) = False
-&apos;	WidthList(15,4) = 
+	WidthList(15,4) = &quot;DateField&quot;
 
 
 	ImgWidthList(0,0) = com.sun.star.sdbc.DataType.BINARY			&apos; =  -2;

@@ -2,6 +2,8 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="FormWizard" script:language="StarBasic">Option Explicit
 
+&apos; Todo: Gruppieren der DBControls mit den Textfeldern einbinden
+&apos; Evtl könnte dies auch am Ende geschehen
 Public DocumentName as String
 Public FormPath$, FormDBName$, FormReturnValue$
 Public TemplatePath$
@@ -105,7 +107,7 @@ Dim i as Integer
 GlobalError:
 	MsgBox(sMsgErrMsg , 16, sMsgWizardName)
 	ToggleWindow(True)
-	DlgFormDB.EndExecute()
+	DlgFormDB.Execute()
 	Reset
 	Stop
 End Sub
@@ -138,6 +140,7 @@ Dim n as Integer
 NOFIELDS:
 	MsgBox sMsgErrCouldNotOpenObject, 16, sMsgWizardName
 End Sub
+
 
 Sub CancelFormWizard()
 	DlgFormDB.EndExecute()
@@ -226,23 +229,28 @@ Sub StoreForm()
 Dim oFileDialog
 Dim iAccept as Integer
 Dim sPath as String
-Dim oStoreProperties(0) as New com.sun.star.beans.PropertyValue
 Dim ListAny(0)
-&apos; Todo: Laut DV soll hierfür ein integer Wert gesetzt werden
-	ListAny(0) = &quot;FileSave_AutoextPwdBox&quot;
-	oFileDialog = CreateUnoService(&quot;com.sun.star.ui.FilePicker&quot;)
-	oFileDialog.AppendFilter(&quot;Writer 6.0&quot;, &quot;*.sxw&quot;)
-	oFileDialog.AppendFilter(&quot;Writer 6.0 Vorlage&quot;, &quot;*.stw&quot;)
+	ListAny(0) = com.sun.star.ui.dialogs.TemplateDescription.FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS
+	oFileDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FilePicker&quot;)
+	oFileDialog.AppendFilter(sWriterFiltername, &quot;*.sxw&quot;)
+	oFileDialog.AppendFilter(sWriterTemplateFiltername, &quot;*.stw&quot;)
 	oFileDialog.SetCurrentFilter(&quot;Writer 6.0&quot;)
 	oFileDialog.Initialize(ListAny())
 	oFileDialog.SetDisplayDirectory(WorkPath)
 	oFileDialog.SetDefaultName(&quot;Form_&quot; &amp; sDBName &amp; &quot;.&quot; &amp; TableName
 	iAccept = oFileDialog.Execute()
 	If iAccept = 1 Then
-		sPath = oFileDialog.Path(0)
-		oStoreProperties(0).Name = &quot;FilterName&quot;
-		oStoreProperties(0).Value = oFileDialog.GetCurrentFilter
-		oDocument.StoreAsUrl(sPath, oStoreProperties())
+		sPath = oFileDialog.Files(0)
+		If oFileDialog.GetCurrentFilter() = sWriterTemplateFiltername Then
+			Dim oStoreProperties(0) as New com.sun.star.beans.PropertyValue
+			oStoreProperties(0).Name = &quot;FilterName&quot;
+			oStoreProperties(0).Value = &quot;swriter: writer_StarOffice_XML_Writer_Template&quot;
+			oDocument.StoreAsUrl(sPath, oStoreProperties())
+		Else
+			Dim NoArgs() as New com.sun.star.beans.PropertyValue	
+			oDocument.StoreAsUrl(sPath, NoArgs())
+		End If
 		DlgFormDB.EndExecute()
 	End If
-End Sub</script:module>
+End Sub
+</script:module>

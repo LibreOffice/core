@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bc $ $Date: 2001-06-15 15:29:19 $
+ *  last change: $Author: bc $ $Date: 2001-06-22 14:25:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2538,6 +2538,24 @@ String RID_DB_FORM_WIZARD_START + 66
     Text[ English_us ] = "Dialog will be enlarged";
     Text[ language_user1 ] = "Hilfetext eines Buttons";
 };
+
+
+String RID_DB_FORM_WIZARD_START + 70
+{
+    Text = "Writer 6.0";
+    Text[English] = "Writer 6.0";
+    Text[ English_us ] = "Writer 6.0";
+    Text[ language_user1 ] = "Dateityp für Textdokumente";
+};
+
+String RID_DB_FORM_WIZARD_START + 71
+{
+    Text = "Writer 6.0 Vorlage";
+    Text[English] = "Writer 6.0 Template";
+    Text[ English_us ] = "Writer 6.0 Template";
+    Text[ language_user1 ] = "Dateityp für Textvorlage";
+};
+
 
 
 // ============================================================================

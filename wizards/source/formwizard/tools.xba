@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="tools" script:language="StarBasic">REM  *****  BASIC  *****
-
+Option Explicit
 
 Function SetProgressValue(iValue as Integer)	
 	If iValue = 0 Then
@@ -49,9 +49,8 @@ Dim aPeerSize as new com.sun.star.awt.Size
 	oControl = oController.GetControl(oModel)
 	oPeer = oControl.GetPeer()
 	If oControl.Model.PropertySetInfo.HasPropertybyName(&quot;EffectiveMax&quot;) Then
-		oControl.Model.EffectiveDefault = oControl.Model.EffectiveMax
 &apos; Todo: Remove this Hack due to Bug #88391
-&apos;		oControl.Model.EffectiveValue = oControl.Model.EffectiveMax
+		oControl.Model.EffectiveValue = oControl.Model.EffectiveMax
 		aPeerSize = oPeer.PreferredSize()
 	ElseIf Not IsMissing(LocText) Then
 		oControl.Text = LocText
@@ -142,6 +141,7 @@ End Function
 Sub RemoveShapes()
 Dim n as Integer
 Dim oControl as Object
+Dim oShape as Object
 	For n = oDrawPage.Count-1 To 0 Step -1
 		oShape = oDrawPage(n)
 		If oShape.Position.Y &gt; -2000 Then

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="develop" script:language="StarBasic">REM  *****  BASIC  *****
+Option Explicit
+
 Public oDBShapeList() as Object
 Public oTCShapeList() as Object
 Public oGridShape as Object
@@ -42,7 +44,6 @@ Dim i as Integer
 		oTCModel = InsertTextControl(i)
 		InsertDBControl(oDBModel, i)
 		bIsVeryFirstRun = False
-&apos; Todo: Klären, wieso er bei der folgenden Zeile abstürzt
 		oDBModel.LabelControl = oTCModel
 		ResetPosSizes(i)
 		oProgressbar.Value = i
@@ -57,13 +58,13 @@ Sub ResetPosSizes(LastIndex as Integer)
 		Case cColumnarLeft
 			nYDBPos = nYDBPos  + nDBHeight + cVertDistance
 			If (nYDBPos &gt; cYOffset + nFormHeight) Or (LastIndex = MaxIndex) Then
-				RepositionControls(LastIndex)
-				nXDBPos = nMaxColRightX + cHoriDistance + nMaxTCWidth
-				nXTCPos = nMaxColRightX + cHoriDistance
+				RepositionColumnarLeftControls(LastIndex)
+				nXTCPos = nMaxColRightX + 2 * cHoriDistance
+				nXDBPos = nXTCPos + cHoriDistance + nMaxTCWidth
 				nYDBPos = cYOffset
 				nYTCPos = cYOffset
 				bIsFirstRun = True
-				StartA = a + 1
+				StartA = LastIndex + 1
 				a = 0
 			Else
 				a = a + 1
@@ -74,10 +75,10 @@ Sub ResetPosSizes(LastIndex as Integer)
 			If nYTCPos &gt; cYOffset + nFormHeight Then
 				nXDBPos = nMaxColRightX + cHoriDistance
 				nXTCPos = nMaxColRightX + cHoriDistance
-				nYDBPos = cYOffset + nTCHeight + cVertiDistance
+				nYDBPos = cYOffset + nTCHeight + cVertDistance
 				nYTCPos = cYOffset
 				bIsFirstRun = True
-				StartA = a + 1
+				StartA = LastIndex + 1
 				a = 0
 			Else
 				a = a + 1
@@ -96,13 +97,14 @@ Sub ResetPosSizes(LastIndex as Integer)
 End Sub
 
 
-Sub	RepositionControls(LastIndex as Integer)
+Sub	RepositionColumnarLeftControls(LastIndex as Integer)
 Dim aSize As New com.sun.star.awt.Size
 Dim aPoint As New com.sun.star.awt.Point
 Dim i as Integer
 Dim oLocTextShape as Object
 Dim oLocDBShape as Object
 	aSize = GetSize(nMaxTCWidth, nTCHeight)
+	bIsFirstRun = True
 	For i = StartA To LastIndex
 		Set oLocTextShape = oTCShapeList(i)
 		Set oLocDBShape = oDBShapeList(i)
@@ -111,10 +113,13 @@ Dim oLocDBShape as Object
 			nXTCPos = oLocTextShape.Position.X
 			nXDBPos = nXTCPos + nMaxTCWidth  + cHoriDistance
 		End If
-		nYDBPos = oLocTextShape.Position.Y
+		nYDBPos = oLocDBShape.Position.Y
+		nDBWidth = oLocDBShape.Size.Width
+		nDBHeight = oLocDBShape.Size.Height
 		aPoint = GetPoint(nXDBPos,nYDBPos)
 		oLocDBShape.SetPosition(aPoint)
-		GroupShapes(oDrawPage, oLocTextShape, oLocDBShape)
+		CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight)
+&apos;		GroupShapes(oDrawPage, oLocTextShape, oLocDBShape)
 	Next i
 End Sub
 
@@ -151,7 +156,7 @@ Dim aSize As New com.sun.star.awt.Size
 		oShape.Position = GetPoint(nXTCPos, nYTCPos)
 	Else
 		oModel = CreateUnoService(oModelService(cLabel))
-		oModel.Label = CurFieldName &apos; + nFieldPostfixes(i) (Todo: Was ist ein fieldPostfix?)
+&apos;		oModel.Label = CurFieldName &apos; + nFieldPostfixes(i) (Todo: Was ist ein fieldPostfix?)
 		oDBForm.InsertByName(oModel.Name, oModel)
 		aPoint = GetPoint(nXTCPos, nYTCPos)
 		aSize = GetSize(nTCWidth,nTCHeight)
@@ -165,21 +170,22 @@ Dim aSize As New com.sun.star.awt.Size
 		End If
 		nTCWidth = GetPreferredWidth(oModel, True, CurFieldname)
 	End If
+	If CurArrangement = cColumnarLeft Then
+		&apos; Note This If Sequence must be called before retrieving the outer Points
+		If bIsFirstRun Then
+			nMaxTCWidth = nTCWidth
+			bIsFirstRun = False
+		ElseIf nTCWidth &gt; nMaxTCWidth Then
+			nMaxTCWidth = nTCWidth
+		End If
+	End If
 	CheckOuterPoints(oShape.Position.X, nTCWidth, nYTCPos, nTCHeight)
 	Select Case CurArrangement
 		Case cLeftJustified
 			nXDBPos = nMaxColRightX
-		Case cColumnarLeft
-			If bIsFirstRun Then
-				nMaxTCWidth = nTCWidth
-				bIsFirstRun = False
-			ElseIf nTCWidth &gt; nMaxTCWidth Then
-				nMaxTCWidth = nTCWidth
-			End If
 		Case cColumnarTop,cTopJustified
 			nXDBPos = nXTCPos
 			nYDBPos = nYTCPos + nTCHeight
-			
 			If CurFieldLength = 20 And nDBWidth &gt; 2 * nTCWidth Then
 				iReduceWidth = iReduceWidth + 1
 			End If 
@@ -214,6 +220,10 @@ Dim iColRightX as Long
 		oShape = InsertControl(oDBModel, aPoint, aSize)
 		Set oDBShapeList(i)= oShape
 		oDBForm.InsertByName(oDBModel.Name, oDBModel)
+		If CurControlType = cCheckBox Then
+			oDBModel.Label = &quot;&quot;
+		End If
+
 	End If
 	If CurControlType = cImageControl Then
 		&apos; Todo: Dies ist nur eine vorsichtige Schätzung
@@ -249,7 +259,6 @@ Dim oLocDBShape as Object
 Dim oLocTextShape as Object
 Dim nBaseWidth as Long
 	nBaseWidth = nFormWidth + cXOffset
-
 	nLeftDist = nMaxColRightX - nBaseWidth
 	nRightDist = nBaseWidth - nXTCPos + cHoriDistance
 	If nLeftDist &lt; 0.5 * nRightDist and iReduceWidth &gt; 2 Then
@@ -257,7 +266,7 @@ Dim nBaseWidth as Long
 		AdjustLineWidth(StartA, a, nLeftDist, - 1)
 		If CurArrangement = cLeftjustified Then
 			nYDBPos = nMaxRowY + cVertDistance
-			nYTCPos = nYDBPos
+			nYTCPos = nYDBPos + 5
 			nXTCPos = cXOffset
 		Else
 			nYTCPos = nMaxRowY + cVertDistance
@@ -282,13 +291,13 @@ Dim nBaseWidth as Long
 			CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight)
 			nXDBPos = nMaxColRightX + cHoriDistance
 		Else
-			nYDBPos = nYTCPOS + nTCHeight			
+			nYDBPos = nYTCPOS + nTCHeight
 			nXDBPos = cXOffset
 			nXTCPos = cXOffset
 			oLocTextShape.Position = GetPoint(cXOffset, nYTCPos)
 			oLocDBShape.Position = GetPoint(cXOffset, nYDBPos)
 			bIsFirstRun = True
-			If nDBWidth &gt; nXTCWidth Then
+			If nDBWidth &gt; nTCWidth Then
 				CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight)
 			Else
 				CheckOuterPoints(nXDBPos, nTCWidth, nYDBPos, nDBHeight)
@@ -341,6 +350,11 @@ Dim ShapeCount as Integer
 			oLocDBShape.Size = GetSize(oLocDBShape.Size.Width + WidthFactor * CorrWidth, oLocDBShape.Size.Height)
 		End If
 		iLocTCPosX = oLocDBShape.Position.X + oLocDBShape.Size.Width + cHoriDistance
+		If CurArrangement = cTopJustified Then
+			If oLocTCShape.Size.Width &gt; oLocDBShape.Size.Width Then
+				iLocTCPosX = oLocDBShape.Position.X + oLocTCShape.Size.Width + cHoriDistance
+			End If
+		End If
 	Next i
 End Sub
 
@@ -382,7 +396,7 @@ Dim nWidth as Long
 		ShapesToNirwana()
 	End If
 	oGridModel = CreateUnoService(oModelService(cGridControl))
-	
+	oGridModel.Name = &quot;Grid1&quot;
 	nWidth = 0
 	For n = 0 to MaxIndex
 		CurFieldType = FieldMetaValues(n,0)
@@ -435,7 +449,7 @@ Dim iStandardColor as Long
 End Sub
 
 
-Sub GroupShapes(oDrawPage as Object, TextShape as Object, DBShape as Object)
+Sub GroupShapes(oDrawPage as Object, oLocTextShape as Object, oLocDBShape as Object)
 Dim oShapes as Object
 	oShapes = createUnoService(&quot;com.sun.star.drawing.ShapeCollection&quot;)
 	oShapes.Add(oLocTextShape)
