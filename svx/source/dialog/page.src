@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:42:07 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ TabPage RID_SVXPAGE_PAGE
     Text[ russian ] = "—Ú‡ÌËˆ‡";
     Text[ polish ] = "Strona";
     Text[ japanese ] = "Õﬂ∞ºﬁ";
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_LEFT_MARGIN
     {
         Pos = MAP_APPFONT ( 12 , 11 ) ;
@@ -266,8 +266,6 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 1 ) ;
         Size = MAP_APPFONT ( 79 , 71 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? R‰nder : Rınder */
-        /* ### ACHTUNG: Neuer Text in Resource? R‰nder : Rınder */
         Text = "R‰nder" ;
         Text [ ENGLISH ] = "Margins" ;
         Text [ norwegian ] = "Margins" ;
@@ -765,72 +763,15 @@ TabPage RID_SVXPAGE_PAGE
     };
     ListBox LB_PAPER_SIZE
     {
-        Pos = MAP_APPFONT ( 12 , 83 ) ;
+        Pos = MAP_APPFONT ( 12 , 85 ) ;
         Size = MAP_APPFONT ( 69 , 47 ) ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
-    RadioButton RB_PORTRAIT
-    {
-        Pos = MAP_APPFONT ( 84 , 84 ) ;
-        Size = MAP_APPFONT ( 36 , 10 ) ;
-        Text = "Ho~ch" ;
-        Text [ ENGLISH ] = "~Portrait" ;
-        Text [ norwegian ] = "~Portrett" ;
-        Text [ italian ] = "~Verticale" ;
-        Text [ portuguese_brazilian ] = "~Vertical" ;
-        Text [ portuguese ] = "~Vertical" ;
-        Text [ finnish ] = "~Pysty" ;
-        Text [ danish ] = "StÂende" ;
-        Text [ french ] = "~Portrait" ;
-        Text [ swedish ] = "~StÂende" ;
-        Text [ dutch ] = "~Staand" ;
-        Text [ spanish ] = "~Vertical" ;
-        Text [ english_us ] = "~Portrait" ;
-        Check = TRUE ;
-        Text[ chinese_simplified ] = "◊›œÚ(~P)";
-        Text[ russian ] = " ÌËÊÌ˚È";
-        Text[ polish ] = "Pionowo";
-        Text[ japanese ] = "ècèëÇ´(~P)";
-        Text[ chinese_traditional ] = "™Ω¶°(~P)";
-        Text[ arabic ] = "»«·ÿÊ·";
-        Text[ greek ] = "~ ·Ù·Í¸Òıˆ·";
-        Text[ korean ] = "ºº∑Œ(~P)";
-        Text[ turkish ] = "Di~key";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RB_LANDSCAPE
-    {
-        Pos = MAP_APPFONT ( 122 , 84 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
-        Text = "~Quer" ;
-        Text [ ENGLISH ] = "Lan~d." ;
-        Text [ norwegian ] = "+++Lan~d." ;
-        Text [ italian ] = "~Orizzont." ;
-        Text [ portuguese_brazilian ] = "PaÌ~s." ;
-        Text [ portuguese ] = "Hori~zontal" ;
-        Text [ finnish ] = "~Vaaka" ;
-        Text [ danish ] = "Liggende" ;
-        Text [ french ] = "Pa~ysage" ;
-        Text [ swedish ] = "L~iggande" ;
-        Text [ dutch ] = "L~iggend" ;
-        Text [ spanish ] = "~Horizontal" ;
-        Text [ english_us ] = "L~andscape" ;
-        Text[ chinese_simplified ] = "∫·œÚ(~A)";
-        Text[ russian ] = "¿Î¸·ÓÏÌ˚È";
-        Text[ polish ] = "Poziomo";
-        Text[ japanese ] = "â°èëÇ´(~L)";
-        Text[ chinese_traditional ] = "æÓ¶V(~L)";
-        Text[ arabic ] = "»«·⁄—÷";
-        Text[ greek ] = "œÒÈ~Ê¸ÌÙÈ·";
-        Text[ korean ] = "∞°∑Œ(~A)";
-        Text[ turkish ] = "~Yatay";
-        Text[ language_user1 ] = " ";
-    };
     FixedText FT_PAPER_WIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 99 ) ;
-        Size = MAP_APPFONT ( 26 , 10 ) ;
+        Pos = MAP_APPFONT ( 96 , 87 ) ;
+        Size = MAP_APPFONT ( 26 , 8 ) ;
         Text = "~Breite" ;
         Text [ ENGLISH ] = "~Width" ;
         Text [ norwegian ] = "~Bredde" ;
@@ -859,7 +800,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_PAPER_WIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 39 , 98 ) ;
+        Pos = MAP_APPFONT ( 133, 85 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -872,10 +813,8 @@ TabPage RID_SVXPAGE_PAGE
     };
     FixedText FT_PAPER_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 113 ) ;
-        Size = MAP_APPFONT ( 26 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Hˆh~e : H˜h~e */
-        /* ### ACHTUNG: Neuer Text in Resource? Hˆh~e : H˜h~e */
+        Pos = MAP_APPFONT ( 178 , 87 ) ;
+        Size = MAP_APPFONT ( 26 , 8 ) ;
         Text = "Hˆh~e" ;
         Text [ ENGLISH ] = "H~eight" ;
         Text [ norwegian ] = "H~eight" ;
@@ -904,7 +843,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_PAPER_HEIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 39 , 113 ) ;
+        Pos = MAP_APPFONT ( 209 , 85 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -915,9 +854,66 @@ TabPage RID_SVXPAGE_PAGE
         Last = 12000 ;
         SpinSize = 10 ;
     };
+    RadioButton RB_PORTRAIT
+    {
+        Pos = MAP_APPFONT ( 12 , 101 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Ho~ch" ;
+        Text [ ENGLISH ] = "~Portrait" ;
+        Text [ norwegian ] = "~Portrett" ;
+        Text [ italian ] = "~Verticale" ;
+        Text [ portuguese_brazilian ] = "~Vertical" ;
+        Text [ portuguese ] = "~Vertical" ;
+        Text [ finnish ] = "~Pysty" ;
+        Text [ danish ] = "StÂende" ;
+        Text [ french ] = "~Portrait" ;
+        Text [ swedish ] = "~StÂende" ;
+        Text [ dutch ] = "~Staand" ;
+        Text [ spanish ] = "~Vertical" ;
+        Text [ english_us ] = "~Portrait" ;
+        Check = TRUE ;
+        Text[ chinese_simplified ] = "◊›œÚ(~P)";
+        Text[ russian ] = " ÌËÊÌ˚È";
+        Text[ polish ] = "Pionowo";
+        Text[ japanese ] = "ècèëÇ´(~P)";
+        Text[ chinese_traditional ] = "™Ω¶°(~P)";
+        Text[ arabic ] = "»«·ÿÊ·";
+        Text[ greek ] = "~ ·Ù·Í¸Òıˆ·";
+        Text[ korean ] = "ºº∑Œ(~P)";
+        Text[ turkish ] = "Di~key";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_LANDSCAPE
+    {
+        Pos = MAP_APPFONT ( 96 , 101 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "~Quer" ;
+        Text [ ENGLISH ] = "Lan~d." ;
+        Text [ norwegian ] = "+++Lan~d." ;
+        Text [ italian ] = "~Orizzont." ;
+        Text [ portuguese_brazilian ] = "PaÌ~s." ;
+        Text [ portuguese ] = "Hori~zontal" ;
+        Text [ finnish ] = "~Vaaka" ;
+        Text [ danish ] = "Liggende" ;
+        Text [ french ] = "Pa~ysage" ;
+        Text [ swedish ] = "L~iggande" ;
+        Text [ dutch ] = "L~iggend" ;
+        Text [ spanish ] = "~Horizontal" ;
+        Text [ english_us ] = "L~andscape" ;
+        Text[ chinese_simplified ] = "∫·œÚ(~A)";
+        Text[ russian ] = "¿Î¸·ÓÏÌ˚È";
+        Text[ polish ] = "Poziomo";
+        Text[ japanese ] = "â°èëÇ´(~L)";
+        Text[ chinese_traditional ] = "æÓ¶V(~L)";
+        Text[ arabic ] = "»«·⁄—÷";
+        Text[ greek ] = "œÒÈ~Ê¸ÌÙÈ·";
+        Text[ korean ] = "∞°∑Œ(~A)";
+        Text[ turkish ] = "~Yatay";
+        Text[ language_user1 ] = " ";
+    };
     FixedText FT_PAPER_TRAY
     {
-        Pos = MAP_APPFONT ( 84 , 99 ) ;
+        Pos = MAP_APPFONT ( 12 , 117 ) ;
         Size = MAP_APPFONT ( 76 , 10 ) ;
         Text = "~Schacht" ;
         Text [ ENGLISH ] = "~Tray" ;
@@ -946,15 +942,15 @@ TabPage RID_SVXPAGE_PAGE
     };
     ListBox LB_PAPER_TRAY
     {
-        Pos = MAP_APPFONT ( 84 , 112 ) ;
-        Size = MAP_APPFONT ( 76 , 49 ) ;
+        Pos = MAP_APPFONT ( 96 , 115 ) ;
+        Size = MAP_APPFONT ( 155 , 49 ) ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
     GroupBox GB_PAPER_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 74 ) ;
-        Size = MAP_APPFONT ( 160 , 56 ) ;
+        Size = MAP_APPFONT ( 248 , 56 ) ;
         Text = "Papierformat" ;
         Text [ ENGLISH ] = "Paper format" ;
         Text [ norwegian ] = "Papir format" ;
@@ -982,7 +978,7 @@ TabPage RID_SVXPAGE_PAGE
     CheckBox CB_HORZ
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 177 , 83 ) ;
+        Pos = MAP_APPFONT ( 12 , 145 ) ;
         Size = MAP_APPFONT ( 71 , 10 ) ;
         Text = "Hor~izontal" ;
         Text [ ENGLISH ] = "Hor~izontal" ;
@@ -1011,7 +1007,7 @@ TabPage RID_SVXPAGE_PAGE
     CheckBox CB_VERT
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 177 , 96 ) ;
+        Pos = MAP_APPFONT ( 12 , 159 ) ;
         Size = MAP_APPFONT ( 71 , 10 ) ;
         Text = "~Vertikal" ;
         Text [ ENGLISH ] = "~Vertical" ;
@@ -1040,10 +1036,8 @@ TabPage RID_SVXPAGE_PAGE
     CheckBox CB_ADAPT
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 177 , 96 ) ;
-        Size = MAP_APPFONT ( 77 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~An Grˆﬂe anpassen : ~An Gr˜òe anpassen */
-        /* ### ACHTUNG: Neuer Text in Resource? ~An Grˆﬂe anpassen : ~An Gr˜òe anpassen */
+        Pos = MAP_APPFONT ( 12 , 159 ) ;
+        Size = MAP_APPFONT ( 71 , 10 ) ;
         Text = "~An Grˆﬂe anpassen" ;
         Text [ ENGLISH ] = "~Fit to size" ;
         Text [ norwegian ] = "~Fit to size" ;
@@ -1071,14 +1065,14 @@ TabPage RID_SVXPAGE_PAGE
     FixedText FT_PAGE_NAME
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 177 , 92 ) ;
+        Pos = MAP_APPFONT ( 12 , 187) ;
         Size = MAP_APPFONT ( 71 , 10 ) ;
         Center = TRUE ;
     };
     GroupBox GB_EXTRA
     {
-        Pos = MAP_APPFONT ( 171 , 74 ) ;
-        Size = MAP_APPFONT ( 83 , 56 ) ;
+        Pos = MAP_APPFONT ( 6 , 134 ) ;
+        Size = MAP_APPFONT ( 248 , 56 ) ;
         Text = "Folgevorlage" ;
         Text [ ENGLISH ] = "Page" ;
         Text [ norwegian ] = "Page" ;
@@ -1106,9 +1100,8 @@ TabPage RID_SVXPAGE_PAGE
     /* Registerhaltigkeit (fuer SW) */
     CheckBox CB_REGISTER
     {
-        Pos = MAP_APPFONT ( 175 , 85 ) ;
+        Pos = MAP_APPFONT ( 12 , 145 ) ;
         Size = MAP_APPFONT ( 76 , 12 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Einsch~alten : Ein~schalten */
         Text = "Einsch~alten" ;
         Text [ ENGLISH ] = "Acti~vate" ;
         Text [ dutch ] = "~Activeren" ;
@@ -1134,7 +1127,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     FixedText FT_REGISTER
     {
-        Pos = MAP_APPFONT ( 175 , 100 ) ;
+        Pos = MAP_APPFONT ( 12 , 161 ) ;
         Size = MAP_APPFONT ( 76 , 10 ) ;
         Text = "Referenzabsa~tzvorlage" ;
         Text [ ENGLISH ] = "Reference style sheet" ;
@@ -1161,8 +1154,8 @@ TabPage RID_SVXPAGE_PAGE
     };
     ListBox LB_REGISTER
     {
-        Pos = MAP_APPFONT ( 175 , 113 ) ;
-        Size = MAP_APPFONT ( 73 , 50 ) ;
+        Pos = MAP_APPFONT ( 96 , 159 ) ;
+        Size = MAP_APPFONT ( 155, 50 ) ;
         DropDown = TRUE ;
         Hide = TRUE ;
         Sort = TRUE ;
@@ -1171,8 +1164,8 @@ TabPage RID_SVXPAGE_PAGE
     };
     GroupBox GB_REGISTER
     {
-        Pos = MAP_APPFONT ( 171 , 74 ) ;
-        Size = MAP_APPFONT ( 83 , 56 ) ;
+        Pos = MAP_APPFONT ( 6 , 134 ) ;
+        Size = MAP_APPFONT ( 248 , 40 ) ;
         Text = "Registerhaltigkeit" ;
         Text [ ENGLISH ] = "" ;
         Text [ italian ] = "Conformit‡ registro" ;
@@ -1222,8 +1215,6 @@ TabPage RID_SVXPAGE_PAGE
     };
     String STR_OUTSIDE
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Au~ﬂen : Au~òen */
-        /* ### ACHTUNG: Neuer Text in Resource? Au~ﬂen : Au~òen */
         Text = "Au~ﬂen" ;
         Text [ ENGLISH ] = "O~uter" ;
         Text [ english_us ] = "O~uter" ;
@@ -2715,8 +2706,6 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
 };
 String RID_SVXSTR_FULLSIZE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Seite ganz f¸llen : Seite ganz f≥llen */
-    /* ### ACHTUNG: Neuer Text in Resource? Seite ganz f¸llen : Seite ganz f≥llen */
     Text = "Seite ganz f¸llen" ;
     Text [ ENGLISH ] = "Fill fullsize" ;
     Text [ dutch ] = "Hele pagina opvullen" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:29:09 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ TabPage RID_SVXPAGE_HEADER
     FixedText FT_DIST
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "A~bstand" ;
         Text [ English ] = "~Distance" ;
         Text [ english_us ] = "~Spacing" ;
@@ -155,9 +155,7 @@ TabPage RID_SVXPAGE_HEADER
     FixedText FT_HEIGHT
     {
         Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 102 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Höhe : ~H÷he */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Höhe : ~H÷he */
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "~Höhe" ;
         Text [ ENGLISH ] = "~Height" ;
         Text [ english_us ] = "~Height" ;
@@ -228,7 +226,7 @@ TabPage RID_SVXPAGE_HEADER
     FixedText FT_LMARGIN
     {
         Pos = MAP_APPFONT ( 12 , 80 ) ;
-        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "~Linker Rand" ;
         Text [ ENGLISH ] = "~Left Margin" ;
         Text [ norwegian ] = "~Left Margin" ;
@@ -272,7 +270,7 @@ TabPage RID_SVXPAGE_HEADER
     FixedText FT_RMARGIN
     {
         Pos = MAP_APPFONT ( 12 , 95 ) ;
-        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "~Rechter Rand" ;
         Text [ ENGLISH ] = "R~ight Margin" ;
         Text [ norwegian ] = "R~ight Margin" ;
@@ -344,7 +342,7 @@ TabPage RID_SVXPAGE_HEADER
     GroupBox GB_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 157 , 125 ) ;
+        Size = MAP_APPFONT ( 157 , 143 ) ;
         Text = "Kopfzeile" ;
         Text [ ENGLISH ] = "Header" ;
         Text [ norwegian ] = "Header" ;
@@ -372,12 +370,12 @@ TabPage RID_SVXPAGE_HEADER
     Window WN_BSP
     {
         Pos = MAP_APPFONT ( 176 , 14 ) ;
-        Size = MAP_APPFONT ( 72 , 54 ) ;
+        Size = MAP_APPFONT ( 72 , 129 ) ;
     };
     GroupBox GB_BSP
     {
         Pos = MAP_APPFONT ( 171 , 3 ) ;
-        Size = MAP_APPFONT ( 83 , 71 ) ;
+        Size = MAP_APPFONT ( 83 , 143 ) ;
         Text = "Vorschau" ;
         Text [ ENGLISH ] = "Example" ;
         Text [ norwegian ] = "Eksempel" ;
@@ -404,10 +402,8 @@ TabPage RID_SVXPAGE_HEADER
     };
     PushButton BTN_EXTRAS
     {
-        Pos = MAP_APPFONT ( 186 , 94 ) ;
+        Pos = MAP_APPFONT ( 12 , 129 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Zus~ätze... : Zus~õtze... */
-        /* ### ACHTUNG: Neuer Text in Resource? Zus~ätze... : Zus~õtze... */
         Text = "Zus~ätze..." ;
         Text [ ENGLISH ] = "Option~s..." ;
         Text [ norwegian ] = "Option~s..." ;
@@ -448,8 +444,6 @@ TabPage RID_SVXPAGE_FOOTER
 {
     HelpId = HID_FORMAT_FOOTER ;
     Hide = TRUE ;
-    /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
-    /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
     Text = "Fußzeile" ;
     Text [ English ] = "Footer" ;
     Text [ norwegian ] = "Footer" ;
@@ -497,7 +491,7 @@ TabPage RID_SVXPAGE_FOOTER
     FixedText FT_DIST
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "A~bstand" ;
         Text [ English ] = "~Distance" ;
         Text [ english_us ] = "~Spacing" ;
@@ -538,9 +532,7 @@ TabPage RID_SVXPAGE_FOOTER
     FixedText FT_HEIGHT
     {
         Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 102 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Höhe : ~H÷he */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Höhe : ~H÷he */
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "~Höhe" ;
         Text [ ENGLISH ] = "~Height" ;
         Disable = TRUE ;
@@ -614,7 +606,7 @@ TabPage RID_SVXPAGE_FOOTER
     FixedText FT_LMARGIN
     {
         Pos = MAP_APPFONT ( 12 , 80 ) ;
-        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "~Linker Rand" ;
         Text [ ENGLISH ] = "~Left Margin" ;
         Text [ norwegian ] = "~Left Margin" ;
@@ -658,7 +650,7 @@ TabPage RID_SVXPAGE_FOOTER
     FixedText FT_RMARGIN
     {
         Pos = MAP_APPFONT ( 12 , 95 ) ;
-        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "~Rechter Rand" ;
         Text [ ENGLISH ] = "R~ight Margin" ;
         Text [ norwegian ] = "R~ight Margin" ;
@@ -730,9 +722,7 @@ TabPage RID_SVXPAGE_FOOTER
     GroupBox GB_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 157 , 125 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
-        /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
+        Size = MAP_APPFONT ( 157 , 143 ) ;
         Text = "Fußzeile" ;
         Text [ ENGLISH ] = "Footer" ;
         Text [ norwegian ] = "Footer" ;
@@ -760,12 +750,12 @@ TabPage RID_SVXPAGE_FOOTER
     Window WN_BSP
     {
         Pos = MAP_APPFONT ( 176 , 14 ) ;
-        Size = MAP_APPFONT ( 72 , 54 ) ;
+        Size = MAP_APPFONT ( 72 , 129 ) ;
     };
     GroupBox GB_BSP
     {
         Pos = MAP_APPFONT ( 171 , 3 ) ;
-        Size = MAP_APPFONT ( 83 , 71 ) ;
+        Size = MAP_APPFONT ( 83 , 143 ) ;
         Text = "Vorschau" ;
         Text [ ENGLISH ] = "Example" ;
         Text [ norwegian ] = "Eksempel" ;
@@ -792,9 +782,8 @@ TabPage RID_SVXPAGE_FOOTER
     };
     PushButton BTN_EXTRAS
     {
-        Pos = MAP_APPFONT ( 186 , 94 ) ;
+        Pos = MAP_APPFONT ( 12 , 129 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Zus~ätze... : Zus~õtze... */
         Text = "Zus~ätze..." ;
         Text [ ENGLISH ] = "~Options..." ;
         Text [ norwegian ] = "~Options..." ;
