@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-08 12:41:38 $
+ *  last change: $Author: dr $ $Date: 2002-11-19 13:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,15 @@
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#include <sfx2/objsh.hxx>
+
 #include <svx/editdata.hxx>
 #include <svx/editeng.hxx>
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
 
 #include <svx/flditem.hxx>
+#include <svx/flstitem.hxx>
 
 #include <svx/algitem.hxx>
 #include <svx/boxitem.hxx>
@@ -88,6 +91,7 @@
 #include <svtools/intitem.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
+#include <svtools/ctrltool.hxx>
 
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
@@ -4094,83 +4098,147 @@ XclExpHeaderFooter::XclExpHeaderFooter(
 void XclExpHeaderFooter::GetFormatString( String& rString, RootData& rRootData, const EditTextObject& rEdTxtObj )
 {
     const sal_Unicode cParSep = 0x000A;
-    sal_Bool bFields = sal_False;
 
+    ScDocument& rDoc = *rRootData.pDoc;
     EditEngine& rEdEng = rRootData.GetEdEngForHF();
     rEdEng.SetText( rEdTxtObj );
 
     sal_uInt16 nParas = rEdEng.GetParagraphCount();
-    if( nParas )
-    {
-        ESelection aSel( 0, 0, nParas - 1, rEdEng.GetTextLen( nParas - 1 ) );
-        SfxItemSet aSet( rEdEng.GetAttribs( aSel ) );
-        SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, sal_False );
-        if( (eFieldState == SFX_ITEM_DONTCARE) || (eFieldState == SFX_ITEM_SET) )
-            bFields = sal_True;
-    }
 
     sal_Bool bOldUpdateMode = rEdEng.GetUpdateMode();
     rEdEng.SetUpdateMode( sal_True );
+
+    XclFontData aFontData;
+    aFontData.nHeight = 200;
+    ScPatternAttr aAttr( rDoc.GetPool() );
+    const FontList* pFontList = NULL;
+
+    if( SfxObjectShell* pDocShell = rDoc.GetDocumentShell() )
+    {
+        if( const SvxFontListItem* pInfoItem = static_cast< const SvxFontListItem* >(
+            pDocShell->GetItem( SID_ATTR_CHAR_FONTLIST ) ) )
+        {
+            pFontList = pInfoItem->GetFontList();
+        }
+    }
 
     for( sal_uInt16 nPar = 0; nPar < nParas; ++nPar )
     {
         if( nPar )
             rString += cParSep;
 
-        if( bFields )   // text and fields
+        SvUShorts aPortions;
+        rEdEng.GetPortions( nPar, aPortions );
+
+        sal_uInt16 nCnt = aPortions.Count();
+        sal_uInt16 nStart = 0;
+
+        for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
         {
-            SvUShorts aPortions;
-            rEdEng.GetPortions( nPar, aPortions );
-
-            sal_uInt16 nCnt = aPortions.Count();
-            sal_uInt16 nStart = 0;
-
-            for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
+            sal_uInt16 nEnd = aPortions.GetObject( nPos );
+            if( nStart < nEnd )
             {
-                sal_uInt16 nEnd = aPortions.GetObject( nPos );
                 ESelection aSel( nPar, nStart, nPar, nEnd );
 
-                // fields are single characters
-                if( nEnd == nStart + 1 )
+                // font attributes
+                SfxItemSet aSet( rEdEng.GetAttribs( aSel ) );
+                aAttr.GetItemSet().ClearItem();
+                aAttr.GetFromEditItemSet( &aSet );
+                Font aFont;
+                aAttr.GetFont( aFont, SC_AUTOCOL_RAW );
+
+                // font name and style
+                sal_uInt16 nWeight = (aFont.GetWeight() > WEIGHT_NORMAL) ? EXC_FONTWGHT_BOLD : EXC_FONTWGHT_NORMAL;
+                sal_Bool bItalic = (aFont.GetItalic() != ITALIC_NONE);
+                sal_Bool bNewFont = (aFontData.aName != aFont.GetName());
+                sal_Bool bNewStyle = (aFontData.nWeight != nWeight) || (aFontData.bItalic != bItalic);
+                if( bNewFont || (bNewStyle && pFontList) )
                 {
-                    const SfxPoolItem* pItem;
-                    SfxItemSet aSet( rEdEng.GetAttribs( aSel ) );
-                    if( aSet.GetItemState( EE_FEATURE_FIELD, sal_False, &pItem ) == SFX_ITEM_SET )
+                    rString.AppendAscii( "&\"" ).Append( aFont.GetName() );
+                    if( pFontList )
                     {
-                        const SvxFieldData* pField = ((const SvxFieldItem*) pItem)->GetField();
-
-                        if( pField )
-                        {
-                            const sal_Char* pText;
-                            if( pField->ISA( SvxPageField ) )
-                                pText = "&P";
-                            else if( pField->ISA( SvxPagesField ) )
-                                pText = "&N";
-                            else if( pField->ISA( SvxDateField ) )
-                                pText = "&D";
-                            else if( pField->ISA( SvxTimeField ) || pField->ISA( SvxExtTimeField ) )
-                                pText = "&T";
-                            else if( pField->ISA( SvxFileField ) || pField->ISA( SvxExtFileField ) )
-                                pText = "&F";
-                            else if( pField->ISA( SvxTableField ) )
-                                pText = "&A";
-                            else
-                                pText = "<unsupported field>";
-
-                            rString.AppendAscii( pText );
-                        }
+                        FontInfo aFontInfo( pFontList->Get(
+                            aFont.GetName(),
+                            (nWeight > EXC_FONTWGHT_NORMAL) ? WEIGHT_BOLD : WEIGHT_NORMAL,
+                            bItalic ? ITALIC_NORMAL : ITALIC_NONE ) );
+                        String aStyle( pFontList->GetStyleName( aFontInfo ) );
+                        if( aStyle.Len() )
+                            rString.Append( ',' ).Append( aStyle );
                     }
-                    else
-                        rString += rEdEng.GetText( aSel );
+                    rString.Append( '"' );
+
+                    aFontData.aName = aFont.GetName();
+                    aFontData.nWeight = nWeight;
+                    aFontData.bItalic = bItalic;
+                }
+
+                // height
+                sal_uInt16 nHeight = (static_cast< const SvxFontHeightItem& >( aSet.Get( EE_CHAR_FONTHEIGHT ) ).GetHeight() + 10) / 20;
+                if( aFontData.nHeight != 20 * nHeight )
+                {
+                    rString.Append( '&' ).Append( String::CreateFromInt32( nHeight ) );
+                    aFontData.nHeight = 20 * nHeight;
+                }
+
+                // underline
+                XclUnderline eUnderl = xlUnderlNone;
+                switch( aFont.GetUnderline() )
+                {
+                    case UNDERLINE_NONE:    eUnderl = xlUnderlNone;     break;
+                    case UNDERLINE_SINGLE:  eUnderl = xlUnderlSingle;   break;
+                    case UNDERLINE_DOUBLE:  eUnderl = xlUnderlDouble;   break;
+                    default:                eUnderl = xlUnderlSingle;
+                }
+                if( aFontData.eUnderline != eUnderl )
+                {
+                    XclUnderline eTmpUnderl = (eUnderl == xlUnderlNone) ? aFontData.eUnderline : eUnderl;
+                    rString.AppendAscii( (eTmpUnderl == xlUnderlSingle) ? "&U" : "&E" );
+                    aFontData.eUnderline = eUnderl;
+                }
+
+                // strikeout
+                sal_Bool bStrikeout = (aFont.GetStrikeout() != STRIKEOUT_NONE);
+                if( aFontData.bStrikeout != bStrikeout )
+                {
+                    rString.AppendAscii( "&S" );
+                    aFontData.bStrikeout = bStrikeout;
+                }
+
+                // fields are single characters
+                const SfxPoolItem* pItem;
+                if( (nEnd == nStart + 1) && (aSet.GetItemState( EE_FEATURE_FIELD, sal_False, &pItem ) == SFX_ITEM_SET) )
+                {
+                    const SvxFieldData* pField = ((const SvxFieldItem*) pItem)->GetField();
+
+                    if( pField )
+                    {
+                        const sal_Char* pText = "";
+                        if( pField->ISA( SvxPageField ) )
+                            pText = "&P";
+                        else if( pField->ISA( SvxPagesField ) )
+                            pText = "&N";
+                        else if( pField->ISA( SvxDateField ) )
+                            pText = "&D";
+                        else if( pField->ISA( SvxTimeField ) || pField->ISA( SvxExtTimeField ) )
+                            pText = "&T";
+                        else if( pField->ISA( SvxFileField ) || pField->ISA( SvxExtFileField ) )
+                            pText = "&F";
+                        else if( pField->ISA( SvxTableField ) )
+                            pText = "&A";
+
+                        rString.AppendAscii( pText );
+                    }
                 }
                 else
-                    rString += rEdEng.GetText( aSel );
-
-                nStart = nEnd;
+                {
+                    String aPortion( rEdEng.GetText( aSel ) );
+                    aPortion.SearchAndReplaceAll( String( '&' ), String::CreateFromAscii( "&&" ) );
+                    rString += aPortion;
+                }
             }
+
+            nStart = nEnd;
         }
-        else        // no fields, text only
-            rString += rEdTxtObj.GetText( nPar );
     }
     rEdEng.SetUpdateMode( bOldUpdateMode );
 }
