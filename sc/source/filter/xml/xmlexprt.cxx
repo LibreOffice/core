@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.173 $
+ *  $Revision: 1.174 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:10:30 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 22:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1860,7 +1860,8 @@ void ScXMLExport::_ExportAutoStyles()
                                                         std::vector< XMLPropertyState >::iterator aItr = xPropStates.begin();
                                                         while (aItr != xPropStates.end())
                                                         {
-                                                            if (xColumnStylesPropertySetMapper->GetEntryContextId(aItr->mnIndex) == CTF_SC_ISVISIBLE)
+                                                            if ((aItr->mnIndex != -1) &&
+                                                                (xColumnStylesPropertySetMapper->GetEntryContextId(aItr->mnIndex) == CTF_SC_ISVISIBLE))
                                                             {
                                                                 aItr->maValue >>= bIsVisible;
                                                                 break;
