@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:23:50 $
+ *  last change: $Author: dl $ $Date: 2001-07-17 06:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,24 +204,32 @@ BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
         }
 
         if (bRestricted &&
-            (nSlotId == SID_DRAW_XLINE               || // 45ø-Linie
-             nSlotId == SID_DRAW_CIRCLEARC           || // Kreisbogen
-             nSlotId == SID_DRAW_SQUARE              || // Quadrat
-             nSlotId == SID_DRAW_SQUARE_NOFILL       || // Quadrat
-             nSlotId == SID_DRAW_SQUARE_ROUND        || // Quadrat, rund
-             nSlotId == SID_DRAW_SQUARE_ROUND_NOFILL || // Quadrat, rund
-             nSlotId == SID_DRAW_CIRCLE              || // Kreis
-             nSlotId == SID_DRAW_CIRCLE_NOFILL       || // Kreis
-             nSlotId == SID_DRAW_CIRCLEPIE           || // Kreissegment
-             nSlotId == SID_DRAW_CIRCLEPIE_NOFILL    || // Kreissegment
-             nSlotId == SID_DRAW_CIRCLECUT           || // Kreisabschnitt
-             nSlotId == SID_DRAW_CIRCLECUT_NOFILL    || // Kreisabschnitt
-             nSlotId == SID_DRAW_XPOLYGON            || // Polygon
-             nSlotId == SID_DRAW_XPOLYGON_NOFILL))       // Polygon
+            (nSlotId == SID_DRAW_XLINE               ||
+             nSlotId == SID_DRAW_CIRCLEARC           ||
+             nSlotId == SID_DRAW_SQUARE              ||
+             nSlotId == SID_DRAW_SQUARE_NOFILL       ||
+             nSlotId == SID_DRAW_SQUARE_ROUND        ||
+             nSlotId == SID_DRAW_SQUARE_ROUND_NOFILL ||
+             nSlotId == SID_DRAW_CIRCLE              ||
+             nSlotId == SID_DRAW_CIRCLE_NOFILL       ||
+             nSlotId == SID_DRAW_CIRCLEPIE           ||
+             nSlotId == SID_DRAW_CIRCLEPIE_NOFILL    ||
+             nSlotId == SID_DRAW_CIRCLECUT           ||
+             nSlotId == SID_DRAW_CIRCLECUT_NOFILL    ||
+             nSlotId == SID_DRAW_XPOLYGON            ||
+             nSlotId == SID_DRAW_XPOLYGON_NOFILL     ||
+             nSlotId == SID_3D_CUBE                  ||
+             nSlotId == SID_3D_SPHERE                ||
+             nSlotId == SID_3D_SHELL                 ||
+             nSlotId == SID_3D_HALF_SPHERE           ||
+             nSlotId == SID_3D_TORUS                 ||
+             nSlotId == SID_3D_CYLINDER              ||
+             nSlotId == SID_3D_CONE                  ||
+             nSlotId == SID_3D_PYRAMID ))
         {
             // Restrict movement:
             // rectangle->quadrat, ellipse->circle etc.
-            bOrtho = TRUE;
+            bOrtho = !rMEvt.IsShift();
         }
         else
         {
@@ -341,24 +349,33 @@ BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
     if (pView->IsAction())
     {
         if (bRestricted &&
-            (nSlotId == SID_DRAW_XLINE               || // 45ø-Linie
-             nSlotId == SID_DRAW_CIRCLEARC           || // Kreisbogen
-             nSlotId == SID_DRAW_SQUARE              || // Quadrat
-             nSlotId == SID_DRAW_SQUARE_NOFILL       || // Quadrat
-             nSlotId == SID_DRAW_SQUARE_ROUND        || // Quadrat, rund
-             nSlotId == SID_DRAW_SQUARE_ROUND_NOFILL || // Quadrat, rund
-             nSlotId == SID_DRAW_CIRCLE              || // Kreis
-             nSlotId == SID_DRAW_CIRCLE_NOFILL       || // Kreis
-             nSlotId == SID_DRAW_CIRCLEPIE           || // Kreissegment
-             nSlotId == SID_DRAW_CIRCLEPIE_NOFILL    || // Kreissegment
-             nSlotId == SID_DRAW_CIRCLECUT           || // Kreisabschnitt
-             nSlotId == SID_DRAW_CIRCLECUT_NOFILL    || // Kreisabschnitt
-             nSlotId == SID_DRAW_XPOLYGON            || // Polygon
-             nSlotId == SID_DRAW_XPOLYGON_NOFILL))       // Polygon
+            (nSlotId == SID_DRAW_XLINE               ||
+             nSlotId == SID_DRAW_CIRCLEARC           ||
+             nSlotId == SID_DRAW_SQUARE              ||
+             nSlotId == SID_DRAW_SQUARE_NOFILL       ||
+             nSlotId == SID_DRAW_SQUARE_ROUND        ||
+             nSlotId == SID_DRAW_SQUARE_ROUND_NOFILL ||
+             nSlotId == SID_DRAW_CIRCLE              ||
+             nSlotId == SID_DRAW_CIRCLE_NOFILL       ||
+             nSlotId == SID_DRAW_CIRCLEPIE           ||
+             nSlotId == SID_DRAW_CIRCLEPIE_NOFILL    ||
+             nSlotId == SID_DRAW_CIRCLECUT           ||
+             nSlotId == SID_DRAW_CIRCLECUT_NOFILL    ||
+             nSlotId == SID_DRAW_XPOLYGON            ||
+             nSlotId == SID_DRAW_XPOLYGON_NOFILL     ||
+             nSlotId == SID_3D_CUBE                  ||
+             nSlotId == SID_3D_SPHERE                ||
+             nSlotId == SID_3D_SHELL                 ||
+             nSlotId == SID_3D_HALF_SPHERE           ||
+             nSlotId == SID_3D_TORUS                 ||
+             nSlotId == SID_3D_CYLINDER              ||
+             nSlotId == SID_3D_CONE                  ||
+             nSlotId == SID_3D_PYRAMID ))
+
         {
             // Restrict movement:
             // rectangle->quadrat, ellipse->circle etc.
-            bOrtho = TRUE;
+            bOrtho = !rMEvt.IsShift();
         }
         else
         {
