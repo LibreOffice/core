@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleCsvGrid.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,24 +61,8 @@
 
 package mod._sc;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XModel;
-import com.sun.star.lang.XComponent;
-import com.sun.star.sheet.XSpreadsheet;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.sheet.XSpreadsheets;
-import com.sun.star.table.XCell;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.accessibility.XAccessibleAction;
-import com.sun.star.awt.XExtendedToolkit;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -86,7 +70,17 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 public class ScAccessibleCsvGrid extends TestCase {
 
@@ -125,16 +119,12 @@ public class ScAccessibleCsvGrid extends TestCase {
                         UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
 
 
-        AccessibilityTools at = new AccessibilityTools();
-
-        //log.println("Found "+tk.getTopWindowCount()+ " Windows");
-
         XWindow xWindow = (XWindow)
                 UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole
+        oObj = AccessibilityTools.getAccessibleObjectForRole
             (xRoot, AccessibleRole.PUSH_BUTTON, "Cancel");
 
         accAction = (XAccessibleAction) UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
@@ -151,13 +141,10 @@ public class ScAccessibleCsvGrid extends TestCase {
 
         //at.printAccessibleTree(log, xRoot);
 
-        oObj = at.getAccessibleObjectForRole
+        oObj = AccessibilityTools.getAccessibleObjectForRole
             (xRoot, AccessibleRole.TABLE);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
-
-        XAccessibleComponent comp = (XAccessibleComponent)
-                UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
@@ -237,7 +224,7 @@ public class ScAccessibleCsvGrid extends TestCase {
             try {
                 String url= utils.getFullTestURL("10test.csv");
                 log.println("loading "+url);
-                XComponent xSpreadsheetDoc = SOF.loadDocument(url,args);
+                SOF.loadDocument(url,args);
             } catch (com.sun.star.uno.Exception e) {
                 e.printStackTrace();
                 throw new StatusException( "Couldn't create document ", e );
