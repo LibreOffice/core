@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 10:44:58 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:09:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,12 +112,13 @@ SLOFILES+=\
                 $(SLO)$/scanunx.obj		\
                 $(SLO)$/grid.obj
 
-SRCFILES=\
+SRS1NAME=$(TARGET)
+SRC1FILES=\
     sanedlg.src		\
     grid.src
 
 RESLIB1NAME=san
-RESLIB1SRSFILES= $(SRS)/scn.srs
+RESLIB1SRSFILES= $(SRS)$/scn.srs
 RESLIB1DEPN= sanedlg.src sanedlg.hrc grid.src grid.hrc
 .ENDIF
 
