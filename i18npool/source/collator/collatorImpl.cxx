@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collatorImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-04-16 00:09:02 $
+ *  last change: $Author: er $ $Date: 2002-07-05 18:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ CollatorImpl::CollatorImpl( const Reference < XMultiServiceFactory >& rxMSF ) : 
         Reference < XInterface > xI =
             xMSF->createInstance( OUString::createFromAscii("com.sun.star.i18n.LocaleData"));
         if ( xI.is() )
-        xI->queryInterface(::getCppuType((const Reference< XLocaleData>*)0)) >>= localedata;
+            xI->queryInterface(::getCppuType((const Reference< XLocaleData>*)0)) >>= localedata;
     }
     cachedItem = NULL;
 }
@@ -85,8 +85,8 @@ CollatorImpl::CollatorImpl( const Reference < XMultiServiceFactory >& rxMSF ) : 
 CollatorImpl::~CollatorImpl()
 {
     // Clear lookuptable
-    for (cachedItem = (lookupTableItem*)lookupTable.First(); cachedItem;
-        cachedItem = (lookupTableItem*)lookupTable.Next());
+    for( cachedItem = (lookupTableItem*)lookupTable.First(); cachedItem;
+            cachedItem = (lookupTableItem*)lookupTable.Next() )
         delete cachedItem;
     lookupTable.Clear();
 }
@@ -102,7 +102,7 @@ CollatorImpl::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 
     sal_Unicode *unistr2 = (sal_Unicode*) str2.getStr() + off2;
     for (int i = 0; i < len1 && i < len2; i++)
         if (unistr1[i] != unistr2[i])
-        return unistr1[i] < unistr2[i] ? -1 : 1;
+            return unistr1[i] < unistr2[i] ? -1 : 1;
     return len1 == len2 ? 0 : (len1 < len2 ? -1 : 1);
 }
 
@@ -122,7 +122,7 @@ CollatorImpl::loadDefaultCollator(const lang::Locale& rLocale, sal_Int32 collato
     Sequence< Implementation > &imp = localedata->getCollatorImplementations(rLocale);
     for (sal_Int16 i = 0; i < imp.getLength(); i++)
         if (imp[i].isDefault)
-        return loadCollatorAlgorithm(imp[i].unoID, rLocale, collatorOptions);
+            return loadCollatorAlgorithm(imp[i].unoID, rLocale, collatorOptions);
 
     throw RuntimeException(); // not default is defined
     return 0;
@@ -163,11 +163,11 @@ CollatorImpl::listCollatorAlgorithms( const lang::Locale& rLocale ) throw(Runtim
     for (sal_Int32 i = 0; i < imp.getLength(); i++) {
         //if the current algorithm is default and the position is not on the first one, then switch
         if (imp[i].isDefault && i) {
-        list[i] = list[0];
-        list[0] = imp[i].unoID;
+            list[i] = list[0];
+            list[0] = imp[i].unoID;
         }
         else
-        list[i] = imp[i].unoID;
+            list[i] = imp[i].unoID;
     }
     return list;
 }
@@ -180,9 +180,9 @@ CollatorImpl::listCollatorOptions( const OUString& collatorAlgorithmName ) throw
 
     for (sal_Int32 i = 0; i < option_str.getLength(); i++)
         option_int[i] =
-        option_str[i].equalsAscii("IGNORE_CASE") ?  CollatorOptions::CollatorOptions_IGNORE_CASE :
-        option_str[i].equalsAscii("IGNORE_KANA") ?  CollatorOptions::CollatorOptions_IGNORE_KANA :
-        option_str[i].equalsAscii("IGNORE_WIDTH") ?  CollatorOptions::CollatorOptions_IGNORE_WIDTH : 0;
+            option_str[i].equalsAscii("IGNORE_CASE") ?  CollatorOptions::CollatorOptions_IGNORE_CASE :
+            option_str[i].equalsAscii("IGNORE_KANA") ?  CollatorOptions::CollatorOptions_IGNORE_KANA :
+            option_str[i].equalsAscii("IGNORE_WIDTH") ?  CollatorOptions::CollatorOptions_IGNORE_WIDTH : 0;
 
     return option_int;
 }
@@ -192,23 +192,23 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
     throw(RuntimeException)
 {
     for (cachedItem = (lookupTableItem*)lookupTable.First(); cachedItem;
-        cachedItem = (lookupTableItem*)lookupTable.Next()) {
+            cachedItem = (lookupTableItem*)lookupTable.Next()) {
         if (cachedItem->service.equals(serviceName)) {// cross locale sharing
-        lookupTable.Insert(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, cachedItem->xC));
-        return sal_True;
+            lookupTable.Insert(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, cachedItem->xC));
+            return sal_True;
         }
     }
     if (xMSF.is()) {
         Reference < XInterface > xI =
-        xMSF->createInstance(OUString::createFromAscii("com.sun.star.i18n.Collator_") + serviceName);
+            xMSF->createInstance(OUString::createFromAscii("com.sun.star.i18n.Collator_") + serviceName);
 
         if (xI.is()) {
-        Reference < XCollator > xC;
-        xI->queryInterface( getCppuType((const Reference< XCollator>*)0) ) >>= xC;
-        if (xC.is()) {
-            lookupTable.Insert(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, xC));
-            return sal_True;
-        }
+            Reference < XCollator > xC;
+            xI->queryInterface( getCppuType((const Reference< XCollator>*)0) ) >>= xC;
+            if (xC.is()) {
+                lookupTable.Insert(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, xC));
+                return sal_True;
+            }
         }
         return sal_False;
     }
@@ -220,9 +220,9 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
     throw(RuntimeException)
 {
     for (cachedItem = (lookupTableItem*)lookupTable.First(); cachedItem;
-        cachedItem = (lookupTableItem*)lookupTable.Next()) {
+            cachedItem = (lookupTableItem*)lookupTable.Next()) {
         if (cachedItem->equals(rLocale, rSortAlgorithm)) {
-        return;
+            return;
         }
     }
 
@@ -239,38 +239,38 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
     OUStringBuffer aBuf(l+c+v+a+4);
 
     if ((l > 0 && c > 0 && v > 0 && a > 0 &&
-            // load service with name <base>_<lang>_<country>_<varian>_<algorithm>
-            createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(rLocale.Country).append(
-            under).append(rLocale.Variant).append(under).append(rSortAlgorithm).makeStringAndClear(),
-            rSortAlgorithm)) ||
-        (l > 0 && c > 0 && a > 0 &&
-            // load service with name <base>_<lang>_<country>_<algorithm>
-            createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(rLocale.Country).append(
-            under).append(rSortAlgorithm).makeStringAndClear(), rSortAlgorithm)) ||
-        (l > 0 && c > 0 && a > 0 && rLocale.Language.equalsAscii("zh") &&
-                    (rLocale.Country.equalsAscii("HK") ||
-                    rLocale.Country.equalsAscii("MO")) &&
-            // if the country code is HK or MO, one more step to try TW.
-            createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(tw).append(under).append(
-            rSortAlgorithm).makeStringAndClear(), rSortAlgorithm)) ||
-        (l > 0 && a > 0 &&
-            // load service with name <base>_<lang>_<algorithm>
-            createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(rSortAlgorithm).makeStringAndClear(),
-            rSortAlgorithm)) ||
+                // load service with name <base>_<lang>_<country>_<varian>_<algorithm>
+                createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(rLocale.Country).append(
+                        under).append(rLocale.Variant).append(under).append(rSortAlgorithm).makeStringAndClear(),
+                    rSortAlgorithm)) ||
+            (l > 0 && c > 0 && a > 0 &&
+             // load service with name <base>_<lang>_<country>_<algorithm>
+             createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(rLocale.Country).append(
+                     under).append(rSortAlgorithm).makeStringAndClear(), rSortAlgorithm)) ||
+            (l > 0 && c > 0 && a > 0 && rLocale.Language.equalsAscii("zh") &&
+             (rLocale.Country.equalsAscii("HK") ||
+              rLocale.Country.equalsAscii("MO")) &&
+             // if the country code is HK or MO, one more step to try TW.
+             createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(tw).append(under).append(
+                     rSortAlgorithm).makeStringAndClear(), rSortAlgorithm)) ||
+            (l > 0 && a > 0 &&
+             // load service with name <base>_<lang>_<algorithm>
+             createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(rSortAlgorithm).makeStringAndClear(),
+                 rSortAlgorithm)) ||
             // load service with name <algorithm>
-        (a > 0 &&
-            createCollator(rLocale, rSortAlgorithm, rSortAlgorithm)) ||
+            (a > 0 &&
+             createCollator(rLocale, rSortAlgorithm, rSortAlgorithm)) ||
             // load default service with name <base>_ICU
             createCollator(rLocale, icu, rSortAlgorithm) ||
             // load default service with name <base>_Simple
             createCollator(rLocale, simple, rSortAlgorithm) ||
             // load default service with name <base>_Unicode
             createCollator(rLocale, unicode, rSortAlgorithm)) {
-        return;
-    } else {
-        cachedItem = NULL;
-        throw RuntimeException(); // could not load any service
-    }
+                return;
+            } else {
+                cachedItem = NULL;
+                throw RuntimeException(); // could not load any service
+            }
 }
 
 const sal_Char cCollator[] = "com.sun.star.i18n.Collator";
