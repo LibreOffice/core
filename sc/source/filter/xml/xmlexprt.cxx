@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.184 $
+ *  $Revision: 1.185 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:13:37 $
+ *  last change: $Author: kz $ $Date: 2004-12-03 14:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2803,7 +2803,6 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
             SvXMLElementExport aCreatorElem( *this, XML_NAMESPACE_DC,
                                                 XML_CREATOR, sal_True,
                                                 sal_False );
-            rtl::OUString sAuthor(sAuthor);
             Characters(sAuthor);
         }
 
