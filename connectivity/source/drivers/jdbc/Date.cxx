@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:22 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include "java/tools.hxx"
 #endif
 #ifndef _CONNECTIVITY_DATECONVERSION_HXX_
-#include "DateConversion.hxx"
+#include "connectivity/DateConversion.hxx"
 #endif
 
 using namespace connectivity;
