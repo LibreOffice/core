@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 21:11:18 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ ModelessDialog DLG_REDLINE_ACCEPT
     Text[ korean ] = "º¯°æ»çÇ×  Àû¿ë ¶Ç´Â Ãë¼Ò";
     Text[ turkish ] = "Deðiþiklikleri onayla ya da reddet";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Aceptar o rechazar modificaciones";
 };
 
 ModalDialog DLG_MOD_REDLINE_ACCEPT
@@ -136,6 +137,7 @@ ModalDialog DLG_MOD_REDLINE_ACCEPT
     Text[ korean ] = "ÀÚµ¿¼­½Ä£º  º¯°æ»çÇ×  Àû¿ë ¶Ç´Â Ãë¼Ò";
     Text[ turkish ] = "Otomatik formatlama: Deðiþiklikleri onayla ya da reddet";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "AutoFormato: Aceptar o rechazar cambios";
 };
 
 Menu MN_REDLINE_POPUP
@@ -167,6 +169,7 @@ Menu MN_REDLINE_POPUP
             Text[ greek ] = "Åðåîåñãáóßá ó÷ïëßïõ...";
             Text[ korean ] = "ÁÖ¼®  ÆíÁý...";
             Text[ turkish ] = "Açýklamalarý düzenle...";
+            Text[ catalan ] = "Modificar comentario...";
         };
         MenuItem
         {
@@ -204,6 +207,7 @@ Menu MN_REDLINE_POPUP
                         Text[ greek ] = "ÅíÝñãåéá";
                         Text[ korean ] = "µ¿ÀÛ";
                         Text[ turkish ] = "Ýþlem";
+                        Text[ catalan ] = "Acción";
                     };
                     MenuItem
                     {
@@ -231,6 +235,7 @@ Menu MN_REDLINE_POPUP
                         Text[ korean ] = "ÀÛ¼ºÀÚ";
                         Text[ turkish ] = "Yazan";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Autor";
                     };
                     MenuItem
                     {
@@ -258,6 +263,7 @@ Menu MN_REDLINE_POPUP
                         Text[ korean ] = "ÀÏÀÚ";
                         Text[ turkish ] = "Tarih";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Fecha";
                     };
                     MenuItem
                     {
@@ -285,6 +291,7 @@ Menu MN_REDLINE_POPUP
                         Text[ korean ] = "¼³¸í";
                         Text[ turkish ] = "Açýklama";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Descripción";
                     };
                     MenuItem
                     {
@@ -312,10 +319,11 @@ Menu MN_REDLINE_POPUP
                         Text[ korean ] = "¹®¼­ À§Ä¡";
                         Text[ turkish ] = "Belge konumu";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "Posición del documento";
                     };
                 };
             };
-            Text [ english_us ] = "Sorting" ;
+            Text [ english_us ] = "Sort By" ;
             Text [ portuguese_brazilian ] = "Sortiere" ;
             Text [ swedish ] = "Sorterar" ;
             Text [ danish ] = "Sorter" ;
@@ -334,6 +342,7 @@ Menu MN_REDLINE_POPUP
             Text[ korean ] = "Á¤·Ä";
             Text[ turkish ] = "Sýrala";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Ordenar";
         };
     };
 };
