@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:44:54 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3333,14 +3333,14 @@ String STR_ObjNameNoObj
     Text [ dutch ] = "Geen tekenobject" ;
     Text [ spanish ] = "Ningún objeto de dibujo" ;
     Text [ english_us ] = "No draw object" ;
-    Text[ chinese_simplified ] = "²»ÊÇ×Ö·û¶ÔÏó";
+    Text[ chinese_simplified ] = "²»ÊÇ»æÍ¼¶ÔÏó";
     Text[ russian ] = "Áåç ãğàôè÷åñêîãî îáúåêòà";
     Text[ polish ] = "brak obiektu rysunkowego";
     Text[ japanese ] = "•`‰æµÌŞ¼Şª¸Ä‚È‚µ";
-    Text[ chinese_traditional ] = "¤£¬O¦r¤¸ª«¥ó";
+    Text[ chinese_traditional ] = "¤£¬OÃ¸¹Ïª«¥ó";
     Text[ arabic ] = "ÈÏæä ßÇÆä ÑÓæãí";
     Text[ dutch ] = "Geen tekenobject";
-    Text[ chinese_simplified ] = "²»ÊÇ×Ö·û¶ÔÏó";
+    Text[ chinese_simplified ] = "²»ÊÇ»æÍ¼¶ÔÏó";
     Text[ greek ] = "×ùñßò áíôéêåßìåíï ó÷åäßáóçò";
     Text[ korean ] = "±×¸®±â °³Ã¼ ¾øÀ½";
     Text[ turkish ] = "Çizim nesnesi yok";
@@ -7359,7 +7359,7 @@ String STR_ItemValFITTOSIZERESIZEAT
     Text [ portuguese_brazilian ] = "Durch hartes ueberattributieren" ;
     Text [ swedish ] = "Genom hård överattributering" ;
     Text [ danish ] = "Gennem hård attributering" ;
-    Text [ italian ] = "Usa attributi duri" ;
+    Text [ italian ] = "Usa attributi fissi" ;
     Text [ spanish ] = "Usar atributos fijos" ;
     Text [ french ] = "Forcer : plus d'attributs" ;
     Text [ dutch ] = "Gebruik vaste attributen" ;
@@ -11709,7 +11709,7 @@ String SIP_SA_SHADOWCOLOR
     Text = "Schattenfarbe";
     Text [ ENGLISH ] = "Shadow color" ;
     Text[ english_us ] = "Shadow color";
-    Text[ portuguese ] = "Cor do sombreado";
+    Text[ portuguese ] = "Cor da sombra";
     Text[ russian ] = "Öâåò òåíè";
     Text[ dutch ] = "Schaduwkleur";
     Text[ french ] = "Couleur d'ombre";
@@ -11788,7 +11788,7 @@ String SIP_SA_SHADOWTRANSPARENCE
     Text = "Schattentransparenz";
     Text [ ENGLISH ] = "Shadow transparence" ;
     Text[ english_us ] = "Shadow transparency";
-    Text[ portuguese ] = "Transparência do sombreado";
+    Text[ portuguese ] = "Transparência da sombra";
     Text[ russian ] = "Ïğîçğà÷íîñòü òåíè";
     Text[ dutch ] = "Transparantie schaduw";
     Text[ french ] = "Transparence d'ombre";
@@ -11814,7 +11814,7 @@ String SIP_SA_SHADOW3D
     Text = "3D-Schatten";
     Text [ ENGLISH ] = "3D-Shadow" ;
     Text[ english_us ] = "3D shadow";
-    Text[ portuguese ] = "Sombreado 3D";
+    Text[ portuguese ] = "Sombra 3D";
     Text[ russian ] = "Òåíü 3-Ì";
     Text[ dutch ] = "3D-schaduw";
     Text[ french ] = "Ombre 3D";
@@ -11841,7 +11841,7 @@ String SIP_SA_SHADOWPERSP
     Text = "Perspektivischer Schatten";
     Text [ ENGLISH ] = "Perspective shadow" ;
     Text[ english_us ] = "Perspective shadow";
-    Text[ portuguese ] = "Sombreado em perspectiva";
+    Text[ portuguese ] = "Sombra em perspectiva";
     Text[ russian ] = "Òåíü â ïåğñïåêòèâå";
     Text[ dutch ] = "Perspectivische schaduw";
     Text[ french ] = "Ombre perspective";
@@ -11867,7 +11867,7 @@ String SIP_SA_SHADOWRESERVE1
     Text = "Schatten Reserve 1";
     Text [ ENGLISH ] = "Shadow reserved 1" ;
     Text[ english_us ] = "Shadow reserved for 1";
-    Text[ portuguese ] = "Sombreado de reserva 1";
+    Text[ portuguese ] = "Reservado para sombra 1";
     Text[ russian ] = "Çàğåçåğâèğîâàííàÿ òåíü 1";
     Text[ dutch ] = "Schaduwreserve 1";
     Text[ french ] = "Réservé pour ombre 1";
@@ -11893,7 +11893,7 @@ String SIP_SA_SHADOWRESERVE2
     Text = "Schatten Reserve 2";
     Text [ ENGLISH ] = "Shadow reserved 2" ;
     Text[ english_us ] = "Shadow reserved for 2";
-    Text[ portuguese ] = "Sombreado de reserva 2";
+    Text[ portuguese ] = "Reservado para sombra 2";
     Text[ russian ] = "Çàğåçåğâèğîâàííàÿ òåíü 2";
     Text[ dutch ] = "Schaduwreserve 2";
     Text[ french ] = "Réservé pour ombre 2";
@@ -11919,7 +11919,7 @@ String SIP_SA_SHADOWRESERVE3
     Text = "Schatten Reserve 3";
     Text [ ENGLISH ] = "Shadow reserved 3" ;
     Text[ english_us ] = "Shadow reserved for 3";
-    Text[ portuguese ] = "Sombreado de reserva 3";
+    Text[ portuguese ] = "Reservado para sombra 3";
     Text[ russian ] = "Çàğåçåğâèğîâàííàÿ òåíü 3";
     Text[ dutch ] = "Schaduwreserve 3";
     Text[ french ] = "Réservé pour ombre 3";
@@ -11945,7 +11945,7 @@ String SIP_SA_SHADOWRESERVE4
     Text = "Schatten Reserve 4";
     Text [ ENGLISH ] = "Shadow reserved 4" ;
     Text[ english_us ] = "Shadow reserved for 4";
-    Text[ portuguese ] = "Sombreado de reserva 4";
+    Text[ portuguese ] = "Reserva para sombra 4";
     Text[ russian ] = "Çàğåçåğâèğîâàííàÿ òåíü 4";
     Text[ dutch ] = "Schaduwreserve 4";
     Text[ french ] = "Réservé pour ombre 4";
@@ -11971,7 +11971,7 @@ String SIP_SA_SHADOWRESERVE5
     Text = "Schatten Reserve 5";
     Text [ ENGLISH ] = "Shadow reserved 5" ;
     Text[ english_us ] = "Shadow reserved for 5";
-    Text[ portuguese ] = "Sombreado de reserva 5";
+    Text[ portuguese ] = "Reserva para sombra 5";
     Text[ russian ] = "Çàğåçåğâèğîâàííàÿ òåíü 5";
     Text[ dutch ] = "Schaduwreserve 5";
     Text[ french ] = "Réservé pour ombre 5";
@@ -12585,7 +12585,7 @@ String SIP_SA_TEXT_LEFTDIST
     Text[ portuguese_brazilian ] = "Left text frame distance";
     Text[ japanese ] = "Ã·½Ä˜g‚Ì¶‘¤ŠÔŠu";
     Text[ chinese_simplified ] = "×ó±ßÎÄ×Ö¿ò¼ä¸ô";
-    Text[ chinese_traditional ] = "¥ª¤å¦r¤è®Ø¶¡¹j";
+    Text[ chinese_traditional ] = "¥ª¤å¦r¤è¶ô¶¡¹j";
     Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÃíÓÑ áßÇÏÑ ÇáäÕ";
     Text[ dutch ] = "Afstand tekst-kader, links";
     Text[ chinese_simplified ] = "×ó±ßÎÄ×Ö¿ò¼ä¸ô";
@@ -12849,7 +12849,7 @@ String SIP_SA_TEXT_ANIKIND
     Text[ portuguese_brazilian ] = "Ticker";
     Text[ japanese ] = "Ã·½Ä±ÆÒ°¼®İ";
     Text[ chinese_simplified ] = "»î¶¯±êÌâ";
-    Text[ chinese_traditional ] = "²¾°Ê¼ĞÃD";
+    Text[ chinese_traditional ] = "²¾°Ê¤å¦r";
     Text[ arabic ] = "ÇáßÊÇÈÉ ÇáãÊÍÑßÉ";
     Text[ dutch ] = "Tekstanimatie";
     Text[ chinese_simplified ] = "»î¶¯±êÌâ";
@@ -12875,7 +12875,7 @@ String SIP_SA_TEXT_ANIDIRECTION
     Text[ portuguese_brazilian ] = "Direction of ticker";
     Text[ japanese ] = "Ã·½Ä±ÆÒ°¼®İ‚Ì•ûŒü";
     Text[ chinese_simplified ] = "»î¶¯±êÌâµÄ·½Ïò";
-    Text[ chinese_traditional ] = "¼ĞÃD²¾°Êªº¤è¦V";
+    Text[ chinese_traditional ] = "¤å¦r²¾°Êªº¤è¦V";
     Text[ arabic ] = "ÇÊÌÇå ÇáßÊÇÈÉ ÇáãÊÍÑßÉ";
     Text[ dutch ] = "Richting tekstanimatie";
     Text[ chinese_simplified ] = "»î¶¯±êÌâµÄ·½Ïò";
@@ -12901,7 +12901,7 @@ String SIP_SA_TEXT_ANISTARTINSIDE
     Text[ portuguese_brazilian ] = "Ticker start inside";
     Text[ japanese ] = "˜g“à‚ÅÃ·½Ä ±ÆÒ°¼®İ‚Ìn‚Ü‚è";
     Text[ chinese_simplified ] = "ÄÚ²¿»î¶¯±êÌâ";
-    Text[ chinese_traditional ] = "¤º³¡²¾°Ê¼ĞÃD";
+    Text[ chinese_traditional ] = "®Ø¤º²¾°Ê¤å¦r";
     Text[ arabic ] = "ÈÏÁ ÇáßÊÇÈÉ ÇáãÊÍÑßÉ ÈÇáÏÇÎá";
     Text[ dutch ] = "Tekstanimatie vanaf midden";
     Text[ chinese_simplified ] = "ÄÚ²¿»î¶¯±êÌâ";
@@ -12927,7 +12927,7 @@ String SIP_SA_TEXT_ANISTOPINSIDE
     Text[ portuguese_brazilian ] = "Ticker stop inside";
     Text[ japanese ] = "˜g“à‚ÅÃ·½Ä ±ÆÒ°¼®İ‚ÌI‚í‚è";
     Text[ chinese_simplified ] = "ÄÚ²¿Í£Ö¹»î¶¯±êÌâ";
-    Text[ chinese_traditional ] = "¤º³¡°±¤î²¾°Ê¼ĞÃD";
+    Text[ chinese_traditional ] = "®Ø¤º°±¤î²¾°Ê¤å¦r";
     Text[ arabic ] = "ÅíŞÇİ ÇáßÊÇÈÉ ÇáãÊÍÑß ÈÇáÏÇÎá";
     Text[ dutch ] = "Tekstanimatie stoppen vanaf midden";
     Text[ chinese_simplified ] = "ÄÚ²¿Í£Ö¹»î¶¯±êÌâ";
@@ -13006,7 +13006,7 @@ String SIP_SA_TEXT_ANIAMOUNT
     Text[ portuguese_brazilian ] = "Step size of ticker";
     Text[ japanese ] = "Ã·½Ä±ÆÒ°¼®İ‚Ì½Ã¯ÌßŠÔŠu";
     Text[ chinese_simplified ] = "»î¶¯±êÌâµÄÃ¿²½¼ä¸ô";
-    Text[ chinese_traditional ] = "²¾°Ê¼ĞÃDªº¨C¨B¶¡¹j";
+    Text[ chinese_traditional ] = "²¾°Ê¤å¦rªº¨C¨B¶¡¹j";
     Text[ arabic ] = "ÍÌã ÎØæÉ ÇáßÊÇÈÉ ÇáãÊÍÑßÉ";
     Text[ dutch ] = "Stapgrootte tekstanimatie";
     Text[ chinese_simplified ] = "»î¶¯±êÌâµÄÃ¿²½¼ä¸ô";
