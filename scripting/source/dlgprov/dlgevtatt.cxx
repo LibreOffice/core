@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgevtatt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:27:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,9 +351,6 @@ namespace dlgprov
             // scripting framework script: ScriptCode contains scriptURL
             sScriptURL = sScriptCode;
         }
-
-        OSL_TRACE( "DialogScriptListenerImpl::firing_impl: processing scriptURL %s",
-            ::rtl::OUStringToOString( sScriptURL, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
         try
         {
