@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 18:00:25 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1562,7 +1562,7 @@ Window DLG_NAVIGATION_PI
     {
         Text = "~Schreibgeschützt";
         Text[English] = "Readonly";
-        Text[ english_us ] = "Read ~only";
+        Text[ english_us ] = "Read-~only";
         Text[ portuguese ] = "Só ~leitura";
         Text[ russian ] = "Òîëüêî äëÿ ÷òåíèÿ";
         Text[ greek ] = "Müíï ãéá áíÜãíùóç";
