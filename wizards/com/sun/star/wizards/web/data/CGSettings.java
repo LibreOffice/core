@@ -7,6 +7,7 @@
 package com.sun.star.wizards.web.data;
 
 
+import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Vector;
@@ -14,10 +15,16 @@ import java.util.Vector;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.i18n.NumberFormatIndex;
+import com.sun.star.lang.Locale;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.DateTime;
+import com.sun.star.util.XNumberFormatsSupplier;
+import com.sun.star.util.XNumberFormatter;
 import com.sun.star.wizards.common.*;
+import com.sun.star.wizards.common.Helper.DateUtils;
 
 /**
  * @author  rpiterman
@@ -38,21 +45,36 @@ public class CGSettings    extends ConfigGroup {
     public ConfigSet       cp_IconSets          = new ConfigSet(CGIconSet.class);
     public ConfigSet       cp_BackgroundImages  = new ConfigSet(CGImage.class);
     public ConfigSet       cp_SavedSessions     = new ConfigSet(CGSessionName.class);
+    public ConfigSet       cp_Filters           = new ConfigSet(CGFilter.class);
+
+    public ConfigSet       savedSessions        = new ConfigSet(CGSessionName.class);
 
     public CGSession       cp_DefaultSession    = new CGSession();
+    public String          cp_LastSavedSession;
 
     private Map exportersMap = new Hashtable();
+    private XMultiServiceFactory xmsf;
+
+    String[] resources;
+    public Formatter formatter;
 
 
-    public String resPages, resSlides, resCreated, resUpdated;
+    public static final int RESOURCE_PAGES_TEMPLATE = 0;
+    public static final int RESOURCE_SLIDES_TEMPLATE = 1;
+    public static final int RESOURCE_CREATED_TEMPLATE = 2;
+    public static final int RESOURCE_UPDATED_TEMPLATE = 3;
+    public static final int RESOURCE_SIZE_TEMPLATE = 4;
 
-    public CGSettings(XMultiServiceFactory xmsf) {
+    public CGSettings(XMultiServiceFactory xmsf_, String[] resources_ , Object document) {
+        xmsf = xmsf_;
         try {
             soTemplateDir = FileAccess.getOfficePath(xmsf, "Template","share");
             soGalleryDir  = FileAccess.getOfficePath(xmsf,"Gallery","share");
             root = this;
+            formatter = new Formatter(xmsf, document );
+            resources = resources_;
         }
-        catch (NoValidPathException ex) {
+        catch (Exception ex) {
           ex.printStackTrace();
         }
     }
@@ -85,6 +107,7 @@ public class CGSettings    extends ConfigGroup {
     /**
      * call after read.
      * @param xmsf
+     * @param document the background document. used for date/number formatting.
      */
     public void configure(XMultiServiceFactory xmsf) throws Exception {
         workPath = FileAccess.connectURLs(soTemplateDir , cp_WorkDir);
@@ -108,6 +131,47 @@ public class CGSettings    extends ConfigGroup {
                 (String) Properties.getPropertyValue(
                     (PropertyValue[]) xNameAccess.getByName(exporter.cp_TargetType),
                     "UIName");
+
+    }
+
+    FileAccess fileAccess;
+
+    FileAccess getFileAccess() throws Exception {
+        return getFileAccess(xmsf);
+    }
+
+    FileAccess getFileAccess(XMultiServiceFactory xmsf) throws Exception {
+        if (fileAccess==null)
+          fileAccess = new FileAccess(xmsf);
+        return fileAccess;
+    }
+
+    public class Formatter {
+        private long docNullTime;
+        private int dateFormat, numberFormat;
+        private DateUtils dateUtils;
+
+        public Formatter(XMultiServiceFactory xmsf, Object document ) throws Exception {
+            dateUtils = new DateUtils(xmsf, document);
+            dateFormat = dateUtils.getFormat( NumberFormatIndex.DATE_SYS_DMMMYYYY);
+            numberFormat = dateUtils.getFormat( NumberFormatIndex.NUMBER_1000DEC2 );
+        }
+
+        public String formatCreated(DateTime date) {
+            String sDate = dateUtils.format( dateFormat, date );
+            return JavaTools.replaceSubString( resources[CGSettings.RESOURCE_CREATED_TEMPLATE], sDate, "%DATE" );
+        }
+
+        public String formatUpdated(DateTime date) {
+            String sDate = dateUtils.format( dateFormat, date );
+            return JavaTools.replaceSubString( resources[CGSettings.RESOURCE_UPDATED_TEMPLATE], sDate, "%DATE" );
+        }
+
+        public String formatFileSize(int size) {
+            float sizeInKB = ((float)size) / 1024f;
+            String sSize = dateUtils.getFormatter().convertNumberToString(numberFormat, sizeInKB );
+            return JavaTools.replaceSubString( resources[CGSettings.RESOURCE_SIZE_TEMPLATE], sSize, "%NUMBER" );
+        }
 
     }
 
