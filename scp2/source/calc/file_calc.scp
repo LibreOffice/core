@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_calc.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:49:55 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,20 @@ File gid_File_Oo_Office_Ui_Calccommands_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/CalcCommands.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_Common_Calc_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name = "/registry/spool/org.openoffice.Office.Common-calc.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_Setup_Calc_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name = "/registry/spool/org.openoffice.Setup-calc.xcu";
 End
 
 File gid_File_Exe_Scalc
