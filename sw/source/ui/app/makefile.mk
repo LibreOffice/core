@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-23 13:30:57 $
+#   last change: $Author: hjs $ $Date: 2002-06-17 10:43:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,15 +150,13 @@ LIB1OBJFILES= \
 $(SLO)$/swdll.obj : $(INCCOM)$/swdll0.hxx
 $(SLO)$/swmodule.obj : $(INCCOM)$/swdll0.hxx
 
-.IF "$(GUIBASE)"=="WIN"
-$(INCCOM)$/swdll0.hxx: makefile.mk
-    echo #define DLL_NAME "sw$(UPD)$(DLLPOSTFIX).DLL" >$@
-.ENDIF
-
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 $(INCCOM)$/swdll0.hxx: makefile.mk
     echo #define DLL_NAME \"libsw$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
-.ENDIF
+.ELSE			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+$(INCCOM)$/swdll0.hxx: makefile.mk
+    echo #define DLL_NAME "sw$(UPD)$(DLLPOSTFIX).DLL" >$@
+.ENDIF			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 
 
 $(SRS)$/app.srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
