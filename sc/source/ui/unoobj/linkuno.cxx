@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:15:47 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,8 +330,8 @@ void ScSheetLinkObj::setFileName(const rtl::OUString& rNewName)
         //  zuerst Tabellen umsetzen
 
         ScDocument* pDoc = pDocShell->GetDocument();
-        USHORT nTabCount = pDoc->GetTableCount();
-        for (USHORT nTab=0; nTab<nTabCount; nTab++)
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for (SCTAB nTab=0; nTab<nTabCount; nTab++)
             if ( pDoc->IsLinked(nTab) && pDoc->GetLinkDoc(nTab) == aFileName )  // alte Datei
                 pDoc->SetLink( nTab, pDoc->GetLinkMode(nTab), aNewStr,
                                 pDoc->GetLinkFlt(nTab), pDoc->GetLinkOpt(nTab),
@@ -445,8 +445,8 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByIndex_Impl(INT32 nIndex)
         INT32 nCount = 0;
         StrCollection aNames;   // um doppelte wegzulassen
         ScDocument* pDoc = pDocShell->GetDocument();
-        USHORT nTabCount = pDoc->GetTableCount();
-        for (USHORT nTab=0; nTab<nTabCount; nTab++)
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for (SCTAB nTab=0; nTab<nTabCount; nTab++)
             if (pDoc->IsLinked(nTab))
             {
                 String aLinkDoc = pDoc->GetLinkDoc( nTab );
@@ -473,8 +473,8 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByName_Impl(const rtl::OUString& aName
         String aNameStr = aName;
 
         ScDocument* pDoc = pDocShell->GetDocument();
-        USHORT nTabCount = pDoc->GetTableCount();
-        for (USHORT nTab=0; nTab<nTabCount; nTab++)
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for (SCTAB nTab=0; nTab<nTabCount; nTab++)
             if (pDoc->IsLinked(nTab))
             {
                 //! case-insensitiv ???
@@ -506,8 +506,8 @@ sal_Int32 SAL_CALL ScSheetLinksObj::getCount() throw(uno::RuntimeException)
     {
         StrCollection aNames;   // um doppelte wegzulassen
         ScDocument* pDoc = pDocShell->GetDocument();
-        USHORT nTabCount = pDoc->GetTableCount();
-        for (USHORT nTab=0; nTab<nTabCount; nTab++)
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for (SCTAB nTab=0; nTab<nTabCount; nTab++)
             if (pDoc->IsLinked(nTab))
             {
                 String aLinkDoc = pDoc->GetLinkDoc( nTab );
@@ -572,8 +572,8 @@ sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const rtl::OUString& aName )
         String aNameStr = aName;
 
         ScDocument* pDoc = pDocShell->GetDocument();
-        USHORT nTabCount = pDoc->GetTableCount();
-        for (USHORT nTab=0; nTab<nTabCount; nTab++)
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for (SCTAB nTab=0; nTab<nTabCount; nTab++)
             if (pDoc->IsLinked(nTab))
             {
                 //! case-insensitiv ???
@@ -594,14 +594,14 @@ uno::Sequence<rtl::OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(u
     {
         StrCollection aNames;   // um doppelte wegzulassen
         ScDocument* pDoc = pDocShell->GetDocument();
-        USHORT nTabCount = pDoc->GetTableCount();
+        SCTAB nTabCount = pDoc->GetTableCount();
         String aName;
 
         INT32 nLinkCount = getCount();
         uno::Sequence<rtl::OUString> aSeq(nLinkCount);
         rtl::OUString* pAry = aSeq.getArray();
         USHORT nPos = 0;
-        for (USHORT nTab=0; nTab<nTabCount; nTab++)
+        for (SCTAB nTab=0; nTab<nTabCount; nTab++)
         {
             if (pDoc->IsLinked(nTab))
             {
@@ -1005,7 +1005,7 @@ void SAL_CALL ScAreaLinksObj::insertAtPosition( const table::CellAddress& aDestP
         String aFilterStr = aFilter;
         String aOptionStr = aFilterOptions;
         String aSourceStr = aSourceArea;
-        ScAddress aDestAddr( (USHORT)aDestPos.Column, (USHORT)aDestPos.Row, aDestPos.Sheet );
+        ScAddress aDestAddr( (SCCOL)aDestPos.Column, (SCROW)aDestPos.Row, aDestPos.Sheet );
 
         aFileStr = ScGlobal::GetAbsDocName( aFileStr, pDocShell );  //! in InsertAreaLink ???
 
