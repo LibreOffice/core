@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:57:51 $
+ *  last change: $Author: obo $ $Date: 2001-03-09 21:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ TabPage TP_REDLINE_OPT
         Text[ chinese_traditional ] = "´¡¤J(~I)";
         Text[ arabic ] = "ÅÏÑÇÌ";
         Text[ greek ] = "~ÅéóáãùãÞ";
-        Text[ korean ] = "»ðÀÔ(~I)";
+        Text[ korean ] = "»ðÀÔ";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
     };
@@ -330,7 +330,7 @@ TabPage TP_REDLINE_OPT
             < "Maiúsculas" ; > ;
             < "Minúsculas" ; > ;
             < "Versaletes" ; > ;
-            < "Letra para título" ; > ;
+            < "Caracteres do título" ; > ;
             < "Cor do plano de fundo" ; > ;
         };
     StringList [ chinese_simplified ] =
@@ -433,7 +433,7 @@ TabPage TP_REDLINE_OPT
         < "ÀÌÁß ¹ØÁÙ" ; > ;
         < "´ë¹®ÀÚ" ; > ;
         < "¼Ò¹®ÀÚ" ; > ;
-        < "ÀÛÀº ´ë¹®ÀÚ" ; > ;
+        < "½º¸ôÄ¸" ; > ;
         < "Á¦¸ñ ±Û²Ã" ; > ;
         < "¹è°æ»ö" ; > ;
     };
@@ -596,11 +596,11 @@ TabPage TP_REDLINE_OPT
             < "[nenhum]" ; > ;
             < "Negrito" ; > ;
             < "Itálico" ; > ;
-            < "Rasurar" ; > ;
+            < "Rasurado" ; > ;
             < "Maiúsculas" ; > ;
             < "Minúsculas" ; > ;
             < "Versaletes" ; > ;
-            < "Letra para título" ; > ;
+            < "Caracteres do título" ; > ;
             < "Cor do plano de fundo" ; > ;
         };
         StringList [ chinese_simplified ] =
@@ -695,7 +695,7 @@ TabPage TP_REDLINE_OPT
         < "Ãë¼Ò¼±" ; > ;
         < "´ë¹®ÀÚ" ; > ;
         < "¼Ò¹®ÀÚ" ; > ;
-        < "ÀÛÀº ´ë¹®ÀÚ" ; > ;
+        < "½º¸ôÄ¸" ; > ;
         < "Á¦¸ñ ±Û²Ã" ; > ;
         < "¹è°æ»ö" ; > ;
     };
@@ -871,7 +871,7 @@ TabPage TP_REDLINE_OPT
             < "Maiúsculas" ; > ;
             < "Minúsculas" ; > ;
             < "Versaletes" ; > ;
-            < "Letra para título" ; > ;
+            < "Caracteres do título" ; > ;
             < "Cor do plano fundo" ; > ;
         };
         StringList [ chinese_simplified ] =
@@ -974,7 +974,7 @@ TabPage TP_REDLINE_OPT
         < "¹ØÁÙ: ÀÌÁß" ; > ;
         < "´ë¹®ÀÚ" ; > ;
         < "¼Ò¹®ÀÚ" ; > ;
-        < "ÀÛÀº ´ë¹®ÀÚ" ; > ;
+        < "½º¸ôÄ¸" ; > ;
         < "Á¦¸ñ ±Û²Ã" ; > ;
         < "¹è°æ»ö" ; > ;
     };
@@ -1129,7 +1129,7 @@ TabPage TP_REDLINE_OPT
         Text[ chinese_traditional ] = "¼Ð°O";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
         Text[ greek ] = "ÌáñêÜñéóìá";
-        Text[ korean ] = "Ç¥½Ã";
+        Text[ korean ] = "¸¶Å·";
         Text[ turkish ] = "Ýþaret";
         Text[ language_user1 ] = " ";
     };
@@ -1368,7 +1368,7 @@ TabPage TP_REDLINE_OPT
         Text[ chinese_traditional ] = "ÅÜ§óªº¦æ";
         Text[ arabic ] = "ÃÓØÑ ãÚÏáÉ";
         Text[ greek ] = "ÃñáììÝò ðïõ Ý÷ïõí áëëá÷èåß";
-        Text[ korean ] = "¼±ÀÌ º¯°æµÇ¾ú½À´Ï´Ù.";
+        Text[ korean ] = "º¯°æµÈ¡¡¼±.";
         Text[ turkish ] = "Deðiþtirilen satýrlar";
         Text[ language_user1 ] = " ";
     };
