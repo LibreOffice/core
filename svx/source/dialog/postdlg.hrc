@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-25 15:03:27 $
+ *  last change: $Author: os $ $Date: 2002-06-10 14:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #define BTN_PREV            15
 #define BTN_NEXT            16
 #define BTN_AUTHOR          17
+#define FT_AUTHOR           18
 
 #define STR_NOTIZ_EDIT      20
 #define STR_NOTIZ_INSERT    21

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 10:27:34 $
+ *  last change: $Author: os $ $Date: 2002-06-10 14:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
     aCancelBtn      ( this, ResId( BTN_POST_CANCEL ) ),
     aPrevBtn        ( this, ResId( BTN_PREV ) ),
     aNextBtn        ( this, ResId( BTN_NEXT ) ),
+    aAuthorFT       ( this, ResId( FT_AUTHOR) ),
     aAuthorBtn      ( this, ResId( BTN_AUTHOR ) ),
     aHelpBtn        ( this, ResId( BTN_POST_HELP ) ),
 
