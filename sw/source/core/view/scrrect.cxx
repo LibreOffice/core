@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-06-08 13:03:27 $
+ *  last change: $Author: ama $ $Date: 2001-11-29 15:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,8 +172,11 @@ void ViewShell::Scroll()
         //Auf die Richtung kommt es an:
         //- Bei einem pos. Ofst muss von hinten nach vorn gescrollt werden.
         //- Bei einem neg. Ofst muss von vorn nach hinten gescrollt werden.
-        const BOOL bPositive = (*pScrollRects)[0]->GetOffs() > 0;
-
+        BOOL bPositive = (*pScrollRects)[0]->GetOffs() > 0;
+#ifdef VERTICAL_LAYOUT
+        if( (*pScrollRects)[0]->IsVertical() )
+            bPositive = !bPositive;
+#endif
         int i = bPositive ? pScrollRects->Count()-1 : 0;
 
         for ( ; bPositive ? i >= 0 : i < (int)pScrollRects->Count();
@@ -187,19 +190,42 @@ void ViewShell::Scroll()
                     bPositive ? --j : ++j )
                 {
                     const SwStripes& rStripes = *rScroll[j];
-                      Rectangle aRectangle( rStripes.GetMin(),
-                          rStripes.GetY() - rScroll.GetOffs(),
-                          rStripes.GetRight(),
-                          rStripes.GetBottom() - rScroll.GetOffs() );
-                      GetWin()->Scroll( 0, rScroll.GetOffs(), aRectangle,
-                          SCROLL_CHILDREN);
-                      SwRect aRect( aRectangle );
-                      Imp()->ScrolledRect( aRect, rScroll.GetOffs() );
-                      if ( bPositive )
-                          aRect.Bottom( aRect.Top() + rScroll.GetOffs()-1 );
-                      else
-                          aRect.Top( aRect.Bottom() + rScroll.GetOffs() );
-                      Imp()->AddPaintRect( aRect );
+#ifdef VERTICAL_LAYOUT
+                    if( rScroll.IsVertical() )
+                    {
+                        Rectangle aRectangle( rStripes.GetY() -
+                            rStripes.GetHeight() + rScroll.GetOffs(),
+                            rStripes.GetMin(),
+                            rStripes.GetY() + rScroll.GetOffs(),
+                            rStripes.GetMax() );
+                        GetWin()->Scroll( -rScroll.GetOffs(), 0, aRectangle,
+                            SCROLL_CHILDREN);
+                        SwRect aRect( aRectangle );
+                        /// ???
+                        Imp()->ScrolledRect( aRect, -rScroll.GetOffs() );
+                        if ( bPositive )
+                            aRect.Right( aRect.Left() + rScroll.GetOffs()-1 );
+                        else
+                            aRect.Left( aRect.Right() - rScroll.GetOffs() );
+                        Imp()->AddPaintRect( aRect );
+                    }
+                    else
+#endif
+                    {
+                        Rectangle aRectangle( rStripes.GetMin(),
+                            rStripes.GetY() - rScroll.GetOffs(),
+                            rStripes.GetRight(),
+                            rStripes.GetBottom() - rScroll.GetOffs() );
+                        GetWin()->Scroll( 0, rScroll.GetOffs(), aRectangle,
+                            SCROLL_CHILDREN);
+                        SwRect aRect( aRectangle );
+                        Imp()->ScrolledRect( aRect, rScroll.GetOffs() );
+                        if ( bPositive )
+                            aRect.Bottom( aRect.Top() + rScroll.GetOffs()-1 );
+                        else
+                            aRect.Top( aRect.Bottom() + rScroll.GetOffs() );
+                        Imp()->AddPaintRect( aRect );
+                    }
                 }
             }
         }
@@ -246,11 +272,46 @@ void SwViewImp::AddScrollRect( const SwFrm *pFrm, const SwRect &rRect,
 {
     ASSERT( nOffs != 0, "Scrollen ohne Ofst." );
     SwRect aRect( rRect );
+#ifdef VERTICAL_LAYOUT
+    BOOL bVert = pFrm->IsVertical();
+    if( bVert )
+        aRect.Pos().X() += nOffs;
+    else
+#endif
     aRect.Pos().Y() -= nOffs;
     if( aRect.IsOver( pSh->VisArea() ) )
     {
         ASSERT( pSh->GetWin(), "Scrolling without outputdevice" );
         aRect._Intersection( pSh->VisArea() );
+#ifdef VERTICAL_LAYOUT
+        SwStripes *pStr;
+        if ( !pScrollRects )
+            pScrollRects = new SwScrollAreas;
+        if( bVert )
+        {
+            aRect.Pos().X() -= nOffs;
+            pStr = new SwStripes( aRect.Right(), aRect.Width(),
+                                  aRect.Top(), aRect.Bottom() );
+            if( pFrm->IsTxtFrm() )
+                ((SwTxtFrm*)pFrm)->CriticalLines(*pSh->GetWin(), *pStr, nOffs );
+            else
+                pStr->Insert( SwStripe( aRect.Right(), aRect.Width() ), 0 );
+            pScrollRects->InsertCol( SwScrollColumn( pFrm->Frm().Top(),
+                                    pFrm->Frm().Height(), nOffs, bVert ), pStr);
+        }
+        else
+        {
+            aRect.Pos().Y() += nOffs;
+            pStr = new SwStripes( aRect.Top(), aRect.Height(),
+                                  aRect.Left(), aRect.Right() );
+            if( pFrm->IsTxtFrm() )
+                ((SwTxtFrm*)pFrm)->CriticalLines(*pSh->GetWin(), *pStr, nOffs );
+            else
+                pStr->Insert( SwStripe( aRect.Top(), aRect.Height() ), 0 );
+            pScrollRects->InsertCol( SwScrollColumn( pFrm->Frm().Left(),
+                                    pFrm->Frm().Width(), nOffs, bVert ), pStr );
+        }
+#else
         aRect.Pos().Y() += nOffs;
         SwStripes *pStripes = new SwStripes( aRect );
         if( pFrm->IsTxtFrm() )
@@ -260,6 +321,7 @@ void SwViewImp::AddScrollRect( const SwFrm *pFrm, const SwRect &rRect,
         if ( !pScrollRects )
             pScrollRects = new SwScrollAreas;
         pScrollRects->InsertCol( SwScrollColumn(pFrm->Frm(),nOffs), pStripes );
+#endif
     }
     else
         AddPaintRect( rRect );
@@ -281,7 +343,7 @@ void SwViewImp::MoveScrollArea()
 {
     if( !pScrolledArea )
         pScrolledArea = new SwScrollAreas;
-    for( long nIdx = 0; nIdx < pScrollRects->Count(); ++nIdx )
+    for( USHORT nIdx = 0; nIdx < pScrollRects->Count(); ++nIdx )
     {
         SwScrollArea *pScr = (*pScrollRects)[ nIdx ];
         if( pScr->Compress() )
@@ -313,20 +375,35 @@ void SwViewImp::MoveScrollArea()
 
 void SwViewImp::FlushScrolledArea()
 {
-    long nCount = pScrolledArea->Count();
+    USHORT nCount = pScrolledArea->Count();
     while( nCount )
     {
         SwScrollArea* pScroll = (*pScrolledArea)[--nCount];
-        long nCnt = pScroll->Count();
+        USHORT nCnt = pScroll->Count();
         while( nCnt )
         {
             SwStripes* pStripes = (*pScroll)[--nCnt];
-            SwRect aRect( pStripes->GetMin(), 0, pStripes->GetWidth(), 0 );
-            for( long i = 0; i < pStripes->Count(); ++i )
+#ifdef VERTICAL_LAYOUT
+            if( pScroll->IsVertical() )
             {
-                aRect.Top( (*pStripes)[i].GetY() );
-                aRect.Height( (*pStripes)[i].GetHeight() );
-                AddPaintRect( aRect );
+                SwRect aRect( 0, pStripes->GetMin(), 0, pStripes->GetWidth() );
+                for( USHORT i = 0; i < pStripes->Count(); ++i )
+                {
+                    long nWidth = (*pStripes)[i].GetHeight();
+                    aRect.Left( (*pStripes)[i].GetY() - nWidth + 1 );
+                    aRect.Width( nWidth );
+                    AddPaintRect( aRect );
+                }
+            }
+#endif
+            {
+                SwRect aRect( pStripes->GetMin(), 0, pStripes->GetWidth(), 0 );
+                for( USHORT i = 0; i < pStripes->Count(); ++i )
+                {
+                    aRect.Top( (*pStripes)[i].GetY() );
+                    aRect.Height( (*pStripes)[i].GetHeight() );
+                    AddPaintRect( aRect );
+                }
             }
             pScroll->Remove( nCnt );
             delete pStripes;
@@ -352,30 +429,56 @@ void SwViewImp::FlushScrolledArea()
 
 BOOL SwViewImp::_FlushScrolledArea( SwRect& rRect )
 {
-    long nCount = pScrolledArea->Count();
     BOOL bRet = FALSE;
-    for( long i = pScrolledArea->Count(); i; )
+    for( USHORT i = pScrolledArea->Count(); i; )
     {
         SwScrollArea* pScroll = (*pScrolledArea)[--i];
-        for( long j = pScroll->Count(); j; )
+        for( USHORT j = pScroll->Count(); j; )
         {
             SwStripes* pStripes = (*pScroll)[--j];
             if( pStripes->Count() )
             {
-                SwRect aRect( pStripes->GetMin(), pStripes->GetY(),
-                    pStripes->GetWidth(), pStripes->GetHeight() );
-                if( rRect.IsOver( aRect ) )
+#ifdef VERTICAL_LAYOUT
+                if( pScroll->IsVertical() )
                 {
-                    for( long nI = pStripes->Count(); nI; )
+                    SwRect aRect( pStripes->GetY() - pStripes->GetHeight(),
+                        pStripes->GetMin(), pStripes->GetHeight(),
+                        pStripes->GetWidth() );
+                    if( rRect.IsOver( aRect ) )
                     {
-                        aRect.Top( (*pStripes)[--nI].GetY() );
-                        aRect.Height( (*pStripes)[nI].GetHeight() );
-                        if( rRect.IsOver( aRect ) )
+                        for( USHORT nI = pStripes->Count(); nI; )
                         {
-                            rRect.Union( aRect );
-                            bRet = TRUE;
-                            pStripes->Remove( nI );
-                            nI = pStripes->Count();
+                            long nWidth = (*pStripes)[--nI].GetHeight();
+                            aRect.Left( (*pStripes)[nI].GetY() - nWidth + 1 );
+                            aRect.Width( nWidth );
+                            if( rRect.IsOver( aRect ) )
+                            {
+                                rRect.Union( aRect );
+                                bRet = TRUE;
+                                pStripes->Remove( nI );
+                                nI = pStripes->Count();
+                            }
+                        }
+                    }
+                }
+                else
+#endif
+                {
+                    SwRect aRect( pStripes->GetMin(), pStripes->GetY(),
+                        pStripes->GetWidth(), pStripes->GetHeight() );
+                    if( rRect.IsOver( aRect ) )
+                    {
+                        for( USHORT nI = pStripes->Count(); nI; )
+                        {
+                            aRect.Top( (*pStripes)[--nI].GetY() );
+                            aRect.Height( (*pStripes)[nI].GetHeight() );
+                            if( rRect.IsOver( aRect ) )
+                            {
+                                rRect.Union( aRect );
+                                bRet = TRUE;
+                                pStripes->Remove( nI );
+                                nI = pStripes->Count();
+                            }
                         }
                     }
                 }
@@ -445,8 +548,16 @@ IMPL_LINK( SwViewImp, RefreshScrolledHdl, Timer *, EMPTYARG )
             SwStripes* pStripes = pScroll->GetObject(0);
             ASSERT( pStripes->Count() > 1, "Empty scrollstripes" );
             const SwStripe &rStripe = pStripes->GetObject(1);
+#ifdef VERTICAL_LAYOUT
+            SwRect aTmpRect = pScroll->IsVertical() ?
+                SwRect( rStripe.GetY() - rStripe.GetHeight(), pScroll->GetX(),
+                          rStripe.GetHeight(), pScroll->GetWidth() ) :
+                SwRect( pScroll->GetX(), rStripe.GetY(),
+                        pScroll->GetWidth(), rStripe.GetHeight() );
+#else
             SwRect aTmpRect( pScroll->GetX(), rStripe.GetY(),
                              pScroll->GetWidth(), rStripe.GetHeight() );
+#endif
             if( aTmpRect.IsOver( aRect ) )
             {
                 SwSaveHdl aSaveHdl( this );
@@ -500,22 +611,43 @@ IMPL_LINK( SwViewImp, RefreshScrolledHdl, Timer *, EMPTYARG )
 
 void SwViewImp::_ScrolledRect( const SwRect& rRect, long nOffs )
 {
-    for( long i = pScrolledArea->Count(); i; )
+    for( USHORT i = pScrolledArea->Count(); i; )
     {
         SwScrollArea* pScroll = (*pScrolledArea)[--i];
         ASSERT( pScroll->Count() == 1, "Missing scrollarea compression 1" );
         SwStripes* pStripes = (*pScroll)[0];
         if( pStripes->Count() )
         {
+#ifdef VERTICAL_LAYOUT
+            SwRect aRect = pScroll->IsVertical() ?
+                SwRect( pStripes->GetY() - pStripes->GetHeight(),
+                        pStripes->GetMin(), pStripes->GetHeight(),
+                        pStripes->GetWidth() ) :
+                SwRect( pStripes->GetMin(), pStripes->GetY(),
+                        pStripes->GetWidth(), pStripes->GetHeight() );
+
+#else
             SwRect aRect( pStripes->GetMin(), pStripes->GetY(),
                 pStripes->GetWidth(), pStripes->GetHeight() );
+#endif
             if( rRect.IsOver( aRect ) )
             {
                 BOOL bRecalc = FALSE;
-                for( long nI = pStripes->Count(); nI; )
+                for( USHORT nI = pStripes->Count(); nI; )
                 {
-                    aRect.Top( (*pStripes)[--nI].GetY() );
-                    aRect.Height( (*pStripes)[nI].GetHeight() );
+#ifdef VERTICAL_LAYOUT
+                    if( pScroll->IsVertical() )
+                    {
+                        long nWidth = (*pStripes)[--nI].GetHeight();
+                        aRect.Left( (*pStripes)[nI].GetY() - nWidth + 1 );
+                        aRect.Width( nWidth );
+                    }
+                    else
+#endif
+                    {
+                        aRect.Top( (*pStripes)[--nI].GetY() );
+                        aRect.Height( (*pStripes)[nI].GetHeight() );
+                    }
                     if( rRect.IsInside( aRect ) )
                     {
                         (*pStripes)[nI].Y() += nOffs;
@@ -523,7 +655,11 @@ void SwViewImp::_ScrolledRect( const SwRect& rRect, long nOffs )
                     }
                 }
                 if( bRecalc )
+#ifdef VERTICAL_LAYOUT
+                    pStripes->Recalc( pScroll->IsVertical() );
+#else
                     pStripes->Recalc();
+#endif
             }
         }
     }
@@ -693,22 +829,42 @@ void SwViewImp::RefreshScrolledArea( SwRect &rRect )
         ( ((SwCrsrShell*)GetShell())->HasSelection() ||
           ((SwCrsrShell*)GetShell())->GetCrsrCnt() > 1) ) ) )
     {
-        for( long i = pScrolledArea->Count(); i; )
+        for( USHORT i = pScrolledArea->Count(); i; )
         {
             SwScrollArea* pScroll = (*pScrolledArea)[--i];
-            for( long j = pScroll->Count(); j; )
+            for( USHORT j = pScroll->Count(); j; )
             {
                 SwStripes* pStripes = (*pScroll)[--j];
                 if( pStripes->Count() )
                 {
+#ifdef VERTICAL_LAYOUT
+                    SwRect aRect = pScroll->IsVertical() ?
+                        SwRect( pStripes->GetY() - pStripes->GetHeight(),
+                                pStripes->GetMin(), pStripes->GetHeight(),
+                                pStripes->GetWidth() ) :
+                        SwRect( pStripes->GetMin(), pStripes->GetY(),
+                                pStripes->GetWidth(), pStripes->GetHeight() );
+#else
                     SwRect aRect( pStripes->GetMin(), pStripes->GetY(),
                         pStripes->GetWidth(), pStripes->GetHeight() );
+#endif
                     if( rRect.IsOver( aRect ) )
                     {
-                        for( long nI = pStripes->Count(); nI; )
+                        for( USHORT nI = pStripes->Count(); nI; )
                         {
-                            aRect.Top( (*pStripes)[--nI].GetY() );
-                            aRect.Height( (*pStripes)[nI].GetHeight() );
+#ifdef VERTICAL_LAYOUT
+                            if( pScroll->IsVertical() )
+                            {
+                                long nWidth = (*pStripes)[--nI].GetHeight();
+                                aRect.Left( (*pStripes)[nI].GetY() -nWidth +1 );
+                                aRect.Width( nWidth );
+                            }
+                            else
+#endif
+                            {
+                                aRect.Top( (*pStripes)[--nI].GetY() );
+                                aRect.Height( (*pStripes)[nI].GetHeight() );
+                            }
                             if( rRect.IsOver( aRect ) )
                             {
                                 pStripes->Remove( nI );
@@ -745,7 +901,11 @@ void SwViewImp::RefreshScrolledArea( SwRect &rRect )
     }
 }
 
+#ifdef VERTICAL_LAYOUT
+SwStripes& SwStripes::Plus( const SwStripes& rOther, BOOL bVert )
+#else
 SwStripes& SwStripes::operator+=( const SwStripes& rOther )
+#endif
 {
     if( !Count() )
     {
@@ -761,7 +921,53 @@ SwStripes& SwStripes::operator+=( const SwStripes& rOther )
         ChkMin( rOther.GetMin() );
         ChkMax( rOther.GetMax() );
         USHORT nStart = 0;
-        for( long nIdx = 0; nIdx < nCnt; ++nIdx )
+#ifdef VERTICAL_LAYOUT
+        if( bVert )
+        for( USHORT nIdx = 0; nIdx < nCnt; ++nIdx )
+        {
+            const SwStripe& rAdd = rOther[ nIdx ];
+            long nBottom = rAdd.GetY() - rAdd.GetHeight();
+            USHORT nCount = Count();
+            USHORT nY = nStart;
+            while( nY < nCount )
+            {
+                SwStripe& rChk = GetObject( nY );
+                if( rChk.GetY() - rChk.GetHeight() < rAdd.GetY() )
+                    break;
+                else
+                    ++nY;
+            }
+            USHORT nB = nY;
+            while( nB < nCount )
+            {
+                const SwStripe& rChk = GetObject( nB );
+                if( rChk.GetY() <= nBottom )
+                    break;
+                else
+                    ++nB;
+            }
+            nStart = nY;
+            if( nY == nB )
+                Insert( rAdd, nY );
+            else
+            {
+                long nChkBottom = rAdd.GetY() - rAdd.GetHeight();;
+                const SwStripe& rChkB = GetObject( nB - 1 );
+                long nTmp = rChkB.GetY() - rChkB.GetHeight();
+                if( nTmp < nChkBottom )
+                    nChkBottom = nTmp;
+                SwStripe& rChk = GetObject( nY );
+                if( rAdd.GetY() > rChk.GetY() )
+                    rChk.Y() = rAdd.GetY();
+                rChk.Height() = rChk.GetY() - nChkBottom;
+                nChkBottom = nB - nY - 1;
+                if( nChkBottom )
+                    Remove( nY + 1, (USHORT)nChkBottom );
+            }
+        }
+        else
+#endif
+        for( USHORT nIdx = 0; nIdx < nCnt; ++nIdx )
         {
             const SwStripe& rAdd = rOther[ nIdx ];
             long nBottom = rAdd.GetY() + rAdd.GetHeight();
@@ -800,28 +1006,50 @@ SwStripes& SwStripes::operator+=( const SwStripes& rOther )
                 rChk.Height() = nChkBottom - rChk.GetY();
                 nChkBottom = nB - nY - 1;
                 if( nChkBottom )
-                    Remove( nY + 1, nChkBottom );
+                    Remove( nY + 1, (USHORT)nChkBottom );
             }
         }
     }
     return *this;
 }
 
+#ifdef VERTICAL_LAYOUT
+BOOL SwStripes::Recalc( BOOL bVert )
+#else
 BOOL SwStripes::Recalc()
+#endif
 {
     if( !Count() )
         return TRUE;
     Y() = GetObject(0).GetY();
-    long nTmpMax = GetObject(0).GetY() + GetObject(0).Height();
-    for( long nIdx = 1; nIdx < Count(); )
+#ifdef VERTICAL_LAYOUT
+    if( bVert )
     {
-        const SwStripe& rStr = GetObject(nIdx++);
-        if( GetY() > rStr.GetY() )
-            Y() = rStr.GetY();
-        if( nTmpMax < rStr.GetY() + rStr.GetHeight() )
-            nTmpMax = rStr.GetY() + rStr.GetHeight();
+        long nTmpMin = GetObject(0).GetY() - GetObject(0).Height();
+        for( USHORT nIdx = 1; nIdx < Count(); )
+        {
+            const SwStripe& rStr = GetObject(nIdx++);
+            if( GetY() < rStr.GetY() )
+                Y() = rStr.GetY();
+            if( nTmpMin > rStr.GetY() - rStr.GetHeight() )
+                nTmpMin = rStr.GetY() - rStr.GetHeight();
+        }
+        Height() = GetY() - nTmpMin;
     }
-    Height() = nTmpMax - GetY();
+    else
+#endif
+    {
+        long nTmpMax = GetObject(0).GetY() + GetObject(0).Height();
+        for( USHORT nIdx = 1; nIdx < Count(); )
+        {
+            const SwStripe& rStr = GetObject(nIdx++);
+            if( GetY() > rStr.GetY() )
+                Y() = rStr.GetY();
+            if( nTmpMax < rStr.GetY() + rStr.GetHeight() )
+                nTmpMax = rStr.GetY() + rStr.GetHeight();
+        }
+        Height() = nTmpMax - GetY();
+    }
     return FALSE;
 }
 
@@ -829,22 +1057,35 @@ BOOL SwScrollArea::Compress()
 {
     if( !Count() )
         return TRUE;
-    for( long nIdx = Count() - 1; nIdx > 0; --nIdx )
+    for( USHORT nIdx = Count() - 1; nIdx > 0; --nIdx )
     {
+#ifdef VERTICAL_LAYOUT
+        GetObject(0)->Plus( *GetObject(nIdx), IsVertical() );
+#else
         *GetObject(0) += *GetObject(nIdx);
+#endif
         delete GetObject( nIdx );
         Remove( nIdx, 1 );
     }
     ClrOffs();
+#ifdef VERTICAL_LAYOUT
+    return GetObject(0)->Recalc( IsVertical() );
+#else
     return GetObject(0)->Recalc();
+#endif
 }
 
 void SwScrollArea::Add( SwScrollArea *pScroll )
 {
     ASSERT( pScroll->Count() == 1, "Missing scrollarea compression 2" );
     ASSERT( Count() == 1, "Missing scrollarea compression 3" );
+#ifdef VERTICAL_LAYOUT
+    GetObject(0)->Plus( *pScroll->GetObject(0), IsVertical() );
+    GetObject(0)->Recalc( IsVertical() );
+#else
     *GetObject(0) += *pScroll->GetObject(0);
     GetObject(0)->Recalc();
+#endif
     delete pScroll->GetObject( 0 );
     pScroll->Remove( (USHORT)0, 1 );
     delete pScroll;
@@ -875,7 +1116,34 @@ void SwScrollArea::SmartInsert( SwStripes* pStripes )
 {
     ASSERT( pStripes, "Insert empty scrollstripe?" );
     BOOL bNotInserted = TRUE;
-    for( long nIdx = 0; nIdx < Count() && bNotInserted; )
+#ifdef VERTICAL_LAYOUT
+    if( IsVertical() )
+        for( USHORT nIdx = 0; nIdx < Count() && bNotInserted; )
+        {
+            SwStripes* pTmp = GetObject( nIdx++ );
+            if( pTmp->GetY() - pTmp->GetHeight() == pStripes->GetY() )
+            {
+                pTmp->Height() += pStripes->GetHeight();
+                pTmp->ChkMin( pStripes->GetMin() );
+                pTmp->ChkMax( pStripes->GetMax() );
+                if( pStripes->Count() )
+                    pTmp->Insert( (SwStripeArr*)pStripes, pTmp->Count(), 0 );
+                bNotInserted = FALSE;
+            }
+            else if( pTmp->GetY() == pStripes->GetY() - pStripes->GetHeight() )
+            {
+                pTmp->Height() += pStripes->GetHeight();
+                pTmp->Y() = pStripes->GetY();
+                pTmp->ChkMin( pStripes->GetMin() );
+                pTmp->ChkMax( pStripes->GetMax() );
+                if( pStripes->Count() )
+                    pTmp->Insert( (SwStripeArr*)pStripes, 0, 0 );
+                bNotInserted = FALSE;
+            }
+        }
+    else
+#endif
+    for( USHORT nIdx = 0; nIdx < Count() && bNotInserted; )
     {
         SwStripes* pTmp = GetObject( nIdx++ );
         if( pTmp->GetY() + pTmp->GetHeight() == pStripes->GetY() )
@@ -905,6 +1173,9 @@ void SwScrollArea::SmartInsert( SwStripes* pStripes )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/06/08 13:03:27  ama
+      Fix #87926#: Don't paint outside the page frame
+
       Revision 1.2  2001/03/01 11:15:24  ama
       Fix #84455#: memory leak
 

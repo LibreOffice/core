@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-16 11:39:37 $
+ *  last change: $Author: ama $ $Date: 2001-11-29 15:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ static SwRectFnCollection aHorizontal = {
     &FirstMinusSecond,
     &SwIncrement,
     &SwIncrement,
-//    &SwRect::SetLeftAndWidth,
+    &SwRect::SetLeftAndWidth,
     &SwRect::SetTopAndHeight
 };
 
@@ -252,7 +252,7 @@ static SwRectFnCollection aVertical = {
     &SecondMinusFirst,
     &SwIncrement,
     &SwDecrement,
-//    &SwRect::SetTopAndHeight,
+    &SwRect::SetTopAndHeight,
     &SwRect::SetRightAndWidth
 };
 
@@ -303,7 +303,7 @@ static SwRectFnCollection aBottomToTop = {
     &SecondMinusFirst,
     &SwIncrement,
     &SwDecrement,
-//    &SwRect::SetLeftAndWidth,
+    &SwRect::SetLeftAndWidth,
     &SwRect::SetBottomAndHeight
 };
 
@@ -354,7 +354,7 @@ static SwRectFnCollection aVerticalRightToLeft = {
     &FirstMinusSecond,
     &SwDecrement,
     &SwIncrement,
-//    &SwRect::SetBottomAndHeight,
+    &SwRect::SetBottomAndHeight,
     &SwRect::SetLeftAndWidth
 };
 
