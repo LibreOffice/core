@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuvect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 13:42:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,9 @@
 #endif
 #include "strings.hrc"
 #include "sdresid.hxx"
-#include "vectdlg.hxx"
-
+//CHINA001 #include "vectdlg.hxx"
+#include "sdabstdlg.hxx" //CHINA001
+#include "vectdlg.hrc" //CHINA001
 namespace sd {
 
 TYPEINIT1( FuVectorize, FuPoor );
@@ -119,11 +120,14 @@ FuVectorize::FuVectorize (
 
         if( pObj && pObj->ISA( SdrGrafObj ) )
         {
-            SdVectorizeDlg aDlg(pWin, ( (SdrGrafObj*) pObj )->GetGraphic().GetBitmap(), pDocSh );
-
-            if( aDlg.Execute() == RET_OK )
+            //CHINA001 SdVectorizeDlg aDlg(pWin, ( (SdrGrafObj*) pObj )->GetGraphic().GetBitmap(), pDocSh );
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+            AbstractSdVectorizeDlg* pDlg = pFact->CreateSdVectorizeDlg(ResId( DLG_VECTORIZE ), pWin, ( (SdrGrafObj*) pObj )->GetGraphic().GetBitmap(), pDocSh );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            if( pDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
             {
-                const GDIMetaFile&  rMtf = aDlg.GetGDIMetaFile();
+                const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile(); //CHINA001 const GDIMetaFile&    rMtf = aDlg.GetGDIMetaFile();
                 SdrPageView*        pPageView = pView->GetPageViewPvNum( 0 );
 
                 if( pPageView && rMtf.GetActionCount() )
@@ -139,6 +143,7 @@ FuVectorize::FuVectorize (
                     pView->EndUndo();
                 }
             }
+            delete pDlg; //add by CHINA001
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusldlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:12:57 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include "present.hxx"
+//CHINA001 #include "present.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
 #include "sdattr.hxx"
@@ -85,7 +85,8 @@
 #include "Window.hxx"
 #endif
 #include "optsitem.hxx"
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "present.hrc" //CHINA001
 
 namespace sd {
 
@@ -165,16 +166,19 @@ FuSlideShowDlg::FuSlideShowDlg (
     aDlgSet.Put( SfxUInt32Item( ATTR_PRESENT_PAUSE_TIMEOUT, pDoc->GetPresPause() ) );
     aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_SHOW_PAUSELOGO, pDoc->IsPresShowLogo() ) );
 
-    SdStartPresentationDlg aDlg (pWindow, aDlgSet, aPageNameList, pCustomShowList );
-
-    if( aDlg.Execute() == RET_OK )
+    //CHINA001 SdStartPresentationDlg aDlg (pWindow, aDlgSet, aPageNameList, pCustomShowList );
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+    AbstractSdStartPresDlg* pDlg = pFact->CreateSdStartPresentationDlg(ResId( DLG_START_PRESENTATION ), pWindow, aDlgSet, aPageNameList, pCustomShowList );
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    if( pDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
     {
         String  aPage;
         ULONG   nValue32;
         BOOL    bValue;
         BOOL    bValuesChanged = FALSE;
 
-        aDlg.GetAttr( aDlgSet );
+        pDlg->GetAttr( aDlgSet ); //CHINA001 aDlg.GetAttr( aDlgSet );
 
         aPage = ITEMVALUE( aDlgSet, ATTR_PRESENT_DIANAME, SfxStringItem );
         if( aPage != pDoc->GetPresPage() )
@@ -278,7 +282,7 @@ FuSlideShowDlg::FuSlideShowDlg (
         if ( bValuesChanged )
             pDoc->SetChanged( TRUE );
     }
-
+    delete pDlg; //add by CHINA001
     // Strings aus Liste loeschen
     for( void* pStr = aPageNameList.First(); pStr; pStr = aPageNameList.Next() )
         delete (String*) pStr;
