@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAutoFormatsObj.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 14:44:32 $
+ *  last change:$Date: 2003-05-27 13:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.frame.XComponentLoader;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sheet.XSpreadsheetDocument;
@@ -109,7 +110,7 @@ public class ScAutoFormatsObj extends TestCase{
     * Creates Spreadsheet document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a Spreadsheet document" );
@@ -160,7 +161,7 @@ public class ScAutoFormatsObj extends TestCase{
             XComponent xComp = (XComponent)UnoRuntime.queryInterface
                 (XComponent.class, xSheetDoc);
             oObj = (XInterface) AnyConverter.toObject(
-                new Type(XInterface.class),Param.getMSF().createInstance
+                new Type(XInterface.class),((XMultiServiceFactory)Param.getMSF()).createInstance
                                     ("com.sun.star.sheet.TableAutoFormats"));
             Object secondInstance = SOF.createInstance
                 (xComp, "com.sun.star.sheet.TableAutoFormat");

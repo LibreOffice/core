@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAutoFormatObj.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 14:37:46 $
+ *  last change:$Date: 2003-05-27 13:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ public class ScAutoFormatObj extends TestCase {
             PrintWriter log) {
 
         XInterface oObj = null;
-        XMultiServiceFactory oMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory oMSF = (XMultiServiceFactory)(XMultiServiceFactory)tParam.getMSF();
         try {
             XInterface formats = (XInterface)oMSF.createInstance
                     ("com.sun.star.sheet.TableAutoFormats");
