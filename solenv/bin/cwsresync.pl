@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 15:11:19 $
+#   last change: $Author: rt $ $Date: 2004-08-23 11:26:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.3 $ ';
+my $id_str = ' $Revision: 1.4 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -151,9 +151,10 @@ my $parameter_list = $log->array2string(";",@args_bak) if (defined $log);
 
 my ($dir, $milestone, @args) = parse_options();
 my $cws = get_and_verify_cws();
+verify_milestone_or_exit($cws, $milestone);
 my @action_list = parse_args($cws, $dir, @args);
 walk_action_list($cws, $dir, $milestone, @action_list);
-&log_stats();
+log_stats();
 exit(0);
 
 #### subroutines ####
@@ -226,13 +227,7 @@ sub parse_options
         exit(1);
     }
 
-    my $qualified_milestone = $opt_merge || $opt_link;
-    if ( !check_milestone($qualified_milestone) ) {
-        print_error("Invalid milestone '$qualified_milestone'.", 0);
-        usage();
-        exit(1);
-    }
-
+    my $milestone = $opt_merge || $opt_link;
     if ( ($opt_merge && $opt_commit) ||
          ($opt_merge && $opt_link)   ||
          ($opt_commit && $opt_link) )
@@ -258,7 +253,7 @@ sub parse_options
         print_error("Can't write to directory '$dir'.", 1);
     }
 
-    return ($dir, $qualified_milestone, @ARGV);
+    return ($dir, $milestone, @ARGV);
 }
 
 # Parse and verify args. Check that all necessary preconditions are fullfilled
@@ -1566,18 +1561,35 @@ sub check_sticky_tag
     }
 }
 
-# some simple checks on the plausibility of the specified milestone
-sub check_milestone
+# Checks specified milestone.
+sub verify_milestone_or_exit
 {
-    # TODO needs more checks based on EIS
+    my $cws = shift;
     my $qualified_milestone = shift;
 
-    return 0 if $qualified_milestone =~ /-/;
+    my ($master, $milestone);
+    my $invalid = 0;
+
+    $invalid++ if $qualified_milestone =~ /-/;
+
     if ( $qualified_milestone =~ /:/ ) {
-        my ($master, $milestone) = split(/:/, $qualified_milestone);
-        return 0 unless ( $master && $milestone );
+        ($master, $milestone) = split(/:/, $qualified_milestone);
+        $invalid++ unless ( $master && $milestone );
     }
-    return 1;
+    else {
+        $milestone = $qualified_milestone;
+    }
+
+    if ( $invalid ) {
+        print_error("Invalid milestone", 0);
+        usage();
+        exit(1);
+    }
+
+    $master = $cws->master() if !$master;
+    if ( !$cws->is_milestone($master, $milestone) ) {
+        print_error("Milestone '$milestone' is not registered with master workspace '$master'.", 2);
+    }
 }
 
 # Returns milestone tag determined from the
