@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 08:04:39 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 16:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ portuguese_brazilian ] = "Br~eite an Text anpassen" ;
         Text[ chinese_simplified ] = "ºÍÎÄ×Ö¿í¶È¶ÔÓ¦(~D)";
         Text[ russian ] = "Âûğîâíÿòü øèğèíó ïî òåêñòó";
-        Text[ polish ] = "Dopasuj szeroko~œæ do tekstu";
+        Text[ polish ] = "Dopasuj szeroko~?æ do tekstu";
         Text[ japanese ] = "Ã·½Ä‚É•‚ğ‡‚í‚¹‚é(~D)";
         Text[ chinese_traditional ] = "¼e«×©M¤º¤å¹ï»ô(~D)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÚÑÖ ááäÕ";
@@ -127,10 +127,10 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ swedish ] = "Anpassa höjd ~till text" ;
         Text [ danish ] = "Tilpas højde til tekst" ;
         Text [ portuguese ] = "Ajustar ~altura ao texto" ;
-        Text [ portuguese_brazilian ] = "H~öhe an Text anpassen" ;
+        Text [ portuguese_brazilian ] = "H~?e an Text anpassen" ;
         Text[ chinese_simplified ] = "ºÍÎÄ×Ö¸ß¶È¶ÔÓ¦(~E)";
         Text[ russian ] = "Âûğîâíÿòü âûñîòó ïî òåêñòó";
-        Text[ polish ] = "Dopas~uj wysokoœæ do tekstu";
+        Text[ polish ] = "Dopas~uj wysoko?æ do tekstu";
         Text[ japanese ] = "Ã·½Ä‚É‚‚³‚ğ‡‚í‚¹‚é(~E)";
         Text[ chinese_traditional ] = "°ª«×©M¤º¤å¹ï»ô(~E)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ááäÕ";
@@ -181,7 +181,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ ENGLISH ] = "~Contour" ;
         Text [ portuguese ] = "Ajustar ao ~contorno" ;
         Text [ english_us ] = "~Adjust to contour" ;
-        Text [ portuguese_brazilian ] = "~Konturfluß" ;
+        Text [ portuguese_brazilian ] = "~Konturflu?" ;
         Text [ swedish ] = "~Konturflöde" ;
         Text [ danish ] = "Konturforløb" ;
         Text [ italian ] = "Flusso di contorno" ;
@@ -426,7 +426,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ portuguese ] = "Espaço até moldura" ;
         Text[ chinese_simplified ] = "Óë±ß¿òµÄ¾àÀë";
         Text[ russian ] = "Ğàññòîÿíèå îò ğàìêè";
-        Text[ polish ] = "Odleg³oœæ od ramki";
+        Text[ polish ] = "Odleg³o?æ od ramki";
         Text[ japanese ] = "˜g‚©‚ç‚ÌŠÔŠu";
         Text[ chinese_traditional ] = "Ãä®Øªº¶¡¹j";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáßÇÏÑ";
@@ -463,7 +463,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ portuguese_brazilian ] = "Ganze ~Breite" ;
         Text[ chinese_simplified ] = "Õû¸ö¿í¶È(~W)";
         Text[ russian ] = "Ïîëíàÿ øèğèíà";
-        Text[ polish ] = "Ca³a szerokoœæ";
+        Text[ polish ] = "Ca³a szeroko?æ";
         Text[ japanese ] = "‘S•(~W)";
         Text[ chinese_traditional ] = "¾ã­Ó¼e«×(~W)";
         Text[ arabic ] = "ÇáÚÑÖ ßáå";
