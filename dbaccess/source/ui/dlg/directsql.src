@@ -2,9 +2,9 @@
  *
  *  $RCSfile: directsql.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:08:48 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,10 @@ ModalDialog DLG_DIRECTSQL
         Text[ swedish ] = "SQL-kommando";
         Text[ polish ] = "Polecenie SQL";
         Text[ portuguese_brazilian ] = "SQL command";
-        Text[ japanese ] = "SQL ºÏİÄŞ";
+        Text[ japanese ] = "SQL ï½ºï¾ï¾ï¾„ï¾";
         Text[ korean ] = "SQL command";
-        Text[ chinese_simplified ] = "SQL ÃüÁî";
-        Text[ chinese_traditional ] = "SQL «ü¥O";
+        Text[ chinese_simplified ] = "SQL å‘½ä»¤";
+        Text[ chinese_traditional ] = "SQL æŒ‡ä»¤";
         Text[ turkish ] = "SQL command";
         Text[ arabic ] = "SQL command";
         Text[ catalan ] = "SQL command";
@@ -126,10 +126,10 @@ ModalDialog DLG_DIRECTSQL
         Text[ swedish ] = "Kommando att utföra";
         Text[ polish ] = "Polecenie do wykonania";
         Text[ portuguese_brazilian ] = "Command to execute";
-        Text[ japanese ] = "ÀsºÏİÄŞ";
+        Text[ japanese ] = "å®Ÿè¡Œï½ºï¾ï¾ï¾„ï¾";
         Text[ korean ] = "Command to execute";
-        Text[ chinese_simplified ] = "ÒªÖ´ĞĞµÄÃüÁî";
-        Text[ chinese_traditional ] = "­n°õ¦æªº«ü¥O";
+        Text[ chinese_simplified ] = "è¦æ‰§è¡Œçš„å‘½ä»¤";
+        Text[ chinese_traditional ] = "è¦åŸ·è¡Œçš„æŒ‡ä»¤";
         Text[ turkish ] = "Command to execute";
         Text[ arabic ] = "Command to execute";
         Text[ catalan ] = "Command to execute";
@@ -163,10 +163,10 @@ ModalDialog DLG_DIRECTSQL
         Text[ swedish ] = "Utför";
         Text[ polish ] = "Wykonaj";
         Text[ portuguese_brazilian ] = "Execute";
-        Text[ japanese ] = "Às";
+        Text[ japanese ] = "å®Ÿè¡Œ";
         Text[ korean ] = "Execute";
-        Text[ chinese_simplified ] = "Ö´ĞĞ";
-        Text[ chinese_traditional ] = "°õ¦æ";
+        Text[ chinese_simplified ] = "æ‰§è¡Œ";
+        Text[ chinese_traditional ] = "åŸ·è¡Œ";
         Text[ turkish ] = "Execute";
         Text[ arabic ] = "Execute";
         Text[ catalan ] = "Execute";
@@ -190,10 +190,10 @@ ModalDialog DLG_DIRECTSQL
         Text[ swedish ] = "Föregående kommando";
         Text[ polish ] = "Poprzednie polecenie";
         Text[ portuguese_brazilian ] = "Previous commands";
-        Text[ japanese ] = "‘O‚ÌºÏİÄŞ";
+        Text[ japanese ] = "å‰ã®ï½ºï¾ï¾ï¾„ï¾";
         Text[ korean ] = "Previous commands";
-        Text[ chinese_simplified ] = "Ç°Ò»¸öÃüÁî";
-        Text[ chinese_traditional ] = "«e¤@­Ó«ü¥O";
+        Text[ chinese_simplified ] = "å‰ä¸€ä¸ªå‘½ä»¤";
+        Text[ chinese_traditional ] = "å‰ä¸€å€‹æŒ‡ä»¤";
         Text[ turkish ] = "Previous commands";
         Text[ arabic ] = "Previous commands";
         Text[ catalan ] = "Previous commands";
@@ -225,10 +225,10 @@ ModalDialog DLG_DIRECTSQL
         Text[ swedish ] = "Status";
         Text[ polish ] = "Stan";
         Text[ portuguese_brazilian ] = "Status";
-        Text[ japanese ] = "½Ã°À½";
-        Text[ korean ] = "»óÅÂ";
-        Text[ chinese_simplified ] = "×´Ì¬";
-        Text[ chinese_traditional ] = "ª¬ºA";
+        Text[ japanese ] = "ï½½ï¾ƒï½°ï¾€ï½½";
+        Text[ korean ] = "ìƒíƒœ";
+        Text[ chinese_simplified ] = "çŠ¶æ€";
+        Text[ chinese_traditional ] = "ç‹€æ…‹";
         Text[ turkish ] = "Durum";
         Text[ arabic ] = "ÇáÍÇáÉ";
         Text[ catalan ] = "Status";
@@ -270,10 +270,10 @@ ModalDialog DLG_DIRECTSQL
         Text[ swedish ] = "Stäng";
         Text[ polish ] = "Zamknij";
         Text[ portuguese_brazilian ] = "Close";
-        Text[ japanese ] = "•Â‚¶‚é";
+        Text[ japanese ] = "é–‰ã˜ã‚‹";
         Text[ korean ] = "Close";
-        Text[ chinese_simplified ] = "¹Ø±Õ";
-        Text[ chinese_traditional ] = "Ãö³¬";
+        Text[ chinese_simplified ] = "å…³é—­";
+        Text[ chinese_traditional ] = "é—œé–‰";
         Text[ turkish ] = "Close";
         Text[ arabic ] = "Close";
         Text[ catalan ] = "Close";
@@ -295,10 +295,10 @@ ModalDialog DLG_DIRECTSQL
     Text[ swedish ] = "Utför SQL-sats";
     Text[ polish ] = "Wykonaj polecenie SQL";
     Text[ portuguese_brazilian ] = "Excecute SQL statement";
-    Text[ japanese ] = "SQL ½Ã°ÄÒİÄ‚ÌÀs";
+    Text[ japanese ] = "SQL ï½½ï¾ƒï½°ï¾„ï¾’ï¾ï¾„ã®å®Ÿè¡Œ";
     Text[ korean ] = "Excecute SQL statement";
-    Text[ chinese_simplified ] = "Ö±½ÓÖ´ĞĞ SQL ÃüÁî";
-    Text[ chinese_traditional ] = "ª½±µ°õ¦æ SQL «ü¥O";
+    Text[ chinese_simplified ] = "ç›´æ¥æ‰§è¡Œ SQL å‘½ä»¤";
+    Text[ chinese_traditional ] = "ç›´æ¥åŸ·è¡Œ SQL æŒ‡ä»¤";
     Text[ turkish ] = "Excecute SQL statement";
     Text[ arabic ] = "Excecute SQL statement";
     Text[ catalan ] = "Excecute SQL statement";
@@ -317,14 +317,14 @@ String STR_COMMAND_EXECUTED_SUCCESSFULLY
     Text [ spanish ] = "Comando ejecutado satisfactoriamente." ;
     Text [ french ] = "Commande exécutée avec succès" ;
     Text [ dutch ] = "Opdracht met succes uitgevoerd." ;
-    Text[ chinese_simplified ] = "Ö´ĞĞÃüÁîÒÑ¾­³É¹¦¡£";
+    Text[ chinese_simplified ] = "æ‰§è¡Œå‘½ä»¤å·²ç»æˆåŠŸã€‚";
     Text[ russian ] = "Êîìàíäà âûïîëíåíà óñïåøíî.";
     Text[ polish ] = "Polecenie wykonano pomyœlnie.";
-    Text[ japanese ] = "ºÏİÄŞ‚Í³í‚ÉÀs‚³‚ê‚Ü‚µ‚½B";
-    Text[ chinese_traditional ] = "°õ¦æ«ü¥O¤w¸g¦¨¥\\¡C";
+    Text[ japanese ] = "ï½ºï¾ï¾ï¾„ï¾ã¯æ­£å¸¸ã«å®Ÿè¡Œã•ã‚Œã¾ã—ãŸã€‚";
+    Text[ chinese_traditional ] = "åŸ·è¡ŒæŒ‡ä»¤å·²ç¶“æˆåŠŸã€‚";
     Text[ arabic ] = "Êã ÊäİíĞ ÇáÃãÑ ÈäÌÇÍ.";
     Text[ greek ] = "Ç åíôïëŞ åêôåëİóôçêå åğéôõ÷şò.";
-    Text[ korean ] = "¸í·ÉÀ» ¼º°øÀûÀ¸·Î ½ÇÇàÇÏ¿´½À´Ï´Ù.";
+    Text[ korean ] = "ëª…ë ¹ì„ ì„±ê³µì ìœ¼ë¡œ ì‹¤í–‰í•˜ì˜€ìŠµë‹ˆë‹¤.";
     Text[ finnish ] = "Command successfully executed.";
     Text[ turkish ] = "Command successfully executed.";
     Text[ catalan ] = "Command successfully executed.";
@@ -347,10 +347,10 @@ String STR_DIRECTSQL_CONNECTIONLOST
     Text[ swedish ] = "Förbindelsen till databasen har raderats. Den här dialogrutan kommer att stängas.";
     Text[ polish ] = "Po³¹czenie z baz¹ danych przerwano. Okno dialogowe zostanie zamkniête.";
     Text[ portuguese_brazilian ] = "The connection to the database has been lost. This dialog will be closed.";
-    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚Ö‚ÌÚ‘±‚Ííœ‚³‚ê‚Ä‚¢‚Ü‚·B‚±‚ÌÀŞ²±Û¸Ş‚ğ•Â‚¶‚Ü‚·B";
+    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ã¸ã®æ¥ç¶šã¯å‰Šé™¤ã•ã‚Œã¦ã„ã¾ã™ã€‚ã“ã®ï¾€ï¾ï½²ï½±ï¾›ï½¸ï¾ã‚’é–‰ã˜ã¾ã™ã€‚";
     Text[ korean ] = "The connection to the database has been lost. This dialog will be closed.";
-    Text[ chinese_simplified ] = "ÒÑ¾­½áÊøºÍÊı¾İ¿âµÄÁ¬½Ó¡£ÏÖÔÚ¹Ø±ÕÕâ¸ö¶Ô»°¿ò¡£";
-    Text[ chinese_traditional ] = "¤w¸gµ²§ô»P¸ê®Æ®wªº³s½u¡C²{¦bÃö³¬³o­Ó¹ï¸Ü¤è¶ô¡C";
+    Text[ chinese_simplified ] = "å·²ç»ç»“æŸå’Œæ•°æ®åº“çš„è¿æ¥ã€‚ç°åœ¨å…³é—­è¿™ä¸ªå¯¹è¯æ¡†ã€‚";
+    Text[ chinese_traditional ] = "å·²ç¶“çµæŸèˆ‡è³‡æ–™åº«çš„é€£ç·šã€‚ç¾åœ¨é—œé–‰é€™å€‹å°è©±æ–¹å¡Šã€‚";
     Text[ turkish ] = "The connection to the database has been lost. This dialog will be closed.";
     Text[ arabic ] = "The connection to the database has been lost. This dialog will be closed.";
     Text[ catalan ] = "The connection to the database has been lost. This dialog will be closed.";
@@ -359,6 +359,9 @@ String STR_DIRECTSQL_CONNECTIONLOST
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/07/13 21:08:48  kz
+ *  Merge SRC638: 13.07.01 - 23:07:57
+ *
  *  Revision 1.2  2001/06/29 02:21:19  kz
  *  Merge SRC633: 29.06.01 - 04:20:55
  *
@@ -368,6 +371,7 @@ String STR_DIRECTSQL_CONNECTIONLOST
  *
  *  Revision 1.0 18.06.01 17:01:52  fs
  ************************************************************************/
+
 
 
 
