@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:48 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 15:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,16 +65,9 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
 #include "template.hxx"
 
-SEG_EOFGLOBALS()
-
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(template_01)
 
 ScTemplateDlg::ScTemplateDlg(Window * pParent, USHORT nAppResource) :
 //  SfxTemplateDlg( pParent, nAppResource )
@@ -83,48 +76,39 @@ ScTemplateDlg::ScTemplateDlg(Window * pParent, USHORT nAppResource) :
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(template_07)
 
 __EXPORT ScTemplateDlg::~ScTemplateDlg()
 {
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(template_02)
 
 BOOL ScTemplateDlg::New(String &rNewName)
 {
     return TRUE;
 }
 
-#pragma SEG_FUNCDEF(template_03)
 
 void ScTemplateDlg::Edit(const String &)
 {
 }
 
-#pragma SEG_FUNCDEF(template_04)
 
 BOOL ScTemplateDlg::Delete(const String &)
 {
     return TRUE;
 }
 
-#pragma SEG_FUNCDEF(template_05)
 
 void ScTemplateDlg::InvalidateTemplates()
 {
 }
 
-#pragma SEG_FUNCDEF(template_06)
 
 void ScTemplateDlg::ToggleApplyTemplate()
 {
 }
 
 
-// STATIC DATA -----------------------------------------------------------
-
-#pragma SEG_EOFMODULE
 
 
