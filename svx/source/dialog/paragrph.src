@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *  last change: $Author: rt $ $Date: 2000-11-24 17:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1267,7 +1267,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ portuguese ] = "~em" ;
         Text [ finnish ] = "~määrä" ;
         Text [ danish ] = "fra" ;
-        Text [ french ] = "~pr" ;
+        Text [ french ] = "~min." ;
         Text [ swedish ] = "~från" ;
         Text [ dutch ] = "~v.a." ;
         Text [ spanish ] = "~en" ;
@@ -1312,9 +1312,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ portuguese ] = "Caracteres no fim da linha" ;
         Text [ finnish ] = "Merkkiä" ;
         Text [ danish ] = "tegn ved linjens slutning" ;
-        Text [ french ] = "Caractères en fin de ligne" ;
+        Text [ french ] = "caractères en fin de ligne" ;
         Text [ swedish ] = "tecken i slutet av raden" ;
-        Text [ dutch ] = "tekens aan einde van regel" ;
+        Text [ dutch ] = "tekens aan regeleinde" ;
         Text [ spanish ] = "carácter al final de la línea" ;
         Text [ english_us ] = "Characters at line end" ;
         Left = TRUE ;
@@ -1342,7 +1342,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ portuguese ] = "e~m" ;
         Text [ finnish ] = "~kohta" ;
         Text [ danish ] = "fra" ;
-        Text [ french ] = "p~r" ;
+        Text [ french ] = "m~in." ;
         Text [ swedish ] = "f~rån" ;
         Text [ dutch ] = "v.~a." ;
         Text [ spanish ] = "e~n" ;
@@ -1387,9 +1387,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ portuguese ] = "Caracteres no início da linha" ;
         Text [ finnish ] = "Merkkiä" ;
         Text [ danish ] = "tegn ved linjens begyndelse" ;
-        Text [ french ] = "Caractères en début de ligne" ;
+        Text [ french ] = "caractères en début de ligne" ;
         Text [ swedish ] = "tecken i början av raden" ;
-        Text [ dutch ] = "tekens aan begin van regel" ;
+        Text [ dutch ] = "tekens aan regelbegin" ;
         Text [ spanish ] = "carácter al comienzo de la línea" ;
         Text [ english_us ] = "Characters at line begin" ;
         Left = TRUE ;
@@ -1720,7 +1720,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ danish ] = "Del ikke afsnit" ;
         Text [ french ] = "~Lignes solidaires" ;
         Text [ swedish ] = "Dela inte sty~cke" ;
-        Text [ dutch ] = "A~linea´s niet scheiden" ;
+        Text [ dutch ] = "A~linea niet splitsen" ;
         Text [ spanish ] = "Mantener ~líneas juntas" ;
         Text [ english_us ] = "~Don't separate lines" ;
         Group = TRUE ;
@@ -1782,7 +1782,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ danish ] = "Fransk horeunge-ordning" ;
         Text [ french ] = "Traitement des orphelines" ;
         Text [ swedish ] = "~Änkekontroll" ;
-        Text [ dutch ] = "~Zwevende regels: Orphans" ;
+        Text [ dutch ] = "~Zwevende regels: wezen" ;
         Text [ spanish ] = "Ajuste de ~huérfanas" ;
         Text [ english_us ] = "~Orphan control" ;
         Group = TRUE ;
@@ -1858,7 +1858,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ danish ] = "Horeunge-ordning" ;
         Text [ french ] = "Traitement des veuves" ;
         Text [ swedish ] = "H~orungekontroll" ;
-        Text [ dutch ] = "Z~wevende regels: Widows" ;
+        Text [ dutch ] = "Z~wevende regels: weduwen" ;
         Text [ spanish ] = "Ajuste de ~viudas" ;
         Text [ english_us ] = "~Widow control" ;
         Group = TRUE ;
