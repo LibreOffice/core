@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:13 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4005,21 +4005,58 @@ void SwWW8ImplReader::Read_UL( USHORT nId, const BYTE* pData, short nLen )
 
 void SwWW8ImplReader::Read_Justify( USHORT, const BYTE* pData, short nLen )
 {
-    static const SvxAdjust aAdjArr[] =
-    {
-        SVX_ADJUST_LEFT,  SVX_ADJUST_CENTER, SVX_ADJUST_RIGHT, SVX_ADJUST_BLOCK
-    };
-
     if( nLen < 0 )
     {
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_PARATR_ADJUST );
         return;
     }
-    BYTE b = *pData;
 
+    static const SvxAdjust aAdjArr[] =
+    {
+        SVX_ADJUST_LEFT,  SVX_ADJUST_CENTER, SVX_ADJUST_RIGHT, SVX_ADJUST_BLOCK
+    };
+
+    BYTE b = *pData;
     NewAttr( SvxAdjustItem( aAdjArr[b&0x3] ) ); // "&0x3 gegen Tabellenueberlauf
 }                                               // bei Stuss-Werten
 
+void SwWW8ImplReader::Read_RTLJustify( USHORT, const BYTE* pData, short nLen )
+{
+    if( nLen < 0 )
+    {
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_PARATR_ADJUST );
+        return;
+    }
+
+    //if we are in a ltr paragraph this is the same as normal Justify,
+    //if we are in a rtl paragraph the meaning is reversed.
+    bool bRTL = false;
+    const BYTE *pDir =
+        pPlcxMan ? pPlcxMan->GetPapPLCF()->HasSprm(0x2441) : 0;
+    if (pDir)
+        bRTL = *pDir ? true : false;
+    else
+    {
+        const SvxFrameDirectionItem* pDir=
+            (const SvxFrameDirectionItem*)GetFmtAttr(RES_FRAMEDIR);
+        if (pDir && (pDir->GetValue() == FRMDIR_HORI_RIGHT_TOP))
+            bRTL = true;
+    }
+
+    if (!bRTL)
+        Read_Justify(0 /*dummy*/, pData, nLen);
+    else
+    {
+        static const SvxAdjust aAdjArr[] =
+        {
+            SVX_ADJUST_RIGHT, SVX_ADJUST_CENTER,
+            SVX_ADJUST_LEFT, SVX_ADJUST_BLOCK
+        };
+
+        BYTE b = *pData;
+        NewAttr( SvxAdjustItem( aAdjArr[b&0x3] ) );
+    }
+}
 
 void SwWW8ImplReader::Read_BoolItem( USHORT nId, const BYTE* pData, short nLen )
 {
@@ -5544,7 +5581,7 @@ SprmReadInfo aSprmReadTab[] = {
                                                  //(like a duplicate of 486D)
     {0x4874, (FNReadRecord)0},                   //undocumented
     {0x6463, (FNReadRecord)0},                   //undocumented
-    {0x2461, &SwWW8ImplReader::Read_Justify},    //undoc, must be asian version
+    {0x2461, &SwWW8ImplReader::Read_RTLJustify}, //undoc, must be asian version
                                                  //of "sprmPJc"
     {0x845E, &SwWW8ImplReader::Read_LR},         //undoc, must be asian version
                                                  //of "sprmPDxaLeft"
