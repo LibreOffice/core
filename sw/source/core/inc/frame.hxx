@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-16 11:36:28 $
+ *  last change: $Author: ama $ $Date: 2001-11-29 15:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ struct SwRectFnCollection
     SwOperator    fnXInc;
     SwOperator    fnYInc;
 
-//    SwRectSetTwice fnSetLeftAndWidth;
+    SwRectSetTwice fnSetLeftAndWidth;
     SwRectSetTwice fnSetTopAndHeight;
 };
 
