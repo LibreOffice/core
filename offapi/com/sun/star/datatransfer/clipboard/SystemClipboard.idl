@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SystemClipboard.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,9 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 //=============================================================================
 
-interface XClipboardEx;
-interface XClipboardNotifier;
-interface XFlushableClipboard;
+ published interface XClipboardEx;
+ published interface XClipboardNotifier;
+ published interface XFlushableClipboard;
 
 //=============================================================================
 /** The system clipboard service builds a bridge to the OS specific clipboard
@@ -100,7 +100,7 @@ interface XFlushableClipboard;
     </ul>
     It is possible to use clipboards for different selections simultaneously.</p>
 */
-service SystemClipboard
+published service SystemClipboard
 {
     //-------------------------------------------------------------------------
     /** Provides access to the clipboard content.
