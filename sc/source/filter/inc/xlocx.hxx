@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:06:52 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XLOCX_HXX
 #define SC_XLOCX_HXX
 
@@ -92,22 +90,21 @@ protected:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >    XControlModelRef;
 
 protected:
-    explicit                    XclOcxConverter( const XclRoot& rRoot );
-    virtual                     ~XclOcxConverter();
+    explicit            XclOcxConverter( const XclRoot& rRoot );
+    virtual             ~XclOcxConverter();
 
     /** Sets the sheet index of the currently processed object. GetDrawPage() needs this. */
-    void                        SetCurrScTab( SCTAB nScTab );
+    void                SetScTab( SCTAB nScTab );
 
 private:
     /** Returns the current draw page. */
     virtual const XDrawPageRef& GetDrawPage();
 
 private:
-    ScDocument&                 mrDoc;          /// The Calc document.
-    sal_uInt16                  mnCurrScTab;    /// Stores sheet index of an object for GetDrawPage().
-    sal_uInt16                  mnCachedScTab;  /// Sheet index of cached draw page.
+    const XclRoot&      mrRoot;         /// Root data.
+    SCTAB               mnCurrScTab;    /// Stores sheet index of an object for GetDrawPage().
+    SCTAB               mnCachedScTab;  /// Sheet index of cached draw page.
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -119,33 +116,32 @@ class XclImpCtrlLinkHelper;
 class XclImpOcxConverter : public XclOcxConverter, protected XclImpRoot
 {
 public:
-    explicit                    XclImpOcxConverter( const XclImpRoot& rRoot );
+    explicit            XclImpOcxConverter( const XclImpRoot& rRoot );
 
     /** Reads the control formatting data for the passed object and creates the SdrUnoObj.
         @return  true = SdrUnoObj successfully created. */
-    bool                        CreateSdrUnoObj( XclImpEscherOle& rOleObj );
+    bool                CreateSdrUnoObj( XclImpEscherOle& rOleObj );
 
     /** Creates the SdrUnoObj for the passed TBX form control object.
         @return  true = SdrUnoObj successfully created. */
-    bool                        CreateSdrUnoObj( XclImpEscherTbxCtrl& rTbxCtrl );
+    bool                CreateSdrUnoObj( XclImpEscherTbxCtrl& rTbxCtrl );
 
 private:
     /** Inserts the passed control rxFComp into the document. */
-    virtual sal_Bool            InsertControl(
-                                    const XFormComponentRef& rxFComp,
-                                    const ::com::sun::star::awt::Size& rSize,
-                                    XShapeRef* pxShape,
-                                    BOOL bFloatingCtrl );
+    virtual sal_Bool    InsertControl(
+                            const XFormComponentRef& rxFComp,
+                            const ::com::sun::star::awt::Size& rSize,
+                            XShapeRef* pxShape,
+                            BOOL bFloatingCtrl );
 
     /** Tries to set a spreadsheet cell link and source range link at the passed form control. */
-    void                        ConvertSheetLinks(
-                                    XControlModelRef rxModel,
-                                    const XclImpCtrlLinkHelper& rControl ) const;
+    void                ConvertSheetLinks(
+                            XControlModelRef rxModel,
+                            const XclImpCtrlLinkHelper& rControl ) const;
 
 private:
-    SvStorageStreamRef          mxStrm;         /// The 'Ctls' stream.
+    SvStorageStreamRef  mxStrm;         /// The 'Ctls' strem.
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -161,27 +157,27 @@ class XclExpCtrlLinkHelper;
 class XclExpOcxConverter : public XclOcxConverter, protected XclExpRoot
 {
 public:
-    explicit                    XclExpOcxConverter( const XclExpRoot& rRoot );
+    explicit            XclExpOcxConverter( const XclExpRoot& rRoot );
 
 #if EXC_EXP_OCX_CTRL
     /** Creates an OCX form control OBJ record from the passed form control.
         @descr  Writes the form control data to the 'Ctls' stream. */
-    XclExpObjOcxCtrl*           CreateCtrlObj( const XShapeRef& rxShape );
+    XclExpObjOcxCtrl*   CreateCtrlObj( const XShapeRef& rxShape );
 #else
     /** Creates a TBX form control OBJ record from the passed form control. */
-    XclExpObjTbxCtrl*           CreateCtrlObj( const XShapeRef& rxShape );
+    XclExpObjTbxCtrl*   CreateCtrlObj( const XShapeRef& rxShape );
 #endif
 
 private:
     /** Tries to get spreadsheet cell link and source range link from the passed model.
         @param rControl  The Excel form control that stores and exports the links. */
-    void                        ConvertSheetLinks(
-                                    XclExpCtrlLinkHelper& rControl,
-                                    const XControlModelRef& rxModel ) const;
+    void                ConvertSheetLinks(
+                            XclExpCtrlLinkHelper& rControl,
+                            const XControlModelRef& rxModel ) const;
 
 private:
 #if EXC_EXP_OCX_CTRL
-    SvStorageStreamRef          mxStrm;         /// The 'Ctls' stream.
+    SvStorageStreamRef  mxStrm;         /// The 'Ctls' stream.
 #endif
 };
 
