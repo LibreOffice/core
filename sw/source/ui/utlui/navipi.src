@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:16:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2025,6 +2025,12 @@ ImageList IMG_NAVI_ENTRYBMPH
     MaskColor = IMAGE_MASK_COLOR ;
     NAVI_ENTRY_IDS
 };
+
+
+
+
+
+
 
 
 
