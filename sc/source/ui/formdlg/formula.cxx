@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formula.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 15:54:40 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,7 @@ void ScFormulaDlg::FillControls()
 
     aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " )" ));
     DeleteArgs();
-    ScFuncDesc*     pOldFuncDesc=pFuncDesc;
+    const ScFuncDesc*       pOldFuncDesc=pFuncDesc;
     BOOL            bTestFlag=FALSE;
 
     if ( ScFormulaUtil::GetNextFunc( aFormula, FALSE,
@@ -766,7 +766,7 @@ IMPL_LINK( ScFormulaDlg, BtnHdl, PushButton*, pBtn )
     else if ( pBtn == &aBtnForward )
     {
         //@pMEdit->GrabFocus();         // Damit die Selektion auch angezeigt wird.
-        ScFuncDesc* pDesc =pScFuncPage->GetFuncDesc(
+        const ScFuncDesc* pDesc =pScFuncPage->GetFuncDesc(
                                 pScFuncPage->GetFunction() );
 
         if(pDesc==pFuncDesc || !pScFuncPage->IsVisible())
@@ -796,7 +796,7 @@ IMPL_LINK( ScFormulaDlg, BtnHdl, PushButton*, pBtn )
 //                          Funktionen fuer 1. Seite
 //  --------------------------------------------------------------------------
 
-void ScFormulaDlg::ResizeArgArr( ScFuncDesc* pNewFunc )
+void ScFormulaDlg::ResizeArgArr( const ScFuncDesc* pNewFunc )
 {
     if ( pFuncDesc != pNewFunc )
     {
@@ -833,7 +833,7 @@ void ScFormulaDlg::UpdateFunctionDesc()
     if (   (pScFuncPage->GetFunctionEntryCount() > 0)
         && (pScFuncPage->GetFunction() != LISTBOX_ENTRY_NOTFOUND) )
     {
-        ScFuncDesc* pDesc =pScFuncPage->GetFuncDesc(
+        const ScFuncDesc* pDesc =pScFuncPage->GetFuncDesc(
                                 pScFuncPage->GetFunction() );
         if (pDesc)
         {
@@ -871,7 +871,7 @@ IMPL_LINK( ScFormulaDlg, DblClkHdl, ScFuncPage*, pLb )
     USHORT nFunc = pScFuncPage->GetFunction();
 
     //  ex-UpdateLRUList
-    ScFuncDesc* pDesc = pScFuncPage->GetFuncDesc(nFunc);
+    const ScFuncDesc*   pDesc = pScFuncPage->GetFuncDesc(nFunc);
     if (pDesc && pDesc->nFIndex!=0)
         pScMod->InsertEntryToLRUList(pDesc->nFIndex);
 
@@ -1929,7 +1929,7 @@ IMPL_LINK( ScFormulaDlg, FuncSelHdl, ScFuncPage*, pLb )
     if (   (pScFuncPage->GetFunctionEntryCount() > 0)
         && (pScFuncPage->GetFunction() != LISTBOX_ENTRY_NOTFOUND) )
     {
-        ScFuncDesc* pDesc =pScFuncPage->GetFuncDesc(
+        const ScFuncDesc* pDesc =pScFuncPage->GetFuncDesc(
                                 pScFuncPage->GetFunction() );
 
         if(pDesc!=pFuncDesc) aBtnForward.Enable(TRUE); //new
@@ -2050,7 +2050,7 @@ String ScFormulaDlg::RepairFormula(const String& aFormula)
                 aResult+=aString;
             }
 
-            ScFuncDesc* pDesc= pFuncMgr->Get(aString);
+            const ScFuncDesc* pDesc= pFuncMgr->Get(aString);
 
             SaveLRUEntry(pDesc);    //! is this necessary?? (EnterData updates the list)
 
@@ -2067,7 +2067,7 @@ void ScFormulaDlg::HighlightFunctionParas(const String& aFormula)
     ShowReference(aFormula);
 }
 
-void ScFormulaDlg::SaveLRUEntry(ScFuncDesc* pFuncDesc)
+void ScFormulaDlg::SaveLRUEntry(const ScFuncDesc*   pFuncDesc)
 {
     if (pFuncDesc && pFuncDesc->nFIndex!=0)
     {
