@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-07 13:10:53 $
+ *  last change: $Author: aw $ $Date: 2001-12-13 18:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,6 +307,38 @@ void FrameView::Disconnect()
 SvStream& operator << (SvStream& rOut, const FrameView& rView)
 {
     ULONG nULTemp;
+
+    // #95895# translate view-layer name to standard-ASCII
+    // like in MakeUniqueLayerNames()
+    String aLayerName(rView.GetActiveLayer());
+
+    String aLayerLayout(SdResId(STR_LAYER_LAYOUT));
+    String aLayerBckgrnd(SdResId(STR_LAYER_BCKGRND));
+    String aLayerBckgrndObj(SdResId(STR_LAYER_BCKGRNDOBJ));
+    String aLayerControls(SdResId(STR_LAYER_CONTROLS));
+    String aLayerMeasurelines(SdResId(STR_LAYER_MEASURELINES));
+
+    if (aLayerName == aLayerLayout)
+    {
+        ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_LAYOUT" )));
+    }
+    else if (aLayerName == aLayerBckgrnd)
+    {
+        ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BCKGRND" )));
+    }
+    else if (aLayerName == aLayerBckgrndObj)
+    {
+        ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BACKGRNDOBJ" )));
+    }
+    else if (aLayerName == aLayerControls)
+    {
+        ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_CONTROLS" )));
+    }
+    else if (aLayerName == aLayerMeasurelines)
+    {
+        ((FrameView&)rView).SetActiveLayer( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_MEASURELINES" )));
+    }
+
     rOut << (SdrView&) rView;
 
     // Letzter Parameter ist die aktuelle Versionsnummer des Codes
