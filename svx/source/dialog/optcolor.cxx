@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:18:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,11 @@
  *
  ************************************************************************/
 
-// include ---------------------------------------------------------------
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
 
-#pragma hdrstop
+// include ---------------------------------------------------------------
 
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
