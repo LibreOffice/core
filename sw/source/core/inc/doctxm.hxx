@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-26 09:31:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,12 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
     void    InsertAlphaDelimitter( const SwTOXInternational& rIntl );
 
     // Textrumpf generieren
-    void GenerateText( USHORT nArrayIdx, USHORT nCount, SvStringsDtor& );
+    // OD 18.03.2003 #106329# - add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc>
+    void GenerateText( USHORT nArrayIdx,
+                       USHORT nCount,
+                       SvStringsDtor&,
+                       const sal_uInt32   _nTOXSectNdIdx,
+                       const SwPageDesc*  _pDefaultPageDesc );
 
     // Seitennummerplatzhalter gegen aktuelle Nummern austauschen
     void    _UpdatePageNum( SwTxtNode* pNd,
@@ -137,7 +142,11 @@ public:
     SwTOXBaseSection( const SwTOXBase& rBase );
     virtual ~SwTOXBaseSection();
 
-    void Update(const SfxItemSet* pAttr = 0); // Formatieren
+    // OD 19.03.2003 #106329# - add parameter <_bNewTOX> in order to distinguish
+    // between the creation of a new table-of-content or an update of
+    // a table-of-content. Default value: false
+    void Update( const SfxItemSet* pAttr = 0,
+                 const bool        _bNewTOX = false ); // Formatieren
     void UpdatePageNum();               // Seitennummern einfuegen
     TYPEINFO();                         // fuers rtti
 
