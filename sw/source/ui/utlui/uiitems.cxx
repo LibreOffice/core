@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiitems.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:39:30 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
             {
                 rText = SW_RESSTR( STR_MAX_FTN_HEIGHT );
                 rText += ' ';
-                rText += ::GetMetricText( nHght, eCoreUnit, ePresUnit );
+                rText += ::GetMetricText( nHght, eCoreUnit, ePresUnit, pIntl );
                 rText += ::GetSvxString( ::GetMetricId( ePresUnit ) );
             }
             return ePres;
