@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:37 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #ifndef _XCEPTION_HXX_
 #include <vos/xception.hxx>
 #endif
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
-#endif
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
 #endif
@@ -114,7 +111,9 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
+#endif
 #include <tools/rcid.h>
 #include <vos/mutex.hxx>
 #include <svtools/pver.hxx>
