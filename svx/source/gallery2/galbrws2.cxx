@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:13:05 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,7 +700,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
                 mpPreview->Hide();
                 mpPreview->SetGraphic( Graphic() );
-                mpPreview->PreviewSound( INetURLObject() );
+                mpPreview->PreviewMedia( INetURLObject() );
 
                 mpIconView->Show();
 
@@ -718,7 +718,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
                 mpPreview->Hide();
                 mpPreview->SetGraphic( Graphic() );
-                mpPreview->PreviewSound( INetURLObject() );
+                mpPreview->PreviewMedia( INetURLObject() );
 
                 mpListView->Show();
 
@@ -750,7 +750,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                      mpPreview->Show();
 
                     if( mpCurTheme && mpCurTheme->GetObjectKind( nPos ) == SGA_OBJ_SOUND )
-                        mpPreview->PreviewSound( mpCurTheme->GetObjectURL( nPos ) );
+                        mpPreview->PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );
 
                     maViewBox.EnableItem( TBX_ID_ICON, FALSE );
                     maViewBox.EnableItem( TBX_ID_LIST, FALSE );
@@ -822,7 +822,7 @@ void GalleryBrowser2::Travel( GalleryBrowserTravel eTravel )
                     mpPreview->SetGraphic( aGraphic );
 
                     if( SGA_OBJ_SOUND == mpCurTheme->GetObjectKind( nPos ) )
-                        mpPreview->PreviewSound( mpCurTheme->GetObjectURL( nPos ) );
+                        mpPreview->PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );
 
                     mpPreview->Invalidate();
                 }
