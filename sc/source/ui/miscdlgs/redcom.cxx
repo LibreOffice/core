@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redcom.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 10:12:47 $
+ *  last change: $Author: er $ $Date: 2001-07-11 16:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <vcl/msgbox.hxx>
 #endif
 
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <svtools/syslocale.hxx>
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 
 #include "redcom.hxx"
@@ -156,10 +156,9 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
         String aAuthor = pChangeAction->GetUser();
 
         DateTime aDT = pChangeAction->GetDateTime();
-        const LocaleDataWrapper& rLocaleData = ScGlobal::pSysLocale->GetLocaleData();
-        String aDate = rLocaleData.getDate( aDT );
+        String aDate = ScGlobal::pLocaleData->getDate( aDT );
         aDate += ' ';
-        aDate += rLocaleData.getTime( aDT, FALSE, FALSE );
+        aDate += ScGlobal::pLocaleData->getTime( aDT, FALSE, FALSE );
 
         ShowLastAuthor(aAuthor, aDate);
         SetNote(aComment);

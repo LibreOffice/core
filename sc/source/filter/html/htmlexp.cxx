@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 10:07:58 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ void ScHTMLExport::WriteHeader()
         OUT_COMMENT( GLOBSTR( STR_DOC_INFO ) );
         aStrOut  = GLOBSTR( STR_DOC_PRINTED );
         aStrOut.AppendAscii( ": " );
-        lcl_AddStamp( aStrOut, rInfo.GetPrinted(), ScGlobal::pSysLocale->GetLocaleData() );
+        lcl_AddStamp( aStrOut, rInfo.GetPrinted(), *ScGlobal::pLocaleData );
         OUT_COMMENT( aStrOut );
     }
     //----------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeimpars.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 10:08:15 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,8 +178,8 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
     BOOL bHasGraphics = FALSE;
     ScEEParseEntry* pE;
 
-    const sal_Unicode cDecSep = ScGlobal::pSysLocale->GetLocaleData().getNumDecimalSep().GetChar(0);
-    const sal_Unicode cThoSep = ScGlobal::pSysLocale->GetLocaleData().getNumThousandSep().GetChar(0);
+    const sal_Unicode cDecSep = ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0);
+    const sal_Unicode cThoSep = ScGlobal::pLocaleData->getNumThousandSep().GetChar(0);
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
     ScDocumentPool* pDocPool = pDoc->GetPool();
     ScRangeName* pRangeNames = pDoc->GetRangeName();
