@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-16 13:06:41 $
+ *  last change: $Author: tbe $ $Date: 2002-05-17 09:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,14 @@
 
 #ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#endif
+
+#ifndef _VCL_UNOWRAP_HXX
+#include <unowrap.hxx>
 #endif
 
 #include <unohelp.hxx>
@@ -426,6 +434,8 @@ public:
 
     void            HighlightItem( USHORT nPos, BOOL bHighlight );
     void            ChangeHighlightItem( USHORT n, BOOL bStartPopupTimer );
+
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
 
@@ -490,6 +500,8 @@ public:
     void            KillActivePopup();
     PopupMenu*      GetActivePopup() const  { return pActivePopup; }
     void            PopupClosed( Menu* pMenu );
+
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
 
@@ -3493,6 +3505,16 @@ void MenuFloatingWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > MenuFloatingWindow::CreateAccessible()
+{
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+
+    UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
+    if ( pWrapper )
+        xAcc = pWrapper->CreateAccessible( this, pMenu );
+
+    return xAcc;
+}
 
 MenuBarWindow::MenuBarWindow( Window* pParent ) :
     Window( pParent, 0 ),
@@ -4120,4 +4142,15 @@ void MenuBarWindow::GetFocus()
         mbAutoPopup = FALSE;    // do not open menu when activated by focus handling like taskpane cycling
         ChangeHighlightItem( 0, FALSE );
     }
+}
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > MenuBarWindow::CreateAccessible()
+{
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+
+    UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
+    if ( pWrapper )
+        xAcc = pWrapper->CreateAccessible( this, pMenu );
+
+    return xAcc;
 }
