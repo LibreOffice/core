@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:36:27 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,8 @@ BOOL ShallSetBaseURL_Impl( SfxMedium &rMed );
 svtools::AsynchronLink* pPendingCloser = 0;
 
 //=========================================================================
+
+
 
 SFX_IMPL_INTERFACE(SfxObjectShell,SfxShell,SfxResId(0))
 {
@@ -710,6 +712,8 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         return sal_False;
     }
 
+    SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC,GetTitle());
+
     // check if a "SaveTo" is wanted, no "SaveAs"
     sal_Bool bCopyTo = GetCreateMode() == SFX_CREATE_MODE_EMBEDDED || bSaveTo;
 
@@ -869,7 +873,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     {
         // Embedded?
         SfxInPlaceObject *pObj=GetInPlaceObject();
-        if( pObj && pObj->GetProtocol().IsEmbed() )
+        if( pObj && (
+            pObj->GetProtocol().IsEmbed() ||
+            GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ))
         {
             BOOL bRet = pObj->GetClient()->SaveObject();
             rReq.SetReturnValue( SfxBoolItem(0, bRet) );
@@ -1179,7 +1185,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         {
             //!! detaillierte Auswertung eines Fehlercodes
             SfxObjectShellRef xLock( this );
-            SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC,GetTitle());
 
             // Bei Calls "uber StarOne OverWrite-Status checken
             SFX_REQUEST_ARG( rReq, pOverwriteItem, SfxBoolItem, SID_OVERWRITE, FALSE );
@@ -1205,7 +1210,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
 
             if ( lErr!=ERRCODE_IO_ABORT )
+            {
+                SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC,GetTitle());
                 ErrorHandler::HandleError(lErr);
+            }
 
             if ( nId == SID_EXPORTDOCASPDF )
             {
@@ -1585,7 +1593,9 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 }
             case SID_SAVEDOC:
             case SID_UPDATEDOC:
-                if (pObj && pObj->GetProtocol().IsEmbed())
+                if (pObj && (
+                    pObj->GetProtocol().IsEmbed() ||
+                    GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ))
                 {
                     String aEntry (SfxResId(STR_UPDATEDOC));
                     aEntry += ' ';
@@ -1622,7 +1632,9 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
                 if ( pDoc->GetFlags() & SFXOBJECTSHELL_DONTCLOSE )
                     rSet.DisableItem(nWhich);
-                else if ( pObj && pObj->GetProtocol().IsEmbed() )
+                else if ( pObj && (
+                    pObj->GetProtocol().IsEmbed() ||
+                    GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ))
                 {
                     String aEntry (SfxResId(STR_CLOSEDOC_ANDRETURN));
                     aEntry += pObj->GetDocumentName();
@@ -1654,7 +1666,9 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
                 if ( !pCombinedFilters || !GetMedium() )
                     rSet.DisableItem( nWhich );
-                else if ( pObj && pObj->GetProtocol().IsEmbed() )
+                else if ( pObj && (
+                    pObj->GetProtocol().IsEmbed() ||
+                    GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ))
                     rSet.Put( SfxStringItem( nWhich, String( SfxResId( STR_SAVECOPYDOC ) ) ) );
                 else
                     rSet.Put( SfxStringItem( nWhich, String( SfxResId( STR_SAVEASDOC ) ) ) );
