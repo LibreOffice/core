@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 15:55:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,9 +428,9 @@ ScAnyRefDlg::ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
     if ( pViewData )
     {
         ScDocument* pDoc = pViewData->GetDocument();
-        USHORT nCol = pViewData->GetCurX();
-        USHORT nRow = pViewData->GetCurY();
-        USHORT nTab = pViewData->GetTabNo();
+        SCCOL nCol = pViewData->GetCurX();
+        SCROW nRow = pViewData->GetCurY();
+        SCTAB nTab = pViewData->GetTabNo();
         ScAddress aCursorPos( nCol, nRow, nTab );
 
         String rStrExp;
@@ -712,9 +712,9 @@ void ScAnyRefDlg::ShowFormulaReference( const XubString& rStr )
         {
             ScDocument* pDoc=pViewData->GetDocument();
             ScTabViewShell* pTabViewShell=pViewData->GetViewShell();
-            USHORT nCol = pViewData->GetCurX();
-            USHORT nRow = pViewData->GetCurY();
-            USHORT nTab = pViewData->GetTabNo();
+            SCCOL nCol = pViewData->GetCurX();
+            SCROW nRow = pViewData->GetCurY();
+            SCTAB nTab = pViewData->GetTabNo();
             ScAddress aPos( nCol, nRow, nTab );
 
             ScTokenArray* pScTokA=pRefComp->CompileString(rStr);
