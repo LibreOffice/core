@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-12 07:47:48 $
+ *  last change: $Author: ama $ $Date: 2001-04-12 12:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,9 +506,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         nTmpAscent = AdjustBaseLine( *pCurr, *pPor );
                         pOrig->Pos().Y() += nTmpAscent - nPorAscent;
 
-                        if( ( ((SwMultiPortion*)pPor)->IsDouble() ||
-                              ((SwMultiPortion*)pPor)->HasRotation() )
-                             && pCMS && pCMS->b2Lines )
+                        if( pCMS && pCMS->b2Lines )
                         {
                             pCMS->p2Lines = new Sw2LinesPos();
                             pCMS->p2Lines->aLine = SwRect(aCharPos, aCharSize);
@@ -519,8 +517,10 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                 else
                                     pCMS->p2Lines->nMultiType = 0;
                             }
-                            else
+                            else if( ((SwMultiPortion*)pPor)->IsDouble() )
                                 pCMS->p2Lines->nMultiType = 2;
+                            else
+                                pCMS->p2Lines->nMultiType = 3;
                             SwTwips nTmpWidth = pPor->Width();
                             if( nSpaceAdd )
                                 nTmpWidth += pPor->CalcSpacing(nSpaceAdd, aInf);

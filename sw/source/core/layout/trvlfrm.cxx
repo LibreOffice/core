@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 10:16:52 $
+ *  last change: $Author: ama $ $Date: 2001-04-12 12:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1985,7 +1985,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             if( pSt2Pos )
             {
                 SwRect aTmp( aStRect.Pos(),
-                    Point( pSt2Pos->aPortion.Right(), aStRect.Bottom() ) );
+                        Point( pSt2Pos->aPortion.Right(), aStRect.Bottom() ) );
                 if( !pSt2Pos->nMultiType ||
                     pSt2Pos->aPortion.Top() == aTmp.Top() )
                     aTmp.Top( pSt2Pos->aLine.Top() );
@@ -2002,19 +2002,19 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                     Sub( aRegion, aTmp );
                 }
                 aStRect = SwRect( Point( pSt2Pos->aPortion.Right(),
-                    pSt2Pos->aLine.Top() ), Size( 1, pSt2Pos->aLine.Height() ));
+                    pSt2Pos->aLine.Top()), Size(1,pSt2Pos->aLine.Height()));
             }
             if( pEnd2Pos )
             {
-                SwRect aTmp( Point( pEnd2Pos->aPortion.Left(), aEndRect.Top() ),
-                    Point( aEndRect.Left() + aEndRect.Width(),
-                           aEndRect.Top() + aEndRect.Height() ) );
+                SwRect aTmp(Point(pEnd2Pos->aPortion.Left(),aEndRect.Top()),
+                            Point( aEndRect.Left() + aEndRect.Width(),
+                                      aEndRect.Top() + aEndRect.Height() ) );
                 if( !pEnd2Pos->nMultiType ||
                     pEnd2Pos->aPortion.Bottom() == aEndRect.Bottom() )
                     aTmp.Bottom( pEnd2Pos->aLine.Bottom() );
                 aTmp.Intersection( aEndFrm );
                 Sub( aRegion, aTmp );
-                if( pEnd2Pos->nMultiType &&
+                if( 3 != pEnd2Pos->nMultiType && pEnd2Pos->nMultiType &&
                     aEndRect.Top() > pEnd2Pos->aLine.Top() )
                 {
                     aTmp.Bottom( aTmp.Top() );
@@ -2025,7 +2025,8 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                     Sub( aRegion, aTmp );
                 }
                 aEndRect = SwRect( Point( pEnd2Pos->aPortion.Left(),
-                    pEnd2Pos->aLine.Top()), Size( 1, pEnd2Pos->aLine.Height()));
+                                          pEnd2Pos->aLine.Top() ),
+                                   Size( 1, pEnd2Pos->aLine.Height() ) );
             }
         }
 
@@ -2053,7 +2054,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
         if( pStartFrm == pEndFrm )
         {
             sal_Bool bSameRotatedLine =
-                pSt2Pos && pEnd2Pos && 2 != pSt2Pos->nMultiType &&
+                pSt2Pos && pEnd2Pos && 2 > pSt2Pos->nMultiType &&
                 pSt2Pos->aPortion == pEnd2Pos->aPortion;
             //Fall 1: (Gleicher Frame und gleiche Zeile)
             if( aStRect.Top() == aEndRect.Top() || bSameRotatedLine )
