@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-15 09:40:24 $
+ *  last change: $Author: hro $ $Date: 2001-08-20 14:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,11 +193,11 @@ static const DataFlavorRepresentation aFormatArray_Impl[] =
 /* 86 SOT_FORMATSTR_ID_LINK_SOURCE*/            { "application/x-openoffice;windows_formatname=\"Star LNKS\"", "Star LNKS", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 87 SOT_FORMATSTR_ID_EMBEDDED_OBJ*/           { "application/x-openoffice;windows_formatname=\"Star EMBO\"", "Star EMBO", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 #else                                   ;;
-/* 83 SOT_FORMATSTR_ID_OBJECTDESCRIPTOR*/       { "application/x-openoffice;windows_formatname=\"Star Object Descriptor\"", "Star Object Descriptor", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-/* 84 SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR*/      { "application/x-openoffice;windows_formatname=\"Star Link Source Descriptor\"", "Star Link Source Descriptor", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-/* 85 SOT_FORMATSTR_ID_EMBED_SOURCE*/           { "application/x-openoffice;windows_formatname=\"Star Embed Source\"", "Star Embed Source", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-/* 86 SOT_FORMATSTR_ID_LINK_SOURCE*/            { "application/x-openoffice;windows_formatname=\"Star Link Source\"", "Star Link Source", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-/* 87 SOT_FORMATSTR_ID_EMBEDDED_OBJ*/           { "application/x-openoffice;windows_formatname=\"Star Embedded Object\"", "Star Embedded Object", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 83 SOT_FORMATSTR_ID_OBJECTDESCRIPTOR*/       { "application/x-openoffice;windows_formatname=\"Star Object Descriptor (XML)\"", "Star Object Descriptor (XML)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 84 SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR*/      { "application/x-openoffice;windows_formatname=\"Star Link Source Descriptor (XML)\"", "Star Link Source Descriptor (XML)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 85 SOT_FORMATSTR_ID_EMBED_SOURCE*/           { "application/x-openoffice;windows_formatname=\"Star Embed Source (XML)\"", "Star Embed Source (XML)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 86 SOT_FORMATSTR_ID_LINK_SOURCE*/            { "application/x-openoffice;windows_formatname=\"Star Link Source (XML)\"", "Star Link Source (XML)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 87 SOT_FORMATSTR_ID_EMBEDDED_OBJ*/           { "application/x-openoffice;windows_formatname=\"Star Embedded Object (XML)\"", "Star Embedded Object (XML)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 #endif
 /* 88 SOT_FORMATSTR_ID_FILECONTENT*/            { "application/x-openoffice;windows_formatname=\"FileContents\"", "File Contents", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 89 SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR*/      { "application/x-openoffice;windows_formatname=\"FileGroupDescriptor\"", "File Group Descriptor", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
