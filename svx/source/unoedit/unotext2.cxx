@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-18 15:51:29 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,17 +144,18 @@ static SvxUnoText* getDummyText() throw()
 
 SvxUnoTextContent::SvxUnoTextContent() throw()
 :   SvxUnoTextRangeBase(*getDummyText()),
+    nParagraph(0),
     rParentText(*getDummyText()),
     aDisposeListeners(aDisposeContainerMutex),
-    nParagraph(0),
     bDisposing( sal_False )
 {
 }
 
 SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_uInt16 nPara ) throw()
-:   SvxUnoTextRangeBase(rText),rParentText(rText),
-    aDisposeListeners(aDisposeContainerMutex),
+:   SvxUnoTextRangeBase(rText),
     nParagraph(nPara),
+    rParentText(rText),
+    aDisposeListeners(aDisposeContainerMutex),
     bDisposing( sal_False )
 {
     xParentText =  (text::XText*)&rText;
@@ -163,8 +164,8 @@ SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_uInt16 nP
 
 SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw()
 :   SvxUnoTextRangeBase(rContent),
-    aDisposeListeners(aDisposeContainerMutex),
     rParentText(rContent.rParentText),
+    aDisposeListeners(aDisposeContainerMutex),
     bDisposing( sal_False )
 {
     xParentText = rContent.xParentText;
@@ -454,6 +455,7 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
 
     uno::Reference< text::XTextRange > xRange;
 
+    // TODO -Wall is this line really nessecary?
     SvxTextForwarder* pForwarder = rParentText.GetEditSource()->GetTextForwarder();
 
     SvxUnoTextRange* pRange = new SvxUnoTextRange( rParentText, sal_True );
