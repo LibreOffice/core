@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:47:55 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@
 #ifndef _SCERRORS_HXX
 #include "scerrors.hxx"
 #endif
+#include "editutil.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #ifndef _XMLOFF_XMLTOKEN_HXX
@@ -121,6 +122,9 @@
 #include <xmloff/xmlnmspe.hxx>
 #endif
 #include <svtools/zforlist.hxx>
+#ifndef _OUTLOBJ_HXX
+#include <svx/outlobj.hxx>
+#endif
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -175,6 +179,15 @@
 
 using namespace com::sun::star;
 using namespace xmloff::token;
+
+//------------------------------------------------------------------
+
+ScMyImportAnnotation::~ScMyImportAnnotation()
+{
+    delete pRect;
+    delete pItemSet;
+    delete pOPO;
+}
 
 //------------------------------------------------------------------
 
@@ -817,8 +830,24 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
                 Color* pColor = NULL;
                 Color** ppColor = &pColor;
                 pNumForm->GetOutputString(fDate, nfIndex, sDate, ppColor);
-                ScPostIt aNote(String(pMyAnnotation->sText), sDate, String(pMyAnnotation->sAuthor));
+                ScPostIt aNote(String(pMyAnnotation->sText),pDoc);
+                aNote.SetDate(sDate);
+                aNote.SetAuthor(String(pMyAnnotation->sAuthor));
                 aNote.SetShown(pMyAnnotation->bDisplay);
+                if (pMyAnnotation->pRect)
+                    aNote.SetRectangle(*pMyAnnotation->pRect);
+                else
+                    aNote.SetRectangle(aNote.DefaultRectangle(ScAddress(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet)));
+                if (pMyAnnotation->pItemSet)
+                    aNote.SetItemSet(*(pMyAnnotation->pItemSet));
+                if ( pMyAnnotation->pOPO )
+                {
+                    EditTextObject* pEditText = NULL;
+                    ScNoteEditEngine& aEngine = pDoc->GetNoteEngine();
+                    aEngine.SetText(pMyAnnotation->pOPO->GetTextObject());
+                    pEditText = aEngine.CreateTextObject();
+                    aNote.SetEditTextObject(pEditText);    // if pEditText is NULL, then aNote.mpEditObj will be reset().
+                }
                 pDoc->SetNote(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet, aNote);
                 if (pMyAnnotation->bDisplay)
                 {
