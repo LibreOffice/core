@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
+ *  last change: $Author: os $ $Date: 2001-06-06 06:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,6 +767,12 @@ ModalDialog DLG_MAILMERGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "%PRODUCTNAME Writer";
         Text[ finnish ] = "%PRODUCTNAME! Writer";
+    };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 137 , 93 ) ;
+        Size = MAP_APPFONT ( 4 , 99 ) ;
+        Vert = TRUE;
     };
     FixedLine FL_DEST
     {

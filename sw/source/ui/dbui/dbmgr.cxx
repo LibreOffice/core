@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2001-05-23 13:42:23 $
+ *  last change: $Author: os $ $Date: 2001-06-06 06:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,6 +314,11 @@ using namespace com::sun::star::task;
 #define DB_SEP_NEWLINE  3
 
 SV_IMPL_PTRARR(SwDSParamArr, SwDSParamPtr);
+const sal_Char cCursor[] = "Cursor";
+const sal_Char cCommand[] = "Command";
+const sal_Char cCommandType[] = "CommandType";
+const sal_Char cDataSourceName[] = "DataSourceName";
+const sal_Char cSelection[] = "Selection";
 
 /* -----------------------------17.07.00 17:04--------------------------------
 
@@ -382,15 +387,15 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
     const PropertyValue* pValues = rProperties.getConstArray();
     for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
     {
-        if(!pValues[nPos].Name.compareToAscii("DataSourceName"))
+        if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cDataSourceName)))
             pValues[nPos].Value >>= aData.sDataSource;
-        else if(!pValues[nPos].Name.compareToAscii("Command"))
+        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommand)))
             pValues[nPos].Value >>= aData.sCommand;
-        else if(!pValues[nPos].Name.compareToAscii("Cursor"))
+        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCursor)))
             pValues[nPos].Value >>= xResSet;
-        else if(!pValues[nPos].Name.compareToAscii("Selection"))
+        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSelection)))
             pValues[nPos].Value >>= aSelection;
-        else if(!pValues[nPos].Name.compareToAscii("CommandType"))
+        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommandType)))
             pValues[nPos].Value >>= aData.nCommandType;
     }
     if(!aData.sDataSource.getLength() || !aData.sCommand.getLength() || !xResSet.is())
@@ -1882,22 +1887,25 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     Sequence<sal_Int32> aSelection;
     BOOL bHasSelectionProperty = FALSE;
     sal_Int32 nSelectionPos = 0;
+    sal_Int32 nResultSetIdx = -1;
     sal_Int16 nCmdType = CommandType::TABLE;
     const PropertyValue* pValues = rProperties.getConstArray();
     for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
     {
-        if(!pValues[nPos].Name.compareToAscii("DataSourceName"))
+        if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cDataSourceName)))
             pValues[nPos].Value >>= sDataSource;
-        else if(!pValues[nPos].Name.compareToAscii("Command"))
+        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommand)))
             pValues[nPos].Value >>= sDataTableOrQuery;
-        else if(!pValues[nPos].Name.compareToAscii("Selection"))
+        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSelection)))
         {
             bHasSelectionProperty = TRUE;
             nSelectionPos = nPos;
             pValues[nPos].Value >>= aSelection;
         }
-        else if(!pValues[nPos].Name.compareToAscii("CommandType"))
+        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommandType)))
             pValues[nPos].Value >>= nCmdType;
+        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCursor)))
+            nResultSetIdx = nPos;
     }
     if(!sDataSource.getLength() || !sDataTableOrQuery.getLength())
     {
@@ -1920,9 +1928,21 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
         {
             nSelectionPos = rProperties.getLength();
             aNewProperties.realloc(rProperties.getLength() + 1);
+            aNewProperties[nSelectionPos].Name = C2U("Selection");
         }
-        PropertyValue* pNewValues = aNewProperties.getArray();
-        pNewValues[nSelectionPos].Value <<= pMergeDialog->GetSelection();
+        aNewProperties[nSelectionPos].Value <<= pMergeDialog->GetSelection();
+
+        Reference<XResultSet> xResSet = pMergeDialog->GetResultSet();
+        if(xResSet.is())
+        {
+            if(nResultSetIdx < 0)
+            {
+                nResultSetIdx = aNewProperties.getLength();
+                aNewProperties.realloc(nResultSetIdx + 1);
+                aNewProperties[nResultSetIdx].Name = C2U("Cursor");
+            }
+            aNewProperties[nResultSetIdx].Value <<= xResSet;
+        }
         OFF_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, rSh.GetView().GetViewFrame()->GetObjectShell()));
         MergeNew(GetMergeType(),
                             rSh,
@@ -1945,19 +1965,19 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     const PropertyValue* pValues = rProperties.getConstArray();
     for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
     {
-        if(!pValues[nPos].Name.compareToAscii("DataSourceName"))
+        if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cDataSourceName)))
             pValues[nPos].Value >>= sDataSource;
-        else if(!pValues[nPos].Name.compareToAscii("Command"))
+        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommand)))
             pValues[nPos].Value >>= sDataTableOrQuery;
-        else if(!pValues[nPos].Name.compareToAscii("Cursor"))
+        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCursor)))
             pValues[nPos].Value >>= xResSet;
-        else if(!pValues[nPos].Name.compareToAscii("Selection"))
+        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSelection)))
         {
             bHasSelectionProperty = TRUE;
             nSelectionPos = nPos;
             pValues[nPos].Value >>= aSelection;
         }
-        else if(!pValues[nPos].Name.compareToAscii("CommandType"))
+        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommandType)))
             pValues[nPos].Value >>= nCmdType;
     }
     if(!sDataSource.getLength() || !sDataTableOrQuery.getLength() || !xResSet.is())

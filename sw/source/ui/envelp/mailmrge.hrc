@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
+ *  last change: $Author: os $ $Date: 2001-06-06 06:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@
 #define ED_ATTACH       33
 #define PB_ATTACH       34
 #define WIN_BEAMER      35
-
+#define FL_SEPARATOR    36
 #endif
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
+ *  last change: $Author: os $ $Date: 2001-06-06 06:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,28 @@
 #include <com/sun/star/ui/XFolderPicker.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
+#include <com/sun/star/form/XFormController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
+#include <com/sun/star/awt/XControl.hpp>
+#endif
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONCHANGELISTENER_HPP_
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XTABCONTROLLERMODEL_HPP_
+#include <com/sun/star/awt/XTabControllerModel.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
+
 using namespace rtl;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
@@ -151,10 +173,76 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
 using namespace ::com::sun::star::ui;
+using namespace com::sun::star::form;
+using namespace com::sun::star::awt;
+using namespace com::sun::star::view;
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
+/* -----------------------------05.06.01 13:54--------------------------------
+
+ ---------------------------------------------------------------------------*/
+struct SwMailMergeDlg_Impl
+{
+    Reference<XFormController> xFController;
+    Reference<XSelectionChangeListener> xChgLstnr;
+    Reference<XSelectionSupplier> xSelSupp;
+};
+/* -----------------------------05.06.01 13:47--------------------------------
+    helper classes
+ ---------------------------------------------------------------------------*/
+class SwXSelChgLstnr_Impl : public cppu::WeakImplHelper1
+<
+    com::sun::star::view::XSelectionChangeListener
+>
+{
+    SwMailMergeDlg& rParent;
+public:
+    SwXSelChgLstnr_Impl(SwMailMergeDlg& rParentDlg);
+    ~SwXSelChgLstnr_Impl();
+
+    virtual void SAL_CALL selectionChanged( const EventObject& aEvent ) throw (RuntimeException);
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
+};
+/* -----------------------------05.06.01 13:51--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwXSelChgLstnr_Impl::SwXSelChgLstnr_Impl(SwMailMergeDlg& rParentDlg) :
+    rParent(rParentDlg)
+{}
+/* -----------------------------05.06.01 14:06--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwXSelChgLstnr_Impl::~SwXSelChgLstnr_Impl()
+{}
+/* -----------------------------05.06.01 14:06--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXSelChgLstnr_Impl::selectionChanged( const EventObject& aEvent ) throw (RuntimeException)
+{
+    //call the parent to enable selection mode
+    Sequence <Any> aSelection;
+    if(rParent.pImpl->xSelSupp.is())
+    {
+        Any aSel = rParent.pImpl->xSelSupp->getSelection();
+        aSel >>= aSelection;
+    }
+    sal_Bool bEnable = aSelection.getLength() > 0;
+    rParent.aMarkedRB.Enable(bEnable);
+    if(rParent.aMarkedRB.IsChecked() && !bEnable)
+    {
+        rParent.aAllRB.Check();
+        rParent.aSelection.realloc(0);
+    }
+}
+/* -----------------------------05.06.01 14:06--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXSelChgLstnr_Impl::disposing( const EventObject& Source ) throw (RuntimeException)
+{
+    DBG_ERROR("disposing")
+}
 /*------------------------------------------------------------------------
  Beschreibung:
 ------------------------------------------------------------------------*/
@@ -174,6 +262,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aToNF           (this, SW_RES(NF_TO)),
     aRecordFL       (this, SW_RES(FL_RECORD)),
 
+    aSeparatorFL    (this, SW_RES(FL_SEPARATOR)),
     aPrinterRB      (this, SW_RES(RB_PRINTER)),
     aMailingRB      (this, SW_RES(RB_MAILING)),
     aFileRB         (this, SW_RES(RB_FILE)),
@@ -206,6 +295,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aCancelBTN      (this, SW_RES(BTN_CANCEL)),
     aHelpBTN        (this, SW_RES(BTN_HELP)),
 
+    pImpl           (new SwMailMergeDlg_Impl),
     rSh             (rShell),
     rDBName         (rSourceName),
     rTableName      (rTblName),
@@ -219,7 +309,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         //move all controls
         long nDiff = aRecordFL.GetPosPixel().Y() - pBeamerWin->GetPosPixel().Y();
         pBeamerWin->Show(FALSE);
-        Size aSize = GetSizePixel();
+        ::Size aSize = GetSizePixel();
         aSize.Height() -= nDiff;
         SetSizePixel(aSize);
         Window* aCntrlArr[] = {
@@ -262,18 +352,6 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
             aPnt.Y() -= nDiff;
             (*ppW)->SetPosPixel( aPnt );
         }
-
-
-
-
-
-
-
-
-
-
-
-
     }
     else
     {
@@ -312,6 +390,18 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
                 pProperties[2].Value <<= nCommandType;
                 xD->dispatch(aURL, aProperties);
                 pBeamerWin->Show();
+            }
+            Reference<XController> xController = xFrame->getController();
+            pImpl->xFController = Reference<XFormController>(xController, UNO_QUERY);
+            if(pImpl->xFController.is())
+            {
+                Reference< XControl > xCtrl = pImpl->xFController->getCurrentControl(  );
+                pImpl->xSelSupp = Reference<XSelectionSupplier>(xCtrl, UNO_QUERY);
+                if(pImpl->xSelSupp.is())
+                {
+                    pImpl->xChgLstnr = new SwXSelChgLstnr_Impl(*this);
+                    pImpl->xSelSupp->addSelectionChangeListener(  pImpl->xChgLstnr );
+                }
             }
         }
     }
@@ -404,6 +494,7 @@ SwMailMergeDlg::~SwMailMergeDlg()
     }
     else
         delete pBeamerWin;
+    delete pImpl;
 }
 
 /*------------------------------------------------------------------------
@@ -596,10 +687,23 @@ void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
         for (ULONG i = nStart; i <= nEnd; i++, nPos++)
             pSelection[nPos] = i;
     }
-
-    if (aAllRB.IsChecked() )
+    else if (aAllRB.IsChecked() )
         aSelection.realloc(0);  // Leere Selektion = Alles einfuegen
-
+    else
+    {
+        if(pImpl->xSelSupp.is())
+        {
+            //update selection
+            Any aSel = pImpl->xSelSupp->getSelection();
+            Sequence <Any> aGridSelection;
+            aSel >>= aGridSelection;
+            aSelection.realloc(aGridSelection.getLength());
+            sal_Int32* pDlgSelection = aSelection.getArray();
+            const Any* pGridSelection = aGridSelection.getConstArray();
+            for(sal_Int32 nSel = 0; nSel < aGridSelection.getLength(); nSel++)
+                pGridSelection[nSel] >>= pDlgSelection[nSel];
+        }
+    }
     pModOpt->SetSinglePrintJob(aSingleJobsCB.IsChecked());
 
     BYTE nMailingMode = 0;
@@ -662,5 +766,17 @@ IMPL_LINK( SwMailMergeDlg, AttachFileHdl, PushButton *, pBtn )
 
     return 0;
 }
+/* -----------------------------05.06.01 14:56--------------------------------
 
+ ---------------------------------------------------------------------------*/
+Reference<XResultSet> SwMailMergeDlg::GetResultSet()
+{
+    Reference< XResultSet >  xResSet;
+    if(pImpl->xFController.is())
+    {
+        Reference< XTabControllerModel > xTModel = pImpl->xFController->getModel();
+        xResSet = Reference< XResultSet >(xTModel, UNO_QUERY);
+    }
+    return xResSet;
+}
 
