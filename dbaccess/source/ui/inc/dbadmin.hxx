@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:39 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,10 @@ protected:
             <FALSE/> in case no new com.sun.star.sdb.DataSource could be created
     */
     sal_Bool            implInsertNew_noCheck(const ::rtl::OUString& _rName);
+
+    /** initializes the settings for a data source which is just being created
+    */
+    void                initializeNewlyCreatedDataSource( ODatasourceMap::Iterator _aWhich );
 
 #ifdef DBG_UTIL
     ::rtl::OString translatePropertyId( sal_Int32 _nId );
