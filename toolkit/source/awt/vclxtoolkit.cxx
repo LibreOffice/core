@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2001-03-12 12:39:51 $
+ *  last change: $Author: mt $ $Date: 2001-03-15 11:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/convert.hxx>
 
+#include <vcl/unohelp.hxx>
 #include <vcl/btndlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
@@ -441,6 +442,9 @@ VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::st
     : cppu::WeakComponentImplHelper2< ::com::sun::star::awt::XToolkit,
     ::com::sun::star::awt::XDataTransferProviderAccess >( GetMutex() )
 {
+    hSvToolsLib = NULL;
+    fnSvtCreateWindow = NULL;
+
     osl::Guard< osl::Mutex > aGuard( getInitMutex() );
 //  if( nVCLToolkitInstanceCount++ == 0 )
     {
@@ -466,6 +470,13 @@ VCLXToolkit::~VCLXToolkit()
 
 void SAL_CALL VCLXToolkit::disposing()
 {
+    if ( hSvToolsLib )
+    {
+        osl_unloadModule( hSvToolsLib );
+        hSvToolsLib = NULL;
+        fnSvtCreateWindow = NULL;
+    }
+
     osl::Guard< osl::Mutex > aGuard( getInitMutex() );
 //  if( --nVCLToolkitInstanceCount == 0 )
     {
@@ -524,10 +535,31 @@ void SAL_CALL VCLXToolkit::disposing()
         ImplGetComponentType( rDescriptor.WindowServiceName ) );
 
     VCLXWindow* pNewComp = NULL;
-    Window* pNewWindow = CreateComponent( &pNewComp, rDescriptor, pParent, nWinBits );
 
-    DBG_ASSERT( pNewWindow, "createComponent: Unknown Component!" );
-    DBG_ASSERTWARNING( pNewComp, "createComponent: No special Interface!" );
+    Window* pNewWindow = ImplCreateWindow( &pNewComp, rDescriptor, pParent, nWinBits );
+    if ( !pNewWindow )
+    {
+        // Try to create the window with SvTools
+        if ( !fnSvtCreateWindow && !hSvToolsLib )
+        {
+            ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "svt", TRUE );
+            hSvToolsLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
+            if ( hSvToolsLib )
+            {
+                ::rtl::OUString aFunctionName( RTL_CONSTASCII_USTRINGPARAM( "CreateWindow" ) );
+                fnSvtCreateWindow = (FN_SvtCreateWindow)osl_getSymbol( hSvToolsLib, aFunctionName.pData );
+            }
+        }
+
+        if ( fnSvtCreateWindow )
+        {
+            pNewWindow = fnSvtCreateWindow( &pNewComp, &rDescriptor, pParent, nWinBits );
+        }
+
+    }
+
+    DBG_ASSERT( pNewWindow, "createWindow: Unknown Component!" );
+    DBG_ASSERTWARNING( pNewComp, "createWindow: No special Interface!" );
 
     if ( pNewWindow )
     {
@@ -608,7 +640,7 @@ void SAL_CALL VCLXToolkit::disposing()
     return xRef;
 }
 
-Window* VCLXToolkit::CreateComponent( VCLXWindow** ppNewComp,
+Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     const ::com::sun::star::awt::WindowDescriptor& rDescriptor, Window* pParent, sal_uInt32 nWinBits )
 {
     String aServiceName( rDescriptor.WindowServiceName );

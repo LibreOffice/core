@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-23 17:42:39 $
+ *  last change: $Author: mt $ $Date: 2001-03-15 11:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,6 @@ public:
 
     // Toolkit
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit> GetVCLToolkit();
-    virtual void                RegisterUnoServices();
 
     // Graphics
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> CreateGraphics( OutputDevice* pOutDev );
@@ -119,13 +118,7 @@ public:
     void                WindowEvent_GetFocus( Window* pWindow );
     void                WindowEvent_LoseFocus( Window* pWindow );
     void                WindowEvent_Paint( Window* pWindow, const Rectangle& rRect );
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getNewUnoServiceManager();
-
 };
-
-
-
 
 #endif // _TOOLKIT_HELPER_UNOWRAPPER_HXX_
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-22 18:20:55 $
+ *  last change: $Author: mt $ $Date: 2001-03-15 11:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,16 @@
 //  class UnoWrapper
 //  ----------------------------------------------------
 
+extern "C" {
+
+UnoWrapperBase* CreateUnoWrapper()
+{
+    return new UnoWrapper( NULL );
+}
+
+};  // extern "C"
+
+
 // Mit Out-Parameter besser als Rueckgabewert, wegen Ref-Objekt...
 
 void ImplInitWindowEvent( ::com::sun::star::awt::WindowEvent& rEvent, Window* pWindow )
@@ -170,11 +180,6 @@ void UnoWrapper::Destroy()
     if ( !mxToolkit.is() )
         mxToolkit = VCLUnoHelper::CreateToolkit();
     return mxToolkit.get();
-}
-
-void UnoWrapper::RegisterUnoServices()
-{
-    // Sollte nicht megr nötig sein!
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> UnoWrapper::GetWindowInterface( Window* pWindow, BOOL bCreate )
@@ -562,12 +567,3 @@ void UnoWrapper::WindowEvent_Normalize( Window* pWindow )
         pWindow->GetWindowPeer()->GetTopWindowListeners().windowNormalized( aEvent );
     }
 }
-
-::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  UnoWrapper::getNewUnoServiceManager()
-{
-    return ::comphelper::getProcessServiceFactory();
-}
-
-
-
-

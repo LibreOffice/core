@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-03-12 12:39:13 $
+ *  last change: $Author: mt $ $Date: 2001-03-15 11:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include <osl/mutex.hxx>
 #endif
 
+#ifndef _OSL_MODULE_H_
+#include <osl/module.h>
+#endif
+
 class Window;
 class VCLXWindow;
 
@@ -97,6 +101,12 @@ namespace awt {
     struct WindowDescriptor;
     class XDataTransfer;
 } } } }
+
+
+extern "C" {
+    typedef Window* (SAL_CALL *FN_SvtCreateWindow)( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, Window* pParent, sal_uInt32 nWinBits );
+};
+
 
 //  ----------------------------------------------------
 //  class VCLXTOOLKIT
@@ -115,17 +125,22 @@ class VCLXToolkit : public VCLXToolkit_Impl,
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxClipboard;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxSelection;
+
+    oslModule           hSvToolsLib;
+    FN_SvtCreateWindow  fnSvtCreateWindow;
+
+
 protected:
     ::osl::Mutex&   GetMutex() { return maMutex; }
 
     virtual void SAL_CALL disposing();
+
+    Window* ImplCreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor& rDescriptor, Window* pParent, sal_uInt32 nWinBits );
+
 public:
 
     VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
     ~VCLXToolkit();
-
-    virtual Window* CreateComponent( VCLXWindow** ppNewComp,
-        const ::com::sun::star::awt::WindowDescriptor& rDescriptor, Window* pParent, sal_uInt32 nWinBits );
 
     // ::com::sun::star::awt::XToolkit
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  SAL_CALL getDesktopWindow(  ) throw(::com::sun::star::uno::RuntimeException);

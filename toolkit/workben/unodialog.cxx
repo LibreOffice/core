@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-22 18:05:32 $
+ *  last change: $Author: mt $ $Date: 2001-03-15 11:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,8 +229,6 @@ public:
 void Main( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMSF )
 {
     ::comphelper::setProcessServiceFactory( xMSF );
-    //InitExtVclToolkit();
-    //Application::RegisterUnoServices();
 
     //uno::Reference< awt::XToolkit> xToolkit( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), uno::UNO_QUERY );
     uno::Reference< awt::XToolkit> xToolkit( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" ) ) ), uno::UNO_QUERY );
