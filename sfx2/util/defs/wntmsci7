@@ -7539,3 +7539,4 @@ _TI4?AVout_of_range@_STL@@
 ?__query@?$Reference@VXStandaloneDocumentInfo@document@star@sun@com@@@uno@star@sun@com@@CAPAVXStandaloneDocumentInfo@document@345@PAVXInterface@2345@@Z
 ??1WaitObject@@QAE@XZ
 ?GetActiveFrame@SfxBindings@@QBE?BV?$Reference@VXFrame@frame@star@sun@com@@@uno@star@sun@com@@XZ
+?lcl_translateBasic2Uno@?%O:\SRC640\src\sfx2\source\doc\objmisc.cxx51783536@@YAXABVSbxVariableRef@@PAX@Z
