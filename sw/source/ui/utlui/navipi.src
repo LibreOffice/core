@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-01 22:01:28 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 23:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ Window DLG_NAVIGATION_PI
                 Text [ italian ] = "Avanti" ;
                 Text [ portuguese_brazilian ] = "Para Frente" ;
                 Text [ portuguese ] = "Seguinte" ;
-                Text [ finnish ] = "Eteenp?in" ;
+                Text [ finnish ] = "Eteenpäin" ;
                 Text [ danish ] = "Fremad" ;
                 Text [ french ] = "Suivant" ;
                 Text [ swedish ] = "Framåt" ;
@@ -324,7 +324,7 @@ Window DLG_NAVIGATION_PI
                 Text [ italian ] = "Capitolo superiore" ;
                 Text [ portuguese_brazilian ] = "Cap?tulo acima" ;
                 Text [ portuguese ] = "Subir um capítulo" ;
-                Text [ finnish ] = "Pienenn? kappaleen sisennyst?" ;
+                Text [ finnish ] = "Pienennä kappaleen sisennystä" ;
                 Text [ danish ] = "Kapitel op" ;
                 Text [ french ] = "Chapitre vers le haut" ;
                 Text [ swedish ] = "Kapitel uppåt" ;
@@ -354,7 +354,7 @@ Window DLG_NAVIGATION_PI
                 Text [ italian ] = "Capitolo inferiore" ;
                 Text [ portuguese_brazilian ] = "Cap?tulo abaixo" ;
                 Text [ portuguese ] = "Descer um capítulo" ;
-                Text [ finnish ] = "Suurenna kappaleen sisennyst?" ;
+                Text [ finnish ] = "Suurenna kappaleen sisennystä" ;
                 Text [ danish ] = "Kapitel ned" ;
                 Text [ french ] = "Chapitre vers le bas" ;
                 Text [ swedish ] = "Kapitel nedåt" ;
@@ -428,7 +428,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "ë‚´ìš©ë³´ê¸° ì „í™˜";
                 Text[ turkish ] = "İçerik görünümünü değiştir";
                 Text[ catalan ] = "Conmutar visualización del contenido";
-                Text[ finnish ] = "Sis?lt??kym?";
+                Text[ finnish ] = "Sisältönäkymä";
             };
             ToolBoxItem
             {
@@ -445,7 +445,7 @@ Window DLG_NAVIGATION_PI
                 Text [ italian ] = "Imposta contrassegno" ;
                 Text [ portuguese_brazilian ] = "Definir Marcas" ;
                 Text [ portuguese ] = "Definir marca" ;
-                Text [ finnish ] = "M??rit? muistutus" ;
+                Text [ finnish ] = "Määritä muistutus" ;
                 Text [ danish ] = "Sæt bogmærke" ;
                 Text [ french ] = "Définir un pense-bête" ;
                 Text [ swedish ] = "Sätt temporärt bokmärke" ;
@@ -478,7 +478,7 @@ Window DLG_NAVIGATION_PI
                 Text [ italian ] = "Intestazione" ;
                 Text [ portuguese_brazilian ] = "Cabe?alho" ;
                 Text [ portuguese ] = "Cabeçalho" ;
-                Text [ finnish ] = "Yl?otsikko" ;
+                Text [ finnish ] = "Yläotsikko" ;
                 Text [ danish ] = "Sidehoved" ;
                 Text [ french ] = "En-tête " ;
                 Text [ swedish ] = "Sidhuvud" ;
@@ -588,7 +588,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "ë‚˜íƒ€ë‚˜ëŠ” í‘œì œ ìˆ˜ì¤€";
                 Text[ turkish ] = "Görüntülenen başlık düzeyleri";
                 Text[ catalan ] = "Niveles de encabezados mostrados";
-                Text[ finnish ] = "Otsikkotasojen n?ytt?";
+                Text[ finnish ] = "Otsikkotasojen näyttö";
             };
             ToolBoxItem
             {
@@ -605,7 +605,7 @@ Window DLG_NAVIGATION_PI
                 Text [ italian ] = "Livello superiore" ;
                 Text [ portuguese_brazilian ] = "Aumentar N?vel" ;
                 Text [ portuguese ] = "Subir um nível" ;
-                Text [ finnish ] = "Pienenn? tason sisennyst?" ;
+                Text [ finnish ] = "Pienennä tason sisennystä" ;
                 Text [ danish ] = "Niveau op" ;
                 Text [ french ] = "Hausser d'un niveau" ;
                 Text [ swedish ] = "En nivå upp" ;
@@ -634,7 +634,7 @@ Window DLG_NAVIGATION_PI
                 Text [ italian ] = "Livello inferiore" ;
                 Text [ portuguese_brazilian ] = "Diminuir N?vel" ;
                 Text [ portuguese ] = "Descer um nível" ;
-                Text [ finnish ] = "Suurenna tason sisennyst?" ;
+                Text [ finnish ] = "Suurenna tason sisennystä" ;
                 Text [ danish ] = "Niveau ned" ;
                 Text [ french ] = "Abaisser d'un niveau" ;
                 Text [ swedish ] = "En nivå ner" ;
@@ -745,7 +745,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "ì—…ë°ì´íŠ¸";
                 Text[ turkish ] = "Güncelle";
                 Text[ catalan ] = "Actualizar";
-                Text[ finnish ] = "P?ivit?";
+                Text[ finnish ] = "Päivitä";
             };
             ToolBoxItem
             {
@@ -773,7 +773,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "ì‚½ì…";
                 Text[ turkish ] = "Ekle";
                 Text[ catalan ] = "Insertar";
-                Text[ finnish ] = "Lis??";
+                Text[ finnish ] = "Lisää";
             };
             ToolBoxItem
             {
@@ -804,7 +804,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "ë‚´ìš© ì €ì¥";
                 Text[ turkish ] = "İçeriği de kaydet";
                 Text[ catalan ] = "Guardar contenidos";
-                Text[ finnish ] = "Tallenna my? sis?lt?";
+                Text[ finnish ] = "Tallenna myös sisältö";
             };
             ToolBoxItem
             {
@@ -836,7 +836,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "ìœ„ë¡œ ì´ë™";
                 Text[ turkish ] = "Yukarı taşı";
                 Text[ catalan ] = "Desplazar hacia arriba";
-                Text[ finnish ] = "Siirr? yl?";
+                Text[ finnish ] = "Siirrä ylös";
             };
             ToolBoxItem
             {
@@ -864,7 +864,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "ì•„ë˜ë¡œ ì´ë™";
                 Text[ turkish ] = "Aşağı taşı";
                 Text[ catalan ] = "Desplazar hacia abajo";
-                Text[ finnish ] = "Siirr? alas";
+                Text[ finnish ] = "Siirrä alas";
             };
         };
     };
@@ -935,7 +935,7 @@ Window DLG_NAVIGATION_PI
         Text[ korean ] = "ë‹¤ë‹¨ê³„";
         Text[ turkish ] = "Anahat düzeyleri";
         Text[ catalan ] = "Niveles del esquema";
-        Text[ finnish ] = "J?sennystaso";
+        Text[ finnish ] = "Jäsennystaso";
     };
     String ST_DRAGMODE
     {
@@ -986,7 +986,7 @@ Window DLG_NAVIGATION_PI
         Text[ korean ] = "í•˜ì´í¼ë§í¬ë¡œ ì‚½ì…";
         Text[ turkish ] = "Hyperlink olarak ekle";
         Text[ catalan ] = "Insertar como hiperenlace";
-        Text[ finnish ] = "Lis?? hyperlinkkin?";
+        Text[ finnish ] = "Lisää hyperlinkkinä";
     };
     String ST_LINK_REGION
     {
@@ -1012,7 +1012,7 @@ Window DLG_NAVIGATION_PI
         Text[ korean ] = "ì—°ê²°ë¡œ ì‚½ì…";
         Text[ turkish ] = "Bağlantı olarak ekle";
         Text[ catalan ] = "Insertar como vínculo";
-        Text[ finnish ] = "Lis?? linkkin?";
+        Text[ finnish ] = "Lisää linkkinä";
     };
     String ST_COPY_REGION
     {
@@ -1038,7 +1038,7 @@ Window DLG_NAVIGATION_PI
         Text[ korean ] = "ë³µì‚¬ë¡œ ì‚½ì…";
         Text[ turkish ] = "Kopya olarak ekle";
         Text[ catalan ] = "Insertar como copia";
-        Text[ finnish ] = "Lis?? kopiona";
+        Text[ finnish ] = "Lisää kopiona";
     };
     String ST_DISPLAY
     {
@@ -1063,7 +1063,7 @@ Window DLG_NAVIGATION_PI
         Text[ korean ] = "í‘œì‹œ";
         Text[ turkish ] = "Görüntü";
         Text[ catalan ] = "Visualización";
-        Text[ finnish ] = "N?yt?";
+        Text[ finnish ] = "Näytä";
     };
     String ST_ACTIVE_VIEW
     {
@@ -1164,7 +1164,7 @@ Window DLG_NAVIGATION_PI
         Text[ korean ] = "ë¹„í™œì„±";
         Text[ turkish ] = "etkin değil";
         Text[ catalan ] = "inactivo";
-        Text[ finnish ] = "ei k?yt?s?";
+        Text[ finnish ] = "ei käytössä";
     };
     String ST_EDIT_ENTRY
     {
@@ -1214,7 +1214,7 @@ Window DLG_NAVIGATION_PI
         Text[ korean ] = "ì—…ë°ì´íŠ¸(~U)";
         Text[ turkish ] = "~Güncelle";
         Text[ catalan ] = "Actuali~zar";
-        Text[ finnish ] = "~P?ivit?";
+        Text[ finnish ] = "~Päivitä";
     };
     String ST_EDIT_CONTENT
     {
@@ -1275,7 +1275,7 @@ Window DLG_NAVIGATION_PI
         Text [ italian ] = "Inserisci" ;
         Text [ portuguese_brazilian ] = "Inserir" ;
         Text [ portuguese ] = "Inserir" ;
-        Text [ finnish ] = "Lis??" ;
+        Text [ finnish ] = "Lisää" ;
         Text [ danish ] = "Indsæt" ;
         Text [ french ] = "Insérer" ;
         Text [ swedish ] = "Infoga" ;
@@ -1646,7 +1646,7 @@ Window DLG_NAVIGATION_PI
         Text[ korean ] = "íŒŒì¼ì„ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤: ";
         Text[ turkish ] = "Dosya bulunamadı: ";
         Text[ catalan ] = "Archivo no encontrado: ";
-        Text[ finnish ] = "Tiedostoa ei l?tynyt: ";
+        Text[ finnish ] = "Tiedostoa ei löytynyt: ";
     };
     String ST_RENAME
     {
@@ -1671,7 +1671,7 @@ Window DLG_NAVIGATION_PI
         Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ";
         Text[ turkish ] = "~Yeniden adlandır";
         Text[ catalan ] = "Ca~mbiar nombre";
-        Text[ finnish ] = "~Nime? uudelleen";
+        Text[ finnish ] = "~Nimeä uudelleen";
     };
     String ST_READONLY_IDX
     {
@@ -1730,6 +1730,7 @@ ImageList IMG_NAVI_ENTRYBMP
     };
     IdCount = { 12 ; };
 };
+
 
 
 
