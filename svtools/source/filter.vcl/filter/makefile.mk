@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:42:23 $
+#   last change: $Author: kz $ $Date: 2004-06-28 16:12:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,14 +104,16 @@ UNOTYPES=	com.sun.star.beans.PropertyValue					\
 # --- Files --------------------------------------------------------
 
 SRS1NAME=$(TARGET)
-SRC1FILES= strings.src		  \
-          dlgexpor.src		  \
+SRC1FILES= strings.src			\
+          dlgexpor.src			\
+          dlgepng.src			\
           dlgejpg.src
 
 SLOFILES= $(SLO)$/filter.obj				\
           $(SLO)$/filter2.obj				\
           $(SLO)$/dlgexpor.obj				\
           $(SLO)$/dlgejpg.obj				\
+          $(SLO)$/dlgepng.obj				\
           $(SLO)$/sgfbram.obj				\
           $(SLO)$/sgvmain.obj				\
           $(SLO)$/sgvtext.obj				\
