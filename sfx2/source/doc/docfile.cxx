@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: mav $ $Date: 2002-02-20 08:04:03 $
+ *  last change: $Author: mav $ $Date: 2002-02-20 15:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1421,7 +1421,6 @@ void SfxMedium::Transfer_Impl()
         INetURLObject aSource( pImp->pTempFile->GetURL() );
 
 
-#ifdef UNX
     // the following fix ( file streaming instead of copiing )
     // is required only for unix
     Reference< XOutputStream > aDestStream;
@@ -1482,7 +1481,6 @@ void SfxMedium::Transfer_Impl()
                 }
         }
     }
-#endif
 
         if ( aDest.removeSegment() )
         {
