@@ -190,11 +190,7 @@ File gid_File_Lib_Npsoplugin
         BIN_FILE_BODY;
         Styles          = (PACKED);
         Dir             = gid_Dir_Program;
- #ifdef UNX
-        Name            = "libnpsoplugin.so";
- #else
-        Name            = "npsoplugin.dll";
- #endif
+        Name            = SPECIAL_NAME(npsoplugin);
 End
 #endif
 
