@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-22 10:52:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,8 @@ ViewShell::ViewShell(
       mpParentWindow(pParentWindow),
       mpObjectBarManager(NULL),
       mpWindowUpdater (new ::sd::WindowUpdater()),
-      mpImpl(new Implementation(*this))
+      mpImpl(new Implementation(*this)),
+      mpLayerTabBar(NULL)
 {
     Construct();
 }
@@ -309,7 +310,14 @@ ViewShell::ViewShell(
 
 ViewShell::~ViewShell()
 {
-    SetActiveWindow (NULL);
+    SfxViewShell* pViewShell = GetViewShell();
+    OSL_ASSERT (pViewShell!=NULL);
+
+    // Call SfxViewShell::SetWindow() directly instead of the local
+    // SetActiveWindow() because the later one accesses the view that
+    // usually has been destroyed already in a derived destructor.
+    if (IsMainViewShell())
+        pViewShell->SetWindow (NULL);
 
     // The sub shell manager will be destroyed in a short time.
     // Disable the switching of object bars now anyway just in case
@@ -323,8 +331,10 @@ ViewShell::~ViewShell()
     if (xComponent.is())
         xComponent->dispose();
 
-    SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=NULL);
+    // Keep the content window from accessing in its destructor the
+    // WindowUpdater.
+    mpContentWindow->SetViewShell(NULL);
+
     CancelSearching();
 
     // Stop listening for window events.
@@ -335,6 +345,8 @@ ViewShell::~ViewShell()
         GetDocSh()->Disconnect(this);
 
     delete pZoomList;
+
+    mpLayerTabBar.reset();
 }
 
 
@@ -348,7 +360,6 @@ void ViewShell::Construct(void)
 {
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
-
 
     if (IsMainViewShell())
         GetDocSh()->Connect (this);
@@ -1063,13 +1074,9 @@ void ViewShell::ArrangeGUIElements (void)
             // For panes other than the center pane we set the size of the
             // content window directly by subtracting the border from the
             // box of the parent window.
-            Rectangle aBox (
-                Point(0,0),
-                GetParentWindow()->GetSizePixel());
-
             mpContentWindow->SetPosSizePixel(
-                aBox.TopLeft(),
-                aBox.GetSize());
+                Point(nLeft,nTop),
+                Size(nRight-nLeft+1,nBottom-nTop+1));
         }
     }
 
