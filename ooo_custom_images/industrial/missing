@@ -66,7 +66,6 @@ lc_calloutshapes.round-rectangular-callout.png
 lc_choosedesign.png
 lc_closedocs.png
 lc_closemasterview.png
-lc_colorsettings.png
 lc_colorview.png
 lc_commontaskbarvisible.png
 lc_countall.png
@@ -98,8 +97,6 @@ lc_dbtableopen.png
 lc_dbviewaliases.png
 lc_dbviewfunctions.png
 lc_dbviewtablenames.png
-lc_decrementlevel.png
-lc_decrementsublevels.png
 lc_definename.png
 lc_defineprintarea.png
 lc_deletecolumns.png
@@ -208,11 +205,8 @@ lc_helpdownload.png
 lc_helplinesuse.png
 lc_helplinesvisible.png
 lc_helpmenu.png
-lc_incrementlevel.png
-lc_incrementsublevels.png
 lc_inscellsctrl.png
 lc_insertmasterpage.png
-lc_insertneutralparagraph.png
 lc_inserttoolbox.png
 lc_insobjctrl.png
 lc_internetonline.png
@@ -224,17 +218,12 @@ lc_mergecells.png
 lc_mergedialog.png
 lc_modifyframe.png
 lc_modifypage.png
-lc_movedown.png
-lc_movedownsubitems.png
-lc_moveup.png
-lc_moveupsubitems.png
 lc_newarrangement.png
 lc_objectposition.png
 lc_playmacro.png
 lc_preview.png
 lc_printlayout.png
 lc_printpagepreview.png
-lc_removebullets.png
 lc_removefilter.png
 lc_renamemasterpage.png
 lc_rulerrows.png
@@ -290,4 +279,3 @@ lc_togglemergecells.png
 lc_toolsmacroedit.png
 lc_toolsoptions.png
 lc_urlbutton.png
-lc_usewizards.png
