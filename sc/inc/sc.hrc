@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 18:21:25 $
+ *  last change: $Author: nn $ $Date: 2000-11-25 14:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1110,6 +1110,7 @@
 #define SCSTR_GRFILTER_VERSIONERROR  (STR_START + 80)
 #define SCSTR_GRFILTER_FILTERERROR   (STR_START + 81)
 #define SCSTR_GRFILTER_TOOBIG        (STR_START + 82)
+#define SCSTR_UNDO_GRAFFILTER        (STR_START + 83)
 
 // Items
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-15 21:50:34 $
+ *  last change: $Author: nn $ $Date: 2000-11-25 14:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2851,5 +2851,28 @@ String SCSTR_GRFILTER_TOOBIG
     Text[ korean ] = "±×·¡ÇÈÀ» »ğÀÔÇÏ±â¿¡ ¸Ş¸ğ¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
     Text[ turkish ] = "Grafiğin eklenmesi için yeterli bellek yok";
     Text[ language_user1 ] = " ";
+};
+String SCSTR_UNDO_GRAFFILTER
+{
+    Text = "Grafikfilter" ;
+    Text [ ENGLISH ] = "Graphic filter" ;
+    Text [ english_us ] = "Graphics filter" ;
+    Text[ portuguese ] = "Filtro gráfico";
+    Text[ russian ] = "Ãğàôè÷åñêèé ôèëüòğ";
+    Text[ greek ] = "Ößëôñï ãñáöéêşí";
+    Text[ dutch ] = "Grafische filter";
+    Text[ french ] = "Filtre graphique";
+    Text[ spanish ] = "Filtro de imagen";
+    Text[ italian ] = "Filtro grafico";
+    Text[ danish ] = "Grafikfilter";
+    Text[ swedish ] = "Grafikfilter";
+    Text[ polish ] = "Filtr graficzny";
+    Text[ portuguese_brazilian ] = "Graphic filter";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì¨ÙÀ";
+    Text[ korean ] = "±×·¡ÇÈ ÇÊÅÍ";
+    Text[ chinese_simplified ] = "Í¼ĞÎ¹ıÂËÆ÷";
+    Text[ chinese_traditional ] = "¹Ï§Î¹LÂo¾¹";
+    Text[ arabic ] = "İáÊÑ ÇáÑÓæãÇÊ";
+    Text[ turkish ] = "Grafik filtresi";
 };
 
