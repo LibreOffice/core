@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.29 $
-# Date:        $Date: 2004-12-13 12:24:03 $
+# Version:     $Revision: 1.30 $
+# Date:        $Date: 2005-01-05 10:42:09 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -85,7 +85,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $SHELL,
      $SOLARINC, $LOCALINI, $MAC_LIB, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $EXTRA_DOTNET_FILES, $USE_NEW_SDK, $FRAME_HOME, 
      $ATL_LIB, $ATL_INCLUDE, $NO_HIDS, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
-     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $ENABLE_DEBUG,
+     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4,
 	 $PROEXT,
      $SYSTEM_PYTHON, $PYTHONPATH, $PYTHONHOME );
 #
@@ -554,8 +554,6 @@ elsif ( $platform eq "$Winnt" )
       }
       if ( "@COMEX@" eq "10" ) { # .NET 2003 needs M1310
           $CVER        = "M1310";
-      } elsif ( "@COMEX@" eq "8" ) { # .NET 2002 needs M1300
-          $CVER        = "M1300";
       } else {                   # Unsupported
           die "Unsupported value for COMEX variable.\n";
       }
@@ -1051,10 +1049,7 @@ elsif ($platform eq "$Winnt")
        }
    }
    if ( $COM eq "MSC" ) {
-	   # for MS-Visual Studio 6.0 to find mspdb60.dll (needed by CL.EXE C/C++ Compiler) 
-	   # and rcdll.dll (need by RC.EXE -- 32 bit Resource Compiler) location
-	   # and
-	   # for .NET to find mspdb70.dll (needed by CL.EXE C/C++ Compiler)
+	   # for .NET to find mspdb71.dll (needed by CL.EXE C/C++ Compiler)
 	   if ( $noldPATH !~ /(?:[:]|\A)(?:$MSPDB_PATH)(?:[:]|\Z)/ ) {
 		   $PATH .= $ps.$MSPDB_PATH;
 	   }
@@ -1408,7 +1403,7 @@ ToFile( "ENABLEUNICODE",     $ENABLEUNICODE,     "e" );
 ToFile( "NEW_JAR_PACK",      $NEW_JAR_PACK,      "e" );
 ToFile( "NO_BSYMBOLIC",      $NO_BSYMBOLIC,      "e" );
 ToFile( "TF_FILTER",         "TRUE",             "e" );
-if ($ENABLE_DEBUG eq "TRUE") {
+if ("@ENABLE_DEBUG@" eq "TRUE") {
 ToFile( "debug",             "true",             "e" );
 }
 ToFile( "PRODUCT",           "@PRODUCT@",        "e" );
