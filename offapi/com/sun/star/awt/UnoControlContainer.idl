@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlContainer.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:53:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 
 /** specifies an abstract control which contains other controls.
  */
-service UnoControlContainer
+published service UnoControlContainer
 {
     service com::sun::star::awt::UnoControl;
 
