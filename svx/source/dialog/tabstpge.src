@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:16:24 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 13:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,11 +171,11 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ dutch ] = "~Rechts" ;
         Text [ spanish ] = "~Derecha" ;
         Text [ english_us ] = "Righ~t" ;
-        Text[ chinese_simplified ] = "ÏòÓÒ(~R)";
+        Text[ chinese_simplified ] = "ÏòÓÒ(~T)";
         Text[ russian ] = "Ñïğàâà";
         Text[ polish ] = "Z p~rawej";
-        Text[ japanese ] = "‰E‘µ‚¦(~R)";
-        Text[ chinese_traditional ] = "¦V¥k(~R)";
+        Text[ japanese ] = "‰E‘µ‚¦(~T)";
+        Text[ chinese_traditional ] = "¦V¥k(~T)";
         Text[ arabic ] = "íãíä";
         Text[ greek ] = "ÄåîéÜ";
         Text[ korean ] = "¿À¸¥ÂÊ(~T)";
@@ -375,7 +375,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese ] = "Carac~ter" ;
         Text [ finnish ] = "Me~rkki" ;
         Text [ danish ] = "Tegn" ;
-        Text [ french ] = "C~aractère" ;
+        Text [ french ] = "C~aractères" ;
         Text [ swedish ] = "Tec~ken" ;
         Text [ dutch ] = "~Teken" ;
         Text [ spanish ] = "C~arácter" ;
@@ -499,14 +499,14 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ dutch ] = "~Wissen" ;
         Text [ spanish ] = "~Eliminar" ;
         Text [ english_us ] = "~Delete" ;
-        Text[ chinese_simplified ] = "É¾³ı";
+        Text[ chinese_simplified ] = "É¾³ı(~D)";
         Text[ russian ] = "Óäàëèòü";
         Text[ polish ] = "~Usuñ";
-        Text[ japanese ] = "íœ(~C)";
-        Text[ chinese_traditional ] = "§R°£(~C)";
+        Text[ japanese ] = "íœ(~D)";
+        Text[ chinese_traditional ] = "§R°£(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦(~C)";
+        Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
     };
