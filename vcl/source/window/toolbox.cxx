@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-16 08:07:07 $
+ *  last change: $Author: ssa $ $Date: 2002-04-18 15:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3476,6 +3476,11 @@ BOOL ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, BOOL bCancel )
 
 void ToolBox::MouseMove( const MouseEvent& rMEvt )
 {
+    // pressing a modifier generates synthetic mouse moves
+    // ignore it if keyboard selection is acive
+    if( HasFocus() && ( rMEvt.GetMode() & MOUSE_MODIFIERCHANGED ) )
+        return;
+
     if ( ImplHandleMouseMove( rMEvt ) )
         return;
 
