@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdslots.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:09:17 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,3 +61,4 @@
 #include <sfx2/sfx.hrc>
 #include <svx/svxids.hrc>
 #include <app.hrc>
+#include <sdattr.hrc>
