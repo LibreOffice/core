@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 17:32:48 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 08:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,6 +962,7 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
                 if ((*aIter)->IsValid())
                 {
                     SvLBoxEntry* pSourceEntry = pSourceBox->GetEntryFromText((*aIter)->GetData()->GetSourceFieldName());
+                    OSL_ENSURE(pSourceEntry,"Could not find column in Source ListBox!");
                     if (pSourceEntry)
                     {
                         pSourceBox->Select(pSourceEntry, TRUE);
@@ -969,11 +970,13 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
                     }
 
                     SvLBoxEntry* pDestEntry = pDestBox->GetEntryFromText((*aIter)->GetData()->GetDestFieldName());
+                    OSL_ENSURE(pDestEntry,"Could not find column in Dest ListBox!");
                     if (pDestEntry)
                     {
                         pDestBox->Select(pDestEntry, TRUE);
                         pDestBox->MakeVisible(pDestEntry);
                     }
+
                 }
             }
 
