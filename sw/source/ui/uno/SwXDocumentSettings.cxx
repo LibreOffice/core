@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:46:15 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _COMPHELPER_MASTERPROPERTSETINFO_HXX_
 #include <comphelper/MasterPropertySetInfo.hxx>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 #ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #endif
@@ -111,6 +114,9 @@
 #endif
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
+#endif
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
 #endif
 #ifndef _UNOTXDOC_HXX
 #include <unotxdoc.hxx>
@@ -193,7 +199,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
 {
     static PropertyInfo aWriterSettingsInfoMap[] =
     {
-        { RTL_CONSTASCII_STRINGPARAM("ForbiddenCharacters"),        HANDLE_FORBIDDEN_CHARS,                 CPPUTYPE_REFFORBCHARS,      0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ForbiddenCharacters"),        HANDLE_FORBIDDEN_CHARS,                 CPPUTYPE_REFFORBCHARS,      PropertyAttribute::READONLY,   0},
         { RTL_CONSTASCII_STRINGPARAM("LinkUpdateMode"),             HANDLE_LINK_UPDATE_MODE,                CPPUTYPE_INT16,             0,   0},
         { RTL_CONSTASCII_STRINGPARAM("FieldAutoUpdate"),            HANDLE_FIELD_AUTO_UPDATE,               CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("ChartAutoUpdate"),            HANDLE_CHART_AUTO_UPDATE,               CPPUTYPE_BOOLEAN,           0,   0},
@@ -353,6 +359,9 @@ void SwXDocumentSettings::_preSetValues ()
 void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
 {
+    if (rInfo.mnAttributes & PropertyAttribute::READONLY)
+        throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + C2U(rInfo.mpName), static_cast < cppu::OWeakObject * > ( 0 ) );
+
     switch( rInfo.mnHandle )
     {
         case HANDLE_FORBIDDEN_CHARS:
@@ -805,7 +814,8 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_PRINTER_INDEPENDENT_LAYOUT:
         {
-            rValue <<= mpDoc->IsUseVirtualDevice();
+            // returns short (see css.document.PrinterIndependentLayout)
+            rValue <<= (sal_Int16) mpDoc->IsUseVirtualDevice();
         }
         break;
         case HANDLE_IS_LABEL_DOC:
