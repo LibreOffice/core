@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBreakIterator.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-25 10:01:46 $
+ *  last change: $Author: jsc $ $Date: 2001-11-28 16:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,10 +249,10 @@ struct LineBreakResults
 */
 struct Boundary
 {
-    /// start position of a word (don't forget - inclusive)
+    /// start position of a word (do not forget - inclusive)
     long startPos ;
 
-    /// end position of a word (don't forget - exclusive)
+    /// end position of a word (do not forget - exclusive)
     long endPos;
 };
 
@@ -442,6 +442,9 @@ interface XBreakIterator: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/10/25 10:01:46  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.6  2001/05/10 21:49:59  bustamam
     modify charType - Joe Xu
 
