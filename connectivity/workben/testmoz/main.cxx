@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-04-17 19:27:23 $
+ *  last change: $Author: dkenny $ $Date: 2001-05-09 12:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,8 @@ void printXResultSet( Reference<XResultSet> &xRes )
     }
 }
 
+#define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
+
 #if (defined UNX) || (defined OS2)
 void main( int argc, char * argv[] )
 #else
@@ -172,7 +174,7 @@ void _cdecl main( int argc, char * argv[] )
 
     try{
         Reference< ::com::sun::star::lang::XMultiServiceFactory > xFac =
-                createRegistryServiceFactory(OUString::createFromAscii("/export/home/openoffice619/program/applicat.rdb"),OUString());
+                createRegistryServiceFactory(OUString::createFromAscii("applicat.rdb"),OUString());
         if(!xFac.is()) {
             printf("No Factory\n");
             return;
@@ -241,35 +243,17 @@ void _cdecl main( int argc, char * argv[] )
                     printf(":   excuteQuery() : START \n");
                     try {
                         Reference<XResultSet> xRes =
-                        // xStmt->executeQuery(OUString::createFromAscii("SELECT
-                        // DisplayName, PrimaryEmail FROM \"Personal Address Book\""));
-                        xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"Personal Address Book\""));
+                        xStmt->executeQuery(OUString::createFromAscii("SELECT DisplayName, PrimaryEmail FROM \"Personal Address Book\""));
+                        // xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"Personal Address Book\" WHERE ( PrimaryEmail IS NULL )"));
+                        // xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"Personal Address Book\" WHERE ( PrimaryEmail LIKE \"Darren\" )"));
+                        // xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"Personal Address Book\""));
+                        // xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"myldap\" WHERE ( PrimaryEmail LIKE \"%Darren%\" OR DisplayName LIKE \"%Darren%\" )"));
                         printXResultSet( xRes );
+                    } catch ( uno::Exception &e ) {
+                        printf( "Exception caught : %s\n", OUtoCStr( e.Message) );
                     } catch (...) {
-                        printf( "Exception caught\n");
+                        printf( "Non-UNO Exception caught\n" );
                     }
-#ifdef DARREN_WORK
-                    if(xRes.is())
-                    {
-                        printf(":   got result\n");
-                        ::rtl::OUString aPat = ::rtl::OUString::createFromAscii("%s\t");
-                        Reference<XRow> xRow(xRes,UNO_QUERY);
-                        Reference<XResultSetMetaData> xMeta = Reference<XResultSetMetaDataSupplier>(xRes,UNO_QUERY)->getMetaData();
-                        for(sal_Int32 i=1;i<xMeta->getColumnCount();++i)
-                        {
-                            printf(aPat.getStr(), xMeta->getColumnName(i).getStr());
-                        }
-                        printf("----------------------------------------------------------------------\n");
-                        while( xRes.is() && xRes->next())
-                        {
-                            for(sal_Int32 j=1;j<xMeta->getColumnCount();++j)
-                                printf(aPat.getStr(), xRow->getString(j).getStr());
-                            printf("\n");
-                        }
-                    } else {
-                        printf(":   FAILED to get result\n");
-                    }
-#endif /* DARREN_WORK */
                     printf(":   excuteQuery() : END \n");
                 } else {
                     printf(": FAILED to get statement\n");

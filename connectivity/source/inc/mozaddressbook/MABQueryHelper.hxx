@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABQueryHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-04-17 19:27:22 $
+ *  last change: $Author: dkenny $ $Date: 2001-05-09 12:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,30 +62,15 @@
 #ifndef _CONNECTIVITY_MAB_QUERYHELPER_HXX_
 #define _CONNECTIVITY_MAB_QUERYHELPER_HXX_
 
+#include <MABNSInclude.hxx>
+
+#include <sal/types.h>
 #include <map>
 #include <vector>
 #include <rtl/ustring.hxx>
+#include <osl/mutex.hxx>
+#include <osl/conditn.hxx>
 
-#include "nsCOMPtr.h"
-#include "nsISupportsArray.h"
-#include "nsString.h"
-#include "nsRDFCID.h"
-#include "nsXPIDLString.h"
-#include "nsIRDFService.h"
-#include "nsIRDFResource.h"
-#include "msgCore.h"
-#include "nsIServiceManager.h"
-#include "nsIAbCard.h"
-#include "nsAbBaseCID.h"
-#include "nsAbAddressCollecter.h"
-#include "nsIPref.h"
-#include "nsIAddrBookSession.h"
-#include "nsIMsgHeaderParser.h"
-#include "nsIAbDirectory.h"
-#include "nsAbDirectoryQuery.h"
-#include "nsIAbDirectoryQuery.h"
-#include "nsISupportsUtils.h"
-#include "nsIAbDirectoryQuery.h"
 
 namespace connectivity
 {
@@ -93,14 +78,17 @@ namespace connectivity
     {
         class OMozabQueryHelperResultEntry {
         private:
+            ::osl::Mutex        m_aMutex;
+
             struct ltstr
             {
-                bool operator()( ::rtl::OUString &s1, ::rtl::OUString &s2) const;
+                sal_Bool operator()( const ::rtl::OUString &s1, const ::rtl::OUString &s2) const;
             };
 
             typedef std::map< rtl::OUString, rtl::OUString, ltstr >  fieldMap;
 
             fieldMap    m_Fields;
+
         public:
             ~OMozabQueryHelperResultEntry();
 
@@ -112,14 +100,22 @@ namespace connectivity
         private:
             typedef std::vector< OMozabQueryHelperResultEntry* > resultsArray;
 
-            resultsArray    m_aResults;
-            sal_Int32       m_nIndex;
-            bool            m_bHasMore;
-            bool            m_bAtEnd;
+            ::osl::Mutex        m_aMutex;
+            ::osl::Condition    m_aCondition;
+            resultsArray        m_aResults;
+            sal_Int32           m_nIndex;
+            sal_Bool            m_bHasMore;
+            sal_Bool            m_bAtEnd;
+            sal_Bool            m_bQueryComplete;
 
             void            append(OMozabQueryHelperResultEntry* resEnt );
 
             void            clear_results();
+
+            void            clearResultOrComplete();
+            void            notifyResultOrComplete();
+            void            waitForResultOrComplete();
+
 
         public:
 
@@ -138,11 +134,17 @@ namespace connectivity
 
             OMozabQueryHelperResultEntry*   getByIndex( sal_Int32 nRow );
 
-            bool                            hasMore() const;
+            sal_Bool                        hasMore() const;
 
-            bool                            atEnd() const;
+            sal_Bool                        atEnd() const;
+
+            sal_Bool                        queryComplete() const;
+
+            void                            waitForRow( sal_Int32 rowNum );
 
             sal_Int32                       getResultCount() const;
+
+            sal_Int32                       getRealCount() const;
 
         };
     }

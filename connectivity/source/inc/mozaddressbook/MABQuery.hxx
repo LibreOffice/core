@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABQuery.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-04-17 19:27:22 $
+ *  last change: $Author: dkenny $ $Date: 2001-05-09 12:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ namespace connectivity
              * WHERE  m_aMatchItems SQL_OPR m_aMatchValue
              * -------------------------------------------------
              *
-             * We are/are not, depending on boolean m_bQuerySubDirs,
+             * We are\are not, depending on boolean m_bQuerySubDirs,
              * interested in querying the sub-directories of the
              * addressbook directory, if any.
              *
@@ -143,7 +143,7 @@ namespace connectivity
             ::std::vector< ::rtl::OUString> m_aAttributes;
             ::rtl::OUString                 m_aAddressbook;
             ::std::vector< ::rtl::OUString> m_aMatchItems;
-            ::rtl::OUString                 m_aMatchValue;
+            ::std::vector< ::rtl::OUString> m_aMatchValues;
             sal_Int32                       m_nMaxNrOfReturns;
             sal_Bool                        m_bQuerySubDirs;
             ::std::vector<eSqlOppr>         m_aSqlOppr;
@@ -155,24 +155,30 @@ namespace connectivity
              * - executeQuery() initiates a non-blocking query.
              */
             void                            setAttributes( ::std::vector< ::rtl::OUString>&);
-            ::std::vector< ::rtl::OUString> &getAttributes(void) const;
+            const ::std::vector< ::rtl::OUString> &getAttributes(void) const;
             void                            setAddressbook( ::rtl::OUString&);
-            ::rtl::OUString                 &getAddressbook(void) const;
+            ::rtl::OUString                 getAddressbook(void) const;
             void                            setMatchItems( ::std::vector< ::rtl::OUString>&);
-            ::std::vector< ::rtl::OUString> &getMatchItems(void) const;
-            void                            setMatchValue( ::rtl::OUString&);
-            ::rtl::OUString                 &getMatchValue(void) const;
+            const ::std::vector< ::rtl::OUString> &getMatchItems(void) const;
+            void                            setMatchValues( ::std::vector< ::rtl::OUString>&);
+            const ::std::vector< ::rtl::OUString> &getMatchValues(void) const;
             void                            setMaxNrOfReturns( sal_Int32&);
-            sal_Int32                       &getMaxNrOfReturns(void) const;
+            sal_Int32                       getMaxNrOfReturns(void) const;
             void                            setQuerySubDirs( sal_Bool&);
-            sal_Bool                        &getQuerySubDirs(void) const;
+            sal_Bool                        getQuerySubDirs(void) const;
             void                            setSqlOppr( ::std::vector< eSqlOppr >&);
-            ::std::vector< eSqlOppr >       &getSqlOppr(void) const;
+            const ::std::vector< eSqlOppr >       &getSqlOppr(void) const;
             sal_Int32                       executeQuery(void);
 
             sal_Int32                       getRowCount( void );
 
-            void                            setRowValue( file::ORowSetValue& rValue,
+            sal_Int32                       getRealRowCount( void );
+
+            sal_Bool                        queryComplete( void );
+
+            sal_Bool                        checkRowAvailable( sal_Int32 nDBRow );
+
+            void                            getRowValue( connectivity::ORowSetValue& rValue,
                                                          sal_Int32 nDBRow, rtl::OUString& aDBColumnName,
                                                          sal_Int32 nType );
 

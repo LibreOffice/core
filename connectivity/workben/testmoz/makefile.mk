@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dkenny $ $Date: 2001-04-17 19:27:23 $
+#   last change: $Author: dkenny $ $Date: 2001-05-09 12:37:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@ APPSTDLIBS=$(SALLIB) \
             $(CPPUHELPERLIB)	\
             $(UCBHELPERLIB)	\
             $(DBTOOLSLIB)	\
-            -lsdbc2 -lcalc619li -lmozab619li \
+            -lsdbc2 -lcalc$(UPD)$(DLLSUFFIX) -lmozab$(UPD)$(DLLSUFFIX) \
             `grep -v '^$$' $(SLB)$/sql.lib | sed -e "s@^@$(PRJ)/@"`
             
 #			-lsdbc2 -lcalc619li -lmozab619li \

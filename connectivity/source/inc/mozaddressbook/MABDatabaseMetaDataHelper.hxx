@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABDatabaseMetaDataHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-04-17 19:27:22 $
+ *  last change: $Author: dkenny $ $Date: 2001-05-09 12:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,11 @@
 #include <comphelper/propertycontainer.hxx>
 #endif
 
+#ifndef _CONNECTIVITY_FDATABASEMETADATARESULTSET_HXX_
+#include "FDatabaseMetaDataResultSet.hxx"
+#endif
+
+
 namespace connectivity
 {
     namespace mozaddressbook
@@ -116,15 +121,15 @@ namespace connectivity
         /*
          * We're not implementing this class yet.
          */
-        DECLARE_STL_VECTOR(::com::sun::star::uno::Any,ORow);
-        DECLARE_STL_VECTOR(ORow, ORows);
+        // DECLARE_STL_VECTOR(::com::sun::star::uno::Any,ORow);
+        // DECLARE_STL_VECTOR(ORow, ORows);
 
         class OMozabDatabaseMetaDataHelper
         {
         public:
             OMozabDatabaseMetaDataHelper( );
             ~OMozabDatabaseMetaDataHelper();
-            ORows &getTables();
+            connectivity::ORows &getTables();
         };
     }
 

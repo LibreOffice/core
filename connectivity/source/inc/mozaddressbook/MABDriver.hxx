@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABDriver.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-04-17 19:27:22 $
+ *  last change: $Author: dkenny $ $Date: 2001-05-09 12:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

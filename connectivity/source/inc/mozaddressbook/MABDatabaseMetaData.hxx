@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABDatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-04-17 19:27:22 $
+ *  last change: $Author: dkenny $ $Date: 2001-05-09 12:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,19 @@ namespace connectivity
 {
     namespace mozaddressbook
     {
-        class OMozabDatabaseMetaData : public file::ODatabaseMetaData
-        {
-        public:
             static const char * const m_pADDRESSBOOKROOTDIR = "abdirectory://";
             static sal_Int32    const m_nCOLUMN_SIZE = 256;
             static sal_Int32    const m_nDECIMAL_DIGITS = 0;
             static sal_Int32    const m_nNULLABLE = 1;
             static sal_Int32    const m_nCHAR_OCTET_LENGTH = 65535;
+        class OMozabDatabaseMetaData : public file::ODatabaseMetaData
+        {
+        private:
+            // static const char * const m_pADDRESSBOOKROOTDIR = "abdirectory://";
+            // static sal_Int32    const m_nCOLUMN_SIZE = 256;
+            // static sal_Int32    const m_nDECIMAL_DIGITS = 0;
+            // static sal_Int32    const m_nNULLABLE = 1;
+            // static sal_Int32    const m_nCHAR_OCTET_LENGTH = 65535;
         public:
             OMozabDatabaseMetaData(file::OConnection* _pCon);
             ~OMozabDatabaseMetaData();

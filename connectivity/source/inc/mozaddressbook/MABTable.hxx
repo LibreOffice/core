@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABTable.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-04-17 19:27:22 $
+ *  last change: $Author: dkenny $ $Date: 2001-05-09 12:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,12 +92,15 @@ namespace connectivity
         typedef ::std::map< ::rtl::OUString,
                         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed>,
                         comphelper::UStringMixLess > OContainer;
+        // WvD
+        static sal_Int32 const m_nNR_OF_FIELDS = 37;
+        // WvD
 
         class OMozabTable : public OMozabTable_BASE
         {
         private:
             // WvD
-            static sal_Int32 const m_nNR_OF_FIELDS = 37;
+            //static sal_Int32 const m_nNR_OF_FIELDS = 37;
             // WvD
             OMozabQuery             *m_xQuery;
             ::std::vector<sal_Int32> m_aTypes;      // holds all type for columns just to avoid to ask the propertyset
@@ -108,12 +111,12 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > m_xFormats;
             ::Date m_aNullDate;
 #endif /* DARREN_WORK */
-            sal_Int32 m_nDataRows;
+            ::std::vector< ::rtl::OUString> m_aAttributeStrings;
 
             void fillColumns();
 
             BOOL WriteBuffer();
-            BOOL UpdateBuffer(file::OValueVector& rRow, file::OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
+            BOOL UpdateBuffer(connectivity::OValueVector& rRow, connectivity::OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> isUniqueByColumnName(const ::rtl::OUString& _rColName);
 
         protected:
@@ -135,7 +138,7 @@ namespace connectivity
 
             virtual sal_Int32 getCurrentLastPos() const;
             virtual sal_Bool seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos);
-            virtual sal_Bool fetchRow(file::OValueRow _rRow,const OSQLColumns& _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData);
+            virtual sal_Bool fetchRow(connectivity::OValueRow _rRow,const OSQLColumns& _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData);
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
@@ -149,11 +152,13 @@ namespace connectivity
             BOOL DropImpl();
             BOOL CreateImpl();
 
-            virtual BOOL InsertRow(file::OValueVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
+            virtual BOOL InsertRow(connectivity::OValueVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual BOOL DeleteRow(const OSQLColumns& _rCols);
-            virtual BOOL UpdateRow(file::OValueVector& rRow, file::OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
+            virtual BOOL UpdateRow(connectivity::OValueVector& rRow, connectivity::OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             // WvD
             void getColumnInfo(sal_Int32, ::rtl::OUString& rName, sal_Int32& rDataType);
+
+            void fillRowData( connectivity::OSQLParseTreeIterator& _aSQLIterator );
             // WvD
         };
     }
