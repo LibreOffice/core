@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMasterPageContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
+ *  last change: $Author: sab $ $Date: 2000-10-23 10:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
 #endif
+#ifndef _XMLOFF_PAGEMASTERIMPORTCONTEXT_HXX
+#include "PageMasterImportContext.hxx"
+#endif
 
 
 using namespace ::rtl;
@@ -126,6 +129,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) ),
     sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) ),
     sPageStyleLayout( RTL_CONSTASCII_USTRINGPARAM( "PageStyleLayout" ) ),
+    sPageMasterName(),
     bInsertHeader( sal_False ),
     bInsertFooter( sal_False ),
     bInsertHeaderLeft( sal_False ),
@@ -154,6 +158,11 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
                         sizeof( sXML_next_style_name )-1 ) )
             {
                 sFollow = xAttrList->getValueByIndex( i );
+            }
+            else if( aLocalName.equalsAsciiL( sXML_page_master_name,
+                        sizeof( sXML_page_master_name )-1 ) )
+            {
+                sPageMasterName = xAttrList->getValueByIndex( i );
             }
         }
     }
@@ -197,6 +206,14 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     if( bOverwrite || bNew )
     {
         // TODO: Look for page master and insert its attributes here!
+        if ( sPageMasterName.getLength() )
+        {
+            XMLPropStyleContext* pStyle = GetImport().GetTextImport()->FindPageMaster( sPageMasterName );
+            if (pStyle)
+            {
+                pStyle->FillPropertySet(xPropSet);
+            }
+        }
 
         bInsertHeader = bInsertFooter = sal_True;
         bInsertHeaderLeft = bInsertFooterLeft = sal_True;
@@ -246,11 +263,8 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateChildContext(
 
     if( bInsert && xStyle.is() )
     {
-        Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
-        pContext = new XMLTextHeaderFooterContext( GetImport(),
-                                                    nPrefix, rLocalName,
+        pContext = CreateHeaderFooterContext( nPrefix, rLocalName,
                                                     xAttrList,
-                                                    xPropSet,
                                                     bFooter, bLeft );
     }
     else
@@ -260,6 +274,21 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateChildContext(
     }
 
     return pContext;
+}
+
+SvXMLImportContext *XMLTextMasterPageContext::CreateHeaderFooterContext(
+            sal_uInt16 nPrefix,
+            const ::rtl::OUString& rLocalName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const sal_Bool bFooter,
+            const sal_Bool bLeft )
+{
+    Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
+    return new XMLTextHeaderFooterContext( GetImport(),
+                                                nPrefix, rLocalName,
+                                                xAttrList,
+                                                xPropSet,
+                                                bFooter, bLeft );
 }
 
 void XMLTextMasterPageContext::Finish( sal_Bool bOverwrite )
