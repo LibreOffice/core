@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:57:15 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,9 +154,6 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
-#include <com/sun/star/beans/XPropertyAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
 #include <com/sun/star/beans/XPropertyContainer.hpp>
