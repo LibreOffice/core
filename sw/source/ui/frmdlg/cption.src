@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:32:04 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ ModalDialog DLG_CAPTION
     HelpID = HID_DLG_CAPTION ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 250 , 127 ) ;
+    Size = MAP_APPFONT ( 250 , 144 ) ;
     Text [ de ] = "Beschriftung" ;
     Text [ en-US ] = "Caption" ;
     Moveable = TRUE ;
@@ -94,90 +94,122 @@ ModalDialog DLG_CAPTION
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    PushButton BTN_OPTION
+    PushButton BTN_AUTOCAPTION
     {
         Pos = MAP_APPFONT ( 194 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Optionen" ;
-        Text [ en-US ] = "~Options" ;
+        Text [ de ] = "~AutoBeschriftung..." ;
+        Text [ en-US ] = "AutoCaption..." ;
         Text [ x-comment ] = " ";
     };
-    FixedText TXT_SAMPLE
+    PushButton BTN_OPTION
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 170 , 8 ) ;
-        Center = TRUE ;
+        Pos = MAP_APPFONT ( 194 , 80 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "~Optionen..." ;
+        Text [ en-US ] = "Options..." ;
+        Text [ x-comment ] = " ";
+    };
+
+    FixedText TXT_TEXT
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
+        Text [ de ] = "~Beschriftungstext" ;
+        Text [ en-US ] = "Caption" ;
+        Left = TRUE ;
+        Text [ x-comment ] = " ";
+    };
+    Edit EDT_TEXT
+    {
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 182 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    FixedLine FL_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Size = MAP_APPFONT ( 182 , 8 ) ;
+        Text [ de ] = "Eigenschaften" ;
+        Text [ en-US ] = "Properties";
     };
     FixedText TXT_CATEGORY
     {
-        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Pos = MAP_APPFONT ( 12 , 47 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
         Text [ de ] = "~Kategorie" ;
-        Text [ en-US ] = "Ca~tegory" ;
+        Text [ en-US ] = "Category" ;
         Left = TRUE ;
         Text [ x-comment ] = " ";
     };
     ComboBox BOX_CATEGORY
     {
-        Pos = MAP_APPFONT ( 82 , 28 ) ;
-        Size = MAP_APPFONT ( 100 , 61 ) ;
+        Pos = MAP_APPFONT ( 82 , 44 ) ;
+        Size = MAP_APPFONT ( 106 , 61 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
         Sort = TRUE ;
     };
     FixedText TXT_FORMAT
     {
-        Pos = MAP_APPFONT ( 12 , 45 ) ;
+        Pos = MAP_APPFONT ( 12 , 63 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
         Text [ de ] = "~Nummerierung" ;
-        Text [ en-US ] = "~Numbering" ;
+        Text [ en-US ] = "Numbering" ;
         Left = TRUE ;
         Text [ x-comment ] = " ";
     };
     ListBox BOX_FORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 82 , 43 ) ;
-        Size = MAP_APPFONT ( 100 , 83 ) ;
+        Pos = MAP_APPFONT ( 82 , 60 ) ;
+        Size = MAP_APPFONT ( 106 , 83 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
     };
-    FixedText TXT_TEXT
+    FixedText TXT_SEP
     {
-        Pos = MAP_APPFONT ( 12 , 60 ) ;
+        Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text [ de ] = "~Beschriftungstext" ;
-        Text [ en-US ] = "~Caption" ;
+        Text [ de ] = "~Trenner" ;
+        Text [ en-US ] = "Separator" ;
         Left = TRUE ;
         Text [ x-comment ] = " ";
     };
-    Edit EDT_TEXT
+    Edit EDT_SEP
     {
-        Pos = MAP_APPFONT ( 82 , 58 ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
+        Pos = MAP_APPFONT ( 82 , 76 ) ;
+        Size = MAP_APPFONT ( 106 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
+        Text [ de ] = ": " ;
+        Text [ en-US ] = ": " ;
+        Text [ fr ] = " : ";
+        Text [ x-comment ] = "Text is default separator. Please pay attention on comments in spec";
     };
     FixedText TXT_POS
     {
-        Pos = MAP_APPFONT ( 12 , 75 ) ;
+        Pos = MAP_APPFONT ( 12 , 95 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
         Left = TRUE ;
         Text [ de ] = "~Position" ;
-        Text [ en-US ] = "~Position" ;
+        Text [ en-US ] = "Position" ;
         Text [ x-comment ] = " ";
     };
     ListBox BOX_POS
     {
-        Pos = MAP_APPFONT ( 82 , 73 ) ;
-        Size = MAP_APPFONT ( 100 , 61 ) ;
+        Pos = MAP_APPFONT ( 82 , 92 ) ;
+        Size = MAP_APPFONT ( 106 , 61 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
         Border = TRUE ;
     };
-    CheckBox CB_COPY_ATTR
+/*  CheckBox CB_COPY_ATTR
     {
         Pos = MAP_APPFONT ( 12 , 90) ;
         Size = MAP_APPFONT ( 145 , 12 ) ;
@@ -186,8 +218,8 @@ ModalDialog DLG_CAPTION
         Text [ de ] = "~Umrandung und Schatten übernehmen" ;
         Text [ en-US ] = "~Apply border and shadow";
         Text [ x-comment ] = " ";
-    };
-    FixedText FT_OBJECT_NAME
+    };*/
+/*  FixedText FT_OBJECT_NAME
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
@@ -202,14 +234,20 @@ ModalDialog DLG_CAPTION
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
-    };
-    FixedLine FL_SETTINGS
+    };*/
+/*  FixedText TXT_SAMPLE
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 182 , 8 ) ;
-        Text [ de ] = "Eigenschaften" ;
-        Text [ en-US ] = "Properties";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 170 , 8 ) ;
+        Center = TRUE ;
+    };*/
+    Window WIN_SAMPLE
+    {
+        Pos = MAP_APPFONT ( 6 , 114 ) ;
+        Size = MAP_APPFONT ( 182 , 20 ) ;
+        Border = TRUE ;
     };
+
     String STR_BEGINNING
     {
         Text [ de ] = "Am Anfang" ;
@@ -234,41 +272,47 @@ ModalDialog DLG_CAPTION
         Text [ en-US ] = "Below" ;
         Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
+    String STR_CATEGORY_NONE
+    {
+        Text [ de ] = "<keine>" ;
+        Text [ en-US ] = "<None>" ;
+    };
 };
 ModalDialog DLG_SEQUENCE_OPTION
 {
     HelpID = HID_DLG_SEQUENCE_OPTION ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 170 , 64 ) ;
-    Text [ de ] = "Nummernkreis Optionen" ;
+    Size = MAP_APPFONT ( 190 , 108 ) ;
     Moveable = TRUE ;
+    Text [ de ] = "Optionen" ;
+    Text [ en-US ] = "Options" ;
+    Text [ x-comment ] = " ";
     OKButton BTN_OK
     {
         DefButton = TRUE ;
-        Pos = MAP_APPFONT ( 115 , 6 ) ;
+        Pos = MAP_APPFONT ( 135 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 115 , 23 ) ;
+        Pos = MAP_APPFONT ( 135 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 115 , 43 ) ;
+        Pos = MAP_APPFONT ( 135 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     FixedLine FL_HEADER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text [ de ] = "Kapitelweise Nummerierung" ;
-        Text [ en-US ] = "Numbering by chapter" ;
+        Size = MAP_APPFONT ( 122 , 8 ) ;
+        Text [ de ] = "Kapitelweise Nummerierung der Beschriftung" ;
+        Text [ en-US ] = "Numbering captions by chapter" ;
         Text [ x-comment ] = " ";
     };
     FixedText FT_LEVEL
@@ -282,22 +326,22 @@ ModalDialog DLG_SEQUENCE_OPTION
     ListBox LB_LEVEL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 19 ) ;
-        Size = MAP_APPFONT ( 46 , 60 ) ;
+        Pos = MAP_APPFONT ( 55 , 18 ) ;
+        Size = MAP_APPFONT ( 72 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList [ de ] =
         {
-            < "Keine" ; > ;
+            < "<Keine>" ; > ;
         };
         StringList [ en-US ] =
         {
-            < "None" ; > ;
+            < "<None>" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-             < " " ; > ;
-    };
+        StringList [ x-comment ] =
+        {
+            < " " ; > ;
+        };
     };
     FixedText FT_SEPARATOR
     {
@@ -309,14 +353,57 @@ ModalDialog DLG_SEQUENCE_OPTION
     };
     Edit ED_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 55 , 35 ) ;
-        Size = MAP_APPFONT ( 46 , 12 ) ;
+        Pos = MAP_APPFONT ( 55 , 34 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
         Border = TRUE ;
         MaxTextLength = 1 ;
         TEXT = "." ;
     };
-    Text [ en-US ] = "Number Range Options" ;
-    Text [ x-comment ] = " ";
+    FixedLine FL_CATANDFRAME
+    {
+        Pos = MAP_APPFONT ( 6 , 53 ) ;
+        Size = MAP_APPFONT ( 122 , 8 ) ;
+        Text [ de ] = "Kapitelweise Nummerierung der Beschriftung" ;
+        Text [ en-US ] = "Numbering captions by chapter" ;
+        Text [ x-comment ] = " ";
+    };
+    FixedText FT_CHARSTYLE
+    {
+        Pos = MAP_APPFONT ( 12 , 71 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ de ] = "~Zeichenvorlage" ;
+        Text [ en-US ] = "Character style" ;
+        Text [ x-comment ] = " ";
+    };
+    ListBox LB_CHARSTYLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 68 ) ;
+        Size = MAP_APPFONT ( 72 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ de ] =
+        {
+            < "<Keine>" ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "<None>" ; > ;
+        };
+        StringList [ x-comment ] =
+        {
+            < " " ; > ;
+        };
+    };
+    CheckBox CB_APPLYBAS
+    {
+        Pos = MAP_APPFONT ( 12 , 90 ) ;
+        Size = MAP_APPFONT ( 165 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "~Umrandung und Schatten übernehmen" ;
+        Text [ en-US ] = "~Apply border and shadow";
+        Text [ x-comment ] = " ";
+    };
 };
  // ********************************************************************** EOF
 
