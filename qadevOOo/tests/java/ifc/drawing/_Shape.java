@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _Shape.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-03-19 15:57:17 $
+ *  last change:$Date: 2005-01-13 17:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,17 @@ public class _Shape extends MultiPropertyTest {
             log.println("There is only one Layer for ScShapeObj");
             log.println("Therefore this property can't be changed");
             tRes.tested("LayerName",true);
+        } else if (tEnv.getTestCase().getObjectName().equals("ScAnnotationShapeObj")) {
+            log.println("There is only one Layer for ScAnnotationShapeObj");
+            log.println("Therefore this property can't be changed");
+            String aName = null;
+            try {
+                aName = (String) oObj.getPropertyValue ("LayerName");
+                log.println("LayerName: '"+aName+"'");
+            } catch (Exception e) {
+                e.printStackTrace (log);
+            }
+            tRes.tested("LayerName",aName != null);
         } else {
             log.println("Testing with custom Property tester") ;
             testProperty("LayerName", StringTester) ;
@@ -149,7 +160,31 @@ public class _Shape extends MultiPropertyTest {
     }
 
     public void _ZOrder() {
-        testProperty("ZOrder", new Integer(0), new Integer(1));
+        if (tEnv.getTestCase().getObjectName().equals("ScAnnotationShapeObj")) {
+            log.println("There is only one Layer for ScAnnotationShapeObj");
+            log.println("Therefore this property can't be changed");
+            tRes.tested("ZOrder",true);
+        } else {
+            testProperty("ZOrder", new Integer(0), new Integer(1));
+        }
+    }
+
+    public void _LayerID() {
+        if (tEnv.getTestCase().getObjectName().equals("ScAnnotationShapeObj")) {
+            log.println("There is only one Layer for ScAnnotationShapeObj");
+            log.println("Therefore this property can't be changed");
+            Short aID = null;
+            try {
+                aID = (Short) oObj.getPropertyValue ("LayerID");
+                log.println("LayerID: '"+aID.intValue ()+"'");
+            } catch (Exception e) {
+                e.printStackTrace (log);
+            }
+            tRes.tested("LayerID",aID != null);
+        } else {
+            log.println("Testing with custom Property tester") ;
+            testProperty("LayerID");
+        }
     }
 
 
