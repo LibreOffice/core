@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-16 11:35:57 $
+ *  last change: $Author: dr $ $Date: 2002-04-17 07:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,11 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
     aOpt.SetDate( 30, 12, 1899 );
     pD->SetDocOptions( aOpt );
     pD->GetFormatTable()->ChangeNullDate( 30, 12, 1899 );
+
+    ScDocOptions aDocOpt( pD->GetDocOptions() );
+    aDocOpt.SetIgnoreCase( TRUE );              // always in Excel
+    aDocOpt.SetFormulaRegexEnabled( FALSE );    // regular expressions? what's that?
+    pD->SetDocOptions( aDocOpt );
 }
 
 
@@ -2449,11 +2454,6 @@ void ImportExcel::AdjustRowHeight()
 
 void ImportExcel::PostDocLoad( void )
 {
-    ScDocOptions        aDocOpt( pD->GetDocOptions() );
-    aDocOpt.SetIgnoreCase( TRUE );      // immer in Excel
-    aDocOpt.SetFormulaRegexEnabled( FALSE );    // regular expressions? what's that?
-    pD->SetDocOptions( aDocOpt );
-
     // visible area if embedded OLE
     SfxObjectShell* pShell = pD->GetDocumentShell();
     if( pShell )
