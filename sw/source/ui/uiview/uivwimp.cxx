@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:32:20 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 16:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,20 +357,19 @@ void SAL_CALL SwClipboardChangeListener::changedContents( const CLIP_NMSPC::Clip
     throw ( RuntimeException )
 
 {
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if( pView )
     {
         {
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            TransferableDataHelper aDataHelper( rEventObject.Contents );
+            SwWrtShell& rSh = pView->GetWrtShell();
 
-        TransferableDataHelper aDataHelper( rEventObject.Contents );
-        SwWrtShell& rSh = pView->GetWrtShell();
+            pView->nLastPasteDestination = SwTransferable::GetSotDestination( rSh );
+            pView->bPasteState = aDataHelper.GetXTransferable().is() &&
+                            SwTransferable::IsPaste( rSh, aDataHelper );
 
-        pView->nLastPasteDestination = SwTransferable::GetSotDestination( rSh );
-        pView->bPasteState = aDataHelper.GetXTransferable().is() &&
-                        SwTransferable::IsPaste( rSh, aDataHelper );
-
-        pView->bPasteSpecialState = aDataHelper.GetXTransferable().is() &&
-                    SwTransferable::IsPasteSpecial( rSh, aDataHelper );
+            pView->bPasteSpecialState = aDataHelper.GetXTransferable().is() &&
+                        SwTransferable::IsPasteSpecial( rSh, aDataHelper );
         }
 
         SfxBindings& rBind = pView->GetViewFrame()->GetBindings();
