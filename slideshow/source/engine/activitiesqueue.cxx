@@ -2,9 +2,9 @@
  *
  *  $RCSfile: activitiesqueue.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:40:32 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,27 +61,22 @@
 
 // must be first
 #include <canvas/debug.hxx>
-#include "comphelper/scopeguard.hxx"
-
 #ifndef _CANVAS_VERBOSETRACE_HXX
 #include <canvas/verbosetrace.hxx>
 #endif
-
-#ifndef BOOST_BIND_HPP_INCLUDED
-#include <boost/bind.hpp>
-#endif
-#ifndef BOOST_MEM_FN_HPP_INCLUDED
-#include <boost/mem_fn.hpp>
-#endif
-
-#include <algorithm>
+#include <comphelper/scopeguard.hxx>
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <slideshowexceptions.hxx>
 #include <activity.hxx>
 #include <activitiesqueue.hxx>
 
+#include <boost/bind.hpp>
+#include <boost/mem_fn.hpp>
+#include <algorithm>
 
-using namespace ::com::sun::star;
+
 using namespace ::com::sun::star;
 
 namespace presentation
@@ -101,12 +96,20 @@ namespace presentation
         ActivitiesQueue::~ActivitiesQueue()
         {
             // dispose all queue entries
-            ::std::for_each( maCurrentActivitiesWaiting.begin(),
-                             maCurrentActivitiesWaiting.end(),
-                             ::boost::mem_fn(&Disposable::dispose) );
-            ::std::for_each( maCurrentActivitiesReinsert.begin(),
-                             maCurrentActivitiesReinsert.end(),
-                             ::boost::mem_fn(&Disposable::dispose) );
+            try {
+                std::for_each( maCurrentActivitiesWaiting.begin(),
+                               maCurrentActivitiesWaiting.end(),
+                               boost::mem_fn( &Disposable::dispose ) );
+                std::for_each( maCurrentActivitiesReinsert.begin(),
+                               maCurrentActivitiesReinsert.end(),
+                               boost::mem_fn( &Disposable::dispose ) );
+            }
+            catch (uno::Exception &) {
+                OSL_ENSURE( false, rtl::OUStringToOString(
+                                comphelper::anyToString(
+                                    cppu::getCaughtException() ),
+                                RTL_TEXTENCODING_UTF8 ).getStr() );
+            }
         }
 
         bool ActivitiesQueue::addActivity( const ActivitySharedPtr& pActivity )
@@ -256,8 +259,16 @@ namespace presentation
 
         void ActivitiesQueue::clear()
         {
-            maCurrentActivitiesWaiting.clear();
-            maCurrentActivitiesReinsert.clear();
+            // dequeue all entries:
+            std::for_each( maCurrentActivitiesWaiting.begin(),
+                           maCurrentActivitiesWaiting.end(),
+                           boost::mem_fn( &Activity::dequeued ) );
+            ActivityQueue().swap( maCurrentActivitiesWaiting );
+
+            std::for_each( maCurrentActivitiesReinsert.begin(),
+                           maCurrentActivitiesReinsert.end(),
+                           boost::mem_fn( &Activity::dequeued ) );
+            ActivityQueue().swap( maCurrentActivitiesReinsert );
 
             mbCurrentRoundNeedsScreenUpdate = false;
         }
