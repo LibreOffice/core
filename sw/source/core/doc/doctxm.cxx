@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:13:32 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,10 +974,13 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         IsHiddenFlag() )
         return;
 
-    if(pAttr)
-        GetFmt()->SetAttr(*pAttr);
-
     SwDoc* pDoc = (SwDoc*)pSectNd->GetDoc();
+
+    DBG_ASSERT(pDoc != NULL, "Where is the document?");
+
+    if(pAttr && pDoc && GetFmt())
+        pDoc->ChgFmt(*GetFmt(), *pAttr);
+
     // OD 18.03.2003 #106329# - determine default page description, which
     // will be used by the content nodes, if no approriate one is found.
     const SwPageDesc* pDefaultPageDesc;
