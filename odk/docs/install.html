@@ -104,13 +104,13 @@
               WindowsNT/2000/XP
             </ul>
             <p>Other versions of the operating system Windows should use the batch program 
-	        &lt;SDK_HOME&gt;setsdkenv_windows.bat directly and adopt it to their local environment.
+	        &lt;OO_SDK_HOME&gt;setsdkenv_windows.bat directly and adopt it to their local environment.
             </p>
             <ul>
               <li><a href="../setsdkenv_windows.bat">setsdkenv_windows.bat</a>
             </ul>
-            <p>The first time you use the batch program you have to prepare it for your environment. Edit the script
-               and set the following variables:
+            <p>The first time you use the batch program you have to prepare it for your environment. 
+	        Edit the script and set the following variables:
             </p>
             <p> 
                <table width="100%" border=1 cellpadding=4 cellspacing=0>
@@ -120,30 +120,32 @@
                        "/usr/local/StarOffice6.0"</td>
                  </tr>
                  <tr> 
-                   <td widht=35%><b>SDK_HOME</b></td>
+                   <td widht=35%><b>OO_SDK_HOME</b></td>
                    <td widht=65%>path to the SDK root directory, e.g "/usr/local/StarOffice6.0SDK"</td>
                  </tr>
                  <tr> 
-                   <td widht=35%><b>SDK_JAVA_HOME</b></td>
+                   <td widht=35%><b>OO_SDK_JAVA_HOME</b></td>
                    <td widht=65%>path to the JDK</td>
                  </tr>
                  <tr> 
-                   <td widht=35%><b>SDK_CPP_HOME</b></td>
-                   <td widht=65%>path to the C++ compiler (under windows the directory where the vcvar32.bat file
-                       can be found)</td>
+                   <td widht=35%><b>OO_SDK_CPP_HOME</b></td>
+                   <td widht=65%>path to the C++ compiler (under windows the directory where the
+                       vcvar32.bat file can be found)</td>
                  </tr>
                  <tr> 
-                   <td widht=35%><b>SDK_MAKE</b></td>
+                   <td widht=35%><b>OO_SDK_MAKE_HOME</b></td>
                    <td widht=65%>path to GNU make</td>
                  </tr>
                  <tr> 
-                   <td widht=35%><b>STLPORT_HOME</b></td>
+                   <td widht=35%><b>OO_STLPORT_HOME</b></td>
                    <td widht=65%>path to the STLPORT installation directory</td>
                  </tr>
                  <tr> 
                    <td widht=35%><b>SDK_AUTO_DEPLOYMENT</b></td>
-                   <td widht=65%>if this variable is set, the component examples will be automatically deployed 
-                   into the Office installation referenced by OFFICE_HOME. See also ((reference deployment mechanism)).
+                   <td widht=65%>if this variable is set, the component examples will be automatically
+                        deployed into the Office installation referenced by OFFICE_HOME. See also chapter
+                        <a href="DevelopersGuide/Components/Components.htm#1+7+1+UNO+Package+Installation">
+                        "UNO Package installation"</a> from the Developers Guide.
                  </tr>
                </table>
             </p>
@@ -163,16 +165,16 @@
                  </tr>
                  <tr> 
                    <td widht=35%>LD_LIBRARY_PATH</td>
-                   <td widht=65%><b>=<i>$OFFICE_PROGRAM_PATH:$SDK_HOME/solsparc/lib:$STLPORT_HOME/lib:
+                   <td widht=65%><b>=<i>$OFFICE_PROGRAM_PATH:$OO_SDK_HOME/solsparc/lib:$OO_STLPORT_HOME/lib:
                        $LD_LIBRARY_PATH</i></b><br>
                        The LD_LIBRARY_PATH will be set or will be extended by the office program path,
                        the platform dependent lib directory for some additional libraries and the 
-                       &lt;STLPORT_HOME&gt;/lib directory (optional).
+                       &lt;OO_STLPORT_HOME&gt;/lib directory (optional).
                    </td>
                  </tr>
                  <tr> 
                    <td widht=35%>PATH</td>
-                   <td widht=65%><b>=<i>$SDK_HOME/solsparc/bin:$SDK_MAKE:$SDK_CPP_HOME:$SDK_JAVA_HOME/bin:
+                   <td widht=65%><b>=<i>$OO_SDK_HOME/solsparc/bin:$OO_SDK_MAKE_HOME:$OO_SDK_CPP_HOME:$OO_SDK_JAVA_HOME/bin:
                        $PATH</i></b><br>
                        The PATH variable will be extended by the pathes for the SDK development tools, 
                        the compiler, the JDK and GNU make.
@@ -192,16 +194,16 @@
                  </tr>
                  <tr> 
                    <td widht=35%>LD_LIBRARY_PATH</td>
-                   <td widht=65%><b>=<i>$OFFICE_PROGRAM_PATH:$SDK_HOM/linux/lib:$STLPORT_HOME/lib:
+                   <td widht=65%><b>=<i>$OFFICE_PROGRAM_PATH:$SDK_HOM/linux/lib:$OO_STLPORT_HOME/lib:
                        $LD_LIBRARY_PATH</i></b><br>
                        The LD_LIBRARY_PATH will be set or will be extended by the office program path,
                        the platform dependent lib directory for some additional libraries and the
-                       &lt;STLPORT_HOME&gt;/lib directory (optional).
+                       &lt;OO_STLPORT_HOME&gt;/lib directory (optional).
                    </td>
                  </tr>
                  <tr> 
                    <td widht=35%>PATH</td>
-                   <td widht=65%><b>=<i>$SDK_HOME/linux/bin:$SDK_MAKE:$SDK_CPP_HOME:$SDK_JAVA_HOME/bin:
+                   <td widht=65%><b>=<i>$OO_SDK_HOME/linux/bin:$OO_SDK_MAKE_HOME:$OO_SDK_CPP_HOME:$OO_SDK_JAVA_HOME/bin:
                        $PATH</i></b><br>
                        The PATH variable will be extended by the pathes for the SDK development tools, 
                        the compiler, the JDK and GNU make.
@@ -223,8 +225,8 @@
                  </tr>
                  <tr> 
                    <td widht=35%>PATH</td>
-                   <td widht=65%><b>=<i>%SDK_HOME%\windows\bin;%SDK_MAKE%;%SDK_CPP_HOME%;%SDK_JAVA_HOME%
-                       \bin;%OFFICE_PROGRAM_PATH%;%STLPORT_HOME%\lib;%PATH%</i></b><br>                    
+                   <td widht=65%><b>=<i>%OO_SDK_HOME%\windows\bin;%OO_SDK_MAKE_HOME%;%OO_SDK_CPP_HOME%;%OO_SDK_JAVA_HOME%
+                       \bin;%OFFICE_PROGRAM_PATH%;%OO_STLPORT_HOME%\lib;%PATH%</i></b><br>                    
                        The PATH variable will be extended by the pathes for the SDK development tools, 
                        the compiler, the JDK, the STLPORT library, GNU make and the 
                        &lt;OFFICE_PROGRAM_PATH&gt;.
@@ -232,7 +234,7 @@
                  </tr>
                  <tr> 
                    <td widht=35%>LIB</td>
-                   <td widht=65%><b>=<i>%SDK_HOME%\windows\lib;%STLPORT_HOME\lib;;%LIB%</i></b><br>                    
+                   <td widht=65%><b>=<i>%OO_SDK_HOME%\windows\lib;%OO_STLPORT_HOME\lib;;%LIB%</i></b><br>                    
                        The LIB variable will be extended by the path to the import libraries which are 
                        necessary for winsows.
                    </td>
