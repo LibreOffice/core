@@ -2,9 +2,9 @@
  *
  *  $RCSfile: staticdbtools_s.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:30:17 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 14:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,49 @@ namespace connectivity
             sal_Int16 _nKeyType) const;
 
         // ------------------------------------------------
+        virtual ::rtl::OUString getValue(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& _rxFormatter,
+            const ::com::sun::star::lang::Locale& _rLocale,
+            const ::com::sun::star::util::Date& _rNullDate
+        ) const;
+
+        // IDataAccessTools
+        // ------------------------------------------------
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection_withFeedback(
+            const ::rtl::OUString& _rDataSourceName,
+            const ::rtl::OUString& _rUser,
+            const ::rtl::OUString& _rPwd,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
+        ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException) );
+
+        // ------------------------------------------------
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> calcConnection(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
+        ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) );
+
+        // ------------------------------------------------
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> connectRowset(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
+            sal_Bool _bSetAsActiveConnection
+        ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) );
+
+        // ------------------------------------------------
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
+            sal_Bool _bAllowDefault
+        ) const;
+
+        // ------------------------------------------------
+        virtual sal_Int32  getDefaultNumberFormat(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes >& _rxTypes,
+            const ::com::sun::star::lang::Locale& _rLocale
+        ) const;
+
+        // ------------------------------------------------
         virtual void TransferFormComponentProperties(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxOld,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxNew,
@@ -130,25 +173,10 @@ namespace connectivity
             const ::rtl::OUString& _rContextDetails
         ) const;
 
-        // IDataAccessTools
         // ------------------------------------------------
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection_withFeedback(
-            const ::rtl::OUString& _rDataSourceName,
-            const ::rtl::OUString& _rUser,
-            const ::rtl::OUString& _rPwd,
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > getDataSource(
+            const ::rtl::OUString& _rsRegisteredName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
-        ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException) );
-
-        // ------------------------------------------------
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> calcConnection(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
-        ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) );
-
-        // ------------------------------------------------
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
-            sal_Bool _bAllowDefault
         ) const;
 
         // disambiguate IReference
@@ -166,6 +194,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/07/25 13:30:17  fs
+ *  initial checkin - class for load-on-demand usage of the statis DBTOOLS helper functions
+ *
  *
  *  Revision 1.0 24.07.01 16:32:42  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualdbtools.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:24:59 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 14:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ namespace com {
         namespace star {
             namespace util {
                 class XNumberFormatter;
+                class XNumberFormatTypes;
                 class XNumberFormatsSupplier;
             }
             namespace beans {
@@ -99,6 +100,7 @@ namespace com {
                 class XDatabaseMetaData;
                 class XConnection;
                 class XRowSet;
+                class XDataSource;
             }
             namespace sdb {
                 class XColumn;
@@ -156,9 +158,21 @@ namespace connectivity
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
             ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ) = 0;
 
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> connectRowset(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
+                sal_Bool _bSetAsActiveConnection
+            ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ) = 0;
+
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
                 sal_Bool _bAllowDefault
+            ) const = 0;
+
+            virtual sal_Int32 getDefaultNumberFormat(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes >& _rxTypes,
+                const ::com::sun::star::lang::Locale& _rLocale
             ) const = 0;
 
             virtual void TransferFormComponentProperties(
@@ -183,6 +197,11 @@ namespace connectivity
                 const ::rtl::OUString& _rContextDescription,
                 const ::rtl::OUString& _rContextDetails
             ) const = 0;
+
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > getDataSource(
+                const ::rtl::OUString& _rsRegisteredName,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
+            ) const = 0;
         };
 
         //================================================================
@@ -204,6 +223,13 @@ namespace connectivity
                 const ::com::sun::star::util::Date& _rNullDate,
                 sal_Int32 _nKey,
                 sal_Int16 _nKeyType) const = 0;
+
+            virtual ::rtl::OUString getValue(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& _rxFormatter,
+                const ::com::sun::star::lang::Locale& _rLocale,
+                const ::com::sun::star::util::Date& _rNullDate
+            ) const = 0;
         };
 
         //================================================================
@@ -278,6 +304,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/07/25 13:24:59  fs
+ *  initial checkin - helper for accessing methods/classes in dbtools with loading the library on demand (and not linking against it)
+ *
  *
  *  Revision 1.0 24.07.01 15:56:38  fs
  ************************************************************************/

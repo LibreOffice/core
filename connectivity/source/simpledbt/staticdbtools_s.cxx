@@ -2,9 +2,9 @@
  *
  *  $RCSfile: staticdbtools_s.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:30:10 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 14:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,13 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
+    ::rtl::OUString ODataAccessStaticTools::getValue( const Reference< XPropertySet>& _rxColumn, const Reference< XNumberFormatter>& _rxFormatter,
+        const Locale& _rLocale, const Date& _rNullDate ) const
+    {
+        return ::dbtools::DBTypeConversion::getValue( _rxColumn, _rxFormatter, _rLocale, _rNullDate );
+    }
+
+    //----------------------------------------------------------------
     oslInterlockedCount SAL_CALL ODataAccessStaticTools::acquire()
     {
         return ORefBase::acquire();
@@ -134,6 +141,13 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
+    Reference< XConnection> ODataAccessStaticTools::connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory, sal_Bool _bSetAsActiveConnection) const
+        SAL_THROW ( (SQLException, RuntimeException) )
+    {
+        return ::dbtools::connectRowset( _rxRowSet, _rxFactory, _bSetAsActiveConnection);
+    }
+
+    //----------------------------------------------------------------
     Reference< XConnection> ODataAccessStaticTools::calcConnection(const Reference< XRowSet>& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory) const
         SAL_THROW ( (SQLException, RuntimeException) )
     {
@@ -144,6 +158,13 @@ namespace connectivity
     Reference< XNumberFormatsSupplier> ODataAccessStaticTools::getNumberFormats(const Reference< XConnection>& _rxConn, sal_Bool _bAllowDefault) const
     {
         return ::dbtools::getNumberFormats(_rxConn, _bAllowDefault);
+    }
+
+    //----------------------------------------------------------------
+    sal_Int32 ODataAccessStaticTools::getDefaultNumberFormat( const Reference< XPropertySet >& _rxColumn, const Reference< XNumberFormatTypes >& _rxTypes,
+        const Locale& _rLocale ) const
+    {
+        return ::dbtools::getDefaultNumberFormat( _rxColumn, _rxTypes, _rLocale );
     }
 
     //----------------------------------------------------------------
@@ -171,6 +192,12 @@ namespace connectivity
         return ::dbtools::prependContextInfo(_rException, _rxContext, _rContextDescription, _rContextDetails);
     }
 
+    //----------------------------------------------------------------
+    Reference< XDataSource > ODataAccessStaticTools::getDataSource( const ::rtl::OUString& _rsRegisteredName, const Reference< XMultiServiceFactory>& _rxFactory ) const
+    {
+        return ::dbtools::getDataSource( _rsRegisteredName, _rxFactory );
+    }
+
 //........................................................................
 }   // namespace connectivity
 //........................................................................
@@ -178,6 +205,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/07/25 13:30:10  fs
+ *  initial checkin - class for load-on-demand usage of the statis DBTOOLS helper functions
+ *
  *
  *  Revision 1.0 24.07.01 16:32:42  fs
  ************************************************************************/
