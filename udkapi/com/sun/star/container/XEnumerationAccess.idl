@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEnumerationAccess.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module container {
 
 /** used to enumerate objects in a container which contains objects.
  */
-interface XEnumerationAccess: com::sun::star::container::XElementAccess
+published interface XEnumerationAccess: com::sun::star::container::XElementAccess
 {
     //-------------------------------------------------------------------------
 
