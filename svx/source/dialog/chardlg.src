@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:39:04 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,7 +720,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text [ spanish ] = "Previsualización" ;
         Text [ english_us ] = "Preview" ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ russian ] = "Ïðîñìîòð";
         Text[ polish ] = "Podgl¹d";
         Text[ japanese ] = "ÌßÚËÞ­°";
@@ -2370,7 +2370,7 @@ TabPage RID_SVXPAGE_CHAR_EXT
         Text [ spanish ] = "Previsualización" ;
         Text [ english_us ] = "Preview" ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ russian ] = "Ïðîñìîòð";
         Text[ polish ] = "Podgl¹d";
         Text[ japanese ] = "ÌßÚËÞ­°";
@@ -2399,7 +2399,7 @@ String RID_SVXSTR_COLOR_USER
     Text [ dutch ] = "Gebruiker" ;
     Text [ spanish ] = "Usuario" ;
     Text [ english_us ] = "User" ;
-    Text[ chinese_simplified ] = "ÓÃ»§";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕß";
     Text[ russian ] = "Ïîëüçîâàòåëü";
     Text[ polish ] = "U¿ytkownik";
     Text[ japanese ] = "Õ°»Þ°";
@@ -3863,7 +3863,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ dutch ] = "~Accentteken";
         Text[ french ] = "Caractères d'a~ccentuation";
         Text[ spanish ] = "Carácter de entonación";
-        Text[ italian ] = "Carattere accentuato";
+        Text[ italian ] = "Carattere di accentua~zione";
         Text[ danish ] = "Emphasis character";
         Text[ swedish ] = "~Betoningstecken";
         Text[ polish ] = "Znak intonacji";
@@ -3959,7 +3959,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     StringList [ polish ] =
     {
             < "(Brak)" ; default ; > ;
-        < "Dot" ; default ; > ;
+        < "Kropka" ; default ; > ;
         < "Kó³ko" ; default ; > ;
     };
     StringList [ portuguese_brazilian ] =
@@ -4447,7 +4447,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ french ] = "Exemple";
         Text[ spanish ] = "Ejemplo";
         Text[ italian ] = "Esempio";
-        Text[ danish ] = "Example";
+        Text[ danish ] = "Eksempel";
         Text[ swedish ] = "Exempel";
         Text[ polish ] = "Przyk³ad";
         Text[ portuguese_brazilian ] = "Example";
@@ -5103,7 +5103,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ french ] = "Exemple";
         Text[ spanish ] = "Ejemplo";
         Text[ italian ] = "Esempio";
-        Text[ danish ] = "Example";
+        Text[ danish ] = "Eksempel";
         Text[ swedish ] = "Exempel";
         Text[ polish ] = "Przyk³ad";
         Text[ portuguese_brazilian ] = "Example";
@@ -5187,7 +5187,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ dutch ] = "Omhullend teken";
         Text[ french ] = "Caractères englobants";
         Text[ spanish ] = "Caracteres de inclusión";
-        Text[ italian ] = "Carattere incluso";
+        Text[ italian ] = "Carattere di inclusione";
         Text[ danish ] = "Enclose character";
         Text[ swedish ] = "Inneslutande tecken";
         Text[ polish ] = "Znaki zamykaj¹ce";
