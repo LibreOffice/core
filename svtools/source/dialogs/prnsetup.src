@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:38:55 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ String STR_SVT_PRNDLG_READY
     Text[ czech ] = "Připraveno";
     Text[ hebrew ] = "‮מוכן‬";
     Text[ hindi ] = "तैयार";
+    Text[ slovak ] = "Pripravené";
 };
 String STR_SVT_PRNDLG_PAUSED
 {
@@ -120,6 +121,7 @@ String STR_SVT_PRNDLG_PAUSED
     Text[ czech ] = "Pozastaveno";
     Text[ hebrew ] = "‮מופסק‬";
     Text[ hindi ] = "रोका हुआ";
+    Text[ slovak ] = "Prerušené";
 };
 String STR_SVT_PRNDLG_PENDING
 {
@@ -150,6 +152,7 @@ String STR_SVT_PRNDLG_PENDING
     Text[ czech ] = "Během mazání";
     Text[ hebrew ] = "‮לפני מחיקה‬";
     Text[ hindi ] = "विचाराधीन मिटाने का कार्य";
+    Text[ slovak ] = "Počas odstraňovania";
 };
 String STR_SVT_PRNDLG_BUSY
 {
@@ -180,6 +183,7 @@ String STR_SVT_PRNDLG_BUSY
     Text[ czech ] = "Zaneprázdněný";
     Text[ hebrew ] = "‮תפוס‬";
     Text[ hindi ] = "कार्य में निरत";
+    Text[ slovak ] = "Zaneprázdnený";
 };
 String STR_SVT_PRNDLG_INITIALIZING
 {
@@ -210,6 +214,7 @@ String STR_SVT_PRNDLG_INITIALIZING
     Text[ czech ] = "Inicializace";
     Text[ hebrew ] = "‮מאתחל‬";
     Text[ hindi ] = "इनिश्यलैज़िंग";
+    Text[ slovak ] = "Inicializácia";
 };
 String STR_SVT_PRNDLG_WAITING
 {
@@ -240,6 +245,7 @@ String STR_SVT_PRNDLG_WAITING
     Text[ czech ] = "Čekání";
     Text[ hebrew ] = "‮ממתין‬";
     Text[ hindi ] = "ठहराव";
+    Text[ slovak ] = "Čakám";
 };
 String STR_SVT_PRNDLG_WARMING_UP
 {
@@ -270,6 +276,7 @@ String STR_SVT_PRNDLG_WARMING_UP
     Text[ czech ] = "Nabíhání";
     Text[ hebrew ] = "‮מתחמם‬";
     Text[ hindi ] = "Warming up";
+    Text[ slovak ] = "Zahrievanie";
 };
 String STR_SVT_PRNDLG_PROCESSING
 {
@@ -300,6 +307,7 @@ String STR_SVT_PRNDLG_PROCESSING
     Text[ czech ] = "Zpracování";
     Text[ hebrew ] = "‮עיבוד‬";
     Text[ hindi ] = "कार्यवाही करना";
+    Text[ slovak ] = "Spracovávam";
 };
 String STR_SVT_PRNDLG_PRINTING
 {
@@ -330,6 +338,7 @@ String STR_SVT_PRNDLG_PRINTING
     Text[ czech ] = "Probíhá tisk";
     Text[ hebrew ] = "‮הדפסה‬";
     Text[ hindi ] = "छपाई करना ";
+    Text[ slovak ] = "Prebieha tlač";
 };
 String STR_SVT_PRNDLG_OFFLINE
 {
@@ -360,6 +369,7 @@ String STR_SVT_PRNDLG_OFFLINE
     Text[ czech ] = "Offline";
     Text[ hebrew ] = "‮לא מקוון‬";
     Text[ hindi ] = "ऑफ़लैन";
+    Text[ slovak ] = "Offline";
 };
 String STR_SVT_PRNDLG_ERROR
 {
@@ -390,6 +400,7 @@ String STR_SVT_PRNDLG_ERROR
     Text[ czech ] = "Chyba";
     Text[ hebrew ] = "‮שגיאה‬";
     Text[ hindi ] = "गलती";
+    Text[ slovak ] = "Chyba";
 };
 String STR_SVT_PRNDLG_SERVER_UNKNOWN
 {
@@ -420,6 +431,7 @@ String STR_SVT_PRNDLG_SERVER_UNKNOWN
     Text[ czech ] = "Neznámý server";
     Text[ hebrew ] = "‮שרת לא מוכר‬";
     Text[ hindi ] = "अज्ञात सर्वर";
+    Text[ slovak ] = "Neznámy server";
 };
 String STR_SVT_PRNDLG_PAPER_JAM
 {
@@ -450,6 +462,7 @@ String STR_SVT_PRNDLG_PAPER_JAM
     Text[ czech ] = "Zaseknutí papíru";
     Text[ hebrew ] = "‮תקלת נייר‬";
     Text[ hindi ] = "कागज़ ज़ाम";
+    Text[ slovak ] = "Zaseknutie papiera";
 };
 String STR_SVT_PRNDLG_PAPER_OUT
 {
@@ -480,6 +493,7 @@ String STR_SVT_PRNDLG_PAPER_OUT
     Text[ czech ] = "Nedostatek papíru";
     Text[ hebrew ] = "‮אין מספיק נייר‬";
     Text[ hindi ] = "अपर्याप्त कागज़";
+    Text[ slovak ] = "Nedostatok papieru";
 };
 String STR_SVT_PRNDLG_MANUAL_FEED
 {
@@ -510,6 +524,7 @@ String STR_SVT_PRNDLG_MANUAL_FEED
     Text[ czech ] = "Ruční vkládání";
     Text[ hebrew ] = "‮הזנת נייר ידנית‬";
     Text[ hindi ] = "हस्त-संबन्धी फ़ीड़";
+    Text[ slovak ] = "Ručné vkladanie";
 };
 String STR_SVT_PRNDLG_PAPER_PROBLEM
 {
@@ -540,6 +555,7 @@ String STR_SVT_PRNDLG_PAPER_PROBLEM
     Text[ czech ] = "Problémy s papírem";
     Text[ hebrew ] = "‮בעית נייר‬";
     Text[ hindi ] = "कागज़ का समस्या";
+    Text[ slovak ] = "Problémy s papierom";
 };
 String STR_SVT_PRNDLG_IO_ACTIVE
 {
@@ -570,6 +586,7 @@ String STR_SVT_PRNDLG_IO_ACTIVE
     Text[ czech ] = "I/O aktivní";
     Text[ hebrew ] = "‮קלט-פלט פעיל‬";
     Text[ hindi ] = "I/O active";
+    Text[ slovak ] = "I/O aktívny";
 };
 String STR_SVT_PRNDLG_OUTPUT_BIN_FULL
 {
@@ -600,6 +617,7 @@ String STR_SVT_PRNDLG_OUTPUT_BIN_FULL
     Text[ czech ] = "Výstupní schránka je plná";
     Text[ hebrew ] = "‮תור הפלט מלא‬";
     Text[ hindi ] = "औटपुट् बिन भरा हुआ है";
+    Text[ slovak ] = "Výstupná schránka je plná";
 };
 String STR_SVT_PRNDLG_TONER_LOW
 {
@@ -630,6 +648,7 @@ String STR_SVT_PRNDLG_TONER_LOW
     Text[ czech ] = "Málo toneru";
     Text[ hebrew ] = "‮טונר עומד להיגמר‬";
     Text[ hindi ] = "टोनर् धीमा";
+    Text[ slovak ] = "Málo toneru";
 };
 String STR_SVT_PRNDLG_NO_TONER
 {
@@ -660,6 +679,7 @@ String STR_SVT_PRNDLG_NO_TONER
     Text[ czech ] = "Došel toner";
     Text[ hebrew ] = "‮אזל הטונר‬";
     Text[ hindi ] = "No toner";
+    Text[ slovak ] = "Došiel toner";
 };
 String STR_SVT_PRNDLG_PAGE_PUNT
 {
@@ -690,6 +710,7 @@ String STR_SVT_PRNDLG_PAGE_PUNT
     Text[ czech ] = "Odstranit stránku";
     Text[ hebrew ] = "‮למחוק דף זה‬";
     Text[ hindi ] = "पृष्ट मिटाओ";
+    Text[ slovak ] = "Odstrániť stránku";
 };
 String STR_SVT_PRNDLG_USER_INTERVENTION
 {
@@ -720,6 +741,7 @@ String STR_SVT_PRNDLG_USER_INTERVENTION
     Text[ czech ] = "Je třeba zásahu uživatele";
     Text[ hebrew ] = "‮התערבות המשתמש נדרשת‬";
     Text[ hindi ] = "User intervention necessary";
+    Text[ slovak ] = "Je potrebný zásah užívateľa";
 };
 String STR_SVT_PRNDLG_OUT_OF_MEMORY
 {
@@ -750,6 +772,7 @@ String STR_SVT_PRNDLG_OUT_OF_MEMORY
     Text[ czech ] = "Nedostatek paměti";
     Text[ hebrew ] = "‮אין מספיק זכרון‬";
     Text[ hindi ] = "अपर्याप्त मेमरी";
+    Text[ slovak ] = "Nedostatok pamäti";
 };
 String STR_SVT_PRNDLG_DOOR_OPEN
 {
@@ -780,6 +803,7 @@ String STR_SVT_PRNDLG_DOOR_OPEN
     Text[ czech ] = "Otevřený kryt";
     Text[ hebrew ] = "‮מכסה פתוח‬";
     Text[ hindi ] = "Cover open";
+    Text[ slovak ] = "Otvorený kryt";
 };
 String STR_SVT_PRNDLG_POWER_SAVE
 {
@@ -810,6 +834,7 @@ String STR_SVT_PRNDLG_POWER_SAVE
     Text[ czech ] = "Úsporný režim";
     Text[ hebrew ] = "‮מצב חיסכון בחשמל‬";
     Text[ hindi ] = "पवर संचित करने का प्रकार";
+    Text[ slovak ] = "Úsporný režim";
 };
 String STR_SVT_PRNDLG_DEFPRINTER
 {
@@ -840,6 +865,7 @@ String STR_SVT_PRNDLG_DEFPRINTER
     Text[ czech ] = "Výchozí tiskárna";
     Text[ hebrew ] = "‮מדפסת ברירת המחדל‬";
     Text[ hindi ] = "अनुपस्थिति मुद्रक";
+    Text[ slovak ] = "Východzia tlačiareň";
 };
 String STR_SVT_PRNDLG_JOBCOUNT
 {
@@ -870,6 +896,7 @@ String STR_SVT_PRNDLG_JOBCOUNT
     Text[ czech ] = "%d dokumentů";
     Text[ hebrew ] = "‮%d מסמכים‬";
     Text[ hindi ] = "%d documents";
+    Text[ slovak ] = "%d dokumentov";
 };
 
 ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
@@ -898,7 +925,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text [ english_us ] = "Printer" ;
         Text [ portuguese_brazilian ] = "Impressora" ;
         Text [ swedish ] = "Skrivare" ;
-        Text [ danish ] = "Printer" ;
+        Text [ danish ] = "Printer " ;
         Text [ italian ] = "Stampante" ;
         Text [ spanish ] = "Impresora" ;
         Text [ french ] = "Imprimante" ;
@@ -920,6 +947,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ czech ] = "Tiskárna";
         Text[ hebrew ] = "‮מדפסת‬";
         Text[ hindi ] = "Printer";
+        Text[ slovak ] = "Tlačiareň";
     };
     FixedText FT_NAME
     {
@@ -952,6 +980,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ czech ] = "Název";
         Text[ hebrew ] = "‮שם מדפסת‬";
         Text[ hindi ] = "~नाम्";
+        Text[ slovak ] = "~Názov";
     };
     ListBox LB_NAMES
     {
@@ -992,6 +1021,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ czech ] = "Vlastnosti...";
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "Propert~ies...";
+        Text[ slovak ] = "Vlastnost~i...";
     };
     FixedText FT_STATUS
     {
@@ -1024,6 +1054,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ czech ] = "Stav";
         Text[ hebrew ] = "‮מצב‬";
         Text[ hindi ] = "वस्तुस्थिति";
+        Text[ slovak ] = "Stav";
     };
     FixedText FI_STATUS
     {
@@ -1061,6 +1092,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "वर्ग";
+        Text[ slovak ] = "Typ";
     };
     FixedText FI_TYPE
     {
@@ -1098,6 +1130,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान्";
+        Text[ slovak ] = "Umiestnenie";
     };
     FixedText FI_LOCATION
     {
@@ -1135,6 +1168,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text[ czech ] = "Komentář";
         Text[ hebrew ] = "‮הערות‬";
         Text[ hindi ] = "अपवाद";
+        Text[ slovak ] = "Komentár";
     };
     FixedText FI_COMMENT
     {
@@ -1178,7 +1212,10 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     Text[ czech ] = "Nastavení tiskárny";
     Text[ hebrew ] = "‮תצורת מדפסת‬";
     Text[ hindi ] = "मुद्रक सेटप";
+    Text[ slovak ] = "Nastavenie tlačiarne";
 };
+
+
 
 
 
