@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:50:33 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@ namespace com { namespace sun { namespace star {
         struct URL;
         class XNumberFormatter;
     }
+    namespace frame
+    {
+        class XModel;
+    }
     namespace ucb { class XContent; }
 
 }}}
@@ -138,6 +142,7 @@ namespace dbaui
     /** creates a new connection and appends the eventlistener
         @param  _rsDataSourceName       name of the datasource
         @param  _xDatabaseContext       the database context
+        @param  _rMF                    the multi service factory
         @param  _rEvtLst                the eventlistener which will be added to the new created connection
         @param  _rOUTConnection         this parameter will be filled with the new created connection
         @return SQLExceptionInfo        contains a SQLException, SQLContext or a SQLWarning when they araised else .isValid() will return false
@@ -150,6 +155,7 @@ namespace dbaui
                                     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection );
     /** creates a new connection and appends the eventlistener
         @param  _xDataSource            the datasource
+        @param  _rMF                    the multi service factory
         @param  _rEvtLst                the eventlistener which will be added to the new created connection
         @param  _rOUTConnection         this parameter will be filled with the new created connection
         @return SQLExceptionInfo        contains a SQLException, SQLContext or a SQLWarning when they araised else .isValid() will return false
@@ -211,6 +217,33 @@ namespace dbaui
         @return the corresponding com::sun::star::awt::TextAlign
     */
     sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment);
+
+    /** retrieves a data source given by name or URL, and displays an error if this fails
+
+        Any <type scope="com::sun::star::sdbc">SQLException</type>s which occur will be displayed.
+        Additionally, and Exceptions which indicate a data source name pointing to a non-existent database
+        URL will also be denoted. Yet more additionally, and other exceptions will be forwarded to
+        a <type scope="com::sun::star::sdb">InteractionHandler</type>.
+
+        @param _rxDBContext
+            The database context. Must not be <NULL/>
+        @param _rDataSourceName
+            the URL of the database document, or the name of a registered data source
+        @param _pErrorMessageParent
+            the window to use as parent for error messages
+        @param _rxORB
+            a service factory to use for components to be created
+        @param _bDisplayError
+            determines whether the method should display an error, when it happens, or simply absorb it
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+            getDataSourceByName_displayError(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxDBContext,
+                const ::rtl::OUString& _rDataSourceName,
+                Window* _pErrorMessageParent,
+                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB,
+                bool _bDisplayError
+            );
 
     /** maps com::sun::star::awt::TextAlign to SvxCellHorJustify
         @param com::sun::star::awt::TextAlign& _nAlignment
@@ -496,6 +529,13 @@ namespace dbaui
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent = ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>()
                             ,sal_Bool _bMove = sal_False);
 
+    /** creates a number formatter
+        @param  _rxConnection
+            The connection is needed to create the formatter
+        @param  _rMF
+            The multi service factory
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > getNumberFormatter(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF );
 // .........................................................................
 }
 // .........................................................................
