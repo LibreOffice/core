@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: er $ $Date: 2001-06-18 09:45:43 $
+ *  last change: $Author: er $ $Date: 2001-06-25 12:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #endif
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -362,7 +359,7 @@ LanguageType SvNumberFormatter::GetProperLanguage( LanguageType eLang )
             eLang = UNKNOWN_SUBSTITUTE;
         break;
         case LANGUAGE_NONE :
-            eLang = Application::GetAppInternational().GetLanguage();
+            eLang = Application::GetSettings().GetUILanguage();
         break;
         case LANGUAGE_PROCESS_OR_USER_DEFAULT :
         case LANGUAGE_SYSTEM_DEFAULT :
@@ -370,7 +367,7 @@ LanguageType SvNumberFormatter::GetProperLanguage( LanguageType eLang )
         break;
     }
     if ( eLang == LANGUAGE_SYSTEM )
-        eLang = International::GetRealLanguage( eLang );
+        eLang = Application::GetSettings().GetLanguage();
     return eLang;
 }
 
@@ -592,7 +589,7 @@ void SvNumberFormatter::SetFormatUsed(ULONG nFIndex)
 
 BOOL SvNumberFormatter::Load( SvStream& rStream )
 {
-    LanguageType eSysLang = System::GetLanguage();
+    LanguageType eSysLang = Application::GetSettings().GetLanguage();
     SvNumberFormatter* pConverter = NULL;
 
     ImpSvNumMultipleReadHeader aHdr( rStream );
@@ -799,7 +796,7 @@ BOOL SvNumberFormatter::Save( SvStream& rStream ) const
     ImpSvNumMultipleWriteHeader aHdr( rStream );
     // ab 364i wird gespeichert was SYSTEM wirklich war, vorher hart LANGUAGE_SYSTEM
     rStream << (USHORT) SV_NUMBERFORMATTER_VERSION;
-    rStream << (USHORT) System::GetLanguage() << (USHORT) SysLnge;
+    rStream << (USHORT) Application::GetSettings().GetLanguage() << (USHORT) SysLnge;
     SvNumberFormatTable* pTable = (SvNumberFormatTable*) &aFTable;
     SvNumberformat* pEntry = (SvNumberformat*) pTable->First();
     while (pEntry)
@@ -3175,7 +3172,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     if ( bCurrencyTableInitialized )
         return ;
 
-    LanguageType eSysLang = System::GetLanguage();
+    LanguageType eSysLang = Application::GetSettings().GetLanguage();
     LocaleDataWrapper* pLocaleData = new LocaleDataWrapper(
         ::comphelper::getProcessServiceFactory(),
         ConvertLanguageToLocale( eSysLang ) );
