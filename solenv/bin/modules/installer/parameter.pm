@@ -2,9 +2,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2004-10-18 13:53:07 $
+#   last change: $Author: hr $ $Date: 2004-11-09 18:32:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -241,14 +241,36 @@ sub make_path_absolute
 
     if ( $installer::globals::iswin )
     {
-        if (!($$pathref =~ /^\s*\w\:/)) # this is a relative windows path
+        if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "tcsh" ))
         {
-            $$pathref = cwd() . $installer::globals::separator . $$pathref;
-            $$pathref =~ s/\//\\/g;
+            if (!($$pathref =~ /^\s*\//))   # this is a relative POSIX path
+            {
+                $$pathref = cwd() . $installer::globals::separator . $$pathref;
+            }
+            my $p = $$pathref;
+            chomp( $p );
+            my $q = '';
+            # Avoid the $(LANG) problem.
+            if ($p =~ /(\A.*)(\$\(.*\Z)/) {
+                $p = $1;
+                $q = $2;
+            }
+            chomp( $p = qx{cygpath -w "$p"} );
+            $$pathref = $p.$q;
+            # Use windows paths, but with '/'s.
+            $$pathref =~ s/\\/\//g;
+        }
+        else
+        {
+            if (!($$pathref =~ /^\s*\w\:/)) # this is a relative windows path (no dos drive)
+            {
+                $$pathref = cwd() . $installer::globals::separator . $$pathref;
+
+                $$pathref =~ s/\//\\/g;
+            }
         }
     }
-
-    $$pathref =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes
+    $$pathref =~ s/[\/\\]\s*$//;    # removing ending slashes
 }
 
 ##################################################
