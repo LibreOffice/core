@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-30 16:08:10 $
+ *  last change: $Author: dr $ $Date: 2002-04-16 11:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ void ImportExcel::Blank25( void )
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
         pColRowBuff->Used( nCol, nRow );
-        pCellStyleBuffer->SetXF( nCol, nRow, nXF, TRUE );
+        pCellStyleBuffer->SetBlankXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -556,14 +556,20 @@ BOOL ImportExcel::Password( void )
 void ImportExcel::Header( void )
 {
     if( aIn.GetRecLeft() )
+    {
         GetHF( TRUE );
+        bHasHeader = sal_True;
+    }
 }
 
 
 void ImportExcel::Footer( void )
 {
     if( aIn.GetRecLeft() )
+    {
         GetHF( FALSE );
+        bHasFooter = sal_True;
+    }
 }
 
 
@@ -875,25 +881,25 @@ void ImportExcel::Defrowheight2( void )
 
 void ImportExcel::Leftmargin( void )
 {
-    GetAndSetMargin( xlLeftMargin );
+    SetMarginItem( *pStyleSheetItemSet, aIn.ReadDouble(), xlLeftMargin );
 }
 
 
 void ImportExcel::Rightmargin( void )
 {
-    GetAndSetMargin( xlRightMargin );
+    SetMarginItem( *pStyleSheetItemSet, aIn.ReadDouble(), xlRightMargin );
 }
 
 
 void ImportExcel::Topmargin( void )
 {
-    GetAndSetMargin( xlTopMargin );
+    SetMarginItem( *pStyleSheetItemSet, aIn.ReadDouble(), xlTopMargin );
 }
 
 
 void ImportExcel::Bottommargin( void )
 {
-    GetAndSetMargin( xlBottomMargin );
+    SetMarginItem( *pStyleSheetItemSet, aIn.ReadDouble(), xlBottomMargin );
 }
 
 
@@ -1038,8 +1044,10 @@ void ImportExcel::Wsbool( void )
     UINT16 nFlags;
     aIn >> nFlags;
 
-    aRowOutlineBuff.SetButtonMode( TRUEBOOL( nFlags & 0x0040 ) );
-    aColOutlineBuff.SetButtonMode( TRUEBOOL( nFlags & 0x0080 ) );
+    aRowOutlineBuff.SetButtonMode( hasFlag( nFlags, EXC_WSBOOL_ROWBELOW ) );
+    aColOutlineBuff.SetButtonMode( hasFlag( nFlags, EXC_WSBOOL_COLBELOW ) );
+
+    bFitToPage = hasFlag( nFlags, EXC_WSBOOL_FITTOPAGE );
 }
 
 
@@ -1409,7 +1417,9 @@ void ImportExcel::Setup( void )
 
         pStyleSheetItemSet->Put( SvxSizeItem( ATTR_PAGE_SIZE, aSize ) );
 
-        pStyleSheetItemSet->Put( SfxUInt16Item( ATTR_PAGE_SCALE, nScale ) );
+        // bFitToPage set in WSBOOL record. For now assuming that it always occurs before SETUP.
+        if( !bFitToPage || !nFitWidth || !nFitHeight )
+            pStyleSheetItemSet->Put( SfxUInt16Item( ATTR_PAGE_SCALE, nScale ) );
     }
 
     if( nOpt & 0x0020 )
@@ -1420,6 +1430,27 @@ void ImportExcel::Setup( void )
     pStyleSheetItemSet->Put( SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, ( nOpt & 0x0080 )? nStartPage : 0 ) );
 
     pStyleSheetItemSet->Put( aPageItem );
+
+    // bFitToPage set in WSBOOL record. For now assuming that it always occurs before SETUP.
+    if( bFitToPage && nFitWidth && nFitHeight )
+        pStyleSheetItemSet->Put( SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, nFitWidth * nFitHeight ) );
+}
+
+
+void ImportExcel::Setup5()
+{
+    Setup();
+    aIn.Seek( 16 );
+
+    // header margin
+    SvxSetItem aHeaderSetItem( (const SvxSetItem&) pStyleSheetItemSet->Get( ATTR_PAGE_HEADERSET ) );
+    SetMarginItem( aHeaderSetItem.GetItemSet(), aIn.ReadDouble(), xlBottomMargin );
+    pStyleSheetItemSet->Put( aHeaderSetItem );
+
+    // footer margin
+    SvxSetItem aFooterSetItem( (const SvxSetItem&) pStyleSheetItemSet->Get( ATTR_PAGE_FOOTERSET ) );
+    SetMarginItem( aFooterSetItem.GetItemSet(), aIn.ReadDouble(), xlTopMargin );
+    pStyleSheetItemSet->Put( aFooterSetItem );
 }
 
 
@@ -1496,7 +1527,7 @@ void ImportExcel::Mulblank( void )
             if( nCol <= MAXCOL )
             {
                 pColRowBuff->Used( nCol, nRow );
-                pCellStyleBuffer->SetXF( nCol, nRow, nXF, TRUE );
+                pCellStyleBuffer->SetBlankXF( nCol, nRow, nXF );
             }
         }
         aIn >> nRow;    // nRow zum Testen von letzter Col missbraucht
@@ -1560,7 +1591,7 @@ void ImportExcel::Blank34( void )
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
         pColRowBuff->Used( nCol, nRow );
-        pCellStyleBuffer->SetXF( nCol, nRow, nXF, TRUE );
+        pCellStyleBuffer->SetBlankXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -1851,13 +1882,6 @@ void ImportExcel::TableOp( void )
             aMarkData.SelectOneTable( nTab );
             pD->InsertTableOp( aTabOpParam, nCol, nRow, nLastCol, nLastRow, aMarkData );
         }
-
-        for( UINT16 nColIx = nFirstCol + 1; nColIx <= nLastCol; ++nColIx )
-            for( UINT16 nRowIx = nFirstRow; nRowIx <= nLastRow; ++nRowIx )
-            {
-                pCellStyleBuffer->SetXF( nColIx, nRowIx, nLastXF );
-                pColRowBuff->Used( nColIx, nRowIx );
-            }
     }
     else
         bTabTruncated = TRUE;
@@ -2028,6 +2052,10 @@ void ImportExcel::NeueTabelle( void )
         &pStyleShPool->Make( aStyleName, SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_USERDEF ).GetItemSet();
 
     pExcRoot->bDefaultPage = TRUE;
+
+    bFitToPage = sal_False;
+    bHasHeader = sal_False;
+    bHasFooter = sal_False;
 }
 
 
@@ -2307,38 +2335,6 @@ void ImportExcel::GetHFString( String& rStr )
 }
 
 
-void ImportExcel::GetAndSetMargin( XclMarginType eSide )
-{
-    double              fMargin;
-    aIn >> fMargin;
-    fMargin *= 1440.0;
-    fMargin += 0.4999999999999; // casten -> runden
-
-    DBG_ASSERT( pStyleSheetItemSet, "-ImportExcel::GetAndSetMargin(): nix StyleSheetItemSet!" );
-
-    if( (eSide == xlTopMargin) || (eSide == xlBottomMargin) )
-    {
-        SvxULSpaceItem  aItem( ATTR_ULSPACE );
-        aItem = ( const SvxULSpaceItem& ) pStyleSheetItemSet->Get( ATTR_ULSPACE );
-        if( eSide == xlTopMargin )
-            aItem.SetUpperValue( ( UINT16 ) fMargin );
-        else
-            aItem.SetLowerValue( ( UINT16 ) fMargin );
-        pStyleSheetItemSet->Put( aItem );
-    }
-    else
-    {
-        SvxLRSpaceItem  aItem( ATTR_LRSPACE );
-        aItem = ( const SvxLRSpaceItem& ) pStyleSheetItemSet->Get( ATTR_LRSPACE );
-        if( eSide == xlRightMargin )
-            aItem.SetRightValue( ( UINT16 ) fMargin );
-        else
-            aItem.SetLeftValue( ( UINT16 ) fMargin );
-        pStyleSheetItemSet->Put( aItem );
-    }
-}
-
-
 String ImportExcel::GetPageStyleName( UINT16 nTab )
 {
     String          aRet( RTL_CONSTASCII_USTRINGPARAM( "TAB_" ) );
@@ -2548,6 +2544,21 @@ void ImportExcel::PostDocLoad( void )
             }
         }
     }
+
+    // no or empty HEADER record
+    if( !bHasHeader )
+    {
+        SvxSetItem aHeaderSetItem( (const SvxSetItem&) pStyleSheetItemSet->Get( ATTR_PAGE_HEADERSET ) );
+        aHeaderSetItem.GetItemSet().Put( SfxBoolItem( ATTR_PAGE_ON, sal_False ) );
+        pStyleSheetItemSet->Put( aHeaderSetItem );
+    }
+    // no or empty FOOTER record
+    if( !bHasFooter )
+    {
+        SvxSetItem aFooterSetItem( (const SvxSetItem&) pStyleSheetItemSet->Get( ATTR_PAGE_FOOTERSET ) );
+        aFooterSetItem.GetItemSet().Put( SfxBoolItem( ATTR_PAGE_ON, sal_False ) );
+        pStyleSheetItemSet->Put( aFooterSetItem );
+    }
 }
 
 
@@ -2593,5 +2604,31 @@ UINT16 ImportExcel::CalcColWidth( const UINT16 n )
         f = 0.0;
 
     return ( UINT16 ) f;
+}
+
+
+void ImportExcel::SetMarginItem( SfxItemSet& rItemSet, double fMarginInch, XclMarginType eType )
+{
+    sal_uInt16 nMarginTwips = XclTools::GetTwipsFromInch( fMarginInch );
+    if( (eType == xlTopMargin) || (eType == xlBottomMargin) )
+    {
+        SvxULSpaceItem aItem( ATTR_ULSPACE );
+        aItem = (const SvxULSpaceItem&) rItemSet.Get( ATTR_ULSPACE );
+        if( eType == xlTopMargin )
+            aItem.SetUpperValue( nMarginTwips );
+        else
+            aItem.SetLowerValue( nMarginTwips );
+        rItemSet.Put( aItem );
+    }
+    else
+    {
+        SvxLRSpaceItem aItem( ATTR_LRSPACE );
+        aItem = (const SvxLRSpaceItem&) rItemSet.Get( ATTR_LRSPACE );
+        if( eType == xlRightMargin )
+            aItem.SetRightValue( nMarginTwips );
+        else
+            aItem.SetLeftValue( nMarginTwips );
+        rItemSet.Put( aItem );
+    }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-11 12:16:50 $
+ *  last change: $Author: dr $ $Date: 2002-04-16 11:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,7 +691,7 @@ FltError ImportExcel::Read( void )
                     case 0x82:  Gridset(); break;       // GRIDSET      [  345]
                     case 0x83:  Hcenter(); break;       // HCENTER      [  345]
                     case 0x84:  Vcenter(); break;       // VCENTER      [  345]
-                    case 0xA1:  Setup(); break;         // SETUP        [   45]
+                    case 0xA1:  Setup5(); break;        // SETUP
                     case 0xBD:                          // MULRK        [    5]
                         Mulrk();
                         eAkt = Z_Biff5T;
@@ -1201,7 +1201,7 @@ FltError ImportExcel8::Read( void )
                         case 0x0082:    Gridset();              break;  // GRIDSET      [  345   ]
                         case 0x0083:    Hcenter();              break;  // HCENTER      [  345   ]
                         case 0x0084:    Vcenter();              break;  // VCENTER      [  345   ]
-                        case 0x00A1:    Setup();                break;  // SETUP        [   45   ]
+                        case 0x00A1:    Setup5();               break;  // SETUP
                         case 0x0200:    Dimensions();           break;  // DIMENSIONS   [      8 ]
                         case 0x0809:                                    // BOF          [    5   ]
                         {
@@ -1557,7 +1557,7 @@ FltError ImportExcel8::ReadChart8( ScfProgressBar& rProgress, const BOOL bOwnTab
             case 0x0029:    Bottommargin();                                     break;  // BOTTOMMARGIN
             case 0x002A:    Printheaders();                                     break;  // PRINTHEADERS
             case 0x00A0:    ChartScl();                                         break;  // SCL
-            case 0x00A1:    if( bOwnTab ) Setup();                              break;  // SETUP
+            case 0x00A1:    if( bOwnTab ) Setup5();                             break;  // SETUP
             case 0x1002:    pChart->ReadChart();                                break;  // CHART
             case 0x1003:    pChart->ReadSeries();                               break;  // SERIES
             case 0x1006:    pChart->ReadDataformat( aIn );                      break;  // DATAFORMAT

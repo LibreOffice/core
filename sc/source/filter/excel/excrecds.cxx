@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-10 12:58:12 $
+ *  last change: $Author: dr $ $Date: 2002-04-16 11:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include <svx/pageitem.hxx>
 #include <svx/paperinf.hxx>
 #include <svx/sizeitem.hxx>
+#include <svx/ulspitem.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
@@ -320,8 +321,7 @@ const ULONG ExcDummy_02b::nMyLen = sizeof( ExcDummy_02b::pMyData );
 //-------------------------------------------------------- class ExcDummy_02c -
 const BYTE      ExcDummy_02c::pMyData[] = {
     0x25, 0x02, 0x04, 0x00, 0x00, 0x00, 0xff, 0x00,         // DEFAULTROWHEIGHT
-    0x8c, 0x00, 0x04, 0x00, 0x31, 0x00, 0x31, 0x00,         // COUNTRY
-    0x81, 0x00, 0x02, 0x00, 0xc1, 0x04                      // WSBOOL
+    0x8c, 0x00, 0x04, 0x00, 0x31, 0x00, 0x31, 0x00          // COUNTRY
 };
 const ULONG ExcDummy_02c::nMyLen = sizeof( ExcDummy_02c::pMyData );
 
@@ -409,6 +409,14 @@ void XclExpRecord::Save( XclExpStream& rStrm )
     rStrm.StartRecord( mnRecId, mnRecSize );
     WriteBody( rStrm );
     rStrm.EndRecord();
+}
+
+
+// XclExpUInt16Record =========================================================
+
+void XclExpUInt16Record::WriteBody( XclExpStream& rStrm )
+{
+    rStrm << mnValue16;
 }
 
 
@@ -3805,9 +3813,26 @@ void UsedAttrList::Save( XclExpStream& rStrm )
 
 
 
+// XclExpWsbool ===============================================================
+
+XclExpWsbool::XclExpWsbool( RootData& rRootData ) :
+    XclExpUInt16Record( EXC_ID_WSBOOL, EXC_WSBOOL_DEFAULTFLAGS )
+{
+    SfxItemSet* pItemSet = rRootData.pStyleSheetItemSet;
+    if( pItemSet && (pItemSet->GetItemState( ATTR_PAGE_SCALETOPAGES, FALSE ) == SFX_ITEM_SET) )
+        mnValue16 |= EXC_WSBOOL_FITTOPAGE;
+}
+
+
 //------------------------------------------------------------ class ExcSetup -
 
-ExcSetup::ExcSetup( RootData* pExcRoot )
+ExcSetup::ExcSetup( RootData* pExcRoot ) :
+    nPaperSize( 0 ),
+    nScale( 100 ),
+    nPageStart( 1 ),
+    nGrbit( 0x0001 ),
+    nHeaderMargin( 0 ),
+    nFooterMargin( 0 )
 {
     SfxStyleSheet*          pStSh = pExcRoot->pStyleSheet;
 
@@ -3900,6 +3925,7 @@ ExcSetup::ExcSetup( RootData* pExcRoot )
             nPaperSize = 0;     // default if size doesn't match Excel sizes
 
         nScale = ( UINT16 ) ( ( const SfxUInt16Item& ) rSet.Get( ATTR_PAGE_SCALE ) ).GetValue();
+        nFitToPages = static_cast< sal_uInt16 >( ((const SfxUInt16Item&) rSet.Get( ATTR_PAGE_SCALETOPAGES )).GetValue() );
 
         nPageStart = ( UINT16 ) ( ( const SfxUInt16Item& ) rSet.Get( ATTR_PAGE_FIRSTPAGENO ) ).GetValue();
 
@@ -3916,13 +3942,11 @@ ExcSetup::ExcSetup( RootData* pExcRoot )
 
         if( !( ( const SfxBoolItem& ) rSet.Get( ATTR_PAGE_NOTES ) ).GetValue() )
             nGrbit |= 0x0020;   // fNotes
-    }
-    else
-    {   // defaults
-        nPaperSize = 0;
-        nScale = 100;
-        nPageStart = 1;
-        nGrbit = 0x0001;
+
+        const SfxItemSet& rHeaderSet = ((const SvxSetItem&) rSet.Get( ATTR_PAGE_HEADERSET )).GetItemSet();
+        nHeaderMargin = ((const SvxULSpaceItem&) rHeaderSet.Get( ATTR_ULSPACE )).GetLower();
+        const SfxItemSet& rFooterSet = ((const SvxSetItem&) rSet.Get( ATTR_PAGE_FOOTERSET )).GetItemSet();
+        nFooterMargin = ((const SvxULSpaceItem&) rFooterSet.Get( ATTR_ULSPACE )).GetUpper();
     }
 }
 
@@ -3930,11 +3954,11 @@ ExcSetup::ExcSetup( RootData* pExcRoot )
 void ExcSetup::SaveCont( XclExpStream& rStrm )
 {
     rStrm   << nPaperSize << nScale << nPageStart
-            << ( UINT16 ) 1 << ( UINT16 ) 1             // FitWidth / FitHeight
+            << (UINT16) 1 << nFitToPages                // FitWidth / FitHeight
             << nGrbit
             << ( UINT16 ) 0x012C << ( UINT16 ) 0x012C   // Res / VRes
-            << ( UINT32 ) 0 << ( UINT32 ) 0x3FE00000    // Header margin (double)
-            << ( UINT32 ) 0 << ( UINT32 ) 0x3FE00000    // Footer margin (double)
+            << XclTools::GetInchFromTwips( nHeaderMargin )
+            << XclTools::GetInchFromTwips( nFooterMargin )
             << ( UINT16 ) 1;                            // num of copies
 }
 

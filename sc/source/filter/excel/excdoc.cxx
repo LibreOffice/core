@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-11 12:16:49 $
+ *  last change: $Author: dr $ $Date: 2002-04-16 11:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,6 +705,7 @@ void ExcTable::FillAsTable( void )
         // GUTS (count & size of outline icons)
         Add( new ExcEGuts( pOLColArray, pOLRowArray ) );
         Add( new ExcDummy_02c );
+        Add( new XclExpWsbool( rR ) );
         Add( new XclExpPageBreaks( rR, nScTab, XclExpPageBreaks::pbHorizontal ) );
         Add( new XclExpPageBreaks( rR, nScTab, XclExpPageBreaks::pbVertical ) );
     }
@@ -720,6 +721,7 @@ void ExcTable::FillAsTable( void )
         Add( new ExcDummy8_02 );
         // GUTS (count & size of outline icons)
         Add( new ExcEGuts( pOLColArray, pOLRowArray ) );
+        Add( new XclExpWsbool( rR ) );
         Add( new XclExpPageBreaks8( rR, nScTab, XclExpPageBreaks::pbHorizontal ) );
         Add( new XclExpPageBreaks8( rR, nScTab, XclExpPageBreaks::pbVertical ) );
     }
