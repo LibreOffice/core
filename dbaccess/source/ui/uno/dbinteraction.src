@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 14:52:36 $
+ *  last change: $Author: kz $ $Date: 2001-08-14 16:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@ String STR_REMEMBERPASSWORD_PERSISTENT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/08/07 14:52:36  kz
+ *  Merge SRC638: 07.08.01 - 16:52:08
+ *
  *  Revision 1.9  2001/07/13 20:49:11  kz
  *  Merge SRC638: 13.07.01 - 22:47:55
  *
@@ -153,6 +156,7 @@ String STR_REMEMBERPASSWORD_PERSISTENT
  *
  *  Revision 1.0 25.10.00 14:10:52  fs
  ************************************************************************/
+
 
 
 
