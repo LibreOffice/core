@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMailMergeBroadcaster.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:15:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #endif
 
 //module com { module sun { module star { module text {
-//    interface XMailMergeListener;
+//     published interface XMailMergeListener;
 //}; }; }; };
 
 //=============================================================================
@@ -89,7 +89,7 @@ module com { module sun { module star { module text {
 
     @since #107627#
 */
-interface XMailMergeBroadcaster : com::sun::star::uno::XInterface
+published interface XMailMergeBroadcaster : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Adds an entry to the list of mail merge listeners.
