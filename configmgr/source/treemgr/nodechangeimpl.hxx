@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:17:29 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,8 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
         class Node;
-        class ValueNodeImpl;
+        class ValueMemberNode;
+        class ValueMemberUpdate;
         class SetNodeImpl;
 //-----------------------------------------------------------------------------
         class NodeChangeData;
@@ -112,21 +113,12 @@ namespace configmgr
             /// the node that is affected by the change
             NodeOffset getAffectedNode() const;
 
-            /// the tree that contains the actual change - allow NULL for set elements,
-            /// where the tree may be new or gone
-            TreeHolder getChangingTree() const;
-            /// the node that actually changes - allow zero for set elements,
-            /// where the node does not keep its identity
-            NodeOffset getChangingNode() const;
-
-            /// the path from the base to the affected node
-            RelativePath getPathToAffectedNode() const;
             /// the path from the base to the changing node
             RelativePath getPathToChangingNode() const;
 
-
+        protected:
             /// setup the 'target' node that is to be affected or changed
-            void setTarget(TreeHolder const& aAffectedTree, NodeOffset nChangingNode);
+            void setAffected(TreeHolder const& aAffectedTree, NodeOffset nAffectedNode);
 
         public:
         // related/affected nodes and trees
@@ -148,14 +140,6 @@ namespace configmgr
         /// apply this change to the stored 'changing' node
             void apply();
 
-        /// apply this change to the given node (without remembering what changed)
-            void applyToOther(Node* pNode);
-
-        protected:
-        /// access to the set state
-            TreeHolder getTargetTree() const { return m_aTargetTree; }
-            NodeOffset getTargetNode() const { return m_nTargetNode; }
-
         protected:
         /// virtual hooks for some of the public methods
             /// the tree on which the operation originated
@@ -163,19 +147,12 @@ namespace configmgr
 
             /// the node thru which the operation originated
             virtual NodeOffset doGetBaseNode() const; // default is the the same as the owning node
-
-            /// the 'changed' node's tree - default is the target tree
-            virtual TreeHolder doGetChangingTree() const;
         private:
-            /// the 'affected' node
-            virtual NodeOffset doGetOwningNode() const = 0;
-            /// the 'changed' node
-            virtual NodeOffset doGetChangingNode() const = 0;
-
-            /// the path from base to 'affected' node
-            virtual RelativePath doGetOwningNodePath() const = 0;
             /// the path from base to 'affected' node
             virtual RelativePath doGetChangingNodePath() const = 0;
+
+            /// is the change really affecting a child of the affected node (true for values)
+            virtual bool doIsChangingSubnode() const = 0;
 
         private:
             /// checks, if this represents an actual change (given whether the change has been applied or not)
@@ -189,11 +166,12 @@ namespace configmgr
             /// do apply the actual change
             virtual void doApply( Node& rTarget) = 0;
         private:
-            TreeHolder m_aTargetTree;
-            NodeOffset m_nTargetNode;
-            unsigned m_nState;
+            typedef sal_uInt16 State;
+            TreeHolder m_aAffectedTree;
+            NodeOffset m_nAffectedNode;
+            State      m_nState;
 
-            void implApply(Node* pImpl, unsigned& op);
+            void implApply();
             Node* implGetTarget() const;
         };
 //-----------------------------------------------------------------------------
@@ -202,6 +180,7 @@ namespace configmgr
         class ValueChangeImpl
         : public NodeChangeImpl
         {
+            Name   m_aName;
             UnoAny m_aNewValue;
             UnoAny m_aOldValue;
         public:
@@ -211,6 +190,13 @@ namespace configmgr
             ~ValueChangeImpl();
 
         public:
+            /// setup the 'target' node that is to be affected or changed
+            void setTarget(TreeHolder const& aAffectedTree, NodeOffset nParentNode, Name const& sNodeName);
+
+        public:
+            /// get the name of the value
+            Name getValueName() const { return m_aName; }
+
             /// get the pre-change value (if known)
             UnoAny getOldValue() const { return m_aOldValue; }
             /// get the post-change value (if known)
@@ -218,15 +204,11 @@ namespace configmgr
 
         protected:
         // override information items
-            /// the 'affected' node  - here is the parent of the target node
-            virtual NodeOffset doGetOwningNode() const;
-            /// the 'changed' node - maybe null for set element - here is the target node
-            virtual NodeOffset doGetChangingNode() const;
-
-            /// the path from base to 'affected' node - here is the (empty) default
-            virtual RelativePath doGetOwningNodePath() const;
             /// the path from base to 'affected' node - here is the name of the changing node
             virtual RelativePath doGetChangingNodePath() const;
+
+            /// is the change really affecting a child of the affected node (true here)
+            virtual bool doIsChangingSubnode() const;
 
         protected:
         // override change information items
@@ -246,11 +228,11 @@ namespace configmgr
         protected:
         // new overrideables
             /// extract the pre-change value from the target context
-            virtual void preCheckValue(ValueNodeImpl& rNode, UnoAny& rOld, UnoAny& rNew);
+            virtual void preCheckValue(ValueMemberNode& rNode, UnoAny& rOld, UnoAny& rNew);
             /// extract the post-change value from the target context
-            virtual void postCheckValue(ValueNodeImpl& rNode, UnoAny& rNew);
+            virtual void postCheckValue(ValueMemberNode& rNode, UnoAny& rNew);
             /// apply the new value to the target context
-            virtual void doApplyChange(ValueNodeImpl& rNode) = 0;
+            virtual void doApplyChange(ValueMemberUpdate& rNode) = 0;
         };
 //-----------------------------------------------------------------------------
 
@@ -264,7 +246,7 @@ namespace configmgr
 
         protected:
             // implement: set the target to the new value
-            virtual void doApplyChange( ValueNodeImpl& rNode);
+            virtual void doApplyChange( ValueMemberUpdate& rNode);
 
             /// fills in pre- and post-change values, returns wether they differ
             virtual bool doFillChange(NodeChangeData& rChange) const;
@@ -283,10 +265,10 @@ namespace configmgr
 
         protected:
             // override: set the new value as well
-            virtual void preCheckValue(ValueNodeImpl& rNode, UnoAny& rOld, UnoAny& rNew);
+            virtual void preCheckValue(ValueMemberNode& rNode, UnoAny& rOld, UnoAny& rNew);
 
             // implement: set the target to default
-            virtual void doApplyChange( ValueNodeImpl& rNode);
+            virtual void doApplyChange( ValueMemberUpdate& rNode);
 
             /// fills in pre- and post-change values, returns wether they differ
             virtual bool doFillChange(NodeChangeData& rChange) const;
@@ -308,8 +290,6 @@ namespace configmgr
             void setBaseContext(TreeHolder const& aBaseTree, NodeOffset nBaseNode);
 
         protected:
-            /// the path from base to 'affected' node - here is the parent of the changing node
-            virtual RelativePath doGetOwningNodePath() const;
             /// the path from base to 'affected' node - uses own (explicit) path
             virtual RelativePath doGetChangingNodePath() const;
 
@@ -330,20 +310,16 @@ namespace configmgr
 
             /// the name of the element being changed
             Name getElementName() const { return m_aName; }
+
+            /// setup the 'target' node that is to be affected or changed
+            void setTarget(TreeHolder const& aAffectedTree, NodeOffset nAffectedNode);
         protected:
         /// virtual hooks for some of the public methods
-            /// the 'affected' node  - use the target node
-            virtual NodeOffset doGetOwningNode() const;
-
-            /// the path from base to 'affected' node - use default (empty path)
-            virtual RelativePath doGetOwningNodePath() const;
             /// the path from base to 'affected' node - use element name
             virtual RelativePath doGetChangingNodePath() const;
 
-            /// the 'changed' node  - the root of the changed tree (if available)
-            virtual NodeOffset doGetChangingNode() const;
-            /// the 'changed' tree  - by default not available in sets - would this be the old or new one
-            virtual TreeHolder doGetChangingTree() const;
+            /// is the change really affecting a child of the affected node (false here)
+            virtual bool doIsChangingSubnode() const;
 
             /// retrieve the old value from the given node
             virtual void doTest( Node& rTarget);

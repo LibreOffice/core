@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechange.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-23 08:49:15 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,17 +227,6 @@ NodeID NodeChange::getAffectedNodeID() const
 {
     TreeHolder aTree = m_pImpl->getAffectedTree();
     NodeOffset nOffset = m_pImpl->getAffectedNode();
-
-    OSL_ASSERT(aTree.isValid() ? aTree->isValidNode(nOffset) : 0==nOffset);
-
-    return NodeID(aTree.getBodyPtr(),nOffset);
-}
-//-----------------------------------------------------------------------------
-
-NodeID NodeChange::getChangedNodeID() const
-{
-    TreeHolder aTree = m_pImpl->getChangingTree();
-    NodeOffset nOffset = m_pImpl->getChangingNode();
 
     OSL_ASSERT(aTree.isValid() ? aTree->isValidNode(nOffset) : 0==nOffset);
 

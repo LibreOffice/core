@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-23 10:47:51 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include "nodeimpl.hxx"
 #include "treeimpl.hxx"
 
+#include "setnodeimplbase.hxx"
+#include "groupnodeimpl.hxx"
+
 namespace configmgr
 {
     namespace configuration
@@ -80,8 +83,8 @@ enum { eTestedChange = 0x01, eAppliedChange = 0x02, eNoCheck = 0x07 };
 //-----------------------------------------------------------------------------
 
 NodeChangeImpl::NodeChangeImpl(bool bNoCheck)
-: m_aTargetTree()
-, m_nTargetNode(0)
+: m_aAffectedTree()
+, m_nAffectedNode(0)
 , m_nState(0)
 {
     if (bNoCheck) m_nState = eNoCheck;
@@ -110,18 +113,8 @@ NodeOffset NodeChangeImpl::getBaseNode() const
 
 TreeHolder NodeChangeImpl::getAffectedTree() const
 {
-    TreeHolder aRet = getTargetTree();
+    TreeHolder aRet = m_aAffectedTree;
     OSL_ENSURE( aRet.isValid(), "ERROR: Configuration Change: Target Tree has not been set up" );
-
-    return aRet;
-}
-//-----------------------------------------------------------------------------
-
-TreeHolder NodeChangeImpl::getChangingTree() const
-{
-    TreeHolder aRet = doGetChangingTree();
-
-    // NULL is allowed for set elements
 
     return aRet;
 }
@@ -129,31 +122,12 @@ TreeHolder NodeChangeImpl::getChangingTree() const
 
 NodeOffset NodeChangeImpl::getAffectedNode() const
 {
-    NodeOffset nRet = doGetOwningNode();
+    NodeOffset nRet = m_nAffectedNode;
     OSL_ENSURE( nRet != 0, "ERROR: Configuration Change: Target Node has not been set up" );
-    OSL_ENSURE( getTargetTree().isValid() && getTargetTree()->isValidNode(nRet),
+    OSL_ENSURE( m_aAffectedTree.isValid() && m_aAffectedTree->isValidNode(nRet),
                 "ERROR: Configuration Change: Changing Node does not match tree" );
 
     return nRet;
-}
-//-----------------------------------------------------------------------------
-
-NodeOffset NodeChangeImpl::getChangingNode() const
-{
-    NodeOffset nRet = doGetChangingNode();
-
-    // zero is allowed for set elements
-    OSL_ENSURE(  nRet == 0 || (doGetChangingTree().isValid() && doGetChangingTree()->isValidNode(nRet)),
-                "ERROR: Configuration Change: Changing Node does not match tree" );
-
-    return nRet;
-}
-//-----------------------------------------------------------------------------
-
-RelativePath NodeChangeImpl::getPathToAffectedNode() const
-{
-    // TODO: Add DEBUG-verification of the result
-    return doGetOwningNodePath();
 }
 //-----------------------------------------------------------------------------
 
@@ -165,18 +139,18 @@ RelativePath NodeChangeImpl::getPathToChangingNode() const
 //-----------------------------------------------------------------------------
 
 
-void NodeChangeImpl::setTarget(TreeHolder const& aChangingTree, NodeOffset nChangingNode)
+void NodeChangeImpl::setAffected(TreeHolder const& aAffectedTree, NodeOffset nAffectedNode)
 {
-    OSL_ENSURE(m_nState == 0 || (m_aTargetTree.isEmpty() && m_nState == eNoCheck), "WARNING: Configuration: Retargeting change that already was tested or applied");
+    OSL_ENSURE(m_nState == 0 || (m_aAffectedTree.isEmpty() && m_nState == eNoCheck), "WARNING: Configuration: Retargeting change that already was tested or applied");
 
-    OSL_ENSURE( aChangingTree.isValid(), "ERROR: Configuration Change: NULL Target Tree is not allowed" );
-    OSL_ENSURE( nChangingNode, "ERROR: Configuration Change: NULL Target Node is not allowed" );
-    OSL_ENSURE( aChangingTree->isValidNode(nChangingNode), "ERROR: Configuration Change: Target Node does not match Tree" );
+    OSL_ENSURE( aAffectedTree.isValid(), "ERROR: Configuration Change: NULL Target Tree is not allowed" );
+    OSL_ENSURE( nAffectedNode, "ERROR: Configuration Change: NULL Target Node is not allowed" );
+    OSL_ENSURE( aAffectedTree->isValidNode(nAffectedNode), "ERROR: Configuration Change: Target Node does not match Tree" );
 
     if (m_nState != eNoCheck) m_nState = 0; // previous checks are invalidated
 
-    m_aTargetTree = aChangingTree;
-    m_nTargetNode = nChangingNode;
+    m_aAffectedTree = aAffectedTree;
+    m_nAffectedNode = nAffectedNode;
 }
 //-----------------------------------------------------------------------------
 
@@ -203,12 +177,15 @@ bool NodeChangeImpl::fillChangeData(NodeChangeData& rChange) const
 
 bool NodeChangeImpl::fillChangeLocation(NodeChangeLocation& rChange) const
 {
-    if (!m_aTargetTree.isValid()) return false;
+    if (!m_aAffectedTree.isValid()) return false;
 
     rChange.setBase( NodeID(this->getBaseTree().getBodyPtr(), this->getBaseNode()) );
-    rChange.setAccessor(this->getPathToChangingNode());
-    rChange.setTarget( NodeID(this->getAffectedTree().getBodyPtr(), this->getAffectedNode()) );
-    rChange.setChanging( NodeID(this->getChangingTree().getBodyPtr(), this->getChangingNode()) );
+
+    rChange.setAccessor( this->getPathToChangingNode() );
+
+    rChange.setAffected( NodeID(this->getAffectedTree().getBodyPtr(), this->getAffectedNode()) );
+
+    rChange.setChangingSubnode( this->doIsChangingSubnode() );
 
     return true;
 }
@@ -239,7 +216,7 @@ void NodeChangeImpl::apply()
 {
     if (!(m_nState & eAppliedChange))
     {
-        implApply( implGetTarget(), m_nState );
+        implApply();
 
         OSL_ENSURE(m_nState & eAppliedChange, "ERROR: Configuration: Change could not be applied");
         OSL_ENSURE(m_nState & eTestedChange, "ERROR: Configuration: Change was not tested while applied");
@@ -248,50 +225,36 @@ void NodeChangeImpl::apply()
         OSL_ENSURE(m_nState & eTestedChange, "ERROR: Configuration: Change marked applied but not tested");
 }
 //-----------------------------------------------------------------------------
-void NodeChangeImpl::applyToOther(Node* pNode)
-{
-    unsigned nState = 0;
-
-    implApply( implGetTarget(), nState );
-
-    OSL_ENSURE(nState & eAppliedChange, "ERROR: Configuration: Change could not be applied");
-    OSL_ENSURE(nState & eTestedChange, "ERROR: Configuration: Change was not tested while applied");
-}
-//-----------------------------------------------------------------------------
 
 /// apply this change to the given node - start state is nState (which is then updated)
-void NodeChangeImpl::implApply(Node* pTarget, unsigned& nState)
+void NodeChangeImpl::implApply()
 {
     OSL_ASSERT( !(m_nState & eAppliedChange)); // Caller must check
 
-    OSL_ENSURE(pTarget, "ERROR: Configuration: No target - cannot apply change");
-
+    Node* pTarget = implGetTarget();
     if (pTarget)
     {
-        if (!(nState & eTestedChange))  // Test checks the old value if there is realy a change
+        if (!(m_nState & eTestedChange))  // Test checks the old value if there is realy a change
         {                               // for eventlisteners to say "the old value is kept"
             doTest(*pTarget);
-            nState |= eTestedChange;
+            m_nState |= eTestedChange;
         }
         doApply(*pTarget);
-        nState |= eAppliedChange;
+        m_nState |= eAppliedChange;
     }
 }
 //-----------------------------------------------------------------------------
 
 Node* NodeChangeImpl::implGetTarget() const
 {
-    TreeHolder aTree = getTargetTree();
-    NodeOffset nNode = getTargetNode();
+    OSL_ENSURE(m_aAffectedTree.isValid(), "ERROR: Configuration Change: no target tree set");
+    if (!m_aAffectedTree.isValid()) return NULL;
 
-    OSL_ENSURE(aTree.isValid(), "ERROR: Configuration Change: no target tree set");
-    if (!aTree.isValid()) return 0;
+    OSL_ENSURE(m_aAffectedTree->isValidNode(m_nAffectedNode), "ERROR: Configuration Change: target node not in target tree");
+    if (!m_aAffectedTree->isValidNode(m_nAffectedNode)) return NULL;
 
-    OSL_ENSURE(aTree->isValidNode(nNode), "ERROR: Configuration Change: target node not in target tree");
-    if (!aTree->isValidNode(nNode)) return 0;
-
-    Node* pTarget = aTree->node(nNode);
-    OSL_ASSERT(pTarget);
+    Node* pTarget = m_aAffectedTree->node(m_nAffectedNode);
+    OSL_ENSURE(pTarget, "ERROR: Configuration: No target for change");
     return pTarget;
 }
 //-----------------------------------------------------------------------------
@@ -299,19 +262,13 @@ Node* NodeChangeImpl::implGetTarget() const
 // hook method default implementations
 TreeHolder NodeChangeImpl::doGetBaseTree() const
 {
-    return getTargetTree();
-}
-//-----------------------------------------------------------------------------
-
-TreeHolder NodeChangeImpl::doGetChangingTree() const
-{
-    return getTargetTree();
+    return m_aAffectedTree;
 }
 //-----------------------------------------------------------------------------
 
 NodeOffset NodeChangeImpl::doGetBaseNode() const
 {
-    return doGetOwningNode();
+    return m_nAffectedNode;
 }
 //-----------------------------------------------------------------------------
 
@@ -347,41 +304,31 @@ ValueChangeImpl::~ValueChangeImpl()
 }
 //-----------------------------------------------------------------------------
 
-NodeOffset ValueChangeImpl::doGetOwningNode() const
+void ValueChangeImpl::setTarget(TreeHolder const& aAffectedTree, NodeOffset nParentNode, Name const& sNodeName)
 {
-    TreeHolder aTree = getTargetTree();
-    OSL_ENSURE(aTree.isValid(), "ERROR: Target tree not set for change");
-    if (!aTree.isValid()) return 0;
-
-    NodeOffset nNode = getTargetNode();
-    OSL_ENSURE(aTree->isValidNode(nNode), "ERROR: Target node does not match tree");
-    if (!aTree->isValidNode(nNode)) return 0;
-
-    return aTree->parent(nNode);
-}
-//-----------------------------------------------------------------------------
-
-NodeOffset ValueChangeImpl::doGetChangingNode() const
-{
-    return getTargetNode();
-}
-//-----------------------------------------------------------------------------
-
-RelativePath ValueChangeImpl::doGetOwningNodePath() const
-{
-    return RelativePath();
+    if ( !sNodeName.isEmpty() || !aAffectedTree.isValid() )
+    {
+        NodeChangeImpl::setAffected(aAffectedTree,nParentNode);
+        m_aName = sNodeName;
+    }
+    else
+    {
+        OSL_ENSURE(false, "ValueChangeTarget is being set without a name");
+        NodeChangeImpl::setAffected(aAffectedTree,aAffectedTree->parent(nParentNode));
+        m_aName = aAffectedTree->name(nParentNode);
+    }
 }
 //-----------------------------------------------------------------------------
 
 RelativePath ValueChangeImpl::doGetChangingNodePath() const
 {
-    TreeHolder aTree = getTargetTree();
-    OSL_ENSURE(aTree.isValid(), "ERROR: Target tree not set for change");
+    return RelativePath( m_aName );
+}
+//-----------------------------------------------------------------------------
 
-    NodeOffset nNode = getTargetNode();
-    OSL_ENSURE(aTree->isValidNode(nNode), "ERROR: Target node does not match tree");
-
-    return RelativePath(aTree->node(nNode)->name());
+bool ValueChangeImpl::doIsChangingSubnode() const
+{
+    return ! m_aName.isEmpty();
 }
 //-----------------------------------------------------------------------------
 
@@ -401,24 +348,28 @@ bool ValueChangeImpl::doFillChange(NodeChangeData& rChange) const
 
 void ValueChangeImpl::doTest( Node& rTarget)
 {
-    OSL_ENSURE(rTarget.isValueNode(), "ERROR: Configuration: Target type mismatch: expected a value node");
-    ValueNodeImpl& rValueTarget = rTarget.valueImpl();
+    OSL_ENSURE(rTarget.isGroupNode(), "ERROR: Configuration: Target type mismatch: expected a group node holding the value");
+    ValueMemberNode aValueTarget = rTarget.groupImpl().getValue( m_aName );
 
-    preCheckValue(rValueTarget, m_aOldValue, m_aNewValue);
+    OSL_ENSURE(aValueTarget.isValid(), "ERROR: Configuration: Target missing: could not find the changing value");
+
+    preCheckValue(aValueTarget, m_aOldValue, m_aNewValue);
 }
 //-----------------------------------------------------------------------------
 
 void ValueChangeImpl::doApply( Node& rTarget)
 {
-    OSL_ENSURE(rTarget.isValueNode(), "ERROR: Configuration: Target type mismatch: expected a value node");
-    ValueNodeImpl& rValueTarget = rTarget.valueImpl();
+    OSL_ENSURE(rTarget.isGroupNode(), "ERROR: Configuration: Target type mismatch: expected a group node holding the value");
+    ValueMemberUpdate aValueTarget = rTarget.groupImpl().getValueForUpdate( m_aName );
 
-    doApplyChange(rValueTarget);
-    postCheckValue(rValueTarget, m_aNewValue); // Sideeffect: m_aNewValue will be changed
+    OSL_ENSURE(aValueTarget.isValid(), "ERROR: Configuration: Target missing: could not find the changing value");
+
+    doApplyChange(aValueTarget);
+    postCheckValue(aValueTarget.getNode(), m_aNewValue); // Sideeffect: m_aNewValue will be changed
 }
 //-----------------------------------------------------------------------------
 
-void ValueChangeImpl::preCheckValue(ValueNodeImpl& rNode, UnoAny& rOld, UnoAny& )
+void ValueChangeImpl::preCheckValue(ValueMemberNode& rNode, UnoAny& rOld, UnoAny& )
 {
     UnoAny aPrevValue = rNode.getValue();
     OSL_ENSURE(!rOld.hasValue() || rOld == aPrevValue, "ERROR: Configuration: Stored old value of target does not match the actual value");
@@ -426,7 +377,7 @@ void ValueChangeImpl::preCheckValue(ValueNodeImpl& rNode, UnoAny& rOld, UnoAny& 
 }
 //-----------------------------------------------------------------------------
 
-void ValueChangeImpl::postCheckValue(ValueNodeImpl& rNode, UnoAny& rNew)
+void ValueChangeImpl::postCheckValue(ValueMemberNode& rNode, UnoAny& rNew)
 {
     UnoAny aResultValue = rNode.getValue();
     OSL_ENSURE(!rNew.hasValue() || rNew == aResultValue, "ERROR: Configuration: New value of target does not match the predicted result");
@@ -450,7 +401,7 @@ ValueReplaceImpl::ValueReplaceImpl(UnoAny const& aNewValue, UnoAny const& aOldVa
 }
 //-----------------------------------------------------------------------------
 
-void ValueReplaceImpl::doApplyChange( ValueNodeImpl& rNode)
+void ValueReplaceImpl::doApplyChange( ValueMemberUpdate& rNode)
 {
     rNode.setValue(getNewValue());
 }
@@ -478,7 +429,7 @@ ValueResetImpl::ValueResetImpl(UnoAny const& aNewValue, UnoAny const& aOldValue)
 }
 //-----------------------------------------------------------------------------
 
-void ValueResetImpl::doApplyChange( ValueNodeImpl& rNode)
+void ValueResetImpl::doApplyChange( ValueMemberUpdate& rNode)
 {
     rNode.setDefault();
 }
@@ -492,7 +443,7 @@ bool ValueResetImpl::doFillChange( NodeChangeData& rChange) const
 }
 //-----------------------------------------------------------------------------
 
-void ValueResetImpl::preCheckValue(ValueNodeImpl& rNode, UnoAny& rOld, UnoAny& rNew)
+void ValueResetImpl::preCheckValue(ValueMemberNode& rNode, UnoAny& rOld, UnoAny& rNew)
 {
     ValueChangeImpl::preCheckValue(rNode,rOld,rNew);
 
@@ -532,12 +483,6 @@ void DeepValueReplaceImpl::setBaseContext(TreeHolder const& aBaseTree, NodeOffse
 }
 //-----------------------------------------------------------------------------
 
-RelativePath DeepValueReplaceImpl::doGetOwningNodePath() const
-{
-    return doGetChangingNodePath().parent();
-}
-//-----------------------------------------------------------------------------
-
 RelativePath DeepValueReplaceImpl::doGetChangingNodePath() const
 {
     return m_aNestedPath;
@@ -566,34 +511,21 @@ SetChangeImpl::SetChangeImpl(Name const& aName, bool bNoCheck)
 }
 //-----------------------------------------------------------------------------
 
-NodeOffset SetChangeImpl::doGetOwningNode() const
+void SetChangeImpl::setTarget(TreeHolder const& aAffectedTree, NodeOffset nAffectedNode)
 {
-    return getTargetNode();
-}
-//-----------------------------------------------------------------------------
-
-NodeOffset SetChangeImpl::doGetChangingNode() const
-{
-    TreeHolder aTree = doGetChangingTree();
-    return aTree.isValid() ? aTree->root() : 0;
-}
-//-----------------------------------------------------------------------------
-
-TreeHolder SetChangeImpl::doGetChangingTree() const
-{
-    return TreeHolder();
-}
-//-----------------------------------------------------------------------------
-
-RelativePath SetChangeImpl::doGetOwningNodePath() const
-{
-    return RelativePath();
+    NodeChangeImpl::setAffected(aAffectedTree,nAffectedNode);
 }
 //-----------------------------------------------------------------------------
 
 RelativePath SetChangeImpl::doGetChangingNodePath() const
 {
     return RelativePath(getElementName());
+}
+//-----------------------------------------------------------------------------
+
+bool SetChangeImpl::doIsChangingSubnode() const
+{
+    return false;
 }
 //-----------------------------------------------------------------------------
 

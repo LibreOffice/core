@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ RootTree createUpdatableTree(   AbsolutePath const& aContextPath,
 //-----------------------------------------------------------------------------
 bool adjustToChanges(   NodeChangesInformation& rLocalChanges,
                         Tree const& aBaseTree, NodeRef const& aBaseNode,
-                        Change const& aExternalChange)
+                        SubtreeChange const& aExternalChange)
 {
     OSL_PRECOND( !aBaseTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND(  aBaseTree.isValidNode(aBaseNode), "ERROR: Configuration: NodeRef does not match Tree");
@@ -137,18 +137,9 @@ bool CommitHelper::prepareCommit(TreeChangeList& rChangeList)
         return false;
 
     // get and check the changes
-    std::auto_ptr<Change> pBaseChange(m_pTree->legacyCommitChanges());
-    if (pBaseChange.get() == NULL)
+    std::auto_ptr<SubtreeChange> pTreeChange(m_pTree->preCommitChanges());
+    if (pTreeChange.get() == NULL)
         return false;
-
-    OSL_ENSURE(pBaseChange->ISA(SubtreeChange),"Cannot commit non-tree nodes");
-    if (!pBaseChange->ISA(SubtreeChange))
-    {
-        m_pTree->legacyRevertCommit(*pBaseChange);
-        return false;
-    }
-
-    std::auto_ptr<SubtreeChange> pTreeChange( static_cast<SubtreeChange*>(pBaseChange.release()) );
 
     // find the name and path of the change
     Name aRootName(m_pTree->name(m_pTree->root()));
@@ -176,7 +167,7 @@ void CommitHelper::finishCommit(TreeChangeList& rChangeList)
     if (rChangeList.pathToRoot.fullName() != aPath.toString())
         throw configuration::Exception("INTERNAL ERROR: FinishCommit cannot handle rebased changes trees");
 
-    m_pTree->legacyFinishCommit(rChangeList.root);
+    m_pTree->finishCommit(rChangeList.root);
 }
 //-----------------------------------------------------------------------------
 
@@ -191,7 +182,7 @@ void CommitHelper::revertCommit(TreeChangeList& rChangeList)
     if (rChangeList.pathToRoot.fullName() != aPath.toString())
         throw configuration::Exception("INTERNAL ERROR: RevertCommit cannot handle rebased changes trees");
 
-    m_pTree->legacyRevertCommit(rChangeList.root);
+    m_pTree->revertCommit(rChangeList.root);
 }
 //-----------------------------------------------------------------------------
 
@@ -206,7 +197,7 @@ void CommitHelper::failedCommit(TreeChangeList& rChangeList)
     if (rChangeList.pathToRoot.fullName() != aPath.toString())
         throw configuration::Exception("INTERNAL ERROR: FailedCommit cannot handle rebased changes trees");
 
-    m_pTree->legacyFailedCommit(rChangeList.root);
+    m_pTree->recoverFailedCommit(rChangeList.root);
 }
 //-----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeinfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:21:19 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,20 +174,22 @@ NodeID NodeChangeData::getOldElementNodeID() const
 NodeChangeLocation::NodeChangeLocation()
 : m_path()
 , m_base(0,0)
-, m_target(0,0)
-, m_changed(0,0)
+, m_affected(0,0)
+, m_bSubNodeChanging(false)
 {
 }
 //-----------------------------------------------------------------------------
-
 bool NodeChangeLocation::isValidLocation() const
 {
     // TODO: Validate that base,target and accessor relate correctly (?)
     return   m_base.isValidNode() &&
-            (m_target.isEmpty()
-                ?   m_changed.isEmpty()
-                :   ( m_target.isValidNode() &&
-                      (m_changed.isEmpty() || m_changed.isValidNode()) ) );
+            (m_affected.isEmpty()
+                ?   ! m_bSubNodeChanging
+                :   ( m_affected.isValidNode() &&
+                      (! m_bSubNodeChanging ||
+                         (!m_path.isEmpty() &&
+                            SubNodeID(m_affected,m_path.getLocalName()).isValidNode()
+                    ) )  ) );
 }
 //-----------------------------------------------------------------------------
 
@@ -203,21 +205,20 @@ void NodeChangeLocation::setBase(NodeID const& aBaseNode)
 }
 //-----------------------------------------------------------------------------
 
-void NodeChangeLocation::setTarget(NodeID const& aTargetNode)
+void NodeChangeLocation::setAffected(NodeID const& aTargetNode)
 {
-    m_target = aTargetNode;
+    m_affected = aTargetNode;
 
     if (m_base.isEmpty())
         setBase(aTargetNode);
 }
 //-----------------------------------------------------------------------------
 
-void NodeChangeLocation::setChanging(NodeID const& aChangedNode)
+void NodeChangeLocation::setChangingSubnode( bool bSubnode )
 {
-    m_changed = aChangedNode;
+    OSL_ENSURE(!m_affected.isEmpty() || !bSubnode, "Change without target cannot affect subnode");
 
-    if (m_target.isEmpty())
-        setTarget(aChangedNode);
+    m_bSubNodeChanging = bSubnode;
 }
 //-----------------------------------------------------------------------------
 
@@ -252,15 +253,23 @@ NodeRef NodeChangeLocation::getAffectedNode() const
 
 NodeID NodeChangeLocation::getAffectedNodeID() const
 {
-    OSL_ENSURE(m_target.isEmpty() || m_target.isValidNode(), "Invalid target location set in NodeChangeLocation");
-    return m_target;
+    OSL_ENSURE(m_affected.isEmpty() || m_affected.isValidNode(), "Invalid target location set in NodeChangeLocation");
+    return m_affected;
 }
 //-----------------------------------------------------------------------------
 
-NodeID NodeChangeLocation::getChangedNodeID() const
+SubNodeID NodeChangeLocation::getChangingValueID() const
 {
-    OSL_ENSURE(m_changed.isEmpty() || m_changed.isValidNode(), "Invalid change location set in NodeChangeLocation");
-    return m_changed;
+    if (!m_bSubNodeChanging) return SubNodeID::createEmpty();
+
+    OSL_ENSURE(!m_affected.isEmpty() && m_affected.isValidNode(), "Invalid target location set in NodeChangeLocation with subnode");
+    OSL_ENSURE(!m_path.isEmpty(), "No target accessor set in NodeChangeLocation with subnode");
+
+    SubNodeID aResult( m_affected, m_path.getLocalName() );
+
+    OSL_ENSURE(aResult.isValidNode(), "Invalid change location set in NodeChangeLocation");
+
+    return aResult;
 }
 //-----------------------------------------------------------------------------
     }
