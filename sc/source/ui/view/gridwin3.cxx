@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:36:22 $
+ *  last change: $Author: nn $ $Date: 2000-12-20 18:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,6 +383,14 @@ void ScGridWindow::OutlinerViewPaint( const Rectangle& rRect )
                     Rectangle aEffRect = rRect.GetIntersection( aEditRect );
                     if (bFrame)
                     {
+                        if ( pEditObj->GetLayer() ==SC_LAYER_INTERN )   // cell note?
+                        {
+                            //  #78828# always draw the edit background in case notes overlap
+                            SetFillColor( pOlView->GetBackgroundColor() );
+                            SetLineColor();
+                            DrawRect( aEffRect );
+                        }
+
                         //  RedrawOneLayer mit dem Text-Rechteck zeichnet nur die Outliner-View
                         //  und den Text-Rahmen (an den kommt man sonst von aussen nicht heran).
 
