@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-10 15:41:22 $
+ *  last change: $Author: mt $ $Date: 2002-06-12 10:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4172,6 +4172,7 @@ Window::Window( Window* pParent, const ResId& rResId ) :
 Window::~Window()
 {
     DBG_DTOR( Window, ImplDbgCheckWindow );
+    DBG_ASSERT( !mbInDtor, "~Window - already in DTOR!" );
 
     mbInDtor = TRUE;
 
@@ -4221,12 +4222,15 @@ Window::~Window()
     if ( pWrapper )
         pWrapper->WindowDestroyed( this );
 
-   if ( mxAccessible.is() )
-   {
-      ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xC( mxAccessible, ::com::sun::star::uno::UNO_QUERY );
-      if ( xC.is() )
-         xC->dispose();
-   }
+    // MT: Must be called after WindowDestroyed!
+    // Otherwise, if the accessible is a VCLXWindow, it will try to destroy this window again!
+    // But accessibility implementations from applications need this dispose.
+    if ( mxAccessible.is() )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xC( mxAccessible, ::com::sun::star::uno::UNO_QUERY );
+        if ( xC.is() )
+            xC->dispose();
+    }
 
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -7844,10 +7848,10 @@ String Window::GetAccessibleName() const
     {
         switch ( GetType() )
         {
-            case WINDOW_IMAGERADIOBUTTON:
-            case WINDOW_RADIOBUTTON:
-            case WINDOW_TRISTATEBOX:
-            case WINDOW_CHECKBOX:
+//            case WINDOW_IMAGERADIOBUTTON:
+//            case WINDOW_RADIOBUTTON:
+//            case WINDOW_TRISTATEBOX:
+//            case WINDOW_CHECKBOX:
 
             case WINDOW_MULTILINEEDIT:
             case WINDOW_PATTERNFIELD:
@@ -7859,9 +7863,16 @@ String Window::GetAccessibleName() const
 
             case WINDOW_DATEBOX:
             case WINDOW_TIMEBOX:
+            case WINDOW_CURRENCYBOX:
+            case WINDOW_LONGCURRENCYBOX:
             case WINDOW_DATEFIELD:
             case WINDOW_TIMEFIELD:
             case WINDOW_SPINFIELD:
+
+            case WINDOW_COMBOBOX:
+            case WINDOW_LISTBOX:
+            case WINDOW_MULTILISTBOX:
+
             {
                 Window *pLabel = GetLabeledBy();
                 if( pLabel )
@@ -8026,3 +8037,17 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
     SetFillColor( oldFillCol );
     SetLineColor( oldLineCol );
 }
+
+/*
+void Window::DbgAssertNoEventListeners()
+{
+    VclWindowEvent aEvent( this, 0, NULL );
+    DBG_ASSERT( maEventListeners.empty(), "Eventlistener: Who is still listening???" )
+    if ( !maEventListeners.empty() )
+        maEventListeners.Call( &aEvent );
+
+    DBG_ASSERT( maChildEventListeners.empty(), "ChildEventlistener: Who is still listening???" )
+    if ( !maChildEventListeners.empty() )
+        maChildEventListeners.Call( &aEvent );
+}
+*/
