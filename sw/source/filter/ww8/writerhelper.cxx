@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:39:39 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,12 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>          //SwDoc
 #endif
+#ifndef _SWTABLE_HXX
+#include <swtable.hxx>      //SwTable
+#endif
+#ifndef _FRMFMT_HXX
+#include <frmfmt.hxx>       //SwFrmFmt
+#endif
 #ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>   //SdrObject
 #endif
@@ -79,6 +85,9 @@
 #endif
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>   //FmFormInventor
+#endif
+#ifndef _SVX_BRKITEM_HXX
+#include <svx/brkitem.hxx>  //SvxFmtBreakItem
 #endif
 
 namespace
@@ -226,6 +235,26 @@ namespace sw
         {
             std::sort(rStyles.begin(), rStyles.end(), outlinecmp());
         }
+
+        bool HasPageBreak(const SwNode &rNd)
+        {
+            const SvxFmtBreakItem *pBreak = 0;
+            if (rNd.IsTableNode() && rNd.GetTableNode())
+            {
+                const SwTable& rTable = rNd.GetTableNode()->GetTable();
+                const SwFrmFmt* pApply = rTable.GetFrmFmt();
+                ASSERT(pApply, "impossible");
+                if (pApply)
+                    pBreak = &(ItemGet<SvxFmtBreakItem>(*pApply, RES_BREAK));
+            }
+            else if (const SwCntntNode *pNd = rNd.GetCntntNode())
+                pBreak = &(ItemGet<SvxFmtBreakItem>(*pNd, RES_BREAK));
+
+            if (pBreak && pBreak->GetBreak() == SVX_BREAK_PAGE_BEFORE)
+                return true;
+            return false;
+        }
+
     }
 }
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
