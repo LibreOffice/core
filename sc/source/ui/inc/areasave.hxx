@@ -2,9 +2,9 @@
  *
  *  $RCSfile: areasave.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-30 11:35:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
+#endif
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 class ScDocument;
