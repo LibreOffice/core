@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-12-14 09:07:32 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,9 @@ class SmParser
     SmParser & operator = (const SmParser &);
 
 protected:
+#if OSL_DEBUG_LEVEL
     BOOL            IsDelimiter( const String &rTxt, xub_StrLen nPos );
+#endif
     void            NextToken();
     xub_StrLen      GetTokenIndex() const   { return nTokenIndex; }
     void            Insert(const String &rText, USHORT nPos);
@@ -279,7 +281,6 @@ protected:
 public:
                  SmParser();
 
-    BOOL         CheckSyntax(const String &rBuffer);
     SmNode      *Parse(const String &rBuffer);
 
     const String & GetText() const { return BufferString; };
