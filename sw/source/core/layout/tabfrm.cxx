@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:25:23 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 11:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,6 +896,9 @@ bool lcl_FindObjectsInRow( const SwRowFrm& rRow )
     SwCellFrm* pLower = (SwCellFrm*)rRow.Lower();
     while ( pLower )
     {
+        if ( pLower->IsVertical() != rRow.IsVertical() )
+            return true;
+
         SwFrm* pTmpFrm = pLower->Lower();
         while ( pTmpFrm )
         {
@@ -2788,6 +2791,8 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
             pRet = ((SwSectionFrm*)pRet)->FindLastCntnt();
     }
 
+//  ASSERT( pRet && pRet->IsCntntFrm(), "FindLastCntnt is going to return unexpected result" )
+
     return (SwCntntFrm*)pRet;
 }
 
@@ -3269,9 +3274,19 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
     return nHeight;
 }
 
-// OD 2004-02-18 #106629# - correct type of 1st parameter
-SwTwips MA_FASTCALL lcl_CalcMinCellHeight( SwCellFrm* _pCell,
-                                           const SwBorderAttrs* _pAttrs = 0 )
+SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm& rCell, const SwBorderAttrs& rAttrs )
+{
+    const SwTabFrm* pTab = rCell.FindTabFrm();
+    if ( pTab->IsVertical() != rCell.IsVertical() )
+        return rAttrs.CalcLeft( &rCell ) + rAttrs.CalcRight( &rCell );
+    else
+        return rAttrs.CalcTop() + rAttrs.CalcBottom();
+}
+
+SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwLayoutFrm *pRow );
+
+SwTwips MA_FASTCALL lcl_CalcMinCellHeight( SwLayoutFrm *pCell,
+                                  const SwBorderAttrs *pAttrs = 0 )
 {
     SWRECTFN( _pCell )
     SwTwips nHeight = 0;
@@ -3305,13 +3320,13 @@ SwTwips MA_FASTCALL lcl_CalcMinCellHeight( SwCellFrm* _pCell,
     //Kombination ungueltig sein koennen.
     if ( _pCell->Lower() )
     {
-        if ( _pAttrs )
-            nHeight += _pAttrs->CalcTop() + _pAttrs->CalcBottom();
+        if ( pAttrs )
+            nHeight += lcl_CalcTopAndBottomMargin( *pCell, *pAttrs );
         else
         {
             SwBorderAttrAccess aAccess( SwFrm::GetCache(), _pCell );
             const SwBorderAttrs &rAttrs = *aAccess.Get();
-            nHeight += rAttrs.CalcTop() + rAttrs.CalcBottom();
+            nHeight += lcl_CalcTopAndBottomMargin( *pCell, rAttrs );
         }
     }
     return nHeight;
@@ -3333,8 +3348,8 @@ SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwRowFrm* _pRow )
     SwCellFrm* pLow = static_cast<SwCellFrm*>(_pRow->Lower());
     while ( pLow )
     {
-        SwTwips nTmp = ::lcl_CalcMinCellHeight( pLow );
-        if ( nTmp > nHeight )
+    SwTwips nTmp = ::lcl_CalcMinCellHeight( pLow );
+        if ( ( 0 != pLow->IsVertical() ) == ( 0 != bVert ) && nTmp > nHeight )
             nHeight = nTmp;
         pLow = static_cast<SwCellFrm*>(pLow->GetNext());
     }
@@ -3840,7 +3855,9 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
 void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
 {
     ASSERT( pAttrs, "CellFrm::Format, pAttrs ist 0." );
-    SWRECTFN( this )
+    const SwTabFrm* pTab = FindTabFrm();
+    SWRECTFN( pTab )
+
     if ( !bValidPrtArea )
     {
         bValidPrtArea = TRUE;
@@ -3875,7 +3892,6 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         SwTwips nWidth;
         if ( GetNext() )
         {
-            const SwTabFrm *pTab = FindTabFrm();
             SwTwips nWish = pTab->GetFmt()->GetFrmSize().GetWidth();
             nWidth = pAttrs->GetSize().Width();
 
@@ -3892,8 +3908,6 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                 nTmpWidth *= nPrtWidth;
                 nTmpWidth /= nWish;
                 nWidth = (SwTwips)nTmpWidth;
-//                nWidth *= nPrtWidth;
-//              nWidth /= nWish;
             }
         }
         else
@@ -3940,6 +3954,9 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
     if ( !Lower() )
         return;
 
+    // From now on, all operations are related to the table cell.
+    SWREFRESHFN( this )
+
     if ( !FindTabFrm()->IsRebuildLastLine() && VERT_NONE != rOri.GetVertOrient() )
     {
         if ( !Lower()->IsCntntFrm() && !Lower()->IsSctFrm() )
@@ -3984,11 +4001,10 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                 }
             }
         }
+
         long nPrtHeight = (Prt().*fnRect->fnGetHeight)();
-        if( ( bVertDir && ( nRemaining -= (pAttrs->CalcTop() +
-                            pAttrs->CalcBottom())) < nPrtHeight ) ||
-            (Lower()->Frm().*fnRect->fnGetTop)() !=
-            (this->*fnRect->fnGetPrtTop)() )
+        if( ( bVertDir && ( nRemaining -= lcl_CalcTopAndBottomMargin( *this, *pAttrs ) ) < nPrtHeight ) ||
+            (Lower()->Frm().*fnRect->fnGetTop)() != (this->*fnRect->fnGetPrtTop)() )
         {
             long lTopOfst = 0,
                     nDiff = (Prt().*fnRect->fnGetHeight)() - nRemaining;
@@ -4028,6 +4044,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
 |*    Letzte Aenderung  MA 20. Dec. 96
 |*
 |*************************************************************************/
+
 void SwCellFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
 {
     BOOL bAttrSetChg = pNew && RES_ATTRSET_CHG == pNew->Which();
@@ -4056,13 +4073,20 @@ void SwCellFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
         }
     }
 
-    if( (bAttrSetChg &&
-         SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_PROTECT, FALSE )) ||
-        RES_PROTECT == pNew->Which() )
+    if ( ( bAttrSetChg &&
+           SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_PROTECT, FALSE ) ) ||
+         RES_PROTECT == pNew->Which() )
     {
         ViewShell *pSh = GetShell();
         if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
             pSh->Imp()->InvalidateAccessibleEditableState( sal_True, this );
+    }
+
+    if ( bAttrSetChg &&
+         SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_FRAMEDIR, FALSE, &pItem ) )
+    {
+        SetDerivedVert( FALSE );
+        CheckDirChange();
     }
 
     SwLayoutFrm::Modify( pOld, pNew );
