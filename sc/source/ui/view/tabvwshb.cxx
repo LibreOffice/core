@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-05 16:48:23 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 15:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include <so3/soerr.hxx>
 #include <svtools/rectitem.hxx>
 #include <svtools/whiter.hxx>
+#include <svtools/moduleoptions.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
 #include <sch/schdll0.hxx>
@@ -190,7 +191,7 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             ((ScClient*)(SfxInPlaceClient*)xClient)->SetGrafEdit( NULL );
 
             //  Link fuer Daten-Highlighting im Chart setzen
-            if ( SFX_APP()->HasFeature(SFX_FEATURE_SCHART) )
+            if ( SvtModuleOptions().IsChart() )
             {
                 SvGlobalName aObjClsId = *xIPObj->GetSvFactory();
                 if (SchModuleDummy::HasID( aObjClsId ))
@@ -414,17 +415,12 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
         {
             case SID_INSERT_DIAGRAM:
             case SID_OPENDLG_CHART:
-                if ( bOle || bTabProt || !pSfxApp->HasFeature(SFX_FEATURE_SCHART) )
-                    rSet.DisableItem( nWhich );
-                break;
-
-            case SID_INSERT_SIMAGE:
-                if ( bOle || bTabProt || !pSfxApp->HasFeature(SFX_FEATURE_SIMAGE) )
+                if ( bOle || bTabProt || !SvtModuleOptions().IsChart() )
                     rSet.DisableItem( nWhich );
                 break;
 
             case SID_INSERT_SMATH:
-                if ( bOle || bTabProt || !pSfxApp->HasFeature(SFX_FEATURE_SMATH) )
+                if ( bOle || bTabProt || !SvtModuleOptions().IsMath() )
                     rSet.DisableItem( nWhich );
                 break;
 
