@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:34:34 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ String STR_TEXTCOLL_HEADER
     TEXT [ italian ] = "(Modello di paragrafo: " ;
     TEXT [ portuguese_brazilian ] = "(Estilo de Parágrafo: " ;
     TEXT [ portuguese ] = "(Estilo de parágrafo: " ;
-    TEXT [ finnish ] = " (Kappaletyyli: " ;
+    TEXT [ finnish ] = "(Kappaleen tyyli: " ;
     TEXT [ danish ] = "(Afsnitstypografi: " ;
     TEXT [ french ] = "(Style de paragraphe : " ;
     TEXT [ swedish ] = "(Styckeformatmall:  " ;
@@ -95,7 +95,7 @@ String STR_PAGEFMT_HEADER
     TEXT [ italian ] = "(Modello di pagina: " ;
     TEXT [ portuguese_brazilian ] = "(Estilo de Página: " ;
     TEXT [ portuguese ] = "(Estilo de página: " ;
-    TEXT [ finnish ] = " (Sivutyyli: " ;
+    TEXT [ finnish ] = "(Sivun tyyli: " ;
     TEXT [ danish ] = "(Sidetypografi: " ;
     TEXT [ french ] = "(Style de page : " ;
     TEXT [ swedish ] = "(Sidformatmall:  " ;
@@ -122,7 +122,7 @@ String SW_STR_NONE
     Text [ italian ] = "[Nessuno]" ;
     Text [ portuguese_brazilian ] = "[Nenhum]" ;
     Text [ portuguese ] = "[Nenhum]" ;
-    Text [ finnish ] = "[Ei ole]" ;
+    Text [ finnish ] = "[Ei mitään]" ;
     Text [ danish ] = "[Ingen]" ;
     Text [ french ] = "[Aucun(e)]" ;
     Text [ swedish ] = "[Ingen]" ;
@@ -152,7 +152,7 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE [ italian ] = "Impossibile usare il numero pagina alla pagina corrente. I numeri pari possono essere usati sulle pagine sinistre, i numeri dispari sulle pagine destre." ;
     MESSAGE [ portuguese_brazilian ] = "Número de página não pode ser aplicado à página atual.  Números pares podem ser utilizados em páginas esquerdas, números ímpares em páginas direitas." ;
     MESSAGE [ portuguese ] = "Número de página não pode ser atribuído à página actual. Nas páginas da esquerda podem apenas ser usados números pares e nas páginas da direita números ímpares." ;
-    MESSAGE [ finnish ] = "Sivunumeroa ei voi lisätä sivulle.  Parillista numeroa käytetään vasemmalla sivulla ja paritonta oikealla sivulla." ;
+    MESSAGE [ finnish ] = "Käsiteltävälle sivulle ei voi lisätä sivunumeroita.  Parillisia numeroita voi käyttää vasemmanpuoleisilla sivuilla, parittomia numeroita oikeanpuoleisilla." ;
     MESSAGE [ danish ] = "Sidetallet kan ikke indsættes. Der må kun bruges lige sidetal på venstre side og ulige sidetal på højre sider." ;
     MESSAGE [ french ] = "Le numéro de page ne peut être assigné à cette page. Les nombres pairs ne peuvent être utilisés que sur des pages de gauche, les nombres impairs que sur celles de droite." ;
     MESSAGE [ swedish ] = "Sidnumret kan inte sättas in på den här sidan. På vänstersidor får bara jämna nummer användas, på högersidor bara udda nummer." ;
