@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-27 15:31:48 $
+ *  last change: $Author: hdu $ $Date: 2001-11-29 15:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,17 +243,15 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
             break;
 
         case XRENDER_KIND:
-        {
-            GlyphSet aGlyphSet = GetGlyphSet( rServerFont );
-            Glyph nGlyphId = GetGlyphId( rServerFont, nGlyphIndex );
-            // TODO: current version of XRENDER does not implement XRenderFreeGlyphs()
-            // (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
-            mnBytesUsed -= nHeight * ((nWidth + 3) & ~3);
-
+            {
+                GlyphSet aGlyphSet = GetGlyphSet( rServerFont );
+                Glyph nGlyphId = GetGlyphId( rServerFont, nGlyphIndex );
+                // TODO: current version of XRENDER does not implement XRenderFreeGlyphs()
+                // (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
+                mnBytesUsed -= nHeight * ((nWidth + 3) & ~3);
+            }
             break;
-        }
     }
-
 
     if( mnBytesUsed < 0 )   // TODO: eliminate nBytesUsed calc mismatch
         mnBytesUsed = 0;
@@ -317,7 +315,9 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
     Pixmap aPixmap = None;
     GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
 
-    if( ( rGlyphData.GetExtInfo() == EMPTY_KIND ) )
+    if( rGlyphData.GetExtInfo() == PIXMAP_KIND )
+        aPixmap = (Pixmap)rGlyphData.GetExtPointer();
+    else
     {
         if( rServerFont.GetGlyphBitmap1( nGlyphIndex, maRawBitmap ) )
         {
@@ -372,17 +372,21 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
                 for( int i = nBytes; --i >= 0; ++pTemp )
                     *pTemp = lsb2msb[ *pTemp ];
 
-                aPixmap = XCreatePixmapFromBitmapData( mpDisplay,
-                    DefaultRootWindow( mpDisplay ), (char*)maRawBitmap.mpBits,
-                    nPixmapWidth, maRawBitmap.mnHeight, 1, 0, 1 );
-                mnBytesUsed += nBytes;
+                 aPixmap = XCreatePixmapFromBitmapData( mpDisplay,
+                 DefaultRootWindow( mpDisplay ), (char*)maRawBitmap.mpBits,
+                 nPixmapWidth, maRawBitmap.mnHeight, 1, 0, 1 );
+                 mnBytesUsed += nBytes;
             }
+        }
+        else
+        {
+            // fall back to .notdef glyph
+            if( nGlyphIndex != 0 )  // recurse only once
+                aPixmap = GetPixmap( rServerFont, 0 );
         }
 
         rGlyphData.SetExtended( PIXMAP_KIND, (void*)aPixmap );
     }
-    else
-        aPixmap = (Pixmap)rGlyphData.GetExtPointer();
 
     return aPixmap;
 }
@@ -392,26 +396,28 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
 const RawBitmap* X11GlyphPeer::GetRawBitmap( ServerFont& rServerFont,
     int nGlyphIndex )
 {
-    RawBitmap* pRawBitmap = NULL;
-
+    const RawBitmap* pRawBitmap = NULL;
     GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
+
     if( rGlyphData.GetExtInfo() == AAFORCED_KIND )
         pRawBitmap = (RawBitmap*)rGlyphData.GetExtPointer();
     else
     {
-        pRawBitmap = new RawBitmap;
-        pRawBitmap->mpBits = NULL;
-        pRawBitmap->mnAllocated = 0;
-        if( !rServerFont.GetGlyphBitmap8( nGlyphIndex, *pRawBitmap ) )
+        RawBitmap* pNewBitmap = new RawBitmap;
+        if( rServerFont.GetGlyphBitmap8( nGlyphIndex, *pNewBitmap ) )
         {
-            delete pRawBitmap;
-            if( nGlyphIndex == 0 )
-                return NULL;
-            return GetRawBitmap( rServerFont, 0 );
+            pRawBitmap = pNewBitmap;
+            mnBytesUsed += pRawBitmap->mnScanlineSize * pRawBitmap->mnHeight;
+            mnBytesUsed += sizeof(RawBitmap);
+        }
+        else
+        {
+            delete pNewBitmap;
+            // fall back to .notdef glyph
+            if( nGlyphIndex != 0 )  // recurse only once
+                pRawBitmap = GetRawBitmap( rServerFont, 0 );
         }
 
-        mnBytesUsed += pRawBitmap->mnScanlineSize * pRawBitmap->mnHeight;
-        mnBytesUsed += sizeof(RawBitmap);
         rGlyphData.SetExtended( AAFORCED_KIND, (void*)pRawBitmap );
     }
 
@@ -422,7 +428,7 @@ const RawBitmap* X11GlyphPeer::GetRawBitmap( ServerFont& rServerFont,
 
 Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
 {
-    Glyph aGlyphId;
+    Glyph aGlyphId = 0;
     GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
 
     if( rGlyphData.GetExtInfo() == XRENDER_KIND )
@@ -430,31 +436,37 @@ Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
     else
     {
         // prepare GlyphInfo and Bitmap
-        if( !rServerFont.GetGlyphBitmap8( nGlyphIndex, maRawBitmap ) )
-            return GetGlyphId( rServerFont, 0 );
+        if( rServerFont.GetGlyphBitmap8( nGlyphIndex, maRawBitmap ) )
+        {
+            XGlyphInfo aGlyphInfo;
+            aGlyphInfo.width    = maRawBitmap.mnWidth;
+            aGlyphInfo.height   = maRawBitmap.mnHeight;
+            aGlyphInfo.x        = -maRawBitmap.mnXOffset;
+            aGlyphInfo.y        = -maRawBitmap.mnYOffset;
 
-        XGlyphInfo aGlyphInfo;
-        aGlyphInfo.width    = maRawBitmap.mnWidth;
-        aGlyphInfo.height   = maRawBitmap.mnHeight;
-        aGlyphInfo.x        = -maRawBitmap.mnXOffset;
-        aGlyphInfo.y        = -maRawBitmap.mnYOffset;
+            rGlyphData.SetSize( Size( maRawBitmap.mnWidth, maRawBitmap.mnHeight ) );
+            rGlyphData.SetOffset( +maRawBitmap.mnXOffset, +maRawBitmap.mnYOffset );
 
-        rGlyphData.SetSize( Size( maRawBitmap.mnWidth, maRawBitmap.mnHeight ) );
-        rGlyphData.SetOffset( +maRawBitmap.mnXOffset, +maRawBitmap.mnYOffset );
+            const GlyphMetric& rGM = rGlyphData.GetMetric();
+            aGlyphInfo.xOff     = +rGM.GetDelta().X();
+            aGlyphInfo.yOff     = +rGM.GetDelta().Y();
 
-        const GlyphMetric& rGM = rGlyphData.GetMetric();
-        aGlyphInfo.xOff     = +rGM.GetDelta().X();
-        aGlyphInfo.yOff     = +rGM.GetDelta().Y();
+            // upload glyph bitmap to server
+            GlyphSet aGlyphSet = GetGlyphSet( rServerFont );
 
-        // upload glyph bitmap to server
-        GlyphSet aGlyphSet = GetGlyphSet( rServerFont );
+            aGlyphId = nGlyphIndex & 0x00FFFFFF;
+            const ULONG nBytes = maRawBitmap.mnScanlineSize * maRawBitmap.mnHeight;
+            (*pXRenderAddGlyphs)( mpDisplay, aGlyphSet, &aGlyphId, &aGlyphInfo, 1,
+                (char*)maRawBitmap.mpBits, nBytes );
+            mnBytesUsed += nBytes;
+        }
+        else
+        {
+            // fall back to .notdef glyph
+            if( nGlyphIndex != 0 )  // recurse only once
+                aGlyphId = GetGlyphId( rServerFont, 0 );
+        }
 
-        aGlyphId = nGlyphIndex & 0x00FFFFFF;
-        const ULONG nBytes = maRawBitmap.mnScanlineSize * maRawBitmap.mnHeight;
-        (*pXRenderAddGlyphs)( mpDisplay, aGlyphSet, &aGlyphId, &aGlyphInfo, 1,
-            (char*)maRawBitmap.mpBits,  nBytes );
-
-        mnBytesUsed += nBytes;
         rGlyphData.SetExtended( XRENDER_KIND, (void*)aGlyphId );
     }
 
