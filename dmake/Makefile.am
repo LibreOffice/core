@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Makefile.am,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mh $ $Date: 2001-06-13 13:34:05 $
+#   last change: $Author: hjs $ $Date: 2002-04-09 17:10:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,7 +61,7 @@
 #*************************************************************************
 
 # require automake 1.4
-AUTOMAKE_OPTIONS = 1.4
+AUTOMAKE_OPTIONS = 1.4 foreign
 
 
 

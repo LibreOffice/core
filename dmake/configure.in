@@ -7,6 +7,7 @@ dnl set the DMAKEROOT
 PACKAGE=dmake
 VERSION=4.2
 
+AC_PREREQ(1.4)
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 
 dnl Checks for programs.
