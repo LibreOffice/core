@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:05:25 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ czech ] = "Zobrazovat okraje v";
         Text[ hebrew ] = "~Rahmen anzeigen";
         Text[ hindi ] = "किनारे को इसमें दिखाओ";
+        Text[ slovak ] = "Zobrazovať okraje v";
     };
     ListBox LB_COLOR
     {
@@ -188,6 +189,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ czech ] = "Tisknout okraje";
         Text[ hebrew ] = "Rahmen drucken";
         Text[ hindi ] = "किनारे का छपाई";
+        Text[ slovak ] = "Tlačiť okraje";
     };
     CheckBox CB_TWOWAY
     {
@@ -221,6 +223,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ czech ] = "Kopírovat zpět";
         Text[ hebrew ] = "~Zurückkopieren";
         Text[ hindi ] = "फिर से प्रतिलिपि";
+        Text[ slovak ] = "Kopírovať späť";
     };
     CheckBox CB_ATTRIB
     {
@@ -254,6 +257,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ czech ] = "Atributy";
         Text[ hebrew ] = "‮תכונות‬";
         Text[ hindi ] = "ऐट्रिब्यूट्स";
+        Text[ slovak ] = "Atribúty";
     };
     CheckBox CB_VALUE
     {
@@ -287,6 +291,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ czech ] = "Kopírovat pouze hodnoty";
         Text[ hebrew ] = "Nur Werte kopieren";
         Text[ hindi ] = "केवल मूल्य का प्रतिलिपि बनाओ";
+        Text[ slovak ] = "Kopírovať iba hodnoty";
     };
     CheckBox CB_COPYALL
     {
@@ -319,6 +324,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ czech ] = "Kopírovat celý list";
         Text[ hebrew ] = "Ganze ~Tabelle kopieren";
         Text[ hindi ] = "सम्पूर्ण शीट् का प्रतिलिपि बनाओ";
+        Text[ slovak ] = "Kopírovať celý list";
     };
     String STR_EDIT
     {
@@ -349,6 +355,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ czech ] = "Upravit scénář";
         Text[ hebrew ] = "Szenario bearbeiten";
         Text[ hindi ] = "विवरण का संपादन ";
+        Text[ slovak ] = "Upraviť scenár";
     };
     String STR_CREATEDBY
     {
@@ -380,6 +387,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ czech ] = "Autor";
         Text[ hebrew ] = "Angelegt von";
         Text[ hindi ] = "से उत्पन्न किया हुआ";
+        Text[ slovak ] = "Vytvorené";
     };
     String STR_ON
     {
@@ -411,6 +419,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ czech ] = "vytvořeno";
         Text[ hebrew ] = "am";
         Text[ hindi ] = "में";
+        Text[ slovak ] = "zapnúť";
     };
     FixedLine FL_NAME
     {
@@ -443,6 +452,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ czech ] = "Název scénáře";
         Text[ hebrew ] = "~Name des Szenarios";
         Text[ hindi ] = "विवरण का नाम";
+        Text[ slovak ] = "Názov scenára";
     };
     FixedLine FL_COMMENT
     {
@@ -475,6 +485,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ czech ] = "Poznámka";
         Text[ hebrew ] = "‮הערות‬";
         Text[ hindi ] = "अपवाद";
+        Text[ slovak ] = "Komentár";
     };
     FixedLine FL_OPTIONS
     {
@@ -507,6 +518,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ czech ] = "Nastavení";
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
+        Text[ slovak ] = "Nastavenia";
     };
     Text[ chinese_simplified ] = "建立方案";
     Text[ russian ] = "������� ��������";
@@ -523,7 +535,10 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     Text[ czech ] = "Vytvořit scénář";
     Text[ hebrew ] = "Szenario anlegen";
     Text[ hindi ] = "Create Scenario";
+    Text[ slovak ] = "Vytvoriť scenár";
 };
+
+
 
 
 
