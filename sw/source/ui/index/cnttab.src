@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: os $ $Date: 2002-01-11 09:56:08 $
+ *  last change: $Author: os $ $Date: 2002-03-05 08:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ TabDialog DLG_MULTI_TOX
                 Text[ turkish ] = "Girişler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Entradas";
-                Text[ finnish ] = "Merkinnät";
+                Text[ finnish ] = "Merkinn?t";
             };
             PageItem
             {
@@ -295,7 +295,7 @@ TabDialog DLG_MULTI_TOX
                 Text[ japanese ] = "æ®µçµ„ã¿";
                 Text[ chinese_traditional ] = "æ¬„";
                 Text[ greek ] = "ÓôŞëåò";
-                Text[ korean ] = "ì—´";
+                Text[ korean ] = "ë‹¨";
                 Text[ arabic ] = "ÃÚãÏÉ";
                 Text[ turkish ] = "Sütunlar";
                 Text[ language_user1 ] = " ";
@@ -425,7 +425,7 @@ TabDialog DLG_MULTI_TOX
     Text[ turkish ] = "Dizin ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar índice";
-    Text[ finnish ] = "Lisää hakemisto";
+    Text[ finnish ] = "Lis?? hakemisto";
 };
 //------------------------------------------------------------------
 TabPage TP_TOX_SELECT
@@ -473,7 +473,7 @@ TabPage TP_TOX_SELECT
         Text[ russian ] = "Çàãîëîâîê";
         Text[ greek ] = "Ôßôëïò";
         Text[ dutch ] = "T~itel";
-        Text[ french ] = "~Titre";
+        Text[ french ] = "Titre";
         Text[ spanish ] = "Títu~lo";
         Text[ italian ] = "Titolo";
         Text[ danish ] = "Overskrift";
@@ -507,7 +507,7 @@ TabPage TP_TOX_SELECT
         Text[ russian ] = "Òèï";
         Text[ greek ] = "Ôı~ğïò";
         Text[ dutch ] = "~Type";
-        Text[ french ] = "~Type";
+        Text[ french ] = "Type";
         Text[ spanish ] = "Tip~o";
         Text[ italian ] = "Tipo";
         Text[ danish ] = "Type";
@@ -752,7 +752,7 @@ TabPage TP_TOX_SELECT
     };
     StringList [ finnish ] =
     {
-            < "Sisällysluettelo" ;  TO_CONTENT      ;> ;
+            < "Sis?llysluettelo" ;  TO_CONTENT      ;> ;
         < "Aakkostettu hakemisto" ;     TO_INDEX        ;> ;
         < "Kuvitushakemisto" ; TO_ILLUSTRATION ;> ;
         < "Taulukkohakemisto" ;     TO_TABLE        ;> ;
@@ -1027,7 +1027,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Utwórz z";
         Text[ portuguese_brazilian ] = "Create from";
         Text[ japanese ] = "å†…å®¹";
-        Text[ korean ] = "ë¡œë¶€í„° ë§Œë“¤ê¸°";
+        Text[ korean ] = "ë‚´ìš©";
         Text[ chinese_simplified ] = "æ–°å»ºé‡‡ç”¨";
         Text[ chinese_traditional ] = "è£½ä½œå¾";
         Text[ arabic ] = "ÅäÔÇÁ ãä";
@@ -1048,22 +1048,22 @@ TabPage TP_TOX_SELECT
         Text[ russian ] = "Ñòğóêòóğà";
         Text[ greek ] = "ÄéÜñèñùóç";
         Text[ dutch ] = "~overzicht";
-        Text[ french ] = "~Structure";
+        Text[ french ] = "Structure";
         Text[ spanish ] = "~Esquema";
         Text[ italian ] = "Struttura";
         Text[ danish ] = "Disposition";
         Text[ swedish ] = "~Disposition";
         Text[ polish ] = "Konspekt";
         Text[ portuguese_brazilian ] = "Outline";
-        Text[ japanese ] = "ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³";
-        Text[ korean ] = "ë‹¤ë‹¨ê³„";
+        Text[ japanese ] = "ï½±ï½³ï¾„ï¾—ï½²ï¾";
+        Text[ korean ] = "ì•„ì›ƒíŠ¸ë¼ì¸";
         Text[ chinese_simplified ] = "å¤§çº²";
         Text[ chinese_traditional ] = "å¤§ç¶±";
         Text[ arabic ] = "ÇáÊŞÓíã";
         Text[ turkish ] = "Anahat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Esquema";
-        Text[ finnish ] = "Jäsennys";
+        Text[ finnish ] = "J?sennys";
     };
     PushButton  PB_CHAPTERDLG
     {
@@ -1083,14 +1083,14 @@ TabPage TP_TOX_SELECT
         Text[ russian ] = "Äîïîëíèòåëüíûå ñòèëè";
         Text[ greek ] = "~Ğñüóèåôá ğñüôõğá";
         Text[ dutch ] = "~andere opmaakprofielen";
-        Text[ french ] = "Styles ~supplémentaires";
+        Text[ french ] = "Styles supplémentaires";
         Text[ spanish ] = "Otro~s estilos";
         Text[ italian ] = "Altri modelli";
         Text[ danish ] = "Yderligere typografier";
         Text[ swedish ] = "Ytterligare ~mallar";
         Text[ polish ] = "Inne style";
         Text[ portuguese_brazilian ] = "additional styles";
-        Text[ japanese ] = "ãã®ä»–ã®ã‚¹ã‚¿ã‚¤ãƒ«(~A)";
+        Text[ japanese ] = "ãã®ä»–ã®ï½½ï¾€ï½²ï¾™(~A)";
         Text[ korean ] = "ê¸°íƒ€ í…œí”Œë¦¿(~A)";
         Text[ chinese_simplified ] = "å…¶å®ƒæ ·å¼(~A)";
         Text[ chinese_traditional ] = "å…¶ä»–æ¨£å¼(~A)";
@@ -1098,7 +1098,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Diğer biçimler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Otro~s estilos";
-        Text[ finnish ] = "~Lisätyylit";
+        Text[ finnish ] = "~Lis?tyylit";
     };
     String ST_USER_ADDSTYLE
     {
@@ -1116,8 +1116,8 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "~Mallar";
         Text[ polish ] = "Style";
         Text[ portuguese_brazilian ] = "Styles";
-        Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«(~E)";
-        Text[ korean ] = "í…œí”Œë¦¿(~E)";
+        Text[ japanese ] = "ï½½ï¾€ï½²ï¾™(~E)";
+        Text[ korean ] = "ìŠ¤íƒ€ì¼(~E)";
         Text[ chinese_simplified ] = "æ ·å¼(~E)";
         Text[ chinese_traditional ] = "æ¨£å¼(~E)";
         Text[ arabic ] = "ÃäãÇØ";
@@ -1250,7 +1250,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Görüntü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Visuali~zación";
-        Text[ finnish ] = "Näytä";
+        Text[ finnish ] = "N?yt?";
     };
     ListBox LB_DISPLAYTYPE
     {
@@ -1450,7 +1450,7 @@ TabPage TP_TOX_SELECT
         Text[ arabic ] = "ÊáÎíÕ ÇáÅÏÎÇáÇÊ ÇáãÊãÇËáÉ";
         Text[ turkish ] = "~Eş girişleri birleştir";
         Text[ catalan ] = "Com~binar entradas idénticas";
-        Text[ finnish ] = "Yhdistä identtiset merkinnät";
+        Text[ finnish ] = "Yhdist? identtiset merkinn?t";
     };
     CheckBox        CB_USEFF
     {
@@ -1470,14 +1470,14 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Kombinera med ~f eller ff";
         Text[ polish ] = "Streœæ za pomoc¹ s lub ss";
         Text[ portuguese_brazilian ] = "Combine identical entries with ~pp.";
-        Text[ japanese ] = "ç¶šããƒšãƒ¼ã‚¸ã‚’ ~p ã¾ãŸã¯ pp ã§è¡¨ç¤º";
+        Text[ japanese ] = "ç¶šãï¾ï¾Ÿï½°ï½¼ï¾ã‚’ ~p ã¾ãŸã¯ pp ã§è¡¨ç¤º";
         Text[ korean ] = "f ë˜ëŠ” ff ë™ì¼ í•­ëª©ì„ í•˜ë‚˜ë¡œ ë¬¶ìŒ(~P)";
         Text[ chinese_simplified ] = "åˆå¹¶å¸¦ f æˆ– ff çš„æ¡ç›®(~P)";
         Text[ chinese_traditional ] = "åˆä½µç”¨ f æˆ– ff(~P)";
         Text[ arabic ] = "ÊáÎíÕ ÈÇÓÊÎÏÇã p.  Ãæ  pp";
         Text[ turkish ] = "Sonraki ~sayfa ya da sayfalar ile birleştir";
         Text[ catalan ] = "Combinar entradas con las ~siguiente(s)";
-        Text[ finnish ] = "Yhdistä identtiset merkinnät kirjaimilla p tai ~pp";
+        Text[ finnish ] = "Yhdist? identtiset merkinn?t kirjaimilla p tai ~pp";
     };
     CheckBox CB_USE_DASH
     {
@@ -1497,14 +1497,14 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Kombinera ~med -";
         Text[ polish ] = "~Scal z -";
         Text[ portuguese_brazilian ] = "Combine identical entries with -";
-        Text[ japanese ] = "ç¶šããƒšãƒ¼ã‚¸ã‚’ - ã§è¡¨ç¤º";
+        Text[ japanese ] = "ç¶šãï¾ï¾Ÿï½°ï½¼ï¾ã‚’ - ã§è¡¨ç¤º";
         Text[ korean ] = "ë™ì¼ í•­ëª© í•˜ë‚˜ë¡œ ë¬¶ìŒ";
         Text[ chinese_simplified ] = "ç”¨ - åˆå¹¶";
         Text[ chinese_traditional ] = "åˆä½µç”¨ -";
         Text[ arabic ] = "ÊáÎíÕ ÈÇÓÊÎÏÇã -";
         Text[ turkish ] = "~Birleşme -";
         Text[ catalan ] = "U~nir con -";
-        Text[ finnish ] = "Yhdistä merkinnällä -";
+        Text[ finnish ] = "Yhdist? merkinn?ll? -";
     };
     CheckBox        CB_CASESENSITIVE
     {
@@ -1524,7 +1524,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Versal~känslig";
         Text[ polish ] = "Uwzglêd~nij wielkie i ma³e litery";
         Text[ portuguese_brazilian ] = "Case sensitive";
-        Text[ japanese ] = "å¤§æ–‡å­—/å°æ–‡å­—ã‚’åŒºåˆ¥";
+        Text[ japanese ] = "å¤§æ–‡å­—ã¨å°æ–‡å­—ã‚’åŒºåˆ¥ã™ã‚‹";
         Text[ korean ] = "ëŒ€/ì†Œë¬¸ì êµ¬ë¶„";
         Text[ chinese_simplified ] = "åŒºåˆ†å­—æ¯å¤§å°å†™";
         Text[ chinese_traditional ] = "å€åˆ†å­—æ¯å¤§å°å¯«";
@@ -1560,7 +1560,7 @@ TabPage TP_TOX_SELECT
         Text[ turkish ] = "Girişleri otomatik olarak büyük harfle başla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Escribir entradas automáticamente en ma~yúsculas";
-        Text[ finnish ] = "Isot kirjaimet merkintöihin automaattisesti";
+        Text[ finnish ] = "Isot kirjaimet merkint?hin automaattisesti";
     };
     CheckBox        CB_KEYASENTRY
     {
@@ -1580,14 +1580,14 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "~Nyckel som egen post";
         Text[ polish ] = "Klucz ja~ko wpis w³asny";
         Text[ portuguese_brazilian ] = "Keys as separate entries";
-        Text[ japanese ] = "åˆ†é¡ã‚¿ã‚¤ãƒˆãƒ«ã‚’é …ç›®è¡¨ç¤º";
+        Text[ japanese ] = "åˆ†é¡ï¾€ï½²ï¾„ï¾™ã‚’é …ç›®è¡¨ç¤º";
         Text[ korean ] = "í‚¤ë¥¼ ê³ ìœ  ì…ë ¥ìœ¼ë¡œ";
         Text[ chinese_simplified ] = "é”®ç ä½œä¸ºå•ç‹¬çš„æ¡ç›®";
         Text[ chinese_traditional ] = "éµç¢¼ç•¶ä½œä¸€å€‹è‡ªå·±çš„æ¢ç›®";
         Text[ arabic ] = "ÇáãİÊÇÍ ßÅÏÎÇá ãÓÊŞá";
         Text[ turkish ] = "Anahtarları ayrı giriş olarak gir";
         Text[ catalan ] = "~Claves como entradas propias";
-        Text[ finnish ] = "Avainmerkit erillisinä merkintöinä";
+        Text[ finnish ] = "Avainmerkit erillisin? merkint?n?";
     };
     CheckBox    CB_FROMFILE
     {
@@ -1671,7 +1671,7 @@ TabPage TP_TOX_SELECT
                     Text[ polish ] = "~Nowy...";
                     Text[ portuguese_brazilian ] = "New...";
                     Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)...";
-                    Text[ korean ] = "ìƒˆë¡œ(~N)...";
+                    Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)...";
                     Text[ chinese_simplified ] = "æ–°å»º(~N)...";
                     Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”(~N)...";
                     Text[ arabic ] = "ÌÏíÏ...";
@@ -1740,7 +1740,7 @@ TabPage TP_TOX_SELECT
         Text[ greek ] = "Ğßíáêåò";
         Text[ dutch ] = "~Tabellen";
         Text[ french ] = "~Tables";
-        Text[ spanish ] = "~Tablas";
+        Text[ spanish ] = "Tablas";
         Text[ italian ] = "Ta~belle";
         Text[ danish ] = "Tabeller";
         Text[ swedish ] = "~Tabeller";
@@ -1795,9 +1795,9 @@ TabPage TP_TOX_SELECT
         Text[ russian ] = "Ğèñóíêè";
         Text[ greek ] = "ÃñáöéêÜ";
         Text[ dutch ] = "~Afbeeldingen";
-        Text[ french ] = "~Images";
+        Text[ french ] = "Images";
         Text[ spanish ] = "Imágene~s";
-        Text[ italian ] = "~Immagini";
+        Text[ italian ] = "Immagini";
         Text[ danish ] = "Grafik";
         Text[ swedish ] = "~Grafik";
         Text[ polish ] = "Grafiki";
@@ -1830,7 +1830,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "~OLE-objekt";
         Text[ polish ] = "Obiekty OLE";
         Text[ portuguese_brazilian ] = "OLE objects";
-        Text[ japanese ] = "OLE ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
+        Text[ japanese ] = "OLE ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„";
         Text[ korean ] = "OLE ê°œì²´";
         Text[ chinese_simplified ] = "OLE å¯¹è±¡";
         Text[ chinese_traditional ] = "OLE ç‰©ä»¶";
@@ -1865,7 +1865,7 @@ TabPage TP_TOX_SELECT
         Text[ arabic ] = "ÇÓÊÎÏÇã ãÓÊæì ãä ÇáİÕá ÇáãÕÏÑí";
         Text[ turkish ] = "Kaynak bölümdeki düzeyi kullan";
         Text[ catalan ] = "Nivel del capítulo orige~n";
-        Text[ finnish ] = "Käytä lähdeluvun tasoa";
+        Text[ finnish ] = "K?yt? l?hdeluvun tasoa";
     };
     FixedLine        FL_IDXOPTIONS
     {
@@ -2397,7 +2397,7 @@ TabPage TP_TOX_ENTRY
         Text[ russian ] = "Òèï";
         Text[ greek ] = "Ôığïò";
         Text[ dutch ] = "~Type";
-        Text[ french ] = "T~ype";
+        Text[ french ] = "Type";
         Text[ spanish ] = "~Tipo";
         Text[ italian ] = "Tipo";
         Text[ danish ] = "Type";
@@ -2413,26 +2413,38 @@ TabPage TP_TOX_ENTRY
         Text[ catalan ] = "~Tipo";
         Text[ finnish ] = "~Tyyppi";
     };
+    FixedText FT_TOKEN
+    {
+        Pos = MAP_APPFONT (  37, 18 ) ;
+        Size = MAP_APPFONT ( 30, 8 ) ;
+        Text = "~Struktur";
+        Text[English] = "~Structure";
+    };
     Window WIN_TOKEN
     {
-        Pos = MAP_APPFONT (  37, 16 ) ;
-        Size = MAP_APPFONT ( 159, 12 ) ;
+        Pos = MAP_APPFONT (  70, 16 ) ;
+        Size = MAP_APPFONT ( 136, 12 ) ;
         ImageButton WIN_LEFT_SCROLL
         {
             Pos = MAP_APPFONT (  0, 0 ) ;
             Size = MAP_APPFONT ( 10, 12 ) ;
             Symbol = IMAGEBUTTON_ARROW_LEFT;
+            DialogControl        = FALSE;
+            TabStop              = FALSE;
         };
         Window WIN_CTRL_PARENT
         {
             Pos = MAP_APPFONT (  11, 0 ) ;
-            Size = MAP_APPFONT ( 137, 12 ) ;
+            Size = MAP_APPFONT ( 114, 12 ) ;
+            DialogControl        = TRUE;
         };
         ImageButton WIN_RIGHT_SCROLL
         {
-            Pos = MAP_APPFONT (  149, 0 ) ;
+            Pos = MAP_APPFONT (  126, 0 ) ;
             Size = MAP_APPFONT ( 10, 12 ) ;
             Symbol = IMAGEBUTTON_ARROW_RIGHT;
+            DialogControl        = FALSE;
+            TabStop              = FALSE;
         };
         String STR_TOKEN_ENTRY_NO
         {
@@ -2693,7 +2705,7 @@ TabPage TP_TOX_ENTRY
             Text[ turkish ] = "Giriş";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Entrada";
-            Text[ finnish ] = "Merkintä";
+            Text[ finnish ] = "Merkint?";
         };
         String STR_TOKEN_HELP_TAB_STOP
         {
@@ -2711,7 +2723,7 @@ TabPage TP_TOX_ENTRY
             Text[ swedish ] = "Tabulator";
             Text[ polish ] = "Tabulator";
             Text[ portuguese_brazilian ] = "Tab stop";
-            Text[ japanese ] = "ã‚¿ãƒ–";
+            Text[ japanese ] = "ï¾€ï¾Œï¾";
             Text[ korean ] = "íƒ­ ìœ„ì¹˜";
             Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦";
             Text[ chinese_traditional ] = "å®šä½éµ";
@@ -2763,7 +2775,7 @@ TabPage TP_TOX_ENTRY
             Text[ swedish ] = "Sidnummer";
             Text[ polish ] = "Numer strony";
             Text[ portuguese_brazilian ] = "Page number";
-            Text[ japanese ] = "ãƒšãƒ¼ã‚¸ç•ªå·";
+            Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ç•ªå·";
             Text[ korean ] = "í˜ì´ì§€ ë²ˆí˜¸";
             Text[ chinese_simplified ] = "é¡µç ";
             Text[ chinese_traditional ] = "é ç¢¼";
@@ -2874,7 +2886,7 @@ TabPage TP_TOX_ENTRY
             Text[ arabic ] = "ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ:";
             Text[ turkish ] = "Kaynakça girişi: ";
             Text[ catalan ] = "Entrada de bibliografía:  ";
-            Text[ finnish ] = "Bibliografiamerkintä: ";
+            Text[ finnish ] = "Bibliografiamerkint?: ";
         };
         String STR_CHARSTYLE
         {
@@ -2892,7 +2904,7 @@ TabPage TP_TOX_ENTRY
             Text[ swedish ] = "Teckenformatmall:  ";
             Text[ polish ] = "Styl znaków:  ";
             Text[ portuguese_brazilian ] = "Character style: ";
-            Text[ japanese ] = "æ–‡å­—ã‚¹ã‚¿ã‚¤ãƒ«: ";
+            Text[ japanese ] = "æ–‡å­—ï½½ï¾€ï½²ï¾™: ";
             Text[ korean ] = "ë¬¸ì í…œí”Œë¦¿: ";
             Text[ chinese_simplified ] = "å­—ç¬¦æ ·å¼ï¼š ";
             Text[ chinese_traditional ] = "å­—å…ƒæ¨£å¼ï¼š ";
@@ -2905,30 +2917,10 @@ TabPage TP_TOX_ENTRY
     };
     PushButton PB_ALL_LEVELS
     {
-        Pos = MAP_APPFONT ( 199 , 14 ) ;
-        Size = MAP_APPFONT ( 50, 14 ) ;
-        Text = "~Alle Ebenen" ;
-        Text [ ENGLISH ] = "All levels" ;
-        Text[ english_us ] = "~All levels";
-        Text[ portuguese ] = "~Níveis todos";
-        Text[ russian ] = "Âñå óğîâíè";
-        Text[ greek ] = "¼ë~á ôá åğßğåäá";
-        Text[ dutch ] = "~Alle niveaus";
-        Text[ french ] = "~Tous les niveaux";
-        Text[ spanish ] = "Todos los ~niveles";
-        Text[ italian ] = "Tutti i livelli";
-        Text[ danish ] = "Alle niveauer";
-        Text[ swedish ] = "~Alla nivåer";
-        Text[ polish ] = "Wszystkie poziomy";
-        Text[ portuguese_brazilian ] = "All levels";
-        Text[ japanese ] = "ã™ã¹ã¦ã®ãƒ¬ãƒ™ãƒ«(~A)";
-        Text[ korean ] = "ëª¨ë“  ìˆ˜ì¤€(~A)";
-        Text[ chinese_simplified ] = "å…¨éƒ¨çš„çº§(~A)";
-        Text[ chinese_traditional ] = "æ‰€æœ‰çš„ç´š(~A)";
-        Text[ arabic ] = "ßá ÇáãÓÊæíÇÊ";
-        Text[ turkish ] = "Tüm düzeyler";
-        Text[ catalan ] = "Todos los ~niveles";
-        Text[ finnish ] = "~Kaikki tasot";
+        Pos = MAP_APPFONT ( 209 , 14 ) ;
+        Size = MAP_APPFONT ( 40, 14 ) ;
+        Text = "~Alle" ;
+        Text [ ENGLISH ] = "All" ;
     };
     PushButton PB_ENTRYNO
     {
@@ -2941,8 +2933,8 @@ TabPage TP_TOX_ENTRY
         Text[ russian ] = "Ãëàâà ¹";
         Text[ greek ] = "Áñéèìüò êåöáëáßïõ";
         Text[ dutch ] = "~Hoofdstuknr.";
-        Text[ french ] = "N° de ~chapitre";
-        Text[ spanish ] = "Nú~m. capítulo";
+        Text[ french ] = "N° de chapitre";
+        Text[ spanish ] = "Núm. capítulo";
         Text[ italian ] = "Capitolo no.";
         Text[ danish ] = "Kapitelnr.";
         Text[ swedish ] = "~Kapitelnr";
@@ -2969,7 +2961,7 @@ TabPage TP_TOX_ENTRY
         Text[ russian ] = "Òåêñò ıëåìåíòà";
         Text[ greek ] = "Êåßìåíï êáôá÷şñéóçò";
         Text[ dutch ] = "Tekst~item";
-        Text[ french ] = "~Texte";
+        Text[ french ] = "Texte";
         Text[ spanish ] = "Te~xto entrada";
         Text[ italian ] = "Testo voce";
         Text[ danish ] = "Elementtekst";
@@ -2984,7 +2976,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Giriş metni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Te~xto de entrada";
-        Text[ finnish ] = "Merkintäteksti";
+        Text[ finnish ] = "Merkint?teksti";
     };
     PushButton PB_CHAPTERINFO
     {
@@ -3025,14 +3017,14 @@ TabPage TP_TOX_ENTRY
         Text[ russian ] = "Ñòğàíèöà ¹";
         Text[ greek ] = "Áñéèìüò óåëßäáò";
         Text[ dutch ] = "~Paginanr.";
-        Text[ french ] = "~No. de page";
+        Text[ french ] = "N° de page";
         Text[ spanish ] = "Nú~m. página";
         Text[ italian ] = "Pag. no.";
         Text[ danish ] = "Sidetal";
         Text[ swedish ] = "~Sidnr";
         Text[ polish ] = "Numer str.";
         Text[ portuguese_brazilian ] = "Page no.";
-        Text[ japanese ] = "ãƒšãƒ¼ã‚¸ç•ªå·";
+        Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ç•ªå·";
         Text[ korean ] = "í˜ì´ì§€ ë²ˆí˜¸.";
         Text[ chinese_simplified ] = "é¡µç ";
         Text[ chinese_traditional ] = "é ç¢¼";
@@ -3053,7 +3045,7 @@ TabPage TP_TOX_ENTRY
         Text[ russian ] = "Òàáóëÿòîğ";
         Text[ greek ] = "Óôçëïèİôçò";
         Text[ dutch ] = "~Tabstop";
-        Text[ french ] = "~Tabulation";
+        Text[ french ] = "Tabulation";
         Text[ spanish ] = "~Tabulador";
         Text[ italian ] = "~Tabulazione";
         Text[ danish ] = "Tabulator";
@@ -3117,7 +3109,7 @@ TabPage TP_TOX_ENTRY
         Text[ russian ] = "Âñòàâèòü";
         Text[ greek ] = "~ÅéóáãùãŞ";
         Text[ dutch ] = "~Invoegen";
-        Text[ french ] = "~Insérer";
+        Text[ french ] = "Insérer";
         Text[ spanish ] = "In~sertar";
         Text[ italian ] = "Inserisci";
         Text[ danish ] = "Indsæt";
@@ -3132,7 +3124,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "In~sertar";
-        Text[ finnish ] = "~Lisää";
+        Text[ finnish ] = "~Lis??";
     };
     PushButton PB_AUTHREMOVE
     {
@@ -3145,7 +3137,7 @@ TabPage TP_TOX_ENTRY
         Text[ russian ] = "Óáğàòü";
         Text[ greek ] = "ÊáôÜñãçóç";
         Text[ dutch ] = "~Verwijderen";
-        Text[ french ] = "~Supprimer";
+        Text[ french ] = "Supprimer";
         Text[ spanish ] = "~Eliminar";
         Text[ italian ] = "Ri~muovi";
         Text[ danish ] = "Fjern";
@@ -3173,14 +3165,14 @@ TabPage TP_TOX_ENTRY
         Text[ russian ] = "Ñòèëü çíàêîâ";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
         Text[ dutch ] = "Teken~opmaakprofiel";
-        Text[ french ] = "Style de ~caractères";
+        Text[ french ] = "Style de caractères";
         Text[ spanish ] = "Estilo de ~carácter";
         Text[ italian ] = "Modello di carattere";
         Text[ danish ] = "Tegntypografi";
         Text[ swedish ] = "T~eckenformatmall";
         Text[ polish ] = "Styl znaku";
         Text[ portuguese_brazilian ] = "Character style";
-        Text[ japanese ] = "æ–‡å­—ã‚¹ã‚¿ã‚¤ãƒ«";
+        Text[ japanese ] = "æ–‡å­—ï½½ï¾€ï½²ï¾™";
         Text[ korean ] = "ë¬¸ì í…œí”Œë¦¿";
         Text[ chinese_simplified ] = "å­—ç¬¦æ ·å¼";
         Text[ chinese_traditional ] = "å­—å…ƒæ¨£å¼";
@@ -3188,7 +3180,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Karakter şablonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estilo de ~carácter";
-        Text[ finnish ] = "Merkistön tyyli";
+        Text[ finnish ] = "Merkist? tyyli";
     };
     ListBox LB_CHARSTYLE
     {
@@ -3243,7 +3235,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "Ut~fyllnadstecken";
         Text[ polish ] = "Wype³niacze";
         Text[ portuguese_brazilian ] = "Fill character";
-        Text[ japanese ] = "ãƒªãƒ¼ãƒ€ãƒ¼";
+        Text[ japanese ] = "ï¾˜ï½°ï¾€ï¾ï½°";
         Text[ korean ] = "ì±„ì›€ ë¬¸ì";
         Text[ chinese_simplified ] = "å……å¡«å­—ç¬¦";
         Text[ chinese_traditional ] = "å……å¡«å­—å…ƒ";
@@ -3251,7 +3243,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Öncü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Carácter de ~relleno";
-        Text[ finnish ] = "Täyttömerkki";
+        Text[ finnish ] = "T?ytt?erkki";
     };
     ComboBox CB_FILLCHAR
     {
@@ -3286,7 +3278,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Bölüm girişi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~ntrada de capítulo";
-        Text[ finnish ] = "Luvun merkintä";
+        Text[ finnish ] = "Luvun merkint?";
     };
     ListBox LB_CHAPTERENTRY
     {
@@ -3511,8 +3503,8 @@ TabPage TP_TOX_ENTRY
     {
         Pos = MAP_APPFONT ( 34 , 3 ) ;
         Size = MAP_APPFONT ( 220, 8 ) ;
-        Text = "Aufbau" ;
-        Text [ ENGLISH ] = "Structure" ;
+        Text = "Struktur und Formatierung" ;
+        Text [ ENGLISH ] = "Structure and formatting" ;
         Text[ english_us ] = "Structure";
         Text[ portuguese ] = "Estrutura";
         Text[ russian ] = "Ñòğîåíèå";
@@ -3547,13 +3539,13 @@ TabPage TP_TOX_ENTRY
         Text[ greek ] = "Èİóç óôçëïèåôşí áíÜëïãá ìå ôçí åóï÷Ş ôïõ ğñïôığïõ ôçò ğáñáãñÜöïõ";
         Text[ dutch ] = "~Positie in verhouding tot de inspringing uit het alinea-opmaakprofiel.";
         Text[ french ] = "P~osition en fonction du style de paragraphe (retrait)";
-        Text[ spanish ] = "Posición relati~va a sangría de estilo de párrafo";
+        Text[ spanish ] = "Posición relativa a sangría de estilo de párrafo";
         Text[ italian ] = "P~osizione relativa al rientro del modello di paragrafo";
         Text[ danish ] = "Tabulatorernes position relativ til indrykningen fra afsnitstypografien";
         Text[ swedish ] = "Tabbarnas p~osition relativ till indraget från styckeformatmallen";
         Text[ polish ] = "Pozycja relatywna do wciêcia ze stylu akapitu";
         Text[ portuguese_brazilian ] = "Position relativ to the paragraph style indent";
-        Text[ japanese ] = "ã‚¿ãƒ–ä½ç½®ã¯æ®µè½ã‚¹ã‚¿ã‚¤ãƒ«ã®ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‹ã‚‰(~V)";
+        Text[ japanese ] = "ï¾€ï¾Œï¾ä½ç½®ã¯æ®µè½ï½½ï¾€ï½²ï¾™ã®ï½²ï¾ï¾ƒï¾ï¾ï¾„ã‹ã‚‰(~V)";
         Text[ korean ] = "ë‹¨ë½ í…œí”Œë¦¿ì˜ ì²« ë¬¸ì¥ ë“¤ì—¬ì“°ê¸°ì— ê´€ë ¨ëœ íƒ­ ìœ„ì¹˜(~V)";
         Text[ chinese_simplified ] = "è°ƒæ•´åˆ¶è¡¨ç¬¦å’Œæ®µè½æ ·å¼ç¼©è¿›çš„ä½ç½®(~V)";
         Text[ chinese_traditional ] = "å®šä½éµä½ç½®å’Œæ®µè½æ¨£å¼çš„ç¸®æ’ä¿æŒç›¸å°ä½ç½®(~V)";
@@ -3581,7 +3573,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "Te~ckenformatmall för huvudposter";
         Text[ polish ] = "Styl znaku wpisów g³ównych";
         Text[ portuguese_brazilian ] = "Character style of main entries";
-        Text[ japanese ] = "ä¸»é …ç›®ã®æ–‡å­—ã‚¹ã‚¿ã‚¤ãƒ«";
+        Text[ japanese ] = "ä¸»é …ç›®ã®æ–‡å­—ï½½ï¾€ï½²ï¾™";
         Text[ korean ] = "ì£¼ í•­ëª©ì˜ ë¬¸ì í…œí”Œë¦¿";
         Text[ chinese_simplified ] = "ä¸»æ¡ç›®çš„å­—ç¬¦æ ·å¼";
         Text[ chinese_traditional ] = "ä¸»é …ç›®çš„å­—å…ƒæ¨£å¼";
@@ -3589,7 +3581,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Ana girişler için karakter şablonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Estilo de caracteres para entradas principales";
-        Text[ finnish ] = "Päämerkintöjen merkistötyyli";
+        Text[ finnish ] = "P??merkint?en merkist?yyli";
     };
     ListBox LB_MAIN_ENTRY_STYLE
     {
@@ -3646,7 +3638,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "Nyckel, kommaseparerad";
         Text[ polish ] = "Klucz odseparowany przecinkiem";
         Text[ portuguese_brazilian ] = "Comma separated keys";
-        Text[ japanese ] = "ã‚³ãƒ³ãƒä»˜ãã§é€£ç¶šè¡¨ç¤º";
+        Text[ japanese ] = "ï½ºï¾ï¾ä»˜ãã§é€£ç¶šè¡¨ç¤º";
         Text[ korean ] = "ì‰¼í‘œë¡œ êµ¬ë¶„ëœ í‚¤";
         Text[ chinese_simplified ] = "é”®ç ç”¨é€—å·åˆ†å¼€";
         Text[ chinese_traditional ] = "éµç¢¼ç”¨é€—è™Ÿåˆ†é–‹";
@@ -3805,7 +3797,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ polish ] = "Rosn¹co";
         QuickHelpText[ portuguese_brazilian ] = "Ascending";
         QuickHelpText[ japanese ] = "æ˜‡é †";
-        QuickHelpText[ korean ] = "ì˜¤ë¦„ì°¨ìˆœ";
+        QuickHelpText[ korean ] = "ì˜¤ë¦„ì°¨ìˆœ!";
         QuickHelpText[ chinese_simplified ] = "Ascending";
         QuickHelpText[ chinese_traditional ] = "å‘ä¸Š";
         QuickHelpText[ arabic ] = "ÊÕÇÚÏí";
@@ -3814,7 +3806,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aufsteigend";
         QuickHelpText[ catalan ] = "Ascendiente";
-        QuickHelpText[ finnish ] = "Nouseva";
+        QuickHelpText[ finnish ] = "Nouseva!";
     };
     ImageRadioButton RB_SORTDOWN1
     {
@@ -3840,7 +3832,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ polish ] = "Malej¹co";
         QuickHelpText[ portuguese_brazilian ] = "Descending";
         QuickHelpText[ japanese ] = "é™é †";
-        QuickHelpText[ korean ] = "ë‚´ë¦¼ì°¨ìˆœ";
+        QuickHelpText[ korean ] = "ë‚´ë¦¼ì°¨ìˆœ!";
         QuickHelpText[ chinese_simplified ] = "Descending";
         QuickHelpText[ chinese_traditional ] = "å‘ä¸‹";
         QuickHelpText[ arabic ] = "ÊäÇÒáí";
@@ -3849,7 +3841,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Absteigend";
         QuickHelpText[ catalan ] = "Descendiente";
-        QuickHelpText[ finnish ] = "Laskeva";
+        QuickHelpText[ finnish ] = "Laskeva!";
     };
     ImageRadioButton RB_SORTUP2
     {
@@ -3876,7 +3868,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ polish ] = "Rosn¹co";
         QuickHelpText[ portuguese_brazilian ] = "Ascending";
         QuickHelpText[ japanese ] = "æ˜‡é †";
-        QuickHelpText[ korean ] = "ì˜¤ë¦„ì°¨ìˆœ";
+        QuickHelpText[ korean ] = "ì˜¤ë¦„ì°¨ìˆœ!";
         QuickHelpText[ chinese_simplified ] = "Ascending";
         QuickHelpText[ chinese_traditional ] = "å‘ä¸Š";
         QuickHelpText[ arabic ] = "ÊÕÇÚÏí";
@@ -3885,7 +3877,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aufsteigend";
         QuickHelpText[ catalan ] = "Ascendiente";
-        QuickHelpText[ finnish ] = "Nouseva";
+        QuickHelpText[ finnish ] = "Nouseva!";
     };
     ImageRadioButton RB_SORTDOWN2
     {
@@ -3911,7 +3903,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ polish ] = "Malej¹co";
         QuickHelpText[ portuguese_brazilian ] = "Descending";
         QuickHelpText[ japanese ] = "é™é †";
-        QuickHelpText[ korean ] = "ë‚´ë¦¼ì°¨ìˆœ";
+        QuickHelpText[ korean ] = "ë‚´ë¦¼ì°¨ìˆœ!";
         QuickHelpText[ chinese_simplified ] = "Descending";
         QuickHelpText[ chinese_traditional ] = "å‘ä¸‹";
         QuickHelpText[ arabic ] = "ÊäÇÒáí";
@@ -3920,7 +3912,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Absteigend";
         QuickHelpText[ catalan ] = "Descendiente";
-        QuickHelpText[ finnish ] = "Laskeva";
+        QuickHelpText[ finnish ] = "Laskeva!";
     };
     ImageRadioButton RB_SORTUP3
     {
@@ -3947,7 +3939,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ polish ] = "Rosn¹co";
         QuickHelpText[ portuguese_brazilian ] = "Ascending";
         QuickHelpText[ japanese ] = "æ˜‡é †";
-        QuickHelpText[ korean ] = "ì˜¤ë¦„ì°¨ìˆœ";
+        QuickHelpText[ korean ] = "ì˜¤ë¦„ì°¨ìˆœ!";
         QuickHelpText[ chinese_simplified ] = "Ascending";
         QuickHelpText[ chinese_traditional ] = "å‘ä¸Š";
         QuickHelpText[ arabic ] = "ÊÕÇÚÏí";
@@ -3956,7 +3948,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aufsteigend";
         QuickHelpText[ catalan ] = "Ascendiente";
-        QuickHelpText[ finnish ] = "Nouseva";
+        QuickHelpText[ finnish ] = "Nouseva!";
     };
     ImageRadioButton RB_SORTDOWN3
     {
@@ -3982,7 +3974,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ polish ] = "Malej¹co";
         QuickHelpText[ portuguese_brazilian ] = "Descending";
         QuickHelpText[ japanese ] = "é™é †";
-        QuickHelpText[ korean ] = "ë‚´ë¦¼ì°¨ìˆœ";
+        QuickHelpText[ korean ] = "ë‚´ë¦¼ì°¨ìˆœ!";
         QuickHelpText[ chinese_simplified ] = "Descending";
         QuickHelpText[ chinese_traditional ] = "å‘ä¸‹";
         QuickHelpText[ arabic ] = "ÊäÇÒáí";
@@ -3991,7 +3983,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Absteigend";
         QuickHelpText[ catalan ] = "Descendiente";
-        QuickHelpText[ finnish ] = "Laskeva";
+        QuickHelpText[ finnish ] = "Laskeva!";
     };
     FixedText FT_SECONDKEY
     {
@@ -4071,7 +4063,7 @@ TabPage TP_TOX_ENTRY
         Text[ arabic ] = "<ÈÏæä>";
         Text[ turkish ] = "<Yok>";
         Text[ catalan ] = "<Ninguno>";
-        Text[ finnish ] = "<Ei mitään>";
+        Text[ finnish ] = "<Ei mit??n>";
     };
     String STR_NO_CHAR_STYLE
     {
@@ -4097,7 +4089,7 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "<Yok>";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "<Ninguno>";
-        Text[ finnish ] = "<Ei mitään>";
+        Text[ finnish ] = "<Ei mit??n>";
     };
     String STR_DELIM
     {
@@ -4181,7 +4173,7 @@ TabPage TP_TOX_STYLES
         Text [ portuguese ] = "Estilo~s de parágrafo" ;
         Text [ finnish ] = "Kappaletyylit" ;
         Text [ danish ] = "Afsnitstypografier" ;
-        Text [ french ] = "~Styles de paragraphe" ;
+        Text [ french ] = "Styles de paragraphe" ;
         Text [ swedish ] = "Styckeformatmallar" ;
         Text [ dutch ] = "~Alinea-opmaakprofielen" ;
         Text [ spanish ] = "Estilos de párra~fo" ;
@@ -4217,9 +4209,9 @@ TabPage TP_TOX_STYLES
         TabStop = TRUE ;
         Text [ dutch ] = "Stan~daard" ;
         Text [ english_us ] = "~Default" ;
-        Text [ italian ] = "~Standard" ;
-        Text [ spanish ] = "~Predeterminado" ;
-        Text [ french ] = "~Standard" ;
+        Text [ italian ] = "Sta~ndard" ;
+        Text [ spanish ] = "Predeterminado" ;
+        Text [ french ] = "Standard" ;
         Text [ swedish ] = "Sta~ndard" ;
         Text [ danish ] = "Standard" ;
         Text [ portuguese ] = "~Padrão" ;
@@ -4232,7 +4224,7 @@ TabPage TP_TOX_STYLES
         Text[ chinese_traditional ] = "æ¨™æº–(~D)";
         Text[ arabic ] = "ÇİÊÑÇÖí";
         Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "ê¸°ë³¸ê°’(~D)";
+        Text[ korean ] = "ê¸°ë³¸ ê°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ catalan ] = "~Predeterminado";
         Text[ finnish ] = "~Oletusarvo";
@@ -4268,7 +4260,7 @@ TabPage TP_TOX_STYLES
         Text[ russian ] = "~Ïğàâêà";
         Text[ dutch ] = "~Bewerken";
         Text[ french ] = "Éditer";
-        Text[ spanish ] = "~Editar";
+        Text[ spanish ] = "Editar";
         Text[ italian ] = "~Modifica";
         Text[ danish ] = "Rediger";
         Text[ swedish ] = "~Redigera";
@@ -4397,8 +4389,8 @@ ModalDialog DLG_ADD_IDX_STYLES
         Text[ swedish ] = "~Mallar";
         Text[ polish ] = "Style";
         Text[ portuguese_brazilian ] = "Styles";
-        Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«(~E)";
-        Text[ korean ] = "í…œí”Œë¦¿(~E)";
+        Text[ japanese ] = "ï½½ï¾€ï½²ï¾™(~E)";
+        Text[ korean ] = "ìŠ¤íƒ€ì¼(~E)";
         Text[ chinese_simplified ] = "æ ·å¼(~E)";
         Text[ chinese_traditional ] = "æ¨£å¼(~E)";
         Text[ arabic ] = "ÃäãÇØ";
@@ -4450,7 +4442,7 @@ ModalDialog DLG_ADD_IDX_STYLES
         Text[ turkish ] = "Uygulanmadı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No asignado";
-        Text[ finnish ] = "Ei käytössä";
+        Text[ finnish ] = "Ei k?yt?s?";
     };
     Text[ english_us ] = "Assign Styles";
     Text[ portuguese ] = "Aplicar estilos";
@@ -4464,7 +4456,7 @@ ModalDialog DLG_ADD_IDX_STYLES
     Text[ swedish ] = "Tilldela mall";
     Text[ polish ] = "Przypisz styl";
     Text[ portuguese_brazilian ] = "Assign styles";
-    Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«ã®é©ç”¨";
+    Text[ japanese ] = "ï½½ï¾€ï½²ï¾™ã®é©ç”¨";
     Text[ korean ] = "í…œí”Œë¦¿ í• ë‹¹";
     Text[ chinese_simplified ] = "æŒ‡å®šæ ·å¼";
     Text[ chinese_traditional ] = "æŒ‡å®šæ¨£å¼";
@@ -4472,7 +4464,7 @@ ModalDialog DLG_ADD_IDX_STYLES
     Text[ turkish ] = "Biçim uygula";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Asignar estilos";
-    Text[ finnish ] = "Määritä tyylit";
+    Text[ finnish ] = "M??rit? tyylit";
 };
 /*-----------------------------------------------------------
 
@@ -4785,24 +4777,5 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
