@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,8 @@
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
 #endif
-#pragma hdrstop
+
+#include <svtools/saveopt.hxx>
 
 #include "docfilt.hxx"
 #include "fcontnr.hxx"
@@ -1343,9 +1344,10 @@ SfxDocumentInfo::SfxDocumentInfo() :
     bReloadEnabled = FALSE;
     nReloadSecs = 60;
     SfxApplication *pSfxApp = SFX_APP();
-    bPortableGraphics = pSfxApp->GetOptions().IsIndepGrfFmt();
-    bSaveGraphicsCompressed = pSfxApp->GetOptions().IsSaveGraphicsCompressed();
-    bSaveOriginalGraphics = pSfxApp->GetOptions().IsSaveOriginalGraphics();
+    bPortableGraphics = TRUE;
+    SvtSaveOptions aSaveOptions;
+    bSaveGraphicsCompressed = aSaveOptions.GetSaveGraphicsMode() == SvtSaveOptions::SaveGraphicsCompressed;
+    bSaveOriginalGraphics = aSaveOptions.GetSaveGraphicsMode() == SvtSaveOptions::SaveGraphicsOriginal;
 
     const String aInf( DEFINE_CONST_UNICODE( "Info " ) );
     for( USHORT i = 0; i < MAXDOCUSERKEYS; ++i )    {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-25 11:40:38 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,12 +114,14 @@
 #include <tools/cachestr.hxx>
 #endif
 
+#include <svtools/saveopt.hxx>
+#include <tools/urlobj.hxx>
+
 #include "objsh.hxx"
 #include "childwin.hxx"
 #include "inimgr.hxx"
 #include "sfxdir.hxx"
 #include "request.hxx"
-#include "saveopt.hxx"
 #include "sfxresid.hxx"
 #include "iodlg.hxx"
 #include "docfile.hxx"
@@ -206,10 +208,9 @@ extern sal_uInt32 CheckPasswd_Impl( Window*, SfxItemPool&, SfxMedium* );
 
 sal_Bool ShallSetBaseURL_Impl( SfxMedium &rMed )
 {
-    SfxOptions &rOpt = SFX_APP()->GetOptions();
+    SvtSaveOptions aOpt;
     sal_Bool bIsRemote = rMed.IsRemote();
-    return  rOpt.IsSaveRelINet() && bIsRemote ||
-            rOpt.IsSaveRelFSys() && !bIsRemote;
+    return  aOpt.IsSaveRelINet() && bIsRemote || aOpt.IsSaveRelFSys() && !bIsRemote;
 }
 
 //=========================================================================
@@ -478,7 +479,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
     SfxApplication* pApp = SFX_APP();
     pImp->nLoadedFlags = 0;
-    sal_Bool bProvidesData = pMedium->ProvidesData_Impl();
     sal_Bool bHasStorage = !pFilter || ( pFilter->IsOwnFormat() && pFilter->UsesStorage() && !(pFilter->GetFilterFlags() & SFX_FILTER_PLUGIN ) );
     if ( !bHasStorage && pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
     {
@@ -535,7 +535,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         // Importieren
         const String aOldURL( INetURLObject::GetBaseURL() );
         if( aBaseURL.Len() ) INetURLObject::SetBaseURL( aBaseURL );
-        if( bProvidesData && !pMedium->GetFilter()->UsesStorage() )
+        if( !pMedium->GetFilter()->UsesStorage() )
             pMedium->GetInStream();
 
         pImp->nLoadedFlags = 0;
@@ -550,7 +550,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         INetURLObject::SetBaseURL( aOldURL );
 
-        if( bProvidesData && bOk && pMedium->GetOpenMode() & STREAM_WRITE )
+        if( bOk && pMedium->GetOpenMode() & STREAM_WRITE )
         //Medium offen halten um andere Zugriffe zu verhindern
         {
             if(pMedium->GetFilter() && pMedium->GetFilter()->UsesStorage())
@@ -578,13 +578,13 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         // Falls nicht asynchron geladen wird selbst FinishedLoading aufrufen
         if ( !( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) &&
-            ( !bProvidesData || !pMedium->GetFilter() ||
+            ( !pMedium->GetFilter() ||
              pMedium->GetFilter()->UsesStorage() ||
              pMedium->GetInStream() && pMedium->GetInStream()->GetLockBytes() &&
              pMedium->GetInStream()->GetLockBytes()->IsSynchronMode() ) )
             FinishedLoading( SFX_LOADED_MAINDOCUMENT );
 
-        if(bProvidesData && IsOwnStorageFormat_Impl(*pMed) && pMed->GetFilter())
+        if( IsOwnStorageFormat_Impl(*pMed) && pMed->GetFilter() )
         {
 //???? dv           DirEntry aDirEntry( pMed->GetPhysicalName() );
 //???? dv           SetFileName( aDirEntry.GetFull() );
@@ -873,7 +873,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         if ( pMedium &&
              ( rMedium.GetName() == pMedium->GetName() ) )
         {
-            const sal_Bool bDoBackup = SFX_APP()->GetOptions().IsBackup();
+            const sal_Bool bDoBackup = SvtSaveOptions().IsBackup();
             if ( bDoBackup )
                 pMedium->DoBackup_Impl();
         }
@@ -1272,7 +1272,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 // Storageformat schreiben und wir nicht in SaveAs sind.
 
     //  Backup will be created in SaveTo_Impl()
-    //  const sal_Bool bDoBackup=SFX_APP()->GetOptions().IsBackup();
+    //  const sal_Bool bDoBackup=SvtSaveOptions().IsBackup();
     const sal_Bool bIsOwn=IsOwnStorageFormat_Impl(*pMedium);
 
 // Zur Zeit wirder immer ueber temporaere Datei, um Storages schrumpfen
@@ -1378,7 +1378,7 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
     }
     else
         bSaved = DoSave_Impl( pSet );
-    if ( bSaved && pSfxApp->GetOptions().IsAutoSave() )
+    if ( bSaved && SvtSaveOptions().IsAutoSave() )
         pSfxApp->GetAutoSaveTimer_Impl()->Start();
     return bSaved;
 }
@@ -1431,7 +1431,11 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             // get the filename by dialog
             ISfxModule *pMod = GetModule();
             if ( !pMod )
-                pMod = SFX_APP()->GetISfxModule();
+            {
+                DBG_ERROR( "ObjectShell without Module!" );
+                SetError(ERRCODE_IO_ABORT);
+                return FALSE;
+            }
 
             SfxFileDialog* pDlg = pMod->CreateDocFileDialog( WB_SAVEAS | WB_3DLOOK, GetFactory(), pParams );
             if ( HasName() )
@@ -1541,7 +1545,11 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         // SaveTo auch ohne Filenamen m"oglich -> dann FileDialog "offnen
         ISfxModule *pMod = GetModule();
         if ( !pMod )
-            pMod = SFX_APP()->GetISfxModule();
+        {
+            DBG_ERROR( "ObjectShell without Module!" );
+            SetError(ERRCODE_IO_ABORT);
+            return sal_False;;
+        }
 
         SfxFileDialog* pDlg = pMod->CreateDocFileDialog( WB_SAVEAS | WB_3DLOOK, GetFactory(), pRequest->GetArgs() );
         if ( pDlg->Execute() == RET_CANCEL )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-25 11:39:54 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,13 +92,13 @@
 #endif
 #include <math.h>
 
+#include <svtools/saveopt.hxx>
+
 #include "sfxresid.hxx"
-#include "saveopt.hxx"
 #include "stbmgr.hxx"
 #include "dinfdlg.hxx"
 #include "fltfnc.hxx"
 #include "docfac.hxx"
-#include "saveopt.hxx"
 #include "cfgmgr.hxx"
 #include "inimgr.hxx"
 #include "viewsh.hxx"
@@ -115,6 +115,7 @@
 #include "basmgr.hxx"
 #include "doctempl.hxx"
 #include "doc.hrc"
+#include "appdata.hxx"
 
 //====================================================================
 
@@ -236,9 +237,9 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
     // Modus bestimmen
     SfxApplication *pSfxApp = SFX_APP();
     SfxViewFrame *pPrefered = pPreferedFrame ? pPreferedFrame->GetCurrentViewFrame() : 0;
-    SfxOptions &rOpt = pSfxApp->GetOptions();
-    BOOL bLoadDocWins = rOpt.IsSaveDocWins() && !pPrefered;
-    BOOL bLoadDocView = rOpt.IsSaveDocView();
+    SvtSaveOptions aOpt;
+    BOOL bLoadDocWins = aOpt.IsSaveDocWins() && !pPrefered;
+    BOOL bLoadDocView = aOpt.IsSaveDocView();
 
     // In a StarPortal not possible at the moment
     bLoadDocWins = FALSE;
@@ -417,20 +418,11 @@ void SfxObjectShell::UpdateDocInfoForSave()
         rDocInfo.SetPasswd( pImp->bPasswd );
 
         // ggf. DocInfo Dialog
-        if (  !pImp->bSilent && eCreateMode == SFX_CREATE_MODE_STANDARD &&
-            0 == ( pImp->eFlags & SFXOBJECTSHELL_NODOCINFO ) && SFX_APP()->GetOptions().IsDocInfoSave() )
+        if (  !pImp->bSilent && eCreateMode == SFX_CREATE_MODE_STANDARD && 0 == ( pImp->eFlags & SFXOBJECTSHELL_NODOCINFO ) )
         {
-//(mba)/task
-/*
-            Window* pWindow = Application::GetAppWindow();
-            if ( pWindow )
-                pWindow->EnterWait();
- */
-            DocInfoDlg_Impl( rDocInfo );
-/*
-            if ( pWindow )
-                pWindow->LeaveWait();
- */
+            SvtSaveOptions aOptions;
+            if ( aOptions.IsDocInfoSave() )
+                DocInfoDlg_Impl( rDocInfo );
         }
     }
 
