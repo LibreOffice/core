@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatrcn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:31:44 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 13:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,11 @@ uno::Reference< uno::XInterface >  SvUnoAttributeContainer_CreateInstance()
     return *(new SvUnoAttributeContainer);
 }
 
-SvUnoAttributeContainer::SvUnoAttributeContainer( SvXMLAttrContainerItem_Impl* pContainer)
+SvUnoAttributeContainer::SvUnoAttributeContainer( SvXMLAttrContainerData* pContainer)
 : mpContainer( pContainer )
 {
     if( mpContainer == NULL )
-        mpContainer = new SvXMLAttrContainerItem_Impl;
+        mpContainer = new SvXMLAttrContainerData;
 }
 
 SvUnoAttributeContainer::~SvUnoAttributeContainer()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatrcn.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:01 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 13:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SvUnoAttributeContainer_CreateInstance();
 
-class SvXMLAttrContainerItem_Impl;
+class SvXMLAttrContainerData;
 
 class SvUnoAttributeContainer : public ::cppu::WeakAggImplHelper3<
                                             ::com::sun::star::lang::XServiceInfo,
@@ -86,15 +86,15 @@ class SvUnoAttributeContainer : public ::cppu::WeakAggImplHelper3<
                                             ::com::sun::star::container::XNameContainer >
 {
 private:
-    SvXMLAttrContainerItem_Impl* mpContainer;
+    SvXMLAttrContainerData* mpContainer;
 
     sal_uInt16 getIndexByName(const ::rtl::OUString& aName ) const;
 
 public:
-    SvUnoAttributeContainer( SvXMLAttrContainerItem_Impl* pContainer = NULL );
+    SvUnoAttributeContainer( SvXMLAttrContainerData* pContainer = NULL );
     virtual ~SvUnoAttributeContainer();
 
-    SvXMLAttrContainerItem_Impl* GetContainerImpl() const { return mpContainer; }
+    SvXMLAttrContainerData* GetContainerImpl() const { return mpContainer; }
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
     static SvUnoAttributeContainer* getImplementation( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInt ) throw();
