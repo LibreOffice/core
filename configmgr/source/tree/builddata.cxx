@@ -2,9 +2,9 @@
  *
  *  $RCSfile: builddata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:36:16 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,7 +653,7 @@ TreeAddress TreeNodeBuilder::allocTreeFragment(UpdateAccessor & _anUpdater)
 
     Address aBaseAddress = _anUpdater.allocator().allocate(nFragmentSize);
 
-    TreeAddress aResult( static_cast<memory::Pointer>(aBaseAddress) );
+    TreeAddress aResult = TreeAddress( memory::Pointer(aBaseAddress) );
 
     if (TreeFragment * pFragment = TreeAccessor::access(aResult,_anUpdater))
     {
