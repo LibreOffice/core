@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: bmahbod $ $Date: 2000-10-09 21:59:31 $
+#   last change: $Author: sb $ $Date: 2000-11-09 13:21:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,8 @@ SLOFILES=\
         $(SLO)$/registerucb.obj        \
         $(SLO)$/resultsetmetadata.obj  \
         $(SLO)$/resultset.obj          \
-        $(SLO)$/resultsethelper.obj
+        $(SLO)$/resultsethelper.obj    \
+        $(SLO)$/provconf.obj
 
 .ENDIF
 
