@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-22 10:49:29 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 14:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ inline void SAL_CALL cppu_Mapping_cpp2uno(
     uno_Mapping * pMapping, void ** ppUnoI,
     void * pCppI, typelib_InterfaceTypeDescription * pTypeDescr ) throw ()
 {
-    OSL_ENSHURE( ppUnoI && pTypeDescr, "### null ptr!" );
+    OSL_ENSURE( ppUnoI && pTypeDescr, "### null ptr!" );
     if (*ppUnoI)
     {
         (*reinterpret_cast< uno_Interface * >( *ppUnoI )->release)(
@@ -477,7 +477,7 @@ inline const ::rtl::OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() throw ()
 inline void SAL_CALL cppu_cppenv_computeObjectIdentifier(
     uno_ExtEnvironment * pEnv, rtl_uString ** ppOId, void * pInterface ) throw ()
 {
-    OSL_ENSHURE( pEnv && ppOId && pInterface, "### null ptr!" );
+    OSL_ENSURE( pEnv && ppOId && pInterface, "### null ptr!" );
     if (pEnv && ppOId && pInterface)
     {
         if (*ppOId)
@@ -489,7 +489,7 @@ inline void SAL_CALL cppu_cppenv_computeObjectIdentifier(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xHome(
             reinterpret_cast< ::com::sun::star::uno::XInterface * >( pInterface ),
             ::com::sun::star::uno::UNO_QUERY );
-        OSL_ENSHURE( xHome.is(), "### query to XInterface failed!" );
+        OSL_ENSURE( xHome.is(), "### query to XInterface failed!" );
         if (xHome.is())
         {
             // interface
@@ -520,8 +520,8 @@ inline void SAL_CALL cppu_cppenv_releaseInterface( uno_ExtEnvironment *, void * 
 //--------------------------------------------------------------------------------------------------
 inline void SAL_CALL cppu_cppenv_initEnvironment( uno_Environment * pCppEnv ) throw ()
 {
-    OSL_ENSHURE( pCppEnv->pExtEnv, "### expected extended environment!" );
-    OSL_ENSHURE( rtl_ustr_ascii_compare( pCppEnv->pTypeName->buffer, CPPU_CURRENT_LANGUAGE_BINDING_NAME ) == 0,
+    OSL_ENSURE( pCppEnv->pExtEnv, "### expected extended environment!" );
+    OSL_ENSURE( rtl_ustr_ascii_compare( pCppEnv->pTypeName->buffer, CPPU_CURRENT_LANGUAGE_BINDING_NAME ) == 0,
                  "### wrong environment type!" );
     ((uno_ExtEnvironment *)pCppEnv)->computeObjectIdentifier = CPPU_CURRENT_NAMESPACE::cppu_cppenv_computeObjectIdentifier;
     ((uno_ExtEnvironment *)pCppEnv)->acquireInterface        = CPPU_CURRENT_NAMESPACE::cppu_cppenv_acquireInterface;

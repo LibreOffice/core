@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-07 17:08:36 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 14:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ static inline typelib_TypeClass cpp2uno_call(
     }
 
     // stack space
-    OSL_ENSHURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
+    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
     // parameters
     void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
     void ** pCppArgs = pUnoArgs + nParams;
@@ -273,7 +273,7 @@ static typelib_TypeClass __cdecl cpp_mediate(
     void ** pCallStack, sal_Int32 nVtableCall,
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
-    OSL_ENSHURE( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
+    OSL_ENSURE( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
 
     // pCallStack: ret adr, this, [ret *], params
     // _this_ ptr is patched cppu_XInterfaceProxy object
@@ -281,7 +281,7 @@ static typelib_TypeClass __cdecl cpp_mediate(
         reinterpret_cast< XInterface * >( pCallStack[1] ) );
 
     typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
-    OSL_ENSHURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex,
+    OSL_ENSURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex,
                  "### illegal vtable index!" );
     if (nVtableCall >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
@@ -291,7 +291,7 @@ static typelib_TypeClass __cdecl cpp_mediate(
 
     // determine called method
     sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nVtableCall];
-    OSL_ENSHURE( nMemberPos < pTypeDescr->nAllMembers, "### illegal member index!" );
+    OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### illegal member index!" );
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 

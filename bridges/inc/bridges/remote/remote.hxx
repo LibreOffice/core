@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 14:37:03 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 14:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <osl/conditn.h>
 #include <osl/interlck.h>
 
-#include <vos/thread.hxx>
+//#include <vos/thread.hxx>
 
 #include <uno/environment.h>
 

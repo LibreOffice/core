@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_writer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-04 11:19:13 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 14:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-#include <vos/thread.hxx>
+//#include <vos/thread.hxx>
 
 #include <osl/mutex.hxx>
 #include <osl/conditn.h>

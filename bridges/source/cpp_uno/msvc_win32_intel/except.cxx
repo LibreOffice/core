@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-07 17:09:25 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 14:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ __type_info::~__type_info() throw ()
 type_info * RTTInfos::getRTTI( const OString & rUNOname ) throw ()
 {
     // a must be
-    OSL_ENSHURE( sizeof(__type_info) == sizeof(type_info), "### type info structure size differ!" );
+    OSL_ENSURE( sizeof(__type_info) == sizeof(type_info), "### type info structure size differ!" );
 
     MutexGuard aGuard( _aMutex );
     const t_string2PtrMap::const_iterator iFind( _allRTTI.find( rUNOname ) );
@@ -244,7 +244,7 @@ ObjectFunction::ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpF
 
     unsigned char * pCode = (unsigned char *)somecode;
     // a must be!
-    OSL_ENSHURE( (void *)this == (void *)pCode, "### unexpected!" );
+    OSL_ENSURE( (void *)this == (void *)pCode, "### unexpected!" );
 
     // push ObjectFunction this
     *pCode++ = 0x68;
@@ -345,7 +345,7 @@ RaiseInfo::RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ()
     , _n4( 0 )
 {
     // a must be
-    OSL_ENSHURE( sizeof(sal_Int32) == sizeof(ExceptionType *), "### pointer size differs from sal_Int32!" );
+    OSL_ENSURE( sizeof(sal_Int32) == sizeof(ExceptionType *), "### pointer size differs from sal_Int32!" );
 
     typelib_CompoundTypeDescription * pCompTypeDescr;
 
@@ -415,7 +415,7 @@ void ExceptionInfos::raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     typelib_TypeDescription * pTypeDescr = 0;
     TYPELIB_DANGER_GET( &pTypeDescr, pUnoExc->pType );
 
-    OSL_ENSHURE( pTypeDescr && (pTypeDescr->eTypeClass == typelib_TypeClass_STRUCT ||
+    OSL_ENSURE( pTypeDescr && (pTypeDescr->eTypeClass == typelib_TypeClass_STRUCT ||
                                 pTypeDescr->eTypeClass == typelib_TypeClass_EXCEPTION),
                  "### can only throw types of class exception/ structs" );
 
@@ -436,7 +436,7 @@ void ExceptionInfos::raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     const t_string2PtrMap::const_iterator iFind( _allRaiseInfos.find( aKey ) );
 
     // a must be
-    OSL_ENSHURE( sizeof(sal_Int32) == sizeof(void *), "### pointer size differs from sal_Int32!" );
+    OSL_ENSURE( sizeof(sal_Int32) == sizeof(void *), "### pointer size differs from sal_Int32!" );
     DWORD arFilterArgs[3];
     arFilterArgs[0] = 0x19930520L;
     arFilterArgs[1] = (DWORD)pCppExc;

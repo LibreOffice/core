@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:46:05 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 14:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,8 @@ inline static void callVirtualMethod(
     // parameter list is mixed list of * and values
     // reference parameters are pointers
 
-    OSL_ENSHURE( pStackLongs && pThis, "### null ptr!" );
-    OSL_ENSHURE( (sizeof(void *) == 4) &&
+    OSL_ENSURE( pStackLongs && pThis, "### null ptr!" );
+    OSL_ENSURE( (sizeof(void *) == 4) &&
                  (sizeof(sal_Int32) == 4), "### unexpected size of int!" );
 
 __asm
@@ -202,7 +202,7 @@ inline static void cpp_call(
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-    OSL_ENSHURE( pReturnTypeDescr, "### expected return type description!" );
+    OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
@@ -224,7 +224,7 @@ inline static void cpp_call(
 
     // stack space
 
-    OSL_ENSHURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
+    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
     // args
     void ** pCppArgs  = (void **)alloca( 3 * sizeof(void *) * nParams );
     // indizes of values this have to be converted (interface conversion cpp<=>uno)
@@ -381,10 +381,10 @@ extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
     {
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
-        OSL_ENSHURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+        OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
 
         sal_Int32 nVtableCall = pTypeDescr->pMapMemberIndexToFunctionIndex[nMemberPos];
-        OSL_ENSHURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
+        OSL_ENSURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
 
         typelib_TypeDescriptionReference * pRuntimeExcRef = 0;
 
@@ -427,10 +427,10 @@ extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
     {
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
-        OSL_ENSHURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+        OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
 
         sal_Int32 nVtableCall = pTypeDescr->pMapMemberIndexToFunctionIndex[nMemberPos];
-        OSL_ENSHURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
+        OSL_ENSURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
 
         switch (nVtableCall)
         {

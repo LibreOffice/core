@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2001-02-06 22:20:37 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 14:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ static inline void cpp_call( cppu_unoInterfaceProxy * pThis,
       // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-    OSL_ENSHURE( pReturnTypeDescr, "### expected return type description!" );
+    OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
 
       void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
@@ -330,10 +330,10 @@ extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
     {
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
-        OSL_ENSHURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+        OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
 
         sal_Int32 nVtableCall = pTypeDescr->pMapMemberIndexToFunctionIndex[nMemberPos];
-        OSL_ENSHURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
+        OSL_ENSURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
 
         typelib_TypeDescriptionReference * pRuntimeExcRef = 0;
 
@@ -376,10 +376,10 @@ extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
     {
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
-        OSL_ENSHURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+        OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
 
         sal_Int32 nVtableCall = pTypeDescr->pMapMemberIndexToFunctionIndex[nMemberPos];
-        OSL_ENSHURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
+        OSL_ENSURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
 
         switch (nVtableCall)
         {

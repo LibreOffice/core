@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2001-02-06 22:20:37 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 14:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,10 +318,10 @@ void* RTTIHolder::insertRTTI( const OString& rTypename )
 
 void* RTTIHolder::insertRTTI( const OString& rTypename, const OString& rSuperTypename )
 {
-    OSL_ENSHURE( ! getRTTI( rTypename ), "insert RTTI called on already existing type" );
+    OSL_ENSURE( ! getRTTI( rTypename ), "insert RTTI called on already existing type" );
 
     void** pBaseRTTI = (void**)getRTTI( rSuperTypename );
-    OSL_ENSHURE( pBaseRTTI, "insert RTTI called with nonexisting supertype" );
+    OSL_ENSURE( pBaseRTTI, "insert RTTI called with nonexisting supertype" );
 
     std::list< void* > aSuperTypes;
 
@@ -370,7 +370,7 @@ static void* generateRTTI( typelib_CompoundTypeDescription * pCompTypeDescr )
         return RTTIHolder::insertRTTI_UnoName( aCompTypeName );
     // generate super rtti if necessary
     void* pSuperRTTI = generateRTTI( pCompTypeDescr->pBaseTypeDescription );
-    OSL_ENSHURE( pSuperRTTI, "could not generate RTTI for supertype!" );
+    OSL_ENSURE( pSuperRTTI, "could not generate RTTI for supertype!" );
 
     return RTTIHolder::insertRTTI_UnoNames(
         aCompTypeName,
@@ -415,7 +415,7 @@ void cc50_solaris_intel_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
     uno_any_destruct( pUnoExc, 0 );
 
     // a must be
-    OSL_ENSHURE( sizeof(sal_Int32) == sizeof(void *), "### pointer size differs from sal_Int32!" );
+    OSL_ENSURE( sizeof(sal_Int32) == sizeof(void *), "### pointer size differs from sal_Int32!" );
 
     typelib_CompoundTypeDescription * pCompTypeDescr = (typelib_CompoundTypeDescription *)pTypeDescr;
     void* pRTTI = generateRTTI( pCompTypeDescr );

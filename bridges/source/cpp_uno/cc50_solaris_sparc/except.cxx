@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-22 20:05:04 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 14:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,7 @@ static void* generateRTTI( typelib_CompoundTypeDescription * pCompTypeDescr )
 
     // get base class RTTI
     void* pSuperRTTI = generateRTTI( pCompTypeDescr->pBaseTypeDescription );
-    OSL_ENSHURE( pSuperRTTI, "could not generate RTTI for supertype!" );
+    OSL_ENSURE( pSuperRTTI, "could not generate RTTI for supertype!" );
 
     return pSuperRTTI;
 }
@@ -378,7 +378,7 @@ void cc50_solaris_sparc_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
     void* pRTTI = generateRTTI( (typelib_CompoundTypeDescription *)pTypeDescr );
 
     // a must be
-    OSL_ENSHURE( sizeof(sal_Int32) == sizeof(void *), "### pointer size differs from sal_Int32!" );
+    OSL_ENSURE( sizeof(sal_Int32) == sizeof(void *), "### pointer size differs from sal_Int32!" );
 
     void** pExcSpace = (void**)__Crun::ex_alloc( pTypeDescr->nSize + 8 );
     void * pCppExc = (void*)(((char*)pExcSpace)+8);
