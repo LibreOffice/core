@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-07 18:09:45 $
+ *  last change: $Author: mba $ $Date: 2002-04-25 08:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@
 #include <sfxsids.hrc>
 #include <workwin.hxx>
 #include <stbmgr.hxx>
+#include <objface.hxx>
 
 #include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
@@ -687,10 +688,18 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
 
             if ( aURL.Protocol.compareToAscii( ".uno:" ) == COMPARE_EQUAL )
             {
-                SfxSlotPool& rPool = SFX_APP()->GetSlotPool( pAct );
-                const SfxSlot* pSlot = rPool.GetUnoSlot( aURL.Path );
-                if ( pSlot )
-                    nId = pSlot->GetSlotId();
+                SfxShell *pShell=0;
+                USHORT nIdx;
+                for (nIdx=0; (pShell=pAct->GetDispatcher()->GetShell(nIdx)); nIdx++)
+                {
+                    const SfxInterface *pIFace = pShell->GetInterface();
+                    const SfxSlot* pSlot = pIFace->GetSlot( aURL.Path );
+                    if ( pSlot )
+                    {
+                        nId = pSlot->GetSlotId();
+                        break;
+                    }
+                }
             }
             else if ( aURL.Protocol.compareToAscii( "slot:" ) == COMPARE_EQUAL )
             {

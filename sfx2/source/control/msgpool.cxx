@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgpool.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-22 16:56:18 $
+ *  last change: $Author: mba $ $Date: 2002-04-25 08:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,18 +574,15 @@ void SfxSlotPool::ReleaseSID( const String &rGroup, const String &rName )
 const SfxSlot* SfxSlotPool::GetUnoSlot( const String& rName )
 {
     const SfxSlot *pSlot = NULL;
-    if ( _pParentPool )
-        pSlot = _pParentPool->GetUnoSlot( rName );
-
-    if ( !pSlot )
+    for ( USHORT nInterface=0; nInterface<_pInterfaces->Count(); nInterface++ )
     {
-        for ( USHORT nInterface=0; nInterface<_pInterfaces->Count(); nInterface++ )
-        {
-            pSlot = (*_pInterfaces)[nInterface]->GetSlot( rName );
-            if ( pSlot )
-                break;
-        }
+        pSlot = (*_pInterfaces)[nInterface]->GetSlot( rName );
+        if ( pSlot )
+            break;
     }
+
+    if ( !pSlot && _pParentPool )
+        pSlot = _pParentPool->GetUnoSlot( rName );
 
     return pSlot;
 }
