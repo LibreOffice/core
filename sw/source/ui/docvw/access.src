@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-10 15:19:37 $
+ *  last change: $Author: kz $ $Date: 2002-06-13 12:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ String STR_ACCESS_DOC_NAME
     Text[ russian ] = "Document View";
     Text[ greek ] = "Document View";
     Text[ dutch ] = "Document View";
-    Text[ french ] = "Document View";
+    Text[ french ] = "Affichage du document";
     Text[ spanish ] = "Visualización del documento";
     Text[ finnish ] = "Document View";
     Text[ italian ] = "Vista documento";
@@ -96,7 +96,7 @@ String STR_ACCESS_DOC_DESC
     Text[ russian ] = "Document View";
     Text[ greek ] = "Document View";
     Text[ dutch ] = "Document View";
-    Text[ french ] = "Document View";
+    Text[ french ] = "Affichage du document";
     Text[ spanish ] = "Visualización del documento";
     Text[ finnish ] = "Document View";
     Text[ italian ] = "Vista documento";
@@ -122,7 +122,7 @@ String STR_ACCESS_PARAGRAPH_NAME
     Text[ russian ] = "Paragraph $(ARG1)";
     Text[ greek ] = "Paragraph $(ARG1)";
     Text[ dutch ] = "Paragraph $(ARG1)";
-    Text[ french ] = "Paragraph $(ARG1)";
+    Text[ french ] = "Paragraphe $(ARG1)";
     Text[ spanish ] = "Párrafo $(ARG1)";
     Text[ finnish ] = "Paragraph $(ARG1)";
     Text[ italian ] = "Paragrafo $(ARG1)";
@@ -148,7 +148,7 @@ String STR_ACCESS_PARAGRAPH_DESC
     Text[ russian ] = "Paragraph: $(ARG1)";
     Text[ greek ] = "Paragraph: $(ARG1)";
     Text[ dutch ] = "Paragraph: $(ARG1)";
-    Text[ french ] = "Paragraph: $(ARG1)";
+    Text[ french ] = "Paragraphe : $(ARG1) ";
     Text[ spanish ] = "Párrafo: $(ARG1)";
     Text[ finnish ] = "Paragraph: $(ARG1)";
     Text[ italian ] = "Paragrafo : $(ARG1) ";
@@ -174,7 +174,7 @@ String STR_ACCESS_HEADING_NAME
     Text[ russian ] = "Heading $(ARG1)";
     Text[ greek ] = "Heading $(ARG1)";
     Text[ dutch ] = "Heading $(ARG1)";
-    Text[ french ] = "Heading $(ARG1)";
+    Text[ french ] = "Titre $(ARG1)";
     Text[ spanish ] = "Encabezado $(ARG1)";
     Text[ finnish ] = "Heading $(ARG1)";
     Text[ italian ] = "Intestazione $(ARG1)";
@@ -200,7 +200,7 @@ String STR_ACCESS_HEADING_DESC
     Text[ russian ] = "Heading: $(ARG1)";
     Text[ greek ] = "Heading: $(ARG1)";
     Text[ dutch ] = "Heading: $(ARG1)";
-    Text[ french ] = "Heading: $(ARG1)";
+    Text[ french ] = "Titre : $(ARG1)";
     Text[ spanish ] = "Encabezado: $(ARG1)";
     Text[ finnish ] = "Heading: $(ARG1)";
     Text[ italian ] = "Intestazione: $(ARG1)";
@@ -226,7 +226,7 @@ String STR_ACCESS_HEADING_WITH_NUM_DESC
     Text[ russian ] = "Heading number $(ARG2): $(ARG1)";
     Text[ greek ] = "Heading number $(ARG2): $(ARG1)";
     Text[ dutch ] = "Heading number $(ARG2): $(ARG1)";
-    Text[ french ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ french ] = "Titre numéro $(ARG2) : $(ARG1)";
     Text[ spanish ] = "Número de encabezado $(ARG2): $(ARG1)";
     Text[ finnish ] = "Heading number $(ARG2): $(ARG1)";
     Text[ italian ] = "Numero intestazione $(ARG2): $(ARG1)";
@@ -252,7 +252,7 @@ String STR_ACCESS_HEADER_NAME
     Text[ russian ] = "Header $(ARG1)";
     Text[ greek ] = "Header $(ARG1)";
     Text[ dutch ] = "Header $(ARG1)";
-    Text[ french ] = "Header $(ARG1)";
+    Text[ french ] = "En-tête $(ARG1)";
     Text[ spanish ] = "Encabezamiento $(ARG1)";
     Text[ finnish ] = "Header $(ARG1)";
     Text[ italian ] = "Riga d'intestazione $(ARG1)";
@@ -278,7 +278,7 @@ String STR_ACCESS_HEADER_DESC
     Text[ russian ] = "Header page $(ARG1)";
     Text[ greek ] = "Header page $(ARG1)";
     Text[ dutch ] = "Header page $(ARG1)";
-    Text[ french ] = "Header page $(ARG1)";
+    Text[ french ] = "En-tête page $(ARG1)";
     Text[ spanish ] = "Página encabezamiento $(ARG1)";
     Text[ finnish ] = "Header page $(ARG1)";
     Text[ italian ] = "Pagina riga d'intestazione $(ARG1)";
@@ -304,7 +304,7 @@ String STR_ACCESS_FOOTER_NAME
     Text[ russian ] = "Footer $(ARG1)";
     Text[ greek ] = "Footer $(ARG1)";
     Text[ dutch ] = "Footer $(ARG1)";
-    Text[ french ] = "Footer $(ARG1)";
+    Text[ french ] = "Pied de page $(ARG1)";
     Text[ spanish ] = "Pie de página $(ARG1)";
     Text[ finnish ] = "Footer $(ARG1)";
     Text[ italian ] = "Piè di pagina $(ARG1)";
@@ -330,7 +330,7 @@ String STR_ACCESS_FOOTER_DESC
     Text[ russian ] = "Footer page $(ARG1)";
     Text[ greek ] = "Footer page $(ARG1)";
     Text[ dutch ] = "Footer page $(ARG1)";
-    Text[ french ] = "Footer page $(ARG1)";
+    Text[ french ] = "Pied de page page $(ARG1)";
     Text[ spanish ] = "Pie de página $(ARG1)";
     Text[ finnish ] = "Footer page $(ARG1)";
     Text[ italian ] = "Pagina piè di pagina $(ARG1)";
@@ -356,7 +356,7 @@ String STR_ACCESS_FOOTNOTE_NAME
     Text[ russian ] = "Footnote $(ARG1)";
     Text[ greek ] = "Footnote $(ARG1)";
     Text[ dutch ] = "Footnote $(ARG1)";
-    Text[ french ] = "Footnote $(ARG1)";
+    Text[ french ] = "Note de bas de page $(ARG1)";
     Text[ spanish ] = "Nota al pie $(ARG1)";
     Text[ finnish ] = "Footnote $(ARG1)";
     Text[ italian ] = "Nota a piè pagina $(ARG1)";
@@ -382,7 +382,7 @@ String STR_ACCESS_FOOTNOTE_DESC
     Text[ russian ] = "Footnote $(ARG1)";
     Text[ greek ] = "Footnote $(ARG1)";
     Text[ dutch ] = "Footnote $(ARG1)";
-    Text[ french ] = "Footnote $(ARG1)";
+    Text[ french ] = "Note de bas de page $(ARG1)";
     Text[ spanish ] = "Nota al pie $(ARG1)";
     Text[ finnish ] = "Footnote $(ARG1)";
     Text[ italian ] = "Nota a piè pagina $(ARG1)";
@@ -408,7 +408,7 @@ String STR_ACCESS_ENDNOTE_NAME
     Text[ russian ] = "Endnote $(ARG1)";
     Text[ greek ] = "Endnote $(ARG1)";
     Text[ dutch ] = "Endnote $(ARG1)";
-    Text[ french ] = "Endnote $(ARG1)";
+    Text[ french ] = "Note de fin $(ARG1)";
     Text[ spanish ] = "Nota al final $(ARG1)";
     Text[ finnish ] = "Endnote $(ARG1)";
     Text[ italian ] = "Nota di chiusura $(ARG1)";
@@ -434,7 +434,7 @@ String STR_ACCESS_ENDNOTE_DESC
     Text[ russian ] = "Endnote $(ARG1)";
     Text[ greek ] = "Endnote $(ARG1)";
     Text[ dutch ] = "Endnote $(ARG1)";
-    Text[ french ] = "Endnote $(ARG1)";
+    Text[ french ] = "Note de fin $(ARG1)";
     Text[ spanish ] = "Nota al final $(ARG1)";
     Text[ finnish ] = "Endnote $(ARG1)";
     Text[ italian ] = "Nota di chiusura $(ARG1)";
@@ -460,7 +460,7 @@ String STR_ACCESS_REPLACEMENT_POSTIT
     Text[ russian ] = "[Annotation]";
     Text[ greek ] = "[Annotation]";
     Text[ dutch ] = "[Annotation]";
-    Text[ french ] = "[Annotation]";
+    Text[ french ] = "[Note : $(ARG1)]";
     Text[ spanish ] = "[Nota: $(ARG1)]";
     Text[ finnish ] = "[Annotation]";
     Text[ italian ] = "[Nota: $(ARG1)]";
@@ -486,7 +486,7 @@ String STR_ACCESS_REPLACEMENT_FRAME
     Text[ russian ] = "[Rahmen: $(ARG1)]";
     Text[ greek ] = "[Rahmen: $(ARG1)]";
     Text[ dutch ] = "[Rahmen: $(ARG1)]";
-    Text[ french ] = "[Rahmen: $(ARG1)]";
+    Text[ french ] = "[Cadre : $(ARG1)]";
     Text[ spanish ] = "[Marcos: $(ARG1)]";
     Text[ finnish ] = "[Rahmen: $(ARG1)]";
     Text[ italian ] = "[Cornici: $(ARG1)]";
@@ -512,7 +512,7 @@ String STR_ACCESS_REPLACEMENT_BULLET_GRAPHICS
     Text[ russian ] = "[Aufz?hlungszeichen]";
     Text[ greek ] = "[Aufz?hlungszeichen]";
     Text[ dutch ] = "[Aufzählungszeichen]";
-    Text[ french ] = "[Aufzählungszeichen]";
+    Text[ french ] = "[Puces]";
     Text[ spanish ] = "[Caracteres de las numeraciones]";
     Text[ finnish ] = "[Aufzählungszeichen]";
     Text[ italian ] = "[Carattere per elenchi puntati]";
@@ -538,7 +538,7 @@ String STR_ACCESS_TABLE_DESC
     Text[ russian ] = "$(ARG1) on page $(ARG2)";
     Text[ greek ] = "$(ARG1) on page $(ARG2)";
     Text[ dutch ] = "$(ARG1) on page $(ARG2)";
-    Text[ french ] = "$(ARG1) on page $(ARG2)";
+    Text[ french ] = "$(ARG1) sur la page $(ARG2)";
     Text[ spanish ] = "$(ARG1) en la página $(ARG2)";
     Text[ finnish ] = "$(ARG1) on page $(ARG2)";
     Text[ italian ] = "$(ARG1) a pagina $(ARG2)";
@@ -590,7 +590,7 @@ String STR_ACCESS_PAGE_DESC
     Text[ russian ] = "Page: $(ARG1)";
     Text[ greek ] = "Page: $(ARG1)";
     Text[ dutch ] = "Page: $(ARG1)";
-    Text[ french ] = "Page: $(ARG1)";
+    Text[ french ] = "Page : $(ARG1)";
     Text[ spanish ] = "Página: $(ARG1)";
     Text[ finnish ] = "Page: $(ARG1)";
     Text[ italian ] = "Pagina: $(ARG1)";
