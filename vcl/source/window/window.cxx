@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-20 14:24:51 $
+ *  last change: $Author: tbe $ $Date: 2002-08-21 12:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7985,7 +7985,7 @@ String Window::GetAccessibleName() const
 
             {
                 Window *pLabel = GetLabeledBy();
-                if( pLabel )
+                if ( pLabel && pLabel != this )
                     aAccessibleName = pLabel->GetText();
                 else if ( ( GetType() == WINDOW_LISTBOX ) || ( GetType() == WINDOW_MULTILISTBOX ) )
                     aAccessibleName = GetText();
