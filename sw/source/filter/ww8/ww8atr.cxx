@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-15 20:08:10 $
+ *  last change: $Author: cmc $ $Date: 2001-02-20 19:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1880,7 +1880,46 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                 bWriteExpand = TRUE;
         }
         break;
+    case RES_COMBINED_CHARS:
+        {
+        /*
+        We need a font size to fill in the defaults, if these are overridden
+        (as they generally are) by character properties then those properties
+        win.
 
+        The fontsize that is used in MS for determing the defaults is always
+        the CJK fontsize even if the text is not in that language, in OOo the
+        largest fontsize used in the field is the one we should take, but
+        whatever we do, word will actually render using the fontsize set for
+        CJK text, so if we have western characters but a CJK fontsize that is
+        different that the western one, then word will render in the CJK
+        fontsize. Given that, there is no use determing if we have actually
+        placed solely western characters in the field as word will render with
+        CJK fontsize anyway.
+        */
+        long nHeight = ((SvxFontHeightItem&)(((SwWW8Writer&)rWrt).GetItem(
+            RES_CHRATR_CJK_FONTSIZE))).GetHeight();;
+
+        nHeight = (nHeight + 10) / 20; //Font Size in points;
+
+        /*
+        Divide the combined char string into its up and down part. Get the
+        font size and fill in the defaults as up == half the font size and
+        down == a fifth the font size
+        */
+        xub_StrLen nAbove = (pFld->GetPar1().Len()+1)/2;
+        aStr.ASIGN_ASC("EQ \\o (\\s\\up ") +=
+            UniString::CreateFromInt32(nHeight/2);
+        aStr.Append('(');
+        aStr += String(pFld->GetPar1(),0,nAbove);
+        aStr.APP_ASC("), \\s\\do ") +=
+            UniString::CreateFromInt32(nHeight/5);
+        aStr.Append('(');
+        aStr += String(pFld->GetPar1(),nAbove,pFld->GetPar1().Len()-nAbove);
+        aStr.APP_ASC("))");
+        rWW8Wrt.OutField( pFld, 49, aStr);
+        }
+        break;
     default:
         bWriteExpand = TRUE;
         break;
@@ -3614,6 +3653,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/02/15 20:08:10  jp
+      im-/export the Rotate-/ScaleWidth-Character attribut
+
       Revision 1.7  2001/02/06 17:28:21  cmc
       #83581# CJK Two Lines in One {Im|Ex}port for Word
 
