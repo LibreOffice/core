@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:36:08 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,15 +117,9 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     mrImpData.mpXFBuffer.reset( new XclImpXFBuffer( GetRoot() ) );
     mrImpData.mpXFIndexBuffer.reset( new XclImpXFIndexBuffer( GetRoot() ) );
     mrImpData.mpPageSettings.reset( new XclImpPageSettings( GetRoot() ) );
-    mrImpData.mpTabIdBuffer.reset( new XclImpTabIdBuffer );
+    mrImpData.mpTabInfo.reset( new XclImpTabInfo );
     mrImpData.mpNameBuffer.reset( new XclImpNameBuffer( GetRoot() ) );
     mrImpData.mpLinkManager.reset( new XclImpLinkManager( GetRoot() ) );
-}
-
-void XclImpRoot::SetBiff( XclBiff eBiff )
-{
-    XclRoot::SetBiff( eBiff );
-    GetPalette().OnChangeBiff();
 }
 
 XclImpSst& XclImpRoot::GetSst() const
@@ -175,9 +169,9 @@ _ScRangeListTabs& XclImpRoot::GetTitleAreaBuffer() const
     return *mpRD->pPrintTitles;
 }
 
-XclImpTabIdBuffer& XclImpRoot::GetTabIdBuffer() const
+XclImpTabInfo& XclImpRoot::GetTabInfo() const
 {
-    return *mrImpData.mpTabIdBuffer;
+    return *mrImpData.mpTabInfo;
 }
 
 XclImpNameBuffer& XclImpRoot::GetNameBuffer() const
@@ -245,6 +239,12 @@ bool XclImpRoot::CheckCellRange( ScRange& rRange ) const
 void XclImpRoot::CheckCellRangeList( ScRangeList& rRanges ) const
 {
     XclRoot::CheckCellRangeList( rRanges, GetScMaxPos() );
+}
+
+void XclImpRoot::SetBiff( XclBiff eBiff )
+{
+    XclRoot::SetBiff( eBiff );
+    GetPalette().OnChangeBiff();
 }
 
 
