@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-13 15:21:30 $
+ *  last change: $Author: ama $ $Date: 2001-11-19 12:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,40 +267,24 @@ void SwFrm::MakeRightPos( const SwFrm* pUp, const SwFrm* pPrv, BOOL bNotify )
 
 void SwFrm::SetTopBottomMargins( long nTop, long nBot )
 {
-    if( nTop > Frm().Height() )
-        nTop = Frm().Height();
     Prt().Top( nTop );
     Prt().Height( Frm().Height() - nTop - nBot );
-    if( Prt().Height() < 0 )
-        Prt().Height( 0 );
 }
 
 void SwFrm::SetBottomTopMargins( long nBot, long nTop )
 {
-    if( nBot > Frm().Height() )
-        nBot = Frm().Height();
-    if( Frm().Height() < nTop + nBot )
-        nTop = Frm().Height() - nBot;
     Prt().Top( nTop );
     Prt().Height( Frm().Height() - nTop - nBot );
 }
 
 void SwFrm::SetLeftRightMargins( long nLeft, long nRight)
 {
-    if( nLeft > Frm().Width() )
-        nLeft = Frm().Width();
     Prt().Left( nLeft );
     Prt().Width( Frm().Width() - nLeft - nRight );
-    if( Prt().Width() < 0 )
-        Prt().Width( 0 );
 }
 
 void SwFrm::SetRightLeftMargins( long nRight, long nLeft)
 {
-    if( nRight > Frm().Width() )
-        nRight = Frm().Width();
-    if( Frm().Width() < nRight + nLeft )
-        nLeft = Frm().Width() - nRight;
     Prt().Left( nLeft );
     Prt().Width( Frm().Width() - nLeft - nRight );
 }

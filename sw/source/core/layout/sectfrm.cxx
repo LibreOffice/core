@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-14 14:39:18 $
+ *  last change: $Author: ama $ $Date: 2001-11-19 12:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1274,7 +1274,11 @@ void SwSectionFrm::SimpleFormat()
     {
         const Size aOldSz( Prt().SSize() );
         (Frm().*fnRect->fnSetBottom)( nDeadLine );
-        (this->*fnRect->fnSetYMargins)( CalcUpperSpace(), 0 );
+        long nHeight = (Frm().*fnRect->fnGetHeight)();
+        long nTop = CalcUpperSpace();
+        if( nTop > nHeight )
+            nTop = nHeight;
+        (this->*fnRect->fnSetYMargins)( nTop, 0 );
         lcl_ColumnRefresh( this, FALSE );
     }
 #else
