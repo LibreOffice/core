@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 11:29:57 $
+ *  last change: $Author: cl $ $Date: 2002-10-28 11:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,20 @@ Printer* SdDrawDocShell::GetDocumentPrinter()
 \************************************************************************/
 void SdDrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
 {
-//  if (pPrinter->IsA(SfxPrinter))
+    // if we already have a printer, see if its the same
+    if( pPrinter )
+    {
+        // easy case
+        if( pPrinter == pNewPrinter )
+            return;
+
+        // compare if its the same printer with the same job setup
+        if( (pPrinter->GetName() == pNewPrinter->GetName()) &&
+            (pPrinter->GetJobSetup() == pNewPrinter->GetJobSetup()))
+            return;
+    }
+
+    //  if (pPrinter->IsA(SfxPrinter))
     {
         // Da kein RTTI verfuegbar, wird hart gecasted (...)
         SetPrinter((SfxPrinter*) pNewPrinter);
