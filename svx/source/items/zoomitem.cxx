@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoomitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:42:31 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,21 @@
 
 #include "zoomitem.hxx"
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
 // -----------------------------------------------------------------------
 
 TYPEINIT1_AUTOFACTORY(SvxZoomItem,SfxUInt16Item);
+
+#define ZOOM_PARAM_VALUE    "Value"
+#define ZOOM_PARAM_VALUESET "ValueSet"
+#define ZOOM_PARAM_TYPE     "Type"
+#define ZOOM_PARAMS         3
 
 // -----------------------------------------------------------------------
 
@@ -155,6 +167,18 @@ sal_Bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId
     switch ( nMemberId )
     {
         case 0 :
+        {
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq( ZOOM_PARAMS );
+            aSeq[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOM_PARAM_VALUE ));
+            aSeq[0].Value <<= sal_Int32( GetValue() );
+            aSeq[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOM_PARAM_VALUESET ));
+            aSeq[1].Value <<= sal_Int16( nValueSet );
+            aSeq[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOM_PARAM_TYPE ));
+            aSeq[2].Value <<= sal_Int16( eType );
+            rVal <<= aSeq;
+        }
+        break;
+
         case MID_VALUE: rVal <<= (sal_Int32) GetValue(); break;
         case MID_VALUESET: rVal <<= (sal_Int16) nValueSet; break;
         case MID_TYPE: rVal <<= (sal_Int16) eType; break;
@@ -168,16 +192,81 @@ sal_Bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemb
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Int32 nVal;
-    if ( rVal >>= nVal )
+    switch ( nMemberId )
     {
-        switch ( nMemberId )
+        case 0 :
         {
-            case MID_VALUE: SetValue( nVal ); break;
-            case MID_VALUESET: nValueSet = (sal_Int16) nVal; break;
-            case MID_TYPE: eType = SvxZoomType( (sal_Int16) nVal ); break;
-            default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq;
+            if (( rVal >>= aSeq ) && ( aSeq.getLength() == ZOOM_PARAMS ))
+            {
+                sal_Int32 nValueTmp( 0 );
+                sal_Int16 nValueSetTmp( 0 );
+                sal_Int16 nTypeTmp( 0 );
+                sal_Bool  bAllConverted( sal_True );
+                sal_Int16 nConvertedCount( 0 );
+                for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
+                {
+                    if ( aSeq[i].Name.equalsAscii( ZOOM_PARAM_VALUE ))
+                    {
+                        bAllConverted &= ( aSeq[i].Value >>= nValueTmp );
+                        ++nConvertedCount;
+                    }
+                    else if ( aSeq[i].Name.equalsAscii( ZOOM_PARAM_VALUESET ))
+                    {
+                        bAllConverted &= ( aSeq[i].Value >>= nValueSetTmp );
+                        ++nConvertedCount;
+                    }
+                    else if ( aSeq[i].Name.equalsAscii( ZOOM_PARAM_TYPE ))
+                    {
+                        bAllConverted &= ( aSeq[i].Value >>= nTypeTmp );
+                        ++nConvertedCount;
+                    }
+                }
+
+                if ( bAllConverted && nConvertedCount == ZOOM_PARAMS )
+                {
+                    SetValue( nValueTmp );
+                    nValueSet = nValueSetTmp;
+                    eType = SvxZoomType( nTypeTmp );
+                    return sal_True;
+                }
+            }
+
+            return sal_False;
         }
+        break;
+
+        case MID_VALUE:
+        {
+            sal_Int32 nVal;
+            if ( rVal >>= nVal )
+            {
+                SetValue( nVal );
+                return sal_True;
+            }
+            else
+                return sal_False;
+        }
+        break;
+
+        case MID_VALUESET:
+        case MID_TYPE:
+        {
+            sal_Int16 nVal;
+            if ( rVal >>= nVal )
+            {
+                if ( nMemberId == MID_VALUESET )
+                    nValueSet = (sal_Int16) nVal;
+                else if ( nMemberId == MID_TYPE )
+                    eType = SvxZoomType( (sal_Int16) nVal );
+                return sal_True;
+            }
+            else
+                return sal_False;
+        }
+        break;
+
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
     }
 
     return sal_True;
