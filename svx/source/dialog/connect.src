@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:20:43 $
+ *  last change: $Author: af $ $Date: 2001-02-07 10:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ TabPage RID_SVXPAGE_CONNECTION
     HelpId = HID_PAGE_CONNECTION ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Verbinder" ;
     Text [ ENGLISH ] = "Connectors" ;
     Text [ english_us ] = "Connector" ;
@@ -84,8 +84,8 @@ TabPage RID_SVXPAGE_CONNECTION
     Text [ portuguese ] = "Conectores" ;
     GroupBox GRP_DISTANCE
     {
-        Pos = MAP_APPFONT ( 6 , 58 ) ;
-        Size = MAP_APPFONT ( 120 , 71 ) ;
+        Pos = MAP_APPFONT ( 6 , 90  ) ;
+        Size = MAP_APPFONT ( 120 , 77 ) ;
         Text = "Linienabstand" ;
         Text [ ENGLISH ] = "Distance" ;
         Text [ english_us ] = "Line spacing" ;
@@ -110,7 +110,7 @@ TabPage RID_SVXPAGE_CONNECTION
     };
     FixedText FT_TYPE
     {
-        Pos = MAP_APPFONT ( 132 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 8  ) ;
         Size = MAP_APPFONT ( 25 , 10 ) ;
         Text = "~Typ" ;
         Text [ ENGLISH ] = "~Type" ;
@@ -136,8 +136,8 @@ TabPage RID_SVXPAGE_CONNECTION
     };
     GroupBox GRP_DELTA
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 53 ) ;
+        Pos = MAP_APPFONT ( 6 , 26  ) ;
+        Size = MAP_APPFONT ( 120 , 61 ) ;
         Text = "Linienversatz" ;
         Text [ ENGLISH ] = "Delta" ;
         Text [ english_us ] = "Line skew" ;
@@ -162,8 +162,8 @@ TabPage RID_SVXPAGE_CONNECTION
     };
     GroupBox GRP_PREVIEW
     {
-        Pos = MAP_APPFONT ( 132 , 24 ) ;
-        Size = MAP_APPFONT ( 121 , 105 ) ;
+        Pos = MAP_APPFONT ( 132 , 26  ) ;
+        Size = MAP_APPFONT ( 122 , 127 ) ;
         Text = "Vorschau" ;
         Text [ ENGLISH ] = "Preview" ;
         Text [ english_us ] = "Preview" ;
@@ -189,14 +189,14 @@ TabPage RID_SVXPAGE_CONNECTION
     ListBox LB_TYPE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 158 , 6 ) ;
+        Pos = MAP_APPFONT ( 37 , 6  ) ;
         Size = MAP_APPFONT ( 96 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_LINE_1
     {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Pos = MAP_APPFONT ( 12 , 38  ) ;
         Size = MAP_APPFONT ( 66 , 10 ) ;
         Text = "Linie ~1" ;
         Text [ ENGLISH ] = "Line ~1" ;
@@ -223,7 +223,7 @@ TabPage RID_SVXPAGE_CONNECTION
     MetricField MTR_FLD_LINE_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 79 , 12 ) ;
+        Pos = MAP_APPFONT ( 79 , 37  ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
@@ -238,7 +238,7 @@ TabPage RID_SVXPAGE_CONNECTION
     };
     FixedText FT_LINE_2
     {
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Pos = MAP_APPFONT ( 12 , 54  ) ;
         Size = MAP_APPFONT ( 66 , 10 ) ;
         Text = "Linie ~2" ;
         Text [ ENGLISH ] = "Line ~2" ;
@@ -265,7 +265,7 @@ TabPage RID_SVXPAGE_CONNECTION
     MetricField MTR_FLD_LINE_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 79 , 26 ) ;
+        Pos = MAP_APPFONT ( 79 , 53  ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
@@ -280,7 +280,7 @@ TabPage RID_SVXPAGE_CONNECTION
     };
     FixedText FT_LINE_3
     {
-        Pos = MAP_APPFONT ( 12 , 41 ) ;
+        Pos = MAP_APPFONT ( 12 , 70  ) ;
         Size = MAP_APPFONT ( 66 , 10 ) ;
         Text = "Linie ~3" ;
         Text [ ENGLISH ] = "Line ~3" ;
@@ -307,7 +307,7 @@ TabPage RID_SVXPAGE_CONNECTION
     MetricField MTR_FLD_LINE_3
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 79 , 40 ) ;
+        Pos = MAP_APPFONT ( 79 , 69  ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
@@ -322,7 +322,7 @@ TabPage RID_SVXPAGE_CONNECTION
     };
     FixedText FT_HORZ_1
     {
-        Pos = MAP_APPFONT ( 12 , 69 ) ;
+        Pos = MAP_APPFONT ( 12 , 102  ) ;
         Size = MAP_APPFONT ( 66 , 10 ) ;
         Text = "Anfang h~orizontal" ;
         Text [ ENGLISH ] = "Start h~orizontal" ;
@@ -349,7 +349,7 @@ TabPage RID_SVXPAGE_CONNECTION
     MetricField MTR_FLD_HORZ_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 79 , 68 ) ;
+        Pos = MAP_APPFONT ( 79 , 101  ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
@@ -364,7 +364,7 @@ TabPage RID_SVXPAGE_CONNECTION
     };
     FixedText FT_HORZ_2
     {
-        Pos = MAP_APPFONT ( 12 , 99 ) ;
+        Pos = MAP_APPFONT ( 12 , 134  ) ;
         Size = MAP_APPFONT ( 54 , 10 ) ;
         Text = "Ende ho~rizontal" ;
         Text [ ENGLISH ] = "End ho~rizontal" ;
@@ -392,7 +392,7 @@ TabPage RID_SVXPAGE_CONNECTION
     {
         Border = TRUE ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
-        Pos = MAP_APPFONT ( 79 , 98 ) ;
+        Pos = MAP_APPFONT ( 79 , 133  ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
         Repeat = TRUE ;
@@ -406,7 +406,7 @@ TabPage RID_SVXPAGE_CONNECTION
     };
     FixedText FT_VERT_1
     {
-        Pos = MAP_APPFONT ( 12 , 84 ) ;
+        Pos = MAP_APPFONT ( 12 , 118  ) ;
         Size = MAP_APPFONT ( 54 , 10 ) ;
         Text = "Anfang ~vertikal" ;
         Text [ ENGLISH ] = "Start ~vertical" ;
@@ -433,7 +433,7 @@ TabPage RID_SVXPAGE_CONNECTION
     MetricField MTR_FLD_VERT_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 79 , 83 ) ;
+        Pos = MAP_APPFONT ( 79 , 117  ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
@@ -448,7 +448,7 @@ TabPage RID_SVXPAGE_CONNECTION
     };
     FixedText FT_VERT_2
     {
-        Pos = MAP_APPFONT ( 12 , 114 ) ;
+        Pos = MAP_APPFONT ( 12 , 150  ) ;
         Size = MAP_APPFONT ( 54 , 10 ) ;
         Text = "Ende v~ertikal" ;
         Text [ ENGLISH ] = "End v~ertical" ;
@@ -475,7 +475,7 @@ TabPage RID_SVXPAGE_CONNECTION
     MetricField MTR_FLD_VERT_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 79 , 113 ) ;
+        Pos = MAP_APPFONT ( 79 , 149  ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
@@ -492,8 +492,8 @@ TabPage RID_SVXPAGE_CONNECTION
     {
         HelpId = HID_PAGE_CONNECTION_CTL_PREVIEW ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 138 , 35 ) ;
-        Size = MAP_APPFONT ( 109 , 88 ) ;
+        Pos = MAP_APPFONT ( 138 , 37  ) ;
+        Size = MAP_APPFONT ( 110 , 110 ) ;
         TabStop = TRUE ;
     };
     Text[ chinese_simplified ] = "Á¬½Ó·û";
@@ -508,3 +508,4 @@ TabPage RID_SVXPAGE_CONNECTION
     Text[ language_user1 ] = " ";
 };
  // ******************************************************************* EOF
+
