@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:22:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,17 @@
 
 #pragma hdrstop
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventObject.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
+#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 #ifndef _SV_MENU_HXX //autogen
@@ -173,7 +173,7 @@
 #define SmViewShell
 #include "smslots.hxx"
 
-using namespace drafts::com::sun::star::accessibility;
+using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
@@ -305,7 +305,7 @@ void SmGraphicWindow::GetFocus()
         uno::Any aOldValue, aNewValue;
         // aOldValue remains empty
         aNewValue <<= AccessibleStateType::FOCUSED;
-        pAccessible->LaunchEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT,
+        pAccessible->LaunchEvent( AccessibleEventId::STATE_CHANGED,
                 aOldValue, aNewValue );
     }
 }
@@ -318,7 +318,7 @@ void SmGraphicWindow::LoseFocus()
         uno::Any aOldValue, aNewValue;
         aOldValue <<= AccessibleStateType::FOCUSED;
         // aNewValue remains empty
-        pAccessible->LaunchEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT,
+        pAccessible->LaunchEvent( AccessibleEventId::STATE_CHANGED,
                 aOldValue, aNewValue );
     }
 }
