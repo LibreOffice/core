@@ -1,0 +1,127 @@
+/*************************************************************************
+ *
+ *  $RCSfile: gtksys.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:53:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <svunx.h>
+#include <svdata.hxx>
+#include <window.hxx>
+#include <plugins/gtk/gtkinst.hxx>
+#include <cstdio>
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
+#include <X11/Xlib.h>
+
+SalSystem *GtkInstance::CreateSalSystem()
+{
+        return new GtkSalSystem();
+}
+
+GtkSalSystem::~GtkSalSystem()
+{
+}
+
+int GtkSalSystem::ShowNativeDialog( const String& rTitle,
+                                    const String& rMessage,
+                                    const std::list< String >& rButtons,
+                                    int nDefButton )
+{
+
+    ImplSVData* pSVData = ImplGetSVData();
+    if( pSVData->mpIntroWindow )
+            pSVData->mpIntroWindow->Hide();
+
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "GtkSalSystem::ShowNativeDialog\n");
+#endif
+
+    ByteString aTitle( rTitle, RTL_TEXTENCODING_UTF8 );
+    ByteString aMessage( rMessage, RTL_TEXTENCODING_UTF8 );
+
+    /* Create the dialogue */
+    GtkWidget* mainwin = gtk_message_dialog_new
+            ( NULL, (GtkDialogFlags)0, GTK_MESSAGE_WARNING,
+              GTK_BUTTONS_NONE, aMessage.GetBuffer(), NULL );
+    gtk_window_set_title( GTK_WINDOW( mainwin ), aTitle.GetBuffer() );
+
+    gint i, nButtons = 0, nResponse;
+
+    int nButton = 0;
+    for( std::list< String >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
+    {
+        ByteString aLabel( *it, RTL_TEXTENCODING_UTF8 );
+
+        if( nButton == nDefButton )
+        {
+            gtk_dialog_add_button( GTK_DIALOG( mainwin ), aLabel.GetBuffer(), nButtons );
+            gtk_dialog_set_default_response( GTK_DIALOG( mainwin ), nButtons );
+        }
+        else
+            gtk_dialog_add_button( GTK_DIALOG( mainwin ), aLabel.GetBuffer(), nButtons );
+        nButtons++;
+    }
+
+    nResponse = gtk_dialog_run( GTK_DIALOG(mainwin) );
+    if( nResponse == GTK_RESPONSE_NONE || nResponse == GTK_RESPONSE_DELETE_EVENT )
+        nResponse = -1;
+
+    gtk_widget_destroy( GTK_WIDGET(mainwin) );
+
+    return nResponse;
+}
