@@ -7435,3 +7435,5 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ?GetActiveHelpString@SfxContentHelper@@SA?AVString@@ABV2@@Z
 ?makeStringAndClear@OStringBuffer@rtl@@QAE?AVOString@2@XZ
 ??0PickListEntry@SfxPickList@@QAE@ABVString@@00@Z
+??1?$Reference@VXTopWindow@awt@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?s_pType_com_sun_star_awt_XTopWindow@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXTopWindow@awt@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
