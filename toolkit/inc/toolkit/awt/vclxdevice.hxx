@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxdevice.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-17 14:51:23 $
+ *  last change: $Author: mt $ $Date: 2001-07-27 09:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@ class VirtualDevice;
 //  class VCLXDevice
 //  ----------------------------------------------------
 
+// For using nDummy, no incompatible update, add a BOOL bCreatedWithToolkitMember later...
+#define FLAGS_CREATEDWITHTOOLKIT    0x00000001
+
 class VCLXDevice :  public ::com::sun::star::awt::XDevice,
                     public ::com::sun::star::lang::XTypeProvider,
                     public ::com::sun::star::lang::XUnoTunnel,
@@ -101,7 +104,7 @@ private:
 
 public:
     void*                   pDummy;
-    sal_uInt32              nDummy;
+    sal_uInt32              nFlags;
 
 protected:
     NAMESPACE_VOS(IMutex)&  GetMutex() { return mrMutex; }
@@ -113,6 +116,9 @@ public:
 
     void                    SetOutputDevice( OutputDevice* pOutDev ) { mpOutputDevice = pOutDev; }
     OutputDevice*           GetOutputDevice() const { return mpOutputDevice; }
+
+    void                    SetCreatedWithToolkit( sal_Bool bCreatedWithToolkit );
+    sal_Bool                IsCreatedWithToolkit() const;
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

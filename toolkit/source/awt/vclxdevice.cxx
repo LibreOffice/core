@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxdevice.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-15 12:34:01 $
+ *  last change: $Author: mt $ $Date: 2001-07-27 09:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,24 +87,36 @@
 VCLXDevice::VCLXDevice() : mrMutex( Application::GetSolarMutex() )
 {
     mpOutputDevice = NULL;
-#ifdef DEBUG
-    nDummy = 0x12345678;
-    pDummy = (void*)0x12345678;
-#endif
+    nFlags = 0;
 }
 
 VCLXDevice::~VCLXDevice()
 {
-#ifdef DEBUG
-    nDummy = 0xbaadbaad;
-    pDummy = (void*)0xbaadbaad;
-#endif
+// Was thought for #88347#, but didn't help, because the interface will not be released
+// But would be a good idea anyway, check after 6.0, it's a little bit dangerous now
+//    if( mpOutputDevice && IsCreatedWithToolkit() )
+//    {
+//        delete mpOutputDevice;
+//    }
 }
 
 void VCLXDevice::DestroyOutputDevice()
 {
     delete mpOutputDevice;
     mpOutputDevice = NULL;
+}
+
+void VCLXDevice::SetCreatedWithToolkit( sal_Bool bCreatedWithToolkit )
+{
+    if ( bCreatedWithToolkit )
+        nFlags |= FLAGS_CREATEDWITHTOOLKIT;
+    else
+        nFlags &= ~FLAGS_CREATEDWITHTOOLKIT;
+}
+
+sal_Bool VCLXDevice::IsCreatedWithToolkit() const
+{
+    return ( nFlags & FLAGS_CREATEDWITHTOOLKIT ) != 0;
 }
 
 // ::com::sun::star::uno::XInterface

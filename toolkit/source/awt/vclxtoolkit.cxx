@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-11 13:55:47 $
+ *  last change: $Author: mt $ $Date: 2001-07-27 09:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,6 +592,7 @@ void SAL_CALL VCLXToolkit::disposing()
         }
         else
         {
+            pNewComp->SetCreatedWithToolkit( TRUE );
             pNewWindow->SetComponentInterface( pNewComp );
             xRef = pNewComp;
         }
@@ -711,10 +712,6 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 *ppNewComp = new VCLXDateField;
                 ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(DateField*)pNewWindow );
             break;
-            case WINDOW_DIALOG:
-                pNewWindow = new Dialog( pParent, nWinBits );
-                *ppNewComp = new VCLXDialog;
-            break;
             case WINDOW_EDIT:
                 pNewWindow = new Edit( pParent, nWinBits );
                 *ppNewComp = new VCLXEdit;
@@ -786,6 +783,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_METRICFIELD:
                 pNewWindow = new MetricField( pParent, nWinBits );
             break;
+            case WINDOW_DIALOG:
             case WINDOW_MODALDIALOG:
             case WINDOW_MODELESSDIALOG:
                 // Modal/Modeless nur durch Show/Execute
