@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-19 12:42:53 $
+ *  last change: $Author: tbe $ $Date: 2001-03-23 16:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,9 +136,12 @@ DialogWindow::DialogWindow( Window* pParent, VCSbxDialogRef aDialog,
 
     InitSettings( TRUE, TRUE, TRUE );
 
+#ifdef _DLGEDITOR_
+    pEditor = new DlgEditor();
+    pEditor->SetWindow( this );
+#else
     pEditor = new VCDlgEditor( GetBasic() );
     pEditor->SetWindow( this );
-#ifndef _DLGEDITOR_
     pEditor->SetVCSbxForm( pDialog );
 #endif
 
@@ -218,7 +221,7 @@ DialogWindow::DialogWindow( Window* pParent, VCSbxDialogRef aDialog, StarBASIC* 
 
     InitSettings( TRUE, TRUE, TRUE );
 
-    pEditor = new VCDlgEditor( GetBasic() );
+    pEditor = new DlgEditor();
     pEditor->SetWindow( this );
     pEditor->SetDialog( xDialogModel );
 
@@ -252,7 +255,7 @@ void DialogWindow::LoseFocus()
 {
     if( pEditor->IsModified() )
     {
-        BasicIDE::MarkDocShellModified( pEditor->GetBasic() );
+        BasicIDE::MarkDocShellModified( GetBasic() );
         pEditor->ClearModifyFlag();
         pDialog->SetModified( TRUE );
     }
@@ -345,11 +348,14 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
 
 IMPL_LINK( DialogWindow, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
 {
+    // not working yet for unocontrols
+#ifndef _DLGEDITOR_
     if (pUndoAction)
     {
         pUndoMgr->AddUndoAction( pUndoAction );
         BasicIDE::GetBindings().Invalidate( SID_UNDO );
     }
+#endif
 
     return 0;
 }
@@ -473,8 +479,11 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
     switch ( rReq.GetSlot() )
     {
         case SID_CUT:
+            // not working yet for unocontrols
+#ifndef _DLGEDITOR_
             GetEditor()->Cut();
             BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
+#endif
             break;
         case SID_DELETE:
 #ifdef MAC
@@ -484,11 +493,17 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
             BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
             break;
         case SID_COPY:
+            // not working yet for unocontrols
+#ifndef _DLGEDITOR_
             GetEditor()->Copy();
+#endif
             break;
         case SID_PASTE:
+            // not working yet for unocontrols
+#ifndef _DLGEDITOR_
             GetEditor()->Paste();
             BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
+#endif
             break;
         case SID_CHOOSE_CONTROLS:
         {
@@ -705,7 +720,7 @@ void DialogWindow::StoreData()
     }
 
     if( pEditor->IsModified() )
-        BasicIDE::MarkDocShellModified( pEditor->GetBasic() );
+        BasicIDE::MarkDocShellModified( GetBasic() );
     pDialog->ResetFlag( SBX_MODIFIED );
     pEditor->ClearModifyFlag();
 #else
@@ -721,7 +736,7 @@ void DialogWindow::StoreData()
 void DialogWindow::Deactivating()
 {
     if( pEditor->IsModified() )
-        BasicIDE::MarkDocShellModified( pEditor->GetBasic() );
+        BasicIDE::MarkDocShellModified( GetBasic() );
 }
 
 void DialogWindow::PrintData( Printer* pPrinter )
