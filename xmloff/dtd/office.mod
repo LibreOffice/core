@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.38 2001-04-23 17:35:09 dvo Exp $
+	$Id: office.mod,v 1.39 2001-05-09 12:30:34 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -54,6 +54,7 @@
 -->
 
 <!ELEMENT office:document ( office:meta?,
+							office:settings?,
 							office:script?,
 							office:font-decls?,
 							office:styles?,

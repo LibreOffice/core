@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.46 2001-05-07 15:44:58 cl Exp $
+	$Id: drawing.mod,v 1.47 2001-05-09 12:30:34 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -564,13 +564,14 @@
 <!ATTLIST draw:image draw:layer %layerName; #IMPLIED>
 
 <!-- objects -->
-<!ELEMENT draw:object (office:events?, draw:image-map?, svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
+<!ELEMENT math:math ANY> <!-- dummy (we have no MathML DTD currently)-->
+<!ELEMENT draw:object ((office:document|math:math)?,office:events?, draw:image-map?, svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
 <!ATTLIST draw:object %draw-style-name;>
 <!ATTLIST draw:object draw:name %string; #IMPLIED>
-<!ATTLIST draw:object xlink:href %uriReference; #REQUIRED>
-<!ATTLIST draw:object xlink:type (simple) #FIXED "simple">
-<!ATTLIST draw:object xlink:show (embed) "embed">
-<!ATTLIST draw:object xlink:actuate (onLoad) "onLoad">
+<!ATTLIST draw:object xlink:href %uriReference; #IMPLIED>
+<!ATTLIST draw:object xlink:type (simple) #IMPLIED>
+<!ATTLIST draw:object xlink:show (embed) #IMPLIED>
+<!ATTLIST draw:object xlink:actuate (onLoad) #IMPLIED>
 <!ATTLIST draw:object %text-anchor;>
 <!ATTLIST draw:object %draw-position;>
 <!ATTLIST draw:object %draw-end-position; >
