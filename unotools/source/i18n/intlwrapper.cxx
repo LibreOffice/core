@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intlwrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:12:19 $
+ *  last change: $Author: er $ $Date: 2001-05-22 11:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,8 @@ IntlWrapper::IntlWrapper(
         pCharClass( NULL ),
         pLocaleData( NULL ),
         pCalendar( NULL ),
-        pCollator( NULL )
+        pCollator( NULL ),
+        pCaseCollator( NULL )
 {
     eLanguage = ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country );
 }
@@ -95,7 +96,8 @@ IntlWrapper::IntlWrapper(
         pCharClass( NULL ),
         pLocaleData( NULL ),
         pCalendar( NULL ),
-        pCollator( NULL )
+        pCollator( NULL ),
+        pCaseCollator( NULL )
 {
     String aLanguage, aCountry;
     ConvertLanguageToIsoNames( eLanguage, aLanguage, aCountry );
