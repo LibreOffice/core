@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:31:27 $
+ *  last change: $Author: nf $ $Date: 2001-05-17 08:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,13 +115,13 @@ TabDialog DLG_ATTR
     {
         TabStop = TRUE ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
-        Text = "~ZurÅck" ;
+        Text = "~Zur¸ck" ;
         Text [ ENGLISH ] = "Undo" ;
         Text [ norwegian ] = "Undo" ;
         Text [ italian ] = "Indietro" ;
         Text [ portuguese_brazilian ] = "Desfazer" ;
         Text [ portuguese ] = "~Anterior" ;
-        Text [ finnish ] = "~Zur?ck" ;
+        Text [ finnish ] = "~Zur¸ck" ;
         Text [ danish ] = "Tilbage" ;
         Text [ french ] = "~PrÈcÈdent" ;
         Text [ swedish ] = "~Tillbaka" ;
