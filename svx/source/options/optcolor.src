@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-06-05 14:21:31 $
+ *  last change: $Author: os $ $Date: 2002-06-26 12:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             ListBox LB_TABLEBOUNDARIES      {Pos = MAP_APPFONT ( _LB_XPOS , 5 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _LB_WIDTH , 50 ) ;DropDown = TRUE;};
             Window WN_TABLEBOUNDARIES       {Pos = MAP_APPFONT ( _WN_XPOS , 5 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _WN_WIDTH, _WN_HEIGHT  ) ;Border = TRUE;};
 
-            CheckBox CB_LINKS               {Pos = MAP_APPFONT ( _CB_XPOS , 6 * _LINE_HEIGHT ) ;Size = MAP_APPFONT ( _CB_WIDTH , 10 ) ;Text = "Unbesuchte verknüpfungen" ;Text [ ENGLISH ] = "Unvisited Links" ;};
+            CheckBox CB_LINKS               {Pos = MAP_APPFONT ( _CB_XPOS , 6 * _LINE_HEIGHT ) ;Size = MAP_APPFONT ( _CB_WIDTH , 10 ) ;Text = "Unbesuchte Verknüpfungen" ;Text [ ENGLISH ] = "Unvisited Links" ;};
             ListBox LB_LINKS                {Pos = MAP_APPFONT ( _LB_XPOS , 6 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _LB_WIDTH , 50 ) ;DropDown = TRUE;};
             Window WN_LINKS                 {Pos = MAP_APPFONT ( _WN_XPOS , 6 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _WN_WIDTH, _WN_HEIGHT  ) ;Border = TRUE;};
 
@@ -471,7 +471,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             ListBox LB_CALCNOTESBACKGROUND  {Pos = MAP_APPFONT ( _LB_XPOS , 30 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _LB_WIDTH , 50 ) ;DropDown = TRUE;};
             Window WN_CALCNOTESBACKGROUND   {Pos = MAP_APPFONT ( _WN_XPOS , 30 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _WN_WIDTH, _WN_HEIGHT  ) ;Border = TRUE;};
 
-            FixedText FT_DRAW               {Pos = MAP_APPFONT ( 14 ,       31 * _LINE_HEIGHT ) ; Size = MAP_APPFONT ( _FT_WIDTH , 8 ) ;Text = "Zeichnung / Presentation" ;Text [ ENGLISH ] = "Drawing / Presentation" ; };
+            FixedText FT_DRAW               {Pos = MAP_APPFONT ( 14 ,       31 * _LINE_HEIGHT ) ; Size = MAP_APPFONT ( _FT_WIDTH , 8 ) ;Text = "Zeichnung / Präsentation" ;Text [ ENGLISH ] = "Drawing / Presentation" ; };
 
             FixedText FT_DRAWGRID           {Pos = MAP_APPFONT ( _FT_XPOS , 32 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "Raster" ;Text [ ENGLISH ] = "Grid" ;};
             ListBox LB_DRAWGRID             {Pos = MAP_APPFONT ( _LB_XPOS , 32 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _LB_WIDTH , 50 ) ;DropDown = TRUE;};
