@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:46:24 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,9 @@
 #ifndef _COM_SUN_STAR_SHEET_XSCENARIO_HPP_
 #include <com/sun/star/sheet/XScenario.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_XSCENARIOENHANCED_HPP_
+#include <com/sun/star/sheet/XScenarioEnhanced.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #endif
@@ -341,7 +344,7 @@ protected:
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
     virtual ::com::sun::star::beans::PropertyState GetOnePropertyState(
                                 USHORT nItemWhich, const SfxItemPropertyMap* pMap );
-    virtual void GetOnePropertyValue( const SfxItemPropertyMap* pMap,
+    virtual void            GetOnePropertyValue( const SfxItemPropertyMap* pMap,
                                 ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
@@ -1075,7 +1078,8 @@ class ScTableSheetObj : public ScCellRangeObj,
                         public com::sun::star::sheet::XSheetAuditing,
                         public com::sun::star::sheet::XSheetOutline,
                         public com::sun::star::util::XProtectable,
-                        public com::sun::star::sheet::XScenario
+                        public com::sun::star::sheet::XScenario,
+                        public com::sun::star::sheet::XScenarioEnhanced
 {
     friend class ScTableSheetsObj;      // fuer insertByName()
 
@@ -1269,6 +1273,10 @@ public:
                                 ::com::sun::star::table::CellRangeAddress >& aRanges )
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   apply() throw(::com::sun::star::uno::RuntimeException);
+                            // XScenarioEnhanced
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress > SAL_CALL
+                            getRanges(  )
+                                    throw(::com::sun::star::uno::RuntimeException);
 
                             // XPropertySet ueberladen wegen Sheet-Properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
