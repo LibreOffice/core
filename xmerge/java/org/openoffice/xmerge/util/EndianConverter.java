@@ -195,14 +195,14 @@ public class EndianConverter {
      */
     public static double readDouble(byte[] value) {
 
-        long lvalue = ( ((long)(value[7]) << 56) +
-                        ((long)(value[6]) << 48) +
-                        ((long)(value[5]) << 40) +
-                        ((long)(value[4]) << 32) +
-                        ((long)(value[3]) << 24) +
-                        ((long)(value[2]) << 16) +
-                        ((long)(value[1]) << 8) +
-                         (long)(value[0]));
+        long lvalue = ( ((long)(value[7])       << 56)  +
+                        ((long)(value[6]&0xFF)  << 48)  +
+                        ((long)(value[5]&0xFF)  << 40)  +
+                        ((long)(value[4]&0xFF)  << 32)  +
+                        ((long)(value[3]&0xFF)  << 24)  +
+                        ((long)(value[2]&0xFF)  << 16)  +
+                        ((long)(value[1]&0xFF)  << 8)   +
+                         (long)(value[0]&0xFF));
 
         return Double.longBitsToDouble(lvalue);
     }
