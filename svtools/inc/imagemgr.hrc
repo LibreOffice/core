@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-11 07:52:32 $
+ *  last change: $Author: pb $ $Date: 2001-05-14 10:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,44 @@
 #define IMG_RELATION                    (IMAGELIST_START + 163)
 #define IMG_IMPRESSPACKED               (IMAGELIST_START + 165)
 #define IMG_NEWFROMTEMPLATE             (IMAGELIST_START + 166)
+
+#define RID_DESCRIPTION_START                       256
+
+#define STR_DESCRIPTION_SOURCEFILE                  (RID_DESCRIPTION_START +  0)
+#define STR_DESCRIPTION_BOOKMARKFILE                (RID_DESCRIPTION_START +  1)
+#define STR_DESCRIPTION_GRAPHIC_DOC                 (RID_DESCRIPTION_START +  2)
+#define STR_DESCRIPTION_CFGFILE                     (RID_DESCRIPTION_START +  3)
+#define STR_DESCRIPTION_APPLICATION                 (RID_DESCRIPTION_START +  4)
+#define STR_DESCRIPTION_DATABASE_TABLE              (RID_DESCRIPTION_START +  5)
+#define STR_DESCRIPTION_SYSFILE                     (RID_DESCRIPTION_START +  6)
+#define STR_DESCRIPTION_WORD_DOC                    (RID_DESCRIPTION_START +  7)
+#define STR_DESCRIPTION_HELP_DOC                    (RID_DESCRIPTION_START +  8)
+#define STR_DESCRIPTION_HTMLFILE                    (RID_DESCRIPTION_START +  9)
+#define STR_DESCRIPTION_ARCHIVFILE                  (RID_DESCRIPTION_START + 10)
+#define STR_DESCRIPTION_LOGFILE                     (RID_DESCRIPTION_START + 11)
+#define STR_DESCRIPTION_SMATH_DOC                   (RID_DESCRIPTION_START + 12)
+#define STR_DESCRIPTION_SCHART_DOC                  (RID_DESCRIPTION_START + 13)
+#define STR_DESCRIPTION_SDRAW_DOC                   (RID_DESCRIPTION_START + 14)
+#define STR_DESCRIPTION_SCALC_DOC                   (RID_DESCRIPTION_START + 15)
+#define STR_DESCRIPTION_SIMPRESS_DOC                (RID_DESCRIPTION_START + 16)
+#define STR_DESCRIPTION_SWRITER_DOC                 (RID_DESCRIPTION_START + 17)
+#define STR_DESCRIPTION_GLOBALDOC                   (RID_DESCRIPTION_START + 18)
+#define STR_DESCRIPTION_SIMAGE_DOC                  (RID_DESCRIPTION_START + 19)
+#define STR_DESCRIPTION_TEXTFILE                    (RID_DESCRIPTION_START + 20)
+#define STR_DESCRIPTION_LINK                        (RID_DESCRIPTION_START + 21)
+#define STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC        (RID_DESCRIPTION_START + 22)
+#define STR_DESCRIPTION_EXCEL_DOC                   (RID_DESCRIPTION_START + 23)
+#define STR_DESCRIPTION_EXCEL_TEMPLATE_DOC          (RID_DESCRIPTION_START + 24)
+#define STR_DESCRIPTION_BATCHFILE                   (RID_DESCRIPTION_START + 25)
+#define STR_DESCRIPTION_FILE                        (RID_DESCRIPTION_START + 26)
+#define STR_DESCRIPTION_FOLDER                      (RID_DESCRIPTION_START + 27)
+#define STR_DESCRIPTION_FACTORY_WRITER              (RID_DESCRIPTION_START + 28)
+#define STR_DESCRIPTION_FACTORY_CALC                (RID_DESCRIPTION_START + 29)
+#define STR_DESCRIPTION_FACTORY_IMPRESS             (RID_DESCRIPTION_START + 30)
+#define STR_DESCRIPTION_FACTORY_DRAW                (RID_DESCRIPTION_START + 31)
+#define STR_DESCRIPTION_FACTORY_WRITERWEB           (RID_DESCRIPTION_START + 32)
+#define STR_DESCRIPTION_FACTORY_GLOBALDOC           (RID_DESCRIPTION_START + 33)
+#define STR_DESCRIPTION_FACTORY_MATH                (RID_DESCRIPTION_START + 34)
 
 #endif
 
