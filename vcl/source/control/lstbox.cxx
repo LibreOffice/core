@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:18:53 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@
 #include <tools/debug.hxx>
 #endif
 
-#pragma hdrstop
+
 
 // =======================================================================
 
