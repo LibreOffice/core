@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: os $ $Date: 2001-06-29 06:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ SwInsertChartDlg::SwInsertChartDlg( SfxBindings* pBindings,
     aFinish     (this, SW_RES(BT_FINISH   )),
     aHelp       (this, SW_RES(BT_HELP     )),
     aCancel     (this, SW_RES(BT_CANCEL   )),
-    aHLine      (this, SW_RES(FT_HORZLINE )),
+    aHLine      (this, SW_RES(FL_HLINE   )),
     aPrev       (this, SW_RES(BT_PREV    )),
     aNext       (this, SW_RES(BT_NEXT    )),
     aFirstRow   (this, SW_RES(CB_FIRST_ROW)),
