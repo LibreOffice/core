@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:19:04 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -861,22 +861,6 @@ void ViewShell::SetTabCompat( BOOL bNew )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
         GetDoc()->SetTabCompat( bNew );
-        const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
-        lcl_InvalidateAllCntnt( *this, nInv );
-    }
-}
-
-BOOL ViewShell::IsAddFlyOffsets() const
-{
-    return GetDoc()->IsAddFlyOffsets();
-}
-
-void ViewShell::SetAddFlyOffsets( BOOL bNew )
-{
-    if( GetDoc()->IsAddFlyOffsets() != bNew  )
-    {
-        SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
-        GetDoc()->SetAddFlyOffsets( bNew );
         const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
         lcl_InvalidateAllCntnt( *this, nInv );
     }
@@ -1959,11 +1943,6 @@ SfxPrinter* ViewShell::GetPrt( BOOL bCreate ) const
     return GetDoc()->GetPrt( bCreate );
 }
 
-VirtualDevice* ViewShell::GetVirDev( BOOL bCreate ) const
-{
-    return GetDoc()->GetVirDev( bCreate );
-}
-
 OutputDevice& ViewShell::GetRefDev() const
 {
     OutputDevice* pTmpOut = 0;
@@ -2011,22 +1990,6 @@ Size ViewShell::GetDocSize() const
 SfxItemPool& ViewShell::GetAttrPool()
 {
     return GetDoc()->GetAttrPool();
-}
-
-/*************************************************************************
-|*
-|*    ViewShell::SetSubsLines()
-|*
-|*    Beschreibung      Hilfslinien An-/Abschalten
-|*    Ersterstellung    MA 26. May. 92
-|*    Letzte Aenderung  MA 03. May. 95
-|*
-*************************************************************************/
-
-void ViewShell::SetSubsLines()
-{
-    if( GetWin() )
-        GetWin()->Invalidate();
 }
 
 /******************************************************************************
