@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-18 08:04:36 $
+ *  last change: $Author: mt $ $Date: 2002-04-18 14:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,6 +832,9 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
     // AppFont-Aufloesung berechnen
     if ( mbFrame && !pSVData->maGDIData.mnAppFontX )
         ImplInitAppFontData( this );
+
+    if ( GetParent() )
+        GetParent()->ImplCallEventListeners( VCLEVENT_WINDOW_CHILDCREATED, this );
 }
 
 // -----------------------------------------------------------------------
@@ -4044,6 +4047,8 @@ Window::~Window()
     mbInDtor = TRUE;
 
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
+    if ( GetParent() )
+        GetParent()->ImplCallEventListeners( VCLEVENT_WINDOW_CHILDDESTROYED, this );
 
     // shutdown drag and drop
     ::com::sun::star::uno::Reference < ::com::sun::star::lang::XComponent > xComponent( mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
@@ -7341,12 +7346,37 @@ Window* Window::GetAccessibleParentWindow() const
 
 USHORT Window::GetAccessibleChildWindowCount()
 {
-    return GetChildCount();
+    USHORT nChildren = GetChildCount();
+
+    // Search also for SystemWindows.
+    Window* pOverlap = GetWindow( WINDOW_OVERLAP );
+    pOverlap = pOverlap->GetWindow( WINDOW_FIRSTOVERLAP );
+    while ( pOverlap )
+    {
+        nChildren++;
+        pOverlap = pOverlap->GetWindow( WINDOW_NEXT );
+    }
+
+    return nChildren;
 }
 
 Window* Window::GetAccessibleChildWindow( USHORT n )
 {
     Window* pChild = GetChild( n );
+    if ( !pChild && ( n >= GetChildCount() ) )
+    {
+        USHORT n2 = n - GetChildCount();
+        Window* pOverlap = GetWindow( WINDOW_OVERLAP );
+        pOverlap = pOverlap->GetWindow( WINDOW_FIRSTOVERLAP );
+        while ( !pChild && pOverlap )
+        {
+            if ( !n2 )
+                pChild = pOverlap;
+            pOverlap = n2 ? pOverlap->GetWindow( WINDOW_NEXT ) : NULL;
+            n2--;
+        }
+
+    }
     if ( pChild && ( pChild->GetType() == WINDOW_BORDERWINDOW ) && ( pChild->GetChildCount() == 1 ) )
     {
         pChild = pChild->GetChild( 0 );
