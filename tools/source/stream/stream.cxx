@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:12:34 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2735,6 +2735,7 @@ sal_Bool SvMemoryStream::ReAllocateMemory( long nDiff )
     else
     {
         bRetVal = TRUE;
+        FreeMemory();
         pBuf = 0;
         nSize = 0;
         nEndOfData = 0;
