@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltracer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:48:03 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:48:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,11 +81,7 @@ enum XclTracerId
     eTabLimitExceeded ,
     ePassword ,
     ePrintRange ,
-    eHorizontalPrint ,
     eShortDate ,
-    eShrinkToFit ,
-    eAlignmentFill ,
-    eDiagonalBorder ,
     eBorderLineStyle ,
     eFillPattern ,
     eInvisibleGrid ,
@@ -96,6 +92,7 @@ enum XclTracerId
     ePivotChartExists ,
     eChartUnKnownType ,
     eChartTrendLines ,
+    eChartErrorBars ,
     eChartOnlySheet ,
     eChartRange ,
     eChartDSName,
@@ -103,8 +100,8 @@ enum XclTracerId
     eChartLegendPosition,
     eChartTextFormatting,
     eChartEmbeddedObj,
-    eChartBorderAuto,
     eChartAxisAuto,
+    eChartAxisManual,
     eChartInvalidXY,
     eUnsupportedObject ,
     eObjectNotPrintable ,
@@ -161,11 +158,7 @@ public:
     void                        TraceInvalidRow( SCTAB nTab,  sal_uInt32 nRow, sal_uInt32 nMaxrow );
     void                        TraceInvalidTab( SCTAB nTab, SCTAB nMaxTab);
     void                        TracePrintRange();
-    void                        TracePrintFitToPages(sal_uInt16 nFitWidth);
     void                        TraceDates(sal_uInt16 nNumFmt);
-    void                        TraceShrinkToFit(bool bShrinkToFit);
-    void                        TraceAlignmentFill(bool bAlignmentFill);
-    void                        TraceDiagonalBorder(bool bDiagonalBorder);
     void                        TraceBorderLineStyle(bool bBorderLineStyle);
     void                        TraceFillPattern(bool bFillPattern);
     void                        TraceInvisibleGrid(bool bVisibleGrid);
@@ -175,6 +168,7 @@ public:
     void                        TracePivotChartExists();
     void                        TraceChartUnKnownType();
     void                        TraceChartTrendLines();
+    void                        TraceChartErrorBars();
     void                        TraceChartOnlySheet();
     void                        TraceChartRange();
     void                        TraceChartDSName();
@@ -182,8 +176,8 @@ public:
     void                        TraceChartLegendPosition();
     void                        TraceChartTextFormatting();
     void                        TraceChartEmbeddedObj();
-    void                        TraceChartBorderAuto();
-    void                        TraceChartAxisAuto();
+    void                        TraceChartAxisAutoCross();
+    void                        TraceChartAxisManualCross();
     void                        TraceChartInvalidXY();
     void                        TraceUnsupportedObjects();
     void                        TraceObjectNotPrintable();
