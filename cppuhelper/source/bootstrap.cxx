@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:58:42 $
+ *  last change: $Author: hr $ $Date: 2004-06-28 14:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,6 @@
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/io/IOException.hpp"
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
-#include "com/sun/star/util/XMacroExpander.hpp"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define ARLEN(x) sizeof (x) / sizeof *(x)
@@ -547,12 +546,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             throw BootstrapException( OUSTR( "no local component context!" ) );
 
         // URL to office executable
-        Reference<util::XMacroExpander> xMacroExpander(
-            xLocalContext->getValueByName(
-            OUSTR( "/singletons/com.sun.star.util.theMacroExpander" ) ),
-            UNO_QUERY_THROW );
-        OUString sOfficeURL( xMacroExpander->expandMacros( OUSTR( "$ORIGIN" ) )
-            + OUSTR( "/soffice" ) );
+        OUString sOfficeURL( get_this_libpath() + OUSTR( "/soffice" ) );
 
         // create a random pipe name
         rtlRandomPool hPool = rtl_random_createPool();
