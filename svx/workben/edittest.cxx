@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edittest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-02 14:34:21 $
+ *  last change: $Author: mt $ $Date: 2000-11-14 06:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,14 @@ short nRotation = 0;
 USHORT nZoom = 100;
 BOOL bURLClicked = FALSE;
 
+using namespace ::com::sun::star::connection;
+using namespace ::vos;
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::registry;
+using namespace ::com::sun::star::lang;
+
+
 
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > createApplicationServiceManager()
 {
@@ -223,53 +231,43 @@ BOOL bURLClicked = FALSE;
 
     if ( xReturn.is() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XInitialization > xInit ( xReturn, ::com::sun::star::uno::UNO_QUERY ) ;
+        Reference< XInitialization > xInit ( xReturn, UNO_QUERY ) ;
         if ( xInit.is() )
         {
-            sal_Bool                bLocalCreate = sal_True;
-            ::rtl::OUString                 localRegistry = ::comphelper::getPathToUserRegistry();
-            ::rtl::OUString                 systemRegistry = ::comphelper::getPathToSystemRegistry();
+            ::rtl::OUString localRegistry = ::comphelper::getPathToUserRegistry();
+            ::rtl::OUString systemRegistry = ::comphelper::getPathToSystemRegistry();
 
-//            if ( localRegistry.getLength() == 0)
-//            {
-//                localRegistry = getDefaultLocalRegistry();
-//                bLocalCreate = sal_True;
-//            }
-
-            ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry > xLocalRegistry   ( xReturn->createInstance( DEFINE_CONST_UNICODE(SERVICE_SIMPLEREGISTRY) ), ::com::sun::star::uno::UNO_QUERY );
-            ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry > xSystemRegistry ( xReturn->createInstance( DEFINE_CONST_UNICODE(SERVICE_SIMPLEREGISTRY) ), ::com::sun::star::uno::UNO_QUERY );
-
+            Reference< XSimpleRegistry > xLocalRegistry   ( xReturn->createInstance( DEFINE_CONST_UNICODE(SERVICE_SIMPLEREGISTRY) ), UNO_QUERY );
+            Reference< XSimpleRegistry > xSystemRegistry ( xReturn->createInstance( DEFINE_CONST_UNICODE(SERVICE_SIMPLEREGISTRY) ), UNO_QUERY );
             if ( xLocalRegistry.is() && (localRegistry.getLength() > 0) )
             {
-                    xLocalRegistry->open(localRegistry,
-                                   sal_False,
-                                   bLocalCreate);
+                try
+                {
+                    xLocalRegistry->open( localRegistry, sal_False, sal_True);
+                }
+                catch ( InvalidRegistryException& )
+                {
+                }
 
-                    if ( !xLocalRegistry->isValid() )
-                        xLocalRegistry->open(localRegistry,
-                                       sal_True,
-                                       bLocalCreate);
+                if ( !xLocalRegistry->isValid() )
+                    xLocalRegistry->open(localRegistry, sal_True, sal_True);
             }
 
             if ( xSystemRegistry.is() && (systemRegistry.getLength() > 0) )
-            {
-                    xSystemRegistry->open(systemRegistry,
-                                    sal_True,
-                                    sal_False);
-            }
+                xSystemRegistry->open( systemRegistry, sal_True, sal_False);
 
             if ( (xLocalRegistry.is() && xLocalRegistry->isValid()) &&
                  (xSystemRegistry.is() && xSystemRegistry->isValid()) )
             {
-                ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > seqAnys(2);
+                Sequence< Any > seqAnys(2);
                 seqAnys[0] <<= xLocalRegistry ;
                 seqAnys[1] <<= xSystemRegistry ;
 
-                ::com::sun::star::uno::Reference < ::com::sun::star::registry::XSimpleRegistry > xReg(
+                Reference < XSimpleRegistry > xReg(
                             xReturn->createInstanceWithArguments(
-                            DEFINE_CONST_UNICODE("com.sun.star.registry.NestedRegistry"), seqAnys ), ::com::sun::star::uno::UNO_QUERY );
+                            DEFINE_CONST_UNICODE("com.sun.star.registry.NestedRegistry"), seqAnys ), UNO_QUERY );
 
-                seqAnys = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >( 1 );
+                seqAnys = Sequence< Any >( 1 );
                 seqAnys[0] <<= xReg;
                 if ( xReg.is() )
                     xInit->initialize( seqAnys );
@@ -288,6 +286,7 @@ BOOL bURLClicked = FALSE;
 
     return xReturn ;
 }
+
 
 
 
@@ -1533,9 +1532,6 @@ EditViewWindow::EditViewWindow( Window* pParent ) :
     Size aSz( LogicToLogic( Size( 12, 0 ), &aPntMode, &aCurrent ) );
     aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) ) );
     pPool->SetPoolDefaultItem( SvxFontItem( aFont.GetFamily(), aFont.GetName(), String(),aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO ) );
-    aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Tahoma" ) ) );
-    pPool->SetPoolDefaultItem( SvxFontItem( aFont.GetFamily(), aFont.GetName(), String(),aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CJK ) );
-    pPool->SetPoolDefaultItem( SvxFontItem( aFont.GetFamily(), aFont.GetName(), String(),aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CTL ) );
     pPool->SetPoolDefaultItem( SvxFontHeightItem( aSz.Width(), 100, EE_CHAR_FONTHEIGHT ) );
     pEditEngine = new MyEditEngine( pPool );
 
