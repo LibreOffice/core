@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-26 07:53:28 $
+ *  last change: $Author: oj $ $Date: 2001-06-26 13:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1666,7 +1666,7 @@ sal_Bool OResultSet::moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData)
             if(m_aBookmarks.size())
             {
                 nLastBookmark   = (*m_aBookmarksPositions.rbegin())->first;
-                nCurPos         = (*m_aBookmarksPositions.rbegin())->second-1;
+                nCurPos         = (*m_aBookmarksPositions.rbegin())->second;
                 nNewOffset      = nNewOffset - nCurPos;
                 bDataFound      = Move(OFileTable::FILE_BOOKMARK, nLastBookmark, _bRetrieveData);
             }
