@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:37 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,6 +1104,11 @@ FASTBOOL SdrPageView::DoCachedMasterPaint(const SdrPage* pPg, ExtOutputDevice& r
     if (!bCreate)
         bCreate=!pBmp->aLogBound.IsInside(aNeedLogRect);
 
+    // #108444# Check whether the draw modes match, this is relevant
+    // for cache object validity
+    if (!bCreate)
+        bCreate = pBmp->nDrawMode != rInfoRec.nPaintMode;
+
     // 2. Wenn keine passende Bmp da ist, dann versuchen eine zu erzeugen
     if (bCreate)
     {
@@ -1157,6 +1162,9 @@ FASTBOOL SdrPageView::DoCachedMasterPaint(const SdrPage* pPg, ExtOutputDevice& r
             // DrawMode vom Window uebernehmen
             const ULONG nOldDrawMode = pBmp->aVD.GetDrawMode();
             pBmp->aVD.SetDrawMode( pWin->GetDrawMode() );
+
+            // #108444# Store draw mode, this is relevant for object validity
+            pBmp->nDrawMode = rInfoRec.nPaintMode;
 
             // und nun endlich die MasterPage
             aNewMap.SetOrigin(aMapOrgTmp);
