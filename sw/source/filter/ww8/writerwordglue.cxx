@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:25:48 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,16 +447,16 @@ namespace
 
         static ScriptTypeList aScripts[] =
         {
-            { UnicodeScript_kBasicLatin, RTL_TEXTENCODING_MS_1252},
-            { UnicodeScript_kLatin1Supplement, RTL_TEXTENCODING_MS_1252},
-            { UnicodeScript_kLatinExtendedA, RTL_TEXTENCODING_MS_1250},
-            { UnicodeScript_kLatinExtendedB, RTL_TEXTENCODING_MS_1257},
-            { UnicodeScript_kGreek, RTL_TEXTENCODING_MS_1253},
-            { UnicodeScript_kCyrillic, RTL_TEXTENCODING_MS_1251},
-            { UnicodeScript_kHebrew, RTL_TEXTENCODING_MS_1255},
-            { UnicodeScript_kArabic, RTL_TEXTENCODING_MS_1256},
-            { UnicodeScript_kThai, RTL_TEXTENCODING_MS_1258},
-            { UnicodeScript_kScriptCount, RTL_TEXTENCODING_MS_1252}
+            { UnicodeScript_kBasicLatin, UnicodeScript_kBasicLatin, RTL_TEXTENCODING_MS_1252},
+            { UnicodeScript_kLatin1Supplement, UnicodeScript_kLatin1Supplement, RTL_TEXTENCODING_MS_1252},
+            { UnicodeScript_kLatinExtendedA, UnicodeScript_kLatinExtendedA, RTL_TEXTENCODING_MS_1250},
+            { UnicodeScript_kLatinExtendedB, UnicodeScript_kLatinExtendedB, RTL_TEXTENCODING_MS_1257},
+            { UnicodeScript_kGreek, UnicodeScript_kGreek, RTL_TEXTENCODING_MS_1253},
+            { UnicodeScript_kCyrillic, UnicodeScript_kCyrillic, RTL_TEXTENCODING_MS_1251},
+            { UnicodeScript_kHebrew, UnicodeScript_kHebrew, RTL_TEXTENCODING_MS_1255},
+            { UnicodeScript_kArabic, UnicodeScript_kArabic, RTL_TEXTENCODING_MS_1256},
+            { UnicodeScript_kThai, UnicodeScript_kThai, RTL_TEXTENCODING_MS_1258},
+            { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, RTL_TEXTENCODING_MS_1252}
         };
 
         return unicode::getUnicodeScriptType(cChar, aScripts,
