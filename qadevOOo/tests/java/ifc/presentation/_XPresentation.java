@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPresentation.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:15 $
+ *  last change:$Date: 2003-09-08 10:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 
 package ifc.presentation;
 
-import com.sun.star.presentation.XPresentation;
 import lib.MultiMethodTest;
+
+import com.sun.star.presentation.XPresentation;
 
 /**
 * Testing <code>com.sun.star.presentation.XPresentation</code>
