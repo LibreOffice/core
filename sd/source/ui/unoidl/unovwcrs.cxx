@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unovwcrs.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:36:52 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@
 #ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
 #endif
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 
 #include <cppuhelper/implbase2.hxx>
@@ -218,6 +218,7 @@ sal_Bool SdXTextViewCursor::screenDown(void) throw( uno::RuntimeException )
     OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
 
+/*
 
     if( mpView && mpView->GetDocSh() )
     {
@@ -232,12 +233,14 @@ sal_Bool SdXTextViewCursor::screenDown(void) throw( uno::RuntimeException )
             }
         }
     }
+*/
     return sal_False;
 }
 
 sal_Bool SdXTextViewCursor::screenUp(void) throw( uno::RuntimeException )
 {
     OGuard aGuard(Application::GetSolarMutex());
+/*
     sal_Bool bRet = sal_False;
 
     if( mpView && mpView->GetDocSh() )
@@ -253,6 +256,7 @@ sal_Bool SdXTextViewCursor::screenUp(void) throw( uno::RuntimeException )
             }
         }
     }
+*/
     return sal_False;
 }
 
