@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:28:39 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,9 +417,12 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
         SfxViewFrame* pVFrame = GetView().GetViewFrame();
         if ( pDrView->IsTextEdit() )
         {
+            //#111733# Sometimes EndTextEdit() initiates the change in selection and
+            // 'this' is not valid anymore
+            SwView& rView = GetView();
             pDrView->EndTextEdit( TRUE );
             //this removes the current shell from the dispatcher stack!!
-            GetView().AttrChangedNotify(&rSh);
+            rView.AttrChangedNotify(&rSh);
         }
 
         if ( rSet.GetItemState(XATTR_FORMTXTSTDFORM, TRUE, &pItem) ==
