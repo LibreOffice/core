@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-21 13:00:34 $
+ *  last change: $Author: cl $ $Date: 2002-05-27 11:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2790,6 +2790,35 @@ String RID_SVXSTR_HYPERDLG_FROM_TEXT
     Text[ finnish ] = "Teksti";
 };
 
+String RID_SVXSTR_HYPERDLG_QUERYOVERWRITE
+{
+    Text = "Die Datei existiert bereits. Soll sie überschrieben werden?" ;
+    Text [ English ] = "The file exists already. Shall it be overwritten?" ;
+    Text [ english_us ] = "The file already exists. Overwrite?" ;
+    Text [ italian ] = "Il file esiste già. Sovrascriverlo?" ;
+    Text [ spanish ] = "El archivo ya existe. ¿Desea sobrescribirlo?" ;
+    Text [ french ] = "Ce fichier existe déjà. Le remplacer ?" ;
+    Text [ dutch ] = "Het bestand bestaat reeds. Overschrijven?" ;
+    Text [ swedish ] = "Filen finns redan. Skall den skrivas över?" ;
+    Text [ danish ] = "Filen eksisterer allerede. Skal den erstattes?" ;
+    Text [ portuguese_brazilian ] = "Die Datei existiert bereits. Soll sie ?erschrieben werden?" ;
+    Text [ portuguese ] = "O ficheiro já existe. Deseja substituí-lo?" ;
+    Text [ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶å·²ç»å­˜åœ¨ã€‚è¦æ”¹å†™?";
+    Text [ russian ] = "İòîò ôàéë óæå ñóùåñòâóåò. Ïåğåïèñàòü åãî?";
+    Text [ polish ] = "Plik ju¿ istnieje. Skasowaæ go przez zapisanie?";
+    Text [ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚ä¸Šæ›¸ãã—ã¾ã™ã‹ã€‚";
+    Text [ chinese_traditional ] = "é€™å€‹æª”æ¡ˆå·²ç¶“å­˜åœ¨ã€‚è¦è¦†å¯«å®ƒï¹–";
+    Text [ arabic ] = "Çáãáİ ãæÌæÏ ÈÇáİÚá. åá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
+    Text[ dutch ] = "Het bestand bestaat reeds. Overschrijven?";
+    Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶å·²ç»å­˜åœ¨ã€‚è¦æ”¹å†™?";
+    Text[ greek ] = "Ôï áñ÷åßï áõôü õğÜñ÷åé Şäç. Íá áíôéêáôáóôáèåß;";
+    Text[ korean ] = "íŒŒì¼ì´ ì´ë¯¸ ìˆìŠµë‹ˆë‹¤. ë®ì–´ì“°ê² ìŠµë‹ˆê¹Œ?";
+    Text[ turkish ] = "Dosya zaten mevcut. Üzerine yazılsın mı?";
+    Text[ finnish ] = "Tiedosto on jo olemassa. Korvataanko?";
+    Text[ catalan ] = "El archivo ya existe. ¿Desea sobrescribirlo?";
+    Text[ thai ] = "à¸¡à¸µà¹à¸Ÿà¹‰à¸¡à¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§  à¹€à¸‚à¸µà¸¢à¸™à¸—à¸±à¸šà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
+};
+
 Image RID_SVXBMP_HLINETTP
 {
     ImageBitmap = Bitmap { File = "hlinettp.bmp" ; };
@@ -2813,9 +2842,6 @@ Image RID_SVXBMP_HLDOCNTP
     ImageBitmap = Bitmap { File = "hldocntp.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
-
-
-
 
 
 

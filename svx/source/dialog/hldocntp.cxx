@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-21 09:05:16 $
+ *  last change: $Author: cl $ $Date: 2002-05-27 11:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
+#endif
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
 #endif
 
 #include "hyperdlg.hrc"
@@ -501,56 +504,78 @@ void SvxHyperlinkNewDocTp::DoApply ()
         SfxViewFrame *pViewFrame = NULL;
         try
         {
-            // current document
-            SfxViewFrame* pCurrentDocFrame = SFX_APP()->GetViewFrame();
+            bool bCreate = true;
 
-            if ( aStrNewName != aEmptyStr )
+            // check if file exists, warn before we overwrite it
             {
-                // get private-url
-                int nPos = maLbDocTypes.GetSelectEntryPos();
-                if( nPos == LISTBOX_ENTRY_NOTFOUND )
-                    nPos=0;
-                String aStrDocName ( ( ( DocumentTypeData* )
-                                     maLbDocTypes.GetEntryData( nPos ) )->aStrURL );
+                com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xHandler;
+                SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, xHandler );
 
-                // create items
-                SfxStringItem aName( SID_FILE_NAME, aStrDocName );
-                SfxStringItem aReferer( SID_REFERER, UniString::CreateFromAscii(
-                                            RTL_CONSTASCII_STRINGPARAM( "private:user" ) ) );
-                SfxStringItem aFrame( SID_TARGETNAME, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_blank" ) ) );
-                //SfxBoolItem aFrame( SID_OPEN_NEW_VIEW, TRUE );
+                sal_Bool bOk = pIStm && ( pIStm->GetError() == 0);
 
-                String aStrFlags ( sal_Unicode('S') );
-                if ( maRbtEditLater.IsChecked() )
+                if( pIStm )
+                    delete pIStm;
+
+                if( bOk )
                 {
-                    aStrFlags += sal_Unicode('H');
-                }
-                SfxStringItem aFlags (SID_OPTIONS, aStrFlags);
-
-                // open url
-                const SfxPoolItem* pReturn = GetDispatcher()->Execute( SID_OPENDOC,
-                                                                       SFX_CALLMODE_SYNCHRON,
-                                                                       &aName, &aFlags,
-                                                                       &aFrame, &aReferer, 0L );
-
-                // save new doc
-                const SfxViewFrameItem *pItem = PTR_CAST( SfxViewFrameItem, pReturn );
-                pViewFrame = pItem->GetFrame();
-                if (pViewFrame)
-                {
-                    //SfxViewFrame *pViewFrame = pFrame->GetCurrentViewFrame();
-                    SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-
-                    pViewFrame->GetDispatcher()->Execute( SID_SAVEASDOC,
-                                                          SFX_CALLMODE_SYNCHRON,
-                                                          &aNewName, 0L );
-
+                    WarningBox aWarning( this, WB_YES_NO, SVX_RESSTR(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE) );
+                    bCreate = aWarning.Execute() == BUTTON_YES;
                 }
             }
 
-            if ( maRbtEditNow.IsChecked() )
+            if( bCreate )
             {
-                pCurrentDocFrame->ToTop();
+                // current document
+                SfxViewFrame* pCurrentDocFrame = SFX_APP()->GetViewFrame();
+
+                if ( aStrNewName != aEmptyStr )
+                {
+                    // get private-url
+                    int nPos = maLbDocTypes.GetSelectEntryPos();
+                    if( nPos == LISTBOX_ENTRY_NOTFOUND )
+                        nPos=0;
+                    String aStrDocName ( ( ( DocumentTypeData* )
+                                         maLbDocTypes.GetEntryData( nPos ) )->aStrURL );
+
+                    // create items
+                    SfxStringItem aName( SID_FILE_NAME, aStrDocName );
+                    SfxStringItem aReferer( SID_REFERER, UniString::CreateFromAscii(
+                                                RTL_CONSTASCII_STRINGPARAM( "private:user" ) ) );
+                    SfxStringItem aFrame( SID_TARGETNAME, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_blank" ) ) );
+                    //SfxBoolItem aFrame( SID_OPEN_NEW_VIEW, TRUE );
+
+                    String aStrFlags ( sal_Unicode('S') );
+                    if ( maRbtEditLater.IsChecked() )
+                    {
+                        aStrFlags += sal_Unicode('H');
+                    }
+                    SfxStringItem aFlags (SID_OPTIONS, aStrFlags);
+
+                    // open url
+                    const SfxPoolItem* pReturn = GetDispatcher()->Execute( SID_OPENDOC,
+                                                                           SFX_CALLMODE_SYNCHRON,
+                                                                           &aName, &aFlags,
+                                                                           &aFrame, &aReferer, 0L );
+
+                    // save new doc
+                    const SfxViewFrameItem *pItem = PTR_CAST( SfxViewFrameItem, pReturn );
+                    pViewFrame = pItem->GetFrame();
+                    if (pViewFrame)
+                    {
+                        //SfxViewFrame *pViewFrame = pFrame->GetCurrentViewFrame();
+                        SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+
+                        pViewFrame->GetDispatcher()->Execute( SID_SAVEASDOC,
+                                                              SFX_CALLMODE_SYNCHRON,
+                                                              &aNewName, 0L );
+
+                    }
+                }
+
+                if ( maRbtEditNow.IsChecked() )
+                {
+                    pCurrentDocFrame->ToTop();
+                }
             }
         }
         catch( uno::Exception )
