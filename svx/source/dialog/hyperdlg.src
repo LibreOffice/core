@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-23 23:17:52 $
+ *  last change: $Author: kz $ $Date: 2001-12-12 22:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,13 +343,13 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ polish ] = "Przegl�darka WWW";
         QuickHelpText[ portuguese_brazilian ] = "Browse";
         QuickHelpText[ japanese ] = "WWWﾌﾞﾗｳｻﾞ";
-        QuickHelpText[ korean ] = "브라우즈!";
+        QuickHelpText[ korean ] = "브라우즈";
         QuickHelpText[ chinese_simplified ] = "万维网浏览器";
         QuickHelpText[ chinese_traditional ] = "WWW 瀏覽器";
         QuickHelpText[ arabic ] = "����� ���";
         QuickHelpText[ turkish ] = "WWW-Browser";
         QuickHelpText[ catalan ] = "Navegador";
-        QuickHelpText[ finnish ] = "WWW-selain!";
+        QuickHelpText[ finnish ] = "WWW-selain";
     };
     ImageButton BTN_TARGET
     {
@@ -376,7 +376,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ polish ] = "Cel w dokumencie";
         QuickHelpText[ portuguese_brazilian ] = "Target";
         QuickHelpText[ japanese ] = "ﾄﾞｷｭﾒﾝﾄにあるﾀｰｹﾞｯﾄ";
-        QuickHelpText[ korean ] = "문서 내 대상!";
+        QuickHelpText[ korean ] = "문서 내 대상";
         QuickHelpText[ chinese_simplified ] = "目标";
         QuickHelpText[ chinese_traditional ] = "文件內的目標";
         QuickHelpText[ arabic ] = "����� �� �������";
@@ -709,7 +709,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ polish ] = "Wydarzenia";
         QuickHelpText[ portuguese_brazilian ] = "Script";
         QuickHelpText[ japanese ] = "ｲﾍﾞﾝﾄ";
-        QuickHelpText[ korean ] = "이벤트!";
+        QuickHelpText[ korean ] = "이벤트";
         QuickHelpText[ chinese_simplified ] = "事件";
         QuickHelpText[ chinese_traditional ] = "事件";
         QuickHelpText[ arabic ] = "�����";
@@ -909,13 +909,13 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ polish ] = "�r�d�a danych...";
         QuickHelpText[ portuguese_brazilian ] = "Adressbook";
         QuickHelpText[ japanese ] = "ﾃﾞｰﾀｿｰｽ...";
-        QuickHelpText[ korean ] = "주소록!";
+        QuickHelpText[ korean ] = "주소록";
         QuickHelpText[ chinese_simplified ] = "通讯簿";
         QuickHelpText[ chinese_traditional ] = "通訊錄...";
         QuickHelpText[ turkish ] = "Adressbuch";
         QuickHelpText[ arabic ] = "���� ��������";
         QuickHelpText[ catalan ] = "Libreta de direcciones";
-        QuickHelpText[ finnish ] = "Osoitekirja!";
+        QuickHelpText[ finnish ] = "Osoitekirja";
     };
 
     FixedLine GRP_MORE
@@ -1224,7 +1224,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ polish ] = "Wydarzenia";
         QuickHelpText[ portuguese_brazilian ] = "Script";
         QuickHelpText[ japanese ] = "ｲﾍﾞﾝﾄ";
-        QuickHelpText[ korean ] = "이벤트!";
+        QuickHelpText[ korean ] = "이벤트";
         QuickHelpText[ chinese_simplified ] = "事件";
         QuickHelpText[ chinese_traditional ] = "事件";
         QuickHelpText[ arabic ] = "�����";
@@ -1351,14 +1351,14 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ polish ] = "Otw�rz plik";
         QuickHelpText[ portuguese_brazilian ] = "Fileopen";
         QuickHelpText[ japanese ] = "ﾌｧｲﾙを開ける";
-        QuickHelpText[ korean ] = "파일 열기!";
+        QuickHelpText[ korean ] = "파일 열기";
         QuickHelpText[ chinese_simplified ] = "打开文件";
         QuickHelpText[ chinese_traditional ] = "開啟舊檔";
         QuickHelpText[ arabic ] = "��� �����";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datei �ffnen";
         QuickHelpText[ catalan ] = "Abrir archivo";
-        QuickHelpText[ finnish ] = "Avaa tiedosto!";
+        QuickHelpText[ finnish ] = "Avaa tiedosto";
     };
 
     FixedLine GRP_TARGET
@@ -1502,7 +1502,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ polish ] = "Cel w dokumencie";
         QuickHelpText[ portuguese_brazilian ] = "Target in document";
         QuickHelpText[ japanese ] = "ﾄﾞｷｭﾒﾝﾄにあるﾀｰｹﾞｯﾄ";
-        QuickHelpText[ korean ] = "문서 내 대상!";
+        QuickHelpText[ korean ] = "문서 내 대상";
         QuickHelpText[ chinese_simplified ] = "文档内的目标";
         QuickHelpText[ chinese_traditional ] = "文件之內的目標";
         QuickHelpText[ arabic ] = "����� �� �������";
@@ -1817,7 +1817,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ polish ] = "Wydarzenia";
         QuickHelpText[ portuguese_brazilian ] = "Script";
         QuickHelpText[ japanese ] = "ｲﾍﾞﾝﾄ";
-        QuickHelpText[ korean ] = "이벤트!";
+        QuickHelpText[ korean ] = "이벤트";
         QuickHelpText[ chinese_simplified ] = "事件";
         QuickHelpText[ chinese_traditional ] = "事件";
         QuickHelpText[ arabic ] = "�����";
@@ -2041,13 +2041,13 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ polish ] = "Wybierz �cie�k�";
         QuickHelpText[ portuguese_brazilian ] = "Create";
         QuickHelpText[ japanese ] = "ﾊﾟｽの選択";
-        QuickHelpText[ korean ] = "생성!";
+        QuickHelpText[ korean ] = "생성";
         QuickHelpText[ chinese_simplified ] = "选择路径";
         QuickHelpText[ chinese_traditional ] = "選擇路徑";
         QuickHelpText[ arabic ] = "������ ������";
         QuickHelpText[ turkish ] = "Pfad ausw�hlen";
         QuickHelpText[ catalan ] = "Seleccionar ruta";
-        QuickHelpText[ finnish ] = "Valitse polku!";
+        QuickHelpText[ finnish ] = "Valitse polku";
     };
 
     FixedLine GRP_MORE
@@ -2356,7 +2356,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ polish ] = "Wydarzenia";
         QuickHelpText[ portuguese_brazilian ] = "Script";
         QuickHelpText[ japanese ] = "ｲﾍﾞﾝﾄ";
-        QuickHelpText[ korean ] = "스크립트!";
+        QuickHelpText[ korean ] = "스크립트";
         QuickHelpText[ chinese_simplified ] = "事件";
         QuickHelpText[ chinese_traditional ] = "事件";
         QuickHelpText[ arabic ] = "�����";
@@ -2764,6 +2764,7 @@ Image RID_SVXBMP_HLDOCNTP
     ImageBitmap = Bitmap { File = "hldocntp.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
