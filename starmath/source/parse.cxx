@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-18 08:54:29 $
+ *  last change: $Author: tl $ $Date: 2001-04-18 11:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,7 @@ void SmParser::NextToken()
     BOOL        bCont;
     do
     {
-        //?? does parseAnyToken handles Japanese spaces correct ??
+        //?? does parseAnyToken handles Japanese (CJK) spaces correct ??
         // seems not to be so...
         while (UnicodeType::SPACE_SEPARATOR ==
                          aCharClass.getType( BufferString, BufferIndex ))
@@ -508,6 +508,7 @@ void SmParser::NextToken()
     CurToken.nRow   = Row;
     CurToken.nCol   = nRealStart - ColOff + 1;
 
+    BOOL bHandled = TRUE;
     if (nRealStart >= nBufLen)
     {
         CurToken.eType     = TEND;
@@ -675,6 +676,8 @@ void SmParser::NextToken()
                         }
                     }
                     break;
+                default:
+                    bHandled = FALSE;
             }
         }
     }
@@ -683,7 +686,7 @@ void SmParser::NextToken()
         long   &rnEndPos = aRes.EndPos;
         String  aName( BufferString.Copy( nRealStart, rnEndPos - nRealStart ) );
 
-        if( 1 == aName.Len() )
+        if (1 == aName.Len())
         {
             sal_Unicode ch = aName.GetChar( 0 );
             switch (ch)
@@ -932,10 +935,15 @@ void SmParser::NextToken()
                         CurToken.aText.AssignAscii( "=" );
                     }
                     break;
+                default:
+                    bHandled = FALSE;
             }
         }
     }
     else
+        bHandled = FALSE;
+
+    if (!bHandled)
     {
         CurToken.eType      = TCHARACTER;
         CurToken.cMathChar  = '\0';
