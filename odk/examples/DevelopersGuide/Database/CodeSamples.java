@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CodeSamples.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:56:12 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -42,12 +42,13 @@ import java.io.*;
 
 import com.sun.star.comp.helper.RegistryServiceFactory;
 import com.sun.star.comp.servicemanager.ServiceManager;
-import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XComponent;
 import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.uno.*;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
@@ -58,17 +59,27 @@ import com.sun.star.frame.*;
 
 public class CodeSamples
 {
-    public static XMultiServiceFactory rSmgr;
+    public static XComponentContext xContext;
+    public static XMultiComponentFactory xMCF;
     public static void main(String argv[]) throws java.lang.Exception
     {
-        try{
-            rSmgr = connect("socket,host=localhost,port=8100");
-            //  checkConnection( openConnectionWithDriverManager(rSmgr) );
-            //  checkConnection( openConnectionWithDriver(rSmgr) );
-            createQuerydefinition( rSmgr );
-            printQueryColumnNames( rSmgr );
+        try {
+            // get the remote office component context
+            xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            System.out.println("Connected to a running office ...");
+            xMCF = xContext.getServiceManager();
+        }
+        catch(Exception e) {
+            System.err.println("ERROR: can't get a component context from a running office ...");
+            e.printStackTrace();
+            System.exit(1);
+        }
 
-            XConnection con = openConnectionWithDriverManager( rSmgr );
+        try{
+            createQuerydefinition( );
+            printQueryColumnNames( );
+
+            XConnection con = openConnectionWithDriverManager();
             if ( con != null ) {
                 {
                     SalesMan sm = new SalesMan( con );
@@ -102,45 +113,14 @@ public class CodeSamples
                 }
                 displayTableStructure( con );
             }
-            //  printDataSources(rSmgr);
+            //  printDataSources();
         }
-        catch(com.sun.star.uno.Exception e)
+        catch(Exception e)
         {
-            System.out.println(e);
+            System.err.println(e);
             e.printStackTrace();
         }
         System.exit(0);
-    }
-
-
-    public static XMultiServiceFactory connect( String connectStr )
-        throws com.sun.star.uno.Exception,
-        com.sun.star.uno.RuntimeException, java.lang.Exception
-    {
-        // initial serviceManager
-        XMultiServiceFactory xLocalServiceManager =
-            com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
-
-        // create a connector, so that it can contact the office
-        Object  xUrlResolver  = xLocalServiceManager.createInstance( "com.sun.star.bridge.UnoUrlResolver" );
-        XUnoUrlResolver urlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface(
-            XUnoUrlResolver.class, xUrlResolver );
-
-        Object rInitialObject = urlResolver.resolve( "uno:" + connectStr + ";urp;StarOffice.NamingService" );
-
-        XNamingService rName = (XNamingService)UnoRuntime.queryInterface(
-            XNamingService.class, rInitialObject );
-
-        XMultiServiceFactory xMSF = null;
-        if( rName != null ) {
-            System.err.println( "got the remote naming service !" );
-            Object rXsmgr = rName.getRegisteredObject("StarOffice.ServiceManager" );
-
-            xMSF = (XMultiServiceFactory)
-                UnoRuntime.queryInterface( XMultiServiceFactory.class, rXsmgr );
-        }
-
-        return ( xMSF );
     }
 
     // check if the connection is not null aand dispose it later on.
@@ -163,11 +143,13 @@ public class CodeSamples
     }
 
     // uses the driver manager to create a new connection and dispose it.
-    public static XConnection openConnectionWithDriverManager(XMultiServiceFactory _rMSF) throws com.sun.star.uno.Exception
+    public static XConnection openConnectionWithDriverManager() throws com.sun.star.uno.Exception
     {
         XConnection con = null;
         // create the DriverManager
-        Object driverManager = _rMSF.createInstance("com.sun.star.sdbc.DriverManager");
+        Object driverManager =
+            xMCF.createInstanceWithContext("com.sun.star.sdbc.DriverManager",
+                                           xContext);
         // query for the interface
         com.sun.star.sdbc.XDriverManager xDriverManager;
         xDriverManager = (XDriverManager)UnoRuntime.queryInterface(XDriverManager.class,driverManager);
@@ -188,11 +170,13 @@ public class CodeSamples
     }
 
     // uses the driver manager to create a new connection and dispose it.
-    public static XConnection openToJDBC(XMultiServiceFactory _rMSF) throws com.sun.star.uno.Exception
+    public static XConnection openToJDBC() throws com.sun.star.uno.Exception
     {
         XConnection con = null;
         // create the DriverManager
-        Object driverManager = _rMSF.createInstance("com.sun.star.sdbc.DriverManager");
+        Object driverManager =
+            xMCF.createInstanceWithContext("com.sun.star.sdbc.DriverManager",
+                                           xContext);
         // query for the interface
         com.sun.star.sdbc.XDriverManager xDriverManager;
         xDriverManager = (XDriverManager)UnoRuntime.queryInterface(XDriverManager.class,driverManager);
@@ -214,11 +198,13 @@ public class CodeSamples
     }
 
     // uses the driver directly to create a new connection and dispose it.
-    public static XConnection openConnectionWithDriver(XMultiServiceFactory _rMSF) throws com.sun.star.uno.Exception
+    public static XConnection openConnectionWithDriver() throws com.sun.star.uno.Exception
     {
         XConnection con = null;
         // create the Driver with the implementation name
-        Object aDriver = _rMSF.createInstance("com.sun.star.comp.sdbcx.adabas.ODriver");
+        Object aDriver =
+            xMCF.createInstanceWithContext("com.sun.star.comp.sdbcx.adabas.ODriver",
+                                           xContext);
         // query for the interface
         com.sun.star.sdbc.XDriver xDriver;
         xDriver = (XDriver)UnoRuntime.queryInterface(XDriver.class,aDriver);
@@ -239,11 +225,13 @@ public class CodeSamples
     }
 
     // print all available datasources
-    public static void printDataSources(XMultiServiceFactory _rMSF) throws com.sun.star.uno.Exception
+    public static void printDataSources() throws com.sun.star.uno.Exception
     {
         // create a DatabaseContext and print all DataSource names
-        XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class,
-                                            _rMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
+        XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface(
+            XNameAccess.class,
+            xMCF.createInstanceWithContext("com.sun.star.sdb.DatabaseContext",
+                                           xContext));
         String aNames [] = xNameAccess.getElementNames();
         for(int i=0;i<aNames.length;++i)
             System.out.println(aNames[i]);
@@ -311,10 +299,12 @@ public class CodeSamples
     }
 
     // creates a new query definition
-    public static void createQuerydefinition(XMultiServiceFactory _rMSF) throws com.sun.star.uno.Exception
+    public static void createQuerydefinition() throws com.sun.star.uno.Exception
     {
-        XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class,
-                                            _rMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
+        XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface(
+            XNameAccess.class,
+            xMCF.createInstanceWithContext("com.sun.star.sdb.DatabaseContext",
+                                           xContext));
         // we use the first datasource
         XQueryDefinitionsSupplier xQuerySup = (XQueryDefinitionsSupplier)
                                             UnoRuntime.queryInterface(XQueryDefinitionsSupplier.class,
@@ -343,10 +333,12 @@ public class CodeSamples
     }
 
     // prints all column names from Query1
-    public static void printQueryColumnNames(XMultiServiceFactory _rMSF) throws com.sun.star.uno.Exception
+    public static void printQueryColumnNames() throws com.sun.star.uno.Exception
     {
-        XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class,
-                                            _rMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
+        XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface(
+            XNameAccess.class,
+            xMCF.createInstanceWithContext("com.sun.star.sdb.DatabaseContext",
+                                           xContext));
         // we use the first datasource
         XDataSource xDS = (XDataSource)UnoRuntime.queryInterface(
             XDataSource.class, xNameAccess.getByName( "Bibliography" ));
