@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-30 17:43:58 $
+ *  last change: $Author: mt $ $Date: 2001-02-14 18:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,14 +75,6 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <cppuhelper/factory.hxx>
-
-#include <uno/environment.h>
-#include <uno/mapping.hxx>
-#include <rtl/ustring.hxx>
-#include <osl/module.h>
-
 #ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #endif
@@ -95,170 +87,113 @@
 #include <com/sun/star/i18n/XCollator.hpp>
 #endif
 
-#ifdef DBG_UTIL
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
-#endif
-#ifndef _OSL_THREAD_H_
-#include <osl/thread.h>
-#endif
-#endif
+#include <com/sun/star/registry/XImplementationRegistration.hpp>
+
+#include <cppuhelper/servicefactory.hxx>
+
+#include <tools/tempfile.hxx>
+#include <osl/file.hxx>
+
+#include <svdata.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 using namespace ::rtl;
 
 #define DOSTRING( x )                       #x
 #define STRING( x )                         DOSTRING( x )
 
-#define DOCONCAT4( x, y, z, a )             x##y##z##a
-#define CONCAT4( x, y, z, a )               DOCONCAT4(x,y,z,a)
-#define DOCONCAT5( x, y, z, a, b )          x##y##z##a##b
-#define CONCAT5( x, y, z, a, b )            DOCONCAT5(x,y,z,a,b)
-
-#ifdef UNX
-#ifdef MACOSX
-#define LIBNAME(name)                       STRING(CONCAT5(lib,name,SUPD, DLLSUFFIX,.dylib.framework))
-#else
-#define LIBNAME(name)                       STRING(CONCAT5(lib,name,SUPD, DLLSUFFIX,.so))
-#endif
-#else
-#define LIBNAME(name)                       STRING(CONCAT4( name, SUPD, DLLSUFFIX, .dll))
-#endif
-
-Reference< XSingleServiceFactory > ImplLoadLibComponentFactory(
-    const OUString & rLibName, const OUString & rImplName,
-    const Reference< XMultiServiceFactory > & xSF, const Reference< XRegistryKey > & xKey )
+struct VCLRegServiceInfo
 {
-    Reference< XSingleServiceFactory > xRet;
+    sal_Char*   pLibName;
+    sal_Bool    bHasSUPD;
+};
 
-    oslModule lib = osl_loadModule( rLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
-#ifdef DBG_UTIL
-    ByteString aMsg( "Cannot load module " );
-    aMsg += ByteString( String( rLibName ), osl_getThreadTextEncoding() );
-    DBG_ASSERT( lib, aMsg.GetBuffer() )
+static VCLRegServiceInfo aVCLComponentsArray[] =
+{
+    {"int",             sal_True},
+#ifdef UNIX
+    {"dtransX11",       sal_True},
 #endif
-    if (lib)
+#ifdef WNT
+    {"sysdtrans",       sal_False},
+#endif
+    {NULL,              sal_False}
+};
+
+uno::Reference< lang::XMultiServiceFactory > ImplGetMultiServiceFactory()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if ( !pSVData->maAppData.mxMSF.is() )
     {
-        void * pSym;
-
-        // ========================= LATEST VERSION =========================
-        OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
-        if (pSym = osl_getSymbol( lib, aGetEnvName.pData ))
-        {
-            uno_Environment * pCurrentEnv = 0;
-            uno_Environment * pEnv = 0;
-            const sal_Char * pEnvTypeName = 0;
-            (*((component_getImplementationEnvironmentFunc)pSym))( &pEnvTypeName, &pEnv );
-
-            sal_Bool bNeedsMapping =
-                (pEnv || 0 != rtl_str_compare( pEnvTypeName, CPPU_CURRENT_LANGUAGE_BINDING_NAME ));
-
-            OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
-
-            if (bNeedsMapping)
-            {
-                if (! pEnv)
-                    uno_getEnvironment( &pEnv, aEnvTypeName.pData, 0 );
-                if (pEnv)
-                {
-                    OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-                    uno_getEnvironment( &pCurrentEnv, aCppEnvTypeName.pData, 0 );
-                    if (pCurrentEnv)
-                        bNeedsMapping = (pEnv != pCurrentEnv);
-                }
-            }
-
-            OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) );
-            if (pSym = osl_getSymbol( lib, aGetFactoryName.pData ))
-            {
-                OString aImplName( OUStringToOString( rImplName, RTL_TEXTENCODING_ASCII_US ) );
-
-                if (bNeedsMapping)
-                {
-                    if (pEnv && pCurrentEnv)
-                    {
-                        Mapping aCurrent2Env( pCurrentEnv, pEnv );
-                        Mapping aEnv2Current( pEnv, pCurrentEnv );
-
-                        if (aCurrent2Env.is() && aEnv2Current.is())
-                        {
-                            void * pSMgr = aCurrent2Env.mapInterface(
-                                xSF.get(), ::getCppuType( (const Reference< XMultiServiceFactory > *)0 ) );
-                            void * pKey = aCurrent2Env.mapInterface(
-                                xKey.get(), ::getCppuType( (const Reference< XRegistryKey > *)0 ) );
-
-                            void * pSSF = (*((component_getFactoryFunc)pSym))(
-                                aImplName.getStr(), pSMgr, pKey );
-
-                            if (pKey)
-                                (*pEnv->pExtEnv->releaseInterface)( pEnv->pExtEnv, pKey );
-                            if (pSMgr)
-                                (*pEnv->pExtEnv->releaseInterface)( pEnv->pExtEnv, pSMgr );
-
-                            if (pSSF)
-                            {
-                                aEnv2Current.mapInterface(
-                                    reinterpret_cast< void ** >( &xRet ),
-                                    pSSF, ::getCppuType( (const Reference< XSingleServiceFactory > *)0 ) );
-                                (*pEnv->pExtEnv->releaseInterface)( pEnv->pExtEnv, pSSF );
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    XSingleServiceFactory * pRet = (XSingleServiceFactory *)
-                        (*((component_getFactoryFunc)pSym))(
-                            aImplName.getStr(), xSF.get(), xKey.get() );
-                    if (pRet)
-                    {
-                        xRet = pRet;
-                        pRet->release();
-                    }
-                }
-            }
-
-            if (pEnv)
-                (*pEnv->release)( pEnv );
-            if (pCurrentEnv)
-                (*pCurrentEnv->release)( pCurrentEnv );
-        }
-
-
-        if (! xRet.is())
-            osl_unloadModule( lib );
+        pSVData->maAppData.mxMSF = ::comphelper::getProcessServiceFactory();
     }
+    if ( !pSVData->maAppData.mxMSF.is() )
+    {
+        TempFile aTempFile;
+        OUString aTempFileName;
+        osl::FileBase::getNormalizedPathFromFileURL( aTempFile.GetName(), aTempFileName );
+        pSVData->maAppData.mpMSFTempFileName = new String(aTempFileName);
 
-    return xRet;
+        pSVData->maAppData.mxMSF = ::cppu::createRegistryServiceFactory( aTempFileName, rtl::OUString(), sal_False );
+
+
+        uno::Reference < registry::XImplementationRegistration > xReg(
+            pSVData->maAppData.mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" )), uno::UNO_QUERY );
+
+        sal_Int32 nCompCount = 0;
+
+        // create variable library name suffixes
+        OUString aSUPDString( OUString::valueOf( (sal_Int32)SUPD, 10 ));
+        OUString aDLLSuffix = OUString::createFromAscii( STRING(DLLSUFFIX) );
+
+        while ( aVCLComponentsArray[ nCompCount ].pLibName )
+        {
+            OUString aComponentPathString;
+
+#ifdef WNT
+            aComponentPathString = OUString::createFromAscii( aVCLComponentsArray[ nCompCount ].pLibName );
+            if ( aVCLComponentsArray[ nCompCount ].bHasSUPD )
+            {
+                aComponentPathString += aSUPDString;
+                aComponentPathString += aDLLSuffix;
+            }
+            aComponentPathString += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".dll" ));
+#else
+            aComponentPathString = OUString( RTL_CONSTASCII_USTRINGPARAM( "lib" ));
+            aComponentPathString += OUString::createFromAscii( aVCLComponentsArray[ nCompCount ].pLibName );
+            if ( aVCLComponentsArray[ nCompCount ].bHasSUPD )
+            {
+                aComponentPathString += aSUPDString;
+                aComponentPathString += aDLLSuffix;
+            }
+            aComponentPathString += OUString( RTL_CONSTASCII_USTRINGPARAM( ".so" ));
+#endif
+
+            if (aComponentPathString.getLength() )
+            {
+                try
+                {
+                    xReg->registerImplementation(
+                        OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),aComponentPathString, NULL );
+                }
+                catch( ::com::sun::star::uno::Exception & )
+                {
+                }
+            }
+            nCompCount++;
+        }
+    }
+    return pSVData->maAppData.mxMSF;
 }
+
 
 uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
 {
     uno::Reference < i18n::XBreakIterator > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    uno::Reference< lang::XMultiServiceFactory > xMSF = ImplGetMultiServiceFactory();
     if ( xMSF.is() )
     {
         uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
-        if ( xI.is() )
-        {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XBreakIterator >*)0) );
-            x >>= xB;
-        }
-    }
-    if( !xB.is() )
-    {
-        uno::Reference< lang::XSingleServiceFactory > xSSF = ImplLoadLibComponentFactory(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.BreakIterator" ) ),
-            Reference< XMultiServiceFactory >(), Reference< XRegistryKey >() );
-
-        uno::Reference < uno::XInterface > xI = xSSF->createInstance();
         if ( xI.is() )
         {
             uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XBreakIterator >*)0) );
@@ -271,7 +206,7 @@ uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
 uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacterClassification()
 {
     uno::Reference < i18n::XCharacterClassification > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    uno::Reference< lang::XMultiServiceFactory > xMSF = ImplGetMultiServiceFactory();
     if ( xMSF.is() )
     {
         uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.CharacterClassification" ) );
@@ -281,28 +216,13 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
             x >>= xB;
         }
     }
-    if( !xB.is() )
-    {
-        uno::Reference< lang::XSingleServiceFactory > xSSF = ImplLoadLibComponentFactory(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.CharacterClassification" ) ),
-            Reference< XMultiServiceFactory >(), Reference< XRegistryKey >() );
-
-        uno::Reference < uno::XInterface > xI = xSSF->createInstance();
-        if ( xI.is() )
-        {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCharacterClassification >*)0) );
-            x >>= xB;
-        }
-    }
     return xB;
 }
-
-
 
 uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
 {
     uno::Reference < i18n::XCollator > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    uno::Reference< lang::XMultiServiceFactory > xMSF = ImplGetMultiServiceFactory();
     if ( xMSF.is() )
     {
         uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.Collator" ) );
@@ -312,41 +232,6 @@ uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
             x >>= xB;
         }
     }
-    if( !xB.is() )
-    {
-        uno::Reference< lang::XSingleServiceFactory > xSSF = ImplLoadLibComponentFactory(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.GNUcollator" ) ),
-            Reference< XMultiServiceFactory >(), Reference< XRegistryKey >() );
-
-        if (xSSF.is())
-        {
-            uno::Reference < uno::XInterface > xI = xSSF->createInstance();
-            if ( xI.is() )
-            {
-                uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCollator >*)0) );
-                x >>= xB;
-            }
-        }
-    }
-    if( !xB.is() )
-    {
-        uno::Reference< lang::XSingleServiceFactory > xSSF = ImplLoadLibComponentFactory(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.SimpleCollator" ) ),
-            Reference< XMultiServiceFactory >(), Reference< XRegistryKey >() );
-
-        if (xSSF.is())
-        {
-            uno::Reference < uno::XInterface > xI = xSSF->createInstance();
-            if ( xI.is() )
-            {
-                uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCollator >*)0) );
-                x >>= xB;
-            }
-        }
-    }
-
     return xB;
 }
 
