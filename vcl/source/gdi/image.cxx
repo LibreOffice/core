@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:59:00 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -500,6 +503,8 @@ ImageList::ImageList( const ResId& rResId ) :
     mnInitSize( 1 ),
     mnGrowSize( 4 )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "vcl: ImageList::ImageList( const ResId& rResId )" );
+
     DBG_CTOR( ImageList, NULL );
 
     rResId.SetRT( RSC_IMAGELIST );
@@ -635,6 +640,8 @@ ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
     mnInitSize( 1 ),
     mnGrowSize( 4 )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "vcl: ImageList::ImageList(const vector< OUString >& ..." );
+
     DBG_CTOR( ImageList, NULL );
 
     static ImplImageTreeSingletonRef    aImageTree;
@@ -745,6 +752,8 @@ ImageList::ImageList( const BitmapEx& rBitmapEx,
     mnInitSize( static_cast< USHORT >( rNameVector.size() ) ),
     mnGrowSize( nGrow )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "vcl: ImageList::ImageList( const BitmapEx& ..." );
+
     DBG_CTOR( ImageList, NULL );
 
     ImplInit( rBitmapEx, static_cast< USHORT >( rNameVector.size() ), NULL, &rNameVector, nGrow );
@@ -807,6 +816,8 @@ void ImageList::ImplInit( const BitmapEx& rBitmapEx,
                           const ::std::vector< ::rtl::OUString >* pNames,
                           USHORT nGrow  )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "vcl: ImageList::ImplInit" );
+
     if( !nInit )
     {
         mpImplData  = NULL;
@@ -1391,6 +1402,8 @@ USHORT ImageList::GetImageId( USHORT nPos ) const
 
 void ImageList::GetImageIds( ::std::vector< USHORT >& rIds ) const
 {
+    RTL_LOGFILE_CONTEXT( aLog, "vcl: ImageList::GetImageIds" );
+
     DBG_CHKTHIS( ImageList, NULL );
 
     rIds = ::std::vector< USHORT >();
@@ -1434,6 +1447,8 @@ void ImageList::GetImageIds( ::std::vector< USHORT >& rIds ) const
 
 void ImageList::GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const
 {
+    RTL_LOGFILE_CONTEXT( aLog, "vcl: ImageList::GetImageNames" );
+
     DBG_CHKTHIS( ImageList, NULL );
 
     rNames = ::std::vector< ::rtl::OUString >();
