@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:24:09 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   tabopdlg.src  $
  //   $Author: hr $
- //     $Date: 2003-07-03 17:24:09 $
- // $Revision: 1.19 $
+ //     $Date: 2003-07-17 12:59:05 $
+ // $Revision: 1.20 $
  //  $Logfile:   T:/sc/source/ui/src/tabopdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -577,6 +577,10 @@ ModelessDialog RID_SCDLG_TABOP
     Text[ hindi ] = "बहुमुखी कार्य";
     Text[ slovak ] = "Viacnásobné operácie";
 };
+
+
+
+
 
 
 
