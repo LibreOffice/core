@@ -1,10 +1,10 @@
-/*************************************************************************
+#/*************************************************************************
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-24 15:25:19 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 17:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,6 +357,15 @@ Image Image::GetColorTransformedImage( ImageColorTransform eColorTransform ) con
         aRet = *this;
 
     return aRet;
+}
+
+// -----------------------------------------------------------------------
+
+void Image::Invert()
+{
+    BitmapEx aInvertedBmp( GetBitmapEx() );
+    aInvertedBmp.Invert();
+    *this = aInvertedBmp;
 }
 
 // -----------------------------------------------------------------------
@@ -1375,6 +1384,17 @@ ImageList ImageList::GetColorTransformedImageList( ImageColorTransform eColorTra
         aRet = *this;
 
     return aRet;
+}
+
+// -----------------------------------------------------------------------
+
+void ImageList::Invert()
+{
+    ImageList aNew( *this );
+    aNew.ImplMakeUnique();
+    aNew.mpImplData->mpImageBitmap->Invert();
+
+    *this = aNew;
 }
 
 // -----------------------------------------------------------------------
