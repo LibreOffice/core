@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: abi $ $Date: 2003-05-08 13:06:42 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ bool INetURLObject::SubString::equals(SubString const & rOther,
                                       UniString const & rOtherString) const
 {
     if (m_nLength != rOther.m_nLength)
-        return true;
+        return false;
     sal_Unicode const * p1 = rThisString.GetBuffer() + m_nBegin;
     sal_Unicode const * p1End = p1 + m_nLength;
     sal_Unicode const * p2 = rOtherString.GetBuffer() + rOther.m_nBegin;
