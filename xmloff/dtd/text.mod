@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.12 2000-12-05 14:54:25 dvo Exp $
+	$Id: text.mod,v 1.13 2000-12-05 15:25:07 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -196,7 +196,7 @@
      					   text:list-level-style-bullet|
      					   text:list-level-style-image)+>
 
-<!ATTLIST text:list-style style:name %styleName; #REQUIRED>
+<!ATTLIST text:list-style style:name %styleName; #IMPLIED>
 
 <!ATTLIST text:list-style text:consecutive-numbering %boolean; "false">
 
@@ -241,7 +241,8 @@
 <!ATTLIST style:properties text:space-before %nonNegativeLength; #IMPLIED>
 <!ATTLIST style:properties text:min-label-width %nonNegativeLength; #IMPLIED>
 <!ATTLIST style:properties text:min-label-distance %nonNegativeLength; #IMPLIED>
-
+<!ATTLIST style:properties text:enable-numbering %boolean; #IMPLIED>
+<!ATTLIST style:properties style:list-style-name %styleName; #IMPLIED>
 
 <!ELEMENT text:outline-style (text:outline-level-style)+>
 
