@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OpenCommandArgument.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
+ *  last change: $Author: kso $ $Date: 2002-07-30 10:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ struct OpenCommandArgument
 
     //-------------------------------------------------------------------------
     /** The properties, for that the values shall be provided by the
-        <type>ContentResultSet</type> returned by the command).
+        <type>DynamicResultSet</type> returned by the command).
     */
     sequence< com::sun::star::beans::Property > Properties;
 };
