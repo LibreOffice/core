@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 14:45:04 $
+ *  last change: $Author: fs $ $Date: 2001-06-05 12:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ protected:
 
     virtual void checkedButton_noBroadcast(SvLBoxEntry* _pEntry);
 
-    void implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateRelatives = sal_True);
+    void implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants = sal_True, sal_Bool _bUpdateAncestors = sal_True);
 };
 
 //.........................................................................
@@ -164,6 +164,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/02/05 14:45:04  oj
+ *  new member for hiding first entry
+ *
  *  Revision 1.3  2001/01/30 08:28:15  fs
  *  'wildcard checking'
  *
