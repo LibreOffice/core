@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:55:20 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1969,9 +1969,9 @@ String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 nFormat) const
     sal_uInt16 nRet = USHRT_MAX;
     switch(nSub)
     {
-    case EU_FIRSTNAME:      aRet = USER_OPT_FIRSTNAME; break;
-    case EU_NAME:           aRet = USER_OPT_LASTNAME;  break;
-    case EU_SHORTCUT:       aRet = USER_OPT_ID; break;
+    case EU_FIRSTNAME:      nRet = USER_OPT_FIRSTNAME; break;
+    case EU_NAME:           nRet = USER_OPT_LASTNAME;  break;
+    case EU_SHORTCUT:       nRet = USER_OPT_ID; break;
 
     case EU_COMPANY:        nRet = USER_OPT_COMPANY;        break;
     case EU_STREET:         nRet = USER_OPT_STREET;         break;
@@ -2263,7 +2263,12 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
 
                 _SetGetExpFld* pNew;
 
-                if( !pFrm || pFrm->IsInDocBody() )
+                if( !pFrm ||
+                     pFrm->IsInDocBody() ||
+                    // --> FME 2004-07-27 #i31868#
+                    // Check if pFrm is not yet connected to the layout.
+                    !pFrm->FindPageFrm() )
+                    // <--
                 {
                     // einen sdbcx::Index fuers bestimmen vom TextNode anlegen
                     SwNodeIndex aIdx( rTxtNd );
