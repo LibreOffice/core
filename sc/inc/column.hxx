@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-24 15:39:19 $
+ *  last change: $Author: er $ $Date: 2002-10-01 17:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ class ScPatternAttr;
 class ScStyleSheet;
 class ScBroadcasterList;
 class TypedStrCollection;
+class ScProgress;
 struct ScFunctionData;
 struct ScLineFlags;
 
@@ -302,7 +303,7 @@ public:
     void        CalcAll();
     void        CalcAfterLoad();
     void        CompileAll();
-    void        CompileXML();
+    void        CompileXML( ScProgress& rProgress );
 
     void        ResetChanged( USHORT nStartRow, USHORT nEndRow );
 

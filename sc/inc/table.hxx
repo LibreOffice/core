@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-26 16:42:31 $
+ *  last change: $Author: er $ $Date: 2002-10-01 17:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,7 @@ public:
     void        CalcAll();
     void        CalcAfterLoad();
     void        CompileAll();
-    void        CompileXML();
+    void        CompileXML( ScProgress& rProgress );
 
     void        UpdateReference( UpdateRefMode eUpdateRefMode, USHORT nCol1, USHORT nRow1, USHORT nTab1,
                                     USHORT nCol2, USHORT nRow2, USHORT nTab2,

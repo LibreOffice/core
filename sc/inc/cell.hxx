@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-10-18 08:56:15 $
+ *  last change: $Author: er $ $Date: 2002-10-01 17:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ class SfxBroadcaster;
 class ScBroadcasterList;
 class ScCodeArray;
 class ScTokenArray;
+class ScProgress;
 
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
@@ -342,7 +343,7 @@ public:
     BOOL            GetDirty() const { return bDirty; }
     void            Compile(const String& rFormula, BOOL bNoListening = FALSE );
     void            CompileTokenArray( BOOL bNoListening = FALSE );
-    void            CompileXML();       // compile temporary string tokens
+    void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
     void            CalcAfterLoad();
     void            Interpret();
 
