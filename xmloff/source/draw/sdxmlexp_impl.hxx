@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-04 13:58:44 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #endif
 
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 class SvXMLUnitConverter;
@@ -124,6 +128,8 @@ enum XmlPlaceholder
     XmlPlaceholderVerticalOutline
 };
 
+DECLARE_STL_STDKEY_SET( sal_Int32, SdXMLFormatMap );
+
 //////////////////////////////////////////////////////////////////////////////
 
 class SdXMLExport : public SvXMLExport
@@ -146,14 +152,16 @@ class SdXMLExport : public SvXMLExport
     com::sun::star::uno::Sequence< ::rtl::OUString > maDrawPagesAutoLayoutNames;
 
     ::std::vector< ::rtl::OUString >        maDrawPagesStyleNames;
+    ::std::vector< ::rtl::OUString >        maDrawNotesPagesStyleNames;
     ::std::vector< ::rtl::OUString >        maMasterPagesStyleNames;
+    ::rtl::OUString                         maHandoutMasterStyleName;
 
     XMLSdPropHdlFactory*                mpSdPropHdlFactory;
     XMLShapeExportPropertyMapper*       mpPropertySetMapper;
     XMLPageExportPropertyMapper*        mpPresPagePropsMapper;
 
-    sal_uInt32                  mnUsedDateStyles;           // this is a bitfield of the used formatings for date fields
-    sal_uInt32                  mnUsedTimeStyles;           // this is a bitfield of the used formatings for time fields
+    SdXMLFormatMap  maUsedDateStyles;           // this is a vector with the used formatings for date fields
+    SdXMLFormatMap  maUsedTimeStyles;           // this is a vector with the used formatings for time fields
 
     sal_Bool                    mbIsDraw;
     sal_Bool                    mbFamilyGraphicUsed;
@@ -184,6 +192,7 @@ class SdXMLExport : public SvXMLExport
     void ImpPrepDrawPageInfos();
     void ImpPrepMasterPageInfos();
     void ImpWritePresentationStyles();
+    ::rtl::OUString ImpCreatePresPageStyleName( com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> xDrawPage, bool bExportBackground = true );
 
     BOOL ImpPrepAutoLayoutInfo(const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >& xPage, rtl::OUString& rName);
     void ImpWriteAutoLayoutInfos();
