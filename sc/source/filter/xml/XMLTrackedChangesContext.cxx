@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:47:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1227,7 +1227,7 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
             {
                 bEmpty = sal_False;
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                        GetKeyByAttrName( sValue, &rFormula );
+                        _GetKeyByAttrName( sValue, &rFormula, sal_False );
                 if (XML_NAMESPACE_OOOC != nPrefix)
                     rFormula = sValue;
                 ScXMLConverter::ParseFormula(rFormula);
