@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:58:44 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,9 +458,6 @@ public:
     SwXTextCursor(::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent, const SwPosition& rPos,
                     CursorType eSet, SwDoc* pDoc, const SwPosition* pMark = 0);
     SwXTextCursor(::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent, SwUnoCrsr* pSourceCrsr, CursorType eSet = CURSOR_ALL);
-    //invalid Cursor!
-    SwXTextCursor(SwXText* pParent = 0);
-
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -801,7 +798,6 @@ class SwXTextRange : public cppu::WeakImplHelper7
 protected:
     virtual ~SwXTextRange();
 public:
-    SwXTextRange();
     SwXTextRange(SwPaM& rPam, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > & rxParent);
     SwXTextRange(SwFrmFmt& rFmt, SwPaM& rPam);
     SwXTextRange(SwFrmFmt& rTblFmt, SwTableBox& rTblBox, SwPaM& rPam);
@@ -890,7 +886,6 @@ protected:
     virtual ~SwXTextRanges();
 public:
     SwXTextRanges();
-    SwXTextRanges( SwUnoCrsr* pCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent);
     SwXTextRanges(SwPaM* pCrsr);
 
 
