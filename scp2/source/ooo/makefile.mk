@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: is $ $Date: 2004-02-05 18:10:08 $
+#   last change: $Author: rt $ $Date: 2004-03-04 14:10:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,15 +68,15 @@ PRJNAME=scp2
 TARGET=ooo
 TARGETTYPE=CUI
 
-.IF "$(ENABLE_CRASHDUMP)"!=""
-SCPDEFS+=-DENABLE_CRASHDUMP
-.ENDIF
+USE_JAVAVER=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
+
+.IF "$(ENABLE_CRASHDUMP)"!=""
+SCPDEFS+=-DENABLE_CRASHDUMP
+.ENDIF
 
 .IF "$(JAVANUMVER)" >= "000100040000"
 SCPDEFS+=-DINCLUDE_JAVA_ACCESSBRIDGE
