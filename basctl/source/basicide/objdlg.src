@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-26 09:34:29 $
+ *  last change: $Author: kz $ $Date: 2001-09-27 21:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,14 +177,14 @@ FloatingWindow RID_BASICIDE_OBJCAT
                 Text [ dutch ] = "Weergeven" ;
                 Text [ spanish ] = "Mostrar" ;
                 Text [ english_us ] = "Show" ;
-                Text[ chinese_simplified ] = "ÏÔÊ¾";
+                Text[ chinese_simplified ] = "æ˜¾ç¤º";
                 Text[ russian ] = "Ïîêàçàòü";
                 Text[ polish ] = "Poka¿";
-                Text[ japanese ] = "•\\Ž¦";
-                Text[ chinese_traditional ] = "Åã¥Ü";
+                Text[ japanese ] = "è¡¨ç¤º";
+                Text[ chinese_traditional ] = "é¡¯ç¤º";
                 Text[ arabic ] = "ÚÑÖ";
                 Text[ greek ] = "ÅìöÜíéóç";
-                Text[ korean ] = "³ªÅ¸³»±â";
+                Text[ korean ] = "ë‚˜íƒ€ë‚´ê¸°";
                 Text[ turkish ] = "Görüntüle";
                 Text[ catalan ] = "Mostrar";
             };
@@ -252,15 +252,16 @@ FloatingWindow RID_BASICIDE_OBJCAT
         Pos = MAP_APPFONT ( 3 , 156 ) ;
         Size = MAP_APPFONT ( 185 , 18 ) ;
     };
-    Text[ chinese_simplified ] = "¶ÔÏó";
+    Text[ chinese_simplified ] = "å¯¹è±¡";
     Text[ russian ] = "Îáúåêòû";
     Text[ polish ] = "Obiekty";
-    Text[ japanese ] = "µÌÞ¼Þª¸Ä";
-    Text[ chinese_traditional ] = "ª«¥ó";
+    Text[ japanese ] = "ï½µï¾Œï¾žï½¼ï¾žï½ªï½¸ï¾„";
+    Text[ chinese_traditional ] = "ç‰©ä»¶";
     Text[ arabic ] = "ßÇÆäÇÊ";
     Text[ greek ] = "Áíôéêåßìåíá";
-    Text[ korean ] = "°³Ã¼";
+    Text[ korean ] = "ê°œì²´";
     Text[ turkish ] = "Nesneler";
     Text[ catalan ] = "Objetos";
 };
+
 
