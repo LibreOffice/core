@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.4 2000-10-20 08:14:36 dvo Exp $
+	$Id: text.mod,v 1.5 2000-10-31 09:40:33 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -118,7 +118,8 @@
 				   text:sequence-ref |
 				   text:bookmark-ref |
 				   text:footnote-ref |
-				   text:endnote-ref">
+				   text:endnote-ref |
+				   text:sheet-name">
 
 
 <!ENTITY % inline-text "(#PCDATA|
@@ -553,6 +554,8 @@
 <!ATTLIST text:endnote-ref text:ref-name %string; #REQUIRED>
 <!ATTLIST text:endnote-ref text:reference-format (page|chapter|text|direction) #IMPLIED>
 
+<!ELEMENT text:sheet-name (#PCDATA)>
+
 <!ELEMENT text:bookmark EMPTY>
 <!ATTLIST text:bookmark text:name CDATA #REQUIRED>
 
@@ -578,7 +581,7 @@
 <!ATTLIST text:footnotes-configuration text:citation-body-style-name %styleName; #IMPLIED>
 <!ATTLIST text:footnotes-configuration text:citation-style-name %styleName; #IMPLIED>
 <!ATTLIST text:footnotes-configuration text:default-style-name  %styleName; #IMPLIED>
-<!ATTLIST text:footnotes-configuration text:page-master-name %styleName; #IMPLIED>
+<!ATTLIST text:footnotes-configuration text:master-page-name %styleName; #IMPLIED>
 <!ATTLIST text:footnotes-configuration text:offset %integer; #IMPLIED>
 <!ATTLIST text:footnotes-configuration text:footnotes-position (document|page) "page">
 <!ATTLIST text:footnotes-configuration text:start-numbering-at (document|chapter|page) "document">
@@ -593,7 +596,7 @@
 <!ATTLIST text:endnotes-configuration text:citation-style-name %styleName; #IMPLIED>
 <!ATTLIST text:endnotes-configuration text:citation-body-style-name %styleName; #IMPLIED>
 <!ATTLIST text:endnotes-configuration text:default-style-name %styleName; #IMPLIED>
-<!ATTLIST text:endnotes-configuration text:page-master-name %styleName; #IMPLIED>
+<!ATTLIST text:endnotes-configuration text:master-page-name %styleName; #IMPLIED>
 <!ATTLIST text:endnotes-configuration text:offset %integer; #IMPLIED>
 
 <!-- Validity constraint: text:footnote and text:endnote elements may not 
