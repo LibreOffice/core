@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOOoTContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:12:20 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,6 +515,8 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             GetPropContextAndAction( aAction, nPrefix, aLocalName, sal_False );
         switch( aAction.m_nActionType )
         {
+        case XML_ATACTION_REMOVE:
+            break;
         case XML_ATACTION_COPY:
             pContext->AddAttribute( sAttrName, sAttrValue );
             break;
