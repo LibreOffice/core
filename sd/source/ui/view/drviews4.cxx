@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 08:58:44 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -796,6 +796,10 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                     case OBJ_OLE2:
                                         nSdResId = bGraphicShell ? RID_GRAPHIC_OLE2_POPUP :
                                                                     RID_DRAW_OLE2_POPUP;
+                                        break;
+                                    case OBJ_MEDIA:
+                                        nSdResId = bGraphicShell ? RID_GRAPHIC_MEDIA_POPUP :
+                                                                    RID_DRAW_MEDIA_POPUP;
                                         break;
                                 }
                             }
