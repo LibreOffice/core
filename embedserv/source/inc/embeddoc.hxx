@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddoc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:55:02 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,16 @@ typedef ::std::hash_map< DWORD, IAdviseSink* > AdviseSinkHashMap;
 typedef ::std::hash_map< DWORD, IAdviseSink* >::iterator AdviseSinkHashMapIterator;
 
 class GDIMetaFile;
+class CIIAObj;
 
-class EmbedDocument_Impl : public IPersistStorage
-                         , public IDataObject
-                         , public IOleObject
-                         , public IPersistFile
-                         , public IDispatch
+
+class EmbedDocument_Impl
+    : public IPersistStorage,
+      public IDataObject,
+      public IOleObject,
+      public IOleInPlaceObject,
+      public IPersistFile,
+      public IDispatch
 {
 protected:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
@@ -157,6 +161,14 @@ public:
     STDMETHOD(GetMiscStatus) ( DWORD dwAspect, DWORD *pdwStatus );
     STDMETHOD(SetColorScheme) ( LOGPALETTE *pLogpal );
 
+    /* IOleInPlaceObject methods */
+    STDMETHOD(GetWindow)(HWND *);
+    STDMETHOD(ContextSensitiveHelp)(BOOL);
+    STDMETHOD(InPlaceDeactivate)();
+    STDMETHOD(UIDeactivate)();
+    STDMETHOD(SetObjectRects)(LPCRECT, LPCRECT);
+    STDMETHOD(ReactivateAndUndo)();
+
     /* IPersistFile methods */
     STDMETHOD(Load) ( LPCOLESTR pszFileName, DWORD dwMode );
     STDMETHOD(Save) ( LPCOLESTR pszFileName, BOOL fRemember );
@@ -173,6 +185,8 @@ public:
 
     void notify();
     HRESULT SaveObject();
+    HRESULT ShowObject();
+    GUID GetGUID() const { return m_guid; }
 
 protected:
     oslInterlockedCount                 m_refCount;
