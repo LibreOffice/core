@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-02-09 14:17:22 $
+ *  last change: $Author: er $ $Date: 2001-02-09 16:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -839,32 +839,33 @@ BOOL ScChangeAction::LoadLinkChain( ScChangeAction* pOfAction,
     return bOk;
 }
 
-void ScChangeAction::LoadDeleted(const ULONG nActionNumber,
-                                            ScChangeTrack* pTrack)
+
+void ScChangeAction::SetDeletedInThis( ULONG nActionNumber,
+        const ScChangeTrack* pTrack )
 {
-    ScChangeAction* pAct = NULL;
     if ( nActionNumber )
     {
-        pAct = pTrack->GetActionOrGenerated( nActionNumber );
-        DBG_ASSERT( pAct, "ScChangeAction::LoadDeleted: missing Action" );
+        ScChangeAction* pAct = pTrack->GetActionOrGenerated( nActionNumber );
+        DBG_ASSERT( pAct, "ScChangeAction::SetDeletedInThis: missing Action" );
+        if ( pAct )
+            pAct->SetDeletedIn( this );
     }
-    if ( pAct )
-        pAct->SetDeletedIn( this );
 }
 
-void ScChangeAction::LoadDependent(const ULONG nActionNumber,
-                                            ScChangeTrack* pTrack)
+
+void ScChangeAction::AddDependent( ULONG nActionNumber,
+        const ScChangeTrack* pTrack )
 {
-    ScChangeAction* pAct = NULL;
     if ( nActionNumber )
     {
-        pAct = pTrack->GetActionOrGenerated( nActionNumber );
-        DBG_ASSERT( pAct, "ScChangeAction::LoadDependent: missing Action" );
+        ScChangeAction* pAct = pTrack->GetActionOrGenerated( nActionNumber );
+        DBG_ASSERT( pAct, "ScChangeAction::AddDependent: missing Action" );
+        if ( pAct )
+        {
+            ScChangeActionLinkEntry* pLink = AddDependent( pAct );
+            pAct->AddLink( this, pLink );
+        }
     }
-    ScChangeActionLinkEntry* pLink = new ScChangeActionLinkEntry(
-        &pLinkDependent, pAct );
-    if ( pAct )
-        pAct->AddLink( this, pLink );
 }
 
 // static
@@ -1716,7 +1717,7 @@ ScChangeActionContent::ScChangeActionContent( const ULONG nActionNumber,
 
 {
     if (pOldCell)
-        ScChangeActionContent::GetStringOfCell(aNewValue, pOldCell, pDoc, 0);
+        ScChangeActionContent::SetCell( aOldValue, pOldCell, 0, pDoc );
 }
 
 ScChangeActionContent::ScChangeActionContent( const ULONG nActionNumber,
@@ -1732,7 +1733,7 @@ ScChangeActionContent::ScChangeActionContent( const ULONG nActionNumber,
         ppPrevInSlot(NULL)
 {
     if (pOldCell)
-        ScChangeActionContent::GetStringOfCell(aNewValue, pOldCell, pDoc, 0);
+        ScChangeActionContent::SetCell( aOldValue, pOldCell, 0, pDoc );
 }
 
 ScChangeActionContent::~ScChangeActionContent()
@@ -1860,11 +1861,11 @@ void ScChangeActionContent::SetOldNewCells( ScBaseCell* pOldCellP,
     ScChangeActionContent::SetCell( aNewValue, pNewCell, nNewFormat, pDoc );
 }
 
-void ScChangeActionContent::SetNewCell(ScBaseCell* pCell, ScDocument* pDoc)
+void ScChangeActionContent::SetNewCell( ScBaseCell* pCell, ScDocument* pDoc )
 {
+    DBG_ASSERT( !pNewCell, "ScChangeActionContent::SetNewCell: overwriting existing cell" );
     pNewCell = pCell;
-    if (pNewCell)
-        ScChangeActionContent::GetStringOfCell(aNewValue, pNewCell, pDoc, 0);
+    ScChangeActionContent::SetCell( aNewValue, pNewCell, 0, pDoc );
 }
 
 void ScChangeActionContent::SetValueString( String& rValue, ScBaseCell*& pCell,
