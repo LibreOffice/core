@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jl $ $Date: 2001-07-09 08:11:08 $
+#   last change: $Author: jl $ $Date: 2002-04-11 15:41:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,8 @@ JAVACLASSFILES= 											\
     $(CLASSDIR)$/$(PACKAGE)$/MappingException.class 		\
     $(CLASSDIR)$/$(PACKAGE)$/MappingWrapper.class			\
     $(CLASSDIR)$/$(PACKAGE)$/UnoRuntime.class			\
-    $(CLASSDIR)$/$(PACKAGE)$/AnyConverter.class
+    $(CLASSDIR)$/$(PACKAGE)$/AnyConverter.class			\
+    $(CLASSDIR)$/$(PACKAGE)$/WeakReference.class 
 
 # --- Targets ------------------------------------------------------
 
