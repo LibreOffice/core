@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-28 11:11:15 $
+ *  last change: $Author: hdu $ $Date: 2002-02-15 16:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef NO_FREETYPE_FONTS
+#ifndef _SV_GCACHFTYP_HXX
+#define _SV_GCACHFTYP_HXX
 
 #include <glyphcache.hxx>
 #include <rtl/textcvt.h>
@@ -167,10 +168,17 @@ class FreetypeServerFont : public ServerFont
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
 
     virtual int                 GetGlyphIndex( sal_Unicode ) const;
+    int                         GetRawGlyphIndex( sal_Unicode ) const;
+    int                         FixupGlyphIndex( int nGlyphIndex, sal_Unicode ) const;
+
     virtual bool                GetAntialiasAdvice( void ) const;
     virtual bool                GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const;
     virtual bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
     virtual bool                GetGlyphOutline( int nGlyphIndex, PolyPolygon& ) const;
+
+    const unsigned char*        GetTable( const char* pName, ULONG* pLength )
+                                { return mpFontInfo->GetTable( pName, pLength ); }
+    int                         GetEmUnits() const;
 
 protected:
 friend GlyphCache;
@@ -178,8 +186,13 @@ friend GlyphCache;
     int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* ) const;
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
     virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
+    virtual int                 GetGlyphKernValue( int, int ) const;
     virtual ULONG               GetFontCodeRanges( sal_uInt32* pCodes ) const;
     bool                        ApplyGSUB( const ImplFontSelectData& );
+
+#ifdef ENABLE_CTL
+    virtual bool                InitLayoutEngine();
+#endif // ENABLE_CTL
 
 private:
     int                         mnWidth;
@@ -195,4 +208,4 @@ private:
 
 // -----------------------------------------------------------------------
 
-#endif // NO_FREETYPE_FONTS
+#endif // _SV_GCACHFTYP_HXX
