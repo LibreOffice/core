@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:56:56 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,8 +409,7 @@ BOOL SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     if ( pCMS && pCMS->eState == MV_TBLSEL )
     {
         const SwTabFrm *pTab = FindTabFrm();
-        if ( pTab->IsFollow() && pTab->GetTable()->IsHeadlineRepeat() &&
-             ((SwLayoutFrm*)pTab->Lower())->IsAnLower( this ) )
+        if ( pTab->IsFollow() && pTab->IsInHeadline( *this ) )
         {
             ((SwCrsrMoveState*)pCMS)->bStop = TRUE;
             return FALSE;
@@ -598,9 +597,7 @@ FASTBOOL lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
     const SwTabFrm *pTab = pFrm->FindTabFrm();
     if( ppTFrm )
         *ppTFrm = pTab;
-    return pTab && pTab->IsFollow() &&
-           pTab->GetTable()->IsHeadlineRepeat() &&
-           ((SwLayoutFrm*)pTab->Lower())->IsAnLower( pFrm );
+    return pTab && pTab->IsFollow() && pTab->IsInHeadline( *pFrm );
 }
 
 
@@ -1061,23 +1058,21 @@ BOOL GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
         if ( pCnt->IsInTab() && fnPosPage == GetFirstSub )
         {
             const SwTabFrm* pTab = pCnt->FindTabFrm();
-            if ( pTab->IsFollow() && pTab->GetTable()->IsHeadlineRepeat() )
+            if ( pTab->IsFollow() )
             {
-                const SwFrm* pTmpFrm = pCnt;
-                while( !pTmpFrm->IsRowFrm() || !pTmpFrm->GetUpper()->IsTabFrm() )
-                    pTmpFrm = pTmpFrm->GetUpper();
-
-                ASSERT( pTmpFrm && pTmpFrm->IsRowFrm(), "No RowFrm available" )
-
-                if ( ! pTmpFrm->GetPrev() && pTmpFrm->GetNext() )
+                if ( pTab->IsInHeadline( *pCnt ) )
                 {
-                    // We are in the first line of a follow table
-                    // with repeated headings.
-                    // To actually make a "real" move we take the first content
-                    // of the next row
-                    pCnt = ((SwLayoutFrm*)pTmpFrm->GetNext())->ContainsCntnt();
-                    if ( ! pCnt )
-                        return FALSE;
+                    SwLayoutFrm* pRow = pTab->GetFirstNonHeadlineRow();
+                    if ( pRow )
+                    {
+                        // We are in the first line of a follow table
+                        // with repeated headings.
+                        // To actually make a "real" move we take the first content
+                        // of the next row
+                        pCnt = pRow->ContainsCntnt();
+                        if ( ! pCnt )
+                            return FALSE;
+                    }
                 }
             }
         }
@@ -1307,8 +1302,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
     if ( pActual->IsInTab() && pCMS && pCMS->eState == MV_TBLSEL )
     {
         const SwTabFrm *pTab = pActual->FindTabFrm();
-        if ( pTab->IsFollow() && pTab->GetTable()->IsHeadlineRepeat() &&
-             ((SwLayoutFrm*)pTab->Lower())->IsAnLower( pActual ) )
+        if ( pTab->IsFollow() && pTab->IsInHeadline( *pActual ) )
         {
             ((SwCrsrMoveState*)pCMS)->bStop = TRUE;
             return 0;
@@ -1870,10 +1864,11 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
             SwSelUnion *pUnion = aUnions[i];
             const SwTabFrm *pTable = pUnion->GetTable();
 
-            SwLayoutFrm *pRow = (SwLayoutFrm*)pTable->Lower();
-            if ( pRow && pTable->IsFollow() &&
-                 pTable->GetTable()->IsHeadlineRepeat() )
-                pRow = (SwLayoutFrm*)pRow->GetNext();
+            // Skip any repeated headlines in the follow:
+            SwLayoutFrm* pRow = pTable->IsFollow() ?
+                                pTable->GetFirstNonHeadlineRow() :
+                                (SwLayoutFrm*)pTable->Lower();
+
             while ( pRow )
             {
                 if ( pRow->Frm().IsOver( pUnion->GetUnion() ) )
@@ -2087,7 +2082,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                     const SwTabFrm* pTabFrm = (SwTabFrm*)pSttLFrm;
                     if( ( pTabFrm->GetFollow() ||
                           ((SwTabFrm*)pEndLFrm)->GetFollow() ) &&
-                        pTabFrm->GetTable()->IsHeadlineRepeat() &&
+                        pTabFrm->GetTable()->GetRowsToRepeat() > 0 &&
                         pTabFrm->GetLower() != ((SwTabFrm*)pEndLFrm)->GetLower() &&
                         ( lcl_IsInRepeatedHeadline( pStartFrm ) ||
                           lcl_IsInRepeatedHeadline( pEndFrm ) ) )
