@@ -283,7 +283,7 @@ public class XmlUpdater extends Thread {
             onInstallComplete();
             return;
         }
-        if (!zd.extractEntry("examples/MemoryUsage/HighlightTextParcel.sxp",scriptsPath+File.separator+"MemoryUsage"+File.separator, statusLabel))
+        if (!zd.extractEntry("examples/MemoryUsage/ExampleSpreadSheet.sxc",scriptsPath+File.separator+"MemoryUsage"+File.separator, statusLabel))
         {
             onInstallComplete();
             return;
