@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:22 $
+ *  last change: $Author: mib $ $Date: 2002-05-27 12:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,9 +261,6 @@ public:
 
 
     //=====  XAccessibleComponent  ============================================
-
-    virtual sal_Bool SAL_CALL isFocusTraversable()
-        throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL grabFocus()
         throw (::com::sun::star::uno::RuntimeException);

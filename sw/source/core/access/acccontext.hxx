@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-23 15:10:57 $
+ *  last change: $Author: mib $ $Date: 2002-05-27 12:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,6 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
-#ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
-#include <com/sun/star/awt/XFocusListener.hpp>
-#endif
 
 class Window;
 class SwAccessibleMap;
@@ -140,7 +137,6 @@ private:
 
     ::rtl::OUString sName;  // immutable outside constructor
     ::cppu::OInterfaceContainerHelper aAccessibleEventListeners;
-    ::cppu::OInterfaceContainerHelper aFocusListeners;
 
     // The parent if it has been retrieved. This is always an
     // SwAccessibleContext. (protected by Mutex)
@@ -340,24 +336,6 @@ public:
     virtual ::com::sun::star::awt::Size SAL_CALL getSize()
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL isShowing()
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL isVisible()
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL isFocusTraversable()
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL addFocusListener(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::awt::XFocusListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL removeFocusListener(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::awt::XFocusListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL grabFocus()
         throw (::com::sun::star::uno::RuntimeException);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:22 $
+ *  last change: $Author: mib $ $Date: 2002-05-27 12:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,7 +696,7 @@ void SwAccessibleTable::FireTableChangeEvent(
     aModelChange.LastColumn = rTableData.GetColumnCount() - 1;
 
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_TABLE_MODEL_CHANGED;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_TABLE_MODEL_EVENT;
     aEvent.NewValue <<= aModelChange;
 
     FireAccessibleEvent( aEvent );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 16:51:26 $
+ *  last change: $Author: mib $ $Date: 2002-05-27 12:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -861,12 +861,6 @@ Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
     Locale aLoc( pBreakIt->GetLocale( pTxtNd->GetLang( 0 ) ) );
 
     return aLoc;
-}
-
-sal_Bool SAL_CALL SwAccessibleParagraph::isFocusTraversable()
-        throw (::com::sun::star::uno::RuntimeException)
-{
-    return sal_True;
 }
 
 void SAL_CALL SwAccessibleParagraph::grabFocus()

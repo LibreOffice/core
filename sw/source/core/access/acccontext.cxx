@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
+ *  last change: $Author: mib $ $Date: 2002-05-27 12:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,6 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
     SwAccessibleFrame( pM->GetVisArea().SVRect(), pF,
                        pM->GetShell()->IsPreView() ),
     aAccessibleEventListeners( aListenerMutex ),
-    aFocusListeners( aListenerMutex ),
     pMap( pM ),
     nRole( nR ),
     bDisposing( sal_False )
@@ -605,7 +604,6 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
                        pM->GetShell()->IsPreView() ),
     sName( rName ),
     aAccessibleEventListeners( aListenerMutex ),
-    aFocusListeners( aListenerMutex ),
     pMap( pM ),
     nRole( nR ),
     bDisposing( sal_False )
@@ -966,48 +964,6 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
     return aSize;
 }
 
-
-sal_Bool SAL_CALL SwAccessibleContext::isShowing()
-        throw (RuntimeException)
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    return IsShowing();
-}
-
-
-sal_Bool SAL_CALL SwAccessibleContext::isVisible()
-        throw (RuntimeException)
-{
-    return sal_True;
-}
-
-
-sal_Bool SAL_CALL SwAccessibleContext::isFocusTraversable()
-        throw (RuntimeException)
-{
-    return sal_False;
-}
-
-
-void SAL_CALL SwAccessibleContext::addFocusListener(
-            const Reference<
-                ::com::sun::star::awt::XFocusListener >& xListener )
-        throw (RuntimeException)
-{
-    DBG_MSG( "focus listener added" )
-    aFocusListeners.addInterface( xListener );
-}
-
-
-void SAL_CALL SwAccessibleContext::removeFocusListener(
-            const Reference<
-                ::com::sun::star::awt::XFocusListener >& xListener )
-        throw (RuntimeException)
-{
-    DBG_MSG( "focus listener removed" )
-    aFocusListeners.removeInterface( xListener );
-}
-
 void SAL_CALL SwAccessibleContext::grabFocus()
         throw (RuntimeException)
 {
@@ -1118,7 +1074,6 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
         EventObject aEvent;
         aEvent.Source = xThis;
         aAccessibleEventListeners.disposeAndClear( aEvent );
-        aFocusListeners.disposeAndClear( aEvent );
         DBG_MSG_CD( "dispose" )
     }
 

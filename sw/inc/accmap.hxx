@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:33:44 $
+ *  last change: $Author: mib $ $Date: 2002-05-27 12:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _SVX_ACCESSIBILITY_IACCESSIBLE_VIEW_FORWARDER_HXX
 #include <svx/IAccessibleViewForwarder.hxx>
 #endif
+#ifndef _SVX_ACCESSIBILITY_IACCESSIBLE_PARENT_HXX
+#include <svx/IAccessibleParent.hxx>
+#endif
 #ifndef _VIEWSH_HXX
 #include "viewsh.hxx"
 #endif
@@ -123,7 +126,8 @@ class SwAccPreviewData;
 
 #define ACC_STATE_MASK 0x1F
 
-class SwAccessibleMap : public accessibility::IAccessibleViewForwarder
+class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
+                        public accessibility::IAccessibleParent
 {
     ::vos::OMutex maMutex;
     ::vos::OMutex maEventMutex;
@@ -239,6 +243,12 @@ public:
     virtual Size LogicToPixel (const Size& rSize) const;
     virtual Point PixelToLogic (const Point& rPoint) const;
     virtual Size PixelToLogic (const Size& rSize) const;
+
+    // IAccessibleParent
+    virtual sal_Bool ReplaceChild (
+        ::accessibility::AccessibleShape* pCurrentChild,
+        ::accessibility::AccessibleShape* pReplacement)
+        throw (::com::sun::star::uno::RuntimeException);
 
     // additional Core/Pixel conversions for internal use; also works
     // for preview
