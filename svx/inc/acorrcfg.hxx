@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acorrcfg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:09:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 
 // include ---------------------------------------------------------------
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
 #endif
@@ -71,7 +75,7 @@
  ---------------------------------------------------------------------------*/
 class SvxAutoCorrect;
 class SvxAutoCorrCfg;
-class SvxBaseAutoCorrCfg : public utl::ConfigItem
+class SVX_DLLPUBLIC SvxBaseAutoCorrCfg : public utl::ConfigItem
 {
     SvxAutoCorrCfg& rParent;
     com::sun::star::uno::Sequence<rtl::OUString>    GetPropertyNames();
@@ -88,7 +92,7 @@ public:
 /* -----------------------------12.10.00 11:40--------------------------------
 
  ---------------------------------------------------------------------------*/
-class SvxSwAutoCorrCfg : public utl::ConfigItem
+class SVX_DLLPUBLIC SvxSwAutoCorrCfg : public utl::ConfigItem
 {
     SvxAutoCorrCfg& rParent;
     com::sun::star::uno::Sequence<rtl::OUString>    GetPropertyNames();
@@ -105,7 +109,7 @@ public:
 /*--------------------------------------------------------------------
     Beschreibung:   Konfiguration fuer Auto Correction
  --------------------------------------------------------------------*/
-class SvxAutoCorrCfg
+class SVX_DLLPUBLIC SvxAutoCorrCfg
 {
     friend class SvxBaseAutoCorrCfg;
     friend class SvxSwAutoCorrCfg;
