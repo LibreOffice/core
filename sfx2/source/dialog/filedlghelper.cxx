@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-22 14:26:41 $
+ *  last change: $Author: dv $ $Date: 2001-05-23 11:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,6 +456,8 @@ ErrCode FileDialogHelper_Impl::execute( const String&   rPath,
     // set the path
     if ( rPath.Len() )
         mxFileDlg->setDisplayDirectory( rPath );
+    else if ( maPath.getLength() )
+        mxFileDlg->setDisplayDirectory( maPath );
 
     loadConfig();
 
@@ -568,15 +570,9 @@ ErrCode FileDialogHelper_Impl::execute()
     if ( ! mxFileDlg.is() || !xFltMgr.is() )
         return ERRCODE_ABORT;
 
+    // setDisplayDirectory will set the default name, too
     if ( maPath.getLength() )
-    {
-        INetURLObject aObj( maPath, INET_PROT_FILE );
-        OUString aTitle( aObj.getName( INetURLObject::LAST_SEGMENT, true,
-                         INetURLObject::DECODE_WITH_CHARSET ) );
-        aObj.removeSegment();
-        mxFileDlg->setDisplayDirectory( aObj.GetMainURL() );
-        mxFileDlg->setDefaultName( aTitle );
-    }
+        mxFileDlg->setDisplayDirectory( maPath );
 
     if ( maCurFilter.getLength() )
         xFltMgr->setCurrentFilter( maCurFilter );
