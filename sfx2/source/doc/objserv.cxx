@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:43:29 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1001,9 +1001,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if ( !pDefFilter->IsInternal() && pCurFilter != pDefFilter )
                 {
                     // fragen, ob im default-Format gespeichert werden soll
+                    // TODO/LATER: in future all the entries should be replaced
                     String aWarn(SfxResId(STR_QUERY_SAVEOWNFORMAT));
                     aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(FORMAT)" ),
                                 GetMedium()->GetFilter()->GetUIName());
+                    aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(FORMAT)" ),
+                                GetMedium()->GetFilter()->GetUIName());
+
                     aWarn = SearchAndReplace( aWarn,
                                 DEFINE_CONST_UNICODE( "$(FILENAME)" ),
                                 INetURLObject( GetMedium()->GetName() ).getName( INetURLObject::LAST_SEGMENT,
