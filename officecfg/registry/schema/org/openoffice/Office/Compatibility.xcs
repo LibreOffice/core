@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Compatibility.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:06:58 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
                 <value>false</value>
             </prop>
             <prop oor:name="UseLineSpacing" oor:type="xs:boolean"><info><desc xml:lang="en-US">Use OpenOffice.org 1.1 line spacing</desc></info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="AddTableSpacing" oor:type="xs:boolean"><info><desc xml:lang="en-US">Add paragraph and table spacing at the bottom of table cells</desc></info>
                 <value>false</value>
             </prop>
         </group>
