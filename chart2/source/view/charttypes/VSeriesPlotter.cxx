@@ -265,6 +265,23 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getLabelsGroupShape( VDataSer
 
 }
 
+uno::Reference< drawing::XShapes > VSeriesPlotter::getErrorBarsGroupShape( VDataSeries* pDataSeries
+                                        , const uno::Reference< drawing::XShapes >& xTarget )
+{
+    if(pDataSeries->m_xErrorBarsShape.is())
+    {
+        return uno::Reference<drawing::XShapes>( pDataSeries->m_xErrorBarsShape, uno::UNO_QUERY );
+    }
+    //create a group shape for this series and add to logic target:
+    uno::Reference< drawing::XShapes > xShapes(
+        createGroupShape( xTarget,pDataSeries->getErrorBarsCID() ));
+    uno::Reference<drawing::XShape> xShape =
+                uno::Reference<drawing::XShape>( xShapes, uno::UNO_QUERY );
+    pDataSeries->m_xErrorBarsShape.set(xShape);
+    return xShapes;
+
+}
+
 void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& xTarget
                     , const VDataSeries& rDataSeries
                     , sal_Int32 nPointIndex

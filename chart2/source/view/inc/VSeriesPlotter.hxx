@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-25 17:39:52 $
+ *  last change: $Author: iha $ $Date: 2003-12-12 22:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,11 @@ protected: //methods
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         getLabelsGroupShape( VDataSeries* pDataSeries
+            , const::com::sun::star:: uno::Reference<
+                ::com::sun::star::drawing::XShapes >& xTarget );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+        getErrorBarsGroupShape( VDataSeries* pDataSeries
             , const::com::sun::star:: uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget );
 
