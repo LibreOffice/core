@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokstack.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-09-22 14:54:25 $
+ *  last change: $Author: mh $ $Date: 2001-10-23 09:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #pragma hdrstop
 
 #ifndef PCH
-#include <segmentc.hxx>
 #include <string.h>
 #endif
 
@@ -686,7 +685,4 @@ const String* TokenPool::GetString( TokenId n ) const
 
     return p;
 }
-
-
-
 
