@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-21 15:27:31 $
+ *  last change: $Author: cl $ $Date: 2001-06-29 08:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1423,6 +1423,19 @@ void BinTextObject::FinishLoad( SfxStyleSheetPool* pStyleSheetPool )
     for ( USHORT nPara = GetContents().Count(); nPara; )
     {
         ContentInfo* pC = GetContents().GetObject( --nPara );
+
+        if( GetUserType() == 0x0003 ) // !! OUTLINERMODE_OUTLINEOBJECT !!
+        {
+            if ( pC->GetParaAttribs().GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
+            {
+                SvxNumBulletItem* pNumBullet = (SvxNumBulletItem*) &pC->GetParaAttribs().Get( EE_PARA_NUMBULLET );
+                if( pNumBullet->GetNumRule()->GetNumRuleType() != SVX_RULETYPE_PRESENTATION_NUMBERING )
+                {
+                    pNumBullet->GetNumRule()->SetNumRuleType( SVX_RULETYPE_PRESENTATION_NUMBERING );
+                    pC->GetParaAttribs().Put( *pNumBullet, EE_PARA_NUMBULLET );
+                }
+            }
+        }
 
         if ( bCreateNumBulletItem )
         {
