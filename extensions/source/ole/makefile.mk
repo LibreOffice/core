@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-11 13:49:57 $
+#   last change: $Author: obo $ $Date: 2004-11-16 12:00:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,19 +60,8 @@
 #
 #*************************************************************************
 PRJ=..$/..
-# from cppumaker --------------------------------------------------
-
-.IF "$(BOOTSTRAP_SERVICE)" == "TRUE"
-UNOUCROUT=	$(OUT)$/inc$/comprehensive
-INCPRE+=	$(OUT)$/inc$/comprehensive
-CPPUMAKERFLAGS += -C
-.ELSE
-UNOUCROUT=	$(OUT)$/inc
-INCPRE+=	$(OUT)$/inc
-.ENDIF
 
 # -----------------------------------------------------------------
-
 
 PRJNAME=extensions
 TARGET=oleautobridge.uno
@@ -89,7 +78,16 @@ USE_DEFFILE=TRUE
 INCPRE+= -I$(ATL_INCLUDE)	
 # --- Settings -----------------------------------------------------
 
+# from cppumaker --------------------------------------------------
 
+.IF "$(BOOTSTRAP_SERVICE)" == "TRUE"
+UNOUCROUT=	$(OUT)$/inc$/comprehensive
+INCPRE+=	$(OUT)$/inc$/comprehensive
+CPPUMAKERFLAGS += -C
+.ELSE
+UNOUCROUT=$(OUT)$/inc$/$(TARGET)
+INCPRE+=$(UNOUCROUT)
+.ENDIF
 
 #----------------------------------------------------------------
 #.INCLUDE: .$/cppumaker.mk
