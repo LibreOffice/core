@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cexports.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:50:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include "cppuhelper/implementationentry.hxx"
 #include "jvmfwk.hxx"
+#include "basicmigration.hxx"
 
 extern "C"
 {
@@ -70,6 +71,11 @@ extern "C"
     {
         migration::jvmfwk_create, migration::jvmfwk_getImplementationName,
         migration::jvmfwk_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
+        0, 0
+    },
+    {
+        migration::BasicMigration_create, migration::BasicMigration_getImplementationName,
+        migration::BasicMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
         0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
