@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modules.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 11:24:45 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ module svg {};
 /// Data synchronization interfaces (deprecated).
 module sync {};
 
-/// Data synchronization interfaces (new).
+/// Data synchronization interfaces (deprecated).
 module sync2 {};
 
 /// Table specific interfaces (for text and spreadsheet).
