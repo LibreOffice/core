@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-09 15:27:55 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
 
 // include ---------------------------------------------------------------
 
