@@ -102,12 +102,9 @@ public class TextComponent extends Component implements javax.accessibility.Acce
         return new AccessibleTextComponentListener();
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            accessibleContext = new AccessibleTextComponent();
-        }
-        return accessibleContext;
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleTextComponent();
     }
 
     protected class AccessibleTextComponent extends AccessibleUNOComponent {
