@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tkpstama.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:20 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 13:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ StateMachine::Peek(intt in_nBranch)
 void
 StateMachine::PrintOut()
 {
-    const anzahl = nNrofStati;
+    const intt anzahl = nNrofStati;
     for (int i = 0; i < anzahl; i++)
     {
         Cout() << i << ':';
