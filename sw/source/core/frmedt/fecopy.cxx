@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:42:48 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,7 +447,7 @@ BOOL lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrm* pFly,
     rAnchor.SetAnchor( &rPos );
     SwCntntFrm* pTmpFrm = rNd.GetCntntNode()->GetFrm( &rInsPt, 0, FALSE );
     SwFlyFrm *pTmpFly = pTmpFrm->FindFlyFrm();
-    if( pTmpFly && bCheckFlyRecur && pFly->IsUpperOf( pTmpFly ) )
+    if( pTmpFly && bCheckFlyRecur && pFly->IsUpperOf( *pTmpFly ) )
         bRet = FALSE;
     else if ( FLY_AT_FLY == rAnchor.GetAnchorId() )
     {
@@ -582,14 +582,16 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                 //Kann 0 sein, weil Draws in Kopf-/Fusszeilen nicht erlaubt sind.
                 if ( pFmt )
                 {
-                    SdrObject *pNew = pFmt->FindSdrObject();
+                    SdrObject* pNew = pFmt->FindSdrObject();
                     if( FLY_IN_CNTNT != aAnchor.GetAnchorId() )
                     {
                         Point aPos( rInsPt );
                         aPos -= aNewAnch;
                         aPos -= rSttPt - pObj->GetSnapRect().TopLeft();
-                        pNew->ImpSetAnchorPos( aNewAnch );
-                        pNew->SetRelativePos( aPos );
+                        // OD 2004-04-05 #i26791# - change attributes instead of
+                        // direct positioning
+                        pFmt->SetAttr( SwFmtHoriOrient( aPos.X(), HORI_NONE, FRAME ) );
+                        pFmt->SetAttr( SwFmtVertOrient( aPos.Y(), VERT_NONE, FRAME ) );
                     }
                     if( bSelectInsert )
                         pDestDrwView->MarkObj( pNew, pDestPgView );
@@ -986,6 +988,8 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc )
                         if( pNew->GetAnchorPos().X() || pNew->GetAnchorPos().Y() )
                         {
                             const Point aPoint( 0, 0 );
+                            // OD 2004-04-05 #i26791# - direct drawing object
+                            // positioning for group members
                             pNew->NbcSetAnchorPos( aPoint );
                             pNew->NbcSetSnapRect( aSnapRect );
                         }
@@ -1005,8 +1009,10 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc )
                             }
                         }
 
+                        // OD 2004-04-05 #i26791# - direct drawing object
+                        // positioning for group members
                         pNew->NbcSetAnchorPos( aGrpAnchor );
-                        pNew->NbcSetSnapRect( aSnapRect );
+                        pNew->SetSnapRect( aSnapRect );
 
                         bInsWithFmt = FALSE;
                     }
@@ -1239,7 +1245,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
 
                     Point aNullPt;
                     SwFlyFrm* pFlyFrm = ((SwFlyFrmFmt*)pFmt)->GetFrm( &aNullPt );
-                    pAnchor = pFlyFrm->GetAnchor();
+                    pAnchor = pFlyFrm->GetAnchorFrm();
 
                     if( pAnchor->FindFooterOrHeader() )
                     {
@@ -1293,6 +1299,8 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
                         aNullPt = aOldObjRect.TopLeft();
 
                     Point aNewAnchor = pAnchor->GetFrmAnchorPos( ::HasWrap( pOldObj ) );
+                    // OD 2004-04-05 #i26791# - direct positioning of Writer
+                    // fly frame object for <SwDoc::Insert(..)>
                     pNewObj->NbcSetRelativePos( aNullPt - aNewAnchor );
                     pNewObj->NbcSetAnchorPos( aNewAnchor );
 
@@ -1301,10 +1309,6 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
                     DelSelectedObj();
 
                     pFmt = GetDoc()->Insert( *GetCrsr(), *pNewObj, &aFrmSet );
-
-                    // die Ordnungsnummer (Z-Order) noch uebertragen
-                    // JP 04.07.98: klappt aber nicht richtig!
-                    // pNewObj->SetOrdNum( nOrdNum );
                 }
                 else
                     pView->ReplaceObject( pOldObj, *Imp()->GetPageView(),
@@ -1345,6 +1349,8 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
             for( ULONG i=0; i < nCnt; ++i )
             {
                 SdrObject *pObj = pView->GetMarkList().GetMark(i)->GetObj();
+                // OD 2004-04-05 #i26791# - direct positioning of object for
+                // <ImpEndCreate()>.
                 pObj->ImpSetAnchorPos( aNull );
             }
 
