@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seltrans.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:26:38 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ void ScSelectionTransferObj::CreateCellData()
                 // SetDragHandlePos is not used - there is no mouse position
                 //? pTransferObj->SetVisibleTab( nTab );
 
-                SvEmbeddedObjectRef aPersistRef( aDragShellRef );
+                SfxObjectShellRef aPersistRef( aDragShellRef );
                 pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
 
                 pTransferObj->SetDragSource( pDocSh, aNewMark );
@@ -398,7 +398,7 @@ void ScSelectionTransferObj::CreateDrawData()
             ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
             uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-            SvEmbeddedObjectRef aPersistRef( aDragShellRef );
+            SfxObjectShellRef aPersistRef( aDragShellRef );
             pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
             pTransferObj->SetDragSource( pDrawView );       // copies selection
 
