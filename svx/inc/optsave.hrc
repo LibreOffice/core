@@ -1,0 +1,103 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optsave.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:41:16 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SVX_OPTSAVE_HRC
+#define _SVX_OPTSAVE_HRC
+
+// defines ------------------------------------------------------------------
+#define LB_LOAD                 1
+#define CB_LOAD_SETTINGS        2
+#define GB_SAVE                 10
+#define BTN_DOCINFO             11
+#define BTN_BACKUP              12
+#define BTN_AUTOSAVE            13
+#define ED_AUTOSAVE             14
+#define FT_MINUTE               15
+#define BTN_AUTOSAVEPROMPT      16
+#define BTN_NOPRETTYPRINTING    17
+
+#define GB_RELATIVE         40
+#define BTN_RELATIVE_FSYS   41
+#define BTN_RELATIVE_INET   42
+
+#define FL_FILTER           43
+#define FT_APP              44
+#define LB_APP              45
+#define FT_FILTER           46
+#define LB_FILTER           47
+
+#define APP_WRITER          0
+#define APP_WRITER_WEB      1
+#define APP_CALC            2
+#define APP_IMPRESS         3
+#define APP_DRAW            4
+#define APP_MATH            5
+#define APP_COUNT           6
+
+//Filter warning
+#define PB_OK               1
+#define FT_FILTER_WARNING   2
+#define CB_DONT_SHOW_AGAIN  3
+#define IMG_WARNING         4
+#define PB_CANCEL           5
+#endif // #ifndef _SVX_OPTSAVE_HRC
+
+// ******************************************************************* EOF
+
