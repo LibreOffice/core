@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sab $ $Date: 2002-01-18 09:54:26 $
+#   last change: $Author: vg $ $Date: 2002-01-24 14:00:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,10 @@ AUTOSEG=true
 CXXFILES =						\
         AccessibleTableBase.cxx			\
         AccessibleDocument.cxx			\
-        AccessibleSpreadsheet.cxx		\
+        AccessibleSpreadsheet.cxx
+
+EXCEPTIONSFILES=\
+        $(SLO)$/AccessibleDocument.obj
 
 SLOFILES =  						\
         $(SLO)$/AccessibleTableBase.obj		\
