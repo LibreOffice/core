@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spritecanvas.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:01:10 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@
 #include "canvashelper.hxx"
 #include "backbuffer.hxx"
 #include "impltools.hxx"
+#include "repainttarget.hxx"
 
 class OutputDevice;
 class Point;
@@ -126,7 +127,8 @@ namespace vclcanvas
     typedef ::canvas::internal::BitmapCanvasBase< CanvasBase_Base, CanvasHelper, tools::LocalGuard >    SpriteCanvas_Base;
 
     class SpriteCanvas : public SpriteCanvas_Base,
-                         public SpriteSurface
+                         public SpriteSurface,
+                         public RepaintTarget
     {
     public:
         typedef ::rtl::Reference< SpriteCanvas > ImplRef;
@@ -192,6 +194,12 @@ namespace vclcanvas
         virtual void updateSprite( const Sprite::ImplRef&   sprite,
                                    const Point&             rPos,
                                    const Rectangle&         rUpdateArea );
+
+        // RepaintTarget
+        virtual bool repaint( const GraphicObjectSharedPtr& rGrf,
+                              const ::Point&                rPt,
+                              const ::Size&                 rSz,
+                              const GraphicAttr&            rAttr ) const;
 
     protected:
         ~SpriteCanvas(); // we're a ref-counted UNO class. _We_ destroy ourselves.
