@@ -2,9 +2,9 @@
  *
  *  $RCSfile: server.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:28:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ namespace vos
 
 class RemoteControlCommunicationManager : public CommunicationManagerServerViaSocket
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     EditWindow     *m_pDbgWin;
 #endif
     String aOriginalWinCaption;
@@ -98,7 +98,7 @@ class RemoteControlCommunicationManager : public CommunicationManagerServerViaSo
     static BOOL bQuiet;
 
 public:
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     RemoteControlCommunicationManager( EditWindow * pDbgWin );
 #else
     RemoteControlCommunicationManager();
@@ -111,7 +111,7 @@ public:
     static ULONG GetPort();
     static USHORT nComm;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //  virtual void DataReceived( CommunicationLink* pCL );
 #endif
 
