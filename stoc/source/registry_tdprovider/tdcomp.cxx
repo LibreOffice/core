@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdcomp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:35:47 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,11 +100,9 @@ Reference< XTypeDescription > CompoundTypeDescriptionImpl::getBaseType()
             Reference< XTypeDescription > xBaseTD;
             if (_xTDMgr->getByHierarchicalName( _aBaseType ) >>= xBaseTD)
             {
-                MutexGuard aGuard( _aMutex );
+                MutexGuard aGuard( getMutex() );
                 if (! _xBaseTD.is())
-                {
                     _xBaseTD = xBaseTD;
-                }
                 return _xBaseTD;
             }
         }
@@ -145,7 +143,7 @@ Sequence< Reference< XTypeDescription > > CompoundTypeDescriptionImpl::getMember
             OSL_ENSURE( pMembers[nFields].is(), "### compound member unknown!" );
         }
 
-        ClearableMutexGuard aGuard( _aMutex );
+        ClearableMutexGuard aGuard( getMutex() );
         if (_pMembers)
         {
             aGuard.clear();
@@ -179,7 +177,7 @@ Sequence< OUString > CompoundTypeDescriptionImpl::getMemberNames()
             pMemberNames[nFields] = aReader.getFieldName( nFields );
         }
 
-        ClearableMutexGuard aGuard( _aMutex );
+        ClearableMutexGuard aGuard( getMutex() );
         if (_pMemberNames)
         {
             aGuard.clear();
