@@ -1,7 +1,3 @@
-import OfficeConnection;
-import FrameActionListener;
-import Print;
-
 import java.lang.Thread;
 
 import com.sun.star.awt.Rectangle;

@@ -1,9 +1,3 @@
-import SimpleOffice;
-import InformationWriter;
-import Print;
-import Canvas;
-import AccessibilityTree;
-
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertyChangeListener;

@@ -65,3 +65,6 @@ dist:
 # Example of how to run the work bench.
 run:
     $(JAVA) -classpath $(CLASSPATH) AccessibilityWorkBench -p $(PORT_NUMBER) -f $(FILE_NAME)
+
+javap:
+    javap -classpath $(CLASSPATH) drafts.com.sun.star.accessibility.XAccessibleContext
