@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-30 11:40:42 $
+ *  last change: $Author: cl $ $Date: 2002-02-05 13:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1085,12 +1085,14 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
             VisAreaChanged(Rectangle(Point(), Size(1, 1)));
         }
 
+        if( pActualPage )
+            pActualPage->SetAutoLayout( pActualPage->GetAutoLayout() );
+
         if (eEditMode == EM_PAGE)
         {
             /**********************************************************************
             * PAGEMODE
             **********************************************************************/
-            pActualPage->SetAutoLayout( pActualPage->GetAutoLayout() );
             pDoc->SetSelected(pActualPage, TRUE);
 
             SdrPageView* pPageView = pDrView->GetPageViewPvNum(0);
