@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-06-29 07:58:06 $
+ *  last change: $Author: ama $ $Date: 2001-06-29 08:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,7 +927,7 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
 
 void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
 {
-    if( !pPage )
+    if( !pImpl || !pPage )
         return;
     USHORT nFlyCount = pImpl->GetFlyCount();
     // Any text frames at the page, fly cache avaiable?
