@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-26 18:51:27 $
+ *  last change: $Author: sab $ $Date: 2001-07-24 11:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
 
 #ifndef _XMLEOHLP_HXX
 #include <svx/xmleohlp.hxx>
@@ -160,7 +163,14 @@ uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator(
                 uno::Reference<task::XStatusIndicatorFactory> xFactory( xFrame, uno::UNO_QUERY );
                 if( xFactory.is())
                 {
-                    return xFactory->createStatusIndicator();
+                    try
+                    {
+                        xStatusIndicator = xFactory->createStatusIndicator();
+                    }
+                    catch( lang::DisposedException e )
+                    {
+                        DBG_ERROR("Exception while trying to get a Status Indicator");
+                    }
                 }
             }
         }
