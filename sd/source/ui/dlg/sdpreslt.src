@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:47:04 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@ ModalDialog DLG_PRESLT
         Text[ chinese_traditional ] = "½Π±zΏοΎά¤@­Σ­¶­±ΌΛ¦΅(~S)";
         Text[ arabic ] = "ΗαΡΜΗΑ ΗΞΚνΗΡ ΚΞΨνΨ ΗαΥέΝΙ";
         Text[ greek ] = "Επιλέξτε ένα πρότυπο ~σελίδας";
-        Text[ korean ] = "½½¶σΐΜµε ·ΉΐΜΎΖΏτΐ» Ό±ΕΓΗΟ½Κ½ΓΏΐ(~S)";
-        Text[ turkish ] = "Bir sayfa dόzeni seηin";
+        Text[ korean ] = "½½¶σΐΜµε µπΐΪΐΞΐ» Ό±ΕΓΗΟ½Κ½ΓΏΐ(~S)";
+        Text[ turkish ] = "Bir sayfa biηimi seηin";
         Text[ language_user1 ] = " ";
     };
     Control VS_LAYOUT
@@ -141,7 +141,7 @@ ModalDialog DLG_PRESLT
         Text[ chinese_traditional ] = "§σ΄«­I΄Ί­¶­±(~E)";
         Text[ arabic ] = "ΗΣΚΘΟΗα ΥέΝΙ ΗαΞαένΙ";
         Text[ greek ] = "~Ανταλλαγή σελίδας φόντου";
-        Text[ korean ] = "Ήθ°ζ ΖδΐΜΑφ ±³Θ―(~E)";
+        Text[ korean ] = "Ήθ°ζΒΚ ΉΩ²Ω±β(~E)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Artalan sayfasύnύ deπiώtir";
     };
@@ -168,7 +168,7 @@ ModalDialog DLG_PRESLT
         Text[ chinese_traditional ] = "§R°£¤£¥ΞªΊ­I΄Ί­¶­±(~R)";
         Text[ arabic ] = "ΝΠέ ΥέΝΗΚ ΗαΞαένΙ ΗαΚν αγ ΚυΣΚΪγα";
         Text[ greek ] = "Διαγραφή μη χρησιμοποιουμένων σελιδών ~φόντου";
-        Text[ korean ] = "»ηΏλΗΟΑφ ΎΚΐΊ Ήθ°ζ ΖδΐΜΑφ »θΑ¦(~D)";
+        Text[ korean ] = "»ηΏλΗΟΑφ ΎΚΐΊ Ήθ°ζ ΒΚ »θΑ¦";
         Text[ turkish ] = "Kullanύlmayan artalan sayfalarύnύ sil";
         Text[ language_user1 ] = " ";
     };
@@ -222,6 +222,6 @@ ModalDialog DLG_PRESLT
     Text[ arabic ] = "δγΨ ΥέΝΙ";
     Text[ greek ] = "Πρότυπο σελίδας";
     Text[ korean ] = "½½¶σΐΜµε µπΐΪΐΞ";
-    Text[ turkish ] = "Sayfa dόzeni";
+    Text[ turkish ] = "Sayfa biηimi";
     Text[ language_user1 ] = " ";
 };
