@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:51:54 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #define NF_YEARVALUE            21
 #define FT_TO                   22
 #define FT_INTERPRET            23
-
 #define FL_HELPAGENT            120
 #define CB_HELPAGENT            121
 #define PB_HELPAGENT_RESET      122
@@ -142,6 +141,7 @@
 #define BTN_OPENWIN             35
 #define LB_ICONSIZE             37
 #define FT_ICONSIZE             38
+#define CB_SYSTEM_FONT          39
 
 #define CB_FONT_SHOW            44
 #define CB_SHOW_INACTIVE        45
@@ -156,7 +156,8 @@
 
 #define ROW_MF_SCALING          (13)
 #define ROW_LB_BIG              (ROW_MF_SCALING+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
-#define ROW_CB_FONTANTIALIASING (ROW_LB_BIG+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
+#define ROW_CB_SYSTEM_FONT      (ROW_LB_BIG+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
+#define ROW_CB_FONTANTIALIASING (ROW_CB_SYSTEM_FONT+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
 #define ROW_NF_AA_POINTLIMIT    (ROW_CB_FONTANTIALIASING+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 
 #define ROW_FL_MENU             (ROW_NF_AA_POINTLIMIT+RSC_CD_DROPDOWN_HEIGHT+RSC_SP_FLGR_SPACE_X)
