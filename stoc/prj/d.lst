@@ -8,7 +8,7 @@ mkdir: %_DEST%\inc%_EXT%\stoc
 
 ..\source\module-description.dtd %_DEST%\xml%_EXT%\module-description.dtd
 
-..\source\corereflection\corefl.xml %_DEST%\xml%_EXT%\corereflection.uno.xml
+..\source\corereflection\corefl.xml %_DEST%\xml%_EXT%\reflection.uno.xml
 ..\source\defaultregistry\defreg.xml %_DEST%\xml%_EXT%\nestedreg.uno.xml
 ..\source\implementationregistration\impreg.xml %_DEST%\xml%_EXT%\implreg.uno.xml
 ..\source\inspect\insp.xml %_DEST%\xml%_EXT%\introspection.uno.xml
