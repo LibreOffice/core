@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.y,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:11:09 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,8 @@
 #include <idlc/astunion.hxx>
 #endif
 
+#include "rtl/strbuf.hxx"
+    
 #ifdef WNT
 #include <stdarg.h>
 namespace std {
@@ -165,31 +167,59 @@ using namespace ::rtl;
 extern int yylex(void);
 void yyerror(char *);
 
+void checkIdentifier(::rtl::OString* id)
+{
+    static short check = 0;
+    if (check == 0) {
+        if (idlc()->getOptions()->isValid("-cid"))
+            check = 1;
+        else
+            check = 2;
+    }
+
+    if ( id->indexOf('_') >= 0 )
+        if ( (id->pData->buffer[0] >= 97 && id->pData->buffer[0] <= 122)
+             || id->pData->buffer[0] == '_') {
+            if (check == 1) {
+                ::rtl::OStringBuffer msg(25 + id->getLength());
+                msg.append("mismatched identifier '");
+                msg.append(*id);
+                msg.append("'");
+                idlc()->error()->syntaxError(idlc()->getParseState(),
+                                         idlc()->getLineNumber(),
+                                         msg.getStr());
+            }
+            else
+                idlc()->error()->warning0(WIDL_WRONG_NAMING_CONV, id->getStr());
+        }
+}
+
+
 %}
 /*
  * Declare the type of values in the grammar
  */
 %union {
-	ExprType				etval;		/* Expression type */
-	AstDeclaration*			dclval;		/* Declaration */
-	AstExpression*			exval;		/* expression value */
-	ExprList*				exlval;		/* expression list value */
+	ExprType				etval;     /* Expression type */
+	AstDeclaration*		dclval;    /* Declaration */
+	AstExpression*		exval;		/* expression value */
+	ExprList*				exlval;	/* expression list value */
 	FeDeclarator*			fdval;		/* declarator value */
-	FeDeclList*				dlval;		/* declarator list value */
+	FeDeclList*			dlval;		/* declarator list value */
 	FeInheritanceHeader*	ihval;		/* inheritance header value */
-	FeInterfaceHeader*		ifval;		/* interface header value */
-	::rtl::OString*			sval;		/* OString value */
-	sal_Char* 				strval;		/* sal_Char* value */
+	FeInterfaceHeader*	ifval;		/* interface header value */
+	::rtl::OString*		sval;		/* OString value */
+	sal_Char* 			strval;	/* sal_Char* value */
 	sal_Char				cval;		/* sal_Char value */
 	sal_Bool				bval;		/* sal_Boolean* value */
 	sal_Int64				ival;		/* sal_Int64 value */
-	sal_uInt32				ulval;		/* sal_uInt32 value */
+	sal_uInt32			ulval;		/* sal_uInt32 value */
 	double					dval;		/* double value */
 	float					fval;		/* float value */
-	StringList*				slval;		/* StringList value	*/
-	LabelList*				llval;		/* LabelList value	*/
-	AstUnionLabel*			lbval;		/* union label value */
-	AstMember*				mval;		/* member value */
+	StringList*			slval;		/* StringList value	*/
+	LabelList*			llval;		/* LabelList value	*/
+	AstUnionLabel*		lbval;		/* union label value */
+	AstMember*			mval;		/* member value */
 }
 
 /*
@@ -197,60 +227,60 @@ void yyerror(char *);
  */
 
 %token <sval>		IDL_IDENTIFIER
-%token 				IDL_ATTRIBUTE
+%token 			IDL_ATTRIBUTE
 %token				IDL_BOUND
-%token 				IDL_CASE
-%token 				IDL_CONST
-%token 				IDL_CONSTANTS
+%token 			IDL_CASE
+%token 			IDL_CONST
+%token 			IDL_CONSTANTS
 %token				IDL_CONSTRAINED
-%token 				IDL_DEFAULT
-%token 				IDL_ENUM
-%token 				IDL_EXCEPTION
-%token 				IDL_INTERFACE
-%token 				IDL_MAYBEAMBIGUOUS
-%token 				IDL_MAYBEDEFAULT
-%token 				IDL_MAYBEVOID
-%token 				IDL_MODULE
-%token 				IDL_NEEDS
-%token 				IDL_OBSERVES
-%token 				IDL_OPTIONAL
-%token 				IDL_PROPERTY
-%token 				IDL_RAISES
-%token 				IDL_READONLY
-%token 				IDL_REMOVEABLE
-%token 				IDL_SERVICE
-%token 				IDL_SEQUENCE
-%token 				IDL_SINGLETON
-%token 				IDL_STRUCT
-%token 				IDL_SWITCH
-%token 				IDL_TYPEDEF
+%token 			IDL_DEFAULT
+%token 			IDL_ENUM
+%token 			IDL_EXCEPTION
+%token 			IDL_INTERFACE
+%token 			IDL_MAYBEAMBIGUOUS
+%token 			IDL_MAYBEDEFAULT
+%token 			IDL_MAYBEVOID
+%token 			IDL_MODULE
+%token 			IDL_NEEDS
+%token 			IDL_OBSERVES
+%token 			IDL_OPTIONAL
+%token 			IDL_PROPERTY
+%token 			IDL_RAISES
+%token 			IDL_READONLY
+%token 			IDL_REMOVEABLE
+%token 			IDL_SERVICE
+%token 			IDL_SEQUENCE
+%token 			IDL_SINGLETON
+%token 			IDL_STRUCT
+%token 			IDL_SWITCH
+%token 			IDL_TYPEDEF
 %token				IDL_TRANSIENT
-%token 				IDL_UNION
+%token 			IDL_UNION
 
-%token 				IDL_ANY
-%token 				IDL_CHAR
-%token 				IDL_BOOLEAN
-%token 				IDL_BYTE
-%token 				IDL_DOUBLE
-%token 				IDL_FLOAT
-%token 				IDL_HYPER
-%token 				IDL_LONG
-%token 				IDL_SHORT
-%token 				IDL_VOID
-%token 				IDL_STRING
-%token 				IDL_TYPE
-%token 				IDL_UNSIGNED
+%token 			IDL_ANY
+%token 			IDL_CHAR
+%token 			IDL_BOOLEAN
+%token 			IDL_BYTE
+%token 			IDL_DOUBLE
+%token 			IDL_FLOAT
+%token 			IDL_HYPER
+%token 			IDL_LONG
+%token 			IDL_SHORT
+%token 			IDL_VOID
+%token 			IDL_STRING
+%token 			IDL_TYPE
+%token 			IDL_UNSIGNED
 
-%token 				IDL_TRUE
-%token 				IDL_FALSE
+%token 			IDL_TRUE
+%token 			IDL_FALSE
 
-%token 				IDL_IN
-%token 				IDL_OUT
-%token 				IDL_INOUT
-%token 				IDL_ONEWAY
+%token 			IDL_IN
+%token 			IDL_OUT
+%token 			IDL_INOUT
+%token 			IDL_ONEWAY
 
-%token <strval>		IDL_LEFTSHIFT
-%token <strval>		IDL_RIGHTSHIFT
+%token <strval>	IDL_LEFTSHIFT
+%token <strval>	IDL_RIGHTSHIFT
 %token <strval> 	IDL_SCOPESEPARATOR
 
 %token <ival>		IDL_INTEGER_LITERAL
@@ -383,15 +413,16 @@ module_dcl :
 	}
 	IDL_IDENTIFIER
 	{
-		idlc()->setParseState(PS_ModuleIDSeen);
+        idlc()->setParseState(PS_ModuleIDSeen);
+        checkIdentifier($3);
 
-		AstScope* 		pScope = idlc()->scopes()->topNonNull();
-		AstModule* 		pModule = NULL;
-		AstDeclaration*	pExists = NULL;
+        AstScope* 		pScope = idlc()->scopes()->topNonNull();
+        AstModule* 		pModule = NULL;
+        AstDeclaration*	pExists = NULL;
 
-		if ( pScope )
-		{
-			pModule = new AstModule(*$3, pScope);
+        if ( pScope )
+        {
+        	pModule = new AstModule(*$3, pScope);
 			if( (pExists = pScope->lookupForAdd(pModule)) )
 			{
 				pExists->setInMainfile(idlc()->isInMainFile());
@@ -403,13 +434,13 @@ module_dcl :
 				pScope->addDeclaration(pModule);
 			}
 			idlc()->scopes()->push(pModule);
-		}
-		delete $3;
-	}
-	'{'
-	{
-		idlc()->setParseState(PS_ModuleSqSeen);
-	}
+        }
+        delete $3;
+    }
+    '{'
+    {
+        idlc()->setParseState(PS_ModuleSqSeen);
+    }
 	definitions
 	{
 		idlc()->setParseState(PS_ModuleBodySeen);
@@ -437,6 +468,7 @@ interface_decl :
 	IDL_IDENTIFIER
 	{
 		idlc()->setParseState(PS_InterfaceIDSeen);
+       checkIdentifier($3);
 		$$ = $3;
 	}
 	;
@@ -802,6 +834,7 @@ operation :
 	IDL_IDENTIFIER
 	{
 		idlc()->setParseState(PS_OpIDSeen);
+       checkIdentifier($4);
 
 		AstScope* 		pScope = idlc()->scopes()->topNonNull();
 		AstOperation* 	pOp = NULL;
@@ -1015,7 +1048,8 @@ const_dcl :
 	}
 	IDL_IDENTIFIER
 	{
-		idlc()->setParseState(PS_ConstIDSeen);
+        idlc()->setParseState(PS_ConstIDSeen);
+        checkIdentifier($5);
 	}
 	'='
 	{
@@ -1051,7 +1085,8 @@ constants_dcl :
 	}
 	IDL_IDENTIFIER
 	{
-		idlc()->setParseState(PS_ConstantsIDSeen);
+        idlc()->setParseState(PS_ConstantsIDSeen);
+        checkIdentifier($3);
 	}
 	'{'
 	{
@@ -1287,7 +1322,8 @@ exception_header :
 	}
 	IDL_IDENTIFIER
  	{
-		idlc()->setParseState(PS_ExceptIDSeen);
+        idlc()->setParseState(PS_ExceptIDSeen);
+        checkIdentifier($3);
 	}
 	inheritance_spec
 	{
@@ -1630,24 +1666,25 @@ service_dcl :
 	}
 	IDL_IDENTIFIER
  	{
-		idlc()->setParseState(PS_ServiceIDSeen);
+        idlc()->setParseState(PS_ServiceIDSeen);
+        checkIdentifier($3);
 
-		AstScope* 	pScope = idlc()->scopes()->topNonNull();
-		AstService*	pService = NULL;
-		
-		/*
-		 * Make a new service and add it to the enclosing scope
-		 */
-		if (pScope != NULL) 
-		{
-			pService = new AstService(*$3, pScope);
-			pScope->addDeclaration(pService);
-		}
-		delete $3;
-		/*
-		 * Push it on the stack
-		 */
-		idlc()->scopes()->push(pService);
+        AstScope* 	pScope = idlc()->scopes()->topNonNull();
+        AstService*	pService = NULL;
+
+        /*
+         * Make a new service and add it to the enclosing scope
+         */
+        if (pScope != NULL)
+        {
+            pService = new AstService(*$3, pScope);
+            pScope->addDeclaration(pService);
+        }
+        delete $3;
+        /*
+         * Push it on the stack
+         */
+        idlc()->scopes()->push(pService);
 	}
 	'{'
 	{
@@ -1672,7 +1709,8 @@ singleton_dcl :
 	}
 	IDL_IDENTIFIER
  	{
-		idlc()->setParseState(PS_SingletonIDSeen);
+        idlc()->setParseState(PS_SingletonIDSeen);
+        checkIdentifier($3);
 
 		AstScope* 	pScope = idlc()->scopes()->topNonNull();
 		AstService*	pService = NULL;
@@ -1820,8 +1858,10 @@ declarator :
 simple_declarator :
 	IDL_IDENTIFIER
 	{
-		$$ = new FeDeclarator(*$1, FeDeclarator::FD_simple, NULL);
-		delete $1;
+        checkIdentifier($1);
+
+        $$ = new FeDeclarator(*$1, FeDeclarator::FD_simple, NULL);
+        delete $1;
 	}
 	;
 
@@ -1835,7 +1875,8 @@ complex_declarator :
 array_declarator :
 	IDL_IDENTIFIER
 	{
-		idlc()->setParseState(PS_ArrayIDSeen);
+        idlc()->setParseState(PS_ArrayIDSeen);
+        checkIdentifier($1);
 	}
 	at_least_one_array_dim
 	{
@@ -1953,8 +1994,9 @@ scoped_names :
 scoped_name :
 	IDL_IDENTIFIER
 	{
-		idlc()->setParseState(PS_SN_IDSeen);
-		$$ = $1;
+        idlc()->setParseState(PS_SN_IDSeen);
+        checkIdentifier($1);
+        $$ = $1;
 	}
 	| IDL_SCOPESEPARATOR
 	{
@@ -1962,10 +2004,11 @@ scoped_name :
 	}
 	IDL_IDENTIFIER
 	{
-		OString* pName = new OString("::");
-		*pName += *$3;
-		delete $3;
-		$$ = pName;
+        checkIdentifier($3);
+        OString* pName = new OString("::");
+        *pName += *$3;
+        delete $3;
+        $$ = pName;
 	}
 	| scoped_name
 	IDL_SCOPESEPARATOR
@@ -1973,10 +2016,11 @@ scoped_name :
 	}
 	IDL_IDENTIFIER
     {
-		*$1 += ::rtl::OString("::");
-		*$1 += *$4;
-		delete $4;
-		$$ = $1;
+        checkIdentifier($4);
+        *$1 += ::rtl::OString("::");
+        *$1 += *$4;
+        delete $4;
+        $$ = $1;
 	}
 	;
 
@@ -2260,18 +2304,19 @@ struct_type :
 structure_header :
 	IDL_STRUCT
 	{
-		idlc()->setParseState(PS_StructSeen);
+        idlc()->setParseState(PS_StructSeen);
 	}
 	IDL_IDENTIFIER
  	{
-		idlc()->setParseState(PS_StructIDSeen);
+        idlc()->setParseState(PS_StructIDSeen);
+        checkIdentifier($3);
 	}
 	inheritance_spec
 	{
-		idlc()->setParseState(PS_InheritSpecSeen);
+        idlc()->setParseState(PS_InheritSpecSeen);
 
-		$$ = new FeInheritanceHeader(NT_struct, $3, $5);
-		delete $5;
+        $$ = new FeInheritanceHeader(NT_struct, $3, $5);
+        delete $5;
 	}
 	;
 
@@ -2352,7 +2397,8 @@ enum_type :
 	}
 	IDL_IDENTIFIER
 	{
-		idlc()->setParseState(PS_EnumIDSeen);
+        idlc()->setParseState(PS_EnumIDSeen);
+        checkIdentifier($3);
 
 		AstScope* 		pScope = idlc()->scopes()->topNonNull();
 		AstEnum*		pEnum = NULL;
@@ -2421,6 +2467,8 @@ enumerators :
 enumerator :
 	IDL_IDENTIFIER
 	{
+        checkIdentifier($1);
+
 		AstScope* 		pScope = idlc()->scopes()->topNonNull();
 		AstEnum*		pEnum = NULL;
 		AstConstant* 	pEnumVal = NULL;
@@ -2445,6 +2493,8 @@ enumerator :
 	'='
 	const_expr
 	{
+        checkIdentifier($1);
+
 		AstScope* 		pScope = idlc()->scopes()->topNonNull();
 		AstEnum*		pEnum = NULL;
 		AstConstant* 	pEnumVal = NULL;
@@ -2481,7 +2531,8 @@ union_type :
 	}
 	IDL_IDENTIFIER
 	{
-		idlc()->setParseState(PS_UnionIDSeen);
+        idlc()->setParseState(PS_UnionIDSeen);
+        checkIdentifier($3);
 	}
 	IDL_SWITCH
 	{
