@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-09 19:06:22 $
+ *  last change: $Author: mib $ $Date: 2001-06-20 10:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,8 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             {
                 // wir hatten eine relative Angabe -> neu berechnen
                 UINT32 nTmp = pOldFSize->GetHeight();       // alten zum Vergleichen
-                SvxFontHeightItem aNew( pFSize->Which() );
+                SvxFontHeightItem aNew;
+                aNew.SetWhich( pFSize->Which() );
                 aNew.SetHeight( pFSize->GetHeight(), pOldFSize->GetProp(),
                                 pOldFSize->GetPropUnit() );
                 if( nTmp != aNew.GetHeight() )
