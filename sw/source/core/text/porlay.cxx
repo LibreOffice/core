@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:56:56 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@
 #endif
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
-#endif
-#ifndef _DRAWFONT_HXX
-#include <drawfont.hxx>
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -538,7 +535,7 @@ SwCharRange &SwCharRange::operator+=(const SwCharRange &rRange)
  * Sw Script Types (SW_LATIN, SW_CJK, SW_CTL), used to identify the font
  *************************************************************************/
 
-BYTE WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI )
+BYTE SwScriptInfo::WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI )
 {
     ASSERT( pTxt || pSI,"How should I determine the script type?" );
     USHORT nScript;
