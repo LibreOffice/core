@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:24:36 $
+ *  last change: $Author: cd $ $Date: 2002-04-22 08:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,7 +404,6 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             MenuItem
             {
                 ITEM_FILE_CLOSEDOC
-                Command = ".uno:DB/Close";
             };
             MenuItem
             {
@@ -413,7 +412,6 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             MenuItem
             {
                 ITEM_FILE_SAVEDOC
-                Command = ".uno:Save";
             };
             MenuItem
             {
@@ -451,7 +449,6 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                 {
                     Identifier = ID_BROWSER_UNDO ;
                     HelpId = SID_UNDO ;
-                    Command = ".uno:Undo";
                     Text = "Rückgängig" ;
                     Text [ ENGLISH ] = "Undo" ;
                     Text[ english_us ] = "Undo";
@@ -479,7 +476,6 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                 {
                     Identifier = ID_BROWSER_REDO ;
                     HelpId = SID_REDO ;
-                    Command = ".uno:Redo";
 
                     Text = "Wiederherstellen" ;
                     Text [ ENGLISH ] = "Redo" ;
