@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-05 14:08:03 $
+ *  last change: $Author: cd $ $Date: 2002-09-24 08:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,8 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
     aModuleButton       ( this, ResId( RB_MODULE   ) ),
     pAct( 0 ),
     pModule( 0 ),
-    pGlobal( 0 )
+    pGlobal( 0 ),
+    m_pMacroInfoItem( 0 )
 {
     FreeResource();
 
@@ -894,6 +895,7 @@ String SfxAcceleratorConfigPage::GetFunctionName( KeyFuncType eType ) const
 
 void SfxAcceleratorConfigPage::SelectMacro(const SfxMacroInfoItem *pItem)
 {
+    m_pMacroInfoItem = pItem;
     aGroupLBox.SelectMacro( pItem );
 }
 
@@ -966,6 +968,9 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& )
 
         RadioHdl(0);
     }
+
+    if ( m_pMacroInfoItem )
+        aGroupLBox.SelectMacro( m_pMacroInfoItem );
 }
 
 IMPL_LINK( SfxAcceleratorConfigPage, RadioHdl, RadioButton *, pBtn )

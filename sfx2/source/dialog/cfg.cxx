@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-06 12:46:41 $
+ *  last change: $Author: cd $ $Date: 2002-09-24 08:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,8 +822,8 @@ void SfxConfigGroupListBox_Impl::SelectMacro( const SfxMacroInfoItem *pItem )
 void SfxConfigGroupListBox_Impl::SelectMacro( const String& rBasic,
          const String& rMacro )
 {
-    String aBasicName(' ');
-    aBasicName += rBasic;
+    String aBasicName( rBasic );
+    aBasicName += ' ';
     aBasicName += String(SfxResId(STR_BASICMACROS));
     String aLib, aModule, aMethod;
     USHORT nCount = rMacro.GetTokenCount('.');
@@ -897,6 +897,14 @@ void SfxConfigDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
         case TP_CONFIG_ACCEL:
             if ( pMacroInfo )
                 ((SfxAcceleratorConfigPage&)rPage).SelectMacro( pMacroInfo );
+            break;
+        case TP_CONFIG_MENU:
+            if ( pMacroInfo )
+                ((SfxMenuConfigPage&)rPage).SelectMacro( pMacroInfo );
+            break;
+        case TP_CONFIG_EVENT:
+            if ( pMacroInfo )
+                ((SfxEventConfigPage&)rPage).SelectMacro( pMacroInfo );
             break;
         default:
             break;
