@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propmultiplex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-08 10:31:13 $
+ *  last change: $Author: fs $ $Date: 2001-05-31 13:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,11 +112,13 @@ namespace comphelper
          ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>   m_xSet;
         OPropertyChangeListener*                    m_pListener;
         sal_Int32                                   m_nLockCount;
+        sal_Bool                                    m_bListening        : 1;
+        sal_Bool                                    m_bAutoSetRelease   : 1;
 
 
         virtual ~OPropertyChangeMultiplexer();
     public:
-        OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxSet);
+        OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxSet, sal_Bool _bAutoReleaseSet = sal_True);
 
     // XEventListener
         virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException);
