@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistrationClassFinder.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2002-07-19 09:00:19 $
+ *  last change: $Author: dbo $ $Date: 2002-09-04 09:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,15 +213,9 @@ public class RegistrationClassFinder {
             m_context.addCargo( resource );
 
               java.io.InputStream inManifest = ResourceProxy.load(new java.net.URL(m_manifest), null).getInputStream();
-            java.io.BufferedReader manifestReader = new java.io.BufferedReader(new java.io.InputStreamReader(inManifest));
-
-            String line;
-            while ((line = manifestReader.readLine()) != null) {
-                if (line.startsWith("RegistrationClassName: ")) {
-                    className = line.substring("RegistrationClassName: ".length() );
-                    break;
-                }
-            }
+            java.util.jar.Manifest manifest = new java.util.jar.Manifest( inManifest );
+            java.util.jar.Attributes attributes = manifest.getMainAttributes();
+            className = attributes.getValue( "RegistrationClassName" );
 
             if (className != null) {
                 ret = m_context.loadClass( className );
