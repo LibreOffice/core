@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:25:00 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ english_us ] = "Move Down";
         Text[ portuguese ] = "Prio -";
         Text[ russian ] = "Ξοσρςθςό";
-        Text[ greek ] = "Προτεραιότητα -";
+        Text[ greek ] = "Μετακίνηση κάτω";
         Text[ dutch ] = "Prio -";
         Text[ french ] = "Prio -";
         Text[ spanish ] = "Prio -";
@@ -595,7 +595,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ english_us ] = "Writing aids";
         Text[ portuguese ] = "Linguνstica";
         Text[ russian ] = "Λθνγβθρςθκΰ";
-        Text[ greek ] = "Γλωσσολογία";
+        Text[ greek ] = "Βοηθήματα γραφής";
         Text[ dutch ] = "Linguοstiek";
         Text[ french ] = "Linguistique";
         Text[ spanish ] = "Linguνstica";
@@ -603,7 +603,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ danish ] = "Lingvistik";
         Text[ swedish ] = "Lingvistik";
         Text[ polish ] = "Pisownia";
-        Text[ portuguese_brazilian ] = "Linguνstica";
+        Text[ portuguese_brazilian ] = "Lingόνstica";
         Text[ japanese ] = "ζ–‡η« ζ ΅ζ­£";
         Text[ korean ] = "λ§μ¶¤λ²• κµμ •";
         Text[ chinese_simplified ] = "θ―­θ¨€θ§„ε™";
@@ -628,7 +628,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ english_us ] = "Available language modules";
         Text[ portuguese ] = "~Mσdulos linguνsticos disponνveis";
         Text[ russian ] = "Δξρςσονϋε ÿηϋκξβϋε μξδσλθ";
-        Text[ greek ] = "Διαθέσιμες λειτουργικές μονάδες γλώσσας:";
+        Text[ greek ] = "Διαθέσιμες λειτουργικές μονάδες γλώσσας";
         Text[ dutch ] = "~Beschikbare taalmodules";
         Text[ french ] = "Modules de langue disponibles";
         Text[ spanish ] = "~Mσdulos de idioma disponibles ";
@@ -701,7 +701,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ english_us ] = "User-defined dictionaries";
         Text[ portuguese ] = "Di~cionαrios do utilizador";
         Text[ russian ] = "Ρλξβΰπθ οξλόηξβΰςελÿ";
-        Text[ greek ] = "Προσωπικά λεξικά";
+        Text[ greek ] = "Λεξικά ορισμένα από το χρήστη";
         Text[ dutch ] = "Gebr~uikerswoordenboeken";
         Text[ french ] = "Dictionnaires de l'utilisateur";
         Text[ spanish ] = "Diccionarios de usuario";
@@ -741,7 +741,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ english_us ] = "~New...";
         Text[ portuguese ] = "~Novo...";
         Text[ russian ] = "Ρξηδΰςό...";
-        Text[ greek ] = "Δημιουργία...";
+        Text[ greek ] = "~Δημιουργία...";
         Text[ dutch ] = "~Nieuw...";
         Text[ french ] = "Nouveau...";
         Text[ spanish ] = "~Nuevo...";
@@ -774,7 +774,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ english_us ] = "~Edit...";
         Text[ portuguese ] = "~Editar...";
         Text[ russian ] = "Οπΰβκΰ...";
-        Text[ greek ] = "Επεξεργασία...";
+        Text[ greek ] = "~Επεξεργασία...";
         Text[ dutch ] = "B~ewerken...";
         Text[ french ] = "Ιditer...";
         Text[ spanish ] = "~Editar...";
@@ -807,7 +807,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ english_us ] = "Dele~te";
         Text[ portuguese ] = "E~liminar";
         Text[ russian ] = "Σδΰλθςό";
-        Text[ greek ] = "Διαγραφή";
+        Text[ greek ] = "Διαγρα~φή";
         Text[ dutch ] = "~Wissen";
         Text[ french ] = "Supprimer";
         Text[ spanish ] = "~Borrar";
@@ -840,7 +840,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ english_us ] = "~Options";
         Text[ portuguese ] = "~Opηυes";
         Text[ russian ] = "Οΰπΰμεςπϋ";
-        Text[ greek ] = "Επιλογές:";
+        Text[ greek ] = "Επ~ιλογές";
         Text[ dutch ] = "~Opties";
         Text[ french ] = "Options";
         Text[ spanish ] = "Opciones";
@@ -880,7 +880,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ english_us ] = "E~dit...";
         Text[ portuguese ] = "E~ditar...";
         Text[ russian ] = "Οπΰβκΰ...";
-        Text[ greek ] = "~Επεξεργασία...";
+        Text[ greek ] = "Επε~ξεργασία...";
         Text[ dutch ] = "Bewer~ken...";
         Text[ french ] = "Ιditer...";
         Text[ spanish ] = "E~ditar...";
@@ -1121,7 +1121,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ english_us ] = "German spelling - old";
         Text[ portuguese ] = "Antiga ortografia alemγ";
         Text[ russian ] = "Οπεζνÿÿ νεμεφκΰÿ ξπτξγπΰτθÿ";
-        Text[ greek ] = "Παλιά γερμανική ορθογραφία";
+        Text[ greek ] = "Γερμανική ορθογραφία - παλιά";
         Text[ dutch ] = "Oude spelling";
         Text[ french ] = "Ancienne orthographe allemande";
         Text[ spanish ] = "Antigua ortografνa alemana";
@@ -1241,7 +1241,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ english_us ] = "Hyphenate without inquiry";
         Text[ portuguese ] = "Divisγo silαbica sem confirmaηγo";
         Text[ russian ] = "ΐβςξμΰςθχερκΰÿ πΰρρςΰνξβκΰ οεπενξρξβ";
-        Text[ greek ] = "Συλλαβισμός δίχως ερώτηση";
+        Text[ greek ] = "Εφαρμογή συλλαβισμού χωρίς διερεύνηση";
         Text[ dutch ] = "Woordafbreking zonder bevestiging";
         Text[ french ] = "Coupure automatique";
         Text[ spanish ] = "Separar sin preguntar";
@@ -1380,6 +1380,7 @@ QueryBox RID_SFXQB_DEL_IGNORELIST
     Message[ slovak ] = "Prajete si zmazaΕ¥ zoznam ignorovanΓ½ch vΓ½razov?";
 };
  // ******************************************************************* EOF
+
 
 
 
