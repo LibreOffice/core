@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:09:24 $
+ *  last change: $Author: kz $ $Date: 2001-03-02 20:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ russian ] = "Ìàğêåğû";
                 Text[ polish ] = "Znaki wypunktowania";
                 Text[ japanese ] = "‰Óğ‘‚«";
-                Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹";
+                Text[ chinese_traditional ] = "¶µ¥Ø½s¸¹";
                 Text[ arabic ] = "ÚáÇãÇÊ ÊÚÏÇÏ";
                 Text[ greek ] = "Êïõêßäåò";
                 Text[ korean ] = "±Û¸Ó¸®±âÈ£";
@@ -488,7 +488,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ russian ] = "Ğèñóíêè";
                 Text[ polish ] = "Grafiki";
                 Text[ japanese ] = "}";
-                Text[ chinese_traditional ] = "¹Ï¤ù";
+                Text[ chinese_traditional ] = "¹Ï§Î";
                 Text[ arabic ] = "ÕæÑ";
                 Text[ greek ] = "ÃñáöéêÜ";
                 Text[ korean ] = "±×·¡ÇÈ";
