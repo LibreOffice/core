@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abpresid.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:36:53 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,10 @@
 #define RID_STR_PLEASECHECKSETTINGS     ( RID_STRING_START +  3 )
 #define RID_STR_FIELDDIALOGTITLE        ( RID_STRING_START +  4 )
 #define RID_STR_NOFIELDSASSIGNED        ( RID_STRING_START +  5 )
-#define RID_STR_ABP_SUCCESS             ( RID_STRING_START +  6 )
+#define RID_STR_ALREADYEXISTOVERWRITE   ( RID_STRING_START +  7 )
 // please adjust RID_STRING_END (below) when adding new strings
 
-#define RID_STRING_END                  RID_STR_ABP_SUCCESS
+#define RID_STRING_END                  RID_STR_ALREADYEXISTOVERWRITE
 
 //========================================================================
 // error boxes
@@ -189,6 +189,7 @@
 #define FT_ASSIGNEDFIELDS        8
 #define FT_FINISH_EXPL           9
 #define FT_DUPLICATENAME        10
+#define FT_LOCATION             11
 
 //........................................................................
 #define RB_MORK                 1
@@ -200,13 +201,21 @@
 
 //........................................................................
 #define ET_DATASOURCENAME       1
+#define ET_LOCATION             2
 
 //........................................................................
 #define PB_INVOKE_ADMIN_DIALOG  1
 #define PB_INVOKE_FIELDS_DIALOG 2
+#define PB_BROWSE               3
 
 //........................................................................
 #define LB_TABLELIST            1
+
+//........................................................................
+#define CB_REGISTER_DS          1
+
+//........................................................................
+#define CBB_LOCATION            1
 
 #if defined( ABP_USE_ROADMAP )
     //........................................................................
