@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 13:53:09 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1944,7 +1944,7 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
         if ( pMergePicStreamBSE )
         {
             sal_uInt32 i, nBlipSize, nOldPos = pMergePicStreamBSE->Tell();
-            const nBuf = 0x40000;   // 256KB buffer
+            const int nBuf = 0x40000;   // 256KB buffer
             sal_uInt8* pBuf = new sal_uInt8[ nBuf ];
 
             for ( i = 0; i < mnBlibEntrys; i++ )
@@ -2429,7 +2429,9 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
 
 EscherSolverContainer::~EscherSolverContainer()
 {
-    for( void* pP = maShapeList.First(); pP; pP = maShapeList.Next() )
+    void* pP;
+
+    for( pP = maShapeList.First(); pP; pP = maShapeList.Next() )
         delete (EscherShapeListEntry*)pP;
     for( pP = maConnectorList.First(); pP; pP = maConnectorList.Next() )
         delete (EscherConnectorListEntry*)pP;
