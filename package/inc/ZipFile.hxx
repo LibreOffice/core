@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #ifndef _INFLATER_HXX
 #include <Inflater.hxx>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGES_ZIPEXCEPTION_HPP_
-#include <com/sun/star/packages/ZipException.hpp>
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPEXCEPTION_HPP_
+#include <com/sun/star/packages/zip/ZipException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
 #include <com/sun/star/container/NoSuchElementException.hpp>
@@ -98,21 +98,40 @@ class ZipFile
 protected:
     ::rtl::OUString sName;          /* zip file name */
     ::rtl::OUString sComment;       /* zip file comment */
+    ::rtl::OUString sURL;
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
     Inflater        aInflater;
+    sal_Bool        bSpanned;
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
+    com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
+
+    com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createMemoryStream(
+            com::sun::star::packages::zip::ZipEntry & rEntry,
+            const vos::ORef < EncryptionData > &rData,
+            sal_Bool bRawStream,
+            sal_Int32 nUncompressedSize,
+            sal_Int32 nEnd);
+
+    com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createFileStream(
+            com::sun::star::packages::zip::ZipEntry & rEntry,
+            const vos::ORef < EncryptionData > &rData,
+            sal_Bool bRawStream,
+            sal_Int32 nUncompressedSize,
+            sal_Int32 nEnd);
 public:
     ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput, sal_Bool bInitialise)
-        throw(::com::sun::star::io::IOException, com::sun::star::packages::ZipException, com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
+    ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput, ::rtl::OUString &rURL )
+        throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
     void setInputStream ( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewStream );
-    sal_uInt32 SAL_CALL getHeader(const ::com::sun::star::packages::ZipEntry& rEntry)
-        throw(::com::sun::star::io::IOException, ::com::sun::star::packages::ZipException, ::com::sun::star::uno::RuntimeException);
+    sal_uInt32 SAL_CALL getHeader(const ::com::sun::star::packages::zip::ZipEntry& rEntry)
+        throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
     ~ZipFile();
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawStream(
-            ::com::sun::star::packages::ZipEntry& rEntry,
+            ::com::sun::star::packages::zip::ZipEntry& rEntry,
             const vos::ORef < EncryptionData > &rData)
-        throw(::com::sun::star::io::IOException, ::com::sun::star::packages::ZipException, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
 
     // XElementAccess
     ::com::sun::star::uno::Type SAL_CALL getElementType(  )
@@ -121,9 +140,9 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
     // XZipFile
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(
-            ::com::sun::star::packages::ZipEntry& rEntry,
+            ::com::sun::star::packages::zip::ZipEntry& rEntry,
             const vos::ORef < EncryptionData > &rData)
-        throw(::com::sun::star::io::IOException, ::com::sun::star::packages::ZipException, ::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
     ::rtl::OUString SAL_CALL getName(  )
         throw(::com::sun::star::uno::RuntimeException);
     sal_Int32 SAL_CALL getSize(  )
@@ -140,13 +159,13 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
 
     ZipEnumeration * SAL_CALL entries(  );
-private:
-    sal_Bool        readLOC (com::sun::star::packages::ZipEntry &rEntry)
-        throw(::com::sun::star::io::IOException, com::sun::star::packages::ZipException, com::sun::star::uno::RuntimeException);
+protected:
+    sal_Bool        readLOC (com::sun::star::packages::zip::ZipEntry &rEntry)
+        throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
     sal_Int32       readCEN()
-        throw(::com::sun::star::io::IOException, com::sun::star::packages::ZipException, com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
     sal_Int32       findEND()
-        throw(::com::sun::star::io::IOException, com::sun::star::packages::ZipException, com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
 };
 
 #endif

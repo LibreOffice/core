@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: ByteChucker.hxx,v $
+ *  $RCSfile: XFileStream.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:13 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,56 +58,61 @@
  *
  *
  ************************************************************************/
-#ifndef _BYTE_CHUCKER_HXX_
-#define _BYTE_CHUCKER_HXX_
+#ifndef _XFILE_STREAM_HXX
+#define _XFILE_STREAM_HXX
 
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
 
-class ThreadedBuffer;
+namespace osl { class File; }
 
-class ByteChucker
+class XFileStream : public com::sun::star::io::XInputStream,
+                    public com::sun::star::io::XSeekable,
+                    public cppu::OWeakObject
 {
-    friend class ThreadedBuffer;
 protected:
-    com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
-    com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
-    com::sun::star::uno::Sequence < sal_Int8 > aBuffer, a1Sequence, a2Sequence, a4Sequence;
-    sal_Bool bSpannable, bNextWriteIsAtomic;
-    sal_Int8 * const p1Sequence, * const p2Sequence, * const p4Sequence, * pBuffer;
-    sal_Int32 nBufferSize, nCurrentBufferPos;
-
+    osl::File *pFile;
 public:
-    ByteChucker (com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xOstream);
-    ~ByteChucker();
+    XFileStream( osl::File * pNewFile );
+    virtual ~XFileStream(void);
 
-    // XOutputStream
-    void SAL_CALL writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nLength = -1, const sal_Int8 * const pData = NULL)
+    // XInterface
+    virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& rType )
+        throw(com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire(void)
+        throw();
+    virtual void SAL_CALL release(void)
+        throw();
+    // XInputStream
+    virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void SAL_CALL flush(  )
+    virtual sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void SAL_CALL closeOutput(  )
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL available(  )
+        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL closeInput(  )
+        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     // XSeekable
-    sal_Int64 SAL_CALL seek( sal_Int64 location )
+    virtual void SAL_CALL seek( sal_Int64 location )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    sal_Int64 SAL_CALL getPosition(  )
+    virtual sal_Int64 SAL_CALL getPosition(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    sal_Int64 SAL_CALL getLength(  )
+    virtual sal_Int64 SAL_CALL getLength(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-
-    ByteChucker& operator << (sal_Int8 nInt8);
-    ByteChucker& operator << (sal_Int16 nInt16);
-    ByteChucker& operator << (sal_Int32 nInt32);
-    ByteChucker& operator << (sal_uInt8 nuInt8);
-    ByteChucker& operator << (sal_uInt16 nuInt16);
-    ByteChucker& operator << (sal_uInt32 nuInt32);
-    void setSpannable ( sal_Bool bNewSpannable );
-    inline sal_Bool isSpannable () { return bSpannable; }
 };
-
 #endif

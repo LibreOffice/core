@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGE_ZIPENTRY_HPP_
-#include <com/sun/star/packages/ZipEntry.hpp>
+#ifndef _COM_SUN_STAR_PACKAGE_ZIP_ZIPENTRY_HPP_
+#include <com/sun/star/packages/zip/ZipEntry.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
@@ -89,7 +89,7 @@ protected:
     com::sun::star::uno::Reference < com::sun::star::uno::XInterface > xParent;
     ::rtl::OUString     sMediaType;
 public:
-    com::sun::star::packages::ZipEntry aEntry;
+    com::sun::star::packages::zip::ZipEntry aEntry;
     ::rtl::OUString & GetMediaType () { return sMediaType; }
     void SetMediaType ( ::rtl::OUString & sNewType) { sMediaType = sNewType; }
 

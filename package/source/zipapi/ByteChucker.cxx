@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-31 09:46:05 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,51 +59,75 @@
  *
  ************************************************************************/
 #ifndef _BYTE_CHUCKER_HXX_
-#include "ByteChucker.hxx"
+#include <ByteChucker.hxx>
+#endif
+#ifndef _PACKAGE_CONSTANTS_HXX_
+#include <PackageConstants.hxx>
 #endif
 #include <memory.h> //for memcpy
 
-using namespace ::com::sun::star;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 
-/** ByteChucker implements the << operators on an XOutputStream. This is
- *  potentially quite slow and may need to be optimised
- */
-
-ByteChucker::ByteChucker(uno::Reference<io::XOutputStream> xOstream)
+ByteChucker::ByteChucker(Reference<XOutputStream> xOstream)
 : xStream(xOstream)
-, xSeek (xOstream, uno::UNO_QUERY )
+, xSeek (xOstream, UNO_QUERY )
 , a1Sequence ( 1 )
 , a2Sequence ( 2 )
 , a4Sequence ( 4 )
+, aBuffer ( n_ConstNonSpannableBufferSize )
+, p1Sequence ( a1Sequence.getArray() )
+, p2Sequence ( a2Sequence.getArray() )
+, p4Sequence ( a4Sequence.getArray() )
+, pBuffer ( aBuffer.getArray() )
+, nBufferSize ( n_ConstNonSpannableBufferSize )
+, nCurrentBufferPos ( 0 )
+, bSpannable ( sal_True )
+, bNextWriteIsAtomic ( sal_False )
 {
-    p1Sequence = a1Sequence.getArray();
-    p2Sequence = a2Sequence.getArray();
-    p4Sequence = a4Sequence.getArray();
 }
+
 ByteChucker::~ByteChucker()
 {
 }
 
 // XOutputStream chained...
-void SAL_CALL ByteChucker::writeBytes( const uno::Sequence< sal_Int8 >& aData )
-    throw(io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
+void SAL_CALL ByteChucker::writeBytes( const Sequence< sal_Int8 >& aData, sal_Int32 nLength, const sal_Int8 * const pData )
+    throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
-    xStream->writeBytes(aData);
+    if ( !bSpannable )
+    {
+        if ( nLength < 0 )
+            nLength = aData.getLength();
+        if (nLength > nBufferSize )
+        {
+            do
+                nBufferSize *= 2;
+            while ( nLength > nBufferSize );
+
+            aBuffer.realloc ( nBufferSize );
+        }
+        memcpy ( pBuffer + nCurrentBufferPos, pData ? pData : aData.getConstArray(), nLength);
+        nCurrentBufferPos += nLength;
+    }
+    else
+        xStream->writeBytes(aData);
 }
 void SAL_CALL ByteChucker::flush(  )
-    throw(io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
+    throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     xStream->flush();
 }
 void SAL_CALL ByteChucker::closeOutput(  )
-    throw(io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
+    throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     xStream->closeOutput();
 }
 
 // XSeekable chained...
 sal_Int64 SAL_CALL ByteChucker::seek( sal_Int64 location )
-    throw(lang::IllegalArgumentException, io::IOException, uno::RuntimeException)
+    throw(IllegalArgumentException, IOException, RuntimeException)
 {
     if (xSeek.is() )
     {
@@ -114,29 +138,48 @@ sal_Int64 SAL_CALL ByteChucker::seek( sal_Int64 location )
         return location;
     }
     else
-        throw io::IOException();
+        throw IOException();
 }
 sal_Int64 SAL_CALL ByteChucker::getPosition(  )
-        throw(io::IOException, uno::RuntimeException)
+        throw(IOException, RuntimeException)
 {
     if (xSeek.is() )
         return xSeek->getPosition();
     else
-        throw io::IOException();
+        throw IOException();
 }
 sal_Int64 SAL_CALL ByteChucker::getLength(  )
-        throw(io::IOException, uno::RuntimeException)
+        throw(IOException, RuntimeException)
 {
     if (xSeek.is() )
         return xSeek->getLength();
     else
-        throw io::IOException();
+        throw IOException();
+}
+
+void ByteChucker::setSpannable ( sal_Bool bNewSpannable )
+{
+    // if current data isn't spannable, then it's been stored in the Buffer
+    // until we know how much of it there is. Once we start recieving
+    // spannable data again, we'll pass it on
+    if (!isSpannable() && bNewSpannable)
+    {
+        bNextWriteIsAtomic = sal_True;
+        sal_Int32 nOldLength = aBuffer.getLength();
+        aBuffer.realloc ( nCurrentBufferPos );
+        xStream->writeBytes( aBuffer );
+        aBuffer.realloc ( nOldLength );
+        pBuffer = aBuffer.getArray();
+        bNextWriteIsAtomic = sal_False;
+        nCurrentBufferPos = 0;
+    }
+    bSpannable = bNewSpannable;
 }
 
 ByteChucker& ByteChucker::operator << (sal_Int8 nInt8)
 {
     p1Sequence[0] = nInt8  & 0xFF;
-    xStream->writeBytes( a1Sequence );
+    writeBytes( a1Sequence, 1, p1Sequence );
     return *this;
 }
 
@@ -144,7 +187,7 @@ ByteChucker& ByteChucker::operator << (sal_Int16 nInt16)
 {
     p2Sequence[0] = (nInt16 >>  0 ) & 0xFF;
     p2Sequence[1] = (nInt16 >>  8 ) & 0xFF;
-    xStream->writeBytes( a2Sequence );
+    writeBytes( a2Sequence, 2, p2Sequence );
     return *this;
 }
 ByteChucker& ByteChucker::operator << (sal_Int32 nInt32)
@@ -153,21 +196,21 @@ ByteChucker& ByteChucker::operator << (sal_Int32 nInt32)
     p4Sequence[1] = (nInt32 >>  8 ) & 0xFF;
     p4Sequence[2] = (nInt32 >> 16 ) & 0xFF;
     p4Sequence[3] = (nInt32 >> 24 ) & 0xFF;
-    xStream->writeBytes( a4Sequence);
+    writeBytes( a4Sequence, 4, p4Sequence );
     return *this;
 }
 
 ByteChucker& ByteChucker::operator << (sal_uInt8 nuInt8)
 {
     p1Sequence[0] = nuInt8  & 0xFF;
-    xStream->writeBytes( a1Sequence );
+    writeBytes( a1Sequence, 1, p1Sequence );
     return *this;
 }
 ByteChucker& ByteChucker::operator << (sal_uInt16 nuInt16)
 {
     p2Sequence[0] = (nuInt16 >>  0 ) & 0xFF;
     p2Sequence[1] = (nuInt16 >>  8 ) & 0xFF;
-    xStream->writeBytes( a2Sequence );
+    writeBytes( a2Sequence, 2, p2Sequence );
     return *this;
 }
 ByteChucker& ByteChucker::operator << (sal_uInt32 nuInt32)
@@ -176,6 +219,6 @@ ByteChucker& ByteChucker::operator << (sal_uInt32 nuInt32)
     p4Sequence[1] = static_cast < sal_Int8 > ((nuInt32 >>  8 ) & 0xFF);
     p4Sequence[2] = static_cast < sal_Int8 > ((nuInt32 >> 16 ) & 0xFF);
     p4Sequence[3] = static_cast < sal_Int8 > ((nuInt32 >> 24 ) & 0xFF);
-    xStream->writeBytes( a4Sequence);
+    writeBytes( a4Sequence, 4, p4Sequence );
     return *this;
 }

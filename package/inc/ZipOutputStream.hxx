@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-31 09:38:31 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,19 +76,22 @@
 #ifndef _RTL_CIPHER_H_
 #include <rtl/cipher.h>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGES_ZIPENTRY_HPP_
-#include <com/sun/star/packages/ZipEntry.hpp>
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPENTRY_HPP_
+#include <com/sun/star/packages/zip/ZipEntry.hpp>
 #endif
 #ifndef _VOS_REF_H_
 #include <vos/ref.hxx>
 #endif
 
 class EncryptionData;
+class ThreadedBuffer;
+
 class ZipOutputStream
 {
+    friend class ThreadedBuffer;
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
-    ::std::vector < ::com::sun::star::packages::ZipEntry *>         aZipList;
+    ::std::vector < ::com::sun::star::packages::zip::ZipEntry *>            aZipList;
     com::sun::star::uno::Sequence < sal_Int8 > aBuffer;
     com::sun::star::uno::Sequence < sal_Int8 > aEncryptionBuffer;
     ::rtl::OUString     sComment;
@@ -96,15 +99,15 @@ protected:
     rtlCipher           aCipher;
     CRC32               aCRC;
     ByteChucker         aChucker;
-    com::sun::star::packages::ZipEntry          *pCurrentEntry;
-    sal_Int16           nMethod;
-    sal_Int16           nLevel;
-    sal_Bool            bFinished;
-    sal_Bool            bEncryptCurrentEntry;
+    com::sun::star::packages::zip::ZipEntry             *pCurrentEntry;
+    sal_Int16           nMethod, nLevel;
+    sal_Bool            bFinished, bEncryptCurrentEntry, bSpanning;
+    sal_Int16           nCurrentDiskNumber;
 
 public:
-    ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream, sal_Int32 nNewBufferSize);
+    ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream, sal_Bool bNewSpanning );
     ~ZipOutputStream(void);
+    void setDiskNumber ( sal_Int16 nNewDiskNumber ) { nCurrentDiskNumber = nNewDiskNumber; }
 
     // rawWrite to support a direct write to the output stream
     void SAL_CALL rawWrite( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
@@ -119,7 +122,7 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setLevel( sal_Int32 nNewLevel )
         throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL putNextEntry( ::com::sun::star::packages::ZipEntry& rEntry,
+    void SAL_CALL putNextEntry( ::com::sun::star::packages::zip::ZipEntry& rEntry,
             const vos::ORef < EncryptionData > &rData,
             sal_Bool bEncrypt = sal_False )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
@@ -136,13 +139,12 @@ protected:
     void doDeflate();
     void writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void writeCEN( const com::sun::star::packages::ZipEntry &rEntry )
+    void writeCEN( const com::sun::star::packages::zip::ZipEntry &rEntry )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void writeEXT( const com::sun::star::packages::ZipEntry &rEntry )
+    void writeEXT( const com::sun::star::packages::zip::ZipEntry &rEntry )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void writeLOC( const com::sun::star::packages::ZipEntry &rEntry )
+    sal_Int32 writeLOC( const com::sun::star::packages::zip::ZipEntry &rEntry )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-
 };
 
 #endif

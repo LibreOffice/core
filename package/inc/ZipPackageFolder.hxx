@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-08 13:51:29 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ public:
     ZipPackageFolder ();
     virtual ~ZipPackageFolder();
 
-    static void copyZipEntry( com::sun::star::packages::ZipEntry &rDest, const com::sun::star::packages::ZipEntry &rSource);
+    static void copyZipEntry( com::sun::star::packages::zip::ZipEntry &rDest, const com::sun::star::packages::zip::ZipEntry &rSource);
     // Recursive functions
     void  saveContents(rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, com::sun::star::uno::Sequence < sal_Int8 > &rEncryptionKey)
         throw(::com::sun::star::uno::RuntimeException);

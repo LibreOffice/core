@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: HashMaps.hxx,v $
+ *  $RCSfile: XMemoryStream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:13 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,33 +58,28 @@
  *
  *
  ************************************************************************/
-#ifndef _HASHMAPS_HXX
-#define _HASHMAPS_HXX
-
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
+#ifndef _XMEMORY_STREAM_HXX
+#include <XMemoryStream.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEl_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#include <hash_map>
 
-struct eqFunc
+using namespace com::sun::star::io;
+using namespace com::sun::star::uno;
+
+XMemoryStream::XMemoryStream ( com::sun::star::uno::Sequence < sal_Int8 > & rNewBuffer )
+: ZipPackageBuffer ( rNewBuffer )
 {
-    sal_Bool operator()( const rtl::OUString &r1,
-                         const rtl::OUString &r2) const
-    {
-        return r1 == r2;
-    }
-};
-
-typedef std::hash_map < rtl::OUString,
-                        com::sun::star::uno::Reference < com::sun::star::lang::XUnoTunnel >,
-                        ::rtl::OUStringHash,
-                        eqFunc > TunnelHash;
-
-typedef std::hash_map < rtl::OUString,
-                        com::sun::star::uno::Reference < com::sun::star::container::XNameContainer >,
-                        ::rtl::OUStringHash,
-                        eqFunc > NameHash;
-#endif
+}
+XMemoryStream::~XMemoryStream(void)
+{
+}
+::com::sun::star::uno::Any SAL_CALL XMemoryStream::queryInterface( const com::sun::star::uno::Type& rType )
+        throw(com::sun::star::uno::RuntimeException)
+{
+    return ::cppu::queryInterface ( rType                                       ,
+                                    // OWeakObject interfaces
+                                    reinterpret_cast< XInterface*       > ( this )  ,
+                                    static_cast< XWeak*         > ( this )  ,
+                                    // my interfaces
+                                    static_cast< XInputStream*      > ( this )  ,
+                                    static_cast< XSeekable*     > ( this ) );
+}

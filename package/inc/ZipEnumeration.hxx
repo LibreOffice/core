@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipEnumeration.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:52 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ protected:
     EntryHash::const_iterator aIterator;
 public:
     sal_Bool SAL_CALL hasMoreElements();
-    const com::sun::star::packages::ZipEntry * SAL_CALL nextElement();
+    const com::sun::star::packages::zip::ZipEntry * SAL_CALL nextElement();
     ZipEnumeration( EntryHash &rNewEntryHash);
     ~ZipEnumeration(void);
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Deflater.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:13:40 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,12 @@
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGES_ZIPCONSTANTS_HPP_
-#include <com/sun/star/packages/ZipConstants.hpp>
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPCONSTANTS_HPP_
+#include <com/sun/star/packages/zip/ZipConstants.hpp>
 #endif
 #include <string.h> // for memset
 
-using namespace com::sun::star::packages::ZipConstants;
+using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star;
 
 /** Provides general purpose compression using the ZLIB compression

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: mtg $ $Date: 2001-05-31 10:21:44 $
+#   last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,16 +76,17 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
-        $(SLO)$/Adler32.obj	\
-        $(SLO)$/CRC32.obj	\
-        $(SLO)$/ByteChucker.obj	\
-        $(SLO)$/ByteGrabber.obj	\
-        $(SLO)$/Inflater.obj	\
-        $(SLO)$/Deflater.obj	\
+        $(SLO)$/Adler32.obj			\
+        $(SLO)$/CRC32.obj			\
+        $(SLO)$/ByteChucker.obj		\
+        $(SLO)$/ByteGrabber.obj		\
+        $(SLO)$/Inflater.obj		\
+        $(SLO)$/Deflater.obj		\
         $(SLO)$/ZipEnumeration.obj	\
-        $(SLO)$/ZipFile.obj	\
+        $(SLO)$/ZipFile.obj			\
         $(SLO)$/ZipOutputStream.obj	\
-        $(SLO)$/EntryInputStream.obj
+        $(SLO)$/XMemoryStream.obj 	\
+        $(SLO)$/XFileStream.obj	
 
 # --- UNO stuff ---------------------------------------------------
 
@@ -97,15 +98,9 @@ UNOUCRDEP=  $(SOLARBINDIR)$/offapi.rdb
 UNOUCRRDB=  $(SOLARBINDIR)$/offapi.rdb
 
 UNOTYPES=\
-    com.sun.star.packages.ZipEntry \
-    com.sun.star.packages.ZipConstants \
-    com.sun.star.packages.ZipException
-#    com.sun.star.packages.XChecksum \
-#    com.sun.star.packages.XInflater \
-#    com.sun.star.packages.XDeflater \
-#    com.sun.star.packages.XZipFile \
-#    com.sun.star.packages.XZipInputStream \
-#    com.sun.star.packages.XZipOutputStream \
+    com.sun.star.packages.zip.ZipEntry \
+    com.sun.star.packages.zip.ZipConstants \
+    com.sun.star.packages.zip.ZipException
 
 # --- Targets ------------------------------------------------------
 

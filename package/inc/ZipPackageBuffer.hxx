@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-06-11 09:32:41 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ protected:
     sal_Bool m_bMustInitBuffer;
 public:
     ZipPackageBuffer(sal_Int64 nNewBufferSize);
+    ZipPackageBuffer( com::sun::star::uno::Sequence < sal_Int8 > &nNewBuffer );
     virtual ~ZipPackageBuffer(void);
     virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& rType )
         throw(com::sun::star::uno::RuntimeException);

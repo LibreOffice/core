@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inflater.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:06 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,9 @@
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGES_ZIPCONSTANTS_HPP_
-#include <com/sun/star/packages/ZipConstants.hpp>
-#endif
 #include <string.h> // for memset
 
+using namespace com::sun::star::uno;
 
 /** Provides general purpose decompression using the ZLIB library */
 
@@ -111,24 +109,24 @@ Inflater::~Inflater()
 {
     end();
 }
-void SAL_CALL Inflater::setInputSegment( const com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(com::sun::star::uno::RuntimeException)
+void SAL_CALL Inflater::setInputSegment( const Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+        throw(RuntimeException)
 {
     sInBuffer = rBuffer;
     nOffset = nNewOffset;
     nLength = nNewLength;
 }
 
-void SAL_CALL Inflater::setInput( const com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
-        throw(com::sun::star::uno::RuntimeException)
+void SAL_CALL Inflater::setInput( const Sequence< sal_Int8 >& rBuffer )
+        throw(RuntimeException)
 {
     sInBuffer = rBuffer;
     nOffset = 0;
     nLength = rBuffer.getLength();
 }
 
-void SAL_CALL Inflater::setDictionarySegment( const com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(com::sun::star::uno::RuntimeException)
+void SAL_CALL Inflater::setDictionarySegment( const Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+        throw(RuntimeException)
 {
     if (pStream == NULL)
     {
@@ -142,8 +140,8 @@ void SAL_CALL Inflater::setDictionarySegment( const com::sun::star::uno::Sequenc
                   nNewLength);
 }
 
-void SAL_CALL Inflater::setDictionary( const com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
-        throw(com::sun::star::uno::RuntimeException)
+void SAL_CALL Inflater::setDictionary( const Sequence< sal_Int8 >& rBuffer )
+        throw(RuntimeException)
 {
     if (pStream == NULL)
     {
@@ -154,36 +152,36 @@ void SAL_CALL Inflater::setDictionary( const com::sun::star::uno::Sequence< sal_
 }
 
 sal_Int32 SAL_CALL Inflater::getRemaining(  )
-        throw(com::sun::star::uno::RuntimeException)
+        throw(RuntimeException)
 {
     return nLength;
 }
 
 sal_Bool SAL_CALL Inflater::needsInput(  )
-        throw(com::sun::star::uno::RuntimeException)
+        throw(RuntimeException)
 {
     return nLength <=0;
 }
 
 sal_Bool SAL_CALL Inflater::needsDictionary(  )
-        throw(com::sun::star::uno::RuntimeException)
+        throw(RuntimeException)
 {
     return bNeedDict;
 }
 
 void SAL_CALL Inflater::finish(  )
-        throw(com::sun::star::uno::RuntimeException)
+        throw(RuntimeException)
 {
     bFinish = sal_True;
 }
 sal_Bool SAL_CALL Inflater::finished(  )
-        throw(com::sun::star::uno::RuntimeException)
+        throw(RuntimeException)
 {
     return bFinished;
 }
 
-sal_Int32 SAL_CALL Inflater::doInflateSegment( com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL Inflater::doInflateSegment( Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+        throw(RuntimeException)
 {
     if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength())
     {
@@ -192,32 +190,32 @@ sal_Int32 SAL_CALL Inflater::doInflateSegment( com::sun::star::uno::Sequence< sa
     return doInflateBytes(rBuffer, nNewOffset, nNewLength);
 }
 
-sal_Int32 SAL_CALL Inflater::doInflate( com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
-        throw(com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL Inflater::doInflate( Sequence< sal_Int8 >& rBuffer )
+        throw(RuntimeException)
 {
     return doInflateBytes(rBuffer, 0, rBuffer.getLength());
 }
 
 sal_Int32 SAL_CALL Inflater::getAdler(  )
-        throw(com::sun::star::uno::RuntimeException)
+        throw(RuntimeException)
 {
     return pStream->adler;
 }
 
 sal_Int32 SAL_CALL Inflater::getTotalIn(  )
-        throw(com::sun::star::uno::RuntimeException)
+        throw(RuntimeException)
 {
     return pStream->total_in;
 }
 
 sal_Int32 SAL_CALL Inflater::getTotalOut(  )
-        throw(com::sun::star::uno::RuntimeException)
+        throw(RuntimeException)
 {
     return pStream->total_out;
 }
 
 void SAL_CALL Inflater::reset(  )
-        throw(com::sun::star::uno::RuntimeException)
+        throw(RuntimeException)
 {
     z_inflateReset(pStream);
     bFinish = bNeedDict = bFinished = sal_False;
@@ -225,7 +223,7 @@ void SAL_CALL Inflater::reset(  )
 }
 
 void SAL_CALL Inflater::end(  )
-        throw(com::sun::star::uno::RuntimeException)
+        throw(RuntimeException)
 {
     if (pStream != NULL)
     {
@@ -235,12 +233,12 @@ void SAL_CALL Inflater::end(  )
     pStream = NULL;
 }
 
-sal_Int32 Inflater::doInflateBytes (com::sun::star::uno::Sequence < sal_Int8 >  &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength)
+sal_Int32 Inflater::doInflateBytes (Sequence < sal_Int8 >  &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength)
 {
     sal_Int32 nResult;
-    pStream->next_in   = (unsigned char*) sInBuffer.getConstArray()+ nOffset;
+    pStream->next_in   = ( unsigned char* ) ( sInBuffer.getConstArray() + nOffset );
     pStream->avail_in  = nLength;
-    pStream->next_out  = (unsigned char*) rBuffer.getArray() + nNewOffset;
+    pStream->next_out  = reinterpret_cast < unsigned char* > ( rBuffer.getArray() + nNewOffset );
     pStream->avail_out = nNewLength;
 
     nResult = ::z_inflate(pStream, bFinish ? Z_SYNC_FLUSH : Z_PARTIAL_FLUSH);

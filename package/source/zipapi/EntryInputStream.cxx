@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-29 11:57:06 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _ENTRY_INPUT_STREAM_HXX
 #include <EntryInputStream.hxx>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGES_ZIPCONSTANTS_HPP_
-#include <com/sun/star/packages/ZipConstants.hpp>
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPCONSTANTS_HPP_
+#include <com/sun/star/packages/zip/ZipConstants.hpp>
 #endif
 #ifndef _RTL_CIPHER_H_
 #include <rtl/cipher.h>
@@ -75,7 +75,8 @@
 using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::packages::ZipConstants;
+using namespace com::sun::star::packages::zip;
+using namespace com::sun::star::packages::zip::ZipConstants;
 
 /** Provides access to the compressed data in a zipfile.
  *
@@ -89,7 +90,7 @@ using namespace com::sun::star::packages::ZipConstants;
  */
 
 EntryInputStream::EntryInputStream( Reference < io::XInputStream > xNewInput,
-                                    const packages::ZipEntry & rNewEntry,
+                                    const ZipEntry & rNewEntry,
                                     const vos::ORef < EncryptionData > &xEncryptData,
                                     sal_Bool bGetRawStream)
 : xStream( xNewInput )

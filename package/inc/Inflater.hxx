@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inflater.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,7 @@ extern "C"
 class Inflater
 {
 protected:
-    sal_Bool                bFinish;
-    sal_Bool                bFinished;
-    sal_Bool                bSetParams;
-    sal_Bool                bNeedDict;
+    sal_Bool                bFinish, bFinished, bSetParams, bNeedDict;
     sal_Int32               nOffset, nLength;
     z_stream*               pStream;
     com::sun::star::uno::Sequence < sal_Int8 >  sInBuffer;

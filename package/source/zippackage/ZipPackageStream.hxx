@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-17 16:17:06 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGES_ZIPENTRY_HPP_
-#include <com/sun/star/packages/ZipEntry.hpp>
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPENTRY_HPP_
+#include <com/sun/star/packages/zip/ZipEntry.hpp>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -123,7 +123,7 @@ public:
     ZipPackageStream (ZipPackage & rNewPackage);
     virtual ~ZipPackageStream( void );
 
-    void setZipEntry( const com::sun::star::packages::ZipEntry &rInEntry);
+    void setZipEntry( const com::sun::star::packages::zip::ZipEntry &rInEntry);
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawStream( )
         throw(::com::sun::star::uno::RuntimeException);
 

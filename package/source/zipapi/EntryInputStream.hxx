@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-29 11:57:06 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #ifndef _INFLATER_HXX_
 #include <Inflater.hxx>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGES_ZIPENTRY_HPP_
-#include <com/sun/star/packages/ZipEntry.hpp>
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPENTRY_HPP_
+#include <com/sun/star/packages/zip/ZipEntry.hpp>
 #endif
 #ifndef _VOS_REF_H_
 #include <vos/ref.hxx>
@@ -92,13 +92,13 @@ protected:
     sal_Bool bRawStream, bHaveInMemory, bEncrypted;
     com::sun::star::uno::Sequence < sal_Int8 > aBuffer;
     const vos::ORef < EncryptionData > xEncryptionData;
-    const com::sun::star::packages::ZipEntry aEntry;
+    const com::sun::star::packages::zip::ZipEntry aEntry;
     Inflater aInflater;
     void readIntoMemory()
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 public:
              EntryInputStream( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xInput,
-                                const com::sun::star::packages::ZipEntry &rNewEntry,
+                                const com::sun::star::packages::zip::ZipEntry &rNewEntry,
                                const vos::ORef < EncryptionData > &xEncryptData,
                                sal_Bool bGetRawStream = sal_False);
     virtual ~EntryInputStream();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-22 11:46:49 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,12 @@
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGES_ZIPCONSTANTS_HPP_
-#include <com/sun/star/packages/ZipConstants.hpp>
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPCONSTANTS_HPP_
+#include <com/sun/star/packages/zip/ZipConstants.hpp>
 #endif
 
-using namespace com::sun::star::packages::ZipConstants;
+using namespace com::sun::star::packages::zip::ZipConstants;
+using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star;
@@ -103,7 +104,7 @@ ZipPackageStream::~ZipPackageStream( void )
 {
 }
 
-void ZipPackageStream::setZipEntry( const packages::ZipEntry &rInEntry)
+void ZipPackageStream::setZipEntry( const ZipEntry &rInEntry)
 {
     aEntry.nVersion = rInEntry.nVersion;
     aEntry.nFlag = rInEntry.nFlag;
@@ -165,7 +166,7 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream( )
             xEncryptionData->aKey = rZipPackage.getEncryptionKey();
             return rZipPackage.getZipFile().getRawStream(aEntry, xEncryptionData);
         }
-        catch (packages::ZipException &)//rException)
+        catch (ZipException &)//rException)
         {
             VOS_ENSURE( 0, "ZipException thrown");//rException.Message);
             return Reference < io::XInputStream > ();
@@ -185,7 +186,7 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
             xEncryptionData->aKey = rZipPackage.getEncryptionKey();
             return rZipPackage.getZipFile().getInputStream( aEntry, xEncryptionData);
         }
-        catch (packages::ZipException &)//rException)
+        catch (ZipException &)//rException)
         {
             VOS_ENSURE( 0,"ZipException thrown");//rException.Message);
             return Reference < io::XInputStream > ();

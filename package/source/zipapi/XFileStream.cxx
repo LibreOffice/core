@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: ZipPackageBuffer.cxx,v $
+ *  $RCSfile: XFileStream.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:37 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,31 +58,27 @@
  *
  *
  ************************************************************************/
-#ifndef _ZIP_PACKAGE_BUFFER_HXX
-#include <ZipPackageBuffer.hxx>
+#ifndef _XFILE_STREAM_HXX
+#include <XFileStream.hxx>
 #endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+#include <memory.h> // for memcpy
 
-using namespace com::sun::star::uno;
+using namespace osl;
 using namespace com::sun::star::io;
+using namespace com::sun::star::uno;
 
-ZipPackageBuffer::ZipPackageBuffer(sal_Int64 nNewBufferSize )
-: m_nBufferSize (nNewBufferSize)
-, m_bMustInitBuffer ( sal_True )
-, m_nCurrent(0)
-, m_nEnd(0)
+XFileStream::XFileStream( File * pNewFile )
+: pFile (pNewFile )
 {
 }
-ZipPackageBuffer::ZipPackageBuffer(Sequence < sal_Int8 > &nNewBuffer )
-: m_aBuffer ( nNewBuffer )
-, m_bMustInitBuffer ( sal_False )
-, m_nCurrent( 0 )
-, m_nEnd ( nNewBuffer.getLength() )
+XFileStream::~XFileStream(void)
 {
+    delete pFile;
 }
-ZipPackageBuffer::~ZipPackageBuffer(void)
-{
-}
-Any SAL_CALL  ZipPackageBuffer::queryInterface( const Type& rType )
+Any SAL_CALL  XFileStream::queryInterface( const Type& rType )
         throw(RuntimeException)
 {
     return ::cppu::queryInterface ( rType                                       ,
@@ -91,104 +87,108 @@ Any SAL_CALL  ZipPackageBuffer::queryInterface( const Type& rType )
                                         static_cast< XWeak*         > ( this )  ,
                                         // my interfaces
                                         static_cast< XInputStream*      > ( this )  ,
-                                        static_cast< XSeekable*     > ( this )  ,
-                                        static_cast< XOutputStream*     > ( this ) );
+                                        static_cast< XSeekable*     > ( this ) );
 
 }
-void SAL_CALL  ZipPackageBuffer::acquire(void)
+void SAL_CALL  XFileStream::acquire(void)
     throw()
 {
     OWeakObject::acquire();
 }
-void SAL_CALL  ZipPackageBuffer::release(void)
+void SAL_CALL  XFileStream::release(void)
     throw()
 {
     OWeakObject::release();
 }
-sal_Int32 SAL_CALL ZipPackageBuffer::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL XFileStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     if (nBytesToRead < 0)
         throw BufferSizeExceededException(::rtl::OUString(),*this);
 
-    if (nBytesToRead + m_nCurrent > m_nEnd)
-        nBytesToRead = static_cast < sal_Int32 > (m_nEnd - m_nCurrent);
-
+    sal_uInt64 nBytesRead = 0;
     aData.realloc ( nBytesToRead );
-    memcpy(aData.getArray(), m_aBuffer.getConstArray() + m_nCurrent, nBytesToRead);
-    m_nCurrent +=nBytesToRead;
-    return nBytesToRead;
+    FileBase::RC nError = pFile->read ( aData.getArray(), nBytesToRead, nBytesRead );
+
+    if ( nError != FileBase::E_None )
+        throw IOException ();
+
+    return static_cast < sal_Int32 > (nBytesRead);
 }
 
-sal_Int32 SAL_CALL ZipPackageBuffer::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL XFileStream::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     return readBytes(aData, nMaxBytesToRead);
 }
-void SAL_CALL ZipPackageBuffer::skipBytes( sal_Int32 nBytesToSkip )
+void SAL_CALL XFileStream::skipBytes( sal_Int32 nBytesToSkip )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     if (nBytesToSkip < 0)
         throw BufferSizeExceededException(::rtl::OUString(),*this);
 
-    if (nBytesToSkip + m_nCurrent > m_nEnd)
-        nBytesToSkip = static_cast < sal_Int32 > (m_nEnd - m_nCurrent);
-
-    m_nCurrent+=nBytesToSkip;
+    FileBase::RC nError = pFile->setPos ( osl_Pos_Current, nBytesToSkip );
+    if ( nError != FileBase::E_None )
+        throw IOException ();
 }
-sal_Int32 SAL_CALL ZipPackageBuffer::available(  )
+
+sal_Int32 SAL_CALL XFileStream::available(  )
         throw(NotConnectedException, IOException, RuntimeException)
 {
-    return static_cast < sal_Int32 > (m_nEnd - m_nCurrent);
+    sal_uInt64 nPos, nEndPos;
+    sal_Int32 nResult = 0;
+    FileBase::RC nError = pFile->getPos ( nPos );
+    if ( nError != FileBase::E_None )
+        throw IOException ();
+    nError = pFile->setPos ( osl_Pos_End, 0 );
+    if ( nError != FileBase::E_None )
+        throw IOException ();
+    nError = pFile->getPos ( nEndPos );
+    if ( nError != FileBase::E_None )
+        throw IOException ();
+    nResult = static_cast < sal_Int32 > ( nEndPos - nPos );
+    nError = pFile->setPos ( osl_Pos_Absolut, nPos );
+    if ( nError != FileBase::E_None )
+        throw IOException ();
+    return nResult;
 }
-void SAL_CALL ZipPackageBuffer::closeInput(  )
+
+void SAL_CALL XFileStream::closeInput(  )
         throw(NotConnectedException, IOException, RuntimeException)
 {
+    pFile->close();
 }
-void SAL_CALL ZipPackageBuffer::writeBytes( const Sequence< sal_Int8 >& aData )
-        throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
-{
-    sal_Int64 nDataLen = aData.getLength(), nCombined = m_nEnd + nDataLen;
-    const sal_Int8 *pData   = aData.getConstArray();
-
-    if ( nCombined > m_nBufferSize)
-    {
-        do
-            m_nBufferSize *=2;
-        while (nCombined > m_nBufferSize);
-        m_aBuffer.realloc(static_cast < sal_Int32 > (m_nBufferSize));
-        m_bMustInitBuffer = sal_False;
-    }
-    else if (m_bMustInitBuffer)
-    {
-         m_aBuffer.realloc ( static_cast < sal_Int32 > ( m_nBufferSize ) );
-        m_bMustInitBuffer = sal_False;
-    }
-    memcpy( m_aBuffer.getArray() + m_nCurrent, aData.getConstArray(), static_cast < sal_Int32 > (nDataLen));
-    m_nCurrent+=nDataLen;
-    if (m_nCurrent>m_nEnd)
-        m_nEnd = m_nCurrent;
-}
-void SAL_CALL ZipPackageBuffer::flush(  )
-        throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
-{
-}
-void SAL_CALL ZipPackageBuffer::closeOutput(  )
-        throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
-{
-}
-void SAL_CALL ZipPackageBuffer::seek( sal_Int64 location )
+void SAL_CALL XFileStream::seek( sal_Int64 location )
         throw(::com::sun::star::lang::IllegalArgumentException, IOException, RuntimeException)
 {
-    m_nCurrent = location;
+    FileBase::RC nError = pFile->setPos ( osl_Pos_Absolut, location );
+    if ( nError != FileBase::E_None )
+        throw IOException ();
 }
-sal_Int64 SAL_CALL ZipPackageBuffer::getPosition(  )
+sal_Int64 SAL_CALL XFileStream::getPosition(  )
         throw(IOException, RuntimeException)
 {
-    return m_nCurrent;
+    sal_uInt64 nPos;
+    FileBase::RC nError = pFile->getPos ( nPos );
+    if ( nError != FileBase::E_None )
+        throw IOException ();
+    return nPos;
 }
-sal_Int64 SAL_CALL ZipPackageBuffer::getLength(  )
+sal_Int64 SAL_CALL XFileStream::getLength(  )
         throw(IOException, RuntimeException)
 {
-    return m_nEnd;
+    sal_uInt64 nPos, nEndPos;
+    FileBase::RC nError = pFile->getPos ( nPos );
+    if ( nError != FileBase::E_None )
+        throw IOException ();
+    nError = pFile->setPos ( osl_Pos_End, 0 );
+    if ( nError != FileBase::E_None )
+        throw IOException ();
+    nError = pFile->getPos ( nEndPos );
+    if ( nError != FileBase::E_None )
+        throw IOException ();
+    nError = pFile->setPos ( osl_Pos_Absolut, nPos );
+    if ( nError != FileBase::E_None )
+        throw IOException ();
+    return nEndPos;
 }

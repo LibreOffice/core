@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-02 18:11:27 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _ZIP_PACKAGE_ENTRY_HXX
 #include <ZipPackageEntry.hxx>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGE_ZIPCONSTANTS_HPP_
-#include <com/sun/star/packages/ZipConstants.hpp>
+#ifndef _COM_SUN_STAR_PACKAGE_ZIP_ZIPCONSTANTS_HPP_
+#include <com/sun/star/packages/zip/ZipConstants.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -70,13 +70,17 @@
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
 #endif
+#ifndef _IMPL_VALID_CHARACTERS_HXX_
+#include <ImplValidCharacters.hxx>
+#endif
 
+using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
-using namespace com::sun::star::packages::ZipConstants;
-using namespace rtl;
+using namespace com::sun::star::packages::zip;
+using namespace com::sun::star::packages::zip::ZipConstants;
 
 ZipPackageEntry::ZipPackageEntry (void)
 {
@@ -123,6 +127,10 @@ void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
     Reference < XNameContainer > xCont (xParent, UNO_QUERY);
     if (xCont.is() && xCont->hasByName ( aEntry.sName ) )
         xCont->removeByName ( aEntry.sName );
+
+    const sal_Unicode *pChar = aName.getStr();
+    for ( sal_Int32 i = 0, nEnd = aName.getLength(); i < nEnd; i++)
+        VOS_ENSURE ( Impl_IsValidChar (pChar[i], sal_False), "Invalid character in new zip package entry name!");
 
     aEntry.sName = aName;
 

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: HashMaps.hxx,v $
+ *  $RCSfile: XMemoryStream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:13 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,33 +58,22 @@
  *
  *
  ************************************************************************/
-#ifndef _HASHMAPS_HXX
-#define _HASHMAPS_HXX
+#ifndef _XMEMORY_STREAM_HXX
+#define _XMEMORY_STREAM_HXX
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
+#ifndef _ZIP_PACKAGE_BUFFER_HXX
+#include <ZipPackageBuffer.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEl_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#include <hash_map>
 
-struct eqFunc
+class ZipPackage;
+class OutputThread;
+
+class XMemoryStream: public ZipPackageBuffer
 {
-    sal_Bool operator()( const rtl::OUString &r1,
-                         const rtl::OUString &r2) const
-    {
-        return r1 == r2;
-    }
+public:
+    XMemoryStream ( com::sun::star::uno::Sequence < sal_Int8 > & rNewBuffer );
+    virtual ~XMemoryStream(void);
+    virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& rType )
+        throw(com::sun::star::uno::RuntimeException);
 };
-
-typedef std::hash_map < rtl::OUString,
-                        com::sun::star::uno::Reference < com::sun::star::lang::XUnoTunnel >,
-                        ::rtl::OUStringHash,
-                        eqFunc > TunnelHash;
-
-typedef std::hash_map < rtl::OUString,
-                        com::sun::star::uno::Reference < com::sun::star::container::XNameContainer >,
-                        ::rtl::OUStringHash,
-                        eqFunc > NameHash;
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRC32.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-31 09:37:33 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 
 class CRC32
 {
-private:
+protected:
     sal_uInt32 nCRC;
 public:
     CRC32();

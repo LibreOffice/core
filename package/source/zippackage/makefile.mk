@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: mtg $ $Date: 2001-05-31 10:28:09 $
+#   last change: $Author: mtg $ $Date: 2001-07-04 14:56:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,20 +84,26 @@ SLOFILES= \
         $(SLO)$/ZipPackageSink.obj		\
         $(SLO)$/ZipPackageStream.obj 	\
         $(SLO)$/OutputThread.obj		\
-        $(SLO)$/ThreadedBuffer.obj
+        $(SLO)$/ThreadedBuffer.obj		\
+        $(SLO)$/InteractionRequest.obj  \
+        $(SLO)$/InteractionContinuation.obj
+
 
 # --- UNO stuff ---------------------------------------------------
 
 CPPUMAKERFLAGS=
-#UNOUCROUT=$(OUT)$/inc
-#INCPRE+=$(UNOUCROUT)
+UNOUCROUT=$(OUT)$/inc
+INCPRE+=$(UNOUCROUT)
 
 UNOUCRDEP=  $(SOLARBINDIR)$/offapi.rdb
 UNOUCRRDB=  $(SOLARBINDIR)$/offapi.rdb
 
 UNOTYPES=\
     com.sun.star.packages.manifest.XManifestReader \
-    com.sun.star.packages.manifest.XManifestWriter
+    com.sun.star.packages.manifest.XManifestWriter \
+    com.sun.star.packages.zip.ZipEntry \
+    com.sun.star.packages.zip.ZipConstants \
+    com.sun.star.packages.zip.ZipException
 
 # --- Targets ------------------------------------------------------
 

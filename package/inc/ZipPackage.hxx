@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-31 09:39:40 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
 #ifndef _ZIP_PACKAGE_BUFFER_HXX
 #include <ZipPackageBuffer.hxx>
 #endif
@@ -97,15 +100,23 @@
 #ifndef _HASHMAPS_HXX
 #include <HashMaps.hxx>
 #endif
-
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
 #include <vector>
 
 class ZipPackageFolder;
 class ZipFile;
 class OutputThread;
 
+enum SegmentEnum
+{
+    e_Aborted = -1000,
+    e_Retry,
+    e_Success = 0
+};
 class ZipPackage :
-                   public ::cppu::OWeakObject,
+                   public cppu::OWeakObject,
                    public com::sun::star::lang::XInitialization,
                    public com::sun::star::lang::XSingleServiceFactory,
                    public com::sun::star::lang::XUnoTunnel,
@@ -119,11 +130,12 @@ protected:
     NameHash         aRecent;
     ::rtl::OUString  sURL;
     sal_Int32        nSegmentSize;
-    sal_Bool         bHasEncryptedEntries;
+    sal_Bool         bHasEncryptedEntries, bSpanned;
 
     ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xRootFolder;
     ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xContentStream;
     ::com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xContentSeek;
+    ::com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xInteractionHandler;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xFactory;
 
     ZipPackageFolder *pRootFolder;
@@ -131,6 +143,17 @@ protected:
     ::ucb::Content   *pContent;
 
     void getZipFileContents();
+    SegmentEnum writeSegment(
+                       const ::rtl::OUString & rFileName,
+                       ::rtl::OUString & rMountPath,
+                       ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xStream,
+                       ::com::sun::star::uno::Sequence < sal_Int8 > &rBuffer,
+                       sal_Bool bRetry,
+                       const sal_Int16 nDiskNum);
+    void getInteractionHandler();
+    sal_Bool HandleError ( com::sun::star::uno::Any &rAny, sal_uInt16 eContinuations );
+    sal_Bool HandleError ( oslFileError, sal_uInt16 eContinuations, ::rtl::OUString &rFileName );
+    sal_Int32 RequestDisk ( ::rtl::OUString &rMountPath, sal_Int16 nDiskNum);
 
 public:
     ZipPackage (const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
@@ -186,6 +209,7 @@ public:
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
     // Uno componentiseralation
     static ::rtl::OUString getImplementationName();
     static ::com::sun::star::uno::Sequence < ::rtl::OUString > getSupportedServiceNames();

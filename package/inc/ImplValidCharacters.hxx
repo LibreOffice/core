@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: HashMaps.hxx,v $
+ *  $RCSfile: ImplValidCharacters.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:13 $
  *
@@ -58,33 +58,36 @@
  *
  *
  ************************************************************************/
-#ifndef _HASHMAPS_HXX
-#define _HASHMAPS_HXX
+#ifndef _IMPL_VALID_CHARACTERS_HXX_
+#define _IMPL_VALID_CHARACTERS_HXX_
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEl_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#include <hash_map>
 
-struct eqFunc
+static sal_Bool Impl_IsValidChar ( sal_Unicode aChar, sal_Bool bSlashAllowed )
 {
-    sal_Bool operator()( const rtl::OUString &r1,
-                         const rtl::OUString &r2) const
+    sal_Bool bReturn = sal_True;
+
+    switch ( aChar )
     {
-        return r1 == r2;
+        case '\\':
+        case '?':
+        case '<':
+        case '>':
+        case '\"':
+        case '|':
+        case ':':
+            bReturn = sal_False;
+        break;
+        case '/':
+            bReturn = bSlashAllowed;
+        break;
+        default:
+            if ( aChar < 32  || aChar > 127 )
+                bReturn = sal_False;
+        break;
     }
-};
-
-typedef std::hash_map < rtl::OUString,
-                        com::sun::star::uno::Reference < com::sun::star::lang::XUnoTunnel >,
-                        ::rtl::OUStringHash,
-                        eqFunc > TunnelHash;
-
-typedef std::hash_map < rtl::OUString,
-                        com::sun::star::uno::Reference < com::sun::star::container::XNameContainer >,
-                        ::rtl::OUStringHash,
-                        eqFunc > NameHash;
+    return bReturn;
+}
 #endif

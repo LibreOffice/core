@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-22 11:48:03 $
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _ZIP_PACKAGE_FOLDER_ENUMERATION_HXX
 #include <ZipPackageFolderEnumeration.hxx>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGES_ZIPCONSTANTS_HPP_
-#include <com/sun/star/packages/ZipConstants.hpp>
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPCONSTANTS_HPP_
+#include <com/sun/star/packages/zip/ZipConstants.hpp>
 #endif
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
@@ -92,7 +92,8 @@
 #include <rtl/digest.h>
 #endif
 
-using namespace com::sun::star::packages::ZipConstants;
+using namespace com::sun::star::packages::zip::ZipConstants;
+using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::container;
 using namespace com::sun::star::packages;
 using namespace com::sun::star::beans;
@@ -207,7 +208,7 @@ void SAL_CALL ZipPackageFolder::removeByName( const OUString& Name )
         sName = Name.copy(1, Name.getLength());
     else
         sName = Name;
-    if (!aContents.count(sName))
+    if (aContents.find(sName) == aContents.end())
         throw NoSuchElementException();
     aContents.erase(sName);
 }
@@ -251,7 +252,9 @@ Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
 {
     sal_uInt32 i=0, nSize = aContents.size();
     OUString *pNames = new OUString[nSize];
-    for (TunnelHash::const_iterator aIterator = aContents.begin() ; aIterator != aContents.end(); i++,aIterator++)
+    for ( TunnelHash::const_iterator aIterator = aContents.begin(), aEnd = aContents.end();
+          aIterator != aEnd;
+          i++,aIterator++)
         pNames[i] = (*aIterator).first;
     return Sequence < OUString > (pNames, nSize);
 }
@@ -263,7 +266,7 @@ sal_Bool SAL_CALL ZipPackageFolder::hasByName( const OUString& aName )
         sName = aName.copy(1, aName.getLength());
     else
         sName = aName;
-    return aContents.count(sName);
+    return aContents.find(sName) != aContents.end();
 }
     // XNameReplace
 void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const Any& aElement )
@@ -286,7 +289,6 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
     Reference < XUnoTunnel > xTunnel;
     ZipPackageFolder *pFolder = NULL;
     ZipPackageStream *pStream = NULL;
-    TunnelHash::const_iterator aCI = aContents.begin(), aEnd = aContents.end();
     const OUString sMediaTypeProperty ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
     const OUString sFullPathProperty ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
     const OUString sInitialisationVectorProperty ( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
@@ -302,15 +304,18 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
     rtlRandomPool aRandomPool = rtl_random_createPool ();
     rtl_random_addBytes ( aRandomPool, &aTime, 8 );
 
-    for (; aCI!=aEnd ; aCI++)
+    for ( TunnelHash::const_iterator aCI = aContents.begin(), aEnd = aContents.end();
+          aCI != aEnd;
+          aCI++)
     {
         // pTempEntry is stored in a vector by ZipOutputStream and will
         // be deleted by the ZipOutputStream destructor
         ZipEntry * pTempEntry = new ZipEntry;
-
+        const OUString &rShortName = (*aCI).first;
         xTunnel = Reference < XUnoTunnel> ((*aCI).second, UNO_QUERY);
         sal_Int64 nTest = 0;
         Sequence < PropertyValue > aPropSet (2);
+        PropertyValue *pValue = aPropSet.getArray();
         pFolder = NULL;
         pStream = NULL;
         sal_Bool bIsFolder = sal_True;
@@ -335,11 +340,9 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             // store the ZipEntry data in pTempEntry
             ZipPackageFolder::copyZipEntry ( *pTempEntry, pFolder->aEntry );
             pTempEntry->nTime = ZipOutputStream::getCurrentDosTime();
-            pTempEntry->nCrc = 0;
-            pTempEntry->nSize = 0;
-            pTempEntry->nCompressedSize = 0;
+            pTempEntry->nCrc = pTempEntry->nSize = pTempEntry->nCompressedSize = 0;
             pTempEntry->nMethod = STORED;
-            pTempEntry->sName = rPath + (*aCI).first + OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
+            pTempEntry->sName = rPath + rShortName + OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
             try
             {
                 vos::ORef < EncryptionData > xEmpty;
@@ -351,17 +354,17 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 VOS_ENSURE( 0, "Error writing ZipOutputStream" );
             }
 
-            aPropSet[0].Name = sMediaTypeProperty;
-            aPropSet[0].Value <<= pFolder->GetMediaType();
-            aPropSet[1].Name = sFullPathProperty;
-            aPropSet[1].Value <<= pTempEntry->sName;
+            pValue[0].Name = sMediaTypeProperty;
+            pValue[0].Value <<= pFolder->GetMediaType();
+            pValue[1].Name = sFullPathProperty;
+            pValue[1].Value <<= pTempEntry->sName;
 
             // Copy back the zip entry and make the offset negative so that we
             // know it's point at the beginning of the LOC
             ZipPackageFolder::copyZipEntry ( pFolder->aEntry, *pTempEntry );
             pFolder->aEntry.nOffset *= -1;
             pFolder->saveContents(pTempEntry->sName, rManList, rZipOut, rEncryptionKey);
-            pFolder->aEntry.sName = (*aCI).first;
+            pFolder->aEntry.sName = rShortName;
         }
         else
         {
@@ -369,15 +372,15 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             // store the ZipEntry data in pTempEntry
 
             ZipPackageFolder::copyZipEntry ( *pTempEntry, pStream->aEntry );
-            pTempEntry->sName = rPath + (*aCI).first;
+            pTempEntry->sName = rPath + rShortName;
 
             sal_Bool bToBeEncrypted = pStream->IsToBeEncrypted() && bHaveEncryptionKey;
             sal_Bool bToBeCompressed = bToBeEncrypted ? sal_True : pStream->IsToBeCompressed();
 
-            aPropSet[0].Name = sMediaTypeProperty;
-            aPropSet[0].Value <<= pStream->GetMediaType( );
-            aPropSet[1].Name = sFullPathProperty;
-            aPropSet[1].Value <<= pTempEntry->sName;
+            pValue[0].Name = sMediaTypeProperty;
+            pValue[0].Value <<= pStream->GetMediaType( );
+            pValue[1].Name = sFullPathProperty;
+            pValue[1].Value <<= pTempEntry->sName;
 
             if ( bToBeEncrypted )
             {
@@ -397,12 +400,13 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 pStream->setKey ( aKey );
 
                 aPropSet.realloc(6); // 6th property is size, below
-                aPropSet[2].Name = sInitialisationVectorProperty;
-                aPropSet[2].Value <<= aVector;
-                aPropSet[3].Name = sSaltProperty;
-                aPropSet[3].Value <<= aSalt;
-                aPropSet[4].Name = sIterationCountProperty;
-                aPropSet[4].Value <<= nIterationCount;
+                pValue = aPropSet.getArray();
+                pValue[2].Name = sInitialisationVectorProperty;
+                pValue[2].Value <<= aVector;
+                pValue[3].Name = sSaltProperty;
+                pValue[3].Value <<= aSalt;
+                pValue[4].Name = sIterationCountProperty;
+                pValue[4].Value <<= nIterationCount;
             }
 
             // If the entry is already stored in the zip file in the format we
@@ -414,22 +418,19 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 try
                 {
                     Reference < XInputStream > xStream = pStream->getRawStream();
-                    try
+                    rZipOut.putNextEntry ( *pTempEntry, pStream->getEncryptionData(), bToBeEncrypted);
+                    Sequence < sal_Int8 > aSeq (n_ConstBufferSize);
+                    sal_Int32 nLength = n_ConstBufferSize;
+                    while ( nLength >= n_ConstBufferSize )
                     {
-                        rZipOut.putNextEntry ( *pTempEntry, pStream->getEncryptionData(), bToBeEncrypted);
-                        Sequence < sal_Int8 > aSeq (n_ConstBufferSize);
-                        sal_Int32 nLength = n_ConstBufferSize;
-                        while ( nLength >= n_ConstBufferSize )
-                        {
-                            nLength = xStream->readBytes(aSeq, n_ConstBufferSize);
-                            rZipOut.rawWrite(aSeq, 0, nLength);
-                        }
-                        rZipOut.rawCloseEntry();
+                        nLength = xStream->readBytes(aSeq, n_ConstBufferSize);
+                        rZipOut.rawWrite(aSeq, 0, nLength);
                     }
-                    catch (ZipException&)
-                    {
-                        VOS_ENSURE( 0, "Error writing ZipOutputStream" );
-                    }
+                    rZipOut.rawCloseEntry();
+                }
+                catch (ZipException&)
+                {
+                    VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                 }
                 catch (IOException & )
                 {
@@ -443,7 +444,6 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 if (!xSeek.is())
                     VOS_ENSURE ( 0, "Bad juju! We can only package streams which support XSeekable!");
                 sal_Int32 nStreamLength = static_cast < sal_Int32 > ( xSeek->getLength() );
-
 
                 if ( bToBeCompressed )
                 {
@@ -462,8 +462,8 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 if (bToBeEncrypted)
                 {
                     // Need to store the uncompressed size in the manifest
-                    aPropSet[5].Name = sSizeProperty;
-                    aPropSet[5].Value <<= nStreamLength;
+                    pValue[5].Name = sSizeProperty;
+                    pValue[5].Value <<= nStreamLength;
                 }
 
                 try
@@ -479,6 +479,10 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     pStream->SetPackageMember ( sal_True );
                     rZipOut.closeEntry();
                 }
+                catch (ZipException&)
+                {
+                    VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+                }
                 catch (IOException & )
                 {
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
@@ -487,7 +491,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
             // Then copy it back afterwards...
             ZipPackageFolder::copyZipEntry ( pStream->aEntry, *pTempEntry );
-            pStream->aEntry.sName = (*aCI).first;
+            pStream->aEntry.sName = rShortName;
             pStream->aEntry.nOffset *= -1;
         }
         rManList.push_back (aPropSet);
