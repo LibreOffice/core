@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:17:37 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,10 +203,10 @@ String STR_WRITER_WEBDOC_FULLTYPE
     Text[ catalan ] = "%PRODUCTNAME 6.0 HTML";
     Text[ finnish ] = "%PRODUCTNAME 6.0 - HTML-asiakirja";
     Text[ thai ] = "เอกสาร %PRODUCTNAME 6.0 HTML ";
-    Text[ czech ] = "HTML dokument %PRODUCTNAME 6.0";
+    Text[ czech ] = "HTML dokument %PRODUCTNAME %PRODUCTVERSION";
     Text[ hebrew ] = "%PRODUCTNAME 6.0 HTML-Dokument";
     Text[ hindi ] = "%PRODUCTNAME 6.0 HTML लेखपत्र";
-    Text[ slovak ] = "HTML dokument %PRODUCTNAME 6.0";
+    Text[ slovak ] = "HTML dokument %PRODUCTNAME %PRODUCTVERSION";
 };
 String STR_SHELLNAME_WEBTEXT
 {
@@ -680,10 +680,10 @@ String RID_WEBOLE_TOOLBOX
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objecte";
     Text[ thai ] = "วัตถุ";
-    Text[ czech ] = "Objekt";
+    Text[ czech ] = "Objekt/Web";
     Text[ hebrew ] = "‮אוביקט‬";
     Text[ hindi ] = "वस्तु";
-    Text[ slovak ] = "Objekt";
+    Text[ slovak ] = "Objekt/Web";
 };
 ToolBox RID_WEBOLE_TOOLBOX
 {
@@ -722,6 +722,8 @@ ToolBox RID_WEBOLE_TOOLBOX
 /*************************************************************************
 
 *************************************************************************/
+
+
 
 
 
