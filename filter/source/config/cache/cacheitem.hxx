@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:46:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,11 +277,38 @@ typedef ::std::hash_map< ::rtl::OUString                    ,
             which property matched to the given URL. The user of this
             structure can decide then, if a deep detection should be
             supressed e.g. if an URLPattern was used.
-
-            Structure info: NamedValue.Name  = <internal type name>
-                            NamedValue.Value = [boolean]bMatchByURLPattern
  */
-typedef ::std::list< css::beans::NamedValue > FlatDetection;
+struct  FlatDetectionInfo
+{
+    // the internal type name
+    ::rtl::OUString sType;
+
+    // this type was found by a matching the URL extension
+    sal_Bool bMatchByExtension;
+
+    // this type was found by a matching URL Pattern
+    sal_Bool bMatchByPattern;
+
+    // the user selected this type explicitly
+    sal_Bool bPreselectedAsType;
+
+    // the user selected this type implicit by selecting a corresponding filter
+    sal_Bool bPreselectedByFilter;
+
+    // the user selected this type implicit by selecting a corresponding office module
+    sal_Bool bPreselectedByDocumentService;
+
+    FlatDetectionInfo()
+        : sType                        (::rtl::OUString())
+        , bMatchByExtension            (sal_False        )
+        , bMatchByPattern              (sal_False        )
+        , bPreselectedAsType           (sal_False        )
+        , bPreselectedByFilter         (sal_False        )
+        , bPreselectedByDocumentService(sal_False        )
+    {}
+};
+
+typedef ::std::list< FlatDetectionInfo > FlatDetection;
 
     } // namespace config
 } // namespace filter
