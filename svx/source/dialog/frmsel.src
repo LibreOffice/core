@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:53:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,96 +60,69 @@
  ************************************************************************/
 
 #ifndef _SVX_DIALOGS_HRC
-#include <dialogs.hrc>
+#include "dialogs.hrc"
 #endif
-#include <frmsel.hrc>
+#ifndef SVX_FRMSEL_HRC
+#include "frmsel.hrc"
+#endif
+
 Resource RID_SVXSTR_BORDER_CONTROL
 {
     StringArray ARR_TEXTS
     {
         ItemList [ de ] =
         {
-            < "Umrandungseinstellung" ; 0; > ;       //SVX_FRMSELLINE_NONE
-            < "Linke Umrandungslinie" ; 1; > ;       //SVX_FRMSELLINE_LEFT,
-            < "Rechte Umrandungslinie" ; 2; > ;       //SVX_FRMSELLINE_RIGHT,
-            < "Obere Umrandungslinie" ; 3; > ;       //SVX_FRMSELLINE_TOP,
-            < "Untere Umrandungslinie" ; 4; > ;       //SVX_FRMSELLINE_BOTTOM,
-            < "Horizontale Umrandungslinie" ; 5; > ;       //SVX_FRMSELLINE_HOR,
-            < "Vertikale Umrandungslinie" ; 6; > ;       //SVX_FRMSELLINE_VER
+            < "Umrandungseinstellung" ; 0; > ;
+            < "Linke Umrandungslinie" ; 1; > ;
+            < "Rechte Umrandungslinie" ; 2; > ;
+            < "Obere Umrandungslinie" ; 3; > ;
+            < "Untere Umrandungslinie" ; 4; > ;
+            < "Horizontale Umrandungslinie" ; 5; > ;
+            < "Vertikale Umrandungslinie" ; 6; > ;
+            < "Diagonale Umrandungslinie von oben links nach unten rechts" ; 7; > ;
+            < "Diagonale Umrandungslinie von unten links nach oben rechts" ; 8; > ;
         };
-    ItemList [ x-comment ] =
-    {
-         < "; Umrandungseinstellung" ; 0; > ;
-        < "; Linke Umrandungslinie" ; 1; > ;
-        < "; Rechte Umrandungslinie" ; 2; > ;
-        < "; Obere Umrandungslinie" ; 3; > ;
-        < "; Untere Umrandungslinie" ; 4; > ;
-        < "; Horizontale Umrandungslinie" ; 5; > ;
-        < "; Vertikale Umrandungslinie" ; 6; > ;
-    };
-    ItemList [ en-US ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
+        ItemList [ en-US ] =
+        {
+            < "Border setting" ; 0; > ;
+            < "Left border line" ; 1; > ;
+            < "Right border line" ; 2; > ;
+            < "Top border line" ; 3; > ;
+            < "Bottom border line" ; 4; > ;
+            < "Horizontal border line" ; 5; > ;
+            < "Vertical border line" ; 6; > ;
+            < "Diagonal border line from top left to bottom right" ; 7; > ;
+            < "Diagonal border line from bottom left to top right" ; 8; > ;
+        };
     };
     StringArray ARR_DESCRIPTIONS
     {
         ItemList [ de ]=
         {
-            < "Umrandungseinstellung" ; 0; > ;       //SVX_FRMSELLINE_NONE
-            < "Linke Umrandungslinie" ; 1; > ;       //SVX_FRMSELLINE_LEFT,
-            < "Rechte Umrandungslinie" ; 2; > ;       //SVX_FRMSELLINE_RIGHT,
-            < "Obere Umrandungslinie" ; 3; > ;       //SVX_FRMSELLINE_TOP,
-            < "Untere Umrandungslinie" ; 4; > ;       //SVX_FRMSELLINE_BOTTOM,
-            < "Horizontale Umrandungslinie" ; 5; > ;       //SVX_FRMSELLINE_HOR,
-            < "Vertikale Umrandungslinie" ; 6; > ;       //SVX_FRMSELLINE_VER
+            < "Umrandungseinstellung" ; 0; > ;
+            < "Linke Umrandungslinie" ; 1; > ;
+            < "Rechte Umrandungslinie" ; 2; > ;
+            < "Obere Umrandungslinie" ; 3; > ;
+            < "Untere Umrandungslinie" ; 4; > ;
+            < "Horizontale Umrandungslinie" ; 5; > ;
+            < "Vertikale Umrandungslinie" ; 6; > ;
+            < "Diagonale Umrandungslinie von oben links nach unten rechts" ; 7; > ;
+            < "Diagonale Umrandungslinie von unten links nach oben rechts" ; 8; > ;
         };
-    ItemList [ x-comment ] =
-    {
-         < "; Umrandungseinstellung" ; 0; > ;
-        < "; Linke Umrandungslinie" ; 1; > ;
-        < "; Rechte Umrandungslinie" ; 2; > ;
-        < "; Obere Umrandungslinie" ; 3; > ;
-        < "; Untere Umrandungslinie" ; 4; > ;
-        < "; Horizontale Umrandungslinie" ; 5; > ;
-        < "; Vertikale Umrandungslinie" ; 6; > ;
+        ItemList [ en-US ] =
+        {
+            < "Border setting" ; 0; > ;
+            < "Left border line" ; 1; > ;
+            < "Right border line" ; 2; > ;
+            < "Top border line" ; 3; > ;
+            < "Bottom border line" ; 4; > ;
+            < "Horizontal border line" ; 5; > ;
+            < "Vertical border line" ; 6; > ;
+            < "Diagonal border line from top left to bottom right" ; 7; > ;
+            < "Diagonal border line from bottom left to top right" ; 8; > ;
+        };
     };
-    ItemList [ en-US ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    };
+
+    Bitmap BMP_FRMSEL_ARROWS { File = "frmsel.bmp"; };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
