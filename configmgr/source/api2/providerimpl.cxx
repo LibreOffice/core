@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-19 11:12:51 $
+ *  last change: $Author: jb $ $Date: 2000-12-19 17:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,9 @@ namespace configmgr
                     if (pValueNode)
                         pValueNode->getValue() >>= sDefaultLocale;
                 }
+
+                // should we clean this up ?
+                // m_pTreeMgr->releaseSubtree(ssUserProfile, m_xDefaultOptions);
             }
         }
         catch (container::NoSuchElementException&)
