@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.162 $
+ *  $Revision: 1.163 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-05 16:18:30 $
+ *  last change: $Author: cd $ $Date: 2002-12-10 13:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8244,6 +8244,8 @@ USHORT Window::GetAccessibleRole() const
 
             case WINDOW_SCROLLBARBOX: nRole = accessibility::AccessibleRole::FILLER; break;
 
+            case WINDOW_HELPTEXTWINDOW: nRole = accessibility::AccessibleRole::TOOLTIP; break;
+
             case WINDOW_WINDOW:
             case WINDOW_CONTROL:
             case WINDOW_BORDERWINDOW:
@@ -8350,7 +8352,13 @@ String Window::GetAccessibleDescription() const
     }
     else
     {
-        aAccessibleDescription = GetHelpText();
+        // Special code for help text windows. ZT asks the border window for the
+        // description so we have to forward this request to our inner window.
+        const Window* pWin = ((Window *)this)->ImplGetWindow();
+        if ( pWin->GetType() == WINDOW_HELPTEXTWINDOW )
+            aAccessibleDescription = pWin->GetHelpText();
+        else
+            aAccessibleDescription = GetHelpText();
     }
 
     return aAccessibleDescription;
