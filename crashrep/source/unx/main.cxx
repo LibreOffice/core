@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:17:57 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 11:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ const char *basename( const char *filename )
 
 using namespace std;
 
+static bool g_bNoUI = false;
 static bool g_bDebugMode = false;
 static int  g_signal = 0;
 
@@ -644,12 +645,14 @@ bool SendAsyncHTTPRequest(
     return request.success;
 }
 
-bool send_crash_report( WizardDialog &rDialog, const hash_map< string, string >& rSettings )
+
+bool send_crash_report( WizardDialog *pDialog, const hash_map< string, string >& rSettings )
 {
     if ( 0 == strcasecmp( rSettings.find( "CONTACT" )->second.c_str(), "true" ) &&
          !trim_string(rSettings.find( "EMAIL" )->second).length() )
     {
-        rDialog.show_messagebox( StringResource::get( "%ERROR_MSG_NOEMAILADDRESS%" ) );
+        if ( pDialog )
+            pDialog->show_messagebox( StringResource::get( "%ERROR_MSG_NOEMAILADDRESS%" ) );
         return false;
     }
 
@@ -672,32 +675,42 @@ bool send_crash_report( WizardDialog &rDialog, const hash_map< string, string >&
         WriteSOAPRequest( fptemp );
         fseek( fptemp, 0, SEEK_SET );
 
-        /*
-        bSuccess = SendHTTPRequest(
-            fptemp,
-            REPORT_SERVER, REPORT_PORT,
-            bUseProxy ? pProxyServer : NULL,
-            uProxyPort ? uProxyPort : 8080
-            );
-        */
-
-        bSuccess = SendAsyncHTTPRequest(
-            rDialog,
-            fptemp,
-            REPORT_SERVER, REPORT_PORT,
-            bUseProxy ? pProxyServer : NULL,
-            uProxyPort ? uProxyPort : 8080
-            );
+        if ( pDialog )
+            bSuccess = SendAsyncHTTPRequest(
+                *pDialog,
+                fptemp,
+                REPORT_SERVER, REPORT_PORT,
+                bUseProxy ? pProxyServer : NULL,
+                uProxyPort ? uProxyPort : 8080
+                );
+        else
+        {
+            bSuccess = SendHTTPRequest(
+                fptemp,
+                REPORT_SERVER, REPORT_PORT,
+                bUseProxy ? pProxyServer : NULL,
+                uProxyPort ? uProxyPort : 8080
+                );
+        }
 
         fclose( fptemp );
 
         if ( bSuccess )
-            rDialog.show_sendingstatus( FALSE );
+        {
+            if ( pDialog )
+                pDialog->show_sendingstatus( FALSE );
+        }
         else
-            rDialog.show_messagebox( StringResource::get( "%ERROR_MSG_PROXY%" ) );
+        {
+            if ( pDialog )
+                pDialog->show_messagebox( StringResource::get( "%ERROR_MSG_PROXY%" ) );
+        }
     }
     else
-        rDialog.show_messagebox( "%ERROR_MSG_DISK_FULL%" );
+    {
+        if ( pDialog )
+            pDialog->show_messagebox( StringResource::get("%ERROR_MSG_DISK_FULL%") );
+    }
 
     unlink( g_szDescriptionFile );
     unlink( g_szReportFile );
@@ -799,6 +812,10 @@ static long setup_commandline_arguments( int argc, char** argv, int *pSignal )
         {
             if ( ++n < argc )
                 g_strChecksumFileName = argv[n];
+        }
+        else if ( 0 == strcmp( argv[n], "-noui" ) )
+        {
+            g_bNoUI = true;
         }
         else if ( argv[n] && strlen(argv[n]) )
         {
@@ -952,6 +969,35 @@ static string get_profile_string( const char *pFileName, const char *pSectionNam
     return retValue;
 }
 
+static string get_environment_string( const char *pEnvName )
+{
+    const char *pEnvValue = getenv( pEnvName );
+
+    return pEnvValue ? string(pEnvValue) : string("");
+}
+
+static string read_from_file( const string& rFileName )
+{
+    string  content;
+    FILE *fp = fopen( rFileName.c_str(), "r" );
+
+    if ( fp )
+    {
+        char    buffer[256 + 1];
+        size_t  nBytesRead;
+
+        while( 0 != ( nBytesRead = fread( buffer, 1, sizeof(buffer) - 1,  fp ) ) )
+        {
+            buffer[nBytesRead] = 0;
+            content += buffer;
+        }
+
+        fclose( fp );
+    }
+
+    return content;
+}
+
 #define RCFILE ".crash_reportrc"
 
 static bool write_settings( const hash_map< string, string >& rSettings )
@@ -990,6 +1036,37 @@ static void read_settings( hash_map< string, string >& rSettings )
     rSettings[ "PORT" ] = get_profile_string( sRCFile.c_str(), "Options", "ProxyPort" );
     rSettings[ "USEPROXY" ] = get_profile_string( sRCFile.c_str(), "Options", "UseProxy" );
     rSettings[ "CONTACT" ] = get_profile_string( sRCFile.c_str(), "Options", "AllowContact" );
+    rSettings[ "DESCRIPTION" ] = "";
+    rSettings[ "TITLE" ] = "";
+}
+
+static void read_settings_from_environment( hash_map< string, string >& rSettings )
+{
+    string  strEnv;
+
+    strEnv = get_environment_string( "ERRORREPORT_RETURNADDRESS" );
+    if ( strEnv.length() )
+        rSettings[ "EMAIL" ] = strEnv;
+
+    strEnv = get_environment_string( "ERRORREPORT_HTTPPROXYSERVER" );
+    if ( strEnv.length() )
+        rSettings[ "SERVER" ] = strEnv;
+
+    strEnv = get_environment_string( "ERRORREPORT_HTTPPROXYPORT" );
+    if ( strEnv.length() )
+        rSettings[ "PORT" ] = strEnv;
+
+    rSettings[ "USEPROXY" ] =
+        0 == strcasecmp( get_environment_string( "ERRORREPORT_HTTPCONNECTIONTYPE" ).c_str(), "MANUALPROXY" ) ?
+        "true" : "false";
+
+    rSettings[ "CONTACT" ] = rSettings.find( "EMAIL" )->second.length() ? "true" : "false";
+
+    strEnv = get_environment_string( "ERRORREPORT_BODYFILE" );
+    if ( strEnv.length() )
+        rSettings[ "DESCRIPTION" ] = read_from_file( strEnv );
+
+    rSettings[ "TITLE" ] = get_environment_string( "ERRORREPORT_SUBJECT" );
 }
 
 static bool setup_version()
@@ -1062,7 +1139,7 @@ int main( int argc, char** argv )
 
     // Don't start if accessiblity is enabled or report server is not given
 
-    if ( !get_accessibility_state() && setup_version() )
+    if ( setup_version() )
     {
            gtk_set_locale ();
            gtk_init (&argc, &argv);
@@ -1073,20 +1150,33 @@ int main( int argc, char** argv )
 
         if ( write_stack( pid ) )
         {
-            WizardDialog aDialog;
+            if ( !get_accessibility_state() && !g_bNoUI )
+            {
+                WizardDialog aDialog;
 
-            hash_map< string, string >& rDialogSettings = aDialog.getSettings();
+                hash_map< string, string >& rDialogSettings = aDialog.getSettings();
 
-            read_settings( rDialogSettings );
+                read_settings( rDialogSettings );
+                read_settings_from_environment( rDialogSettings );
 
-            aDialog.insertPage( new WelcomePage( &aDialog ) );
-            aDialog.insertPage( new MainPage( &aDialog ) );
+                aDialog.insertPage( new WelcomePage( &aDialog ) );
+                aDialog.insertPage( new MainPage( &aDialog ) );
 
-            aDialog.show();
+                aDialog.show();
 
-            gtk_main();
+                gtk_main();
 
-            write_settings( rDialogSettings );
+                write_settings( rDialogSettings );
+            }
+            else
+            {
+                hash_map< string, string > aDialogSettings;
+
+                read_settings( aDialogSettings );
+                read_settings_from_environment( aDialogSettings );
+
+                send_crash_report( NULL, aDialogSettings );
+            }
 
             unlink( g_szStackFile );
 
