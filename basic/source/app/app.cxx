@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:23 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,10 @@
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 
 #include <ucbhelper/content.hxx>
+
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
 
 using namespace comphelper;
 using namespace ucb;
@@ -498,6 +502,12 @@ void BasicApp::Main( )
 
     SetSystemWindowMode( SYSTEMWINDOW_MODE_NOAUTOMODE );
     SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
+
+    // Instantiate a SvtSysLocale to avoid permant instatiation
+    // and deletion of SvtSysLocale_Impl in SvtSysLocale Ctor/Dtor
+    // because in the testtool szenario Basic is the only instance
+    // instatiating SvtSysLocale (#107417).
+    SvtSysLocale aSysLocale;
 
     PostUserEvent( LINK( this, BasicApp, LateInit ) );
     Execute();
