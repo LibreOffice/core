@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-16 16:49:21 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,8 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
         if(xNameAccess.is())
         {
             uno::Any aObj = xNameAccess->getByName(sObjectName);
-             uno::Reference< uno::XInterface >  xTmp = *(uno::Reference< uno::XInterface > *)aObj.getValue();
+            uno::Reference< uno::XInterface >  xTmp;
+            aObj >>= xTmp;
             xNamed = uno::Reference< container::XNamed >(xTmp, uno::UNO_QUERY);
         }
         aObjectNameED.SetText(sObjectName);

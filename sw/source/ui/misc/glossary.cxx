@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-09 12:45:40 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -796,7 +796,7 @@ IMPL_LINK( SwGlossaryDlg, BibHdl, Button *, EMPTYARG )
                     bIsWritable = !*(sal_Bool*)aAny.getValue();
                 }
             }
-            catch(...)
+            catch(Exception&)
             {}
             if(bIsWritable)
                 break;
@@ -1356,12 +1356,13 @@ void    SwGlossaryDlg::ResumeShowAutoText()
             if(sShortName.Len())
             {
                 uno::Any aGroup = _xAutoText->getByName(sGroup);
-                uno::Reference< XAutoTextGroup >  xGroup = *(uno::Reference< XAutoTextGroup > *)aGroup.getValue();
+                uno::Reference< XAutoTextGroup >  xGroup;
                 OUString uShortName(sShortName);
-                if(xGroup->hasByName(uShortName))
+                if((aGroup >>= xGroup) && xGroup->hasByName(uShortName))
                 {
                     uno::Any aEntry(xGroup->getByName(uShortName));
-                    uno::Reference< XAutoTextEntry >  xEntry = *(uno::Reference< XAutoTextEntry > *)aEntry.getValue();
+                    uno::Reference< XAutoTextEntry >  xEntry;
+                    aEntry >>= xEntry;
                     uno::Reference< XTextRange >  xRange(xCrsr, uno::UNO_QUERY);
                     xEntry->applyTo(xRange);
                 }

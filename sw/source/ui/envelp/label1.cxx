@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-09-14 14:53:53 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1138,7 +1138,8 @@ void SwVisitingCardPage::InitFrameControl()
     for(sal_uInt16 i = 0; i < aNames.getLength(); i++)
     {
         uno::Any aGroup = _xAutoText->getByName(pGroups[i]);
-        uno::Reference< text::XAutoTextGroup >  xGroup = *(uno::Reference< text::XAutoTextGroup > *)aGroup.getValue();
+        uno::Reference< text::XAutoTextGroup >  xGroup;
+        aGroup >>= xGroup;
         uno::Reference< container::XIndexAccess >  xIdxAcc(xGroup, uno::UNO_QUERY);
         if(!xIdxAcc.is() || xIdxAcc->getCount())
         {
@@ -1162,7 +1163,8 @@ void SwVisitingCardPage::InitFrameControl()
             uno::Any aGroup = _xAutoText->getByName(sCurGroupName);
             try
             {
-                uno::Reference< text::XAutoTextGroup >  xGroup = *(uno::Reference< text::XAutoTextGroup > *)aGroup.getValue();
+                uno::Reference< text::XAutoTextGroup >  xGroup;
+                aGroup >>= xGroup;
                 uno::Sequence< OUString > aBlockNames = xGroup->getElementNames();
                 uno::Sequence< OUString > aTitles = xGroup->getTitles() ;
 
@@ -1198,7 +1200,8 @@ IMPL_LINK( SwVisitingCardPage, FrameControlInitializedHdl, void*, EMPTYARG )
     if( sEntry.Len() && xGroup->hasByName( uEntry ) )
     {
         uno::Any aEntry(xGroup->getByName(uEntry));
-        uno::Reference< text::XAutoTextEntry >  xEntry = *(uno::Reference< text::XAutoTextEntry > *)aEntry.getValue();
+        uno::Reference< text::XAutoTextEntry >  xEntry;
+        aEntry >>= xEntry;
         if(xEntry.is())
         {
             uno::Reference< text::XTextRange >  xRange(xCrsr, uno::UNO_QUERY);
@@ -1309,8 +1312,8 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
             if( xFldMasters->hasByName( uFldName ))
             {
                 uno::Any aFirstName = xFldMasters->getByName( uFldName );
-                uno::Reference< beans::XPropertySet >  xFld =
-                    *(uno::Reference< beans::XPropertySet > *)aFirstName.getValue();
+                uno::Reference< beans::XPropertySet >  xFld;
+                aFirstName >>= xFld;
                 uno::Any aContent;
                 aContent <<= rItem.*p->pValue;
                 xFld->setPropertyValue( uCntName, aContent );

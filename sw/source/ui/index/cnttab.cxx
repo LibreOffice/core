@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-24 16:38:11 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:14:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,8 +801,7 @@ IMPL_LINK( SwMultiTOXTabDialog, CreateExample_Hdl, void*, EMPTYARG )
         {
             String sTmp( sSectionName ); sTmp += String::CreateFromInt32(i);
             uno::Any aSection = xSections->getByName( sTmp );
-            pxIndexSectionsArr[i]->xContainerSection = * (uno::Reference<
-                                text::XTextSection > *)aSection.getValue();
+            aSection >>= pxIndexSectionsArr[i]->xContainerSection;
          }
          uno::Reference< text::XDocumentIndexesSupplier >  xIdxSupp(xModel, uno::UNO_QUERY);
          uno::Reference< container::XIndexAccess >  xIdxs = xIdxSupp->getDocumentIndexes();
@@ -811,7 +810,8 @@ IMPL_LINK( SwMultiTOXTabDialog, CreateExample_Hdl, void*, EMPTYARG )
         {
             n--;
             uno::Any aIdx = xIdxs->getByIndex(n);
-             uno::Reference< text::XDocumentIndex >  xIdx = * (uno::Reference< text::XDocumentIndex > *)aIdx.getValue();
+            uno::Reference< text::XDocumentIndex >  xIdx;
+            aIdx >>= xIdx;
             xIdx->dispose();
         }
         CreateOrUpdateExample(eCurrentTOXType.eType);
@@ -963,8 +963,8 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             {
                 sal_Bool bOn = 0!=(nContentOptions&TOX_TEMPLATE    );
                 uno::Any aStyleNames(xIdxProps->getPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LEVEL_PARAGRAPH_STYLES))));
-                 uno::Reference< container::XIndexReplace >  xAcc =
-                    *(uno::Reference< container::XIndexReplace > *)aStyleNames.getValue();
+                uno::Reference< container::XIndexReplace >  xAcc;
+                aStyleNames >>= xAcc;
 
                 for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
                 {
@@ -1136,8 +1136,8 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         "wrong property type")
 
 
-                    uno::Reference< container::XIndexReplace >  xFormatAccess =
-                        *(uno::Reference< container::XIndexReplace > *)aFormatAccess.getValue();
+                    uno::Reference< container::XIndexReplace >  xFormatAccess;
+                    aFormatAccess >>= xFormatAccess;
                     uno::Any aLevelProp(&aSequPropVals, ::getCppuType((uno::Sequence<beans::PropertyValues>*)0));
                     xFormatAccess->replaceByIndex(nCurrLevel, aLevelProp);
                 }

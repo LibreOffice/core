@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-06-29 06:24:39 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:14:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1184,12 +1184,10 @@ String lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int32 nLen, 
     OUString uColumnTitle = rColumnTitle;
     for(sal_uInt16 i = 0; i < nLen; i++)
     {
+        OUString uTmp;
         if(pFields[i].Name == uColumnTitle &&
-            pFields[i].Value.getValueType() == ::getCppuType((const OUString*)0))
-
+            (pFields[i].Value >>= uTmp))
         {
-            OUString uTmp;
-            pFields[i].Value >>= uTmp;
             sRet = String(uTmp);
             break;
         }
@@ -1210,12 +1208,11 @@ IMPL_LINK( SwAuthMarkDlg, CompEntryHdl, ListBox*, pBox)
             if(xBibAccess->hasByName(uEntry))
             {
                 uno::Any aEntry(xBibAccess->getByName(uEntry));
-                if(aEntry.getValueType() == ::getCppuType((uno::Sequence<beans::PropertyValue>*)0))
-
+                uno::Sequence<beans::PropertyValue> aFieldProps;
+                if(aEntry >>= aFieldProps)
                 {
-                    uno::Sequence<beans::PropertyValue> aFieldProps = *(uno::Sequence<beans::PropertyValue>*)aEntry.getValue();
                     const beans::PropertyValue* pProps = aFieldProps.getConstArray();
-                    for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
+                    for(sal_uInt16 i = 0; i < AUTH_FIELD_END && i < aFieldProps.getLength(); i++)
                     {
                         m_sFields[i] = lcl_FindColumnEntry(
                                 pProps, aFieldProps.getLength(), m_sColumnTitles[i]);
@@ -1371,9 +1368,9 @@ IMPL_LINK(SwAuthMarkDlg, ChangeSourceHdl, RadioButton*, pButton)
             if(xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName(uPropName))
             {
                 uno::Any aNames = xPropSet->getPropertyValue(uPropName);
-                if(aNames.getValueType() == ::getCppuType((uno::Sequence<beans::PropertyValue>*)0))
+                uno::Sequence<beans::PropertyValue> aSeq;
+                if( aNames >>= aSeq)
                 {
-                    uno::Sequence<beans::PropertyValue> aSeq = *(uno::Sequence<beans::PropertyValue>*)aNames.getValue();
                     const beans::PropertyValue* pArr = aSeq.getConstArray();
                     for(sal_uInt16 i = 0; i < aSeq.getLength(); i++)
                     {
