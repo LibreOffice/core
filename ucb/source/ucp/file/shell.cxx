@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-14 11:22:10 $
+ *  last change: $Author: hro $ $Date: 2001-05-15 15:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3606,9 +3606,7 @@ void SAL_CALL shell::notifyPropertyChanges( std::list< PropertyChangeNotifier* >
 
 // Return value: not mounted
 
-#ifdef UNX
-extern "C" oslFileError osl_getRealPath(rtl_uString* strPath, rtl_uString** strRealPath);
-#endif
+oslFileError getResolvedURL(rtl_uString* ustrPath, rtl_uString** pustrResolvedURL);
 
 //----------------------------------------------------------------------------
 //  makeAbsolute Path
@@ -3718,12 +3716,11 @@ sal_Bool SAL_CALL shell::uncheckMountPoint( const rtl::OUString&  aUnqPath,
     {
         sal_Int32 nL = m_vecMountPoint[j].m_aDirectory.getLength();
 
-#ifdef UNX
         rtl::OUString   aRealUnqPath;
         oslFileError    error = osl_File_E_None;
 
         if ( !aRealUnqPath.pData->length )
-            error = osl_getRealPath( aAbsPath.pData, &aRealUnqPath.pData );
+            error = getResolvedURL( aAbsPath.pData, &aRealUnqPath.pData );
 
         rtl::OUString dir = m_vecMountPoint[j].m_aDirectory;
 
@@ -3734,18 +3731,6 @@ sal_Bool SAL_CALL shell::uncheckMountPoint( const rtl::OUString&  aUnqPath,
             aRedirectedPath += aRealUnqPath.copy( nL );
             return true;
         }
-#else
-        rtl::OUString dir = m_vecMountPoint[j].m_aDirectory;
-
-        if( aAbsPath.compareTo( dir,nL ) == 0  &&
-            ( aAbsPath.getLength() == nL || aAbsPath[nL] == '/' )
-        )
-        {
-            aRedirectedPath = m_vecMountPoint[j].m_aMountPoint;
-            aRedirectedPath += aAbsPath.copy( nL );
-            return true;
-        }
-#endif
     }
 
     return false;
