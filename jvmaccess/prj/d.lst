@@ -4,4 +4,5 @@ mkdir: %_DEST%\inc%_EXT%\jvmaccess
 ..\%__SRC%\bin\jvmaccess*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\lib\ijvmaccess.lib %_DEST%\lib%_EXT%\ijvmaccess.lib
 ..\%__SRC%\lib\libjvmaccess*.so.*.*.* %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libjvmaccess*.dylib* %_DEST%\lib%_EXT%\*
 linklib: libjvmaccess*.so.*.*.*
