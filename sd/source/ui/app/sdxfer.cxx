@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-04 11:06:52 $
+ *  last change: $Author: ka $ $Date: 2001-10-16 09:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,10 +405,12 @@ void SdTransferable::AddSupportedFormats()
         if( !bLateInit )
             CreateData();
 
+        if( pObjDesc )
+            AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
+
         if( pOLEDataHelper )
         {
             AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-            AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
             DataFlavorExVector              aVector( pOLEDataHelper->GetDataFlavorExVector() );
             DataFlavorExVector::iterator    aIter( aVector.begin() ), aEnd( aVector.end() );
@@ -439,7 +441,6 @@ void SdTransferable::AddSupportedFormats()
         else
         {
             AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-            AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
             AddFormat( SOT_FORMATSTR_ID_DRAWING );
             AddFormat( SOT_FORMAT_GDIMETAFILE );
             AddFormat( SOT_FORMAT_BITMAP );
