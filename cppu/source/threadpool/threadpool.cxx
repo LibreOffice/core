@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadpool.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:08 $
+ *  last change: $Author: jbu $ $Date: 2001-05-08 15:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,20 +72,6 @@
 
 using namespace ::std;
 using namespace ::osl;
-
-struct uno_threadpool_Handle
-{
-    /**
-     * Global Threadidentifier of the waiting thread
-     **/
-    uno_threadpool_Handle( const ByteSequence &aThreadId_ , sal_Int64 nDisposeId_ )
-        : aThreadId( aThreadId_ )
-        , nDisposeId( nDisposeId_ )
-        {}
-
-    ByteSequence aThreadId;
-    sal_Int64 nDisposeId;
-};
 
 namespace cppu_threadpool
 {
@@ -428,69 +414,63 @@ namespace cppu_threadpool
 
 using namespace cppu_threadpool;
 
+static oslInterlockedCount g_hPool;
 
-//------------------------------
-//
-// The C-Interface
-//
-//-------------------------------
-extern "C"  void SAL_CALL uno_threadpool_putRequest(
-    sal_Sequence *pThreadId, void *pThreadSpecificData,
-    void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ), sal_Bool bIsOneway )
-    SAL_THROW_EXTERN_C()
+extern "C" uno_ThreadPool SAL_CALL
+uno_threadpool_create() SAL_THROW_EXTERN_C()
 {
-    ThreadPool::getInstance()->addJob( pThreadId, bIsOneway, pThreadSpecificData,doRequest );
+    // Just ensure that the number is unique in this process
+    uno_ThreadPool h = ( uno_ThreadPool ) osl_incrementInterlockedCount( &g_hPool );
+    return h;
 }
 
-
-
-extern "C"  void SAL_CALL uno_threadpool_putReply(
-    sal_Sequence *pThreadId, void *pThreadSpecificData )
-    SAL_THROW_EXTERN_C()
+extern "C" void SAL_CALL
+uno_threadpool_attach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
-    ThreadPool::getInstance()->addJob( pThreadId, sal_False, pThreadSpecificData, 0 );
+    sal_Sequence *pThreadId = 0;
+    uno_getIdOfCurrentThread( &pThreadId );
+    ThreadPool::getInstance()->prepare( pThreadId );
+    rtl_byte_sequence_release( pThreadId );
+    uno_releaseIdFromCurrentThread();
 }
 
-
-extern "C"  struct uno_threadpool_Handle * SAL_CALL
-uno_threadpool_createHandle( sal_Int64 nDisposeId )
+extern "C" void SAL_CALL
+uno_threadpool_enter( uno_ThreadPool hPool , void **ppJob )
     SAL_THROW_EXTERN_C()
 {
     sal_Sequence *pThreadId = 0;
     uno_getIdOfCurrentThread( &pThreadId );
-
-    struct uno_threadpool_Handle *pHandle = new uno_threadpool_Handle( pThreadId, nDisposeId );
-    ThreadPool::getInstance()->prepare( pThreadId );
-
+    *ppJob =
+        ThreadPool::getInstance()->enter( pThreadId , (sal_Int64 ) hPool );
     rtl_byte_sequence_release( pThreadId );
-
-    return pHandle;
-}
-
-extern "C" void SAL_CALL uno_threadpool_enter(
-    struct uno_threadpool_Handle *pHandle , void **ppThreadSpecificData )
-    SAL_THROW_EXTERN_C()
-{
-    OSL_ASSERT( ppThreadSpecificData );
-
-    *ppThreadSpecificData =
-        ThreadPool::getInstance()->enter( pHandle->aThreadId , pHandle->nDisposeId );
-
     uno_releaseIdFromCurrentThread();
-    delete pHandle;
-}
-
-
-extern "C" void SAL_CALL
-uno_threadpool_disposeThreads( sal_Int64 nDisposeId )
-    SAL_THROW_EXTERN_C()
-{
-    ThreadPool::getInstance()->dispose( nDisposeId );
 }
 
 extern "C" void SAL_CALL
-uno_threadpool_stopDisposeThreads( sal_Int64 nDisposeId )
-    SAL_THROW_EXTERN_C()
+uno_threadpool_detach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
-    ThreadPool::getInstance()->stopDisposing( nDisposeId );
+    // we might do here some tiding up in case a thread called attach but never detach
+}
+
+extern "C" void SAL_CALL
+uno_threadpool_putJob(
+    uno_ThreadPool hPool,
+    sal_Sequence *pThreadId,
+    void *pJob,
+    void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ),
+    sal_Bool bIsOneway ) SAL_THROW_EXTERN_C()
+{
+    ThreadPool::getInstance()->addJob( pThreadId, bIsOneway, pJob ,doRequest );
+}
+
+extern "C" void SAL_CALL
+uno_threadpool_dispose( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
+{
+    ThreadPool::getInstance()->dispose( (sal_Int64 ) hPool );
+}
+
+extern "C" void SAL_CALL
+uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
+{
+    ThreadPool::getInstance()->stopDisposing( (sal_Int64) hPool );
 }
