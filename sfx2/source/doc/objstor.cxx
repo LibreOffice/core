@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 11:09:05 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,9 @@ sal_Bool SfxObjectShell::DoInitNew( SvStorage * pStor )
         if ( xModel.is() )
         {
             SfxItemSet *pSet = GetMedium()->GetItemSet();
-            pSet->Put( SfxStringItem( SID_FILTER_NAME, GetFactory().GetFilter(0)->GetFilterName() ) );
+            const SfxFilter* pFilter = GetFactory().GetFilter(0);
+            if ( pFilter )
+                pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetFilterName() ) );
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
             TransformItems( SID_OPENDOC, *pSet, aArgs );
             sal_Int32 nLength = aArgs.getLength();
@@ -797,7 +799,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
     sal_uInt32 nError = ERRCODE_NONE;
     SfxItemSet* pSet = pMedium->GetItemSet();
     SFX_ITEMSET_ARG( pSet, pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
-    SFX_ITEMSET_ARG( pSet, pData, SfxUsrAnyItem, SID_FILTER_DATA, sal_False );
+    SFX_ITEMSET_ARG( pSet, pData, SfxUnoAnyItem, SID_FILTER_DATA, sal_False );
     if ( !pData && !pOptions )
     {
         com::sun::star::uno::Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
@@ -834,7 +836,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
                                     Any aAny;
                                     aAny <<= pMedium->GetInputStream();
                                     if ( pSet->GetItemState( SID_INPUTSTREAM ) < SFX_ITEM_SET )
-                                    pSet->Put( SfxUsrAnyItem( SID_INPUTSTREAM, aAny ) );
+                                    pSet->Put( SfxUnoAnyItem( SID_INPUTSTREAM, aAny ) );
                                     if ( pSet->GetItemState( SID_FILE_NAME ) < SFX_ITEM_SET )
                                         pSet->Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
                                     if ( pSet->GetItemState( SID_FILTER_NAME ) < SFX_ITEM_SET )
@@ -865,7 +867,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
 
                                            SFX_ITEMSET_ARG( &aNewParams,
                                                          pData,
-                                                         SfxUsrAnyItem,
+                                                         SfxUnoAnyItem,
                                                          SID_FILTER_DATA,
                                                          sal_False );
                                            if ( pData )
@@ -1821,10 +1823,10 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 
     // copy version list from "old" medium to target medium, so it can be used on saving
     pMediumTmp->TransferVersionList_Impl( *pMedium );
-
+/*
     if ( pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
         SetError( GetMedium()->Unpack_Impl( pMedium->GetPhysicalName() ) );
-
+*/
     // an interaction handler here can aquire only in case of GUI Saving
     // and should be removed after the saving is done
     com::sun::star::uno::Reference< XInteractionHandler > xInteract;
@@ -1892,7 +1894,7 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
         String aFilterName;
         const SfxFilter *pFilter = NULL;
         if ( pFilterItem )
-            pFilter = GetFactory().GetFilterContainer()->GetFilter( aFilterName );
+            pFilter = GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
 
         SfxMedium *pMed = new SfxMedium(
             pSalvageItem->GetValue(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE, sal_False, pFilter );
@@ -1938,7 +1940,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
     SFX_ITEMSET_ARG( aParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
     sal_Bool bSaveTo = pSaveToItem ? pSaveToItem->GetValue() : sal_False;
 
-    const SfxFilter* pFilter = GetFactory().GetFilterContainer()->GetFilter( aFilterName );
+    const SfxFilter* pFilter = GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
     if ( !pFilter
         || !pFilter->CanExport()
         || !bSaveTo && !pFilter->CanImport() )
@@ -2073,7 +2075,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
     // set filter; if no filter is given, take the default filter of the factory
     if ( aFilterName.Len() )
-        pNewFile->SetFilter( GetFactory(), aFilterName );
+        pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName ) );
     else
         pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetFilter(0) );
 
@@ -2113,17 +2115,17 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         const SfxFilter *pFilt = rMatcher.GetFilter4ClipBoardId( nFormat );
         if ( pFilt )
         {
-            if ( pFilt->GetFilterContainer() != pNewFile->GetFilter()->GetFilterContainer() )
+            if ( pFilt->GetServiceName() != pNewFile->GetFilter()->GetServiceName() )
                 pNewFile->GetStorage()->SetClass( SvFactory::GetServerName( nFormat ), nFormat, pFilt->GetTypeName() );
         }
     }
-
+/*
     if ( GetMedium()->GetFilter() && ( GetMedium()->GetFilter()->GetFilterFlags() & SFX_FILTER_PACKED ) )
     {
         SfxMedium *pMed = bCopyTo ? pMedium : pNewFile;
         pNewFile->SetError( GetMedium()->Unpack_Impl( pMed->GetPhysicalName() ) );
     }
-
+*/
     // Save the document ( first as temporary file, then transfer to the target URL by committing the medium )
     sal_Bool bOk = sal_False;
     if ( !pNewFile->GetErrorCode() && SaveTo_Impl( *pNewFile, NULL, sal_True ) )
