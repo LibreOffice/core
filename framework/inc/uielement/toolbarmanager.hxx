@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:54:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 09:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         DECL_LINK( MenuButton, ToolBox * );
         DECL_LINK( MenuSelect, Menu * );
         DECL_LINK( MenuDeactivate, Menu * );
+        DECL_LINK( AsyncUpdateControllersHdl, Timer * );
 
         void RemoveControllers();
         rtl::OUString RetrieveLabelFromCommand( const rtl::OUString& aCmdURL );
@@ -218,6 +219,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         void AddImageOrientationListener();
         void UpdateImageOrientation();
         void ImplClearPopupMenu( ToolBox *pToolBar );
+        void RequestImages();
 
     protected:
         struct CommandInfo
@@ -264,6 +266,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >                          m_xImageOrientationListener;
         CommandToInfoMap                                                                                m_aCommandMap;
         SubToolBarToSubToolBarControllerMap                                                             m_aSubToolBarControllerMap;
+        Timer                                                                                           m_aAsyncUpdateControllersTimer;
 };
 
 }
