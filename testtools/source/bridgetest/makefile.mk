@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-23 17:09:34 $
+#   last change: $Author: kz $ $Date: 2005-01-18 13:28:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,15 +104,16 @@ UNOTYPES= \
             com.sun.star.lang.XSingleComponentFactory	\
         com.sun.star.uno.XComponentContext          
 
-SLOFILES= \
-        $(SLO)$/cppobj.obj	\
-        $(SLO)$/bridgetest.obj
+SLOFILES = \
+    $(SLO)$/bridgetest.obj \
+    $(SLO)$/cppobj.obj \
+    $(SLO)$/multi.obj
 
 # ---- test ----
 
 LIB1TARGET=$(SLB)$/cppobj.lib
 LIB1OBJFILES= \
-        $(SLO)$/cppobj.obj
+        $(SLO)$/cppobj.obj $(SLO)$/multi.obj
 
 SHL1TARGET = cppobj.uno
 SHL1STDLIBS= \
@@ -123,13 +124,17 @@ SHL1STDLIBS= \
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
-SHL1VERSIONMAP=component.map
+.IF "$(OS)$(CPU)$(COMNAME)" == "LINUXIgcc3"
+SHL1VERSIONMAP = component.LINUXIgcc3.map
+.ELSE
+SHL1VERSIONMAP = component.map
+.ENDIF
 
 # ---- test object ----
 
 LIB2TARGET=$(SLB)$/bridgetest.lib
 LIB2OBJFILES= \
-        $(SLO)$/bridgetest.obj
+        $(SLO)$/bridgetest.obj $(SLO)$/multi.obj
 
 SHL2TARGET = bridgetest.uno
 SHL2STDLIBS= \
@@ -140,7 +145,11 @@ SHL2STDLIBS= \
 SHL2LIBS=	$(LIB2TARGET)
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
-SHL2VERSIONMAP=component.map
+.IF "$(OS)$(CPU)$(COMNAME)" == "LINUXIgcc3"
+SHL2VERSIONMAP = component.LINUXIgcc3.map
+.ELSE
+SHL2VERSIONMAP = component.map
+.ENDIF
 
 
 
