@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 13:52:07 $
+ *  last change: $Author: rt $ $Date: 2001-07-11 09:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,10 +118,6 @@
 
 #ifndef _XMLOFF_FAMILIES_HXX
 #include "families.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLITMAP_HXX
-#include "xmlitmap.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
