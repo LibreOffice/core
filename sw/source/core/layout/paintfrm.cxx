@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-23 18:43:57 $
+ *  last change: $Author: ama $ $Date: 2001-04-25 12:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -993,6 +993,8 @@ void MA_FASTCALL InvertSizeBorderRect( SwRect &rRect, ViewShell *pSh )
 
 void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh )
 {
+    if( !rRect.HasArea() )
+        return;
     const OutputDevice *pOut = bFlyMetafile ?
                         pFlyMetafileOut : pSh->GetOut();
     Rectangle aTmp( rRect.SVRect() );
