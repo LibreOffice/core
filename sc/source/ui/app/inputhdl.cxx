@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 16:28:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1485,7 +1485,7 @@ BOOL ScInputHandler::StartTable( sal_Unicode cTyped, BOOL bFromCommand )
 
     BOOL bNewTable = FALSE;
 
-    if (!bModified && aCursorPos.Col()<=MAXCOL)
+    if (!bModified && ValidCol(aCursorPos.Col()))
     {
         if (pActiveViewSh)
         {
