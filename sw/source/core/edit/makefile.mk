@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: cmc $ $Date: 2001-02-08 13:17:55 $
+#   last change: $Author: jp $ $Date: 2001-10-18 12:18:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,9 +124,6 @@ SLOFILES =	\
         $(SLO)$/edws.obj \
         $(SLO)$/edsect.obj \
         $(SLO)$/tempauto.obj
-
-EXCEPTIONSFILES =	\
-        $(SLO)$/edtox.obj
 
 # --- Targets -------------------------------------------------------
 
