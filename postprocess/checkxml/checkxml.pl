@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: checkxml.pl,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: obo $ $Date: 2005-02-04 14:17:37 $
+#   last change: $Author: obo $ $Date: 2005-02-04 15:36:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,7 @@ print "Checking:$path\n";
 if ($err > 0)
 {
     print "$err damaged files encountered\n";
-
+    exit(1); # stop dmake
 } else
 {
     print "ok.\n";
