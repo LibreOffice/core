@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-01 16:08:28 $
+ *  last change: $Author: gt $ $Date: 2001-06-05 11:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,36 +70,43 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Workday
         {
             Text = "Liefert die fortlaufende Zahl des Datums, dass vor oder nach einer bestimmten Anzahl von Arbeitstagen liegt.";
+            Text[ english ] = "Returns the serial number of the date before or after a specified number of workdays";
         };
 
         String 2 // name of parameter 1         Workday
         {
             Text = "Ausgangsdatum";
+            Text[ english ] = "Ausgangsdatum";
         };
 
         String 3 // description of parameter 1  Workday
         {
             Text = "Ausgangsdatum";
+            Text[ english ] = "Ausgangsdatum";
         };
 
         String 4 // name of parameter 2         Workday
         {
             Text = "Tage";
+            Text[ english ] = "Tage";
         };
 
         String 5 // description of parameter 2  Workday
         {
             Text = "Anzahl Arbeitstage vor oder nach dem Ausgangsdatum.";
+            Text[ english ] = "Anzahl Arbeitstage vor oder nach dem Ausgangsdatum.";
         };
 
         String 6 // name of parameter 3         Workday
         {
             Text = "Freie Tage";
+            Text[ english ] = "Freie Tage";
         };
 
         String 7 // description of parameter 3  Workday
         {
             Text = "Liste mit Datumswerten freier Tage (Urlaub, Feiertage, etc.).";
+            Text[ english ] = "Liste mit Datumswerten freier Tage (Urlaub, Feiertage, etc.).";
         };
     };
 
@@ -108,36 +115,43 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Yearfrac
         {
             Text = "Berechnet die Differenz zwischen Ausgangsdatum und Enddatum als Bruchteil von Jahren.";
+            Text[ english ] = "Returns the year fraction representing the number of whole days between start_date and end_date";
         };
 
         String 2 // name of parameter 1         Yearfrac
         {
             Text = "Ausgangsdatum";
+            Text[ english ] = "Ausgangsdatum";
         };
 
         String 3 // description of parameter 1  Yearfrac
         {
             Text = "Ausgangsdatum";
+            Text[ english ] = "Ausgangsdatum";
         };
 
         String 4 // name of parameter 2         Yearfrac
         {
             Text = "Enddatum";
+            Text[ english ] = "Enddatum";
         };
 
         String 5 // description of parameter 2  Yearfrac
         {
             Text = "Enddatum";
+            Text[ english ] = "Enddatum";
         };
 
         String 6 // name of parameter 3         Yearfrac
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 7 // description of parameter 3  Yearfrac
         {
             Text = "Basis für die Bestimmung der Zinstage";
+            Text[ english ] = "Basis für die Bestimmung der Zinstage";
         };
     };
 
@@ -146,26 +160,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Edate
         {
             Text = "Liefert die fortlaufende Zahl des Datums, das eine bestimmte Anzahl Monate vor bzw. nach dem Ausgangsdatum liegt.";
+            Text[ english ] = "Returns the serial number of the date that is the indicated number of months before or after the start date";
         };
 
         String 2 // name of parameter 1         Edate
         {
             Text = "Ausgangsdatum";
+            Text[ english ] = "Ausgangsdatum";
         };
 
         String 3 // description of parameter 1  Edate
         {
             Text = "Ausgangsdatum";
+            Text[ english ] = "Ausgangsdatum";
         };
 
         String 4 // name of parameter 2         Edate
         {
             Text = "Monate";
+            Text[ english ] = "Monate";
         };
 
         String 5 // description of parameter 2  Edate
         {
             Text = "Anzahl der Monate vor oder nach dem Ausgangsdatum.";
+            Text[ english ] = "Anzahl der Monate vor oder nach dem Ausgangsdatum.";
         };
     };
 
@@ -174,26 +193,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Weeknum_add
         {
             Text = "Liefert eine Zahl, die angibt, in welche Woche eines Jahres das angegebene Datum fällt.";
+            Text[ english ] = "Returns the week number in year";
         };
 
         String 2 // name of parameter 1         Weeknum_add
         {
             Text = "Datum";
+            Text[ english ] = "Datum";
         };
 
         String 3 // description of parameter 1  Weeknum_add
         {
             Text = "Datum";
+            Text[ english ] = "Datum";
         };
 
         String 4 // name of parameter 2         Weeknum_add
         {
             Text = "Rückgabetyp";
+            Text[ english ] = "Rückgabetyp";
         };
 
         String 5 // description of parameter 2  Weeknum_add
         {
             Text = "Eine Zahl von 1 bis 3, die angibt, mit welchem Tag eine Woche beginnt.";
+            Text[ english ] = "Eine Zahl von 1 bis 3, die angibt, mit welchem Tag eine Woche beginnt.";
         };
     };
 
@@ -202,26 +226,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description EoMonth
         {
             Text = "Liefert die fortlaufende Zahl des Datums, das den letzten Tag des Monats representiert, der eine bestimmte Anzahl von Monaten vor oder nach dem Ausgangsdatum liegt.";
+            Text[ english ] = "Returns the serial number of the last day of the month before or after a specified number of months";
         };
 
         String 2 // name of parameter 1         EoMonth
         {
             Text = "Ausgangsdatum";
+            Text[ english ] = "Ausgangsdatum";
         };
 
         String 3 // description of parameter 1  EoMonth
         {
             Text = "Ausgangsdatum";
+            Text[ english ] = "Ausgangsdatum";
         };
 
         String 4 // name of parameter 2         EoMonth
         {
             Text = "Monate";
+            Text[ english ] = "Monate";
         };
 
         String 5 // description of parameter 2  EoMonth
         {
             Text = "Anzahl der Monate vor oder nach dem Ausgangsdatum";
+            Text[ english ] = "Anzahl der Monate vor oder nach dem Ausgangsdatum";
         };
     };
 
@@ -230,36 +259,43 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Networkdays
         {
             Text = "Liefert die Anzahl Tage in einem Zeitintervall";
+            Text[ english ] = "Returns the number of whole workdays between to dates";
         };
 
         String 2 // name of parameter 1         Networkdays
         {
             Text = "Ausgangsdatum";
+            Text[ english ] = "Ausgangsdatum";
         };
 
         String 3 // description of parameter 1  Networkdays
         {
             Text = "Ausgangsdatum";
+            Text[ english ] = "Ausgangsdatum";
         };
 
         String 4 // name of parameter 2         Networkdays
         {
             Text = "Enddatum";
+            Text[ english ] = "Enddatum";
         };
 
         String 5 // description of parameter 2  Networkdays
         {
             Text = "Enddatum";
+            Text[ english ] = "Enddatum";
         };
 
         String 6 // name of parameter 3         Networkdays
         {
             Text = "Freie Tage";
+            Text[ english ] = "Freie Tage";
         };
 
         String 7 // description of parameter 3  Networkdays
         {
             Text = "Liste mit Datumswerten, die die freien Tage (Urlaub, Feiertage, etc.) darstellen.";
+            Text[ english ] = "Liste mit Datumswerten, die die freien Tage (Urlaub, Feiertage, etc.) darstellen.";
         };
     };
 
@@ -268,16 +304,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Iseven_add
         {
             Text = "Gibt den Wert WAHR zurück, wenn die Zahl gerade ist.";
+            Text[ english ] = "Returns true if the number is even";
         };
 
         String 2 // name of parameter 1         Iseven_add
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Iseven_add
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
     };
 
@@ -286,16 +325,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Isodd_add
         {
             Text = "Gibt den Wert WAHR zurück, wenn die Zahl ungerade ist.";
+            Text[ english ] = "Returns true if the number is odd";
         };
 
         String 2 // name of parameter 1         Isodd_add
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Isodd_add
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
     };
 
@@ -304,16 +346,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Multinomial
         {
             Text = "Berechnet den Polynomialkoeffizienten einer Gruppe von Zahlen.";
+            Text[ english ] = "Returns the multinomial of a set of numbers";
         };
 
         String 2 // name of parameter 1         Multinomial
         {
             Text = "Zahl(en)";
+            Text[ english ] = "Zahl(en)";
         };
 
         String 3 // description of parameter 1  Multinomial
         {
             Text = "Zahl oder Liste von Zahlen, deren Polynomialkoeffizienten bestimmt werden soll.";
+            Text[ english ] = "Zahl oder Liste von Zahlen, deren Polynomialkoeffizienten bestimmt werden soll.";
         };
     };
 
@@ -322,46 +367,55 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Seriessum
         {
             Text = "Berechnet die Summe von Potenzen.";
+            Text[ english ] = "Returns the sum of a power series based on the formula";
         };
 
         String 2 // name of parameter 1         Seriessum
         {
             Text = "X";
+            Text[ english ] = "X";
         };
 
         String 3 // description of parameter 1  Seriessum
         {
             Text = "Unabhängige Variable der Potenzreihe.";
+            Text[ english ] = "Unabhängige Variable der Potenzreihe.";
         };
 
         String 4 // name of parameter 2         Seriessum
         {
             Text = "N";
+            Text[ english ] = "N";
         };
 
         String 5 // description of parameter 2  Seriessum
         {
             Text = "Anfangspotenz, in die x erhoben werden soll.";
+            Text[ english ] = "Anfangspotenz, in die x erhoben werden soll.";
         };
 
         String 6 // name of parameter 3         Seriessum
         {
             Text = "M";
+            Text[ english ] = "M";
         };
 
         String 7 // description of parameter 3  Seriessum
         {
             Text = "Inkrement, um das n in jedem Glied der Reihe vergrößert werden soll.";
+            Text[ english ] = "Inkrement, um das n in jedem Glied der Reihe vergrößert werden soll.";
         };
 
         String 8 // name of parameter 4         Seriessum
         {
             Text = "Koeffizienten";
+            Text[ english ] = "Koeffizienten";
         };
 
         String 9 // description of parameter 4  Seriessum
         {
             Text = "Gruppe von Koeffizienten, mit denen aufeinanderfolgende Potenzen der Variablen x multipliziert werden.";
+            Text[ english ] = "Gruppe von Koeffizienten, mit denen aufeinanderfolgende Potenzen der Variablen x multipliziert werden.";
         };
     };
 
@@ -370,26 +424,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Quotient
         {
             Text = "Gibt den ganzzahligen Anteil einer Division zurück.";
+            Text[ english ] = "Returns the integer portion of a division";
         };
 
         String 2 // name of parameter 1         Quotient
         {
             Text = "Zähler";
+            Text[ english ] = "Zähler";
         };
 
         String 3 // description of parameter 1  Quotient
         {
             Text = "Zähler (Divident)";
+            Text[ english ] = "Zähler (Divident)";
         };
 
         String 4 // name of parameter 2         Quotient
         {
             Text = "Nenner";
+            Text[ english ] = "Nenner";
         };
 
         String 5 // description of parameter 2  Quotient
         {
             Text = "Nenner (Divisor)";
+            Text[ english ] = "Nenner (Divisor)";
         };
     };
 
@@ -398,26 +457,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Mround
         {
             Text = "Liefert eine auf das Vielfache gerundete Zahl.";
+            Text[ english ] = "Returns a number rounded to the desire multiple";
         };
 
         String 2 // name of parameter 1         Mround
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Mround
         {
             Text = "Die zu rundende Zahl";
+            Text[ english ] = "Die zu rundende Zahl";
         };
 
         String 4 // name of parameter 2         Mround
         {
             Text = "Vielfaches";
+            Text[ english ] = "Vielfaches";
         };
 
         String 5 // description of parameter 2  Mround
         {
             Text = "Der Wert, auf dessen Vielfaches gerundet werden soll.";
+            Text[ english ] = "Der Wert, auf dessen Vielfaches gerundet werden soll.";
         };
     };
 
@@ -426,16 +490,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description SqrtPI
         {
             Text = "Berechnet die Wurzel aus einer mit Pi multiplizierten Zahl.";
+            Text[ english ] = "Returns the square root of ( number * pi )";
         };
 
         String 2 // name of parameter 1         SqrtPI
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  SqrtPI
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
     };
 
@@ -444,26 +511,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Randbetween
         {
             Text = "Liefert eine ganze Zufallszahl aus dem angegebenen Bereich.";
+            Text[ english ] = "Returns a random integer number between the numbers you specify";
         };
 
         String 2 // name of parameter 1         Randbetween
         {
             Text = "Kleinste Zahl";
+            Text[ english ] = "Kleinste Zahl";
         };
 
         String 3 // description of parameter 1  Randbetween
         {
             Text = "Die kleinste Zahl, die geliefert werden soll.";
+            Text[ english ] = "Die kleinste Zahl, die geliefert werden soll.";
         };
 
         String 4 // name of parameter 2         Randbetween
         {
             Text = "Größte Zahl";
+            Text[ english ] = "Größte Zahl";
         };
 
         String 5 // description of parameter 2  Randbetween
         {
             Text = "Die größte Zahl, die geliefert werden soll.";
+            Text[ english ] = "Die größte Zahl, die geliefert werden soll.";
         };
     };
 
@@ -472,16 +544,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Gcd_add
         {
             Text = "Liefert den größten gemeinsamen Teiler.";
+            Text[ english ] = "Returns the greatest common divisor";
         };
 
         String 2 // name of parameter 1         Gcd_add
         {
             Text = "Zahl(en)";
+            Text[ english ] = "Zahl(en)";
         };
 
         String 3 // description of parameter 1  Gcd_add
         {
             Text = "Zahl oder Liste von Zahlen";
+            Text[ english ] = "Zahl oder Liste von Zahlen";
         };
     };
 
@@ -490,16 +565,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Lcm_add
         {
             Text = "Liefert das kleinste gemeinsame Vielfache.";
+            Text[ english ] = "Returns the least common multiple";
         };
 
         String 2 // name of parameter 1         Lcm_add
         {
             Text = "Zahl(en)";
+            Text[ english ] = "Zahl(en)";
         };
 
         String 3 // description of parameter 1  Lcm_add
         {
             Text = "Zahl oder Liste von Zahlen";
+            Text[ english ] = "Zahl oder Liste von Zahlen";
         };
     };
 
@@ -508,26 +586,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description BesselI
         {
             Text = "Berechnet die modifizierte Besselfunktion In(x).";
+            Text[ english ] = "Returns the modified Bessel function In(x)";
         };
 
         String 2 // name of parameter 1         BesselI
         {
             Text = "X";
+            Text[ english ] = "X";
         };
 
         String 3 // description of parameter 1  BesselI
         {
             Text = "X";
+            Text[ english ] = "X";
         };
 
         String 4 // name of parameter 2         BesselI
         {
             Text = "N";
+            Text[ english ] = "N";
         };
 
         String 5 // description of parameter 2  BesselI
         {
             Text = "Ordnung der Besselfunktion";
+            Text[ english ] = "Ordnung der Besselfunktion";
         };
     };
 
@@ -536,26 +619,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description BesselJ
         {
             Text = "Berechnet die Besselfunktion Jn(x).";
+            Text[ english ] = "Returns the Bessel function Jn(x)";
         };
 
         String 2 // name of parameter 1         BesselJ
         {
             Text = "X";
+            Text[ english ] = "X";
         };
 
         String 3 // description of parameter 1  BesselJ
         {
             Text = "X";
+            Text[ english ] = "X";
         };
 
         String 4 // name of parameter 2         BesselJ
         {
             Text = "N";
+            Text[ english ] = "N";
         };
 
         String 5 // description of parameter 2  BesselJ
         {
             Text = "Ordnung der Besselfunktion";
+            Text[ english ] = "Ordnung der Besselfunktion";
         };
     };
 
@@ -564,26 +652,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description BesselK
         {
             Text = "Berechnet die modifizierte Besselfunktion Kn(x).";
+            Text[ english ] = "Returns the Bessel function Kn(x)";
         };
 
         String 2 // name of parameter 1         BesselK
         {
             Text = "X";
+            Text[ english ] = "X";
         };
 
         String 3 // description of parameter 1  BesselK
         {
             Text = "X";
+            Text[ english ] = "X";
         };
 
         String 4 // name of parameter 2         BesselK
         {
             Text = "N";
+            Text[ english ] = "N";
         };
 
         String 5 // description of parameter 2  BesselK
         {
             Text = "Ordnung der Besselfunktion";
+            Text[ english ] = "Ordnung der Besselfunktion";
         };
     };
 
@@ -592,27 +685,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description BesselY
         {
             Text = "Berechnet die Besselfunktion Yn(x).";
+            Text[ english ] = "Returns the Bessel function Yn(x)";
         };
 
         String 2 // name of parameter 1         BesselY
         {
             Text = "X";
+            Text[ english ] = "X";
         };
 
         String 3 // description of parameter 1  BesselY
         {
             Text = "X";
+            Text[ english ] = "X";
         };
 
         String 4 // name of parameter 2         BesselY
         {
             Text = "N";
+            Text[ english ] = "N";
         };
 
         String 5 // description of parameter 2  BesselY
         {
-            Text = "";
             Text = "Ordnung der Besselfunktion";
+            Text[ english ] = "Ordnung der Besselfunktion";
         };
     };
 
@@ -621,26 +718,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Bin2Oct
         {
             Text = "Wandelt eine (Binär-) Dualzahl in eine Oktalzahl um.";
+            Text[ english ] = "Converts a binary number to octal";
         };
 
         String 2 // name of parameter 1         Bin2Oct
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Bin2Oct
         {
             Text = "Dualzahl (als Text)";
+            Text[ english ] = "Dualzahl (als Text)";
         };
 
         String 4 // name of parameter 2         Bin2Oct
         {
             Text = "Stellen";
+            Text[ english ] = "Stellen";
         };
 
         String 5 // description of parameter 2  Bin2Oct
         {
             Text = "Anzahl der verwendeten Stellen.";
+            Text[ english ] = "Anzahl der verwendeten Stellen.";
         };
     };
 
@@ -649,16 +751,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Bin2Dec
         {
             Text = "Wandelt eine (Binär-) Dualzahl in eine Dezimalzahl um.";
+            Text[ english ] = "Converts a binary number to decimal";
         };
 
         String 2 // name of parameter 1         Bin2Dec
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Bin2Dec
         {
             Text = "Dualzahl (als Text)";
+            Text[ english ] = "Dualzahl (als Text)";
         };
     };
 
@@ -667,26 +772,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Bin2Hex
         {
             Text = "Wandelt eine (Binär-) Dualzahl in eine Hexadezimalzahl um.";
+            Text[ english ] = "Converts a binary number to hexadecimal";
         };
 
         String 2 // name of parameter 1         Bin2Hex
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Bin2Hex
         {
             Text = "Dualzahl (als Text)";
+            Text[ english ] = "Dualzahl (als Text)";
         };
 
         String 4 // name of parameter 2         Bin2Hex
         {
             Text = "Stellen";
+            Text[ english ] = "Stellen";
         };
 
         String 5 // description of parameter 2  Bin2Hex
         {
             Text = "Anzahl der verwendeten Stellen.";
+            Text[ english ] = "Anzahl der verwendeten Stellen.";
         };
     };
 
@@ -695,26 +805,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Oct2Bin
         {
             Text = "Wandelt eine Oktalzahl in eine (Binär-) Dualzahl um.";
+            Text[ english ] = "Converts a octal number to binary";
         };
 
         String 2 // name of parameter 1         Oct2Bin
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Oct2Bin
         {
             Text = "Oktalzahl (als Text)";
+            Text[ english ] = "Oktalzahl (als Text)";
         };
 
         String 4 // name of parameter 2         Oct2Bin
         {
             Text = "Stellen";
+            Text[ english ] = "Stellen";
         };
 
         String 5 // description of parameter 2  Oct2Bin
         {
             Text = "Anzahl der verwendeten Stellen.";
+            Text[ english ] = "Anzahl der verwendeten Stellen.";
         };
     };
 
@@ -723,16 +838,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Oct2Dec
         {
             Text = "Wandelt eine Oktalzahl in eine Dezimalzahl um.";
+            Text[ english ] = "Converts a octal number to decimal";
         };
 
         String 2 // name of parameter 1         Oct2Dec
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Oct2Dec
         {
             Text = "Oktalzahl (als Text)";
+            Text[ english ] = "Oktalzahl (als Text)";
         };
     };
 
@@ -741,26 +859,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Oct2Hex
         {
             Text = "Wandelt eine Oktalzahl in eine Hexadezimalzahl um.";
+            Text[ english ] = "Converts a octal number to hexadecimal";
         };
 
         String 2 // name of parameter 1         Oct2Hex
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Oct2Hex
         {
             Text = "Oktalzahl (als Text)";
+            Text[ english ] = "Oktalzahl (als Text)";
         };
 
         String 4 // name of parameter 2         Oct2Hex
         {
             Text = "Stellen";
+            Text[ english ] = "Stellen";
         };
 
         String 5 // description of parameter 2  Oct2Hex
         {
             Text = "Anzahl der verwendeten Stellen.";
+            Text[ english ] = "Anzahl der verwendeten Stellen.";
         };
     };
 
@@ -769,26 +892,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Dec2Bin
         {
             Text = "Wandelt eine Dezimalzahl in eine (Binär-) Dualzahl um.";
+            Text[ english ] = "Converts a decimal number to binary";
         };
 
         String 2 // name of parameter 1         Dec2Bin
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Dec2Bin
         {
             Text = "Dezimalzahl";
+            Text[ english ] = "Dezimalzahl";
         };
 
         String 4 // name of parameter 2         Dec2Bin
         {
             Text = "Stellen";
+            Text[ english ] = "Stellen";
         };
 
         String 5 // description of parameter 2  Dec2Bin
         {
             Text = "Anzahl der verwendeten Stellen.";
+            Text[ english ] = "Anzahl der verwendeten Stellen.";
         };
     };
 
@@ -797,26 +925,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Dec2Hex
         {
             Text = "Wandelt eine Dezimalzahl in eine Hexadezimalzahl um.";
+            Text[ english ] = "Converts a decimal number to hexadecimal";
         };
 
         String 2 // name of parameter 1         Dec2Hex
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Dec2Hex
         {
             Text = "Dezimalzahl";
+            Text[ english ] = "Dezimalzahl";
         };
 
         String 4 // name of parameter 2         Dec2Hex
         {
             Text = "Stellen";
+            Text[ english ] = "Stellen";
         };
 
         String 5 // description of parameter 2  Dec2Hex
         {
             Text = "Anzahl der verwendeten Stellen.";
+            Text[ english ] = "Anzahl der verwendeten Stellen.";
         };
     };
 
@@ -825,26 +958,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Dec2Oct
         {
             Text = "Wandelt eine Dezimalzahl in eine Oktalzahl um.";
+            Text[ english ] = "Wandelt eine Dezimalzahl in eine Oktalzahl um.";
         };
 
         String 2 // name of parameter 1         Dec2Oct
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Dec2Oct
         {
             Text = "Dezimalzahl";
+            Text[ english ] = "Dezimalzahl";
         };
 
         String 4 // name of parameter 2         Dec2Oct
         {
             Text = "Stellen";
+            Text[ english ] = "Stellen";
         };
 
         String 5 // description of parameter 2  Dec2Oct
         {
             Text = "Anzahl der verwendeten Stellen.";
+            Text[ english ] = "Anzahl der verwendeten Stellen.";
         };
     };
 
@@ -853,26 +991,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Hex2Bin
         {
             Text = "Wandelt eine Hexadezimalzahl in eine (Binär-) Dualzahl um.";
+            Text[ english ] = "Converts a hexadecimal number to binary";
         };
 
         String 2 // name of parameter 1         Hex2Bin
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Hex2Bin
         {
             Text = "Hexadezimalzahl (als Text)";
+            Text[ english ] = "Hexadezimalzahl (als Text)";
         };
 
         String 4 // name of parameter 2         Hex2Bin
         {
             Text = "Stellen";
+            Text[ english ] = "Stellen";
         };
 
         String 5 // description of parameter 2  Hex2Bin
         {
             Text = "Anzahl der verwendeten Stellen.";
+            Text[ english ] = "Anzahl der verwendeten Stellen.";
         };
     };
 
@@ -881,16 +1024,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Hex2Dec
         {
             Text = "Wandelt eine Hexadezimalzahl in eine Dezimalzahl um.";
+            Text[ english ] = "Converts a hexadecimal number to decimal";
         };
 
         String 2 // name of parameter 1         Hex2Dec
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Hex2Dec
         {
             Text = "Hexadezimalzahl (als Text)";
+            Text[ english ] = "Hexadezimalzahl (als Text)";
         };
     };
 
@@ -899,26 +1045,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Hex2Oct
         {
             Text = "Wandelt eine Hexadezimalzahl in eine Oktalzahl um.";
+            Text[ english ] = "Converts a hexadecimal number to octal";
         };
 
         String 2 // name of parameter 1         Hex2Oct
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Hex2Oct
         {
             Text = "Hexadezimalzahl (als Text)";
+            Text[ english ] = "Hexadezimalzahl (als Text)";
         };
 
         String 4 // name of parameter 2         Hex2Oct
         {
             Text = "Stellen";
+            Text[ english ] = "Stellen";
         };
 
         String 5 // description of parameter 2  Hex2Oct
         {
             Text = "Anzahl der verwendeten Stellen.";
+            Text[ english ] = "Anzahl der verwendeten Stellen.";
         };
     };
 
@@ -927,26 +1078,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Delta
         {
             Text = "Überprüft, ob zwei Werte gleich sind.";
+            Text[ english ] = "Tests wether two numbers are equal";
         };
 
         String 2 // name of parameter 1         Delta
         {
             Text = "Zahl 1";
+            Text[ english ] = "Zahl 1";
         };
 
         String 3 // description of parameter 1  Delta
         {
             Text = "Erste Zahl";
+            Text[ english ] = "Erste Zahl";
         };
 
         String 4 // name of parameter 2         Delta
         {
             Text = "Zahl 2";
+            Text[ english ] = "Zahl 2";
         };
 
         String 5 // description of parameter 2  Delta
         {
             Text = "Zweite Zahl";
+            Text[ english ] = "Zweite Zahl";
         };
     };
 
@@ -955,26 +1111,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Erf
         {
             Text = "Liefert die Gauss'sche Fehlerfunktion.";
+            Text[ english ] = "Returns the error function";
         };
 
         String 2 // name of parameter 1         Erf
         {
             Text = "Untere Grenze";
+            Text[ english ] = "Untere Grenze";
         };
 
         String 3 // description of parameter 1  Erf
         {
             Text = "Untere Grenze zur Integration.";
+            Text[ english ] = "Untere Grenze zur Integration.";
         };
 
         String 4 // name of parameter 2         Erf
         {
             Text = "Obere Grenze";
+            Text[ english ] = "Obere Grenze";
         };
 
         String 5 // description of parameter 2  Erf
         {
             Text = "Obere Grenze zur Integration.";
+            Text[ english ] = "Obere Grenze zur Integration.";
         };
     };
 
@@ -983,16 +1144,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Erfc
         {
             Text = "Liefert das Komplement zur Gauss'schen Fehlerfunktion.";
+            Text[ english ] = "Returns the complementary error function";
         };
 
         String 2 // name of parameter 1         Erfc
         {
             Text = "Untere Grenze";
+            Text[ english ] = "Untere Grenze";
         };
 
         String 3 // description of parameter 1  Erfc
         {
             Text = "Untere Grenze zur Integration.";
+            Text[ english ] = "Untere Grenze zur Integration.";
         };
     };
 
@@ -1001,26 +1165,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description GeStep
         {
             Text = "Rundet eine Zahl auf die nächstkleinere ganze Zahl ab.";
+            Text[ english ] = "Tests wether a number is greater than a threshold value";
         };
 
         String 2 // name of parameter 1         GeStep
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  GeStep
         {
             Text = "An Schwellenwert zu überprüfender Wert.";
+            Text[ english ] = "An Schwellenwert zu überprüfender Wert.";
         };
 
         String 4 // name of parameter 2         GeStep
         {
             Text = "Schwellenwert";
+            Text[ english ] = "Schwellenwert";
         };
 
         String 5 // description of parameter 2  GeStep
         {
             Text = "Schwellenwert";
+            Text[ english ] = "Schwellenwert";
         };
     };
 
@@ -1029,16 +1198,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Factdouble
         {
             Text = "Liefert die Fakultät zu Zahl mit der Schrittlänge 2.";
+            Text[ english ] = "Returns the double factorial of a number";
         };
 
         String 2 // name of parameter 1         Factdouble
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Factdouble
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
     };
 
@@ -1047,16 +1219,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Imabs
         {
             Text = "Liefert den Betrag einer komplexen Zahl.";
+            Text[ english ] = "Returns the absolute value (modulus) of a complex number";
         };
 
         String 2 // name of parameter 1         Imabs
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 3 // description of parameter 1  Imabs
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
     };
 
@@ -1065,16 +1240,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Imaginary
         {
             Text = "Liefert den Imaginärteil einer komplexen Zahl.";
+            Text[ english ] = "Returns the imaginary coefficient of a complex number";
         };
 
         String 2 // name of parameter 1         Imaginary
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 3 // description of parameter 1  Imaginary
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
     };
 
@@ -1083,26 +1261,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Impower
         {
             Text = "Potenziert eine komplexe Zahl mit einer ganzen Zahl.";
+            Text[ english ] = "Returns a complex number raised by a real number";
         };
 
         String 2 // name of parameter 1         Impower
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 3 // description of parameter 1  Impower
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 4 // name of parameter 2         Impower
         {
             Text = "Potenz";
+            Text[ english ] = "Potenz";
         };
 
         String 5 // description of parameter 2  Impower
         {
             Text = "Exponent, mit dem die komplexe Zahl potenziert wird.";
+            Text[ english ] = "Exponent, mit dem die komplexe Zahl potenziert wird.";
         };
     };
 
@@ -1111,16 +1294,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Imargument
         {
             Text = "Liefert den Winkel im Bogenmaß zur Darstellung der komplexen Zahl in trigonometrischer Schreibweise.";
+            Text[ english ] = "Returns the argument q, an angle expressed in radians";
         };
 
         String 2 // name of parameter 1         Imargument
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 3 // description of parameter 1  Imargument
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
     };
 
@@ -1129,16 +1315,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Imcos
         {
             Text = "Liefert den Kosinus einer komplexen Zahl.";
+            Text[ english ] = "Returns the cosine of a complex number";
         };
 
         String 2 // name of parameter 1         Imcos
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 3 // description of parameter 1  Imcos
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
     };
 
@@ -1147,26 +1336,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Imdiv
         {
             Text = "Liefert den Quotient zweier komplexer Zahlen.";
+            Text[ english ] = "Returns the quotient of two complex numbers";
         };
 
         String 2 // name of parameter 1         Imdiv
         {
             Text = "Zähler";
+            Text[ english ] = "Zähler";
         };
 
         String 3 // description of parameter 1  Imdiv
         {
             Text = "Zähler (Dividend)";
+            Text[ english ] = "Zähler (Dividend)";
         };
 
         String 4 // name of parameter 2         Imdiv
         {
             Text = "Nenner";
+            Text[ english ] = "Nenner";
         };
 
         String 5 // description of parameter 2  Imdiv
         {
             Text = "Nenner( Divisor )";
+            Text[ english ] = "Nenner( Divisor )";
         };
     };
 
@@ -1175,16 +1369,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Imexp
         {
             Text = "Liefert die algebraische Form einer in exponentieller Darstellung vorliegenden komplexen Zahl.";
+            Text[ english ] = "Returns the exponential of a complex number";
         };
 
         String 2 // name of parameter 1         Imexp
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 3 // description of parameter 1  Imexp
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
     };
 
@@ -1193,16 +1390,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Imconjugate
         {
             Text = "Liefert das konjugiert Komplexe zu einer komplexen Zahl.";
+            Text[ english ] = "Returns the comlex conjugate of a complex number";
         };
 
         String 2 // name of parameter 1         Imconjugate
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 3 // description of parameter 1  Imconjugate
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
     };
 
@@ -1211,16 +1411,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Imln
         {
             Text = "Liefert den natürlichen Logarithmus einer komplexen Zahl.";
+            Text[ english ] = "Returns the natural logarithm of a complex number";
         };
 
         String 2 // name of parameter 1         Imln
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 3 // description of parameter 1  Imln
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
     };
 
@@ -1229,16 +1432,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Imlog10
         {
             Text = "Liefert den dekadischen Logarithmus einer komplexen Zahl.";
+            Text[ english ] = "Returns the base-10 logarithm of a complex number";
         };
 
         String 2 // name of parameter 1         Imlog10
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 3 // description of parameter 1  Imlog10
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
     };
 
@@ -1247,16 +1453,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Imlog2
         {
             Text = "Liefert den Duallogarithmus";
+            Text[ english ] = "Returns the base-2 logarithm of a complex number";
         };
 
         String 2 // name of parameter 1         Imlog2
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 3 // description of parameter 1  Imlog2
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
     };
 
@@ -1265,26 +1474,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Improduct
         {
             Text = "Liefert das Produkt mehrer komplexer Zahlen";
+            Text[ english ] = "Returns the product of complex numbers";
         };
 
         String 2 // name of parameter 1         Improduct
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 3 // description of parameter 1  Improduct
         {
             Text = "Erste komplexe Zahl";
+            Text[ english ] = "Erste komplexe Zahl";
         };
 
         String 4 // name of parameter 2         Improduct
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 5 // description of parameter 2  Improduct
         {
             Text = "Weitere komplexe Zahl";
+            Text[ english ] = "Weitere komplexe Zahl";
         };
     };
 
@@ -1293,16 +1507,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Imreal
         {
             Text = "Liefert den Realteil einer komplexen Zahl.";
+            Text[ english ] = "Returns the real coefficient of a complex number";
         };
 
         String 2 // name of parameter 1         Imreal
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 3 // description of parameter 1  Imreal
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
     };
 
@@ -1311,16 +1528,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Imsin
         {
             Text = "Liefert den Sinus einer komplexen Zahl.";
+            Text[ english ] = "Returns the sine of a complex number";
         };
 
         String 2 // name of parameter 1         Imsin
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 3 // description of parameter 1  Imsin
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
     };
 
@@ -1329,26 +1549,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Imsub
         {
             Text = "Liefert die Differenz zweier komplexer Zahlen.";
+            Text[ english ] = "Returns the difference of two complex numbers";
         };
 
         String 2 // name of parameter 1         Imsub
         {
             Text = "Komplexe Zahl 1";
+            Text[ english ] = "Komplexe Zahl 1";
         };
 
         String 3 // description of parameter 1  Imsub
         {
             Text = "Komplexe Zahl 1";
+            Text[ english ] = "Komplexe Zahl 1";
         };
 
         String 4 // name of parameter 2         Imsub
         {
             Text = "Komplexe Zahl 2";
+            Text[ english ] = "Komplexe Zahl 2";
         };
 
         String 5 // description of parameter 2  Imsub
         {
             Text = "Komplexe Zahl 2";
+            Text[ english ] = "Komplexe Zahl 2";
         };
     };
 
@@ -1357,16 +1582,19 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Imsqrt
         {
             Text = "Liefert die Quadratwurzel einer komplexen Zahl.";
+            Text[ english ] = "Returns the square root of a complex number";
         };
 
         String 2 // name of parameter 1         Imsqrt
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 3 // description of parameter 1  Imsqrt
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
     };
 
@@ -1375,26 +1603,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Imsum
         {
             Text = "Liefert die Summe komplexer Zahlen";
+            Text[ english ] = "Returns the sum of complex numbers";
         };
 
         String 2 // name of parameter 1         Imsum
         {
             Text = "Komplexe Zahl 1";
+            Text[ english ] = "Komplexe Zahl 1";
         };
 
         String 3 // description of parameter 1  Imsum
         {
             Text = "Komplexe Zahl 1";
+            Text[ english ] = "Komplexe Zahl 1";
         };
 
         String 4 // name of parameter 2         Imsum
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
 
         String 5 // description of parameter 2  Imsum
         {
             Text = "Komplexe Zahl";
+            Text[ english ] = "Komplexe Zahl";
         };
     };
 
@@ -1403,36 +1636,43 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Complex
         {
             Text = "Wandelt den Real- und Imaginärteil in eine komplexe Zahl um.";
+            Text[ english ] = "Converts real and imaginary coefficients into a complex number";
         };
 
         String 2 // name of parameter 1         Complex
         {
             Text = "Realteil";
+            Text[ english ] = "Realteil";
         };
 
         String 3 // description of parameter 1  Complex
         {
             Text = "Realteil";
+            Text[ english ] = "Realteil";
         };
 
         String 4 // name of parameter 2         Complex
         {
             Text = "Imaginärteil";
+            Text[ english ] = "Imaginärteil";
         };
 
         String 5 // description of parameter 2  Complex
         {
             Text = "Imaginärteil";
+            Text[ english ] = "Imaginärteil";
         };
 
         String 6 // name of parameter 3         Complex
         {
             Text = "Suffix";
+            Text[ english ] = "Suffix";
         };
 
         String 7 // description of parameter 3  Complex
         {
             Text = "Suffix";
+            Text[ english ] = "Suffix";
         };
     };
 
@@ -1441,36 +1681,43 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Convert_add
         {
             Text = "Wandelt eine Zahl von einem Maßsystem in ein anderes um.";
+            Text[ english ] = "Converts a number from one measurement system to another";
         };
 
         String 2 // name of parameter 1         Convert_add
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Convert_add
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 4 // name of parameter 2         Convert_add
         {
             Text = "Von-Maßeinheit";
+            Text[ english ] = "Von-Maßeinheit";
         };
 
         String 5 // description of parameter 2  Convert_add
         {
             Text = "Maßeinheit von Zahl.";
+            Text[ english ] = "Maßeinheit von Zahl.";
         };
 
         String 6 // name of parameter 3         Convert_add
         {
             Text = "In-Maßeinheit";
+            Text[ english ] = "In-Maßeinheit";
         };
 
         String 7 // description of parameter 3  Convert_add
         {
             Text = "Maßeinheit des Ergebnisses.";
+            Text[ english ] = "Maßeinheit des Ergebnisses.";
         };
     };
 
@@ -1479,76 +1726,91 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Amordegrc
         {
             Text = "Liefert den für eine Abrechnungsperiode anzusetzenden Abschreibungsbetrag auf Basis des französischen Buchführungssystems.";
+            Text[ english ] = "Returns the prorated linear depreciation of an asset for each accounting period";
         };
 
         String 2 // name of parameter 1         Amordegrc
         {
             Text = "Kosten";
+            Text[ english ] = "Kosten";
         };
 
         String 3 // description of parameter 1  Amordegrc
         {
             Text = "Anschaffungskosten des Anlageguts.";
+            Text[ english ] = "Anschaffungskosten des Anlageguts.";
         };
 
         String 4 // name of parameter 2         Amordegrc
         {
             Text = "Datum";
+            Text[ english ] = "Datum";
         };
 
         String 5 // description of parameter 2  Amordegrc
         {
             Text = "Anschaffungsdatum des Anlagegutes";
+            Text[ english ] = "Anschaffungsdatum des Anlagegutes";
         };
 
         String 6 // name of parameter 3         Amordegrc
         {
             Text = "Erste Periode";
+            Text[ english ] = "Erste Periode";
         };
 
         String 7 // description of parameter 3  Amordegrc
         {
             Text = "Datum des Endes der ersten Periode.";
+            Text[ english ] = "Datum des Endes der ersten Periode.";
         };
 
         String 8 // name of parameter 4         Amordegrc
         {
             Text = "Restwert";
+            Text[ english ] = "Restwert";
         };
 
         String 9 // description of parameter 4  Amordegrc
         {
             Text = "Restwert des Anlagegutes am Ende der Nutzungsdauer.";
+            Text[ english ] = "Restwert des Anlagegutes am Ende der Nutzungsdauer.";
         };
 
         String 10 // name of parameter 5        Amordegrc
         {
             Text = "Periode";
+            Text[ english ] = "Periode";
         };
 
         String 11 // description of parameter 5 Amordegrc
         {
             Text = "Periode";
+            Text[ english ] = "Periode";
         };
 
         String 12 // name of parameter 6        Amordegrc
         {
             Text = "Rate";
+            Text[ english ] = "Rate";
         };
 
         String 13 // description of parameter 6 Amordegrc
         {
             Text = "Abschreibungssatz";
+            Text[ english ] = "Abschreibungssatz";
         };
 
         String 14 // name of parameter 7        Amordegrc
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 15 // description of parameter 7 Amordegrc
         {
             Text = "Zu verwendende Jahresbasis.";
+            Text[ english ] = "Zu verwendende Jahresbasis.";
         };
     };
 
@@ -1557,76 +1819,91 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Amorlinc
         {
             Text = "Liefert den für eine Abrechnungsperiode anzusetzenden Abschreibungsbetrag auf Basis des französischen Buchführungssystems.";
+            Text[ english ] = "Returns the prorated linear depreciation of an asset for each accounting period";
         };
 
         String 2 // name of parameter 1         Amorlinc
         {
             Text = "Kosten";
+            Text[ english ] = "Kosten";
         };
 
         String 3 // description of parameter 1  Amorlinc
         {
             Text = "Anschaffungskosten des Anlageguts.";
+            Text[ english ] = "Anschaffungskosten des Anlageguts.";
         };
 
         String 4 // name of parameter 2         Amorlinc
         {
             Text = "Datum";
+            Text[ english ] = "Datum";
         };
 
         String 5 // description of parameter 2  Amorlinc
         {
             Text = "Anschaffungsdatum des Anlagegutes";
+            Text[ english ] = "Anschaffungsdatum des Anlagegutes";
         };
 
         String 6 // name of parameter 3         Amorlinc
         {
             Text = "Erste Periode";
+            Text[ english ] = "Erste Periode";
         };
 
         String 7 // description of parameter 3  Amorlinc
         {
             Text = "Datum des Endes der ersten Periode.";
+            Text[ english ] = "Datum des Endes der ersten Periode.";
         };
 
         String 8 // name of parameter 4         Amorlinc
         {
             Text = "Restwert";
+            Text[ english ] = "Restwert";
         };
 
         String 9 // description of parameter 4  Amorlinc
         {
             Text = "Restwert des Anlagegutes am Ende der Nutzungsdauer.";
+            Text[ english ] = "Restwert des Anlagegutes am Ende der Nutzungsdauer.";
         };
 
         String 10 // name of parameter 5        Amorlinc
         {
             Text = "Periode";
+            Text[ english ] = "Periode";
         };
 
         String 11 // description of parameter 5 Amorlinc
         {
             Text = "Periode";
+            Text[ english ] = "Periode";
         };
 
         String 12 // name of parameter 6        Amorlinc
         {
             Text = "Rate";
+            Text[ english ] = "Rate";
         };
 
         String 13 // description of parameter 6 Amorlinc
         {
             Text = "Abschreibungssatz";
+            Text[ english ] = "Abschreibungssatz";
         };
 
         String 14 // name of parameter 7        Amorlinc
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 15 // description of parameter 7 Amorlinc
         {
             Text = "Zu verwendende Jahresbasis.";
+            Text[ english ] = "Zu verwendende Jahresbasis.";
         };
     };
 
@@ -1635,76 +1912,91 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Accrint
         {
             Text = "Liefert die aufgelaufenen Zinsen (Stückzinsen) eines Wertpapieres mit periodischer Zinszahlung.";
+            Text[ english ] = "Return the accrued interest for a security that pays periodic interest";
         };
 
         String 2 // name of parameter 1         Accrint
         {
             Text = "Emission";
+            Text[ english ] = "Emission";
         };
 
         String 3 // description of parameter 1  Accrint
         {
             Text = "Datum der Wertpapieremission.";
+            Text[ english ] = "Datum der Wertpapieremission.";
         };
 
         String 4 // name of parameter 2         Accrint
         {
             Text = "Erster Zinstermin";
+            Text[ english ] = "Erster Zinstermin";
         };
 
         String 5 // description of parameter 2  Accrint
         {
             Text = "Erster Zinstermin des Werpapiers.";
+            Text[ english ] = "Erster Zinstermin des Werpapiers.";
         };
 
         String 6 // name of parameter 3         Accrint
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 7 // description of parameter 3  Accrint
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 8 // name of parameter 4         Accrint
         {
             Text = "Nominalzins";
+            Text[ english ] = "Nominalzins";
         };
 
         String 9 // description of parameter 4  Accrint
         {
             Text = "Nominalzins";
+            Text[ english ] = "Nominalzins";
         };
 
         String 10 // name of parameter 5        Accrint
         {
             Text = "Nennwert";
+            Text[ english ] = "Nennwert";
         };
 
         String 11 // description of parameter 5 Accrint
         {
             Text = "Nennwert";
+            Text[ english ] = "Nennwert";
         };
 
         String 12 // name of parameter 6        Accrint
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 13 // description of parameter 6 Accrint
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 14 // name of parameter 7        Accrint
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 15 // description of parameter 7 Accrint
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -1713,56 +2005,67 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Accrintm
         {
             Text = "Liefert die aufgelaufenen Zinsen (Stückzinsen) eines Wertpapieres, die bei Fälligkeit ausgezahlt werden.";
+            Text[ english ] = "Return the accrued interest for a security that pays interest at maturity";
         };
 
         String 2 // name of parameter 1         Accrintm
         {
             Text = "Emission";
+            Text[ english ] = "Emission";
         };
 
         String 3 // description of parameter 1  Accrintm
         {
             Text = "Emission";
+            Text[ english ] = "Emission";
         };
 
         String 4 // name of parameter 2         Accrintm
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 5 // description of parameter 2  Accrintm
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 6 // name of parameter 3         Accrintm
         {
             Text = "Nominalzins";
+            Text[ english ] = "Nominalzins";
         };
 
         String 7 // description of parameter 3  Accrintm
         {
             Text = "Nominalzins";
+            Text[ english ] = "Nominalzins";
         };
 
         String 8 // name of parameter 4         Accrintm
         {
             Text = "Nennwert";
+            Text[ english ] = "Nennwert";
         };
 
         String 9 // description of parameter 4  Accrintm
         {
             Text = "Nennwert";
+            Text[ english ] = "Nennwert";
         };
 
         String 10 // name of parameter 5        Accrintm
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 11 // description of parameter 5 Accrintm
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -1771,56 +2074,67 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Received
         {
             Text = "Liefert den Auszahlungsbetrag eines voll investierten Wertpapiers am Fälligkeitstermin.";
+            Text[ english ] = "Returns the amount received at maturity for a fully invested security";
         };
 
         String 2 // name of parameter 1         Received
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Received
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Received
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Received
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Received
         {
             Text = "Anlage";
+            Text[ english ] = "Anlage";
         };
 
         String 7 // description of parameter 3  Received
         {
             Text = "Anlage";
+            Text[ english ] = "Anlage";
         };
 
         String 8 // name of parameter 4         Received
         {
             Text = "Disagio";
+            Text[ english ] = "Disagio";
         };
 
         String 9 // description of parameter 4  Received
         {
             Text = "Disagio";
+            Text[ english ] = "Disagio";
         };
 
         String 10 // name of parameter 5        Received
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 11 // description of parameter 5 Received
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -1829,56 +2143,67 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Disc
         {
             Text = "Liefert den prozentualen Abschlag (Disagio) eines Wertpapiers";
+            Text[ english ] = "Returns the discount rate for a security";
         };
 
         String 2 // name of parameter 1         Disc
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Disc
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Disc
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Disc
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Disc
         {
             Text = "Kurs";
+            Text[ english ] = "Kurs";
         };
 
         String 7 // description of parameter 3  Disc
         {
             Text = "Kurs";
+            Text[ english ] = "Kurs";
         };
 
         String 8 // name of parameter 4         Disc
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 9 // description of parameter 4  Disc
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 10 // name of parameter 5        Disc
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 11 // description of parameter 5 Disc
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -1887,66 +2212,79 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Duration
         {
             Text = "Liefert die jährliche Duration eines Wertpapieres mit periodischer Zinszahlung.";
+            Text[ english ] = "Returns the annual duration of a security with periodic interest payments";
         };
 
         String 2 // name of parameter 1         Duration
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Duration
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Duration
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Duration
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Duration
         {
             Text = "Nominalzins";
+            Text[ english ] = "Nominalzins";
         };
 
         String 7 // description of parameter 3  Duration
         {
             Text = "Nominalzins";
+            Text[ english ] = "Nominalzins";
         };
 
         String 8 // name of parameter 4         Duration
         {
             Text = "Rendite";
+            Text[ english ] = "Rendite";
         };
 
         String 9 // description of parameter 4  Duration
         {
             Text = "Rendite";
+            Text[ english ] = "Rendite";
         };
 
         String 10 // name of parameter 5        Duration
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 11 // description of parameter 5 Duration
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 12 // name of parameter 6        Duration
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 13 // description of parameter 6 Duration
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -1955,26 +2293,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Effect_add
         {
             Text = "Liefert die jährliche Effektivverzinsung.";
+            Text[ english ] = "Returns the effectiv annual interest rate";
         };
 
         String 2 // name of parameter 1         Effect_add
         {
             Text = "Nominalzins";
+            Text[ english ] = "Nominalzins";
         };
 
         String 3 // description of parameter 1  Effect_add
         {
             Text = "Nominalzins";
+            Text[ english ] = "Nominalzins";
         };
 
         String 4 // name of parameter 2         Effect_add
         {
             Text = "Perioden";
+            Text[ english ] = "Perioden";
         };
 
         String 5 // description of parameter 2  Effect_add
         {
             Text = "Perioden";
+            Text[ english ] = "Perioden";
         };
     };
 
@@ -1983,66 +2326,79 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Cumprinc_add
         {
             Text = "Liefert die aufgelaufene Tilgung eines Darlehens, die zwischen zwie Perioden zu zahlen ist.";
+            Text[ english ] = "Returns the cumulative principal paid a loan between two periods";
         };
 
         String 2 // name of parameter 1         Cumprinc_add
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 3 // description of parameter 1  Cumprinc_add
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 4 // name of parameter 2         Cumprinc_add
         {
             Text = "Zzr";
+            Text[ english ] = "Zzr";
         };
 
         String 5 // description of parameter 2  Cumprinc_add
         {
             Text = "Anzahl der Zahlungsperioden.";
+            Text[ english ] = "Anzahl der Zahlungsperioden.";
         };
 
         String 6 // name of parameter 3         Cumprinc_add
         {
             Text = "Bw";
+            Text[ english ] = "Bw";
         };
 
         String 7 // description of parameter 3  Cumprinc_add
         {
             Text = "Gegenstandswert";
+            Text[ english ] = "Gegenstandswert";
         };
 
         String 8 // name of parameter 4         Cumprinc_add
         {
             Text = "Startperiode";
+            Text[ english ] = "Startperiode";
         };
 
         String 9 // description of parameter 4  Cumprinc_add
         {
             Text = "Startperiode";
+            Text[ english ] = "Startperiode";
         };
 
         String 10 // name of parameter 5        Cumprinc_add
         {
             Text = "Endperiode";
+            Text[ english ] = "Endperiode";
         };
 
         String 11 // description of parameter 5 Cumprinc_add
         {
             Text = "Endperiode";
+            Text[ english ] = "Endperiode";
         };
 
         String 12 // name of parameter 6        Cumprinc_add
         {
             Text = "F";
+            Text[ english ] = "F";
         };
 
         String 13 // description of parameter 6 Cumprinc_add
         {
             Text = "Typ der Fälligkeit";
+            Text[ english ] = "Typ der Fälligkeit";
         };
     };
 
@@ -2050,67 +2406,80 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Cumipmt_add
         {
-            Text = "Liefert die kumulierten Zinsen, die ";
+            Text = "Liefert die kumulierten Zinsen, die zwischen zwei Perioden zu zahlen sind.";
+            Text[ english ] = "Returns the cumulative interest paid between two periods";
         };
 
         String 2 // name of parameter 1         Cumipmt_add
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 3 // description of parameter 1  Cumipmt_add
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 4 // name of parameter 2         Cumipmt_add
         {
             Text = "Zzr";
+            Text[ english ] = "Zzr";
         };
 
         String 5 // description of parameter 2  Cumipmt_add
         {
             Text = "Anzahl Zahlungsperioden";
+            Text[ english ] = "Anzahl Zahlungsperioden";
         };
 
         String 6 // name of parameter 3         Cumipmt_add
         {
             Text = "Bw";
+            Text[ english ] = "Bw";
         };
 
         String 7 // description of parameter 3  Cumipmt_add
         {
             Text = "Gegenstandswert";
+            Text[ english ] = "Gegenstandswert";
         };
 
         String 8 // name of parameter 4         Cumipmt_add
         {
             Text = "Startperiode";
+            Text[ english ] = "Startperiode";
         };
 
         String 9 // description of parameter 4  Cumipmt_add
         {
             Text = "Startperiode";
+            Text[ english ] = "Startperiode";
         };
 
         String 10 // name of parameter 5        Cumipmt_add
         {
             Text = "Endperiode";
+            Text[ english ] = "Endperiode";
         };
 
         String 11 // description of parameter 5 Cumipmt_add
         {
             Text = "Endperiode";
+            Text[ english ] = "Endperiode";
         };
 
         String 12 // name of parameter 6        Cumipmt_add
         {
             Text = "F";
+            Text[ english ] = "F";
         };
 
         String 13 // description of parameter 6 Cumipmt_add
         {
             Text = "Typ der Fälligkeit";
+            Text[ english ] = "Typ der Fälligkeit";
         };
     };
 
@@ -2119,76 +2488,91 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Price
         {
             Text = "Liefert den Kurs pro 100 DM Nennwert eines Wertpapiers, das periodische Zinsen auszahlt.";
+            Text[ english ] = "Returns the price per $100 face value of a security that pays periodic interest";
         };
 
         String 2 // name of parameter 1         Price
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Price
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Price
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Price
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Price
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 7 // description of parameter 3  Price
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 8 // name of parameter 4         Price
         {
             Text = "Rendite";
+            Text[ english ] = "Rendite";
         };
 
         String 9 // description of parameter 4  Price
         {
             Text = "Rendite";
+            Text[ english ] = "Rendite";
         };
 
         String 10 // name of parameter 5        Price
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 11 // description of parameter 5 Price
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 12 // name of parameter 6        Price
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 13 // description of parameter 6 Price
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 14 // name of parameter 7        Price
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 15 // description of parameter 7 Price
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -2197,56 +2581,67 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Pricedisc
         {
             Text = "Liefert den Kurs pro 100 DM Nennwert eines unverzinslichen Werpapiers.";
+            Text[ english ] = "Returns the price per $100 face value of a discounted security";
         };
 
         String 2 // name of parameter 1         Pricedisc
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Pricedisc
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Pricedisc
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Pricedisc
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Pricedisc
         {
             Text = "Disagio";
+            Text[ english ] = "Disagio";
         };
 
         String 7 // description of parameter 3  Pricedisc
         {
             Text = "Disagio";
+            Text[ english ] = "Disagio";
         };
 
         String 8 // name of parameter 4         Pricedisc
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 9 // description of parameter 4  Pricedisc
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 10 // name of parameter 5        Pricedisc
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 11 // description of parameter 5 Pricedisc
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -2255,66 +2650,79 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Pricemat
         {
             Text = "Liefert den Kurs pro 100 Dm Nennwert eines Wertpapiers, das Zinsen am Fälligkeitsdatum auszahlt.";
+            Text[ english ] = "Returns the price per $100 face value of a security that pays interest at maturity";
         };
 
         String 2 // name of parameter 1         Pricemat
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Pricemat
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Pricemat
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Pricemat
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Pricemat
         {
             Text = "Emission";
+            Text[ english ] = "Emission";
         };
 
         String 7 // description of parameter 3  Pricemat
         {
             Text = "Emission";
+            Text[ english ] = "Emission";
         };
 
         String 8 // name of parameter 4         Pricemat
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 9 // description of parameter 4  Pricemat
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 10 // name of parameter 5        Pricemat
         {
             Text = "Rendite";
+            Text[ english ] = "Rendite";
         };
 
         String 11 // description of parameter 5 Pricemat
         {
             Text = "Rendite";
+            Text[ english ] = "Rendite";
         };
 
         String 12 // name of parameter 6        Pricemat
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 13 // description of parameter 6 Pricemat
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -2323,66 +2731,79 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Mduration
         {
             Text = "Liefert die modifizierte Macauley-Duration eines Wertpapiers mit 100 DM Nennwert.";
+            Text[ english ] = "Returns the Macauley modified duration for a security with an assumed par ";
         };
 
         String 2 // name of parameter 1         Mduration
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Mduration
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Mduration
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Mduration
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Mduration
         {
             Text = "Nominalzins";
+            Text[ english ] = "Nominalzins";
         };
 
         String 7 // description of parameter 3  Mduration
         {
             Text = "Nominalzins";
+            Text[ english ] = "Nominalzins";
         };
 
         String 8 // name of parameter 4         Mduration
         {
             Text = "Rendite";
+            Text[ english ] = "Rendite";
         };
 
         String 9 // description of parameter 4  Mduration
         {
             Text = "Rendite";
+            Text[ english ] = "Rendite";
         };
 
         String 10 // name of parameter 5        Mduration
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 11 // description of parameter 5 Mduration
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 12 // name of parameter 6        Mduration
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 13 // description of parameter 6 Mduration
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -2391,26 +2812,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Nomial_add
         {
             Text = "Liefert die jährliche Nominalverzinsung.";
+            Text[ english ] = "Returns the annual nominal interest rate";
         };
 
         String 2 // name of parameter 1         Nomial_add
         {
             Text = "Effektiver Zins";
+            Text[ english ] = "Effektiver Zins";
         };
 
         String 3 // description of parameter 1  Nomial_add
         {
             Text = "Effektiver Zins";
+            Text[ english ] = "Effektiver Zins";
         };
 
         String 4 // name of parameter 2         Nomial_add
         {
             Text = "Perioden";
+            Text[ english ] = "Perioden";
         };
 
         String 5 // description of parameter 2  Nomial_add
         {
             Text = "Perioden";
+            Text[ english ] = "Perioden";
         };
     };
 
@@ -2419,26 +2845,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Dollarfr
         {
             Text = "Konvertiert eine Notierung in dezimaler Schreibweise in eine gemischten Dezimalbruch.";
+            Text[ english ] = "Converts a dollar price, expressed as a decimal number, into a dollar price, expressed as a fraction";
         };
 
         String 2 // name of parameter 1         Dollarfr
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Dollarfr
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 4 // name of parameter 2         Dollarfr
         {
             Text = "Teiler";
+            Text[ english ] = "Teiler";
         };
 
         String 5 // description of parameter 2  Dollarfr
         {
             Text = "Teiler";
+            Text[ english ] = "Teiler";
         };
     };
 
@@ -2447,26 +2878,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Dollarde
         {
             Text = "Konvertiert eine Notierung, die als Dezimalbruch angegeben ist, in eine Dezimalzahl.";
+            Text[ english ] = "Converts a dollar price, expressed as a fraction, into a dollar price, expressed as a decimal number";
         };
 
         String 2 // name of parameter 1         Dollarde
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 3 // description of parameter 1  Dollarde
         {
             Text = "Zahl";
+            Text[ english ] = "Zahl";
         };
 
         String 4 // name of parameter 2         Dollarde
         {
             Text = "Teiler";
+            Text[ english ] = "Teiler";
         };
 
         String 5 // description of parameter 2  Dollarde
         {
             Text = "Teiler";
+            Text[ english ] = "Teiler";
         };
     };
 
@@ -2475,76 +2911,91 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Yield
         {
             Text = "Liefert die Rendite eines Wertpapieres, das periodisch Zinsen auszahlt.";
+            Text[ english ] = "Returns the yield on a security that pays periodic interest";
         };
 
         String 2 // name of parameter 1         Yield
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Yield
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Yield
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Yield
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Yield
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 7 // description of parameter 3  Yield
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 8 // name of parameter 4         Yield
         {
             Text = "Kurs";
+            Text[ english ] = "Kurs";
         };
 
         String 9 // description of parameter 4  Yield
         {
             Text = "Kurs";
+            Text[ english ] = "Kurs";
         };
 
         String 10 // name of parameter 5        Yield
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 11 // description of parameter 5 Yield
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 12 // name of parameter 6        Yield
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 13 // description of parameter 6 Yield
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 14 // name of parameter 7        Yield
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 15 // description of parameter 7 Yield
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -2553,56 +3004,67 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Yielddisc
         {
             Text = "Liefert die jährliche Rendite eines unverzinslichen Wertpapiers.";
+            Text[ english ] = "Returns the annual yield for a discounted security (e.g. treasury bill)";
         };
 
         String 2 // name of parameter 1         Yielddisc
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Yielddisc
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Yielddisc
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Yielddisc
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Yielddisc
         {
             Text = "Kurs";
+            Text[ english ] = "Kurs";
         };
 
         String 7 // description of parameter 3  Yielddisc
         {
             Text = "Kurs";
+            Text[ english ] = "Kurs";
         };
 
         String 8 // name of parameter 4         Yielddisc
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 9 // description of parameter 4  Yielddisc
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 10 // name of parameter 5        Yielddisc
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 11 // description of parameter 5 Yielddisc
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -2611,66 +3073,79 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Yieldmat
         {
             Text = "Liefert die jährliche Rendite eines Wertpapiers, das Zinsen am Fälligkeitsdatum auszahlt.";
+            Text[ english ] = "Returns the annual yield of a security that pays interest at maturity";
         };
 
         String 2 // name of parameter 1         Yieldmat
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Yieldmat
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Yieldmat
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Yieldmat
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Yieldmat
         {
             Text = "Emission";
+            Text[ english ] = "Emission";
         };
 
         String 7 // description of parameter 3  Yieldmat
         {
             Text = "Emission";
+            Text[ english ] = "Emission";
         };
 
         String 8 // name of parameter 4         Yieldmat
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 9 // description of parameter 4  Yieldmat
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 10 // name of parameter 5        Yieldmat
         {
             Text = "Kurs";
+            Text[ english ] = "Kurs";
         };
 
         String 11 // description of parameter 5 Yieldmat
         {
             Text = "Kurs";
+            Text[ english ] = "Kurs";
         };
 
         String 12 // name of parameter 6        Yieldmat
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 13 // description of parameter 6 Yieldmat
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -2679,36 +3154,43 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Tbilleq
         {
             Text = "Rechnet die Verzinsung eines Schatzwechsels in die für Anleihen übliche einfache jährliche Verzinsung um.";
+            Text[ english ] = "Returns the bond-equivalent yield for a treasury bill";
         };
 
         String 2 // name of parameter 1         Tbilleq
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Tbilleq
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Tbilleq
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Tbilleq
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Tbilleq
         {
             Text = "Disagio";
+            Text[ english ] = "Disagio";
         };
 
         String 7 // description of parameter 3  Tbilleq
         {
             Text = "Disagio";
+            Text[ english ] = "Disagio";
         };
     };
 
@@ -2717,36 +3199,43 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Tbillprice
         {
             Text = "Liefert den Kurs pro 100 DM Nennwert eines Schatzwechsels.";
+            Text[ english ] = "Returns the price of $100 face value for a treasury bill";
         };
 
         String 2 // name of parameter 1         Tbillprice
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Tbillprice
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Tbillprice
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Tbillprice
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Tbillprice
         {
             Text = "Disagio";
+            Text[ english ] = "Disagio";
         };
 
         String 7 // description of parameter 3  Tbillprice
         {
             Text = "Disagio";
+            Text[ english ] = "Disagio";
         };
     };
 
@@ -2755,36 +3244,43 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Tbillyield
         {
             Text = "Liefert die Rendite eines Schatzwechsels.";
+            Text[ english ] = "Returns the yield for a treasury bill";
         };
 
         String 2 // name of parameter 1         Tbillyield
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Tbillyield
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Tbillyield
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Tbillyield
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Tbillyield
         {
             Text = "Kurs";
+            Text[ english ] = "Kurs";
         };
 
         String 7 // description of parameter 3  Tbillyield
         {
             Text = "Kurs";
+            Text[ english ] = "Kurs";
         };
     };
 
@@ -2793,96 +3289,115 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Oddfprice
         {
             Text = "Liefert den Kurs pro 100 DM Nennwert eines Wertpapiers mit einem unregelmäßigen ersten Zinstermin.";
+            Text[ english ] = "Returns the price of $100 face value of a security with an odd first period";
         };
 
         String 2 // name of parameter 1         Oddfprice
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Oddfprice
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Oddfprice
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Oddfprice
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Oddfprice
         {
             Text = "Emission";
+            Text[ english ] = "Emission";
         };
 
         String 7 // description of parameter 3  Oddfprice
         {
             Text = "Emission";
+            Text[ english ] = "Emission";
         };
 
         String 8 // name of parameter 4         Oddfprice
         {
             Text = "Erster Zinstermin";
+            Text[ english ] = "Erster Zinstermin";
         };
 
         String 9 // description of parameter 4  Oddfprice
         {
             Text = "Erster Zinstermin";
+            Text[ english ] = "Erster Zinstermin";
         };
 
         String 10 // name of parameter 5        Oddfprice
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 11 // description of parameter 5 Oddfprice
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 12 // name of parameter 6        Oddfprice
         {
             Text = "Rendite";
+            Text[ english ] = "Rendite";
         };
 
         String 13 // description of parameter 6 Oddfprice
         {
             Text = "Rendite";
+            Text[ english ] = "Rendite";
         };
 
         String 14 // name of parameter 7        Oddfprice
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 15 // description of parameter 7 Oddfprice
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 16 // name of parameter 8        Oddfprice
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 17 // description of parameter 8 Oddfprice
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 18 // name of parameter 9        Oddfprice
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 19 // description of parameter 9 Oddfprice
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -2891,96 +3406,115 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Oddfyield
         {
             Text = "Liefert die Rendite eines Wertpapiers mit einem unregelmäßigen ersten Zinstermin.";
+            Text[ english ] = "Returns the yield of a security with an odd first period";
         };
 
         String 2 // name of parameter 1         Oddfyield
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Oddfyield
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Oddfyield
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Oddfyield
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Oddfyield
         {
             Text = "Emission";
+            Text[ english ] = "Emission";
         };
 
         String 7 // description of parameter 3  Oddfyield
         {
             Text = "Emission";
+            Text[ english ] = "Emission";
         };
 
         String 8 // name of parameter 4         Oddfyield
         {
             Text = "Erster Zinstermin";
+            Text[ english ] = "Erster Zinstermin";
         };
 
         String 9 // description of parameter 4  Oddfyield
         {
             Text = "Erster Zinstermin";
+            Text[ english ] = "Erster Zinstermin";
         };
 
         String 10 // name of parameter 5        Oddfyield
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 11 // description of parameter 5 Oddfyield
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 12 // name of parameter 6        Oddfyield
         {
             Text = "Kurs";
+            Text[ english ] = "Kurs";
         };
 
         String 13 // description of parameter 6 Oddfyield
         {
             Text = "Kurs";
+            Text[ english ] = "Kurs";
         };
 
         String 14 // name of parameter 7        Oddfyield
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 15 // description of parameter 7 Oddfyield
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 16 // name of parameter 8        Oddfyield
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 17 // description of parameter 8 Oddfyield
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 18 // name of parameter 9        Oddfyield
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 19 // description of parameter 9 Oddfyield
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -2989,86 +3523,103 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Oddlprice
         {
             Text = "Liefert den Kurs pro 100 DM Nennwert eines Wertpapiers mit einem unregelmäßigen letzten Zinstermin.";
+            Text[ english ] = "Returns the price of $100 face value of a security with an odd last period";
         };
 
         String 2 // name of parameter 1         Oddlprice
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Oddlprice
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Oddlprice
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Oddlprice
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Oddlprice
         {
             Text = "Letzter Zinstermin";
+            Text[ english ] = "Letzter Zinstermin";
         };
 
         String 7 // description of parameter 3  Oddlprice
         {
             Text = "Letzter Zinstermin";
+            Text[ english ] = "Letzter Zinstermin";
         };
 
         String 8 // name of parameter 4         Oddlprice
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 9 // description of parameter 4  Oddlprice
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 10 // name of parameter 5        Oddlprice
         {
             Text = "Rendite";
+            Text[ english ] = "Rendite";
         };
 
         String 11 // description of parameter 5 Oddlprice
         {
             Text = "Rendite";
+            Text[ english ] = "Rendite";
         };
 
         String 12 // name of parameter 6        Oddlprice
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 13 // description of parameter 6 Oddlprice
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 14 // name of parameter 7        Oddlprice
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 15 // description of parameter 7 Oddlprice
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 16 // name of parameter 8        Oddlprice
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 17 // description of parameter 8 Oddlprice
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -3077,86 +3628,103 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Oddlyield
         {
             Text = "Liefert die Rendite eines Wertpapiers mit einem unregelmäßigen letzten Zinstermin.";
+            Text[ english ] = "Returns the yield of a security with an odd last period";
         };
 
         String 2 // name of parameter 1         Oddlyield
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Oddlyield
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Oddlyield
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Oddlyield
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Oddlyield
         {
             Text = "Letzter Zinstermin";
+            Text[ english ] = "Letzter Zinstermin";
         };
 
         String 7 // description of parameter 3  Oddlyield
         {
             Text = "Letzter Zinstermin";
+            Text[ english ] = "Letzter Zinstermin";
         };
 
         String 8 // name of parameter 4         Oddlyield
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 9 // description of parameter 4  Oddlyield
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 10 // name of parameter 5        Oddlyield
         {
             Text = "Kurs";
+            Text[ english ] = "Kurs";
         };
 
         String 11 // description of parameter 5 Oddlyield
         {
             Text = "Kurs";
+            Text[ english ] = "Kurs";
         };
 
         String 12 // name of parameter 6        Oddlyield
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 13 // description of parameter 6 Oddlyield
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 14 // name of parameter 7        Oddlyield
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 15 // description of parameter 7 Oddlyield
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 16 // name of parameter 8        Oddlyield
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 17 // description of parameter 8 Oddlyield
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -3165,36 +3733,43 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Xirr
         {
             Text = "Liefert den internen Zinsfuß einer Reihe nicht periodisch anfallender Zahlungen.";
+            Text[ english ] = "Returns the internal rate of return for a schedule of cash flows";
         };
 
         String 2 // name of parameter 1         Xirr
         {
             Text = "Werte";
+            Text[ english ] = "Werte";
         };
 
         String 3 // description of parameter 1  Xirr
         {
             Text = "Werte";
+            Text[ english ] = "Werte";
         };
 
         String 4 // name of parameter 2         Xirr
         {
             Text = "Zeitpunkte";
+            Text[ english ] = "Zeitpunkte";
         };
 
         String 5 // description of parameter 2  Xirr
         {
             Text = "Zeitpunkte";
+            Text[ english ] = "Zeitpunkte";
         };
 
         String 6 // name of parameter 3         Xirr
         {
             Text = "Schätzwert";
+            Text[ english ] = "Schätzwert";
         };
 
         String 7 // description of parameter 3  Xirr
         {
             Text = "Schätzwert";
+            Text[ english ] = "Schätzwert";
         };
     };
 
@@ -3203,36 +3778,43 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Xnpv
         {
             Text = "Liefert den Nettobarwert (Kapitalwert) einer Reihe nicht periodisch anfallender Zahlungen.";
+            Text[ english ] = "Returns the net present value for a schedule of cash flows";
         };
 
         String 2 // name of parameter 1         Xnpv
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 3 // description of parameter 1  Xnpv
         {
             Text = "Zins";
+            Text[ english ] = "Zins";
         };
 
         String 4 // name of parameter 2         Xnpv
         {
             Text = "Werte";
+            Text[ english ] = "Werte";
         };
 
         String 5 // description of parameter 2  Xnpv
         {
             Text = "Werte";
+            Text[ english ] = "Werte";
         };
 
         String 6 // name of parameter 3         Xnpv
         {
             Text = "Zeitpunkte";
+            Text[ english ] = "Zeitpunkte";
         };
 
         String 7 // description of parameter 3  Xnpv
         {
             Text = "Zeitpunkte";
+            Text[ english ] = "Zeitpunkte";
         };
     };
 
@@ -3241,56 +3823,67 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Intrate
         {
             Text = "Liefert den Zinssatz eines voll investierten Wertpapiers.";
+            Text[ english ] = "Returns the interest rate for a fully invested security";
         };
 
         String 2 // name of parameter 1         Intrate
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Intrate
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Intrate
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Intrate
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Intrate
         {
             Text = "Anlage";
+            Text[ english ] = "Anlage";
         };
 
         String 7 // description of parameter 3  Intrate
         {
             Text = "Anlage";
+            Text[ english ] = "Anlage";
         };
 
         String 8 // name of parameter 4         Intrate
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 9 // description of parameter 4  Intrate
         {
             Text = "Rückzahlung";
+            Text[ english ] = "Rückzahlung";
         };
 
         String 10 // name of parameter 5        Intrate
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 11 // description of parameter 5 Intrate
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -3299,46 +3892,55 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Coupncd
         {
             Text = "Liefert das Datum des ersten Zinstermins nach dem Abrechungstermin.";
+            Text[ english ] = "Returns the next coupon date after the settlement date";
         };
 
         String 2 // name of parameter 1         Coupncd
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Coupncd
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Coupncd
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Coupncd
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Coupncd
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 7 // description of parameter 3  Coupncd
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 8 // name of parameter 4         Coupncd
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 9 // description of parameter 4  Coupncd
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -3347,46 +3949,55 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Coupdays
         {
             Text = "Liefert die Anzahl Tage der Zinsperiode, die den Abrechnungstermin einschließt.";
+            Text[ english ] = "Returns the number of days in the coupon period that contains the settlement date";
         };
 
         String 2 // name of parameter 1         Coupdays
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Coupdays
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Coupdays
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Coupdays
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Coupdays
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 7 // description of parameter 3  Coupdays
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 8 // name of parameter 4         Coupdays
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 9 // description of parameter 4  Coupdays
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -3395,46 +4006,55 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Coupdaysnc
         {
             Text = "Liefert die Anzahl der Tage vom Abrechnungstermin bis zum nächsten Zinstermin.";
+            Text[ english ] = "Returns the number of days from the settlement date to the next coupon date";
         };
 
         String 2 // name of parameter 1         Coupdaysnc
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Coupdaysnc
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Coupdaysnc
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Coupdaysnc
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Coupdaysnc
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 7 // description of parameter 3  Coupdaysnc
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 8 // name of parameter 4         Coupdaysnc
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 9 // description of parameter 4  Coupdaysnc
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -3443,46 +4063,55 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Coupdaybs
         {
             Text = "Liefert die Anzahl der Tage vom Anfang des Zinstermins bis zum Abrechnungstermin.";
+            Text[ english ] = "Returns the number of days from the beginning of the coupon period to the settlement date";
         };
 
         String 2 // name of parameter 1         Coupdaybs
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Coupdaybs
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Coupdaybs
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Coupdaybs
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Coupdaybs
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 7 // description of parameter 3  Coupdaybs
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 8 // name of parameter 4         Coupdaybs
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 9 // description of parameter 4  Coupdaybs
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -3491,46 +4120,55 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Couppcd
         {
             Text = "Liefert das Datum des letzten Zinstermins vor dem Abrechnungsdatum.";
+            Text[ english ] = "Returns the previous coupon date before the settlement date";
         };
 
         String 2 // name of parameter 1         Couppcd
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Couppcd
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Couppcd
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Couppcd
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Couppcd
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 7 // description of parameter 3  Couppcd
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 8 // name of parameter 4         Couppcd
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 9 // description of parameter 4  Couppcd
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -3539,46 +4177,55 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Coupnum
         {
             Text = "Liefert die Anzahl der Zinstermine zwischen Abrechnungs- und Fälligkeitsdatum.";
+            Text[ english ] = "Returns the number of coupons payable between the settlement date and maturity date";
         };
 
         String 2 // name of parameter 1         Coupnum
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 3 // description of parameter 1  Coupnum
         {
             Text = "Abrechnung";
+            Text[ english ] = "Abrechnung";
         };
 
         String 4 // name of parameter 2         Coupnum
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 5 // description of parameter 2  Coupnum
         {
             Text = "Fälligkeit";
+            Text[ english ] = "Fälligkeit";
         };
 
         String 6 // name of parameter 3         Coupnum
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 7 // description of parameter 3  Coupnum
         {
             Text = "Häufigkeit";
+            Text[ english ] = "Häufigkeit";
         };
 
         String 8 // name of parameter 4         Coupnum
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
 
         String 9 // description of parameter 4  Coupnum
         {
             Text = "Basis";
+            Text[ english ] = "Basis";
         };
     };
 
@@ -3587,26 +4234,31 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         String 1    // description Fvschedule
         {
             Text = "Liefert den aufgezinsten Wert des Anfangskapitals für eine Reihe periodisch unterschiedlicher Zinssätze.";
+            Text[ english ] = "Returns the future value of an initial principal after applying a series of compound interest rates";
         };
 
         String 2 // name of parameter 1         Fvschedule
         {
             Text = "Kapital";
+            Text[ english ] = "Kapital";
         };
 
         String 3 // description of parameter 1  Fvschedule
         {
             Text = "Kapital";
+            Text[ english ] = "Kapital";
         };
 
         String 4 // name of parameter 2         Fvschedule
         {
             Text = "Zinsen";
+            Text[ english ] = "Zinsen";
         };
 
         String 5 // description of parameter 2  Fvschedule
         {
             Text = "Zinsen";
+            Text[ english ] = "Zinsen";
         };
     };
 };
