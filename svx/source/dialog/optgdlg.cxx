@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:13:40 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 16:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,7 +960,8 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     aAsianSupportCB(this,       ResId(CB_ASIANSUPPORT   )),
     aCTLSupportFI(this,         ResId(FI_CTLSUPPORT    )),
     aCTLSupportCB(this,         ResId(CB_CTLSUPPORT   )),
-    pLangConfig(new LanguageConfig_Impl)
+    pLangConfig(new LanguageConfig_Impl),
+    sDecimalSeparatorLabel(aDecimalSeparatorCB.GetText())
 {
     FreeResource();
 
