@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmkmenu.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-04-09 08:07:55 $
+ *  last change: $Author: cd $ $Date: 2001-05-03 08:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,21 +75,16 @@
 #include <macros/debug/assertion.hxx>
 #endif
 
+#ifndef __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
+#include <helper/imageproducer.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
-#include <com/sun/star/frame/XDispatch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
-#include <com/sun/star/frame/XFrame.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
@@ -107,42 +102,6 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
-#include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_ILLEGALIDENTIFIEREXCEPTION_HPP_
-#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
-#include <com/sun/star/ucb/NameClash.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_NUMBEREDSORTINGINFO_HPP_
-#include <com/sun/star/ucb/NumberedSortingInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
-#include <com/sun/star/ucb/TransferInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XANYCOMPAREFACTORY_HPP_
-#include <com/sun/star/ucb/XAnyCompareFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDINFO_HPP_
-#include <com/sun/star/ucb/XCommandInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
-#include <com/sun/star/ucb/XContentAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XDYNAMICRESULTSET_HPP_
-#include <com/sun/star/ucb/XDynamicResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XSORTEDDYNAMICRESULTSETFACTORY_HPP_
-#include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
@@ -151,19 +110,13 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#include <tools/urlobj.hxx>
 #include <vcl/config.hxx>
-#include <svtools/pathoptions.hxx>
-#include <unotools/localfilehelper.hxx>
-
-#include <ucbhelper/content.hxx>
-#include <ucbhelper/commandenvironment.hxx>
+#include <svtools/dynamicmenuoptions.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
 
-using namespace ::ucb;
 using namespace ::rtl;
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
@@ -171,79 +124,47 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::ucb;
-using namespace com::sun::star::sdbc;
-
-
-#define INTERNETSHORTCUT_EXT            "url"
-#define INTERNETSHORTCUT_ID_TAG         "InternetShortcut"
-#define INTERNETSHORTCUT_URL_TAG        "URL"
-#define INTERNETSHORTCUT_PASS_TAG       "Password"
-#define INTERNETSHORTCUT_TITLE_TAG      "Title"
-#define INTERNETSHORTCUT_TARGET_TAG     "Target"
-#define INTERNETSHORTCUT_FOLDER_TAG     "Folder"
-#define INTERNETSHORTCUT_FRAME_TAG      "Frame"
-#define INTERNETSHORTCUT_BROWSER_TAG    "Browser"
-#define INTERNETSHORTCUT_OPENAS_TAG     "OpenAs"
-#define INTERNETSHORTCUT_TEMPLATE_TAG   "Template"
-#define INTERNETSHORTCUT_DEFTEMPL_TAG   "DefaultTemplate"
-#define INTERNETSHORTCUT_DEFURL_TAG     "DefaultURL"
-#define INTERNETSHORTCUT_SOICON_TAG     "SOIcon"
-
-#define URLFILE_CHARSET                 CHARSET_ANSI
 
 #define S2U(STRING)                     ::rtl::OStringToOUString(STRING, RTL_TEXTENCODING_UTF8)
 #define U2S(STRING)                     ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
 
-void ReadURLFile
-(
-    const String& rFile,
-    String& rTitle,
-    String& rURL,
-    String& rFrame,
-    BOOL*   pShowAsFolder,
-    USHORT& rImageId,
-    String* pOpenAs=0,
-    String* pDefTempl=0,
-    String* pDefURL=0
-);
+namespace framework
+{
 
-Sequence < OUString > GetFolderContents( const String& rFolder, sal_Bool bFolder, sal_Bool bSorted );
-
+void GetMenuEntry(
+    Sequence< PropertyValue >&  aDynamicMenuEntry,
+    ::rtl::OUString&            rTitle,
+    ::rtl::OUString&            rURL,
+    ::rtl::OUString&            rFrame,
+    ::rtl::OUString&            rImageId );
 
 class BmkMenu_Impl
 {
     private:
-        static USHORT       _nMID;
+        static USHORT        m_nMID;
 
     public:
-        String               _aURL;
-        String               _aReferer;
-        BmkMenu*             _pRoot;
-        BOOL                 _bInitialized;
+        BmkMenu*             m_pRoot;
+        BOOL                 m_bInitialized;
 
-        BmkMenu_Impl( const String& rURL, BmkMenu* pRoot );
-        BmkMenu_Impl( const String& rURL, const String& rReferer );
+        BmkMenu_Impl( BmkMenu* pRoot );
+        BmkMenu_Impl();
         ~BmkMenu_Impl();
 
         static USHORT       GetMID();
-        static String       GetTitle( const String& rTitle );
 };
 
-USHORT BmkMenu_Impl::_nMID = BMKMENU_ITEMID_START;
+USHORT BmkMenu_Impl::m_nMID = BMKMENU_ITEMID_START;
 
-BmkMenu_Impl::BmkMenu_Impl( const String& rURL, BmkMenu* pRoot ) :
-    _aURL(rURL),
-    _pRoot(pRoot),
-    _bInitialized(FALSE)
+BmkMenu_Impl::BmkMenu_Impl( BmkMenu* pRoot ) :
+    m_pRoot(pRoot),
+    m_bInitialized(FALSE)
 {
 }
 
-BmkMenu_Impl::BmkMenu_Impl( const String& rURL, const String& rReferer ) :
-    _aURL(rURL),
-    _pRoot(0),
-    _aReferer( rReferer ),
-    _bInitialized(FALSE)
+BmkMenu_Impl::BmkMenu_Impl() :
+    m_pRoot(0),
+    m_bInitialized(FALSE)
 {
 }
 
@@ -253,12 +174,13 @@ BmkMenu_Impl::~BmkMenu_Impl()
 
 USHORT BmkMenu_Impl::GetMID()
 {
-    _nMID++;
-    if( !_nMID )
-        _nMID = BMKMENU_ITEMID_START;
-    return _nMID;
+    m_nMID++;
+    if( !m_nMID )
+        m_nMID = BMKMENU_ITEMID_START;
+    return m_nMID;
 }
 
+/*
 String BmkMenu_Impl::GetTitle( const String& rStr )
 {
     // "_..._" vorne rausschneiden
@@ -276,15 +198,17 @@ String BmkMenu_Impl::GetTitle( const String& rStr )
 
     return aTitle;
 }
+*/
 
 // ------------------------------------------------------------------------
 
 //ImageList* BmkMenu::_pSmallImages = NULL;
 //ImageList* BmkMenu::_pBigImages = NULL;
 
-BmkMenu::BmkMenu( const String& rURL, BmkMenu* pRoot )
+BmkMenu::BmkMenu( Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType, BmkMenu* pRoot ) :
+    m_xFrame( xFrame ), m_nType( nType )
 {
-    _pImp = new BmkMenu_Impl( rURL, pRoot );
+    _pImp = new BmkMenu_Impl( pRoot );
     Initialize();
 }
 
@@ -308,9 +232,10 @@ Image BmkMenu::GetImage( USHORT nId, BOOL bBig )
 }
 */
 
-BmkMenu::BmkMenu( const String& rURL, const String& rReferer )
+BmkMenu::BmkMenu( Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType ) :
+    m_nType( nType ), m_xFrame( xFrame )
 {
-    _pImp = new BmkMenu_Impl( rURL, rReferer );
+    _pImp = new BmkMenu_Impl();
     Initialize();
 }
 
@@ -319,111 +244,50 @@ BmkMenu::~BmkMenu()
     delete _pImp;
 }
 
-/*
-void BmkMenu::Activate()
-{
-    Initialize();
-    _pImp->_bActivated = TRUE;
-}
-
-void BmkMenu::Deactivate()
-{
-    PopupMenu::Deactivate();
-    _pImp->_bActivated = FALSE;
-}
-*/
-
-/*
-void BmkMenu::Select()
-{
-    String aURL( GetItemCommand( GetCurItemId() ) );
-    if( !aURL.Len() )
-        return;
-
-    Reference < XFramesSupplier > xDesktop = Reference < XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    Reference < XFrame > xFrame( xDesktop->getActiveFrame() );
-    if ( !xFrame.is() )
-        xFrame = Reference < XFrame >( xDesktop, UNO_QUERY );
-
-    URL aTargetURL;
-    aTargetURL.Complete = aURL;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-    xTrans->parseStrict( aTargetURL );
-
-    Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
-    Reference < XDispatch > xDisp;
-    if ( xProv.is() )
-        if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
-            xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-        else
-            xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_blank"), 0 );
-    if ( xDisp.is() )
-    {
-        SfxBmkMenu* pRoot = _pImp->_pRoot;
-        if( !pRoot )
-            pRoot = this;
-
-        Sequence<PropertyValue> aArgs(1);
-        PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = rtl::OUString::createFromAscii("Referer");
-        pArg[0].Value <<= (::rtl::OUString) pRoot->_pImp->_aReferer;
-        xDisp->dispatch( aTargetURL, aArgs );
-    }
-}
-*/
-
 void BmkMenu::Initialize()
 {
-    if( _pImp->_bInitialized )
+    if( _pImp->m_bInitialized )
         return;
 
-    _pImp->_bInitialized = TRUE;
+    _pImp->m_bInitialized = TRUE;
 
-    Sequence< ::rtl::OUString > aFiles = GetFolderContents( _pImp->_aURL, sal_False, sal_True );
-    const ::rtl::OUString* pFiles  = aFiles.getConstArray();
-    UINT32 i, nCount = aFiles.getLength();
+    Sequence< Sequence< PropertyValue > > aDynamicMenuEntries;
+
+    if ( m_nType == BmkMenu::BMK_NEWMENU )
+        aDynamicMenuEntries = SvtDynamicMenuOptions().GetMenu( E_NEWMENU );
+    else if ( m_nType == BmkMenu::BMK_WIZARDMENU )
+        aDynamicMenuEntries = SvtDynamicMenuOptions().GetMenu( E_WIZARDMENU );
+
+    ::rtl::OUString aTitle;
+    ::rtl::OUString aURL;
+    ::rtl::OUString aTargetFrame;
+    ::rtl::OUString aImageId;
+
+    UINT32 i, nCount = aDynamicMenuEntries.getLength();
     for ( i = 0; i < nCount; ++i )
     {
-        String aFileURL( pFiles[i] );
-        INetURLObject aObj( aFileURL );
+        GetMenuEntry( aDynamicMenuEntries[i], aTitle, aURL, aTargetFrame, aImageId );
 
-        String aTitle;
-        String aURL;
-        BOOL bShowAsFolder;
-        String aFrame;
-        USHORT nImageId = USHRT_MAX;
-
-        ReadURLFile( aObj.GetMainURL(), aTitle, aURL, aFrame, &bShowAsFolder, nImageId );
-
-        if ( !aTitle.Len() && !aURL.Len() )
+        if ( !aTitle.getLength() && !aURL.getLength() )
             continue;
 
-        if ( aTitle.GetChar(0) == '_' && aTitle.GetChar(3) == '_' )
-            aTitle = aTitle.Erase( 0, 4 );
-
-        if( aURL.EqualsAscii("private:separator") )
+        if ( aURL == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:separator" )))
             InsertSeparator();
         else
         {
-            aURL = SvtPathOptions().SubstituteVariable( aURL );
             USHORT nId = CreateMenuId();
-            if( !bShowAsFolder )
-            {
-                USHORT nTitleLen = aTitle.Len();
-                if( nTitleLen > 4  && aTitle.GetChar(nTitleLen-4) == '.' && aURL.EqualsAscii( "file:",0,5 ) )
-                    aTitle.Erase( nTitleLen-4 );
-//              Image aImage = GetImage( nImageId, FALSE );
-//              InsertItem( nId, aTitle, aImage );
-                InsertItem( nId, aTitle );
-                SetItemCommand( nId, aURL );
-            }
+
+            Image* pImage = GetImageFromURL( m_xFrame, aURL );
+            if ( pImage )
+                InsertItem( nId, aTitle, *pImage );
             else
-            {
                 InsertItem( nId, aTitle );
-                BmkMenu* pSubMenu = new BmkMenu( aURL,
-                        _pImp->_pRoot ? _pImp->_pRoot : this );
-                SetPopupMenu( nId, pSubMenu );
-            }
+
+            BmkMenu::Attributes* pUserAttributes = new BmkMenu::Attributes;
+            pUserAttributes->aTargetFrame = aTargetFrame;
+            SetUserValue( nId, (ULONG)pUserAttributes );
+
+            SetItemCommand( nId, aURL );
         }
     }
 }
@@ -433,189 +297,26 @@ USHORT BmkMenu::CreateMenuId()
     return BmkMenu_Impl::GetMID();
 }
 
-String ReadURL_Impl( Config& rURLFile, const String& rFile )
-{
-    // read the URL from config file
-    String aURL( String( rURLFile.ReadKey( INTERNETSHORTCUT_URL_TAG ), RTL_TEXTENCODING_UTF8 ) );
-    aURL = SvtPathOptions().SubstituteVariable( aURL );
-
-    // make it absolute
-    INetURLObject aBase( rFile );
-    LOG_ASSERT( aBase.GetProtocol() != INET_PROT_NOT_VALID, "Not a valid URL" );
-    INetURLObject aOut;
-    aBase.GetNewAbsURL( aURL, &aOut );
-    return aOut.GetMainURL();
-}
-
-void ReadURLFile
+void GetMenuEntry
 (
-    const String& rFile,      // Datei, aus der gelesen werden soll
-    String& rTitle,           // Puffer fuer den Titel
-    String& rURL,             // Puffer fuer den URL
-    String& rFrame,           // Puffer fuer den Zielrahmen
-    BOOL* pShowAsFolder,      /* Puffer fuer das Flag, ob die URL als Ordner
-                                 dargestellt wird:
-                                 NULL => wird nicht geliefert */
-    USHORT& rImageId,         // zugeordnetes Image
-    String* pOpenAs,          /* Puffer fuer die Oeffnunsart
-                                 NULL => wird nicht geliefert */
-    String* pDefTempl,         /* Standardvorlagenname */
-    String* pDefURL
+    Sequence< PropertyValue >& aDynamicMenuEntry,
+    ::rtl::OUString& rTitle,
+    ::rtl::OUString& rURL,
+    ::rtl::OUString& rFrame,
+    ::rtl::OUString& rImageId
 )
 {
-    // Oefnung der Datei
-    String aPath;
-    if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( rFile, aPath ) )
+    for ( int i = 0; i < aDynamicMenuEntry.getLength(); i++ )
     {
-        Config aCfg( aPath );
-        aCfg.SetGroup( INTERNETSHORTCUT_ID_TAG );
-
-        // Einlesung des URLs
-        rURL = ReadURL_Impl( aCfg, rFile );
-
-        // Einlesung des Ziels, in dem die URL angezeigt werden soll
-        if ( pShowAsFolder )
-        {
-            ByteString aTemp( aCfg.ReadKey( INTERNETSHORTCUT_TARGET_TAG ) );
-            *pShowAsFolder = aTemp == INTERNETSHORTCUT_FOLDER_TAG;
-        }
-
-        // Einlesung und Konvertierung des Zielrahmens
-        rFrame = String( aCfg.ReadKey( INTERNETSHORTCUT_FRAME_TAG ), RTL_TEXTENCODING_UTF8 );
-
-        String aImgStr = String( aCfg.ReadKey( INTERNETSHORTCUT_SOICON_TAG ), RTL_TEXTENCODING_UTF8 );
-        if ( aImgStr.GetToken(0).EqualsAscii( "StarOfficeIcon" ) )
-        {
-            rImageId = aImgStr.GetToken(1).ToInt32();
-        }
-
-        // Einlesung des Oeffnungstyps
-        if ( pOpenAs )
-            *pOpenAs = String( aCfg.ReadKey( INTERNETSHORTCUT_OPENAS_TAG ), RTL_TEXTENCODING_UTF8 );
-
-        if ( pDefTempl )
-            *pDefTempl = String( aCfg.ReadKey( INTERNETSHORTCUT_DEFTEMPL_TAG ), RTL_TEXTENCODING_UTF8 );
-
-        if ( pDefURL )
-            *pDefURL = ReadURL_Impl( aCfg, rFile );
-
-        // read and convert the title, dependent on the language
-        String aLangStr = SvtPathOptions().SubstituteVariable( String::CreateFromAscii( "$(vlang)" ) );
-
-        ByteString aLang = U2S( aLangStr );
-        ByteString aGroup = INTERNETSHORTCUT_ID_TAG;
-        ( ( aGroup += '-' ) += aLang ) += ".W";
-        aCfg.SetGroup( aGroup );
-        rTitle = String( aCfg.ReadKey( INTERNETSHORTCUT_TITLE_TAG ), RTL_TEXTENCODING_UTF7 );
-    }
-    else
-    {
-        LOG_ASSERT( sal_False, "Bookmark is not in the local file system!" );
+        if ( aDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_URL )
+            aDynamicMenuEntry[i].Value >>= rURL;
+        else if ( aDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_TITLE )
+            aDynamicMenuEntry[i].Value >>= rTitle;
+        else if ( aDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER )
+            aDynamicMenuEntry[i].Value >>= rImageId;
+        else if ( aDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_TARGETNAME )
+            aDynamicMenuEntry[i].Value >>= rFrame;
     }
 }
 
-
-DECLARE_LIST( StringList_Impl, OUString* );
-
-Sequence < OUString > GetFolderContents( const String& rFolder, sal_Bool bFolder, sal_Bool bSorted )
-{
-    StringList_Impl* pFiles = NULL;
-    INetURLObject aFolderObj( rFolder );
-    LOG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-    try
-    {
-        Content aCnt( aFolderObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        Reference< XResultSet > xResultSet;
-        Sequence< OUString > aProps(2);
-        OUString* pProps = aProps.getArray();
-        pProps[0] = OUString::createFromAscii( "Title" );
-        pProps[1] = OUString::createFromAscii( "IsFolder" );
-
-        try
-        {
-            ResultSetInclude eInclude = bFolder ? INCLUDE_FOLDERS_AND_DOCUMENTS : INCLUDE_DOCUMENTS_ONLY;
-            if ( !bSorted )
-            {
-                xResultSet = aCnt.createCursor( aProps, eInclude );
-            }
-            else
-            {
-                Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
-                xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
-
-                Reference < com::sun::star::ucb::XAnyCompareFactory > xFactory;
-                Reference < XMultiServiceFactory > xMgr = getProcessServiceFactory();
-                Reference < com::sun::star::ucb::XSortedDynamicResultSetFactory > xSRSFac(
-                    xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SortedDynamicResultSetFactory") ), UNO_QUERY );
-
-                Sequence< com::sun::star::ucb::NumberedSortingInfo > aSortInfo( 2 );
-                com::sun::star::ucb::NumberedSortingInfo* pInfo = aSortInfo.getArray();
-                pInfo[ 0 ].ColumnIndex = 2;
-                pInfo[ 0 ].Ascending   = sal_False;
-                pInfo[ 1 ].ColumnIndex = 1;
-                pInfo[ 1 ].Ascending   = sal_True;
-
-                Reference< com::sun::star::ucb::XDynamicResultSet > xDynamicResultSet;
-                xDynamicResultSet =
-                    xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xFactory );
-                if ( xDynamicResultSet.is() )
-                {
-                    sal_Int16 nCaps = xDynamicResultSet->getCapabilities();
-                    xResultSet = xDynamicResultSet->getStaticResultSet();
-                }
-            }
-        }
-        catch( ::com::sun::star::ucb::CommandAbortedException& )
-        {
-            LOG_ASSERT( sal_False, "createCursor: CommandAbortedException" );
-        }
-        catch( ... )
-        {
-            LOG_ASSERT( sal_False, "createCursor: Any other exception" );
-        }
-
-        if ( xResultSet.is() )
-        {
-            pFiles = new StringList_Impl;
-            Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-            try
-            {
-                while ( xResultSet->next() )
-                {
-                    OUString aId = xContentAccess->queryContentIdentifierString();
-                    OUString* pFile = new OUString( aId );
-                    pFiles->Insert( pFile, LIST_APPEND );
-                }
-            }
-            catch( ::com::sun::star::ucb::CommandAbortedException& )
-            {
-                LOG_ASSERT( sal_False, "XContentAccess::next(): CommandAbortedException" );
-            }
-            catch( ... )
-            {
-                LOG_ASSERT( sal_False, "XContentAccess::next(): Any other exception" );
-            }
-        }
-    }
-    catch( ... )
-    {
-        LOG_ASSERT( sal_False, "GetFolderContents: Any other exception" );
-    }
-
-    if ( pFiles )
-    {
-        ULONG nCount = pFiles->Count();
-        Sequence < OUString > aRet( nCount );
-        OUString* pRet = aRet.getArray();
-        for ( ULONG i = 0; i < nCount; ++i )
-        {
-            OUString* pFile = pFiles->GetObject(i);
-            pRet[i] = *( pFile );
-            delete pFile;
-        }
-        delete pFiles;
-        return aRet;
-    }
-    else
-        return Sequence < OUString > ();
 }

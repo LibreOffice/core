@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmkmenu.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-04-09 08:06:23 $
+ *  last change: $Author: cd $ $Date: 2001-05-03 08:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,38 +58,69 @@
  *
  *
  ************************************************************************/
-#ifndef _BMKMENU_HXX
-#define _BMKMENU_HXX
+#ifndef __FRAMEWORK_CLASSES_BMKMENU_HXX
+#define __FRAMEWORK_CLASSES_BMKMENU_HXX
+
+//_________________________________________________________________________________________________________________
+//  interface includes
+//_________________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+
+//_________________________________________________________________________________________________________________
+//  includes of other projects
+//_________________________________________________________________________________________________________________
 
 #include <vcl/menu.hxx>
 #include <vcl/image.hxx>
+#include <classes/menumanager.hxx>
 
-class BmkMenu_Impl;
 class String;
 class ImageList;
 
 #define BMKMENU_ITEMID_START    20000
 
+namespace framework
+{
+
+class BmkMenu_Impl;
 class BmkMenu : public PopupMenu
 {
-private:
-//  static ImageList*  _pSmallImages;
-//  static ImageList*  _pBigImages;
 
-    BmkMenu_Impl*   _pImp;
+    public:
+                        enum BmkMenuType
+                        {
+                            BMK_NEWMENU,
+                            BMK_WIZARDMENU
+                        };
 
-//  Image               GetImage( USHORT nId, BOOL bBig );
-
-                        BmkMenu( const String& rURL, BmkMenu* pRoot );
-
-protected:
-    USHORT              CreateMenuId();
-
-public:
-                        BmkMenu( const String& rURL, const String& rReferer );
+                        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                 BmkMenuType nType );
                         ~BmkMenu();
 
     void                Initialize(); // Synchrones Laden der Eintraege
+
+    protected:
+        BmkMenu::BmkMenuType m_nType;
+        USHORT          CreateMenuId();
+
+    private:
+        struct Attributes
+        {
+            ::rtl::OUString aTargetFrame;
+        };
+
+                        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                 BmkMenuType, BmkMenu* pRoot );
+
+        BmkMenu_Impl*   _pImp;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& m_xFrame;
+
+        friend class MenuManager;
 };
 
-#endif // #ifndef _BMKMENU_HXX
+} // namespace framework
+
+#endif // #ifndef __FRAMEWORK_CLASSES_BMKMENU_HXX
