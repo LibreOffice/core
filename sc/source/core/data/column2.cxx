@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-05 19:19:51 $
+ *  last change: $Author: nn $ $Date: 2002-06-24 15:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,11 @@ void ScColumn::SaveData( SvStream& rStream ) const
                         {
                             do
                             {
-                                pAttr = aIter.Next( nStt, nEnd );
+                                do
+                                {
+                                    pAttr = aIter.Next( nStt, nEnd );
+                                }
+                                while ( pAttr && nRow > nEnd );     // #99139# skip all formats before this cell
                             }
                             while( pAttr && !(
                                 (xFontConverter = pAttr->GetSubsFontConverter( nFontConverterFlags ))
@@ -501,6 +505,79 @@ void ScColumn::SaveNotes( SvStream& rStream ) const
 
 // -----------------------------------------------------------------------------------------
 
+void ScColumn::CorrectSymbolCells( CharSet eStreamCharSet )
+{
+    //  #99139# find and correct string cells that are formatted with a symbol font,
+    //  but are not in the LoadedSymbolStringCellsList
+    //  (because CELLTYPE_SYMBOLS wasn't written in the file)
+
+    ScFontToSubsFontConverter_AutoPtr xFontConverter;
+    const ULONG nFontConverterFlags = FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
+
+    BOOL bListInitialized = FALSE;
+    ScSymbolStringCellEntry* pCurrentEntry = NULL;
+
+    ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
+    USHORT nStt, nEnd;
+    const ScPatternAttr* pAttr = aAttrIter.Next( nStt, nEnd );
+    while ( pAttr )
+    {
+        if ( (xFontConverter = pAttr->GetSubsFontConverter( nFontConverterFlags )) ||
+                pAttr->IsSymbolFont() )
+        {
+            ScColumnIterator aCellIter( this, nStt, nEnd );
+            USHORT nRow;
+            ScBaseCell* pCell;
+            while ( aCellIter.Next( nRow, pCell ) )
+            {
+                if ( pCell->GetCellType() == CELLTYPE_STRING )
+                {
+                    List& rList = pDocument->GetLoadedSymbolStringCellsList();
+                    if (!bListInitialized)
+                    {
+                        pCurrentEntry = (ScSymbolStringCellEntry*)rList.First();
+                        bListInitialized = TRUE;
+                    }
+
+                    while ( pCurrentEntry && pCurrentEntry->nRow < nRow )
+                        pCurrentEntry = (ScSymbolStringCellEntry*)rList.Next();
+
+                    if ( pCurrentEntry && pCurrentEntry->nRow == nRow )
+                    {
+                        //  found
+                    }
+                    else
+                    {
+                        //  not in list -> convert and put into list
+
+                        ScStringCell* pStrCell = (ScStringCell*)pCell;
+                        String aOldStr;
+                        pStrCell->GetString( aOldStr );
+
+                        //  convert back to stream character set (get original data)
+                        ByteString aByteStr( aOldStr, eStreamCharSet );
+
+                        //  convert using symbol encoding, as for CELLTYPE_SYMBOLS cells
+                        String aNewStr( aByteStr, RTL_TEXTENCODING_SYMBOL );
+                        pStrCell->SetString( aNewStr );
+
+                        ScSymbolStringCellEntry * pEntry = new ScSymbolStringCellEntry;
+                        pEntry->pCell = pStrCell;
+                        pEntry->nRow = nRow;
+
+                        if ( pCurrentEntry )
+                            rList.Insert( pEntry );     // before current entry - pCurrentEntry stays valid
+                        else
+                            rList.Insert( pEntry, LIST_APPEND );    // append if already behind last entry
+                    }
+                }
+            }
+        }
+
+        pAttr = aAttrIter.Next( nStt, nEnd );
+    }
+}
+
 BOOL ScColumn::Load( SvStream& rStream, ScMultipleReadHeader& rHdr )
 {
     rHdr.StartEntry();
@@ -527,6 +604,11 @@ BOOL ScColumn::Load( SvStream& rStream, ScMultipleReadHeader& rHdr )
         }
     }
     rHdr.EndEntry();
+
+    //  #99139# old versions didn't always write CELLTYPE_SYMBOLS for symbol string cells,
+    //  so we have to look for remaining string cells in areas that are formatted with
+    //  symbol font:
+    CorrectSymbolCells( rStream.GetStreamCharSet() );
 
     if ( pDocument->SymbolStringCellsPending() )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-10-18 08:56:15 $
+ *  last change: $Author: nn $ $Date: 2002-06-24 15:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,6 +433,7 @@ public:
 private:
     ScBaseCell* CloneCell(USHORT nIndex, USHORT nFlags,
                             ScDocument* pDestDoc, const ScAddress& rDestPos);
+    void        CorrectSymbolCells( CharSet eStreamCharSet );
 };
 
 
