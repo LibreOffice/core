@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-30 12:50:53 $
+ *  last change: $Author: pl $ $Date: 2001-04-05 10:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2288,7 +2288,8 @@ void SalFrameData::RepositionChildren()
     for( nChild = 0; nChild < maChildren.Count(); nChild++ )
     {
         SalFrameData* pData = &maChildren.GetObject( nChild )->maFrameData;
-        XRaiseWindow( GetXDisplay(), pData->GetStackingWindow() ? pData->GetStackingWindow() : pData->GetShellWindow() );
+        if( pData->bMapped_ )
+            XRaiseWindow( GetXDisplay(), pData->GetStackingWindow() ? pData->GetStackingWindow() : pData->GetShellWindow() );
     }
     for( nChild = 0; nChild < maChildren.Count(); nChild++ )
     {
