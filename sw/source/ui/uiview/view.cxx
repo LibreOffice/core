@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:56:30 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,6 +369,52 @@ void SwView::ImpSetVerb( int nSelType )
     }
 }
 
+/*--------------------------------------------------------------------
+    Description:
+    called by the SwEditWin when it gets the focus
+ --------------------------------------------------------------------*/
+
+void SwView::GotFocus() const
+{
+    // if we got the focus, and the form shell *is* on the top of the dispatcher
+    // stack, then we need to rebuild the stack (the form shell doesn't belong to
+    // the top then)
+    const SfxDispatcher& rDispatcher = const_cast< SwView* >( this )->GetDispatcher();
+    SfxShell* pTopShell = rDispatcher.GetShell( 0 );
+    FmFormShell* pAsFormShell = PTR_CAST( FmFormShell, pTopShell );
+    if ( pAsFormShell )
+    {
+        pAsFormShell->ForgetActiveControl();
+        const_cast< SwView* >( this )->AttrChangedNotify( pWrtShell );
+    }
+}
+
+/*--------------------------------------------------------------------
+    Description:
+    called by the FormShell when a form control is focused. This is
+    a request to put the form shell on the top of the dispatcher
+    stack
+ --------------------------------------------------------------------*/
+
+IMPL_LINK( SwView, FormControlActivated, FmFormShell*, EMPTYARG )
+{
+    // if a form control has been activated, and the form shell is not on the top
+    // of the dispatcher stack, then we need to activate it
+    const SfxDispatcher& rDispatcher = GetDispatcher();
+    const SfxShell* pTopShell = rDispatcher.GetShell( 0 );
+    const FmFormShell* pAsFormShell = PTR_CAST( FmFormShell, pTopShell );
+    if ( !pAsFormShell )
+    {
+        // if we're editing text currently, cancel this
+        SdrView *pSdrView = pWrtShell ? pWrtShell->GetDrawView() : NULL;
+        if ( pSdrView && pSdrView->IsTextEdit() )
+            pSdrView->EndTextEdit( sal_True );
+
+        const_cast< SwView* >( this )->AttrChangedNotify( pWrtShell );
+    }
+
+    return 0L;
+}
 
 void SwView::SelectShell()
 {
@@ -392,6 +438,9 @@ void SwView::SelectShell()
     //SEL_TBL und SEL_TBL_CELLS koennen verodert sein!
     int nNewSelectionType = (pWrtShell->GetSelectionType()
                                 & ~SwWrtShell::SEL_TBL_CELLS);
+
+    if ( pFormShell && pFormShell->IsActiveControl() )
+        nNewSelectionType |= SwWrtShell::FOC_FRM_CTRL;
 
     if ( nNewSelectionType == nSelectionType )
     {
@@ -418,17 +467,22 @@ void SwView::SelectShell()
                 pBarCfg->SetTopToolbar( nSelectionType, nId );
 
             SfxShell *pSfxShell;
-            sal_uInt16 i;
-            for ( i = 0; sal_True; ++i )
+            for ( sal_uInt16 i = 0; sal_True; ++i )
             {
                 pSfxShell = rDispatcher.GetShell( i );
-                if ( !(pSfxShell->ISA( SwBaseShell ) ||
-                    pSfxShell->ISA( SwDrawTextShell )) )
+                if  (  pSfxShell->ISA( SwBaseShell )
+                    || pSfxShell->ISA( SwDrawTextShell )
+                    )
+                {
+                    rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_DELETE );
+                }
+                else if ( pSfxShell->ISA( FmFormShell ) )
+                {
+                    rDispatcher.Pop( *pSfxShell );
+                }
+                else
                     break;
             }
-            pSfxShell = rDispatcher.GetShell( --i );
-            ASSERT( pSfxShell, "My Shell ist lost in space" );
-            rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE);
         }
 
         FASTBOOL bInitFormShell = sal_False;
@@ -436,14 +490,16 @@ void SwView::SelectShell()
         {
             bInitFormShell = sal_True;
             pFormShell = new FmFormShell( this );
-            rDispatcher.Push( *pFormShell );
-
+            pFormShell->SetControlActivationHandler( LINK( this, SwView, FormControlActivated ) );
             StartListening(*pFormShell);
         }
 
         FASTBOOL bSetExtInpCntxt = sal_False;
         nSelectionType = nNewSelectionType;
         ShellModes eShellMode;
+
+        if ( !( nSelectionType & SwWrtShell::FOC_FRM_CTRL ) )
+            rDispatcher.Push( *pFormShell );
 
         if ( nSelectionType & SwWrtShell::SEL_OLE )
         {
@@ -521,6 +577,10 @@ void SwView::SelectShell()
                 rDispatcher.Push( *pShell );
             }
         }
+
+        if ( nSelectionType & SwWrtShell::FOC_FRM_CTRL )
+            rDispatcher.Push( *pFormShell );
+
         pViewImpl->SetShellMode(eShellMode);
         ImpSetVerb( nSelectionType );
 
@@ -1779,6 +1839,9 @@ BOOL SwView::IsPasteAllowed()
 
 BOOL SwView::IsPasteSpecialAllowed()
 {
+    if ( pFormShell && pFormShell->IsActiveControl() )
+        return FALSE;
+
     USHORT nPasteDestination = SwTransferable::GetSotDestination( *pWrtShell );
     if( nLastPasteDestination != nPasteDestination )
     {
