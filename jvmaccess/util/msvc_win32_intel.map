@@ -1,0 +1,14 @@
+UDK_3.1 {
+    global:
+        # jvmaccess/virtualmachine.hxx:
+        ??0CreationException@AttachGuard@VirtualMachine@jvmaccess@@QAE@XZ; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException()
+        ??0CreationException@AttachGuard@VirtualMachine@jvmaccess@@QAE@ABV0123@@Z; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException(CreationException const &)
+        ??1CreationException@AttachGuard@VirtualMachine@jvmaccess@@UAE@XZ; # jvmaccess::VirtualMachine::AttachGuard::CreationException::~CreationException()
+        ??4CreationException@AttachGuard@VirtualMachine@jvmaccess@@QAEAAV0123@ABV0123@@Z; # jvmaccess::VirtualMachine::AttachGuard::CreationException::operator =(CreationException const &)
+        ??0AttachGuard@VirtualMachine@jvmaccess@@QAE@ABV?$Reference@VVirtualMachine@jvmaccess@@@rtl@@@Z; # jvmaccess::VirtualMachine::AttachGuard::AttachGuard(rtl::Reference< VirtualMachine > const &)
+        ??1AttachGuard@VirtualMachine@jvmaccess@@QAE@XZ; # jvmaccess::VirtualMachine::AttachGuard::~AttachGuard()
+        ??0VirtualMachine@jvmaccess@@QAE@PAUJavaVM_@@J_NPAUJNIEnv_@@@Z; # jvmaccess::VirtualMachine::VirtualMachine(JavaVM *, jint, bool, JNIEnv *)
+
+    local:
+        *;
+};
