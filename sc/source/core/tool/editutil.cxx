@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-25 18:23:30 $
+ *  last change: $Author: sab $ $Date: 2000-11-22 13:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,7 +577,7 @@ String __EXPORT ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             aRet = Application::GetAppInternational().GetDate(aData.aDate);
         else
         {
-            DBG_ERROR("unbekannter Feldbefehl");
+            //DBG_ERROR("unbekannter Feldbefehl");
             aRet = '?';
         }
     }
