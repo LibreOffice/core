@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoaprms.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:16:54 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ SdAnimationPrmsUndoAction::SdAnimationPrmsUndoAction(
 
         eNewClickAction     = eOldClickAction    = pInfo->eClickAction;
         aNewBookmark        = aOldBookmark       = pInfo->aBookmark;
-        bNewInvisibleInPres = bOldInvisibleInPres= pInfo->bInvisibleInPresentation;
+//      bNewInvisibleInPres = bOldInvisibleInPres= pInfo->bInvisibleInPresentation;
         nNewVerb            = nOldVerb           = pInfo->nVerb;
         nNewPresOrder       = nOldPresOrder      = pInfo->nPresOrder;
 
@@ -145,7 +145,7 @@ void SdAnimationPrmsUndoAction::Undo()
             pInfo->SetPath(pOldPathObj);
             pInfo->eClickAction = eOldClickAction;
             pInfo->aBookmark    = aOldBookmark;
-            pInfo->bInvisibleInPresentation = bOldInvisibleInPres;
+//          pInfo->bInvisibleInPresentation = bOldInvisibleInPres;
             pInfo->nVerb        = nOldVerb;
             pInfo->nPresOrder   = nOldPresOrder;
 
@@ -201,7 +201,7 @@ void SdAnimationPrmsUndoAction::Redo()
     pInfo->SetPath(pNewPathObj);
     pInfo->eClickAction = eNewClickAction;
     pInfo->aBookmark    = aNewBookmark;
-    pInfo->bInvisibleInPresentation = bNewInvisibleInPres;
+//  pInfo->bInvisibleInPresentation = bNewInvisibleInPres;
     pInfo->nVerb        = nNewVerb;
     pInfo->nPresOrder   = nNewPresOrder;
 
