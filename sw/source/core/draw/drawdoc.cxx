@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:24:51 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,7 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
@@ -80,6 +78,7 @@
 #include <svx/forbiddencharacterstable.hxx>
 #endif
 
+#include <unotools/ucbstreamhelper.hxx>
 #include <svx/xtable.hxx>
 
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
@@ -113,12 +112,15 @@
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>
 #endif
-#ifndef _SW3IO_HXX
-#include <sw3io.hxx>
-#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
+
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+
+using namespace com::sun::star;
 
 /*************************************************************************
 |*
@@ -269,11 +271,8 @@ SdrPage* SwDrawDocument::AllocPage(FASTBOOL bMasterPage)
 SvStream* SwDrawDocument::GetDocumentStream( SdrDocumentStreamInfo& rInfo ) const
 {
     SvStream* pRet = NULL;
-    SvStorageRef xRoot( pDoc->GetDocStorage() );
-    String sDrawStrmNm( String::CreateFromAscii(
-                    RTL_CONSTASCII_STRINGPARAM( DRAWING_STREAM_NAME )));
-
-     if( xRoot.Is() && SVSTREAM_OK == xRoot->GetError() )
+    uno::Reference < embed::XStorage > xRoot( pDoc->GetDocStorage() );
+    if( xRoot.is() )
     {
         if( rInfo.maUserData.Len() &&
             ( rInfo.maUserData.GetToken( 0, ':' ) ==
@@ -284,82 +283,27 @@ SvStream* SwDrawDocument::GetDocumentStream( SdrDocumentStreamInfo& rInfo ) cons
             // graphic from picture stream in picture storage in XML package
             if( aPicturePath.GetTokenCount( '/' ) == 2 )
             {
-                SvStorageRef    xPictureStorage;
                 const String    aPictureStorageName( aPicturePath.GetToken( 0, '/' ) );
                 const String    aPictureStreamName( aPicturePath.GetToken( 1, '/' ) );
 
-                if( xRoot->IsContained( aPictureStorageName ) &&
-                    xRoot->IsStorage( aPictureStorageName )  )
+                try
                 {
-                    xPictureStorage = xRoot->OpenUCBStorage( aPictureStorageName,
-                                                             STREAM_READ |
-                                                             STREAM_SHARE_DENYWRITE |
-                                                             STREAM_NOCREATE );
-                }
-
-                if( xPictureStorage.Is() &&
-                    xPictureStorage->IsContained( aPictureStreamName ) &&
-                    xPictureStorage->IsStream( aPictureStreamName ) )
-                {
-                    pRet = xPictureStorage->OpenSotStream( aPictureStreamName,
-                                                           STREAM_READ |
-                                                           STREAM_SHARE_DENYWRITE |
-                                                           STREAM_NOCREATE );
-
+                    uno::Reference < embed::XStorage > xPictureStorage = xRoot->openStorageElement(
+                            aPictureStorageName, embed::ElementModes::READ );
+                    uno::Reference < io::XStream > xStream = xPictureStorage->openStreamElement(
+                            aPictureStreamName, embed::ElementModes::READ );
+                    pRet = utl::UcbStreamHelper::CreateStream( xStream );
                     if( pRet )
                     {
-                        pRet->SetVersion( xPictureStorage->GetVersion() );
-                        pRet->SetKey( xPictureStorage->GetKey() );
-
                         rInfo.mbDeleteAfterUse = TRUE;
-                        rInfo.mpStorageRef = new SvStorageRef( xPictureStorage );
+                        rInfo.mxStorageRef = xPictureStorage;
                     }
+                }
+                catch ( uno::Exception& )
+                {
                 }
             }
         }
-        else if( xRoot->IsStream( sDrawStrmNm ) )
-        {
-            long nFFVersion = xRoot->GetVersion();
-            ASSERT( nFFVersion == SOFFICE_FILEFORMAT_31 ||
-                    nFFVersion == SOFFICE_FILEFORMAT_40 ||
-                    nFFVersion == SOFFICE_FILEFORMAT_50,
-                    "Am Root-Storage ist keine FF-Version gesetzt!" );
-
-            // Wenn eine 3.1-Clipboard-ID gesetzt ist, die Fileformat-Version
-            // auf 3.1 setzten.
-            if( SOT_FORMATSTR_ID_STARWRITER_30 == xRoot->GetFormat() &&
-                nFFVersion != SOFFICE_FILEFORMAT_31 )
-            {
-                ASSERT( nFFVersion == SOFFICE_FILEFORMAT_31,
-                        "Fileformat-Version auf 3.1 umgesetzt" );
-                xRoot->SetVersion( nFFVersion = SOFFICE_FILEFORMAT_31 );
-            }
-            else if( ( SOT_FORMATSTR_ID_STARWRITER_40 == xRoot->GetFormat() ||
-                       SOT_FORMATSTR_ID_STARWRITERWEB_40 == xRoot->GetFormat() ||
-                       SOT_FORMATSTR_ID_STARWRITERGLOB_40 == xRoot->GetFormat() ) &&
-                     nFFVersion != SOFFICE_FILEFORMAT_40 )
-            {
-                ASSERT( nFFVersion == SOFFICE_FILEFORMAT_40,
-                        "Fileformat-Version auf 4.0 umgesetzt" );
-                xRoot->SetVersion( nFFVersion = SOFFICE_FILEFORMAT_40 );
-            }
-            else if( ( SOT_FORMATSTR_ID_STARWRITER_50 == xRoot->GetFormat() ||
-                       SOT_FORMATSTR_ID_STARWRITERWEB_50 == xRoot->GetFormat() ||
-                       SOT_FORMATSTR_ID_STARWRITERGLOB_50 == xRoot->GetFormat() ) &&
-                     nFFVersion != SOFFICE_FILEFORMAT_50 )
-            {
-                ASSERT( nFFVersion == SOFFICE_FILEFORMAT_50,
-                        "Fileformat-Version auf 4.0 umgesetzt" );
-                xRoot->SetVersion( nFFVersion = SOFFICE_FILEFORMAT_50 );
-            }
-
-            pRet = xRoot->OpenStream( sDrawStrmNm,
-                        STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE );
-
-            if( pRet )
-                rInfo.mbDeleteAfterUse = TRUE;
-        }
-
     }
     return pRet;
 }
