@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-19 13:36:54 $
+ *  last change: $Author: mba $ $Date: 2000-12-19 15:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1250,7 +1250,10 @@ void SfxMedium::Transfer_Impl()
     {
         Reference < XContent > xContent = GetContent();
         if ( ! xContent.is() )
+        {
+            eError = ERRCODE_IO_NOTEXISTS;
             return;
+        }
 
         sal_Bool bSuccess = sal_False;
 
