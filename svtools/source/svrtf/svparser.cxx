@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svparser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-13 14:12:56 $
+ *  last change: $Author: mib $ $Date: 2001-10-15 08:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #define _SVSTDARR_USHORTS
 #include <svstdarr.hxx>
+#ifndef _RTL_TEXTCVT_H
+#include <rtl/textcvt.h>
+#endif
 
 #define SVPAR_CSM_
 
@@ -115,6 +118,8 @@ struct SvParser_Impl
 
     int             nSaveToken;         // das Token vom Continue
 
+    rtl_TextToUnicodeConverter hConv;
+
 #ifdef ASYNCHRON_TEST
 // HACK
 _SvLockBytes_Impl* pLB;
@@ -123,6 +128,12 @@ _SvLockBytes_Impl* pLB;
 #ifndef PRODUCT
     SvFileStream aOut;
 #endif
+
+    SvParser_Impl() :
+        nSaveToken(0), hConv( 0 )
+    {
+    }
+
 };
 
 
@@ -183,6 +194,11 @@ delete pImplData->pLB;
     pImplData->aOut.Close();
 #endif
 
+    if( pImplData && pImplData->hConv )
+    {
+        rtl_destroyTextToUnicodeConverter( pImplData->hConv );
+    }
+
     delete pImplData;
 
 #ifdef MPW
@@ -197,17 +213,34 @@ delete pImplData->pLB;
 
 void SvParser::SetSrcEncoding( rtl_TextEncoding eEnc )
 {
-    if( ( eEnc < RTL_TEXTENCODING_STD_COUNT &&
-          eEnc != RTL_TEXTENCODING_UTF7 ) ||
-        RTL_TEXTENCODING_UCS2 == eEnc  )
+
+    if( eEnc != eSrcEnc )
     {
-        eSrcEnc = eEnc;
-    }
-    else
-    {
-        DBG_ASSERT( !this,
-                    "SvParser::SetSrcEncoding: invalid source encoding" );
-        eSrcEnc = RTL_TEXTENCODING_DONTKNOW;
+        if( pImplData && pImplData->hConv )
+        {
+            rtl_destroyTextToUnicodeConverter( pImplData->hConv );
+            pImplData->hConv = 0;
+        }
+
+        if( eEnc < RTL_TEXTENCODING_STD_COUNT ||
+            RTL_TEXTENCODING_UCS2 == eEnc  )
+        {
+            eSrcEnc = eEnc;
+            if( !pImplData )
+                pImplData = new SvParser_Impl;
+            pImplData->hConv = rtl_createTextToUnicodeConverter( eSrcEnc );
+            DBG_ASSERT( pImplData->hConv,
+                        "SvParser::SetSrcEncoding: no converter for source encoding" );
+            if( !pImplData->hConv )
+                eSrcEnc = RTL_TEXTENCODING_DONTKNOW;
+
+        }
+        else
+        {
+            DBG_ASSERT( !this,
+                        "SvParser::SetSrcEncoding: invalid source encoding" );
+            eSrcEnc = RTL_TEXTENCODING_DONTKNOW;
+        }
     }
 }
 
@@ -250,6 +283,9 @@ sal_Unicode SvParser::GetNextChar()
 //HACK
 #else
 
+    // When reading muliple bytes, we don't have to care about the file
+    // position when we run inti the pending state. The file position is
+    // maintained by SaveState/RestoreState.
     BOOL bErr;
     if( bSwitchToUCS2 && 0 == rInput.Tell() )
     {
@@ -285,85 +321,24 @@ sal_Unicode SvParser::GetNextChar()
         bSwitchToUCS2 = FALSE;
     }
 
-    if( RTL_TEXTENCODING_UCS2 == eSrcEnc || RTL_TEXTENCODING_UTF8 == eSrcEnc )
+    if( RTL_TEXTENCODING_UCS2 == eSrcEnc )
     {
         sal_Unicode cUC = USHRT_MAX;
-        sal_uChar c1, c2, c3;
+        sal_uChar c1, c2;
 
-        if( RTL_TEXTENCODING_UTF8 == eSrcEnc )
-        {
-            rInput >> c1;
-            if( !(bErr = (rInput.IsEof() || rInput.GetError())) )
-            {
-                switch( c1 >> 4 )
-                {
-                case 0: case 1: case 2: case 3:
-                case 4: case 5: case 6: case 7:
-                    // 0xxxxxxx
-                    cUC = c1;
-                    break;
-
-                case 12: case 13:
-                    // 110x xxxx   10xx xxxx
-                    rInput >> c2;
-                    if( !(bErr = (rInput.IsEof() || rInput.GetError())) )
-                    {
-                        if( (c2 & 0xC0) == 0x80 )
-                        {
-                            cUC = (sal_Unicode(c1 & 0x1F) << 6) |
-                                    (c2 & 0x3F);
-                        }
-                        else
-                        {
-                            // Kein UTF-8? Dann Zeichen direkt einfuegen
-                            cUC = c1;
-                            rInput.SeekRel( -1 );
-                        }
-                    }
-                    break;
-
-                case 14:
-                    // 1110 xxxx  10xx xxxx  10xx xxxx
-                    rInput >> c2 >> c3;
-                    if( !(bErr = (rInput.IsEof() || rInput.GetError())) )
-                    {
-                        if( (c2 & 0xC0) == 0x80 && (c3 & 0xC0) == 0x80 )
-                        {
-                            cUC = (sal_Unicode(c1 & 0x0F) << 12) |
-                                  (sal_Unicode(c2 & 0x3F) << 6) |
-                                  (c3 & 0x3F);
-                        }
-                        else
-                        {
-                            // Kein UTF-8? Dann Zeichen direkt einfuegen
-                            cUC = c1;
-                            rInput.SeekRel( -2 );
-                        }
-                    }
-                    break;
-
-                default:
-                    cUC = c1;
-                    break;
-                }
-            }
-        }
-        else
-        {
+        rInput >> c1 >> c2;
+        if( 2 == rInput.Tell() &&
+            !(rInput.IsEof() || rInput.GetError()) &&
+            ( (bUCS2BSrcEnc && 0xfe == c1 && 0xff == c2) ||
+              (!bUCS2BSrcEnc && 0xff == c1 && 0xfe == c2) ) )
             rInput >> c1 >> c2;
-            if( 2 == rInput.Tell() && !
-                !(rInput.IsEof() || rInput.GetError()) &&
-                ( (bUCS2BSrcEnc && 0xfe == c1 && 0xff == c2) ||
-                  (!bUCS2BSrcEnc && 0xff == c1 && 0xfe == c2) ) )
-                rInput >> c1 >> c2;
 
-            if( !(bErr = (rInput.IsEof() || rInput.GetError())) )
-            {
-                if( bUCS2BSrcEnc )
-                    cUC = (sal_Unicode(c1) << 8) | c2;
-                else
-                    cUC = (sal_Unicode(c2) << 8) | c1;
-            }
+        if( !(bErr = (rInput.IsEof() || rInput.GetError())) )
+        {
+            if( bUCS2BSrcEnc )
+                cUC = (sal_Unicode(c1) << 8) | c2;
+            else
+                cUC = (sal_Unicode(c2) << 8) | c1;
         }
 
         if( !bErr )
@@ -373,17 +348,96 @@ sal_Unicode SvParser::GetNextChar()
     }
     else
     {
-        sal_uChar c1;
+        sal_Char c1;    // signed, that's the text converter expects
         rInput >> c1;
-        if( RTL_TEXTENCODING_DONTKNOW != eSrcEnc)
+        if( !(bErr = (rInput.IsEof() || rInput.GetError())) )
         {
-            // #73398#: If the character could not be converted,
-            // because a conversion is not available, do no conversion at all.
-            sal_Unicode cUC = ByteString::ConvertToUnicode( c1, eSrcEnc );
-            c = 0U != cUC ? cUC : (sal_Unicode)c;
-        }
+            if( RTL_TEXTENCODING_DONTKNOW == eSrcEnc )
+            {
+                // no convserion shall take place
+                c = (sal_Unicode)c1;
+            }
+            else
+            {
+                DBG_ASSERT( pImplData && pImplData->hConv,
+                             "no text converter!" )
 
-        bErr = rInput.IsEof() || rInput.GetError();
+                sal_Unicode cUC;
+                sal_uInt32 nInfo = 0;
+                sal_Size nCvtBytes;
+                sal_Size nChars = rtl_convertTextToUnicode(
+                            pImplData->hConv, 0, &c1, 1, &cUC, 1,
+                            RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|
+                            RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|
+                            RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR|
+                            RTL_TEXTTOUNICODE_FLAGS_FLUSH,
+                            &nInfo, &nCvtBytes);
+                if( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 )
+                {
+                    // The conversion wasn't successfull because we haven't
+                    // read enough characters.
+                    sal_Char sBuffer[10];
+                    sBuffer[0] = c1;
+                    sal_uInt16 nLen = 1;
+                    while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 &&
+                            nLen < 10 )
+                    {
+                        rInput >> c1;
+                        if( (bErr = (rInput.IsEof() || rInput.GetError())) )
+                            break;
+
+                        sBuffer[nLen++] = c1;
+                        nChars = rtl_convertTextToUnicode(
+                                    pImplData->hConv, 0, sBuffer, nLen, &cUC, 1,
+                                    RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|
+                                    RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|
+                                    RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR|
+                                    RTL_TEXTTOUNICODE_FLAGS_FLUSH,
+                                    &nInfo, &nCvtBytes);
+                    }
+                    if( !bErr )
+                    {
+                        if( 1 == nChars && 0 == nInfo )
+                        {
+                            DBG_ASSERT( nCvtBytes == nLen,
+                                        "no all bytes have been converted!" );
+                            c = cUC;
+                        }
+                        else
+                        {
+                            DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0,
+                                "source buffer is to small" );
+                            DBG_ASSERT( 0 == nChars,
+                               "there is a converted character, but an error" );
+                            DBG_ASSERT( 0 != nInfo,
+                               "there is no converted character and no error" );
+                            // There are still errors, so we use the first
+                            // character and restart after that.
+                            c = (sal_Unicode)sBuffer[0];
+                            rInput.SeekRel( -(nLen-1) );
+                        }
+                    }
+                }
+                else if( 1 == nChars && 0 == nInfo )
+                {
+                    // The conversion was successfull
+                    DBG_ASSERT( nCvtBytes == 1,
+                                "no all bytes have been converted!" );
+                    c = cUC;
+                }
+                else
+                {
+                    DBG_ASSERT( 0 == nChars,
+                            "there is a converted character, but an error" );
+                    DBG_ASSERT( 0 != nInfo,
+                            "there is no converted character and no error" );
+                    // #73398#: If the character could not be converted,
+                    // because a conversion is not available, do no conversion at all.
+                    c = (sal_Unicode)c1;
+
+                }
+            }
+        }
     }
     if( bErr )
     {
