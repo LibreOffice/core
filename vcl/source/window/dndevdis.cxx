@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-15 09:25:10 $
+ *  last change: $Author: obr $ $Date: 2001-09-24 08:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,6 +339,9 @@ sal_Int32 DNDEventDispatcher::fireDragEnterEvent( Window *pWindow,
     {
         OClearableGuard aGuard( Application::GetSolarMutex() );
 
+        // set an UI lock
+        pWindow->IncrementLockCount();
+
         // query DropTarget from window
         Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
 
@@ -408,6 +411,9 @@ sal_Int32 DNDEventDispatcher::fireDragExitEvent( Window *pWindow ) throw(Runtime
 
         if( xDropTarget.is() )
             n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragExitEvent();
+
+        // release UI lock
+        pWindow->DecrementLockCount();
     }
 
     return n;
@@ -474,6 +480,9 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
             n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDropEvent(
                 xContext, nDropAction, relLoc.X(), relLoc.Y(), nSourceActions, xTransferable );
         }
+
+        // release UI lock
+        pWindow->DecrementLockCount();
     }
 
     return n;
