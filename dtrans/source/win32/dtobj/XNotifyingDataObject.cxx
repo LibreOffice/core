@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNotifyingDataObject.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-22 14:15:51 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,6 @@
  *
  ************************************************************************/
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -83,18 +79,12 @@
 #include "..\..\inc\DtObjFactory.hxx"
 #endif
 
-//------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
 
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Reference;
 
-//------------------------------------------------------------------------
-// ctor
-//------------------------------------------------------------------------
 
 CXNotifyingDataObject::CXNotifyingDataObject(
     const IDataObjectPtr& aIDataObject,
@@ -108,10 +98,6 @@ CXNotifyingDataObject::CXNotifyingDataObject(
     m_pWinClipImpl( theWinClipImpl )
 {
 }
-
-//------------------------------------------------------------------------
-// IUnknown->QueryInterface
-//------------------------------------------------------------------------
 
 STDMETHODIMP CXNotifyingDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
 {
@@ -132,18 +118,10 @@ STDMETHODIMP CXNotifyingDataObject::QueryInterface( REFIID iid, LPVOID* ppvObjec
     return hr;
 }
 
-//------------------------------------------------------------------------
-// IUnknown->AddRef
-//------------------------------------------------------------------------
-
 STDMETHODIMP_(ULONG) CXNotifyingDataObject::AddRef( )
 {
     return static_cast< ULONG >( InterlockedIncrement( &m_nRefCnt ) );
 }
-
-//------------------------------------------------------------------------
-// IUnknown->Release
-//------------------------------------------------------------------------
 
 STDMETHODIMP_(ULONG) CXNotifyingDataObject::Release( )
 {
@@ -161,216 +139,68 @@ STDMETHODIMP_(ULONG) CXNotifyingDataObject::Release( )
     return nRefCnt;
 }
 
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
 STDMETHODIMP CXNotifyingDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
 {
-    HRESULT hr;
-
-    try
-    {
-        hr = m_aIDataObject->GetData( pFormatetc, pmedium );
-    }
-    catch( _com_error& ex )
-    {
-        hr = ex.Error( );
-    }
-
-    return hr;
+    return m_aIDataObject->GetData(pFormatetc, pmedium);
 }
-
-//------------------------------------------------------------------------
-// IDataObject->EnumFormatEtc
-//------------------------------------------------------------------------
 
 STDMETHODIMP CXNotifyingDataObject::EnumFormatEtc(
     DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc )
 {
-    HRESULT hr;
-
-    try
-    {
-        hr = m_aIDataObject->EnumFormatEtc(
-            dwDirection, ppenumFormatetc );
-    }
-    catch( _com_error& ex )
-    {
-        hr = ex.Error( );
-    }
-
-    return hr;
+    return m_aIDataObject->EnumFormatEtc(dwDirection, ppenumFormatetc);
 }
-
-//------------------------------------------------------------------------
-// IDataObject->QueryGetData
-//------------------------------------------------------------------------
 
 STDMETHODIMP CXNotifyingDataObject::QueryGetData( LPFORMATETC pFormatetc )
 {
-    HRESULT hr;
-
-    try
-    {
-        hr = m_aIDataObject->QueryGetData( pFormatetc );
-    }
-    catch( _com_error& ex )
-    {
-        hr = ex.Error( );
-    }
-
-    return hr;
+    return m_aIDataObject->QueryGetData(pFormatetc);
 }
-
-//------------------------------------------------------------------------
-// IDataObject->GetDataHere
-//------------------------------------------------------------------------
 
 STDMETHODIMP CXNotifyingDataObject::GetDataHere( LPFORMATETC lpFetc, LPSTGMEDIUM lpStgMedium )
 {
-    HRESULT hr;
-
-    try
-    {
-        hr = m_aIDataObject->GetDataHere( lpFetc, lpStgMedium );
-    }
-    catch( _com_error& ex )
-    {
-        hr = ex.Error( );
-    }
-
-    return hr;
+    return m_aIDataObject->GetDataHere(lpFetc, lpStgMedium);
 }
-
-//------------------------------------------------------------------------
-// IDataObject->GetCanonicalFormatEtc
-//------------------------------------------------------------------------
 
 STDMETHODIMP CXNotifyingDataObject::GetCanonicalFormatEtc( LPFORMATETC lpFetc, LPFORMATETC lpCanonicalFetc )
 {
-    HRESULT hr;
-
-    try
-    {
-        hr = m_aIDataObject->GetCanonicalFormatEtc( lpFetc, lpCanonicalFetc );
-    }
-    catch( _com_error& ex )
-    {
-        hr = ex.Error( );
-    }
-
-    return hr;
+    return m_aIDataObject->GetCanonicalFormatEtc(lpFetc, lpCanonicalFetc);
 }
-
-//------------------------------------------------------------------------
-// IDataObject->SetData
-//------------------------------------------------------------------------
 
 STDMETHODIMP CXNotifyingDataObject::SetData( LPFORMATETC lpFetc, LPSTGMEDIUM lpStgMedium, BOOL bRelease )
 {
-    HRESULT hr;
-
-    try
-    {
-        hr = m_aIDataObject->SetData( lpFetc, lpStgMedium, bRelease );
-    }
-    catch( _com_error& ex )
-    {
-        hr = ex.Error( );
-    }
-
-    return hr;
+    return m_aIDataObject->SetData( lpFetc, lpStgMedium, bRelease );
 }
-
-//------------------------------------------------------------------------
-// IDataObject->DAdvise
-//------------------------------------------------------------------------
 
 STDMETHODIMP CXNotifyingDataObject::DAdvise(
     LPFORMATETC lpFetc, DWORD advf, LPADVISESINK lpAdvSink, DWORD* pdwConnection )
 {
-    HRESULT hr;
-
-    try
-    {
-        hr = m_aIDataObject->DAdvise( lpFetc, advf, lpAdvSink, pdwConnection );
-    }
-    catch( _com_error& ex )
-    {
-        hr = ex.Error( );
-    }
-
-    return hr;
+    return m_aIDataObject->DAdvise( lpFetc, advf, lpAdvSink, pdwConnection );
 }
-
-//------------------------------------------------------------------------
-// IDataObject->DUnadvise
-//------------------------------------------------------------------------
 
 STDMETHODIMP CXNotifyingDataObject::DUnadvise( DWORD dwConnection )
 {
-    HRESULT hr;
-
-    try
-    {
-        hr = m_aIDataObject->DUnadvise( dwConnection );
-    }
-    catch( _com_error& ex )
-    {
-        hr = ex.Error( );
-    }
-
-    return hr;
+    return m_aIDataObject->DUnadvise( dwConnection );
 }
-
-//------------------------------------------------------------------------
-// IDataObject->EnumDAdvise
-//------------------------------------------------------------------------
 
 STDMETHODIMP CXNotifyingDataObject::EnumDAdvise( LPENUMSTATDATA * ppenumAdvise )
 {
-    HRESULT hr;
-
-    try
-    {
-        hr = m_aIDataObject->EnumDAdvise( ppenumAdvise );
-    }
-    catch( _com_error& ex )
-    {
-        hr = ex.Error( );
-    }
-
-    return hr;
+    return m_aIDataObject->EnumDAdvise( ppenumAdvise );
 }
-
-//------------------------------------------------------------------------
-// for our convenience
-//------------------------------------------------------------------------
 
 CXNotifyingDataObject::operator IDataObject*( )
 {
     return static_cast< IDataObject* >( this );
 }
 
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
 void SAL_CALL CXNotifyingDataObject::lostOwnership( )
 {
     try
     {
-        if ( m_XClipboardOwner.is( ) )
+        if (m_XClipboardOwner.is())
             m_XClipboardOwner->lostOwnership(
-                static_cast< XClipboardEx* >( m_pWinClipImpl->m_pWinClipboard ), m_XTransferable );
+                static_cast<XClipboardEx*>(m_pWinClipImpl->m_pWinClipboard ), m_XTransferable);
     }
-    catch( RuntimeException& )
+    catch(RuntimeException&)
     {
         OSL_ENSURE( sal_False, "RuntimeException caught" );
-    }
-    catch(...)
-    {
-        OSL_ENSURE( sal_False, "Unknown exception caught" );
     }
 }
