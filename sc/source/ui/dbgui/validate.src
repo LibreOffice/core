@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-19 20:17:56 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,7 +542,7 @@ TabPage TP_VALIDATION_VALUES
             < "uguale" ; Default ; > ;
             < "più piccolo di" ; Default ; > ;
             < "maggiore di" ; Default ; > ;
-            < "inferiore o uguale" ; Default ; > ;
+            < "minore o uguale" ; Default ; > ;
             < "maggiore o uguale" ; Default ; > ;
             < "diverso" ; Default ; > ;
             < "tra" ; Default ; > ;
@@ -1355,6 +1355,7 @@ TabPage TP_VALIDATION_ERROR
     Text[ catalan ] = "Mensaje de error";
     Text[ finnish ] = "Virhehälytys";
 };
+
 
 
 
