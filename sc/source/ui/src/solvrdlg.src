@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:06 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   solvrdlg.src  $
- //   $Author: hr $
- //     $Date: 2000-09-18 16:45:06 $
- // $Revision: 1.1.1.1 $
+ //   $Author: nf $
+ //     $Date: 2000-09-27 20:51:56 $
+ // $Revision: 1.2 $
  //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -83,7 +83,7 @@ ModelessDialog RID_SCDLG_SOLVER
     Text [ norwegian ] = "+++ Problemløser Solver" ;
     Text [ italian ] = "Ricerca valore destinazione" ;
     Text [ portuguese_brazilian ] = "Resolver" ;
-    Text [ portuguese ] = "Atingir objectivo" ;
+    Text [ portuguese ] = "Resolver" ;
     Text [ finnish ] = "Ratkaisija" ;
     Text [ danish ] = "Målsøgning" ;
     Text [ french ] = "Recherche de valeur cible" ;
