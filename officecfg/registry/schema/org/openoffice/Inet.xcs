@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Inet.xcs,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:31:51 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 				<desc xml:lang="th">Specifies the search type, i.e. nexus or exact search.</desc>
 				<desc xml:lang="hi-IN">Specifies the search type, i.e. nexus or exact search.</desc>
 				<desc xml:lang="x-comment">Specifies the search type, i.e. nexus or exact search.</desc>
+				<desc xml:lang="sk">Specifies the search type, i.e. nexus or exact search.</desc>
 			</info>
 			<group oor:name="And">
 				<info>
@@ -106,7 +107,7 @@
 					<desc xml:lang="fi">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 					<desc xml:lang="cs">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 					<desc xml:lang="da">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="zh-CN">指定“和”搜寻的搜寻选项 (必须找到所有字)。</desc>
+					<desc xml:lang="zh-CN">指定“和”搜寻的搜寻选项(必须找到所有字)。</desc>
 					<desc xml:lang="zh-TW">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 					<desc xml:lang="ar">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 					<desc xml:lang="he">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
@@ -124,6 +125,7 @@
 					<desc xml:lang="th">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 					<desc xml:lang="hi-IN">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 					<desc xml:lang="x-comment">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
+					<desc xml:lang="sk">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 				</info>
 				<prop oor:name="ooInetPrefix" oor:type="xs:string">
 					<info>
@@ -152,6 +154,7 @@
 						<desc xml:lang="th">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="hi-IN">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="x-comment">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc xml:lang="sk">Specifies the search expression, i.e. URL and query command.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSuffix" oor:type="xs:string">
@@ -181,6 +184,7 @@
 						<desc xml:lang="th">Specifies the suffix.</desc>
 						<desc xml:lang="hi-IN">Specifies the suffix.</desc>
 						<desc xml:lang="x-comment">Specifies the suffix.</desc>
+						<desc xml:lang="sk">Specifies the suffix.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSeparator" oor:type="xs:string">
@@ -210,6 +214,7 @@
 						<desc xml:lang="th">Specifies the separator</desc>
 						<desc xml:lang="hi-IN">Specifies the separator</desc>
 						<desc xml:lang="x-comment">Specifies the separator</desc>
+						<desc xml:lang="sk">Specifies the separator</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetCaseMatch" oor:type="xs:int">
@@ -239,6 +244,7 @@
 						<desc xml:lang="th">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="hi-IN">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="x-comment">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc xml:lang="sk">Specifies if upper and lower case spelling should be considered.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -343,7 +349,7 @@
 					<desc xml:lang="fi">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 					<desc xml:lang="cs">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 					<desc xml:lang="da">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="zh-CN">指定“或”搜寻的搜寻选项 (必须至少找到一个字)。</desc>
+					<desc xml:lang="zh-CN">指定“或”搜寻的搜寻选项(必须至少找到一个字)。</desc>
 					<desc xml:lang="zh-TW">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 					<desc xml:lang="ar">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 					<desc xml:lang="he">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
@@ -361,6 +367,7 @@
 					<desc xml:lang="th">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 					<desc xml:lang="hi-IN">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 					<desc xml:lang="x-comment">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
+					<desc xml:lang="sk">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 				</info>
 				<prop oor:name="ooInetPrefix" oor:type="xs:string">
 					<info>
@@ -389,6 +396,7 @@
 						<desc xml:lang="th">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="hi-IN">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="x-comment">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc xml:lang="sk">Specifies the search expression, i.e. URL and query command.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSuffix" oor:type="xs:string">
@@ -418,6 +426,7 @@
 						<desc xml:lang="th">Specifies the suffix.</desc>
 						<desc xml:lang="hi-IN">Specifies the suffix.</desc>
 						<desc xml:lang="x-comment">Specifies the suffix.</desc>
+						<desc xml:lang="sk">Specifies the suffix.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSeparator" oor:type="xs:string">
@@ -447,6 +456,7 @@
 						<desc xml:lang="th">Specifies the separator</desc>
 						<desc xml:lang="hi-IN">Specifies the separator</desc>
 						<desc xml:lang="x-comment">Specifies the separator</desc>
+						<desc xml:lang="sk">Specifies the separator</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetCaseMatch" oor:type="xs:int">
@@ -476,6 +486,7 @@
 						<desc xml:lang="th">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="hi-IN">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="x-comment">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc xml:lang="sk">Specifies if upper and lower case spelling should be considered.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -580,7 +591,7 @@
 					<desc xml:lang="fi">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 					<desc xml:lang="cs">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 					<desc xml:lang="da">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="zh-CN">指定“精确”搜寻的搜寻选项 (必须找到整个文字)。</desc>
+					<desc xml:lang="zh-CN">指定“精确”搜寻的搜寻选项(必须找到整个文字)。</desc>
 					<desc xml:lang="zh-TW">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 					<desc xml:lang="ar">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 					<desc xml:lang="he">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
@@ -598,6 +609,7 @@
 					<desc xml:lang="th">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 					<desc xml:lang="hi-IN">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 					<desc xml:lang="x-comment">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
+					<desc xml:lang="sk">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 				</info>
 				<prop oor:name="ooInetPrefix" oor:type="xs:string">
 					<info>
@@ -626,6 +638,7 @@
 						<desc xml:lang="th">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="hi-IN">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="x-comment">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc xml:lang="sk">Specifies the search expression, i.e. URL and query command.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSuffix" oor:type="xs:string">
@@ -655,6 +668,7 @@
 						<desc xml:lang="th">Specifies the suffix.</desc>
 						<desc xml:lang="hi-IN">Specifies the suffix.</desc>
 						<desc xml:lang="x-comment">Specifies the suffix.</desc>
+						<desc xml:lang="sk">Specifies the suffix.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSeparator" oor:type="xs:string">
@@ -684,6 +698,7 @@
 						<desc xml:lang="th">Specifies the separator</desc>
 						<desc xml:lang="hi-IN">Specifies the separator</desc>
 						<desc xml:lang="x-comment">Specifies the separator</desc>
+						<desc xml:lang="sk">Specifies the separator</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetCaseMatch" oor:type="xs:int">
@@ -713,6 +728,7 @@
 						<desc xml:lang="th">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="hi-IN">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="x-comment">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc xml:lang="sk">Specifies if upper and lower case spelling should be considered.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -838,6 +854,7 @@
 				<desc xml:lang="th">Contains Internet-related configurations (servers, proxies, etc.).</desc>
 				<desc xml:lang="hi-IN">Contains Internet-related configurations (servers, proxies, etc.).</desc>
 				<desc xml:lang="x-comment">Contains Internet-related configurations (servers, proxies, etc.).</desc>
+				<desc xml:lang="sk">Contains Internet-related configurations (servers, proxies, etc.).</desc>
 			</info>
 			<prop oor:name="ooInetDNSServer" oor:type="xs:string">
 				<!-- OldPath: Inet/DNS -->
@@ -847,30 +864,31 @@
 					<deprecated/>
 					<author>ABI/SB/MHU</author>
 					<desc xml:lang="en-US">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="el">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="nl">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="fr">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="fi">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="cs">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="da">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="el">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="nl">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="fr">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="fi">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="cs">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="da">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="zh-CN">指定 DNS 服务器的 IP 地址。如果该字串为空，将自动指定 DNS 服务器。</desc>
-					<desc xml:lang="zh-TW">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="ar">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="he">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="ca">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="pt">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="ru">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="es">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="it">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="sv">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="pl">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="zh-TW">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="ar">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="he">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="ca">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="pt">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="ru">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="es">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="it">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="sv">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="pl">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="pt-BR">Especifica o endereço IP do servidor DNS. Se o string for vazio, o servidor DNS será especificado automaticamente.</desc>
 					<desc xml:lang="ja">DNS サーバーの IP アドレスを指定します。空の文字列を指定した場合、DNS サーバーが自動的に指定されます。</desc>
-					<desc xml:lang="ko">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="tr">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="th">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="hi-IN">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="ko">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="tr">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="th">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="hi-IN">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="x-comment">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="sk">Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -906,6 +924,7 @@
 					<desc xml:lang="th">Enumerates the names of servers that do not require any proxies.</desc>
 					<desc xml:lang="hi-IN">Enumerates the names of servers that do not require any proxies.</desc>
 					<desc xml:lang="x-comment">Enumerates the names of servers that do not require any proxies.</desc>
+					<desc xml:lang="sk">Enumerates the names of servers that do not require any proxies.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -941,6 +960,7 @@
 					<desc xml:lang="th">Specifies the type of proxy selection.</desc>
 					<desc xml:lang="hi-IN">Specifies the type of proxy selection.</desc>
 					<desc xml:lang="x-comment">Specifies the type of proxy selection.</desc>
+					<desc xml:lang="sk">Specifies the type of proxy selection.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -970,6 +990,7 @@
 							<desc xml:lang="th">No proxies</desc>
 							<desc xml:lang="hi-IN">No proxies</desc>
 							<desc xml:lang="x-comment">No proxies</desc>
+							<desc xml:lang="sk">No proxies</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -999,6 +1020,7 @@
 							<desc xml:lang="th">Automatic proxy configuration</desc>
 							<desc xml:lang="hi-IN">Automatic proxy configuration</desc>
 							<desc xml:lang="x-comment">Automatic proxy configuration</desc>
+							<desc xml:lang="sk">Automatic proxy configuration</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -1028,6 +1050,7 @@
 							<desc xml:lang="th">Manual proxy configuration</desc>
 							<desc xml:lang="hi-IN">Manual proxy configuration</desc>
 							<desc xml:lang="x-comment">Manual proxy configuration</desc>
+							<desc xml:lang="sk">Manual proxy configuration</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1063,6 +1086,7 @@
 					<desc xml:lang="th">Specifies the name of the FTP proxy server.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the FTP proxy server.</desc>
 					<desc xml:lang="x-comment">Specifies the name of the FTP proxy server.</desc>
+					<desc xml:lang="sk">Specifies the name of the FTP proxy server.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1098,6 +1122,7 @@
 					<desc xml:lang="th">Specifies the port of the FTP proxy server.</desc>
 					<desc xml:lang="hi-IN">Specifies the port of the FTP proxy server.</desc>
 					<desc xml:lang="x-comment">Specifies the port of the FTP proxy server.</desc>
+					<desc xml:lang="sk">Specifies the port of the FTP proxy server.</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="0">
@@ -1127,6 +1152,7 @@
 							<desc xml:lang="th">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="hi-IN">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="x-comment">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="sk">Specifies the minimum allowed port number.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="65535">
@@ -1156,6 +1182,7 @@
 							<desc xml:lang="th">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="hi-IN">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="x-comment">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="sk">Specifies the maximum allowed port number.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1191,6 +1218,7 @@
 					<desc xml:lang="th">Specifies the name of the HTTP proxy server.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the HTTP proxy server.</desc>
 					<desc xml:lang="x-comment">Specifies the name of the HTTP proxy server.</desc>
+					<desc xml:lang="sk">Specifies the name of the HTTP proxy server.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1226,6 +1254,7 @@
 					<desc xml:lang="th">Specifies the port of the HTTP proxy server.</desc>
 					<desc xml:lang="hi-IN">Specifies the port of the HTTP proxy server.</desc>
 					<desc xml:lang="x-comment">Specifies the port of the HTTP proxy server.</desc>
+					<desc xml:lang="sk">Specifies the port of the HTTP proxy server.</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="0">
@@ -1255,6 +1284,7 @@
 							<desc xml:lang="th">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="hi-IN">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="x-comment">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="sk">Specifies the minimum allowed port number.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="65535">
@@ -1284,6 +1314,7 @@
 							<desc xml:lang="th">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="hi-IN">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="x-comment">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="sk">Specifies the maximum allowed port number.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1320,6 +1351,7 @@
 					<desc xml:lang="th">Specifies the name of the Socks proxy server.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the Socks proxy server.</desc>
 					<desc xml:lang="x-comment">Specifies the name of the Socks proxy server.</desc>
+					<desc xml:lang="sk">Specifies the name of the Socks proxy server.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1356,6 +1388,7 @@
 					<desc xml:lang="th">Specifies the port of the Socks proxy server.</desc>
 					<desc xml:lang="hi-IN">Specifies the port of the Socks proxy server.</desc>
 					<desc xml:lang="x-comment">Specifies the port of the Socks proxy server.</desc>
+					<desc xml:lang="sk">Specifies the port of the Socks proxy server.</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="0">
@@ -1385,6 +1418,7 @@
 							<desc xml:lang="th">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="hi-IN">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="x-comment">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="sk">Specifies the minimum allowed port number.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="65535">
@@ -1414,6 +1448,7 @@
 							<desc xml:lang="th">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="hi-IN">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="x-comment">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="sk">Specifies the maximum allowed port number.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1448,10 +1483,15 @@
 				<desc xml:lang="th">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
 				<desc xml:lang="hi-IN">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
 				<desc xml:lang="x-comment">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
+				<desc xml:lang="sk">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
+
+
+
 
 
 
