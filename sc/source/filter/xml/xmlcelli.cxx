@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 14:09:26 $
+ *  last change: $Author: nn $ $Date: 2001-08-16 10:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,6 +782,7 @@ void ScXMLTableRowCellContext::EndElement()
                                 {
                                 case util::NumberFormat::TEXT:
                                     {
+                                        sal_Bool bDoIncrement = sal_True;
                                         uno::Reference <text::XText> xText (xCell, uno::UNO_QUERY);
                                         if (xText.is())
                                         {
@@ -789,11 +790,13 @@ void ScXMLTableRowCellContext::EndElement()
                                                 xText->setString(sOUTextValue);
                                             else if (sOUTextContent.getLength())
                                                 xText->setString(sOUTextContent);
+                                            else if ( i > 0 && sOUText.getLength() )
+                                                xText->setString(sOUText);
                                             else
-                                                if (i > 0)
-                                                    xText->setString(sOUText);
+                                                bDoIncrement = sal_False;
                                         }
-                                        GetScImport().GetProgressBarHelper()->Increment();
+                                        if (bDoIncrement)
+                                            GetScImport().GetProgressBarHelper()->Increment();
                                     }
                                     break;
                                 case util::NumberFormat::NUMBER:
