@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:02:01 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 14:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ chinese_traditional ] = "±ø¥ó 2";
         Text[ arabic ] = "ÇáÔÑØ 2";
         Text[ greek ] = "ÓõíèÞêç 2";
-        Text[ korean ] = "Á¶°Ç2";
+        Text[ korean ] = "Á¶°Ç 2";
         Text[ turkish ] = "Koþul 2";
         Text[ language_user1 ] = " ";
     };
