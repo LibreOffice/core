@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testserver.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:30:10 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,19 +238,19 @@ int main( int argc, char *argv[] )
 
         Reference < XBridgeFactory > rBridgeFactory ( createComponent(
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.BridgeFactory")),
-            OUString( RTL_CONSTASCII_USTRINGPARAM("brdgfctr" )),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("bridgefac.uno" SAL_DLLEXTENSION )),
             rSMgr ),
                                                      UNO_QUERY );
 
 
         createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge.iiop")),
-                         OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge")),
+                         OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge.uno" SAL_DLLEXTENSION)),
                          rSMgr );
 
 
         Reference < XAcceptor > rAcceptor(
             createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor")),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("acceptor")),
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("acceptor.uno" SAL_DLLEXTENSION)),
                              rSMgr ) ,
             UNO_QUERY );
 
