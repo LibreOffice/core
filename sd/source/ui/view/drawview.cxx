@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:30:27 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,9 +210,6 @@ DrawView::DrawView (
       bActionMode(TRUE)
 {
     SetCurrentObj(OBJ_RECT, SdrInventor);
-    // #i32689#
-    // method of SdrPaintView
-    SetHlplFront( FALSE );
 }
 
 /*************************************************************************
