@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-08 15:39:01 $
+ *  last change: $Author: mtg $ $Date: 2001-04-04 09:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1105,22 +1105,38 @@ void SwXAutoTextEntry::applyTo(const Reference< text::XTextRange > & xTextRange)
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
 
-    Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
+    Reference<lang::XUnoTunnel> xTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
     SwXTextCursor* pCursor = 0;
-    if(xRangeTunnel.is())
+    SwXText *pText = 0;
+
+    if(xTunnel.is())
     {
-        pRange = (SwXTextRange*)xRangeTunnel->getSomething(
-                                SwXTextRange::getUnoTunnelId());
-        pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
-                                SwXTextCursor::getUnoTunnelId());
+        pRange = reinterpret_cast < SwXTextRange* >
+                ( xTunnel->getSomething( SwXTextRange::getUnoTunnelId() ) );
+        pCursor = reinterpret_cast < SwXTextCursor*>
+                ( xTunnel->getSomething( SwXTextCursor::getUnoTunnelId() ) );
+        pText = reinterpret_cast < SwXText* >
+                ( xTunnel->getSomething( SwXText::getUnoTunnelId() ) );
     }
 
     SwDoc* pDoc = 0;
-    if(pRange && pRange->GetBookmark())
+    if ( pRange && pRange->GetBookmark())
         pDoc = pRange->GetDoc();
-    else if(pCursor && pCursor->GetCrsr())
-            pDoc = pCursor->GetDoc();
+    else if ( pCursor && pCursor->GetCrsr() )
+        pDoc = pCursor->GetDoc();
+    else if ( pText && pText->GetDoc() )
+    {
+        xTunnel = Reference < lang::XUnoTunnel > (pText->getStart(), uno::UNO_QUERY);
+        if (xTunnel.is())
+        {
+            pCursor = reinterpret_cast < SwXTextCursor* >
+                ( xTunnel->getSomething( SwXTextCursor::getUnoTunnelId() ) );
+            if (pCursor)
+                pDoc = pText->GetDoc();
+        }
+    }
+
     if(!pDoc)
         throw uno::RuntimeException();
     SwPaM* pInsertPaM = 0;
