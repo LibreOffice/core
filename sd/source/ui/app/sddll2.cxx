@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-18 11:37:04 $
+ *  last change: $Author: dl $ $Date: 2000-12-01 12:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 
 #define ITEMID_FIELD    EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
-#ifndef _BASIDE_TBXCTL_HXX //autogen
-#include <basctl/btbxctl.hxx>
-#endif
 #ifndef _IMAPDLG_HXX_ //autogen
 #include <svx/imapdlg.hxx>
 #endif
@@ -178,8 +175,6 @@ void SdDLL::RegisterControllers()
     SdTbxControl::RegisterControl( SID_DRAWTBX_3D_OBJECTS, pMod );
     SdTbxControl::RegisterControl( SID_DRAWTBX_CONNECTORS, pMod );
     SdTbxControl::RegisterControl( SID_DRAWTBX_INSERT, pMod );
-    // CLs TbxCtl !!!
-    TbxControls::RegisterControl( SID_OBJECT_SELECT, pMod );
 
     SdTbxCtlDiaEffect::RegisterControl(0, pMod);
     SdTbxCtlDiaSpeed::RegisterControl(0, pMod);
