@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-10-30 09:04:43 $
+ *  last change: $Author: os $ $Date: 2001-10-30 09:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,7 @@ void SwDBField::Evaluate()
     {
         sal_Int32 nColumnType = pMgr->GetColumnType(aTmpData.sDataSource, aTmpData.sCommand, aColNm);
         if( DataType::DATE == nColumnType  || DataType::TIME == nColumnType  ||
-                 DataType::TIME == DataType::TIMESTAMP )
+                 DataType::TIMESTAMP  == nColumnType)
 
         {
             Date aStandard(1,1,1900);
