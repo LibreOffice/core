@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActionMapTypesOASIS.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:43:00 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ enum ActionMapTypesOOo
     OASIS_BACKGROUND_IMAGE_ACTIONS,
     OASIS_DDE_CONNECTION_DECL_ACTIONS,
     OASIS_EVENT_ACTIONS,
+    OASIS_DLG_ACTIONS,
     OASIS_FORM_CONTROL_ACTIONS,
     OASIS_FORM_COLUMN_ACTIONS,
     OASIS_FORM_PROP_ACTIONS,
