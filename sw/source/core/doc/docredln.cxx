@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-09-19 15:02:17 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-09-23 14:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3385,15 +3385,6 @@ int SwRedline::operator==( const SwRedline& rCmp ) const
     return this == &rCmp;
 }
 
- #if 0
-int SwRedline::operator<( const SwRedline& rCmp ) const
-{
-    BOOL bLower = *Start() < *rCmp.Start();
-    if( !bLower && *Start() == *rCmp.Start() && !HasMark() )
-        bLower = TRUE;
-    return bLower;
-}
-#else
 int SwRedline::operator<( const SwRedline& rCmp ) const
 {
     BOOL nResult = FALSE;
@@ -3406,4 +3397,3 @@ int SwRedline::operator<( const SwRedline& rCmp ) const
 
     return nResult;
 }
-#endif
