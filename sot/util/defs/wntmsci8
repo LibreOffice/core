@@ -1468,3 +1468,15 @@ _TI3?AVNotConnectedException@io@star@sun@com@@
 ??0Storage@@QAE@AAVUCBStorageStream@@E@Z
 ?SetStrm@StgCache@@QAEXPAVUCBStorageStream@@@Z
 ??_C@_0DF@OACFFDKI@o?3?2SRC680?2wntmsci8?2inc?2com?1sun?1s@
+??0bad_alloc@std@@QAE@ABV01@@Z
+??0bad_alloc@std@@QAE@PBD@Z
+??1bad_alloc@std@@UAE@XZ
+??_7bad_alloc@std@@6B@
+??_C@_0P@GHFPNOJB@bad?5allocation?$AA@
+??_Gbad_alloc@std@@UAEPAXI@Z
+??_R0?AVbad_alloc@std@@@8
+??_R0?AVexception@@@8
+?getArray@?$Sequence@UContentInfo@ucb@star@sun@com@@@uno@star@sun@com@@QAAPAUContentInfo@ucb@345@XZ
+?getArray@?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@QAAPAUPropertyValue@beans@345@XZ
+?getArray@?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAPAV?$Sequence@UPropertyValue@beans@star@sun@com@@@2345@XZ
+_TI2?AVbad_alloc@std@@
