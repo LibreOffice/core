@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-30 13:34:52 $
+ *  last change: $Author: thb $ $Date: 2001-07-30 17:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2797,6 +2797,7 @@ void ImpEditEngine::SetActiveView( EditView* pView )
 
 uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable( const EditSelection& rSelection ) const
 {
+#ifndef SVX_LIGHT
     EditSelection aSelection( rSelection );
     aSelection.Adjust( GetEditDoc() );
 
@@ -2833,6 +2834,9 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     }
 
     return xDataObj;
+#else
+    return uno::Reference< datatransfer::XTransferable >();
+#endif
 }
 
 EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransferable >& rxDataObj, const EditPaM& rPaM, BOOL bUseSpecial )

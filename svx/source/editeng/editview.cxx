@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-13 08:27:52 $
+ *  last change: $Author: thb $ $Date: 2001-07-30 17:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,6 +512,7 @@ sal_uInt32 EditView::Read( SvStream& rInput, EETextFormat eFormat, sal_Bool bSel
     return rInput.GetError();
 }
 
+#ifndef SVX_LIGHT
 sal_uInt32 EditView::Write( SvStream& rOutput, EETextFormat eFormat )
 {
     DBG_CHKTHIS( EditView, 0 );
@@ -520,6 +521,7 @@ sal_uInt32 EditView::Write( SvStream& rOutput, EETextFormat eFormat )
     ShowCursor();
     return rOutput.GetError();
 }
+#endif
 
 void EditView::Cut()
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-26 15:47:37 $
+ *  last change: $Author: thb $ $Date: 2001-07-30 17:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,16 +199,18 @@ EditPaM ImpEditEngine::ReadText( SvStream& rInput, EditSelection aSel )
 
 EditPaM ImpEditEngine::ReadXML( SvStream& rInput, EditSelection aSel )
 {
+#ifndef SVX_LIGHT
     if ( aSel.HasRange() )
         aSel = ImpDeleteSelection( aSel );
 
     ESelection aESel = CreateESel( aSel );
 
-#ifndef SVX_LIGHT
     ::SvxReadXML( *GetEditEnginePtr(), rInput, aESel );
-#endif
 
     return aSel.Max();
+#else
+    return EditPaM();
+#endif
 }
 
 EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
@@ -286,7 +288,7 @@ EditPaM ImpEditEngine::ReadBin( SvStream& rInput, EditSelection aSel )
     return aLastPaM;
 }
 
-
+#ifndef SVX_LIGHT
 void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat, EditSelection aSel )
 {
     if ( !rOutput.IsWritable() )
@@ -308,6 +310,7 @@ void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat, EditSelectio
             DBG_ERROR( "Write: Unbekanntes Format" );
     }
 }
+#endif
 
 sal_uInt32 ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
 {
@@ -385,16 +388,16 @@ sal_uInt32 ImpEditEngine::WriteBin( SvStream& rOutput, EditSelection aSel, BOOL 
     return 0;
 }
 
+#ifndef SVX_LIGHT
 sal_uInt32 ImpEditEngine::WriteXML( SvStream& rOutput, EditSelection aSel )
 {
     ESelection aESel = CreateESel( aSel );
 
-#ifndef SVX_LIGHT
     SvxWriteXML( *GetEditEnginePtr(), rOutput, aESel );
-#endif
 
     return 0;
 }
+#endif
 
 sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 {

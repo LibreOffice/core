@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-30 13:34:51 $
+ *  last change: $Author: thb $ $Date: 2001-07-30 17:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1070,6 +1070,7 @@ sal_uInt32 EditEngine::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueI
     return rInput.GetError();
 }
 
+#ifndef SVX_LIGHT
 sal_uInt32 EditEngine::Write( SvStream& rOutput, EETextFormat eFormat )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -1078,6 +1079,7 @@ sal_uInt32 EditEngine::Write( SvStream& rOutput, EETextFormat eFormat )
     pImpEditEngine->Write( rOutput, eFormat, EditSelection( aStartPaM, aEndPaM ) );
     return rOutput.GetError();
 }
+#endif
 
 EditTextObject* EditEngine::CreateTextObject()
 {
