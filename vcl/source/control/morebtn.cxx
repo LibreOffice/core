@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morebtn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:40:26 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,27 +71,58 @@
 
 // =======================================================================
 
-// Muss mit der Laenge der folgenden Texte uebereinstimmen
-#define EXTRA_TEXTLEN       3
-
-static sal_Char const aImplMoreOpen[]  = " >>";
-static sal_Char const aImplMoreClose[] = " <<";
-
 DECLARE_LIST( ImplMoreWindowList, Window* );
+
+struct ImplMoreButtonData
+{
+    ImplMoreWindowList *mpItemList;
+    XubString           maMoreText;
+    XubString           maLessText;
+};
 
 // =======================================================================
 
 void MoreButton::ImplInit( Window* pParent, WinBits nStyle )
 {
-    mpItemList   = NULL;
+    mpMBData     = new ImplMoreButtonData;
     mnDelta      = 0;
     meUnit       = MAP_PIXEL;
     mbState      = FALSE;
 
+    mpMBData->mpItemList = NULL;
+
     PushButton::ImplInit( pParent, nStyle );
 
-    SetText( Button::GetStandardText( BUTTON_MORE ) );
+    mpMBData->maMoreText = Button::GetStandardText( BUTTON_MORE );
+    mpMBData->maLessText = Button::GetStandardText( BUTTON_LESS );
+
     SetHelpText( Button::GetStandardHelpText( BUTTON_MORE ) );
+
+    ShowState();
+
+    SetSymbolAlign( SYMBOLALIGN_RIGHT );
+    ImplSetSmallSymbol( TRUE );
+
+    if ( ! ( nStyle & ( WB_RIGHT | WB_LEFT ) ) )
+    {
+        nStyle |= WB_CENTER;
+        SetStyle( nStyle );
+    }
+}
+
+// -----------------------------------------------------------------------
+void MoreButton::ShowState()
+{
+    if ( mbState )
+    {
+        SetSymbol( SYMBOL_PAGEUP );
+        SetText( mpMBData->maLessText );
+    }
+    else
+    {
+        SetSymbol( SYMBOL_PAGEDOWN );
+        SetText( mpMBData->maMoreText );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -128,7 +159,8 @@ void MoreButton::ImplLoadRes( const ResId& rResId )
     {
         // Nicht Methode rufen, da Dialog nicht umgeschaltet werden soll
         mbState = (BOOL)ReadShortRes();
-        SetText( GetText() );
+        // SetText( GetText() );
+        ShowState();
     }
     if ( nObjMask & RSC_MOREBUTTON_MAPUNIT )
         meUnit = (MapUnit)ReadLongRes();
@@ -141,8 +173,9 @@ void MoreButton::ImplLoadRes( const ResId& rResId )
 
 MoreButton::~MoreButton()
 {
-    if ( mpItemList )
-        delete mpItemList;
+    if ( mpMBData->mpItemList )
+        delete mpMBData->mpItemList;
+    delete mpMBData;
 }
 
 // -----------------------------------------------------------------------
@@ -151,13 +184,12 @@ void MoreButton::Click()
 {
     Window*     pParent = GetParent();
     Size        aSize( pParent->GetSizePixel() );
-    Window*     pWindow = (mpItemList) ? mpItemList->First() : NULL;
+    Window*     pWindow = (mpMBData->mpItemList) ? mpMBData->mpItemList->First() : NULL;
     long        nDeltaPixel = LogicToPixel( Size( 0, mnDelta ), meUnit ).Height();
 
     // Status aendern
-    XubString aText = GetText();
     mbState = !mbState;
-    SetText( aText );
+    ShowState();
 
     // Hier den Click-Handler rufen, damit vorher die Controls initialisiert
     // werden koennen
@@ -170,7 +202,7 @@ void MoreButton::Click()
         while ( pWindow )
         {
             pWindow->Show();
-            pWindow = mpItemList->Next();
+            pWindow = mpMBData->mpItemList->Next();
         }
 
         // Dialogbox anpassen
@@ -200,7 +232,7 @@ void MoreButton::Click()
         while ( pWindow )
         {
             pWindow->Hide();
-            pWindow = mpItemList->Next();
+            pWindow = mpMBData->mpItemList->Next();
         }
     }
 }
@@ -209,10 +241,10 @@ void MoreButton::Click()
 
 void MoreButton::AddWindow( Window* pWindow )
 {
-    if ( !mpItemList )
-        mpItemList = new ImplMoreWindowList( 1024, 16, 16 );
+    if ( !mpMBData->mpItemList )
+        mpMBData->mpItemList = new ImplMoreWindowList( 1024, 16, 16 );
 
-    mpItemList->Insert( pWindow, LIST_APPEND );
+    mpMBData->mpItemList->Insert( pWindow, LIST_APPEND );
 
     if ( mbState )
         pWindow->Show();
@@ -224,41 +256,59 @@ void MoreButton::AddWindow( Window* pWindow )
 
 void MoreButton::RemoveWindow( Window* pWindow )
 {
-    if ( mpItemList )
-        mpItemList->Remove( pWindow );
+    if ( mpMBData->mpItemList )
+        mpMBData->mpItemList->Remove( pWindow );
 }
 
 // -----------------------------------------------------------------------
 
 void MoreButton::SetText( const XubString& rText )
 {
-    XubString aText = rText;
-
-    if ( !mbState )
-        aText.AppendAscii( aImplMoreOpen );
-    else
-        aText.AppendAscii( aImplMoreClose );
-
-    PushButton::SetText( aText );
+    PushButton::SetText( rText );
 }
 
 // -----------------------------------------------------------------------
 
 XubString MoreButton::GetText() const
 {
-    XubString aText = PushButton::GetText();
-
-    XubString aSubText = aText.Copy( aText.Len()-EXTRA_TEXTLEN, EXTRA_TEXTLEN );
-    if ( !mbState )
-    {
-        if ( aSubText.EqualsAscii( aImplMoreOpen ) )
-            aText.Erase( aText.Len()-EXTRA_TEXTLEN, EXTRA_TEXTLEN );
-    }
-    else
-    {
-        if ( aSubText.EqualsAscii( aImplMoreClose ) )
-            aText.Erase( aText.Len()-EXTRA_TEXTLEN, EXTRA_TEXTLEN );
-    }
-
-    return aText;
+    return PushButton::GetText();
 }
+
+// -----------------------------------------------------------------------
+void MoreButton::SetMoreText( const XubString& rText )
+{
+    if ( mpMBData )
+        mpMBData->maMoreText = rText;
+
+    if ( !mbState )
+        SetText( rText );
+}
+
+// -----------------------------------------------------------------------
+XubString MoreButton::GetMoreText() const
+{
+    if ( mpMBData )
+        return mpMBData->maMoreText;
+    else
+        return PushButton::GetText();
+}
+
+// -----------------------------------------------------------------------
+void MoreButton::SetLessText( const XubString& rText )
+{
+    if ( mpMBData )
+        mpMBData->maLessText = rText;
+
+    if ( mbState )
+        SetText( rText );
+}
+
+// -----------------------------------------------------------------------
+XubString MoreButton::GetLessText() const
+{
+    if ( mpMBData )
+        return mpMBData->maLessText;
+    else
+        return PushButton::GetText();
+}
+
