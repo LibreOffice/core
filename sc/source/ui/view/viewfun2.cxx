@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-15 19:46:03 $
+ *  last change: $Author: nn $ $Date: 2001-01-30 14:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1993,38 +1993,25 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, USHORT nDestTab, BOOL bCopy )
         //  ohne SFX_CALLMODE_RECORD ausfuehren, weil schon im Move-Befehl enthalten:
 
         String aUrl = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("private:factory/"));
-        aUrl.AppendAscii(RTL_CONSTASCII_STRINGPARAM( STRING_SCAPP ));               // "scalc4"
+        aUrl.AppendAscii(RTL_CONSTASCII_STRINGPARAM( STRING_SCAPP ));               // "scalc"
         SfxStringItem aItem( SID_FILE_NAME, aUrl );
-        const SfxObjectItem* pObjItem = (const SfxObjectItem*) GetViewData()->GetDispatcher().Execute(
-                    SID_OPENDOC, SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON, &aItem, 0L );
-        if (pObjItem)
+        SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
+
+        const SfxPoolItem* pRetItem = GetViewData()->GetDispatcher().Execute(
+                    SID_OPENDOC, SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON, &aItem, &aTarget, 0L );
+        if ( pRetItem )
         {
-            pDestShell = PTR_CAST( ScDocShell, pObjItem->GetShell() );
+            if ( pRetItem->ISA( SfxObjectItem ) )
+                pDestShell = PTR_CAST( ScDocShell, ((const SfxObjectItem*)pRetItem)->GetShell() );
+            else if ( pRetItem->ISA( SfxViewFrameItem ) )
+            {
+                SfxViewFrame* pFrm = ((const SfxViewFrameItem*)pRetItem)->GetFrame();
+                if (pFrm)
+                    pDestShell = PTR_CAST( ScDocShell, pFrm->GetObjectShell() );
+            }
             if (pDestShell)
                 pDestViewSh = pDestShell->GetBestViewShell();
         }
-
-        //  Mit SID_NEWDOCDIRECT geht's diese Woche gerade mal gar nicht,
-        //  weil es ein SfxFrameItem zurueckgibt
-#if 0
-        //! SID_NEWDOCDIRECT will immer aufzeichnen !!!
-        //! Mit CALLMODE_API wuerde der Returnwert nicht stimmen (SbxObject statt Frame)
-
-        String aFactory = STRING_SCAPP;     // "scalc4"
-        SfxStringItem aItem( SID_NEWDOCDIRECT, aFactory );
-        const SfxViewFrameItem* pViewFrameItem = (const SfxViewFrameItem*)
-            GetViewData()->GetDispatcher().Execute( SID_NEWDOCDIRECT, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
-
-        if ( pViewFrameItem )
-        {
-            SfxViewFrame* pFrame = pViewFrameItem->GetFrame();
-            if (pFrame)
-            {
-                pDestViewSh = PTR_CAST( ScTabViewShell, pFrame->GetViewShell() );
-                pDestShell  = PTR_CAST( ScDocShell, pFrame->GetObjectShell() );
-            }
-        }
-#endif
     }
     else
         pDestShell = ScDocShell::GetShellByNum( nDestDocNo );
