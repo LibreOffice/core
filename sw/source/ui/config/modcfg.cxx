@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:36:56 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1044,6 +1044,7 @@ SwMiscConfig::SwMiscConfig() :
     bNumAlignSize(sal_True),
     bSinglePrintJob(sal_False),
     bIsNameFromColumn(sal_True),
+    bAskForMailMergeInPrint(sal_True),
     nMailingFormats(0)
 {
     Load();
@@ -1062,7 +1063,7 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
     static Sequence<OUString> aNames;
     if(!aNames.getLength())
     {
-        const int nCount = 11;
+        const int nCount = 12;
         aNames.realloc(nCount);
         static const char* aPropNames[] =
         {
@@ -1076,7 +1077,8 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
             "FormLetter/FileOutput/FileName/FromDatabaseField",  // 7
             "FormLetter/FileOutput/Path",               // 8
             "FormLetter/FileOutput/FileName/FromManualSetting",   // 9
-            "FormLetter/FileOutput/FileName/Generation"//10
+            "FormLetter/FileOutput/FileName/Generation",//10
+            "FormLetter/PrintOutput/AskForMerge"        //11
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
@@ -1113,6 +1115,7 @@ void SwMiscConfig::Commit()
             case 8 : pValues[nProp] <<= OUString(sMailingPath);     break;
             case 9 : pValues[nProp] <<= OUString(sMailName);        break;
             case 10: pValues[nProp].setValue(&bIsNameFromColumn, rType);break;
+            case 11: pValues[nProp] <<= bAskForMailMergeInPrint; break;
         }
     }
     PutProperties(aNames, aValues);
@@ -1148,6 +1151,7 @@ void SwMiscConfig::Load()
                     case 8 : pValues[nProp] >>= sTmp; sMailingPath = sTmp;  break;
                     case 9 : pValues[nProp] >>= sTmp; sMailName = sTmp;     break;
                     case 10: bIsNameFromColumn = *(sal_Bool*)pValues[nProp].getValue(); break;
+                    case 11: pValues[nProp] >>= bAskForMailMergeInPrint; break;
                 }
             }
         }
