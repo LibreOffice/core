@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-16 13:34:51 $
+ *  last change: $Author: cl $ $Date: 2001-05-18 08:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1861,6 +1861,13 @@ void SdXMLExport::exportPresentationSettings()
         if( !bTemp )
         {
             AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_transition_on_click, sXML_disabled );
+            bHasAttr = sal_True;
+        }
+
+        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsShowLogo" ) ) ) >>= bTemp;
+        if( bTemp )
+        {
+            AddAttributeASCII(XML_NAMESPACE_PRESENTATION, sXML_show_logo, sXML_true );
             bHasAttr = sal_True;
         }
 
