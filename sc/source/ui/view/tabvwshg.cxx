@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:51 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,9 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     //  Tabelle geschuetzt ?
 
     ScViewData* pViewData = GetViewData();
-    if ( pViewData->GetDocument()->IsTabProtected(pViewData->GetTabNo()) )
+    ScDocument* pDoc = pViewData->GetDocument();
+    USHORT nTab = pViewData->GetTabNo();
+    if ( pDoc->IsTabProtected(nTab) )
     {
         ErrorMessage(STR_PROTECTIONERR);
         return;
@@ -153,6 +155,9 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
 
     // Groesse wie in 3.1:
     Size aSize = GetActiveWin()->PixelToLogic(Size(140, 20));
+
+    if ( pDoc->IsNegativePage(nTab) )
+        aPos.X() -= aSize.Width();
 
     pObj->SetLogicRect(Rectangle(aPos, aSize));
 //  pObj->Resize(Point(), Fraction(1, 1), Fraction(1, 1));
