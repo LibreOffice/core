@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:41:31 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ ModalDialog DLG_INSERT_TABLE
         Spin = TRUE ;
         Minimum = 1 ;
         Maximum = 99 ;
-        Value = 5 ;
+        Value = 2 ;
         First = 1 ;
         Last = 99 ;
     };
