@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:51:00 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ class DlgEditor: public SfxBroadcaster
 {
 private:
     DECL_LINK( PaintTimeout, Timer * );
+    DECL_LINK( MarkTimeout, Timer * );
 
 protected:
     ScrollBar*          pHScroll;
@@ -168,6 +169,7 @@ protected:
     Timer               aPaintTimer;
     Rectangle           aPaintRect;
     BOOL                bDialogModelChanged;
+    Timer               aMarkTimer;
 
 public:
     DlgEditor();
@@ -227,6 +229,7 @@ public:
     BOOL            IsPasteAllowed();
 
     void            ShowProperties();
+    void            UpdatePropertyBrowserDelayed();
 
     void            PrintData( Printer*, const String& rTitle );    // not working yet
 };
