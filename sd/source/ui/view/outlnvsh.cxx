@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-08 13:31:00 $
+ *  last change: $Author: dl $ $Date: 2000-12-15 14:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2142,6 +2142,15 @@ BOOL SdOutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
         // Nur Objekt painten
         pTO->SendRepaintBroadcast();
     }
+    else if( pTO && !bText )
+    {
+        pTO->SetOutlinerParaObject( NULL );
+        pTO->SetEmptyPresObj( TRUE );
+
+        // Nur Objekt painten
+        pTO->SendRepaintBroadcast();
+    }
+
     return( bNewObject );
 }
 
