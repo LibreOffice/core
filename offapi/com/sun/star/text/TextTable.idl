@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextTable.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:58 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,6 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::TextTable
 /** is a table of text cells which is anchored to a surrounding text.
 
 
@@ -151,85 +150,75 @@
     xTable.RightMargin = 1500
     xTextDoc.getText.insertTextContent( xTextRange, xTable, false )
     </listing>
+
+    @see    com::sun::star::text::Cell
+    @see    com::sun::star::text::CellRange
+    @see    com::sun::star::text::TableColumns
+    @see    com::sun::star::text::TableRows
+    @see    com::sun::star::text::TextTableCursor
  */
 service TextTable
 {
-    // DocMerge: empty anyway
     service com::sun::star::text::TextContent;
 
-    // DocMerge: empty anyway
     interface com::sun::star::text::XTextTable;
 
-    // DocMerge: empty anyway
     interface com::sun::star::container::XNamed;
 
-    // DocMerge: empty anyway
     interface com::sun::star::table::XCellRange;
 
-    // DocMerge: empty anyway
     interface com::sun::star::chart::XChartDataArray;
 
-    // DocMerge: empty anyway
     interface com::sun::star::table::XAutoFormattable;
 
-    // DocMerge: empty anyway
     interface com::sun::star::util::XSortable;
 
     [optional] interface com::sun::star::sheet::XCellRangeData;
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::BreakType
     /** determins the type of break that is applied at the beginning of the table.@see com.sun.star.style.BreakType
      */
     [property] com::sun::star::style::BreakType BreakType;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::LeftMargin
     /** contains the left margin of the table.
      */
     [property] long LeftMargin;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::RightMargin
     /** contains the right margin of the table.
      */
     [property] long RightMargin;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::HoriOrient
     /** contains the horizontal orientation.@see com.sun.star.text.HoriOrientation
      */
     [property] short HoriOrient;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::KeepTogether
     /** Setting this property to TRUE prevents page or column
         breaks between this table and the following paragraph or text table.
      */
     [property] boolean KeepTogether;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::Split
     /** Setting this property to FALSE prevents the table from
         getting spread on two pages.
      */
     [property] boolean Split;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::PageNumberOffset
     /** If a page break property is set at the table,
         this property contains the new value for the page number.
      */
     [property] short PageNumberOffset;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::PageDescName
     /** If this property is set, it creates a page break before the
         table and assigns the value as the name of the new page style sheet to use.
      */
     [property] string PageDescName;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::RelativeWidth
     /** determins the width of the table relative to its environment.
      */
     [property] short RelativeWidth;
@@ -239,37 +228,31 @@ service TextTable
     [property] boolean IsWidthRelative;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::RepeatHeadline
     /** determins if the first row of the table is repeated on every new page.
      */
     [property] boolean RepeatHeadline;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::ShadowFormat
     /** determins the type, color and size of the shadow.@see com.sun.star.table.ShadowFormat
      */
     [property] com::sun::star::table::ShadowFormat ShadowFormat;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::TopMargin
     /** determins the top margin.
      */
     [property] long TopMargin;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::BottomMargin
     /** determins the bottom margin.
      */
     [property] long BottomMargin;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::BackTransparent
     /** determins if the background color is transparent.
      */
     [property] boolean BackTransparent;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::Width
     /** contains the absolute table width.
 
         <p>As this is only a describing property the value of the actual table may vary depending on the
@@ -279,60 +262,51 @@ service TextTable
     [property] long Width;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::ChartRowAsLabel
     /** determins if the first row of the table should be treated as
         axis labels when a chart is to be created.
      */
     [property] boolean ChartRowAsLabel;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::ChartColumnAsLabel
     /** determins if the first column of the table should be treated as
         axis labels when a chart is to be created.
      */
     [property] boolean ChartColumnAsLabel;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::TableBorder
     /** contains the description of the table borders.@see com.sun.star.table.TableBorder
      */
     [property] com::sun::star::table::TableBorder TableBorder;
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: property com::sun::star::text::TextTable::TableColumnSeparators
     /** contains the column description of the table.
              @see com.sun.star.text.TableColumnSeparator
      */
     [property] sequence<com::sun::star::text::TableColumnSeparator> TableColumnSeparators;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::TableColumnRelativeSum
     /** contains the sum of the column width values used in TableColumnSeparators.
      */
     [property] short TableColumnRelativeSum;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::BackColor
     /** contains the color of the background.
      */
     [property] long BackColor;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::BackGraphicURL
     /** contains the URL for the background graphic.
      */
     [property] string BackGraphicURL;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::BackGraphicFilter
     /** contains the name of the file filter for the background graphic.
      */
     [property] string BackGraphicFilter;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTable::BackGraphicLocation
     /** determines the position of the background graphic.@see GraphicLocation
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
