@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   javaloader  </module-name>
+    <component-description>
+        <author> Kay Ramme </author>
+        <name>  com.sun.star.comp.stoc.JavaComponentLoader  </name>
+        <description> ... </description>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.loader.Java2   </supported-service>
+        <service-dependency> ... </service-dependency>
+        <type>  com.sun.star.java.XJavaThreadRegister_11    </type>
+        <type>  com.sun.star.java.XJavaVM                   </type>
+        <type>  com.sun.star.lang.IllegalArgumentException  </type>
+        <type>  com.sun.star.lang.XInitialization           </type>
+        <type>  com.sun.star.lang.XMultiServiceFactory      </type>
+        <type>  com.sun.star.lang.XServiceInfo              </type>
+        <type>  com.sun.star.lang.XSingleServiceFactory     </type>
+        <type>  com.sun.star.lang.XTypeProvider             </type>
+        <type>  com.sun.star.loader.XImplementationLoader   </type>
+        <type>  com.sun.star.registry.XRegistryKey          </type>
+        <type>  com.sun.star.uno.TypeClass                  </type>
+        <type>  com.sun.star.uno.XAggregation               </type>
+        <type>  com.sun.star.uno.XWeak                      </type>
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  tools       </project-build-dependency>
+    <project-build-dependency>  vos         </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
+    <runtime-module-dependency> cppu1       </runtime-module-dependency>
+    <runtime-module-dependency> vos2$(COM)  </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
+</module-description>
