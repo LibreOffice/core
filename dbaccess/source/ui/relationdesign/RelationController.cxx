@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:17:27 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,6 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
 #endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
@@ -262,7 +259,7 @@ FeatureState ORelationController::GetState(sal_uInt16 _nId) const
     aReturn.bEnabled = m_bRelationsPossible;
     switch (_nId)
     {
-        case ID_RELATION_ADD_RELATION:
+        case SID_RELATION_ADD_RELATION:
             aReturn.bEnabled = m_vTableData.size() > 1 && isConnected() && isEditable();
             aReturn.aState = ::cppu::bool2any(sal_False);
             break;
@@ -276,7 +273,7 @@ FeatureState ORelationController::GetState(sal_uInt16 _nId) const
     return aReturn;
 }
 // -----------------------------------------------------------------------------
-void ORelationController::Execute(sal_uInt16 _nId)
+void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
     switch(_nId)
     {
@@ -311,11 +308,11 @@ void ORelationController::Execute(sal_uInt16 _nId)
                 }
             }
             break;
-        case ID_RELATION_ADD_RELATION:
+        case SID_RELATION_ADD_RELATION:
             static_cast<ORelationTableView*>(static_cast<ORelationDesignView*>(m_pView)->getTableView())->AddNewRelation();
             break;
         default:
-            OJoinController::Execute(_nId);
+            OJoinController::Execute(_nId,aArgs);
             return;
             break;
     }
@@ -358,7 +355,9 @@ void ORelationController::impl_initialize( const Sequence< Any >& aArguments )
         setEditable(sal_False);
         m_bRelationsPossible    = sal_False;
         {
-            OSQLMessageBox aDlg(getView(),ModuleRes(STR_RELATIONDESIGN),ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
+            String sTitle(ModuleRes(STR_RELATIONDESIGN));
+            sTitle.Erase(0,3);
+            OSQLMessageBox aDlg(getView(),sTitle,ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
             aDlg.Execute();
         }
         throw SQLException();
@@ -387,7 +386,7 @@ void ORelationController::impl_initialize( const Sequence< Any >& aArguments )
         setModified(sal_False);     // and we are not modified yet
 
         if(m_vTableData.empty())
-            Execute(ID_BROWSER_ADDTABLE);
+            Execute(ID_BROWSER_ADDTABLE,Sequence<PropertyValue>());
     }
     catch(Exception&)
     {
@@ -401,8 +400,9 @@ void ORelationController::updateTitle()
     ::rtl::OUString sName;
     sName = String(ModuleRes(STR_RELATIONDESIGN));
     ::rtl::OUString sDataSourceName = getDataSourceName();
-    sName += ::dbaui::getStrippedDatabaseName(getDataSource(),sDataSourceName) ;
-    OGenericUnoController::setTitle(sName);
+    sDataSourceName = ::dbaui::getStrippedDatabaseName(getDataSource(),sDataSourceName) ;;
+    sDataSourceName += sName;
+    OGenericUnoController::setTitle(sDataSourceName);
 }
 // -----------------------------------------------------------------------------
 sal_Bool ORelationController::Construct(Window* pParent)
@@ -422,7 +422,7 @@ short ORelationController::saveModified()
         QueryBox aQry(getView(), ModuleRes(RELATION_DESIGN_SAVEMODIFIED));
         nSaved = aQry.Execute();
         if(nSaved == RET_YES)
-            Execute(ID_BROWSER_SAVEDOC);
+            Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
     }
     return nSaved;
 }
@@ -430,12 +430,7 @@ short ORelationController::saveModified()
 void ORelationController::AddSupportedFeatures()
 {
     OJoinController::AddSupportedFeatures();
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddRelation")]  = ID_RELATION_ADD_RELATION;
-}
-// -----------------------------------------------------------------------------
-ToolBox* ORelationController::CreateToolBox(Window* _pParent)
-{
-    return new ToolBox(_pParent, ModuleRes(RID_BRW_REALTIONDESIGN_TOOLBOX));
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBAddRelation")]   = SID_RELATION_ADD_RELATION;
 }
 // -----------------------------------------------------------------------------
 void ORelationController::loadData()
