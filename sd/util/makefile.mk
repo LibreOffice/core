@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 00:46:24 $
+#   last change: $Author: hjs $ $Date: 2004-06-26 18:04:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ RESLIB1NAME=sd
 RESLIB1IMAGES=$(PRJ)$/res/imagelst $(PRJ)$/res 
 RESLIB1SRSFILES=\
      $(SRS)$/app.srs $(SRS)$/dlg.srs $(SRS)$/core.srs $(SRS)$/html.srs $(SRS)$/sdslots.srs \
-     $(SRS)$/accessibility.srs $(SOLARRESDIR)$/sfx.srs
+     $(SRS)$/accessibility.srs $(SOLARCOMMONRESDIR)$/sfx.srs
 
 # --- StarDraw DLL
 
