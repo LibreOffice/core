@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NamingService.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:00 $
+ *  last change:$Date: 2003-05-27 12:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ public class NamingService extends TestCase {
         Object oInterface = null;
 
         try {
-            XMultiServiceFactory xMSF = Param.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
             oInterface = xMSF.createInstance
                 ( "com.sun.star.uno.NamingService" );
         }
@@ -120,7 +120,7 @@ public class NamingService extends TestCase {
         // objRelation for XNamingService as object to be registered
         try {
             tEnv.addObjRelation("XNamingService.RegisterObject",
-                Param.getMSF().createInstance
+                ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.lang.ServiceManager")) ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Can't create object relation") ;
