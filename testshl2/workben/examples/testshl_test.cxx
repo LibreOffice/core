@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl_test.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-09 11:06:19 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@ sal_uInt32 createFlags( vector< sal_Char* > const& cmdln )
 
             if ( item == "-msg" )
                 retflags |= rtl_tres_Flag_MSG;
+
+            if ( item == "-quiet" )
+                retflags |= rtl_tres_Flag_QUIET;
         }
         iter++;
     }
