@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dg $ $Date: 2001-06-22 13:06:16 $
+ *  last change: $Author: as $ $Date: 2001-08-22 13:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #include <unotools/configitem.hxx>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
@@ -87,819 +87,653 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
-#endif
-
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
-#endif
-
-#ifndef _VOS_PROFILE_HXX_
-#include <vos/profile.hxx>
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
 //  namespaces
 //_________________________________________________________________________________________________________________
 
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::vos                   ;
-using namespace ::com::sun::star::uno   ;
+#ifdef css
+    #error  "Who defined css? I use it as namespace value ...!"
+#else
+    #define css     ::com::sun::star
+#endif
 
 //_________________________________________________________________________________________________________________
 //  const
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @descr          These values are used to define needed keys from ouer configuration management to support
-                    all neccessary functionality of these implementation.
+    @descr          These values are used to define neccessary keys from our configuration management to support
+                    all functionality of these implementation.
                     It's a fast way to make changes if some keys change his name or location!
 
-                    Follow property handle are neccessary to specify right position in return list of configuration
+                    Property handle are neccessary to specify right position in return list of configuration
                     for asked values. We ask it with a list of properties to get his values. The returned list
-                    has the same order like ouer given name list!
-                        NAMELIST[ PROPERTYHANDLE_xxx ] has value VALUELIST[ PROPERTYHANDLE_xxx ]!
-                    See impl_GetPropertyNames() and his using for furter informations!
+                    has the same order like our given name list!
+                    e.g.:
+                            NAMELIST[ PROPERTYHANDLE_xxx ] => VALUELIST[ PROPERTYHANDLE_xxx ]
 *//*-*************************************************************************************************************/
+#define ROOTNODE_FACTORIES                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Setup/Office/Factories"        ))
+#define PATHSEPERATOR                       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"                             ))
 
-#define ROOTNODE_MODULES                    OUString(RTL_CONSTASCII_USTRINGPARAM("Setup/Office/Modules" ))
+#define PROPERTYNAME_SHORTNAME              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryShortName"       ))
+#define PROPERTYNAME_TEMPLATEFILE           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryTemplateFile"    ))
+#define PROPERTYNAME_WINDOWATTRIBUTES       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryWindowAttributes"))
+#define PROPERTYNAME_EMPTYDOCUMENTURL       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryEmptyDocumentURL"))
+#define PROPERTYNAME_ICON                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryIcon"            ))
 
-#ifdef TF_CFGDATA
-#define PROPERTYNAME_PORTALMATH             OUString(RTL_CONSTASCII_USTRINGPARAM("Math"))
-#define PROPERTYNAME_PORTALCHART            OUString(RTL_CONSTASCII_USTRINGPARAM("Chart"        ))
-#define PROPERTYNAME_PORTALCALC             OUString(RTL_CONSTASCII_USTRINGPARAM("Calc"         ))
-#define PROPERTYNAME_PORTALDRAW             OUString(RTL_CONSTASCII_USTRINGPARAM("Draw"         ))
-#define PROPERTYNAME_PORTALWRITER           OUString(RTL_CONSTASCII_USTRINGPARAM("Writer"       ))
-#define PROPERTYNAME_PORTALIMPRESS          OUString(RTL_CONSTASCII_USTRINGPARAM("Impress"      ))
-#define PROPERTYNAME_PORTALBASICIDE         OUString(RTL_CONSTASCII_USTRINGPARAM("BasicIDE"     ))
-#else
-#define PROPERTYNAME_PORTALMATH             OUString(RTL_CONSTASCII_USTRINGPARAM("Math/Install"         ))
-#define PROPERTYNAME_PORTALCHART            OUString(RTL_CONSTASCII_USTRINGPARAM("Chart/Install"        ))
-#define PROPERTYNAME_PORTALCALC             OUString(RTL_CONSTASCII_USTRINGPARAM("Calc/Install"         ))
-#define PROPERTYNAME_PORTALDRAW             OUString(RTL_CONSTASCII_USTRINGPARAM("Draw/Install"         ))
-#define PROPERTYNAME_PORTALWRITER           OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/Install"       ))
-#define PROPERTYNAME_PORTALIMPRESS          OUString(RTL_CONSTASCII_USTRINGPARAM("Impress/Install"      ))
-#define PROPERTYNAME_PORTALBASICIDE         OUString(RTL_CONSTASCII_USTRINGPARAM("BasicIDE/Install"     ))
-#endif
+#define PROPERTYHANDLE_SHORTNAME            0
+#define PROPERTYHANDLE_TEMPLATEFILE         1
+#define PROPERTYHANDLE_WINDOWATTRIBUTES     2
+#define PROPERTYHANDLE_EMPTYDOCUMENTURL     3
+#define PROPERTYHANDLE_ICON                 4
 
-/*TODO:
+#define PROPERTYCOUNT                       5
 
-    Enable it if new configuration keys exist!
-    in the moment use HACK with sversion.ini!
+#define FACTORYNAME_WRITER                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument"                ))
+#define FACTORYNAME_WRITERWEB               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.WebDocument"                 ))
+#define FACTORYNAME_WRITERGLOBAL            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GlobalDocument"              ))
+#define FACTORYNAME_CALC                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument"        ))
+#define FACTORYNAME_DRAW                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"          ))
+#define FACTORYNAME_IMPRESS                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"))
+#define FACTORYNAME_MATH                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.formula.FormulaProperties"        ))
+#define FACTORYNAME_CHART                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.ChartDocument"              ))
 
-#define PROPERTYNAME_PORTALMATH             OUString(RTL_CONSTASCII_USTRINGPARAM("Math/PortalInstalled"         ))
-#define PROPERTYNAME_PORTALCHART            OUString(RTL_CONSTASCII_USTRINGPARAM("Chart/PortalInstalled"        ))
-#define PROPERTYNAME_PORTALCALC             OUString(RTL_CONSTASCII_USTRINGPARAM("Calc/PortalInstalled"         ))
-#define PROPERTYNAME_PORTALDRAW             OUString(RTL_CONSTASCII_USTRINGPARAM("Draw/PortalInstalled"         ))
-#define PROPERTYNAME_PORTALWRITER           OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/PortalInstalled"       ))
-#define PROPERTYNAME_PORTALIMPRESS          OUString(RTL_CONSTASCII_USTRINGPARAM("Impress/PortalInstalled"      ))
-#define PROPERTYNAME_CLIENTMATH             OUString(RTL_CONSTASCII_USTRINGPARAM("Math/ClientInstalled"         ))
-#define PROPERTYNAME_CLIENTCHART            OUString(RTL_CONSTASCII_USTRINGPARAM("Chart/ClientInstalled"        ))
-#define PROPERTYNAME_CLIENTCALC             OUString(RTL_CONSTASCII_USTRINGPARAM("Calc/ClientInstalled"         ))
-#define PROPERTYNAME_CLIENTDRAW             OUString(RTL_CONSTASCII_USTRINGPARAM("Draw/ClientInstalled"         ))
-#define PROPERTYNAME_CLIENTWRITER           OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/ClientInstalled"       ))
-#define PROPERTYNAME_CLIENTIMPRESS          OUString(RTL_CONSTASCII_USTRINGPARAM("Impress/ClientInstalled"      ))
-*/
-
-#define PROPERTYHANDLE_PORTALMATH            0
-#define PROPERTYHANDLE_PORTALCHART           1
-#define PROPERTYHANDLE_PORTALCALC            2
-#define PROPERTYHANDLE_PORTALDRAW            3
-#define PROPERTYHANDLE_PORTALWRITER          4
-#define PROPERTYHANDLE_PORTALIMPRESS         5
-#define PROPERTYHANDLE_PORTALBASICIDE        6
-
-/*TODO:
-
-    Enable it if new configuration keys exist!
-    in the moment use HACK with sversion.ini!
-
-#define PROPERTYHANDLE_CLIENTMATH            6
-#define PROPERTYHANDLE_CLIENTCHART           7
-#define PROPERTYHANDLE_CLIENTCALC            8
-#define PROPERTYHANDLE_CLIENTDRAW            9
-#define PROPERTYHANDLE_CLIENTWRITER         10
-#define PROPERTYHANDLE_CLIENTIMPRESS        11
-*/
-
-//#define   PROPERTYCOUNT                   12
-#define PROPERTYCOUNT                       7
+#define FACTORYCOUNT                        8
 
 /*-************************************************************************************************************//**
-    @descr          The return value of GetFeature() is a combination of different bit-flags. Follow const definitions
-                    can be used to seperate all included informations from these return value!
-                    These values can be used to enable/disable a module flag on a returned integer too.
-                    To enable a module information we use ENABLEFEATURE_xxx defines ... to disable it the DISABLEFEATURE_xxx!
+    @descr  This struct hold information about one factory. We declare a complete array which can hold infos
+            for all well known factories. Values of enum "EFactory" (see header!) are directly used as index!
+            So we can support a fast access on these informations.
 *//*-*************************************************************************************************************/
+struct FactoryInfo
+{
+    public:
+        // initialize empty struct
+        FactoryInfo()
+        {
+            free();
+        }
 
-#define ENABLEFEATURE_BASICIDE              FEATUREFLAG_BASICIDE        // ----------1-----
-#define ENABLEFEATURE_MATH                  FEATUREFLAG_MATH            // -------1--------
-#define ENABLEFEATURE_CHART                 FEATUREFLAG_CHART           // ------1---------
-#define ENABLEFEATURE_CALC                  FEATUREFLAG_CALC            // ----1-----------
-#define ENABLEFEATURE_DRAW                  FEATUREFLAG_DRAW            // ---1------------
-#define ENABLEFEATURE_WRITER                FEATUREFLAG_WRITER          // --1-------------
-#define ENABLEFEATURE_IMPRESS               FEATUREFLAG_IMPRESS         // 1---------------
+        // easy way to reset struct member!
+        void free()
+        {
+            bInstalled          = sal_False         ;
+            sFactory            = ::rtl::OUString() ;
+            sShortName          = ::rtl::OUString() ;
+            sTemplateFile       = ::rtl::OUString() ;
+            sWindowAttributes   = ::rtl::OUString() ;
+            sEmptyDocumentURL   = ::rtl::OUString() ;
+            nIcon               = 0                 ;
+        }
 
-#define DISABLEFEATURE_BASICIDE             0xFFFFFFDF                  // 1111111111-11111
-#define DISABLEFEATURE_MATH                 0xFFFFFEFF                  // 1111111-11111111
-#define DISABLEFEATURE_CHART                0xFFFFFDFF                  // 111111-111111111
-#define DISABLEFEATURE_CALC                 0xFFFFF7FF                  // 1111-11111111111
-#define DISABLEFEATURE_DRAW                 0xFFFFEFFF                  // 111-111111111111
-#define DISABLEFEATURE_WRITER               0xFFFFDFFF                  // 11-1111111111111
-#define DISABLEFEATURE_IMPRESS              0xFFFF7FFF                  // -111111111111111
+    public:
+        sal_Bool            bInstalled          ;
+        ::rtl::OUString     sFactory            ;
+        ::rtl::OUString     sShortName          ;
+        ::rtl::OUString     sTemplateFile       ;
+        ::rtl::OUString     sWindowAttributes   ;
+        ::rtl::OUString     sEmptyDocumentURL   ;
+        sal_Int32           nIcon               ;
+};
+
+typedef FactoryInfo   FactoryInfoList[FACTORYCOUNT];
 
 /*-************************************************************************************************************//**
-    @descr          These defines are used for better code reading!
-                    They represent the only possible states of module installation.
+    @short          IMPL data container for wrapper class SvtModulOptions!
+    @descr          These class is used as a static data container of class SvtModuleOptions. The hold it by using
+                    a refcount and make it threadsafe by using an osl mutex. So we don't must do anything for that.
+                    We can implement pure functionality to read/write configuration data only.
+
+    @implements     -
+    @base           ConfigItem
+
+    @devstatus      ready to use
+    @threadsafe     no
 *//*-*************************************************************************************************************/
-
-#define INSTALLED                           sal_True
-#define NOT_INSTALLED                       sal_False
-
-/*-************************************************************************************************************//**
-    @descr          These defines are used as default values for m_nClient/PortalModules!
-                    So you can change the initialization state in an easy manner.
-*//*-*************************************************************************************************************/
-
-#define DEFAULT_CLIENTMODULES               0
-#define DEFAULT_PORTALMODULES               0
-
-//_________________________________________________________________________________________________________________
-//  private declarations!
-//_________________________________________________________________________________________________________________
-
-class SvtModuleOptions_Impl : public ConfigItem
+class SvtModuleOptions_Impl : public ::utl::ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
-
     public:
-
         //---------------------------------------------------------------------------------------------------------
         //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
-
          SvtModuleOptions_Impl();
         ~SvtModuleOptions_Impl();
 
         //---------------------------------------------------------------------------------------------------------
         //  overloaded methods of baseclass
         //---------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      called for notify of configmanager
-            @descr      These method is called from the ConfigManager before application ends or from the
-                         PropertyChangeListener if the sub tree broadcasts changes. You must update your
-                        internal values.
-
-            @ATTENTION  These method is'nt implemented yet - because we support readonly values only...
-                        There is no reason to change ouer values at runtime!
-
-            @seealso    baseclass ConfigItem
-
-            @param      "seqPropertyNames" is the list of properties which should be updated.
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual void Notify( const Sequence< OUString >& seqPropertyNames )
-        {
-            DBG_ERRORFILE( "SvtModuleOptions_Impl::Notify()\nNot implemented yet! I think we don't need it for readonly values! ...\n" );
-        }
-
-        /*-****************************************************************************************************//**
-            @short      write changes to configuration
-            @descr      These method writes the changed values into the sub tree
-                        and should always called in our destructor to guarantee consistency of config data.
-
-            @ATTENTION  These method is'nt implemented yet - because we support readonly values only...
-                        There is no reason to change ouer values at runtime!
-
-            @seealso    baseclass ConfigItem
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual void Commit()
-        {
-            DBG_ERRORFILE( "SvtModuleOptions_Impl::Commit()\nNot implemented yet! I think we don't need it for readonly values! ...\n" );
-        }
+        virtual void Notify( const css::uno::Sequence< ::rtl::OUString >& lPropertyNames );
+        virtual void Commit(                                                             );
 
         //---------------------------------------------------------------------------------------------------------
         //  public interface
         //---------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      access method to get internal values
-            @descr      These methods regulate a readonly access to ouer internal variables!
-
-            @seealso    -
-
-            @param      -
-            @return     sal_True if module is installed or sal_Fals if not.
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        sal_Bool    IsMath      ( sal_Bool bClient = sal_False ) const;
-        sal_Bool    IsChart     ( sal_Bool bClient = sal_False ) const;
-        sal_Bool    IsCalc      ( sal_Bool bClient = sal_False ) const;
-        sal_Bool    IsDraw      ( sal_Bool bClient = sal_False ) const;
-        sal_Bool    IsWriter    ( sal_Bool bClient = sal_False ) const;
-        sal_Bool    IsImpress   ( sal_Bool bClient = sal_False ) const;
-        sal_Bool    IsBasicIDE  ( sal_Bool bClient = sal_False ) const;
-        sal_uInt32  GetFeatures ( sal_Bool bClient = sal_False ) const;
+        sal_Bool        IsModuleInstalled         (       SvtModuleOptions::EModule     eModule    ) const;
+        ::rtl::OUString GetFactoryName            (       SvtModuleOptions::EFactory    eFactory   ) const;
+        ::rtl::OUString GetFactoryShortName       (       SvtModuleOptions::EFactory    eFactory   ) const;
+        ::rtl::OUString GetFactoryStandardTemplate(       SvtModuleOptions::EFactory    eFactory   ) const;
+        ::rtl::OUString GetFactoryWindowAttributes(       SvtModuleOptions::EFactory    eFactory   ) const;
+        ::rtl::OUString GetFactoryEmptyDocumentURL(       SvtModuleOptions::EFactory    eFactory   ) const;
+        sal_Int32       GetFactoryIcon            (       SvtModuleOptions::EFactory    eFactory   ) const;
+        static sal_Bool ClassifyFactoryByName     ( const ::rtl::OUString&              sName      ,
+                                                          SvtModuleOptions::EFactory&   eFactory   );
+        void            SetFactoryStandardTemplate(       SvtModuleOptions::EFactory    eFactory   ,
+                                                    const ::rtl::OUString&              sTemplate  );
+        void            SetFactoryWindowAttributes(       SvtModuleOptions::EFactory    eFactory   ,
+                                                    const ::rtl::OUString&              sAttributes);
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
-
     private:
+        static css::uno::Sequence< ::rtl::OUString > impl_ExpandSetNames ( const css::uno::Sequence< ::rtl::OUString >& lSetNames   );
+               void                                  impl_Read           ( const css::uno::Sequence< ::rtl::OUString >& lSetNames   );
 
-        /*-****************************************************************************************************//**
-            @short      return list of key names of ouer configuration management which represent oue module tree
-            @descr      These methods return a static const list of key names. We need it to get needed values from our
-                        configuration management.
-
-            @seealso    -
-
-            @param      -
-            @return     A list of needed configuration keys is returned.
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        static Sequence< OUString > impl_GetPropertyNames();
+    //-------------------------------------------------------------------------------------------------------------
+    //  private types
+    //-------------------------------------------------------------------------------------------------------------
+    private:
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member
     //-------------------------------------------------------------------------------------------------------------
-
     private:
-
-        sal_uInt32      m_nClientModules        ;   // cache states of localy cached components as flag field
-        sal_uInt32      m_nPortalModules        ;   // cache states of portal installed components as flag field
+        FactoryInfoList     m_lFactories;
 };
 
 //_________________________________________________________________________________________________________________
 //  definitions
 //_________________________________________________________________________________________________________________
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
+/*-************************************************************************************************************//**
+    @short      default ctor
+    @descr      We open our configuration here and read all neccessary values from it.
+                These values are cached till everyone call Commit(). Then we write changed ones back to cfg.
+
+    @seealso    baseclass ConfigItem
+    @seealso    method impl_Read()
+
+    @param      -
+    @return     -
+
+    @onerror    -
+    @threadsafe no
+*//*-*************************************************************************************************************/
 SvtModuleOptions_Impl::SvtModuleOptions_Impl()
-    // Init baseclasses first
-    :   ConfigItem          ( ROOTNODE_MODULES      )
-    // Init member then.
-    ,   m_nClientModules    ( DEFAULT_CLIENTMODULES )
-    ,   m_nPortalModules    ( DEFAULT_PORTALMODULES )
+    :   ::utl::ConfigItem( ROOTNODE_FACTORIES )
 {
-#ifdef TF_CFGDATA
-
-    Sequence<OUString> aNodeNames = GetNodeNames(OUString());
-    const OUString* pNodeNames = aNodeNames.getConstArray();
-    for(sal_Int32 nNode = 0; nNode < aNodeNames.getLength(); nNode++, pNodeNames++)
+    // First initialize list of factory infos! Otherwise we couldnt gurantee right working of these class.
+    for( sal_Int32 nFactory=0; nFactory<FACTORYCOUNT; ++nFactory )
     {
-        if (!IsMath() && PROPERTYNAME_PORTALMATH.equals(*pNodeNames))
-            m_nPortalModules |= ENABLEFEATURE_MATH;
-
-        else if (!IsChart() && PROPERTYNAME_PORTALCHART.equals(*pNodeNames))
-            m_nPortalModules |= ENABLEFEATURE_CHART;
-
-        else if (!IsCalc() && PROPERTYNAME_PORTALCALC.equals(*pNodeNames))
-            m_nPortalModules |= ENABLEFEATURE_CALC;
-
-        else if (!IsImpress() && PROPERTYNAME_PORTALIMPRESS.equals(*pNodeNames))
-            m_nPortalModules |= ENABLEFEATURE_IMPRESS;
-
-        else if (!IsDraw() && PROPERTYNAME_PORTALDRAW.equals(*pNodeNames))
-            m_nPortalModules |= ENABLEFEATURE_DRAW;
-
-        else if (!IsWriter() && PROPERTYNAME_PORTALWRITER.equals(*pNodeNames))
-            m_nPortalModules |= ENABLEFEATURE_WRITER;
-
-        else if (!IsBasicIDE() && PROPERTYNAME_PORTALBASICIDE.equals(*pNodeNames))
-            m_nPortalModules |= ENABLEFEATURE_BASICIDE;
+        m_lFactories[nFactory].free();
     }
 
-#else
-    // Use our static list of configuration keys to get his values.
-    const Sequence< OUString >  seqNames    = impl_GetPropertyNames (           );
-    const Sequence< Any >       seqValues   = GetProperties         ( seqNames  );
+    // Get name list of all existing set node names in configuration to read her properties in impl_Read().
+    // These list is a list of long names of our factories.
+    const css::uno::Sequence< ::rtl::OUString > lFactories = GetNodeNames( ::rtl::OUString() );
+    impl_Read( lFactories );
 
-    // Safe impossible cases.
-    // We need values from ALL configuration keys.
-    // Follow assignment use order of values in relation to our list of key names!
-    DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtModuleOptions_Impl::SvtModuleOptions_Impl()\nI miss some values of configuration keys!\n" );
-
-    // Copy values from list in right order to ouer internal member.
-    sal_Int32 nPropertyCount = seqValues.getLength();
-    for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
-    {
-        // Safe impossible cases.
-        // Check any for valid value.
-    DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False||seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtModuleOptions_Impl::SvtModuleOptions_Impl()\nInvalid property value detected!\n" );
-        sal_Bool bState;
-        seqValues[nProperty] >>= bState;
-        sal_Bool bState(sal_True);
-        switch( nProperty )
-        {
-/*TODO: Hack with sversion.ini
-            case PROPERTYHANDLE_CLIENTMATH      :   {
-                                                        if( bState == INSTALLED )
-                                                        {
-                                                            m_nClientModules |= ENABLEFEATURE_MATH;
-                                                        }
-                                                        else
-                                                        {
-                                                            m_nClientModules &= DISABLEFEATURE_MATH;
-                                                        }
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_CLIENTCHART     :   {
-                                                        if( bState == INSTALLED )
-                                                        {
-                                                            m_nClientModules |= ENABLEFEATURE_CHART;
-                                                        }
-                                                        else
-                                                        {
-                                                            m_nClientModules &= DISABLEFEATURE_CHART;
-                                                        }
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_CLIENTCALC      :   {
-                                                        if( bState == INSTALLED )
-                                                        {
-                                                            m_nClientModules |= ENABLEFEATURE_CALC;
-                                                        }
-                                                        else
-                                                        {
-                                                            m_nClientModules &= DISABLEFEATURE_CALC;
-                                                        }
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_CLIENTDRAW      :   {
-                                                        if( bState == INSTALLED )
-                                                        {
-                                                            m_nClientModules |= ENABLEFEATURE_DRAW;
-                                                        }
-                                                        else
-                                                        {
-                                                            m_nClientModules &= DISABLEFEATURE_DRAW;
-                                                        }
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_CLIENTWRITER    :   {
-                                                        if( bState == INSTALLED )
-                                                        {
-                                                            m_nClientModules |= ENABLEFEATURE_WRITER;
-                                                        }
-                                                        else
-                                                        {
-                                                            m_nClientModules &= DISABLEFEATURE_WRITER;
-                                                        }
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_CLIENTIMPRESS   :   {
-                                                        if( bState == INSTALLED )
-                                                        {
-                                                            m_nClientModules |= ENABLEFEATURE_IMPRESS;
-                                                        }
-                                                        else
-                                                        {
-                                                            m_nClientModules &= DISABLEFEATURE_IMPRESS;
-                                                        }
-                                                    }
-                                                    break;
-*/
-            case PROPERTYHANDLE_PORTALMATH      :   {
-                                                        if( bState == INSTALLED )
-                                                        {
-                                                            m_nPortalModules |= ENABLEFEATURE_MATH;
-                                                        }
-                                                        else
-                                                        {
-                                                            m_nPortalModules &= DISABLEFEATURE_MATH;
-                                                        }
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_PORTALCHART     :   {
-                                                        if( bState == INSTALLED )
-                                                        {
-                                                            m_nPortalModules |= ENABLEFEATURE_CHART;
-                                                        }
-                                                        else
-                                                        {
-                                                            m_nPortalModules &= DISABLEFEATURE_CHART;
-                                                        }
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_PORTALCALC      :   {
-                                                        if( bState == INSTALLED )
-                                                        {
-                                                            m_nPortalModules |= ENABLEFEATURE_CALC;
-                                                        }
-                                                        else
-                                                        {
-                                                            m_nPortalModules &= DISABLEFEATURE_CALC;
-                                                        }
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_PORTALDRAW      :   {
-                                                        if( bState == INSTALLED )
-                                                        {
-                                                            m_nPortalModules |= ENABLEFEATURE_DRAW;
-                                                        }
-                                                        else
-                                                        {
-                                                            m_nPortalModules &= DISABLEFEATURE_DRAW;
-                                                        }
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_PORTALWRITER    :   {
-                                                        if( bState == INSTALLED )
-                                                        {
-                                                            m_nPortalModules |= ENABLEFEATURE_WRITER;
-                                                        }
-                                                        else
-                                                        {
-                                                            m_nPortalModules &= DISABLEFEATURE_WRITER;
-                                                        }
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_PORTALIMPRESS   :   {
-                                                        if( bState == INSTALLED )
-                                                        {
-                                                            m_nPortalModules |= ENABLEFEATURE_IMPRESS;
-                                                        }
-                                                        else
-                                                        {
-                                                            m_nPortalModules &= DISABLEFEATURE_IMPRESS;
-                                                        }
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_PORTALBASICIDE  :   {
-                                                        if( bState == INSTALLED )
-                                                        {
-                                                            m_nPortalModules |= ENABLEFEATURE_BASICIDE;
-                                                        }
-                                                        else
-                                                        {
-                                                            m_nPortalModules &= DISABLEFEATURE_BASICIDE;
-                                                        }
-                                                    }
-                                                    break;
-
-            default                             :   DBG_ERRORFILE( "SvtModuleOptions_Impl::SvtModuleOptions_Impl()\nWho has changed my property order mechanism?\n" );
-        }
-    }
-#endif
-/*
- * OBR: disabled the hack with the knowledge of AS:
- *      getProfileName should not be used any more
- */
-
-#if 0
-/* Hack! -------------------------------------------------------------------------------------
-    Read values for localy cached components from sversion.ini!
- */
-    OUString sSVersionINI;
-    OProfile::getProfileName( sSVersionINI, OUString::createFromAscii( "sversion" ), OUString::createFromAscii( "?^" ) );
-
-    OProfile aSVersion;
-    aSVersion.open( sSVersionINI );
-
-    if( aSVersion.readBool( "StarWebTop 6.0 Plugin Priority", "application/vnd.stardivision.math", sal_False ) == sal_True )
-    {
-        m_nClientModules |= ENABLEFEATURE_MATH;
-    }
-    else
-    {
-        m_nClientModules &= DISABLEFEATURE_MATH;
-    }
-    if( aSVersion.readBool( "StarWebTop 6.0 Plugin Priority", "application/vnd.stardivision.chart", sal_False ) == sal_True )
-    {
-        m_nClientModules |= ENABLEFEATURE_CHART;
-    }
-    else
-    {
-        m_nClientModules &= DISABLEFEATURE_CHART;
-    }
-    if( aSVersion.readBool( "StarWebTop 6.0 Plugin Priority", "application/vnd.stardivision.calc", sal_False ) == sal_True )
-    {
-        m_nClientModules |= ENABLEFEATURE_CALC;
-    }
-    else
-    {
-        m_nClientModules &= DISABLEFEATURE_CALC;
-    }
-    if( aSVersion.readBool( "StarWebTop 6.0 Plugin Priority", "application/vnd.stardivision.draw", sal_False ) == sal_True )
-    {
-        m_nClientModules |= ENABLEFEATURE_DRAW;
-    }
-    else
-    {
-        m_nClientModules &= DISABLEFEATURE_DRAW;
-    }
-    if( aSVersion.readBool( "StarWebTop 6.0 Plugin Priority", "application/vnd.stardivision.writer", sal_False ) == sal_True )
-    {
-        m_nClientModules |= ENABLEFEATURE_WRITER;
-    }
-    else
-    {
-        m_nClientModules &= DISABLEFEATURE_WRITER;
-    }
-    if( aSVersion.readBool( "StarWebTop 6.0 Plugin Priority", "application/vnd.stardivision.impress", sal_False ) == sal_True )
-    {
-        m_nClientModules |= ENABLEFEATURE_IMPRESS;
-    }
-    else
-    {
-        m_nClientModules &= DISABLEFEATURE_IMPRESS;
-    }
-
-    // To read the sversion.ini is a hack ... and these new key isn't supported by a sversion entry!
-    // Enable basic ide by default!!!
-    m_nClientModules |= ENABLEFEATURE_BASICIDE;
-
-    aSVersion.close();
-
-/* Hack! -------------------------------------------------------------------------------------*/
-
-#endif
-
-    // I think we don't need any notifications ...
-    // because we support readonly variables yet in the moment!
-//  EnableNotification( seqNames );
+    // Enable notification for changes by using configuration directly.
+    // So we can update our internal values immediatly.
+    EnableNotification( lFactories );
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
+/*-************************************************************************************************************//**
+    @short      default dtor
+    @descr      If any values of our cache was modified we should write it back to configuration.
+
+    @attention  Don't forget to call "SetModified()" method of base class ConfigItem if any interface method
+                of this class modify internal member list m_lFactories! Otherwise Commit() will never be called!!!
+
+    @seealso    baseclass ConfigItem
+
+    @param      -
+    @return     -
+
+    @onerror    -
+    @threadsafe no
+*//*-*************************************************************************************************************/
 SvtModuleOptions_Impl::~SvtModuleOptions_Impl()
 {
-    // We support readonly variables in the moment only.
-    // There is no reason to commit ouer data set ...
-    /*
-
     if( IsModified() == sal_True )
     {
         Commit();
     }
+}
 
-    */
+/*-************************************************************************************************************//**
+    @short      called for notify of configmanager
+    @descr      These method is called from the ConfigManager before application ends or from the
+                PropertyChangeListener if the sub tree broadcasts changes. You must update our
+                internal values.
+
+    @attention  We are registered for pure set node names only. So we can use our internal method "impl_Read()" to
+                update our info list. Because - these method expand given name list to full qualified property list
+                and use it to read the values. These values are filled into our internal member list m_lFactories
+                at right position.
+
+    @seealso    method impl_Read()
+
+    @param      "lNames" is the list of set node entries which should be updated.
+    @return     -
+
+    @onerror    -
+    @threadsafe no
+*//*-*************************************************************************************************************/
+void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< ::rtl::OUString >& lNames )
+{
+    impl_Read( lNames );
+}
+
+/*-****************************************************************************************************//**
+    @short      write changes to configuration
+    @descr      These method writes the changed values into the sub tree
+                and should always called in our destructor to guarantee consistency of config data.
+
+    @attention  We clear complete set in configuration first and write it completly new! So we don't must
+                distinguish between existing, added or removed elements. Our internal cached values
+                are the only and right ones.
+
+    @seealso    baseclass ConfigItem
+
+    @param      -
+    @return     -
+
+    @onerror    -
+    @threadsafe no
+*//*-*****************************************************************************************************/
+void SvtModuleOptions_Impl::Commit()
+{
+    // Clear whole cfg list.
+    ClearNodeSet( ::rtl::OUString() );
+    // Build complete list of all factories, her properties and values.
+    css::uno::Sequence< css::beans::PropertyValue > lProperties     ( FACTORYCOUNT*PROPERTYCOUNT );
+    FactoryInfo*                                    pInfo           = NULL                        ;
+    sal_Int32                                       nPropertyStart  = 0                           ;
+    for( sal_Int32 nFactory=0; nFactory<FACTORYCOUNT; ++nFactory )
+    {
+        pInfo = &(m_lFactories[nFactory]);
+
+        if( pInfo->bInstalled == sal_True )
+        {
+            lProperties[nPropertyStart+PROPERTYHANDLE_SHORTNAME       ].Name = PATHSEPERATOR + pInfo->sFactory + PATHSEPERATOR + PROPERTYNAME_SHORTNAME       ;
+            lProperties[nPropertyStart+PROPERTYHANDLE_TEMPLATEFILE    ].Name = PATHSEPERATOR + pInfo->sFactory + PATHSEPERATOR + PROPERTYNAME_TEMPLATEFILE    ;
+            lProperties[nPropertyStart+PROPERTYHANDLE_WINDOWATTRIBUTES].Name = PATHSEPERATOR + pInfo->sFactory + PATHSEPERATOR + PROPERTYNAME_WINDOWATTRIBUTES;
+            lProperties[nPropertyStart+PROPERTYHANDLE_EMPTYDOCUMENTURL].Name = PATHSEPERATOR + pInfo->sFactory + PATHSEPERATOR + PROPERTYNAME_EMPTYDOCUMENTURL;
+            lProperties[nPropertyStart+PROPERTYHANDLE_ICON            ].Name = PATHSEPERATOR + pInfo->sFactory + PATHSEPERATOR + PROPERTYNAME_ICON            ;
+
+            lProperties[nPropertyStart+PROPERTYHANDLE_SHORTNAME       ].Value <<= pInfo->sShortName         ;
+            lProperties[nPropertyStart+PROPERTYHANDLE_TEMPLATEFILE    ].Value <<= pInfo->sTemplateFile      ;
+            lProperties[nPropertyStart+PROPERTYHANDLE_WINDOWATTRIBUTES].Value <<= pInfo->sWindowAttributes  ;
+            lProperties[nPropertyStart+PROPERTYHANDLE_EMPTYDOCUMENTURL].Value <<= pInfo->sEmptyDocumentURL  ;
+            lProperties[nPropertyStart+PROPERTYHANDLE_ICON            ].Value <<= pInfo->nIcon              ;
+        }
+        nPropertyStart += PROPERTYCOUNT;
+    }
+    // Write list to cfg.
+    SetSetProperties( ::rtl::OUString(), lProperties );
+}
+
+/*-****************************************************************************************************//**
+    @short      access method to get internal values
+    @descr      These methods implement easy access to our internal values.
+                You give us right enum value to specify which module interest you ... we return right information.
+
+    @attention  Some poeple use any value as enum ... but we support in header specified values only!
+                We use it directly as index in our internal list. If enum value isn't right - we crash with an
+                "index out of range"!!! Please use me right - otherwise there is no guarantee.
+
+    @seealso    -
+
+    @param      "eModule"  , index in list - specify module
+    @param      "eFactory" , index in list - specify factory
+    @param      "sTemplate", set new standard template for these factory
+    @return     Queried information.
+
+    @onerror    We return default values. (mostly "not installed"!)
+    @threadsafe no
+*//*-*****************************************************************************************************/
+sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eModule ) const
+{
+    sal_Bool bInstalled = sal_False;
+    switch( eModule )
+    {
+        case SvtModuleOptions::E_SWRITER    :   {
+                                                    // Module writer knows more then one factory!
+                                                    bInstalled = (
+                                                                    ( m_lFactories[SvtModuleOptions::E_WRITER      ].bInstalled == sal_True ) ||
+                                                                    ( m_lFactories[SvtModuleOptions::E_WRITERWEB   ].bInstalled == sal_True ) ||
+                                                                    ( m_lFactories[SvtModuleOptions::E_WRITERGLOBAL].bInstalled == sal_True )
+                                                                 );
+                                                }
+                                                break;
+        case SvtModuleOptions::E_SCALC      :   bInstalled = m_lFactories[SvtModuleOptions::E_CALC].bInstalled;
+                                                break;
+        case SvtModuleOptions::E_SDRAW      :   bInstalled = m_lFactories[SvtModuleOptions::E_DRAW].bInstalled;
+                                                break;
+        case SvtModuleOptions::E_SIMPRESS   :   bInstalled = m_lFactories[SvtModuleOptions::E_IMPRESS].bInstalled;
+                                                break;
+        case SvtModuleOptions::E_SMATH      :   bInstalled = m_lFactories[SvtModuleOptions::E_MATH].bInstalled;
+                                                break;
+        case SvtModuleOptions::E_SCHART     :   bInstalled = m_lFactories[SvtModuleOptions::E_CHART].bInstalled;
+                                                break;
+        case SvtModuleOptions::E_SBASIC     :   bInstalled = sal_True; // Couldn't be deselected by setup yet!
+                                                break;
+    }
+
+    return bInstalled;
 }
 
 //*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtModuleOptions_Impl::IsMath( sal_Bool bClient ) const
+::rtl::OUString SvtModuleOptions_Impl::GetFactoryName( SvtModuleOptions::EFactory eFactory ) const
 {
-    // Set default return state to "non installed".
-    sal_Bool bState = sal_False;
-    // Try to specify right install state for given search parameter!
-    if( bClient == sal_True )
+    ::rtl::OUString sName;
+
+    if( eFactory>=0 && eFactory<FACTORYCOUNT )
     {
-        if( ( m_nClientModules & FEATUREFLAG_MATH ) == FEATUREFLAG_MATH )
-        {
-            bState = sal_True;
-        }
+        sName = m_lFactories[eFactory].sFactory;
     }
-    else
+
+    return sName;
+}
+
+//*****************************************************************************************************************
+::rtl::OUString SvtModuleOptions_Impl::GetFactoryShortName( SvtModuleOptions::EFactory eFactory ) const
+{
+    // Attention: Hard configured yet ... because it's not fine to make changes possible by xml file yet.
+    //            But it's good to plan further possibilities!
+
+    //return m_lFactories[eFactory].sShortName;
+
+    ::rtl::OUString sShortName;
+    switch( eFactory )
     {
-        if( ( m_nPortalModules & FEATUREFLAG_MATH ) == FEATUREFLAG_MATH )
-        {
-            bState = sal_True;
-        }
+        case SvtModuleOptions::E_WRITER        :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter"));
+                                                  break;
+        case SvtModuleOptions::E_WRITERWEB     :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/web"));
+                                                  break;
+        case SvtModuleOptions::E_WRITERGLOBAL  :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("swriter/GlobalDocument"));
+                                                  break;
+        case SvtModuleOptions::E_CALC          :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("scalc"));
+                                                  break;
+        case SvtModuleOptions::E_DRAW          :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw"));
+                                                  break;
+        case SvtModuleOptions::E_IMPRESS       :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpress"));
+                                                  break;
+        case SvtModuleOptions::E_MATH          :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smath"));
+                                                  break;
+        case SvtModuleOptions::E_CHART         :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("schart"));
+                                                  break;
     }
-    // Return install state.
+    return sShortName;
+}
+
+//*****************************************************************************************************************
+::rtl::OUString SvtModuleOptions_Impl::GetFactoryStandardTemplate( SvtModuleOptions::EFactory eFactory ) const
+{
+    ::rtl::OUString sFile;
+
+    if( eFactory>=0 && eFactory<FACTORYCOUNT )
+    {
+        sFile = m_lFactories[eFactory].sTemplateFile;
+    }
+
+    return sFile;
+}
+
+//*****************************************************************************************************************
+::rtl::OUString SvtModuleOptions_Impl::GetFactoryWindowAttributes( SvtModuleOptions::EFactory eFactory ) const
+{
+    ::rtl::OUString sAttributes;
+
+    if( eFactory>=0 && eFactory<FACTORYCOUNT )
+    {
+        sAttributes = m_lFactories[eFactory].sWindowAttributes;
+    }
+
+    return sAttributes;
+}
+
+//*****************************************************************************************************************
+::rtl::OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory eFactory ) const
+{
+    // Attention: Hard configured yet ... because it's not fine to make changes possible by xml file yet.
+    //            But it's good to plan further possibilities!
+
+    //return m_lFactories[eFactory].sEmptyDocumentURL;
+
+    ::rtl::OUString sURL;
+    switch( eFactory )
+    {
+        case SvtModuleOptions::E_WRITER        :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/swriter"));
+                                                  break;
+        case SvtModuleOptions::E_WRITERWEB     :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/swriter/web"));
+                                                  break;
+        case SvtModuleOptions::E_WRITERGLOBAL  :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/swriter/GlobalDocument"));
+                                                  break;
+        case SvtModuleOptions::E_CALC          :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc"));
+                                                  break;
+        case SvtModuleOptions::E_DRAW          :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdraw"));
+                                                  break;
+        case SvtModuleOptions::E_IMPRESS       :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/simpress"));
+                                                  break;
+        case SvtModuleOptions::E_MATH          :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/smath"));
+                                                  break;
+        case SvtModuleOptions::E_CHART         :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/schart"));
+                                                  break;
+    }
+    return sURL;
+}
+
+//*****************************************************************************************************************
+sal_Int32 SvtModuleOptions_Impl::GetFactoryIcon( SvtModuleOptions::EFactory eFactory ) const
+{
+    sal_Int32 nIcon = 0;
+
+    if( eFactory>=0 && eFactory<FACTORYCOUNT )
+    {
+        nIcon = m_lFactories[eFactory].nIcon;
+    }
+
+    return nIcon;
+}
+
+//*****************************************************************************************************************
+void SvtModuleOptions_Impl::SetFactoryStandardTemplate(       SvtModuleOptions::EFactory eFactory   ,
+                                                        const ::rtl::OUString&           sTemplate  )
+{
+    if( eFactory>=0 && eFactory<FACTORYCOUNT )
+    {
+        m_lFactories[eFactory].sTemplateFile = sTemplate;
+        SetModified();
+    }
+}
+
+//*****************************************************************************************************************
+void SvtModuleOptions_Impl::SetFactoryWindowAttributes(       SvtModuleOptions::EFactory eFactory   ,
+                                                        const ::rtl::OUString&           sAttributes)
+{
+    if( eFactory>=0 && eFactory<FACTORYCOUNT )
+    {
+        m_lFactories[eFactory].sWindowAttributes = sAttributes;
+        SetModified();
+    }
+}
+
+/*-************************************************************************************************************//**
+    @short      return list of key names of ouer configuration management which represent our module tree
+    @descr      You give use a list of current existing set node names .. and we expand it for all
+                well known properties which are neccessary for this implementation.
+                These full expanded list should be used to get values of this properties.
+
+    @seealso    ctor
+
+    @param      -
+    @return     List of all relative addressed properties of given set entry names.
+
+    @onerror    List will be empty.
+    @threadsafe no
+*//*-*************************************************************************************************************/
+css::uno::Sequence< ::rtl::OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const css::uno::Sequence< ::rtl::OUString >& lSetNames )
+{
+    sal_Int32                             nCount     = lSetNames.getLength() ;
+    css::uno::Sequence< ::rtl::OUString > lPropNames ( nCount*PROPERTYCOUNT );
+    sal_Int32                             nPropStart = 0                     ;
+
+    for( sal_Int32 nName=0; nName<nCount; ++nName )
+    {
+        lPropNames[nPropStart+PROPERTYHANDLE_SHORTNAME       ] = lSetNames[nName] + PATHSEPERATOR + PROPERTYNAME_SHORTNAME       ;
+        lPropNames[nPropStart+PROPERTYHANDLE_TEMPLATEFILE    ] = lSetNames[nName] + PATHSEPERATOR + PROPERTYNAME_TEMPLATEFILE    ;
+        lPropNames[nPropStart+PROPERTYHANDLE_WINDOWATTRIBUTES] = lSetNames[nName] + PATHSEPERATOR + PROPERTYNAME_WINDOWATTRIBUTES;
+        lPropNames[nPropStart+PROPERTYHANDLE_EMPTYDOCUMENTURL] = lSetNames[nName] + PATHSEPERATOR + PROPERTYNAME_EMPTYDOCUMENTURL;
+        lPropNames[nPropStart+PROPERTYHANDLE_ICON            ] = lSetNames[nName] + PATHSEPERATOR + PROPERTYNAME_ICON            ;
+        nPropStart += PROPERTYCOUNT;
+    }
+
+    return lPropNames;
+}
+
+/*-************************************************************************************************************//**
+    @short      helper to classify given factory by name
+    @descr      Every factory has his own long and short name. So we can match right enum value for internal using.
+
+    @attention  We change in/out parameter "eFactory" in every case! But you should use it only, if return value is TRUE!
+                Algorithm:  Set out-parameter to propably value ... and check the longname.
+                            If it match with these factory - break operation and return true AND right set parameter.
+                            Otherwise try next one and so on. If no factory was found return false. Out parameter eFactory
+                            is set to last tried value but shouldn't be used! Because our return value is false!
+
+    @seealso    -
+
+    @param      "sLongName" , long name of factory, which should be classified
+    @return     "eFactory"  , right enum value, which match given long name
+                and true for successfully classification, false otherwise
+
+    @onerror    We return false.
+    @threadsafe no
+*//*-*************************************************************************************************************/
+sal_Bool SvtModuleOptions_Impl::ClassifyFactoryByName( const ::rtl::OUString& sName, SvtModuleOptions::EFactory& eFactory )
+{
+    sal_Bool bState;
+
+    eFactory = SvtModuleOptions::E_WRITER     ;
+    bState   = ( sName == FACTORYNAME_WRITER );
+
+    if( bState == sal_False )
+    {
+        eFactory = SvtModuleOptions::E_WRITERWEB     ;
+        bState   = ( sName == FACTORYNAME_WRITERWEB );
+    }
+    // no else!
+    if( bState == sal_False )
+    {
+        eFactory = SvtModuleOptions::E_WRITERGLOBAL     ;
+        bState   = ( sName == FACTORYNAME_WRITERGLOBAL );
+    }
+    // no else!
+    if( bState == sal_False )
+    {
+        eFactory = SvtModuleOptions::E_CALC     ;
+        bState   = ( sName == FACTORYNAME_CALC );
+    }
+    // no else!
+    if( bState == sal_False )
+    {
+        eFactory = SvtModuleOptions::E_DRAW     ;
+        bState   = ( sName == FACTORYNAME_DRAW );
+    }
+    // no else!
+    if( bState == sal_False )
+    {
+        eFactory = SvtModuleOptions::E_IMPRESS     ;
+        bState   = ( sName == FACTORYNAME_IMPRESS );
+    }
+    // no else!
+    if( bState == sal_False )
+    {
+        eFactory = SvtModuleOptions::E_MATH     ;
+        bState   = ( sName == FACTORYNAME_MATH );
+    }
+    // no else!
+    if( bState == sal_False )
+    {
+        eFactory = SvtModuleOptions::E_CHART     ;
+        bState   = ( sName == FACTORYNAME_CHART );
+    }
+
     return bState;
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtModuleOptions_Impl::IsChart( sal_Bool bClient ) const
+/*-************************************************************************************************************//**
+    @short      read factory configuration
+    @descr      Give us a list of pure factory names (long names!) which can be used as
+                direct set node names ... and we read her property values and fill internal list.
+                These method can be used by initial reading at ctor and later updating by "Notify()".
+
+    @seealso    ctor
+    @seealso    method Notify()
+
+    @param      "lFactories" is the list of set node entries which should be readed.
+    @return     -
+
+    @onerror    We do nothing.
+    @threadsafe no
+*//*-*************************************************************************************************************/
+void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< ::rtl::OUString >& lFactories )
 {
-    // Set default return state to "non installed".
-    sal_Bool bState = sal_False;
-    // Try to specify right install state for given search parameter!
-    if( bClient == sal_True )
+    // Expand every set node name in lFactories to full qualified pathes to his properties
+    // and get right values from configuration.
+    const css::uno::Sequence< ::rtl::OUString > lProperties = impl_ExpandSetNames( lFactories  );
+    const css::uno::Sequence< css::uno::Any >   lValues     = GetProperties      ( lProperties );
+
+    // Safe impossible cases.
+    // We need values from ALL configuration keys.
+    // Follow assignment use order of values in relation to our list of key names!
+    OSL_ENSURE( !(lProperties.getLength()!=lValues.getLength()), "SvtModuleOptions_Impl::impl_Read()\nI miss some values of configuration keys!\n" );
+
+    // Algorithm:   We step over all given factory names and classify it. These enum value can be used as direct index
+    //              in our member list m_lFactories! VAriable nPropertyStart marks start position of every factory
+    //              and her properties in expanded property/value list. The defines PROPERTHANDLE_xxx are used as offset values
+    //              added to nPropertyStart. So we can address every property relative in these lists.
+    //              If we found any valid values ... we reset all existing informations for corresponding m_lFactories-entry and
+    //              use a pointer to these struct in memory directly to set new values.
+    //              But we set it only, if bInstalled is true. Otherwise all other values of a factory can be undeclared .. They
+    //              shouldn't be used then.
+    // Attention:   If a propertyset of a factory will be ignored we must step to next start position of next factory infos!
+    //              see "nPropertyStart += PROPERTYCOUNT" ...
+
+    sal_Int32                   nPropertyStart  = 0                     ;
+    sal_Int32                   nNodeCount      = lFactories.getLength();
+    FactoryInfo*                pInfo           = NULL                  ;
+    SvtModuleOptions::EFactory  eFactory                                ;
+    ::rtl::OUString             sFactoryName                            ;
+    for( sal_Int32 nSetNode=0; nSetNode<nNodeCount; ++nSetNode )
     {
-        if( ( m_nClientModules & FEATUREFLAG_CHART ) == FEATUREFLAG_CHART )
+        sFactoryName = lFactories[nSetNode];
+        if( ClassifyFactoryByName( sFactoryName, eFactory ) == sal_True )
         {
-            bState = sal_True;
+            pInfo = &(m_lFactories[eFactory]);
+            pInfo->free();
+
+            pInfo->bInstalled                                         = sal_True                ;
+            pInfo->sFactory                                           = sFactoryName            ;
+            lValues[nPropertyStart+PROPERTYHANDLE_SHORTNAME       ] >>= pInfo->sShortName       ;
+            lValues[nPropertyStart+PROPERTYHANDLE_TEMPLATEFILE    ] >>= pInfo->sTemplateFile    ;
+            lValues[nPropertyStart+PROPERTYHANDLE_WINDOWATTRIBUTES] >>= pInfo->sWindowAttributes;
+            lValues[nPropertyStart+PROPERTYHANDLE_EMPTYDOCUMENTURL] >>= pInfo->sEmptyDocumentURL;
+            lValues[nPropertyStart+PROPERTYHANDLE_ICON            ] >>= pInfo->nIcon            ;
         }
+        nPropertyStart += PROPERTYCOUNT;
     }
-    else
-    {
-        if( ( m_nPortalModules & FEATUREFLAG_CHART ) == FEATUREFLAG_CHART )
-        {
-            bState = sal_True;
-        }
-    }
-    // Return install state.
-    return bState;
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtModuleOptions_Impl::IsCalc( sal_Bool bClient ) const
-{
-    // Set default return state to "non installed".
-    sal_Bool bState = sal_False;
-    // Try to specify right install state for given search parameter!
-    if( bClient == sal_True )
-    {
-        if( ( m_nClientModules & FEATUREFLAG_CALC ) == FEATUREFLAG_CALC )
-        {
-            bState = sal_True;
-        }
-    }
-    else
-    {
-        if( ( m_nPortalModules & FEATUREFLAG_CALC ) == FEATUREFLAG_CALC )
-        {
-            bState = sal_True;
-        }
-    }
-    // Return install state.
-    return bState;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtModuleOptions_Impl::IsDraw( sal_Bool bClient ) const
-{
-    // Set default return state to "non installed".
-    sal_Bool bState = sal_False;
-    // Try to specify right install state for given search parameter!
-    if( bClient == sal_True )
-    {
-        if( ( m_nClientModules & FEATUREFLAG_DRAW ) == FEATUREFLAG_DRAW )
-        {
-            bState = sal_True;
-        }
-    }
-    else
-    {
-        if( ( m_nPortalModules & FEATUREFLAG_DRAW ) == FEATUREFLAG_DRAW )
-        {
-            bState = sal_True;
-        }
-    }
-    // Return install state.
-    return bState;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtModuleOptions_Impl::IsWriter( sal_Bool bClient ) const
-{
-    // Set default return state to "non installed".
-    sal_Bool bState = sal_False;
-    // Try to specify right install state for given search parameter!
-    if( bClient == sal_True )
-    {
-        if( ( m_nClientModules & FEATUREFLAG_WRITER ) == FEATUREFLAG_WRITER )
-        {
-            bState = sal_True;
-        }
-    }
-    else
-    {
-        if( ( m_nPortalModules & FEATUREFLAG_WRITER ) == FEATUREFLAG_WRITER )
-        {
-            bState = sal_True;
-        }
-    }
-    // Return install state.
-    return bState;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtModuleOptions_Impl::IsImpress( sal_Bool bClient ) const
-{
-    // Set default return state to "non installed".
-    sal_Bool bState = sal_False;
-    // Try to specify right install state for given search parameter!
-    if( bClient == sal_True )
-    {
-        if( ( m_nClientModules & FEATUREFLAG_IMPRESS ) == FEATUREFLAG_IMPRESS )
-        {
-            bState = sal_True;
-        }
-    }
-    else
-    {
-        if( ( m_nPortalModules & FEATUREFLAG_IMPRESS ) == FEATUREFLAG_IMPRESS )
-        {
-            bState = sal_True;
-        }
-    }
-    // Return install state.
-    return bState;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtModuleOptions_Impl::IsBasicIDE( sal_Bool bClient ) const
-{
-    // Set default return state to "non installed".
-    sal_Bool bState = sal_False;
-    // Try to specify right install state for given search parameter!
-    if( bClient == sal_True )
-    {
-        if( ( m_nClientModules & FEATUREFLAG_BASICIDE ) == FEATUREFLAG_BASICIDE )
-        {
-            bState = sal_True;
-        }
-    }
-    else
-    {
-        if( ( m_nPortalModules & FEATUREFLAG_BASICIDE ) == FEATUREFLAG_BASICIDE )
-        {
-            bState = sal_True;
-        }
-    }
-    // Return install state.
-    return bState;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_uInt32 SvtModuleOptions_Impl::GetFeatures( sal_Bool bClient ) const
-{
-    // Set default return state to "non installed".
-    sal_uInt32 nFeatures = 0;
-    // Try to specify right install state for given search parameter!
-    if( bClient == sal_True )
-    {
-        nFeatures = m_nClientModules;
-    }
-    else
-    {
-        nFeatures = m_nPortalModules;
-    }
-    // Return install state.
-    return nFeatures;
-}
-
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
-Sequence< OUString > SvtModuleOptions_Impl::impl_GetPropertyNames()
-{
-    // Build static list of configuration key names.
-    static const OUString pProperties[] =
-    {
-/*TODO: Hack width sversion.ini
-        PROPERTYNAME_CLIENTMATH     ,
-        PROPERTYNAME_CLIENTCHART    ,
-        PROPERTYNAME_CLIENTCALC     ,
-        PROPERTYNAME_CLIENTDRAW     ,
-        PROPERTYNAME_CLIENTWRITER   ,
-        PROPERTYNAME_CLIENTIMPRESS  ,*/
-         PROPERTYNAME_PORTALMATH        ,
-        PROPERTYNAME_PORTALCHART    ,
-        PROPERTYNAME_PORTALCALC     ,
-        PROPERTYNAME_PORTALDRAW     ,
-        PROPERTYNAME_PORTALWRITER   ,
-        PROPERTYNAME_PORTALIMPRESS  ,
-        PROPERTYNAME_PORTALBASICIDE ,
-    };
-    // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
-    // ... and return it.
-    return seqPropertyNames;
-}
 
 //*****************************************************************************************************************
 //  initialize static member
@@ -909,130 +743,236 @@ Sequence< OUString > SvtModuleOptions_Impl::impl_GetPropertyNames()
 SvtModuleOptions_Impl*  SvtModuleOptions::m_pDataContainer  = NULL  ;
 sal_Int32               SvtModuleOptions::m_nRefCount       = 0     ;
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
+/*-************************************************************************************************************//**
+    @short      standard constructor and destructor
+    @descr      This will initialize an instance with default values. We initialize/deinitialize our static data
+                container and create a static mutex, which is used for threadsafe code in further time of this object.
+
+    @seealso    method impl_GetOwnStaticMutex()
+
+    @param      -
+    @return     -
+
+    @onerror    -
+    @threadsafe yes
+*//*-*************************************************************************************************************/
 SvtModuleOptions::SvtModuleOptions()
 {
-    // Global access, must be guarded (multithreading!).
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase ouer refcount ...
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     ++m_nRefCount;
-    // ... and initialize ouer data container only if it not already exist!
-    if( m_pDataContainer == NULL )
+    if( m_nRefCount == 1 )
     {
         m_pDataContainer = new SvtModuleOptions_Impl;
     }
 }
 
 //*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
 SvtModuleOptions::~SvtModuleOptions()
 {
-    // Global access, must be guarded (multithreading!)
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease ouer refcount.
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy ouer static data container!
-    if( m_nRefCount <= 0 )
+    if( m_nRefCount == 0 )
     {
         delete m_pDataContainer;
         m_pDataContainer = NULL;
     }
 }
 
+/*-************************************************************************************************************//**
+    @short      access to configuration data
+    @descr      This methods allow read/write access to configuration values.
+                They are threadsafe. All calls are forwarded to impl-data-container. See there for further informations!
+
+    @seealso    method impl_GetOwnStaticMutex()
+
+    @param      -
+    @return     -
+
+    @onerror    -
+    @threadsafe yes
+*//*-*************************************************************************************************************/
+sal_Bool SvtModuleOptions::IsModuleInstalled( EModule eModule ) const
+{
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    return m_pDataContainer->IsModuleInstalled( eModule );
+}
+
 //*****************************************************************************************************************
-//  public method
+::rtl::OUString SvtModuleOptions::GetFactoryName( EFactory eFactory ) const
+{
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    return m_pDataContainer->GetFactoryName( eFactory );
+}
+
+//*****************************************************************************************************************
+::rtl::OUString SvtModuleOptions::GetFactoryShortName( EFactory eFactory ) const
+{
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    return m_pDataContainer->GetFactoryShortName( eFactory );
+}
+
+//*****************************************************************************************************************
+::rtl::OUString SvtModuleOptions::GetFactoryStandardTemplate( EFactory eFactory ) const
+{
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    return m_pDataContainer->GetFactoryStandardTemplate( eFactory );
+}
+
+//*****************************************************************************************************************
+::rtl::OUString SvtModuleOptions::GetFactoryWindowAttributes( EFactory eFactory ) const
+{
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    return m_pDataContainer->GetFactoryWindowAttributes( eFactory );
+}
+
+//*****************************************************************************************************************
+::rtl::OUString SvtModuleOptions::GetFactoryEmptyDocumentURL( EFactory eFactory ) const
+{
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    return m_pDataContainer->GetFactoryEmptyDocumentURL( eFactory );
+}
+
+//*****************************************************************************************************************
+sal_Int32 SvtModuleOptions::GetFactoryIcon( EFactory eFactory ) const
+{
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    return m_pDataContainer->GetFactoryIcon( eFactory );
+}
+
+//*****************************************************************************************************************
+sal_Bool SvtModuleOptions::ClassifyFactoryByName( const ::rtl::OUString& sName    ,
+                                                        EFactory&        eFactory )
+{
+    // We don't need any mutex here ... because we don't use any member here!
+    return SvtModuleOptions_Impl::ClassifyFactoryByName( sName, eFactory );
+}
+
+//*****************************************************************************************************************
+void SvtModuleOptions::SetFactoryStandardTemplate(       EFactory         eFactory   ,
+                                                   const ::rtl::OUString& sTemplate  )
+{
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    m_pDataContainer->SetFactoryStandardTemplate( eFactory, sTemplate );
+}
+
+//*****************************************************************************************************************
+void SvtModuleOptions::SetFactoryWindowAttributes(       EFactory         eFactory   ,
+                                                   const ::rtl::OUString& sAttributes)
+{
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    m_pDataContainer->SetFactoryWindowAttributes( eFactory, sAttributes );
+}
+
 //*****************************************************************************************************************
 sal_Bool SvtModuleOptions::IsMath( sal_Bool bClient ) const
 {
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsMath( bClient );
+    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsMath()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    return m_pDataContainer->IsModuleInstalled( E_SMATH );
 }
 
-//*****************************************************************************************************************
-//  public method
 //*****************************************************************************************************************
 sal_Bool SvtModuleOptions::IsChart( sal_Bool bClient ) const
 {
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsChart( bClient );
+    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsChart()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    return m_pDataContainer->IsModuleInstalled( E_SCHART );
 }
 
-//*****************************************************************************************************************
-//  public method
 //*****************************************************************************************************************
 sal_Bool SvtModuleOptions::IsCalc( sal_Bool bClient ) const
 {
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsCalc( bClient );
+    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsCalc()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    return m_pDataContainer->IsModuleInstalled( E_SCALC );
 }
 
-//*****************************************************************************************************************
-//  public method
 //*****************************************************************************************************************
 sal_Bool SvtModuleOptions::IsDraw( sal_Bool bClient ) const
 {
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsDraw( bClient );
+    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsDraw()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    return m_pDataContainer->IsModuleInstalled( E_SDRAW );
 }
 
-//*****************************************************************************************************************
-//  public method
 //*****************************************************************************************************************
 sal_Bool SvtModuleOptions::IsWriter( sal_Bool bClient ) const
 {
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsWriter( bClient );
+    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsWriter()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    return m_pDataContainer->IsModuleInstalled( E_SWRITER );
 }
 
-//*****************************************************************************************************************
-//  public method
 //*****************************************************************************************************************
 sal_Bool SvtModuleOptions::IsImpress( sal_Bool bClient ) const
 {
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsImpress( bClient );
+    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsImpress()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+    return m_pDataContainer->IsModuleInstalled( E_SIMPRESS );
 }
 
-//*****************************************************************************************************************
-//  public method
 //*****************************************************************************************************************
 sal_Bool SvtModuleOptions::IsBasicIDE( sal_Bool bClient ) const
 {
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsBasicIDE( bClient );
+    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsBasicIDE()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
+    return sal_True;
 }
 
-//*****************************************************************************************************************
-//  public method
 //*****************************************************************************************************************
 sal_uInt32 SvtModuleOptions::GetFeatures( sal_Bool bClient ) const
 {
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetFeatures( bClient );
+    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::GetFeatures()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
+    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
+
+    sal_uInt32 nFeature = 0;
+
+    if( m_pDataContainer->IsModuleInstalled( E_SWRITER ) == sal_True )
+        nFeature |= FEATUREFLAG_WRITER;
+    if( m_pDataContainer->IsModuleInstalled( E_SCALC ) == sal_True )
+        nFeature |= FEATUREFLAG_CALC;
+    if( m_pDataContainer->IsModuleInstalled( E_SDRAW ) == sal_True )
+        nFeature |= FEATUREFLAG_DRAW;
+    if( m_pDataContainer->IsModuleInstalled( E_SIMPRESS ) == sal_True )
+        nFeature |= FEATUREFLAG_IMPRESS;
+    if( m_pDataContainer->IsModuleInstalled( E_SCHART ) == sal_True )
+        nFeature |= FEATUREFLAG_CHART;
+    if( m_pDataContainer->IsModuleInstalled( E_SMATH ) == sal_True )
+        nFeature |= FEATUREFLAG_MATH;
+    if( m_pDataContainer->IsModuleInstalled( E_SBASIC ) == sal_True )
+        nFeature |= FEATUREFLAG_BASICIDE;
+
+    return nFeature;
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
-Mutex& SvtModuleOptions::GetOwnStaticMutex()
+/*-****************************************************************************************************//**
+    @short      return a reference to a static mutex
+    @descr      These class is threadsafe.
+                We create a static mutex only for one time and use it to protect our refcount and container
+                member!
+
+    @seealso    -
+
+    @param      -
+    @return     A reference to a static mutex member.
+
+    @onerror    -
+    @threadsafe yes
+*//*-*****************************************************************************************************/
+::osl::Mutex& SvtModuleOptions::impl_GetOwnStaticMutex()
 {
     // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
+    static ::osl::Mutex* pMutex = NULL;
     // If these method first called (Mutex not already exist!) ...
     if( pMutex == NULL )
     {
         // ... we must create a new one. Protect follow code with the global mutex -
         // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
         if( pMutex == NULL )
         {
             // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
+            static ::osl::Mutex aMutex;
             pMutex = &aMutex;
         }
     }
