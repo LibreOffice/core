@@ -1,3 +1,14 @@
+UDK_3.1 { # OOo 1.1.2 SDK
+    global:
+        __1cJsalhelperJCondition2t5B6MrnDoslFMutex__v_;
+        __1cJsalhelperJCondition2T5B6M_v_;
+        __1cJsalhelperPConditionWaiter2t6Mrn0AJCondition_L_v_;
+        __1cJsalhelperPConditionWaiter2t6Mrn0AJCondition__v_;
+        __1cJsalhelperPConditionWaiter2T6M_v_;
+        __1cJsalhelperRConditionModifier2t6Mrn0AJCondition__v_;
+        __1cJsalhelperRConditionModifier2T6M_v_;
+} UDK_3.0;
+
 UDK_3.0 {
     global:
 GetVersionInfo;
