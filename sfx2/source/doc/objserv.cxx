@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-07 09:56:25 $
+ *  last change: $Author: mba $ $Date: 2002-10-07 10:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,10 +215,11 @@ void SAL_CALL PDFExportFileDialog::DirectoryChanged( const ::com::sun::star::ui:
         if ( xControlAccess.is() )
         {
             String aExportButtonStr;
-
+#if SUPD>643
             if ( m_bNoOptionsDlg )
                 aExportButtonStr = String( SfxResId( STR_EXPORTBUTTON ));
             else
+#endif
                 aExportButtonStr = String( SfxResId( STR_EXPORTWITHCFGBUTTON ));
 
             ::rtl::OUString aStrExport = aExportButtonStr;
