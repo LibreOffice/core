@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 11:01:04 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:03:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3535,7 +3535,7 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT_NOCOL
     SlotName[ swedish ] = "Infoga ram med en kolumn manuellt";
     SlotName[ polish ] = "Wstaw rêcznie ramkê z jedn¹ kolumn¹";
     SlotName[ portuguese_brazilian ] = "Insert single column frame manually";
-    SlotName[ japanese ] = "‚P—ñ˜g‚ğè“®‚Å‘}“ü";
+    SlotName[ japanese ] = "1—ñ‚Ì˜g‚ğè“®‚Å‘}“ü";
     SlotName[ korean ] = "1¿­ ÇÁ·¹ÀÓ ¼öµ¿À¸·Î »ğÀÔ";
     SlotName[ chinese_simplified ] = "ÊÖ¹¤²åÈëµ¥À¸Ê½¿ò";
     SlotName[ chinese_traditional ] = "¤â¤u´¡¤J³æÄæ¤å¦r®Ø¡C";
@@ -5059,7 +5059,7 @@ SfxSlotInfo FN_NUMBER_NEWSTART
     SlotName[ spanish ] = "Reiniciar numeración";
     SlotName[ italian ] = "Ricomincia numerazione";
     SlotName[ danish ] = "Start nummerering forfra";
-    SlotName[ swedish ] = "Starta numrering på nytt";
+    SlotName[ swedish ] = "Starta om numrering";
     SlotName[ polish ] = "Zacznij na nowo numeracjê";
     SlotName[ portuguese_brazilian ] = "NumberingStart";
     SlotName[ japanese ] = "”Ô†•t‚¯‚ğV‚µ‚­ŠJn";
@@ -5846,7 +5846,7 @@ SfxSlotInfo FN_PRINT_LAYOUT
     SlotName[ dutch ] = "Afdruklay-out aan/uit";
     SlotName[ chinese_simplified ] = "ÏÔÊ¾/ÒşÈë ´òÓ¡°æÊ½";
     SlotName[ greek ] = "ÄéÜôáîç åêôığùóçò Íáé/¼÷é";
-    SlotName[ korean ] = "ÀÎ¼â ·¹ÀÌ¾Æ¿ô Àû¿ë/Àû¿ëÇØÁ¦";
+    SlotName[ korean ] = "ÀÎ¼â ·¹ÀÌ¾Æ¿ô Àû¿ë/ºñÀû¿ë";
     SlotName[ turkish ] = "Yazdırma düzeni açık/kapalı";
     SlotName[ language_user1 ] = " ";
 };
@@ -8485,7 +8485,7 @@ SfxSlotInfo FN_VIEW_META_CHARS
     SlotName[ polish ] = "W³¹cz/Wy³¹cz znaki niedrukowalne";
     SlotName[ portuguese_brazilian ] = "ViewControlCodes";
     SlotName[ japanese ] = "•ÒW‹L† µİ/µÌ";
-    SlotName[ korean ] = "ºñÀÎ¼â ¹®ÀÚ  Àû¿ë/ºñÀû¿ë";
+    SlotName[ korean ] = "´Ü¶ô±âÈ£Ç¥½Ã  ¿Â/¿ÀÇÁ";
     SlotName[ chinese_simplified ] = "ÏÔÊ¾/ÒşÈë ¿ØÖÆ·û";
     SlotName[ chinese_traditional ] = "Åã¥Ü©ÎÁô¤J±±¨î²Å¸¹";
     SlotName[ turkish ] = "Denetim karakterleri";
