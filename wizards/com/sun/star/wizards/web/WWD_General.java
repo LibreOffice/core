@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WWD_General.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:14:51 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,15 @@ package com.sun.star.wizards.web;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.util.XStringSubstitution;
-import com.sun.star.wizards.common.*;
+import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.ui.event.ListModelBinder;
-import com.sun.star.wizards.web.data.*;
+import com.sun.star.wizards.web.data.CGDocument;
+import com.sun.star.wizards.web.data.CGFilter;
+import com.sun.star.wizards.web.data.CGPublish;
+import com.sun.star.wizards.web.data.CGSettings;
 
 /**
  * @author rpiterman
@@ -81,8 +87,6 @@ public abstract class WWD_General extends WebWizardDialog {
 
     protected FTPDialog ftpDialog;
 
-    protected StatusDialog statusDialog;
-
     protected CGSettings settings;
 
 
@@ -93,14 +97,14 @@ public abstract class WWD_General extends WebWizardDialog {
     private XStringSubstitution xStringSubstitution ;
 
     protected StatusDialog getStatusDialog() {
-        if (statusDialog == null) {
-            statusDialog = new StatusDialog(xMSF, StatusDialog.STANDARD_WIDTH,  resources.resLoadingSession , false , new String[] { resources.prodName, "", "", "", "", "" }, "HID:"+ HID0_STATUS_DIALOG);
-            try {
-                statusDialog.createWindowPeer(xControl.getPeer());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
+        StatusDialog statusDialog = new StatusDialog(xMSF, StatusDialog.STANDARD_WIDTH,  resources.resLoadingSession , false , new String[] { resources.prodName, "", "", "", "", "" }, "HID:"+ HID0_STATUS_DIALOG);
+        try {
+            statusDialog.createWindowPeer(xControl.getPeer());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return statusDialog;
     }
 
@@ -121,22 +125,19 @@ public abstract class WWD_General extends WebWizardDialog {
     protected SystemDialog getDocAddDialog() {
         //if (docAddDialog == null) {
             docAddDialog = SystemDialog.createOpenDialog(xMSF);
-            docAddDialog.addFilter(resources.resSODocs, "*.sxw;*.sxc;*.sxd;*.sxi;*.sdw;*.sdc;*.sdd;*.sdi;*.sda;*.sdp"  ,true);
-            docAddDialog.addFilter(resources.resMSDocs, "*.doc;*.xls;*.ppt;*.pps",false);
-            docAddDialog.addFilter(resources.resImages, "*.jpg;*.gif;*.png;*.bmp;*.tiff;*.jpeg;*.jpe",false);
-            docAddDialog.addFilter(resources.resAllFiles,"*.*",false);
+            for (int i = 0; i < settings.cp_Filters.getSize(); i++) {
+                CGFilter f = ((CGFilter)settings.cp_Filters.getElementAt(i));
+                docAddDialog.addFilter(
+                        JavaTools.replaceSubString(f.cp_Name, resources.prodName, "%PRODNAME")
+                        , f.cp_Filter, i == 0);
+            }
+            //docAddDialog.addFilter(resources.resSODocs, "*.oxt;*.sxw;*.sxc;*.sxd;*.sxi;*.sdw;*.sdc;*.sdd;*.sdi;*.sda;*.sdp"  ,true);
+            //docAddDialog.addFilter(resources.resMSDocs, "*.doc;*.xls;*.ppt;*.pps",false);
+            //docAddDialog.addFilter(resources.resImages, "*.jpg;*.gif;*.png;*.bmp;*.tiff;*.jpeg;*.jpe",false);
+            //docAddDialog.addFilter(resources.resAllFiles,"*.*",false);
         //}
         return docAddDialog;
     }
-
-    protected SystemDialog getFavIconDialog() {
-        if (favIconDialog == null) {
-            favIconDialog = SystemDialog.createOpenDialog(xMSF);
-            favIconDialog.addFilter(resources.resIconFiles, "*.ico", true);
-        }
-        return favIconDialog ;
-    }
-
 
     protected SystemDialog getZipDialog() {
         if (zipDialog==null) {
@@ -188,6 +189,8 @@ public abstract class WWD_General extends WebWizardDialog {
     protected CGDocument getDoc(short[] s) {
         if (s.length==0)
           return null;
+        else if (settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() <= s[0])
+            return null;
         else return (CGDocument)settings.cp_DefaultSession.cp_Content.cp_Documents.getElementAt(s[0]);
     }
 
@@ -306,10 +309,11 @@ public abstract class WWD_General extends WebWizardDialog {
      * active, returns true if the url is not empty...
      * if the url is empty, throws an exception
      */
-    private boolean checkPublish(String s) {
+    private boolean checkPublish(String s, Object text, String property) {
         CGPublish p = getPublisher(s);
         if (p.cp_Publish) {
-            if ((p.cp_URL == null) || (p.cp_URL.equals("")))
+            String url = (String)Helper.getUnoPropertyValue(getModel(text),property);
+            if ((url == null) || (url.equals("")))
                 throw new IllegalArgumentException();
             else return true;
         }
@@ -328,11 +332,9 @@ public abstract class WWD_General extends WebWizardDialog {
      */
     private boolean checkPublish_() {
         try {
-
-
-            return (checkPublish(LOCAL_PUBLISHER)
-                | ( !proxies && checkPublish(FTP_PUBLISHER))
-                | checkPublish(ZIP_PUBLISHER)) && checkSaveSession();
+            return (checkPublish(LOCAL_PUBLISHER, txtLocalDir, "Text")
+                | ( !proxies && checkPublish(FTP_PUBLISHER, lblFTP, "Label"))
+                | checkPublish(ZIP_PUBLISHER, txtZip, "Text" )) && checkSaveSession();
         }
         catch (IllegalArgumentException ex) {
             return false;
