@@ -3909,6 +3909,31 @@ SfxVoidItem JumpToNextTable SID_NEXT_TABLE
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem JumpToNextTableSel SID_NEXT_TABLE_SEL
+()
+[
+        /* flags: */
+        AutoUpdate = FALSE,
+        Cachable = Cachable,
+        FastCall = FALSE,
+        HasCoreId = FALSE,
+        HasDialog = FALSE,
+        ReadOnlyDoc = TRUE,
+        Toggle = FALSE,
+        Container = FALSE,
+        RecordAbsolute = FALSE,
+        RecordPerSet;
+        Synchron;
+
+        /* config: */
+        AccelConfig = TRUE,
+        MenuConfig = FALSE,
+        StatusBarConfig = FALSE,
+        ToolBoxConfig = FALSE,
+        GroupId = GID_NAVIGATOR;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem JumpToNextUnprotected SID_NEXT_UNPROTECT
 ()
 [
@@ -4006,6 +4031,31 @@ SfxVoidItem JumpToPrevTable SID_PREV_TABLE
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_NAVIGATOR;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem JumpToPrevTableSel SID_PREV_TABLE_SEL
+()
+[
+        /* flags: */
+        AutoUpdate = FALSE,
+        Cachable = Cachable,
+        FastCall = FALSE,
+        HasCoreId = FALSE,
+        HasDialog = FALSE,
+        ReadOnlyDoc = TRUE,
+        Toggle = FALSE,
+        Container = FALSE,
+        RecordAbsolute = FALSE,
+        RecordPerSet;
+        Synchron;
+
+        /* config: */
+        AccelConfig = TRUE,
+        MenuConfig = FALSE,
+        StatusBarConfig = FALSE,
+        ToolBoxConfig = FALSE,
+        GroupId = GID_NAVIGATOR;
 ]
 
 //--------------------------------------------------------------------------
