@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:50:09 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,114 +141,14 @@
 #include "fmtcol.hxx"
 #include "section.hxx"
 
+// -> #i23726#
+#include "ndtxt.hxx"
+#include "pam.hxx"
+// <- #i23726#
+
 /*--------------------------------------------------------------------
     Beschreibung:   Debug-Methode
  --------------------------------------------------------------------*/
-#ifdef DEBUGLIN
-
-
-static void DebugTabCols(const SwTabCols &rCols)
-{
-    String aTmp("TabCols LeftMin ");
-    aTmp += rCols.GetLeftMin() / 56;
-    aTmp += "Left: ";
-    aTmp += rCols.GetLeft() / 56;
-    aTmp += "Right: ";
-    aTmp += rCols.GetRight() / 56;
-    aTmp += "RightMax: ";
-    aTmp += rCols.GetRightMax() / 56;
-    aTmp += ": ";
-    const USHORT nCount = rCols.Count();
-    for(USHORT i = 0; i < nCount; ++i) {
-        aTmp += rCols[i] / 56;
-        aTmp += ' ';
-    }
-    InfoBox(0, aTmp).Execute();
-}
-
-
-
-static void DebugColItems(SvxColumnItem& rColItem)
-{
-    String aTmp("Aktuell: ");
-    aTmp += rColItem.GetActColumn();
-    aTmp += " ColLeft: ";
-    aTmp +=  String(rColItem.GetLeft() / 56);
-    aTmp += "   ColRight: ";
-    aTmp +=  String(rColItem.GetRight() / 56);
-    for(USHORT i = 0; i < rColItem.Count(); ++i) {
-        aTmp += " Start: ";
-        aTmp += String(rColItem[i].nStart/56);
-        aTmp += " End: ";
-        aTmp += String(rColItem[i].nEnd/56);
-    }
-
-    InfoBox(0, aTmp).Execute();
-}
-
-
-static void DebugLRSpace(const SvxLongLRSpaceItem& rLRSpace)
-{
-    String aTmp("Left: ");
-    aTmp += rLRSpace.GetLeft() / 56;
-    aTmp += "   Right: ";
-    aTmp += rLRSpace.GetRight() / 56;
-    InfoBox(0, aTmp).Execute();
-}
-
-
-
-static void DebugULSpace(const SvxLongULSpaceItem& rULSpace)
-{
-    String aTmp("Upper: ");
-    aTmp += rULSpace.GetUpper() / 56;
-    aTmp += "   Lower: ";
-    aTmp += rULSpace.GetLower() / 56;
-
-    InfoBox(0, aTmp).Execute();
-}
-
-
-
-static void DebugTabStops(const SvxTabStopItem& rTabs)
-{
-    String aTmp("Tabs: ");
-
-    // Def Tabs loeschen
-    for(USHORT i = 0; i < rTabs.Count(); ++i)
-    {
-        aTmp += String(rTabs[i].GetTabPos() / 56);
-        aTmp += " : ";
-    }
-    InfoBox(0, aTmp).Execute();
-}
-
-
-
-static void DebugParaMargin(const SvxLRSpaceItem& rLRSpace)
-{
-    String aTmp("ParaLeft: ");
-    aTmp += rLRSpace.GetTxtLeft() / 56;
-    aTmp += "   ParaRight: ";
-    aTmp += rLRSpace.GetRight() / 56;
-    aTmp += "   FLI: ";
-    aTmp += rLRSpace.GetTxtFirstLineOfst() / 56;
-    InfoBox(0, aTmp).Execute();
-}
-#define DEBUGTABCOLS( bla )     DebugTabCols( bla )
-#define DEBUGCOLITEMS( bla )    DebugColItems   ( bla )
-#define DEBUGLRSPACE( bla )     DebugLRSpace    ( bla )
-#define DEBUGULSPACE( bla )     DebugULSpace    ( bla )
-#define DEBUGTABSTOPS( bla )    DebugTabStops   ( bla )
-#define DEBUGPARAMARGIN( bla )  DebugParaMargin ( bla )
-#else
-#define DEBUGTABCOLS
-#define DEBUGCOLITEMS
-#define DEBUGLRSPACE
-#define DEBUGULSPACE
-#define DEBUGTABSTOPS
-#define DEBUGPARAMARGIN
-#endif
 
 
 /*--------------------------------------------------------------------
@@ -481,7 +381,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         SvxLongLRSpaceItem aLongLR( (const SvxLongLRSpaceItem&)rReq.GetArgs()->
                                                     Get( SID_ATTR_LONG_LRSPACE ) );
         SvxLRSpaceItem aLR;
-        DEBUGLRSPACE(aLongLR);
+        BOOL bSect = 0 != (nFrmType & FRMTYPE_COLSECT);
         if ( !bSect && (bFrmSelection || nFrmType & FRMTYPE_FLY_ANY) )
         {
             SwFrmFmt* pFmt = ((SwFrmFmt*)rSh.GetFlyFrmFmt());
@@ -614,7 +514,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     {
         SvxLongULSpaceItem aLongULSpace( (const SvxLongULSpaceItem&)rReq.GetArgs()->
                                                         Get( SID_ATTR_LONG_ULSPACE ));
-        DEBUGULSPACE(aLongULSpace);
 
         if( bFrmSelection || nFrmType & FRMTYPE_FLY_ANY )
         {
@@ -737,8 +636,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         SvxTabStopItem aTabStops( (const SvxTabStopItem&)rReq.GetArgs()->
                                                     Get( nWhich ));
         aTabStops.SetWhich(RES_PARATR_TABSTOP);
-        DEBUGTABSTOPS(aTabStops);
-        const SvxTabStopItem& rDefTabs =
+         const SvxTabStopItem& rDefTabs =
                     (const SvxTabStopItem&)rSh.GetDefault(RES_PARATR_TABSTOP);
 
         // Default-Tab an Pos 0
@@ -790,11 +688,16 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         aParaMargin.SetRight( aParaMargin.GetRight() - nRightBorderDistance );
         aParaMargin.SetTxtLeft(aParaMargin.GetTxtLeft() - nLeftBorderDistance );
 
-        DEBUGPARAMARGIN(aParaMargin);
-
         aParaMargin.SetWhich( RES_LR_SPACE );
         SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
-        if( pColl && pColl->IsAutoUpdateFmt() )
+
+        // #i23726#
+        if (pNumRuleNodeFromDoc)
+        {
+            SwPosition aPos(*pNumRuleNodeFromDoc);
+            rSh.NumIndent(aParaMargin.GetTxtLeft(), aPos);
+        }
+        else if(    pColl && pColl->IsAutoUpdateFmt() )
         {
             SfxItemSet aSet(GetPool(), RES_LR_SPACE, RES_LR_SPACE);
             aSet.Put(aParaMargin);
@@ -859,13 +762,11 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             const BOOL bSingleLine = ((const SfxBoolItem&)rReq.
                             GetArgs()->Get(SID_RULER_ACT_LINE_ONLY)).GetValue();
 
-            DEBUGCOLITEMS(aColItem);
             SwTabCols aTabCols;
             if ( bSetTabColFromDoc )
                 rSh.GetMouseTabCols( aTabCols, aTabColFromDocPos );
             else
                 rSh.GetTabCols(aTabCols);
-            DEBUGTABCOLS(aTabCols);
 
             // linker Tabellenrand
             long nBorder = long(aColItem.GetLeft()) -
@@ -909,7 +810,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     aTabCols.SetHidden( i, !rCol.bVisible );
                 }
             }
-            DEBUGTABCOLS(aTabCols);
 
             if ( bSetTabColFromDoc )
             {
@@ -948,7 +848,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 SwRect aCurRect = rSh.GetAnyCurRect(bSect ? RECT_SECTION_PRT : RECT_FLY_PRT_EMBEDDED);
                 const long lWidth = bVerticalWriting ? aCurRect.Height() : aCurRect.Width();
                 ::lcl_ConvertToCols( aColItem, USHORT(lWidth), aCols );
-                DEBUGCOLITEMS(aColItem);
                 aSet.Put( aCols );
                 if(bSect)
                     rSh.SetSectionAttr( aSet, pSectFmt );
@@ -974,7 +873,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 ::lcl_ConvertToCols( aColItem,
                     USHORT(bVerticalWriting ? aPrtRect.Height() : aPrtRect.Width()),
                                 aCols );
-                DEBUGCOLITEMS(aColItem);
                 SwPageDesc aDesc( rDesc );
                 aDesc.GetMaster().SetAttr( aCols );
                 rSh.ChgPageDesc( rSh.GetCurPageDesc(), aDesc );
@@ -993,13 +891,11 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             {
                 ASSERT(aColItem.Count(), "ColDesc ist leer!!");
 
-                DEBUGCOLITEMS(aColItem);
                 SwTabCols aTabCols;
                 if ( bSetTabRowFromDoc )
                     rSh.GetMouseTabRows( aTabCols, aTabColFromDocPos );
                 else
                     rSh.GetTabRows(aTabCols);
-                DEBUGTABCOLS(aTabCols);
 
                 if ( bVerticalWriting )
                 {
@@ -1033,8 +929,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                         aTabCols.SetHidden( i, !rCol.bVisible );
                     }
                 }
-                DEBUGTABCOLS(aTabCols);
-
                 BOOL bSingleLine = FALSE;
                 const SfxPoolItem* pSingleLine;
                 if( SFX_ITEM_SET == rReq.GetArgs()->GetItemState(SID_RULER_ACT_LINE_ONLY, FALSE, &pSingleLine))
@@ -1062,6 +956,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         rSh.LockView( FALSE );
 
     bSetTabColFromDoc = bSetTabRowFromDoc = bTabColFromDoc = bTabRowFromDoc = FALSE;
+    SetNumRuleNodeFromDoc(NULL);
 }
 
 /*--------------------------------------------------------------------
@@ -1174,7 +1069,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                     nWhich);
                 rSet.Put(aLR);
             }
-            DEBUGLRSPACE(aLongLR);
             break;
         }
         case SID_ATTR_LONG_ULSPACE:
@@ -1221,7 +1115,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                     nWhich);
                 rSet.Put(aUL);
             }
-            DEBUGULSPACE(aLongUL);
             break;
         }
         case SID_ATTR_TABSTOP_VERTICAL :
@@ -1250,7 +1143,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 pHRuler->SetDefTabDist( nDefTabDist );
                 pVRuler->SetDefTabDist( nDefTabDist );
                 ::lcl_EraseDefTabs(aTabStops);
-                DEBUGTABSTOPS(aTabStops);
                 rSet.Put(aTabStops, nWhich);
             }
             break;
@@ -1272,8 +1164,17 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             {
                 SvxLRSpaceItem aLR;
                 if ( !IsTabColFromDoc() )
+                {
                     aLR = (const SvxLRSpaceItem&)aCoreSet.Get(RES_LR_SPACE);
-                DEBUGPARAMARGIN(aLR);
+
+                    // #i23726#
+                    if (pNumRuleNodeFromDoc)
+                    {
+                        short nFLOffset =
+                            pNumRuleNodeFromDoc->GetLeftMarginWithNum();
+                        aLR.SetLeft(nFLOffset);
+                    }
+                }
                 aLR.SetWhich(nWhich);
                 rSet.Put(aLR);
             }
@@ -1495,7 +1396,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     aColItem.Append(aColDesc);
                 }
                 rSet.Put(aColItem, nWhich);
-                DEBUGCOLITEMS(aColItem);
             }
             else if ( bFrmSelection || nFrmType & ( FRMTYPE_COLUMN | FRMTYPE_COLSECT ) )
             {
@@ -1549,7 +1449,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         aColItem.SetOrtho(aColItem.CalcOrtho());
 
                         rSet.Put(aColItem, nWhich);
-                        DEBUGCOLITEMS(aColItem);
                     }
                 }
                 else if( bFrmSelection || nFrmType & FRMTYPE_FLY_ANY )
@@ -1591,7 +1490,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         aColItem.SetOrtho(aColItem.CalcOrtho());
 
                         rSet.Put(aColItem, nWhich);
-                        DEBUGCOLITEMS(aColItem);
                     }
                     else
                         rSet.DisableItem(nWhich);
@@ -1626,7 +1524,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     aColItem.SetOrtho(aColItem.CalcOrtho());
 
                     rSet.Put(aColItem, nWhich);
-                    DEBUGCOLITEMS(aColItem);
                 }
             }
             else
@@ -1713,7 +1610,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 aColItem.Append(aColDesc);
 
                 rSet.Put(aColItem, nWhich);
-                DEBUGCOLITEMS(aColItem);
             }
             else
                 rSet.DisableItem(nWhich);
