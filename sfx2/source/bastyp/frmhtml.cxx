@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmhtml.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:51:23 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,7 @@ static HTMLOptionEnum __READONLY_DATA aScollingTable[] =
     { 0,                0               }
 };
 
-void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame,
-        const HTMLOptions *pOptions )
+void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame, const HTMLOptions *pOptions, const String& rBaseURL )
 {
     // die Optionen holen und setzen
     Size aMargin( pFrame->GetMargin() );
@@ -136,7 +135,9 @@ void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame,
             }
         case HTML_O_SRC:
             pFrame->SetURL(
-                String(INetURLObject::RelToAbs(pOption->GetString()) ));
+                String(
+                    INetURLObject::GetAbsURL(
+                        rBaseURL, pOption->GetString())) );
             break;
         case HTML_O_NAME:
             pFrame->SetName( pOption->GetString() );
