@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2001-06-26 16:13:25 $
+#   last change: $Author: kso $ $Date: 2001-06-27 07:52:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,8 +97,7 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB) \
-    $(SALHELPERLIB) \
-    $(UCBHELPERLIB)
+        $(UCBHELPERLIB)
 SHL1LIBS=\
     $(LIB1TARGET) \
     $(SLB)$/regexp.lib
