@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-27 10:00:48 $
+ *  last change: $Author: kr $ $Date: 2001-09-03 14:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,11 @@ bootstrap_InitialComponentContext(
 */
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
 defaultBootstrap_InitialComponentContext() SAL_THROW( (::com::sun::star::uno::Exception) );
+
+
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
+defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile) SAL_THROW( (::com::sun::star::uno::Exception) );
+
 
 } // end namespace cppu
 

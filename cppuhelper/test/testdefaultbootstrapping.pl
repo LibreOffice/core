@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: testdefaultbootstrapping.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kr $ $Date: 2001-07-25 09:20:13 $
+#   last change: $Author: kr $ $Date: 2001-09-03 14:28:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -214,6 +214,59 @@ sub testBeneathExe() {
     }
 }
 
+sub testBeneathLib_rdb() {
+    my $_service = 'com.sun.star.script.Invocation';
+
+    use UNO;
+
+    my $_rdb_name;
+
+    if ($ENV{GUI} eq "WNT") {
+        $_rdb_name = "UNO" . "_services.rdb";
+    }
+    else {
+        $_rdb_name = "../lib/UNO" . "_services.rdb";
+    }
+
+    registerService($services{$_service}, $_rdb_name);
+    my $_rc = UNO::tryService($_service);
+    if (!$_rc) {
+        $comment = $comment. "beneath lib test not passed\n";
+        $state = 0;
+    }
+    unlink $_rdb_name;
+}
+
+sub testBeneathLib_rc() {
+    my $_service = 'com.sun.star.script.Invocation';
+
+    use UNO;
+
+    my $_rc_name;
+
+    if ($ENV{GUI} eq "WNT") {
+        $_rc_name = "UNO.ini";
+    }
+    else {
+        $_rc_name = "../lib/UNOrc";
+    }
+
+    my $_rdb_name = "../lib/test.rdb";
+
+    my $_handle;
+    open $_handle, ">" . $_rc_name;
+    print $_handle "UNO_SERVICES=" . $_rdb_name . "\n";
+    close $_handle;
+
+    registerService($services{$_service}, $_rdb_name);
+    my $_rc = UNO::tryService($_service);
+    if (!$_rc) {
+        $comment = $comment. "beneath lib rc test not passed\n";
+        $state = 0;
+    }
+    unlink $_rdb_name;
+    unlink $_rc_name;
+}
 
 sub testAllAvailable() {
     # test that all services are reachable through different rdbs
@@ -235,6 +288,8 @@ registerServices();
 
 testIndirection();
 testBeneathExe();
+testBeneathLib_rc();
+testBeneathLib_rdb();
 testAllAvailable();
 
 print "**************************\n";
@@ -243,7 +298,7 @@ if($state) {
 }
 else {
     print "**** tests NOT passed ****\n";
-    print "Commnent:", $comment, "\n";
+    print "Commnent:\n", $comment, "\n";
 }
 print "**************************\n";
 

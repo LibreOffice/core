@@ -178,6 +178,7 @@ component_getDescriptionFunc
 ?addListener@?$OBroadcastHelperVar@VOMultiTypeInterfaceContainerHelper@cppu@@VType@uno@star@sun@com@@@cppu@@QAEXABVType@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
 ?component_writeInfoHelper@cppu@@YAEPAX0QBUImplementationEntry@1@@Z
 ?component_getFactoryHelper@cppu@@YAPAXPBDPAX1QBUImplementationEntry@1@@Z
+?defaultBootstrap_InitialComponentContext@cppu@@YA?AV?$Reference@VXComponentContext@uno@star@sun@com@@@uno@star@sun@com@@ABVOUString@rtl@@@Z
     local:
         *;
 };
