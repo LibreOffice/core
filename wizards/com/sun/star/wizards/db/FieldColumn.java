@@ -2,9 +2,9 @@
 *
 *  $RCSfile: FieldColumn.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-17 11:20:00 $
+*  last change: $Author: vg $ $Date: 2005-02-21 13:53:18 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,7 +57,6 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.db;
 
 import com.sun.star.container.XNameAccess;
@@ -94,7 +93,7 @@ public class FieldColumn {
         setFieldNameAndCommandName(_DisplayFieldName);
         if (CommandName == null){
             DisplayFieldName = FieldName;
-            CommandName = oCommandMetaData.getCommand();
+            CommandName = oCommandMetaData.getCommandName();
         }
         else
             DisplayFieldName = CommandName + "." + FieldName;
@@ -110,12 +109,12 @@ public class FieldColumn {
             oField = _xColumns.getByName(FieldName);
             ColIndex = JavaTools.FieldInList(_xColumns.getElementNames(), FieldName) + 1;
             iType = AnyConverter.toInt(Helper.getUnoPropertyValue(oField, "Type"));
-            iDateFormatKey = oCommandMetaData.iDateFormatKey;
-            iDateTimeFormatKey = oCommandMetaData.iDateTimeFormatKey;
-            iNumberFormatKey = oCommandMetaData.iNumberFormatKey;
-            iTextFormatKey = oCommandMetaData.iTextFormatKey;
-            iTimeFormatKey = oCommandMetaData.iTimeFormatKey;
-            iLogicalFormatKey = oCommandMetaData.iLogicalFormatKey;
+            iDateFormatKey = oCommandMetaData.getNumberFormatter().getDateFormatKey();
+            iDateTimeFormatKey = oCommandMetaData.getNumberFormatter().getDateTimeFormatKey();
+            iNumberFormatKey = oCommandMetaData.getNumberFormatter().getNumberFormatKey();
+            iTextFormatKey = oCommandMetaData.getNumberFormatter().getTextFormatKey();
+            iTimeFormatKey = oCommandMetaData.getNumberFormatter().getTimeFormatKey();
+            iLogicalFormatKey = oCommandMetaData.getNumberFormatter().getLogicalFormatKey();
             DefaultValue = getTyperelatedFieldData();
         } catch (Exception e) {
             e.printStackTrace(System.out);
