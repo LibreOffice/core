@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:19:18 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 10:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,6 +604,10 @@ Image FmControlData::GetImage(const ImageList& ilNavigatorImages) const
 
     case OBJ_FM_COMBOBOX:
         aImage = ilNavigatorImages.GetImage( RID_SVXIMG_COMBOBOX );
+        break;
+
+    case OBJ_FM_NAVIGATIONBAR:
+        aImage = ilNavigatorImages.GetImage( RID_SVXIMG_NAVIGATIONBAR );
         break;
 
     case OBJ_FM_GROUPBOX:
