@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mmaher $ $Date: 2002-12-06 14:01:50 $
+ *  last change: $Author: cmc $ $Date: 2002-12-06 16:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,31 +250,6 @@ inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,BOOL bInP=TRUE)
 
 
 /*  */
-#ifdef DEBUG_JP
-
-static void OutStyle( const SwPaM& rPam, const SwTxtFmtColl& rColl );
-static void OutSet( const SwPaM& rPam, const SfxItemSet& rSet );
-static void OutText( const SwPaM& rPam, const sal_Char* pText );
-static void DumpStart();
-static void DumpEnde();
-
-#define DUMP_INIT                   DumpStart();
-#define DUMP_FINIT                  DumpEnde();
-#define DUMP_SET( pam, set )        OutSet( pam, set );
-#define DUMP_STYLE( pam, ss )       OutStyle( pam, ss );
-#define DUMP_TXT( pam, txt )        OutText( pam, txt );
-
-#else
-
-#define DUMP_INIT
-#define DUMP_FINIT
-#define DUMP_SET( pam, set )
-#define DUMP_STYLE( pam, ss )
-#define DUMP_TXT( pam, txt )
-
-#endif
-
-/*  */
 
 // Aufruf fuer die allg. Reader-Schnittstelle
 ULONG RtfReader::Read( SwDoc &rDoc,SwPaM &rPam, const String &)
@@ -342,8 +317,6 @@ SwRTFParser::SwRTFParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     temp = RES_BREAK;               AddPardAttr( temp );
     temp = RES_PARATR_NUMRULE;      AddPardAttr( temp );
     temp = FN_PARAM_NUM_LEVEL;          AddPardAttr( temp );
-
-    DUMP_INIT
 }
 
 // Aufruf des Parsers
@@ -410,19 +383,6 @@ void SwRTFParser::Continue( int nToken )
 
     // Laufbalken bei asynchronen Call nicht einschalten !!!
     ::EndProgress( pDoc->GetDocShell() );
-
-#ifdef DEBUG_JP
-{
-extern Writer* GetDebugWriter(const String&);
-        Writer* pWriter = GetDebugWriter(aEmptyStr);
-        if( pWriter )
-        {
-            SwWriter( SvFileStream( "f:\\tmp\\$$rtf_1.db", STREAM_WRITE ),
-                        *pDoc ).Write( pWriter );
-        }
-}
-#endif
-
 
     {
         // JP 13.08.98: TabellenUmrandungen optimieren - Bug 53525
@@ -612,7 +572,6 @@ SwRTFParser::~SwRTFParser()
 
     if (pGrfAttrSet)
         DELETEZ( pGrfAttrSet );
-    DUMP_FINIT
 }
 
 extern void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
@@ -894,7 +853,6 @@ SETCHDATEFIELD:
 
 void SwRTFParser::InsertText()
 {
-    DUMP_TXT( *pPam, aToken )
     // dann fuege den String ein, ohne das Attribute am Ende
     // aufgespannt werden.
     CheckInsNewTblLine();
@@ -982,10 +940,7 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             MakeStyleTab();
         SwTxtFmtColl* pColl = aTxtCollTbl.Get( rSet.StyleNo() );
         if( pColl )
-        {
             pDoc->SetTxtFmtColl( aPam, pColl, FALSE );
-            DUMP_STYLE( aPam, *pColl )
-        }
     }
 
     const SfxPoolItem* pItem;
@@ -1051,7 +1006,6 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 #endif
 
         pDoc->Insert( aPam, rSet.GetAttrSet(), SETATTR_DONTCHGNUMRULE );
-        DUMP_SET( aPam, rSet.GetAttrSet() )
     }
 
     if( SFX_ITEM_SET == rSet.GetAttrSet().GetItemState(
@@ -3606,299 +3560,3 @@ xub_StrLen SwxPosition::GetCntIdx() const
 {
     return pPam->GetPoint()->nContent.GetIndex();
 }
-
-
-/*  */
-
-#ifdef DEBUG_JP
-
-#include <string.h>     // fuer sprintf
-#include <stdio.h>
-#include <svx/cmapitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/adjitem.hxx>
-#include <unotools/tempfile.hxx>
-
-static SvFileStream* pOut = 0;
-static void OutAttr( const SfxItemSet& rSet )
-{
-    if( !rSet.Count() )
-        return;
-
-    char sOut[ 200 ];
-    SfxItemIter aIter( rSet );
-    const SfxPoolItem* pItem = aIter.GetCurItem();
-    while( TRUE )
-    {
-        sOut[0] = 0;
-        switch( pItem->Which() )
-        {
-        case RES_CHRATR_CASEMAP:
-            {
-                sprintf( sOut,
-                    "CaseMap: Style[%d]",
-                    ((const SvxCaseMapItem*)pItem)->GetValue() );
-            }
-            break;
-        case RES_CHRATR_COLOR:
-            {
-                sprintf( sOut,
-                    "Color: Red[%d] Green[%d] Blue[%d]",
-                    ((const SvxColorItem*)pItem)->GetValue().GetRed(),
-                    ((const SvxColorItem*)pItem)->GetValue().GetGreen(),
-                    ((const SvxColorItem*)pItem)->GetValue().GetBlue() );
-            }
-            break;
-
-        case RES_CHRATR_CONTOUR:
-            {
-                sprintf( sOut,
-                        "Contour: Style[%s]",
-            ( ((const SvxContourItem*)pItem)->GetValue() ? "ON" : "OFF" ) );
-            }
-            break;
-        case RES_CHRATR_CROSSEDOUT:
-            {
-                sprintf( sOut,
-                    "CrossedOut: Style[%d]",
-                    ((const SvxCrossedOutItem*)pItem)->GetValue() );
-            }
-            break;
-        case RES_CHRATR_ESCAPEMENT:
-            {
-                sprintf( sOut,
-                    "Escapement: Style[%d, %d]",
-                    ((const SvxEscapementItem*)pItem)->GetEsc(),
-                    ((const SvxEscapementItem*)pItem)->GetProp() );
-            }
-            break;
-        case RES_CHRATR_FONT:
-            {
-                const SvxFontItem& rFont = *(const SvxFontItem*)pItem;
-                sprintf( sOut,
-                    "Font: Fam[%d] Nm[%s] Pitch[%d] CharSet[%d]",
-                    rFont.GetFamily(),
-                    rFont.GetFamilyName().GetStr(),
-                    rFont.GetPitch(),
-                    rFont.GetCharSet() );
-            }
-            break;
-        case RES_CHRATR_FONTSIZE:
-            {
-                sprintf( sOut,
-                    "FontSize: Height[%d]",
-                    ((const SvxFontHeightItem*)pItem)->GetHeight() );
-            }
-            break;
-        case RES_CHRATR_KERNING:
-            {
-                sprintf( sOut,
-                    "Kerning: Style[%d]",
-                    ((const SvxKerningItem*)pItem)->GetValue() );
-            }
-            break;
-        case RES_CHRATR_LANGUAGE:
-            {
-                sprintf( sOut,
-                    "Language: Style[%d]",
-                    ((const SvxLanguageItem*)pItem)->GetValue() );
-            }
-            break;
-        case RES_CHRATR_POSTURE:
-            {
-                sprintf( sOut,
-                    "Posture: Style[%d]",
-                    ((const SvxPostureItem*)pItem)->GetValue() );
-            }
-            break;
-
-        case RES_CHRATR_SHADOWED:
-            {
-                sprintf( sOut,
-                    "Shadowed: Style[%s]",
-            ( ((const SvxShadowedItem*)pItem)->GetValue() ? "ON" : "OFF" ) );
-            }
-            break;
-
-        case RES_CHRATR_UNDERLINE:
-            {
-                sprintf( sOut,
-                    "Underline: Style[%d]",
-                    ((const SvxUnderlineItem*)pItem)->GetValue() );
-            }
-            break;
-        case RES_CHRATR_WEIGHT:
-            {
-                sprintf( sOut,
-                    "Weight: Style[%d]",
-                    ((const SvxWeightItem*)pItem)->GetValue() );
-            }
-            break;
-        case RES_CHRATR_WORDLINEMODE:
-            {
-                sprintf( sOut,
-                    "WordLine: Style[%s]",
-            ( ((const SvxWordLineModeItem*)pItem)->GetValue() ? "ON" : "OFF" ) );
-            }
-            break;
-
-        case RES_TXTATR_CHARFMT:
-            *pOut << "CharFmt: "
-                  << ((SwFmtCharFmt*)pItem)->GetCharFmt()->GetName()->GetStr()
-                  << endl;
-            }
-            break;
-        case RES_PARATR_LINESPACING:
-            {
-                sprintf( sOut,
-                    "LineSpacing: Size[%d] Sp.Rule[%d] In.Sp.Rule[%d] In.Space[%d] Height[%d]",
-                    ((const SvxLineSpacingItem*)pItem)->GetPropLineSpace(),
-                    ((const SvxLineSpacingItem*)pItem)->GetLineSpaceRule(),
-                    ((const SvxLineSpacingItem*)pItem)->GetInterLineSpaceRule(),
-                    ((const SvxLineSpacingItem*)pItem)->GetInterLineSpace(),
-                    ((const SvxLineSpacingItem*)pItem)->GetLineHeight() );
-            }
-            break;
-
-        case RES_PARATR_ADJUST:
-            {
-                sprintf( sOut,
-                    "Adjust: Style[%d]",
-                    ((const SvxAdjustItem*)pItem)->GetAdjust() );
-            }
-            break;
-        case RES_PARATR_TABSTOP:
-            {
-                const SvxTabStopItem & rAttr = *(const SvxTabStopItem*)pItem;
-                *pOut << "TabStops: (" << endl;
-                for( USHORT n = 0; n < rAttr.Count(); n++ )
-                {
-                    const SvxTabStop & rTab = rAttr[ n ];
-                    sprintf( sOut,
-                                "\t\tTabStop: Style[%d] Pos[%d] Around[%c] Fill[%c]",
-                                rTab.GetAdjustment(),
-                                rTab.GetTabPos(),
-                                rTab.GetDecimal(),
-                                rTab.GetFill() );
-                    *pOut << sOut << endl;
-                }
-                *pOut << ')' << endl;
-                sOut[0] = 0;
-            }
-            break;
-        case RES_PARATR_HYPHENZONE:
-                *pOut << "HYPHENZONE" << endl;
-                break;
-
-        case RES_LR_SPACE:
-            {
-                sprintf( sOut,
-                    "LRSpace: Left[%d], Right[%d]",
-                    ((const SvxLRSpaceItem*)pItem)->GetLeft(),
-                    ((const SvxLRSpaceItem*)pItem)->GetRight() );
-            }
-            break;
-        case RES_UL_SPACE:
-            {
-                sprintf( sOut,
-                    "ULSpace: Upper[%d], Lower[%d]",
-                    ((const SvxULSpaceItem*)pItem)->GetUpper(),
-                    ((const SvxULSpaceItem*)pItem)->GetLower() );
-            }
-            break;
-
-        case RES_BACKGROUND:
-                *pOut << "BACKGROUND" << endl;
-                break;
-        case RES_BOX:
-                *pOut << "BOX" << endl;
-                break;
-        case RES_SHADOW:
-                *pOut << "SHADOW" << endl;
-                break;
-
-        default:
-            sprintf( sOut, "UnknownItem: %d", pItem->Which() );
-        }
-
-        if( sOut[0] )
-            *pOut << sOut << endl;
-
-        if( aIter.IsAtEnd() )
-            break;
-        pItem = aIter.NextItem();
-    }
-}
-
-static void OutStyle( const SwPaM& rPam, const SwTxtFmtColl& rColl )
-{
-    char sOut[ 200 ];
-    sprintf( sOut, "Style: [%5d|%5d] - [%5d|%5d]",
-        rPam.GetMark()->nNode.GetIndex(),
-        rPam.GetMark()->nContent.GetIndex(),
-        rPam.GetPoint()->nNode.GetIndex(),
-        rPam.GetPoint()->nContent.GetIndex() );
-    *pOut << sOut
-        << " ®"
-        << rColl.GetName()->GetStr()
-        << "¯ {" << endl;
-    OutAttr( rColl.GetAttrSet() );
-    *pOut << '}' << endl;
-}
-
-static void OutSet( const SwPaM& rPam, const SfxItemSet& rSet )
-{
-    char sOut[ 200 ];
-    sprintf( sOut, "Attr: [%5d|%5d] - [%5d|%5d] {",
-        rPam.GetMark()->nNode.GetIndex(),
-        rPam.GetMark()->nContent.GetIndex(),
-        rPam.GetPoint()->nNode.GetIndex(),
-        rPam.GetPoint()->nContent.GetIndex() );
-    *pOut << sOut << endl;
-    OutAttr( rSet );
-    *pOut << '}' << endl;
-}
-
-static void OutText( const SwPaM& rPam, const char* pText )
-{
-    char sOut[ 200 ];
-    sprintf( sOut, "Text: [%5d|%5d] - [%5d|%5d]",
-        rPam.GetMark()->nNode.GetIndex(),
-        rPam.GetMark()->nContent.GetIndex(),
-        rPam.GetPoint()->nNode.GetIndex(),
-        rPam.GetPoint()->nContent.GetIndex() );
-    *pOut << sOut
-        << " ®"
-        << pText
-        << '¯' << endl;
-}
-
-static void DumpStart()
-{
-    utl::TempFile aTempFile;
-
-    pOut = new SvFileStream( aTempFile.GetFileName(),
-                            STREAM_WRITE | STREAM_TRUNC );
-    *pOut << "Dump des RTF30-Parsers" << endl;
-}
-
-static void DumpEnde()
-{
-    *pOut  << endl<< "Das wars" << endl;
-    delete pOut;
-    pOut = 0;
-}
-
-#endif
-
-
