@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hdu $ $Date: 2002-02-18 15:33:19 $
+ *  last change: $Author: hdu $ $Date: 2002-06-18 09:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,11 +653,11 @@ X11FontLayout* ExtendedFontStruct::LayoutText( const ImplLayoutArgs& rArgs )
 
         long nGlyphWidth;
         GetCharWidth( cChar, cChar, &nGlyphWidth, NULL );
+        long nGlyphFlags = (nGlyphWidth > 0) ? GlyphItem::CLUSTER_START : 0;
         pGlyphBuffer[i] = GlyphItem( nLogicalIndex, cChar, aNewPos,
-            GlyphItem::CLUSTER_START, nGlyphWidth );
-        nWidth += nGlyphWidth;
+            nGlyphFlags, nGlyphWidth );
 
-        aNewPos = Point( nWidth, 0 );
+        aNewPos.X() += nGlyphWidth;
     }
 
     X11FontLayout* pLayout = new X11FontLayout( rArgs );
