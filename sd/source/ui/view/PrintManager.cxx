@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:14:27 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ USHORT PrintManager::SetPrinterOptDlg (
             bScaleAll = (aWarnBox.Execute() == RET_YES);
         }
 
-        ViewShell* pShell = mrViewShell.GetSubShellManager().GetMainSubShell();
+        ViewShell* pShell = mrViewShell.GetMainViewShell();
         if (pShell != NULL && pShell->ISA(DrawViewShell))
         {
             SdPage* pPage = mrViewShell.GetDocument()->GetSdPage(
@@ -203,7 +203,7 @@ PrintDialog* PrintManager::CreatePrintDialog (::Window *pParent)
 
     pDlg = new PrintDialog(pParent );
 
-    ViewShell* pShell = mrViewShell.GetSubShellManager().GetMainSubShell();
+    ViewShell* pShell = mrViewShell.GetMainViewShell();
     if (pShell!=NULL && ! pShell->ISA(OutlineViewShell))
     {
 
@@ -280,7 +280,7 @@ SfxTabPage*  PrintManager::CreatePrintOptionsPage(
 USHORT  PrintManager::Print (SfxProgress& rProgress, PrintDialog* pDlg)
 {
     SfxPrinter* pPrinter = mrViewShell.GetPrinter(TRUE);
-    ViewShell* pShell = mrViewShell.GetSubShellManager().GetMainSubShell();
+    ViewShell* pShell = mrViewShell.GetMainViewShell();
 
     if( pPrinter )
     {
@@ -617,7 +617,7 @@ ErrCode PrintManager::DoPrint (
 {
     ErrCode nResult = ERRCODE_NONE;
 
-    ViewShell* pShell = mrViewShell.GetSubShellManager().GetMainSubShell();
+    ViewShell* pShell = mrViewShell.GetMainViewShell();
     if (pShell != NULL)
     {
         const SdrMarkList& rMarkList = pShell->GetView()->GetMarkedObjectList();
