@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-11 19:14:26 $
+ *  last change: $Author: mib $ $Date: 2000-12-18 13:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,11 +561,10 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // TODO
     // RES_COL
     M_E( "TextColumns",         STYLE,  columns,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_COLUMNS, CTF_TEXTCOLUMNS ),
-    // TODO: Column delimiter line
     // RES_KEEP
     // not required
     // RES_URL
-    // TODO
+    // not required (exprted as draw:a element)
     // RES_EDIT_IN_READONLY
     M_E( "EditInReadonly",      STYLE,  editable,                   XML_TYPE_BOOL, 0 ),
     // RES_LAYOUT_SPLIT
@@ -578,6 +577,8 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // not required
     // RES_END_AT_TXTEND
     // not required
+    // RES_COLUMNBALANCE
+    // TODO
     // RES_UNKNOWNATR_CONTAINER
 //  M_E_SE( TEXT, xmlns, RES_UNKNOWNATR_CONTAINER, 0 ),
     // RES_GRFATR_MIRRORGRF (vertical MUST be processed after horizontal!)
@@ -586,6 +587,26 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     M_E( "VertMirrored",        STYLE,  mirror,     XML_TYPE_TEXT_MIRROR_VERTICAL|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
     // RES_GRFATR_CROPGRF
     M_E( "GraphicCrop",         FO,     clip,       XML_TYPE_TEXT_CLIP, 0 ),
+    // RES_GRFATR_ROTATION
+    // not required (exported as svg:transform attribute)
+    // RES_GRFATR_LUMINANCE
+    { "AdjustLuminance",  XML_NAMESPACE_DRAW, sXML_luminance,           XML_TYPE_PERCENT16, 0 },        // signed?
+    // RES_GRFATR_CONTRAST
+    { "AdjustContrast", XML_NAMESPACE_DRAW, sXML_contrast,              XML_TYPE_PERCENT16, 0 },        // signed?
+    // RES_GRFATR_CHANNELR
+    { "AdjustRed",      XML_NAMESPACE_DRAW, sXML_red,                   XML_TYPE_PERCENT16, 0 },        // signed?
+    // RES_GRFATR_CHANNELG
+    { "AdjustGreen",    XML_NAMESPACE_DRAW, sXML_green,                 XML_TYPE_PERCENT16, 0 },        // signed?
+    // RES_GRFATR_CHANNELB
+    { "AdjustBlue",     XML_NAMESPACE_DRAW, sXML_blue,                  XML_TYPE_PERCENT16, 0 },        // signed?
+    // RES_GRFATR_GAMMA
+    { "Gamma",          XML_NAMESPACE_DRAW, sXML_gamma,                 XML_TYPE_DOUBLE, 0 },           // signed?
+    // RES_GRFATR_INVERT
+    { "GraphicIsInverted", XML_NAMESPACE_DRAW, sXML_color_inversion,        XML_TYPE_BOOL, 0 },
+    // RES_GRFATR_TRANSPARENCY
+    { "Transparency",   XML_NAMESPACE_DRAW, sXML_transparency,      XML_TYPE_PERCENT16, 0 },
+    // RES_GRFATR_DRAWMODE
+    { "GraphicColorMode", XML_NAMESPACE_DRAW, sXML_color_mode,          XML_TYPE_COLOR_MODE, 0 },
     M_E( "UserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     { 0, 0, 0, 0 }
 };

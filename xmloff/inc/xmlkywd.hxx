@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 18:19:32 $
+ *  last change: $Author: mib $ $Date: 2000-12-18 13:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,6 +328,7 @@ XML_CONSTASCII_ACTION( sXML_close_vertical, "close-vertical" );
 XML_CONSTASCII_ACTION( sXML_cn, "cn" );
 XML_CONSTASCII_ACTION( sXML_collapse, "collapse" );
 XML_CONSTASCII_ACTION( sXML_color, "color" );
+XML_CONSTASCII_ACTION( sXML_color_inversion , "color-inversion" );
 XML_CONSTASCII_ACTION( sXML_color_mode , "color-mode" );
 XML_CONSTASCII_ACTION( sXML_column, "column" );
 XML_CONSTASCII_ACTION( sXML_column_count, "column-count" );
@@ -1186,6 +1187,7 @@ XML_CONSTASCII_ACTION( sXML_roll_from_left, "roll-from-left" );
 XML_CONSTASCII_ACTION( sXML_roll_from_right, "roll-from-right" );
 XML_CONSTASCII_ACTION( sXML_roman, "roman" );
 XML_CONSTASCII_ACTION( sXML_root, "root" );
+XML_CONSTASCII_ACTION( sXML_rotate, "rotate" );
 XML_CONSTASCII_ACTION( sXML_rotation, "rotation" );
 XML_CONSTASCII_ACTION( sXML_rotation_align, "rotation-align" );
 XML_CONSTASCII_ACTION( sXML_rotation_angle, "rotation-angle" );

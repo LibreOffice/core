@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 18:22:15 $
+ *  last change: $Author: mib $ $Date: 2000-12-18 13:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,6 @@
 
 #ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
 #include <com/sun/star/drawing/FillStyle.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
-#include <com/sun/star/drawing/ColorMode.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONSPEED_HPP_
@@ -224,7 +220,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "ShadowTransparence", XML_NAMESPACE_DRAW, sXML_shadow_transparency, XML_TYPE_PERCENT, 0 },
 
     // graphic attributes
-    { "GraphicColorMode", XML_NAMESPACE_DRAW, sXML_color_mode,          XML_SD_TYPE_COLORMODE, 0 },
+    { "GraphicColorMode", XML_NAMESPACE_DRAW, sXML_color_mode,          XML_TYPE_COLOR_MODE, 0 },
     { "AdjustLuminance",  XML_NAMESPACE_DRAW, sXML_luminance,           XML_TYPE_PERCENT16, 0 },        // signed?
     { "AdjustContrast", XML_NAMESPACE_DRAW, sXML_contrast,              XML_TYPE_PERCENT16, 0 },        // signed?
     { "Gamma",          XML_NAMESPACE_DRAW, sXML_gamma,                 XML_TYPE_DOUBLE, 0 },           // signed?
@@ -415,15 +411,6 @@ SvXMLEnumMapEntry aXML_PresChange_EnumMap[] =
     { NULL, 0 }
 };
 
-SvXMLEnumMapEntry aXML_ColorMode_EnumMap[] =
-{
-    { sXML_greyscale, drawing::ColorMode_GREYS },
-    { sXML_mono,      drawing::ColorMode_MONO },
-    { sXML_watermark, drawing::ColorMode_WATERMARK },
-    { sXML_standard,  drawing::ColorMode_STANDARD },
-    { NULL, 0 }
-};
-
 SvXMLEnumMapEntry aXML_TransSpeed_EnumMap[] =
 {
     { sXML_slow,      presentation::AnimationSpeed_FAST },
@@ -581,11 +568,6 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SD_TYPE_FILLSTYLE :
             {
                 pHdl = new XMLEnumPropertyHdl( aXML_FillStyle_EnumMap, ::getCppuType((const drawing::FillStyle*)0) );
-                break;
-            }
-            case XML_SD_TYPE_COLORMODE :
-            {
-                pHdl = new XMLEnumPropertyHdl( aXML_ColorMode_EnumMap, ::getCppuType((const drawing::ColorMode*)0) );
                 break;
             }
             case XML_SD_TYPE_PRESPAGE_TYPE :

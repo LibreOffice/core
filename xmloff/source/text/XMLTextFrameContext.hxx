@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-27 13:37:09 $
+ *  last change: $Author: mib $ $Date: 2000-12-18 13:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ class XMLTextFrameContext : public SvXMLImportContext
     const ::rtl::OUString sGraphicFilter;
     const ::rtl::OUString sAlternativeText;
     const ::rtl::OUString sFrameStyleName;
+    const ::rtl::OUString sGraphicRotation;
     const ::rtl::OUString sTextBoxServiceName;
     const ::rtl::OUString sGraphicServiceName;
 

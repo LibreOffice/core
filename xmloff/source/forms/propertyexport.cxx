@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-13 10:38:49 $
+ *  last change: $Author: mib $ $Date: 2000-12-18 13:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,9 @@ namespace xmloff
         sal_Bool bSuccess =
     #endif
         _rSequenceAny >>= aContainer;
+    #ifdef DBG_UTIL
         OSL_ENSURE(bSuccess, "OSequenceIterator::OSequenceIterator: invalid Any!");
+    #endif
         construct(aContainer);
     }
 
@@ -799,6 +801,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/12/13 10:38:49  fs
+ *  slightly modified some documentations
+ *
  *  Revision 1.5  2000/12/12 11:58:32  fs
  *  generic properies: writer shorts really as shorts
  *

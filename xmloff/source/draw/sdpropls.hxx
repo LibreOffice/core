@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 18:22:15 $
+ *  last change: $Author: mib $ $Date: 2000-12-18 13:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,6 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define XML_SD_TYPE_GRADIENT                        (XML_SD_TYPES_START + 12 )
 #define XML_SD_TYPE_GRADIENT_STEPCOUNT              (XML_SD_TYPES_START + 13 )
 #define XML_SD_TYPE_SHADOW                          (XML_SD_TYPES_START + 14 )
-#define XML_SD_TYPE_COLORMODE                       (XML_SD_TYPES_START + 15 )
 #define XML_SD_TYPE_TEXT_CROSSEDOUT                 (XML_SD_TYPES_START + 16 )
 #define XML_SD_TYPE_NUMBULLET                       (XML_SD_TYPES_START + 17 )
 #define XML_SD_TYPE_WRITINGMODE                     (XML_SD_TYPES_START + 18 )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-13 09:36:23 $
+ *  last change: $Author: mib $ $Date: 2000-12-18 13:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,6 +671,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo")),
     sGraphicURL(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")),
     sGraphicFilter(RTL_CONSTASCII_USTRINGPARAM("GraphicFilter")),
+    sGraphicRotation(RTL_CONSTASCII_USTRINGPARAM("GraphicRotation")),
     sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")),
     sHyperLinkURL(RTL_CONSTASCII_USTRINGPARAM("HyperLinkURL")),
     sHyperLinkName(RTL_CONSTASCII_USTRINGPARAM("HyperLinkName")),
@@ -1769,6 +1770,21 @@ void XMLTextParagraphExport::_exportTextGraphic(
     if( sGrfFilter.getLength() )
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_filter_name,
                                   sGrfFilter );
+
+    // svg:transform
+    aAny = rPropSet->getPropertyValue( sGraphicRotation );
+    sal_Int16 nVal;
+    aAny >>= nVal;
+    if( nVal != 0 )
+    {
+        OUStringBuffer sRet( sizeof(sXML_rotate)+4 );
+        sRet.appendAscii(sXML_rotate);
+        sRet.append( (sal_Unicode)'(' );
+        GetExport().GetMM100UnitConverter().convertNumber( sRet, (sal_Int32)nVal );
+        sRet.append( (sal_Unicode)')' );
+        GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_transform,
+                                  sRet.makeStringAndClear() );
+    }
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               sXML_image, sal_False, sal_True );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-13 10:38:10 $
+ *  last change: $Author: mib $ $Date: 2000-12-18 13:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -961,7 +961,9 @@ namespace xmloff
                     sal_Bool bSuccess =
                 #endif
                     m_xProps->getPropertyValue(PROPERTY_LISTSOURCETYPE) >>= eListSourceType;
+                #ifdef DBG_UTIL
                     OSL_ENSURE(bSuccess, "OControlExport::examineControl: could not retrieve the ListSourceType!");
+                #endif
                     if (ListSourceType_VALUELIST != eListSourceType)
                     {
                         m_nIncludeDatabase |= DA_LIST_SOURCE;
@@ -1294,6 +1296,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/13 10:38:10  fs
+ *  moved some code to a more central place to reuse it
+ *
  *  Revision 1.4  2000/12/06 17:28:05  fs
  *  changes for the formlayer import - still under construction
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-08 08:22:56 $
+ *  last change: $Author: mib $ $Date: 2000-12-18 13:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,7 @@ XMLTextFrameContext::XMLTextFrameContext(
     sGraphicFilter(RTL_CONSTASCII_USTRINGPARAM("GraphicFilter")),
     sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")),
     sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyleName")),
+    sGraphicRotation(RTL_CONSTASCII_USTRINGPARAM("GraphicRotation")),
     sTextBoxServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")),
     sGraphicServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GraphicObject"))
 {
@@ -334,6 +335,7 @@ XMLTextFrameContext::XMLTextFrameContext(
     sal_Int32   nMinHeight = 0;
     sal_Int32   nZIndex = -1;
     sal_Int16   nPage = 0;
+    sal_Int16   nRotation = 0;
 
     TextContentAnchorType   eAnchorType = eATyp;
 
@@ -431,6 +433,25 @@ XMLTextFrameContext::XMLTextFrameContext(
             break;
         case XML_TOK_TEXT_FRAME_FILTER_NAME:
             sFilterName = rValue;
+            break;
+        case XML_TOK_TEXT_FRAME_TRANSFORM:
+            {
+                OUString sValue( rValue );
+                sValue.trim();
+                const sal_Int32 nRotateLen = sizeof(sXML_rotate)-1;
+                sal_Int32 nLen = sValue.getLength();
+                if( nLen >= nRotateLen+3 &&
+                    0 == sValue.compareToAscii( sXML_rotate, nRotateLen ) &&
+                    '(' == sValue[nRotateLen] &&
+                    ')' == sValue[nLen-1] )
+                {
+                    sValue = sValue.copy( nRotateLen+1, nLen-(nRotateLen+2) );
+                    sValue.trim();
+                    sal_Int32 nVal;
+                    if( GetImport().GetMM100UnitConverter().convertNumber( nVal, sValue ) )
+                        nRotation = (sal_Int16)(nVal % 360 );
+                }
+            }
             break;
         }
     }
@@ -594,6 +615,10 @@ XMLTextFrameContext::XMLTextFrameContext(
         // filter name
         aAny <<=sFilterName;
         xPropSet->setPropertyValue( sGraphicFilter, aAny );
+
+        // rotation
+        aAny <<= nRotation;
+        xPropSet->setPropertyValue( sGraphicRotation, aAny );
     }
 
     if( XML_TEXT_FRAME_OLE != nType )

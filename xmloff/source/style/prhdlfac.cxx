@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-23 11:51:54 $
+ *  last change: $Author: mib $ $Date: 2000-12-18 13:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
+#include <com/sun/star/drawing/ColorMode.hpp>
+#endif
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -137,9 +140,24 @@
 #ifndef _XMLOFF_PROPERTYHANDLER_TABSTOPTYPES_HXX
 #include <tabsthdl.hxx>
 #endif
+#ifndef _XMLOFF_ENUMPROPERTYHANDLER_HXX
+#include "EnumPropertyHdl.hxx"
+#endif
 #ifndef _XMLOFF_ATTRIBUTECONTAINERHANDLER_HXX
 #include "AttributeContainerHandler.hxx"
 #endif
+
+using namespace ::com::sun::star;
+
+SvXMLEnumMapEntry aXML_ColorMode_EnumMap[] =
+{
+    { sXML_greyscale, drawing::ColorMode_GREYS },
+    { sXML_mono,      drawing::ColorMode_MONO },
+    { sXML_watermark, drawing::ColorMode_WATERMARK },
+    { sXML_standard,  drawing::ColorMode_STANDARD },
+    { NULL, 0 }
+};
+
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -361,6 +379,9 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 
                 break;
             case XML_TYPE_ATTRIBUTE_CONTAINER:
                 pPropHdl = new XMLAttributeContainerHandler;
+                break;
+            case XML_TYPE_COLOR_MODE:
+                pPropHdl = new XMLEnumPropertyHdl( aXML_ColorMode_EnumMap, ::getCppuType((const drawing::ColorMode*)0) );
                 break;
         }
 
