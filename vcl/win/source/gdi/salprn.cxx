@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-20 12:00:35 $
+ *  last change: $Author: cd $ $Date: 2002-12-04 17:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,7 +716,7 @@ static void ImplJobSetupToDevMode( SalInfoPrinter* pPrinter, ImplJobSetup* pSetu
                 pDevMode->dmPaperSize = DMPAPER_TABLOID;
                 break;
             default:
-                {
+            {
                 short   nPaper = 0;
                 ULONG   nPaperCount = ImplDeviceCaps( pPrinter, DC_PAPERS, NULL, pSetupData );
                 WORD*   pPapers = NULL;
@@ -741,31 +741,65 @@ static void ImplJobSetupToDevMode( SalInfoPrinter* pPrinter, ImplJobSetup* pSetu
                     for ( ULONG i = 0; i < nPaperCount; i++ )
                     {
                         if ( ImplPaperSizeEqual( (short)(pSetupData->mnPaperWidth/10),
-                                                 (short)(pSetupData->mnPaperHeight/10),
-                                                 (short)pPaperSizes[i].x,
-                                                 (short)pPaperSizes[i].y ) )
+                                                (short)(pSetupData->mnPaperHeight/10),
+                                                (short)pPaperSizes[i].x,
+                                                (short)pPaperSizes[i].y ) )
                         {
                             nPaper = pPapers[i];
                             break;
                         }
                     }
-                }
-                if ( pPapers )
-                    delete [] pPapers;
-                if ( pPaperSizes )
-                    delete [] pPaperSizes;
 
-                if ( nPaper )
-                    pDevMode->dmPaperSize = nPaper;
-                else
+                    if ( nPaper )
+                        pDevMode->dmPaperSize = nPaper;
+                    else
+                    {
+                        // Fallback solution:
+                        // Use the paper format that matches best with our user format. Prefer bigger
+                        // formats to formats that would better fit but are smaller. This is needed
+                        // because of the strange printer driver handling of DMPAPER_USER in some cases!
+                        long nDelta = 0;
+                        BOOL bCurrSelPrnPaperFits = FALSE;
+                        for( ULONG i = 0; i < nPaperCount; i++ )
+                        {
+                            long nSW = pSetupData->mnPaperWidth/10;
+                            long nSH = pSetupData->mnPaperHeight/10;
+                            long nPW = pPaperSizes[i].x;
+                            long nPH = pPaperSizes[i].y;
+                            BOOL bPrnPaperSmaller = (( nPW < nSW ) || ( nPH < nSH ));
+                            long nCurDelta = ((nPW - nSW)*(nPW - nSW) + (nPH - nSH)*(nPH - nSH));
+
+                            if (( nPaper == 0 ) ||
+                                ( !bCurrSelPrnPaperFits && !bPrnPaperSmaller ) ||
+                                ( !bCurrSelPrnPaperFits && ( nCurDelta < nDelta ) ) ||
+                                ( bCurrSelPrnPaperFits && !bPrnPaperSmaller && ( nCurDelta < nDelta ) ))
+                            {
+                                nPaper = pPapers[i];
+                                nDelta = nCurDelta;
+                                bCurrSelPrnPaperFits = !bPrnPaperSmaller;
+                            }
+                        }
+
+                        if ( nPaper >= 0 )
+                            pDevMode->dmPaperSize = nPaper;
+                    }
+                }
+
+                if ( !nPaper )
                 {
                     pDevMode->dmFields     |= DM_PAPERLENGTH | DM_PAPERWIDTH;
                     pDevMode->dmPaperSize   = DMPAPER_USER;
                     pDevMode->dmPaperWidth  = pSetupData->mnPaperWidth/10;
                     pDevMode->dmPaperLength = pSetupData->mnPaperHeight/10;
                 }
-                }
+
+                if ( pPapers )
+                    delete [] pPapers;
+                if ( pPaperSizes )
+                    delete [] pPaperSizes;
+
                 break;
+            }
         }
     }
 }
