@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 20:36:34 $
+ *  last change: $Author: obo $ $Date: 2001-01-19 20:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ Window WIN_HELP_INDEX
                 Text = "Index" ;
                 Text [ ENGLISH ] = "Index" ;
                 Text[ english_us ] = "Index";
-                Text[ portuguese ] = "Index";
+                Text[ portuguese ] = "Νndice";
                 Text[ russian ] = "Θνδεκρ";
                 Text[ greek ] = "Ευρετήριο";
                 Text[ dutch ] = "Index";
@@ -136,7 +136,7 @@ Window WIN_HELP_INDEX
                 Text = "Suchen" ;
                 Text [ ENGLISH ] = "Search" ;
                 Text[ english_us ] = "Find";
-                Text[ portuguese ] = "Search";
+                Text[ portuguese ] = "Procurar";
                 Text[ russian ] = "Οξθρκ";
                 Text[ greek ] = "Αναζήτηση";
                 Text[ dutch ] = "Zoeken";
@@ -204,7 +204,7 @@ TabPage TP_HELP_INDEX
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Anzeigen" ;
         Text [ english_us ] = "~Display" ;
-        Text[ portuguese ] = "~Display";
+        Text[ portuguese ] = "~Mostrar";
         Text[ russian ] = "~Οξκΰηΰςό";
         Text[ greek ] = "Εμφάνιση";
         Text[ dutch ] = "~Weergeven";
@@ -265,7 +265,7 @@ TabPage TP_HELP_SEARCH
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Suchen";
         Text [ english_us ] = "~Find";
-        Text[ portuguese ] = "Search";
+        Text[ portuguese ] = "~Procurar";
         Text[ russian ] = "Νΰιςθ";
         Text[ greek ] = "Ανα~ζήτηση";
         Text[ dutch ] = "~Zoeken";
@@ -295,7 +295,7 @@ TabPage TP_HELP_SEARCH
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Anzeigen" ;
         Text [ english_us ] = "~Display" ;
-        Text[ portuguese ] = "~Display";
+        Text[ portuguese ] = "~Mostrar";
         Text[ russian ] = "~Οξκΰηΰςό";
         Text[ greek ] = "Εμφάνιση";
         Text[ dutch ] = "~Weergeven";
@@ -350,7 +350,7 @@ String STR_HELP_WINDOW_TITLE
 {
     Text = "%PRODUCTNAME Hilfe";
     Text [ english_us ] = "%PRODUCTNAME Help";
-    Text[ portuguese ] = "%PRODUCTNAME Help";
+    Text[ portuguese ] = "Ajuda %PRODUCTNAME";
     Text[ russian ] = "Ροπΰβκΰ %PRODUCTNAME";
     Text[ greek ] = "Βοήθεια του %PRODUCTNAME";
     Text[ dutch ] = "%PRODUCTNAME Help";
@@ -372,7 +372,7 @@ String STR_HELP_BUTTON_INDEX
 {
     Text = "Index";
     Text [ english_us ] = "Index";
-    Text[ portuguese ] = "Index";
+    Text[ portuguese ] = "Νndice";
     Text[ russian ] = "Θνδεκρ";
     Text[ greek ] = "Ευρετήριο";
     Text[ dutch ] = "Index";
@@ -394,7 +394,7 @@ String STR_HELP_BUTTON_START
 {
     Text = "Startseite";
     Text [ english_us ] = "First page";
-    Text[ portuguese ] = "Start page";
+    Text[ portuguese ] = "Pαgina inicial";
     Text[ russian ] = "Οεπβΰÿ ρςπΰνθφΰ";
     Text[ greek ] = "Αρχική σελίδα";
     Text[ dutch ] = "Startpagina";
@@ -416,7 +416,7 @@ String STR_HELP_BUTTON_PREV
 {
     Text = "Vorherige Seite";
     Text [ english_us ] = "Previous page";
-    Text[ portuguese ] = "Backward";
+    Text[ portuguese ] = "Pαgina anterior";
     Text[ russian ] = "Οπεδϋδσωΰÿ ρςπΰνθφΰ";
     Text[ greek ] = "Προηγούμενη σελίδα";
     Text[ dutch ] = "Vorige";
@@ -438,7 +438,7 @@ String STR_HELP_BUTTON_NEXT
 {
     Text = "Nδchste Seite";
     Text [ english_us ] = "Next page";
-    Text[ portuguese ] = "Forward";
+    Text[ portuguese ] = "Pαgina seguinte";
     Text[ russian ] = "Ρλεδσώωΰÿ ρςπΰνθφΰ";
     Text[ greek ] = "Επόμενη σελίδα";
     Text[ dutch ] = "Volgende";
@@ -460,7 +460,7 @@ String STR_HELP_BUTTON_PRINT
 {
     Text = "Drucken";
     Text [ english_us ] = "Print";
-    Text[ portuguese ] = "Print";
+    Text[ portuguese ] = "Imprimir";
     Text[ russian ] = "Οεχΰςό";
     Text[ greek ] = "Εκτύπωση";
     Text[ dutch ] = "Afdrukken";
