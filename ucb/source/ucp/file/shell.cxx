@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:38:55 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,6 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
       m_xMultiServiceFactory( xMultiServiceFactory ),
       m_pProvider( pProvider ),
       m_sCommandInfo( 8 ),
-      m_bFaked( false ),
       Title( rtl::OUString::createFromAscii( "Title" ) ),
       CasePreservingURL(
           rtl::OUString::createFromAscii( "CasePreservingURL" ) ),
@@ -1233,14 +1232,6 @@ shell::move( sal_Int32 CommandId,
         }
     case NameClash::OVERWRITE:
         {
-//  #if 0
-//              // don't call shell::remove because that function will send
-//              // a deleted hint for dstUnqPath which isn't right.
-//              // dstUnqPath will exist again after the call to osl::File::move.
-//              // call osl::File::remove() instead.
-
-//              remove( CommandId,dstUnqPath,IsWhat );
-//  #else
             // stat to determine whether we have a symlink
             rtl::OUString targetPath(dstUnqPath);
 
@@ -1254,15 +1245,8 @@ shell::move( sal_Int32 CommandId,
                 aStatus.getFileType() == osl::FileStatus::Link )
                 targetPath = aStatus.getLinkTargetURL();
 
-//              else
-//              {
-//                  installError( CommandId,
-//                                TASKHANDLING_OVERWRITE_FOR_MOVE );
-//                  return;
-//              }
             // Will do nothing if file does not exist.
             osl::File::remove( targetPath );
-//  #endif
 
             nError = osl_File_move( srcUnqPath,targetPath );
             if( nError != osl::FileBase::E_None )
@@ -2350,17 +2334,8 @@ shell::commit( const shell::ContentMap::iterator& it,
         if( aFileStatus.isValid( FileStatusMask_FileName ) )
         {
             aAny <<= aFileStatus.getFileName();
-
-            if( m_bFaked )
-            {
-                for( sal_uInt32 i = 0; i < m_vecMountPoint.size(); ++i )
-                    if( it->first == m_vecMountPoint[i].m_aDirectory )
-                        aAny <<= m_vecMountPoint[i].m_aTitle;
-            }
             it1->setValue( aAny );
         }
-//      else
-//          it1->setValue( emptyAny );
     }
 
     it1 = properties.find( MyProperty( CasePreservingURL ) );
@@ -2371,8 +2346,6 @@ shell::commit( const shell::ContentMap::iterator& it,
             aAny <<= aFileStatus.getFileURL();
             it1->setValue( aAny );
         }
-//      else
-//          it1->setValue( emptyAny );
     }
 
 
@@ -2472,67 +2445,6 @@ shell::commit( const shell::ContentMap::iterator& it,
             if( it1 != properties.end() ) it1->setValue( aAny );
         }
     }
-//  else
-//  {
-//      it1 = properties.find( MyProperty( IsVolume ) );
-//      if( it1 != properties.end() ) it1->setValue( emptyAny );
-
-//      it1 = properties.find( MyProperty( IsFolder ) );
-//      if( it1 != properties.end() ) it1->setValue( emptyAny );
-
-//      it1 = properties.find( MyProperty( IsDocument ) );
-//      if( it1 != properties.end() ) it1->setValue( emptyAny );
-
-//      it1 = properties.find( MyProperty( IsRemote ) );
-//      if( it1 != properties.end() ) it1->setValue( emptyAny );
-
-//      it1 = properties.find( MyProperty( IsRemoveable ) );
-//      if( it1 != properties.end() ) it1->setValue( emptyAny );
-
-//      it1 = properties.find( MyProperty( IsCompactDisc ) );
-//      if( it1 != properties.end() ) it1->setValue( emptyAny );
-
-//      it1 = properties.find( MyProperty( IsFloppy ) );
-//      if( it1 != properties.end() ) it1->setValue( emptyAny );
-//  }
-
-
-    if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
-    {
-        isFile = false;
-        isVolume = isDirectory = true;
-        isRemoveable = isRemote = false;
-        isFloppy = isCompactDisc = false;
-
-        aAny <<= isDirectory;
-        it1 = properties.find( MyProperty( IsFolder ) );
-        if( it1 != properties.end() ) it1->setValue( aAny );
-
-        aAny <<= isVolume;
-        it1 = properties.find( MyProperty( IsVolume ) );
-        if( it1 != properties.end() ) it1->setValue( aAny );
-
-        aAny <<= isFile;
-        it1 = properties.find( MyProperty( IsDocument ) );
-        if( it1 != properties.end() ) it1->setValue( aAny );
-
-        aAny <<= isRemoveable;
-        it1 = properties.find( MyProperty( IsRemoveable ) );
-        if( it1 != properties.end() ) it1->setValue( aAny );
-
-        aAny <<= isRemote;
-        it1 = properties.find( MyProperty( IsRemote ) );
-        if( it1 != properties.end() ) it1->setValue( aAny );
-
-        aAny <<= isCompactDisc;
-        it1 = properties.find( MyProperty( IsCompactDisc ) );
-        if( it1 != properties.end() ) it1->setValue( aAny );
-
-        aAny <<= isFloppy;
-        it1 = properties.find( MyProperty( IsFloppy ) );
-        if( it1 != properties.end() ) it1->setValue( aAny );
-    }
-
 
     it1 = properties.find( MyProperty( Size ) );
     if( it1 != properties.end() )
@@ -2548,8 +2460,6 @@ shell::commit( const shell::ContentMap::iterator& it,
             aAny <<= dirSize;
             it1->setValue( aAny );
         }
-//      else
-//          it1->setValue( emptyAny );
     }
 
 
@@ -2563,22 +2473,7 @@ shell::commit( const shell::ContentMap::iterator& it,
             aAny <<= readonly;
             it1->setValue( aAny );
         }
-//      else
-//          it1->setValue( emptyAny );
     }
-
-
-    if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
-    {
-        it1 = properties.find( MyProperty( IsReadOnly ) );
-        if( it1 != properties.end() )
-        {
-            sal_Bool readonly = true;
-            aAny <<= readonly;
-            it1->setValue( aAny );
-        }
-    }
-
 
     it1 = properties.find( MyProperty( IsHidden ) );
     if( it1 != properties.end() )
@@ -2590,24 +2485,10 @@ shell::commit( const shell::ContentMap::iterator& it,
             aAny <<= ishidden;
             it1->setValue( aAny );
         }
-//      else
-//          it1->setValue( emptyAny );
     }
-
-
-    if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
-    {
-        it1 = properties.find( MyProperty( IsHidden ) );
-        if( it1 != properties.end() )
-        {
-            sal_Bool ishidden = false;
-            aAny <<= ishidden;
-            it1->setValue( aAny );
-        }
-    }
-
 
     it1 = properties.find( MyProperty( DateModified ) );
+
     if( it1 != properties.end() )
     {
         if( aFileStatus.isValid( FileStatusMask_ModifyTime ) )
@@ -2632,8 +2513,6 @@ shell::commit( const shell::ContentMap::iterator& it,
             aAny <<= aDateTime;
             it1->setValue( aAny );
         }
-//      else
-//          it1->setValue( emptyAny );
     }
 
 }
@@ -3180,136 +3059,6 @@ shell::copyPersistentSet( const rtl::OUString& srcUnqPath,
         }
     }         // end for( sal_Int...
 }
-
-
-
-
-/*******************************************************************************/
-/*                                                                             */
-/*                 the functions remapping the path to a physical file,        */
-/*                 if access is allowed by the mount points                    */
-/*                                                                             */
-/*******************************************************************************/
-
-
-shell::MountPoint::MountPoint( const rtl::OUString& aMountPoint,
-                               const rtl::OUString& aDirectory )
-    : m_aMountPoint( aMountPoint ),
-      m_aDirectory( aDirectory )
-{
-    rtl::OUString Title = aMountPoint;
-    sal_Int32 lastIndex = Title.lastIndexOf( sal_Unicode( '/' ) );
-    m_aTitle = Title.copy( lastIndex + 1 );
-}
-
-
-//
-//  Replaces the alias name part of aUnqPath by the physical directory.
-//  Returns true if mapping is successful;
-//
-
-sal_Bool SAL_CALL shell::checkMountPoint( const rtl::OUString&  aUnqPath,
-                                          rtl::OUString&        aRedirectedPath )
-{
-    rtl::OUString   aAbsPath;
-
-    if ( !makeAbsolutePath( aUnqPath, aAbsPath ) )
-        return false;
-
-    sal_Int32 numMp = m_vecMountPoint.size();
-
-    if( ! numMp )
-    {
-        // No access restrictions
-        aRedirectedPath = aAbsPath;
-        return true;
-    }
-
-
-    if( aAbsPath.compareTo( rtl::OUString::createFromAscii( "//./" ) ) == 0 )
-    {
-        aRedirectedPath = aAbsPath;
-        return true;
-    }
-
-    for( sal_Int32 j = 0; j < numMp; ++j )
-    {
-        rtl::OUString aAlias = m_vecMountPoint[j].m_aMountPoint;
-        rtl::OUString aDir   = m_vecMountPoint[j].m_aDirectory;
-        sal_Int32 nL = aAlias.getLength();
-
-        if( aAbsPath.compareTo( aAlias,nL ) == 0 && ( aAbsPath.getLength() == nL || aAbsPath[nL] == '/' ) )
-        {
-            aRedirectedPath = aDir;
-            aRedirectedPath += aAbsPath.copy( nL );
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
-
-//
-//  Replaces the physical directory name part corresponding to a given accessible
-//  directory in the mount points by the alias name, defined for that part in
-//  the mount points;
-//  Returns true if mapping is successful;
-//
-
-sal_Bool SAL_CALL shell::uncheckMountPoint( const rtl::OUString&  aUnqPath,
-                                            rtl::OUString&        aRedirectedPath )
-{
-    rtl::OUString   aAbsPath;
-
-
-    //
-    if ( !makeAbsolutePath( aUnqPath, aAbsPath ) )
-        return false;
-
-    sal_Int32 numMp = m_vecMountPoint.size();
-
-    if( ! numMp )
-    {
-        // No access restrictions
-        aRedirectedPath = aAbsPath;
-        return true;
-    }
-
-
-    if( aAbsPath.compareTo( rtl::OUString::createFromAscii( "//./" ) ) == 0 )
-    {
-        aRedirectedPath = aAbsPath;
-        return true;
-    }
-
-
-    for( sal_Int32 j = 0; j < numMp; ++j )
-    {
-        sal_Int32 nL = m_vecMountPoint[j].m_aDirectory.getLength();
-
-        rtl::OUString   aRealUnqPath;
-        oslFileError    error = osl_File_E_None;
-
-        if ( !aRealUnqPath.pData->length )
-            error = getResolvedURL( aAbsPath.pData, &aRealUnqPath.pData );
-
-        rtl::OUString dir = m_vecMountPoint[j].m_aDirectory;
-
-        if ( osl_File_E_None == error && aRealUnqPath.compareTo( dir,nL ) == 0 &&
-             ( aRealUnqPath.getLength() == nL || aRealUnqPath[nL] == '/' ) )
-        {
-            aRedirectedPath = m_vecMountPoint[j].m_aMountPoint;
-            aRedirectedPath += aRealUnqPath.copy( nL );
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
 
 /*******************************************************************************/
 /*                                                                             */
