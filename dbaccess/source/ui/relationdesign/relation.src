@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:52:47 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ french ] = "…diter";
             Text[ spanish ] = "Editar";
             Text[ italian ] = "Modifica";
-            Text[ danish ] = "Edit";
+            Text[ danish ] = "Rediger";
             Text[ swedish ] = "Redigera";
             Text[ polish ] = "Edytuj";
             Text[ portuguese_brazilian ] = "Edit";
@@ -145,7 +145,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ french ] = "Enregistrer";
             Text[ spanish ] = "Guardar";
             Text[ italian ] = "Salva";
-            Text[ danish ] = "Save";
+            Text[ danish ] = "Gem";
             Text[ swedish ] = "Spara";
             Text[ polish ] = "Zapisz";
             Text[ portuguese_brazilian ] = "Save";
@@ -174,7 +174,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ french ] = "Imprimer";
             Text[ spanish ] = "Imprimir";
             Text[ italian ] = "Stampa";
-            Text[ danish ] = "Print";
+            Text[ danish ] = "Udskriv";
             Text[ swedish ] = "Skriv ut";
             Text[ polish ] = "Drukuj";
             Text[ portuguese_brazilian ] = "Print";
@@ -246,7 +246,7 @@ String STR_QUERY_REL_EDIT_RELATION
     Text[ french ] = "Cette relation existe dÈj‡. Voulez-vous l'Èditer ?";
     Text[ spanish ] = "Ya existe esta relaciÛn. øDesea editarla?";
     Text[ italian ] = "Questa relazione esiste gi‡. Volete modificarla?";
-    Text[ danish ] = "Denne ralation eksisterer allerede. Vil du redigere den?";
+    Text[ danish ] = "Denne relation findes allerede. Vil du redigere den?";
     Text[ swedish ] = "Den h‰r relationen finns redan. Vill du redigera den?";
     Text[ polish ] = "Relacja juø istnieje. Czy chcesz jπ edytowaÊ?";
     Text[ portuguese_brazilian ] = "This relation already exsits. Do you want to edit it?";
@@ -272,7 +272,7 @@ String STR_RELATIONDESIGN
     Text[ french ] = "…bauche de relation";
     Text[ spanish ] = "DiseÒo de relaciones";
     Text[ italian ] = "Struttura relazione";
-    Text[ danish ] = "Relation design";
+    Text[ danish ] = "Relationsdesign";
     Text[ swedish ] = "Relationsutkast";
     Text[ polish ] = "Projekt relacji";
     Text[ portuguese_brazilian ] = "Relation design";
@@ -298,7 +298,7 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
     Text[ french ] = "La base de donnÈes ne supporte pas les relations !";
     Text[ spanish ] = "La base de datos no apoya ninguna relaciÛn.";
     Text[ italian ] = "Il database non supporta alcuna relazione.";
-    Text[ danish ] = "The database doesn't support any relations. The relation design will be closed!";
+    Text[ danish ] = "Databasen underst¯tter ingen relationer!";
     Text[ swedish ] = "Databasen understˆder inte nÂgra relationer.";
     Text[ polish ] = "Baza danych nie obs≥uguje relacji.";
     Text[ portuguese_brazilian ] = "The database doesn't support any relations. The relation design will be closed!";
@@ -326,7 +326,7 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message[ french ] = "L'Èbauche de relation a ÈtÈ modifiÈe.\nVoulez-vous enregistrer les modifications ?";
     Message[ spanish ] = "El diseÒo de relaciÛn ha sido modificado\nøDesea guardar las modificaciones?";
     Message[ italian ] = "La struttura relazione Ë stata cambiata.\nVolete salvare le modifiche?";
-    Message[ danish ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ danish ] = "Relationsdesignet er blevet Êndret.\nSkal Êndringerne gemmes?";
     Message[ swedish ] = "Relationsutkastet har ‰ndrats.\nSka ‰ndringarna sparas?";
     Message[ polish ] = "Zmieniono projekt relacji.\nZapisaÊ zmiany?";
     Message[ portuguese_brazilian ] = "The relation design has been changed.\nDo you want to save the changes?";
@@ -423,7 +423,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ french ] = "Annuler";
                     Text[ spanish ] = "Deshacer";
                     Text[ italian ] = "Annulla";
-                    Text[ danish ] = "Undo";
+                    Text[ danish ] = "Fortryd";
                     Text[ swedish ] = "≈ngra";
                     Text[ polish ] = "Cofnij";
                     Text[ portuguese_brazilian ] = "Undo";
@@ -453,7 +453,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ french ] = "Restaurer";
                     Text[ spanish ] = "Restaurar";
                     Text[ italian ] = "Ripristina";
-                    Text[ danish ] = "Redo";
+                    Text[ danish ] = "Gendan";
                     Text[ swedish ] = "≈terst‰ll";
                     Text[ polish ] = "PrzywrÛÊ";
                     Text[ portuguese_brazilian ] = "Redo";
@@ -529,8 +529,8 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ chinese_traditional ] = "ÊèíÂÖ•(~I)";
             Text[ turkish ] = "~Insert";
             Text[ arabic ] = "~Insert";
-            Text[ catalan ] = "~Insert";
-            Text[ thai ] = "~Insert";
+            Text[ catalan ] = "~Insereix";
+            Text[ thai ] = "~‡∏ß‡∏≤‡∏á";
         };
 
     MenuItem
@@ -576,7 +576,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ arabic ] = "√~œÊ« ";
             Text[ turkish ] = "~AraÁlar";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Eines";
+            Text[ catalan ] = "Ei~nes";
             Text[ thai ] = "‡πÄ~‡∏Ñ‡∏£‡∏∑‡πà‡∏≠‡∏á‡∏°‡∏∑‡∏≠";
         };
         GLOBLMN_WINMN
@@ -601,7 +601,7 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ spanish ] = "Si elimina esta tabla se eliminar·n tambiÈn todas las relaciones correspondientes. øDesea continuar?";
     Text[ finnish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ italian ] = "Eliminando questa tabella eliminerete anche tutte le relazioni corrispondenti. Volete procedere comunque?";
-    Text[ danish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ danish ] = "Hvis du sletter denne tabel, slettes ogsÂ alle tilh¯rende relationer. Vil du fortsÊtte?";
     Text[ swedish ] = "Om du raderar den h‰r tabellen raderas ‰ven alla tillhˆrande relationer. Vill du forts‰tta?";
     Text[ polish ] = "Wraz z tabelπ usuniÍte zostanπ wszystkie przynaleøne relacje. KontynuowaÊ?";
     Text[ portuguese_brazilian ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
