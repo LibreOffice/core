@@ -2,9 +2,9 @@
  *
  *  $RCSfile: substitutepathvars.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:41:39 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 10:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1440,48 +1440,13 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     else
         LOG_ERROR( "SubstitutePathVariables::SetPredefinedPathVariables", "Bootstrap code has no value for userpath");
 
-    // Get insturl and userurl from configuration (xml files)
-    // But if they doesn't exist (e.g. is true for fat office!) use instpath and userpath instead of this.
     // Set $(inst), $(instpath), $(insturl)
-    aAny = pCfgMgr->GetDirectConfigProperty( utl::ConfigManager::OFFICEINSTALLURL );
-    if ( !aAny.hasValue() || ( aAny >>= aOfficePath ) )
-    {
-        // "OFFICEINSTALLURL" is a UCB compatible URL for the office installation directory
-        // in the Webtop this MUST be set, in FATOffice it is the osl URL of the instpath
-        if ( aOfficePath.getLength() )
-        {
-            aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ]   = aOfficePath;
-            aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTURL ]    = aOfficePath;
-            aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INST ]       = aOfficePath;
-        }
-        else
-        {
-            aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
-            aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INST ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
-        }
-    }
-    else
-        LOG_ERROR( "SubstitutePathVariables::SetPredefinedPathVariables", "Wrong any typ for office install URL!" );
+    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
+    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INST ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
 
-    // Get the user installation directory
     // Set $(user), $(userpath), $(userurl)
-    aAny = pCfgMgr->GetDirectConfigProperty( utl::ConfigManager::USERINSTALLURL );
-    if ( !aAny.hasValue() || ( aAny >>= aUserPath ) )
-    {
-        if ( aUserPath.getLength() )
-        {
-            aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ]   = aUserPath;
-            aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERURL ]    = aUserPath;
-            aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USER ]       = aUserPath;
-        }
-        else
-        {
-            aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
-            aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USER ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
-        }
-    }
-    else
-        LOG_ERROR( "SubstitutePathVariables::SetPredefinedPathVariables", "Wrong any type for user install URL!" );
+    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
+    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USER ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
 
     // Detect the program directory
     // Set $(prog), $(progpath), $(progurl)
