@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:19:50 $
+ *  last change: $Author: dvo $ $Date: 2001-02-06 14:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,7 +672,7 @@ SvXMLImportContext *XMLImpHyperlinkContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    if ( (nPrefix == XML_NAMESPACE_SCRIPT) &&
+    if ( (nPrefix == XML_NAMESPACE_OFFICE) &&
          (rLocalName.equalsAsciiL(sXML_events, sizeof(sXML_events)-1)))
     {
         XMLEventsImportContext* pCtxt = new XMLEventsImportContext(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-30 13:09:59 $
+ *  last change: $Author: dvo $ $Date: 2001-02-06 14:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ XMLEventExport::XMLEventExport(SvXMLExport& rExp,
     rExport(rExp),
     sEvents(RTL_CONSTASCII_USTRINGPARAM(sXML_events)),
     sScriptEvents(rExp.GetNamespaceMap().GetQNameByKey(
-        XML_NAMESPACE_SCRIPT, OUString::createFromAscii(sXML_events))),
+        XML_NAMESPACE_OFFICE, sEvents)),
     sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType"))
 {
     AddTranslationTable(pTranslationTable);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-30 13:10:00 $
+ *  last change: $Author: dvo $ $Date: 2001-02-06 14:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ SvXMLImportContext *XMLTextShapeStyleContext::CreateChildContext(
                     GetProperties(), xImpPrMap );
         }
     }
-    else if ( (XML_NAMESPACE_SCRIPT == nPrefix) &&
+    else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
               rLocalName.equalsAsciiL( sXML_events, sizeof(sXML_events)-1 ) )
     {
         // create and remember events import context

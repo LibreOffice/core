@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-31 10:18:35 $
+ *  last change: $Author: dvo $ $Date: 2001-02-06 14:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
                                                     xImpPrMap,
                                                     sDropCapTextStyleName );
     }
-    else if ( (XML_NAMESPACE_SCRIPT == nPrefix) &&
+    else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
               rLocalName.equalsAsciiL( sXML_events, sizeof(sXML_events)-1 ) )
     {
         // create and remember events import context
