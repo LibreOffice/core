@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 20:18:38 $
+ *  last change: $Author: kz $ $Date: 2001-01-23 13:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1332,7 +1332,7 @@ String S_UNPACKING_STORAGE_FAILED
 {
     Text = "Entpacken der Storage \"($Arg1)\" nach \"($Arg2)\" ist fehlgeschlagen";
     Text[ english_us ] = "Unpacking storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ portuguese ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ portuguese ] = "Foi impossνvel descomprimir o ficheiro Storage de \"($Arg1)\" para \"($Arg2)\".";
     Text[ russian ] = "Πΰροΰκξβΰςό νΰκξοθςελό \"($Arg1)\" β \"($Arg2)\" νε σδΰλξρό.";
     Text[ greek ] = "Η αποσυμπίεση του αρχείου αποθήκευσης \"($Arg1)\" στο \"($Arg2)\" απέτυχε";
     Text[ dutch ] = "Decomprimeren van Storage \"($Arg1)\" in \"($Arg2)\" mislukt";
