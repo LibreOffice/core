@@ -2,9 +2,9 @@
  *
  *  $RCSfile: startoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dg $ $Date: 2001-09-26 15:43:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ void SvtStartOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames 
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_STRING), "SvtStartOptions_Impl::Notify()\nWho has changed the value type of \"Office.Common\\Start\\Connection\"?" );
             seqValues[nProperty] >>= m_sConnectionURL;
         }
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         else DBG_ASSERT( sal_False, "SvtStartOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
         #endif
     }
