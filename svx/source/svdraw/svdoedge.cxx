@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-28 08:05:38 $
+ *  last change: $Author: pluby $ $Date: 2001-05-14 22:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
