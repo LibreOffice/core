@@ -3,9 +3,9 @@
  *
  *  $RCSfile: schema_trim.xsl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 22:59:26 $
+ *  last change: $Author: dg $ $Date: 2002-05-20 11:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,33 @@
 <!-- suppress the constraints of the schema -->
 	<xsl:template match = "constraints"/>
 
-<!-- suppress the all documentation items -->
+<!-- suppress all documentation items -->
 	<xsl:template match = "info"/>
+
+<!-- suppress values, which do not have content and are not nil -->
+	<xsl:template match="value[@xsi:nil='true']">
+		<xsl:if test="contains(../@oor:type, 'string') or contains(../@oor:type, 'hexBinary') or contains(../@oor:type, 'list')"> 
+			<xsl:copy>
+				<xsl:apply-templates select="*|@*"/>
+			</xsl:copy>
+		</xsl:if>
+	</xsl:template>
+
+
+	<xsl:template match="value[@oor:separator]">
+		<xsl:copy>
+			<xsl:apply-templates select="*|@*"/>
+			<xsl:value-of select="."/>
+		</xsl:copy>		
+	</xsl:template>
+
+	<xsl:template match="value">
+		<xsl:if test="string-length(current())"> 
+			<xsl:copy>
+				<xsl:apply-templates select="*|@*"/>
+				<xsl:value-of select="."/>
+			</xsl:copy>
+		</xsl:if>
+	</xsl:template>
 
 </xsl:transform>

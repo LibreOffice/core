@@ -3,9 +3,9 @@
  *
  *  $RCSfile: schema_val.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:31:14 $
+ *  last change: $Author: dg $ $Date: 2002-05-20 11:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,13 @@
 	<xsl:template match = "group[@oor:extensible='true']">
 		<xsl:if test="count(child::prop) or count(child::set) or count(child::group) or count(child::node-ref)">
 			<xsl:message terminate="yes">ERROR: extensible groups with children are currently NOT supported!</xsl:message>
+		</xsl:if>
+	</xsl:template>
+
+<!-- check if properties of type 'any' do not have a value -->
+	<xsl:template match="prop[@oor:type='oor:any']">
+		<xsl:if test="count(value)"> 
+			<xsl:message terminate="yes">ERROR: Properties of type 'oor:any' MUST NOT have a value!</xsl:message>
 		</xsl:if>
 	</xsl:template>
 
