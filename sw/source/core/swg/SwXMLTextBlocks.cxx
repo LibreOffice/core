@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-23 14:31:41 $
+ *  last change: $Author: mtg $ $Date: 2001-02-26 13:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,6 +428,7 @@ ULONG SwXMLTextBlocks::Rename( USHORT nIdx, const String& s, const String& l )
 {
     aNames [ nIdx ]->aShort = s;
     aNames [ nIdx ]->aLong = l;
+    GeneratePackageName( s, aNames [ nIdx ]->aPackageName);
     return 0;
 }
 
@@ -587,6 +588,7 @@ ULONG SwXMLTextBlocks::BeginPutDoc( const String& rShort, const String& rLong )
     aShort = rShort;
     aLong = rLong;
     GeneratePackageName( rShort, aPackageName );
+    SetIsTextOnly( rShort, FALSE);
     return StartPutBlock (rShort, aPackageName);
 }
 
@@ -605,6 +607,8 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& rPam, const String& rLong )
     aWriter.Write ( xWrt );
 
     xRoot->Commit();
+    xRoot.Clear();
+
     if ( !nCommitFlags )
         xBlkRoot->Commit();
     ULONG nErr = xBlkRoot->GetError();
@@ -612,7 +616,6 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& rPam, const String& rLong )
         nRes = ERR_W4W_WRITE_FULL;
     else if( nErr != SVSTREAM_OK )
         nRes = ERR_SWG_WRITE_ERROR;
-    xRoot.Clear();
     nFlags |= nCommitFlags;
     return nErr;
 }
@@ -718,6 +721,18 @@ void SwXMLTextBlocks::CloseFile()
             WriteInfo();
     }
     xBlkRoot.Clear();
+}
+
+void SwXMLTextBlocks::SetIsTextOnly( const String& rShort, BOOL bNewValue )
+{
+    USHORT nIdx = GetIndex ( rShort );
+    if (nIdx != (USHORT) -1  && nIdx != USHRT_MAX)
+        aNames[nIdx]->bIsOnlyTxt = bNewValue;
+}
+
+void SwXMLTextBlocks::SetIsTextOnly( USHORT nIdx, BOOL bNewValue )
+{
+    aNames[nIdx]->bIsOnlyTxt = bNewValue;
 }
 
 BOOL SwXMLTextBlocks::IsOnlyTextBlock( const String& rShort ) const
@@ -951,10 +966,10 @@ ULONG SwXMLTextBlocks::PutText( const String& rShort, const String& rName,
                                 const String& rText )
 {
     ULONG nRes = 0;
-    USHORT nIndex = GetIndex ( rShort );
     aShort = rShort;
     aLong = rName;
     aCur = rText;
+    SetIsTextOnly( aShort, TRUE );
     GeneratePackageName( rShort, aPackageName );
     ClearDoc();
     nRes = PutBlockText( rShort, rName, rText, aPackageName );
