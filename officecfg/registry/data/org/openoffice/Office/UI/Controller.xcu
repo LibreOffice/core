@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Controller.xcu,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:51:21 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,17 +85,6 @@
           <value>com.sun.star.comp.framework.FontSizeMenuController</value>
         </prop>
       </node>
-      <node oor:name="c3" oor:op="replace">
-        <prop oor:name="Command">
-          <value>.uno:FormatMenu</value>
-        </prop>
-        <prop oor:name="Module">
-          <value/>
-        </prop>
-        <prop oor:name="Controller">
-          <value>com.sun.star.comp.framework.FormatMenuController</value>
-        </prop>
-      </node>
       <node oor:name="c4" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ObjectMenue</value>
@@ -160,6 +149,17 @@
         </prop>
         <prop oor:name="Controller">
           <value>com.sun.star.comp.framework.MacrosMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c9" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:RecentFileList</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.RecentFilesMenuController</value>
         </prop>
       </node>
     </node>
