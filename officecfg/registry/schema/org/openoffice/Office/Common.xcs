@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: os $ $Date: 2002-09-05 12:03:04 $
+ *  last change: $Author: mba $ $Date: 2002-09-11 09:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1898,9 +1898,9 @@
 					<!-- OldLocation: soffice.ini -->
 					<!-- Responsible: MBA -->
 					<!-- UIHints: Tools - Options - Browser -->
-					<value>$(workdirurl) $(userurl) $(insturl) private:newmenu private:user</value>
+					<value>$(userurl) $(insturl)</value>
 					<info>
-						<desc xml:lang="en-US">A list of all trustworthy URLs: file:/ =&gt; All scripts from the local file system including a LAN; private:explorer =&gt; Scripts from the Explorer; private:help =&gt; Scripts in the help system; private:newmenu =&gt; Scripts that are executed by the commands File-New and AutoPilot; private:schedule =&gt; Scripts of the scheduler; private:searchfolder =&gt; Scripts of the searchfolder; private:user =&gt; Scripts that are entered in the URL field.</desc>
+						<desc xml:lang="en-US">A list of all trustworthy URLs: file:/ =&gt; All scripts from the local file system including a LAN.</desc>
 					</info>
 				</prop>
 				<prop oor:name="OfficeBasic" oor:type="xs:int">
