@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_pch.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-09 15:24:19 $
+ *  last change: $Author: rt $ $Date: 2001-08-10 10:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,6 @@
 #include <sfx2/progress.hxx>
 #include <vcl/event.hxx>
 #include <vcl/window.hxx>
-#include <so3/advise.hxx>
 #include <svx/algitem.hxx>
 #include <vcl/field.hxx>
 #include <svx/svdtypes.hxx>
@@ -271,7 +270,6 @@
 #include <svx/brshitem.hxx>
 #include <so3/lnkbase.hxx>
 #include <sot/exchange.hxx>
-#include <so3/linkname.hxx>
 #include <svx/editeng.hxx>
 #include <vcl/fonttype.hxx>
 #include <svx/editobj.hxx>
