@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:39:18 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@ class ExtNameBuff;
 class ExtSheetBuffer;
 class ExcelToSc;
 class ExcExternDup;
-class ScExtDocOptions;
 
 class XclImpPivotCacheList;
 class XclImpAutoFilterBuffer;
@@ -132,7 +131,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     ExtNameBuff*        pExtNameBuff;
     ExcelToSc*          pFmlaConverter;
     const CharSet*      pCharset;               // actual charset (im- / export!)
-    ScExtDocOptions*    pExtDocOpt;
 
     BOOL                bCellCut;               // bei Ueberlauf max. Cols / Rows
     BOOL                bBreakSharedFormula;    // SharedFormula bei Export aufbrechen?
