@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-24 08:21:50 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,7 @@ inline BOOL SvxSearchDialog::HasReplaceAttributes() const
 
 //////////////////////////////////////////////////////////////////////
 
-
+/* //CHINA001
 class SvxJSearchOptionsDialog : public SfxSingleTabDialog
 {
     INT32                   nInitialTlFlags;
@@ -369,7 +369,7 @@ public:
     INT32           GetTransliterationFlags() const;
     void            SetTransliterationFlags( INT32 nSettings );
 };
-
+*/ //CHINA001
 
 //////////////////////////////////////////////////////////////////////
 
