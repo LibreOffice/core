@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-17 10:09:01 $
+ *  last change: $Author: sab $ $Date: 2000-10-17 10:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,12 +685,11 @@ void XMLCellStylesPropertySetMapper::ContextFilter(
             pRightBorderWidthState->maValue >>= aRight;
             pTopBorderWidthState->maValue >>= aTop;
             pBottomBorderWidthState->maValue >>= aBottom;
-            if( aLeft.Color == aRight.Color && aLeft.InnerLineWidth == aRight.InnerLineWidth &&
-                aLeft.OuterLineWidth == aRight.OuterLineWidth && aLeft.LineDistance == aRight.LineDistance &&
-                aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
+            if( aLeft.InnerLineWidth == aRight.InnerLineWidth && aLeft.OuterLineWidth == aRight.OuterLineWidth &&
+                aLeft.LineDistance == aRight.LineDistance && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
                 aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
-                aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
-                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance )
+                aLeft.InnerLineWidth == aBottom.InnerLineWidth && aLeft.OuterLineWidth == aBottom.OuterLineWidth &&
+                aLeft.LineDistance == aBottom.LineDistance )
             {
                 pLeftBorderWidthState->mnIndex = -1;
                 pLeftBorderWidthState->maValue.clear();
