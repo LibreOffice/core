@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 13:24:41 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 09:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,113 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
         m_pListLabels[i] = NULL;
         mbListVisibility[i] = false;
     }
+
+    CResourceProvider aResProvider;
+    OUString aFilePickerTitle = aResProvider.getResString( FILE_PICKER_TITLE_OPEN );
+
+    m_pDialog = gtk_file_chooser_dialog_new(
+            OUStringToOString( aFilePickerTitle, RTL_TEXTENCODING_UTF8 ).getStr(),
+            NULL,
+            GTK_FILE_CHOOSER_ACTION_OPEN,
+            GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+            GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+            NULL );
+
+    gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
+
+    gtk_file_chooser_set_local_only( GTK_FILE_CHOOSER( m_pDialog ), FALSE );
+    gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), FALSE );
+
+    m_pVBox = gtk_vbox_new( FALSE, 0 );
+
+    OUString aLabel;
+
+    for( i = 0; i < TOGGLE_LAST; i++ )
+    {
+        m_pToggles[i] = gtk_check_button_new();
+
+#define LABEL_TOGGLE( elem ) \
+        case elem : \
+            aLabel = aResProvider.getResString( CHECKBOX_##elem ); \
+            setLabel( CHECKBOX_##elem, aLabel ); \
+            break
+
+          switch( i ) {
+
+        LABEL_TOGGLE( AUTOEXTENSION );
+        LABEL_TOGGLE( PASSWORD );
+        LABEL_TOGGLE( FILTEROPTIONS );
+        LABEL_TOGGLE( READONLY );
+        LABEL_TOGGLE( LINK );
+        LABEL_TOGGLE( PREVIEW );
+        LABEL_TOGGLE( SELECTION );
+            default:
+                OSL_TRACE("Handle unknown control %d\n", i);
+                break;
+        }
+
+
+        gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pToggles[i], FALSE, TRUE, 0 );
+    }
+
+    for( i = 0; i < BUTTON_LAST; i++ )
+    {
+        m_pButtons[i] = gtk_button_new();
+
+#define LABEL_BUTTON( elem ) \
+        case elem : \
+            aLabel = aResProvider.getResString( PUSHBUTTON_##elem ); \
+            setLabel( PUSHBUTTON_##elem, aLabel ); \
+            break
+
+          switch( i ) {
+
+        LABEL_BUTTON( PLAY );
+            default:
+                OSL_TRACE("Handle unknown control %d\n", i);
+                break;
+        }
+
+        gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pButtons[i], FALSE, TRUE, 0 );
+    }
+
+    for( i = 0; i < LIST_LAST; i++ )
+    {
+        m_pHBoxs[i] = gtk_hbox_new( FALSE, 0 );
+
+        m_pAligns[i] = gtk_alignment_new(0, 0, 0, 1);
+
+        m_pLists[i] = gtk_combo_box_new_text();
+
+        m_pListLabels[i] = gtk_label_new( "" );
+
+#define LABEL_LIST( elem ) \
+        case elem : \
+            aLabel = aResProvider.getResString( LISTBOX_##elem##_LABEL ); \
+            setLabel( LISTBOX_##elem##_LABEL, aLabel ); \
+            break
+
+          switch( i )
+        {
+            LABEL_LIST( VERSION );
+            LABEL_LIST( TEMPLATE );
+            LABEL_LIST( IMAGE_TEMPLATE );
+            default:
+                OSL_TRACE("Handle unknown control %d\n", i);
+                break;
+        }
+
+        gtk_container_add( GTK_CONTAINER( m_pAligns[i]), m_pLists[i] );
+        gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pAligns[i], FALSE, FALSE, 0 );
+
+        gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pListLabels[i], FALSE, FALSE, 0 );
+
+        gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pHBoxs[i], FALSE, FALSE, 0 );
+    }
+
+    gtk_file_chooser_set_extra_widget( GTK_FILE_CHOOSER( m_pDialog ), m_pVBox );
+
+    gtk_widget_show( m_pVBox );
 }
 
 //------------------------------------------------------------------------------------
@@ -470,6 +577,20 @@ shrinkFilterName( const rtl::OUString &rFilterName )
     return aRealName;
 }
 
+static void
+dialog_remove_buttons( GtkDialog *pDialog )
+{
+    g_return_if_fail( GTK_IS_DIALOG( pDialog ) );
+
+    GList *pChildren =
+        gtk_container_get_children( GTK_CONTAINER( pDialog->action_area ) );
+
+    for( GList *p = pChildren; p; p = p->next )
+        gtk_widget_destroy( GTK_WIDGET( p->data ) );
+
+    g_list_free( pChildren );
+}
+
 //------------------------------------------------------------------------------------
 namespace {
     //................................................................................
@@ -622,8 +743,16 @@ rtl::OUString SAL_CALL SalGtkFilePicker::getCurrentFilter() throw( uno::RuntimeE
     if( GtkFileFilter *filter = gtk_file_chooser_get_filter( GTK_FILE_CHOOSER( m_pDialog ) ) )
     {
         const gchar* filtername = gtk_file_filter_get_name( filter );
-        m_aCurrentFilter = rtl::OUString( filtername, strlen( filtername ),
-                            RTL_TEXTENCODING_UTF8 );
+        OUString aFilterName(filtername, strlen(filtername), RTL_TEXTENCODING_UTF8);
+        FilterList::iterator aEnd = m_pFilterList->end();
+        for (FilterList::iterator aIter = m_pFilterList->begin(); aIter != aEnd; ++aIter)
+        {
+            if (aFilterName == shrinkFilterName( aIter->getTitle()))
+            {
+                m_aCurrentFilter = aIter->getTitle();
+                break;
+            }
+        }
     }
 
     OSL_TRACE( "Returning current filter of %s\n",
@@ -682,8 +811,11 @@ void SAL_CALL SalGtkFilePicker::setDefaultName( const rtl::OUString& aName )
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     OString aStr = OUStringToOString( aName, RTL_TEXTENCODING_UTF8 );
-    gtk_file_chooser_set_current_name( GTK_FILE_CHOOSER( m_pDialog ),
-                       aStr.getStr() );
+    GtkFileChooserAction eAction = gtk_file_chooser_get_action( GTK_FILE_CHOOSER( m_pDialog ) );
+
+    // set_current_name launches a Gtk critical error if called for other than save
+    if( GTK_FILE_CHOOSER_ACTION_SAVE == eAction )
+        gtk_file_chooser_set_current_name( GTK_FILE_CHOOSER( m_pDialog ), aStr.getStr() );
 }
 
 void SAL_CALL SalGtkFilePicker::setDisplayDirectory( const rtl::OUString& rDirectory )
@@ -843,7 +975,8 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
         btn = GTK_RESPONSE_YES; // we dont want to repeat unless user clicks NO for file save.
 
         resumeEventNotification();
-        gint nStatus = gtk_dialog_run( GTK_DIALOG( m_pDialog ) );
+        RunDialog aRunInMain(m_pDialog);
+        gint nStatus = aRunInMain.runandwaitforresult();
         suspendEventNotification();
         switch( nStatus )
         {
@@ -856,14 +989,20 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                         OString sFileName = rtl::OUStringToOString( aPathSeq[0], RTL_TEXTENCODING_UTF8 );
                         if( g_file_test( g_filename_from_uri( sFileName.getStr(), NULL, NULL ), G_FILE_TEST_IS_REGULAR ) )
                         {
+                            CResourceProvider aResProvider;
                             GtkWidget *dlg;
 
                             dlg = gtk_message_dialog_new( GTK_WINDOW( m_pDialog ), GTK_DIALOG_MODAL,
                                 GTK_MESSAGE_QUESTION,
                                 GTK_BUTTONS_YES_NO,
-                                "The file already exists. Overwrite?" );
+                                  OUStringToOString(
+                                    aResProvider.getResString( FILE_PICKER_OVERWRITE ),
+                                    RTL_TEXTENCODING_UTF8 ).getStr() );
 
-                            gtk_window_set_title( GTK_WINDOW( dlg ), "Overwrite file?" );
+                            gtk_window_set_title( GTK_WINDOW( dlg ),
+                                OUStringToOString(aResProvider.getResString(FILE_PICKER_TITLE_SAVE ),
+                                RTL_TEXTENCODING_UTF8 ).getStr() );
+
                             gtk_dialog_set_has_separator( GTK_DIALOG( dlg ), FALSE );
 
                             btn = gtk_dialog_run( GTK_DIALOG( dlg ) );
@@ -887,9 +1026,6 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                 break;
         }
     }
-
-    gtk_widget_hide( m_pDialog );
-
     shutdownEventNotification();
     return retVal;
 }
@@ -1492,108 +1628,19 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
                 1 );
     }
 
-    CResourceProvider aResProvider;
-    OUString aLabel;
+    if( GTK_FILE_CHOOSER_ACTION_SAVE == eAction )
+    {
+        CResourceProvider aResProvider;
+        OUString aFilePickerTitle(aResProvider.getResString( FILE_PICKER_TITLE_SAVE ));
+        gtk_window_set_title ( GTK_WINDOW( m_pDialog ),
+            OUStringToOString( aFilePickerTitle, RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
 
-    m_pDialog = gtk_file_chooser_dialog_new( "File Selection", NULL,
-            eAction,
-            GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-            first_button_text, GTK_RESPONSE_ACCEPT,
-            NULL );
-
+    gtk_file_chooser_set_action( GTK_FILE_CHOOSER( m_pDialog ), eAction);
+    dialog_remove_buttons( GTK_DIALOG( m_pDialog ) );
+    gtk_dialog_add_button( GTK_DIALOG( m_pDialog ), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL );
+    gtk_dialog_add_button( GTK_DIALOG( m_pDialog ), first_button_text, GTK_RESPONSE_ACCEPT );
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
-
-    gtk_file_chooser_set_local_only( GTK_FILE_CHOOSER( m_pDialog ), FALSE );
-    gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), FALSE );
-
-    m_pVBox = gtk_vbox_new( FALSE, 0 );
-
-        int i;
-
-    for( i = 0; i < TOGGLE_LAST; i++ )
-    {
-        m_pToggles[i] = gtk_check_button_new();
-
-#define LABEL_TOGGLE( elem ) \
-        case elem : \
-            aLabel = aResProvider.getResString( CHECKBOX_##elem ); \
-            setLabel( CHECKBOX_##elem, aLabel ); \
-            break
-
-          switch( i ) {
-
-        LABEL_TOGGLE( AUTOEXTENSION );
-        LABEL_TOGGLE( PASSWORD );
-        LABEL_TOGGLE( FILTEROPTIONS );
-        LABEL_TOGGLE( READONLY );
-        LABEL_TOGGLE( LINK );
-        LABEL_TOGGLE( PREVIEW );
-        LABEL_TOGGLE( SELECTION );
-            default:
-                OSL_TRACE("Handle unknown control %d\n", i);
-                break;
-        }
-
-
-        gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pToggles[i], FALSE, TRUE, 0 );
-    }
-
-    for( i = 0; i < BUTTON_LAST; i++ )
-    {
-        m_pButtons[i] = gtk_button_new();
-
-#define LABEL_BUTTON( elem ) \
-        case elem : \
-            aLabel = aResProvider.getResString( PUSHBUTTON_##elem ); \
-            setLabel( PUSHBUTTON_##elem, aLabel ); \
-            break
-
-          switch( i ) {
-
-        LABEL_BUTTON( PLAY );
-            default:
-                OSL_TRACE("Handle unknown control %d\n", i);
-                break;
-        }
-
-        gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pButtons[i], FALSE, TRUE, 0 );
-    }
-
-    for( i = 0; i < LIST_LAST; i++ )
-    {
-        m_pHBoxs[i] = gtk_hbox_new( FALSE, 0 );
-
-        m_pAligns[i] = gtk_alignment_new(0, 0, 0, 1);
-
-        m_pLists[i] = gtk_combo_box_new_text();
-
-        m_pListLabels[i] = gtk_label_new( "" );
-
-#define LABEL_LIST( elem ) \
-        case elem : \
-            aLabel = aResProvider.getResString( LISTBOX_##elem##_LABEL ); \
-            setLabel( LISTBOX_##elem##_LABEL, aLabel ); \
-            break
-
-          switch( i )
-        {
-            LABEL_LIST( VERSION );
-            LABEL_LIST( TEMPLATE );
-            LABEL_LIST( IMAGE_TEMPLATE );
-            default:
-                OSL_TRACE("Handle unknown control %d\n", i);
-                break;
-        }
-
-        gtk_container_add( GTK_CONTAINER( m_pAligns[i]), m_pLists[i] );
-        gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pAligns[i], FALSE, FALSE, 0 );
-
-        gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pListLabels[i], FALSE, FALSE, 0 );
-
-        gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pHBoxs[i], FALSE, FALSE, 0 );
-    }
-
-    gtk_file_chooser_set_extra_widget( GTK_FILE_CHOOSER( m_pDialog ), m_pVBox );
 
     // Setup special flags
     for( int nTVIndex = 0; nTVIndex < TOGGLE_LAST; nTVIndex++ )
@@ -1613,8 +1660,6 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
             gtk_widget_show( m_pHBoxs[ nTVIndex ] );
         }
     }
-
-    gtk_widget_show( m_pVBox );
 
     // if Preview check is visible, connect the signal handler
     if( mbToggleVisibility[PREVIEW] )
@@ -1689,9 +1734,9 @@ void SalGtkFilePicker::SetCurFilter( const OUString& rFilter )
     GSList *filters = gtk_file_chooser_list_filters ( GTK_FILE_CHOOSER( m_pDialog ) );
     bool bFound = false;
 
-    while( ( !bFound ) && ( NULL != filters ) )
+    for( GSList *iter = filters; !bFound && iter; iter = iter->next )
     {
-        GtkFileFilter* pFilter = reinterpret_cast<GtkFileFilter *>( filters->data );
+        GtkFileFilter* pFilter = reinterpret_cast<GtkFileFilter *>( iter->data );
         G_CONST_RETURN gchar * filtername = gtk_file_filter_get_name( pFilter );
         OUString sFilterName( filtername, strlen( filtername ), RTL_TEXTENCODING_UTF8 );
 
@@ -1702,17 +1747,37 @@ void SalGtkFilePicker::SetCurFilter( const OUString& rFilter )
             gtk_file_chooser_set_filter( GTK_FILE_CHOOSER( m_pDialog ), pFilter );
             bFound = true;
         }
-
-        // Free the node
-        g_object_ref( pFilter );
-        gtk_object_sink( GTK_OBJECT( pFilter ) );
-        g_object_unref( pFilter );
-
-        //    g_free(filters->data);
-        filters = g_slist_next( filters );
     }
 
     g_slist_free( filters );
+}
+
+static gboolean
+case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
+{
+    gboolean bRetval = FALSE;
+    const char *pFilter = (const char *) data;
+
+    g_return_val_if_fail( data != NULL, FALSE );
+    g_return_val_if_fail( filter_info != NULL, FALSE );
+
+    if( !filter_info->filename )
+        return FALSE;
+
+    const char *pExtn = strrchr( filter_info->filename, '.' );
+    if( !pExtn )
+        return FALSE;
+    pExtn++;
+
+    if( !g_ascii_strcasecmp( pFilter, pExtn ) )
+        bRetval = TRUE;
+
+#ifdef DEBUG
+    fprintf( stderr, "'%s' match extn '%s' vs '%s' yeilds %d\n",
+        filter_info->filename, pExtn, pFilter, bRetval );
+#endif
+
+    return bRetval;
 }
 
 void SalGtkFilePicker::implAddFilter( const OUString& rFilter, const OUString& rType )
@@ -1723,6 +1788,8 @@ void SalGtkFilePicker::implAddFilter( const OUString& rFilter, const OUString& r
     OString aFilterName = rtl::OUStringToOString( aShrunkName, RTL_TEXTENCODING_UTF8 );
     gtk_file_filter_set_name( filter, aFilterName );
 
+    static const OUString aStarDot = OUString::createFromAscii( "*." );
+
     if( !rType.compareToAscii( "*.*" ) )
         gtk_file_filter_add_pattern( filter, "*" );
     else
@@ -1732,11 +1799,23 @@ void SalGtkFilePicker::implAddFilter( const OUString& rFilter, const OUString& r
         do
         {
             aToken = rType.getToken( 0, ';', nIndex );
-            if( aToken.getLength() )
+            // Assume all have the "*.<extn>" syntax
+            aToken = aToken.copy( aToken.lastIndexOf( aStarDot ) + 2 );
+            if (aToken.getLength())
             {
-                OString aStr = rtl::OUStringToOString( aToken, RTL_TEXTENCODING_UTF8 );
-                gtk_file_filter_add_pattern( filter, aStr );
+                gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_FILENAME,
+                    case_insensitive_filter,
+                    g_strdup( rtl::OUStringToOString( aToken, RTL_TEXTENCODING_UTF8 ) ),
+                    (GDestroyNotify) g_free );
             }
+#ifdef DEBUG
+            else
+            {
+                g_warning( "Duff filter token '%s'\n",
+                    (const sal_Char *) rtl::OUStringToOString(
+                        rType.getToken( 0, ';', nIndex ), RTL_TEXTENCODING_UTF8 ) );
+            }
+#endif
         }
         while( nIndex >= 0 );
     }
