@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-29 16:35:26 $
+ *  last change: $Author: oj $ $Date: 2001-12-07 09:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1684,7 +1684,9 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
                 { // found outer join
                     bLeftSide = SQL_ISTOKEN(pOuterType->getChild(0),LEFT);
                     bCheck = bLeftSide || SQL_ISTOKEN(pOuterType->getChild(0),RIGHT);
+                    bOk = sal_False;
                 }
+
                 if(bCheck)
                 { // here we know that we have to check on which side our table resides
                     OSQLParseNode* pTableRef = pJoin->getByRule(::connectivity::OSQLParseNode::qualified_join);
