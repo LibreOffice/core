@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:29 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,10 +660,11 @@ sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::supportsService( const OUString
 
 Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException )
 {
-    Sequence< OUString > aSNs( 2 );
+    Sequence< OUString > aSNs( 3 );
 
     aSNs[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.accessibility.Accessible" ) );
     aSNs[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.accessibility.AccessibleContext" ) );
+    aSNs[2] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.AccessibleGraphControl" ) );
 
     return aSNs;
 }
