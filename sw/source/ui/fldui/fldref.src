@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldref.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 20:57:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ TabPage TP_FLD_REF
         Text [ italian ] = "~Tipo di campo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "Tipo de ~campo" ;
-        Text [ finnish ] = "Laji" ;
+        Text [ finnish ] = "~Tyyppi" ;
         Text [ danish ] = "Felttype" ;
         Text [ french ] = "~Type de champ" ;
         Text [ swedish ] = "~Fälttyp" ;
@@ -118,7 +118,7 @@ TabPage TP_FLD_REF
         Text [ italian ] = "~Selezione" ;
         Text [ portuguese_brazilian ] = "Seleção" ;
         Text [ portuguese ] = "~Selecção" ;
-        Text [ finnish ] = "Valinta" ;
+        Text [ finnish ] = "~Valinta" ;
         Text [ danish ] = "Udvalg" ;
         Text [ french ] = "~Sélection" ;
         Text [ swedish ] = "~Urval" ;
@@ -173,6 +173,7 @@ TabPage TP_FLD_REF
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~ormato";
+        Text[ finnish ] = "~Muotoile";
     };
     ListBox LB_REFFORMAT
     {
@@ -210,6 +211,7 @@ TabPage TP_FLD_REF
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No~mbre";
+        Text[ finnish ] = "~Nimi";
     };
     Edit ED_REFNAME
     {
@@ -229,7 +231,7 @@ TabPage TP_FLD_REF
         Text [ italian ] = "~Valore" ;
         Text [ portuguese_brazilian ] = "Valor" ;
         Text [ portuguese ] = "Valor" ;
-        Text [ finnish ] = "Arvo" ;
+        Text [ finnish ] = "~Arvo" ;
         Text [ danish ] = "Værdi" ;
         Text [ french ] = "~Valeur" ;
         Text [ swedish ] = "~Värde" ;
@@ -283,6 +285,7 @@ TabPage TP_FLD_REF
         Text[ turkish ] = "Metin iþareti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Marcas de texto";
+        Text[ finnish ] = "Kirjanmerkit";
     };
     String STR_REFFOOTNOTE
     {
@@ -335,6 +338,7 @@ TabPage TP_FLD_REF
         Text[ turkish ] = "Son notlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Notas finales";
+        Text[ finnish ] = "Loppuhuomautukset";
     };
     Text [ english_us ] = "References" ;
     Text [ portuguese_brazilian ] = "Referenzen" ;
@@ -356,4 +360,5 @@ TabPage TP_FLD_REF
     Text[ turkish ] = "Referans";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Referencias";
+    Text[ finnish ] = "Viitteet";
 };
