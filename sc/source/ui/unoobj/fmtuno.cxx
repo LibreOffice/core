@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-21 09:35:14 $
+ *  last change: $Author: nn $ $Date: 2000-10-04 16:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,10 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
     ScUnoGuard aGuard;
     uno::Reference<sheet::XSheetConditionalEntry> xEntry = GetObjectByIndex_Impl(nIndex);
     uno::Any aAny;
-    aAny <<= xEntry;
+    if (xEntry.is())
+        aAny <<= xEntry;
+    else
+        throw lang::IndexOutOfBoundsException();
     return aAny;
 }
 
@@ -360,25 +363,63 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasElements() throw(uno::RuntimeExce
     return ( getCount() != 0 );
 }
 
+//  conditional format entries have no real names
+//  -> generate name from index
+
+rtl::OUString lcl_GetEntryNameFromIndex( sal_Int32 nIndex )
+{
+    rtl::OUString aRet( RTL_CONSTASCII_USTRINGPARAM( "Entry" ) );
+    aRet += rtl::OUString::valueOf( nIndex );
+    return aRet;
+}
+
 uno::Any SAL_CALL ScTableConditionalFormat::getByName( const rtl::OUString& aName )
             throw(container::NoSuchElementException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
-    //! was fuer Namen ???
-    return uno::Any();
+    ScUnoGuard aGuard;
+
+    uno::Reference<sheet::XSheetConditionalEntry> xEntry;
+    long nCount = aEntries.Count();
+    for (long i=0; i<nCount; i++)
+        if ( aName == lcl_GetEntryNameFromIndex(i) )
+        {
+            xEntry = GetObjectByIndex_Impl(i);
+            break;
+        }
+
+    uno::Any aAny;
+    if (xEntry.is())
+        aAny <<= xEntry;
+    else
+        throw container::NoSuchElementException();
+    return aAny;
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScTableConditionalFormat::getElementNames()
                                                     throw(uno::RuntimeException)
 {
-    //! was fuer Namen ???
-    return uno::Sequence<rtl::OUString>(0);
+    ScUnoGuard aGuard;
+
+    long nCount = aEntries.Count();
+    uno::Sequence<rtl::OUString> aNames(nCount);
+    rtl::OUString* pArray = aNames.getArray();
+    for (long i=0; i<nCount; i++)
+        pArray[i] = lcl_GetEntryNameFromIndex(i);
+
+    return aNames;
 }
 
 sal_Bool SAL_CALL ScTableConditionalFormat::hasByName( const rtl::OUString& aName )
                                                     throw(uno::RuntimeException)
 {
-    //! was fuer Namen ???
+    ScUnoGuard aGuard;
+
+    long nCount = aEntries.Count();
+    for (long i=0; i<nCount; i++)
+        if ( aName == lcl_GetEntryNameFromIndex(i) )
+            return TRUE;
+
     return FALSE;
 }
 
