@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:50:42 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ SdNavigatorWin::SdNavigatorWin(
     aToolbox.SetOutputSizePixel( aTbxSize );
     aToolbox.SetSelectHdl( LINK( this, SdNavigatorWin, SelectToolboxHdl ) );
     aToolbox.SetClickHdl( LINK( this, SdNavigatorWin, ClickToolboxHdl ) );
+    aToolbox.SetDropdownClickHdl( LINK(this, SdNavigatorWin, DropdownClickToolBoxHdl) );
     pBindings->GetImageManager()->RegisterToolBox( &aToolbox, SFX_TOOLBOX_CHANGEOUTSTYLE );
 
     // TreeListBox
@@ -323,6 +324,13 @@ IMPL_LINK( SdNavigatorWin, SelectToolboxHdl, void *, EMPTYARG )
 
 IMPL_LINK( SdNavigatorWin, ClickToolboxHdl, ToolBox*, pBox )
 {
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
+{
     USHORT nId = aToolbox.GetCurItemId();
 
     switch( nId )
@@ -358,7 +366,7 @@ IMPL_LINK( SdNavigatorWin, ClickToolboxHdl, ToolBox*, pBox )
             pMenu->CheckItem( eDragType );
             pMenu->SetSelectHdl( LINK( this, SdNavigatorWin, MenuSelectHdl ) );
 
-            pMenu->Execute( this, aToolbox.GetItemRect( nId ).BottomLeft() );
+            pMenu->Execute( this, aToolbox.GetItemRect( nId ), POPUPMENU_EXECUTE_DOWN );
             pBox->EndSelection();
             delete pMenu;
             //pBox->Invalidate();
