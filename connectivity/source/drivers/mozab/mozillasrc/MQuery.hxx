@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-12-12 15:32:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ namespace connectivity
             void                            setQuerySubDirs( sal_Bool&);
             sal_Bool                        getQuerySubDirs(void) const;
 
-            sal_Int32                       executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon);
+            sal_Int32                       executeQuery(OConnection* _pCon);
 
             sal_Int32                       getRowCount( void );
 
