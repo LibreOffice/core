@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:23:00 $
+ *  last change: $Author: oj $ $Date: 2002-12-09 09:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1016,14 +1016,24 @@ namespace dbaui
         m_aFTDriverClass.Enable(    !bODBC );
         m_aEDDriverClass.Enable(    !bODBC );
 
+        String sOldContent;
+
         if ( bODBC )
+        {
+            sOldContent = m_sOldODBCUrl;
+            m_sOldJDBCUrl = m_aUrl.GetTextNoPrefix();
             m_aUrl.SetText(String::CreateFromAscii("sdbc:mysql:odbc:"));
+        }
         else
         {
+            sOldContent = m_sOldJDBCUrl;
+            m_sOldODBCUrl = m_aUrl.GetTextNoPrefix();
             String sUrl = String::CreateFromAscii("sdbc:mysql:jdbc:");
             sUrl += m_sJDBCDefaultUrl;
             m_aUrl.SetText(sUrl);
         }
+        if ( sOldContent.Len() )
+            m_aUrl.SetTextNoPrefix(sOldContent);
         callModifiedHdl();
 
         return 0;
@@ -1521,6 +1531,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2002/11/21 15:23:00  oj
+ *  #105213# impl new feature of rown mysql driver page
+ *
  *  Revision 1.20  2002/11/15 12:28:32  oj
  *  #105175# insert none for empty string
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:23:01 $
+ *  last change: $Author: oj $ $Date: 2002-12-09 09:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,8 @@ namespace dbaui
         OConnectionURLEdit  m_aUrl;
         PushButton          m_aBrowseConnection;
         String              m_sJDBCDefaultUrl;
+        String              m_sOldODBCUrl;
+        String              m_sOldJDBCUrl;
 
         OMySQLDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
 
@@ -368,6 +370,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2002/11/21 15:23:01  oj
+ *  #105213# impl new feature of rown mysql driver page
+ *
  *  Revision 1.13  2002/11/15 12:28:32  oj
  *  #105175# insert none for empty string
  *
