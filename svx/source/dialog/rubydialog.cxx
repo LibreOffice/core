@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-04-06 09:55:02 $
+ *  last change: $Author: os $ $Date: 2001-04-17 13:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,11 +193,12 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     pImpl(new SvxRubyData_Impl)
 {
     FreeResource();
+    //#85638# automatic detection not yet available
+    aAutoDetectionCB.Hide();
     aEditArr[0] = &aLeft1ED; aEditArr[1] = &aRight1ED;
     aEditArr[2] = &aLeft2ED; aEditArr[3] = &aRight2ED;
     aEditArr[4] = &aLeft3ED; aEditArr[5] = &aRight3ED;
     aEditArr[6] = &aLeft4ED; aEditArr[7] = &aRight4ED;
-
 
     aApplyPB.SetClickHdl(LINK(this, SvxRubyDialog, ApplyHdl_Impl));
     aClosePB.SetClickHdl(LINK(this, SvxRubyDialog, CloseHdl_Impl));
