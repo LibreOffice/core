@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 10:38:58 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef __FRAMEWORK_LOADENV_LOADENV_HXX_
 #define __FRAMEWORK_LOADENV_LOADENV_HXX_
 
@@ -118,6 +117,10 @@
 
 //_______________________________________________
 // includes of an other project
+
+#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
+#include <comphelper/mediadescriptor.hxx>
+#endif
 
 #ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
@@ -249,7 +252,7 @@ class LoadEnv : private ThreadHelpBase
             @descr  Inside this struct e.g. the URL, its type and filter name,
                     the stream or a model directly are saved.
          */
-        ::comphelper::SequenceAsHashMap m_lMediaDescriptor;
+        ::comphelper::MediaDescriptor m_lMediaDescriptor;
 
         /** @short  because the mediadescriptor contains the complete URL ... but
                     some functionality need the structured version, we hold it twice :-(.
