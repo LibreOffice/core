@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:47:19 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@
 #include "hints.hxx"
 #include "dpobject.hxx"
 #include "unoguard.hxx"
+#include "drwlayer.hxx"
 #include "listenercalls.hxx"
 
 using namespace com::sun::star;
@@ -1513,13 +1514,17 @@ ScRange ScDocument::GetRange( USHORT nTab, const Rectangle& rMMRect )
         return ScRange();
     }
 
+    Rectangle aPosRect = rMMRect;
+    if ( IsNegativePage( nTab ) )
+        ScDrawLayer::MirrorRectRTL( aPosRect );         // always with positive (LTR) values
+
     long nSize;
     long nTwips;
     long nAdd;
     BOOL bEnd;
 
     nSize = 0;
-    nTwips = (long) (rMMRect.Left() / HMM_PER_TWIPS);
+    nTwips = (long) (aPosRect.Left() / HMM_PER_TWIPS);
 
     USHORT nX1 = 0;
     bEnd = FALSE;
@@ -1535,7 +1540,7 @@ ScRange ScDocument::GetRange( USHORT nTab, const Rectangle& rMMRect )
             bEnd = TRUE;
     }
 
-    nTwips = (long) (rMMRect.Right() / HMM_PER_TWIPS);
+    nTwips = (long) (aPosRect.Right() / HMM_PER_TWIPS);
 
     USHORT nX2 = nX1;
     bEnd = FALSE;
@@ -1553,7 +1558,7 @@ ScRange ScDocument::GetRange( USHORT nTab, const Rectangle& rMMRect )
 
 
     nSize = 0;
-    nTwips = (long) (rMMRect.Top() / HMM_PER_TWIPS);
+    nTwips = (long) (aPosRect.Top() / HMM_PER_TWIPS);
 
     USHORT nY1 = 0;
     bEnd = FALSE;
@@ -1569,7 +1574,7 @@ ScRange ScDocument::GetRange( USHORT nTab, const Rectangle& rMMRect )
             bEnd = TRUE;
     }
 
-    nTwips = (long) (rMMRect.Bottom() / HMM_PER_TWIPS);
+    nTwips = (long) (aPosRect.Bottom() / HMM_PER_TWIPS);
 
     USHORT nY2 = nY1;
     bEnd = FALSE;
@@ -1790,6 +1795,9 @@ Rectangle ScDocument::GetMMRect( USHORT nStartCol, USHORT nStartRow,
     aRect.Right()   = (long)(aRect.Right()  * HMM_PER_TWIPS);
     aRect.Top()     = (long)(aRect.Top()    * HMM_PER_TWIPS);
     aRect.Bottom()  = (long)(aRect.Bottom() * HMM_PER_TWIPS);
+
+    if ( IsNegativePage( nTab ) )
+        ScDrawLayer::MirrorRectRTL( aRect );
 
     return aRect;
 }
