@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bcaslot.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: mh $ $Date: 2001-10-23 10:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,9 @@
 #include "core_pch.hxx"
 #endif
 
-#pragma hdrstop
 
 #include <sfx2/objsh.hxx>
 #include <svtools/lstner.hxx>
-#include <segmentc.hxx>
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "document.hxx"
@@ -109,18 +106,10 @@ ULONG erCountBCAInserts = 0;
 ULONG erCountBCAFinds = 0;
 #endif
 
-SEG_EOFGLOBALS()
-
-#pragma SEG_SEGCLASS(PTRARR_SEG,WORKSET_CODE)
-
 SV_IMPL_OP_PTRARR_SORT( ScBroadcastAreas, ScBroadcastAreaPtr );
-
-#pragma SEG_SEGCLASS(TYPEINIT_SEG,WORKSET_CODE)
 
 TYPEINIT1( ScHint, SfxSimpleHint );
 TYPEINIT1( ScAreaChangedHint, SfxHint );
-
-#pragma SEG_FUNCDEF(bcaslot_01)
 
 ScBroadcastAreaSlot::ScBroadcastAreaSlot( ScDocument* pDocument,
         ScBroadcastAreaSlotMachine* pBASMa ) :
@@ -132,7 +121,6 @@ ScBroadcastAreaSlot::ScBroadcastAreaSlot( ScDocument* pDocument,
 }
 
 
-#pragma SEG_FUNCDEF(bcaslot_02)
 
 ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
 {
@@ -152,7 +140,6 @@ ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
 }
 
 
-#pragma SEG_FUNCDEF(bcaslot_03)
 
 // nur hier werden neue BroadcastAreas angelegt, wodurch keine doppelten entstehen.
 // Ist rpArea != NULL werden keine Listener gestartet sondern nur die Area
@@ -205,7 +192,6 @@ void ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
 }
 
 
-#pragma SEG_FUNCDEF(bcaslot_04)
 
 // Ist rpArea != NULL werden keine Listener gestopt sondern nur die Area
 // ausgetragen und der RefCount vermindert
@@ -249,7 +235,6 @@ void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
 }
 
 
-#pragma SEG_FUNCDEF(bcaslot_05)
 
 USHORT ScBroadcastAreaSlot::FindBroadcastArea( const ScRange& rRange ) const
 {
@@ -261,7 +246,6 @@ USHORT ScBroadcastAreaSlot::FindBroadcastArea( const ScRange& rRange ) const
 }
 
 
-#pragma SEG_FUNCDEF(bcaslot_06)
 
 ScBroadcastArea* ScBroadcastAreaSlot::GetBroadcastArea(
         const ScRange& rRange ) const
@@ -273,7 +257,6 @@ ScBroadcastArea* ScBroadcastAreaSlot::GetBroadcastArea(
 }
 
 
-#pragma SEG_FUNCDEF(bcaslot_07)
 
 BOOL ScBroadcastAreaSlot::AreaBroadcast( const ScAddress& rAddress,
         const ScHint& rHint
@@ -306,12 +289,10 @@ BOOL ScBroadcastAreaSlot::AreaBroadcast( const ScAddress& rAddress,
     return bIsBroadcasted;
 }
 
-#pragma SEG_FUNCDEF(bcaslot_08)
 
 //  DelBroadcastAreasInRange wird unter Windows (16 Bit) kaputtoptimiert
 
 #ifdef WIN
-#pragma optimize("",off)
 #endif
 
 void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
@@ -339,10 +320,8 @@ void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
 }
 
 #ifdef WIN
-#pragma optimize("",on)
 #endif
 
-#pragma SEG_FUNCDEF(bcaslot_09)
 
 void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
         const ScRange& rRange, short nDx, short nDy, short nDz
@@ -407,7 +386,6 @@ void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
 }
 
 
-#pragma SEG_FUNCDEF(bcaslot_0a)
 
 void ScBroadcastAreaSlot::UpdateInsert( ScBroadcastArea* pArea )
 {
@@ -418,7 +396,6 @@ void ScBroadcastAreaSlot::UpdateInsert( ScBroadcastArea* pArea )
 
 // --- ScBroadcastAreaSlotMachine -------------------------------------
 
-#pragma SEG_FUNCDEF(bcaslot_0b)
 
 ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
         ScDocument* pDocument ) :
@@ -432,7 +409,6 @@ ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
 }
 
 
-#pragma SEG_FUNCDEF(bcaslot_0c)
 
 ScBroadcastAreaSlotMachine::~ScBroadcastAreaSlotMachine()
 {
@@ -453,7 +429,6 @@ ScBroadcastAreaSlotMachine::~ScBroadcastAreaSlotMachine()
 }
 
 
-//#pragma SEG_FUNCDEF(bcaslot_0d)
 
 inline USHORT ScBroadcastAreaSlotMachine::ComputeSlotOffset(
         const ScAddress& rAddress ) const
@@ -472,7 +447,6 @@ inline USHORT ScBroadcastAreaSlotMachine::ComputeSlotOffset(
 }
 
 
-#pragma SEG_FUNCDEF(bcaslot_0e)
 
 void ScBroadcastAreaSlotMachine::ComputeAreaPoints( const ScRange& rRange,
         USHORT& rStart, USHORT& rEnd, USHORT& rRowBreak
@@ -486,7 +460,6 @@ void ScBroadcastAreaSlotMachine::ComputeAreaPoints( const ScRange& rRange,
 }
 
 
-#pragma SEG_FUNCDEF(bcaslot_0f)
 
 void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
         SfxListener* pListener
@@ -549,7 +522,6 @@ void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
 }
 
 
-#pragma SEG_FUNCDEF(bcaslot_10)
 
 void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
         SfxListener* pListener
@@ -603,7 +575,6 @@ void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
 }
 
 
-#pragma SEG_FUNCDEF(bcaslot_11)
 
 BOOL ScBroadcastAreaSlotMachine::AreaBroadcast( const ScAddress& rAddress,
         const ScHint& rHint
@@ -633,7 +604,6 @@ BOOL ScBroadcastAreaSlotMachine::AreaBroadcast( const ScAddress& rAddress,
 }
 
 
-#pragma SEG_FUNCDEF(bcaslot_12)
 
 void ScBroadcastAreaSlotMachine::DelBroadcastAreasInRange(
         const ScRange& rRange
@@ -664,7 +634,6 @@ void ScBroadcastAreaSlotMachine::DelBroadcastAreasInRange(
 }
 
 
-#pragma SEG_FUNCDEF(bcaslot_13)
 
 // alle Betroffenen austragen, verketten, Range anpassen, neu eintragen
 void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
@@ -760,42 +729,3 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
     }
     pEOUpdateChain = NULL;
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.9  2000/09/17 14:08:34  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.8  2000/08/31 16:37:55  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.7  1997/12/04 21:07:30  NN
-    includes
-
-
-      Rev 1.6   04 Dec 1997 22:07:30   NN
-   includes
-
-      Rev 1.5   13 Nov 1997 20:54:50   NN
-   ifndef PCH raus
-
-      Rev 1.4   06 Mar 1997 16:47:38   ER
-   #36765# Teil2: RC_ALWAYS als Liste von Broadcastern
-
-      Rev 1.3   08 Jan 1997 20:11:06   ER
-   ScAddress als Reference (keine temporaeren Objekte ohne inlining)
-
-      Rev 1.2   31 Jan 1996 15:15:38   NN
-   Optimierung nur auf Windows16 abschalten
-
-      Rev 1.1   31 Jan 1996 14:42:52   NN
-   #24968# DelBroadcastAreasInRange ohne Optimierung
-
-      Rev 1.0   26 Jan 1996 20:04:46   ER
-   #24511# new: ScBroadcastAreaSlotMachine (Performance)
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
-
