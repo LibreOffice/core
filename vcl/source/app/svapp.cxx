@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-22 09:39:05 $
+ *  last change: $Author: ssa $ $Date: 2002-10-23 12:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@
 
 using namespace ::com::sun::star::uno;
 
+extern KeyCode ImplReservedKeyCodes[];
 
 // #include <usr/refl.hxx>
 class Reflection;
@@ -476,6 +477,13 @@ void Application::Abort( const XubString& rErrorText )
     aErrorBox.Execute();
     exit(-1);
 #endif
+}
+
+// -----------------------------------------------------------------------
+
+const KeyCode* Application::GetReservedKeyCodes()
+{
+    return ImplReservedKeyCodes;
 }
 
 // -----------------------------------------------------------------------
