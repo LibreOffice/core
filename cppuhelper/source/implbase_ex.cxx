@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase_ex.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:21:16 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 12:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@ bool recursivelyFindType(
     // the object layout, and that they contain slots for the inherited classes
     // in a specifc order.  In theory, that need not hold for any given
     // platform; in practice, it seems to work well on all supported platforms:
+ next:
     for (sal_Int32 i = 0; i < type->nBaseTypes; ++i) {
         if (i > 0) {
             *offset += sizeof (void *);
@@ -209,6 +210,12 @@ bool recursivelyFindType(
                     demandedType))
             {
                 return true;
+            }
+            // Profiling showed that it is important to speed up the common case
+            // of only one base:
+            if (type->nBaseTypes == 1) {
+                type = base;
+                goto next;
             }
             if (recursivelyFindType(demandedType, base, offset)) {
                 return true;
