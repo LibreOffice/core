@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RTableConnectionData.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 13:56:07 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,7 +515,7 @@ BOOL ORelationTableConnectionData::Update()
 
 //  OSL_ENSURE(xKey.is(),"No key found have insertion!");
 
-    xColSup = Reference<XColumnsSupplier>(xKey,UNO_QUERY);
+    xColSup.set(xKey,UNO_QUERY);
     if ( xColSup.is() )
     {
         // The fields the relation marks may not be the same as our LineDatas mark after the relation has been updated
