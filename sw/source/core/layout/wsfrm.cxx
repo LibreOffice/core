@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-12 14:39:06 $
+ *  last change: $Author: ama $ $Date: 2002-01-24 16:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,9 @@
 #ifndef _DBG_LAY_HXX
 #include <dbg_lay.hxx>
 #endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 
 #ifdef DEBUG
 
@@ -269,11 +272,42 @@ void SwFrm::CheckDirection( BOOL bVert )
 {
     if( !IsHeaderFrm() && !IsFooterFrm() )
     {
-        if( bVert )
-            bDerivedVert = 1;
+        if( IsFlyFrm() )
+        {
+            UINT16 nDir = ((SvxFrameDirectionItem&)((SwFlyFrm*)this)->GetFmt()->
+                            GetAttr( RES_FRAMEDIR )).GetValue();
+            if( FRMDIR_ENVIRONMENT == nDir )
+            {
+                bDerivedVert = 1;
+                bDerivedR2L = 1;
+                SetDirFlags( bVert );
+            }
+            else if ( bVert )
+            {
+                bInvalidVert = 0;
+                if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP==nDir
+                    || ((SwFlyFrm*)this)->GetFmt()->GetDoc()->IsBrowseMode() )
+                    bVertical = 0;
+                else
+                    bVertical = 1;
+            }
+            else
+            {
+                bInvalidR2L = 0;
+                if( FRMDIR_HORI_RIGHT_TOP == nDir )
+                    bRightToLeft = 1;
+                else
+                    bRightToLeft = 0;
+            }
+        }
         else
-            bDerivedR2L = 1;
-        SetDirFlags( bVert );
+        {
+            if( bVert )
+                bDerivedVert = 1;
+            else
+                bDerivedR2L = 1;
+            SetDirFlags( bVert );
+        }
     }
 }
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-19 12:27:13 $
+ *  last change: $Author: ama $ $Date: 2002-01-24 16:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,28 +303,57 @@ void SwFrm::CheckDirChange()
     SetInvalidVert( TRUE );
     SetInvalidR2L( TRUE );
     BOOL bChg = bOldR2L != IsRightToLeft();
-    if( ( ( IsVertical() != bOldVert ) || bChg || IsReverse() != bOldRev )
-        && IsLayoutFrm() )
+    if( ( IsVertical() != bOldVert ) || bChg || IsReverse() != bOldRev )
     {
         InvalidateAll();
-        SwFrm* pFrm = ((SwLayoutFrm*)this)->Lower();
-        const SwFmtCol* pCol = NULL;
-        SwLayoutFrm* pBody;
-        if( pFrm && IsPageFrm() )
+        if( IsLayoutFrm() )
         {
-            // If we're a page frame and we change our layout direction,
-            // we have to look for columns and rearrange them.
-            pBody = ((SwPageFrm*)this)->FindBodyCont();
-            if( pBody && pBody->Lower() && pBody->Lower()->IsColumnFrm() )
-                pCol = &((SwPageFrm*)this)->GetFmt()->GetCol();
+            SwFrm* pFrm = ((SwLayoutFrm*)this)->Lower();
+            const SwFmtCol* pCol = NULL;
+            SwLayoutFrm* pBody;
+            if( pFrm && IsPageFrm() )
+            {
+                // If we're a page frame and we change our layout direction,
+                // we have to look for columns and rearrange them.
+                pBody = ((SwPageFrm*)this)->FindBodyCont();
+                if( pBody && pBody->Lower() && pBody->Lower()->IsColumnFrm() )
+                    pCol = &((SwPageFrm*)this)->GetFmt()->GetCol();
+                SwSortDrawObjs *pObjs = ((SwPageFrm*)this)->GetSortedObjs();
+                if( pObjs )
+                {
+                    USHORT nCnt = pObjs->Count();
+                    for ( USHORT i = 0; i < nCnt; ++i )
+                    {
+                        SdrObject *pObj = (*pObjs)[i];
+                        if ( pObj->IsWriterFlyFrame() )
+                        {
+                            SwFlyFrm *pFly =
+                                        ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+                            if( pFly->GetAnchor() == this )
+                                pFly->CheckDirChange();
+                        }
+                    }
+                }
+            }
+            while( pFrm )
+            {
+                pFrm->CheckDirChange();
+                pFrm = pFrm->GetNext();
+            }
+            if( pCol )
+                pBody->AdjustColumns( pCol, FALSE );
         }
-        while( pFrm )
+        if( !IsPageFrm() && GetDrawObjs() )
         {
-            pFrm->CheckDirChange();
-            pFrm = pFrm->GetNext();
+            const SwDrawObjs *pObjs = GetDrawObjs();
+            USHORT nCnt = pObjs->Count();
+            for ( USHORT i = 0; i < nCnt; ++i )
+            {
+                SdrObject *pObj = (*pObjs)[i];
+                if( pObj->IsWriterFlyFrame() )
+                    ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->CheckDirChange();
+            }
         }
-        if( pCol )
-            pBody->AdjustColumns( pCol, FALSE );
     }
 }
 

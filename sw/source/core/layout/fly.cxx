@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-21 09:48:54 $
+ *  last change: $Author: ama $ $Date: 2002-01-24 16:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,6 +898,14 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
         case RES_SHADOW:
             rInvFlags |= 0x17;
             break;
+
+#ifdef VERTICAL_LAYOUT
+        case RES_FRAMEDIR :
+            SetDerivedVert( FALSE );
+            SetDerivedR2L( FALSE );
+            CheckDirChange();
+            break;
+#endif
 
         case RES_OPAQUE:
             {

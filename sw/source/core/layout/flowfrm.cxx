@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-14 16:08:34 $
+ *  last change: $Author: ama $ $Date: 2002-01-24 16:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1331,6 +1331,45 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
         nUpper = pAttrs->GetULSpace().GetUpper();
 
     nUpper += pAttrs->GetTopLine( &rThis );
+
+#ifdef VERTICAL_LAYOUT
+    if( rThis.IsInDocBody() )
+    {
+        const SwPageFrm* pPg = rThis.FindPageFrm();
+        const SwPageDesc* pDesc = pPg->GetPageDesc();
+        if( pDesc )
+        {
+            long nRegDiff = pDesc->GetRegHeight();
+            if( nRegDiff )
+            {
+                long nRegSum = ( 7 * nRegDiff ) / 4;
+                const SwFrm* pBody = pPg->FindBodyCont();
+                if( pBody )
+                {
+                    SWRECTFN( (&rThis) )
+                    SwTwips nOrig = (pBody->*fnRect->fnGetPrtTop)();
+                    SwTwips nTop = (rThis.Frm().*fnRect->fnGetTop)();
+                    if( bVert )
+                    {
+                        nTop -= nUpper;
+                        SwTwips nY = nOrig + nRegSum *( (nOrig-nTop)/nRegSum );
+                        if( nY > nTop )
+                            nY -= nRegSum;
+                        nUpper = nTop + nUpper - nY;
+                    }
+                    else
+                    {
+                        nTop += nUpper;
+                        SwTwips nY = nOrig + nRegSum *( (nTop-nOrig)/nRegSum );
+                        if( nY < nTop )
+                            nY += nRegSum;
+                        nUpper = nY - rThis.Frm().Top();
+                    }
+                }
+            }
+        }
+    }
+#endif
 
     delete pAccess;
     return nUpper;

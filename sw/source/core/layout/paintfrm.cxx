@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-23 15:19:14 $
+ *  last change: $Author: ama $ $Date: 2002-01-24 16:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3008,10 +3008,13 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
     if( pDesc && OUTDEV_PRINTER != pOut->GetOutDevType() )
     {
         long nRegDiff = pDesc->GetRegHeight();
-        if( nRegDiff )
+        if( !nRegDiff )
+            return;
+        const SwFrm* pBody = FindBodyCont();
+        if( pBody )
         {
-            SwRect aGrid( Prt() );
-            aGrid += Frm().Pos();
+            SwRect aGrid( pBody->Prt() );
+            aGrid += pBody->Frm().Pos();
             SwRect aInter( aGrid );
             aInter.Intersection( rRect );
             if( aInter.HasArea() )

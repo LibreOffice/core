@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-21 11:41:36 $
+ *  last change: $Author: ama $ $Date: 2002-01-24 16:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #include "htmltbl.hxx"
 #include "pagedesc.hxx"
 #include "poolfmt.hxx"
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 
 /*************************************************************************
 |*
@@ -205,7 +208,6 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
     nPhyPageNum( 0 )
 {
 #ifdef VERTICAL_LAYOUT
-    // Test
     SetDerivedVert( FALSE );
     SetDerivedR2L( FALSE );
 #endif
@@ -308,23 +310,27 @@ SwPageFrm::~SwPageFrm()
 
 void SwPageFrm::CheckDirection( BOOL bVert )
 {
-#ifndef TEST
+#ifdef VERTICAL_LAYOUT
+    UINT16 nDir =
+            ((SvxFrameDirectionItem&)GetFmt()->GetAttr( RES_FRAMEDIR )).GetValue();
     if( bVert )
     {
-        if( ( pDesc && pDesc->GetLandscape() ) ||
+        if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir ||
             GetFmt()->GetDoc()->IsBrowseMode() )
             bVertical = 0;
         else
             bVertical = 1;
+/*
         if( pDesc && pDesc->GetName().GetChar(0)=='x')
             bReverse = 1;
         else
+ */
             bReverse = 0;
         bInvalidVert = 0;
     }
     else
     {
-        if( pDesc && pDesc->GetName().GetChar(1)=='x')
+        if( FRMDIR_HORI_RIGHT_TOP == nDir )
             bRightToLeft = 1;
         else
             bRightToLeft = 0;
@@ -578,9 +584,6 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             /* kein break hier */
         case RES_FRM_SIZE:
         {
-#ifdef VERTICAL_LAYOUT
-            CheckDirChange();
-#endif
             const SwRect aOldRect( Frm() );
             if ( GetFmt()->GetDoc()->IsBrowseMode() )
             {
@@ -634,6 +637,11 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             //Hier wird die Seite ggf. zerstoert!
             ((SwRootFrm*)GetUpper())->RemoveFtns( 0, FALSE, TRUE );
             break;
+#ifdef VERTICAL_LAYOUT
+        case RES_FRAMEDIR :
+            CheckDirChange();
+            break;
+#endif
 
         default:
             bClear = FALSE;
