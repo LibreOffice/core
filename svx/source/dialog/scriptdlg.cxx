@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 15:41:00 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 #include <com/sun/star/script/provider/ScriptErrorRaisedException.hpp>
 #include <com/sun/star/script/provider/ScriptExceptionRaisedException.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
 
 #include <com/sun/star/script/XInvocation.hpp>
 
@@ -268,10 +268,9 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
 
             if ( xDocumentModel.is() )
             {
-                Reference< ::drafts::com::sun::star::frame::XModuleManager >
+                Reference< ::com::sun::star::frame::XModuleManager >
                     xModuleManager( xCtx->getServiceManager()->createInstanceWithContext(
-                        ::rtl::OUString::createFromAscii("drafts." // xxx todo
-                              "com.sun.star.frame.ModuleManager"), xCtx ),
+                        ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager"), xCtx ),
                                     UNO_QUERY_THROW );
 
                 Reference<container::XNameAccess> xModuleConfig(
