@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:34:40 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:21:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include <helpid.hrc>
 #include <tools/isolang.hxx>
 #include <vcl/menu.hxx>
+#include <acorrcfg.hxx>
 
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
@@ -1117,7 +1118,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         {
             DBG_ASSERT(nId - MN_AUTOSTART < aAlt.getLength(), "index out of range");
             String aWord = pAlt[nId - MN_AUTOSTART];
-            SvxAutoCorrect* pAutoCorrect = EE_DLL()->GetGlobalData()->GetAutoCorrect();
+            SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
             if ( pAutoCorrect )
                 pAutoCorrect->PutText( aSelected, aWord, PIMPEE->GetLanguage( aPaM2 ) );
             InsertText( aWord );
