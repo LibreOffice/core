@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hro $ $Date: 2001-02-22 12:14:50 $
+ *  last change: $Author: abi $ $Date: 2001-03-02 12:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2193,6 +2193,38 @@ shell::copyPersistentSet( const rtl::OUString& srcUnqPath,
 }
 
 
+osl::FileBase::RC osl_File_copy( const rtl::OUString& strPath,
+                                 const rtl::OUString& strDestPath,
+                                 sal_Bool test = false )
+{
+    if( test )
+    {
+        osl::DirectoryItem aItem;
+        if( osl::DirectoryItem::get( strDestPath,aItem ) != osl::FileBase:: E_NOENT )
+            return osl::FileBase::E_EXIST;
+    }
+
+    return osl::File::copy( strPath,strDestPath );
+}
+
+
+
+osl::FileBase::RC osl_File_move( const rtl::OUString& strPath,
+                                 const rtl::OUString& strDestPath,
+                                 sal_Bool test = false )
+{
+    if( test )
+    {
+        osl::DirectoryItem aItem;
+        if( osl::DirectoryItem::get( strDestPath,aItem ) != osl::FileBase:: E_NOENT )
+            return osl::FileBase::E_EXIST;
+    }
+
+    return osl::File::move( strPath,strDestPath );
+}
+
+
+
 // Moves "srcUnqPath" to "dstUnqPath/NewTitle"
 void SAL_CALL
 shell::move( sal_Int32 CommandId,
@@ -2218,7 +2250,7 @@ shell::move( sal_Int32 CommandId,
     if( aStatus.isValid( FileStatusMask_Type ) )
         isDocument = aStatus.getFileType() == osl::FileStatus::Regular;
 
-    err = osl::File::move( srcUnqPath,dstUnqPath );   // Why, the hell, is this not all what has to be done?
+    err = osl_File_move( srcUnqPath,dstUnqPath,true );   // Why, the hell, is this not all what has to be done?
 
     if( err == osl::FileBase::E_EXIST )
     {
@@ -2235,7 +2267,7 @@ shell::move( sal_Int32 CommandId,
 //              call to osl::File::move. call osl::File::remove() instead.
 //              remove( CommandId,dstUnqPath,IsWhat );
                 osl::File::remove( dstUnqPath );
-                err = osl::File::move( srcUnqPath,dstUnqPath );
+                err = osl_File_move( srcUnqPath,dstUnqPath );
             }
             break;
             case NameClash::RENAME:
@@ -2263,7 +2295,7 @@ shell::move( sal_Int32 CommandId,
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
 
-                    err = osl::File::move( srcUnqPath,newDstUnqPath );
+                    err = osl_File_move( srcUnqPath,newDstUnqPath,true );
                 }
                 while ( ( err == osl::FileBase::E_EXIST ) && ( nTry < 10000 ) );
 
@@ -2322,13 +2354,14 @@ shell::move( sal_Int32 CommandId,
 osl::FileBase::RC SAL_CALL
 shell::copy_recursive( const rtl::OUString& srcUnqPath,
                        const rtl::OUString& dstUnqPath,
-                       sal_Int32 TypeToCopy )
+                       sal_Int32 TypeToCopy,
+                       sal_Bool testExistBeforeCopy )
 {
     osl::FileBase::RC err;
 
     if( TypeToCopy == -1 ) // Document
     {
-        err = osl::File::copy( srcUnqPath,dstUnqPath );
+        err = osl_File_copy( srcUnqPath,dstUnqPath,testExistBeforeCopy );
     }
     else if( TypeToCopy == +1 ) // Folder
     {
@@ -2367,7 +2400,7 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
                 newDstUnqPath += tit;
 
                 if ( newSrcUnqPath != dstUnqPath )
-                    copy_recursive( newSrcUnqPath,newDstUnqPath,newTypeToCopy );
+                    copy_recursive( newSrcUnqPath,newDstUnqPath,newTypeToCopy,false );
             }
 
             if( next != osl::FileBase::E_NOENT )
@@ -2407,7 +2440,7 @@ shell::copy(
 
     sal_Int32 IsWhat = isDocument ? -1 : 1;
 
-    err = copy_recursive( srcUnqPath,dstUnqPath,IsWhat );
+    err = copy_recursive( srcUnqPath,dstUnqPath,IsWhat,true );
 
     if( err == osl::FileBase::E_EXIST )
     {
@@ -2419,7 +2452,7 @@ shell::copy(
             case NameClash::OVERWRITE:
             {
                 remove( CommandId,dstUnqPath,IsWhat );
-                err = copy_recursive( srcUnqPath,dstUnqPath,IsWhat );
+                err = copy_recursive( srcUnqPath,dstUnqPath,IsWhat,false );
             }
             break;
             case NameClash::RENAME:
@@ -2447,7 +2480,7 @@ shell::copy(
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
 
-                    err = copy_recursive( srcUnqPath, dstUnqPath, IsWhat );
+                    err = copy_recursive( srcUnqPath, dstUnqPath, IsWhat,true );
                 }
                 while ( ( err == osl::FileBase::E_EXIST ) && ( nTry < 10000 ) );
 
@@ -3609,3 +3642,7 @@ shell::MountPoint::MountPoint( const rtl::OUString& aMountPoint,
     sal_Int32 lastIndex = Title.lastIndexOf( sal_Unicode( '/' ) );
     m_aTitle = Title.copy( lastIndex + 1 );
 }
+
+
+
+

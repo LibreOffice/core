@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-30 11:02:18 $
+ *  last change: $Author: abi $ $Date: 2001-03-02 12:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,8 @@ namespace fileaccess {
 
         osl::FileBase::RC SAL_CALL copy_recursive( const rtl::OUString& srcUnqPath,
                                                    const rtl::OUString& dstUnqPath,
-                                                   sal_Int32 TypeToCopy );
+                                                   sal_Int32 TypeToCopy,
+                                                   sal_Bool testExistence );
 
         // General
         vos::OMutex m_aMutex;
