@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:12:49 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 07:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,12 +261,22 @@ public:
     bool mbOwnGraphicResolver;
     bool mbOwnEmbeddedResolver;
     INetURLObject aBaseURL;
+    // --> OD 2004-08-10 #i28749# - boolean, indicating that position attributes
+    // of shapes are given in horizontal left-to-right layout. This is the case
+    // for the OpenOffice.org file format.
+    sal_Bool mbShapePositionInHoriL2R;
+    // <--
 
     SvXMLImport_Impl() :
 #ifdef CONV_STAR_FONTS
         hBatsFontConv( 0 ), hMathFontConv( 0 ),
 #endif
-        mbOwnGraphicResolver( false ), mbOwnEmbeddedResolver( false ) {}
+        mbOwnGraphicResolver( false ),
+        mbOwnEmbeddedResolver( false ),
+        // --> OD 2004-08-11 #i28749#
+        mbShapePositionInHoriL2R( sal_False )
+        // <--
+    {}
     ~SvXMLImport_Impl()
     {
 #ifdef CONV_STAR_FONTS
@@ -935,7 +945,14 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                         pImpl->aBaseURL.insertName( sRelPath );
                     pImpl->aBaseURL.insertName( sName );
                 }
-
+                // --> OD 2004-08-10 #i28749# - retrieve property <ShapePositionInHoriL2R>
+                sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("ShapePositionInHoriL2R" ) );
+                if( xPropertySetInfo->hasPropertyByName(sPropName) )
+                {
+                    uno::Any aAny = xImportInfo->getPropertyValue(sPropName);
+                    aAny >>= (pImpl->mbShapePositionInHoriL2R);
+                }
+                // <--
             }
         }
     }
@@ -1651,4 +1668,10 @@ void SvXMLImport::DisposingModel()
     return mxServiceFactory;
 }
 
+// --> OD 2004-08-10 #i28749#
+sal_Bool SvXMLImport::IsShapePositionInHoriL2R() const
+{
+    return pImpl->mbShapePositionInHoriL2R;
+}
+// <--
 // eof
