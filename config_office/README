@@ -9,6 +9,8 @@ correct version of gcc is found. This should be harmless.
 * It is at present time not possible to use --with-local-solenv to point
 to a solvenv residing at a non-standard location.
 
+* Solaris 8
+
 Running configure on Windows NT:
 
 * configure must be run from the Cygnus bash shell. On the bash command line
