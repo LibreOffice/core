@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2002-08-14 15:54:31 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@
 #include <svxids.hrc>
 #include <dialogs.hrc>
 
-#define ITEMID_COLOR            SID_ATTR_3D_LIGHTCOLOR
+//#define ITEMID_COLOR          SID_ATTR_3D_LIGHTCOLOR - defined in svx3ditems.hxx
 #include <colritem.hxx>
 #include <e3ditem.hxx>
 
