@@ -1,0 +1,133 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XTransitionFilter.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:42:21 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_animations_XTransitionFilter_idl__
+#define __com_sun_star_animations_XTransitionFilter_idl__
+
+#ifndef __com_sun_star_animations_XAnimate_idl__
+#include <com/sun/star/animations/XAnimate.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module animations {
+
+//=============================================================================
+
+/**
+    Base members <member>XAnimate::Values</member>, <member>XAnimate::From</member>,
+    <member>XAnimate::To</member> and <member>XAnimate::By</member> can be used
+    with <atom>double</atom> values that set the transition progress the specific
+    amount of time.
+
+
+    @see http://www.w3.org/TR/smil20/smil-transitions.html#edef-transitionFilter
+*/
+interface XTransitionFilter : XAnimate
+{
+    /** This is the type or family of transition.
+        <br>This attribute is required and must be one of the transition families listed in
+        <const>TransitionType</const>.
+    */
+    [attribute] short Transition;
+
+    /** This is the subtype of the transition.
+        <br>
+        This must be one of the transition subtypes appropriate for the specified <member>Type</member>
+        as listed in <const>TransitionSubType</const>.
+        <const>TransitionSubType::DEFAULT</const> is the default.
+    */
+    [attribute] short Subtype;
+
+    /** Indicates whether the transitionFilter's parent element will transition in or out.
+        Legal values are <true/> indicating that the parent media will become more visible as
+        the transition progress increases and <false/> indicating that the parent media will
+        become less visible as the transition progress increases.
+
+        The default value is </true>.
+    */
+    [attribute] boolean Mode;
+
+    /** This specifies the direction the transition will run.
+        <br>
+        The legal values are <true/> for forward and <false/> for reverse.
+        The default value is <true/>.
+        Note that this does not impact the media being transitioned to, but
+        only affects the geometry of the transition.
+        Transitions which do not have a reverse interpretation should ignore the
+        direction attribute and assume the default value of <true/>.
+    */
+    [attribute] boolean Direction;
+
+    /** If the value of the <member>Type</member> attribute is <const>TransitionType::FADE</const> and
+        the value of the <member>Subtype</member> attribute is  <const>TransitionSubType::FADETOCOLOR</const> or
+        <const>TransitionSubType::FADEFROMCOLOR</const>, then this attribute specifies the starting or ending
+        color of the fade.
+        The default value is 0 (black).
+
+    */
+    [attribute] long FadeColor;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
