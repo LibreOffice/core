@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-04-19 12:19:55 $
+ *  last change: $Author: mib $ $Date: 2001-04-27 15:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2327,8 +2327,11 @@ void SwXTextTable::attachToRange(const uno::Reference< XTextRange > & xTextRange
                 pDoc->SplitNode(*aPam.Start() );
             }
             //TODO: wenn es der letzte Absatz ist, dann muss noch ein Absatz angehaengt werden!
-            pDoc->DeleteAndJoin(aPam);
-            aPam.DeleteMark();
+            if( aPam.HasMark() )
+            {
+                pDoc->DeleteAndJoin(aPam);
+                aPam.DeleteMark();
+            }
             pTable = pDoc->InsertTable(
                                         *aPam.GetPoint(),
                                         nRows,
