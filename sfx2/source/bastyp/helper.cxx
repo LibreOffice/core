@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-19 11:41:31 $
+ *  last change: $Author: mba $ $Date: 2001-02-28 14:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,11 +423,15 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
     DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
+#if SUPD>521
         Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
         Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
                     xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
 
         Content aCnt( aFolderObj.GetMainURL(), new ::ucb::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ) );
+#else
+    Content aCnt( aFolderObj.GetMainURL(), Reference < XCommandEnvironment >() );
+#endif
         Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps(5);
         OUString* pProps = aProps.getArray();
@@ -776,20 +780,36 @@ sal_Bool SfxContentHelper::IsYounger( const String& rIsYoung, const String& rIsO
 // please don't use it (only used in appbas.cxx and appcfg.cxx)
 sal_Bool SfxContentHelper::Exists( const String& rContent )
 {
+    sal_Bool bRet = sal_False;
     INetURLObject aObj( rContent );
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-    rtl::OUString aTmp( aObj.GetMainURL() );
-    rtl::OUString aResult;
-    if ( FileBase::getNormalizedPathFromFileURL( aTmp, aResult )  == FileBase::E_None )
+
+    try
     {
-        FileBase::RC err = Directory::create( aResult );
-        if ( err == FileBase::E_EXIST )
-            return sal_True;
-        else
-            Directory::remove( aResult );
+        Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        // just try to get the property; if no exception is thrown, the content exists!
+        aCnt.isDocument();
+        bRet = sal_True;
+    }
+    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    {
+            DBG_WARNING( "CommandAbortedException" );
+    }
+    catch( ::com::sun::star::ucb::IllegalIdentifierException& )
+    {
+            DBG_WARNING( "IllegalIdentifierException" );
+    }
+    catch( ContentCreationException& )
+    {
+            DBG_WARNING( "IllegalIdentifierException" );
+    }
+    catch( Exception& )
+    {
+        DBG_ERRORFILE( "Any other exception" );
     }
 
-    return sal_False;
+    return bRet;
+
 }
 
 // -----------------------------------------------------------------------
