@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-04 08:34:39 $
+ *  last change: $Author: os $ $Date: 2001-05-21 13:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,7 +804,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_PARA_STYLE           (FN_EXTRA2 + 9)  // jetzt kommen diverse UNO-Ids fuer die
 #define FN_UNO_PAGE_STYLE           (FN_EXTRA2 + 10)  // PropertyMap
 
-#define FN_UNO_FRAME_STYLE          (FN_EXTRA2 + 12)
+#define FN_UNO_FRAME_STYLE_NAME     (FN_EXTRA2 + 12)
 #define FN_UNO_NUM_START_VALUE      (FN_EXTRA2 + 13)
 #define FN_UNO_NUM_LEVEL            (FN_EXTRA2 + 14)
 #define FN_UNO_NUM_RULES            (FN_EXTRA2 + 15)
@@ -880,6 +880,10 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_IS_START                     (FN_EXTRA2 + 81)
 #define FN_UNO_IS_AUTOMATIC_CONTOUR         (FN_EXTRA2 + 82)
 #define FN_UNO_IS_PIXEL_CONTOUR             (FN_EXTRA2 + 83)
+#define FN_UNO_ALTERNATIVE_TEXT             (FN_EXTRA2 + 84)
+#define FN_UNO_ACTUAL_SIZE                  (FN_EXTRA2 + 85)
+#define FN_UNO_GRAPHIC_U_R_L                (FN_EXTRA2 + 86)
+#define FN_UNO_GRAPHIC_FILTER               (FN_EXTRA2 + 87)
 
 /*--------------------------------------------------------------------
     Bereich: Fenster

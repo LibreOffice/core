@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-11 12:52:14 $
+ *  last change: $Author: os $ $Date: 2001-05-21 13:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,7 +669,7 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
     ANCHOR_TYPES_PROPERTY\
     { SW_PROP_NAME(UNO_NAME_BACK_COLOR       ),     RES_BACKGROUND,         &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_BACK_COLOR        },                      \
     { SW_PROP_NAME(UNO_NAME_CONTENT_PROTECTED ),        RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_CONTENT   },                          \
-    { SW_PROP_NAME(UNO_NAME_FRAME_STYLE_NAME),          0,                      &::getCppuType((const OUString*)0),         PROPERTY_NONE, 0},                                   \
+    { SW_PROP_NAME(UNO_NAME_FRAME_STYLE_NAME),          FN_UNO_FRAME_STYLE_NAME,&::getCppuType((const OUString*)0),         PROPERTY_NONE, 0},                                   \
     { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_URL      ),    RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_GRAPHIC_URL    },                 \
     { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_FILTER  ),     RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_GRAPHIC_FILTER    },              \
     { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_LOCATION    ), RES_BACKGROUND,         &::getCppuType((const style::GraphicLocation*)0), PROPERTY_NONE ,MID_GRAPHIC_POSITION},    \
@@ -1337,10 +1337,10 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_HORI_MIRRORED_ON_EVEN_PAGES),           RES_GRFATR_MIRRORGRF,   &::getBooleanCppuType(),            PROPERTY_NONE,      MID_MIRROR_HORZ_EVEN_PAGES            },
                     { SW_PROP_NAME(UNO_NAME_HORI_MIRRORED_ON_ODD_PAGES),            RES_GRFATR_MIRRORGRF,   &::getBooleanCppuType(),            PROPERTY_NONE,      MID_MIRROR_HORZ_ODD_PAGES                 },
                     { SW_PROP_NAME(UNO_NAME_VERT_MIRRORED),         RES_GRFATR_MIRRORGRF,   &::getBooleanCppuType(),            PROPERTY_NONE,     MID_MIRROR_VERT            },
-                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_URL),               0,                      &::getCppuType((const OUString*)0), 0, 0 },
-                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_FILTER),            0,                      &::getCppuType((const OUString*)0), 0, 0 },
-                    { SW_PROP_NAME(UNO_NAME_ACTUAL_SIZE),           0,                      &::getCppuType((const awt::Size*)0),    PropertyAttribute::READONLY, CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT),      0,                      &::getCppuType((const OUString*)0),         PROPERTY_NONE , 0   },
+                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_URL),           FN_UNO_GRAPHIC_U_R_L, &::getCppuType((const OUString*)0), 0, 0 },
+                    { SW_PROP_NAME(UNO_NAME_GRAPHIC_FILTER),        FN_UNO_GRAPHIC_FILTER,      &::getCppuType((const OUString*)0), 0, 0 },
+                    { SW_PROP_NAME(UNO_NAME_ACTUAL_SIZE),           FN_UNO_ACTUAL_SIZE,    &::getCppuType((const awt::Size*)0),  PropertyAttribute::READONLY, CONVERT_TWIPS},
+                    { SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT),      FN_UNO_ALTERNATIVE_TEXT,&::getCppuType((const OUString*)0),   PROPERTY_NONE , 0   },
                     { SW_PROP_NAME(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, &::getCppuType((PointSequenceSequence*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_IS_PIXEL_CONTOUR), FN_UNO_IS_PIXEL_CONTOUR, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
                     { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_CONTOUR), FN_UNO_IS_AUTOMATIC_CONTOUR , &::getBooleanCppuType(), PROPERTY_NONE, 0 },
@@ -1938,7 +1938,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aTextColumns_Impl[] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC),                       WID_TXTCOL_IS_AUTOMATIC, &::getBooleanCppuType(),PROPERTY_NONE, 0},
+                    {SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC),                       WID_TXTCOL_IS_AUTOMATIC, &::getBooleanCppuType(),PropertyAttribute::READONLY, 0},
                     {SW_PROP_NAME(UNO_NAME_AUTOMATIC_DISTANCE),                 WID_TXTCOL_AUTO_DISTANCE, &::getCppuType((const sal_Int32*)0),PROPERTY_NONE, 0},
                     {SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_WIDTH),               WID_TXTCOL_LINE_WIDTH, &::getCppuType((const sal_Int32*)0),PROPERTY_NONE, 0},
                     {SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_COLOR),               WID_TXTCOL_LINE_COLOR, &::getCppuType((const sal_Int32*)0),PROPERTY_NONE,   0},

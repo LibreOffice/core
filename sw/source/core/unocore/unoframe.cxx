@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-04 08:41:21 $
+ *  last change: $Author: os $ $Date: 2001-05-21 13:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ const SfxItemPropertyMap* GetFrameDescMap()
 /*n.i.*/{ SW_PROP_NAME(UNO_NAME_CLIENT_MAP     )    ,       RES_URL,                &::getBooleanCppuType(),            PROPERTY_NONE ,MID_URL_CLIENTMAP         },
         { SW_PROP_NAME(UNO_NAME_CONTENT_PROTECTED) ,        RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_CONTENT   },
         { SW_PROP_NAME(UNO_NAME_EDIT_IN_READONLY),      RES_EDIT_IN_READONLY,   &::getBooleanCppuType(),            PROPERTY_NONE, 0},
-        { SW_PROP_NAME(UNO_NAME_FRAME_STYLE_NAME),          0,                      &::getCppuType((const OUString*)0),         PROPERTY_NONE, 0},
+        { SW_PROP_NAME(UNO_NAME_FRAME_STYLE_NAME),          FN_UNO_FRAME_STYLE_NAME,&::getCppuType((const OUString*)0),         PROPERTY_NONE, 0},
         { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_URL)      ,    RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_GRAPHIC_URL    },
         { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_FILTER)  ,     RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
         { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_LOCATION)   ,  RES_BACKGROUND,         &::getCppuType((const style::GraphicLocation*)0), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
@@ -323,7 +323,7 @@ const SfxItemPropertyMap* GetGraphicDescMap()
 {
     static SfxItemPropertyMap aGraphicDescPropertyMap_Impl[] =
     {
-        { SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT),      0,                      &::getCppuType((const OUString*)0),         PROPERTY_NONE , 0   },
+        { SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT),      FN_UNO_ALTERNATIVE_TEXT,    &::getCppuType((const OUString*)0),         PROPERTY_NONE , 0   },
         { SW_PROP_NAME(UNO_NAME_ANCHOR_PAGE_NO),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_PAGENUM       },
         { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},
         { SW_PROP_NAME(UNO_NAME_BACK_COLOR     )     ,      RES_BACKGROUND,         &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_BACK_COLOR        },
@@ -333,7 +333,7 @@ const SfxItemPropertyMap* GetGraphicDescMap()
         { SW_PROP_NAME(UNO_NAME_CLIENT_MAP     )    ,       RES_URL,                &::getBooleanCppuType(),            PROPERTY_NONE ,MID_URL_CLIENTMAP         },
         { SW_PROP_NAME(UNO_NAME_CONTENT_PROTECTED) ,        RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_CONTENT   },
         { SW_PROP_NAME(UNO_NAME_CONTOUR_OUTSIDE),       RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_CONTOUROUTSIDE  },
-        { SW_PROP_NAME(UNO_NAME_FRAME_STYLE_NAME),          0,                      &::getCppuType((const OUString*)0),         PROPERTY_NONE, 0},
+        { SW_PROP_NAME(UNO_NAME_FRAME_STYLE_NAME),      FN_UNO_FRAME_STYLE_NAME,  &::getCppuType((const OUString*)0),         PROPERTY_NONE, 0},
         { SW_PROP_NAME(UNO_NAME_GRAPHIC_CROP),          RES_GRFATR_CROPGRF,     &::getCppuType((const GraphicCrop*)0),  PROPERTY_NONE, CONVERT_TWIPS },
         { SW_PROP_NAME(UNO_NAME_HORI_MIRRORED_ON_EVEN_PAGES),   RES_GRFATR_MIRRORGRF,   &::getBooleanCppuType(),            PROPERTY_NONE,      MID_MIRROR_HORZ_EVEN_PAGES            },
         { SW_PROP_NAME(UNO_NAME_HORI_MIRRORED_ON_ODD_PAGES),    RES_GRFATR_MIRRORGRF,   &::getBooleanCppuType(),            PROPERTY_NONE,      MID_MIRROR_HORZ_ODD_PAGES                 },
@@ -382,7 +382,7 @@ const SfxItemPropertyMap* GetGraphicDescMap()
         { SW_PROP_NAME(UNO_NAME_ADJUST_BLUE),           RES_GRFATR_CHANNELB,     &::getCppuType((sal_Int16*)0), 0,   0},
         { SW_PROP_NAME(UNO_NAME_GRAPHIC_COLOR_MODE),    RES_GRFATR_DRAWMODE,     &::getCppuType((drawing::ColorMode*)0),        0,   0},
         { SW_PROP_NAME(UNO_NAME_ADJUST_CONTRAST),       RES_GRFATR_CONTRAST,     &::getCppuType((sal_Int16*)0), 0,   0},
-        { SW_PROP_NAME(UNO_NAME_GRAPHIC_FILTER),            0,                      &::getCppuType((const OUString*)0), 0, 0 },
+        { SW_PROP_NAME(UNO_NAME_GRAPHIC_FILTER),        FN_UNO_GRAPHIC_FILTER,  &::getCppuType((const OUString*)0), 0, 0 },
         { SW_PROP_NAME(UNO_NAME_GAMMA),         RES_GRFATR_GAMMA,        &::getCppuType((double*)0),        0,   0},
         { SW_PROP_NAME(UNO_NAME_ADJUST_GREEN),          RES_GRFATR_CHANNELG,     &::getCppuType((sal_Int16*)0), 0,   0},
         { SW_PROP_NAME(UNO_NAME_GRAPHIC_IS_INVERTED),   RES_GRFATR_INVERT,       &::getBooleanCppuType(),   0,   0},
@@ -390,7 +390,7 @@ const SfxItemPropertyMap* GetGraphicDescMap()
         { SW_PROP_NAME(UNO_NAME_ADJUST_RED),            RES_GRFATR_CHANNELR,     &::getCppuType((sal_Int16*)0), 0,   0},
         { SW_PROP_NAME(UNO_NAME_GRAPHIC_ROTATION),      RES_GRFATR_ROTATION,     &::getCppuType((sal_Int16*)0), 0,   0},
         { SW_PROP_NAME(UNO_NAME_TRANSPARENCY),  RES_GRFATR_TRANSPARENCY, &::getCppuType((sal_Int16*)0), 0,   0},
-        { SW_PROP_NAME(UNO_NAME_GRAPHIC_URL),               0,                      &::getCppuType((const OUString*)0), 0, 0 },
+        { SW_PROP_NAME(UNO_NAME_GRAPHIC_URL),           FN_UNO_GRAPHIC_U_R_L,  &::getCppuType((const OUString*)0), 0, 0 },
         { SW_PROP_NAME(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, &::getCppuType((PointSequenceSequence*)0), PropertyAttribute::MAYBEVOID, 0 },
         { SW_PROP_NAME(UNO_NAME_IS_PIXEL_CONTOUR), FN_UNO_IS_PIXEL_CONTOUR, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
         { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_CONTOUR), FN_UNO_IS_AUTOMATIC_CONTOUR , &::getBooleanCppuType(), PROPERTY_NONE, 0 },
@@ -1217,20 +1217,19 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
 
         SwDoc* pDoc = pFmt->GetDoc();
         if( eType == FLYCNTTYPE_GRF &&
-                    (COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ALTERNATIVE_TEXT)||
-                    (pCur &&
-                    ((pCur->nWID >=  RES_GRFATR_BEGIN &&
-                        pCur->nWID < RES_GRFATR_END )||
+                    (pCur->nWID >=  RES_GRFATR_BEGIN &&
+                        pCur->nWID < RES_GRFATR_END)||
                             pCur->nWID == FN_PARAM_COUNTOUR_PP ||
                             pCur->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR ||
-                              pCur->nWID == FN_UNO_IS_PIXEL_CONTOUR))))
+                            pCur->nWID == FN_UNO_IS_PIXEL_CONTOUR ||
+                            FN_UNO_ALTERNATIVE_TEXT == pCur->nWID)
         {
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
             if(pIdx)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
                 SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-                if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ALTERNATIVE_TEXT))
+                if(FN_UNO_ALTERNATIVE_TEXT == pCur->nWID )
                 {
                     OUString uTemp;
                     aValue >>= uTemp;
@@ -1288,7 +1287,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 }
             }
         }
-        else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_FRAME_STYLE_NAME))
+        else if(FN_UNO_FRAME_STYLE_NAME == pCur->nWID)
         {
             SwFrmFmt *pFrmFmt = lcl_GetFrmFmt( aValue, pFmt->GetDoc() );
             if( pFrmFmt )
@@ -1300,8 +1299,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             else
                 throw IllegalArgumentException();
         }
-        else if( COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_GRAPHIC_URL) ||
-                COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_GRAPHIC_FILTER))
+        else if( FN_UNO_GRAPHIC_U_R_L == pCur->nWID ||
+                FN_UNO_GRAPHIC_FILTER == pCur->nWID)
         {
             String sGrfName, sFltName;
             GraphicObject *pGrfObj = 0;
@@ -1310,7 +1309,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             aValue >>= uTemp;
             String sTmp(uTemp);
             UnoActionContext aAction(pFmt->GetDoc());
-            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_GRAPHIC_URL))
+            if(FN_UNO_GRAPHIC_U_R_L == pCur->nWID)
             {
                 if( sTmp.EqualsAscii( sPackageProtocol,
                                       0, sizeof( sPackageProtocol )-1 ) )
@@ -1555,7 +1554,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 }
             }
         }
-        else if( COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_GRAPHIC_URL))
+        else if( FN_UNO_GRAPHIC_U_R_L == pCur->nWID)
         {
             String sGrfName;
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
@@ -1580,26 +1579,26 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             }
             aAny <<= OUString(sGrfName);
         }
-        else if( COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_GRAPHIC_FILTER))
+        else if( FN_UNO_GRAPHIC_FILTER == pCur->nWID )
         {
             String sFltName;
             pFmt->GetDoc()->GetGrfNms( *(SwFlyFrmFmt*)pFmt, 0, &sFltName );
                 aAny <<= OUString(sFltName);
         }
-        else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_FRAME_STYLE_NAME))
+        else if(FN_UNO_FRAME_STYLE_NAME == pCur->nWID)
         {
             aAny <<= OUString(SwXStyleFamilies::GetProgrammaticName(pFmt->DerivedFrom()->GetName(), SFX_STYLE_FAMILY_FRAME));
         }
         else if(eType == FLYCNTTYPE_GRF &&
                 (COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ACTUAL_SIZE) ||
-                    COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ALTERNATIVE_TEXT)))
+                    FN_UNO_ALTERNATIVE_TEXT == pCur->nWID))
         {
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
             if(pIdx)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
                 SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-                if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ALTERNATIVE_TEXT))
+                if(FN_UNO_ALTERNATIVE_TEXT == pCur->nWID)
                     aAny <<= OUString(pNoTxt->GetAlternateText());
                 else
                 {
@@ -1714,11 +1713,11 @@ Sequence< PropertyState > SwXFrame::getPropertyStates(
                 throw UnknownPropertyException();
             if(pCur->nWID == FN_UNO_ANCHOR_TYPES||
                 pCur->nWID == FN_PARAM_LINK_DISPLAY_NAME||
-                COMPARE_EQUAL == pNames[i].compareToAscii(UNO_NAME_FRAME_STYLE_NAME)||
-                COMPARE_EQUAL == pNames[i].compareToAscii(UNO_NAME_GRAPHIC_URL)||
-                COMPARE_EQUAL == pNames[i].compareToAscii(UNO_NAME_GRAPHIC_FILTER)||
-                COMPARE_EQUAL == pNames[i].compareToAscii(UNO_NAME_ACTUAL_SIZE) ||
-                COMPARE_EQUAL == pNames[i].compareToAscii(UNO_NAME_ALTERNATIVE_TEXT))
+                FN_UNO_FRAME_STYLE_NAME == pCur->nWID||
+                FN_UNO_GRAPHIC_U_R_L == pCur->nWID||
+                FN_UNO_GRAPHIC_FILTER     == pCur->nWID||
+                FN_UNO_ACTUAL_SIZE == pCur->nWID||
+                FN_UNO_ALTERNATIVE_TEXT == pCur->nWID)
                 pStates[i] = PropertyState_DIRECT_VALUE;
             else
             {
@@ -2090,10 +2089,10 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             if(pProps->GetProperty(C2S(UNO_NAME_CONTOUR_POLY_POLYGON), pContourPoly))
                 setPropertyValue(C2U(UNO_NAME_CONTOUR_POLY_POLYGON), *pContourPoly);
             uno::Any* pPixelContour;
-            if(pProps->GetProperty(C2S(UNO_NAME_IS_PIXEL_CONTOUR), pContourPoly))
+            if(pProps->GetProperty(C2S(UNO_NAME_IS_PIXEL_CONTOUR), pPixelContour))
                 setPropertyValue(C2U(UNO_NAME_IS_PIXEL_CONTOUR), *pPixelContour);
             uno::Any* pAutoContour;
-            if(pProps->GetProperty(C2S(UNO_NAME_IS_AUTOMATIC_CONTOUR), pContourPoly))
+            if(pProps->GetProperty(C2S(UNO_NAME_IS_AUTOMATIC_CONTOUR), pAutoContour))
                 setPropertyValue(C2U(UNO_NAME_IS_AUTOMATIC_CONTOUR), *pAutoContour);
             uno::Any* pAltText;
             if(pProps->GetProperty(C2S(UNO_NAME_ALTERNATIVE_TEXT), pAltText))
