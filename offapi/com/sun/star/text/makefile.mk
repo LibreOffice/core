@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: mtg $ $Date: 2001-09-25 17:08:09 $
+#   last change: $Author: dvo $ $Date: 2002-02-04 17:02:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -246,7 +246,8 @@ IDLFILES=\
     XWordCursor.idl\
     AuthorDisplayFormat.idl\
     DateDisplayFormat.idl\
-    TimeDisplayFormat.idl
+    TimeDisplayFormat.idl\
+    WritingMode2.idl
 
 # ------------------------------------------------------------------
 

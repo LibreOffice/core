@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: TextFrame.idl,v $
+ *  $RCSfile: WritingMode2.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2002-02-04 17:02:55 $
  *
@@ -58,20 +58,9 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_TextFrame_idl__
-#define __com_sun_star_text_TextFrame_idl__
-
-#ifndef __com_sun_star_text_XTextFrame_idl__
-#include <com/sun/star/text/XTextFrame.idl>
-#endif
-
-#ifndef __com_sun_star_text_BaseFrame_idl__
-#include <com/sun/star/text/BaseFrame.idl>
-#endif
-
 #ifndef __com_sun_star_text_WritingMode2_idl__
-#include <com/sun/star/text/WritingMode2.idl>
-#endif
+#define __com_sun_star_text_WritingMode2_idl__
+
 
 //=============================================================================
 
@@ -79,79 +68,55 @@
 
 //=============================================================================
 
-/** specifies a rectangular shape which contains a <type scope="com::sun::star::drawing">Text</type> object
-    and is attached to a piece of surrounding <type scope="com::sun::star::drawing">Text</type>.
-
-    @see Text
-
-    @example StarBasic
-
-    <p>This example shows how to create a <type>TextFrame</type> and insert
-    it at the very beginning of <type>Text</type> component. The macro
-    is ready to run, if it is a script within a text document. </p>
-
-    <listing>
-    Sub Main
-    oFrame = ThisComponent.createInstance( "com.sun.star.text.TextFrame" )
-    oFrame.Width = 6000
-    ThisComponent.Text.insertTextContent( ThisComponent.Text.Start, oFrame, false )
-    oFrame.Text.String = "Hello, this text is within the frame."
-    End Sub
-    </listing>
+/** this enum describes different writing directions, and also allows
+ * for a value 'PAGE' which causes the writing mode to be obtained from
+ * the current page.
  */
-service TextFrame
+enum WritingMode2
 {
-    /** contains the definition of interfaces and properties that are supported by text frames,
-     graphic objects and embeddedobjects.
-     */
-    service BaseFrame;
-
-    /** This interface makes it possible to access the text within this
-                text frame.
-     */
-    interface com::sun::star::text::XTextFrame;
     //-------------------------------------------------------------------------
-    /** contains the metric height value of the frame.
-     */
-    [property] long FrameHeightAbsolute;
 
-    //-------------------------------------------------------------------------
-    /** contains the metric width value of the frame.
+    /** text within lines is written left-to-right. Lines and blocks are placed
+        top-to-bottom.
+        <p>
+        Typically, this is the writing mode for normal "alphabetic" text.
      */
-    [property] long FrameWidthAbsolute;
+    LR_TB,
 
     //-------------------------------------------------------------------------
 
-    /** specifies a width relative to the width of the
-        surrounding text.
-        <p>If the value for "WidthPercent" is 0, the absolute value from
-        is used.</p>
+    /** text within a line are written right-to-left. Lines and blocks are
+        placed top-to-bottom.
+        <p>
+        Typically, this writing mode is used in Arabic and Hebrew text.
      */
-    [property] byte FrameWidthPercent;
+    RL_TB,
 
     //-------------------------------------------------------------------------
-    /** specifies a width relative to the width of the
-        surrounding text.
 
-        <p>If the value for "HeightPercent" is 0, the absolute value from
-        is used.</p>
+    /** text within a line is written top-to-bottom. Lines and blocks are
+        placed right-to-left.
+        <p>
+        Typically, this writing mode is used in Chinese and Japanese text.
      */
-    [property] byte FrameHeightPercent;
-    //-------------------------------------------------------------------------
-    /** If "AutomaticHeight" is set, then the object grows if it is required
-        by the frame content.
-     */
-    [property] boolean FrameIsAutomaticHeight;
-    //-------------------------------------------------------------------------
-    /** determines the interpretation of the height and relative
-        height properties.@see SizeType
-     */
-    [property] short SizeType;
-    //-----------------------------------------------------------------------------
-    /** contains the writing direction
-     */
-    [optional,property] com::sun::star::text::WritingMode2 WritingMode;
+    TB_RL,
 
+    //-------------------------------------------------------------------------
+
+    /** text within a line is written top-to-bottom. Lines and blocks are
+        placed left-ro-right.
+        <p>
+        Typically, this writing mode is used in Mongolian text.
+     */
+    TB_LR,
+
+    //-------------------------------------------------------------------------
+
+    /** obtain writing mode from the current page.
+        <p>
+        May not be used in page styles.
+    */
+    PAGE
 
 };
 
