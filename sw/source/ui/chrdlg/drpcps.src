@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:38:22 $
+ *  last change: $Author: rt $ $Date: 2000-12-04 11:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,7 +451,7 @@ TabPage TP_DROPCAPS
         Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡(~Y)";
         Text[ arabic ] = "äãØ ÇáÃÍÑİ";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚ À¯Çü(~Y)";
+        Text[ korean ] = "¹®ÀÚ À¯Çü";
         Text[ turkish ] = "Karakter ~biçimi";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
     };
