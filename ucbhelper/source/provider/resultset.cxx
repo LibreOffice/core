@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 14:02:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 
  *************************************************************************/
 
-#ifndef __HASH_MAP__
-#include <hash_map>
-#endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
