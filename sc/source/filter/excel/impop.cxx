@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:34:16 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ ImportExcel::ImportExcel( SvStream& rSvStrm, ScDocument* pDoc, const String& rBa
     pOutlineListBuffer = new OutlineListBuffer( );
 
     // ab Biff8
-    pFormConv = new ExcelToSc( pExcRoot, aIn );
+    pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc( pExcRoot, aIn );
 
     bTabTruncated = FALSE;
 
@@ -422,8 +422,6 @@ void ImportExcel::Boolerr25( void )
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
-        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
-
         double              fVal;
         const ScTokenArray  *pErgebnis;
 
@@ -437,6 +435,11 @@ void ImportExcel::Boolerr25( void )
         GetDoc().PutCell( nCol, nRow, GetScTab(), pCell );
 
         pColRowBuff->Used( nCol, nRow );
+
+        if( bErrOrVal )     // !=0 -> Error
+            GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+        else                // ==0 -> Boolean
+            GetXFIndexBuffer().SetBoolXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -1610,7 +1613,11 @@ void ImportExcel::Boolerr34( void )
 
         GetDoc().PutCell( nCol, nRow, GetScTab(), pZelle );
         pColRowBuff->Used( nCol, nRow );
-        GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+
+        if( bErrOrVal )     // !=0 -> Error
+            GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
+        else                // ==0 -> Boolean
+            GetXFIndexBuffer().SetBoolXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
@@ -1964,6 +1971,7 @@ void ImportExcel::Bof5( void )
 
 void ImportExcel::EndSheet( void )
 {
+    pColRowBuff->Apply( GetScTab() );
     GetXFIndexBuffer().Apply();
 
     pExcRoot->pExtSheetBuff->Reset();
@@ -2341,5 +2349,5 @@ void OutlineDataBuffer::Apply(ScDocument* pD)
     pRowOutlineBuff->SetOutlineArray( pD->GetOutlineTable( nTab, TRUE )->GetRowArray() );
     pRowOutlineBuff->MakeScOutline();
 
-    pColRowBuff->Apply(nTab);
+    pColRowBuff->SetHiddenFlags(nTab);
 }
