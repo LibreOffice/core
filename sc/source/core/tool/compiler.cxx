@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 14:58:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,7 +683,13 @@ xub_StrLen ScCompiler::NextSymbol()
             {
                 if ( nMask & SC_COMPILER_C_IDENT )
                 {   // this catches also $Sheet1.A1:A$2, for example
-                    *pSym++ = c;
+                    if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
+                    {
+                        SetError(errStringOverflow);
+                        eState = ssStop;
+                    }
+                    else
+                        *pSym++ = c;
                 }
                 else if ( 128 <= c || '\'' == c )
                 {   // High values need reparsing with i18n,
