@@ -2,9 +2,9 @@
  *
  *  $RCSfile: historyoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 17:21:22 $
+ *  last change: $Author: cd $ $Date: 2001-08-09 14:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@
 #include <deque>
 #endif
 
+#ifndef __SGI_STL_ALGORITHM
+#include <algorithm>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespaces
 //_________________________________________________________________________________________________________________
@@ -147,6 +151,11 @@ struct IMPL_THistoryItem
         sFilter     = sNewFilter    ;
         sTitle      = sNewTitle     ;
         sPassword   = sNewPassword  ;
+    }
+
+    sal_Bool operator==( const OUString& sSearchedURL )
+    {
+        return( sURL == sSearchedURL );
     }
 
     OUString    sURL        ;
@@ -359,7 +368,7 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
         ++nPosition;
         seqValues[nPosition] >>= aItem.sPassword    ;
         ++nPosition;
-        m_aPicklist.push_front( aItem );
+        m_aPicklist.push_back( aItem );
     }
 
     // Attention: Don't reset nPosition here!
@@ -376,7 +385,7 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
         ++nPosition;
         seqValues[nPosition] >>= aItem.sPassword    ;
         ++nPosition;
-        m_aHistory.push_front( aItem );
+        m_aHistory.push_back( aItem );
     }
 
 /*TODO: Not used in the moment! see Notify() ...
@@ -598,26 +607,44 @@ void SvtHistoryOptions_Impl::AppendItem(            EHistoryType    eHistory    
     switch( eHistory )
     {
         case ePICKLIST  :   {
-                                // If current list full ... delete the oldest item.
-                                if( m_aPicklist.size() >= m_nPicklistSize )
+                                deque< IMPL_THistoryItem >::iterator pItem = ::std::find( m_aPicklist.begin(), m_aPicklist.end(), sURL );
+                                if( pItem == m_aPicklist.end() )
                                 {
-                                    m_aPicklist.pop_back();
+                                    // If current list full ... delete the oldest item.
+                                    if( m_aPicklist.size() >= m_nPicklistSize )
+                                    {
+                                        m_aPicklist.pop_back();
+                                    }
+                                    // Append new item to list.
+                                    m_aPicklist.push_front( aItem );
+                                    SetModified();
                                 }
-                                // Append new item to list.
-                                m_aPicklist.push_front( aItem );
-                                SetModified();
+                                else
+                                {
+                                    m_aPicklist.push_front( *pItem );
+                                    m_aPicklist.erase     ( pItem  );
+                                }
                             }
                             break;
 
         case eHISTORY   :   {
-                                // If current list full ... delete the oldest item.
-                                if( m_aHistory.size() >= m_nHistorySize )
+                                deque< IMPL_THistoryItem >::iterator pItem = ::std::find( m_aHistory.begin(), m_aHistory.end(), sURL );
+                                if( pItem == m_aHistory.end() )
                                 {
-                                    m_aHistory.pop_back();
+                                    // If current list full ... delete the oldest item.
+                                    if( m_aHistory.size() >= m_nHistorySize )
+                                    {
+                                        m_aHistory.pop_back();
+                                    }
+                                    // Append new item to list.
+                                    m_aHistory.push_front( aItem );
+                                    SetModified();
                                 }
-                                // Append new item to list.
-                                m_aHistory.push_front( aItem );
-                                SetModified();
+                                else
+                                {
+                                    m_aHistory.push_front( *pItem );
+                                    m_aHistory.erase      ( pItem  );
+                                }
                             }
                             break;
     }
@@ -628,6 +655,10 @@ void SvtHistoryOptions_Impl::AppendItem(            EHistoryType    eHistory    
 //*****************************************************************************************************************
 Sequence< OUString > SvtHistoryOptions_Impl::impl_GetPropertyNames( sal_uInt32& nPicklistCount, sal_uInt32& nHistoryCount )
 {
+    /* TODO
+        Index basiert einfügen !!! => p0 => 0 p1 => 1 ...
+    */
+
     // First get ALL names of current existing list items in configuration!
     Sequence< OUString > seqPicklistItems = GetNodeNames( PROPERTYNAME_PICKLIST );
     Sequence< OUString > seqHistoryItems  = GetNodeNames( PROPERTYNAME_HISTORY  );
