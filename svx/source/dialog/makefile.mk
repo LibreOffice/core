@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: os $ $Date: 2001-02-02 12:00:00 $
+#   last change: $Author: pb $ $Date: 2001-05-07 11:07:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,9 +111,6 @@ CXXFILES = \
         _contdlg.cxx \
         _bmpmask.cxx \
         iconcdlg.cxx\
-        ivctrl.cxx\
-        imivctl1.cxx\
-        imivctl2.cxx\
         contwnd.cxx \
         ctrdial.cxx\
         ctredlin.cxx\
@@ -266,9 +263,6 @@ SLOFILES=\
         $(SLO)$/_bmpmask.obj\
         $(SLO)$/_contdlg.obj\
         $(SLO)$/iconcdlg.obj\
-        $(SLO)$/ivctrl.obj\
-        $(SLO)$/imivctl1.obj\
-        $(SLO)$/imivctl2.obj\
         $(SLO)$/connect.obj \
         $(SLO)$/connctrl.obj \
         $(SLO)$/contwnd.obj	\
