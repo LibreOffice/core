@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msfilter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:40:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,14 @@
 #define SW_MS_MSFILTER_HXX
 
 #include <set>
-
+#ifndef _SWTYPES_HXX
+#   include <swtypes.hxx>       //SwTwips
+#endif
 #ifndef WW_WWSTYLES_HXX
-#   include "wwstyles.hxx"     //ww::sti
+#   include "wwstyles.hxx"      //ww::sti
 #endif
 #ifndef _RTL_TEXTENC_H
-#   include <rtl/textenc.h>    //rtl_TextEncoding
+#   include <rtl/textenc.h>     //rtl_TextEncoding
 #endif
 
 class SwDoc;
@@ -145,6 +147,24 @@ namespace sw
 
     namespace util
     {
+
+        /** Clips a value to MAX/MIN 16bit value to make it safe for use
+            as a position value to give to writer. i.e. +-57.8cm. Sometimes
+            we see ridiculous values for positioning in rtf and word document,
+            this captures such ones and clips them to values which are
+            still outside the document, but of a value that doesn't cause
+            problems for writer's layout, e.g. see
+            http://www.openoffice.org/issues/show_bug.cgi?id=i9245
+
+            @param nIn
+
+            @return nIn clipped to min/max 16bit value
+
+            @author
+                <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        SwTwips MakeSafePositioningValue(SwTwips nIn);
+
         /** Knows which writer style a given word style should be imported as
 
             Mapping a word style to a writer style has to consider mapping
