@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-22 09:08:08 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #ifndef _PLUGIN_HXX //autogen wg. SvPlugInObject
 #include <so3/plugin.hxx>
 #endif
@@ -104,9 +101,6 @@
 #endif
 #ifndef _SVX_HLNKITEM_HXX //autogen
 #include <svx/hlnkitem.hxx>
-#endif
-#ifndef _SBASLTID_HRC //autogen
-#include <offmgr/sbasltid.hrc>
 #endif
 #ifndef _SVX_SRCHITEM_HXX //autogen
 #include <svx/srchitem.hxx>
@@ -171,17 +165,13 @@
 #ifndef _SVX_PFILEDLG_HXX //autogen wg. SvxPluginFileDlg
 #include <svx/pfiledlg.hxx>
 #endif
-#ifndef _OFA_HTMLCFG_HXX //autogen
-#include <offmgr/htmlcfg.hxx>
-#endif
-#ifndef _OFAACCFG_HXX //autogen
-#include <offmgr/ofaaccfg.hxx>
-#endif
+#include <svx/htmlcfg.hxx>
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HDL_
 #include <com/sun/star/i18n/TransliterationModules.hdl>
 #endif
 
 #include <sot/clsids.hxx>
+#include <svx/acorrcfg.hxx>
 
 #ifndef _SWWDOCSH_HXX //autogen
 #include <wdocsh.hxx>
@@ -304,6 +294,9 @@
 #include <swslots.hxx>
 #endif
 
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
+
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 
 /*--------------------------------------------------------------------
@@ -360,7 +353,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             sal_Unicode cIns = FN_INSERT_HARD_SPACE == nSlot ? CHAR_HARDBLANK
                                                              : CHAR_HARDHYPHEN;
 
-            OfaAutoCorrCfg* pACfg = OFF_APP()->GetAutoCorrConfig();
+            SvxAutoCorrCfg* pACfg = SvxAutoCorrCfg::Get();
             SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
             if( pACorr && pACfg->IsAutoFmtByInput() &&
                     pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
@@ -744,7 +737,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         BOOL bSingleCol = FALSE;
         if( 0!= PTR_CAST(SwWebDocShell, GetView().GetDocShell()) )
         {
-            OfaHtmlOptions* pHtmlOpt = OFF_APP()->GetHtmlOptions();
+            SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
             USHORT nExport = pHtmlOpt->GetExportMode();
             if( HTML_CFG_MSIE == nExport ||
                 HTML_CFG_HTML32 == nExport ||
@@ -1000,7 +993,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                     rSet.DisableItem( nWhich );
                 else if(SID_INSERT_FLOATINGFRAME == nWhich && nHtmlMode&HTMLMODE_ON)
                 {
-                    OfaHtmlOptions* pHtmlOpt = OFF_APP()->GetHtmlOptions();
+                    SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
                     USHORT nExport = pHtmlOpt->GetExportMode();
                     if(HTML_CFG_MSIE_40 != nExport && HTML_CFG_WRITER != nExport )
                         rSet.DisableItem(nWhich);
@@ -1239,7 +1232,12 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     if( !aChars.Len() )
     {
         // Eingestellten Font als Default
-        SvxCharacterMap* pDlg = new SvxCharacterMap( &GetView().GetViewFrame()->GetWindow(), FALSE );
+        //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap( &GetView().GetViewFrame()->GetWindow(), FALSE );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( &GetView().GetViewFrame()->GetWindow(),  ResId(RID_SVXDLG_CHARMAP), FALSE );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+
         Font aDlgFont( pDlg->GetCharFont() );
         SwViewOption aOpt(*GetShell().GetViewOptions());
         String sSymbolFont = aOpt.GetSymbolFont();
