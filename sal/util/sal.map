@@ -501,7 +501,4 @@ UDK_3.1 {
         rtl_math_round;
         rtl_math_stringToDouble;
         rtl_math_uStringToDouble;
-
-    local:
-        *;
-};
+} UDK_3_0_0;
