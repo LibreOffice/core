@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-03 13:30:32 $
+ *  last change: $Author: cmc $ $Date: 2002-12-04 09:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,13 +570,13 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
                             // chp.ibstPropRMark, chp.dttmPropRMark;Complex
         {0x0858, 1, L_FIX}, // "sprmCFEmboss" chp.fEmboss;1 or 0;bit;
         {0x2859, 1, L_FIX}, // "sprmCSfxText" chp.sfxtText;text animation;byte;
-        {0x085A, 0, L_FIX}, // "sprmCFBiDi" ;;;
-        {0x085B, 0, L_FIX}, // "sprmCFDiacColor" ;;;
+        {0x085A, 1, L_FIX}, // "sprmCFBiDi" ;;;
+        {0x085B, 1, L_FIX}, // "sprmCFDiacColor" ;;;
         {0x085C, 1, L_FIX}, // "sprmCFBoldBi" ;;;
-        {0x085D, 0, L_FIX}, // "sprmCFItalicBi" ;;;
+        {0x085D, 1, L_FIX}, // "sprmCFItalicBi" ;;;
         {0x4A5E, 2, L_FIX},
         {0x485F, 2, L_FIX}, // "sprmCLidBi" ;;;
-        {0x4A60, 0, L_FIX}, // "sprmCIcoBi" ;;;
+        {0x4A60, 1, L_FIX}, // "sprmCIcoBi" ;;;
         {0x4A61, 2, L_FIX}, // "sprmCHpsBi" ;;;
         {0xCA62, 0, L_VAR}, // "sprmCDispFldRMark" chp.fDispFldRMark,
                             // chp.ibstDispFldRMark, chp.dttmDispFldRMark ;
@@ -634,7 +634,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x501B, 2, L_FIX}, // "sprmSLnnMin" sep.lnnMin;lnn;word;
         {0x501C, 2, L_FIX}, // "sprmSPgnStart" sep.pgnStart;pgn;word;
         {0x301D, 1, L_FIX}, // "sprmSBOrientation" sep.dmOrientPage;dm;byte;
-        {0x301E, 0, L_FIX}, // "sprmSBCustomize" ;;;
+        {0x301E, 1, L_FIX}, // "sprmSBCustomize" ;;;
         {0xB01F, 2, L_FIX}, // "sprmSXaPage" sep.xaPage;xa;word;
         {0xB020, 2, L_FIX}, // "sprmSYaPage" sep.yaPage;ya;word;
         {0xB021, 2, L_FIX}, // "sprmSDxaLeft" sep.dxaLeft;dxa;word;
@@ -645,8 +645,8 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x5026, 2, L_FIX}, // "sprmSDmPaperReq" sep.dmPaperReq;dm;word;
         {0xD227, 0, L_VAR}, // "sprmSPropRMark" sep.fPropRMark,
                             // sep.ibstPropRMark, sep.dttmPropRMark ;complex
-        {0x3228, 0, L_FIX}, // "sprmSFBiDi" ;;;
-        {0x3229, 0, L_FIX}, // "sprmSFFacingCol" ;;;
+        {0x3228, 1, L_FIX}, // "sprmSFBiDi" ;;;
+        {0x3229, 1, L_FIX}, // "sprmSFFacingCol" ;;;
         {0x322A, 1, L_FIX}, // "sprmSFRTLGutter", set to one if gutter is on
                             // right
         {0x702B, 4, L_FIX}, // "sprmSBrcTop" sep.brcTop;BRC;long;
@@ -657,7 +657,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x7030, 4, L_FIX}, // "sprmSDxtCharSpace" sep.dxtCharSpace;dxt;long;
         {0x9031, 2, L_FIX}, // "sprmSDyaLinePitch"
                             // sep.dyaLinePitch;dya; WRONG:long; RIGHT:short; !
-        {0x5032, 0, L_FIX}, // "sprmSClm" ;;;
+        {0x5032, 1, L_FIX}, // "sprmSClm" ;;;
         {0x5033, 2, L_FIX}, // "sprmSTextFlow" sep.wTextFlow;complex
         {0x5400, 2, L_FIX}, // "sprmTJc" tap.jc;jc;word (low order byte is
                             // significant);
@@ -673,8 +673,8 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0xD608, 0, L_VAR}, // "sprmTDefTable" tap.rgtc;complex
         {0xD609, 0, L_VAR}, // "sprmTDefTableShd" tap.rgshd;complex
         {0x740A, 4, L_FIX}, // "sprmTTlp" tap.tlp;TLP;4 bytes;
-        {0x560B, 0, L_FIX}, // "sprmTFBiDi" ;;;
-        {0x740C, 0, L_FIX}, // "sprmTHTMLProps" ;;;
+        {0x560B, 1, L_FIX}, // "sprmTFBiDi" ;;;
+        {0x740C, 1, L_FIX}, // "sprmTHTMLProps" ;;;
         {0xD620, 0, L_VAR}, // "sprmTSetBrc" tap.rgtc[].rgbrc;complex
         {0x7621, 4, L_FIX}, // "sprmTInsert" tap.rgdxaCenter, tap.rgtc;complex
         {0x5622, 2, L_FIX}, // "sprmTDelete" tap.rgdxaCenter, tap.rgtc;complex
@@ -687,7 +687,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x7629, 0, L_VAR}, // "sprmTTextFlow" tap.rgtc[].fVerticaltap,
                             // rgtc[].fBackwardtap, rgtc[].fRotateFont;0 or 10
                             // or 10 or 1;word;
-        {0xD62A, 0, L_FIX}, // "sprmTDiagLine" ;;;
+        {0xD62A, 1, L_FIX}, // "sprmTDiagLine" ;;;
         {0xD62B, 0, L_VAR}, // "sprmTVertMerge" tap.rgtc[].vertMerge
         {0xD62C, 0, L_VAR}, // "sprmTVertAlign" tap.rgtc[].vertAlign
         {0xCA78, 0, L_VAR}, // undocumented "sprmCDoubleLine ?"
