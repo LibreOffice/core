@@ -2,9 +2,6 @@
 #
 #   $RCSfile: tg_merge.mk,v $
 #
-#   $Revision: 1.4 $
-#
-#   last change: $Author: obo $ $Date: 2004-10-18 13:56:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
