@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:35:23 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,7 @@ namespace framework
             UIElementVector                                                             m_aUIElements;
             sal_Bool                                                                    m_bActive;
             sal_Bool                                                                    m_bInplaceMenuSet;
+            sal_Bool                                                                    m_bMenuVisible;
             css::awt::Rectangle                                                         m_aDockingArea;
             css::uno::Reference< ::drafts::com::sun::star::ui::XDockingAreaAcceptor >   m_xDockingAreaAcceptor;
             css::uno::Reference< ::com::sun::star::lang::XComponent >                   m_xInplaceMenuBar;
