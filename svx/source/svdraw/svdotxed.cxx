@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxed.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:35 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ FASTBOOL SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
             // werden, da sonst bei SetParaAttribs() auch alle in diesem
             // Parent enthaltenen Items hart am Absatz attributiert werden.
             // -> BugID 22467
-            const SfxItemSet& rSet = GetItemSet();
+            const SfxItemSet& rSet = GetObjectItemSet();
             SdrOutlinerSetItem aOutlSetItem(rSet.GetPool());
             aOutlSetItem.GetItemSet().Put(rSet);
             const SfxItemSet* pTmpSet = &aOutlSetItem.GetItemSet();
@@ -163,10 +163,15 @@ FASTBOOL SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     {
         // #78476# also repaint when animated text is put to edit mode
         // to not make appear the text double
-        BOOL bIsAnimated(pPlusData && pPlusData->pAnimator);
+        // #111096# should now repaint automatically.
+        // BOOL bIsAnimated(pPlusData && pPlusData->pAnimator);
 
-        if(aGeo.nDrehWink || IsFontwork() || bIsAnimated)
-            SendRepaintBroadcast();
+        if(aGeo.nDrehWink || IsFontwork() /*|| bIsAnimated*/)
+        {
+            // only repaint here, no real objectchange
+            ActionChanged();
+            // BroadcastObjectChange();
+        }
     }
 
     rOutl.UpdateFields();
