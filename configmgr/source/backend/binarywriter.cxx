@@ -2,9 +2,9 @@
 *
 *  $RCSfile: binarywriter.cxx,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: rt $ $Date: 2003-10-06 14:46:15 $
+*  last change: $Author: kz $ $Date: 2004-03-23 10:23:17 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -121,8 +121,8 @@ namespace configmgr
         namespace io = com::sun::star::io;
 
         BinaryWriter::BinaryWriter(rtl::OUString const &_aFileURL, uno::Reference<lang::XMultiServiceFactory> const& _xServiceProvider)
-            :m_pFileOut(NULL),
-             m_aFileURL(_aFileURL),
+            :m_aFileURL(_aFileURL),
+             m_pFileOut(NULL),
              m_xServiceProvider(_xServiceProvider)
         {}
 
@@ -291,7 +291,7 @@ namespace configmgr
         {
             nLength |= binary::STR_ASCII_MASK;
             OSL_ASSERT((nLength &  binary::STR_ASCII_MASK) == binary::STR_ASCII_MASK);
-            OSL_ASSERT((nLength & ~binary::STR_ASCII_MASK) == aData.getLength());
+            OSL_ASSERT(sal_Int32(nLength & ~binary::STR_ASCII_MASK) == aData.getLength());
         }
         m_xDataOutputStream->writeLong (nLength);
 
