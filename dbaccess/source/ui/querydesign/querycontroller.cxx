@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 11:44:02 $
+ *  last change: $Author: oj $ $Date: 2001-03-12 14:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,22 +570,21 @@ void OQueryController::Execute(sal_uInt16 _nId)
                 // we don't need to check the connection here because we already check the composer
                 // which can't live without his connection
                 m_sStatement = m_pWindow->getView()->getStatement();
+                ::rtl::OUString sTranslatedStmt;
                 if(m_sStatement.getLength() && m_xComposer.is() && m_bEsacpeProcessing)
                 {
                     try
                     {
-                        ::rtl::OUString aErrorMsg,sStmt;
+                        ::rtl::OUString aErrorMsg;
                         ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,sal_True);
                         //  m_pParseNode = pNode;
                         if(pNode)
                         {
-                            m_sStatement = ::rtl::OUString();
-                            pNode->parseNodeToStr(  m_sStatement,
-                                                    m_xConnection->getMetaData(),
-                                                    &getParser()->getContext());
+                            pNode->parseNodeToStr(  sTranslatedStmt,
+                                                    m_xConnection->getMetaData());
                         }
-                        m_xComposer->setQuery(m_sStatement);
-                        m_sStatement = m_xComposer->getComposedQuery();
+                        m_xComposer->setQuery(sTranslatedStmt);
+                        sTranslatedStmt = m_xComposer->getComposedQuery();
                     }
                     catch(SQLException& e)
                     {
@@ -594,7 +593,9 @@ void OQueryController::Execute(sal_uInt16 _nId)
                         break;
                     }
                 }
-                if(m_sDataSourceName.getLength() && m_sStatement.getLength())
+                else if(!m_bEsacpeProcessing)
+                    sTranslatedStmt = m_sStatement;
+                if(m_sDataSourceName.getLength() && sTranslatedStmt.getLength())
                 {
                     URL aWantToDispatch;
                     aWantToDispatch.Complete = ::rtl::OUString::createFromAscii(".component:DB/DataSourceBrowser");
@@ -626,7 +627,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                         aProps[1].Value <<= CommandType::COMMAND;
 
                         aProps[2].Name = PROPERTY_COMMAND;
-                        aProps[2].Value <<= m_sStatement;
+                        aProps[2].Value <<= sTranslatedStmt;
 
                         aProps[3].Name = PROPERTY_SHOWTREEVIEW;
                         aProps[3].Value = ::cppu::bool2any(sal_False);
