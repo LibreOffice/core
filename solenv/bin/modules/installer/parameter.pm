@@ -85,6 +85,7 @@ The following parameter are needed:
 -l: Language of the product (comma and hash) (optional, defined in productlist)
 -b: Build, e.g. srx645 (optional)
 -m: Minor, e.g. m10 (optional)
+-simple: Path to do a simple install to
 -c: Compiler, e.g. wntmsci8, unxlngi5, unxsols4, ... (optional)
 -u: Path, in which zipfiles are unpacked (optional)
 -msitemplate: Source of the msi file templates (Windows compiler only)
@@ -177,8 +178,7 @@ sub getparameter
         elsif ($param eq "-dontcallepm") { $installer::globals::call_epm = 0; }
         elsif ($param eq "-msitemplate") { $installer::globals::idttemplatepath = shift(@ARGV); }
         elsif ($param eq "-msilanguage") { $installer::globals::idtlanguagepath = shift(@ARGV); }
-        elsif ($param eq "-msichild") { $installer::globals::msichildpath = shift(@ARGV); }
-        elsif ($param eq "-javafiles") { $installer::globals::javafilespath = shift(@ARGV); }
+        elsif ($param eq "-addjavainstaller") { $installer::globals::addjavainstaller = 1; }
         elsif ($param eq "-javalanguage") { $installer::globals::javalanguagepath = shift(@ARGV); }
         elsif ($param eq "-buildid") { $installer::globals::buildid = shift(@ARGV); }
         elsif ($param eq "-packagelist") { $installer::globals::packagelist = shift(@ARGV); }
@@ -186,6 +186,19 @@ sub getparameter
         elsif ($param eq "-copyproject") { $installer::globals::is_copy_only_project = 1; }
         elsif ($param eq "-languagepack") { $installer::globals::languagepack = 1; }
         elsif ($param eq "-addchildprojects") { $installer::globals::addchildprojects = 1; }
+        elsif ($param eq "-destdir")    # new parameter for simple installer
+        {
+            $installer::globals::rootpath ne "" && die "must set destdir before -i or -simple";
+            $installer::globals::destdir = shift @ARGV;
+        }
+        elsif ($param eq "-simple")     # new parameter for simple installer
+        {
+            $installer::globals::simple = 1;
+            $installer::globals::call_epm = 0;
+            my $path = shift(@ARGV);
+            $path =~ s/^$installer::globals::destdir//;
+            $installer::globals::rootpath = $path;
+        }
         else
         {
             print("\n*************************************\n");
@@ -195,6 +208,13 @@ sub getparameter
             exit(-1);
         }
     }
+
+    # Usage of simple installer (not for Windows):
+    # $PERL -w $SOLARENV/bin/make_installer.pl \
+    # -f openoffice.lst -l en-US -p OpenOffice \
+    # -packagelist ../inc_openoffice/unix/packagelist.txt \
+    # -buildid $BUILD -rpm \
+    # -destdir /tmp/nurk -simple $INSTALL_PATH
 }
 
 ############################################
@@ -283,7 +303,11 @@ sub setglobalvariables
     if (( $installer::globals::compiler =~ /unxsols/ ) || ( $installer::globals::compiler =~ /unxsoli/ ))
     {
         $installer::globals::issolarisbuild = 1;
-        if ( $installer::globals::packageformat eq "pkg" ) { $installer::globals::issolarispkgbuild = 1; }
+        if ( $installer::globals::packageformat eq "pkg" )
+        {
+            $installer::globals::issolarispkgbuild = 1;
+            $installer::globals::epmoutpath = "packages";
+        }
     }
 
     if ( $installer::globals::compiler =~ /unxsols/ ) { $installer::globals::issolarissparcbuild = 1; }
@@ -295,7 +319,11 @@ sub setglobalvariables
     if ( $installer::globals::compiler =~ /unxlngi/ )
     {
         $installer::globals::islinuxbuild = 1;
-        if ( $installer::globals::packageformat eq "rpm" ) { $installer::globals::islinuxrpmbuild = 1; }
+        if ( $installer::globals::packageformat eq "rpm" )
+        {
+            $installer::globals::islinuxrpmbuild = 1;
+            $installer::globals::epmoutpath = "RPMS";
+        }
     }
 
     # Defaulting to native package format for epm
@@ -356,27 +384,6 @@ sub setglobalvariables
     else
     {
         $installer::globals::temppathdefined = 0;
-    }
-
-    # The following setting has to be removed, after removal of old setup and changes in scp projects
-    # No binary file custom actions for Ada products and language packs
-    # Typical scp definition, files with flag: BINARYTABLE or SELFREG
-
-    if (( $installer::globals::product =~ /OpenOffice/i ) && ( ! $installer::globals::languagepack ))
-    {
-        push(@installer::globals::binarytablefiles, "gid_File_Pythonmsi_Dll");  # to be removed after scp changes, see parameter.pm
-    }
-
-    if ( $installer::globals::languagepack )
-    {
-        @installer::globals::binarytablefiles = ("gid_File_Lib_Lngpckinsthlp");
-        @installer::globals::selfreglibraries = ();
-    }
-
-    if ( $installer::globals::product =~ /ada/i )
-    {
-        @installer::globals::binarytablefiles = ();
-        @installer::globals::selfreglibraries = ();
     }
 
 }
@@ -486,20 +493,6 @@ sub control_required_parameter
             exit(-1);
         }
 
-        ##############################################################################################
-        # msi files path. Only required for Windows build ($installer::globals::compiler =~ /wntmsci/)
-        # for the creation of the msi installation set.
-        ##############################################################################################
-
-        if (($installer::globals::msichildpath eq "") && ( $installer::globals::addchildprojects ) && ($installer::globals::iswindowsbuild))
-        {
-            print "\n**************************************************\n";
-            print "ERROR: msi child path not set (-msichild)!";
-            print "\n**************************************************\n";
-            usage();
-            exit(-1);
-        }
-
         # Analyzing the idt template path
 
         if (!($installer::globals::idttemplatepath eq ""))  # idttemplatepath set, relative or absolute?
@@ -517,15 +510,6 @@ sub control_required_parameter
         }
 
         installer::remover::remove_ending_pathseparator(\$installer::globals::idtlanguagepath);
-
-        # Analyzing the msi child path
-
-        if (!($installer::globals::msichildpath eq "")) # msichildpath set, relative or absolute?
-        {
-            make_path_absolute(\$installer::globals::msichildpath);
-        }
-
-        installer::remover::remove_ending_pathseparator(\$installer::globals::msichildpath);
 
         # In the msi template directory a files "codes.txt" has to exist, in which the ProductCode
         # and the UpgradeCode for the product are defined.
@@ -601,12 +585,9 @@ sub outputparameter
     if ((!($installer::globals::idttemplatepath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi template path will be ignored for non Windows builds!\n"); }
     if (!($installer::globals::idtlanguagepath eq ""))  { push(@output, "msi languagepath: $installer::globals::idtlanguagepath\n"); }
     if ((!($installer::globals::idtlanguagepath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi language path will be ignored for non Windows builds!\n"); }
-    if (!($installer::globals::msichildpath eq "")) { push(@output, "msi child path: $installer::globals::msichildpath\n"); }
-    if ((!($installer::globals::msichildpath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi child path will be ignored for non Windows builds!\n"); }
     if ((!($installer::globals::iswindowsbuild)) && ( $installer::globals::call_epm )) { push(@output, "Calling epm\n"); }
     if ((!($installer::globals::iswindowsbuild)) && (!($installer::globals::call_epm))) { push(@output, "Not calling epm\n"); }
-    if (!($installer::globals::javafilespath eq "")) { push(@output, "Java installer files path: $installer::globals::javafilespath\n"); }
-    if ((!($installer::globals::javafilespath eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Java language path will be ignored for Windows builds!\n"); }
+    if ( $installer::globals::addjavainstaller ) { push(@output, "Adding Java installer\n"); }
     if (!($installer::globals::javalanguagepath eq "")) { push(@output, "Java language path: $installer::globals::javalanguagepath\n"); }
     if ((!($installer::globals::javalanguagepath eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Java language path will be ignored for Windows builds!\n"); }
     if (($installer::globals::iswindowsbuild) && ($installer::globals::addchildprojects )) { push(@output, "Adding child projects into installation set\n"); }
