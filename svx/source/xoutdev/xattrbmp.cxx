@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattrbmp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-23 21:37:11 $
+ *  last change: $Author: cl $ $Date: 2001-02-27 16:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,10 @@
 #include "xdef.hxx"
 #include "unomid.hxx"
 #include "unoprnms.hxx"
+
+#ifndef SVX_LIGHT
 #include "unoapi.hxx"
+#endif
 
 #define GLOBALOVERFLOW
 
@@ -740,7 +743,9 @@ sal_Bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMe
     if( nMemberId == MID_NAME )
     {
         rtl::OUString aApiName;
+#ifndef SVX_LIGHT
         SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+#endif
         rVal <<= aApiName;
     }
     else if( nMemberId == MID_GRAFURL )
