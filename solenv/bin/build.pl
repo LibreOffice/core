@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.98 $
+#   $Revision: 1.99 $
 #
-#   last change: $Author: vg $ $Date: 2004-03-09 15:33:53 $
+#   last change: $Author: vg $ $Date: 2004-03-11 09:51:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.98 $ ';
+    $id_str = ' $Revision: 1.99 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -105,7 +105,7 @@
         };
         $log = Logging->new() if (!defined $ENV{NO_LOGGING});
     };
-    $modules_number = 0;
+    $modules_number++;
     $perl = "";
     $remove_commando = "";
     if ( $^O eq 'MSWin32' ) {
@@ -235,14 +235,15 @@
         close CMD_FILE;
         print STDOUT "Script $cmd_file generated\n";
     };
-    exit(0) if (!$ignore);
-    exit(0) if (!scalar @ignored_errors);
-    print STDERR "\nERROR: next directories could not be built:\n";
-    foreach (@ignored_errors) {
-        print STDERR "\t$_\n";
+    if ($ignore && scalar @ignored_errors) {
+        print STDERR "\nERROR: next directories could not be built:\n";
+        foreach (@ignored_errors) {
+            print STDERR "\t$_\n";
+        };
+        print STDERR "\nERROR: please check these directories and build the correspondent module(s) anew!!\n\n";
+        do_exit(1);
     };
-    print STDERR "\nERROR: please check these directories and build the correspondent module(s) anew!!\n\n";
-    exit(1);
+    do_exit(0);
 
 
 #########################
@@ -396,8 +397,8 @@ sub dmake_dir {
     if ($child) {
         my $oldfh = select STDERR;
         $| = 1;
-        _exit($? >> 8) if ($? && ($? != -1));
-        _exit(0);
+        _do_exit($? >> 8) if ($? && ($? != -1));
+        _do_exit(0);
     } elsif ($error_code && ($error_code != -1)) {
         &print_error("Error $? occurred while making $BuildDir");
     };
@@ -711,7 +712,7 @@ sub check_deps_hash {
     if ($child) {
         my $oldfh = select STDERR;
         $| = 1;
-        _exit(1);
+        _do_exit(1);
     } else {
         &print_error ("There are dead or circular dependencies\n");
     };
@@ -811,7 +812,7 @@ sub print_error {
     $ENV{mk_tmp} = '';
     close CMD_FILE if ($cmd_file);
     unlink ($cmd_file);
-    exit(1) if (!$child);
+    do_exit(1) if (!$child);
 };
 
 sub usage {
@@ -861,7 +862,7 @@ sub init_logging {
 sub INT_handler {
     print("Command aborted!\n");
     &finish_logging('Manual abort (ctrl-c)');
-    exit(1);
+    do_exit(1);
 }
 
 #
@@ -907,12 +908,12 @@ sub get_options {
                                 and $build_since = shift @ARGV      and next;
         $arg =~ /^-s$/          and $BuildAllParents = 1
                                 and $build_since = shift @ARGV      and next;
-        $arg =~ /^--help$/      and &usage                          and exit(0);
-        $arg =~ /^-h$/      and &usage                          and exit(0);
+        $arg =~ /^--help$/      and &usage                          and do_exit(0);
+        $arg =~ /^-h$/      and &usage                          and do_exit(0);
         $arg =~ /^--ignore$/        and $ignore = 1                         and next;
         $arg =~ /^-i$/      and $ignore = 1                         and next;
-        $arg =~ /^--version$/   and exit(0);
-        $arg =~ /^-V$/          and exit(0);
+        $arg =~ /^--version$/   and do_exit(0);
+        $arg =~ /^-V$/          and do_exit(0);
         $arg =~ /^-m$/          and &get_modes      and next;
         $arg =~ /^--mode$/      and &get_modes      and next;
         if ($arg =~ /^--$/) {
@@ -1002,7 +1003,7 @@ sub cancel_build {
         kill 9 => -$$;
     };
     print STDERR "\n";
-    exit(1);
+    do_exit(1);
 };
 
 #
@@ -1097,7 +1098,7 @@ sub start_child {
         select $oldfh;
         $child = 1;
         &dmake_dir($child_nick);
-        exit(1);
+        do_exit(1);
     };
 };
 
@@ -1147,7 +1148,7 @@ sub build_multiprocessing {
 sub mp_success_exit {
     print STDERR "\nMultiprocessing build is finished\n";
     print STDERR "Maximal number of processes run: $maximal_processes\n";
-    exit(0);
+    do_exit(0);
 };
 
 #
@@ -1565,7 +1566,7 @@ sub prepare_incompartible_build {
         $$deps_hash{$build_from_opt} = [];
         $build_from_opt = '';
     };
-    print "\nPreparation finished\n\n" and  exit(0) if ($prepare);
+    print "\nPreparation finished\n\n" and  do_exit(0) if ($prepare);
 };
 
 #
@@ -1857,4 +1858,14 @@ sub pick_for_build_type {
         $new_modules .= $_ . ' '
     };
     return $new_modules;
+};
+
+sub do_exit {
+    my $exit_code = shift;
+    if ($exit_code) {
+        &finish_logging("error occured");
+    } else {
+        &finish_logging;
+    };
+    exit($exit_code);
 };
