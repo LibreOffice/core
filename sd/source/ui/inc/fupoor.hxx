@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-29 14:22:01 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUPOOR_HXX
-#define _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
+#define SD_FU_POOR_HXX
 
 #ifndef _RTTI_HXX //autogen
 #include <tools/rtti.hxx>
@@ -78,17 +78,18 @@
 #include <vcl/event.hxx>
 #endif
 
-class SdView;
-class SdViewShell;
-class SdWindow;
 class SdDrawDocument;
-class SdDrawDocShell;
 class SfxRequest;
 class Dialog;
 class SdrObject;
 
-#define HITPIX    2                    // Hit-Toleranz in Pixel
-#define DRGPIX    2                    // Drag MinMove in Pixel
+namespace sd {
+
+class DrawDocShell;
+class View;
+class ViewShell;
+class Window;
+
 
 
 /*************************************************************************
@@ -99,11 +100,106 @@ class SdrObject;
 
 class FuPoor
 {
- protected:
-    SdView*         pView;
-    SdViewShell*    pViewShell;
-    SdWindow*       pWindow;
-    SdDrawDocShell* pDocSh;
+public:
+    static const int HITPIX = 2;                   // Hit-Toleranz in Pixel
+    static const int DRGPIX = 2;                   // Drag MinMove in Pixel
+
+    TYPEINFO();
+
+    /**
+        @param pViewSh
+            May be NULL.
+    */
+    FuPoor (ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuPoor (void);
+
+    // #95491# see member
+    void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
+    const sal_uInt16 GetMouseButtonCode() const { return mnCode; }
+
+    DrawDocShell* GetDocSh() { return pDocSh; }
+    SdDrawDocument* GetDoc() { return pDoc; }
+
+    virtual void DoCut();
+    virtual void DoCopy();
+    virtual void DoPaste();
+
+    // Mouse- & Key-Events; Returnwert=TRUE: Event wurde bearbeitet
+    virtual BOOL KeyInput(const KeyEvent& rKEvt);
+    virtual BOOL MouseMove(const MouseEvent& rMEvt) { return FALSE; }
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+
+    // #95491# moved from inline to *.cxx
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+
+    virtual BOOL Command(const CommandEvent& rCEvt);
+    virtual BOOL RequestHelp(const HelpEvent& rHEvt);
+    virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin) {}
+    virtual void ReceiveRequest(SfxRequest& rReq);
+
+    virtual void Activate();        // Function aktivieren
+    virtual void Deactivate();      // Function deaktivieren
+
+    virtual void ScrollStart() {}   // diese Funktionen werden von
+    virtual void ScrollEnd() {}     // ForceScroll aufgerufen
+
+    void SetWindow(::sd::Window* pWin) { pWindow = pWin; }
+    void WriteStatus(const String& aStr);  // Statuszeile schreiben
+
+    // #97016# II
+    virtual void SelectionHasChanged();
+
+    USHORT  GetSlotID() const { return( nSlotId ); }
+    USHORT  GetSlotValue() const { return( nSlotValue ); }
+
+    void    SetNoScrollUntilInside(BOOL bNoScroll = TRUE)
+            { bNoScrollUntilInside = bNoScroll; }
+
+    void StartDelayToScrollTimer ();
+
+    // #97016#
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
+
+    /** is called when the currenct function should be aborted. <p>
+        This is used when a function gets a KEY_ESCAPE but can also
+        be called directly.
+
+        @returns true if a active function was aborted
+    */
+    virtual bool cancel();
+
+protected:
+    DECL_LINK( DelayHdl, Timer * );
+    long diffPoint (long pos1, long pos2);
+
+    void ImpForceQuadratic(Rectangle& rRect);
+
+    /** Switch to another layer.  The layer to switch to is specified by an
+        offset relative to the active layer.  With respect to the layer bar
+        control at the lower left of the document window positive values
+        move to the right and negative values move to the left.
+
+        <p>Switching the layer is independant of the view's layer mode.  The
+        layers are switched even when the layer mode is turned off and the
+        layer control is not visible.</p>
+        @param nOffset
+           If the offset is positive skip that many layers in selecting the
+           next layer.  If it is negative then select a previous one.  An
+           offset or zero does not change the current layer.  If the
+           resulting index lies outside the valid range of indices then it
+           is set to either the minimal or maximal valid index, whitchever
+           is nearer.
+    */
+    void SwitchLayer (sal_Int32 nOffset);
+
+    ::sd::View* pView;
+    ViewShell* pViewShell;
+    ::sd::Window* pWindow;
+    DrawDocShell* pDocSh;
     SdDrawDocument* pDoc;
 
     USHORT          nSlotId;
@@ -133,98 +229,13 @@ class FuPoor
 
     // #95491# member to hold state of the mouse buttons for creation
     // of own MouseEvents (like in ScrollHdl)
+
 private:
     sal_uInt16      mnCode;
 
-protected:
-    DECL_LINK( DelayHdl, Timer * );
-    long diffPoint (long pos1, long pos2);
-
- public:
-    TYPEINFO();
-
-    FuPoor(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-           SdDrawDocument* pDoc, SfxRequest& rReq);
-    virtual ~FuPoor();
-
-    // #95491# see member
-    void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
-    const sal_uInt16 GetMouseButtonCode() const { return mnCode; }
-
-    SdDrawDocShell* GetDocSh() { return pDocSh; }
-    SdDrawDocument* GetDoc() { return pDoc; }
-
-    virtual void DoCut();
-    virtual void DoCopy();
-    virtual void DoPaste();
-
-    // Mouse- & Key-Events; Returnwert=TRUE: Event wurde bearbeitet
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL MouseMove(const MouseEvent& rMEvt) { return FALSE; }
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-
-    // #95491# moved from inline to *.cxx
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
-
-    virtual BOOL Command(const CommandEvent& rCEvt);
-    virtual BOOL RequestHelp(const HelpEvent& rHEvt);
-    virtual void Paint(const Rectangle& rRect, SdWindow* pWin) {}
-    virtual void ReceiveRequest(SfxRequest& rReq);
-
-    virtual void Activate();        // Function aktivieren
-    virtual void Deactivate();      // Function deaktivieren
-
-    virtual void ScrollStart() {}   // diese Funktionen werden von
-    virtual void ScrollEnd() {}     // ForceScroll aufgerufen
-
-    void SetWindow(SdWindow* pWin) { pWindow = pWin; }
-    void WriteStatus(const String& aStr);  // Statuszeile schreiben
-
-    // #97016# II
-    virtual void SelectionHasChanged();
-
-    USHORT  GetSlotID() const { return( nSlotId ); }
-    USHORT  GetSlotValue() const { return( nSlotValue ); }
-
-    void    SetNoScrollUntilInside(BOOL bNoScroll = TRUE)
-            { bNoScrollUntilInside = bNoScroll; }
-
-    void StartDelayToScrollTimer ();
-
-    // #97016#
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
-
-    /** is called when the currenct function should be aborted. <p>
-        This is used when a function gets a KEY_ESCAPE but can also
-        be called directly.
-
-        @returns true if a active function was aborted
-    */
-    virtual bool cancel();
-
-protected:
-    void ImpForceQuadratic(Rectangle& rRect);
-
-    /** Switch to another layer.  The layer to switch to is specified by an
-        offset relative to the active layer.  With respect to the layer bar
-        control at the lower left of the document window positive values
-        move to the right and negative values move to the left.
-
-        <p>Switching the layer is independant of the view's layer mode.  The
-        layers are switched even when the layer mode is turned off and the
-        layer control is not visible.</p>
-        @param nOffset
-           If the offset is positive skip that many layers in selecting the
-           next layer.  If it is negative then select a previous one.  An
-           offset or zero does not change the current layer.  If the
-           resulting index lies outside the valid range of indices then it
-           is set to either the minimal or maximal valid index, whitchever
-           is nearer.
-    */
-    void SwitchLayer (sal_Int32 nOffset);
 };
 
-
+} // end of namespace sd
 
 #endif      // _SD_FUPOOR_HXX
 
