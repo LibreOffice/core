@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: th $ $Date: 2001-07-30 10:54:49 $
+ *  last change: $Author: th $ $Date: 2001-08-13 11:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1743,7 +1743,7 @@ static void ImplHandleSalSettings( Window* pWindow, USHORT nEvent )
     {
         AllSettings aSettings = pApp->GetSettings();
         pApp->MergeSystemSettings( aSettings );
-        pWindow->ImplUpdateGlobalSettings( aSettings );
+        pApp->SystemSettingsChanging( aSettings, pWindow );
         pApp->SetSettings( aSettings );
     }
     else
