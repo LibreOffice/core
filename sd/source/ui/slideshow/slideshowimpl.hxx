@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:11:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,8 +262,8 @@ public:
     SlideshowImpl( ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc );
     ~SlideshowImpl();
 
-    void startShow( PresentationSettings* pPresSettings );
-    void startPreview(
+    bool startShow( PresentationSettings* pPresSettings );
+    bool startPreview(
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage,
         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xAnimationNode,
         ::Window* pParent = 0 );
@@ -317,6 +317,7 @@ public:
     void gotoLastSlide();
     void endPresentation();
     void gotoSlideIndex( sal_Int32 nPageIndex );
+    void enablePen();
 
     bool pause( bool bPause );
 
@@ -327,7 +328,7 @@ public:
     void onFirstPaint();
 
 private:
-    void startShowImpl(
+    bool startShowImpl(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > >& aSlides,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > >& aRootNodes,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties );
