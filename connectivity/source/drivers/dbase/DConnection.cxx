@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:28:55 $
+ *  last change: $Author: fs $ $Date: 2000-10-06 14:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,10 +146,10 @@ Reference< XStatement > SAL_CALL ODbaseConnection::createStatement(  ) throw(SQL
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    ODbaseStatement* pStmt = new ODbaseStatement(this);
 
-    m_aStatements.push_back(WeakReferenceHelper(*pStmt));
-    return pStmt;
+    Reference< XStatement > xReturn = new ODbaseStatement(this);
+    m_aStatements.push_back(WeakReferenceHelper(xReturn));
+    return xReturn;
 }
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
@@ -160,6 +160,7 @@ Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( con
 
     ODbasePreparedStatement* pStmt = new ODbasePreparedStatement(this,m_aTypeInfo);
     pStmt->construct(sql);
+    Reference< XPreparedStatement > xHoldAlive = pStmt;
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return pStmt;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-06 12:04:21 $
+ *  last change: $Author: fs $ $Date: 2000-10-06 14:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,9 +254,9 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    OStatement* pStmt = new OStatement(this);
-    m_aStatements.push_back(WeakReferenceHelper(*pStmt));
-    return pStmt;
+    Reference< XStatement > xReturn = new OStatement(this);
+    m_aStatements.push_back(WeakReferenceHelper(xReturn));
+    return xReturn;
 }
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
@@ -266,9 +266,10 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
         throw DisposedException();
     if(m_aTypeInfo.empty())
         buildTypeInfo();
-    OPreparedStatement* pStmt = new OPreparedStatement(this,m_aTypeInfo,sql);
-    m_aStatements.push_back(WeakReferenceHelper(*pStmt));
-    return pStmt;
+
+    Reference< XPreparedStatement > xReturn = new OPreparedStatement(this,m_aTypeInfo,sql);
+    m_aStatements.push_back(WeakReferenceHelper(xReturn));
+    return xReturn;
 }
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
