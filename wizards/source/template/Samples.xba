@@ -48,7 +48,7 @@ Dim mFileProperties(1) as New com.sun.star.beans.PropertyValue
 				mFileProperties(0).Name = &quot;AsTemplate&quot;
 				mFileProperties(0).Value = True
 				mFileProperties(1).Name = &quot;MacroExecutionMode&quot;
-				mFileProperties(1).Value = com.sun.star.document.MacroExecMode.ALWAYS_EXECUTE	
+				mFileProperties(1).Value = com.sun.star.document.MacroExecMode.USE_CONFIG	
 				
 				oNewDocument = StarDesktop.LoadComponentFromURL(DocPath,&quot;_default&quot;,0, mFileProperties())
 				PrepareForEditing() = oNewDocument
