@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:37:54 $
+ *  last change: $Author: nn $ $Date: 2002-06-24 17:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1248,6 +1248,11 @@ BOOL ScDocShell::AdjustPrintZoom( const ScRange& rRange )
         ScPrintFunc aOldPrFunc( this, GetPrinter(), nTab );
         aOldPrFunc.GetScaleData( aPhysPage, nHdr, nFtr );
         nBlkTwipsY += nHdr + nFtr;
+
+        if ( nBlkTwipsX == 0 )      // #100639# hidden columns/rows may lead to 0
+            nBlkTwipsX = 1;
+        if ( nBlkTwipsY == 0 )
+            nBlkTwipsY = 1;
 
         long nNeeded = Min( aPhysPage.Width()  * 100 / nBlkTwipsX,
                             aPhysPage.Height() * 100 / nBlkTwipsY );
