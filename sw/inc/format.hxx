@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 13:49:01 $
+ *  last change: $Author: od $ $Date: 2002-08-28 11:37:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,9 +322,35 @@ public:
     inline const SvxParaGridItem        &GetParaGrid(BOOL = TRUE) const;
 
     // TabellenBox-Attribute    - impl. steht im cellatr.hxx
-        INLINE  const SwTblBoxNumFormat     &GetTblBoxNumFmt( BOOL = TRUE ) const;
-        INLINE  const SwTblBoxFormula       &GetTblBoxFormula( BOOL = TRUE ) const;
-        INLINE  const SwTblBoxValue         &GetTblBoxValue( BOOL = TRUE ) const;
+    INLINE  const SwTblBoxNumFormat     &GetTblBoxNumFmt( BOOL = TRUE ) const;
+    INLINE  const SwTblBoxFormula       &GetTblBoxFormula( BOOL = TRUE ) const;
+    INLINE  const SwTblBoxValue         &GetTblBoxValue( BOOL = TRUE ) const;
+
+    /** SwFmt::IsBackgroundTransparent - for feature #99657#
+
+        OD 22.08.2002
+        Virtual method to determine, if background of format is transparent.
+        Default implementation returns false. Thus, subclasses have to overload
+        method, if the specific subclass can have a transparent background.
+
+        @author OD
+
+        @return false, default implementation
+    */
+    virtual const sal_Bool IsBackgroundTransparent() const;
+
+    /** SwFmt::IsShadowTransparent - for feature #99657#
+
+        OD 22.08.2002
+        Virtual method to determine, if shadow of format is transparent.
+        Default implementation returns false. Thus, subclasses have to overload
+        method, if the specific subclass can have a transparent shadow.
+
+        @author OD
+
+        @return false, default implementation
+    */
+    virtual const sal_Bool IsShadowTransparent() const;
 };
 
 // --------------- Inline Implementierungen ------------------------
