@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CIndexes.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-06 12:48:49 $
+ *  last change: $Author: oj $ $Date: 2001-11-08 15:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ Reference< XPropertySet > OIndexes::createEmptyObject()
     if(xData.is())
         return xData->createDataDescriptor();
     else
-        return new connectivity::sdbcx::OIndex(sal_True);
+        return new ODBIndex(m_pTable);
 }
 // -------------------------------------------------------------------------
 // XAppend
