@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConsolidationContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: nn $ $Date: 2001-11-06 16:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,18 +168,29 @@ void ScXMLConsolidationContext::EndElement()
         aConsParam.nTab = aTargetAddr.Tab();
         aConsParam.eFunction = eFunction;
 
+        sal_Bool bError = sal_False;
         USHORT nCount = (USHORT) Min( ScXMLConverter::GetTokenCount( sSourceList ), (sal_Int32)0xFFFF );
         ScArea** ppAreas = nCount ? new ScArea*[ nCount ] : NULL;
         if( ppAreas )
         {
             sal_Int32 nOffset = 0;
-            for( USHORT nIndex = 0; nIndex < nCount; nIndex++ )
+            USHORT nIndex;
+            for( nIndex = 0; nIndex < nCount; nIndex++ )
             {
                 ppAreas[ nIndex ] = new ScArea;
-                nOffset = ScXMLConverter::GetAreaFromString(
-                    *ppAreas[ nIndex ], sSourceList, GetScImport().GetDocument(), nOffset );
+                if ( !ScXMLConverter::GetAreaFromString(
+                    *ppAreas[ nIndex ], sSourceList, GetScImport().GetDocument(), nOffset ) )
+                {
+                    bError = sal_True;      //! handle error
+                }
             }
+
             aConsParam.SetAreas( ppAreas, nCount );
+
+            // array is copied in SetAreas
+            for( nIndex = 0; nIndex < nCount; nIndex++ )
+                delete ppAreas[nIndex];
+            delete[] ppAreas;
         }
 
         aConsParam.bByCol = aConsParam.bByRow = FALSE;
