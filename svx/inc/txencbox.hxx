@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txencbox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-02-05 17:20:37 $
+ *  last change: $Author: er $ $Date: 2001-08-14 10:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,17 @@ public:
          Unicode with RTL_TEXTENCODING_INFO_UNICODE but to include UTF7 and UTF8
          with RTL_TEXTENCODING_INFO_MIME */
     void                FillFromTextEncodingTable(
+                            sal_uInt32 nExcludeInfoFlags = 0,
+                            sal_uInt32 nButIncludeInfoFlags = 0
+                            );
+
+    /** Fill with all encodings known to the dbtools::OCharsetMap but exclude
+        those matching one or more given flags as defined in rtl/tencinfo.h
+         If nButIncludeInfoFlags is given, encodings are included even if they
+         match nExcludeInfoFlags. Thus it is possible to exclude 16/32-bit
+         Unicode with RTL_TEXTENCODING_INFO_UNICODE but to include UTF7 and UTF8
+         with RTL_TEXTENCODING_INFO_MIME */
+    void                FillFromDbTextEncodingMap(
                             sal_uInt32 nExcludeInfoFlags = 0,
                             sal_uInt32 nButIncludeInfoFlags = 0
                             );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txencbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-02-05 17:21:36 $
+ *  last change: $Author: er $ $Date: 2001-08-14 10:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #include "txenctab.hxx"
 #include "dialogs.hrc"
 
+#ifndef SVX_DBCHARSETHELPER_HXX
+#include "dbcharsethelper.hxx"
+#endif
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
@@ -137,6 +140,46 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
         {
             InsertTextEncoding( rtl_TextEncoding( m_pEncTable->GetValue( j ) ),
                 m_pEncTable->GetString( j ) );
+        }
+    }
+}
+
+//------------------------------------------------------------------------
+
+void SvxTextEncodingBox::FillFromDbTextEncodingMap(
+        sal_uInt32 nExcludeInfoFlags, sal_uInt32 nButIncludeInfoFlags )
+{
+    svxform::ODataAccessCharsetHelper aCSH;
+    ::std::vector< rtl_TextEncoding > aEncs;
+    sal_Int32 nCount = aCSH.getSupportedTextEncodings( aEncs );
+    if ( nExcludeInfoFlags )
+    {
+        rtl_TextEncodingInfo aInfo;
+        aInfo.StructSize = sizeof(rtl_TextEncodingInfo);
+        for ( sal_Int32 j=0; j<nCount; j++ )
+        {
+            rtl_TextEncoding nEnc = rtl_TextEncoding( aEncs[j] );
+            if ( rtl_getTextEncodingInfo( nEnc, &aInfo ) )
+            {
+                if ( (aInfo.Flags & nExcludeInfoFlags) == 0 )
+                {
+                    if ( (nExcludeInfoFlags & RTL_TEXTENCODING_INFO_UNICODE) &&
+                            ((nEnc == RTL_TEXTENCODING_UCS2) ||
+                            nEnc == RTL_TEXTENCODING_UCS4) )
+                        ;   // InfoFlags don't work for Unicode :-(
+                    else
+                        InsertTextEncoding( nEnc );
+                }
+                else if ( (aInfo.Flags & nButIncludeInfoFlags) != 0 )
+                    InsertTextEncoding( nEnc );
+            }
+        }
+    }
+    else
+    {
+        for ( sal_Int32 j=0; j<nCount; j++ )
+        {
+            InsertTextEncoding( rtl_TextEncoding( aEncs[j] ) );
         }
     }
 }
