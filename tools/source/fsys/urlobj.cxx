@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 11:58:26 $
+ *  last change: $Author: sb $ $Date: 2004-09-30 13:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -888,7 +888,9 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
         if (m_eScheme == INET_PROT_NOT_VALID) {
             sal_Unicode const * p = pPos;
             aSynScheme = parseScheme(&p, pEnd);
-            if (aSynScheme.Len() != 0 && p != pEnd && *p != nFragmentDelimiter)
+            // #i34835# To avoid problems with Windows file paths like "C:\foo", do not
+            // accept generic schemes that are only one character long:
+            if (aSynScheme.Len() >= 2 && p != pEnd && *p != nFragmentDelimiter)
             {
                 m_eScheme = INET_PROT_GENERIC;
                 pPos = p;
