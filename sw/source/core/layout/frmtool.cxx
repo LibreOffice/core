@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:46:13 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -349,7 +348,10 @@ SwFrmNotify::~SwFrmNotify()
                 bool bNotifySize = false;
                 SwAnchoredObject* pObj = rObjs[i];
                 SwContact* pContact = ::GetUserCall( pObj->GetDrawObj() );
-                if ( !pContact->ObjAnchoredAsChar() )
+                // --> OD 2004-12-08 #115759#
+                const bool bAnchoredAsChar = pContact->ObjAnchoredAsChar();
+                if ( !bAnchoredAsChar )
+                // <--
                 {
                     // Notify object, which aren't anchored as-character:
 
@@ -430,12 +432,24 @@ SwFrmNotify::~SwFrmNotify()
                         SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pObj);
                         if ( bNotifySize )
                             pFlyFrm->_InvalidateSize();
-                        pFlyFrm->_InvalidatePos();
+                        // --> OD 2004-12-08 #115759# - no invalidation of
+                        // position for as-character anchored objects.
+                        if ( !bAnchoredAsChar )
+                        {
+                            pFlyFrm->_InvalidatePos();
+                        }
+                        // <--
                         pFlyFrm->_Invalidate();
                     }
                     else if ( pObj->ISA(SwAnchoredDrawObject) )
                     {
-                        pObj->InvalidateObjPos();
+                        // --> OD 2004-12-08 #115759# - no invalidation of
+                        // position for as-character anchored objects.
+                        if ( !bAnchoredAsChar )
+                        {
+                            pObj->InvalidateObjPos();
+                        }
+                        // <--
                     }
                     else
                     {
@@ -686,7 +700,10 @@ SwLayNotify::~SwLayNotify()
 
 SwFlyNotify::SwFlyNotify( SwFlyFrm *pFlyFrm ) :
     SwLayNotify( pFlyFrm ),
-    pOldPage( pFlyFrm->FindPageFrm() ),
+    // --> OD 2004-11-24 #115759# - keep correct page frame - the page frame
+    // the Writer fly frame is currently registered at.
+    pOldPage( pFlyFrm->GetPageFrm() ),
+    // <--
     aFrmAndSpace( pFlyFrm->GetObjRectWithSpaces() )
 {
 }
@@ -1083,16 +1100,9 @@ void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
                         pFmt->GetDoc()->GetDrawModel()->GetPage(0)->
                                 InsertObject(pSdrObj, pSdrObj->GetOrdNumDirect());
                     }
-                    // OD 25.06.2003 #108784# - move object to visible layer,
-                    // if necessary.
-                    // OD 21.08.2003 #i18447# - in order to consider group object correct
-                    // use new method <SwDrawContact::MoveObjToVisibleLayer(..)>
-                    // OD 21.08.2003 NOTE: the contact object has to be set at
-                    //                     the drawing object.
+
                     SwDrawContact* pNew =
                         static_cast<SwDrawContact*>(GetUserCall( pSdrObj ));
-                    pNew->MoveObjToVisibleLayer( pSdrObj );
-
                     if ( !pNew->GetAnchorFrm() )
                     {
                         pFrm->AppendDrawObj( *(pNew->GetAnchoredObj()) );
@@ -2388,27 +2398,57 @@ const SdrObject *SwOrderIter::Prev()
 //verboten.
 //Unterwegs werden die Flys bei der Seite abgemeldet.
 
-void MA_FASTCALL lcl_RemoveFlysFromPage( SwCntntFrm *pCntnt )
+// --> OD 2004-11-29 #115759# - 'remove' also drawing object from page and
+// at-fly anchored objects from page
+void MA_FASTCALL lcl_RemoveObjsFromPage( SwFrm* _pFrm )
 {
-    ASSERT( pCntnt->GetDrawObjs(), "Keine DrawObjs fuer lcl_RemoveFlysFromPage." );
-    SwSortedObjs &rObjs = *pCntnt->GetDrawObjs();
+    ASSERT( _pFrm->GetDrawObjs(), "Keine DrawObjs fuer lcl_RemoveFlysFromPage." );
+    SwSortedObjs &rObjs = *_pFrm->GetDrawObjs();
     for ( USHORT i = 0; i < rObjs.Count(); ++i )
     {
         SwAnchoredObject* pObj = rObjs[i];
-        SwFlyFreeFrm* pFlyFrm = pObj->ISA(SwFlyFreeFrm)
-                                ? static_cast<SwFlyFreeFrm*>(pObj) : 0;
-        if ( pFlyFrm )
+        // --> OD 2004-11-29 #115759# - reset member, at which the anchored
+        // object orients its vertical position
+        pObj->ClearVertPosOrientFrm();
+        // <--
+        // --> OD 2004-11-29 #115759# - remove also lower objects of as-character
+        // anchored Writer fly frames from page
+        if ( pObj->ISA(SwFlyFrm) )
         {
-            SwCntntFrm *pCnt = pFlyFrm->ContainsCntnt();
+            SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pObj);
+
+            // --> OD 2004-11-29 #115759# - remove also direct lowers of Writer
+            // fly frame from page
+            if ( pFlyFrm->GetDrawObjs() )
+            {
+                ::lcl_RemoveObjsFromPage( pFlyFrm );
+            }
+            // <--
+
+            SwCntntFrm* pCnt = pFlyFrm->ContainsCntnt();
             while ( pCnt )
             {
                 if ( pCnt->GetDrawObjs() )
-                    ::lcl_RemoveFlysFromPage( pCnt );
+                    ::lcl_RemoveObjsFromPage( pCnt );
                 pCnt = pCnt->GetNextCntntFrm();
             }
-            // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
-            pFlyFrm->GetPageFrm()->RemoveFlyFromPage( pFlyFrm );
+            if ( pFlyFrm->IsFlyFreeFrm() )
+            {
+                // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+                pFlyFrm->GetPageFrm()->RemoveFlyFromPage( pFlyFrm );
+            }
         }
+        // <--
+        // --> OD 2004-11-29 #115759# - remove also drawing objects from page
+        else if ( pObj->ISA(SwAnchoredDrawObject) )
+        {
+            if ( pObj->GetFrmFmt().GetAnchor().GetAnchorId() != FLY_IN_CNTNT )
+            {
+                pObj->GetPageFrm()->RemoveDrawObjFromPage(
+                                *(static_cast<SwAnchoredDrawObject*>(pObj)) );
+            }
+        }
+        // <--
     }
 }
 
@@ -2464,7 +2504,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
                 if ( pFloat->IsCntntFrm() )
                 {
                     if ( pFloat->GetDrawObjs() )
-                        ::lcl_RemoveFlysFromPage( (SwCntntFrm*)pFloat );
+                        ::lcl_RemoveObjsFromPage( (SwCntntFrm*)pFloat );
                 }
                 else if ( pFloat->IsTabFrm() || pFloat->IsSctFrm() )
                 {
@@ -2473,7 +2513,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
                     {
                         do
                         {   if ( pCnt->GetDrawObjs() )
-                                ::lcl_RemoveFlysFromPage( pCnt );
+                                ::lcl_RemoveObjsFromPage( pCnt );
                             pCnt = pCnt->GetNextCntntFrm();
                         } while ( pCnt && ((SwLayoutFrm*)pFloat)->IsAnLower( pCnt ) );
                     }
@@ -2522,29 +2562,61 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
     return bGo ? pStart : NULL;
 }
 
-void MA_FASTCALL lcl_AddFlysToPage( SwCntntFrm *pCntnt, SwPageFrm *pPage )
+// --> OD 2004-11-29 #115759# - add also drawing objects to page and at-fly
+// anchored objects to page
+void MA_FASTCALL lcl_AddObjsToPage( SwFrm* _pFrm, SwPageFrm* _pPage )
 {
-    ASSERT( pCntnt->GetDrawObjs(), "Keine DrawObjs fuer lcl_AddFlysToPage." );
-    SwSortedObjs &rObjs = *pCntnt->GetDrawObjs();
+    ASSERT( _pFrm->GetDrawObjs(), "Keine DrawObjs fuer lcl_AddFlysToPage." );
+    SwSortedObjs &rObjs = *_pFrm->GetDrawObjs();
     for ( USHORT i = 0; i < rObjs.Count(); ++i )
     {
         SwAnchoredObject* pObj = rObjs[i];
-        SwFlyFreeFrm* pFlyFrm = pObj->ISA(SwFlyFreeFrm)
-                                ? static_cast<SwFlyFreeFrm*>(pObj) : 0;
-        if ( pFlyFrm )
+
+        // --> OD 2004-11-29 #115759# - unlock position of anchored object
+        // in order to get the object's position calculated.
+        pObj->UnlockPosition();
+        // <--
+        // --> OD 2004-11-29 #115759# - add also lower objects of as-character
+        // anchored Writer fly frames from page
+        if ( pObj->ISA(SwFlyFrm) )
         {
-            pPage->AppendFlyToPage( pFlyFrm );
+            SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pObj);
+            if ( pObj->ISA(SwFlyFreeFrm) )
+            {
+                _pPage->AppendFlyToPage( pFlyFrm );
+            }
             pFlyFrm->_InvalidatePos();
             pFlyFrm->_InvalidateSize();
-            pFlyFrm->InvalidatePage( pPage );
+            pFlyFrm->InvalidatePage( _pPage );
+
+            // --> OD 2004-11-29 #115759# - add also at-fly anchored objects
+            // to page
+            if ( pFlyFrm->GetDrawObjs() )
+            {
+                ::lcl_AddObjsToPage( pFlyFrm, _pPage );
+            }
+            // <--
+
             SwCntntFrm *pCnt = pFlyFrm->ContainsCntnt();
             while ( pCnt )
             {
                 if ( pCnt->GetDrawObjs() )
-                    ::lcl_AddFlysToPage( pCnt, pPage );
+                    ::lcl_AddObjsToPage( pCnt, _pPage );
                 pCnt = pCnt->GetNextCntntFrm();
             }
         }
+        // <--
+        // --> OD 2004-11-29 #115759# - remove also drawing objects from page
+        else if ( pObj->ISA(SwAnchoredDrawObject) )
+        {
+            if ( pObj->GetFrmFmt().GetAnchor().GetAnchorId() != FLY_IN_CNTNT )
+            {
+                pObj->InvalidateObjPos();
+                _pPage->AppendDrawObjToPage(
+                                *(static_cast<SwAnchoredDrawObject*>(pObj)) );
+            }
+        }
+        // <--
     }
 }
 
@@ -2607,7 +2679,7 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
                 ((SwTxtFrm*)pSav)->Init();  //Ich bin sein Freund.
 
             if ( pPage && pSav->GetDrawObjs() )
-                ::lcl_AddFlysToPage( (SwCntntFrm*)pSav, pPage );
+                ::lcl_AddObjsToPage( (SwCntntFrm*)pSav, pPage );
         }
         else
         {   SwCntntFrm *pBlub = ((SwLayoutFrm*)pSav)->ContainsCntnt();
@@ -2615,7 +2687,7 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
             {
                 do
                 {   if ( pPage && pBlub->GetDrawObjs() )
-                        ::lcl_AddFlysToPage( pBlub, pPage );
+                        ::lcl_AddObjsToPage( pBlub, pPage );
                     if( pBlub->IsTxtFrm() && ((SwTxtFrm*)pBlub)->HasFtn() &&
                          ((SwTxtFrm*)pBlub)->GetCacheIdx() != USHRT_MAX )
                         ((SwTxtFrm*)pBlub)->Init(); //Ich bin sein Freund.
