@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:05:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,7 +919,7 @@ int SwWrtShell::IntelligentCut(int nSelection, BOOL bCut)
         // ist kein Wort selektiert.
     sal_Unicode cPrev = GetChar(FALSE);
     sal_Unicode cNext = GetChar(TRUE, -1);
-    if( !cPrev || !cNext || SCRIPTTYPE_LATIN != GetScriptType() ||
+    if( !cPrev || !cNext ||
         !rCC.isLetterNumeric( ( sTxt = cPrev), 0 ) ||
         !rCC.isLetterNumeric( ( sTxt = cNext), 0 ) )
         return NO_WORD;
