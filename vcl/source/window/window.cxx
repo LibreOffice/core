@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-20 12:58:08 $
+ *  last change: $Author: obr $ $Date: 2002-11-21 08:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,6 @@
 #include <unowrap.hxx>
 #include <dndlcon.hxx>
 #include <dndevdis.hxx>
-#include <frameacc.hxx>
 
 
 #pragma hdrstop
@@ -5891,6 +5890,12 @@ void Window::SetParent( Window* pNewParent )
         {
             mpFrame->ToTop( 0 );
         }
+    }
+
+    // Assure DragSource and DropTarget members are created
+    if ( bNewFrame )
+    {
+            GetDropTarget();
     }
 
     if ( bVisible )
