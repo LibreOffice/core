@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2002-12-04 13:03:28 $
+ *  last change: $Author: rt $ $Date: 2002-12-05 16:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,15 +281,15 @@ void SvxLinguConfigUpdate::UpdateAll()
 
         SvtLinguConfigItem aCfg( A2OU( "Office.Linguistic/ServiceManager" ) );
 
-        char * aServices[3]      =  { SN_THESAURUS,         SN_SPELLCHECKER,            SN_HYPHENATOR };
-        char * aActiveList[3]    =  { "ThesaurusList",      "SpellCheckerList",         "HyphenatorList" };
-        char * aLastFoundList[3] =  { "LastFoundThesauri",  "LastFoundSpellCheckers",   "LastFoundHyphenators" };
+        const sal_Char * aServices[3]      =  { SN_THESAURUS,         SN_SPELLCHECKER,            SN_HYPHENATOR };
+        const sal_Char * aActiveList[3]    =  { "ThesaurusList",      "SpellCheckerList",         "HyphenatorList" };
+        const sal_Char * aLastFoundList[3] =  { "LastFoundThesauri",  "LastFoundSpellCheckers",   "LastFoundHyphenators" };
 
         for (int k = 0;  k < 3;  ++k)
         {
-            OUString aService( A2OU(aServices[k]) );
-            OUString aActiveList( A2OU(aActiveList[k]) );
-            OUString aLastFoundList( A2OU(aLastFoundList[k]) );
+            OUString aService( A2OU( (sal_Char *)aServices[k]) );
+            OUString aActiveList( A2OU( (sal_Char *) aActiveList[k]) );
+            OUString aLastFoundList( A2OU( (sal_Char *) aLastFoundList[k]) );
             INT32 i;
 
             //
