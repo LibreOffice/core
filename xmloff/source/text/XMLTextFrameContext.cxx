@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:35:19 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,6 +614,15 @@ void XMLTextFrameContext::Create( sal_Bool bHRefOrBase64 )
         aAny.setValue( &bTmp, ::getBooleanCppuType() );
         xPropSet->setPropertyValue( sIsSyncWidthToHeight, aAny );
     }
+    if( xPropSetInfo->hasPropertyByName( sWidthType ) &&
+        (bMinWidth || nWidth > 0 || nRelWidth > 0 ) )
+    {
+        sal_Int16 nSizeType =
+            (bMinWidth && XML_TEXT_FRAME_TEXTBOX == nType) ? SizeType::MIN
+                                                           : SizeType::FIX;
+        aAny <<= nSizeType;
+        xPropSet->setPropertyValue( sWidthType, aAny );
+    }
 
     if( nHeight > 0 )
     {
@@ -776,6 +785,7 @@ XMLTextFrameContext::XMLTextFrameContext(
     sGraphicRotation(RTL_CONSTASCII_USTRINGPARAM("GraphicRotation")),
     sTextBoxServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")),
     sGraphicServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GraphicObject")),
+    sWidthType(RTL_CONSTASCII_USTRINGPARAM("WidthType")),
     pHyperlink( 0 )
 {
     nX = 0;
@@ -790,6 +800,7 @@ XMLTextFrameContext::XMLTextFrameContext(
     bMayScript = sal_False;
 
     bMinHeight = sal_False;
+    bMinWidth = sal_False;
     bSyncWidth = sal_False;
     bSyncHeight = sal_False;
     bCreateFailed = sal_False;
@@ -881,6 +892,21 @@ XMLTextFrameContext::XMLTextFrameContext(
                         convertPercent( nTmp, rValue ) )
                     nRelWidth = (sal_Int16)nTmp;
             }
+            break;
+        case XML_TOK_TEXT_FRAME_MIN_WIDTH:
+            if( rValue.indexOf( '%' ) != -1 )
+            {
+                sal_Int32 nTmp;
+                GetImport().GetMM100UnitConverter().convertPercent( nTmp,
+                                                                    rValue );
+                nRelWidth = (sal_Int16)nTmp;
+            }
+            else
+            {
+                GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
+                                                                    rValue, 0 );
+            }
+            bMinWidth = sal_True;
             break;
         case XML_TOK_TEXT_FRAME_HEIGHT:
             // relative heights are obsolete since SRC617. Remove them some day!
