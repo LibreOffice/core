@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: lla $ $Date: 2000-11-09 14:23:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,12 +132,12 @@ namespace configmgr
 
         AsciiServiceName const aProviderServices[] =
         {
-            "com.sun.star.configuration.ConfigurationProvider2",
+            "com.sun.star.configuration.ConfigurationProvider",
             0
         };
         ServiceInfo const aProviderInfo =
         {
-            "com.sun.star.configuration.configmgr.ConfigurationProvider",
+            "com.sun.star.configuration.configmgr.ConfigurationProvider2",
             aProviderServices
 
         };
