@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pb $ $Date: 2001-05-21 11:13:43 $
+#   last change: $Author: fs $ $Date: 2002-07-19 13:27:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,7 +134,8 @@ OBJFILES=	$(OBJ)$/svtabbx.obj	\
 
 SRCFILES =\
             fileview.src	\
-            templwin.src
+            templwin.src	\
+            svcontnr.src
 
 HXX1TARGET=	svcontnr
 HXX1EXT=	hxx
