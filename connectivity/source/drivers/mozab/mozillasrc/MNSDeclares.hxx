@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MNSDeclares.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:31:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,14 +60,10 @@
  ************************************************************************/
 
 #ifndef _CONNECTIVITY_MAB_NS_DECLARES_HXX_
-#define _CONNECTIVITY_MAB_NS_DECLARES_HXX_ 1
+#define _CONNECTIVITY_MAB_NS_DECLARES_HXX_
 
 #include <sal/types.h>
 
-#define PROXIED_FUNCTION
-#define ACCESSED_IN_PROXY
-#define ACCESS_PROXIED_VARIABLES
-#define PROXY_RELATED
 
 const   sal_Int32 RowStates_Normal = 0;
 const   sal_Int32 RowStates_Inserted = 1;
@@ -75,10 +71,15 @@ const   sal_Int32 RowStates_Updated = 2;
 const   sal_Int32 RowStates_Deleted  = 4;
 const   sal_Int32 RowStates_Error  = 32;
 
-ACCESSED_IN_PROXY  extern sal_Bool isProfileLocked();
+namespace connectivity{
+    namespace mozab{
+        class OConnection;
+    }
+}
+sal_Bool isProfileLocked(connectivity::mozab::OConnection* _pCon);
 
 class nsIAbDirectory;
-ACCESSED_IN_PROXY sal_Int32 getDirectoryType(const nsIAbDirectory*  directory);
+sal_Int32 getDirectoryType(const nsIAbDirectory*  directory);
 
 
 #endif // _CONNECTIVITY_MAB_NS_DECLARES_HXX_ 1
