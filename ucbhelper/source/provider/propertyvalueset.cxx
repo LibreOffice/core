@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyvalueset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 10:01:02 $
+ *  last change: $Author: obo $ $Date: 2004-10-21 11:51:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,9 +163,16 @@ struct PropertyValue
     Any                         aObject;            // getObject
 
     inline PropertyValue()
-    : nPropsSet( NO_VALUE_SET ), nOrigValue( NO_VALUE_SET ) {}
+        : nPropsSet( NO_VALUE_SET ), nOrigValue( NO_VALUE_SET ),
+          bBoolean(false),
+          nByte(0),
+          nShort(0),
+          nInt(0),
+          nLong(0),
+          nFloat(0.0),
+          nDouble(0.0)
+        {}
 };
-
 } // namespace ucb_impl
 
 using namespace ucb_impl;
