@@ -222,6 +222,12 @@
 </LC_FORMAT>
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
+<LC_INDEX>
+<IndexKey unoid="alphanumeric" default="true" phonetic="false">ا-غ ف-ن و-ي ٹ-ٻ پ-ڀ ڃ ڄ چ-ڈ ڌ-ڎ ڑ ژ ڤ ڦ ک ڪ ڭ گ ڱ ڳ</IndexKey>
+<UnicodeScript>11</UnicodeScript>
+<FollowPageWord>p.</FollowPageWord>
+<FollowPageWord>pp.</FollowPageWord>
+</LC_INDEX>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek>
