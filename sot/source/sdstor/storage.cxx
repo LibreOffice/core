@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-01-16 15:30:00 $
+ *  last change: $Author: mba $ $Date: 2001-02-06 10:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,7 +461,7 @@ void SotStorage::TestMemberInvariant( BOOL bPrint )
     : nError( SVSTREAM_OK )                 \
     , bIsRoot( FALSE )                      \
     , bDelStm( FALSE )                      \
-    , nVersion( SOFFICE_FILEFORMAT_NOW )    \
+    , nVersion( SOFFICE_FILEFORMAT_60 )    \
     , pOwnStg( NULL )   \
     , pStorStm( NULL )
 
@@ -544,10 +544,10 @@ void SotStorage::CreateStorage( BOOL bForceUCBStorage, StreamMode nMode, Storage
     else
     {
         // temporary storage
-        if ( bForceUCBStorage )
+//        if ( bForceUCBStorage )
             pOwnStg = new UCBStorage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
-        else
-            pOwnStg = new Storage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+//        else
+//            pOwnStg = new Storage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
         aName = pOwnStg->GetName();
     }
 
