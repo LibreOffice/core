@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:54:49 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,8 +624,10 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
         {
             try
             {
+                static const BOOL bDontBurnInStyleSheet = ( getenv( "AVOID_BURN_IN_FOR_GALLERY_THEME" ) != NULL );
                 SdDrawDocument* pDoc = (SdDrawDocument*) pObject;
-                pDoc->BurnInStyleSheetAttributes();
+                if ( !bDontBurnInStyleSheet )
+                    pDoc->BurnInStyleSheetAttributes();
 //BFS04             pDoc->SetStreamingSdrModel( TRUE );
 //BFS02             pDoc->RemoveNotPersistentObjects( TRUE );
                 rxOStm->SetBufferSize( 16348 );
