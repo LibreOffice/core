@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-30 09:04:55 $
+ *  last change: $Author: kz $ $Date: 2002-08-03 20:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ TabPage TP_LAB_PRT
         Text[ spanish ] = "Distribuir";
         Text[ finnish ] = "Divide";
         Text[ italian ] = "Distribuisci";
-        Text[ danish ] = "Divide";
+        Text[ danish ] = "Fordel";
         Text[ swedish ] = "F�rdela";
         Text[ polish ] = "Dystrybuj";
         Text[ portuguese_brazilian ] = "Divide";
@@ -340,7 +340,7 @@ TabPage TP_LAB_PRT
         Text [ spanish ] = "Impresora " ;
         Text [ french ] = " Imprimante " ;
         Text [ swedish ] = "Skrivare " ;
-        Text [ danish ] = "Printer " ;
+        Text [ danish ] = " Printer " ;
         Text [ portuguese_brazilian ] = "Drucker " ;
         Text [ portuguese ] = "Impressora " ;
         Text[ chinese_simplified ] = " 打印机 ";
