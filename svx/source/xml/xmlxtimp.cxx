@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 14:34:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,11 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const Reference< XNameC
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR("svx::SvxXMLXTableImport::load(), exception caught!");
+//      CL: I disabled this assertion since its an error, but it happens
+//          each time you load a document with property tables that are not
+//          on the current machine. Maybe a better fix would be to place
+//          a file exists check before importing...
+//      DBG_ERROR("svx::SvxXMLXTableImport::load(), exception caught!");
         bRet = sal_False;
     }
 
