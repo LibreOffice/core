@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:54:52 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,6 @@ public:
     void GoMagic( ViewShell *pSh, BYTE nWhich );
     // set background color
     void SetBackColor( Color* pNewColor );
-    Color* XChgBackColor( Color* pNewColor );
     inline const Color* GetBackColor() const{ return pBackColor; }
 
     inline void ChkMagic( ViewShell *pSh, BYTE nWhich )
@@ -382,16 +381,6 @@ public:
 
     xub_StrLen GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth );
 
-    xub_StrLen GetTxtBreak( ViewShell* pSh, const OutputDevice* pOut,
-        const SwScriptInfo* pScript, const XubString& rTxt,
-        long nTextWidth, xub_StrLen& rExtraCharPos,
-        const xub_StrLen nIdx, const xub_StrLen nLen );
-
-    xub_StrLen GetTxtBreak( ViewShell* pSh,  const OutputDevice* pOut,
-        const SwScriptInfo* pScript, const XubString& rTxt,
-        long nTextWidth, const xub_StrLen nIdx,
-        const xub_StrLen nLen );
-
     xub_StrLen _GetCrsrOfst( SwDrawTextInfo& rInf )
         { return aSub[nActual]._GetCrsrOfst( rInf ); }
 
@@ -408,7 +397,6 @@ public:
         { return aSub[nActual].GetAscent( pSh, rOut ); }
     inline USHORT GetHeight( ViewShell *pSh, const OutputDevice& rOut )
         { return aSub[nActual].GetHeight( pSh, rOut ); }
-    USHORT GetGuessedLeading( ViewShell *pSh, const OutputDevice& rOut );
 
     inline void Invalidate()
         { bFntChg = bOrgChg = TRUE; }
