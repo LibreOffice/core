@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.105 $
+#   $Revision: 1.106 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-14 12:42:47 $
+#   last change: $Author: hjs $ $Date: 2002-03-21 16:24:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -646,7 +646,7 @@ SCP9 ?= TNR!:=9
 
 ZIPALL=ZIPALLTARGET
 
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 ziplangdirs:=$(shell +find . -type d ! -name CVS ! -name "." | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
 ziplangdirs:=$(subst,CVS, $(shell +-dir /ba:d ))
