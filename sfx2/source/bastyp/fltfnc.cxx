@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:47:32 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,13 +559,33 @@ sal_uInt32  SfxFilterMatcher::GuessFilter( SfxMedium& rMedium, const SfxFilter**
 
     Reference< XTypeDetection > xDetection( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection")), UNO_QUERY );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aDescriptor(3);
-    aDescriptor[0].Name = ::rtl::OUString::createFromAscii("InputStream");
-    aDescriptor[0].Value <<= rMedium.GetInputStream();
-    aDescriptor[1].Name = ::rtl::OUString::createFromAscii("InteractionHandler");
-    aDescriptor[1].Value <<= rMedium.GetInteractionHandler();
-    aDescriptor[2].Name = ::rtl::OUString::createFromAscii("URL");
-    aDescriptor[2].Value <<= ::rtl::OUString( rMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+    sal_Int32 nParamCount = 3;
+    if ( pImpl->aName.getLength() )
+        nParamCount++;
+    if ( pOldFilter )
+        nParamCount += 2;
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aDescriptor(nParamCount);
+    sal_Int32 nParamIndex = 0;
+    aDescriptor[nParamIndex].Name = ::rtl::OUString::createFromAscii("InputStream");
+    aDescriptor[nParamIndex++].Value <<= rMedium.GetInputStream();
+    aDescriptor[nParamIndex].Name = ::rtl::OUString::createFromAscii("InteractionHandler");
+    aDescriptor[nParamIndex++].Value <<= rMedium.GetInteractionHandler();
+    aDescriptor[nParamIndex].Name = ::rtl::OUString::createFromAscii("URL");
+    aDescriptor[nParamIndex++].Value <<= ::rtl::OUString( rMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+    if ( pImpl->aName.getLength() )
+    {
+        aDescriptor[nParamIndex].Name = ::rtl::OUString::createFromAscii("DocumentService");
+        aDescriptor[nParamIndex++].Value <<= pImpl->aName;
+    }
+
+    if ( pOldFilter )
+    {
+        aDescriptor[nParamIndex].Name = ::rtl::OUString::createFromAscii("TypeName");
+        aDescriptor[nParamIndex++].Value <<= ::rtl::OUString( pOldFilter->GetTypeName() );
+        aDescriptor[nParamIndex].Name = ::rtl::OUString::createFromAscii("FilterName");
+        aDescriptor[nParamIndex++].Value <<= ::rtl::OUString( pOldFilter->GetFilterName() );
+    }
 
     ::rtl::OUString sTypeName;
     try
@@ -579,8 +599,10 @@ sal_uInt32  SfxFilterMatcher::GuessFilter( SfxMedium& rMedium, const SfxFilter**
     if ( sTypeName.getLength() )
     {
         // detect filter by given type
-        // Note: might existing DocumentService can influence this search
-        // but its checked inside call method GetFilterForProps!
+        // In case of this matcher is bound to a particular document type:
+        // If there is no acceptable type for this document at all, the type detection has possibly returned something else.
+        // The DocumentService property is only a preselection, and all preselections are considered as optional!
+        // This "wrong" type will be sorted out now because we match only allowed filters to the detected type
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > lQuery(1);
         lQuery[0].Name = ::rtl::OUString::createFromAscii("Name");
         lQuery[0].Value <<= sTypeName;
