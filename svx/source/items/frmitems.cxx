@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-30 11:17:27 $
+ *  last change: $Author: mib $ $Date: 2000-12-13 10:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4486,7 +4486,7 @@ sal_Bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         break;
 
         case MID_GRAPHIC_TRANSPARENT:
-            rVal = Bool2Any( aColor.GetTransparency() );
+            rVal = Bool2Any( aColor.GetTransparency() != 0 );
         break;
 
         case MID_GRAPHIC_URL:
