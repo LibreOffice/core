@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:21:56 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,44 @@ void SwFlyFreeFrm::MakeAll()
 #endif
 }
 
+/** determines, if direct environment of fly frame has 'auto' size
+
+    OD 07.08.2003 #i17297#, #111066#, #111070#
+    start with anchor frame and search via <GetUpper()> for a header, footer,
+    row or fly frame stopping at page frame.
+    return <true>, if such a frame is found and it has 'auto' size.
+    otherwise <false> is returned.
+
+    @author OD
+
+    @return boolean indicating, that direct environment has 'auto' size
+*/
+bool SwFlyFreeFrm::HasEnvironmentAutoSize() const
+{
+    bool bRetVal = false;
+
+    const SwFrm* pToBeCheckedFrm = GetAnchor();
+    while ( pToBeCheckedFrm &&
+            !pToBeCheckedFrm->IsPageFrm() )
+    {
+        if ( pToBeCheckedFrm->IsHeaderFrm() ||
+             pToBeCheckedFrm->IsFooterFrm() ||
+             pToBeCheckedFrm->IsRowFrm() ||
+             pToBeCheckedFrm->IsFlyFrm() )
+        {
+            bRetVal = ATT_FIX_SIZE !=
+                      pToBeCheckedFrm->GetAttrSet()->GetFrmSize().GetSizeType();
+            break;
+        }
+        else
+        {
+            pToBeCheckedFrm = pToBeCheckedFrm->GetUpper();
+        }
+    }
+
+    return bRetVal;
+}
+
 /*************************************************************************
 |*
 |*  SwFlyFreeFrm::CheckClip()
@@ -374,7 +412,19 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 bWidthClipped = TRUE;
             }
 
-            if ( Lower() && Lower()->IsNoTxtFrm() && !FindFooterOrHeader() )
+            // OD 06.08.2003 #i17297#, #111066#, #111070# - no proportional
+            // scaling of graphics in environments, which determines its size
+            // by its content ('auto' size). Otherwise layout loops can occur and
+            // layout sizes of the environment can be incorrect.
+            // Such environment are:
+            // (1) header and footer frames with 'auto' size
+            // (2) table row frames with 'auto' size
+            // (3) fly frames with 'auto' size
+            // Note: section frames seems to be not critical - didn't found
+            //       any critical layout situation so far.
+            if ( Lower() && Lower()->IsNoTxtFrm() &&
+                 ( static_cast<SwCntntFrm*>(Lower())->GetNode()->GetOLENode() ||
+                   !HasEnvironmentAutoSize() ) )
             {
                 //Wenn Breite und Hoehe angepasst wurden, so ist die
                 //groessere Veraenderung massgeblich.
@@ -403,16 +453,19 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                     bWidthClipped = TRUE;
                 }
 
-//                if( bWidthClipped || bHeightClipped )
-//                {
-//                    SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
-//                    pFmt->LockModify();
-//                    SwFmtFrmSize aFrmSize( rSz );
-//                    aFrmSize.SetWidth( aFrmRect.Width() );
-//                    aFrmSize.SetHeight( aFrmRect.Height() );
-//                    pFmt->SetAttr( aFrmSize );
-//                    pFmt->UnlockModify();
-//                }
+                // OD 07.08.2003 #i17297#, #111066#, #111070# - reactivate change
+                // of size attribute for fly frames containing an ole object.
+                if ( static_cast<SwCntntFrm*>(Lower())->GetNode()->GetOLENode() &&
+                     ( bWidthClipped || bHeightClipped ) )
+                {
+                    SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
+                    pFmt->LockModify();
+                    SwFmtFrmSize aFrmSize( rSz );
+                    aFrmSize.SetWidth( aFrmRect.Width() );
+                    aFrmSize.SetHeight( aFrmRect.Height() );
+                    pFmt->SetAttr( aFrmSize );
+                    pFmt->UnlockModify();
+                }
             }
 
             //Jetzt die Einstellungen am Frm vornehmen, bei Spalten werden
