@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosrch.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 13:29:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 14:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 #ifndef _DOC_HXX //autogen
