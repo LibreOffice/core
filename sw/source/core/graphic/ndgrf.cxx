@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-02 10:55:22 $
+ *  last change: $Author: od $ $Date: 2002-09-17 13:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1276,6 +1276,16 @@ BOOL SwGrfNode::IsTransparent() const
     BOOL bRet = aGrfObj.IsTransparent();
     if( !bRet ) // ask the attribut
         bRet = 0 != GetSwAttrSet().GetTransparencyGrf().GetValue();
+
+    /// OD 17.09.2002 #102099# - if return value is still FALSE and
+    ///     graphic is swapped out, assume that graphic is transparent.
+    ///     Thus, for safety reasons, paint errors are avoided, because the
+    ///     background is painted not only by the graphic node.
+    if ( !bRet && aGrfObj.IsSwappedOut() )
+    {
+        bRet = true;
+    }
+
     return bRet;
 }
 
