@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:55 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 12:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,12 @@ void SwWW8Writer::OutListTab()
                         sNumStr = 0x6C;
                     }
                 }
+                else if (eChrSet == RTL_TEXTENCODING_SYMBOL)
+                {
+                    sal_Unicode cChar = sNumStr.GetChar(0);
+                    if (cChar>= 0xF000 && cChar<=0xF0FF)
+                        sNumStr.SetChar(0, cChar-0xF000);
+                }
             }
             else if( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
             {
@@ -371,12 +377,13 @@ void SwWW8Writer::OutListTab()
                     else
                         pO->Insert(93, pO->Count());
                     InsUInt16(nFontID);
-
+#if 0
                     if (bWrtWW8)
                     {
                         InsUInt16(0x286F);
                         pO->Insert(01, pO->Count());
                     }
+#endif
                 }
                 else
                     pOutSet = &rFmt.GetCharFmt()->GetAttrSet();

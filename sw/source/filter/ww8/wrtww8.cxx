@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:55 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 12:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2386,6 +2386,7 @@ ULONG SwWW8Writer::WriteStorage()
     SwPosFlyFrms aFlyPos;
     pDoc->GetAllFlyFmts( aFlyPos, bWriteAll ? 0 : pOrigPam, bWrtWW8 );
     // Die Sonderbehandlung fuer Teilausgabe fehlt noch ( siehe RTF )
+    pFlyPos = &aFlyPos;
 
     ULONG nRet = StoreDoc();
 
