@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
+ *  last change: $Author: cl $ $Date: 2001-07-10 10:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2046,6 +2046,20 @@ namespace xmloff { namespace token {
         TOKEN( "background-objects-visible" ), // XML_BACKGROUND_OBJECTS_VISIBLE
         TOKEN( "background-visible" ),         // XML_BACKGROUND_VISIBLE
 
+        TOKEN( "move-from-upperleft" ),        // XML_MOVE_FROM_UPPERLEFT,
+        TOKEN( "move-from-upperright" ),       // XML_MOVE_FROM_UPPERRIGHT,
+        TOKEN( "move-from-lowerright" ),       // XML_MOVE_FROM_LOWERRIGHT,
+        TOKEN( "move-from-lowerleft" ),        // XML_MOVE_FROM_LOWERLEFT,
+        TOKEN( "uncover-to-left" ),            // XML_UNCOVER_TO_LEFT,
+        TOKEN( "uncover-to-upperleft" ),       // XML_UNCOVER_TO_UPPERLEFT,
+        TOKEN( "uncover-to-top" ),             // XML_UNCOVER_TO_TOP,
+        TOKEN( "uncover-to-upperright" ),      // XML_UNCOVER_TO_UPPERRIGHT,
+        TOKEN( "uncover-to-right" ),           // XML_UNCOVER_TO_RIGHT,
+        TOKEN( "uncover-to-lowerright" ),      // XML_UNCOVER_TO_LOWERRIGHT,
+        TOKEN( "uncover-to-bottom" ),          // XML_UNCOVER_TO_BOTTOM,
+        TOKEN( "uncover-to-lowerleft" ),       // XML_UNCOVER_TO_LOWERLEFT,
+        TOKEN( "vertical-checkerboard" ),      // XML_VERTICAL_CHECKERBOARD,
+        TOKEN( "horizontal-checkerboard" ),    // XML_HORIZONTAL_CHECKERBOARD,
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };

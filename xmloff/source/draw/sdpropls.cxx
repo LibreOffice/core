@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: cl $ $Date: 2001-07-10 10:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,9 +512,9 @@ SvXMLEnumMapEntry aXML_FadeEffect_EnumMap[] =
     { XML_CLOCKWISE,            presentation::FadeEffect_CLOCKWISE },
     { XML_COUNTERCLOCKWISE,     presentation::FadeEffect_COUNTERCLOCKWISE },
     { XML_FADE_FROM_UPPERLEFT,  presentation::FadeEffect_FADE_FROM_UPPERLEFT },
-    { XML_FADE_FROM_UPPERRIGHT,presentation::FadeEffect_FADE_FROM_UPPERRIGHT },
+    { XML_FADE_FROM_UPPERRIGHT, presentation::FadeEffect_FADE_FROM_UPPERRIGHT },
     { XML_FADE_FROM_LOWERLEFT,  presentation::FadeEffect_FADE_FROM_LOWERLEFT },
-    { XML_FADE_FROM_LOWERRIGHT,presentation::FadeEffect_FADE_FROM_LOWERRIGHT },
+    { XML_FADE_FROM_LOWERRIGHT, presentation::FadeEffect_FADE_FROM_LOWERRIGHT },
     { XML_CLOSE_VERTICAL,       presentation::FadeEffect_CLOSE_VERTICAL },
     { XML_CLOSE_HORIZONTAL,     presentation::FadeEffect_CLOSE_HORIZONTAL },
     { XML_OPEN_VERTICAL,        presentation::FadeEffect_OPEN_VERTICAL },
@@ -527,7 +527,7 @@ SvXMLEnumMapEntry aXML_FadeEffect_EnumMap[] =
     { XML_WAVYLINE_FROM_LEFT,   presentation::FadeEffect_WAVYLINE_FROM_LEFT },
     { XML_WAVYLINE_FROM_TOP,    presentation::FadeEffect_WAVYLINE_FROM_TOP },
     { XML_WAVYLINE_FROM_RIGHT,  presentation::FadeEffect_WAVYLINE_FROM_RIGHT },
-    { XML_WAVYLINE_FROM_BOTTOM,presentation::FadeEffect_WAVYLINE_FROM_BOTTOM },
+    { XML_WAVYLINE_FROM_BOTTOM, presentation::FadeEffect_WAVYLINE_FROM_BOTTOM },
     { XML_RANDOM,               presentation::FadeEffect_RANDOM },
     { XML_STRETCH_FROM_LEFT,    presentation::FadeEffect_STRETCH_FROM_LEFT },
     { XML_STRETCH_FROM_TOP,     presentation::FadeEffect_STRETCH_FROM_TOP },
@@ -535,6 +535,20 @@ SvXMLEnumMapEntry aXML_FadeEffect_EnumMap[] =
     { XML_STRETCH_FROM_BOTTOM,  presentation::FadeEffect_STRETCH_FROM_BOTTOM },
     { XML_VERTICAL_LINES,       presentation::FadeEffect_VERTICAL_LINES },
     { XML_HORIZONTAL_LINES,     presentation::FadeEffect_HORIZONTAL_LINES },
+    { XML_MOVE_FROM_UPPERLEFT,  presentation::FadeEffect_MOVE_FROM_UPPERLEFT },
+    { XML_MOVE_FROM_UPPERRIGHT, presentation::FadeEffect_MOVE_FROM_UPPERRIGHT },
+    { XML_MOVE_FROM_LOWERRIGHT, presentation::FadeEffect_MOVE_FROM_LOWERRIGHT },
+    { XML_MOVE_FROM_LOWERLEFT,  presentation::FadeEffect_MOVE_FROM_LOWERLEFT },
+    { XML_UNCOVER_TO_LEFT,      presentation::FadeEffect_UNCOVER_TO_LEFT },
+    { XML_UNCOVER_TO_UPPERLEFT, presentation::FadeEffect_UNCOVER_TO_UPPERLEFT },
+    { XML_UNCOVER_TO_TOP,       presentation::FadeEffect_UNCOVER_TO_TOP },
+    { XML_UNCOVER_TO_UPPERRIGHT,presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT },
+    { XML_UNCOVER_TO_RIGHT,     presentation::FadeEffect_UNCOVER_TO_RIGHT },
+    { XML_UNCOVER_TO_LOWERRIGHT,presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT },
+    { XML_UNCOVER_TO_BOTTOM,    presentation::FadeEffect_UNCOVER_TO_BOTTOM },
+    { XML_UNCOVER_TO_LOWERLEFT, presentation::FadeEffect_UNCOVER_TO_LOWERLEFT },
+    { XML_VERTICAL_CHECKERBOARD,presentation::FadeEffect_VERTICAL_CHECKERBOARD },
+    { XML_HORIZONTAL_CHECKERBOARD,presentation::FadeEffect_HORIZONTAL_CHECKERBOARD },
     { XML_TOKEN_INVALID, 0 }
 };
 
