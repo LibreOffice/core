@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arguments.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:08 $
+ *  last change: $Author: as $ $Date: 2001-07-02 13:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ namespace framework{
 #define ARGUMENTNAME_SILENT                                 DECLARE_ASCII("Silent"              )   // bool
 #define ARGUMENTNAME_POSSIZE                                DECLARE_ASCII("PosSize"             )   // rectangle
 #define ARGUMENTNAME_INPUTSTREAM                            DECLARE_ASCII("InputStream"         )   // Reference< XInputStream >
+#define ARGUMENTNAME_OUTPUTSTREAM                           DECLARE_ASCII("OutputStream"        )   // Reference< XOutputStream >
 #define ARGUMENTNAME_DEEPDETECTION                          DECLARE_ASCII("DeepDetection"       )   // bool
 #define ARGUMENTNAME_JUMPMARK                               DECLARE_ASCII("JumpMark"            )   // string
 #define ARGUMENTNAME_TYPENAME                               DECLARE_ASCII("TypeName"            )   // string
@@ -140,9 +141,10 @@ namespace framework{
 #define ARGUMENTFLAG_SILENT                                 0x0000000000400000L
 #define ARGUMENTFLAG_POSSIZE                                0x0000000000800000L
 #define ARGUMENTFLAG_INPUTSTREAM                            0x0000000001000000L
-#define ARGUMENTFLAG_DEEPDETECTION                          0x0000000002000000L
-#define ARGUMENTFLAG_JUMPMARK                               0x0000000004000000L
-#define ARGUMENTFLAG_TYPENAME                               0x0000000008000000L
+#define ARGUMENTFLAG_OUTPUTSTREAM                           0x0000000002000000L
+#define ARGUMENTFLAG_DEEPDETECTION                          0x0000000004000000L
+#define ARGUMENTFLAG_JUMPMARK                               0x0000000008000000L
+#define ARGUMENTFLAG_TYPENAME                               0x0000000010000000L
 
 #define DISABLE_ARGUMENT_CHARACTERSET                       0xFFFFFFFFFFFFFFFEL
 #define DISABLE_ARGUMENT_MEDIATYPE                          0xFFFFFFFFFFFFFFFDL
@@ -169,9 +171,10 @@ namespace framework{
 #define DISABLE_ARGUMENT_SILENT                             0xFFFFFFFFFFBFFFFFL
 #define DISABLE_ARGUMENT_POSSIZE                            0xFFFFFFFFFF7FFFFFL
 #define DISABLE_ARGUMENT_INPUTSTREAM                        0xFFFFFFFFFEFFFFFFL
-#define DISABLE_ARGUMENT_DEEPDETECTION                      0xFFFFFFFFFDFFFFFFL
-#define DISABLE_ARGUMENT_JUMPMARK                           0xFFFFFFFFFBFFFFFFL
-#define DISABLE_ARGUMENT_TYPENAME                           0xFFFFFFFFF7FFFFFFL
+#define DISABLE_ARGUMENT_OUTPUTSTREAM                       0xFFFFFFFFFDFFFFFFL
+#define DISABLE_ARGUMENT_DEEPDETECTION                      0xFFFFFFFFFBFFFFFFL
+#define DISABLE_ARGUMENT_JUMPMARK                           0xFFFFFFFFF7FFFFFFL
+#define DISABLE_ARGUMENT_TYPENAME                           0xFFFFFFFFEFFFFFFFL
 
 }       //  namespace framework
 
