@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:26:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include "rtl/bootstrap.hxx"
 #include "rtl/string.hxx"
 #include "rtl/ustrbuf.hxx"
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 #include "rtl/strbuf.hxx"
 #endif
 #include "osl/diagnose.h"
@@ -169,7 +169,7 @@ void addFactories(
 
         Any aFac( makeAny( loadSharedLibComponentFactory( lib, bootstrapPath, implName, xSF, xKey ) ) );
         xSet->insert( aFac );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if (xSet->has( aFac ))
         {
             Reference< lang::XServiceInfo > xInfo;
@@ -192,7 +192,7 @@ void addFactories(
             }
         }
 #endif
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         if (! xSet->has( aFac ))
         {
             OStringBuffer buf( 64 );
@@ -266,7 +266,7 @@ static OUString findBoostrapArgument(
         result_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".rdb") );
         result = result_buf.makeStringAndClear();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OString result_dbg = OUStringToOString(result, RTL_TEXTENCODING_ASCII_US);
         OString arg_name_dbg = OUStringToOString(arg_name, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("cppuhelper::findBoostrapArgument - setting %s relative to executable: %s\n",
@@ -279,7 +279,7 @@ static OUString findBoostrapArgument(
         if(pFallenBack)
             *pFallenBack = sal_False;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OString prefixed_arg_name_dbg = OUStringToOString(
             prefixed_arg_name, RTL_TEXTENCODING_ASCII_US );
         OString result_dbg = OUStringToOString(
@@ -318,7 +318,7 @@ static Reference< registry::XSimpleRegistry > nestRegistries(
         }
         catch (registry::InvalidRegistryException & invalidRegistryException)
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             OString rdb_name_tmp = OUStringToOString(
                 write_rdb, RTL_TEXTENCODING_ASCII_US);
             OString message_dbg = OUStringToOString(
@@ -381,7 +381,7 @@ static Reference< registry::XSimpleRegistry > nestRegistries(
                     throw;
             }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             OString rdb_name_tmp = OUStringToOString(
                 rdb_name, RTL_TEXTENCODING_ASCII_US );
             OString message_dbg = OUStringToOString(
