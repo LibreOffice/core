@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passcrtdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-31 11:08:38 $
+ *  last change: $Author: vg $ $Date: 2002-11-04 16:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,27 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Size = MAP_APPFONT ( 94 , 10 ) ;
         Text = "Kennwort ~festlegen";
         Text [ English ] = "~Enter password" ;
+        Text[ english_us ] = "~Enter password";
+        Text[ portuguese ] = "~Enter password";
+        Text[ russian ] = "~Enter password";
+        Text[ greek ] = "~Enter password";
+        Text[ dutch ] = "~Enter password";
+        Text[ french ] = "~Enter password";
+        Text[ spanish ] = "~Enter password";
+        Text[ finnish ] = "~Enter password";
+        Text[ italian ] = "~Enter password";
+        Text[ danish ] = "~Enter password";
+        Text[ swedish ] = "~Enter password";
+        Text[ polish ] = "~Enter password";
+        Text[ portuguese_brazilian ] = "~Enter password";
+        Text[ japanese ] = "~Enter password";
+        Text[ korean ] = "~Enter password";
+        Text[ chinese_simplified ] = "~Enter password";
+        Text[ chinese_traditional ] = "~Enter password";
+        Text[ turkish ] = "~Enter password";
+        Text[ arabic ] = "~Enter password";
+        Text[ catalan ] = "~Enter password";
+        Text[ thai ] = "~Enter password";
     };
     Edit ED_PASSWORD_CRT
     {
@@ -98,6 +119,27 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Size = MAP_APPFONT ( 94 , 10 ) ;
         Text = "Kennwort ~bestätigen" ;
         Text [ English ] = "~Confirm password" ;
+        Text[ english_us ] = "~Confirm password";
+        Text[ portuguese ] = "~Confirm password";
+        Text[ russian ] = "~Confirm password";
+        Text[ greek ] = "~Confirm password";
+        Text[ dutch ] = "~Confirm password";
+        Text[ french ] = "~Confirm password";
+        Text[ spanish ] = "~Confirm password";
+        Text[ finnish ] = "~Confirm password";
+        Text[ italian ] = "~Confirm password";
+        Text[ danish ] = "~Confirm password";
+        Text[ swedish ] = "~Confirm password";
+        Text[ polish ] = "~Confirm password";
+        Text[ portuguese_brazilian ] = "~Confirm password";
+        Text[ japanese ] = "~Confirm password";
+        Text[ korean ] = "~Confirm password";
+        Text[ chinese_simplified ] = "~Confirm password";
+        Text[ chinese_traditional ] = "~Confirm password";
+        Text[ turkish ] = "~Confirm password";
+        Text[ arabic ] = "~Confirm password";
+        Text[ catalan ] = "~Confirm password";
+        Text[ thai ] = "~Confirm password";
     };
     Edit ED_PASSWORD_REPEAT
     {
@@ -123,5 +165,25 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Pos = MAP_APPFONT ( 109 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
+    Text[ english_us ] = "Enter Master Password";
+    Text[ portuguese ] = "Indique a senha principal.";
+    Text[ russian ] = "Ââåñòè îñíîâíîé ïàğîëü";
+    Text[ greek ] = "Please enter master password";
+    Text[ dutch ] = "Hoofwachtwoord invoeren";
+    Text[ french ] = "Définition du mot de passe principal";
+    Text[ spanish ] = "Determinar la contraseña principal";
+    Text[ finnish ] = "Please enter master password";
+    Text[ italian ] = "Digitate la password principale";
+    Text[ danish ] = "Definer hovedadgangskode";
+    Text[ swedish ] = "Definiera huvudlösenord";
+    Text[ polish ] = "Zdefiniuj has³o g³ówne";
+    Text[ portuguese_brazilian ] = "Please enter master password";
+    Text[ japanese ] = "ãƒã‚¹ã‚¿ãƒ¼ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®æŒ‡å®š";
+    Text[ korean ] = "ë§ˆìŠ¤í„° íŒ¨ìŠ¤ì›Œë“œ ì •ì˜";
+    Text[ chinese_simplified ] = "æŒ‡å®šä¸»å¯†ç ";
+    Text[ chinese_traditional ] = "è«‹è¼¸å…¥ä¸»å¯†ç¢¼";
+    Text[ turkish ] = "Please enter master password";
+    Text[ arabic ] = "Please enter master password";
+    Text[ catalan ] = "Introduïu la contrasenya mestra";
 };
 
