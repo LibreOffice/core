@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-03 16:00:46 $
+ *  last change: $Author: ssa $ $Date: 2002-06-06 13:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent
     if ( pEvent && pEvent->ISA( VclWindowEvent ) )
     {
         DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
-        //if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() )
+        if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() )
             ProcessWindowEvent( *(VclWindowEvent*)pEvent );
     }
     return 0;
@@ -185,7 +185,7 @@ IMPL_LINK( VCLXAccessibleComponent, WindowChildEventListener, VclSimpleEvent*, p
     if ( pEvent && pEvent->ISA( VclWindowEvent ) )
     {
         DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
-        //if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() )
+        if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() )
             ProcessWindowChildEvent( *(VclWindowEvent*)pEvent );
     }
     return 0;
