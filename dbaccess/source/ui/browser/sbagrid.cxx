@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-09 08:59:07 $
+ *  last change: $Author: fs $ $Date: 2002-10-09 09:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,6 +645,12 @@ void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& _rUrl,
     aEvt.IsEnabled = !pGrid->IsReadOnlyDB();
     aEvt.FeatureURL = _rUrl;
 
+    ConstMapDispatchToBoolIterator aURLStatePos = m_aDispatchStates.find( classifyDispatchURL( _rUrl ) );
+    if ( m_aDispatchStates.end() != aURLStatePos )
+        aEvt.State <<= aURLStatePos->second;
+    else
+        aEvt.State <<= sal_False;
+
     if (xControl.is())
         xControl->statusChanged(aEvt);
     else
@@ -685,13 +691,75 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDis
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridPeer::dispatch(const ::com::sun::star::util::URL& aURL, const Sequence< PropertyValue >& aArgs) throw( RuntimeException )
+IMPL_LINK( SbaXGridPeer, OnDispatchEvent, void*, NOTINTERESTEDIN )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SbaGridControl* pGrid = static_cast< SbaGridControl* >( GetWindow() );
+    if ( pGrid )    // if this fails, we were disposing before arriving here
+    {
+        if ( Application::GetMainThreadIdentifier() != ::vos::OThread::getCurrentIdentifier() )
+        {
+            // still not in the main thread (see SbaXGridPeer::dispatch). post an event, again
+            // without moving the special even to the back of the queue
+            pGrid->PostUserEvent( LINK( this, SbaXGridPeer, OnDispatchEvent ) );
+        }
+        else
+        {
+            DispatchArgs aArgs = m_aDispatchArgs.front();
+            m_aDispatchArgs.pop();
+
+            SbaXGridPeer::dispatch( aArgs.aURL, aArgs.aArgs );
+        }
+    }
+
+    return 0;
+}
+
+//---------------------------------------------------------------------------------------
+SbaXGridPeer::DispatchType SbaXGridPeer::classifyDispatchURL( const URL& _rURL )
+{
+    DispatchType eURLType = dtUnknown;
+    if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/BrowserAttribs" ) )
+        eURLType = dtBrowserAttribs;
+    else if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/RowHeight" ) )
+        eURLType = dtRowHeight;
+    else if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/ColumnAttribs" ) )
+        eURLType = dtColumnAttribs;
+    else if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/ColumnWidth" ) )
+        eURLType = dtColumnWidth;
+    return eURLType;
+}
+
+//---------------------------------------------------------------------------------------
+void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyValue >& aArgs) throw( RuntimeException )
+{
     SbaGridControl* pGrid = (SbaGridControl*)GetWindow();
     if (!pGrid)
         return;
 
+    if ( Application::GetMainThreadIdentifier() != ::vos::OThread::getCurrentIdentifier() )
+    {
+        // we're not in the main thread. This is bad, as we want to raise windows here,
+        // and VCL does not like windows to be opened in non-main threads (at least on Win32).
+        // Okay, do this async. No problem with this, as XDispatch::dispatch is defined to be
+        // a one-way method.
+
+        // save the args
+        DispatchArgs aDispatchArgs;
+        aDispatchArgs.aURL = aURL;
+        aDispatchArgs.aArgs = aArgs;
+        m_aDispatchArgs.push( aDispatchArgs );
+
+        // post an event
+        // we use the Window::PostUserEvent here, instead of the application::PostUserEvent
+        // this saves us from keeping track of these events - as soon as the window dies,
+        // the events are deleted automatically. For the application way, we would need to
+        // do this ourself.
+        // As we use our grid as window, and the grid dies before we dy, this should be no problem.
+        pGrid->PostUserEvent( LINK( this, SbaXGridPeer, OnDispatchEvent ) );
+        return;
+    }
+
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Int16 nColId = -1;
     const PropertyValue* pArgs = aArgs.getConstArray();
     for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArgs)
@@ -713,23 +781,47 @@ void SAL_CALL SbaXGridPeer::dispatch(const ::com::sun::star::util::URL& aURL, co
         }
     }
 
-    if (aURL.Complete == ::rtl::OUString::createFromAscii(".uno:GridSlots/BrowserAttribs"))
-        pGrid->SetBrowserAttrs();
-    else if (aURL.Complete == ::rtl::OUString::createFromAscii(".uno:GridSlots/RowHeight"))
-        pGrid->SetRowHeight();
-    else if (aURL.Complete == ::rtl::OUString::createFromAscii(".uno:GridSlots/ColumnAttribs"))
+    DispatchType eURLType = classifyDispatchURL( aURL );
+
+    if ( dtUnknown != eURLType )
     {
-        DBG_ASSERT(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
-        if (nColId != -1)
-            return;
-        pGrid->SetColAttrs(nColId);
-    }
-    else if (aURL.Complete == ::rtl::OUString::createFromAscii(".uno:GridSlots/ColumnWidth"))
-    {
-        DBG_ASSERT(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
-        if (nColId != -1)
-            return;
-        pGrid->SetColWidth(nColId);
+        // notify any status listeners that the dialog is now active (well, about to be active)
+        MapDispatchToBool::iterator aThisURLState = m_aDispatchStates.insert( MapDispatchToBool::value_type( eURLType, sal_True ) ).first;
+        NotifyStatusChanged( aURL, NULL );
+
+        // execute the dialog
+        switch ( eURLType )
+        {
+            case dtBrowserAttribs:
+                pGrid->SetBrowserAttrs();
+                break;
+
+            case dtRowHeight:
+                pGrid->SetRowHeight();
+                break;
+
+            case dtColumnAttribs:
+            {
+                DBG_ASSERT(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
+                if (nColId != -1)
+                    break;
+                pGrid->SetColAttrs(nColId);
+            }
+            break;
+
+            case dtColumnWidth:
+            {
+                DBG_ASSERT(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
+                if (nColId != -1)
+                    break;
+                pGrid->SetColWidth(nColId);
+            }
+            break;
+        }
+
+        // notify any status listeners that the dialog vanished
+        m_aDispatchStates.erase( aThisURLState );
+        NotifyStatusChanged( aURL, NULL );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-23 07:48:49 $
+ *  last change: $Author: fs $ $Date: 2002-10-09 09:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
 #endif
+#include <queue>
 
 class SvNumberFormatter;
 
@@ -209,6 +210,31 @@ namespace dbaui
         virtual FmGridControl*  imp_CreateControl(Window* pParent, WinBits nStyle);
 
         void NotifyStatusChanged(const ::com::sun::star::util::URL& aUrl, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > ());
+
+    private:
+        // for asny execution of XDispatch::dispatch
+        struct DispatchArgs
+        {
+            ::com::sun::star::util::URL                                                 aURL;
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   aArgs;
+        };
+        ::std::queue< DispatchArgs >    m_aDispatchArgs;
+        DECL_LINK( OnDispatchEvent, void* );
+
+        // for dynamic states of our 4 dispatchable URLs
+        enum DispatchType
+        {
+            dtBrowserAttribs,
+            dtRowHeight,
+            dtColumnAttribs,
+            dtColumnWidth,
+
+            dtUnknown
+        };
+        DispatchType classifyDispatchURL( const ::com::sun::star::util::URL& _rURL );
+
+        DECLARE_STL_STDKEY_MAP( DispatchType, sal_Bool, MapDispatchToBool );
+        MapDispatchToBool   m_aDispatchStates;
     };
 
     //==================================================================
