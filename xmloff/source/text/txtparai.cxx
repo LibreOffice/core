@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:28:16 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1319,7 +1319,7 @@ void XMLTOCMarkImportContext_Impl::ProcessAttribute(
             GetImport().GetTextImport()->GetChapterNumbering()->getCount()))
         {
             Any aAny;
-            aAny <<= (sal_Int16)nTmp;
+            aAny <<= (sal_Int16)(nTmp - 1);
             rPropSet->setPropertyValue(sLevel, aAny);
         }
         // else: value out of range -> ignore
