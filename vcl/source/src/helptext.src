@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helptext.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:42:31 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 09:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,6 +444,15 @@ String SV_SHORTCUT_HELP
     TEXT[ korean ] = "Help";
     TEXT[ turkish ] = "Help";
     TEXT[ thai ] = "Help";
+    TEXT[ greek ] = "Help";
+    TEXT[ dutch ] = "Help";
+    TEXT[ french ] = "Help";
+    TEXT[ finnish ] = "Help";
+    TEXT[ danish ] = "Help";
+    TEXT[ chinese_simplified ] = "Help";
+    TEXT[ chinese_traditional ] = "Help";
+    TEXT[ arabic ] = "Help";
+    TEXT[ catalan ] = "Help";
 };
 
 String SV_SHORTCUT_CONTEXTHELP
@@ -462,6 +471,15 @@ String SV_SHORTCUT_CONTEXTHELP
     TEXT[ korean ] = "Context Help";
     TEXT[ turkish ] = "Context Help";
     TEXT[ thai ] = "Context Help";
+    TEXT[ greek ] = "Context Help";
+    TEXT[ dutch ] = "Context Help";
+    TEXT[ french ] = "Context Help";
+    TEXT[ finnish ] = "Context Help";
+    TEXT[ danish ] = "Context Help";
+    TEXT[ chinese_simplified ] = "Context Help";
+    TEXT[ chinese_traditional ] = "Context Help";
+    TEXT[ arabic ] = "Context Help";
+    TEXT[ catalan ] = "Context Help";
 };
 
 String SV_SHORTCUT_ACTIVEHELP
@@ -480,6 +498,15 @@ String SV_SHORTCUT_ACTIVEHELP
     TEXT[ korean ] = "Extended Tips";
     TEXT[ turkish ] = "Extended Tips";
     TEXT[ thai ] = "Extended Tips";
+    TEXT[ greek ] = "Extended Tips";
+    TEXT[ dutch ] = "Extended Tips";
+    TEXT[ french ] = "Extended Tips";
+    TEXT[ finnish ] = "Extended Tips";
+    TEXT[ danish ] = "Extended Tips";
+    TEXT[ chinese_simplified ] = "Extended Tips";
+    TEXT[ chinese_traditional ] = "Extended Tips";
+    TEXT[ arabic ] = "Extended Tips";
+    TEXT[ catalan ] = "Extended Tips";
 };
 
 String SV_SHORTCUT_DOCKUNDOCK
@@ -498,6 +525,15 @@ String SV_SHORTCUT_DOCKUNDOCK
     TEXT[ korean ] = "Dock/Undock Windows";
     TEXT[ turkish ] = "Dock/Undock Windows";
     TEXT[ thai ] = "Dock/Undock Windows";
+    TEXT[ greek ] = "Dock/Undock Windows";
+    TEXT[ dutch ] = "Dock/Undock Windows";
+    TEXT[ french ] = "Dock/Undock Windows";
+    TEXT[ finnish ] = "Dock/Undock Windows";
+    TEXT[ danish ] = "Dock/Undock Windows";
+    TEXT[ chinese_simplified ] = "Dock/Undock Windows";
+    TEXT[ chinese_traditional ] = "Dock/Undock Windows";
+    TEXT[ arabic ] = "Dock/Undock Windows";
+    TEXT[ catalan ] = "Dock/Undock Windows";
 };
 
 String SV_SHORTCUT_NEXTSUBWINDOW
@@ -516,6 +552,15 @@ String SV_SHORTCUT_NEXTSUBWINDOW
     TEXT[ korean ] = "To Next Toolbar/Window";
     TEXT[ turkish ] = "To Next Toolbar/Window";
     TEXT[ thai ] = "To Next Toolbar/Window";
+    TEXT[ greek ] = "To Next Toolbar/Window";
+    TEXT[ dutch ] = "To Next Toolbar/Window";
+    TEXT[ french ] = "To Next Toolbar/Window";
+    TEXT[ finnish ] = "To Next Toolbar/Window";
+    TEXT[ danish ] = "To Next Toolbar/Window";
+    TEXT[ chinese_simplified ] = "To Next Toolbar/Window";
+    TEXT[ chinese_traditional ] = "To Next Toolbar/Window";
+    TEXT[ arabic ] = "To Next Toolbar/Window";
+    TEXT[ catalan ] = "To Next Toolbar/Window";
 };
 
 String SV_SHORTCUT_PREVSUBWINDOW
@@ -534,6 +579,15 @@ String SV_SHORTCUT_PREVSUBWINDOW
     TEXT[ korean ] = "To Previous Toolbar/Window";
     TEXT[ turkish ] = "To Previous Toolbar/Window";
     TEXT[ thai ] = "To Previous Toolbar/Window";
+    TEXT[ greek ] = "To Previous Toolbar/Window";
+    TEXT[ dutch ] = "To Previous Toolbar/Window";
+    TEXT[ french ] = "To Previous Toolbar/Window";
+    TEXT[ finnish ] = "To Previous Toolbar/Window";
+    TEXT[ danish ] = "To Previous Toolbar/Window";
+    TEXT[ chinese_simplified ] = "To Previous Toolbar/Window";
+    TEXT[ chinese_traditional ] = "To Previous Toolbar/Window";
+    TEXT[ arabic ] = "To Previous Toolbar/Window";
+    TEXT[ catalan ] = "To Previous Toolbar/Window";
 };
 
 String SV_SHORTCUT_TODOCUMENT
@@ -552,6 +606,15 @@ String SV_SHORTCUT_TODOCUMENT
     TEXT[ korean ] = "To Document";
     TEXT[ turkish ] = "To Document";
     TEXT[ thai ] = "To Document";
+    TEXT[ greek ] = "To Document";
+    TEXT[ dutch ] = "To Document";
+    TEXT[ french ] = "To Document";
+    TEXT[ finnish ] = "To Document";
+    TEXT[ danish ] = "To Document";
+    TEXT[ chinese_simplified ] = "To Document";
+    TEXT[ chinese_traditional ] = "To Document";
+    TEXT[ arabic ] = "To Document";
+    TEXT[ catalan ] = "To Document";
 };
 
 String SV_SHORTCUT_MENUBAR
@@ -570,4 +633,13 @@ String SV_SHORTCUT_MENUBAR
     TEXT[ korean ] = "To Menu Bar";
     TEXT[ turkish ] = "To Menu Bar";
     TEXT[ thai ] = "To Menu Bar";
+    TEXT[ greek ] = "To Menu Bar";
+    TEXT[ dutch ] = "To Menu Bar";
+    TEXT[ french ] = "To Menu Bar";
+    TEXT[ finnish ] = "To Menu Bar";
+    TEXT[ danish ] = "To Menu Bar";
+    TEXT[ chinese_simplified ] = "To Menu Bar";
+    TEXT[ chinese_traditional ] = "To Menu Bar";
+    TEXT[ arabic ] = "To Menu Bar";
+    TEXT[ catalan ] = "To Menu Bar";
 };
