@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:59:06 $
+#   last change: $Author: hr $ $Date: 2000-11-14 11:02:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,52 +73,10 @@ TARGET=svsql
 
 # --- Files --------------------------------------------------------
 
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-
-# Every source directory generates headers in a own output directory to
-# enable parallel building of the source directories within a project!
-UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)
-INCPRE+=$(UNOUCROUT)
-
-UNOTYPES = 	com.sun.star.util.XNumberFormatsSupplier \
-        com.sun.star.util.XNumberFormatter \
-        com.sun.star.util.XNumberFormatTypes \
-        com.sun.star.util.Date \
-        com.sun.star.data.DatabaseFieldType \
-        com.sun.star.data.DatabaseInfo \
-        com.sun.star.data.XDatabaseDescriptor \
-        com.sun.star.sdbc.XDatabaseMetaData \
-        com.sun.star.lang.Locale \
-        com.sun.star.beans.XPropertySet \
-        com.sun.star.uno.TypeClass
-
-SRCFILES = svsql.src
-
 SLOFILES =  \
-        $(SLO)$/sdbbison.obj		\
-        $(SLO)$/sdbflex.obj			\
-        $(SLO)$/sdbsql.obj \
-        $(SLO)$/sdbnode.obj \
         $(SLO)$/converter.obj
-
-EXCEPTIONSFILES=	\
-        $(SLO)$/sdbbison.obj		\
-        $(SLO)$/sdbsql.obj
-
-all: \
-        $(MISC)$/sdbflex.cxx \
-        $(MISC)$/sdbbison.cxx \
-        ALLTAR
 
 # --- Targets -------------------------------------------------------
 
-.INCLUDE :  target.mk
+.INCLUDE : target.mk
 
-$(MISC)$/sdbflex.cxx:	sdblex.l
-    +flex -i -8 -PSQLyy -L -o$(MISC)$/sdbflex.cxx sdblex.l
-
-$(MISC)$/sdbbison.cxx: sdbyacc.y
-    +bison -v -d -pSQLyy -l -bsql -o$(MISC)$/sdbbison.cxx sdbyacc.y
-    -$(MKDIR) $(OUT)$/inc$/svtools
-    +$(COPY) $(MISC)$/sdbbison.cxx.h $(OUT)$/inc$/svtools$/sdbbison.hxx
