@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:24:47 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,18 +121,38 @@
 #include "res_bmp.hrc"
 
 #include "app.hxx"
-#include "grdocsh.hxx"
+#ifndef SD_GRAPHIC_DOC_SHELL_HXX
+#include "GraphicDocShell.hxx"
+#endif
+#ifndef SD_FU_DRAW_HXX
 #include "fudraw.hxx"
-#include "viewshel.hxx"
-#include "frmview.hxx"
-#include "sdview.hxx"
-#include "sdwindow.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "docshell.hxx"
-#include "sdclient.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
+#ifndef SD_CLIENT_HXX
+#include "Client.hxx"
+#endif
 #include "sdresid.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
+#ifndef SD_FU_SELECTION_HXX
 #include "fusel.hxx"
+#endif
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
 #endif
@@ -142,6 +162,8 @@
 
 using namespace ::com::sun::star;
 
+namespace sd {
+
 TYPEINIT1( FuDraw, FuPoor );
 
 /*************************************************************************
@@ -150,7 +172,7 @@ TYPEINIT1( FuDraw, FuPoor );
 |*
 \************************************************************************/
 
-FuDraw::FuDraw(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
+FuDraw::FuDraw(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                SdDrawDocument* pDoc, SfxRequest& rReq) :
     FuPoor(pViewSh, pWin, pView, pDoc, rReq),
     bMBDown(FALSE),
@@ -543,7 +565,9 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                     // zu restaurieren, das gar nicht mehr existiert.
                     // Alle anderen OLE-Objekte sind davon nicht
                     // betroffen (KA 06.10.95)
-                    SdClient* pIPClient = (SdClient*)pViewShell->GetIPClient();
+                    OSL_ASSERT (pViewShell->GetViewShell()!=NULL);
+                    Client* pIPClient = static_cast<Client*>(
+                        pViewShell->GetViewShell()->GetIPClient());
                     if (pIPClient && pIPClient->IsInPlaceActive())
                     {
                         pIPClient->SetSdrGrafObj(NULL);
@@ -846,7 +870,7 @@ BOOL FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
 {
     BOOL bSet = FALSE;
 
-    BOOL bAnimationInfo = (!pDocSh->ISA(SdGraphicDocShell) &&
+    BOOL bAnimationInfo = (!pDocSh->ISA(GraphicDocShell) &&
                           pDoc->GetAnimationInfo(pObj)) ? TRUE:FALSE;
 
     BOOL bImageMapInfo = FALSE;
@@ -886,8 +910,8 @@ BOOL FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
                 ******************************************************/
                 SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pObj);
 
-                if ((pView->ISA(SdDrawView)                        &&
-                     ((SdDrawView*) pView)->IsActionMode()         &&
+                if ((pView->ISA(DrawView) &&
+                        static_cast<DrawView*>(pView)->IsActionMode()         &&
                       (pInfo->eClickAction == presentation::ClickAction_BOOKMARK  ||
                        pInfo->eClickAction == presentation::ClickAction_DOCUMENT  ||
                        pInfo->eClickAction == presentation::ClickAction_PREVPAGE  ||
@@ -899,8 +923,8 @@ BOOL FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
                        pInfo->eClickAction == presentation::ClickAction_MACRO     ||
                        pInfo->eClickAction == presentation::ClickAction_SOUND))
                                                                     ||
-                      (pView->ISA(SdDrawView)                        &&
-                       ((SdDrawView*) pView)->GetSlideShow()         &&
+                      (pView->ISA(DrawView) &&
+                       static_cast<DrawView*>(pView)->GetSlideShow()         &&
                          (pInfo->eClickAction == presentation::ClickAction_VANISH             ||
                           pInfo->eClickAction == presentation::ClickAction_INVISIBLE          ||
                           pInfo->eClickAction == presentation::ClickAction_STOPPRESENTATION ||
@@ -956,7 +980,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
 
             if (nInv == SdrInventor && nSdrObjKind == OBJ_OLE2)
             {
-                SdDrawDocShell* pDocSh = pDoc->GetDocSh();
+                DrawDocShell* pDocSh = pDoc->GetDocSh();
 
                 if ( !pDocSh->IsUIActive() )
                 {
@@ -1073,7 +1097,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
             }
         }
     }
-    else if (!pDocSh->ISA(SdGraphicDocShell) && pDoc->GetAnimationInfo(pObj))
+    else if (!pDocSh->ISA(GraphicDocShell) && pDoc->GetAnimationInfo(pObj))
     {
         SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pObj);
 
@@ -1245,3 +1269,5 @@ bool FuDraw::cancel()
 
     return bReturn;
 }
+
+} // end of namespace sd
