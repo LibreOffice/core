@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:49:11 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:24:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@
 #endif
 
 #ifndef _SMARTID_HXX_
-#include "smartid.hxx"
+#include <vcl/smartid.hxx>
 #endif
 
 class Window;
@@ -302,10 +302,10 @@ public:
     StatementList *pNext;
     static StatementList /**pCurrent,*/ *pFirst;
     static BOOL bReadingCommands;
-    static ULONG nWindowWaitUId;
+    static SmartId aWindowWaitUId;
     static Window *pWindowWaitPointer;
-    static ULONG nWindowWaitOldHelpId;
-    static ULONG nWindowWaitOldUniqueId;
+    static SmartId aWindowWaitOldHelpId;
+    static SmartId aWindowWaitOldUniqueId;
     static RetStream *pRet;
     static BOOL IsError;
     static BOOL bDying;
