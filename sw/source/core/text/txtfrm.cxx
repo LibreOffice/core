@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 08:46:46 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,7 @@ void SwTxtFrm::HideAndShowObjects()
         if ( IsHiddenNow() )
         {
             // complete paragraph is hidden. Thus, hide all objects
-            for ( sal_Int8 i = 0; i < GetDrawObjs()->Count(); ++i )
+            for ( sal_uInt32 i = 0; i < GetDrawObjs()->Count(); ++i )
             {
                 SdrObject* pObj = (*GetDrawObjs())[i];
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
@@ -592,7 +592,7 @@ void SwTxtFrm::HideAndShowObjects()
             // Thus, show all objects, which are anchored at paragraph and
             // hide/show objects, which are anchored at/as character, according
             // to the visibility of the anchor character.
-            for ( sal_Int8 i = 0; i < GetDrawObjs()->Count(); ++i )
+            for ( sal_uInt32 i = 0; i < GetDrawObjs()->Count(); ++i )
             {
                 SdrObject* pObj = (*GetDrawObjs())[i];
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
