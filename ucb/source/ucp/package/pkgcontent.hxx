@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-20 12:25:04 $
+ *  last change: $Author: kso $ $Date: 2000-11-22 08:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,8 @@
 #ifndef _PKGCONTENT_HXX
 #define _PKGCONTENT_HXX
 
-#ifndef __LIST__
-#include <stl/list>
-#endif
+#include <list>
+
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
