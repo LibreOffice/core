@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-01-30 08:11:37 $
+ *  last change: $Author: kz $ $Date: 2001-02-13 15:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,14 +601,14 @@ void SwXTextDocument::dispose(void) throw( RuntimeException )
 /*-- 18.12.98 13:12:25---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextDocument::addEventListener(const Reference< XEventListener > & aListener) throw( RuntimeException )
+void SwXTextDocument::addEventListener(const Reference< lang::XEventListener > & aListener) throw( RuntimeException )
 {
     SfxBaseModel::addEventListener(aListener);
 }
 /*-- 18.12.98 13:12:26---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextDocument::removeEventListener(const Reference< XEventListener > & aListener) throw( RuntimeException )
+void SwXTextDocument::removeEventListener(const Reference< lang::XEventListener > & aListener) throw( RuntimeException )
 {
     SfxBaseModel::removeEventListener(aListener);
 }
