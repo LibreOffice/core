@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:50:44 $
+ *  last change: $Author: nn $ $Date: 2001-06-25 16:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@ ModalDialog RID_SCDLG_LINKAREA
     Moveable = TRUE ;
     Closeable = TRUE ;
     Size = MAP_APPFONT ( 274 , 190 ) ;
-    Text = "Externe Datenquelle" ;
-    Text [ ENGLISH ] = "External Data Source" ;
+    Text = "Externe Daten" ;
+    Text [ ENGLISH ] = "External Data" ;
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 218 , 8 ) ;
