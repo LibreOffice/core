@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-18 17:04:55 $
+ *  last change: $Author: tra $ $Date: 2002-11-20 15:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4645,6 +4645,10 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
     static int  bInWheelMsg = FALSE;
     static int  bInQueryEnd = FALSE;
 
+    char buff[256];
+    wsprintf(buff, "Msg: %d WPARAM: %d LPARAM %d\n", nMsg, wParam, lParam);
+    OutputDebugStringA(buff);
+
     // By WM_CRETAE we connect the frame with the window handle
     if ( nMsg == WM_CREATE )
     {
@@ -5012,22 +5016,6 @@ bool GetSalSystemDisplayInfo( System::DisplayInfo& rInfo )
     }
     else
         return false;
-}
-
-// -----------------------------------------------------------------------
-
-/* !!!  Parameter rButtons and nDefButton will be ignored currently, the
-        message box has always only an "OK" button !!!
-*/
-int ImplShowNativeDialog( const String& rTitle, const String& rMessage, const std::list< String >& rButtons, int nDefButton )
-{
-    // Remeber: The MessageBox function exist as ANSI and UNICODE
-    // version even under Win9x!
-    MessageBoxW(0, rMessage.GetBuffer(), rTitle.GetBuffer(), MB_OK | MB_TASKMODAL | MB_SETFOREGROUND);
-
-    // always return 0 because there is only
-    // an "OK" button
-    return 0;
 }
 
 // -----------------------------------------------------------------------
