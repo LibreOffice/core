@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ssa $ $Date: 2001-12-07 11:35:05 $
+ *  last change: $Author: ssa $ $Date: 2001-12-19 12:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -931,6 +931,7 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible )
 
         pFrame->maFrameData.mbInShow = FALSE;
 
+
         // Direct Paint only, if we get the SolarMutx
         if ( ImplSalYieldMutexTryToAcquire() )
         {
@@ -1241,6 +1242,7 @@ void SalFrame::SetWindowState( const SalFrameState* pState )
 
     // Status setzen
     BOOL bVisible = (GetWindowStyle( maFrameData.mhWnd ) & WS_VISIBLE) != 0;
+    BOOL bUpdateHiddenFramePos = FALSE;
     if ( !bVisible )
     {
         aPlacement.showCmd = SW_HIDE;
@@ -1252,7 +1254,10 @@ void SalFrame::SetWindowState( const SalFrameState* pState )
                 if ( pState->mnState & SAL_FRAMESTATE_MINIMIZED )
                     maFrameData.mnShowState = SW_SHOWMINIMIZED;
                 else if ( pState->mnState & SAL_FRAMESTATE_MAXIMIZED )
+                {
                     maFrameData.mnShowState = SW_SHOWMAXIMIZED;
+                    bUpdateHiddenFramePos = TRUE;
+                }
                 else if ( pState->mnState & SAL_FRAMESTATE_NORMAL )
                     maFrameData.mnShowState = SW_SHOWNORMAL;
             }
@@ -1281,7 +1286,21 @@ void SalFrame::SetWindowState( const SalFrameState* pState )
     if ( !IsIconic( maFrameData.mhWnd ) && !IsZoomed( maFrameData.mhWnd ) &&
          (!bVisible || (aPlacement.showCmd == SW_RESTORE)) )
     {
-        SetWindowPos( maFrameData.mhWnd, 0,
+        if( bUpdateHiddenFramePos )
+        {
+            // #96084 set a useful internal window size because
+            // the window will not be maximized (and the size updated) before show()
+            RECT aRect;
+            SystemParametersInfo( SPI_GETWORKAREA, 0, &aRect, 0 );
+            AdjustWindowRectEx( &aRect, GetWindowStyle( maFrameData.mhWnd ),
+                                FALSE,     GetWindowExStyle( maFrameData.mhWnd ) );
+            maGeometry.nX = aRect.left;
+            maGeometry.nY = aRect.top;;
+            maGeometry.nWidth = aRect.right - aRect.left + 1;
+            maGeometry.nHeight = aRect.bottom - aRect.top + 1;
+        }
+        else
+            SetWindowPos( maFrameData.mhWnd, 0,
                       nX, nY, nWidth, nHeight,
                       SWP_NOZORDER | SWP_NOACTIVATE | nPosSize );
     }
@@ -1299,7 +1318,6 @@ void SalFrame::SetWindowState( const SalFrameState* pState )
 
     if( !(nPosSize & SWP_NOMOVE) )
         maFrameData.mbDefPos = FALSE; // window was positioned
-
 }
 
 // -----------------------------------------------------------------------
