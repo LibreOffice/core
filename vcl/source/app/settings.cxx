@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 15:15:36 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,7 +660,7 @@ void ImplStyleData::SetStandardStyles()
     mnTearOffTitleHeight        = 8;
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
-    mnUseSystemUIFonts          = 0;
+    mnUseSystemUIFonts          = 1;
     mnUseFlatBorders            = 0;
     mnUseFlatMenues             = 0;
     mnUseImagesInMenus          = (USHORT)TRUE;
