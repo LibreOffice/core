@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpstat.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ TabPage RID_SCPAGE_STAT
         Text [ ENGLISH ] = "Number of tables:" ;
         Text [ norwegian ] = "Number of tables:" ;
         Text [ italian ] = "Numero di tabelle:" ;
-        Text [ portuguese_brazilian ] = "N?ero de tabelas:" ;
+        Text [ portuguese_brazilian ] = "Número de planilhas:" ;
         Text [ portuguese ] = "Número de tabelas:" ;
         Text [ finnish ] = "Taulukoiden määrä:" ;
         Text [ danish ] = "Antal tabeller:" ;
@@ -97,6 +97,9 @@ TabPage RID_SCPAGE_STAT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre de fulls:";
         Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™:";
+        Text[ czech ] = "PoÄet listÅ¯:";
+        Text[ hebrew ] = "Anzahl Tabellen:";
+        Text[ hindi ] = "à¤¶à¥€à¤Ÿà¥‹à¤‚ à¤•à¥€ à¤¸à¤‚à¤–à¥à¤¯à¤¾:";
     };
     FixedText FT_TABLES
     {
@@ -119,7 +122,7 @@ TabPage RID_SCPAGE_STAT
         Text [ swedish ] = "Antal celler:" ;
         Text [ danish ] = "Antal celler:" ;
         Text [ portuguese ] = "Número de células:" ;
-        Text [ portuguese_brazilian ] = "Anzahl Zellen:" ;
+        Text [ portuguese_brazilian ] = "Número de células:" ;
         Text[ chinese_simplified ] = "å•å…ƒæ ¼çš„æ•°ç›®ï¼š";
         Text[ russian ] = "Êîëè÷åñòâî ÿ÷ååê:";
         Text[ polish ] = "Liczba komórek:";
@@ -135,6 +138,9 @@ TabPage RID_SCPAGE_STAT
         Text[ catalan ] = "Nombre de cel.les:";
         Text[ finnish ] = "Solujen määrä:";
         Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¹€à¸‹à¸¥à¸¥à¹Œ:";
+        Text[ czech ] = "PoÄet bunÄ›k:";
+        Text[ hebrew ] = "Anzahl Zellen:";
+        Text[ hindi ] = "à¤•à¥‹à¤·à¥à¤ à¥‹à¤‚ à¤•à¥€ à¤¸à¤‚à¤–à¥à¤¯à¤¾:";
     };
     FixedText FT_CELLS
     {
@@ -156,7 +162,7 @@ TabPage RID_SCPAGE_STAT
         Text [ dutch ] = "Aantal pagina's:" ;
         Text [ swedish ] = "Antal sidor:" ;
         Text [ danish ] = "Antal sider:" ;
-        Text [ portuguese_brazilian ] = "Anzahl Seiten:" ;
+        Text [ portuguese_brazilian ] = "Número de páginas:" ;
         Text [ portuguese ] = "Número de páginas:" ;
         Text[ chinese_simplified ] = "é¡µæ•°ï¼š";
         Text[ russian ] = "Êîëè÷åñòâî ñòğàíèö:";
@@ -173,6 +179,9 @@ TabPage RID_SCPAGE_STAT
         Text[ catalan ] = "Nombre de pàgines:";
         Text[ finnish ] = "Sivujen määrä:";
         Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¸«à¸™à¹‰à¸²:";
+        Text[ czech ] = "PoÄet strÃ¡nek:";
+        Text[ hebrew ] = "â€®××¡×¤×¨ ×”×“×¤×™×â€¬:";
+        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¥‹à¤‚ à¤•à¥€ à¤¸à¤‚à¤–à¥à¤¯à¤¾:";
     };
     FixedText FT_PAGES
     {
@@ -193,7 +202,7 @@ TabPage RID_SCPAGE_STAT
         Text [ french ] = "Document : " ;
         Text [ swedish ] = "Dokument: " ;
         Text [ danish ] = "Dokument: " ;
-        Text [ portuguese_brazilian ] = "Dokument: " ;
+        Text [ portuguese_brazilian ] = "Documento: " ;
         Text [ portuguese ] = "Documento: " ;
         Text[ chinese_simplified ] = "æ–‡æ¡£ï¼š ";
         Text[ russian ] = "Äîêóìåíò:  ";
@@ -205,13 +214,25 @@ TabPage RID_SCPAGE_STAT
         Text[ chinese_simplified ] = "æ–‡æ¡£ï¼š ";
         Text[ greek ] = "¸ããñáöï:";
         Text[ korean ] = "ë¬¸ì„œ: ";
-        Text[ turkish ] = "Belge: ";
+        Text[ turkish ] = "Belge:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Document:  ";
         Text[ finnish ] = "Asiakirja: ";
         Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£: ";
+        Text[ czech ] = "Dokument: ";
+        Text[ hebrew ] = "Dokument:";
+        Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°: ";
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 
