@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pl $ $Date: 2001-09-04 16:24:50 $
+#   last change: $Author: hjs $ $Date: 2002-08-19 17:46:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,6 +120,8 @@ SHL1STDLIBS=\
 
 
 APP1TARGET=spadmin.bin
+APP1DEPN+=$(SHL1TARGETN)
+
 APP1OBJS=\
     $(OBJ)/pamain.obj
 
