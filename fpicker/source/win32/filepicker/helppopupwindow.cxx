@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helppopupwindow.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-03 13:51:04 $
+ *  last change: $Author: tra $ $Date: 2001-08-06 08:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ CHelpPopupWindow::CHelpPopupWindow(
     m_bWndClassRegistered = RegisterWindowClass( ) ? sal_True : sal_False;
 
     // create a pattern brush for the window shadow
-    int aPattern[] = { 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55 };
+    WORD aPattern[] = { 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55 };
 
     m_hBitmapShadow = CreateBitmap( 8, 8, 1, 1, aPattern );
     m_hBrushShadow  = CreatePatternBrush( m_hBitmapShadow );
@@ -407,6 +407,12 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
     SetTextColor( hdc, oldTextColor );
     SetBkColor( hdc, oldBkColor );
 
+    // set text color and text background color is
+    // MSDN PatBlt
+
+    oldBkColor   = SetBkColor( hdc, RGB( 0, 0, 0 ) );
+    oldTextColor = SetTextColor( hdc, RGB( 255, 255, 255 ) );
+
     // Get our brush for the shadow
 
     UnrealizeObject( m_hBrushShadow );
@@ -417,7 +423,7 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
     PatBlt(hdc,
            rc.left + SHADOW_OFFSET,
            rc.bottom - SHADOW_HEIGHT,
-           rc.right - SHADOW_OFFSET,
+           rc.right - SHADOW_OFFSET - SHADOW_WIDTH,
            SHADOW_HEIGHT,
            0xA000C9);
 
@@ -427,10 +433,12 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
            rc.right - SHADOW_WIDTH,
            rc.top + SHADOW_OFFSET,
            SHADOW_WIDTH,
-           rc.bottom,
+           rc.bottom - SHADOW_OFFSET,
            0xA000C9);
 
     SelectObject(hdc, hbrOld);
+    SetTextColor( hdc, oldTextColor );
+    SetBkColor( hdc, oldBkColor );
 }
 
 //---------------------------------------------------
@@ -536,7 +544,7 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
          break;
 
          default:
-             return DefWindowProc(hWnd, uMsg, wParam, lParam);
+             return DefWindowProcA(hWnd, uMsg, wParam, lParam);
        }
 
     return lResult;
