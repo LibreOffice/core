@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:33:07 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 #ifndef XMLOFF_FORMSTYLES_HXX
 #include "formstyles.hxx"
+#endif
+#ifndef _XMLOFF_FORMENUMS_HXX_
+#include "formenums.hxx"
 #endif
 
 #ifndef _COMPHELPER_EXTRACT_HXX_
@@ -473,6 +476,10 @@ namespace xmloff
         {   // it's the control id
             m_sControlId = _rValue;
         }
+        else if ( _rLocalName.equalsAscii( getBindingAttributeName( BA_LINKED_CELL ) ) )
+        {
+            m_sBoundCellAddress = _rValue;
+        }
         else
         {
             sal_Int32 nHandle;
@@ -716,6 +723,20 @@ namespace xmloff
                 OSL_ENSURE( sal_False, "OControlImport::EndElement: caught an exception while restoring the value property!" );
             }
         }
+
+        // the external cell binding, if applicable
+        if ( m_xElement.is() && m_sBoundCellAddress.getLength() )
+            doRegisterCellValueBinding( m_sBoundCellAddress );
+    }
+
+    //---------------------------------------------------------------------
+    void OControlImport::doRegisterCellValueBinding( const ::rtl::OUString& _rBoundCellAddress )
+    {
+        OSL_PRECOND( m_xElement.is(), "OControlImport::doRegisterCellValueBinding: invalid element!" );
+        OSL_PRECOND( _rBoundCellAddress.getLength(),
+            "OControlImport::doRegisterCellValueBinding: invalid address!" );
+
+        m_rContext.registerCellValueBinding( m_xElement, _rBoundCellAddress );
     }
 
     //---------------------------------------------------------------------
@@ -937,6 +958,7 @@ namespace xmloff
         ,m_nEmptyListItems( 0 )
         ,m_nEmptyValueItems( 0 )
         ,m_bEncounteredLSAttrib( sal_False )
+        ,m_bLinkWithIndexes( sal_False )
     {
         if (OControlElement::COMBOBOX == m_eElementType)
             enableTrackAttributes();
@@ -963,6 +985,8 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OListAndComboImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
     {
+        m_bLinkWithIndexes = sal_False;
+
         OControlImport::StartElement(_rxAttrList);
 
         if (OControlElement::COMBOBOX == m_eElementType)
@@ -1015,6 +1039,26 @@ namespace xmloff
         }
 
         OControlImport::EndElement();
+
+        // the external list source, if applicable
+        if ( m_xElement.is() && m_sCellListSource.getLength() )
+            m_rContext.registerCellRangeListSource( m_xElement, m_sCellListSource );
+    }
+
+    //---------------------------------------------------------------------
+    void OListAndComboImport::doRegisterCellValueBinding( const ::rtl::OUString& _rBoundCellAddress )
+    {
+        ::rtl::OUString sBoundCellAddress( _rBoundCellAddress );
+        if ( m_bLinkWithIndexes )
+        {
+            // This is a HACK. We register a string which is no valid address, but allows
+            // (somewhere else) to determine that a non-standard binding should be created.
+            // This hack is acceptable for OOo 1.1.1, since the file format for value
+            // bindings of form controls is to be changed afterwards, anyway.
+            sBoundCellAddress += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":index" ) );
+        }
+
+        OControlImport::doRegisterCellValueBinding( sBoundCellAddress );
     }
 
     //---------------------------------------------------------------------
@@ -1043,6 +1087,22 @@ namespace xmloff
             }
 
             implPushBackPropertyValue( aListSource );
+        }
+        else if ( _rLocalName.equalsAscii( getBindingAttributeName( BA_LIST_CELL_RANGE ) ) )
+        {
+            m_sCellListSource = _rValue;
+        }
+        else if ( _rLocalName.equalsAscii( getBindingAttributeName( BA_LIST_LINKING_TYPE ) ) )
+        {
+            sal_Int16 nLinkageType = 0;
+            convertString(
+                m_rContext.getGlobalContext(),
+                ::getCppuType( static_cast< sal_Int16* >( NULL ) ),
+                _rValue,
+                OEnumMapper::getEnumMap( OEnumMapper::epListLinkageType )
+            ) >>= nLinkageType;
+
+            m_bLinkWithIndexes = ( nLinkageType != 0 );
         }
         else
             OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
