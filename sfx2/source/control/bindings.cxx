@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.38 $
- *  last change: $Author: vg $ $Date: 2005-02-16 18:21:15 $
+ *  $Revision: 1.39 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1710,6 +1710,9 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
             pShell->CallState( aFunc, aSet );
             const SfxPoolItem *pOldItem;
             SfxItemState eState = aSet.GetItemState(nWhich, sal_True, &pOldItem);
+            if ( eState == SFX_ITEM_DISABLED )
+                return;
+
             if ( SFX_ITEM_SET == eState ||
                  ( SFX_ITEM_AVAILABLE == eState &&
                    SfxItemPool::IsWhich(nWhich) &&
@@ -2921,7 +2924,11 @@ uno::Reference < frame::XDispatch > SfxBindings::GetDispatch( const SfxSlot* pSl
         xRet = pCache->GetInternalDispatch();
     if ( !xRet.is() )
     {
-        SfxOfficeDispatch* pDispatch = new SfxOfficeDispatch( *this, pDispatcher, pSlot, aURL );
+        // dispatches for slaves are unbound, they don't have a state
+        SfxOfficeDispatch* pDispatch = bMasterCommand ?
+            new SfxOfficeDispatch( pDispatcher, pSlot, aURL ) :
+            new SfxOfficeDispatch( *this, pDispatcher, pSlot, aURL );
+
         pDispatch->SetMasterUnoCommand( bMasterCommand );
         xRet = uno::Reference < frame::XDispatch >( pDispatch );
         if ( !pCache )
