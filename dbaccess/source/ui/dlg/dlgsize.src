@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsize.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nf $ $Date: 2001-03-19 09:46:45 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  // JN
  //
  // Letzte Aenderung:
- // $Author: nf $ $Date: 2001-03-19 09:46:45 $ $Revision: 1.3 $
+ // $Author: kz $ $Date: 2001-03-31 06:00:52 $ $Revision: 1.4 $
  //
  //---------------------------------------------------------------------------
 
@@ -105,14 +105,14 @@ ModalDialog DLG_ROWHEIGHT
         Text [ danish ] = "Højde" ;
         Text [ portuguese_brazilian ] = "Höhe" ;
         Text [ portuguese ] = "~Altura" ;
-        Text[ chinese_simplified ] = "¸ß¶È";
+        Text[ chinese_simplified ] = "¸ß¶È(~H)";
         Text[ russian ] = "Âûñîòà";
         Text[ polish ] = "Wysokoœæ";
-        Text[ japanese ] = "‚‚³";
-        Text[ chinese_traditional ] = "°ª«×";
+        Text[ japanese ] = "‚‚³(~H)";
+        Text[ chinese_traditional ] = "°ª«×(~H)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾~øïò";
-        Text[ korean ] = "³ôÀÌ";
+        Text[ korean ] = "³ôÀÌ(~H)";
         Text[ turkish ] = "Yükseklik";
     };
     MetricField MF_VALUE
@@ -217,14 +217,14 @@ ModalDialog DLG_COLWIDTH
         Text [ danish ] = "Bredde" ;
         Text [ portuguese_brazilian ] = "Breite" ;
         Text [ portuguese ] = "~Largura" ;
-        Text[ chinese_simplified ] = "¿í¶È";
+        Text[ chinese_simplified ] = "¿í¶È(~W)";
         Text[ russian ] = "Øèğèíà";
         Text[ polish ] = "Szerokoœæ";
-        Text[ japanese ] = "•";
-        Text[ chinese_traditional ] = "¼e«×";
+        Text[ japanese ] = "•(~W)";
+        Text[ chinese_traditional ] = "¼e«×(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ";
+        Text[ korean ] = "³Êºñ(~W)";
         Text[ turkish ] = "Genişlik";
     };
     MetricField MF_VALUE
