@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-14 17:18:00 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 16:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     OSL_ASSERT(strlen(pPipe->m_Name) > 0);
 
 #if defined(LINUX)
-    pParamPipeImpl->m_bIsAccepting = sal_True;
+    pPipe->m_bIsAccepting = sal_True;
 #endif
 
     s = accept(pPipe->m_Socket, NULL, NULL);
@@ -483,7 +483,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     if ( pPipe->m_bIsInShutdown == sal_True )
     {
         close(s);
-        __osl_destroyPipeImpl(pParamPipeImpl);
+        __osl_destroyPipeImpl(pPipe);
 
 #if defined(DEBUG)
         fprintf(stderr,"osl_acceptPipe : destroying while accept\n");
