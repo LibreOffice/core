@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-11 08:55:33 $
+ *  last change: $Author: pb $ $Date: 2001-07-11 09:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include "svtabbx.hxx"
 
 #include "svtools.hrc"
+#include "fileview.hrc"
 
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
@@ -371,6 +372,7 @@ public:
 
     virtual void    Resize();
     virtual void    KeyInput( const KeyEvent& rKEvt );
+    virtual void    Command( const CommandEvent& rCEvt );
 
     void            ClearAll();
     void            EnableAutoResize() { mbAutoResize = sal_True; }
@@ -391,10 +393,10 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParent, sal_Int16 nFlags ) :
     mpHeaderBar = new HeaderBar( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), mpHeaderBar->CalcWindowSizePixel() );
 
-    HeaderBarItemBits nBits = ( HIB_LEFT | HIB_VCENTER );
+    HeaderBarItemBits nBits = ( HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE );
     if ( ( nFlags & FILEVIEW_SHOW_ALL ) == FILEVIEW_SHOW_ALL )
     {
-        mpHeaderBar->InsertItem( 1, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_TITLE ) ), 180, nBits );
+        mpHeaderBar->InsertItem( 1, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_TITLE ) ), 180, nBits | HIB_UPARROW );
         mpHeaderBar->InsertItem( 2, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_TYPE ) ), 140, nBits );
         mpHeaderBar->InsertItem( 3, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_SIZE ) ), 80, nBits );
         mpHeaderBar->InsertItem( 4, String( SvtResId( STR_SVT_FILEVIEW_COLUMN_DATE ) ), 500, nBits );
@@ -486,6 +488,30 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
         GetDoubleClickHdl().Call( this );
     else
         SvHeaderTabListBox::KeyInput( rKEvt );
+}
+
+// -----------------------------------------------------------------------
+
+void ViewTabListBox_Impl::Command( const CommandEvent& rCEvt )
+{
+    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    {
+        Point nPos = rCEvt.GetMousePosPixel();
+        SvLBoxEntry* pEntry = GetEntry( nPos );
+        if ( pEntry )
+        {
+            PopupMenu aMenu( SvtResId( RID_FILEVIEW_CONTEXTMENU ) );
+            USHORT nId = aMenu.Execute( this, nPos );
+            switch ( nId )
+            {
+                case MID_FILEVIEW_DELETE :
+                case MID_FILEVIEW_RENAME :
+                    break;
+            }
+        }
+    }
+    else
+        SvHeaderTabListBox::Command( rCEvt );
 }
 
 // -----------------------------------------------------------------------
