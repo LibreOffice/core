@@ -395,10 +395,6 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL1OBJS) `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ)) $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(STDSHL1) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
@@ -812,10 +808,6 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL2OBJS) `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ)) $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(STDSHL2) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
@@ -1229,10 +1221,6 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL3OBJS) `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ)) $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(STDSHL3) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
@@ -1646,10 +1634,6 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL4OBJS) `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ)) $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(STDSHL4) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
@@ -2063,10 +2047,6 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL5OBJS) `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ)) $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(STDSHL5) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
@@ -2480,10 +2460,6 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL6OBJS) `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ)) $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(STDSHL6) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
@@ -2897,10 +2873,6 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL7OBJS) `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ)) $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(STDSHL7) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
@@ -3314,10 +3286,6 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL8OBJS) `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ)) $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(STDSHL8) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
@@ -3731,10 +3699,6 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL9OBJS) `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ)) $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(STDSHL9) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
@@ -4148,10 +4112,6 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL10OBJS) `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ)) $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(STDSHL10) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF			# "$(GUI)"=="MAC"
 .IF "$(TARGETTHREAD)"!="MT"
     @+echo ----------------------------------------------------------
     @+echo -
@@ -4208,17 +4168,9 @@ $(SHL1IMPLIBN):	\
     +@echo build of $(SHL1TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL1DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL1TARGETN)
-.ENDIF
-.ELSE
     @echo no ImportLibs on Mac and *ix
     @+-$(RM) $@
     @$(TOUCH) $@
-.ENDIF
 .ENDIF
 .ENDIF
 
@@ -4258,17 +4210,9 @@ $(SHL2IMPLIBN):	\
     +@echo build of $(SHL2TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL2DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL2TARGETN)
-.ENDIF
-.ELSE
     @echo no ImportLibs on Mac and *ix
     @+-$(RM) $@
     @$(TOUCH) $@
-.ENDIF
 .ENDIF
 .ENDIF
 
@@ -4308,17 +4252,9 @@ $(SHL3IMPLIBN):	\
     +@echo build of $(SHL3TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL3DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL3TARGETN)
-.ENDIF
-.ELSE
     @echo no ImportLibs on Mac and *ix
     @+-$(RM) $@
     @$(TOUCH) $@
-.ENDIF
 .ENDIF
 .ENDIF
 
@@ -4358,17 +4294,9 @@ $(SHL4IMPLIBN):	\
     +@echo build of $(SHL4TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL4DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL4TARGETN)
-.ENDIF
-.ELSE
     @echo no ImportLibs on Mac and *ix
     @+-$(RM) $@
     @$(TOUCH) $@
-.ENDIF
 .ENDIF
 .ENDIF
 
@@ -4408,17 +4336,9 @@ $(SHL5IMPLIBN):	\
     +@echo build of $(SHL5TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL5DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL5TARGETN)
-.ENDIF
-.ELSE
     @echo no ImportLibs on Mac and *ix
     @+-$(RM) $@
     @$(TOUCH) $@
-.ENDIF
 .ENDIF
 .ENDIF
 
@@ -4458,17 +4378,9 @@ $(SHL6IMPLIBN):	\
     +@echo build of $(SHL6TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL6DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL6TARGETN)
-.ENDIF
-.ELSE
     @echo no ImportLibs on Mac and *ix
     @+-$(RM) $@
     @$(TOUCH) $@
-.ENDIF
 .ENDIF
 .ENDIF
 
@@ -4508,17 +4420,9 @@ $(SHL7IMPLIBN):	\
     +@echo build of $(SHL7TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL7DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL7TARGETN)
-.ENDIF
-.ELSE
     @echo no ImportLibs on Mac and *ix
     @+-$(RM) $@
     @$(TOUCH) $@
-.ENDIF
 .ENDIF
 .ENDIF
 
@@ -4558,17 +4462,9 @@ $(SHL8IMPLIBN):	\
     +@echo build of $(SHL8TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL8DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL8TARGETN)
-.ENDIF
-.ELSE
     @echo no ImportLibs on Mac and *ix
     @+-$(RM) $@
     @$(TOUCH) $@
-.ENDIF
 .ENDIF
 .ENDIF
 
@@ -4608,17 +4504,9 @@ $(SHL9IMPLIBN):	\
     +@echo build of $(SHL9TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL9DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL9TARGETN)
-.ENDIF
-.ELSE
     @echo no ImportLibs on Mac and *ix
     @+-$(RM) $@
     @$(TOUCH) $@
-.ENDIF
 .ENDIF
 .ENDIF
 
@@ -4658,17 +4546,9 @@ $(SHL10IMPLIBN):	\
     +@echo build of $(SHL10TARGETN) creates $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL10DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL10TARGETN)
-.ENDIF
-.ELSE
     @echo no ImportLibs on Mac and *ix
     @+-$(RM) $@
     @$(TOUCH) $@
-.ENDIF
 .ENDIF
 .ENDIF
 
