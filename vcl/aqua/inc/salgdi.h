@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-01-17 23:10:47 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-23 05:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,5 +146,6 @@ struct SalGraphicsData
 
 typedef struct SalGraphicsData   SalGraphicsData;
 typedef SalGraphicsData         *SalGraphicsDataPtr;
+typedef SalGraphicsDataPtr      *SalGraphicsDataHandle;
 
 #endif // _SV_SALGDI_H
