@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 10:27:08 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,8 @@ struct ImplObjStack
     Point*          mpRefPoint;
     TextAlign       meTextAlign;
     RasterOp        meRasterOp;
+    ULONG           mnTextLayoutMode;
+    LanguageType    meTextLanguage;
     USHORT          mnFlags;
 };
 
@@ -2038,6 +2040,10 @@ void OutputDevice::Push( USHORT nFlags )
     }
     if ( nFlags & PUSH_TEXTALIGN )
         pData->meTextAlign = GetTextAlign();
+    if( nFlags & PUSH_TEXTLAYOUTMODE )
+        pData->mnTextLayoutMode = GetLayoutMode();
+    if( nFlags & PUSH_TEXTLANGUAGE )
+        pData->meTextLanguage = GetDigitLanguage();
     if ( nFlags & PUSH_RASTEROP )
         pData->meRasterOp = GetRasterOp();
     if ( nFlags & PUSH_MAPMODE )
@@ -2119,6 +2125,10 @@ void OutputDevice::Pop()
     }
     if ( pData->mnFlags & PUSH_TEXTALIGN )
         SetTextAlign( pData->meTextAlign );
+    if( pData->mnFlags & PUSH_TEXTLAYOUTMODE )
+        SetLayoutMode( pData->mnTextLayoutMode );
+    if( pData->mnFlags & PUSH_TEXTLANGUAGE )
+        SetDigitLanguage( pData->meTextLanguage );
     if ( pData->mnFlags & PUSH_RASTEROP )
         SetRasterOp( pData->meRasterOp );
     if ( pData->mnFlags & PUSH_MAPMODE )
