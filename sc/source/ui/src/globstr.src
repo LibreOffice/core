@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:44:35 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -10594,9 +10594,8 @@ Resource RID_GLOBSTR
     };
     String STR_SCATTR_PAGE_SCALE
     {
-        Text = "Alles auf [%]" ;
-        Text [ ENGLISH ] = "All pages to [%]" ;
-        Text [ english_us ] = "All to [%]" ;
+        Text = "Ausdruck verkleinern/vergrˆﬂern" ;
+        Text [ english_us ] = "Reduce/enlarge printout" ;
         Text [ italian ] = "Tutto a [%]" ;
         Text [ spanish ] = "Todo en [%]" ;
         Text [ french ] = "Tout ‡ [%]" ;
@@ -10626,9 +10625,8 @@ Resource RID_GLOBSTR
     };
     String STR_SCATTR_PAGE_SCALETOPAGES
     {
-        Text = "Max. Seitenzahl" ;
-        Text [ ENGLISH ] = "To fit on pages" ;
-        Text [ english_us ] = "Max. no of pages" ;
+        Text = "Druckbereich(e) auf Seitenzahl anpassen" ;
+        Text [ english_us ] = "Fit print range(s) on number of pages" ;
         Text [ italian ] = "Num. massimo pagine" ;
         Text [ spanish ] = "N˙m. m·x. de p·ginas" ;
         Text [ french ] = "Nbre max. de pages" ;
@@ -10656,6 +10654,31 @@ Resource RID_GLOBSTR
         Text[ slovak ] = "Maxim√°lny poƒçet str√°n";
         Text[ hungarian ] = "Maxim√°lis oldalsz√°m";
         Text[ slovenian ] = "Najveƒçje ≈°tevilo strani";
+    };
+    String STR_SCATTR_PAGE_SCALETO
+    {
+        Text = "Druckbereich(e) auf Breite/Hˆhe anpassen" ;
+        Text[ english_us ] = "Fit print range(s) to width/height" ;
+    };
+    String STR_SCATTR_PAGE_SCALE_WIDTH
+    {
+        Text = "Breite" ;
+        Text[ english_us ] = "Width" ;
+    };
+    String STR_SCATTR_PAGE_SCALE_HEIGHT
+    {
+        Text = "Hˆhe" ;
+        Text[ english_us ] = "Height" ;
+    };
+    String STR_SCATTR_PAGE_SCALE_PAGES
+    {
+        Text = "%1 Seite(n)" ;
+        Text[ english_us ] = "%1 page(s)" ;
+    };
+    String STR_SCATTR_PAGE_SCALE_AUTO
+    {
+        Text = "automatisch" ;
+        Text[ english_us ] = "automatic" ;
     };
     String STR_DOC_STAT
     {
