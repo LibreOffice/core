@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:39:33 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,7 +631,7 @@ void __EXPORT ScTPValidationError::Reset( const SfxItemSet& rArgSet )
     if ( rArgSet.GetItemState( FID_VALID_SHOWERR, TRUE, &pItem ) == SFX_ITEM_SET )
         aTsbShow.SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
     else
-        aTsbShow.SetState( STATE_NOCHECK );
+        aTsbShow.SetState( STATE_CHECK );   // #111720# check by default
 
     if ( rArgSet.GetItemState( FID_VALID_ERRSTYLE, TRUE, &pItem ) == SFX_ITEM_SET )
         aLbAction.SelectEntryPos( ((const SfxAllEnumItem*)pItem)->GetValue() );
