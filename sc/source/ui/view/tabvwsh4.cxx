@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-27 19:16:45 $
+ *  last change: $Author: sab $ $Date: 2001-08-01 07:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1666,7 +1666,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     __INIT_ScTabViewShell,
     ScDBFunc( &pViewFrame->GetWindow(), rWin, this )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScTabViewShell::ScTabViewShell" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScTabViewShell::ScTabViewShell" );
 
     Construct();
 
@@ -1686,7 +1686,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     __INIT_ScTabViewShell,
     ScDBFunc( &pViewFrame->GetWindow(), (ScDocShell&)*pViewFrame->GetObjectShell(), this )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScTabViewShell::ScTabViewShell" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScTabViewShell::ScTabViewShell" );
 
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-27 19:15:54 $
+ *  last change: $Author: sab $ $Date: 2001-08-01 07:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ ScResId::ScResId( USHORT nId ) :
 
 void ScDLL::Init()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScDLL::Init" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDLL::Init" );
 
     // called directly after loading the DLL
     // do whatever you want, you may use Sxx-DLL too

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-31 15:35:34 $
+ *  last change: $Author: sab $ $Date: 2001-08-01 07:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,7 +515,7 @@ BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3, 4 or 5 file
 
 BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (sab) ScDocShell::LoadXML" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::LoadXML" );
 
     // prevent unnecessary broadcasts and updates
     ScDocShellModificator aModificator( *this );
@@ -562,7 +562,7 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
 
 BOOL ScDocShell::SaveXML( SfxMedium* pMedium, SvStorage* pStor )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (sab) ScDocShell::SaveXML" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::SaveXML" );
 
     ScXMLImportWrapper aImport( aDocument, pMedium, pStor );
     sal_Bool bRet(sal_False);
@@ -575,7 +575,7 @@ BOOL ScDocShell::SaveXML( SfxMedium* pMedium, SvStorage* pStor )
 
 BOOL __EXPORT ScDocShell::Load( SvStorage* pStor )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScDocShell::Load" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Load" );
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
@@ -666,7 +666,7 @@ void __EXPORT ScDocShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
 
 BOOL __EXPORT ScDocShell::LoadFrom( SvStorage* pStor )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScDocShell::LoadFrom" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::LoadFrom" );
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
@@ -730,7 +730,7 @@ BOOL __EXPORT ScDocShell::LoadFrom( SvStorage* pStor )
 
 BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScDocShell::ConvertFrom" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertFrom" );
 
     BOOL bRet = FALSE;              // FALSE heisst Benutzerabbruch !!
                                     // bei Fehler: Fehler am Stream setzen!!
@@ -1336,7 +1336,7 @@ void __EXPORT ScDocShell::HandsOff()
 
 BOOL __EXPORT ScDocShell::Save()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScDocShell::Save" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Save" );
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
@@ -1373,7 +1373,7 @@ BOOL __EXPORT ScDocShell::Save()
 
 BOOL __EXPORT ScDocShell::SaveAs( SvStorage* pStor )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScDocShell::SaveAs" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::SaveAs" );
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
@@ -1633,7 +1633,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, sal_Unicode cDelim, sal_Unicode c
 
 BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScDocShell::ConvertTo" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertTo" );
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
@@ -2094,7 +2094,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell )
         bNoInformLost( TRUE ),
         __SCDOCSHELL_INIT
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScDocShell::ScDocShell" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
 
     SetPool( &SC_MOD()->GetPool() );
 
@@ -2126,7 +2126,7 @@ ScDocShell::ScDocShell( SfxObjectCreateMode eMode )
         bNoInformLost( TRUE ),
         __SCDOCSHELL_INIT
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScDocShell::ScDocShell" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
 
     SetPool( &SC_MOD()->GetPool() );
 

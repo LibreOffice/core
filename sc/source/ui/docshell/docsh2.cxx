@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-27 19:19:54 $
+ *  last change: $Author: sab $ $Date: 2001-08-01 07:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ using namespace com::sun::star;
 
 BOOL __EXPORT ScDocShell::InitNew( SvStorage * pStor )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScDocShell::InitNew" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::InitNew" );
 
     BOOL bRet = SfxInPlaceObject::InitNew( pStor );
 
@@ -250,7 +250,7 @@ ScDrawLayer* ScDocShell::MakeDrawLayer()
     ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
     if (!pDrawLayer)
     {
-        RTL_LOGFILE_CONTEXT( aLog, "calc: (nn) ScDocShell::MakeDrawLayer" );
+        RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::MakeDrawLayer" );
 
         aDocument.InitDrawLayer(this);
         pDrawLayer = aDocument.GetDrawLayer();

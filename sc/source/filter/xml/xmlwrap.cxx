@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-27 13:20:07 $
+ *  last change: $Author: sab $ $Date: 2001-08-01 07:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,7 @@ sal_Bool ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServ
 
 sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (sab) ScXMLImportWrapper::Import" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScXMLImportWrapper::Import" );
 
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
                                         comphelper::getProcessServiceFactory();
@@ -540,7 +540,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
 
 sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "calc: (sab) ScXMLImportWrapper::Export" );
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScXMLImportWrapper::Export" );
 
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
                                         comphelper::getProcessServiceFactory();
