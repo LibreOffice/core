@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:10:50 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,6 +731,54 @@ IMPL_LINK( ScDPSubtotalOptDlg, SelectHdl, ListBox*, pLBox )
             maLabelData.maMembers, &maLabelData.maVisible );
         InitHideListBox();
     }
+    return 0;
+}
+
+// ============================================================================
+
+ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, USHORT nOrient ) :
+    ModalDialog     ( pParent, ScResId( RID_SCDLG_DPSHOWDETAIL ) ),
+    maFtDims        ( this, ScResId( FT_DIMS ) ),
+    maLbDims        ( this, ScResId( LB_DIMS ) ),
+    maBtnOk         ( this, ScResId( BTN_OK ) ),
+    maBtnCancel     ( this, ScResId( BTN_CANCEL ) ),
+    maBtnHelp       ( this, ScResId( BTN_HELP ) )
+{
+    FreeResource();
+
+    ScDPSaveData* pSaveData = rDPObj.GetSaveData();
+    long nDimCount = rDPObj.GetDimCount();
+    for (long nDim=0; nDim<nDimCount; nDim++)
+    {
+        BOOL bIsDataLayout;
+        String aName = rDPObj.GetDimName( nDim, bIsDataLayout );
+        if ( !bIsDataLayout && !rDPObj.IsDuplicated( nDim ) )
+        {
+            const ScDPSaveDimension* pDimension = pSaveData ? pSaveData->GetExistingDimensionByName(aName) : 0;
+            if ( !pDimension || (pDimension->GetOrientation() != nOrient) )
+                maLbDims.InsertEntry( aName );
+        }
+    }
+    if( maLbDims.GetEntryCount() )
+        maLbDims.SelectEntryPos( 0 );
+
+    maLbDims.SetDoubleClickHdl( LINK( this, ScDPShowDetailDlg, DblClickHdl ) );
+}
+
+short ScDPShowDetailDlg::Execute()
+{
+    return maLbDims.GetEntryCount() ? ModalDialog::Execute() : RET_CANCEL;
+}
+
+String ScDPShowDetailDlg::GetDimensionName() const
+{
+    return maLbDims.GetSelectEntry();
+}
+
+IMPL_LINK( ScDPShowDetailDlg, DblClickHdl, ListBox*, pLBox )
+{
+    if( pLBox == &maLbDims )
+        maBtnOk.Click();
     return 0;
 }
 
