@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-06-27 14:58:33 $
+ *  last change: $Author: os $ $Date: 2001-10-26 14:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,10 +130,14 @@ struct SvxBackgroundTable_Impl
     SvxBrushItem*   pCellBrush;
     SvxBrushItem*   pRowBrush;
     SvxBrushItem*   pTableBrush;
+    USHORT          nCellWhich;
+    USHORT          nRowWhich;
+    USHORT          nTableWhich;
     USHORT          nActPos;
 
     SvxBackgroundTable_Impl() :
-        pCellBrush(NULL), pRowBrush(NULL), pTableBrush(NULL) {}
+        pCellBrush(NULL), pRowBrush(NULL), pTableBrush(NULL),
+        nCellWhich(0), nRowWhich(0), nTableWhich(0) {}
 };
 
 struct SvxBackgroundPara_Impl
@@ -554,9 +558,9 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
 
             if ( pTableBck_Impl )
             {
-                delete pTableBck_Impl->pCellBrush;
-                delete pTableBck_Impl->pRowBrush;
-                delete pTableBck_Impl->pTableBrush;
+                DELETEZ( pTableBck_Impl->pCellBrush);
+                DELETEZ( pTableBck_Impl->pRowBrush);
+                DELETEZ( pTableBck_Impl->pTableBrush);
             }
             else
                 pTableBck_Impl = new SvxBackgroundTable_Impl();
@@ -565,16 +569,25 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
 
             nWhich = GetWhich( SID_ATTR_BRUSH );
             if ( rSet.GetItemState( nWhich, FALSE ) >= SFX_ITEM_AVAILABLE )
+            {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( nWhich ) );
-            pTableBck_Impl->pCellBrush = new SvxBrushItem(*pBgdAttr);
+                pTableBck_Impl->pCellBrush = new SvxBrushItem(*pBgdAttr);
+            }
+            pTableBck_Impl->nCellWhich = nWhich;
 
             if ( rSet.GetItemState( SID_ATTR_BRUSH_ROW, FALSE ) >= SFX_ITEM_AVAILABLE )
+            {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( SID_ATTR_BRUSH_ROW ) );
-            pTableBck_Impl->pRowBrush = new SvxBrushItem(*pBgdAttr);
+                pTableBck_Impl->pRowBrush = new SvxBrushItem(*pBgdAttr);
+            }
+            pTableBck_Impl->nRowWhich = SID_ATTR_BRUSH_ROW;
 
             if ( rSet.GetItemState( SID_ATTR_BRUSH_TABLE, FALSE ) >= SFX_ITEM_AVAILABLE )
+            {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( SID_ATTR_BRUSH_TABLE ) );
-            pTableBck_Impl->pTableBrush = new SvxBrushItem(*pBgdAttr);
+                pTableBck_Impl->pTableBrush = new SvxBrushItem(*pBgdAttr);
+            }
+            pTableBck_Impl->nTableWhich = SID_ATTR_BRUSH_TABLE;
 
             TblDestinationHdl_Impl(&aTblLBox);
             aTblLBox.SaveValue();
@@ -760,6 +773,7 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
     USHORT nWhich = GetWhich( nSlot );
 
     const SfxPoolItem* pOld = GetOldItem( rCoreSet, nSlot );
+    SfxItemState eOldItemState = rCoreSet.GetItemState(nSlot, FALSE);
     const SfxItemSet& rOldSet = GetItemSet();
 
     if ( pOld )
@@ -776,7 +790,7 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
             if ( (GPOS_NONE == eOldPos) || !aLbSelect.IsVisible() )
             {
                 // Brush-Behandlung:
-                if ( rOldItem.GetColor() != aBgdColor )
+                if ( rOldItem.GetColor() != aBgdColor || SFX_ITEM_AVAILABLE >= eOldItemState)
                 {
                     bModified = TRUE;
                     rCoreSet.Put( SvxBrushItem( aBgdColor, nWhich ) );
@@ -860,7 +874,7 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
     if( aTblLBox.IsVisible() )
     {
         // Der aktuelle Zustand wurde bereits geputtet
-        if( nSlot != SID_ATTR_BRUSH )
+        if( nSlot != SID_ATTR_BRUSH && pTableBck_Impl->pCellBrush)
         {
             const SfxPoolItem* pOldCell =
                 GetOldItem( rCoreSet, SID_ATTR_BRUSH );
@@ -872,7 +886,7 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
             }
         }
 
-        if( nSlot != SID_ATTR_BRUSH_ROW )
+        if( nSlot != SID_ATTR_BRUSH_ROW && pTableBck_Impl->pRowBrush)
         {
             const SfxPoolItem* pOldRow =
                 GetOldItem( rCoreSet, SID_ATTR_BRUSH_ROW );
@@ -884,7 +898,7 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
             }
         }
 
-        if( nSlot != SID_ATTR_BRUSH_TABLE )
+        if( nSlot != SID_ATTR_BRUSH_TABLE && pTableBck_Impl->pTableBrush)
         {
             const SfxPoolItem* pOldTable =
                 GetOldItem( rCoreSet, SID_ATTR_BRUSH_TABLE );
@@ -1649,22 +1663,27 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
     if( pTableBck_Impl && pTableBck_Impl->nActPos != nSelPos)
     {
         SvxBrushItem** pActItem = new (SvxBrushItem*);
+        USHORT nWhich = 0;
         switch(pTableBck_Impl->nActPos)
         {
             case TBL_DEST_CELL:
                 *pActItem = pTableBck_Impl->pCellBrush;
+                nWhich = pTableBck_Impl->nCellWhich;
             break;
             case TBL_DEST_ROW:
                 *pActItem = pTableBck_Impl->pRowBrush;
+                nWhich = pTableBck_Impl->nRowWhich;
             break;
             case TBL_DEST_TBL:
                 *pActItem = pTableBck_Impl->pTableBrush;
+                nWhich = pTableBck_Impl->nTableWhich;
             break;
         }
         pTableBck_Impl->nActPos = nSelPos;
+        if(!*pActItem)
+            *pActItem = new SvxBrushItem;
         if(0 == aLbSelect.GetSelectEntryPos())  // Brush ausgewaehlt
         {
-            USHORT nWhich = (*pActItem)->Which();
             **pActItem = aBgdColor;
             (*pActItem)->SetWhich(nWhich);
         }
@@ -1691,20 +1710,25 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
             case TBL_DEST_CELL:
                 *pActItem = pTableBck_Impl->pCellBrush;
                 aLbSelect.Enable();
+                nWhich = pTableBck_Impl->nCellWhich;
             break;
             case TBL_DEST_ROW:
             {
                 if((nHtmlMode & HTMLMODE_ON) && !(nHtmlMode & HTMLMODE_SOME_STYLES))
                     aLbSelect.Disable();
                 *pActItem = pTableBck_Impl->pRowBrush;
+                nWhich = pTableBck_Impl->nRowWhich;
             }
             break;
             case TBL_DEST_TBL:
                 *pActItem = pTableBck_Impl->pTableBrush;
                 aLbSelect.Enable();
+                nWhich = pTableBck_Impl->nTableWhich;
             break;
         }
         String aUserData = GetUserData();
+        if(!*pActItem)
+            *pActItem = new SvxBrushItem(nWhich);
         FillControls_Impl(**pActItem, aUserData);
         delete pActItem;
     }
