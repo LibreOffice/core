@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-08 13:16:51 $
+ *  last change: $Author: fme $ $Date: 2001-06-13 08:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,20 +416,10 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
         pLast->Insert( pPor );
 
         // Maxima anpassen:
-        // Der PaintOfst muss zurueckgesetzt werden.
-        // Unterlaufsituation in Kombination mit Recycle()
         if( pCurr->Height() < pPor->Height() )
-        {
             pCurr->Height( pPor->Height() );
-            if( IsFirstReformat() )
-                rInf.SetPaintOfst(0);
-        }
         if( pCurr->GetAscent() < pPor->GetAscent() )
-        {
             pCurr->SetAscent( pPor->GetAscent() );
-            if( IsFirstReformat() )
-                rInf.SetPaintOfst(0);
-        }
     }
 
     // manchmal werden ganze Ketten erzeugt (z.B. durch Hyphenate)
@@ -542,10 +532,20 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
         if ( pPor->IsFlyPortion() )
             pCurr->SetFly( sal_True );
-        else if ( pPor->InTabGrp() &&
-                 !pPor->IsTabLeftPortion() &&
-                 !rInf.GetPaintOfst() )
-            // we store the beginning of the first right tab as our
+        // some special cases, where we have to take care for the repaint
+        // offset:
+        // 1. Right Tab
+        // 2. Multiportions
+        else if (  ! rInf.GetPaintOfst() &&
+                   // 1. Right Tab
+                   ( ( pPor->InTabGrp() && !pPor->IsTabLeftPortion() ) ||
+                   // 2. Multi Portion
+                     ( pPor->IsMultiPortion() &&
+                       rInf.GetReformatStart() >= rInf.GetIdx() &&
+                       rInf.GetReformatStart() < rInf.GetIdx() + pPor->GetLen() )
+                   )
+                )
+            // we store the beginning of the critical portion as our
             // paint offset
             rInf.SetPaintOfst( GetLeftMargin() + rInf.X() );
 
@@ -1365,6 +1365,10 @@ void SwTxtFormatter::FormatReset( SwTxtFormatInfo &rInf )
     pCurr->Init();
     if( pBlink && pCurr->IsBlinking() )
         pBlink->Delete( pCurr );
+
+    // delete pSpaceAdd und pKanaComp
+    pCurr->FinishSpaceAdd();
+    pCurr->FinishKanaComp();
     pCurr->ResetFlags();
     FeedInf( rInf );
 }

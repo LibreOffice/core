@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2001-06-13 08:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1592,6 +1592,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     SwLinePortion *pNextFirst = NULL;
     SwLinePortion *pNextSecond = NULL;
     BOOL bRet = FALSE;
+
     do
     {
         pCurr = &rMulti.GetRoot();
@@ -1616,6 +1617,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         // If there's no more rubytext, then buildportion is forbidden
         if( pFirstRest || !aInf.IsRuby() )
             BuildPortions( aInf );
+
         rMulti.CalcSize( *this, aInf );
         pCurr->SetRealHeight( pCurr->Height() );
         if( rMulti.HasRotation() && !rMulti.IsDouble() )
@@ -1813,6 +1815,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     }
 
     rInf.SetTxt( *pOldTxt );
+    rInf.SetStop( aInf.IsStop() );
     SeekAndChg( rInf );
     delete pFirstRest;
     delete pSecondRest;
