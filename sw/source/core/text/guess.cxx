@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-28 08:41:57 $
+ *  last change: $Author: ama $ $Date: 2001-03-08 10:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@ using namespace ::com::sun::star::linguistic2;
 xub_StrLen SwTxtGuess::GetWordStart( const SwTxtFormatInfo &rInf,
                                      const xub_StrLen nPos )
 {
+    if (! pBreakIt->xBreak.is() )
+        return nPos;
+
     // get word boundaries
     Boundary aBound =
         pBreakIt->xBreak->getWordBoundary( rInf.GetTxt(), rInf.GetIdx(),
