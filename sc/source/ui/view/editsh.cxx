@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:28:32 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,7 +478,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     }
                 }
                 if (!bOk)
-                    Sound::Beep();              // keine Referenzen oder mehrere Absätze
+                    Sound::Beep();              // keine Referenzen oder mehrere Absaetze
             }
             break;
 
