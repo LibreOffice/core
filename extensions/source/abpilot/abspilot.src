@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 08:03:26 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     Text[ czech ] = "Průvodce importem databáze kontaktů";
     Text[ hebrew ] = "‮\"טייס אוטומטי\" ספר כתובות‬";
     Text[ hindi ] = "पता ड़ॉटा मूल ओटोपैलट्";
+    Text[ slovak ] = "Sprievodca zdrojom dát adries";
 };
 
 //........................................................................
@@ -148,6 +149,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ czech ] = "%PRODUCTNAME vám umožňuje importovat data z databází kontaktů, které jsou již ve vašem systému dostupné. %PRODUCTNAME vytvoří zdroj dat, který zpřístupní tato data jako tabulku.\n\nTento průvodce vám pomůže ve vytvoření tohoto zdroje dat.";
         Text[ hebrew ] = "‮מאפשר גישה לספרי כתובות קיימים במערכת. כדי לעשות זאת ימיר ה\"טייס האוטומטי\" את הנתונים למבנה טבלאי נגיש‬ %PRODUCTNAME";
         Text[ hindi ] = "%PRODUCTNAME द्वारा आप पहिले से ही सिस्टम में रहनेवाला पता ड़ॉटा को प्रवेश कर सकते है । यह करने केलिए, %PRODUCTNAME ड़ॉटा मूल को उत्पन्न किया जायेगा जहाँ पर आपका पता ड़ॉटा सारणीबद्ध प्रकार में उपलब्ध है ।\n\nइस ओटोपैलट आपको ड़ॉटा मूल उत्पन्न करने केलिए सहायता करेगा ।";
+        Text[ slovak ] = "%PRODUCTNAME Vám umožňuje pristupovať k adresám nachádzajúcim sa vo vašom systéme. Aby ste toto mohli využívať bude vytvorený zdroj dát v ktorom budú vaše adresy k dispozícii v tabuľkovej forme.\n\nTento sprievodca vám pomôže vytvoriť spomínaný zdroj dát.";
     };
 
     FixedLine FL_TYPE
@@ -181,6 +183,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ czech ] = "Prosím zvolte si typ své externí databáze kontaktů:";
         Text[ hebrew ] = "‮בחירת סוג ספר הכתובות הרצוי‬";
         Text[ hindi ] = "कृपया आपका बाहरी पता पुस्तक का वर्ग को चुनिए :";
+        Text[ slovak ] = "Prosím vyberte typ vášho externého adresára:";
     };
 
     RadioButton RB_MORK
@@ -214,6 +217,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ hebrew ] = "Mozilla / Netscape";
         Text[ thai ] = "Mozilla / Netscape";
         Text[ hindi ] = "Mozilla / Netscape 6.x";
+        Text[ slovak ] = "Mozilla / Netscape 6.x";
     };
     RadioButton RB_EVOLUTION
      {
@@ -275,6 +279,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ czech ] = "LDAP";
         Text[ hebrew ] = "LDAP‮ספר כתובות ‬";
         Text[ hindi ] = "LDAP पता ड़ॉटा";
+        Text[ slovak ] = "LDAP adresár";
     };
     RadioButton RB_OUTLOOK
     {
@@ -307,6 +312,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ czech ] = "Databáze kontaktů programu Outlook";
         Text[ hebrew ] = "Outlook‮ספר כתובות ‬";
         Text[ hindi ] = "औटलुक पता पुस्तक";
+        Text[ slovak ] = "Outlook adresár";
     };
     RadioButton RB_OUTLOOKEXPRESS
     {
@@ -339,6 +345,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ czech ] = "Systémová databáze kontaktů op.systému Windows";
         Text[ hebrew ] = "Windows System‮ספר כתובות ‬";
         Text[ hindi ] = "Windows सिस्टम पता पुस्तक";
+        Text[ slovak ] = "Windows system adresár";
     };
     RadioButton RB_OTHER
     {
@@ -371,6 +378,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ czech ] = "Jiný externí zdroj dat";
         Text[ hebrew ] = "‮סוגים אחרים של מקורות חיצוניים לספר הכתובות‬";
         Text[ hindi ] = "अन्य बाहरी ड़ॉटा मूल";
+        Text[ slovak ] = "Ostatné externé zdroje dát";
     };
     Text[ portuguese ] = "Bem-vindo ao AutoPiloto da fonte de dados dos endere�os!";
     Text[ russian ] = "����� ���������� � ������ ���������� ������ �������!";
@@ -395,6 +403,7 @@ TabPage RID_PAGE_SELECTABTYPE
     Text[ czech ] = "Vítejte v průvodci vytvořením databáze kontaktů";
     Text[ hebrew ] = "‮בריכים הבאים ל\"טייס האוטומטי\" לספרי כתובות‬";
     Text[ hindi ] = "पता ड़ॉटा मूल ओटोपैलट् में स्वागत है";
+    Text[ slovak ] = "Vitajte v sprievodcovi zdrojom dát adries";
 };
 
 //........................................................................
@@ -442,6 +451,7 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ czech ] = "K vytvoření nového zdroje dat je potřeba dalších informací.\n\nKlikněte na následující tlačítko k otevření dalšího dialogu, kde zadáte potřebné informace.";
         Text[ hebrew ] = "Zur Einrichtung der neuen Datenquelle sind noch weiter gehende Angaben notwendig.\n\nDie folgende Schaltfläche öffnet einen weiteren Dialog, in dem Sie die fehlenden Einstellungen vornehmen können.";
         Text[ hindi ] = "नया ड़ॉटा मूल को सेटप करने केलिए, अतिरिक्त जानकारी की आवश्यकता है ।\n\nनिम्नलिखित बटन को क्लिक करने से दूसरा डयलॉग खुल जायेगा जहाँ पर आवश्यक जानकारियों को आप प्रविष्ट कर सकते है ।";
+        Text[ slovak ] = "Aby bolo možné nastaviť zdroj dát, sú potrebné ďalšie informácie.\n\nKliknutím na nasledujúce tlačítko otvoríte ďalšie okno, v ktorom zadáte potrebné informácie.";
     };
 
     PushButton PB_INVOKE_ADMIN_DIALOG
@@ -475,6 +485,7 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ czech ] = "Nastavení";
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
+        Text[ slovak ] = "Nastavenia";
     };
 
     FixedText FT_ERROR
@@ -513,6 +524,7 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ czech ] = "Nelze navázat spojení se zdrojem dat.\n\nDříve než budete pokračovat, zkontrolujte prosím nastavení nebo na předchozí stránce zvolte jiný typ zdroje dat.";
         Text[ hebrew ] = "Die Verbindung zur Datenquelle konnte nicht hergestellt werden.\nBitte überprüfen Sie, bevor Sie fortfahren, die gemachten Einstellungen, oder wählen Sie (auf der vorigen Seite) einen anderen Typ für Ihre  Adress-Datenquelle.";
         Text[ hindi ] = "ड़ॉटा मूल को कनेक्शन स्थापित नहीं कर सकते है ।\nजारी रखने से पहिले, की हुयी निर्धारणों का जाँच कीजिए, अथवा (पिछला पृष्ठ में) दूसरा पते का ड़ॉटा मूल वर्ग को चुनिए । ";
+        Text[ slovak ] = "Nepodarilo sa nadviazať spojenie so zdrojom dát.\nPredtým ako budete pokračovať, skontrolujte prosím nastavenia, alebo (na predchádzajúcej stránke) vyberte iný typ zdroja dát adresy.";
     };
     Text[ portuguese ] = "Defini��es adicionais";
     Text[ russian ] = "�������������� ���������";
@@ -537,6 +549,7 @@ TabPage RID_PAGE_ADMININVOKATION
     Text[ czech ] = "Další nastavení";
     Text[ hebrew ] = "Zusätzliche Einstellungen";
     Text[ hindi ] = "अतिरिक्त निर्धारण";
+    Text[ slovak ] = "Ďalšie nastavenia";
 };
 
 //........................................................................
@@ -583,6 +596,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ czech ] = "Externí zdroj dat, který jste zvolili, obsahuje více než jednu databázi kontaktů.\nProsím zvolte tu, se kterou chcete dále pracovat:";
         Text[ hebrew ] = "Die von Ihnen gewählte externe Datenquelle enthält mehrere Adress-Bestände.\nBitte wählen Sie denjenigen aus, mit dem Sie hauptsächlich arbeiten wollen:";
         Text[ hindi ] = "आपके चुने हुए बाहरी ड़ॉटा मूल में एक से अधिक पता पुस्तक सम्मिलित है ।\nकृपया का एक मुख्य पता पुस्तक को चुनो जिसके साथ आप काम करना चाहते है :";
+        Text[ slovak ] = "Externý zdroj dát, ktorý ste vybrali obsahuje viac ako jednu knihu adries.\nVyberte si prosím jednu, s ktorou chcete pracovať.";
     };
 
     ListBox LB_TABLELIST
@@ -618,6 +632,7 @@ TabPage RID_PAGE_TABLESELECTION
     Text[ czech ] = "Vybrat tabulku";
     Text[ hebrew ] = "‮בחירת טבלה‬";
     Text[ hindi ] = "सारणी चुनो";
+    Text[ slovak ] = "Vybrať tabuľku";
 };
 
 //........................................................................
@@ -670,6 +685,7 @@ TabPage RID_PAGE_FIELDMAPPING
         Text[ czech ] = "Abyste mohli zařadit svá data do šablon, %PRODUCTNAME potřebuje vědět, která pole obsahují jaká data.\n\nNapříklad jste mohli uložit emailové adresy do pole \"email\", \"E-mail\" , nebo úplně jiného.\n\nKliknutím na tlačítko níže otevřete dialog, kde můžete zadat nastavení svého zdroje dat.";
         Text[ hebrew ] = "Um die Adress-Daten in Ihren Vorlagen-Dokumenten benutzen zu können, muss %PRODUCTNAME wissen, welche Felder welche konkreten Daten enthalten.\n\nZum Beispiel könnten Sie die E-Mail-Adressen in einem Feld namens \"E-Mail\" oder \"Email\" oder \"EM\" - oder unter völlig anderem Namen - gespeichert haben.\n\nSobald Sie die unten befindliche Schaltfläche betätigen, wird ein weiterer Dialog geöffnet, in dem sie diese Einstellungen für Ihre Datenquelle vornehmen können.";
         Text[ hindi ] = "आपके नमूनों में पता ड़ॉटा को संयुक्त करने केलिए, %PRODUCTNAME को यह पता होना चाहिए कि हरेक क्षेत्र क्या मूल्य है ।\n\nअभी केलिए, आपने इ-मेइल पता को \"ईमेइल\", अथवा \"इ-मेइल\" अथवा \"EM\" - अथवा कुछ संपूर्ण भिन्न नाम का क्षेत्र में संग्रह किया होगा ।\n\nनीचे का बटन को दबाने पर एक डयलॉग बॉक्स खुल जायेगा जहाँ पर आप अपना ड़ॉटा मूल केलिए निर्धारणों को प्रविष्ट कर सकते है ।";
+        Text[ slovak ] = "Aby ste mohli pripojiť adresy k Vašim šablónam, %PRODUCTNAME musí vedieť, aké dáta obsahujú jednotlivé polia.\n\nNapríklad, môžete mať uložené e-mailové adresy v poli nazvanom \"email\", alebo \"E-mail\", alebo \"EM\" - alebo hociako inak.\n\nKliknite na tlačidlo dole a otvorte ďalšie okno, kde môžete zadať nastavenie pre Váš zdroj dát.";
     };
 
     PushButton PB_INVOKE_FIELDS_DIALOG
@@ -703,6 +719,7 @@ TabPage RID_PAGE_FIELDMAPPING
         Text[ czech ] = "Přiřazení polí";
         Text[ hebrew ] = "‮השמת ערכים לשדות‬";
         Text[ hindi ] = "Field Assignment";
+        Text[ slovak ] = "Priradenie poľa";
     };
 
     FixedText FT_ASSIGNEDFIELDS
@@ -734,6 +751,7 @@ TabPage RID_PAGE_FIELDMAPPING
     Text[ czech ] = "Přiřazení polí";
     Text[ hebrew ] = "‮השצת ערכים לשדות‬";
     Text[ hindi ] = "क्षेत्र निर्दिष्ट करना";
+    Text[ slovak ] = "Priradenie poľa";
 };
 
 //........................................................................
@@ -780,6 +798,7 @@ TabPage RID_PAGE_FINAL
         Text[ czech ] = "Toto jsou všechny informace potřebné k integraci vaší databáze kontaktů do %PRODUCTNAME.\n\nNyní pouze zadejte název, pod kterým chcete tuto databázi zaregistrovat v %PRODUCTNAME.";
         Text[ hebrew ] = "Das waren alle Angaben, die zur Integration Ihrer Adress-Daten in %PRODUCTNAME benötigt werden.\n\nGeben Sie jetzt noch den Namen an, unter dem die Datenquelle in %PRODUCTNAME registriert werden soll.";
         Text[ hindi ] = "आपका पता ड़ॉटा को %PRODUCTNAME में संयुक्त करने केलिए इन सभी जानकारी का आवश्यकता था ।";
+        Text[ slovak ] = "To boli všetky informácie potrebné na integráciu vašich adries do %PRODUCTNAME.\n\nTeraz iba zadajte meno, pod ktorým chcete zaregistrovať zdroj dát v %PRODUCTNAME.";
     };
 
     FixedText FT_NAME_EXPL
@@ -814,6 +833,7 @@ Text[ japanese ] = "タイトル";
         Text[ czech ] = "Název";
         Text[ hebrew ] = "Titel";
         Text[ hindi ] = "नाम्";
+        Text[ slovak ] = "Názov";
     };
 
     Edit ET_DATASOURCENAME
@@ -858,6 +878,7 @@ Text[ japanese ] = "タイトル";
         Text[ czech ] = "Jiný zdroj dat již používá tento název. Jelikož zdroje dat musí mít unikátní názvy, musíte zvolit jiný.";
         Text[ hebrew ] = "Es existiert schon eine andere Datenquelle mit diesem Namen. Da Datenquellennamen global eindeutig sind, müssen sie einen anderen wählen.";
         Text[ hindi ] = "इस नाम का अन्य ड़ॉटा मूल पहिले से है । ड़ॉटा मूल को ग्लोबली अनोखा नाम रहने के कारण, कृपया अन्य नाम को चुनिए ।";
+        Text[ slovak ] = "Toto meno už bolo pridelené inému zdroju dát. Vzhľadom na to, že zdroje dát musia mať unikátne mená, vyberte iné.";
     };
     Text[ portuguese ] = "T�tulo da fonte de dados";
     Text[ russian ] = "��� ��������� ������";
@@ -882,6 +903,7 @@ Text[ japanese ] = "タイトル";
     Text[ czech ] = "Název datového zdroje";
     Text[ hebrew ] = "Datenquellen Titel";
     Text[ hindi ] = "ड़ॉटा मूल नाम";
+    Text[ slovak ] = "Názov zdroja dát";
 };
 
 //........................................................................
@@ -915,6 +937,7 @@ ErrorBox RID_ERR_NEEDTYPESELECTION
     Message[ czech ] = "Prosím zvolte typ databáze kontaktů.";
     Message[ hebrew ] = "Bitte wählen sie einen Adressbuch-Typ aus";
     Message[ hindi ] = "कृपया एक पता पुस्तक वर्ग को चुनो ।";
+    Message[ slovak ] = "Vyberte typ knihy adries prosím.";
 };
 
 //........................................................................
@@ -951,6 +974,7 @@ QueryBox RID_QRY_NOTABLES
     Message[ czech ] = "Zdroj dat neobsahuje žádné tabulky.\nChcete jej přesto nastavit jako zdroj dat?";
     Message[ hebrew ] = "Die Datenquelle enthält keine Tabelle.\nWollen Sie sie trotzdem als Adress-Datenquelle einrichten?";
     Message[ hindi ] = "ड़ॉटा मूल में कोई सारणियाँ नहीं है ।\nआप किसी तरह उसको एक पते का ड़ॉटा मूल जैसे सेट्ट करना चाहते है ?";
+    Message[ slovak ] = "Zdroj dát neobsahuje žiadne tabuľky.\nChcete to nastaviť ako zdroj dát adries aj napriek tomu?";
 };
 
 //........................................................................
@@ -982,6 +1006,7 @@ String RID_STR_DEFAULT_NAME
     Text[ czech ] = "Adresy";
     Text[ hebrew ] = "Adressen";
     Text[ hindi ] = "पता";
+    Text[ slovak ] = "Adresy";
 };
 
 String RID_STR_ADMINDIALOGTITLE
@@ -1012,6 +1037,7 @@ String RID_STR_ADMINDIALOGTITLE
     Text[ czech ] = "Vytvořit databázi kontaktů";
     Text[ hebrew ] = "Adress Datenquelle anlegen";
     Text[ hindi ] = "पता ड़ॉटा मूल को उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť zdroj dát pre adresy";
 };
 
 String RID_STR_NOCONNECTION
@@ -1042,6 +1068,7 @@ String RID_STR_NOCONNECTION
     Text[ czech ] = "Spojení nelze navázat.";
     Text[ hebrew ] = "Die Verbindung konnte nicht hergestellt werden.";
     Text[ hindi ] = "कनेक्शन को स्थापित नहीं कर सकते है ।";
+    Text[ slovak ] = "Spojenie sa nepodarilo nadviazať.";
 };
 
 String RID_STR_PLEASECHECKSETTINGS
@@ -1072,6 +1099,7 @@ String RID_STR_PLEASECHECKSETTINGS
     Text[ czech ] = "Prosím zkontrolujte nastavení provedená pro zdroj dat.";
     Text[ hebrew ] = "Bitte überprüfen Sie die Einstellungen für die Datenquelle.";
     Text[ hindi ] = "कृपया ड़ॉटा मूल केलिए की हुयी निर्धारणों का जाँच कीजिए ।";
+    Text[ slovak ] = "Skontrolujte nastavenia zdroja dát prosím.";
 };
 
 String RID_STR_FIELDDIALOGTITLE
@@ -1102,6 +1130,7 @@ String RID_STR_FIELDDIALOGTITLE
     Text[ czech ] = "Položky adresy - přiřazení polí";
     Text[ hebrew ] = "Adress Daten - Feldzuordnung";
     Text[ hindi ] = "पता ड़ॉटा - क्षेत्र निर्दिष्ट करना";
+    Text[ slovak ] = "Údaje adries - priradenie polí";
 };
 
 String RID_STR_NOFIELDSASSIGNED
@@ -1137,6 +1166,7 @@ String RID_STR_NOFIELDSASSIGNED
     Text[ czech ] = "V současnosti nejsou přiřazena žádná pole.\nMůžete buďto přiřadit pole nyní, anebo později pomocí menu:\n\"Soubor - Šablona - Zdroj databáze kontaktů...\"";
     Text[ hebrew ] = "Im Augenblick sind keine Felder zugeordnet.\nWenn Sie im Augenblick keine Zuordnung treffen wollen, können Sie dies später jederzeit nachholen:\nMenü \"Datei - Dokumentvorlage - Adressbuch Quelle ...\"";
     Text[ hindi ] = "इस समय निर्दिष्ट की हुयी कोई क्षेत्र नहीं है ।\n\"फाइल - नमूना - पता पुस्तक मूल...\"\n को चुनके आप अभी अथवा बाद में क्षेत्रों को निर्दिष्ट कर सकते है";
+    Text[ slovak ] = "Momentálne nie sú priradené žiadne polia.\nMôžete ich priradiť teraz, ale tak urobiť neskôr v::\n\"Súbor - Šablóny - Zdroj knihy adries...\"";
 };
 
 String RID_STR_ABP_SUCCESS
@@ -1167,6 +1197,7 @@ String RID_STR_ABP_SUCCESS
     Text[ czech ] = "Vaše externí databáze kontaktů byla úspěšně registrována v %PRODUCTNAME.\nNyní můžete používat své kontakty jako každý jiný zdroj dat.";
     Text[ hebrew ] = "Ab jetzt können Sie Ihre Adressdaten von %PRODUCTNAME aus erreichen. So öffnen Sie z.B. mit der F4-Taste die Datenquellenansicht, um mit den Adressdaten zu arbeiten.";
     Text[ hindi ] = "%PRODUCTNAME में आपका बाहरी पता पुस्तक को सफलता से पंजीयन किया है ।\nअभी आप पता पुस्तक को अन्य किसी ड़ॉटा मूल जैसे उपयोग कर सकते है ।";
+    Text[ slovak ] = "Vaša externá kniha adries bola úspešne zaregistrovaná v %PRODUCTNAME.\nTeraz môžete používať vaše adresy ako iné zdroje dát.";
 };
 
 //........................................................................
@@ -1174,6 +1205,8 @@ Bitmap BMP_HEADERIMAGE
 {
     file = "addresspilot.bmp";
 };
+
+
 
 
 
