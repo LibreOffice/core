@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibledialogcontrolshape.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:47:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 18:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,14 @@
 #include <dlgedobj.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
@@ -107,7 +107,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
@@ -186,7 +186,7 @@ void AccessibleDialogControlShape::SetFocused( sal_Bool bFocused )
         else
             aNewValue <<= AccessibleStateType::FOCUSED;
         m_bFocused = bFocused;
-        NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+        NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
     }
 }
 
@@ -202,7 +202,7 @@ void AccessibleDialogControlShape::SetSelected( sal_Bool bSelected )
         else
             aNewValue <<= AccessibleStateType::SELECTED;
         m_bSelected = bSelected;
-        NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+        NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
     }
 }
 
@@ -243,7 +243,7 @@ void AccessibleDialogControlShape::SetBounds( const awt::Rectangle& aBounds )
     if ( m_aBounds.X != aBounds.X || m_aBounds.Y != aBounds.Y || m_aBounds.Width != aBounds.Width || m_aBounds.Height != aBounds.Height )
     {
         m_aBounds = aBounds;
-        NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_BOUNDRECT_EVENT, Any(), Any() );
+        NotifyAccessibleEvent( AccessibleEventId::BOUNDRECT_CHANGED, Any(), Any() );
     }
 }
 
@@ -365,7 +365,7 @@ void AccessibleDialogControlShape::propertyChange( const beans::PropertyChangeEv
 {
     if ( rEvent.PropertyName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ) )
     {
-        NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_NAME_EVENT, rEvent.OldValue, rEvent.NewValue );
+        NotifyAccessibleEvent( AccessibleEventId::NAME_CHANGED, rEvent.OldValue, rEvent.NewValue );
     }
     else if ( rEvent.PropertyName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ) ||
               rEvent.PropertyName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ) ||
@@ -378,7 +378,7 @@ void AccessibleDialogControlShape::propertyChange( const beans::PropertyChangeEv
               rEvent.PropertyName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextColor" ) ) ||
               rEvent.PropertyName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextLineColor" ) ) )
     {
-        NotifyAccessibleEvent( AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT, Any(), Any() );
+        NotifyAccessibleEvent( AccessibleEventId::VISIBLE_DATA_CHANGED, Any(), Any() );
     }
 }
 
@@ -409,7 +409,7 @@ sal_Bool AccessibleDialogControlShape::supportsService( const ::rtl::OUString& r
 Sequence< ::rtl::OUString > AccessibleDialogControlShape::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "drafts.com.sun.star.drawing.AccessibleShape" );
+    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.drawing.AccessibleShape" );
     return aNames;
 }
 
@@ -564,7 +564,7 @@ Locale AccessibleDialogControlShape::getLocale(  ) throw (IllegalAccessibleCompo
 // XAccessibleComponent
 // -----------------------------------------------------------------------------
 
-Reference< XAccessible > AccessibleDialogControlShape::getAccessibleAt( const awt::Point& rPoint ) throw (RuntimeException)
+Reference< XAccessible > AccessibleDialogControlShape::getAccessibleAtPoint( const awt::Point& rPoint ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
