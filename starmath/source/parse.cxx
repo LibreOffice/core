@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-28 07:47:20 $
+ *  last change: $Author: tl $ $Date: 2001-09-11 09:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,7 +726,7 @@ void SmParser::NextToken()
                                 aEmptyStr );
 
                         xub_StrLen nTmpStart = rnEndPos +
-                                (xub_StrLen) aRes.LeadingWhiteSpace;
+                                (xub_StrLen) aTmpRes.LeadingWhiteSpace;
 
                         INT32 n = aTmpRes.EndPos - nTmpStart;
                         CurToken.eType      = TSPECIAL;
