@@ -121,14 +121,8 @@ namespace treeview {
 
                 rtl::OUStringBuffer strBuff( 22 + len + id.getLength() );
                 strBuff.appendAscii(
-                    "vnd.sun.star.help://"
-                ).append(
-                    p->application
-                ).appendAscii(
-                    "/"
-                ).append(
-                    id
-                );
+                                    "vnd.sun.star.help://"
+                                    ).append(id);
 
                 targetURL = strBuff.makeStringAndClear();
             }
@@ -758,7 +752,8 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
         rtl::OUString::createFromAscii( "?Language=" ) +
         configData.locale +
         rtl::OUString::createFromAscii( "&System=" ) +
-        configData.system;
+        configData.system +
+        rtl::OUString::createFromAscii( "&UseDB=no" ) ;
 
     return configData;
 }
