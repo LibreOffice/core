@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-15 13:16:17 $
+#   last change: $Author: hr $ $Date: 2004-11-26 21:55:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,9 +82,7 @@ SCP_PRODUCT_TYPE=osl
 
 PARFILES=\
         module_python.par              \
-        procedure_python.par           \
         profileitem_python.par         \
-        starregistryitem_python.par    \
         file_python.par
 
 ULFFILES= \
