@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:35:58 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,6 @@ public:
     const SwFlyFrm* GetFlyFrm() const   { return pFlyFrm; }
 
     void SetRect() const;
-    void _SetRectsDirty()               { SetRectsDirty(); }
 
     // ist eine URL an einer Grafik gesetzt, dann ist das ein Makro-Object
     virtual FASTBOOL HasMacro() const;
