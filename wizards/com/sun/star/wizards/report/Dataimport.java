@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 15:44:20 $
+ *  last change: $Author: rt $ $Date: 2003-04-30 08:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,12 +313,9 @@ public class Dataimport extends ReportWizard{
         sMsgQueryCreationImpossible = Tools.replaceSubString(sMsgQueryCreationImpossible, CurReportDocument.CurDBMetaData.Command, "<STATEMENT>");
         bgetConnection = CurReportDocument.CurDBMetaData.getConnection(sMsgNoConnection, sMsgConnectionImpossible);
         if (bgetConnection){
-        boolean bexecute = CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot);
-        if (bexecute == true){
-            CurReportDocument.CurDBMetaData.initializeFields(CurReportDocument.CurDBMetaData.FieldNames, false);
+        boolean bexecute = CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot, true);
+        if (bexecute == true)
             CurReportDocument.getallDBColumns();
-        }
-
         return bexecute;
         }
         else
