@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:25:04 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,25 +877,11 @@ SalPrinter::~SalPrinter()
 
 static String getTmpName()
 {
-    char tmpNam[ L_tmpnam + 4 ];
-#if defined( FREEBSD ) || defined (IRIX)
-    mkstemp ( tmpNam );
-#elif defined( MACOSX )
-    {
-        char    *tempFileName;
-        tempFileName = macxp_tempnam( NULL, NULL );
-        strncpy( tmpNam, tempFileName, L_tmpnam );
-        strcat( tmpNam, ".ps" );
-        free( tempFileName );
-    }
-#else
-    do
-    {
-        tmpnam_r( tmpNam );
-        strcat( tmpNam, ".ps" );
-    } while( ! access( tmpNam, F_OK ) );
-#endif
-    return String( ByteString( tmpNam ), osl_getThreadTextEncoding() );
+    rtl::OUString aTmp, aSys;
+    osl_createTempFile( NULL, NULL, &aTmp.pData );
+    osl_getSystemPathFromFileURL( aTmp.pData, &aSys.pData );
+
+    return aSys;
 }
 
 BOOL SalPrinter::StartJob(
