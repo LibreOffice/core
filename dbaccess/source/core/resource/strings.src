@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:41:11 $
+ *  last change: $Author: fs $ $Date: 2001-08-01 12:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,9 +114,9 @@ String RID_STR_CONNECTION_INVALID
 
 String RID_STR_TABLE_IS_FILTERED
 {
-    Text = "Die Tabelle $name$ existiert bereits. Sie wurde gefiltert!";
+    Text = "Die Tabelle $name$ existiert bereits. Sie ist nicht sichtbar, da sie ausgefiltert wurde.";
     Text [ english ] = "The table $name$ already exists, but hidden because it's filtered out.";
-    Text [ english_us ] = "The table $name$ already exists. It has been filtered.";
+    Text [ english_us ] = "The table $name$ already exists, but hidden because it's filtered out.";
     Text[ portuguese ] = "A tabela $name$ jб existe. Esta foi filtrada.";
     Text[ russian ] = "“аблица $name$ уже существует. ќна отфильтрована!";
     Text[ greek ] = "ѕ рянбкбт $name$ хр№счей ёдз. Єчей цйлфсбсйуфея!";
