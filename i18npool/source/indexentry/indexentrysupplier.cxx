@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:07:14 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,6 @@
  ************************************************************************/
 
 #include <rtl/ustrbuf.hxx>
-#include <tools/string.hxx>
-#include <tools/intn.hxx>
-#include <tools/isolang.hxx>
 #include <indexentrysupplier.hxx>
 #include <data/zh_pinyin.h>
 #include <data/zh_zhuyin.h>
@@ -238,7 +235,7 @@ OUString SAL_CALL IndexEntrySupplier::getPhoneticCandidate( const OUString& rInd
         if (address != 0xFFFF)
             address = PhoneticCharacter_ko[address + (ch & 0xFF)];
         if (address != 0xFFFF)
-            candidate += OUString(address);
+            candidate += OUString(&address, 1);
         else
             candidate += space;
         }
