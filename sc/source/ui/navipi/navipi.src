@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-30 10:47:10 $
+ *  last change: $Author: rt $ $Date: 2002-08-02 20:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ korean ] = "행";
         Text[ turkish ] = "Sat�r";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Fila";
+        Text[ catalan ] = "fila";
         Text[ thai ] = "แถว";
     };
     NumericField ED_ROW
@@ -215,7 +215,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ korean ] = "단";
         Text[ turkish ] = "S�tun";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Columna";
+        Text[ catalan ] = "COLUMN";
         Text[ thai ] = "คอลัมน์";
     };
     SpinField ED_COL
@@ -1124,8 +1124,8 @@ String SCSTR_CONTENT_DRAWING
     TEXT[ chinese_traditional ] = "繪圖物件";
     TEXT[ turkish ] = "Drawing objects";
     TEXT[ arabic ] = "Drawing objects";
-    TEXT[ catalan ] = "Drawing objects";
-    TEXT[ thai ] = "Drawing objects";
+    TEXT[ catalan ] = "Objectes de dibuix";
+    TEXT[ thai ] = "วัตถุวาดรูป";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_POPUP_DROPMODE
