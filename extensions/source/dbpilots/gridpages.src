@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridpages.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:35:43 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:18:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,8 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text[ hebrew ] = "Tabellenelement";
         Text[ hindi ] = "सारणी ऐलिमेन्ट्";
         Text[ slovak ] = "Prvok tabuľky";
+        Text[ hungarian ] = "Táblaelem";
+        Text[ slovenian ] = "Element tabele";
     };
 
     FixedText FT_EXISTING_FIELDS
@@ -157,6 +159,8 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text[ hebrew ] = "Vorhandene Felder";
         Text[ hindi ] = "अस्तित्व में रहनेवाला क्षेत्रें";
         Text[ slovak ] = "Existujúce polia";
+        Text[ hungarian ] = "Létező mezők";
+        Text[ slovenian ] = "Obstoječa polja";
     };
     ListBox LB_EXISTING_FIELDS
     {
@@ -205,7 +209,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text [ french ] = "Champs s�lectionn�s";
         Text [ spanish ] = "Campos seleccionados";
         Text [ italian ] = "Campi selezionati";
-        Text [ danish ] = "Udvalgte felter";
+        Text [ danish ] = "Valgte felter";
         Text [ swedish ] = "Utvalda f�lt";
         Text [ polish ] = "Wybrane pola";
         Text [ portuguese_brazilian ] = "Campos selecionados";
@@ -225,6 +229,8 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text[ hebrew ] = "Ausgewählte Felder";
         Text[ hindi ] = "चुने हुए क्षेत्र";
         Text[ slovak ] = "Vybrané polia";
+        Text[ hungarian ] = "Kijelölt mezők";
+        Text[ slovenian ] = "Izbrana polja";
     };
     ListBox LB_SELECTED_FIELDS
     {
@@ -243,6 +249,8 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     Text[ hebrew ] = "Feldauswahl";
     Text[ hindi ] = "क्षेत्र चुनाव";
     Text[ slovak ] = "Výber poľa";
+    Text[ hungarian ] = "Mező kijelölése";
+    Text[ slovenian ] = "Izbor polja";
 };
 
 String RID_STR_DATEPOSTFIX
@@ -255,7 +263,7 @@ String RID_STR_DATEPOSTFIX
     Text [ french ] = " (Date)";
     Text [ spanish ] = "(Fecha)";
     Text [ italian ] = "(Data)";
-    Text [ danish ] = " (Dato)";
+    Text [ danish ] = "(Dato)";
     Text [ swedish ] = " (Datum)";
     Text [ polish ] = "(Data)";
     Text [ portuguese_brazilian ] = " (Data)";
@@ -276,6 +284,8 @@ String RID_STR_DATEPOSTFIX
     Text[ hebrew ] = " (Datum)";
     Text[ hindi ] = " (दिनांक)";
     Text[ slovak ] = " (Dátum)";
+    Text[ hungarian ] = "(Dátum)";
+    Text[ slovenian ] = " (Datum)";
 };
 
 String RID_STR_TIMEPOSTFIX
@@ -309,11 +319,23 @@ String RID_STR_TIMEPOSTFIX
     Text[ hebrew ] = " (Zeit)";
     Text[ hindi ] = " (समय)";
     Text[ slovak ] = " (Čas)";
+    Text[ hungarian ] = "(Idő)";
+    Text[ slovenian ] = " (Čas)";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26.90.1  2003/12/16 11:43:24  hr
+ *  #111934#: join CWS ooo111fix1
+ *
+ *  Revision 1.26.44.1  2003/11/24 13:32:10  ihi
+ *  OOo 1.1.1 merge
+ *
+ *  Revision 1.26  2003/07/17 12:35:43  hr
+ *  INTEGRATION: CWS mergerc3 (1.25.6); FILE MERGED
+ *  2003/07/16 17:08:00 ihi 1.25.6.1: rc-3 merge all languages
+ *
  *  Revision 1.25.6.1  2003/07/16 17:08:00  ihi
  *  rc-3 merge all languages
  *
@@ -438,6 +460,7 @@ String RID_STR_TIMEPOSTFIX
  *
  *  Revision 1.0 05.03.01 09:50:25  fs
  ************************************************************************/
+
 
 
 
