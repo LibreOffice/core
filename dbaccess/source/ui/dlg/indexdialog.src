@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-02 11:45:20 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ italian ] = "Nuovo indice";
                 Text[ danish ] = "new index";
                 Text[ swedish ] = "Nytt index";
-                Text[ polish ] = "nowy indeks";
+                Text[ polish ] = "Nowy indeks";
                 Text[ portuguese_brazilian ] = "new index";
                 Text[ japanese ] = "êVãKçÏê¨≤›√ﬁØ∏Ω";
                 Text[ korean ] = "new index";
@@ -119,6 +119,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ chinese_traditional ] = "∂}±“∑sØ¡§ﬁ";
                 Text[ turkish ] = "new index";
                 Text[ arabic ] = "›Â—” ÃœÌœ";
+                Text[ catalan ] = "new index";
             };
             ToolBoxItem
             {
@@ -137,7 +138,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ italian ] = "Elimina l'indice attuale";
                 Text[ danish ] = "drop current index";
                 Text[ swedish ] = "Radera aktuellt index";
-                Text[ polish ] = "usuÒ bieøπcy indeks";
+                Text[ polish ] = "UsuÒ bieøπcy indeks";
                 Text[ portuguese_brazilian ] = "drop current index";
                 Text[ japanese ] = "åªç›ÇÃ≤›√ﬁØ∏ΩÇÃçÌèú";
                 Text[ korean ] = "drop current index";
@@ -145,6 +146,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ chinese_traditional ] = "ßR∞£∑Ì´e™∫Ø¡§ﬁ";
                 Text[ turkish ] = "drop current index";
                 Text[ arabic ] = "Õ–› «·›Â—” «·Õ«·Ì";
+                Text[ catalan ] = "drop current index";
             };
             ToolBoxItem
             {
@@ -163,7 +165,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ italian ] = "Rinomina l'indice attuale";
                 Text[ danish ] = "rename current index";
                 Text[ swedish ] = "Byt namn pÂ aktuellt index";
-                Text[ polish ] = "zmieÒ nazwÍ bieøπcego indeksu";
+                Text[ polish ] = "ZmieÒ nazwÍ bieøπcego indeksu";
                 Text[ portuguese_brazilian ] = "rename current index";
                 Text[ japanese ] = "åªç›ÇÃ≤›√ﬁØ∏ΩÇÃñºëOÇïœçX";
                 Text[ korean ] = "rename current index";
@@ -171,6 +173,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ chinese_traditional ] = "≠´∑s©R¶W∑Ì´e™∫Ø¡§ﬁ";
                 Text[ turkish ] = "rename current index";
                 Text[ arabic ] = "≈⁄«œ…  ”„Ì… «·›Â—” «·Õ«·Ì";
+                Text[ catalan ] = "rename current index";
             };
             ToolBoxItem
             {
@@ -189,7 +192,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ italian ] = "Salva l'indica attuale";
                 Text[ danish ] = "save current index";
                 Text[ swedish ] = "Spara aktuellt index";
-                Text[ polish ] = "zapisz bieøπcy indeks";
+                Text[ polish ] = "Zapisz bieøπcy indeks";
                 Text[ portuguese_brazilian ] = "save current index";
                 Text[ japanese ] = "åªç›ÇÃ≤›√ﬁØ∏ΩÇÃï€ë∂";
                 Text[ korean ] = "save current index";
@@ -197,6 +200,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ chinese_traditional ] = "¿x¶s∑Ì´e™∫Ø¡§ﬁ";
                 Text[ turkish ] = "save current index";
                 Text[ arabic ] = "Õ›Ÿ «·›Â—” «·Õ«·Ì";
+                Text[ catalan ] = "save current index";
             };
             ToolBoxItem
             {
@@ -215,7 +219,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ italian ] = "Ripristina l'indice attuale";
                 Text[ danish ] = "reset current index";
                 Text[ swedish ] = "≈terst‰ll aktuellt index";
-                Text[ polish ] = "zresetuj bieøπcy indeks";
+                Text[ polish ] = "Zresetuj bieøπcy indeks";
                 Text[ portuguese_brazilian ] = "reset current index";
                 Text[ japanese ] = "åªç›ÇÃ≤›√ﬁØ∏ΩÇå≥Ç…ñﬂÇ∑";
                 Text[ korean ] = "reset current index";
@@ -223,6 +227,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ chinese_traditional ] = "≠´≥]∑Ì´e™∫Ø¡§ﬁ";
                 Text[ turkish ] = "reset current index";
                 Text[ arabic ] = "≈⁄«œ…  ⁄ÌÌ‰ «·›Â—” «·Õ«·Ì";
+                Text[ catalan ] = "reset current index";
             };
         };
     };
@@ -257,6 +262,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ chinese_traditional ] = "Ø¡§ﬁ≤”∏`";
         Text[ turkish ] = "Index details";
         Text[ arabic ] = " ›«’Ì· «·›Â—”";
+        Text[ catalan ] = "Index details";
     };
     FixedText FT_DESC_LABEL
     {
@@ -284,6 +290,7 @@ ModalDialog DLG_INDEXDESIGN
         Text [ greek ] = "¡Ì·„Ì˘ÒÈÛÙÈÍ¸ ÂıÒÂÙÁÒﬂÔı:";
         Text [ korean ] = "¿Œµ¶Ω∫ »Æ¿Œ¿⁄:";
         Text[ turkish ] = "Index identifier:";
+        Text[ catalan ] = "Identificador de Ìndice:";
     };
     FixedText FT_DESCRIPTION
     {
@@ -307,7 +314,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ italian ] = "Univoco";
         Text[ danish ] = "Unique";
         Text[ swedish ] = "Entydig";
-        Text[ polish ] = "Jednoznaczny";
+        Text[ polish ] = "Unikatowy";
         Text[ portuguese_brazilian ] = "Unique";
         Text[ japanese ] = "å≈óL";
         Text[ korean ] = "Unique";
@@ -315,6 +322,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ chinese_traditional ] = "©˙ΩT™∫";
         Text[ turkish ] = "Unique";
         Text[ arabic ] = "Ê«÷Õ";
+        Text[ catalan ] = "Unique";
     };
     FixedText FT_FIELDS
     {
@@ -341,6 +349,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ chinese_traditional ] = "ƒÊ¶Ï";
         Text[ turkish ] = "Fields";
         Text[ arabic ] = "ÕﬁÊ·";
+        Text[ catalan ] = "Fields";
     };
     Control CTR_FIELDS
     {
@@ -375,6 +384,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ chinese_traditional ] = "√ˆ≥¨(~C)";
         Text[ turkish ] = "~Close";
         Text[ arabic ] = "≈€·«ﬁ";
+        Text[ catalan ] = "~Close";
     };
     HelpButton HB_HELP
     {
@@ -398,6 +408,7 @@ ModalDialog DLG_INDEXDESIGN
     Text[ chinese_traditional ] = "Ø¡§ﬁ";
     Text[ turkish ] = "Indexes";
     Text[ arabic ] = "›Â«—”";
+    Text[ catalan ] = "Indexes";
 };
 
 String STR_TAB_INDEX_SORTORDER
@@ -424,6 +435,7 @@ String STR_TAB_INDEX_SORTORDER
     Text [ greek ] = "”ÂÈÒ‹ Ù·ÓÈÌ¸ÏÁÛÁÚ";
     Text [ korean ] = "¡§∑ƒº¯º≠";
     Text[ turkish ] = "Sort order";
+    Text[ catalan ] = "Orden de clasificaciÛn";
 };
 String STR_TAB_INDEX_FIELD
 {
@@ -447,6 +459,7 @@ String STR_TAB_INDEX_FIELD
     Text[ chinese_traditional ] = "Ø¡§ﬁƒÊ¶Ï";
     Text[ turkish ] = "Index field";
     Text[ arabic ] = "Õﬁ· ›Â—”";
+    Text[ catalan ] = "Index field";
 };
 String STR_ORDER_ASCENDING
 {
@@ -472,6 +485,7 @@ String STR_ORDER_ASCENDING
     Text [ greek ] = "¡˝ÓÔıÛ·";
     Text [ korean ] = "ø¿∏ß ¬˜º¯";
     Text[ turkish ] = "Ascending";
+    Text[ catalan ] = "Ascendente";
 };
 String STR_ORDER_DESCENDING
 {
@@ -497,6 +511,7 @@ String STR_ORDER_DESCENDING
     Text [ greek ] = "÷ËﬂÌÔıÛ·";
     Text [ korean ] = "≥ª∏≤¬˜º¯";
     Text[ turkish ] = "Descending";
+    Text[ catalan ] = "Descendente";
 };
 
 String STR_CONFIRM_DROP_INDEX
@@ -521,6 +536,7 @@ String STR_CONFIRM_DROP_INDEX
     Text[ chinese_traditional ] = "Øu≠nßR∞£Ø¡§ﬁ'$name$'°H";
     Text[ turkish ] = "Do you really want to drop the index '$name$'?";
     Text[ arabic ] = "Â·  —Ìœ »«·›⁄· Õ–› «·›Â—” '$name$'ø";
+    Text[ catalan ] = "Do you really want to drop the index '$name$'?";
 };
 
 String STR_LOGICAL_INDEX_NAME
@@ -579,6 +595,8 @@ ErrorBox ERR_NEED_INDEX_FIELDS
     Title[ chinese_traditional ] = "¿x¶sØ¡§ﬁ!";
     Title[ turkish ] = "Save Index";
     Title[ arabic ] = "Õ›Ÿ «·›Â—”!";
+    Message[ catalan ] = "Der Index muﬂ mindestens ein Feld enthalten.";
+    Title[ catalan ] = "Save Index";
 };
 
 QueryBox QUERY_SAVE_CURRENT_INDEX
@@ -627,13 +645,33 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     Title[ chinese_traditional ] = "√ˆ≥¨Ø¡§ﬁ≥]≠p!";
     Title[ turkish ] = "close index design";
     Title[ arabic ] = "≈€·«ﬁ  ’„Ì„ «·›Â—”!";
+    Message[ catalan ] = "Do you want to save the changes made on the current index?";
+    Title[ catalan ] = "close index design";
 };
 
 String STR_INDEX_NAME_ALREADY_USED
 {
     Text = "Es gibt schon einen anderen Index namens \"$name$\".";
     Text [ english ] = "There's already another index named \"$name$\".";
-    Text [ english_us ] = "There's already another index named \"$name$\".";
+    Text [ english_us ] = "There is already another index named \"$name$\".";
+    Text[ portuguese ] = "There's already another index named \"$name$\".";
+    Text[ russian ] = "There's already another index named \"$name$\".";
+    Text[ greek ] = "There's already another index named \"$name$\".";
+    Text[ dutch ] = "Er bestaat reeds een andere index met de naam \"$name$\".";
+    Text[ french ] = "Un autre index nommÈ \"$name$\" existe dÈj‡.";
+    Text[ spanish ] = "Ya existe otro Ìndice con el nombre \"$name$\".";
+    Text[ italian ] = "There's already another index named \"$name$\".";
+    Text[ danish ] = "There's already another index named \"$name$\".";
+    Text[ swedish ] = "Det finns redan ett annat index med namnet \"$name$\".";
+    Text[ polish ] = "Istnieje juø inny indeks o nazwie \"$name$\".";
+    Text[ portuguese_brazilian ] = "There's already another index named \"$name$\".";
+    Text[ japanese ] = "There's already another index named \"$name$\".";
+    Text[ korean ] = "There's already another index named \"$name$\".";
+    Text[ chinese_simplified ] = "There's already another index named \"$name$\".";
+    Text[ chinese_traditional ] = "There's already another index named \"$name$\".";
+    Text[ turkish ] = "There's already another index named \"$name$\".";
+    Text[ arabic ] = "There's already another index named \"$name$\".";
+    Text[ catalan ] = "There's already another index named \"$name$\".";
 };
 
 String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
@@ -659,11 +697,15 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
     Text[ chinese_traditional ] = "¶b§@≠”Ø¡§ﬁ©w∏q§ß§§∂»§π≥\\≥Ã¶h§@¶∏®œ•Œ§@≠”ƒÊ¶W∫Ÿ°C¶˝¨O±z≤ƒ§G¶∏®œ•ŒƒÊ¶W∫Ÿ \"$name$\" °C";
     Text[ turkish ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
     Text[ arabic ] = "·« Ìı”„Õ »«” Œœ«„ ⁄„Êœ ÃœÊ· √ﬂÀ— „‰ „—… ›Ì  ⁄—Ì› «·›Â—”° ≈·« √‰ﬂ «” Œœ„  «·⁄„Êœ \"$name$\" „— Ì‰.";
+    Text[ catalan ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/05/02 11:45:20  fs
+ *  #86434# +STR_INDEX_NAME_ALREADY_USED
+ *
  *  Revision 1.7  2001/04/26 19:45:34  kz
  *  Merge SRC630: 26.04.01 - 21:44:50 (NoBranch)
  *
