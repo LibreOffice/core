@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-19 13:25:34 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
 
 #define ITEMID_GRF_CROP         0
 #define ITEMID_SIZE             0
