@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawutil.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:59:44 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,12 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
         nTwipsX += (long) nWidth;
         nPixelX += ScViewData::ToPixel( nWidth, nPPTX );
     }
-    for (SCROW j=nStartRow; j<nEndRow; j++)
+    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
+            pDoc->GetRowFlagsArray( nTab), nStartRow, nEndRow-1, CR_HIDDEN, 0,
+            pDoc->GetRowHeightArray( nTab));
+    for ( ; aIter; ++aIter )
     {
-        USHORT nHeight = pDoc->GetRowHeight(j,nTab);
+        USHORT nHeight = *aIter;
         nTwipsY += (long) nHeight;
         nPixelY += ScViewData::ToPixel( nHeight, nPPTY );
     }
