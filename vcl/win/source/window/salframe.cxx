@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-26 16:37:42 $
+ *  last change: $Author: ssa $ $Date: 2002-11-27 17:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,9 @@
 
 // misssing prototypes and constants for LayeredWindows
 extern "C" {
-WINUSERAPI BOOL WINAPI SetLayeredWindowAttributes(HWND,COLORREF,BYTE,DWORD);
+    //WINUSERAPI BOOL WINAPI SetLayeredWindowAttributes(HWND,COLORREF,BYTE,DWORD);
+    typedef BOOL ( WINAPI * SetLayeredWindowAttributes_Proc_T ) (HWND,COLORREF,BYTE,DWORD);
+    static SetLayeredWindowAttributes_Proc_T lpfnSetLayeredWindowAttributes;
 };
 #define LWA_COLORKEY            0x00000001
 #define LWA_ALPHA               0x00000002
@@ -152,6 +154,7 @@ WINUSERAPI BOOL WINAPI SetLayeredWindowAttributes(HWND,COLORREF,BYTE,DWORD);
 #define ULW_ALPHA               0x00000002
 #define ULW_OPAQUE              0x00000004
 #define WS_EX_LAYERED           0x00080000
+
 
 // =======================================================================
 
@@ -360,7 +363,12 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
         if ( GetVersionEx( &aVerInfo ) )
             // check for W2k and XP
             if ( aVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT && aVerInfo.dwMajorVersion >= 5 )
+            {
                 bLayeredAPI = 1;
+                HMODULE hModule = LoadLibrary("user32");
+                if( !(lpfnSetLayeredWindowAttributes = ( SetLayeredWindowAttributes_Proc_T )GetProcAddress( hModule, "SetLayeredWindowAttributes" ) ) )
+                    bLayeredAPI = 0;
+            }
     }
     static const char* pEnvTransparentFloats = getenv("SAL_TRANSPARENT_FLOATS" );
 
@@ -489,7 +497,7 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
 #ifdef DEBUG
         // set transparency value
         if( bLayeredAPI == 1 && GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
-            SetLayeredWindowAttributes( hWnd, 0, 230, LWA_ALPHA );
+            lpfnSetLayeredWindowAttributes( hWnd, 0, 230, LWA_ALPHA );
 #endif
     }
     else
