@@ -174,14 +174,14 @@ SHL1SONAME=\"$(SONAME_SWITCH)$(SHL1TARGETN:b:b)\"
 .IF "$(SHL1RES)"!=""
 SHL1RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL1RES))
 SHL1ALLRES+=$(SHL1RES)
-SHL1LINKRES*=$(MISC)$/$(SHL1TARGET).res
+LINKRES*=$(MISC)$/$(SHL1TARGET).res
 .ENDIF			# "$(SHL1RES)"!=""
 .ENDIF
 
 .IF "$(SHL1DEFAULTRES)$(use_shl_versions)"!=""
 SHL1DEFAULTRES*=$(MISC)$/$(SHL1TARGET)_def.res
 SHL1ALLRES+=$(SHL1DEFAULTRES)
-SHL1LINKRES*=$(MISC)$/$(SHL1TARGET).res
+LINKRES*=$(MISC)$/$(SHL1TARGET).res
 .ENDIF			# "$(SHL1DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL1DESCRIPTION)"==""
@@ -251,9 +251,9 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(SHL1DEFAULTRES)"!=""
 .IF "$(SHL1ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL1ALLRES:s/res /res+/) $(SHL1LINKRES)
+    +$(COPY) /b $(SHL1ALLRES:s/res /res+/) $(LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL1ALLRES) > $(SHL1LINKRES)
+    +$(TYPE) $(SHL1ALLRES) > $(LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL1ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -278,7 +278,7 @@ $(SHL1TARGETN) : \
         $(SHL1LIBS) \
         $(SHL1STDLIBS) \
         $(STDSHL) $(STDSHL1) \
-        $(SHL1LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -292,7 +292,7 @@ $(SHL1TARGETN) : \
         $(SHL1LIBS)                         \
         $(SHL1STDLIBS)                      \
         $(STDSHL) $(STDSHL1)                           \
-        $(SHL1LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -308,7 +308,7 @@ $(SHL1TARGETN) : \
         $(SHL1OBJS) \
         $(SHL1STDLIBS) \
         $(STDSHL) $(STDSHL1) \
-        $(SHL1LINKRES) \
+        $(LINKRES) \
         ) >> $(MISC)$/$(SHL1TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL1TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL1TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL1TARGET).lnk
@@ -354,9 +354,9 @@ $(SHL1TARGETN) : \
     .IF "$(CVER)"=="C295"
         # This is a hack as libstatic and libcppuhelper have a circular dependency
         .IF "$(PRJNAME)"=="cppuhelper"
-        @echo "------------------------------"
-        @echo "Rerunning static data member initializations"
-        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+            @echo "------------------------------"
+            @echo "Rerunning static data member initializations"
+            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
         .ENDIF
     .ENDIF
 .IF "$(SHL1VERSIONMAP)"!=""
@@ -427,6 +427,11 @@ SHL2STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL2STDLIBS+=$(STATICLIB)
+# Allow certain libraries to not link to libstatic*.dylib. This is only used
+# by libraries that cannot be linked to other libraries.
+.IF "$(NOSHAREDSTATICLIB)"==""
+SHL2STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -587,14 +592,14 @@ SHL2SONAME=\"$(SONAME_SWITCH)$(SHL2TARGETN:b:b)\"
 .IF "$(SHL2RES)"!=""
 SHL2RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL2RES))
 SHL2ALLRES+=$(SHL2RES)
-SHL2LINKRES*=$(MISC)$/$(SHL2TARGET).res
+LINKRES*=$(MISC)$/$(SHL2TARGET).res
 .ENDIF			# "$(SHL2RES)"!=""
 .ENDIF
 
 .IF "$(SHL2DEFAULTRES)$(use_shl_versions)"!=""
 SHL2DEFAULTRES*=$(MISC)$/$(SHL2TARGET)_def.res
 SHL2ALLRES+=$(SHL2DEFAULTRES)
-SHL2LINKRES*=$(MISC)$/$(SHL2TARGET).res
+LINKRES*=$(MISC)$/$(SHL2TARGET).res
 .ENDIF			# "$(SHL2DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL2DESCRIPTION)"==""
@@ -664,9 +669,9 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(SHL2DEFAULTRES)"!=""
 .IF "$(SHL2ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL2ALLRES:s/res /res+/) $(SHL2LINKRES)
+    +$(COPY) /b $(SHL2ALLRES:s/res /res+/) $(LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL2ALLRES) > $(SHL2LINKRES)
+    +$(TYPE) $(SHL2ALLRES) > $(LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL2ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -691,7 +696,7 @@ $(SHL2TARGETN) : \
         $(SHL2LIBS) \
         $(SHL2STDLIBS) \
         $(STDSHL) $(STDSHL2) \
-        $(SHL2LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -705,7 +710,7 @@ $(SHL2TARGETN) : \
         $(SHL2LIBS)                         \
         $(SHL2STDLIBS)                      \
         $(STDSHL) $(STDSHL2)                           \
-        $(SHL2LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -721,7 +726,7 @@ $(SHL2TARGETN) : \
         $(SHL2OBJS) \
         $(SHL2STDLIBS) \
         $(STDSHL) $(STDSHL2) \
-        $(SHL2LINKRES) \
+        $(LINKRES) \
         ) >> $(MISC)$/$(SHL2TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL2TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL2TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL2TARGET).lnk
@@ -767,9 +772,9 @@ $(SHL2TARGETN) : \
     .IF "$(CVER)"=="C295"
         # This is a hack as libstatic and libcppuhelper have a circular dependency
         .IF "$(PRJNAME)"=="cppuhelper"
-        @echo "------------------------------"
-        @echo "Rerunning static data member initializations"
-        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+            @echo "------------------------------"
+            @echo "Rerunning static data member initializations"
+            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
         .ENDIF
     .ENDIF
 .IF "$(SHL2VERSIONMAP)"!=""
@@ -840,6 +845,11 @@ SHL3STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL3STDLIBS+=$(STATICLIB)
+# Allow certain libraries to not link to libstatic*.dylib. This is only used
+# by libraries that cannot be linked to other libraries.
+.IF "$(NOSHAREDSTATICLIB)"==""
+SHL3STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -1000,14 +1010,14 @@ SHL3SONAME=\"$(SONAME_SWITCH)$(SHL3TARGETN:b:b)\"
 .IF "$(SHL3RES)"!=""
 SHL3RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL3RES))
 SHL3ALLRES+=$(SHL3RES)
-SHL3LINKRES*=$(MISC)$/$(SHL3TARGET).res
+LINKRES*=$(MISC)$/$(SHL3TARGET).res
 .ENDIF			# "$(SHL3RES)"!=""
 .ENDIF
 
 .IF "$(SHL3DEFAULTRES)$(use_shl_versions)"!=""
 SHL3DEFAULTRES*=$(MISC)$/$(SHL3TARGET)_def.res
 SHL3ALLRES+=$(SHL3DEFAULTRES)
-SHL3LINKRES*=$(MISC)$/$(SHL3TARGET).res
+LINKRES*=$(MISC)$/$(SHL3TARGET).res
 .ENDIF			# "$(SHL3DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL3DESCRIPTION)"==""
@@ -1077,9 +1087,9 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(SHL3DEFAULTRES)"!=""
 .IF "$(SHL3ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL3ALLRES:s/res /res+/) $(SHL3LINKRES)
+    +$(COPY) /b $(SHL3ALLRES:s/res /res+/) $(LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL3ALLRES) > $(SHL3LINKRES)
+    +$(TYPE) $(SHL3ALLRES) > $(LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL3ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -1104,7 +1114,7 @@ $(SHL3TARGETN) : \
         $(SHL3LIBS) \
         $(SHL3STDLIBS) \
         $(STDSHL) $(STDSHL3) \
-        $(SHL3LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -1118,7 +1128,7 @@ $(SHL3TARGETN) : \
         $(SHL3LIBS)                         \
         $(SHL3STDLIBS)                      \
         $(STDSHL) $(STDSHL3)                           \
-        $(SHL3LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -1134,7 +1144,7 @@ $(SHL3TARGETN) : \
         $(SHL3OBJS) \
         $(SHL3STDLIBS) \
         $(STDSHL) $(STDSHL3) \
-        $(SHL3LINKRES) \
+        $(LINKRES) \
         ) >> $(MISC)$/$(SHL3TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL3TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL3TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL3TARGET).lnk
@@ -1180,9 +1190,9 @@ $(SHL3TARGETN) : \
     .IF "$(CVER)"=="C295"
         # This is a hack as libstatic and libcppuhelper have a circular dependency
         .IF "$(PRJNAME)"=="cppuhelper"
-        @echo "------------------------------"
-        @echo "Rerunning static data member initializations"
-        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+            @echo "------------------------------"
+            @echo "Rerunning static data member initializations"
+            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
         .ENDIF
     .ENDIF
 .IF "$(SHL3VERSIONMAP)"!=""
@@ -1253,6 +1263,11 @@ SHL4STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL4STDLIBS+=$(STATICLIB)
+# Allow certain libraries to not link to libstatic*.dylib. This is only used
+# by libraries that cannot be linked to other libraries.
+.IF "$(NOSHAREDSTATICLIB)"==""
+SHL4STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -1413,14 +1428,14 @@ SHL4SONAME=\"$(SONAME_SWITCH)$(SHL4TARGETN:b:b)\"
 .IF "$(SHL4RES)"!=""
 SHL4RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL4RES))
 SHL4ALLRES+=$(SHL4RES)
-SHL4LINKRES*=$(MISC)$/$(SHL4TARGET).res
+LINKRES*=$(MISC)$/$(SHL4TARGET).res
 .ENDIF			# "$(SHL4RES)"!=""
 .ENDIF
 
 .IF "$(SHL4DEFAULTRES)$(use_shl_versions)"!=""
 SHL4DEFAULTRES*=$(MISC)$/$(SHL4TARGET)_def.res
 SHL4ALLRES+=$(SHL4DEFAULTRES)
-SHL4LINKRES*=$(MISC)$/$(SHL4TARGET).res
+LINKRES*=$(MISC)$/$(SHL4TARGET).res
 .ENDIF			# "$(SHL4DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL4DESCRIPTION)"==""
@@ -1490,9 +1505,9 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(SHL4DEFAULTRES)"!=""
 .IF "$(SHL4ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL4ALLRES:s/res /res+/) $(SHL4LINKRES)
+    +$(COPY) /b $(SHL4ALLRES:s/res /res+/) $(LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL4ALLRES) > $(SHL4LINKRES)
+    +$(TYPE) $(SHL4ALLRES) > $(LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL4ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -1517,7 +1532,7 @@ $(SHL4TARGETN) : \
         $(SHL4LIBS) \
         $(SHL4STDLIBS) \
         $(STDSHL) $(STDSHL4) \
-        $(SHL4LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -1531,7 +1546,7 @@ $(SHL4TARGETN) : \
         $(SHL4LIBS)                         \
         $(SHL4STDLIBS)                      \
         $(STDSHL) $(STDSHL4)                           \
-        $(SHL4LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -1547,7 +1562,7 @@ $(SHL4TARGETN) : \
         $(SHL4OBJS) \
         $(SHL4STDLIBS) \
         $(STDSHL) $(STDSHL4) \
-        $(SHL4LINKRES) \
+        $(LINKRES) \
         ) >> $(MISC)$/$(SHL4TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL4TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL4TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL4TARGET).lnk
@@ -1593,9 +1608,9 @@ $(SHL4TARGETN) : \
     .IF "$(CVER)"=="C295"
         # This is a hack as libstatic and libcppuhelper have a circular dependency
         .IF "$(PRJNAME)"=="cppuhelper"
-        @echo "------------------------------"
-        @echo "Rerunning static data member initializations"
-        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+            @echo "------------------------------"
+            @echo "Rerunning static data member initializations"
+            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
         .ENDIF
     .ENDIF
 .IF "$(SHL4VERSIONMAP)"!=""
@@ -1666,6 +1681,11 @@ SHL5STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL5STDLIBS+=$(STATICLIB)
+# Allow certain libraries to not link to libstatic*.dylib. This is only used
+# by libraries that cannot be linked to other libraries.
+.IF "$(NOSHAREDSTATICLIB)"==""
+SHL5STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -1826,14 +1846,14 @@ SHL5SONAME=\"$(SONAME_SWITCH)$(SHL5TARGETN:b:b)\"
 .IF "$(SHL5RES)"!=""
 SHL5RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL5RES))
 SHL5ALLRES+=$(SHL5RES)
-SHL5LINKRES*=$(MISC)$/$(SHL5TARGET).res
+LINKRES*=$(MISC)$/$(SHL5TARGET).res
 .ENDIF			# "$(SHL5RES)"!=""
 .ENDIF
 
 .IF "$(SHL5DEFAULTRES)$(use_shl_versions)"!=""
 SHL5DEFAULTRES*=$(MISC)$/$(SHL5TARGET)_def.res
 SHL5ALLRES+=$(SHL5DEFAULTRES)
-SHL5LINKRES*=$(MISC)$/$(SHL5TARGET).res
+LINKRES*=$(MISC)$/$(SHL5TARGET).res
 .ENDIF			# "$(SHL5DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL5DESCRIPTION)"==""
@@ -1903,9 +1923,9 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(SHL5DEFAULTRES)"!=""
 .IF "$(SHL5ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL5ALLRES:s/res /res+/) $(SHL5LINKRES)
+    +$(COPY) /b $(SHL5ALLRES:s/res /res+/) $(LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL5ALLRES) > $(SHL5LINKRES)
+    +$(TYPE) $(SHL5ALLRES) > $(LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL5ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -1930,7 +1950,7 @@ $(SHL5TARGETN) : \
         $(SHL5LIBS) \
         $(SHL5STDLIBS) \
         $(STDSHL) $(STDSHL5) \
-        $(SHL5LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -1944,7 +1964,7 @@ $(SHL5TARGETN) : \
         $(SHL5LIBS)                         \
         $(SHL5STDLIBS)                      \
         $(STDSHL) $(STDSHL5)                           \
-        $(SHL5LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -1960,7 +1980,7 @@ $(SHL5TARGETN) : \
         $(SHL5OBJS) \
         $(SHL5STDLIBS) \
         $(STDSHL) $(STDSHL5) \
-        $(SHL5LINKRES) \
+        $(LINKRES) \
         ) >> $(MISC)$/$(SHL5TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL5TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL5TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL5TARGET).lnk
@@ -2006,9 +2026,9 @@ $(SHL5TARGETN) : \
     .IF "$(CVER)"=="C295"
         # This is a hack as libstatic and libcppuhelper have a circular dependency
         .IF "$(PRJNAME)"=="cppuhelper"
-        @echo "------------------------------"
-        @echo "Rerunning static data member initializations"
-        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+            @echo "------------------------------"
+            @echo "Rerunning static data member initializations"
+            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
         .ENDIF
     .ENDIF
 .IF "$(SHL5VERSIONMAP)"!=""
@@ -2079,6 +2099,11 @@ SHL6STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL6STDLIBS+=$(STATICLIB)
+# Allow certain libraries to not link to libstatic*.dylib. This is only used
+# by libraries that cannot be linked to other libraries.
+.IF "$(NOSHAREDSTATICLIB)"==""
+SHL6STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -2239,14 +2264,14 @@ SHL6SONAME=\"$(SONAME_SWITCH)$(SHL6TARGETN:b:b)\"
 .IF "$(SHL6RES)"!=""
 SHL6RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL6RES))
 SHL6ALLRES+=$(SHL6RES)
-SHL6LINKRES*=$(MISC)$/$(SHL6TARGET).res
+LINKRES*=$(MISC)$/$(SHL6TARGET).res
 .ENDIF			# "$(SHL6RES)"!=""
 .ENDIF
 
 .IF "$(SHL6DEFAULTRES)$(use_shl_versions)"!=""
 SHL6DEFAULTRES*=$(MISC)$/$(SHL6TARGET)_def.res
 SHL6ALLRES+=$(SHL6DEFAULTRES)
-SHL6LINKRES*=$(MISC)$/$(SHL6TARGET).res
+LINKRES*=$(MISC)$/$(SHL6TARGET).res
 .ENDIF			# "$(SHL6DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL6DESCRIPTION)"==""
@@ -2316,9 +2341,9 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(SHL6DEFAULTRES)"!=""
 .IF "$(SHL6ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL6ALLRES:s/res /res+/) $(SHL6LINKRES)
+    +$(COPY) /b $(SHL6ALLRES:s/res /res+/) $(LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL6ALLRES) > $(SHL6LINKRES)
+    +$(TYPE) $(SHL6ALLRES) > $(LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL6ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -2343,7 +2368,7 @@ $(SHL6TARGETN) : \
         $(SHL6LIBS) \
         $(SHL6STDLIBS) \
         $(STDSHL) $(STDSHL6) \
-        $(SHL6LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -2357,7 +2382,7 @@ $(SHL6TARGETN) : \
         $(SHL6LIBS)                         \
         $(SHL6STDLIBS)                      \
         $(STDSHL) $(STDSHL6)                           \
-        $(SHL6LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -2373,7 +2398,7 @@ $(SHL6TARGETN) : \
         $(SHL6OBJS) \
         $(SHL6STDLIBS) \
         $(STDSHL) $(STDSHL6) \
-        $(SHL6LINKRES) \
+        $(LINKRES) \
         ) >> $(MISC)$/$(SHL6TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL6TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL6TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL6TARGET).lnk
@@ -2419,9 +2444,9 @@ $(SHL6TARGETN) : \
     .IF "$(CVER)"=="C295"
         # This is a hack as libstatic and libcppuhelper have a circular dependency
         .IF "$(PRJNAME)"=="cppuhelper"
-        @echo "------------------------------"
-        @echo "Rerunning static data member initializations"
-        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+            @echo "------------------------------"
+            @echo "Rerunning static data member initializations"
+            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
         .ENDIF
     .ENDIF
 .IF "$(SHL6VERSIONMAP)"!=""
@@ -2492,6 +2517,11 @@ SHL7STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL7STDLIBS+=$(STATICLIB)
+# Allow certain libraries to not link to libstatic*.dylib. This is only used
+# by libraries that cannot be linked to other libraries.
+.IF "$(NOSHAREDSTATICLIB)"==""
+SHL7STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -2652,14 +2682,14 @@ SHL7SONAME=\"$(SONAME_SWITCH)$(SHL7TARGETN:b:b)\"
 .IF "$(SHL7RES)"!=""
 SHL7RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL7RES))
 SHL7ALLRES+=$(SHL7RES)
-SHL7LINKRES*=$(MISC)$/$(SHL7TARGET).res
+LINKRES*=$(MISC)$/$(SHL7TARGET).res
 .ENDIF			# "$(SHL7RES)"!=""
 .ENDIF
 
 .IF "$(SHL7DEFAULTRES)$(use_shl_versions)"!=""
 SHL7DEFAULTRES*=$(MISC)$/$(SHL7TARGET)_def.res
 SHL7ALLRES+=$(SHL7DEFAULTRES)
-SHL7LINKRES*=$(MISC)$/$(SHL7TARGET).res
+LINKRES*=$(MISC)$/$(SHL7TARGET).res
 .ENDIF			# "$(SHL7DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL7DESCRIPTION)"==""
@@ -2729,9 +2759,9 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(SHL7DEFAULTRES)"!=""
 .IF "$(SHL7ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL7ALLRES:s/res /res+/) $(SHL7LINKRES)
+    +$(COPY) /b $(SHL7ALLRES:s/res /res+/) $(LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL7ALLRES) > $(SHL7LINKRES)
+    +$(TYPE) $(SHL7ALLRES) > $(LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL7ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -2756,7 +2786,7 @@ $(SHL7TARGETN) : \
         $(SHL7LIBS) \
         $(SHL7STDLIBS) \
         $(STDSHL) $(STDSHL7) \
-        $(SHL7LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -2770,7 +2800,7 @@ $(SHL7TARGETN) : \
         $(SHL7LIBS)                         \
         $(SHL7STDLIBS)                      \
         $(STDSHL) $(STDSHL7)                           \
-        $(SHL7LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -2786,7 +2816,7 @@ $(SHL7TARGETN) : \
         $(SHL7OBJS) \
         $(SHL7STDLIBS) \
         $(STDSHL) $(STDSHL7) \
-        $(SHL7LINKRES) \
+        $(LINKRES) \
         ) >> $(MISC)$/$(SHL7TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL7TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL7TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL7TARGET).lnk
@@ -2832,9 +2862,9 @@ $(SHL7TARGETN) : \
     .IF "$(CVER)"=="C295"
         # This is a hack as libstatic and libcppuhelper have a circular dependency
         .IF "$(PRJNAME)"=="cppuhelper"
-        @echo "------------------------------"
-        @echo "Rerunning static data member initializations"
-        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+            @echo "------------------------------"
+            @echo "Rerunning static data member initializations"
+            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
         .ENDIF
     .ENDIF
 .IF "$(SHL7VERSIONMAP)"!=""
@@ -2905,6 +2935,11 @@ SHL8STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL8STDLIBS+=$(STATICLIB)
+# Allow certain libraries to not link to libstatic*.dylib. This is only used
+# by libraries that cannot be linked to other libraries.
+.IF "$(NOSHAREDSTATICLIB)"==""
+SHL8STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -3065,14 +3100,14 @@ SHL8SONAME=\"$(SONAME_SWITCH)$(SHL8TARGETN:b:b)\"
 .IF "$(SHL8RES)"!=""
 SHL8RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL8RES))
 SHL8ALLRES+=$(SHL8RES)
-SHL8LINKRES*=$(MISC)$/$(SHL8TARGET).res
+LINKRES*=$(MISC)$/$(SHL8TARGET).res
 .ENDIF			# "$(SHL8RES)"!=""
 .ENDIF
 
 .IF "$(SHL8DEFAULTRES)$(use_shl_versions)"!=""
 SHL8DEFAULTRES*=$(MISC)$/$(SHL8TARGET)_def.res
 SHL8ALLRES+=$(SHL8DEFAULTRES)
-SHL8LINKRES*=$(MISC)$/$(SHL8TARGET).res
+LINKRES*=$(MISC)$/$(SHL8TARGET).res
 .ENDIF			# "$(SHL8DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL8DESCRIPTION)"==""
@@ -3142,9 +3177,9 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(SHL8DEFAULTRES)"!=""
 .IF "$(SHL8ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL8ALLRES:s/res /res+/) $(SHL8LINKRES)
+    +$(COPY) /b $(SHL8ALLRES:s/res /res+/) $(LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL8ALLRES) > $(SHL8LINKRES)
+    +$(TYPE) $(SHL8ALLRES) > $(LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL8ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -3169,7 +3204,7 @@ $(SHL8TARGETN) : \
         $(SHL8LIBS) \
         $(SHL8STDLIBS) \
         $(STDSHL) $(STDSHL8) \
-        $(SHL8LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -3183,7 +3218,7 @@ $(SHL8TARGETN) : \
         $(SHL8LIBS)                         \
         $(SHL8STDLIBS)                      \
         $(STDSHL) $(STDSHL8)                           \
-        $(SHL8LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -3199,7 +3234,7 @@ $(SHL8TARGETN) : \
         $(SHL8OBJS) \
         $(SHL8STDLIBS) \
         $(STDSHL) $(STDSHL8) \
-        $(SHL8LINKRES) \
+        $(LINKRES) \
         ) >> $(MISC)$/$(SHL8TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL8TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL8TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL8TARGET).lnk
@@ -3245,9 +3280,9 @@ $(SHL8TARGETN) : \
     .IF "$(CVER)"=="C295"
         # This is a hack as libstatic and libcppuhelper have a circular dependency
         .IF "$(PRJNAME)"=="cppuhelper"
-        @echo "------------------------------"
-        @echo "Rerunning static data member initializations"
-        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+            @echo "------------------------------"
+            @echo "Rerunning static data member initializations"
+            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
         .ENDIF
     .ENDIF
 .IF "$(SHL8VERSIONMAP)"!=""
@@ -3318,6 +3353,11 @@ SHL9STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL9STDLIBS+=$(STATICLIB)
+# Allow certain libraries to not link to libstatic*.dylib. This is only used
+# by libraries that cannot be linked to other libraries.
+.IF "$(NOSHAREDSTATICLIB)"==""
+SHL9STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -3478,14 +3518,14 @@ SHL9SONAME=\"$(SONAME_SWITCH)$(SHL9TARGETN:b:b)\"
 .IF "$(SHL9RES)"!=""
 SHL9RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL9RES))
 SHL9ALLRES+=$(SHL9RES)
-SHL9LINKRES*=$(MISC)$/$(SHL9TARGET).res
+LINKRES*=$(MISC)$/$(SHL9TARGET).res
 .ENDIF			# "$(SHL9RES)"!=""
 .ENDIF
 
 .IF "$(SHL9DEFAULTRES)$(use_shl_versions)"!=""
 SHL9DEFAULTRES*=$(MISC)$/$(SHL9TARGET)_def.res
 SHL9ALLRES+=$(SHL9DEFAULTRES)
-SHL9LINKRES*=$(MISC)$/$(SHL9TARGET).res
+LINKRES*=$(MISC)$/$(SHL9TARGET).res
 .ENDIF			# "$(SHL9DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL9DESCRIPTION)"==""
@@ -3555,9 +3595,9 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(SHL9DEFAULTRES)"!=""
 .IF "$(SHL9ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL9ALLRES:s/res /res+/) $(SHL9LINKRES)
+    +$(COPY) /b $(SHL9ALLRES:s/res /res+/) $(LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL9ALLRES) > $(SHL9LINKRES)
+    +$(TYPE) $(SHL9ALLRES) > $(LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL9ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -3582,7 +3622,7 @@ $(SHL9TARGETN) : \
         $(SHL9LIBS) \
         $(SHL9STDLIBS) \
         $(STDSHL) $(STDSHL9) \
-        $(SHL9LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -3596,7 +3636,7 @@ $(SHL9TARGETN) : \
         $(SHL9LIBS)                         \
         $(SHL9STDLIBS)                      \
         $(STDSHL) $(STDSHL9)                           \
-        $(SHL9LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -3612,7 +3652,7 @@ $(SHL9TARGETN) : \
         $(SHL9OBJS) \
         $(SHL9STDLIBS) \
         $(STDSHL) $(STDSHL9) \
-        $(SHL9LINKRES) \
+        $(LINKRES) \
         ) >> $(MISC)$/$(SHL9TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL9TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL9TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL9TARGET).lnk
@@ -3658,9 +3698,9 @@ $(SHL9TARGETN) : \
     .IF "$(CVER)"=="C295"
         # This is a hack as libstatic and libcppuhelper have a circular dependency
         .IF "$(PRJNAME)"=="cppuhelper"
-        @echo "------------------------------"
-        @echo "Rerunning static data member initializations"
-        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+            @echo "------------------------------"
+            @echo "Rerunning static data member initializations"
+            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
         .ENDIF
     .ENDIF
 .IF "$(SHL9VERSIONMAP)"!=""
@@ -3731,6 +3771,11 @@ SHL10STDLIBS=
 # Link in static data members for template classes
 .IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL10STDLIBS+=$(STATICLIB)
+# Allow certain libraries to not link to libstatic*.dylib. This is only used
+# by libraries that cannot be linked to other libraries.
+.IF "$(NOSHAREDSTATICLIB)"==""
+SHL10STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -3891,14 +3936,14 @@ SHL10SONAME=\"$(SONAME_SWITCH)$(SHL10TARGETN:b:b)\"
 .IF "$(SHL10RES)"!=""
 SHL10RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL10RES))
 SHL10ALLRES+=$(SHL10RES)
-SHL10LINKRES*=$(MISC)$/$(SHL10TARGET).res
+LINKRES*=$(MISC)$/$(SHL10TARGET).res
 .ENDIF			# "$(SHL10RES)"!=""
 .ENDIF
 
 .IF "$(SHL10DEFAULTRES)$(use_shl_versions)"!=""
 SHL10DEFAULTRES*=$(MISC)$/$(SHL10TARGET)_def.res
 SHL10ALLRES+=$(SHL10DEFAULTRES)
-SHL10LINKRES*=$(MISC)$/$(SHL10TARGET).res
+LINKRES*=$(MISC)$/$(SHL10TARGET).res
 .ENDIF			# "$(SHL10DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL10DESCRIPTION)"==""
@@ -3968,9 +4013,9 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(SHL10DEFAULTRES)"!=""
 .IF "$(SHL10ALLRES)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(SHL10ALLRES:s/res /res+/) $(SHL10LINKRES)
+    +$(COPY) /b $(SHL10ALLRES:s/res /res+/) $(LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    +$(TYPE) $(SHL10ALLRES) > $(SHL10LINKRES)
+    +$(TYPE) $(SHL10ALLRES) > $(LINKRES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL10ALLRES)"!=""
 .IF "$(linkinc)"==""
@@ -3995,7 +4040,7 @@ $(SHL10TARGETN) : \
         $(SHL10LIBS) \
         $(SHL10STDLIBS) \
         $(STDSHL) $(STDSHL10) \
-        $(SHL10LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
@@ -4009,7 +4054,7 @@ $(SHL10TARGETN) : \
         $(SHL10LIBS)                         \
         $(SHL10STDLIBS)                      \
         $(STDSHL) $(STDSHL10)                           \
-        $(SHL10LINKRES) \
+        $(LINKRES) \
     )
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
@@ -4025,7 +4070,7 @@ $(SHL10TARGETN) : \
         $(SHL10OBJS) \
         $(SHL10STDLIBS) \
         $(STDSHL) $(STDSHL10) \
-        $(SHL10LINKRES) \
+        $(LINKRES) \
         ) >> $(MISC)$/$(SHL10TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL10TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL10TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL10TARGET).lnk
@@ -4071,9 +4116,9 @@ $(SHL10TARGETN) : \
     .IF "$(CVER)"=="C295"
         # This is a hack as libstatic and libcppuhelper have a circular dependency
         .IF "$(PRJNAME)"=="cppuhelper"
-        @echo "------------------------------"
-        @echo "Rerunning static data member initializations"
-        @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+            @echo "------------------------------"
+            @echo "Rerunning static data member initializations"
+            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
         .ENDIF
     .ENDIF
 .IF "$(SHL10VERSIONMAP)"!=""
