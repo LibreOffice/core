@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-28 15:05:34 $
+ *  last change: $Author: sj $ $Date: 2001-01-12 16:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,10 @@ static const sal_Int32 mso_sptDefault3700[] =
     1, 3700
 };
 static const sal_Int32 mso_sptDefault5400[] =
+{
+    1, 5400
+};
+static const sal_Int32 mso_sptDefault8100[] =
 {
     1, 5400
 };
@@ -3354,6 +3358,111 @@ static const mso_AutoShape msoRightBrace =      // adj value0 0 -> 5400
     0x80000000, 0x80000000
 };
 
+static const sal_Int32 mso_sptIrregularSeal1Vert[] =
+{
+    10901,  5905,   8458,   2399,   7417,   6425,   476,    2399,   4732,   7722,
+    106,    8718,   3828,   11880,  243,    14689,  5772,   14041,  4868,   17719,
+    7819,   15730,  8590,   21600,  10637,  15038,  13349,  19840,  14125,  14561,
+    18248,  18195,  16938,  13044,  21600,  13393,  17710,  10579,  21198,  8242,
+    16806,  7417,   18482,  4560,   14257,  5429,   14623,  106,    10901,  5905
+};
+static const sal_Int32 mso_sptIrregularSeal1TextRect[] =
+{
+    1, 4680, 6570, 16140, 13280
+};
+static const mso_AutoShape msoIrregularSeal1 =
+{
+    (sal_Int32*)mso_sptIrregularSeal1Vert, sizeof( mso_sptIrregularSeal1Vert ) >> 3,
+    NULL, 0,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptIrregularSeal1TextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptIrregularSeal2Vert[] =
+{
+    11464,  4340,   9722,   1887,   8548,   6383,   4503,   3626,
+    5373,   7816,   1174,   8270,   3934,   11592,  0,      12875,
+    3329,   15372,  1283,   17824,  4804,   18239,  4918,   21600,
+    7525,   18125,  8698,   19712,  9871,   17371,  11614,  18844,
+    12178,  15937,  14943,  17371,  14640,  14348,  18878,  15632,
+    16382,  12311,  18270,  11292,  16986,  9404,   21600,  6646,
+    16382,  6533,   18005,  3172,   14524,  5778,   14789,  0,
+    11464,  4340
+};
+static const sal_Int32 mso_sptIrregularSeal2TextRect[] =
+{
+    1, 5400, 6570, 14160, 15290
+};
+static const mso_AutoShape msoIrregularSeal2 =
+{
+    (sal_Int32*)mso_sptIrregularSeal2Vert, sizeof( mso_sptIrregularSeal2Vert ) >> 3,
+    NULL, 0,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptIrregularSeal2TextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptSeal4Vert[] =     // adjustment1 : 0 - 10800
+{
+    0,      10800,
+    4 MSO_I, 4 MSO_I,
+    10800,  0,
+    3 MSO_I, 4 MSO_I,
+    21600,  10800,
+    3 MSO_I, 3 MSO_I,
+    10800,  21600,
+    4 MSO_I, 3 MSO_I,
+    0,      10800
+};
+static const SvxMSDffCalculationData mso_sptSeal4Calc[] =
+{
+    { 0x0000, 7600, 0, 0 },
+    { 0x6001, 0x400, DFF_Prop_adjustValue, 10800 },
+    { 0xa000, 0x400, 0, 0x401 },
+    { 0x4000, 10800, 0x402, 0 },
+    { 0x8000, 10800, 0, 0x402 }
+};
+static const sal_Int32 mso_sptSeal4TextRect[] =
+{
+    1, 4 MSO_I, 4 MSO_I, 3 MSO_I, 3 MSO_I
+};
+static const mso_AutoShape msoSeal4 =
+{
+    (sal_Int32*)mso_sptSeal4Vert, sizeof( mso_sptSeal4Vert ) >> 3,
+    NULL, 0,
+    (SvxMSDffCalculationData*)mso_sptSeal4Calc, sizeof( mso_sptSeal4Calc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault8100,
+    (sal_Int32*)mso_sptSeal4TextRect,
+    (sal_Int32*)NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptStarVert[] =
+{
+    10797,  0,      8278,   8256,   0,      8256,   6722,   13405,
+    4198,   21600,  10797,  16580,  17401,  21600,  14878,  13405,
+    21600,  8256,   13321,  8256,   10797,  0
+};
+static const sal_Int32 mso_sptStarTextRect[] =
+{
+    1, 6722, 8256, 14878, 15460
+};
+static const mso_AutoShape msoStar =
+{
+    (sal_Int32*)mso_sptStarVert, sizeof( mso_sptStarVert ) >> 3,
+    NULL, 0,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptStarTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
 class SvxMSDffAdjustmentHandle
 {
     sal_Int32   nAdjustValue;
@@ -3567,6 +3676,19 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
         case mso_sptUpDownArrowCallout :    pDefAutoShape = &msoUpDownArrowCallout; break;
         case mso_sptQuadArrowCallout :      pDefAutoShape = &msoQuadArrowCallout; break;
         case mso_sptCircularArrow :         pDefAutoShape = &msoCircularArrow; break;
+        case mso_sptIrregularSeal1 :        pDefAutoShape = &msoIrregularSeal1; break;
+        case mso_sptIrregularSeal2 :        pDefAutoShape = &msoIrregularSeal2; break;
+        case mso_sptSeal4 :                 pDefAutoShape = &msoSeal4; break;
+        case mso_sptStar :                  pDefAutoShape = &msoStar; break;
+//      case mso_sptSeal8 :
+//      case mso_sptSeal16 :
+//      case mso_sptSeal24 :
+//      case mso_sptSeal32 :
+//      case mso_sptRibbon2 :
+//      case mso_sptRibbon :
+//      case mso_sptEllipseRibbon2 :
+//      case mso_sptEllipseRibbon :
+
         default :
         break;
     }
