@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 16:02:38 $
+ *  last change: $Author: dg $ $Date: 2000-11-17 08:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
