@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:36 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,6 +524,9 @@ public:
 
     //Auskunft ueber naechstliegenden Inhalt zum uebergebenen Point
     Point GetCntntPos( const Point& rPoint, BOOL bNext ) const;
+
+    //convert document position into position relative to the current page
+    Point GetRelativePagePosition(const Point& rDocPos);
 
     //Layout-Selektion Hiden/Zeigen und aufruf an die CrsrSh weiterreichen.
     void ShLooseFcs();
