@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDropTargetDropContext.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:19 $
+ *  last change: $Author: arellano $ $Date: 2001-07-27 18:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,11 @@ module com { module sun { module star { module datatransfer { module dnd {
     with a Drag and Drop operation moves with the visible geometry of a
     window associated with a DropTarget. </p>
 
+    <!-- Editor: Should the word be "within" instead of "with"? -->
+
     <p>The DropTargetContext provides the mechanism for a potential receiver
-    of a drop operation to both provide the end user with the appropriate drag
-    under feedback, but also to effect the subsequent data transfer if
-    appropriate. </p>
+    of a drop operation to provide the end user with the appropriate drag
+    under feedback and to effect the subsequent data transfer, if appropriate. </p>
 
 */
 
@@ -112,6 +113,8 @@ interface XDropTargetDropContext : com::sun::star::uno::XInterface
         <p>Reject the drop as a result of examining either or the available
         <type scope="com::sun::star::datatransfer">DataFlavor</type> types
         received in the <member>XDropTargetListener::dragEnter</member>.
+
+    <!-- Editor: "either" and "or" should have some text between them -->
     */
 
     [oneway] void rejectDrop();
@@ -121,6 +124,8 @@ interface XDropTargetDropContext : com::sun::star::uno::XInterface
 
         @param success
         <TRUE/> if drop completed successful, <FALSE/> otherwise.
+
+    <!-- Editor: Should this be @return ? -->
     */
 
     [oneway] void dropComplete( [in] boolean success );

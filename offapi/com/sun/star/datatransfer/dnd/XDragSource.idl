@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragSource.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:19 $
+ *  last change: $Author: arellano $ $Date: 2001-07-27 18:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,26 +90,32 @@ interface XDragSourceListener;
     when imlpementing <type>XDragGestureListener</type>.
 
     <p>Different to Java, the association between view and interface is fixed
-    and can not be changed. Otherwise the awt messaging would have to be
+    and can not be changed. Otherwise, the awt messaging would have to be
     implemented for any window supporting Drag and Drop operations, what would
     be a real performance issue.</p>
+
+    <!-- Editor: Do you mean Java does it differently? -->
+
+    <!-- Editor: Can the last phrase read: which would be a performance issue. -->
 */
 
 interface XDragSource: com::sun::star::uno::XInterface
 {
 
     //-------------------------------------------------------------------------
-    /** @returns a boolean indicating whether or not drag Image support is
+    /** @returns
+    a boolean indicating whether or not drag Image support is
         available on the underlying platform.
     */
 
     boolean isDragImageSupported();
 
     //-------------------------------------------------------------------------
-    /** @returns the default drag cursor for the specified drag action.
+    /** @returns
+    the default drag cursor for the specified drag action.
 
         @param dragAction
-        a drag action
+        a drag action.
     */
 
     long getDefaultCursor( [in] byte dragAction )
@@ -119,27 +125,29 @@ interface XDragSource: com::sun::star::uno::XInterface
     /** starts the drag operation.
 
         <p>Note: this call does <em>not</em> block until the drag and drop
-        operation ends. if the Drag and Drop system is unable to initiate
+        operation ends. If the Drag and Drop system is unable to initiate
         a drag operation or if the user attempts to start a drag while an
-        existing drag operation is still executing the action fails immediately
-        indicated by calling endDragDrop on the listener parameter with
+        existing drag operation is still executing, the action fails immediately.
+        This is indicated by calling endDragDrop on the listener parameter with
         a DragSourceDragEvent showing failure.
         </p>
+
+    <!-- Editor: Is "block" the right word in the previous paragraph? -->
 
         @param trigger
         the <type>DragGestureEvent</type> that initiated the drag.
 
         @param sourceActions
-        the action(s) supported for this transferable.
+        the action or actions supported for this transferable.
 
         @param cursor
-        the initial drag cursor id or 0 for defaults
+        the initial drag cursor id or 0 for defaults.
 
         @param image
-        the initial drag image id or 0 for defaults
+        the initial drag image id or 0 for defaults.
 
         @param trans
-        the transferable object dragged
+        the transferable object dragged.
 
         @param listener
         the <type>XDragSourceListener</type>.
