@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:12:54 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,8 +292,6 @@ hidspecial HID { HelpID = HID_BG_BTN_IMG16; } ;
 
 #define HID_DLGREPORT_DIALOG                34320
 hidspecial HID { HelpID = HID_DLGREPORT_DIALOG; };
-#define HID_DLGREPORT_0_CMDHELP             34321
-hidspecial HID { HelpID = HID_DLGREPORT_0_CMDHELP; };
 #define HID_DLGREPORT_0_CMDPREV             34322
 hidspecial HID { HelpID = HID_DLGREPORT_0_CMDPREV; };
 #define HID_DLGREPORT_0_CMDNEXT             34323
@@ -337,29 +335,29 @@ hidspecial HID { HelpID = HID_DLGREPORT_2_CMDMOVEUPGROUP; };
 hidspecial HID { HelpID = HID_DLGREPORT_2_CMDMOVEDOWNGROUP; };
 
 
-#define HID_DLGREPORT_3_SORT1               34345
+#define HID_DLGREPORT_3_SORT1               34346
 hidspecial HID { HelpID = HID_DLGREPORT_3_SORT1; };
-#define HID_DLGREPORT_3_OPTASCEND1          34346
+#define HID_DLGREPORT_3_OPTASCEND1          34347
 hidspecial HID { HelpID = HID_DLGREPORT_3_OPTASCEND1; };
-#define HID_DLGREPORT_3_OPTDESCEND1         34347
+#define HID_DLGREPORT_3_OPTDESCEND1         34348
 hidspecial HID { HelpID = HID_DLGREPORT_3_OPTDESCEND1; };
-#define HID_DLGREPORT_3_SORT2               34348
+#define HID_DLGREPORT_3_SORT2               34349
 hidspecial HID { HelpID = HID_DLGREPORT_3_SORT2; };
-#define HID_DLGREPORT_3_OPTASCEND2          34349
+#define HID_DLGREPORT_3_OPTASCEND2          34350
 hidspecial HID { HelpID = HID_DLGREPORT_3_OPTASCEND2; };
-#define HID_DLGREPORT_3_OPTDESCEND2         34350
+#define HID_DLGREPORT_3_OPTDESCEND2         34351
 hidspecial HID { HelpID = HID_DLGREPORT_3_OPTDESCEND2; };
-#define HID_DLGREPORT_3_SORT3               34351
+#define HID_DLGREPORT_3_SORT3               34352
 hidspecial HID { HelpID = HID_DLGREPORT_3_SORT3; };
-#define HID_DLGREPORT_3_OPTASCEND3          34352
+#define HID_DLGREPORT_3_OPTASCEND3          34353
 hidspecial HID { HelpID = HID_DLGREPORT_3_OPTASCEND3; };
-#define HID_DLGREPORT_3_OPTDESCEND3         34353
+#define HID_DLGREPORT_3_OPTDESCEND3         34354
 hidspecial HID { HelpID = HID_DLGREPORT_3_OPTDESCEND3; };
-#define HID_DLGREPORT_3_SORT4               34354
+#define HID_DLGREPORT_3_SORT4               34355
 hidspecial HID { HelpID = HID_DLGREPORT_3_SORT4; };
-#define HID_DLGREPORT_3_OPTASCEND4          34355
+#define HID_DLGREPORT_3_OPTASCEND4          34356
 hidspecial HID { HelpID = HID_DLGREPORT_3_OPTASCEND4; };
-#define HID_DLGREPORT_3_OPTDESCEND4         34356
+#define HID_DLGREPORT_3_OPTDESCEND4         34357
 hidspecial HID { HelpID = HID_DLGREPORT_3_OPTDESCEND4; };
 
 #define HID_DLGREPORT_4_TITLE               34362
@@ -415,8 +413,6 @@ hidspecial HID { HelpID = HID_DLGREPORT_6_TXTTITLE_7; };
 
 #define HID_DLGFORM_DIALOG                  34400
 hidspecial HID { HelpID = HID_DLGFORM_DIALOG; };
-#define HID_DLGFORM_CMDHELP                 34401
-hidspecial HID { HelpID = HID_DLGFORM_CMDHELP; };
 #define HID_DLGFORM_CMDPREV                 34402
 hidspecial HID { HelpID = HID_DLGFORM_CMDPREV; };
 #define HID_DLGFORM_CMDNEXT                 34403
@@ -1044,6 +1040,10 @@ hidspecial HID { HelpID = HID_QUERYWIZARD_CMDFILTERMOVEUP; };
 #define HID_QUERYWIZARD_CMDFILTERMOVEDOWN           40920
 hidspecial HID { HelpID = HID_QUERYWIZARD_CMDFILTERMOVEDOWN; };
 
+#define HID_QUERYWIZARD_OPTGROUPMATCHALL            40923
+hidspecial HID { HelpID = HID_QUERYWIZARD_OPTGROUPMATCHALL; };
+#define HID_QUERYWIZARD_OPTGROUPMATCHANY        40924
+hidspecial HID { HelpID = HID_QUERYWIZARD_OPTGROUPMATCHANY; };
 
 #define HID_QUERYWIZARD_LSTFILTERFIELDNAME_1        40925
 hidspecial HID { HelpID = HID_QUERYWIZARD_LSTFILTERFIELDNAME_1; };
@@ -1090,8 +1090,6 @@ hidspecial HID { HelpID = HID_QUERYWIZARD_TXTSUMMARY; };
 
 #define HID_QUERYWIZARD             40970
 hidspecial HID { HelpID = HID_QUERYWIZARD; };
-#define HID_QUERYWIZARD_HELP        40971
-hidspecial HID { HelpID = HID_QUERYWIZARD_HELP; };
 #define HID_QUERYWIZARD_BACK        40972
 hidspecial HID { HelpID = HID_QUERYWIZARD_BACK; };
 #define HID_QUERYWIZARD_NEXT        40973
@@ -1430,18 +1428,19 @@ hidspecial HID { HelpID = HID_FAXWIZARD_CANCEL; };
 
 #define HID_DLGTABLE_DIALOG                  41200
 hidspecial HID { HelpID = HID_DLGTABLE_DIALOG; };
-#define HID_DLGTABLE_CMDCANCEL               41201
-hidspecial HID { HelpID = HID_DLGTABLE_CMDCANCEL; };
 #define HID_DLGTABLE_CMDPREV                 41202
 hidspecial HID { HelpID = HID_DLGTABLE_CMDPREV; };
 #define HID_DLGTABLE_CMDNEXT                 41203
 hidspecial HID { HelpID = HID_DLGTABLE_CMDNEXT; };
 #define HID_DLGTABLE_CMDFINISH              41204
 hidspecial HID { HelpID = HID_DLGTABLE_CMDFINISH; };
+#define HID_DLGTABLE_CMDCANCEL               41205
+hidspecial HID { HelpID = HID_DLGTABLE_CMDCANCEL; };
 
-#define HID_DLGTABLE_OPTBUSINESS            41205
+
+#define HID_DLGTABLE_OPTBUSINESS            41206
 hidspecial HID { HelpID = HID_DLGTABLE_OPTBUSINESS; };
-#define HID_DLGTABLE_OPTPRIVATE             41206
+#define HID_DLGTABLE_OPTPRIVATE             41207
 hidspecial HID { HelpID = HID_DLGTABLE_OPTPRIVATE; };
 
 
@@ -1482,26 +1481,38 @@ hidspecial HID { HelpID = HID_DLGTABLE_COLNAME; };
 hidspecial HID { HelpID = HID_DLGTABLE_COLMODIFIER; };
 
 
-#define HID_DLGTABLE_CHK_USEPRIMEKEY        41229
+#define HID_DLGTABLE_CHK_USEPRIMEKEY        41227
 hidspecial HID { HelpID = HID_DLGTABLE_CHK_USEPRIMEKEY; };
-#define HID_DLGTABLE_OPT_PK_AUTOMATIC           41230
+#define HID_DLGTABLE_OPT_PK_AUTOMATIC           41228
 hidspecial HID { HelpID = HID_DLGTABLE_OPT_PK_AUTOMATIC; };
-#define HID_DLGTABLE_OPT_PK_SINGLE              41231
+
+#define HID_DLGTABLE_CK_PK_AUTOVALUE_AUTOMATIC     41229
+hidspecial HID { HelpID = HID_DLGTABLE_CK_PK_AUTOVALUE_AUTOMATIC; };
+
+#define HID_DLGTABLE_OPT_PK_SINGLE              41230
 hidspecial HID { HelpID = HID_DLGTABLE_OPT_PK_SINGLE; };
-#define HID_DLGTABLE_LB_PK_FIELDNAME            41232
+#define HID_DLGTABLE_LB_PK_FIELDNAME            41231
 hidspecial HID { HelpID = HID_DLGTABLE_LB_PK_FIELDNAME; };
-#define HID_DLGTABLE_CK_PK_AUTOVALUE             41233
+#define HID_DLGTABLE_CK_PK_AUTOVALUE             41232
 hidspecial HID { HelpID = HID_DLGTABLE_CK_PK_AUTOVALUE; };
-#define HID_DLGTABLE_OPT_PK_SEVERAL         41234
+#define HID_DLGTABLE_OPT_PK_SEVERAL         41233
 hidspecial HID { HelpID = HID_DLGTABLE_OPT_PK_SEVERAL; };
-#define HID_DLGTABLE_FIELDS_PK_AVAILABLE         41235
+#define HID_DLGTABLE_FIELDS_PK_AVAILABLE         41234
 hidspecial HID { HelpID = HID_DLGTABLE_FIELDS_PK_AVAILABLE; };
-#define HID_DLGTABLE_FIELDS_PK_SELECTED          41236
-hidspecial HID { HelpID = HID_DLGTABLE_FIELDS_PK_SELECTED; };
-#define HID_DLGTABLE_CMDMOVE_PK_SELECTED         41237
+#define HID_DLGTABLE_CMDMOVE_PK_SELECTED         41235
 hidspecial HID { HelpID = HID_DLGTABLE_CMDMOVE_PK_SELECTED; };
-#define HID_DLGTABLE_CMDREMOVE_PK_SELECTED       41238
+#define HID_DLGTABLE_CMDREMOVE_PK_SELECTED       41236
 hidspecial HID { HelpID = HID_DLGTABLE_CMDREMOVE_PK_SELECTED; };
+#define HID_DLGTABLE_FIELDS_PK_SELECTED          41237
+hidspecial HID { HelpID = HID_DLGTABLE_FIELDS_PK_SELECTED; };
+
+#define HID_DLGTABLE_CMDMOVEUP_PK_SELECTED         41238
+hidspecial HID { HelpID = HID_DLGTABLE_CMDMOVEUP_PK_SELECTED; };
+#define HID_DLGTABLE_CMDMOVEDOWN_PK_SELECTED       41239
+hidspecial HID { HelpID = HID_DLGTABLE_CMDMOVEDOWN_PK_SELECTED; };
+
+
+
 
 #define HID_DLGTABLE_TXT_NAME               41240
 hidspecial HID { HelpID = HID_DLGTABLE_TXT_NAME; };
