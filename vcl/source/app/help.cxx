@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-12 09:57:50 $
+ *  last change: $Author: ssa $ $Date: 2002-12-03 14:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,8 @@ void Help::HideTip( ULONG nId )
 // =======================================================================
 
 HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT nHelpWinStyle, USHORT nStyle ) :
-    FloatingWindow( pParent->ImplGetFrameWindow(), WB_SYSTEMWINDOW ),
+    //FloatingWindow( pParent->ImplGetFrameWindow(), WB_SYSTEMWINDOW ),
+    FloatingWindow( pParent, WB_SYSTEMWINDOW ), // #105827# if we change the parent, mirroring will not work correctly when positioning this window
     maHelpText( rText )
 {
     ImplSetMouseTransparent( TRUE );
@@ -595,7 +596,7 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
             bool bTextChanged = rHelpText != pHelpWin->GetHelpText();
             if( bTextChanged )
             {
-                Window * pWindow = pHelpWin->GetParent();
+                Window * pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
                 Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
                 if( pHelpWin->IsVisible() )
                     pWindow->Invalidate( aInvRect );
@@ -637,7 +638,7 @@ void ImplDestroyHelpWindow( BOOL bUpdate )
     HelpTextWindow* pHelpWin = pSVData->maHelpData.mpHelpWin;
     if ( pHelpWin )
     {
-        Window * pWindow = pHelpWin->GetParent();
+        Window * pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
         // find out screen area covered by system help window
         Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
         if( pHelpWin->IsVisible() )
@@ -657,10 +658,10 @@ void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle
     Point       aPos = rPos;
     Size        aSz = pHelpWin->GetSizePixel();
     Rectangle   aScreenRect = pHelpWin->ImplGetFrameWindow()->GetDesktopRectPixel();
-    aPos = pHelpWin->GetParent()->OutputToAbsoluteScreenPixel( aPos );
+    aPos = pHelpWin->GetParent()->ImplGetFrameWindow()->OutputToAbsoluteScreenPixel( aPos );
     // get mouse screen coords
-    Point mPos( pHelpWin->GetParent()->GetPointerPosPixel() );
-    mPos = pHelpWin->GetParent()->OutputToAbsoluteScreenPixel( mPos );
+    Point mPos( pHelpWin->GetParent()->ImplGetFrameWindow()->GetPointerPosPixel() );
+    mPos = pHelpWin->GetParent()->ImplGetFrameWindow()->OutputToAbsoluteScreenPixel( mPos );
 
     if ( nHelpWinStyle == HELPWINSTYLE_QUICK )
     {
@@ -691,8 +692,8 @@ void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle
         {
             // convert help area to screen coords
             Rectangle devHelpArea(
-                pHelpWin->GetParent()->OutputToAbsoluteScreenPixel( pHelpArea->TopLeft() ),
-                pHelpWin->GetParent()->OutputToAbsoluteScreenPixel( pHelpArea->BottomRight() ) );
+                pHelpWin->GetParent()->ImplGetFrameWindow()->OutputToAbsoluteScreenPixel( pHelpArea->TopLeft() ),
+                pHelpWin->GetParent()->ImplGetFrameWindow()->OutputToAbsoluteScreenPixel( pHelpArea->BottomRight() ) );
 
             // Welche Position vom Rechteck?
             aPos = devHelpArea.Center();
@@ -747,7 +748,7 @@ void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle
             aPos = mPos + delta;
     }
 
-    Window* pWindow = pHelpWin->GetParent();
+    Window* pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
     aPos = pWindow->AbsoluteScreenToOutputPixel( aPos );
     pHelpWin->SetPosPixel( aPos );
 }
