@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-17 16:13:53 $
+ *  last change: $Author: mib $ $Date: 2001-05-21 09:21:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,13 +341,26 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                     OUString sName;
                     if( xNamed.is() )
                         sName = xNamed->getName();
-                    if( !sName.getLength() || !pListAutoPool->HasName( sName ) )
+                    sal_Bool bAdd = !sName.getLength();
+                    if( !bAdd )
                     {
-                        // HasName returns false if the num rule is a style,
-                        // because all style names have been registered while
-                        // all automatic rules not.
-                        pListAutoPool->Add( xNumRule );
+                        Reference < XPropertySet > xNumPropSet( xNumRule,
+                                                                UNO_QUERY );
+                        OUString sIsAutomatic( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) );
+                        if( xNumPropSet.is() &&
+                            xNumPropSet->getPropertySetInfo()
+                                       ->hasPropertyByName( sIsAutomatic ) )
+                        {
+                            aAny = xNumPropSet->getPropertyValue( sIsAutomatic );
+                            bAdd = *(sal_Bool *)aAny.getValue();
+                        }
+                        else
+                        {
+                            bAdd = sal_True;
+                        }
                     }
+                    if( bAdd )
+                        pListAutoPool->Add( xNumRule );
                 }
             }
             break;
