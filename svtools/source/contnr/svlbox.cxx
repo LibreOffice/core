@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 14:23:25 $
+ *  last change: $Author: jp $ $Date: 2001-07-04 07:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #endif
 #ifndef _SV_ACCEL_HXX
 #include <vcl/accel.hxx>
-#endif
-#ifndef _SV_DRAG_HXX
-#include <vcl/drag.hxx>
 #endif
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
@@ -748,8 +745,6 @@ SvLBox::SvLBox( Window* pParent, WinBits nWinStyle  ) :
     pModel->InsertView( this );
     pHdlEntry = 0;
     pEdCtrl = 0;
-    aMovePtr = Pointer( POINTER_MOVEDATA );
-    aCopyPtr = Pointer( POINTER_COPYDATA );
     SetSelectionMode( SINGLE_SELECTION );  // pruefen ob TreeListBox gecallt wird
     SetDragDropMode( SV_DRAGDROP_NONE );
 #ifdef MAC
@@ -776,8 +771,6 @@ SvLBox::SvLBox( Window* pParent, const ResId& rResId ) :
     pHdlEntry = 0;
     pEdCtrl = 0;
     pModel->SetCloneLink( LINK(this, SvLBox, CloneHdl_Impl ));
-    aMovePtr = Pointer( POINTER_MOVEDATA );
-    aCopyPtr = Pointer( POINTER_COPYDATA );
 #ifdef MAC
     Font aFont( "Geneva", Size( 0, 10 ) );
     SetFont( aFont );
@@ -1261,8 +1254,6 @@ void SvLBox::SetSelectionMode( SelectionMode eSelectMode )
 void SvLBox::SetDragDropMode( DragDropMode nDDMode )
 {
     DBG_CHKTHIS(SvLBox,0);
-    if( nDDMode && !nDragDropMode )
-        EnableDrop();
     nDragDropMode = nDDMode;
 }
 
@@ -1531,7 +1522,6 @@ sal_Int8 SvLBox::AcceptDrop( const AcceptDropEvent& rEvt )
     }
     else
     {
-
         SvLBoxEntry* pEntry = GetDropTarget( rEvt.maPosPixel );
         if( !IsDropFormatSupported( SOT_FORMATSTR_ID_TREELISTBOX ) )
         {
@@ -1726,21 +1716,4 @@ Link SvLBox::GetDragFinishedHdl() const
     return STATIC_LINK( this, SvLBox, DragFinishHdl_Impl );
 }
 
-
-
-//JP 28.3.2001: old Drag & Drop API
-void SvLBox::BeginDrag( const Point& rPos )
-{
-}
-DragDropMode SvLBox::NotifyBeginDrag( SvLBoxEntry* )
-{
-    return (DragDropMode)0xffff;
-}
-void SvLBox::EndDrag()
-{
-}
-BOOL SvLBox::NotifyQueryDrop( SvLBoxEntry* )
-{
-    return TRUE;
-}
 

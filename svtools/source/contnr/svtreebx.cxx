@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-24 16:25:46 $
+ *  last change: $Author: jp $ $Date: 2001-07-04 07:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,13 +573,6 @@ void __EXPORT SvTreeListBox::CheckButtonHdl()
     DBG_CHKTHIS(SvTreeListBox,0);
     aCheckButtonHdl.Call( this );
 }
-
-BOOL __EXPORT SvTreeListBox::QueryDrop( DropEvent& rDEvt )
-{
-    DBG_CHKTHIS(SvTreeListBox,0);
-    return SvLBox::QueryDrop( rDEvt ); // Basisklasse rufen
-}
-
 
 
 // *********************************************************************
