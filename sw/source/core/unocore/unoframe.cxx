@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2001-01-25 10:10:42 $
+ *  last change: $Author: os $ $Date: 2001-02-12 07:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,16 +1009,20 @@ OUString SwXFrame::getImplementationName(void) throw( RuntimeException )
  ---------------------------------------------------------------------------*/
 BOOL SwXFrame::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.Frame") == rServiceName;
+    return !rServiceName.compareToAscii("com.sun.star.text.BaseFrame")||
+                !rServiceName.compareToAscii("com.sun.star.text.TextContent") ||
+                    !rServiceName.compareToAscii("com.sun.star.document.LinkTarget");
 }
 /* -----------------------------06.04.00 14:20--------------------------------
 
  ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXFrame::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    Sequence< OUString > aRet(1);
+    Sequence< OUString > aRet(3);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.Frame");
+    pArray[0] = C2U("com.sun.star.text.BaseFrame");
+    pArray[1] = C2U("com.sun.star.text.TextContent");
+    pArray[2] = C2U("com.sun.star.document.LinkTarget");
     return aRet;
 }
 /*-- 11.12.98 15:05:00---------------------------------------------------
@@ -2312,21 +2316,18 @@ sal_Bool SwXTextFrame::supportsService(const OUString& rServiceName) throw( Runt
 {
     return COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.Text")||
             COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextFrame")||
-                COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextContent") ||
-                    COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.document.LinkTarget");
+                    SwXFrame::supportsService(rServiceName);
 }
 /* -----------------03.05.99 12:28-------------------
  *
  * --------------------------------------------------*/
 uno::Sequence< OUString > SwXTextFrame::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    uno::Sequence < OUString > aRet(4);
+    uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
+    aRet.realloc(aRet.getLength() + 2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.Frame");
-    pArray[1] = C2U("com.sun.star.text.TextContent");
-    pArray[2] = C2U("com.sun.star.text.Text");
-    pArray[3] = C2U("com.sun.star.document.LinkTarget");
-
+    pArray[aRet.getLength() - 2] = C2U("com.sun.star.text.TextFrame");
+    pArray[aRet.getLength() - 1] = C2U("com.sun.star.text.Text");
     return aRet;
 }
 /* -----------------------------20.06.00 10:02--------------------------------
@@ -2495,8 +2496,7 @@ OUString SwXTextGraphicObject::getImplementationName(void) throw( RuntimeExcepti
 sal_Bool SwXTextGraphicObject::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextGraphicObject") ||
-            COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextContent") ||
-                COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.document.LinkTarget");
+                    SwXFrame::supportsService(rServiceName);
 }
 /* -----------------03.05.99 12:28-------------------
  *
@@ -2504,12 +2504,10 @@ sal_Bool SwXTextGraphicObject::supportsService(const OUString& rServiceName) thr
 uno::Sequence< OUString > SwXTextGraphicObject::getSupportedServiceNames(void)
         throw( RuntimeException )
 {
-    uno::Sequence < OUString > aRet(3);
+    uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
+    aRet.realloc(aRet.getLength() + 1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextContent");
-    pArray[1] = C2U("com.sun.star.document.LinkTarget");
-    pArray[2] = C2U("com.sun.star.text.TextGraphicObject");
-
+    pArray[aRet.getLength() - 1] = C2U("com.sun.star.text.TextGraphicObject");
     return aRet;
 }
 /* -----------------------------20.06.00 10:02--------------------------------
@@ -2721,8 +2719,7 @@ OUString SwXTextEmbeddedObject::getImplementationName(void) throw( RuntimeExcept
 sal_Bool SwXTextEmbeddedObject::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return  COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextEmbeddedObject")||
-            COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextContent")||
-            COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.document.LinkTarget");
+                    SwXFrame::supportsService(rServiceName);
 }
 /* -----------------03.05.99 12:28-------------------
  *
@@ -2730,12 +2727,10 @@ sal_Bool SwXTextEmbeddedObject::supportsService(const OUString& rServiceName) th
 uno::Sequence< OUString > SwXTextEmbeddedObject::getSupportedServiceNames(void)
         throw( RuntimeException )
 {
-    uno::Sequence < OUString > aRet(3);
+    uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
+    aRet.realloc(aRet.getLength() + 1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextContent");
-    pArray[1] = C2U("com.sun.star.document.LinkTarget");
-    pArray[2] = C2U("com.sun.star.text.TextEmbeddedObject");
-
+    pArray[aRet.getLength() - 1] = C2U("com.sun.star.text.TextEmbeddedObject");
     return aRet;
 }
 /* -----------------------------20.06.00 10:02--------------------------------
