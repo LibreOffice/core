@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:31:39 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include "drwlayer.hxx"
 #include "document.hxx"
 #include "tabvwsh.hxx"
+#include "fillinfo.hxx"
 
 
 #ifdef IRIX
