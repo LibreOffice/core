@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-09 13:35:20 $
+ *  last change: $Author: tbe $ $Date: 2001-12-07 11:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1853,6 +1853,16 @@ namespace pcr
                 {
                     if ( m_xIntrospecteeAsProperty.is() )
                     {
+                        Reference< XServiceInfo > xInfo(m_xIntrospecteeAsProperty, UNO_QUERY);
+                        if ( xInfo.is() )
+                        {
+                            if ( xInfo->supportsService( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFormattedFieldModel" ) ) ) )
+                            {
+                                delete pProperty;
+                                continue;
+                            }
+                        }
+
                         Reference< XPropertySetInfo > xPropInfo = m_xIntrospecteeAsProperty->getPropertySetInfo();
                         if ( xPropInfo.is() )
                         {
@@ -2650,8 +2660,14 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.46  2001/11/09 13:35:20  tbe
+ *  #92755# Assign Standard Values for Basic Controls in Designmode
+ *
  *  Revision 1.45  2001/10/30 15:17:57  fs
  *  connectRowSet: better error message upon failure
+ *
+ *  Revision 1.44.4.2  2001/12/07 10:50:01  tbe
+ *  #92755# Assign Standard Values for Basic Controls in Designmode
  *
  *  Revision 1.44.4.1  2001/11/08 17:42:26  tbe
  *  #92755# Assign Standard Values for Basic Controls in Designmode
