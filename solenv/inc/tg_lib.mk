@@ -40,9 +40,6 @@ LIB1 LIB2 LIB3 LIB4 LIB5 LIB6 LIB7 LIB8 LIB9:
 $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
     @echo Making: $@
     @-+$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="MAC"
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB$(TNR)ARCHIV) `cat /dev/null $@ | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
-.ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="UNX"
     @+-$(RM) $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -60,7 +57,6 @@ $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
 .ELSE			# "$(GUI)"=="UNX"
     @echo just a dummy > $@
 .ENDIF			# "$(GUI)"=="UNX"
-.ENDIF          # "$(GUI)"=="MAC"
 
 .ENDIF			# "$(LIB$(TNR)ARCHIV)" != ""
 
@@ -94,16 +90,13 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB$(TNR)FILES) $(LIB$(TNR)OBJFILES))
+    @-+echo $(LIB$(TNR)OBJFILES) > $(null,$(LIB$(TNR)OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-$(TYPE) $(foreach,i,$(LIB$(TNR)FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB$(TNR)FILES:+"&\n") \
-    $(LIB$(TNR)OBJFILES:+"&\n");)
-.ELSE
     +echo $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES)
     $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES) $(LIB$(TNR)FILES) bla.lib
-.ENDIF
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="MAC"
 .ENDIF          # "$(GUI)"=="UNX"

@@ -43,6 +43,12 @@ APP1STDLIBS+=$(STATICLIB)
 .IF "$(APP1TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(APP1TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP1LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(APP1TARGETN:b)_linkinc.ls
 $(APP1TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
@@ -235,6 +241,12 @@ APP2STDLIBS+=$(STATICLIB)
 .IF "$(APP2TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(APP2TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP2LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(APP2TARGETN:b)_linkinc.ls
 $(APP2TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
@@ -427,6 +439,12 @@ APP3STDLIBS+=$(STATICLIB)
 .IF "$(APP3TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(APP3TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP3LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(APP3TARGETN:b)_linkinc.ls
 $(APP3TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
@@ -619,6 +637,12 @@ APP4STDLIBS+=$(STATICLIB)
 .IF "$(APP4TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(APP4TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP4LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(APP4TARGETN:b)_linkinc.ls
 $(APP4TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
@@ -811,6 +835,12 @@ APP5STDLIBS+=$(STATICLIB)
 .IF "$(APP5TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(APP5TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP5LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(APP5TARGETN:b)_linkinc.ls
 $(APP5TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
@@ -1003,6 +1033,12 @@ APP6STDLIBS+=$(STATICLIB)
 .IF "$(APP6TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(APP6TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP6LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(APP6TARGETN:b)_linkinc.ls
 $(APP6TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
@@ -1195,6 +1231,12 @@ APP7STDLIBS+=$(STATICLIB)
 .IF "$(APP7TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(APP7TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP7LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(APP7TARGETN:b)_linkinc.ls
 $(APP7TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
@@ -1387,6 +1429,12 @@ APP8STDLIBS+=$(STATICLIB)
 .IF "$(APP8TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(APP8TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP8LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(APP8TARGETN:b)_linkinc.ls
 $(APP8TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
@@ -1579,6 +1627,12 @@ APP9STDLIBS+=$(STATICLIB)
 .IF "$(APP9TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(APP9TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP9LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(APP9TARGETN:b)_linkinc.ls
 $(APP9TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
@@ -1771,6 +1825,12 @@ APP10STDLIBS+=$(STATICLIB)
 .IF "$(APP10TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(APP10TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP10LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(APP10TARGETN:b)_linkinc.ls
 $(APP10TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""

@@ -166,8 +166,18 @@ SHL1DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_d
 .IF "$(SHL1TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(SHL1TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(SHL1TARGETN:b)_linkinc.ls
 $(SHL1TARGETN) : $(LINKINCTARGETS)
+
+.ELSE
+$(MISC)$/%linkinc.ls:
+    echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 $(SHL1TARGETN) : \
@@ -597,8 +607,18 @@ SHL2DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_d
 .IF "$(SHL2TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(SHL2TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(SHL2TARGETN:b)_linkinc.ls
 $(SHL2TARGETN) : $(LINKINCTARGETS)
+
+.ELSE
+$(MISC)$/%linkinc.ls:
+    echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 $(SHL2TARGETN) : \
@@ -1028,8 +1048,18 @@ SHL3DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_d
 .IF "$(SHL3TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(SHL3TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(SHL3TARGETN:b)_linkinc.ls
 $(SHL3TARGETN) : $(LINKINCTARGETS)
+
+.ELSE
+$(MISC)$/%linkinc.ls:
+    echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 $(SHL3TARGETN) : \
@@ -1459,8 +1489,18 @@ SHL4DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_d
 .IF "$(SHL4TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(SHL4TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(SHL4TARGETN:b)_linkinc.ls
 $(SHL4TARGETN) : $(LINKINCTARGETS)
+
+.ELSE
+$(MISC)$/%linkinc.ls:
+    echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 $(SHL4TARGETN) : \
@@ -1890,8 +1930,18 @@ SHL5DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_d
 .IF "$(SHL5TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(SHL5TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(SHL5TARGETN:b)_linkinc.ls
 $(SHL5TARGETN) : $(LINKINCTARGETS)
+
+.ELSE
+$(MISC)$/%linkinc.ls:
+    echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 $(SHL5TARGETN) : \
@@ -2321,8 +2371,18 @@ SHL6DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_d
 .IF "$(SHL6TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(SHL6TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(SHL6TARGETN:b)_linkinc.ls
 $(SHL6TARGETN) : $(LINKINCTARGETS)
+
+.ELSE
+$(MISC)$/%linkinc.ls:
+    echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 $(SHL6TARGETN) : \
@@ -2752,8 +2812,18 @@ SHL7DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_d
 .IF "$(SHL7TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(SHL7TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(SHL7TARGETN:b)_linkinc.ls
 $(SHL7TARGETN) : $(LINKINCTARGETS)
+
+.ELSE
+$(MISC)$/%linkinc.ls:
+    echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 $(SHL7TARGETN) : \
@@ -3183,8 +3253,18 @@ SHL8DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_d
 .IF "$(SHL8TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(SHL8TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(SHL8TARGETN:b)_linkinc.ls
 $(SHL8TARGETN) : $(LINKINCTARGETS)
+
+.ELSE
+$(MISC)$/%linkinc.ls:
+    echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 $(SHL8TARGETN) : \
@@ -3614,8 +3694,18 @@ SHL9DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_d
 .IF "$(SHL9TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(SHL9TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(SHL9TARGETN:b)_linkinc.ls
 $(SHL9TARGETN) : $(LINKINCTARGETS)
+
+.ELSE
+$(MISC)$/%linkinc.ls:
+    echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 $(SHL9TARGETN) : \
@@ -4045,8 +4135,18 @@ SHL10DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}
 .IF "$(SHL10TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(SHL10TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(SHL10TARGETN:b)_linkinc.ls
 $(SHL10TARGETN) : $(LINKINCTARGETS)
+
+.ELSE
+$(MISC)$/%linkinc.ls:
+    echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
 $(SHL10TARGETN) : \

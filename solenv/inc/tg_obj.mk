@@ -10,6 +10,7 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
     @+$(TYPE) $@ | tr -d ï\n\rï > $@
     @+echo. >> $@
 .ELSE			# "$(COM)"=="GCC"
+    @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)"=="WNT"
@@ -28,6 +29,7 @@ $(SVXLIGHTOBJTARGET): $(REAL_SVXLIGHTOBJFILES)
 #     $(LIBMGR) $(LIBFLAGS) $@ $(OBJFILES)
     +echo. $(foreach,i,$(REAL_SVXLIGHTOBJFILES:f) $(ROBJ)$/$(i)) >> $@
 .ELSE
+    @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF
 .ENDIF			# "$(GUI)"=="WNT"
@@ -46,6 +48,7 @@ $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
 #     $(LIBMGR) $(LIBFLAGS) $@ $(OBJFILES)
     +echo. $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)$/$(i)) > $@
 .ELSE
+    @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF
 .ENDIF			# "$(GUI)"=="WNT"

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-28 17:11:33 $
+#   last change: $Author: hjs $ $Date: 2001-10-23 15:07:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -138,6 +138,12 @@ APP$(TNR)STDLIBS+=$(STATICLIB)
 .IF "$(APP$(TNR)TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
+.IF "$(GUI)"=="WNT"
+$(MISC)$/$(APP$(TNR)TARGET)_linkinc.ls .PHONY:
+    @+-$(RM) $@ >& $(NULLDEV)
+    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
+.ENDIF
+
 LINKINCTARGETS+=$(MISC)$/$(APP$(TNR)TARGETN:b)_linkinc.ls
 $(APP$(TNR)TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.78 $
+#   $Revision: 1.79 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-18 12:58:32 $
+#   last change: $Author: hjs $ $Date: 2001-10-23 15:07:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2878,27 +2878,9 @@ $(MISC)$/$(PRJNAME).hid : $(RESLIB1SRSFILES)
     @+if exist $(MISC)\*.* $(ENV_TOOLS)$/slothid.bat $(MISC)\*.lst $@ $(INPATH)
     @echo done Making $@
 
-.IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
-$(MISC)$/%linkinc.ls .PHONY:
-        +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(MISC)$/*.lin >> $@
-.ENDIF
-.ELSE
-$(MISC)$/%linkinc.ls:
-    echo . > $@
-.ENDIF
-
-
 .IF "$(SOLAR_JAVA)"!=""
 .INCLUDE : tg_java.mk
 .ENDIF          # "$(SOLAR_JAVA)"!=""
-
-$(MISC)\$(TARGET).lck:
-    @vlog -BL *.??v > $(MISC)\$(TARGET).lck
-
-.IF "$(COM)"=="WTC"
-libr:
-.ENDIF
 
 # dependencies from *.lng to par-files, this dependency is too much
 # but better than nothing

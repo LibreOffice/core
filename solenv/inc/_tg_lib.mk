@@ -6,9 +6,6 @@
 $(LIB1ARCHIV) :	$(LIB1TARGET)
     @echo Making: $@
     @-+$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="MAC"
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB1ARCHIV) `cat /dev/null $@ | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
-.ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="UNX"
     @+-$(RM) $(MISC)$/$(LIB1ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -26,7 +23,6 @@ $(LIB1ARCHIV) :	$(LIB1TARGET)
 .ELSE			# "$(GUI)"=="UNX"
     @echo just a dummy > $@
 .ENDIF			# "$(GUI)"=="UNX"
-.ENDIF          # "$(GUI)"=="MAC"
 
 .ENDIF			# "$(LIB1ARCHIV)" != ""
 
@@ -60,23 +56,19 @@ $(LIB1TARGET) :	$(LIB1FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB1FILES) $(LIB1OBJFILES))
+    @-+echo $(LIB1OBJFILES) > $(null,$(LIB1OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-$(TYPE) $(foreach,i,$(LIB1FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB1FILES:+"&\n") \
-    $(LIB1OBJFILES:+"&\n");)
-.ELSE
     +echo $(LIBMGR) r $@ $(LIB1OBJFILES)
     $(LIBMGR) r $@ $(LIB1OBJFILES) $(LIB1FILES) bla.lib
-.ENDIF
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="MAC"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB1TARGET)" != ""
 
 # Anweisungen fuer das LIBTARGETs
-#next Target
 # unroll begin
 
 .IF "$(LIB2TARGET)" != ""
@@ -85,9 +77,6 @@ $(LIB1TARGET) :	$(LIB1FILES) \
 $(LIB2ARCHIV) :	$(LIB2TARGET)
     @echo Making: $@
     @-+$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="MAC"
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB2ARCHIV) `cat /dev/null $@ | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
-.ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="UNX"
     @+-$(RM) $(MISC)$/$(LIB2ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -105,7 +94,6 @@ $(LIB2ARCHIV) :	$(LIB2TARGET)
 .ELSE			# "$(GUI)"=="UNX"
     @echo just a dummy > $@
 .ENDIF			# "$(GUI)"=="UNX"
-.ENDIF          # "$(GUI)"=="MAC"
 
 .ENDIF			# "$(LIB2ARCHIV)" != ""
 
@@ -139,23 +127,19 @@ $(LIB2TARGET) :	$(LIB2FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB2FILES) $(LIB2OBJFILES))
+    @-+echo $(LIB2OBJFILES) > $(null,$(LIB2OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-$(TYPE) $(foreach,i,$(LIB2FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB2FILES:+"&\n") \
-    $(LIB2OBJFILES:+"&\n");)
-.ELSE
     +echo $(LIBMGR) r $@ $(LIB2OBJFILES)
     $(LIBMGR) r $@ $(LIB2OBJFILES) $(LIB2FILES) bla.lib
-.ENDIF
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="MAC"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB2TARGET)" != ""
 
 # Anweisungen fuer das LIBTARGETs
-#next Target
 # unroll begin
 
 .IF "$(LIB3TARGET)" != ""
@@ -164,9 +148,6 @@ $(LIB2TARGET) :	$(LIB2FILES) \
 $(LIB3ARCHIV) :	$(LIB3TARGET)
     @echo Making: $@
     @-+$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="MAC"
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB3ARCHIV) `cat /dev/null $@ | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
-.ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="UNX"
     @+-$(RM) $(MISC)$/$(LIB3ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -184,7 +165,6 @@ $(LIB3ARCHIV) :	$(LIB3TARGET)
 .ELSE			# "$(GUI)"=="UNX"
     @echo just a dummy > $@
 .ENDIF			# "$(GUI)"=="UNX"
-.ENDIF          # "$(GUI)"=="MAC"
 
 .ENDIF			# "$(LIB3ARCHIV)" != ""
 
@@ -218,23 +198,19 @@ $(LIB3TARGET) :	$(LIB3FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB3FILES) $(LIB3OBJFILES))
+    @-+echo $(LIB3OBJFILES) > $(null,$(LIB3OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-$(TYPE) $(foreach,i,$(LIB3FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB3FILES:+"&\n") \
-    $(LIB3OBJFILES:+"&\n");)
-.ELSE
     +echo $(LIBMGR) r $@ $(LIB3OBJFILES)
     $(LIBMGR) r $@ $(LIB3OBJFILES) $(LIB3FILES) bla.lib
-.ENDIF
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="MAC"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB3TARGET)" != ""
 
 # Anweisungen fuer das LIBTARGETs
-#next Target
 # unroll begin
 
 .IF "$(LIB4TARGET)" != ""
@@ -243,9 +219,6 @@ $(LIB3TARGET) :	$(LIB3FILES) \
 $(LIB4ARCHIV) :	$(LIB4TARGET)
     @echo Making: $@
     @-+$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="MAC"
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB4ARCHIV) `cat /dev/null $@ | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
-.ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="UNX"
     @+-$(RM) $(MISC)$/$(LIB4ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -263,7 +236,6 @@ $(LIB4ARCHIV) :	$(LIB4TARGET)
 .ELSE			# "$(GUI)"=="UNX"
     @echo just a dummy > $@
 .ENDIF			# "$(GUI)"=="UNX"
-.ENDIF          # "$(GUI)"=="MAC"
 
 .ENDIF			# "$(LIB4ARCHIV)" != ""
 
@@ -297,23 +269,19 @@ $(LIB4TARGET) :	$(LIB4FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB4FILES) $(LIB4OBJFILES))
+    @-+echo $(LIB4OBJFILES) > $(null,$(LIB4OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-$(TYPE) $(foreach,i,$(LIB4FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB4FILES:+"&\n") \
-    $(LIB4OBJFILES:+"&\n");)
-.ELSE
     +echo $(LIBMGR) r $@ $(LIB4OBJFILES)
     $(LIBMGR) r $@ $(LIB4OBJFILES) $(LIB4FILES) bla.lib
-.ENDIF
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="MAC"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB4TARGET)" != ""
 
 # Anweisungen fuer das LIBTARGETs
-#next Target
 # unroll begin
 
 .IF "$(LIB5TARGET)" != ""
@@ -322,9 +290,6 @@ $(LIB4TARGET) :	$(LIB4FILES) \
 $(LIB5ARCHIV) :	$(LIB5TARGET)
     @echo Making: $@
     @-+$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="MAC"
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB5ARCHIV) `cat /dev/null $@ | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
-.ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="UNX"
     @+-$(RM) $(MISC)$/$(LIB5ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -342,7 +307,6 @@ $(LIB5ARCHIV) :	$(LIB5TARGET)
 .ELSE			# "$(GUI)"=="UNX"
     @echo just a dummy > $@
 .ENDIF			# "$(GUI)"=="UNX"
-.ENDIF          # "$(GUI)"=="MAC"
 
 .ENDIF			# "$(LIB5ARCHIV)" != ""
 
@@ -376,23 +340,19 @@ $(LIB5TARGET) :	$(LIB5FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB5FILES) $(LIB5OBJFILES))
+    @-+echo $(LIB5OBJFILES) > $(null,$(LIB5OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-$(TYPE) $(foreach,i,$(LIB5FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB5FILES:+"&\n") \
-    $(LIB5OBJFILES:+"&\n");)
-.ELSE
     +echo $(LIBMGR) r $@ $(LIB5OBJFILES)
     $(LIBMGR) r $@ $(LIB5OBJFILES) $(LIB5FILES) bla.lib
-.ENDIF
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="MAC"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB5TARGET)" != ""
 
 # Anweisungen fuer das LIBTARGETs
-#next Target
 # unroll begin
 
 .IF "$(LIB6TARGET)" != ""
@@ -401,9 +361,6 @@ $(LIB5TARGET) :	$(LIB5FILES) \
 $(LIB6ARCHIV) :	$(LIB6TARGET)
     @echo Making: $@
     @-+$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="MAC"
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB6ARCHIV) `cat /dev/null $@ | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
-.ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="UNX"
     @+-$(RM) $(MISC)$/$(LIB6ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -421,7 +378,6 @@ $(LIB6ARCHIV) :	$(LIB6TARGET)
 .ELSE			# "$(GUI)"=="UNX"
     @echo just a dummy > $@
 .ENDIF			# "$(GUI)"=="UNX"
-.ENDIF          # "$(GUI)"=="MAC"
 
 .ENDIF			# "$(LIB6ARCHIV)" != ""
 
@@ -455,23 +411,19 @@ $(LIB6TARGET) :	$(LIB6FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB6FILES) $(LIB6OBJFILES))
+    @-+echo $(LIB6OBJFILES) > $(null,$(LIB6OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-$(TYPE) $(foreach,i,$(LIB6FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB6FILES:+"&\n") \
-    $(LIB6OBJFILES:+"&\n");)
-.ELSE
     +echo $(LIBMGR) r $@ $(LIB6OBJFILES)
     $(LIBMGR) r $@ $(LIB6OBJFILES) $(LIB6FILES) bla.lib
-.ENDIF
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="MAC"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB6TARGET)" != ""
 
 # Anweisungen fuer das LIBTARGETs
-#next Target
 # unroll begin
 
 .IF "$(LIB7TARGET)" != ""
@@ -480,9 +432,6 @@ $(LIB6TARGET) :	$(LIB6FILES) \
 $(LIB7ARCHIV) :	$(LIB7TARGET)
     @echo Making: $@
     @-+$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="MAC"
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB7ARCHIV) `cat /dev/null $@ | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
-.ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="UNX"
     @+-$(RM) $(MISC)$/$(LIB7ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -500,7 +449,6 @@ $(LIB7ARCHIV) :	$(LIB7TARGET)
 .ELSE			# "$(GUI)"=="UNX"
     @echo just a dummy > $@
 .ENDIF			# "$(GUI)"=="UNX"
-.ENDIF          # "$(GUI)"=="MAC"
 
 .ENDIF			# "$(LIB7ARCHIV)" != ""
 
@@ -534,23 +482,19 @@ $(LIB7TARGET) :	$(LIB7FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB7FILES) $(LIB7OBJFILES))
+    @-+echo $(LIB7OBJFILES) > $(null,$(LIB7OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-$(TYPE) $(foreach,i,$(LIB7FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB7FILES:+"&\n") \
-    $(LIB7OBJFILES:+"&\n");)
-.ELSE
     +echo $(LIBMGR) r $@ $(LIB7OBJFILES)
     $(LIBMGR) r $@ $(LIB7OBJFILES) $(LIB7FILES) bla.lib
-.ENDIF
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="MAC"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB7TARGET)" != ""
 
 # Anweisungen fuer das LIBTARGETs
-#next Target
 # unroll begin
 
 .IF "$(LIB8TARGET)" != ""
@@ -559,9 +503,6 @@ $(LIB7TARGET) :	$(LIB7FILES) \
 $(LIB8ARCHIV) :	$(LIB8TARGET)
     @echo Making: $@
     @-+$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="MAC"
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB8ARCHIV) `cat /dev/null $@ | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
-.ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="UNX"
     @+-$(RM) $(MISC)$/$(LIB8ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -579,7 +520,6 @@ $(LIB8ARCHIV) :	$(LIB8TARGET)
 .ELSE			# "$(GUI)"=="UNX"
     @echo just a dummy > $@
 .ENDIF			# "$(GUI)"=="UNX"
-.ENDIF          # "$(GUI)"=="MAC"
 
 .ENDIF			# "$(LIB8ARCHIV)" != ""
 
@@ -613,23 +553,19 @@ $(LIB8TARGET) :	$(LIB8FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB8FILES) $(LIB8OBJFILES))
+    @-+echo $(LIB8OBJFILES) > $(null,$(LIB8OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-$(TYPE) $(foreach,i,$(LIB8FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB8FILES:+"&\n") \
-    $(LIB8OBJFILES:+"&\n");)
-.ELSE
     +echo $(LIBMGR) r $@ $(LIB8OBJFILES)
     $(LIBMGR) r $@ $(LIB8OBJFILES) $(LIB8FILES) bla.lib
-.ENDIF
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="MAC"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB8TARGET)" != ""
 
 # Anweisungen fuer das LIBTARGETs
-#next Target
 # unroll begin
 
 .IF "$(LIB9TARGET)" != ""
@@ -638,9 +574,6 @@ $(LIB8TARGET) :	$(LIB8FILES) \
 $(LIB9ARCHIV) :	$(LIB9TARGET)
     @echo Making: $@
     @-+$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="MAC"
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB9ARCHIV) `cat /dev/null $@ | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
-.ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="UNX"
     @+-$(RM) $(MISC)$/$(LIB9ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -658,7 +591,6 @@ $(LIB9ARCHIV) :	$(LIB9TARGET)
 .ELSE			# "$(GUI)"=="UNX"
     @echo just a dummy > $@
 .ENDIF			# "$(GUI)"=="UNX"
-.ENDIF          # "$(GUI)"=="MAC"
 
 .ENDIF			# "$(LIB9ARCHIV)" != ""
 
@@ -692,23 +624,19 @@ $(LIB9TARGET) :	$(LIB9FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB9FILES) $(LIB9OBJFILES))
+    @-+echo $(LIB9OBJFILES) > $(null,$(LIB9OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-$(TYPE) $(foreach,i,$(LIB9FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB9FILES:+"&\n") \
-    $(LIB9OBJFILES:+"&\n");)
-.ELSE
     +echo $(LIBMGR) r $@ $(LIB9OBJFILES)
     $(LIBMGR) r $@ $(LIB9OBJFILES) $(LIB9FILES) bla.lib
-.ENDIF
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="MAC"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB9TARGET)" != ""
 
 # Anweisungen fuer das LIBTARGETs
-#next Target
 # unroll begin
 
 .IF "$(LIB10TARGET)" != ""
@@ -717,9 +645,6 @@ $(LIB9TARGET) :	$(LIB9FILES) \
 $(LIB10ARCHIV) :	$(LIB10TARGET)
     @echo Making: $@
     @-+$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="MAC"
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB10ARCHIV) `cat /dev/null $@ | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
-.ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="UNX"
     @+-$(RM) $(MISC)$/$(LIB10ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
@@ -737,7 +662,6 @@ $(LIB10ARCHIV) :	$(LIB10TARGET)
 .ELSE			# "$(GUI)"=="UNX"
     @echo just a dummy > $@
 .ENDIF			# "$(GUI)"=="UNX"
-.ENDIF          # "$(GUI)"=="MAC"
 
 .ENDIF			# "$(LIB10ARCHIV)" != ""
 
@@ -771,20 +695,16 @@ $(LIB10TARGET) :	$(LIB10FILES) \
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(GUI)"=="WNT"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB10FILES) $(LIB10OBJFILES))
+    @-+echo $(LIB10OBJFILES) > $(null,$(LIB10OBJFILES) $(NULLDEV) $(@:s/.lib/.lib/))
+    @-$(TYPE) $(foreach,i,$(LIB10FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
     @+echo.
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LIBMGR) $(LIBFLAGS) $@ @$(mktmp $(LIB10FILES:+"&\n") \
-    $(LIB10OBJFILES:+"&\n");)
-.ELSE
     +echo $(LIBMGR) r $@ $(LIB10OBJFILES)
     $(LIBMGR) r $@ $(LIB10OBJFILES) $(LIB10FILES) bla.lib
-.ENDIF
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF          # "$(GUI)"=="MAC"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB10TARGET)" != ""
 
 # Anweisungen fuer das LIBTARGETs
-#next Target
