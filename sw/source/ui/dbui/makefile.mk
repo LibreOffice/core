@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 13:14:08 $
+#   last change: $Author: rt $ $Date: 2005-01-28 15:28:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -128,6 +128,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/dbtree.obj \
         $(SLO)$/maildispatcher.obj \
         $(SLO)$/mailmergechildwindow.obj \
+        $(SLO)$/mailmergehelper.obj \
         $(SLO)$/mmconfigitem.obj \
         $(SLO)$/mmlayoutpage.obj \
         $(SLO)$/mmoutputpage.obj \
