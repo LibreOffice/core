@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:14:37 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 12:38:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ SLOFILES =  $(SLO)$/itiff.obj    \
 
 SHL1TARGET=     iti$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     itiff
-SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB)
+SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
 SHL1DEPN=       $(LB)$/itiff.lib
 SHL1LIBS=       $(SLB)$/itiff.lib # $(LB)$/rtftoken.lib
 
