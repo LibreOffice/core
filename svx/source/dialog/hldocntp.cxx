@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-01 13:48:15 $
+ *  last change: $Author: hr $ $Date: 2001-10-11 17:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,8 @@ void SvxHyperlinkNewDocTp::SetInitFocus()
 
 BOOL SvxHyperlinkNewDocTp::AskApply()
 {
-    sal_Bool bRet = ImplGetURLObject( maCbbPath.GetText(), maCbbPath.GetBaseURL(), INetURLObject() );
+    INetURLObject aINetURLObject;
+    sal_Bool bRet = ImplGetURLObject( maCbbPath.GetText(), maCbbPath.GetBaseURL(), aINetURLObject );
     if ( !bRet )
     {
         WarningBox aWarning( this, WB_OK, SVX_RESSTR(RID_SVXSTR_HYPDLG_NOVALIDFILENAME) );
