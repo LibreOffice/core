@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alloc.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mhu $ $Date: 2001-11-27 18:47:11 $
+ *  last change: $Author: mhu $ $Date: 2001-12-04 15:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ static sal_uInt32 __rtl_memory_vmpagesize (void)
     /* xBSD */
     return (sal_uInt32)(getpagesize());
 }
-#elif defined(LINUX) || defined(SOLARIS)
+#elif defined(IRIX) || defined(LINUX) || defined(SOLARIS)
 static sal_uInt32 __rtl_memory_vmpagesize (void)
 {
     /* POSIX */
@@ -122,7 +122,7 @@ static sal_uInt32 __rtl_memory_vmpagesize (void)
     /* other */
     return (sal_uInt32)(0x2000);
 }
-#endif /* FREEBSD || NETBSD || LINUX || SOLARIS */
+#endif /* FREEBSD || NETBSD || IRIX || LINUX || SOLARIS */
 
 #ifndef PROT_HEAP
 #define PROT_HEAP (PROT_READ | PROT_WRITE | PROT_EXEC)
