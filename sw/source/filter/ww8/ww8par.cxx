@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:22:27 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1509,7 +1509,7 @@ void SwWW8ImplReader::ImportDop()
     if (rDoc.GetpInfo())
     {
         DateTime aLastPrinted(
-            WW8ScannerBase::WW8DTTM2DateTime(pWDop->dttmLastPrint));
+            sw::ms::DTTM2DateTime(pWDop->dttmLastPrint));
         SfxDocumentInfo aNeuDocInf(*rDoc.GetpInfo());
         SfxStamp aPrinted(aNeuDocInf.GetPrinted());
         if (aPrinted.GetTime() != aLastPrinted)
@@ -1719,7 +1719,7 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     pRdr->pCtrlStck = new SwWW8FltControlStack(&pRdr->rDoc, pRdr->nFieldFlags,
         *pRdr);
 
-    pRdr->mpRedlineStack = new wwRedlineStack(pRdr->rDoc);
+    pRdr->mpRedlineStack = new sw::util::RedlineStack(pRdr->rDoc);
 
     pRdr->pAnchorStck = new SwWW8FltAnchorStack(&pRdr->rDoc, pRdr->nFieldFlags);
 
@@ -3586,7 +3586,7 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
     pCtrlStck = new SwWW8FltControlStack( &rDoc, nFieldFlags, *this );
 
-    mpRedlineStack = new wwRedlineStack(rDoc);
+    mpRedlineStack = new sw::util::RedlineStack(rDoc);
 
     /*
         RefFldStck: Keeps track of bookmarks which may be inserted as
