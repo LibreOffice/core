@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 21:42:52 $
+ *  last change: $Author: mt $ $Date: 2001-02-23 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,6 +283,13 @@ String RID_EDITUNDO_SETSTYLE
     TEXT[ korean ] = "À¯Çü Àû¿ë";
     TEXT[ turkish ] = "Þablonlarý kullan";
 };
+
+String RID_EDITUNDO_TRANSLITERATE
+{
+    TEXT = "Groß-/Kleinschreibung";
+    TEXT[English] = "Change case";
+};
+
 
 Menu RID_MENU_SPELL
 {

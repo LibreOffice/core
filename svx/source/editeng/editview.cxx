@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-20 12:23:19 $
+ *  last change: $Author: mt $ $Date: 2001-02-23 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,6 +854,13 @@ EVAnchorMode EditView::GetAnchorMode() const
     DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->GetAnchorMode();
 }
+
+void EditView::TransliterateText( sal_Int32 nTransliterationMode )
+{
+    DBG_CHKTHIS( EditView, 0 );
+    PIMPEE->TransliterateText( pImpEditView->GetEditSelection(), nTransliterationMode );
+}
+
 
 sal_Bool EditView::MatchGroup()
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-20 17:14:46 $
+ *  last change: $Author: mt $ $Date: 2001-02-23 13:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ void ImpEditEngine::FormatDoc()
         sal_uInt32 nNewHeight = CalcTextHeight();
         long nDiff = nNewHeight - nCurTextHeight;
         if ( nDiff )
-            aStatus.GetStatusWord() |= EE_STAT_TEXTHEIGHTCHANGED;
+            aStatus.GetStatusWord() |= !IsVertical() ? EE_STAT_TEXTHEIGHTCHANGED : EE_STAT_TEXTWIDTHCHANGED;
         if ( nNewHeight < nCurTextHeight )
         {
             aInvalidRec.Bottom() = (long)Max( nNewHeight, nCurTextHeight );
@@ -494,7 +494,7 @@ void ImpEditEngine::CheckAutoPageSize()
              || ( IsVertical() && ( aPaperSize.Height() != aPrevPaperSize.Height() ) ) )
         {
             // Falls davor zentriert/rechts oder Tabs...
-            aStatus.GetStatusWord() |= EE_STAT_TEXTWIDTHCHANGED;
+            aStatus.GetStatusWord() |= !IsVertical() ? EE_STAT_TEXTWIDTHCHANGED : EE_STAT_TEXTHEIGHTCHANGED;
             for ( sal_uInt16 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
             {
                 // Es brauchen nur Absaetze neu formatiert werden,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:29:29 $
+ *  last change: $Author: mt $ $Date: 2001-02-23 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2106,6 +2106,9 @@ XubString __EXPORT EditEngine::GetUndoComment( sal_uInt16 nId ) const
         break;
         case EDITUNDO_STYLESHEET:
             aComment = XubString( EditResId( RID_EDITUNDO_SETSTYLE ) );
+        break;
+        case EDITUNDO_TRANSLITERATE:
+            aComment = XubString( EditResId( RID_EDITUNDO_TRANSLITERATE ) );
         break;
         case EDITUNDO_INDENTBLOCK:
         case EDITUNDO_UNINDENTBLOCK:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-20 17:14:46 $
+ *  last change: $Author: mt $ $Date: 2001-02-23 13:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -966,8 +966,6 @@ const SfxItemSet& ImpEditEngine::GetEmptyItemSet()
 //  ----------------------------------------------------------------------
 void ImpEditEngine::CursorMoved( ContentNode* pPrevNode )
 {
-    DBG_ASSERT( pPrevNode, "Woher komm ich ?" );
-
     // Leere Attribute loeschen, aber nur, wenn Absatz nicht leer!
     if ( pPrevNode->GetCharAttribs().HasEmptyAttribs() && pPrevNode->Len() )
         pPrevNode->GetCharAttribs().DeleteEmptyAttribs( aEditDoc.GetItemPool() );
@@ -1453,9 +1451,12 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
     }
 }
 
-short ImpEditEngine::GetScriptType( const EditPaM& rPaM ) const
+USHORT ImpEditEngine::GetScriptType( const EditPaM& rPaM, USHORT* pEndPos ) const
 {
-    short nScriptType = i18n::ScriptType::LATIN;
+    USHORT nScriptType = i18n::ScriptType::LATIN;
+
+    if ( pEndPos )
+        *pEndPos = rPaM.GetNode()->Len();
 
     if ( rPaM.GetNode()->Len() )
     {
@@ -1471,6 +1472,8 @@ short ImpEditEngine::GetScriptType( const EditPaM& rPaM ) const
             if ( ( rTypes[n].nStartPos <= nPos ) && ( rTypes[n].nEndPos >= nPos ) )
                {
                 nScriptType = rTypes[n].nScriptType;
+                if( pEndPos )
+                    *pEndPos = rTypes[n].nEndPos;
                 break;
             }
         }

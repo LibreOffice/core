@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editundo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: mt $ $Date: 2001-02-23 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ TYPEINIT1( EditUndoMoveParagraphs, EditUndo );
 TYPEINIT1( EditUndoSetStyleSheet, EditUndo );
 TYPEINIT1( EditUndoSetParaAttribs, EditUndo );
 TYPEINIT1( EditUndoSetAttribs, EditUndo );
+TYPEINIT1( EditUndoTransliteration, EditUndo );
 TYPEINIT1( EditUndoMarkSelection, EditUndo );
 
 void lcl_DoSetSelection( EditView* pView, USHORT nPara )
@@ -734,6 +735,61 @@ void EditUndoSetAttribs::ImpSetSelection( EditView* pView )
     ImpEditEngine* pImpEE = GetImpEditEngine();
     EditSelection aSel( pImpEE->CreateSel( aESel ) );
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aSel );
+}
+
+// -----------------------------------------------------------------------
+// EditUndoTransliteration
+// ------------------------------------------------------------------------
+EditUndoTransliteration::EditUndoTransliteration( ImpEditEngine* pImpEE, const ESelection& rESel, sal_Int32 nM )
+    : EditUndo( EDITUNDO_TRANSLITERATE, pImpEE ), aOldESel( rESel )
+{
+    nMode = nM;
+    pTxtObj = NULL;
+}
+
+EditUndoTransliteration::~EditUndoTransliteration()
+{
+    delete pTxtObj;
+}
+
+void __EXPORT EditUndoTransliteration::Undo()
+{
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
+
+    ImpEditEngine* pImpEE = GetImpEditEngine();
+
+    EditSelection aSel( pImpEE->CreateSel( aNewESel ) );
+
+    // Insert text, but don't expand Atribs at the current position:
+    aSel = pImpEE->DeleteSelected( aSel );
+    EditSelection aDelSel( aSel );
+    aSel = pImpEE->InsertParaBreak( aSel );
+    aDelSel.Max() = aSel.Min();
+    aDelSel.Max().GetNode()->GetCharAttribs().DeleteEmptyAttribs( pImpEE->GetEditDoc().GetItemPool() );
+    if ( pTxtObj )
+    {
+        pImpEE->InsertText( *pTxtObj, aSel );
+    }
+    else
+    {
+        pImpEE->InsertText( aSel, aText );
+    }
+    pImpEE->DeleteSelected( aDelSel );
+
+}
+
+void __EXPORT EditUndoTransliteration::Redo()
+{
+    DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
+    ImpEditEngine* pImpEE = GetImpEditEngine();
+
+    EditSelection aSel( pImpEE->CreateSel( aOldESel ) );
+    pImpEE->TransliterateText( aSel, nMode );
+}
+
+void __EXPORT EditUndoTransliteration::Repeat()
+{
+    DBG_ERROR( "EditUndoTransliteration::Repeat nicht implementiert!" );
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-20 17:14:46 $
+ *  last change: $Author: mt $ $Date: 2001-02-23 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1994,6 +1994,19 @@ BOOL CharAttribList::HasAttrib( USHORT nWhich ) const
     }
     return FALSE;
 }
+
+BOOL CharAttribList::HasAttrib( USHORT nStartPos, USHORT nEndPos ) const
+{
+    BOOL bAttr = FALSE;
+    for ( USHORT nAttr = aAttribs.Count(); nAttr && !bAttr; )
+    {
+        const EditCharAttrib* pAttr = aAttribs[--nAttr];
+        if ( ( pAttr->GetStart() < nEndPos ) && ( pAttr->GetEnd() > nStartPos ) )
+            return bAttr = TRUE;
+    }
+    return bAttr;
+}
+
 
 BOOL CharAttribList::HasBoundingAttrib( USHORT nBound )
 {

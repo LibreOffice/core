@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-20 17:14:46 $
+ *  last change: $Author: mt $ $Date: 2001-02-23 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,7 @@ public:
     EditCharAttrib* FindEmptyAttrib( USHORT nWhich, USHORT nPos );
     EditCharAttrib* FindFeature( USHORT nPos ) const;
 
+
     void            ResortAttribs();
 
     USHORT          Count()                 { return aAttribs.Count(); }
@@ -278,6 +279,7 @@ public:
     BOOL&           HasEmptyAttribs()       { return bHasEmptyAttribs; }
     BOOL            HasBoundingAttrib( USHORT nBound );
     BOOL            HasAttrib( USHORT nWhich ) const;
+    BOOL            HasAttrib( USHORT nStartPos, USHORT nEndPos ) const;
 
     CharAttribArray&        GetAttribs()        { return aAttribs; }
     const CharAttribArray&  GetAttribs() const  { return aAttribs; }

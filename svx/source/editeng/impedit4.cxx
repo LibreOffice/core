@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-15 13:53:28 $
+ *  last change: $Author: mt $ $Date: 2001-02-23 13:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,16 @@
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 #endif
 
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
+
 #ifndef _TXTCMP_HXX //autogen
 #include <unotools/textsearch.hxx>
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _SV_HELP_HXX //autogen
@@ -143,7 +151,7 @@ void SwapUSHORTs( sal_uInt16& rX, sal_uInt16& rY )
     rY = n;
 }
 
-EditPaM ImpEditEngine::Read( SvStream& rInput, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
+EditPaM ImpEditEngine::Read( SvStream& rInput, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     sal_Bool bUpdate = GetUpdateMode();
     SetUpdateMode( sal_False );
@@ -350,13 +358,8 @@ void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_uInt16 nIndex
 
 sal_uInt32 ImpEditEngine::WriteBin( SvStream& rOutput, EditSelection aSel, BOOL bStoreUnicodeStrings ) const
 {
-    // Einfach ein temporaeres TextObject missbrauchen...
-    // Hier aber nicht den globalen Pool verwenden:
-    SfxItemPool* pGlblPool = pTextObjectPool;
-    ((ImpEditEngine*)this)->pTextObjectPool = NULL;
-    BinTextObject* pObj = (BinTextObject*)CreateBinTextObject( aSel );
+    BinTextObject* pObj = (BinTextObject*)CreateBinTextObject( aSel, NULL );
     pObj->StoreUnicodeStrings( bStoreUnicodeStrings );
-    ((ImpEditEngine*)this)->pTextObjectPool = pGlblPool;
     pObj->Store( rOutput );
     delete pObj;
     return 0;
@@ -1092,12 +1095,12 @@ EditTextObject* ImpEditEngine::CreateTextObject()
 
 EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel )
 {
-    return CreateBinTextObject( aSel, aStatus.AllowBigObjects(), nBigTextObjectStart );
+    return CreateBinTextObject( aSel, GetEditTextObjectPool(), aStatus.AllowBigObjects(), nBigTextObjectStart );
 }
 
-EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, sal_Bool bAllowBigObjects, sal_uInt16 nBigObjectStart ) const
+EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemPool* pPool, sal_Bool bAllowBigObjects, sal_uInt16 nBigObjectStart ) const
 {
-    BinTextObject* pTxtObj = new BinTextObject( pTextObjectPool );
+    BinTextObject* pTxtObj = new BinTextObject( pPool );
     pTxtObj->SetVertical( IsVertical() );
     MapUnit eMapUnit = (MapUnit)aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
     pTxtObj->SetMetric( (sal_uInt16) eMapUnit );
@@ -1471,14 +1474,17 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
     return aSel;
 }
 
-LanguageType ImpEditEngine::GetLanguage( const EditPaM& rPaM ) const
+LanguageType ImpEditEngine::GetLanguage( const EditPaM& rPaM, USHORT* pEndPos ) const
 {
-    short nScriptType = GetScriptType( rPaM );
+    short nScriptType = GetScriptType( rPaM, pEndPos ); // pEndPos will be valid now, pointing to ScriptChange or NodeLen
     USHORT nLangId = GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType );
     const SvxLanguageItem* pLangItem = &(const SvxLanguageItem&)rPaM.GetNode()->GetContentAttribs().GetItem( nLangId );
     EditCharAttrib* pAttr = rPaM.GetNode()->GetCharAttribs().FindAttrib( nLangId, rPaM.GetIndex() );
     if ( pAttr )
         pLangItem = (const SvxLanguageItem*)pAttr->GetItem();
+
+    if ( pEndPos && pAttr && ( pAttr->GetEnd() < *pEndPos ) )
+        *pEndPos = pAttr->GetEnd();
 
     return pLangItem->GetLanguage();
 }
@@ -2093,4 +2099,112 @@ void ImpEditEngine::SetAutoCompleteText( const String& rStr, sal_Bool bClearTipW
 #endif // !SVX_LIGHT
 }
 
+void ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode )
+{
+    EditSelection aSel( rSelection );
+    aSel.Adjust( aEditDoc );
 
+    if ( !aSel.HasRange() )
+        aSel = SelectWord( aSel );
+
+    USHORT nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
+    USHORT nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
+
+    BOOL bChanges = FALSE;
+    EditUndoTransliteration* pUndo = NULL;
+    if ( IsUndoEnabled() && !IsInUndo() )
+    {
+        ESelection aESel( CreateESel( aSel ) );
+        pUndo = new EditUndoTransliteration( this, aESel, nTransliterationMode );
+
+        if ( ( nStartNode == nEndNode ) && !aSel.Min().GetNode()->GetCharAttribs().HasAttrib( aSel.Min().GetIndex(), aSel.Max().GetIndex() ) )
+            pUndo->SetText( aSel.Min().GetNode()->Copy( aSel.Min().GetIndex(), aSel.Max().GetIndex()-aSel.Min().GetIndex() ) );
+        else
+            pUndo->SetText( CreateBinTextObject( aSel, NULL ) );
+    }
+
+    EditPaM aLastPaM = aSel.Max();
+
+    utl::TransliterationWrapper aTranslitarationWrapper( ::comphelper::getProcessServiceFactory(), nTransliterationMode );
+    BOOL bConsiderLanguage = aTranslitarationWrapper.needLanguageForTheMode();
+
+    for ( USHORT nNode = nStartNode; nNode <= nEndNode; nNode++ )
+    {
+        ContentNode* pNode = aEditDoc.GetObject( nNode );
+        xub_StrLen nStartPos = 0;
+        xub_StrLen nEndPos = pNode->Len();
+        if ( nNode == nStartNode )
+            nStartPos = aSel.Min().GetIndex();
+        if ( nNode == nEndNode ) // kann auch == nStart sein!
+            nEndPos = aSel.Max().GetIndex();
+
+        USHORT nCurrentStart = nStartPos;
+        USHORT nCurrentEnd = nEndPos;
+        sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
+
+        do
+        {
+            if ( bConsiderLanguage )
+            {
+                nLanguage = GetLanguage( EditPaM( pNode, nCurrentStart ), &nCurrentEnd );
+                if ( nCurrentEnd > nEndPos )
+                    nCurrentEnd = nEndPos;
+            }
+
+            xub_StrLen nLen = nCurrentEnd - nCurrentStart;
+
+            Sequence <long> aOffsets;
+            String aNewText( aTranslitarationWrapper.transliterate( *pNode, nLanguage, nCurrentStart, nLen, &aOffsets ) );
+
+            // Transliteration and Undo are prepared for 1:x transliteration, but attribs are not corrected...
+            DBG_ASSERT( nLen == aNewText.Len(), "Transliteration: Change of TextLen - Attributes not corrected!" );
+            if( ( nLen != aNewText.Len() ) || !pNode->Equals( aNewText, nCurrentStart, nLen ) )
+            {
+                bChanges = TRUE;
+                pNode->Erase( nCurrentStart, nLen );
+                pNode->Insert( aNewText, nCurrentStart );
+
+                if ( nLen != aNewText.Len()  )
+                {
+                    short nDiff = aNewText.Len() - nLen;
+                    nCurrentEnd += nDiff;
+                    nEndPos += nDiff;
+
+                    USHORT nMaxEnd = pNode->Len();
+                    for( USHORT nAttr = pNode->GetCharAttribs().Count(); nAttr; )
+                    {
+                        EditCharAttrib* pAttr = pNode->GetCharAttribs().GetAttribs()[--nAttr];
+                        if ( pAttr->GetEnd() > nMaxEnd )
+                            pAttr->GetEnd() = nMaxEnd;
+                    }
+                }
+
+                ParaPortion* pParaPortion = GetParaPortions()[nNode];
+                pParaPortion->MarkSelectionInvalid( nCurrentStart, Max( nCurrentStart+nLen, nCurrentStart+aNewText.Len() ) );
+            }
+            if ( nNode == nEndNode )
+                aLastPaM.GetIndex() = nCurrentStart+aNewText.Len();
+
+            nCurrentStart = nCurrentEnd;
+        } while( nCurrentEnd < nEndPos );
+    }
+
+    if ( pUndo )
+    {
+        if ( bChanges )
+        {
+            EditSelection aNewSel( aSel );
+            aNewSel.Max() = aLastPaM;
+            ESelection aESel( CreateESel( aSel ) );
+            pUndo->SetNewSelection( aESel );
+            InsertUndo( pUndo );
+        }
+        else
+        {
+            delete pUndo;
+        }
+    }
+
+    if ( bChanges )
+        FormatAndUpdate();
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-09 16:42:31 $
+ *  last change: $Author: mt $ $Date: 2001-02-23 13:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,7 +454,7 @@ private:
     void                ParaAttribsToCharAttribs( ContentNode* pNode );
     void                GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const;
 
-    EditTextObject*     CreateBinTextObject( EditSelection aSelection, sal_Bool bAllowBigObjects = sal_False, sal_uInt16 nBigObjStart = 0 ) const;
+    EditTextObject*     CreateBinTextObject( EditSelection aSelection, SfxItemPool*, sal_Bool bAllowBigObjects = sal_False, sal_uInt16 nBigObjStart = 0 ) const;
     void                StoreBinTextObject( SvStream& rOStream, BinTextObject& rTextObject );
     EditSelection       InsertBinTextObject( BinTextObject&, EditPaM aPaM );
 
@@ -514,7 +514,7 @@ private:
     EditSelection       SelectWord( const EditSelection& rCurSelection, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
 
     void                InitScriptTypes( USHORT nPara );
-    short               GetScriptType( const EditPaM& rPaM ) const;
+    USHORT              GetScriptType( const EditPaM& rPaM, USHORT* pEndPos = NULL ) const;
     USHORT              GetScriptType( const EditSelection& rSel ) const;
     BOOL                IsScriptChange( const EditPaM& rPaM ) const;
 
@@ -769,7 +769,7 @@ public:
                             { xHyphenator = xHyph; }
     SpellInfo*          GetSpellInfo() const { return pSpellInfo; }
 
-    LanguageType        GetLanguage( const EditPaM& rPaM ) const;
+    LanguageType        GetLanguage( const EditPaM& rPaM, USHORT* pEndPos = NULL ) const;
     ::com::sun::star::lang::Locale GetLocale( const EditPaM& rPaM ) const;
 
     void                DoOnlineSpelling( ContentNode* pThisNodeOnly = 0, sal_Bool bSpellAtCursorPos = sal_False, sal_Bool bInteruptable = sal_True );
@@ -804,6 +804,9 @@ public:
 
     const XubString&    GetAutoCompleteText() const { return aAutoCompleteText; }
     void                SetAutoCompleteText( const String& rStr, sal_Bool bUpdateTipWindow );
+
+    void                TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
+
 };
 
 inline long ImpEditEngine::LogicToTwips( long n )
