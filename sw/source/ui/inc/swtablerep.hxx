@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtablerep.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-26 10:17:24 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,17 @@
 #ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
 #endif
-#include "swtypes.hxx"
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+#ifndef _SWTYPES_HXX
+#include "swtypes.hxx"
+#endif
 
 class SwTabCols;
 struct TColumn;
-class SwTableRep
+class SW_DLLPUBLIC SwTableRep
 {
     TColumn*    pTColumns;
 
