@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableSourceContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:48:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ void ScXMLTableSourceContext::EndElement()
         if (xLinkable.is() && pDoc)
         {
             GetScImport().LockSolarMutex();
-            if (pDoc->RenameTab( GetScImport().GetTables().GetCurrentSheet(),
+            if (pDoc->RenameTab( static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()),
                 GetScImport().GetTables().GetCurrentSheetName(), sal_False, sal_True))
             {
                  String aFileString(sLink);
@@ -194,7 +194,7 @@ void ScXMLTableSourceContext::EndElement()
                 else if ( nMode == sheet::SheetLinkMode_VALUE )
                     nLinkMode = SC_LINK_VALUE;
 
-                pDoc->SetLink( GetScImport().GetTables().GetCurrentSheet(),
+                pDoc->SetLink( static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()),
                     nLinkMode, aFileString, aFilterString, aOptString,
                     aSheetString, nRefresh );
             }
