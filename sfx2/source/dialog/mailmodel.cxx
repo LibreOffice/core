@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cd $ $Date: 2001-06-26 08:39:52 $
+ *  last change: $Author: sb $ $Date: 2001-11-02 15:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,18 @@
 #include <com/sun/star/system/SimpleMailClientFlags.hpp>
 #endif
 
-
+#ifndef _RTL_TEXTENC_H
+#include <rtl/textench.h>
+#endif
+#ifndef _RTL_URI_H_
+#include <rtl/uri.h>
+#endif
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _UNOTOOLS_STREAMHELPER_HXX_
 #include <unotools/streamhelper.hxx>
 #endif
@@ -137,16 +148,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::system;
 using namespace ::rtl;
-
-// --------------------------------------------------------------
-#define SEND_MAIL_COMMAND   "?cmd2.officeMail=1"
-#define SEND_MAIL_FROM      "MESSAGE_FROM="
-#define SEND_MAIL_TO        "MESSAGE_TO="
-#define SEND_MAIL_CC        "MESSAGE_CC="
-#define SEND_MAIL_BCC       "MESSAGE_BCC="
-#define SEND_MAIL_SUBJECT   "MESSAGE_SUBJECT="
-#define SEND_MAIL_FILEURL   "file_1="
-#define SEND_MAIL_SEP       '&'
 
 // class DefaultMailer_Impl ------------------------------------------------
 
@@ -411,62 +412,101 @@ sal_Bool SfxMailModel_Impl::Send()
 
         if ( xPlugin.is() )
         {
-            OUString aURL = aFileName;
+            OUStringBuffer aURL(aFileName);
 
             // Create the parameter
-            ULONG i, nCount;
-            OUString aSep( SEND_MAIL_SEP );
-            OUString aParam( RTL_CONSTASCII_USTRINGPARAM( SEND_MAIL_COMMAND ) );
-            aParam += aSep;
+
+            // Unencoded characters within the various values transported in
+            // the URL are all RFC 2396/2732 <uric> characters, minus '&' and
+            // '=' (used to delimit keys and values) and '+' (translated into
+            // a space character by servlet containers):
+            static sal_Bool const aCharClass[128]
+                = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                    0,1,0,0,1,0,0,1,1,1,1,0,1,1,1,1, //  !"#$%&'()*+,-./
+                    1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1, // 0123456789:;<=>?
+                    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, // @ABCDEFGHIJKLMNO
+                    1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1, // PQRSTUVWXYZ[\]^_
+                    0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, // `abcdefghijklmno
+                    1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,0};// pqrstuvwxyz{|}~
+            ULONG nCount;
+            aURL.appendAscii(RTL_CONSTASCII_STRINGPARAM(
+                                 "?cmd2.officeMail=1"));
 
             if ( maFromAddress.Len() || CreateFromAddress_Impl( maFromAddress ) )
             {
-                aParam += OUString( RTL_CONSTASCII_USTRINGPARAM( SEND_MAIL_FROM ) );
-                aParam += maFromAddress;
-                aParam += aSep;
+                aURL.appendAscii(RTL_CONSTASCII_STRINGPARAM(
+                                     "&MESSAGE_FROM="));
+                aURL.append(Uri::encode(maFromAddress,
+                                        aCharClass,
+                                        rtl_UriEncodeIgnoreEscapes,
+                                        RTL_TEXTENCODING_UTF8));
             }
 
             nCount = mpToList ? mpToList->Count() : 0;
-            for ( i = 0; i < nCount; ++i )
+            if (nCount > 0)
             {
-                aParam += OUString( RTL_CONSTASCII_USTRINGPARAM( SEND_MAIL_TO ) );
-                aParam += *mpToList->GetObject(i);;
-                aParam += aSep;
+                aURL.appendAscii(RTL_CONSTASCII_STRINGPARAM("&MESSAGE_TO="));
+                for (ULONG i = 0; i < nCount; ++i)
+                {
+                    if (i > 0)
+                        aURL.append(static_cast< sal_Unicode >(','));
+                    aURL.append(Uri::encode(*mpToList->GetObject(i),
+                                            aCharClass,
+                                            rtl_UriEncodeIgnoreEscapes,
+                                            RTL_TEXTENCODING_UTF8));
+                }
             }
 
             nCount = mpCcList ? mpCcList->Count() : 0;
-            for ( i = 0; i < nCount; ++i )
+            if (nCount > 0)
             {
-                aParam += OUString( RTL_CONSTASCII_USTRINGPARAM( SEND_MAIL_CC ) );
-                aParam += *mpCcList->GetObject(i);;
-                aParam += aSep;
+                aURL.appendAscii(RTL_CONSTASCII_STRINGPARAM("&MESSAGE_CC="));
+                for (ULONG i = 0; i < nCount; ++i)
+                {
+                    if (i > 0)
+                        aURL.append(static_cast< sal_Unicode >(','));
+                    aURL.append(Uri::encode(*mpCcList->GetObject(i),
+                                            aCharClass,
+                                            rtl_UriEncodeIgnoreEscapes,
+                                            RTL_TEXTENCODING_UTF8));
+                }
             }
 
             nCount = mpBccList ? mpBccList->Count() : 0;
-            for ( i = 0; i < nCount; ++i )
+            if (nCount > 0)
             {
-                aParam += OUString( RTL_CONSTASCII_USTRINGPARAM( SEND_MAIL_BCC ) );
-                aParam += *mpBccList->GetObject(i);;
-                aParam += aSep;
+                aURL.appendAscii(RTL_CONSTASCII_STRINGPARAM("&MESSAGE_BCC="));
+                for (ULONG i = 0; i < nCount; ++i)
+                {
+                    if (i > 0)
+                        aURL.append(static_cast< sal_Unicode >(','));
+                    aURL.append(Uri::encode(*mpBccList->GetObject(i),
+                                            aCharClass,
+                                            rtl_UriEncodeIgnoreEscapes,
+                                            RTL_TEXTENCODING_UTF8));
+                }
             }
 
             if ( maSubject.Len() )
             {
-                aParam += OUString( RTL_CONSTASCII_USTRINGPARAM( SEND_MAIL_SUBJECT ) );
-                aParam += maSubject;
-                aParam += aSep;
+                aURL.appendAscii(RTL_CONSTASCII_STRINGPARAM(
+                                     "&MESSAGE_SUBJECT="));
+                aURL.append(Uri::encode(maSubject,
+                                        aCharClass,
+                                        rtl_UriEncodeIgnoreEscapes,
+                                        RTL_TEXTENCODING_UTF8));
             }
 
-            aParam += OUString( RTL_CONSTASCII_USTRINGPARAM( SEND_MAIL_FILEURL ) );
-            aParam += aFileName;
-            aParam += aSep;
+            aURL.appendAscii(RTL_CONSTASCII_STRINGPARAM("&file_1="));
+            aURL.append(Uri::encode(aFileName,
+                                    aCharClass,
+                                    rtl_UriEncodeIgnoreEscapes,
+                                    RTL_TEXTENCODING_UTF8));
 
             // now we dispatch the new created URL so the document will be send.
-
-            aURL += aParam;
-
             URL aTargetURL;
-            aTargetURL.Complete = aURL;
+            aTargetURL.Complete = aURL.makeStringAndClear();
             Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
             xTrans->parseStrict( aTargetURL );
 
