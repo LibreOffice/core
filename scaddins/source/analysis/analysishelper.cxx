@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2001-09-26 13:22:24 $
+ *  last change: $Author: dr $ $Date: 2001-10-02 07:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,117 +62,124 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <vcl/resary.hxx>
+#include <tools/resary.hxx>
 #include <tools/solmath.hxx>
 #include "analysishelper.hxx"
 #include "analysis.hrc"
 
+using namespace                 ::rtl;
+using namespace                 ::com::sun::star;
 
 
-#define unique              sal_False
-#define DOUBLE              sal_True
-#define STDPAR              sal_False
-#define INTPAR              sal_True
 
-#define FD( FNCNM, FNCDESC, DBL, OPT, NUMOFPAR, CAT )       { "get" #FNCNM, ANALYSIS_FUNCNAME_##FNCNM, ANALYSIS_##FNCDESC, DBL, OPT, ANALYSIS_DEFFUNCNAME_##FNCNM, NUMOFPAR, CAT }
+#define UNIQUE              sal_False   // function name does not exist in Calc
+#define DOUBLE              sal_True    // function name exists in Calc
 
+#define STDPAR              sal_False   // all parameters are described
+#define INTPAR              sal_True    // first parameter is internal
+
+#define FUNCDATA( FUNCNAME, DBL, OPT, NUMOFPAR, CAT ) \
+    { "get" #FUNCNAME, ANALYSIS_FUNCNAME_##FUNCNAME, ANALYSIS_##FUNCNAME, DBL, OPT, ANALYSIS_DEFFUNCNAME_##FUNCNAME, NUMOFPAR, CAT }
 
 const FuncDataBase pFuncDatas[] =
 {
-    FD( Workday,        Workday,        unique, INTPAR, 3, FDCat_DateTime ),
-    FD( Yearfrac,       Yearfrac,       unique, INTPAR, 3, FDCat_DateTime ),
-    FD( Edate,          Edate,          unique, INTPAR, 2, FDCat_DateTime ),
-    FD( Weeknum,        Weeknum_add,    DOUBLE, INTPAR, 2, FDCat_DateTime ),
-    FD( Eomonth,        EoMonth,        unique, INTPAR, 2, FDCat_DateTime ),
-    FD( Networkdays,    Networkdays,    unique, INTPAR, 3, FDCat_DateTime ),
-    FD( Iseven,         Iseven_add,     DOUBLE, STDPAR, 1, FDCat_Inf ),
-    FD( Isodd,          Isodd_add,      DOUBLE, STDPAR, 1, FDCat_Inf ),
-    FD( Multinomial,    Multinomial,    unique, STDPAR, 1, FDCat_Math ),
-    FD( Seriessum,      Seriessum,      unique, STDPAR, 4, FDCat_Math ),
-    FD( Quotient,       Quotient,       unique, STDPAR, 2, FDCat_Math ),
-    FD( Mround,         Mround,         unique, STDPAR, 2, FDCat_Math ),
-    FD( Sqrtpi,         SqrtPI,         unique, STDPAR, 1, FDCat_Math ),
-    FD( Randbetween,    Randbetween,    unique, STDPAR, 2, FDCat_Math ),
-    FD( Gcd,            Gcd_add,        DOUBLE, STDPAR, 1, FDCat_Math ),
-    FD( Lcm,            Lcm_add,        DOUBLE, STDPAR, 1, FDCat_Math ),
-    FD( Besseli,        BesselI,        unique, STDPAR, 2, FDCat_Tech ),
-    FD( Besselj,        BesselJ,        unique, STDPAR, 2, FDCat_Tech ),
-    FD( Besselk,        BesselK,        unique, STDPAR, 2, FDCat_Tech ),
-    FD( Bessely,        BesselY,        unique, STDPAR, 2, FDCat_Tech ),
-    FD( Bin2Oct,        Bin2Oct,        unique, STDPAR, 2, FDCat_Tech ),
-    FD( Bin2Dec,        Bin2Dec,        unique, STDPAR, 1, FDCat_Tech ),
-    FD( Bin2Hex,        Bin2Hex,        unique, STDPAR, 2, FDCat_Tech ),
-    FD( Oct2Bin,        Oct2Bin,        unique, STDPAR, 2, FDCat_Tech ),
-    FD( Oct2Dec,        Oct2Dec,        unique, STDPAR, 1, FDCat_Tech ),
-    FD( Oct2Hex,        Oct2Hex,        unique, STDPAR, 2, FDCat_Tech ),
-    FD( Dec2Bin,        Dec2Bin,        unique, STDPAR, 2, FDCat_Tech ),
-    FD( Dec2Hex,        Dec2Hex,        unique, STDPAR, 2, FDCat_Tech ),
-    FD( Dec2Oct,        Dec2Oct,        unique, STDPAR, 2, FDCat_Tech ),
-    FD( Hex2Bin,        Hex2Bin,        unique, STDPAR, 2, FDCat_Tech ),
-    FD( Hex2Dec,        Hex2Dec,        unique, STDPAR, 1, FDCat_Tech ),
-    FD( Hex2Oct,        Hex2Oct,        unique, STDPAR, 2, FDCat_Tech ),
-    FD( Delta,          Delta,          unique, STDPAR, 2, FDCat_Tech ),
-    FD( Erf,            Erf,            unique, STDPAR, 2, FDCat_Tech ),
-    FD( Erfc,           Erfc,           unique, STDPAR, 1, FDCat_Tech ),
-    FD( Gestep,         GeStep,         unique, STDPAR, 2, FDCat_Tech ),
-    FD( Factdouble,     Factdouble,     unique, STDPAR, 1, FDCat_Tech ),
-    FD( Imabs,          Imabs,          unique, STDPAR, 1, FDCat_Tech ),
-    FD( Imaginary,      Imaginary,      unique, STDPAR, 1, FDCat_Tech ),
-    FD( Impower,        Impower,        unique, STDPAR, 2, FDCat_Tech ),
-    FD( Imargument,     Imargument,     unique, STDPAR, 1, FDCat_Tech ),
-    FD( Imcos,          Imcos,          unique, STDPAR, 1, FDCat_Tech ),
-    FD( Imdiv,          Imdiv,          unique, STDPAR, 2, FDCat_Tech ),
-    FD( Imexp,          Imexp,          unique, STDPAR, 1, FDCat_Tech ),
-    FD( Imconjugate,    Imconjugate,    unique, STDPAR, 1, FDCat_Tech ),
-    FD( Imln,           Imln,           unique, STDPAR, 1, FDCat_Tech ),
-    FD( Imlog10,        Imlog10,        unique, STDPAR, 1, FDCat_Tech ),
-    FD( Imlog2,         Imlog2,         unique, STDPAR, 1, FDCat_Tech ),
-    FD( Improduct,      Improduct,      unique, STDPAR, 2, FDCat_Tech ),
-    FD( Imreal,         Imreal,         unique, STDPAR, 1, FDCat_Tech ),
-    FD( Imsin,          Imsin,          unique, STDPAR, 1, FDCat_Tech ),
-    FD( Imsub,          Imsub,          unique, STDPAR, 2, FDCat_Tech ),
-    FD( Imsqrt,         Imsqrt,         unique, STDPAR, 1, FDCat_Tech ),
-    FD( Imsum,          Imsum,          unique, STDPAR, 1, FDCat_Tech ),
-    FD( Complex,        Complex,        unique, STDPAR, 3, FDCat_Tech ),
-    FD( Convert,        Convert_add,    DOUBLE, STDPAR, 3, FDCat_Tech ),
-    FD( Amordegrc,      Amordegrc,      unique, INTPAR, 7, FDCat_Finance ),
-    FD( Amorlinc,       Amorlinc,       unique, INTPAR, 7, FDCat_Finance ),
-    FD( Accrint,        Accrint,        unique, INTPAR, 7, FDCat_Finance ),
-    FD( Accrintm,       Accrintm,       unique, INTPAR, 5, FDCat_Finance ),
-    FD( Received,       Received,       unique, INTPAR, 5, FDCat_Finance ),
-    FD( Disc,           Disc,           unique, INTPAR, 5, FDCat_Finance ),
-    FD( Duration,       Duration,       DOUBLE, INTPAR, 6, FDCat_Finance ),
-    FD( Effect,         Effect_add,     DOUBLE, STDPAR, 2, FDCat_Finance ),
-    FD( Cumprinc,       Cumprinc_add,   DOUBLE, STDPAR, 6, FDCat_Finance ),
-    FD( Cumipmt,        Cumipmt_add,    DOUBLE, STDPAR, 6, FDCat_Finance ),
-    FD( Price,          Price,          unique, INTPAR, 7, FDCat_Finance ),
-    FD( Pricedisc,      Pricedisc,      unique, INTPAR, 5, FDCat_Finance ),
-    FD( Pricemat,       Pricemat,       unique, INTPAR, 6, FDCat_Finance ),
-    FD( Mduration,      Mduration,      unique, INTPAR, 6, FDCat_Finance ),
-    FD( Nominal,        Nomial_add,     DOUBLE, STDPAR, 2, FDCat_Finance ),
-    FD( Dollarfr,       Dollarfr,       unique, STDPAR, 2, FDCat_Finance ),
-    FD( Dollarde,       Dollarde,       unique, STDPAR, 2, FDCat_Finance ),
-    FD( Yield,          Yield,          unique, INTPAR, 7, FDCat_Finance ),
-    FD( Yielddisc,      Yielddisc,      unique, INTPAR, 5, FDCat_Finance ),
-    FD( Yieldmat,       Yieldmat,       unique, INTPAR, 6, FDCat_Finance ),
-    FD( Tbilleq,        Tbilleq,        unique, INTPAR, 3, FDCat_Finance ),
-    FD( Tbillprice,     Tbillprice,     unique, INTPAR, 3, FDCat_Finance ),
-    FD( Tbillyield,     Tbillyield,     unique, INTPAR, 3, FDCat_Finance ),
-    FD( Oddfprice,      Oddfprice,      unique, INTPAR, 9, FDCat_Finance ),
-    FD( Oddfyield,      Oddfyield,      unique, INTPAR, 9, FDCat_Finance ),
-    FD( Oddlprice,      Oddlprice,      unique, INTPAR, 8, FDCat_Finance ),
-    FD( Oddlyield,      Oddlyield,      unique, INTPAR, 8, FDCat_Finance ),
-    FD( Xirr,           Xirr,           unique, STDPAR, 3, FDCat_Finance ),
-    FD( Xnpv,           Xnpv,           unique, STDPAR, 3, FDCat_Finance ),
-    FD( Intrate,        Intrate,        unique, INTPAR, 5, FDCat_Finance ),
-    FD( Coupncd,        Coupncd,        unique, INTPAR, 4, FDCat_Finance ),
-    FD( Coupdays,       Coupdays,       unique, INTPAR, 4, FDCat_Finance ),
-    FD( Coupdaysnc,     Coupdaysnc,     unique, INTPAR, 4, FDCat_Finance ),
-    FD( Coupdaybs,      Coupdaybs,      unique, INTPAR, 4, FDCat_Finance ),
-    FD( Couppcd,        Couppcd,        unique, INTPAR, 4, FDCat_Finance ),
-    FD( Coupnum,        Coupnum,        unique, INTPAR, 4, FDCat_Finance ),
-    FD( Fvschedule,     Fvschedule,     unique, STDPAR, 2, FDCat_Finance )
+    //                          UNIQUE or   INTPAR or
+    //         function name     DOUBLE      STDPAR     # of param  category
+    FUNCDATA( Workday,          UNIQUE,     INTPAR,     3,          FDCat_DateTime ),
+    FUNCDATA( Yearfrac,         UNIQUE,     INTPAR,     3,          FDCat_DateTime ),
+    FUNCDATA( Edate,            UNIQUE,     INTPAR,     2,          FDCat_DateTime ),
+    FUNCDATA( Weeknum,          DOUBLE,     INTPAR,     2,          FDCat_DateTime ),
+    FUNCDATA( Eomonth,          UNIQUE,     INTPAR,     2,          FDCat_DateTime ),
+    FUNCDATA( Networkdays,      UNIQUE,     INTPAR,     3,          FDCat_DateTime ),
+    FUNCDATA( Iseven,           DOUBLE,     STDPAR,     1,          FDCat_Inf ),
+    FUNCDATA( Isodd,            DOUBLE,     STDPAR,     1,          FDCat_Inf ),
+    FUNCDATA( Multinomial,      UNIQUE,     STDPAR,     1,          FDCat_Math ),
+    FUNCDATA( Seriessum,        UNIQUE,     STDPAR,     4,          FDCat_Math ),
+    FUNCDATA( Quotient,         UNIQUE,     STDPAR,     2,          FDCat_Math ),
+    FUNCDATA( Mround,           UNIQUE,     STDPAR,     2,          FDCat_Math ),
+    FUNCDATA( Sqrtpi,           UNIQUE,     STDPAR,     1,          FDCat_Math ),
+    FUNCDATA( Randbetween,      UNIQUE,     STDPAR,     2,          FDCat_Math ),
+    FUNCDATA( Gcd,              DOUBLE,     STDPAR,     1,          FDCat_Math ),
+    FUNCDATA( Lcm,              DOUBLE,     STDPAR,     1,          FDCat_Math ),
+    FUNCDATA( Besseli,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Besselj,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Besselk,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Bessely,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Bin2Oct,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Bin2Dec,          UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Bin2Hex,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Oct2Bin,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Oct2Dec,          UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Oct2Hex,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Dec2Bin,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Dec2Hex,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Dec2Oct,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Hex2Bin,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Hex2Dec,          UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Hex2Oct,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Delta,            UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Erf,              UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Erfc,             UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Gestep,           UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Factdouble,       UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imabs,            UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imaginary,        UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Impower,          UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Imargument,       UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imcos,            UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imdiv,            UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Imexp,            UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imconjugate,      UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imln,             UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imlog10,          UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imlog2,           UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Improduct,        UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Imreal,           UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imsin,            UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imsub,            UNIQUE,     STDPAR,     2,          FDCat_Tech ),
+    FUNCDATA( Imsqrt,           UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imsum,            UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Complex,          UNIQUE,     STDPAR,     3,          FDCat_Tech ),
+    FUNCDATA( Convert,          DOUBLE,     STDPAR,     3,          FDCat_Tech ),
+    FUNCDATA( Amordegrc,        UNIQUE,     INTPAR,     7,          FDCat_Finance ),
+    FUNCDATA( Amorlinc,         UNIQUE,     INTPAR,     7,          FDCat_Finance ),
+    FUNCDATA( Accrint,          UNIQUE,     INTPAR,     7,          FDCat_Finance ),
+    FUNCDATA( Accrintm,         UNIQUE,     INTPAR,     5,          FDCat_Finance ),
+    FUNCDATA( Received,         UNIQUE,     INTPAR,     5,          FDCat_Finance ),
+    FUNCDATA( Disc,             UNIQUE,     INTPAR,     5,          FDCat_Finance ),
+    FUNCDATA( Duration,         DOUBLE,     INTPAR,     6,          FDCat_Finance ),
+    FUNCDATA( Effect,           DOUBLE,     STDPAR,     2,          FDCat_Finance ),
+    FUNCDATA( Cumprinc,         DOUBLE,     STDPAR,     6,          FDCat_Finance ),
+    FUNCDATA( Cumipmt,          DOUBLE,     STDPAR,     6,          FDCat_Finance ),
+    FUNCDATA( Price,            UNIQUE,     INTPAR,     7,          FDCat_Finance ),
+    FUNCDATA( Pricedisc,        UNIQUE,     INTPAR,     5,          FDCat_Finance ),
+    FUNCDATA( Pricemat,         UNIQUE,     INTPAR,     6,          FDCat_Finance ),
+    FUNCDATA( Mduration,        UNIQUE,     INTPAR,     6,          FDCat_Finance ),
+    FUNCDATA( Nominal,          DOUBLE,     STDPAR,     2,          FDCat_Finance ),
+    FUNCDATA( Dollarfr,         UNIQUE,     STDPAR,     2,          FDCat_Finance ),
+    FUNCDATA( Dollarde,         UNIQUE,     STDPAR,     2,          FDCat_Finance ),
+    FUNCDATA( Yield,            UNIQUE,     INTPAR,     7,          FDCat_Finance ),
+    FUNCDATA( Yielddisc,        UNIQUE,     INTPAR,     5,          FDCat_Finance ),
+    FUNCDATA( Yieldmat,         UNIQUE,     INTPAR,     6,          FDCat_Finance ),
+    FUNCDATA( Tbilleq,          UNIQUE,     INTPAR,     3,          FDCat_Finance ),
+    FUNCDATA( Tbillprice,       UNIQUE,     INTPAR,     3,          FDCat_Finance ),
+    FUNCDATA( Tbillyield,       UNIQUE,     INTPAR,     3,          FDCat_Finance ),
+    FUNCDATA( Oddfprice,        UNIQUE,     INTPAR,     9,          FDCat_Finance ),
+    FUNCDATA( Oddfyield,        UNIQUE,     INTPAR,     9,          FDCat_Finance ),
+    FUNCDATA( Oddlprice,        UNIQUE,     INTPAR,     8,          FDCat_Finance ),
+    FUNCDATA( Oddlyield,        UNIQUE,     INTPAR,     8,          FDCat_Finance ),
+    FUNCDATA( Xirr,             UNIQUE,     STDPAR,     3,          FDCat_Finance ),
+    FUNCDATA( Xnpv,             UNIQUE,     STDPAR,     3,          FDCat_Finance ),
+    FUNCDATA( Intrate,          UNIQUE,     INTPAR,     5,          FDCat_Finance ),
+    FUNCDATA( Coupncd,          UNIQUE,     INTPAR,     4,          FDCat_Finance ),
+    FUNCDATA( Coupdays,         UNIQUE,     INTPAR,     4,          FDCat_Finance ),
+    FUNCDATA( Coupdaysnc,       UNIQUE,     INTPAR,     4,          FDCat_Finance ),
+    FUNCDATA( Coupdaybs,        UNIQUE,     INTPAR,     4,          FDCat_Finance ),
+    FUNCDATA( Couppcd,          UNIQUE,     INTPAR,     4,          FDCat_Finance ),
+    FUNCDATA( Coupnum,          UNIQUE,     INTPAR,     4,          FDCat_Finance ),
+    FUNCDATA( Fvschedule,       UNIQUE,     STDPAR,     2,          FDCat_Finance )
 };
+#undef FUNCDATA
 
 
 static const double nKorrVal[] = {
@@ -2168,7 +2175,7 @@ void MyList::_Grow( void )
     void**          pNewData = new void*[ nSize ];
     memcpy( pNewData, pData, nNew * sizeof( void* ) );
 
-    delete pData;
+    delete[] pData;
     pData = pNewData;
 }
 
@@ -2183,7 +2190,7 @@ MyList::MyList( void )
 
 MyList::~MyList()
 {
-    delete pData;
+    delete[] pData;
 }
 
 
