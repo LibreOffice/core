@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-19 10:57:28 $
+ *  last change: $Author: fs $ $Date: 2001-06-22 10:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 #define ID_BROWSER_ADDTABLE                 SID_FM_ADDTABLE
 #define ID_BROWSER_DESIGN                   SID_SBA_QRY_DESIGN
 #define ID_BROWSER_EXPLORER                 SID_DSBROWSER_EXPLORER
+#define ID_BROWSER_DOCUMENT_DATASOURCE      SID_DOCUMENT_DATA_SOURCE
 
 // The following ids are local to special components (e.g. menus), so they don't need to be unique
 // overall. Please have this in mind when changing anything
@@ -137,7 +138,6 @@
 #define ID_TREE_VIEW_COPY                   30
 #define ID_TREE_VIEW_PASTE                  31
 #define ID_DIRECT_SQL                       32
-
 
 
 #define ID_BROWSER_QUERY_EXECUTE            SID_FM_EXECUTE
