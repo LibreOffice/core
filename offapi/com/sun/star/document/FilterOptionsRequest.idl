@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterOptionsRequest.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:38 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@ module com { module sun { module star { module document {
 
 //=============================================================================
 /** Is used for interaction handle to get filter options.
+
+    @since #107627#
 */
 exception FilterOptionsRequest : ::com::sun::star::uno::Exception
 {
