@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-20 18:43:52 $
+#   last change: $Author: svesik $ $Date: 2002-02-08 15:18:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -119,7 +119,7 @@ OUT2CLASS=java$/classes$/db.jar
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
-TG_DELIVER : build$/$(INPATH)$/so_predeliver
+TG_DELIVER : $(INPATH)$/misc$/build$/so_predeliver
         $(DELIVER)
 
 .IF "$(BUILD_SOSL)"!=""
