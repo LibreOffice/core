@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplneend.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-20 13:13:15 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,9 @@
 #include "drawitem.hxx"
 #include "xpool.hxx"
 #include "xtable.hxx"
-#include "tabline.hxx"
-#include "dlgname.hxx"
+#include "cuitabline.hxx"
+//CHINA001 #include "dlgname.hxx"
+#include "svxdlg.hxx" //CHINA001
 #include "dialmgr.hxx"
 #include "dlgutil.hxx"
 
@@ -396,7 +397,11 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
             aWarningBox.Execute();
 
-            SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
+            //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, ResId(RID_SVXDLG_NAME) );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             BOOL bLoop = TRUE;
 
             while( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
@@ -504,7 +509,11 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
                     bDifferent = FALSE;
         }
 
-        SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
+        //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, ResId(RID_SVXDLG_NAME) );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         BOOL bLoop = TRUE;
 
         while ( bLoop && pDlg->Execute() == RET_OK )
