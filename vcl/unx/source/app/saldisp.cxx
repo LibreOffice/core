@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:33:35 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1138,7 +1138,7 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
             sscanf( pProperties, "%li", &nProperties_ );
         else
         {
-#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD
+#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || defined IRIX
             nProperties_ |= PROPERTY_FEATURE_Maximize;
 #endif
             // Server Bugs & Properties
