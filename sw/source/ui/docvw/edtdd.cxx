@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-27 16:12:24 $
+ *  last change: $Author: os $ $Date: 2002-06-20 11:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,7 +534,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
                 nEventAction = DND_ACTION_COPY;
 
             if( (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE == nDropFormat &&
-                 EXCHG_IN_ACTION_LINK != nDropAction) ||
+                 EXCHG_IN_ACTION_LINK == nDropAction) ||
                  SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE == nDropFormat )
             {
                 SdrMarkView* pMView = PTR_CAST( SdrMarkView, rSh.GetDrawView() );
@@ -599,6 +599,11 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.11  2002/05/27 16:12:24  dvo
+    #99027# re-evaluate drop action after the drop has been accepted
+            this should enable the special treatment of single-element file
+            lists as files
+
     Revision 1.10  2002/04/09 14:20:51  ama
     Fix #98156#: Leave the selected frame
 
