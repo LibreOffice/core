@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 11:58:14 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@
 #endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
+#endif
+// OD 08.01.2004 #i11859#
+#ifndef _SVX_LSPCITEM_HXX //autogen
+#include <svx/lspcitem.hxx>
 #endif
 
 
@@ -787,8 +791,27 @@ SwFlyNotify::~SwFlyNotify()
 |*************************************************************************/
 
 SwCntntNotify::SwCntntNotify( SwCntntFrm *pCntntFrm ) :
-    SwFrmNotify( pCntntFrm )
+    SwFrmNotify( pCntntFrm ),
+    // OD 08.01.2004 #i11859#
+    mbChkHeightOfLastLine( false ),
+    mnHeightOfLastLine( 0L )
 {
+    // OD 08.01.2004 #i11859#
+    if ( pCntntFrm->IsTxtFrm() )
+    {
+        SwTxtFrm* pTxtFrm = static_cast<SwTxtFrm*>(pCntntFrm);
+        if ( !pTxtFrm->GetTxtNode()->GetDoc()->IsFormerLineSpacing() )
+        {
+            const SwAttrSet* pSet = pTxtFrm->GetAttrSet();
+            const SvxLineSpacingItem &rSpace = pSet->GetLineSpacing();
+            if ( rSpace.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
+            {
+                mbChkHeightOfLastLine = true;
+                mnHeightOfLastLine =
+                        pTxtFrm->GetHeightOfLastLineForPropLineSpacing();
+            }
+        }
+    }
 }
 
 /*************************************************************************
@@ -1014,6 +1037,17 @@ SwCntntNotify::~SwCntntNotify()
                 }
             }
             delete pIdx;
+        }
+    }
+
+    // OD 12.01.2004 #i11859# - invalidate printing area of following frame,
+    //  if height of last line has changed.
+    if ( pCnt->IsTxtFrm() && mbChkHeightOfLastLine )
+    {
+        if ( mnHeightOfLastLine !=
+                static_cast<SwTxtFrm*>(pCnt)->GetHeightOfLastLineForPropLineSpacing() )
+        {
+            static_cast<SwTxtFrm*>(pCnt)->InvalidateNextPrtArea();
         }
     }
 }
