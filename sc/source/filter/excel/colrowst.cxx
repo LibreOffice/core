@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-08 14:52:01 $
+ *  last change: $Author: gt $ $Date: 2001-06-19 08:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ void ColRowSettings::Reset( void )
     }
 
     bDirty = TRUE;
-    nMaxRow = 0;
+    nMaxRow = -1;
 
     bSetByStandard = FALSE;
 }
@@ -161,7 +161,7 @@ void ColRowSettings::Apply( const UINT16 nAktTab )
     if( !bDirty )
         return;
 
-    UINT16                  nC;
+    INT32                   nC;
     UINT16                  nStart = 0;
     UINT16                  nWidth;
     UINT16                  nLastWidth = ( pWidth[ 0 ] >= 0 )? ( UINT16 ) pWidth[ 0 ] : nDefWidth;
@@ -183,11 +183,11 @@ void ColRowSettings::Apply( const UINT16 nAktTab )
         bExtraHide = ( nWidth == 0 );
 
         if( !bExtraHide )
-            rD.SetColWidth( nC, nAktTab, nWidth );
+            rD.SetColWidth( UINT16( nC ), nAktTab, nWidth );
 
         if( pColHidden[ nC ] || bExtraHide )
             // Column versteckt
-            rD.SetColFlags( nC, nAktTab, rD.GetColFlags( nC, nAktTab ) | CR_HIDDEN );
+            rD.SetColFlags( UINT16( nC ), nAktTab, rD.GetColFlags( UINT16( nC ), nAktTab ) | CR_HIDDEN );
     }
 
     // Row-Bemachung
@@ -229,7 +229,7 @@ void ColRowSettings::Apply( const UINT16 nAktTab )
 
             if( nFlags & ( ROWFLAG_HIDDEN | ROWFLAG_MAN ) )
             {
-                BYTE        nSCFlags = rD.GetRowFlags( nC, nAktTab );
+                BYTE        nSCFlags = rD.GetRowFlags( UINT16( nC ), nAktTab );
 
                 if( nFlags & ROWFLAG_HIDDEN )
                     nSCFlags |= CR_HIDDEN;
@@ -237,29 +237,29 @@ void ColRowSettings::Apply( const UINT16 nAktTab )
                 if( nFlags & ROWFLAG_MAN )
                     nSCFlags |= CR_MANUALSIZE;
 
-                rD.SetRowFlags( nC, nAktTab, nSCFlags );
+                rD.SetRowFlags( UINT16( nC ), nAktTab, nSCFlags );
             }
         }
         else
             nHeight = nDefHeight;
 
         if( !nHeight )
-            rD.SetRowFlags( nC, nAktTab, rD.GetRowFlags( nC, nAktTab ) | CR_HIDDEN );
+            rD.SetRowFlags( UINT16( nC ), nAktTab, rD.GetRowFlags( UINT16( nC ), nAktTab ) | CR_HIDDEN );
 
         if( nLastHeight != nHeight )
         {
-            DBG_ASSERT( nC, "ColRowSettings::Apply(): Algorithmus-Fehler!" );
+            DBG_ASSERT( nC > 0, "ColRowSettings::Apply(): Algorithmus-Fehler!" );
 
             if( nLastHeight )
                 rD.SetRowHeightRange( nStart, nC - 1, nAktTab, nLastHeight );
 
-            nStart = nC;
+            nStart = UINT16( nC );
             nLastHeight = nHeight;
         }
     }
 
-    if( nLastHeight )
-        rD.SetRowHeightRange( nStart, nMaxRow, nAktTab, nLastHeight );
+    if( nLastHeight && nMaxRow >= 0 )
+        rD.SetRowHeightRange( nStart, UINT16( nMaxRow ), nAktTab, nLastHeight );
 
     if( pExtTabOpt )
         pExcRoot->pExtDocOpt->Add( *this );
@@ -376,8 +376,6 @@ void ColRowSettings::_SetRowSettings( const UINT16 nRow, const UINT16 nExcelHeig
 void ColRowSettings::ReadSplit( XclImpStream& rIn )
 {
     GetExtTabOpt();
-
-    pExtTabOpt->bFrozen = FALSE;
 
     rIn >> pExtTabOpt->nSplitX >> pExtTabOpt->nSplitY >> pExtTabOpt->nTopSplitRow >> pExtTabOpt->nLeftSplitCol;
 
