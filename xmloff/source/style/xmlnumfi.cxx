@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-28 11:37:30 $
+ *  last change: $Author: er $ $Date: 2002-10-08 16:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1455,7 +1455,7 @@ void SvXMLNumFormatContext::GetFormat(rtl::OUString& rFormatString, lang::Locale
                 if (pStyle)
                 {
                     pStyle->GetFormat(sFormat, aLoc);
-                    AddCondition(i, sFormat, aLoc);
+                    AddCondition(i, sFormat, pStyle->GetLocaleData());
                 }
             }
         }
@@ -1966,6 +1966,13 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
 
         if (!bDefaultCond)
         {
+            sal_Int32 nPos = sRealCond.indexOf( '.' );
+            if ( nPos >= 0 )
+            {   // #i8026# #103991# localize decimal separator
+                const String& rDecSep = GetLocaleData().getNumDecimalSep();
+                if ( rDecSep.Len() > 1 || rDecSep.GetChar(0) != '.' )
+                    sRealCond = sRealCond.replaceAt( nPos, 1, rDecSep );
+            }
             aConditions.append( (sal_Unicode) '[' );
             aConditions.append( sRealCond );
             aConditions.append( (sal_Unicode) ']' );
@@ -1979,7 +1986,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
     }
 }
 
-void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex, const rtl::OUString& rFormat, const lang::Locale& rLocale )
+void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex, const rtl::OUString& rFormat, const LocaleDataWrapper& rData )
 {
     rtl::OUString rCondition = aMyConditions[nIndex].sCondition;
     OUString sValue = OUString::createFromAscii( "value()" );       //! define constant
@@ -2001,6 +2008,13 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex, const rtl::OUS
 
         if (!bDefaultCond)
         {
+            sal_Int32 nPos = sRealCond.indexOf( '.' );
+            if ( nPos >= 0 )
+            {   // #i8026# #103991# localize decimal separator
+                const String& rDecSep = rData.getNumDecimalSep();
+                if ( rDecSep.Len() > 1 || rDecSep.GetChar(0) != '.' )
+                    sRealCond = sRealCond.replaceAt( nPos, 1, rDecSep );
+            }
             aConditions.append( (sal_Unicode) '[' );
             aConditions.append( sRealCond );
             aConditions.append( (sal_Unicode) ']' );
