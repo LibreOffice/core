@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 08:41:57 $
+ *  last change: $Author: fs $ $Date: 2002-05-17 11:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1316,6 +1316,16 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
+    void NavigatorTree::ModelHasRemoved( SvListEntry* _pEntry )
+    {
+        sal_uInt16 nPosition;
+        if ( m_aCutEntries.Seek_Entry( static_cast< SvLBoxEntry* >( _pEntry ), &nPosition ) )
+        {
+            m_aCutEntries.Remove( nPosition );
+        }
+    }
+
+    //------------------------------------------------------------------------
     void NavigatorTree::doCut()
     {
         if ( implPrepareExchange( DND_ACTION_MOVE ) )
@@ -1323,6 +1333,18 @@ namespace svxform
             m_aControlExchange.setClipboardListener( LINK( this, NavigatorTree, OnClipboardAction ) );
             m_aControlExchange.copyToClipboard( );
             m_bKeyboardCut = sal_True;
+
+            // mark all the entries we just "cut" into the clipboard as "nearly moved"
+            for ( sal_Int32 i=0; i<m_arrCurrentSelection.Count(); ++i )
+            {
+                SvLBoxEntry* pEntry = m_arrCurrentSelection[ (sal_uInt16)i ];
+                if ( pEntry )
+                {
+                    m_aCutEntries.Insert( pEntry );
+                    pEntry->SetFlags( pEntry->GetFlags() | SV_ENTRYFLAG_SEMITRANSPARENT );
+                    InvalidateEntry( pEntry );
+                }
+            }
         }
     }
 
@@ -1610,6 +1632,17 @@ namespace svxform
         {
             if ( doingKeyboardCut() )
             {
+                for ( sal_Int32 i=0; i<m_aCutEntries.Count(); ++i )
+                {
+                    SvLBoxEntry* pEntry = m_aCutEntries[ (sal_uInt16)i ];
+                    if ( pEntry )
+                    {
+                        pEntry->SetFlags( pEntry->GetFlags() & ~SV_ENTRYFLAG_SEMITRANSPARENT );
+                        InvalidateEntry( pEntry );
+                    }
+                }
+                m_aCutEntries.Remove( (USHORT)0, (USHORT)m_aCutEntries.Count() );
+
                 m_bKeyboardCut = sal_False;
             }
         }
@@ -2173,6 +2206,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2002/05/17 08:41:57  fs
+ *  high contrast support #99375#
+ *
  *  Revision 1.2  2002/05/16 15:05:59  fs
  *  some major changes in preparation of #98725# (not enabled, yet)
  *
