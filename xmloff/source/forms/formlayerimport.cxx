@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerimport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,11 +98,11 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OFormLayerXMLImport::setAutoStyleContext(SvXMLStylesContext* _pAutoStyles)
     {
-        m_pImpl->setAutoStyleContext(_pAutoStyles);
+        OSL_ENSURE(sal_False, "OFormLayerXMLImport::setAutoStyleContext: obsolete method called!");
     }
 
     //---------------------------------------------------------------------
-    SvXMLImportPropertyMapper* OFormLayerXMLImport::getStylePropertyMapper() const
+    ::vos::ORef< SvXMLImportPropertyMapper > OFormLayerXMLImport::getStylePropertyMapper() const
     {
         return m_pImpl->getStylePropertyMapper();
     }
@@ -145,6 +145,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.3  2000/12/13 10:40:15  fs
  *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
  *

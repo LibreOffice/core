@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-24 08:55:48 $
+ *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,11 +153,11 @@ namespace xmloff
         ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(aControlStyleProperties, m_xPropertyHandlerFactory.getBodyPtr());
         m_xExportMapper = new SvXMLExportPropertyMapper(xStylePropertiesMapper.getBodyPtr());
 
-        m_rContext.GetAutoStylePool()->AddFamily(
-            XML_STYLE_FAMILY_CONTROL_ID,
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_CONTROL_NAME)),
-            m_xExportMapper.getBodyPtr(),
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_CONTROL_PREFIX)));
+//      m_rContext.GetAutoStylePool()->AddFamily(
+//          XML_STYLE_FAMILY_CONTROL_ID,
+//          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_CONTROL_NAME)),
+//          m_xExportMapper.getBodyPtr(),
+//          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_CONTROL_PREFIX)));
 
         // add our event translation table
         m_rContext.GetEventExport().AddTranslationTable(g_pFormsEventTranslation);
@@ -229,15 +229,15 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    SvXMLExport& OFormLayerXMLExport_Impl::getGlobalContext()
-    {
-        return m_rContext;
-    }
-
-    //---------------------------------------------------------------------
     ::vos::ORef< SvXMLExportPropertyMapper > OFormLayerXMLExport_Impl::getStylePropertyMapper()
     {
         return m_xExportMapper;
+    }
+
+    //---------------------------------------------------------------------
+    SvXMLExport& OFormLayerXMLExport_Impl::getGlobalContext()
+    {
+        return m_rContext;
     }
 
     //---------------------------------------------------------------------
@@ -371,13 +371,6 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLExport_Impl::exportAutoStyles()
-    {
-        m_rContext.GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_CONTROL_ID,
-            m_rContext.GetDocHandler(), m_rContext.GetMM100UnitConverter(), m_rContext.GetNamespaceMap());
-    }
-
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::examineForms(const Reference< XDrawPage >& _rxDrawPage)
     {
         // get the forms collection of the page
@@ -451,11 +444,6 @@ namespace xmloff
                             sReferencedBy += sCurrentId;
                         }
                     }
-
-                    // get the styles of the object
-                    ::std::vector< XMLPropertyState > xStylePropState = m_xExportMapper->Filter(xCurrent);
-                    // and add them to the style pool
-                    m_rContext.GetAutoStylePool()->Add(XML_STYLE_FAMILY_CONTROL_ID, xStylePropState);
                 }
                 else
                 {
@@ -492,6 +480,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/01/24 08:55:48  fs
+ *  corrected assertions in getControlId
+ *
  *  Revision 1.8  2001/01/02 15:58:21  fs
  *  event ex- & import
  *

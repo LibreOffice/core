@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-24 09:34:40 $
+ *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,6 @@ namespace xmloff
         OAttribute2Property                 m_aAttributeMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                                             m_xForms;   // the forms of the currently imported page
-        SvXMLStylesContextRef               m_xAutoStyles;
 
     protected:
         // style handling
@@ -165,7 +164,6 @@ namespace xmloff
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                             getServiceFactory();
         virtual SvXMLImport&                getGlobalContext();
-        virtual const SvXMLStyleContext*    getStyleElement(const ::rtl::OUString& _rStyleName) const;
         virtual void                        enterEventContext();
         virtual void                        leaveEventContext();
 
@@ -173,13 +171,9 @@ namespace xmloff
         OFormLayerXMLImport_Impl(SvXMLImport& _rImporter);
         ~OFormLayerXMLImport_Impl();
 
-        /** announces the AutoStyleContext to the importer.
-        */
-        void    setAutoStyleContext(SvXMLStylesContext* _pAutoStyles);
-
         /** retrieves the property mapper form form related auto styles.
         */
-        SvXMLImportPropertyMapper* getStylePropertyMapper() const;
+        ::vos::ORef< SvXMLImportPropertyMapper > getStylePropertyMapper() const;
 
         /** start importing the forms of the given page
         */
@@ -218,6 +212,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/01/24 09:34:40  fs
+ *  +enter-/leaveEventContext
+ *
  *  Revision 1.5  2001/01/02 15:58:22  fs
  *  event ex- & import
  *

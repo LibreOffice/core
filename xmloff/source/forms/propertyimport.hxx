@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,14 +98,6 @@ namespace xmloff
 
         <p>This class imports properties which are stored as attributes as well as properties which
         are stored in </em>&lt;form:properties&gt;</em> elements.</p>
-
-        <p>Styles are imported, too. A problem is that the class itself does not know the object which's
-        propertie values it imports, but only these property values. But the infrastructure (namely the
-        XMLPropStyleContext) does not allow to collect PropertyValue's, it only allows to pass a XPropertySet
-        where the style-relevant properties will be set.<br/>
-        So this class restricts itself to retrieve the class which knows the style properties (and values), it
-        <em>does not automatically set them</em>. This is the responsibility of derived classes, though there is
-        a method for this ...</p>
     */
     class OPropertyImport : public SvXMLImportContext
     {
@@ -117,7 +109,6 @@ namespace xmloff
             // the values which the instance collects between StartElement and EndElement
 
         IFormsImportContext&        m_rContext;
-        const XMLPropStyleContext*  m_pStyleElement;
 
         // TODO: think about the restriction that the class does not know anything about the object it is importing.
         // Perhaps this object should be known to the class, so setting the properties ('normal' ones as well as
@@ -162,9 +153,6 @@ namespace xmloff
             const ::rtl::OUString& _rReadCharacters,
             const SvXMLEnumMapEntry* _pEnumMap = NULL
             );
-
-        void implSetStyleProperties(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
 
     private:
         static ::com::sun::star::util::Time implGetTime(double _nValue);
@@ -255,6 +243,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.3  2000/12/13 10:40:15  fs
  *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
  *

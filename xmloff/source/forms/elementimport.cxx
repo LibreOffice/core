@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-24 09:37:58 $
+ *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,9 +285,6 @@ namespace xmloff
                 }
             }
         }
-
-        // set the style properties
-        implSetStyleProperties(m_xElement);
 
         // insert the element into the parent container
         if (!m_sName.getLength())
@@ -1048,6 +1045,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/01/24 09:37:58  fs
+ *  OFormImport: call enter-/leaveEventContext when starting/ending the element
+ *
  *  Revision 1.7  2001/01/03 16:25:34  fs
  *  file format change (extra wrapper element for controls, similar to columns)
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-02 15:58:22 $
+ *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,9 +206,6 @@ namespace xmloff
         void exportForms(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
 
-        /// exports the auto-styles collected during the examineForms calls
-        void exportAutoStyles();
-
     protected:
         sal_Bool implCheckPage(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage,
@@ -232,6 +229,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/01/02 15:58:22  fs
+ *  event ex- & import
+ *
  *  Revision 1.7  2000/12/19 12:13:57  fs
  *  some changes ... now the exported styles are XSL conform
  *

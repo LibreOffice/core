@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
+ *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,12 +243,12 @@ namespace xmloff
         */
         void exportTargetFrameAttribute();
 
-        /** just a dummy at the moment.
+        /** flag the style properties as 'already exported'
 
             <p>We don't have style support right now, so the only thing the method does is removing the style-relevant
             properties from the list of yet-to-be-exported properties (<member>m_aRemainingProps</member>)</p>
         */
-        void implExportStyleReference();
+        void flagStyleProperties();
 
         /** add an arbitrary attribute extracted from an arbitrary property to the export context
 
@@ -396,6 +396,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/01/03 16:25:34  fs
+ *  file format change (extra wrapper element for controls, similar to columns)
+ *
  *  Revision 1.8  2001/01/03 11:08:56  mib
  *  syntax
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,6 @@ namespace xmloff
     OPropertyImport::OPropertyImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName)
         :SvXMLImportContext(_rImport.getGlobalContext(), _nPrefix, _rName)
         ,m_rContext(_rImport)
-        ,m_pStyleElement(NULL)
     {
     }
 
@@ -193,27 +192,9 @@ namespace xmloff
             m_aValues.push_back(aNewValue);
         }
         else
-        {   // maybe it's the style attribute
-            static const ::rtl::OUString s_sStyleAttribute = ::rtl::OUString::createFromAscii("style-name");
-            if (s_sStyleAttribute == _rLocalName)
-            {
-                const SvXMLStyleContext* pStyleContext = m_rContext.getStyleElement(_rValue);
-                OSL_ENSURE(pStyleContext, "OPropertyImport::handleAttribute: do not know the style!");
-                // remember the element for later usage. Derived classes have to call implSetStyleProperties
-                // if necessary
-                m_pStyleElement = static_cast<const XMLPropStyleContext*>(pStyleContext);
-            }
-            else
-                OSL_ENSURE(sal_False, "OPropertyImport::handleAttribute: can't handle attributes which do not describe properties or the style!");
+        {
+            OSL_ENSURE(sal_False, "OPropertyImport::handleAttribute: can't handle attributes which do not describe properties or the style!");
         }
-    }
-
-    //---------------------------------------------------------------------
-    void OPropertyImport::implSetStyleProperties(const Reference< XPropertySet >& _rxObject)
-    {
-        if (!m_pStyleElement || !_rxObject.is())
-            return;
-        const_cast<XMLPropStyleContext*>(m_pStyleElement)->FillPropertySet(_rxObject);
     }
 
     //---------------------------------------------------------------------
@@ -549,6 +530,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.3  2000/12/13 10:40:15  fs
  *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
  *

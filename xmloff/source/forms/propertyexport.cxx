@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
+ *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,16 +490,8 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OPropertyExport::implExportStyleReference()
+    void OPropertyExport::flagStyleProperties()
     {
-        // the current state of the style-relevant properties
-        ::std::vector< XMLPropertyState > aStyleProperties = m_rContext.getStylePropertyMapper()->Filter(m_xProps);
-        // find the style name for this state
-        ::rtl::OUString sStyleName = m_rContext.getGlobalContext().GetAutoStylePool()->Find(XML_STYLE_FAMILY_CONTROL_ID, aStyleProperties);
-
-        // export this style
-        AddAttribute(XML_NAMESPACE_FORM, "style-name", sStyleName);
-
         // flag all the properties which are part of the style as "handled"
         UniReference< XMLPropertySetMapper > xStylePropertiesSupplier = m_rContext.getStylePropertyMapper()->getPropertySetMapper();
         for (sal_Int32 i=0; i<xStylePropertiesSupplier->GetEntryCount(); ++i)
@@ -752,6 +744,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/01/03 16:25:34  fs
+ *  file format change (extra wrapper element for controls, similar to columns)
+ *
  *  Revision 1.8  2000/12/18 15:14:35  fs
  *  some changes ... now exporting/importing styles
  *

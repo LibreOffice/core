@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-24 09:34:40 $
+ *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,21 +337,6 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    const SvXMLStyleContext* OFormLayerXMLImport_Impl::getStyleElement(const ::rtl::OUString& _rStyleName) const
-    {
-        OSL_ENSURE(m_xAutoStyles.Is(), "OFormLayerXMLImport_Impl::getStyleElement: have no auto style context!");
-            // did you use setAutoStyleContext?
-
-        const SvXMLStyleContext* pControlStyle =
-            m_xAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_CONTROL_ID, _rStyleName);
-        OSL_ENSURE(pControlStyle,
-                    ::rtl::OString("OFormLayerXMLImport_Impl::getStyleElement: did not find the style named \"")
-                +=  ::rtl::OString(_rStyleName.getStr(), _rStyleName.getLength(), RTL_TEXTENCODING_ASCII_US)
-                +=  ::rtl::OString("\"!"));
-        return pControlStyle;
-    }
-
-    //---------------------------------------------------------------------
     void OFormLayerXMLImport_Impl::registerControlId(const Reference< XPropertySet >& _rxControl, const ::rtl::OUString& _rId)
     {
         OSL_ENSURE(m_aCurrentPageIds != m_aControlIds.end(), "OFormLayerXMLImport_Impl::registerControlId: no current page!");
@@ -370,16 +355,9 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    SvXMLImportPropertyMapper* OFormLayerXMLImport_Impl::getStylePropertyMapper() const
+    ::vos::ORef< SvXMLImportPropertyMapper > OFormLayerXMLImport_Impl::getStylePropertyMapper() const
     {
-        return m_xImportMapper.getBodyPtr();
-    }
-
-    //---------------------------------------------------------------------
-    void OFormLayerXMLImport_Impl::setAutoStyleContext(SvXMLStylesContext* _pAutoStyles)
-    {
-        m_xAutoStyles = _pAutoStyles;
-        OSL_ENSURE(m_xAutoStyles.Is(), "OFormLayerXMLImport_Impl::setAutoStyleContext: invalid auto style context!");
+        return m_xImportMapper;
     }
 
     //---------------------------------------------------------------------
@@ -505,6 +483,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/01/24 09:34:40  fs
+ *  +enter-/leaveEventContext
+ *
  *  Revision 1.6  2001/01/02 15:58:22  fs
  *  event ex- & import
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callbacks.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-24 09:34:10 $
+ *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,6 @@ namespace xmloff
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                             getServiceFactory() = 0;
         virtual SvXMLImport&                getGlobalContext() = 0;
-        virtual const SvXMLStyleContext*    getStyleElement(const ::rtl::OUString& _rStyleName) const = 0;
 
         virtual void                        enterEventContext() = 0;
         virtual void                        leaveEventContext() = 0;
@@ -183,6 +182,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/01/24 09:34:10  fs
+ *  +IFormsImportContext::enter-/leaveEventContext
+ *
  *  Revision 1.5  2001/01/02 15:58:21  fs
  *  event ex- & import
  *

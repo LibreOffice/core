@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerexport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 16:22:35 $
+ *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,13 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OFormLayerXMLExport::exportAutoStyles()
     {
-        m_pImpl->exportAutoStyles();
+        OSL_ENSURE(sal_False, "OFormLayerXMLExport::exportAutoStyles: obsolete method called!");
+    }
+
+    //---------------------------------------------------------------------
+    ::vos::ORef< SvXMLExportPropertyMapper > OFormLayerXMLExport::getStylePropertyMapper()
+    {
+        return m_pImpl->getStylePropertyMapper();
     }
 
     //---------------------------------------------------------------------
@@ -175,6 +181,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/12/18 16:22:35  fs
+ *  forgot an & on the getControlId parameter
+ *
  *  Revision 1.5  2000/12/18 15:14:35  fs
  *  some changes ... now exporting/importing styles
  *
