@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:48:10 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,7 +543,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ chinese_traditional ] = "«ö³¹½s¸¹";
         Text[ arabic ] = "ÊÑŞíã ÇáİÕæá";
         Text[ greek ] = "Áñßèìçóç êáôÜ êåöÜëáéá";
-        Text[ korean ] = "Àå ¹øÈ£ ¸Å±â±â";
+        Text[ korean ] = "Àåº°·Î  ¹øÈ£ ¸Å±â±â";
         Text[ turkish ] = "Bölüme göre numaralama";
         Text[ language_user1 ] = " ";
     };
@@ -715,7 +715,7 @@ ModalDialog DLG_SEQUENCE_OPTION
     Text[ chinese_traditional ] = "½s¸¹§Ç¦C¿ï¶µ";
     Text[ arabic ] = "ÎíÇÑÇÊ ÇáÊÑŞíã ÇáãÊÓáÓá";
     Text[ greek ] = "Åğéëïãİò êıêëïõ áñéèìşí";
-    Text[ korean ] = "¼ıÀÚ ¿µ¿ª ¿É¼Ç";
+    Text[ korean ] = "¼ıÀÚ ¹üÀ§ ¿É¼Ç";
     Text[ turkish ] = "Numara aralığı seçenekleri";
     Text[ language_user1 ] = " ";
 };
