@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-05 08:15:04 $
+ *  last change: $Author: ka $ $Date: 2001-09-25 10:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,12 @@
 #endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XFLUSHABLECLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XMIMECONTENTTYPEFACTORY_HPP_
+#include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XMIMECONTENTTYPE_HPP_
+#include <com/sun/star/datatransfer/XMimeContentType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -266,9 +272,42 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
             if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_WMF, aSubstFlavor ) &&
                 TransferableDataHelper::IsEqual( rFlavor, aSubstFlavor ) )
             {
-                ImplGetSubstitutionData( rFlavor );
+                sal_Bool bDone = sal_False;
+
+                // WMF => GDIMETAFILE
+                if( SotExchange::GetFormatDataFlavor( FORMAT_GDIMETAFILE, aSubstFlavor ) )
+                {
+                    GetData( aSubstFlavor );
+
+                    if( maAny.hasValue() )
+                    {
+                        Sequence< sal_Int8 > aSeq;
+
+                        if( maAny >>= aSeq )
+                        {
+                            SvMemoryStream* pSrcStm = new SvMemoryStream( (char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_WRITE | STREAM_TRUNC );
+                            GDIMetaFile     aMtf;
+
+                            *pSrcStm >> aMtf;
+                            delete pSrcStm;
+
+                            Graphic         aGraphic( aMtf );
+                            SvMemoryStream  aDstStm( 65535, 65535 );
+
+                            if( GraphicConverter::Export( aDstStm, aGraphic, CVT_WMF ) == ERRCODE_NONE )
+                            {
+                                maAny <<= ( aSeq = Sequence< sal_Int8 >( (sal_Int8*) aDstStm.GetData(), aDstStm.Seek( STREAM_SEEK_TO_END ) ) );
+                                bDone = sal_True;
+                            }
+                        }
+                    }
+                }
+
+                if( !bDone )
+                    maAny = Any();
             }
 
+            // if any is not yet filled, use standard format
             if( !maAny.hasValue() )
                 GetData( rFlavor );
         }
@@ -414,50 +453,6 @@ void SAL_CALL TransferableHelper::dragOver( const DragSourceDragEvent& rDSDE ) t
 
 void SAL_CALL TransferableHelper::dropActionChanged( const DragSourceDragEvent& rDSDE ) throw( RuntimeException )
 {
-}
-
-// -----------------------------------------------------------------------------
-
-void TransferableHelper::ImplGetSubstitutionData( const DataFlavor& rFlavor )
-{
-    DataFlavor aSubstFlavor;
-
-    if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_WMF, aSubstFlavor ) && TransferableDataHelper::IsEqual( rFlavor, aSubstFlavor ) )
-    {
-        sal_Bool bDone = sal_False;
-
-        // WMF => GDIMETAFILE
-        if( SotExchange::GetFormatDataFlavor( FORMAT_GDIMETAFILE, aSubstFlavor ) )
-        {
-            GetData( aSubstFlavor );
-
-            if( maAny.hasValue() )
-            {
-                Sequence< sal_Int8 > aSeq;
-
-                if( maAny >>= aSeq )
-                {
-                    SvMemoryStream* pSrcStm = new SvMemoryStream( (char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_WRITE | STREAM_TRUNC );
-                    GDIMetaFile     aMtf;
-
-                    *pSrcStm >> aMtf;
-                    delete pSrcStm;
-
-                    Graphic         aGraphic( aMtf );
-                    SvMemoryStream  aDstStm( 65535, 65535 );
-
-                    if( GraphicConverter::Export( aDstStm, aGraphic, CVT_WMF ) == ERRCODE_NONE )
-                    {
-                        maAny <<= ( aSeq = Sequence< sal_Int8 >( (sal_Int8*) aDstStm.GetData(), aDstStm.Seek( STREAM_SEEK_TO_END ) ) );
-                        bDone = sal_True;
-                    }
-                }
-            }
-        }
-
-        if( !bDone )
-            maAny = Any();
-    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1146,12 +1141,23 @@ void TransferableDataHelper::InitFormats()
     {
         if( mxTransfer.is() )
         {
-            const Sequence< DataFlavor > aFlavors( mxTransfer->getTransferDataFlavors() );
+            const Sequence< DataFlavor >            aFlavors( mxTransfer->getTransferDataFlavors() );
+            Reference< XMultiServiceFactory >       xFact( ::comphelper::getProcessServiceFactory() );
+            Reference< XMimeContentTypeFactory >    xMimeFact;
+
+            if( xFact.is() )
+                xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString::createFromAscii(
+                                                                  "com.sun.star.datatransfer.MimeContentTypeFactory" ) ),
+                                                                  UNO_QUERY );
 
             for( sal_Int32 i = 0; i < aFlavors.getLength(); i++ )
             {
-                DataFlavorEx        aFlavorEx;
-                const DataFlavor&   rFlavor = aFlavors[ i ];
+                DataFlavorEx                    aFlavorEx;
+                const DataFlavor&               rFlavor = aFlavors[ i ];
+                   Reference< XMimeContentType >   xMimeType;
+
+                if( xMimeFact.is() && rFlavor.MimeType.getLength() )
+                    xMimeType = xMimeFact->createMimeContentType( rFlavor.MimeType );
 
                 aFlavorEx.MimeType = rFlavor.MimeType;
                 aFlavorEx.HumanPresentableName = rFlavor.HumanPresentableName;
@@ -1160,11 +1166,26 @@ void TransferableDataHelper::InitFormats()
 
                 mpFormats->push_back( aFlavorEx );
 
-                if( ( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ) && !HasFormat( SOT_FORMAT_GDIMETAFILE ) )
+                // check alien formats and add appropriate internal match to formats list
+                if( ( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ) &&
+                    !HasFormat( SOT_FORMAT_GDIMETAFILE ) )
                 {
                     if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavorEx ) )
                     {
                         aFlavorEx.mnSotId = SOT_FORMAT_GDIMETAFILE;
+                        mpFormats->push_back( aFlavorEx );
+                    }
+                }
+                else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/plain" ) ) &&
+                         !HasFormat( FORMAT_STRING ) )
+                {
+                    // set format id ofd alien FlavorEx to FORMAT_STRING
+                    (*mpFormats)[ mpFormats->size() - 1 ].mnSotId = FORMAT_STRING;
+
+                    // add standard format FORMAT_STRING to get used by application
+                    if( SotExchange::GetFormatDataFlavor( FORMAT_STRING, aFlavorEx ) )
+                    {
+                        aFlavorEx.mnSotId = FORMAT_STRING;
                         mpFormats->push_back( aFlavorEx );
                     }
                 }
@@ -1292,8 +1313,12 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
 
 sal_Bool TransferableDataHelper::GetString( SotFormatStringId nFormat, String& rStr )
 {
-    DataFlavor aFlavor;
-    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetString( aFlavor, rStr ) );
+    ::rtl::OUString aOUString;
+    sal_Bool        bRet = GetString( nFormat, aOUString );
+
+    rStr = aOUString;
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------------
@@ -1320,22 +1345,89 @@ sal_Bool TransferableDataHelper::GetString( SotFormatStringId nFormat, ::rtl::OU
 
 sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, ::rtl::OUString& rStr )
 {
-    const Any   aAny( GetAny( rFlavor ) );
-    sal_Bool    bRet = sal_False;
+    Reference< XMultiServiceFactory >       xFact( ::comphelper::getProcessServiceFactory() );
+    Reference< XMimeContentTypeFactory >    xMimeFact;
+    Any                                     aAny;
+    sal_Bool                                bRet = sal_False;
 
-    if( aAny.hasValue() )
+    try
     {
-        ::rtl::OUString         aOUString;
-        Sequence< sal_Int8 >    aSeq;
+        // do we have an UTF-8 encoded format (JAVA)
+        if( xFact.is() )
+            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString::createFromAscii(
+                                                              "com.sun.star.datatransfer.MimeContentTypeFactory" ) ),
+                                                              UNO_QUERY );
 
-        bRet = sal_True;
+        if( xMimeFact.is() )
+        {
+            DataFlavorExVector::iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
 
-        if( aAny >>= aOUString )
-            rStr = aOUString;
-        else if( aAny >>= aSeq )
-            rStr = ::rtl::OUString( (sal_Char*) aSeq.getArray(), aSeq.getLength(), gsl_getSystemTextEncoding() );
-        else
-            bRet = sal_False;
+            while( aIter != aEnd )
+            {
+                const DataFlavorEx aFlavorEx( *aIter++ );
+
+                if( FORMAT_STRING == aFlavorEx.mnSotId )
+                {
+                    Reference< XMimeContentType >   xMimeType( xMimeFact->createMimeContentType( aFlavorEx.MimeType ) );
+                    const ::rtl::OUString           aCharsetStr( ::rtl::OUString::createFromAscii( "charset" ) );
+
+                    if( xMimeType->hasParameter( aCharsetStr ) )
+                    {
+                        const ::rtl::OUString aCharset( xMimeType->getParameterValue( aCharsetStr ) );
+
+                        if( xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "utf-8" ) ) )
+                        {
+                            const ::rtl::OUString aClassStr( ::rtl::OUString::createFromAscii( "class" ) );
+
+                            if( !xMimeType->hasParameter( aClassStr ) ||
+                                xMimeType->getParameterValue( aClassStr ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "java.nio.bytebuffer" ) ) )
+                            {
+                                aAny = GetAny( aFlavorEx );
+
+                                if( aAny.hasValue() )
+                                {
+                                    ::rtl::OUString         aOUString;
+                                    Sequence< sal_Int8 >    aSeq;
+
+                                    if( aAny >>= aSeq )
+                                    {
+                                        aIter = aEnd;
+                                        rStr = ::rtl::OUString( (sal_Char*) aSeq.getArray(), aSeq.getLength(),
+                                                                RTL_TEXTENCODING_UTF8 );
+                                    }
+                                    else
+                                        aAny = Any();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+    }
+
+    if( !aAny.hasValue() )
+    {
+        // do normal extraction
+        aAny = GetAny( rFlavor );
+
+        if( aAny.hasValue() )
+        {
+            ::rtl::OUString         aOUString;
+            Sequence< sal_Int8 >    aSeq;
+
+            bRet = sal_True;
+
+            if( aAny >>= aOUString )
+                rStr = aOUString;
+            else if( aAny >>= aSeq )
+                rStr = ::rtl::OUString( (sal_Char*) aSeq.getArray(), aSeq.getLength(), gsl_getSystemTextEncoding() );
+            else
+                bRet = sal_False;
+        }
     }
 
     return bRet;
