@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:36:07 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ TabPage RID_SVXPAGE_PICK_BULLET
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     Control VS_VALUES
     {
@@ -155,6 +156,7 @@ TabPage RID_SVXPAGE_PICK_SINGLE_NUM
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     Control VS_VALUES
     {
@@ -205,6 +207,7 @@ TabPage RID_SVXPAGE_PICK_NUM
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     Control VS_VALUES
     {
@@ -255,6 +258,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     Control VS_VALUES
     {
@@ -295,6 +299,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ czech ] = "Propojit obrázky";
         Text[ hebrew ] = "Grafiken ~verknüpfen";
         Text[ hindi ] = "सुचित्रों को ~लिंक करो";
+        Text[ slovak ] = "~Prepojiť obrázky";
     };
     FixedText FT_ERROR
     {
@@ -329,6 +334,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ czech ] = "Motiv galerie 'Odrážky' je prázdný (žádné obrázky).";
         Text[ hebrew ] = "Es sind keine Grafiken im Gallery-Thema 'Bullets' vorhanden.";
         Text[ hindi ] = "गेलरी विषय 'बुलेट्स्' खाली है (सुचित्र नहीं है)।";
+        Text[ slovak ] = "Motív galérie 'Odrážky' je prázdny (žiadne obrázky).";
     };
 };
 /**************************************************************************/
@@ -374,6 +380,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Úroveň";
         Text[ hebrew ] = "~Ebene";
         Text[ hindi ] = "स्तर";
+        Text[ slovak ] = "Úroveň";
     };
     MultiListBox LB_LEVEL
     {
@@ -415,6 +422,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
+        Text[ slovak ] = "Formát";
     };
     FixedText FT_FMT
     {
@@ -447,6 +455,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Číslování";
         Text[ hebrew ] = "‮מיספור‬";
         Text[ hindi ] = "~संख्या देना";
+        Text[ slovak ] = "Čí~slovanie";
     };
     ListBox LB_FMT
     {
@@ -833,6 +842,20 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         < "लिंक किया हुआ सुचित्र" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
         < "कोई नहीं" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "1, 2, 3, ... " ;                4/*SVX_NUM_ARABIC              */; > ;
+        < "A, B, C, ... " ;                 0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+        < "I, II, III, ... " ;          2/*SVX_NUM_ROMAN_UPPER         */; > ;
+        < "i, ii, iii, ... " ;          3/*SVX_NUM_ROMAN_LOWER         */; > ;
+        < "A, .., AA, .., AAA, ... " ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+        < "Odrážka" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "Obrázky" ;                  8/*SVX_NUM_BITMAP              */; > ;
+        < "Obrázky s odkazom" ;            0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+        < "Žiadne" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+    };
     };
     FixedText FT_PREFIX
     {
@@ -867,6 +890,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Před";
         Text[ hebrew ] = "‮לפני‬";
         Text[ hindi ] = "से पहिले";
+        Text[ slovak ] = "Pred";
     };
     Edit ED_PREFIX
     {
@@ -910,6 +934,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Za";
         Text[ hebrew ] = "‮אחרי‬";
         Text[ hindi ] = "के पश्चात्";
+        Text[ slovak ] = "Za";
     };
     Edit ED_SUFFIX
     {
@@ -951,6 +976,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Styl znaku";
         Text[ hebrew ] = "Zeichen~vorlage";
         Text[ hindi ] = "~अक्षर शैली";
+        Text[ slovak ] = "Štýl ~znaku";
     };
     ListBox LB_CHARFMT
     {
@@ -991,6 +1017,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Barva";
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "रंग";
+        Text[ slovak ] = "Farba";
     };
     ListBox LB_BUL_COLOR
     {
@@ -1032,6 +1059,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Relativní velikost";
         Text[ hebrew ] = "~Relative Größe";
         Text[ hindi ] = "~सम्बन्धित परिमाण";
+        Text[ slovak ] = "~Relatívna veľkosť";
     };
     MetricField MF_BUL_REL_SIZE
     {
@@ -1081,6 +1109,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Zobrazit vše";
         Text[ hebrew ] = "V~ollständig";
         Text[ hindi ] = "उपस्तरों को दिखाओ";
+        Text[ slovak ] = "Zobraziť všetko";
     };
     NumericField NF_ALL_LEVEL
     {
@@ -1130,6 +1159,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Začít od";
         Text[ hebrew ] = "Be~ginn bei";
         Text[ hindi ] = "से प्रारंभ करो";
+        Text[ slovak ] = "Začať od";
     };
     NumericField ED_START
     {
@@ -1179,6 +1209,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Zobrazit symbol";
         Text[ hebrew ] = "~Symbol anzeigen";
         Text[ hindi ] = "संकेत दिखाओ";
+        Text[ slovak ] = "Zobraziť symbol";
     };
     FixedText FT_ALIGN
     {
@@ -1212,6 +1243,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Zarovnání";
         Text[ hebrew ] = "‮ישור‬";
         Text[ hindi ] = "~पंक्तिकरण";
+        Text[ slovak ] = "Z~arovnanie";
     };
     ListBox LB_ALIGN
     {
@@ -1382,6 +1414,12 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         < "केन्द्रित" ; > ;
         < "दाहिना" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Vľavo" ; > ;
+        < "Na stred" ; > ;
+        < "Vpravo" ; > ;
+    };
     };
     String STR_BULLET
     {
@@ -1413,6 +1451,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Znak";
         Text[ hebrew ] = "Ze~ichen";
         Text[ hindi ] = "अक्षर";
+        Text[ slovak ] = "Znak";
     };
     PushButton PB_BULLET
     {
@@ -1454,6 +1493,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Obrázky";
         Text[ hebrew ] = "‮גרפיקה‬";
         Text[ hindi ] = "सुचित्र";
+        Text[ slovak ] = "Obrázky";
     };
     MenuButton MB_BITMAP
     {
@@ -1498,6 +1538,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
                     Text[ czech ] = "Ze souboru...";
                     Text[ hebrew ] = "‮מקובץ...‬";
                     Text[ hindi ] = "फाइल से...";
+                    Text[ slovak ] = "Zo súboru...";
                 };
                 MenuItem
                 {
@@ -1528,6 +1569,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
                     Text[ czech ] = "Galerie";
                     Text[ hebrew ] = "‮גלריה‬";
                     Text[ hindi ] = "गेलरी";
+                    Text[ slovak ] = "Galéria";
                 };
             };
         };
@@ -1556,6 +1598,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Vybrat...";
         Text[ hebrew ] = "‮בחירה...‬";
         Text[ hindi ] = "चुनो...";
+        Text[ slovak ] = "Vybrať...";
     };
     FixedText FT_SIZE
     {
@@ -1589,6 +1632,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौड़ाई";
+        Text[ slovak ] = "Šírka";
     };
     MetricField MF_WIDTH
     {
@@ -1641,6 +1685,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँचाई";
+        Text[ slovak ] = "Výška";
     };
     MetricField MF_HEIGHT
     {
@@ -1693,6 +1738,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Zachovat poměr";
         Text[ hebrew ] = "Abg~leich";
         Text[ hindi ] = "अनुपात रखो";
+        Text[ slovak ] = "Zachovať pomer";
     };
     FixedText FT_ORIENT
     {
@@ -1726,6 +1772,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Zarovnání";
         Text[ hebrew ] = "‮ישור‬";
         Text[ hindi ] = "पंक्तिकरण";
+        Text[ slovak ] = "Zarovnanie";
     };
     ListBox LB_ORIENT
     {
@@ -2059,6 +2106,18 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         < "रेखा के मध्य" ; > ;
         < "रेखा के नीचे" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Vrchol základne" ; > ;
+        < "Stred základne" ; > ;
+        < "Spodok základne" ; > ;
+        < "Vrchol znaku" ; > ;
+        < "Stred znaku" ; > ;
+        < "Päta znaku" ; > ;
+        < "Vrchol riadku" ; > ;
+        < "Stred riadku" ; > ;
+        < "Päta riadku" ; > ;
+    };
     };
     FixedLine FL_SAME_LEVEL
     {
@@ -2091,6 +2150,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Všechny úrovně";
         Text[ hebrew ] = "Alle Ebenen";
         Text[ hindi ] = "सब स्तरें";
+        Text[ slovak ] = "všetky úrovne";
     };
     CheckBox CB_SAME_LEVEL
     {
@@ -2123,6 +2183,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "Postupné číslování";
         Text[ hebrew ] = "~Fortlaufende Nu~mmerierung";
         Text[ hindi ] = "~क्रमागत संख्या देना";
+        Text[ slovak ] = "~Postupné číslovanie";
     };
     Window WIN_PREVIEW
     {
@@ -2158,6 +2219,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ czech ] = "V tématu galerie 'Odrážky' nejsou žádné obrázky.";
         Text[ hebrew ] = "Es sind keine Grafiken im Gallery-Thema 'Bullets' vorhanden.";
         Text[ hindi ] = "'बुल्लेट्स' गेलरी विषय में कोई सुचित्र नहीं है ।";
+        Text[ slovak ] = "V motíve galérie 'Odrážky' nie sú žiadne obrázky.";
     };
 
 };
@@ -2204,6 +2266,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ czech ] = "Úroveň";
         Text[ hebrew ] = "~Ebene";
         Text[ hindi ] = "स्तर";
+        Text[ slovak ] = "Úroveň";
     };
     MultiListBox LB_LEVEL
     {
@@ -2246,6 +2309,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ czech ] = "Umístění a rozteče";
         Text[ hebrew ] = "Position und Abstand";
         Text[ hindi ] = "स्थान और अंतर देना";
+        Text[ slovak ] = "Umiestnenie a rozostupy";
     };
     FixedText FT_BORDERDIST
     {
@@ -2278,6 +2342,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ czech ] = "Odsazení";
         Text[ hebrew ] = "‮שוליים‬";
         Text[ hindi ] = "इन्डेन्ट";
+        Text[ slovak ] = "Odsadenie";
     };
     CheckBox CB_RELATIVE
     {
@@ -2310,6 +2375,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ czech ] = "Relativní";
         Text[ hebrew ] = "Relati~v";
         Text[ hindi ] = "सम्बन्धि~त";
+        Text[ slovak ] = "Relatí~vne";
     };
     MetricField MF_BORDERDIST
     {
@@ -2360,6 +2426,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ czech ] = "Vzdálenost k textu";
         Text[ hebrew ] = "Abstand zum Te~xt";
         Text[ hindi ] = "टेक्स्ट् को अंतर देना";
+        Text[ slovak ] = "Vzdialenosť k textu";
     };
     MetricField MF_INDENT
     {
@@ -2410,6 +2477,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ czech ] = "Minimální mezera mezi číslováním a textem";
         Text[ hebrew ] = "~Mindestabstand Nummer <-> Text";
         Text[ hindi ] = "न्यूनतम अंतर संख्या देना <-> टेक्स्ट्";
+        Text[ slovak ] = "Min. vzdial. medzi čísl. a textom";
     };
     MetricField MF_NUMDIST
     {
@@ -2460,6 +2528,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ czech ] = "Zarovnání číslování";
         Text[ hebrew ] = "Ausri~chtung der Nummerierung";
         Text[ hindi ] = "सं~ख्या की पंक्तिकरण";
+        Text[ slovak ] = "~Zarovnanie číslovaní";
     };
     ListBox LB_ALIGN
     {
@@ -2629,6 +2698,12 @@ TabPage RID_SVXPAGE_NUM_POSITION
         < "केन्द्रित" ; > ;
         < "दाहिना" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Vľavo" ; > ;
+        < "Na stred" ; > ;
+        < "Vpravo" ; > ;
+    };
     };
     PushButton PB_STANDARD
     {
@@ -2661,6 +2736,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ czech ] = "Výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "अनुपस्थिति";
+        Text[ slovak ] = "Východzie";
     };
     Window WIN_PREVIEW
     {
@@ -2700,6 +2776,7 @@ String RID_STR_EDIT_GRAPHIC
     Text[ czech ] = "Odkaz";
     Text[ hebrew ] = "Verknüpfen";
     Text[ hindi ] = "लिंक";
+    Text[ slovak ] = "Odkaz";
 };
 String RID_STR_FULLNUMS_1 { Text = "1.|1.1|a)|61589|61589" ; };
 String RID_STR_FULLNUMS_2 { Text = "1.|a)|61589|61589|61589" ; };
@@ -2710,6 +2787,8 @@ String RID_STR_FULLNUMS_6 { Text = "A.|I.|a.|i.|61589" ; };
 String RID_STR_FULLNUMS_7 { Text = "1|1.1|1.1.1|1.1.1.1|1.1.1.1.1" ; };
 String RID_STR_FULLNUMS_8 { Text = "61487|61488|61485|61589|61589" ; };
 String RID_STR_FULLNUMS_7_HTML { Text = "I.|I.|I|I.|I." ; };
+
+
 
 
 
