@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListenAtCalcRangeInDraw.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:10:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -113,7 +113,7 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
 
         // insert a new chart into the "Chart" sheet of the
         // spreadsheet document
-        maChartDocument = aChartHelper.insertOLEChart(
+        maChartDocument = aChartHelper.insertOLEChartInDraw(
             "ChartWithCalcData",
             aPos,
             aExtent,
