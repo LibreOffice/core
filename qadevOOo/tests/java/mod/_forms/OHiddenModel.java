@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OHiddenModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:06 $
+ *  last change:$Date: 2003-02-10 10:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@ import lib.TestParameters;
 import util.DrawTools;
 import util.FormTools;
 import util.SOfficeFactory;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which is represented by service
@@ -182,7 +185,8 @@ public class OHiddenModel extends TestCase {
                 (XNameContainer.class, frm) ;
 
             frmNC.insertByName("OHiddenModel", ctrl) ;
-            oObj = (XInterface) frmNC.getByName("OHiddenModel") ;
+            oObj = (XInterface) AnyConverter.toObject(
+                new Type(XInterface.class),frmNC.getByName("OHiddenModel"));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create and add control", e) ;
