@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Compatibility.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 10:08:58 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,23 @@
                     <enumeration oor:value="swriter"><info><desc xml:lang="en-US">Writer module</desc></info></enumeration>
                 </constraints>
             </prop>
-            <prop oor:name="Options" oor:type="xs:int"><info><desc xml:lang="en-US">The options as a bitfield</desc></info>
-                <value>0</value>
+            <prop oor:name="UsePrinterMetrics" oor:type="xs:boolean"><info><desc xml:lang="en-US">Use printer metrics for document formatting</desc></info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="AddSpacing" oor:type="xs:boolean"><info><desc xml:lang="en-US">Add spacing between paragraphs and tables</desc></info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="AddSpacingAtPages" oor:type="xs:boolean"><info><desc xml:lang="en-US">Add paragraph and table spacing at tops of pages</desc></info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="UseOurTabStopFormat" oor:type="xs:boolean"><info><desc xml:lang="en-US">Use OpenOffice.org 1.1 tabstop formatting</desc></info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="NoExternalLeading" oor:type="xs:boolean"><info><desc xml:lang="en-US">Do not add leading (extra space) between lines of text</desc></info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="UseLineSpacing" oor:type="xs:boolean"><info><desc xml:lang="en-US">Use OpenOffice.org 1.1 line spacing</desc></info>
+                <value>false</value>
             </prop>
         </group>
     </templates>
