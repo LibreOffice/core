@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: os $ $Date: 2001-03-28 13:27:59 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:21:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,8 @@ RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 
 # --- Files --------------------------------------------------------
 
-SRCFILES = \
+SRS1NAME=$(TARGET)
+SRC1FILES = \
     sc.src		 \
     pseudo.src	 \
     menue.src	 \
