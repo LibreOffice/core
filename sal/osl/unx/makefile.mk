@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2001-03-16 15:15:13 $
+#   last change: $Author: obr $ $Date: 2001-04-11 11:32:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/socket.obj   \
             $(SLO)$/interlck.obj \
             $(SLO)$/mutex.obj    \
+            $(SLO)$/nlsupport.obj \
             $(SLO)$/thread.obj   \
             $(SLO)$/module.obj   \
             $(SLO)$/process.obj  \
@@ -107,6 +108,7 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/socket.obj   \
             $(OBJ)$/interlck.obj \
             $(OBJ)$/mutex.obj    \
+            $(OBJ)$/nlsupport.obj \
             $(OBJ)$/thread.obj   \
             $(OBJ)$/module.obj   \
             $(OBJ)$/process.obj  \
