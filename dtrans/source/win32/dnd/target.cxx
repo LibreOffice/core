@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-07 07:10:36 $
+ *  last change: $Author: ssa $ $Date: 2001-07-04 09:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ void SAL_CALL DropTarget::addDropTargetListener( const Reference< XDropTargetLis
 void SAL_CALL DropTarget::removeDropTargetListener( const Reference< XDropTargetListener >& dtl )
         throw(RuntimeException)
 {
-    rBHelper.addListener( ::getCppuType( &dtl ), dtl );
+    rBHelper.removeListener( ::getCppuType( &dtl ), dtl );
 }
 
 sal_Bool SAL_CALL DropTarget::isActive(  ) throw(RuntimeException)
