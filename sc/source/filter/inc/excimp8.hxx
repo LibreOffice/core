@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:20:42 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,6 @@ class ImportExcel8 : public ImportExcel
         void                    Calccount( void );              // 0x0C
         void                    Delta( void );                  // 0x10
         void                    Iteration( void );              // 0x11
-        void                    Protect( void );                // 0x12
         void                    Verticalpagebreaks( void );     // 0x1A
         void                    Horizontalpagebreaks( void );   // 0x1B
         void                    Note( void );                   // 0x1C
