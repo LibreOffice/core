@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibilityoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2002-04-15 18:44:44 $
+ *  last change: $Author: os $ $Date: 2002-05-24 11:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ class SvtAccessibilityOptions_Impl : public utl::ConfigItem, public SfxBroadcast
 {
 private:
     sal_Bool        m_bForDrawings;
+    sal_Bool        m_bForBorders;
     sal_Bool        m_bForPagePreviews;
     sal_Bool        m_bHelpTipsDisappear;
     sal_Bool        m_bAllowAnimatedGraphics;
@@ -108,6 +109,7 @@ private:
 
     //this list needs exactly to mach the listet properties in GetPropertyNames
     enum PropertyNameIndex { DRAWINGS=0
+                            , BORDERS
                             , PAGEPREVIEWS
                             , HELPTIPSDISAPPEAR
                             , HELPTIPSECONDS
@@ -128,6 +130,8 @@ public:
 
     sal_Bool    GetIsForDrawings() const
                     {return GetToken( &SvtAccessibilityOptions_Impl::m_bForDrawings );}
+    sal_Bool    GetIsForBorders() const
+                    {return GetToken( &SvtAccessibilityOptions_Impl::m_bForBorders );}
     sal_Bool    GetIsForPagePreviews() const
                     {return GetToken( &SvtAccessibilityOptions_Impl::m_bForPagePreviews );}
     sal_Bool    GetIsHelpTipsDisappear() const
@@ -147,6 +151,8 @@ public:
 
     void        SetIsForDrawings(sal_Bool bSet)
                     { SetToken( &SvtAccessibilityOptions_Impl::m_bForDrawings, bSet ); }
+    void        SetIsForBorders(sal_Bool bSet)
+                    { SetToken( &SvtAccessibilityOptions_Impl::m_bForBorders, bSet ); }
     void        SetIsForPagePreviews(sal_Bool bSet)
                     { SetToken( &SvtAccessibilityOptions_Impl::m_bForPagePreviews, bSet ); }
     void        SetIsHelpTipsDisappear(sal_Bool bSet)
@@ -185,6 +191,7 @@ Sequence< OUString > SvtAccessibilityOptions_Impl::GetPropertyNames()
     static const char* aPropNames[] =
     {
         "IsForDrawings"             // DRAWINGS
+        ,"IsForBorders"             // BORDERS
         ,"IsForPagePreviews"        // PAGEPREVIEWS
         ,"IsHelpTipsDisappear"      // HELPTIPSDISAPPEAR
         ,"HelpTipSeconds"           // HELPTIPSECONDS
@@ -232,6 +239,7 @@ void SvtAccessibilityOptions_Impl::Load()
                     switch ( PropertyNameIndex(nProp) )
                     {
                         case DRAWINGS:              m_bForDrawings = bTemp;         break;
+                        case BORDERS:               m_bForBorders = bTemp;         break;
                         case PAGEPREVIEWS:          m_bForPagePreviews = bTemp;     break;
                         case HELPTIPSDISAPPEAR:     m_bHelpTipsDisappear = bTemp;   break;
                         case ALLOWANIMATEDGRAPHICS: m_bAllowAnimatedGraphics = bTemp; break;
@@ -279,6 +287,7 @@ void SvtAccessibilityOptions_Impl::Commit()
         switch ( PropertyNameIndex(nProp) )
         {
             case DRAWINGS:              bTemp = m_bForDrawings;         break;
+            case BORDERS:               bTemp = m_bForBorders;         break;
             case PAGEPREVIEWS:          bTemp = m_bForPagePreviews;     break;
             case HELPTIPSDISAPPEAR:     bTemp = m_bHelpTipsDisappear;   break;
             case HELPTIPSECONDS:        pValues[nProp] <<= m_nHelpTipSeconds; continue;//this is an integer and not a bool
@@ -376,6 +385,10 @@ sal_Bool SvtAccessibilityOptions::GetIsForDrawings() const
 {
     return sm_pSingleImplConfig->GetIsForDrawings();
 }
+sal_Bool SvtAccessibilityOptions::GetIsForBorders() const
+{
+    return sm_pSingleImplConfig->GetIsForBorders();
+}
 sal_Bool SvtAccessibilityOptions::GetIsForPagePreviews() const
 {
     return sm_pSingleImplConfig->GetIsForPagePreviews();
@@ -414,6 +427,10 @@ sal_Int16 SvtAccessibilityOptions::GetHelpTipSeconds() const
 void SvtAccessibilityOptions::SetIsForDrawings(sal_Bool bSet)
 {
     sm_pSingleImplConfig->SetIsForDrawings(bSet);
+}
+void SvtAccessibilityOptions::SetIsForBorders(sal_Bool bSet)
+{
+    sm_pSingleImplConfig->SetIsForBorders(bSet);
 }
 void SvtAccessibilityOptions::SetIsForPagePreviews(sal_Bool bSet)
 {
