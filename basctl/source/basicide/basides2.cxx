@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ab $ $Date: 2002-10-30 09:27:01 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 17:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #pragma hdrstop
 #define _SOLAR__PRIVATE 1
 
-#include <vcl/rcid.h>
 #include <vcl/sound.hxx>
 #include <basidesh.hxx>
 #include <baside2.hxx>
