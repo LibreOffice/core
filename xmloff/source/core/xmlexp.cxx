@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-30 13:36:38 $
+ *  last change: $Author: cl $ $Date: 2001-05-04 14:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,7 +1104,25 @@ void SvXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
 {
 }
 
-OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat) const
+void SvXMLExport::addDataStyle(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat )
+{
+    if(pNumExport)
+        pNumExport->SetUsed(nNumberFormat);
+}
+
+void SvXMLExport::exportDataStyles()
+{
+    if(pNumExport)
+        pNumExport->Export(*pNamespaceMap, sal_False);
+}
+
+void SvXMLExport::exportAutoDataStyles()
+{
+    if(pNumExport)
+        pNumExport->Export(*pNamespaceMap, sal_True);
+}
+
+OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat ) const
 {
     OUString sTemp;
     if(pNumExport)
