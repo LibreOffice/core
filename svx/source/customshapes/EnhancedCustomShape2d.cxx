@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:07:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2308,20 +2308,6 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
 // SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
 //      pRet->SetModel( pCustomShapeObj->GetModel() );
         pRet->SetMergedItemSet( *this );
-    }
-    else if ( eSpType == mso_sptRoundRectangle )
-    {
-        sal_Int32 nW = aLogicRect.Right() - aLogicRect.Left();
-        sal_Int32 nH = aLogicRect.Bottom() - aLogicRect.Top();
-        if ( nH < nW )
-            nW = nH;
-        double fAdjust = GetAdjustValueAsDouble( 0 ) / 21600.0;
-        nW = (sal_Int32)( (double)nW * fAdjust );
-        pRet = new SdrRectObj( aLogicRect );
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//      pRet->SetModel( pCustomShapeObj->GetModel() );
-        pRet->SetMergedItemSet( *this );
-        pRet->SetMergedItem( SdrEckenradiusItem( nW ) );
     }
     else if ( eSpType == mso_sptEllipse )
     {
