@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alienwarn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 16:47:06 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 15:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ SfxAlienWarningDialog::SfxAlienWarningDialog( Window* pParent, const String& _rF
 
     // replace formatname
     String sInfoText = m_aInfoText.GetText();
-    sInfoText.SearchAndReplace( DEFINE_CONST_UNICODE("%FORMATNAME"), _rFormatName );
+    sInfoText.SearchAndReplaceAll( DEFINE_CONST_UNICODE("%FORMATNAME"), _rFormatName );
     m_aInfoText.SetText( sInfoText );
 
     // if the button text is too wide, then broaden the button
