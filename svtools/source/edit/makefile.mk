@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pl $ $Date: 2001-11-01 19:12:41 $
+#   last change: $Author: sb $ $Date: 2002-07-23 13:03:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -50,7 +50,7 @@
 #
 #   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
 #
-#   Copyright: 2000 by Sun Microsystems, Inc.
+#   Copyright: 2002 by Sun Microsystems, Inc.
 #
 #   All Rights Reserved.
 #
@@ -68,13 +68,29 @@ LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
 .IF "$(header)" == ""
+
+UNOUCRDEP = $(SOLARBINDIR)$/applicat.rdb
+UNOUCRRDB = $(SOLARBINDIR)$/applicat.rdb
+UNOUCROUT = $(OUT)$/inc
+UNOTYPES = \
+    com.sun.star.awt.FontWeight \
+    com.sun.star.awt.XTextArea \
+    com.sun.star.awt.XTextComponent \
+    com.sun.star.awt.XTextLayoutConstrains \
+    com.sun.star.lang.EventObject \
+    drafts.com.sun.star.accessibility.AccessibleEventId \
+    drafts.com.sun.star.accessibility.AccessibleRole \
+    drafts.com.sun.star.accessibility.AccessibleStateType \
+    drafts.com.sun.star.accessibility.AccessibleTextType \
+    drafts.com.sun.star.accessibility.XAccessible \
+    drafts.com.sun.star.accessibility.XAccessibleContext \
+    drafts.com.sun.star.accessibility.XAccessibleEditableText \
+    drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
 
 SLOFILES=   \
             $(SLO)$/textdata.obj	\
@@ -86,7 +102,8 @@ SLOFILES=   \
             $(SLO)$/xtextedt.obj	\
             $(SLO)$/sychconv.obj	\
             $(SLO)$/svmedit.obj		\
-            $(SLO)$/svmedit2.obj
+            $(SLO)$/svmedit2.obj \
+            $(SLO)$/textwindowaccessibility.obj
 
 OBJFILES=   \
             $(OBJ)$/textdata.obj	\
@@ -98,11 +115,14 @@ OBJFILES=   \
             $(OBJ)$/xtextedt.obj	\
             $(OBJ)$/sychconv.obj	\
             $(OBJ)$/svmedit.obj		\
-            $(OBJ)$/svmedit2.obj
+            $(OBJ)$/svmedit2.obj \
+            $(OBJ)$/textwindowaccessibility.obj
 
 EXCEPTIONSFILES=	\
             $(SLO)$/textview.obj	\
-            $(OBJ)$/textview.obj
+            $(OBJ)$/textview.obj \
+            $(SLO)$/textwindowaccessibility.obj \
+            $(OBJ)$/textwindowaccessibility.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1OBJFILES=  $(SLOFILES)
