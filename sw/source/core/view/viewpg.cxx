@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:39:51 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,8 +231,9 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
 
         const SwPageFrm *pStPage  = (SwPageFrm*)GetLayout()->Lower();
         const SwFrm     *pEndPage = pStPage;
+        USHORT i;
 
-        for( USHORT i = 1; pStPage && i < (USHORT)aPages.Min(); ++i )
+        for( i = 1; pStPage && i < (USHORT)aPages.Min(); ++i )
             pStPage = (SwPageFrm*)pStPage->GetNext();
 
         if( !pStPage )          // dann wars das
@@ -555,8 +556,9 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
     USHORT nCopyCnt = rOptions.bCollate ? rOptions.nCopyCount : 1;
 
     const SwPageFrm *pStPage  = (SwPageFrm*)GetLayout()->Lower();
+    USHORT i;
 
-    for( USHORT i = 1; pStPage && i < (USHORT)aPages.Min(); ++i )
+    for( i = 1; pStPage && i < (USHORT)aPages.Min(); ++i )
         pStPage = (SwPageFrm*)pStPage->GetNext();
 
     if( !pStPage )          // dann wars das
