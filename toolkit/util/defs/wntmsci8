@@ -15162,3 +15162,6 @@ _TI2?AVbad_alloc@std@@
 ?tryCreateFactory@toolkit@@YAPAXPBD000P6A?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@3456@@Z1@Z
 ?szServiceName_UnoSpinButtonControl@@3QBDB
 ?szServiceName_UnoSpinButtonModel@@3QBDB
+?lcl_getSpinButtonValue@?A0x4c7da398@toolkit@@YAJAAVIMutex@vos@@PBVWindow@@P8SpinButton@@BEJXZ@Z
+?lcl_modifyStyle@?A0x4c7da398@toolkit@@YAXPAVWindow@@_JE@Z
+?lcl_setSpinButtonValue@?A0x4c7da398@toolkit@@YAXAAVIMutex@vos@@PAVWindow@@P8SpinButton@@AEXJ@ZJ@Z
