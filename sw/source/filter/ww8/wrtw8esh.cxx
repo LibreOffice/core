@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:13 $
+ *  last change: $Author: cmc $ $Date: 2002-11-15 13:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _SV_CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
 #endif
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
@@ -133,6 +136,9 @@
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
+#endif
+#ifndef _SVDOOLE2_HXX
+#include <svx/svdoole2.hxx>
 #endif
 
 #ifndef _MyEDITENG_HXX
@@ -245,6 +251,12 @@
 #endif
 
 using namespace ::com::sun::star;
+
+namespace wwUtility
+{
+    Graphic MakeSafeGDIMetaFile(SvInPlaceObjectRef xObj);
+};
+
 
 PlcDrawObj::~PlcDrawObj()
 {
@@ -1359,16 +1371,12 @@ void SwEscherEx::SetPicId(const SdrObject &rSdrObj, UINT32 nShapeId,
 
 INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
 {
-    INT32 nBorderThick=0;
-    SwNodeIndex aIdx(*rFmt.GetCntnt().GetCntntIdx(), 1);
-    SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
-    const SvInPlaceObjectRef xObj(rOLENd.GetOLEObj().GetOleRef());
-
+    INT32 nBorderThick = 0;
     if (const SdrObject* pSdrObj = rFmt.FindRealSdrObject())
     {
-        GDIMetaFile aMtf;
-        xObj->GetGDIMetaFile(aMtf);
-        Graphic aGraphic(aMtf);
+        SwNodeIndex aIdx(*rFmt.GetCntnt().GetCntntIdx(), 1);
+        SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
+        const SvInPlaceObjectRef xObj(rOLENd.GetOLEObj().GetOleRef());
 
         /*
         #i5970#
@@ -1376,7 +1384,7 @@ INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
         instead ==> allows unicode text to be preserved
         */
 #ifdef OLE_PREVIEW_AS_EMF
-        wwUtility::MakeSafeGDIMetaFile(aGraphic);
+        Graphic aGraphic = wwUtility::MakeSafeGDIMetaFile(xObj);
 #endif
         OpenContainer(ESCHER_SpContainer);
 
@@ -2438,27 +2446,33 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
  {Open|Star}Symbol and if it is then use PNG, and if not use EMF. That would
  be a very acceptable compromise in my view.
 */
-bool wwUtility::MakeSafeGDIMetaFile(Graphic &rGraphic)
+Graphic wwUtility::MakeSafeGDIMetaFile(SvInPlaceObjectRef xObj)
 {
-    bool bRet = false;
-    SvMemoryStream aStream;
+    Graphic aGraphic;
+    GDIMetaFile aGDIMtf;
 
-    sal_uInt32 nRet = GraphicConverter::Export(aStream, rGraphic, CVT_PNG);
-    if (nRet == ERRCODE_NONE)
+    if (xObj.Is())
     {
-        const ULONG nBufSize = aStream.Tell();
-        if (nBufSize)
-        {
-            BYTE* pBuf = new BYTE[nBufSize];
-            aStream.Seek(0);
-            aStream.Read(pBuf, nBufSize);
-            rGraphic.SetLink(
-                GfxLink(pBuf, nBufSize, GFX_LINK_TYPE_NATIVE_PNG, TRUE));
-            bRet = true;
-        }
+        VirtualDevice aVDev;
+        const MapMode aMap100(MAP_100TH_MM);
+        const Size& rSize = xObj->GetVisArea().GetSize();
+
+        aVDev.SetMapMode(aMap100);
+        aGDIMtf.Record(&aVDev);
+
+        xObj->DoDraw(&aVDev, Point(), rSize, JobSetup());
+
+        aGDIMtf.Stop();
+        aGDIMtf.WindStart();
+        aGDIMtf.SetPrefMapMode(aMap100);
+        aGDIMtf.SetPrefSize(rSize);
+        aGraphic = Graphic(aGDIMtf);
     }
 
-    return bRet;
+    BitmapEx aBmpEx(aGraphic.GetBitmap(0));
+    aBmpEx.SetPrefMapMode(aGDIMtf.GetPrefMapMode());
+    aBmpEx.SetPrefSize(aGDIMtf.GetPrefSize());
+    return Graphic(aBmpEx);
 }
 
 void SwEscherEx::MakeZOrderArrAndFollowIds(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:21 $
+ *  last change: $Author: cmc $ $Date: 2002-11-15 13:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,12 +807,10 @@ struct WW8_TablePos
 #pragma pack()
 #endif
 
-class Graphic;
 namespace wwUtility
 {
     sal_uInt32 BGRToRGB(sal_uInt32 nColour);
     inline sal_uInt32 RGBToBGR(sal_uInt32 nColour) { return BGRToRGB(nColour); }
-    bool MakeSafeGDIMetaFile(Graphic &rGraphic);
 };
 
 #endif
