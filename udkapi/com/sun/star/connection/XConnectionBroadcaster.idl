@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnectionBroadcaster.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-08-05 09:33:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
     <p> Maybe supported by connections returned from <member>XAcceptor::accept</member>
     or <member>XConnector::connect</member>.
  */
-interface XConnectionBroadcaster: com::sun::star::uno::XInterface
+published interface XConnectionBroadcaster: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
