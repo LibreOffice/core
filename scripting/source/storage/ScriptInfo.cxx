@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lkovacs $ $Date: 2002-09-23 14:08:29 $
+ *  last change: $Author: dsherwin $ $Date: 2002-09-23 16:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,12 @@
 #include <cppuhelper/implementationentry.hxx>
 
 #include <util/util.hxx>
-#ifndef _SCRIPT_FRAMEWORK_STORAGE_SCRIPT_INFO_HXX_
 #include <ScriptInfo.hxx>
-#endif
+#include <osl/file.hxx>
 
+#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_STORAGE_XSCRIPTSTORAGEMANAGER_HPP_
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_STORAGE_XPARCELINVOCATIONPREP_HPP_
 #include <drafts/com/sun/star/script/framework/storage/XParcelInvocationPrep.hpp>
 #endif
@@ -76,6 +77,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace ::drafts::com::sun::star::script::framework;
+using namespace ::drafts::com::sun::star::script::framework::storage;
 
 namespace scripting_impl
 {
@@ -95,7 +97,7 @@ static sal_Char docUriPrefix [] = "vnd.sun.star.pkg";
 ScriptInfo::ScriptInfo( const Reference< XComponentContext > & xContext )
         : m_xContext( xContext )
 {
-    OSL_TRACE( "< ScriptInfo ctor called >\n" );
+    OSL_TRACE( "< ++++++ ScriptInfo ctor called >\n" );
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 }
 
@@ -113,14 +115,13 @@ throw (RuntimeException, Exception)
     try
     {
         if (((args[0] >>= m_scriptImplInfo) == sal_False) ||
-                ((args[1] >>= m_storageID) == sal_False))
-        {
-            throw RuntimeException(OUSTR("ScriptInfo: initialize(): "), Reference< XInterface >());
+        ((args[1] >>= m_storageID) == sal_False)) {
+        throw RuntimeException(OUSTR("ScriptInfo: initialize(): "), Reference< XInterface >());
         }
     }
     catch (Exception &e)
     {
-        throw RuntimeException(OUSTR("ScriptInfo: initialize(): ") + e.Message, Reference< XInterface >());
+    throw RuntimeException(OUSTR("ScriptInfo: initialize(): ") + e.Message, Reference< XInterface >());
     }
 }
 
@@ -168,7 +169,7 @@ void SAL_CALL ScriptInfo::setLanguage( const OUString& language ) throw (Runtime
 
 //*************************************************************************
 OUString SAL_CALL ScriptInfo::getScriptLocation()
-throw ( RuntimeException )
+    throw ( RuntimeException )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
     return m_scriptImplInfo.scriptLocation;
@@ -239,55 +240,41 @@ throw(RuntimeException)
 
 //*************************************************************************
 /**
-   This function prepares the script for invocation and returns the full path
-   to the prepared parcel folder
-
-   @return
-    <type>::rtl::OUString</type> file URI to the prepared parcel
-
-*/
+ *  This function prepares the script for invocation and returns the full path
+ *  to the prepared parcel folder
+ *
+ */
 ::rtl::OUString SAL_CALL ScriptInfo::prepareForInvocation() throw(RuntimeException)
 {
+    OSL_TRACE("******* In ScriptInfo::prepareForInvocation() *************\n");
     try
     {
-    // if not document URI nothing to do, return path
-        if (m_scriptImplInfo.parcelURI.compareToAscii(docUriPrefix, 16) != 0)
-        {
-            return m_scriptImplInfo.parcelURI;
-        }
-
-        // if document URI then copy parcel to a temporary area and return path to it
+        if (m_scriptImplInfo.parcelURI.compareToAscii(docUriPrefix, 16) != 0) {
+        return m_scriptImplInfo.parcelURI;
+        } 
 
         validateXRef(m_xContext, "ScriptInfo::prepareForInvocation(): invalid context");
         Any aAny=m_xContext->getValueByName(
-                     OUString::createFromAscii(
-                         "/singletons/drafts.com.sun.star.script.framework.storage.theScriptStorageManager"));
+        OUString::createFromAscii(
+        "/singletons/drafts.com.sun.star.script.framework.storage.theScriptStorageManager"));
         Reference <XInterface> xx;
-        if ((aAny >>= xx) == sal_False)
-        {
-            throw RuntimeException(OUSTR("ScriptInfo::prepareForInvocation(): could not get ScriptStorageManager"), Reference< XInterface >());
+        if ((aAny >>= xx) == sal_False) {
+        throw RuntimeException(OUSTR("ScriptInfo::prepareForInvocation(): could not get ScriptStorageManager"), Reference< XInterface >());
         }
 
         validateXRef(xx, "ScriptInfo::prepareForInvocation(): could not get XInterface");
-        Reference<storage::XScriptStorageManager> xSSM(xx,UNO_QUERY_THROW);
+        Reference<XScriptStorageManager> xSSM(xx,UNO_QUERY);
         validateXRef(xSSM, "ScriptInfo::prepareForInvocation(): could not get XScriptStorageManager");
         xx = xSSM->getScriptStorage(m_storageID);
         validateXRef(xx, "ScriptInfo::prepareForInvocation(): could not get XInterface");
-        Reference <storage::XParcelInvocationPrep> xPIP(xx, UNO_QUERY_THROW);
+        Reference <XParcelInvocationPrep> xPIP(xx, UNO_QUERY);
         validateXRef(xPIP, "ScriptInfo::prepareForInvocation(): could not get XParcelInvocationPrep");
         return xPIP->prepareForInvocation(m_scriptImplInfo.parcelURI);
     }
     catch(RuntimeException &e)
     {
         OUString temp = OUSTR(
-                            "ScriptInfo::prepareForInvocation RuntimeException: ");
-        throw RuntimeException(temp.concat(e.Message),
-                               Reference<XInterface> ());
-    }
-    catch(RuntimeException &e)
-    {
-        OUString temp = OUSTR(
-                            "ScriptInfo::prepareForInvocation UnknownException: ");
+            "ScriptInfo::prepareForInvocation RuntimeException: ");
         throw RuntimeException(temp.concat(e.Message),
                                Reference<XInterface> ());
     }
@@ -295,8 +282,8 @@ throw(RuntimeException)
     catch ( ... )
     {
         throw RuntimeException(OUSTR(
-                                   "ScriptInfo::prepareForInvocation UnknownException: "),
-                               Reference<XInterface> ());
+            "ScriptInfo::prepareForInvocation UnknownException: "),
+                         Reference<XInterface> ());
     }
 #endif
 }
