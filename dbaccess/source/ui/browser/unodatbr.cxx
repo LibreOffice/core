@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 14:15:28 $
+ *  last change: $Author: oj $ $Date: 2001-10-29 12:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3684,6 +3684,9 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
     aContextMenu.RemoveDisabledEntries();
 
     sal_Bool bReopenConn = sal_False;
+    // disable inplace editing because this timer could bring this frame back to front
+    m_pTreeView->getListBox()->EnableInplaceEditing( sal_False );
+
     USHORT nPos = aContextMenu.Execute(m_pTreeView->getListBox(), aPosition);
 
     delete pDynamicSubMenu;
@@ -3855,6 +3858,8 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
         }
         break;
     }
+
+    m_pTreeView->getListBox()->EnableInplaceEditing( sal_True );
 
     return sal_True;    // handled
 }
