@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smdetect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:25:47 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,8 +397,8 @@ SmFilterDetect::~SmFilterDetect()
                         const int nSize = 5;
                         sal_Char aBuffer[nSize+1];
                         aBuffer[nSize] = 0;
-                        ULONG nBytesRead = pStrm->Read( aBuffer, nSize );
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
+                        ULONG nBytesRead = pStrm->Read( aBuffer, nSize );
                         if (nBytesRead == nSize)
                         {
                             if (0 == strncmp( "<?xml",aBuffer,nSize))
