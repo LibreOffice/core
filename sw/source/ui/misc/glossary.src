@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:52:13 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ ModalDialog DLG_GLOSSARY
         Text[ japanese ] = "“ό—Ν’†‚Ι“ό—Νx‰‡€–Ϊ–Ό‚π•\\¦‚·‚ι(~D)";
         Text[ chinese_traditional ] = "¦Ϋ°Κ§Ή¦¨Εγ¥ά(~D)";
         Text[ arabic ] = "ΪΡΦ ΘήνΙ ΕΟΞΗα ΗαδΥ ΗαΚαήΗΖν ΓΛδΗΑ ΗαίΚΗΘΙ Ϊαμ Τία ΚαγνΝ";
-        Text[ greek ] = "Εμφάνιση του υπόλοιπου μέ~ρους του ονόματος ως υπόδειξη κατά την δακτυλογράφηση";
+        Text[ greek ] = "Εμφάνιση του υπόλοιπου τμήματος του ονόματος ως συμβουλή κατά την εισαγωγή";
         Text[ korean ] = "±βΐΤΗΟ΄Β µΏΎΘ  Α¦ΎΘΐΈ·ΞΌ­ ³ªΈΣΑφ ΐΜΈ§ Η¥½Γ(~D)";
         Text[ turkish ] = "Giriώ sύrasύnda adύn tamamύnύ φneri olarak gφrόntόle";
         Text[ language_user1 ] = " ";
@@ -265,7 +265,7 @@ ModalDialog DLG_GLOSSARY
             Text[ dutch ] = "schrijfbeveiligd";
             Text[ french ] = "en lecture seule";
             Text[ spanish ] = "solo lectura";
-            Text[ italian ] = "readonly";
+            Text[ italian ] = "di sola lettura";
             Text[ danish ] = "skrivebeskyttet";
             Text[ swedish ] = "skrivskyddad";
             Text[ polish ] = "tylko do odczytu";
@@ -552,7 +552,7 @@ ModalDialog DLG_GLOSSARY
         Text[ dutch ] = "Voor de directory's van 'AutoTekst' bestaan geen schrijfrechten. Wilt u de dialoog voor het definiλren van het pad oproepen?";
         Text[ french ] = "Aucun droit d'ιcriture n'existe pour les rιpertoires 'AutoText'. Voulez-vous appeler la boξte de dialogue des chemins ?";
         Text[ spanish ] = "No existen derechos de escritura para los directorios 'AutoTexto'. ΏDesea abrir el diαlogo de rutas?";
-        Text[ italian ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ italian ] = "La cartella 'AutoText' θ di sola lettura. Volete richiamare il dialogo del percorso?";
         Text[ danish ] = "Der findes ingen skriverettigheder til 'AutoTekst'-bibliotekerne. Vil du εbne stidialogen?";
         Text[ swedish ] = "Det saknas skrivrδttigheter fφr katalogerna fφr 'AutoText'. Vill Du φppna sφkvδgsdialogen?";
         Text[ polish ] = "Katalogi 'Autotekst' sΉ tylko do odczytu. Czy wywo³aζ dialog cieΏki?";
