@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 15:58:47 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,17 +446,27 @@ FASTBOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
     BOOL bSkipHidden = !GetViewOptions()->IsShowHiddenChar();
 
     // #i27615# Handle cursor in front of label.
+    const SwTxtNode* pTxtNode = 0;
     FASTBOOL bRet = FALSE;
-    if (! bLeft && pCurCrsr->IsInFrontOfLabel())
+    if ( !bLeft && pCurCrsr->IsInFrontOfLabel() )
     {
         pCurCrsr->SetInFrontOfLabel(FALSE);
-
+        bRet = TRUE;
+    }
+    else if ( bLeft && 0 == pCurCrsr->GetPoint()->nContent.GetIndex() &&
+             !pCurCrsr->IsInFrontOfLabel() &&
+             0 != ( pTxtNode = pCurCrsr->GetPoint()->nNode.GetNode().GetTxtNode() ) &&
+             pTxtNode->IsNumbered() )
+    {
+        pCurCrsr->SetInFrontOfLabel(TRUE);
         bRet = TRUE;
     }
     else
+    {
         bRet = pCurCrsr->LeftRight( bLeft, nCnt, nMode, bVisualAllowed,
                                     bSkipHidden,
                                     !IsOverwriteCrsr() );
+    }
 
     if( bRet )
     {
@@ -528,6 +538,12 @@ FASTBOOL SwCrsrShell::UpDown( BOOL bUp, USHORT nCnt )
     SwShellCrsr* pTmpCrsr = bTableMode ? pTblCrsr : pCurCrsr;
 
     FASTBOOL bRet = pTmpCrsr->UpDown( bUp, nCnt );
+
+    // --> FME 2005-01-10 #i40019# UpDown should always reset the
+    // bInFrontOfLabel flag:
+    pCurCrsr->SetInFrontOfLabel(FALSE);
+    // <--
+
     if( bRet )
     {
         eMvState = MV_UPDOWN;       // Status fuers Crsr-Travelling - GetCrsrOfst
