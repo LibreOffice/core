@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-28 14:28:53 $
+ *  last change: $Author: aw $ $Date: 2001-04-19 16:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,10 @@
 
 #ifndef _E3D_OBJ3D_HXX
 #include <obj3d.hxx>
+#endif
+
+#ifndef _SVX_XFLFTRIT_HXX
+#include "xflftrit.hxx"
 #endif
 
 using namespace ::osl;
@@ -1000,6 +1004,14 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
                     rSet.Put( XLineEndItem( aEmpty, aPoly ) );
                 else
                     rSet.Put( XLineStartItem( aEmpty, aPoly ) );
+
+                return sal_True;
+            }
+            break;
+        case XATTR_FILLFLOATTRANSPARENCE:
+            {
+                // #85953# Set a disabled XFillFloatTransparenceItem
+                rSet.Put(XFillFloatTransparenceItem());
 
                 return sal_True;
             }
