@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-06 08:34:08 $
+ *  last change: $Author: thb $ $Date: 2001-09-25 12:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,12 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     INT32 nX, nY;
     SdOptions* pOptions = SD_MOD()->GetSdOptions(eDocType);
     pOptions->GetScale( nX, nY );
-    SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( nX, nY ) );
+
+    // #92067# Allow UI scale only for draw documents.
+    if( eType == DOCUMENT_TYPE_DRAW )
+        SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( nX, nY ) );  // user-defined
+    else
+        SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( 1, 1 ) );    // default
 #endif
 
     SetScaleUnit(MAP_100TH_MM);
