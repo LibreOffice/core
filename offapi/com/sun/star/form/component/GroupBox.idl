@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupBox.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 /** This service specifies a model for a control which can be used to visually
     group controls.
  */
-service GroupBox
+published service GroupBox
 {
     service com::sun::star::awt::UnoControlGroupBoxModel;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HTMLForm.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@
     the possibility of submitting or resetting the contents of a form.
     For more information on HTML forms, please see the documentation of HTML.</p>
  */
-service HTMLForm
+published service HTMLForm
 {
     service com::sun::star::form::component::Form;
 

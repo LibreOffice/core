@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HiddenControl.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
     Nevertheless, you can use them in your own forms for storing any data, for instance
     to evaluate it in some scripting macro.</p>
  */
-service HiddenControl
+published service HiddenControl
 {
     service com::sun::star::form::FormComponent;
 
