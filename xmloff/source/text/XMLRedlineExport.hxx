@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:13:18 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 16:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,8 @@ class XMLRedlineExport
     const ::rtl::OUString sEndRedline;
     const ::rtl::OUString sRedlineIdentifier;
     const ::rtl::OUString sIsInHeaderFooter;
-
+    const ::rtl::OUString sRedlineProtectionKey;
+    const ::rtl::OUString sRecordChanges;
 
     const ::rtl::OUString sChangePrefix;
 

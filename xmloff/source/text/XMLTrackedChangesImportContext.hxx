@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesImportContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 20:51:01 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 16:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,11 @@ public:
 
     ~XMLTrackedChangesImportContext();
 
-    SvXMLImportContext* CreateChildContext(
+    virtual void StartElement(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+    virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<

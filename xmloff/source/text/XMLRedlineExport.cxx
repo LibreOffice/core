@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:13:18 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 16:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,8 @@ XMLRedlineExport::XMLRedlineExport(SvXMLExport& rExp) :
     sEndRedline(RTL_CONSTASCII_USTRINGPARAM("EndRedline")),
     sRedlineIdentifier(RTL_CONSTASCII_USTRINGPARAM("RedlineIdentifier")),
     sIsInHeaderFooter(RTL_CONSTASCII_USTRINGPARAM("IsInHeaderFooter")),
+    sRedlineProtectionKey(RTL_CONSTASCII_USTRINGPARAM("RedlineProtectionKey")),
+    sRecordChanges(RTL_CONSTASCII_USTRINGPARAM("RecordChanges")),
     rExport(rExp),
     aChangeMap(),
     pCurrentChangesList(NULL)
@@ -286,9 +288,35 @@ void XMLRedlineExport::ExportChangesListElements()
     {
         Reference<XEnumerationAccess> aEnumAccess = xSupplier->getRedlines();
 
-        // only export if we actually have redlines
-        if (aEnumAccess->hasElements())
+        // redline protection key
+        Sequence<sal_Int8> aKey;
+        Reference<XPropertySet> aDocPropertySet( rExport.GetModel(),
+                                                 uno::UNO_QUERY );
+        aDocPropertySet->getPropertyValue( sRedlineProtectionKey ) >>= aKey;
+        if ( aKey.getLength() > 0 )
         {
+            OUStringBuffer aBuffer;
+            SvXMLUnitConverter::encodeBase64( aBuffer, aKey );
+            rExport.AddAttribute( XML_NAMESPACE_TEXT, sXML_protection_key,
+                                  aBuffer.makeStringAndClear() );
+        }
+
+        // redlining enabled?
+        sal_Bool bEnabled = *(sal_Bool*)aDocPropertySet->getPropertyValue(
+                                                sRecordChanges ).getValue();
+
+        // only export if we have redlines or attributes
+        if ( aEnumAccess->hasElements() || bEnabled || aKey.getLength() > 0 )
+        {
+
+            // export only if we have changes, but tracking is not enabled
+            if ( !bEnabled != !aEnumAccess->hasElements() )
+            {
+                rExport.AddAttributeASCII(
+                    XML_NAMESPACE_TEXT, sXML_track_changes,
+                    bEnabled ? sXML_true : sXML_false );
+            }
+
             // changes container element
             SvXMLElementExport aChanges(rExport, XML_NAMESPACE_TEXT,
                                         sXML_tracked_changes,
@@ -665,5 +693,3 @@ void XMLRedlineExport::ExportStartOrEndRedline(
         DBG_ERROR("XPropertySet expected");
     }
 }
-
-

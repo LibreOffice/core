@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: bm $ $Date: 2001-04-25 16:26:22 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 16:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1701,6 +1701,7 @@ XML_CONSTASCII_ACTION( sXML_top_values, "top values");
 XML_CONSTASCII_ACTION( sXML_trace_dependents, "trace-dependents" );
 XML_CONSTASCII_ACTION( sXML_trace_errors, "trace-errors" );
 XML_CONSTASCII_ACTION( sXML_trace_precedents, "trace-precedents" );
+XML_CONSTASCII_ACTION( sXML_track_changes, "track-changes" );
 XML_CONSTASCII_ACTION( sXML_tracked_changes, "tracked-changes" );
 XML_CONSTASCII_ACTION( sXML_tracked_changes_view_settings, "tracked-changes-view-settings" );
 XML_CONSTASCII_ACTION( sXML_transform , "transform" );

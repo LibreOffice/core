@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-30 09:04:04 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 16:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1915,6 +1915,22 @@ void XMLTextImportHelper::RedlineAdjustStartNodeCursor(
 {
     // dummy implementation: do nothing
 }
+
+void XMLTextImportHelper::SetShowChanges( sal_Bool bShowChanges )
+{
+    // dummy implementation: do nothing
+}
+
+void XMLTextImportHelper::SetRecordChanges( sal_Bool bRecordChanges )
+{
+    // dummy implementation: do nothing
+}
+void XMLTextImportHelper::SetChangesProtectionKey(
+    const Sequence<sal_Int8> & rProtectionKey )
+{
+    // dummy implementation: do nothing
+}
+
 
 OUString XMLTextImportHelper::GetOpenRedlineId()
 {
