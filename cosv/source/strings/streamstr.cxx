@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamstr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:48:01 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,10 @@
 namespace csv
 {
 
-const uintt C_short_max_size    = sizeof(short) / 2 + 1;
-const uintt C_int_max_size      = sizeof(int)   / 2 + 1;
-const uintt C_long_max_size     = sizeof(long)  / 2 + 1;
+// Maximal sizes of resulting integers in text form:
+const uintt C_short_max_size    = sizeof(short) * 3;
+const uintt C_int_max_size      = sizeof(int) * 3;
+const uintt C_long_max_size     = sizeof(long) * 3;
 
 
 inline void
@@ -687,7 +688,7 @@ StreamStr::to_lower( position_type       i_nStart,
               ++pChange )
         {
             *pChange =  (*pChange & char(0x80)) == '\0'
-                            ?   cLower[*pChange]
+                            ?   cLower[ UINT8(*pChange) ]
                             :   *pChange;
         }
     }
@@ -718,7 +719,7 @@ StreamStr::to_upper( position_type       i_nStart,
               ++pChange )
         {
             *pChange =  (*pChange & char(0x80)) == '\0'
-                            ?   cUpper[*pChange]
+                            ?   cUpper[ UINT8(*pChange) ]
                             :   *pChange;
         }
     }
