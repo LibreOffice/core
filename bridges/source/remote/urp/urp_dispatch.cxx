@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_dispatch.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:30:10 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 #include <sal/alloca.h>
-
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 
@@ -95,9 +94,8 @@ void SAL_CALL urp_sendCloseConnection( uno_Environment *pEnvRemote )
 
     {
         MutexGuard guard( pImpl->m_marshalingMutex );
-        sal_uInt8 nBitfield = 0;
 
-        // send immeadiatly
+        // send immediately
         if( ! pImpl->m_blockMarshaler.empty() )
         {
             pImpl->m_pWriter->touch( sal_True );
