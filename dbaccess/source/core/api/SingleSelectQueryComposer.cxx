@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:55:36 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,10 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
+#ifndef DBACCESS_SOURCE_CORE_INC_COMPOSERTOOLS_HXX
+#include "composertools.hxx"
+#endif
 #include <memory>
-#include <functional>
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -149,6 +151,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::util;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::utl;
@@ -167,6 +170,93 @@ using namespace ::utl;
 #define R_BRACKET       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"))
 #define COMMA           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","))
 
+// -------------------------------------------------------------------------
+namespace
+{
+    // .....................................................................
+    /** parses the given statement, using the given parser, returns a parse node representing
+        the statement
+
+        If the statement cannot be parsed, an error is thrown.
+    */
+    const OSQLParseNode* parseStatement_throwError( OSQLParser& _rParser, const ::rtl::OUString& _rStatement, const Reference< XInterface >& _rxContext )
+    {
+        ::rtl::OUString aErrorMsg;
+        const OSQLParseNode* pNewSqlParseNode = _rParser.parseTree( aErrorMsg, _rStatement );
+        if ( !pNewSqlParseNode )
+        {
+            SQLException aError2(aErrorMsg,_rxContext,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+            SQLException aError1(_rStatement,_rxContext,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,makeAny(aError2));
+            throw SQLException(_rParser.getContext().getErrorMessage(OParseContext::ERROR_GENERAL),_rxContext,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,makeAny(aError1));
+        }
+        return pNewSqlParseNode;
+    }
+
+    // .....................................................................
+    /** checks whether the given parse node describes a valid single select statement, throws
+        an error if not
+    */
+    void checkForSingleSelect_throwError( const OSQLParseNode* pStatementNode, OSQLParseTreeIterator& _rIterator,
+        const Reference< XInterface >& _rxContext, const ::rtl::OUString& _rOriginatingCommand )
+    {
+        const OSQLParseNode* pOldNode = _rIterator.getParseTree();
+
+        // determine the statement type
+        _rIterator.setParseTree( pStatementNode );
+        _rIterator.traverseAll();
+        bool bIsSingleSelect = ( _rIterator.getStatementType() == SQL_STATEMENT_SELECT )
+                            || ( _rIterator.getStatementType() != SQL_STATEMENT_SELECT_COUNT );
+
+        // throw the error, if necessary
+        if ( !bIsSingleSelect || SQL_ISRULE( pStatementNode, union_statement ) ) // #i4229# OJ
+        {
+            // restore the old node before throwing the exception
+            _rIterator.setParseTree( pOldNode );
+            // and now really ...
+            SQLException aError1( _rOriginatingCommand, _rxContext, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HY000" ) ), 1000, Any() );
+            throw SQLException( DBACORE_RESSTRING( RID_STR_ONLY_QUERY ), _rxContext,
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HY000" ) ), 1000, makeAny( aError1 ) );
+        }
+
+        delete pOldNode;
+    }
+
+    // .....................................................................
+    /** combines parseStatement_throwError and checkForSingleSelect_throwError
+    */
+    void parseAndCheck_throwError( OSQLParser& _rParser, const ::rtl::OUString& _rStatement,
+        OSQLParseTreeIterator& _rIterator, const Reference< XInterface >& _rxContext )
+    {
+        const OSQLParseNode* pNode = parseStatement_throwError( _rParser, _rStatement, _rxContext );
+        checkForSingleSelect_throwError( pNode, _rIterator, _rxContext, _rStatement );
+    }
+
+    // .....................................................................
+    /** transforms a parse node describing a complete statement into a pure select
+        statement, without any filter/order/groupby/having clauses
+    */
+    ::rtl::OUString getPureSelectStatement( const OSQLParseNode* _pRootNode, Reference< XDatabaseMetaData > _rxMedaData )
+    {
+        ::rtl::OUString sSQL = STR_SELECT;
+        _pRootNode->getChild(1)->parseNodeToStr( sSQL, _rxMedaData );
+        _pRootNode->getChild(2)->parseNodeToStr( sSQL, _rxMedaData );
+        sSQL += STR_FROM;
+        _pRootNode->getChild(3)->getChild(0)->getChild(1)->parseNodeToStr( sSQL, _rxMedaData );
+        return sSQL;
+    }
+
+    /** resets an SQL iterator, including deletion of the parse tree, and disposal if desired
+    */
+    void resetIterator( OSQLParseTreeIterator& _rIterator, bool _bDispose )
+    {
+        const OSQLParseNode* pSqlParseNode = _rIterator.getParseTree();
+        _rIterator.setParseTree(NULL);
+        delete pSqlParseNode;
+        if ( _bDispose )
+            _rIterator.dispose();
+    }
+}
+
 DBG_NAME(OSingleSelectQueryComposer)
 // -------------------------------------------------------------------------
 OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
@@ -177,11 +267,13 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
  , m_xConnection(_xConnection)
  , m_xMetaData(_xConnection->getMetaData())
  , m_aSqlIterator(_xTableSupplier,_xConnection->getMetaData(),NULL)
+ , m_aAdditiveIterator(_xTableSupplier,_xConnection->getMetaData(),NULL)
  , m_xTableSupplier(_xTableSupplier)
  , m_aSqlParser(_xServiceFactory)
  ,m_xServiceFactory(_xServiceFactory)
  ,m_pTables(NULL)
  ,m_nBoolCompareMode(BOOL_COMPARISON_DEFAULT)
+ ,m_aElementaryParts( (size_t)SQLPartCount )
 {
     DBG_CTOR(OSingleSelectQueryComposer,NULL);
     OSL_ENSURE(_xServiceFactory.is()," ServiceFactory cant be null!");
@@ -246,10 +338,8 @@ void SAL_CALL OSingleSelectQueryComposer::disposing(void)
 
     MutexGuard aGuard(m_aMutex);
 
-    const OSQLParseNode* pSqlParseNode = m_aSqlIterator.getParseTree();
-    m_aSqlIterator.setParseTree(NULL);
-    delete pSqlParseNode;
-    m_aSqlIterator.dispose();
+    resetIterator( m_aSqlIterator, true );
+    resetIterator( m_aAdditiveIterator, true );
 
     m_xTableSupplier    = NULL;
     m_xConnection       = NULL;
@@ -271,14 +361,18 @@ sal_Int64 SAL_CALL OSingleSelectQueryComposer::getSomething( const Sequence< sal
 
     return sal_Int64(0);
 }
+
 // -------------------------------------------------------------------------
 // XSingleSelectQueryAnalyzer
 ::rtl::OUString SAL_CALL OSingleSelectQueryComposer::getQuery(  ) throw(RuntimeException)
 {
-    ::std::const_mem_fun_t<const OSQLParseNode*,OSQLParseTreeIterator> F_tmp(&OSQLParseTreeIterator::getParseTree);
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
+    ::osl::MutexGuard aGuard( m_aMutex );
 
-    return getStatementPart(F_tmp);
+    TGetParseNode F_tmp(&OSQLParseTreeIterator::getParseTree);
+    return getStatementPart(F_tmp,m_aSqlIterator);
 }
+
 // -------------------------------------------------------------------------
 void SAL_CALL OSingleSelectQueryComposer::setQuery( const ::rtl::OUString& command ) throw(SQLException, RuntimeException)
 {
@@ -290,57 +384,41 @@ void SAL_CALL OSingleSelectQueryComposer::setQuery( const ::rtl::OUString& comma
     // now set the new one
     m_sOrignal = command;
     setQuery_Impl(m_sOrignal);
+
+    // reset the additive iterator to the same statement
+    parseAndCheck_throwError( m_aSqlParser, m_sOrignal, m_aAdditiveIterator, *this );
+
+    // we have no "elementary" parts anymore (means filter/groupby/having/order clauses)
+    for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
+        m_aElementaryParts[ eLoopParts ] = ::rtl::OUString();
 }
 // -----------------------------------------------------------------------------
 void OSingleSelectQueryComposer::setQuery_Impl( const ::rtl::OUString& command )
 {
-    ::rtl::OUString aErrorMsg;
-    const OSQLParseNode* pNewSqlParseNode = m_aSqlParser.parseTree(aErrorMsg,command);
-    if ( !pNewSqlParseNode )
-    {
-        SQLException aError2(aErrorMsg,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
-        SQLException aError1(command,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,makeAny(aError2));
-        throw SQLException(m_aSqlParser.getContext().getErrorMessage(OParseContext::ERROR_GENERAL),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,makeAny(aError1));
-    }
+    // parse this
+    parseAndCheck_throwError( m_aSqlParser, command, m_aSqlIterator, *this );
 
-    const OSQLParseNode* pSqlParseNode = m_aSqlIterator.getParseTree();
-    m_aSqlIterator.setParseTree(NULL);
-    delete pSqlParseNode;
+    // strip it from all clauses, to have the pure SELECT statement
+    m_aPureSelectSQL = getPureSelectStatement( m_aSqlIterator.getParseTree(), m_xMetaData );
 
-    m_aSqlIterator.setParseTree(pNewSqlParseNode);
-    m_aSqlIterator.traverseAll();
-    if ((   m_aSqlIterator.getStatementType() != SQL_STATEMENT_SELECT
-        &&  m_aSqlIterator.getStatementType() != SQL_STATEMENT_SELECT_COUNT)
-        ||  SQL_ISRULE(pNewSqlParseNode,union_statement) ) // #i4229# OJ
-    {
-        SQLException aError1(command,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
-        throw SQLException(DBACORE_RESSTRING(RID_STR_ONLY_QUERY),*this,
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,makeAny(aError1));
-    }
-
-    m_aWorkSql = STR_SELECT;
-    pNewSqlParseNode->getChild(1)->parseNodeToStr(m_aWorkSql,m_xMetaData);
-    pNewSqlParseNode->getChild(2)->parseNodeToStr(m_aWorkSql,m_xMetaData);
-    m_aWorkSql += STR_FROM;
-    pNewSqlParseNode->getChild(3)->getChild(0)->getChild(1)->parseNodeToStr(m_aWorkSql,m_xMetaData);
-
+    // update columns and tables
     getColumns();
     getTables();
 }
 // -----------------------------------------------------------------------------
-Sequence< Sequence< PropertyValue > > SAL_CALL OSingleSelectQueryComposer::getStructuredHavingFilter(  ) throw (RuntimeException)
+Sequence< Sequence< PropertyValue > > SAL_CALL OSingleSelectQueryComposer::getStructuredHavingClause(  ) throw (RuntimeException)
 {
-    ::std::const_mem_fun_t<const OSQLParseNode*,OSQLParseTreeIterator> F_tmp(&OSQLParseTreeIterator::getSimpleHavingTree);
+    TGetParseNode F_tmp(&OSQLParseTreeIterator::getSimpleHavingTree);
     return getStructuredCondition(F_tmp);
 }
 // -------------------------------------------------------------------------
 Sequence< Sequence< PropertyValue > > SAL_CALL OSingleSelectQueryComposer::getStructuredFilter(  ) throw(RuntimeException)
 {
-    ::std::const_mem_fun_t<const OSQLParseNode*,OSQLParseTreeIterator> F_tmp(&OSQLParseTreeIterator::getSimpleWhereTree);
+    TGetParseNode F_tmp(&OSQLParseTreeIterator::getSimpleWhereTree);
     return getStructuredCondition(F_tmp);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OSingleSelectQueryComposer::appendHavingFilterByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria ) throw (SQLException, RuntimeException)
+void SAL_CALL OSingleSelectQueryComposer::appendHavingClauseByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria ) throw (SQLException, RuntimeException)
 {
     ::std::mem_fun1_t<bool,OSingleSelectQueryComposer,::rtl::OUString> F_tmp(&OSingleSelectQueryComposer::implSetHavingClause);
     setConditionByColumn(column,andCriteria,F_tmp);
@@ -381,7 +459,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< 
 
     // filter anhaengen
     // select ohne where und order by aufbauen
-    ::rtl::OUString aSql(m_aWorkSql);
+    ::rtl::OUString aSql(m_aPureSelectSQL);
     ::rtl::OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
     if ( m_aCurrentColumns[SelectColumns]->hasByName(aName) )
     {
@@ -431,6 +509,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< 
 
     setOrder(sOrder);
 }
+
 // -------------------------------------------------------------------------
 void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< XPropertySet >& column) throw(SQLException, RuntimeException)
 {
@@ -461,7 +540,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< 
 
     // filter anhaengen
     // select ohne where und order by aufbauen
-    ::rtl::OUString aSql(m_aWorkSql);
+    ::rtl::OUString aSql(m_aPureSelectSQL);
     ::rtl::OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
     if ( m_aCurrentColumns[SelectColumns]->hasByName(aName) )
     {
@@ -489,88 +568,166 @@ void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< 
     else
         aAppendOrder = getTableAlias(column) + ::dbtools::quoteName(aQuote,aName);
 
-    ::rtl::OUString sGroup = getGroup();
-    if ( (sGroup.getLength() != 0) && aAppendOrder.getLength() )
-        sGroup += COMMA;
-    sGroup += aAppendOrder;
-
-    setGroup(sGroup);
+    OrderCreator aComposer;
+    aComposer.append( getGroup() );
+    aComposer.append( aAppendOrder );
+    setGroup( aComposer.getComposedAndClear() );
 }
+// -------------------------------------------------------------------------
+::rtl::OUString OSingleSelectQueryComposer::composeStatementFromParts( const ::std::vector< ::rtl::OUString >& _rParts )
+{
+    DBG_ASSERT( _rParts.size() == (size_t)SQLPartCount, "OSingleSelectQueryComposer::composeStatementFromParts: invalid parts array!" );
+
+    ::rtl::OUStringBuffer aSql( m_aPureSelectSQL );
+    for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
+        if ( _rParts[ eLoopParts ].getLength() )
+        {
+            aSql.append( getKeyword( eLoopParts ) );
+            aSql.append( _rParts[ eLoopParts ] );
+        }
+
+    return aSql.makeStringAndClear();
+}
+
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OSingleSelectQueryComposer::getElementaryQuery() throw (::com::sun::star::uno::RuntimeException)
+{
+    return composeStatementFromParts( m_aElementaryParts );
+}
+
+// -------------------------------------------------------------------------
+void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const ::rtl::OUString& _rElementary ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+{
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    // parse and verify the statement, building a temporary iterator
+    OSQLParseTreeIterator aElementaryIterator( m_xTableSupplier, m_xMetaData, NULL );
+    parseAndCheck_throwError( m_aSqlParser, _rElementary, aElementaryIterator, *this );
+
+    // remember the 4 current "additive" clauses
+    ::std::vector< ::rtl::OUString > aAdditiveClauses( SQLPartCount );
+    for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
+        aAdditiveClauses[ eLoopParts ] = getSQLPart( eLoopParts, m_aAdditiveIterator, sal_False );
+
+    // strip every filter/order/groupby/having clause, and set the pure select statement
+    // as query
+    setQuery( _rElementary );
+
+    // reset the the AdditiveIterator: m_aPureSelectSQL may have changed, and even if not,
+    // setQuery touched the m_aAdditiveIterator
+    try
+    {
+        parseAndCheck_throwError( m_aSqlParser, composeStatementFromParts( aAdditiveClauses ), m_aAdditiveIterator, *this );
+    }
+    catch( const Exception& e )
+    {
+        e;
+        DBG_ERROR( "OSingleSelectQueryComposer::setElementaryQuery: there should be no error anymore for the additive statement!" );
+        // every part of the additive statement should have passed other tests already, and should not
+        // be able to cause any errors ... me thinks
+    }
+
+    // get the four parts of the statement
+    for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
+        m_aElementaryParts[ eLoopParts ] = getSQLPart( eLoopParts, aElementaryIterator, sal_False );
+
+    // temporary iterator not needed anymore
+    resetIterator( aElementaryIterator, true );
+}
+
+// -------------------------------------------------------------------------
+namespace
+{
+    ::rtl::OUString getComposedClause( const ::rtl::OUString _rElementaryClause, const ::rtl::OUString _rAdditionalClause,
+        TokenComposer& _rComposer, const ::rtl::OUString _rKeyword )
+    {
+        _rComposer.clear();
+        _rComposer.append( _rElementaryClause );
+        _rComposer.append( _rAdditionalClause );
+        ::rtl::OUString sComposed = _rComposer.getComposedAndClear();
+        if ( sComposed.getLength() )
+            sComposed = _rKeyword + sComposed;
+        return sComposed;
+    }
+}
+
+// -------------------------------------------------------------------------
+void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const ::rtl::OUString& _rClause )
+{
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    // collect the 4 single parts as they're currently set
+    ::std::vector< ::rtl::OUString > aClauses;
+    aClauses.reserve( (size_t)SQLPartCount );
+    for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
+        aClauses.push_back( getSQLPart( eLoopParts, m_aSqlIterator, sal_True ) );
+
+    // overwrite the one part in question here
+    ::std::auto_ptr< TokenComposer > pComposer;
+    if ( ( _ePart == Where ) || ( _ePart == Having ) )
+        pComposer.reset( new FilterCreator );
+    else
+        pComposer.reset( new OrderCreator );
+    aClauses[ _ePart ] = getComposedClause( m_aElementaryParts[ _ePart ], _rClause,
+        *pComposer, getKeyword( _ePart ) );
+
+    // construct the complete statement
+    ::rtl::OUString aSql(m_aPureSelectSQL);
+    for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
+        aSql += aClauses[ eLoopParts ];
+
+    // set the query
+    setQuery_Impl(aSql);
+    // parameters may also have changed
+    clearParametersCollection();
+
+    // also, since the "additive filter" change, we need to rebuild our "additive" statement
+    aSql = m_aPureSelectSQL;
+    // again, first get all the old additive parts
+    for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
+        aClauses[ eLoopParts ] = getSQLPart( eLoopParts, m_aAdditiveIterator, sal_True );
+    // then overwrite the one in question
+    aClauses[ _ePart ] = getComposedClause( ::rtl::OUString(), _rClause, *pComposer, getKeyword( _ePart ) );
+    // and parse it, so that m_aAdditiveIterator is up to date
+    for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
+        aSql += aClauses[ eLoopParts ];
+    try
+    {
+        parseAndCheck_throwError( m_aSqlParser, aSql, m_aAdditiveIterator, *this );
+    }
+    catch( const Exception& e )
+    {
+        e;
+        DBG_ERROR( "OSingleSelectQueryComposer::setSingleAdditiveClause: there should be no error anymore for the additive statement!" );
+        // every part of the additive statement should have passed other tests already, and should not
+        // be able to cause any errors ... me thinks
+    }
+}
+
 // -------------------------------------------------------------------------
 void SAL_CALL OSingleSelectQueryComposer::setFilter( const ::rtl::OUString& filter ) throw(SQLException, RuntimeException)
 {
-    // add the filter and the sort order
-    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-    ::rtl::OUString aSql(m_aWorkSql);
-
-    if ( filter.getLength() )
-    {
-        aSql += STR_WHERE;
-        aSql += filter;
-    }
-    aSql += getSQLPart(Group);
-    aSql += getSQLPart(Having);
-    aSql += getSQLPart(Order);
-
-    setQuery_Impl(aSql);
-    clearParametersCollection();  // parameters may also have changed with the filter
+    setSingleAdditiveClause( Where, filter );
 }
+
 // -------------------------------------------------------------------------
 void SAL_CALL OSingleSelectQueryComposer::setOrder( const ::rtl::OUString& order ) throw(SQLException, RuntimeException)
 {
-    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-    ::rtl::OUString aSql(m_aWorkSql);
-
-    aSql += getSQLPart(Where);
-    aSql += getSQLPart(Group);
-    aSql += getSQLPart(Having);
-    if ( order.getLength() )
-    {
-        aSql += STR_ORDER_BY;
-        aSql += order;
-    }
-
-    setQuery_Impl(aSql);
+    setSingleAdditiveClause( Order, order );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OSingleSelectQueryComposer::setGroup( const ::rtl::OUString& group ) throw (SQLException, RuntimeException)
 {
-    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-    ::rtl::OUString aSql(m_aWorkSql);
-
-    aSql += getSQLPart(Where);
-    if ( group.getLength() )
-    {
-        aSql += STR_GROUP_BY;
-        aSql += group;
-    }
-    aSql += getSQLPart(Having);
-    aSql += getSQLPart(Order);
-
-    setQuery_Impl(aSql);
+    setSingleAdditiveClause( Group, group );
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OSingleSelectQueryComposer::setHavingClause( const ::rtl::OUString& filter ) throw(SQLException, RuntimeException)
 {
-    // add the filter and the sort order
-    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-    ::rtl::OUString aSql(m_aWorkSql);
-
-    aSql += getSQLPart(Where);
-    aSql += getSQLPart(Group);
-    if ( filter.getLength() )
-    {
-        aSql += STR_HAVING;
-        aSql += filter;
-    }
-    aSql += getSQLPart(Order);
-
-    setQuery_Impl(aSql);
+    setSingleAdditiveClause( Having, filter );
 }
+
 // -------------------------------------------------------------------------
 // XTablesSupplier
 Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getTables(  ) throw(RuntimeException)
@@ -606,10 +763,10 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
             ::vos::ORef< OSQLColumns> aCols = m_aSqlIterator.getSelectColumns();
             if ( xStmt.is() )
             {
-                ::rtl::OUString sSql = m_aWorkSql;
+                ::rtl::OUString sSql = m_aPureSelectSQL;
                 sSql += STR_WHERE;
                 sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" 0 = 1 "));
-                ::rtl::OUString sGroupBy = getSQLPart(Group);
+                ::rtl::OUString sGroupBy = getSQLPart(Group,m_aSqlIterator,sal_True);
                 if ( sGroupBy.getLength() )
                     sSql += sGroupBy;
 
@@ -691,7 +848,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
     return m_aCurrentColumns[SelectColumns];
 }
 // -------------------------------------------------------------------------
-sal_Bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition,
+sal_Bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition, OSQLParseTreeIterator& _rIterator,
                                     ::std::vector< ::std::vector < PropertyValue > >& rFilters, const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const
 {
     // Runde Klammern um den Ausdruck
@@ -699,7 +856,7 @@ sal_Bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition,
         SQL_ISPUNCTUATION(pCondition->getChild(0),"(") &&
         SQL_ISPUNCTUATION(pCondition->getChild(2),")"))
     {
-        return setORCriteria(pCondition->getChild(1), rFilters, xFormatter);
+        return setORCriteria(pCondition->getChild(1), _rIterator, rFilters, xFormatter);
     }
     // oder Verknuepfung
     // a searchcondition can only look like this: search_condition SQL_TOKEN_OR boolean_term
@@ -712,11 +869,11 @@ sal_Bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition,
             // Dann rekursiv absteigen ...
             //if (!i && SQL_ISRULE(pCondition->getChild(i),search_condition))
             if (SQL_ISRULE(pCondition->getChild(i),search_condition))
-                bResult = setORCriteria(pCondition->getChild(i), rFilters, xFormatter);
+                bResult = setORCriteria(pCondition->getChild(i), _rIterator, rFilters, xFormatter);
             else
             {
                 rFilters.push_back( ::std::vector < PropertyValue >());
-                bResult = setANDCriteria(pCondition->getChild(i), rFilters[rFilters.size() - 1], xFormatter);
+                bResult = setANDCriteria(pCondition->getChild(i), _rIterator, rFilters[rFilters.size() - 1], xFormatter);
             }
         }
         return bResult;
@@ -724,13 +881,13 @@ sal_Bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition,
     else
     {
         rFilters.push_back(::std::vector < PropertyValue >());
-        return setANDCriteria(pCondition, rFilters[rFilters.size() - 1], xFormatter);
+        return setANDCriteria(pCondition, _rIterator, rFilters[rFilters.size() - 1], xFormatter);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-sal_Bool OSingleSelectQueryComposer::setANDCriteria(OSQLParseNode * pCondition,
-                                  ::std::vector < PropertyValue >& rFilter, const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const
+sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
+    OSQLParseTreeIterator& _rIterator, ::std::vector < PropertyValue >& rFilter, const Reference< XNumberFormatter > & xFormatter) const
 {
     // Runde Klammern
     if (SQL_ISRULE(pCondition,boolean_primary))
@@ -742,12 +899,12 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria(OSQLParseNode * pCondition,
     // Das erste Element ist (wieder) eine AND-Verknuepfung
     else if ( SQL_ISRULE(pCondition,boolean_term) && pCondition->count() == 3 )
     {
-        return setANDCriteria(pCondition->getChild(0), rFilter, xFormatter) &&
-               setANDCriteria(pCondition->getChild(2), rFilter, xFormatter);
+        return setANDCriteria(pCondition->getChild(0), _rIterator, rFilter, xFormatter) &&
+               setANDCriteria(pCondition->getChild(2), _rIterator, rFilter, xFormatter);
     }
     else if (SQL_ISRULE(pCondition, comparison_predicate))
     {
-        return setComparsionPredicate(pCondition,rFilter,xFormatter);
+        return setComparsionPredicate(pCondition,_rIterator,rFilter,xFormatter);
     }
     else if (SQL_ISRULE(pCondition,like_predicate) ||
              SQL_ISRULE(pCondition,test_for_null) ||
@@ -771,7 +928,7 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria(OSQLParseNode * pCondition,
             aValue = aValue.copy(aColumnName.getLength());
             aValue = aValue.trim();
 
-            aItem.Name = getColumnName(pCondition->getChild(0));
+            aItem.Name = getColumnName(pCondition->getChild(0),_rIterator);
             aItem.Value <<= aValue;
             aItem.Handle = 0; // just to know that this is not one the known ones
             if (SQL_ISRULE(pCondition,like_predicate))
@@ -845,7 +1002,7 @@ sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode * _pPredica
     return nPredicate;
 }
 //------------------------------------------------------------------------------
-sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
+sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition, OSQLParseTreeIterator& _rIterator,
                                             ::std::vector < PropertyValue >& rFilter, const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const
 {
     DBG_ASSERT(SQL_ISRULE(pCondition, comparison_predicate),"setComparsionPredicate: pCondition ist kein ComparsionPredicate");
@@ -918,7 +1075,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         else
             return sal_False;
 
-        aItem.Name = getColumnName(pCondition->getChild(nPos));
+        aItem.Name = getColumnName(pCondition->getChild(nPos),_rIterator);
         aItem.Value <<= aValue;
         rFilter.push_back(aItem);
     }
@@ -936,7 +1093,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         aValue = aValue.copy(aColumnName.getLength());
         aValue.trim();
 
-        aItem.Name = UniString(getColumnName(pCondition->getChild(0)));
+        aItem.Name = UniString(getColumnName(pCondition->getChild(0),_rIterator));
         aItem.Value <<= aValue;
         aItem.Handle = pCondition->getNodeType();
         rFilter.push_back(aItem);
@@ -968,31 +1125,39 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
 }
 // functions for analysing SQL
 //--------------------------------------------------------------------------------------------------
-::rtl::OUString OSingleSelectQueryComposer::getColumnName(::connectivity::OSQLParseNode* pColumnRef) const
+::rtl::OUString OSingleSelectQueryComposer::getColumnName( ::connectivity::OSQLParseNode* pColumnRef, OSQLParseTreeIterator& _rIterator ) const
 {
     ::rtl::OUString aTableRange, aColumnName;
-    m_aSqlIterator.getColumnRange(pColumnRef, aColumnName, aTableRange );
+    _rIterator.getColumnRange(pColumnRef,aColumnName,aTableRange);
     return aColumnName;
 }
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OSingleSelectQueryComposer::getFilter(  ) throw(RuntimeException)
 {
-    return getSQLPart(Where,sal_False);
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
+    ::osl::MutexGuard aGuard( m_aMutex );
+    return getSQLPart(Where,m_aAdditiveIterator,sal_False);
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OSingleSelectQueryComposer::getOrder(  ) throw(RuntimeException)
 {
-    return getSQLPart(Order,sal_False);
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
+    ::osl::MutexGuard aGuard( m_aMutex );
+    return getSQLPart(Order,m_aAdditiveIterator,sal_False);
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OSingleSelectQueryComposer::getGroup(  ) throw (RuntimeException)
 {
-    return getSQLPart(Group,sal_False);
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
+    ::osl::MutexGuard aGuard( m_aMutex );
+    return getSQLPart(Group,m_aAdditiveIterator,sal_False);
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OSingleSelectQueryComposer::getHavingClause() throw (RuntimeException)
 {
-    return getSQLPart(Having,sal_False);
+    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
+    ::osl::MutexGuard aGuard( m_aMutex );
+    return getSQLPart(Having,m_aAdditiveIterator,sal_False);
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OSingleSelectQueryComposer::getTableAlias(const Reference< XPropertySet >& column) const
@@ -1036,7 +1201,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
 
             if(!m_pTables->hasByName(aComposedName))
             {
-                ::comphelper::UStringMixLess aTmp(m_aSqlIterator.getTables().key_comp());
+                ::comphelper::UStringMixLess aTmp(m_aAdditiveIterator.getTables().key_comp());
                 ::comphelper::UStringMixEqual aComp(static_cast< ::comphelper::UStringMixLess*>(&aTmp)->isCaseSensitive());
                 for(;pBegin != pEnd;++pBegin)
                 {
@@ -1116,8 +1281,8 @@ void OSingleSelectQueryComposer::clearCurrentCollections()
     }
 }
 // -----------------------------------------------------------------------------
-Reference< XIndexAccess > OSingleSelectQueryComposer::setColumns( EColumnType _eType
-                                ,::std::const_mem_fun_t< ::vos::ORef< OSQLColumns>,::connectivity::OSQLParseTreeIterator>& _aGetFunctor )
+Reference< XIndexAccess > OSingleSelectQueryComposer::setCurrentColumns( EColumnType _eType,
+    const ::vos::ORef< OSQLColumns >& _rCols )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -1125,11 +1290,10 @@ Reference< XIndexAccess > OSingleSelectQueryComposer::setColumns( EColumnType _e
     // now set the group columns
     if ( !m_aCurrentColumns[_eType] )
     {
-        ::vos::ORef< OSQLColumns> aCols = _aGetFunctor(&m_aSqlIterator);
         ::std::vector< ::rtl::OUString> aNames;
-        for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
+        for(OSQLColumns::const_iterator aIter = _rCols->begin(); aIter != _rCols->end();++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
-        m_aCurrentColumns[_eType] = new OPrivateColumns(aCols,m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,sal_True);
+        m_aCurrentColumns[_eType] = new OPrivateColumns(_rCols,m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,sal_True);
     }
 
     return m_aCurrentColumns[_eType];
@@ -1137,26 +1301,19 @@ Reference< XIndexAccess > OSingleSelectQueryComposer::setColumns( EColumnType _e
 // -----------------------------------------------------------------------------
 Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getGroupColumns(  ) throw(RuntimeException)
 {
-    ::std::const_mem_fun_t< ::vos::ORef< OSQLColumns>,OSQLParseTreeIterator> F_tmp(&OSQLParseTreeIterator::getGroupColumns);
-
-    return setColumns(GroupByColumns,F_tmp);
+    return setCurrentColumns( GroupByColumns, m_aAdditiveIterator.getGroupColumns() );
 }
 // -------------------------------------------------------------------------
 Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getOrderColumns(  ) throw(RuntimeException)
 {
-    ::std::const_mem_fun_t< ::vos::ORef< OSQLColumns>,OSQLParseTreeIterator> F_tmp(&OSQLParseTreeIterator::getOrderColumns);
-
-    return setColumns(OrderColumns,F_tmp);
+    return setCurrentColumns( OrderColumns, m_aAdditiveIterator.getOrderColumns() );
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OSingleSelectQueryComposer::getStatementPart(::std::const_mem_fun_t< const ::connectivity::OSQLParseNode*,::connectivity::OSQLParseTreeIterator>& _aGetFunctor)
+::rtl::OUString OSingleSelectQueryComposer::getStatementPart( TGetParseNode& _aGetFunctor, OSQLParseTreeIterator& _rIterator )
 {
-    ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     ::rtl::OUString sResult;
 
-    const OSQLParseNode* pNode = _aGetFunctor(&m_aSqlIterator);
+    const OSQLParseNode* pNode = _aGetFunctor( &_rIterator );
     if ( pNode )
         pNode->parseNodeToStr(sResult,m_xMetaData);
 
@@ -1244,7 +1401,7 @@ void SAL_CALL OSingleSelectQueryComposer::setStructuredFilter( const Sequence< S
     setFilter(lcl_getCondition(filter));
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OSingleSelectQueryComposer::setStructuredHavingFilter( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, RuntimeException)
+void SAL_CALL OSingleSelectQueryComposer::setStructuredHavingClause( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, RuntimeException)
 {
     setHavingClause(lcl_getCondition(filter));
 }
@@ -1429,20 +1586,20 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
     _aSetFunctor(this,sFilter);
 }
 // -----------------------------------------------------------------------------
-Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredCondition( ::std::const_mem_fun_t< const ::connectivity::OSQLParseNode*,::connectivity::OSQLParseTreeIterator>& _aGetFunctor )
+Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredCondition( TGetParseNode& _aGetFunctor )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     MutexGuard aGuard(m_aMutex);
 
     Sequence< Sequence< PropertyValue > > aFilterSeq;
-    ::rtl::OUString sFilter = getStatementPart(_aGetFunctor);
+    ::rtl::OUString sFilter = getStatementPart( _aGetFunctor, m_aAdditiveIterator );
 
     if ( sFilter.getLength() != 0 )
     {
-        ::rtl::OUString aSql(m_aWorkSql);
+        ::rtl::OUString aSql(m_aPureSelectSQL);
         // build a temporary parse node
-        const OSQLParseNode* pTempNode = m_aSqlIterator.getParseTree();
+        const OSQLParseNode* pTempNode = m_aAdditiveIterator.getParseTree();
 
         aSql += STR_WHERE;
         aSql += sFilter;
@@ -1451,9 +1608,9 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
         ::std::auto_ptr<OSQLParseNode> pSqlParseNode( m_aSqlParser.parseTree(aErrorMsg,aSql));
         if ( pSqlParseNode.get() )
         {
-            m_aSqlIterator.setParseTree(pSqlParseNode.get());
+            m_aAdditiveIterator.setParseTree(pSqlParseNode.get());
             // normalize the filter
-            OSQLParseNode* pWhereNode = const_cast<OSQLParseNode*>(m_aSqlIterator.getWhereTree());
+            OSQLParseNode* pWhereNode = const_cast<OSQLParseNode*>(m_aAdditiveIterator.getWhereTree());
 
             OSQLParseNode* pCondition = pWhereNode->getChild(1);
             OSQLParseNode::negateSearchCondition(pCondition);
@@ -1472,7 +1629,7 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
                                 ->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
                 xFormatter->attachNumberFormatsSupplier(m_xNumberFormatsSupplier);
 
-                if (setORCriteria(pCondition, aFilters, xFormatter))
+                if (setORCriteria(pCondition, m_aAdditiveIterator, aFilters, xFormatter))
                 {
                     aFilterSeq.realloc(aFilters.size());
                     Sequence<PropertyValue>* pFilters = aFilterSeq.getArray();
@@ -1495,39 +1652,60 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
                 }
             }
             // restore
-            m_aSqlIterator.setParseTree(pTempNode);
+            m_aAdditiveIterator.setParseTree(pTempNode);
         }
     }
     return aFilterSeq;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OSingleSelectQueryComposer::getSQLPart(SQLPart _ePart,sal_Bool _bWithKeyword)
+::rtl::OUString OSingleSelectQueryComposer::getKeyword( SQLPart _ePart ) const
 {
-    ::std::const_mem_fun_t<const OSQLParseNode*,OSQLParseTreeIterator> F_tmp(&OSQLParseTreeIterator::getSimpleWhereTree);
     ::rtl::OUString sKeyword;
     switch(_ePart)
     {
+        default:
+            OSL_ENSURE( 0, "OSingleSelectQueryComposer::getKeyWord: Invalid enum value!" );
+            // no break, fallback to WHERE
         case Where:
             sKeyword = STR_WHERE;
-            F_tmp = ::std::const_mem_fun_t<const OSQLParseNode*,OSQLParseTreeIterator>(&OSQLParseTreeIterator::getSimpleWhereTree);
             break;
         case Group:
             sKeyword = STR_GROUP_BY;
-            F_tmp = ::std::const_mem_fun_t<const OSQLParseNode*,OSQLParseTreeIterator> (&OSQLParseTreeIterator::getSimpleGroupByTree);
             break;
         case Having:
             sKeyword = STR_HAVING;
-            F_tmp = ::std::const_mem_fun_t<const OSQLParseNode*,OSQLParseTreeIterator>(&OSQLParseTreeIterator::getSimpleHavingTree);
             break;
         case Order:
             sKeyword = STR_ORDER_BY;
-            F_tmp = ::std::const_mem_fun_t<const OSQLParseNode*,OSQLParseTreeIterator>(&OSQLParseTreeIterator::getSimpleOrderTree);
+            break;
+    }
+    return sKeyword;
+}
+
+// -----------------------------------------------------------------------------
+::rtl::OUString OSingleSelectQueryComposer::getSQLPart( SQLPart _ePart, OSQLParseTreeIterator& _rIterator, sal_Bool _bWithKeyword )
+{
+    TGetParseNode F_tmp(&OSQLParseTreeIterator::getSimpleWhereTree);
+    ::rtl::OUString sKeyword( getKeyword( _ePart ) );
+    switch(_ePart)
+    {
+        case Where:
+            F_tmp = TGetParseNode(&OSQLParseTreeIterator::getSimpleWhereTree);
+            break;
+        case Group:
+            F_tmp = TGetParseNode (&OSQLParseTreeIterator::getSimpleGroupByTree);
+            break;
+        case Having:
+            F_tmp = TGetParseNode(&OSQLParseTreeIterator::getSimpleHavingTree);
+            break;
+        case Order:
+            F_tmp = TGetParseNode(&OSQLParseTreeIterator::getSimpleOrderTree);
             break;
         default:
             OSL_ENSURE(0,"Invalid enum value!");
     }
 
-    ::rtl::OUString sRet = getStatementPart(F_tmp);
+    ::rtl::OUString sRet = getStatementPart( F_tmp, _rIterator );
     if ( _bWithKeyword && sRet.getLength() )
         sRet = sKeyword + sRet;
     return sRet;
