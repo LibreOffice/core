@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2001-06-01 12:06:26 $
+#   last change: $Author: hr $ $Date: 2001-06-06 12:36:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.8 $ ';
+$id_str = ' $Revision: 1.9 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -184,36 +184,56 @@ sub do_hedabu {
 }
 
 sub do_linklib {
-    my ($lib_base, $lib_major,$to_dir);
+    my ($lib_base, $lib_major,$from_dir, $to_dir);
     my $lib = shift;
+    my @globbed_files = ();
+    my %globbed_hash = ();
 
     print "linklib: $lib\n" if $is_debug;
     print "has symlinks\n" if ( $has_symlinks && $is_debug );
 
-    $to_dir = expand_macros("%_DEST%/lib%_EXT%");
+    return unless $has_symlinks;
 
-    return unless ( -e "$to_dir/$lib" && $has_symlinks);
+    $from_dir = expand_macros('../%__SRC%/lib');
+    $to_dir = expand_macros('%_DEST%/lib%_EXT%');
 
-    if ( $lib !~ /^(lib\w+\.so)\.(\d+)\.(\d+)\.(\d+)$/ ) {
-        print_error("invalid library name: $lib");
+    @globbed_files = glob("$from_dir/$lib");
+
+    if ( $#globbed_files == -1 ) {
+       $files_unchanged++;
+       return;
     }
-    else {
-        $lib_base = $1;
+
+    foreach $lib (@globbed_files) {
+        $lib = basename($lib);
+        if ( $lib =~ /^(lib\w+\.so)\.(\d+)\.(\d+)\.(\d+)$/ ) {
+           push(@{$globbed_hash{$1}}, $lib);
+        }
+        else {
+            print_error("invalid library name: $lib");
+        }
+    }
+
+    foreach $lib_base ( sort keys %globbed_hash ) {
+        $lib = get_latest_patchlevel(@{$globbed_hash{$lib_base}});
+
+        $lib =~ /^(lib\w+\.so)\.(\d+)\.(\d+)\.(\d+)$/;
         $lib_major = "$lib_base.$2";
-    }
-    if ( $opt_check ) {
-        print "LINKLIB: $to_dir/$lib -> $to_dir/$lib_major\n";
-        print "LINKLIB: $to_dir/$lib -> $to_dir/$lib_base\n";
-    }
-    else {
-        my $symlib;
-        my @symlibs = ("$to_dir/$lib_major", "$to_dir/$lib_base");
-        # remove old symlinks
-        unlink(@symlibs);
-        foreach $symlib (@symlibs) {
-            print "LINKLIB: $lib -> $symlib\n";
-            if ( !symlink("$lib", "$symlib") ) {
-                print_error("can't symlink $lib -> $symlib: $!",0);
+
+        if ( $opt_check ) {
+            print "LINKLIB: $to_dir/$lib -> $to_dir/$lib_major\n";
+            print "LINKLIB: $to_dir/$lib -> $to_dir/$lib_base\n";
+        }
+        else {
+            my $symlib;
+            my @symlibs = ("$to_dir/$lib_major", "$to_dir/$lib_base");
+            # remove old symlinks
+            unlink(@symlibs);
+            foreach $symlib (@symlibs) {
+                print "LINKLIB: $lib -> $symlib\n";
+                if ( !symlink("$lib", "$symlib") ) {
+                    print_error("can't symlink $lib -> $symlib: $!",0);
+                }
             }
         }
     }
@@ -516,6 +536,38 @@ sub fix_file_permissions {
         $mode = 0666 - $umask;
     }
     chmod($mode, $file);
+}
+
+sub get_latest_patchlevel {
+    # note: feed only well formed library names to this function
+    # of the form libfoo.so.x.y.z with x,y,z numbers
+
+    my @sorted_files = sort by_rev @_;
+    return @sorted_files[-1];
+
+    sub by_rev {
+    # comparison function for sorting
+        my (@field_a, @field_b, $i);
+
+        $a =~ /^(lib\w+\.so)\.(\d+)\.(\d+)\.(\d+)$/;
+        @field_a = ($2, $3, $4);
+        $b =~ /^(lib\w+\.so)\.(\d+)\.(\d+)\.(\d+)$/;
+        @field_b = ($2, $3, $4);
+
+        for ($i = 0; $i < 3; $i++)
+          {
+              if ( ($field_a[$i] < $field_b[$i]) ) {
+                  return -1;
+              }
+              if ( ($field_a[$i] > $field_b[$i]) ) {
+                  return 1;
+              }
+          }
+
+        # can't happen
+        return 0;
+    }
+
 }
 
 sub push_default_actions {
