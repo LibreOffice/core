@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:16 $
+ *  last change: $Author: dvo $ $Date: 2000-12-19 12:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1261,6 +1261,7 @@ class XMLUrlFieldImportContext : public XMLTextFieldImportContext
 
     const ::rtl::OUString sPropertyURL;
     const ::rtl::OUString sPropertyTargetFrame;
+    const ::rtl::OUString sPropertyRepresentation;
 
     ::rtl::OUString sURL;
     ::rtl::OUString sFrame;

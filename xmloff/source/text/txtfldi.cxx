@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-12 18:30:35 $
+ *  last change: $Author: dvo $ $Date: 2000-12-19 12:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,7 @@ const sal_Char sAPI_dde_command_file[]  = "DDECommandFile";
 const sal_Char sAPI_dde_command_element[] = "DDECommandElement";
 // sAPI_url: also used as service name
 const sal_Char sAPI_target_frame[]      = "TargetFrame";
+const sal_Char sAPI_representation[]    = "Representation";
 
 const sal_Char sAPI_true[] = "TRUE";
 
@@ -415,8 +416,8 @@ void XMLTextFieldImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
     // process attributes
-    sal_Int32 nLength = xAttrList->getLength();
-    for(sal_Int32 i=0; i<nLength; i++) {
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 i=0; i<nLength; i++) {
 
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
@@ -1054,7 +1055,7 @@ void XMLPageNumberImportContext::ProcessAttribute(
             sal_Int32 nTmp;
             if (SvXMLUnitConverter::convertNumber(nTmp, sAttrValue))
             {
-                nPageAdjust = nTmp;
+                nPageAdjust = (sal_Int16)nTmp;
             }
             break;
         }
@@ -1263,7 +1264,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
             if (SvXMLUnitConverter::convertTime(fTmp, sAttrValue))
             {
                 // convert to minutes
-                nAdjust = SolarMath::ApproxFloor(fTmp * 60 * 24);
+                nAdjust = (sal_Int16)SolarMath::ApproxFloor(fTmp * 60 * 24);
             }
             break;
         }
@@ -2836,8 +2837,8 @@ void XMLDdeFieldDeclImportContext::StartElement(
     sal_Bool bCommandItemOK = sal_False;
 
     // process attributes
-    sal_Int32 nLength = xAttrList->getLength();
-    for(sal_Int32 i=0; i<nLength; i++)
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 i=0; i<nLength; i++)
     {
 
         OUString sLocalName;
@@ -3053,6 +3054,8 @@ XMLUrlFieldImportContext::XMLUrlFieldImportContext(
                                   nPrfx, sLocalName),
         sPropertyURL(RTL_CONSTASCII_USTRINGPARAM(sAPI_url)),
         sPropertyTargetFrame(RTL_CONSTASCII_USTRINGPARAM(sAPI_target_frame)),
+        sPropertyRepresentation(RTL_CONSTASCII_USTRINGPARAM(
+            sAPI_representation)),
         bFrameOK(sal_False)
 {
 }
@@ -3090,6 +3093,9 @@ void XMLUrlFieldImportContext::PrepareField(
         aAny <<= sFrame;
         xPropertySet->setPropertyValue(sPropertyTargetFrame, aAny);
     }
+
+    aAny <<= GetContent();
+    xPropertySet->setPropertyValue(sPropertyRepresentation, aAny);
 }
 
 
@@ -3153,8 +3159,8 @@ void XMLBibliographyFieldImportContext::StartElement(
         const Reference<XAttributeList> & xAttrList)
 {
     // iterate over attributes
-    sal_Int32 nLength = xAttrList->getLength();
-    for(sal_Int32 i=0; i<nLength; i++) {
+    sal_Int16 nLength = xAttrList->getLength();
+    for(sal_Int16 i=0; i<nLength; i++) {
 
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().

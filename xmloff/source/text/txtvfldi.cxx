@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-10 15:24:58 $
+ *  last change: $Author: dvo $ $Date: 2000-12-19 12:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,8 +832,8 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
         // TODO: check validity (need name!)
 
         // parse attributes
-        sal_Int32 nLength = xAttrList->getLength();
-        for(sal_Int32 i=0; i<nLength; i++) {
+        sal_Int16 nLength = xAttrList->getLength();
+        for(sal_Int16 i=0; i<nLength; i++) {
 
             OUString sLocalName;
             sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
@@ -861,7 +861,8 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
                     break;
                 }
                 case XML_TOK_TEXTFIELD_NUMBERING_SEPARATOR:
-                    cSeparationChar = xAttrList->getValueByIndex(i).toChar();
+                    cSeparationChar =
+                        (sal_Char)xAttrList->getValueByIndex(i).toChar();
                     break;
 
                 default:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-13 09:36:23 $
+ *  last change: $Author: dvo $ $Date: 2000-12-19 12:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1486,6 +1486,8 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
             pContext = new XMLUrlFieldImportContext( rImport,
                                               *rImport.GetTextImport().get(),
                                                      nPrefix, rLocalName);
+            //whitespace handling like other fields
+            rIgnoreLeadingSpace = sal_False;
 
         }
         break;
