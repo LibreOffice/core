@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-12 15:02:45 $
+ *  last change: $Author: cmc $ $Date: 2002-07-15 12:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,6 @@
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
-#endif
-
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
 #endif
 
 #ifndef _RTL_TENCINFO_H
@@ -1628,8 +1623,8 @@ BOOL SwWW8ImplReader::ReadPlainChars( long& rPos, long nEnd, long nCpOfs )
     CharSet eSrcCharSet = eHardCharSet;
     if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
     {
-        if (pFontSrcCharSets->Count())
-            eSrcCharSet = (*pFontSrcCharSets)[pFontSrcCharSets->Count()-1];
+        if (!maFontSrcCharSets.empty())
+            eSrcCharSet = maFontSrcCharSets.top();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
             eSrcCharSet = pCollA[nAktColl].eFontSrcCharSet;
     }
@@ -2262,7 +2257,6 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     pNode_FLY_AT_CNTNT = 0;
     pDrawModel = 0;
     pDrawPg = 0;
-    pFontSrcCharSets = new SvUShorts;
     nDrawTxbx = 0;
     pDrawEditEngine = 0;
     pWWZOrder = 0;
@@ -2717,7 +2711,6 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     if (!pGloss)
         DELETEZ( pWwFib );
     DeleteCtrlStk();
-    DELETEZ(pFontSrcCharSets);
     DeleteAnchorStk();
     DeleteRefStk();
 

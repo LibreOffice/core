@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-12 15:15:11 $
+ *  last change: $Author: cmc $ $Date: 2002-07-15 12:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3706,11 +3706,11 @@ BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums,
         //off the stack will keep in sync
         if (!pAktColl && !pAktItemSet)
         {
-            if (pFontSrcCharSets->Count())
-                eSrcCharSet = (*pFontSrcCharSets)[pFontSrcCharSets->Count()-1];
+            if (!maFontSrcCharSets.empty())
+                eSrcCharSet = maFontSrcCharSets.top();
             else
                 eSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
-            pFontSrcCharSets->Insert(eSrcCharSet,pFontSrcCharSets->Count());
+            maFontSrcCharSets.push(eSrcCharSet);
         }
         return FALSE;
     }
@@ -3729,7 +3729,7 @@ BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums,
         else if (!pAktItemSet)
         {
             //Add character text encoding to stack
-            pFontSrcCharSets->Insert(eSrcCharSet,pFontSrcCharSets->Count());
+            maFontSrcCharSets.push(eSrcCharSet);
         }
     }
 
@@ -3740,9 +3740,9 @@ BOOL SwWW8ImplReader::SetNewFontAttr( USHORT nFCode, BOOL bSetEnums,
 
 void SwWW8ImplReader::ResetCharSetVars()
 {
-    ASSERT(pFontSrcCharSets->Count(),"no charset to remove");
-    if (pFontSrcCharSets->Count())
-        pFontSrcCharSets->Remove(pFontSrcCharSets->Count()-1);
+    ASSERT(!maFontSrcCharSets.empty(),"no charset to remove");
+    if (!maFontSrcCharSets.empty())
+        maFontSrcCharSets.pop();
 }
 
 /*

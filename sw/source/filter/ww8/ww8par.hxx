@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-12 15:02:47 $
+ *  last change: $Author: cmc $ $Date: 2002-07-15 12:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,6 @@ class SdrTextObj;
 class Size;
 class EditEngine;
 struct SwPosition;
-class SvShorts;
-class SvUShorts;
 class WW8ReaderSave;
 struct WW8PicDesc;
 class Graphic;
@@ -636,6 +634,11 @@ friend class WW8FormulaControl;
     */
     wwFrameNamer aGrfNameGenerator;
 
+    /*
+     Stack of textencoding being used as we progress through the document text
+    */
+    ::std::stack<rtl_TextEncoding> maFontSrcCharSets;
+
     SwMSConvertControls *pFormImpl; // Control-Implementierung
 
     SwFlyFrmFmt* pFlyFmtOfJustInsertedGraphic;
@@ -731,8 +734,6 @@ friend class WW8FormulaControl;
     rtl_TextEncoding eTextCharSet;    // Default charset for Text
     rtl_TextEncoding eStructCharSet;  // rtl_TextEncoding for structures
     rtl_TextEncoding eHardCharSet;    // Hard rtl_TextEncoding-Attribute
-    // Source rtl_TextEncoding character encodings stack for word text
-    SvUShorts *pFontSrcCharSets;
     USHORT nProgress;           // %-Angabe fuer Progressbar
     USHORT nColls;              // Groesse des Arrays
     USHORT nAktColl;            // gemaess WW-Zaehlung
