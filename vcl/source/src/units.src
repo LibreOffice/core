@@ -2,9 +2,9 @@
  *
  *  $RCSfile: units.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-25 15:05:18 $
+ *  last change: $Author: vg $ $Date: 2002-11-28 16:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ ItemList [ language_user1 ] =
         < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_TWIP ; > ;
         < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_POINT ; > ;
         < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_INCH ; > ;
         < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_INCH ; > ;
         < "EM NOv 2002: this is the measurement sign for \"foot\". Do not change!" ; FUNIT_FOOT ; > ;
@@ -245,7 +245,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -266,7 +266,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -308,7 +308,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "PI.GRECO" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -350,7 +350,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -413,7 +413,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -434,7 +434,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "파이" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -455,7 +455,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -476,7 +476,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
