@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-14 10:48:08 $
+ *  last change: $Author: mba $ $Date: 2001-07-02 11:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,11 +107,17 @@ using namespace ::com::sun::star::uno   ;
 
 #define PROPERTYNAME_DONTHIDEDISABLEDENTRIES    OUString(RTL_CONSTASCII_USTRINGPARAM("DontHideDisabledEntry"    ))
 #define PROPERTYNAME_FOLLOWMOUSE                OUString(RTL_CONSTASCII_USTRINGPARAM("FollowMouse"              ))
+#define PROPERTYNAME_SHOWICONSINMENUES          OUString(RTL_CONSTASCII_USTRINGPARAM("ShowIconsInMenues"        ))
 
 #define PROPERTYHANDLE_DONTHIDEDISABLEDENTRIES  0
 #define PROPERTYHANDLE_FOLLOWMOUSE              1
+#define PROPERTYHANDLE_SHOWICONSINMENUES        2
 
-#define PROPERTYCOUNT                           2
+#define PROPERTYCOUNT                           3
+
+#include <tools/link.hxx>
+#include <tools/list.hxx>
+DECLARE_LIST( LinkList, Link * );
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -125,6 +131,7 @@ class SvtMenuOptions_Impl : public ConfigItem
 
     private:
 
+        LinkList    aList;
         sal_Bool    m_bDontHideDisabledEntries          ;   /// cache "DontHideDisabledEntries" of Menu section
         sal_Bool    m_bFollowMouse                      ;   /// cache "FollowMouse" of Menu section
         sal_Bool    m_bMenuIcons                        ;   /// cache "MenuIcons" of Menu section
@@ -141,6 +148,9 @@ class SvtMenuOptions_Impl : public ConfigItem
 
          SvtMenuOptions_Impl();
         ~SvtMenuOptions_Impl();
+
+        void AddListener( const Link& rLink );
+        void RemoveListener( const Link& rLink );
 
         //---------------------------------------------------------------------------------------------------------
         //  overloaded methods of baseclass
@@ -204,13 +214,28 @@ class SvtMenuOptions_Impl : public ConfigItem
                     { return m_bMenuIcons; }
 
         void        SetEntryHidingState ( sal_Bool bState )
-                    { m_bDontHideDisabledEntries = bState; SetModified(); }
+                    {
+                        m_bDontHideDisabledEntries = bState;
+                        SetModified();
+                        for ( USHORT n=0; n<aList.Count(); n++ )
+                            aList.GetObject(n)->Call( this );
+                    }
 
         void        SetFollowMouseState ( sal_Bool bState )
-                    { m_bFollowMouse = bState; SetModified(); }
+                    {
+                        m_bFollowMouse = bState;
+                        SetModified();
+                        for ( USHORT n=0; n<aList.Count(); n++ )
+                            aList.GetObject(n)->Call( this );
+                    }
 
         void        SetMenuIconsState ( sal_Bool bState )
-                    { m_bMenuIcons = bState; SetModified(); }
+                    {
+                        m_bMenuIcons = bState;
+                        SetModified();
+                        for ( USHORT n=0; n<aList.Count(); n++ )
+                            aList.GetObject(n)->Call( this );
+                    }
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -279,6 +304,11 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
                                                                 seqValues[nProperty] >>= m_bFollowMouse;
                                                             }
                                                             break;
+            case PROPERTYHANDLE_SHOWICONSINMENUES       :   {
+                                                                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Menu\\ShowIconsInMenues\"?" );
+                                                                seqValues[nProperty] >>= m_bMenuIcons;
+                                                            }
+                                                            break;
         }
     }
 
@@ -296,6 +326,9 @@ SvtMenuOptions_Impl::~SvtMenuOptions_Impl()
     {
         Commit();
     }
+
+    for ( USHORT n=0; n<aList.Count(); )
+        delete aList.Remove(n);
 }
 
 //*****************************************************************************************************************
@@ -323,10 +356,18 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::Notify()\nWho has changed the value type of \"Office.Common\\View\\Menu\\FollowMouse\"?" );
             seqValues[nProperty] >>= m_bFollowMouse;
         }
+        if( seqPropertyNames[nProperty] == PROPERTYNAME_SHOWICONSINMENUES )
+        {
+            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Menu\\ShowIconsInMenues\"?" );
+            seqValues[nProperty] >>= m_bMenuIcons;
+        }
         #ifdef DEBUG
         else DBG_ASSERT( sal_False, "SvtMenuOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
         #endif
     }
+
+    for ( USHORT n=0; n<aList.Count(); n++ )
+        aList.GetObject(n)->Call( this );
 }
 
 //*****************************************************************************************************************
@@ -351,6 +392,10 @@ void SvtMenuOptions_Impl::Commit()
                                                                 seqValues[nProperty] <<= m_bFollowMouse;
                                                             }
                                                             break;
+            case PROPERTYHANDLE_SHOWICONSINMENUES       :   {
+                                                                seqValues[nProperty] <<= m_bMenuIcons;
+                                                            }
+                                                            break;
         }
     }
     // Set properties in configuration.
@@ -367,11 +412,29 @@ Sequence< OUString > SvtMenuOptions_Impl::impl_GetPropertyNames()
     {
         PROPERTYNAME_DONTHIDEDISABLEDENTRIES    ,
         PROPERTYNAME_FOLLOWMOUSE                ,
+        PROPERTYNAME_SHOWICONSINMENUES
     };
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     // ... and return it.
     return seqPropertyNames;
+}
+
+void SvtMenuOptions_Impl::AddListener( const Link& rLink )
+{
+    aList.Insert( new Link( rLink ) );
+}
+
+void SvtMenuOptions_Impl::RemoveListener( const Link& rLink )
+{
+    for ( USHORT n=0; n<aList.Count(); n++ )
+    {
+        if ( (*aList.GetObject(n) ) == rLink )
+        {
+            delete aList.Remove(n);
+            break;
+        }
+    }
 }
 
 //*****************************************************************************************************************
@@ -493,4 +556,14 @@ Mutex& SvtMenuOptions::GetOwnStaticMutex()
     }
     // Return new created or already existing mutex object.
     return *pMutex;
+}
+
+void SvtMenuOptions::AddListener( const Link& rLink )
+{
+    m_pDataContainer->AddListener( rLink );
+}
+
+void SvtMenuOptions::RemoveListener( const Link& rLink )
+{
+    m_pDataContainer->RemoveListener( rLink );
 }
