@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-08-06 10:13:30 $
+ *  last change: $Author: er $ $Date: 2001-09-05 09:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -901,7 +901,8 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
 
 BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam,
-        BOOL* pSpecial /* =NULL */ , ScBaseCell* pCell /* =NULL */ )
+        BOOL* pSpecial /* =NULL */ , ScBaseCell* pCell /* =NULL */ ,
+        BOOL* pbTestEqualCondition /* = NULL */ )
 {
     if (!rParam.GetEntry(0).bDoQuery)
         return TRUE;
@@ -910,8 +911,10 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam,
 
     const USHORT nFixedBools = 32;
     BOOL aBool[nFixedBools];
+    BOOL aTest[nFixedBools];
     USHORT nEntryCount = rParam.GetEntryCount();
     BOOL* pPasst = ( nEntryCount <= nFixedBools ? &aBool[0] : new BOOL[nEntryCount] );
+    BOOL* pTest = ( nEntryCount <= nFixedBools ? &aTest[0] : new BOOL[nEntryCount] );
 
     short   nPos = -1;
     USHORT  i    = 0;
@@ -929,6 +932,7 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam,
             pCell = GetCell( rEntry.nField, nRow );
 
         BOOL bOk = FALSE;
+        BOOL bTestEqual = FALSE;
 
         if ( pSpecial && pSpecial[i] )
         {
@@ -971,9 +975,13 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam,
                     break;
                 case SC_LESS_EQUAL :
                     bOk = (nCellVal < rEntry.nVal) || SolarMath::ApproxEqual( nCellVal, rEntry.nVal );
+                    if ( bOk && pbTestEqualCondition )
+                        bTestEqual = SolarMath::ApproxEqual( nCellVal, rEntry.nVal );
                     break;
                 case SC_GREATER_EQUAL :
                     bOk = (nCellVal > rEntry.nVal) || SolarMath::ApproxEqual( nCellVal, rEntry.nVal );
+                    if ( bOk && pbTestEqualCondition )
+                        bTestEqual = SolarMath::ApproxEqual( nCellVal, rEntry.nVal );
                     break;
                 case SC_NOT_EQUAL :
                     bOk = !SolarMath::ApproxEqual( nCellVal, rEntry.nVal );
@@ -997,60 +1005,67 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam,
             else
                 GetInputString( rEntry.nField, nRow, aCellStr );
 
-            if (rParam.bRegExp && ((rEntry.eOp == SC_EQUAL)
-                                || (rEntry.eOp == SC_NOT_EQUAL)) )
+            BOOL bRealRegExp = (rParam.bRegExp && ((rEntry.eOp == SC_EQUAL)
+                || (rEntry.eOp == SC_NOT_EQUAL)));
+            BOOL bTestRegExp = (pbTestEqualCondition && rParam.bRegExp
+                && ((rEntry.eOp == SC_LESS_EQUAL)
+                    || (rEntry.eOp == SC_GREATER_EQUAL)));
+            if ( bRealRegExp || bTestRegExp )
             {
                 xub_StrLen nStart = 0;
                 xub_StrLen nEnd   = aCellStr.Len();
-                bOk = (BOOL) rEntry.GetSearchTextPtr( rParam.bCaseSens )
+                BOOL bMatch = (BOOL) rEntry.GetSearchTextPtr( rParam.bCaseSens )
                     ->SearchFrwrd( aCellStr, &nStart, &nEnd );
                 // from 614 on, nEnd is behind the found text
-                if ( bOk && bMatchWholeCell
+                if ( bMatch && bMatchWholeCell
                         && (nStart != 0 || nEnd != aCellStr.Len()) )
-                    bOk = FALSE;    // RegExp muss ganze Zelle matchen
-                if ( rEntry.eOp == SC_NOT_EQUAL )
-                    bOk = !bOk;
+                    bMatch = FALSE;    // RegExp must match entire cell string
+                if ( bRealRegExp )
+                    bOk = ((rEntry.eOp == SC_NOT_EQUAL) ? !bMatch : bMatch);
+                else
+                    bTestEqual = bMatch;
             }
-            else
+            if ( !bRealRegExp )
             {
                 if ( rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL )
                 {
                     if ( bMatchWholeCell )
-                    {
                         bOk = pTransliteration->isEqual( aCellStr, *rEntry.pStr );
-                    }
                     else
                     {
-                        if ( rParam.bCaseSens )
-                            bOk = (aCellStr.Search( *rEntry.pStr ) != STRING_NOTFOUND);
-                        else
-                        {
-                            String aQueryStr( *rEntry.pStr );
-                            ScGlobal::pCharClass->toLower( aQueryStr );
-                            ScGlobal::pCharClass->toLower( aCellStr );
-                            bOk = (aCellStr.Search( aQueryStr ) != STRING_NOTFOUND);
-                        }
+                        ::com::sun::star::uno::Sequence< long > xOff;
+                        String aCell( pTransliteration->transliterate(
+                            aCellStr, ScGlobal::eLnge, 0, aCellStr.Len(),
+                            &xOff ) );
+                        String aQuer( pTransliteration->transliterate(
+                            *rEntry.pStr, ScGlobal::eLnge, 0, rEntry.pStr->Len(),
+                            &xOff ) );
+                        bOk = (aCell.Search( aQuer ) != STRING_NOTFOUND);
                     }
                     if ( rEntry.eOp == SC_NOT_EQUAL )
                         bOk = !bOk;
                 }
                 else
-                {
+                {   // use collator here because data was probably sorted
                     sal_Int32 nCompare = pCollator->compareString(
                         aCellStr, *rEntry.pStr );
                     switch (rEntry.eOp)
                     {
                         case SC_LESS :
-                            bOk = (nCompare == COMPARE_LESS);
+                            bOk = (nCompare < 0);
                             break;
                         case SC_GREATER :
-                            bOk = (nCompare == COMPARE_GREATER);
+                            bOk = (nCompare > 0);
                             break;
                         case SC_LESS_EQUAL :
-                            bOk = (nCompare == COMPARE_LESS) || (nCompare == COMPARE_EQUAL);
+                            bOk = (nCompare <= 0);
+                            if ( bOk && pbTestEqualCondition && !bTestEqual )
+                                bTestEqual = (nCompare == 0);
                             break;
                         case SC_GREATER_EQUAL :
-                            bOk = (nCompare == COMPARE_GREATER) || (nCompare == COMPARE_EQUAL);
+                            bOk = (nCompare >= 0);
+                            if ( bOk && pbTestEqualCondition && !bTestEqual )
+                                bTestEqual = (nCompare == 0);
                             break;
                     }
                 }
@@ -1061,26 +1076,38 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam,
         {
             nPos++;
             pPasst[nPos] = bOk;
+            pTest[nPos] = bTestEqual;
         }
         else
         {
             if (rEntry.eConnect == SC_AND)
+            {
                 pPasst[nPos] = pPasst[nPos] && bOk;
+                pTest[nPos] = pTest[nPos] && bTestEqual;
+            }
             else
             {
                 nPos++;
                 pPasst[nPos] = bOk;
+                pTest[nPos] = bTestEqual;
             }
         }
         i++;
     }
 
     for ( i=1; (short)i <= nPos; i++ )
+    {
         pPasst[0] = pPasst[0] || pPasst[i];
+        pTest[0] = pTest[0] || pTest[i];
+    }
 
     BOOL bRet = pPasst[0];
     if ( pPasst != &aBool[0] )
         delete [] pPasst;
+    if ( pbTestEqualCondition )
+        *pbTestEqualCondition = pTest[0];
+    if ( pTest != &aTest[0] )
+        delete [] pTest;
 
     return bRet;
 }
