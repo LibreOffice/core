@@ -2,9 +2,9 @@
  *
  *  $RCSfile: structpg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-22 12:43:45 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,9 +194,6 @@ public:
     void            ClearStruct();
     SvLBoxEntry*    InsertEntry(const XubString& rText, SvLBoxEntry* pParent,
                                 USHORT nFlag,ULONG nPos=0,ScToken* pScToken=NULL);
-
-    SvLBoxEntry*    InsertEntryWithError(USHORT nError,SvLBoxEntry* pParent,
-                                        ULONG nPos=0);
 
     String          GetEntryText(SvLBoxEntry* pEntry);
     String          GetSelectedEntryText();
