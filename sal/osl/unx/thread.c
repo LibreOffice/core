@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 09:48:11 $
+ *  last change: $Author: gh $ $Date: 2001-03-20 14:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -887,7 +887,7 @@ oslThreadSleep SAL_CALL osl_sleepThread(oslThread Thread, const TimeValue* pDela
         {
             ret = pthread_cond_timedwait(&pThreadImpl->m_Suspend, &pThreadImpl->m_AccessLock, &delay);
         }
-        while ( ret != 0 && ( ret != ETIME || ret != ETIMEDOUT ) );
+        while ( ret != 0 && ( ret != ETIME && ret != ETIMEDOUT ) );
 
         pthread_mutex_unlock(&pThreadImpl->m_AccessLock);
 
@@ -1041,7 +1041,7 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
         {
             ret = pthread_cond_timedwait(&pThreadImpl->m_Suspend, &pThreadImpl->m_AccessLock, &delay);
         }
-        while ( ret != 0 && ( ret != ETIME || ret != ETIMEDOUT ) );
+        while ( ret != 0 && ( ret != ETIME && ret != ETIMEDOUT ) );
 
         pthread_mutex_unlock(&pThreadImpl->m_AccessLock);
 
