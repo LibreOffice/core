@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:11:00 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,31 +464,16 @@ BOOL  SwFldMgr::CanInsertRefMark( const String& rStr )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Alle DBTypes loeschen
+    Beschreibung: Zugriff ueber ResIds
  --------------------------------------------------------------------*/
 
-void SwFldMgr::RemoveDBTypes()
+void SwFldMgr::RemoveFldType(USHORT nResId, const String& rName )
 {
     SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
     DBG_ASSERT(pSh, "no SwWrtShell found")
-    if(pSh)
-    {
-        USHORT nCount = pSh->GetFldTypeCount(RES_DBFLD);
-        for ( USHORT i=0; i < nCount ; ++i )
-        {
-            SwFieldType* pType = pSh->GetFldType( i, RES_DBFLD );
-            if( !pType->GetDepends() )
-            {
-                pSh->RemoveFldType( i--, RES_DBFLD );
-                nCount--;
-            }
-        }
-    }
+    if( pSh )
+        pSh->RemoveFldType(nResId, rName);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung: Zugriff ueber ResIds
- --------------------------------------------------------------------*/
 
 USHORT SwFldMgr::GetFldTypeCount(USHORT nResId) const
 {
@@ -514,28 +499,9 @@ SwFieldType* SwFldMgr::GetFldType(USHORT nResId, const String& rName) const
 }
 
 
-void SwFldMgr::RemoveFldType(USHORT nResId, USHORT nId)
-{
-    SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
-    DBG_ASSERT(pSh, "no SwWrtShell found")
-    if( pSh )
-        pSh->RemoveFldType(nId, nResId);
-}
-
-
-void SwFldMgr::RemoveFldType(USHORT nResId, const String& rName )
-{
-    SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
-    DBG_ASSERT(pSh, "no SwWrtShell found")
-    if( pSh )
-        pSh->RemoveFldType(nResId, rName);
-}
-
 /*--------------------------------------------------------------------
     Beschreibung: Aktuelles Feld ermitteln
  --------------------------------------------------------------------*/
-
-
 SwField* SwFldMgr::GetCurFld()
 {
     SwWrtShell *pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
@@ -1763,26 +1729,6 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
     pSh->EndAllAction();
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Setzen / Erfragen Werte von Benutzerfeldern aus BASIC
-------------------------------------------------------------------------*/
-
-
-BOOL SwFldMgr::SetFieldValue(const String &rFieldName,
-                             const String &rValue)
-{
-    SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
-    DBG_ASSERT(pSh, "no SwWrtShell found")
-    if(!pSh)
-        return FALSE;
-    SwUserFieldType* pType = (SwUserFieldType*)pSh->InsertFldType(
-                                    SwUserFieldType( pSh->GetDoc(), rFieldName ));
-
-    if(pType)
-        pType->SetContent(rValue);
-    return 0 != pType;
-}
-
 /*--------------------------------------------------------------------
     Beschreibung: ExpressionFields explizit evaluieren
  --------------------------------------------------------------------*/
@@ -1864,39 +1810,6 @@ void SwFieldType::_GetFldName()
         pTmp->Assign( MnemonicGenerator::EraseAllMnemonicChars( *pTmp ) );
         SwFieldType::pFldNames->Insert(pTmp, nIdx );
     }
-}
-
-
-BOOL SwFldMgr::SetUserSubType(const String& rName, USHORT nType)
-{
-    BOOL bRet = FALSE;
-    SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
-    DBG_ASSERT(pSh, "no SwWrtShell found")
-    SwUserFieldType *pType =
-        (SwUserFieldType *) (pSh ?
-            pSh->GetFldType(RES_USERFLD, rName) : 0);
-
-    if(pType)
-    {
-        pType->SetType(nType);
-        bRet = TRUE;
-    }
-    return bRet;
-}
-
-BOOL SwFldMgr::InsertURL(  const String& rName,
-                                const String& rVal,
-                                const String& rFrame,
-                                const SvxMacroItem* pItem)
-{
-    sCurFrame = rFrame;
-    pMacroItem = pItem;
-    SwInsertFld_Data aData(TYP_INTERNETFLD, 0, rName, rVal, 0);
-    BOOL bRet = InsertFld(aData);
-    sCurFrame = aEmptyStr;
-    pMacroItem = 0;
-    return bRet;
-
 }
 
 /*--------------------------------------------------------------------
@@ -1997,25 +1910,7 @@ ULONG SwFldMgr::GetDefaultFormat(USHORT nTypeId, BOOL bIsText, SvNumberFormatter
 
     return pFormatter->GetStandardFormat(nDefFormat, GetCurrLanguage());
 }
-/* -----------------------------23.06.00 17:32--------------------------------
 
- ---------------------------------------------------------------------------*/
-Reference<XNameAccess> SwFldMgr::GetDBContext()
-{
-    if(!xDBContext.is())
-    {
-        Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-        if( xMgr.is() )
-        {
-            Reference<XInterface> xInstance = xMgr->createInstance(
-                    rtl::OUString::createFromAscii(
-                                    "com.sun.star.sdb.DatabaseContext" ));
-            xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
-        }
-        DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available")
-    }
-    return xDBContext;
-}
 /* -----------------------------01.03.01 16:46--------------------------------
 
  ---------------------------------------------------------------------------*/
