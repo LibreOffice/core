@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 10:16:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@ class SwFrm;
 class SwLinePortion;
 class SwTxtPainter;
 class SwEditShell;
+class rtl::OUString;
+class MultiSelection;
 
 
 /*
@@ -203,15 +205,26 @@ class SwEnhancedPDFExportHelper
     SwEditShell& mrSh;
     OutputDevice& mrOut;
 
+    MultiSelection* pPageRange;
+
+    bool mbSkipEmptyPages;
+    bool mbEditEngineOnly;
+
     static LinkIdMap aLinkIdMap;
     static FrmTagIdMap aFrmTagIdMap;
 
-    void EnhancedPDFExport( bool bEditEngineOnly );
+    void EnhancedPDFExport();
+    sal_Int32 CalcOutputPageNum( const SwRect& rRect );
 
     public:
 
-    SwEnhancedPDFExportHelper( SwEditShell& rSh, OutputDevice& rOut,
-                               bool bEditEngineOnly = false );
+    SwEnhancedPDFExportHelper( SwEditShell& rSh,
+                               OutputDevice& rOut,
+                               const rtl::OUString& rPageRange,
+                               bool bSkipEmptyPages,
+                               bool bEditEngineOnly );
+
+    ~SwEnhancedPDFExportHelper();
 
     static LinkIdMap& GetLinkIdMap() { return aLinkIdMap; }
     static FrmTagIdMap& GetFrmTagIdMap() { return aFrmTagIdMap; }
