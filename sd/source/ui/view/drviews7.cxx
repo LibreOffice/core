@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:49:34 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@
 #include <svtools/slstitm.hxx>
 #endif
 
+#include <svtools/insdlg.hxx>
 #include <svtools/moduleoptions.hxx>
 #ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
 #include <svtools/languageoptions.hxx>
@@ -141,15 +142,13 @@
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
 #endif
-#ifndef _PASTEDLG_HXX
-#include <so3/pastedlg.hxx>
-#endif
 
 #pragma hdrstop
 
 #include <svx/pfiledlg.hxx>
 #include <svx/grafctrl.hxx>
 #include <svtools/cliplistener.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include "app.hrc"
 #include "glob.hrc"
@@ -693,7 +692,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             if (bHasFormat)
             {
                 String sName,sSource;
-                if (SvPasteObjectDialog::GetEmbeddedName (aDataHelper, sName, sSource, nFormat))
+                if (SvPasteObjectHelper::GetEmbeddedName (aDataHelper, sName, sSource, nFormat))
                     aItem.AddClipbrdFormat (nFormat, sName);
             }
 
@@ -1364,8 +1363,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_MATH );
     }
 
-    const SvEditObjectProtocol& rProt = GetDocSh()->GetProtocol();
-
     if ( pFuSlideShow || GetDocSh()->IsPreview() || bInEffectAssignment )
     {
         // Eigene Slots
@@ -1654,9 +1651,9 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
     // clause because the current function of the docshell can only be
     // search and replace or spell checking and in that case switching the
     // view mode is allowed.
-    if (GetDocSh()->IsInPlaceActive() || pFuSlideShow)
+    if (GetViewFrame()->GetFrame()->IsInPlace() || pFuSlideShow)
     {
-        if ( !GetDocSh()->IsInPlaceActive() )
+        if ( !GetViewFrame()->GetFrame()->IsInPlace() )
         {
             rSet.ClearItem( SID_DRAWINGMODE );
             rSet.DisableItem( SID_DRAWINGMODE );
@@ -1690,7 +1687,6 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
         rSet.ClearItem( SID_HANDOUTMODE );
         rSet.DisableItem( SID_HANDOUTMODE );
     }
-
 
     svx::ExtrusionBar::getState( pDrView, rSet );
     svx::FontworkBar::getState( pDrView, rSet );
