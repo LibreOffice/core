@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-07 15:51:31 $
+ *  last change: $Author: od $ $Date: 2002-11-11 09:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,66 @@ BOOL SwLayoutFrm::IsAnLower( const SwFrm *pAssumed ) const
             pUp = pUp->GetUpper();
     }
     return FALSE;
+}
+
+/** method to check relative position of layout frame to
+    a given layout frame.
+
+    OD 08.11.2002 - refactoring of pseudo-local method <lcl_Apres(..)> in
+    <txtftn.cxx> for #104840#.
+
+    @param _aCheckRefLayFrm
+    constant reference of an instance of class <SwLayoutFrm> which
+    is used as the reference for the relative position check.
+
+    @author OD
+
+    @return true, if <this> is positioned before the layout frame <p>
+*/
+bool SwLayoutFrm::IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const
+{
+    ASSERT( !IsRootFrm() , "<IsBefore> called at a <SwRootFrm>.");
+    ASSERT( !_pCheckRefLayFrm->IsRootFrm() , "<IsBefore> called with a <SwRootFrm>.");
+
+    bool bReturn;
+
+    // check, if on different pages
+    const SwPageFrm *pMyPage = FindPageFrm();
+    const SwPageFrm *pCheckRefPage = _pCheckRefLayFrm->FindPageFrm();
+    if( pMyPage != pCheckRefPage )
+    {
+        // being on different page as check reference
+        bReturn = pMyPage->GetPhyPageNum() < pCheckRefPage->GetPhyPageNum();
+    }
+    else
+    {
+        // being on same page as check reference
+        // --> search my supreme parent <pUp>, which doesn't contain check reference.
+        const SwLayoutFrm* pUp = this;
+        while ( pUp->GetUpper() &&
+                !pUp->GetUpper()->IsAnLower( _pCheckRefLayFrm )
+              )
+            pUp = pUp->GetUpper();
+        if( !pUp->GetUpper() )
+        {
+            // can occur, if <this> is a fly frm
+            bReturn = false;
+        }
+        else
+        {
+            // travel through the next's of <pUp> and check if one of these
+            // contain the check reference.
+            SwLayoutFrm* pUpNext = (SwLayoutFrm*)pUp->GetNext();
+            while ( pUpNext &&
+                    !pUpNext->IsAnLower( _pCheckRefLayFrm ) )
+            {
+                pUpNext = (SwLayoutFrm*)pUpNext->GetNext();
+            }
+            bReturn = pUpNext != 0;
+        }
+    }
+
+    return bReturn;
 }
 
 /*************************************************************************
