@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-11 10:33:59 $
+ *  last change: $Author: fs $ $Date: 2001-07-17 14:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,7 +447,7 @@ sal_Int32 OInterfaceContainer::getCount() throw( RuntimeException )
 //------------------------------------------------------------------------------
 Any OInterfaceContainer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
-    if (_nIndex < 0 || _nIndex >= m_aItems.size())
+    if (_nIndex < 0 || (_nIndex >= (sal_Int32)m_aItems.size()))
         throw IndexOutOfBoundsException();
 
     return Any(&m_aItems[_nIndex], m_aElementType);
@@ -456,6 +456,9 @@ Any OInterfaceContainer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsEx
 //------------------------------------------------------------------------------
 void OInterfaceContainer::insert(sal_Int32 _nIndex, const InterfaceRef& xElement, sal_Bool bEvents) throw( IllegalArgumentException )
 {
+    if (!xElement.is())
+        throw IllegalArgumentException(FRM_RES_STRING(RID_STR_NEED_NON_NULL_OBJECT), static_cast<XContainer*>(this), 1);
+
     // das richtige Interface besorgen
     Any aCorrectType = xElement->queryInterface(m_aElementType);
     if (!aCorrectType.hasValue())
@@ -539,7 +542,9 @@ void SAL_CALL OInterfaceContainer::insertByIndex(sal_Int32 _nIndex, const Any& E
         throw IllegalArgumentException();
 
     ::osl::MutexGuard aGuard( m_rMutex );
-    insert(_nIndex, InterfaceRef (*(InterfaceRef *)Element.getValue()), sal_True);
+    Reference< XInterface > xElement;
+    Element >>= xElement;
+    insert(_nIndex, xElement, sal_True);
 }
 
 //------------------------------------------------------------------------------
@@ -662,7 +667,9 @@ void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& Name, con
     if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
         throw IllegalArgumentException();
 
-    InterfaceRef  xElement(*(InterfaceRef *)Element.getValue());
+    Reference< XInterface > xElement;
+    Element >>= xElement;
+
     Reference<XPropertySet>  xSet(xElement, UNO_QUERY);
     if (xSet.is())
     {
