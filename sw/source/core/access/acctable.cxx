@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:51:45 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,9 +151,11 @@ typedef ::std::list < Int32Pair_Impl > Int32PairList_Impl;
 class SwAccTableSelHander_Impl
 {
 public:
-
+    virtual ~SwAccTableSelHander_Impl() = 0;
     virtual void Unselect( sal_Int32 nRowOrCol, sal_Int32 nExt ) = 0;
 };
+
+SwAccTableSelHander_Impl::~SwAccTableSelHander_Impl() {}
 
 //------------------------------------------------------------------------------
 
@@ -519,8 +521,8 @@ sal_Bool SwAccessibleTableData_Impl::CompareExtents(
 SwAccessibleTableData_Impl::SwAccessibleTableData_Impl(
         const SwTabFrm *pTabFrm,
         sal_Bool bIsInPagePreview ) :
-    mpTabFrm( pTabFrm ),
     maTabFrmPos( pTabFrm->Frm().Pos() ),
+    mpTabFrm( pTabFrm ),
     mbIsInPagePreview( bIsInPagePreview )
 {
     CollectData( mpTabFrm );
