@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-19 15:55:46 $
+ *  last change: $Author: jl $ $Date: 2004-04-26 11:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include "jvmfwk/vendorplugin.h"
 
 
-#define NS_JAVA_FRAMEWORK "http://openoffice.org/2004/java/framework/1.0"
-#define NS_SCHEMA_INSTANCE "http://www.w3.org/2001/XMLSchema-instance"
+//#define NS_JAVA_FRAMEWORK "http://openoffice.org/2004/java/framework/1.0"
+//#define NS_SCHEMA_INSTANCE "http://www.w3.org/2001/XMLSchema-instance"
 
 /** typedefs for functions from vendorplugin.h
  */

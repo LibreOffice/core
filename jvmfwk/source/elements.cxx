@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-23 08:40:39 $
+ *  last change: $Author: jl $ $Date: 2004-04-26 11:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 #include "elements.hxx"
 #include "osl/mutex.hxx"
+#include "osl/file.hxx"
 #include "fwkutil.hxx"
 #include "libxmlutil.hxx"
 #include "osl/thread.hxx"
@@ -67,11 +68,275 @@
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
 #include "libxml/xpathinternals.h"
-#define NS_JAVA_FRAMEWORK "http://openoffice.org/2004/java/framework/1.0"
-#define NS_SCHEMA_INSTANCE "http://www.w3.org/2001/XMLSchema-instance"
+
+// #define NS_JAVA_FRAMEWORK "http://openoffice.org/2004/java/framework/1.0"
+// #define NS_SCHEMA_INSTANCE "http://www.w3.org/2001/XMLSchema-instance"
 
 namespace jfw
 {
+
+xmlNode* findChildNode(const xmlNode * pParent, const xmlChar* pName)
+{
+    xmlNode* ret = NULL;
+
+    if (pParent)
+    {
+        xmlNode* cur = pParent->children;
+        while (cur != NULL)
+        {
+            if (xmlStrcmp(cur->name, pName) == 0)
+                break;
+            cur = cur->next;
+        }
+        ret = cur;
+    }
+    return ret;
+}
+
+javaFrameworkError getElementUpdated(rtl::OString & sValue)
+{
+    javaFrameworkError errcode = JFW_E_NONE;
+    //Prepare the xml document and context
+    rtl::OString sSettingsPath = jfw::getVendorSettingsPath();
+     jfw::CXmlDocPtr doc = xmlParseFile(sSettingsPath.getStr());
+    if (doc == NULL)
+    {
+        OSL_ASSERT(0);
+        return JFW_E_CONFIG_READWRITE;
+    }
+    jfw::CXPathContextPtr context = xmlXPathNewContext(doc);
+    int reg = xmlXPathRegisterNs(context, (xmlChar*) "jf",
+        (xmlChar*) NS_JAVA_FRAMEWORK);
+    if (reg == -1)
+        return JFW_E_ERROR;
+    CXPathObjectPtr pathObj = xmlXPathEvalExpression(
+        (xmlChar*)"/jf:javaSelection/jf:updated/text()", context);
+    if (xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
+            return JFW_E_FORMAT_STORE;
+    sValue = (sal_Char*) pathObj->nodesetval->nodeTab[0]->content;
+
+    return errcode;
+}
+
+javaFrameworkError createUserSettingsDocument()
+{
+    javaFrameworkError ret = JFW_E_NONE;
+    // check if javasettings.xml already exist
+    rtl::OUString sURL = getUserSettingsURL();
+
+    osl::DirectoryItem testFileItem;
+    osl::File::RC fileError = osl::DirectoryItem::get(sURL, testFileItem);
+    if (fileError == osl::FileBase::E_None)
+        //file exist already
+        return JFW_E_NONE;
+    else if (fileError != osl::FileBase::E_NOENT)
+        return JFW_E_ERROR;
+
+    //javasettings.xml does not exist yet
+    CXmlDocPtr doc = xmlNewDoc((xmlChar *)"1.0");
+    if (! doc)
+        return JFW_E_ERROR;
+    //Create a comment
+    xmlNewDocComment(
+        doc, (xmlChar *) "This is a generated file. Do not alter this file!");
+
+    //Create the root element and name spaces
+    xmlNodePtr root =   xmlNewDocNode(
+        doc, NULL, (xmlChar *) "java", (xmlChar *) "\n");
+    if (root == NULL)
+        return JFW_E_ERROR;
+    if (xmlNewNs(root, (xmlChar *) NS_JAVA_FRAMEWORK,NULL) == NULL)
+        return JFW_E_ERROR;
+    if (xmlNewNs(root,(xmlChar*) NS_SCHEMA_INSTANCE,(xmlChar*)"xsi") == NULL)
+        return JFW_E_ERROR;
+    xmlDocSetRootElement(doc,  root);
+
+    //Create a comment
+    xmlNodePtr com = xmlNewComment(
+        (xmlChar *) "This is a generated file. Do not alter this file!");
+    if (com == NULL)
+        return JFW_E_ERROR;
+
+    if (xmlAddPrevSibling(root, com) == NULL)
+        return JFW_E_ERROR;
+
+    rtl::OString sSettingsPath = jfw::getUserSettingsPath();
+    if (xmlSaveFormatFileEnc(
+            sSettingsPath.getStr(), doc,"UTF-8", 1) == -1)
+        return JFW_E_CONFIG_READWRITE;
+
+    return ret;
+}
+
+javaFrameworkError createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
+{
+    javaFrameworkError errcode = JFW_E_NONE;
+    xmlNode * root = xmlDocGetRootElement(document);
+    if (root == NULL)
+        return JFW_E_ERROR;
+    bool bFound = false;
+    xmlNode * cur = root->children;
+    while (cur != NULL)
+    {
+        if (xmlStrcmp(cur->name, (xmlChar*) "enabled") == 0)
+        {
+            bFound = true;
+            break;
+        }
+        cur = cur->next;
+    }
+    if (bFound)
+    {
+        bNeedsSave = false;
+        return errcode;
+    }
+    //We will modify this document
+    *bNeedsSave = true;
+    // Now we create the child elements ------------------
+    //Get xsi:nil namespace
+    xmlNs* nsXsi = xmlSearchNsByHref(
+        document, root,(xmlChar*)  NS_SCHEMA_INSTANCE);
+
+    //<classesDirectory/>
+    xmlNode  * nodeCP = xmlNewTextChild(
+        root,NULL, (xmlChar*) "classesDirectory", (xmlChar*) "");
+    if (nodeCP == NULL)
+        return JFW_E_ERROR;
+    //add a new line
+    xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
+    xmlAddChild(root, nodeCrLf);
+
+    //<enabled xsi:nil="true"
+    xmlNode  * nodeEn = xmlNewTextChild(
+        root,NULL, (xmlChar*) "enabled", (xmlChar*) "");
+    if (nodeEn == NULL)
+        return JFW_E_ERROR;
+    xmlSetNsProp(nodeEn,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
+    //add a new line
+    nodeCrLf = xmlNewText((xmlChar*) "\n");
+    xmlAddChild(root, nodeCrLf);
+
+    //<userClassPath xsi:nil="true">
+    xmlNode  * nodeUs = xmlNewTextChild(
+        root,NULL, (xmlChar*) "userClassPath", (xmlChar*) "");
+    if (nodeUs == NULL)
+        return JFW_E_ERROR;
+    xmlSetNsProp(nodeUs,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
+    //add a new line
+    nodeCrLf = xmlNewText((xmlChar*) "\n");
+    xmlAddChild(root, nodeCrLf);
+
+    //<vmParameters xsi:nil="true">
+    xmlNode  * nodeVm = xmlNewTextChild(
+        root,NULL, (xmlChar*) "vmParameters", (xmlChar*) "");
+    if (nodeVm == NULL)
+        return JFW_E_ERROR;
+    xmlSetNsProp(nodeVm,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
+    //add a new line
+    nodeCrLf = xmlNewText((xmlChar*) "\n");
+    xmlAddChild(root, nodeCrLf);
+
+    //<jreLocations xsi:nil="true">
+    xmlNode  * nodeJre = xmlNewTextChild(
+        root,NULL, (xmlChar*) "jreLocations", (xmlChar*) "");
+    if (nodeJre == NULL)
+        return JFW_E_ERROR;
+    xmlSetNsProp(nodeJre,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
+    //add a new line
+    nodeCrLf = xmlNewText((xmlChar*) "\n");
+    xmlAddChild(root, nodeCrLf);
+
+    //<javaInfo xsi:nil="true">
+    xmlNode  * nodeJava = xmlNewTextChild(
+        root,NULL, (xmlChar*) "javaInfo", (xmlChar*) "");
+    if (nodeJava == NULL)
+        return JFW_E_ERROR;
+    xmlSetNsProp(nodeJava,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
+    //add a new line
+    nodeCrLf = xmlNewText((xmlChar*) "\n");
+    xmlAddChild(root, nodeCrLf);
+
+    //only copied during first time setup for the current user and client
+    //machine
+    //!!! ToDo replace root later
+    errcode = copyShareSettings(document, root);
+
+    return errcode;
+}
+
+javaFrameworkError copyShareSettings(xmlDoc * doc, xmlNode * userParent)
+{
+    javaFrameworkError errcode = JFW_E_NONE;
+    CXPathContextPtr contextShare;
+    CXPathObjectPtr pathObj;
+
+    //check if there is a share/config/javasettings.xml
+    rtl::OUString sShareSettings = getSharedSettingsURL();
+
+    osl::DirectoryItem testFileItem;
+    osl::File::RC fileError = osl::DirectoryItem::get(
+        sShareSettings, testFileItem);
+    if (fileError == osl::FileBase::E_NOENT)
+        return JFW_E_NONE;
+    if (fileError != osl::FileBase::E_None)
+        //file exist already
+        return JFW_E_ERROR;
+
+
+
+    //Prepare access to share javasettings.xml
+    rtl::OString sSettings = getSharedSettingsPath();
+    CXmlDocPtr docShare = xmlParseFile(sSettings.getStr());
+    if (docShare == NULL)
+        return JFW_E_CONFIG_READWRITE;
+    contextShare = xmlXPathNewContext(docShare);
+    if (xmlXPathRegisterNs(contextShare, (xmlChar*) "jf",
+        (xmlChar*) NS_JAVA_FRAMEWORK) == -1)
+        return JFW_E_CONFIG_READWRITE;
+
+    //copy <classesDirectory>
+    //ToDo make sure that this works when admin copied the user javasettings.xml
+    //to the share/javasettings.xml
+    rtl::OString sExpression= rtl::OString("//jf:classesDirectory[1]/text()");
+    pathObj = xmlXPathEvalExpression((xmlChar*) sExpression.getStr(),
+                                     contextShare);
+    if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
+        return JFW_E_FORMAT_STORE;
+
+    CXmlCharPtr sClasses = xmlNodeListGetString(
+        docShare, pathObj->nodesetval->nodeTab[0], 1);
+
+    xmlNode* userClasses =
+        findChildNode(userParent, (xmlChar*) "classesDirectory");
+    OSL_ASSERT(userClasses);
+
+    xmlNodeSetContent(userClasses, sClasses);
+
+    return errcode;
+}
+javaFrameworkError prepareSettingsDocument()
+{
+    javaFrameworkError errcode = JFW_E_NONE;
+    if ((errcode = createUserSettingsDocument()) != JFW_E_NONE)
+        return errcode;
+
+    rtl::OString sSettings = getUserSettingsPath();
+    CXmlDocPtr doc = xmlParseFile(sSettings.getStr());
+    if (!doc)
+        return JFW_E_CONFIG_READWRITE;
+
+    bool bNeedsSave = false;
+    errcode = createSettingsStructure(doc, & bNeedsSave);
+    if (errcode != JFW_E_NONE)
+        return errcode;
+    if (bNeedsSave)
+    {
+        if (xmlSaveFormatFileEnc(
+                sSettings.getStr(), doc,"UTF-8", 1) == -1)
+            return JFW_E_CONFIG_READWRITE;
+    }
+    return errcode;
+}
 
 //====================================================================
 VersionInfo::VersionInfo(): arVersions(NULL)
@@ -357,6 +622,7 @@ javaFrameworkError CNodeJava::writeSettings() const
     CXPathContextPtr contextUser;
     CXPathObjectPtr pathObj;
 
+    javaFrameworkError err = prepareSettingsDocument();
     //Read the user elements
     rtl::OString sSettingsPath = jfw::getUserSettingsPath();
     docUser = xmlParseFile(sSettingsPath.getStr());
@@ -542,12 +808,14 @@ rtl::OUString const &  CNodeJava::getUserClassPath() const
     return m_sUserClassPath;
 }
 
-void CNodeJava::setJavaInfo(const JavaInfo * pInfo,
-                            const rtl::OUString & sVendorUpdate)
+void CNodeJava::setJavaInfo(const JavaInfo * pInfo)
+
 {
-    OSL_ASSERT(sVendorUpdate.getLength() > 0);
+
     m_aInfo.bNil = false;
-    m_aInfo.sAttrVendorUpdate = sVendorUpdate;
+//    m_aInfo.sAttrVendorUpdate = sVendorUpdate;
+
+
     if (pInfo != NULL)
     {
         m_aInfo.m_bEmptyNode = false;
@@ -577,7 +845,7 @@ JavaInfo * CNodeJava::getJavaInfo() const
     return m_aInfo.makeJavaInfo();
 }
 
-rtl::OUString const & CNodeJava::getJavaInfoAttrVendorUpdate() const
+rtl::OString const & CNodeJava::getJavaInfoAttrVendorUpdate() const
 {
     return m_aInfo.sAttrVendorUpdate;
 }
@@ -707,13 +975,12 @@ CNodeJavaInfo::~CNodeJavaInfo()
 {
 }
 
-CNodeJavaInfo::CNodeJavaInfo(const JavaInfo * pInfo,
-                             const rtl::OUString & sUpdated)
+CNodeJavaInfo::CNodeJavaInfo(const JavaInfo * pInfo)
 {
     if (pInfo != NULL)
     {
         m_bEmptyNode = false;
-        sAttrVendorUpdate = sUpdated;
+//        sAttrVendorUpdate = sUpdated;
         sVendor = pInfo->sVendor;
         sLocation = pInfo->sLocation;
         sVersion = pInfo->sVersion;
@@ -813,11 +1080,14 @@ javaFrameworkError CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
     OSL_ASSERT(pJavaInfoNode && pDoc);
     javaFrameworkError errcode = JFW_E_NONE;
     //write the attribute vendorSettings
-    rtl::OString osUpdate = rtl::OUStringToOString(
-        sAttrVendorUpdate, osl_getThreadTextEncoding());
+
     //creates the attribute if necessary
+    rtl::OString sUpdated;
+    errcode = getElementUpdated(sUpdated);
+    if (errcode != JFW_E_NONE)
+        return errcode;
     xmlSetProp(pJavaInfoNode, (xmlChar*)"vendorUpdate",
-                   (xmlChar*) osUpdate.getStr());
+                   (xmlChar*) sUpdated.getStr());
 
     //Set xsi:nil in javaInfo element to false
     //the xmlNs pointer must not be destroyed

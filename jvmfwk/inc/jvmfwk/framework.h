@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-23 08:40:39 $
+ *  last change: $Author: jl $ $Date: 2004-04-26 11:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,7 +566,9 @@ javaFrameworkError SAL_CALL jfw_getVMParameters(
 /** sets the user class path.
 
    <p>When the VM is started then it is passed the class path. The
-   class path also contains the user class path set by this function.</p>
+   class path also contains the user class path set by this function.
+   The paths contained in <code>pCP</code> must be separated with a
+   system dependent path separator.</p>
 
    @param pCP
    [in] the user class path.

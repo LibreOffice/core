@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-19 15:55:56 $
+ *  last change: $Author: jl $ $Date: 2004-04-26 11:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@ rtl::OUString getBaseInstallation();
 rtl::OUString getVendorSettingsURL();
 
 rtl::OString getVendorSettingsPath();
-xmlNode* findChildNode(const xmlNode * pParent, const xmlChar* pName);
 
 struct PluginLibrary;
 class VersionInfo;
@@ -103,25 +102,10 @@ javaFrameworkError getVersionInformation(
     const rtl::OString & sVendor,
     VersionInfo *pVersionInfo);
 
-/** gets the value of the updated element from the javavendors.xml.
- */
-javaFrameworkError getElementUpdated(rtl::OUString & sValue);
 
 /** Gets the file URL to the plubin library for the currently selected Java.
  */
 javaFrameworkError getPluginLibrary(rtl::OUString & sLibPathe);
-
-//xmlNode* findChildNode(const xmlNode * pParent, const xmlChar* pName);
-/**
-   @param sUpdated
-   the value of the element /javaSelection/updated from the javavendors.xml
-   file.
-   @param sSettings
-       the system path to the settings xml file.
- */
-javaFrameworkError writeJavaInfoData(const jfw::CJavaInfo & aInfo,
-                                     const rtl::OUString& sUpdated,
-                                     const rtl::OString &  sSettings);
 
 /** Called from writeJavaInfoData. It sets the process identifier. When
 java is to be started, then the current id is compared to the one set by

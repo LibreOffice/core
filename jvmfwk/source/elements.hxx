@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-21 09:30:36 $
+ *  last change: $Author: jl $ $Date: 2004-04-26 11:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,71 @@
 #include "rtl/ustring.hxx"
 #include "rtl/byteseq.hxx"
 #include "libxml/parser.h"
+
+#define NS_JAVA_FRAMEWORK "http://openoffice.org/2004/java/framework/1.0"
+#define NS_SCHEMA_INSTANCE "http://www.w3.org/2001/XMLSchema-instance"
+
 namespace jfw
 {
+
+xmlNode* findChildNode(const xmlNode * pParent, const xmlChar* pName);
+
+/** gets the value of the updated element from the javavendors.xml.
+ */
+javaFrameworkError getElementUpdated(rtl::OString & sValue);
+
+/** creates the javasettings.xml in the users home directory.
+
+    If javasettings.xml does not exist then it creates the file
+    and inserts the root element with its namespaces.
+    The content should look like this:
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!--This is a generated file. Do not alter this file!-->
+    <java xmlns:="http://openoffice.org/2004/java/framework/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    </java>
+
+    @return
+    JFW_E_NONE
+    JFW_E_ERROR
+ */
+javaFrameworkError createUserSettingsDocument();
+
+/** create the child elements within the root structure for each platform.
+
+    @param bNeedsSave
+    [out]If true then the respective structure of elements was added and the
+    document needs to be saved.
+ */
+javaFrameworkError createSettingsStructure(
+    xmlDoc * document, bool * bNeedsSave);
+
+/** copies share settings to user settings.
+
+    This must only occur the first time when the javasettings.xml is
+    prepared for the user.
+
+    @param userParent
+    The node under which the values are to be copied. For example if classesDirectory is
+    copied, then it is copied to userParent/classesDirectory
+
+ */
+javaFrameworkError copyShareSettings(xmlDoc * userDoc, xmlNode* userParent);
+
+/** creates the structure of the documend.
+
+    When this function is called the first time for a user then it creates the
+    javasettings.xml in th ~/<office>/user/config/ unless it already exists
+    (see createUserSettingsDocument). Then
+    it creates a section for the current platform unless it already exist and
+    creates all children elements. If the respective platform section did not exist
+    then after creating the children, the values from the share/config/javasettings.xml
+    are copied.
+
+    @return
+    JFW_E_CONFIG_READWRITE
+ */
+javaFrameworkError prepareSettingsDocument();
 
 class CXmlCharPtr;
 class CNodeJavaInfo
@@ -79,16 +142,18 @@ public:
        sUpdated is the value from the <updated> element from the
        javavendors.xml.
      */
-    CNodeJavaInfo(const JavaInfo * pInfo, const rtl::OUString& sUpdated);
+    CNodeJavaInfo(const JavaInfo * pInfo);
 
     /** if true, then javaInfo is empty. When writeToNode is called
         then all child elements are deleted.
      */
     bool m_bEmptyNode;
     /** Contains the value of the <updated> element of
-        the javavendors.xml
+        the javavendors.xml after loadFromNode was called.
+        It is not used, when the javaInfo node is written.
+        see writeToNode
      */
-    rtl::OUString sAttrVendorUpdate;
+    rtl::OString sAttrVendorUpdate;
     /** contains the nil value of the /java/javaInfo@xsi:nil attribute.
         Default is true;
      */
@@ -106,7 +171,8 @@ public:
      */
     javaFrameworkError loadFromNode(xmlDoc * pDoc,xmlNode * pJavaInfo);
     /** Only writes user settings. The attribut nil always gets the value
-        false;
+        false. The function gets the value javaSettings/updated from the
+        javavendors.xml and writes it to javaInfo@vendorUpdate in javasettings.xml
      */
     javaFrameworkError writeToNode(xmlDoc * pDoc, xmlNode * pJavaInfo) const;
 
@@ -203,11 +269,8 @@ public:
      */
     rtl::OUString const & getUserClassPath() const;
     /** sets m_aInfo. Analog to setEnabled.
-        @param sVendorUpdated
-        The date string that is written to /java/javaInfo@vendorUpdate
-        The string is the same as the value of /javaSettings/updated in javavendors.xml
      */
-    void setJavaInfo(const JavaInfo * pInfo, const rtl::OUString& sVendorUpdated);
+    void setJavaInfo(const JavaInfo * pInfo);
     /** returns a JavaInfo structure representing the node
         /java/javaInfo
         If both, user and share settings are nil, then NULL is returned.
@@ -215,7 +278,7 @@ public:
     JavaInfo * getJavaInfo() const;
     /** returns the value of the attribute /java/javaInfo[@vendorUpdate].
      */
-    rtl::OUString const & getJavaInfoAttrVendorUpdate() const;
+    rtl::OString const & getJavaInfoAttrVendorUpdate() const;
     /** sets the /java/vmParameters/param elements.
         The values are kept in a vector m_arVmParameters. When this method is
         called then the vector is cleared and the new values are inserted.

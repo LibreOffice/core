@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-19 15:55:15 $
+ *  last change: $Author: jl $ $Date: 2004-04-26 11:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,88 +542,6 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
 }
 
 
-javaFrameworkError writeJavaInfoData(const jfw::CJavaInfo & aInfo,
-                                     const rtl::OUString & sUpdated,
-                                     const rtl::OString &  sSettings)
-{
-    OSL_ASSERT(sSettings.getLength());
-    javaFrameworkError errcode = JFW_E_NONE;
-    jfw::CXmlDocPtr docUser;
-    jfw::CXPathContextPtr contextUser;
-    jfw::CXPathObjectPtr pathObjUser;
-     docUser = xmlParseFile(sSettings.getStr());
-    if (docUser == NULL)
-        return JFW_E_CONFIG_READWRITE;
-
-
-    contextUser = xmlXPathNewContext(docUser);
-    if (xmlXPathRegisterNs(contextUser, (xmlChar*) "jf",
-        (xmlChar*) NS_JAVA_FRAMEWORK) == -1)
-        return JFW_E_CONFIG_READWRITE;
-
-    //Get position of javaInfo element
-    rtl::OString sExpresion= rtl::OString(
-        "/jf:java/jf:javaInfo");
-    pathObjUser = xmlXPathEvalExpression((xmlChar*) sExpresion.getStr(),
-                                         contextUser);
-    if ( ! pathObjUser || xmlXPathNodeSetIsEmpty(pathObjUser->nodesetval))
-        return JFW_E_FORMAT_STORE;
-
-    CNodeJavaInfo infoNode(aInfo, sUpdated);
-    errcode = infoNode.writeToNode(docUser, pathObjUser->nodesetval->nodeTab[0]);
-    if (errcode == JFW_E_NONE)
-    {
-//    xmlKeepBlanksDefault(0);
-        if (xmlSaveFormatFile(sSettings.getStr(), docUser, 1) == -1)
-            return JFW_E_CONFIG_READWRITE;
-        setJavaSelected();
-    }
-    return errcode;
-}
-
-xmlNode* findChildNode(const xmlNode * pParent, const xmlChar* pName)
-{
-    xmlNode* ret = NULL;
-
-    if (pParent)
-    {
-        xmlNode* cur = pParent->children;
-        while (cur != NULL)
-        {
-            if (xmlStrcmp(cur->name, pName) == 0)
-                break;
-            cur = cur->next;
-        }
-        ret = cur;
-    }
-    return ret;
-}
-
-javaFrameworkError getElementUpdated(rtl::OUString & sValue)
-{
-    javaFrameworkError errcode = JFW_E_NONE;
-    //Prepare the xml document and context
-    rtl::OString sSettingsPath = jfw::getVendorSettingsPath();
-     jfw::CXmlDocPtr doc = xmlParseFile(sSettingsPath.getStr());
-    if (doc == NULL)
-    {
-        OSL_ASSERT(0);
-        return JFW_E_CONFIG_READWRITE;
-    }
-    jfw::CXPathContextPtr context = xmlXPathNewContext(doc);
-    int reg = xmlXPathRegisterNs(context, (xmlChar*) "jf",
-        (xmlChar*) NS_JAVA_FRAMEWORK);
-    if (reg == -1)
-        return JFW_E_ERROR;
-    CXPathObjectPtr pathObj = xmlXPathEvalExpression(
-        (xmlChar*)"/jf:javaSelection/jf:updated/text()", context);
-    if (xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
-            return JFW_E_FORMAT_STORE;
-    rtl::OString osUpdated =
-        (sal_Char*) pathObj->nodesetval->nodeTab[0]->content;
-    sValue = rtl::OStringToOUString(osUpdated, RTL_TEXTENCODING_UTF8);
-    return errcode;
-}
 
 javaFrameworkError buildClassPathFromDirectory(const rtl::OUString & relPath,
                              rtl::OUString & sClassPath)

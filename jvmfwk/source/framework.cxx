@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-23 08:40:39 $
+ *  last change: $Author: jl $ $Date: 2004-04-26 11:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
     if (aInfo == NULL)
         return JFW_E_NO_SELECT;
     //check if the javavendors.xml has changed after a Java was selected
-    rtl::OUString sVendorUpdate;
+    rtl::OString sVendorUpdate;
     if ((errcode = jfw::getElementUpdated(sVendorUpdate))
         != JFW_E_NONE)
         return errcode;
@@ -603,20 +603,10 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
     }
     if ((JavaInfo*) aCurrentInfo)
     {
-        rtl::OString sSettings = jfw::getUserSettingsPath();
-        if (sSettings.getLength() == 0)
-            return JFW_E_ERROR;
-        // Get the <updated> element from the javavendors.xml
-        jfw::CXPathObjectPtr pathObjUpdated = xmlXPathEvalExpression(
-            (xmlChar*) "/jf:javaSelection/jf:updated/text()", context);
-        if (xmlXPathNodeSetIsEmpty(pathObjUpdated->nodesetval))
-            return JFW_E_FORMAT_STORE;
-        rtl::OString osUpdated =
-            (sal_Char*) pathObjUpdated->nodesetval->nodeTab[0]->content;
-        rtl::OUString sUpdated =
-            rtl::OStringToOUString(osUpdated, RTL_TEXTENCODING_UTF8);
-        // write the Java information to the user settings
-        errcode = jfw::writeJavaInfoData(aCurrentInfo, sUpdated, sSettings);
+        jfw::CNodeJava javaNode;
+        javaNode.setJavaInfo(aCurrentInfo);
+        errcode = javaNode.writeSettings();
+
         if (errcode == JFW_E_NONE && pInfo !=NULL)
         {
             //copy to out param
@@ -680,7 +670,7 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
         //If the javavendors.xml has changed, then the current selected
         //Java is not valid anymore
         // /java/javaInfo/@vendorUpdate != javaSelection/updated (javavendors.xml)
-        rtl::OUString sUpdated;
+        rtl::OString sUpdated;
         if ((errcode = jfw::getElementUpdated(sUpdated)) != JFW_E_NONE)
             return errcode;
         if (sUpdated.equals(aSettings.getJavaInfoAttrVendorUpdate()) == sal_False)
@@ -793,10 +783,7 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
     osl::MutexGuard guard(jfw::getFwkMutex());
     javaFrameworkError errcode = JFW_E_NONE;
     jfw::CNodeJava node;
-    rtl::OUString sUpdated;
-    if((errcode = jfw::getElementUpdated(sUpdated)) != JFW_E_NONE)
-        return errcode;
-    node.setJavaInfo(pInfo, sUpdated);
+    node.setJavaInfo(pInfo);
     errcode = node.writeSettings();
     if (errcode != JFW_E_NONE)
         return errcode;
