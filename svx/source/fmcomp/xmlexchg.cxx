@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexchg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:21:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,14 @@
 #ifndef _SVX_XMLEXCHG_HXX_
 #include "xmlexchg.hxx"
 #endif
-
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
 #endif
 #ifndef _SOT_EXCHANGE_HXX
 #include <sot/exchange.hxx>
+#endif
+#ifndef _DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
 //........................................................................
@@ -81,7 +83,8 @@ namespace svx
     //= OXFormsTransferable
     //====================================================================
     //--------------------------------------------------------------------
-    OXFormsTransferable::OXFormsTransferable()
+    OXFormsTransferable::OXFormsTransferable( const OXFormsDescriptor &rhs ) :
+        m_aDescriptor(rhs)
     {
     }
     //--------------------------------------------------------------------
@@ -109,6 +112,17 @@ namespace svx
             return SetString( ::rtl::OUString( String::CreateFromAscii("XForms-Transferable") ), _rFlavor );
         }
         return sal_False;
+    }
+    //--------------------------------------------------------------------
+    const OXFormsDescriptor &OXFormsTransferable::extractDescriptor( const TransferableDataHelper &_rData ) {
+
+        using namespace ::com::sun::star::uno;
+        using namespace ::com::sun::star::datatransfer;
+        Reference<XTransferable> &transfer = const_cast<Reference<XTransferable> &>(_rData.GetTransferable());
+        XTransferable *pInterface = transfer.get();
+        OXFormsTransferable *pThis = dynamic_cast<OXFormsTransferable *>(pInterface);
+        DBG_ASSERT(pThis,"XTransferable is NOT an OXFormsTransferable???");
+        return pThis->m_aDescriptor;
     }
 
 
