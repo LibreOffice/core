@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-07 10:54:50 $
+ *  last change: $Author: pb $ $Date: 2002-10-02 09:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1547,17 +1547,22 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
 
 {
     String aPath;
-    String aExtension = DEFINE_CONST_UNICODE( "vor" );
-
+    String aExtension( DEFINE_CONST_UNICODE( "vor" ) );
     short nDialogType = bOpen ? FILEOPEN_SIMPLE : FILESAVE_SIMPLE;
-
     sfx2::FileDialogHelper aFileDlg( nDialogType, 0L );
 
-    aFileDlg.AddFilter( String( SfxResId( STR_FILTERNAME_ALL ) ), DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+    // add "All" filter
+    aFileDlg.AddFilter( String( SfxResId( STR_FILTERNAME_ALL ) ),
+                        DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+    // add template filter
+    String sFilterName( SfxResId( STR_TEMPLATE_FILTER ) );
+    String sFilterExt( DEFINE_CONST_UNICODE( "*.vor;*.stw;*.stc;*.std;*.sti" ) );
+    sFilterName += DEFINE_CONST_UNICODE( " (" );
+    sFilterName += sFilterExt;
+    sFilterName += ')';
+    aFileDlg.AddFilter( sFilterName, sFilterExt );
 
-    const String aFilter( SfxResId( STR_TEMPLATE_FILTER ) );
-    aFileDlg.AddFilter( aFilter, DEFINE_CONST_UNICODE( "*.vor;*.stw;*.stc;*.std;*.sti" ) );
-    aFileDlg.SetCurrentFilter( aFilter );
+    aFileDlg.SetCurrentFilter( sFilterName );
 
     if ( aLastDir.Len() || rFileName.Len() )
     {
@@ -2173,31 +2178,33 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
 
 */
 {
-    sfx2::FileDialogHelper aFileDlg( WB_OPEN );
-    // add <All> filter
-    aFileDlg.AddFilter( String( SfxResId( STR_FILTERNAME_ALL ) ),
-                        DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
-    // add filters of all modules
-    USHORT i, j, nCount = SfxObjectFactory::GetObjectFactoryCount_Impl();
-    for( i = 0; i < nCount; ++i )
-    {
-        const SfxObjectFactory& rObjFact = SfxObjectFactory::GetObjectFactory_Impl(i);
-        USHORT nMax = rObjFact.GetFilterCount();
-        for ( j = 0; j < nMax; ++j )
-        {
-            const SfxFilter* pFilter = rObjFact.GetFilter(j);
-            if ( pFilter->IsInternal() )
-                continue;
-            if ( pFilter->CanImport() && pFilter->IsAllowedAsTemplate() )
-                aFileDlg.AddFilter( pFilter->GetUIName(), pFilter->GetWildcard()() );
-        }
-    }
+    void* pDummy = NULL;
+    sfx2::FileDialogHelper aFileDlg( WB_OPEN, *(SfxObjectFactory*)pDummy );
+
     // add config and basic filter
-    aFileDlg.AddFilter( String(SfxResId(RID_STR_FILTCONFIG)), DEFINE_CONST_UNICODE( "*.cfg" ) );
-    aFileDlg.AddFilter( String(SfxResId(RID_STR_FILTBASIC)), DEFINE_CONST_UNICODE( "*.sbl" ) );
+    static String sOpenBracket( DEFINE_CONST_UNICODE( " (" ) );
+    static String sCloseBracket( DEFINE_CONST_UNICODE( ")" ) );
+    static String sConfigExt( DEFINE_CONST_UNICODE( "*.cfg" ) );
+    static String sBasicExt( DEFINE_CONST_UNICODE( "*.sbl" ) );
+
+    String sFilterName( SfxResId( RID_STR_FILTCONFIG ) );
+    sFilterName += sOpenBracket;
+    sFilterName += sConfigExt;
+    sFilterName += sCloseBracket;
+    aFileDlg.AddFilter( sFilterName, sConfigExt );
+
+    sFilterName = String( SfxResId( RID_STR_FILTBASIC ) );
+    sFilterName += sOpenBracket;
+    sFilterName += sBasicExt;
+    sFilterName += sCloseBracket;
+    aFileDlg.AddFilter( sFilterName, sBasicExt );
+
+    // set "All" filter as current
+    aFileDlg.SetCurrentFilter( String( SfxResId( STR_FILTERNAME_ALL ) ) );
 
     if ( aLastDir.Len() )
         aFileDlg.SetDisplayDirectory( aLastDir );
+
     if ( ERRCODE_NONE == aFileDlg.Execute() )
     {
         String aPath = aFileDlg.GetPath();
