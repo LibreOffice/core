@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-09 10:25:47 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,14 @@ String ConstructTempDir_Impl( const String* pParent )
 
     if ( !aName.Len() )
     {
+        if (aTempNameBase_Impl.getLength() == 0)
+        {
+            ::rtl::OUString ustrTempDirURL;
+            ::osl::FileBase::RC rc = ::osl::File::getTempDirURL(
+                ustrTempDirURL );
+            if (rc == ::osl::FileBase::E_None)
+                aTempNameBase_Impl = ustrTempDirURL;
+        }
         // if no parent or invalid parent : use default directory
         DBG_ASSERT( aTempNameBase_Impl.getLength(), "No TempDir!" );
         aName = aTempNameBase_Impl;
