@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-18 12:31:08 $
+ *  last change: $Author: dr $ $Date: 2000-10-19 12:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,30 +109,26 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define XML_SC_ISTEXTWRAPPED                        (XML_SC_TYPES_START + 14)
 //#define XML_SC_TYPE_NUMBERFORMAT                  (XML_SC_TYPES_START + 14)
 
-#define CTF_CELLBACKCOLOR                       1
-#define CTF_ISCELLBACKGROUNDTRANSPARENT         2
-#define CTF_HORIJUSTIFY                         3
-#define CTF_HORIJUSTIFY_SOURCE                  4
-#define CTF_ALLPADDING                          5
-#define CTF_BOTTOMPADDING                       6
-#define CTF_LEFTPADDING                         7
-#define CTF_RIGHTPADDING                        8
-#define CTF_TOPPADDING                          9
-#define CTF_ALLBORDER                           10
-#define CTF_LEFTBORDER                          11
-#define CTF_RIGHTBORDER                         12
-#define CTF_TOPBORDER                           13
-#define CTF_BOTTOMBORDER                        14
-#define CTF_ALLBORDERWIDTH                      15
-#define CTF_LEFTBORDERWIDTH                     16
-#define CTF_RIGHTBORDERWIDTH                    17
-#define CTF_TOPBORDERWIDTH                      18
-#define CTF_BOTTOMBORDERWIDTH                   19
-#define CTF_NUMBERFORMAT                        20
-#define CTF_MAP                                 21
-#define CTF_PARAINDENT                          22
-#define CTF_TEXTBACKCOLOR                       23
-#define CTF_ISTEXTBACKGROUNDTRANSPARENT         24
+#define CTF_HORIJUSTIFY                         1
+#define CTF_HORIJUSTIFY_SOURCE                  2
+#define CTF_ALLPADDING                          3
+#define CTF_BOTTOMPADDING                       4
+#define CTF_LEFTPADDING                         5
+#define CTF_RIGHTPADDING                        6
+#define CTF_TOPPADDING                          7
+#define CTF_ALLBORDER                           8
+#define CTF_LEFTBORDER                          9
+#define CTF_RIGHTBORDER                         10
+#define CTF_TOPBORDER                           11
+#define CTF_BOTTOMBORDER                        12
+#define CTF_ALLBORDERWIDTH                      13
+#define CTF_LEFTBORDERWIDTH                     14
+#define CTF_RIGHTBORDERWIDTH                    15
+#define CTF_TOPBORDERWIDTH                      16
+#define CTF_BOTTOMBORDERWIDTH                   17
+#define CTF_NUMBERFORMAT                        18
+#define CTF_MAP                                 19
+#define CTF_PARAINDENT                          20
 
 //ColumnStyles
 #define XML_SC_TYPE_BREAKBEFORE                     (XML_SC_TYPES_START + 50)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-18 12:31:08 $
+ *  last change: $Author: dr $ $Date: 2000-10-19 12:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ using namespace com::sun::star;
 
 const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
 {
-    { "CellBackColor", XML_NAMESPACE_FO, sXML_background_color, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, CTF_CELLBACKCOLOR },
+    { "CellBackColor", XML_NAMESPACE_FO, sXML_background_color, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 },
     { "CellProtection", XML_NAMESPACE_STYLE, sXML_cell_protect, XML_SC_TYPE_CELLPROTECTION|MID_FLAG_MERGE_PROPERTY, 0 },
     { "CellProtection", XML_NAMESPACE_STYLE, sXML_print_content, XML_SC_TYPE_PRINTCONTENT|MID_FLAG_MERGE_PROPERTY, 0 },
     { "NumberFormat", XML_NAMESPACE_STYLE, sXML_data_style_name, XML_TYPE_NUMBER|MID_FLAG_SPECIAL_ITEM, CTF_NUMBERFORMAT},
@@ -129,7 +129,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     { "HoriJustify", XML_NAMESPACE_STYLE, sXML_text_align_source, XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MERGE_PROPERTY, 0 },
 //  { "HoriJustify", XML_NAMESPACE_FO, sXML_text_align, XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MULTI_PROPERTY, CTF_HORIJUSTIFY },
 //  { "HoriJustify", XML_NAMESPACE_STYLE, sXML_text_align_source, XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MULTI_PROPERTY, CTF_HORIJUSTIFY_SOURCE },
-    { "IsCellBackgroundTransparent", XML_NAMESPACE_FO, sXML_background_color, XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY, CTF_ISCELLBACKGROUNDTRANSPARENT },
+    { "IsCellBackgroundTransparent", XML_NAMESPACE_FO, sXML_background_color, XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 },
     { "IsTextWrapped", XML_NAMESPACE_FO, sXML_wrap_option, XML_SC_ISTEXTWRAPPED, 0 },
     { "Orientation", XML_NAMESPACE_FO, sXML_direction, XML_SC_TYPE_ORIENTATION, 0 },
     { "ParaIndent", XML_NAMESPACE_FO, sXML_margin_left, XML_TYPE_MEASURE16, 0 },
@@ -156,7 +156,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
 
 // CharacterProperties
     { "CharAutoKerning", XML_NAMESPACE_STYLE, sXML_letter_kerning, XML_TYPE_BOOL, 0 },
-    { "CharBackColor", XML_NAMESPACE_FO, sXML_text_background_color, XML_TYPE_COLORTRANSPARENT, CTF_TEXTBACKCOLOR },
+    { "CharBackColor", XML_NAMESPACE_FO, sXML_text_background_color, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 },
     { "CharCaseMap", XML_NAMESPACE_FO, sXML_font_variant, XML_TYPE_TEXT_CASEMAP_VAR, 0 },
     { "CharCaseMap", XML_NAMESPACE_FO, sXML_text_transform, XML_TYPE_TEXT_CASEMAP, 0 },
     { "CharColor", XML_NAMESPACE_FO, sXML_color, XML_TYPE_COLOR, 0 },
@@ -181,7 +181,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     { "CharShadowed",XML_NAMESPACE_FO, sXML_text_shadow, XML_TYPE_TEXT_SHADOWED, 0 },
 //  { "CharStyle", ... },
 //  { "CharBackTransparent", ... },
-    { "CharBackTransparent", XML_NAMESPACE_FO, sXML_text_background_color, XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY, CTF_ISTEXTBACKGROUNDTRANSPARENT },
+    { "CharBackTransparent", XML_NAMESPACE_FO, sXML_text_background_color, XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 },
     { "CharUnderline", XML_NAMESPACE_STYLE, sXML_text_underline, XML_TYPE_TEXT_UNDERLINE, 0 },
     { "CharWeight", XML_NAMESPACE_FO, sXML_font_weight, XML_TYPE_TEXT_WEIGHT, 0 },
     { "CharWordMode", XML_NAMESPACE_STYLE, sXML_score_spaces, XML_TYPE_NBOOL, 0 },
@@ -242,11 +242,12 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
     if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
     {
-        sal_Bool bNotFound = sal_True;
         ::std::vector< XMLPropertyState >::const_iterator i = rProperties.begin();
-        for (i; (i != rProperties.end()) && bNotFound; i++)
+        for (i; (i != rProperties.end()); i++)
         {
-            sal_Int16 nContextID = rScXMLExport.GetCellStylesPropertySetMapper()->GetEntryContextId(i->mnIndex);
+            UniReference< XMLCellStylesPropertySetMapper > aPropMapper =
+                rScXMLExport.GetCellStylesPropertySetMapper();
+            sal_Int16 nContextID = aPropMapper->GetEntryContextId(i->mnIndex);
             switch (nContextID)
             {
                 case CTF_NUMBERFORMAT :
@@ -257,7 +258,8 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
                         rtl::OUString sAttrValue = rScXMLExport.getDataStyleName(nNumberFormat);
                         if (sAttrValue.len())
                         {
-                            rtl::OUString sAttrName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_data_style_name)));
+                            rtl::OUString sAttrName( rNamespaceMap.GetQNameByKey(
+                                aPropMapper->GetEntryNameSpace(i->mnIndex), aPropMapper->GetEntryXMLName(i->mnIndex) ) );
                             rtl::OUString sCDATA( RTL_CONSTASCII_USTRINGPARAM(sXML_CDATA ) );
                             rAttrList.AddAttribute( sAttrName, sCDATA, sAttrValue );
                         }
@@ -541,11 +543,6 @@ void XMLCellStylesPropertySetMapper::ContextFilter(
     ::std::vector< XMLPropertyState >& rProperties,
     uno::Reference< beans::XPropertySet > rPropSet ) const
 {
-    XMLPropertyState* pCellBackColor = NULL;
-    XMLPropertyState* pIsCellBackgroundTransparent = NULL;
-    XMLPropertyState* pTextBackColor = NULL;
-    XMLPropertyState* pIsTextBackgroundTransparent = NULL;
-
     XMLPropertyState* pPadding = NULL;
     XMLPropertyState* pPadding_Bottom = NULL;
     XMLPropertyState* pPadding_Left = NULL;
@@ -570,62 +567,24 @@ void XMLCellStylesPropertySetMapper::ContextFilter(
     {
         switch( GetEntryContextId( propertie->mnIndex ) )
         {
-            case CTF_CELLBACKCOLOR:                 pCellBackColor = propertie; break;
-            case CTF_ISCELLBACKGROUNDTRANSPARENT:   pIsCellBackgroundTransparent = propertie; break;
-            case CTF_TEXTBACKCOLOR:                 pTextBackColor = propertie; break;
-            case CTF_ISTEXTBACKGROUNDTRANSPARENT:   pIsTextBackgroundTransparent = propertie; break;
-            case CTF_ALLPADDING:                    pPadding = propertie; break;
-            case CTF_BOTTOMPADDING:                 pPadding_Bottom = propertie; break;
-            case CTF_LEFTPADDING:                   pPadding_Left = propertie; break;
-            case CTF_RIGHTPADDING:                  pPadding_Right = propertie; break;
-            case CTF_TOPPADDING:                    pPadding_Top = propertie; break;
-            case CTF_ALLBORDER:                     pBorder = propertie; break;
-            case CTF_LEFTBORDER:                    pBorder_Left = propertie; break;
-            case CTF_RIGHTBORDER:                   pBorder_Right = propertie; break;
-            case CTF_BOTTOMBORDER:                  pBorder_Bottom = propertie; break;
-            case CTF_TOPBORDER:                     pBorder_Top = propertie; break;
-            case CTF_ALLBORDERWIDTH:                pAllBorderWidthState = propertie; break;
-            case CTF_LEFTBORDERWIDTH:               pLeftBorderWidthState = propertie; break;
-            case CTF_RIGHTBORDERWIDTH:              pRightBorderWidthState = propertie; break;
-            case CTF_TOPBORDERWIDTH:                pTopBorderWidthState = propertie; break;
-            case CTF_BOTTOMBORDERWIDTH:             pBottomBorderWidthState = propertie; break;
+            case CTF_ALLPADDING:        pPadding = propertie; break;
+            case CTF_BOTTOMPADDING:     pPadding_Bottom = propertie; break;
+            case CTF_LEFTPADDING:       pPadding_Left = propertie; break;
+            case CTF_RIGHTPADDING:      pPadding_Right = propertie; break;
+            case CTF_TOPPADDING:        pPadding_Top = propertie; break;
+            case CTF_ALLBORDER:         pBorder = propertie; break;
+            case CTF_LEFTBORDER:        pBorder_Left = propertie; break;
+            case CTF_RIGHTBORDER:       pBorder_Right = propertie; break;
+            case CTF_BOTTOMBORDER:      pBorder_Bottom = propertie; break;
+            case CTF_TOPBORDER:         pBorder_Top = propertie; break;
+            case CTF_ALLBORDERWIDTH:    pAllBorderWidthState = propertie; break;
+            case CTF_LEFTBORDERWIDTH:   pLeftBorderWidthState = propertie; break;
+            case CTF_RIGHTBORDERWIDTH:  pRightBorderWidthState = propertie; break;
+            case CTF_TOPBORDERWIDTH:    pTopBorderWidthState = propertie; break;
+            case CTF_BOTTOMBORDERWIDTH: pBottomBorderWidthState = propertie; break;
         }
     }
 
-    if( pCellBackColor && pIsCellBackgroundTransparent )
-    {
-        sal_Bool bTemp;
-        if(pIsCellBackgroundTransparent->maValue >>= bTemp)
-        {
-            if( bTemp )
-            {
-                pCellBackColor->mnIndex = -1;
-                pCellBackColor->maValue.clear();
-            }
-            else
-            {
-                pIsCellBackgroundTransparent->mnIndex = -1;
-                pIsCellBackgroundTransparent->maValue.clear();
-            }
-        }
-    }
-    if( pTextBackColor && pIsTextBackgroundTransparent )
-    {
-        sal_Bool bTemp;
-        if(pIsTextBackgroundTransparent->maValue >>= bTemp)
-        {
-            if( bTemp )
-            {
-                pTextBackColor->mnIndex = -1;
-                pTextBackColor->maValue.clear();
-            }
-            else
-            {
-                pIsTextBackgroundTransparent->mnIndex = -1;
-                pIsTextBackgroundTransparent->maValue.clear();
-            }
-        }
-    }
     if (pPadding && pPadding_Bottom && pPadding_Left && pPadding_Right && pPadding_Top)
     {
         sal_Int32 nBottom, nTop, nLeft, nRight;
