@@ -11,5 +11,5 @@
             <value xml:lang="en-US">%productname% %formatversion% Chart</value>
             <value xml:lang="x-translate">%productname% %formatversion% Chart</value>
         </prop>
-        <prop oor:name="Flags"><value>IMPORT OWN NOTINFILEDIALOG NOTINCHOOSER</value></prop>
+        <prop oor:name="Flags"><value>IMPORT OWN ALIEN NOTINFILEDIALOG NOTINCHOOSER</value></prop>
     </node>
