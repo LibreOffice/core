@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filstr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 09:56:22 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,15 +368,7 @@ XStream_impl::closeStream(
 {
     if( m_nIsOpen )
     {
-        osl::FileBase::RC err = m_aFile.sync();
-        if( err != osl::FileBase::E_None ) {
-            io::IOException ex;
-            ex.Message = rtl::OUString::createFromAscii(
-                "could not synchronize file to disc");
-            throw ex;
-        }
-
-        err = m_aFile.close();
+        osl::FileBase::RC err = m_aFile.close();
 
         if( err != osl::FileBase::E_None ) {
             io::IOException ex;
