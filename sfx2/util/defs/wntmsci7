@@ -8157,3 +8157,5 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ?OpenURL@ShutdownIcon@@SAXAAVOUString@rtl@@ABV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@Z
 ?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx2372420298@@YAXABVSbxVariableRef@@PAX@Z
 ??1OReleaseSolarMutex@sfx2@@QAE@XZ
+??A?$Sequence@VOUString@rtl@@@uno@star@sun@com@@QAAAAVOUString@rtl@@J@Z
+?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx294142365@@YAXABVSbxVariableRef@@PAX@Z
