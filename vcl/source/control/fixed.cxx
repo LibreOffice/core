@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:36 $
+ *  last change: $Author: th $ $Date: 2000-12-01 14:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
 
 // =======================================================================
 
-#define FIXEDLINE_BORDER        12
 #define FIXEDLINE_TEXT_BORDER    2
 
 #define FIXEDTEXT_VIEW_STYLE    (WB_3DLOOK |                        \
@@ -398,7 +397,7 @@ Size FixedText::CalcMinimumSize( long nMaxWidth ) const
     if ( !( GetStyle() & WB_NOLABEL ) )
         nStyle |= TEXT_DRAW_MNEMONIC;
 
-    Size aSize = GetTextRect( Rectangle( Point(), Size( (nMaxWidth ? nMaxWidth : 0x7fffffff)-FIXEDLINE_BORDER, 0x7fffffff ) ),
+    Size aSize = GetTextRect( Rectangle( Point(), Size( (nMaxWidth ? nMaxWidth : 0x7fffffff), 0x7fffffff ) ),
                               GetText(), nStyle ).GetSize();
 
     // GetTextRect verkraftet keinen leeren String:
@@ -544,7 +543,7 @@ void FixedLine::Paint( const Rectangle& rRect )
     else
     {
         USHORT      nStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_ENDELLIPSIS;
-        Rectangle   aRect( FIXEDLINE_BORDER, 0, aOutSize.Width()-FIXEDLINE_BORDER, aOutSize.Height() );
+        Rectangle   aRect( 0, 0, aOutSize.Width(), aOutSize.Height() );
 
         if ( !IsEnabled() )
             nStyle |= TEXT_DRAW_DISABLE;
@@ -554,19 +553,15 @@ void FixedLine::Paint( const Rectangle& rRect )
             nStyle |= TEXT_DRAW_MONO;
 
         aRect = GetTextRect( aRect, aText, nStyle );
+        DrawText( aRect, aText, nStyle );
+
         long nTop = aRect.Top() + ((aRect.GetHeight()-1)/2);
-
-        DrawLine( Point( 0, nTop ), Point( aRect.Left()-FIXEDLINE_TEXT_BORDER, nTop ) );
         DrawLine( Point( aRect.Right()+FIXEDLINE_TEXT_BORDER, nTop ), Point( aOutSize.Width()-1, nTop ) );
-
         if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
         {
             SetLineColor( rStyleSettings.GetLightColor() );
-            DrawLine( Point( 0, nTop+1 ), Point( aRect.Left()-FIXEDLINE_TEXT_BORDER, nTop+1 ) );
             DrawLine( Point( aRect.Right()+FIXEDLINE_TEXT_BORDER, nTop+1 ), Point( aOutSize.Width()-1, nTop+1 ) );
         }
-
-        DrawText( aRect, aText, nStyle );
     }
 }
 
