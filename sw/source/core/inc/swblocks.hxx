@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-27 15:41:14 $
+ *  last change: $Author: mtg $ $Date: 2001-04-30 19:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ protected:
 #define SWBLK_SW3       3               // SW3-Datei
 #define SWBLK_XML       4               // XML Block List
 
-    void   ClearDoc();                  // Doc-Inhalt loeschen
+    virtual void   ClearDoc();                  // Doc-Inhalt loeschen
     SwPaM* MakePaM();                   // PaM ueber Doc aufspannen
     virtual void   AddName( const String&, const String&, BOOL bOnlyTxt = FALSE );
     BOOL   IsFileChanged() const;
