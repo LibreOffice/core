@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2004-08-18 09:14:40 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,9 +98,9 @@ namespace embed {
 struct XMLSignatureCreationResult
 {
     sal_Int32 nSecurityId;
-    com::sun::star::xml::crypto::sax::SignatureCreationResult nSignatureCreationResult;
+    com::sun::star::xml::crypto::SecurityOperationStatus nSignatureCreationResult;
 
-    XMLSignatureCreationResult( sal_Int32 nId, com::sun::star::xml::crypto::sax::SignatureCreationResult nResult )
+    XMLSignatureCreationResult( sal_Int32 nId, com::sun::star::xml::crypto::SecurityOperationStatus nResult )
     {
         nSecurityId = nId;
         nSignatureCreationResult = nResult;
@@ -110,9 +110,9 @@ struct XMLSignatureCreationResult
 struct XMLSignatureVerifyResult
 {
     sal_Int32 nSecurityId;
-    com::sun::star::xml::crypto::sax::SignatureVerifyResult nSignatureVerifyResult;
+    com::sun::star::xml::crypto::SecurityOperationStatus nSignatureVerifyResult;
 
-    XMLSignatureVerifyResult( sal_Int32 nId, com::sun::star::xml::crypto::sax::SignatureVerifyResult nResult )
+    XMLSignatureVerifyResult( sal_Int32 nId, com::sun::star::xml::crypto::SecurityOperationStatus nResult )
     {
         nSecurityId = nId;
         nSignatureVerifyResult = nResult;
