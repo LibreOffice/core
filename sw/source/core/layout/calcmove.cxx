@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 10:49:15 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 10:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1237,11 +1237,13 @@ void SwCntntFrm::MakeAll()
             Format();
         }
 
+        // FME 16.07.2003 #i16930# - removed this code because it did not work
+
         // OD 04.04.2003 #108446# - react on the situation detected in the text
         // formatting - see <SwTxtFrm::FormatAdjust(..)>:
         // text frame has to move forward, because its text formatting stopped,
         // created a follow and detected, that it contains no content.
-        if ( IsTxtFrm() && bValidPos && bValidSize && bValidPrtArea &&
+/*        if ( IsTxtFrm() && bValidPos && bValidSize && bValidPrtArea &&
              (Frm().*fnRect->fnGetHeight)() == 0 &&
              HasFollow()
            )
@@ -1254,7 +1256,7 @@ void SwCntntFrm::MakeAll()
                 SWREFRESHFN( this )
                 continue;
             }
-        }
+        } */
 
         //Wenn ich der erste einer Kette bin koennte ich mal sehen ob
         //ich zurueckfliessen kann (wenn ich mich ueberhaupt bewegen soll).
