@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:05 $
+ *  last change: $Author: cl $ $Date: 2000-11-15 10:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,11 +596,27 @@ SvXMLImportContext* XMLShapeImportHelper::CreateGroupChildContext(
 }
 
 
-void XMLShapeImportHelper::addShape( uno::Reference< drawing::XShape >& rShape, const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Reference< drawing::XShapes >& rShapes)
+/** this function is called whenever the implementation classes like to add this new
+    shape to the given XShapes.
+*/
+void XMLShapeImportHelper::addShape( uno::Reference< drawing::XShape >& rShape,
+                                     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+                                     uno::Reference< drawing::XShapes >& rShapes)
 {
     if( rShape.is() && rShapes.is() )
     {
         // add new shape to parent
         rShapes->add( rShape );
     }
+}
+
+/** this function is called whenever the implementation classes have finished importing
+    a shape to the given XShapes. The shape is already inserted into its XShapes and
+    all properties and styles are set.
+*/
+void XMLShapeImportHelper::finishShape(
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes)
+{
 }

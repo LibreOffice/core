@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-08 12:24:09 $
+ *  last change: $Author: cl $ $Date: 2000-11-15 10:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,15 @@ void SdXMLShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeL
                 OUString(RTL_CONSTASCII_USTRINGPARAM("RotateAngle")), aAny);
         }
     }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLShapeContext::EndElement()
+{
+    SvXMLImportContext::EndElement();
+
+    GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1565,6 +1574,8 @@ void SdXMLChartShapeContext::EndElement()
 {
     if( mpChartContext )
         mpChartContext->EndElement();
+
+    SdXMLShapeContext::EndElement();
 }
 
 void SdXMLChartShapeContext::Characters( const ::rtl::OUString& rChars )
