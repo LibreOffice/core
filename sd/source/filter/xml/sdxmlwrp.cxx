@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-13 12:09:06 $
+ *  last change: $Author: cl $ $Date: 2001-02-19 13:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,10 @@
 #endif //!MAC
 #include "sdxmlwrp.hxx"
 
+#ifndef _XMLEOHLP_HXX
+#include <svx/xmleohlp.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
@@ -164,202 +168,275 @@ sal_Bool SdXMLFilter::Import()
         return FALSE;
     }
 
-    UINT16      nStyleFamilyMask = 0;
-    sal_Bool    bLoadDoc = TRUE;
+    mxModel->lockControllers();
 
-// this is stuff for loading only styles or add-load documents, needed later
-//  USHORT nStyleFamilyMask = SFX_STYLE_FAMILY_ALL;
-//  BOOL bInsert;
-//  if( aOpt.IsFmtsOnly() )
-//  {
-//      bLoadDoc = FALSE;
-//      bInsert = aOpt.IsMerge();
-//      nStyleFamilyMask = 0U;
-//      if( aOpt.IsFrmFmts() )
-//          nStyleFamilyMask |= SFX_STYLE_FAMILY_FRAME;
-//      if( aOpt.IsPageDescs() )
-//          nStyleFamilyMask |= SFX_STYLE_FAMILY_PAGE;
-//      if( aOpt.IsTxtFmts() )
-//          nStyleFamilyMask |= (SFX_STYLE_FAMILY_CHAR|SFX_STYLE_FAMILY_PARA);
-//      if( aOpt.IsNumRules() )
-//          nStyleFamilyMask |= SFX_STYLE_FAMILY_PSEUDO;
-//  }
-//  else
-//  {
-//      bLoadDoc = TRUE;
-//      bInsert = bInsertMode;
- //     nStyleFamilyMask = SFX_STYLE_FAMILY_ALL;
-//  }
-//  aOpt.ResetAllFmtsOnly();
+    sal_Bool    bRet = sal_False;
 
-    try
+    do
     {
-        xml::sax::InputSource                   aParserInput;
-        SvStorageStreamRef                      xIStm;
-        SvStorage*                              pStorage = mrMedium.GetStorage();
-        uno::Reference< io::XActiveDataSource > xSource;
+        UINT16      nStyleFamilyMask = 0;
+        sal_Bool    bLoadDoc = TRUE;
 
-        aParserInput.sSystemId = mrMedium.GetName();
-
-        if( pStorage )
+        try
         {
+            uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
+            SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
 
-            static const String aContentStmName( RTL_CONSTASCII_USTRINGPARAM( sXML_contentStreamName ) );
-
-            xIStm = pStorage->OpenStream( aContentStmName, STREAM_READ | STREAM_NOCREATE );
-
-            if( xIStm.Is() )
-            {
-                xIStm->SetBufferSize( 16 * 1024 );
-                aParserInput.aInputStream = new utl::OInputStreamWrapper( *xIStm );
-            }
-            else
-            {
-                DBG_ERROR( "could not open Content stream" );
-                return FALSE;
-            }
-        }
-        else
-        {
-            uno::Reference< uno::XInterface > xPipe;
-
-            mrMedium.GetInStream()->Seek( 0 );
-
-            xSource = mrMedium.GetDataSource();
-            DBG_ASSERT( xSource.is(), "got no data source from medium" );
-
-            if( !xSource.is() )
-                return sal_False;
-
-            xPipe = xServiceFactory->createInstance( OUString::createFromAscii( "com.sun.star.io.Pipe" ) );
-            DBG_ASSERT( xPipe.is(), "com.sun.star.io.Pipe service missing" );
-
-            if( !xPipe.is() )
-                return sal_False;
-
-            xSource->setOutputStream( uno::Reference< io::XOutputStream >( xPipe, uno::UNO_QUERY ) );
-            aParserInput.aInputStream = uno::Reference< io::XInputStream >( xPipe, uno::UNO_QUERY );
-        }
-
-        if( aParserInput.aInputStream.is() )
-        {
-            SvXMLGraphicHelper*                             pGraphicHelper;
             uno::Reference< document::XGraphicObjectResolver >  xGrfResolver;
-            uno::Reference< xml::sax::XParser >             xParser( xXMLParser, uno::UNO_QUERY );
+            SvXMLGraphicHelper* pGraphicHelper = 0;
+
+            xml::sax::InputSource                   aParserInput;
+            SvStorageStreamRef                      xIStm;
+            SvStorage*                              pStorage = mrMedium.GetStorage();
+            uno::Reference< io::XActiveDataSource > xSource;
+
+            aParserInput.sSystemId = mrMedium.GetName();
 
             if( pStorage )
             {
+
+                static const String aContentStmName( RTL_CONSTASCII_USTRINGPARAM( sXML_contentStreamName ) );
+
+                xIStm = pStorage->OpenStream( aContentStmName, STREAM_READ | STREAM_NOCREATE );
+
+                if( xIStm.Is() )
+                {
+                    xIStm->SetBufferSize( 16 * 1024 );
+                    aParserInput.aInputStream = new utl::OInputStreamWrapper( *xIStm );
+                }
+                else
+                {
+                    DBG_ERROR( "could not open Content stream" );
+                    break;
+                }
+
+                SvPersist *pPersist = mrDocShell.GetDoc()->GetPersist();
+                if( pPersist )
+                {
+                    pObjectHelper = SvXMLEmbeddedObjectHelper::Create(*pStorage, *pPersist, EMBEDDEDOBJECTHELPER_MODE_READ, sal_False );
+                    xObjectResolver = pObjectHelper;
+                }
+
                 pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_READ );
                 xGrfResolver = pGraphicHelper;
             }
-
-            if( mbShowProgress )
+            else
             {
-                CreateStatusIndicator();
+                uno::Reference< uno::XInterface > xPipe;
+
+                mrMedium.GetInStream()->Seek( 0 );
+
+                xSource = mrMedium.GetDataSource();
+                DBG_ASSERT( xSource.is(), "got no data source from medium" );
+
+                if( !xSource.is() )
+                    break;
+
+                xPipe = xServiceFactory->createInstance( OUString::createFromAscii( "com.sun.star.io.Pipe" ) );
+                DBG_ASSERT( xPipe.is(), "com.sun.star.io.Pipe service missing" );
+
+                if( !xPipe.is() )
+                    break;
+
+                xSource->setOutputStream( uno::Reference< io::XOutputStream >( xPipe, uno::UNO_QUERY ) );
+                aParserInput.aInputStream = uno::Reference< io::XInputStream >( xPipe, uno::UNO_QUERY );
+            }
+
+            if( aParserInput.aInputStream.is() )
+            {
+                uno::Reference< xml::sax::XParser > xParser( xXMLParser, uno::UNO_QUERY );
+
+                if( mbShowProgress )
+                {
+                    CreateStatusIndicator();
+
+                    if( mxStatusIndicator.is() )
+                        mxStatusIndicator->start( ::rtl::OUString::createFromAscii( "XML Import" ), 100 );
+                }
+
+                uno::Sequence< uno::Any > aArgs( ( mxStatusIndicator.is() ? 1 : 0 ) + ( xGrfResolver.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
+                uno::Any* pArgs = aArgs.getArray();
+                if( xGrfResolver.is() )
+                    *pArgs++ <<= xGrfResolver;
+
+                if( xObjectResolver.is() )
+                    *pArgs++ <<= xObjectResolver;
 
                 if( mxStatusIndicator.is() )
-                    mxStatusIndicator->start( ::rtl::OUString::createFromAscii( "XML Import" ), 100 );
-            }
+                    *pArgs   <<= mxStatusIndicator;
 
-            uno::Sequence< uno::Any > aArgs( 2 );
-            uno::Any* pArgs = aArgs.getArray();
-            *pArgs++ <<= xGrfResolver;
-            *pArgs   <<= mxStatusIndicator;
+                const sal_Char * pService = IsDraw() ? "com.sun.star.office.sax.importer.Draw" : "com.sun.star.office.sax.importer.Impress";
+                uno::Reference< xml::sax::XDocumentHandler> xDocHandler( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pService ), aArgs), uno::UNO_QUERY );
 
-            const sal_Char * pService = IsDraw() ? "com.sun.star.office.sax.importer.Draw" : "com.sun.star.office.sax.importer.Impress";
-            uno::Reference< xml::sax::XDocumentHandler> xDocHandler( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pService ), aArgs), uno::UNO_QUERY );
-
-            if( xDocHandler.is() )
-            {
-                uno::Reference< document::XImporter > xImporter( xDocHandler, uno::UNO_QUERY );
-                uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
-                if( xImporter.is() )
+                if( xDocHandler.is() )
                 {
-                    xImporter->setTargetDocument( xComponent );
-                    xParser->setDocumentHandler( xDocHandler );
+                    uno::Reference< document::XImporter > xImporter( xDocHandler, uno::UNO_QUERY );
+                    uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
+                    if( xImporter.is() )
+                    {
+                        xImporter->setTargetDocument( xComponent );
+                        xParser->setDocumentHandler( xDocHandler );
 
-                    if( !pStorage )
-                        uno::Reference< io::XActiveDataControl >( xSource, uno::UNO_QUERY )->start();
+                        if( !pStorage )
+                            uno::Reference< io::XActiveDataControl >( xSource, uno::UNO_QUERY )->start();
 
-                    xParser->parseStream( aParserInput );
-
-                    if( pStorage )
-                        SvXMLGraphicHelper::Destroy( pGraphicHelper );
-
-                    return sal_True;
+                        xParser->parseStream( aParserInput );
+                        bRet = sal_True;
+                    }
                 }
             }
-        }
-    }
-    catch( uno::Exception e )
-    {
-#ifdef DEBUG
-        ByteString aError( "uno Exception catched while exporting:\n" );
-        aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
-#endif
-    }
 
-    return sal_False;
+            if( pGraphicHelper )
+                SvXMLGraphicHelper::Destroy( pGraphicHelper );
+
+            if( pObjectHelper )
+                SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
+        }
+        catch( uno::Exception e )
+        {
+    #ifdef DEBUG
+            ByteString aError( "uno Exception catched while exporting:\n" );
+            aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR( aError.GetBuffer() );
+    #endif
+        }
+    } while( 0 );
+
+    mxModel->unlockControllers();
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------------
 
 sal_Bool SdXMLFilter::Export()
 {
-    sal_Bool bRet = FALSE;
+    sal_Bool bMetaRet = FALSE;
+    sal_Bool bDocRet = FALSE;
 
-    if( !mxModel.is() )
+    try
     {
-        DBG_ERROR("Got NO Model in XMLExport");
-        return FALSE;
-    }
-
-    uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel, uno::UNO_QUERY );
-
-    if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
-    {
-        DBG_ERROR( "Model is no DrawingDocument in XMLExport" );
-        return FALSE;
-    }
-
-    uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
-
-    if( !xServiceFactory.is() )
-    {
-        DBG_ERROR( "got no service manager" );
-        return FALSE;
-    }
-
-    uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
-
-    if( !xWriter.is() )
-    {
-        DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
-        return FALSE;
-    }
-
-    SvStorage* pStorage = mrMedium.GetOutputStorage( sal_True );
-
-    if( pStorage )
-    {
-        SvStorageStreamRef  xOStm( pStorage->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( sXML_contentStreamName ) ),
-                                                         STREAM_READ | STREAM_WRITE | STREAM_TRUNC ) );
-
-        if( !xOStm.Is() || xOStm->GetError() )
+        if( !mxModel.is() )
         {
-            DBG_ERROR( "Could not create output stream" );
+            DBG_ERROR("Got NO Model in XMLExport");
             return FALSE;
         }
 
-        uno::Reference< io::XActiveDataSource >     xSrc( xWriter, uno::UNO_QUERY );
+        uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel, uno::UNO_QUERY );
+
+        if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
+        {
+            DBG_ERROR( "Model is no DrawingDocument in XMLExport" );
+            return FALSE;
+        }
+
+        uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
+
+        if( !xServiceFactory.is() )
+        {
+            DBG_ERROR( "got no service manager" );
+            return FALSE;
+        }
+
+        uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
+
+        if( !xWriter.is() )
+        {
+            DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
+            return FALSE;
+        }
+
         uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
 
-        xSrc->setOutputStream( new ::utl::OOutputStreamWrapper( *xOStm ) );
-        try
+        SvStorage* pStorage = mrMedium.GetOutputStorage( sal_True );
+
+        // initialize descriptor
+        uno::Sequence< beans::PropertyValue > aDescriptor( 1 );
+        beans::PropertyValue* pProps = aDescriptor.getArray();
+
+        pProps[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ) );
+        pProps[0].Value <<= OUString( mrMedium.GetName() );
+
+        // meta export
         {
-            SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_WRITE, FALSE );
-            uno::Reference< document::XGraphicObjectResolver > xGrfResolver( pGraphicHelper );
+            uno::Reference<io::XOutputStream> xMetaOut;
+            SvStorageStreamRef xMetaStream;
+
+            if( pStorage )
+            {
+                OUString sMetaName( RTL_CONSTASCII_USTRINGPARAM( "Meta.xml" ) );
+                xMetaStream = pStorage->OpenStream( sMetaName,
+                                          STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+                xMetaStream->SetBufferSize( 16*1024 );
+                xMetaOut = new utl::OOutputStreamWrapper( *xMetaStream );
+            }
+            else
+            {
+                xMetaOut = mrMedium.GetDataSink();
+            }
+
+            uno::Reference<io::XActiveDataSource> xMetaSrc( xWriter, uno::UNO_QUERY );
+            xMetaSrc->setOutputStream( xMetaOut );
+
+            uno::Sequence<uno::Any> aMetaArgs(1);
+            uno::Any* pMetaArgs = aMetaArgs.getArray();
+            pMetaArgs[0] <<= xHandler;
+
+            uno::Reference<document::XFilter> xMetaFilter(
+                xServiceFactory->createInstanceWithArguments(
+                    OUString::createFromAscii( "com.sun.star.office.sax.exporter.MetaInformation" ), aMetaArgs ),
+                uno::UNO_QUERY );
+            DBG_ASSERT( xMetaFilter.is(), "can't get Meta exporter" );
+            uno::Reference<document::XExporter> xMetaExporter( xMetaFilter, uno::UNO_QUERY );
+            uno::Reference<lang::XComponent> xMetaComponent( mxModel, uno::UNO_QUERY );
+            if (xMetaExporter.is())
+                xMetaExporter->setSourceDocument( xMetaComponent );
+
+            if ( xMetaFilter.is() )
+            {
+                bMetaRet = xMetaFilter->filter( aDescriptor );
+
+                if (bMetaRet && xMetaStream.Is())
+                    xMetaStream->Commit();
+            }
+        }
+
+        // doc export
+        {
+            uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
+            SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
+
+            uno::Reference< document::XGraphicObjectResolver > xGrfResolver;
+            SvXMLGraphicHelper* pGraphicHelper = 0;
+
+            uno::Reference<io::XOutputStream> xDocOut;
+            SvStorageStreamRef xDocStream;
+
+            if( pStorage )
+            {
+                const OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
+                xDocStream = pStorage->OpenStream( sDocName,
+                                          STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+                xDocStream->SetBufferSize( 16*1024 );
+                xDocOut = new utl::OOutputStreamWrapper( *xDocStream );
+
+                SvPersist *pPersist = mrDocShell.GetDoc()->GetPersist();
+                if( pPersist )
+                {
+                    pObjectHelper = SvXMLEmbeddedObjectHelper::Create( *pStorage, *pPersist, EMBEDDEDOBJECTHELPER_MODE_WRITE, sal_False );
+                    xObjectResolver = pObjectHelper;
+                }
+
+                pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_WRITE, FALSE );
+                xGrfResolver = pGraphicHelper;
+            }
+            else
+            {
+                xDocOut = mrMedium.GetDataSink();
+            }
+
+            uno::Reference< io::XActiveDataSource > xDocSrc( xWriter, uno::UNO_QUERY );
+            xDocSrc->setOutputStream( xDocOut );
 
             if( mbShowProgress )
             {
@@ -369,43 +446,51 @@ sal_Bool SdXMLFilter::Export()
                     mxStatusIndicator->start( ::rtl::OUString::createFromAscii( "XML Export" ), 100 );
             }
 
-            uno::Sequence< uno::Any > aArgs( 3 );
+            uno::Sequence< uno::Any > aArgs( 1 + ( mxStatusIndicator.is() ? 1 : 0 ) + ( xGrfResolver.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
             uno::Any* pArgs = aArgs.getArray();
-            *pArgs++ <<= xGrfResolver;
-            *pArgs++ <<= mxStatusIndicator;
+            if( xGrfResolver.is() )
+                *pArgs++ <<= xGrfResolver;
+
+            if( xObjectResolver.is() )
+                *pArgs++ <<= xObjectResolver;
+
+            if( mxStatusIndicator.is() )
+                *pArgs++ <<= mxStatusIndicator;
+
             *pArgs   <<= xHandler;
 
             const sal_Char* pService = IsDraw() ? "com.sun.star.office.sax.exporter.Draw" : "com.sun.star.office.sax.exporter.Impress";
             uno::Reference< document::XFilter > xFilter( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pService ), aArgs ), uno::UNO_QUERY );
             if( xFilter.is() )
             {
-                uno::Sequence< beans::PropertyValue > aDescriptor( 1 );
-                beans::PropertyValue* pProps = aDescriptor.getArray();
-
-                pProps[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ) );
-                pProps[0].Value <<= OUString( mrMedium.GetName() );
-
                 uno::Reference< document::XExporter > xExporter( xFilter, uno::UNO_QUERY );
                 uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
                 if( xExporter.is() )
                 {
                     xExporter->setSourceDocument( xComponent );
 
-                    bRet = xFilter->filter( aDescriptor );
+                    bDocRet = xFilter->filter( aDescriptor );
+
+                    if(bDocRet && xDocStream.Is())
+                        xDocStream->Commit();
                 }
             }
 
-            SvXMLGraphicHelper::Destroy( pGraphicHelper );
+            if( pGraphicHelper )
+                SvXMLGraphicHelper::Destroy( pGraphicHelper );
+
+            if( pObjectHelper )
+                SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
         }
-        catch(uno::Exception e)
-        {
+    }
+    catch(uno::Exception e)
+    {
 #ifdef DEBUG
-        ByteString aError( "uno Exception catched while importing:\n" );
+        ByteString aError( "uno Exception catched while exporting:\n" );
         aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
 #endif
-        }
     }
 
-    return bRet;
+    return bMetaRet && bDocRet;
 }
