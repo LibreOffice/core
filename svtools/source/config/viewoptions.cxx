@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-11-10 09:32:42 $
+ *  last change: $Author: as $ $Date: 2000-11-10 11:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,10 @@ using namespace ::com::sun::star::beans ;
 #define ROOTNODE_TABPAGES                   OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Views/TabPages"    ))
 #define ROOTNODE_WINDOWS                    OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Views/Windows"     ))
 
-#define PROPERTYNAME_POSITION_X             OUString(RTL_CONSTASCII_USTRINGPARAM("Position/X"               ))
-#define PROPERTYNAME_POSITION_Y             OUString(RTL_CONSTASCII_USTRINGPARAM("Position/Y"               ))
-#define PROPERTYNAME_SIZE_WIDTH             OUString(RTL_CONSTASCII_USTRINGPARAM("Size/Width"               ))
-#define PROPERTYNAME_SIZE_HEIGHT            OUString(RTL_CONSTASCII_USTRINGPARAM("Size/Height"              ))
+#define PROPERTYNAME_X                      OUString(RTL_CONSTASCII_USTRINGPARAM("X"                        ))
+#define PROPERTYNAME_Y                      OUString(RTL_CONSTASCII_USTRINGPARAM("Y"                        ))
+#define PROPERTYNAME_WIDTH                  OUString(RTL_CONSTASCII_USTRINGPARAM("Width"                    ))
+#define PROPERTYNAME_HEIGHT                 OUString(RTL_CONSTASCII_USTRINGPARAM("Height"                   ))
 #define PROPERTYNAME_PAGEID                 OUString(RTL_CONSTASCII_USTRINGPARAM("PageID"                   ))
 #define PROPERTYNAME_VISIBLE                OUString(RTL_CONSTASCII_USTRINGPARAM("Visible"                  ))
 #define PROPERTYNAME_USERDATA               OUString(RTL_CONSTASCII_USTRINGPARAM("UserData"                 ))
@@ -205,6 +205,8 @@ class SvtViewDialogOptions_Impl : public ConfigItem
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
         virtual void Commit();
 
+        sal_Bool    Exist       (   const   OUString&   sName                                                           );
+        void        Delete      (   const   OUString&   sName                                                           );
         void        GetPosition (   const   OUString&   sName   ,           sal_Int32&  nX      ,   sal_Int32&  nY      );
         void        SetPosition (   const   OUString&   sName   ,           sal_Int32   nX      ,   sal_Int32   nY      );
         void        GetSize     (   const   OUString&   sName   ,           sal_Int32&  nWidth  ,   sal_Int32&  nHeight );
@@ -277,22 +279,22 @@ void SvtViewDialogOptions_Impl::Notify( const Sequence< OUString >& seqPropertyN
         // We use the index operator to set the new value.
         // If the item already exist - all is ok ...
         // otherwise these operator create a new hash item automaticly!
-        if( sPropertyName == PROPERTYNAME_POSITION_X )
+        if( sPropertyName == PROPERTYNAME_X )
         {
             seqValues[nProperty] >>= m_aList[ sDialogName ].nX;
         }
         else
-        if( sPropertyName == PROPERTYNAME_POSITION_Y )
+        if( sPropertyName == PROPERTYNAME_Y )
         {
             seqValues[nProperty] >>= m_aList[ sDialogName ].nY;
         }
         else
-        if( sPropertyName == PROPERTYNAME_SIZE_WIDTH )
+        if( sPropertyName == PROPERTYNAME_WIDTH )
         {
             seqValues[nProperty] >>= m_aList[ sDialogName ].nWidth;
         }
         else
-        if( sPropertyName == PROPERTYNAME_SIZE_HEIGHT )
+        if( sPropertyName == PROPERTYNAME_HEIGHT )
         {
             seqValues[nProperty] >>= m_aList[ sDialogName ].nHeight;
         }
@@ -317,11 +319,11 @@ void SvtViewDialogOptions_Impl::Commit()
     // We save 5 properties for every hash item. But his names are fix ...
     // Prepare sequence!
     Sequence< PropertyValue > seqProperties( 5 );
-    seqProperties[0].Name   = PROPERTYNAME_POSITION_X   ;
-    seqProperties[1].Name   = PROPERTYNAME_POSITION_Y   ;
-    seqProperties[2].Name   = PROPERTYNAME_SIZE_WIDTH   ;
-    seqProperties[3].Name   = PROPERTYNAME_SIZE_HEIGHT  ;
-    seqProperties[4].Name   = PROPERTYNAME_USERDATA     ;
+    seqProperties[0].Name   = PROPERTYNAME_X        ;
+    seqProperties[1].Name   = PROPERTYNAME_Y        ;
+    seqProperties[2].Name   = PROPERTYNAME_WIDTH    ;
+    seqProperties[3].Name   = PROPERTYNAME_HEIGHT   ;
+    seqProperties[4].Name   = PROPERTYNAME_USERDATA ;
 
     for( IMPL_TDialogHash::iterator pIterator=m_aList.begin(); pIterator!=m_aList.end(); ++pIterator )
     {
@@ -333,6 +335,22 @@ void SvtViewDialogOptions_Impl::Commit()
 
         OUString sName = pIterator->first;
         SetSetProperties( sName, seqProperties ); // The keyname of our hash is the kename of our set!
+    }
+}
+
+//*****************************************************************************************************************
+sal_Bool SvtViewDialogOptions_Impl::Exist( const OUString& sName )
+{
+    return ( m_aList.find( sName ) != m_aList.end() );
+}
+
+//*****************************************************************************************************************
+void SvtViewDialogOptions_Impl::Delete( const OUString& sName )
+{
+    OUString sNode = sName;
+    if( ClearNodeSet( sNode ) == sal_True )
+    {
+        m_aList.erase( sName );
     }
 }
 
@@ -392,6 +410,8 @@ class SvtViewTabDialogOptions_Impl : public ConfigItem
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
         virtual void Commit();
 
+        sal_Bool    Exist       (   const   OUString&   sName                                                           );
+        void        Delete      (   const   OUString&   sName                                                           );
         void        GetPosition (   const   OUString&   sName   ,           sal_Int32&  nX      ,   sal_Int32&  nY      );
         void        SetPosition (   const   OUString&   sName   ,           sal_Int32   nX      ,   sal_Int32   nY      );
         sal_Int32   GetPageID   (   const   OUString&   sName                                                           );
@@ -464,12 +484,12 @@ void SvtViewTabDialogOptions_Impl::Notify( const Sequence< OUString >& seqProper
         // We use the index operator to set the new value.
         // If the item already exist - all is ok ...
         // otherwise these operator create a new hash item automaticly!
-        if( sPropertyName == PROPERTYNAME_POSITION_X )
+        if( sPropertyName == PROPERTYNAME_X )
         {
             seqValues[nProperty] >>= m_aList[ sTabDialogName ].nX;
         }
         else
-        if( sPropertyName == PROPERTYNAME_POSITION_Y )
+        if( sPropertyName == PROPERTYNAME_Y )
         {
             seqValues[nProperty] >>= m_aList[ sTabDialogName ].nY;
         }
@@ -499,10 +519,10 @@ void SvtViewTabDialogOptions_Impl::Commit()
     // We save 4 properties for every hash item. But his names are fix ...
     // Prepare sequence!
     Sequence< PropertyValue > seqProperties( 4 );
-    seqProperties[0].Name   = PROPERTYNAME_POSITION_X   ;
-    seqProperties[1].Name   = PROPERTYNAME_POSITION_Y   ;
-    seqProperties[2].Name   = PROPERTYNAME_PAGEID       ;
-    seqProperties[3].Name   = PROPERTYNAME_USERDATA     ;
+    seqProperties[0].Name   = PROPERTYNAME_X        ;
+    seqProperties[1].Name   = PROPERTYNAME_Y        ;
+    seqProperties[2].Name   = PROPERTYNAME_PAGEID   ;
+    seqProperties[3].Name   = PROPERTYNAME_USERDATA ;
 
     for( IMPL_TTabDialogHash::iterator pIterator=m_aList.begin(); pIterator!=m_aList.end(); ++pIterator )
     {
@@ -513,6 +533,22 @@ void SvtViewTabDialogOptions_Impl::Commit()
 
         OUString sName = pIterator->first;
         SetSetProperties( sName, seqProperties ); // The keyname of our hash is the kename of our set!
+    }
+}
+
+//*****************************************************************************************************************
+sal_Bool SvtViewTabDialogOptions_Impl::Exist( const OUString& sName )
+{
+    return ( m_aList.find( sName ) != m_aList.end() );
+}
+
+//*****************************************************************************************************************
+void SvtViewTabDialogOptions_Impl::Delete( const OUString& sName )
+{
+    OUString sNode = sName;
+    if( ClearNodeSet( sNode ) == sal_True )
+    {
+        m_aList.erase( sName );
     }
 }
 
@@ -570,6 +606,8 @@ class SvtViewTabPageOptions_Impl : public ConfigItem
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
         virtual void Commit();
 
+        sal_Bool    Exist       (   const   OUString&   sName                               );
+        void        Delete      (   const   OUString&   sName                               );
         OUString    GetUserData (   const   OUString&   sName                               );
         void        SetUserData (   const   OUString&   sName,  const   OUString&   sData   );
 
@@ -670,6 +708,22 @@ void SvtViewTabPageOptions_Impl::Commit()
 }
 
 //*****************************************************************************************************************
+sal_Bool SvtViewTabPageOptions_Impl::Exist( const OUString& sName )
+{
+    return ( m_aList.find( sName ) != m_aList.end() );
+}
+
+//*****************************************************************************************************************
+void SvtViewTabPageOptions_Impl::Delete( const OUString& sName )
+{
+    OUString sNode = sName;
+    if( ClearNodeSet( sNode ) == sal_True )
+    {
+        m_aList.erase( sName );
+    }
+}
+
+//*****************************************************************************************************************
 OUString SvtViewTabPageOptions_Impl::GetUserData( const OUString& sName )
 {
     return m_aList[ sName ].sUserData;
@@ -695,6 +749,8 @@ class SvtViewWindowOptions_Impl : public ConfigItem
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
         virtual void Commit();
 
+        sal_Bool    Exist       (   const   OUString&   sName                                                           );
+        void        Delete      (   const   OUString&   sName                                                           );
         void        GetPosition (   const   OUString&   sName   ,           sal_Int32&  nX      ,   sal_Int32&  nY      );
         void        SetPosition (   const   OUString&   sName   ,           sal_Int32   nX      ,   sal_Int32   nY      );
         void        GetSize     (   const   OUString&   sName   ,           sal_Int32&  nWidth  ,   sal_Int32&  nHeight );
@@ -769,24 +825,29 @@ void SvtViewWindowOptions_Impl::Notify( const Sequence< OUString >& seqPropertyN
         // We use the index operator to set the new value.
         // If the item already exist - all is ok ...
         // otherwise these operator create a new hash item automaticly!
-        if( sPropertyName == PROPERTYNAME_POSITION_X )
+        if( sPropertyName == PROPERTYNAME_X )
         {
             seqValues[nProperty] >>= m_aList[ sWindowName ].nX;
         }
         else
-        if( sPropertyName == PROPERTYNAME_POSITION_Y )
+        if( sPropertyName == PROPERTYNAME_Y )
         {
             seqValues[nProperty] >>= m_aList[ sWindowName ].nY;
         }
         else
-        if( sPropertyName == PROPERTYNAME_SIZE_WIDTH )
+        if( sPropertyName == PROPERTYNAME_WIDTH )
         {
             seqValues[nProperty] >>= m_aList[ sWindowName ].nWidth;
         }
         else
-        if( sPropertyName == PROPERTYNAME_SIZE_HEIGHT )
+        if( sPropertyName == PROPERTYNAME_HEIGHT )
         {
             seqValues[nProperty] >>= m_aList[ sWindowName ].nHeight;
+        }
+        else
+        if( sPropertyName == PROPERTYNAME_VISIBLE )
+        {
+            seqValues[nProperty] >>= m_aList[ sWindowName ].bVisible;
         }
         else
         if( sPropertyName == PROPERTYNAME_USERDATA )
@@ -806,14 +867,15 @@ void SvtViewWindowOptions_Impl::Commit()
     // Calculate size of dynamic set, copy names and values to it and set it in configuration.
     // For structure informations see class description of "SvtViewOptions" in header!
 
-    // We save 5 properties for every hash item. But his names are fix ...
+    // We save 6 properties for every hash item. But his names are fix ...
     // Prepare sequence!
-    Sequence< PropertyValue > seqProperties( 5 );
-    seqProperties[0].Name   = PROPERTYNAME_POSITION_X   ;
-    seqProperties[1].Name   = PROPERTYNAME_POSITION_Y   ;
-    seqProperties[2].Name   = PROPERTYNAME_SIZE_WIDTH   ;
-    seqProperties[3].Name   = PROPERTYNAME_SIZE_HEIGHT  ;
-    seqProperties[4].Name   = PROPERTYNAME_USERDATA     ;
+    Sequence< PropertyValue > seqProperties( 6 );
+    seqProperties[0].Name   = PROPERTYNAME_X        ;
+    seqProperties[1].Name   = PROPERTYNAME_Y        ;
+    seqProperties[2].Name   = PROPERTYNAME_WIDTH    ;
+    seqProperties[3].Name   = PROPERTYNAME_HEIGHT   ;
+    seqProperties[4].Name   = PROPERTYNAME_VISIBLE  ;
+    seqProperties[5].Name   = PROPERTYNAME_USERDATA ;
 
     for( IMPL_TWindowHash::iterator pIterator=m_aList.begin(); pIterator!=m_aList.end(); ++pIterator )
     {
@@ -821,10 +883,27 @@ void SvtViewWindowOptions_Impl::Commit()
         seqProperties[1].Value  <<= pIterator->second.nY        ;
         seqProperties[2].Value  <<= pIterator->second.nWidth    ;
         seqProperties[3].Value  <<= pIterator->second.nHeight   ;
-        seqProperties[4].Value  <<= pIterator->second.sUserData ;
+        seqProperties[4].Value  <<= pIterator->second.bVisible  ;
+        seqProperties[5].Value  <<= pIterator->second.sUserData ;
 
         OUString sName = pIterator->first;
         SetSetProperties( sName, seqProperties ); // The keyname of our hash is the kename of our set!
+    }
+}
+
+//*****************************************************************************************************************
+sal_Bool SvtViewWindowOptions_Impl::Exist( const OUString& sName )
+{
+    return ( m_aList.find( sName ) != m_aList.end() );
+}
+
+//*****************************************************************************************************************
+void SvtViewWindowOptions_Impl::Delete( const OUString& sName )
+{
+    OUString sNode = sName;
+    if( ClearNodeSet( sNode ) == sal_True )
+    {
+        m_aList.erase( sName );
     }
 }
 
@@ -996,6 +1075,66 @@ SvtViewOptions::~SvtViewOptions()
                                         delete m_pDataContainer_Windows;
                                         m_pDataContainer_Windows = NULL;
                                     }
+                                }
+                                break;
+    }
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+sal_Bool SvtViewOptions::Exist() const
+{
+    // Ready for multithreading
+    MutexGuard aGuard( GetOwnStaticMutex() );
+
+    sal_Bool bExist = sal_False;
+    switch( m_eViewType )
+    {
+        case E_DIALOG       :   {
+                                    bExist = m_pDataContainer_Dialogs->Exist( m_sViewName );
+                                }
+                                break;
+        case E_TABDIALOG    :   {
+                                    bExist = m_pDataContainer_TabDialogs->Exist( m_sViewName );
+                                }
+                                break;
+        case E_TABPAGE      :   {
+                                    bExist = m_pDataContainer_TabPages->Exist( m_sViewName );
+                                }
+                                break;
+        case E_WINDOW       :   {
+                                    bExist = m_pDataContainer_Windows->Exist( m_sViewName );
+                                }
+                                break;
+    }
+    return bExist;
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtViewOptions::Delete()
+{
+    // Ready for multithreading
+    MutexGuard aGuard( GetOwnStaticMutex() );
+
+    switch( m_eViewType )
+    {
+        case E_DIALOG       :   {
+                                    m_pDataContainer_Dialogs->Delete( m_sViewName );
+                                }
+                                break;
+        case E_TABDIALOG    :   {
+                                    m_pDataContainer_TabDialogs->Delete( m_sViewName );
+                                }
+                                break;
+        case E_TABPAGE      :   {
+                                    m_pDataContainer_TabPages->Delete( m_sViewName );
+                                }
+                                break;
+        case E_WINDOW       :   {
+                                    m_pDataContainer_Windows->Delete( m_sViewName );
                                 }
                                 break;
     }
