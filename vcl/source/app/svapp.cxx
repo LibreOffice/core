@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:07:39 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_APP_CXX
 
 #include <stdio.h>
 #ifndef _SV_SVSYS_HXX
@@ -119,9 +117,6 @@
 #endif
 #ifndef _SV_CVTGRF_HXX
 #include <cvtgrf.hxx>
-#endif
-#ifndef _SV_ACCESS_HXX
-#include <access.hxx>
 #endif
 #ifndef _VCL_UNOWRAP_HXX
 #include <unowrap.hxx>
@@ -1409,69 +1404,6 @@ UniqueItemId Application::CreateUniqueId()
 
 // -----------------------------------------------------------------------
 
-SystemInfoType Application::GetClientSystem()
-{
-    return GetServerSystem();
-}
-
-// -----------------------------------------------------------------------
-
-SystemInfoType Application::GetServerSystem()
-{
-#if defined( WIN )
-    return SYSTEMINFO_SYSTEM_WINDOWS | SYSTEMINFO_SYSTEMBASE_DOS;
-#elif defined( WNT )
-    return SYSTEMINFO_SYSTEM_WINDOWS | SYSTEMINFO_SYSTEMBASE_NT;
-#elif defined( OS2 )
-    return SYSTEMINFO_SYSTEM_OS2;
-#elif defined( MAC )
-    return SYSTEMINFO_SYSTEM_MAC;
-#elif defined( UNX )
-#if defined( LINUX )
-    return SYSTEMINFO_SYSTEM_UNIX | SYSTEMINFO_SYSTEMBASE_LINUX;
-#elif defined( SOLARIS )
-    return SYSTEMINFO_SYSTEM_UNIX | SYSTEMINFO_SYSTEMBASE_SOLARIS;
-#elif defined( SCO )
-    return SYSTEMINFO_SYSTEM_UNIX | SYSTEMINFO_SYSTEMBASE_SCO;
-#elif defined( NETBSD )
-    return SYSTEMINFO_SYSTEM_UNIX | SYSTEMINFO_SYSTEMBASE_NETBSD;
-#elif defined( AIX )
-    return SYSTEMINFO_SYSTEM_UNIX | SYSTEMINFO_SYSTEMBASE_AIX;
-#elif defined( IRIX )
-    return SYSTEMINFO_SYSTEM_UNIX | SYSTEMINFO_SYSTEMBASE_IRIX;
-#elif defined( HPUX )
-    return SYSTEMINFO_SYSTEM_UNIX | SYSTEMINFO_SYSTEMBASE_HPUX;
-#elif defined( FREEBSD )
-    return SYSTEMINFO_SYSTEM_UNIX | SYSTEMINFO_SYSTEMBASE_FREEBSD;
-#elif defined( MACOSX )
-    return SYSTEMINFO_SYSTEM_UNIX | SYSTEMINFO_SYSTEMBASE_MACOSX;
-#else
-#error Unknown Unix-System, new SystemBase must be defined!
-#endif
-#else
-#error Unknown System, new System must be defined!
-#endif
-}
-
-// -----------------------------------------------------------------------
-
-BOOL Application::IsRemoteServer()
-{
-    return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > Application::GetUnoInstance(
-    ::com::sun::star::uno::Reference< ::com::sun::star::connection::XConnection > rConnection,
-    const ::rtl::OUString& sObjectName )
-{
-    ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > r;
-    return r;
-}
-
-// -----------------------------------------------------------------------
-
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > Application::GetVCLToolkit()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > xT;
@@ -1535,159 +1467,6 @@ void Application::SetFilterHdl( const Link& rLink )
 const Link& Application::GetFilterHdl()
 {
     return ImplGetSVData()->maGDIData.mpGrfConverter->GetFilterHdl();
-}
-
-// -----------------------------------------------------------------------
-
-void Application::AccessNotify( const AccessNotification& rNotification )
-{
-    GetFirstAccessHdl().Call( (void*) &rNotification );
-}
-
-// -----------------------------------------------------------------------
-
-BOOL Application::GenerateAccessEvent( ULONG nAccessEvent,
-                                       long nData1,
-                                       long nData2,
-                                       long nData3 )
-{
-    BOOL bRet = FALSE;
-
-    switch( nAccessEvent )
-    {
-        case( ACCESS_EVENT_DLGCONTROLS ):
-        {
-            if( IsInModalMode() )
-            {
-                Window* pDlgWin = GetFocusWindow();
-                BOOL    bFound = FALSE;
-
-                // find modal dialog
-                while( pDlgWin && !bFound )
-                {
-                    switch( pDlgWin->GetType() )
-                    {
-                        case( WINDOW_MESSBOX ):
-                        case( WINDOW_INFOBOX ):
-                        case( WINDOW_WARNINGBOX ):
-                        case( WINDOW_ERRORBOX ):
-                        case( WINDOW_QUERYBOX ):
-                        case( WINDOW_MODALDIALOG ):
-                        case( WINDOW_PATHDIALOG ):
-                        case( WINDOW_FILEDIALOG ):
-                        case( WINDOW_PRINTERSETUPDIALOG ):
-                        case( WINDOW_PRINTDIALOG ):
-                        case( WINDOW_COLORDIALOG ):
-                        case( WINDOW_FONTDIALOG ):
-                        case( WINDOW_TABDIALOG ):
-                        case( WINDOW_BUTTONDIALOG ):
-                            bFound = TRUE;
-                        break;
-
-                        default:
-                            pDlgWin = pDlgWin->GetWindow( WINDOW_PARENT );
-                        break;
-                    }
-                }
-
-                if( pDlgWin )
-                {
-                    AccessNotify( AccessNotification( ACCESS_EVENT_DLGCONTROLS, pDlgWin ) );
-                    bRet = TRUE;
-                }
-            }
-        }
-        break;
-
-        case( ACCESS_EVENT_KEY ):
-            AccessNotify( AccessNotification( ACCESS_EVENT_KEY, nData1, nData2, nData3 ) );
-        break;
-
-        default:
-        break;
-    }
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
-void Application::AddAccessHdl( const Link& rLink )
-{
-    if( !ImplGetSVData()->maAppData.mpAccessList )
-        ImplGetSVData()->maAppData.mpAccessList = new List;
-
-    List* pList = ImplGetSVData()->maAppData.mpAccessList;
-    BOOL  bInserted = FALSE;
-
-    for( void* pLink = pList->First(); pLink; pLink = pList->Next() )
-    {
-        if( *(Link*) pLink == rLink )
-        {
-            bInserted = TRUE;
-            break;
-        }
-    }
-
-    if( !bInserted )
-    {
-        ImplGetSVData()->maAppData.mnAccessCount++;
-        pList->Insert( new Link( rLink ), LIST_APPEND );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void Application::RemoveAccessHdl( const Link& rLink )
-{
-    List* pList = ImplGetSVData()->maAppData.mpAccessList;
-
-    if( pList )
-    {
-        for( void* pLink = pList->First(); pLink; pLink = pList->Next() )
-        {
-            if( *(Link*) pLink == rLink )
-            {
-                ImplGetSVData()->maAppData.mnAccessCount--;
-                delete (Link*) pList->Remove( pLink );
-                break;
-            }
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
-USHORT Application::GetAccessHdlCount()
-{
-    return ImplGetSVData()->maAppData.mnAccessCount;
-}
-
-// -----------------------------------------------------------------------
-
-Link Application::GetFirstAccessHdl()
-{
-    List* pList = ImplGetSVData()->maAppData.mpAccessList;
-
-    if( pList && pList->Count() )
-        return *(Link*) pList->First();
-    else
-        return Link();
-}
-
-// -----------------------------------------------------------------------
-
-void Application::CallNextAccessHdl( AccessNotification* pData )
-{
-    List* pList = ImplGetSVData()->maAppData.mpAccessList;
-
-    if( pList )
-    {
-        Link* pNext = (Link*) pList->Next();
-
-        if( pNext )
-            pNext->Call( pData );
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -1930,4 +1709,32 @@ BOOL InitAccessBridge( BOOL bShowCancel, BOOL &rCancelled )
     }
 
     return bRet;
+}
+
+// MT: AppProperty, AppEvent was in oldsv.cxx, but is still needed...
+// ------------------------------------------------------------------------
+
+TYPEINIT0(ApplicationProperty)
+
+// ------------------------------------------------------------------------
+
+static PropertyHandler* pHandler=NULL;
+
+void Application::Property( ApplicationProperty& rProp )
+{
+    if ( pHandler )
+        pHandler->Property( rProp );
+}
+
+void Application::SetPropertyHandler( PropertyHandler* p )
+{
+    if ( pHandler )
+        delete pHandler;
+    pHandler = p;
+}
+
+
+
+void Application::AppEvent( const ApplicationEvent& rAppEvent )
+{
 }
