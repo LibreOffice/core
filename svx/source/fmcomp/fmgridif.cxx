@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-06 14:59:47 $
+ *  last change: $Author: fs $ $Date: 2002-03-14 16:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2774,8 +2774,8 @@ IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, void*, pSlot)
         {
             if (m_pDispatchers[i].is())
             {
-                // commit any changes done so far
-                if ( commit() )
+                // commit any changes done so far, if it's not the undoRecord URL
+                if ( 0 == pUrls->Complete.compareToAscii( FMURL_RECORD_UNDO ) || commit() )
                     m_pDispatchers[i]->dispatch(*pUrls, Sequence< PropertyValue>());
 
                 return 1;   // handled
