@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationOLEShape.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-03-07 09:41:23 $
+ *  last change: $Author: rt $ $Date: 2002-03-08 14:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,7 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ImpressTable"));
             break;
         default:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM (
-                                         "UnknownAccessibleImpressOLEShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("UnknownAccessibleImpressOLEShape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
                 sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM (": "))

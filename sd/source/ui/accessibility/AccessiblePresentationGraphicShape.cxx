@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationGraphicShape.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-03-07 09:41:23 $
+ *  last change: $Author: rt $ $Date: 2002-03-08 14:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,7 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("ImpressGraphicObject"));
             break;
         default:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM (
-                                         "UnknownAccessibleImpressShape"));
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM ("UnknownAccessibleImpressShape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
                 sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM (": "))
