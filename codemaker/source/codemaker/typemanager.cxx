@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:52:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ sal_Bool RegistryTypeManager::init(
 }
 
 typereg::Reader RegistryTypeManager::getTypeReader(
-    const OString& name, sal_Bool * pIsExtraType )
+    const OString& name, sal_Bool * pIsExtraType ) const
 {
     typereg::Reader reader;
     RegistryKey key(searchTypeKey(name, pIsExtraType));
@@ -223,7 +223,7 @@ typereg::Reader RegistryTypeManager::getTypeReader(
     return reader;
 }
 
-RTTypeClass RegistryTypeManager::getTypeClass(const OString& name)
+RTTypeClass RegistryTypeManager::getTypeClass(const OString& name) const
 {
     if (m_pImpl->m_t2TypeClass.count(name) > 0)
     {
@@ -287,6 +287,7 @@ void RegistryTypeManager::freeRegistries()
 }
 
 RegistryKey RegistryTypeManager::searchTypeKey(const OString& name_, sal_Bool * pIsExtraType )
+    const
 {
     OUString name( OStringToOUString(m_pImpl->m_base + name_, RTL_TEXTENCODING_UTF8) );
     RegistryKey key, rootKey;
