@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:33:55 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,11 +659,6 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
         return STATUS_SAVEAS;
 
     // so at this point there is either an acceptable old filter or default one
-
-    ::rtl::OUString aOldUIName = aOldFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "UIName" ),
-                                                                            ::rtl::OUString() );
-    ::rtl::OUString aDefUIName = aDefFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "UIName" ),
-                                                                            ::rtl::OUString() );
     if ( !aOldFiltPropsHM.size() || !( nOldFiltFlags & SFX_FILTER_EXPORT ) )
     {
         // so the default filter must be acceptable
@@ -675,10 +670,17 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     {
         // the default filter is acceptable and the old filter is alian one
         // so ask to make a saveAs operation
+        ::rtl::OUString aOldUIName = aOldFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "UIName" ),
+                                                                                ::rtl::OUString() );
+        ::rtl::OUString aDefUIName = aDefFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "UIName" ),
+                                                                                ::rtl::OUString() );
+        ::rtl::OUString aDefName = aDefFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Name" ),
+                                                                                ::rtl::OUString() );
         ::rtl::OUString aPreusedFilterName = GetDocProps().getUnpackedValueOrDefault(
                                                     ::rtl::OUString::createFromAscii( "PreusedFilterName" ),
                                                     ::rtl::OUString() );
-        if ( !aPreusedFilterName.equals( aOldFilterName ) )
+
+        if ( !aPreusedFilterName.equals( aOldFilterName ) && !aOldFilterName.equals(aDefName) )
         {
             if ( !SfxStoringHelper::WarnUnacceptableFormat( GetModel(), aOldUIName, aDefUIName, sal_True ) )
                 return STATUS_SAVEAS_STANDARDNAME;
