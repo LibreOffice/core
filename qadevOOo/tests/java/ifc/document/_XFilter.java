@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFilter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:56 $
+ *  last change:$Date: 2003-09-08 10:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,15 @@
 package ifc.document;
 
 
-import com.sun.star.beans.PropertyValue;
-
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.XComponent;
-import com.sun.star.document.XExporter;
-import com.sun.star.document.XFilter;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
+
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.document.XExporter;
+import com.sun.star.document.XFilter;
+import com.sun.star.lang.XComponent;
+import com.sun.star.uno.UnoRuntime;
 
 /**
 * Testing <code>com.sun.star.document.XFilter</code>
