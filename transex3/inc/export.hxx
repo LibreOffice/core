@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:39:13 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 17:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,12 +307,15 @@ private:
 
 public:
     ParserQueue* pParseQueue; // public ?
-
-    static ByteString sLanguages;
+    static ByteString sLanguages; // public ?
+    static ByteString sForcedLanguages; // public ?
 
     static ByteString sIsoCode99;
     static void InitLanguages( bool bMergeMode = false );
+    static void InitForcedLanguages( bool bMergeMode = false );
     static std::vector<ByteString> GetLanguages();
+    static std::vector<ByteString> GetForcedLanguages();
+
     static void SetLanguages( std::vector<ByteString> val );
     static USHORT GetLangIndex( USHORT nLangId );
     static CharSet GetCharSet( USHORT nLangId );
@@ -332,9 +335,9 @@ public:
     static BOOL ConvertLineEnds( ByteString sSource, ByteString sDestination );
     static ByteString GetNativeFile( ByteString sSource );
     static DirEntry GetTempFile();
-
 private:
     static std::vector<ByteString> aLanguages;
+    static std::vector<ByteString> aForcedLanguages;
 
     BOOL CreateRefIds( ResData *pResData ) { /* Dummy !!! */ return TRUE; }
     BOOL ListExists( ResData *pResData, USHORT nLst );
@@ -345,6 +348,7 @@ private:
 
     ByteString FullId();                    // creates cur. GID
 
+    void UnmergeUTF8( ByteString& sOrig );
     void InsertListEntry( const ByteString &rText, const ByteString &rLine );
     void CleanValue( ByteString &rValue );
     ByteString GetText( const ByteString &rSource, USHORT nToken );
