@@ -2,9 +2,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 #
-#  last change: $Author: thb $ $Date: 2004-03-18 10:38:34 $
+#  last change: $Author: rt $ $Date: 2004-07-23 14:31:28 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -52,7 +52,7 @@ PACKAGE = test
 JAVAFILES  = \
     PerfTest.java 
 
-JARFILES 		= sandbox.jar jurt.jar unoil.jar ridl.jar juh.jar java_uno.jar 
+JARFILES 		= jurt.jar unoil.jar ridl.jar juh.jar java_uno.jar 
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 JARTARGET               = $(TARGET).jar
