@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlPatternFieldModel.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:44 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,26 +76,21 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoControlPatternFieldModel
-/** specifies the standard model of an <type scope="com::sun::star::awt">UnoControlPatternField</type>
+/** specifies the standard model of an <type>UnoControlPatternField</type>.
  */
 service UnoControlPatternFieldModel
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlModel;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlPatternFieldModel::BackgroundColor
     /** specifies the background color (RGB) of the control.
      */
     [property] long BackgroundColor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlPatternFieldModel::Border
     /** specifies the border style of the control.
-
 
         <pre>
         0: No border
@@ -107,73 +102,35 @@ service UnoControlPatternFieldModel
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlPatternFieldModel::EditMask
     /** specifies the edit mask.
      */
     [property] string EditMask;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlPatternFieldModel::Enabled
-    /** determines whether a control is enabled or disabled.
+    /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlPatternFieldModel::FontDescriptor
     /** specifies the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlPatternFieldModel::LiteralMask
-    /** specifies the literal mask.
+    /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
+        value of the text in the control.
      */
-    [property] string LiteralMask;
+    [property] short FontEmphasisMark;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlPatternFieldModel::Printable
-    /** specifies that the control will be printed with the document.
+    /** specifies the <type scope="com::sun::star::text">FontRelief</type>
+        value of the text in the control.
      */
-    [property] boolean Printable;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlPatternFieldModel::ReadOnly
-    /** specifies that the content of the control cannot be modified by the user.
-     */
-    [property] boolean ReadOnly;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlPatternFieldModel::StrictFormat
-    /** specifies that the string is checked during the input.
-     */
-    [property] boolean StrictFormat;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlPatternFieldModel::Tabstop
-    /** specifies that the control can be reached with the tabulator key.
-     */
-    [property] boolean Tabstop;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlPatternFieldModel::Text
-    /** specifies the text displayed in the control.
-     */
-    [property] string Text;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlPatternFieldModel::TextColor
-    /** specifies the text color (RGB) of the control.
-     */
-    [property] long TextColor;
+    [property] short FontRelief;
 
     //-------------------------------------------------------------------------
 
@@ -183,9 +140,64 @@ service UnoControlPatternFieldModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the help id of the control.
+    /** specifies the help URL of the control.
      */
     [property] string HelpURL;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the literal mask.
+     */
+    [property] string LiteralMask;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the maximum character count.
+     */
+    [property] short MaxTextLen;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control will be printed with the document.
+     */
+    [property] boolean Printable;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the content of the control cannot be modified by the
+        user.
+     */
+    [property] boolean ReadOnly;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the text is checked during the user input.
+     */
+    [property] boolean StrictFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control can be reached with the TAB key.
+     */
+    [property] boolean Tabstop;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the text displayed in the control.
+     */
+    [property] string Text;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the text color (RGB) of the control.
+     */
+    [property] long TextColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the text line color (RGB) of the control.
+     */
+    [property] long TextLineColor;
 
 };
 

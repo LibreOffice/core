@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlNumericFieldModel.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:44 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,26 +76,21 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoControlNumericFieldModel
-/** specifies the standard model of an <type scope="com::sun::star::awt">UnoControlNumericField</type>.
+/** specifies the standard model of an <type>UnoControlNumericField</type>.
  */
 service UnoControlNumericFieldModel
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlModel;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::BackgroundColor
-    /** specifies the background color (RGB) of the control.
+    /** specifies the background color(RGB) of the control.
      */
     [property] long BackgroundColor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::Border
     /** specifies the border style of the control.
-
 
         <pre>
         0: No border
@@ -107,101 +102,35 @@ service UnoControlNumericFieldModel
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::DecimalAccuracy
     /** specifies the decimal accuracy.
      */
     [property] short DecimalAccuracy;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::Enabled
-    /** determines whether a control is enabled or disabled.
+    /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::FontDescriptor
     /** specifies the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::ShowThousandsSeparator
-    /** specifies if the thousands separator is displayed.
+    /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
+        value of the text in the control.
      */
-    [property] boolean ShowThousandsSeparator;
+    [property] short FontEmphasisMark;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::Printable
-    /** specifies that the control will be printed with the document.
+    /** specifies the <type scope="com::sun::star::text">FontRelief</type>
+        value of the text in the control.
      */
-    [property] boolean Printable;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::ReadOnly
-    /** specifies that the content of the control cannot be modified by the user.
-     */
-    [property] boolean ReadOnly;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::Spin
-    /** specifies that the control has a spin button.
-     */
-    [property] boolean Spin;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::StrictFormat
-    /** specifies that the value is checked during the input.
-     */
-    [property] boolean StrictFormat;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::Tabstop
-    /** specifies that the control can be reached with the tabulator key.
-     */
-    [property] boolean Tabstop;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::TextColor
-    /** specifies the text color (RGB) of the control.
-     */
-    [property] long TextColor;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::Value
-    /** specifies the value displayed in the control.
-     */
-    [property] double Value;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::ValueMax
-    /** specifies the maximum value that can be entered.
-     */
-    [property] double ValueMax;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::ValueMin
-    /** specifies the minimum value that can be entered.
-     */
-    [property] double ValueMin;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlNumericFieldModel::ValueStep
-    /** specifies the value step when using the spin buttons.
-     */
-    [property] double ValueStep;
+    [property] short FontRelief;
 
     //-------------------------------------------------------------------------
 
@@ -211,9 +140,82 @@ service UnoControlNumericFieldModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the help id of the control.
+    /** specifies the help URL of the control.
      */
     [property] string HelpURL;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control will be printed with the document.
+     */
+    [property] boolean Printable;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the content of the control cannot be modified by the
+        user.
+     */
+    [property] boolean ReadOnly;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the thousands separator is to be displayed.
+     */
+    [property] boolean ShowThousandsSeparator;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control has a spin button.
+     */
+    [property] boolean Spin;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the value is checked during the user input.
+     */
+    [property] boolean StrictFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control can be reached with the TAB key.
+     */
+    [property] boolean Tabstop;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the text color (RGB) of the control.
+     */
+    [property] long TextColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the text line color (RGB) of the control.
+     */
+    [property] long TextLineColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the value displayed in the control.
+     */
+    [property] double Value;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the maximum value that can be entered.
+     */
+    [property] double ValueMax;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the minimum value that can be entered.
+     */
+    [property] double ValueMin;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the value step when using the spin button.
+     */
+    [property] double ValueStep;
 
 };
 
