@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@
 #include "sc.hrc"
 #endif
 
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 #include <vcl/window.hxx>
 #include <svtools/smplhint.hxx>
@@ -106,12 +106,12 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
 ScAccessiblePreviewHeaderCell::ScAccessiblePreviewHeaderCell( const ::com::sun::star::uno::Reference<
-                                ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+                                ::com::sun::star::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell,
                             const ScAddress& rCellPos, sal_Bool bIsColHdr, sal_Bool bIsRowHdr,
                             sal_Int32 nIndex ) :
@@ -244,11 +244,11 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumValue() throw (uno::R
 
 //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleAt( const awt::Point& rPoint )
+uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleAtPoint( const awt::Point& rPoint )
                                 throw (uno::RuntimeException)
 {
     uno::Reference<XAccessible> xRet;
-    if (contains(rPoint))
+    if (containsPoint(rPoint))
     {
          ScUnoGuard aGuard;
         IsObjectValid();
@@ -317,7 +317,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewHeaderCell::getA
     else
     {
         pStateSet->AddState(AccessibleStateType::ENABLED);
-        pStateSet->AddState(AccessibleStateType::MULTILINE);
+        pStateSet->AddState(AccessibleStateType::MULTI_LINE);
         if (isShowing())
             pStateSet->AddState(AccessibleStateType::SHOWING);
         pStateSet->AddState(AccessibleStateType::TRANSIENT);
@@ -342,7 +342,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePreviewHeaderCell::getSupporte
     aSequence.realloc(nOldSize + 1);
     ::rtl::OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.table.AccessibleCellView"));
+    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.AccessibleCellView"));
 
     return aSequence;
 }
@@ -473,7 +473,7 @@ void ScAccessiblePreviewHeaderCell::CreateTextHelper()
             (new ScAccessiblePreviewHeaderCellTextData(mpViewShell, String(getAccessibleName()), maCellPos, mbColumnHeader, mbRowHeader));
         ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewHeaderCellTextData));
 
-        mpTextHelper = new accessibility::AccessibleTextHelper(pEditSource );
+        mpTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource );
         mpTextHelper->SetEventSource(this);
     }
 }
