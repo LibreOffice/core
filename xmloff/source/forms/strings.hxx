@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:40:40 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,6 +286,7 @@ namespace xmloff
     XMLFORM_CONSTASCII_STRING( EVENT_TYPE, "EventType" );
     XMLFORM_CONSTASCII_STRING( EVENT_LIBRARY, "Library" );
     XMLFORM_CONSTASCII_STRING( EVENT_LOCALMACRONAME, "MacroName" );
+    XMLFORM_CONSTASCII_STRING( EVENT_SCRIPTURL, "Script" );
     XMLFORM_CONSTASCII_STRING( EVENT_STAROFFICE, "StarOffice" );
     XMLFORM_CONSTASCII_STRING( EVENT_STARBASIC, "StarBasic" );
     XMLFORM_CONSTASCII_STRING( EVENT_APPLICATION, "application" );
