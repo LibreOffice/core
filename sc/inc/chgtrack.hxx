@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-11-21 10:26:48 $
+ *  last change: $Author: er $ $Date: 2000-11-21 15:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1110,11 +1110,17 @@ public:
                                     { return aUserCollection; }
             ScDocument*         GetDocument() const { return pDoc; }
 
-                                // fuer MergeDocument, Original-Datum uebernehmen
-            void                SetFixDateTimeUTC( const DateTime& rDT )
-                                    { aFixDateTime = rDT; }
+                                // set this if the date/time set with
+                                // SetFixDateTime...() shall be applied to
+                                // appended actions
             void                SetUseFixDateTime( BOOL bVal )
                                     { bUseFixDateTime = bVal; }
+                                // for MergeDocument, apply original date/time as UTC
+            void                SetFixDateTimeUTC( const DateTime& rDT )
+                                    { aFixDateTime = rDT; }
+                                // for import filter, apply original date/time as local time
+            void                SetFixDateTimeLocal( const DateTime& rDT )
+                                    { aFixDateTime = rDT; aFixDateTime.ConvertToUTC(); }
 
             void                Append( ScChangeAction* );
 
