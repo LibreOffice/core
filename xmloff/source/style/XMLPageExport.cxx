@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLPageExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
+ *  last change: $Author: sab $ $Date: 2001-04-06 11:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ sal_Bool XMLPageExport::exportStyle(
         aAny = xPropSet->getPropertyValue( sFollowStyle );
         OUString sNextName;
         aAny >>= sNextName;
-        if( sName != sNextName )
+        if( sName != sNextName && sNextName.getLength() )
         {
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_next_style_name,
                           sNextName );
