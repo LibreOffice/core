@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-28 13:24:50 $
+ *  last change: $Author: fs $ $Date: 2002-12-06 15:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,9 +430,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
 
 void VCLXAccessibleComponent::NotifyAccessibleEvent( const sal_Int16 _nEventId, const uno::Any& _rOldValue, const uno::Any& _rNewValue )
 {
-    ULONG nCount = Application::ReleaseSolarMutex();
     AccessibleExtendedComponentHelper_BASE::NotifyAccessibleEvent( _nEventId, _rOldValue, _rNewValue );
-    Application::AcquireSolarMutex( nCount );
 }
 
 void VCLXAccessibleComponent::disposing()
