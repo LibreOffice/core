@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-11 07:41:10 $
+ *  last change: $Author: thb $ $Date: 2002-07-26 13:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,14 +738,14 @@ void ImplRenderPath( HDC hdc, ULONG nPoints, const SalPoint* pPtAry, const BYTE*
 
         for( i=1; i<nPoints; ++i, ++pPtAry, ++pFlgAry )
         {
-            if( *pFlgAry == POLY_NORMAL )
+            if( *pFlgAry != POLY_CONTROL )
             {
                 LineTo( hdc, pPtAry->mnX, pPtAry->mnY );
             }
             else if( nPoints - i > 2 )
             {
                 PolyBezierTo( hdc, reinterpret_cast<const POINT*>(pPtAry), 3 );
-                pPtAry += 2; pFlgAry += 2;
+                i += 2; pPtAry += 2; pFlgAry += 2;
             }
         }
     }
