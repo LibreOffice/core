@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 16:22:08 $
+ *  last change: $Author: ama $ $Date: 2000-11-30 14:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -793,19 +793,21 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
                 if( pEndFrm != pStartFrm )
                 {
                     bSameFrame = FALSE;
-                    aTmp.Left( pStartFrm->Frm().Left() );
-                    aTmp.Right( pStartFrm->Frm().Right() );
-                    aTmp.Bottom( pStartFrm->Frm().Bottom() );
-                    aRect.Top( pEndFrm->Frm().Top() );
-                    aRect.Left( pEndFrm->Frm().Left() );
-                    aRect.Right( pEndFrm->Frm().Right() );
+                    SwRect aStFrm( pStartFrm->PaintArea() );
+                    aTmp.Left( aStFrm.Left() );
+                    aTmp.Right( aStFrm.Right() );
+                    aTmp.Bottom( aStFrm.Bottom() );
+                    aStFrm = pEndFrm->PaintArea();
+                    aRect.Top( aStFrm.Top() );
+                    aRect.Left( aStFrm.Left() );
+                    aRect.Right( aStFrm.Right() );
                     aRect.Union( aTmp );
                     while( TRUE )
                     {
                         pStartFrm = pStartFrm->GetFollow();
                         if( pStartFrm == pEndFrm )
                             break;
-                        aRect.Union( pStartFrm->Frm() );
+                        aRect.Union( pStartFrm->PaintArea() );
                     }
                 }
             }
@@ -815,8 +817,9 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
                     aRect.Left( aTmp.Left() );
                 else
                 {
-                    aRect.Left( pStartFrm->Frm().Left() );
-                    aRect.Right( pStartFrm->Frm().Right() );
+                    SwRect aStFrm( pStartFrm->PaintArea() );
+                    aRect.Left( aStFrm.Left() );
+                    aRect.Right( aStFrm.Right() );
                     aRect.Top( aTmp.Top() );
                 }
                 if( aTmp.Height() > aRect.Height() )
