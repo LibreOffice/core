@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-02-14 19:23:32 $
+ *  last change: $Author: nn $ $Date: 2002-02-18 18:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,14 +67,10 @@
 
 //------------------------------------------------------------------
 
-#include <comphelper/processfactory.hxx>
-#include <vos/xception.hxx>
 #include <svx/unolingu.hxx>
 #include <svtools/lingucfg.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
 using namespace com::sun::star;
@@ -83,12 +79,9 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
-#define SERVICE_LINGUPROP   "com.sun.star.linguistic2.LinguProperties"
-#define SERVICE_THESAURUS   "com.sun.star.linguistic2.Thesaurus"
-
-#define LINGUPROP_DEFLOCALE         "DefaultLocale"
-#define LINGUPROP_CJKLOCALE         "DefaultLocale_CJK"
-#define LINGUPROP_CTLLOCALE         "DefaultLocale_CTL"
+//#define LINGUPROP_DEFLOCALE           "DefaultLocale"
+//#define LINGUPROP_CJKLOCALE           "DefaultLocale_CJK"
+//#define LINGUPROP_CTLLOCALE           "DefaultLocale_CTL"
 #define LINGUPROP_AUTOSPELL         "IsSpellAuto"
 #define LINGUPROP_HIDEAUTO          "IsSpellHide"
 
@@ -147,20 +140,16 @@ BOOL ScModule::HasThesaurusLanguage( USHORT nLang )
     SvxLanguageToLocale( aLocale, nLang );
 
     BOOL bHasLang = FALSE;
-    TRY
+    try
     {
-        uno::Reference< lang::XMultiServiceFactory > xManager = comphelper::getProcessServiceFactory();
-        uno::Reference< linguistic2::XThesaurus > xThes( xManager->createInstance(
-                            rtl::OUString::createFromAscii( SERVICE_THESAURUS ) ),
-                        uno::UNO_QUERY );
+        uno::Reference< linguistic2::XThesaurus > xThes(LinguMgr::GetThesaurus());
         if ( xThes.is() )
             bHasLang = xThes->hasLocale( aLocale );
     }
-    CATCH_ALL()
+    catch( uno::Exception& )
     {
         DBG_ERROR("Error in Thesaurus");
     }
-    END_CATCH
 
     return bHasLang;
 }
