@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-10 16:56:12 $
+ *  last change: $Author: er $ $Date: 2002-11-27 21:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,8 +175,8 @@ void ScColumn::Insert( USHORT nRow, ScBaseCell* pNewCell )
             if ( eCellType == CELLTYPE_FORMULA )
                 ((ScFormulaCell*)pNewCell)->SetDirty();
             else
-                pDocument->Broadcast( SC_HINT_DATACHANGED,
-                    ScAddress( nCol, nRow, nTab ), pNewCell );
+                pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
+                    ScAddress( nCol, nRow, nTab ), pNewCell ) );
         }
     }
 }
@@ -236,8 +236,8 @@ void ScColumn::Delete( USHORT nRow )
         ScBaseCell* pCell = pItems[nIndex].pCell;
         ScNoteCell* pNoteCell = new ScNoteCell;
         pItems[nIndex].pCell = pNoteCell;       // Dummy fuer Interpret
-        pDocument->Broadcast( SC_HINT_DYING,
-            ScAddress( nCol, nRow, nTab ), pCell );
+        pDocument->Broadcast( ScHint( SC_HINT_DYING,
+            ScAddress( nCol, nRow, nTab ), pCell ) );
         ScBroadcasterList* pBC = pCell->GetBroadcaster();
         if ( pBC )
         {
@@ -264,8 +264,8 @@ void ScColumn::DeleteAtIndex( USHORT nIndex )
     ScBaseCell* pCell = pItems[nIndex].pCell;
     ScNoteCell* pNoteCell = new ScNoteCell;
     pItems[nIndex].pCell = pNoteCell;       // Dummy fuer Interpret
-    pDocument->Broadcast( SC_HINT_DYING,
-        ScAddress( nCol, pItems[nIndex].nRow, nTab ), pCell );
+    pDocument->Broadcast( ScHint( SC_HINT_DYING,
+        ScAddress( nCol, pItems[nIndex].nRow, nTab ), pCell ) );
     delete pNoteCell;
     --nCount;
     memmove( &pItems[nIndex], &pItems[nIndex + 1], (nCount - nIndex) * sizeof(ColEntry) );
@@ -343,26 +343,47 @@ void ScColumn::DeleteRow( USHORT nStartRow, USHORT nSize )
     else
         i = nFirstIndex;
 
-    USHORT nLastBroadcast = MAXROW+1;
     ScAddress aAdr( nCol, 0, nTab );
-
-    for ( ; i < nCount; i++ )
+    ScHint aHint( SC_HINT_DATACHANGED, aAdr, NULL );    // only areas (ScBaseCell* == NULL)
+    ScAddress& rAddress = aHint.GetAddress();
+    // for sparse occupation use single broadcasts, not ranges
+    BOOL bSingleBroadcasts = (((pItems[nCount-1].nRow - pItems[i].nRow) /
+                (nCount - i)) > 1);
+    if ( bSingleBroadcasts )
     {
-        USHORT nOldRow = pItems[i].nRow;
-        // #43940# Aenderung Quelle broadcasten
-        aAdr.SetRow( nOldRow );
-        pDocument->Broadcast( SC_HINT_DATACHANGED, aAdr, NULL );    // nur Areas
-        USHORT nNewRow = (pItems[i].nRow -= nSize);
-        // #43940# Aenderung Ziel broadcasten
-        if ( nLastBroadcast != nNewRow )
-        {   // direkt aufeinanderfolgende nicht doppelt broadcasten
-            aAdr.SetRow( nNewRow );
-            pDocument->Broadcast( SC_HINT_DATACHANGED, aAdr, NULL );    // nur Areas
+        USHORT nLastBroadcast = MAXROW+1;
+        for ( ; i < nCount; i++ )
+        {
+            USHORT nOldRow = pItems[i].nRow;
+            // #43940# Aenderung Quelle broadcasten
+            rAddress.SetRow( nOldRow );
+            pDocument->AreaBroadcast( aHint );
+            USHORT nNewRow = (pItems[i].nRow -= nSize);
+            // #43940# Aenderung Ziel broadcasten
+            if ( nLastBroadcast != nNewRow )
+            {   // direkt aufeinanderfolgende nicht doppelt broadcasten
+                rAddress.SetRow( nNewRow );
+                pDocument->AreaBroadcast( aHint );
+            }
+            nLastBroadcast = nOldRow;
+            ScBaseCell* pCell = pItems[i].pCell;
+            if ( pCell->GetCellType() == CELLTYPE_FORMULA )
+                ((ScFormulaCell*)pCell)->aPos.SetRow( nNewRow );
         }
-        nLastBroadcast = nOldRow;
-        ScBaseCell* pCell = pItems[i].pCell;
-        if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-            ((ScFormulaCell*)pCell)->aPos.SetRow( nNewRow );
+    }
+    else
+    {
+        rAddress.SetRow( pItems[i].nRow );
+        ScRange aRange( rAddress );
+        aRange.aEnd.SetRow( pItems[nCount-1].nRow );
+        for ( ; i < nCount; i++ )
+        {
+            USHORT nNewRow = (pItems[i].nRow -= nSize);
+            ScBaseCell* pCell = pItems[i].pCell;
+            if ( pCell->GetCellType() == CELLTYPE_FORMULA )
+                ((ScFormulaCell*)pCell)->aPos.SetRow( nNewRow );
+        }
+        pDocument->AreaBroadcastInRange( aRange, aHint );
     }
 
     pDocument->SetAutoCalc( bOldAutoCalc );
@@ -398,6 +419,8 @@ void ScColumn::DeleteRange( USHORT nStartIndex, USHORT nEndIndex, USHORT nDelFla
                 bSimple = FALSE;
     }
 
+    ScHint aHint( SC_HINT_DYING, ScAddress( nCol, 0, nTab ), NULL );
+
     if (bSimple)            // Bereich komplett loeschen
     {
         ScBaseCell* pOldCell;
@@ -411,8 +434,9 @@ void ScColumn::DeleteRange( USHORT nStartIndex, USHORT nEndIndex, USHORT nDelFla
             {
                 // Interpret in Broadcast darf kein Value finden
                 pItems[i].pCell = pNoteCell;
-                pDocument->Broadcast( SC_HINT_DYING,
-                    ScAddress( nCol, pItems[i].nRow, nTab ), pOldCell );
+                aHint.GetAddress().SetRow( pItems[i].nRow );
+                aHint.SetCell( pOldCell );
+                pDocument->Broadcast( aHint );
                 pOldCell->Delete();
             }
         }
@@ -493,8 +517,9 @@ void ScColumn::DeleteRange( USHORT nStartIndex, USHORT nEndIndex, USHORT nDelFla
                 }
                 else
                 {
-                    pDocument->Broadcast( SC_HINT_DYING,
-                        ScAddress( nCol, nOldRow, nTab ), pOldCell );
+                    aHint.GetAddress().SetRow( nOldRow );
+                    aHint.SetCell( pOldCell );
+                    pDocument->Broadcast( aHint );
                     if (eCellType != CELLTYPE_NOTE)
                         pOldCell->ForgetBroadcaster();
                     pOldCell->Delete();
@@ -529,7 +554,9 @@ void ScColumn::DeleteRange( USHORT nStartIndex, USHORT nEndIndex, USHORT nDelFla
     for (i=0; i<nDelCount; i++)
     {
         ScFormulaCell* pOldCell = (ScFormulaCell*) ppDelCells[i];
-        pDocument->Broadcast( SC_HINT_DYING, pOldCell->aPos, pOldCell );
+        aHint.SetAddress( pOldCell->aPos );
+        aHint.SetCell( pOldCell );
+        pDocument->Broadcast( aHint );
         pOldCell->ForgetBroadcaster();
         pOldCell->Delete();
     }
@@ -1171,8 +1198,8 @@ void ScColumn::BroadcastInArea( USHORT nRow1, USHORT nRow2 )
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                 ((ScFormulaCell*)pCell)->SetDirty();
             else
-                pDocument->Broadcast( SC_HINT_DATACHANGED,
-                    ScAddress( nCol, nRow, nTab ), pCell );
+                pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
+                    ScAddress( nCol, nRow, nTab ), pCell ) );
             nIndex++;
         }
     }
@@ -1334,8 +1361,8 @@ BOOL ScColumn::SetString( USHORT nRow, USHORT nTab, const String& rString )
                         ((ScFormulaCell*)pNewCell)->SetDirty();
                     }
                     else
-                        pDocument->Broadcast( SC_HINT_DATACHANGED,
-                            ScAddress( nCol, nRow, nTab ), pNewCell );
+                        pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
+                            ScAddress( nCol, nRow, nTab ), pNewCell ) );
                 }
                 else
                 {
