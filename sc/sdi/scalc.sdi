@@ -6584,8 +6584,8 @@ SfxVoidItem TableOperationDialog SID_OPENDLG_TABOP
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem TableRename FID_TAB_MENU_RENAME
-()
+SfxVoidItem RenameTable FID_TAB_MENU_RENAME
+( SfxStringItem Name FID_TAB_RENAME )
 [
     /* flags: */
     AutoUpdate = FALSE,
