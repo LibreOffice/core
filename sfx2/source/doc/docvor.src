@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:27:37 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 21:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,7 +582,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ portuguese ] = "~Editar" ;
                     Text [ finnish ] = "~Muokkaa" ;
                     Text [ danish ] = "~Rediger" ;
-                    Text [ french ] = "~Edition" ;
+                    Text [ french ] = "~Édition" ;
                     Text [ swedish ] = "~Redigera" ;
                     Text [ dutch ] = "~Bewerken" ;
                     Text [ spanish ] = "E~ditar" ;
@@ -656,7 +656,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ chinese_traditional ] = "¿é¥X¼Ë¦¡(~X)...";
                     Text[ arabic ] = "ÊÕÏíÑ ÞÇáÈ...";
                     Text[ greek ] = "~ÅîáãùãÞ ðñïôýðùí...";
-                    Text[ korean ] = "¼­½ÄÆÄÀÏ ³»º¸³»±â...";
+                    Text[ korean ] = "¼­½Ä ÆÄÀÏ ³»º¸³»±â...";
                     Text[ turkish ] = "Þablonu dýþa aktar...";
                     Text[ language_user1 ] = " ";
                     Text[ catalan ] = "E~xportar plantilla...";
@@ -822,3 +822,4 @@ ModalDialog DLG_ORGANIZE
     Text[ catalan ] = "Administrar plantillas";
 };
  // ********************************************************************** EOF
+
