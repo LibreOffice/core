@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: er $ $Date: 2001-07-16 17:25:09 $
+ *  last change: $Author: er $ $Date: 2001-08-02 14:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #include "listener.hxx"
 #include "smplhint.hxx"
 
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -280,6 +283,8 @@ SvNumberFormatter::~SvNumberFormatter()
 
 void SvNumberFormatter::ImpConstruct( LanguageType eLang )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svtools", "er93726", "SvNumberFormatter::ImpConstruct" );
+
     if ( eLang == LANGUAGE_DONTKNOW )
         eLang = UNKNOWN_SUBSTITUTE;
     IniLnge = eLang;
@@ -291,16 +296,22 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     pCharClass = new CharClass( xServiceManager, aLocale );
     xLocaleData.init( xServiceManager, aLocale, eLang );
     xCalendar.init( xServiceManager, aLocale );
-    xCollator.init( xServiceManager, aLocale );
+    xTransliteration.init( xServiceManager, eLang,
+        ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE );
+
+    // cached locale data items
+    const LocaleDataWrapper* pLoc = GetLocaleData();
+    aDecimalSep = pLoc->getNumDecimalSep();
+    aThousandSep = pLoc->getNumThousandSep();
+    aDateSep = pLoc->getDateSep();
 
     pStringScanner = new ImpSvNumberInputScan( this );
     pFormatScanner = new ImpSvNumberformatScan( this );
     pFormatTable = NULL;
     MaxCLOffset = 0;
     ImpGenerateFormats( 0, FALSE );     // 0 .. 999 for initialized language formats
-    pMergeTable = new SvULONGTable;
+    pMergeTable = NULL;
     bNoZero = FALSE;
-    pColorLink = NULL;
 
     ::osl::MutexGuard aGuard( GetMutex() );
     GetFormatterRegistry().Insert( this );
@@ -317,7 +328,13 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
         pCharClass->setLocale( aLocale );
         xLocaleData.changeLocale( aLocale, eLnge );
         xCalendar.changeLocale( aLocale );
-        xCollator.changeLocale( aLocale );
+        xTransliteration.changeLocale( eLnge );
+
+        // cached locale data items, initialize BEFORE calling ChangeIntl below
+        const LocaleDataWrapper* pLoc = GetLocaleData();
+        aDecimalSep = pLoc->getNumDecimalSep();
+        aThousandSep = pLoc->getNumThousandSep();
+        aDateSep = pLoc->getDateSep();
 
         pFormatScanner->ChangeIntl();
         pStringScanner->ChangeIntl();
@@ -386,8 +403,8 @@ LanguageType SvNumberFormatter::GetProperLanguage( LanguageType eLang )
 
 Color* SvNumberFormatter::GetUserDefColor(USHORT nIndex)
 {
-    if( pColorLink && pColorLink->IsSet() )
-        return (Color*) ( pColorLink->Call( (void*) &nIndex ));
+    if( aColorLink.IsSet() )
+        return (Color*) ( aColorLink.Call( (void*) &nIndex ));
     else
         return NULL;
 }
@@ -935,7 +952,7 @@ void SvNumberFormatter::GetUsedLanguages( SvUShorts& rList )
 String SvNumberFormatter::GetKeyword( LanguageType eLnge, USHORT nIndex )
 {
     ChangeIntl(eLnge);
-    const String* pTable = pFormatScanner->GetKeyword();
+    const String* pTable = pFormatScanner->GetKeywords();
     if ( pTable && nIndex < NF_KEYWORD_ENTRIES_COUNT )
         return pTable[nIndex];
 
@@ -1616,7 +1633,7 @@ BOOL SvNumberFormatter::GetPreviewStringGuess( const String& sFormatString,
 
         if ( !bEnglishFormat )
         {
-            if ( nCheckPos > 0 || xCollator->compareString( sFormatString,
+            if ( nCheckPos > 0 || xTransliteration->compareString( sFormatString,
                     pEntry->GetFormatstring() ) == 0 )
             {   // other Format
                 delete pEntry;
@@ -1635,7 +1652,7 @@ BOOL SvNumberFormatter::GetPreviewStringGuess( const String& sFormatString,
                     pStringScanner, nCheckPos2, eFormatLang );
                 pFormatScanner->SetConvertMode( FALSE );
                 ChangeIntl( eLnge );
-                if ( nCheckPos2 == 0 && xCollator->compareString( sFormatString,
+                if ( nCheckPos2 == 0 && xTransliteration->compareString( sFormatString,
                         pEntry2->GetFormatstring() ) != 0 )
                 {   // other Format
                     delete pEntry;
@@ -1846,7 +1863,7 @@ String SvNumberFormatter::GetFormatDecimalSep( ULONG nFormat ) const
 {
     const SvNumberformat* pFormat = aFTable.Get( nFormat );
     if ( !pFormat || pFormat->GetLanguage() == ActLnge )
-        return xLocaleData->getNumDecimalSep();
+        return GetNumDecimalSep();
 
     String aRet;
     LanguageType eSaveLang = xLocaleData.getCurrentLanguage();
@@ -1956,7 +1973,7 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
         rSeq.realloc(1);
         rSeq[0] = ::com::sun::star::i18n::NumberFormatCode();
         String aTmp( '0' );
-        aTmp += GetDecimalSep();
+        aTmp += GetNumDecimalSep();
         aTmp.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "############" ) );
         rSeq[0].Code = aTmp;
     }
@@ -2358,7 +2375,7 @@ void SvNumberFormatter::ImpGenerateFormats( ULONG CLOffset, BOOL bLoadingSO5 )
         CLOffset + SetIndexTable( NF_FRACTION_2, ZF_STANDARD_FRACTION+1 ));
 
     // Week of year   must be appended here because of nNewExtended
-    const String* pKeyword = pFormatScanner->GetKeyword();
+    const String* pKeyword = pFormatScanner->GetKeywords();
     aSingleFormatCode.Code = pKeyword[NF_KEY_WW];
     ImpInsertNewStandardFormat( aSingleFormatCode,
         CLOffset + SetIndexTable( NF_DATE_WW, nNewExtended++ ),
@@ -2471,7 +2488,7 @@ void SvNumberFormatter::GenerateFormat(String& sString,
                                     // formate anlegen
     sString.Erase();
 
-    const String& rThSep = xLocaleData->getNumThousandSep();
+    const String& rThSep = GetNumThousandSep();
     if (nAnzLeading == 0)
     {
         if (!bThousand)
@@ -2503,7 +2520,7 @@ void SvNumberFormatter::GenerateFormat(String& sString,
     }
     if (nPrecision > 0)
     {
-        sString += xLocaleData->getNumDecimalSep();
+        sString += GetNumDecimalSep();
         sString.Expand( sString.Len() + nPrecision, '0' );
     }
     if (eType == NUMBERFORMAT_PERCENT)
@@ -2625,18 +2642,24 @@ short SvNumberFormatter::GetType(ULONG nFIndex)
 
 void SvNumberFormatter::ClearMergeTable()
 {
-    ULONG* pIndex = (ULONG*) pMergeTable->First();
-    while (pIndex)
+    if ( pMergeTable )
     {
-        delete pIndex;
-        pIndex = pMergeTable->Next();
+        ULONG* pIndex = (ULONG*) pMergeTable->First();
+        while (pIndex)
+        {
+            delete pIndex;
+            pIndex = pMergeTable->Next();
+        }
+        pMergeTable->Clear();
     }
-    pMergeTable->Clear();
 }
 
 SvULONGTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter& rTable)
 {
-    ClearMergeTable();
+    if ( pMergeTable )
+        ClearMergeTable();
+    else
+        pMergeTable = new SvULONGTable;
     ULONG nCLOffset, nOldKey, nOffset, nNewKey;
     ULONG* pNewIndex;
     SvNumberformat* pNewEntry;
@@ -3286,8 +3309,10 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         return ;
     bInitializing = TRUE;
 
+    RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svtools", "er93726", "SvNumberFormatter::ImpInitCurrencyTable" );
+
     LanguageType eSysLang = Application::GetSettings().GetLanguage();
-    LocaleDataWrapper* xLocaleData = new LocaleDataWrapper(
+    LocaleDataWrapper* pLocaleData = new LocaleDataWrapper(
         ::comphelper::getProcessServiceFactory(),
         ConvertLanguageToLocale( eSysLang ) );
     // get user configured currency
@@ -3300,17 +3325,19 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     NfCurrencyEntryPtr pEntry;
 
     // first entry is SYSTEM
-    pEntry = new NfCurrencyEntry( *xLocaleData, LANGUAGE_SYSTEM );
+    pEntry = new NfCurrencyEntry( *pLocaleData, LANGUAGE_SYSTEM );
     theCurrencyTable.Insert( pEntry, 0 );
     USHORT nCurrencyPos = 1;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xLoc =
         LocaleDataWrapper::getInstalledLocaleNames();
     sal_Int32 nLocaleCount = xLoc.getLength();
+    RTL_LOGFILE_CONTEXT_TRACE1( aTimeLog, "number of locales: %ld", nLocaleCount );
+    Locale const * const pLocales = xLoc.getConstArray();
     for ( sal_Int32 nLocale = 0; nLocale < nLocaleCount; nLocale++ )
     {
-        LanguageType eLang = ConvertIsoNamesToLanguage( xLoc[nLocale].Language,
-            xLoc[nLocale].Country );
+        LanguageType eLang = ConvertIsoNamesToLanguage(
+            pLocales[nLocale].Language, pLocales[nLocale].Country );
 #ifdef DEBUG
         LanguageType eReal = International::GetRealLanguage( eLang );
         LanguageType eNeut = International::GetNeutralLanguage( eLang );
@@ -3319,9 +3346,22 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         if ( eNeut != eLang )
             BOOL bBreak = TRUE;
 #endif
-        xLocaleData->setLocale( xLoc[nLocale] );
+        pLocaleData->setLocale( pLocales[nLocale] );
+        Sequence< Currency > aCurrSeq = pLocaleData->getAllCurrencies();
+        sal_Int32 nCurrencyCount = aCurrSeq.getLength();
+        Currency const * const pCurrencies = aCurrSeq.getConstArray();
+
         // one default currency for each locale, insert first so it is found first
-        pEntry = new NfCurrencyEntry( *xLocaleData, eLang );
+        sal_Int32 nDefault;
+        for ( nDefault = 0; nDefault < nCurrencyCount; nDefault++ )
+        {
+            if ( pCurrencies[nDefault].Default )
+                break;
+        }
+        if ( nDefault < nCurrencyCount )
+            pEntry = new NfCurrencyEntry( pCurrencies[nDefault], *pLocaleData, eLang );
+        else
+            pEntry = new NfCurrencyEntry( *pLocaleData, eLang );    // first or ShellsAndPebbles
 #ifndef PRODUCT
         lcl_CheckCurrencySymbolPosition( *pEntry );
 #endif
@@ -3334,41 +3374,42 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                 pEntry->GetLanguage() == eSysLang )
             nMatchingSystemCurrencyPosition = nCurrencyPos-1;
 
-        // all available currencies for each locale
-        Sequence< Currency > aCurrSeq = xLocaleData->getAllCurrencies();
-        sal_Int32 nCurrencyCount = aCurrSeq.getLength();
+        // all remaining currencies for each locale
         if ( nCurrencyCount > 1 )
         {
             sal_Int32 nCurrency;
             for ( nCurrency = 0; nCurrency < nCurrencyCount; nCurrency++ )
             {
-                pEntry = new NfCurrencyEntry( aCurrSeq[nCurrency], *xLocaleData, eLang );
-                // no dupes
-                BOOL bInsert = TRUE;
-                NfCurrencyEntry const * const * pData = theCurrencyTable.GetData();
-                USHORT n = theCurrencyTable.Count();
-                pData++;        // skip first SYSTEM entry
-                for ( USHORT j=1; j<n; j++ )
+                if ( nCurrency != nDefault )
                 {
-                    if ( *(*pData++) == *pEntry )
+                    pEntry = new NfCurrencyEntry( pCurrencies[nCurrency], *pLocaleData, eLang );
+                    // no dupes
+                    BOOL bInsert = TRUE;
+                    NfCurrencyEntry const * const * pData = theCurrencyTable.GetData();
+                    USHORT n = theCurrencyTable.Count();
+                    pData++;        // skip first SYSTEM entry
+                    for ( USHORT j=1; j<n; j++ )
                     {
-                        bInsert = FALSE;
-                        break;  // for
+                        if ( *(*pData++) == *pEntry )
+                        {
+                            bInsert = FALSE;
+                            break;  // for
+                        }
                     }
-                }
-                if ( !bInsert )
-                    delete pEntry;
-                else
-                {
-                    theCurrencyTable.Insert( pEntry, nCurrencyPos++ );
-                    if ( !nSecondarySystemCurrencyPosition &&
-                            (aConfiguredCurrencyAbbrev.Len() ?
-                            pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev :
-                            pEntry->GetLanguage() == eConfiguredCurrencyLanguage) )
-                        nSecondarySystemCurrencyPosition = nCurrencyPos-1;
-                    if ( !nMatchingSystemCurrencyPosition &&
-                            pEntry->GetLanguage() ==  eSysLang )
-                        nMatchingSystemCurrencyPosition = nCurrencyPos-1;
+                    if ( !bInsert )
+                        delete pEntry;
+                    else
+                    {
+                        theCurrencyTable.Insert( pEntry, nCurrencyPos++ );
+                        if ( !nSecondarySystemCurrencyPosition &&
+                                (aConfiguredCurrencyAbbrev.Len() ?
+                                pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev :
+                                pEntry->GetLanguage() == eConfiguredCurrencyLanguage) )
+                            nSecondarySystemCurrencyPosition = nCurrencyPos-1;
+                        if ( !nMatchingSystemCurrencyPosition &&
+                                pEntry->GetLanguage() ==  eSysLang )
+                            nMatchingSystemCurrencyPosition = nCurrencyPos-1;
+                    }
                 }
             }
         }
@@ -3382,7 +3423,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         nSystemCurrencyPosition = nMatchingSystemCurrencyPosition;
     DBG_ASSERT( aConfiguredCurrencyAbbrev.Len() || nSystemCurrencyPosition,
         "system currency not in I18N locale data" );
-    delete xLocaleData;
+    delete pLocaleData;
     SvtSysLocaleOptions::SetCurrencyChangeLink(
         STATIC_LINK( NULL, SvNumberFormatter, CurrencyChangeLink ) );
     bInitializing = FALSE;

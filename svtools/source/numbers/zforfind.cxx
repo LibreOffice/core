@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2001-07-24 09:51:16 $
+ *  last change: $Author: er $ $Date: 2001-08-02 14:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1309,7 +1309,7 @@ BOOL ImpSvNumberInputScan::ScanMidString(
     }
 
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
-    const String& rDate = pLoc->getDateSep();
+    const String& rDate = pFormatter->GetDateSep();
     const String& rTime = pLoc->getTimeSep();
     sal_Unicode cTime = rTime.GetChar(0);
     SkipBlanks(rString, nPos);
@@ -1497,7 +1497,7 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
     }
 
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
-    const String& rDate = pLoc->getDateSep();
+    const String& rDate = pFormatter->GetDateSep();
     const String& rTime = pLoc->getTimeSep();
     if ( SkipString(rTime, rString, nPos) )         // 10:
     {
@@ -1634,7 +1634,7 @@ BOOL ImpSvNumberInputScan::ScanStringNumFor(
 {
     if ( !pFormat )
         return FALSE;
-    const CollatorWrapper* pCollator = pFormatter->GetCollator();
+    const ::utl::TransliterationWrapper* pTransliteration = pFormatter->GetTransliteration();
     const String* pStr;
     String aString( rString );
     BOOL bFound = FALSE;
@@ -1650,7 +1650,7 @@ BOOL ImpSvNumberInputScan::ScanStringNumFor(
         {   // TeilFormate durchprobieren, erst positiv, dann negativ, dann anderes,
             // letztes (Text) nicht
             pStr = pFormat->GetNumForString( nSub, nString, TRUE );
-            if ( pStr && (pCollator->compareString( aString, *pStr ) == 0) )
+            if ( pStr && (pTransliteration->compareString( aString, *pStr ) == 0) )
             {
                 bFound = TRUE;
                 bContinue = FALSE;
@@ -1976,11 +1976,11 @@ void ImpSvNumberInputScan::InitText()
 
 void ImpSvNumberInputScan::ChangeIntl()
 {
-    sal_Unicode cDecSep = pFormatter->GetLocaleData()->getNumDecimalSep().GetChar(0);
+    sal_Unicode cDecSep = pFormatter->GetNumDecimalSep().GetChar(0);
     bDecSepInDateSeps = ( cDecSep == '-' ||
                           cDecSep == '/' ||
                           cDecSep == '.' ||
-                          cDecSep == pFormatter->GetLocaleData()->getDateSep().GetChar(0) );
+                          cDecSep == pFormatter->GetDateSep().GetChar(0) );
     bTextInitialized = FALSE;
     aUpperCurrSymbol.Erase();
 }

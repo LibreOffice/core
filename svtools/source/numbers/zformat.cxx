@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: er $ $Date: 2001-07-16 17:21:09 $
+ *  last change: $Author: er $ $Date: 2001-08-02 14:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,7 +469,7 @@ SvNumberformat::SvNumberformat(String& rString,
     // replace all occurences by a simple space.
     // The tokens will be changed to the LocaleData separator again later on.
     const sal_Unicode cNBSp = 0xA0;
-    const String& rThSep = pSc->GetLoc().getNumThousandSep();
+    const String& rThSep = GetFormatter().GetNumThousandSep();
     if ( rThSep.GetChar(0) == cNBSp && rThSep.Len() == 1 )
     {
         xub_StrLen nIndex = 0;
@@ -920,7 +920,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
     xub_StrLen nLen = rString.Len();
     ScanState eState = SsStart;
     sSymbol.Erase();
-    const String* pKeywords = rScan.GetKeyword();
+    const String* pKeywords = rScan.GetKeywords();
     while (nPos < nLen && eState != SsStop)
     {
         cToken = rString.GetChar(nPos);
@@ -1542,11 +1542,11 @@ void SvNumberformat::ImpGetOutputStandard(double& fNumber, String& OutString)
     USHORT nStandardPrec = rScan.GetStandardPrec();
     if ( fabs(fNumber) > 1.0E15 )       // #58531# war E16
         SolarMath::DoubleToString(OutString, fNumber, 'E', nStandardPrec /*2*/,
-                       rLoc().getNumDecimalSep().GetChar(0));
+                       GetFormatter().GetNumDecimalSep().GetChar(0));
     else
     {
         SolarMath::DoubleToString( OutString, fNumber, 'F', nStandardPrec /*2*/,
-                       rLoc().getNumDecimalSep().GetChar(0), TRUE );
+                       GetFormatter().GetNumDecimalSep().GetChar(0), TRUE );
         if (OutString.GetChar(0) == '-' &&
             OutString.GetTokenCount('0') == OutString.Len())
             OutString.EraseLeadingChars('-');            // nicht -0
@@ -1575,7 +1575,7 @@ void SvNumberformat::ImpGetOutputInputLine(double fNumber, String& OutString)
     }
 
     SolarMath::DoubleToString( OutString, fNumber, 'A', INT_MAX,
-                    rLoc().getNumDecimalSep().GetChar(0), TRUE );
+                    GetFormatter().GetNumDecimalSep().GetChar(0), TRUE );
 
     if ( eType & NUMBERFORMAT_PERCENT && bModified)
         OutString += '%';
@@ -2170,7 +2170,6 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
 {
     using namespace ::com::sun::star::i18n;
     BOOL bCalendarSet = FALSE;
-    CalendarWrapper& rCal = GetCal();
     double fNumberOrig = fNumber;
     BOOL bRes = FALSE;
     BOOL bSign = FALSE;
@@ -2310,7 +2309,7 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
             case SYMBOLTYPE_DIGIT:
             {
                 xub_StrLen nLen = ( bInputLine && i > 0 &&
-                    rInfo.sStrArray[i-1] == rLoc().getNumDecimalSep() ?
+                    rInfo.sStrArray[i-1] == GetFormatter().GetNumDecimalSep() ?
                     nCntPost : rInfo.sStrArray[i].Len() );
                 for (xub_StrLen j = 0; j < nLen && nSecPos < nCntPost; j++)
                 {
@@ -2325,16 +2324,15 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
                 {
                     DateTime aDateTime( *(rScan.GetNullDate()) );
                     aDateTime += fNumberOrig;
-                    CalendarWrapper& rCal = GetCal();
-                    rCal.setGregorianDateTime( aDateTime );
+                    GetCal().setGregorianDateTime( aDateTime );
                     bCalendarSet = TRUE;
                 }
                 if (cAmPm == 'a')
-                    OutString += rCal.getDisplayName( CalendarDisplayIndex::AM_PM,
-                        AmPmValue::AM, 0 );
+                    OutString += GetCal().getDisplayName(
+                        CalendarDisplayIndex::AM_PM, AmPmValue::AM, 0 );
                 else
-                    OutString += rCal.getDisplayName( CalendarDisplayIndex::AM_PM,
-                        AmPmValue::PM, 0 );
+                    OutString += GetCal().getDisplayName(
+                        CalendarDisplayIndex::AM_PM, AmPmValue::PM, 0 );
             }
             break;
             case NF_KEY_AP:                 // A/P
@@ -3228,7 +3226,7 @@ BOOL SvNumberformat::ImpGetNumberOutput(double fNumber,
                             rInfo.nCntPre);
     if ( rInfo.nCntPost > 0 )
     {
-        const String& rDecSep = rLoc().getNumDecimalSep();
+        const String& rDecSep = GetFormatter().GetNumDecimalSep();
         xub_StrLen nLen = rDecSep.Len();
         if ( sStr.Len() > nLen && sStr.Equals( rDecSep, sStr.Len() - nLen, nLen ) )
             sStr.Erase( sStr.Len() - nLen );        // no decimals => strip DecSep
@@ -3255,7 +3253,7 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
     USHORT nDigitCount = 0;             // Zaehlt Vorkommaziffern
     BOOL bStop = FALSE;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    const String& rThousandSep = rLoc().getNumThousandSep();
+    const String& rThousandSep = GetFormatter().GetNumThousandSep();
     while (!bStop)                                      // rueckwaerts
     {
         if (j == 0)
@@ -3367,7 +3365,7 @@ void SvNumberformat::ImpDigitFill(
 {
     if (NumFor[nIx].Info().bThousand)                       // noch Ziffern da
     {                                                       // Aufuellen mit .
-        const String& rThousandSep = rLoc().getNumThousandSep();
+        const String& rThousandSep = GetFormatter().GetNumThousandSep();
         while (k > nStart)
         {
             if (nThousandCnt > 2)
@@ -3395,7 +3393,7 @@ BOOL SvNumberformat::ImpNumberFill(String& sStr,        // Zahlstring
     k = sStr.Len();                         // hinter letzter Ziffer
     BOOL bLeading = FALSE;                  // fuehrende ? oder 0
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    const String& rThousandSep = rLoc().getNumThousandSep();
+    const String& rThousandSep = GetFormatter().GetNumThousandSep();
     short nType;
     while (j > 0 && (nType = rInfo.nTypeArray[j]) != eSymbolType )
     {                                       // rueckwaerts:
@@ -3743,7 +3741,7 @@ String SvNumberformat::GetMappedFormatstring(
         const String& rColorName = NumFor[n].GetColorName();
         if ( rColorName.Len() )
         {
-            const String* pKey = rScan.GetKeyword() + NF_KEY_FIRSTCOLOR;
+            const String* pKey = rScan.GetKeywords() + NF_KEY_FIRSTCOLOR;
             for ( int j=NF_KEY_FIRSTCOLOR; j<=NF_KEY_LASTCOLOR; j++, pKey++ )
             {
                 if ( *pKey == rColorName )

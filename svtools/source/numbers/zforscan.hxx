@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-06-25 12:45:57 $
+ *  last change: $Author: er $ $Date: 2001-08-02 14:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,23 +131,61 @@ public:
     const LocaleDataWrapper& GetLoc() const     { return *pFormatter->GetLocaleData(); }
     CalendarWrapper& GetCal() const             { return *pFormatter->GetCalendar(); }
 
-    const String& GetTrueString() const     { return sKeyword[NF_KEY_TRUE]; }
-    const String& GetFalseString() const    { return sKeyword[NF_KEY_FALSE]; }
-    const String& GetColorString() const    { return sKeyword[NF_KEY_COLOR]; }
-    const String& GetRedString() const      { return sKeyword[NF_KEY_RED]; }
-    const String& GetBooleanString() const  { return sKeyword[NF_KEY_BOOLEAN]; }
+    const String* GetKeywords() const
+        {
+            if ( bKeywordsNeedInit )
+                InitKeywords();
+            return sKeyword;
+        }
+    // Keywords used in output like TRUE and FALSE
+    const String& GetSpecialKeyword( NfKeywordIndex eIdx ) const
+        {
+            if ( !sKeyword[eIdx].Len() )
+                InitSpecialKeyword( eIdx );
+            return sKeyword[eIdx];
+        }
+    const String& GetTrueString() const     { return GetSpecialKeyword( NF_KEY_TRUE ); }
+    const String& GetFalseString() const    { return GetSpecialKeyword( NF_KEY_FALSE ); }
+    const String& GetColorString() const    { return GetKeywords()[NF_KEY_COLOR]; }
+    const String& GetRedString() const      { return GetKeywords()[NF_KEY_RED]; }
+    const String& GetBooleanString() const  { return GetKeywords()[NF_KEY_BOOLEAN]; }
     const String& GetErrorString() const    { return sErrStr; }
-    const String* GetKeyword() const        { return sKeyword; }
 
     Date* GetNullDate() const                   { return pNullDate; }
-    const String& GetStandardName() const   { return sNameStandardFormat; }
+    const String& GetStandardName() const
+        {
+            if ( bKeywordsNeedInit )
+                InitKeywords();
+            return sNameStandardFormat;
+        }
     short GetStandardPrec() const               { return nStandardPrec; }
     const Color& GetRedColor() const            { return StandardColor[4]; }
     Color* GetColor(String& sStr);          // Setzt Hauptfarben oder
                                                 // definierte Farben
 
+    // the compatibility currency symbol for old automatic currency formats
+    const String& GetCurSymbol() const
+        {
+            if ( bCompatCurNeedInit )
+                InitCompatCur();
+            return sCurSymbol;
+        }
+
     // the compatibility currency abbreviation for CCC format code
-    const String& GetCurAbbrev() const      { return sCurAbbrev; }
+    const String& GetCurAbbrev() const
+        {
+            if ( bCompatCurNeedInit )
+                InitCompatCur();
+            return sCurAbbrev;
+        }
+
+    // the compatibility currency symbol upper case for old automatic currency formats
+    const String& GetCurString() const
+        {
+            if ( bCompatCurNeedInit )
+                InitCompatCur();
+            return sCurString;
+        }
 
     void SetConvertMode(LanguageType eTmpLge, LanguageType eNewLge,
             BOOL bSystemToSystem = FALSE )
@@ -207,6 +245,8 @@ private:                            // ---- privater Teil
     BOOL bFrac;                                 // wird bei Lesen des / gesetzt
     BOOL bBlank;                                // wird bei ' '(Fraction) ges.
     BOOL bDecSep;                               // Wird beim ersten , gesetzt
+    mutable BOOL bKeywordsNeedInit;             // Locale dependent keywords need to be initialized
+    mutable BOOL bCompatCurNeedInit;            // Locale dependent compatibility currency need to be initialized
     String sCurSymbol;                          // Currency symbol for compatibility format codes
     String sCurString;                          // Currency symbol in upper case
     String sCurAbbrev;                          // Currency abbreviation
@@ -227,6 +267,10 @@ private:                            // ---- privater Teil
                                                 // too).
 
     xub_StrLen nCurrPos;                        // Position des Waehrungssymbols
+
+    void InitKeywords() const;
+    void InitSpecialKeyword( NfKeywordIndex eIdx ) const;
+    void InitCompatCur() const;
 
 #ifdef _ZFORSCAN_CXX                // ----- private Methoden -----
     void SetDependentKeywords();
@@ -252,7 +296,7 @@ private:                            // ---- privater Teil
     inline BOOL IsAmbiguousE( short nKey )      // whether nKey is ambiguous E of NF_KEY_E/NF_KEY_EC
         {
             return (nKey == NF_KEY_EC || nKey == NF_KEY_E) &&
-                (sKeyword[NF_KEY_EC] == sKeyword[NF_KEY_E]);
+                (GetKeywords()[NF_KEY_EC] == GetKeywords()[NF_KEY_E]);
         }
 
     short Next_Symbol(const String& rStr,
