@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-26 15:40:28 $
+ *  last change: $Author: as $ $Date: 2002-05-03 08:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,10 +885,35 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     rArgs = aSequ;
 }
 
-SFX_IMPL_XINTERFACE_2( SfxMacroLoader, OWeakObject, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch )
-SFX_IMPL_XTYPEPROVIDER_2( SfxMacroLoader, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch )
+SFX_IMPL_XINTERFACE_3( SfxMacroLoader, OWeakObject, ::com::sun::star::frame::XDispatchProvider, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch )
+SFX_IMPL_XTYPEPROVIDER_3( SfxMacroLoader, ::com::sun::star::frame::XDispatchProvider, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch )
 SFX_IMPL_XSERVICEINFO( SfxMacroLoader, PROTOCOLHANDLER_SERVICENAME, "com.sun.star.comp.sfx2.SfxMacroLoader" )
 SFX_IMPL_SINGLEFACTORY( SfxMacroLoader )
+
+// -----------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL SfxMacroLoader::queryDispatch( const ::com::sun::star::util::URL&   aURL            ,
+                                                                                                               const ::rtl::OUString&               sTargetFrameName,
+                                                                                                                     sal_Int32                      nSearchFlags    ) throw( ::com::sun::star::uno::RuntimeException )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatcher;
+    if(aURL.Complete.compareToAscii("macro:",6)==0)
+        xDispatcher = this;
+    return xDispatcher;
+}
+
+// -----------------------------------------------------------------------
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > > SAL_CALL
+                SfxMacroLoader::queryDispatches( const ::com::sun::star::uno::Sequence < ::com::sun::star::frame::DispatchDescriptor >& seqDescriptor )
+                    throw( ::com::sun::star::uno::RuntimeException )
+{
+    sal_Int32 nCount = seqDescriptor.getLength();
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > > lDispatcher(nCount);
+    for( sal_Int32 i=0; i<nCount; ++i )
+        lDispatcher[i] = this->queryDispatch( seqDescriptor[i].FeatureURL,
+                                              seqDescriptor[i].FrameName,
+                                              seqDescriptor[i].SearchFlags );
+    return lDispatcher;
+}
 
 // -----------------------------------------------------------------------
 void SAL_CALL SfxMacroLoader::dispatchWithNotification( const ::com::sun::star::util::URL&                                                          aURL      ,
