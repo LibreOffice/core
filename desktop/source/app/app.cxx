@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cd $ $Date: 2001-09-19 11:01:05 $
+ *  last change: $Author: cd $ $Date: 2001-09-25 11:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <unistd.h>
 #include "app.hxx"
 #include "desktop.hrc"
 #include "appinit.hxx"
@@ -490,7 +491,7 @@ void Desktop::Init()
         else if ( aStatus == OfficeIPCThread::IPC_STATUS_2ND_OFFICE )
         {
             // 2nd office startup should terminate after sending cmdlineargs through pipe
-            exit( 0 );
+            _exit( 0 );
         }
 
         pSignalHandler = new SalMainPipeExchangeSignalHandler;
@@ -628,7 +629,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
             }
         }
 
-        exit( 333 );
+        _exit( 333 );
     }
 }
 
@@ -678,7 +679,7 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
         }
     }
 
-    exit( 333 );
+    _exit( 333 );
 }
 
 USHORT Desktop::Exception(USHORT nError)
@@ -822,7 +823,7 @@ USHORT Desktop::Exception(USHORT nError)
         default:
         {
             if ( pArgs->IsNoRestore() )
-                exit( 333 );
+                _exit( 333 );
 
             if( bRecovery && !pPluginAcceptThread && !Application::IsRemoteServer() )
             {
@@ -844,7 +845,7 @@ USHORT Desktop::Exception(USHORT nError)
                          xSystemShellExecute->execute( aSysPathFileName, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
                 }
 
-                exit( 333 );
+                _exit( 333 );
             }
             else
             {
