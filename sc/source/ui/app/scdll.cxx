@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-12 15:50:20 $
+ *  last change: $Author: obo $ $Date: 2001-10-16 14:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,11 +155,7 @@ void ScDLL::Init()
 
     // the ScModule must be created
     ScModuleDummy **ppShlPtr = (ScModuleDummy**) GetAppData(SHL_CALC);
-#ifndef SO3
-    SvFactory *pFact = (*ppShlPtr)->pScDocShellFactory;
-#else
     SvFactory *pFact = (SvFactory*)(*ppShlPtr)->pScDocShellFactory;
-#endif
     ScLibSignalFunc pFunc = (*ppShlPtr)->pSignalFunc;
     delete (*ppShlPtr);
     ScModule* pMod = new ScModule((SfxObjectFactory*)pFact);
