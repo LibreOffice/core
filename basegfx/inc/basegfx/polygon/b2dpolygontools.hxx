@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:32:54 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,8 +162,11 @@ namespace basegfx
         // Subdivide all contained curves. Use distanceBound value if given.
         B2DPolygon adaptiveSubdivideByDistance(const B2DPolygon& rCandidate, double fDistanceBound = 0.0);
 
-        // Subdivide all contained curves. Use distanceBound value if given.
-        B2DPolygon adaptiveSubdivideByAngle(const B2DPolygon& rCandidate, double fAngleBound = 5.0);
+        // Subdivide all contained curves. Use angleBound value if given.
+        B2DPolygon adaptiveSubdivideByAngle(const B2DPolygon& rCandidate, double fAngleBound = 0.0);
+
+        // #i37443# Subdivide all contained curves. Use distanceBound value if given.
+        B2DPolygon adaptiveSubdivideByCount(const B2DPolygon& rCandidate, sal_uInt32 nCount = 0L);
 
         // Definitions for the cut flags used from the findCut methods
         typedef sal_uInt16 CutFlagValue;
