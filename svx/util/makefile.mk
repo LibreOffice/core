@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: thb $ $Date: 2001-12-06 14:10:02 $
+#   last change: $Author: mh $ $Date: 2001-12-06 14:40:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,25 +74,12 @@ USE_LDUMP2=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 
-.IF "$(COM)"=="ICC"
-#LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
-LINKFLAGS+=/SEGMENTS:1024
-.ENDIF
-
 .IF "$(OS)"=="IRIX"
 LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=30
 .ENDIF
 RSCLOCINC+=-I$(PRJ)$/source$/svdraw
 
-.IF "$(GUI)"=="WNT"
-LIBCMT += $(LIBCIMT)
-.ENDIF
-
-# --- Allgemein ----------------------------------------------------
-
 # --- Svx - DLL ----------
-
-.IF "$(header)" == ""
 
 HELPIDFILES=    ..$/inc$/helpid.hrc
 
@@ -131,14 +118,8 @@ SHL1STDLIBS+=\
 .ENDIF
 
 .IF "$(BIG_SVX)"==""
-.IF "$(GUI)"=="OS2"
-SHL1STDLIBS+=\
-            $(LB)$/dl1.lib \
-            $(LB)$/dl2.lib
-.ELSE
 SHL1STDLIBS+=\
             $(LB)$/dl.lib
-.ENDIF
 .ENDIF
 
 .IF "$(SOLAR_JAVA)" != ""
@@ -204,12 +185,7 @@ SHL2STDLIBS+=\
 
 
 SHL2DEPN=       $(SLB)$/dl.lib $(LB)$/svx.lib
-
 SHL2LIBS=       $(SLB)$/dl.lib
-
-.IF "$(COM)"=="ICC"
-SHL2OBJS=       $(SLO)$/sidll.obj
-.ENDIF
 SHL2OBJS+=      $(SLO)$/svxempty.obj
 
 SHL2DEF=        $(MISC)$/$(SHL2TARGET).def
@@ -338,17 +314,6 @@ ALL:      \
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 ALL: \
         $(MAKELANGDIR)  \
-        ALLTAR
-.ENDIF
-
-.IF "$(GUI)"=="OS2"
-ALL:      \
-        $(MAKELANGDIR)  \
-        implib_defs     \
-        implib1         \
-        implib2 		\
-        implib3 		\
-        implib4 		\
         ALLTAR
 .ENDIF
 .ENDIF			#F "$(depend)" != ""
@@ -500,11 +465,6 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
 #   @echo ?CreateType@>>$@
 #   @echo ?LinkStub>>$@
 .ENDIF
-.IF "$(COM)"=="ICC"
-    @echo _alloc >> $@
-    @echo _lower_bound >> $@
-    @echo _stl_prime >> $@
-.ENDIF
 
 $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo ------------------------------
@@ -636,11 +596,6 @@ $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
 .ENDIF
-.IF "$(COM)"=="ICC"
-    @echo _alloc >> $@
-    @echo _lower_bound >> $@
-    @echo _stl_prime >> $@
-.ENDIF
 .IF "$(COM)"=="MSC"
     @echo ??_5>>$@
     @echo ??_7>>$@
@@ -671,10 +626,6 @@ $(SRS)$/hidother.hid: hidother.src
     +-mhids hidother.src ..\$(INPATH)$/srs $(INCLUDE) svx hidother
 .ENDIF
 .ENDIF
-
-
-.ENDIF                  # "$(header)" == ""
-
 
 .INCLUDE :  target.mk
 
