@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: dbo $ $Date: 2001-07-05 10:23:31 $
+#   last change: $Author: dbo $ $Date: 2001-10-17 12:48:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,6 @@ NO_BSYMBOLIC=	TRUE
 
 # --- Files --------------------------------------------------------
 
-UNOUCRDEP=	$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/udkapi.rdb
 UNOUCROUT=	$(OUT)$/inc$/test
 INCPRE+=	$(OUT)$/inc$/test
 
