@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:21:22 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,13 +73,28 @@
 #include <rtl/tencinfo.h>
 #endif
 
-#ifndef _SVSTOR_HXX //autogen
+#ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
 
-#ifndef _SFXDOCINF_HXX //autogen
+#ifndef _SFXDOCINF_HXX
 #include <sfx2/docinf.hxx>
 #endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
+
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _UNOTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
+#endif
+#ifndef _SFXECODE_HXX
+#include <svtools/sfxecode.hxx>
+#endif
+
+#include <svtools/docpasswdrequest.hxx>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -121,6 +136,12 @@
 #ifndef _MSDFFIMP_HXX
 #include <svx/msdffimp.hxx>
 #endif
+#ifndef _SVXERR_HXX
+#include <svx/svxerr.hxx>
+#endif
+#ifndef SVX_MSCODEC_HXX
+#include <svx/mscodec.hxx>
+#endif
 #ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
 #endif
@@ -130,7 +151,6 @@
 #ifndef _SVX_XFLCLIT_HXX
 #include <svx/xflclit.hxx>
 #endif
-
 
 #include <svtools/fltrcfg.hxx>
 
@@ -253,6 +273,12 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONREQUEST_HPP_
+#include <com/sun/star/task/XInteractionRequest.hpp>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -1602,7 +1628,7 @@ void SwWW8ImplReader::ImportDop()
 
 void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
 {
-    using namespace ::com::sun::star;
+    using namespace com::sun::star;
     switch (rTypo.iLevelOfKinsoku)
     {
 #if 0
@@ -3616,14 +3642,14 @@ void SwWW8ImplReader::StoreMacroCmds()
     }
 }
 
-ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
+ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 {
     ULONG nErrRet = 0;
 
     if (mbNewDoc && pStg && !pGloss)
         ReadDocInfo();
 
-    pPaM = new SwPaM( *rPaM.GetPoint() );
+    pPaM = new SwPaM(rPos);
 
     pCtrlStck = new SwWW8FltControlStack( &rDoc, nFieldFlags, *this );
 
@@ -3644,433 +3670,351 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 
     USHORT eMode = REDLINE_SHOW_INSERT;
 
-    // enum-para mitgeben, welche Versions-Nummern erlaubt sind: ww6, ww8, ...
+    mpSprmParser = new wwSprmParser(pWwFib->nVersion);
 
-    if (pGloss)
-        pWwFib = pGloss->GetFib();
-    else
-        pWwFib = new WW8Fib( *pStrm, nWantedVersion );  // Fib einlesen
+    // praktische Hilfsvariablen besetzen:
+    bVer6  = (6 == pWwFib->nVersion);
+    bVer7  = (7 == pWwFib->nVersion);
+    bVer67 = bVer6 || bVer7;
+    bVer8  = (8 == pWwFib->nVersion);
 
-    if ( pWwFib->nFibError )
-    {           // ERR_NO_WW8_FILE
-        nErrRet = ERR_SWG_READ_ERROR;               // oder ERR_SW6_READ_ERROR
-    }
-    else if( pWwFib->fEncrypted )
-    {
-        nErrRet = ERR_SW6_PASSWD;                   // gecryptet geht nicht
+    eTextCharSet = WW8Fib::GetFIBCharset(pWwFib->chse);
+    eStructCharSet = WW8Fib::GetFIBCharset(pWwFib->chseTables);
 
+    bWWBugNormal = pWwFib->nProduct == 0xc03d;
 
+    if (!mbNewDoc)
+        aSttNdIdx = pPaM->GetPoint()->nNode;
 
-        // Annotation:  Crypted files  C O U L D  be imported if we used the methods
-        //              provided by Caolan Mc Nammara.
-        //              Written permission (my e-mail) was given by him
-        //              but no special document has been signed...
-        //              27. Sept. 1999, K.-H. Zimmer
-
-
-    }
-    else
-    {
-        mpSprmParser = new wwSprmParser(pWwFib->nVersion);
-
-        // praktische Hilfsvariablen besetzen:
-        bVer67 = (     (6 == pWwFib->nVersion)
-                                || (7 == pWwFib->nVersion) );   // z.B.: altes Sprm-Id-Format!
-
-        bVer6  =  (6 == pWwFib->nVersion);
-        bVer7  =  (7 == pWwFib->nVersion);
-        bVer8  =  (8 == pWwFib->nVersion);
-
-        SvStorageStreamRef xTableStream, xDataStream;
-
-        // Nachdem wir nun den FIB eingelesen haben, wissen wir ja,
-        // welcher Table-Stream gueltig ist.
-        // Diesen oeffnen wir nun.
-
-        // 6 stands for "6 OR 7",  7 stand for "ONLY 7"
-        switch( pWwFib->nVersion )
-        {
-        case 6:
-        case 7: pTableStream = pStrm;
-                pDataStream = pStrm;
-                break;
-
-        case 8:
-            if( !pStg )
-            {
-                ASSERT( pStg, "Version 8 muss immer einen Storage haben!" );
-                nErrRet = ERR_SWG_READ_ERROR;
-                break;
-            }
-
-            xTableStream = pStg->OpenStream( String::CreateFromAscii(
-                pWwFib->fWhichTblStm ? SL::a1Table : SL::a0Table),
-                STREAM_STD_READ );
-
-            pTableStream = &xTableStream;
-            pTableStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-
-            xDataStream = pStg->OpenStream(CREATE_CONST_ASC(SL::aData),
-                STREAM_STD_READ | STREAM_NOCREATE );
-
-            if( xDataStream.Is() && SVSTREAM_OK == xDataStream->GetError() )
-            {
-                pDataStream = &xDataStream;
-                pDataStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
-            }
-            else
-                pDataStream = pStrm;
-            break;
-        default:
-            // Programm-Fehler!
-            ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
-            nErrRet = ERR_SWG_READ_ERROR;
-            break;
-        }
-
-        if (ERR_SWG_READ_ERROR != nErrRet)
-        {
-            eTextCharSet = WW8Fib::GetFIBCharset(pWwFib->chse);
-            eStructCharSet = WW8Fib::GetFIBCharset(pWwFib->chseTables);
-
-            bWWBugNormal = pWwFib->nProduct == 0xc03d;
-
-            if (!mbNewDoc)
-                aSttNdIdx = pPaM->GetPoint()->nNode;
-
-            ::StartProgress(STR_STATSTR_W4WREAD, 0, 100, mpDocShell);
+    ::StartProgress(STR_STATSTR_W4WREAD, 0, 100, mpDocShell);
 
 #ifdef DEBUGDUMP
-            //experimental embedded ttf dumper
-            if (pWwFib->lcbSttbttmbd && (7 < pWwFib->nVersion))
-            {
-                pTableStream->Seek(pWwFib->fcSttbttmbd);
-                sal_uInt16 nZeros;
-                *pTableStream >> nZeros;
-                sal_uInt16 nNoEntries;
-                *pTableStream >> nNoEntries;
-                sal_uInt32 nUnknown1;
-                *pTableStream >> nUnknown1;
-                sal_uInt16 nUnknown2;
-                *pTableStream >> nUnknown2;
-                std::vector<sal_uInt32> aOffsets;
-                for (sal_uInt16 nI = 0; nI < nNoEntries; ++nI)
-                {
-                    sal_uInt32 nOffset;
-                    *pTableStream >> nOffset;
-                    aOffsets.push_back(nOffset);
-                    sal_uInt32 nUnknown3;
-                    *pTableStream >> nUnknown3;
-                    sal_uInt32 nUnknown4;
-                    *pTableStream >> nUnknown4;
-                }
-                typedef std::vector<sal_uInt32>::iterator myIter;
-                myIter aEnd = aOffsets.end();
-                myIter aIter = aOffsets.begin();
-                while (aIter != aEnd)
-                {
-                    sal_uInt32 nOffset = *aIter;
-                    sal_uInt32 nLen = STREAM_SEEK_TO_END;
-                    ++aIter;
-                    pStrm->Seek(nOffset);
-                    if (aIter != aEnd)
-                        nLen = *aIter - nOffset;
-                    SvStream *pDbg = sw::hack::CreateDebuggingStream(CREATE_CONST_ASC(".ttf.dump"));
-                    sw::hack::DumpStream(*pStrm, *pDbg, nLen);
-                    delete pDbg;
-                }
-            }
+    //experimental embedded ttf dumper
+    if (pWwFib->lcbSttbttmbd && (7 < pWwFib->nVersion))
+    {
+        pTableStream->Seek(pWwFib->fcSttbttmbd);
+        sal_uInt16 nZeros;
+        *pTableStream >> nZeros;
+        sal_uInt16 nNoEntries;
+        *pTableStream >> nNoEntries;
+        sal_uInt32 nUnknown1;
+        *pTableStream >> nUnknown1;
+        sal_uInt16 nUnknown2;
+        *pTableStream >> nUnknown2;
+        std::vector<sal_uInt32> aOffsets;
+        for (sal_uInt16 nI = 0; nI < nNoEntries; ++nI)
+        {
+            sal_uInt32 nOffset;
+            *pTableStream >> nOffset;
+            aOffsets.push_back(nOffset);
+            sal_uInt32 nUnknown3;
+            *pTableStream >> nUnknown3;
+            sal_uInt32 nUnknown4;
+            *pTableStream >> nUnknown4;
+        }
+        typedef std::vector<sal_uInt32>::iterator myIter;
+        myIter aEnd = aOffsets.end();
+        myIter aIter = aOffsets.begin();
+        while (aIter != aEnd)
+        {
+            sal_uInt32 nOffset = *aIter;
+            sal_uInt32 nLen = STREAM_SEEK_TO_END;
+            ++aIter;
+            pStrm->Seek(nOffset);
+            if (aIter != aEnd)
+                nLen = *aIter - nOffset;
+            SvStream *pDbg = sw::hack::CreateDebuggingStream(CREATE_CONST_ASC(".ttf.dump"));
+            sw::hack::DumpStream(*pStrm, *pDbg, nLen);
+            delete pDbg;
+        }
+    }
 #endif
 
-            // read Font Table
-            pFonts = new WW8Fonts( *pTableStream, *pWwFib );
+    // read Font Table
+    pFonts = new WW8Fonts( *pTableStream, *pWwFib );
 
-            // Document Properties
-            pWDop = new WW8Dop( *pTableStream, pWwFib->nFib, pWwFib->fcDop,
-                pWwFib->lcbDop );
+    // Document Properties
+    pWDop = new WW8Dop( *pTableStream, pWwFib->nFib, pWwFib->fcDop,
+        pWwFib->lcbDop );
 
-            if (mbNewDoc)
-                ImportDop();
+    if (mbNewDoc)
+        ImportDop();
 
-            /*
-                Import revisioning data: author names
-            */
-            if( pWwFib->lcbSttbfRMark )
-            {
-                ReadRevMarkAuthorStrTabl( *pTableStream,
-                                            pWwFib->fcSttbfRMark,
-                                            pWwFib->lcbSttbfRMark, rDoc );
-            }
-
-            // M.M. Initialize our String/ID map for Linked Sections
-            std::vector<String> aLinkStrings;
-            std::vector<ww::bytes> aStringIds;
-
-            WW8ReadSTTBF(!bVer67, *pTableStream, pWwFib->fcSttbFnm,
-                pWwFib->lcbSttbFnm, bVer67 ? 2 : 0, eStructCharSet,
-                aLinkStrings, &aStringIds);
-
-            for (int i=0; i < aLinkStrings.size(); ++i)
-            {
-                ww::bytes stringId = aStringIds[i];
-                WW8_STRINGID *stringIdStruct = (WW8_STRINGID*)(&stringId[0]);
-                aLinkStringMap[SVBT16ToShort(stringIdStruct->nStringId)] =
-                    aLinkStrings[i];
-            }
-
-            ::SetProgressState(nProgress, mpDocShell);    // Update
-
-            pLstManager = new WW8ListManager( *pTableStream, *this );
-
-            /*
-                zuerst(!) alle Styles importieren   (siehe WW8PAR2.CXX)
-                    VOR dem Import der Listen !!
-            */
-            ::SetProgressState(nProgress, mpDocShell);    // Update
-            pStyles = new WW8RStyle( *pWwFib, this );   // Styles
-            pStyles->Import();
-
-            /*
-                zu guter Letzt: (siehe ebenfalls WW8PAR3.CXX)
-                ===============
-                alle Styles durchgehen und ggfs. zugehoeriges Listen-Format
-                anhaengen NACH dem Import der Styles und NACH dem Import der
-                Listen !!
-            */
-            ::SetProgressState(nProgress, mpDocShell);    // Update
-            pStyles->PostProcessStyles();
-
-            if (pCollA)
-                SetOutLineStyles();
-
-            pSBase = new WW8ScannerBase(pStrm,pTableStream,pDataStream,pWwFib);
-
-            static const SvxExtNumType eNumTA[16] =
-            {
-                SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
-                SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N,
-                SVX_NUM_ARABIC, SVX_NUM_ARABIC, SVX_NUM_ARABIC,
-                SVX_NUM_ARABIC, SVX_NUM_ARABIC, SVX_NUM_ARABIC,
-                SVX_NUM_ARABIC, SVX_NUM_ARABIC, SVX_NUM_ARABIC,
-                SVX_NUM_ARABIC, SVX_NUM_ARABIC
-            };
-
-            if (pSBase->AreThereFootnotes())
-            {
-                static const SwFtnNum eNumA[4] =
-                {
-                    FTNNUM_DOC, FTNNUM_CHAPTER, FTNNUM_PAGE, FTNNUM_DOC
-                };
-
-                SwFtnInfo aInfo;
-                aInfo = rDoc.GetFtnInfo();      // Copy-Ctor privat
-
-                aInfo.ePos = FTNPOS_PAGE;
-                aInfo.eNum = eNumA[pWDop->rncFtn];
-                aInfo.aFmt.SetNumberingType(eNumTA[pWDop->nfcFtnRef]);
-                if( pWDop->nFtn )
-                    aInfo.nFtnOffset = pWDop->nFtn - 1;
-                rDoc.SetFtnInfo( aInfo );
-            }
-            if( pSBase->AreThereEndnotes() )
-            {
-                SwEndNoteInfo aInfo;
-                aInfo = rDoc.GetEndNoteInfo();  // parallel zu Ftn
-
-                // Ich kann nicht setzen, wann neu nummerieren...
-                //  aInfo.eNum = eNumA[pWDop->pDop->rncEdn];
-                aInfo.aFmt.SetNumberingType(eNumTA[pWDop->nfcEdnRef]);
-                if( pWDop->nEdn )
-                    aInfo.nFtnOffset = pWDop->nEdn - 1;
-                rDoc.SetEndNoteInfo( aInfo );
-            }
-
-            if( pWwFib->lcbPlcfhdd )
-                pHdFt = new WW8PLCF_HdFt( pTableStream, *pWwFib, *pWDop );
-
-            if (!mbNewDoc)
-            {
-                // in ein Dokument einfuegen ?
-                // Da immer ganze Zeile eingelesen werden, muessen
-                // evtl. Zeilen eingefuegt / aufgebrochen werden
-                //
-                const SwPosition* pPos = pPaM->GetPoint();
-                const SwTxtNode* pSttNd =
-                    rDoc.GetNodes()[ pPos->nNode ]->GetTxtNode();
-
-                USHORT nCntPos = pPos->nContent.GetIndex();
-
-                // EinfuegePos nicht in leerer Zeile
-                if( nCntPos && pSttNd->GetTxt().Len() )
-                    rDoc.SplitNode( *pPos );            // neue Zeile erzeugen
-
-                if( pSttNd->GetTxt().Len() )
-                {   // EinfuegePos nicht am Ende der Zeile
-                    rDoc.SplitNode( *pPos );    // neue Zeile
-                    pPaM->Move( fnMoveBackward );   // gehe in leere Zeile
-                }
-
-                // verhinder das Einlesen von Tabellen in Fussnoten / Tabellen
-                ULONG nNd = pPos->nNode.GetIndex();
-                bReadNoTbl = 0 != pSttNd->FindTableNode() ||
-                    ( nNd < rDoc.GetNodes().GetEndOfInserts().GetIndex() &&
-                    rDoc.GetNodes().GetEndOfInserts().StartOfSectionIndex()
-                    < nNd );
-
-            }
-
-            ::SetProgressState(nProgress, mpDocShell);    // Update
-
-            // loop for each glossary entry and add dummy section node
-            if (pGloss)
-            {
-                WW8PLCF aPlc(&xTableStream,pWwFib->fcPlcfglsy,
-                                pWwFib->lcbPlcfglsy,0 );
-
-                WW8_CP nStart, nEnd;
-                void* pDummy;
-
-                for (int i=0;i<pGloss->GetNoStrings();i++,aPlc++)
-                {
-                    SwNodeIndex aIdx( rDoc.GetNodes().GetEndOfContent());
-                    SwTxtFmtColl* pColl =
-                        rDoc.GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD,
-                        false);
-                    SwStartNode *pNode =
-                        rDoc.GetNodes().MakeTextSection(aIdx,
-                        SwNormalStartNode,pColl);
-                    pPaM->GetPoint()->nNode = pNode->GetIndex()+1;
-                    pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(),0);
-                    aPlc.Get( nStart, nEnd, pDummy );
-                    ReadText(nStart,nEnd-nStart-1,MAN_MAINTEXT);
-                }
-            }
-            else //ordinary case
-            {
-                ReadText(0, pWwFib->ccpText, MAN_MAINTEXT);
-            }
-
-            ::SetProgressState(nProgress, mpDocShell);    // Update
-
-            if (pDrawPg && pMSDffManager && pMSDffManager->GetShapeOrders())
-            {
-                // Hilfsarray zum Verketten der (statt SdrTxtObj) eingefuegten
-                // Rahmen
-                SvxMSDffShapeTxBxSort aTxBxSort;
-
-                // korrekte Z-Order der eingelesen Escher-Objekte sicherstellen
-                USHORT nShapeCount = pMSDffManager->GetShapeOrders()->Count();
-
-                for (USHORT nShapeNum=0; nShapeNum < nShapeCount; nShapeNum++)
-                {
-                    SvxMSDffShapeOrder *pOrder =
-                        pMSDffManager->GetShapeOrders()->GetObject(nShapeNum);
-                    // Pointer in neues Sort-Array einfuegen
-                    if (pOrder->nTxBxComp && pOrder->pFly)
-                        aTxBxSort.Insert(pOrder);
-                }
-                // zu verkettende Rahmen jetzt verketten
-                USHORT nTxBxCount = aTxBxSort.Count();
-                if( nTxBxCount )
-                {
-                    SwFmtChain aChain;
-                    for (USHORT nTxBxNum=0; nTxBxNum < nTxBxCount; nTxBxNum++)
-                    {
-                        SvxMSDffShapeOrder *pOrder =
-                            aTxBxSort.GetObject(nTxBxNum);
-
-                        // Fly-Frame-Formate initialisieren
-                        SwFlyFrmFmt* pFlyFmt     = pOrder->pFly;
-                        SwFlyFrmFmt* pNextFlyFmt = 0;
-                        SwFlyFrmFmt* pPrevFlyFmt = 0;
-                        // ggfs. Nachfolger ermitteln
-                        if( 1+nTxBxNum < nTxBxCount )
-                        {
-                            SvxMSDffShapeOrder *pNextOrder =
-                                aTxBxSort.GetObject(nTxBxNum+1);
-                            if ((0xFFFF0000 & pOrder->nTxBxComp)
-                                   == (0xFFFF0000 & pNextOrder->nTxBxComp))
-                                pNextFlyFmt = pNextOrder->pFly;
-                        }
-                        // ggfs. Vorgaenger ermitteln
-                        if( nTxBxNum )
-                        {
-                            SvxMSDffShapeOrder *pPrevOrder =
-                                aTxBxSort.GetObject(nTxBxNum-1);
-                            if ((0xFFFF0000 & pOrder->nTxBxComp)
-                                   == (0xFFFF0000 & pPrevOrder->nTxBxComp))
-                                pPrevFlyFmt = pPrevOrder->pFly;
-                        }
-                        // Falls Nachfolger oder Vorgaenger vorhanden,
-                        // die Verkettung am Fly-Frame-Format eintragen
-                        if (pNextFlyFmt || pPrevFlyFmt)
-                        {
-                            aChain.SetNext( pNextFlyFmt );
-                            aChain.SetPrev( pPrevFlyFmt );
-                            pFlyFmt->SetAttr( aChain );
-                        }
-                    }
-
-                }
-
-            }
-
-            if (mbNewDoc)
-            {
-                if( pWDop->fRevMarking )
-                    eMode |= REDLINE_ON;
-                if( pWDop->fRMView )
-                    eMode |= REDLINE_SHOW_DELETE;
-                if (pStg && !pGloss) /*meaningless for a glossary, cmc*/
-                {
-                    const SvtFilterOptions* pVBAFlags = SvtFilterOptions::Get();
-                    maTracer.EnterEnvironment(sw::log::eMacros);
-                    SvxImportMSVBasic aVBasic(*mpDocShell, *pStg,
-                                    pVBAFlags->IsLoadWordBasicCode(),
-                                    pVBAFlags->IsLoadWordBasicStorage() );
-                    String s1(CREATE_CONST_ASC("Macros"));
-                    String s2(CREATE_CONST_ASC("VBA"));
-                    int nRet = aVBasic.Import( s1, s2 );
-                    if( 2 & nRet )
-                    {
-                        maTracer.Log(sw::log::eContainsVisualBasic);
-                        rDoc.SetContainsMSVBasic(true);
-                    }
-
-                    StoreMacroCmds();
-
-                    maTracer.LeaveEnvironment(sw::log::eMacros);
-                }
-            }
-
-            maInsertedTables.DelAndMakeTblFrms();
-            maSectionManager.InsertSegments();
-
-            if (pCollA)
-                delete[] pCollA;
-
-            DELETEZ( pStyles );
-
-            if( pFormImpl )
-                DeleteFormImpl();
-            GrafikDtor();
-            DELETEZ( pMSDffManager );
-            DELETEZ( pHdFt );
-            DELETEZ( pLstManager );
-            DELETEZ( pSBase );
-            delete pWDop;
-            DELETEZ( pFonts );
-            delete mpAtnNames;
-            DELETEZ( pAuthorInfos );
-            delete mpSprmParser;
-            ::EndProgress(mpDocShell);
-        }
-        pDataStream = 0;
-        pTableStream = 0;
+    /*
+        Import revisioning data: author names
+    */
+    if( pWwFib->lcbSttbfRMark )
+    {
+        ReadRevMarkAuthorStrTabl( *pTableStream,
+                                    pWwFib->fcSttbfRMark,
+                                    pWwFib->lcbSttbfRMark, rDoc );
     }
 
-    if (!pGloss)
-        DELETEZ(pWwFib);
+    // M.M. Initialize our String/ID map for Linked Sections
+    std::vector<String> aLinkStrings;
+    std::vector<ww::bytes> aStringIds;
+
+    WW8ReadSTTBF(!bVer67, *pTableStream, pWwFib->fcSttbFnm,
+        pWwFib->lcbSttbFnm, bVer67 ? 2 : 0, eStructCharSet,
+        aLinkStrings, &aStringIds);
+
+    for (int i=0; i < aLinkStrings.size(); ++i)
+    {
+        ww::bytes stringId = aStringIds[i];
+        WW8_STRINGID *stringIdStruct = (WW8_STRINGID*)(&stringId[0]);
+        aLinkStringMap[SVBT16ToShort(stringIdStruct->nStringId)] =
+            aLinkStrings[i];
+    }
+
+    ::SetProgressState(nProgress, mpDocShell);    // Update
+
+    pLstManager = new WW8ListManager( *pTableStream, *this );
+
+    /*
+        zuerst(!) alle Styles importieren   (siehe WW8PAR2.CXX)
+            VOR dem Import der Listen !!
+    */
+    ::SetProgressState(nProgress, mpDocShell);    // Update
+    pStyles = new WW8RStyle( *pWwFib, this );   // Styles
+    pStyles->Import();
+
+    /*
+        zu guter Letzt: (siehe ebenfalls WW8PAR3.CXX)
+        ===============
+        alle Styles durchgehen und ggfs. zugehoeriges Listen-Format
+        anhaengen NACH dem Import der Styles und NACH dem Import der
+        Listen !!
+    */
+    ::SetProgressState(nProgress, mpDocShell);    // Update
+    pStyles->PostProcessStyles();
+
+    if (pCollA)
+        SetOutLineStyles();
+
+    pSBase = new WW8ScannerBase(pStrm,pTableStream,pDataStream,pWwFib);
+
+    static const SvxExtNumType eNumTA[16] =
+    {
+        SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
+        SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N,
+        SVX_NUM_ARABIC, SVX_NUM_ARABIC, SVX_NUM_ARABIC,
+        SVX_NUM_ARABIC, SVX_NUM_ARABIC, SVX_NUM_ARABIC,
+        SVX_NUM_ARABIC, SVX_NUM_ARABIC, SVX_NUM_ARABIC,
+        SVX_NUM_ARABIC, SVX_NUM_ARABIC
+    };
+
+    if (pSBase->AreThereFootnotes())
+    {
+        static const SwFtnNum eNumA[4] =
+        {
+            FTNNUM_DOC, FTNNUM_CHAPTER, FTNNUM_PAGE, FTNNUM_DOC
+        };
+
+        SwFtnInfo aInfo;
+        aInfo = rDoc.GetFtnInfo();      // Copy-Ctor privat
+
+        aInfo.ePos = FTNPOS_PAGE;
+        aInfo.eNum = eNumA[pWDop->rncFtn];
+        aInfo.aFmt.SetNumberingType(eNumTA[pWDop->nfcFtnRef]);
+        if( pWDop->nFtn )
+            aInfo.nFtnOffset = pWDop->nFtn - 1;
+        rDoc.SetFtnInfo( aInfo );
+    }
+    if( pSBase->AreThereEndnotes() )
+    {
+        SwEndNoteInfo aInfo;
+        aInfo = rDoc.GetEndNoteInfo();  // parallel zu Ftn
+
+        // Ich kann nicht setzen, wann neu nummerieren...
+        //  aInfo.eNum = eNumA[pWDop->pDop->rncEdn];
+        aInfo.aFmt.SetNumberingType(eNumTA[pWDop->nfcEdnRef]);
+        if( pWDop->nEdn )
+            aInfo.nFtnOffset = pWDop->nEdn - 1;
+        rDoc.SetEndNoteInfo( aInfo );
+    }
+
+    if( pWwFib->lcbPlcfhdd )
+        pHdFt = new WW8PLCF_HdFt( pTableStream, *pWwFib, *pWDop );
+
+    if (!mbNewDoc)
+    {
+        // in ein Dokument einfuegen ?
+        // Da immer ganze Zeile eingelesen werden, muessen
+        // evtl. Zeilen eingefuegt / aufgebrochen werden
+        //
+        const SwPosition* pPos = pPaM->GetPoint();
+        const SwTxtNode* pSttNd =
+            rDoc.GetNodes()[ pPos->nNode ]->GetTxtNode();
+
+        USHORT nCntPos = pPos->nContent.GetIndex();
+
+        // EinfuegePos nicht in leerer Zeile
+        if( nCntPos && pSttNd->GetTxt().Len() )
+            rDoc.SplitNode( *pPos );            // neue Zeile erzeugen
+
+        if( pSttNd->GetTxt().Len() )
+        {   // EinfuegePos nicht am Ende der Zeile
+            rDoc.SplitNode( *pPos );    // neue Zeile
+            pPaM->Move( fnMoveBackward );   // gehe in leere Zeile
+        }
+
+        // verhinder das Einlesen von Tabellen in Fussnoten / Tabellen
+        ULONG nNd = pPos->nNode.GetIndex();
+        bReadNoTbl = 0 != pSttNd->FindTableNode() ||
+            ( nNd < rDoc.GetNodes().GetEndOfInserts().GetIndex() &&
+            rDoc.GetNodes().GetEndOfInserts().StartOfSectionIndex()
+            < nNd );
+
+    }
+
+    ::SetProgressState(nProgress, mpDocShell);    // Update
+
+    // loop for each glossary entry and add dummy section node
+    if (pGloss)
+    {
+        WW8PLCF aPlc(pTableStream, pWwFib->fcPlcfglsy, pWwFib->lcbPlcfglsy, 0);
+
+        WW8_CP nStart, nEnd;
+        void* pDummy;
+
+        for (int i=0;i<pGloss->GetNoStrings();i++,aPlc++)
+        {
+            SwNodeIndex aIdx( rDoc.GetNodes().GetEndOfContent());
+            SwTxtFmtColl* pColl =
+                rDoc.GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD,
+                false);
+            SwStartNode *pNode =
+                rDoc.GetNodes().MakeTextSection(aIdx,
+                SwNormalStartNode,pColl);
+            pPaM->GetPoint()->nNode = pNode->GetIndex()+1;
+            pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(),0);
+            aPlc.Get( nStart, nEnd, pDummy );
+            ReadText(nStart,nEnd-nStart-1,MAN_MAINTEXT);
+        }
+    }
+    else //ordinary case
+    {
+        ReadText(0, pWwFib->ccpText, MAN_MAINTEXT);
+    }
+
+    ::SetProgressState(nProgress, mpDocShell);    // Update
+
+    if (pDrawPg && pMSDffManager && pMSDffManager->GetShapeOrders())
+    {
+        // Hilfsarray zum Verketten der (statt SdrTxtObj) eingefuegten
+        // Rahmen
+        SvxMSDffShapeTxBxSort aTxBxSort;
+
+        // korrekte Z-Order der eingelesen Escher-Objekte sicherstellen
+        USHORT nShapeCount = pMSDffManager->GetShapeOrders()->Count();
+
+        for (USHORT nShapeNum=0; nShapeNum < nShapeCount; nShapeNum++)
+        {
+            SvxMSDffShapeOrder *pOrder =
+                pMSDffManager->GetShapeOrders()->GetObject(nShapeNum);
+            // Pointer in neues Sort-Array einfuegen
+            if (pOrder->nTxBxComp && pOrder->pFly)
+                aTxBxSort.Insert(pOrder);
+        }
+        // zu verkettende Rahmen jetzt verketten
+        USHORT nTxBxCount = aTxBxSort.Count();
+        if( nTxBxCount )
+        {
+            SwFmtChain aChain;
+            for (USHORT nTxBxNum=0; nTxBxNum < nTxBxCount; nTxBxNum++)
+            {
+                SvxMSDffShapeOrder *pOrder =
+                    aTxBxSort.GetObject(nTxBxNum);
+
+                // Fly-Frame-Formate initialisieren
+                SwFlyFrmFmt* pFlyFmt     = pOrder->pFly;
+                SwFlyFrmFmt* pNextFlyFmt = 0;
+                SwFlyFrmFmt* pPrevFlyFmt = 0;
+                // ggfs. Nachfolger ermitteln
+                if( 1+nTxBxNum < nTxBxCount )
+                {
+                    SvxMSDffShapeOrder *pNextOrder =
+                        aTxBxSort.GetObject(nTxBxNum+1);
+                    if ((0xFFFF0000 & pOrder->nTxBxComp)
+                           == (0xFFFF0000 & pNextOrder->nTxBxComp))
+                        pNextFlyFmt = pNextOrder->pFly;
+                }
+                // ggfs. Vorgaenger ermitteln
+                if( nTxBxNum )
+                {
+                    SvxMSDffShapeOrder *pPrevOrder =
+                        aTxBxSort.GetObject(nTxBxNum-1);
+                    if ((0xFFFF0000 & pOrder->nTxBxComp)
+                           == (0xFFFF0000 & pPrevOrder->nTxBxComp))
+                        pPrevFlyFmt = pPrevOrder->pFly;
+                }
+                // Falls Nachfolger oder Vorgaenger vorhanden,
+                // die Verkettung am Fly-Frame-Format eintragen
+                if (pNextFlyFmt || pPrevFlyFmt)
+                {
+                    aChain.SetNext( pNextFlyFmt );
+                    aChain.SetPrev( pPrevFlyFmt );
+                    pFlyFmt->SetAttr( aChain );
+                }
+            }
+
+        }
+
+    }
+
+    if (mbNewDoc)
+    {
+        if( pWDop->fRevMarking )
+            eMode |= REDLINE_ON;
+        if( pWDop->fRMView )
+            eMode |= REDLINE_SHOW_DELETE;
+        if (pStg && !pGloss) /*meaningless for a glossary, cmc*/
+        {
+            const SvtFilterOptions* pVBAFlags = SvtFilterOptions::Get();
+            maTracer.EnterEnvironment(sw::log::eMacros);
+            SvxImportMSVBasic aVBasic(*mpDocShell, *pStg,
+                            pVBAFlags->IsLoadWordBasicCode(),
+                            pVBAFlags->IsLoadWordBasicStorage() );
+            String s1(CREATE_CONST_ASC("Macros"));
+            String s2(CREATE_CONST_ASC("VBA"));
+            int nRet = aVBasic.Import( s1, s2 );
+            if( 2 & nRet )
+            {
+                maTracer.Log(sw::log::eContainsVisualBasic);
+                rDoc.SetContainsMSVBasic(true);
+            }
+
+            StoreMacroCmds();
+
+            maTracer.LeaveEnvironment(sw::log::eMacros);
+        }
+    }
+
+    maInsertedTables.DelAndMakeTblFrms();
+    maSectionManager.InsertSegments();
+
+    if (pCollA)
+        delete[] pCollA;
+
+    DELETEZ( pStyles );
+
+    if( pFormImpl )
+        DeleteFormImpl();
+    GrafikDtor();
+    DELETEZ( pMSDffManager );
+    DELETEZ( pHdFt );
+    DELETEZ( pLstManager );
+    DELETEZ( pSBase );
+    delete pWDop;
+    DELETEZ( pFonts );
+    delete mpAtnNames;
+    DELETEZ( pAuthorInfos );
+    delete mpSprmParser;
+    ::EndProgress(mpDocShell);
+
+    pDataStream = 0;
+    pTableStream = 0;
+
     DeleteCtrlStk();
     mpRedlineStack->closeall(*pPaM->GetPoint());
     delete mpRedlineStack;
@@ -4086,6 +4030,314 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     UpdatePageDescs(rDoc, nPageDescOffset);
 
     delete pPaM, pPaM = 0;
+    return nErrRet;
+}
+
+ULONG SwWW8ImplReader::SetSubStreams(SvStorageStreamRef &rTableStream,
+    SvStorageStreamRef &rDataStream)
+{
+    ULONG nErrRet = 0;
+    // 6 stands for "6 OR 7",  7 stand for "ONLY 7"
+    switch (pWwFib->nVersion)
+    {
+        case 6:
+        case 7:
+            pTableStream = pStrm;
+            pDataStream = pStrm;
+            break;
+        case 8:
+            if(!pStg)
+            {
+                ASSERT( pStg, "Version 8 muss immer einen Storage haben!" );
+                nErrRet = ERR_SWG_READ_ERROR;
+                break;
+            }
+
+            rTableStream = pStg->OpenStream(String::CreateFromAscii(
+                pWwFib->fWhichTblStm ? SL::a1Table : SL::a0Table),
+                STREAM_STD_READ);
+
+            pTableStream = &rTableStream;
+            pTableStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+
+            rDataStream = pStg->OpenStream(CREATE_CONST_ASC(SL::aData),
+                STREAM_STD_READ | STREAM_NOCREATE );
+
+            if (rDataStream.Is() && SVSTREAM_OK == rDataStream->GetError())
+            {
+                pDataStream = &rDataStream;
+                pDataStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+            }
+            else
+                pDataStream = pStrm;
+            break;
+        default:
+            // Programm-Fehler!
+            ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+            nErrRet = ERR_SWG_READ_ERROR;
+            break;
+    }
+    return nErrRet;
+}
+
+namespace
+{
+    utl::TempFile *MakeTemp(SvFileStream &rSt)
+    {
+        utl::TempFile *pT = new utl::TempFile;
+        pT->EnableKillingFile();
+        rSt.Open(pT->GetFileName(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE);
+        return pT;
+    }
+
+#define WW_BLOCKSIZE 0x200
+
+    void DecryptRC4(svx::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
+    {
+        rIn.Seek(STREAM_SEEK_TO_END);
+        ULONG nLen = rIn.Tell();
+        rIn.Seek(0);
+
+        sal_uInt8 in[WW_BLOCKSIZE];
+        for (ULONG nI = 0, nBlock = 0; nI < nLen; nI += WW_BLOCKSIZE, ++nBlock)
+        {
+            ULONG nBS = (nLen - nI > WW_BLOCKSIZE) ? WW_BLOCKSIZE : nLen - nI;
+            rIn.Read(in, nBS);
+            rCtx.InitCipher(nBlock);
+            rCtx.Decode(in, nBS, in, nBS);
+            rOut.Write(in, nBS);
+        }
+    }
+
+    void DecryptXOR(svx::MSCodec_XorWord95 &rCtx, SvStream &rIn, SvStream &rOut)
+    {
+        ULONG nSt = rIn.Tell();
+        rIn.Seek(STREAM_SEEK_TO_END);
+        ULONG nLen = rIn.Tell();
+        rIn.Seek(nSt);
+
+        rCtx.InitCipher();
+        rCtx.Skip(nSt);
+
+        sal_uInt8 in[0x4096];
+        for (ULONG nI = nSt; nI < nLen; nI += 0x4096)
+        {
+            ULONG nBS = (nLen - nI > 0x4096 ) ? 0x4096 : nLen - nI;
+            rIn.Read(in, nBS);
+            rCtx.Decode(in, nBS);
+            rOut.Write(in, nBS);
+        }
+    }
+
+    //moan, copy and paste :-(
+    String QueryPasswordForMedium(SfxMedium& rMedium)
+    {
+        String aPassw;
+
+        using namespace com::sun::star;
+        try
+        {
+            uno::Reference< task::XInteractionHandler > xHandler( rMedium.GetInteractionHandler() );
+            if( xHandler.is() )
+            {
+                RequestDocumentPassword* pRequest = new RequestDocumentPassword(
+                    task::PasswordRequestMode_PASSWORD_ENTER,
+                    INetURLObject( rMedium.GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+                uno::Reference< task::XInteractionRequest > xRequest( pRequest );
+
+                xHandler->handle( xRequest );
+
+                if( pRequest->isPassword() )
+                    aPassw = pRequest->getPassword();
+            }
+        }
+        catch( uno::Exception& )
+        {
+        }
+
+        return aPassw;
+    }
+
+}
+
+ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
+{
+    ULONG nErrRet = 0;
+    if (pGloss)
+        pWwFib = pGloss->GetFib();
+    else
+        pWwFib = new WW8Fib(*pStrm, nWantedVersion);
+
+    if (pWwFib->nFibError)
+        nErrRet = ERR_SWG_READ_ERROR;
+
+    SvStorageStreamRef xTableStream, xDataStream;
+
+    if (!nErrRet)
+        nErrRet = SetSubStreams(xTableStream, xDataStream);
+
+    utl::TempFile *pTempMain = 0;
+    utl::TempFile *pTempTable = 0;
+    utl::TempFile *pTempData = 0;
+    SvFileStream aDecryptMain;
+    SvFileStream aDecryptTable;
+    SvFileStream aDecryptData;
+
+    bool bDecrypt = false;
+    enum {RC4, XOR, Other} eAlgo = Other;
+    if (pWwFib->fEncrypted && !nErrRet)
+    {
+        if (!pGloss)
+        {
+            bDecrypt = true;
+            if (8 != pWwFib->nVersion)
+                eAlgo = XOR;
+            else
+            {
+                if (pWwFib->nKey != 0)
+                    eAlgo = XOR;
+                else
+                {
+                    pTableStream->Seek(0);
+                    sal_uInt32 nEncType;
+                    *pTableStream >> nEncType;
+                    if (nEncType == 0x10001)
+                        eAlgo = RC4;
+                }
+            }
+        }
+    }
+
+    if (bDecrypt)
+    {
+        nErrRet = ERRCODE_SVX_WRONGPASS;
+        switch (eAlgo)
+        {
+            default:
+                nErrRet = ERRCODE_SVX_READ_FILTER_CRYPT;
+                break;
+            case XOR:
+            {
+                String sUniPassword =
+                    QueryPasswordForMedium(*(mpDocShell->GetMedium()));
+
+                ByteString sPassword(sUniPassword,
+                    WW8Fib::GetFIBCharset(pWwFib->chseTables));
+
+                xub_StrLen nLen = sPassword.Len();
+                // DR: do not cut a wrong (too long) password
+                if( nLen <= 15 )
+                {
+                    sal_uInt8 aPassword[16] = {0};
+
+                    for (xub_StrLen nChar = 0; nChar < sPassword.Len(); ++nChar )
+                        aPassword[nChar] = sPassword.GetChar(nChar);
+
+                    svx::MSCodec_XorWord95 aCtx;
+                    aCtx.InitKey(aPassword);
+                    if (aCtx.VerifyKey(pWwFib->nKey, pWwFib->nHash))
+                    {
+                        nErrRet = 0;
+                        pTempMain = MakeTemp(aDecryptMain);
+
+                        pStrm->Seek(0);
+                        size_t nUnencryptedHdr =
+                            (8 == pWwFib->nVersion) ? 0x44 : 0x34;
+                        sal_uInt8 *pIn = new sal_uInt8[nUnencryptedHdr];
+                        pStrm->Read(pIn, nUnencryptedHdr);
+                        aDecryptMain.Write(pIn, nUnencryptedHdr);
+                        delete pIn;
+
+                        DecryptXOR(aCtx, *pStrm, aDecryptMain);
+
+                        if (!pTableStream || pTableStream == pStrm)
+                            pTableStream = &aDecryptMain;
+                        else
+                        {
+                            pTempTable = MakeTemp(aDecryptTable);
+                            DecryptXOR(aCtx, *pTableStream, aDecryptTable);
+                            pTableStream = &aDecryptTable;
+                        }
+
+                        if (!pDataStream || pDataStream == pStrm)
+                            pDataStream = &aDecryptMain;
+                        else
+                        {
+                            pTempData = MakeTemp(aDecryptData);
+                            DecryptXOR(aCtx, *pDataStream, aDecryptData);
+                            pDataStream = &aDecryptData;
+                        }
+                    }
+                }
+            }
+            break;
+            case RC4:
+            {
+                String sUniPassword =
+                    QueryPasswordForMedium(*(mpDocShell->GetMedium()));
+
+                xub_StrLen nLen = sUniPassword.Len();
+                // DR: do not cut a wrong (too long) password
+                if (nLen <= 15)
+                {
+                    sal_Unicode aPassword[16] = {0};
+                    for (xub_StrLen nChar = 0; nChar < nLen; ++nChar )
+                        aPassword[nChar] = sUniPassword.GetChar(nChar);
+
+                    sal_uInt8 aDocId[ 16 ];
+                    pTableStream->Read(aDocId, 16);
+                    sal_uInt8 aSaltData[ 16 ];
+                    pTableStream->Read(aSaltData, 16);
+                    sal_uInt8 aSaltHash[ 16 ];
+                    pTableStream->Read(aSaltHash, 16);
+
+                    svx::MSCodec_Std97 aCtx;
+                    aCtx.InitKey(aPassword, aDocId);
+                    if (aCtx.VerifyKey(aSaltData, aSaltHash))
+                    {
+                        nErrRet = 0;
+
+                        pTempTable = MakeTemp(aDecryptTable);
+                        DecryptRC4(aCtx, *pTableStream, aDecryptTable);
+                        pTableStream = &aDecryptTable;
+
+                        pTempMain = MakeTemp(aDecryptMain);
+                        DecryptRC4(aCtx, *pStrm, aDecryptMain);
+
+                        if (!pDataStream || pDataStream == pStrm)
+                            pDataStream = &aDecryptMain;
+                        else
+                        {
+                            pTempData = MakeTemp(aDecryptData);
+                            DecryptRC4(aCtx, *pDataStream, aDecryptData);
+                            pDataStream = &aDecryptData;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+
+        if (nErrRet == 0)
+        {
+            pStrm = &aDecryptMain;
+
+            delete pWwFib;
+            pWwFib = new WW8Fib(*pStrm, nWantedVersion);
+            if (pWwFib->nFibError)
+                nErrRet = ERR_SWG_READ_ERROR;
+        }
+    }
+
+    if (!nErrRet)
+        nErrRet = CoreLoad(pGloss, *rPaM.GetPoint());
+
+    delete pTempMain;
+    delete pTempTable;
+    delete pTempData;
+
+    if (!pGloss)
+        delete pWwFib;
     return nErrRet;
 }
 
@@ -4293,9 +4545,6 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
 {
     ULONG nErrRet = 0;
 
-    pAktColl    = 0;
-    pAktItemSet = 0;
-
     {
         static const sal_Char* aNames[ 12 ] = {
             "WinWord/WW", "WinWord/WW8", "WinWord/WWFT",
@@ -4360,11 +4609,10 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
     }
 
     if (!nErrRet)
-        nErrRet = LoadDoc1(rPaM ,pGloss);
+        nErrRet = LoadThroughDecryption(rPaM ,pGloss);
 
     return nErrRet;
 }
-
 
 ULONG WW8Reader::Read(SwDoc &rDoc, SwPaM &rPam, const String & /* FileName */)
 {
