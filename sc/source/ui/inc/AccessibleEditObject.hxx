@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditObject.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-13 09:13:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ public:
     //=====  internal  ========================================================
     ScAccessibleEditObject(
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+        ::com::sun::star::accessibility::XAccessible>& rxParent,
         EditView* pEditView, Window* pWin, const rtl::OUString& rName,
         const rtl::OUString& rDescription, EditObjectType eObjectType);
 
@@ -107,8 +107,8 @@ public:
 
     ///=====  XAccessibleComponent  ============================================
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
-        SAL_CALL getAccessibleAt(
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        SAL_CALL getAccessibleAtPoint(
         const ::com::sun::star::awt::Point& rPoint )
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -132,14 +132,14 @@ public:
 
     /// Return the specified child or NULL if index is invalid.
     // is overloaded to calculate this on demand
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
+            ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -163,14 +163,14 @@ public:
     virtual void SAL_CALL
         addEventListener(
             const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
+                ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
         throw (com::sun::star::uno::RuntimeException);
 
     //  Remove an existing event listener.
     virtual void SAL_CALL
         removeEventListener(
             const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
+                ::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
         throw (com::sun::star::uno::RuntimeException);
 
     ///=====  XServiceInfo  ====================================================
@@ -198,7 +198,7 @@ private:
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+        ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 
     void CreateTextHelper();
 };
