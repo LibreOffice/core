@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TColumnsHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:01:08 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ using namespace ::comphelper;
 
 using namespace connectivity::sdbcx;
 using namespace connectivity;
+using namespace dbtools;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 //  using namespace ::com::sun::star::sdbcx;
@@ -109,19 +110,74 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
+namespace connectivity
+{
+    class OColumnsHelperImpl
+    {
+    public:
+        OColumnsHelperImpl(sal_Bool _bCase)
+            : m_aColumnInfo(_bCase)
+        {
+        }
+        ColumnInformationMap m_aColumnInfo;
+    };
+}
+
 OColumnsHelper::OColumnsHelper( ::cppu::OWeakObject& _rParent,
                     sal_Bool _bCase,
                     ::osl::Mutex& _rMutex,
                     const TStringVector &_rVector
             ) : OCollection(_rParent,_bCase,_rMutex,_rVector)
     ,m_pTable(NULL)
+    ,m_pImpl(NULL)
 {
+}
+// -----------------------------------------------------------------------------
+OColumnsHelper::~OColumnsHelper()
+{
+    delete m_pImpl;
+    m_pImpl = NULL;
 }
 // -----------------------------------------------------------------------------
 
 Reference< XNamed > OColumnsHelper::createObject(const ::rtl::OUString& _rName)
 {
-    Reference< XNamed > xRet(::dbtools::createSDBCXColumn(m_pTable,m_pTable->getConnection(),_rName,isCaseSensitive()),UNO_QUERY);
+    OSL_ENSURE(m_pTable,"NO Table set. Error!");
+    Reference<XConnection> xConnection = m_pTable->getConnection();
+
+    if ( !m_pImpl )
+        m_pImpl = new OColumnsHelperImpl(isCaseSensitive());
+
+    sal_Bool bQueryInfo     = sal_True;
+    sal_Bool bAutoIncrement = sal_False;
+    sal_Bool bIsCurrency    = sal_False;
+    sal_Int32 nDataType     = DataType::OTHER;
+
+    ColumnInformationMap::iterator aFind = m_pImpl->m_aColumnInfo.find(_rName);
+    if ( aFind == m_pImpl->m_aColumnInfo.end() ) // we have to fill it
+    {
+        Reference<XDatabaseMetaData> xMetaData = xConnection->getMetaData();
+        ::rtl::OUString sComposedName = ::dbtools::composeTableName(xMetaData,m_pTable,sal_True,::dbtools::eInDataManipulation);
+        collectColumnInformation(xConnection,sComposedName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) ,m_pImpl->m_aColumnInfo);
+        aFind = m_pImpl->m_aColumnInfo.find(_rName);
+    }
+    if ( aFind != m_pImpl->m_aColumnInfo.end() )
+    {
+        bQueryInfo      = sal_False;
+        bAutoIncrement  = aFind->second.first.first;
+        bIsCurrency     = aFind->second.first.second;
+        nDataType       = aFind->second.second;
+    }
+
+
+    Reference< XNamed > xRet(::dbtools::createSDBCXColumn(  m_pTable,
+                                                            xConnection,
+                                                            _rName,
+                                                            isCaseSensitive(),
+                                                            bQueryInfo,
+                                                            bAutoIncrement,
+                                                            bIsCurrency,
+                                                            nDataType),UNO_QUERY);
     return xRet;
 }
 
