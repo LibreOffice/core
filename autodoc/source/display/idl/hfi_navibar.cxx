@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_navibar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-15 10:35:32 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,8 @@ HF_IdlNavigationBar::~HF_IdlNavigationBar()
 }
 
 void
-HF_IdlNavigationBar::Produce_CeMainRow( const client & i_ce )
+HF_IdlNavigationBar::Produce_CeMainRow( const client & i_ce,
+                                        bool  i_bNoUsePage )
 {
     HF_NaviMainRow
                 aNaviMain( CurOut() );
@@ -114,10 +115,16 @@ HF_IdlNavigationBar::Produce_CeMainRow( const client & i_ce )
                       Env().Linker().PositionOf_CurModule() );
     aNaviMain.Add_StdItem( C_sModule, rLink.c_str() );
 
-    Env().Get_LinkTo( rLink.reset(),
-                      Env().Linker().PositionOf_CurXRefs(i_ce.LocalName()) );
-    aNaviMain.Add_StdItem( C_sUse, rLink.c_str() );
-
+    if (i_bNoUsePage)
+    {
+        aNaviMain.Add_NoneItem( C_sUse );
+    }
+    else
+    {
+        Env().Get_LinkTo( rLink.reset(),
+                          Env().Linker().PositionOf_CurXRefs(i_ce.LocalName()) );
+        aNaviMain.Add_StdItem( C_sUse, rLink.c_str() );
+    }
 
     const StringVector &
         rManualDescrs = i_ce.Secondaries().Links2DescriptionInManual();
