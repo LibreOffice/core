@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-17 08:14:21 $
+ *  last change: $Author: aw $ $Date: 2002-10-31 16:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -862,7 +862,10 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                 if( bPosCorr )
                 {
                     const Point aTmpRel( aPt - pNewAnch->GetAnchorPos() );
-                    pObj->NbcSetRelativePos( aTmpRel );
+
+                    // #102344# Use SetRelativePos here so that eventually
+                    // connectors cobnnected to this object get the necessary refresh.
+                    pObj->SetRelativePos( aTmpRel );
                 }
 #ifndef PRODUCT
                 const Point aIstA( pObj->GetAnchorPos() );
