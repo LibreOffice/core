@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:28:36 $
+ *  last change: $Author: kz $ $Date: 2001-08-16 20:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2741,20 +2741,20 @@ String STR_ObjNameSingulGRAFBMPTRANS
     Text [ ENGLISH ] = "bitmap with transparency" ;
     Text [ english_us ] = "Bitmap with transparency" ;
     Text[ portuguese ] = "Bitmap transparente";
-    Text[ russian ] = "Bitmap with transparency";
+    Text[ russian ] = "Ğèñóíîê Bitmap ñ ïğîçğà÷íîñòüş";
     Text[ greek ] = "Bitmap with transparency";
     Text[ dutch ] = "Bitmap with transparency";
     Text[ french ] = "Bitmap avec transparence";
     Text[ spanish ] = "Bitmap con transparencia";
     Text[ finnish ] = "Bitmap with transparency";
-    Text[ italian ] = "Bitmap with transparency";
+    Text[ italian ] = "Bitmap con trasparenza";
     Text[ danish ] = "Bitmap with transparency";
     Text[ swedish ] = "Bitmap with transparency";
     Text[ polish ] = "Bitmap with transparency";
     Text[ portuguese_brazilian ] = "Bitmap with transparency";
     Text[ japanese ] = "é€éæ€§ã®ã‚ã‚‹ï¾‹ï¾ï½¯ï¾„ï¾ï½¯ï¾Œï¾Ÿ";
     Text[ korean ] = "Bitmap with transparency";
-    Text[ chinese_simplified ] = "Bitmap with transparency";
+    Text[ chinese_simplified ] = "é€æ˜ä½å›¾";
     Text[ chinese_traditional ] = "å¸¶é€æ˜è‰²çš„é»é™£åœ–";
     Text[ turkish ] = "Bitmap with transparency";
     Text[ arabic ] = "Bitmap with transparency";
@@ -2792,22 +2792,22 @@ String STR_ObjNameSingulGRAFBMPTRANSLNK
 {
     Text = "verknüpfte Bitmap mit Transparenz" ;
     Text [ ENGLISH ] = "linked bitmap with transparency" ;
-    Text [ english_us ] = "Linked Bitmap with transparency" ;
+    Text [ english_us ] = "Linked bitmap with transparency" ;
     Text[ portuguese ] = "Ligação do Bitmap transparente";
-    Text[ russian ] = "Linked Bitmap with transparency";
+    Text[ russian ] = "Ñâÿçàííûé ğèñóíîê Bitmap ñ ïğîçğà÷íîñòüş";
     Text[ greek ] = "Linked Bitmap with transparency";
     Text[ dutch ] = "Linked Bitmap with transparency";
     Text[ french ] = "Bitmap lié avec transparence";
     Text[ spanish ] = "bitmap con transparencia vinculado";
     Text[ finnish ] = "Linked Bitmap with transparency";
-    Text[ italian ] = "Linked Bitmap with transparency";
+    Text[ italian ] = "Bitmap con trasparenza collegato";
     Text[ danish ] = "Linked Bitmap with transparency";
     Text[ swedish ] = "Linked Bitmap with transparency";
     Text[ polish ] = "Linked Bitmap with transparency";
     Text[ portuguese_brazilian ] = "Linked Bitmap with transparency";
     Text[ japanese ] = "ï¾˜ï¾ï½¸ã—ãŸé€éæ€§ã®ã‚ã‚‹ï¾‹ï¾ï½¯ï¾„ï¾ï½¯ï¾Œï¾Ÿ";
     Text[ korean ] = "Linked Bitmap with transparency";
-    Text[ chinese_simplified ] = "Linked Bitmap with transparency";
+    Text[ chinese_simplified ] = "é€æ˜çš„é“¾æ¥ä½å›¾";
     Text[ chinese_traditional ] = "é€£çµçš„å¸¶é€æ˜è‰²çš„é»é™£åœ–";
     Text[ turkish ] = "Linked Bitmap with transparency";
     Text[ arabic ] = "Linked Bitmap with transparency";
@@ -2848,20 +2848,20 @@ String STR_ObjNamePluralGRAFBMPTRANS
     Text [ ENGLISH ] = "bitmaps with transparency" ;
     Text [ english_us ] = "Bitmaps with transparency" ;
     Text[ portuguese ] = "Bitmaps transparentes";
-    Text[ russian ] = "Bitmaps with transparency";
+    Text[ russian ] = "Ğèñóíêè Bitmap ñ ïğîçğà÷íîñòüş";
     Text[ greek ] = "Bitmaps with transparency";
     Text[ dutch ] = "Bitmaps with transparency";
     Text[ french ] = "Bitmaps avec transparence";
     Text[ spanish ] = "Bitmaps con transparencia";
     Text[ finnish ] = "Bitmaps with transparency";
-    Text[ italian ] = "Bitmaps with transparency";
+    Text[ italian ] = "Bitmap con trasparenza";
     Text[ danish ] = "Bitmaps with transparency";
     Text[ swedish ] = "Bitmaps with transparency";
     Text[ polish ] = "Bitmaps with transparency";
     Text[ portuguese_brazilian ] = "Bitmaps with transparency";
     Text[ japanese ] = "é€éæ€§ã®ã‚ã‚‹ï¾‹ï¾ï½¯ï¾„ï¾ï½¯ï¾Œï¾Ÿ";
     Text[ korean ] = "Bitmaps with transparency";
-    Text[ chinese_simplified ] = "Bitmaps with transparency";
+    Text[ chinese_simplified ] = "é€æ˜ä½å›¾";
     Text[ chinese_traditional ] = "å¸¶é€æ˜è‰²çš„é»é™£åœ–";
     Text[ turkish ] = "Bitmaps with transparency";
     Text[ arabic ] = "Bitmaps with transparency";
@@ -2899,22 +2899,22 @@ String STR_ObjNamePluralGRAFBMPTRANSLNK
 {
     Text = "verknüpfte Bitmaps mit Transparenz" ;
     Text [ ENGLISH ] = "linked bitmaps with transparency" ;
-    Text [ english_us ] = "Linked Bitmaps with transparency" ;
+    Text [ english_us ] = "Linked bitmaps with transparency" ;
     Text[ portuguese ] = "Linked Bitmaps with transparency";
-    Text[ russian ] = "Linked Bitmaps with transparency";
+    Text[ russian ] = "Ñâÿçàííûå ğèñóíêè Bitmap ñ ïğîçğà÷íîñòüş";
     Text[ greek ] = "Linked Bitmaps with transparency";
     Text[ dutch ] = "Linked Bitmaps with transparency";
     Text[ french ] = "Bitmaps liés avec transparence";
     Text[ spanish ] = "bitmaps con transparencia vinculados";
     Text[ finnish ] = "Linked Bitmaps with transparency";
-    Text[ italian ] = "Linked Bitmaps with transparency";
+    Text[ italian ] = "Bitmap con trasparenza collegato";
     Text[ danish ] = "Linked Bitmaps with transparency";
     Text[ swedish ] = "Linked Bitmaps with transparency";
     Text[ polish ] = "Linked Bitmaps with transparency";
     Text[ portuguese_brazilian ] = "Linked Bitmaps with transparency";
     Text[ japanese ] = "ï¾˜ï¾ï½¸ã—ãŸé€éæ€§ã®ã‚ã‚‹ï¾‹ï¾ï½¯ï¾„ï¾ï½¯ï¾Œï¾Ÿ";
     Text[ korean ] = "Linked Bitmaps with transparency";
-    Text[ chinese_simplified ] = "Linked Bitmaps with transparency";
+    Text[ chinese_simplified ] = "é€æ˜çš„é“¾æ¥ä½å›¾";
     Text[ chinese_traditional ] = "é€£çµçš„å¸¶é€æ˜è‰²çš„é»é™£åœ–";
     Text[ turkish ] = "Linked Bitmaps with transparency";
     Text[ arabic ] = "Linked Bitmaps with transparency";
@@ -17732,6 +17732,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
