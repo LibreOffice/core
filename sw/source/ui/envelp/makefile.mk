@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jp $ $Date: 2001-11-14 16:35:43 $
+#   last change: $Author: vg $ $Date: 2003-04-17 15:26:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,9 +67,6 @@ TARGET=envelp
 
 AUTOSEG=true
 
-PROJECTPCH=ui_pch
-PDBTARGET=ui_pch
-PROJECTPCHSOURCE=..\ui_1st\ui_pch
 
 # --- Settings -----------------------------------------------------
 
