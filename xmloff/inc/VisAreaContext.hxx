@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VisAreaContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 11:04:10 $
+ *  last change: $Author: cl $ $Date: 2001-02-21 18:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 
 class Rectangle;
 
+namespace com { namespace sun { namespace star { namespace awt {
+    struct Rectangle;
+} } } }
+
 class XMLVisAreaContext : public SvXMLImportContext
 {
 public:
@@ -80,6 +84,12 @@ public:
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       Rectangle& rRect, const MapUnit aMapUnit);
+
+    XMLVisAreaContext( SvXMLImport& rImport, USHORT nPrfx, const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::com::sun::star::uno::Reference<
+                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                      ::com::sun::star::awt::Rectangle& rRect, const sal_Int16 nMeasureUnit);
+
     virtual ~XMLVisAreaContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
@@ -87,6 +97,12 @@ public:
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
+
+private:
+    void process(   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                    ::com::sun::star::awt::Rectangle& rRect,
+                    const sal_Int16 nMeasureUnit );
+
 };
 
 #endif

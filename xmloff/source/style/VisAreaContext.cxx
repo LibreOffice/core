@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VisAreaContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 11:03:18 $
+ *  last change: $Author: cl $ $Date: 2001-02-21 18:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,33 @@ XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
                                               Rectangle& rRect, const MapUnit aMapUnit ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
+    awt::Rectangle rAwtRect( rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight() );
+    process( xAttrList, rAwtRect, (sal_Int16)aMapUnit );
+
+    rRect.setX( rAwtRect.X );
+    rRect.setY( rAwtRect.Y );
+    rRect.setWidth( rAwtRect.Width );
+    rRect.setHeight( rAwtRect.Height );
+}
+
+XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
+                                         USHORT nPrfx,
+                                                   const NAMESPACE_RTL(OUString)& rLName,
+                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                                            ::com::sun::star::awt::Rectangle& rRect, const sal_Int16 nMeasureUnit ) :
+    SvXMLImportContext( rImport, nPrfx, rLName )
+{
+    process( xAttrList, rRect, nMeasureUnit );
+}
+
+XMLVisAreaContext::~XMLVisAreaContext()
+{
+}
+
+void XMLVisAreaContext::process( const uno::Reference< xml::sax::XAttributeList>& xAttrList, awt::Rectangle& rRect, const sal_Int16 nMeasureUnit )
+{
+    MapUnit aMapUnit = (MapUnit)nMeasureUnit;
+
     sal_Int32 nX(0);
     sal_Int32 nY(0);
     sal_Int32 nWidth(0);
@@ -111,7 +138,7 @@ XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
-        USHORT nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(
+        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
@@ -120,29 +147,25 @@ XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
             if (aLocalName.compareToAscii(sXML_x) == 0)
             {
                 SvXMLUnitConverter::convertMeasure(nX, sValue, aMapUnit);
-                rRect.setX(nX);
+                rRect.X = nX;
             }
             else if (aLocalName.compareToAscii(sXML_y) == 0)
             {
                 SvXMLUnitConverter::convertMeasure(nY, sValue, aMapUnit);
-                rRect.setY(nY);
+                rRect.Y = nY;
             }
             else if (aLocalName.compareToAscii(sXML_width) == 0)
             {
                 SvXMLUnitConverter::convertMeasure(nWidth, sValue, aMapUnit);
-                rRect.setWidth(nWidth);
+                rRect.Width = nWidth;
             }
             else if (aLocalName.compareToAscii(sXML_height) == 0)
             {
                 SvXMLUnitConverter::convertMeasure(nHeight, sValue, aMapUnit);
-                rRect.setHeight(nHeight);
+                rRect.Height = nHeight;
             }
         }
     }
-}
-
-XMLVisAreaContext::~XMLVisAreaContext()
-{
 }
 
 SvXMLImportContext *XMLVisAreaContext::CreateChildContext( USHORT nPrefix,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VisAreaExport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 11:03:18 $
+ *  last change: $Author: cl $ $Date: 2001-02-21 18:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
+#include <com/sun/star/awt/Rectangle.hpp>
+#endif
+
 #ifndef _XMLOFF_VISAREAEXPORT_HXX
 #include "VisAreaExport.hxx"
 #endif
@@ -100,6 +104,26 @@ XMLVisAreaExport::XMLVisAreaExport(SvXMLExport& rExport, const sal_Char *pName,
     rUnitConv.convertMeasure(sBuffer, aRect.getWidth(), aMapUnit);
     rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_width, sBuffer.makeStringAndClear());
     rUnitConv.convertMeasure(sBuffer, aRect.getHeight(), aMapUnit);
+    rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_height, sBuffer.makeStringAndClear());
+    SvXMLElementExport aVisAreaElem(rExport, XML_NAMESPACE_OFFICE, pName, sal_True, sal_True);
+}
+
+XMLVisAreaExport::XMLVisAreaExport(SvXMLExport& rExport, const sal_Char *pName,
+                                   const com::sun::star::awt::Rectangle& aRect, const sal_Int16 nMeasureUnit )
+{
+    MapUnit aMapUnit = (MapUnit)nMeasureUnit;
+
+    SvXMLUnitConverter& rUnitConv = rExport.GetMM100UnitConverter();
+
+    // write VisArea Element and its Attributes
+    rtl::OUStringBuffer sBuffer;
+    rUnitConv.convertMeasure(sBuffer, aRect.X, aMapUnit);
+    rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_x, sBuffer.makeStringAndClear());
+    rUnitConv.convertMeasure(sBuffer, aRect.Y, aMapUnit);
+    rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_y, sBuffer.makeStringAndClear());
+    rUnitConv.convertMeasure(sBuffer, aRect.Width, aMapUnit);
+    rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_width, sBuffer.makeStringAndClear());
+    rUnitConv.convertMeasure(sBuffer, aRect.Height, aMapUnit);
     rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_height, sBuffer.makeStringAndClear());
     SvXMLElementExport aVisAreaElem(rExport, XML_NAMESPACE_OFFICE, pName, sal_True, sal_True);
 }

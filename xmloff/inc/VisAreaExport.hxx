@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VisAreaExport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 11:04:10 $
+ *  last change: $Author: cl $ $Date: 2001-02-21 18:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,19 @@
 class SvXMLExport;
 class Rectangle;
 
+namespace com { namespace sun { namespace star { namespace awt {
+    struct Rectangle;
+} } } }
+
 class XMLVisAreaExport
 {
 public:
     // the complete export is done in the constructor
     XMLVisAreaExport(SvXMLExport& rExport, const sal_Char *pName,
             const Rectangle& aRect, const MapUnit aMapUnit);
+
+    XMLVisAreaExport(SvXMLExport& rExport, const sal_Char *pName,
+                    const com::sun::star::awt::Rectangle& aRect, const sal_Int16 nMeasureUnit );
 
     ~XMLVisAreaExport();
 };
