@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:43:45 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1956,6 +1956,11 @@ shell::write( sal_Int32 CommandId,
                           TASKHANDLING_FILESIZE_FOR_WRITE,
                           err );
 
+        err = aFile.sync();
+        if( err != osl::FileBase::E_None  )
+            installError( CommandId,
+                          TASKHANDLING_FILEIOERROR_FOR_WRITE,
+                          err );
     }
 
     aFile.close();
