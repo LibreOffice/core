@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:14:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,25 +150,33 @@ static bool is_gnome_desktop( Display* pDisplay )
 {
     bool ret = false;
 
-    // warning: this check is coincidental, GNOME does not
+    // warning: these checks are coincidental, GNOME does not
     // explicitly advertise itself
-    Atom nAtom1 = XInternAtom( pDisplay, "GNOME_SM_PROXY", True );
-    Atom nAtom2 = XInternAtom( pDisplay, "NAUTILUS_DESKTOP_WINDOW_ID", True );
-    if( nAtom1 || nAtom2 )
+
+    if ( NULL != getenv( "GNOME_DESKTOP_SESSION_ID" ) )
+        ret = true;
+
+    if( ! ret )
     {
-        int nProperties = 0;
-        Atom* pProperties = XListProperties( pDisplay, DefaultRootWindow( pDisplay ), &nProperties );
-        if( pProperties && nProperties )
+        Atom nAtom1 = XInternAtom( pDisplay, "GNOME_SM_PROXY", True );
+        Atom nAtom2 = XInternAtom( pDisplay, "NAUTILUS_DESKTOP_WINDOW_ID", True );
+        if( nAtom1 || nAtom2 )
         {
-            for( int i = 0; i < nProperties; i++ )
-                if( pProperties[ i ] == nAtom1 ||
-                    pProperties[ i ] == nAtom2 )
+            int nProperties = 0;
+            Atom* pProperties = XListProperties( pDisplay, DefaultRootWindow( pDisplay ), &nProperties );
+            if( pProperties && nProperties )
+            {
+                for( int i = 0; i < nProperties; i++ )
+                    if( pProperties[ i ] == nAtom1 ||
+                        pProperties[ i ] == nAtom2 )
                 {
                     ret = true;
                 }
-            XFree( pProperties );
+                XFree( pProperties );
+            }
         }
     }
+
     if( ! ret )
     {
         Atom nUTFAtom       = XInternAtom( pDisplay, "UTF8_STRING", True );
@@ -326,6 +334,9 @@ static OUString getNetWMName( Display* pDisplay )
 
 static bool is_kde_desktop( Display* pDisplay )
 {
+    if ( NULL != getenv( "KDE_FULL_SESSION" ) )
+        return true;
+
     // check for kwin
     rtl::OUString aWM = getNetWMName( pDisplay );
     if( aWM.equalsIgnoreAsciiCaseAscii( "KWin" ) )
@@ -398,10 +409,10 @@ static const char * get_desktop_environment()
             {
                 XErrorHandler pOldHdl = XSetErrorHandler( autodect_error_handler );
 
-                if ( is_gnome_desktop( pDisplay ) )
-                    pRet = desktop_strings[DESKTOP_GNOME];
-                else if ( is_kde_desktop( pDisplay ) )
+                if ( is_kde_desktop( pDisplay ) )
                     pRet = desktop_strings[DESKTOP_KDE];
+                else if ( is_gnome_desktop( pDisplay ) )
+                    pRet = desktop_strings[DESKTOP_GNOME];
                 else if ( is_cde_desktop( pDisplay ) )
                     pRet = desktop_strings[DESKTOP_CDE];
                 else
