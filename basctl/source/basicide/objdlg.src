@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ FloatingWindow RID_BASICIDE_OBJCAT
                 Text [ spanish ] = "Ayuda" ;
                 Text [ french ] = "Aide" ;
                 Text [ dutch ] = "Help" ;
-                Text[ chinese_simplified ] = "«у÷ъ";
+                Text[ chinese_simplified ] = "∞п÷ъ";
                 Text[ russian ] = "—правка";
                 Text[ polish ] = "Pomoc";
                 Text[ japanese ] = "Ќўћя";
