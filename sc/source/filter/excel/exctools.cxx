@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:59:54 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@ RootData::RootData( void )
 
     pLastHlink = NULL;
 
+    nCellCount = 0;
+    pPrgrsBar = 0;
+
     pIR = NULL;
     pER = NULL;
 }
@@ -168,6 +171,8 @@ RootData::~RootData()
 
 //  if( pCtrlStorage )
 //      delete pCtrlStorage;
+
+    delete pPrgrsBar;
 }
 
 
