@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docoptio.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-05-15 18:16:43 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #ifndef SC_DOCOPTIO_HXX
 #define SC_DOCOPTIO_HXX
 
-
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
 #endif
@@ -71,13 +70,15 @@
 #include <svtools/poolitem.hxx>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
+
 #ifndef SC_OPTUTIL_HXX
 #include "optutil.hxx"
 #endif
 
-
-
-class ScDocOptions
+class SC_DLLPUBLIC ScDocOptions
 {
     double fIterEps;                // Epsilon-Wert dazu
     USHORT nIterCount;              // Anzahl
@@ -215,7 +216,7 @@ inline int ScDocOptions::operator!=( const ScDocOptions& rOpt ) const
 // Item fuer Einstellungsdialog - Berechnen
 //==================================================================
 
-class ScTpCalcItem : public SfxPoolItem
+class SC_DLLPUBLIC ScTpCalcItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
