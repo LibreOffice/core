@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-02 12:09:37 $
+ *  last change: $Author: sab $ $Date: 2002-08-05 09:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,10 +427,16 @@ ScAccessibleCell* ScAccessibleSpreadsheet::GetAccessibleCellAt(sal_Int32 nRow, s
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     ScUnoGuard aGuard;
     IsObjectValid();
+    if (nRow > (maRange.aEnd.Row() - maRange.aStart.Row()) ||
+        nRow < 0 ||
+        nColumn > (maRange.aEnd.Col() - maRange.aStart.Col()) ||
+        nColumn < 0)
+        throw lang::IndexOutOfBoundsException();
+
     uno::Reference<XAccessible> xAccessible;
     ScAccessibleCell* pAccessibleCell = GetAccessibleCellAt(nRow, nColumn);
     xAccessible = pAccessibleCell;

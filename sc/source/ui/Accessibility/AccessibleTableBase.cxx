@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-02 12:48:30 $
+ *  last change: $Author: sab $ $Date: 2002-08-05 09:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleColumnSelected( sal_Int32 n
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     DBG_ERROR("not implemented yet");
     uno::Reference< XAccessible > xAccessible;
