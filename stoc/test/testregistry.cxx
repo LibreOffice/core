@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregistry.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2001-02-12 03:30:53 $
+ *  last change: $Author: jsc $ $Date: 2001-03-07 09:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,8 +464,6 @@ void test_SimpleRegistry()
 
 void test_DefaultRegistry()
 {
-//  Reference < XMultiServiceFactory > rSMgr  = ::cppu::createDefaultRegistryServiceFactory(  );
-
     // Test NestedRegistry
     OUString exePath( getExePath() );
     OUString userRdb(exePath);
@@ -474,8 +472,8 @@ void test_DefaultRegistry()
     userRdb += OUString::createFromAscii("user.rdb");
     applicatRdb += OUString::createFromAscii("stoctest.rdb");
 
-    Reference < XMultiServiceFactory > rSMgr  = ::cppu::createRegistryServiceFactory( userRdb, applicatRdb, sal_False,
-                                                                                      OUString::createFromAscii("//./e:/src596/stoc/wntmsci3/bin") );
+    Reference < XMultiServiceFactory > rSMgr  = ::cppu::createRegistryServiceFactory( userRdb, applicatRdb, sal_False, OUString());
+                                                                                      //OUString::createFromAscii("//./e:/src596/stoc/wntmsci3/bin") );
 
     Reference< XPropertySet > xPropSet( rSMgr, UNO_QUERY);
     TEST_ENSHURE( xPropSet.is(), "test_DefaultRegistry error0");
@@ -628,15 +626,14 @@ void test_DefaultRegistry()
         {
             xRootKey->deleteKey(OUString( RTL_CONSTASCII_USTRINGPARAM("/AllFromTestreg2") ));
         }
-/*
-        Reference<XSimpleRegistry> xSimplReg( xMgr->createInstance(L"com.sun.star.registry.SimpleRegistry"), USR_QUERY );
+
+        Reference< XSimpleRegistry > xSimplReg( rSMgr->createInstance(L"com.sun.star.registry.SimpleRegistry"), UNO_QUERY );
 
         xSimplReg->open(L"testreg2.rdb", False, True);
         xSimplReg->destroy();
 
         xSimplReg->open(L"testreg.rdb", False, True);
         xSimplReg->destroy();
-*/
     }
     catch(InvalidRegistryException&)
     {
