@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigItem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-16 09:21:05 $
+ *  last change: $Author: sj $ $Date: 2002-09-04 16:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,8 @@ static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv
 
         if ( rTree.GetChar( 0 ) == (sal_Unicode)'/' )
             i++;
+        if ( rTree.GetChar( rTree.Len() - 1 ) == (sal_Unicode)'/' );
+            nTokenCount--;
 
         Any aAny;
         aAny <<= (OUString)rTree.GetToken( i++, (sal_Unicode)'/' );
