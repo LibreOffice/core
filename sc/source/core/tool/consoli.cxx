@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consoli.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #include "olinetab.hxx"
 #include "globstr.hrc"
 #include "subtotal.hxx"
-#include "compiler.hxx"                 // fuer errNoValue
+#include "errorcodes.hxx"
 #include "cell.hxx"
 
 #define SC_CONS_NOTFOUND    0xFFFF
