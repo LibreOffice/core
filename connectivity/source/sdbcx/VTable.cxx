@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-16 18:14:25 $
+ *  last change: $Author: oj $ $Date: 2002-11-12 09:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,9 +229,20 @@ Reference< XNameAccess > SAL_CALL OTable::getColumns(  ) throw(RuntimeException)
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
-
-    if(!m_pColumns)
-        refreshColumns();
+    try
+    {
+        if ( !m_pColumns )
+            refreshColumns();
+    }
+    catch( const RuntimeException& )
+    {
+        // allowed to leave this method
+        throw;
+    }
+    catch( const Exception& )
+    {
+        // allowed
+    }
 
     return m_pColumns;
 }
@@ -243,9 +254,20 @@ Reference< XIndexAccess > SAL_CALL OTable::getKeys(  ) throw(RuntimeException)
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
-
-    if(!m_pKeys)
-        refreshKeys();
+    try
+    {
+        if(!m_pKeys)
+            refreshKeys();
+    }
+    catch( const RuntimeException& )
+    {
+        // allowed to leave this method
+        throw;
+    }
+    catch( const Exception& )
+    {
+        // allowed
+    }
 
     return m_pKeys;
 }
@@ -278,9 +300,20 @@ Reference< XNameAccess > SAL_CALL OTable::getIndexes(  ) throw(RuntimeException)
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
-
-    if(!m_pIndexes)
-        refreshIndexes();
+    try
+    {
+        if ( !m_pIndexes )
+            refreshIndexes();
+    }
+    catch( const RuntimeException& )
+    {
+        // allowed to leave this method
+        throw;
+    }
+    catch( const Exception& )
+    {
+        // allowed
+    }
 
     return m_pIndexes;
 }

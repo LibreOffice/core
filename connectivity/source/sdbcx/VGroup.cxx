@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VGroup.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-16 18:14:25 $
+ *  last change: $Author: oj $ $Date: 2002-11-12 09:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,20 @@ Reference< XNameAccess > SAL_CALL OGroup::getUsers(  ) throw(RuntimeException)
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OGroup_BASE::rBHelper.bDisposed);
 
+    try
+    {
+        if ( !m_pUsers )
+            refreshUsers();
+    }
+    catch( const RuntimeException& )
+    {
+        // allowed to leave this method
+        throw;
+    }
+    catch( const Exception& )
+    {
+        // allowed
+    }
 
     return const_cast<OGroup*>(this)->m_pUsers;
 }

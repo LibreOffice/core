@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndex.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-16 18:14:25 $
+ *  last change: $Author: oj $ $Date: 2002-11-12 09:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,9 +209,20 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OIndex::getColumn
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(ODescriptor_BASE::rBHelper.bDisposed);
 
-
-    if(!m_pColumns)
-        refreshColumns();
+    try
+    {
+        if  ( !m_pColumns )
+            refreshColumns();
+    }
+    catch( const RuntimeException& )
+    {
+        // allowed to leave this method
+        throw;
+    }
+    catch( const Exception& )
+    {
+        // allowed
+    }
 
     return const_cast<OIndex*>(this)->m_pColumns;
 }
