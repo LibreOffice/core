@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:51:00 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ void DefaultFontConfigItem::getValues()
     Sequence< OUString > aNames( GetNodeNames( OUString() ) );
     for( j = 0; j < aNames.getLength(); j++ )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
         fprintf( stderr, "found localized default font data for \"%s\"\n",
                  OUStringToOString( aNames.getConstArray()[j], osl_getThreadTextEncoding() ).getStr()
                  );
@@ -307,7 +307,7 @@ void DefaultFontConfigItem::getValues()
                 const OUString* pLine = (const OUString*)pValue->getValue();
                 if( pLine->getLength() )
                     m_aDefaults[ nLanguageType ][ getKeyType( aKeys.getConstArray()[i] ) ] = *pLine;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
                 fprintf( stderr, "   \"%s\"=\"%.30s\"\n",
                          OUStringToOString( aKeys.getConstArray()[i], RTL_TEXTENCODING_ASCII_US ).getStr(),
                          OUStringToOString( *pLine, RTL_TEXTENCODING_ASCII_US ).getStr()
@@ -1023,7 +1023,7 @@ void FontSubstConfigItem::getValues()
         String aKeyName( aLocales.getConstArray()[j] );
         int nLanguageType = ConvertIsoStringToLanguage( aLocales.getConstArray()[j], '-' );
         Sequence< OUString > aSubstFonts( GetNodeNames( aKeyName ) );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
         fprintf( stderr, "reading %d font substitutions for locale %s\n",
                  aSubstFonts.getLength(),
                  ByteString( aKeyName, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
@@ -1294,7 +1294,7 @@ void SettingsConfigItem::getValues()
     Sequence< OUString > aNames( GetNodeNames( OUString() ) );
     for( j = 0; j < aNames.getLength(); j++ )
     {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
         fprintf( stderr, "found settings data for \"%s\"\n",
                  OUStringToOString( aNames.getConstArray()[j], RTL_TEXTENCODING_ASCII_US ).getStr()
                  );
@@ -1320,7 +1320,7 @@ void SettingsConfigItem::getValues()
                 const OUString* pLine = (const OUString*)pValue->getValue();
                 if( pLine->getLength() )
                     m_aSettings[ aKeyName ][ pFrom[i] ] = *pLine;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
                 fprintf( stderr, "   \"%s\"=\"%.30s\"\n",
                          OUStringToOString( aKeys.getConstArray()[i], RTL_TEXTENCODING_ASCII_US ).getStr(),
                          OUStringToOString( *pLine, RTL_TEXTENCODING_ASCII_US ).getStr()
