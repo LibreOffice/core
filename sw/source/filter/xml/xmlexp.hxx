@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-02 21:02:30 $
+ *  last change: $Author: mtg $ $Date: 2001-03-19 13:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,8 @@ class SwXMLExport : public SvXMLExport
     virtual void _ExportAutoStyles();
     virtual void _ExportMasterStyles();
     virtual void _ExportContent();
+    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
+    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
 
 #ifdef XML_CORE_API
     void SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly );

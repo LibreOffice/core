@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-13 15:44:38 $
+ *  last change: $Author: mtg $ $Date: 2001-03-19 13:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
+#include <com/sun/star/container/XIndexContainer.hpp>
+#endif
 
 #ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
@@ -141,6 +144,14 @@
 #ifndef _XMLEXP_HXX
 #include <xmlexp.hxx>
 #endif
+
+#ifndef _SFXVIEWSH_HXX
+#include <sfx2/viewsh.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORYHXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star::frame;
@@ -379,7 +390,7 @@ sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
     }
     // else: keep default pClass that we received
 
-    sal_uInt32 nRet = SvXMLExport::exportDoc( pClass );
+     sal_uInt32 nRet = SvXMLExport::exportDoc( pClass );
 
     if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
     {
@@ -436,6 +447,116 @@ void SwXMLExport::_ExportFontDecls()
     SvXMLExport::_ExportFontDecls();
 }
 
+#define NUM_EXPORTED_PROPERTIES 9
+void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
+{
+    Reference< XMultiServiceFactory > xServiceFactory =
+            comphelper::getProcessServiceFactory();
+    ASSERT( xServiceFactory.is(),
+            "XMLReader::Read: got no service manager" );
+    if( !xServiceFactory.is() )
+        return;
+    Reference < XIndexContainer > xBox (xServiceFactory->createInstance
+            (OUString( RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.document.IndexedPropertyValues") ) ), UNO_QUERY);
+    if (!xBox.is() )
+        return;
+
+    sal_Int32 i=0;
+    Any aAny;
+    for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst();
+            pFrame;
+            i++, pFrame = SfxViewFrame::GetNext(*pFrame ) )
+    {
+        Sequence < PropertyValue > aSequence;
+        pFrame->GetViewShell()->ReadUserDataSequence( aSequence, sal_False );
+        aAny <<= aSequence;
+        xBox->insertByIndex(i, aAny);
+    }
+    aAny <<= Reference < XIndexAccess > ( xBox, UNO_QUERY );
+
+    aProps.realloc( NUM_EXPORTED_PROPERTIES ); // Currently exporting 9 properties
+
+    PropertyValue *pValue = aProps.getArray();
+    sal_Int16 nIndex = 0;
+
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "Views") );
+    pValue[nIndex++].Value = aAny;
+
+    if( !GetModel().is() )
+    {
+        aProps.realloc(nIndex);
+        return;
+    }
+
+    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
+    Reference < XText > xText = xTextDoc->getText();
+    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
+    ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+    if( !xTextTunnel.is() )
+    {
+        aProps.realloc(nIndex);
+        return;
+    }
+
+    SwXText *pText = (SwXText *)xTextTunnel->getSomething(
+                                        SwXText::getUnoTunnelId() );
+    ASSERT( pText, "SwXText missing" );
+    if( !pText )
+    {
+        aProps.realloc(nIndex);
+        return;
+    }
+
+    SwDoc *pDoc = pText->GetDoc();
+    const Rectangle &rRect = pDoc->GetDocShell()->SfxInPlaceObject::GetVisArea();
+
+    aAny <<= rRect.Top();
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaTop") );
+    pValue[nIndex++].Value = aAny;
+
+    aAny <<= rRect.Left();
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaLeft") );
+    pValue[nIndex++].Value = aAny;
+
+    aAny <<= rRect.GetWidth();
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaWidth") );
+    pValue[nIndex++].Value = aAny;
+
+    aAny <<= rRect.GetHeight();
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaHeight") );
+    pValue[nIndex++].Value = aAny;
+
+    sal_Bool bShowInsert = sal_False, bShowDelete = sal_False;
+
+    if (( REDLINE_SHOW_MASK & pDoc->GetRedlineMode()) | REDLINE_SHOW_INSERT )
+        bShowInsert = sal_True;
+    if (( REDLINE_SHOW_MASK & pDoc->GetRedlineMode()) | REDLINE_SHOW_DELETE )
+        bShowDelete = sal_True;
+
+    aAny <<= bShowInsert;
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowRedlineInsertions") );
+    pValue[nIndex++].Value = aAny;
+
+    aAny <<= bShowDelete;
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowRedlineDeletions") );
+    pValue[nIndex++].Value = aAny;
+
+    aAny <<= pDoc->IsHeadInBrowse();
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowHeaderWhileBrowsing") );
+    pValue[nIndex++].Value = aAny;
+
+    aAny <<= pDoc->IsFootInBrowse();
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowFooterWhileBrowsing") );
+    pValue[nIndex++].Value = aAny;
+
+    if ( nIndex < NUM_EXPORTED_PROPERTIES )
+        aProps.realloc(nIndex);
+}
+#undef NUM_EXPORTED_PROPERTIES
+
+void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
+{
+}
 void SwXMLExport::_ExportContent()
 {
 #ifdef XML_CORE_API
@@ -586,8 +707,26 @@ Reference< XInterface > SAL_CALL SwXMLExportMeta_createInstance(
     return (cppu::OWeakObject*)new SwXMLExport(EXPORT_META);
 }
 
+OUString SAL_CALL SwXMLExportSettings_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.Writer.XMLSettingsExporter" ) );
+}
 
+Sequence< OUString > SAL_CALL SwXMLExportSettings_getSupportedServiceNames()
+    throw()
+{
+    const OUString aServiceName(SwXMLExportSettings_getImplementationName());
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
 
+Reference< XInterface > SAL_CALL SwXMLExportSettings_createInstance(
+        const Reference< XMultiServiceFactory > & rSMgr)
+    throw( Exception )
+{
+    return (cppu::OWeakObject*)new SwXMLExport(EXPORT_SETTINGS);
+}
 
 const Sequence< sal_Int8 > & SwXMLExport::getUnoTunnelId() throw()
 {
@@ -666,5 +805,3 @@ void SwXMLExport::ExportCurPaM( sal_Bool bExportWholePaM )
     ExportListChange( aPrevNumInfo, aNextNumInfo );
 }
 #endif
-
-
