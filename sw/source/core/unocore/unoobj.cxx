@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:32:24 $
+ *  last change: $Author: mtg $ $Date: 2001-07-25 13:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1984,15 +1984,26 @@ Sequence< PropertyState > SwXTextCursor::GetPropertyStates(
     PropertyState* pStates = aRet.getArray();
 
     SfxItemSet *pSet = 0, *pSetParent = 0;
-    const SfxItemPropertyMap* pMap = rPropSet.getPropertyMap();
+    const SfxItemPropertyMap* pSaveMap, *pMap = rPropSet.getPropertyMap();
     for( INT32 i = 0, nEnd = PropertyNames.getLength(); i < nEnd; i++ )
     {
+        pSaveMap = pMap;
         pMap = SfxItemPropertyMap::GetByName( pMap, pNames[i] );
         if(!pMap)
         {
-            UnknownPropertyException aExcept;
-            aExcept.Message = pNames[i];
-            throw aExcept;
+            if(pNames[i].equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)) ||
+               pNames[i].equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT)))
+            {
+                pStates[i] = beans::PropertyState_DEFAULT_VALUE;
+                pMap = pSaveMap;
+                continue;
+            }
+            else
+            {
+                UnknownPropertyException aExcept;
+                aExcept.Message = pNames[i];
+                throw aExcept;
+            }
         }
         pStates[i] = ::lcl_SwXTextCursor_GetPropertyState( &pSet, &pSetParent,
                                             rPaM, rPropSet, *pMap );
@@ -2016,9 +2027,17 @@ PropertyState SwXTextCursor::GetPropertyState(
                                 rPropSet.getPropertyMap(), rPropertyName );
     if(!pMap)
     {
-        UnknownPropertyException aExcept;
-        aExcept.Message = rPropertyName;
-        throw aExcept;
+        if (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)) ||
+            rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT)))
+        {
+            eRet = beans::PropertyState_DEFAULT_VALUE;
+        }
+        else
+        {
+            UnknownPropertyException aExcept;
+            aExcept.Message = rPropertyName;
+            throw aExcept;
+        }
     }
     eRet = ::lcl_SwXTextCursor_GetPropertyState( &pSet, &pSetParent,
                                     rPaM, rPropSet, *pMap );
