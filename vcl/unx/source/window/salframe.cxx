@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-07 13:24:33 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 12:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,8 +489,9 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
     XSync( GetXDisplay(), False );
 
     int nDecoFlags = WMAdaptor::decoration_All;
-    if( nStyle_ & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE)
-        != (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE) )
+    if( ( nStyle_ & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE ) != (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE) )
+        || ( nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW )
+        )
     {
         nDecoFlags = WMAdaptor::decoration_Border;
         if( ! mpParent )
@@ -498,7 +499,11 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         if( nStyle_ & SAL_FRAME_STYLE_CLOSEABLE )
             nDecoFlags |= WMAdaptor::decoration_CloseBtn;
         if( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
-            nDecoFlags |= WMAdaptor::decoration_MaximizeBtn | WMAdaptor::decoration_Resize;
+        {
+            nDecoFlags |= WMAdaptor::decoration_Resize;
+            if( ! nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW )
+                nDecoFlags |= WMAdaptor::decoration_MaximizeBtn;
+        }
         if( nStyle_ & SAL_FRAME_STYLE_MOVEABLE )
             nDecoFlags |= WMAdaptor::decoration_Title;
     }
