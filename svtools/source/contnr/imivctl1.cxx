@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-06 14:35:26 $
+ *  last change: $Author: pb $ $Date: 2001-11-12 09:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1858,19 +1858,17 @@ void SvxIconChoiceCtrl_Impl::PaintItem( const Rectangle& rRect,
         else
             aText = *pStr;
 
-
-        Color aBkgColor ( pOut->GetBackground().GetColor() );
-        Color aFontColor;
-
-        float nColor = ( float( aBkgColor.GetRed() ) +
-                         float( aBkgColor.GetGreen() ) +
-                         float( aBkgColor.GetBlue() ) ) / 3;
-        if ( nColor < 128.0 || nColor == 255.0 )
-            aFontColor.SetColor ( COL_BLACK );
-        else
-            aFontColor.SetColor( COL_WHITE );
         if ( pView->AutoFontColor() )
+        {
+            Color aBkgColor( pOut->GetBackground().GetColor() );
+            Color aFontColor;
+            USHORT nColor = ( aBkgColor.GetRed() + aBkgColor.GetGreen() + aBkgColor.GetBlue() ) / 3;
+            if ( nColor > 128 )
+                aFontColor.SetColor ( COL_BLACK );
+            else
+                aFontColor.SetColor( COL_WHITE );
             pOut->SetTextColor( aFontColor );
+        }
 
         pOut->DrawText( rRect, aText, nCurTextDrawFlags );
 
@@ -2028,7 +2026,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
 
     // Highlight-Frame zeichnen
     if( pEntry == pCurHighlightFrame && !bNoEmphasis )
-        DrawHighlightFrame( pOut, aBmpRect, FALSE );
+        DrawHighlightFrame( pOut, CalcFocusRect( pEntry ), FALSE );
 
     pOut->SetFont( aTempFont );
     if( bResetClipRegion )
@@ -3587,10 +3585,8 @@ void SvxIconChoiceCtrl_Impl::ShowFocus ( Rectangle& rRect )
 {
     Color aBkgColor ( pView->GetBackground().GetColor() );
     Color aPenColor;
-    float nColor = ( float( aBkgColor.GetRed() ) +
-                     float( aBkgColor.GetGreen() ) +
-                     float( aBkgColor.GetBlue() ) ) / 3;
-    if ( nColor < 128.0 || nColor == 255.0 )
+    USHORT nColor = ( aBkgColor.GetRed() + aBkgColor.GetGreen() + aBkgColor.GetBlue() ) / 3;
+    if ( nColor > 128 )
         aPenColor.SetColor ( COL_BLACK );
     else
         aPenColor.SetColor( COL_WHITE );
@@ -4500,7 +4496,7 @@ void SvxIconChoiceCtrl_Impl::SetEntryHighlightFrame( SvxIconChoiceCtrlEntry* pEn
     pCurHighlightFrame = pEntry;
     if( pEntry )
     {
-        Rectangle aBmpRect( CalcBmpRect(pEntry) );
+        Rectangle aBmpRect( CalcFocusRect(pEntry) );
         DrawHighlightFrame( pView, aBmpRect, FALSE );
     }
 }
@@ -4512,7 +4508,7 @@ void SvxIconChoiceCtrl_Impl::HideEntryHighlightFrame()
 
     SvxIconChoiceCtrlEntry* pEntry = pCurHighlightFrame;
     pCurHighlightFrame = 0;
-    Rectangle aBmpRect( CalcBmpRect(pEntry) );
+    Rectangle aBmpRect( CalcFocusRect(pEntry) );
     DrawHighlightFrame( pView, aBmpRect, TRUE );
 }
 
