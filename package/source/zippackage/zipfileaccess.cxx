@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zipfileaccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 17:22:52 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,31 +91,6 @@
 using namespace ::com::sun::star;
 
 extern void copyInputToOutput_Impl( uno::Reference< io::XInputStream >& aIn, uno::Reference< io::XOutputStream >& aOut );
-
-uno::Reference< io::XInputStream > GetSeekableTempCopy_Impl( uno::Reference< io::XInputStream > xInStream,
-                                                        uno::Reference< lang::XMultiServiceFactory > xFactory )
-{
-    if ( !xInStream.is() )
-        uno::Reference< io::XInputStream >();
-
-    if ( !xFactory.is() )
-        throw uno::RuntimeException();
-
-    uno::Reference < io::XOutputStream > xTempOut(
-                        xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
-                        uno::UNO_QUERY );
-    uno::Reference < io::XInputStream > xTempIn( xTempOut, uno::UNO_QUERY );
-    uno::Reference < io::XSeekable > xSeekable( xTempOut, uno::UNO_QUERY );
-
-    if ( !xTempOut.is() || !xTempIn.is() || !xSeekable.is() )
-        throw io::IOException();
-
-    copyInputToOutput_Impl( xInStream, xTempOut );
-    xTempOut->closeOutput();
-    xSeekable->seek(0);
-
-    return xTempIn;
-}
 
 // ----------------------------------------------------------------
 OZipFileAccess::OZipFileAccess( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
@@ -339,9 +314,9 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const ::rtl::OUString& aName )
     if ( aIter == m_aEntries.end() )
         throw container::NoSuchElementException();
 
-    uno::Reference< io::XInputStream > xEntryStream = GetSeekableTempCopy_Impl(
-                                m_pZipFile->getDataStream( (*aIter).second, new EncryptionData(), sal_False ),
-                                m_xFactory );
+    uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second,
+                                                                                new EncryptionData(),
+                                                                                sal_False ) );
 
     if ( !xEntryStream.is() )
         throw uno::RuntimeException(); // TODO:
@@ -448,10 +423,9 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
     {
         if ( StringGoodForPattern_Impl( (*aIter).second.sName, aPattern ) )
         {
-            uno::Reference< io::XInputStream > xEntryStream =
-                        GetSeekableTempCopy_Impl(
-                            m_pZipFile->getDataStream( (*aIter).second, new EncryptionData(), sal_False ),
-                            m_xFactory );
+            uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second,
+                                                                                        new EncryptionData(),
+                                                                                        sal_False ) );
 
             if ( !xEntryStream.is() )
                 throw uno::RuntimeException();
