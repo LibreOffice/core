@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:58:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ SfxItemPool * SmEditWindow::GetEditEngineItemPool()
 void SmEditWindow::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
 {
     // Note: SetBackground still done in SmEditWindow::DataChanged
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ColorData nVal = rColorCfg.GetColorValue(svtools::FONTCOLOR).nColor;
 #endif
     SetTextColor( rColorCfg.GetColorValue(svtools::FONTCOLOR).nColor );
