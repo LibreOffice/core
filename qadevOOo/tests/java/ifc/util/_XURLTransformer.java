@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XURLTransformer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-10-06 13:31:35 $
+ *  last change:$Date: 2004-11-02 11:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,10 @@ public class _XURLTransformer extends MultiMethodTest {
     URL url;
 
     final static String user = "user";
+    final static String invalidUserPrefix = "1";
     final static String password = "password";
     final static String server = "server";
+    final static String invalidServerPrefix = "1";
     final static String port = "8080";
     final static String path = "/pub/path";
     final static String name = "file.txt";
@@ -319,7 +321,7 @@ public class _XURLTransformer extends MultiMethodTest {
     public void _parseSmart() {
         URL[] url = new URL[1];
 
-        String httpURL = server + ":" + port + path + "/" + name + "?" +
+        String httpURL = invalidServerPrefix + server + ":" + port + path + "/" + name + "?" +
             arguments + "#" + mark;
 
         url[0] = new URL();
@@ -338,7 +340,7 @@ public class _XURLTransformer extends MultiMethodTest {
             res = false;
         }
 
-        if (!url[0].Server.equals(server)) {
+        if (!url[0].Server.equals(invalidServerPrefix+server)) {
             log.println("parseSmart works wrong");
             log.println("server field : " + url[0].Server);
             log.println("expected : " + server);
@@ -380,7 +382,7 @@ public class _XURLTransformer extends MultiMethodTest {
             res = false;
         }
 
-        String ftpURL = user + ":" + password + "@" + server + ":" +
+        String ftpURL = invalidUserPrefix +user + ":" + password + "@" + server + ":" +
             port + path + "/" + name;
 
         url[0] = new URL();
@@ -397,7 +399,7 @@ public class _XURLTransformer extends MultiMethodTest {
             res = false;
         }
 
-        if (!url[0].User.equals(user)) {
+        if (!url[0].User.equals(invalidUserPrefix+user)) {
             log.println("parseSmart works wrong");
             log.println("user field : " + url[0].User);
             log.println("expected : " + user);
