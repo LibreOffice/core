@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-19 13:25:51 $
+ *  last change: $Author: fs $ $Date: 2002-09-05 12:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1756,12 +1756,10 @@ void SvImpLBox::EntryMoved( SvLBoxEntry* pEntry )
     USHORT nFirstPos = (USHORT)pTree->GetAbsPos( pStartEntry );
     USHORT nNewPos = (USHORT)pTree->GetAbsPos( pEntry );
     FindMostRight(0);
-    if( nNewPos < nFirstPos )
-    {
-        //!!!Notloesung
+    if( nNewPos < nFirstPos ) //!!!Notloesung
         pStartEntry = pEntry;
-        SyncVerThumb();
-    }
+    // #97702# ---------------
+    SyncVerThumb();
     if( pEntry == pCursor )
     {
         if( pView->IsEntryVisible( pCursor ) )
