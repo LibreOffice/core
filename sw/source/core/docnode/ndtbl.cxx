@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:46:37 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1177,7 +1177,9 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
     }
 
     // die Tabelle ausgleichen, leere Sections einfuegen
-    for( USHORT n = 0; n < pTable->GetTabLines().Count(); ++n )
+    USHORT n;
+
+    for( n = 0; n < pTable->GetTabLines().Count(); ++n )
     {
         SwTableLine* pLine = pTable->GetTabLines()[ n ];
         if( nMaxBoxes != ( nBoxes = pLine->GetTabBoxes().Count() ))
@@ -2416,9 +2418,11 @@ void SwCollectTblLineBoxes::AddBox( const SwTableBox& rBox )
 const SwTableBox* SwCollectTblLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
 {
     const SwTableBox* pRet = 0;
+    USHORT n;
+
     if( aPosArr.Count() )
     {
-        for( USHORT n = 0; n < aPosArr.Count(); ++n )
+        for( n = 0; n < aPosArr.Count(); ++n )
             if( aPosArr[ n ] == nWidth )
                 break;
             else if( aPosArr[ n ] > nWidth )
@@ -2439,9 +2443,11 @@ const SwTableBox* SwCollectTblLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
 
 FASTBOOL SwCollectTblLineBoxes::Resize( USHORT nOffset, USHORT nOldWidth )
 {
+    USHORT n;
+
     if( aPosArr.Count() )
     {
-        for( USHORT n = 0; n < aPosArr.Count(); ++n )
+        for( n = 0; n < aPosArr.Count(); ++n )
             if( aPosArr[ n ] == nOffset )
                 break;
             else if( aPosArr[ n ] > nOffset )
@@ -3285,10 +3291,12 @@ String SwDoc::GetUniqueTblName() const
     xub_StrLen nNmLen = aName.Len();
 
     USHORT nNum, nTmp, nFlagSize = ( pTblFrmFmtTbl->Count() / 8 ) +2;
+    USHORT n;
+
     BYTE* pSetFlags = new BYTE[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
-    for( USHORT n = 0; n < pTblFrmFmtTbl->Count(); ++n )
+    for( n = 0; n < pTblFrmFmtTbl->Count(); ++n )
     {
         const SwFrmFmt* pFmt = (*pTblFrmFmtTbl)[ n ];
         if( !pFmt->IsDefault() && IsUsed( *pFmt )  &&
