@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 11:42:20 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define XML_SC_TYPE_PRINTCONTENT                    (XML_SC_TYPES_START +  2)
 #define XML_SC_TYPE_HORIJUSTIFY                     (XML_SC_TYPES_START +  3)
 #define XML_SC_TYPE_HORIJUSTIFYSOURCE               (XML_SC_TYPES_START +  4)
+#define XML_SC_TYPE_HORIJUSTIFYREPEAT               (XML_SC_TYPES_START +  5)
 #define XML_SC_TYPE_ORIENTATION                     (XML_SC_TYPES_START +  6)
 #define XML_SC_TYPE_ROTATEANGLE                     (XML_SC_TYPES_START +  7)
 #define XML_SC_TYPE_ROTATEREFERENCE                 (XML_SC_TYPES_START +  8)
@@ -135,6 +136,10 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define CTF_SC_IMPORT_MAP                           (XML_SC_CTF_START + 22)
 #define CTF_SC_CELLSTYLE                            (XML_SC_CTF_START + 23)
 #define CTF_SC_VALIDATION                           (XML_SC_CTF_START + 24)
+#define CTF_SC_DIAGONALTLBR                         (XML_SC_CTF_START + 25)
+#define CTF_SC_DIAGONALTLBRWIDTH                    (XML_SC_CTF_START + 26)
+#define CTF_SC_DIAGONALBLTR                         (XML_SC_CTF_START + 27)
+#define CTF_SC_DIAGONALBLTRWIDTH                    (XML_SC_CTF_START + 28)
 
 #define CTF_SC_ROWHEIGHT                            (XML_SC_CTF_START + 50)
 #define CTF_SC_ROWOPTIMALHEIGHT                     (XML_SC_CTF_START + 51)
@@ -303,6 +308,15 @@ class XmlScPropHdl_HoriJustifySource : public XMLPropertyHandler
 {
 public:
     virtual ~XmlScPropHdl_HoriJustifySource();
+    virtual sal_Bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const;
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+class XmlScPropHdl_HoriJustifyRepeat : public XMLPropertyHandler
+{
+public:
+    virtual ~XmlScPropHdl_HoriJustifyRepeat();
     virtual sal_Bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const;
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
