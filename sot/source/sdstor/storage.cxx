@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-21 10:52:03 $
+ *  last change: $Author: mm $ $Date: 2001-09-06 10:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,7 @@ BOOL SotStorageStream::CopyTo( SotStorageStream * pDestStm )
     { // Wenn Ole2 oder nicht nur eigene StorageStreams
 
         ULONG nPos = Tell();    // Position merken
+        Seek( 0L );
         pDestStm->SetSize( 0 ); // Ziel-Stream leeren
 
         void * pMem = new BYTE[ 8192 ];

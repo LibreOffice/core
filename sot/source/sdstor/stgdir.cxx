@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgdir.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-20 12:56:37 $
+ *  last change: $Author: mm $ $Date: 2001-09-06 10:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,9 +292,9 @@ BOOL StgDirEntry::IsDirty()
 
 void StgDirEntry::OpenStream( StgIo& rIo, BOOL bForceBig )
 {
-    short nThreshold = (USHORT) rIo.aHdr.GetThreshold();
+    INT32 nThreshold = (USHORT) rIo.aHdr.GetThreshold();
     delete pStgStrm;
-    if( !bForceBig && aEntry.GetSize() < (INT32) nThreshold )
+    if( !bForceBig && aEntry.GetSize() < nThreshold )
         pStgStrm = new StgSmallStrm( rIo, this );
     else
         pStgStrm = new StgDataStrm( rIo, this );
@@ -351,11 +351,11 @@ BOOL StgDirEntry::SetSize( INT32 nNewSize )
     {
         BOOL bRes = FALSE;
         StgIo& rIo = pStgStrm->GetIo();
-        short nThreshold = (USHORT) rIo.aHdr.GetThreshold();
+        INT32 nThreshold = rIo.aHdr.GetThreshold();
         // ensure the correct storage stream!
         StgStrm* pOld = NULL;
         USHORT nOldSize = 0;
-        if( nNewSize > nThreshold && pStgStrm->IsSmallStrm() )
+        if( nNewSize >= nThreshold && pStgStrm->IsSmallStrm() )
         {
             pOld = pStgStrm;
             nOldSize = (USHORT) pOld->GetSize();
