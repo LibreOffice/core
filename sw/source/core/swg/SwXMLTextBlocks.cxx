@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:13:25 $
+ *  last change: $Author: mtg $ $Date: 2001-07-11 14:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::rtl;
 using ::xmloff::token::XML_BLOCK_LIST;
+using ::xmloff::token::XML_UNFORMATTED_TEXT;
+using ::xmloff::token::GetXMLToken;
 
 
 /*
@@ -983,7 +985,7 @@ ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& rName,
        uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter,
         uno::UNO_QUERY);
 
-       SwXMLTextBlockExport aExp(*this, OUString::createFromAscii(sXML_unformatted_text), xHandler);
+       SwXMLTextBlockExport aExp(*this, GetXMLToken ( XML_UNFORMATTED_TEXT ), xHandler);
     aExp.exportDoc( rText );
 
     xDocStream->Commit();
