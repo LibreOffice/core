@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-12 12:51:14 $
+ *  last change: $Author: sab $ $Date: 2001-07-06 11:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,11 +102,14 @@
 #ifndef _COM_SUN_STAR_SHEET_XSHEETOPERATION_HPP_
 #include <com/sun/star/sheet/XSheetOperation.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETCELLRANGES_HPP_
-#include <com/sun/star/sheet/XSheetCellRanges.hpp>
+#ifndef _COM_SUN_STAR_SHEET_XSHEETCELLRANGECONTAINER_HPP_
+#include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XCELLFORMATRANGESSUPPLIER_HPP_
 #include <com/sun/star/sheet/XCellFormatRangesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XUNIQUECELLFORMATRANGESSUPPLIER_HPP_
+#include <com/sun/star/sheet/XUniqueCellFormatRangesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XCELLRANGESQUERY_HPP_
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
@@ -221,6 +224,10 @@
 #include <cppuhelper/implbase3.hxx>
 #endif
 
+#ifndef __SGI_STL_VECTOR
+#include <vector>
+#endif
+
 class ScDocShell;
 class ScMarkData;
 class SchMemChart;
@@ -331,6 +338,7 @@ public:
     ScDocShell*             GetDocShell() const     { return pDocShell; }
     ScDocument*             GetDocument() const;
     const ScRangeList&      GetRangeList() const    { return aRanges; }
+    void                    AddRange(const ScRange& rRange, const sal_Bool bMergeRanges);
 
                             // per Service erzeugtes Objekt zum Leben erwecken:
     void                    InitInsertRange(ScDocShell* pDocSh, const ScRange& rR);
@@ -541,7 +549,7 @@ public:
 
 
 class ScCellRangesObj : public ScCellRangesBase,
-                        public com::sun::star::sheet::XSheetCellRanges,
+                        public com::sun::star::sheet::XSheetCellRangeContainer,
                         public com::sun::star::container::XNameContainer,
                         public com::sun::star::container::XEnumerationAccess
 {
@@ -569,6 +577,22 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress > SAL_CALL
                             getRangeAddresses() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XSheetCellRangeContainer
+    virtual void SAL_CALL   addRangeAddress( const ::com::sun::star::table::CellRangeAddress& rRange,
+                                        sal_Bool bMergeRanges )
+                                    throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   removeRangeAddress( const ::com::sun::star::table::CellRangeAddress& rRange )
+                                throw(::com::sun::star::container::NoSuchElementException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   addRangeAddresses( const ::com::sun::star::uno::Sequence<
+                                        ::com::sun::star::table::CellRangeAddress >& rRanges,
+                                        sal_Bool bMergeRanges )
+                                    throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   removeRangeAddresses( const ::com::sun::star::uno::Sequence<
+                                        ::com::sun::star::table::CellRangeAddress >& rRanges )
+                                throw(::com::sun::star::container::NoSuchElementException,
+                                    ::com::sun::star::uno::RuntimeException);
 
                             // XNameContainer
     virtual void SAL_CALL   insertByName( const ::rtl::OUString& aName,
@@ -646,6 +670,7 @@ class ScCellRangeObj : public ScCellRangesBase,
                        public com::sun::star::sheet::XSubTotalCalculatable,
                        public com::sun::star::util::XImportable,
                        public com::sun::star::sheet::XCellFormatRangesSupplier,
+                       public com::sun::star::sheet::XUniqueCellFormatRangesSupplier,
                        public com::sun::star::table::XColumnRowRange
 {
 private:
@@ -772,6 +797,10 @@ public:
                             // XCellFormatRangesSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL
                             getCellFormatRanges() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XUniqueCellFormatRangesSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL
+                            getUniqueCellFormatRanges() throw(::com::sun::star::uno::RuntimeException);
 
                             // XColumnRowRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XTableColumns > SAL_CALL
@@ -1434,6 +1463,85 @@ private:
 public:
                             ScCellFormatsEnumeration(ScDocShell* pDocSh, const ScRange& rR);
     virtual                 ~ScCellFormatsEnumeration();
+
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+                            // XEnumeration
+    virtual sal_Bool SAL_CALL hasMoreElements() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL nextElement()
+                                throw(::com::sun::star::container::NoSuchElementException,
+                                        ::com::sun::star::lang::WrappedTargetException,
+                                        ::com::sun::star::uno::RuntimeException);
+
+                            // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+                                throw(::com::sun::star::uno::RuntimeException);
+};
+
+typedef std::vector< ScRangeList > ScMyRangeLists;
+
+class ScUniqueCellFormatsObj : public cppu::WeakImplHelper3<
+                            com::sun::star::container::XIndexAccess,
+                            com::sun::star::container::XEnumerationAccess,
+                            com::sun::star::lang::XServiceInfo >,
+                        public SfxListener
+{
+private:
+    ScDocShell*                     pDocShell;
+    ScRange                         aTotalRange;
+    ScMyRangeLists                  aRangeLists;
+
+private:
+    void                            GetObjects_Impl();
+
+public:
+                            ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange& rR);
+    virtual                 ~ScUniqueCellFormatsObj();
+
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+                            // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
+                                throw(::com::sun::star::lang::IndexOutOfBoundsException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+
+                            // XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL
+                            createEnumeration() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+                                throw(::com::sun::star::uno::RuntimeException);
+};
+
+class ScUniqueCellFormatsEnumeration : public cppu::WeakImplHelper2<
+                                    com::sun::star::container::XEnumeration,
+                                    com::sun::star::lang::XServiceInfo >,
+                                 public SfxListener
+{
+private:
+    ScMyRangeLists                  aRangeLists;
+    ScDocShell*                     pDocShell;
+    sal_Int32                       nCurrentPosition;
+
+public:
+                            ScUniqueCellFormatsEnumeration(ScDocShell* pDocShell, const ScMyRangeLists& rRangeLists);
+    virtual                 ~ScUniqueCellFormatsEnumeration();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 

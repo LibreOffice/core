@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-21 09:19:39 $
+ *  last change: $Author: sab $ $Date: 2001-07-06 11:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,10 @@
 #include "styleuno.hxx"
 #include "rangeseq.hxx"
 #include "unowids.hxx"
+
+#ifndef __SGI_STL_LIST
+#include <list>
+#endif
 
 using namespace com::sun::star;
 
@@ -772,6 +776,8 @@ inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
 
 SC_SIMPLE_SERVICE_INFO( ScCellFormatsEnumeration, "ScCellFormatsEnumeration", "com.sun.star.sheet.CellFormatRangesEnumeration" )
 SC_SIMPLE_SERVICE_INFO( ScCellFormatsObj, "ScCellFormatsObj", "com.sun.star.sheet.CellFormatRanges" )
+SC_SIMPLE_SERVICE_INFO( ScUniqueCellFormatsEnumeration, "ScUniqueCellFormatsEnumeration", "com.sun.star.sheet.UniqueCellFormatRangesEnumeration" )
+SC_SIMPLE_SERVICE_INFO( ScUniqueCellFormatsObj, "ScUniqueCellFormatsObj", "com.sun.star.sheet.UniqueCellFormatRanges" )
 SC_SIMPLE_SERVICE_INFO( ScCellRangesBase, "ScCellRangesBase", "stardiv.unknown" )
 SC_SIMPLE_SERVICE_INFO( ScCellsEnumeration, "ScCellsEnumeration", "com.sun.star.sheet.CellsEnumeration" )
 SC_SIMPLE_SERVICE_INFO( ScCellsObj, "ScCellsObj", "com.sun.star.sheet.Cells" )
@@ -1361,6 +1367,15 @@ void ScCellRangesBase::InitInsertRange(ScDocShell* pDocSh, const ScRange& rR)
 
         RefChanged();   // Range im Range-Objekt anpassen
     }
+}
+
+void ScCellRangesBase::AddRange(const ScRange& rRange, const sal_Bool bMergeRanges)
+{
+    if (bMergeRanges)
+        aRanges.Join(rRange);
+    else
+        aRanges.Append(rRange);
+    RefChanged();
 }
 
 void ScCellRangesBase::SetNewRange(const ScRange& rNew)
@@ -3635,6 +3650,7 @@ void ScCellRangesObj::RefChanged()
 uno::Any SAL_CALL ScCellRangesObj::queryInterface( const uno::Type& rType )
                                                 throw(uno::RuntimeException)
 {
+    SC_QUERYINTERFACE( sheet::XSheetCellRangeContainer )
     SC_QUERYINTERFACE( sheet::XSheetCellRanges )
     SC_QUERYINTERFACE( container::XIndexAccess )
     SC_QUERY_MULTIPLE( container::XElementAccess, container::XIndexAccess )
@@ -3667,7 +3683,7 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangesObj::getTypes() throw(uno::Runtime
 
         aTypes.realloc( nParentLen + 3 );
         uno::Type* pPtr = aTypes.getArray();
-        pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSheetCellRanges>*)0);
+        pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSheetCellRangeContainer>*)0);
         pPtr[nParentLen + 1] = getCppuType((const uno::Reference<container::XNameContainer>*)0);
         pPtr[nParentLen + 2] = getCppuType((const uno::Reference<container::XEnumerationAccess>*)0);
 
@@ -3757,6 +3773,117 @@ rtl::OUString SAL_CALL ScCellRangesObj::getRangeAddressesAsString()
     if (pDocSh)
         rRanges.Format( aString, SCA_VALID | SCA_TAB_3D, pDocSh->GetDocument() );
     return aString;
+}
+
+// XSheetCellRangeContainer
+
+void SAL_CALL ScCellRangesObj::addRangeAddress( const table::CellRangeAddress& rRange,
+                                    sal_Bool bMergeRanges )
+                                    throw(::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScRange aRange(static_cast<sal_uInt16>(rRange.StartColumn),
+            static_cast<sal_uInt16>(rRange.StartRow),
+            static_cast<sal_uInt16>(rRange.Sheet),
+            static_cast<sal_uInt16>(rRange.EndColumn),
+            static_cast<sal_uInt16>(rRange.EndRow),
+            static_cast<sal_uInt16>(rRange.Sheet));
+    AddRange(aRange, bMergeRanges);
+}
+
+void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, const ScRange& rRange )
+{
+    USHORT nCount = rNamedEntries.Count();
+    for ( USHORT n=nCount; n--; )
+        if ( rNamedEntries[n]->GetRange() == rRange )
+            rNamedEntries.DeleteAndDestroy( n );
+}
+
+void SAL_CALL ScCellRangesObj::removeRangeAddress( const table::CellRangeAddress& rRange )
+                                throw(::com::sun::star::container::NoSuchElementException,
+                                    ::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    const ScRangeList& rRanges = GetRangeList();
+    ScMarkData aMarkData;
+    aMarkData.MarkFromRangeList( rRanges, FALSE );
+    ScRange aRange(static_cast<sal_uInt16>(rRange.StartColumn),
+                static_cast<sal_uInt16>(rRange.StartRow),
+                static_cast<sal_uInt16>(rRange.Sheet),
+                static_cast<sal_uInt16>(rRange.EndColumn),
+                static_cast<sal_uInt16>(rRange.EndRow),
+                static_cast<sal_uInt16>(rRange.Sheet));
+    if (aMarkData.GetTableSelect( aRange.aStart.Tab() ))
+        if (aMarkData.IsAllMarked( aRange ) )
+        {
+            aMarkData.SetMultiMarkArea( aRange, FALSE );
+            lcl_RemoveNamedEntry(aNamedEntries, aRange);
+        }
+        else
+            throw container::NoSuchElementException();
+    ScRangeList aNew;
+    aMarkData.FillRangeListWithMarks( &aNew, FALSE );
+    SetNewRanges(aNew);
+}
+
+void SAL_CALL ScCellRangesObj::addRangeAddresses( const uno::Sequence<table::CellRangeAddress >& rRanges,
+                                    sal_Bool bMergeRanges )
+                                    throw(::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    sal_Int32 nCount(rRanges.getLength());
+    if (nCount)
+    {
+        const table::CellRangeAddress* pRanges = rRanges.getConstArray();
+        for (sal_Int32 i = 0; i < rRanges.getLength(); i++, pRanges++)
+        {
+            ScRange aRange(static_cast<sal_uInt16>(pRanges->StartColumn),
+                    static_cast<sal_uInt16>(pRanges->StartRow),
+                    static_cast<sal_uInt16>(pRanges->Sheet),
+                    static_cast<sal_uInt16>(pRanges->EndColumn),
+                    static_cast<sal_uInt16>(pRanges->EndRow),
+                    static_cast<sal_uInt16>(pRanges->Sheet));
+            AddRange(aRange, bMergeRanges);
+        }
+    }
+}
+
+void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::CellRangeAddress >& rRangeSeq )
+                                throw(::com::sun::star::container::NoSuchElementException,
+                                    ::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    sal_uInt32 nCount(rRangeSeq.getLength());
+    if (nCount)
+    {
+        const ScRangeList& rRanges = GetRangeList();
+        ScMarkData aMarkData;
+        aMarkData.MarkFromRangeList( rRanges, FALSE );
+        const table::CellRangeAddress* pRanges = rRangeSeq.getConstArray();
+        for (sal_uInt32 i=0; i < nCount; i++, pRanges++)
+        {
+            ScRange aDiffRange(static_cast<sal_uInt16>(pRanges->StartColumn),
+                            static_cast<sal_uInt16>(pRanges->StartRow),
+                            static_cast<sal_uInt16>(pRanges->Sheet),
+                            static_cast<sal_uInt16>(pRanges->EndColumn),
+                            static_cast<sal_uInt16>(pRanges->EndRow),
+                            static_cast<sal_uInt16>(pRanges->Sheet));
+            if (aMarkData.GetTableSelect( aDiffRange.aStart.Tab() ))
+                if (aMarkData.IsAllMarked( aDiffRange ) )
+                {
+                    aMarkData.SetMultiMarkArea( aDiffRange, FALSE );
+                    lcl_RemoveNamedEntry(aNamedEntries, aDiffRange);
+                }
+                else
+                    throw container::NoSuchElementException();
+
+        }
+
+        ScRangeList aNew;
+        aMarkData.FillRangeListWithMarks( &aNew, FALSE );
+        SetNewRanges(aNew);
+    }
 }
 
 // XNameContainer
@@ -4185,6 +4312,7 @@ uno::Any SAL_CALL ScCellRangeObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( table::XColumnRowRange )
     SC_QUERYINTERFACE( util::XImportable )
     SC_QUERYINTERFACE( sheet::XCellFormatRangesSupplier )
+    SC_QUERYINTERFACE( sheet::XUniqueCellFormatRangesSupplier )
 
     return ScCellRangesBase::queryInterface( rType );
 }
@@ -4208,7 +4336,7 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangeObj::getTypes() throw(uno::RuntimeE
         long nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
-        aTypes.realloc( nParentLen + 14 );
+        aTypes.realloc( nParentLen + 15 );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XCellRangeAddressable>*)0);
         pPtr[nParentLen + 1] = getCppuType((const uno::Reference<sheet::XSheetCellRange>*)0);
@@ -4224,6 +4352,7 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangeObj::getTypes() throw(uno::RuntimeE
         pPtr[nParentLen +11] = getCppuType((const uno::Reference<table::XColumnRowRange>*)0);
         pPtr[nParentLen +12] = getCppuType((const uno::Reference<util::XImportable>*)0);
         pPtr[nParentLen +13] = getCppuType((const uno::Reference<sheet::XCellFormatRangesSupplier>*)0);
+        pPtr[nParentLen +14] = getCppuType((const uno::Reference<sheet::XUniqueCellFormatRangesSupplier>*)0);
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -5120,7 +5249,7 @@ void SAL_CALL ScCellRangeObj::doImport( const uno::Sequence<beans::PropertyValue
     }
 }
 
-// XCellFormatsSupplier
+// XCellFormatRangesSupplier
 
 uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangeObj::getCellFormatRanges()
                                                 throw(uno::RuntimeException)
@@ -5129,6 +5258,18 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangeObj::getCellFormatRa
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
         return new ScCellFormatsObj( pDocSh, aRange );
+    return NULL;
+}
+
+// XUniqueCellFormatRangesSupplier
+
+uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangeObj::getUniqueCellFormatRanges()
+                                                throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScDocShell* pDocSh = GetDocShell();
+    if ( pDocSh )
+        return new ScUniqueCellFormatsObj( pDocSh, aRange );
     return NULL;
 }
 
@@ -8216,5 +8357,203 @@ uno::Any SAL_CALL ScCellFormatsEnumeration::nextElement() throw(container::NoSuc
     return aAny;
 }
 
+//------------------------------------------------------------------------
+
+ScUniqueCellFormatsObj::ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange& rRange) :
+    pDocShell( pDocSh ),
+    aTotalRange( rRange ),
+    aRangeLists()
+{
+    pDocShell->GetDocument()->AddUnoObject(*this);
+
+    DBG_ASSERT( aTotalRange.aStart.Tab() == aTotalRange.aEnd.Tab(), "unterschiedliche Tabellen" );
+
+    GetObjects_Impl();
+}
+
+ScUniqueCellFormatsObj::~ScUniqueCellFormatsObj()
+{
+    if (pDocShell)
+        pDocShell->GetDocument()->RemoveUnoObject(*this);
+}
+
+void ScUniqueCellFormatsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA( ScUpdateRefHint ) )
+    {
+        //! aTotalRange...
+    }
+    else if ( rHint.ISA( SfxSimpleHint ) )
+    {
+        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        if ( nId == SFX_HINT_DYING )
+            pDocShell = NULL;                       // ungueltig geworden
+    }
+}
+
+void ScUniqueCellFormatsObj::GetObjects_Impl()
+{
+    //! direkt auf die AttrArrays zugreifen !!!!
+
+    if (pDocShell)
+    {
+        ScDocument* pDoc = pDocShell->GetDocument();
+        long nPos = 0;
+        USHORT nTab = aTotalRange.aStart.Tab();
+        ScAttrRectIterator aIter( pDoc, nTab,
+                                    aTotalRange.aStart.Col(), aTotalRange.aStart.Row(),
+                                    aTotalRange.aEnd.Col(), aTotalRange.aEnd.Row() );
+        USHORT nCol1, nCol2, nRow1, nRow2;
+        std::list<ScRange> aList;
+        ScRange aFirst;
+        if (aIter.GetNext( nCol1, nCol2, nRow1, nRow2 ) )
+        {
+            aFirst = ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
+            aRangeLists.push_back(ScRangeList());
+            aRangeLists[0].Join(aFirst);
+        }
+        while ( aIter.GetNext( nCol1, nCol2, nRow1, nRow2 ) )
+        {
+            ScRange aNext( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
+            if (pDoc->GetPattern(nCol1, nRow1, nTab) == pDoc->GetPattern(aFirst.aStart.Col(), aFirst.aStart.Row(), aFirst.aStart.Tab()) )
+                aRangeLists[0].Join(aNext);
+            else
+                aList.push_back(aNext);
+        }
+        if (!aList.empty())
+        {
+            std::list<ScRange>::iterator aItr = aList.begin();
+            aRangeLists.push_back(ScRangeList());
+            sal_Int32 nIndex(1);
+            aFirst = *aItr;
+            aRangeLists[nIndex].Join(aFirst);
+            aItr = aList.erase(aItr);
+            while (!aList.empty())
+            {
+                if (pDoc->GetPattern(aItr->aStart.Col(), aItr->aStart.Row(), aItr->aStart.Tab()) ==
+                    pDoc->GetPattern(aFirst.aStart.Col(), aFirst.aStart.Row(), aFirst.aStart.Tab()) )
+                {
+                    aRangeLists[nIndex].Join(*aItr);
+                    aItr = aList.erase(aItr);
+                }
+                else
+                    aItr++;
+                if (aItr == aList.end() && !aList.empty())
+                {
+                    aItr = aList.begin();
+                    aRangeLists.push_back(ScRangeList());
+                    nIndex++;
+                    aFirst = *aItr;
+                    aRangeLists[nIndex].Join(aFirst);
+                    aItr = aList.erase(aItr);
+                }
+            }
+        }
+    }
+}
+
+// XIndexAccess
+
+sal_Int32 SAL_CALL ScUniqueCellFormatsObj::getCount() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    return aRangeLists.size();
+}
+
+uno::Any SAL_CALL ScUniqueCellFormatsObj::getByIndex( sal_Int32 nIndex )
+                            throw(lang::IndexOutOfBoundsException,
+                                    lang::WrappedTargetException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    uno::Any aAny;
+    if(static_cast<sal_uInt32>(nIndex) < aRangeLists.size())
+    {
+        uno::Reference<sheet::XSheetCellRangeContainer> xCellRanges = new ScCellRangesObj(pDocShell, aRangeLists[nIndex]);
+        aAny <<= xCellRanges;
+    }
+    else
+        throw lang::IndexOutOfBoundsException();
+    return aAny;
+}
+
+uno::Type SAL_CALL ScUniqueCellFormatsObj::getElementType() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return getCppuType((uno::Reference<sheet::XSheetCellRangeContainer>*)0);
+}
+
+sal_Bool SAL_CALL ScUniqueCellFormatsObj::hasElements() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return ( aRangeLists.size() != 0 );
+}
+
+// XEnumerationAccess
+
+uno::Reference<container::XEnumeration> SAL_CALL ScUniqueCellFormatsObj::createEnumeration()
+                                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (pDocShell)
+        return new ScUniqueCellFormatsEnumeration( pDocShell, aRangeLists );
+    return NULL;
+}
+
+//------------------------------------------------------------------------
+
+ScUniqueCellFormatsEnumeration::ScUniqueCellFormatsEnumeration(ScDocShell* pDocSh, const ScMyRangeLists& rRangeLists) :
+    pDocShell( pDocSh ),
+    aRangeLists(rRangeLists),
+    nCurrentPosition(0)
+{
+    pDocShell->GetDocument()->AddUnoObject(*this);
+}
+
+ScUniqueCellFormatsEnumeration::~ScUniqueCellFormatsEnumeration()
+{
+    if (pDocShell)
+        pDocShell->GetDocument()->RemoveUnoObject(*this);
+}
+
+void ScUniqueCellFormatsEnumeration::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA( ScUpdateRefHint ) )
+    {
+        //! und nun ???
+    }
+    else if ( rHint.ISA( SfxSimpleHint ) )
+    {
+        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        if ( nId == SFX_HINT_DYING )
+            pDocShell = NULL;                       // ungueltig geworden
+    }
+}
+
+// XEnumeration
+
+sal_Bool SAL_CALL ScUniqueCellFormatsEnumeration::hasMoreElements() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return static_cast<sal_uInt32>(nCurrentPosition + 1) < aRangeLists.size();
+}
+
+uno::Any SAL_CALL ScUniqueCellFormatsEnumeration::nextElement() throw(container::NoSuchElementException,
+                                        lang::WrappedTargetException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    if ( !hasMoreElements() || !pDocShell )
+        throw container::NoSuchElementException();      // no more elements
+
+    // Interface-Typ muss zu ScCellFormatsObj::getElementType passen
+
+    nCurrentPosition++;
+    uno::Reference<sheet::XSheetCellRangeContainer> xCellRanges = new ScCellRangesObj(pDocShell, aRangeLists[nCurrentPosition]);
+    uno::Any aAny;
+    aAny <<= xCellRanges;
+    return aAny;
+}
 
 
