@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-26 08:15:46 $
+ *  last change: $Author: obo $ $Date: 2001-07-06 13:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1150,10 +1150,6 @@ SfxMenuBarManager::~SfxMenuBarManager()
         pWindow->SetMenuBar( 0 );
 }
 
-String SfxMenuBarManager::GetStreamName()
-{
-    return String::CreateFromAscii("MenuBar.xml");
-}
 
 /*
 SvStream* SfxMenuBarManager::GetDefaultStream( StreamMode nMode )
