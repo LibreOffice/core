@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:58:00 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,7 @@ inline SfxDispatcher &SwView::GetDispatcher()
 void SwView::ImpSetVerb( int nSelType )
 {
     sal_Bool bResetVerbs = bVerbsActive;
-    if ( !GetDocShell()->GetProtocol().IsInPlaceActive() &&
+    if ( !GetDocShell()->IsInPlaceActive() &&
          (SwWrtShell::SEL_OLE|SwWrtShell::SEL_GRF) & nSelType )
     {
         if ( !pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT) )
@@ -1520,7 +1520,7 @@ void SwView::ShowCursor( FASTBOOL bOn )
 
 ErrCode SwView::DoVerb( long nVerb )
 {
-    if ( !GetDocShell()->GetProtocol().IsInPlaceActive() )
+    if ( !GetDocShell()->IsInPlaceActive() )
     {
         SwWrtShell &rSh = GetWrtShell();
         const int nSel = rSh.GetSelectionType();
