@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-22 17:20:42 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,11 @@
 //------------------------------------------------------------------
 #include <svx/eeitem.hxx>
 #include <svx/fontwork.hxx>
-#include <svx/labdlg.hxx>
+//CHINA001 #include <svx/labdlg.hxx>
 #include <svx/srchitem.hxx>
 #include <svx/tabarea.hxx>
 #include <svx/tabline.hxx>
-#include <svx/textanim.hxx>
-#include <svx/transfrm.hxx>
+//CHINA001 #include <svx/transfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
