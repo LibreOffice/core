@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:32:11 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x16: // Missing Argument                      [314 266]
                 aPool << ocMissing;
                 aPool >> aStack;
+                pExcRoot->pIR->GetTracer().TraceFormulaMissingArg();
                 break;
             case 0x17: // String Constant                       [314 266]
                 aIn >> nLen;        // und?
@@ -1209,7 +1210,7 @@ void ExcelToSc8::ExcRelToScRel( UINT16 nRow, UINT16 nC, SingleRefData &rSRD, con
         // T A B
         // #67965# abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
-            rSRD.nTab = pExcRoot->pIR->GetScTab();
+            rSRD.nTab = pExcRoot->pIR->GetCurrScTab();
     }
     else
     {
@@ -1228,7 +1229,7 @@ void ExcelToSc8::ExcRelToScRel( UINT16 nRow, UINT16 nC, SingleRefData &rSRD, con
         // T A B
         // #i10184# abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
-            rSRD.nTab = pExcRoot->pIR->GetScTab() + rSRD.nRelTab;
+            rSRD.nTab = pExcRoot->pIR->GetCurrScTab() + rSRD.nRelTab;
     }
 }
 
@@ -1262,7 +1263,7 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
 
                 nRow2 = nRow1;
                 nCol2 = nCol1;
-                nTab1 = nTab2 = pExcRoot->pIR->GetScTab();
+                nTab1 = nTab2 = pExcRoot->pIR->GetCurrScTab();
                 goto _common;
             case 0x45:
             case 0x65:
@@ -1273,7 +1274,7 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
                        // Area Reference Within a Shared Formula[    274]
                 aIn >> nRow1 >> nRow2 >> nCol1 >> nCol2;
 
-                nTab1 = nTab2 = pExcRoot->pIR->GetScTab();
+                nTab1 = nTab2 = pExcRoot->pIR->GetCurrScTab();
                 goto _common;
             case 0x5A:
             case 0x7A:
