@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-26 09:28:27 $
+ *  last change: $Author: sab $ $Date: 2002-03-04 14:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,6 +1039,7 @@ void ScCellTextData::UpdateData()
 {
     if ( bDoUpdate )
     {
+        DBG_ASSERT(pEditEngine != NULL, "no EditEngine for UpdateData()");
         if ( pDocShell && pEditEngine )
         {
             //  during the own UpdateData call, bDataValid must not be reset,
