@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadpool.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-28 15:56:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ namespace cppu_threadpool
 
     DisposedCallerAdmin::~DisposedCallerAdmin()
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if( !m_lst.empty() )
         {
             printf( "DisposedCallerList : %d left\n" , m_lst.size( ));
@@ -140,7 +140,7 @@ namespace cppu_threadpool
     //-------------------------------------------------------------------------------
     ThreadPool::~ThreadPool()
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if( m_mapQueue.size() )
         {
             printf( "ThreadIdHashMap : %d left\n" , m_mapQueue.size() );
