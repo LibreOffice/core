@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-21 13:35:09 $
+ *  last change: $Author: mav $ $Date: 2002-06-21 08:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _SBX_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
+#ifndef _SFXINTITEM_HXX //autogen
+#include <svtools/intitem.hxx>
+#endif
 #ifndef _SB_SBMETH_HXX //autogen
 #include <basic/sbmeth.hxx>
 #endif
@@ -81,6 +84,10 @@
 #include <osl/mutex.hxx>
 
 #include <com/sun/star/script/XEngine.hpp>
+
+#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
+#include <com/sun/star/document/MacroExecMode.hpp>
+#endif
 
 #pragma hdrstop
 
@@ -106,6 +113,7 @@
 #include <viewfrm.hxx>
 #include <appdata.hxx>
 #include "objshimp.hxx"
+#include "request.hxx"
 
 static const sal_uInt16 nCompatVersion = 2;
 static const sal_uInt16 nVersion = 3;
@@ -761,8 +769,8 @@ sal_Bool SfxMacroConfig::ExecuteMacro( SfxObjectShell *pSh, const SvxMacro* pMac
             if ( pSh && pMgr && pMgr != pAppMgr )
             {
                 pSh->AdjustMacroMode( String() );
-                if ( pSh->Get_Impl()->nMacroMode == eNEVER_EXECUTE )
-                    return FALSE;
+                if( pSh->Get_Impl()->nMacroMode == ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
+                    return sal_False;
             }
 
             if ( pSh && pMgr && pMgr == pAppMgr )

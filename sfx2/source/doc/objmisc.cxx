@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mav $ $Date: 2002-03-26 16:24:31 $
+ *  last change: $Author: mav $ $Date: 2002-06-21 08:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
+#ifndef _SFXINTITEM_HXX //autogen
+#include <svtools/intitem.hxx>
+#endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
 #endif
@@ -109,6 +112,9 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYACCESS_HPP_
 #include <com/sun/star/script/XLibraryAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
+#include <com/sun/star/document/MacroExecMode.hpp>
+#endif
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -122,6 +128,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::document;
 
 #ifndef _SB_SBUNO_HXX
 #include <basic/sbuno.hxx>
@@ -1157,7 +1164,7 @@ ErrCode SfxObjectShell::CallBasic( const String& rMacro,
     if( pApp->GetName() != rBasic )
     {
         AdjustMacroMode( String() );
-        if ( pImp->nMacroMode == eNEVER_EXECUTE )
+        if( pImp->nMacroMode == MacroExecMode::NEVER_EXECUTE )
             return ERRCODE_IO_ACCESSDENIED;
     }
 
@@ -1512,55 +1519,70 @@ void SfxObjectShell::Invalidate( USHORT nId )
         Invalidate_Impl( pFrame->GetBindings(), nId );
 }
 
-// nMacroMode == 3 : uninitialized
-// nMacroMode == 4 : always execute, no warning
-// other values as in svtools/securityoptions.hxx
+// nMacroMode == -1 : uninitialized
+// other values as in /com/sun/star/document/MacroExecMode.hxx
 
 void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
 {
+    if( pImp->nMacroMode < 0 )
+    {
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pMacroModeItem, SfxUInt16Item, SID_MACROEXECMODE, sal_False);
+        pImp->nMacroMode = pMacroModeItem ? pMacroModeItem->GetValue() : MacroExecMode::NEVER_EXECUTE;
+    }
+
+    /*
+     * take place only in case of api mode
+     * that is now uses NEVER_EXECUTE by default
     if ( IsPreview() || eCreateMode != SFX_CREATE_MODE_STANDARD )
     {
         // no execution, no warnings
         pImp->nMacroMode = eNEVER_EXECUTE;
         return;
     }
+    */
 
-    SvtSecurityOptions aOpt;
-
-    // eFROM_LIST is uninitialized default
-    if ( pImp->nMacroMode == 3 )
-        // get setting from configuration
-        pImp->nMacroMode = aOpt.GetBasicMode();
-
-    if ( pImp->nMacroMode == eFROM_LIST || pImp->nMacroMode == eALWAYS_EXECUTE )
+    if( pImp->nMacroMode != MacroExecMode::NEVER_EXECUTE
+     || pImp->nMacroMode != MacroExecMode::ALWAYS_EXECUTE_NO_WARN )
     {
-        // user was not asked before
-        // ask one time and store result for all future calls
-        sal_Bool bWarn = aOpt.IsWarningEnabled();
-        sal_Bool bConfirm = aOpt.IsConfirmationEnabled();
-        sal_Bool bSecure = pImp->nMacroMode == eALWAYS_EXECUTE || IsSecure();
-        if ( bSecure && bWarn || !bSecure && bConfirm )
-        {
-            QueryBox aBox( GetDialogParent(), SfxResId( DLG_MACROQUERY ) );
-            aBox.SetButtonText( aBox.GetButtonId(0), String( SfxResId(BTN_OK) ) );
-            aBox.SetButtonText( aBox.GetButtonId(1), String( SfxResId(BTN_CANCEL) ) );
-            String aText = aBox.GetMessText();
-            if ( bSecure )
-            {
-                aBox.SetFocusButton( aBox.GetButtonId(0) );
-                aText.SearchAndReplace( String::CreateFromAscii("$(TEXT)"), String( SfxResId(FT_OK) ) );
-            }
-            else
-            {
-                aBox.SetFocusButton( aBox.GetButtonId(1) );
-                aText.SearchAndReplace( String::CreateFromAscii("$(TEXT)"), String( SfxResId(FT_CANCEL) ) );
-            }
+        SvtSecurityOptions aOpt;
 
-            aBox.SetMessText( aText );
-            bSecure = ( aBox.Execute() == RET_OK );
+        if ( pImp->nMacroMode == MacroExecMode::USE_CONFIG )
+        {
+            // get setting from configuration
+            pImp->nMacroMode = aOpt.GetBasicMode();
+            DBG_ASSERT( pImp->nMacroMode != MacroExecMode::USE_CONFIG, "Configuration should contain explicit value!\n" );
         }
 
-        pImp->nMacroMode = bSecure ? 4 : eNEVER_EXECUTE;
+        if ( pImp->nMacroMode == MacroExecMode::FROM_LIST || pImp->nMacroMode == MacroExecMode::ALWAYS_EXECUTE )
+        {
+            // user was not asked before
+            // ask one time and store result for all future calls
+            sal_Bool bWarn = aOpt.IsWarningEnabled();
+            sal_Bool bConfirm = aOpt.IsConfirmationEnabled();
+            sal_Bool bSecure = pImp->nMacroMode == MacroExecMode::ALWAYS_EXECUTE || IsSecure();
+            if ( bSecure && bWarn || !bSecure && bConfirm )
+            {
+                QueryBox aBox( GetDialogParent(), SfxResId( DLG_MACROQUERY ) );
+                aBox.SetButtonText( aBox.GetButtonId(0), String( SfxResId(BTN_OK) ) );
+                aBox.SetButtonText( aBox.GetButtonId(1), String( SfxResId(BTN_CANCEL) ) );
+                String aText = aBox.GetMessText();
+                if ( bSecure )
+                {
+                    aBox.SetFocusButton( aBox.GetButtonId(0) );
+                    aText.SearchAndReplace( String::CreateFromAscii("$(TEXT)"), String( SfxResId(FT_OK) ) );
+                }
+                else
+                {
+                    aBox.SetFocusButton( aBox.GetButtonId(1) );
+                    aText.SearchAndReplace( String::CreateFromAscii("$(TEXT)"), String( SfxResId(FT_CANCEL) ) );
+                }
+
+                aBox.SetMessText( aText );
+                bSecure = ( aBox.Execute() == RET_OK );
+            }
+
+            pImp->nMacroMode = bSecure ? MacroExecMode::ALWAYS_EXECUTE_NO_WARN : MacroExecMode::NEVER_EXECUTE;
+        }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: as $ $Date: 2002-05-24 09:40:34 $
+ *  last change: $Author: mav $ $Date: 2002-06-21 08:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_CONTROLACTIONS_HPP_
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
+#include <com/sun/star/document/MacroExecMode.hpp>
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include <filedlghelper.hxx>
@@ -267,15 +270,19 @@ void ShutdownIcon::FileOpen()
                     Sequence< OUString >        sFiles = xPicker->getFiles();
                     int                         nFiles = sFiles.getLength();
 
-                    int                         nArgs=1;
-                    Sequence< PropertyValue >   aArgs(1);
+                    int                         nArgs=2;
+                    Sequence< PropertyValue >   aArgs(2);
 
                     Reference < com::sun::star::task::XInteractionHandler > xInteraction(
                         ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.task.InteractionHandler") ),
                         com::sun::star::uno::UNO_QUERY );
 
-                    aArgs[nArgs-1].Name = OUString::createFromAscii( "InteractionHandler" );
-                    aArgs[nArgs-1].Value <<= xInteraction;
+                    aArgs[0].Name = OUString::createFromAscii( "InteractionHandler" );
+                    aArgs[0].Value <<= xInteraction;
+
+                    sal_Int16 nMacroExecMode = ::com::sun::star::document::MacroExecMode::USE_CONFIG;
+                    aArgs[1].Name = OUString::createFromAscii( "MacroExecutionMode" );
+                    aArgs[1].Value <<= nMacroExecMode;
 
                     OUString                    aFilterName;
                     if ( xFilterManager.is() )
