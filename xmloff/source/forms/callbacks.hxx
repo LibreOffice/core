@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callbacks.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 13:11:31 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,9 @@ namespace xmloff
 
         virtual const SvXMLStyleContext*    getStyleElement(const ::rtl::OUString& _rStyleName) const = 0;
 
+        virtual void                        enterEventContext() = 0;
+        virtual void                        leaveEventContext() = 0;
+
         /** applies the given number style to the given object
         */
         virtual void applyControlNumberStyle(
@@ -158,8 +161,19 @@ namespace xmloff
             const ::rtl::OUString& _rControlNumerStyleName
         ) = 0;
 
-        virtual void                        enterEventContext() = 0;
-        virtual void                        leaveEventContext() = 0;
+        /** registers a control model for later binding to a spreadsheet cell value
+        */
+        virtual void                        registerCellValueBinding(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+            const ::rtl::OUString& _rCellAddress
+        ) = 0;
+
+        /** registers a list-like control model for later binding to a spreadsheet cell range as list source
+        */
+        virtual void                        registerCellRangeListSource(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+            const ::rtl::OUString& _rCellRangeAddress
+        ) = 0;
     };
 
     //=====================================================================
@@ -194,6 +208,18 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9.160.1  2003/10/01 09:55:17  fs
+ *  #i18994# merging the changes from the CWS fs002
+ *
+ *  Revision 1.9.156.1  2003/09/25 14:28:35  fs
+ *  #18994# merging the changes from cws_srx645_fs002 branch
+ *
+ *  Revision 1.9.152.1  2003/09/17 12:26:44  fs
+ *  #18999# #19367# persistence for cell value and cell range bindings
+ *
+ *  Revision 1.9  2002/10/25 13:11:31  fs
+ *  #104402# new methods on the import context callback for importing column styles
+ *
  *  Revision 1.8  2002/10/25 07:35:35  fs
  *  #104402# +IFormsExportContext::getObjectStyleName
  *
