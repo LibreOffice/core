@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:38:19 $
+ *  last change: $Author: nn $ $Date: 2001-02-06 17:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,8 +495,8 @@ TabPage RID_SCPAGE_CALC
     FixedText FT_STEPS
     {
         Pos = MAP_APPFONT ( 20 , 28 ) ;
-        Size = MAP_APPFONT ( 52 , 10 ) ;
-        Text = "S~chritte" ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
+        Text = "Sch~ritte" ;
         Text [ ENGLISH ] = "S~teps" ;
         Text [ norwegian ] = "S~teps" ;
         Text [ italian ] = "Pa~ssaggi" ;
@@ -523,7 +523,7 @@ TabPage RID_SCPAGE_CALC
     FixedText FT_EPS
     {
         Pos = MAP_APPFONT ( 20 , 44 ) ;
-        Size = MAP_APPFONT ( 52 , 20 ) ;
+        Size = MAP_APPFONT ( 52 , 16 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Minimaler Änderungs~wert : Minimaler Žnderungs~wert */
         Text = "Minimaler Änderungs~wert" ;
         Text [ ENGLISH ] = "Minimum Chan~ge" ;
@@ -567,7 +567,7 @@ TabPage RID_SCPAGE_CALC
     GroupBox GB_ZREFS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 115 , 77 ) ;
+        Size = MAP_APPFONT ( 114 , 62 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Zirkuläre Referenzen : Zirkulõre Referenzen */
         Text = "Zirkuläre Referenzen" ;
         Text [ ENGLISH ] = "~Circular References" ;
@@ -641,7 +641,7 @@ TabPage RID_SCPAGE_CALC
     };
     RadioButton BTN_DATESC10
     {
-        Pos = MAP_APPFONT ( 132 , 27 ) ;
+        Pos = MAP_APPFONT ( 132 , 28 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         QuickHelpText = "Wert 0 entspricht dem 01.01.1900" ;
         QuickHelpText [ ENGLISH ] = "Value 0 yields 01.01.1900" ;
@@ -688,7 +688,7 @@ TabPage RID_SCPAGE_CALC
     };
     RadioButton BTN_DATE1904
     {
-        Pos = MAP_APPFONT ( 132 , 40 ) ;
+        Pos = MAP_APPFONT ( 132 , 42 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         QuickHelpText = "Wert 0 entspricht dem 01.01.1904" ;
         QuickHelpText [ ENGLISH ] = "Value 0 yields 01.01.1904" ;
@@ -736,7 +736,7 @@ TabPage RID_SCPAGE_CALC
     GroupBox GB_DATE
     {
         Pos = MAP_APPFONT ( 126 , 3 ) ;
-        Size = MAP_APPFONT ( 128 , 77 ) ;
+        Size = MAP_APPFONT ( 128 , 62 ) ;
         Text = "Datum" ;
         Text [ ENGLISH ] = "Date" ;
         Text [ norwegian ] = "Date" ;
@@ -763,8 +763,8 @@ TabPage RID_SCPAGE_CALC
     };
     FixedText FT_PREC
     {
-        Pos = MAP_APPFONT ( 160 , 86 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 160 , 77 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "Nach~kommastellen" ;
         Text [ ENGLISH ] = "~Precision" ;
         Text [ norwegian ] = "~Precision" ;
@@ -793,14 +793,14 @@ TabPage RID_SCPAGE_CALC
     NumericField ED_PREC
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 229 , 85 ) ;
+        Pos = MAP_APPFONT ( 229 , 76 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
         Maximum = 20 ;
         Spin = TRUE ;
     };
     CheckBox BTN_CASE
     {
-        Pos = MAP_APPFONT ( 6 , 84 ) ;
+        Pos = MAP_APPFONT ( 6 , 76 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Groß-/Kleinschreibung beachten : ~Gro˜-/Kleinschreibung beachten */
         Text = "~Groß-/Kleinschreibung beachten" ;
@@ -829,7 +829,7 @@ TabPage RID_SCPAGE_CALC
     };
     CheckBox BTN_CALC
     {
-        Pos = MAP_APPFONT ( 6 , 97 ) ;
+        Pos = MAP_APPFONT ( 6 , 90 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "Gena~uigkeit wie angezeigt" ;
         Text [ ENGLISH ] = "Calc~ulate as precise as shown" ;
@@ -857,7 +857,7 @@ TabPage RID_SCPAGE_CALC
     };
     CheckBox BTN_MATCH
     {
-        Pos = MAP_APPFONT ( 6 , 110 ) ;
+        Pos = MAP_APPFONT ( 6 , 104 ) ;
         Size = MAP_APPFONT ( 240 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Suchkri~terien = und <> müssen auf ganze Zellen zutreffen : Suchkri~terien = und <> m³ssen auf ganze Zellen zutreffen */
         Text = "Suchkri~terien = und <> müssen auf ganze Zellen zutreffen" ;
@@ -884,7 +884,7 @@ TabPage RID_SCPAGE_CALC
     };
     CheckBox BTN_LOOKUP
     {
-        Pos = MAP_APPFONT ( 6 , 123 ) ;
+        Pos = MAP_APPFONT ( 6 , 118 ) ;
         Size = MAP_APPFONT ( 240 , 10 ) ;
         Text = "Spalten-/Zeilen~beschriftungen automatisch suchen" ;
         Text [ ENGLISH ] = "Search column and row ~labels automatically" ;
@@ -922,11 +922,11 @@ TabPage RID_SCPAGE_USERLISTS
     SVLook = TRUE ;
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_LISTS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 93 , 8 ) ;
         Text = "L~isten" ;
         Text [ ENGLISH ] = "L~ists" ;
         Text [ norwegian ] = "L~ists" ;
@@ -955,12 +955,12 @@ TabPage RID_SCPAGE_USERLISTS
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 15 ) ;
-        Size = MAP_APPFONT ( 94 , 98 ) ;
+        Size = MAP_APPFONT ( 93 , 148 ) ;
     };
     FixedText FT_ENTRIES
     {
-        Pos = MAP_APPFONT ( 106 , 3 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 105 , 3 ) ;
+        Size = MAP_APPFONT ( 93 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Ein~träge : Ein~trõge */
         Text = "Ein~träge" ;
         Text [ ENGLISH ] = "En~tries" ;
@@ -989,21 +989,21 @@ TabPage RID_SCPAGE_USERLISTS
     MultiLineEdit ED_ENTRIES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 106 , 15 ) ;
-        Size = MAP_APPFONT ( 94 , 98 ) ;
+        Pos = MAP_APPFONT ( 105 , 15 ) ;
+        Size = MAP_APPFONT ( 93 , 148 ) ;
         VScroll = TRUE ;
         IgnoreTab = TRUE ;
     };
     Edit ED_COPYFROM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 70 , 117 ) ;
-        Size = MAP_APPFONT ( 130 , 12 ) ;
+        Pos = MAP_APPFONT ( 70 , 167 ) ;
+        Size = MAP_APPFONT ( 128 , 12 ) ;
     };
     FixedText FT_COPYFROM
     {
-        Pos = MAP_APPFONT ( 6 , 118 ) ;
-        Size = MAP_APPFONT ( 62 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 168 ) ;
+        Size = MAP_APPFONT ( 62 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Liste kopieren ~aus : Liste kopieren aus */
         Text = "Liste kopieren ~aus" ;
         Text [ ENGLISH ] = "Copy list from" ;
@@ -1031,8 +1031,8 @@ TabPage RID_SCPAGE_USERLISTS
     };
     PushButton BTN_NEW
     {
-        Pos = MAP_APPFONT ( 208 , 15 ) ;
-        Size = MAP_APPFONT ( 45 , 14 ) ;
+        Pos = MAP_APPFONT ( 204 , 15 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Neu" ;
         Text [ ENGLISH ] = "~New" ;
         Text [ norwegian ] = "~New" ;
@@ -1059,8 +1059,8 @@ TabPage RID_SCPAGE_USERLISTS
     };
     PushButton BTN_ADD
     {
-        Pos = MAP_APPFONT ( 208 , 35 ) ;
-        Size = MAP_APPFONT ( 45 , 14 ) ;
+        Pos = MAP_APPFONT ( 204 , 36 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Hinzufügen : ~Hinzuf³gen */
         Text = "~Hinzufügen" ;
         Text [ ENGLISH ] = "~Add" ;
@@ -1089,8 +1089,8 @@ TabPage RID_SCPAGE_USERLISTS
     };
     PushButton BTN_REMOVE
     {
-        Pos = MAP_APPFONT ( 208 , 52 ) ;
-        Size = MAP_APPFONT ( 45 , 14 ) ;
+        Pos = MAP_APPFONT ( 204 , 54 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text = "~Löschen" ;
         Text [ ENGLISH ] = "Remo~ve" ;
@@ -1118,8 +1118,8 @@ TabPage RID_SCPAGE_USERLISTS
     };
     PushButton BTN_COPY
     {
-        Pos = MAP_APPFONT ( 208 , 116 ) ;
-        Size = MAP_APPFONT ( 45 , 14 ) ;
+        Pos = MAP_APPFONT ( 204 , 166 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Kopieren" ;
         Text [ ENGLISH ] = "~Copy" ;
         Text [ norwegian ] = "~Kopier" ;
@@ -1281,11 +1281,11 @@ TabPage RID_SCPAGE_CONTENT
     SVLook = TRUE ;
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     GroupBox GB_DISPLAY
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 48 ) ;
+        Size = MAP_APPFONT ( 248 , 52 ) ;
         Text = "Anzeigen" ;
         Text [ ENGLISH ] = "Display" ;
         Text [ norwegian ] = "Display" ;
@@ -1312,7 +1312,7 @@ TabPage RID_SCPAGE_CONTENT
     };
     CheckBox CB_FORMULA
     {
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Formeln" ;
         Text [ ENGLISH ] = "~Formulas" ;
@@ -1340,7 +1340,7 @@ TabPage RID_SCPAGE_CONTENT
     };
     CheckBox CB_NIL
     {
-        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Nullwerte" ;
         Text [ ENGLISH ] = "~Null values" ;
@@ -1368,9 +1368,9 @@ TabPage RID_SCPAGE_CONTENT
     };
     CheckBox CB_ANNOT
     {
-        Pos = MAP_APPFONT ( 12 , 38 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text = "Noti~zanzeiger" ;
+        Text = "Not~izanzeiger" ;
         Text [ ENGLISH ] = "Note Tag~s" ;
         Text [ norwegian ] = "Note Tag~s" ;
         Text [ italian ] = "Indica~zione note" ;
@@ -1396,7 +1396,7 @@ TabPage RID_SCPAGE_CONTENT
     };
     CheckBox CB_VALUE
     {
-        Pos = MAP_APPFONT ( 140 , 12 ) ;
+        Pos = MAP_APPFONT ( 140 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Werte her~vorheben" ;
         Text [ ENGLISH ] = "Syntax highlighting" ;
@@ -1424,7 +1424,7 @@ TabPage RID_SCPAGE_CONTENT
     };
     CheckBox CB_ANCHOR
     {
-        Pos = MAP_APPFONT ( 140 , 25 ) ;
+        Pos = MAP_APPFONT ( 140 , 28 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Anker" ;
         Text [ ENGLISH ] = "Anchor" ;
@@ -1450,7 +1450,7 @@ TabPage RID_SCPAGE_CONTENT
     };
     CheckBox CB_CLIP
     {
-        Pos = MAP_APPFONT ( 140 , 38 ) ;
+        Pos = MAP_APPFONT ( 140 , 42 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Textüberlauf" ;
         Text [ ENGLISH ] = "~Text overflow" ;
@@ -1476,8 +1476,8 @@ TabPage RID_SCPAGE_CONTENT
     };
     GroupBox GB_OBJECT
     {
-        Pos = MAP_APPFONT ( 6 , 57 ) ;
-        Size = MAP_APPFONT ( 248 , 56 ) ;
+        Pos = MAP_APPFONT ( 6 , 58 ) ;
+        Size = MAP_APPFONT ( 248 , 60 ) ;
         Text = "Objekte" ;
         Text [ ENGLISH ] = "Objects" ;
         Text[ chinese_simplified ] = "¶ÔÏó";
@@ -1504,8 +1504,8 @@ TabPage RID_SCPAGE_CONTENT
     };
     FixedText FT_OBJGRF
     {
-        Pos = MAP_APPFONT ( 12 , 68 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 70 ) ;
+        Size = MAP_APPFONT ( 98 , 8 ) ;
         Text = "~Objekte/Grafiken" ;
         Text [ ENGLISH ] = "Objects/Images" ;
         Text [ norwegian ] = "Objects/Images" ;
@@ -1532,13 +1532,13 @@ TabPage RID_SCPAGE_CONTENT
     };
     ListBox LB_OBJGRF
     {
-        Pos = MAP_APPFONT ( 110 , 67 ) ;
+        Pos = MAP_APPFONT ( 110 , 69 ) ;
         LB_OBJECTMODE
     };
     FixedText FT_DIAGRAM
     {
-        Pos = MAP_APPFONT ( 12 , 83 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 86 ) ;
+        Size = MAP_APPFONT ( 98 , 8 ) ;
         Text = "~Diagramme" ;
         Text [ ENGLISH ] = "Charts" ;
         Text [ norwegian ] = "Charts" ;
@@ -1565,13 +1565,13 @@ TabPage RID_SCPAGE_CONTENT
     };
     ListBox LB_DIAGRAM
     {
-        Pos = MAP_APPFONT ( 110 , 82 ) ;
+        Pos = MAP_APPFONT ( 110 , 85 ) ;
         LB_OBJECTMODE
     };
     FixedText FT_DRAW
     {
-        Pos = MAP_APPFONT ( 12 , 98 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 102 ) ;
+        Size = MAP_APPFONT ( 98 , 8 ) ;
         Text = "~Zeichenobjekte" ;
         Text [ ENGLISH ] = "Draw objects" ;
         Text [ norwegian ] = "Draw objects" ;
@@ -1598,7 +1598,7 @@ TabPage RID_SCPAGE_CONTENT
     };
     ListBox LB_DRAW
     {
-        Pos = MAP_APPFONT ( 110 , 97 ) ;
+        Pos = MAP_APPFONT ( 110 , 101 ) ;
         LB_OBJECTMODE
     };
 };
@@ -1616,11 +1616,11 @@ TabPage RID_SCPAGE_LAYOUT
     SVLook = TRUE ;
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     GroupBox GB_LINES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 93 ) ;
+        Size = MAP_APPFONT ( 120 , 96 ) ;
         Text = "Linien" ;
         Text [ ENGLISH ] = "Lines" ;
         Text [ english_us ] = "Lines" ;
@@ -1645,7 +1645,7 @@ TabPage RID_SCPAGE_LAYOUT
     };
     CheckBox CB_GRID
     {
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Gitterlinien" ;
         Text [ ENGLISH ] = "~Grid" ;
@@ -1673,8 +1673,8 @@ TabPage RID_SCPAGE_LAYOUT
     };
     FixedText FT_COLOR
     {
-        Pos = MAP_APPFONT ( 22 , 25 ) ;
-        Size = MAP_APPFONT ( 23 , 10 ) ;
+        Pos = MAP_APPFONT ( 22 , 29 ) ;
+        Size = MAP_APPFONT ( 23 , 8 ) ;
         Text = "F~arbe" ;
         Text [ ENGLISH ] = "~Color" ;
         Text [ norwegian ] = "~Color" ;
@@ -1702,14 +1702,14 @@ TabPage RID_SCPAGE_LAYOUT
     ListBox LB_COLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 48 , 24 ) ;
+        Pos = MAP_APPFONT ( 48 , 28 ) ;
         Size = MAP_APPFONT ( 75 , 86 ) ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
     CheckBox CB_PAGEBREAKS
     {
-        Pos = MAP_APPFONT ( 12 , 39 ) ;
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Seitenumbrüche : ~Seitenumbr³che */
         Text = "~Seitenumbrüche" ;
@@ -1736,7 +1736,7 @@ TabPage RID_SCPAGE_LAYOUT
     };
     CheckBox CB_GUIDELINE
     {
-        Pos = MAP_APPFONT ( 12 , 52 ) ;
+        Pos = MAP_APPFONT ( 12 , 58 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? H~ilfslinien : Hilfslinien */
         Text = "H~ilfslinien" ;
@@ -1763,7 +1763,7 @@ TabPage RID_SCPAGE_LAYOUT
     };
     CheckBox CB_HANDLES
     {
-        Pos = MAP_APPFONT ( 12 , 65 ) ;
+        Pos = MAP_APPFONT ( 12 , 72 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Einfache Griffe" ;
         Text [ ENGLISH ] = "~Simple Handles" ;
@@ -1789,7 +1789,7 @@ TabPage RID_SCPAGE_LAYOUT
     };
     CheckBox CB_BIGHANDLES
     {
-        Pos = MAP_APPFONT ( 12 , 78 ) ;
+        Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Gr~oße Griffe" ;
         Text [ ENGLISH ] = "~Big Handles" ;
@@ -1816,7 +1816,7 @@ TabPage RID_SCPAGE_LAYOUT
     GroupBox GB_WINDOW
     {
         Pos = MAP_APPFONT ( 134 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 93 ) ;
+        Size = MAP_APPFONT ( 120 , 96 ) ;
         Text = "Fenster" ;
         Text [ ENGLISH ] = "Window" ;
         Text [ norwegian ] = "Window" ;
@@ -1843,7 +1843,7 @@ TabPage RID_SCPAGE_LAYOUT
     };
     CheckBox CB_ROWCOLHEADER
     {
-        Pos = MAP_APPFONT ( 140 , 12 ) ;
+        Pos = MAP_APPFONT ( 140 , 14 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Zeilen- und Spaltenköpfe : ~Zeilen- und Spaltenk÷pfe */
         Text = "~Zeilen- und Spaltenköpfe" ;
@@ -1872,7 +1872,7 @@ TabPage RID_SCPAGE_LAYOUT
     };
     CheckBox CB_HSCROLL
     {
-        Pos = MAP_APPFONT ( 140 , 25 ) ;
+        Pos = MAP_APPFONT ( 140 , 28 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Horizontale Bildlaufleiste : ~Horizontale Schiebeleiste */
         Text = "~Horizontale Bildlaufleiste" ;
@@ -1901,7 +1901,7 @@ TabPage RID_SCPAGE_LAYOUT
     };
     CheckBox CB_VSCROLL
     {
-        Pos = MAP_APPFONT ( 140 , 38 ) ;
+        Pos = MAP_APPFONT ( 140 , 42 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Vertikale Bildlaufleiste : ~Vertikale Schiebeleiste */
         Text = "~Vertikale Bildlaufleiste" ;
@@ -1930,7 +1930,7 @@ TabPage RID_SCPAGE_LAYOUT
     };
     CheckBox CB_TBLREG
     {
-        Pos = MAP_APPFONT ( 140 , 51 ) ;
+        Pos = MAP_APPFONT ( 140 , 56 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Tabellen~register" ;
         Text [ ENGLISH ] = "Table ~registers" ;
@@ -1958,7 +1958,7 @@ TabPage RID_SCPAGE_LAYOUT
     };
     CheckBox CB_OUTLINE
     {
-        Pos = MAP_APPFONT ( 140 , 64 ) ;
+        Pos = MAP_APPFONT ( 140 , 70 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Glieder~ungssymbole" ;
         Text [ ENGLISH ] = "O~utliner" ;
@@ -1986,8 +1986,8 @@ TabPage RID_SCPAGE_LAYOUT
     };
     GroupBox GB_UNIT
     {
-        Pos = MAP_APPFONT ( 6 , 101 ) ;
-        Size = MAP_APPFONT ( 120 , 26 ) ;
+        Pos = MAP_APPFONT ( 6 , 102 ) ;
+        Size = MAP_APPFONT ( 120 , 28 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Maßeinheit : Ma˜einheit */
         Text = "Maßeinheit" ;
         Text [ ENGLISH ] = "Metric Units" ;
@@ -2016,8 +2016,8 @@ TabPage RID_SCPAGE_LAYOUT
     ListBox LB_UNIT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 110 ) ;
-        Size = MAP_APPFONT ( 70 , 50 ) ;
+        Pos = MAP_APPFONT ( 12 , 113 ) ;
+        Size = MAP_APPFONT ( 70 , 52 ) ;
         DropDown = TRUE ;
     };
     StringArray ST_UNIT
@@ -2302,8 +2302,8 @@ TabPage RID_SCPAGE_LAYOUT
     };
     GroupBox GB_TAB
     {
-        Pos = MAP_APPFONT ( 134 , 101 ) ;
-        Size = MAP_APPFONT ( 120 , 26 ) ;
+        Pos = MAP_APPFONT ( 134 , 102 ) ;
+        Size = MAP_APPFONT ( 120 , 28 ) ;
         Text = "Tabulatorenabstand" ;
         Text [ ENGLISH ] = "Default Tab distance" ;
         Text [ norwegian ] = "Standard tabulatoravstand" ;
@@ -2332,7 +2332,7 @@ TabPage RID_SCPAGE_LAYOUT
     MetricField MF_TAB
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 140 , 110 ) ;
+        Pos = MAP_APPFONT ( 140 , 113 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -2360,11 +2360,11 @@ TabPage RID_SCPAGE_INPUT
     SVLook = TRUE ;
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     GroupBox GB_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 87 ) ;
+        Size = MAP_APPFONT ( 248 , 94 ) ;
         Text = "Eingabe" ;
         Text [ ENGLISH ] = "Input" ;
         Text [ english_us ] = "Input" ;
@@ -2389,7 +2389,7 @@ TabPage RID_SCPAGE_INPUT
     };
     CheckBox CB_ALIGN
     {
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 170 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Eingabebestätigung setzt die ~Selektion nach : Eingabebestätigung setzt die Selektion nach */
         /* ### ACHTUNG: Neuer Text in Resource? Eingabebestätigung setzt die ~Selektion nach : Eingabebestõtigung setzt die ~Selektion nach */
@@ -2417,7 +2417,7 @@ TabPage RID_SCPAGE_INPUT
     };
     ListBox LB_ALIGN
     {
-        Pos = MAP_APPFONT ( 188 , 11 ) ;
+        Pos = MAP_APPFONT ( 188 , 13 ) ;
         Size = MAP_APPFONT ( 60 , 60 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -2572,8 +2572,8 @@ TabPage RID_SCPAGE_INPUT
     };
     CheckBox CB_EDITMODE
     {
-        Pos = MAP_APPFONT ( 12 , 25 ) ;
-        Size = MAP_APPFONT ( 170 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Eingabetaste schaltet in den ~Editmodus : Eingabetaste schaltet in den Editmodus */
         Text = "Eingabetaste schaltet in den ~Editmodus" ;
         Text [ ENGLISH ] = "Return key switches edit mode on" ;
@@ -2599,8 +2599,8 @@ TabPage RID_SCPAGE_INPUT
     };
     CheckBox CB_FORMAT
     {
-        Pos = MAP_APPFONT ( 12 , 38 ) ;
-        Size = MAP_APPFONT ( 170 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "~Formatierung ausdehnen" ;
         Text [ ENGLISH ] = "Expand formatting" ;
         Text [ english_us ] = "Expand ~formatting" ;
@@ -2625,8 +2625,8 @@ TabPage RID_SCPAGE_INPUT
     };
     CheckBox CB_RFIND
     {
-        Pos = MAP_APPFONT ( 12 , 51 ) ;
-        Size = MAP_APPFONT ( 170 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "~Referenzen farbig anzeigen" ;
         Text [ ENGLISH ] = "Show colored references" ;
         Text [ english_us ] = "~Show references in color" ;
@@ -2651,7 +2651,7 @@ TabPage RID_SCPAGE_INPUT
     };
     CheckBox CB_EXPREF
     {
-        Pos = MAP_APPFONT ( 12 , 64 ) ;
+        Pos = MAP_APPFONT ( 12 , 70 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Refere~nzen beim Spalten-/Zeileneinfügen an deren Rändern ausdehnen : Refere~nzen beim Spalten-/Zeileneinf³gen an deren Rõndern ausdehnen */
         Text = "Refere~nzen beim Spalten-/Zeileneinfügen an deren Rändern ausdehnen" ;
@@ -2678,7 +2678,7 @@ TabPage RID_SCPAGE_INPUT
     };
     CheckBox CB_MARKHDR
     {
-        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Pos = MAP_APPFONT ( 12 , 84 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "Se~lektion in Spalten-/Zeilenköpfen hervorheben" ;
         Text [ ENGLISH ] = "~Highlight selection in Column-/Row Headings" ;

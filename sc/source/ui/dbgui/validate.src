@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:04:47 $
+ *  last change: $Author: nn $ $Date: 2001-02-06 17:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,13 +179,13 @@ TabPage TP_VALIDATION_VALUES
 {
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Werte" ;
     Text [ ENGLISH ] = "Values" ;
     FixedText FT_ALLOW
     {
         Pos = MAP_APPFONT ( 12 , 20 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "~Zulassen" ;
         Text [ ENGLISH ] = "~Allow" ;
         Text [ dutch ] = "~Toestaan" ;
@@ -409,7 +409,7 @@ TabPage TP_VALIDATION_VALUES
     FixedText FT_VALUE
     {
         Pos = MAP_APPFONT ( 12 , 62 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "~Daten" ;
         Text [ ENGLISH ] = "~Data" ;
         Text [ english_us ] = "~Data" ;
@@ -676,7 +676,7 @@ TabPage TP_VALIDATION_VALUES
     FixedText FT_MIN
     {
         Pos = MAP_APPFONT ( 12 , 90 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "~Minimum" ;
         Text [ ENGLISH ] = "~Minimum" ;
         Text [ english_us ] = "~Minimum" ;
@@ -708,7 +708,7 @@ TabPage TP_VALIDATION_VALUES
     FixedText FT_MAX
     {
         Pos = MAP_APPFONT ( 12 , 106 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "M~aximum" ;
         Text [ ENGLISH ] = "Ma~ximum" ;
         Text [ english_us ] = "Ma~ximum" ;
@@ -766,7 +766,7 @@ TabPage TP_VALIDATION_VALUES
     GroupBox GRP_VALUES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 126 ) ;
+        Size = MAP_APPFONT ( 248 , 176 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Gültigkeitskriterien : G³ltigkeitskriterien */
         Text = "Gültigkeitskriterien" ;
         Text [ ENGLISH ] = "Validation settings" ;
@@ -813,7 +813,7 @@ TabPage TP_VALIDATION_INPUTHELP
 {
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Eingabehilfe" ;
     TriStateBox TSB_HELP
     {
@@ -844,7 +844,7 @@ TabPage TP_VALIDATION_INPUTHELP
     GroupBox GRP_CONTENT
     {
         Pos = MAP_APPFONT ( 6 , 20 ) ;
-        Size = MAP_APPFONT ( 248 , 109 ) ;
+        Size = MAP_APPFONT ( 248 , 159 ) ;
         Text = "Inhalt" ;
         Text [ ENGLISH ] = "Content" ;
         Text [ english_us ] = "Contents" ;
@@ -868,8 +868,8 @@ TabPage TP_VALIDATION_INPUTHELP
     };
     FixedText FT_TITLE
     {
-        Pos = MAP_APPFONT ( 12 , 33 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "~Titel" ;
         Text [ ENGLISH ] = "~Title" ;
         Text [ english_us ] = "~Title" ;
@@ -894,7 +894,7 @@ TabPage TP_VALIDATION_INPUTHELP
     FixedText FT_INPUTHELP
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "~Eingabehilfe" ;
         Text [ ENGLISH ] = "~Input help" ;
         Text [ dutch ] = "~Invoerhulp" ;
@@ -919,15 +919,15 @@ TabPage TP_VALIDATION_INPUTHELP
     Edit EDT_TITLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 32 ) ;
+        Pos = MAP_APPFONT ( 80 , 31 ) ;
         Size = MAP_APPFONT ( 166 , 12 ) ;
         TabStop = TRUE ;
     };
     MultiLineEdit EDT_INPUTHELP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 48 ) ;
-        Size = MAP_APPFONT ( 166 , 74 ) ;
+        Pos = MAP_APPFONT ( 80 , 47 ) ;
+        Size = MAP_APPFONT ( 166 , 127 ) ;
         TabStop = TRUE ;
         VScroll = TRUE ;
         IgnoreTab = TRUE ;
@@ -938,13 +938,13 @@ TabPage TP_VALIDATION_ERROR
 {
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Fehlermeldung" ;
     Text [ ENGLISH ] = "Error message" ;
     GroupBox GRP_CONTENT
     {
         Pos = MAP_APPFONT ( 6 , 20 ) ;
-        Size = MAP_APPFONT ( 248 , 109 ) ;
+        Size = MAP_APPFONT ( 248 , 159 ) ;
         Text = "Inhalt" ;
         Text [ ENGLISH ] = "Content" ;
         Text [ english_us ] = "Contents" ;
@@ -996,8 +996,8 @@ TabPage TP_VALIDATION_ERROR
     MultiLineEdit EDT_ERROR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 61 ) ;
-        Size = MAP_APPFONT ( 166 , 61 ) ;
+        Pos = MAP_APPFONT ( 80 , 63 ) ;
+        Size = MAP_APPFONT ( 166 , 111 ) ;
         TabStop = TRUE ;
         VScroll = TRUE ;
         IgnoreTab = TRUE ;
@@ -1011,8 +1011,8 @@ TabPage TP_VALIDATION_ERROR
     };
     FixedText FT_ERROR
     {
-        Pos = MAP_APPFONT ( 12 , 61 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 64 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "~Fehlermeldung" ;
         Text [ ENGLISH ] = "~Error message" ;
         Text [ english_us ] = "~Error message" ;
@@ -1037,7 +1037,7 @@ TabPage TP_VALIDATION_ERROR
     FixedText FT_TITLE
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "~Titel" ;
         Text [ ENGLISH ] = "~Title" ;
         Text [ english_us ] = "~Title" ;
@@ -1061,8 +1061,8 @@ TabPage TP_VALIDATION_ERROR
     };
     FixedText FT_ACTION
     {
-        Pos = MAP_APPFONT ( 12 , 33 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
         Text = "~Aktion" ;
         Text [ ENGLISH ] = "~Action" ;
         Text [ english_us ] = "~Action" ;
@@ -1087,7 +1087,7 @@ TabPage TP_VALIDATION_ERROR
     ListBox LB_ACTION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 30 ) ;
+        Pos = MAP_APPFONT ( 80 , 31 ) ;
         Size = MAP_APPFONT ( 102 , 76 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -1242,7 +1242,7 @@ TabPage TP_VALIDATION_ERROR
     };
     PushButton BTN_SEARCH
     {
-        Pos = MAP_APPFONT ( 186 , 30 ) ;
+        Pos = MAP_APPFONT ( 186 , 31 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text = "~Durchsuchen..." ;
         Text [ ENGLISH ] = "~Search..." ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:03:02 $
+ *  last change: $Author: nn $ $Date: 2001-02-06 17:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,39 +678,11 @@ TabPage RID_SCPAGE_TABLE
     HelpId = HID_SCPAGE_TABLE ;
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
-    CheckBox BTN_GRID
-    {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 77 , 10 ) ;
-        Text = "Tabellen~gitter" ;
-        Text [ ENGLISH ] = "~Grid" ;
-        Text [ norwegian ] = "~Grid" ;
-        Text [ italian ] = "Griglia" ;
-        Text [ portuguese_brazilian ] = "~Grade" ;
-        Text [ portuguese ] = "~Grelha" ;
-        Text [ finnish ] = "Taustav~iivat" ;
-        Text [ danish ] = "Tabelgitter" ;
-        Text [ french ] = "~Grille" ;
-        Text [ swedish ] = "Tabell~gitter" ;
-        Text [ dutch ] = "Tabellen~raster" ;
-        Text [ spanish ] = "~CuadrÌcula" ;
-        Text [ english_us ] = "~Grid" ;
-        TabStop = TRUE ;
-        Text[ chinese_simplified ] = "π§◊˜±ÌÕ¯∏Ò(~G)";
-        Text[ russian ] = "—ÂÚÍ‡";
-        Text[ polish ] = "Siatka tabeli";
-        Text[ japanese ] = "ï\\ÇÃ∏ﬁÿØƒﬁê¸(~G)";
-        Text[ chinese_traditional ] = "§uß@™Ì∫ÙÆÊ(~G)";
-        Text[ arabic ] = "‘»ﬂ… «·ÃœÊ·";
-        Text[ greek ] = "–Î›~„Ï· ﬂÌ·Í·";
-        Text[ korean ] = "¥´±›º±(~G)";
-        Text[ turkish ] = "~K˝lavuz Áizgiler";
-    };
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox BTN_HEADER
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Zeilen- & Sp~altenkˆpfe : Zeilen- & Sp~altenk˜pfe */
         Text = "Zeilen- & Sp~altenkˆpfe" ;
         Text [ ENGLISH ] = "Column- & row he~adings" ;
@@ -736,10 +708,38 @@ TabPage RID_SCPAGE_TABLE
         Text[ korean ] = "ø≠∞˙ «‡ ∏”∏Æ±€(~C)";
         Text[ turkish ] = "Sat˝r ve s¸tun ~ba˛l˝klar˝";
     };
+    CheckBox BTN_GRID
+    {
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Tabellen~gitter" ;
+        Text [ ENGLISH ] = "~Grid" ;
+        Text [ norwegian ] = "~Grid" ;
+        Text [ italian ] = "Griglia" ;
+        Text [ portuguese_brazilian ] = "~Grade" ;
+        Text [ portuguese ] = "~Grelha" ;
+        Text [ finnish ] = "Taustav~iivat" ;
+        Text [ danish ] = "Tabelgitter" ;
+        Text [ french ] = "~Grille" ;
+        Text [ swedish ] = "Tabell~gitter" ;
+        Text [ dutch ] = "Tabellen~raster" ;
+        Text [ spanish ] = "~CuadrÌcula" ;
+        Text [ english_us ] = "~Grid" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "π§◊˜±ÌÕ¯∏Ò(~G)";
+        Text[ russian ] = "—ÂÚÍ‡";
+        Text[ polish ] = "Siatka tabeli";
+        Text[ japanese ] = "ï\\ÇÃ∏ﬁÿØƒﬁê¸(~G)";
+        Text[ chinese_traditional ] = "§uß@™Ì∫ÙÆÊ(~G)";
+        Text[ arabic ] = "‘»ﬂ… «·ÃœÊ·";
+        Text[ greek ] = "–Î›~„Ï· ﬂÌ·Í·";
+        Text[ korean ] = "¥´±›º±(~G)";
+        Text[ turkish ] = "~K˝lavuz Áizgiler";
+    };
     CheckBox BTN_NOTES
     {
-        Pos = MAP_APPFONT ( 12 , 40 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "~Notizen" ;
         Text [ ENGLISH ] = "~Notes" ;
         Text [ norwegian ] = "~Notes" ;
@@ -766,8 +766,8 @@ TabPage RID_SCPAGE_TABLE
     };
     CheckBox BTN_OBJECTS
     {
-        Pos = MAP_APPFONT ( 12 , 53 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "~Objekte/Grafiken" ;
         Text [ ENGLISH ] = "~Objects/Images" ;
         Text [ norwegian ] = "~Objects/Images" ;
@@ -794,8 +794,8 @@ TabPage RID_SCPAGE_TABLE
     };
     CheckBox BTN_CHARTS
     {
-        Pos = MAP_APPFONT ( 12 , 66 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 70 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "~Diagramme" ;
         Text [ ENGLISH ] = "~Charts" ;
         Text [ norwegian ] = "~Charts" ;
@@ -822,8 +822,8 @@ TabPage RID_SCPAGE_TABLE
     };
     CheckBox BTN_DRAWINGS
     {
-        Pos = MAP_APPFONT ( 12 , 79 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 84 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Zeichenob~jekte" ;
         Text [ ENGLISH ] = "Drawob~jects" ;
         Text [ norwegian ] = "Drawob~jects" ;
@@ -850,7 +850,7 @@ TabPage RID_SCPAGE_TABLE
     };
     CheckBox BTN_FORMULAS
     {
-        Pos = MAP_APPFONT ( 12 , 92 ) ;
+        Pos = MAP_APPFONT ( 12 , 98 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "~Formeln" ;
         Text [ ENGLISH ] = "~Formulas" ;
@@ -878,7 +878,7 @@ TabPage RID_SCPAGE_TABLE
     };
     CheckBox BTN_NULLVALS
     {
-        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Pos = MAP_APPFONT ( 12 , 112 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "N~ullwerte" ;
         Text [ ENGLISH ] = "N~ull values" ;
@@ -907,7 +907,7 @@ TabPage RID_SCPAGE_TABLE
     GroupBox GB_PRINT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 100 , 118 ) ;
+        Size = MAP_APPFONT ( 100 , 122 ) ;
         Text = "Drucken" ;
         Text [ ENGLISH ] = "Print" ;
         Text [ norwegian ] = "Skriv ut" ;
@@ -961,7 +961,7 @@ TabPage RID_SCPAGE_TABLE
     };
     RadioButton BTN_LEFTRIGHT
     {
-        Pos = MAP_APPFONT ( 118 , 27 ) ;
+        Pos = MAP_APPFONT ( 118 , 28 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text = "Von lin~ks nach rechts" ;
         Text [ ENGLISH ] = "Left to rig~ht" ;
@@ -990,7 +990,7 @@ TabPage RID_SCPAGE_TABLE
     };
     FixedBitmap BMP_PAGEDIR
     {
-        Pos = MAP_APPFONT ( 214 , 12 ) ;
+        Pos = MAP_APPFONT ( 214 , 13 ) ;
         Size = MAP_APPFONT ( 25 , 25 ) ;
     };
      //      Image IMG_LEFTRIGHT { BMP( "lftrgt.bmp" );  COLMASK; };
@@ -999,7 +999,7 @@ TabPage RID_SCPAGE_TABLE
     Bitmap IMG_TOPDOWN { File = "topdown.bmp" ; };
     CheckBox BTN_PAGENO
     {
-        Pos = MAP_APPFONT ( 118 , 44 ) ;
+        Pos = MAP_APPFONT ( 118 , 46 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Erste Seiten~zahl" ;
         Text [ ENGLISH ] = "First ~page" ;
@@ -1028,7 +1028,7 @@ TabPage RID_SCPAGE_TABLE
     NumericField ED_PAGENO
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 191 , 43 ) ;
+        Pos = MAP_APPFONT ( 191 , 45 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
@@ -1040,7 +1040,7 @@ TabPage RID_SCPAGE_TABLE
     GroupBox GB_PAGEDIR
     {
         Pos = MAP_APPFONT ( 112 , 3 ) ;
-        Size = MAP_APPFONT ( 142 , 65 ) ;
+        Size = MAP_APPFONT ( 141 , 67 ) ;
         Text = "Seitenreihenfolge" ;
         Text [ ENGLISH ] = "Page Order" ;
         Text [ norwegian ] = "Page Order" ;
@@ -1066,7 +1066,7 @@ TabPage RID_SCPAGE_TABLE
     };
     RadioButton BTN_SCALEALL
     {
-        Pos = MAP_APPFONT ( 118 , 84 ) ;
+        Pos = MAP_APPFONT ( 118 , 85 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "A~lles auf [%]" ;
         Text [ ENGLISH ] = "~All pages to [%]" ;
@@ -1094,7 +1094,7 @@ TabPage RID_SCPAGE_TABLE
     };
     RadioButton BTN_SCALEPAGENUM
     {
-        Pos = MAP_APPFONT ( 118 , 103 ) ;
+        Pos = MAP_APPFONT ( 118 , 101 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Ma~x. Seitenzahl" ;
         Text [ ENGLISH ] = "To ~fit on pages" ;
@@ -1120,22 +1120,10 @@ TabPage RID_SCPAGE_TABLE
         Text[ korean ] = "√÷¥Î ∆‰¿Ã¡ˆ π¯»£(~M)";
         Text[ turkish ] = "A~zami sayfa say˝s˝";
     };
-    NumericField ED_SCALEPAGENUM
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 191 , 102 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        TabStop = TRUE ;
-        Spin = TRUE ;
-        Repeat = TRUE ;
-        Minimum = 1 ;
-        Maximum = 999 ;
-        SpinSize = 1 ;
-    };
     NumericField ED_SCALEALL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 191 , 83 ) ;
+        Pos = MAP_APPFONT ( 191 , 84 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
@@ -1145,10 +1133,22 @@ TabPage RID_SCPAGE_TABLE
         Last = 200 ;
         SpinSize = 1 ;
     };
+    NumericField ED_SCALEPAGENUM
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 191 , 100 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Minimum = 1 ;
+        Maximum = 999 ;
+        SpinSize = 1 ;
+    };
     GroupBox GB_SCALE
     {
-        Pos = MAP_APPFONT ( 112 , 71 ) ;
-        Size = MAP_APPFONT ( 142 , 50 ) ;
+        Pos = MAP_APPFONT ( 112 , 73 ) ;
+        Size = MAP_APPFONT ( 141 , 52 ) ;
         Text = "Skalierung" ;
         Text [ ENGLISH ] = "Scale" ;
         Text [ ENGLISH_US ] = "Scale" ;

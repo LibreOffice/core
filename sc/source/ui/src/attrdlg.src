@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:30:05 $
+ *  last change: $Author: nn $ $Date: 2001-02-06 17:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ TabPage RID_SCPAGE_PROTECTION
     SVLook = TRUE ;
     HelpId = HID_SCPAGE_PROTECTION ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     TriStateBox BTN_PROTECTED
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
@@ -365,7 +365,7 @@ TabPage RID_SCPAGE_PROTECTION
     };
     TriStateBox BTN_HIDE_FORMULAR
     {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Formel ausblenden" ;
         Text [ ENGLISH ] = "Hide ~Formulas" ;
@@ -394,7 +394,7 @@ TabPage RID_SCPAGE_PROTECTION
     };
     TriStateBox BTN_HIDE_ALL
     {
-        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Alles ausblenden" ;
         Text [ ENGLISH ] = "Hide ~All" ;
@@ -423,8 +423,8 @@ TabPage RID_SCPAGE_PROTECTION
     };
     FixedText FT_HINT
     {
-        Pos = MAP_APPFONT ( 114 , 12 ) ;
-        Size = MAP_APPFONT ( 130 , 63 ) ;
+        Pos = MAP_APPFONT ( 114 , 14 ) ;
+        Size = MAP_APPFONT ( 130 , 56 ) ;
         WordBreak = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'. : Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü ''Extras'' den Befehl ''Dokument schützen'' und dann den Befehl ''Tabelle''. */
         /* ### ACHTUNG: Neuer Text in Resource? Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'. : Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü ''Extras'' den Befehl ''Dokument schützen'' und dann den Befehl ''Tabelle''. */
@@ -460,7 +460,7 @@ TabPage RID_SCPAGE_PROTECTION
     GroupBox GB_PROTECTION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 246 , 75 ) ;
+        Size = MAP_APPFONT ( 246 , 70 ) ;
         Text = "Schutz" ;
         Text [ ENGLISH ] = "Protection" ;
         Text [ norwegian ] = "Protection" ;
@@ -487,7 +487,7 @@ TabPage RID_SCPAGE_PROTECTION
     };
     TriStateBox BTN_HIDE_PRINT
     {
-        Pos = MAP_APPFONT ( 12 , 93 ) ;
+        Pos = MAP_APPFONT ( 12 , 87 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Für Aus~druck ausblenden" ;
         Text [ ENGLISH ] = "Hide for ~Printing" ;
@@ -516,8 +516,8 @@ TabPage RID_SCPAGE_PROTECTION
     };
     FixedText FT_HINT2
     {
-        Pos = MAP_APPFONT ( 114 , 93 ) ;
-        Size = MAP_APPFONT ( 131 , 31 ) ;
+        Pos = MAP_APPFONT ( 114 , 87 ) ;
+        Size = MAP_APPFONT ( 131 , 24 ) ;
         WordBreak = TRUE ;
         Text = "Die Zellen der aktuellen Selektion werden beim Ausdruck nicht ausgegeben." ;
         Text [ ENGLISH ] = "Cells of current selection will be omitted for printing." ;
@@ -545,8 +545,8 @@ TabPage RID_SCPAGE_PROTECTION
     };
     GroupBox GB_PRINT
     {
-        Pos = MAP_APPFONT ( 6 , 82 ) ;
-        Size = MAP_APPFONT ( 246 , 48 ) ;
+        Pos = MAP_APPFONT ( 6 , 76 ) ;
+        Size = MAP_APPFONT ( 246 , 38 ) ;
         Text = "Ausdruck" ;
         Text [ ENGLISH ] = "Printing" ;
         Text [ norwegian ] = "Printing" ;
