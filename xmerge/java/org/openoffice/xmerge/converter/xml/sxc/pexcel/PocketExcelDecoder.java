@@ -71,6 +71,7 @@ import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Formula;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.LabelCell;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.CellValue;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.FloatNumber;
@@ -194,7 +195,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
             cell = (CellValue) ws.get(cellValue);
             cellValue++;
             readCellFormat();
-            Debug.log(Debug.TRACE,"Current Cell : " + cell.getValue());
+            // Debug.log(Debug.TRACE,"Current Cell : " + cell.getString());
             return true;
         }
         else {
@@ -274,8 +275,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
         String outputString = "=";
         String op1,op2;
 
-        for (int i = 1;i<=inputString.length()-1;i++) {
-
+        for (int i = 1;i<inputString.length();i++) {
 
             char ch = inputString.charAt(i);        // Check to see if this is a cell or an operator
             if(((ch>='a') && (ch<='z')) || (ch>='A') && (ch<='Z'))  {
@@ -285,9 +285,13 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
                     interval++;
                     nextRef = inputString.charAt(i+interval);
                 }
-                while(nextRef>='0' && nextRef<='9') { // Keep reading until we reach another operator or cell reference
+                while(nextRef>='0' && nextRef<='9') {
+                // Keep reading until we reach another operator or cell reference
                     interval++;
-                    nextRef = inputString.charAt(i+interval);
+                    if((i+interval)<inputString.length())
+                        nextRef = inputString.charAt(i+interval);
+                    else
+                        nextRef = 0;
                 }
                 nextChar = inputString.substring(i,i+interval); // if cell then read all of the cell reference
                 i += interval-1;
@@ -334,7 +338,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
 
         if (cell != null) {
             try {
-            contents = cell.getValue();
+            contents = cell.getString();
             }
             catch (IOException e) {
                 System.err.println("Could Not retrieve Cell contents");
@@ -349,6 +353,29 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
         return contents;
     }
 
+    /**
+     *  This method returns the contents of the current cell.
+     *
+     *  @return  The contents of the current cell.  Returns
+     *           null if no cell is currently selected.
+     */
+    public String getCellValue() {
+
+        String contents = new String("");
+
+        if (cell != null) {
+            try {
+            contents = ((Formula)cell).getValue();
+            }
+            catch (IOException e) {
+                System.err.println("Could Not retrieve Cell value");
+                System.err.println("Setting value of cell(" + cell.getRow()
+                                    + "," + cell.getCol() + ") to an empty string");
+                System.err.println("Error msg: " + e.getMessage());
+            }
+        }
+        return contents;
+    }
 
     /**
      *  <p>This method returns the type of the data in the current cell.
@@ -375,6 +402,8 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
         String type = OfficeConstants.CELLTYPE_STRING;
 
         if(cell instanceof FloatNumber)
+            type = OfficeConstants.CELLTYPE_FLOAT;
+        if(cell instanceof Formula)
             type = OfficeConstants.CELLTYPE_FLOAT;
 
         return type;
