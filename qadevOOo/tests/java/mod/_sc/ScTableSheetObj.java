@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTableSheetObj.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2004-07-23 10:48:53 $
+ *  last change:$Date: 2004-11-02 12:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ import com.sun.star.sheet.XScenariosSupplier;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
+import com.sun.star.table.CellAddress;
 import com.sun.star.table.CellRangeAddress;
 import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
@@ -258,6 +259,12 @@ public class ScTableSheetObj extends TestCase {
             oSheet.getCellByPosition(5, 5).setValue(15);
             oSheet.getCellByPosition(1, 4).setValue(10);
             oSheet.getCellByPosition(2, 0).setValue(-5.15);
+            oSheet.getCellByPosition(8, 8).setFormula("= B5 + C1");
+            // fill cells for XSheetOtline::autoutline
+            oSheet.getCellByPosition(6, 6).setValue(3);
+            oSheet.getCellByPosition(7, 6).setValue(3);
+            oSheet.getCellByPosition(8, 6).setFormula("= SUM(G7:H7)");
+            oSheet.getCellByPosition(9, 6).setFormula("= G7*I7");
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
             throw new StatusException("Exception occurred while filling cells", e);
@@ -268,6 +275,19 @@ public class ScTableSheetObj extends TestCase {
         log.println("creating a new environment for object");
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        // set the adress ranges of the cells (see values set above): for e.g. XSheetOutline test
+        tEnv.addObjRelation("CellRangeAddress",
+            new CellRangeAddress((short)0, 6, 6, 8, 8));
+        tEnv.addObjRelation("CellRangeSubAddress",
+            new CellRangeAddress((short)0, 6, 6, 7, 8));
+        // pick a cell with a formula for XSheetAuditing, a dependent cell and a precedent cell
+        tEnv.addObjRelation("XSheetAuditing.CellAddress", new CellAddress((short)0, 8, 6));
+        tEnv.addObjRelation("XSheetAuditing.PrecedentCellAddress", new CellAddress((short)0, 7, 6));
+        tEnv.addObjRelation("XSheetAuditing.DependentCellAddress", new CellAddress((short)0, 9, 6));
+
+        // add an existing sheet for linking
+        tEnv.addObjRelation("XSheetLinkable.LinkSheet", "ScSheetLinksObj.sdc");
 
         //adding Scenario and with that a ScenarioSheet-Relation for Scenario and XScenarioEnhanced
         XScenariosSupplier scene = (XScenariosSupplier) UnoRuntime.queryInterface(
@@ -307,7 +327,7 @@ public class ScTableSheetObj extends TestCase {
         expectedResults[_XCellRangesQuery.QUERYCOLUMNDIFFERENCES] = "Sheet1.B5;Sheet1.C1";
         expectedResults[_XCellRangesQuery.QUERYCONTENTCELLS] = "Sheet1.B5;Sheet1.C1;Sheet1.F6";
         expectedResults[_XCellRangesQuery.QUERYEMPTYCELLS] = "Sheet1.A1 ... Sheet1.B1 ... Sheet1.B6 ... Sheet1.C2 ... Sheet1.D1 ... Sheet1.F1 ... Sheet1.F7 ... Sheet1.G1";
-        expectedResults[_XCellRangesQuery.QUERYFORMULACELLS] = "";
+        expectedResults[_XCellRangesQuery.QUERYFORMULACELLS] = "Sheet1.I7:J7;Sheet1.I9";
         expectedResults[_XCellRangesQuery.QUERYINTERSECTION] = "Sheet1.D4";
         expectedResults[_XCellRangesQuery.QUERYROWDIFFERENCES] = "Sheet1.A5;Sheet1.C1";
         expectedResults[_XCellRangesQuery.QUERYVISIBLECELLS] = "Sheet1.A2";
