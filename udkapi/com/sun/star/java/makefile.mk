@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: sb $ $Date: 2001-07-13 12:52:02 $
+#   last change: $Author: jl $ $Date: 2002-07-18 13:55:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,11 @@ IDLFILES=\
     WrongJavaVersionException.idl\
     XJavaThreadRegister_11.idl\
     XJavaVM.idl\
+    JavaInitializationException.idl\
+    JavaDisabledException.idl\
+    JavaNotConfiguredException.idl\
+    MissingJavaRuntimeException.idl\
+    JavaVMCreationFailureException.idl
 
 # ------------------------------------------------------------------
 
