@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-08 08:32:02 $
+ *  last change: $Author: os $ $Date: 2000-12-09 14:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1910,6 +1910,9 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
         {
             setPropertyValue(C2U(UNO_NAME_Z_ORDER), *pOrder);
         }
+        uno::Any* pStyle;
+        if(pProps->GetProperty(C2S(UNO_NAME_FRAME_STYLE_NAME), pStyle))
+            setPropertyValue(C2U(UNO_NAME_FRAME_STYLE_NAME), *pStyle);
 
     }
     else
