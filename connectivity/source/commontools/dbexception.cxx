@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-26 07:54:03 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-08 07:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,14 @@ void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::s
     throw SQLException(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_INVALID_INDEX),_Context,sStatus,0,Any());
 }
 // -----------------------------------------------------------------------------
+void throwFunctionNotSupportedException(const ::rtl::OUString& _rMsg,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
+        const ::com::sun::star::uno::Any& _Next)  throw ( ::com::sun::star::sdbc::SQLException )
+{
+    static ::rtl::OUString sStatus = ::rtl::OUString::createFromAscii("IM001");
+    throw SQLException(_rMsg,_Context,sStatus,0,_Next);
+}
+// -----------------------------------------------------------------------------
 void throwGenericSQLException(const ::rtl::OUString& _rMsg, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource)
     throw (::com::sun::star::sdbc::SQLException)
 {
@@ -408,6 +416,9 @@ void throwGenericSQLException(const ::rtl::OUString& _rMsg, const Reference< XIn
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/06/26 07:54:03  fs
+ *  throwGenericSQLException version with additional NextException parameter
+ *
  *  Revision 1.7  2001/05/14 11:42:00  oj
  *  #86528# lower size need
  *

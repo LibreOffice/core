@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyids.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 13:09:28 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-08 07:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@ pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaCon
 #define PROPERTY_ID_DELIMITER                       45
 #define PROPERTY_ID_FORMATKEY                       46
 #define PROPERTY_ID_LOCALE                          47
+#define PROPERTY_ID_IM001                           48
 
 #endif // _CONNECTIVITY_PROPERTYIDS_HXX_
 

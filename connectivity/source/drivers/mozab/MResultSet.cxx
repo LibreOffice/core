@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-07 10:49:56 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-08 07:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1168,14 +1168,6 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         return;
 
     if ( aSQLIterator.getParseTree() != NULL ) {
-        OSL_TRACE("FULL QUERY IS : \n" );
-#ifdef DARREN_WORK
-#if defined DEBUG || defined DBG_UTIL
-        printParseTree( aSQLIterator.getParseTree(), "XX " );
-#endif
-#endif /* DARREN_WORK */
-        OSL_TRACE("FULL QUERY IS : \n" );
-
         ::vos::ORef<OSQLColumns> xColumns = aSQLIterator.getParameters();
         if(xColumns.isValid())
         {
@@ -1198,11 +1190,6 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         }
 
     }
-#ifdef DARREN_WORK
-#if defined DEBUG || defined DBG_UTIL
-    printParseTree( parseTree, "XX " );
-#endif
-#endif /* DARREN_WORK */
 
     if ( SQL_ISRULE(parseTree,where_clause) )
     {
@@ -1602,9 +1589,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
             }
             else if(isCount())
             {
-                m_nRowCountResult = 0;
-                m_aQuery.waitForQueryComplete();
-                m_nRowCountResult = m_aQuery.getRowCount();
+                ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("COUNT() - Driver does not support this function."), NULL);
             }
             else
             {
@@ -1731,6 +1716,8 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
         }   break;
 
         case SQL_STATEMENT_SELECT_COUNT:
+            ::dbtools::throwFunctionNotSupportedException(::rtl::OUString::createFromAscii("COUNT() - Driver does not support this function."), NULL);
+            break;
         case SQL_STATEMENT_UPDATE:
         case SQL_STATEMENT_DELETE:
         case SQL_STATEMENT_INSERT:
