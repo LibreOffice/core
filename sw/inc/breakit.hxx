@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakit.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-28 16:54:37 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ public:
 };
 
 extern SwBreakIt* pBreakIt;
-
+SwBreakIt* GetBreakIt(); //CHINA001 add for swui
 
 #endif
 
