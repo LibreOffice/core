@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-31 16:53:37 $
+ *  last change: $Author: pl $ $Date: 2002-08-26 11:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,7 @@ namespace x11 {
         int                         m_nNoPosX, m_nNoPosY, m_nNoPosWidth, m_nNoPosHeight;
         int                         m_nDragButton;
         sal_Int8                    m_nUserDragAction;
+        sal_Int8                    m_nTargetAcceptAction;
         sal_Int8                    m_nSourceActions;
         bool                        m_bLastDropAccepted;
         bool                        m_bDropSuccess;
@@ -454,6 +455,8 @@ namespace x11 {
         // compound text conversion
         ::rtl::OString convertToCompound( const ::rtl::OUString& rText );
         ::rtl::OUString convertFromCompound( const char* pText, int nLen = -1 );
+
+        sal_Int8 getUserDragAction() const;
     public:
         static SelectionManager& get( const ::rtl::OUString& rDisplayName = ::rtl::OUString() );
 
