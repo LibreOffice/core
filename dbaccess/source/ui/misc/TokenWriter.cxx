@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 15:52:40 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,17 @@
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
-#include <com/sun/star/sdb/CommandType.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
+#include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_FONTWEIGHT_HPP_
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -130,8 +133,12 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
 
 using namespace dbaui;
+using namespace dbtools;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -160,23 +167,33 @@ const static char __FAR_DATA sFontSize[]        = "font-size: ";
 
 DBG_NAME(ODatabaseImportExport);
 //======================================================================
-ODatabaseImportExport::ODatabaseImportExport(const Reference< XPropertySet >& _rxObject,
-                                             const Reference< XConnection >& _rxConnection,
-                                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
-                                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+ODatabaseImportExport::ODatabaseImportExport(const Sequence< PropertyValue >& _aSeq,
+                                             const Reference< XMultiServiceFactory >& _rM,
+                                             const Reference< XNumberFormatter >& _rxNumberF,
                                              const String& rExchange)
-    :m_xObject(_rxObject)
-    ,m_xConnection(_rxConnection)
-    ,m_pReader(NULL)
+    :m_pReader(NULL)
     ,m_pRowMarker(NULL)
     ,m_xFormatter(_rxNumberF)
+    ,m_xFactory(_rM)
+    ,m_nCommandType(CommandType::TABLE)
+    ,m_bDisposeConnection(sal_False)
 {
 
     DBG_CTOR(ODatabaseImportExport,NULL);
-
-
-    if(m_xObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FONT))
-        m_xObject->getPropertyValue(PROPERTY_FONT) >>= m_aFont;
+    // get the information we need
+    const PropertyValue* pBegin = _aSeq.getConstArray();
+    const PropertyValue* pEnd   = pBegin + _aSeq.getLength();
+    for(;pBegin != pEnd;++pBegin)
+    {
+        if(pBegin->Name == PROPERTY_DATASOURCENAME)
+            pBegin->Value >>= m_sDataSourceName;
+        else if(pBegin->Name == PROPERTY_COMMANDTYPE)
+            pBegin->Value >>= m_nCommandType;
+        else if(pBegin->Name == PROPERTY_NAME)
+            pBegin->Value >>= m_sName;
+        else if(pBegin->Name == PROPERTY_ACTIVECONNECTION)
+            pBegin->Value >>= m_xConnection;
+    }
 
     xub_StrLen nCount = rExchange.GetTokenCount(char(11));
     if( nCount > SBA_FORMAT_SELECTION_COUNT && rExchange.GetToken(4).Len())
@@ -186,48 +203,118 @@ ODatabaseImportExport::ODatabaseImportExport(const Reference< XPropertySet >& _r
             m_pRowMarker[i-SBA_FORMAT_SELECTION_COUNT] = rExchange.GetToken(i,char(11)).ToInt32();
     }
 
-    m_xResultSet = Reference< XResultSet >(_rM->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
-    Reference<XPropertySet > xProp(m_xResultSet,UNO_QUERY);
-    if(xProp.is())
-    {
-        xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(m_xConnection));
-        ::rtl::OUString sName;
-        sal_Int32 nCommandType;
-        if(m_xObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND)) // here we have a query
-        {
-            m_xObject->getPropertyValue(PROPERTY_NAME) >>= sName;
-            nCommandType = CommandType::QUERY;
-        }
-        else
-        {
-            nCommandType = CommandType::TABLE;
-            ::rtl::OUString sCatalog, sSchema, sComposedName;
-
-            m_xObject->getPropertyValue(PROPERTY_CATALOGNAME)   >>= sCatalog;
-            m_xObject->getPropertyValue(PROPERTY_SCHEMANAME)    >>= sSchema;
-            m_xObject->getPropertyValue(PROPERTY_NAME)          >>= sName;
-            ::dbtools::composeTableName(m_xConnection->getMetaData(), sCatalog, sSchema, sName, sComposedName, sal_False);
-            sName = sComposedName;
-        }
-        xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(nCommandType));
-        xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(sName));
-        Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
-        xRowSet->execute();
-        m_xRow = Reference<XRow>(xRowSet,UNO_QUERY);
-        m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
-    }
-    else
-        OSL_ASSERT(0);
-
+    OSL_ENSURE(m_sDataSourceName.getLength(),"There must be a datsource name!");
+    initialize();
 }
 //-------------------------------------------------------------------
 ODatabaseImportExport::~ODatabaseImportExport()
 {
-    ::comphelper::disposeComponent(m_xRow);
+    acquire();
+    // remove me as listener
+    Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
+    if (xComponent.is())
+    {
+        Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
+        xComponent->removeEventListener(xEvt);
+    }
+    disposing();
+
     if(m_pReader)
         ((SvRefBase*)m_pReader)->ReleaseRef();
     delete m_pRowMarker;
     DBG_DTOR(ODatabaseImportExport,NULL);
+}
+// -----------------------------------------------------------------------------
+void ODatabaseImportExport::disposing()
+{
+    if(m_bDisposeConnection)
+        ::comphelper::disposeComponent(m_xConnection);
+
+    ::comphelper::disposeComponent(m_xRow);
+
+    m_xObject               = NULL;
+    m_xConnection           = NULL;
+    m_xResultSetMetaData    = NULL;
+    m_xResultSet            = NULL;
+    m_xRow                  = NULL;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
+{
+    Reference<XConnection> xCon(Source.Source,UNO_QUERY);
+    if(m_xConnection == xCon)
+    {
+        disposing();
+        initialize();
+        m_bDisposeConnection = m_xConnection.is();
+    }
+}
+// -----------------------------------------------------------------------------
+void ODatabaseImportExport::initialize()
+{
+    if(!m_xConnection.is())
+    {   // we need a connection
+        Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(m_xFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+        Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
+        SQLExceptionInfo aInfo = ::dbaui::createConnection(m_sDataSourceName,xDatabaseContext,m_xFactory,xEvt,m_xConnection);
+        if(aInfo.isValid() && aInfo.getType() == SQLExceptionInfo::SQL_EXCEPTION)
+            throw *static_cast<const SQLException*>(aInfo);
+    }
+    else
+    {
+        Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
+        Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
+        if (xComponent.is() && xEvt.is())
+            xComponent->addEventListener(xEvt);
+    }
+
+    Reference<XNameAccess> xNameAccess;
+    switch(m_nCommandType)
+    {
+        case CommandType::TABLE:
+            {
+                // only for tables
+                Reference<XTablesSupplier> xSup(m_xConnection,UNO_QUERY);
+                if(xSup.is())
+                    xNameAccess = xSup->getTables();
+            }
+            break;
+        case CommandType::QUERY:
+            {
+                Reference<XQueriesSupplier> xSup(m_xConnection,UNO_QUERY);
+                if(xSup.is())
+                    xNameAccess = xSup->getQueries();
+            }
+            break;
+    }
+    if(xNameAccess.is() && xNameAccess->hasByName(m_sName))
+    {
+        Reference<XPropertySet> xSourceObject;
+        xNameAccess->getByName(m_sName) >>= m_xObject;
+    }
+
+    if(m_xObject.is())
+    {
+        if(m_xObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FONT))
+            m_xObject->getPropertyValue(PROPERTY_FONT) >>= m_aFont;
+
+        m_xResultSet = Reference< XResultSet >(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
+        Reference<XPropertySet > xProp(m_xResultSet,UNO_QUERY);
+        if(xProp.is())
+        {
+            xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(m_xConnection));
+            xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(m_nCommandType));
+            xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(m_sName));
+            Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
+            xRowSet->execute();
+            m_xRow = Reference<XRow>(xRowSet,UNO_QUERY);
+            m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
+        }
+        else
+            OSL_ASSERT(0);
+    }
+    if(!m_aFont.Name.getLength())
+        m_aFont.Name = Application::GetSettings().GetStyleSettings().GetAppFont().GetName();
 }
 //======================================================================
 BOOL ORTFImportExport::Write()
@@ -293,7 +380,8 @@ BOOL ORTFImportExport::Write()
     BOOL bStrikeout     = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
 
     sal_Int32 nColor = 0;
-    m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
+    if(m_xObject.is())
+        m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
     Color aColor(nColor);
 
     ByteString aFonts(m_aFont.Name,m_aFont.Name.getLength(), gsl_getSystemTextEncoding());
@@ -333,128 +421,132 @@ BOOL ORTFImportExport::Write()
 
     (*m_pStream) << sRTF_TROWD << sRTF_TRGAPH << s40 << sNewLine;
 
-    Reference<XColumnsSupplier> xColSup(m_xObject,UNO_QUERY);
-    Reference<XNameAccess> xColumns = xColSup->getColumns();
-    Sequence< ::rtl::OUString> aNames(xColumns->getElementNames());
-    const ::rtl::OUString* pBegin = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
-
-    sal_Int32 nCount = aNames.getLength();
-
-    sal_Int32 i;
-    for(i=1;i<=nCount;++i)
+    if(m_xObject.is())
     {
-        (*m_pStream) << aCell1;
-        (*m_pStream) << ::rtl::OString::valueOf(sal_Int32(i*nCellx));
-        (*m_pStream) << sNewLine;
-    }
+        Reference<XColumnsSupplier> xColSup(m_xObject,UNO_QUERY);
+        Reference<XNameAccess> xColumns = xColSup->getColumns();
+        Sequence< ::rtl::OUString> aNames(xColumns->getElementNames());
+        const ::rtl::OUString* pBegin = aNames.getConstArray();
+        const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
 
-    // Spaltenbeschreibung
-    (*m_pStream) << '{' << sNewLine;
-    (*m_pStream) << aTRRH;
+        sal_Int32 nCount = aNames.getLength();
 
-
-    ::rtl::OString* pHorzChar = new ::rtl::OString[nCount];
-
-    for(i=1;pBegin != pEnd;++pBegin,++i)
-    {
-        Reference<XPropertySet> xColumn;
-        xColumns->getByName(*pBegin) >>= xColumn;
-        sal_Int32 nAlign = 0;
-        xColumn->getPropertyValue(PROPERTY_ALIGN) >>= nAlign;
-
-        const char* pChar;
-        switch( nAlign )
+        sal_Int32 i;
+        for(i=1;i<=nCount;++i)
         {
-            case 1: pChar = sRTF_QC;    break;
-            case 2: pChar = sRTF_QR;    break;
-            case 0:
-            default:pChar = sRTF_QL;    break;
+            (*m_pStream) << aCell1;
+            (*m_pStream) << ::rtl::OString::valueOf(sal_Int32(i*nCellx));
+            (*m_pStream) << sNewLine;
         }
 
-        pHorzChar[i-1] = pChar; // um sp"ater nicht immer im ITEMSET zuw"uhlen
+        // Spaltenbeschreibung
+        (*m_pStream) << '{' << sNewLine;
+        (*m_pStream) << aTRRH;
 
-        (*m_pStream) << sNewLine;
-        (*m_pStream) << '{';
-        (*m_pStream) << sRTF_QC;   // column header always centered
 
-        if ( bBold )        (*m_pStream) << sRTF_B;
-        if ( bItalic )      (*m_pStream) << sRTF_I;
-        if ( bUnderline )   (*m_pStream) << sRTF_UL;
-        if ( bStrikeout )   (*m_pStream) << sRTF_STRIKE;
+        ::rtl::OString* pHorzChar = new ::rtl::OString[nCount];
 
-        (*m_pStream) << aFS;
-        (*m_pStream) << ' ';
-        (*m_pStream) << ::rtl::OString(*pBegin,pBegin->getLength(), gsl_getSystemTextEncoding());
-            // TODO : think about the encoding of the column name
-        (*m_pStream) << sRTF_CELL;
-        (*m_pStream) << '}';
-        (*m_pStream) << sNewLine;
-        (*m_pStream) << sRTF_PARD   << sRTF_INTBL;
-    }
-
-    (*m_pStream) << sRTF_ROW;
-    (*m_pStream) << sNewLine << '}';
-    (*m_pStream) << sNewLine;
-
-    sal_Int32 k=1;
-    sal_Int32 kk=0;
-    while(m_xResultSet->next())
-    {
-        if(!m_pRowMarker || m_pRowMarker[kk] == k)
+        for(i=1;pBegin != pEnd;++pBegin,++i)
         {
-            ++kk;
-            (*m_pStream) << sRTF_TROWD << sRTF_TRGAPH << s40 << sNewLine;
+            Reference<XPropertySet> xColumn;
+            xColumns->getByName(*pBegin) >>= xColumn;
+            sal_Int32 nAlign = 0;
+            xColumn->getPropertyValue(PROPERTY_ALIGN) >>= nAlign;
 
-            for(i=1;i<=nCount;++i)
+            const char* pChar;
+            switch( nAlign )
             {
-                (*m_pStream) << aCell2;
-                (*m_pStream) << ::rtl::OString::valueOf((sal_Int32)(i*nCellx));
-                (*m_pStream) << sNewLine;
+                case 1: pChar = sRTF_QC;    break;
+                case 2: pChar = sRTF_QR;    break;
+                case 0:
+                default:pChar = sRTF_QL;    break;
             }
 
+            pHorzChar[i-1] = pChar; // um sp"ater nicht immer im ITEMSET zuw"uhlen
+
+            (*m_pStream) << sNewLine;
             (*m_pStream) << '{';
-            (*m_pStream) << aTRRH;
-            for(sal_Int32 i=1;i<=nCount;++i)
-            {
-                (*m_pStream) << sNewLine;
-                (*m_pStream) << '{';
-                (*m_pStream) << pHorzChar[i-1];
+            (*m_pStream) << sRTF_QC;   // column header always centered
 
-                if ( bBold )        (*m_pStream) << sRTF_B;
-                if ( bItalic )      (*m_pStream) << sRTF_I;
-                if ( bUnderline )   (*m_pStream) << sRTF_UL;
-                if ( bStrikeout )   (*m_pStream) << sRTF_STRIKE;
+            if ( bBold )        (*m_pStream) << sRTF_B;
+            if ( bItalic )      (*m_pStream) << sRTF_I;
+            if ( bUnderline )   (*m_pStream) << sRTF_UL;
+            if ( bStrikeout )   (*m_pStream) << sRTF_STRIKE;
 
-                (*m_pStream) << aFS2;
-                (*m_pStream) << ' ';
-
-                try
-                {
-                    ::rtl::OUString sValue = m_xRow->getString(i);
-                    if (!m_xRow->wasNull())
-                    {
-                        (*m_pStream) << ::rtl::OString(sValue,sValue.getLength(), gsl_getSystemTextEncoding());
-                            // TODO : think about the encoding of the value string
-                    }
-                }
-                catch (Exception&)
-                {
-                    OSL_ENSURE(0,"RTF WRITE!");
-                }
-
-                (*m_pStream) << sRTF_CELL;
-                (*m_pStream) << '}';
-                (*m_pStream) << sNewLine;
-                (*m_pStream) << sRTF_PARD   << sRTF_INTBL;
-            }
-            (*m_pStream) << sRTF_ROW << sNewLine;
+            (*m_pStream) << aFS;
+            (*m_pStream) << ' ';
+            (*m_pStream) << ::rtl::OString(*pBegin,pBegin->getLength(), gsl_getSystemTextEncoding());
+                // TODO : think about the encoding of the column name
+            (*m_pStream) << sRTF_CELL;
             (*m_pStream) << '}';
+            (*m_pStream) << sNewLine;
+            (*m_pStream) << sRTF_PARD   << sRTF_INTBL;
         }
-        ++k;
-    }
 
-    delete [] pHorzChar;
+        (*m_pStream) << sRTF_ROW;
+        (*m_pStream) << sNewLine << '}';
+        (*m_pStream) << sNewLine;
+
+        sal_Int32 k=1;
+        sal_Int32 kk=0;
+        m_xResultSet->beforeFirst(); // set back before the first row
+        while(m_xResultSet->next())
+        {
+            if(!m_pRowMarker || m_pRowMarker[kk] == k)
+            {
+                ++kk;
+                (*m_pStream) << sRTF_TROWD << sRTF_TRGAPH << s40 << sNewLine;
+
+                for(i=1;i<=nCount;++i)
+                {
+                    (*m_pStream) << aCell2;
+                    (*m_pStream) << ::rtl::OString::valueOf((sal_Int32)(i*nCellx));
+                    (*m_pStream) << sNewLine;
+                }
+
+                (*m_pStream) << '{';
+                (*m_pStream) << aTRRH;
+                for(sal_Int32 i=1;i<=nCount;++i)
+                {
+                    (*m_pStream) << sNewLine;
+                    (*m_pStream) << '{';
+                    (*m_pStream) << pHorzChar[i-1];
+
+                    if ( bBold )        (*m_pStream) << sRTF_B;
+                    if ( bItalic )      (*m_pStream) << sRTF_I;
+                    if ( bUnderline )   (*m_pStream) << sRTF_UL;
+                    if ( bStrikeout )   (*m_pStream) << sRTF_STRIKE;
+
+                    (*m_pStream) << aFS2;
+                    (*m_pStream) << ' ';
+
+                    try
+                    {
+                        ::rtl::OUString sValue = m_xRow->getString(i);
+                        if (!m_xRow->wasNull())
+                        {
+                            (*m_pStream) << ::rtl::OString(sValue,sValue.getLength(), gsl_getSystemTextEncoding());
+                                // TODO : think about the encoding of the value string
+                        }
+                    }
+                    catch (Exception&)
+                    {
+                        OSL_ENSURE(0,"RTF WRITE!");
+                    }
+
+                    (*m_pStream) << sRTF_CELL;
+                    (*m_pStream) << '}';
+                    (*m_pStream) << sNewLine;
+                    (*m_pStream) << sRTF_PARD   << sRTF_INTBL;
+                }
+                (*m_pStream) << sRTF_ROW << sNewLine;
+                (*m_pStream) << '}';
+            }
+            ++k;
+        }
+
+        delete [] pHorzChar;
+    }
 
     (*m_pStream) << '}' << sNewLine;
     (*m_pStream) << (BYTE) 0;
@@ -463,7 +555,7 @@ BOOL ORTFImportExport::Write()
 //-------------------------------------------------------------------
 BOOL ORTFImportExport::Read()
 {
-    m_pReader = new ORTFReader((*m_pStream),m_xConnection,m_xFormatter);
+    m_pReader = new ORTFReader((*m_pStream),m_xConnection,m_xFormatter,m_xFactory);
     ((ORTFReader*)m_pReader)->AddRef();
     SvParserState eState = ((ORTFReader*)m_pReader)->CallParser();
     ((ORTFReader*)m_pReader)->ReleaseRef();
@@ -499,12 +591,11 @@ const char __FAR_DATA OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t
 #define lcl_OUT_COMMENT( comment )  ((*m_pStream) << sMyBegComment, OUT_STR( comment ) << sMyEndComment << sNewLine)
 
 //-------------------------------------------------------------------
-OHTMLImportExport::OHTMLImportExport(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+OHTMLImportExport::OHTMLImportExport(const Sequence< PropertyValue >& _aSeq,
+                                     const Reference< XMultiServiceFactory >& _rM,
+                                     const Reference< XNumberFormatter >& _rxNumberF,
                                      const String& rExchange)
-        : ODatabaseImportExport(_rxObject,_rxConnection,_rM,_rxNumberF,rExchange)
+        : ODatabaseImportExport(_aSeq,_rM,_rxNumberF,rExchange)
     ,m_nIndent(0)
 #if DBG_UTIL
     ,m_bCheckFont(FALSE)
@@ -516,20 +607,24 @@ OHTMLImportExport::OHTMLImportExport(const ::com::sun::star::uno::Reference< ::c
 //-------------------------------------------------------------------
 BOOL OHTMLImportExport::Write()
 {
-    (*m_pStream) << '<' << sHTML_doctype << ' ' << sHTML_doctype32 << '>' << sNewLine << sNewLine;
-    TAG_ON_LF( sHTML_html );
-    WriteHeader();
-    OUT_LF();
-    WriteBody();
-    OUT_LF();
-    TAG_OFF_LF( sHTML_html );
+    if(m_xObject.is())
+    {
+        (*m_pStream) << '<' << sHTML_doctype << ' ' << sHTML_doctype32 << '>' << sNewLine << sNewLine;
+        TAG_ON_LF( sHTML_html );
+        WriteHeader();
+        OUT_LF();
+        WriteBody();
+        OUT_LF();
+        TAG_OFF_LF( sHTML_html );
 
-    return ((*m_pStream).GetError() == SVSTREAM_OK);
+        return ((*m_pStream).GetError() == SVSTREAM_OK);
+    }
+    return sal_False;
 }
 //-------------------------------------------------------------------
 BOOL OHTMLImportExport::Read()
 {
-    m_pReader = new OHTMLReader((*m_pStream),m_xConnection,m_xFormatter);
+    m_pReader = new OHTMLReader((*m_pStream),m_xConnection,m_xFormatter,m_xFactory);
     ((OHTMLReader*)m_pReader)->AddRef();
     SvParserState eState = ((OHTMLReader*)m_pReader)->CallParser();
     ((OHTMLReader*)m_pReader)->ReleaseRef();
@@ -540,20 +635,13 @@ BOOL OHTMLImportExport::Read()
 void OHTMLImportExport::WriteHeader()
 {
     SfxDocumentInfo rInfo;
-    ::rtl::OUString sName;
-    m_xObject->getPropertyValue(PROPERTY_NAME) >>= sName;
-    rInfo.SetTitle(sName);
+    rInfo.SetTitle(m_sName);
     String  aStrOut;
 
     IncIndent(1); TAG_ON_LF( sHTML_head );
 
     SfxFrameHTMLWriter::Out_DocInfo( (*m_pStream), &rInfo, sIndent );
     OUT_LF();
-    /*
-    TAG_ON( sHTML_title );
-    (*m_pStream) << m_rDBDef->Name();
-    TAG_OFF_LF( sHTML_title );
-    */
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( sHTML_head );
 }
 //-----------------------------------------------------------------------
@@ -574,13 +662,15 @@ void OHTMLImportExport::WriteBody()
     // default Textfarbe schwarz
     (*m_pStream) << '<' << sHTML_body << ' ' << sHTML_O_text << '=';
     sal_Int32 nColor = 0;
-    m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
+    if(m_xObject.is())
+        m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
     Color aColor(nColor);
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
 
     ::rtl::OString sOut( ' ' );
-    sOut = sOut + sHTML_O_bgcolor + '=';
-    (*m_pStream)    << sOut;
+    sOut = sOut + sHTML_O_bgcolor;
+    sOut = sOut + "=";
+    (*m_pStream) << sOut;
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
 
     (*m_pStream) << '>'; OUT_LF();
@@ -598,9 +688,14 @@ void OHTMLImportExport::WriteTables()
     aStrOut = aStrOut + "=";
     aStrOut = aStrOut + sHTML_TF_void;
 
-    Reference<XColumnsSupplier> xColSup(m_xObject,UNO_QUERY);
-    Reference<XNameAccess> xColumns = xColSup->getColumns();
-    Sequence< ::rtl::OUString> aNames(xColumns->getElementNames());
+    Sequence< ::rtl::OUString> aNames;
+    Reference<XNameAccess> xColumns;
+    if(m_xObject.is())
+    {
+        Reference<XColumnsSupplier> xColSup(m_xObject,UNO_QUERY);
+        xColumns = xColSup->getColumns();
+        aNames = xColumns->getElementNames();
+    }
 
     aStrOut = aStrOut + " ";
     aStrOut = aStrOut + sHTML_O_align;
@@ -626,9 +721,7 @@ void OHTMLImportExport::WriteTables()
     TAG_ON( sHTML_caption );
     TAG_ON( sHTML_bold );
 
-    ::rtl::OUString sName;
-    m_xObject->getPropertyValue(PROPERTY_NAME) >>= sName;
-    (*m_pStream)    << ::rtl::OString(sName,sName.getLength(), gsl_getSystemTextEncoding());
+    (*m_pStream)    << ::rtl::OString(m_sName,m_sName.getLength(), gsl_getSystemTextEncoding());
         // TODO : think about the encoding of the name
     TAG_OFF( sHTML_bold );
     TAG_OFF( sHTML_caption );
@@ -643,90 +736,103 @@ void OHTMLImportExport::WriteTables()
     IncIndent(1);
     TAG_ON_LF( sHTML_tablerow );
 
-    sal_Int32* pFormat = new sal_Int32[aNames.getLength()];
-
-    char **pHorJustify = new char*[aNames.getLength()];
-    sal_Int32 *pColWidth = new sal_Int32[aNames.getLength()];
-
-
-    sal_Int32 nHeight = 0;
-    m_xObject->getPropertyValue(PROPERTY_ROW_HEIGHT) >>= nHeight;
-
-    // 1. die Spaltenbeschreibung rauspusten
-    const ::rtl::OUString* pBegin = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
-
-    for(sal_Int32 i=0;pBegin != pEnd;++pBegin,++i)
+    if(m_xObject.is())
     {
+        sal_Int32* pFormat = new sal_Int32[aNames.getLength()];
 
-        Reference<XPropertySet> xColumn;
-        xColumns->getByName(*pBegin) >>= xColumn;
-        sal_Int32 nAlign = 0;
-        xColumn->getPropertyValue(PROPERTY_ALIGN) >>= nAlign;
+        char **pHorJustify = new char*[aNames.getLength()];
+        sal_Int32 *pColWidth = new sal_Int32[aNames.getLength()];
 
-        pColWidth[i] = ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_WIDTH));
 
-        switch( nAlign )
+        sal_Int32 nHeight = 0;
+        m_xObject->getPropertyValue(PROPERTY_ROW_HEIGHT) >>= nHeight;
+
+        // 1. die Spaltenbeschreibung rauspusten
+        const ::rtl::OUString* pBegin = aNames.getConstArray();
+        const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
+
+        for(sal_Int32 i=0;pBegin != pEnd;++pBegin,++i)
         {
-            case 1:     pHorJustify[i] = sHTML_AL_center;   break;
-            case 2:     pHorJustify[i] = sHTML_AL_right;    break;
-            default:    pHorJustify[i] = sHTML_AL_left;     break;
-        }
 
-        pFormat[i] = ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_FORMATKEY));
-        if(i == aNames.getLength()-1)
-            IncIndent(-1);
+            Reference<XPropertySet> xColumn;
+            xColumns->getByName(*pBegin) >>= xColumn;
+            sal_Int32 nAlign = 0;
+            xColumn->getPropertyValue(PROPERTY_ALIGN) >>= nAlign;
 
-        WriteCell(pFormat[i],pColWidth[i],nHeight,pHorJustify[i],*pBegin,sHTML_tableheader);
-    }
+            pColWidth[i] = ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_WIDTH));
 
-    IncIndent(-1);
-    TAG_OFF_LF( sHTML_tablerow );
-    TAG_OFF_LF( sHTML_thead );
-
-    IncIndent(1);
-    TAG_ON_LF( sHTML_tbody );
-
-    // 2. und jetzt die Daten
-
-    sal_Int32 j=1;
-    sal_Int32 kk=0;
-    while(m_xResultSet->next())
-    {
-        IncIndent(1);
-        TAG_ON_LF( sHTML_tablerow );
-
-        if(!m_pRowMarker || m_pRowMarker[kk] == j)
-        {
-            ++kk;
-            for(sal_Int32 i=1;i<=aNames.getLength();++i)
+            switch( nAlign )
             {
-                if(i == aNames.getLength()-1)
-                    IncIndent(-1);
-
-                String aValue;
-                try
-                {
-                    ::rtl::OUString sValue = m_xRow->getString(i);
-                    if (!m_xRow->wasNull())
-                    {
-                        aValue = sValue;
-                    }
-                }
-                catch ( Exception& )
-                {
-                    OSL_ASSERT(0);
-                }
-                WriteCell(pFormat[i-1],pColWidth[i-1],nHeight,pHorJustify[i-1],aValue,sHTML_tabledata);
+                case 1:     pHorJustify[i] = sHTML_AL_center;   break;
+                case 2:     pHorJustify[i] = sHTML_AL_right;    break;
+                default:    pHorJustify[i] = sHTML_AL_left;     break;
             }
-        }
-        ++j;
-        TAG_OFF_LF( sHTML_tablerow );
-    }
 
-    delete [] pFormat;
-    delete [] pHorJustify;
-    delete [] pColWidth;
+            pFormat[i] = ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_FORMATKEY));
+            if(i == aNames.getLength()-1)
+                IncIndent(-1);
+
+            WriteCell(pFormat[i],pColWidth[i],nHeight,pHorJustify[i],*pBegin,sHTML_tableheader);
+        }
+
+        IncIndent(-1);
+        TAG_OFF_LF( sHTML_tablerow );
+        TAG_OFF_LF( sHTML_thead );
+
+        IncIndent(1);
+        TAG_ON_LF( sHTML_tbody );
+
+        // 2. und jetzt die Daten
+
+        sal_Int32 j=1;
+        sal_Int32 kk=0;
+        m_xResultSet->beforeFirst(); // set back before the first row
+        while(m_xResultSet->next())
+        {
+            IncIndent(1);
+            TAG_ON_LF( sHTML_tablerow );
+
+            if(!m_pRowMarker || m_pRowMarker[kk] == j)
+            {
+                ++kk;
+                for(sal_Int32 i=1;i<=aNames.getLength();++i)
+                {
+                    if(i == aNames.getLength())
+                        IncIndent(-1);
+
+                    String aValue;
+                    try
+                    {
+                        ::rtl::OUString sValue = m_xRow->getString(i);
+                        if (!m_xRow->wasNull())
+                        {
+                            aValue = sValue;
+                        }
+                    }
+                    catch ( Exception& )
+                    {
+                        OSL_ASSERT(0);
+                    }
+                    WriteCell(pFormat[i-1],pColWidth[i-1],nHeight,pHorJustify[i-1],aValue,sHTML_tabledata);
+                }
+            }
+            ++j;
+            TAG_OFF_LF( sHTML_tablerow );
+        }
+
+        delete [] pFormat;
+        delete [] pHorJustify;
+        delete [] pColWidth;
+    }
+    else
+    {
+        IncIndent(-1);
+        TAG_OFF_LF( sHTML_tablerow );
+        TAG_OFF_LF( sHTML_thead );
+
+        IncIndent(1);
+        TAG_ON_LF( sHTML_tbody );
+    }
 
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( sHTML_tbody );
     IncIndent(-1); TAG_OFF_LF( sHTML_table );
@@ -831,7 +937,8 @@ void OHTMLImportExport::FontOn()
     (*m_pStream) << aStrOut;
 
     sal_Int32 nColor = 0;
-    m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
+    if(m_xObject.is())
+        m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
     Color aColor(nColor);
 
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );

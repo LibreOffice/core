@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 15:52:48 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,33 @@
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
-
+#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
+#include "WCopyTable.hxx"
+#endif
+#ifndef DBAUI_WIZ_EXTENDPAGES_HXX
+#include "WExtendPages.hxx"
+#endif
+#ifndef DBAUI_WIZ_NAMEMATCHING_HXX
+#include "WNameMatch.hxx"
+#endif
+#ifndef DBAUI_WIZ_COLUMNSELECT_HXX
+#include "WColumnSelect.hxx"
+#endif
+#ifndef DBAUI_ENUMTYPES_HXX
+#include "QEnumTypes.hxx"
+#endif
+#ifndef DBAUI_WIZARD_CPAGE_HXX
+#include "WCPage.hxx"
+#endif
+#ifndef TOOLS_INETMIME_HXX
+#include <tools/inetmime.hxx>
+#endif
+#ifndef _INETTYPE_HXX
+#include <svtools/inettype.hxx>
+#endif
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
+#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -144,30 +170,80 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 
+#define CONTAINER_ENTRY_NOTFOUND    ((ULONG)0xFFFFFFFF)
 #define DBAUI_HTML_FONTSIZES 7      // wie Export, HTML-Options
+#define HTML_META_NONE          0
+#define HTML_META_AUTHOR        1
+#define HTML_META_DESCRIPTION   2
+#define HTML_META_KEYWORDS      3
+#define HTML_META_REFRESH       4
+#define HTML_META_CLASSIFICATION 5
+#define HTML_META_CREATED       6
+#define HTML_META_CHANGEDBY     7
+#define HTML_META_CHANGED       8
+#define HTML_META_GENERATOR     9
+#define HTML_META_SDFOOTNOTE    10
+#define HTML_META_SDENDNOTE     11
+#define HTML_META_CONTENT_TYPE  12
+
+static HTMLOptionEnum __READONLY_DATA aHTMLMetaNameTable[] =
+{
+    { sHTML_META_author,        HTML_META_AUTHOR        },
+    { sHTML_META_changed,       HTML_META_CHANGED       },
+    { sHTML_META_changedby,     HTML_META_CHANGEDBY     },
+    { sHTML_META_classification,HTML_META_CLASSIFICATION},
+    { sHTML_META_content_type,  HTML_META_CONTENT_TYPE  },
+    { sHTML_META_created,       HTML_META_CREATED       },
+    { sHTML_META_description,   HTML_META_DESCRIPTION   },
+    { sHTML_META_keywords,      HTML_META_KEYWORDS      },
+    { sHTML_META_generator,     HTML_META_GENERATOR     },
+    { sHTML_META_refresh,       HTML_META_REFRESH       },
+    { sHTML_META_sdendnote,     HTML_META_SDENDNOTE     },
+    { sHTML_META_sdfootnote,    HTML_META_SDFOOTNOTE    },
+    { 0,                        0                       }
+};
+
 // ==========================================================================
 DBG_NAME(OHTMLReader);
 // ==========================================================================
 // OHTMLReader
 // ==========================================================================
 OHTMLReader::OHTMLReader(SvStream& rIn,const Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                        const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF) : HTMLParser(rIn)
-    ,ODatabaseExport(_rxConnection,_rxNumberF)
+                        const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+    : HTMLParser(rIn)
+    ,ODatabaseExport(_rxConnection,_rxNumberF,_rM)
     ,m_nTableCount(0)
     ,m_nColumnWidth(87)
+    ,m_bMetaOptions(sal_False)
 {
     DBG_CTOR(OHTMLReader,NULL);
+    // If the system encoding is ANSI, this encoding is used as default
+    // source encoding. Otherwise ISO-8859-1 will be used, because this
+    // is the real default encoding.
+    SetSrcEncoding( RTL_TEXTENCODING_MS_1252 == gsl_getSystemTextEncoding()
+                        ? RTL_TEXTENCODING_MS_1252
+                        : RTL_TEXTENCODING_ISO_8859_1 );
 }
 // ---------------------------------------------------------------------------
 OHTMLReader::OHTMLReader(SvStream& rIn,
                          sal_Int32 nRows,
-                         sal_Int32 nColumns,
-                         const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF): HTMLParser(rIn)
-    ,ODatabaseExport(nRows,nColumns,_rxNumberF)
+                         const ::std::vector<sal_Int32> &_rColumnPositions,
+                         const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+    : HTMLParser(rIn)
+    ,ODatabaseExport(nRows,_rColumnPositions,_rxNumberF,_rM)
     ,m_nTableCount(0)
     ,m_nColumnWidth(87)
+    ,m_bMetaOptions(sal_False)
 {
     DBG_CTOR(OHTMLReader,NULL);
+    // If the system encoding is ANSI, this encoding is used as default
+    // source encoding. Otherwise ISO-8859-1 will be used, because this
+    // is the real default encoding.
+    SetSrcEncoding( RTL_TEXTENCODING_MS_1252 == gsl_getSystemTextEncoding()
+                        ? RTL_TEXTENCODING_MS_1252
+                        : RTL_TEXTENCODING_ISO_8859_1 );
 }
 // ---------------------------------------------------------------------------
 OHTMLReader::~OHTMLReader()
@@ -181,11 +257,33 @@ SvParserState OHTMLReader::CallParser()
     rInput.ResetError();
     return HTMLParser::CallParser();
 }
+// -----------------------------------------------------------------------------
+rtl_TextEncoding OHTMLReader::GetEncodingByMIME( const String& rMime )
+{
+    ByteString sType;
+    ByteString sSubType;
+    INetContentTypeParameterList aParameters;
+    ByteString sMime( rMime, RTL_TEXTENCODING_ASCII_US );
+    if (INetContentTypes::parse(sMime, sType, sSubType, &aParameters))
+    {
+        const INetContentTypeParameter * pCharset
+            = aParameters.find("charset");
+        if (pCharset != 0)
+        {
+            ByteString sValue( pCharset->m_sValue, RTL_TEXTENCODING_ASCII_US );
+            return rtl_getTextEncodingFromMimeCharset( sValue.GetBuffer() );
+        }
+    }
+    return RTL_TEXTENCODING_DONTKNOW;
+}
+
 // ---------------------------------------------------------------------------
 void OHTMLReader::NextToken( int nToken )
 {
     if(m_bError || !m_nRows) // falls Fehler oder keine Rows mehr zur "Uberpr"ufung dann gleich zur"uck
         return;
+    if(!m_bMetaOptions)
+        setTextEncoding();
 
     if(m_xConnection.is())    // gibt an welcher CTOR gerufen wurde und damit, ob eine Tabelle erstellt werden soll
     {
@@ -296,8 +394,11 @@ void OHTMLReader::NextToken( int nToken )
             case HTML_TABLEDATA_OFF:
                 if(m_sTextToken.Len())
                 {
-                    m_vColumns[m_nColumnPos] = CheckString(m_sTextToken,m_vColumns[m_nColumnPos]);
-                    m_pColumnSize[m_nColumnPos] = ::std::max((sal_Int32)m_pColumnSize[m_nColumnPos],(sal_Int32)m_sTextToken.Len());
+                    if(m_vColumns[m_nColumnPos] != CONTAINER_ENTRY_NOTFOUND)
+                    {
+                        m_vFormatKey[m_vColumns[m_nColumnPos]] = CheckString(m_sTextToken,m_vFormatKey[m_vColumns[m_nColumnPos]]);
+                        m_vColumnSize[m_vColumns[m_nColumnPos]] = ::std::max<sal_Int32>((sal_Int32)m_vColumnSize[m_vColumns[m_nColumnPos]],(sal_Int32)m_sTextToken.Len());
+                    }
                     m_sTextToken.Erase();
                 }
                 m_nColumnPos++;
@@ -306,8 +407,11 @@ void OHTMLReader::NextToken( int nToken )
             case HTML_TABLEROW_OFF:
                 if(m_sTextToken.Len())
                 {
-                    m_vColumns[m_nColumnPos] = CheckString(m_sTextToken,m_vColumns[m_nColumnPos]);
-                    m_pColumnSize[m_nColumnPos] = ::std::max((sal_Int32)m_pColumnSize[m_nColumnPos],(sal_Int32)m_sTextToken.Len());
+                    if(m_vColumns[m_nColumnPos] != CONTAINER_ENTRY_NOTFOUND)
+                    {
+                        m_vFormatKey[m_vColumns[m_nColumnPos]] = CheckString(m_sTextToken,m_vFormatKey[m_vColumns[m_nColumnPos]]);
+                        m_vColumnSize[m_vColumns[m_nColumnPos]] = ::std::max<sal_Int32>((sal_Int32)m_vColumnSize[m_vColumns[m_nColumnPos]],(sal_Int32)m_sTextToken.Len());
+                    }
                     m_sTextToken.Erase();
                 }
                 m_nColumnPos = 0;
@@ -364,9 +468,8 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal,String *pValue,int nToken)
 }
 
 //---------------------------------------------------------------------------------
-void OHTMLReader::TableFontOn(sal_Int16 &nWidth,sal_Int16 &nHeight)
+void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
 {
-    FontDescriptor aFont;
     const HTMLOptions* pOptions = GetOptions();
     sal_Int16 nArrLen = pOptions->Count();
     for ( sal_Int16 i = 0; i < nArrLen; i++ )
@@ -378,7 +481,7 @@ void OHTMLReader::TableFontOn(sal_Int16 &nWidth,sal_Int16 &nHeight)
             {
                 Color aColor;
                 pOption->GetColor( aColor );
-                m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,makeAny(aColor.GetRGBColor()));
+                _rTextColor = aColor.GetRGBColor();
             }
             break;
         case HTML_O_FACE :
@@ -395,7 +498,7 @@ void OHTMLReader::TableFontOn(sal_Int16 &nWidth,sal_Int16 &nHeight)
                     aFontName += aFName;
                 }
                 if ( aFontName.Len() )
-                    aFont.Name = ::rtl::OUString(aFontName);
+                    _rFont.Name = ::rtl::OUString(aFontName);
             }
             break;
         case HTML_O_SIZE :
@@ -406,7 +509,7 @@ void OHTMLReader::TableFontOn(sal_Int16 &nWidth,sal_Int16 &nHeight)
                 else if ( nSize > DBAUI_HTML_FONTSIZES )
                     nSize = DBAUI_HTML_FONTSIZES;
 
-                aFont.Height = nSize;
+                _rFont.Height = nSize;
             }
             break;
         }
@@ -435,8 +538,9 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption* pOption )
 // ---------------------------------------------------------------------------
 sal_Bool OHTMLReader::CreateTable(int nToken)
 {
-    String aTableName(ModuleRes(STR_TBL_TITLE));
-    aTableName = aTableName.GetToken(0,' ');
+    String aTempName(ModuleRes(STR_TBL_TITLE));
+    aTempName = aTempName.GetToken(0,' ');
+    aTempName = String(::dbtools::createUniqueName(m_xTables,::rtl::OUString(aTempName )));
 
     int nTmpToken2 = nToken;
     sal_Bool bCaption = sal_False;
@@ -447,17 +551,9 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
     sal_Int16 nWidth = 0;
     sal_Int16 nHeight = 0;
 
-    if(!m_xTable.is())
-    {
-        Reference<XDataDescriptorFactory> xFact(m_xTables,UNO_QUERY);
-        OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
-        m_xTable = xFact->createDataDescriptor();
-
-        aTableName = String(::dbtools::createUniqueName(m_xTables,::rtl::OUString(aTableName)));
-        Reference<XColumnsSupplier> xColSup(m_xTable,UNO_QUERY);
-        m_xColumns = xColSup->getColumns();
-    }
-
+    String aTableName;
+    FontDescriptor aFont;
+    sal_Int32 nTextColor = 0;
     do
     {
         switch(nTmpToken2)
@@ -502,16 +598,6 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                     CreateDefaultColumn(aColumnName);
                     aColumnName.Erase();
 
-//                  SbaColumn* pColumn = CreateColumn(aColumnName,aTableName,pDestList);
-//                  pColumn->Put(SvxHorJustifyItem( eVal, SBA_ATTR_ALIGN_HOR_JUSTIFY) );
-//
-//                  pDestList->InsertAt(aColumnName,pColumn);
-//                  aColumnName.Erase();
-//
-//                  SbaColRowSizeItem aRowHeightItem(*PTR_CAST(SbaColRowSizeItem,&((SbaDBDataDef*)&m_xTable)->GetObjAttrs()->Get( SBA_DEF_ROWHEIGHT )));
-//                  aRowHeightItem.PutPixelValue(nHeight);
-//                  pColumn->Put(SbaColRowSizeItem(SBA_DEF_FLTCOLWIDTH,nWidth));
-
                     DELETEZ(pValue);
                     eVal = SVX_HOR_JUSTIFY_STANDARD;
                     bTableHeader = sal_False;
@@ -527,47 +613,25 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                 aTableName.EraseLeadingChars();
                 aTableName.EraseTrailingChars();
                 if(aTableName.Len())
-                {
                     aTableName = String(::dbtools::createUniqueName(m_xTables,::rtl::OUString(aTableName)));
-                    m_xTable->setPropertyValue(PROPERTY_NAME,makeAny(::rtl::OUString(aTableName)));
-                }
-                aTableName.Erase();
+                else
+                    aTableName = aTempName;
                 bCaption = sal_False;
                 break;
             case HTML_FONT_ON:
-                TableFontOn(nWidth,nHeight);
+                TableFontOn(aFont,nTextColor);
                 break;
             case HTML_BOLD_ON:
-                {
-                    FontDescriptor aFont;
-                    m_xTable->getPropertyValue(PROPERTY_FONT) >>= aFont;
-                    aFont.Weight = ::com::sun::star::awt::FontWeight::BOLD;
-                    m_xTable->setPropertyValue(PROPERTY_FONT,makeAny(aFont));
-                }
+                aFont.Weight = ::com::sun::star::awt::FontWeight::BOLD;
                 break;
             case HTML_ITALIC_ON:
-                {
-                    FontDescriptor aFont;
-                    m_xTable->getPropertyValue(PROPERTY_FONT) >>= aFont;
-                    aFont.Slant = ::com::sun::star::awt::FontSlant_ITALIC;
-                    m_xTable->setPropertyValue(PROPERTY_FONT,makeAny(aFont));
-                }
+                aFont.Slant = ::com::sun::star::awt::FontSlant_ITALIC;
                 break;
             case HTML_UNDERLINE_ON:
-                {
-                    FontDescriptor aFont;
-                    m_xTable->getPropertyValue(PROPERTY_FONT) >>= aFont;
-                    aFont.Underline = ::com::sun::star::awt::FontUnderline::SINGLE;
-                    m_xTable->setPropertyValue(PROPERTY_FONT,makeAny(aFont));
-                }
+                aFont.Underline = ::com::sun::star::awt::FontUnderline::SINGLE;
                 break;
             case HTML_STRIKE_ON:
-                {
-                    FontDescriptor aFont;
-                    m_xTable->getPropertyValue(PROPERTY_FONT) >>= aFont;
-                    aFont.Strikeout = ::com::sun::star::awt::FontStrikeout::SINGLE;
-                    m_xTable->setPropertyValue(PROPERTY_FONT,makeAny(aFont));
-                }
+                aFont.Strikeout = ::com::sun::star::awt::FontStrikeout::SINGLE;
                 break;
         }
     }
@@ -578,58 +642,100 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 
     m_bInTbl = sal_False;
 
-    sal_Bool m_bError = sal_False;
+    sal_Bool bError = sal_False;
+    OCopyTableWizard aWizard(NULL,aTableName,m_aDestColumns,m_vDestVector,m_xConnection,m_xFormatter,m_xFactory);
 
-//  SbaDBDataDefRef xSourceDef = (SbaDBDataDef*)m_xTable;
-//  CopyTableWizard aWizard(Application::GetDefDialogParent(),xSourceDef,m_xConnection);
-//
-//  DlgCopyTable*       pPage1 = new DlgCopyTable(&aWizard,SbaExplorerExchObj::AT_COPY, sal_False,0);
-//  SbaWizNameMatching* pPage2 = new SbaWizNameMatching(&aWizard);
-//  SbaWizColumnSelect* pPage3 = new SbaWizColumnSelect(&aWizard);
-//  SbaWizHTMLExtend*   pPage4 = new SbaWizHTMLExtend(&aWizard,rInput);
-//
-//  aWizard.AddWizardPage(pPage1);
-//  aWizard.AddWizardPage(pPage2);
-//  aWizard.AddWizardPage(pPage3);
-//  aWizard.AddWizardPage(pPage4);
-//
-//  aWizard.ActivatePage();
-//
-//  if (aWizard.Execute())
-//  {
-//      switch(aWizard.GetCreateStyle())
-//      {
-//          case CopyTableWizard::WIZARD_DEF_DATA:
-//          case CopyTableWizard::WIZARD_APPEND_DATA:
-//              {
-//                  m_bIsAutoIncrement = aWizard.SetAutoincrement();
-//                  m_vColumns = aWizard.GetColumnPositions();
-//                  m_vColumnTypes = aWizard.GetColumnTypes();
+    OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, sal_False,OCopyTableWizard::WIZARD_DEF_DATA);
+    OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
+    OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
+    OWizHTMLExtend*     pPage4 = new OWizHTMLExtend(&aWizard,rInput);
+
+    aWizard.AddWizardPage(pPage1);
+    aWizard.AddWizardPage(pPage2);
+    aWizard.AddWizardPage(pPage3);
+    aWizard.AddWizardPage(pPage4);
+
+    aWizard.ActivatePage();
+
+    if (aWizard.Execute())
+    {
+        switch(aWizard.GetCreateStyle())
+        {
+            case OCopyTableWizard::WIZARD_DEF_DATA:
+            case OCopyTableWizard::WIZARD_APPEND_DATA:
+                {
+                    m_xTable = aWizard.createTable();
+                    bError = !m_xTable.is();
+                    if(m_xTable.is())
+                    {
+                        m_xTable->setPropertyValue(PROPERTY_FONT,makeAny(aFont));
+                        m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,makeAny(nTextColor));
+                    }
+                    m_bIsAutoIncrement  = aWizard.SetAutoincrement();
+                    m_vColumns          = aWizard.GetColumnPositions();
+                    m_vColumnTypes      = aWizard.GetColumnTypes();
 //                  m_xTable = aWizard.GetTableDef();
 //                  void *pTemp = (void *)&m_vColumns;
 //                  map<String,String,SbaStringCompare> aTmp = aWizard.GetNameMapping();
 //                  void* pTemp2 = (void *)&aTmp;
 //                  m_bError = !SbaExplorerExchObj::CheckColumnMerge(xSourceDef->GetColumns(),m_xTable->GetOriginalColumns(),pTemp,pTemp2);
-//              }
-//              break;
-//          default:
-//              m_bError = TRUE; // there is no error but I have nothing more to do
-//      }
-//  }
-//  else
-//      m_bError = TRUE;
-//
-//  if(!m_bError && m_xTable.Is())
-//  {
-//      xDestCursor = m_xConnection->CreateCursor( SDB_SNAPSHOT, SDB_APPENDONLY );
-//      String aDestTableName( m_xTable->Name());
-//      if (!xDestCursor->Open(aDestTableName, TRUE))
-//          return sal_False;
-//  }
-//  // this two statements are nessesary, else this would let to gpf
-//  pDestList = NULL; // it must be sure that the list is destroied before def object
-//  xSourceDef = NULL;
+                }
+                break;
+            default:
+                bError = TRUE; // there is no error but I have nothing more to do
+        }
+    }
+    else
+        bError = TRUE;
 
+    if(!bError)
+        bError = !createRowSet();
 
-    return !m_bError && m_xTable.is();
+    return !bError && m_xTable.is();
 }
+// -----------------------------------------------------------------------------
+void OHTMLReader::setTextEncoding()
+{
+    m_bMetaOptions = sal_True;
+    USHORT nContentOption = HTML_O_CONTENT;
+    rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
+    String aName, aContent;
+    USHORT nAction = HTML_META_NONE;
+    BOOL bHTTPEquiv = FALSE, bChanged = FALSE;
+    const HTMLOptions *pOptions = GetOptions(&nContentOption);
+    for( USHORT i = pOptions->Count(); i; )
+    {
+        const HTMLOption *pOption = (*pOptions)[ --i ];
+        switch( pOption->GetToken() )
+        {
+        case HTML_O_HTTPEQUIV:
+            aName = pOption->GetString();
+            pOption->GetEnum( nAction, aHTMLMetaNameTable );
+            bHTTPEquiv = TRUE;
+            break;
+        case HTML_O_CONTENT:
+            aContent = pOption->GetString();
+            break;
+        }
+    }
+    if( bHTTPEquiv || HTML_META_DESCRIPTION!=nAction )
+    {
+        // wenn's keine Description ist CRs und LFs aus dem CONTENT entfernen
+        aContent.EraseAllChars( _CR );
+        aContent.EraseAllChars( _LF );
+    }
+    else
+    {
+        // fuer die Beschreibung die Zeilen-Umbrueche entsprechen wandeln
+        aContent.ConvertLineEnd();
+    }
+    switch( nAction )
+    {
+        case HTML_META_CONTENT_TYPE:
+            if( aContent.Len() )
+                SetSrcEncoding(GetEncodingByMIME( aContent ));
+            break;
+    }
+}
+// -----------------------------------------------------------------------------
+

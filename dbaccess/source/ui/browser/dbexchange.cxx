@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 16:00:13 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,142 +62,66 @@
 #ifndef DBAUI_DBEXCHANGE_HXX
 #include "dbexchange.hxx"
 #endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
-#endif
-#ifndef _SV_EXCHANGE_HXX
-#include <vcl/exchange.hxx>
 #endif
 #ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
 #endif
 
-using namespace dbaui;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-
-String ODataExchange::aDataExchangeFormat;
-String ODataExchange::aRTFExchangeFormat;
-String ODataExchange::aHTMLExchangeFormat;
-
-
-TYPEINIT0( ODataExchange );
-DBG_NAME(ODataExchange);
-//------------------------------------------------------------------------
-ODataExchange::ODataExchange(const String& _rExchangeStr)
+namespace dbaui
 {
-    DBG_CTOR(ODataExchange,NULL);
-    if(!aDataExchangeFormat.Len())
-        aDataExchangeFormat = Exchange::GetFormatName(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE);
-    if(!aRTFExchangeFormat.Len())
-        aRTFExchangeFormat = Exchange::GetFormatName(SOT_FORMAT_RTF);
-    if(!aHTMLExchangeFormat.Len())
-        aHTMLExchangeFormat = Exchange::GetFormatName(SOT_FORMATSTR_ID_HTML);
-
-    m_aDataExchange = _rExchangeStr;
-
-    SvData* pData = new SvData( Exchange::RegisterFormatName(aDataExchangeFormat), MEDIUM_MEMORY );
-    Append(pData);
-    // TODO insert the format for rtf and html
-}
-
-//------------------------------------------------------------------------
-ODataExchange::~ODataExchange()
-{
-    DBG_DTOR(ODataExchange,NULL);
-}
-
-//------------------------------------------------------------------------
-void ODataExchange::SetBookmark( const String& rURL, const String& rLinkName )
-{
-}
-//------------------------------------------------------------------------
-BOOL ODataExchange::GetData( SvData* pData )
-{
-    ULONG nFormat = pData->GetFormat();
-
-    //////////////////////////////////////////////////////////////////////
-    // Wenn Daten in SBA_RTF_EXCHANGE_FORMAT, koennten wir diese verarbeiten
-    // TODO enable rtf and html format again
-    if(nFormat==FORMAT_RTF)
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::beans;
+    // -----------------------------------------------------------------------------
+    sal_Bool ODataClipboard::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
     {
-        SvMemoryStream aStrm;
-//      SbaRTFImportExport aExport(aStrm,*m_xSourceDef,m_aDataExchange);
-//      BOOL bErr;
-//      if(bErr = aExport.Write())
-//          pData->SetData( const_cast<void*>((const void*)aStrm), aStrm.Tell() );
-//      return bErr;
-    }
-
-    if(nFormat==SOT_FORMATSTR_ID_HTML)
-    {
-
-        SvMemoryStream aStrm;
-//      SbaHTMLImportExport aExport(aStrm,*m_xSourceDef,m_aDataExchange);
-//      BOOL bErr;
-//      if(bErr = aExport.Write())
-//          pData->SetData( const_cast<void*>((const void*)aStrm), aStrm.Tell() );
-//      return bErr;
-    }
-    if( m_aDataExchange.Len() && (nFormat == Exchange::RegisterFormatName(aDataExchangeFormat)))
-    {
-        pData->SetData( m_aDataExchange );
-        return TRUE;
-    }
-    //////////////////////////////////////////////////////////////////////
-    // Alle anderen Formate werden an die Basisklasse weitergegeben
-    return SvDataMemberObject::GetData( pData );
-}
-// -----------------------------------------------------------------------------
-sal_Bool ODataClipboard::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
-{
-    if(nUserObjectId == SOT_FORMAT_RTF || nUserObjectId == SOT_FORMATSTR_ID_HTML)
-    {
-        ODatabaseImportExport* pExport = reinterpret_cast<ODatabaseImportExport*>(pUserObject);
-        if(pExport)
+        if(nUserObjectId == SOT_FORMAT_RTF || nUserObjectId == SOT_FORMATSTR_ID_HTML)
         {
-            pExport->setStream(&rxOStm);
-            return pExport->Write();
+            ODatabaseImportExport* pExport = reinterpret_cast<ODatabaseImportExport*>(pUserObject);
+            if(pExport)
+            {
+                pExport->setStream(&rxOStm);
+                return pExport->Write();
+            }
         }
+        return sal_False;
     }
-    return sal_False;
-}
-// -----------------------------------------------------------------------------
-void ODataClipboard::AddSupportedFormats()
-{
-    AddFormat(SOT_FORMAT_RTF);
-    AddFormat(SOT_FORMATSTR_ID_HTML);
-    AddFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE);
-}
-// -----------------------------------------------------------------------------
-sal_Bool ODataClipboard::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
-{
-    ULONG nFormat = SotExchange::GetFormat(rFlavor);
-    if(nFormat == SOT_FORMAT_RTF)
+    // -----------------------------------------------------------------------------
+    void ODataClipboard::AddSupportedFormats()
     {
-        return SetObject(m_pRtf.get(),SOT_FORMAT_RTF,rFlavor);
+        AddFormat(SOT_FORMAT_RTF);
+        AddFormat(SOT_FORMATSTR_ID_HTML);
+        if(m_aSeq.getLength())
+            AddFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE);
     }
-    else if(nFormat == SOT_FORMATSTR_ID_HTML)
+    // -----------------------------------------------------------------------------
+    sal_Bool ODataClipboard::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
     {
-        return SetObject(m_pHtml.get(),SOT_FORMATSTR_ID_HTML,rFlavor);
+        ULONG nFormat = SotExchange::GetFormat(rFlavor);
+        if(nFormat == SOT_FORMAT_RTF)
+        {
+            return SetObject(m_pRtf,SOT_FORMAT_RTF,rFlavor);
+        }
+        else if(nFormat == SOT_FORMATSTR_ID_HTML)
+        {
+            return SetObject(m_pHtml,SOT_FORMATSTR_ID_HTML,rFlavor);
+        }
+        else if(nFormat == SOT_FORMATSTR_ID_SBA_DATAEXCHANGE)
+        {
+            return SetAny(makeAny(m_aSeq),rFlavor);
+        }
+        return sal_False;
     }
-    else if(nFormat == SOT_FORMATSTR_ID_SBA_DATAEXCHANGE)
+    // -----------------------------------------------------------------------------
+    void ODataClipboard::ObjectReleased()
     {
-        return SetAny(makeAny(m_aSeq),rFlavor);
+        m_xHtml = NULL;
+        m_xRtf  = NULL;
+        m_aSeq  = Sequence< PropertyValue >();
     }
-    return sal_False;
+    // -----------------------------------------------------------------------------
 }
-// -----------------------------------------------------------------------------
-void ODataClipboard::ObjectReleased()
-{
-    delete m_pHtml.release();
-    delete m_pRtf.release();
-    m_aSeq = Sequence< PropertyValue >();
-}
-// -----------------------------------------------------------------------------
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 15:52:16 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,24 @@
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
+#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
+#include "WCopyTable.hxx"
+#endif
+#ifndef DBAUI_WIZ_EXTENDPAGES_HXX
+#include "WExtendPages.hxx"
+#endif
+#ifndef DBAUI_WIZ_NAMEMATCHING_HXX
+#include "WNameMatch.hxx"
+#endif
+#ifndef DBAUI_WIZ_COLUMNSELECT_HXX
+#include "WColumnSelect.hxx"
+#endif
+#ifndef DBAUI_ENUMTYPES_HXX
+#include "QEnumTypes.hxx"
+#endif
+#ifndef DBAUI_WIZARD_CPAGE_HXX
+#include "WCPage.hxx"
+#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -140,23 +158,28 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 
+#define CONTAINER_ENTRY_NOTFOUND    ((ULONG)0xFFFFFFFF)
 DBG_NAME(ORTFReader);
 // ==========================================================================
 // ORTFReader
 // ==========================================================================
 ORTFReader::ORTFReader( SvStream& rIn,
-                        const Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                        const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF): SvRTFParser(rIn) ,ODatabaseExport(_rxConnection,_rxNumberF)
+                        const Reference< XConnection >& _rxConnection,
+                        const Reference< XNumberFormatter >& _rxNumberF,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+    : SvRTFParser(rIn)
+    ,ODatabaseExport(_rxConnection,_rxNumberF,_rM)
 {
     DBG_CTOR(ORTFReader,NULL);
 }
 // ---------------------------------------------------------------------------
 ORTFReader::ORTFReader(SvStream& rIn,
                        sal_Int32 nRows,
-                       sal_Int32 nColumns,
-                       const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF)
-                       :SvRTFParser(rIn)
-                       ,ODatabaseExport(nRows,nColumns,_rxNumberF)
+                       const ::std::vector<sal_Int32> &_rColumnPositions,
+                       const Reference< XNumberFormatter >& _rxNumberF,
+                       const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+   :SvRTFParser(rIn)
+   ,ODatabaseExport(nRows,_rColumnPositions,_rxNumberF,_rM)
 {
     DBG_CTOR(ORTFReader,NULL);
 }
@@ -297,8 +320,11 @@ void ORTFReader::NextToken( int nToken )
             case RTF_CELL:
                 if(m_sTextToken.Len())
                 {
-                    m_vColumns[m_nColumnPos] = CheckString(m_sTextToken,m_vColumns[m_nColumnPos]);
-                    m_pColumnSize[m_nColumnPos] = ::std::max(m_pColumnSize[m_nColumnPos],(sal_Int32)m_sTextToken.Len());
+                    if(m_vColumns[m_nColumnPos] != CONTAINER_ENTRY_NOTFOUND)
+                    {
+                        m_vFormatKey[m_vColumns[m_nColumnPos]] = CheckString(m_sTextToken,m_vFormatKey[m_vColumns[m_nColumnPos]]);
+                        m_vColumnSize[m_vColumns[m_nColumnPos]] = ::std::max<sal_Int32>(m_vColumnSize[m_vColumns[m_nColumnPos]],(sal_Int32)m_sTextToken.Len());
+                    }
 
                     m_sTextToken.Erase();
                 }
@@ -307,8 +333,11 @@ void ORTFReader::NextToken( int nToken )
             case RTF_ROW:
                 if(m_sTextToken.Len())
                 {
-                    m_vColumns[m_nColumnPos] = CheckString(m_sTextToken,m_vColumns[m_nColumnPos]);
-                    m_pColumnSize[m_nColumnPos] = ::std::max(m_pColumnSize[m_nColumnPos],(sal_Int32)m_sTextToken.Len());
+                    if(m_vColumns[m_nColumnPos] != CONTAINER_ENTRY_NOTFOUND)
+                    {
+                        m_vFormatKey[m_vColumns[m_nColumnPos]] = CheckString(m_sTextToken,m_vFormatKey[m_vColumns[m_nColumnPos]]);
+                        m_vColumnSize[m_vColumns[m_nColumnPos]] = ::std::max<sal_Int32>(m_vColumnSize[m_vColumns[m_nColumnPos]],(sal_Int32)m_sTextToken.Len());
+                    }
                     m_sTextToken.Erase();
                 }
                 m_nColumnPos = 0;
@@ -322,21 +351,7 @@ sal_Bool ORTFReader::CreateTable(int nToken)
 {
     String aTableName(ModuleRes(STR_TBL_TITLE));
     aTableName = aTableName.GetToken(0,' ');
-    //////////////////////////////////////////////////////////////////////////
-    // Wenn keine Tabelle zum Anhaengen da ist, neue erzeugen
-    Reference<XDataDescriptorFactory> xFact(m_xTables,UNO_QUERY);
-    OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
-    m_xTable = xFact->createDataDescriptor();
-
     aTableName = String(::dbtools::createUniqueName(m_xTables,::rtl::OUString(aTableName)));
-    Reference<XColumnsSupplier> xColSup(m_xTable,UNO_QUERY);
-    m_xColumns = xColSup->getColumns();
-    OSL_ENSURE(m_xColumns.is(),"No columns");
-    Reference<XDataDescriptorFactory> xColumnFactory(m_xColumns,UNO_QUERY);
-
-    Reference<XAppend> xAppend(m_xColumns,UNO_QUERY);
-    OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
-
 
     int nTmpToken2 = nToken;
     String aColumnName;
@@ -379,8 +394,8 @@ sal_Bool ORTFReader::CreateTable(int nToken)
                 }
                 break;
             case RTF_CF:
-                if(nTokenValue < m_vecColor.size())
-                    m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,makeAny(m_vecColor[nTokenValue]));
+                //  if(nTokenValue < m_vecColor.size())
+                    //  m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,makeAny(m_vecColor[nTokenValue]));
                 break;
             case RTF_B:
                 aFont.Weight = ::com::sun::star::awt::FontWeight::BOLD;
@@ -399,69 +414,61 @@ sal_Bool ORTFReader::CreateTable(int nToken)
     while((nTmpToken2 = GetNextToken()) != RTF_ROW);
 
 
-    m_xTable->setPropertyValue(PROPERTY_FONT,makeAny(aFont));
+
 
     if(aColumnName.Len())
         CreateDefaultColumn(aColumnName);
 
     m_bInTbl = sal_False;
 
-    sal_Bool m_bError = sal_False;
+    sal_Bool bError = sal_False;
 
-//  SbaDBDataDefRef xSourceDef = (SbaDBDataDef*)m_xTable;
-//  CopyTableWizard aWizard(Application::GetDefDialogParent(),xSourceDef,m_xConnection);
-//
-//  DlgCopyTable*       pPage1 = new DlgCopyTable(&aWizard,SbaExplorerExchObj::AT_COPY, sal_False,0);
-//  SbaWizNameMatching* pPage2 = new SbaWizNameMatching(&aWizard);
-//  SbaWizColumnSelect* pPage3 = new SbaWizColumnSelect(&aWizard);
-//  SbaWizRTFExtend*    pPage4 = new SbaWizRTFExtend(&aWizard,rInput);
-//
-//  aWizard.AddWizardPage(pPage1);
-//  aWizard.AddWizardPage(pPage2);
-//  aWizard.AddWizardPage(pPage3);
-//  aWizard.AddWizardPage(pPage4);
-//
-//  aWizard.ActivatePage();
-//
-//  if (aWizard.Execute())
-//  {
-//      switch(aWizard.GetCreateStyle())
-//      {
-//          case CopyTableWizard::WIZARD_DEF_DATA:
-//          case CopyTableWizard::WIZARD_APPEND_DATA:
-//              {
-//                  m_bIsAutoIncrement = aWizard.SetAutoincrement();
-//                  m_vColumns = aWizard.GetColumnPositions();
-//                  m_vColumnTypes = aWizard.GetColumnTypes();
-//                  m_xTable = aWizard.GetTableDef();
-//                  void *pTemp = (void *)&m_vColumns;
-//                  map<String,String,SbaStringCompare> aTmp = aWizard.GetNameMapping();
-//                  void* pTemp2 = (void *)&aTmp;
-//                  m_bError = !SbaExplorerExchObj::CheckColumnMerge(xSourceDef->GetColumns(),m_xTable->GetOriginalColumns(),pTemp,pTemp2);
-//              }
-//              break;
-//          default:
-//              m_bError = TRUE; // there is no error but I have nothing more to do
-//      }
-//  }
-//  else
-//      m_bError = TRUE;
-//
-//  if(!m_bError && m_xTable.is())
-//  {
-//      xDestCursor = m_xConnection->CreateCursor( SDB_SNAPSHOT, SDB_APPENDONLY );
-//      String aDestTableName( m_xTable->Name());
-//      if (!xDestCursor->Open(aDestTableName, TRUE))
-//          return sal_False;
-//  }
-//  // this two statements are nessesary, else this would let to gpf
-//  //pDestList = NULL; // it must be sure that the list is destroied before def object
-//  xSourceDef = NULL;
+    OCopyTableWizard aWizard(NULL,aTableName,m_aDestColumns,m_vDestVector,m_xConnection,m_xFormatter,m_xFactory);
 
-    Reference<XAppend> xTableAppend(m_xTables,UNO_QUERY);
-    xTableAppend->appendByDescriptor(m_xTable);
+    OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, sal_False,OCopyTableWizard::WIZARD_DEF_DATA);
+    OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
+    OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
+    OWizRTFExtend*      pPage4 = new OWizRTFExtend(&aWizard,rInput);
 
-    return !m_bError && m_xTable.is();
+    aWizard.AddWizardPage(pPage1);
+    aWizard.AddWizardPage(pPage2);
+    aWizard.AddWizardPage(pPage3);
+    aWizard.AddWizardPage(pPage4);
+
+    aWizard.ActivatePage();
+
+    if (aWizard.Execute())
+    {
+        switch(aWizard.GetCreateStyle())
+        {
+            case OCopyTableWizard::WIZARD_DEF_DATA:
+            case OCopyTableWizard::WIZARD_APPEND_DATA:
+                {
+                    m_xTable = aWizard.createTable();
+                    bError = !m_xTable.is();
+                    if(m_xTable.is())
+                    {
+                        m_xTable->setPropertyValue(PROPERTY_FONT,makeAny(aFont));
+                        if(m_vecColor.size())
+                            m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,makeAny(m_vecColor[0]));
+
+                        m_bIsAutoIncrement  = aWizard.SetAutoincrement();
+                        m_vColumns          = aWizard.GetColumnPositions();
+                        m_vColumnTypes      = aWizard.GetColumnTypes();
+                    }
+                }
+                break;
+            default:
+                bError = TRUE; // there is no error but I have nothing more to do
+        }
+    }
+    else
+        bError = TRUE;
+
+    if(!bError)
+        bError = createRowSet();
+
+    return !bError && m_xTable.is();
 }
 // -----------------------------------------------------------------------------
 

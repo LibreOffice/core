@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: oj $ $Date: 2001-02-16 15:51:10 $
+#   last change: $Author: oj $ $Date: 2001-02-23 15:10:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,11 +76,19 @@ ENABLE_EXCEPTIONS=TRUE
 # ... resource files ............................
 
 SRCFILES =	\
-        dbumiscres.src
+        dbumiscres.src	\
+        WizardPages.src
 
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/UITools.obj					\
+        $(SLO)$/WCPage.obj					\
+        $(SLO)$/WExtendPages.obj			\
+        $(SLO)$/WNameMatch.obj				\
+        $(SLO)$/WTypeSelect.obj				\
+        $(SLO)$/WColumnSelect.obj			\
+        $(SLO)$/WCopyTable.obj				\
         $(SLO)$/TokenWriter.obj				\
         $(SLO)$/HtmlReader.obj				\
         $(SLO)$/RtfReader.obj				\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 16:00:13 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,21 +695,25 @@ Menu MENU_BROWSERTREE_CONTEXT
         };
     };
 };
-
-QueryBox QUERY_BRW_DELETE_QUERY
+String STR_TITLE_CONFIRM_DELETION
 {
-    Buttons = WB_YES_NO ;
-    Message = "Soll die Abfrage gelöscht werden?" ;
-    Message [ English ] = "Delete selected query?" ;
-    Message [ english_us ] = "Do you want to delete the selected query?" ;
+    Text = "Löschen bestätigen" ;
+    Text [ English ] = "confirm deletion" ;
+    Text [ english_us ] = "confirm deletion" ;
 };
 
-QueryBox QUERY_BRW_DELETE_TABLE
+String STR_QUERY_DELETE_QUERY
 {
-    Buttons = WB_YES_NO ;
-    Message = "Soll die Tabelle gelöscht werden?" ;
-    Message [ English ] = "Delete selected table?" ;
-    Message [ english_us ] = "Do you want to delete the selected table?" ;
+    Text = "Soll die Abfrage '%1' gelöscht werden?" ;
+    Text [ English ] = "Delete query '%1'?" ;
+    Text [ english_us ] = "Do you want to delete the query '%1'?" ;
+};
+
+String STR_QUERY_DELETE_TABLE
+{
+    Text = "Soll die Tabelle '%1' gelöscht werden?" ;
+    Text [ English ] = "Delete table '%1'?" ;
+    Text [ english_us ] = "Do you want to delete the table '%1'?" ;
 };
 
 QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
