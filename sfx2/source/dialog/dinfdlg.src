@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:18:34 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,7 +586,7 @@ TabPage TP_DOCINFODOC
         Text[french] = "~Utiliser les données d'identité";
         Text [ italian ] = "Usa i dati utente" ;
         Text [ dutch ] = "~Gebruikersgegevens toepassen" ;
-        Text [ spanish ] = "Utilice los ~datos del usuario" ;
+        Text [ spanish ] = "Utilizar los ~datos del usuario" ;
         Text [ swedish ] = "Använd ~användardata" ;
         Text [ portuguese ] = "Usar dados do ~utilizador";
         Text[ portuguese_brazilian ] = "~Benutzerdaten verwenden";
