@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Invocation.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,13 +76,12 @@
     <p>Invoke createInstanceWithArguments() of XSingleServiceFactory
     to create an Invocation adapter for the passed object (Invoking
     createInstance() will fail).</p>
-
     <p>
     The adapter has to support <type scope="com::sun::star::script">XInvocation</type>.
     The adapter may also support <type scope="com::sun::star::script">XInvocation2</type>.
     </p>
  */
-service Invocation
+published service Invocation
 {
     /// Interface to specify the object to be mapped by the invocation service.
     interface com::sun::star::lang::XSingleServiceFactory;
