@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-24 15:22:21 $
+ *  last change: $Author: cl $ $Date: 2001-12-17 15:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,8 @@ enum SdXMLDrawPageAttrTokenMap
     XML_TOK_DRAWPAGE_STYLE_NAME,
     XML_TOK_DRAWPAGE_MASTER_PAGE_NAME,
     XML_TOK_DRAWPAGE_PAGE_LAYOUT_NAME,
-    XML_TOK_DRAWPAGE_ID
+    XML_TOK_DRAWPAGE_ID,
+    XML_TOK_DRAWPAGE_HREF
 };
 
 enum SdXMLDrawPageElemTokenMap

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-08 15:40:58 $
+ *  last change: $Author: cl $ $Date: 2001-12-17 15:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,8 @@ static __FAR_DATA SvXMLTokenMapEntry aDrawPageAttrTokenMap[] =
     { XML_NAMESPACE_DRAW,           XML_STYLE_NAME,                     XML_TOK_DRAWPAGE_STYLE_NAME         },
     { XML_NAMESPACE_DRAW,           XML_MASTER_PAGE_NAME,               XML_TOK_DRAWPAGE_MASTER_PAGE_NAME   },
     { XML_NAMESPACE_PRESENTATION,   XML_PRESENTATION_PAGE_LAYOUT_NAME,  XML_TOK_DRAWPAGE_PAGE_LAYOUT_NAME   },
-    { XML_NAMESPACE_DRAW,           XML_ID,                         XML_TOK_DRAWPAGE_ID                 },
+    { XML_NAMESPACE_DRAW,           XML_ID,                             XML_TOK_DRAWPAGE_ID                 },
+    { XML_NAMESPACE_XLINK,          XML_HREF,                           XML_TOK_DRAWPAGE_HREF               },
     XML_TOKEN_MAP_END
 };
 

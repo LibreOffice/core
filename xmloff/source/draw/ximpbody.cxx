@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-09-28 08:48:46 $
+ *  last change: $Author: cl $ $Date: 2001-12-17 15:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,12 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                 sal_Int32 nId;
                 if( SvXMLUnitConverter::convertNumber( nId, sValue ) )
                     nPageId = nId;
+                break;
+            }
+            case XML_TOK_DRAWPAGE_HREF:
+            {
+                maHREF = sValue;
+                break;
             }
         }
     }
@@ -295,6 +301,26 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                     }
                 }
             }
+        }
+    }
+
+    if( maHREF.getLength() )
+    {
+        uno::Reference< beans::XPropertySet > xProps( xDrawPage, uno::UNO_QUERY );
+        if( xProps.is() )
+        {
+            sal_Int32 nIndex = maHREF.lastIndexOf( (sal_Unicode)'#' );
+            if( nIndex != -1 )
+            {
+                OUString aFileName( maHREF.copy( 0, nIndex ) );
+                OUString aBookmarkName( maHREF.copy( nIndex+1 ) );
+
+                maHREF = GetImport().GetAbsoluteReference( aFileName );
+                maHREF += OUString( (sal_Unicode)'#' );
+                maHREF += aBookmarkName;
+            }
+
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "BookmarkURL" ) ), uno::makeAny( maHREF ) );
         }
     }
 

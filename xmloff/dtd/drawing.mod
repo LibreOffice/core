@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.70 2001-11-15 17:07:26 cl Exp $
+	$Id: drawing.mod,v 1.71 2001-12-17 15:54:45 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -510,6 +510,10 @@
 <!ATTLIST draw:page draw:master-page-name %styleName; #REQUIRED>
 <!ATTLIST draw:page presentation:presentation-page-layout-name %styleName; #IMPLIED>
 <!ATTLIST draw:page draw:id %nonNegativeInteger; #IMPLIED>
+<!ATTLIST draw:page xlink:href %uriReference; #IMPLIED>
+<!ATTLIST draw:page xlink:type (simple) #IMPLIED>
+<!ATTLIST draw:page xlink:show (replace) #IMPLIED>
+<!ATTLIST draw:page xlink:actuate (onRequest) #IMPLIED>
 
 <!-- Presentation notes -->
 <!ELEMENT presentation:notes (%shapes;)*>

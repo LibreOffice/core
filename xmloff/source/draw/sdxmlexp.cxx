@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-27 14:14:16 $
+ *  last change: $Author: cl $ $Date: 2001-12-17 15:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1771,6 +1771,32 @@ void SdXMLExport::_ExportContent()
             if( IsImpress() && maDrawPagesAutoLayoutNames[nPageInd+1].getLength())
             {
                 AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PRESENTATION_PAGE_LAYOUT_NAME, maDrawPagesAutoLayoutNames[nPageInd+1]);
+            }
+
+            uno::Reference< beans::XPropertySet > xProps( xDrawPage, uno::UNO_QUERY );
+            if( xProps.is() )
+            {
+                OUString aBookmarkURL;
+                xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "BookmarkURL" ) ) ) >>= aBookmarkURL;
+
+                if( aBookmarkURL.getLength() )
+                {
+                    sal_Int32 nIndex = aBookmarkURL.lastIndexOf( (sal_Unicode)'#' );
+                    if( nIndex != -1 )
+                    {
+                        OUString aFileName( aBookmarkURL.copy( 0, nIndex ) );
+                        OUString aBookmarkName( aBookmarkURL.copy( nIndex+1 ) );
+
+                        aBookmarkURL = GetRelativeReference( aFileName );
+                        aBookmarkURL += OUString( (sal_Unicode)'#' );
+                        aBookmarkURL += aBookmarkName;
+                    }
+
+                    AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, aBookmarkURL);
+                    AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                    AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_REPLACE );
+                    AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
+                }
             }
 
             // write page
