@@ -1,0 +1,526 @@
+/*************************************************************************
+ *
+ *  $RCSfile: urltest.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: sb $ $Date: 2001-01-18 12:57:08 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <cstddef>
+#include <cstdio>
+#include <cstdlib>
+
+#ifndef TOOLS_INETMIME_HXX
+#include <inetmime.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <urlobj.hxx>
+#endif
+
+//============================================================================
+//
+//  testRelToAbs
+//
+//============================================================================
+
+struct RelToAbsTest
+{
+    sal_Char const * m_pBase;
+    sal_Char const * m_pRel;
+    sal_Char const * m_pAbs;
+    sal_Char const * m_pAlt;
+};
+
+//============================================================================
+bool testRelToAbs(RelToAbsTest const * pTest, size_t nSize)
+{
+    bool bSuccess = true;
+    INetURLObject aBase;
+    for (size_t i = 0; i < nSize; ++i)
+    {
+        if (pTest[i].m_pBase)
+        {
+            aBase.SetURL(pTest[i].m_pBase);
+            if (!aBase.HasError())
+                printf("Base %s\n",
+                       ByteString(aBase.GetMainURL(INetURLObject::NO_DECODE),
+                                  RTL_TEXTENCODING_ISO_8859_1).
+                           GetBuffer());
+        }
+        if (aBase.HasError())
+        {
+            printf(" BAD BASE %s\n",
+                   pTest[i].m_pBase ? pTest[i].m_pBase : "");
+            continue;
+        }
+        INetURLObject aAbs;
+        aBase.GetNewAbsURL(pTest[i].m_pRel, &aAbs);
+        ByteString aTheAbs(aAbs.GetMainURL(INetURLObject::NO_DECODE),
+                           RTL_TEXTENCODING_ISO_8859_1);
+        if (aTheAbs.Equals(pTest[i].m_pAbs)
+            || pTest[i].m_pAlt && aTheAbs.Equals(pTest[i].m_pAlt))
+            printf("  ok %s -> %s\n", pTest[i].m_pRel, aTheAbs.GetBuffer());
+        else
+        {
+            printf(" BAD %s -> %s (%s)\n", pTest[i].m_pRel,
+                   aTheAbs.GetBuffer(), pTest[i].m_pAbs);
+            bSuccess = false;
+        }
+    }
+    printf("\n");
+    return bSuccess;
+}
+
+//============================================================================
+//
+//  testSetFSys
+//
+//============================================================================
+
+struct SetFSysTest
+{
+    sal_Char const * m_pPath;
+    INetURLObject::FSysStyle m_eStyle;
+    sal_Char const * m_pUrl;
+};
+
+//============================================================================
+inline sal_Char const * toString(INetURLObject::FSysStyle eStyle)
+{
+    static sal_Char aBuffer[5];
+    int i = 0;
+    if (eStyle & INetURLObject::FSYS_VOS)
+        aBuffer[i++] = 'V';
+    if (eStyle & INetURLObject::FSYS_UNX)
+        aBuffer[i++] = 'U';
+    if (eStyle & INetURLObject::FSYS_DOS)
+        aBuffer[i++] = 'D';
+    if (eStyle & INetURLObject::FSYS_MAC)
+        aBuffer[i++] = 'M';
+    if (i == 0)
+        aBuffer[i++] = '-';
+    aBuffer[i] = '\0';
+    return aBuffer;
+}
+
+//============================================================================
+bool testSetFSys(SetFSysTest const * pTest, size_t nSize)
+{
+    bool bSuccess = true;
+    String aPath;
+    for (size_t i = 0; i < nSize; ++i)
+    {
+        if (pTest[i].m_pPath)
+            aPath = String::CreateFromAscii(pTest[i].m_pPath);
+        if (aPath.Len() == 0)
+        {
+            printf(" NO PATH\n");
+            continue;
+        }
+        INetURLObject aUrl1(aPath, pTest[i].m_eStyle);
+        INetURLObject aUrl2;
+        aUrl2.setFSysPath(aPath, pTest[i].m_eStyle);
+        if (aUrl1.GetMainURL(INetURLObject::NO_DECODE).
+                      EqualsAscii(pTest[i].m_pUrl)
+            && aUrl2.GetMainURL(INetURLObject::NO_DECODE).
+                         EqualsAscii(pTest[i].m_pUrl))
+            printf("  ok %s %s -> %s\n",
+                   ByteString(aPath, RTL_TEXTENCODING_ISO_8859_1).GetBuffer(),
+                   toString(pTest[i].m_eStyle), pTest[i].m_pUrl);
+        else
+        {
+            printf(" BAD %s %s -> %s, %s (%s)\n",
+                   ByteString(aPath, RTL_TEXTENCODING_ISO_8859_1).GetBuffer(),
+                   toString(pTest[i].m_eStyle),
+                   ByteString(aUrl1.GetMainURL(INetURLObject::NO_DECODE),
+                              RTL_TEXTENCODING_ISO_8859_1).
+                       GetBuffer(),
+                   ByteString(aUrl2.GetMainURL(INetURLObject::NO_DECODE),
+                              RTL_TEXTENCODING_ISO_8859_1).
+                       GetBuffer(),
+                   pTest[i].m_pUrl);
+            bSuccess = false;
+        }
+    }
+    printf("\n");
+    return bSuccess;
+}
+
+//============================================================================
+//
+//  main
+//
+//============================================================================
+
+int
+#if defined WNT
+__cdecl
+#endif WNT
+main()
+{
+    bool bSuccess = true;
+
+    if (false)
+    {
+        // The data for this test is taken from the files
+        // <http://www.ics.uci.edu/~fielding/url/testN.html> with N = 1,
+        // ..., 3, as of August 28, 2000:
+        static RelToAbsTest const aTest[]
+            = { { "http://a/b/c/d;p?q", "g:h", "g:h", 0 },
+                { 0, "g", "http://a/b/c/g", 0 },
+                { 0, "./g", "http://a/b/c/g", 0 },
+                { 0, "g/", "http://a/b/c/g/", 0 },
+                { 0, "/g", "http://a/g", 0 },
+                { 0, "//g", "http://g", 0 },
+                { 0, "?y", "http://a/b/c/d;p?y", 0 },
+                { 0, "g?y", "http://a/b/c/g?y", 0 },
+                { 0, "#s", "http://a/b/c/d;p?q#s", 0 },
+                { 0, "g#s", "http://a/b/c/g#s", 0 },
+                { 0, "g?y#s", "http://a/b/c/g?y#s", 0 },
+                { 0, ";x", "http://a/b/c/;x", 0 },
+                { 0, "g;x", "http://a/b/c/g;x", 0 },
+                { 0, "g;x?y#s", "http://a/b/c/g;x?y#s", 0 },
+                { 0, ".", "http://a/b/c/", 0 },
+                { 0, "./", "http://a/b/c/", 0 },
+                { 0, "..", "http://a/b/", 0 },
+                { 0, "../", "http://a/b/", 0 },
+                { 0, "../g", "http://a/b/g", 0 },
+                { 0, "../..", "http://a/", 0 },
+                { 0, "../../", "http://a/", 0 },
+                { 0, "../../g", "http://a/g", 0 },
+                { 0, "", "http://a/b/c/d;p?q", 0 },
+                { 0, "../../../g", "http://a/../g", "http://a/g" },
+                { 0, "../../../../g", "http://a/../../g", "http://a/g" },
+                { 0, "/./g", "http://a/./g", 0 },
+                { 0, "/../g", "http://a/../g", 0 },
+                { 0, "g.", "http://a/b/c/g.", 0 },
+                { 0, ".g", "http://a/b/c/.g", 0 },
+                { 0, "g..", "http://a/b/c/g..", 0 },
+                { 0, "..g", "http://a/b/c/..g", 0 },
+                { 0, "./../g", "http://a/b/g", 0 },
+                { 0, "./g/.", "http://a/b/c/g/", 0 },
+                { 0, "g/./h", "http://a/b/c/g/h", 0 },
+                { 0, "g/../h", "http://a/b/c/h", 0 },
+                { 0, "g;x=1/./y", "http://a/b/c/g;x=1/y", 0 },
+                { 0, "g;x=1/../y", "http://a/b/c/y", 0 },
+                { 0, "g?y/./x", "http://a/b/c/g?y/./x", 0 },
+                { 0, "g?y/../x", "http://a/b/c/g?y/../x", 0 },
+                { 0, "g#s/./x", "http://a/b/c/g#s/./x", 0 },
+                { 0, "g#s/../x", "http://a/b/c/g#s/../x", 0 },
+                { 0, "http:g", "http:g", "http://a/b/c/g" },
+                { 0, "http:", "http:", 0 },
+                { "http://a/b/c/d;p?q=1/2", "g", "http://a/b/c/g", 0 },
+                { 0, "./g", "http://a/b/c/g", 0 },
+                { 0, "g/", "http://a/b/c/g/", 0 },
+                { 0, "/g", "http://a/g", 0 },
+                { 0, "//g", "http://g", 0 },
+                { 0, "g?y", "http://a/b/c/g?y", 0 },
+                { 0, "g?y/./x", "http://a/b/c/g?y/./x", 0 },
+                { 0, "g?y/../x", "http://a/b/c/g?y/../x", 0 },
+                { 0, "g#s", "http://a/b/c/g#s", 0 },
+                { 0, "g#s/./x", "http://a/b/c/g#s/./x", 0 },
+                { 0, "g#s/../x", "http://a/b/c/g#s/../x", 0 },
+                { 0, "./", "http://a/b/c/", 0 },
+                { 0, "../", "http://a/b/", 0 },
+                { 0, "../g", "http://a/b/g", 0 },
+                { 0, "../../", "http://a/", 0 },
+                { 0, "../../g", "http://a/g", 0 },
+                { "http://a/b/c/d;p=1/2?q", "g", "http://a/b/c/d;p=1/g", 0 },
+                { 0, "./g", "http://a/b/c/d;p=1/g", 0 },
+                { 0, "g/", "http://a/b/c/d;p=1/g/", 0 },
+                { 0, "g?y", "http://a/b/c/d;p=1/g?y", 0 },
+                { 0, ";x", "http://a/b/c/d;p=1/;x", 0 },
+                { 0, "g;x", "http://a/b/c/d;p=1/g;x", 0 },
+                { 0, "g;x=1/./y", "http://a/b/c/d;p=1/g;x=1/y", 0 },
+                { 0, "g;x=1/../y", "http://a/b/c/d;p=1/y", 0 },
+                { 0, "./", "http://a/b/c/d;p=1/", 0 },
+                { 0, "../", "http://a/b/c/", 0 },
+                { 0, "../g", "http://a/b/c/g", 0 },
+                { 0, "../../", "http://a/b/", 0 },
+                { 0, "../../g", "http://a/b/g", 0 } };
+        if (!testRelToAbs(aTest, sizeof aTest / sizeof (RelToAbsTest)))
+            bSuccess = false;
+    }
+
+    if (false)
+    {
+        static SetFSysTest const aTest[]
+            = { { "//.", INetURLObject::FSysStyle(0), "" },
+                { 0, INetURLObject::FSysStyle(1), "file:///" },
+                { 0, INetURLObject::FSysStyle(2), "file:////." },
+                { 0, INetURLObject::FSysStyle(3), "file:///" },
+                { 0, INetURLObject::FSysStyle(4), "file:///%2F%2F." },
+                { 0, INetURLObject::FSysStyle(5), "file:///" },
+                { 0, INetURLObject::FSysStyle(6), "file:////." },
+                { 0, INetURLObject::FSysStyle(7), "file:///" },
+                { 0, INetURLObject::FSysStyle(8), "file:///%2F%2F." },
+                { 0, INetURLObject::FSysStyle(9), "file:///" },
+                { 0, INetURLObject::FSysStyle(10), "file:////." },
+                { 0, INetURLObject::FSysStyle(11), "file:///" },
+                { 0, INetURLObject::FSysStyle(12), "file:///%2F%2F." },
+                { 0, INetURLObject::FSysStyle(13), "file:///" },
+                { 0, INetURLObject::FSysStyle(14), "file:////." },
+                { 0, INetURLObject::FSysStyle(15), "file:///" },
+                { "//./", INetURLObject::FSysStyle(0), "" },
+                { 0, INetURLObject::FSysStyle(1), "file:///" },
+                { 0, INetURLObject::FSysStyle(2), "file:////./" },
+                { 0, INetURLObject::FSysStyle(3), "file:///" },
+                { 0, INetURLObject::FSysStyle(4), "file:///%2F%2F.%2F" },
+                { 0, INetURLObject::FSysStyle(5), "file:///" },
+                { 0, INetURLObject::FSysStyle(6), "file:////./" },
+                { 0, INetURLObject::FSysStyle(7), "file:///" },
+                { 0, INetURLObject::FSysStyle(8), "file:///%2F%2F.%2F" },
+                { 0, INetURLObject::FSysStyle(9), "file:///" },
+                { 0, INetURLObject::FSysStyle(10), "file:////./" },
+                { 0, INetURLObject::FSysStyle(11), "file:///" },
+                { 0, INetURLObject::FSysStyle(12), "file:///%2F%2F.%2F" },
+                { 0, INetURLObject::FSysStyle(13), "file:///" },
+                { 0, INetURLObject::FSysStyle(14), "file:////./" },
+                { 0, INetURLObject::FSysStyle(15), "file:///" },
+                { "//./a/b\\c:d", INetURLObject::FSysStyle(0), "" },
+                { 0, INetURLObject::FSysStyle(1), "file:///a/b%5Cc:d" },
+                { 0, INetURLObject::FSysStyle(2), "file:////./a/b%5Cc:d" },
+                { 0, INetURLObject::FSysStyle(3), "file:///a/b%5Cc:d" },
+                { 0, INetURLObject::FSysStyle(4), "file:///%2F%2F.%2Fa%2Fb/c:d" },
+                { 0, INetURLObject::FSysStyle(5), "file:///a/b%5Cc:d" },
+                { 0, INetURLObject::FSysStyle(6), "file:////./a/b%5Cc:d" },
+                { 0, INetURLObject::FSysStyle(7), "file:///a/b%5Cc:d" },
+                { 0, INetURLObject::FSysStyle(8), "file:///%2F%2F.%2Fa%2Fb%5Cc/d" },
+                { 0, INetURLObject::FSysStyle(9), "file:///a/b%5Cc:d" },
+                { 0, INetURLObject::FSysStyle(10), "file:////./a/b%5Cc:d" },
+                { 0, INetURLObject::FSysStyle(11), "file:///a/b%5Cc:d" },
+                { 0, INetURLObject::FSysStyle(12), "file:///%2F%2F.%2Fa%2Fb/c:d" },
+                { 0, INetURLObject::FSysStyle(13), "file:///a/b%5Cc:d" },
+                { 0, INetURLObject::FSysStyle(14), "file:////./a/b%5Cc:d" },
+                { 0, INetURLObject::FSysStyle(15), "file:///a/b%5Cc:d" } };
+        if (!testSetFSys(aTest, sizeof aTest / sizeof (SetFSysTest)))
+            bSuccess = false;
+    }
+
+    if (false)
+    {
+        bool bAbs = false;
+        INetURLObject aUrl1(INetURLObject().smartRel2Abs(L"/export/home/mba/Office/user/Basic/soffice.sbl", bAbs));
+
+        INetURLObject aUrl2a(L"/export/home/mba/Office/user/Basic/soffice.sbl", INET_PROT_FILE);
+
+        INetURLObject aUrl2b(L"file:///export/home/mba/Office/user/Basic/soffice.sbl", INET_PROT_FILE);
+
+        INetURLObject aUrl3a(L"/export/home/mba/Office/user/Basic/soffice.sbl", INetURLObject::FSYS_DETECT);
+
+        INetURLObject aUrl3b(L"file:///export/home/mba/Office/user/Basic/soffice.sbl", INetURLObject::FSYS_DETECT);
+    }
+
+    if (false)
+    {
+        INetURLObject aUrl1("http://host:1234/xy/~zw?xxx=yyy");
+        if (aUrl1.HasError())
+        {
+            printf("BAD http\n");
+            bSuccess = false;
+        }
+        else
+            printf("GOOD http\n");
+        INetURLObject aUrl2("vnd.sun.star.webdav://host:1234/xy/~zw?xxx=yyy");
+        if (aUrl2.HasError())
+        {
+            printf("BAD vnd.sun.star.webdav\n");
+            bSuccess = false;
+        }
+        else
+            printf("GOOD vnd.sun.star.webdav\n");
+    }
+
+    if (false)
+    {
+        static sal_Char const * const aTest[]
+            = { "vnd.sun.star.help://",
+                "vnd.sun.star.help://swriter",
+                "vnd.sun.star.help://swriter/",
+                "vnd.sun.star.help://swriter/12345",
+                "vnd.sun.star.help://swriter/1234X",
+                "vnd.sun.star.help://swriter/?a=b?c=d",
+                "vnd.sun.star.help://swriter/12345?a=b?c=d",
+                "vnd.sun.star.help://swriter/12345???",
+                "vnd.sun.star.help://swriter/#xxx",
+                "vnd.sun.star.help://swriter/12345#xxx",
+                "vnd.sun.star.help://swriter/1234X#xxx",
+                "vnd.sun.star.help://swriter/?a=b?c=d#xxx",
+                "vnd.sun.star.help://swriter/12345?a=b?c=d#xxx",
+                "vnd.sun.star.help://swriter/12345???#xxx",
+                "vnd.sun.star.help://swriter/start" };
+        for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        {
+            INetURLObject aUrl(aTest[i]);
+            if (aUrl.HasError())
+                printf("BAD %s\n", aTest[i]);
+            else if (aUrl.GetMainURL().CompareToAscii(aTest[i]) != 0)
+                printf("BAD %s -> %s\n",
+                       aTest[i],
+                       ByteString(aUrl.GetMainURL(),
+                                  RTL_TEXTENCODING_ASCII_US).
+                           GetBuffer());
+        }
+    }
+
+    if (false)
+    {
+        static sal_Char const * const aTest[]
+            = { "vnd.sun.star.wfs://",
+                "vnd.sun.star.wfs://LocalHost",
+                "vnd.sun.star.wfs:///c|/xyz/",
+                "vnd.sun.star.wfs://xxx/yyy?zzz",
+                "vnd.sun.star.wfs:///x/y/z",
+                "wfs://",
+                "wfs://LocalHost",
+                "wfs:///c|/xyz/",
+                "wfs://xxx/yyy?zzz",
+                "wfs:///x/y/z" };
+        for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        {
+            INetURLObject aUrl(aTest[i]);
+            if (aUrl.HasError())
+                printf("BAD %s\n", aTest[i]);
+            else if (aUrl.GetMainURL().CompareToAscii(aTest[i]) != 0)
+                printf("BAD %s -> %s\n",
+                       aTest[i],
+                       ByteString(aUrl.GetMainURL(),
+                                  RTL_TEXTENCODING_ASCII_US).
+                           GetBuffer());
+        }
+    }
+
+    if (false)
+    {
+        static sal_Char const * const aTest[]
+            = { "vnd.sun.star.pkg:",
+                "vnd.sun.star.pkg:/",
+                "vnd.sun.star.pkg://abc",
+                "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c",
+                "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/",
+                "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx",
+                "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx;yy",
+                "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx//yy" };
+        for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        {
+            INetURLObject aUrl(aTest[i]);
+            if (aUrl.HasError())
+                printf("BAD %s\n", aTest[i]);
+            else if (aUrl.GetMainURL().CompareToAscii(aTest[i]) != 0)
+                printf("BAD %s -> %s\n",
+                       aTest[i],
+                       ByteString(aUrl.GetMainURL(),
+                                  RTL_TEXTENCODING_ASCII_US).
+                           GetBuffer());
+        }
+    }
+
+    if (false)
+    {
+        static sal_Char const * const aTest[]
+            = { "vnd.sun.star.cmd:",
+                "vnd.sun.star.cmd:/",
+                "vnd.sun.star.cmd:logout",
+                "vnd.sun.star.cmd:log/out",
+                "vnd.sun.star.cmd:[logout]",
+                "vnd.sun.star.cmd:log[out]" };
+        for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        {
+            INetURLObject aUrl(aTest[i]);
+            if (aUrl.HasError())
+                printf("BAD %s\n", aTest[i]);
+            else if (aUrl.GetMainURL().CompareToAscii(aTest[i]) != 0)
+                printf("BAD %s -> %s\n",
+                       aTest[i],
+                       ByteString(aUrl.GetMainURL(),
+                                  RTL_TEXTENCODING_ASCII_US).
+                           GetBuffer());
+        }
+    }
+
+    if (true)
+    {
+        rtl::OUString
+            aParameters(rtl::OUString::createFromAscii("; CharSet=UTF-8  ; Blubber=Blob"));
+        sal_Unicode const * pBegin = aParameters.getStr();
+        sal_Unicode const * pEnd = pBegin + aParameters.getLength();
+        INetContentTypeParameterList aList;
+        if (INetMIME::scanParameters(pBegin, pEnd, &aList) == pEnd)
+        {
+            ULONG nCount = aList.Count();
+            for (ULONG i = 0; i < nCount; ++i)
+            {
+                INetContentTypeParameter const * p = aList.GetObject(i);
+                if (p)
+                    printf("attribute: '%s'\n charset: '%s'\n language: '%s'\n value: '%s'\n converted: %s\n",
+                           p->m_sAttribute.GetBuffer(),
+                           p->m_sCharset.GetBuffer(),
+                           p->m_sLanguage.GetBuffer(),
+                           rtl::OUStringToOString(p->m_sValue,RTL_TEXTENCODING_UTF8).getStr(),
+                           p->m_bConverted ? "true" : "false");
+                else
+                    printf("BAD INetContentTypeParameter\n");
+            }
+        }
+        else
+        {
+            printf("BAD INetMIME::scanParameters()\n");
+            bSuccess = false;
+        }
+    }
+
+    return bSuccess ? EXIT_SUCCESS : EXIT_FAILURE;
+}
