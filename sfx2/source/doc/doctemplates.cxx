@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-02 09:16:43 $
+ *  last change: $Author: dv $ $Date: 2001-04-02 10:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,16 +242,10 @@ class SfxDocTplService_Impl
     OUString                    getLongName( const OUString& rShortName );
     void                        getTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType );
 
-    void                        getFolders( Content& rRoot,
-                                            Content& rFolder );
-    void                        getTemplates( Content& rTargetFolder,
-                                              Content& rParentFolder );
     sal_Bool                    addEntry( Content& rParentFolder,
                                           const OUString& rTitle,
                                           const OUString& rTargetURL,
                                           const OUString& rType );
-    void                        addToStandard( Content& rRoot,
-                                               Content& rFolder );
 
     sal_Bool                    createFolder( const OUString& rNewFolderURL,
                                               sal_Bool  bCreateParent,
@@ -282,6 +276,7 @@ class SfxDocTplService_Impl
 
     void                        removeFromHierarchy( GroupData_Impl *pGroup );
     void                        addGroupToHierarchy( GroupData_Impl *pGroup );
+
 public:
                                  SfxDocTplService_Impl( Reference< XMultiServiceFactory > xFactory );
                                 ~SfxDocTplService_Impl();
@@ -574,126 +569,6 @@ void SfxDocTplService_Impl::getDirList()
 }
 
 // -----------------------------------------------------------------------
-void SfxDocTplService_Impl::getFolders( Content& rRoot,
-                                        Content& rFolder )
-{
-    Reference< XResultSet > xResultSet;
-    Sequence< OUString > aProps(1);
-    OUString* pProps = aProps.getArray();
-    pProps[0] = OUString::createFromAscii( TITLE );
-
-    addToStandard( rRoot, rFolder );
-
-    try
-    {
-        ResultSetInclude eInclude = INCLUDE_FOLDERS_ONLY;
-        xResultSet = rFolder.createCursor( aProps, eInclude );
-    }
-    catch( CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "createCursor: CommandAbortedException" );
-    }
-    catch ( Exception& ) {}
-
-    if ( xResultSet.is() )
-    {
-        Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-        Reference< XRow > xRow( xResultSet, UNO_QUERY );
-
-        Content aFolder;
-        OUString aAdditionalProp( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
-
-        try
-        {
-            while ( xResultSet->next() )
-            {
-                OUString aTitle( xRow->getString(1) );
-                OUString aId = xContentAccess->queryContentIdentifierString();
-
-                if ( aTitle.compareToAscii( "wizard" ) == 0 )
-                    continue;
-                else if ( aTitle.compareToAscii( "internal" ) == 0 )
-                    continue;
-
-                aTitle = getLongName( aTitle );
-
-                INetURLObject aNewFolderObj( maRootURL );
-                aNewFolderObj.insertName( aTitle, false,
-                      INetURLObject::LAST_SEGMENT, true,
-                      INetURLObject::ENCODE_ALL );
-
-                OUString aNewFolderURL = aNewFolderObj.GetMainURL();
-
-                if ( ! Content::create( aNewFolderURL, maCmdEnv, aFolder ) &&
-                     createFolder( aNewFolderURL, sal_False, sal_False, aFolder ) )
-                {
-                    setProperty( aFolder, aAdditionalProp, makeAny( aId ) );
-                }
-
-                Content aSubFolder( xContentAccess->queryContent(), maCmdEnv );
-                getTemplates( aSubFolder, aFolder );
-            }
-        }
-        catch ( Exception& ) {}
-    }
-}
-
-// -----------------------------------------------------------------------
-void SfxDocTplService_Impl::getTemplates( Content& rTargetFolder,
-                                          Content& rParentFolder )
-{
-    Reference< XResultSet > xResultSet;
-    Sequence< OUString >    aProps(1);
-    OUString* pProps = aProps.getArray();
-
-    pProps[0] = OUString::createFromAscii( TITLE );
-
-    try
-    {
-        ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
-        xResultSet = rTargetFolder.createCursor( aProps, eInclude );
-    }
-    catch( CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "createCursor: CommandAbortedException" );
-    }
-    catch ( Exception& ) {}
-
-    if ( xResultSet.is() )
-    {
-        Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-        Reference< XRow > xRow( xResultSet, UNO_QUERY );
-
-        try
-        {
-            while ( xResultSet->next() )
-            {
-                OUString aTitle( xRow->getString(1) );
-
-                if ( aTitle.compareToAscii( "sfx.tlx" ) == 0 )
-                    continue;
-
-                OUString aId = xContentAccess->queryContentIdentifierString();
-
-                OUString aFullTitle;
-                OUString aType;
-                getTitleFromURL( aId, aFullTitle, aType );
-
-                if ( aFullTitle.len() )
-                    aTitle = aFullTitle;
-
-                addEntry( rParentFolder, aTitle, aId, aType );
-            }
-        }
-        catch( CommandAbortedException& )
-        {
-            DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
-        }
-        catch ( Exception& ) {}
-    }
-}
-
-// -----------------------------------------------------------------------
 void SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTitle, OUString& aType )
 {
     if ( mxInfo.is() )
@@ -774,38 +649,6 @@ sal_Bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
     }
     return bAddedEntry;
 }
-
-// -----------------------------------------------------------------------
-void SfxDocTplService_Impl::addToStandard( Content& rRoot,
-                                           Content& rFolder )
-{
-    OUString aNewFolderURL;
-    OUString aTitle = getLongName( OUString( RTL_CONSTASCII_USTRINGPARAM( STANDARD_FOLDER ) ) );
-    OUString aFolderURL = rFolder.get()->getIdentifier()->getContentIdentifier();
-    Content  aFolder;
-
-    INetURLObject aNewFolderObj( maRootURL );
-    aNewFolderObj.insertName( aTitle, false,
-          INetURLObject::LAST_SEGMENT, true,
-          INetURLObject::ENCODE_ALL );
-
-    aNewFolderURL = aNewFolderObj.GetMainURL();
-
-    if ( ! Content::create( aNewFolderURL, maCmdEnv, aFolder ) )
-    {
-        if ( ! createFolder( aNewFolderURL, sal_False, sal_False, aFolder ) )
-        {
-            DBG_ERRORFILE( "addToStandard(): Could not create Folder!" );
-            return;
-        }
-
-        OUString aAdditionalProp( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
-        setProperty( aFolder, aAdditionalProp, makeAny( aFolderURL ) );
-    }
-
-    getTemplates( rFolder, aFolder );
-}
-
 
 // -----------------------------------------------------------------------
 sal_Bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
@@ -1058,7 +901,6 @@ void SfxDocTplService_Impl::doUpdate()
         if ( Content::create( pDirs[ nCount ], maCmdEnv, aDirContent ) )
         {
             createFromContent( aGroupList, aDirContent, sal_False );
-//          getFolders( maRootContent, aDirContent );
         }
     }
 
@@ -1843,6 +1685,9 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
                 OUString aType;
                 OUString aHierURL;
 
+                if ( aTitle.compareToAscii( "sfx.tlx" ) == 0 )
+                    continue;
+
                 getTitleFromURL( aTargetURL, aTitle, aType );
 
                 pGroup->addEntry( aTitle, aTargetURL, aType, aHierURL );
@@ -1955,19 +1800,24 @@ void SfxDocTplService_Impl::addGroupToHierarchy( GroupData_Impl *pGroup )
     OUString aAdditionalProp( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
     Content aGroup;
 
-    INetURLObject aNewFolderObj( maRootURL );
-    aNewFolderObj.insertName( pGroup->getTitle(), false,
+    INetURLObject aNewGroupObj( maRootURL );
+    aNewGroupObj.insertName( pGroup->getTitle(), false,
           INetURLObject::LAST_SEGMENT, true,
           INetURLObject::ENCODE_ALL );
 
-    OUString aNewFolderURL = aNewFolderObj.GetMainURL();
+    OUString aNewGroupURL = aNewGroupObj.GetMainURL();
 
-    if ( createFolder( aNewFolderURL, sal_False, sal_False, aGroup ) )
+    if ( createFolder( aNewGroupURL, sal_False, sal_False, aGroup ) )
     {
         setProperty( aGroup, aAdditionalProp, makeAny( pGroup->getTargetURL() ) );
-        Content aTargetDir;
-        if ( Content::create( pGroup->getTargetURL(), maCmdEnv, aTargetDir ) )
-            getTemplates( aTargetDir, aGroup );
+        pGroup->setHierarchyURL( aNewGroupURL );
+
+        ULONG nCount = pGroup->count();
+        for ( ULONG i=0; i<nCount; i++ )
+        {
+            EntryData_Impl *pData = pGroup->getEntry( i );
+            addToHierarchy( pGroup, pData ); // add entry to hierarchy
+        }
     }
 }
 
