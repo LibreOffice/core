@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-17 09:13:19 $
+ *  last change: $Author: jl $ $Date: 2000-10-19 11:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,18 @@
 #include <vos/refernce.hxx>
 
 #include <tools/presys.h>
-#include "stdafx.h"
 #include "comifaces.hxx"
 #include <tools/postsys.h>
 
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"
 
+#define INVOCATION_SERVICE  L"com.sun.star.script.Invocation"
+#define JSCRIPT_VALUE_FUNC  L"_GetValueObject"
+#define GET_STRUCT_FUNC     L"_GetStruct"
+
+#define DISPID_JSCRIPT_VALUE_FUNC   -10l
+#define DISPID_GET_STRUCT_FUNC      -102
 
 using namespace std;
 using namespace cppu;
@@ -312,6 +317,9 @@ protected:
     BadNameMap m_badNameMap;
 
     IdToMemberInfoMap m_idToMemberInfoMap;
+
+    DISPID m_currentId;
+
 
 };
 
