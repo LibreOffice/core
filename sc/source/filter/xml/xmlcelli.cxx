@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-15 13:58:43 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 18:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -945,13 +945,16 @@ void ScXMLTableRowCellContext::EndElement()
 {
     if (bHasTextImport)
     {
-        //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
-        if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
+        if (GetImport().GetTextImport()->GetCursor().is())
         {
-            OUString sEmpty;
-            GetImport().GetTextImport()->GetText()->insertString(
-                GetImport().GetTextImport()->GetCursorAsRange(), sEmpty,
-                sal_True );
+            //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
+            if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
+            {
+                OUString sEmpty;
+                GetImport().GetTextImport()->GetText()->insertString(
+                    GetImport().GetTextImport()->GetCursorAsRange(), sEmpty,
+                    sal_True );
+            }
         }
     }
     GetScImport().GetTextImport()->ResetCursor();
