@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:32:25 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
@@ -139,10 +142,12 @@
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
+#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-
 #include <algorithm>
 
 using namespace ::com::sun::star::uno;
@@ -238,10 +243,15 @@ Reference< XWindow > OGenericUnoController::getComponentWindow() const
 {
     return VCLUnoHelper::GetInterface( getView() );
 }
-
+// -----------------------------------------------------------------------------
+void OGenericUnoController::impl_initialize(const Sequence< Any >& aArguments)
+{
+}
 // -------------------------------------------------------------------------
 void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
     Reference< XWindow >        xParent;
     Reference< XFrame > xFrame;
 
@@ -265,10 +275,6 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
 
                 if(xFrame.is() && Construct(pParentWin))
                 {
-                    xFrame->setComponent(getComponentWindow(), this);
-                    attachFrame(xFrame);
-                    pParentComponent->setVisible(sal_True);
-                    loadMenu(xFrame);
                 }
                 // remove the container window
                 ::dbaui::notifySystemWindow(pParentWin,pParentWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
@@ -280,6 +286,9 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
             }
         }
     }
+    impl_initialize(aArguments);
+    if ( xFrame.is() )
+        xFrame->setComponent(getComponentWindow(), this);
 }
 
 //------------------------------------------------------------------------------
@@ -354,7 +363,15 @@ void OGenericUnoController::disposing(const EventObject& Source) throw( RuntimeE
 //------------------------------------------------------------------------
 void OGenericUnoController::modified(const EventObject& aEvent) throw( RuntimeException )
 {
-    m_bCurrentlyModified = sal_True;
+    if ( !isDataSourceReadOnly() )
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+        Reference<XModifiable> xModi(aEvent.Source,UNO_QUERY);
+        if ( xModi.is() )
+            m_bCurrentlyModified = m_bCurrentlyModified || xModi->isModified(); // can only be reset by save
+        else
+            m_bCurrentlyModified = sal_True;
+    }
     InvalidateFeature(ID_BROWSER_SAVEDOC);
     InvalidateFeature(ID_BROWSER_UNDO);
 }
@@ -367,8 +384,14 @@ void OGenericUnoController::attachFrame(const Reference< XFrame > & xFrame) thro
 
     if ( startFrameListening( ) )
         m_bFrameUiActive = m_xCurrentFrame->isActive();
+    loadMenu(xFrame);
+    if ( m_xCurrentFrame.is() )
+        updateTitle();
 }
-
+// -----------------------------------------------------------------------------
+void OGenericUnoController::updateTitle()
+{
+}
 // -----------------------------------------------------------------------
 sal_Bool OGenericUnoController::ImplInvalidateTBItem(sal_uInt16 nId, const FeatureState& rState)
 {
@@ -534,7 +557,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _xListener, sal_Bool _bForceBroadcast )
+void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Reference< ::com::sun::star::frame::XStatusListener >& _xListener, sal_Bool _bForceBroadcast )
 {
     FeaturePair aPair;
     aPair.nId               = _nId;
@@ -726,24 +749,19 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
 // -----------------------------------------------------------------------
 void OGenericUnoController::disposing()
 {
-    // our status listeners, too
-    while (!m_arrStatusListener.empty())
     {
-        DispatchIterator iterCurrent = m_arrStatusListener.begin();
-
-        DispatchTarget& rCurrent = *iterCurrent;
         EventObject aDisposeEvent;
         aDisposeEvent.Source = static_cast<XWeak*>(this);
-
-#ifdef DBG_UTIL
-        sal_Int32 nSize = m_arrStatusListener.size();
-#endif
-        rCurrent.xListener->disposing(aDisposeEvent);
-        DBG_ASSERT(nSize > (sal_Int32)m_arrStatusListener.size(), "OGenericUnoController::dispose : the listener did not call removeStatusListener !");
-            // in disposing the status listener should remove itself via removeStatusListener, therein we remove it from
-            // m_arrStatusListener, so the size should have decreased.
+        Dispatch aStatusListener = m_arrStatusListener;
+        Dispatch::iterator aEnd = aStatusListener.end();
+        for (Dispatch::iterator aIter = aStatusListener.begin(); aIter != aEnd; ++aIter)
+        {
+            aIter->xListener->disposing(aDisposeEvent);
+        }
+        m_arrStatusListener.clear();
     }
 
+    m_xDatabaseContext = NULL;
     {
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
         m_aAsyncInvalidateAll.CancelCall();
@@ -774,17 +792,6 @@ void OGenericUnoController::frameAction(const FrameActionEvent& aEvent) throw( R
         m_bFrameUiActive =  ( FrameAction_FRAME_UI_ACTIVATED == aEvent.Action )
                         ||  ( FrameAction_FRAME_ACTIVATED == aEvent.Action );
 }
-//------------------------------------------------------------------------------
-void OGenericUnoController::EmptyWindow()
-{
-    if(m_xCurrentFrame.is())
-    {
-        m_xCurrentFrame->setComponent(NULL,NULL);
-        ::comphelper::disposeComponent(m_xCurrentFrame);
-    }
-
-}
-
 //------------------------------------------------------------------------------
 void OGenericUnoController::AddSupportedFeatures()
 {
@@ -904,7 +911,24 @@ void OGenericUnoController::stopConnectionListening(const Reference< XConnection
     if (xComponent.is())
         xComponent->removeEventListener(static_cast<XFrameActionListener*>(this));
 }
+// -----------------------------------------------------------------------------
+Reference< XConnection > OGenericUnoController::connect(
+            const Reference< XDataSource>& _xDataSource
+            ,sal_Bool _bStartListening
+        )
+{
+    WaitObject aWaitCursor(getView());
 
+    const ::rtl::OUString sNoContext;
+    ODatasourceConnector aConnector(m_xMultiServiceFacatory, getView(), sNoContext, sNoContext);
+    Reference<XConnection> xConnection = aConnector.connect(_xDataSource);
+
+    // be notified when connection is in disposing
+    if (_bStartListening)
+        startConnectionListening(xConnection);
+
+    return xConnection;
+}
 // -----------------------------------------------------------------------------
 Reference<XConnection> OGenericUnoController::connect(const ::rtl::OUString& _rDataSourceName, sal_Bool _bStartListening)
 {
@@ -944,9 +968,7 @@ void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
     {
         try
         {
-            Any a;
-            a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
-            a >>= xLayoutManager;
+            xLayoutManager.set(xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))),UNO_QUERY);
         }
         catch ( Exception& )
         {
@@ -955,38 +977,6 @@ void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
 
     if ( xLayoutManager.is() )
         xLayoutManager->createElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" )));
-/*
-    String sMenuName = getMenu();
-    if(sMenuName.Len())
-    {
-        INetURLObject aEntry( URIHelper::SmartRelToAbs(OModule::getResManager()->GetFileName()) );
-        String aMenuRes( RTL_CONSTASCII_USTRINGPARAM( "private:resource/" ));
-        aMenuRes += ( aEntry.GetName() += '/' );
-        aMenuRes += sMenuName;
-
-        URL aURL;
-        aURL.Complete = aMenuRes;
-
-        if ( m_xUrlTransformer.is() )
-        {
-            // Datei laden
-            m_xUrlTransformer->parseStrict( aURL );
-
-            Reference< XDispatchProvider >  xProv( _xFrame, UNO_QUERY );
-            if ( xProv.is() )
-            {
-                Reference< XDispatch >  aDisp = xProv->queryDispatch( aURL,  ::rtl::OUString::createFromAscii("_menubar"), 12 );
-                if ( aDisp.is() )
-                    aDisp->dispatch( aURL, Sequence<PropertyValue>() );
-            }
-        }
-    }
-*/
-}
-// -----------------------------------------------------------------------------
-String OGenericUnoController::getMenu() const
-{
-    return String();
 }
 // -----------------------------------------------------------------------------
 void OGenericUnoController::closeTask()
@@ -1100,6 +1090,7 @@ namespace
 
                 // check which service we know ....
                 static const sal_Char* pTransTable[] = {
+                    "com.sun.star.sdb.DatabaseDocument","sdatabase",
                     "com.sun.star.text.TextDocument",   "swriter",
                     "com.sun.star.sheet.SpreadsheetDocument", "scalc",
                     "com.sun.star.presentation.PresentationDocument", "simpress",
@@ -1134,6 +1125,8 @@ namespace
                 SvtModuleOptions aModOpt;
                 if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
                     pReturn = "swriter";
+                else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+                    pReturn = "sdatabase";
                 else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
                     pReturn = "scalc";
                 else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
@@ -1199,7 +1192,7 @@ Reference< ::com::sun::star::awt::XWindow> OGenericUnoController::getTopMostCont
         Reference<XFrame> xFrame = m_xCurrentFrame;
         while ( xFrame.is() && !xFrame->isTop() )
         {
-            xFrame = Reference<XFrame>(xFrame->getCreator(),UNO_QUERY);
+            xFrame.set(xFrame->getCreator(),UNO_QUERY);
         }
         if ( xFrame.is() )
             xWindow = xFrame->getContainerWindow();
@@ -1207,4 +1200,30 @@ Reference< ::com::sun::star::awt::XWindow> OGenericUnoController::getTopMostCont
     return xWindow;
 }
 // -----------------------------------------------------------------------------
-
+void OGenericUnoController::setTitle(const ::rtl::OUString& _sName)
+{
+    try
+    {
+        Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
+        if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE) )
+        {
+            xProp->setPropertyValue(PROPERTY_TITLE,makeAny(_sName));
+        }
+    }
+    catch(Exception)
+    {
+        OSL_ENSURE(0,"Exception catched while setting the title!");
+    }
+}
+// -----------------------------------------------------------------------------
+void OGenericUnoController::executeChecked(sal_uInt16 _nCommandId)
+{
+    if ( isCommandEnabled(_nCommandId) )
+        Execute(_nCommandId);
+}
+// -----------------------------------------------------------------------------
+sal_Bool OGenericUnoController::isCommandEnabled(sal_uInt16 _nCommandId) const
+{
+    return GetState( _nCommandId ).bEnabled;
+}
+// -----------------------------------------------------------------------------
