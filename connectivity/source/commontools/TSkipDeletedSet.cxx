@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TSkipDeletedSet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:15:37 $
+ *  last change: $Author: oj $ $Date: 2001-11-30 14:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,8 +176,13 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
             bDone = sal_False;
     }
 
-    if(bDataFound && bDone && m_aBookmarks.find(m_pHelper->getDriverPos()) == m_aBookmarks.end())
-        m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(m_pHelper->getDriverPos(),m_aBookmarksPositions.size()+1)).first);
+
+    if(bDataFound && bDone)
+    {
+        sal_Int32 nDriverPos = m_pHelper->getDriverPos();
+        if(m_aBookmarks.find(nDriverPos) == m_aBookmarks.end())
+            m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(nDriverPos,m_aBookmarksPositions.size()+1)).first);
+    }
 
     return bDataFound;
 }

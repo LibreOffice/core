@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-29 16:33:10 $
+ *  last change: $Author: oj $ $Date: 2001-11-30 14:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -836,7 +836,9 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0)
                     sal_Bool bNotBookmarks = ((nCurProp & SQL_CA1_BOOKMARK) != SQL_CA1_BOOKMARK);
                     nCurProp = getCursorProperties(SQL_CURSOR_KEYSET_DRIVEN,sal_False);
                     nSet = SQL_CURSOR_KEYSET_DRIVEN;
-                    if(bNotBookmarks || ((nCurProp & SQL_CA2_SENSITIVITY_DELETIONS) != SQL_CA2_SENSITIVITY_DELETIONS))
+                    if( bNotBookmarks ||
+                        ((nCurProp & SQL_CA2_SENSITIVITY_DELETIONS) != SQL_CA2_SENSITIVITY_DELETIONS) ||
+                        ((nCurProp & SQL_CA2_SENSITIVITY_ADDITIONS) != SQL_CA2_SENSITIVITY_ADDITIONS))
                     {
                         // bookmarks for keyset isn't supported so reset bookmark setting
                         setUsingBookmarks(sal_False);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-06 10:10:44 $
+ *  last change: $Author: oj $ $Date: 2001-11-30 14:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,11 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
     SQLSMALLINT fSqlType = 0;
 
     SQLSMALLINT nDecimalDigits = 0;
-    OTools::getBindTypes(sal_False,m_pConnection->useOldDateFormat(),sqlType,fCType,fSqlType,nColumnSize,nDecimalDigits);
+    OTools::getBindTypes(   sal_False,
+                            m_pConnection->useOldDateFormat(),
+                            sqlType,
+                            fCType,
+                            fSqlType);
 
     SQLRETURN nReturn = N3SQLBindParameter( m_aStatementHandle,
                                             (SQLUSMALLINT)parameterIndex,

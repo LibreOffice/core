@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-29 16:33:10 $
+ *  last change: $Author: oj $ $Date: 2001-11-30 14:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ void OTools::bindParameter( OConnection* _pConnection,
                             sal_Int32 nPos,
                             sal_Int8*& pDataBuffer,
                             sal_Int8* pLenBuffer,
-                            SQLSMALLINT _nJDBCtype,
+                            SQLSMALLINT _nODBCtype,
                             sal_Bool _bUseWChar,
                             sal_Bool _bUseOldTimeDate,
                             const void* _pValue,
@@ -124,14 +124,14 @@ void OTools::bindParameter( OConnection* _pConnection,
     SWORD   fCType;
     SDWORD  nMaxLen = 0;
     //  void*&   pData   = pDataBuffer;
-    SDWORD* pLen    = (SDWORD*)pLenBuffer;
+    SQLINTEGER* pLen    = (SQLINTEGER*)pLenBuffer;
     SQLUINTEGER nColumnSize=0;
     SQLSMALLINT nDecimalDigits=0;
     SQLSMALLINT nNullable=0;
 
-    OTools::getBindTypes(_bUseWChar,_bUseOldTimeDate,_nJDBCtype,fCType,fSqlType,nColumnSize,nDecimalDigits);
+    OTools::getBindTypes(_bUseWChar,_bUseOldTimeDate,_nODBCtype,fCType,fSqlType);
 
-    OTools::bindData(fSqlType,_bUseWChar,pDataBuffer,pLen,_pValue,_nTextEncoding,nColumnSize);
+    OTools::bindData(_nODBCtype,_bUseWChar,pDataBuffer,pLen,_pValue,_nTextEncoding,nColumnSize);
     if ((nColumnSize == 0) && (fSqlType == SQL_CHAR || fSqlType == SQL_VARCHAR || fSqlType == SQL_LONGVARCHAR))
         nColumnSize = 1;
     if(fSqlType == SQL_LONGVARCHAR || fSqlType == SQL_LONGVARBINARY)
@@ -154,17 +154,17 @@ void OTools::bindParameter( OConnection* _pConnection,
     OTools::ThrowException(_pConnection,nRetcode,_hStmt,SQL_HANDLE_STMT,_xInterface);
 }
 // -----------------------------------------------------------------------------
-void OTools::bindData(  SWORD fSqlType,
+void OTools::bindData(  SQLSMALLINT _nOdbcType,
                         sal_Bool _bUseWChar,
                         sal_Int8 *&_pData,
-                        SDWORD*& pLen,
+                        SQLINTEGER*& pLen,
                         const void* _pValue,
                         rtl_TextEncoding _nTextEncoding,
                         SQLUINTEGER& _nColumnSize)
 {
     _nColumnSize = 0;
 
-    switch (fSqlType)
+    switch (_nOdbcType)
     {
         case SQL_CHAR:
         case SQL_VARCHAR:
@@ -298,108 +298,15 @@ void OTools::bindValue( OConnection* _pConnection,
                         sal_Bool _bUseOldTimeDate) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     SQLRETURN nRetcode;
-    SWORD   fSqlType;
-    SWORD   fCType;
+    SQLSMALLINT   fSqlType;
+    SQLSMALLINT   fCType;
+    SQLSMALLINT   nMaxLen = _nMaxLen;
 
-    switch(_nType)
-    {
-        case SQL_CHAR:          //if(GetODBCConnection()->m_bUserWChar)
-                                        //  {
-//                                          fCType   = SQL_C_WCHAR;
-//                                          fSqlType = SQL_WCHAR;
-//                                      }
-                                        //  else
-                                        {
-                                            fCType   = SQL_C_CHAR;
-                                            fSqlType = SQL_CHAR;
-                                        }
-                                        break;
-        case SQL_VARCHAR:       //if(GetODBCConnection()->m_bUserWChar)
-//                                      {
-//                                          fCType   = SQL_C_WCHAR;
-//                                          fSqlType = SQL_WVARCHAR;
-//                                      }
-//                                      else
-                                        {
-                                            fCType   = SQL_C_CHAR;
-                                            fSqlType = SQL_VARCHAR;
-                                        }
-                                        break;
-        case SQL_LONGVARCHAR:   //if(GetODBCConnection()->m_bUserWChar)
-//                                      {
-//                                          fCType   = SQL_C_WCHAR;
-//                                          fSqlType = SQL_WLONGVARCHAR;
-//                                      }
-//                                      else
-                                        {
-                                            fCType   = SQL_C_CHAR;
-                                            fSqlType = SQL_LONGVARCHAR;
-                                        }
-                                        break;
-        case SQL_DECIMAL:               fCType      = SQL_C_CHAR;//GetODBCConnection()->m_bUserWChar ? SQL_C_WCHAR : SQL_C_CHAR;
-                                        fSqlType    = SQL_DECIMAL; break;
-        case SQL_NUMERIC:               fCType      = SQL_C_CHAR;//GetODBCConnection()->m_bUserWChar ? SQL_C_WCHAR : SQL_C_CHAR;
-                                        fSqlType    = SQL_NUMERIC; break;
-        case SQL_BIT:                   fCType      = SQL_C_TINYINT;
-                                        fSqlType    = SQL_INTEGER; break;
-        case SQL_TINYINT:               fCType      = SQL_C_SHORT;
-                                        fSqlType    = SQL_TINYINT; break;
-        case SQL_SMALLINT:              fCType      = SQL_C_SHORT;
-                                        fSqlType    = SQL_SMALLINT; break;
-        case SQL_INTEGER:               fCType      = SQL_C_LONG;
-                                        fSqlType    = SQL_INTEGER; break;
-        case SQL_BIGINT:                fCType      = SQL_C_SBIGINT;//GetODBCConnection()->m_bUserWChar ? SQL_C_WCHAR : SQL_C_CHAR;
-                                        fSqlType    = SQL_BIGINT; break;
-        case SQL_REAL:                  fCType      = SQL_C_FLOAT;
-                                        fSqlType    = SQL_REAL; break;
-        case SQL_DOUBLE:                fCType      = SQL_C_DOUBLE;
-                                        fSqlType    = SQL_DOUBLE; break;
-        case SQL_BINARY:                fCType      = SQL_C_BINARY;
-                                        fSqlType    = SQL_BINARY; break;
-        case SQL_VARBINARY:
-                                        fCType      = SQL_C_BINARY;
-                                        fSqlType    = SQL_VARBINARY; break;
-        case SQL_LONGVARBINARY:         fCType      = SQL_C_BINARY;
-                                        fSqlType    = SQL_LONGVARBINARY; break;
-        case SQL_DATE:
-                                    if(_bUseOldTimeDate)
-                                    {
-                                        fCType      = SQL_C_DATE;
-                                        fSqlType    = SQL_DATE;
-                                    }
-                                    else
-                                    {
-                                        fCType      = SQL_C_TYPE_DATE;
-                                        fSqlType    = SQL_TYPE_DATE;
-                                    }
-                                    break;
-        case SQL_TIME:
-                                    if(_bUseOldTimeDate)
-                                    {
-                                        fCType      = SQL_C_TIME;
-                                        fSqlType    = SQL_TIME;
-                                    }
-                                    else
-                                    {
-                                        fCType      = SQL_C_TYPE_TIME;
-                                        fSqlType    = SQL_TYPE_TIME;
-                                    }
-                                    break;
-        case SQL_TIMESTAMP:
-                                    if(_bUseOldTimeDate)
-                                    {
-                                        fCType      = SQL_C_TIMESTAMP;
-                                        fSqlType    = SQL_TIMESTAMP;
-                                    }
-                                    else
-                                    {
-                                        fCType      = SQL_C_TYPE_TIMESTAMP;
-                                        fSqlType    = SQL_TYPE_TIMESTAMP;
-                                    }
-                                    break;
-        default:                        fCType      = SQL_C_BINARY;
-                                        fSqlType    = SQL_LONGVARBINARY; break;
-    }
+    OTools::getBindTypes(   sal_False,
+                            _bUseOldTimeDate,
+                            _nType,
+                            fCType,
+                            fSqlType);
 
     if (columnIndex != 0 && !_pValue)
     {
@@ -408,7 +315,7 @@ void OTools::bindValue( OConnection* _pConnection,
                                 columnIndex,
                                 fCType,
                                 _pData,
-                                _nMaxLen,
+                                nMaxLen,
                                 pLen
                                 );
     }
@@ -519,15 +426,12 @@ void OTools::bindValue( OConnection* _pConnection,
         catch ( ... )
         {
         }
-//              SQLINTEGER *pLen = &aLen;
-//              bindData< T >(fSqlType,sal_False,_pData,pLen,_pValue);
-
 
         nRetcode = (*(T3SQLBindCol)_pConnection->getOdbcFunction(ODBC3SQLBindCol))(_aStatementHandle,
                                 columnIndex,
                                 fCType,
                                 _pData,
-                                _nMaxLen,
+                                nMaxLen,
                                 pLen
                                 );
     }
@@ -946,11 +850,14 @@ sal_Int32 OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
     return odbcType;
 }
 //-----------------------------------------------------------------------------
-void OTools::getBindTypes(sal_Bool _bUseWChar,sal_Bool _bUseOldTimeDate,
-                          sal_Int32 jdbcType,SQLSMALLINT& fCType,SQLSMALLINT& fSqlType,
-                          SQLUINTEGER& nColumnSize,SQLSMALLINT& nDecimalDigits)
+void OTools::getBindTypes(sal_Bool _bUseWChar,
+                          sal_Bool _bUseOldTimeDate,
+                          SQLSMALLINT _nOdbcType,
+                          SQLSMALLINT& fCType,
+                          SQLSMALLINT& fSqlType
+                          )
 {
-    switch(jdbcTypeToOdbc(jdbcType))
+    switch(_nOdbcType)
     {
         case SQL_CHAR:              if(_bUseWChar)
                                     {

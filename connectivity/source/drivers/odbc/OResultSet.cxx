@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-29 16:33:10 $
+ *  last change: $Author: oj $ $Date: 2001-11-30 14:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ void OResultSet::disposing(void)
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
-    if(m_aBindVector.size())
+    if(!m_aBindVector.empty())
         releaseBuffer();
     if(m_bFreeHandle)
         m_pStatement->getOwnConnection()->freeStatementHandle(m_aStatementHandle);
@@ -520,7 +520,9 @@ Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, R
     aDate.month = 0;
     aDate.year  = 0;
 
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_DATE,&aDate,sizeof aDate);
+    const ORowSetValue& aValue = getValue(  columnIndex,
+                            m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_DATE : SQL_C_TYPE_DATE,
+                                            &aDate,sizeof aDate);
     return (&aValue == &m_aEmptyValue)  ? Date(aDate.day,aDate.month,aDate.year) : (Date)aValue;
 }
 // -------------------------------------------------------------------------
@@ -649,7 +651,9 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     TIME_STRUCT aTime={0,0,0};
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_TIME,&aTime,sizeof aTime);
+    const ORowSetValue& aValue = getValue(columnIndex,
+        m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_TIME : SQL_C_TYPE_TIME,
+        &aTime,sizeof aTime);
     return (&aValue == &m_aEmptyValue) ? Time(0,aTime.second,aTime.minute,aTime.hour) : (Time)aValue;
 }
 // -------------------------------------------------------------------------
@@ -658,7 +662,9 @@ Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, R
 DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     TIMESTAMP_STRUCT aTime={0,0,0,0,0,0,0};
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_TIMESTAMP,&aTime,sizeof aTime);
+    const ORowSetValue& aValue = getValue(columnIndex,
+        m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_TIMESTAMP : SQL_C_TYPE_TIMESTAMP,
+        &aTime,sizeof aTime);
     return (&aValue == &m_aEmptyValue)
             ?
             DateTime(aTime.fraction*1000,aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year)
@@ -864,13 +870,25 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     }
     OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
+    nRet = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_RELATIVE,0);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    nRet = N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
+    OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+
     if(m_pSkipDeletedSet)
     {
         if(moveToBookmark(makeAny(aBookmark)))
-            m_pSkipDeletedSet->insertNewPosition(getDriverPos());
+        {
+            sal_Int32 nRowPos = getDriverPos();
+            if(nRowPos == m_nRowPos)
+                ++nRowPos;
+            m_nRowPos = nRowPos;
+            m_pSkipDeletedSet->insertNewPosition(nRowPos);
+            m_aPosToBookmarks[aBookmark] = nRowPos;
+        }
     }
     m_bRowInserted = sal_True;
-    nRet = N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
+
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
@@ -1117,11 +1135,6 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLE
         TBookmarkPosMap::iterator aFind = m_aPosToBookmarks.find(aBookmark);
         if(aFind != m_aPosToBookmarks.end())
             m_nRowPos = aFind->second;
-        else
-        {
-            m_nRowPos = m_pSkipDeletedSet ? (m_pSkipDeletedSet->getLastPosition() + 1) : 0; // special case: Noone ask for a bookmark so this one was inserted before
-            m_aPosToBookmarks[aBookmark] = m_nRowPos;
-        }
         return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
     }
     return sal_False;
@@ -1514,9 +1527,10 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
             nFetchOrientation = SQL_FETCH_ABSOLUTE;
             break;
     }
-    m_bEOF = sal_False;
 
+    m_bEOF = sal_False;
     m_nLastColumnPos = 0;
+    SQLRETURN nOldFetchStatus = m_nCurrentFetchState;
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,nFetchOrientation,_nOffset);
     OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
@@ -1547,6 +1561,8 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
     }
     else if(IResultSetHelper::PRIOR == _eCursorPosition && m_nCurrentFetchState == SQL_NO_DATA)
         m_nRowPos = 0;
+    else if(IResultSetHelper::NEXT == _eCursorPosition && m_nCurrentFetchState == SQL_NO_DATA && nOldFetchStatus != SQL_NO_DATA)
+        ++m_nRowPos;
 
     return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
 }

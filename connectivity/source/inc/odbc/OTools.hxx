@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-06 10:11:08 $
+ *  last change: $Author: oj $ $Date: 2001-11-30 14:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,9 +228,19 @@ namespace connectivity
                 aVal.fraction   = x.HundredthSeconds * ODBC_FRACTION_UNITS_PER_HSECOND;
                 return aVal;
             }
-            static void getBindTypes(sal_Bool _bUseWChar,sal_Bool _bUseOldTimeDate,
-                              sal_Int32 jdbcType,SQLSMALLINT& fCType,SQLSMALLINT& fSqlType,
-                              SQLUINTEGER& nColumnSize,SQLSMALLINT& nDecimalDigits);
+            /**
+                getBindTypes set the ODBC type for C
+                @param  _bUseWChar          true when Unicode should be used
+                @param  _bUseOldTimeDate    true when the old datetime format should be used
+                @param  _nOdbcType          the ODBC sql type
+                @param  fCType              the C type for the ODBC type
+                @param  fSqlType            the SQL type for the ODBC type
+            */
+            static void getBindTypes(sal_Bool _bUseWChar,
+                                     sal_Bool _bUseOldTimeDate,
+                                     SQLSMALLINT _nOdbcType,
+                                     SQLSMALLINT& fCType,
+                                     SQLSMALLINT& fSqlType);
 
             static ::rtl::OUString getStringValue(  OConnection* _pConnection,
                                                     SQLHANDLE _aStatementHandle,
@@ -255,10 +265,19 @@ namespace connectivity
                                     void* _pValue,
                                     SQLINTEGER _rSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-            static void bindData(   SWORD fSqlType,
+            /**
+                bindData copies the from pValue to pData
+                @param  _nOdbcType          the ODBC sql type
+                @param  _bUseWChar          true when Unicode should be used
+                @param  _pData              contains a copy of the data to be set
+                @param  _pValue             contains the data to be copied
+                @param  _nTextEncoding      the text encoding
+                @param  _nColumnSize        the columnsize which is a out param
+            */
+            static void bindData(   SQLSMALLINT _nOdbcType,
                                     sal_Bool _bUseWChar,
                                     sal_Int8 *&_pData,
-                                    SDWORD*& pLen,
+                                    SQLINTEGER*& pLen,
                                     const void* _pValue,
                                     rtl_TextEncoding _nTextEncoding,
                                     SQLUINTEGER& _nColumnSize);
@@ -283,7 +302,7 @@ namespace connectivity
                                     SQLSMALLINT _nMaxLen,
                                     SQLSMALLINT _nScale,
                                     const void* _pValue,
-                                    void* _pData,
+                                    void*       _pData,
                                     SQLINTEGER *pLen,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                                     rtl_TextEncoding _nTextEncoding,
