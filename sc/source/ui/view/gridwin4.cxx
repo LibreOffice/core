@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:47 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1219,9 +1219,58 @@ void ScGridWindow::DrawButtons( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                 }
             }
         }
+
+        if ( bListValButton && pRowInfo[nArrY].nRowNo == aListValPos.Row() && pRowInfo[nArrY].bChanged )
+        {
+            Rectangle aRect = GetListValButtonRect( aListValPos );
+            aComboButton.SetPosPixel( aRect.TopLeft() );
+            aComboButton.SetSizePixel( aRect.GetSize() );
+            SetClipRegion( aRect );
+            aComboButton.Draw( FALSE, FALSE );
+            SetClipRegion();                        // always called from Draw() without clip region
+            aComboButton.SetPosPixel( aOldPos );    // restore old state
+            aComboButton.SetSizePixel( aOldSize );  // for MouseUp/Down (AutoFilter)
+        }
     }
 
     delete pQueryParam;
+}
+
+Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
+{
+    ScDocument* pDoc = pViewData->GetDocument();
+    USHORT nTab = pViewData->GetTabNo();
+
+    ScDDComboBoxButton aButton( this );             // for optimal size
+    Size aBtnSize = aButton.GetSizePixel();
+
+    USHORT nCol = rButtonPos.Col();
+    USHORT nRow = rButtonPos.Row();
+
+    //  left edge of next cell if there is a non-hidden next column
+    USHORT nNextCol = nCol + 1;
+    while ( nNextCol <= MAXCOL && (pDoc->GetColFlags( nNextCol, nTab ) & CR_HIDDEN) )
+        ++nNextCol;
+    BOOL bNextCell = ( nNextCol <= MAXCOL );
+    if ( bNextCell )
+        nCol = nNextCol;
+
+    long nCellSizeX;
+    long nCellSizeY;
+    pViewData->GetMergeSizePixel( nCol, nRow, nCellSizeX, nCellSizeY );
+
+    if ( nCellSizeX < aBtnSize.Width() )
+        aBtnSize.Width() = nCellSizeX;
+    if ( nCellSizeY < aBtnSize.Height() )
+        aBtnSize.Height() = nCellSizeY;
+
+    Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich );
+    if (!bNextCell)
+        aPos.X() += nCellSizeX - aBtnSize.Width();      // right edge of cell if next cell not available
+    aPos.Y() += nCellSizeY - aBtnSize.Height();
+    // X remains at the left edge
+
+    return Rectangle( aPos, aBtnSize );
 }
 
 BOOL ScGridWindow::IsAutoFilterActive( USHORT nCol, USHORT nRow, USHORT nTab )
