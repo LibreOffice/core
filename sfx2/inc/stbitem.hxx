@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbitem.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:24 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,21 +61,26 @@
 #ifndef _SFXSTBITEM_HXX
 #define _SFXSTBITEM_HXX
 
-#ifndef _SFXCTRLITEM_HXX
-#include "ctrlitem.hxx"
+#ifndef _SFXPOOLITEM_HXX
+#include <svtools/poolitem.hxx>
 #endif
-
-class SvStream;
-class SvStream;
-class SfxModule;
+#ifndef _SVTOOLS_STATUSBARCONTROLLER_HXX
+#include <svtools/statusbarcontroller.hxx>
+#endif
 
 //------------------------------------------------------------------
 
+class SfxModule;
 class StatusBar;
 class SfxStatusBarControl;
 class SfxBindings;
 
-typedef SfxStatusBarControl* (*SfxStatusBarControlCtor)( USHORT nId, StatusBar &rStb, SfxBindings & );
+svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    StatusBar* pStatusBar,
+    unsigned short nID,
+    const ::rtl::OUString& aCommandURL );
+typedef SfxStatusBarControl* (*SfxStatusBarControlCtor)( USHORT nSlotId, USHORT nId, StatusBar &rStb );
 
 struct SfxStbCtrlFactory
 {
@@ -93,17 +98,48 @@ struct SfxStbCtrlFactory
 
 //------------------------------------------------------------------
 
-class  CommandEvent;
-class  MouseEvent;
+class CommandEvent;
+class MouseEvent;
 class UserDrawEvent;
 
-class SfxStatusBarControl: public SfxControllerItem
+class SfxStatusBarControl: public svt::StatusbarController
 {
-friend class SfxStatusBar_Impl;
-
+    USHORT          nSlotId;
+    USHORT          nId;
     StatusBar*      pBar;
 
 protected:
+    // new controller API
+    // XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void               SAL_CALL acquire() throw();
+    virtual void               SAL_CALL release() throw();
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::uno::RuntimeException );
+
+    // XComponent
+    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
+
+    // XStatusListener
+    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+    // XStatusbarController
+    virtual ::sal_Bool SAL_CALL mouseButtonDown( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL mouseMove( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL mouseButtonUp( const ::com::sun::star::awt::MouseEvent& aMouseEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL command( const ::com::sun::star::awt::Point& aPos,
+                                    ::sal_Int32 nCommand,
+                                    ::sal_Bool bMouseEvent,
+                                    const ::com::sun::star::uno::Any& aData ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL paint( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics,
+                                    const ::com::sun::star::awt::Rectangle& rOutputRectangle,
+                                    ::sal_Int32 nItemId, ::sal_Int32 nStyle ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL click() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL doubleClick() throw (::com::sun::star::uno::RuntimeException);
+
+    // Old sfx2 interface
     virtual void    StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
     virtual void    Click();
@@ -114,30 +150,33 @@ protected:
     virtual BOOL    MouseButtonUp( const MouseEvent & );
     virtual void    Paint( const UserDrawEvent &rUDEvt );
 
+    static USHORT   convertAwtToVCLMouseButtons( sal_Int16 nAwtMouseButtons );
+
 public:
-                    SfxStatusBarControl( USHORT nId, StatusBar& rBar, SfxBindings & );
+                    SfxStatusBarControl( USHORT nSlotID, USHORT nId, StatusBar& rBar );
     virtual         ~SfxStatusBarControl();
 
+    USHORT          GetSlotId() const { return nSlotId; }
+    USHORT          GetId() const { return nId; }
     StatusBar&      GetStatusBar() const { return *pBar; }
     void            CaptureMouse();
     void            ReleaseMouse();
 
-    static SfxStatusBarControl* CreateControl( USHORT nId, StatusBar *pBar, SfxBindings&, SfxModule* );
+    static SfxStatusBarControl* CreateControl( USHORT nSlotID, USHORT nId, StatusBar *pBar, SfxModule* );
 };
 
 //------------------------------------------------------------------
 
 #define SFX_DECL_STATUSBAR_CONTROL() \
-        static SfxStatusBarControl* CreateImpl( USHORT nId, StatusBar &rStb, SfxBindings &rBindings ); \
+        static SfxStatusBarControl* CreateImpl( USHORT nSlotId, USHORT nId, StatusBar &rStb ); \
         static void RegisterControl(USHORT nSlotId = 0, SfxModule *pMod=NULL)
 
 #define SFX_IMPL_STATUSBAR_CONTROL(Class, nItemClass) \
-        SfxStatusBarControl* __EXPORT Class::CreateImpl( USHORT nId, StatusBar &rStb, SfxBindings &rBindings ) \
-               { return new Class(nId, rStb, rBindings); } \
+        SfxStatusBarControl* __EXPORT Class::CreateImpl( USHORT nSlotId, USHORT nId, StatusBar &rStb ) \
+               { return new Class( nSlotId, nId, rStb ); } \
         void Class::RegisterControl(USHORT nSlotId, SfxModule *pMod) \
                { SFX_APP()->RegisterStatusBarControl( pMod, new SfxStbCtrlFactory( \
                     Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
 
 
 #endif
-
