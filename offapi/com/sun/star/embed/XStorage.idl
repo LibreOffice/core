@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStorage.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:27:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,157 @@ interface XStorage: com::sun::star::uno::XInterface
 
      */
     XStorage openStorageElement( [in] string aStorName, [in] long nOpenMode )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWTException );
+
+    // ========================================================================
+    /** Allows to get readonly copy of a child stream of the storage.
+    <p>
+        This method returns <type>StorageStream</type> service implementation.
+    The stream is open in readonly mode so the <type>XStream</type>::getOutputStream()
+    method will return an empty reference.
+    </p>
+
+    <p>
+        The latest flashed version of the stream will be used. The stream can
+    be flashed explicitly by <type>XOutputStream</type>::flush() call. A storage
+    flashes on commit all the child streams it owns. So in case after the stream is changed
+    neither the storage was commited nor the stream was flashed explicitly, the changes will not appear
+    in the new created stream.
+    This method allows to retrieve copy of a child stream even in case it is already opened
+    for writing.
+    </p>
+
+    <p>
+        If the child stream is an encrypted one a corect common storage key should be
+    set through <type>XEncryptionProtectedSource</type> interface to this storage or to a
+    one of storages in parent hierarchy. In case the key is not set
+    or is a wrong one an exception will be thrown.
+    </p>
+
+    @param aStreamName
+        the name of the substream that should be copied
+
+    @throws ::com::sun::star::embed::InvalidStorageException
+        this storage is in invalid state for any reason
+
+    @throws ::com::sun::star::lang::IllegalArgumentException
+        one of provided arguments is illegal
+
+    @throws ::com::sun::star::packages::WrongPasswordException
+        the provided key is wrong
+
+    @throws ::com::sun::star::io::IOException
+        in case of io errors during stream opening
+
+    @throws ::com::sun::star::embed::StorageWTException
+        wraps other exceptions
+     */
+    ::com::sun::star::io::XStream cloneStreamElement( [in] string aStreamName )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWTException );
+
+    // ========================================================================
+    /** Allows to get readonly copy of a child encrypted stream with password.
+    <p>
+        This method returns <type>StorageStream</type> service implementation.
+    The stream is open in readonly mode so the <type>XStream</type>::getOutputStream()
+    method will return an empty reference.
+    </p>
+
+    <p>
+        The latest flashed version of the stream will be used. The stream can
+    be flashed explicitly by <type>XOutputStream</type>::flush() call. A storage
+    flashes on commit all the child streams it owns. So in case after the stream is changed
+    neither the storage was commited nor the stream was flashed explicitly, the changes will not appear
+    in the new created stream.
+    This method allows to retrieve copy of a child stream even in case it is already opened
+    for writing.
+    </p>
+
+    <p>
+        The version of child stream on last commit of the storage will be used. So in case
+    the storage was not commited after the stream is changed, the changes will not appear
+    in the new created stream.
+    This method allows to retrieve copy of a child stream even in case it is already opened
+    for writing.
+    </p>
+
+    <p>
+        This method allows to specify reading password for the child stream explicitly.
+    </p>
+
+    @param aStreamName
+        the name of the substream that should be copied
+
+    @param aKey
+        this parameter allowes to specify a reading key for the stream,
+        the key must be a correct one, otherwise an exception will be thrown
+
+    @throws ::com::sun::star::embed::InvalidStorageException
+        this storage is in invalid state for any reason
+
+    @throws ::com::sun::star::lang::IllegalArgumentException
+        one of provided arguments is illegal
+
+    @throws ::com::sun::star::packages::NoEncryptionException
+        the stream is not encrypted
+
+    @throws ::com::sun::star::packages::WrongPasswordException
+        the provided key is wrong
+
+    @throws ::com::sun::star::io::IOException
+        in case of io errors during stream opening
+
+    @throws ::com::sun::star::embed::StorageWTException
+        wraps other exceptions
+     */
+    ::com::sun::star::io::XStream cloneEncryptedStreamElement( [in] string aStreamName,
+                                                     [in] sequence< byte > aKey )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::NoEncryptionException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWTException );
+
+    // ========================================================================
+    /** Allows to get readonly copy of a child storage.
+    <p>
+        The latest commited version of child storage before the last commit of this storage
+    will be used. So in case this ( parent ) storage was not commited after the child storage
+    is changed and commited, the changes will not appear in the new created storage.
+    </p>
+
+    <p>
+        This method returns <type>Storage</type> service implementation.
+    The result storage is a new root storage that is a complete copy of the specified child storage.
+    This method allows to retrieve copy of a child storage even in case it is already opened
+    for writing.
+    </p>
+
+    @param aStorName
+        the name of the storage that should be copied
+
+    @throws ::com::sun::star::embed::InvalidStorageException
+        this storage is in invalid state for any reason
+
+    @throws ::com::sun::star::lang::IllegalArgumentException
+        one of provided arguments is illegal
+
+    @throws ::com::sun::star::io::IOException
+        in case of io errors during stream opening
+
+    @throws ::com::sun::star::embed::StorageWTException
+        wraps other exceptions
+
+     */
+    XStorage cloneStorageElement( [in] string aStorName )
         raises( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::io::IOException,
