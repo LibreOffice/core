@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-29 10:19:53 $
+ *  last change: $Author: fs $ $Date: 2001-12-10 16:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1438,7 +1438,7 @@ void FmExplorerModel::BroadcastMarkedObjects(const SdrMarkList& mlMarked)
     {
         SdrObject* pobjCurrent = mlMarked.GetMark(i)->GetObj();
         bIsMixedSelection |= !InsertFormComponent(rshRequestSelection, pobjCurrent);
-            // bei einem Nicht-::com::sun::star::form::Form-Control liefert InsertFormComponent sal_False !
+            // bei einem Nicht-Form-Control liefert InsertFormComponent sal_False !
     }
 
     rshRequestSelection.SetMixedSelection(bIsMixedSelection);
@@ -2604,9 +2604,15 @@ sal_Int8 FmExplorer::ExecuteDrop( const ExecuteDropEvent& rEvt )
     UnlockSelectionHandling();
     pFormModel->EndUndo();
 
-    // waehrend des Verschiebens der Eintraege hat sich die Markierung der unterliegenden ::com::sun::star::sdbcx::View nicht geaendert (da sie mit der
-    // logischen Seite nichts zu tun hat), wohl aber meine Selektion, die ich also wieder an der Markierung ausrichten muss
+    // During the move, the markings of the underlying view did not change (because the view is not affected by the logical
+    // hierarchy of the form/control models. But my selection changed - which means I have to adjust it according to the
+    // view marks, again.
     SynchronizeSelection();
+
+    // in addition, with the move of controls such things as "the current form" may have changed - force the shell
+    // to update itself accordingly
+    if( pFormShell && pFormShell->GetImpl() && pFormShell->GetFormView() )
+        pFormShell->GetImpl()->DetermineSelection( pFormShell->GetFormView()->GetMarkList() );
 
     return rEvt.mnAction;
 }
