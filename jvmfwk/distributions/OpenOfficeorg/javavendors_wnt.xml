@@ -16,6 +16,6 @@
 
  <plugins>
   <library vendor="Sun Microsystems Inc.">program/sunjavaplugin.dll</library>
-  <library vendor="IBM Corporation">program/ibmjavaplugin.dll</library>
+  <library vendor="IBM Corporation">program/sunjavaplugin.dll</library>
  </plugins>
 </javaSelection>
