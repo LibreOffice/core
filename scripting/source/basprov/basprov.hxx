@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:14:00 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ namespace basprov
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer > m_xLibContainerApp;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer > m_xLibContainerDoc;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xScriptingContext;
+     ::rtl::OUString  m_sScriptingContext;
         bool m_bIsAppScriptCtx;
         bool m_bIsUserCtx;
         ::rtl::OUString m_sCtxLocation;
@@ -141,7 +141,7 @@ namespace basprov
         // XScriptProvider
         virtual ::com::sun::star::uno::Reference < ::drafts::com::sun::star::script::provider::XScript > SAL_CALL getScript(
             const ::rtl::OUString& scriptURI )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+            throw (  ::drafts::com::sun::star::script::provider::ScriptFrameworkErrorException, ::com::sun::star::uno::RuntimeException);
 
         // XBrowseNode
         virtual ::rtl::OUString SAL_CALL getName(  )
