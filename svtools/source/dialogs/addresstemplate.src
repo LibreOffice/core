@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-14 21:20:43 $
+ *  last change: $Author: kz $ $Date: 2002-02-20 11:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ polish ] = "�r�d�o ksi��ki adresowej";
         Text[ portuguese_brazilian ] = "Address Book Source";
         Text[ japanese ] = "アドレス帳ソース";
-        Text[ korean ] = "주소록 소스";
+        Text[ korean ] = "주소록";
         Text[ chinese_simplified ] = "通讯簿源";
         Text[ chinese_traditional ] = "通訊錄來源";
         Text[ turkish ] = "Address Book Source";
