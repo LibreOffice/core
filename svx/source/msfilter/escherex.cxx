@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:30:37 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,8 +544,9 @@ void EscherPropertyContainer::CreateFillProperties(
 
     sal_uInt32 nFillBackColor = 0;
 
+    const rtl::OUString aPropName( String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) );
     if ( EscherPropertyValueHelper::GetPropertyValue(
-            aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ), sal_False ) )
+            aAny, rXPropSet, aPropName, sal_False ) )
     {
         ::com::sun::star::drawing::FillStyle eFS;
         if ( ! ( aAny >>= eFS ) )
@@ -574,6 +575,11 @@ void EscherPropertyContainer::CreateFillProperties(
             case ::com::sun::star::drawing::FillStyle_SOLID :
             default:
             {
+                ::com::sun::star::beans::PropertyState ePropState = EscherPropertyValueHelper::GetPropertyState(
+                    rXPropSet, aPropName );
+                if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+                    AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
+
                 sal_uInt16 nTransparency = ( EscherPropertyValueHelper::GetPropertyValue(
                                                 aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillTransparence" ) ), sal_False ) )
                                             ? *((sal_Int16*)aAny.getValue() )
@@ -1151,6 +1157,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
         const String& rSource, sal_Bool bFillBitmap, sal_Bool bCreateCroppingAttributes )
 {
     sal_Bool        bRetValue = sal_False;
+    sal_Bool        bCreateFillStyles = sal_False;
 
     sal_Bool        bMirrored = sal_False;
     sal_Bool        bRotate   = sal_True;
@@ -1207,6 +1214,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
         else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ) )
         {
             aGraphicUrl = *(::rtl::OUString*)aAny.getValue();
+            bCreateFillStyles = sal_True;
         }
         else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillHatch" ) ) )
         {
@@ -1376,6 +1384,9 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
         }
     }
     delete pGraphicAttr;
+    if ( bCreateFillStyles )
+        CreateFillProperties( rXPropSet, sal_True );
+
     return bRetValue;
 }
 
@@ -4310,7 +4321,7 @@ EscherEx::~EscherEx()
 
 void EscherEx::InsertAtCurrentPos( UINT32 nBytes, BOOL bContainer )
 {
-    UINT32  i, nSize, nType, nSource, nBufSize, nToCopy, nCurPos = mpOutStrm->Tell();
+    UINT32  nSize, nType, nSource, nBufSize, nToCopy, nCurPos = mpOutStrm->Tell();
     BYTE*   pBuf;
 
     // Persist table anpassen
