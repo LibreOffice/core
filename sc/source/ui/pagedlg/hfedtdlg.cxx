@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,10 @@
 #include "hfedtdlg.hxx"
 #include "global.hxx"
 #include "globstr.hrc"
-#include "tphfedit.hxx"
+//CHINA001 #include "tphfedit.hxx"
 #include "scresid.hxx"
 #include "hfedtdlg.hrc"
-
+#include "scuitphfedit.hxx" //CHINA001
 //------------------------------------------------------------------
 
 //  macros from docsh4.cxx
