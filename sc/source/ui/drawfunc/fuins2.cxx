@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:16:42 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <sot/exchange.hxx>
 #include <svtools/globalnameitem.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/docfile.hxx>
 #include <svtools/stritem.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
@@ -325,13 +326,9 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
                 if ( ERRCODE_NONE == aPluginFileDialog.Execute() )
                 {
                     // get URL
-                    String aStrURL(aPluginFileDialog.GetPath());
-                    aStrURL = URIHelper::SmartRelToAbs( aStrURL );
-
                     INetURLObject aURL;
                     aURL.SetSmartProtocol( INET_PROT_FILE );
-
-                    if ( aURL.SetURL( aStrURL ) )
+                    if ( aURL.SetURL( aPluginFileDialog.GetPath() ) )
                     {
                         // create a plugin object
                         ::rtl::OUString aName;
@@ -351,6 +348,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
                     }
                     else
                     {
+                        DBG_ERROR("Invalid URL!");
                         //! error message
                         //! can this happen???
                     }
