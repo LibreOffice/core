@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:14:02 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
@@ -1900,8 +1899,11 @@ void SdXMLExport::ImpPrepMasterPageInfos()
     if( xHandoutSupp.is() )
     {
         Reference< XDrawPage > xHandoutPage( xHandoutSupp->getHandoutMasterPage() );
-        maHandoutPageHeaderFooterSettings = ImpPrepDrawPageHeaderFooterDecls( xHandoutPage );
-        maHandoutMasterStyleName = ImpCreatePresPageStyleName( xHandoutPage, false );
+        if( xHandoutPage.is() )
+        {
+            maHandoutPageHeaderFooterSettings = ImpPrepDrawPageHeaderFooterDecls( xHandoutPage );
+            maHandoutMasterStyleName = ImpCreatePresPageStyleName( xHandoutPage, false );
+        }
     }
 }
 
