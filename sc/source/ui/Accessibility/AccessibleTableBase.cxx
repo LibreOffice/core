@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-25 11:46:49 $
+ *  last change: $Author: sab $ $Date: 2002-02-25 13:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,14 +145,14 @@ void SAL_CALL
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowCount(  )
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     return maRange.aEnd.Row() - maRange.aStart.Row() + 1;
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     return maRange.aEnd.Col() - maRange.aStart.Col() + 1;
 }
 
@@ -175,7 +175,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     sal_Int32 nCount(1); // the same cell
     nRow += maRange.aStart.Row();
     nColumn += maRange.aStart.Col();
@@ -195,7 +195,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nR
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     sal_Int32 nCount(1); // the same cell
     nRow += maRange.aStart.Row();
     nColumn += maRange.aStart.Col();
@@ -296,7 +296,7 @@ sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 nRow, s
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     nRow -= maRange.aStart.Row();
     nColumn -= maRange.aStart.Col();
     return (nRow * maRange.aEnd.Col() + 1) + nColumn;
@@ -305,7 +305,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sa
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildIndex )
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     sal_Int32 nRow(-1);
     if (maRange.aEnd.Col() > 0)
         nRow = nChildIndex / (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
@@ -315,7 +315,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildInde
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildIndex )
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     sal_Int32 nColumn(-1);
     if (maRange.aEnd.Col() > 0)
         nColumn = nChildIndex % (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
@@ -328,7 +328,7 @@ sal_Int32 SAL_CALL
     ScAccessibleTableBase::getAccessibleChildCount(void)
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
 /*  return (maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
             (maRange.aEnd.Col() - maRange.aStart.Col() + 1);*/
     return 1;
@@ -339,7 +339,7 @@ uno::Reference< XAccessible > SAL_CALL
         throw (uno::RuntimeException,
         lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     sal_Int32 nRow(0);
     sal_Int32 nColumn(0);
     if (maRange.aEnd.Col() > 0)
@@ -362,7 +362,7 @@ uno::Reference< XAccessible > SAL_CALL
     ScAccessibleTableBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     rtl::OUString sName;
     String sCoreName;
     if (mpDoc && mpDoc->GetName( maRange.aStart.Tab(), sCoreName ))
@@ -400,7 +400,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 uno::Sequence< uno::Type> SAL_CALL ScAccessibleTableBase::getTypes(void)
         throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     uno::Sequence< uno::Type>
         aTypeSequence = ScAccessibleContextBase::getTypes();
     sal_Int32 nOldSize(aTypeSequence.getLength());

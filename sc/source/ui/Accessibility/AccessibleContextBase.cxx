@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-25 11:46:49 $
+ *  last change: $Author: sab $ $Date: 2002-02-25 13:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ uno::Reference< XAccessibleContext> SAL_CALL
 sal_Bool SAL_CALL ScAccessibleContextBase::contains(const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     Rectangle aBounds(GetBoundingBox());
     return !((rPoint.X < aBounds.getX()) || (rPoint.X > (aBounds.getX() + aBounds.getWidth())) ||
             (rPoint.Y < aBounds.getY()) || (rPoint.Y > (aBounds.getY() + aBounds.getHeight())));
@@ -191,7 +191,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAt(
 awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     Rectangle aCoreBounds(GetBoundingBox());
     awt::Rectangle aBounds;
     aBounds.X = aCoreBounds.getX();
@@ -204,7 +204,7 @@ awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
 awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     awt::Point aLocation;
     Rectangle aRect(GetBoundingBox());
     aLocation.X = aRect.getX();
@@ -215,7 +215,7 @@ awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
 awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     awt::Point aPoint;
     Rectangle aRect(GetBoundingBoxOnScreen());
     aPoint.X = aRect.getX();
@@ -226,7 +226,7 @@ awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
 awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     awt::Size aSize;
     Rectangle aRect(GetBoundingBox());
     aSize.Width = aRect.getWidth();
@@ -237,7 +237,7 @@ awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
 sal_Bool SAL_CALL ScAccessibleContextBase::isShowing(  )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     sal_Bool bShowing(sal_False);
     uno::Reference<XAccessibleComponent> xParentComponent (mxParent->getAccessibleContext(), uno::UNO_QUERY);
     if (xParentComponent.is())
@@ -269,7 +269,7 @@ void SAL_CALL ScAccessibleContextBase::addFocusListener(
     const uno::Reference< awt::XFocusListener >& xListener )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     if (xListener.is())
     {
         if (!mpFocusListeners)
@@ -282,7 +282,7 @@ void SAL_CALL ScAccessibleContextBase::removeFocusListener(
     const uno::Reference< awt::XFocusListener >& xListener )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     if (xListener.is() && mpFocusListeners)
         mpFocusListeners->removeInterface(xListener);
 }
@@ -329,7 +329,7 @@ sal_Int32 SAL_CALL
        ScAccessibleContextBase::getAccessibleIndexInParent(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     //  Use a simple but slow solution for now.  Optimize later.
    //   Return -1 to indicate that this object's parent does not know about the
    //   object.
@@ -370,7 +370,7 @@ sal_Int16 SAL_CALL
        ScAccessibleContextBase::getAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     if (!msDescription.getLength())
     {
         OUString sDescription(createAccessibleDescription());
@@ -392,7 +392,7 @@ OUString SAL_CALL
        ScAccessibleContextBase::getAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     if (!msName.getLength())
     {
         OUString sName(createAccessibleName());
@@ -429,7 +429,7 @@ lang::Locale SAL_CALL
     throw (IllegalAccessibleComponentStateException,
         uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     if (mxParent.is())
     {
         uno::Reference<XAccessibleContext> xParentContext (
@@ -450,7 +450,7 @@ void SAL_CALL
            const uno::Reference<XAccessibleEventListener>& xListener)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     if (xListener.is())
     {
         if (!mpEventListeners)
@@ -464,7 +464,7 @@ void SAL_CALL
         const uno::Reference<XAccessibleEventListener>& xListener)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     if (xListener.is() && mpEventListeners)
         mpEventListeners->removeInterface(xListener);
 }
@@ -554,10 +554,10 @@ uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleContextBase::getImplementationId(void)
     throw (uno::RuntimeException)
 {
+    ScUnoGuard aGuard();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {
-        ScUnoGuard();
         aId.realloc (16);
         rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
     }

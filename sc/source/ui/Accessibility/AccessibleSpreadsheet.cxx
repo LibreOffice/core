@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-25 11:46:49 $
+ *  last change: $Author: sab $ $Date: 2002-02-25 13:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessibleRows(  )
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     uno::Sequence<sal_Int32> aSequence;
     if (mpViewShell && mpViewShell->GetViewData())
     {
@@ -193,7 +193,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessibleColumns(  )
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     uno::Sequence<sal_Int32> aSequence;
     if (mpViewShell && mpViewShell->GetViewData())
     {
@@ -219,7 +219,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nRow )
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     sal_Bool bResult(sal_False);
     if (mpViewShell && mpViewShell->GetViewData())
     {
@@ -232,7 +232,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nR
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32 nColumn )
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     sal_Bool bResult(sal_False);
     if (mpViewShell && mpViewShell->GetViewData())
     {
@@ -245,7 +245,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32
 uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     ScAddress aCellAddress(static_cast<sal_uInt16>(maRange.aStart.Col() + nColumn),
         static_cast<sal_uInt16>(maRange.aStart.Row() + nRow), maRange.aStart.Tab());
     ScAccessibleCell* pAccessibleCell = new ScAccessibleCell(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn), meSplitPos);
@@ -255,7 +255,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCel
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     sal_Bool bResult(sal_False);
     if (mpViewShell && mpViewShell->GetViewData())
     {
@@ -271,7 +271,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAt(
     const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     uno::Reference< XAccessible > xAccessible;
     if (mpViewShell)
     {
@@ -299,7 +299,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleSpreadsheet::getAccessibleStateSet(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {

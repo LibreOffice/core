@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-25 11:46:49 $
+ *  last change: $Author: sab $ $Date: 2002-02-25 13:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ void SAL_CALL
 sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
         throw (uno::RuntimeException)
 {
-     ScUnoGuard();
+     ScUnoGuard aGuard();
     // test whether the cell is hidden (column/row - hidden/filtered)
     sal_Bool bVisible(sal_True);
     if (mpDoc)
@@ -176,7 +176,7 @@ sal_Int32
     ScAccessibleCellBase::getAccessibleIndexInParent(void)
         throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     return mnIndex;
 }
 
@@ -217,7 +217,7 @@ uno::Any SAL_CALL
     ScAccessibleCellBase::getCurrentValue(  )
     throw (uno::RuntimeException)
 {
-     ScUnoGuard();
+     ScUnoGuard aGuard();
     uno::Any aAny;
     if (mpDoc)
         aAny <<= mpDoc->GetValue(maCellAddress);
@@ -229,7 +229,7 @@ sal_Bool SAL_CALL
     ScAccessibleCellBase::setCurrentValue( const uno::Any& aNumber )
     throw (uno::RuntimeException)
 {
-     ScUnoGuard();
+     ScUnoGuard aGuard();
     double fValue;
     sal_Bool bResult(sal_False);
     if((aNumber >>= fValue) && mpDoc && mpDoc->GetDocumentShell())
@@ -283,7 +283,7 @@ uno::Any SAL_CALL
 uno::Sequence< uno::Type> SAL_CALL ScAccessibleCellBase::getTypes(void)
         throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     uno::Sequence< uno::Type>
         aTypeSequence = ScAccessibleContextBase::getTypes();
     sal_Int32 nOldSize(aTypeSequence.getLength());

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-25 11:46:49 $
+ *  last change: $Author: sab $ $Date: 2002-02-25 13:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAt(
 sal_Bool SAL_CALL ScAccessibleCell::isVisible(  )
         throw (uno::RuntimeException)
 {
-     ScUnoGuard();
+     ScUnoGuard aGuard();
     // test whether the cell is hidden (column/row - hidden/filtered)
     sal_Bool bVisible(sal_True);
     if (mpDoc)
@@ -155,7 +155,7 @@ sal_Bool SAL_CALL ScAccessibleCell::isVisible(  )
 void SAL_CALL ScAccessibleCell::grabFocus(  )
         throw (uno::RuntimeException)
 {
-     ScUnoGuard();
+     ScUnoGuard aGuard();
     if (getAccessibleParent().is() && mpViewShell)
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -223,7 +223,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleCell::getAccessibleStateSet(void)
     throw (uno::RuntimeException)
 {
-    ScUnoGuard();
+    ScUnoGuard aGuard();
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {
