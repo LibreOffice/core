@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextListBlockContext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: mib $ $Date: 2000-10-23 10:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
     nLevels( 0 ),
     bOrdered( bOrd ),
     bRestartNumbering( sal_True ),
+    bSetDefaults( sal_False ),
     sNumberingRules( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) )
 {
     // Inherit style name from parent list, as well as the flags whether
@@ -131,12 +132,12 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         XMLTextListBlockContext *pParent =
             (XMLTextListBlockContext *)&xParentListBlock;
         sStyleName = pParent->GetStyleName();
-        sRealName = pParent->GetRealName();
+        xNumRules = pParent->GetNumRules();
         sParentStyleName = sStyleName;
         nLevels = pParent->nLevels;
         nLevel = pParent->GetLevel() + 1;
         bRestartNumbering = pParent->IsRestartNumbering();
-        xGenNumRule = pParent->xGenNumRule;
+        bSetDefaults = pParent->bSetDefaults;
     }
 
     const SvXMLTokenMap& rTokenMap =
@@ -178,12 +179,10 @@ XMLTextListBlockContext::XMLTextListBlockContext(
             if( bRestartNumbering && !xStyle->isInUse() )
                 bRestartNumbering = sal_False;
 
-            Reference<XIndexReplace> xNumRule;
             Reference< XPropertySet > xPropSet( xStyle, UNO_QUERY );
             aAny = xPropSet->getPropertyValue( sNumberingRules );
-            aAny >>= xNumRule;
-            nLevels = xNumRule->getCount();
-            sRealName = sStyleName;
+            aAny >>= xNumRules;
+            nLevels = xNumRules->getCount();
         }
         else
         {
@@ -191,46 +190,47 @@ XMLTextListBlockContext::XMLTextListBlockContext(
                 rTxtImport.FindAutoListStyle( sStyleName );
             if( pListStyle )
             {
-                sal_Bool bUsed = pListStyle->IsUsed();
-                if( !bUsed )
+                xNumRules = pListStyle->GetNumRules();
+                sal_Bool bUsed = xNumRules.is();
+                if( !xNumRules.is() )
+                {
                     pListStyle->CreateAndInsertAuto();
+                    xNumRules = pListStyle->GetNumRules();
+                }
                 if( bRestartNumbering && !bUsed )
                     bRestartNumbering = sal_False;
-                sRealName = pListStyle->GetRealName();
                 nLevels = pListStyle->GetLevels();
             }
         }
-
     }
 
-    if( !sRealName.getLength() )
+    if( !xNumRules.is() )
     {
         // If no style name has been specified for this style and for any
         // parent or if no num rule this the specified name is existing,
         // create a new one.
 
-        xGenNumRule =
-            SvxXMLListStyleContext::CreateNumRule( sRealName,
-                                                   GetImport().GetModel() );
-        DBG_ASSERT( xGenNumRule.is(), "go no numbering rule" );
-        DBG_ASSERT( sRealName.getLength(), "go no numbering rule name" );
-        if( !xGenNumRule.is() && !sRealName.getLength() )
+        xNumRules =
+            SvxXMLListStyleContext::CreateNumRule( GetImport().GetModel() );
+        DBG_ASSERT( xNumRules.is(), "go no numbering rule" );
+        if( !xNumRules.is() )
             return;
 
-        nLevels = xGenNumRule->getCount();
+        nLevels = xNumRules->getCount();
 
         // Because its a new num rule, numbering mist be restarted never.
         bRestartNumbering = sal_False;
+        bSetDefaults = sal_True;
     }
 
     if( nLevel >= nLevels )
         nLevel = nLevels-1;
 
-    if( xGenNumRule.is() )
+    if( bSetDefaults )
     {
         // Because there is no list style sheet for this style, a default
         // format must be set for any level of this num rule.
-        SvxXMLListStyleContext::SetDefaultStyle( xGenNumRule, nLevel,
+        SvxXMLListStyleContext::SetDefaultStyle( xNumRules, nLevel,
                                                    bOrdered );
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextListBlockContext.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: mib $ $Date: 2000-10-23 10:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,16 +77,16 @@ class XMLTextListBlockContext : public SvXMLImportContext
     XMLTextImportHelper&    rTxtImport;
 
     ::com::sun::star::uno::Reference<
-                ::com::sun::star::container::XIndexReplace > xGenNumRule;
+                ::com::sun::star::container::XIndexReplace > xNumRules;
 
     const ::rtl::OUString   sNumberingRules;
     ::rtl::OUString         sStyleName;
-    ::rtl::OUString         sRealName;
     SvXMLImportContextRef   xParentListBlock;
     sal_Int16               nLevel;
     sal_Int16               nLevels;
     sal_Bool                bOrdered : 1;
     sal_Bool                bRestartNumbering : 1;
+    sal_Bool                bSetDefaults : 1;
 
 
 public:
@@ -109,12 +109,14 @@ public:
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     const ::rtl::OUString& GetStyleName() const { return sStyleName; }
-    const ::rtl::OUString& GetRealName() const { return sRealName; }
     sal_Int16 GetLevel() const { return nLevel; }
     sal_Bool IsRestartNumbering() const { return bRestartNumbering; }
     void ResetRestartNumbering() { bRestartNumbering = sal_False; }
 
-    sal_Bool HasGeneratedStyle() const { return xGenNumRule.is(); }
+//  sal_Bool HasGeneratedStyle() const { return xGenNumRule.is(); }
+    const ::com::sun::star::uno::Reference <
+        ::com::sun::star::container::XIndexReplace >& GetNumRules() const
+        { return xNumRules; }
 };
 
 

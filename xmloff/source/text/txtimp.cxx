@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-20 12:45:07 $
+ *  last change: $Author: mib $ $Date: 2000-10-23 10:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,24 +713,14 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
 
         if( IsInList() )
         {
-            OUString sNumRuleName;
-            if( xNumRule.is() &&
-                xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
-            {
-                aAny = xPropSet->getPropertyValue( sNumberingStyleName );
-                aAny >>= sNumRuleName;
-            }
-
-            DBG_ASSERT( !xNumRule.is() || sNumRuleName.getLength(),
-                        "num rule name is missing!" );
             XMLTextListBlockContext *pListBlock = GetListBlock();
-            const OUString& rStyleName = pListBlock->GetRealName();
-            if( !xNumRule.is() ||
-                ( !pListBlock->HasGeneratedStyle() &&
-                  sNumRuleName != rStyleName ) )
+            Reference < XIndexReplace > xNewNumRules =
+                pListBlock->GetNumRules();
+
+            if( xNewNumRules != xNumRule )
             {
-                aAny <<= rStyleName;
-                xPropSet->setPropertyValue( sNumberingStyleName, aAny );
+                aAny <<= xNewNumRules;
+                xPropSet->setPropertyValue( sNumberingRules, aAny );
             }
 
             XMLTextListItemContext *pListItem = GetListItem();
@@ -765,11 +755,11 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         {
             // If the paragraph is not in a list but its style, remove it from
             // the list.
-            if( xNumRule.is() && xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
+            if( xNumRule.is() )
             {
-                OUString sTmp;
-                aAny <<= sTmp;
-                xPropSet->setPropertyValue( sNumberingStyleName, aAny );
+                Reference < XIndexReplace > xEmpty;
+                aAny <<= xEmpty;
+                xPropSet->setPropertyValue( sNumberingRules, aAny );
             }
         }
     }
