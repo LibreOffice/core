@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-19 19:48:07 $
+ *  last change: $Author: nn $ $Date: 2001-12-20 19:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,15 +428,6 @@ BOOL ScDocShell::LoadCalc( SvStorage* pStor )       // StarCalc 3, 4 or 5 file
 
     delete pProgress;
 
-    if ( eShellMode == SFX_CREATE_MODE_STANDARD && bRet )
-    {
-        //  If the document contains macro calls, call AdjustMacroMode now,
-        //  which will warn about macros if configured that way.
-
-        if ( aDocument.HasMacroCallsAfterLoad() )
-            AdjustMacroMode( String::CreateFromAscii("StarBasic") );
-    }
-
     return bRet;
 }
 
@@ -601,13 +592,6 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
     aDocument.SetImportingXML( FALSE );
 
     //! row heights...
-
-    // handling of macro warnings as in LoadCalc
-    if ( eShellMode == SFX_CREATE_MODE_STANDARD && bRet )
-    {
-        if ( aDocument.HasMacroCallsAfterLoad() )
-            AdjustMacroMode( String::CreateFromAscii("StarBasic") );
-    }
 
     return bRet;
 }
