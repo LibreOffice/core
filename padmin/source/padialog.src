@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-23 00:34:09 $
+ *  last change: $Author: rt $ $Date: 2001-11-27 23:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2428,9 +2428,9 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ polish ] = "Dalej >>";
         Text[ portuguese_brazilian ] = "~Next >>";
         Text[ japanese ] = "次へ(~N) >>";
-        Text[ korean ] = "다음  (~N) >>";
-        Text[ chinese_simplified ] = "继续   (~N) >>";
-        Text[ chinese_traditional ] = "繼續   (~N) >>";
+        Text[ korean ] = "다음 (~N)>>";
+        Text[ chinese_simplified ] = "继续(~N) >>";
+        Text[ chinese_traditional ] = "繼續(~N) >>";
         Text[ turkish ] = "~Next >>";
         Text[ arabic ] = "������ <<";
         Text[ finnish ] = "~Seuraava >>";
@@ -4029,6 +4029,7 @@ String RID_TXT_FONT_REGULAR
     Text[ arabic ] = "Regular";
     Text[ catalan ] = "Regular";
 };
+
 
 
 
