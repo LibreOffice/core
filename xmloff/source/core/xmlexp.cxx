@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 15:26:31 $
+ *  last change: $Author: sab $ $Date: 2001-06-25 12:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1453,6 +1453,11 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
 
     Sequence < PropertyValue > aMediaDesc( 0 );
     return xFilter->filter( aMediaDesc );
+}
+
+OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
+{
+    return INetURLObject::AbsToRel( rValue );
 }
 
 void SvXMLElementExport::StartElement( SvXMLExport& rExp,
