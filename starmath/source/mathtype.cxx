@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-17 11:08:04 $
+ *  last change: $Author: cmc $ $Date: 2001-05-18 16:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,51 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,BYTE nVersion,
         case 0x00b1:
             pC = " +- ";
             break;
+        case '(':
+            pC = " \\( ";
+            break;
+        case ')':
+            pC = " \\) ";
+            break;
+        case 0x00fb:
+            if ((nVersion < 3) && (nTypeFace == 0x81))
+                nChar = 0xDF;
+            rRet.Append(nChar);
+            bRet=TRUE;
+            break;
+        case 'b':
+            if ((nVersion < 3) && (nTypeFace == 0x84))
+                nChar = 0x3b2;
+            rRet.Append(nChar);
+            bRet=TRUE;
+            break;
+        case 0x00f1:
+            if ((nVersion < 3) && (nTypeFace == 0x86))
+                pC = " \\rangle ";
+            else
+            {
+                rRet.Append(nChar);
+                bRet=TRUE;
+            }
+            break;
+        case 0x00a3:
+            if ((nVersion < 3) && (nTypeFace == 0x86))
+                pC = " <= ";
+            else
+            {
+                rRet.Append(nChar);
+                bRet=TRUE;
+            }
+            break;
+        case 0x00de:
+            if ((nVersion < 3) && (nTypeFace == 0x86))
+                pC = " drarrow ";
+            else
+            {
+                rRet.Append(nChar);
+                bRet=TRUE;
+            }
+            break;
         case 0x0057:
             if ((nVersion < 3) && (nTypeFace == 0x85))
                 pC = " %OMEGA ";
@@ -532,6 +577,8 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,BYTE nVersion,
         case 0xeb08:    //normal space
             bRet=TRUE;
             break;
+        case 0xef04:    //tiny space
+        case 0xef05:    //tiny space
         case 0xeb02:    //small space
         case 0xeb04:    //medium space
             rRet.Append('`');
@@ -620,6 +667,7 @@ int MathType::HandleRecords(int nLevel,BYTE nSelector,
     int nCurRow=0,nCurCol=0;
     BOOL bOpenString=FALSE;
     xub_StrLen nTextStart;
+    xub_StrLen nSubSupStartPos;
 
     do
     {
@@ -765,6 +813,7 @@ int MathType::HandleRecords(int nLevel,BYTE nSelector,
                             APPEND(rRet," {");
                             break;
                         case 0xf:
+                            nSubSupStartPos = rRet.Len();
                             if ((nVariation == 0) ||
                                     ((nVariation == 2) && (nPart==1)))
                                 APPEND(rRet," rSup");
@@ -1207,11 +1256,29 @@ int MathType::HandleRecords(int nLevel,BYTE nSelector,
                             break;
                         }
                         int nOldCurSize=nCurSize;
+                        xub_StrLen nSizeStartPos = rRet.Len();
                         HandleSize(nLSize,nDSize,nSetSize);
                         nRet = HandleRecords(nLevel+1);
                         while (nSetSize)
                         {
-                            APPEND(rRet,"} ");
+                            BOOL bOk=sal_False;
+                            xub_StrLen nI = rRet.SearchBackward('{');
+                            if (nI != STRING_NOTFOUND)
+                            {
+                                for(nI=nI+1;nI<rRet.Len();nI++)
+                                    if (rRet.GetChar(nI) != ' ')
+                                    {
+                                        bOk=sal_True;
+                                        break;
+                                    }
+                            }
+                            else
+                                bOk=sal_True;
+
+                            if (bOk)
+                                APPEND(rRet,"} ");
+                            else
+                                rRet.Erase(nSizeStartPos);
                             nSetSize--;
                             nCurSize=nOldCurSize;
                         }
@@ -1314,6 +1381,32 @@ int MathType::HandleRecords(int nLevel,BYTE nSelector,
                             nPart++;
                             break;
                         case 0xf:
+                            {
+                            if ((nPart == 0) &&
+                                    ((nVariation == 2) || (nVariation == 1)))
+                                newline--;
+
+                            BOOL bOk=sal_False;
+                            xub_StrLen nI = rRet.SearchBackward('{');
+                            if (nI != STRING_NOTFOUND)
+                            {
+                                for(nI=nI+1;nI<rRet.Len();nI++)
+                                    if (rRet.GetChar(nI) != ' ')
+                                    {
+                                        bOk=sal_True;
+                                        break;
+                                    }
+                            }
+                            else
+                                bOk=sal_True;
+
+                            if (bOk)
+                                APPEND(rRet,"} ");
+                            else
+                                rRet.Erase(nSubSupStartPos);
+                            nPart++;
+                            }
+                            break;
                         case 0x2c:
                             if ((nPart == 0) &&
                                     ((nVariation == 2) || (nVariation == 1)))
@@ -2737,6 +2830,13 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
     }
     else
         *pS >> nChar;
+
+    /*
+    ##912##
+    bad character, old mathtype < 3 has these
+    */
+    if (nChar < 0x20)
+        return nRet;
 
     if (xfEMBELL(nTag))
     {
