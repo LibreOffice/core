@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:45:14 $
+ *  last change: $Author: fs $ $Date: 2001-06-06 10:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3096,6 +3096,12 @@ String RID_STR_ALIGNMENT
     Text[ finnish ] = "Vasen:Keskitys;Oikea";
     Text[ catalan ] = "Izquierda;Centrado;Derecha";
 };
+String RID_STR_ENUM_SIDE_ALIGN
+{
+    Text = "Links;Oben;Rechts;Unten" ;
+    Text [ english ] = "Left;Top;Right;Bottom" ;
+    Text [ english_us ] = "Left;Top;Right;Bottom" ;
+};
 String RID_STR_ENUM_BUTTONTYPE
 {
     Text = "Push;Submit;Reset;Url" ;
@@ -4634,6 +4640,9 @@ String RID_STR_ENUM_ORIENTATION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/05/16 15:45:14  kz
+ *  Merge SRC632: 05/16/01 - 17:44:33 (NoBranch)
+ *
  *  Revision 1.18  2001/05/11 05:19:44  hjs
  *  Merge SRC631: 11.05.01 - 07:19:04 (NoBranch)
  *
