@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartType.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-19 16:50:13 $
+ *  last change: $Author: bm $ $Date: 2003-11-19 17:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,9 @@ namespace
 enum
 {
     PROP_LINECHARTTYPE_DIMENSION,
-    PROP_LINECHARTTYPE_CURVE_STYLE
+    PROP_LINECHARTTYPE_CURVE_STYLE,
+    PROP_LINECHARTTYPE_CURVE_RESOLUTION,
+    PROP_LINECHARTTYPE_SPLINE_ORDER
 };
 
 void lcl_AddPropertiesToVector(
@@ -108,6 +110,19 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const chart2::CurveStyle * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "CurveResolution" ),
+                  PROP_LINECHARTTYPE_CURVE_RESOLUTION,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "SplineOrder" ),
+                  PROP_LINECHARTTYPE_SPLINE_ORDER,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void lcl_AddDefaultsToMap(
@@ -121,6 +136,16 @@ void lcl_AddDefaultsToMap(
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_CURVE_STYLE ));
     rOutMap[ PROP_LINECHARTTYPE_CURVE_STYLE ] =
         uno::makeAny( chart2::CurveStyle_LINES );
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_CURVE_RESOLUTION ));
+    rOutMap[ PROP_LINECHARTTYPE_CURVE_RESOLUTION ] =
+        uno::makeAny( sal_Int32( 20 ) );
+
+    // todo: check whether order 3 means polygons of order 3 or 2. (see
+    // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_SPLINE_ORDER ));
+    rOutMap[ PROP_LINECHARTTYPE_SPLINE_ORDER ] =
+        uno::makeAny( sal_Int32( 3 ) );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
