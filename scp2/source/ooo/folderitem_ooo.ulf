@@ -2,9 +2,9 @@
  *
  *  $RCSfile: folderitem_ooo.ulf,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:24:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 08:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@ de = "Aus Vorlage"
 en-US = "Open Document"
 de = "Dokument öffnen"
 
+[STR_FI_TOOLTIP_BASE]
+de = "Verwalten von Datenbanken, Erstellen von Abfragen und Berichten - Base macht's möglich."
+en-US = "Manage databases, create queries and reports to track and manage your information by using Base."
 
 
 
