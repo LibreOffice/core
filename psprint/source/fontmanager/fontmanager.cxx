@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:26:22 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 14:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1680,35 +1680,37 @@ void PrintFontManager::initialize( void* pInitDisplay )
     if( ! pDisplay )
         pDisplay = XOpenDisplay( NULL );
 
-
-    // get font paths to look for fonts
-    int nPaths = 0, i;
-    char** pPaths = XGetFontPath( pDisplay, &nPaths );
-
-    int nPos = 0;
-    bool bServerDirs = false;
-    for( i = 0; i < nPaths; i++ )
+    if( pDisplay )
     {
-        ByteString aPath( pPaths[i] );
-        if( ! bServerDirs
-            && ( nPos = aPath.Search( ':' ) ) != STRING_NOTFOUND
-            && ( !aPath.Equals( ":unscaled", nPos, 9 ) ) )
+        // get font paths to look for fonts
+        int nPaths = 0, i;
+        char** pPaths = XGetFontPath( pDisplay, &nPaths );
+
+        int nPos = 0;
+        bool bServerDirs = false;
+        for( i = 0; i < nPaths; i++ )
         {
-            bServerDirs = true;
-            getServerDirectories();
+            ByteString aPath( pPaths[i] );
+            if( ! bServerDirs
+                && ( nPos = aPath.Search( ':' ) ) != STRING_NOTFOUND
+                && ( !aPath.Equals( ":unscaled", nPos, 9 ) ) )
+            {
+                bServerDirs = true;
+                getServerDirectories();
+            }
+            else
+            {
+                normPath( aPath );
+                m_aFontDirectories.push_back( aPath );
+            }
         }
-        else
-        {
-            normPath( aPath );
-            m_aFontDirectories.push_back( aPath );
-        }
+
+        if( nPaths )
+            XFreeFontPath( pPaths );
+
+        if( ! pInitDisplay )
+            XCloseDisplay( pDisplay );
     }
-
-    if( nPaths )
-        XFreeFontPath( pPaths );
-
-    if( ! pInitDisplay )
-        XCloseDisplay( pDisplay );
 
     // insert some standard directories
     m_aFontDirectories.push_back( "/usr/openwin/lib/X11/fonts/Type1" );
