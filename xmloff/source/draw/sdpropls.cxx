@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: pw $ $Date: 2000-10-26 14:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,14 +141,14 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "LineEndName",    XML_NAMESPACE_DRAW, sXML_marker_end,            XML_TYPE_STRING, 0 },
     { "LineEndWidth",   XML_NAMESPACE_DRAW, sXML_marker_end_width,      XML_TYPE_MEASURE, 0 },
     { "LineEndCenter",  XML_NAMESPACE_DRAW, sXML_marker_end_center,     XML_TYPE_BOOL, 0 },
-//  { "LineTransparence", XML_NAMESPACE_SVG,sXML_stroke_opacity,        XML_SD_TYPE_OPACITY, 0 },
+    { "LineTransparence", XML_NAMESPACE_SVG,sXML_stroke_opacity,        XML_SD_TYPE_OPACITY, 0 },
     { "LineJoint",      XML_NAMESPACE_SVG,  sXML_stroke_linejoin,       XML_SD_TYPE_LINEJOIN, 0 },
 
     // fill attributes
     { "FillStyle",      XML_NAMESPACE_DRAW, sXML_fill,                  XML_SD_TYPE_FILLSTYLE, 0 },
     { "FillColor",      XML_NAMESPACE_DRAW, sXML_fill_color,            XML_TYPE_COLOR, 0 },
     { "FillGradientName",   XML_NAMESPACE_DRAW, sXML_fill_gradient_name,XML_TYPE_STRING, 0 },
-//  { "FillGradient",   XML_NAMESPACE_DRAW, sXML_gradient_step_count,   XML_SD_TYPE_GRADIENT_STEPCOUNT, 0 },
+    { "FillGradientStepCount",  XML_NAMESPACE_DRAW, sXML_gradient_step_count,   XML_TYPE_NUMBER, 0 },
     { "FillHatchName",      XML_NAMESPACE_DRAW, sXML_fill_hatch_name,   XML_TYPE_STRING, 0 },
     { "FillBitmapName",     XML_NAMESPACE_DRAW, sXML_fill_image_name,   XML_TYPE_STRING, 0 },
     { "FillTransparenceName",   XML_NAMESPACE_DRAW, sXML_transparency_name, XML_TYPE_STRING, 0 },
@@ -175,7 +175,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
 
     // text attributes
     { "CharColor",      XML_NAMESPACE_FO,       sXML_color,                 XML_TYPE_COLOR, 0 },
-    { "CharCrossedOut", XML_NAMESPACE_STYLE,    sXML_text_crossing_out,     XML_TYPE_BOOL,  0},
+    { "CharCrossedOut", XML_NAMESPACE_STYLE,    sXML_text_crossing_out,     XML_SD_TYPE_TEXT_CROSSEDOUT,    0},
 //  { "CharEscapement",      XML_NAMESPACE_STYLE, sXML_text_position,   XML_TYPE_TEXT_ESCAPEMENT|MID_FLAG_MERGE_ATTRIBUTE, 0 }, BugID #76842#
 //  { "CharEscapementHeight", XML_NAMESPACE_STYLE, sXML_text_position,  XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE, 0 },
 // ??   { "CharContoured",  XML_NAMESPACE_STYLE,    sXML_text_outline,      XML_TYPE_BOOL,  0 },
@@ -399,6 +399,18 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SD_TYPE_PRESPAGE_DURATION :
             {
                 pHdl = new XMLDurationPropertyHdl();
+                break;
+            }
+            case XML_SD_TYPE_TEXT_CROSSEDOUT :
+            {
+                const OUString aTrueStr( OUString::createFromAscii(sXML_crossedout_single) );
+                const OUString aFalseStr( OUString::createFromAscii(sXML_none) );
+                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                break;
+            }
+            case XML_SD_TYPE_OPACITY :
+            {
+                pHdl = new XMLOpacityPropertyHdl();
                 break;
             }
 // still missing:
