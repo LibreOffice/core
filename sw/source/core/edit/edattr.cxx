@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-24 15:03:40 $
+ *  last change: $Author: jp $ $Date: 2001-09-28 16:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,7 +507,7 @@ BOOL lcl_GetIsFldAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
 }
 
 // returns the scripttpye of the selection
-USHORT SwEditShell::GetScriptType() const
+USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
 {
     USHORT nRet = 0;
     if( pBreakIt->xBreak.is() )
