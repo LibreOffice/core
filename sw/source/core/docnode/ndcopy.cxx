@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:56:04 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -954,7 +954,6 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
             if( rPos.nContent.GetIndex() == pDestNd->Len() )
             {
                 aInsPos++;
-                bStartIsTxtNode = TRUE;
             }
             else if( rPos.nContent.GetIndex() )
             {
@@ -1004,6 +1003,14 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                             pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD));
                 aDestIdx.Assign( pDestNd, 0  );
                 aInsPos--;
+
+                // #112756# #98130# if we have to insert an extra text node
+                // at the destination, this node will be our new destination
+                // (text) node, and thus we set bStartisTxtNode to true. This
+                // will ensure that this node will be deleted during Undo
+                // using JoinNext.
+                DBG_ASSERT( !bStartIsTxtNode, "Oops, undo may be instable now." );
+                bStartIsTxtNode = TRUE;
             }
 
             const SfxPoolItem * pItem = NULL;
