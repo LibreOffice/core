@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpbitmap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-04 15:18:00 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 12:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,10 +602,11 @@ long SvxBitmapTabPage::CheckChanges_Impl()
         if( bBmpChanged )
         {
             ResMgr* pMgr = DIALOG_MGR();
+            Image aWarningBoxImage = WarningBox::GetStandardImage();
             SvxMessDialog aMessDlg( DLGWIN,
                 String( ResId( RID_SVXSTR_BITMAP, pMgr ) ),
                 String( ResId( RID_SVXSTR_ASK_CHANGE_BITMAP, pMgr ) ),
-                &(WarningBox::GetStandardImage()) );
+                &aWarningBoxImage );
 
             aMessDlg.SetButtonText( MESS_BTN_1,
                                     String( ResId( RID_SVXSTR_CHANGE, pMgr ) ) );

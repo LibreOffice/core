@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphatch.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 14:49:07 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 12:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,10 +308,11 @@ long SvxHatchTabPage::CheckChanges_Impl()
         aLbHatchings.GetSelectEntryPos() != aLbHatchings.GetSavedValue() )
     {
         ResMgr* pMgr = DIALOG_MGR();
+        Image aWarningBoxImage = WarningBox::GetStandardImage();
         SvxMessDialog aMessDlg( DLGWIN,
             String( ResId( RID_SVXSTR_HATCH, pMgr ) ),
             String( ResId( RID_SVXSTR_ASK_CHANGE_HATCH, pMgr ) ),
-            &( WarningBox::GetStandardImage() ) );
+            &aWarningBoxImage );
         aMessDlg.SetButtonText( MESS_BTN_1,
                                 String( ResId( RID_SVXSTR_CHANGE, pMgr ) ) );
         aMessDlg.SetButtonText( MESS_BTN_2,

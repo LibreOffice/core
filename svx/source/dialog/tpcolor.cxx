@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 14:47:55 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 12:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,10 +338,11 @@ long SvxColorTabPage::CheckChanges_Impl()
             aString != aEdtName.GetText() )
         {
             ResMgr* pMgr = DIALOG_MGR();
+            Image aWarningBoxImage = WarningBox::GetStandardImage();
             SvxMessDialog aMessDlg( DLGWIN,
                 String( ResId( RID_SVXSTR_COLOR, pMgr ) ),
                 String( ResId( RID_SVXSTR_ASK_CHANGE_COLOR, pMgr ) ),
-                &( WarningBox::GetStandardImage() ) );
+                &aWarningBoxImage );
 
             aMessDlg.SetButtonText( MESS_BTN_1,
                                     String( ResId( RID_SVXSTR_CHANGE, pMgr ) ) );

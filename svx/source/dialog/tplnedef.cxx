@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplnedef.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 14:49:07 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 12:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,10 +297,11 @@ void SvxLineDefTabPage::CheckChanges_Impl()
         aMtrDistance.GetText()       != aMtrDistance.GetSavedValue() )
     {
         ResMgr* pMgr = DIALOG_MGR();
+        Image aWarningBoxImage = WarningBox::GetStandardImage();
         SvxMessDialog aMessDlg( DLGWIN,
             String( ResId( RID_SVXSTR_LINESTYLE, pMgr ) ),
             String( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, pMgr ) ),
-            &( WarningBox::GetStandardImage() ) );
+            &aWarningBoxImage );
 
         aMessDlg.SetButtonText( MESS_BTN_1,
                                 String( ResId( RID_SVXSTR_CHANGE, pMgr ) ) );
