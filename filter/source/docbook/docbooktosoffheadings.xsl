@@ -503,6 +503,9 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 	<xsl:when test="ancestor-or-self::footnote">
 	 	<xsl:attribute name= "text:style-name"><xsl:text>Footnote</xsl:text></xsl:attribute>
 	</xsl:when>
+	<xsl:when test="ancestor-or-self::listitem">
+	 	<xsl:attribute name= "text:style-name"><xsl:text>VarList Item</xsl:text></xsl:attribute>
+	</xsl:when>
 	<xsl:when test="ancestor-or-self::informaltable">
 		<xsl:if test="ancestor-or-self::informaltable">
 			<xsl:attribute name="text:style-name">Table Contents</xsl:attribute>
@@ -748,7 +751,7 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 
 <xsl:template match="itemizedlist">
 	<xsl:element name="text:unordered-list">
-	<xsl:attribute name="text:style-name">UnOrdered List</xsl:attribute>
+	<xsl:attribute name="text:style-name">Itemized List</xsl:attribute>
 			<xsl:attribute name="text:continue-numbering">false</xsl:attribute>
 			<xsl:apply-templates/>
 	</xsl:element>
