@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-31 07:46:26 $
+ *  last change: $Author: pb $ $Date: 2002-06-13 08:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,6 +469,9 @@ void ToolBox::InsertItem( const ResId& rResId, USHORT nPos )
 
     // ToolBox neu brechnen und neu ausgeben
     ImplInvalidate( bNewCalc );
+
+    // Notify
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nPos );
 }
 
 // -----------------------------------------------------------------------
@@ -484,6 +487,9 @@ void ToolBox::InsertItem( USHORT nItemId, const Image& rImage,
     mpItemList->Insert( new ImplToolItem( nItemId, rImage, nBits ), nPos );
 
     ImplInvalidate( TRUE );
+
+    // Notify
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nPos );
 }
 
 // -----------------------------------------------------------------------
@@ -500,6 +506,9 @@ void ToolBox::InsertItem( USHORT nItemId, const Image& rImage,
     mpItemList->Insert( new ImplToolItem( nItemId, rImage, ImplConvertMenuString( rText ), nBits ), nPos );
 
     ImplInvalidate( TRUE );
+
+    // Notify
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nPos );
 }
 
 // -----------------------------------------------------------------------
@@ -515,6 +524,9 @@ void ToolBox::InsertItem( USHORT nItemId, const XubString& rText,
     mpItemList->Insert( new ImplToolItem( nItemId, ImplConvertMenuString( rText ), nBits ), nPos );
 
     ImplInvalidate( TRUE );
+
+    // Notify
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nPos );
 }
 
 // -----------------------------------------------------------------------
@@ -538,6 +550,9 @@ void ToolBox::InsertWindow( USHORT nItemId, Window* pWindow,
         pWindow->Hide();
 
     ImplInvalidate( TRUE );
+
+    // Notify
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nPos );
 }
 
 // -----------------------------------------------------------------------
@@ -551,6 +566,9 @@ void ToolBox::InsertSpace( USHORT nPos )
     mpItemList->Insert( pItem, nPos );
 
     ImplInvalidate( FALSE );
+
+    // Notify
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nPos );
 }
 
 // -----------------------------------------------------------------------
@@ -566,6 +584,9 @@ void ToolBox::InsertSeparator( USHORT nPos, USHORT nPixSize )
     mpItemList->Insert( pItem, nPos );
 
     ImplInvalidate( FALSE );
+
+    // Notify
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nPos );
 }
 
 // -----------------------------------------------------------------------
@@ -579,6 +600,9 @@ void ToolBox::InsertBreak( USHORT nPos )
     mpItemList->Insert( pItem, nPos );
 
     ImplInvalidate( FALSE );
+
+    // Notify
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nPos );
 }
 
 // -----------------------------------------------------------------------
@@ -611,6 +635,9 @@ void ToolBox::RemoveItem( USHORT nPos )
         ImplInvalidate( bMustCalc );
 
         delete pItem;
+
+        // Notify
+        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMREMOVED, (void*) nPos );
     }
 }
 
@@ -632,6 +659,12 @@ void ToolBox::MoveItem( USHORT nItemId, USHORT nNewPos )
 
         // ToolBox neu ausgeben
         ImplInvalidate( FALSE );
+
+        // Notify
+        if( nPos < nNewPos )    // only send one event, all indices above this item are invalid anyway
+            ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMREMOVED, (void*) nPos );
+        else
+            ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nNewPos );
     }
 }
 
@@ -658,6 +691,9 @@ void ToolBox::CopyItem( const ToolBox& rToolBox, USHORT nItemId,
 
         // ToolBox neu ausgeben
         ImplInvalidate( FALSE );
+
+        // Notify
+        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, (void*) nPos );
     }
 }
 
@@ -697,6 +733,9 @@ void ToolBox::CopyItems( const ToolBox& rToolBox )
     }
 
     ImplInvalidate( TRUE, TRUE );
+
+    // Notify
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ALLITEMSCHANGED );
 }
 
 // -----------------------------------------------------------------------
@@ -721,6 +760,9 @@ void ToolBox::Clear()
     mnHighItemId = 0;
 
     ImplInvalidate( TRUE, TRUE );
+
+    // Notify
+    ImplCallEventListeners( VCLEVENT_TOOLBOX_ALLITEMSCHANGED );
 }
 
 // -----------------------------------------------------------------------
