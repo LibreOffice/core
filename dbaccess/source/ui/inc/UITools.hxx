@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-12 09:43:49 $
+ *  last change: $Author: oj $ $Date: 2002-11-14 07:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,24 @@ namespace dbaui
         @param  _rxFormatter
     */
     void setEvalDateFormatForFormatter(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter);
+
+    /** query for a type info which can be used to create a primary key column
+        @param  _rTypeInfo
+            The map which contains all available types.
+        @return
+            The type info which can be used to create a primary key column.
+    */
+    const OTypeInfo* queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo);
+
+    /** query for a specific type.
+        @param  _nDataType
+            The type we are searching.
+        @param  _rTypeInfo
+            The map which contains all available types.
+        @return
+            The type or <NULL/> if we can't find it.
+    */
+    const OTypeInfo* queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rTypeInfo);
 
 // .........................................................................
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:28:26 $
+ *  last change: $Author: oj $ $Date: 2002-11-14 07:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,8 @@
 #define PAGE_DOCUMENTLINKS              RID_PAGE_START + 14
 #define PAGE_LDAP                       RID_PAGE_START + 15
 #define TAB_PAGE_USERADMIN              RID_PAGE_START + 16
+#define PAGE_MYSQL                      RID_PAGE_START + 17
+#define TAB_PAGE_TABLEPRIVILEGES        RID_PAGE_START + 18
 
 //========================================================================
 // error boxes
@@ -352,6 +354,8 @@
 #define STR_QRY_TITLE                       RID_STR_GEN_START + 23
 #define STR_VIEW_TITLE                      RID_STR_GEN_START + 24
 #define STR_GENERAL_SDB_ERROR               RID_STR_GEN_START + 25
+#define STR_TABLEDESIGN_DUPLICATE_NAME      RID_STR_GEN_START + 26
+
 //========================================================================
 // untyped resources
 
@@ -371,6 +375,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.79  2002/08/19 07:28:26  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.78  2002/07/30 07:07:07  oj
  *  #101846# - STR_ERR_LIKE_COLUMN
  *
