@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-31 15:52:30 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 07:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,9 +253,9 @@ SfxObjectShell::~SfxObjectShell()
     DELETEX(pImp->pEventConfig);
     DELETEX(pImp->pImageManager);
     DELETEX(pImp->pTbxConfig);
+    DELETEX(pImp->pAccMgr);
     DELETEX(pImp->pCfgMgr);
     DELETEX(pImp->pReloadTimer );
-    DELETEX(pImp->pAccMgr);
 
     SfxApplication *pSfxApp = SFX_APP();
     if ( USHRT_MAX != pImp->nVisualDocumentNumber )
