@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:59:21 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,11 @@ class SwGrfFmtColl;
 class SwDoc;
 class SwOLENode;
 class SwOLELink;
-class SwOLELRUCache;
-
 
 class SwOLEListener_Impl;
 class SwOLEObj
 {
     friend class SwOLENode;
-
-    static SwOLELRUCache* pOLELRU_Cache;
 
     const SwOLENode* pOLENd;
     SwOLEListener_Impl* pListener;
@@ -87,7 +83,6 @@ class SwOLEObj
     //Entweder Ref oder Name sind bekannt, wenn nur der Name bekannt ist, wird
     //dir Ref bei Anforderung durch GetOleRef() vom Sfx besorgt.
     svt::EmbeddedObjectRef xOLERef;
-    //com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xOLERef;
     String aName;
 
     SwOLEObj( const SwOLEObj& rObj );   //nicht erlaubt.
@@ -100,16 +95,13 @@ public:
     SwOLEObj( const String &rName );
     ~SwOLEObj();
 
-    BOOL RemovedFromLRU();
-
+    BOOL UnloadObject();
     String GetDescription();
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetOleRef();
     svt::EmbeddedObjectRef& GetObject();
-//    const String &GetName() const { return aName; }
     const String& GetCurrentPersistName() const { return aName; }
-
     BOOL IsOleRef() const;  //Damit das Objekt nicht unnoetig geladen werden muss.
 #endif
 };
