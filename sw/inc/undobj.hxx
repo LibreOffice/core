@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:43:01 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,7 +642,16 @@ class SwUndoFmtAttr : public SwUndo
 
     int IsFmtInDoc( SwDoc* );       // ist das Attribut-Format noch im Doc ?
     void SaveFlyAnchor( BOOL bSaveDrawPt = FALSE );
-    void RestoreFlyAnchor( SwUndoIter& rIter );
+    // --> OD 2004-10-26 #i35443# - Add return value, type <bool>.
+    // Return value indicates, if anchor attribute is restored.
+    // Notes: - If anchor attribute is restored, all other existing attributes
+    //          are also restored.
+    //        - Anchor attribute isn't restored successfully, if it contains
+    //          an invalid anchor position and all other existing attributes
+    //          aren't restored.
+    //          This situation occurs for undo of styles.
+    bool RestoreFlyAnchor( SwUndoIter& rIter );
+    // <--
     void Init();
 
 public:
@@ -653,7 +662,9 @@ public:
                     BOOL bSaveDrawPt = TRUE );
     virtual ~SwUndoFmtAttr();
     virtual void Undo( SwUndoIter& );
+    // --> OD 2004-10-26 #i35443# - <Redo(..)> calls <Undo(..)> - nothing else
     virtual void Redo( SwUndoIter& );
+    // <--
     virtual void Repeat( SwUndoIter& );
     virtual SwRewriter GetRewriter() const;
 
