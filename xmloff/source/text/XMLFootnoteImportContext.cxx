@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteImportContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-19 13:16:33 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,20 +139,15 @@ const sal_Char sAPI_service_footnote[] = "com.sun.star.text.Footnote";
 const sal_Char sAPI_service_endnote[] = "com.sun.star.text.Endnote";
 
 enum XMLFootnoteChildToken {
-    XML_TOK_FTN_FOOTNOTE_CITATION,
-    XML_TOK_FTN_ENDNOTE_CITATION,
-    XML_TOK_FTN_FOOTNOTE_BODY,
-    XML_TOK_FTN_ENDNOTE_BODY
+    XML_TOK_FTN_NOTE_CITATION,
+    XML_TOK_FTN_NOTE_BODY
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aFootnoteChildTokenMap[] =
 {
-    { XML_NAMESPACE_TEXT, XML_FOOTNOTE_CITATION,
-      XML_TOK_FTN_FOOTNOTE_CITATION },
-    { XML_NAMESPACE_TEXT, XML_ENDNOTE_CITATION,
-      XML_TOK_FTN_ENDNOTE_CITATION },
-    { XML_NAMESPACE_TEXT, XML_FOOTNOTE_BODY, XML_TOK_FTN_FOOTNOTE_BODY },
-    { XML_NAMESPACE_TEXT, XML_ENDNOTE_BODY, XML_TOK_FTN_ENDNOTE_BODY },
+    { XML_NAMESPACE_TEXT, XML_NOTE_CITATION,
+      XML_TOK_FTN_NOTE_CITATION },
+    { XML_NAMESPACE_TEXT, XML_NOTE_BODY, XML_TOK_FTN_NOTE_BODY },
     XML_TOKEN_MAP_END
 };
 
@@ -178,7 +173,24 @@ void XMLFootnoteImportContext::StartElement(
     if( xFactory.is() )
     {
         // create endnote or footnote
-        sal_Bool bIsEndnote = IsXMLToken( GetLocalName(), XML_ENDNOTE );
+        sal_Bool bIsEndnote = sal_False;
+        sal_Int16 nLength = xAttrList->getLength();
+        for(sal_Int16 nAttr1 = 0; nAttr1 < nLength; nAttr1++)
+        {
+            OUString sLocalName;
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                GetKeyByAttrName( xAttrList->getNameByIndex(nAttr1),
+                                  &sLocalName );
+            if( XML_NAMESPACE_TEXT == nPrefix && IsXMLToken( sLocalName,
+                                                            XML_NOTE_CLASS ) )
+            {
+                const OUString& rValue = xAttrList->getValueByIndex( nAttr1 );
+                if( IsXMLToken( rValue, XML_ENDNOTE ) )
+                    bIsEndnote = sal_True;
+                break;
+            }
+        }
+
         Reference<XInterface> xIfc = xFactory->createInstance(
             bIsEndnote ?
             OUString(RTL_CONSTASCII_USTRINGPARAM(sAPI_service_endnote)) :
@@ -189,12 +201,11 @@ void XMLFootnoteImportContext::StartElement(
         rHelper.InsertTextContent(xTextContent);
 
         // process id attribute
-        sal_Int16 nLength = xAttrList->getLength();
-        for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+        for(sal_Int16 nAttr2 = 0; nAttr2 < nLength; nAttr2++)
         {
             OUString sLocalName;
             sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+                GetKeyByAttrName( xAttrList->getNameByIndex(nAttr2),
                                   &sLocalName );
 
             if ( (XML_NAMESPACE_TEXT == nPrefix) &&
@@ -208,7 +219,7 @@ void XMLFootnoteImportContext::StartElement(
 
                 // ... and insert into map
                 rHelper.InsertFootnoteID(
-                    xAttrList->getValueByIndex(nAttr),
+                    xAttrList->getValueByIndex(nAttr2),
                     nID);
             }
         }
@@ -264,8 +275,7 @@ SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
 
     switch(aTokenMap.Get(nPrefix, rLocalName))
     {
-        case XML_TOK_FTN_FOOTNOTE_CITATION:
-        case XML_TOK_FTN_ENDNOTE_CITATION:
+        case XML_TOK_FTN_NOTE_CITATION:
         {
             // little hack: we only care for one attribute of the citation
             //              element. We handle that here, and then return a
@@ -291,8 +301,7 @@ SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
             break;
         }
 
-        case XML_TOK_FTN_FOOTNOTE_BODY:
-        case XML_TOK_FTN_ENDNOTE_BODY:
+        case XML_TOK_FTN_NOTE_BODY:
             // return footnote body
             pContext = new XMLFootnoteBodyImportContext(GetImport(),
                                                         nPrefix, rLocalName);
