@@ -1,0 +1,330 @@
+/*************************************************************************
+ *
+ *  $RCSfile: mailmergechildwindow.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:13:11 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "mailmergechildwindow.hrc"
+#include "dbui.hrc"
+#include "helpid.h"
+#include <cmdid.h>
+
+#define WIDTH  100
+#define HEIGHT 16
+FloatingWindow DLG_MAILMERGECHILD
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WIDTH , HEIGHT ) ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Sizeable = FALSE ;
+    Zoomable = TRUE ;
+    HelpID = HID_MAILMERGECHILD ;
+    Hide = TRUE ;
+    Text [ de ] = "Serienbrief-Assistent";
+    Text [ en-US ] = "Mail Merge Wizard";
+    ToolBox TB_BACK
+    {
+        MenuStrings = TRUE ;
+        SVLook = TRUE ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = 1;
+                HelpID = HID_RETURN_TO_MAILMERGE ;
+                Left = TRUE;
+                Text [ de ] = "Zurück zum Serienbrief-Assistenten" ;
+                Text [ en-US ] = "Return to Mail Merge Wizard" ;
+            };
+        };
+    };
+    #define IMGLIST_IDS\
+        IdList = \
+        { \
+            FN_SHOW_ROOT; \
+        }; \
+        IdCount = 1
+
+    ImageList ILIST_TBX
+    {
+        Prefix = "sc";
+        MaskColor = IMAGE_MASK_COLOR;
+        IMGLIST_IDS;
+    };
+
+    ImageList ILIST_TBX_HC
+    {
+        Prefix = "sch";
+        MaskColor = IMAGE_MASK_COLOR ;
+        IMGLIST_IDS;
+    };
+};
+//FloatingWindow DLG_MM_SENDMAILS
+ModalDialog DLG_MM_SENDMAILS
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_SENDMAILS;
+    Size = MAP_APPFONT ( 250 , 221 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE;
+
+    Text [ de ] = "E-Mails versenden";
+    Text [ en-US ] = "Sending E-mail messages";
+
+    FixedLine  FL_STATUS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 238 , 8 ) ;
+        Text [ de ] = "Verbindungsstatus" ;
+        Text[ en-US ] = "Connection status";
+    };
+    FixedText  FT_STATUS
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 226 , 8 ) ;
+        Text [ de ] = "Verbindung zum Postausgansserver wird aufgebaut" ;
+        Text[ en-US ] = "Connection to outgoing mail server established";
+    };
+    String ST_SEND
+    {
+        Text [ de ] = "E-Mails werden versendet..." ;
+        Text[ en-US ] = "Sending e-mails...";
+    };
+    FixedLine  FL_TRANSFERSTATUS
+    {
+        Pos = MAP_APPFONT ( 6 , 28 ) ;
+        Size = MAP_APPFONT ( 238 , 8 ) ;
+        Text [ de ] = "Übertragungsstatus" ;
+        Text[ en-US ] = "Transfer status";
+    };
+    FixedText  FT_TRANSFERSTATUS
+    {
+        Pos = MAP_APPFONT ( 12, 39 ) ;
+        Size = MAP_APPFONT ( 110 , 8 ) ;
+        Text [ de ] = "%1 von %2 E-Mails wurden gesendet" ;
+        Text[ en-US ] = "%1 of %2 e-mails sent";
+    };
+    FixedText  FI_PAUSED
+    {
+        Pos = MAP_APPFONT ( 125, 39 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Hide = TRUE;
+        Text [ de ] = "Senden gestoppt" ;
+        Text[ en-US ] = "Sending paused";
+    };
+    Window    PB_PROGRESS
+    {
+        Pos = MAP_APPFONT ( 12 , 50 ) ;
+        Size = MAP_APPFONT ( 226 , 14 ) ;
+        Border = TRUE;
+    };
+    FixedText  FT_ERRORSTATUS
+    {
+        Pos = MAP_APPFONT ( 12 , 67 ) ;
+        Size = MAP_APPFONT ( 226 , 8 ) ;
+        Text [ de ] = "Nicht versendete E-Mails: %1" ;
+        Text[ en-US ] = "E-mails not sent: %1";
+    };
+    PushButton PB_DETAILS
+    {
+        Pos = MAP_APPFONT ( 188 , 81 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ] = "Mehr >>" ;
+        Text[ en-US ] = "More >>";
+    };
+    String  ST_LESS
+    {
+        Text [ de ] = "<< Weninger" ;
+        Text[ en-US ] = "<< Less";
+    };
+
+    Control LB_STATUS
+    {
+        Pos = MAP_APPFONT ( 12 , 101 ) ;
+        Size = MAP_APPFONT ( 226 , 80 ) ;
+        Border = TRUE;
+    };
+    FixedLine  FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 0 , 187 ) ;
+        Size = MAP_APPFONT ( 250 , 8 ) ;
+    };
+    PushButton PB_STOP
+    {
+        Pos = MAP_APPFONT ( 141 , 201 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ] = "Stopp" ;
+        Text[ en-US ] = "~Stop";
+    };
+    PushButton PB_CLOSE
+    {
+        Pos = MAP_APPFONT ( 194 , 201 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ] = "Schließen" ;
+        Text[ en-US ] = "C~lose";
+    };
+    String     ST_CONTINUE
+    {
+        Text [ de ] = "Fortsetzen" ;
+        Text[ en-US ] = "~Continue";
+    };
+    #define IMGLIST_IDS\
+        IdList = \
+        { \
+            FN_FORMULA_CANCEL ;\
+            FN_FORMULA_APPLY     ;\
+        }; \
+        IdCount = 2
+
+    ImageList ILIST
+    {
+        Prefix = "sc";
+        MaskColor = IMAGE_MASK_COLOR;
+        IMGLIST_IDS;
+    };
+
+    ImageList ILIST_HC
+    {
+        Prefix = "sch";
+        MaskColor = IMAGE_MASK_COLOR ;
+        IMGLIST_IDS;
+    };
+    String ST_TASK
+    {
+        Text [ de ] = "Aktion" ;
+        Text[ en-US ] = "Task";
+    };
+    String ST_STATUS
+    {
+        Text [ de ] = "Status" ;
+        Text[ en-US ] = "Status";
+    };
+    String ST_SENDINGTO
+    {
+        Text [ de ] = "Senden an: %1" ;
+        Text[ en-US ] = "Sending to: %1";
+    };
+    String ST_COMPLETED
+    {
+        Text [ de ] = "Erfolgreich versendet" ;
+        Text[ en-US ] = "Successfully sent";
+    };
+    String ST_FAILED
+    {
+        Text [ de ] = "Fehlgeschlagen (ungültige Adresse)" ;
+        Text[ en-US ] = "Sending failed (invalid address)";
+    };
+    String ST_TERMINATEQUERY
+    {
+        Text [ de ] = "In Ihrem %PRODUCTNAME Postausgang sind noch Nachrichten zu versenden.\nMöchten Sie das Programm trotzdem beenden?" ;
+        Text[ en-US ] = "There are still e-mail messages in your %PRODUCTNAME Outbox.\nWould you like to exit anyway?";
+    };
+};
+
+ModalDialog DLG_MM_SENDWARNING
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_SENDWARNING;
+    Size = MAP_APPFONT ( 240 , 137 ) ;
+    Moveable = TRUE ;
+
+    Text [ de ] = "E-Mails konnten nicht versandt werden";
+    Text[en-US] = "E-Mails could not be sent";
+    FixedImage IM_WARNING
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 30 , 30 ) ;
+    };
+    FixedText FI_WARNING
+    {
+        Pos = MAP_APPFONT ( 40 , 6 ) ;
+        Size = MAP_APPFONT ( 170 , 30 ) ;
+        WordBreak = TRUE;
+        Text [ de ] = "Folgender Fehler ist aufgetreten:" ;
+        Text[ en-US ] = "The following error occured:";
+    };
+    FixedText   FT_DETAILS
+    {
+        Pos = MAP_APPFONT (  40, 39 ) ;
+        Size = MAP_APPFONT (  174, 8 ) ;
+        Text [ de ] = "Details" ;
+        Text[ en-US ] = "Detailed information";
+    };
+    MultiLineEdit ED_DETAILS
+    {
+        Pos = MAP_APPFONT ( 40 , 50 ) ;
+        Size = MAP_APPFONT ( 194 , 50 ) ;
+        Border = TRUE;
+        Readonly = TRUE;
+    };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 0 , 106 ) ;
+        Size = MAP_APPFONT ( 240 , 8 ) ;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 95 ,  117) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE;
+    };
+};
+
