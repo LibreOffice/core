@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_rslb.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-18 10:14:25 $
+#   last change: $Author: vg $ $Date: 2005-03-23 15:51:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,7 @@ $(HIDRES$(TNR)PARTICLE): $(RESLIB$(TNR)HIDFILES)
     @echo ------------------------------
     @echo Making: $@
     @+$(IFEXIST) $@ $(THEN) $(RM) $@
-    $(TYPE) $(RESLIB$(TNR)HIDFILES) > $@.$(ROUT).tmp 
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(RESLIB$(TNR)HIDFILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES$(TNR)PARTICLE)
