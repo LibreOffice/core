@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-07 10:09:39 $
+ *  last change: $Author: bm $ $Date: 2001-05-09 14:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1996,7 +1996,7 @@ void SchXMLExport::SetProgress( sal_Int32 nPercentage )
 
 uno::Sequence< OUString > SAL_CALL SchXMLExport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Chart" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Chart.XMLExporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
