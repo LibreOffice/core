@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-18 08:13:57 $
+ *  last change: $Author: mba $ $Date: 2001-09-19 15:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1346,7 +1346,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
         return;
 
     // count (estimate) the number of filter tokens
-    sal_Int32 nTokens;
+    sal_Int32 nTokens=0;
     const sal_Unicode* pStart = rFilter.getStr();
     const sal_Unicode* pEnd = pStart + rFilter.getLength();
     while ( pStart != pEnd )
