@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-18 15:02:24 $
+ *  last change: $Author: aw $ $Date: 2002-11-07 12:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,13 @@ void FuConstRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         rAttr.Put( SdrTextMinFrameWidthItem( aSize.Width() ) );
         rAttr.Put( SdrTextAutoGrowHeightItem( TRUE ) );
         rAttr.Put( SdrTextAutoGrowWidthItem( TRUE ) );
-        rAttr.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
+
+        // #103516# Support full with for vertical caption objects, too
+        if(SID_DRAW_CAPTION == nSlotId)
+            rAttr.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
+        else
+            rAttr.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_BLOCK ) );
+
         rAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
         rAttr.Put( SdrTextLeftDistItem( 100 ) );
         rAttr.Put( SdrTextRightDistItem( 100 ) );
