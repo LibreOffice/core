@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: jb $ $Date: 2001-07-20 10:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,22 +122,41 @@ bool adjustToChanges(   NodeChangesInformation& rLocalChanges,
 //-----------------------------------------------------------------------------
 // class CommitHelper
 //-----------------------------------------------------------------------------
-
-CommitHelper::CommitHelper(Tree const& aTree)
+struct CommitHelper::Data
 {
-    m_pTree = TreeImplHelper::impl(aTree);
+    ElementList m_aRemovedElements; // filled to keep the elements alive 'till after notification
+};
+
+//-----------------------------------------------------------------------------
+CommitHelper::CommitHelper(Tree const& aTree)
+: m_pData(  )
+, m_pTree( TreeImplHelper::impl(aTree) )
+{
     OSL_ENSURE(m_pTree, "INTERNAL ERROR: Unexpected NULL tree in commit helper");
 }
 //-----------------------------------------------------------------------------
+CommitHelper::~CommitHelper()
+{
+}
 
+//-----------------------------------------------------------------------------
+void CommitHelper::reset()
+{
+    m_pData.reset();
+}
+
+//-----------------------------------------------------------------------------
 bool CommitHelper::prepareCommit(TreeChangeList& rChangeList)
 {
-    OSL_ENSURE(m_pTree,"Cannot commit without a tree");
+    OSL_ENSURE(m_pTree,"ERROR: CommitHelper: Cannot commit without a tree");
     if (m_pTree == NULL)
         return false;
 
+    OSL_ENSURE(m_pData.get() == NULL,"ERROR: CommitHelper: Need to reset before reusing");
+    m_pData.reset( new Data() );
+
     // get and check the changes
-    std::auto_ptr<SubtreeChange> pTreeChange(m_pTree->preCommitChanges());
+    std::auto_ptr<SubtreeChange> pTreeChange(m_pTree->preCommitChanges(m_pData->m_aRemovedElements));
     if (pTreeChange.get() == NULL)
         return false;
 

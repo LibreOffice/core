@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:46 $
+ *  last change: $Author: jb $ $Date: 2001-07-20 10:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,14 @@
 #ifndef CONFIGMGR_ROOTTREE_HXX_
 #define CONFIGMGR_ROOTTREE_HXX_
 
-#include <vector>
+#ifndef CONFIGMGR_API_APITYPES_HXX_
+#include "apitypes.hxx" // for NotCopyable ...
+#endif
+
+#ifndef INCLUDED_MEMORY
+#include <memory>
+#define INCLUDED_MEMORY
+#endif
 
 namespace configmgr
 {
@@ -93,20 +100,28 @@ namespace configmgr
                                         TemplateProvider const& aTemplateProvider);
 
 //-----------------------------------------------------------------------------
-        class CommitHelper
+        class CommitHelper : NotCopyable
         {
-            TreeImpl* m_pTree;
+            struct Data;
+
+            std::auto_ptr<Data> m_pData;
+            TreeImpl*           m_pTree;
         public:
             CommitHelper(Tree const& aTree);
+            ~CommitHelper();
 
             // collect all changes into rChangeList
             bool prepareCommit(TreeChangeList& rChangeList);
+
             // finish and clean up the changes in rChangeList after they are integrated
             void finishCommit(TreeChangeList& rChangeList);
             // restore the changes in rChangeList as pending
             void revertCommit(TreeChangeList& rChangeList);
             // throw away and clean up the changes in rChangeList after a commit failed
             void failedCommit(TreeChangeList& rChangeList);
+
+            // dispose of auxiliary data for a commit operation
+            void reset();
         };
 
 //-----------------------------------------------------------------------------
