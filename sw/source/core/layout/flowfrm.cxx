@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-14 14:16:02 $
+ *  last change: $Author: ama $ $Date: 2001-07-16 13:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1789,7 +1789,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
 
         rThis.Paste( pNewUpper );
 
-        SwPageFrm *pNewPage = pNewUpper->FindPageFrm();
+        SwPageFrm *pNewPage = rThis.FindPageFrm();
         if( pNewPage != pOldPage )
         {
             rThis.Prepare( PREP_BOSS_CHGD, (const void*)pOldPage, FALSE );
