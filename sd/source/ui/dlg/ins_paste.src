@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ins_paste.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-28 20:19:52 $
+ *  last change: $Author: vg $ $Date: 2002-06-10 15:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ ModalDialog DLG_INSERT_PASTE
         Text [ portuguese ] = "� ~frente" ;
         Text [ finnish ] = "~Ennen" ;
         Text [ danish ] = "foran" ;
-        Text [ french ] = "A~vant" ;
+        Text [ french ] = "Avant" ;
         Text [ swedish ] = "~framf�r" ;
         Text [ dutch ] = "~ervoor" ;
         Text [ spanish ] = "De~lante" ;
@@ -153,12 +153,12 @@ ModalDialog DLG_INSERT_PASTE
         Text = "da~hinter" ;
         Text [ ENGLISH ] = "~behind" ;
         Text [ norwegian ] = "~bak" ;
-        Text [ italian ] = "~Dietro" ;
+        Text [ italian ] = "Dietro" ;
         Text [ portuguese_brazilian ] = "~atr?s" ;
         Text [ portuguese ] = "~atr�s" ;
         Text [ finnish ] = "~J�lkeen" ;
         Text [ danish ] = "efter" ;
-        Text [ french ] = "~Apr�s" ;
+        Text [ french ] = "Apr�s" ;
         Text [ swedish ] = "~bakom" ;
         Text [ dutch ] = "e~rachter" ;
         Text [ spanish ] = "de~tr�s" ;
@@ -181,4 +181,8 @@ ModalDialog DLG_INSERT_PASTE
     Text[ spanish ] = "Insertar diapositivas";
     Text[ korean ] = "슬라이드 삽입";
     Text[ chinese_traditional ] = "插入投影片";
+    Text[ french ] = "Insertion de diapos";
+    Text[ italian ] = "Inserisci diapositiva";
+    Text[ japanese ] = "スライドの挿入";
+    Text[ chinese_simplified ] = "插入幻灯片";
 };
