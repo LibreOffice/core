@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:40:36 $
+ *  last change: $Author: oj $ $Date: 2002-11-15 12:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,6 +772,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
         {0,0},
     };
 
+    OSL_ENSURE(sizeof(aItemInfos)/sizeof(aItemInfos[0]) == DSID_LAST_ITEM_ID,"Invlaid Ids!");
     _rpPool = new SfxItemPool(String::CreateFromAscii("DSAItemPool"), DSID_FIRST_ITEM_ID, DSID_LAST_ITEM_ID,
         aItemInfos, _rppDefaults);
     _rpPool->FreezeIdRanges();
@@ -2150,6 +2151,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.81  2002/08/19 07:40:36  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.80  2002/07/25 07:01:22  oj
  *  #95146# new SfxItems for autoinc
  *
