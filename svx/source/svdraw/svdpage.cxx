@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: cl $ $Date: 2001-01-28 16:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1771,6 +1771,11 @@ uno::Reference< uno::XInterface > SdrPage::createUnoPage()
 #endif
         ;
     return xInt;
+}
+
+SfxStyleSheet* SdrPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
+{
+    return pObj->GetStyleSheet();
 }
 
 #ifdef GCC
