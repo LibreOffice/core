@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-15 13:02:37 $
+ *  last change: $Author: nf $ $Date: 2001-05-17 10:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1425,7 +1425,7 @@ BOOL Export::WriteExportList( ResData *pResData, ExportList *pExportList,
                         sOutput += sTimeStamp;
 
                         if ( bUTF8 )
-                            sOutput = UTF8Converter::ConvertToUTF8( sOutput, GetCharSet( LangId[ i ] ));
+                            sOutput = UTF8Converter::ConvertToUTF8( sOutput, GetCharSet( LangId[ j ] ));
 
                         aOutput.WriteLine( sOutput );
                     }
