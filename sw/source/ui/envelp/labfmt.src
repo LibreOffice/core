@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:16:47 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ TabPage TP_LAB_FMT
         Text[ czech ] = "Vodorovná rozteč";
         Text[ hebrew ] = "‮מרווח אופקי‬";
         Text[ hindi ] = "स~मतल पिच";
+        Text[ slovak ] = "Vodo~rovný posun";
     };
     MetricField FLD_HDIST
     {
@@ -166,6 +167,7 @@ TabPage TP_LAB_FMT
         Text[ czech ] = "Svislá rozteč";
         Text[ hebrew ] = "‮מרווח אנכי‬";
         Text[ hindi ] = "~लंबरूप पिच";
+        Text[ slovak ] = "Z~vislý posun";
     };
     MetricField FLD_VDIST
     {
@@ -213,6 +215,7 @@ TabPage TP_LAB_FMT
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "~चौड़ाई";
+        Text[ slovak ] = "~Šírka";
     };
     MetricField FLD_WIDTH
     {
@@ -260,6 +263,7 @@ TabPage TP_LAB_FMT
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
+        Text[ slovak ] = "~Výška";
     };
     MetricField FLD_HEIGHT
     {
@@ -307,6 +311,7 @@ TabPage TP_LAB_FMT
         Text[ czech ] = "Levý okraj";
         Text[ hebrew ] = "‮שוליים אנכיים‬";
         Text[ hindi ] = "~बायाँ पृष्ठ-प्रान्त";
+        Text[ slovak ] = "Ľa~vý okraj";
     };
     MetricField FLD_LEFT
     {
@@ -356,6 +361,7 @@ TabPage TP_LAB_FMT
         Text[ czech ] = "Horní okraj";
         Text[ hebrew ] = "‮שוליים אופקיים‬";
         Text[ hindi ] = "~ऊपरी पृष्ठ-प्रान्त";
+        Text[ slovak ] = "~Horný okraj";
     };
     MetricField FLD_UPPER
     {
@@ -405,6 +411,7 @@ TabPage TP_LAB_FMT
         Text[ czech ] = "Sloupce";
         Text[ hebrew ] = "‮טורים‬";
         Text[ hindi ] = "~स्तंभें";
+        Text[ slovak ] = "~Stĺpce";
     };
     NumericField FLD_COLUMNS
     {
@@ -451,6 +458,7 @@ TabPage TP_LAB_FMT
         Text[ czech ] = "Řádky";
         Text[ hebrew ] = "‮שורות‬";
         Text[ hindi ] = "पंक्ति~याँ";
+        Text[ slovak ] = "Ria~dky";
     };
     NumericField FLD_ROWS
     {
@@ -494,6 +502,7 @@ TabPage TP_LAB_FMT
         Text[ czech ] = "Uložit...";
         Text[ hebrew ] = "‮שמירה‬";
         Text[ hindi ] = "~संचित करो...";
+        Text[ slovak ] = "~Uložiť...";
     };
 };
  // String *******************************************************************
@@ -527,6 +536,7 @@ String STR_HDIST
     Text[ czech ] = "Vodorovná rozteč";
     Text[ hebrew ] = "H. Abstand";
     Text[ hindi ] = "H. पिच";
+    Text[ slovak ] = "Vodorovný rozstup";
 };
 String STR_VDIST
 {
@@ -558,6 +568,7 @@ String STR_VDIST
     Text[ czech ] = "Svislá rozteč";
     Text[ hebrew ] = "V. Abstand";
     Text[ hindi ] = "V. पिच";
+    Text[ slovak ] = "Zvislý rozstup";
 };
 String STR_WIDTH
 {
@@ -589,6 +600,7 @@ String STR_WIDTH
     Text[ czech ] = "Šířka";
     Text[ hebrew ] = "‮רוחב‬";
     Text[ hindi ] = "चौड़ाई";
+    Text[ slovak ] = "Šírka";
 };
 String STR_HEIGHT
 {
@@ -620,6 +632,7 @@ String STR_HEIGHT
     Text[ czech ] = "Výška";
     Text[ hebrew ] = "‮גובה‬";
     Text[ hindi ] = "ऊँचाई";
+    Text[ slovak ] = "Výška";
 };
 String STR_LEFT
 {
@@ -651,6 +664,7 @@ String STR_LEFT
     Text[ czech ] = "Levý okraj";
     Text[ hebrew ] = "Rand links";
     Text[ hindi ] = "बायाँ पृष्ठ-प्रान्त";
+    Text[ slovak ] = "Ľavý okraj";
 };
 String STR_UPPER
 {
@@ -682,6 +696,7 @@ String STR_UPPER
     Text[ czech ] = "Horní okraj";
     Text[ hebrew ] = "Rand oben";
     Text[ hindi ] = "ऊपरी पृष्ठ-प्रान्त";
+    Text[ slovak ] = "Horný okraj";
 };
 String STR_COLS
 {
@@ -713,6 +728,7 @@ String STR_COLS
     Text[ czech ] = "Sloupce";
     Text[ hebrew ] = "‮טורים‬";
     Text[ hindi ] = "स्तंभें";
+    Text[ slovak ] = "Stĺpce";
 };
 String STR_ROWS
 {
@@ -744,6 +760,7 @@ String STR_ROWS
     Text[ czech ] = "Řádky";
     Text[ hebrew ] = "Zeilen";
     Text[ hindi ] = "पंक्तियाँ";
+    Text[ slovak ] = "Riadky";
 };
 ModalDialog DLG_SAVE_LABEL
 {
@@ -785,6 +802,7 @@ ModalDialog DLG_SAVE_LABEL
         Text[ czech ] = "Značka";
         Text[ hebrew ] = "~Marke";
         Text[ hindi ] = "व्यापारिक चिन्ह";
+        Text[ slovak ] = "Značka";
     };
     ComboBox CB_MAKE
     {
@@ -826,6 +844,7 @@ ModalDialog DLG_SAVE_LABEL
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "~Typ";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "T~yp";
     };
     Edit ED_TYPE
     {
@@ -863,6 +882,7 @@ ModalDialog DLG_SAVE_LABEL
         Text[ czech ] = "Volby";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
+        Text[ slovak ] = "Nastavenia";
     };
     OKButton PB_OK
     {
@@ -916,6 +936,7 @@ ModalDialog DLG_SAVE_LABEL
         Message[ czech ] = "Popisek \"%1 / %2\" již existuje.\nChcete jej přepsat?";
         Message[ hebrew ] = "Das Etikett \"%1 / %2\" ist bereits vorhanden.\nMöchten Sie die Daten überschreiben?";
         Message[ hindi ] = "लेबिल \"%1 / %2\" पहिले से ही अस्तित्व में है ।\nआप ओवररइट् करना चाहते है?";
+        Message[ slovak ] = "Popisok \"%1 / %2\" už existuje.\nChcete ho prepísať?";
     };
     Text[ english_us ] = "Save Label Format";
     Text[ portuguese ] = "Guardar formato de etiqueta";
@@ -941,7 +962,10 @@ ModalDialog DLG_SAVE_LABEL
     Text[ czech ] = "Uložit formát popisku";
     Text[ hebrew ] = "Etikettenformat speichern";
     Text[ hindi ] = "लेबिल रचना संचित करो";
+    Text[ slovak ] = "Uložiť formát popisku";
 };
+
+
 
 
 
