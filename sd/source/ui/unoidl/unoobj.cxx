@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:28:38 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2204,8 +2204,6 @@ void SdXShape::setOldTextEffect( const com::sun::star::uno::Any& aValue )
         EffectSequence::iterator aIterOnlyText( ImplFindEffect( pMainSequence, xShape, ShapeAnimationSubType::ONLY_TEXT ) );
         const EffectSequence::iterator aEnd( pMainSequence->getEnd() );
 
-        CustomAnimationEffectPtr pEffect;
-
         CustomAnimationTextGroupPtr pGroup;
 
         // is there already an animation text group for this shape?
@@ -2243,7 +2241,7 @@ void SdXShape::setOldTextEffect( const com::sun::star::uno::Any& aValue )
 
                     SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
                     if( pPage && pPage->GetPresChange() != PRESCHANGE_MANUAL )
-                        pEffect->setNodeType( EffectNodeType::AFTER_PREVIOUS );
+                        pShapeEffect->setNodeType( EffectNodeType::AFTER_PREVIOUS );
                 }
             }
 
