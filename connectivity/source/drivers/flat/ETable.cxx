@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:21:22 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,10 +419,8 @@ void OFlatTable::construct()
     INetURLObject aURL;
     aURL.SetURL(getEntry());
 
-    if(aURL.getExtension() != m_pConnection->getExtension())
+    if(aURL.getExtension() != rtl::OUString(m_pConnection->getExtension()))
         aURL.setExtension(m_pConnection->getExtension());
-
-    //  Content aContent(aURL.GetMainURL());
 
     String aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
