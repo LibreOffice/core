@@ -50,6 +50,7 @@ mkdir: %_DEST%\xml%_EXT%\office\ldap
 ..\data\org\openoffice\Office\Writer.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\Writer.xcd
 ..\data\org\openoffice\Office\WriterWeb.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\WriterWeb.xcd
 ..\data\org\openoffice\Office\Commands.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\Commands.xcd
+..\data\org\openoffice\Office\ProtocolHandler.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\ProtocolHandler.xcd
 ..\data\org\openoffice\Inet.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Inet.xcd
 ..\data\org\openoffice\ucb\Store.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\ucb\Store.xcd
 ..\data\org\openoffice\Setup.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Setup.xcd
@@ -77,6 +78,7 @@ mkdir: %_DEST%\xml%_EXT%\office\ldap
 ..\%__SRC%\misc\instance\org\openoffice\Office\Writer.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Writer.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\WriterWeb.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\WriterWeb.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\Commands.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Commands.xml
+..\%__SRC%\misc\instance\org\openoffice\Office\ProtocolHandler.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\ProtocolHandler.xml
 ..\%__SRC%\misc\instance\org\openoffice\Inet.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Inet.xml
 ..\%__SRC%\misc\instance\org\openoffice\ucb\Configuration.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\ucb\Configuration.xml
 ..\%__SRC%\misc\instance\org\openoffice\ucb\Hierarchy.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\ucb\Hierarchy.xml
@@ -105,6 +107,7 @@ mkdir: %_DEST%\xml%_EXT%\office\ldap
 ..\%__SRC%\misc\template\org\openoffice\Office\Writer.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Writer.xml
 ..\%__SRC%\misc\template\org\openoffice\Office\WriterWeb.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\WriterWeb.xml
 ..\%__SRC%\misc\template\org\openoffice\Office\Commands.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Commands.xml
+..\%__SRC%\misc\template\org\openoffice\Office\ProtocolHandler.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\ProtocolHandler.xml
 ..\%__SRC%\misc\template\org\openoffice\Inet.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Inet.xml
 ..\%__SRC%\misc\template\org\openoffice\ucb\Configuration.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\ucb\Configuration.xml
 ..\%__SRC%\misc\template\org\openoffice\ucb\Hierarchy.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\ucb\Hierarchy.xml
