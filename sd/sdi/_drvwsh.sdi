@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-06 13:37:48 $
+ *  last change: $Author: mba $ $Date: 2002-08-29 13:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ interface DrawView : View
         ExecMethod = ExecCtrl ;
         StateMethod = GetCtrlState ;
     ]
-    SfxVoidItem RevertToSaved SID_RELOAD ( )  // ole : no, status : ?
+    SID_RELOAD  // ole : no, status : ?
     [
         GroupId = GID_DOCUMENT ;
         ExecMethod = ExecCtrl ;
@@ -257,9 +257,7 @@ interface DrawView : View
     ]
 */
 
-    SfxVoidItem Paragraph SID_PARA_DLG // ole : no, status : ?
-    (
-    )
+    SID_PARA_DLG // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
@@ -277,10 +275,8 @@ interface DrawView : View
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SfxVoidItem InsertGraphic SID_INSERT_GRAPHIC // ole : no, status : todo
-    (
-        SfxStringItem GraficName ID_VAL_DUMMY1;
-    )
+
+    SID_INSERT_GRAPHIC // ole : no, status : todo
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
@@ -303,9 +299,8 @@ interface DrawView : View
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SfxVoidItem InsertChart SID_INSERT_DIAGRAM // ole : yes, status : ?
-    (
-    )
+
+    SID_INSERT_DIAGRAM // ole : yes, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
@@ -615,9 +610,7 @@ interface DrawView : View
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
-    SfxVoidItem Delete SID_DELETE // ole : no, status : ?
-    (
-    )
+    SID_DELETE // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
@@ -686,7 +679,7 @@ interface DrawView : View
     ]
 */
 
-    SfxBoolItem Rotate SID_OBJECT_ROTATE // ole : no, status : ?
+    SID_OBJECT_ROTATE // ole : no, status : ?
     [
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
@@ -1151,7 +1144,8 @@ interface DrawView : View
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
     ]
-    TbxImageItem Alignment SID_OBJECT_ALIGN // ole : no, status : ?
+
+    TbxImageItem ObjectAlign SID_OBJECT_ALIGN // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
@@ -1161,6 +1155,7 @@ interface DrawView : View
         ToolBoxConfig ;
         MenuConfig = TRUE;
     ]
+
     SID_ZOOM_TOOLBOX // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
@@ -1229,8 +1224,9 @@ interface DrawView : View
         ExecMethod = FuPermanent ;
     ]
     // #98721#
-    SfxBoolItem CreateFieldControl SID_FM_CREATE_FIELDCONTROL
+    SID_FM_CREATE_FIELDCONTROL
     [
+    SlotType = SfxBoolItem ;
         ExecMethod = FuPermanent ;
     ]
     SID_ATTR_YEAR2000
@@ -1315,15 +1311,13 @@ interface DrawView : View
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SfxTemplateItem TemplateFamily2 SID_STYLE_FAMILY2 // ole : no, status : ?
+    SID_STYLE_FAMILY2 // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         Export = FALSE ;
     ]
-    SfxVoidItem NewTemplate SID_STYLE_NEW // ole : no, status : ?
-    (
-    )
+    SID_STYLE_NEW // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
@@ -1334,50 +1328,42 @@ interface DrawView : View
     [
         StateMethod = GetAttrState ;
     ]
-    SfxVoidItem EditTemplate SID_STYLE_EDIT // ole : no, status : ?
-    (
-    )
+    SID_STYLE_EDIT // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
         Cachable ;
     ]
-    SfxVoidItem DeleteTemplate SID_STYLE_DELETE // ole : no, status : ?
-    (
-    )
+    SID_STYLE_DELETE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
         Cachable ;
     ]
-    SfxTemplateItem ApplyTemplate SID_STYLE_APPLY // ole : no, status : ?
+    SID_STYLE_APPLY // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
         Cachable ;
     ]
-    SfxBoolItem TemplateWatercan SID_STYLE_WATERCAN // ole : no, status : ?
+    SID_STYLE_WATERCAN // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
         Cachable ;
     ]
-    SfxVoidItem TemplateNewByExample SID_STYLE_NEW_BY_EXAMPLE // ole : no, status : ?
-    (
-    )
+    SID_STYLE_NEW_BY_EXAMPLE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
         GroupId = GID_DOCUMENT ;
         Cachable ;
     ]
-    SfxVoidItem TemplateUpdateByExample SID_STYLE_UPDATE_BY_EXAMPLE // ole : no, status : ?
-    (
-    )
+    SID_STYLE_UPDATE_BY_EXAMPLE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
@@ -1406,13 +1392,13 @@ interface DrawView : View
         ExecMethod = ExecRuler ;
         StateMethod = GetRulerState ;
     ]
-    SvxLongLRSpaceItem RulerLRSpace SID_ATTR_LONG_LRSPACE // ole : no, status : ?
+    SID_ATTR_LONG_LRSPACE // ole : no, status : ?
     [
         ExecMethod = ExecRuler ;
         StateMethod = GetRulerState ;
         Cachable ;
     ]
-    SvxLongULSpaceItem RulerULSpace SID_ATTR_LONG_ULSPACE // ole : no, status : ?
+    SID_ATTR_LONG_ULSPACE // ole : no, status : ?
     [
         ExecMethod = ExecRuler ;
         StateMethod = GetRulerState ;
@@ -1496,17 +1482,13 @@ interface DrawView : View
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
     ]
-    SfxVoidItem ShowRuler SID_RULER // ole : no, status : play rec
-    (
-            SfxBoolItem     IsActive    ID_VAL_ISACTIVE;
-    )
+    SID_RULER // ole : no, status : play rec
     [
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
         GroupId = GID_DOCUMENT ;
-        SlotType = SfxBoolItem ;
         Cachable ;
-        MenuConfig = TRUE ;
+    MenuConfig = TRUE ;
     ]
     SID_TEXTALIGNMENT // ole : no, status : ?
     [
@@ -1588,7 +1570,7 @@ interface DrawView : View
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SfxUInt32Item GalleryFormats SID_GALLERY_FORMATS // ole : no, status : ?
+    SID_GALLERY_FORMATS // ole : no, status : ?
     [
         ExecMethod = ExecGallery ;
         StateMethod = GetGalleryState ;
@@ -1687,12 +1669,7 @@ interface DrawView : View
      // Problem mit SID_ATTR_FILL_COLOR:
      // frueher XFillColor, jetzt Property FillColor (Get/Set)
      // deswegen Export = FALSE !
-    SfxVoidItem SetFillColor SID_SETFILLCOLOR // ole : no, status : play rec
-    (
-        SfxUInt32Item Red       ID_VAL_RED;
-        SfxUInt32Item Green     ID_VAL_GREEN;
-        SfxUInt32Item Blue      ID_VAL_BLUE;
-    )
+    SID_SETFILLCOLOR // ole : no, status : play rec
     [
         ExecMethod = AttrExec ;
         StateMethod = AttrState ;

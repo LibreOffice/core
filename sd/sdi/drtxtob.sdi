@@ -2,7 +2,7 @@
 
 shell SdDrawTextObjectBar
 {
-    SfxTemplateItem ApplyTemplate SID_STYLE_APPLY  // ole : ?, status : ?
+    SID_STYLE_APPLY  // ole : ?, status : ?
     [
         ExecMethod = Execute;
         StateMethod = GetAttrState;
@@ -64,63 +64,63 @@ shell SdDrawTextObjectBar
         StateMethod = GetAttrState;
     ]
 
-    SfxBoolItem AdjustLeft SID_ATTR_PARA_ADJUST_LEFT  // ole : ?, status : ?
+    SID_ATTR_PARA_ADJUST_LEFT  // ole : ?, status : ?
     [
         ExecMethod = Execute;
         StateMethod = GetAttrState;
 //      Cachable, AutoUpdate;
     ]
 
-    SfxBoolItem AdjustCenter SID_ATTR_PARA_ADJUST_CENTER  // ole : ?, status : ?
+    SID_ATTR_PARA_ADJUST_CENTER  // ole : ?, status : ?
     [
         ExecMethod = Execute;
         StateMethod = GetAttrState;
 //      Cachable, AutoUpdate;
     ]
 
-    SfxBoolItem AdjustRight SID_ATTR_PARA_ADJUST_RIGHT  // ole : ?, status : ?
+    SID_ATTR_PARA_ADJUST_RIGHT  // ole : ?, status : ?
     [
         ExecMethod = Execute;
         StateMethod = GetAttrState;
 //      Cachable, AutoUpdate;
     ]
 
-    SfxBoolItem AdjustBlock SID_ATTR_PARA_ADJUST_BLOCK  // ole : ?, status : ?
+    SID_ATTR_PARA_ADJUST_BLOCK  // ole : ?, status : ?
     [
         ExecMethod = Execute;
         StateMethod = GetAttrState;
 //      Cachable, AutoUpdate;
     ]
 
-    SfxBoolItem ParaLeftToRight SID_ATTR_PARA_LEFT_TO_RIGHT // ole : ?, status : ?
+    SID_ATTR_PARA_LEFT_TO_RIGHT // ole : ?, status : ?
     [
         ExecMethod = Execute;
         StateMethod = GetAttrState;
 //      Cachable, AutoUpdate;
     ]
 
-    SfxBoolItem ParaRightToLeft SID_ATTR_PARA_RIGHT_TO_LEFT // ole : ?, status : ?
+    SID_ATTR_PARA_RIGHT_TO_LEFT // ole : ?, status : ?
     [
         ExecMethod = Execute;
         StateMethod = GetAttrState;
 //      Cachable, AutoUpdate;
     ]
 
-    SfxBoolItem LineSpacing100 SID_ATTR_PARA_LINESPACE_10  // ole : ?, status : ?
+    SID_ATTR_PARA_LINESPACE_10  // ole : ?, status : ?
     [
         ExecMethod = Execute;
         StateMethod = GetAttrState;
 //      Cachable, AutoUpdate;
     ]
 
-    SfxBoolItem LineSpacing150 SID_ATTR_PARA_LINESPACE_15  // ole : ?, status : ?
+    SID_ATTR_PARA_LINESPACE_15  // ole : ?, status : ?
     [
         ExecMethod = Execute;
         StateMethod = GetAttrState;
 //      Cachable, AutoUpdate;
     ]
 
-    SfxBoolItem LineSpacing200 SID_ATTR_PARA_LINESPACE_20  // ole : ?, status : ?
+    SID_ATTR_PARA_LINESPACE_20  // ole : ?, status : ?
     [
         ExecMethod = Execute;
         StateMethod = GetAttrState;
@@ -176,12 +176,12 @@ shell SdDrawTextObjectBar
         ExecMethod = Execute;
         StateMethod = GetAttrState;
     ]
-    SfxBoolItem TextdirectionLeftToRight SID_TEXTDIRECTION_LEFT_TO_RIGHT  // ole : ?, status : ?
+    SID_TEXTDIRECTION_LEFT_TO_RIGHT  // ole : ?, status : ?
     [
         ExecMethod = Execute;
         StateMethod = GetAttrState;
     ]
-    SfxBoolItem TextdirectionTopToBottom SID_TEXTDIRECTION_TOP_TO_BOTTOM  // ole : ?, status : ?
+    SID_TEXTDIRECTION_TOP_TO_BOTTOM  // ole : ?, status : ?
     [
         ExecMethod = Execute;
         StateMethod = GetAttrState;

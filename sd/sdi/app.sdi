@@ -4,9 +4,7 @@ interface StarImpress : Module
     uuid ( "A1814AE0-07D4-11CF-89CA-008029E4B0B1" )
 ]
 {
-    SfxVoidItem NewDoc SID_NEWDOC // ole : ?, status : ?
-    (
-    )
+    SID_NEWDOC // ole : ?, status : ?
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

@@ -5189,31 +5189,6 @@ TbxImageItem Objects3DToolbox SID_DRAWTBX_3D_OBJECTS
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Options SID_WORKINGAREA
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_OPTIONS;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem OriginalSize SID_ORIGINAL_SIZE
 ()
 [
