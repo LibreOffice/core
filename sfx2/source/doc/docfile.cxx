@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-11 11:11:31 $
+ *  last change: $Author: mba $ $Date: 2001-09-14 13:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1569,18 +1569,16 @@ void SfxMedium::GetMedium_Impl()
 
             if ( pPostDataItem )
             {
-                DBG_ASSERT( !bIsWritable && bAllowReadOnlyMode, "Strange open mode!" );
+                DBG_ASSERT( bAllowReadOnlyMode, "Strange open mode!" );
                 bIsWritable = FALSE;
+                GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
+                SetOpenMode(SFX_STREAM_READONLY, sal_False);
 
                 ::rtl::OUString aMimeType;
                 if ( pContentTypeItem )
                     aMimeType = pContentTypeItem->GetValue();
                 else
                     aMimeType = ::rtl::OUString::createFromAscii( "application/x-www-form-urlencoded" );
-
-                aProps.realloc(2);
-                aProps[1].Name = ::rtl::OUString::createFromAscii("ContentType");
-                aProps[1].Value <<= aMimeType;
 
                 Reference < XInputStream > xPostData;
                 if ( pPostDataItem )
@@ -1590,7 +1588,7 @@ void SfxMedium::GetMedium_Impl()
                 }
 
                 pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes(
-                        GetContent(), aProps, xPostData, xInteractionHandler, pHandler );
+                        GetContent(), aReferer, aMimeType, xPostData, xInteractionHandler, pHandler );
             }
             else
             {
