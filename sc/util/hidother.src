@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:15:23 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,6 +379,7 @@ hidspecial HID_FUNC_VORLAGE      { HelpID = HID_FUNC_VORLAGE; };
 hidspecial HID_FUNC_DDE      { HelpID = HID_FUNC_DDE; };
 hidspecial HID_FUNC_TABELLE      { HelpID = HID_FUNC_TABELLE; };
 hidspecial HID_FUNC_TABELLEN         { HelpID = HID_FUNC_TABELLEN; };
+hidspecial HID_FUNC_HYPERLINK        { HelpID = HID_FUNC_HYPERLINK; };
 hidspecial HID_FUNC_CODE         { HelpID = HID_FUNC_CODE; };
 hidspecial HID_FUNC_DM       { HelpID = HID_FUNC_DM; };
 hidspecial HID_FUNC_ZEICHEN      { HelpID = HID_FUNC_ZEICHEN; };
