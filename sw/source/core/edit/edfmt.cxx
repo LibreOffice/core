@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edfmt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:24:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 #endif
 #include "ndtxt.hxx"    // Fuer GetXXXFmt
 #include "hints.hxx"
-
 
 /*************************************
  * Formate
@@ -222,31 +221,10 @@ BOOL SwEditShell::IsUsed( const SwModify& rModify ) const
     return pDoc->IsUsed( rModify );
 }
 
-
-USHORT SwEditShell::GetPoolId( const String& rName,
-                                SwGetPoolIdFromName eFlags ) const
-{
-    return pDoc->GetPoolId( rName, eFlags );
-}
-
-
-const SvStringsDtor& SwEditShell::GetChrFmtNmArray() const
-{
-    return pDoc->GetChrFmtNmArray();
-}
-
-
-const SvStringsDtor& SwEditShell::GetHTMLChrFmtNmArray() const
-{
-    return pDoc->GetHTMLChrFmtNmArray();
-}
-
-
 const SwFlyFrmFmt* SwEditShell::FindFlyByName( const String& rName, BYTE nNdTyp ) const
 {
     return pDoc->FindFlyByName(rName, nNdTyp);
 }
-
 
 SwCharFmt* SwEditShell::FindCharFmtByName( const String& rName ) const
 {
