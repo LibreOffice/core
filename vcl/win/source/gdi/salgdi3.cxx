@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:08:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1995,7 +1995,7 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     ScopedFont aOldFont(maGraphicsData);
     SetFont( &aIFSD, 0 );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     // get font metrics
     TEXTMETRICA aWinMetric;
     if( !::GetTextMetricsA( maGraphicsData.mhDC, &aWinMetric ) )
