@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 14:54:18 $
+ *  last change: $Author: mt $ $Date: 2001-02-28 17:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "ShowThousandsSeparator" ), BASEPROPERTY_NUMSHOWTHOUSANDSEP,::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "Sizeable" ),           BASEPROPERTY_SIZEABLE,          ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "Spin" ),               BASEPROPERTY_SPIN,              ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
-            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "State" ),              BASEPROPERTY_STATE,             ::getCppuType((const sal_Int16*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
+            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "State" ),              BASEPROPERTY_STATE,             ::getCppuType((const sal_Int16*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT, sal_True ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "StrictFormat" ),       BASEPROPERTY_STRICTFORMAT,      ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "StringItemList" ),     BASEPROPERTY_STRINGITEMLIST,    ::getCppuType((::com::sun::star::uno::Sequence< ::rtl::OUString >*)0),      ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "Tabstop" ),            BASEPROPERTY_TABSTOP,           ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT|::com::sun::star::beans::PropertyAttribute::MAYBEVOID ),
