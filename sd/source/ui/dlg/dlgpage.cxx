@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:43:36 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
 #define ITEMID_HATCH_LIST       SID_HATCH_LIST
 #define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
-
+#include <svtools/intitem.hxx> //add CHINA001
 #ifndef _SVX_PAGE_HXX
 #include <svx/page.hxx>
 #endif
@@ -113,7 +113,8 @@ SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet*
     FreeResource();
 
     AddTabPage( RID_SVXPAGE_PAGE, SvxPageDescPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_AREA, SvxAreaTabPage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_AREA);//CHINA001 AddTabPage( RID_SVXPAGE_AREA, SvxAreaTabPage::Create, 0 );
+
 
     nDlgType = 1; // Vorlagen-Dialog
     nPageType = 0;
@@ -144,18 +145,27 @@ void SdPageDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
         ( (SvxPageDescPage&) rPage).SetPaperFormatRanges( SVX_PAPER_A0, SVX_PAPER_E );
         break;
     case RID_SVXPAGE_AREA:
-        ( (SvxAreaTabPage&) rPage ).SetColorTable( pColorTab );
-        ( (SvxAreaTabPage&) rPage ).SetGradientList( pGradientList );
-        ( (SvxAreaTabPage&) rPage ).SetHatchingList( pHatchingList );
-        ( (SvxAreaTabPage&) rPage ).SetBitmapList( pBitmapList );
-        ( (SvxAreaTabPage&) rPage ).SetPageType( &nPageType );
-        ( (SvxAreaTabPage&) rPage ).SetDlgType( &nDlgType );
-        ( (SvxAreaTabPage&) rPage ).SetPos( &nPos );
-        ( (SvxAreaTabPage&) rPage ).SetGrdChgd( &nGradientListState );
-        ( (SvxAreaTabPage&) rPage ).SetHtchChgd( &nHatchingListState );
-        ( (SvxAreaTabPage&) rPage ).SetBmpChgd( &nBitmapListState );
-        ( (SvxAreaTabPage&) rPage ).SetColorChgd( &nColorTableState );
-        ( (SvxAreaTabPage&) rPage ).Construct();
+//CHINA001      ( (SvxAreaTabPage&) rPage ).SetColorTable( pColorTab );
+//CHINA001      ( (SvxAreaTabPage&) rPage ).SetGradientList( pGradientList );
+//CHINA001      ( (SvxAreaTabPage&) rPage ).SetHatchingList( pHatchingList );
+//CHINA001      ( (SvxAreaTabPage&) rPage ).SetBitmapList( pBitmapList );
+//CHINA001      ( (SvxAreaTabPage&) rPage ).SetPageType( &nPageType );
+//CHINA001      ( (SvxAreaTabPage&) rPage ).SetDlgType( &nDlgType );
+//CHINA001      ( (SvxAreaTabPage&) rPage ).SetPos( &nPos );
+//CHINA001      ( (SvxAreaTabPage&) rPage ).SetGrdChgd( &nGradientListState );
+//CHINA001      ( (SvxAreaTabPage&) rPage ).SetHtchChgd( &nHatchingListState );
+//CHINA001      ( (SvxAreaTabPage&) rPage ).SetBmpChgd( &nBitmapListState );
+//CHINA001      ( (SvxAreaTabPage&) rPage ).SetColorChgd( &nColorTableState );
+//CHINA001      ( (SvxAreaTabPage&) rPage ).Construct();
+            SfxAllItemSet aSet(*(GetRefreshedSet()->GetPool()));
+            aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE));
+            aSet.Put (SvxGradientListItem(pGradientList,SID_GRADIENT_LIST));
+            aSet.Put (SvxHatchListItem(pHatchingList,SID_HATCH_LIST));
+            aSet.Put (SvxBitmapListItem(pBitmapList,SID_BITMAP_LIST));
+            aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
+            aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
+            aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,nPos));
+            rPage.PageCreated(aSet);
         break;
     }
 }
