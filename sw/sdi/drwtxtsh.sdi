@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.sdi,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-12-06 11:24:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,13 @@ interface TextDrawText : Selection
         ExecMethod = ExecDrawLingu ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+
+        SID_HANGUL_HANJA_CONVERSION  // api:
+        [
+                ExecMethod = ExecDrawLingu ;
+                StateMethod = GetState ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
 
     FN_DRAWTEXT_ATTR_DLG
     [
