@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-03-16 12:45:29 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_simplified ] = "´æÅÌ";
         Text[ russian ] = "Ñîõğàíèòü";
         Text[ polish ] = "Zapisz";
-        Text[ japanese ] = "•Û‘¶‚·‚é";
+        Text[ japanese ] = "•Û‘¶";
         Text[ chinese_traditional ] = "Àx¦s";
         Text[ arabic ] = "ÍİÙ";
         Text[ greek ] = "ÁğïèŞêåõóç";
@@ -148,7 +148,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_traditional ] = "¥ı½s¿èÄİ©Ê(~E)";
         Text[ arabic ] = "ÊÍÑíÑ ÎÕÇÆÕ ÇáãÓÊäÏ ŞÈá ÇáÍİÙ";
         Text[ greek ] = "Åğåîåñã. ~éäéïôŞôùí åããñÜöïõ ğñéí ôçí áğïèŞêåõóç";
-        Text[ korean ] = "¹®¼­ µî·ÏÁ¤º¸ »çÀü ÆíÁı";
+        Text[ korean ] = "¹®¼­ µî·ÏÁ¤º¸ »çÀü ÆíÁı(~E)";
         Text[ turkish ] = "Önce özellikleri düzenle";
     };
     CheckBox BTN_BACKUP
@@ -168,11 +168,11 @@ TabPage RID_SFXPAGE_SAVE
         Text [ dutch ] = "Altijd een ~reservekopie maken" ;
         Text [ spanish ] = "Cre~ar siempre copia de seguridad" ;
         Text [ english_us ] = "Al~ways create backup copy" ;
-        Text[ chinese_simplified ] = "×ÜÊÇ½¨Á¢°²È«±¸¼ş(~B)";
+        Text[ chinese_simplified ] = "×ÜÊÇ½¨Á¢°²È«±¸¼ş(~W)";
         Text[ russian ] = "Ñîçäàâàòü âñåãäà ğåçåğâíóş êîïèş";
         Text[ polish ] = "Zawsze ~utwórz kopiê zapasow¹";
         Text[ japanese ] = "íÊŞ¯¸±¯ÌßºËß°‚Ìì¬(~W)";
-        Text[ chinese_traditional ] = "Á`¬O²£¥Í¦w¥ş³Æ¥÷(~B)";
+        Text[ chinese_traditional ] = "Á`¬O²£¥Í¦w¥ş³Æ¥÷(~W)";
         Text[ arabic ] = "Úãá äÓÎÉ ÇÍÊíÇØíÉ ÏæãÇğ";
         Text[ greek ] = "ĞÜíôá äçìéïõñãßá áíôéãñÜöïõ á~óöáëåßáò";
         Text[ korean ] = "Ç×»ó ¹é¾÷ º¹»çÇÏ±â(~W)";
@@ -290,11 +290,11 @@ TabPage RID_SFXPAGE_SAVE
         Text [ danish ] = "Gem URLs relativt" ;
         Text [ portuguese_brazilian ] = "URLs relativ speichern" ;
         Text [ portuguese ] = "Guardar URLs relativamente" ;
-        Text[ chinese_simplified ] = "Ïà¶Ô´æÅÌ URL";
+        Text[ chinese_simplified ] = "´æÅÌÏà¶ÔµÄURLµØÖ·";
         Text[ russian ] = "Ñîõğàíÿòü URL îòíîñèòåëüíî";
-        Text[ polish ] = "Zapisz URL relatywnie";
-        Text[ japanese ] = "URL±ÄŞÚ½‚Ì‘Š‘Î•Û‘¶";
-        Text[ chinese_traditional ] = "¬Û¹ïÀx¦s URL";
+        Text[ polish ] = "Zapisz adresy URL w sposób relatywny";
+        Text[ japanese ] = "URL ±ÄŞÚ½‚Ì‘Š‘Î•Û‘¶";
+        Text[ chinese_traditional ] = "Àx¦s¬Û¹ï¦¡ URL ¦a§}";
         Text[ arabic ] = "ÍİÙ ÇáÜ URLs ÍİÙÇğ äÓÈíÇğ İí";
         Text[ greek ] = "Ó÷åôéêŞ áğïèŞêåõóç ôùí URL";
         Text[ korean ] = "URL »ó´ëÀû ÀúÀå";
