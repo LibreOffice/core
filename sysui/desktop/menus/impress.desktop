@@ -9,4 +9,4 @@ Exec=openoffice -impress %U
 TryExec=openoffice-impress
 MimeType=application/vnd.sun.xml.impress;application/vnd.sun.xml.impress.template;application/vnd.stardivision.impress;application/mspowerpoint
 Name=%PRODUCTNAME Impress
-Commment=Create a new presentation
+Comment=Create and edit presentations for slideshows, meeting and Web pages by using Impress.

@@ -9,4 +9,4 @@ Exec=openoffice -draw %U
 TryExec=openoffice-draw
 MimeType=application/vnd.sun.xml.draw;application/vnd.sun.xml.draw.template;application/vnd.stardivision.draw
 Name=%PRODUCTNAME Draw
-Comment=Create a new drawing
+Comment=Create and edit drawings, flow charts, and logos by using Draw.

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Encoding=UTF-8
-Terminal=none
+Terminal=false
 Icon=calc
 Type=Application
 Categories=Application;Office;
@@ -9,4 +9,4 @@ Exec=openoffice -calc %U
 TryExec=openoffice-calc
 MimeType=application/vnd.sun.xml.calc;application/vnd.sun.xml.calc.template;application/vnd.stardivision.calc;application/vnd.stardivision.chart;application/msexcel;application/vnd.ms-excel
 Name=%PRODUCTNAME Calc
-Comment=Create a new spreadsheet
+Comment=Perform calculation, analyze information and manage lists in spreadsheets by using Calc.
