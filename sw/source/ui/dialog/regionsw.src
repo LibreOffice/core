@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:03:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1061,29 +1061,30 @@ TabDialog DLG_INSERT_SECTION
                 PageResID = TP_SECTION_INDENTS;
                 Text = "Einz¸ge" ;
                 Text [ english_us ] = "Indents" ;
-                Text[ portuguese ] = "Indents";
-                Text[ russian ] = "Indents";
-                Text[ greek ] = "Indents";
-                Text[ dutch ] = "Indents";
+                Text[ portuguese ] = "AvanÁos";
+                Text[ russian ] = "ŒÚÒÚÛÔ˚";
+                Text[ greek ] = "≈ÛÔ˜›Ú";
+                Text[ dutch ] = "Inspringingen";
                 Text[ french ] = "Retraits";
                 Text[ spanish ] = "SangrÌas";
-                Text[ finnish ] = "Indents";
+                Text[ finnish ] = "Sisennykset";
                 Text[ italian ] = "Rientri";
-                Text[ czech ] = "Indents";
-                Text[ slovak ] = "Indents";
-                Text[ danish ] = "Indents";
+                Text[ czech ] = "Odsazen√≠";
+                Text[ slovak ] = "Odsadenie";
+                Text[ danish ] = "Indrykning";
                 Text[ swedish ] = "Indrag";
-                Text[ polish ] = "Indents";
-                Text[ portuguese_brazilian ] = "Indents";
+                Text[ polish ] = "WciÍcia";
+                Text[ portuguese_brazilian ] = "Recuos";
                 Text[ japanese ] = "„Ç§„É≥„Éá„É≥„Éà";
                 Text[ korean ] = "Îì§Ïó¨Ïì∞Í∏∞";
                 Text[ chinese_simplified ] = "Áº©Ëøõ";
                 Text[ chinese_traditional ] = "Á∏ÆÊéí";
-                Text[ turkish ] = "Indents";
-                Text[ arabic ] = "Indents";
-                Text[ hebrew ] = "Indents";
-                Text[ catalan ] = "Indents";
-                Text[ thai ] = "Indents";
+                Text[ turkish ] = "Girintiler";
+                Text[ arabic ] = "≈“«Õ« ";
+                Text[ hebrew ] = "‚ÄÆ◊õ◊†◊ô◊°◊ï◊™‚Ä¨";
+                Text[ catalan ] = "Sagnats";
+                Text[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡πÄ‡∏¢‡∏∑‡πâ‡∏≠‡∏á";
+                Text[ hindi ] = "‡§á‡§®‡•ç‡§°‡•á‡§®‡•ç‡§ü‡•ç‡§∏";
             };
             PageItem
             {
@@ -1452,29 +1453,30 @@ TabDialog DLG_SECTION_PROPERTIES
                 PageResID = TP_SECTION_INDENTS;
                 Text = "Einz¸ge" ;
                 Text [ english_us ] = "Indents" ;
-                Text[ portuguese ] = "Indents";
-                Text[ russian ] = "Indents";
-                Text[ greek ] = "Indents";
-                Text[ dutch ] = "Indents";
+                Text[ portuguese ] = "AvanÁos";
+                Text[ russian ] = "ŒÚÒÚÛÔ˚";
+                Text[ greek ] = "≈ÛÔ˜›Ú";
+                Text[ dutch ] = "Inspringingen";
                 Text[ french ] = "Retraits";
                 Text[ spanish ] = "SangrÌas";
-                Text[ finnish ] = "Indents";
+                Text[ finnish ] = "Sisennykset";
                 Text[ italian ] = "Rientri";
-                Text[ czech ] = "Indents";
-                Text[ slovak ] = "Indents";
-                Text[ danish ] = "Indents";
+                Text[ czech ] = "Odsazen√≠";
+                Text[ slovak ] = "Odsadenie";
+                Text[ danish ] = "Indrykning";
                 Text[ swedish ] = "Indrag";
-                Text[ polish ] = "Indents";
-                Text[ portuguese_brazilian ] = "Indents";
+                Text[ polish ] = "WciÍcia";
+                Text[ portuguese_brazilian ] = "Recuos";
                 Text[ japanese ] = "„Ç§„É≥„Éá„É≥„Éà";
                 Text[ korean ] = "Îì§Ïó¨Ïì∞Í∏∞";
                 Text[ chinese_simplified ] = "Áº©Ëøõ";
                 Text[ chinese_traditional ] = "Á∏ÆÊéí";
-                Text[ turkish ] = "Indents";
-                Text[ arabic ] = "Indents";
-                Text[ hebrew ] = "Indents";
-                Text[ catalan ] = "Indents";
-                Text[ thai ] = "Indents";
+                Text[ turkish ] = "Girintiler";
+                Text[ arabic ] = "≈“«Õ« ";
+                Text[ hebrew ] = "‚ÄÆ◊õ◊†◊ô◊°◊ï◊™‚Ä¨";
+                Text[ catalan ] = "Sagnats";
+                Text[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡πÄ‡∏¢‡∏∑‡πâ‡∏≠‡∏á";
+                Text[ hindi ] = "‡§á‡§®‡•ç‡§°‡•á‡§®‡•ç‡§ü‡•ç‡§∏";
             };
             PageItem
             {
@@ -2152,29 +2154,30 @@ TabPage TP_SECTION_INDENTS
         Size = MAP_APPFONT ( 173 , 8 ) ;
         Text = "Einzug" ;
         Text [ english_us ] = "Indent" ;
-        Text[ portuguese ] = "Indent";
-        Text[ russian ] = "Indent";
-        Text[ greek ] = "Indent";
-        Text[ dutch ] = "Indent";
+        Text[ portuguese ] = "AvanÁar";
+        Text[ russian ] = "ŒÚÒÚÛÔ";
+        Text[ greek ] = "≈ÛÔ˜ﬁ";
+        Text[ dutch ] = "Inspringen";
         Text[ french ] = "Retrait";
         Text[ spanish ] = "SangrÌa";
-        Text[ finnish ] = "Indent";
+        Text[ finnish ] = "Sisenn‰";
         Text[ italian ] = "Rientro";
-        Text[ czech ] = "Indent";
-        Text[ slovak ] = "Indent";
-        Text[ danish ] = "Indent";
+        Text[ czech ] = "Odsadit";
+        Text[ slovak ] = "Odsadenie";
+        Text[ danish ] = "Indryk";
         Text[ swedish ] = "Indrag";
-        Text[ polish ] = "Indent";
-        Text[ portuguese_brazilian ] = "Indent";
+        Text[ polish ] = "WciÍcie";
+        Text[ portuguese_brazilian ] = "Recuo";
         Text[ japanese ] = "„Ç§„É≥„Éá„É≥„Éà";
         Text[ korean ] = "Îì§Ïó¨Ïì∞Í∏∞";
         Text[ chinese_simplified ] = "Áº©Ëøõ";
         Text[ chinese_traditional ] = "Á∏ÆÊéí";
-        Text[ turkish ] = "Indent";
-        Text[ arabic ] = "Indent";
-        Text[ hebrew ] = "Indent";
-        Text[ catalan ] = "Indent";
-        Text[ thai ] = "Indent";
+        Text[ turkish ] = "Girinti";
+        Text[ arabic ] = "≈“«Õ…";
+        Text[ hebrew ] = "‚ÄÆ◊õ◊†◊ô◊°◊î‚Ä¨";
+        Text[ catalan ] = "Sagnat";
+        Text[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡πÄ‡∏¢‡∏∑‡πâ‡∏≠‡∏á";
+        Text[ hindi ] = "‡§á‡§®‡•ç‡§°‡•á‡§®‡•ç‡§ü";
     };
     FixedText FT_BEFORE
     {
@@ -2191,8 +2194,8 @@ TabPage TP_SECTION_INDENTS
         Text[ spanish ] = "~Antes de la secciÛn";
         Text[ finnish ] = "~Before section";
         Text[ italian ] = "~Prima della sezione";
-        Text[ czech ] = "~Before section";
-        Text[ slovak ] = "~Before section";
+        Text[ czech ] = "P≈ôed sekc√≠";
+        Text[ slovak ] = "Pred o~blas≈•";
         Text[ danish ] = "~Before section";
         Text[ swedish ] = "~Fˆre omrÂde";
         Text[ polish ] = "~Before section";
@@ -2206,6 +2209,7 @@ TabPage TP_SECTION_INDENTS
         Text[ hebrew ] = "~Before section";
         Text[ catalan ] = "~Before section";
         Text[ thai ] = "~Before section";
+        Text[ hindi ] = "~Before section";
     };
     MetricField MF_BEFORE
     {
@@ -2238,8 +2242,8 @@ TabPage TP_SECTION_INDENTS
         Text[ spanish ] = "~DespuÈs de la secciÛn";
         Text[ finnish ] = "~After section";
         Text[ italian ] = "~Dopo la sezione";
-        Text[ czech ] = "~After section";
-        Text[ slovak ] = "~After section";
+        Text[ czech ] = "Po sekci";
+        Text[ slovak ] = "Z~a oblas≈•";
         Text[ danish ] = "~After section";
         Text[ swedish ] = "~Efter omrÂde";
         Text[ polish ] = "~After section";
@@ -2253,6 +2257,7 @@ TabPage TP_SECTION_INDENTS
         Text[ hebrew ] = "~After section";
         Text[ catalan ] = "~After section";
         Text[ thai ] = "~After section";
+        Text[ hindi ] = "~After section";
     };
     MetricField MF_AFTER
     {
@@ -2277,4 +2282,16 @@ TabPage TP_SECTION_INDENTS
         Size = MAP_APPFONT ( 68 , 112 ) ;
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
