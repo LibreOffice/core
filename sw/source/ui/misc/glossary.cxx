@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:35:57 $
+ *  last change: $Author: os $ $Date: 2000-10-12 15:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,9 +216,6 @@
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
-#ifndef _MODOPT_HXX
-#include <modcfg.hxx>
-#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -382,7 +379,9 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     aNameED.SetMaxTextLen(LONG_LENGTH);
     FreeResource();
 
-    aShowExampleCB.Check( SW_MOD()->GetModuleConfig()->IsShowAutoTextPreview());
+    const OfaAutoCorrCfg* pCfg = OFF_APP()->GetAutoCorrConfig();
+
+    aShowExampleCB.Check( pCfg->IsAutoTextPreview());
     ShowPreviewHdl(&aShowExampleCB);
 
     bIsDocReadOnly = pSh->GetView().GetDocShell()->IsReadOnly() ||
@@ -407,7 +406,9 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
 
 SwGlossaryDlg::~SwGlossaryDlg()
 {
-    SW_MOD()->GetModuleConfig()->SetShowAutoTextPreview(aShowExampleCB.IsChecked());
+    OfaAutoCorrCfg* pCfg = OFF_APP()->GetAutoCorrConfig();
+    pCfg->SetAutoTextPreview(aShowExampleCB.IsChecked()) ;
+
     aCategoryBox.Clear();
     aEditBtn.SetPopupMenu(0);
     delete pMenu;
@@ -1341,96 +1342,5 @@ void SwGlossaryDlg::ShowAutoText(const String& rGroup, const String& rShortName)
         }
     }
 }
-/*--------------------------------------------------------------------
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:44  hr
-      initial import
-
-      Revision 1.154  2000/09/18 16:05:56  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.153  2000/08/31 06:33:07  jp
-      use CharClass instead of international
-
-      Revision 1.152  2000/08/16 07:33:39  os
-      #71166# handling of readonly AutoText groups improved
-
-      Revision 1.151  2000/07/03 08:54:04  jp
-      must changes for VCL
-
-      Revision 1.150  2000/06/07 13:20:47  os
-      using UCB
-
-      Revision 1.149  2000/05/16 17:30:17  jp
-      Changes for Unicode
-
-      Revision 1.148  2000/05/16 09:15:13  os
-      project usr removed
-
-      Revision 1.147  2000/05/10 11:53:43  os
-      Basic API removed
-
-      Revision 1.146  2000/04/19 12:56:35  os
-      include sfx2/filedlg.hxx removed
-
-      Revision 1.145  2000/04/18 15:08:17  os
-      UNICODE
-
-      Revision 1.144  2000/03/23 08:42:49  os
-      UNO III
-
-      Revision 1.143  2000/03/14 10:53:19  os
-      #73958# select non-readonly group after start up
-
-      Revision 1.142  2000/03/06 08:50:43  os
-      #70359# GetGroupName: if no title is set use group name
-
-      Revision 1.141  2000/03/03 15:17:02  os
-      StarView remainders removed
-
-      Revision 1.140  2000/02/14 14:40:48  os
-      #70473# Unicode
-
-      Revision 1.139  2000/02/10 10:34:32  os
-      #70359# titles added to AutoText groups
-
-      Revision 1.138  2000/02/03 11:07:05  jp
-      Task #72579#: SwTextblocks - use the new method GetValidShortCut
-
-      Revision 1.137  2000/02/02 17:03:02  jp
-      Task #72579#: WW8Reader can import glossaries
-
-      Revision 1.136  2000/02/02 11:23:21  os
-      #72564# select one of the created groups; #72563# D'n'D: set copy mode for readonly blocks
-
-      Revision 1.135  1999/12/29 07:58:25  os
-      #71320# flags for AutoText preview in module config
-
-      Revision 1.134  1999/12/27 10:35:11  os
-      #71262# Undo in SwOneExampleFrame
-
-      Revision 1.133  1999/12/15 15:32:24  os
-      #70234# ExampleFrame: OnlineLayout, ContextMenu, disabled
-
-      Revision 1.132  1999/11/25 13:11:59  hr
-      #65293#: cast
-
-      Revision 1.131  1999/11/19 16:40:24  os
-      modules renamed
-
-      Revision 1.130  1999/11/19 11:47:36  os
-      #67410# consider path index selection restore
-
-      Revision 1.129  1999/11/19 11:11:52  os
-      #69862# Example window corrected
-
-      Revision 1.128  1999/11/16 16:09:00  jp
-      Init: call resize at SvTreeListBox
-
-      Revision 1.127  1999/10/21 17:48:59  jp
-      have to change - SearchFile with SfxIniManager, dont use SwFinder for this
-
- --------------------------------------------------------------------*/
 
 
