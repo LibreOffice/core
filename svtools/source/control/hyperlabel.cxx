@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperlabel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 14:00:46 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,8 +286,6 @@ namespace svt
         SetText(_rText);
         Show();
     }
-
-
 
 
 
