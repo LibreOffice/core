@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rngitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:01 $
+ *  last change: $Author: pluby $ $Date: 2000-12-15 02:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
@@ -66,7 +67,6 @@
 
 #ifndef NUMTYPE
 
-#include "rngitem.hxx"
 #include "sbx.hxx"
 #include "args.hxx"
 
@@ -78,11 +78,13 @@ DBG_NAME(SfxRangeItem);
 #define NUMTYPE USHORT
 #define SfxXRangeItem SfxRangeItem
 #define SfxXRangesItem SfxUShortRangesItem
+#include "rngitem.hxx"
 #include "rngitem.cxx"
 
 #define NUMTYPE ULONG
 #define SfxXRangeItem SfxULongRangeItem
 #define SfxXRangesItem SfxULongRangesItem
+#include "rngitem.hxx"
 #include "rngitem.cxx"
 
 #else
@@ -297,6 +299,9 @@ SvStream& SfxXRangesItem::Store( SvStream &rStream, USHORT nItemVersion ) const
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:59:01  hr
+    initial import
+
     Revision 1.24  2000/09/18 14:13:35  willem.vandorp
     OpenOffice header added.
 
