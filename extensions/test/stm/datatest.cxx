@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datatest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:19:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ INT32 ODataStreamTest::test(    const UString& TestName,
     if( L"com.sun.star.io.DataInputStream" == TestName ||
         L"com.sun.star.io.DataOutputStream" == TestName )  {
 
-        TRY {
+        try {
             if( 0 == hTestHandle ) {
                 testInvariant( TestName , TestObject );
             }
@@ -247,13 +247,12 @@ INT32 ODataStreamTest::test(    const UString& TestName,
                 }
             }
         }
-        CATCH( Exception , e )  {
+        catch( Exception& e )  {
             BUILD_ERROR( 0 , UStringToString( e.getName() , CHARSET_SYSTEM ).GetCharStr() );
         }
-        AND_CATCH_ALL() {
+        catch(...) {
             BUILD_ERROR( 0 , "unknown exception (Exception is  not base class)" );
         }
-        END_CATCH;
 
         hTestHandle ++;
 
@@ -331,37 +330,35 @@ void ODataStreamTest::testSimple(   const XDataInputStreamRef &rInput,
     ERROR_ASSERT( rInput->readUTF() == str , "error reading 64k block" );
 
     rOutput->closeOutput();
-    TRY {
+    try {
         rInput->readLong();
         ERROR_ASSERT( 0 , "eof-exception does not occur !" );
     }
-    CATCH ( IOException ,e ){
+    catch ( IOException& e ){
         //ok
         e.getName();
     }
-    AND_CATCH_ALL() {
+    catch(...)  {
         ERROR_ASSERT( 0 , "wrong exception after reading beyond eof" );
     }
-    END_CATCH;
 
     ERROR_ASSERT( ! rInput->readBytes( Sequence<BYTE> (1) , 1 ),
                     "stream must be on eof !" );
 
     rInput->closeInput();
 
-    TRY {
+    try {
         rOutput->writeByte( 1 );
         ERROR_ASSERT( 0 , "writing still possible though chain must be interrupted" );
     }
-    CATCH( IOException , e )
+    catch( IOException& e )
     {
         e.getName();
         // ok
     }
-    AND_CATCH_ALL() {
+    catch( ... ) {
         ERROR_ASSERT( 0 , "IOException  expected, but another exception was thrown" );
     }
-    END_CATCH;
 
 }
 
@@ -764,7 +761,7 @@ INT32 OObjectStreamTest::test(  const UString& TestName,
     if( L"com.sun.star.io.ObjectInputStream" == TestName ||
         L"com.sun.star.io.ObjectOutputStream" == TestName )  {
 
-        TRY {
+        try {
             if( 0 == hTestHandle ) {
                 testInvariant( TestName , TestObject );
             }
@@ -834,13 +831,12 @@ INT32 OObjectStreamTest::test(  const UString& TestName,
 
             }
         }
-        CATCH( Exception , e )  {
+        catch( Exception& e )  {
             BUILD_ERROR( 0 , UStringToString( e.getName() , CHARSET_SYSTEM ).GetCharStr() );
         }
-        AND_CATCH_ALL() {
+        catch(...) {
             BUILD_ERROR( 0 , "unknown exception (Exception is  not base class)" );
         }
-        END_CATCH;
 
         hTestHandle ++;
 
@@ -940,12 +936,12 @@ void OObjectStreamTest::testObject(     const XObjectOutputStreamRef &rOut,
 
         ERROR_ASSERT( 0 != rIn->available() , "no data arrived at input" );
 
-        TRY
+        try
         {
             XPersistObjectRef xReadPersistRef = rIn->readObject();
             ERROR_ASSERT( 0 , "expected exception not thrown" );
         }
-        CATCH( IOException , e )
+        catch( IOException& e )
         {
             // all is ok
         }
