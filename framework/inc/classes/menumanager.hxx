@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2001-04-18 19:44:21 $
+ *  last change: $Author: cd $ $Date: 2001-05-02 05:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 #endif
 
 #ifndef __SGI_STL_VECTOR
-#include <vector>
+#include <stl/vector>
 #endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
@@ -153,6 +153,9 @@ class MenuManager : public XSTATUSLISTENER      ,
         DECL_LINK( Deactivate, Menu * );
 
     private:
+        void UpdateSpecialFileMenu( Menu* pMenu );
+        void UpdateSpecialWindowMenu( Menu* pMenu );
+
         PopupMenu* CreateBookmarkMenu( const ::rtl::OUString aURL, const ::rtl::OUString aReferer );
 
         struct MenuItemHandler
@@ -162,6 +165,9 @@ class MenuManager : public XSTATUSLISTENER      ,
 
             USHORT                  nItemId;
             ::rtl::OUString         aMenuItemURL;
+            ::rtl::OUString         aFilter;
+            ::rtl::OUString         aPassword;
+            ::rtl::OUString         aTitle;
             MenuManager*            pSubMenuManager;
             REFERENCE< XDISPATCH >  xMenuItemDispatch;
         };
@@ -173,6 +179,7 @@ class MenuManager : public XSTATUSLISTENER      ,
         sal_Bool                            m_bDeleteChildren;
         sal_Bool                            m_bActive;
         sal_Bool                            m_bIsBookmarkMenu;
+        ::rtl::OUString                     m_aMenuItemCommand;
         Menu*                               m_pVCLMenu;
         REFERENCE< XFRAME >                 m_xFrame;
         ::std::vector< MenuItemHandler* >   m_aMenuItemHandlerVector;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: as $ $Date: 2001-04-19 12:38:21 $
+#   last change: $Author: cd $ $Date: 2001-05-02 05:44:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,9 @@ TARGET=				framework
 USE_DEFFILE=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
 NO_BSYMBOLIC=		TRUE
+COMP1TYPELIST=		fwk
+COMP2TYPELIST=		fwl
+COMP3TYPELIST=		lgd
 
 # --- Settings -----------------------------------------------------
 
@@ -113,7 +116,10 @@ SHL1OBJS=		$(SLO)$/registerservices.obj		\
                 $(SLO)$/resetableguard.obj			\
                 $(SLO)$/omenudispatcher.obj			\
                 $(SLO)$/menumanager.obj				\
-                $(SLO)$/bmkmenu.obj
+                $(SLO)$/bmkmenu.obj					\
+                $(SLO)$/menudocumenthandler.obj		\
+                $(SLO)$/menuconfiguration.obj		\
+                $(SLO)$/attributelist.obj
 
 SHL1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
