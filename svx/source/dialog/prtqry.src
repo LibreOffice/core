@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtqry.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:20:13 $
+ *  last change: $Author: rt $ $Date: 2000-12-06 14:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ String RID_SVXSTR_QRY_PRINT_MSG
     Text[ english_us ] = "Do you want to print the selection or the entire document?";
     Text[ chinese_simplified ] = "ÄúÒª´òÓ¡Ñ¡ÖĞµÄ²¿·Ö»¹ÊÇÒª´òÓ¡Õû¸öÎÄµµ£¿";
     Text[ russian ] = "Âû õîòèòå íàïå÷àòàòü âåñü äîêóìåíò èëè òîëüêî âûäåëåíííûé ôğàãìåíò?";
-    Text[ polish ] = "Czy chcesz wydrukowaæ zaznaczony obszar, czy ca³y dokument?";
+    Text[ polish ] = "Czy wydrukowaæ tylko zaznaczony obszar, czy ca³y dokument?";
     Text[ japanese ] = "ˆóü‚Í‘I‘ğ‚µ‚½•”•ª‚É‚µ‚Ü‚·‚©AÄŞ·­ÒİÄ‘S‘Ì‚µ‚Ü‚·‚©H";
     Text[ chinese_traditional ] = "­n¦C¦L¿ï¨úªº³¡¥÷ÁÙ¬O­n¦C¦L¾ã­Ó¤å¥ó¡H";
     Text[ arabic ] = "åá ÊÑíÏ ØÈÇÚÉ ÇáÊÍÏíÏ İŞØ¡ Ãã ÇáãÓÊäÏ ÈÃßãáå¿";
