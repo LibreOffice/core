@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:34:37 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,6 +533,25 @@ IMPL_LINK( SwNavigationPI, ToolBoxClickHdl, ToolBox *, pBox )
     const USHORT nId = pBox->GetCurItemId();
     switch (nId)
     {
+        case FN_GLOBAL_UPDATE:
+        case FN_GLOBAL_OPEN:
+        {
+            aGlobalTree.TbxMenuHdl(nId, pBox);
+        }
+        break;
+    }
+
+    return TRUE;
+}
+
+/*-----------------13.07.04 -------------------
+ ----------------------------------------------*/
+
+IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
+{
+    const USHORT nId = pBox->GetCurItemId();
+    switch (nId)
+    {
         case FN_DROP_REGION:
         {
             PopupMenu *pMenu = new PopupMenu;
@@ -546,8 +565,11 @@ IMPL_LINK( SwNavigationPI, ToolBoxClickHdl, ToolBox *, pBox )
             }
             pMenu->CheckItem( nRegionMode + 1 );
             pMenu->SetSelectHdl(LINK(this, SwNavigationPI, MenuSelectHdl));
+            pBox->SetItemDown( nId, TRUE );
             pMenu->Execute( pBox,
-                    pBox->GetItemRect(FN_DROP_REGION).BottomLeft());
+                    pBox->GetItemRect(FN_DROP_REGION),
+                    POPUPMENU_EXECUTE_DOWN );
+            pBox->SetItemDown( nId, FALSE );
             pBox->EndSelection();
             delete pMenu;
             pBox->Invalidate();
@@ -563,26 +585,23 @@ IMPL_LINK( SwNavigationPI, ToolBoxClickHdl, ToolBox *, pBox )
             }
             pMenu->CheckItem( aContentTree.GetOutlineLevel() + 100 );
             pMenu->SetSelectHdl(LINK(this, SwNavigationPI, MenuSelectHdl));
+            pBox->SetItemDown( nId, TRUE );
             pMenu->Execute( pBox,
-                    pBox->GetItemRect(FN_OUTLINE_LEVEL).BottomLeft());
+                    pBox->GetItemRect(FN_OUTLINE_LEVEL),
+                    POPUPMENU_EXECUTE_DOWN );
+            pBox->SetItemDown( nId, FALSE );
             delete pMenu;
             pBox->EndSelection();
             pBox->Invalidate();
         }
         break;
-        case FN_GLOBAL_UPDATE:
-        case FN_GLOBAL_OPEN:
-        {
-            aGlobalTree.TbxMenuHdl(nId, pBox);
-        }
-        break;
     }
-
     return TRUE;
 }
-/* -----------------------------19.09.00 15:16--------------------------------
 
- ---------------------------------------------------------------------------*/
+/*-----------------13.07.04 -------------------
+--------------------------------------------------*/
+
 SwNavHelpToolBox::SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId) :
             SwHelpToolBox(pParent, rResId)
 {}
@@ -988,7 +1007,9 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
     aDocListBox.SetSelectHdl(LINK(this, SwNavigationPI,
                                                     DocListBoxSelectHdl));
     aContentToolBox.SetClickHdl( LINK(this, SwNavigationPI, ToolBoxClickHdl) );
+    aContentToolBox.SetDropdownClickHdl( LINK(this, SwNavigationPI, ToolBoxDropdownClickHdl) );
     aGlobalToolBox.SetClickHdl( LINK(this, SwNavigationPI, ToolBoxClickHdl) );
+    aGlobalToolBox.SetDropdownClickHdl( LINK(this, SwNavigationPI, ToolBoxDropdownClickHdl) );
     aGlobalToolBox.CheckItem(FN_GLOBAL_SWITCH, TRUE);
 
     Font aFont(GetFont());
