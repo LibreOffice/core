@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:20:36 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,13 +90,13 @@ TabPage TP_CONDCOLL
         Text[ polish ] = "Opcje";
         Text[ portuguese_brazilian ] = "Settings";
         Text[ japanese ] = "µÌß¼®Ý";
-        Text[ korean ] = "Settings";
+        Text[ korean ] = "¼¼ÆÃ";
         Text[ chinese_simplified ] = "Ñ¡Ïî";
         Text[ chinese_traditional ] = "¿ï¶µ";
         Text[ turkish ] = "Settings";
         Text[ arabic ] = "ÎíÇÑÇÊ";
         Text[ catalan ] = "Opciones";
-        Text[ finnish ] = "Optionen";
+        Text[ finnish ] = "Mukauta";
     };
     CheckBox CB_CONDITION
     {
@@ -877,15 +877,15 @@ TabPage TP_CONDCOLL
         < "¸Ó¸®±Û" ; > ;
         < "¹Ù´Ú±Û" ; > ;
         < "1¹øÂ°´Ù´Ü°è¡¡´Ü°è£¡" ; > ;
-        < "2¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
-        < "3¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
-        < "4¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
-        < "5¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
-        < "6¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
-        < "7¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
-        < "8¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
-        < "9¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
-        < "10¹øÂ°´Ù´Ü°è ´Ü°è " ; > ;
+        < "2¹øÂ° ´Ù´Ü°è ´Ü°è " ; > ;
+        < "3¹øÂ° ´Ù´Ü°è ´Ü°è " ; > ;
+        < "4¹øÂ° ´Ù´Ü°è ´Ü°è " ; > ;
+        < "5¹øÂ° ´Ù´Ü°è ´Ü°è " ; > ;
+        < "6¹øÂ° ´Ù´Ü°è ´Ü°è " ; > ;
+        < "7¹øÂ° ´Ù´Ü°è ´Ü°è " ; > ;
+        < "8¹øÂ° ´Ù´Ü°è ´Ü°è " ; > ;
+        < "9¹øÂ° ´Ù´Ü°è ´Ü°è " ; > ;
+        < "10¹øÂ° ´Ù´Ü°è ´Ü°è " ; > ;
         < "1¹øÂ° ´Ü°è¡¡¹øÈ£¸Å±â±â" ; > ;
         < "2¹øÂ° ´Ü°è¡¡¹øÈ£¸Å±â±â" ; > ;
         < " 3¹øÂ° ´Ü°è¡¡¹øÈ£¸Å±â±â" ; > ;
