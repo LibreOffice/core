@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XServiceTypeDescription.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:24 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 09:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@
 
     <p>The type class of this type is
     <member scope="com::sun::star::uno">TypeClass::SERVICE</member>.
+
+    @since #107627#
   */
 interface XServiceTypeDescription : com::sun::star::reflection::XTypeDescription
 {
