@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-29 12:28:04 $
+ *  last change: $Author: oj $ $Date: 2001-03-29 07:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,12 @@ OView::OView(sal_Bool _bCase,
 
 {
     m_Name = _Name;
+    construct();
 }
 // -------------------------------------------------------------------------
 OView::OView(sal_Bool _bCase): ODescriptor(OViewHelper::rBHelper,_bCase,sal_True)
 {
+    construct();
 }
 // -------------------------------------------------------------------------
 OView::~OView()

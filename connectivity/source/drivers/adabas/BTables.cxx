@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:48:02 $
+ *  last change: $Author: oj $ $Date: 2001-03-29 07:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,10 +171,7 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
     if(!aName.getLength())
         ::dbtools::FunctionSequenceException(*this);
 
-    if(descriptor->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND)) // here we have a view
-        createView(descriptor);
-    else
-        createTable(descriptor);
+    createTable(descriptor);
 
     OCollection_TYPE::appendByDescriptor(descriptor);
 }
@@ -253,7 +250,7 @@ void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQ
         aName   = elementName.copy(nLen+1);
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
         Reference<XPropertySet> xProp(xTunnel,UNO_QUERY);
-        if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND)) // here we have a view
+        if(xProp.is() && ::comphelper::getString(xProp->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")) // here we have a view
             aSql += ::rtl::OUString::createFromAscii("VIEW ");
         else
             aSql += ::rtl::OUString::createFromAscii("TABLE ");
@@ -463,38 +460,6 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
 
     if(getString(descriptor->getPropertyValue(PROPERTY_DESCRIPTION)).getLength())
         setComments(descriptor);
-}
-// -----------------------------------------------------------------------------
-void OTables::createView( const Reference< XPropertySet >& descriptor )
-{
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE VIEW ");
-    ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
-    ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii("."),sSchema,sCommand;
-
-    descriptor->getPropertyValue(PROPERTY_SCHEMANAME) >>= sSchema;
-    if(sSchema.getLength())
-        aSql += ::dbtools::quoteName(aQuote, sSchema) + aDot;
-    else
-        descriptor->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getUserName()));
-
-    aSql += ::dbtools::quoteName(aQuote, getString(descriptor->getPropertyValue(PROPERTY_NAME)))
-                + ::rtl::OUString::createFromAscii(" AS ");
-    descriptor->getPropertyValue(PROPERTY_SCHEMANAME) >>= sCommand;
-    aSql += sCommand;
-
-    OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
-        Reference< XStatement > xStmt = pConnection->createStatement(  );
-    xStmt->execute(aSql);
-
-    // insert the new view also in the tables collection
-    OTables* pTables = static_cast<OTables*>(static_cast<OAdabasCatalog&>(m_rParent).getPrivateTables());
-    if(pTables)
-    {
-        ::rtl::OUString sName = sSchema;
-        sName += aDot;
-        sName += getString(descriptor->getPropertyValue(PROPERTY_NAME));
-        pTables->appendNew(sName);
-    }
 }
 // -----------------------------------------------------------------------------
 void OTables::appendNew(const ::rtl::OUString& _rsNewTable)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:19 $
+ *  last change: $Author: oj $ $Date: 2001-03-29 07:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _CONNECTIVITY_ADABAS_TABLES_HXX_
 #include "adabas/BTables.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADABAS_VIEWS_HXX_
+#include "adabas/BViews.hxx"
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -115,16 +118,13 @@ void OAdabasCatalog::refreshTables()
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii("."),aView = ::rtl::OUString::createFromAscii("VIEW");
+        ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
         while(xResult->next())
         {
-            if(xRow->getString(4) != aView)
-            {
-                aName = xRow->getString(2);
-                aName += aDot;
-                aName += xRow->getString(3);
-                aVector.push_back(aName);
-            }
+            aName = xRow->getString(2);
+            aName += aDot;
+            aName += xRow->getString(3);
+            aVector.push_back(aName);
         }
     }
     if(m_pTables)
@@ -135,10 +135,10 @@ void OAdabasCatalog::refreshTables()
 void OAdabasCatalog::refreshViews()
 {
     ::std::vector< ::rtl::OUString> aVector;
-    Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString::createFromAscii("VIEW");
-    Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        ::rtl::OUString::createFromAscii("%"),::rtl::OUString::createFromAscii("%"),aTypes);
+
+    Reference< XStatement > xStmt = m_pConnection->createStatement(  );
+    Reference< XResultSet > xResult = xStmt->executeQuery(
+        ::rtl::OUString::createFromAscii("SELECT DISTINCT DOMAIN.VIEWDEFS.OWNER, DOMAIN.VIEWDEFS.VIEWNAME FROM DOMAIN.VIEWDEFS"));
 
     if(xResult.is())
     {
@@ -146,15 +146,15 @@ void OAdabasCatalog::refreshViews()
         ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
         while(xResult->next())
         {
-            aName = xRow->getString(2);
+            aName = xRow->getString(1);
             aName += aDot;
-            aName += xRow->getString(3);
+            aName += xRow->getString(2);
             aVector.push_back(aName);
         }
     }
     if(m_pViews)
         delete m_pViews;
-    m_pViews = new OTables(m_xMetaData,*this,m_aMutex,aVector);
+    m_pViews = new OViews(m_xMetaData,*this,m_aMutex,aVector);
 }
 // -------------------------------------------------------------------------
 void OAdabasCatalog::refreshGroups()
