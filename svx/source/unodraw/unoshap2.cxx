@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-28 10:58:47 $
+ *  last change: $Author: cl $ $Date: 2001-06-06 09:02:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,6 +956,8 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const ::rtl::OUString& aP
                 return xControl->getPropertyDefault( aFormsName );
             }
         }
+
+        throw beans::UnknownPropertyException();
     }
     else
     {
