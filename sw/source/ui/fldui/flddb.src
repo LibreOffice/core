@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:17:22 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ TabPage TP_FLD_DB
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "~Typ";
     };
     ListBox LB_DBTYPE
     {
@@ -152,6 +153,7 @@ TabPage TP_FLD_DB
         TEXT[ czech ] = "Podmínka";
         TEXT[ hebrew ] = "Bedin~gung";
         TEXT[ hindi ] = "~शर्त";
+        TEXT[ slovak ] = "~Podmienka";
     };
     Edit ED_DBCONDITION
     {
@@ -193,6 +195,7 @@ TabPage TP_FLD_DB
         TEXT[ czech ] = "Číslo záznamu";
         TEXT[ hebrew ] = "Sat~znummer";
         TEXT[ hindi ] = "अभिलेख संख्या";
+        TEXT[ slovak ] = "Číslo záznamu";
     };
     Edit ED_DBSETNUMBER
     {
@@ -233,6 +236,7 @@ TabPage TP_FLD_DB
         Text[ czech ] = "Výběr databáze";
         Text[ hebrew ] = "Datenbank~auswahl";
         Text[ hindi ] = "लेखासंचय चु~नाव";
+        Text[ slovak ] = "Výb~er databázy";
     };
     Control TLB_DBLIST
     {
@@ -272,6 +276,7 @@ TabPage TP_FLD_DB
         Text[ czech ] = "Z databáze";
         Text[ hebrew ] = "A~us Datenbank";
         Text[ hindi ] = "लेखासंचय से";
+        Text[ slovak ] = "Z databázy";
     };
     RadioButton RB_DBFORMAT
     {
@@ -303,6 +308,7 @@ TabPage TP_FLD_DB
         Text[ czech ] = "Definované uživatelem";
         Text[ hebrew ] = "Se~lbst definiert";
         Text[ hindi ] = "उपभोक्ता से परिभाषित";
+        Text[ slovak ] = "Definované užívateľom";
     };
     ListBox LB_DBNUMFORMAT
     {
@@ -354,6 +360,7 @@ TabPage TP_FLD_DB
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
+        Text[ slovak ] = "Formát";
     };
     FixedLine FL_DBFORMAT_VERT
     {
@@ -385,7 +392,10 @@ TabPage TP_FLD_DB
     Text[ czech ] = "Databáze";
     Text[ hebrew ] = "Datenbank";
     Text[ hindi ] = "लेखासंचय";
+    Text[ slovak ] = "Databáza";
 };
+
+
 
 
 
