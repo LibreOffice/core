@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2002-04-22 09:33:26 $
+ *  last change: $Author: tl $ $Date: 2002-08-13 14:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1171,7 +1171,7 @@ sal_Bool SwXTextViewCursor::isCollapsed(void) throw( uno::RuntimeException )
     if(pView)
     {
         const SwWrtShell& rSh = pView->GetWrtShell();
-        bRet = rSh.HasSelection();
+        bRet = !rSh.HasSelection();
     }
     else
         throw uno::RuntimeException();
