@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.100 $
+#   $Revision: 1.101 $
 #
-#   last change: $Author: hjs $ $Date: 2002-02-13 16:58:18 $
+#   last change: $Author: nf $ $Date: 2002-02-21 15:49:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1794,7 +1794,7 @@ TARGETDPJ=$(MISC)$/$(TARGET).dpj
 .ENDIF
 
 .IF "$(UPDATER)"=="YES"
-.IF "$(product)"!=""
+#.IF "$(product)"!=""
 .IF "$(GEN_HID)"!=""
 .IF "$(no_hids)"==""
 .IF "$(BUILD_SOSL)" == ""
@@ -1804,7 +1804,7 @@ PRJHIDTARGET=$(MISC)$/$(PRJNAME).hid
 .ENDIF
 .ENDIF
 .ENDIF
-.ENDIF
+#.ENDIF
 .ENDIF
 
 .IF "$(OS2_SOLENV_INC)"!=""
