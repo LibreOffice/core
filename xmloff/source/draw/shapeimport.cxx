@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-06 14:47:58 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,9 @@ using namespace ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
-XMLShapeImportHelper::XMLShapeImportHelper(const uno::Reference< frame::XModel>& rModel)
+XMLShapeImportHelper::XMLShapeImportHelper(
+        const uno::Reference< frame::XModel>& rModel,
+        SvXMLImportPropertyMapper *pExtMapper )
 :   mxModel(rModel),
     mpSdPropHdlFactory(0L),
     mpPropertySetMapper(0L),
@@ -130,15 +132,24 @@ XMLShapeImportHelper::XMLShapeImportHelper(const uno::Reference< frame::XModel>&
         const UniReference< XMLPropertyHandlerFactory > aFactoryRef = mpSdPropHdlFactory;
 
         // construct PropertySetMapper
-        mpPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDProperties, aFactoryRef);
+        UniReference < XMLPropertySetMapper > xMapper =
+               new XMLPropertySetMapper( (XMLPropertyMapEntry*)aXMLSDProperties,
+                                        aFactoryRef);
+        mpPropertySetMapper = new SvXMLImportPropertyMapper( xMapper );
         if(mpPropertySetMapper)
         {
             // set lock to avoid deletion
             mpPropertySetMapper->acquire();
+            if( pExtMapper )
+            {
+                UniReference < SvXMLImportPropertyMapper > xExtMapper( pExtMapper );
+                mpPropertySetMapper->ChainImportMapper( xExtMapper );
+            }
         }
 
         // construct PresPagePropsMapper
-        mpPresPagePropsMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, aFactoryRef);
+        xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, aFactoryRef);
+        mpPresPagePropsMapper = new SvXMLImportPropertyMapper( xMapper );
         if(mpPresPagePropsMapper)
         {
             // set lock to avoid deletion

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-06 12:58:31 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,15 +92,23 @@ using namespace ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
-XMLShapeExport::XMLShapeExport(SvXMLExport& rExp)
+XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
+                                SvXMLExportPropertyMapper *pExtMapper )
 :   rExport( rExp )
 {
     // construct PropertyHandlerFactory
     xSdPropHdlFactory = new XMLSdPropHdlFactory;
 
     // construct PropertySetMapper
-    xPropertySetMapper = new XMLPropertySetMapper(
-        (XMLPropertyMapEntry*)aXMLSDProperties, xSdPropHdlFactory);
+    UniReference < XMLPropertySetMapper > xMapper =
+        new XMLPropertySetMapper(
+            (XMLPropertyMapEntry*)aXMLSDProperties, xSdPropHdlFactory);
+    xPropertySetMapper = new SvXMLExportPropertyMapper( xMapper );
+    if( pExtMapper )
+    {
+        UniReference < SvXMLExportPropertyMapper > xExtMapper( pExtMapper );
+        xPropertySetMapper->ChainExportMapper( xExtMapper );
+    }
 
     rExp.GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_SD_GRAPHICS_ID,
@@ -207,15 +215,12 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 void XMLShapeExport::exportAutoStyles()
 {
     // export all autostyle infos
-    const UniReference< XMLPropertySetMapper > aMapperRef( GetPropertySetMapper() );
-    SvXMLExportPropertyMapper aExpPropMapper(aMapperRef);
 
     // ...for graphic
 //  if(IsFamilyGraphicUsed())
     {
         GetExport().GetAutoStylePool()->exportXML(
             XML_STYLE_FAMILY_SD_GRAPHICS_ID,
-            aExpPropMapper,
             GetExport().GetDocHandler(),
             GetExport().GetMM100UnitConverter(),
             GetExport().GetNamespaceMap());
@@ -226,7 +231,6 @@ void XMLShapeExport::exportAutoStyles()
     {
         GetExport().GetAutoStylePool()->exportXML(
             XML_STYLE_FAMILY_SD_PRESENTATION_ID,
-            aExpPropMapper,
             GetExport().GetDocHandler(),
             GetExport().GetMM100UnitConverter(),
             GetExport().GetNamespaceMap());

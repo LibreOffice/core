@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-27 14:08:05 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #include "xmlnmspe.hxx"
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
@@ -100,6 +101,30 @@ SvXMLImportPropertyMapper::SvXMLImportPropertyMapper(
 
 SvXMLImportPropertyMapper::~SvXMLImportPropertyMapper()
 {
+    xNextMapper = 0;
+}
+
+void SvXMLImportPropertyMapper::ChainImportMapper(
+        const UniReference< SvXMLImportPropertyMapper>& rMapper )
+{
+    maPropMapper->AddMapperEntry( rMapper->getPropertySetMapper() );
+    rMapper->maPropMapper = maPropMapper;
+
+    if( xNextMapper.is() )
+        xNextMapper->_ChainImportMapper( rMapper );
+    else
+        xNextMapper = rMapper;
+}
+
+void SvXMLImportPropertyMapper::_ChainImportMapper(
+        const UniReference< SvXMLImportPropertyMapper>& rMapper )
+{
+    maPropMapper = rMapper->getPropertySetMapper();
+
+    if( xNextMapper.is() )
+        xNextMapper->_ChainImportMapper( rMapper );
+    else
+        xNextMapper = rMapper;
 }
 
 void SvXMLImportPropertyMapper::importXML(
@@ -269,8 +294,12 @@ BOOL SvXMLImportPropertyMapper::handleSpecialItem(
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const
 {
-    DBG_ERROR( "unsuported special item in xml import" );
-    return FALSE;
+    DBG_ASSERT( xNextMapper.is(), "unsuported special item in xml import" );
+    if( xNextMapper.is() )
+        return xNextMapper->handleSpecialItem( rProperty, rProperties, rValue,
+                                               rUnitConverter, rNamespaceMap );
+    else
+        return FALSE;
 }
 
 /** this method is called for every item that has the MID_FLAG_NO_ITEM_IMPORT flag set */
@@ -281,13 +310,50 @@ BOOL SvXMLImportPropertyMapper::handleNoItem(
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap) const
 {
-    DBG_ERROR( "unsuported no item in xml import" );
-    return FALSE;
+    DBG_ASSERT( xNextMapper.is(), "unsuported no item in xml import" );
+    if( xNextMapper.is() )
+        return xNextMapper->handleNoItem( nIndex, rProperties, rValue,
+                                          rUnitConverter, rNamespaceMap );
+    else
+        return FALSE;
 }
 
+sal_Bool SvXMLImportPropertyMapper::FillPropertySet(
+            const vector< XMLPropertyState >& aProperties,
+            const Reference<
+                    XPropertySet > rPropSet ) const
+{
+    sal_Bool bSet = sal_False;
+    Reference< XPropertySetInfo > xInfo = rPropSet->getPropertySetInfo();
+
+    sal_Int32 nCount = aProperties.size();
+    for( sal_Int32 i=0; i < nCount; i++ )
+    {
+        const XMLPropertyState& rProp = aProperties[i];
+        sal_Int32 nIdx = rProp.mnIndex;
+        if( -1 == nIdx )
+            continue;
+        const OUString& rPropName = maPropMapper->GetEntryAPIName( nIdx );
+        if( xInfo->hasPropertyByName( rPropName ) )
+        {
+            try
+            {
+                rPropSet->setPropertyValue( rPropName, rProp.maValue );
+                bSet = sal_True;
+            }
+            catch(...)
+            {
+            }
+        }
+    }
+
+    return bSet;
+}
 void SvXMLImportPropertyMapper::finished(
         vector< XMLPropertyState >& rProperties,
         sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
     // nothing to do here
+    if( xNextMapper.is() )
+        xNextMapper->finished( rProperties, nStartIndex, nEndIndex );
 }

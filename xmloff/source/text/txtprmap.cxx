@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,18 +62,6 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
-#include <com/sun/star/table/BorderLine.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_SIZETYPE_HPP_
-#include <com/sun/star/text/SizeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_WRAPTEXTMODE_HPP_
-#include <com/sun/star/text/WrapTextMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
-#include <com/sun/star/text/TextContentAnchorType.hpp>
-#endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -88,13 +76,8 @@
 #include "txtprmap.hxx"
 #endif
 
-//using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-//using namespace ::com::sun::star::style;
-//using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::text;
 
 #define M_E( a, p, l, t, c ) \
     { a, XML_NAMESPACE_##p, sXML_##l, t, c }
@@ -501,500 +484,41 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     { 0, 0, 0, 0 }
 };
 
+XMLPropertyMapEntry aXMLShapePropMap[] =
+{
+    // RES_LR_SPACE
+    M_E( "LeftMargin",              FO, margin_left,        XML_TYPE_MEASURE,  0),
+    M_E( "RightMargin",             FO, margin_right,       XML_TYPE_MEASURE, 0 ),
+    // RES_UL_SPACE
+    M_E( "TopMargin",               FO, margin_top,         XML_TYPE_MEASURE, 0 ),
+    M_E( "BottomMargin",            FO, margin_bottom,      XML_TYPE_MEASURE, 0 ),
+    // RES_SURROUND
+    M_E( "TextWrap",                STYLE,  wrap,   XML_TYPE_TEXT_WRAP, CTF_WRAP ),
+    M_E( "SurroundAnchorOnly",      STYLE,  number_wrapped_paragraphs,  XML_TYPE_TEXT_PARAGRAPH_ONLY, CTF_WRAP_PARAGRAPH_ONLY ),
+    M_E( "SurroundContour",         STYLE,  wrap_contour,   XML_TYPE_BOOL, CTF_WRAP_CONTOUR ),
+    M_E( "ContourOutside",          STYLE,  wrap_contour_mode,  XML_TYPE_TEXT_WRAP_OUTSIDE, CTF_WRAP_CONTOUR_MODE ),
+    // RES_VERT_ORIENT
+    M_E( "VertOrient",              STYLE,  vertical_pos,         XML_TYPE_TEXT_VERTICAL_POS, CTF_VERTICALPOS ),
+    M_E( "VertOrient",              STYLE,  vertical_rel,         XML_TYPE_TEXT_VERTICAL_REL_AS_CHAR|MID_FLAG_MULTI_PROPERTY, CTF_VERTICALREL_ASCHAR ),
+    M_E( "VertOrientRelation",      STYLE,  vertical_rel,         XML_TYPE_TEXT_VERTICAL_REL, CTF_VERTICALREL ),
+    M_E( "VertOrientRelation",      STYLE,  vertical_rel,         XML_TYPE_TEXT_VERTICAL_REL_PAGE|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_VERTICALREL_PAGE ),
+    M_E( "VertOrientRelation",      STYLE,  vertical_rel,         XML_TYPE_TEXT_VERTICAL_REL_FRAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_VERTICALREL_FRAME ),
+    // RES_HORI_ORIENT
+    M_E( "HoriOrient",              STYLE,  horizontal_pos,       XML_TYPE_TEXT_HORIZONTAL_POS|MID_FLAG_MULTI_PROPERTY, CTF_HORIZONTALPOS ),
+    M_E( "PageToggle",      STYLE,  horizontal_pos,       XML_TYPE_TEXT_HORIZONTAL_MIRROR, CTF_HORIZONTALMIRROR ),
+    M_E( "HoriOrient",              STYLE,  horizontal_pos,       XML_TYPE_TEXT_HORIZONTAL_POS_MIRRORED|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_HORIZONTALPOS_MIRRORED ),
+    M_E( "HoriOrientRelation",      STYLE,  horizontal_rel,       XML_TYPE_TEXT_HORIZONTAL_REL, CTF_HORIZONTALREL ),
+    M_E( "HoriOrientRelation",      STYLE,  horizontal_rel,       XML_TYPE_TEXT_HORIZONTAL_REL_FRAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_HORIZONTALREL_FRAME ),
+    M_E( "UserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+    { 0, 0, 0, 0 }
+};
+
 XMLPropertyMapEntry aXMLSectionPropMap[] =
 {
     M_E( "TextColumns",         STYLE,  columns,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_COLUMNS, CTF_TEXTCOLUMNS ),
     M_E( "IsProtected",         STYLE,  protect,    XML_TYPE_BOOL, 0 ),
     { 0, 0, 0, 0 }
 };
-
-void XMLTextPropertySetMapper::ContextFilter(
-    ::std::vector< XMLPropertyState >& rProperties,
-    Reference< XPropertySet > rPropSet ) const
-{
-    // filter char height point/percent
-    XMLPropertyState* pCharHeightState = NULL;
-    XMLPropertyState* pCharPropHeightState = NULL;
-    XMLPropertyState* pCharDiffHeightState = NULL;
-
-    // filter left margin measure/percent
-    XMLPropertyState* pParaLeftMarginState = NULL;
-    XMLPropertyState* pParaLeftMarginRelState = NULL;
-
-    // filter right margin measure/percent
-    XMLPropertyState* pParaRightMarginState = NULL;
-    XMLPropertyState* pParaRightMarginRelState = NULL;
-
-    // filter first line indent measure/percent
-    XMLPropertyState* pParaFirstLineState = NULL;
-    XMLPropertyState* pParaFirstLineRelState = NULL;
-
-    // filter ParaTopMargin/Relative
-    XMLPropertyState* pParaTopMarginState = NULL;
-    XMLPropertyState* pParaTopMarginRelState = NULL;
-
-    // filter ParaTopMargin/Relative
-    XMLPropertyState* pParaBottomMarginState = NULL;
-    XMLPropertyState* pParaBottomMarginRelState = NULL;
-
-    // filter (Left|Right|Top|Bottom|)BorderWidth
-    XMLPropertyState* pAllBorderWidthState = NULL;
-    XMLPropertyState* pLeftBorderWidthState = NULL;
-    XMLPropertyState* pRightBorderWidthState = NULL;
-    XMLPropertyState* pTopBorderWidthState = NULL;
-    XMLPropertyState* pBottomBorderWidthState = NULL;
-
-    // filter (Left|Right|Top|)BorderDistance
-    XMLPropertyState* pAllBorderDistanceState = NULL;
-    XMLPropertyState* pLeftBorderDistanceState = NULL;
-    XMLPropertyState* pRightBorderDistanceState = NULL;
-    XMLPropertyState* pTopBorderDistanceState = NULL;
-    XMLPropertyState* pBottomBorderDistanceState = NULL;
-
-    // filter (Left|Right|Top|Bottom|)Border
-    XMLPropertyState* pAllBorderState = NULL;
-    XMLPropertyState* pLeftBorderState = NULL;
-    XMLPropertyState* pRightBorderState = NULL;
-    XMLPropertyState* pTopBorderState = NULL;
-    XMLPropertyState* pBottomBorderState = NULL;
-
-    // filter width/height properties
-    XMLPropertyState* pWidthAbsState = NULL;
-    XMLPropertyState* pWidthMinAbsState = NULL;
-    XMLPropertyState* pWidthRelState = NULL;
-    XMLPropertyState* pWidthMinRelState = NULL;
-    XMLPropertyState* pHeightAbsState = NULL;
-    XMLPropertyState* pHeightMinAbsState = NULL;
-    XMLPropertyState* pHeightRelState = NULL;
-    XMLPropertyState* pHeightMinRelState = NULL;
-    XMLPropertyState* pSizeTypeState = NULL;
-    XMLPropertyState* pSyncHeightState = NULL;
-
-    // wrap
-    XMLPropertyState* pWrapState = NULL;
-    XMLPropertyState* pWrapContourState = NULL;
-    XMLPropertyState* pWrapContourModeState = NULL;
-    XMLPropertyState* pWrapParagraphOnlyState = NULL;
-
-    // anchor
-    XMLPropertyState* pAnchorTypeState = NULL;
-    XMLPropertyState* pAnchorPageNumberState = NULL;
-
-    // horizontal position and relation
-    XMLPropertyState* pHoriOrientState = NULL;
-    XMLPropertyState* pHoriOrientMirroredState = NULL;
-    XMLPropertyState* pHoriOrientRelState = NULL;
-    XMLPropertyState* pHoriOrientRelFrameState = NULL;
-    XMLPropertyState* pHoriOrientMirrorState = NULL;
-
-    // vertical position and relation
-    XMLPropertyState* pVertOrientState = NULL;
-    XMLPropertyState* pVertOrientRelState = NULL;
-    XMLPropertyState* pVertOrientRelPageState = NULL;
-    XMLPropertyState* pVertOrientRelFrameState = NULL;
-    XMLPropertyState* pVertOrientRelAsCharState = NULL;
-
-    sal_Bool bNeedsAnchor = sal_False;
-
-    for( ::std::vector< XMLPropertyState >::iterator propertie = rProperties.begin();
-         propertie != rProperties.end();
-         propertie++ )
-    {
-        switch( GetEntryContextId( propertie->mnIndex ) )
-        {
-        case CTF_CHARHEIGHT:            pCharHeightState = propertie; break;
-        case CTF_CHARHEIGHT_REL:        pCharPropHeightState = propertie; break;
-        case CTF_CHARHEIGHT_DIFF:       pCharDiffHeightState = propertie; break;
-        case CTF_PARALEFTMARGIN:        pParaLeftMarginState = propertie; break;
-        case CTF_PARALEFTMARGIN_REL:    pParaLeftMarginRelState = propertie; break;
-        case CTF_PARARIGHTMARGIN:       pParaRightMarginState = propertie; break;
-        case CTF_PARARIGHTMARGIN_REL:   pParaRightMarginRelState = propertie; break;
-        case CTF_PARAFIRSTLINE:         pParaFirstLineState = propertie; break;
-        case CTF_PARAFIRSTLINE_REL:     pParaFirstLineRelState = propertie; break;
-        case CTF_PARATOPMARGIN:         pParaTopMarginState = propertie; break;
-        case CTF_PARATOPMARGIN_REL:     pParaTopMarginRelState = propertie; break;
-        case CTF_PARABOTTOMMARGIN:      pParaBottomMarginState = propertie; break;
-        case CTF_PARABOTTOMMARGIN_REL:  pParaBottomMarginRelState = propertie; break;
-        case CTF_ALLBORDERWIDTH:        pAllBorderWidthState = propertie; break;
-        case CTF_LEFTBORDERWIDTH:       pLeftBorderWidthState = propertie; break;
-        case CTF_RIGHTBORDERWIDTH:      pRightBorderWidthState = propertie; break;
-        case CTF_TOPBORDERWIDTH:        pTopBorderWidthState = propertie; break;
-        case CTF_BOTTOMBORDERWIDTH:     pBottomBorderWidthState = propertie; break;
-        case CTF_ALLBORDERDISTANCE:     pAllBorderDistanceState = propertie; break;
-        case CTF_LEFTBORDERDISTANCE:    pLeftBorderDistanceState = propertie; break;
-        case CTF_RIGHTBORDERDISTANCE:   pRightBorderDistanceState = propertie; break;
-        case CTF_TOPBORDERDISTANCE:     pTopBorderDistanceState = propertie; break;
-        case CTF_BOTTOMBORDERDISTANCE:  pBottomBorderDistanceState = propertie; break;
-        case CTF_ALLBORDER:             pAllBorderState = propertie; break;
-        case CTF_LEFTBORDER:            pLeftBorderState = propertie; break;
-        case CTF_RIGHTBORDER:           pRightBorderState = propertie; break;
-        case CTF_TOPBORDER:             pTopBorderState = propertie; break;
-        case CTF_BOTTOMBORDER:          pBottomBorderState = propertie; break;
-
-        case CTF_FRAMEWIDTH_ABS:        pWidthAbsState = propertie; break;
-        case CTF_FRAMEWIDTH_REL:        pWidthRelState = propertie; break;
-        case CTF_FRAMEHEIGHT_ABS:       pHeightAbsState = propertie; break;
-        case CTF_FRAMEHEIGHT_MIN_ABS:   pHeightMinAbsState = propertie; break;
-        case CTF_FRAMEHEIGHT_REL:       pHeightRelState = propertie; break;
-        case CTF_FRAMEHEIGHT_MIN_REL:   pHeightMinRelState = propertie; break;
-        case CTF_SIZETYPE:              pSizeTypeState = propertie; break;
-        case CTF_SYNCHEIGHT:            pSyncHeightState = propertie; break;
-
-        case CTF_WRAP:                  pWrapState = propertie; break;
-        case CTF_WRAP_CONTOUR:          pWrapContourState = propertie; break;
-        case CTF_WRAP_CONTOUR_MODE:     pWrapContourModeState = propertie; break;
-        case CTF_WRAP_PARAGRAPH_ONLY:   pWrapParagraphOnlyState = propertie; break;
-        case CTF_ANCHORTYPE:            pAnchorTypeState = propertie; break;
-        case CTF_ANCHORPAGENUMBER:      pAnchorPageNumberState = propertie; bNeedsAnchor = sal_True; break;
-
-        case CTF_HORIZONTALPOS:             pHoriOrientState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_HORIZONTALPOS_MIRRORED:    pHoriOrientMirroredState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_HORIZONTALREL:             pHoriOrientRelState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_HORIZONTALREL_FRAME:       pHoriOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_HORIZONTALMIRROR:          pHoriOrientMirrorState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALPOS:           pVertOrientState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALREL:           pVertOrientRelState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALREL_PAGE:      pVertOrientRelPageState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALREL_FRAME:     pVertOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
-        case CTF_VERTICALREL_ASCHAR:    pVertOrientRelAsCharState = propertie; bNeedsAnchor = sal_True; break;
-        }
-    }
-
-    if( pCharHeightState && pCharPropHeightState )
-    {
-        sal_Int32 nTemp;
-        pCharPropHeightState->maValue >>= nTemp;
-        if( nTemp == 100 )
-        {
-            pCharPropHeightState->mnIndex = -1;
-            pCharPropHeightState->maValue.clear();
-        }
-        else
-        {
-            pCharHeightState->mnIndex = -1;
-            pCharHeightState->maValue.clear();
-        }
-    }
-    if( pCharHeightState && pCharDiffHeightState )
-    {
-        float nTemp;
-        pCharDiffHeightState->maValue >>= nTemp;
-        if( nTemp == 0. )
-        {
-            pCharDiffHeightState->mnIndex = -1;
-            pCharDiffHeightState->maValue.clear();
-        }
-        else
-        {
-            pCharHeightState->mnIndex = -1;
-            pCharHeightState->maValue.clear();
-        }
-    }
-
-    if( pParaLeftMarginState && pParaLeftMarginRelState )
-    {
-        sal_Int32 nTemp;
-        pParaLeftMarginRelState->maValue >>= nTemp;
-        if( nTemp == 100 )
-        {
-            pParaLeftMarginRelState->mnIndex = -1;
-            pParaLeftMarginRelState->maValue.clear();
-        }
-        else
-        {
-            pParaLeftMarginState->mnIndex = -1;
-            pParaLeftMarginState->maValue.clear();
-        }
-
-    }
-
-    if( pParaRightMarginState && pParaRightMarginRelState )
-    {
-        sal_Int32 nTemp;
-        pParaRightMarginRelState->maValue >>= nTemp;
-        if( nTemp == 100 )
-        {
-            pParaRightMarginRelState->mnIndex = -1;
-            pParaRightMarginRelState->maValue.clear();
-        }
-        else
-        {
-            pParaRightMarginState->mnIndex = -1;
-            pParaRightMarginState->maValue.clear();
-        }
-    }
-
-    if( pParaFirstLineState && pParaFirstLineRelState )
-    {
-        sal_Int32 nTemp;
-        pParaFirstLineRelState->maValue >>= nTemp;
-        if( nTemp == 100 )
-        {
-            pParaFirstLineRelState->mnIndex = -1;
-            pParaFirstLineRelState->maValue.clear();
-        }
-        else
-        {
-            pParaFirstLineState->mnIndex = -1;
-            pParaFirstLineState->maValue.clear();
-        }
-    }
-
-    if( pParaTopMarginState && pParaTopMarginRelState )
-    {
-        sal_Int32 nTemp;
-        pParaTopMarginRelState->maValue >>= nTemp;
-        if( nTemp == 100 )
-        {
-            pParaTopMarginRelState->mnIndex = -1;
-            pParaTopMarginRelState->maValue.clear();
-        }
-        else
-        {
-            pParaTopMarginState->mnIndex = -1;
-            pParaTopMarginState->maValue.clear();
-        }
-
-    }
-
-    if( pParaBottomMarginState && pParaBottomMarginRelState )
-    {
-        sal_Int32 nTemp;
-        pParaBottomMarginRelState->maValue >>= nTemp;
-        if( nTemp == 100 )
-        {
-            pParaBottomMarginRelState->mnIndex = -1;
-            pParaBottomMarginRelState->maValue.clear();
-        }
-        else
-        {
-            pParaBottomMarginState->mnIndex = -1;
-            pParaBottomMarginState->maValue.clear();
-        }
-
-    }
-
-    if( pAllBorderWidthState )
-    {
-        if( pLeftBorderWidthState && pRightBorderWidthState && pTopBorderWidthState && pBottomBorderWidthState )
-        {
-            table::BorderLine aLeft, aRight, aTop, aBottom;
-
-            pLeftBorderWidthState->maValue >>= aLeft;
-            pRightBorderWidthState->maValue >>= aRight;
-            pTopBorderWidthState->maValue >>= aTop;
-            pBottomBorderWidthState->maValue >>= aBottom;
-            if( aLeft.Color == aRight.Color && aLeft.InnerLineWidth == aRight.InnerLineWidth &&
-                aLeft.OuterLineWidth == aRight.OuterLineWidth && aLeft.LineDistance == aRight.LineDistance &&
-                aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
-                aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
-                aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
-                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance )
-            {
-                pLeftBorderWidthState->mnIndex = -1;
-                pLeftBorderWidthState->maValue.clear();
-                pRightBorderWidthState->mnIndex = -1;
-                pRightBorderWidthState->maValue.clear();
-                pTopBorderWidthState->mnIndex = -1;
-                pTopBorderWidthState->maValue.clear();
-                pBottomBorderWidthState->mnIndex = -1;
-                pBottomBorderWidthState->maValue.clear();
-            }
-            else
-            {
-                pAllBorderWidthState->mnIndex = -1;
-                pAllBorderWidthState->maValue.clear();
-            }
-        }
-        else
-        {
-            pAllBorderWidthState->mnIndex = -1;
-            pAllBorderWidthState->maValue.clear();
-        }
-    }
-
-    if( pAllBorderDistanceState )
-    {
-        if( pLeftBorderDistanceState && pRightBorderDistanceState && pTopBorderDistanceState && pBottomBorderDistanceState )
-        {
-            sal_Int32 aLeft, aRight, aTop, aBottom;
-
-            pLeftBorderDistanceState->maValue >>= aLeft;
-            pRightBorderDistanceState->maValue >>= aRight;
-            pTopBorderDistanceState->maValue >>= aTop;
-            pBottomBorderDistanceState->maValue >>= aBottom;
-            if( aLeft == aRight && aLeft == aTop && aLeft == aBottom )
-            {
-                pLeftBorderDistanceState->mnIndex = -1;
-                pLeftBorderDistanceState->maValue.clear();
-                pRightBorderDistanceState->mnIndex = -1;
-                pRightBorderDistanceState->maValue.clear();
-                pTopBorderDistanceState->mnIndex = -1;
-                pTopBorderDistanceState->maValue.clear();
-                pBottomBorderDistanceState->mnIndex = -1;
-                pBottomBorderDistanceState->maValue.clear();
-            }
-            else
-            {
-                pAllBorderDistanceState->mnIndex = -1;
-                pAllBorderDistanceState->maValue.clear();
-            }
-        }
-        else
-        {
-            pAllBorderDistanceState->mnIndex = -1;
-            pAllBorderDistanceState->maValue.clear();
-        }
-    }
-
-    if( pAllBorderState )
-    {
-        if( pLeftBorderState && pRightBorderState && pTopBorderState && pBottomBorderState )
-        {
-            table::BorderLine aLeft, aRight, aTop, aBottom;
-
-            pLeftBorderState->maValue >>= aLeft;
-            pRightBorderState->maValue >>= aRight;
-            pTopBorderState->maValue >>= aTop;
-            pBottomBorderState->maValue >>= aBottom;
-            if( aLeft.Color == aRight.Color && aLeft.InnerLineWidth == aRight.InnerLineWidth &&
-                aLeft.OuterLineWidth == aRight.OuterLineWidth && aLeft.LineDistance == aRight.LineDistance &&
-                aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
-                aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
-                aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
-                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance )
-            {
-                pLeftBorderState->mnIndex = -1;
-                pLeftBorderState->maValue.clear();
-                pRightBorderState->mnIndex = -1;
-                pRightBorderState->maValue.clear();
-                pTopBorderState->mnIndex = -1;
-                pTopBorderState->maValue.clear();
-                pBottomBorderState->mnIndex = -1;
-                pBottomBorderState->maValue.clear();
-            }
-            else
-            {
-                pAllBorderState->mnIndex = -1;
-                pAllBorderState->maValue.clear();
-            }
-        }
-        else
-        {
-            pAllBorderState->mnIndex = -1;
-            pAllBorderState->maValue.clear();
-        }
-    }
-
-    if( pWidthAbsState && pWidthRelState )
-    {
-        sal_Int16 nRelWidth =  0;
-        pWidthRelState->maValue >>= nRelWidth;
-        if( nRelWidth > 0 )
-            pWidthAbsState->mnIndex = -1;
-        // TODO: instead of checking this value for 255 a new property
-        // must be introduced like for heights.
-        if( nRelWidth == 255 )
-            pWidthRelState->mnIndex = -1;
-    }
-
-    if( pHeightAbsState && pHeightRelState )
-    {
-        DBG_ASSERT( pHeightMinAbsState, "no min abs state" );
-        DBG_ASSERT( pHeightMinRelState, "no min rel state" );
-        sal_Int32 nSizeType = SizeType::FIX;
-        if( pSizeTypeState )
-            pSizeTypeState->maValue >>= nSizeType;
-
-        if( SizeType::VARIABLE == nSizeType ||
-            ( pSyncHeightState &&
-              *(sal_Bool *)pSyncHeightState->maValue.getValue() ) )
-        {
-            pHeightAbsState->mnIndex = -1;
-            pHeightMinAbsState->mnIndex = -1;
-            pHeightRelState->mnIndex = -1;
-            pHeightMinRelState->mnIndex = -1;
-        }
-        else
-        {
-            sal_Int16 nRelHeight =  0;
-            pHeightRelState->maValue >>= nRelHeight;
-            sal_Bool bRel = (nRelHeight > 0);
-            sal_Bool bMin = (SizeType::MIN == nSizeType);
-            if( bRel || bMin )
-                pHeightAbsState->mnIndex = -1;
-            if( bRel || !bMin )
-                pHeightMinAbsState->mnIndex = -1;
-            if( !bRel || bMin )
-                pHeightRelState->mnIndex = -1;
-            if( !bRel || !bMin )
-                pHeightMinRelState->mnIndex = -1;
-        }
-    }
-    if( pSizeTypeState )
-        pSizeTypeState->mnIndex = -1;
-    if( pSyncHeightState )
-        pSyncHeightState->mnIndex = -1;
-
-    if( pWrapState )
-    {
-        WrapTextMode eVal;
-        pWrapState->maValue >>= eVal;
-        switch( eVal )
-        {
-        case WrapTextMode_NONE:
-        case WrapTextMode_THROUGHT:
-            if( pWrapContourState )
-                pWrapContourState->mnIndex = -1;
-            if( pWrapParagraphOnlyState )
-                pWrapParagraphOnlyState->mnIndex = -1;
-            break;
-        }
-        if( pWrapContourModeState  &&
-            (!pWrapContourState ||
-             !*(sal_Bool *)pWrapContourState ->maValue.getValue() ) )
-            pWrapContourModeState->mnIndex = -1;
-    }
-
-    TextContentAnchorType eAnchor = TextContentAnchorType_AT_PARAGRAPH;
-    if( pAnchorTypeState )
-        pAnchorTypeState->maValue >>= eAnchor;
-    else if( bNeedsAnchor )
-    {
-        Any aAny = rPropSet->getPropertyValue(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AnchorType") ) );
-        aAny >>= eAnchor;
-    }
-
-    if( pAnchorPageNumberState && TextContentAnchorType_AT_PAGE != eAnchor )
-        pAnchorPageNumberState->mnIndex = -1;
-
-    if( pHoriOrientState && pHoriOrientMirroredState )
-    {
-        if( pHoriOrientMirrorState &&
-            *(sal_Bool *)pHoriOrientMirrorState->maValue.getValue() )
-            pHoriOrientState->mnIndex = -1;
-        else
-            pHoriOrientMirroredState->mnIndex = -1;
-    }
-    if( pHoriOrientMirrorState )
-        pHoriOrientMirrorState->mnIndex = -1;
-
-    if( pHoriOrientRelState && TextContentAnchorType_AT_FRAME == eAnchor )
-        pHoriOrientRelState->mnIndex = -1;
-    if( pHoriOrientRelFrameState && TextContentAnchorType_AT_FRAME != eAnchor )
-        pHoriOrientRelFrameState->mnIndex = -1;;
-
-    if( pVertOrientRelState && TextContentAnchorType_AT_PARAGRAPH != eAnchor &&
-         TextContentAnchorType_AT_CHARACTER != eAnchor )
-        pVertOrientRelState->mnIndex = -1;
-    if( pVertOrientRelPageState && TextContentAnchorType_AT_PAGE != eAnchor )
-        pVertOrientRelPageState->mnIndex = -1;
-    if( pVertOrientRelFrameState && TextContentAnchorType_AT_FRAME != eAnchor )
-        pVertOrientRelFrameState->mnIndex = -1;
-    if( pVertOrientRelAsCharState && TextContentAnchorType_AS_CHARACTER != eAnchor )
-        pVertOrientRelAsCharState->mnIndex = -1;
-}
 
 XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
 {
@@ -1013,6 +537,9 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
     case TEXT_PROP_MAP_AUTO_FRAME:
         pMap = &(aXMLFramePropMap[12]);
         DBG_ASSERT( pMap->msXMLName == sXML_margin_left, "frame map changed" );
+        break;
+    case TEXT_PROP_MAP_SHAPE:
+        pMap = aXMLShapePropMap;
         break;
     case TEXT_PROP_MAP_SECTION:
         pMap = aXMLSectionPropMap;

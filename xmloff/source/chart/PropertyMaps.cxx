@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-26 10:33:17 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,31 +313,6 @@ XMLChartPropertySetMapper::~XMLChartPropertySetMapper()
 {
 }
 
-void XMLChartPropertySetMapper::ContextFilter(
-    std::vector< XMLPropertyState >& rProperties,
-    uno::Reference< beans::XPropertySet > rPropSet ) const
-{
-    // filter properties
-    for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
-         property != rProperties.end();
-         property++ )
-    {
-        // find properties with context
-        // to prevent writing this property set mnIndex member to -1
-        switch( GetEntryContextId( property->mnIndex ))
-        {
-            case XML_SCH_USER_SYMBOL:
-                {
-                    sal_Int32 nIndex = chart::ChartSymbolType::AUTO;
-                    property->maValue >>= nIndex;
-                    if( nIndex == chart::ChartSymbolType::AUTO )
-                        property->mnIndex = -1;
-                }
-                break;
-        }
-    }
-}
-
 // ----------------------------------------
 
 XMLChartExportPropertyMapper::XMLChartExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper ) :
@@ -350,6 +325,31 @@ XMLChartExportPropertyMapper::XMLChartExportPropertyMapper( const UniReference< 
 
 XMLChartExportPropertyMapper::~XMLChartExportPropertyMapper()
 {
+}
+
+void XMLChartExportPropertyMapper::ContextFilter(
+    std::vector< XMLPropertyState >& rProperties,
+    uno::Reference< beans::XPropertySet > rPropSet ) const
+{
+    // filter properties
+    for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
+         property != rProperties.end();
+         property++ )
+    {
+        // find properties with context
+        // to prevent writing this property set mnIndex member to -1
+        switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ))
+        {
+            case XML_SCH_USER_SYMBOL:
+                {
+                    sal_Int32 nIndex = chart::ChartSymbolType::AUTO;
+                    property->maValue >>= nIndex;
+                    if( nIndex == chart::ChartSymbolType::AUTO )
+                        property->mnIndex = -1;
+                }
+                break;
+        }
+    }
 }
 
 void XMLChartExportPropertyMapper::handleElementItem(

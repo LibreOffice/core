@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastp1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-18 11:37:23 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ using namespace rtl;
 XMLFamilyData_Impl::XMLFamilyData_Impl(
         sal_Int32 nFamily,
         const ::rtl::OUString& rStrName,
-        const UniReference < XMLPropertySetMapper > &rMapper,
+        const UniReference < SvXMLExportPropertyMapper > &rMapper,
         const OUString& rStrPrefix,
         sal_Bool bAsFam )
     : mnFamily( nFamily ), maStrFamilyName( rStrName), mxMapper( rMapper ), maStrPrefix( rStrPrefix ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _COM_SUN_STAR_TEXT_CONTROLCHARACTER_HPP_
 #include <com/sun/star/text/ControlCharacter.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
+#include <com/sun/star/drawing/XShapes.hpp>
+#endif
 
 
 #ifndef _XMLOFF_XMLICTXT_HXX
@@ -132,6 +135,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::drawing;
 
 
 // ---------------------------------------------------------------------
@@ -779,7 +783,13 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
             // text field found: white space!
             rIgnoreLeadingSpace = sal_False;
         }
-        else
+        else if( !rImport.GetTextImport()->IsInHeaderFooter() )
+        {
+            Reference < XShapes > xShapes;
+            pContext = rImport.GetShapeImport()->CreateGroupChildContext(
+                    rImport, nPrefix, rLocalName, xAttrList, xShapes );
+        }
+        if( !pContext )
         {
             // ignore unknown content
             pContext =

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-30 13:34:13 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,14 @@
 #include <com/sun/star/xml/AttributeData.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
+#include <com/sun/star/beans/XPropertyState.hpp>
+#endif
+
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -92,6 +100,9 @@
 #ifndef _XMLOFF_XMLCNITM_HXX
 #include "xmlcnitm.hxx"
 #endif
+#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
+#include "xmlprmap.hxx"
+#endif
 
 #ifndef _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTS
@@ -99,7 +110,10 @@
 #endif
 
 using namespace ::rtl;
+using namespace ::std;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::uno;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -114,12 +128,186 @@ SvXMLExportPropertyMapper::SvXMLExportPropertyMapper(
 
 SvXMLExportPropertyMapper::~SvXMLExportPropertyMapper()
 {
+    xNextMapper = 0;
+}
+
+void SvXMLExportPropertyMapper::ChainExportMapper(
+        const UniReference< SvXMLExportPropertyMapper>& rMapper )
+{
+    maPropMapper->AddMapperEntry( rMapper->getPropertySetMapper() );
+    rMapper->maPropMapper = maPropMapper;
+
+    if( xNextMapper.is() )
+        xNextMapper->_ChainExportMapper( rMapper );
+    else
+        xNextMapper = rMapper;
+}
+
+void SvXMLExportPropertyMapper::_ChainExportMapper(
+        const UniReference< SvXMLExportPropertyMapper>& rMapper )
+{
+    maPropMapper = rMapper->getPropertySetMapper();
+
+    if( xNextMapper.is() )
+        xNextMapper->_ChainExportMapper( rMapper );
+    else
+        xNextMapper = rMapper;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // public methods
 //
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Take all properties of the XPropertySet which are also found in the
+// XMLPropertyMapEntry-array and which are not set to their default-value,
+// if a state is available.
+//
+// After that I call the method 'ContextFilter'.
+//
+vector< XMLPropertyState > SvXMLExportPropertyMapper::Filter(
+        const Reference< XPropertySet > xPropSet ) const
+{
+    vector< XMLPropertyState > aPropStateArray;
+
+    // Retrieve XPropertySetInfo and XPropertyState
+    Reference< XPropertySetInfo > xInfo( xPropSet->getPropertySetInfo() );
+
+    if( xInfo.is() )
+    {
+        Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
+        sal_Int32 nProps = maPropMapper->GetEntryCount();
+
+        if( xPropState.is() )
+        {
+            Sequence<OUString> aApiNames( nProps );
+            Sequence<sal_uInt32> aIndexes( nProps );
+            OUString *pNames = aApiNames.getArray();
+            sal_uInt32 *pIndexes = aIndexes.getArray();
+
+            sal_Int32 nCount = 0;
+            for( sal_Int32 i=0; i < nProps; i++ )
+            {
+                // Does the PropertySet contain name of mpEntries-array ?
+                const OUString& rAPIName = maPropMapper->GetEntryAPIName( i );
+                if( xInfo->hasPropertyByName( rAPIName ) )
+                {
+                    pNames[nCount] = rAPIName;
+                    pIndexes[nCount] = i;
+                    nCount++;
+                }
+            }
+
+            aApiNames.realloc( nCount );
+            aIndexes.realloc( nCount );
+
+            Sequence < PropertyState > aStates =
+                xPropState->getPropertyStates( aApiNames );
+
+            const PropertyState *pStates = aStates.getArray();
+            for( i = 0; i < nCount; i++ )
+            {
+                if( pStates[i] == PropertyState_DIRECT_VALUE )
+                {
+                    // The value is stored in the PropertySet itself, add to list.
+                    XMLPropertyState aNewProperty( pIndexes[i],
+                            xPropSet->getPropertyValue(
+                                    aApiNames[i] ) );
+                    aPropStateArray.push_back( aNewProperty );
+                }
+            }
+        }
+        else
+        {
+            for( sal_Int32 i=0; i < nProps; i++ )
+            {
+                // Does the PropertySet contain name of mpEntries-array ?
+                const OUString& rAPIName = maPropMapper->GetEntryAPIName( i );
+                if( xInfo->hasPropertyByName( rAPIName ) )
+                {
+                    // If there isn't a XPropertyState we can't filter by its state
+                    if( !xPropState.is() ||
+                        xPropState->getPropertyState( rAPIName ) ==
+                                PropertyState_DIRECT_VALUE )
+                    {
+                        // The value is stored in the PropertySet itself, add to list.
+                        XMLPropertyState aNewProperty( i,
+                            xPropSet->getPropertyValue( rAPIName ) );
+                        aPropStateArray.push_back( aNewProperty );
+                    }
+                }
+            }
+        }
+
+        // Call centext-filter
+        ContextFilter( aPropStateArray, xPropSet );
+    }
+
+    return aPropStateArray;
+}
+
+void SvXMLExportPropertyMapper::ContextFilter(
+        vector< XMLPropertyState >& rProperties,
+        Reference< XPropertySet > rPropSet ) const
+{
+    // Derived class could implement this.
+    if( xNextMapper.is() )
+        xNextMapper->ContextFilter( rProperties, rPropSet );
+}
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Compares two Sequences of XMLPropertyState:
+//  1.Number of elements equal ?
+//  2.Index of each element equal ? (So I know whether the propertynames are the same)
+//  3.Value of each element equal ?
+//
+sal_Bool SvXMLExportPropertyMapper::Equals(
+        const vector< XMLPropertyState >& aProperties1,
+        const vector< XMLPropertyState >& aProperties2 ) const
+{
+    sal_Bool bRet = sal_True;
+    sal_Int32 nCount = aProperties1.size();
+
+    if( nCount == aProperties2.size() )
+    {
+        sal_Int32 nIndex = 0;
+        while( bRet && nIndex < nCount )
+        {
+            const XMLPropertyState& rProp1 = aProperties1[ nIndex ];
+            const XMLPropertyState& rProp2 = aProperties2[ nIndex ];
+
+            // Compare index. If equal, compare value
+            if( rProp1.mnIndex == rProp2.mnIndex )
+            {
+                if( rProp1.mnIndex != -1 )
+                {
+                    // Now compare values
+                    if( ( maPropMapper->GetEntryType( rProp1.mnIndex ) &
+                          XML_TYPE_BUILDIN_CMP ) != 0 )
+                        // simple type ( binary compare )
+                        bRet = ( rProp1.maValue == rProp2.maValue );
+                    else
+                        // complex type ( ask for compare-function )
+                        bRet = maPropMapper->GetPropertyHandler(
+                                    rProp1.mnIndex )->equals( rProp1.maValue,
+                                                              rProp2.maValue );
+                }
+            }
+            else
+                bRet = sal_False;
+
+            nIndex++;
+        }
+    }
+    else
+        bRet = sal_False;
+
+    return bRet;
+}
+
 
 /** fills the given attribute list with the items in the given set */
 void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
@@ -215,7 +403,10 @@ void SvXMLExportPropertyMapper::handleSpecialItem(
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
-    DBG_ERROR( "special item not handled in xml export" );
+    DBG_ASSERT( xNextMapper.is(), "special item not handled in xml export" );
+    if( xNextMapper.is() )
+        xNextMapper->handleSpecialItem( rAttrList, rProperty, rUnitConverter,
+                                        rNamespaceMap, pProperties, nIdx );
 }
 
 /** this method is called for every item that has the
@@ -228,7 +419,10 @@ void SvXMLExportPropertyMapper::handleNoItem(
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
-    DBG_ERROR( "no item not handled in xml export" );
+    DBG_ASSERT( xNextMapper.is(), "no item not handled in xml export" );
+    if( xNextMapper.is() )
+        xNextMapper->handleNoItem( rAttrList, rProperty, rUnitConverter,
+                                   rNamespaceMap, pProperties, nIdx );
 }
 
 /** this method is called for every item that has the
@@ -242,7 +436,11 @@ void SvXMLExportPropertyMapper::handleElementItem(
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
-    DBG_ERROR( "element item not handled in xml export" );
+    DBG_ASSERT( xNextMapper.is(), "element item not handled in xml export" );
+    if( xNextMapper.is() )
+        xNextMapper->handleElementItem( rHandler, rProperty, rUnitConverter,
+                                           rNamespaceMap, nFlags, pProperties,
+                                        nIdx );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

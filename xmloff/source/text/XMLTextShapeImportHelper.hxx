@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: PageMasterPropMapper.cxx,v $
+ *  $RCSfile: XMLTextShapeImportHelper.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,38 +59,32 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
-#include "PageMasterPropMapper.hxx"
+#ifndef _XMLTEXTSHAPEIMPORTHELPER_HXX
+#define _XMLTEXTSHAPEIMPORTHELPER_HXX
+
+#ifndef _XMLOFF_SHAPEIMPORT_HXX_
+#include "shapeimport.hxx"
 #endif
 
+class XMLTextShapeImportHelper : public XMLShapeImportHelper
+{
+    SvXMLImport& rImport;
 
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
-#include "PageMasterStyleMap.hxx"
+    const ::rtl::OUString sAnchorType;
+    const ::rtl::OUString sAnchorPageNo;
+
+public:
+
+    XMLTextShapeImportHelper( SvXMLImport& rImp );
+    ~XMLTextShapeImportHelper();
+
+    virtual void addShape(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShape >& rShape,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShapes >& rShapes );
+};
+
 #endif
-#ifndef _XMLOFF_PAGEMASTERPROPHDLFACTORY_HXX
-#include "PageMasterPropHdlFactory.hxx"
-#endif
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-
-
-//______________________________________________________________________________
-
-XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper():
-    XMLPropertySetMapper( aXMLPageMasterStyleMap, new XMLPageMasterPropHdlFactory())
-{
-}
-
-XMLPageMasterPropSetMapper::XMLPageMasterPropSetMapper(
-        const XMLPropertyMapEntry* pEntries,
-        const UniReference< XMLPropertyHandlerFactory >& rFactory ) :
-    XMLPropertySetMapper( pEntries, rFactory )
-{
-}
-
-XMLPageMasterPropSetMapper::~XMLPageMasterPropSetMapper()
-{
-}
-

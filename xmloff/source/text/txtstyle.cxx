@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,8 +184,10 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed )
                        bUsed, XML_STYLE_FAMILY_TEXT_PARAGRAPH );
     exportStyleFamily( "CharacterStyles", sXML_text, GetTextPropMapper(),
                        bUsed, XML_STYLE_FAMILY_TEXT_TEXT );
+    // get shape export to make sure the the frame family is added correctly.
+    GetExport().GetShapeExport();
     exportStyleFamily( "FrameStyles", XML_STYLE_FAMILY_SD_GRAPHICS_NAME, GetFramePropMapper(),
-                       bUsed, XML_STYLE_FAMILY_SD_GRAPHICS_ID );
+                       bUsed, XML_STYLE_FAMILY_TEXT_FRAME );
     exportNumStyles( bUsed );
     exportTextFootnoteConfiguration();
 }

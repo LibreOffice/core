@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-06 14:47:58 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,7 +608,9 @@ SdXMLExport::SdXMLExport(
         const UniReference< XMLPropertyHandlerFactory > aFactoryRef = mpSdPropHdlFactory;
 
         // construct PropertySetMapper
-        mpPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDProperties, aFactoryRef);
+        UniReference < XMLPropertySetMapper > xMapper =
+            new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDProperties, aFactoryRef);
+        mpPropertySetMapper = new ImpPresPageDrawStylePropMapper( xMapper );
         if(mpPropertySetMapper)
         {
             // set lock to avoid deletion
@@ -616,7 +618,10 @@ SdXMLExport::SdXMLExport(
         }
 
         // construct PresPagePropsMapper
-        mpPresPagePropsMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, aFactoryRef);
+        xMapper =
+            new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, aFactoryRef);
+
+        mpPresPagePropsMapper = new ImpPresPageDrawStylePropMapper( xMapper );
         if(mpPresPagePropsMapper)
         {
             // set lock to avoid deletion
@@ -854,14 +859,12 @@ void SdXMLExport::ImpWriteDefaultStyleInfos()
                     if(xPropState.is())
                     {
                         uno::Reference< beans::XPropertySet > xImpDefaultMapper( new ImpDefaultMapper( xPropState ) );
-                        const UniReference< XMLPropertySetMapper > aMapperRef = GetPropertySetMapper();
+                        const UniReference< SvXMLExportPropertyMapper > aMapperRef = GetPropertySetMapper();
                         std::vector< XMLPropertyState > xPropStates = aMapperRef->Filter( xImpDefaultMapper );
 
                         if(xPropStates.size())
                         {
-                            ImpPresPageDrawStylePropMapper aExpPropMapper(aMapperRef);
-
-                            aExpPropMapper.exportXML(GetDocHandler(), xPropStates,
+                            aMapperRef->exportXML(GetDocHandler(), xPropStates,
                                 GetMM100UnitConverter(), GetNamespaceMap());
                             bDone = TRUE;
                         }
@@ -878,7 +881,7 @@ void SdXMLExport::ImpWriteObjGraphicStyleInfos()
 {
     XMLStyleExport aStEx(*this,
         OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_drawpool)), GetAutoStylePool().get());
-    const UniReference< XMLPropertySetMapper > aMapperRef = GetPropertySetMapper();
+    const UniReference< SvXMLExportPropertyMapper > aMapperRef = GetPropertySetMapper();
 
     aStEx.exportStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_NAME, XML_STYLE_FAMILY_SD_GRAPHICS_NAME,
         aMapperRef, FALSE, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
@@ -1488,14 +1491,12 @@ void SdXMLExport::ImpWriteDrawPageInfos()
                         uno::Reference< beans::XPropertySet > xPropSet(xDrawPage, uno::UNO_QUERY);
                         if(xPropSet.is())
                         {
-                            const UniReference< XMLPropertySetMapper > aMapperRef = GetPresPagePropsMapper();
+                            const UniReference< SvXMLExportPropertyMapper > aMapperRef = GetPresPagePropsMapper();
                             std::vector< XMLPropertyState > xPropStates = aMapperRef->Filter( xPropSet );
 
                             if(xPropStates.size())
                             {
-                                ImpPresPageDrawStylePropMapper aExpPropMapper(aMapperRef);
-
-                                aExpPropMapper.exportXML(GetDocHandler(), xPropStates,
+                                aMapperRef->exportXML(GetDocHandler(), xPropStates,
                                     GetMM100UnitConverter(), GetNamespaceMap());
                             }
                         }
@@ -3157,7 +3158,7 @@ void SdXMLExport::_ExportMasterStyles()
             {
                 XMLStyleExport aStEx(*this,
                     OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_drawpool)), GetAutoStylePool().get());
-                const UniReference< XMLPropertySetMapper > aMapperRef = GetPropertySetMapper();
+                const UniReference< SvXMLExportPropertyMapper > aMapperRef = GetPropertySetMapper();
 
                 OUString aPrefix = xNamed->getName();
                 aPrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));

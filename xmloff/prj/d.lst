@@ -79,3 +79,4 @@ hedabu: ..\inc\XMLTextMasterPageExport.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextMaste
 hedabu: ..\inc\XMLTextMasterStylesContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextMasterStylesContext.hxx
 hedabu: ..\inc\XMLTextMasterPageContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextMasterPageContext.hxx
 hedabu: ..\inc\XMLTextTableContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextTableContext.hxx
+hedabu: ..\source\text\XMLTextShapeImportHelper.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextShapeImportHelper.hxx

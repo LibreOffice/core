@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartPropertySetMapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-26 10:06:05 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,12 +95,6 @@ public:
 
 class XMLChartPropertySetMapper : public XMLPropertySetMapper
 {
-protected:
-    virtual void ContextFilter(
-        ::std::vector< XMLPropertyState >& rProperties,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > rPropSet ) const;
-
 public:
     XMLChartPropertySetMapper();
     ~XMLChartPropertySetMapper();
@@ -115,6 +109,13 @@ private:
     const rtl::OUString msTrue;
     const rtl::OUString msFalse;
 
+protected:
+    virtual void ContextFilter(
+        ::std::vector< XMLPropertyState >& rProperties,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > rPropSet ) const;
+
+private:
     /// this method is called for every item that has the MID_FLAG_ELEMENT_EXPORT flag set
     virtual void handleElementItem(
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,

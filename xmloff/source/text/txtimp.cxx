@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTFRAME_HPP_
 #include <com/sun/star/text/XTextFrame.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
+#include <com/sun/star/drawing/XShapes.hpp>
+#endif
 
 
 #ifndef _XMLOFF_XMLKYWD_HXX
@@ -136,6 +139,9 @@
 #endif
 #ifndef _XMLOFF_TXTIMPPR_HXX
 #include "txtimppr.hxx"
+#endif
+#ifndef _XMLOFF_XMLIMP_HXX
+#include "xmlimp.hxx"
 #endif
 #ifndef _XMLOFF_TXTVFLDI_HXX
 #include "txtvfldi.hxx"
@@ -174,6 +180,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::xml::sax;
 
 
@@ -538,6 +545,13 @@ XMLTextImportHelper::~XMLTextImportHelper()
     delete pNextFrmNames;
 
     _FinitBackpatcher();
+}
+
+SvXMLImportPropertyMapper *XMLTextImportHelper::CreateShapeExtPropMapper()
+{
+    XMLPropertySetMapper *pPropMapper =
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME );
+    return new XMLTextImportPropertyMapper( pPropMapper );
 }
 
 void XMLTextImportHelper::SetCursor( const Reference < XTextCursor > & rCursor )
@@ -967,6 +981,14 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     case XML_TOK_TEXT_TOC:
         pContext = new XMLIndexTOCContext( rImport, nPrefix, rLocalName );
         break;
+
+    default:
+        if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType )
+        {
+            Reference < XShapes > xShapes;
+            pContext = rImport.GetShapeImport()->CreateGroupChildContext(
+                    rImport, nPrefix, rLocalName, xAttrList, xShapes );
+        }
     }
 
 //  if( !pContext )
@@ -1185,13 +1207,13 @@ void XMLTextImportHelper::ConnectFrameChains(
     }
 }
 
-sal_Bool XMLTextImportHelper::IsInFrame()
+sal_Bool XMLTextImportHelper::IsInFrame() const
 {
     sal_Bool bIsInFrame = sal_False;
 
     // are we currently in a text frame? yes, if the cursor has a
     // TextFrame property and it's non-NULL
-    Reference<XPropertySet> xPropSet(GetCursor(), UNO_QUERY);
+    Reference<XPropertySet> xPropSet(((XMLTextImportHelper *)this)->GetCursor(), UNO_QUERY);
     if (xPropSet.is())
     {
         if (xPropSet->getPropertySetInfo()->hasPropertyByName(sTextFrame))
@@ -1208,4 +1230,9 @@ sal_Bool XMLTextImportHelper::IsInFrame()
     }
 
     return bIsInFrame;
+}
+
+sal_Bool XMLTextImportHelper::IsInHeaderFooter() const
+{
+    return sal_False;
 }

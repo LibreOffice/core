@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleexp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ sal_Bool XMLStyleExport::exportStyle(
                                   sal_True, sal_True );
         // <style:properties>
         ::std::vector< XMLPropertyState > xPropStates =
-            rPropMapper->getPropertySetMapper()->Filter( xPropSet );
+            rPropMapper->Filter( xPropSet );
         rPropMapper->exportXML( GetExport().GetDocHandler(), xPropStates,
                                   GetExport().GetMM100UnitConverter(),
                                      GetExport().GetNamespaceMap(),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prstylei.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:18:29 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,8 +175,7 @@ void XMLPropStyleContext::FillPropertySet(
                                                                 GetFamily() );
     DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
     if( xImpPrMap.is() )
-        xImpPrMap->getPropertySetMapper()->FillPropertySet( aProperties,
-                                                           rPropSet );
+        xImpPrMap->FillPropertySet( aProperties, rPropSet );
 }
 
 Reference < XStyle > XMLPropStyleContext::Create()

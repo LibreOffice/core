@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,11 +149,18 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTGRAPHICOBJECTSSUPPLIER_HPP_
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_TEXT_XTEXTSECTION_HPP_
 #include <com/sun/star/text/XTextSection.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_SECTIONFILELINK_HPP_
 #include <com/sun/star/text/SectionFileLink.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
@@ -212,6 +219,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::drawing;
 
 typedef OUString *OUStringPtr;
 SV_DECL_PTRARR_DEL( OUStrings_Impl, OUStringPtr, 20, 10 )
@@ -223,20 +231,20 @@ SV_IMPL_OP_PTRARR_SORT( OUStringsSort_Impl, OUStringPtr )
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                                     const Reference < XPropertySet > & rPropSet )
 {
-    UniReference < XMLPropertySetMapper > xPropMapper;
+    UniReference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
-        xPropMapper = GetParaPropMapper()->getPropertySetMapper();
+        xPropMapper = GetParaPropMapper();
         break;
     case XML_STYLE_FAMILY_TEXT_TEXT:
-        xPropMapper = GetTextPropMapper()->getPropertySetMapper();
+        xPropMapper = GetTextPropMapper();
         break;
-    case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
-        xPropMapper = GetAutoFramePropMapper()->getPropertySetMapper();
+    case XML_STYLE_FAMILY_TEXT_FRAME:
+        xPropMapper = GetAutoFramePropMapper();
         break;
     case XML_STYLE_FAMILY_TEXT_SECTION:
-        xPropMapper = GetSectionPropMapper()->getPropertySetMapper();
+        xPropMapper = GetSectionPropMapper();
         break;
     }
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
@@ -291,7 +299,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                 aAny >>= sParent;
             }
             break;
-        case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
+        case XML_STYLE_FAMILY_TEXT_FRAME:
             if( xPropSetInfo->hasPropertyByName( sFrameStyleName ) )
             {
                 aAny = rPropSet->getPropertyValue( sFrameStyleName );
@@ -315,20 +323,20 @@ OUString XMLTextParagraphExport::Find(
         const OUString& rParent ) const
 {
     OUString sName( rParent );
-    UniReference < XMLPropertySetMapper > xPropMapper;
+    UniReference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
-        xPropMapper = GetParaPropMapper()->getPropertySetMapper();
+        xPropMapper = GetParaPropMapper();
         break;
     case XML_STYLE_FAMILY_TEXT_TEXT:
-        xPropMapper = GetTextPropMapper()->getPropertySetMapper();
+        xPropMapper = GetTextPropMapper();
         break;
-    case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
-        xPropMapper = GetAutoFramePropMapper()->getPropertySetMapper();
+    case XML_STYLE_FAMILY_TEXT_FRAME:
+        xPropMapper = GetAutoFramePropMapper();
         break;
     case XML_STYLE_FAMILY_TEXT_SECTION:
-        xPropMapper = GetSectionPropMapper()->getPropertySetMapper();
+        xPropMapper = GetSectionPropMapper();
         break;
     }
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
@@ -538,8 +546,10 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     pFieldExport( 0 ),
     pPageTextFrameIdxs( 0 ),
     pPageGraphicIdxs( 0 ),
+    pPageShapeIdxs( 0 ),
     pFrameTextFrameIdxs( 0 ),
     pFrameGraphicIdxs( 0 ),
+    pFrameShapeIdxs( 0 ),
     sParagraphService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Paragraph")),
     sTableService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextTable")),
     sTextFieldService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField")),
@@ -548,6 +558,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sTextEmbeddedService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextEmbeddedObject")),
     sTextEndnoteService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Endnote")),
     sTextContentService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextContent")),
+    sShapeService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape")),
     sParaStyleName(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName")),
     sParaConditionalStyleName(RTL_CONSTASCII_USTRINGPARAM("ParaConditionalStyleName")),
     sParaChapterNumberingLevel(RTL_CONSTASCII_USTRINGPARAM("ParaChapterNumberingLevel")),
@@ -633,7 +644,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     OUString sFamily( RTL_CONSTASCII_USTRINGPARAM(sXML_paragraph) );
     OUString sPrefix( 'P' );
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_PARAGRAPH, sFamily,
-                              xPropMapper, sPrefix );
+                              xParaPropMapper, sPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT );
     xTextPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
@@ -641,15 +652,15 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sFamily = OUString( RTL_CONSTASCII_USTRINGPARAM(sXML_text) );
     sPrefix = OUString( 'T' );
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_TEXT, sFamily,
-                              xPropMapper, sPrefix );
+                              xTextPropMapper, sPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_AUTO_FRAME );
     xAutoFramePropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                                   GetExport() );
     sFamily = OUString( RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME) );
-    sPrefix = OUString( 'G' );
-    rAutoStylePool.AddFamily( XML_STYLE_FAMILY_SD_GRAPHICS_ID, sFamily,
-                              xPropMapper, sPrefix );
+    sPrefix = OUString( RTL_CONSTASCII_USTRINGPARAM( "fr" ) );
+    rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_FRAME, sFamily,
+                              xAutoFramePropMapper, sPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_SECTION );
     xSectionPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
@@ -657,7 +668,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sFamily = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_section ) );
     sPrefix = OUString( RTL_CONSTASCII_USTRINGPARAM( "Sect" ) );
     rAutoStylePool.AddFamily( XML_STYLE_FAMILY_TEXT_SECTION, sFamily,
-                              xPropMapper, sPrefix );
+                              xSectionPropMapper, sPrefix );
 
     xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME );
     xFramePropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
@@ -674,8 +685,18 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
     delete pListAutoPool;
     delete pPageTextFrameIdxs;
     delete pPageGraphicIdxs;
+    delete pPageShapeIdxs;
     delete pFrameTextFrameIdxs;
     delete pFrameGraphicIdxs;
+    delete pFrameShapeIdxs;
+}
+
+SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateShapeExtPropMapper(
+        SvXMLExport& rExport )
+{
+    UniReference < XMLPropertySetMapper > xPropMapper =
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_SHAPE );
+    return new XMLTextExportPropertySetMapper( xPropMapper, rExport );
 }
 
 void XMLTextParagraphExport::collectFrames()
@@ -746,6 +767,43 @@ void XMLTextParagraphExport::collectFrames()
             }
         }
     }
+
+    Reference < XDrawPageSupplier > xDPS( GetExport().GetModel(),
+                                                    UNO_QUERY );
+    if( xDPS.is() )
+    {
+        xShapes = Reference < XIndexAccess >( xDPS->getDrawPage(),
+                                                  UNO_QUERY );
+        sal_Int32 nCount =  xShapes->getCount();
+        for( sal_Int32 i = 0; i < nCount; i++ )
+        {
+            Any aAny = xShapes->getByIndex( i );
+            Reference < XShape > xShape;
+            aAny >>= xShape;
+            if( !xShape.is() )
+                continue;
+
+            Reference < XPropertySet > xPropSet( xShape, UNO_QUERY );
+
+            aAny = xPropSet->getPropertyValue( sAnchorType );
+            TextContentAnchorType eAnchor;
+            aAny >>= eAnchor;
+
+            switch( eAnchor )
+            {
+            case TextContentAnchorType_AT_PAGE:
+                if( !pPageShapeIdxs )
+                    pPageShapeIdxs = new SvLongs;
+                pPageShapeIdxs->Insert( i, pPageShapeIdxs->Count() );
+                break;
+            case TextContentAnchorType_AT_FRAME:
+                if( !pFrameShapeIdxs )
+                    pFrameShapeIdxs = new SvLongs;
+                pFrameShapeIdxs->Insert( i, pFrameShapeIdxs->Count() );
+                break;
+            }
+        }
+    }
 }
 
 void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles )
@@ -769,6 +827,17 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles )
             Reference < XTextContent > xTxtCntnt;
             aAny >>= xTxtCntnt;
             exportTextGraphic( xTxtCntnt, bAutoStyles );
+        }
+    }
+    if( pPageShapeIdxs )
+    {
+        for( sal_Int32 i = 0; i < pPageShapeIdxs->Count(); i++ )
+        {
+            Any aAny = xShapes->getByIndex( (*pPageShapeIdxs)[i] );
+            Reference < XShape > xShape;
+            aAny >>= xShape;
+            Reference < XTextContent > xTxtCntnt( xShape, UNO_QUERY );
+            exportShape( xTxtCntnt, bAutoStyles );
         }
     }
 }
@@ -835,6 +904,10 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
         else if( xServiceInfo->supportsService( sTextEmbeddedService ) )
         {
             exportTextEmbedded( xTxtCntnt, bAutoStyles );
+        }
+        else if( xServiceInfo->supportsService( sShapeService ) )
+        {
+            exportShape( xTxtCntnt, bAutoStyles );
         }
         else
         {
@@ -1140,9 +1213,12 @@ void XMLTextParagraphExport::exportTextMark(
     // else: no styles. (see above)
 }
 
-void XMLTextParagraphExport::addTextFrameAttributes(
-    const Reference < XPropertySet >& rPropSet )
+sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
+    const Reference < XPropertySet >& rPropSet,
+    sal_Bool bShape )
 {
+    sal_Int32 nShapeFeatures = SEF_DEFAULT;
+
     // draw:name
     Reference < XNamed > xNamed( rPropSet, UNO_QUERY );
     if( xNamed.is() )
@@ -1176,41 +1252,56 @@ void XMLTextParagraphExport::addTextFrameAttributes(
                                   sValue.makeStringAndClear() );
     }
 
-    // svg:x
-    sal_Int16 nHoriOrient =  HoriOrientation::NONE;
-    aAny = rPropSet->getPropertyValue( sHoriOrient );
-    aAny >>= nHoriOrient;
-    if( HoriOrientation::NONE == nHoriOrient )
+    if( !bShape )
     {
-        sal_Int32 nPos = 0;
-        Any aAny = rPropSet->getPropertyValue( sHoriOrientPosition );
-        aAny >>= nPos;
-        GetExport().GetMM100UnitConverter().convertMeasure( sValue, nPos );
-        GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_x,
-                                  sValue.makeStringAndClear() );
+        // svg:x
+        sal_Int16 nHoriOrient =  HoriOrientation::NONE;
+        aAny = rPropSet->getPropertyValue( sHoriOrient );
+        aAny >>= nHoriOrient;
+        if( HoriOrientation::NONE == nHoriOrient )
+        {
+            sal_Int32 nPos = 0;
+            Any aAny = rPropSet->getPropertyValue( sHoriOrientPosition );
+            aAny >>= nPos;
+            GetExport().GetMM100UnitConverter().convertMeasure( sValue, nPos );
+            GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_x,
+                                      sValue.makeStringAndClear() );
+        }
+    }
+    else if( TextContentAnchorType_AS_CHARACTER == eAnchor )
+        nShapeFeatures = (nShapeFeatures & ~SEF_EXPORT_X);
+
+    if( !bShape || TextContentAnchorType_AS_CHARACTER == eAnchor  )
+    {
+        // svg:y
+        sal_Int16 nVertOrient =  VertOrientation::NONE;
+        aAny = rPropSet->getPropertyValue( sVertOrient );
+        aAny >>= nVertOrient;
+        if( VertOrientation::NONE == nVertOrient )
+        {
+            sal_Int32 nPos = 0;
+            Any aAny = rPropSet->getPropertyValue( sVertOrientPosition );
+            aAny >>= nPos;
+            GetExport().GetMM100UnitConverter().convertMeasure( sValue, nPos );
+            GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_y,
+                                      sValue.makeStringAndClear() );
+        }
+        else if( bShape )
+            nShapeFeatures = (nShapeFeatures & ~SEF_EXPORT_Y);
     }
 
-    // svg:y
-    sal_Int16 nVertOrient =  VertOrientation::NONE;
-    aAny = rPropSet->getPropertyValue( sVertOrient );
-    aAny >>= nVertOrient;
-    if( VertOrientation::NONE == nVertOrient )
-    {
-        sal_Int32 nPos = 0;
-        Any aAny = rPropSet->getPropertyValue( sVertOrientPosition );
-        aAny >>= nPos;
-        GetExport().GetMM100UnitConverter().convertMeasure( sValue, nPos );
-        GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_y,
-                                  sValue.makeStringAndClear() );
-    }
 
+    Reference< XPropertySetInfo > xPropSetInfo = rPropSet->getPropertySetInfo();
 
     // svg:width
     sal_Int8 nRelWidth =  0;
-    aAny = rPropSet->getPropertyValue( sRelativeWidth );
-    aAny >>= nRelWidth;
-    DBG_ASSERT( nRelWidth >= 0 && nRelWidth <= 100,
-                "Got illegal relative width from API" );
+    if( xPropSetInfo->hasPropertyByName( sRelativeWidth ) )
+    {
+        aAny = rPropSet->getPropertyValue( sRelativeWidth );
+        aAny >>= nRelWidth;
+        DBG_ASSERT( nRelWidth >= 0 && nRelWidth <= 100,
+                    "Got illegal relative width from API" );
+    }
     if( nRelWidth > 0 )
     {
         // TODO: instead of checking this value for 255 a new property
@@ -1219,21 +1310,26 @@ void XMLTextParagraphExport::addTextFrameAttributes(
             GetExport().GetMM100UnitConverter().convertPercent( sValue,
                                                                 nRelWidth );
     }
-    else
+    else if( xPropSetInfo->hasPropertyByName( sWidth ) )
+
     {
         sal_Int32 nWidth =  0;
         aAny = rPropSet->getPropertyValue( sWidth );
         aAny >>= nWidth;
         GetExport().GetMM100UnitConverter().convertMeasure( sValue, nWidth );
     }
-    GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_width,
-                              sValue.makeStringAndClear() );
+    if( sValue.getLength() )
+        GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_width,
+                                  sValue.makeStringAndClear() );
 
     // svg:height or fo:min-height
-    aAny = rPropSet->getPropertyValue( sSizeRelative );
-    sal_Bool bSyncHeight = *(sal_Bool *)aAny.getValue();
+    sal_Bool bSyncHeight = sal_False;
+    if( xPropSetInfo->hasPropertyByName( sSizeRelative ) )
+    {
+        aAny = rPropSet->getPropertyValue( sSizeRelative );
+        bSyncHeight = *(sal_Bool *)aAny.getValue();
+    }
 
-    Reference< XPropertySetInfo > xPropSetInfo = rPropSet->getPropertySetInfo();
     sal_Int16 nSizeType = SizeType::FIX;
     if( xPropSetInfo->hasPropertyByName( sSizeType ) )
     {
@@ -1247,14 +1343,18 @@ void XMLTextParagraphExport::addTextFrameAttributes(
     if( !bSyncHeight && SizeType::VARIABLE != nSizeType )
     {
         sal_Int8 nRelHeight =  0;
-        aAny = rPropSet->getPropertyValue( sRelativeHeight );
-        aAny >>= nRelHeight;
+        if( xPropSetInfo->hasPropertyByName( sRelativeHeight ) )
+        {
+            aAny = rPropSet->getPropertyValue( sRelativeHeight );
+            aAny >>= nRelHeight;
+        }
         if( nRelHeight > 0 )
         {
             GetExport().GetMM100UnitConverter().convertPercent( sValue,
                                                                 nRelHeight );
         }
-        else
+        else if( xPropSetInfo->hasPropertyByName( sHeight ) )
+
         {
             sal_Int32 nHeight =  0;
             aAny = rPropSet->getPropertyValue( sHeight );
@@ -1262,13 +1362,18 @@ void XMLTextParagraphExport::addTextFrameAttributes(
             GetExport().GetMM100UnitConverter().convertMeasure( sValue,
                                                                 nHeight );
         }
-        if( SizeType::MIN == nSizeType )
-            GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_min_height,
-                                      sValue.makeStringAndClear() );
-        else
-            GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_height,
-                                      sValue.makeStringAndClear() );
+        if( sValue.getLength() )
+        {
+            if( SizeType::MIN == nSizeType )
+                GetExport().AddAttribute( XML_NAMESPACE_FO, sXML_min_height,
+                                          sValue.makeStringAndClear() );
+            else
+                GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_height,
+                                          sValue.makeStringAndClear() );
+        }
     }
+
+    return nShapeFeatures;
 }
 
 void XMLTextParagraphExport::_exportTextFrame(
@@ -1287,11 +1392,11 @@ void XMLTextParagraphExport::_exportTextFrame(
     }
 
     OUString sAutoStyle( sStyle );
-    sAutoStyle = Find( XML_STYLE_FAMILY_SD_GRAPHICS_ID, rPropSet, sStyle );
+    sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle );
     if( sAutoStyle.getLength() )
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_style_name,
                                   sAutoStyle );
-    addTextFrameAttributes( rPropSet );
+    addTextFrameAttributes( rPropSet, sal_False );
 
     // draw:chain-next-name
     if( rPropSetInfo->hasPropertyByName( sChainNextName ) )
@@ -1319,7 +1424,7 @@ void XMLTextParagraphExport::exportTextFrame(
     {
         Reference < XTextFrame > xTxtFrame( rTxtCntnt, UNO_QUERY );
         Reference < XText > xTxt = xTxtFrame->getText();
-        Add( XML_STYLE_FAMILY_SD_GRAPHICS_ID, xPropSet );
+        Add( XML_STYLE_FAMILY_TEXT_FRAME, xPropSet );
         exportText( xTxt, bAutoStyles );
     }
     else
@@ -1357,11 +1462,11 @@ void XMLTextParagraphExport::_exportTextGraphic(
     }
 
     OUString sAutoStyle( sStyle );
-    sAutoStyle = Find( XML_STYLE_FAMILY_SD_GRAPHICS_ID, rPropSet, sStyle );
+    sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle );
     if( sAutoStyle.getLength() )
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_style_name,
                                   sAutoStyle );
-    addTextFrameAttributes( rPropSet );
+    addTextFrameAttributes( rPropSet, sal_False );
 
     // xlink:href
     OUString sURL;
@@ -1406,7 +1511,7 @@ void XMLTextParagraphExport::exportTextGraphic(
 
     if( bAutoStyles )
     {
-        Add( XML_STYLE_FAMILY_SD_GRAPHICS_ID, xPropSet );
+        Add( XML_STYLE_FAMILY_TEXT_FRAME, xPropSet );
     }
     else
     {
@@ -1427,6 +1532,24 @@ void XMLTextParagraphExport::exportTextGraphic(
         {
             _exportTextGraphic( xPropSet, xPropSetInfo );
         }
+    }
+}
+
+void XMLTextParagraphExport::exportShape(
+        const Reference < XTextContent > & rTxtCntnt,
+        sal_Bool bAutoStyles )
+{
+    Reference < XShape > xShape( rTxtCntnt, UNO_QUERY );
+
+    if( bAutoStyles )
+    {
+        GetExport().GetShapeExport()->collectShapeAutoStyles( xShape );
+    }
+    else
+    {
+        Reference < XPropertySet > xPropSet( rTxtCntnt, UNO_QUERY );
+        sal_Int32 nFeatures = addTextFrameAttributes( xPropSet, sal_True );
+        GetExport().GetShapeExport()->exportShape( xShape, nFeatures );
     }
 }
 
@@ -1685,27 +1808,21 @@ void XMLTextParagraphExport::exportTextDeclarations()
 void XMLTextParagraphExport::exportTextAutoStyles()
 {
     GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
-                                   *GetParaPropMapper().get(),
                                    GetExport().GetDocHandler(),
                                    GetExport().GetMM100UnitConverter(),
                                    GetExport().GetNamespaceMap() );
 
     GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_TEXT,
-                                   *GetTextPropMapper().get(),
                                    GetExport().GetDocHandler(),
                                    GetExport().GetMM100UnitConverter(),
                                    GetExport().GetNamespaceMap() );
 
-/*
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_SD_GRAPHICS_ID,
-                                   *GetAutoFramePropMapper().get(),
+    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_FRAME,
                                    GetExport().GetDocHandler(),
                                    GetExport().GetMM100UnitConverter(),
                                    GetExport().GetNamespaceMap() );
-*/
 
     GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_SECTION,
-                                  *GetSectionPropMapper().get(),
                                   GetExport().GetDocHandler(),
                                   GetExport().GetMM100UnitConverter(),
                                   GetExport().GetNamespaceMap() );

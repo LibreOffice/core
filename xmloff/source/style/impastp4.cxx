@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ SvXMLAutoStylePoolP_Impl::~SvXMLAutoStylePoolP_Impl()
 void SvXMLAutoStylePoolP_Impl::AddFamily(
         sal_Int32 nFamily,
         const OUString& rStrName,
-        const UniReference < XMLPropertySetMapper > & rMapper,
+        const UniReference < SvXMLExportPropertyMapper > & rMapper,
            const OUString& rStrPrefix,
         sal_Bool bAsFamily )
 {
@@ -251,7 +251,6 @@ OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
 
 void SvXMLAutoStylePoolP_Impl::exportXML(
            sal_Int32 nFamily,
-        const SvXMLExportPropertyMapper& rPropExp,
         const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
@@ -348,7 +347,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
 
                 pAntiImpl->exportStyleAttributes( *mpAttrList, nFamily,
                         aExpStyles[i].mpProperties->GetProperties(),
-                        rPropExp,
+                        *pFamily->mxMapper.get(),
                         rUnitConverter, rNamespaceMap );
 
                 rHandler->ignorableWhitespace( msWS );
@@ -360,7 +359,8 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                 {
                     nStart = 0;
                     sal_Int32 nIndex = 0;
-                    UniReference< XMLPropertySetMapper > aPropMapper = rPropExp.getPropertySetMapper();
+                    UniReference< XMLPropertySetMapper > aPropMapper =
+                        pFamily->mxMapper->getPropertySetMapper();
                     while(nIndex < aPropMapper->GetEntryCount() && nEnd == -1)
                     {
                         if (aPropMapper->GetEntryContextId( nIndex ) & CTF_PM_FLAGMASK)
@@ -371,12 +371,12 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                         nEnd = nIndex;
                 }
 
-                rPropExp.exportXML( rHandler, aExpStyles[i].mpProperties->GetProperties(), rUnitConverter,
+                pFamily->mxMapper->exportXML( rHandler, aExpStyles[i].mpProperties->GetProperties(), rUnitConverter,
                                     rNamespaceMap, nStart, nEnd, XML_EXPORT_FLAG_IGN_WS );
 
                 pAntiImpl->exportStyleContent( rHandler, nFamily,
                         aExpStyles[i].mpProperties->GetProperties(),
-                        rPropExp, rUnitConverter, rNamespaceMap );
+                        *pFamily->mxMapper.get(), rUnitConverter, rNamespaceMap );
 
                 rHandler->ignorableWhitespace( msWS );
                 rHandler->endElement( sName );

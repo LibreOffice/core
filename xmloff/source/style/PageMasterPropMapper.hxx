@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropMapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,6 @@
 
 class XMLPageMasterPropSetMapper : public XMLPropertySetMapper
 {
-
-protected:
-    virtual void        ContextFilter(
-                            ::std::vector< XMLPropertyState >& rProperties,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rPropSet
-                            ) const;
 public:
                         XMLPageMasterPropSetMapper();
                         XMLPageMasterPropSetMapper(

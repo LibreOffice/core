@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,18 +237,18 @@ SvXMLAutoStylePoolP::~SvXMLAutoStylePoolP()
 void SvXMLAutoStylePoolP::AddFamily(
         sal_Int32 nFamily,
         const OUString& rStrName,
-        XMLPropertySetMapper* pMapper,
+        SvXMLExportPropertyMapper* pMapper,
         OUString aStrPrefix,
         sal_Bool bAsFamily )
 {
-    UniReference <XMLPropertySetMapper> xTmp = pMapper;
+    UniReference <SvXMLExportPropertyMapper> xTmp = pMapper;
     AddFamily( nFamily, rStrName, xTmp, aStrPrefix, bAsFamily );
 }
 
 void SvXMLAutoStylePoolP::AddFamily(
         sal_Int32 nFamily,
         const OUString& rStrName,
-        const UniReference < XMLPropertySetMapper > & rMapper,
+        const UniReference < SvXMLExportPropertyMapper > & rMapper,
         const OUString& rStrPrefix,
         sal_Bool bAsFamily )
 {
@@ -290,12 +290,11 @@ OUString SvXMLAutoStylePoolP::Find( sal_Int32 nFamily,
 }
 
 void SvXMLAutoStylePoolP::exportXML( sal_Int32 nFamily,
-    const SvXMLExportPropertyMapper& rPropExp,
     const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
     const SvXMLUnitConverter& rUnitConverter,
     const SvXMLNamespaceMap& rNamespaceMap) const
 {
-    pImpl->exportXML( nFamily, rPropExp, rHandler, rUnitConverter,
+    pImpl->exportXML( nFamily, rHandler, rUnitConverter,
                       rNamespaceMap, this);
 }
 

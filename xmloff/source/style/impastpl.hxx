@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-18 11:37:23 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,6 @@
 #include <xmlexppr.hxx>
 #endif
 
-class XMLPropertySetMapper;
 class SvXMLAutoStylePoolP;
 class SvXMLAutoStylePoolParentsP_Impl;
 class SvXMLAutoStylePoolNamesP_Impl;
@@ -108,7 +107,7 @@ class XMLFamilyData_Impl
 public:
     sal_uInt32                          mnFamily;
     ::rtl::OUString                     maStrFamilyName;
-    UniReference < XMLPropertySetMapper >   mxMapper;
+    UniReference < SvXMLExportPropertyMapper >  mxMapper;
 
     SvXMLAutoStylePoolParentsP_Impl*    mpParentList;
     SvXMLAutoStylePoolNamesP_Impl*      mpNameList;
@@ -119,7 +118,7 @@ public:
 
 public:
     XMLFamilyData_Impl( sal_Int32 nFamily, const ::rtl::OUString& rStrName,
-            const UniReference < XMLPropertySetMapper > &  rMapper,
+            const UniReference < SvXMLExportPropertyMapper > &  rMapper,
             const ::rtl::OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
     XMLFamilyData_Impl( sal_Int32 nFamily )
         : mnFamily( nFamily ), mpParentList( NULL ),
@@ -223,7 +222,7 @@ public:
     ~SvXMLAutoStylePoolP_Impl();
 
     void AddFamily( sal_Int32 nFamily, const ::rtl::OUString& rStrName,
-        const UniReference < XMLPropertySetMapper > & rMapper,
+        const UniReference < SvXMLExportPropertyMapper > & rMapper,
         const ::rtl::OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
     void RegisterName( sal_Int32 nFamily, const ::rtl::OUString& rName );
 
@@ -233,7 +232,6 @@ public:
                           const ::std::vector< XMLPropertyState >& rProperties ) const;
 
     void exportXML( sal_Int32 nFamily,
-        const SvXMLExportPropertyMapper& rPropExp,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,

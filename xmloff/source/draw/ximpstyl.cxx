@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,7 +799,7 @@ UniReference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropertyM
         {
             UniReference< XMLShapeImportHelper > aImpHelper = ((SvXMLImport&)GetImport()).GetShapeImport();
             ((SdXMLStylesContext*)this)->xPresImpPropMapper =
-                new SvXMLImportPropertyMapper(aImpHelper->GetPresPagePropsMapper());
+                aImpHelper->GetPresPagePropsMapper();
         }
         xMapper = xPresImpPropMapper;
         return xMapper;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-23 10:27:59 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,7 +737,7 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
         {
             UniReference< XMLShapeImportHelper > aImpHelper = ((SvXMLImport&)GetImport()).GetShapeImport();
             ((SvXMLStylesContext*)this)->xShapeImpPropMapper =
-                new SvXMLImportPropertyMapper(aImpHelper->GetPropertySetMapper());
+                aImpHelper->GetPropertySetMapper();
         }
         xMapper = xShapeImpPropMapper;
         break;

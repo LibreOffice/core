@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-19 14:25:20 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,11 @@ protected:
     XMLTextColumnsExport maTextColumnsExport;
     XMLBackgroundImageExport maBackgroundImageExport;
 
+    /** Application-specific filter. By default do nothing. */
+    virtual void ContextFilter(
+            ::std::vector< XMLPropertyState >& rProperties,
+            ::com::sun::star::uno::Reference<
+                        ::com::sun::star::beans::XPropertySet > rPropSet ) const;
 public:
 
     XMLTextExportPropertySetMapper(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2000-09-27 15:15:41 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 13:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,15 +175,16 @@ SchXMLExportHelper::SchXMLExportHelper(
         // create property set mapper
         mxPropertySetMapper = new XMLChartPropertySetMapper;
 
-        // register chart auto-style family
-        mrAutoStylePool.AddFamily(
-            XML_STYLE_FAMILY_SCH_CHART_ID,
-            rtl::OUString::createFromAscii( XML_STYLE_FAMILY_SCH_CHART_NAME ),
-            mxPropertySetMapper,
-            rtl::OUString::createFromAscii( XML_STYLE_FAMILY_SCH_CHART_PREFIX ));
     }
 
     mxExpPropMapper = new XMLChartExportPropertyMapper( mxPropertySetMapper );
+
+    // register chart auto-style family
+    mrAutoStylePool.AddFamily(
+        XML_STYLE_FAMILY_SCH_CHART_ID,
+        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_SCH_CHART_NAME ),
+        mxExpPropMapper.get(),
+        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_SCH_CHART_PREFIX ));
 }
 
 void SchXMLExportHelper::exportAutoStyles()
@@ -192,7 +193,6 @@ void SchXMLExportHelper::exportAutoStyles()
     {
         mrAutoStylePool.exportXML(
             XML_STYLE_FAMILY_SCH_CHART_ID,
-            *( mxExpPropMapper.get()),
             mrExport.GetDocHandler(),
             mrExport.GetMM100UnitConverter(),
             mrExport.GetNamespaceMap());
@@ -345,11 +345,11 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
 
     SvXMLElementExport* pElChart = 0;
     // get property states for autostyles
-    if( mxPropertySetMapper.is())
+    if( mxExpPropMapper.is())
     {
         uno::Reference< beans::XPropertySet > xPropSet( rChartDoc->getArea(), uno::UNO_QUERY );
         if( xPropSet.is())
-            aPropertyStates = mxPropertySetMapper->Filter( xPropSet );
+            aPropertyStates = mxExpPropMapper->Filter( xPropSet );
     }
     if( bExportContent )
     {
@@ -413,11 +413,11 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
     if( bHasMainTitle )
     {
         // get property states for autostyles
-        if( mxPropertySetMapper.is())
+        if( mxExpPropMapper.is())
         {
             uno::Reference< beans::XPropertySet > xPropSet( rChartDoc->getTitle(), uno::UNO_QUERY );
             if( xPropSet.is())
-                aPropertyStates = mxPropertySetMapper->Filter( xPropSet );
+                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
         }
         if( bExportContent )
         {
@@ -456,11 +456,11 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
     if( bHasSubTitle )
     {
         // get property states for autostyles
-        if( mxPropertySetMapper.is())
+        if( mxExpPropMapper.is())
         {
             uno::Reference< beans::XPropertySet > xPropSet( rChartDoc->getSubTitle(), uno::UNO_QUERY );
             if( xPropSet.is())
-                aPropertyStates = mxPropertySetMapper->Filter( xPropSet );
+                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
         }
 
         if( bExportContent )
@@ -499,11 +499,11 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
     if( bHasLegend )
     {
         // get property states for autostyles
-        if( mxPropertySetMapper.is())
+        if( mxExpPropMapper.is())
         {
             uno::Reference< beans::XPropertySet > xPropSet( rChartDoc->getLegend(), uno::UNO_QUERY );
             if( xPropSet.is())
-                aPropertyStates = mxPropertySetMapper->Filter( xPropSet );
+                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
         }
 
         if( bExportContent )
@@ -725,8 +725,8 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
     xPropSet = uno::Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY );
     if( xPropSet.is())
     {
-        if( mxPropertySetMapper.is())
-            aPropertyStates = mxPropertySetMapper->Filter( xPropSet );
+        if( mxExpPropMapper.is())
+            aPropertyStates = mxExpPropMapper->Filter( xPropSet );
     }
     if( bExportContent )
     {
@@ -880,9 +880,9 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 DBG_WARNING( "Required property not found in DataRowProperties" );
             }
 
-            if( mxPropertySetMapper.is())
+            if( mxExpPropMapper.is())
             {
-                aPropertyStates = mxPropertySetMapper->Filter( xPropSet );
+                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
             }
         }
 
@@ -1014,7 +1014,7 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
         // Note: if only the nth data-point has autostyles there is an element
         // without style and repeat="n-1" attribute written in advance.
 
-        if( mxPropertySetMapper.is())
+        if( mxExpPropMapper.is())
         {
             const sal_Int32 nSeriesCount =
                 ( bRowSourceColumns ? ( mnRowCount - nRowOffset ): ( mnColCount - nColOffset ));
@@ -1027,7 +1027,7 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 // get property states for autostyles
                 xPropSet = xDiagram->getDataPointProperties( nElement, nSeries );
                 if( xPropSet.is())
-                    aPropertyStates = mxPropertySetMapper->Filter( xPropSet );
+                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
                 bIsEmpty = ( aPropertyStates.size() == 0 );
 
                 if( bExportContent )
@@ -1238,11 +1238,11 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
         if( xAxisSupp.is())
         {
             // get property states for autostyles
-            if( mxPropertySetMapper.is())
+            if( mxExpPropMapper.is())
             {
                 xPropSet = xAxisSupp->getXAxis();
                 if( xPropSet.is())
-                    aPropertyStates = mxPropertySetMapper->Filter( xPropSet );
+                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
             }
             if( bExportContent )
             {
@@ -1290,7 +1290,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             uno::Reference< beans::XPropertySet > xMajorGrid( xAxisSupp->getXMainGrid(), uno::UNO_QUERY );
             if( bHasXAxisMajorGrid && xMajorGrid.is())
             {
-                aPropertyStates = mxPropertySetMapper->Filter( xMajorGrid );
+                aPropertyStates = mxExpPropMapper->Filter( xMajorGrid );
                 if( bExportContent )
                 {
                     aASName = GetAutoStylePoolP().Find( nStyleFamily, aPropertyStates );
@@ -1309,7 +1309,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             uno::Reference< beans::XPropertySet > xMinorGrid( xAxisSupp->getXHelpGrid(), uno::UNO_QUERY );
             if( bHasXAxisMinorGrid && xMinorGrid.is())
             {
-                aPropertyStates = mxPropertySetMapper->Filter( xMinorGrid );
+                aPropertyStates = mxExpPropMapper->Filter( xMinorGrid );
                 if( bExportContent )
                 {
                     aASName = GetAutoStylePoolP().Find( nStyleFamily, aPropertyStates );
@@ -1340,11 +1340,11 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
         if( xAxisSupp.is())
         {
             // get property states for autostyles
-            if( mxPropertySetMapper.is())
+            if( mxExpPropMapper.is())
             {
                 xPropSet = xAxisSupp->getSecondaryXAxis();
                 if( xPropSet.is())
-                    aPropertyStates = mxPropertySetMapper->Filter( xPropSet );
+                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
             }
             if( bExportContent )
             {
@@ -1382,11 +1382,11 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
         if( xAxisSupp.is())
         {
             // get property states for autostyles
-            if( mxPropertySetMapper.is())
+            if( mxExpPropMapper.is())
             {
                 xPropSet = xAxisSupp->getYAxis();
                 if( xPropSet.is())
-                    aPropertyStates = mxPropertySetMapper->Filter( xPropSet );
+                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
             }
             if( bExportContent )
             {
@@ -1428,7 +1428,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             uno::Reference< beans::XPropertySet > xMajorGrid( xAxisSupp->getYMainGrid(), uno::UNO_QUERY );
             if( bHasYAxisMajorGrid && xMajorGrid.is())
             {
-                aPropertyStates = mxPropertySetMapper->Filter( xMajorGrid );
+                aPropertyStates = mxExpPropMapper->Filter( xMajorGrid );
 
                 if( bExportContent )
                 {
@@ -1449,7 +1449,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             uno::Reference< beans::XPropertySet > xMinorGrid( xAxisSupp->getYHelpGrid(), uno::UNO_QUERY );
             if( bHasYAxisMinorGrid && xMinorGrid.is())
             {
-                aPropertyStates = mxPropertySetMapper->Filter( xMinorGrid );
+                aPropertyStates = mxExpPropMapper->Filter( xMinorGrid );
 
                 if( bExportContent )
                 {
@@ -1479,11 +1479,11 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
         if( xAxisSupp.is())
         {
             // get property states for autostyles
-            if( mxPropertySetMapper.is())
+            if( mxExpPropMapper.is())
             {
                 xPropSet = xAxisSupp->getSecondaryYAxis();
                 if( xPropSet.is())
-                    aPropertyStates = mxPropertySetMapper->Filter( xPropSet );
+                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
             }
             if( bExportContent )
             {
@@ -1517,11 +1517,11 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
         if( xAxisSupp.is())
         {
             // get property states for autostyles
-            if( mxPropertySetMapper.is())
+            if( mxExpPropMapper.is())
             {
                 xPropSet = xAxisSupp->getZAxis();
                 if( xPropSet.is())
-                    aPropertyStates = mxPropertySetMapper->Filter( xPropSet );
+                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
             }
             if( bExportContent )
             {
@@ -1563,7 +1563,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             uno::Reference< beans::XPropertySet > xMajorGrid( xAxisSupp->getZMainGrid(), uno::UNO_QUERY );
             if( bHasZAxisMajorGrid && xMajorGrid.is())
             {
-                aPropertyStates = mxPropertySetMapper->Filter( xMajorGrid );
+                aPropertyStates = mxExpPropMapper->Filter( xMajorGrid );
 
                 if( bExportContent )
                 {
@@ -1584,7 +1584,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             uno::Reference< beans::XPropertySet > xMinorGrid( xAxisSupp->getZHelpGrid(), uno::UNO_QUERY );
             if( bHasZAxisMinorGrid && xMinorGrid.is())
             {
-                aPropertyStates = mxPropertySetMapper->Filter( xMinorGrid );
+                aPropertyStates = mxExpPropMapper->Filter( xMinorGrid );
 
                 if( bExportContent )
                 {
