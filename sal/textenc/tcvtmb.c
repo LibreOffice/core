@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtmb.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:47:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,8 +434,8 @@ sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
                              sal_Size* pSrcCvtBytes )
 {
     sal_uChar                   c;
-    sal_uChar                   cLead;
-    sal_uChar                   cTrail;
+    sal_uChar                   cLead = '\0';
+    sal_uChar                   cTrail = '\0';
     sal_Unicode                 cConv;
     const ImplDBCSToUniLeadTab* pLeadEntry;
     const ImplDBCSToUniLeadTab* pLeadTab;
