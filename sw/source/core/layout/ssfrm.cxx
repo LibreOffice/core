@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-13 08:20:02 $
+ *  last change: $Author: ama $ $Date: 2001-09-14 14:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,14 @@ long SwFrm::GetPrtLeft() const
     { return Frm().Left() + Prt().Left(); }
 long SwFrm::GetPrtBottom() const
     { return Frm().Top() + Prt().Height() + Prt().Top(); }
+long SwFrm::GetLeftDistance( long nLimit ) const
+    { return nLimit - Frm().Left(); }
+long SwFrm::GetBottomDistance( long nLimit ) const
+    { return Frm().Top() + Frm().Height() - nLimit; }
+BOOL SwFrm::OverStepLeft( long nLimit )
+    { return nLimit > Frm().Left() && Frm().Left() + Frm().Width() > nLimit; }
+BOOL SwFrm::OverStepBottom( long nLimit )
+    { return nLimit > Frm().Top() && Frm().Top() + Frm().Height() > nLimit; }
 
 BOOL SwFrm::SetMinLeft( long nDeadline )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-13 08:18:48 $
+ *  last change: $Author: ama $ $Date: 2001-09-14 14:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,7 @@ struct SwCrsrMoveState;
 class SwFrm;
 typedef long (SwFrm:: *SwFrmGet)() const;
 typedef BOOL (SwFrm:: *SwFrmMax)( long );
+typedef long (SwFrm:: *SwFrmDist)( long ) const;
 
 struct SwRectFnCollection
 {
@@ -218,6 +219,8 @@ struct SwRectFnCollection
     SwFrmGet      fnGetRightMargin;
     SwFrmGet      fnGetLimit;
     SwFrmMax      fnSetLimit;
+    SwFrmDist     fnCheckLimit;
+    SwFrmMax      fnOverStep;
 };
 
 typedef SwRectFnCollection* SwRectFn;
@@ -752,6 +755,10 @@ public:
     long GetPrtBottom() const;
     BOOL SetMinLeft( long );
     BOOL SetMaxBottom( long );
+    long GetLeftDistance( long ) const;
+    long GetBottomDistance( long ) const;
+    BOOL OverStepLeft( long );
+    BOOL OverStepBottom( long );
 #endif
 
 #ifndef PRODUCT
