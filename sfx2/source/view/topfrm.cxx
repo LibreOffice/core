@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:21:59 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,19 +877,29 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
         pFrame = new SfxTopViewFrame( this, pDoc, pViewIdItem ? pViewIdItem->GetValue() : 0 );
     }
 
-    if ( pViewDataItem )
+    String aMark;
+    SFX_ITEMSET_ARG( pSet, pMarkItem, SfxStringItem, SID_JUMPMARK, FALSE );
+    if ( pMarkItem )
+        aMark = pMarkItem->GetValue();
+
+    if ( pDoc->Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT )
     {
-        if ( pDoc->Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT )
+        if ( pViewDataItem )
             pFrame->GetViewShell()->ReadUserData( pViewDataItem->GetValue(), sal_True );
-        else
-        {
-            // Daten setzen, die in FinishedLoading ausgewertet werden
-            MarkData_Impl*& rpMark = pDoc->Get_Impl()->pMarkData;
-            if (!rpMark)
-                rpMark = new MarkData_Impl;
-            rpMark->pFrame = pFrame;
+        else if( aMark.Len() )
+            GetCurrentViewFrame()->GetViewShell()->JumpToMark( aMark );
+    }
+    else
+    {
+        // Daten setzen, die in FinishedLoading ausgewertet werden
+        MarkData_Impl*& rpMark = pDoc->Get_Impl()->pMarkData;
+        if (!rpMark)
+            rpMark = new MarkData_Impl;
+        rpMark->pFrame = GetCurrentViewFrame();
+        if ( pViewDataItem )
             rpMark->aUserData = pViewDataItem->GetValue();
-        }
+        else
+            rpMark->aMark = aMark;
     }
 
     // Position und Groesse setzen
@@ -922,12 +932,11 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
 
     if ( !pImp->bHidden )
     {
-#if SUPD>638
         if ( pDoc->IsHelpDocument() )
             pFrame->GetDispatcher()->HideUI( TRUE );
         else
             pFrame->GetDispatcher()->HideUI( FALSE );
-#endif
+
         pFrame->Show();
         GetWindow().Show();
         pFrame->MakeActive_Impl( TRUE );
