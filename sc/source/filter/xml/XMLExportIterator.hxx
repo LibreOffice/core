@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:42:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ public:
 
     void                        AddObject(
                                     ScDetectiveObjType eObjType,
-                                    const sal_uInt16 nSheet,
+                                    const SCTAB nSheet,
                                     const ScAddress& rPosition,
                                     const ScRange& rSourceRange,
                                     sal_Bool bHasError );
@@ -394,9 +394,9 @@ class ScMyNotEmptyCellsIterator
     ScXMLExport&                rExport;
     ScHorizontalCellIterator*   pCellItr;
 
-    sal_uInt16                  nCellCol;
-    sal_uInt16                  nCellRow;
-    sal_Int16                   nCurrentTable;
+    SCCOL                   nCellCol;
+    SCROW                   nCellRow;
+    SCTAB                   nCurrentTable;
 
     void                        UpdateAddress( ::com::sun::star::table::CellAddress& rAddress );
     void                        SetCellData( ScMyCell& rMyCell, ::com::sun::star::table::CellAddress& rAddress );
@@ -422,7 +422,7 @@ public:
     inline void                 SetDetectiveOp(ScMyDetectiveOpContainer* pNewDetectiveOp)
                                     { pDetectiveOp = pNewDetectiveOp; }
 
-    void                        SetCurrentTable(const sal_Int32 nTable,
+    void                        SetCurrentTable(const SCTAB nTable,
                                     com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& rxTable);
 
     sal_Bool                    GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles);
