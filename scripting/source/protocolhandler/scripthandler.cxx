@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.20 $
+*  $Revision: 1.21 $
 *
-*  last change: $Author: rt $ $Date: 2004-12-07 10:53:49 $
+*  last change: $Author: vg $ $Date: 2004-12-23 11:49:54 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -58,7 +58,6 @@
 *
 *
 ************************************************************************/
-
 #include "scripthandler.hxx"
 
 #include <osl/mutex.hxx>
