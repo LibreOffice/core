@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ItemStyle.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 18:23:55 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_ui_ItemDescriptor_idl__
-#define __com_sun_star_ui_ItemDescriptor_idl__
+#ifndef __com_sun_star_ui_ItemStyle_idl__
+#define __com_sun_star_ui_ItemStyle_idl__
 
 //=============================================================================
 
@@ -173,6 +173,13 @@ constants ItemStyle
         <p>This style is only valid if the item describes a toolbar item.</p>
     */
     const short REPEAT        = 512;
+
+    //-------------------------------------------------------------------------
+    /** indicates that the item only supports a dropdown menu or toolbar for
+        additional functions. There is no function on the button itself.
+        <p>This style is only valid if the item describes a toolbar item.</p>
+    */
+    const short DROPDOWN_ONLY = 1024;
 };
 
 }; }; }; };
