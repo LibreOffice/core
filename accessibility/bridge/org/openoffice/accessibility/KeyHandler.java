@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeyHandler.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-23 09:32:26 $
+ *  last change: $Author: obr $ $Date: 2002-08-30 06:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,8 +159,8 @@ public class KeyHandler extends Component implements XKeyHandler {
 
         eventQueue.postEvent(new VCLKeyEvent(KeyEvent.KEY_RELEASED, event));
 
-//      return false;
-        return true;
+//      return true;
+        return false;
     }
 
     public void disposing(com.sun.star.lang.EventObject event) {
