@@ -364,12 +364,15 @@ DOCUFILES+= \
     $(DESTDIRDOCUIMAGES)$/shadow_l.gif \
     $(DESTDIRDOCUIMAGES)$/elements.jpg
 
+.IF "$(GUI)"=="UNX"
 INSTALLSCRIPT= \
     $(DESTDIR)$/configureUnix \
-    $(DESTDIR)$/setsdkenv_unix.in \
+    $(DESTDIR)$/setsdkenv_unix.in
+.ELSE
+INSTALLSCRIPT= \
     $(DESTDIR)$/configureWindowsNT.bat \
     $(DESTDIR)$/setsdkenv_windows.bat
-
+.ENDIF
 
 #--------------------------------------------------
 # TARGETS
@@ -381,12 +384,12 @@ all : 	\
     $(DOCUFILES) \
     $(INSTALLSCRIPT) \
     $(DESTIDLLIST)  \
-    $(DESTDIRBIN)$/pkgchk$(PKGCHK_POSTFIX)  \
-    $(DESTDIRDLL)$/$(MY_DLLPREFIX)pkgchk$(UPD)$(DLLPOSTFIX)$(MY_DLLPOSTFIX)  \
     $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)  \
     $(DESTDIR)$/settings$/dk.mk \
     $(DESTDIRCLASSES)$/officebean.jar \
     $(CONVERTTAGFLAG)
+#	$(DESTDIRBIN)$/pkgchk$(PKGCHK_POSTFIX)  \
+#	$(DESTDIRDLL)$/$(MY_DLLPREFIX)pkgchk$(UPD)$(DLLPOSTFIX)$(MY_DLLPOSTFIX)  \
 
 $(DIRLIST) :
      -$(MKDIRHIER) 	$@
