@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:49:13 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 15:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,8 @@
 #endif
 
 #define C2U(x)         OUString::createFromAscii(x)
-#define SN_MAILMERGE    "com.sun.star.text.MailMerge"
+#define SN_MAIL_MERGE               "com.sun.star.text.MailMerge"
+#define SN_DATA_ACCESS_DESCRIPTOR   "com.sun.star.sdb.DataAccessDescriptor"
 
 using namespace com::sun::star;
 using namespace com::sun::star::frame;
@@ -574,7 +575,7 @@ SwXMailMerge::SwXMailMerge() :
 
     nDataCommandType    = sdb::CommandType::TABLE;
     nOutputType         = MailMergeType::PRINTER;
-    bEscapeProcessing   = sal_False;
+    bEscapeProcessing   = sal_True;     //!! allow to process properties like "Filter", "Order", ...
     bSinglePrintJobs    = sal_False;
     bFileNameFromColumn = sal_False;
 
@@ -1188,7 +1189,8 @@ sal_Bool SAL_CALL SwXMailMerge::supportsService( const OUString& rServiceName )
     throw(RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
-    return C2U( SN_MAILMERGE ) == rServiceName;
+    return C2U( SN_MAIL_MERGE ) == rServiceName ||
+           C2U( SN_DATA_ACCESS_DESCRIPTOR ) == rServiceName;
 }
 
 uno::Sequence< OUString > SAL_CALL SwXMailMerge::getSupportedServiceNames()
@@ -1204,7 +1206,9 @@ uno::Sequence< OUString > SAL_CALL SwXMailMerge_getSupportedServiceNames()
     throw()
 {
     uno::Sequence< OUString > aNames(1);
-    aNames.getArray()[0] = C2U( SN_MAILMERGE );
+    OUString *pName = aNames.getArray();
+    pName[0] = C2U( SN_MAIL_MERGE );
+    pName[1] = C2U( SN_DATA_ACCESS_DESCRIPTOR );
     return aNames;
 }
 
