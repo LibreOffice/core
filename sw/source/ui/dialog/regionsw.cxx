@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:21:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@
 #include <sfx2/docfile.hxx>
 #endif
 #ifndef _LINKMGR_HXX
-#include <so3/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 #ifndef _SVX_SIZEITEM_HXX //autogen
 #define ITEMID_SIZE 0
@@ -280,13 +280,13 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 
         if(aFile.Len() || aSub.Len())
         {
-            String sLinkFileName(so3::cTokenSeperator);
-            sLinkFileName += so3::cTokenSeperator;
-            sLinkFileName.SetToken(0, so3::cTokenSeperator,aFile);
+            String sLinkFileName(sfx2::cTokenSeperator);
+            sLinkFileName += sfx2::cTokenSeperator;
+            sLinkFileName.SetToken(0, sfx2::cTokenSeperator,aFile);
 
             if(SFX_ITEM_SET ==
                     pSet->GetItemState(FN_PARAM_2, TRUE, &pItem))
-                sLinkFileName.SetToken(1, so3::cTokenSeperator,
+                sLinkFileName.SetToken(1, sfx2::cTokenSeperator,
                     ((const SfxStringItem *)pItem)->GetValue());
 
             sLinkFileName += aSub;
