@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-11 08:50:11 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 16:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ turkish ] = "Print";
             Text[ arabic ] = "�����";
             Text[ catalan ] = "Imprimeix";
-            Text[ finnish ] = "Tulostetaan";
+            Text[ finnish ] = "Tulosta";
         };
         ToolBoxItem
         {
@@ -213,7 +213,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ turkish ] = "Undo";
             Text[ arabic ] = "�����";
             Text[ catalan ] = "Desf�s";
-            Text[ finnish ] = "Peruuta ";
+            Text[ finnish ] = "Peruuta";
         };
         ToolBoxItem
         {
@@ -241,7 +241,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ turkish ] = "Redo";
             Text[ arabic ] = "�����";
             Text[ catalan ] = "Ref�s";
-            Text[ finnish ] = "Palauta";
+            Text[ finnish ] = "Toista ";
         };
         ToolBoxItem
         {
@@ -265,14 +265,14 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ swedish ] = "L�gg till tabeller ...";
             Text[ polish ] = "Dodaj tabele ...";
             Text[ portuguese_brazilian ] = "Add tables ...";
-            Text[ japanese ] = "ﾃｰﾌﾞﾙの追加...";
-            Text[ korean ] = "테이블 추가 ...";
+            Text[ japanese ] = "テーブルの追加...";
+            Text[ korean ] = "시트 추가 ...";
             Text[ chinese_simplified ] = "新增表格...";
             Text[ chinese_traditional ] = "新增表格...";
             Text[ turkish ] = "Add tables ...";
             Text[ arabic ] = "����� �����...";
             Text[ catalan ] = "Afegeix les taules...";
-            Text[ finnish ] = "Tabellen hinzuf�gen ...";
+            Text[ finnish ] = "Lis�� taulukoita";
         };
         ToolboxItem
         {
@@ -312,14 +312,14 @@ String STR_QUERY_REL_EDIT_RELATION
     Text[ swedish ] = "Den h�r relationen finns redan. Vill du redigera den?";
     Text[ polish ] = "Relacja ju� istnieje. Czy chcesz j� edytowa�?";
     Text[ portuguese_brazilian ] = "This relation already exsits. Do you want to edit it?";
-    Text[ japanese ] = "このﾘﾚｰｼｮﾝはすでにあります。これを編集しますか。";
-    Text[ korean ] = "이 관계는 이미 있습니다. 이것을 편집하시겠습니까 ?";
+    Text[ japanese ] = "このリレーションはすでにあります。これを編集しますか。";
+    Text[ korean ] = "이 관계가 이미 존재합니다. 이 관계를 편집하겠습니까 ?";
     Text[ chinese_simplified ] = "这个关系已经存在。您想编辑它？";
     Text[ chinese_traditional ] = "這個關係已經存在。要編輯它？";
     Text[ arabic ] = "��� ������� ������ ������. �� ���� ������ǿ";
     Text[ turkish ] = "Bu ili�ki mevcut durumda. D�zenlemek istiyor musunuz?";
     Text[ catalan ] = "Aquesta relaci� ja existeix. Voleu editar-la?";
-    Text[ finnish ] = "Diese Relation existiert bereits. M�chten Sie sie bearbeiten?";
+    Text[ finnish ] = "Suhde on jo olemassa. Haluatko muokata suhdetta?";
 };
 String STR_RELATIONDESIGN
 {
@@ -337,14 +337,14 @@ String STR_RELATIONDESIGN
     Text[ swedish ] = "Relationsutkast";
     Text[ polish ] = "Projekt relacji";
     Text[ portuguese_brazilian ] = "Relation design";
-    Text[ japanese ] = "ﾘﾚｰｼｮﾝﾃﾞｻﾞｲﾝ";
+    Text[ japanese ] = "リレーションデザイン";
     Text[ korean ] = "관계 디자인";
     Text[ chinese_simplified ] = "关系设计";
     Text[ chinese_traditional ] = "關係設計";
     Text[ turkish ] = "Relation design";
     Text[ arabic ] = "����� ������";
     Text[ catalan ] = "Disseny de la relaci�";
-    Text[ finnish ] = "Relationenentwurf";
+    Text[ finnish ] = "Suhdemalli";
 };
 String STR_RELATIONDESIGN_NOT_AVAILABLE
 {
@@ -362,14 +362,14 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
     Text[ swedish ] = "Databasen underst�der inte n�gra relationer.";
     Text[ polish ] = "Baza danych nie obs�uguje relacji.";
     Text[ portuguese_brazilian ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽはﾘﾚｰｼｮﾝを支援しません。";
+    Text[ japanese ] = "データベースはリレーションを支援しません。";
     Text[ korean ] = "데이터베이스는 어떠한 관계도 지원하지 않습니다!";
     Text[ chinese_simplified ] = "这个数据库不支持关系功能！";
     Text[ chinese_traditional ] = "這個資料庫不支援關係功能！";
     Text[ turkish ] = "The database doesn't support any relations. The relation design will be closed!";
     Text[ arabic ] = "����� �������� �� ���� ��� ������.";
     Text[ catalan ] = "La base de dades no permet les relacions.";
-    Text[ finnish ] = "Die Datenbank unterst�tzt keine Relationen!";
+    Text[ finnish ] = "Tietokanta ei tue suhteita.";
 };
 QueryBox RELATION_DESIGN_SAVEMODIFIED
 {
@@ -389,14 +389,14 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message[ swedish ] = "Relationsutkastet har �ndrats.\nSka �ndringarna sparas?";
     Message[ polish ] = "Zmieniono projekt relacji.\nZapisa� zmiany?";
     Message[ portuguese_brazilian ] = "The relation design has been changed.\nDo you want to save the changes?";
-    Message[ japanese ] = "ﾘﾚｰｼｮﾝのﾃﾞｻﾞｲﾝが変更されています。\n変更を保存しますか。";
-    Message[ korean ] = "관계 디자인이 변경되었습니다.\n변경사항을 저장하시겠습니까?";
+    Message[ japanese ] = "リレーションのデザインが変更されています。\n変更を保存しますか。";
+    Message[ korean ] = "관계 디자인이 변경되었습니다.\n변경 사항을 저장하겠습니까?";
     Message[ chinese_simplified ] = "这个关系数据已经更改。\n要存盘这些更改内容？";
     Message[ chinese_traditional ] = "這個關係設計已經變更。\n要儲存變更內容？";
     Message[ turkish ] = "The relation design has been changed.\nDo you want to save the changes?";
     Message[ arabic ] = "�� ����� ����� ��������.\n�� ���� ��� ��������ʿ";
     Message[ catalan ] = "El disseny de la relaci� ha canviat.\nVoleu desar els canvis?";
-    Message[ finnish ] = "Der Relationeneentwurf wurde ge�ndert.\nSollen die �nderungen gespeichert werden?";
+    Message[ finnish ] = "Suhdemallia on muutettu.\nHaluatko tallentaa muutokset?";
 };
 
 Menu RID_RELATION_DESIGN_MAIN_MENU
@@ -495,7 +495,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ turkish ] = "Undo";
                     Text[ arabic ] = "�����";
                     Text[ catalan ] = "Desf�s";
-                        Text[ finnish ] = "Peruuta ";
+                        Text[ finnish ] = "Peruuta";
                     };
                 MenuItem
                 {
@@ -525,7 +525,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ turkish ] = "Redo";
                     Text[ arabic ] = "�����";
                     Text[ catalan ] = "Ref�s";
-                        Text[ finnish ] = "Palauta";
+                        Text[ finnish ] = "Toista ";
                     };
                 MenuItem
                 {
@@ -591,7 +591,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ russian ] = "~������";
             Text[ greek ] = "�~�������";
             Text[ polish ] = "~Narz�dzia";
-            Text[ japanese ] = "ﾂｰﾙ(~T)";
+            Text[ japanese ] = "ツール(~T)";
             Text[ korean ] = "옵션(~T)";
             Text[ chinese_simplified ] = "工具(~T)";
             Text[ chinese_traditional ] = "工具(~T)";
@@ -626,14 +626,15 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ swedish ] = "Om du raderar den h�r tabellen raderas �ven alla tillh�rande relationer. Vill du forts�tta?";
     Text[ polish ] = "Wraz z tabel� usuni�te zostan� wszystkie przynale�ne relacje. Kontynuowa�?";
     Text[ portuguese_brazilian ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
-    Text[ japanese ] = "このﾃｰﾌﾞﾙを削除すると、これに属するすべてのﾘﾚｰｼｮﾝも削除されてします。続行しますか。";
-    Text[ korean ] = "이 시트를 삭제하면 해당하는 모든 관계들도 삭제됩니다. 계속하시겠습니까?";
+    Text[ japanese ] = "このテーブルを削除すると、これに属するすべてのリレーションも削除されてします。続行しますか。";
+    Text[ korean ] = "이 시트를 삭제하면 해당하는 모든 관계들도 삭제됩니다. 계속하겠습니까?";
     Text[ chinese_simplified ] = "如果删除这个表格，就会一同删除所有的从属关系。要继续？";
     Text[ chinese_traditional ] = "如果刪除這個表格，也就會一起刪除全部的從屬關係。要繼續？";
     Text[ turkish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ arabic ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ catalan ] = "Quan s'elimini aquesta taula tamb� de suprimiran les seves relacions associades. Voleu continuar?";
 };
+
 
 
 
