@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_dep.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:13 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:47:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,7 @@ ALLDEP .PHONY:
     @+-$(RM) $(SRS)$/$(PWD:f).*.dpr >& $(NULLDEV)
 .ENDIF
     @+-$(RM) $(MISC)$/$(TARGET).dpr >& $(NULLDEV)
+    @+-$(RM) $(MISC)$/$(TARGET).dprr >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpc >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpz >& $(NULLDEV)
@@ -121,12 +122,10 @@ ALLDPC: \
 .IF "$(HDBDEPNTARGET)$(OBJFILES)$(SLOFILES)$(DEPOBJFILES)$(RCFILES)$(PARFILES)"!=""
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 #	@+if ( -e  $(MISC)$/$(TARGET).dpr ) $(RM) $(MISC)$/$(TARGET).dpr >& $(NULLDEV)
-    @+if ( -e  $(MISC)$/$(TARGET).dpw ) $(RM) $(MISC)$/$(TARGET).dpw >& $(NULLDEV)
     @+if ( -e  $(MISC)$/$(TARGET).dpj ) $(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV)
     @+if ( -e  $(MISC)$/genjava.mk ) $(RM) $(MISC)$/genjava.mk >& $(NULLDEV)
 .ELSE
 #	@+-if exist $(MISC)$/$(TARGET).dpr $(RM) $(MISC)$/$(TARGET).dpr >& $(NULLDEV)
-    @+-if exist $(MISC)$/$(TARGET).dpw $(RM) $(MISC)$/$(TARGET).dpw >& $(NULLDEV)
     @+-if exist $(MISC)$/$(TARGET).dpj $(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV)
     @+-if exist $(MISC)$/genjava.mk $(RM) $(MISC)$/genjava.mk >& $(NULLDEV)
 .ENDIF
@@ -145,31 +144,6 @@ ALLDPC: \
 .IF "$($(SECOND_BUILD)_OBJFILES)"!=""
     @+$(TYPE) $(mktmp $(foreach,i,$($(SECOND_BUILD)_OBJFILES) $(i:d:^"\n")$(SECOND_BUILD)_$(i:f) : $(i:d:s/obj/slo/)$(i:b).obj )) >> $(MISC)$/$(TARGET).dpc
 .ENDIF
-.IF "$(GROUP)"=="WRITER"
-.IF "$(debug)"==""
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    @+-$(RM) $(MISC)$/$(TARGET).dpw
-    @$(TYPE)  $(MISC)$/$(TARGET).dpc | $(SED) s\#$/slo$/\#$/dso$/\# | $(SED) s\#$/obj$/\#$/dbo$/\# > $(MISC)$/$(TARGET).dpw
-.ELSE
-    @+-$(RM) $(MISC)$/$(TARGET).dpw >& $(NULLDEV)
-    @$(TYPE)  $(MISC)$/$(TARGET).dpc | $(SED) s#$/$/slo$/$/#$/$/dso$/$/# > $(TEMP)$/$(TARGET).dpt
-    @$(TYPE) $(TEMP)$/$(TARGET).dpt | $(SED) s#$/$/obj$/$/#$/$/dbo$/$/# > $(MISC)$/$(TARGET).dpw
-    @+-$(RM) $(TEMP)$/$(TARGET).dpt >& $(NULLDEV)
-.ENDIF
-.ELSE			# "$(debug)"==""
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    @+$(COPY) $(MISC)$/$(TARGET).dpc $(MISC)$/$(TARGET).dpw
-    @+-$(RM) $(MISC)$/$(TARGET).dpc
-    @$(TYPE)  $(MISC)$/$(TARGET).dpw | $(SED) s\#$/dso$/\#$/slo$/\# | $(SED) s\#$/dbo$/\#$/obj$/\# > $(MISC)$/$(TARGET).dpc
-.ELSE
-    @+$(COPY) $(MISC)$/$(TARGET).dpc $(MISC)$/$(TARGET).dpw >& $(NULLDEV)
-    @+-$(RM) $(MISC)$/$(TARGET).dpc >& $(NULLDEV)
-    @$(TYPE) $(MISC)$/$(TARGET).dpw | $(SED) s#$/$/dso$/$/#$/$/slo$/$/# > $(TEMP)$/$(TARGET).dpt
-    @$(TYPE) $(TEMP)$/$(TARGET).dpt | $(SED) s#$/$/dbo$/$/#$/$/obj$/$/# > $(MISC)$/$(TARGET).dpc
-    @+-$(RM) $(TEMP)$/$(TARGET).dpt >& $(NULLDEV)
-.ENDIF
-.ENDIF			# "$(debug)"==""
-.ENDIF			# "$(GROUP)"=="WRITER"
 .ELSE			# "$(HDBDEPNTARGET)$(OBJFILES)$(SLOFILES)$(DEPOBJFILES)$(RCFILES)"!=""
     @echo ttt: ppp > $(MISC)$/$(TARGET).dpc
 .ENDIF			# "$(HDBDEPNTARGET)$(OBJFILES)$(SLOFILES)$(DEPOBJFILES)$(RCFILES)"!=""
@@ -182,14 +156,8 @@ ALLDPC:
     @echo No Dependencies
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     @echo "#" > $(MISC)$/$(TARGET).dpc
-.IF "$(GROUP)"=="WRITER"
-    @echo "#" > $(MISC)$/$(TARGET).dpw
-.ENDIF
 .ELSE			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     @echo # > $(MISC)$/$(TARGET).dpc
-.IF "$(GROUP)"=="WRITER"
-    @echo # > $(MISC)$/$(TARGET).dpw
-.ENDIF
 .ENDIF			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 
 ALLDEP:
