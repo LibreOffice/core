@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pb $ $Date: 2002-11-28 08:52:03 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ String RID_SVXSTR_A11Y_TEXT_COLOR
     Text[ danish ] = "text color";
     Text[ swedish ] = "Textf�rg";
     Text[ polish ] = "text color";
-    Text[ portuguese_brazilian ] = "text color";
+    Text[ portuguese_brazilian ] = "Cor da Fonte";
     Text[ japanese ] = "テキストの色";
     Text[ korean ] = "텍스트 색상";
     Text[ chinese_simplified ] = "文字颜色";
@@ -242,7 +242,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT
     Text[ arabic ] = "gradient";
     Text[ catalan ] = "gradient";
     Text[ thai ] = "gradient";
-    Text[ language_user1 ] = "Correct German is \"Verlauf\"";
+    Text[ language_user1 ] = "Corr; Correct German is \"Verlauf\"";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_BITMAP
 {
@@ -269,7 +269,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_BITMAP
     Text[ arabic ] = "���� �����";
     Text[ catalan ] = "Mapa de bits";
     Text[ thai ] = "บิทแมป";
-    Text[ language_user1 ] = "Correct German is \"Bitmap\"";
+    Text[ language_user1 ] = "Corr; Correct German is \"Bitmap\"";
 };
 String RID_SVXSTR_A11Y_WITH
 {
