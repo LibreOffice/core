@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-14 16:06:36 $
+ *  last change: $Author: fs $ $Date: 2002-07-29 16:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2524,7 +2524,7 @@ sal_Bool FmXGridPeer::approveReset(const EventObject& rEvent) throw( RuntimeExce
 sal_Bool SAL_CALL FmXGridPeer::select( const Any& _rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
     Sequence< Any > aBookmarks;
-    if (!(_rSelection >>= aBookmarks) || (0 == aBookmarks.getLength()))
+    if ( !( _rSelection >>= aBookmarks ) )
         throw IllegalArgumentException();
 
     FmGridControl* pVclControl = static_cast<FmGridControl*>(GetWindow());
