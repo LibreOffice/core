@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProviderBrowseNode.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:20:06 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,11 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
+import com.sun.star.uno.UnoRuntime;
+
+import com.sun.star.lang.XMultiComponentFactory;
+
+import com.sun.star.ucb.XSimpleFileAccess;
 
 import com.sun.star.beans.XIntrospectionAccess;
 import com.sun.star.script.XInvocation;
@@ -86,29 +91,52 @@ import javax.swing.JOptionPane;
 public class ProviderBrowseNode extends PropertySet
     implements XBrowseNode, XInvocation
 {
-    private ScriptProvider provider;
-    //private RootBrowseNode parent;
-    private Collection browsenodes;
-    private String name;
-    private ParcelContainer container;
-    private Parcel parcel;
-    public boolean deletable = true;
-    public boolean editable  = false;
-    public boolean creatable = true;
+    protected ScriptProvider provider;
+    protected Collection browsenodes;
+    protected String name;
+    protected ParcelContainer container;
+    protected Parcel parcel;
+    protected XComponentContext m_xCtx;
 
-    public ProviderBrowseNode( ScriptProvider provider, ParcelContainer container ) {
+    public boolean deletable = true;
+    public boolean creatable = true;
+    public boolean editable = false;
+
+    public ProviderBrowseNode( ScriptProvider provider, ParcelContainer container, XComponentContext xCtx ) {
         LogUtils.DEBUG("*** ProviderBrowseNode ctor");
         this.container = container;
         this.name = this.container.getLanguage();
         this.provider = provider;
+        this.m_xCtx = xCtx;
 
         registerProperty("Deletable", new Type(boolean.class),
             (short)0, "deletable");
-        registerProperty("Editable", new Type(boolean.class),
-            (short)0, "editable");
         registerProperty("Creatable", new Type(boolean.class),
             (short)0, "creatable");
+        registerProperty("Editable", new Type(boolean.class),
+            (short)0, "editable");
+        XSimpleFileAccess xSFA = null;
+        XMultiComponentFactory xFac = m_xCtx.getServiceManager();
+        try
+        {
+            xSFA = ( XSimpleFileAccess)
+                UnoRuntime.queryInterface( XSimpleFileAccess.class,
+                    xFac.createInstanceWithContext(
+                        "com.sun.star.ucb.SimpleFileAccess",
+                        xCtx ) );
+            if (  container.isUnoPkg() || xSFA.isReadOnly( container.getParcelContainerDir() ) )
+            {
+                deletable = false;
+                creatable = false;
+            }
+        }
+        // TODO propage errors
+        catch( com.sun.star.uno.Exception e )
+        {
+                LogUtils.DEBUG("Caught exception in creation of ProviderBrowseNode ");
+                LogUtils.DEBUG( LogUtils.getTrace(e));
 
+        }
     }
 
     public String getName() {
@@ -118,8 +146,9 @@ public class ProviderBrowseNode extends PropertySet
 
     public XBrowseNode[] getChildNodes() {
         LogUtils.DEBUG("***** ProviderBrowseNode.getChildNodes()");
-        if ( container != null  )
+        if ( hasChildNodes() )
         {
+            // needs initialisation?
             LogUtils.DEBUG("** ProviderBrowseNode.getChildNodes(), container is " + container );
             String[] parcels = container.getElementNames();
             browsenodes = new ArrayList( parcels.length );
@@ -136,22 +165,34 @@ public class ProviderBrowseNode extends PropertySet
                     LogUtils.DEBUG( e.toString() );
                 }
             }
+            ParcelContainer[] packageContainers = container.getChildContainers();
+            LogUtils.DEBUG("**** For container named " + container.getName() + " with root path " + container.getParcelContainerDir() + " has " + packageContainers.length + " child containers " );
+
+            for ( int i = 0; i < packageContainers.length; i++ )
+            {
+                XBrowseNode node = new PkgProviderBrowseNode( provider, packageContainers[ i ], m_xCtx );
+                browsenodes.add( node );
+            }
         }
         else
         {
             LogUtils.DEBUG("*** No container available");
-        return new XBrowseNode[0];
+            return new XBrowseNode[0];
         }
-        return (XBrowseNode[])browsenodes.toArray(new XBrowseNode[0]);
+        return ( XBrowseNode[] )browsenodes.toArray( new XBrowseNode[0] );
     }
 
     public boolean hasChildNodes() {
-        if (container == null || !container.hasElements() )
+        LogUtils.DEBUG("***** ProviderBrowseNode.hasChildNodes() ");
+        LogUtils.DEBUG("***** ProviderBrowseNode.hasChildNodes() name " + container.getName() );
+        LogUtils.DEBUG("***** ProviderBrowseNode.hasChildNodes() path " + container.getParcelContainerDir() );
+        if ( container == null ||
+             ( !container.hasElements() && !(container.getChildContainers().length == 0 ) )  )
         {
-           LogUtils.DEBUG("** ProviderBrowseNode returning FALSE for has children");
-            return false;
+           LogUtils.DEBUG("** ProviderBrowseNode hasChildNodes() returning FALSE for has children");
+            return true;
         }
-        LogUtils.DEBUG("** ProviderBrowseNode returning true for has children");
+        LogUtils.DEBUG("** ProviderBrowseNode returning TRUE for has children");
         return true;
     }
 
@@ -244,7 +285,7 @@ public class ProviderBrowseNode extends PropertySet
             }
             catch (Exception e)
             {
-        //System.err.print("create failed with: " + e );
+        LogUtils.DEBUG("ProviderBrowseNode[create] failed with: " + e );
                 LogUtils.DEBUG( LogUtils.getTrace( e ) );
                 result = new Any(new Type(Boolean.class), Boolean.FALSE);
 
