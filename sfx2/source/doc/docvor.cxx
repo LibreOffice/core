@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:52:55 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1638,7 +1638,7 @@ BOOL SfxOrganizeDlg_Impl::DontDelete_Impl( SvLBoxEntry *pEntry)
 SvStringsDtor* SfxOrganizeDlg_Impl::GetAllFactoryURLs_Impl( ) const
 {
     SvtModuleOptions aModOpt;
-    ::com::sun::star::uno::Sequence < ::rtl::OUString >& aServiceNames = aModOpt.GetAllServiceNames() ;
+    const ::com::sun::star::uno::Sequence < ::rtl::OUString >& aServiceNames = aModOpt.GetAllServiceNames() ;
     SvStringsDtor* pList = new SvStringsDtor;
     sal_Int32 nCount = aServiceNames.getLength();
     for( sal_Int32 i=0; i<nCount; ++i )
