@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 07:27:42 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,9 +249,9 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
  ,m_pParameters(NULL)
 {
     DBG_CTOR(OQueryComposer,NULL);
-    OSL_ENSHURE(_xServiceFactory.is()," ServiceFactory cant be null!");
-    OSL_ENSHURE(_xConnection.is()," Connection cant be null!");
-    OSL_ENSHURE(_xTableSupplier.is(),"TableSupplier cant be null!");
+    OSL_ENSURE(_xServiceFactory.is()," ServiceFactory cant be null!");
+    OSL_ENSURE(_xConnection.is()," Connection cant be null!");
+    OSL_ENSURE(_xTableSupplier.is(),"TableSupplier cant be null!");
 
     Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
     m_aLocale.Language = ::comphelper::getString(aValue);
@@ -259,7 +259,7 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
     Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
     LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
     m_sDecimalSep = aData.decimalSeparator;
-    OSL_ENSHURE(m_sDecimalSep.getLength() == 1,"OQueryComposer::OQueryComposer decimal separator is not 1 length");
+    OSL_ENSURE(m_sDecimalSep.getLength() == 1,"OQueryComposer::OQueryComposer decimal separator is not 1 length");
 }
 // -------------------------------------------------------------------------
 OQueryComposer::~OQueryComposer()
@@ -933,7 +933,7 @@ sal_Int32 getPredicateType(OSQLParseNode * _pPredicate)
             nPredicate = SQL_PRED_GREATEROREQUAL;
             break;
         default:
-            OSL_ENSHURE(0,"Wrong NodeType!");
+            OSL_ENSURE(0,"Wrong NodeType!");
     }
     return nPredicate;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ void OResultSet::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             sal_Int16 nAttributes;
             const_cast<OResultSet*>(this)->getInfoHelper().
                 fillPropertyMembersByHandle(&aPropName, &nAttributes, nHandle);
-            OSL_ENSHURE(aPropName.getLength(), "property not found?");
+            OSL_ENSURE(aPropName.getLength(), "property not found?");
 
             // now read the value
             rValue = Reference< XPropertySet >(m_xAggregateAsResultSet, UNO_QUERY)->getPropertyValue(aPropName);

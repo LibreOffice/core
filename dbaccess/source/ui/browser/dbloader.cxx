@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:01:22 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     else if(aParser.GetMainURL() == String(URL_COMPONENT_RELATIONDESIGN))// construct the control
         xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ORelationDesign")),UNO_QUERY);
     else
-        OSL_ENSHURE(0,"wrong dispatch url!");
+        OSL_ENSURE(0,"wrong dispatch url!");
 
     if(bSuccess = xController.is())
     {

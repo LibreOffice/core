@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:19:18 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,7 +500,7 @@ void OTableContainer::impl_refresh() throw(RuntimeException)
 // -----------------------------------------------------------------------------
 Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)
 {
-    OSL_ENSHURE(m_xMasterTables.is(),"getByName: m_xMasterTables must be set!");
+    OSL_ENSURE(m_xMasterTables.is(),"getByName: m_xMasterTables must be set!");
     Reference<XPropertySet> xProp;
     if(m_xMasterTables.is() && m_xMasterTables->hasByName(_rName))
         m_xMasterTables->getByName(_rName) >>= xProp;

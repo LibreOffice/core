@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registrationhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 15:24:02 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,17 +84,17 @@ void OModuleRegistration::registerComponent(
 {
     if (!s_pImplementationNames)
     {
-        OSL_ENSHURE(!s_pSupportedServices && !s_pCreationFunctionPointers && !s_pFactoryFunctionPointers,
+        OSL_ENSURE(!s_pSupportedServices && !s_pCreationFunctionPointers && !s_pFactoryFunctionPointers,
             "OModuleRegistration::registerComponent : inconsistent state (the pointers (1)) !");
         s_pImplementationNames = new Sequence< OUString >;
         s_pSupportedServices = new Sequence< Sequence< OUString > >;
         s_pCreationFunctionPointers = new Sequence< sal_Int64 >;
         s_pFactoryFunctionPointers = new Sequence< sal_Int64 >;
     }
-    OSL_ENSHURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
+    OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
         "OModuleRegistration::registerComponent : inconsistent state (the pointers (2)) !");
 
-    OSL_ENSHURE(    (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+    OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
                 &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
                 &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
         "OModuleRegistration::registerComponent : inconsistent state !");
@@ -119,9 +119,9 @@ void OModuleRegistration::revokeComponent(const ::rtl::OUString& _rImplementatio
         OSL_ASSERT("OModuleRegistration::revokeComponent : have no class infos ! Are you sure called this method at the right time ?");
         return;
     }
-    OSL_ENSHURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
+    OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
         "OModuleRegistration::revokeComponent : inconsistent state (the pointers) !");
-    OSL_ENSHURE(    (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+    OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
                 &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
                 &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
         "OModuleRegistration::revokeComponent : inconsistent state !");
@@ -154,16 +154,16 @@ sal_Bool OModuleRegistration::writeComponentInfos(
         const Reference< XMultiServiceFactory >& /*_rxServiceManager*/,
         const Reference< XRegistryKey >& _rxRootKey)
 {
-    OSL_ENSHURE(_rxRootKey.is(), "OModuleRegistration::writeComponentInfos : invalid argument !");
+    OSL_ENSURE(_rxRootKey.is(), "OModuleRegistration::writeComponentInfos : invalid argument !");
 
     if (!s_pImplementationNames)
     {
         OSL_ASSERT("OModuleRegistration::writeComponentInfos : have no class infos ! Are you sure called this method at the right time ?");
         return sal_True;
     }
-    OSL_ENSHURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
+    OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
         "OModuleRegistration::writeComponentInfos : inconsistent state (the pointers) !");
-    OSL_ENSHURE(    (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+    OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
                 &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
                 &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
         "OModuleRegistration::writeComponentInfos : inconsistent state !");
@@ -202,17 +202,17 @@ Reference< XInterface > OModuleRegistration::getComponentFactory(
     const ::rtl::OUString& _rImplementationName,
     const Reference< XMultiServiceFactory >& _rxServiceManager)
 {
-    OSL_ENSHURE(_rxServiceManager.is(), "OModuleRegistration::getComponentFactory : invalid argument (service manager) !");
-    OSL_ENSHURE(_rImplementationName.getLength(), "OModuleRegistration::getComponentFactory : invalid argument (implementation name) !");
+    OSL_ENSURE(_rxServiceManager.is(), "OModuleRegistration::getComponentFactory : invalid argument (service manager) !");
+    OSL_ENSURE(_rImplementationName.getLength(), "OModuleRegistration::getComponentFactory : invalid argument (implementation name) !");
 
     if (!s_pImplementationNames)
     {
         OSL_ASSERT("OModuleRegistration::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
         return NULL;
     }
-    OSL_ENSHURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
+    OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
         "OModuleRegistration::getComponentFactory : inconsistent state (the pointers) !");
-    OSL_ENSHURE(    (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+    OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
                 &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
                 &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
         "OModuleRegistration::getComponentFactory : inconsistent state !");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 10:24:52 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ OQueryDescriptor::OQueryDescriptor(const ::com::sun::star::uno::Reference< XProp
 {
     registerProperties();
 
-    OSL_ENSHURE(_rxCommandDefinition.is(), "OQueryDescriptor::OQueryDescriptor : invalid source property set !");
+    OSL_ENSURE(_rxCommandDefinition.is(), "OQueryDescriptor::OQueryDescriptor : invalid source property set !");
     try
     {
         _rxCommandDefinition->getPropertyValue(PROPERTY_NAME)                   >>= m_sElementName;
@@ -309,7 +309,7 @@ void OQueryDescriptor::storeTo(const OConfigurationTreeRoot& _rConfigLocation)
     MutexGuard aGuard(m_aMutex);
     if (!_rConfigLocation.isValid() || _rConfigLocation.isReadonly())
     {
-        OSL_ENSHURE(sal_False, "OQueryDescriptor::storeTo : invalid config key (NULL or readonly) !");
+        OSL_ENSURE(sal_False, "OQueryDescriptor::storeTo : invalid config key (NULL or readonly) !");
         return;
     }
 
@@ -318,7 +318,7 @@ void OQueryDescriptor::storeTo(const OConfigurationTreeRoot& _rConfigLocation)
     OConfigurationNode aSettingsNode = _rConfigLocation.openNode(CONFIGKEY_SETTINGS);
     if (!aSettingsNode.isValid())
     {
-        OSL_ENSHURE(sal_False, "OQueryDescriptor::storeTo: could not open the sub key for the data settings!");
+        OSL_ENSURE(sal_False, "OQueryDescriptor::storeTo: could not open the sub key for the data settings!");
         return;
     }
     ODataSettings::storeTo(aSettingsNode);
@@ -336,7 +336,7 @@ void OQueryDescriptor::storeTo(const OConfigurationTreeRoot& _rConfigLocation)
         _rConfigLocation.commit();
     }
     else
-        OSL_ENSHURE(sal_False, "OQueryDescriptor::storeTo : could not open the node for the columns UI information !");
+        OSL_ENSURE(sal_False, "OQueryDescriptor::storeTo : could not open the node for the columns UI information !");
 }
 
 //--------------------------------------------------------------------------
@@ -345,7 +345,7 @@ void OQueryDescriptor::initializeFrom(const OConfigurationNode& _rConfigLocation
     MutexGuard aGuard(m_aMutex);
     if (!_rConfigLocation.isValid())
     {
-        OSL_ENSHURE(sal_False, "OQueryDescriptor::initializeFrom : invalid config key (NULL or readonly) !");
+        OSL_ENSURE(sal_False, "OQueryDescriptor::initializeFrom : invalid config key (NULL or readonly) !");
         return;
     }
 
@@ -354,7 +354,7 @@ void OQueryDescriptor::initializeFrom(const OConfigurationNode& _rConfigLocation
     OConfigurationNode aSettingsNode = _rConfigLocation.openNode(CONFIGKEY_SETTINGS);
     if (!aSettingsNode.isValid())
     {
-        OSL_ENSHURE(sal_False, "OQueryDescriptor::initializeFrom: could not open the sub key for the data settings!");
+        OSL_ENSURE(sal_False, "OQueryDescriptor::initializeFrom: could not open the sub key for the data settings!");
         return;
     }
     ODataSettings::loadFrom(aSettingsNode);

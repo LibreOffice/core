@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:21:01 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
             }
             else
             {
-                OSL_ENSHURE(0,"OGenericUnoController::initialize: Frame is null!");
+                OSL_ENSURE(0,"OGenericUnoController::initialize: Frame is null!");
             }
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:23:00 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,10 +183,10 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
             if (m_xColumns->hasByName(*pBegin))
             {
                 ::cppu::extractInterface(xColumn,m_xColumns->getByName(*pBegin));
-                OSL_ENSHURE(xColumn.is(),"DlgFilterCrit::DlgFilterCrit: Column is null!");
+                OSL_ENSURE(xColumn.is(),"DlgFilterCrit::DlgFilterCrit: Column is null!");
             }
             else
-                OSL_ENSHURE(sal_False, "DlgFilterCrit::DlgFilterCrit: invalid column name!");
+                OSL_ENSURE(sal_False, "DlgFilterCrit::DlgFilterCrit: invalid column name!");
             sal_Int32 nDataType(0);
             xColumn->getPropertyValue(PROPERTY_TYPE) >>= nDataType;
             sal_Int32 eColumnSearch = dbtools::getSearchColumnFlag(m_xConnection,nDataType);

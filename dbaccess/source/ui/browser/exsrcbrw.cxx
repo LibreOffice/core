@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-19 12:38:43 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,21 +245,21 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
             if (pArguments->Name.equals(::rtl::OUString::createFromAscii("ColumnType")))
             {
                 sal_Bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const ::rtl::OUString*)0));
-                OSL_ENSHURE(bCorrectType, "invalid type for argument \"ColumnType\" !");
+                OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnType\" !");
                 if (bCorrectType)
                     sControlType = ::comphelper::getString(pArguments->Value);
             }
             else if (pArguments->Name.equals(::rtl::OUString::createFromAscii("ColumnPosition")))
             {
                 sal_Bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const sal_Int16*)0));
-                OSL_ENSHURE(bCorrectType, "invalid type for argument \"ColumnPosition\" !");
+                OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnPosition\" !");
                 if (bCorrectType)
                     nControlPos = ::comphelper::getINT16(pArguments->Value);
             }
             else if (pArguments->Name.equals(::rtl::OUString::createFromAscii("ColumnProperties")))
             {
                 sal_Bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const Sequence< ::com::sun::star::beans::PropertyValue>*)0));
-                OSL_ENSHURE(bCorrectType, "invalid type for argument \"ColumnProperties\" !");
+                OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnProperties\" !");
                 if (bCorrectType)
                     aControlProps = *(Sequence< ::com::sun::star::beans::PropertyValue>*)pArguments->Value.getValue();
             }
@@ -271,7 +271,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
             OSL_ASSERT("SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnType) !");
             sControlType = ::rtl::OUString::createFromAscii("TextField");
         }
-        OSL_ENSHURE(aControlProps.getLength(), "SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnProperties) !");
+        OSL_ENSURE(aControlProps.getLength(), "SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnProperties) !");
 
         // create the col
         Reference< ::com::sun::star::form::XGridColumnFactory >  xColFactory(getControlModel(), UNO_QUERY);
@@ -361,12 +361,12 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
             )
         )
     {
-        OSL_ENSHURE(aURL.Mark.len() == 0, "SbaExternalSourceBrowser::queryDispatch : the ::com::sun::star::util::URL shouldn't have a mark !");
+        OSL_ENSURE(aURL.Mark.len() == 0, "SbaExternalSourceBrowser::queryDispatch : the ::com::sun::star::util::URL shouldn't have a mark !");
         ::com::sun::star::util::URL aNewUrl = aURL;
 
         // split the ::com::sun::star::util::URL
         Reference< ::com::sun::star::util::XURLTransformer >  xTransformer(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")), UNO_QUERY);
-        OSL_ENSHURE(xTransformer.is(), "SbaExternalSourceBrowser::queryDispatch : could not create an URLTransformer !");
+        OSL_ENSURE(xTransformer.is(), "SbaExternalSourceBrowser::queryDispatch : could not create an URLTransformer !");
         if (xTransformer.is())
             xTransformer->parseStrict(aNewUrl);
 
@@ -653,7 +653,7 @@ SbaExternalSourceBrowser::FormControllerImpl::FormControllerImpl(SbaExternalSour
     ,m_bActive(sal_False)
     ,m_aActivateListeners(m_pOwner->m_aPropertyMutex)
 {
-    OSL_ENSHURE(m_pOwner, "SbaExternalSourceBrowser::FormControllerImpl::FormControllerImpl : invalid Owner !");
+    OSL_ENSURE(m_pOwner, "SbaExternalSourceBrowser::FormControllerImpl::FormControllerImpl : invalid Owner !");
 }
 
 //------------------------------------------------------------------
@@ -749,7 +749,7 @@ void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::activateLast(void) t
 //------------------------------------------------------------------
 void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( RuntimeException )
 {
-    OSL_ENSHURE(aEvent.Source == m_pOwner->m_xCurrentFrame, "SbaExternalSourceBrowser::FormControllerImpl::frameAction : where did this come frome ?");
+    OSL_ENSURE(aEvent.Source == m_pOwner->m_xCurrentFrame, "SbaExternalSourceBrowser::FormControllerImpl::frameAction : where did this come frome ?");
 
     ::com::sun::star::lang::EventObject aEvt(*m_pOwner);
     ::cppu::OInterfaceIteratorHelper aIter(m_aActivateListeners);

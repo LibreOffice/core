@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosqlmessage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 12:16:07 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
     if (m_aException.hasValue())
         return new OSQLMessageBox(_pParent, SQLExceptionInfo(m_aException));
 
-    OSL_ENSHURE(sal_False, "OSQLMessageDialog::createDialog : You hould use the SQLException property to specify the error to display!");
+    OSL_ENSURE(sal_False, "OSQLMessageDialog::createDialog : You hould use the SQLException property to specify the error to display!");
     return new OSQLMessageBox(_pParent, SQLException());
 }
 
@@ -206,6 +206,9 @@ Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/01/05 12:16:07  fs
+ *  adjusted the implementation name
+ *
  *  Revision 1.5  2000/12/15 15:48:13  fs
  *  #82151# two instances of the registration helper module - one for every library in this project
  *

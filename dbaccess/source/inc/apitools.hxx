@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:26:41 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,7 @@ protected:
 
 //----------------------------------------------------------------------------------
 #define END_PROPERTY_SEQUENCE()                             \
-    OSL_ENSHURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");   \
+    OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");    \
 
 //----------------------------------------------------------------------------------
 #define END_PROPERTY_HELPER()                               \

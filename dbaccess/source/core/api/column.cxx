@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:19:18 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ void OColumn::setFastPropertyValue_NoBroadcast(
     switch (nHandle)
     {
         case PROPERTY_ID_NAME:
-            OSL_ENSHURE(rValue.getValueType().equals(::getCppuType(static_cast< ::rtl::OUString* >(NULL))),
+            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< ::rtl::OUString* >(NULL))),
                 "OColumn::setFastPropertyValue_NoBroadcast(NAME) : invalid value !");
             rValue >>= m_sName;
             break;
@@ -388,27 +388,27 @@ void OColumnSettings::setFastPropertyValue_NoBroadcast(
     switch (nHandle)
     {
         case PROPERTY_ID_ALIGN:
-            OSL_ENSHURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
+            OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
                 "OColumnSettings::setFastPropertyValue_NoBroadcast(ALIGN) : invalid value !");
             m_aAlignment = rValue;
             break;
         case PROPERTY_ID_WIDTH:
-            OSL_ENSHURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
+            OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
                 "OColumnSettings::setFastPropertyValue_NoBroadcast(WIDTH) : invalid value !");
             m_aWidth = rValue;
             break;
         case PROPERTY_ID_NUMBERFORMAT:
-            OSL_ENSHURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
+            OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
                 "OColumnSettings::setFastPropertyValue_NoBroadcast(NUMBERFORMAT) : invalid value !");
             m_aFormatKey = rValue;
             break;
         case PROPERTY_ID_RELATIVEPOSITION:
-            OSL_ENSHURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
+            OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
                 "OColumnSettings::setFastPropertyValue_NoBroadcast(ID_RELATIVEPOSITION) : invalid value !");
             m_aWidth = rValue;
             break;
         case PROPERTY_ID_HIDDEN:
-            OSL_ENSHURE(rValue.getValueType().equals(::getBooleanCppuType()),
+            OSL_ENSURE(rValue.getValueType().equals(::getBooleanCppuType()),
                 "OColumnSettings::setFastPropertyValue_NoBroadcast(HIDDEN) : invalid value !");
             m_bHidden = ::comphelper::getBOOL(rValue);
             break;
@@ -540,7 +540,7 @@ void OColumns::loadSettings(const OConfigurationNode& _rLocation, const IColumnF
 {
     MutexGuard aGuard(m_rMutex);
 
-    OSL_ENSHURE(_pColFactory != NULL, "OColumns::loadSettings : invalid factory !");
+    OSL_ENSURE(_pColFactory != NULL, "OColumns::loadSettings : invalid factory !");
 
     OConfigurationNode aLocation(_rLocation);
     aLocation.setEscape(aLocation.isSetNode());
@@ -570,7 +570,7 @@ void OColumns::loadSettings(const OConfigurationNode& _rLocation, const IColumnF
             Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xColumn,UNO_QUERY);
             if(xTunnel.is())
                 pExistent = (OColumn*)xTunnel->getSomething(OColumn::getUnoTunnelImplementationId());
-            OSL_ENSHURE(pExistent,"OColumns::loadSettings: No column from unotunnelhelper!");
+            OSL_ENSURE(pExistent,"OColumns::loadSettings: No column from unotunnelhelper!");
         }
 
         OConfigurationNode aCurrent = aLocation.openNode(*pColumNames);
@@ -620,7 +620,7 @@ void OColumns::storeSettings(const OConfigurationNode& _rLocation)
         {
             pCurrent = (OColumn*)xTunnel->getSomething(OColumn::getUnoTunnelImplementationId());
 
-            OSL_ENSHURE(pCurrent,"OColumns::storeSettings: No column from unotunnelhelper!");
+            OSL_ENSURE(pCurrent,"OColumns::storeSettings: No column from unotunnelhelper!");
 
             OColumnSettings* pCurrentSettings = pCurrent->getSettings();
             if (!pCurrentSettings)
@@ -679,7 +679,7 @@ void OColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
 {
-    OSL_ENSHURE(m_pTable,"OColumns::createObject: ParentTable wasn't set");
+    OSL_ENSURE(m_pTable,"OColumns::createObject: ParentTable wasn't set");
     if(!m_pTable)
         return Reference< XNamed >();
 
@@ -692,7 +692,7 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
         sal_Int32 nPos = -1;
         if(xColumnLocate.is())
             nPos = xColumnLocate->findColumn(_rName);
-        OSL_ENSHURE(nPos != -1,"OColumns::createObjectname not found!");
+        OSL_ENSURE(nPos != -1,"OColumns::createObjectname not found!");
 //      else
 //      {
 //          Sequence< ::rtl::OUString> aNames = m_xDrvColumns->getElementNames();
@@ -1153,17 +1153,17 @@ void OColumn::setFastPropertyValue_NoBroadcast(
     switch (nHandle)
     {
         case PROPERTY_ID_ALIGN:
-            OSL_ENSHURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
+            OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
                 "OColumn::setFastPropertyValue_NoBroadcast(ALIGN) : invalid value !");
             m_aAlignment = rValue;
             break;
         case PROPERTY_ID_WIDTH:
-            OSL_ENSHURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
+            OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
                 "OColumn::setFastPropertyValue_NoBroadcast(WIDTH) : invalid value !");
             m_aWidth = rValue;
             break;
         case PROPERTY_ID_HIDDEN:
-            OSL_ENSHURE(rValue.getValueType().equals(::getBooleanCppuType()),
+            OSL_ENSURE(rValue.getValueType().equals(::getBooleanCppuType()),
                 "OColumn::setFastPropertyValue_NoBroadcast(HIDDEN) : invalid value !");
             m_bHidden = ::comphelper::getBOOL(rValue);
             break;
@@ -1415,7 +1415,7 @@ const OColumn* OColumns::at(const rtl::OUString& rName) const
 void OColumns::setCaseSensitive(sal_Bool bCaseSensitive)
 {
     MutexGuard aGuard(m_rMutex);
-    OSL_ENSHURE(m_pColMap->empty(), "OColumns::setCaseSensitive() there are still existing columns");
+    OSL_ENSURE(m_pColMap->empty(), "OColumns::setCaseSensitive() there are still existing columns");
     if (bCaseSensitive == m_pColMap->hash_funct().isCaseSensitive())
         return;
 

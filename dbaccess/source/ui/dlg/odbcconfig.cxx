@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-10 12:09:37 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ OOdbcEnumeration::~OOdbcEnumeration()
 //-------------------------------------------------------------------------
 sal_Bool OOdbcEnumeration::allocEnv()
 {
-    OSL_ENSHURE(isLoaded(), "OOdbcEnumeration::allocEnv: not loaded!");
+    OSL_ENSURE(isLoaded(), "OOdbcEnumeration::allocEnv: not loaded!");
     if (!isLoaded())
         return sal_False;
 
@@ -261,13 +261,13 @@ void OOdbcEnumeration::freeEnv()
 //-------------------------------------------------------------------------
 void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
 {
-    OSL_ENSHURE(isLoaded(), "OOdbcManagement::getDatasourceNames: not loaded!");
+    OSL_ENSURE(isLoaded(), "OOdbcManagement::getDatasourceNames: not loaded!");
     if (!isLoaded())
         return;
 
     if (!allocEnv())
     {
-        OSL_ENSHURE(sal_False, "OOdbcManagement::getDatasourceNames: could not allocate an ODBC environment!");
+        OSL_ENSURE(sal_False, "OOdbcManagement::getDatasourceNames: could not allocate an ODBC environment!");
         return;
     }
 
@@ -319,8 +319,8 @@ OOdbcManagement::OOdbcManagement()
 //-------------------------------------------------------------------------
 void OOdbcManagement::manageDataSources(void* _pParentSysWindowHandle)
 {
-    OSL_ENSHURE(isLoaded(), "OOdbcManagement::manageDataSources: not loaded!");
-    OSL_ENSHURE(_pParentSysWindowHandle, "OOdbcManagement::manageDataSources: invalid parent window!");
+    OSL_ENSURE(isLoaded(), "OOdbcManagement::manageDataSources: not loaded!");
+    OSL_ENSURE(_pParentSysWindowHandle, "OOdbcManagement::manageDataSources: invalid parent window!");
     if (!isLoaded())
         return;
 
@@ -336,6 +336,9 @@ void OOdbcManagement::manageDataSources(void* _pParentSysWindowHandle)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/01/10 12:09:37  oj
+ *  #82620# calling convention of windows changed
+ *
  *  Revision 1.4  2000/10/30 15:36:51  fs
  *  don't append the description of the ODBC data source to the DSN name
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,52 +274,52 @@ void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(
     switch (nHandle)
     {
         case PROPERTY_ID_TYPE:
-            OSL_ENSHURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
+            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
                 "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(TYPE) : invalid value !");
             rValue >>= m_nType;
             break;
         case PROPERTY_ID_PRECISION:
-            OSL_ENSHURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
+            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
                 "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(PRECISION) : invalid value !");
             rValue >>= m_nPrecision;
             break;
         case PROPERTY_ID_SCALE:
-            OSL_ENSHURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
+            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
                 "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(SCALE) : invalid value !");
             rValue >>= m_nScale;
             break;
         case PROPERTY_ID_ISNULLABLE:
-            OSL_ENSHURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
+            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
                 "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(ISNULLABLE) : invalid value !");
             rValue >>= m_nIsNullable;
             break;
         case PROPERTY_ID_TYPENAME:
-            OSL_ENSHURE(rValue.getValueType().equals(::getCppuType(static_cast< rtl::OUString* >(NULL))),
+            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< rtl::OUString* >(NULL))),
                 "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(TYPENAME) : invalid value !");
             rValue >>= m_aTypeName;
             break;
         case PROPERTY_ID_DESCRIPTION:
-            OSL_ENSHURE(rValue.getValueType().equals(::getCppuType(static_cast< rtl::OUString* >(NULL))),
+            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< rtl::OUString* >(NULL))),
                 "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(DESCRIPTION) : invalid value !");
             rValue >>= m_aDescription;
             break;
         case PROPERTY_ID_DEFAULTVALUE:
-            OSL_ENSHURE(rValue.getValueType().equals(::getCppuType(static_cast< rtl::OUString* >(NULL))),
+            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< rtl::OUString* >(NULL))),
                 "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(DEFAULTVALUE) : invalid value !");
             rValue >>= m_aDefaultValue;
             break;
         case PROPERTY_ID_ISAUTOINCREMENT:
-            OSL_ENSHURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Bool* >(NULL))),
+            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Bool* >(NULL))),
                 "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(DEFAULTVALUE) : invalid value !");
             m_bAutoIncrement = ::comphelper::getBOOL(rValue);
             break;
         case PROPERTY_ID_ISCURRENCY:
-            OSL_ENSHURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Bool* >(NULL))),
+            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Bool* >(NULL))),
                 "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(DEFAULTVALUE) : invalid value !");
             m_bCurrency = ::comphelper::getBOOL(rValue);
             break;
         case PROPERTY_ID_ISROWVERSION:
-            OSL_ENSHURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Bool* >(NULL))),
+            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Bool* >(NULL))),
                 "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(ISROWVERSION) : invalid value !");
             m_bRowVersion = ::comphelper::getBOOL(rValue);
             break;
@@ -446,7 +446,7 @@ void OColumnWrapper::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
             sal_Int16 nAttributes;
             const_cast<OColumnWrapper*>(this)->getInfoHelper().
                         fillPropertyMembersByHandle(&aPropName, &nAttributes, nHandle);
-            OSL_ENSHURE(aPropName.getLength(), "property not found?");
+            OSL_ENSURE(aPropName.getLength(), "property not found?");
 
             // now read the value
             rValue = m_xAggregate->getPropertyValue(aPropName);
@@ -469,7 +469,7 @@ sal_Bool OColumnWrapper::convertFastPropertyValue(
     ::rtl::OUString aPropName;
     sal_Int16 nAttributes;
     getInfoHelper().fillPropertyMembersByHandle(&aPropName, &nAttributes, nHandle);
-    OSL_ENSHURE(aPropName.getLength(), "property not found?");
+    OSL_ENSURE(aPropName.getLength(), "property not found?");
 
     // now read the value
     m_xAggregate->setPropertyValue(aPropName, rValue);
@@ -602,7 +602,7 @@ void OTableColumnDescriptorWrapper::getFastPropertyValue( Any& rValue, sal_Int32
             sal_Int16 nAttributes;
             const_cast<OTableColumnDescriptorWrapper*>(this)->getInfoHelper().
                 fillPropertyMembersByHandle(&aPropName, &nAttributes, nHandle);
-            OSL_ENSHURE(aPropName.getLength(), "property not found?");
+            OSL_ENSURE(aPropName.getLength(), "property not found?");
 
             // now read the value
             rValue = m_xAggregate->getPropertyValue(aPropName);
