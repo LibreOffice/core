@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.16 2000-12-05 18:00:47 cl Exp $
+	$Id: drawing.mod,v 1.17 2000-12-05 18:22:15 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -222,8 +222,8 @@
 <!ELEMENT draw:transparency EMPTY>
 <!ATTLIST draw:transparency draw:name %styleName; #REQUIRED>
 <!ATTLIST draw:transparency draw:style %gradient-style; #REQUIRED>
-<!ATTLIST draw:transparency svg:cx %coordinate; #IMPLIED>
-<!ATTLIST draw:transparency svg:cy %coordinate; #IMPLIED>
+<!ATTLIST draw:transparency draw:cx %coordinate; #IMPLIED>
+<!ATTLIST draw:transparency draw:cy %coordinate; #IMPLIED>
 <!ATTLIST draw:transparency draw:start %percentage; #IMPLIED>
 <!ATTLIST draw:transparency draw:end %percentage; #IMPLIED>
 <!ATTLIST draw:transparency draw:angle %integer; #IMPLIED>
