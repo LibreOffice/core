@@ -1,4 +1,4 @@
-sd	sd	:	offmgr NULL
+sd	sd	:	offmgr sch NULL
 sd	sd										usr1	-	all	sd_mkout NULL
 sd	sd\inc									get		-	all	sd_inc NULL
 sd	sd\prj									get		-	all	sd_prj NULL
