@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-01 17:55:49 $
+ *  last change: $Author: cmc $ $Date: 2002-05-22 11:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,10 +603,11 @@ void SwRTFParser::ReadTable( int nToken )
 
     if( pDoc->GetRootFrm() )
     {
-        // exitiert schon ein Layout, dann muss an dieser Tabelle die
-        // BoxFrames neu erzeugt werden.
-        pTableNode->DelFrms();
-        pTableNode->MakeFrms( &pPam->GetPoint()->nNode );
+        //Associate this tablenode with this after position, replace an
+        //old node association if necessary
+        ::std::pair<SwTableNode *, SwNodeIndex> aPair(pTableNode,
+            pPam->GetPoint()->nNode);
+        maTables.insert(aPair);
     }
 
     ULONG nOldPos = pPam->GetPoint()->nNode.GetIndex();
@@ -775,6 +776,9 @@ void SwRTFParser::CheckInsNewTblLine()
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/03/01 17:55:49  jp
+      Bug #84104#: add negativ left indent of tables
+
       Revision 1.1.1.1  2000/09/18 17:14:56  hr
       initial import
 
