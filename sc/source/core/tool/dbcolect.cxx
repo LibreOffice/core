@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcolect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-11 07:55:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@
 //---------------------------------------------------------------------------------------
 
 ScDBData::ScDBData( const String& rName,
-                    USHORT nTab,
-                    USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
+                    SCTAB nTab,
+                    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     BOOL bByR, BOOL bHasH) :
     aName       (rName),
     nTable      (nTab),
@@ -142,6 +142,8 @@ ScDBData::ScDBData( SvStream& rStream, ScMultipleReadHeader& rHdr ) :
     bSortUserDef    (FALSE),
     nSortUserIndex  (0)
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rHdr.StartEntry();
 
     USHORT i;
@@ -187,7 +189,8 @@ ScDBData::ScDBData( SvStream& rStream, ScMultipleReadHeader& rHdr ) :
     for (i=0; i<MAXSORT; i++)
     {
         rStream >> bDoSort[i];
-        rStream >> nSortField[i];
+        USHORT n16;
+        rStream >> n16; nSortField[i] = n16;
         rStream >> bAscending[i];
     }
     for (i=0; i<MAXQUERY; i++)
@@ -292,10 +295,13 @@ ScDBData::ScDBData( SvStream& rStream, ScMultipleReadHeader& rHdr ) :
         DBG_ERRORFILE( "nQueryDestRow > MAXROW" );
         nQueryDestRow = MAXROW;
     }
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 BOOL ScDBData::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rHdr.StartEntry();
 
     USHORT i;
@@ -340,7 +346,10 @@ BOOL ScDBData::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
     for (i=0; i<MAXSORT; i++)
     {
         rStream << bDoSort[i];
-        rStream << nSortField[i];
+        DBG_ASSERT( !SC_ROWLIMIT_MORE_THAN_32K ||
+                (0 <= nSortField[i] && nSortField[i] < SCROWS32K),
+                "rowlimit increased, bad file data");
+        rStream << (USHORT) nSortField[i];
         rStream << bAscending[i];
     }
     for (i=0; i<MAXQUERY; i++)
@@ -401,6 +410,9 @@ BOOL ScDBData::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 
     rHdr.EndEntry();
     return TRUE;
+#else
+    return FALSE;
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 ScDBData::ScDBData( const ScDBData& rData ) :
@@ -480,10 +492,10 @@ ScDBData::ScDBData( const ScDBData& rData ) :
         bDoSubTotal[i]      = rData.bDoSubTotal[i];
         nSubField[i]        = rData.nSubField[i];
 
-        USHORT nCount   = rData.nSubTotals[i];
+        SCCOL nCount    = rData.nSubTotals[i];
         nSubTotals[i]   = nCount;
-        pFunctions[i]   = nCount ? new ScSubTotalFunc [nCount] : NULL;
-        pSubTotals[i]   = nCount ? new USHORT         [nCount] : NULL;
+        pFunctions[i]   = nCount > 0 ? new ScSubTotalFunc [nCount] : NULL;
+        pSubTotals[i]   = nCount > 0 ? new SCCOL          [nCount] : NULL;
 
         for (j=0; j<nCount; j++)
         {
@@ -569,14 +581,14 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     {
         bDoSubTotal[i]      = rData.bDoSubTotal[i];
         nSubField[i]        = rData.nSubField[i];
-        USHORT nCount   = rData.nSubTotals[i];
+        SCCOL nCount    = rData.nSubTotals[i];
         nSubTotals[i]   = nCount;
 
         delete[] pSubTotals[i];
         delete[] pFunctions[i];
 
-        pSubTotals[i] = nCount ? new USHORT         [nCount] : NULL;
-        pFunctions[i] = nCount ? new ScSubTotalFunc [nCount] : NULL;
+        pSubTotals[i] = nCount > 0 ? new SCCOL          [nCount] : NULL;
+        pFunctions[i] = nCount > 0 ? new ScSubTotalFunc [nCount] : NULL;
         for (j=0; j<nCount; j++)
         {
             pSubTotals[i][j] = rData.pSubTotals[i][j];
@@ -646,7 +658,7 @@ ScDBData::~ScDBData()
     }
 }
 
-BOOL ScDBData::IsBeyond(USHORT nMaxRow) const
+BOOL ScDBData::IsBeyond(SCROW nMaxRow) const
 {
     return ( nStartRow > nMaxRow ||
              nEndRow > nMaxRow ||
@@ -691,7 +703,7 @@ String ScDBData::GetOperations() const
     return aVal;
 }
 
-void ScDBData::GetArea(USHORT& rTab, USHORT& rCol1, USHORT& rRow1, USHORT& rCol2, USHORT& rRow2) const
+void ScDBData::GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const
 {
     rTab  = nTable;
     rCol1 = nStartCol;
@@ -705,7 +717,7 @@ void ScDBData::GetArea(ScRange& rRange) const
     rRange = ScRange( nStartCol,nStartRow,nTable, nEndCol,nEndRow,nTable );
 }
 
-void ScDBData::SetArea(USHORT nTab, USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2)
+void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
     nTable  = nTab;
     nStartCol = nCol1;
@@ -714,14 +726,14 @@ void ScDBData::SetArea(USHORT nTab, USHORT nCol1, USHORT nRow1, USHORT nCol2, US
     nEndRow   = nRow2;
 }
 
-void ScDBData::MoveTo(USHORT nTab, USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2)
+void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
     USHORT i;
-    short nDifX = ((short) nCol1) - ((short) nStartCol);
-    short nDifY = ((short) nRow1) - ((short) nStartRow);
+    long nDifX = ((long) nCol1) - ((long) nStartCol);
+    long nDifY = ((long) nRow1) - ((long) nStartRow);
 
-    short nSortDif = bByRow ? nDifX : nDifY;
-    USHORT nSortEnd = bByRow ? nCol2 : nRow2;
+    long nSortDif = bByRow ? nDifX : nDifY;
+    long nSortEnd = bByRow ? static_cast<long>(nCol2) : static_cast<long>(nRow2);
 
     for (i=0; i<MAXSORT; i++)
     {
@@ -821,7 +833,7 @@ void ScDBData::GetQueryParam( ScQueryParam& rQueryParam ) const
     rQueryParam.nDestRow = nQueryDestRow;
 
     rQueryParam.Resize( MAXQUERY );
-    for (USHORT i=0; i<MAXQUERY; i++)
+    for (SCSIZE i=0; i<MAXQUERY; i++)
     {
         ScQueryEntry& rEntry = rQueryParam.GetEntry(i);
 
@@ -852,7 +864,7 @@ void ScDBData::SetQueryParam(const ScQueryParam& rQueryParam)
     nQueryDestTab = rQueryParam.nDestTab;
     nQueryDestCol = rQueryParam.nDestCol;
     nQueryDestRow = rQueryParam.nDestRow;
-    for (USHORT i=0; i<MAXQUERY; i++)
+    for (SCSIZE i=0; i<MAXQUERY; i++)
     {
         ScQueryEntry& rEntry = rQueryParam.GetEntry(i);
 
@@ -907,13 +919,13 @@ void ScDBData::GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const
     {
         rSubTotalParam.bGroupActive[i]  = bDoSubTotal[i];
         rSubTotalParam.nField[i]        = nSubField[i];
-        USHORT nCount = nSubTotals[i];
+        SCCOL nCount = nSubTotals[i];
 
         rSubTotalParam.nSubTotals[i] = nCount;
         delete[] rSubTotalParam.pSubTotals[i];
         delete[] rSubTotalParam.pFunctions[i];
-        rSubTotalParam.pSubTotals[i] = nCount ? new USHORT[nCount] : NULL;
-        rSubTotalParam.pFunctions[i] = nCount ? new ScSubTotalFunc[nCount]
+        rSubTotalParam.pSubTotals[i] = nCount > 0 ? new SCCOL[nCount] : NULL;
+        rSubTotalParam.pFunctions[i] = nCount > 0 ? new ScSubTotalFunc[nCount]
                                               : NULL;
         for (j=0; j<nCount; j++)
         {
@@ -942,13 +954,13 @@ void ScDBData::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
     {
         bDoSubTotal[i]  = rSubTotalParam.bGroupActive[i];
         nSubField[i]    = rSubTotalParam.nField[i];
-        USHORT nCount = rSubTotalParam.nSubTotals[i];
+        SCCOL nCount = rSubTotalParam.nSubTotals[i];
 
         nSubTotals[i] = nCount;
         delete[] pSubTotals[i];
         delete[] pFunctions[i];
-        pSubTotals[i] = nCount ? new USHORT         [nCount] : NULL;
-        pFunctions[i] = nCount ? new ScSubTotalFunc [nCount] : NULL;
+        pSubTotals[i] = nCount > 0 ? new SCCOL          [nCount] : NULL;
+        pFunctions[i] = nCount > 0 ? new ScSubTotalFunc [nCount] : NULL;
         for (j=0; j<nCount; j++)
         {
             pSubTotals[i][j] = rSubTotalParam.pSubTotals[i][j];
@@ -982,7 +994,7 @@ void ScDBData::SetImportParam(const ScImportParam& rImportParam)
     nDBType         = rImportParam.nType;
 }
 
-BOOL ScDBData::IsDBAtCursor(USHORT nCol, USHORT nRow, USHORT nTab, BOOL bStartOnly) const
+BOOL ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bStartOnly) const
 {
     if (nTab == nTable)
     {
@@ -996,7 +1008,7 @@ BOOL ScDBData::IsDBAtCursor(USHORT nCol, USHORT nRow, USHORT nTab, BOOL bStartOn
     return FALSE;
 }
 
-BOOL ScDBData::IsDBAtArea(USHORT nTab, USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2) const
+BOOL ScDBData::IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
 {
     return (BOOL)((nTab == nTable)
                     && (nCol1 == nStartCol) && (nRow1 == nStartRow)
@@ -1034,7 +1046,7 @@ BOOL ScDBCollection::IsEqual(DataObject* pKey1, DataObject* pKey2) const
     return *(ScDBData*)pKey1 == *(ScDBData*)pKey2;
 }
 
-ScDBData* ScDBCollection::GetDBAtCursor(USHORT nCol, USHORT nRow, USHORT nTab, BOOL bStartOnly) const
+ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bStartOnly) const
 {
     ScDBData* pNoNameData = NULL;
     if (pItems)
@@ -1054,7 +1066,7 @@ ScDBData* ScDBCollection::GetDBAtCursor(USHORT nCol, USHORT nRow, USHORT nTab, B
     return pNoNameData;             // "unbenannt" nur zurueck, wenn sonst nichts gefunden
 }
 
-ScDBData* ScDBCollection::GetDBAtArea(USHORT nTab, USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2) const
+ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
 {
     ScDBData* pNoNameData = NULL;
     if (pItems)
@@ -1107,7 +1119,7 @@ BOOL ScDBCollection::Store( SvStream& rStream ) const
 
     USHORT i;
     USHORT nSaveCount = nCount;
-    USHORT nSaveMaxRow = pDoc->GetSrcMaxRow();
+    SCROW nSaveMaxRow = pDoc->GetSrcMaxRow();
     if ( nSaveMaxRow < MAXROW )
     {
         nSaveCount = 0;
@@ -1135,18 +1147,18 @@ BOOL ScDBCollection::Store( SvStream& rStream ) const
 }
 
 void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
-                                USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                                USHORT nCol2, USHORT nRow2, USHORT nTab2,
-                                short nDx, short nDy, short nDz )
+                                SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
+                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     for (USHORT i=0; i<nCount; i++)
     {
-        USHORT theCol1;
-        USHORT theRow1;
-        USHORT theTab1;
-        USHORT theCol2;
-        USHORT theRow2;
-        USHORT theTab2;
+        SCCOL theCol1;
+        SCROW theRow1;
+        SCTAB theTab1;
+        SCCOL theCol2;
+        SCROW theRow2;
+        SCTAB theTab2;
         ((ScDBData*)pItems[i])->GetArea( theTab1, theCol1, theRow1, theCol2, theRow2 );
         theTab2 = theTab1;
 
@@ -1179,7 +1191,7 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
 }
 
 
-void ScDBCollection::UpdateMoveTab( USHORT nOldPos, USHORT nNewPos )
+void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
     //  wenn nOldPos vor nNewPos liegt, ist nNewPos schon angepasst
 
@@ -1188,7 +1200,7 @@ void ScDBCollection::UpdateMoveTab( USHORT nOldPos, USHORT nNewPos )
         ScRange aRange;
         ScDBData* pData = (ScDBData*)pItems[i];
         pData->GetArea( aRange );
-        USHORT nTab = aRange.aStart.Tab();              // hat nur eine Tabelle
+        SCTAB nTab = aRange.aStart.Tab();               // hat nur eine Tabelle
 
         //  anpassen wie die aktuelle Tabelle bei ScTablesHint (tabvwsh5.cxx)
 
