@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 10:47:19 $
+ *  last change: $Author: dvo $ $Date: 2001-03-21 16:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,7 @@ SwXMLExport::SwXMLExport(sal_uInt16 nExportFlags) :
     bBlock( sal_False ),
     bShowProgress( sal_True ),
     sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
+    sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected")),
     sCell(RTL_CONSTASCII_USTRINGPARAM("Cell"))
 {
     _InitItemExport();
@@ -241,6 +242,7 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
     bExportFirstTableOnly( bExpFirstTableOnly ),
     bShowProgress( bShowProg ),
     sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
+    sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected")),
     sCell(RTL_CONSTASCII_USTRINGPARAM("Cell"))
 {
     _InitItemExport();

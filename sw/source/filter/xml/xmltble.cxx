@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-20 10:39:13 $
+ *  last change: $Author: dvo $ $Date: 2001-03-21 16:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -806,7 +806,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan )
             Reference<XTextRange> xRange(
                 lcl_xml_CreateTableBoxTextRange( *pBoxSttNd ) );
 
-            // get formula
+            // get formula (and protection)
             Reference<XPropertySet> xRangePropertySet(xRange, UNO_QUERY);
             Any aAny = xRangePropertySet->getPropertyValue(sCell);
             Reference<XCell> xCell;
@@ -851,6 +851,14 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan )
                                 (xRange->getString().getLength() > 0) );
                     }
                     // else: invalid key; ignore
+
+                    // cell protection
+                    aAny = xCellPropertySet->getPropertyValue(sIsProtected);
+                    if (*(sal_Bool*)aAny.getValue())
+                    {
+                        AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_protect,
+                                           sXML_true );
+                    }
                 }
             }
 

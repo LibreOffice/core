@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-14 07:55:10 $
+ *  last change: $Author: dvo $ $Date: 2001-03-21 16:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ public:
                      sal_uInt32 nRowSpan=1U, sal_uInt32 nColSpan=1U,
                      const SwStartNode *pStNd=0,
                      SwXMLTableContext *pTable=0,
+                     sal_Bool bIsProtected = sal_False,
                      ::rtl::OUString *pFormula=0,
                      sal_Bool bHasValue = sal_False,
                      double fValue = 0.0 );

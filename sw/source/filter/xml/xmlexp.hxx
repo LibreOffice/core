@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-19 13:46:11 $
+ *  last change: $Author: dvo $ $Date: 2001-03-21 16:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,9 @@ class SwXMLExport : public SvXMLExport
     void SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly );
 #endif
 
+    // string constants for table cell export
     const ::rtl::OUString sNumberFormat;
+    const ::rtl::OUString sIsProtected;
     const ::rtl::OUString sCell;
 
 protected:

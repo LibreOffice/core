@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-14 07:55:09 $
+ *  last change: $Author: dvo $ $Date: 2001-03-21 16:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@
 
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
+#endif
+
+#ifndef _SVX_PROTITEM_HXX
+#include <svx/protitem.hxx>
 #endif
 
 #ifndef _POOLFMT_HXX
@@ -234,6 +238,7 @@ public:
     inline void Set( const OUString& rStyleName,
                       sal_uInt32 nRSpan, sal_uInt32 nCSpan,
                      const SwStartNode *pStNd, SwXMLTableContext *pTable,
+                     sal_Bool bProtect = sal_False,
                      OUString* pFormula = NULL, sal_Bool bHasValue = sal_False,
                      double dVal = 0.0 );
 
@@ -247,6 +252,7 @@ public:
     const OUString& GetFormula() const { return sFormula; }
     double GetValue() const { return dValue; }
     sal_Bool HasValue() const { return bHasValue; }
+    sal_Bool IsProtected() const { return bProtected; }
 
     const SwStartNode *GetStartNode() const { return pStartNode; }
     inline void SetStartNode( const SwStartNode *pSttNd );
@@ -260,6 +266,7 @@ inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
                                       sal_uInt32 nRSpan, sal_uInt32 nCSpan,
                                       const SwStartNode *pStNd,
                                       SwXMLTableContext *pTable,
+                                      sal_Bool bProtect,
                                       OUString* pFormula,
                                       sal_Bool bHasVal,
                                       double dVal)
@@ -271,6 +278,7 @@ inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
     xSubTable = pTable;
     dValue = dVal;
     bHasValue = bHasVal;
+    bProtected = bProtect;
 
     // set formula, if valid
     if (pFormula != NULL)
@@ -395,6 +403,7 @@ class SwXMLTableCellContext_Impl : public SvXMLImportContext
 
     double fValue;
     sal_Bool bHasValue;
+    sal_Bool bProtect;
 
     sal_uInt32                  nRowSpan;
     sal_uInt32                  nColSpan;
@@ -436,8 +445,9 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
     bHasTextContent( sal_False ),
     bHasTableContent( sal_False ),
     sFormula(),
-    fValue(0.0),
-    bHasValue(sal_False)
+    fValue( 0.0 ),
+    bHasValue( sal_False ),
+    bProtect( sal_False )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -513,6 +523,15 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                     bHasValue = sal_True;
                 }
             }
+            else if (aLocalName.equalsAsciiL(sXML_protect,
+                                             sizeof(sXML_protect)-1))
+            {
+                sal_Bool bTmp;
+                if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+                {
+                    bProtect = bTmp;
+                }
+            }
         }
     }
 }
@@ -527,7 +546,7 @@ inline void SwXMLTableCellContext_Impl::InsertContentIfNotThere()
     {
         GetTable()->InsertCell( aStyleName, nRowSpan, nColSpan,
                                 GetTable()->InsertTableSection(),
-                                NULL, &sFormula, bHasValue, fValue);
+                                NULL, bProtect, &sFormula, bHasValue, fValue);
         bHasTextContent = sal_True;
     }
 }
@@ -535,7 +554,7 @@ inline void SwXMLTableCellContext_Impl::InsertContentIfNotThere()
 inline void SwXMLTableCellContext_Impl::InsertContent(
                                                 SwXMLTableContext *pTable )
 {
-    GetTable()->InsertCell( aStyleName, nRowSpan, nColSpan, 0, pTable );
+    GetTable()->InsertCell( aStyleName, nRowSpan, nColSpan, 0, pTable, bProtect );
     bHasTableContent = sal_True;
 }
 
@@ -1343,6 +1362,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
                                     sal_uInt32 nRowSpan, sal_uInt32 nColSpan,
                                     const SwStartNode *pStartNode,
                                     SwXMLTableContext *pTable,
+                                    sal_Bool bProtect,
                                     OUString* pFormula,
                                     sal_Bool bHasValue,
                                     double fValue)
@@ -1420,8 +1440,8 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     for( i=nColSpan; i>0UL; i-- )
         for( j=nRowSpan; j>0UL; j-- )
             GetCell( nRowsReq-j, nColsReq-i )
-                ->Set( rStyleName, j, i, pStartNode, pTable, pFormula,
-                       bHasValue, fValue);
+                ->Set( rStyleName, j, i, pStartNode, pTable, bProtect,
+                       pFormula, bHasValue, fValue);
 
     // Set current col to the next (free) column
     nCurCol = nColsReq;
@@ -1704,6 +1724,11 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     pFrmFmt->ResetAllAttr();
     pFrmFmt->SetAttr( aFillOrder );
 
+    // no update for cell number format (in style), formula, value
+    // (else cell alignment gets fumbled)
+    sal_Bool bModifyLocked = pFrmFmt->IsModifyLocked();
+    pFrmFmt->LockModify();
+
     const SfxItemSet *pAutoItemSet = 0;
     const OUString& rStyleName = pCell->GetStyleName();
     if( pCell->GetStartNode() && rStyleName &&
@@ -1731,6 +1756,17 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
             SwTblBoxValue aValueItem( pCell->GetValue() );
             pFrmFmt->SetAttr( aValueItem );
         }
+    }
+    // restore old modify-lock state
+    if (! bModifyLocked)
+        pFrmFmt->UnlockModify();
+
+    // table cell protection
+    if( pCell->IsProtected() )
+    {
+        SvxProtectItem aProtectItem;
+        aProtectItem.SetCntntProtect( sal_True );
+        pFrmFmt->SetAttr( aProtectItem );
     }
 
     pFrmFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
