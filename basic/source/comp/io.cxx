@@ -2,9 +2,9 @@
  *
  *  $RCSfile: io.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #include "sbcomp.hxx"
 #pragma hdrstop
 #include "iosys.hxx"
-
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBCOMP, SBCOMP_CODE )
 
 // Test, ob ein I/O-Channel angegeben wurde
 

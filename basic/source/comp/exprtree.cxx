@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprtree.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-10 13:02:28 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 #pragma hdrstop
 #include <svtools/sbx.hxx>      // w.g. ...IMPL_REF(...sbxvariable)
 #include "expr.hxx"
-
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBCEXPR, SBCOMP_CODE )
 
 /***************************************************************************
 |*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-17 09:41:05 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,19 +59,11 @@
  *
  ************************************************************************/
 
-#if SUPD >= 375
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
-#else
-#include <svmem.hxx>
-#include <sbx.hxx>
-#endif
 #include "sbcomp.hxx"
 #pragma hdrstop
-
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBCOMP, SBCOMP_CODE )
 
 struct SbiParseStack {              // "Stack" fuer Statement-Blocks
     SbiParseStack* pNext;           // Chain

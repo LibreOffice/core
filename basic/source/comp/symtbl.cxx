@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symtbl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-04 10:07:46 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBCOMP, SBCOMP_CODE )
 
 SV_IMPL_PTRARR(SbiStrings,String*)
 SV_IMPL_PTRARR(SbiSymbols,SbiSymDef*)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprgen.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-04 10:06:24 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #include "sbcomp.hxx"
 #pragma hdrstop
 #include "expr.hxx"
-
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBCEXPR, SBCOMP_CODE )
 
 // Umsetztabelle fuer Token-Operatoren und Opcodes
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-27 11:11:59 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 #include <ctype.h>
 #include "sbcomp.hxx"
-
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBCOMP, SBCOMP_CODE )
 
 struct TokenTable { SbiToken t; const char *s; };
 

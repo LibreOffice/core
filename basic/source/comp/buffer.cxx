@@ -2,9 +2,9 @@
  *
  *  $RCSfile: buffer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 #pragma hdrstop
 #include "buffer.hxx"
 #include <string.h>
-
-#include "segmentc.hxx"
-#pragma SW_SEGMENT_CLASS( SBCOMP, SBCOMP_CODE )
 
 // Der SbiBuffer wird in Inkrements von mindestens 16 Bytes erweitert.
 // Dies ist notwendig, da viele Klassen von einer Pufferlaenge
