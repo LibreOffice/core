@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-21 14:51:28 $
+ *  last change: $Author: sb $ $Date: 2001-11-23 15:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1008,6 +1008,44 @@ main()
                            getStr());
                 bSuccess = false;
             }
+        }
+    }
+
+    if (true)
+    {
+        INetURLObject aUrl(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                             "file://host/dir/file")));
+        rtl::OUString aPath;
+        aPath = aUrl.getFSysPath(INetURLObject::FSYS_DETECT);
+        if (!aPath.
+                 equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("//host/dir/file")))
+        {
+            printf("BAD getFSysPath(VOS|UNX|DOS|MAC) = %s\n",
+                   rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).
+                       getStr());
+            bSuccess = false;
+        }
+        aPath = aUrl.getFSysPath(INetURLObject::FSysStyle(
+                                     INetURLObject::FSYS_UNX
+                                         | INetURLObject::FSYS_DOS
+                                         | INetURLObject::FSYS_MAC));
+        if (!aPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                                    "\\\\host\\dir\\file")))
+        {
+            printf("BAD getFSysPath(UNX|DOS|MAC) = %s\n",
+                   rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).
+                       getStr());
+            bSuccess = false;
+        }
+        aPath = aUrl.getFSysPath(INetURLObject::FSysStyle(
+                                     INetURLObject::FSYS_UNX
+                                         | INetURLObject::FSYS_MAC));
+        if (aPath.getLength() != 0)
+        {
+            printf("BAD getFSysPath(UNX|MAC) = %s\n",
+                   rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).
+                       getStr());
+            bSuccess = false;
         }
     }
 

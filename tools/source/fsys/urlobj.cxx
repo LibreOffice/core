@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sb $ $Date: 2001-11-02 16:08:42 $
+ *  last change: $Author: sb $ $Date: 2001-11-23 14:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4856,7 +4856,9 @@ UniString INetURLObject::getFSysPath(FSysStyle eStyle,
                  && m_aHost.getLength() > 0 ?
                      FSYS_VOS :
                  hasDosVolume(eStyle)
-                 && (!m_aHost.isPresent() || m_aHost.getLength() == 0) ?
+                 || (eStyle & FSYS_DOS) != 0
+                    && m_aHost.isPresent()
+                    && m_aHost.getLength() > 0 ?
                      FSYS_DOS :
                  eStyle & FSYS_UNX
                  && (!m_aHost.isPresent() || m_aHost.getLength() == 0) ?
