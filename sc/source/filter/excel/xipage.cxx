@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:35:58 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ void lclPutMarginItem( SfxItemSet& rItemSet, sal_uInt16 nRecId, double fMarginIn
 void XclImpPageSettings::CreatePageStyle()
 {
     ScDocument& rDoc = GetDoc();
-    sal_uInt16 nScTab = GetScTab();
+    USHORT nScTab = GetCurrScTab();
 
     // *** create page style sheet ***
 
