@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-18 12:39:02 $
+ *  last change: $Author: dvo $ $Date: 2001-01-18 17:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,6 +363,7 @@ sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )
 }
 
 void SwXMLImport::startDocument( void )
+    throw( xml::sax::SAXException, uno::RuntimeException )
 {
     DBG_ASSERT( GetModel().is(), "model is missing" );
     if( !GetModel().is() )
@@ -429,6 +430,7 @@ void SwXMLImport::startDocument( void )
 }
 
 void SwXMLImport::endDocument( void )
+    throw( xml::sax::SAXException, uno::RuntimeException )
 {
     if( !IsStylesOnlyMode() )
     {
