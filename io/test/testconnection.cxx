@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testconnection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-01 12:40:06 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ void testConnection( const OUString &sConnectionDescription  ,
         {
             Sequence < sal_Int8 > seq(10);
             r->write( seq );
-            OSL_ENSHURE( 0 , "expected exception not thrown" );
+            OSL_ENSURE( 0 , "expected exception not thrown" );
         }
         catch ( IOException & )
         {
@@ -200,7 +200,7 @@ void testConnection( const OUString &sConnectionDescription  ,
         }
         catch ( ... )
         {
-            OSL_ENSHURE( 0 , "wrong exception was thrown" );
+            OSL_ENSURE( 0 , "wrong exception was thrown" );
         }
 
         thread.join();
@@ -228,7 +228,7 @@ int __cdecl main( int argc, char * argv[] )
 
     Reference< XImplementationRegistration > xImplReg(
         xMgr->createInstance( OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration") ), UNO_QUERY );
-    OSL_ENSHURE( xImplReg.is(), "### no impl reg!" );
+    OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
     OUString aLibName = OUString::createFromAscii( REG_PREFIX );
     aLibName += OUString::createFromAscii("connectr");

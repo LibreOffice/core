@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opump.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-01-25 14:04:57 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ void Pump::fireError( list< Reference< XStreamListener > > &aList , Any & except
         catch ( RuntimeException &e )
         {
             OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
-            OSL_ENSHURE( !"com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners", sMessage.getStr() );
+            OSL_ENSURE( !"com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners", sMessage.getStr() );
         }
     }
 }
@@ -270,7 +270,7 @@ void Pump::run()
             catch ( RuntimeException &e )
             {
                 OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
-                OSL_ENSHURE( !"com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners", sMessage.getStr() );
+                OSL_ENSURE( !"com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners", sMessage.getStr() );
             }
         }
     }
@@ -279,7 +279,7 @@ void Pump::run()
         // we are the last on the stack.
         // this is to avoid crashing the program, when e.g. a bridge crashes
         OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
-        OSL_ENSHURE( !"com.sun.star.comp.stoc.Pump: unexpected exception", sMessage.getStr() );
+        OSL_ENSURE( !"com.sun.star.comp.stoc.Pump: unexpected exception", sMessage.getStr() );
     }
 
     release();
