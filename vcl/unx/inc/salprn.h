@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:38:52 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,12 @@
 #include <salprn.hxx>
 #endif
 
-class X11SalGraphics;
+class PspGraphics;
 
 class PspSalInfoPrinter : public SalInfoPrinter
 {
 public:
-    X11SalGraphics*         m_pGraphics;
+    PspGraphics*            m_pGraphics;
     psp::JobData            m_aJobData;
     psp::PrinterGfx         m_aPrinterGfx;
 
@@ -113,10 +113,10 @@ public:
     bool                    m_bFax:1;
     bool                    m_bPdf:1;
     bool                    m_bSwallowFaxNo:1;
-    X11SalGraphics*         m_pGraphics;
-    ::psp::PrinterJob       m_aPrintJob;
-    ::psp::JobData          m_aJobData;
-    ::psp::PrinterGfx       m_aPrinterGfx;
+    PspGraphics*            m_pGraphics;
+    psp::PrinterJob         m_aPrintJob;
+    psp::JobData            m_aJobData;
+    psp::PrinterGfx         m_aPrinterGfx;
     ULONG                   m_nCopies;
 
     PspSalPrinter();
