@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
+ *  last change: $Author: dvo $ $Date: 2000-10-19 10:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2625,20 +2625,18 @@ void XMLReferenceFieldImportContext::PrepareField(
 enum DdeFieldDeclAttrs
 {
     XML_TOK_DDEFIELD_NAME,
-    XML_TOK_DDEFIELD_COMMAND_TARGET,
-    XML_TOK_DDEFIELD_COMMAND_FILE,
-    XML_TOK_DDEFIELD_COMMAND_ELEMENT,
+    XML_TOK_DDEFIELD_APPLICATION,
+    XML_TOK_DDEFIELD_TOPIC,
+    XML_TOK_DDEFIELD_ITEM,
     XML_TOK_DDEFIELD_UPDATE
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aDdeDeclAttrTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, sXML_name, XML_TOK_DDEFIELD_NAME },
-    { XML_NAMESPACE_TEXT, sXML_dde_target_name,
-          XML_TOK_DDEFIELD_COMMAND_TARGET },
-    { XML_NAMESPACE_TEXT, sXML_dde_file_name,
-          XML_TOK_DDEFIELD_COMMAND_FILE },
-    { XML_NAMESPACE_TEXT, sXML_dde_command, XML_TOK_DDEFIELD_COMMAND_ELEMENT },
+    { XML_NAMESPACE_TEXT, sXML_dde_application, XML_TOK_DDEFIELD_APPLICATION },
+    { XML_NAMESPACE_TEXT, sXML_dde_topic, XML_TOK_DDEFIELD_TOPIC },
+    { XML_NAMESPACE_TEXT, sXML_dde_item, XML_TOK_DDEFIELD_ITEM },
     { XML_NAMESPACE_TEXT, sXML_automatic_update, XML_TOK_DDEFIELD_UPDATE },
     XML_TOKEN_MAP_END
 };
@@ -2700,15 +2698,15 @@ void XMLDdeFieldDeclImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
     OUString sName;
-    OUString sCommandTarget;
-    OUString sCommandFile;
-    OUString sCommandElement;
+    OUString sCommandApplication;
+    OUString sCommandTopic;
+    OUString sCommandItem;
 
     sal_Bool bUpdate = sal_False;
     sal_Bool bNameOK = sal_False;
-    sal_Bool bCommandTargetOK = sal_False;
-    sal_Bool bCommandFileOK = sal_False;
-    sal_Bool bCommandElementOK = sal_False;
+    sal_Bool bCommandApplicationOK = sal_False;
+    sal_Bool bCommandTopicOK = sal_False;
+    sal_Bool bCommandItemOK = sal_False;
 
     // process attributes
     sal_Int32 nLength = xAttrList->getLength();
@@ -2725,17 +2723,17 @@ void XMLDdeFieldDeclImportContext::StartElement(
                 sName = xAttrList->getValueByIndex(i);
                 bNameOK = sal_True;
                 break;
-            case XML_TOK_DDEFIELD_COMMAND_TARGET:
-                sCommandTarget = xAttrList->getValueByIndex(i);
-                bCommandTargetOK = sal_True;
+            case XML_TOK_DDEFIELD_APPLICATION:
+                sCommandApplication = xAttrList->getValueByIndex(i);
+                bCommandApplicationOK = sal_True;
                 break;
-            case XML_TOK_DDEFIELD_COMMAND_FILE:
-                sCommandFile = xAttrList->getValueByIndex(i);
-                bCommandFileOK = sal_True;
+            case XML_TOK_DDEFIELD_TOPIC:
+                sCommandTopic = xAttrList->getValueByIndex(i);
+                bCommandTopicOK = sal_True;
                 break;
-            case XML_TOK_DDEFIELD_COMMAND_ELEMENT:
-                sCommandElement = xAttrList->getValueByIndex(i);
-                bCommandElementOK = sal_True;
+            case XML_TOK_DDEFIELD_ITEM:
+                sCommandItem = xAttrList->getValueByIndex(i);
+                bCommandItemOK = sal_True;
                 break;
             case XML_TOK_DDEFIELD_UPDATE:
             {
@@ -2751,7 +2749,7 @@ void XMLDdeFieldDeclImportContext::StartElement(
     }
 
     // valid data?
-    if (bNameOK && bCommandTargetOK && bCommandFileOK && bCommandElementOK)
+    if (bNameOK && bCommandApplicationOK && bCommandTopicOK && bCommandItemOK)
     {
         // make service name
         OUStringBuffer sBuf;
@@ -2775,13 +2773,13 @@ void XMLDdeFieldDeclImportContext::StartElement(
                     aAny <<= sName;
                     xPropSet->setPropertyValue(sPropertyName, aAny);
 
-                    aAny <<= sCommandTarget;
+                    aAny <<= sCommandTopic;
                     xPropSet->setPropertyValue(sPropertyDDECommandType, aAny);
 
-                    aAny <<= sCommandFile;
+                    aAny <<= sCommandApplication;
                     xPropSet->setPropertyValue(sPropertyDDECommandFile, aAny);
 
-                    aAny <<= sCommandElement;
+                    aAny <<= sCommandItem;
                     xPropSet->setPropertyValue(sPropertyDDECommandElement,
                                                aAny);
 

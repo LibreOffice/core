@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-18 17:30:22 $
+ *  last change: $Author: dvo $ $Date: 2000-10-19 10:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,13 +342,10 @@ XML_CONSTASCII_ACTION( sXML_date_value, "date-value");
 XML_CONSTASCII_ACTION( sXML_day, "day" );
 XML_CONSTASCII_ACTION( sXML_day_of_week, "day-of-week" );
 XML_CONSTASCII_ACTION( sXML_dde_application, "dde-application" );
-XML_CONSTASCII_ACTION( sXML_dde_command, "dde-command" );
 XML_CONSTASCII_ACTION( sXML_dde_connection, "dde-connection" );
 XML_CONSTASCII_ACTION( sXML_dde_connection_decl, "dde-connection-decl" );
 XML_CONSTASCII_ACTION( sXML_dde_connection_decls, "dde-connection-decls" );
-XML_CONSTASCII_ACTION( sXML_dde_file_name, "dde-file-name" );
 XML_CONSTASCII_ACTION( sXML_dde_item, "dde-item" );
-XML_CONSTASCII_ACTION( sXML_dde_target_name, "dde-target-name" );
 XML_CONSTASCII_ACTION( sXML_dde_topic, "dde-topic" );
 XML_CONSTASCII_ACTION( sXML_decimal_places, "decimal-places" );
 XML_CONSTASCII_ACTION( sXML_decimal_replacement, "decimal-replacement" );

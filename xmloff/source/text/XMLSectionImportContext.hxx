@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-16 13:01:58 $
+ *  last change: $Author: dvo $ $Date: 2000-10-19 10:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,16 +81,6 @@ class XMLTextImportHelper;
 
 /**
  * Import text sections.
- *
- * There's a little trick with text section import: We have to insert
- * enclosing (parent) text sections before the contained (child) text
- * sections. We can't insert text sections as soon as the start
- * element appears, because then they would be zero length, and
- * there's no way to get a cursor between the parent and the child
- * section (because the cursor position does not exist). Therefore, we
- * collect all sections, and insert them after actual text import in
- * the order they appeared in the document. The collection of text
- * sections is held at the XMLTextImportHelper.
  */
 class XMLSectionImportContext : public SvXMLImportContext
 {
@@ -108,6 +98,7 @@ class XMLSectionImportContext : public SvXMLImportContext
 
     const ::rtl::OUString sTextSection;
     const ::rtl::OUString sIsProtected;
+    const ::rtl::OUString sEmpty;
 
     ::rtl::OUString sStyleName;
     ::rtl::OUString sName;
@@ -124,13 +115,6 @@ public:
         const ::rtl::OUString& rLocalName );
 
     ~XMLSectionImportContext();
-
-    /// This methods inserts all sections that are held in the section
-    /// list at the XMLTextImportHelper.
-    void ProcessSections();
-
-    /// insert the section held by this context into the document
-    void InsertSection();
 
 protected:
 

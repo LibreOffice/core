@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
+ *  last change: $Author: dvo $ $Date: 2000-10-19 10:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1590,11 +1590,11 @@ void XMLTextFieldExport::ExportFieldDeclarations()
             // export element
             ProcessString(sXML_name,
                           GetStringProperty(sPropertyName, xPropSet));
-            ProcessString(sXML_dde_target_name,
+            ProcessString(sXML_dde_topic,
                       GetStringProperty(sPropertyDDECommandType, xPropSet));
-            ProcessString(sXML_dde_file_name,
+            ProcessString(sXML_dde_application,
                       GetStringProperty(sPropertyDDECommandFile, xPropSet));
-            ProcessString(sXML_dde_command,
+            ProcessString(sXML_dde_item,
                       GetStringProperty(sPropertyDDECommandElement, xPropSet));
             ProcessBoolean(sXML_automatic_update,
                        GetBoolProperty(sPropertyIsAutomaticUpdate, xPropSet),

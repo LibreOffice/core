@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
+ *  last change: $Author: dvo $ $Date: 2000-10-19 10:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -957,9 +957,10 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         }
         break;
 
-    case XML_TOK_TEXT_SECTION:
-        pContext = new XMLSectionImportContext( rImport, nPrefix, rLocalName );
-        break;
+// disable sections until section implementation is sufficient
+//  case XML_TOK_TEXT_SECTION:
+//      pContext = new XMLSectionImportContext( rImport, nPrefix, rLocalName );
+//      break;
 
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
+ *  last change: $Author: dvo $ $Date: 2000-10-19 10:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,100 +518,109 @@ void XMLTextParagraphExport::exportListAndSectionChange(
     const XMLTextNumRuleInfo& rNextRule,
     sal_Bool bAutoStyles)
 {
-    Reference<XTextSection> xNextSection;
+    // currently, section import does not work properly; thus, we also
+    // disable section import. Simply call exportSectionChange
 
-    // first: get current XTextSection
-    Reference<XPropertySet> xPropSet(rNextSectionContent, UNO_QUERY);
-    if (xPropSet.is())
+    if (!bAutoStyles)
     {
-        if (xPropSet->getPropertySetInfo()->hasPropertyByName(sTextSection))
-        {
-            Any aAny = xPropSet->getPropertyValue(sTextSection);
-            aAny >>= xNextSection;
-        }
-        // else: no current section
-    }
-    // else: no current section
-
-    // careful: exportListChange may only be called for (!bAutoStyles)
-    // I'd like a cleaner solution! Maybe export all section styles upfront.
-    if ( bAutoStyles )
-    {
-        if ( xNextSection.is() )
-        {
-            Reference<XPropertySet> xPropSet( xNextSection, UNO_QUERY);
-            Add( XML_STYLE_FAMILY_TEXT_SECTION, xPropSet );
-        }
-    }
-    else
-    {
-        // old != new? -> start/equal?
-        if (rPrevSection != xNextSection)
-        {
-            // a new section started, or an old one gets closed!
-
-            // close old list
-            XMLTextNumRuleInfo aEmptyNumRule;
-            exportListChange(rPrevRule, aEmptyNumRule);
-
-            // build stacks of old and new sections
-            vector<Reference<XTextSection> > aOldStack;
-            Reference<XTextSection> aCurrent = rPrevSection;
-            while(aCurrent.is())
-            {
-                aOldStack.push_back(aCurrent);
-                aCurrent = aCurrent->getParentSection();
-            }
-
-            vector<Reference<XTextSection> > aNewStack;
-            aCurrent = xNextSection;
-            while(aCurrent.is())
-            {
-                aNewStack.push_back(aCurrent);
-                aCurrent = aCurrent->getParentSection();
-            }
-
-            // compare the two stacks
-            vector<Reference<XTextSection> > ::reverse_iterator aOld =
-                aOldStack.rbegin();
-            vector<Reference<XTextSection> > ::reverse_iterator aNew =
-                aNewStack.rbegin();
-            while ( (aOld != aOldStack.rend()) &&
-                    (aNew != aNewStack.rend()) &&
-                    (*aOld) == (*aNew) )
-            {
-                aOld++;
-                aNew++;
-            }
-
-            // close all elements of aOld, open all of aNew
-            while (aOld != aOldStack.rend())
-            {
-                Reference<XNamed> xName(*aOld, UNO_QUERY);
-                GetExport().GetDocHandler()->endElement(sText_Section);
-                GetExport().GetDocHandler()->ignorableWhitespace(
-                    GetExport().sWS );
-                aOld++;
-            }
-
-            while (aNew != aNewStack.rend())
-            {
-                exportSectionStart(*aNew);
-                aNew++;
-            }
-
-            // start new list
-            exportListChange(aEmptyNumRule, rNextRule);
-        }
-        else
-        {
-            // list change, if sections have not changed
-            exportListChange(rPrevRule, rNextRule);
-        }
+        exportListChange(rPrevRule, rNextRule);
     }
 
-    // save old section (old numRule gets saved in calling method
-    rPrevSection = xNextSection;
+
+//  Reference<XTextSection> xNextSection;
+//
+//  // first: get current XTextSection
+//  Reference<XPropertySet> xPropSet(rNextSectionContent, UNO_QUERY);
+//  if (xPropSet.is())
+//  {
+//      if (xPropSet->getPropertySetInfo()->hasPropertyByName(sTextSection))
+//      {
+//          Any aAny = xPropSet->getPropertyValue(sTextSection);
+//          aAny >>= xNextSection;
+//      }
+//      // else: no current section
+//  }
+//  // else: no current section
+//
+//  // careful: exportListChange may only be called for (!bAutoStyles)
+//  // I'd like a cleaner solution! Maybe export all section styles upfront.
+//  if ( bAutoStyles )
+//  {
+//      if ( xNextSection.is() )
+//      {
+//          Reference<XPropertySet> xPropSet( xNextSection, UNO_QUERY);
+//          Add( XML_STYLE_FAMILY_TEXT_SECTION, xPropSet );
+//      }
+//  }
+//  else
+//  {
+//      // old != new? -> start/equal?
+//      if (rPrevSection != xNextSection)
+//      {
+//          // a new section started, or an old one gets closed!
+//
+//          // close old list
+//          XMLTextNumRuleInfo aEmptyNumRule;
+//          exportListChange(rPrevRule, aEmptyNumRule);
+//
+//          // build stacks of old and new sections
+//          vector<Reference<XTextSection> > aOldStack;
+//          Reference<XTextSection> aCurrent = rPrevSection;
+//          while(aCurrent.is())
+//          {
+//              aOldStack.push_back(aCurrent);
+//              aCurrent = aCurrent->getParentSection();
+//          }
+//
+//          vector<Reference<XTextSection> > aNewStack;
+//          aCurrent = xNextSection;
+//          while(aCurrent.is())
+//          {
+//              aNewStack.push_back(aCurrent);
+//              aCurrent = aCurrent->getParentSection();
+//          }
+//
+//          // compare the two stacks
+//          vector<Reference<XTextSection> > ::reverse_iterator aOld =
+//              aOldStack.rbegin();
+//          vector<Reference<XTextSection> > ::reverse_iterator aNew =
+//              aNewStack.rbegin();
+//          while ( (aOld != aOldStack.rend()) &&
+//                  (aNew != aNewStack.rend()) &&
+//                  (*aOld) == (*aNew) )
+//          {
+//              aOld++;
+//              aNew++;
+//          }
+//
+//          // close all elements of aOld, open all of aNew
+//          while (aOld != aOldStack.rend())
+//          {
+//              Reference<XNamed> xName(*aOld, UNO_QUERY);
+//              GetExport().GetDocHandler()->endElement(sText_Section);
+//              GetExport().GetDocHandler()->ignorableWhitespace(
+//                  GetExport().sWS );
+//              aOld++;
+//          }
+//
+//          while (aNew != aNewStack.rend())
+//          {
+//              exportSectionStart(*aNew);
+//              aNew++;
+//          }
+//
+//          // start new list
+//          exportListChange(aEmptyNumRule, rNextRule);
+//      }
+//      else
+//      {
+//          // list change, if sections have not changed
+//          exportListChange(rPrevRule, rNextRule);
+//      }
+//  }
+//
+//  // save old section (old numRule gets saved in calling method
+//  rPrevSection = xNextSection;
 }
 
 void XMLTextParagraphExport::exportSectionStart(

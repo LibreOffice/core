@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-16 13:01:58 $
+ *  last change: $Author: dvo $ $Date: 2000-10-19 10:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_TEXT_CONTROLCHARACTER_HPP_
+#include <com/sun/star/text/ControlCharacter.hpp>
+#endif
+
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::XPropertySet;
@@ -154,6 +158,11 @@ static __FAR_DATA SvXMLTokenMapEntry aSectionTokenMap[] =
 };
 
 
+// section import: This one is fairly tricky due to a variety of
+// limits of the core or the API. The main problem is that if you
+// insert a section within another section, you can't move the cursor
+// between the ends of the inner and the enclosing section. To avoid
+// these problems, additional markers are first inserted and later deleted.
 XMLSectionImportContext::XMLSectionImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
@@ -166,6 +175,7 @@ XMLSectionImportContext::XMLSectionImportContext(
         sIsProtected(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsProtected)),
         sStyleName(),
         sName(),
+        sEmpty(),
         bValid(sal_False),
         bProtected(sal_False)
 {
@@ -186,14 +196,13 @@ void XMLSectionImportContext::StartElement(
     // valid?
     if (bValid)
     {
-        // remember cursor with section begin
-        xStartRange = rHelper->GetCursorAsRange()->getStart();
-
         // create text section (as XPropertySet)
-        Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
+        Reference<XMultiServiceFactory> xFactory(
+            GetImport().GetModel(),UNO_QUERY);
         if (xFactory.is())
         {
-            Reference<XInterface> xIfc = xFactory->createInstance( sTextSection );
+            Reference<XInterface> xIfc =
+                xFactory->createInstance( sTextSection );
             if (xIfc.is())
             {
                 Reference<XPropertySet> xPropSet(xIfc, UNO_QUERY);
@@ -222,13 +231,32 @@ void XMLSectionImportContext::StartElement(
                     }
                 }
 
-                // put text section and cursor into section list
-                XMLSectionList_Impl& rSectionList =
-                    GetImport().GetTextImport()->GetSectionList();
-                rSectionList.Insert(this, rSectionList.Count());
+                // insert X and paragraph mark; then insert
+                // section over the space character, and delete the
+                // last paragraph when closing a section.
+                Reference<XTextRange> xStart =
+                    rHelper->GetCursor()->getStart();
+                OUString sMarkerString(RTL_CONSTASCII_USTRINGPARAM("X"));
+                rHelper->InsertString(sMarkerString);
+                rHelper->InsertControlCharacter(
+                    ControlCharacter::APPEND_PARAGRAPH );
+                rHelper->InsertString(sMarkerString);
 
-                // increase reference count, so context doesn't get deleted
-                AddRef();
+                // select first marker
+                rHelper->GetCursor()->gotoRange(xStart, sal_False);
+                rHelper->GetCursor()->goRight(1, sal_True);
+
+                // convert section to XTextContent
+                Reference<XTextContent> xTextContent(xSectionPropertySet,
+                                                     UNO_QUERY);
+
+                // and insert (over marker)
+                rHelper->GetText()->insertTextContent(
+                    rHelper->GetCursorAsRange(), xTextContent, sal_True );
+
+                // and delete first marker (in section)
+                rHelper->GetText()->insertString(
+                    rHelper->GetCursorAsRange(), sEmpty, sal_True);
             }
         }
     }
@@ -273,16 +301,17 @@ void XMLSectionImportContext::ProcessAttributes(
 
 void XMLSectionImportContext::EndElement()
 {
-    // expand cursor to full range of section
-    xEndRange = GetImport().GetTextImport()->GetCursorAsRange()->getStart();
+    // get rid of last paragraph
+    UniReference<XMLTextImportHelper> rHelper = GetImport().GetTextImport();
+    rHelper->GetCursor()->goRight(1, sal_False);
+    rHelper->GetCursor()->goLeft(1, sal_True);
+    rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
+                                     sEmpty, sal_True);
 
-    // are we top-most section? Then insert sections to enable early
-    // formatting of columns etc.
-    // Always fails if section was invalid and not inserted into stack.
-    if (this == GetImport().GetTextImport()->GetSectionList().GetObject(0))
-    {
-        ProcessSections();
-    }
+    // and delete second marker
+    rHelper->GetCursor()->goRight(1, sal_True);
+    rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
+                                     sEmpty, sal_True);
 }
 
 SvXMLImportContext* XMLSectionImportContext::CreateChildContext(
@@ -317,7 +346,7 @@ SvXMLImportContext* XMLSectionImportContext::CreateChildContext(
         pContext = GetImport().GetTextImport()->CreateTextChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList);
 
-        // if even that failed, default context
+        // if that fails, default context
         if (NULL == pContext)
         {
             pContext = new SvXMLImportContext( GetImport(),
@@ -328,42 +357,3 @@ SvXMLImportContext* XMLSectionImportContext::CreateChildContext(
     return pContext;
 }
 
-void XMLSectionImportContext::ProcessSections()
-{
-    XMLSectionList_Impl& rSectionList =
-        GetImport().GetTextImport()->GetSectionList();
-
-    sal_uInt16 nCount = rSectionList.Count();
-    for(sal_uInt16 i = 0; i < nCount; i++ )
-    {
-        // process each context
-        XMLSectionImportContext* pContext = rSectionList.GetObject(i);
-        pContext->InsertSection();
-
-        // release reference -> stale pointer in list!
-        pContext->ReleaseRef();
-    }
-
-    // empty list; stale pointers deleted
-    rSectionList.Remove();
-}
-
-void XMLSectionImportContext::InsertSection()
-{
-    // convert to XTextContent
-    Reference<XTextContent> xTextContent(xSectionPropertySet, UNO_QUERY);
-
-    // create section cursor
-    Reference<XTextCursor> xSectionCursor =
-        GetImport().GetTextImport()->GetText()->createTextCursorByRange(
-            xEndRange );
-    xSectionCursor->goLeft(1, sal_False);
-    xSectionCursor->gotoRange( xStartRange, sal_True );
-
-    // convert to range
-    Reference<XTextRange> xSectionRange(xSectionCursor, UNO_QUERY);
-
-    // and insert
-    GetImport().GetTextImport()->GetText()->insertTextContent(
-        xSectionRange, xTextContent, sal_True );
-}
