@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-15 07:40:27 $
+ *  last change: $Author: ssa $ $Date: 2002-11-12 10:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,6 +601,50 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         // 91625 - ignore Minimize
         //nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
         aState.mnState  = nState & SAL_FRAMESTATE_SYSTEMMASK;
+
+        // #96568# avoid having multiple frames at the same screen location
+        if( rData.GetMask() & (WINDOWSTATE_MASK_POS|WINDOWSTATE_MASK_WIDTH|WINDOWSTATE_MASK_HEIGHT) )
+        {
+            Rectangle aDesktop = GetDesktopRectPixel();
+            ImplSVData *pSVData = ImplGetSVData();
+            Window *pWin = pSVData->maWinData.mpFirstFrame;
+            BOOL bWrapped = FALSE;
+            while( pWin )
+            {
+                if( !pWin->ImplIsRealParentPath( this ) &&
+                    pWin->ImplGetWindow()->IsTopWindow() && pWin->mbReallyVisible )
+                {
+                    SalFrameGeometry g = pWin->mpFrame->GetGeometry();
+                    if( abs(g.nX-aState.mnX) < 2 && abs(g.nY-aState.mnY) < 5 )
+                    {
+                        long displacement = g.nTopDecoration ? g.nTopDecoration : 20;
+                        if( aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > aDesktop.nRight ||
+                            aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > aDesktop.nBottom )
+                        {
+                            // displacing would leave screen
+                            aState.mnX = g.nLeftDecoration ? g.nLeftDecoration : 10; // should result in (0,0)
+                            aState.mnY = displacement;
+                            if( bWrapped ||
+                                aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > aDesktop.nRight ||
+                                aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > aDesktop.nBottom )
+                                break;  // further displacement not possible -> break
+                            // avoid endless testing
+                            bWrapped = TRUE;
+                        }
+                        else
+                        {
+                            // displace
+                            aState.mnX += displacement;
+                            aState.mnY += displacement;
+                        }
+                    pWin = pSVData->maWinData.mpFirstFrame; // check new pos again
+                    }
+                }
+                pWin = pWin->mpFrameData->mpNextFrame;
+            }
+
+        }
+
         mpFrame->SetWindowState( &aState );
 #else
         ByteString aStr;
