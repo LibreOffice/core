@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-25 10:17:04 $
+#   last change: $Author: nf $ $Date: 2001-05-09 09:02:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,7 +134,13 @@ APP8STACK=  16000
 APP8OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/xgfconv.obj $(OBJ)$/export2.obj
 APP8STDLIBS=$(STATIC_LIBS)
 
-DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS)
+# encoding converter for text files
+APP9TARGET= txtconv
+APP9STACK=  16000
+APP9OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/txtconv.obj
+APP9STDLIBS=$(STATIC_LIBS)
+
+DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
 
 .IF "$(depend)" == ""
 ALL : 	$(MISC)$/src_yy.c 	\
