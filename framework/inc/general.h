@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-11-02 07:53:34 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,11 @@
 #include <macros/generic.hxx>
 #endif
 
+/* include it to be able to define namespace alias :-) */
+#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
+#include <com/sun/star/uno/XInterface.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -86,8 +91,9 @@ namespace framework{
 //  some general types for whole project
 //_________________________________________________________________________________________________________________
 
-#define css                                                 ::com::sun::star                            /// used for short namespaces!
-#define dcss                                                ::drafts::com::sun::star                    /// ... too
+namespace css = ::com::sun::star;
+//#define css                                                 ::com::sun::star                            /// used for short namespaces!
+//#define dcss                                                ::drafts::com::sun::star                    /// ... too
 
 }       //  namespace framework
 
