@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:49:42 $
+ *  last change: $Author: nn $ $Date: 2001-03-28 19:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,6 +697,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     //  kein Filter angegeben -> Detection
                     if ( !aFilterName.Len() )
                         ScDocumentLoader::GetFilterName( aFileName, aFilterName, aOptions );
+
+                    //  filter name from dialog contains application prefix,
+                    //  GetFilter needs name without the prefix.
+                    ScDocumentLoader::RemoveAppPrefix( aFilterName );
 
                     const SfxFilter* pFilter = pApp->GetFilter( ScDocShell::Factory(), aFilterName );
                     SfxItemSet* pSet = new SfxAllItemSet( pApp->GetPool() );
