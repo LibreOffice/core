@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:21:39 $
+#   last change: $Author: kz $ $Date: 2004-02-25 17:09:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,22 +81,30 @@ INCPRE+= $(ATL_INCLUDE)
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
-        $(SLO)$/register.obj \
-        $(SLO)$/servprov.obj \
-        $(SLO)$/docholder.obj \
+        $(SLO)$/register.obj       \
+        $(SLO)$/servprov.obj       \
+        $(SLO)$/docholder.obj      \
         $(SLO)$/ed_ipersiststr.obj \
-        $(SLO)$/ed_idataobj.obj \
-        $(SLO)$/ed_ioleobject.obj \
-        $(SLO)$/guid.obj \
-        $(SLO)$/esdll.obj  \
-        $(SLO)$/intercept.obj
+        $(SLO)$/ed_idataobj.obj    \
+        $(SLO)$/ed_ioleobject.obj  \
+        $(SLO)$/ed_iinplace.obj    \
+        $(SLO)$/iipaobj.obj        \
+        $(SLO)$/guid.obj           \
+        $(SLO)$/esdll.obj          \
+        $(SLO)$/intercept.obj      \
+        $(SLO)$/syswinwrapper.obj  \
+        $(SLO)$/tracker.obj
 
 EXCEPTIONSFILES= \
-        $(SLO)$/register.obj \
-        $(SLO)$/docholder.obj \
+        $(SLO)$/register.obj       \
+        $(SLO)$/docholder.obj      \
         $(SLO)$/ed_ipersiststr.obj \
-        $(SLO)$/ed_idataobj.obj \
-        $(SLO)$/intercept.obj
+        $(SLO)$/ed_idataobj.obj    \
+        $(SLO)$/ed_iinplace.obj    \
+        $(SLO)$/iipaobj.obj        \
+        $(SLO)$/intercept.obj      \
+        $(SLO)$/syswinwrapper.obj  \
+        $(SLO)$/tracker.obj
 
 
 # --- Targets -------------------------------------------------------
