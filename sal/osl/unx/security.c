@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:23:49 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,20 +885,19 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent
 
 sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax)
 {
-    sal_Char buffer[32];
+    sal_Char  buffer[32];
+    sal_Int32 nChr;
 
     oslSecurityImpl *pSecImpl = (oslSecurityImpl *)Security;
-
-    buffer[0] = '\0';
-
 
     if (pSecImpl == NULL)
         return sal_False;
 
-    sprintf(buffer, "%u", pSecImpl->m_pPasswd.pw_uid);
+    nChr = snprintf(buffer, sizeof(buffer), "%u", pSecImpl->m_pPasswd.pw_uid);
+    if ( nChr < 0 || nChr >= sizeof(buffer) || nChr >= nMax )
+        return sal_False; /* leave *pszIdent unmodified in case of failure */
 
-    strncpy(pszIdent, buffer, nMax);
-
+    memcpy(pszIdent, buffer, nChr+1);
     return sal_True;
 }
 
