@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:06:00 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 07:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ italian ] = "Autore" ;
         Text [ portuguese_brazilian ] = "Autor" ;
         Text [ portuguese ] = "Autor" ;
-        Text [ finnish ] = "Tekijä" ;
+        Text [ finnish ] = "Laatija" ;
         Text [ danish ] = "Forfatter" ;
         Text [ french ] = "Auteur" ;
         Text [ swedish ] = "Författare" ;
@@ -225,7 +225,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ italian ] = "Autore" ;
         Text [ portuguese_brazilian ] = "~Autor" ;
         Text [ portuguese ] = "~Autor" ;
-        Text [ finnish ] = "~Tekijä" ;
+        Text [ finnish ] = "~Laatija" ;
         Text [ danish ] = "Forfatter" ;
         Text [ french ] = "~Auteur" ;
         Text [ swedish ] = "Sk~apad av" ;
