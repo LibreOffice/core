@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-09-20 12:09:54 $
+ *  last change: $Author: fme $ $Date: 2002-12-05 10:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ Color SwViewOption::aVisitedLinksColor(COL_RED);
 Color SwViewOption::aDirectCursorColor(COL_BLUE);
 Color SwViewOption::aTextGridColor(COL_LIGHTGRAY);
 Color SwViewOption::aSpellColor(COL_LIGHTRED);
+Color SwViewOption::aFontColor(COL_BLACK);
 Color SwViewOption::aFieldShadingsColor(COL_LIGHTGRAY);
 Color SwViewOption::aSectionBoundColor(COL_LIGHTGRAY);
 Color SwViewOption::aPageBreakColor(COL_BLUE);
@@ -730,6 +731,13 @@ Color&   SwViewOption::GetSpellColor()
 {
     return aSpellColor;
 }
+/*-- 06.12.2002 10:50:11---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Color&   SwViewOption::GetFontColor()
+{
+    return aFontColor;
+}
 /*-- 24.04.2002 10:50:15---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -810,6 +818,8 @@ void SwViewOption::ApplyColorConfigValues(const svx::ColorConfig& rConfig )
     aTextGridColor.SetColor(rConfig.GetColorValue(svx::WRITERTEXTGRID).nColor);
 
     aSpellColor.SetColor(rConfig.GetColorValue(svx::SPELL).nColor);
+
+    aFontColor.SetColor(rConfig.GetColorValue(svx::FONTCOLOR).nColor);
 
     aValue = rConfig.GetColorValue(svx::WRITERFIELDSHADINGS);
     aFieldShadingsColor.SetColor(aValue.nColor);

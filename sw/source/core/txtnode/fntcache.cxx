@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-03 11:42:50 $
+ *  last change: $Author: fme $ $Date: 2002-12-05 10:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2273,17 +2273,16 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
             if ( ! pCol )
                 pCol = &aGlobalRetoucheColor;
 
-            // we take the window text color for painting
             if( GetShell() && GetShell()->GetWin() )
             {
+                // here we determine the prefered window text color for painting
                 const SwViewOption* pViewOption = GetShell()->GetViewOptions();
                 if(pViewOption->IsPagePreview() &&
                         !SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews())
                     nNewColor = COL_BLACK;
                 else
-                    nNewColor = GetShell()->GetWin()->GetSettings().
-                                GetStyleSettings().GetWindowTextColor().
-                                GetColor();
+                    // we take the font color from the appearence page
+                    nNewColor = SwViewOption::GetFontColor().GetColor();
             }
 
             // change painting color depending of dark/bright background

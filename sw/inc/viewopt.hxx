@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-12 14:29:14 $
+ *  last change: $Author: fme $ $Date: 2002-12-05 10:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ class SwViewOption
     static Color    aObjectBoundColor; // color of object boundaries
     static Color    aAppBackgroundColor; // application background
     static Color    aTableBoundColor; // color of table boundaries
+    static Color    aFontColor;
     static Color    aIndexShadingsColor; // background color of indexes
     static Color    aLinksColor;
     static Color    aVisitedLinksColor;
@@ -585,6 +586,7 @@ public:
     static Color&   GetDirectCursorColor();
     static Color&   GetTextGridColor();
     static Color&   GetSpellColor();
+    static Color&   GetFontColor();
     static Color&   GetFieldShadingsColor();
     static Color&   GetSectionBoundColor();
     static Color&   GetPageBreakColor();
