@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-23 12:55:33 $
+ *  last change: $Author: obo $ $Date: 2003-11-12 17:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,11 +121,12 @@ public:
                             TextAttribFontColor( const TextAttribFontColor& rAttr );
                             ~TextAttribFontColor();
 
+    const Color&            GetColor() const { return maColor; }
+
     virtual void            SetFont( Font& rFont ) const;
     virtual TextAttrib*     Clone() const;
     virtual int             operator==( const TextAttrib& rAttr ) const;
 
-    inline Color const & getColor() const { return maColor; }
 };
 
 class TextAttribFontWeight : public TextAttrib
