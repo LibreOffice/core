@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interaction.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-25 12:45:52 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 08:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,76 +113,49 @@ namespace comphelper
     };
 
     //=========================================================================
-    //= OInteractionApprove
+    //= OInteraction
     //=========================================================================
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::task::XInteractionApprove
-                                    >   OInteractionApprove_Base;
-    /** implements a XInteractionApprove
+    /** template for instantiating concret interaction handlers<p/>
+        the template argument must eb an interface derived from XInteractionContinuation
     */
-    class OInteractionApprove
-            :public OInteractionApprove_Base
+    template <class INTERACTION>
+    class OInteraction
+            :public ::cppu::WeakImplHelper1< INTERACTION >
             ,public OInteractionSelect
     {
     public:
-        OInteractionApprove() { }
+        OInteraction() { }
 
     // XInteractionContinuation
         virtual void SAL_CALL select(  ) throw(::com::sun::star::uno::RuntimeException);
     };
+
+    //.........................................................................
+    template <class INTERACTION>
+    void SAL_CALL OInteraction< INTERACTION >::select(  ) throw(::com::sun::star::uno::RuntimeException)
+    {
+        implSelected();
+    }
+
+    //=========================================================================
+    //= OInteractionApprove
+    //=========================================================================
+    typedef OInteraction< ::com::sun::star::task::XInteractionApprove > OInteractionApprove;
 
     //=========================================================================
     //= OInteractionDispprove
     //=========================================================================
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::task::XInteractionDisapprove
-                                    >   OInteractionDisapprove_Base;
-    /** implements a XInteractionDisapprove
-    */
-    class OInteractionDisapprove
-            :public OInteractionDisapprove_Base
-            ,public OInteractionSelect
-    {
-    public:
-        OInteractionDisapprove() { }
-
-    // XInteractionContinuation
-        virtual void SAL_CALL select(  ) throw(::com::sun::star::uno::RuntimeException);
-    };
+    typedef OInteraction< ::com::sun::star::task::XInteractionDisapprove >  OInteractionDisapprove;
 
     //=========================================================================
     //= OInteractionAbort
     //=========================================================================
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::task::XInteractionAbort
-                                    >   OInteractionAbort_Base;
-    /** implements a XInteractionAbort
-    */
-    class OInteractionAbort
-            :public OInteractionAbort_Base
-            ,public OInteractionSelect
-    {
-    public:
-        OInteractionAbort() { }
-
-    // XInteractionContinuation
-        virtual void SAL_CALL select(  ) throw(::com::sun::star::uno::RuntimeException);
-    };
+    typedef OInteraction< ::com::sun::star::task::XInteractionAbort >   OInteractionAbort;
 
     //=========================================================================
     //= OInteractionRetry
     //=========================================================================
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::task::XInteractionRetry
-                                    >   OInteractionRetry_Base;
-    /** implements a XInteractionRetry
-    */
-    class OInteractionRetry
-            :public OInteractionRetry_Base
-            ,public OInteractionSelect
-    {
-    public:
-        OInteractionRetry() { }
-
-    // XInteractionContinuation
-        virtual void SAL_CALL select(  ) throw(::com::sun::star::uno::RuntimeException);
-    };
+    typedef OInteraction< ::com::sun::star::task::XInteractionRetry >   OInteractionRetry;
 
     //=========================================================================
     //= OInteractionRequest
@@ -220,6 +193,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/25 12:45:52  fs
+ *  initial checkin - helper for implementing using XInteractionContinution and XInteractionRequest
+ *
  *
  *  Revision 1.0 25.10.00 12:23:23  fs
  ************************************************************************/

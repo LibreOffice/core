@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interaction.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-25 12:46:18 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 08:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,38 +75,6 @@ namespace comphelper
     using namespace ::com::sun::star::task;
 
     //=========================================================================
-    //= OInteractionApprove
-    //=========================================================================
-    void SAL_CALL OInteractionApprove::select(  ) throw(RuntimeException)
-    {
-        implSelected();
-    }
-
-    //=========================================================================
-    //= OInteractionDisapprove
-    //=========================================================================
-    void SAL_CALL OInteractionDisapprove::select(  ) throw(RuntimeException)
-    {
-        implSelected();
-    }
-
-    //=========================================================================
-    //= OInteractionAbort
-    //=========================================================================
-    void SAL_CALL OInteractionAbort::select(  ) throw(RuntimeException)
-    {
-        implSelected();
-    }
-
-    //=========================================================================
-    //= OInteractionRetry
-    //=========================================================================
-    void SAL_CALL OInteractionRetry::select(  ) throw(RuntimeException)
-    {
-        implSelected();
-    }
-
-    //=========================================================================
     //= OInteractionRequest
     //=========================================================================
     //-------------------------------------------------------------------------
@@ -152,6 +120,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/25 12:46:18  fs
+ *  initial checkin - helper for implementing using XInteractionContinution and XInteractionRequest
+ *
  *
  *  Revision 1.0 25.10.00 12:23:29  fs
  ************************************************************************/
