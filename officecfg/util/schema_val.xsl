@@ -3,9 +3,9 @@
  *
  *  $RCSfile: schema_val.xsl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-20 11:47:24 $
+ *  last change: $Author: jb $ $Date: 2002-11-22 11:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,10 @@
 <xsl:param name="file"/>
 <xsl:variable name="componentName"><xsl:value-of select="translate($file,$pathSeparator,'.')"/></xsl:variable>
 
-	<xsl:message terminate="yes">CHECKING CONSISTENCY ...</xsl:message>
+	<xsl:template match = "/">
+		<xsl:message terminate="no">CHECKING CONSISTENCY ...</xsl:message>
+		<xsl:apply-templates/>
+	</xsl:template>
 	
 <!-- make sure that missing features are not invoked -->
 	<xsl:template match = "item">
@@ -98,6 +101,11 @@
 		<xsl:if test="count(value)"> 
 			<xsl:message terminate="yes">ERROR: Properties of type 'oor:any' MUST NOT have a value!</xsl:message>
 		</xsl:if>
+	</xsl:template>
+
+<!-- warn for (deprecated) NIL values -->
+	<xsl:template match="value[@xsi:nil]">
+		<xsl:message terminate="no">WARNING: xsi:nil is deprecated in schemas and will be stripped !</xsl:message>
 	</xsl:template>
 
 <!-- validate for correct node references -->
