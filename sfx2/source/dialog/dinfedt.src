@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfedt.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:22:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,17 +82,17 @@ ModalDialog DLG_DOCINFO_EDT
     Text [ dutch ] = "Labels bewerken" ;
     Text [ spanish ] = "Editar nombres de informaciones" ;
     Text [ english_us ] = "Edit Field Names" ;
-    Text[ chinese_simplified ] = "±à¼­±êÌâ";
-    Text[ russian ] = "Ïğàâêà èìåí èíôîğìàöèè";
+    Text[ chinese_simplified ] = "ç¼–è¾‘æ ‡é¢˜";
+    Text[ russian ] = "Ïğàâêà èìåí ïîëåé";
     Text[ polish ] = "Edytuj nazwy informacji";
-    Text[ japanese ] = "î•ñ–¼‚ğ•ÒW";
-    Text[ chinese_traditional ] = "½s¿è¼ĞÃD";
+    Text[ japanese ] = "æƒ…å ±åã‚’ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯æ¨™é¡Œ";
     Text[ arabic ] = "ÊÍÑíÑ ÈØÇŞÇÊ ÇáãÚáæãÇÊ";
     Text[ greek ] = "Åğåîåñãáóßá ïíüìáôïò ğëçñïöïñßáò";
-    Text[ korean ] = "Á¤º¸ÀÌ¸§ ÆíÁı";
+    Text[ korean ] = "ì •ë³´ ì´ë¦„ í¸ì§‘";
     Text[ turkish ] = "Etiketleri düzenle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Editar nombres informaciones";
+    Text[ catalan ] = "Edita els noms dels camps";
     Moveable = TRUE ;
     FixedLine FL_INFO
     {
@@ -105,23 +105,24 @@ ModalDialog DLG_DOCINFO_EDT
         Text [ portuguese_brazilian ] = "Nomes" ;
         Text [ portuguese ] = "Nomes" ;
         Text [ finnish ] = "Nimet" ;
-        Text [ danish ] = "Navne" ;
+        Text [ danish ] = "Navn" ;
         Text [ french ] = "Noms" ;
         Text [ swedish ] = "Namn" ;
         Text [ dutch ] = "Namen" ;
         Text [ spanish ] = "Nombres" ;
         Text [ english_us ] = "Names" ;
-        Text[ chinese_simplified ] = "Ãû³Æ";
+        Text[ chinese_simplified ] = "åç§°";
         Text[ russian ] = "Èìåíà";
         Text[ polish ] = "Nazwy";
-        Text[ japanese ] = "–¼‘O";
-        Text[ chinese_traditional ] = "¦WºÙ";
+        Text[ japanese ] = "åå‰";
+        Text[ chinese_traditional ] = "åç¨±";
         Text[ arabic ] = "ÇáÃÓãÇÁ";
         Text[ greek ] = "Ïíüìáôá";
-        Text[ korean ] = "ÀÌ¸§";
+        Text[ korean ] = "ì´ë¦„";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombres";
+        Text[ catalan ] = "Noms";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­";
     };
     Edit ED_INFO1
     {
@@ -166,7 +167,19 @@ ModalDialog DLG_DOCINFO_EDT
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸Šà¸·à¹ˆà¸­à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
+
+
+
+
+
+
+
+
+
+
+
 
 
 

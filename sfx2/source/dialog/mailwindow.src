@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 07:51:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ Window RID_MAIL_WINDOW
         Text[ portuguese ] = "E~nviar";
         Text[ russian ] = "Отправить";
         Text[ greek ] = "Брп~уфплЮ";
-        Text[ dutch ] = "~Zenden";
+        Text[ dutch ] = "Ver~zenden";
         Text[ french ] = "Envo~yer";
         Text[ spanish ] = "Enviar";
         Text[ italian ] = "In~via";
@@ -170,7 +170,7 @@ Window RID_MAIL_WINDOW
         {
             < "Кому" ; 1 ; > ;
             < "Копия" ; 2 ; > ;
-            < "Слепая копия" ; 3 ; > ;
+            < "Скрытая копия" ; 3 ; > ;
         };
         StringList [ greek ] =
         {
@@ -270,7 +270,7 @@ Window RID_MAIL_WINDOW
     };
     StringList [ finnish ] =
     {
-            < "Kohde" ; 1 ; > ;
+            < "Vastaanottaja" ; 1 ; > ;
         < "Kopioi" ; 2 ; > ;
         < "Piilokopio" ; 3 ; > ;
     };
@@ -350,7 +350,7 @@ Window RID_MAIL_WINDOW
         Text[ polish ] = "Od:";
         Text[ portuguese_brazilian ] = "From:";
         Text[ japanese ] = "е·®е‡єдєє:";
-        Text[ korean ] = "л¶Ђн„°:";
+        Text[ korean ] = "ліґл‚ё м‚¬лћЊ:";
         Text[ chinese_simplified ] = "еЏ‘д»¶дєєпјљ";
         Text[ chinese_traditional ] = "еЇ„д»¶иЂ…пјљ";
         Text[ turkish ] = "From:";
@@ -534,7 +534,7 @@ Window RID_MAIL_WINDOW
         {
             < "л§¤мљ° л†’мќЊ" ; 1 ; > ;
             < "л†’мќЊ" ; 2 ; > ;
-            < "ліґн†µ" ; 3 ; > ;
+            < "н‘њм¤Ђ" ; 3 ; > ;
             < "л‚®мќЊ" ; 4 ; > ;
             < "л§¤мљ° л‚®мќЊ" ; 5 ; > ;
         };
@@ -583,8 +583,8 @@ Window RID_MAIL_WINDOW
             < "Kiireellinen" ; 1 ; > ;
         < "Tдrkeд" ; 2 ; > ;
         < "Normaali" ; 3 ; > ;
-        < "Matala" ; 4 ; > ;
-        < "Matalin" ; 5 ; > ;
+        < "Pieni" ; 4 ; > ;
+        < "Pienin" ; 5 ; > ;
     };
     StringList [ thai ] =
     {
@@ -619,20 +619,20 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE [ italian ] = "Errore durante l'invio del messaggio. I possibili errori sono: conto dell'utente errato oppure setup errato.\nVerificate le impostazioni di %PRODUCTNAME oppure il programma di eMail." ;
     MESSAGE [ portuguese_brazilian ] = "Erro ao enviar correio." ;
     MESSAGE [ portuguese ] = "Erro ao enviar correio." ;
-    MESSAGE [ finnish ] = "Virhe sдhkцpostia lдhetettдessд." ;
+    MESSAGE [ finnish ] = "Virhe viestiд lдhetettдessд. Syitд voivat olla puuttuva kдyttдjдtili tai virheelliset asetukset.\nTarkista %PRODUCTNAMEn tai sдhkцpostiohjelmasi asetukset." ;
     MESSAGE [ danish ] = "Fejl ved afsendelse af meddelelsen. Mulige fejl er en manglende brugerkonto eller en forkert opsжtning.\nKontroller indstillingerne i %PRODUCTNAME eller i dit e-mail-program." ;
     MESSAGE [ french ] = "Erreur lors de l'envoi du message. Erreurs possibles : compte d'utilisateur manquant ou Setup erronй.\nVйrifiez les paramиtres de %PRODUCTNAME ou ceux du logiciel de messagerie." ;
     MESSAGE [ swedish ] = "Fel vid sдndning av meddelande. Mцjliga fel дr att ett anvдndarkonto saknas eller en felaktig installation.\nKontrollera instдllningarna i %PRODUCTNAME eller i ditt e-postprogram." ;
-    MESSAGE [ dutch ] = "Fout bij het verzenden van het bericht. Mogelijke fouten zijn een ontbrekend gebruikersaccount of een defecte Setup.\nControleer de insteliingen van %PRODUCTNAME of die van uw e-mail-programma." ;
+    MESSAGE [ dutch ] = "Fout bij verzenden van bericht. Het is mogelijk dat de gebruikersaccount ontbreekt of dat de installatie fouten bevat.\nControleer de instellingen van %PRODUCTNAME of van het e-mailprogramma." ;
     MESSAGE [ spanish ] = "Error al enviar el mensaje. La razуn puede ser una cuenta de usuario o una instalaciуn defectuosa.\nCompruebe la configuraciуn de %PRODUCTNAME o la de su programa de correo electrуnico." ;
     MESSAGE [ english_us ] = "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings." ;
     MESSAGE[ chinese_simplified ] = "ењЁеЇ„еЏ‘з”µе­ђй‚®д»¶ж—¶еЏ‘з”џдёЂдёЄй”™иЇЇгЂ‚еЏЇиѓЅзјєе°‘дёЂдёЄз”Ёж€·еёђеЏ·ж€–иЂ…е®‰иЈ…зЁ‹еєЏжњ‰иЇЇгЂ‚\nиЇ·жЈЂжџҐ %PRODUCTNAME зљ„и®ѕе®љж€–иЂ…з”µе­ђй‚®д»¶зЁ‹еєЏзљ„и®ѕе®љгЂ‚";
-    MESSAGE[ russian ] = "Ошибка при отправке сообщения. Возможно, ошибка возникла из-за отсутствия учетной записи пользователя или неполадок в инсталляции.\nПроверьте настройки %PRODUCTNAME и программы электронной почты.";
+    MESSAGE[ russian ] = "Ошибка отправки сообщения. Возможно, ошибка возникла из-за неверной учетной записи пользователя или некорректных настроек почтовой программы.\nПроверьте настройки %PRODUCTNAME и программы электронной почты.";
     MESSAGE[ polish ] = "Bі№d w przesyіaniu wiadomoњci: brak konta uїytkownika lub nieprawidіowa instalacja.\nNaleїy sprawdziж ustawienia programu %PRODUCTNAME lub programu poczty elektronicznej.";
     MESSAGE[ japanese ] = "гѓЎгѓѓг‚»гѓјг‚ёйЂЃдїЎж™‚гЃ®г‚Ёгѓ©гѓјгЂ‚г‚Ёгѓ©гѓјгЃ®еЋџе› гЃЁгЃ—гЃ¦гЃЇгЂЃгѓ¦гѓјг‚¶гѓјг‚ўг‚«г‚¦гѓігѓ€гЃЊгЃЄгЃ„гЃ‹гЂЃгЃ‚г‚‹гЃ„гЃЇг‚»гѓѓгѓ€г‚ўгѓѓгѓ—гЃЊж­ЈгЃ—гЃЏгЃЄгЃ„гЃ‹гЃЊиЂѓгЃ€г‚‰г‚ЊгЃѕгЃ™гЂ‚\n%PRODUCTNAMEгЂЃгЃѕгЃџгЃЇгЃЉдЅїгЃ„гЃ® E-mail гѓ—гѓ­г‚°гѓ©гѓ гЃ®иЁ­е®љг‚’зўєиЄЌгЃ—гЃ¦гЃЏгЃ гЃ•гЃ„гЂ‚";
     MESSAGE[ chinese_traditional ] = "ењЁе‚ійЂЃйЂ™еЂ‹ж–‡д»¶ж™‚з™јз”џдёЂеЂ‹йЊЇиЄ¤гЂ‚еЏЇиѓЅзјєе°‘дёЂеЂ‹дЅїз”ЁиЂ…иі¬и™џж€–зЁ‹ејЏе®‰иЈќжњ‰е•ЏйЎЊгЂ‚\nи«‹жЄўжџҐ %PRODUCTNAME зљ„иЁ­е®ље’Њй›»е­ђйѓµд»¶зЁ‹ејЏзљ„иЁ­е®љгЂ‚";
     MESSAGE[ greek ] = "УцЬлмб кбфЬ фзн брпуфплЮ мзнэмбфпт.";
-    MESSAGE[ korean ] = "л©”м‹њм§ЂлҐј ліґл‚ј л•Њ м¤лҐ л°њмѓќ. м•„л§€лЏ„ м‚¬мљ©мћђ кі„м •мќґ м—†к±°л‚ мћлЄ» м„¤м№лђм–ґ м¤лҐк°Ђ л°њмѓќн–€мќ„ кІѓмћ…л‹€л‹¤.\n  %PRODUCTNAME м„¤м •мќґл‚ E-Mail н”„лЎњк·ёлћЁ м„¤м •мќ„ н™•мќён•м‹­м‹њм¤";
+    MESSAGE[ korean ] = "л©”м‹њм§ЂлҐј ліґл‚ґлЉ” м¤‘ м¤лҐк°Ђ л°њмѓќн–€мЉµл‹€л‹¤. м•„л§€лЏ„ м‚¬мљ©мћђ кі„м •мќґ м—†к±°л‚ мћлЄ» м„¤м№лђм–ґ м¤лҐк°Ђ л°њмѓќн–€мќ„ кІѓмћ…л‹€л‹¤.\n%PRODUCTNAME м„¤м •мќґл‚ м „мћђ л©”мќј н”„лЎњк·ёлћЁ м„¤м •мќ„ н™•мќён•м‹­м‹њм¤.";
     MESSAGE[ arabic ] = "НПЛ ОШГ ГЛдЗБ ЕСУЗб ЗбСУЗбЙ ";
     MESSAGE[ turkish ] = "Posta gцnderirken hata oluюtu.";
     MESSAGE[ language_user1 ] = " ";
@@ -641,3 +641,8 @@ InfoBox MSG_ERROR_SEND_MAIL
 };
 
 // ------------------------------------------------------------------- EOF
+
+
+
+
+

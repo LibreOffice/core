@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-08 16:04:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@
 #include "topfrm.hxx"
 #include "sfxuno.hxx"
 #include "cfgmgr.hxx"
+#include "docfile.hxx"
 
 //==================================================================
 DBG_NAME(SfxDispatcherFlush);
@@ -289,15 +290,18 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
                     xFrame,
                     com::sun::star::uno::UNO_QUERY);
 
-            com::sun::star::uno::Any aProp = xSet->getPropertyValue(::rtl::OUString::createFromAscii("DispatchRecorderSupplier"));
-            com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
-            com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
-            aProp >>= xSupplier;
-            if(xSupplier.is())
-                xRecorder = xSupplier->getDispatchRecorder();
+            if ( xSet.is() )
+            {
+                com::sun::star::uno::Any aProp = xSet->getPropertyValue(::rtl::OUString::createFromAscii("DispatchRecorderSupplier"));
+                com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
+                com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
+                aProp >>= xSupplier;
+                if(xSupplier.is())
+                    xRecorder = xSupplier->getDispatchRecorder();
 
-            if ( bRecord && xRecorder.is() && !rSlot.IsMode(SFX_SLOT_NORECORD) )
-                rReq.Record_Impl( rShell, rSlot, xRecorder, GetFrame() );
+                if ( bRecord && xRecorder.is() && !rSlot.IsMode(SFX_SLOT_NORECORD) )
+                    rReq.Record_Impl( rShell, rSlot, xRecorder, GetFrame() );
+            }
         }
 
         // ggf. die Bindings locken (MI: warum?)
@@ -1917,6 +1921,17 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
             if ( nFeature && !pShell->HasUIFeature( nFeature ) )
                 continue;
 
+            // check for toolboxes that are exclusively for a viewer
+            if ( pImp->pFrame)
+            {
+                BOOL bViewerTbx = SFX_VISIBILITY_VIEWER == ( nPos & SFX_VISIBILITY_VIEWER );
+                SfxObjectShell* pSh = pImp->pFrame->GetObjectShell();
+                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, sal_False );
+                BOOL bIsViewer = pItem && pItem->GetValue();
+                if ( bIsViewer != bViewerTbx )
+                    continue;
+            }
+
             // Auf jeden Fall eintragen, auch wenn unsichtbar. Dann kann
             // WorkWindow anbieten, wieder anzuschalten
             sal_Bool bVisible = pIFace->IsObjectBarVisible(nNo);
@@ -2940,6 +2955,17 @@ void SfxDispatcher::ShowObjectBar(sal_uInt16 nId, SfxShell *pShell) const
         if ( nFeature && !pShell->HasUIFeature( nFeature ) )
             return;
 
+        // check for toolboxes that are exclusively for a viewer
+        if ( pImp->pFrame)
+        {
+            BOOL bViewerTbx = SFX_VISIBILITY_VIEWER == ( nPos & SFX_VISIBILITY_VIEWER );
+            SfxObjectShell* pSh = pImp->pFrame->GetObjectShell();
+            SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, sal_False );
+            BOOL bIsViewer = pItem && pItem->GetValue();
+            if ( bIsViewer != bViewerTbx )
+                return;
+        }
+
         sal_Bool bVisible = pIFace->IsObjectBarVisible(nNo);
         if ( !bVisible )
             // Alle Sichtbarkeitsflags ausschalten
@@ -3109,7 +3135,7 @@ sal_Bool SfxDispatcher::IsReadOnlyShell_Impl( sal_uInt16 nShell ) const
     if ( nShell < nShellCount )
     {
         SfxShell* pShell = pImp->aStack.Top( nShell );
-        if( pShell->ISA( SfxModule ) || pShell->ISA( SfxApplication ) )
+        if( pShell->ISA( SfxModule ) || pShell->ISA( SfxApplication ) || pShell->ISA( SfxViewFrame ) )
             return sal_False;
         else
             return pImp->bReadOnly;
@@ -3320,6 +3346,17 @@ sal_uInt16 SfxDispatcher::GetNextToolBox_Impl( sal_uInt16 nPos, sal_uInt16 nType
                             sal_uInt32 nFeature = pInterFace->GetObjectBarFeature( nNo );
                             if ( nFeature && !pShell->HasUIFeature( nFeature ) )
                                 continue;
+
+                            // check for toolboxes that are exclusively for a viewer
+                            if ( pImp->pFrame)
+                            {
+                                BOOL bViewerTbx = SFX_VISIBILITY_VIEWER == ( nP & SFX_VISIBILITY_VIEWER );
+                                SfxObjectShell* pSh = pImp->pFrame->GetObjectShell();
+                                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, sal_False );
+                                BOOL bIsViewer = pItem && pItem->GetValue();
+                                if ( bIsViewer != bViewerTbx )
+                                    continue;
+                            }
 
                             // Kommt sie nach der aktuellen ?
                             if ( bFound )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 16:32:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ chinese_traditional ] = "ζ‡ε®(~A)";
         Text[ arabic ] = "ΚΪννδ";
         Text[ greek ] = "Αντιστοίχιση";
-        Text[ korean ] = "μ μ©(~A)";
+        Text[ korean ] = "μ§€μ •(~A)";
         Text[ turkish ] = "A~ta";
         Text[ catalan ] = "~Assigna";
         Text[ finnish ] = "~Mδδritδ";
@@ -237,7 +237,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         TabStop = TRUE ;
         Text [ english_us ] = "~Remove" ;
         Text [ italian ] = "Elimina" ;
-        Text [ spanish ] = "~Eliminar" ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ french ] = "~Ιliminer" ;
         Text [ dutch ] = "~Opheffen" ;
         Text [ swedish ] = "~Upphδv" ;
@@ -245,13 +245,13 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text [ portuguese_brazilian ] = "~Aufheben" ;
         Text [ portuguese ] = "~Limpar" ;
         Text[ chinese_simplified ] = "ε–ζ¶(~R)";
-        Text[ russian ] = "Ξςμενθςό";
+        Text[ russian ] = "Σδΰλθςό";
         Text[ polish ] = "Usuρ";
         Text[ japanese ] = "θ§£ι™¤(~R)";
         Text[ chinese_traditional ] = "ε–ζ¶(~R)";
         Text[ arabic ] = "ΕÒΗαΙ";
         Text[ greek ] = "Κατάργηση";
-        Text[ korean ] = "ν•΄μ (~R)";
+        Text[ korean ] = "μ κ±°(~R)";
         Text[ turkish ] = "~Kaldύr";
         Text[ catalan ] = "~Suprimeix";
         Text[ finnish ] = "~Poista";
@@ -270,7 +270,7 @@ TabPage RID_SFX_TP_MACROASSIGN
     {
         Text = "Makros" ;
         Text [ ENGLISH ] = "Macros" ;
-        Text [ dutch ] = "Macro΄s" ;
+        Text [ dutch ] = "Macro's" ;
         Text [ english_us ] = "Macros" ;
         Text [ italian ] = "Macro" ;
         Text [ spanish ] = "Macros" ;
@@ -296,7 +296,7 @@ TabPage RID_SFX_TP_MACROASSIGN
     Text[ greek ] = "Αντιστοίχιση μακροεντολής";
     Text[ polish ] = "Przypisz makro";
     Text[ japanese ] = "γƒγ‚―γƒ­γ®ε‰²γ‚ε½“γ¦";
-    Text[ korean ] = "λ§¤ν¬λ΅ μ§€μ •";
+    Text[ korean ] = "λ§¤ν¬λ΅ ν• λ‹Ή";
     Text[ chinese_simplified ] = "ζ‡ε®ε®";
     Text[ chinese_traditional ] = "ζ‡ε®ε·¨ι›†";
     Text[ turkish ] = "Makro ata";
@@ -353,4 +353,9 @@ TabPage RID_SFX_TP_MACROASSIGN
     Text[ greek ] = "Αντιστοίχιση μακροεντολής";
     Text[ korean ] = "Assign Macro";
 };
+
+
+
+
+
 

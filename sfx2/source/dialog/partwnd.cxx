@@ -2,9 +2,9 @@
  *
  *  $RCSfile: partwnd.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-30 17:05:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,16 +219,19 @@ SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
     // frame reference in our own DisposingListener.
     // But don't do it, if xFrame already exist. Then dispose() must come from inside ...
     // and we need a valid pMgr for further operations ...
-    SfxPartDockWnd_Impl* pWin = (SfxPartDockWnd_Impl*) pWindow;
-    if( pWin != NULL && !xFrame.is() )
-        pWin->ReleaseChildWindow_Impl();
 
+    SfxPartDockWnd_Impl* pWin = (SfxPartDockWnd_Impl*) pWindow;
+//    if( pWin != NULL && !xFrame.is() )
+//        pWin->ReleaseChildWindow_Impl();
+/*
     // Release frame and window.
     // If frame reference is valid here ... start dieing from inside by calling dispose().
     SetFrame( NULL );
     pWindow = NULL;
+*/
     if ( pWin && xFrame == pWin->GetBindings().GetActiveFrame() )
-        pWin->GetBindings().SetActiveFrame( GetFrame() );
+        pWin->GetBindings().SetActiveFrame( NULL );
+/*
     if( xFrame.is() )
     {
         try
@@ -248,6 +251,7 @@ SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
         {
         }
     }
+ */
 }
 
 sal_Bool SfxPartChildWnd_Impl::QueryClose()

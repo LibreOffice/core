@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-05 08:10:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 //________________________________________________________________________________________________________
 //  include of other projects
 //________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_VIEW_XPRINTJOB_HPP_
+#include <com/sun/star/view/XPrintJob.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -163,6 +167,7 @@
 #endif
 
 #include <vos/mutex.hxx>
+#include <svtools/printdlg.hxx>
 
 //________________________________________________________________________________________________________
 //  includes of my own project
@@ -226,6 +231,8 @@
 
 #include "topfrm.hxx"
 #include "appdata.hxx"
+#include "docfac.hxx"
+#include "fcontnr.hxx"
 
 //________________________________________________________________________________________________________
 //  defines
@@ -252,7 +259,7 @@
 #define OIMPLEMENTATIONID                       ::cppu::OImplementationId
 #define MUTEXGUARD                              ::osl::MutexGuard
 #define XINDEXCONTAINER                         ::com::sun::star::container::XIndexContainer
-
+#define XPRINTJOBLISTENER                       ::com::sun::star::view::XPrintJobListener
 //________________________________________________________________________________________________________
 //  namespaces
 //________________________________________________________________________________________________________
@@ -287,12 +294,12 @@ struct IMPL_SfxBaseModel_DataContainer
     REFERENCE< XCONTROLLER >                        m_xCurrent              ;
     REFERENCE< XDOCUMENTINFO >                      m_xDocumentInfo         ;
     REFERENCE< XSTARBASICACCESS >                   m_xStarBasicAccess      ;
-#if SUPD>614
     REFERENCE< XNAMEREPLACE >                       m_xEvents               ;
-#endif
     SEQUENCE< PROPERTYVALUE>                        m_seqArguments          ;
     SEQUENCE< REFERENCE< XCONTROLLER > >            m_seqControllers        ;
     REFERENCE< XINDEXACCESS >                       m_contViewData          ;
+    REFERENCE< com::sun::star::view::XPrintJob>     m_xPrintJob             ;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aPrintOptions;
 
     IMPL_SfxBaseModel_DataContainer::IMPL_SfxBaseModel_DataContainer(   MUTEX&          aMutex          ,
                                                                         SfxObjectShell* pObjectShell    )
@@ -323,6 +330,44 @@ Size impl_Size_Struct2Object( const SIZE& aSize )
     aReturnValue.Height() = aSize.Height ;
 
     return aReturnValue ;
+}
+
+class SfxPrintJob_Impl : public cppu::WeakImplHelper1
+<
+    com::sun::star::view::XPrintJob
+>
+{
+        IMPL_SfxBaseModel_DataContainer* m_pData;
+
+public:
+        SfxPrintJob_Impl( IMPL_SfxBaseModel_DataContainer* pData );
+        virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrintOptions(  ) throw (RuntimeException);
+        virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrinter(  ) throw (RuntimeException);
+        virtual Reference< ::com::sun::star::view::XPrintable > SAL_CALL getPrintable(  ) throw (RuntimeException);
+};
+
+SfxPrintJob_Impl::SfxPrintJob_Impl( IMPL_SfxBaseModel_DataContainer* pData )
+    : m_pData( pData )
+{
+}
+
+Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrintOptions() throw (RuntimeException)
+{
+    return m_pData->m_aPrintOptions;
+}
+
+Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrinter() throw (RuntimeException)
+{
+    Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell->GetModel(), UNO_QUERY );
+    if ( xPrintable.is() )
+        return xPrintable->getPrinter();
+    return Sequence< ::com::sun::star::beans::PropertyValue >();
+}
+
+Reference< ::com::sun::star::view::XPrintable > SAL_CALL SfxPrintJob_Impl::getPrintable() throw (RuntimeException)
+{
+    Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell->GetModel(), UNO_QUERY );
+    return xPrintable;
 }
 
 //________________________________________________________________________________________________________
@@ -374,6 +419,7 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
     if ( aReturn.hasValue() == sal_False )
     {
         aReturn = ::cppu::queryInterface(   rType                                           ,
+                                               static_cast< XPRINTJOBBROADCASTER*   > ( this )  ,
                                                 static_cast< XCLOSEBROADCASTER*     > ( this )  ,
                                             static_cast< XVIEWDATASUPPLIER*     > ( this )  ,
                                                static_cast< XEVENTBROADCASTER*      > ( this )  ,
@@ -452,6 +498,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
                                                          ::getCppuType(( const REFERENCE< XEVENTBROADCASTER      >*)NULL ) );
 
             static OTYPECOLLECTION aTypeCollection     ( ::getCppuType(( const REFERENCE< XVIEWDATASUPPLIER      >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XPRINTJOBBROADCASTER   >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XEVENTSSUPPLIER        >*)NULL ) ,
                                                          aTypeCollectionFirst.getTypes()                                   );
 
@@ -754,6 +801,17 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
     ::osl::MutexGuard aGuard( m_aMutex );
     m_pData->m_sURL         =   rURL    ;
     m_pData->m_seqArguments =   rArgs   ;
+
+    if ( m_pData->m_pObjectShell )
+    {
+        SfxAllItemSet aSet( m_pData->m_pObjectShell->GetPool() );
+        TransformParameters( SID_OPENDOC, rArgs, aSet );
+        m_pData->m_pObjectShell->GetMedium()->GetItemSet()->Put( aSet );
+        SFX_ITEMSET_ARG( &aSet, pItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+        if ( pItem )
+            m_pData->m_pObjectShell->GetMedium()->SetFilter( m_pData->m_pObjectShell->GetFactory().GetFilterContainer()->GetFilter( pItem->GetValue() ) );
+    }
+
     return sal_True ;
 }
 
@@ -774,6 +832,49 @@ OUSTRING SAL_CALL SfxBaseModel::getURL() throw(::com::sun::star::uno::RuntimeExc
 SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getArgs() throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_pData->m_pObjectShell )
+    {
+        SEQUENCE< PROPERTYVALUE > seqArgsNew;
+        SEQUENCE< PROPERTYVALUE > seqArgsOld;
+        SfxAllItemSet aSet( m_pData->m_pObjectShell->GetPool() );
+
+        // we need to know which properties are supported by the transformer
+        // hopefully it is a temporary solution, I guess nonconvertable properties
+        // should not be supported so then there will be only ItemSet from medium
+
+        TransformItems( SID_OPENDOC, *(m_pData->m_pObjectShell->GetMedium()->GetItemSet()), seqArgsNew );
+        TransformParameters( SID_OPENDOC, m_pData->m_seqArguments, aSet );
+        TransformItems( SID_OPENDOC, aSet, seqArgsOld );
+
+        sal_Int32 nOrgLength = m_pData->m_seqArguments.getLength();
+        sal_Int32 nOldLength = seqArgsOld.getLength();
+        sal_Int32 nNewLength = seqArgsNew.getLength();
+
+        for ( sal_Int32 nOrg = 0; nOrg < nOrgLength; nOrg++ )
+        {
+             sal_Int32 nOldInd = 0;
+            while ( nOldInd < nOldLength )
+            {
+                if ( m_pData->m_seqArguments[nOrg].Name.equals( seqArgsOld[nOldInd].Name ) )
+                    break;
+                nOldInd++;
+            }
+
+            if ( nOldInd == nOldLength )
+            {
+                // the entity with this name should be new for seqArgsNew
+                // since it is not supported by transformer
+
+                seqArgsNew.realloc( ++nNewLength );
+                seqArgsNew[ nNewLength - 1 ].Name = m_pData->m_seqArguments[nOrg].Name;
+                seqArgsNew[ nNewLength - 1 ].Value = m_pData->m_seqArguments[nOrg].Value;
+            }
+
+        }
+        m_pData->m_seqArguments = seqArgsNew;
+    }
+
     return m_pData->m_seqArguments ;
 }
 
@@ -1705,6 +1806,66 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             postEvent_Impl( *pNamedHint );
         }
 
+        SfxPrintingHint* pPrintHint = PTR_CAST( SfxPrintingHint, &rHint );
+        if ( pPrintHint )
+        {
+            if ( pPrintHint->GetWhich() == -1 )
+            {
+                if ( !m_pData->m_xPrintJob.is() )
+                    m_pData->m_xPrintJob = new SfxPrintJob_Impl( m_pData );
+
+                PrintDialog* pDlg = pPrintHint->GetPrintDialog();
+                Printer* pPrinter = pPrintHint->GetPrinter();
+                ::rtl::OUString aPrintFile ( pPrinter ? pPrinter->GetPrintFile() : String() );
+                ::rtl::OUString aRangeText ( ( pDlg && pDlg->IsRangeChecked(PRINTDIALOG_RANGE) ) ? pDlg->GetRangeText() : String() );
+                sal_Bool bSelectionOnly = ( ( pDlg && pDlg->IsRangeChecked(PRINTDIALOG_SELECTION) ) ? sal_True : sal_False );
+
+                sal_Int32 nArgs = 2;
+                if ( aPrintFile.getLength() )
+                    nArgs++;
+                if ( aRangeText.getLength() )
+                    nArgs++;
+                else if ( bSelectionOnly )
+                    nArgs++;
+
+                m_pData->m_aPrintOptions.realloc(nArgs);
+                m_pData->m_aPrintOptions[0].Name = DEFINE_CONST_UNICODE("CopyCount");
+                m_pData->m_aPrintOptions[0].Value <<= (sal_Int16) (pPrinter ? pPrinter->GetCopyCount() : 1 );
+                m_pData->m_aPrintOptions[1].Name = DEFINE_CONST_UNICODE("Collate");
+                m_pData->m_aPrintOptions[1].Value <<= (sal_Bool) (pDlg ? pDlg->IsCollateChecked() : sal_False );
+
+                if ( bSelectionOnly )
+                {
+                    m_pData->m_aPrintOptions[2].Name = DEFINE_CONST_UNICODE("Selection");
+                    m_pData->m_aPrintOptions[2].Value <<= bSelectionOnly;
+                }
+                else if ( aRangeText.getLength() )
+                {
+                    m_pData->m_aPrintOptions[2].Name = DEFINE_CONST_UNICODE("Pages");
+                    m_pData->m_aPrintOptions[2].Value <<= aRangeText;
+                }
+
+                if ( aPrintFile.getLength() )
+                {
+                    m_pData->m_aPrintOptions[nArgs-1].Name = DEFINE_CONST_UNICODE("FileName");
+                    m_pData->m_aPrintOptions[nArgs-1].Value <<= aPrintFile;
+                }
+            }
+            else
+            {
+                view::PrintJobEvent aEvent;
+                aEvent.Source = m_pData->m_xPrintJob;
+                aEvent.State = (com::sun::star::view::PrintableState) pPrintHint->GetWhich();
+                ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( ( const uno::Reference< view::XPrintJobListener >*) NULL ) );
+                if ( pContainer!=NULL )
+                {
+                    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+                    while (pIterator.hasMoreElements())
+                        ((view::XPrintJobListener*)pIterator.next())->printJobEvent( aEvent );
+                }
+            }
+        }
+
         if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_TITLECHANGED )
         {
             ::rtl::OUString aTitle = m_pData->m_pObjectShell->GetTitle();
@@ -1939,5 +2100,24 @@ void SfxBaseModel::notifyEvent( const ::com::sun::star::document::EventObject& a
 sal_Bool SfxBaseModel::hasEventListeners() const
 {
     return !impl_isDisposed() && (NULL != m_pData->m_aInterfaceContainer.getContainer( ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0) ) );
+}
+
+
+void SAL_CALL SfxBaseModel::addPrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    // object already disposed?
+    if ( impl_isDisposed() )
+        return;
+
+    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const REFERENCE< XPRINTJOBLISTENER >*)0), xListener );
+}
+
+void SAL_CALL SfxBaseModel::removePrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    // object already disposed?
+    if ( impl_isDisposed() )
+        return;
+
+    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XPRINTJOBLISTENER >*)0), xListener );
 }
 

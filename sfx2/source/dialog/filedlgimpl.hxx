@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlgimpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-31 13:51:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ namespace sfx2
         FileDialogHelper*           mpParent;
 
         ::rtl::OUString             maPath;
+        ::rtl::OUString             maFileName;
         ::rtl::OUString             maCurFilter;
         ::rtl::OUString             maSelectFilter;
         ::rtl::OUString             maButtonLabel;
@@ -150,6 +151,8 @@ namespace sfx2
         sal_Bool                    mbInsert                : 1;
         sal_Bool                    mbSystemPicker          : 1;
         sal_Bool                    mbPwdCheckBoxState      : 1;
+        sal_Bool                    mbSelection             : 1;
+        sal_Bool                    mbSelectionEnabled      : 1;
 
     private:
         void                    addFilters( sal_uInt32 nFlags,
@@ -194,6 +197,8 @@ namespace sfx2
         void                    SaveLastUsedFilter( const ::rtl::OUString& _rContextIdentifier );
         void                    SaveLastUsedFilter( void );
 
+        void                    implInitializeFileName( );
+
         DECL_LINK( TimeOutHdl_Impl, Timer* );
         DECL_LINK( HandleEvent, FileDialogHelper* );
         DECL_LINK( InitControls, void* );
@@ -227,8 +232,16 @@ namespace sfx2
                                          String&         rFilter );
         ErrCode                 execute();
 
-        void                    setPath( const ::rtl::OUString& rPath );
+//      void                    setPath( const ::rtl::OUString& rPath );
         void                    setFilter( const ::rtl::OUString& rFilter );
+
+        /** sets the directory which should be browsed
+
+            <p>If the given path does not point to a valid (existent and accessible) folder, the request
+            is silently dropped</p>
+        */
+        void                    displayFolder( const ::rtl::OUString& rPath );
+        void                    setFileName( const ::rtl::OUString& _rFile );
 
         ::rtl::OUString         getPath() const;
         ::rtl::OUString         getFilter() const;

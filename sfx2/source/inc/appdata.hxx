@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-19 17:18:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <svtools/lstner.hxx>
 #include <vcl/timer.hxx>
 #include <tools/string.hxx>
+#include "rtl/ref.hxx"
 
 #include "bitset.hxx"
 
@@ -102,6 +103,7 @@ class SfxObjectFactory;
 class SfxObjectShell;
 class ResMgr;
 class Window;
+namespace sfx2 { namespace appl { class ImeStatusWindow; } }
 
 //=========================================================================
 // SfxAppData_Impl
@@ -170,6 +172,8 @@ public:
     USHORT                              nInReschedule;
     USHORT                              nAsynchronCalls;
     USHORT                              nAppEvent;                  // command line interpretation
+
+    rtl::Reference< sfx2::appl::ImeStatusWindow > m_xImeStatusWindow;
 
     BOOL                                bDirectAliveCount : 1;
     BOOL                                bInQuit : 1;

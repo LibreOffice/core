@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-19 17:13:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <framework/eventsconfiguration.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "evntconf.hxx"
 
@@ -277,10 +278,14 @@ SfxEventConfiguration::SfxEventConfiguration()
     pEventArr->Insert(pEvent, 0);
 }
 
-SfxEventConfigItem_Impl* SfxEventConfiguration::GetAppEventConfig()
+SfxEventConfigItem_Impl* SfxEventConfiguration::GetAppEventConfig_Impl()
 {
     if ( !pAppEventConfig )
+    {
         pAppEventConfig = new SfxEventConfigItem_Impl( SFX_ITEMTYPE_APPEVENTCONFIG, this );
+        pAppEventConfig->Initialize();
+    }
+
     return pAppEventConfig;
 }
 
@@ -354,59 +359,6 @@ USHORT SfxEventConfiguration::GetEventId(const String& rName) const
     return SFX_NO_EVENT;
 }
 
-void SfxEventConfiguration::ConfigureEvent( USHORT nId, const String& rMacro, SfxObjectShell *pObjSh )
-{
-    String aLibrary, aModule, aFunction;
-    if ( STRING_NOTFOUND == rMacro.Search( '(' ) )
-    {
-        // interne Syntax: Library.Module.Function
-        aFunction = rMacro.GetToken( 2, '.' );
-        aModule = rMacro.GetToken( 1, '.' );
-        aLibrary = rMacro.GetToken( 0, '.' );
-    }
-    else
-    {
-        // UI-Syntax: Function(Library.Module)
-        aFunction = rMacro.GetToken( 0, '(' );
-        String aModLib( rMacro.GetToken( 1, '(' ) );
-        aLibrary = aModLib.GetToken( 0, '.' );
-        aModule = aModLib.GetToken( 1, '.' ).GetToken( 0, ')' );
-    }
-
-    //Ist ein DocBasic-Macro oder nicht ?
-    BOOL bDocBasic = FALSE;
-    if ( pObjSh )
-    {
-        BasicManager *pMgr = pObjSh->GetBasicManager();
-        StarBASIC* pLib = pMgr->GetLib( aLibrary );
-        if ( pLib )
-        {
-            SbModule* pMod =
-                pLib->FindModule( aModule );
-            if ( pMod && pMod->GetMethods()->Find( aFunction, SbxCLASS_METHOD ) )
-                bDocBasic = TRUE;
-        }
-    }
-
-    // Event konfigurieren
-    String aCode( aLibrary );
-    if ( aCode.Len() )
-    {
-        aCode += '.';
-        aCode += aModule;
-        aCode += '.';
-        aCode += aFunction;
-    }
-
-    String aBasic;
-    if( bDocBasic )
-        aBasic = pObjSh->GetTitle();
-    else
-        aBasic = SFX_APP()->GetName();
-    SvxMacro aMacro( aCode, aBasic, STARBASIC );
-    ConfigureEvent( nId, aMacro, pObjSh );
-}
-
 void SfxEventConfiguration::ConfigureEvent( USHORT nId, const SvxMacro& rMacro, SfxObjectShell *pDoc )
 {
     if ( bIgnoreConfigure )
@@ -417,14 +369,15 @@ void SfxEventConfiguration::ConfigureEvent( USHORT nId, const SvxMacro& rMacro, 
         pMacro = new SvxMacro( rMacro.GetMacName(), rMacro.GetLibName(), rMacro.GetScriptType() );
     if ( pDoc )
     {
-        pDocEventConfig = pDoc->GetEventConfig_Impl( TRUE );
-        pDocEventConfig->ConfigureEvent( nId, pMacro );
+        //pDocEventConfig = pDoc->GetEventConfig_Impl( TRUE );
+        //pDocEventConfig->ConfigureEvent( nId, pMacro );
         PropagateEvent_Impl( pDoc, nId, pMacro );
     }
     else
     {
         // globale Bindung
-        GetAppEventConfig()->ConfigureEvent( nId, pMacro );
+        //GetAppEventConfig_Impl()->ConfigureEvent( nId, pMacro );
+        PropagateEvent_Impl( NULL, nId, pMacro );
     }
 }
 
@@ -439,7 +392,7 @@ void SfxEventConfiguration::ExecuteEvent(
     if ( pDoc && pDoc->GetEventConfig_Impl() && pDoc->GetEventConfig_Impl()->aMacroTable.Seek( nId ) )
         return;
 
-    const SvxMacro* pMacro = GetAppEventConfig()->aMacroTable.Seek( nId );
+    const SvxMacro* pMacro = GetAppEventConfig_Impl()->aMacroTable.Seek( nId );
     if ( pMacro )
     {
         if ( bSynchron )
@@ -462,7 +415,7 @@ const SvxMacro* SfxEventConfiguration::GetMacroForEventId
     if ( pDocEventConfig )
         pMacro = pDocEventConfig->aMacroTable.Seek( nId );
     if ( !pMacro )
-        pMacro = GetAppEventConfig()->aMacroTable.Seek( nId );
+        pMacro = GetAppEventConfig_Impl()->aMacroTable.Seek( nId );
     return pMacro;
 }
 
@@ -479,7 +432,7 @@ const SfxMacroInfo* SfxEventConfiguration::GetMacroInfo
     if ( pDocEventConfig )
         pMacro = pDocEventConfig->aMacroTable.Seek( nId );
     if ( !pMacro )
-        pMacro = const_cast< SfxEventConfiguration* >(this)->GetAppEventConfig()->aMacroTable.Seek( nId );
+        pMacro = const_cast< SfxEventConfiguration* >(this)->GetAppEventConfig_Impl()->aMacroTable.Seek( nId );
 
     return SFX_APP()->GetMacroConfig()->GetMacroInfo_Impl( pMacro );
 }
@@ -493,8 +446,9 @@ SfxEventConfigItem_Impl::SfxEventConfigItem_Impl( USHORT nConfigId,
     , aMacroTable( 2, 2 )
     , pEvConfig( pCfg )
     , pObjShell( pObjSh )
+    , bInitialized( FALSE )
 {
-    Initialize();
+    bInitialized = TRUE;
 }
 
 /*
@@ -516,6 +470,7 @@ int SfxEventConfigItem_Impl::Load(SvStream& rStream)
     if ( nFileVersion < nCompatVersion || nFileVersion > nVersion )
         return SfxConfigItem::WARNING_VERSION;
 
+    SvxMacroTableDtor aLocalMacroTable;
     if ( nFileVersion <= nOldVersion )
     {
         if ( nFileVersion > nCompatVersion )
@@ -528,7 +483,6 @@ int SfxEventConfigItem_Impl::Load(SvStream& rStream)
         else
             bWarning = bAlwaysWarning = FALSE;
 
-        aMacroTable.DelDtor();
         USHORT nCount, nEventCount = pEvConfig->GetEventCount();
         rStream >> nCount;
 
@@ -545,7 +499,7 @@ int SfxEventConfigItem_Impl::Load(SvStream& rStream)
                 if ( nEventId == nId )
                 {
                     SvxMacro *pMacro = new SvxMacro( aInfo.GetQualifiedName(), aInfo.GetBasicName(), STARBASIC );
-                    aMacroTable.Insert( nEventId, pMacro );
+                    aLocalMacroTable.Insert( nEventId, pMacro );
                     break;
                 }
             }
@@ -557,11 +511,11 @@ int SfxEventConfigItem_Impl::Load(SvStream& rStream)
         rStream >> nWarn;
         bWarning = ( nWarn & 0x01 ) != 0;
         bAlwaysWarning = ( nWarn & 0x02 ) != 0;
-        aMacroTable.Read( rStream );
+        aLocalMacroTable.Read( rStream );
     }
 
     if ( pObjShell && pEvConfig )
-        pEvConfig->PropagateEvents_Impl( pObjShell, *pEvConfig->GetDocEventTable( pObjShell ) );
+        pEvConfig->PropagateEvents_Impl( pObjShell, aLocalMacroTable );
 
     return SfxConfigItem::ERR_OK;
 }
@@ -577,10 +531,12 @@ BOOL SfxEventConfigItem_Impl::LoadXML( SvStream& rInStream )
             SvxMacro* pMacro = SfxEvents_Impl::ConvertToMacro( aCfg.aEventsProperties[i], NULL );
             USHORT nID = (USHORT) SfxEventConfiguration::GetEventId_Impl( aCfg.aEventNames[i] );
             if ( nID && pMacro )
-                ConfigureEvent( nID, pMacro );
+                pEvConfig->PropagateEvent_Impl( pObjShell, nID, pMacro );
             else
                 DBG_ERROR("Suspicious event binding!");
         }
+
+        return TRUE;
     }
 
     return FALSE;
@@ -616,7 +572,20 @@ BOOL SfxEventConfigItem_Impl::StoreXML( SvStream& rOutStream )
     for ( i=0; i<nNamesCount; i++ )
         pNames[i] = aEventNames.GetString( (USHORT) i);
 
+    REFERENCE< XEVENTSSUPPLIER > xSupplier;
+    if ( pObjShell )
+    {
+        xSupplier = REFERENCE< XEVENTSSUPPLIER >( pObjShell->GetModel(), UNO_QUERY );
+    }
+    else
+    {
+        xSupplier = REFERENCE< XEVENTSSUPPLIER >
+                ( ::comphelper::getProcessServiceFactory()->createInstance(
+                        rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster" )), UNO_QUERY );
+    }
+
     // fill in the bindings
+    REFERENCE< XNAMEREPLACE > xEvents = xSupplier->getEvents();
     SvxMacroTableDtor& rTable = aMacroTable;
     long nCount = (long) rTable.Count();
     for ( i=0; i<nCount; i++ )
@@ -631,8 +600,9 @@ BOOL SfxEventConfigItem_Impl::StoreXML( SvStream& rOutStream )
                 if ( aSequence[n] == aEventName )
                 {
                     // create properties from macro
-                    SvxMacro* pMacro = rTable.GetObject( i );
-                    aData[n] = pEvConfig->CreateEventData_Impl( pMacro );
+                    //SvxMacro* pMacro = rTable.GetObject( i );
+                    //aData[n] = pEvConfig->CreateEventData_Impl( pMacro );
+                    aData[n] = xEvents->getByName( aEventName );
                     break;
                 }
             }
@@ -664,6 +634,7 @@ void SfxEventConfigItem_Impl::UseDefault()
 
     aMacroTable.DelDtor();
     SetDefault( TRUE );
+    pEvConfig->PropagateEvents_Impl( pObjShell, aMacroTable );
 }
 
 int SfxEventConfigItem_Impl::Load( SotStorage& rStorage )
@@ -672,7 +643,18 @@ int SfxEventConfigItem_Impl::Load( SotStorage& rStorage )
     if ( xStream->GetError() )
         return SfxConfigItem::ERR_READ;
     else
-        return LoadXML( *xStream );
+    {
+        if ( bInitialized )
+        {
+            aMacroTable.DelDtor();
+            pEvConfig->PropagateEvents_Impl( pObjShell, aMacroTable );
+        }
+
+        if ( LoadXML( *xStream ) )
+            return SfxConfigItem::ERR_OK;
+        else
+            return SfxConfigItem::ERR_READ;
+    }
 }
 
 BOOL SfxEventConfigItem_Impl::Store( SotStorage& rStorage )
@@ -717,7 +699,7 @@ void SfxEventConfiguration::AddEvents( SfxMacroTabPage* pPage ) const
 
 SvxMacroTableDtor* SfxEventConfiguration::GetAppEventTable()
 {
-    return &GetAppEventConfig()->aMacroTable;
+    return &GetAppEventConfig_Impl()->aMacroTable;
 }
 
 SvxMacroTableDtor* SfxEventConfiguration::GetDocEventTable( SfxObjectShell*pDoc )
@@ -730,8 +712,9 @@ SvxMacroTableDtor* SfxEventConfiguration::GetDocEventTable( SfxObjectShell*pDoc 
 
 void SfxEventConfiguration::SetAppEventTable( const SvxMacroTableDtor& rTable )
 {
-    GetAppEventConfig()->aMacroTable = rTable;
-    pAppEventConfig->SetDefault(FALSE);
+    //GetAppEventConfig_Impl()->aMacroTable = rTable;
+    //pAppEventConfig->SetDefault(FALSE);
+    PropagateEvents_Impl( NULL, rTable );
 }
 
 void SfxEventConfiguration::SetDocEventTable( SfxObjectShell *pDoc,
@@ -740,8 +723,8 @@ void SfxEventConfiguration::SetDocEventTable( SfxObjectShell *pDoc,
     if ( pDoc )
     {
         pDocEventConfig = pDoc->GetEventConfig_Impl( TRUE );
-        pDocEventConfig->aMacroTable = rTable;
-        pDocEventConfig->SetDefault(FALSE);
+        //pDocEventConfig->aMacroTable = rTable;
+        //pDocEventConfig->SetDefault(FALSE);
         pDoc->SetModified(TRUE);
         PropagateEvents_Impl( pDoc, rTable );
     }
@@ -753,7 +736,17 @@ void SfxEventConfiguration::SetDocEventTable( SfxObjectShell *pDoc,
 void SfxEventConfiguration::PropagateEvents_Impl( SfxObjectShell *pDoc,
     const SvxMacroTableDtor& rTable )
 {
-    REFERENCE< XEVENTSSUPPLIER > xSupplier( pDoc->GetModel(), UNO_QUERY );
+    REFERENCE< XEVENTSSUPPLIER > xSupplier;
+    if ( pDoc )
+    {
+        xSupplier = REFERENCE< XEVENTSSUPPLIER >( pDoc->GetModel(), UNO_QUERY );
+    }
+    else
+    {
+        xSupplier = REFERENCE< XEVENTSSUPPLIER >
+                ( ::comphelper::getProcessServiceFactory()->createInstance(
+                        rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster" )), UNO_QUERY );
+    }
 
     if ( xSupplier.is() )
     {
@@ -823,7 +816,17 @@ void SfxEventConfiguration::PropagateEvent_Impl( SfxObjectShell *pDoc,
                                                  USHORT nId,
                                                  const SvxMacro* pMacro )
 {
-    REFERENCE< XEVENTSSUPPLIER > xSupplier( pDoc->GetModel(), UNO_QUERY );
+    REFERENCE< XEVENTSSUPPLIER > xSupplier;
+    if ( pDoc )
+    {
+        xSupplier = REFERENCE< XEVENTSSUPPLIER >( pDoc->GetModel(), UNO_QUERY );
+    }
+    else
+    {
+        xSupplier = REFERENCE< XEVENTSSUPPLIER >
+                ( ::comphelper::getProcessServiceFactory()->createInstance(
+                        rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster" )), UNO_QUERY );
+    }
 
     if ( xSupplier.is() )
     {
@@ -887,6 +890,37 @@ ANY SfxEventConfiguration::CreateEventData_Impl( const SvxMacro *pMacro )
 
             pValues[ 2 ].Name = OUSTRING::createFromAscii( PROP_MACRO_NAME );
             pValues[ 2 ].Value <<= aMacro;
+
+            aEventData <<= aProperties;
+        }
+        else if ( pMacro->GetScriptType() == EXTENDED_STYPE )
+        {
+            SEQUENCE < PROPERTYVALUE > aProperties(2);
+            PROPERTYVALUE  *pValues = aProperties.getArray();
+
+            OUSTRING    aLib    = pMacro->GetLibName();
+            OUSTRING    aMacro  = pMacro->GetMacName();
+
+            pValues[ 0 ].Name = OUSTRING::createFromAscii( PROP_EVENT_TYPE );
+            pValues[ 0 ].Value <<= aLib;
+
+            pValues[ 1 ].Name = OUSTRING::createFromAscii( PROP_SCRIPT );
+            pValues[ 1 ].Value <<= aMacro;
+
+            aEventData <<= aProperties;
+        }
+        else if ( pMacro->GetScriptType() == JAVASCRIPT )
+        {
+            SEQUENCE < PROPERTYVALUE > aProperties(2);
+            PROPERTYVALUE  *pValues = aProperties.getArray();
+
+            OUSTRING    aMacro  = pMacro->GetMacName();
+
+            pValues[ 0 ].Name = OUSTRING::createFromAscii( PROP_EVENT_TYPE );
+            pValues[ 0 ].Value <<= ::rtl::OUString::createFromAscii(SVX_MACRO_LANGUAGE_JAVASCRIPT);
+
+            pValues[ 1 ].Name = OUSTRING::createFromAscii( PROP_MACRO_NAME );
+            pValues[ 1 ].Value <<= aMacro;
 
             aEventData <<= aProperties;
         }
@@ -1084,7 +1118,7 @@ BOOL SfxEventConfiguration::Import( SvStream& rInStream, SvStream* pOutStream, S
     else if ( pOutStream )
     {
         SfxEventConfiguration aConfig;
-        if ( aConfig.GetAppEventConfig()->Load( rInStream ) == SfxConfigItem::ERR_OK )
+        if ( aConfig.GetAppEventConfig_Impl()->Load( rInStream ) == SfxConfigItem::ERR_OK )
             return aConfig.pAppEventConfig->StoreXML( *pOutStream );
         return FALSE;
     }
@@ -1097,7 +1131,6 @@ BOOL SfxEventConfiguration::Export( SvStream* pInStream, SvStream& rOutStream, S
 {
     if ( pDoc )
     {
-        // load events, they are automatically propagated to the document
         DBG_ASSERT( !pInStream, "DocEventConfig can't be converted!" );
         SfxEventConfigItem_Impl* pCfg = pDoc->GetEventConfig_Impl();
         if ( pCfg )
@@ -1108,7 +1141,7 @@ BOOL SfxEventConfiguration::Export( SvStream* pInStream, SvStream& rOutStream, S
     else if ( pInStream )
     {
         SfxEventConfiguration aConfig;
-        if ( aConfig.GetAppEventConfig()->LoadXML( *pInStream ) )
+        if ( aConfig.GetAppEventConfig_Impl()->LoadXML( *pInStream ) )
             return aConfig.pAppEventConfig->Store( rOutStream );
         return FALSE;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-30 15:16:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include <app.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/imagemgr.hxx>
+// #include <cmdlineargs.hxx>
 
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -466,12 +467,15 @@ void ShutdownIcon::terminateDesktop()
         getInstance()->m_xDesktop->removeTerminateListener( getInstance() );
 
         // terminate desktop only if no tasks exist
-        Reference < XFramesSupplier > xTasksSupplier( getInstance()->m_xDesktop, UNO_QUERY );
-        if( xTasksSupplier.is() )
+        Reference < XFramesSupplier > xSupplier( getInstance()->m_xDesktop, UNO_QUERY );
+        if( xSupplier.is() )
         {
-            Reference < XElementAccess > xCont( xTasksSupplier->getFrames(), UNO_QUERY );
-            if( !xCont->hasElements() )
-                getInstance()->m_xDesktop->terminate();
+            Reference < XIndexAccess > xTasks ( xSupplier->getFrames(), UNO_QUERY );
+            if( xTasks.is() )
+            {
+                if( xTasks->getCount()<1 )
+                    getInstance()->m_xDesktop->terminate();
+            }
         }
     }
 }
@@ -530,30 +534,32 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
 
     if ( aArguments.getLength() > 0 )
     {
-        try
+        if ( !ShutdownIcon::pShutdownIcon )
         {
-            sal_Bool bQuickstart = sal_False;
-            bQuickstart = ::cppu::any2bool( aArguments[0] );
-            if( Application::IsRemoteServer() || ( !bQuickstart && !GetAutostart() ) )
-                return;
+            try
+            {
+                sal_Bool bQuickstart = sal_False;
+                bQuickstart = ::cppu::any2bool( aArguments[0] );
+                if( Application::IsRemoteServer() || ( !bQuickstart && !GetAutostart() ) )
+                    return;
 
-            m_pResMgr = SFX_APP()->GetSfxResManager();
+                m_pResMgr = SFX_APP()->GetSfxResManager();
 
-            m_xDesktop = Reference < XDesktop >( m_xServiceManager->createInstance(
-                                                        DEFINE_CONST_UNICODE( "com.sun.star.frame.Desktop" )),
-                                                    UNO_QUERY );
+                m_xDesktop = Reference < XDesktop >( m_xServiceManager->createInstance(
+                                                            DEFINE_CONST_UNICODE( "com.sun.star.frame.Desktop" )),
+                                                        UNO_QUERY );
 
-            if ( !m_xDesktop.is() )
-                return;
+                if ( !m_xDesktop.is() )
+                    return;
 
-            if ( !ShutdownIcon::pShutdownIcon )
                 ShutdownIcon::pShutdownIcon = this;
 #ifdef WNT
-            initSystray();
+                initSystray();
 #endif
-        }
-        catch(const ::com::sun::star::lang::IllegalArgumentException&)
-        {
+            }
+            catch(const ::com::sun::star::lang::IllegalArgumentException&)
+            {
+            }
         }
     }
 }

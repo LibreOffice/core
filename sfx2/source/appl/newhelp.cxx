@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: os $ $Date: 2002-10-24 09:38:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,9 @@
 #ifndef _VCL_UNOHELP_HXX
 #include <vcl/unohelp.hxx>
 #endif
+#ifndef _VCL_I18NHELP_HXX
+#include <vcl/i18nhelp.hxx>
+#endif
 
 #include <ucbhelper/content.hxx>
 #include <vcl/msgbox.hxx>
@@ -222,6 +225,7 @@
 using namespace ::ucb;
 using namespace com::sun::star::ucb;
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
@@ -994,6 +998,30 @@ sal_Bool IndexTabPage_Impl::HasKeyword() const
 }
 
 // -----------------------------------------------------------------------
+//added by BerryJia for fixing Bug98251, 2002-12-11
+sal_Bool IndexTabPage_Impl::HasKeywordIgnoreCase()
+{
+    sal_Bool bRet = sal_False;
+    if ( sKeyword.Len() > 0 )
+    {
+        USHORT nEntries = aIndexCB.GetEntryCount();
+        String sIndexItem;
+        const vcl::I18nHelper& rI18nHelper = GetSettings().GetLocaleI18nHelper();
+        for ( USHORT n = 0; n < nEntries; n++)
+        {
+            sIndexItem = aIndexCB.GetEntry( n );
+            if (rI18nHelper.MatchString( sIndexItem, sKeyword ))
+            {
+                sKeyword = sIndexItem;
+                bRet = sal_True;
+            }
+        }
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
 
 void IndexTabPage_Impl::OpenKeyword()
 {
@@ -1750,6 +1778,9 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, KeywordHdl, IndexTabPage_Impl *, EMPTYARG )
 {
     // keyword found on index?
     sal_Bool bIndex = pIPage->HasKeyword();
+    //The following two lines are added by BerryJia for fixing Bug98251, 2002-12-11
+    if( !bIndex)
+        bIndex = pIPage->HasKeywordIgnoreCase();
     // then set index or search page as current.
     USHORT nPageId = ( bIndex ) ? HELP_INDEX_PAGE_INDEX :  HELP_INDEX_PAGE_SEARCH;
     if ( nPageId != aTabCtrl.GetCurPageId() )
@@ -2544,7 +2575,7 @@ void SfxHelpWindow_Impl::MakeLayout()
 
         if ( aRect.Width > 0 && aRect.Height > 0 )
         {
-            Rectangle aScreenRect = pScreenWin->GetWindowExtentsRelative( NULL );
+            Rectangle aScreenRect = pScreenWin->GetClientWindowExtentsRelative( NULL );
             Point aNewPos = aScreenRect.TopLeft();
             sal_Int32 nDiffWidth = nOldWidth - nWidth;
             aNewPos.X() += nDiffWidth;

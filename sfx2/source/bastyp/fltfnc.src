@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-19 20:10:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,25 +68,26 @@ String STR_FILTER_CHANNELON_OFFLINE
     Text = "Dieses Abonnement soll gemäß Einstellung im Offline Modus gelesen werden.\n\nDas %PRODUCTNAME befindet sich aber im Online Modus. Möchten Sie %PRODUCTNAME jetzt in den Offline Modus umschalten?" ;
     Text [ english_us ] = "This subscription is set to be read in the offline mode.\n\n%PRODUCTNAME is presently in the online mode. Switch to offline mode now?" ;
     Text [ portuguese_brazilian ] = "Dieses Abonnement soll gem?? Einstellung im Offline Modus gelesen werden.\n\nDas %PRODUCTNAME befindet sich aber im Online Modus. M?hten Sie %PRODUCTNAME jetzt in den Offline Modus umschalten?" ;
-    Text [ swedish ] = "Denna prenumeration skall enligt inställningarna läsas i offlineläget.\n\nMen %PRODUCTNAME är i onlineläge. Vill Du växla till offlineläget nu?" ;
+    Text [ swedish ] = "Den här prenumerationen skall enligt inställningarna läsas i offlineläget.\n\nMen %PRODUCTNAME är i onlineläge. Vill du växla till offlineläget nu?" ;
     Text [ danish ] = "Dette abonnement skal ifølge indstillingerne læses i offlinetilstand.\n\nDit %PRODUCTNAME befinder sig for tiden i onlinetilstand. Vil du skifte til offlinetilstand nu?" ;
     Text [ italian ] = "Questa sottoscrizione deve essere letta nel modo offline conformemente all'impostazione. \n\n%PRODUCTNAME attualmente si trova nel modo online. Volete passare al modo offline?" ;
-    Text [ spanish ] = "Esta suscripción se debe poder leer en modo desconectado (Offline).\n\n%PRODUCTNAME se encuentra sin embargo en modo en línea. ¿Desea cambiar %PRODUCTNAME al modo desconectado?" ;
+    Text [ spanish ] = "Esta suscripción está pensada para ser leída en el modo 'fuera de línea'.\n\nSin embargo %PRODUCTNAME se encuentra en el modo 'en línea'. ¿Desea desconectar ahora %PRODUCTNAME?" ;
     Text [ french ] = "Cet abonnement ne peut être lu que hors connexion.\n\n%PRODUCTNAME est cependant en ligne. Souhaitez-vous déconnecter  %PRODUCTNAME maintenant?" ;
-    Text [ dutch ] = "Dit abonnement moet in offline modus worden gelezen.\n\n%PRODUCTNAME bevindt zich echter in de online-modus. Wilt u omschakelen naar offline-modus?" ;
+    Text [ dutch ] = "Dit abonnement moet in offlinemodus worden gelezen.\n\n%PRODUCTNAME bevindt zich echter in de onlinemodus. Wilt u omschakelen naar offlinemodus?" ;
     Text [ portuguese ] = "Esta subscrição foi definida para ser lida em offline.\n\nDe momento o %PRODUCTNAME encontra-se no modo online. Deseja passar ao modo offline? " ;
-    Text[ chinese_simplified ] = "Ê¹ÓÃÍÑ»ú·½Ê½ÔÄ¶Á¶©ÔÄµÄÄÚÈİ¡£\n\n%PRODUCTNAME ÏÖÔÚ´¦ÓÚÁª»ú×´Ì¬¡£ÄúÒªÈÃ %PRODUCTNAME ×ªµ½ÍÑ»úÄ£Ê½£¿";
-    Text[ russian ] = "İòà ïîäïèñêà äîëæíà ÷èòàòüñÿ, ñîãëàñíî óñòàíîâêå, â ğåæèìå Offline.\n\n%PRODUCTNAME íàõîäèòñÿ â ğåæèìå Online. Âû õîòèòå ïåğåêëş÷èòü ñåé÷àñ %PRODUCTNAME â ğåæèì Offline?";
+    Text[ chinese_simplified ] = "ä½¿ç”¨è„±æœºæ–¹å¼é˜…è¯»è®¢é˜…çš„å†…å®¹ã€‚\n\n%PRODUCTNAME ç°åœ¨å¤„äºè”æœºçŠ¶æ€ã€‚æ‚¨è¦è®© %PRODUCTNAME è½¬åˆ°è„±æœºæ¨¡å¼ï¼Ÿ";
+    Text[ russian ] = "İòà ïîäïèñêà äîëæíà ÷èòàòüñÿ â ğåæèìå îôëàéí.\n\n%PRODUCTNAME íàõîäèòñÿ â ğåæèìå îíëàéí. Ïåğåêëş÷èòü ñåé÷àñ %PRODUCTNAME â ğåæèì îôëàéí?";
     Text[ polish ] = "Wed³ug ustawieñ ta subskrypcja ma zostaæ odczytana w trybie offline.\n\n %PRODUCTNAME znajduje siê w trybie online. Czy prze³¹czyæ na tryb offline?";
-    Text[ japanese ] = "‚±‚Ìw“Ç‚ÍµÌ×²İ Ó°ÄŞ‚Å‚Ìİ’è‚É]‚Á‚Ä“Ç‚İæ‚ç‚ê‚Ü‚·B\n\n%PRODUCTNAME‚Í Œ»İµİ×²İ Ó°ÄŞ‚É‚È‚Á‚Ä‚¢‚Ü‚·B%PRODUCTNAME‚ğ¡ µÌ×²İ Ó°ÄŞ‚ÉØ‚èŠ·‚¦‚Ü‚·‚©?";
-    Text[ chinese_traditional ] = "«ö·Ó³]©w¨Ï¥ÎªÌ¨Ï¥ÎÂ÷½u¾\\Åª¼Ò¦¡¡C\n\n%PRODUCTNAME ²{¦b³B©ó½u¤Wª¬ºA¡C±z­nÅı %PRODUCTNAME Âà¨ì³s½u¼Ò¦¡¡H";
+    Text[ japanese ] = "ã“ã®è³¼èª­ã¯ã‚ªãƒ•ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰è¨­å®šã«ã‚‚ã¨ã¥ã„ã¦èª­ã¿å–ã‚‰ã‚Œã¾ã™ã€‚\n\n%PRODUCTNAME ã¯ç¾åœ¨ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ã«ãªã£ã¦ã„ã¾ã™ã€‚%PRODUCTNAME ã‚’ã‚ªãƒ•ãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰ã«åˆ‡ã‚Šæ›ãˆã¾ã™ã‹ã€‚";
+    Text[ chinese_traditional ] = "æŒ‰ç…§è¨­å®šä½¿ç”¨è€…ä½¿ç”¨é›¢ç·šé–±è®€æ¨¡å¼ã€‚\n\n%PRODUCTNAME ç¾åœ¨è™•æ–¼ç·šä¸Šç‹€æ…‹ã€‚æ‚¨è¦è®“ %PRODUCTNAME è½‰åˆ°é€£ç·šæ¨¡å¼ï¼Ÿ";
     Text[ arabic ] = "íÌÈ Ãä íŞÑÃ åĞÇ ÇáÇÔÊÑÇß¡ ÍÓÈ ÇáÅÚÏÇÏÇÊ¡ İí æÖÚ ÇáÇäİÕÇá.\n\n%PRODUCTNAMEÍÇáíÇğ İí æÖÚ ÇáÇÊÕÇá. åá ÊÑíÏ ÊÛííÑ %PRODUCTNAME ÇáÂä Åáì æÖÚ ÇáÇäİÕÇá¿";
     Text[ greek ] = "Ç áíÜãíùóç áõôŞò ôçò óõíäñïìŞò èá ğñİğåé íá ãßíåé, âÜóåé ôùí ñõèìßóåùí, óå êáôÜóôáóç '×ùñßò óıíäåóç'.\n\nÔï %PRODUCTNAME âñßóêåôáé üìùò óå êáôÜóôáóç ";
-    Text[ korean ] = "°¡ÀÔÀº ¼³Á¤¿¡ µû¶ó  ¿ÀÇÁ¶óÀÎ ¸ğµå¿¡¼­ ÀĞ¾î¾ß ÇÕ´Ï´Ù.\n\n%PRODUCTNAME Àº(´Â) ÇöÀç ¿Â¶óÀÎ ¸ğµå¿¡ ÀÖ½À´Ï´Ù. Áö±İ ¿ÀÇÁ¶óÀÎ ¸ğµå·Î ÀüÈ¯ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ korean ] = "ê°€ì…ì€ ì„¤ì •ì— ë”°ë¼  ì˜¤í”„ë¼ì¸ ëª¨ë“œì—ì„œ ì½ì–´ì•¼ í•©ë‹ˆë‹¤.\n\n%PRODUCTNAMEì€(ëŠ”) í˜„ì¬ ì˜¨ë¼ì¸ ëª¨ë“œì— ìˆìŠµë‹ˆë‹¤. ì§€ê¸ˆ ì˜¤í”„ë¼ì¸ ëª¨ë“œë¡œ ì „í™˜í•˜ê² ìŠµë‹ˆê¹Œ?";
     Text[ turkish ] = "Bu üyelik, çevrimdışı kipte okunmak üzere ayarlanmıştır.\n\n%PRODUCTNAME şu an çevrimiçi kipinde. %PRODUCTNAME, çevrimdışı kipe geçsin mi?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Esta suscripción se debe poder leer en modo desconectado (Offline).\n\n%PRODUCTNAME se encuentra sin embargo en modo en línea. ¿Desea cambiar %PRODUCTNAME al modo desconectado?";
+    Text[ catalan ] = "Aquesta subscripció s'ha de poder llegir en mode desconnectat (Offline).\n\n%PRODUCTNAME es troba en mode en línia. Voleu canviar el %PRODUCTNAME al mode desconnectat?";
     Text[ finnish ] = "Tilaus on määritetty luettavaksi offline-tilassa.\n\n%PRODUCTNAME on käytettävissä vain online-tilassa. Siirrytäänkö offline-tilaan?";
+    Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸à¸²à¸£à¸­à¹ˆà¸²à¸™à¸à¸²à¸£à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¸™à¸µà¹‰à¹ƒà¸™à¹‚à¸«à¸¡à¸”à¹„à¸¡à¹ˆà¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¸£à¸‡\n\n%PRODUCTNAME à¸­à¸¢à¸¹à¹ˆà¹ƒà¸™à¹‚à¸«à¸¡à¸”à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¸£à¸‡à¸‚à¸“à¸°à¸™à¸µà¹‰  à¸ªà¸¥à¸±à¸šà¹„à¸›à¸—à¸µà¹ˆà¹‚à¸«à¸¡à¸”à¹„à¸¡à¹ˆà¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¸£à¸‡à¸‚à¸“à¸°à¸™à¸µà¹‰à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 String STR_FILTER_EXTERNAL
 {
@@ -101,18 +102,19 @@ String STR_FILTER_EXTERNAL
     Text [ spanish ] = "Otra aplicación" ;
     Text [ french ] = "Autres applications" ;
     Text [ dutch ] = "Andere toepassing" ;
-    Text[ chinese_simplified ] = "ÆäËûµÄÓ¦ÓÃ³ÌĞò";
+    Text[ chinese_simplified ] = "å…¶ä»–çš„åº”ç”¨ç¨‹åº";
     Text[ russian ] = "Äğóãîå ïğèëîæåíèå";
     Text[ polish ] = "Inna aplikacja";
-    Text[ japanese ] = "‚Ù‚©‚Ì±ÌßØ¹°¼®İ";
-    Text[ chinese_traditional ] = "¨ä¥¦ªºÀ³¥Îµ{§Ç";
+    Text[ japanese ] = "ã»ã‹ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³";
+    Text[ chinese_traditional ] = "å…¶å®ƒçš„æ‡‰ç”¨ç¨‹åº";
     Text[ arabic ] = "ÊØÈíŞ ÂÎÑ";
     Text[ greek ] = "¢ëëç åöáñìïãŞ";
-    Text[ korean ] = "±âÅ¸ ÀÀ¿ëÇÁ·Î±×·¥";
+    Text[ korean ] = "ê¸°íƒ€ ì‘ìš© í”„ë¡œê·¸ë¨";
     Text[ turkish ] = "Diğer uygulama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Otra aplicación";
+    Text[ catalan ] = "Una altra aplicació";
     Text[ finnish ] = "Muu sovellus";
+    Text[ thai ] = "à¹‚à¸›à¸£à¹à¸à¸£à¸¡à¸›à¸£à¸°à¸¢à¸¸à¸à¸•à¹Œà¸­à¸·à¹ˆà¸™";
 };
 
 String STR_FILTER_COMPONENT
@@ -121,24 +123,25 @@ String STR_FILTER_COMPONENT
     Text [ english ] = "StarOffice Component" ;
     Text [ english_us ] = "%PRODUCTNAME Component" ;
     Text[ portuguese ] = "Componentes %PRODUCTNAME";
-    Text[ russian ] = "%PRODUCTNAME - Êîìïîíåíòû";
+    Text[ russian ] = "Êîìïîíåíòû %PRODUCTNAME";
     Text[ greek ] = "%PRODUCTNAME - Óôïé÷åßï";
     Text[ dutch ] = "%PRODUCTNAME component";
     Text[ french ] = "Composants de %PRODUCTNAME";
-    Text[ spanish ] = "%PRODUCTNAME Componentes";
+    Text[ spanish ] = "%PRODUCTNAME - Componentes";
     Text[ italian ] = "Componenti %PRODUCTNAME";
     Text[ danish ] = "%PRODUCTNAME komponent";
     Text[ swedish ] = "%PRODUCTNAME-komponent";
     Text[ polish ] = "Sk³adnik %PRODUCTNAME ";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Component";
-    Text[ japanese ] = "%PRODUCTNAME ºİÎß°ÈİÄ";
-    Text[ korean ] = "%PRODUCTNAME ±¸¼º¿ä¼Ò";
-    Text[ chinese_simplified ] = "%PRODUCTNAME ²¿¼ş";
-    Text[ chinese_traditional ] = "%PRODUCTNAME ³¡¥ó";
+    Text[ japanese ] = "%PRODUCTNAME ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ";
+    Text[ korean ] = "%PRODUCTNAME êµ¬ì„±ìš”ì†Œ";
+    Text[ chinese_simplified ] = "%PRODUCTNAME ç»„ä»¶";
+    Text[ chinese_traditional ] = "%PRODUCTNAME å…ƒä»¶";
     Text[ arabic ] = "ÅÍÏì ãßæäÇÊ  %PRODUCTNAME";
     Text[ turkish ] = "%PRODUCTNAME bileşeni";
-    Text[ catalan ] = "%PRODUCTNAME Componentes";
-    Text[ finnish ] = "Tuotteen %PRODUCTNAME osa";
+    Text[ catalan ] = "%PRODUCTNAME Components";
+    Text[ finnish ] = "%PRODUCTNAMEn osa";
+    Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸›à¸£à¸°à¸à¸­à¸šà¹‚à¸›à¸£à¹à¸à¸£à¸¡%PRODUCTNAME ";
 };
 
 String STR_FILTER_NOT_INSTALLED
@@ -147,25 +150,26 @@ String STR_FILTER_NOT_INSTALLED
     Text [ English ] = " The selected filter $(FILTER) has not been installed.\nWould you like to do this now ?";
     Text[ english_us ] = "The selected filter $(FILTER) has not been installed.\nWould you like to do this now ?";
     Text[ portuguese ] = "O filtro seleccionado $(FILTER) não está instalado.\nInstalar agora?";
-    Text[ russian ] = "Âûáğàííûé ôèëüòğ $(FILTER) íå èíñòàëëèğîâàí.\nÂû õîòèòå ñåé÷àñ ıòî ñäåëàòü ?";
-    Text[ dutch ] = "De gekozen filter $(FILTER) is niet geïnstalleerd.\nWilt u dat nu doen ?";
+    Text[ russian ] = "Âûáğàííûé ôèëüòğ $(FILTER) íå óñòàíîâëåí.\nÓñòàíîâèòü ñåé÷àñ?";
+    Text[ dutch ] = "De gekozen filter $(FILTER) is niet geïnstalleerd.\nWilt u dat nu doen?";
     Text[ french ] = "Le filtre $(FILTER) que vous avez sélectionné n'est pas installé\nSouhaitez-vous l'installer ?";
     Text[ spanish ] = "El filtro seleccionado $(FILTER) no ha sido instalado.\n¿Desea instalarlo?";
     Text[ italian ] = "Il filtro selezionato $(FILTER) non è stato instalalto.\nVolete installarlo adesso?";
     Text[ danish ] = "Det udvalgte filter $(FILTER) er ikke installeret.\nVil du installere det nu?";
-    Text[ swedish ] = "Det utvalda filtret $(FILTER) är inte installerat.\nVill Du göra det nu?";
+    Text[ swedish ] = "Det utvalda filtret $(FILTER) är inte installerat.\nVill du göra det nu?";
     Text[ polish ] = "Wybrany filtr $(FILTER) nie jest zainstalowany.\nCzy to teraz zrobiæ ?";
     Text[ portuguese_brazilian ] = "The selected filter $(FILTER) has not been installed.\nWould you like to do this now ?";
-    Text[ japanese ] = "‘I‘ğ‚³‚ê‚½Ì¨ÙÀ$(FILTER)‚Í²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‚±‚ê‚ğ²İ½Ä°Ù‚³‚ê‚½‚¢‚Å‚·‚©?";
-    Text[ chinese_simplified ] = "ÄúÑ¡ÔñµÄ¹ıÂËÆ÷ $(FILTER)»¹Ã»ÓĞ±»°²×°ºÃ¡£\nÄúÏÖÔÚÒª°²×°Âğ£¿";
-    Text[ chinese_traditional ] = "±z¿ï¾Üªº¹LÂo¾¹ $(FILTER)ÁÙ¨S¦³¦w¸Ë¦n¡C\n²{¦b­n¦w¸Ë¡H";
+    Text[ japanese ] = "é¸æŠã•ã‚ŒãŸãƒ•ã‚£ãƒ«ã‚¿$(FILTER)ã¯ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚\nã“ã‚Œã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚ŒãŸã„ã§ã™ã‹?";
+    Text[ chinese_simplified ] = "æ‚¨é€‰æ‹©çš„è½¬æ¢å™¨ $(FILTER)è¿˜æ²¡æœ‰è¢«å®‰è£…å¥½ã€‚\nç°åœ¨è¦å®‰è£…ï¼Ÿ";
+    Text[ chinese_traditional ] = "æ‚¨é¸æ“‡çš„è½‰æ›å™¨ $(FILTER)é‚„æ²’æœ‰å®‰è£å¥½ã€‚\nç¾åœ¨è¦å®‰è£ï¼Ÿ";
     Text[ arabic ] = "ÇáİáÊÑ $(FILTER)¡ ÇáĞí Êã ÇÎÊíÇÑå¡ ÛíÑ ãËÈÊ.\nåá ÊÑíÏ ÅÌÑÇÁ ÇáÊËÈíÊ ÇáÂä¿";
     Text[ greek ] = "Ôï åğéëåãìİíï ößëôñï $(FILTER) äåí İ÷åé åãêáôáóôáèåß.\nÈİëåôå íá åãêáôáóôáèåß ôşñá;";
-    Text[ korean ] = "¼±ÅÃµÈ ÇÊÅÍ $(FILTER)Àº(´Â) ¼³Ä¡µÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù.\nÁö±İ ¼³Ä¡ ÇÏ½Ã°Ú½À´Ï±î ?";
+    Text[ korean ] = "ì„ íƒëœ í•„í„° $(FILTER)ì€(ëŠ”) ì„¤ì¹˜ë˜ì–´ ìˆì§€ ì•ŠìŠµë‹ˆë‹¤.\nì§€ê¸ˆ ì„¤ì¹˜í•˜ê² ìŠµë‹ˆê¹Œ ?";
     Text[ turkish ] = "Seçilen $(FILTER) filtresi kurulu değil.\nŞimdi kurmak ister misiniz ?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El filtro seleccionado $(FILTER) no ha sido instalado.\n¿Desea instalarlo?";
+    Text[ catalan ] = "El filtre seleccionat $(FILTER) no ha estat instal.lat\nVoleu instal.lar-lo?";
     Text[ finnish ] = "Valittua suodatinta $(FILTER) ei ole asennettu.\nHaluatko asentaa suodattimen nyt?";
+    Text[ thai ] = "à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸•à¸´à¸”à¸•à¸±à¹‰à¸‡à¸•à¸±à¸§à¸à¸£à¸­à¸‡à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸ $(FILTER) \nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸•à¸´à¸”à¸•à¸±à¹‰à¸‡à¸‚à¸“à¸°à¸™à¸µà¹‰à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 
 String STR_FILTER_CONSULT_SERVICE
@@ -174,26 +178,41 @@ String STR_FILTER_CONSULT_SERVICE
     Text [ English ] = "The selected filter $(FILTER) is not included in your edition.\nOrdering informations can be found on our website.";
     Text[ english_us ] = "The selected filter $(FILTER) is not included in your edition.\nYou can find information about orders on our homepage.";
     Text[ portuguese ] = "O filtro seleccionado $(FILTER) não está incluído na sua versão.\nEncontrará as informações necessárias para uma possível encomenda na nossa página principal.";
-    Text[ russian ] = "Âûáğàííûé ôèëüòğ $(FILTER) íå ñîäåğæèòñÿ â Âàøåé âåğñèè.\nÈíôîğìàöèş î âîçìîæíîñòÿõ çàêàçà Âû íàéäåòå íà íàøåé íà÷àëüíîé ñòğàíèöå.";
+    Text[ russian ] = "Âûáğàííûé ôèëüòğ $(FILTER) íå âêëş÷åí â âàøó âåğñèş.\nÈíôîğìàöèş î âîçìîæíîñòÿõ ïîëó÷åíèÿ ôèëüòğà âû íàéäåòå íà íàøåé ñòğàíèöå.";
     Text[ dutch ] = "De geselecteerde filter $(FILTER) komt in uw versie niet voor.\nVoor informatie over bestelmogelijkheden zie onze homepage.";
     Text[ french ] = "Le filtre $(FILTER) que vous avez sélectionné n'est pas inclus dans votre version.\nVous trouverez les renseignements nécessaires à une éventuelle commande sur notre page d'accueil.";
     Text[ spanish ] = "El filtro seleccionado $(FILTER) no está incluido en su edición.\nEn nuestra página de Internet encontrará las informaciones para poder pedirlos.";
     Text[ italian ] = "Il filtro selezionato $(FILTER) non è incluso nella vostra versione.\nTroverete informazioni su eventuali ordini sulla nostra home page.";
     Text[ danish ] = "De udvalgte filter $(FILTER) er ikke indeholdt i din version.\nDu kan finde informationer omkring ordremuligheder på vores hjemmeside.";
-    Text[ swedish ] = "Det utvalda filtret $(FILTER) är inte inkluderat i Din version.\nDu hittar information om beställningsmöjligheter på vår hemsida.";
+    Text[ swedish ] = "Det utvalda filtret $(FILTER) finns inte med i din version.\nDu hittar information om beställningsmöjligheter på vår hemsida.";
     Text[ polish ] = "Wybrany filtr $(FILTER) nie jest zawarty w twoim edytorze. \nInformacje dotycz¹ce zamówienia znajdziesz na naszej stronie macierzystej.";
     Text[ portuguese_brazilian ] = "The selected filter $(FILTER) is not included in your version.\nPlease contact our sales department.";
-    Text[ japanese ] = "‘I‘ğ‚³‚ê‚½Ì¨ÙÀ$(FILTER)‚ÍÕ°»Ş°‚Ìg—p”Å‚ÉŠÜ‚Ü‚ê‚Ä‚Ü‚¹‚ñB\n’•¶‰Â”\\‚Èî•ñ‚Í‚í‚ªĞ‚ÌÎ°ÑÍß°¼‚Åè‚É“ü‚ê‚ç‚ê‚Ü‚·B";
-    Text[ chinese_simplified ] = "Õâ¸ö°æ±¾»¹Ã»ÓĞÌá¹©ÄúËùÑ¡ÔñµÄ¹ıÂËÆ÷ $(FILTER)¡£\nÄú²ÎÔÄÎÒÃÇ¹«Ë¾µÄÍøÒ³Ìá¹©¶¨¹ºÈí¼şµÄĞÅÏ¢¡£";
-    Text[ chinese_traditional ] = "³o­Óª©¥»ÁÙ¨S¦³´£¨Ñ±z©Ò¿ï¾Üªº¹LÂo¾¹ $(FILTER)¡C\n½Ğ°Ñ¾\\§Ú­Ìªººô­¶´£¨Ñªº©wÁÊ³nÅéªº¸ê°T¡C";
+    Text[ japanese ] = "é¸æŠã•ã‚ŒãŸãƒ•ã‚£ãƒ«ã‚¿$(FILTER)ã¯ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ä½¿ç”¨ç‰ˆã«å«ã¾ã‚Œã¦ã¾ã›ã‚“ã€‚\næ³¨æ–‡å¯èƒ½ãªæƒ…å ±ã¯ã‚ãŒç¤¾ã®ãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚·ã§æ‰‹ã«å…¥ã‚Œã‚‰ã‚Œã¾ã™ã€‚";
+    Text[ chinese_simplified ] = "è¿™ä¸ªç‰ˆæœ¬è¿˜æ²¡æœ‰æä¾›æ‚¨æ‰€é€‰æ‹©çš„è½¬æ¢å™¨ $(FILTER)ã€‚\næ‚¨å‚é˜…æˆ‘ä»¬å…¬å¸çš„ç½‘é¡µæä¾›å®šè´­è½¯ä»¶çš„ä¿¡æ¯ã€‚";
+    Text[ chinese_traditional ] = "é€™å€‹ç‰ˆæœ¬é‚„æ²’æœ‰æä¾›æ‚¨é¸æ“‡çš„è½‰æ›å™¨ $(FILTER)ã€‚\nè«‹åƒé–±æˆ‘å€‘çš„ç¶²é æä¾›çš„å®šè³¼è»Ÿé«”çš„è³‡è¨Šã€‚";
     Text[ arabic ] = "áÇ ÊÍÊæí äÓÎÊß Úáì ÇáİáÊÑ $(FILTER)¡ ÇáĞí Êã ÇÎÊíÇÑå.\níãßäß ÇáÍÕæá Úáì ãÚáæãÇÊ Úä ÅãßÇäíÉ ØáÈ ÇáİáÊÑ İí ãæŞÚäÇ Úáì ÇáÅäÊÑäÊ.";
     Text[ greek ] = "Ôï åğéëåãìİíï ößëôñï $(FILTER) äåí ğåñéİ÷åôáé óôçí İêäïóŞ óáò.\nĞëçñïöïñßåò ãéá äõíáôüôçôåò ğáñáããåëßáò èá âñåßôå óôçí áñ÷éêŞ ìáò óåëßäá.";
-    Text[ korean ] = "¼±ÅÃÇÑ ÇÊÅÍ$(FILTER)Àº(´Â) ÀÌ ¹öÀü¿¡ µé¾î ÀÖÁö ¾Ê½À´Ï´Ù.\nÁÖ¹® ½ÅÃ» ¹æ¹ı¿¡ ´ëÇÑ Á¤º¸¸¦ ¾òÀ¸·Á¸é ÀúÈñ È¨ÆäÀÌÁö¸¦ º¸½Ê½Ã¿À.";
+    Text[ korean ] = "ì„ íƒí•œ í•„í„°$(FILTER)ì€(ëŠ”) ì´ ë²„ì „ì— ë“¤ì–´ ìˆì§€ ì•ŠìŠµë‹ˆë‹¤.\nì£¼ë¬¸ ì‹ ì²­ ë°©ë²•ì— ëŒ€í•œ ì •ë³´ë¥¼ ì–»ìœ¼ë ¤ë©´ ì €í¬ í™ˆí˜ì´ì§€ë¥¼ ë³´ì‹­ì‹œì˜¤.";
     Text[ turkish ] = "Seçilen $(FILTER) filtresi sürümünüzde bulunmuyor.\nSipariş etmek için gereken bilgileri web sitemizde bulabilirsiniz.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El filtro seleccionado $(FILTER) no está incluido en su edición.\nEn nuestra página de Internet encontrará las informaciones para poder pedirlos.";
+    Text[ catalan ] = "El filtre seleccionat $(FILTER) no està inclós en aquesta edició.\nEn la nostra pàgina d'Internet trobareu la informació per poder demanar-los.";
     Text[ finnish ] = "Valittu suodatin $(FILTER) ei sisälly laitokseen.\nTilausohjeet ovat kotisivullamme.";
+    Text[ thai ] = "à¸•à¸±à¸§à¸à¸£à¸­à¸‡à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸ $(FILTER) à¹„à¸¡à¹ˆà¸­à¸¢à¸¹à¹ˆà¹ƒà¸™à¸‰à¸šà¸±à¸šà¸‚à¸­à¸‡à¸„à¸¸à¸“\nà¸„à¸¸à¸“à¸ªà¸²à¸¡à¸²à¸£à¸–à¸«à¸²à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹€à¸à¸µà¹ˆà¸¢à¸§à¸à¸±à¸šà¸„à¸³à¸ªà¸±à¹ˆà¸‡à¸šà¸™à¹‚à¸®à¸¡à¹€à¸à¸ˆà¸‚à¸­à¸‡à¹€à¸£à¸²";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

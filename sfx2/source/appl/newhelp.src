@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 11:26:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,23 +96,23 @@ Window WIN_HELP_INDEX
                 Text [ ENGLISH ] = "Contents" ;
                 Text[ english_us ] = "Contents";
                 Text[ portuguese ] = "Conteúdos";
-                Text[ russian ] = "Ñîäåğæèìîå";
+                Text[ russian ] = "Ñîäåğæàíèå";
                 Text[ greek ] = "Ğåñéå÷üìåíá";
                 Text[ dutch ] = "Inhoud";
                 Text[ french ] = "Contenu";
-                Text[ spanish ] = "Contenidos";
+                Text[ spanish ] = "Contenido";
                 Text[ italian ] = "Contenuti";
                 Text[ danish ] = "Indhold";
                 Text[ swedish ] = "Innehåll";
                 Text[ polish ] = "Zawartoœci";
                 Text[ portuguese_brazilian ] = "Contents";
-                Text[ japanese ] = "å†…å®¹";
+                Text[ japanese ] = "ç›®æ¬¡";
                 Text[ korean ] = "ë‚´ìš©";
                 Text[ chinese_simplified ] = "å†…å®¹";
                 Text[ chinese_traditional ] = "å…§å®¹";
                 Text[ turkish ] = "Contents";
                 Text[ arabic ] = "ÇáãÍÊæíÇÊ";
-                Text[ finnish ] = "Contents";
+                Text[ finnish ] = "Sisältö";
                 Text[ catalan ] = "Continguts";
                 Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
             };
@@ -133,7 +133,7 @@ Window WIN_HELP_INDEX
                 Text[ swedish ] = "Index";
                 Text[ polish ] = "Indeks";
                 Text[ portuguese_brazilian ] = "Index";
-                Text[ japanese ] = "ç›®æ¬¡";
+                Text[ japanese ] = "ç´¢å¼•";
                 Text[ korean ] = "ìƒ‰ì¸";
                 Text[ chinese_simplified ] = "ç´¢å¼•";
                 Text[ chinese_traditional ] = "ç´¢å¼•";
@@ -150,7 +150,7 @@ Window WIN_HELP_INDEX
                 Text [ ENGLISH ] = "Find" ;
                 Text[ english_us ] = "Find";
                 Text[ portuguese ] = "Procurar";
-                Text[ russian ] = "Ïîèñê";
+                Text[ russian ] = "Íàéòè";
                 Text[ greek ] = "ÁíáæŞôçóç";
                 Text[ dutch ] = "Zoeken";
                 Text[ french ] = "Recherche";
@@ -183,7 +183,7 @@ Window WIN_HELP_INDEX
                 Text[ dutch ] = "Bladwijzers";
                 Text[ french ] = "Signets";
                 Text[ spanish ] = "Marcadores";
-                Text[ finnish ] = "Bookmarks";
+                Text[ finnish ] = "Kirjanmerkit";
                 Text[ italian ] = "Segnalibro";
                 Text[ danish ] = "Bogmærke";
                 Text[ swedish ] = "Bokmärken";
@@ -232,7 +232,7 @@ TabPage TP_HELP_INDEX
         Text[ turkish ] = "~Suchbegriff";
         Text[ arabic ] = "ãÕØáÍ ÇáÈÍË";
         Text[ catalan ] = "~Cerca terme";
-        Text[ finnish ] = "~Etsittävä termi";
+        Text[ finnish ] = "Etsittävä ~termi";
         Text[ thai ] = "~à¸„à¹‰à¸™à¸«à¸²à¹€à¸‡à¸·à¹ˆà¸­à¸™à¹„à¸‚";
     };
     ComboBox CB_INDEX
@@ -344,19 +344,19 @@ TabPage TP_HELP_SEARCH
         Text = "~Nur ganze Wörter" ;
         Text [ english_us ] = "~Complete words only";
         Text[ portuguese ] = "~Só palavras inteiras";
-        Text[ russian ] = "~Òîëüêî âñå ñëîâî";
+        Text[ russian ] = "~Òîëüêî ñëîâî öåëèêîì";
         Text[ greek ] = "~Complete words only";
         Text[ dutch ] = "~Alleen hele woorden";
         Text[ french ] = "Uniquement les mots entiers";
         Text[ spanish ] = "~Sólo palabras completas";
-        Text[ finnish ] = "~Complete words only";
+        Text[ finnish ] = "Vain ~kokonaiset sanat";
         Text[ italian ] = "~Solo parole intere";
         Text[ danish ] = "~Kun hele ord";
         Text[ swedish ] = "~Bara hela ord";
         Text[ polish ] = "~Tylko ca³e s³owa";
         Text[ portuguese_brazilian ] = "~Complete words only";
         Text[ japanese ] = "å˜èªã¨ã—ã¦(~C)";
-        Text[ korean ] = "ì™„ë²½í•œ ë‹¨ì–´ë§Œ(~C)";
+        Text[ korean ] = "ë‹¨ì–´ ë‹¨ìœ„ë¡œ(~C)";
         Text[ chinese_simplified ] = "åªå…è®¸å•è¯(~C)";
         Text[ chinese_traditional ] = "åƒ…æ˜¯å–®è©(~C)";
         Text[ turkish ] = "~Complete words only";
@@ -382,7 +382,7 @@ TabPage TP_HELP_SEARCH
         Text[ polish ] = "Przeszukaj tylko tytu³y";
         Text[ portuguese_brazilian ] = "~Search headings only";
         Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«ã®ã¿ã‚’æ¤œç´¢(~H)";
-        Text[ korean ] = "ì œëª©ì—ì„œë§Œ ì°¾ê¸°(~H)";
+        Text[ korean ] = "ì œëª©ì—ì„œë§Œ ì°¾ì•„ë³´ê¸°(~H)";
         Text[ chinese_simplified ] = "ä»…åœ¨å¤§æ ‡é¢˜èŒƒå›´å†…æœå¯»(~H)";
         Text[ chinese_traditional ] = "åƒ…åœ¨å¤§æ¨™é¡Œç¯„åœå…§æœå°‹(~H)";
         Text[ turkish ] = "~Search headings only";
@@ -444,7 +444,7 @@ TabPage TP_HELP_BOOKMARKS
         Text[ dutch ] = "~Bladwijzers";
         Text[ french ] = "Signets";
         Text[ spanish ] = "Marcadores";
-        Text[ finnish ] = "Bookmarks";
+        Text[ finnish ] = "Kirjan~merkit";
         Text[ italian ] = "~Segnalibro";
         Text[ danish ] = "~Bogmærke";
         Text[ swedish ] = "~Bokmärken";
@@ -594,7 +594,7 @@ String STR_HELP_WINDOW_TITLE
     Text[ greek ] = "ÂïŞèåéá ôïõ %PRODUCTNAME";
     Text[ dutch ] = "%PRODUCTNAME Help";
     Text[ french ] = "Aide de %PRODUCTNAME";
-    Text[ spanish ] = "%PRODUCTNAME Ayuda";
+    Text[ spanish ] = "%PRODUCTNAME - Ayuda";
     Text[ italian ] = "Guida %PRODUCTNAME";
     Text[ danish ] = "Hjælp til %PRODUCTNAME";
     Text[ swedish ] = "%PRODUCTNAME-hjälp";
@@ -607,7 +607,7 @@ String STR_HELP_WINDOW_TITLE
     Text[ turkish ] = "%PRODUCTNAME Help";
     Text[ arabic ] = "%PRODUCTNAME ãÓÇÚÏÉ";
     Text[ catalan ] = "%PRODUCTNAME Ajuda";
-    Text[ finnish ] = " Ohjelman %PRODUCTNAME ohje";
+    Text[ finnish ] = "%PRODUCTNAME Ohje";
     Text[ thai ] = "à¸•à¸±à¸§à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­%PRODUCTNAME ";
 };
 String STR_HELP_BUTTON_INDEX_ON
@@ -615,7 +615,7 @@ String STR_HELP_BUTTON_INDEX_ON
     Text = "Navigationsbereich anzeigen";
     Text [ english_us ] = "Show Navigation Pane";
     Text[ portuguese ] = "Mostrar área de navegação";
-    Text[ russian ] = "Ïîêàçàòü îáëàñòü íàâèãàöèè";
+    Text[ russian ] = "Ïîêàçàòü ïàíåëü íàâèãàöèè";
     Text[ greek ] = "ÅõñåôŞñéï";
     Text[ dutch ] = "Navigatiebereik weergeven";
     Text[ french ] = "Afficher l'espace de navigation";
@@ -632,7 +632,7 @@ String STR_HELP_BUTTON_INDEX_ON
     Text[ turkish ] = "İndis";
     Text[ arabic ] = "İåÑÓ";
     Text[ catalan ] = "Índex";
-    Text[ finnish ] = "Hakemisto";
+    Text[ finnish ] = "Näytä siirtymisruutu";
     Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸à¸²à¸£à¸™à¸³à¸—à¸²à¸‡à¸šà¸²à¸™à¸«à¸™à¹‰à¸²à¸•à¹ˆà¸²à¸‡";
 };
 String STR_HELP_BUTTON_INDEX_OFF
@@ -640,12 +640,12 @@ String STR_HELP_BUTTON_INDEX_OFF
     Text = "Navigationsbereich ausschalten";
     Text [ english_us ] = "Hide Navigation Pane";
     Text[ portuguese ] = "Desactivar área de navegação";
-    Text[ russian ] = "Ñïğÿòàòü îáëàñòü íàâèãàöèè";
+    Text[ russian ] = "Ñêğûòü ïàíåëü íàâèãàöèè";
     Text[ greek ] = "Hide navigation area";
     Text[ dutch ] = "Navigatiebereik uitschakelen";
     Text[ french ] = "Masquer l'espace de navigation";
     Text[ spanish ] = "Ocultar área de navegación";
-    Text[ finnish ] = "Hide navigation area";
+    Text[ finnish ] = "Piilota siirtymisruutu";
     Text[ italian ] = "Nascondi area di navigazione";
     Text[ danish ] = "Slå navigationsområde fra";
     Text[ swedish ] = "Dölj navigationsområde";
@@ -667,7 +667,7 @@ String STR_HELP_BUTTON_START
     Text[ portuguese ] = "Página inicial";
     Text[ russian ] = "Ïåğâàÿ ñòğàíèöà";
     Text[ greek ] = "Áñ÷éêŞ óåëßäá";
-    Text[ dutch ] = "Startpagina";
+    Text[ dutch ] = "Beginpagina";
     Text[ french ] = "Page de départ";
     Text[ spanish ] = "Página de inicio";
     Text[ italian ] = "Home";
@@ -676,7 +676,7 @@ String STR_HELP_BUTTON_START
     Text[ polish ] = "Strona startowa";
     Text[ portuguese_brazilian ] = "Start page";
     Text[ japanese ] = "é–‹å§‹ãƒšãƒ¼ã‚¸";
-    Text[ korean ] = "ì‹œì‘ í˜ì´ì§€";
+    Text[ korean ] = "ì²« í˜ì´ì§€";
     Text[ chinese_simplified ] = "é¦–é¡µ";
     Text[ chinese_traditional ] = "é¦–é ";
     Text[ turkish ] = "Start page";
@@ -757,7 +757,7 @@ String STR_HELP_BUTTON_PRINT
     Text[ turkish ] = "Print";
     Text[ arabic ] = "ØÈÇÚÉ";
     Text[ catalan ] = "Imprimeix";
-    Text[ finnish ] = "Tulosta";
+    Text[ finnish ] = "Tulosta...";
     Text[ thai ] = "à¸à¸´à¸¡à¸à¹Œ...";
 };
 String STR_HELP_BUTTON_ADDBOOKMARK
@@ -767,10 +767,10 @@ String STR_HELP_BUTTON_ADDBOOKMARK
     Text[ portuguese ] = "Adicionar marcador...";
     Text[ russian ] = "Äîáàâèòü çàêëàäêó...";
     Text[ greek ] = "Add to bookmarks";
-    Text[ dutch ] = "Bladwijzers toevoegen...";
+    Text[ dutch ] = "Bladwijzer toevoegen...";
     Text[ french ] = "Ajouter un signet...";
     Text[ spanish ] = "Añadir marcador...";
-    Text[ finnish ] = "Add to bookmarks";
+    Text[ finnish ] = "Lisää kirjanmerkkeihin...";
     Text[ italian ] = "Aggiungi segnalibro...";
     Text[ danish ] = "Tilføj bogmærke...";
     Text[ swedish ] = "Lägg till bokmärke...";
@@ -795,7 +795,7 @@ String STR_HELP_BUTTON_SEARCHDIALOG
     Text[ dutch ] = "Zoeken...";
     Text[ french ] = "Rechercher...";
     Text[ spanish ] = "Buscar...";
-    Text[ finnish ] = "Find...";
+    Text[ finnish ] = "Etsi...";
     Text[ italian ] = "Cerca...";
     Text[ danish ] = "Søg...";
     Text[ swedish ] = "Sök...";
@@ -815,8 +815,8 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text = "HTML-Quelltext";
     Text[ english_us ] = "HTML Source";
     Text[ portuguese ] = "Fonte HTML";
-    Text[ russian ] = "Èñõîäíûé òåêñò HTML";
-    Text[ dutch ] = "HTLM-brontekst";
+    Text[ russian ] = "Èñõîäíûé HTML-òåêñò";
+    Text[ dutch ] = "HTML-brontekst";
     Text[ french ] = "Texte source HTML";
     Text[ spanish ] = "Texto fuente HTML";
     Text[ italian ] = "Testo sorgente HTML";
@@ -828,10 +828,10 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text[ chinese_simplified ] = "HTML æºæ–‡æœ¬";
     Text[ chinese_traditional ] = "HTML åŸå§‹æª”";
     Text[ arabic ] = "äÕ ãÕÏÑ HTML";
-    Text[ dutch ] = "HTLM-brontekst";
+    Text[ dutch ] = "HTML-brontekst";
     Text[ chinese_simplified ] = "HTML æºæ–‡æœ¬";
     Text[ greek ] = "Êåßìåíï ğñïİëåõóçò HTML";
-    Text[ korean ] = "HTML-ì†ŒìŠ¤ í…ìŠ¤íŠ¸";
+    Text[ korean ] = "HTML ì›ë³¸";
     Text[ turkish ] = "HTML kaynak kodu";
     Text[ catalan ] = "Font HTML";
     Text[ finnish ] = "HTML-lähde";
@@ -843,7 +843,7 @@ String STR_HELP_FIRST_MESSAGE
     Text = "Die Hilfe wird gestartet...";
     Text[ english_us ] = "The Help is being started...";
     Text[ portuguese ] = "A iniciar Ajuda...";
-    Text[ russian ] = "Çàïóñê ñïğàâêè...";
+    Text[ russian ] = "Çàïóñê Ñïğàâêè...";
     Text[ greek ] = "Help is started...";
     Text[ dutch ] = "Help wordt gestart...";
     Text[ french ] = "Démarrage de l'aide...";
@@ -860,7 +860,7 @@ String STR_HELP_FIRST_MESSAGE
     Text[ turkish ] = "Help is started...";
     Text[ arabic ] = "Help is started...";
     Text[ catalan ] = "S'ha iniciat l'ajuda...";
-    Text[ finnish ] = "Ohjetoiminto käynnistetään";
+    Text[ finnish ] = "Ohjetoiminto käynnistetään...";
     Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸•à¸±à¸§à¸Šà¹ˆà¸§à¸¢...";
 };
 String STR_HELP_FIRST_HTML
@@ -969,10 +969,10 @@ ModalDialog DLG_HELP_ADDBOOKMARK
         TEXT[ portuguese ] = "Mudar nome ao marcador";
         TEXT[ russian ] = "Ïåğåèìåíîâàòü çàêëàäêó";
         TEXT[ greek ] = "Rename bookmark";
-        TEXT[ dutch ] = "Bladwijzer nieuwe naam geven";
+        TEXT[ dutch ] = "Naam bladwijzer wijzigen";
         TEXT[ french ] = "Renommer le signet";
         TEXT[ spanish ] = "Cambiar nombre a marcador";
-        TEXT[ finnish ] = "Rename bookmark";
+        TEXT[ finnish ] = "Nimeä kirjanmerkki uudelleen";
         TEXT[ italian ] = "Rinomina segnalibro";
         TEXT[ danish ] = "Omdøb bogmærke";
         TEXT[ swedish ] = "Byt namn på bokmärke";
@@ -991,10 +991,10 @@ ModalDialog DLG_HELP_ADDBOOKMARK
     TEXT[ portuguese ] = "Adicionar marcador";
     TEXT[ russian ] = "Äîáàâèòü çàêëàäêó";
     TEXT[ greek ] = "Add to Bookmarks";
-    TEXT[ dutch ] = "Bladwijzers toevoegen";
+    TEXT[ dutch ] = "Bladwijzer toevoegen";
     TEXT[ french ] = "Ajouter un signet";
     TEXT[ spanish ] = "Añadir marcador";
-    TEXT[ finnish ] = "Add to Bookmarks";
+    TEXT[ finnish ] = "Lisää kirjanmerkkeihin";
     TEXT[ italian ] = "Aggiungi segnalibro";
     TEXT[ danish ] = "Tilføj bogmærke";
     TEXT[ swedish ] = "Lägg till bokmärke";
@@ -1027,7 +1027,7 @@ Menu MENU_HELP_BOOKMARKS
             Text[ dutch ] = "Weergeven";
             Text[ french ] = "Afficher";
             Text[ spanish ] = "Mostrar";
-            Text[ finnish ] = "New...";
+            Text[ finnish ] = "Näytä";
             Text[ italian ] = "Mostra";
             Text[ danish ] = "Vis";
             Text[ swedish ] = "Visa";
@@ -1056,10 +1056,10 @@ Menu MENU_HELP_BOOKMARKS
             Text[ portuguese ] = "Mudar nome...";
             Text[ russian ] = "Ïåğåèìåíîâàòü...";
             Text[ greek ] = "Rename...";
-            Text[ dutch ] = "Nieuwe naam geven...";
+            Text[ dutch ] = "Naam wijzigen...";
             Text[ french ] = "Renommer...";
             Text[ spanish ] = "Cambiar nombre...";
-            Text[ finnish ] = "Rename...";
+            Text[ finnish ] = "Nimeä uudelleen...";
             Text[ italian ] = "Rinomina...";
             Text[ danish ] = "Omdøb...";
             Text[ swedish ] = "Byt namn...";
@@ -1086,8 +1086,8 @@ Menu MENU_HELP_BOOKMARKS
             Text[ greek ] = "Delete";
             Text[ dutch ] = "Wissen";
             Text[ french ] = "Supprimer";
-            Text[ spanish ] = "Eliminar";
-            Text[ finnish ] = "Delete";
+            Text[ spanish ] = "Borrar";
+            Text[ finnish ] = "Poista";
             Text[ italian ] = "Elimina";
             Text[ danish ] = "Slet";
             Text[ swedish ] = "Radera";
@@ -1113,12 +1113,12 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     MESSAGE [ English ] = "No themes found." ;
     MESSAGE[ english_us ] = "No topics found.";
     MESSAGE[ portuguese ] = "Não foram encontrados temas.";
-    MESSAGE[ russian ] = "Òåìû íå íàéäåíû.";
+    MESSAGE[ russian ] = "Èñêîìûé òåğìèí íå íàéäåí.";
     MESSAGE[ greek ] = "No themes found.";
     MESSAGE[ dutch ] = "Geen onderwerpen gevonden";
     MESSAGE[ french ] = "Aucun résultat de recherche.";
     MESSAGE[ spanish ] = "No se han encontrado temas";
-    MESSAGE[ finnish ] = "No themes found.";
+    MESSAGE[ finnish ] = "Aiheita ei löytynyt.";
     MESSAGE[ italian ] = "Nessun tema trovato";
     MESSAGE[ danish ] = "Der blev ikke fundet emner.";
     MESSAGE[ swedish ] = "Sökningen gav inget resultat.";
@@ -1271,4 +1271,9 @@ Image IMG_HELP_TOOLBOX_HCL_COPY
     ImageBitmap = Bitmap { File = "lch05711.bmp" ; };
     MASKCOLOR_MAGENTA
 };
+
+
+
+
+
 

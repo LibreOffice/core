@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-28 16:15:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@ public:
                     // image configuration share the same instance
                     SfxImageManager( SfxObjectShell* pDoc );
                     ~SfxImageManager();
+
+    SfxConfigManager* GetConfigManager();
+    USHORT            GetType() const;
 
     Size            GetImageSize() const;
     Color           GetMaskColor() const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-29 06:02:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     SfxModalDialog  ( pParent,  rId ),
 
     aOKButton       ( this,     ResId( ABOUT_BTN_OK ) ),
-    aAppLogo        (           ResId( ABOUT_BMP_LOGO ) ),
     aVersionText    ( this,     ResId( ABOUT_FTXT_VERSION ) ),
     aCopyrightText  ( this,     ResId( ABOUT_FTXT_COPYRIGHT ) ),
     aDeveloperAry   (           ResId( ABOUT_STR_DEVELOPER_ARY ) ),
@@ -166,6 +165,10 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
         Bitmap aBmp;
         aStrm >> aBmp;
         aAppLogo = Image( aBmp );
+    }
+    else
+    {
+        aAppLogo = Image( Bitmap( ResId( RID_DEFAULT_ABOUT_BMP_LOGO, rId.GetResMgr() ) ) );
     }
 
     // Transparenter Font

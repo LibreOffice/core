@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: mba $ $Date: 2002-11-04 09:16:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,9 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
+#endif
 #ifndef _SVTOOLS_TEMPLDLG_HXX
 #include <svtools/templdlg.hxx>
 #endif
@@ -181,7 +184,6 @@
 #include "objshimp.hxx"
 #include "openflag.hxx"
 #include "passwd.hxx"
-#include "picklist.hxx"
 #include "referers.hxx"
 #include "request.hxx"
 #include "sfxresid.hxx"
@@ -261,10 +263,6 @@ SfxObjectShellRef SfxApplication::DocAlreadyLoaded
 
     if ( !aUrlToFind.HasError() )
     {
-        // erst im Cache suchen
-        MemCache_Impl &rCache = SfxPickList_Impl::Get()->GetMemCache();
-        xDoc = rCache.Find( aUrlToFind, aPostString );
-
         // dann bei den normal geoeffneten Docs
         if ( !xDoc.Is() )
         {
@@ -342,7 +340,7 @@ void SetTemplate_Impl( SvStorage *pStorage,
         String aFoundName;
         if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( String(), rLongName, aFoundName ) )
         {
-            rInfo.SetTemplateFileName( aObj.GetMainURL() );
+            rInfo.SetTemplateFileName( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
             rInfo.SetTemplateName( rLongName );
 
             // wenn schon eine Config da ist, mu\s sie aus dem Template sein
@@ -595,7 +593,6 @@ SfxMedium* SfxApplication::InsertDocumentDialog
     String aFilter;
     SfxItemSet* pSet=0;
     ErrCode nErr = sfx2::FileOpenDialog_Impl( nFlags | SFXWB_INSERT | WB_3DLOOK, rFact, pURLList, aFilter, pSet, String(), nHelpId );
-    DBG_ASSERT( pURLList, "invalid URLList" );
     if( pURLList && !nErr )
     {
         DBG_ASSERT( pURLList->Count() == 1, "invalid URLList count" );
@@ -729,42 +726,15 @@ SfxObjectShellLock SfxApplication::NewDoc_Impl( const String& rFact, const SfxIt
     }
 
     if( !pFactory )
+    {
+        DBG_ERROR("Unknown factory!");
         pFactory = &SfxObjectFactory::GetDefaultFactory();
-
-    // Objekt erzeugen
-    USHORT nSlotId = pFactory->GetCreateNewSlotId();
-    if ( pSet )
-    {
-        SFX_ITEMSET_ARG( pSet, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
-        if ( pFrmItem && pFrmItem->GetFrame() && !pFrmItem->GetFrame()->IsTop() )
-            // In SubFrames ohne Dialog laden
-            nSlotId = 0;
-        SFX_ITEMSET_ARG( pSet, pSilentItem, SfxBoolItem, SID_SILENT, FALSE);
-        if ( pSilentItem && pSilentItem->GetValue() )
-            nSlotId = 0;
     }
 
-    if ( nSlotId )
-    {
-        const SfxFrameItem* pFrmItem = NULL;
-        if ( pSet )
-            pFrmItem = (const SfxFrameItem*) SfxRequest::GetItem( pSet, SID_DOCFRAME, FALSE, TYPE(SfxFrameItem) );
-        SfxBoolItem aItem( SID_NEWDOCDIRECT, TRUE );
-        if ( pFrmItem && pFrmItem->GetFrame() && !pFrmItem->GetFrame()->GetCurrentDocument() )
-        {
-            GetAppDispatcher_Impl()->Execute( nSlotId, SFX_CALLMODE_SYNCHRON, &aItem, pFrmItem, 0L );
-            xDoc = pFrmItem->GetFrame()->GetCurrentDocument();
-        }
-        else
-            GetAppDispatcher_Impl()->Execute( nSlotId, SFX_CALLMODE_ASYNCHRON, &aItem, pFrmItem, 0L );
-    }
-    else
-    {
-        xDoc = pFactory->CreateObject();
-        aParam = INetURLObject::decode( aParam, '%', INetURLObject::DECODE_WITH_CHARSET );
-        if( xDoc.Is() )
-            xDoc->DoInitNew_Impl( aParam );
-    }
+    xDoc = pFactory->CreateObject();
+    aParam = INetURLObject::decode( aParam, '%', INetURLObject::DECODE_WITH_CHARSET );
+    if( xDoc.Is() )
+        xDoc->DoInitNew_Impl( aParam );
 
     if ( xDoc.Is() )
     {
@@ -811,6 +781,31 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
     SFX_REQUEST_ARG( rReq, pFactoryName, SfxStringItem, SID_NEWDOCDIRECT, FALSE );
     if( pFactoryName )
         aFactory = pFactoryName->GetValue();
+    else
+    {
+        SvtModuleOptions aOpt;
+
+        if (aOpt.IsModuleInstalled(SvtModuleOptions::E_SWRITER))
+            aFactory = aOpt.GetFactoryShortName(SvtModuleOptions::E_WRITER);
+        else
+        if (aOpt.IsModuleInstalled(SvtModuleOptions::E_SCALC))
+            aFactory = aOpt.GetFactoryShortName(SvtModuleOptions::E_CALC);
+        else
+        if (aOpt.IsModuleInstalled(SvtModuleOptions::E_SDRAW))
+            aFactory = aOpt.GetFactoryShortName(SvtModuleOptions::E_DRAW);
+        else
+        if (aOpt.IsModuleInstalled(SvtModuleOptions::E_SIMPRESS))
+            aFactory = aOpt.GetFactoryShortName(SvtModuleOptions::E_IMPRESS);
+        else
+        if (aOpt.IsModuleInstalled(SvtModuleOptions::E_SMATH))
+            aFactory = aOpt.GetFactoryShortName(SvtModuleOptions::E_MATH);
+        else
+        if (aOpt.IsModuleInstalled(SvtModuleOptions::E_SWRITER))
+            aFactory = aOpt.GetFactoryShortName(SvtModuleOptions::E_WRITERGLOBAL);
+        else
+        if (aOpt.IsModuleInstalled(SvtModuleOptions::E_SWRITER))
+            aFactory = aOpt.GetFactoryShortName(SvtModuleOptions::E_WRITERWEB);
+    }
 
     SFX_REQUEST_ARG( rReq, pFileFlagsItem, SfxStringItem, SID_OPTIONS, FALSE);
     if ( pFileFlagsItem )
@@ -855,12 +850,20 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
     if ( xDoc.Is() )
     {
         SFX_REQUEST_ARG(rReq, pHidden, SfxBoolItem, SID_HIDDEN, FALSE);
+        BOOL bHidden = FALSE;
         if ( pHidden )
+        {
             xDoc->GetMedium()->GetItemSet()->Put( *pHidden, SID_HIDDEN );
+            bHidden = pHidden->GetValue();
+        }
 
         SFX_REQUEST_ARG(rReq, pViewId, SfxUInt16Item, SID_VIEW_ID, FALSE);
+        USHORT nViewId = 0;
         if ( pViewId )
+        {
             xDoc->GetMedium()->GetItemSet()->Put( *pViewId, SID_VIEW_ID );
+            nViewId = pViewId->GetValue();
+        }
 
         xDoc->SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
 //      xDoc->Get_Impl()->nLoadedFlags = SFX_LOADED_ALL;
@@ -869,13 +872,17 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
             xDoc->GetMedium()->GetItemSet()->Put( *pInternalArgs );
         BOOL bOwnsFrame = FALSE;
         SFX_REQUEST_ARG(rReq, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE);
-        SfxFrame* pFrame = pFrameItem ? pFrameItem->GetFrame() : NULL;
-        DBG_ASSERT( pFrame, "This call we not work correctly in StarPortal !" );
+
+        SfxFrame* pFrame = NULL;
+        if (pFrameItem)
+            pFrame = pFrameItem->GetFrame();
+        else
+            pFrame = (SfxFrame*)SfxTopFrame::Create(xDoc, nViewId, bHidden, pInternalArgs);
         if ( pFrame )
         {
             if ( pFrame->GetCurrentDocument() == xDoc || pFrame->PrepareClose_Impl( TRUE, TRUE ) == TRUE )
             {
-                if ( pHidden && pHidden->GetValue() )
+                if (bHidden)
                 {
                     xDoc->RestoreNoDelete();
                     xDoc->OwnerLock( TRUE );
@@ -996,7 +1003,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
             INetURLObject aObj( aTemplateFileName );
             DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
 
-            SfxStringItem aName( SID_FILE_NAME, aObj.GetMainURL() );
+            SfxStringItem aName( SID_FILE_NAME, aObj.GetMainURL( INetURLObject::NO_DECODE ) );
             SfxStringItem aTemplName( SID_TEMPLATE_NAME, aTemplateName );
             SfxStringItem aTemplRegionName( SID_TEMPLATE_REGIONNAME, aTemplateRegion );
             pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, eMode, &aName, &aTarget, &aReferer, &aTemplName, &aTemplRegionName, 0L );
@@ -1141,6 +1148,11 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     SFX_REQUEST_ARG( rReq, pRefererItem, SfxStringItem, SID_REFERER, FALSE );
     if ( pRefererItem )
         aReferer = pRefererItem->GetValue();
+
+    // #105259#: opening templates in UI should open the template, not use it
+    SFX_REQUEST_ARG( rReq, pTemplItem, SfxBoolItem, SID_TEMPLATE, FALSE);
+    if ( !pTemplItem )
+        rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, FALSE ) );
 
     // Mark without URL cannot be handled by hyperlink code
     if ( bHyperlinkUsed && aFileName.Len() && aFileName.GetChar(0) != '#' )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-24 12:23:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,28 +598,10 @@ void SfxViewShell::Activate( BOOL bMDI )
         {
             INetURLObject aObject( SvtPathOptions().GetWorkPath() );
             aObject.setFinalSlash();
-            INetURLObject::SetBaseURL( aObject.GetMainURL() );
+            INetURLObject::SetBaseURL( aObject.GetMainURL( INetURLObject::NO_DECODE ) );
         }
 
-        StarBASIC* pBas = SFX_APP()->GetBasic_Impl();
-        if ( pBas )
-        {
-            SFX_APP()->Get_Impl()->pThisDocument = pSh;
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xInterface ( pSh->GetModel() , ::com::sun::star::uno::UNO_QUERY );
-            ::com::sun::star::uno::Any aComponent;
-            aComponent <<= xInterface;
-            SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
-            if ( pCompVar )
-            {
-                pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent ) );
-            }
-            else
-            {
-                SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent );
-                xUnoObj->SetFlag( SBX_DONTSTORE );
-                pBas->Insert( xUnoObj );
-            }
-        }
+        SfxObjectShell::SetWorkingDocument( pSh );
     }
 }
 
@@ -1002,15 +984,6 @@ USHORT SfxViewShell::PrepareClose
 
     if( GetViewFrame()->IsInModalMode() )
         return FALSE;
-
-    ModelessDialogPtrArr_Impl& rArr = pImp->aDialogArr;
-    for ( USHORT nPos=0; rArr.Count(); )
-    {
-        ModelessDialogPtr_Impl pEntry = rArr[nPos];
-        rArr.Remove( nPos );
-        delete pEntry->pDialog;
-        delete pEntry;
-    }
 
     return TRUE;
 }
@@ -1836,44 +1809,6 @@ Reference < XController > SfxViewShell::GetController()
     return pImp->pController;
 }
 
-void SfxViewShell::AddModelessDialog( Dialog* pDialog, USHORT nSlotId )
-{
-    ModelessDialogPtr_Impl pEntry = new ModelessDialog_Impl;
-    pEntry->pDialog = pDialog;
-    pEntry->nSlotId = nSlotId;
-    pImp->aDialogArr.Insert( pEntry, pImp->aDialogArr.Count() );
-
-}
-
-BOOL SfxViewShell::HasModelessDialog( USHORT nSlotId )
-{
-    ModelessDialogPtrArr_Impl& rArr = pImp->aDialogArr;
-    for ( USHORT nPos=0; nPos<rArr.Count(); nPos++ )
-    {
-        ModelessDialogPtr_Impl pEntry = rArr[nPos];
-        if ( pEntry->nSlotId == nSlotId )
-            return TRUE;
-    }
-
-    return FALSE;
-}
-
-void SfxViewShell::RemoveModelessDialog( USHORT nSlotId )
-{
-    ModelessDialogPtrArr_Impl& rArr = pImp->aDialogArr;
-    for ( USHORT nPos=0; nPos<rArr.Count(); nPos++ )
-    {
-        ModelessDialogPtr_Impl pEntry = rArr[nPos];
-        if ( pEntry->nSlotId == nSlotId )
-        {
-            rArr.Remove( nPos );
-            delete pEntry->pDialog;
-            delete pEntry;
-            break;
-        }
-    }
-}
-
 void SfxViewShell::AddContextMenuInterceptor_Impl( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor )
 {
     pImp->aInterceptorContainer.addInterface( xInterceptor );
@@ -1961,4 +1896,21 @@ void SfxViewShell::TakeOwnerShip_Impl()
 BOOL SfxViewShell::GotOwnerShip_Impl()
 {
     return pImp->bGotOwnerShip;
+}
+
+long SfxViewShell::HandleNotifyEvent_Impl( NotifyEvent& rEvent )
+{
+    if ( pImp->pController )
+        return pImp->pController->HandleEvent_Impl( rEvent );
+    return 0;
+}
+
+BOOL SfxViewShell::HasKeyListeners_Impl()
+{
+    return pImp->pController ? pImp->pController->HasKeyListeners_Impl() : FALSE;
+}
+
+BOOL SfxViewShell::HasMouseClickListeners_Impl()
+{
+    return pImp->pController ? pImp->pController->HasMouseClickListeners_Impl() : FALSE;
 }

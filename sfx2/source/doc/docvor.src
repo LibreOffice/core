@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:17:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ ModalDialog DLG_ORGANIZE
     Text [ italian ] = "Gestione dei modelli" ;
     Text [ portuguese_brazilian ] = "Editar os modelos do documento" ;
     Text [ portuguese ] = "Gerir modelos de documentos" ;
-    Text [ finnish ] = "Mallipohjien hallinta" ;
+    Text [ finnish ] = "Mallien hallinta" ;
     Text [ danish ] = "Administrer dokumentskabeloner" ;
     Text [ french ] = "Gestion des modèles de document" ;
     Text [ swedish ] = "Administrera dokumentmallar" ;
@@ -139,7 +139,7 @@ ModalDialog DLG_ORGANIZE
         Text [ italian ] = "~File..." ;
         Text [ portuguese_brazilian ] = "~Arquivos..." ;
         Text [ portuguese ] = "~Ficheiro..." ;
-        Text [ finnish ] = "~Tiedosto" ;
+        Text [ finnish ] = "Tie~dosto..." ;
         Text [ danish ] = "~Fil..." ;
         Text [ french ] = "~Fichier..." ;
         Text [ swedish ] = "~Fil..." ;
@@ -185,7 +185,7 @@ ModalDialog DLG_ORGANIZE
         Text[ turkish ] = "~Address Book...";
         Text[ arabic ] = "ÏİÊÑ ÇáÚäÇæíä...";
         Text[ catalan ] = "Llibreta d'~adreces...";
-        Text[ finnish ] = "~Osoitekirja";
+        Text[ finnish ] = "O~soitekirja...";
         Text[ thai ] = "à¸ªà¸¡à¸¸à¸”~à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ...";
     };
     ListBox LB_LEFT_TYP
@@ -228,7 +228,7 @@ ModalDialog DLG_ORGANIZE
         };
         StringList [ finnish ] =
         {
-            < "Mallipohjat" ; Default ; > ;
+            < "Mallit" ; Default ; > ;
             < "Asiakirjat" ; Default ; > ;
         };
         StringList [ danish ] =
@@ -253,7 +253,7 @@ ModalDialog DLG_ORGANIZE
         };
         StringList [ spanish ] =
         {
-            < "Plantillas de documento" ; Default ; > ;
+            < "Plantillas" ; Default ; > ;
             < "Documentos" ; Default ; > ;
         };
         StringList [ english_us ] =
@@ -298,7 +298,7 @@ ModalDialog DLG_ORGANIZE
     };
     StringList [ korean ] =
     {
-            < "ë¬¸ì„œ í…œí”Œë¦¿" ; Default ; > ;
+            < "ì„œì‹ íŒŒì¼" ; Default ; > ;
         < "ë¬¸ì„œ" ; Default ; > ;
     };
     StringList [ turkish ] =
@@ -362,7 +362,7 @@ ModalDialog DLG_ORGANIZE
         };
         StringList [ finnish ] =
         {
-            < "Mallipohjat" ; Default ; > ;
+            < "Mallit" ; Default ; > ;
             < "Asiakirjat" ; Default ; > ;
         };
         StringList [ danish ] =
@@ -387,7 +387,7 @@ ModalDialog DLG_ORGANIZE
         };
         StringList [ spanish ] =
         {
-            < "Plantillas de documento" ; Default ; > ;
+            < "Plantillas" ; Default ; > ;
             < "Documentos" ; Default ; > ;
         };
         StringList [ english_us ] =
@@ -432,7 +432,7 @@ ModalDialog DLG_ORGANIZE
     };
     StringList [ korean ] =
     {
-            < "ë¬¸ì„œ í…œí”Œë¦¿" ; Default ; > ;
+            < "ì„œì‹ íŒŒì¼" ; Default ; > ;
         < "ë¬¸ì„œ" ; Default ; > ;
     };
     StringList [ turkish ] =
@@ -511,7 +511,7 @@ ModalDialog DLG_ORGANIZE
         Text [ french ] = "~Commandes" ;
         Text [ swedish ] = "~Kommandon" ;
         Text [ dutch ] = "~Opdrachten" ;
-        Text [ spanish ] = "~Comandos" ;
+        Text [ spanish ] = "~Órdenes" ;
         Text [ english_us ] = "Commands" ;
         TabStop = TRUE ;
         ButtonMenu = Menu
@@ -569,7 +569,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ french ] = "~Supprimer" ;
                     Text [ swedish ] = "R~adera" ;
                     Text [ dutch ] = "~Wissen" ;
-                    Text [ spanish ] = "~Eliminar" ;
+                    Text [ spanish ] = "~Borrar" ;
                     Text [ english_us ] = "~Delete" ;
                     AccelKey = KeyCode
                     {
@@ -632,7 +632,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ italian ] = "~Importa modello..." ;
                     Text [ portuguese_brazilian ] = "Copiar para..." ;
                     Text [ portuguese ] = "I~mportar modelo..." ;
-                    Text [ finnish ] = "Tuo mallipohja..." ;
+                    Text [ finnish ] = "Tuo malli..." ;
                     Text [ danish ] = "Importer skabelon..." ;
                     Text [ french ] = "I~mporter un modèle..." ;
                     Text [ swedish ] = "~Importera mall..." ;
@@ -646,7 +646,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ chinese_traditional ] = "åŒ¯å…¥æ¨£å¼...";
                     Text[ arabic ] = "ÇÓÊíÑÇÏ ŞÇáÈ...";
                     Text[ greek ] = "Å~éóáãùãŞ ğñïôığïõ...";
-                    Text[ korean ] = "í…œí”Œë¦¿ ê°€ì ¸ì˜¤ê¸°...";
+                    Text[ korean ] = "ì„œì‹ íŒŒì¼ ê°€ì ¸ì˜¤ê¸°...";
                     Text[ turkish ] = "Şablonu içe aktar...";
                     Text[ language_user1 ] = " ";
                     Text[ catalan ] = "Importa plantilla...";
@@ -662,7 +662,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ italian ] = "Esporta modello..." ;
                     Text [ portuguese_brazilian ] = "Copiar de..." ;
                     Text [ portuguese ] = "E~xportar modelo..." ;
-                    Text [ finnish ] = "Vie mallipohja..." ;
+                    Text [ finnish ] = "Vie malli..." ;
                     Text [ danish ] = "Eksporter skabelon..." ;
                     Text [ french ] = "E~xporter un modèle..." ;
                     Text [ swedish ] = "~Exportera mall..." ;
@@ -676,7 +676,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ chinese_traditional ] = "åŒ¯å‡ºæ¨£å¼...";
                     Text[ arabic ] = "ÊÕÏíÑ ŞÇáÈ...";
                     Text[ greek ] = "~ÅîáãùãŞ ğñïôığùí...";
-                    Text[ korean ] = "í…œí”Œë¦¿ ë‚´ë³´ë‚´ê¸°...";
+                    Text[ korean ] = "ì„œì‹ íŒŒì¼ ë‚´ë³´ë‚´ê¸°...";
                     Text[ turkish ] = "Şablonu dışa aktar...";
                     Text[ language_user1 ] = " ";
                     Text[ catalan ] = "Exporta plantilla...";
@@ -696,7 +696,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ italian ] = "Stam~pa" ;
                     Text [ portuguese_brazilian ] = "~Imprimir" ;
                     Text [ portuguese ] = "~Imprimir" ;
-                    Text [ finnish ] = "~Tulosta" ;
+                    Text [ finnish ] = "Tu~losta" ;
                     Text [ danish ] = "~Udskriv" ;
                     Text [ french ] = "~Imprimer" ;
                     Text [ swedish ] = "Skriv ~ut" ;
@@ -764,7 +764,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ danish ] = "Opdater" ;
                     Text [ french ] = "~Actualiser" ;
                     Text [ swedish ] = "Upp~datera" ;
-                    Text [ dutch ] = "~Actualiseren" ;
+                    Text [ dutch ] = "~Bijwerken" ;
                     Text [ spanish ] = "~Actualizar" ;
                     Text [ english_us ] = "Update" ;
                     Text[ chinese_simplified ] = "æ›´æ–°";
@@ -791,19 +791,19 @@ ModalDialog DLG_ORGANIZE
                     Text = "Als S~tandardvorlage setzen" ;
                     Text [ english_us ] = "Set As Default Template" ;
                     Text[ portuguese ] = "~Definir como modelo padrão";
-                    Text[ russian ] = "~Êàê ñòàíäàğòíûé øàáëîí";
+                    Text[ russian ] = "Ñäåëàòü øàáëîíîì ïî óìîë÷àíèş";
                     Text[ greek ] = "Set As Default Template";
                     Text[ dutch ] = "Als s~tandaardsjabloon";
                     Text[ french ] = "Définir comme modèle ~par défaut";
                     Text[ spanish ] = "Definir como plantilla predeterminada";
-                    Text[ finnish ] = "Set As Default Template";
+                    Text[ finnish ] = "Aseta oletusmalliksi";
                     Text[ italian ] = "~Imposta come modello standard";
                     Text[ danish ] = "Anvend som s~tandardskabelon";
                     Text[ swedish ] = "Definiera som s~tandardmall";
                     Text[ polish ] = "~OsadŸ jako szablon standardowy";
                     Text[ portuguese_brazilian ] = "Set As Default Template";
                     Text[ japanese ] = "æ¨™æº–ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã¨ã—ã¦è¨­å®š";
-                    Text[ korean ] = "ê¸°ë³¸ í…œí”Œë¦¿ìœ¼ë¡œ ì„¤ì •";
+                    Text[ korean ] = "ê¸°ë³¸ ì„œì‹ íŒŒì¼ë¡œ ì„¤ì •";
                     Text[ chinese_simplified ] = "è®¾å®šæˆæ ‡å‡†æ ·å¼";
                     Text[ chinese_traditional ] = "è¨­å®šæˆæ¨™æº–æ¨£å¼";
                     Text[ turkish ] = "Set As Default Template";
@@ -818,19 +818,19 @@ ModalDialog DLG_ORGANIZE
                     Text = "~Standardvorlage zurücksetzen" ;
                     Text [ english_us ] = "Reset Default Template" ;
                     Text[ portuguese ] = "~Restaurar modelo padrão";
-                    Text[ russian ] = "~Âîññòàíîâëåíèå ñòàíäàğòíîãî øàáëîíà";
+                    Text[ russian ] = "~Âîññòàíîâèòü ñòàíäàğòíûé øàáëîí";
                     Text[ greek ] = "Reset Default Template";
                     Text[ dutch ] = "~Standaardsjabloon";
                     Text[ french ] = "Restaurer le modèle par ~défaut";
                     Text[ spanish ] = "Restaurar plantilla predeterminada";
-                    Text[ finnish ] = "Reset Default Template";
+                    Text[ finnish ] = "Palauta oletusmalli";
                     Text[ italian ] = "~Ripristina il modello standard";
                     Text[ danish ] = "Nulstil ~standardskabeloner";
                     Text[ swedish ] = "Återställ ~standardmall";
                     Text[ polish ] = "~Przywróæ szablon standardowy";
                     Text[ portuguese_brazilian ] = "Reset Default Template";
                     Text[ japanese ] = "æ¨™æº–ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚’å…ƒã«æˆ»ã™";
-                    Text[ korean ] = "ê¸°ë³¸ í…œí”Œë¦¿ ì´ˆê¸°í™”";
+                    Text[ korean ] = "ê¸°ë³¸ ì„œì‹ íŒŒì¼ì„ ì›ë˜ëŒ€ë¡œ";
                     Text[ chinese_simplified ] = "é‡è®¾æ ‡å‡†æ ·å¼";
                     Text[ chinese_traditional ] = "é‡è¨­æ¨™æº–æ¨£å¼";
                     Text[ turkish ] = "Reset Default Template";
@@ -917,17 +917,19 @@ ModalDialog DLG_ORGANIZE
         Size = MAP_APPFONT ( 131 , 10 ) ;
     };*/
     Text[ chinese_simplified ] = "ç®¡ç†æ–‡æ¡£æ ·å¼";
-    Text[ russian ] = "Îğãàíèçîâàòü øàáëîíû äîêóìåíòà";
+    Text[ russian ] = "Óïğàâëåíèå øàáëîíàìè";
     Text[ polish ] = "Zarz¹dzaj szablonami dokumentów";
     Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®ç®¡ç†";
     Text[ chinese_traditional ] = "ç®¡ç†æ–‡ä»¶æ¨£å¼";
     Text[ arabic ] = "ÅÏÇÑÉ ŞæÇáÈ ÇáãÓÊäÏ";
     Text[ greek ] = "Äéá÷åßñéóç ğñüôõğùí åããñÜöïõ";
-    Text[ korean ] = "ì„œì‹ ë¬¸ì„œ ê´€ë¦¬";
+    Text[ korean ] = "ì„œì‹ íŒŒì¼ ê´€ë¦¬";
     Text[ turkish ] = "Belge şablonları";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Organitza les plantilles";
     Text[ thai ] = "à¸à¸²à¸£à¸ˆà¸±à¸”à¸à¸²à¸£à¹à¸¡à¹ˆà¹à¸šà¸š";
 };
  // ********************************************************************** EOF
+
+
 

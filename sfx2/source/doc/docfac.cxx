@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-09 14:54:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,18 +97,15 @@
 #include "doc.hrc"
 
 //========================================================================
+
 DECL_PTRARRAY( SfxViewFactoryArr_Impl, SfxViewFactory*, 2, 2 );
 
-typedef SfxViewFactory* SfxViewFactoryPtr;
-SV_DECL_PTRARR_DEL(SfxGlobalViewFactoryArr_Impl, SfxViewFactoryPtr, 2, 2);
-SV_IMPL_PTRARR(SfxGlobalViewFactoryArr_Impl, SfxViewFactoryPtr);
 //========================================================================
 
 DBG_NAME(SfxObjectFactory);
 TYPEINIT1(SfxObjectFactory,SvFactory);
 
 static SfxObjectFactoryArr_Impl* pObjFac = 0;
-static SfxGlobalViewFactoryArr_Impl* pViewFac = 0;
 
 //========================================================================
 
@@ -157,6 +154,15 @@ struct SfxObjectFactory_Impl
         // delete pFilterContainer;
         if ( bOwnsAccel )
             delete pAccMgr;
+    }
+
+    void ClearAccMgr()
+    {
+        if ( bOwnsAccel )
+        {
+            delete pAccMgr;
+            pAccMgr = 0;
+        }
     }
 };
 
@@ -340,17 +346,30 @@ SfxObjectFactory::~SfxObjectFactory()
     delete pImpl;
 }
 
+//--------------------------------------------------------------------
+
 void SfxObjectFactory::RemoveAll_Impl()
 {
-    GetObjFacArray_Impl();
     for( USHORT n=0; n<pObjFac->Count(); )
     {
         SfxObjectFactoryPtr pFac = pObjFac->GetObject(n);
         pObjFac->Remove( n );
         delete pFac;
     }
+}
 
-    DELETEZ( pViewFac );
+//--------------------------------------------------------------------
+
+void SfxObjectFactory::ClearAll_Impl()
+{
+    for( USHORT n=0; n<pObjFac->Count(); n++ )
+    {
+        // Clear accelerator manager as it uses the same global SfxMacroConfig object as
+        // the application class does. This can lead to problems by using a newly created
+        // SfxMacroConfig object that doesn't have any macros inside => an assertion occur!
+        SfxObjectFactoryPtr pFac = pObjFac->GetObject(n);
+        pFac->pImpl->ClearAccMgr();
+    }
 }
 
 //--------------------------------------------------------------------
@@ -366,14 +385,7 @@ void SfxObjectFactory::RegisterViewFactory
           pImpl->aViewFactoryArr[nPos]->GetOrdinal() <= rFactory.GetOrdinal();
           ++nPos )
     /* empty loop */;
-    SfxViewFactoryPtr pFact = &rFactory;
-    pImpl->aViewFactoryArr.Insert( nPos, pFact );
-
-    if ( !pViewFac )
-        pViewFac = new SfxGlobalViewFactoryArr_Impl;
-
-    if ( !pViewFac->GetPos( pFact ) )
-        pViewFac->Insert( pFact, nPos );
+    pImpl->aViewFactoryArr.Insert(nPos, &rFactory);
 }
 
 //--------------------------------------------------------------------
@@ -575,15 +587,20 @@ const SfxObjectFactory* SfxObjectFactory::GetFactory( const String& rFactoryURL 
 
 const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
 {
-    sal_uInt16 nCount = GetFilterCount();
-    for ( sal_uInt16 n=0; n<nCount; n++ )
+    USHORT nFilterCount = pImpl->pFilterContainer->GetFilterCount();
+    USHORT nVersion = 0;
+    const SfxFilter *pFilter = NULL;
+    for( int n=0; n<nFilterCount; n++)
     {
-        const SfxFilter *pFilter = pImpl->pFilterContainer->GetFilter(n);
-        if ( pFilter->GetFilterFlags() & SFX_FILTER_TEMPLATE)
-            return pFilter;
+        const SfxFilter *pTemp = pImpl->pFilterContainer->GetFilter(n);
+        if( pTemp && pTemp->IsOwnFormat() && pTemp->IsOwnTemplateFormat() && ( pTemp->GetVersion() > nVersion ) )
+        {
+            pFilter = pTemp;
+            nVersion = pTemp->GetVersion();
+        }
     }
 
-    return 0;
+    return pFilter;
 }
 
 void SfxObjectFactory::SetCreateNewSlotId( sal_uInt16 nId )
@@ -651,7 +668,7 @@ sal_Bool SfxObjectFactory::HasObjectFactories()
     return ( GetObjFacArray_Impl().Count() != 0 );
 }
 
-SfxObjectFactoryArr_Impl& SfxObjectFactory::GetObjFacArray_Impl()
+SfxObjectFactoryArr_Impl&   SfxObjectFactory::GetObjFacArray_Impl()
 {
     if ( !pObjFac )
         pObjFac = new SfxObjectFactoryArr_Impl;

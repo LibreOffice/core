@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2002-10-22 09:58:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1029,11 +1029,14 @@ namespace sfx2
 
         sal_Int32                           nPDFIndex   = -1;
         sal_Int32                           nHTMLIndex  = -1;
+        sal_Int32                           nFlashIndex = -1;
         sal_Int32                           nCount      = 0;
         String                              sPDFExtension = String::CreateFromAscii( "*.pdf" );
         String                              sHTMLExtension = String::CreateFromAscii( "*.htm*" );
+        String                              sFlashExtension = String::CreateFromAscii( "*.swf" );
         WildCard                            aHTMLWildcardMatcher( sHTMLExtension, ';' );
         WildCard                            aPDFWildcardMatcher( sPDFExtension, ';' );
+        WildCard                            aFlashWildcardMatcher( sFlashExtension, ';' );
         ::rtl::OUString                     sUIName;
         ::rtl::OUString                     sExtensions;
         std::vector< ExportFilter >         aImportantFilterGroup;
@@ -1062,6 +1065,19 @@ namespace sfx2
                 else
                     aImportantFilterGroup.insert( ++aIter, aExportFilter );
                 nPDFIndex = 0;
+                nCount++;
+            }
+            else if ( nFlashIndex == -1 && aFlashWildcardMatcher.Matches( aExt ))
+            {
+                std::vector< ExportFilter >::iterator aIter = aImportantFilterGroup.begin();
+                if ( nHTMLIndex != -1 )
+                    aIter++;
+
+                if ( nPDFIndex != -1 )
+                    aIter++;
+
+                aImportantFilterGroup.insert( aIter, aExportFilter );
+                nFlashIndex = 0;
                 nCount++;
             }
             else
@@ -1240,22 +1256,4 @@ namespace sfx2
 }   // namespace sfx2
 //........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.15  2002/10/01 12:03:39  pb
- *  fix: #103741# append methods need FileDialogHelper_Impl
- *
- *  Revision 1.14  2002/08/29 13:42:35  cd
- *  #102385# Use correct way to create filter groups for export
- *
- *  Revision 1.13  2002/08/26 07:57:16  cd
- *  #101559# Display export filters in new order
- *
- *  Revision 1.12  2002/08/20 09:22:52  pb
- *  fix: #92788# show extensions of filter
- *
- *
- *  Revision 1.0 01.10.01 10:28:28  fs
- ************************************************************************/
 

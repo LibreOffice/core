@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mba $ $Date: 2001-09-10 15:36:46 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:28:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,6 +112,7 @@ EXCEPTIONSFILES=$(SLO)$/objuno.obj \
         $(SLO)$/doctemplates.obj \
         $(SLO)$/sfxbasemodel.obj \
         $(SLO)$/objxtor.obj \
+        $(SLO)$/objstor.obj \
         $(SLO)$/xmlversion.obj
 
 # --- Tagets -------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:21:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,8 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     {
         < "Default" ; > ;
         < "Business Correspondence" ; > ;
-        < "Other Business documents" ; > ;
-        < "Personal Correspondence And Documents" ; > ;
+        < "Other Business Documents" ; > ;
+        < "Personal Correspondence and Documents" ; > ;
         < "Forms and Contracts" ; > ;
         < "Finances" ; > ;
         < "Education" ; > ;
@@ -136,11 +136,11 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ russian ] =
     {
-        < "Ñòàíäàğò" ; > ;
+        < "Îáû÷íûé" ; > ;
         < "Äåëîâàÿ êîğğåñïîíäåíöèÿ" ; > ;
         < "Ïğî÷èå äåëîâûå äîêóìåíòû" ; > ;
         < "Ëè÷íàÿ êîğğåñïîíäåíöèÿ è äîêóìåíòû" ; > ;
-        < "Ôîğìóëÿğû è äîãîâîğû" ; > ;
+        < "Ôîğìû è êîíòàêòû" ; > ;
         < "Ôèíàíñû" ; > ;
         < "Îáğàçîâàíèå" ; > ;
         < "Ôîíû ïğåçåíòàöèè" ; > ;
@@ -165,7 +165,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
         < "Standaard" ; > ;
         < "Zakelijke correspondentie" ; > ;
         < "Andere zakelijke documenten" ; > ;
-        < "Privécorrespondentie en documenten" ; > ;
+        < "Privé-correspondentie en -documenten" ; > ;
         < "Formulieren en contracten" ; > ;
         < "Financieel" ; > ;
         < "Opleiding" ; > ;
@@ -188,7 +188,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ spanish ] =
     {
-        < "Estándar" ; > ;
+        < "Predeterminado" ; > ;
         < "Correspondencia comercial" ; > ;
         < "Otros documentos comerciales" ; > ;
         < "Correspondencia privada y documentos" ; > ;
@@ -214,7 +214,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ danish ] =
     {
-        < "Normal" ; > ;
+        < "Standard" ; > ;
         < "Arbejdsrelateret korrespondance" ; > ;
         < "Andre arbejdsrelaterede dokumenter" ; > ;
         < "Privat korrespondance og private dokumenter" ; > ;
@@ -266,55 +266,55 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ japanese ] =
     {
-        < "•W€" ; > ;
-        < "Ğ—p‘ŠÈ" ; > ;
-        < "‚»‚Ì‘¼‚ÌĞ—p•¶‘" ; > ;
-        < "ŒÂl‘ŠÈ‚Æ•¶‘" ; > ;
-        < "‹Æ–±—p‘—Ş‚ÆŒ_–ñ‘" ; > ;
-        < "à­" ; > ;
-        < "‹³—{" ; > ;
-        < "ÌßÚ¾ŞİÃ°¼®İ”wŒi" ; > ;
-        < "ÌßÚ¾ŞİÃ°¼®İ" ; > ;
-        < "‚»‚Ì‘¼" ; > ;
+        < "æ¨™æº–" ; > ;
+        < "ç¤¾ç”¨æ›¸ç°¡" ; > ;
+        < "ãã®ä»–ã®ç¤¾ç”¨æ–‡æ›¸" ; > ;
+        < "å€‹äººæ›¸ç°¡ã¨æ–‡æ›¸" ; > ;
+        < "æ¥­å‹™ç”¨æ›¸é¡ã¨å¥‘ç´„æ›¸" ; > ;
+        < "è²¡æ”¿" ; > ;
+        < "æ•™é¤Š" ; > ;
+        < "ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³èƒŒæ™¯" ; > ;
+        < "ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³" ; > ;
+        < "ãã®ä»–" ; > ;
     };
     ItemList[ korean ] =
     {
-        < "Ç¥ÁØ" ; > ;
-        < "¾÷¹«¿ë¡¡Åë½Å£¡" ; > ;
-        < "±âÅ¸ ¾÷¹« ¹®¼­" ; > ;
-        < "°³ÀÎ¡¡Åë½Å³»¿ë°ú¡¡¹®¼­" ; > ;
-        < "¾ç½Ä°ú Çù¾à" ; > ;
-        < "È¸°è" ; > ;
-        < "±³À°" ; > ;
-        < "ÇÁ¸®Á¨Å×ÀÌ¼Ç¡¡¹è°æ" ; > ;
-        < "ÇÁ¸®Á¨Å×ÀÌ¼Ç" ; > ;
-        < "±âÅ¸" ; > ;
+        < "ê¸°ë³¸ê°’" ; > ;
+        < "ì—…ë¬´ì ì¸ í†µì‹ " ; > ;
+        < "ê¸°íƒ€ ì‚¬ë¬´ìš© ë¬¸ì„œ" ; > ;
+        < "ê°œì¸ì  í†µì‹  ë° ë¬¸ì„œ" ; > ;
+        < "ì—…ë¬´ìš© ì–‘ì‹ ë° ê³„ì•½ì„œ" ; > ;
+        < "ì¬ì • ê´€ë¦¬" ; > ;
+        < "êµìœ¡" ; > ;
+        < "í”„ë ˆì  í…Œì´ì…˜ ë°°ê²½" ; > ;
+        < "í”„ë ˆì  í…Œì´ì…˜" ; > ;
+        < "ê¸°íƒ€" ; > ;
     };
     ItemList[ chinese_simplified ] =
     {
-        < "±ê×¼" ; > ;
-        < "ÉÌÎñĞÅº¯" ; > ;
-        < "ÆäËûÉÌÎñÎÄµµ" ; > ;
-        < "Ë½ÈËĞÅº¯ºÍÎÄµµ" ; > ;
-        < "±íµ¥ºÍºÏÍ¬" ; > ;
-        < "²ÆÎñ" ; > ;
-        < "½ÌÓı" ; > ;
-        < "ÑİÊ¾ÎÄ¸å±³¾°" ; > ;
-        < "ÑİÊ¾ÎÄ¸å" ; > ;
-        < "ÆäËü" ; > ;
+        < "æ ‡å‡†" ; > ;
+        < "å•†åŠ¡ä¿¡å‡½" ; > ;
+        < "å…¶ä»–å•†åŠ¡æ–‡æ¡£" ; > ;
+        < "ç§äººä¿¡å‡½å’Œæ–‡æ¡£" ; > ;
+        < "è¡¨å•å’ŒåˆåŒ" ; > ;
+        < "è´¢åŠ¡" ; > ;
+        < "æ•™è‚²" ; > ;
+        < "æ¼”ç¤ºæ–‡ç¨¿èƒŒæ™¯" ; > ;
+        < "æ¼”ç¤ºæ–‡ç¨¿" ; > ;
+        < "å…¶å®ƒ" ; > ;
     };
     ItemList[ chinese_traditional ] =
     {
-        < "¼Ğ·Ç" ; > ;
-        < "°Ó°È«H¨ç" ; > ;
-        < "¨ä¥L°Ó°È¤å¥ó" ; > ;
-        < "¨p¤H«H¨ç©M¤å¥ó" ; > ;
-        < "ªí³æ©M¦X¦P" ; > ;
-        < "°]°È" ; > ;
-        < "±Ğ¨|" ; > ;
-        < "Â²³ø­I´º" ; > ;
-        < "Â²³ø" ; > ;
-        < "¨ä¥¦" ; > ;
+        < "æ¨™æº–" ; > ;
+        < "å•†å‹™ä¿¡å‡½" ; > ;
+        < "å…¶ä»–å•†å‹™æ–‡ä»¶" ; > ;
+        < "ç§äººä¿¡å‡½å’Œæ–‡ä»¶" ; > ;
+        < "è¡¨å–®å’ŒåˆåŒ" ; > ;
+        < "è²¡å‹™" ; > ;
+        < "æ•™è‚²" ; > ;
+        < "ç°¡å ±èƒŒæ™¯" ; > ;
+        < "ç°¡å ±" ; > ;
+        < "å…¶å®ƒ" ; > ;
     };
     ItemList[ arabic ] =
     {
@@ -358,29 +358,42 @@ ItemList [ language_user1 ] =
     };
     ItemList [ catalan ] =
     {
-            < "Estándar" ; > ;
+            < "Per defecte" ; > ;
         < "Correspondencia comercial" ; > ;
-        < "Otros documentos comerciales" ; > ;
-        < "Correspondencia privada y documentos" ; > ;
-        < "Formularios y contratos" ; > ;
-        < "Finanzas" ; > ;
-        < "Educación" ; > ;
-        < "Fondos de presentación" ; > ;
-        < "Presentaciones" ; > ;
+        < "Altres documents de negocis" ; > ;
+        < "Correspondencia privada i documents" ; > ;
+        < "Formularis i contractes" ; > ;
+        < "Finances" ; > ;
+        < "Educació" ; > ;
+        < "Fons de presentació" ; > ;
+        < "Presentacions" ; > ;
         < "Diversos" ; > ;
     };
     ItemList [ finnish ] =
     {
-            < "Oletusarvo" ; > ;
-        < "Liiketoiminnan kirjeenvaihto" ; > ;
-        < "Muut liiketoiminta-asiakirjat" ; > ;
-        < "Henkilökohtainen kirjeenvaihto ja asiakirjat" ; > ;
+            < "Oletus" ; > ;
+        < "Liikekirjeenvaihto" ; > ;
+        < "Muut liikeasiakirjat" ; > ;
+        < "Yksityinen kirjeenvaihto ja asiakirjat" ; > ;
         < "Lomakkeet ja sopimukset" ; > ;
         < "Talous" ; > ;
         < "Koulutus" ; > ;
         < "Esitystaustat" ; > ;
         < "Esitykset" ; > ;
         < "Sekalaiset" ; > ;
+    };
+    ItemList [ thai ] =
+    {
+         < "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™" ; > ;
+        < "à¸à¸²à¸£à¹‚à¸•à¹‰à¸•à¸­à¸šà¸—à¸²à¸‡à¸˜à¸¸à¸£à¸à¸´à¸ˆ" ; > ;
+        < "à¹€à¸­à¸à¸ªà¸²à¸£à¸˜à¸¸à¸£à¸à¸´à¸ˆà¸­à¸·à¹ˆà¸™ à¹†" ; > ;
+        < "à¸à¸²à¸£à¹‚à¸•à¹‰à¸•à¸­à¸šà¹à¸¥à¸°à¹€à¸­à¸à¸ªà¸²à¸£à¸ªà¹ˆà¸§à¸™à¸•à¸±à¸§" ; > ;
+        < "à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡à¹à¸¥à¸°à¸ªà¸±à¸à¸à¸²" ; > ;
+        < "à¸à¸²à¸£à¹€à¸‡à¸´à¸™" ; > ;
+        < "à¸à¸²à¸£à¸¨à¸¶à¸à¸©à¸²" ; > ;
+        < "à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­" ; > ;
+        < "à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­" ; > ;
+        < "à¹€à¸šà¹‡à¸”à¹€à¸•à¸¥à¹‡à¸”" ; > ;
     };
     };
 
@@ -397,19 +410,34 @@ String RID_CNT_STR_WAITING
     Text[ french ] = "Initialisation des modèles pour une première utilisation ...";
     Text[ spanish ] = "Las plantillas se inicializarán ahora para el primer uso.";
     Text[ italian ] = "Inizializzazione dei modelli per il primo utilizzo del programma.";
-    Text[ danish ] = "%PRODUCTNAME-komponenterne initialiseres.";
+    Text[ danish ] = "Skabelonerne initialiseres nu til første brug.";
     Text[ swedish ] = "Mallarna initieras nu för den första användningen.";
     Text[ polish ] = "Rozpocznie siê teraz inicjalizacja u¿ytych pierwszy raz szablonów";
     Text[ portuguese_brazilian ] = "Die %PRODUCTNAME Komponenten werden initialisiert";
-    Text[ japanese ] = "ÃİÌßÚ°Ä‚Í¡‰ñ‰‚ß‚Äg—p‚·‚é‚É‚ ‚½‚Á‚ÄA‚Ü‚¸‰Šú‰»‚³‚ê‚Ü‚·B";
-    Text[ korean ] = "¼­½Ä ÆÄÀÏÀÌ ÀÌÁ¦ 1È¸ »ç¿ëÀ» À§ÇÏ¿© ÇÑ ¹ø ¼³Ä¡µË´Ï´Ù.";
-    Text[ chinese_simplified ] = "ÏÖÔÚÊ×´Î³õÊ¼»¯ĞèÒªÊ¹ÓÃµÄÑùÊ½ÎÄ¼ş¡£";
-    Text[ chinese_traditional ] = "²{¦b­º¦¸ªì©l¤Æ»İ­n¨Ï¥Îªº¼Ë¦¡ÀÉ®×¡C";
+    Text[ japanese ] = "ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã¯ä»Šå›åˆã‚ã¦ä½¿ç”¨ã™ã‚‹ã«ã‚ãŸã£ã¦ã€ã¾ãšåˆæœŸåŒ–ã•ã‚Œã¾ã™ã€‚";
+    Text[ korean ] = "ì§€ê¸ˆ ì„œì‹ íŒŒì¼ì´ ì²˜ìŒ ì‚¬ìš©ì„ ìœ„í•´ ì„¤ì¹˜ë˜ê³  ìˆìŠµë‹ˆë‹¤.";
+    Text[ chinese_simplified ] = "ç°åœ¨é¦–æ¬¡åˆå§‹åŒ–éœ€è¦ä½¿ç”¨çš„æ ·å¼æ–‡ä»¶ã€‚";
+    Text[ chinese_traditional ] = "ç¾åœ¨é¦–æ¬¡åˆå§‹åŒ–éœ€è¦ä½¿ç”¨çš„æ¨£å¼æª”æ¡ˆã€‚";
     Text[ turkish ] = "Kurulumdan sonra %PRODUCTNAME bileşenleri şimdi yeniden başlatılacak.";
     Text[ arabic ] = "ÌÇÑí ÇáÂä ÊåíÆÉ ãßæäÇÊ %PRODUCTNAME ááãÑÉ ÇáÃæáì ÈÚÏ ÇäÊåÇÁ ÚãáíÉ ÇáÊËÈíÊ.";
-    Text[ catalan ] = "Los componentes de %PRODUCTNAME van a ser inicializados ahora tras la instalación.";
-    Text[ finnish ] = "Alustetaan ohjelman %PRODUCTNAME osat ensimmäistä kertaa asennuksen jälkeen.";
+    Text[ catalan ] = "Els components d'%PRODUCTNAME s'inicialitzaran després de la instal.lació.";
+    Text[ finnish ] = "Malleja alustetaan ensimmäistä käyttökertaa varten.";
+    Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¹à¸¡à¹ˆà¹à¸šà¸šà¸ªà¸³à¸«à¸£à¸±à¸šà¸à¸²à¸£à¹ƒà¸Šà¹‰à¸„à¸£à¸±à¹‰à¸‡à¹à¸£à¸";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

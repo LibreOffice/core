@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2002-11-14 14:30:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,8 +253,8 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
     if ( pImp->bLoadingWindows || !pPreferedFrame )
         return NULL;
 
-    const SfxFilter* pFilter;
-    if( GetMedium() && ( pFilter = GetMedium()->GetFilter() ) && !pFilter->UsesStorage() )
+    DBG_ASSERT( GetMedium(), "A Medium should exist here!");
+    if( !GetMedium() )
         return 0;
 
     // get correct mode
@@ -809,7 +809,7 @@ void SfxObjectShell::DocInfoDlg_Impl( SfxDocumentInfo &rDocInfo )
             aURL += String::CreateFromAscii( GetFactory().GetShortName() );
             aURL += DEFINE_CONST_UNICODE( "]" );
             INetURLObject aURLObj( pImp->aNewName );
-            aURL += aURLObj.GetMainURL();
+            aURL += aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
             // aTitle = aURLObj.GetBase();
         }
         aTitle = GetTitle();
@@ -1793,6 +1793,7 @@ SfxEventConfigItem_Impl* SfxObjectShell::GetEventConfig_Impl( BOOL bForce )
     {
         pImp->pEventConfig = new SfxEventConfigItem_Impl( SFX_ITEMTYPE_DOCEVENTCONFIG,
                     SFX_APP()->GetEventConfig(), this );
+        pImp->pEventConfig->Initialize();
     }
 
     return pImp->pEventConfig;

@@ -5,8 +5,8 @@
 #*    Description       shell SfxApplication
 #*
 #*    Creation date     MI  01/31/1995
-#*    last change       $Author: cd $ $Date: 2002-10-11 14:43:52 $
-#*    $Revision: 1.9 $
+#*    last change       $Author: hr $ $Date: 2003-03-27 11:27:31 $
+#*    $Revision: 1.10 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -323,9 +323,28 @@ interface Application : Module
         ]
 
     //---------------------------------------------------------------------
-    SID_ADDONS
+
+        SID_UPDATE_CONFIG
+        [
+        ExecMethod = MiscExec_Impl ;
+        ]
+
+        SID_ADDONS
+        [
+        ]
+
+    SID_SHOW_IME_STATUS_WINDOW
     [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
     ]
+
+     //---------------------------------------------------------------------
+    SID_HELP_SUPPORTPAGE
+    [
+        ExecMethod = MiscExec_Impl ;
+    ]
+
 }
 
  //=========================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 16:18:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ String STR_MENU_CFGITEM
     TEXT [ spanish ] = "Menú" ;
     TEXT [ english_us ] = "Configuration Menu" ;
     TEXT[ chinese_simplified ] = "èœå•";
-    TEXT[ russian ] = "Ìåíş";
+    TEXT[ russian ] = "Ìåíş êîíôèãóğàöèè";
     TEXT[ polish ] = "Menu";
     TEXT[ japanese ] = "ãƒ¡ãƒ‹ãƒ¥ãƒ¼";
     TEXT[ chinese_traditional ] = "åŠŸèƒ½è¡¨";
@@ -101,18 +101,18 @@ String STR_MENU_ADDONS
     TEXT[ russian ] = "~Add-Ons";
     TEXT[ greek ] = "~Add-Ons";
     TEXT[ dutch ] = "~Add-Ons";
-    TEXT[ french ] = "~Add-Ons";
-    TEXT[ spanish ] = "~Add-Ons";
+    TEXT[ french ] = "Add-ons";
+    TEXT[ spanish ] = "~Add-ons";
     TEXT[ finnish ] = "~Add-Ons";
-    TEXT[ italian ] = "~Add-Ons";
+    TEXT[ italian ] = "~Complementari";
     TEXT[ danish ] = "~Add-Ons";
-    TEXT[ swedish ] = "~Add-Ons";
+    TEXT[ swedish ] = "~Tillägg";
     TEXT[ polish ] = "~Add-Ons";
     TEXT[ portuguese_brazilian ] = "~Add-Ons";
-    TEXT[ japanese ] = "~Add-Ons";
+    TEXT[ japanese ] = "ã‚¢ãƒ‰ã‚ªãƒ³(~A)";
     TEXT[ korean ] = "~Add-Ons";
     TEXT[ chinese_simplified ] = "~Add-Ons";
-    TEXT[ chinese_traditional ] = "~Add-Ons";
+    TEXT[ chinese_traditional ] = "é™„åŠ å…ƒä»¶(~A)";
     TEXT[ turkish ] = "~Add-Ons";
     TEXT[ arabic ] = "~Add-Ons";
     TEXT[ catalan ] = "~Add-Ons";
@@ -133,7 +133,7 @@ Menu MN_CLIPBOARDFUNCS
             Text [ italian ] = "Ta~glia" ;
             Text [ portuguese_brazilian ] = "Co~rtar" ;
             Text [ portuguese ] = "Co~rtar" ;
-            Text [ finnish ] = "L~eikkaa" ;
+            Text [ finnish ] = "~Leikkaa" ;
             Text [ danish ] = "~Klip" ;
             Text [ french ] = "~Couper" ;
             Text [ swedish ] = "~Klipp ut" ;
@@ -149,7 +149,7 @@ Menu MN_CLIPBOARDFUNCS
             Text[ dutch ] = "Kn~ippen";
             Text[ chinese_simplified ] = "å‰ªåˆ‡(~T)";
             Text[ greek ] = "~ÁğïêïğŞ";
-            Text[ korean ] = "ì˜ë¼ ë‚´ê¸°(~T)";
+            Text[ korean ] = "ì˜ë¼ë‚´ê¸°(~T)";
             Text[ turkish ] = "Kes";
             Text[ catalan ] = "Re~talla";
             Text[ thai ] = "à¸•à¸±~à¸”";
@@ -164,7 +164,7 @@ Menu MN_CLIPBOARDFUNCS
             Text [ italian ] = "~Copia" ;
             Text [ portuguese_brazilian ] = "~Copiar" ;
             Text [ portuguese ] = "~Copiar" ;
-            Text [ finnish ] = "~Kopioi" ;
+            Text [ finnish ] = "K~opioi" ;
             Text [ danish ] = "K~opier" ;
             Text [ french ] = "Co~pier" ;
             Text [ swedish ] = "K~opiera" ;
@@ -195,7 +195,7 @@ Menu MN_CLIPBOARDFUNCS
             Text [ italian ] = "~Incolla" ;
             Text [ portuguese_brazilian ] = "~Colar" ;
             Text [ portuguese ] = "Co~lar" ;
-            Text [ finnish ] = "L~iitä" ;
+            Text [ finnish ] = "Lii~tä" ;
             Text [ danish ] = "Sæt i~nd" ;
             Text [ french ] = "C~oller" ;
             Text [ swedish ] = "K~listra in" ;
@@ -384,18 +384,18 @@ String SID_WIN_FULLSCREEN
     Text[ russian ] = "Leave Full-Screen Mode";
     Text[ greek ] = "Leave Full-Screen Mode";
     Text[ dutch ] = "Leave Full-Screen Mode";
-    Text[ french ] = "Leave Full-Screen Mode";
-    Text[ spanish ] = "Leave Full-Screen Mode";
+    Text[ french ] = "Quitter le mode Plein écran";
+    Text[ spanish ] = "Abandonar el modo Pantalla completa";
     Text[ finnish ] = "Leave Full-Screen Mode";
     Text[ italian ] = "Leave Full-Screen Mode";
     Text[ danish ] = "Leave Full-Screen Mode";
-    Text[ swedish ] = "Leave Full-Screen Mode";
+    Text[ swedish ] = "Lämna helskärmsläge";
     Text[ polish ] = "Leave Full-Screen Mode";
     Text[ portuguese_brazilian ] = "Leave Full-Screen Mode";
-    Text[ japanese ] = "Leave Full-Screen Mode";
-    Text[ korean ] = "Leave Full-Screen Mode";
-    Text[ chinese_simplified ] = "Leave Full-Screen Mode";
-    Text[ chinese_traditional ] = "Leave Full-Screen Mode";
+    Text[ japanese ] = "å…¨ç”»é¢è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰ã‚’ä¿æŒ";
+    Text[ korean ] = "ì „ì²´ í™”ë©´ ëª¨ë“œ ë§ˆì¹¨";
+    Text[ chinese_simplified ] = "ç¦»å¼€å…¨å±å¹•æ¨¡å¼";
+    Text[ chinese_traditional ] = "é›¢é–‹å…¨è¢å¹•æ¨¡å¼";
     Text[ turkish ] = "Leave Full-Screen Mode";
     Text[ arabic ] = "Leave Full-Screen Mode";
     Text[ catalan ] = "Leave Full-Screen Mode";
@@ -403,6 +403,8 @@ String SID_WIN_FULLSCREEN
 };
 
 // ******************************************************************* EOF
+
+
 
 
 

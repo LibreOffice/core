@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: iha $ $Date: 2002-10-01 08:41:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,7 +523,7 @@ void SfxDockingWindow::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
         pImp->bEndDocked = FALSE;
     }
 
-    SetAlignment(pImp->GetDockAlignment());
+    SetAlignment( IsFloatingMode() ? SFX_ALIGN_NOALIGNMENT : pImp->GetDockAlignment() );
     pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
 }
 
@@ -1157,11 +1157,11 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
         }
 
         BOOL bChanged = pImp->nLine != pImp->nDockLine || pImp->nPos != pImp->nDockPos || eDockAlign != GetAlignment();
-        if ( !bChanged )
+        if ( !bChanged && !IsFloatingMode() )
         {
             // window only sightly moved, no change of any property
             rRect.SetSize( pImp->aSplitSize );
-            rRect.SetPos( aPos );
+            rRect.SetPos( aDockingRect.TopLeft() );
             return eDockAlign;
         }
 
@@ -1581,7 +1581,7 @@ void SfxDockingWindow::StateChanged( StateChangedType nStateChange )
 
 void SfxDockingWindow::Move()
 {
-    if ( IsReallyVisible() )
+    if ( IsReallyVisible() && IsFloatingMode() )
     {
         SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
         if ( pImp->bSplitable )

@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.22 $
- *  last change: $Author: mba $ $Date: 2002-09-18 16:09:13 $
+ *  $Revision: 1.23 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1989,8 +1989,7 @@ void SfxBindings::UpdateControllers_Impl
             eState = SfxControllerItem::GetItemState( pEnumItem );
 
         // "uber alle Slaves-Slots iterieren
-        for ( const SfxSlot *pSlave = pFirstSlave; pSlave;
-              pSlave = pSlave->GetNextSlot() )
+        for ( const SfxSlot *pSlave = pFirstSlave; pSlave; pSlave = pSlave->GetNextSlot() )
         {
             DBG_ASSERT(pSlave, "Falsche SlaveSlot-Verkettung!");
             DBG_ASSERT(SFX_KIND_ENUM == pSlave->GetKind(),"non enum slaves aren't allowed");
@@ -2014,11 +2013,7 @@ void SfxBindings::UpdateControllers_Impl
                     continue;
                 }
 
-                if ( SFX_ITEM_DISABLED == eState
-#ifdef OV_hat_das_SvxChooseControlItem_angepasst
-                          || USHRT_MAX == pEnumItem->GetPosByValue(pEnumCache->GetValue())
-#endif
-                    )
+                if ( SFX_ITEM_DISABLED == eState || !pEnumItem->IsEnabled( pSlave->GetSlotId()) )
                 {
                     // disabled
                     pEnumCache->SetState(SFX_ITEM_DISABLED, 0);

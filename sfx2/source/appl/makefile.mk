@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: mav $ $Date: 2002-09-30 15:14:52 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:27:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,7 +114,6 @@ SLOFILES =  \
     $(SLO)$/childwin.obj \
     $(SLO)$/sfxdll.obj \
     $(SLO)$/module.obj \
-    $(SLO)$/picklist.obj \
     $(SLO)$/appsys.obj \
     $(SLO)$/loadenv.obj \
     $(SLO)$/dlgcont.obj \
@@ -125,7 +124,9 @@ SLOFILES =  \
     $(SLO)$/shutdownicon.obj \
     $(SLO)$/shutdowniconw32.obj \
     $(SLO)$/sfxpicklist.obj \
-    $(SLO)$/helpdispatch.obj
+    $(SLO)$/helpdispatch.obj \
+    $(SLO)$/imestatuswindow.obj \
+    $(SLO)$/accelinfo.obj
 
 EXCEPTIONSFILES=\
     $(SLO)$/imagemgr.obj		\
@@ -133,7 +134,6 @@ EXCEPTIONSFILES=\
     $(SLO)$/appmisc.obj			\
     $(SLO)$/frstinit.obj		\
     $(SLO)$/appinit.obj			\
-    $(SLO)$/picklist.obj		\
     $(SLO)$/appcfg.obj			\
     $(SLO)$/helpinterceptor.obj	\
     $(SLO)$/newhelp.obj			\

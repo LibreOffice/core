@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2002-10-01 12:03:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,19 +123,4 @@ namespace sfx2
 
 #endif // SFX2_FILTERGROUPING_HXX
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2002/08/26 07:58:28  cd
- *  #101559# Display export filters in new order
- *
- *  Revision 1.2  2002/08/20 09:22:52  pb
- *  fix: #92788# show extensions of filter
- *
- *  Revision 1.1  2001/10/01 16:32:37  fs
- *  initial checkin - helpers for grouping and classifying filters in the file open dialog
- *
- *
- *  Revision 1.0 01.10.01 10:28:28  fs
- ************************************************************************/
 

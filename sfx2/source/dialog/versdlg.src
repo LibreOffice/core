@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 17:04:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ ModalDialog DLG_VERSIONS
         Text [ swedish ] = "Nya versioner" ;
         Text [ danish ] = "Nye versioner" ;
         Text [ italian ] = "Nuove versioni" ;
-        Text [ spanish ] = "Nuevas versiones" ;
+        Text [ spanish ] = "Versiones nuevas" ;
         Text [ french ] = "Nouvelles versions" ;
         Text [ dutch ] = "Nieuwe versies" ;
         Text [ portuguese ] = "Novas versões" ;
@@ -94,8 +94,9 @@ ModalDialog DLG_VERSIONS
         Text[ korean ] = "ìƒˆ ë²„ì „";
         Text[ turkish ] = "Yeni sürümler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nuevas versiones";
+        Text[ catalan ] = "Versions noves";
         Text[ finnish ] = "Uudet versiot";
+        Text[ thai ] = "à¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¹ˆà¸™à¹ƒà¸«à¸¡à¹ˆ";
     };
     PushButton PB_SAVE
     {
@@ -114,7 +115,7 @@ ModalDialog DLG_VERSIONS
         Text [ dutch ] = "~Nieuwe versie opslaan" ;
         Text [ portuguese ] = "~Guardar nova versão" ;
         Text[ chinese_simplified ] = "ä¿å­˜æ–°ç‰ˆæœ¬(~N)";
-        Text[ russian ] = "Ñîõğàíèòü íîâóş âåğñèş";
+        Text[ russian ] = "Ñîõğàíèòü...";
         Text[ polish ] = "Zapisz now¹ wersjê";
         Text[ japanese ] = "æ–°ã—ã„ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã®ä¿å­˜(~N)";
         Text[ chinese_traditional ] = "ä¿å­˜æ–°ç‰ˆæœ¬(~N)";
@@ -123,8 +124,9 @@ ModalDialog DLG_VERSIONS
         Text[ korean ] = "ìƒˆ ë²„ì „ ì €ì¥(~N)";
         Text[ turkish ] = "~Yeni sürümü kaydet";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Guardar versión nueva";
+        Text[ catalan ] = "~Desa versió nova";
         Text[ finnish ] = "Tallenna ~uusi versio";
+        Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¹ˆà¸™à¹ƒ~à¸«à¸¡à¹ˆ";
     };
     CheckBox CB_SAVEONCLOSE
     {
@@ -143,7 +145,7 @@ ModalDialog DLG_VERSIONS
         Text [ dutch ] = "~Bij sluiten altijd versie opslaan" ;
         Text [ portuguese ] = "~Guardar sempre uma versão ao fechar." ;
         Text[ chinese_simplified ] = "åœ¨å…³é—­æ—¶è‡ªåŠ¨ä¿å­˜ç‰ˆæœ¬ä¿¡æ¯(~A)";
-        Text[ russian ] = "Ïğè çàêğûòèè âñåãäà ñîõğàíÿòü âåğñèş";
+        Text[ russian ] = "Àâòîìàòè÷åñêè ñîõğàíÿòü âåğñèş ïğè çàêğûòèè";
         Text[ polish ] = "Zawsze zapisuj wersjê przy zamykaniu";
         Text[ japanese ] = "é–‰ã˜ã‚‹ã¨ãã€å¸¸ã«ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã®ä¿å­˜(~A)";
         Text[ chinese_traditional ] = "åœ¨é—œé–‰æ™‚è‡ªå‹•ä¿å­˜ç‰ˆæœ¬è³‡è¨Š(~A)";
@@ -152,8 +154,9 @@ ModalDialog DLG_VERSIONS
         Text[ korean ] = "ë‹«ì„ ë•Œ í•­ìƒ ë²„ì „ ì €ì¥(~A)";
         Text[ turkish ] = "~Kapatırken daima sürümü kaydet";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Guardar ~versión siempre al cerrar";
-        Text[ finnish ] = "~Tallenna versio aina suljettaessa";
+        Text[ catalan ] = "Desa la ~versió sempre al tancar";
+        Text[ finnish ] = "Tallenna versio ~aina suljettaessa";
+        Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¹ˆà¸™à¹€~à¸ªà¸¡à¸­à¸‚à¸“à¸°à¸à¸³à¸¥à¸±à¸‡à¸›à¸´à¸”";
     };
     FixedLine GB_OLDVERSIONS
     {
@@ -180,8 +183,9 @@ ModalDialog DLG_VERSIONS
         Text[ korean ] = "ê¸°ì¡´ ë²„ì „";
         Text[ turkish ] = "Mevcut sürümler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Versiones existentes";
+        Text[ catalan ] = "Versions existents";
         Text[ finnish ] = "Nykyiset versiot";
+        Text[ thai ] = "à¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¹ˆà¸™à¸—à¸µà¹ˆà¸¡à¸µà¸­à¸¢à¸¹à¹ˆ";
     };
     FixedText FT_DATETIME
     {
@@ -205,11 +209,12 @@ ModalDialog DLG_VERSIONS
         Text[ chinese_traditional ] = "æ—¥æœŸå’Œæ™‚é–“";
         Text[ arabic ] = "ÇáÊÇÑíÎ æÇáæŞÊ";
         Text[ greek ] = "Çìåñïìçíßá êáé şñá";
-        Text[ korean ] = "ë‚ ì§œì™€ ì‹œê°„";
+        Text[ korean ] = "ë‚ ì§œ ë° ì‹œê°„";
         Text[ turkish ] = "Tarih ve saat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Fecha y hora";
+        Text[ catalan ] = "Data i hora";
         Text[ finnish ] = "Päivämäärä ja aika";
+        Text[ thai ] = "à¸§à¸±à¸™à¸—à¸µà¹ˆà¹à¸¥à¸°à¹€à¸§à¸¥à¸²";
     };
     FixedText FT_SAVEDBY
     {
@@ -227,7 +232,7 @@ ModalDialog DLG_VERSIONS
         Text [ dutch ] = "opgeslagen door" ;
         Text [ portuguese ] = "Guardado por" ;
         Text[ chinese_simplified ] = "ä½œè€…";
-        Text[ russian ] = "ñîõğàíåíî";
+        Text[ russian ] = "Ñîõğàíåíî";
         Text[ polish ] = "Zapisana przez";
         Text[ japanese ] = "ä¿å­˜è€…";
         Text[ chinese_traditional ] = "ä½œè€…";
@@ -236,8 +241,9 @@ ModalDialog DLG_VERSIONS
         Text[ korean ] = "ì €ì¥ ì£¼ì²´";
         Text[ turkish ] = "Kaydeden";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Guardado por";
+        Text[ catalan ] = "Desat per";
         Text[ finnish ] = "Tallentanut";
+        Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹‚à¸”à¸¢";
     };
     FixedText FT_COMMENTS
     {
@@ -252,20 +258,21 @@ ModalDialog DLG_VERSIONS
         Text [ italian ] = "Commento" ;
         Text [ spanish ] = "Comentario" ;
         Text [ french ] = "Commentaire" ;
-        Text [ dutch ] = "Commentaar" ;
+        Text [ dutch ] = "Opmerkingen" ;
         Text [ portuguese ] = "Comentário" ;
         Text[ chinese_simplified ] = "æ³¨è§£";
-        Text[ russian ] = "Êîììåíòàğèé";
+        Text[ russian ] = "Êîììåíòàğèè";
         Text[ polish ] = "Komentarz";
         Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆ";
         Text[ chinese_traditional ] = "è¨»è§£";
         Text[ arabic ] = "ÊÚáíŞ";
         Text[ greek ] = "Ó÷üëéï";
-        Text[ korean ] = "ì£¼ì„";
+        Text[ korean ] = "ì„¤ëª…";
         Text[ turkish ] = "Açıklama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Comentari";
+        Text[ catalan ] = "Comentaris";
         Text[ finnish ] = "Huomautukset";
+        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™";
     };
     Control TLB_VERSIONS
     {
@@ -300,8 +307,9 @@ ModalDialog DLG_VERSIONS
         Text[ korean ] = "ë‹«ê¸°";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tanca";
-        Text[ finnish ] = "~Sulje";
+        Text[ catalan ] = "Cerrar";
+        Text[ finnish ] = "Sulje";
+        Text[ thai ] = "~à¸›à¸´à¸”";
     };
     PushButton PB_OPEN
     {
@@ -331,6 +339,7 @@ ModalDialog DLG_VERSIONS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Obre";
         Text[ finnish ] = "Avaa";
+        Text[ thai ] = "à¹€à¸›à¸´à¸”";
     };
     PushButton PB_VIEW
     {
@@ -350,7 +359,7 @@ ModalDialog DLG_VERSIONS
         Text [ dutch ] = "~Weergeven..." ;
         Text [ portuguese ] = "~Mostrar..." ;
         Text[ chinese_simplified ] = "æ˜¾ç¤º(~S)...";
-        Text[ russian ] = "Ïîêàçàòü...";
+        Text[ russian ] = "Êîììåíòàğèè...";
         Text[ polish ] = "Po~ka¿...";
         Text[ japanese ] = "è¡¨ç¤º(~S)...";
         Text[ chinese_traditional ] = "é¡¯ç¤º(~S)...";
@@ -359,8 +368,9 @@ ModalDialog DLG_VERSIONS
         Text[ korean ] = "í‘œì‹œ(~S)...";
         Text[ turkish ] = "~Görüntüle...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Mostrar...";
-        Text[ finnish ] = "~Näytä";
+        Text[ catalan ] = "~Mostra...";
+        Text[ finnish ] = "~Näytä...";
+        Text[ thai ] = "à¹~à¸ªà¸”à¸‡...";
     };
     PushButton PB_DELETE
     {
@@ -374,7 +384,7 @@ ModalDialog DLG_VERSIONS
         Text [ swedish ] = "~Radera" ;
         Text [ danish ] = "Slet" ;
         Text [ italian ] = "~Elimina" ;
-        Text [ spanish ] = "~Eliminar" ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ french ] = "Supprimer" ;
         Text [ dutch ] = "~Wissen" ;
         Text [ portuguese ] = "E~liminar" ;
@@ -388,8 +398,9 @@ ModalDialog DLG_VERSIONS
         Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Suprimeix";
+        Text[ catalan ] = "S~uprimeix";
         Text[ finnish ] = "~Poista";
+        Text[ thai ] = "~à¸¥à¸š";
     };
     PushButton PB_COMPARE
     {
@@ -417,8 +428,9 @@ ModalDialog DLG_VERSIONS
         Text[ korean ] = "ë¹„êµ";
         Text[ turkish ] = "Karşılaştır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Comparar";
+        Text[ catalan ] = "Compara";
         Text[ finnish ] = "Vertaa";
+        Text[ thai ] = "à¹€à¸›à¸£à¸µà¸¢à¸šà¹€à¸—à¸µà¸¢à¸š";
     };
     HelpButton PB_HELP
     {
@@ -436,7 +448,7 @@ ModalDialog DLG_VERSIONS
     Text [ french ] = "Versions de" ;
     Text [ dutch ] = "Versies in" ;
     Text[ chinese_simplified ] = "ç‰ˆæœ¬";
-    Text[ russian ] = "Âåğñèè â";
+    Text[ russian ] = "Âåğñèè";
     Text[ polish ] = "Wersje w";
     Text[ japanese ] = "ãƒãƒ¼ã‚¸ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "ç‰ˆæœ¬åœ¨";
@@ -445,8 +457,9 @@ ModalDialog DLG_VERSIONS
     Text[ greek ] = "Åêäüóåéò óå";
     Text[ korean ] = "ë²„ì „";
     Text[ turkish ] = "Mevcut sürümler:";
-    Text[ catalan ] = "Versiones en";
+    Text[ catalan ] = "Versions de";
     Text[ finnish ] = "Versiot";
+    Text[ thai ] = "à¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¹ˆà¸™à¸‚à¸­à¸‡";
 };
 ModalDialog DLG_COMMENTS
 {
@@ -469,20 +482,21 @@ ModalDialog DLG_COMMENTS
         Text [ italian ] = "Data e ora : " ;
         Text [ spanish ] = "Fecha y hora:  " ;
         Text [ french ] = "Date et heure : " ;
-        Text [ dutch ] = "Datum en tijd :  " ;
+        Text [ dutch ] = "Datum en tijd:" ;
         Text [ portuguese ] = "Data e horas : " ;
         Text[ chinese_simplified ] = "æ—¥æœŸå’Œæ—¶é—´ï¼š ";
-        Text[ russian ] = "Äàòà è âğåìÿ :  ";
+        Text[ russian ] = "Äàòà è âğåìÿ:  ";
         Text[ polish ] = "Data i godzina :  ";
         Text[ japanese ] = "æ—¥ä»˜ã¨æ™‚åˆ»: ";
         Text[ chinese_traditional ] = "æ—¥æœŸå’Œæ™‚é–“ï¼š ";
         Text[ arabic ] = "ÇáÊÇÑíÎ æÇáæŞÊ : ";
         Text[ greek ] = "Çìåñïìçíßá êáé şñá : ";
-        Text[ korean ] = "ë‚ ì§œì™€ ì‹œê°„ : ";
+        Text[ korean ] = "ë‚ ì§œ ë° ì‹œê°„: ";
         Text[ turkish ] = "Tarih ve saat : ";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Fecha y hora:  ";
+        Text[ catalan ] = "Data i hora : ";
         Text[ finnish ] = "Päivämäärä ja aika: ";
+        Text[ thai ] = "à¸§à¸±à¸™à¸—à¸µà¹ˆà¹à¸¥à¸°à¹€à¸§à¸¥à¸² : ";
     };
     FixedText FT_SAVEDBY
     {
@@ -497,10 +511,10 @@ ModalDialog DLG_COMMENTS
         Text [ italian ] = "salvato da " ;
         Text [ spanish ] = "guardado por  " ;
         Text [ french ] = "Enregistré par  " ;
-        Text [ dutch ] = "opgeslagen door  " ;
+        Text [ dutch ] = "opgeslagen door" ;
         Text [ portuguese ] = "Guardado por " ;
         Text[ chinese_simplified ] = "ä½œè€… ";
-        Text[ russian ] = "ñîõğàíåíî ";
+        Text[ russian ] = "Ñîõğàíåíî:   ";
         Text[ polish ] = "zapisany przez  ";
         Text[ japanese ] = "ä¿å­˜è€… ";
         Text[ chinese_traditional ] = "ä½œè€… ";
@@ -509,8 +523,9 @@ ModalDialog DLG_COMMENTS
         Text[ korean ] = "ì €ì¥";
         Text[ turkish ] = "Kaydeden ";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "guardado por  ";
-        Text[ finnish ] = "Tallentanut";
+        Text[ catalan ] = "Desat per ";
+        Text[ finnish ] = "Tallentanut ";
+        Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹‚à¸”à¸¢ ";
     };
     MultiLineEdit ME_VERSIONS
     {
@@ -560,6 +575,7 @@ ModalDialog DLG_COMMENTS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tanca";
         Text[ finnish ] = "~Sulje";
+        Text[ thai ] = "~à¸›à¸´à¸”";
     };
     HelpButton PB_HELP
     {
@@ -574,20 +590,21 @@ ModalDialog DLG_COMMENTS
     Text [ italian ] = "Inserisci commento versioni" ;
     Text [ spanish ] = "Escribir comentario sobre la versión" ;
     Text [ french ] = "Saisie du commentaire de version (facultatif)" ;
-    Text [ dutch ] = "Versiecommentaar invoeren" ;
+    Text [ dutch ] = "Versie-opmerkingen invoeren" ;
     Text [ portuguese ] = "Inserir comentário sobre versão" ;
     Text[ chinese_simplified ] = "é”®å…¥ç‰ˆæœ¬æ³¨è§£";
-    Text[ russian ] = "Ââåñòè êîììåíòàğèé ê âåğñèè";
+    Text[ russian ] = "Âñòàâèòü êîììåíòàğèé ê âåğñèè";
     Text[ polish ] = "WprowadŸ komentarz do wersji";
     Text[ japanese ] = "ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚³ãƒ¡ãƒ³ãƒˆã®å…¥åŠ›";
     Text[ chinese_traditional ] = "è¼¸å…¥ç‰ˆæœ¬è¨»è§£";
     Text[ arabic ] = "ÅÏÑÇÌ ÊÚáíŞ ÇáÅÕÏÇÑ";
     Text[ greek ] = "ÅéóáãùãŞ ó÷ïëßïõ İêäïóçò";
-    Text[ korean ] = "ë²„ì „-ì£¼ì„ ì…ë ¥";
+    Text[ korean ] = "ë²„ì „ ì„¤ëª… ì…ë ¥";
     Text[ turkish ] = "Sürüm açıklaması ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Escribir comentario sobre la versión";
+    Text[ catalan ] = "Escriure comentari sobre la versió";
     Text[ finnish ] = "Lisää versiohuomautus";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¹ˆà¸™à¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™";
 };
 String DLG_COMMENTS
 {
@@ -601,7 +618,7 @@ String DLG_COMMENTS
     Text [ italian ] = "Commento versioni" ;
     Text [ spanish ] = "Comentario sobre la versión" ;
     Text [ french ] = "Commentaire de version" ;
-    Text [ dutch ] = "Versiecommentaar" ;
+    Text [ dutch ] = "Versie-opmerkingen" ;
     Text[ chinese_simplified ] = "ç‰ˆæœ¬æ³¨è§£";
     Text[ russian ] = "Êîììåíòàğèé ê âåğñèè";
     Text[ polish ] = "Komentarz do wersji";
@@ -609,10 +626,16 @@ String DLG_COMMENTS
     Text[ chinese_traditional ] = "ç‰ˆæœ¬è¨»è§£";
     Text[ arabic ] = "ÊÚáíŞ ÇáÅÕÏÇÑ";
     Text[ greek ] = "Ó÷üëéï İêäïóçò";
-    Text[ korean ] = "ë²„ì „ ì£¼ì„";
+    Text[ korean ] = "ë²„ì „ ì„¤ëª…";
     Text[ turkish ] = "Sürüm açıklaması";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Comentario sobre la versión";
+    Text[ catalan ] = "Comentari sobre la versió";
     Text[ finnish ] = "Versiohuomautus";
+    Text[ thai ] = "à¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¹ˆà¸™à¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™";
 };
+
+
+
+
+
 

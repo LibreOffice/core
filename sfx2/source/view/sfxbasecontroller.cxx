@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-24 13:06:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,22 @@
 //________________________________________________________________________________________________________
 //  include of other projects
 //________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_AWT_KEYEVENT_HPP_
+#include <com/sun/star/awt/KeyEvent.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
+#include <com/sun/star/awt/KeyModifier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_MOUSEEVENT_HPP_
+#include <com/sun/star/awt/MouseEvent.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_MOUSEBUTTON_HPP_
+#include <com/sun/star/awt/MouseButton.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
@@ -173,6 +189,8 @@
 #define XSTATUSINDICATORSUPPLIER                ::com::sun::star::task::XStatusIndicatorSupplier
 #define XCOMPONENT                              ::com::sun::star::lang::XComponent
 #define XINTERFACE                              ::com::sun::star::uno::XInterface
+#define XKEYHANDLER                             ::drafts::com::sun::star::awt::XKeyHandler
+#define XMOUSECLICKHANDLER                      ::drafts::com::sun::star::awt::XMouseClickHandler
 
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
 
@@ -379,10 +397,10 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::disposing( const EVENT
 
 void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const EVENTOBJECT& aEvent, sal_Bool bDeliverOwnership ) throw (RUNTIMEEXCEPTION)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if  ( m_pController !=  NULL )
     {
-        BOOL bCanClose = m_pController->GetViewShell_Impl()->PrepareClose( FALSE );
+        BOOL bCanClose = (BOOL) m_pController->GetViewShell_Impl()->PrepareClose( FALSE );
         if ( !bCanClose )
         {
             if ( bDeliverOwnership )
@@ -412,6 +430,8 @@ struct IMPL_SfxBaseController_DataContainer
     SfxBaseController*                      m_pController           ;
     sal_Bool                                m_bDisposing            ;
     sal_Bool                                m_bGotOwnerShip;
+    sal_Bool                                m_bHasKeyListeners;
+    sal_Bool                                m_bHasMouseClickListeners;
 
     IMPL_SfxBaseController_DataContainer(   MUTEX&              aMutex      ,
                                             SfxViewShell*       pViewShell  ,
@@ -424,6 +444,8 @@ struct IMPL_SfxBaseController_DataContainer
             ,   m_pController           ( pController                                           )
             ,   m_bDisposing            ( sal_False                                             )
             ,   m_bGotOwnerShip         ( sal_False                                             )
+            ,   m_bHasKeyListeners      ( sal_False                                             )
+            ,   m_bHasMouseClickListeners( sal_False                                                )
     {
     }
 
@@ -450,7 +472,7 @@ IMPL_SfxBaseController_ListenerHelper::~IMPL_SfxBaseController_ListenerHelper()
 
 void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const FRAMEACTIONEVENT& aEvent ) throw( RUNTIMEEXCEPTION )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if  (
             ( m_pController !=  NULL ) &&
             ( aEvent.Frame  ==  m_pController->getFrame() ) &&
@@ -459,12 +481,16 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const FRAMEACT
     {
         if ( aEvent.Action == ::com::sun::star::frame::FrameAction_FRAME_UI_ACTIVATED )
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
             m_pController->GetViewShell_Impl()->GetViewFrame()->MakeActive_Impl( FALSE );
+        }
+        if ( aEvent.Action == ::com::sun::star::frame::FrameAction_FRAME_ACTIVATED )
+        {
+            SfxViewFrame* pFrame = m_pController->GetViewShell_Impl()->GetViewFrame();
+            if ( !pFrame->GetActiveChildFrame_Impl() )
+                pFrame->MakeActive_Impl( FALSE );
         }
         else if ( aEvent.Action == ::com::sun::star::frame::FrameAction_CONTEXT_CHANGED )
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
             m_pController->GetViewShell_Impl()->GetViewFrame()->GetBindings().ContextChanged_Impl();
         }
     }
@@ -476,7 +502,7 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const FRAMEACT
 
 void SAL_CALL IMPL_SfxBaseController_ListenerHelper::disposing( const EVENTOBJECT& aEvent ) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pController && m_pController->getFrame().is() )
         m_pController->getFrame()->removeFrameActionListener( this ) ;
 }
@@ -514,8 +540,8 @@ ANY SAL_CALL SfxBaseController::queryInterface( const UNOTYPE& rType ) throw( RU
                                                static_cast< XTYPEPROVIDER*      > ( this )  ,
                                             static_cast< XCOMPONENT*       > ( this )  ,
                                                static_cast< XCONTROLLER*        > ( this )  ,
+                                               static_cast< XUSERINPUTINTERCEPTION*     > ( this )  ,
                                             static_cast< XSTATUSINDICATORSUPPLIER* > ( this )  ,
-                                            static_cast< XDISPATCHINFORMATIONPROVIDER* > ( this ) ,
                                             static_cast< XCONTEXTMENUINTERCEPTION* > ( this ) ,
                                                static_cast< XDISPATCHPROVIDER*  > ( this )  ) ) ;
 
@@ -579,10 +605,11 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseController::getTypes() throw( RUNTIMEEXCEPTI
         {
             // Create a static typecollection ...
             static OTYPECOLLECTION aTypeCollection( ::getCppuType(( const REFERENCE< XTYPEPROVIDER      >*)NULL ) ,
-                                                    ::getCppuType(( const REFERENCE< XSTATUSINDICATORSUPPLIER >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XCONTROLLER      >*)NULL ) ,
+                                                      ::getCppuType(( const REFERENCE< XDISPATCHPROVIDER    >*)NULL ) ,
+                                                    ::getCppuType(( const REFERENCE< XSTATUSINDICATORSUPPLIER >*)NULL ) ,
                                                     ::getCppuType(( const REFERENCE< XCONTEXTMENUINTERCEPTION   >*)NULL ) ,
-                                                      ::getCppuType(( const REFERENCE< XDISPATCHPROVIDER    >*)NULL ) ) ;
+                                                    ::getCppuType(( const REFERENCE< XUSERINPUTINTERCEPTION   >*)NULL ) );
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;
         }
@@ -631,7 +658,7 @@ void SAL_CALL SfxBaseController::attachFrame( const REFERENCE< XFRAME >& xFrame 
 {
     REFERENCE< XFRAME > xTemp( getFrame() ) ;
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( xTemp.is() )
     {
         xTemp->removeFrameActionListener( m_pData->m_xListener ) ;
@@ -657,6 +684,13 @@ void SAL_CALL SfxBaseController::attachFrame( const REFERENCE< XFRAME >& xFrame 
 
 sal_Bool SAL_CALL SfxBaseController::attachModel( const REFERENCE< XMODEL >& xModel ) throw( ::com::sun::star::uno::RuntimeException )
 {
+    if ( m_pData->m_pViewShell && xModel.is() && xModel != m_pData->m_pViewShell->GetObjectShell()->GetModel() )
+    {
+        // don't allow to reattach a model!
+        DBG_ERROR("Can't reattach model!");
+        return sal_False;
+    }
+
     REFERENCE < ::com::sun::star::util::XCloseBroadcaster > xCloseable( xModel, com::sun::star::uno::UNO_QUERY );
     if ( xCloseable.is() )
         xCloseable->addCloseListener( m_pData->m_xCloseListener );
@@ -671,11 +705,10 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::
 {
     if ( bSuspend == sal_True )
     {
-        ::osl::MutexGuard aMutexGuard( m_aMutex );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         if ( !m_pData->m_pViewShell )
             return sal_True;
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         if ( m_pData->m_pViewShell->PrepareClose() )
         {
             if ( getFrame().is() )
@@ -715,10 +748,9 @@ ANY SfxBaseController::getViewData() throw( ::com::sun::star::uno::RuntimeExcept
 {
     ANY         aAny;
     String      sData1;
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pData->m_pViewShell )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         m_pData->m_pViewShell->WriteUserData( sData1 ) ;
         OUSTRING    sData( sData1 );
         aAny <<= sData ;
@@ -733,10 +765,9 @@ ANY SfxBaseController::getViewData() throw( ::com::sun::star::uno::RuntimeExcept
 
 void SAL_CALL SfxBaseController::restoreViewData( const ANY& aValue ) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pData->m_pViewShell )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         OUSTRING sData;
         aValue >>= sData ;
         m_pData->m_pViewShell->ReadUserData( sData ) ;
@@ -749,7 +780,7 @@ void SAL_CALL SfxBaseController::restoreViewData( const ANY& aValue ) throw( ::c
 
 REFERENCE< XFRAME > SAL_CALL SfxBaseController::getFrame() throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     return m_pData->m_xFrame;
 }
 
@@ -759,7 +790,7 @@ REFERENCE< XFRAME > SAL_CALL SfxBaseController::getFrame() throw( ::com::sun::st
 
 REFERENCE< XMODEL > SAL_CALL SfxBaseController::getModel() throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     return m_pData->m_pViewShell ? m_pData->m_pViewShell->GetObjectShell()->GetModel() : REFERENCE < XMODEL > () ;
 }
 
@@ -771,7 +802,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                                                                     const   OUSTRING&           sTargetFrameName,
                                                                             sal_Int32           eSearchFlags    ) throw( RUNTIMEEXCEPTION )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     REFERENCE< XDISPATCH >  xDisp;
     if ( m_pData->m_pViewShell )
     {
@@ -779,7 +810,6 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
         if ( !m_pData->m_bDisposing )
         {
             sal_uInt16 nId = 0;
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
             if ( sTargetFrameName.compareToAscii( "_beamer" ) == COMPARE_EQUAL )
             {
                 SfxViewFrame *pFrame = m_pData->m_pViewShell->GetViewFrame();
@@ -862,7 +892,7 @@ SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL SfxBaseController::queryDispatches( 
 
 void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     REFERENCE < XCONTROLLER > xTmp( this );
     m_pData->m_bDisposing = sal_True ;
 
@@ -884,7 +914,6 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
             aObject.Source = (OWEAKOBJECT*)this ;
 
             // Bei Reload hat die alte ViewShell keinen Frame!
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
             SfxObjectShell* pDoc = pFrame->GetObjectShell() ;
             REFERENCE< XMODEL > xModel = pDoc->GetModel();
             REFERENCE < ::com::sun::star::util::XCloseable > xCloseable( xModel, com::sun::star::uno::UNO_QUERY );
@@ -938,7 +967,7 @@ void SAL_CALL SfxBaseController::removeEventListener( const REFERENCE< XEVENTLIS
 
 void SfxBaseController::ReleaseShell_Impl()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pData->m_pViewShell )
     {
         SfxObjectShell* pDoc = m_pData->m_pViewShell->GetObjectShell() ;
@@ -959,63 +988,18 @@ SfxViewShell* SfxBaseController::GetViewShell_Impl() const
 
 ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > SAL_CALL SfxBaseController::getStatusIndicator(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pData->m_pViewShell && !m_pData->m_xIndicator.is() )
         m_pData->m_xIndicator = new SfxStatusIndicator( this, m_pData->m_pViewShell->GetViewFrame()->GetFrame()->GetWorkWindow_Impl() );
     return m_pData->m_xIndicator;
 }
-
-#if SUPD>630
-::rtl::OUString SAL_CALL SfxBaseController::queryDescription( const ::rtl::OUString& rURL ) throw( RUNTIMEEXCEPTION )
-{
-    if ( m_pData->m_pViewShell )
-    {
-        SfxViewFrame* pAct = m_pData->m_pViewShell->GetViewFrame() ;
-        if ( !m_pData->m_bDisposing )
-        {
-            sal_uInt16 nId = 0;
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
-            if ( rURL.compareToAscii( ".uno:", 5 ) == 0 )
-            {
-                ::rtl::OUString aPath = rURL.copy( 5 );
-                SfxSlotPool& rPool = SFX_APP()->GetSlotPool( pAct );
-                const SfxSlot* pSlot = rPool.GetUnoSlot( aPath );
-                return rPool.GetSlotName_Impl( *pSlot );
-            }
-            else if ( rURL.compareToAscii( ".slot:", 6 ) == 0 )
-            {
-                ::rtl::OUString aPath = rURL.copy( 6 );
-                nId = (USHORT) rURL.toInt32();
-                SfxSlotPool& rPool = SFX_APP()->GetSlotPool( pAct );
-                return rPool.GetSlotName_Impl( nId );
-            }
-        }
-    }
-
-    return ::rtl::OUString();
-}
-
-void SAL_CALL SfxBaseController::queryDescriptions ( const SEQUENCE < ::rtl::OUString >& rURLs, SEQUENCE < ::rtl::OUString >& rDescriptions ) throw( RUNTIMEEXCEPTION )
-{
-    for ( sal_Int32 n=0; n<rURLs.getLength(); n++ )
-    {
-        rDescriptions[n] = SfxBaseController::queryDescription( rURLs[n] );
-    }
-}
-
-SEQUENCE < DISPATCHINFORMATION > SAL_CALL SfxBaseController::getConfigurableDispatchInformation() throw( RUNTIMEEXCEPTION )
-{
-    return SEQUENCE < DISPATCHINFORMATION >();
-}
-#endif
-
 
 void SAL_CALL SfxBaseController::registerContextMenuInterceptor( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor ) throw( RUNTIMEEXCEPTION )
 
 {
     m_pData->m_aInterceptorContainer.addInterface( xInterceptor );
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pData->m_pViewShell )
         m_pData->m_pViewShell->AddContextMenuInterceptor_Impl( xInterceptor );
 }
@@ -1025,8 +1009,158 @@ void SAL_CALL SfxBaseController::releaseContextMenuInterceptor( const REFERENCE<
 {
     m_pData->m_aInterceptorContainer.removeInterface( xInterceptor );
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pData->m_pViewShell )
         m_pData->m_pViewShell->RemoveContextMenuInterceptor_Impl( xInterceptor );
 }
 
+void SAL_CALL SfxBaseController::addKeyHandler( const ::com::sun::star::uno::Reference< XKEYHANDLER >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( !m_pData->m_bHasKeyListeners )
+        m_pData->m_bHasKeyListeners = sal_True;
+    m_pData->m_aListenerContainer.addInterface( ::getCppuType((const REFERENCE< XKEYHANDLER >*)0), xHandler );
+}
+
+void SAL_CALL SfxBaseController::removeKeyHandler( const ::com::sun::star::uno::Reference< XKEYHANDLER >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    m_pData->m_aListenerContainer.removeInterface( ::getCppuType((const REFERENCE< XKEYHANDLER >*)0), xHandler );
+    m_pData->m_bHasKeyListeners = sal_False;
+    ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aListenerContainer.getContainer( ::getCppuType( ( const REFERENCE < XKEYHANDLER >*) NULL ) );
+    if ( pContainer )
+    {
+        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+        if (pIterator.hasMoreElements())
+            m_pData->m_bHasKeyListeners = sal_True;
+    }
+}
+
+void SAL_CALL SfxBaseController::addMouseClickHandler( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( !m_pData->m_bHasMouseClickListeners )
+        m_pData->m_bHasMouseClickListeners = sal_True;
+    m_pData->m_aListenerContainer.addInterface( ::getCppuType((const REFERENCE< XMOUSECLICKHANDLER >*)0), xHandler );
+}
+
+void SAL_CALL SfxBaseController::removeMouseClickHandler( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    m_pData->m_aListenerContainer.removeInterface( ::getCppuType((const REFERENCE< XMOUSECLICKHANDLER >*)0), xHandler );
+    m_pData->m_bHasMouseClickListeners = sal_False;
+    ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aListenerContainer.getContainer( ::getCppuType( ( const REFERENCE < XMOUSECLICKHANDLER >*) NULL ) );
+    if ( pContainer )
+    {
+        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+        if (pIterator.hasMoreElements())
+            m_pData->m_bHasMouseClickListeners = sal_True;
+    }
+}
+
+void ImplInitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent, const KeyEvent& rEvt )
+{
+    rEvent.Modifiers = 0;
+    if ( rEvt.GetKeyCode().IsShift() )
+        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
+    if ( rEvt.GetKeyCode().IsMod1() )
+        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
+    if ( rEvt.GetKeyCode().IsMod2() )
+        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
+
+    rEvent.KeyCode = rEvt.GetKeyCode().GetCode();
+    rEvent.KeyChar = (unsigned char)rEvt.GetCharCode();
+    rEvent.KeyFunc = rEvt.GetKeyCode().GetFunction();
+}
+
+void ImplInitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const MouseEvent& rEvt )
+{
+    rEvent.Modifiers = 0;
+    if ( rEvt.IsShift() )
+        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
+    if ( rEvt.IsMod1() )
+    rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
+    if ( rEvt.IsMod2() )
+        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
+
+    rEvent.Buttons = 0;
+    if ( rEvt.IsLeft() )
+        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::LEFT;
+    if ( rEvt.IsRight() )
+        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::RIGHT;
+    if ( rEvt.IsMiddle() )
+        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::MIDDLE;
+
+    rEvent.X = rEvt.GetPosPixel().X();
+    rEvent.Y = rEvt.GetPosPixel().Y();
+    rEvent.ClickCount = rEvt.GetClicks();
+    rEvent.PopupTrigger = sal_False;
+}
+
+BOOL SfxBaseController::HandleEvent_Impl( NotifyEvent& rEvent )
+{
+    REFERENCE < ::com::sun::star::uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
+    com::sun::star::lang::EventObject aSource(static_cast< ::cppu::OWeakObject*>(this));
+    USHORT nType = rEvent.GetType();
+    BOOL bHandled = FALSE;
+    if ( nType == EVENT_KEYINPUT || nType == EVENT_KEYUP )
+    {
+        ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aListenerContainer.getContainer( ::getCppuType( ( const REFERENCE < XKEYHANDLER >*) NULL ) );
+        if ( pContainer )
+        {
+            ::com::sun::star::awt::KeyEvent aEvent;
+            ImplInitKeyEvent( aEvent, *rEvent.GetKeyEvent() );
+            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+            while (pIterator.hasMoreElements())
+            {
+                try
+                {
+                    if ( nType == EVENT_KEYINPUT )
+                        bHandled = ((XKEYHANDLER*)pIterator.next())->keyPressed( aEvent );
+                    else
+                        bHandled = ((XKEYHANDLER*)pIterator.next())->keyReleased( aEvent );
+                }
+                catch( RUNTIMEEXCEPTION& )
+                {
+                    pIterator.remove();
+                }
+            }
+        }
+    }
+    else if ( nType == EVENT_MOUSEBUTTONUP || nType == EVENT_MOUSEBUTTONDOWN )
+    {
+        ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aListenerContainer.getContainer( ::getCppuType( ( const REFERENCE < XMOUSECLICKHANDLER >*) NULL ) );
+        if ( pContainer )
+        {
+            ::com::sun::star::awt::MouseEvent aEvent;
+            ImplInitMouseEvent( aEvent, *rEvent.GetMouseEvent() );
+            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+            while (pIterator.hasMoreElements())
+            {
+                try
+                {
+                    if ( nType == EVENT_MOUSEBUTTONDOWN )
+                        bHandled = ((XMOUSECLICKHANDLER*)pIterator.next())->mousePressed( aEvent );
+                    else
+                        bHandled = ((XMOUSECLICKHANDLER*)pIterator.next())->mouseReleased( aEvent );
+                }
+                catch( RUNTIMEEXCEPTION& )
+                {
+                    pIterator.remove();
+                }
+            }
+        }
+    }
+
+    return bHandled;
+}
+
+BOOL SfxBaseController::HasKeyListeners_Impl()
+{
+    return m_pData->m_bHasKeyListeners;
+}
+
+BOOL SfxBaseController::HasMouseClickListeners_Impl()
+{
+    return m_pData->m_bHasMouseClickListeners;
+}

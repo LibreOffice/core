@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-20 16:02:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,8 @@ struct SfxObjectShell_Impl
                         bForbidReload : 1,
                         bSupportsEventMacros: 1,
                         bLoadingWindows: 1,
-                        bBasicInitialized :1;
+                        bBasicInitialized :1,
+                        bHidden :1; // indicates a hidden view shell
 
 
     String              aNewName;  // Der Name, unter dem das Doc gespeichert
@@ -223,7 +224,8 @@ struct SfxObjectShell_Impl
         bReadOnlyUI( sal_False ),
         bHiddenLockedByAPI( sal_False ),
         bInCloseEvent( sal_False ),
-        bLoadingWindows( sal_False )
+        bLoadingWindows( sal_False ),
+        bHidden( sal_False )
         , nStyleFilter( 0 )
         , nMacroMode( -1 )
         , bDisposing( sal_False )

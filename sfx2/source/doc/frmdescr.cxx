@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmdescr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-25 14:42:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,7 +444,7 @@ void SfxFrameDescriptor::SetURL( const String& rURL )
 
 void SfxFrameDescriptor::SetURL( const INetURLObject& rURL )
 {
-    aURL = rURL.GetMainURL();
+    aURL = rURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
     SetActualURL( aURL );
 }
 
@@ -457,7 +457,7 @@ void SfxFrameDescriptor::SetActualURL( const String& rURL )
 
 void SfxFrameDescriptor::SetActualURL( const INetURLObject& rURL )
 {
-    SetActualURL( rURL.GetMainURL() );
+    SetActualURL( rURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
 }
 
 void SfxFrameDescriptor::SetEditable( BOOL bSet )
@@ -523,7 +523,8 @@ BOOL SfxFrameDescriptor::Store( SvStream& rStream ) const
     if ( bReadOnly )
         nFlags1 |= 0x04;
 
-    rStream.WriteByteString( INetURLObject::AbsToRel( aURL.GetMainURL() ), RTL_TEXTENCODING_UTF8 );
+    rStream.WriteByteString( INetURLObject::AbsToRel( aURL.GetMainURL(
+                    INetURLObject::DECODE_TO_IURI ) ), RTL_TEXTENCODING_UTF8 );
     rStream.WriteByteString( aName, RTL_TEXTENCODING_UTF8 );
     rStream << aMargin
             << nWidth
@@ -952,7 +953,7 @@ USHORT SfxFrameDescriptor::GetItemPos() const
 
 
 SfxFrameProperties::SfxFrameProperties( const SfxFrameDescriptor *pD )
-    : aURL( pD->GetURL().GetMainURL() )
+    : aURL( pD->GetURL().GetMainURL( INetURLObject::DECODE_TO_IURI ) )
     , aName( pD->GetName() )
     , lMarginWidth( pD->GetMargin().Width() )
     , lMarginHeight( pD->GetMargin().Height() )

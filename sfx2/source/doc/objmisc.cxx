@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2002-11-14 14:31:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,8 @@ using namespace ::com::sun::star::document;
 
 #include <svtools/pathoptions.hxx>
 #include <unotools/ucbhelper.hxx>
+#include <tools/inetmime.hxx>
+#include <svtools/inettype.hxx>
 
 #include "appdata.hxx"
 #include "request.hxx"
@@ -450,6 +452,24 @@ sal_Bool SfxObjectShell::IsInModalMode() const
     return pImp->bModalMode || pImp->bRunningMacro;
 }
 
+//-------------------------------------------------------------------------
+
+sal_Bool SfxObjectShell::HasModalViews() const
+{
+    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
+    while( pFrame )
+    {
+        if ( pFrame->IsInModalMode() )
+            return sal_True;
+
+        pFrame = SfxViewFrame::GetNext( *pFrame, this );
+    }
+
+    return sal_False;
+}
+
+//-------------------------------------------------------------------------
+
 void SfxObjectShell::SetMacroMode_Impl( sal_Bool bModal )
 {
     if ( !pImp->bRunningMacro != !bModal )
@@ -665,15 +685,6 @@ String SfxObjectShell::GetTitle
             return X( pNameItem->GetValue() );
     }
 
-    if ( nMaxLength >= SFX_TITLE_CAPTION && nMaxLength <= SFX_TITLE_HISTORY )
-    {
-        sal_uInt16 nRemote;
-        if( !pMed || pMed->GetURLObject().GetProtocol() == INET_PROT_FILE )
-            nRemote = 0;
-        else nRemote = 1;
-        nMaxLength = aTitleMap_Impl[nMaxLength-SFX_TITLE_CAPTION][nRemote];
-    }
-
     // noch unbenannt?
     DBG_ASSERT( !HasName() || pMed, "HasName() aber kein Medium?!?" );
     if ( !HasName() || !pMed )
@@ -692,9 +703,18 @@ String SfxObjectShell::GetTitle
         return X(aNoName);
     }
 
+    const INetURLObject& aURL = INetURLObject( pMed->GetName() );
+    if ( nMaxLength >= SFX_TITLE_CAPTION && nMaxLength <= SFX_TITLE_HISTORY )
+    {
+        sal_uInt16 nRemote;
+        if( !pMed || aURL.GetProtocol() == INET_PROT_FILE )
+            nRemote = 0;
+        else
+            nRemote = 1;
+        nMaxLength = aTitleMap_Impl[nMaxLength-SFX_TITLE_CAPTION][nRemote];
+    }
 
     // lokale Datei?
-    const INetURLObject& aURL = pMed->GetURLObject();
     if ( aURL.GetProtocol() == INET_PROT_FILE )
     {
         String aName( aURL.HasMark() ? INetURLObject( aURL.GetURLNoMark() ).PathToFileName() : aURL.PathToFileName() );
@@ -740,7 +760,7 @@ String SfxObjectShell::GetTitle
             return X(aName);
         }
         else if ( nMaxLength == SFX_TITLE_FULLNAME )
-            return X(aURL.GetMainURL());
+            return X(aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ));
 
         // ggf. Titel aus Dateiname generieren
         if ( !pImp->aTitle.Len() )
@@ -958,7 +978,8 @@ void SfxObjectShell::SetAutoLoad(
     if ( bReload )
     {
         pImp->pReloadTimer = new AutoReloadTimer_Impl(
-                                rUrl.GetMainURL(), nTime, bReload, this );
+                                rUrl.GetMainURL( INetURLObject::DECODE_TO_IURI ),
+                                nTime, bReload, this );
         pImp->pReloadTimer->Start();
     }
 }
@@ -1004,6 +1025,12 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         pImp->nLoadedFlags & SFX_LOADED_IMAGES )
         GetMedium()->SetUsesCache( sal_True );
 
+    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem,
+                     SfxBoolItem, SID_HIDDEN, sal_False );
+    pImp->bHidden = sal_False;
+    if ( pHiddenItem )
+        pImp->bHidden = pHiddenItem->GetValue();
+
     if ( bSetModifiedTRUE )
         SetModified( sal_True );
     if ( pImp->nEventId )
@@ -1012,8 +1039,7 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         // mu\s das jetzt nachgeholt werden, indem der Frame benachrichtigt wird.
         Broadcast( SfxEventHint( SFX_EVENT_LOADFINISHED, this ) );
 
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
-        if ( pHiddenItem && pHiddenItem->GetValue() )
+        if ( pImp->bHidden )
         {
             sal_uInt16 nId = pImp->nEventId;
             pImp->nEventId = 0;
@@ -1334,8 +1360,8 @@ String SfxObjectShell::QueryTitle( SfxTitleQuery eType ) const
         case SFX_TITLE_QUERY_SAVE_NAME_PROPOSAL:
         {
             SfxMedium* pMed = GetMedium();
-            const INetURLObject& rObj = pMed->GetURLObject();
-            aRet = rObj.GetMainURL();
+            const INetURLObject aObj( pMed->GetName() );
+            aRet = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
             if ( !aRet.Len() )
                 aRet = GetTitle( SFX_TITLE_CAPTION );
             break;
@@ -1365,8 +1391,7 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
         if( aURL.Copy(0, 4).CompareIgnoreCaseToAscii( "url=" ) == COMPARE_EQUAL )
         {
             INetURLObject aObj;
-            pDoc->GetMedium()->GetURLObject().GetNewAbsURL(
-                aURL.Copy( 4 ), &aObj );
+            INetURLObject( pDoc->GetMedium()->GetName() ).GetNewAbsURL( aURL.Copy( 4 ), &aObj );
             rInfo.SetReloadURL( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
         }
         rInfo.EnableReload( sal_True );
@@ -1385,6 +1410,19 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
         {
 //          DBG_ERROR( "Schlechtes ::com::sun::star::util::DateTime fuer Expired" );
             pDoc->GetMedium()->SetExpired_Impl( Date( 1, 1, 1970 ) );
+        }
+    }
+    else if( rKV.GetKey().CompareIgnoreCaseToAscii( "content-type" ) == COMPARE_EQUAL )
+    {
+        ::rtl::OString sContent = ::rtl::OUStringToOString( aValue, RTL_TEXTENCODING_ASCII_US );
+        ByteString sType, sSubType;
+        INetContentTypeParameterList aParameters;
+
+        if( INetContentTypes::parse( sContent, sType, sSubType, &aParameters ) )
+        {
+            const INetContentTypeParameter * pCharset = aParameters.find("charset");
+            if (pCharset != 0)
+                pDoc->GetMedium()->SetCharset( pCharset->m_sValue );
         }
     }
 }
@@ -1696,7 +1734,10 @@ String SfxObjectShell::UpdateTitle( SfxMedium* pMed, USHORT nDocViewNumber )
     // Titel des Fensters
     String aTitle;
     if ( pMed )
-        aTitle = pMed->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+    {
+        INetURLObject aTmp( pMed->GetName() );
+        aTitle = aTmp.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+    }
     else
     {
         pMed = GetMedium();

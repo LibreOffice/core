@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 13:50:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,12 +532,12 @@ sal_uInt16 SfxApplication::SaveBasicManager() const
     INetURLObject aAppBasicObj( aBasicPath.GetToken(1) );
     aAppBasicObj.insertName( Application::GetAppName() );
     aAppBasicObj.setExtension( DEFINE_CONST_UNICODE( "sbl" ) );
-    String aAppBasicPath( aAppBasicObj.GetMainURL() );
+    String aAppBasicPath( aAppBasicObj.GetMainURL( INetURLObject::NO_DECODE ) );
     SvStorageRef aStor = new SvStorage( aAppBasicPath );
     if ( aStor->GetError() == 0 )
     {
         String aBaseURL = INetURLObject::GetBaseURL();
-        INetURLObject::SetBaseURL( aAppBasicObj.GetMainURL() );
+        INetURLObject::SetBaseURL( aAppBasicObj.GetMainURL( INetURLObject::NO_DECODE ) );
         pImp->pBasicMgr->Store( *aStor );
         INetURLObject::SetBaseURL( aBaseURL );
     }
@@ -858,15 +858,6 @@ void SfxApplication::LeaveBasicCall()
 
 void SfxApplication::EventExec_Impl( SfxRequest &rReq, SfxObjectShell *pObjSh )
 {
-    // SID nur einmal holen
-    sal_uInt16 nSID = rReq.GetSlot();
-
-    SFX_REQUEST_ARG(rReq, pItem, SfxStringItem, nSID, sal_False);
-    if ( pItem )
-    {
-        String aArg( pItem->GetValue() );
-        GetEventConfig()->ConfigureEvent( nSID, aArg, pObjSh );
-    }
 }
 
 //-------------------------------------------------------------------------
@@ -878,16 +869,6 @@ void SfxApplication::EventState_Impl
     SfxObjectShell* pObjSh
 )
 {
-    // Config auslesen
-    SfxMacroConfig *pMC = GetMacroConfig();
-    SfxEventConfiguration *pEC = GetEventConfig();
-    const SvxMacro* pMacro = pEC->GetMacroForEventId( nSID, pObjSh );
-
-    // "Library.Modul.Method" zusammensetzen
-    String aRet;
-    if ( pMacro )
-        aRet = pMacro->GetMacName();
-    rSet.Put( SfxStringItem( nSID, aRet ) );
 }
 
 //-------------------------------------------------------------------------

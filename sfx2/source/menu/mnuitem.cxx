@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: as $ $Date: 2002-07-05 12:26:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,11 @@
  *
  *
  ************************************************************************/
+
+#ifdef SOLARIS
+// HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
+#include <ctime>
+#endif
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop includes
 

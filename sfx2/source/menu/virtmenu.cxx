@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-11 15:21:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@
 #include "ipfrm.hxx"
 #include "ipenv.hxx"
 #include "appdata.hxx"
-//#include "picklist.hxx"
 #include "viewsh.hxx"
 #include "imgmgr.hxx"
 #include "sfxpicklist.hxx"
@@ -115,6 +114,10 @@
 
 #ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
 #include <framework/addonsoptions.hxx>
+#endif
+
+#ifndef __FRAMEWORK_CLASSES_ADDONMENUS_HXX_
+#include <framework/addonmenu.hxx>
 #endif
 
 #ifndef __FRAMEWORK_CLASSES_MENUCONFIGURATION_HXX_
@@ -219,8 +222,9 @@ void SfxVirtualMenu::Construct_Impl()
     pSVMenu->SetDeactivateHdl( LINK(this, SfxVirtualMenu, Deactivate) );
     pSVMenu->SetSelectHdl( LINK(this, SfxVirtualMenu, Select) );
 
-    // Accels eintragen
-//  InvalidateKeyCodes();
+    // #107258# accelerator keys are needed for accessibility
+    if ( bOLE )
+        InvalidateKeyCodes();
 
     if ( !pResMgr && pParent )
         pResMgr = pParent->pResMgr;
@@ -377,6 +381,22 @@ void SfxVirtualMenu::CreateFromSVMenu()
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxVirtualMenu, 0);
+
+    // Merge Addon popup menus into the SV Menu
+    USHORT nHelpPos = pSVMenu->GetItemPos( SID_HELPMENU );
+    if ( nHelpPos != MENU_ITEM_NOTFOUND )
+    {
+        // retrieve addon popup menus and add them to our menu bar
+        Reference< com::sun::star::frame::XFrame > xFrame( pBindings->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface() );
+        if ( xFrame.is() && pSVMenu->IsMenuBar() )
+        {
+            Reference< com::sun::star::frame::XModel >      xModel;
+            Reference< com::sun::star::frame::XController > xController( xFrame->getController(), UNO_QUERY );
+            if ( xController.is() )
+                xModel = Reference< com::sun::star::frame::XModel >( xController->getModel(), UNO_QUERY );
+            framework::AddonPopupMenu::MergeAddonPopupMenus( xFrame, xModel, nHelpPos, (MenuBar *)pSVMenu );
+        }
+    }
 
     // get and store the number of items
     nCount = pSVMenu->GetItemCount();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: hr $ $Date: 2002-11-14 14:33:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
+#include <com/sun/star/document/MacroExecMode.hpp>
+#endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
@@ -341,6 +344,8 @@ sal_Bool SfxObjectShell::DoInitNew( SvStorage * pStor )
 
     if ( InitNew( pStor ) )
     {
+        // empty documents always get their macros from the user, so there is no reason to restrict access
+        pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
         if ( SFX_CREATE_MODE_EMBEDDED == eCreateMode )
             SetTitle( String( SfxResId( STR_NONAME ) ));
 
@@ -365,6 +370,25 @@ sal_Bool SfxObjectShell::DoInitNew( SvStorage * pStor )
 
 //-------------------------------------------------------------------------
 
+void SfxObjectShell::DoHandsOffNoMediumClose()
+{
+    const SfxFilter *pFilter = pMedium->GetFilter();
+    if( !pFilter || pFilter->IsOwnFormat() || ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
+        HandsOff();
+
+    // Force document library containers to release storage
+    SotStorageRef xDummyStorage;
+    SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
+    if( pDialogCont )
+        pDialogCont->setStorage( xDummyStorage );
+
+    SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
+    if( pBasicCont )
+        pBasicCont->setStorage( xDummyStorage );
+}
+
+//-------------------------------------------------------------------------
+
 void SfxObjectShell::DoHandsOff()
 
 /*  [Beschreibung]
@@ -382,20 +406,7 @@ void SfxObjectShell::DoHandsOff()
 */
 
 {
-    const SfxFilter *pFilter = pMedium->GetFilter();
-    if( !pFilter || pFilter->IsOwnFormat() || ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
-        HandsOff();
-
-    // Force document library containers to release storage
-    SotStorageRef xDummyStorage;
-    SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
-    if( pDialogCont )
-        pDialogCont->setStorage( xDummyStorage );
-
-    SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
-    if( pBasicCont )
-        pBasicCont->setStorage( xDummyStorage );
-
+    DoHandsOffNoMediumClose();
     pMedium->Close();
 //  DELETEZ( pMedium );
 }
@@ -561,11 +572,14 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         }
     }
 
-    sal_uInt32 nError = HandleFilter( pMedium, this );
-    if ( nError != ERRCODE_NONE )
-        SetError( nError );
+    if ( pMedium->GetFilter() )
+    {
+        sal_uInt32 nError = HandleFilter( pMedium, this );
+        if ( nError != ERRCODE_NONE )
+            SetError( nError );
+    }
 
-    if ( GetError() == ERRCODE_NONE && bHasStorage && !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
+    if ( GetError() == ERRCODE_NONE && bHasStorage && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
     {
         SvStorageRef xStor( pMed->GetStorage() );
         if( pMed->GetLastStorageCreationState() == ERRCODE_NONE )
@@ -592,7 +606,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 SvStorageInfoList aList;
                 xStor->FillInfoList( &aList );
                 if ( !aList.Count() && !xStor->IsOLEStorage() )
-                    SetError( ERRCODE_IO_WRONGFORMAT );
+                    SetError( ERRCODE_IO_BROKENPACKAGE );
                 else
                 {
                     BOOL bHasMacros = FALSE;
@@ -603,6 +617,11 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
                     if ( bHasMacros )
                         AdjustMacroMode( String() );
+                    else
+                    {
+                        // if macros will be added by the user later, the security check is obsolete
+                        pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+                    }
                 }
             }
 
@@ -673,8 +692,8 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     {
         try
         {
-            ::ucb::Content aContent( pMedium->GetName(), Reference < XCommandEnvironment >() );
-            Reference < XPropertySetInfo > xProps = aContent.getProperties();
+            ::ucb::Content aContent( pMedium->GetName(), com::sun::star::uno::Reference < XCommandEnvironment >() );
+            com::sun::star::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
                 ::rtl::OUString aAuthor( RTL_CONSTASCII_USTRINGPARAM("Author") );
@@ -729,6 +748,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             pMedium->GetItemSet()->ClearItem( SID_DOCUMENT );
         }
 
+        pMedium->GetItemSet()->ClearItem( SID_REFERER );
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  xModel ( GetModel(), ::com::sun::star::uno::UNO_QUERY );
         if ( xModel.is() )
         {
@@ -778,11 +798,11 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
     SFX_ITEMSET_ARG( pSet, pData, SfxUsrAnyItem, SID_FILTER_DATA, sal_False );
     if ( !pData && !pOptions )
     {
-        Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-        Reference< XNameAccess > xFilterCFG;
+        com::sun::star::uno::Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+        com::sun::star::uno::Reference< XNameAccess > xFilterCFG;
         if( xServiceManager.is() )
         {
-            xFilterCFG = Reference< XNameAccess >(
+            xFilterCFG = com::sun::star::uno::Reference< XNameAccess >(
                 xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
                 UNO_QUERY );
         }
@@ -805,7 +825,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
                             aProps[nProperty].Value >>= aServiceName;
                             if( aServiceName.getLength() )
                             {
-                                Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
+                                com::sun::star::uno::Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
                                 if( rHandler.is() )
                                 {
                                     // we need some properties in the media descriptor, so we have to make sure that they are in
@@ -822,7 +842,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
                                     TransformItems( SID_OPENDOC, *pSet, rProperties, NULL );
                                     RequestFilterOptions* pFORequest = new RequestFilterOptions( pDoc->GetModel(), rProperties );
 
-                                    Reference< XInteractionRequest > rRequest( pFORequest );
+                                    com::sun::star::uno::Reference< XInteractionRequest > rRequest( pFORequest );
                                     rHandler->handle( rRequest );
 
                                     if ( !pFORequest->isAbort() )
@@ -1210,11 +1230,31 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             bOk = rMedium.Commit();
             EnableSetModified( sal_True );
 
-            // watch: if the document was successfully saved into an own format, no "SaveCompleted" was called,
-            // this must be done by the caller ( because they want to do different calls )
-            if ( xNewTempRef.Is() && xNewTempRef != GetStorage() )
-                // if the new object storage is a temporary one, because the target format is an alien format
-                SaveCompleted( xNewTempRef );
+            if ( bOk )
+            {
+                // watch: if the document was successfully saved into an own format, no "SaveCompleted" was called,
+                // this must be done by the caller ( because they want to do different calls )
+                if( xNewTempRef.Is() && xNewTempRef != GetStorage() )
+                    // if the new object storage is a temporary one, because the target format is an alien format
+                    SaveCompleted( xNewTempRef );
+            }
+            else
+            {
+                // if the storing process fails on medium commit step it means that
+                // the new medium should contain successfully written temporary representation
+                // of the document, so the docshell can just switch to new medium.
+                // it is reasonable in case an open document suddenly became unavailable.
+
+                OUString aOrigName = pMedium ? OUString(pMedium->GetName()) : OUString();
+                if ( aOrigName && aOrigName.compareToAscii( "private:", 8 ) != COMPARE_EQUAL
+                      && !::utl::UCBContentHelper::Exists( aOrigName ) )
+                {
+                    if ( !IsHandsOff() )
+                        DoHandsOff();
+
+                    rMedium.MoveTempTo_Impl( pMedium );
+                }
+            }
         }
     }
 
@@ -1237,8 +1277,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
         try
         {
-            ::ucb::Content aContent( rMedium.GetName(), Reference < XCommandEnvironment >() );
-            Reference < XPropertySetInfo > xProps = aContent.getProperties();
+            ::ucb::Content aContent( rMedium.GetName(), com::sun::star::uno::Reference < XCommandEnvironment >() );
+            com::sun::star::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
                 ::rtl::OUString aAuthor( RTL_CONSTASCII_USTRINGPARAM("Author") );
@@ -1565,11 +1605,20 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
         if ( !bHasInputStream )
         {
             pNewValue[i].Name = sInputStream;
-            pNewValue[i].Value <<= Reference < com::sun::star::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
+            pNewValue[i].Value <<= com::sun::star::uno::Reference < com::sun::star::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
         }
         else
             aArgs.realloc ( i-1 );
-        xLoader->filter( aArgs );
+
+        try
+        {
+            xLoader->filter( aArgs );
+        }
+        catch (com::sun::star::uno::Exception&)
+        {
+            return sal_False;
+        }
+
         return sal_True;
     }
 
@@ -1640,7 +1689,7 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         if ( !bHasStream )
         {
             pNewValue[i].Name = sOutputStream;
-            pNewValue[i].Value <<= Reference < com::sun::star::io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
+            pNewValue[i].Value <<= com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
         }
         else
             aArgs.realloc ( i-1 );
@@ -1777,7 +1826,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 
     // an interaction handler here can aquire only in case of GUI Saving
     // and should be removed after the saving is done
-    Reference< XInteractionHandler > xInteract;
+    com::sun::star::uno::Reference< XInteractionHandler > xInteract;
     SFX_ITEMSET_ARG( pArgs, pxInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False );
     if ( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteract ) && xInteract.is() )
         pMediumTmp->GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, makeAny( xInteract ) ) );
@@ -1933,40 +1982,41 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         if (!pImp->bSetStandardName)
             pImp->bDidWarnFormat=sal_False;
 
-        // Muss !!!
-        if ( IsOwnStorageFormat_Impl(*GetMedium()))
-            SetFileName( GetMedium()->GetPhysicalName() );
-
         // Daten am Medium updaten
         SfxItemSet *pSet = GetMedium()->GetItemSet();
-        pSet->ClearItem( SID_REFERER );
-        pSet->ClearItem( SID_POSTDATA );
-        pSet->ClearItem( SID_TEMPLATE );
-        pSet->ClearItem( SID_DOC_READONLY );
-        pSet->ClearItem( SID_CONTENTTYPE );
-        pSet->ClearItem( SID_CHARSET );
-        pSet->ClearItem( SID_FILTER_NAME );
-        pSet->ClearItem( SID_OPTIONS );
-        //pSet->ClearItem( SID_FILE_FILTEROPTIONS );
-        pSet->ClearItem( SID_VERSION );
-        //pSet->ClearItem( SID_USE_FILTEROPTIONS );
         pSet->ClearItem( SID_INTERACTIONHANDLER );
 
-        SFX_ITEMSET_GET( (*aParams), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
-        if ( pFilterItem )
-            pSet->Put( *pFilterItem );
+        if ( !bSaveTo )
+        {
+            pSet->ClearItem( SID_REFERER );
+            pSet->ClearItem( SID_POSTDATA );
+            pSet->ClearItem( SID_TEMPLATE );
+            pSet->ClearItem( SID_DOC_READONLY );
+            pSet->ClearItem( SID_CONTENTTYPE );
+            pSet->ClearItem( SID_CHARSET );
+            pSet->ClearItem( SID_FILTER_NAME );
+            pSet->ClearItem( SID_OPTIONS );
+            //pSet->ClearItem( SID_FILE_FILTEROPTIONS );
+            pSet->ClearItem( SID_VERSION );
+            //pSet->ClearItem( SID_USE_FILTEROPTIONS );
+            pSet->ClearItem( SID_EDITDOC );
 
-        SFX_ITEMSET_GET( (*aParams), pOptionsItem, SfxStringItem, SID_OPTIONS, sal_False );
-        if ( pOptionsItem )
-            pSet->Put( *pOptionsItem );
+            SFX_ITEMSET_GET( (*aParams), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+            if ( pFilterItem )
+                pSet->Put( *pFilterItem );
 
-        SFX_ITEMSET_GET( (*aParams), pFilterOptItem, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
-        if ( pFilterOptItem )
-            pSet->Put( *pFilterOptItem );
+            SFX_ITEMSET_GET( (*aParams), pOptionsItem, SfxStringItem, SID_OPTIONS, sal_False );
+            if ( pOptionsItem )
+                pSet->Put( *pOptionsItem );
+
+            SFX_ITEMSET_GET( (*aParams), pFilterOptItem, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
+            if ( pFilterOptItem )
+                pSet->Put( *pFilterOptItem );
+        }
 
         SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEASDOCDONE,this));
 
-        if ( bWasReadonly )
+        if ( bWasReadonly && !bSaveTo )
             Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
 
         return sal_True;
@@ -1993,6 +2043,8 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
     pMergedParams->ClearItem( SID_INPUTSTREAM );
     pMergedParams->ClearItem( SID_CONTENT );
+
+    pMergedParams->ClearItem( SID_REPAIRPACKAGE );
 
     // "SaveAs" will never store any version information - it's a complete new file !
     pMergedParams->ClearItem( SID_VERSION );
@@ -2048,7 +2100,8 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     // distinguish between "Save" and "SaveAs"
     pImp-> bIsSaving = sal_False;
 
-    if ( IsOwnStorageFormat_Impl(*pNewFile) )
+    sal_Bool bToOwnFormat = IsOwnStorageFormat_Impl(*pNewFile);
+    if ( bToOwnFormat )
     {
         // If the filter is a "cross export" filter ( f.e. a filter for exporting an impress document from
         // a draw document ), the ClassId of the destination storage is different from the ClassId of this
@@ -2083,7 +2136,13 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
         // notify the document that saving was done successfully
         if ( !bCopyTo )
+        {
+            // Muss !!!
+            if ( bToOwnFormat )
+                SetFileName( pNewFile->GetPhysicalName() );
+
             bOk = DoSaveCompleted( pNewFile );
+        }
 
         if( bOk )
         {

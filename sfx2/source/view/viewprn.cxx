@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 07:43:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #include <vcl/sysdep.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_VIEW_PRINTABLESTATE_HPP_
+#include <com/sun/star/view/PrintableState.hpp>
+#endif
+
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
 #endif
@@ -109,6 +113,8 @@
 
 #include "view.hrc"
 #include "helpid.hrc"
+
+TYPEINIT1(SfxPrintingHint, SfxHint);
 
 // -----------------------------------------------------------------------
 
@@ -533,11 +539,11 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             rReq.AppendItem( SfxInt16Item( SID_PRINT_COPIES, (INT16) pPrintDlg->GetCopyCount() ) );
             if ( pPrinter->IsPrintFileEnabled() )
                 rReq.AppendItem( SfxStringItem( SID_FILE_NAME, pPrinter->GetPrintFile() ) );
-            if ( pPrintDlg->IsRangeEnabled(PRINTDIALOG_SELECTION) )
+            if ( pPrintDlg->IsRangeChecked(PRINTDIALOG_SELECTION) )
                 rReq.AppendItem( SfxBoolItem( SID_SELECTION, TRUE ) );
-            else if ( pPrintDlg->IsRangeEnabled(PRINTDIALOG_RANGE) )
+            else if ( pPrintDlg->IsRangeChecked(PRINTDIALOG_RANGE) )
                 rReq.AppendItem( SfxStringItem( SID_PRINT_PAGES, pPrintDlg->GetRangeText() ) );
-            else if ( pPrintDlg->IsRangeEnabled(PRINTDIALOG_FROMTO) )
+            else if ( pPrintDlg->IsRangeChecked(PRINTDIALOG_FROMTO) )
             {
                 // currently this doesn't seem to work -> return values of dialog are always 0
                 // seems to be encoded as range string like "1-3"
@@ -686,6 +692,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         if ( bDontModifyDoc && bOldFlag != pObjSh->IsEnableSetModified() )
             pObjSh->EnableSetModified( bOldFlag );
 
+        GetObjectShell()->Broadcast( SfxPrintingHint( -1, pPrintDlg, pPrinter ) );
         ErrCode nError = DoPrint( pPrinter, pPrintDlg, bSilent );
         if ( nError == PRINTER_OK )
         {
@@ -842,10 +849,11 @@ void SfxViewShell::LockPrinter( BOOL bLock)
 
 //--------------------------------------------------------------------
 
-USHORT SfxViewShell::Print( SfxProgress &rProgress, PrintDialog * )
+USHORT SfxViewShell::Print( SfxProgress &rProgress, PrintDialog *pDlg )
 {
     SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
     SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_PRINTDOC, pObjShell));
+    GetObjectShell()->Broadcast( SfxPrintingHint( com::sun::star::view::PrintableState_JOB_STARTED, pDlg, NULL ) );
     return 0;
 }
 

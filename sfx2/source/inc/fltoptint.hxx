@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltoptint.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2002-05-29 16:19:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,9 @@
 #include <com/sun/star/frame/XModel.hpp>
 #endif
 
+#ifndef __FRAMEWORK_DISPATCH_INTERACTION_HXX_
 #include <framework/interaction.hxx>
+#endif
 
 using namespace ::framework;
 

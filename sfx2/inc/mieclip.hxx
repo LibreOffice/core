@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mieclip.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 13:41:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,43 +94,6 @@ public:
     const String& GetBaseURL() const        { return sBaseURL; }
 };
 
-
-////////////////////////////////////////////////////////////////////////////////
-//
-/*
-   $Log: not supported by cvs2svn $
-   Revision 1.1.1.1  2000/09/18 16:52:23  hr
-   initial import
-
-   Revision 1.8  2000/09/17 16:47:07  willem.vandorp
-   OpenOffice header added.
-
-   Revision 1.7  2000/09/06 14:49:36  willem.vandorp
-   Header and footer replaced.
-
-   Revision 1.6  1999/12/16 19:32:37  er
-   #60614# add: GetData with SvData
-
-   Revision 1.5  1999/07/23 08:34:06  hr
-   #65293#: misplaced comment
-
-   Revision 1.4  1999/01/18 13:35:50  JP
-   Task #59398#: unnoetiges RegisterClipb... gegen IDS ausgetauscht
-
-
-      Rev 1.3   18 Jan 1999 14:35:50   JP
-   Task #59398#: unnoetiges RegisterClipb... gegen IDS ausgetauscht
-
-      Rev 1.2   22 Jun 1998 21:20:36   JP
-   SvDataObject gegen SorDataObject ausgetauscht
-
-      Rev 1.1   23 Feb 1998 17:05:14   TJ
-   include
-
-      Rev 1.0   18 Feb 1998 17:28:26   OK
-   NEW: MSE40HTMLClipFormatObj
-
-*/
 
 #endif //_MIECLIP_HXX
 

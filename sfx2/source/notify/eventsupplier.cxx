@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-03 10:55:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,38 +138,36 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
             // check for correct type of the element
             if ( ::getCppuType( (const SEQUENCE < PROPERTYVALUE > *)0 ) == rElement.getValueType() )
             {
-                ANY aValue = BlowUpMacro( rElement );
-                maEventData[i] = aValue;
-
-                SEQUENCE < PROPERTYVALUE > aProperties;
-                if ( aValue >>= aProperties )
-                {
-                    long nCount = aProperties.getLength();
-                    for ( long nIndex = 0; nIndex < nCount; nIndex++ )
-                    {
-                        if ( aProperties[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
-                        {
-                            ::rtl::OUString aType;
-                            aProperties[ nIndex ].Value >>= aType;
-                            if ( aType.compareToAscii( STAR_BASIC ) != COMPARE_EQUAL )
-                                return;
-                            break;
-                        }
-                    }
-                }
-
-                SvxMacro *pMacro = ConvertToMacro( aValue, mpObjShell );
+                // create Configuration at first, creation might call this method also and that would overwrite everything
+                // we might have stored before!
                 USHORT nID = (USHORT) SfxEventConfiguration::GetEventId_Impl( aName );
                 if ( nID )
                 {
-                    if ( pMacro )
-                        SFX_APP()->GetEventConfig()->ConfigureEvent( nID, *pMacro, mpObjShell );
-                    else
-                        SFX_APP()->GetEventConfig()->ConfigureEvent( nID, String(), mpObjShell );
-                }
+                    SfxEventConfigItem_Impl* pConfig =
+                        mpObjShell ? mpObjShell->GetEventConfig_Impl(TRUE) : SFX_APP()->GetEventConfig()->GetAppEventConfig_Impl();
 
-                if ( pMacro )
-                    delete pMacro;
+                    ANY aValue = BlowUpMacro( rElement );
+
+                    // pConfig becomes the owner of the new SvxMacro
+                    SvxMacro *pMacro = ConvertToMacro( aValue, mpObjShell );
+                     pConfig->ConfigureEvent( nID, pMacro );
+                    maEventData[i] = aValue;
+
+                    SEQUENCE < PROPERTYVALUE > aProperties;
+                    if ( aValue >>= aProperties )
+                    {
+                        long nCount = aProperties.getLength();
+                        for ( long nIndex = 0; nIndex < nCount; nIndex++ )
+                        {
+                            if ( aProperties[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
+                            {
+                                ::rtl::OUString aType;
+                                aProperties[ nIndex ].Value >>= aType;
+                                break;
+                            }
+                        }
+                    }
+                }
             }
             else
                 throw ILLEGALARGUMENTEXCEPTION();
@@ -301,6 +299,10 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
             {
                 aProperties[ nIndex ].Value >>= aScript;
             }
+            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_SCRIPT_URL ) == 0 )
+            {
+                aProperties[ nIndex ].Value >>= aScript;
+            }
             else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
             {
                 aProperties[ nIndex ].Value >>= aLibrary;
@@ -334,11 +336,11 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
                 SfxMacroLoader::loadMacro( aScript, mpObjShell );
             }
         }
-        else if ( aType.compareToAscii( "Service" ) == 0 )
+        else if ( aType.compareToAscii( "Service" ) == 0  || ( aType.compareToAscii( "Script" ) == 0 ) )
         {
             if ( aScript.getLength() )
             {
-                SfxViewFrame* pView = SfxViewFrame::GetFirst( mpObjShell );
+                SfxViewFrame* pView = mpObjShell ? SfxViewFrame::GetFirst( mpObjShell ) : SfxViewFrame::Current();
                 ::com::sun::star::util::URL aURL;
                 aURL.Complete = aScript;
                 ::com::sun::star::uno::Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
@@ -351,11 +353,11 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
                     xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
                 if ( xDisp.is() )
                 {
-                    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aArgs(1);
-                    ::com::sun::star::beans::PropertyValue* pArg = aArgs.getArray();
-                    pArg[0].Name = rtl::OUString::createFromAscii("Referer");
-                    pArg[0].Value <<= ::rtl::OUString( mpObjShell->GetMedium()->GetName() );
-                    xDisp->dispatch( aURL, aArgs );
+                    //::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aArgs(1);
+                    //aArgs[0].Name = rtl::OUString::createFromAscii("Referer");
+                    //aArs[0].Value <<= ::rtl::OUString( mpObjShell->GetMedium()->GetName() );
+                    //xDisp->dispatch( aURL, aArgs );
+                    xDisp->dispatch( aURL, ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >() );
                 }
             }
         }
@@ -387,7 +389,11 @@ SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
                                 REFERENCE< XEVENTBROADCASTER > xBroadcaster )
 {
     // get the list of supported events and store it
-    maEventNames = pShell->GetEventNames();
+    if ( pShell )
+        maEventNames = pShell->GetEventNames();
+    else
+        maEventNames = SfxObjectShell::GetEventNames_Impl();
+
     maEventData = SEQUENCE < ANY > ( maEventNames.getLength() );
 
     mpObjShell      = pShell;
@@ -434,6 +440,10 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
             {
                 aProperties[ nIndex ].Value >>= aScriptURL;
             }
+            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_SCRIPT_URL ) == 0 )
+            {
+                aProperties[ nIndex ].Value >>= aScriptURL;
+            }
             else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
             {
                 aProperties[ nIndex ].Value >>= aLibrary;
@@ -450,7 +460,9 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
 
         if ( aType.compareToAscii( STAR_BASIC ) == COMPARE_EQUAL )
             eType = STARBASIC;
-        else if ( aType.compareToAscii( JAVA_SCRIPT ) == COMPARE_EQUAL )
+        else if ( aType.compareToAscii( "Script" ) == COMPARE_EQUAL && aScriptURL.getLength() )
+            eType = EXTENDED_STYPE;
+        else if ( aType.compareToAscii( SVX_MACRO_LANGUAGE_JAVASCRIPT ) == COMPARE_EQUAL )
             eType = JAVASCRIPT;
         else
             DBG_ERRORFILE( "ConvertToMacro: Unknown macro type" );
@@ -482,48 +494,11 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
 
         if ( aMacroName.getLength() )
             pMacro = new SvxMacro( aMacroName, aLibrary, eType );
+        else if ( eType == EXTENDED_STYPE )
+            pMacro = new SvxMacro( aScriptURL, aType );
     }
 
     return pMacro;
-}
-
-//--------------------------------------------------------------------------------------------------------
-sal_Bool SfxEvents_Impl::Warn_Impl( const String& rMacName )
-{
-    SvtSecurityOptions aOpt;
-    EBasicSecurityMode eMode = aOpt.GetBasicMode();
-    if ( eMode == eNEVER_EXECUTE )
-        return sal_False;
-
-    String aReferer( mpObjShell->GetMedium()->GetName() );
-    if ( !aReferer.Len() )
-    {
-        // if document was created from template, take the templates' name for the checks
-        String aTempl( mpObjShell->GetDocInfo().GetTemplateFileName() );
-        if ( aTempl.Len() )
-            aReferer = INetURLObject( aTempl ).GetMainURL();
-        else
-            // new documents from scratch are safe
-            return TRUE;
-    }
-
-    sal_Bool bConfirm = aOpt.IsConfirmationEnabled();
-    sal_Bool bWarn = aOpt.IsWarningEnabled();
-    sal_Bool bSecure = aOpt.IsSecureURL( rMacName, aReferer );
-    if ( bSecure && bWarn || !bSecure && bConfirm )
-    {
-        OUSTRING aPrefix = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
-        OUSTRING aName = rMacName.Copy( (USHORT) aPrefix.getLength() );
-        sal_Int32 nPos = aName.indexOf( '/' );
-        aName = aName.copy( nPos+1 );
-        SfxMacroQueryDlg_Impl aBox ( aName, bSecure );
-        if ( aBox.Execute() )
-            bWarn = sal_False;
-    }
-    else
-        return bSecure;
-
-    return !bWarn;
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -553,6 +528,8 @@ ANY SfxEvents_Impl::BlowUpMacro( const ANY& rEvent ) const
             aInProps[ nIndex ].Value >>= aType;
         else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
             aInProps[ nIndex ].Value >>= aScript;
+        else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_SCRIPT_URL ) == 0 )
+            aInProps[ nIndex ].Value >>= aScript;
         else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
             aInProps[ nIndex ].Value >>= aLibrary;
         else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
@@ -574,9 +551,10 @@ ANY SfxEvents_Impl::BlowUpMacro( const ANY& rEvent ) const
         if ( ( nHashPos != STRING_NOTFOUND ) && ( nHashPos < nArgsPos ) )
         {
             OUSTRING aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
+            SfxObjectShell* pDoc = mpObjShell ? mpObjShell : SfxObjectShell::Current();
 
             if ( aBasMgrName.compareToAscii(".") == 0 )
-                aLibrary = mpObjShell->GetTitle( SFX_TITLE_APINAME );
+                aLibrary = pDoc->GetTitle( SFX_TITLE_APINAME );
             else if ( aBasMgrName.getLength() )
                 aLibrary = aBasMgrName;
             else
@@ -619,3 +597,62 @@ ANY SfxEvents_Impl::BlowUpMacro( const ANY& rEvent ) const
     return rEvent;
 }
 
+SFX_IMPL_XSERVICEINFO( SfxGlobalEvents_Impl, "com.sun.star.frame.GlobalEventBroadcaster", "com.sun.star.comp.sfx2.GlobalEventBroadcaster" )
+SFX_IMPL_ONEINSTANCEFACTORY( SfxGlobalEvents_Impl );
+
+SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& )
+    : m_aInterfaceContainer( m_aMutex )
+{
+    m_refCount++;
+    pImp = new SfxEvents_Impl( NULL, this );
+    m_xEvents = pImp;
+    m_refCount--;
+    StartListening(*SFX_APP());
+}
+
+SfxGlobalEvents_Impl::~SfxGlobalEvents_Impl()
+{
+}
+
+REFERENCE< XNAMEREPLACE > SAL_CALL SfxGlobalEvents_Impl::getEvents() throw( RUNTIMEEXCEPTION )
+{
+    return m_xEvents;
+}
+
+void SAL_CALL SfxGlobalEvents_Impl::addEventListener( const REFERENCE< XDOCEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION )
+{
+    m_aInterfaceContainer.addInterface( xListener );
+}
+
+void SAL_CALL SfxGlobalEvents_Impl::removeEventListener( const REFERENCE< XDOCEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION )
+{
+    m_aInterfaceContainer.removeInterface( xListener );
+}
+
+void SfxGlobalEvents_Impl::Notify( SfxBroadcaster& aBC, const SfxHint& aHint )
+{
+    SfxEventHint* pNamedHint = PTR_CAST( SfxEventHint, &aHint );
+    if ( pNamedHint )
+    {
+        OUSTRING aName = SfxEventConfiguration::GetEventName_Impl( pNamedHint->GetEventId() );
+        REFERENCE < XEVENTSSUPPLIER > xSup;
+        if ( pNamedHint->GetObjShell() )
+            xSup = REFERENCE < XEVENTSSUPPLIER >( pNamedHint->GetObjShell()->GetModel(), UNO_QUERY );
+//      else
+//          xSup = (XEVENTSSUPPLIER*) this;
+
+        DOCEVENTOBJECT aEvent( xSup, aName );
+        ::cppu::OInterfaceIteratorHelper aIt( m_aInterfaceContainer );
+        while( aIt.hasMoreElements() )
+        {
+            try
+            {
+                ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
+            }
+            catch( RUNTIMEEXCEPTION& )
+            {
+                aIt.remove();
+            }
+        }
+    }
+}

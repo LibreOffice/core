@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-28 16:17:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -995,6 +995,16 @@ SfxImageManager::~SfxImageManager()
     if ( pImp != pGlobalConfig || !--nGlobalRef )
         delete pImp;
     delete pData;
+}
+
+SfxConfigManager* SfxImageManager::GetConfigManager()
+{
+    return pImp->GetConfigManager();
+}
+
+USHORT SfxImageManager::GetType() const
+{
+    return pImp->GetType();
 }
 
 BOOL SfxImageManager::Import( SvStream& rInStream, SotStorage& rOutStorage )

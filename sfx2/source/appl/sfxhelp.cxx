@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 13:14:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ public:
                     SfxHelpOptions_Impl();
                     ~SfxHelpOptions_Impl();
 
-    BOOL            HasId( ULONG nId ) { USHORT nDummy; return m_pIds->Seek_Entry( nId, &nDummy ); }
+    BOOL            HasId( ULONG nId ) { USHORT nDummy; return m_pIds ? m_pIds->Seek_Entry( nId, &nDummy ) : FALSE; }
 };
 
 static Sequence< ::rtl::OUString > GetPropertyNames()

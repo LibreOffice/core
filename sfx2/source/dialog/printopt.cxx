@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-28 13:40:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,28 @@ SfxCommonPrintOptionsTabPage::~SfxCommonPrintOptionsTabPage()
 SfxTabPage* SfxCommonPrintOptionsTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return( new SfxCommonPrintOptionsTabPage( pParent, rAttrSet ) );
+}
+
+// -----------------------------------------------------------------------------
+
+Window* SfxCommonPrintOptionsTabPage::GetParentLabeledBy( const Window* pWindow ) const
+{
+    if ( pWindow == (Window *)&aReduceGradientsStepCountNF )
+        return (Window *)&aReduceGradientsStripesRB;
+    else if ( pWindow == (Window *)&aReduceBitmapsResolutionLB )
+        return (Window *)&aReduceBitmapsResolutionRB;
+    else
+        return SfxTabPage::GetParentLabeledBy( pWindow );
+}
+
+Window* SfxCommonPrintOptionsTabPage::GetParentLabelFor( const Window* pWindow ) const
+{
+    if ( pWindow == (Window *)&aReduceGradientsStripesRB )
+        return (Window *)&aReduceGradientsStepCountNF;
+    else if ( pWindow == (Window *)&aReduceBitmapsResolutionRB )
+        return (Window *)&aReduceBitmapsResolutionLB;
+    else
+        return SfxTabPage::GetParentLabelFor( pWindow );
 }
 
 // -----------------------------------------------------------------------------

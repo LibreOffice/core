@@ -2,9 +2,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:28:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
@@ -106,6 +109,7 @@ struct SfxChildWindow_Impl
     sal_Bool                bHideNotDelete;
     sal_Bool                bVisible;
     sal_Bool                bHideAtToggle;
+    sal_Bool                bWantsFocus;
     SfxModule*          pContextModule;
     SfxWorkWindow*      pWorkWin;
 };
@@ -132,12 +136,17 @@ class DisposeListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::
             if( m_pOwner && m_pData )
             {
                 m_pData->xListener = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >();
-                m_pData->xFrame    = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >();
 
-                // Attention: Do nothing after "Toogle" call with pOwner & pData!
-                // They will die insteandly ... We should forget these pointers only!!!
-                if( m_pData->pWorkWin )
+                if ( m_pData->pWorkWin )
+                {
+                    // m_pOwner and m_pData will be killed
+                    m_pData->xFrame    = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >();
                     m_pData->pWorkWin->GetBindings().Execute( m_pOwner->GetType() );
+                }
+                else
+                {
+                    delete m_pOwner;
+                }
 
                 m_pOwner = NULL;
                 m_pData  = NULL;
@@ -180,12 +189,34 @@ SfxChildWindow::SfxChildWindow(Window *pParentWindow, sal_uInt16 nId)
     pImp->pFact = 0L;
     pImp->bHideNotDelete = sal_False;
     pImp->bHideAtToggle = sal_False;
+    pImp->bWantsFocus = sal_True;
     pImp->bVisible = sal_True;
     pImp->pContextModule = NULL;
     pImp->pWorkWin = NULL;
 
     pContext = 0L;
     DBG_CTOR(SfxChildWindow,0);
+}
+
+void SfxChildWindow::Destroy()
+{
+    if ( GetFrame().is() )
+    {
+        pImp->pWorkWin = NULL;
+        try
+        {
+            ::com::sun::star::uno::Reference < ::com::sun::star::util::XCloseable > xClose( GetFrame(), ::com::sun::star::uno::UNO_QUERY );
+            if ( xClose.is() )
+                xClose->close( sal_True );
+            else
+                GetFrame()->dispose();
+        }
+        catch ( com::sun::star::uno::Exception& )
+        {
+        }
+    }
+    else
+        delete this;
 }
 
 //-------------------------------------------------------------------------
@@ -616,6 +647,16 @@ sal_Bool SfxChildWindow::IsHideAtToggle() const
     return pImp->bHideAtToggle;
 }
 
+void SfxChildWindow::SetWantsFocus( BOOL bSet )
+{
+    pImp->bWantsFocus = bSet;
+}
+
+sal_Bool SfxChildWindow::WantsFocus() const
+{
+    return pImp->bWantsFocus;
+}
+
 sal_Bool SfxChildWinInfo::GetExtraData_Impl
 (
     SfxChildAlignment   *pAlign,
@@ -737,14 +778,14 @@ Window* SfxChildWindow::GetContextWindow( SfxModule *pModule ) const
 void SfxChildWindow::SetWorkWindow_Impl( SfxWorkWindow* pWin )
 {
     pImp->pWorkWin = pWin;
-    if ( pWindow->HasChildPathFocus() )
+    if ( pWin && pWindow->HasChildPathFocus() )
         pImp->pWorkWin->SetActiveChild_Impl( pWindow );
 }
 
-SfxWorkWindow* SfxChildWindow::GetWorkWindow_Impl() const
-{
-    return pImp->pWorkWin;
-}
+//SfxWorkWindow* SfxChildWindow::GetWorkWindow_Impl() const
+//{
+//  return pImp->pWorkWin;
+//}
 
 void SfxChildWindow::Activate_Impl()
 {

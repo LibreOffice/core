@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-24 17:57:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,6 @@
 #include "tabdlg.hxx"
 #include "arrdecl.hxx"
 #include "fltfnc.hxx"
-//#include "picklist.hxx"
 #include "sfx.hrc"
 #include "app.hrc"
 #include "tbxcust.hxx"
@@ -184,6 +183,7 @@
 #include "module.hxx"
 #include "topfrm.hxx"
 #include "sfxpicklist.hxx"
+#include "imestatuswindow.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -202,69 +202,6 @@ long QuitAgain_Impl( void* pObj, void* pArg )
     return 0;
 }
 
-struct ApplicationType
-{
-    String aPathName;
-    String aParams;
-    String aDomainName;
-};
-
-/*
-BOOL SfxApplication::InitOfficeAppType_Impl( USHORT nAppId, ApplicationType& rType, BOOL bEmbed )
-{
-    if ( nAppId < SID_START_BEGIN || nAppId > SID_START_END )
-        return FALSE;
-    // App in Config suchen
-    String aAppName = String( SfxResId( nAppId ) );
-#if SUPD<613//MUSTINI
-    SfxIniManager* pIni = SFX_INIMANAGER();
-    DBG_ASSERT( pIni, "Kein IniManager?!" );
-    String aFullName;
-    while ( pIni && !aFullName.Len() )
-    {
-        aFullName = pIni->ReadKey( DEFINE_CONST_UNICODE("OfficeApplications"), aAppName );
-        if ( !aFullName.Len() )
-            pIni = pIni->GetSubManager();
-    }
-#else
-    String aFullName;
-#endif
-
-    if ( !aFullName.Len() )
-    {
-        // not found, but new try
-        INetURLObject aTryObj( Application::GetAppFileName(), INET_PROT_FILE );
-        aTryObj.setBase( aAppName );
-        aFullName = aTryObj.PathToFileName();
-    }
-
-    rType.aPathName = aFullName;
-    if ( bEmbed )
-        rType.aParams = DEFINE_CONST_UNICODE( "-embedding" );
-    INetURLObject aObj( aFullName, INET_PROT_FILE );
-    rType.aDomainName = aObj.getBase();
-    return TRUE;
-}
-
-FASTBOOL SfxApplication::PostOfficeAppEvent( USHORT nAppId, const String& rEvent, const String& rParam )
-{
-
-//(mba)/task    SfxWaitCursor aWait;
-
-    ApplicationType aType;
-    if( !InitOfficeAppType_Impl( nAppId, aType ) )
-        return FALSE;
-
-    // Event posten, ggf. App mit ï.ï auf Kommandozeile starten
-    ApplicationAddress aAppAdr;
-    String aAppParam( rParam.Len() ? DEFINE_CONST_UNICODE(".") : String() );
-    SvFactory::IncAliveCount(); // Quit verhindern
-    BOOL bOk = FALSE; //! (pb) OldSV: Application::PostAppEvent( aType.aPathName, aAppAdr, rEvent, rParam, TRUE, &aAppParam );
-    SvFactory::DecAliveCount();
-    return bOk;
-}
- */
-
 void SfxApplication::BasicLibExec_Impl( SfxRequest &rReq, BasicManager *pMgr )
 {
     // Zuerst den LibName holen
@@ -281,7 +218,7 @@ void SfxApplication::BasicLibExec_Impl( SfxRequest &rReq, BasicManager *pMgr )
             // Bei AddLibrary ist der LibName optional, er kann mit dem
             // FileName identisch sein
             INetURLObject aObj( pNameItem->GetValue(), INET_PROT_FILE );
-            aFileName = aObj.GetMainURL();
+            aFileName = aObj.GetMainURL( INetURLObject::NO_DECODE );
 
             // Nach optionalem LibName suchen
             SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_LOAD_LIBRARY, FALSE );
@@ -428,6 +365,14 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
     FASTBOOL bDone = FALSE;
     switch ( rReq.GetSlot() )
     {
+        case SID_UPDATE_CONFIG:
+        {
+            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_UPDATE_CONFIG, FALSE );
+            if ( pItem )
+                GetConfigManager_Impl()->ReInitialize( pItem->GetValue() );
+            break;
+        }
+
         case SID_LOAD_LIBRARY:
         case SID_UNLOAD_LIBRARY:
         case SID_REMOVE_LIBRARY:
@@ -659,11 +604,13 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_HELPINDEX:
+        case SID_HELP_SUPPORTPAGE:
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                pHelp->Start( 0, NULL ); // show start page
+                ULONG nHelpId = ( rReq.GetSlot() == SID_HELP_SUPPORTPAGE ) ? 66056 : 0;
+                pHelp->Start( nHelpId, NULL ); // show start or support page
                 bDone = TRUE;
             }
             break;
@@ -768,6 +715,23 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             GetpApp()->Exception( EXC_SYSTEM );
             abort();
         }
+
+        case SID_SHOW_IME_STATUS_WINDOW:
+            if (pAppData_Impl->m_xImeStatusWindow->canToggle())
+            {
+                SfxBoolItem const * pItem = static_cast< SfxBoolItem const * >(
+                    rReq.GetArg(SID_SHOW_IME_STATUS_WINDOW, false,
+                                TYPE(SfxBoolItem)));
+                bool bShow = pItem == 0
+                    ? !pAppData_Impl->m_xImeStatusWindow->isShowing()
+                    : ( pItem->GetValue() == TRUE );
+                pAppData_Impl->m_xImeStatusWindow->show(bShow);
+                if (pItem == 0)
+                    rReq.AppendItem(SfxBoolItem(SID_SHOW_IME_STATUS_WINDOW,
+                                                bShow));
+            }
+            bDone = true;
+            break;
 
         default:
             break;
@@ -915,6 +879,16 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     break;
                 }
 
+                case SID_SHOW_IME_STATUS_WINDOW:
+                    if (pAppData_Impl->m_xImeStatusWindow->canToggle())
+                        rSet.Put(SfxBoolItem(
+                                     SID_SHOW_IME_STATUS_WINDOW,
+                                     pAppData_Impl->m_xImeStatusWindow->
+                                         isShowing()));
+                    else
+                        rSet.DisableItem(SID_SHOW_IME_STATUS_WINDOW);
+                    break;
+
                 default:
                     break;
             }
@@ -923,5 +897,3 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
         ++pRanges;
     }
 }
-
-

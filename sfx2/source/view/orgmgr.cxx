@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 17:00:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( USHORT nIdx )
         INetURLObject aFileObj( pEntry->aFileName );
         BOOL bDum = FALSE;
         SfxApplication* pSfxApp = SFX_APP();
-        String aFilePath = aFileObj.GetMainURL();
+        String aFilePath = aFileObj.GetMainURL( INetURLObject::NO_DECODE );
         pEntry->aDocShell = pSfxApp->DocAlreadyLoaded( aFilePath, FALSE, bDum );
         if ( !pEntry->aDocShell.Is() )
         {

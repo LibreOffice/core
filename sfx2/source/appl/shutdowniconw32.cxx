@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hro $ $Date: 2002-11-29 12:57:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

@@ -38,8 +38,6 @@ touch: ..\%__SRC%\misc\sfx2.hid %_DEST%\bin%_EXT%\sfx2.hid
 ..\util\sfx.xml %_DEST%\xml%_EXT%\sfx.xml
 ..\%__SRC%\misc\sfx2.csv %_DEST%\inc%_EXT%\sfx2.csv
 ..\%__SRC%\inc\macropg.hxx %_DEST%\inc%_EXT%\macropg.hxx
-..\%__SRC%\bin\odk?????.dll %_DEST%\odk\bin%_EXT%\odk?????.dll
-..\%__SRC%\bin\cli?????.dll %_DEST%\odk\bin%_EXT%\cli?????.dll
 
 hedabu: ..\inc\accmgr.hxx %_DEST%\inc%_EXT%\sfx2\accmgr.hxx
 hedabu: ..\inc\app.hxx %_DEST%\inc%_EXT%\sfx2\app.hxx
@@ -147,6 +145,7 @@ hedabu: ..\inc\xmlmetai.hxx %_DEST%\inc%_EXT%\sfx2\xmlmetai.hxx
 hedabu: ..\inc\cntids.hrc %_DEST%\inc%_EXT%\sfx2\cntids.hrc
 hedabu: ..\inc\basmgr.hxx %_DEST%\inc%_EXT%\sfx2\basmgr.hxx
 hedabu: ..\inc\imagemgr.hxx %_DEST%\inc%_EXT%\sfx2\imagemgr.hxx
+hedabu: ..\inc\accelinfo.hxx %_DEST%\inc%_EXT%\sfx2\accelinfo.hxx
 
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib

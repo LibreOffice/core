@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2002-11-20 11:41:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

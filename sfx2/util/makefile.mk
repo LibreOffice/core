@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: obo $ $Date: 2002-10-23 12:51:59 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:29:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,7 @@ TARGET=sfx
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 #sfx.hid generieren
 GEN_HID=TRUE
+GEN_HID_OTHER=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -76,8 +77,8 @@ GEN_HID=TRUE
 # --- Allgemein ----------------------------------------------------
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
-
-LIB1FILES=  $(SLB)$/explorer.lib	\
+LIB1FILES=  $(SLB)$/appl.lib		\
+            $(SLB)$/explorer.lib	\
             $(SLB)$/doc.lib			\
             $(SLB)$/view.lib		\
             $(SLB)$/control.lib		\
@@ -89,7 +90,6 @@ LIB1FILES=  $(SLB)$/explorer.lib	\
             $(SLB)$/statbar.lib		\
             $(SLB)$/dialog.lib		\
             $(SLB)$/bastyp.lib		\
-        $(SLB)$/appl.lib 		\
             $(SLB)$/config.lib
 
 HELPIDFILES=\
@@ -98,7 +98,7 @@ HELPIDFILES=\
 
 .IF "$(GUI)"!="UNX"
 LIB2TARGET= $(LB)$/$(TARGET).lib
-LIB2FILES=   $(LB)$/isfx.lib 
+LIB2FILES=  $(LB)$/isfx.lib
 .ENDIF
 
 SHL1TARGET= sfx$(UPD)$(DLLPOSTFIX)
@@ -146,13 +146,13 @@ SHL1STDLIBS+=\
 .IF "$(GUI)"=="WNT"
 
 SHL1STDLIBS+=\
+        uwinapi.lib \
         advapi32.lib \
         shell32.lib \
         gdi32.lib \
         ole32.lib \
-        uuid.lib  \
-        uwinapi.lib \
-        unicows.lib
+        uuid.lib
+
 .ENDIF
 
 
@@ -212,24 +212,10 @@ RESLIB1SRSFILES=$(SFXSRSLIST)
 
 .INCLUDE :  target.mk
 
-ALLTAR : $(SRS)$/hidother.hid
-
 # --- SFX-Filter-Datei ---
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @+$(TYPE) sfxwin.flt > $@
-
-$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
-
-$(SRS)$/hidother.hid: hidother.src
-.IF "$(GUI)$(CPU)"=="WNTI"
-.IF "$(BUILD_SOSL)"==""
-    @+echo no hids
-    @+-mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)
-.ENDIF
-.ELSE
-    @echo nix
-.ENDIF          # "$(GUI)$(CPU)"=="WNTI"
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-24 13:57:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,11 @@
  *
  *
  ************************************************************************/
+
+#ifdef SOLARIS
+// HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
+#include <ctime>
+#endif
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
@@ -149,7 +154,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
         pCache->Invalidate( sal_False );
         if ( !aStatus.IsEnabled )
             pCache->SetState_Impl( SFX_ITEM_DISABLED, NULL );
-        else
+        else if (aStatus.State.hasValue())
         {
             sal_uInt16 nId = pCache->GetId();
             SfxItemState eState = SFX_ITEM_AVAILABLE;
@@ -196,6 +201,12 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
 
             pCache->SetState_Impl( eState, pItem );
             delete pItem;
+        }
+        else
+        {
+            // DONTCARE status
+            SfxVoidItem aVoid(0);
+            pCache->SetState_Impl( SFX_ITEM_UNKNOWN, &aVoid );
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: pb $ $Date: 2002-10-16 12:47:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,7 @@ public:
     inline void         SetKeywordHdl( const Link& rLink ) { aKeywordLink = rLink; }
     void                SetKeyword( const String& rKeyword );
     sal_Bool            HasKeyword() const;
+    sal_Bool            HasKeywordIgnoreCase(); //added by BerryJia for fixing Bug98251, 2002-12-11
     void                OpenKeyword();
 };
 

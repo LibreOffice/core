@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mav $ $Date: 2002-08-27 10:47:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,6 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
         aReq.AppendItem( SfxStringItem( SID_FILE_NAME, pPick->aName ));
         aReq.AppendItem( SfxStringItem( SID_REFERER, DEFINE_CONST_UNICODE( SFX_REFERER_USER ) ) );
         aReq.AppendItem( SfxStringItem( SID_TARGETNAME, DEFINE_CONST_UNICODE("_default") ) );
-        aReq.AppendItem( SfxBoolItem( SID_TEMPLATE, FALSE ) );
         String aFilter( pPick->aFilter );
         aGuard.clear();
 
@@ -386,6 +385,7 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
         }
 
         aReq.AppendItem(SfxStringItem( SID_FILTER_NAME, aFilter ));
+        aReq.AppendItem( SfxBoolItem( SID_TEMPLATE, sal_False ) );
         SFX_APP()->ExecuteSlot( aReq );
     }
 }
@@ -431,6 +431,39 @@ void SfxPickList::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
             }
 
+            case SFX_EVENT_OPENDOC:
+            {
+                SfxMedium *pMed = pDocSh->GetMedium();
+                if( !pMed )
+                    return;
+
+                // unbenannt-Docs und embedded-Docs nicht in History
+                if ( !pDocSh->HasName() ||
+                     SFX_CREATE_MODE_STANDARD != pDocSh->GetCreateMode() )
+                    return;
+
+                // Hilfe nicht in History
+                if ( !pDocSh->Get_Impl()->bIsHelpObjSh )
+                {
+                    ::rtl::OUString     aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
+                    ::rtl::OUString     aFilter;
+
+                    INetURLObject       aURL( pMed->GetOrigURL() );
+                    const SfxFilter*    pFilter = pMed->GetOrigFilter();
+
+                    if ( pFilter )
+                        aFilter = pFilter->GetFilterName();
+
+                    // add to svtool history options
+                    SvtHistoryOptions().AppendItem( eHISTORY,
+                            aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
+                            aFilter,
+                            aTitle,
+                            SfxStringEncode( aURL.GetPass() ) );
+                }
+                break;
+            }
+
             case SFX_EVENT_CLOSEDOC:
             {
                 SfxMedium *pMed = pDocSh->GetMedium();
@@ -453,6 +486,10 @@ void SfxPickList::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     // add no document that forbids this (for example Message-Body)
                     SFX_ITEMSET_ARG( pMed->GetItemSet(), pPicklistItem, SfxBoolItem, SID_PICKLIST, sal_False );
                     if ( pPicklistItem && !pPicklistItem->GetValue() )
+                        return;
+
+                    // ignore hidden documents
+                    if ( pDocSh->Get_Impl()->bHidden )
                         return;
 
                     ::rtl::OUString     aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);

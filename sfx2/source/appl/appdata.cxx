@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-19 17:17:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
+#include "comphelper/processfactory.hxx"
 
 #include "viewfrm.hxx"
 #include "appdata.hxx"
@@ -103,7 +104,6 @@
 #include "dataurl.hxx"
 #include "arrdecl.hxx"
 #include "docfac.hxx"
-#include "picklist.hxx"
 #include "docfile.hxx"
 #include "request.hxx"
 #include "referers.hxx"
@@ -111,6 +111,7 @@
 #include "sfxresid.hxx"
 #include "objshimp.hxx"
 #include "appuno.hxx"
+#include "imestatuswindow.hxx"
 
 SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         bServer( false ),
@@ -159,7 +160,9 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         pTemplates( 0 ),
         pSaveOptions( 0 ),
         pUndoOptions( 0 ),
-        pHelpOptions( 0 )
+        pHelpOptions( 0 ),
+        m_xImeStatusWindow(new sfx2::appl::ImeStatusWindow(
+                               *pApp, comphelper::getProcessServiceFactory()))
 {
     StartListening( *pApp );
 }

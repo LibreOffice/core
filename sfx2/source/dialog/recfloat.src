@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-12 10:02:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,3 +154,5 @@ String STR_CANCEL_RECORDING
     Text[ turkish ] = "Cancel Recording";
     Text[ arabic ] = "Cancel Recording";
 };
+
+

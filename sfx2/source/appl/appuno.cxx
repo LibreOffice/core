@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-31 09:36:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+#pragma warning( disable : 4290 )
+#endif
 
 #include "appuno.hxx"
 
@@ -203,7 +206,6 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
-using namespace ::rtl;
 
 #pragma hdrstop
 
@@ -232,6 +234,8 @@ using namespace ::rtl;
 #include "fltoptint.hxx"
 #include "docfile.hxx"
 #include "sfxbasecontroller.hxx"
+#include "brokenpackageint.hxx"
+#include "eventsupplier.hxx"
 
 #define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
@@ -252,6 +256,7 @@ static const String sOutputStream   = String::CreateFromAscii( "OutputStream"   
 static const String sHidden         = String::CreateFromAscii( "Hidden"         );
 static const String sPreview        = String::CreateFromAscii( "Preview"        );
 static const String sViewOnly       = String::CreateFromAscii( "ViewOnly"       );
+static const String sDontEdit       = String::CreateFromAscii( "DontEdit"       );
 static const String sSilent         = String::CreateFromAscii( "Silent"         );
 static const String sJumpMark       = String::CreateFromAscii( "JumpMark"       );
 static const String sFileName       = String::CreateFromAscii( "FileName"       );
@@ -270,6 +275,7 @@ static const String sMinimized      = String::CreateFromAscii( "Minimized" );
 static const String sInteractionHdl = String::CreateFromAscii( "InteractionHandler" );
 static const String sWindowState    = String::CreateFromAscii( "WindowState" );
 static const String sUCBContent     = String::CreateFromAscii( "UCBContent" );
+static const String sRepairPackage  = String::CreateFromAscii( "RepairPackage" );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -677,93 +683,101 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         sal_Bool bOK = (rProp.Value >>= bVal);
                         DBG_ASSERT( bOK, "invalid type for ViewOnly" )
                         if (bOK)
+                            rSet.Put( SfxBoolItem( SID_VIEWONLY, bVal ) );
+                     }
+                else if ( aName == sDontEdit )
+                     {
+                        sal_Bool bVal = sal_False;
+                        sal_Bool bOK = (rProp.Value >>= bVal);
+                        DBG_ASSERT( bOK, "invalid type for ViewOnly" )
+                        if (bOK)
                             rSet.Put( SfxBoolItem( SID_EDITDOC, !bVal ) );
                      }
                 else if ( aName == sFileName )
                      {
                         ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && (sVal.getLength() > 0));
-                        DBG_ASSERT( bOK, "invalid type for FileName" )
+                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                        DBG_ASSERT( bOK, "invalid type or value for FileName" )
                         if (bOK)
                             rSet.Put( SfxStringItem( SID_FILE_NAME, sVal ) );
                      }
                 else if ( aName == sOrigURL )
                      {
                         ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && (sVal.getLength() > 0));
-                        DBG_ASSERT( bOK, "invalid type for OrigURL" )
+                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                        DBG_ASSERT( bOK, "invalid type or value for OrigURL" )
                         if (bOK)
                             rSet.Put( SfxStringItem( SID_ORIGURL, sVal ) );
                      }
                 else if ( aName == sSalvageURL )
                      {
                         ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && (sVal.getLength() > 0));
-                        DBG_ASSERT( bOK, "invalid type for SalvageURL" )
+                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                        DBG_ASSERT( bOK, "invalid type or value for SalvageURL" )
                         if (bOK)
                             rSet.Put( SfxStringItem( SID_DOC_SALVAGE, sVal ) );
                      }
                 else if ( aName == sFrameName )
                      {
                         ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && (sVal.getLength() > 0));
+                        sal_Bool bOK = (rProp.Value >>= sVal);
                         DBG_ASSERT( bOK, "invalid type for FrameName" )
-                        if (bOK)
+                        if (bOK && sVal.getLength())
                             rSet.Put( SfxStringItem( SID_TARGETNAME, sVal ) );
                      }
                 else if ( aName == sMediaType )
                      {
                         ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && (sVal.getLength() > 0));
-                        DBG_ASSERT( bOK, "invalid type for MediaType" )
+                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                        DBG_ASSERT( bOK, "invalid type or value for MediaType" )
                         if (bOK)
                             rSet.Put( SfxStringItem( SID_CONTENTTYPE, sVal ) );
                      }
                 else if ( aName == sWindowState )
                      {
                         ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && (sVal.getLength() > 0));
-                        DBG_ASSERT( bOK, "invalid type for WindowState" )
+                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                        DBG_ASSERT( bOK, "invalid type or value for WindowState" )
                         if (bOK)
                             rSet.Put( SfxStringItem( SID_WIN_POSSIZE, sVal ) );
                      }
                 else if ( aName == sTemplateName )
                      {
                         ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && (sVal.getLength() > 0));
-                        DBG_ASSERT( bOK, "invalid type for TemplateName" )
+                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                        DBG_ASSERT( bOK, "invalid type or value for TemplateName" )
                         if (bOK)
                             rSet.Put( SfxStringItem( SID_TEMPLATE_NAME, sVal ) );
                      }
                 else if ( aName == sTemplateRegionName )
                      {
                         ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && (sVal.getLength() > 0));
-                        DBG_ASSERT( bOK, "invalid type for TemplateRegionName" )
+                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                        DBG_ASSERT( bOK, "invalid type or value for TemplateRegionName" )
                         if (bOK)
                             rSet.Put( SfxStringItem( SID_TEMPLATE_REGIONNAME, sVal ) );
                      }
                 else if ( aName == sJumpMark )
                      {
                         ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && (sVal.getLength() > 0));
-                        DBG_ASSERT( bOK, "invalid type for JumpMark" )
+                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                        DBG_ASSERT( bOK, "invalid type or value for JumpMark" )
                         if (bOK)
                             rSet.Put( SfxStringItem( SID_JUMPMARK, sVal ) );
                      }
                 else if ( aName == sCharacterSet )
                      {
                         ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && (sVal.getLength() > 0));
-                        DBG_ASSERT( bOK, "invalid type for CharacterSet" )
+                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                        DBG_ASSERT( bOK, "invalid type or value for CharacterSet" )
                         if (bOK)
                             rSet.Put( SfxStringItem( SID_CHARSET, sVal ) );
                      }
                 else if ( aName == sFilterFlags )
                      {
                         ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && (sVal.getLength() > 0));
-                        DBG_ASSERT( bOK, "invalid type for FilterFlags" )
+                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                        DBG_ASSERT( bOK, "invalid type or value for FilterFlags" )
                         if (bOK)
                             rSet.Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sVal ) );
                      }
@@ -783,6 +797,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUInt16Item( SID_UPDATEDOCMODE, nVal ) );
                 }
+                else if ( aName == sRepairPackage )
+                     {
+                        sal_Bool bVal = sal_False;
+                        sal_Bool bOK = (rProp.Value >>= bVal);
+                        DBG_ASSERT( bOK, "invalid type for RepairPackage" )
+                        if (bOK)
+                           rSet.Put( SfxBoolItem( SID_REPAIRPACKAGE, bVal ) );
+                     }
 
             }
         }
@@ -931,6 +953,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_PREVIEW ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_VIEWONLY ) == SFX_ITEM_SET )
+                nAdditional++;
             if ( rSet.GetItemState( SID_EDITDOC ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_SILENT ) == SFX_ITEM_SET )
@@ -942,6 +966,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_MACROEXECMODE ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_UPDATEDOCMODE ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_REPAIRPACKAGE ) == SFX_ITEM_SET )
                 nAdditional++;
 
             // consider additional arguments
@@ -1028,6 +1054,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         continue;
                     if ( nId == SID_PREVIEW )
                         continue;
+                    if ( nId == SID_VIEWONLY )
+                        continue;
                     if ( nId == SID_EDITDOC )
                         continue;
                     if ( nId == SID_TARGETNAME )
@@ -1051,6 +1079,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_MACROEXECMODE )
                         continue;
                     if ( nId == SID_UPDATEDOCMODE )
+                        continue;
+                    if ( nId == SID_REPAIRPACKAGE )
                         continue;
                 }
 
@@ -1267,9 +1297,14 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nProps].Name = sPreview;
                 pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
-            if ( rSet.GetItemState( SID_EDITDOC, sal_False, &pItem ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_VIEWONLY, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nProps].Name = sViewOnly;
+                pValue[nProps++].Value <<= (sal_Bool) (( ((SfxBoolItem*)pItem)->GetValue() ));
+            }
+            if ( rSet.GetItemState( SID_EDITDOC, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sDontEdit;
                 pValue[nProps++].Value <<= (sal_Bool) (!( ((SfxBoolItem*)pItem)->GetValue() ));
             }
             if ( rSet.GetItemState( SID_TARGETNAME, sal_False, &pItem ) == SFX_ITEM_SET )
@@ -1334,6 +1369,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nProps].Name = sUpdateDocMode;
                 pValue[nProps++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
             }
+            if ( rSet.GetItemState( SID_REPAIRPACKAGE, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sRepairPackage;
+                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
+
         }
     }
 
@@ -1347,21 +1388,32 @@ SFX_IMPL_SINGLEFACTORY( SfxMacroLoader )
 
 void SAL_CALL SfxMacroLoader::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
+    Reference < XFrame > xFrame;
     if ( aArguments.getLength() )
-        aArguments[0] >>= m_xFrame;
+    {
+        aArguments[0] >>= xFrame;
+        m_xFrame = xFrame;
+    }
+}
 
-    if ( m_xFrame.is() )
+SfxObjectShell* SfxMacroLoader::GetObjectShell_Impl()
+{
+    SfxObjectShell* pDocShell = NULL;
+    Reference < XFrame > xFrame( m_xFrame.get(), UNO_QUERY );
+    if ( xFrame.is() )
     {
         SfxFrame* pFrame=0;
         for ( pFrame = SfxFrame::GetFirst(); pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
         {
-            if ( pFrame->GetFrameInterface() == m_xFrame )
+            if ( pFrame->GetFrameInterface() == xFrame )
                 break;
         }
 
         if ( pFrame )
             pDocShell = pFrame->GetCurrentDocument();
     }
+
+    return pDocShell;
 }
 
 // -----------------------------------------------------------------------
@@ -1401,14 +1453,14 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification( const ::com::sun::star::
     ::rtl::OUString aReferer;
     for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        if( lArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Referer")) )
+        if( lArgs[nProperty].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer")) )
         {
             lArgs[nProperty].Value >>= aReferer;
             break;
         }
     }
 
-    ErrCode nErr = loadMacro( aURL.Complete, pDocShell );
+    ErrCode nErr = loadMacro( aURL.Complete, GetObjectShell_Impl() );
     if( xListener.is() )
     {
         // always call dispatchFinished(), because we didn't load a document but
@@ -1436,14 +1488,14 @@ void SAL_CALL SfxMacroLoader::dispatch( const ::com::sun::star::util::URL&      
     ::rtl::OUString aReferer;
     for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        if( lArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Referer")) )
+        if( lArgs[nProperty].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer")) )
         {
             lArgs[nProperty].Value >>= aReferer;
             break;
         }
     }
 
-    ErrCode nErr = loadMacro( aURL.Complete, pDocShell );
+    ErrCode nErr = loadMacro( aURL.Complete, GetObjectShell_Impl() );
 }
 
 // -----------------------------------------------------------------------
@@ -1461,17 +1513,6 @@ void SAL_CALL SfxMacroLoader::addStatusListener( const ::com::sun::star::uno::Re
 void SAL_CALL SfxMacroLoader::removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl ,
                                                     const ::com::sun::star::util::URL&                                                  aURL     )
         throw (::com::sun::star::uno::RuntimeException)
-{
-}
-
-// -----------------------------------------------------------------------
-SfxMacroLoader::SfxMacroLoader( com::sun::star::uno::Reference < class com::sun::star::lang::XMultiServiceFactory > const &)
-    : pDocShell(0)
-{
-}
-
-// -----------------------------------------------------------------------
-SfxMacroLoader::~SfxMacroLoader()
 {
 }
 
@@ -1610,6 +1651,9 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
                 aCall += aQuotedArgs;
                 aCall += ']';
 
+                // just to let the shell be alive
+                SfxObjectShellRef rSh = pSh;
+
                 // execute function using its Sbx parent,
                 pMethod->GetParent()->Execute( aCall );
                 nErr = SbxBase::GetError();
@@ -1617,9 +1661,9 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
                     // reset "ThisComponent" to prior value
                     pCompVar->PutObject( xOldVar );
 
-                if ( pSh )
-                    // remove flag for modal mode
-                    pSh->SetMacroMode_Impl( FALSE );
+                if ( pSh && pSh->GetModel().is() )
+                       // remove flag for modal mode
+                       pSh->SetMacroMode_Impl( FALSE );
             }
             else
                 nErr = ERRCODE_BASIC_PROC_UNDEFINED;
@@ -1643,12 +1687,16 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
 }
 
 SFX_IMPL_XSERVICEINFO( SfxAppDispatchProvider, "com.sun.star.frame.DispatchProvider", "com.sun.star.comp.sfx2.AppDispatchProvider" )                                                                \
-SFX_IMPL_ONEINSTANCEFACTORY( SfxAppDispatchProvider );
+SFX_IMPL_SINGLEFACTORY( SfxAppDispatchProvider );
 
 void SAL_CALL SfxAppDispatchProvider::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
+    Reference < XFrame > xFrame;
     if ( aArguments.getLength() )
-        aArguments[0] >>= m_xFrame;
+    {
+        aArguments[0] >>= xFrame;
+        m_xFrame = xFrame;
+    }
 }
 
 Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& sTargetFrameName,
@@ -1679,7 +1727,79 @@ Sequence< Reference < XDispatch > > SAL_CALL SfxAppDispatchProvider::queryDispat
 {
     return Sequence< Reference < XDispatch > >();
 }
+#ifdef TEST_HANDLERS
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
 
+#include <drafts/com/sun/star/awt/XKeyHandler.hdl>
+#include <drafts/com/sun/star/awt/XMouseClickHandler.hdl>
+
+class TestKeyHandler: public ::cppu::WeakImplHelper2
+<
+    drafts::com::sun::star::awt::XKeyHandler,
+    com::sun::star::lang::XServiceInfo
+>
+{
+public:
+    TestKeyHandler( const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& ){}
+
+    SFX_DECL_XSERVICEINFO
+    virtual sal_Bool SAL_CALL keyPressed( const ::com::sun::star::awt::KeyEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL keyReleased( const ::com::sun::star::awt::KeyEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source)
+        throw (::com::sun::star::uno::RuntimeException);
+};
+
+class TestMouseClickHandler: public ::cppu::WeakImplHelper2
+<
+    drafts::com::sun::star::awt::XMouseClickHandler,
+    com::sun::star::lang::XServiceInfo
+>
+{
+public:
+    TestMouseClickHandler( const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& ){}
+
+    SFX_DECL_XSERVICEINFO
+    virtual sal_Bool SAL_CALL mousePressed( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL mouseReleased( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source)
+        throw (::com::sun::star::uno::RuntimeException);
+};
+
+sal_Bool SAL_CALL TestKeyHandler::keyPressed( const ::com::sun::star::awt::KeyEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return sal_False;
+}
+
+sal_Bool SAL_CALL TestKeyHandler::keyReleased( const ::com::sun::star::awt::KeyEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return sal_False;
+}
+
+void SAL_CALL TestKeyHandler::disposing( const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+sal_Bool SAL_CALL TestMouseClickHandler::mousePressed( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return sal_False;
+}
+
+sal_Bool SAL_CALL TestMouseClickHandler::mouseReleased( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return sal_False;
+}
+
+void SAL_CALL TestMouseClickHandler::disposing( const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+SFX_IMPL_XSERVICEINFO( TestKeyHandler, "com.sun.star.task.Job", "com.sun.star.comp.Office.KeyHandler");
+SFX_IMPL_XSERVICEINFO( TestMouseClickHandler, "com.sun.star.task.Job", "com.sun.star.comp.Office.MouseClickHandler");
+SFX_IMPL_SINGLEFACTORY( TestKeyHandler );
+SFX_IMPL_SINGLEFACTORY( TestMouseClickHandler );
+#endif
 // -----------------------------------------------------------------------
 
 extern "C" {
@@ -1701,6 +1821,15 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     ::rtl::OUString aKeyStr;
     Reference< XRegistryKey > xNewKey;
     Reference< XRegistryKey > xLoaderKey;
+
+    // global app event broadcaster
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxGlobalEvents_Impl::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster") );
 
     // global app dispatcher
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
@@ -1820,6 +1949,7 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
         //  !!! ATTENTION !!!
         //      Write no ";" at end of line and dont forget "else" ! (see macro)
         //=============================================================================
+        IF_NAME_CREATECOMPONENTFACTORY( SfxGlobalEvents_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( SfxFrameLoader_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( SfxMacroLoader )
         IF_NAME_CREATECOMPONENTFACTORY( SfxStandaloneDocumentInfoObject )
@@ -1830,7 +1960,10 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
         IF_NAME_CREATECOMPONENTFACTORY( SfxDialogLibraryContainer )
         IF_NAME_CREATECOMPONENTFACTORY( SfxApplicationScriptLibraryContainer )
         IF_NAME_CREATECOMPONENTFACTORY( SfxApplicationDialogLibraryContainer )
-
+#ifdef TEST_HANDLERS
+        IF_NAME_CREATECOMPONENTFACTORY( TestKeyHandler )
+        IF_NAME_CREATECOMPONENTFACTORY( TestMouseClickHandler )
+#endif
         // Factory is valid - service was found.
         if ( xFactory.is() )
         {
@@ -1889,6 +2022,70 @@ RequestFilterOptions::RequestFilterOptions( ::com::sun::star::uno::Reference< ::
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >
     SAL_CALL RequestFilterOptions::getContinuations()
+        throw( ::com::sun::star::uno::RuntimeException )
+{
+    return m_lContinuations;
+}
+
+//=========================================================================
+
+RequestPackageReparation::RequestPackageReparation( ::rtl::OUString aName )
+{
+    ::rtl::OUString temp;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
+    ::com::sun::star::document::BrokenPackageRequest aBrokenPackageRequest( temp,
+                                                                                 temp2,
+                                                                              aName );
+
+       m_aRequest <<= aBrokenPackageRequest;
+
+       m_pApprove = new ContinuationApprove;
+       m_pDisapprove = new ContinuationDisapprove;
+
+       m_lContinuations.realloc( 2 );
+       m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pApprove );
+       m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pDisapprove );
+}
+
+::com::sun::star::uno::Any SAL_CALL RequestPackageReparation::getRequest()
+        throw( ::com::sun::star::uno::RuntimeException )
+{
+    return m_aRequest;
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >
+    SAL_CALL RequestPackageReparation::getContinuations()
+        throw( ::com::sun::star::uno::RuntimeException )
+{
+    return m_lContinuations;
+}
+
+//=========================================================================
+
+NotifyBrokenPackage::NotifyBrokenPackage( ::rtl::OUString aName )
+{
+    ::rtl::OUString temp;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
+    ::com::sun::star::document::BrokenPackageRequest aBrokenPackageRequest( temp,
+                                                                                 temp2,
+                                                                              aName );
+
+       m_aRequest <<= aBrokenPackageRequest;
+
+       m_pAbort  = new ContinuationAbort;
+
+       m_lContinuations.realloc( 1 );
+       m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
+}
+
+::com::sun::star::uno::Any SAL_CALL NotifyBrokenPackage::getRequest()
+        throw( ::com::sun::star::uno::RuntimeException )
+{
+    return m_aRequest;
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >
+    SAL_CALL NotifyBrokenPackage::getContinuations()
         throw( ::com::sun::star::uno::RuntimeException )
 {
     return m_lContinuations;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hro $ $Date: 2001-09-26 10:14:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,13 +171,13 @@ sal_Bool SfxContentHelper::Transfer_Impl( const String& rSource, const String& r
 
     try
     {
-        Content aDestPath( aDestObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aDestPath( aDestObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         Reference< ::com::sun::star::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
         OUString aTransferName = OUString::createFromAscii( "transfer" );
         if ( xInfo->hasCommandByName( aTransferName ) )
         {
             aDestPath.executeCommand( aTransferName, makeAny(
-                ::com::sun::star::ucb::TransferInfo( bMoveData, aSourceObj.GetMainURL(), aName, nNameClash ) ) );
+                ::com::sun::star::ucb::TransferInfo( bMoveData, aSourceObj.GetMainURL( INetURLObject::NO_DECODE ), aName, nNameClash ) ) );
         }
         else
         {
@@ -818,7 +818,7 @@ sal_Bool SfxContentHelper::MakeFolder( const String& rFolder )
     sal_Bool bRet = sal_False;
     try
     {
-        Content aCnt( aURL.GetMainURL(), aCmdEnv );
+        Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
         Content aNewFolder;
         OUString aType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.staroffice.fsys-folder" ) );
         bRet = aCnt.insertNewContent( aType, aNames, aValues, aNewFolder );

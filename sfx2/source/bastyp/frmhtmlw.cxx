@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmhtmlw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 07:47:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,8 +521,9 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         if( pSh )
             aURL = CreateDataURL( pSh, pFSet, pTopFrame );
     }
-    if( !aURL.Len() ) aURL = bFlatten ? pFrame->GetActualURL().GetMainURL() :
-        pFrame->GetURL().GetMainURL();
+    if( !aURL.Len() ) aURL = bFlatten ?
+        pFrame->GetActualURL().GetMainURL( INetURLObject::DECODE_TO_IURI ) :
+        pFrame->GetURL().GetMainURL( INetURLObject::DECODE_TO_IURI );
     if( aURL.Len() )
     {
         if( !bFlatten ) aURL = INetURLObject::AbsToRel( aURL );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cd $ $Date: 2002-09-24 08:36:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,11 +177,12 @@ private:
     String                      aHelpText;
     String                      aStr;
     String                      aCommand;
+    BOOL                        bConfigure;
 
 public:
     SfxMenuConfigEntry( USHORT nInitId, const String& rInitStr,
                         const String& rHelpText, BOOL bPopup = FALSE );
-    SfxMenuConfigEntry() : nId( 0 ), bPopUp( FALSE ) {}
+    SfxMenuConfigEntry() : nId( 0 ), bPopUp( FALSE ), bConfigure( TRUE ) {}
     ~SfxMenuConfigEntry();
 
     USHORT                      GetId() const { return nId; }
@@ -192,9 +193,11 @@ public:
     const String&               GetHelpText() const { return aHelpText; }
     void                        SetHelpText( const String& rStr ) { aHelpText = rStr; }
     void                        SetPopup( BOOL bOn = TRUE ) { bPopUp = bOn; }
+    void                        SetConfigurable( BOOL bOn = TRUE ) { bConfigure = bOn; }
     BOOL                        IsBinding() const { return nId != 0 && !bPopUp; }
     BOOL                        IsSeparator() const { return nId == 0; }
     BOOL                        IsPopup() const { return bPopUp; }
+    BOOL                        IsConfigurable() const { return bConfigure; }
     const String&               GetCommand() const { return aCommand; }
 };
 
@@ -303,6 +306,9 @@ class SfxAccCfgTabListBox_Impl : public SfxMenuCfgTabListBox_Impl
 
     void                        KeyInput( const KeyEvent &rKEvt );
 
+protected:
+    virtual void                InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image& );
+
 public:
                                 SfxAccCfgTabListBox_Impl(
                                         SfxAcceleratorConfigPage* pAccelConfigPage,
@@ -331,6 +337,8 @@ private:
     const SfxMacroInfoItem*         m_pMacroInfoItem;
     SfxAccCfgTabListBox_Impl        aEntriesBox;
     FixedLine                       aKeyboardGroup;
+     RadioButton                        aOfficeButton;
+    RadioButton                     aModuleButton;
     PushButton                      aChangeButton;
     PushButton                      aRemoveButton;
     FixedText                       aGroupText;
@@ -343,8 +351,6 @@ private:
     PushButton                      aLoadButton;
     PushButton                      aSaveButton;
     PushButton                      aResetButton;
-    RadioButton                     aOfficeButton;
-    RadioButton                     aModuleButton;
 
     USHORTArr                   aConfigCodeArr;
     USHORTArr                   aConfigAccelArr;
@@ -373,6 +379,8 @@ private:
 
     void                        Init( SfxAcceleratorManager* pAccMgr );
     void                        ResetConfig();
+
+    void                        CreateCustomItems( SvLBoxEntry* pEntry, const String& aCol1, const String& aCol2 );
 
 public:
                                 SfxAcceleratorConfigPage( Window *pParent, const SfxItemSet& rItemSet );

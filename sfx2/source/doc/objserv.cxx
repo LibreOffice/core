@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: gt $ $Date: 2002-11-21 09:27:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,8 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                 pFileDlg->CreateMatcher( GetFactory() );
             }
 
-            if ( HasName() )
+            SFX_ITEMSET_ARG( pMedSet, pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
+            if ( HasName() && !( pRepairItem && pRepairItem->GetValue() ) )
             {
                 String aLastName = QueryTitle( SFX_TITLE_QUERY_SAVE_NAME_PROPOSAL );
                 const SfxFilter* pMedFilter = GetMedium()->GetFilter();
@@ -585,6 +586,10 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPassItem, SfxStringItem, SID_PASSWORD, FALSE );
             if ( pPassItem != NULL )
                 pParams->Put( SfxStringItem( SID_PASSWORD, ::rtl::OUString() ) );
+
+            Reference < ::com::sun::star::view::XSelectionSupplier > xSel( GetModel()->getCurrentController(), UNO_QUERY );
+            if ( xSel.is() && xSel->getSelection().hasValue() )
+                pParams->Put( SfxBoolItem( SID_SELECTION, TRUE ) );
 
             if ( pFileDlg->Execute( pParams, aFilterName ) != ERRCODE_NONE )
             {
@@ -883,11 +888,10 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 
     if( bOk )
     {
-        const SfxFilter* pFilter = GetMedium()->GetFilter();
-        if  (   bDialogUsed && pFilter
-            &&  pFilter->IsOwnFormat()
-            &&  pFilter->UsesStorage()
-            &&  pFilter->GetVersion() >= SOFFICE_FILEFORMAT_60
+        if  (   bDialogUsed
+            &&  pFilt->IsOwnFormat()
+            &&  pFilt->UsesStorage()
+            &&  pFilt->GetVersion() >= SOFFICE_FILEFORMAT_60
             )
         {
             SfxViewFrame* pDocViewFrame = SfxViewFrame::GetFirst( this );
@@ -1414,7 +1418,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             SfxDocumentTemplates *pTemplates =  new SfxDocumentTemplates;
 
             // Find the template filter with the highest version number
-            const SfxFilter* pFilter;
+            const SfxFilter* pFilter=NULL;
             const SfxObjectFactory& rFactory = GetFactory();
             USHORT  nFilterCount = rFactory.GetFilterCount();
             ULONG   nVersion = 0;
@@ -1692,12 +1696,24 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     break;
                 }
 
-                if ( !GetMedium() )
-                    rSet.DisableItem(nWhich);
+                const SfxFilter* pCombinedFilters = NULL;
+                SfxFactoryFilterContainer* pFilterContainer = GetFactory().GetFilterContainer();
+
+                if ( pFilterContainer )
+                {
+                    SfxFilterFlags    nMust    = SFX_FILTER_IMPORT | SFX_FILTER_EXPORT;
+                    SfxFilterFlags    nDont    = SFX_FILTER_NOTINSTALLED;
+
+                    pCombinedFilters = pFilterContainer->GetAnyFilter( nMust, nDont );
+                }
+
+                if ( !pCombinedFilters || !GetMedium() )
+                    rSet.DisableItem( nWhich );
                 else if ( pObj && pObj->GetProtocol().IsEmbed() )
                     rSet.Put( SfxStringItem( nWhich, String( SfxResId( STR_SAVECOPYDOC ) ) ) );
                 else
                     rSet.Put( SfxStringItem( nWhich, String( SfxResId( STR_SAVEASDOC ) ) ) );
+
                 break;
             }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 17:09:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,8 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "ì˜ì—­(~C)";
         Text[ turkish ] = "~Kategori";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "àrees";
+        Text[ catalan ] = "~Categories";
+        Text[ thai ] = "~à¸›à¸£à¸°à¹€à¸ à¸—";
     };
     FixedText FT_TEMPLATE
     {
@@ -163,10 +164,11 @@ ModalDialog DLG_NEW_FILE
         Text[ chinese_traditional ] = "æ¨£å¼(~E)";
         Text[ arabic ] = "ŞæÇáÈ";
         Text[ greek ] = "Ğñüôõğá";
-        Text[ korean ] = "ìŠ¤íƒ€ì¼(~E)";
+        Text[ korean ] = "ì„œì‹ íŒŒì¼(~E)";
         Text[ turkish ] = "~Şablon";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Estils";
+        Text[ catalan ] = "~Plantilles";
+        Text[ thai ] = "à¹à¸¡à¹ˆà¹~à¸šà¸š";
     };
     ListBox LB_TEMPLATE
     {
@@ -195,7 +197,7 @@ ModalDialog DLG_NEW_FILE
         Delta = 148 ;
         MapUnit = MAP_APPFONT ;
         Text[ chinese_simplified ] = "é™„åŠ (~M)";
-        Text[ russian ] = "~Áîëüøå";
+        Text[ russian ] = "~Äåòàëè";
         Text[ polish ] = "~Dodatki";
         Text[ japanese ] = "è©³ç´°(~M)";
         Text[ chinese_traditional ] = "é™„åŠ (~M)";
@@ -204,7 +206,8 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "ì˜µì…˜(~M)";
         Text[ turkish ] = "~Araçlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Opciones";
+        Text[ catalan ] = "~Opcions";
+        Text[ thai ] = "~à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”";
     };
     Window WIN_PREVIEW
     {
@@ -233,7 +236,7 @@ ModalDialog DLG_NEW_FILE
         Text [ english_us ] = "Pre~view" ;
         Hide = TRUE ;
         Text[ chinese_simplified ] = "é¢„è§ˆ(~V)";
-        Text[ russian ] = "Ïğîñìîòğ";
+        Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ";
         Text[ polish ] = "Po~dgl¹d";
         Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼(~V)";
         Text[ chinese_traditional ] = "æª¢è¦–(~V)";
@@ -242,7 +245,8 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "ë¯¸ë¦¬ë³´ê¸°(~V)";
         Text[ turkish ] = "Ö~nizleme";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Pre~visualización";
+        Text[ catalan ] = "Pre~visualització";
+        Text[ thai ] = "à¹à¸ªà¸”~à¸‡à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡";
     };
     FixedLine GB_DOCINFO
     {
@@ -271,7 +275,8 @@ ModalDialog DLG_NEW_FILE
         Text[ turkish ] = "Tanım";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Descripció";
-        Text[ finnish ] = "Kuvaus";
+        Text[ finnish ] = "Asiakirjan tiedot";
+        Text[ thai ] = "à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢";
     };
     CheckBox CB_TEXT_STYLE
     {
@@ -300,6 +305,7 @@ ModalDialog DLG_NEW_FILE
         Text[ turkish ] = "~Metin";
         Text[ finnish ] = "Teks~ti";
         Text[ catalan ] = "Te~xt";
+        Text[ thai ] = "à¸‚à¹‰à¸­~à¸„à¸§à¸²à¸¡";
     };
     CheckBox CB_FRAME_STYLE
     {
@@ -318,7 +324,7 @@ ModalDialog DLG_NEW_FILE
         Text [ portuguese_brazilian ] = "Rahmen" ;
         Text [ portuguese ] = "Mol~dura" ;
         Text[ chinese_simplified ] = "æ¡†(~F)";
-        Text[ russian ] = "Ğàìêà";
+        Text[ russian ] = "~Âğåçêà";
         Text[ polish ] = "Ramka";
         Text[ japanese ] = "æ (~F)";
         Text[ chinese_traditional ] = "æ–‡å­—æ–¹å¡Š(~F)";
@@ -327,7 +333,8 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "í”„ë ˆì„(~F)";
         Text[ turkish ] = "Çerçeve";
         Text[ finnish ] = "~Kehys";
-        Text[ catalan ] = "~Frame";
+        Text[ catalan ] = "~Marc";
+        Text[ thai ] = "~à¸à¸£à¸­à¸š";
     };
     CheckBox CB_PAGE_STYLE
     {
@@ -355,7 +362,8 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "í˜ì´ì§€(~P)";
         Text[ turkish ] = "Sayfa";
         Text[ finnish ] = "~Sivut";
-        Text[ catalan ] = "~Pages";
+        Text[ catalan ] = "~Pàgines";
+        Text[ thai ] = "~à¸«à¸™à¹‰à¸²";
     };
     CheckBox CB_NUM_STYLE
     {
@@ -382,8 +390,9 @@ ModalDialog DLG_NEW_FILE
         Text[ greek ] = "Áñßèìçóç";
         Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸°(~U)";
         Text[ turkish ] = "Numaralama";
-        Text[ finnish ] = "Nu~merointi";
-        Text[ catalan ] = "N~umbering";
+        Text[ finnish ] = "Numerointi";
+        Text[ catalan ] = "N~umeració";
+        Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸š~à¸•à¸±à¸§à¹€à¸¥à¸‚";
     };
     CheckBox CB_MERGE_STYLE
     {
@@ -410,8 +419,9 @@ ModalDialog DLG_NEW_FILE
         Text[ greek ] = "ÁíôéêáôÜóôáóç";
         Text[ korean ] = "ë®ì–´ì“°ê¸°(~O)";
         Text[ turkish ] = "Üzerine yaz";
-        Text[ finnish ] = "~Korvaa";
-        Text[ catalan ] = "~Overwrite";
+        Text[ finnish ] = "Korvaa";
+        Text[ catalan ] = "~Sobrescriu";
+        Text[ thai ] = "à¹€~à¸‚à¸µà¸¢à¸™à¸—à¸±à¸š";
     };
     PushButton PB_LOAD_FILE
     {
@@ -424,10 +434,10 @@ ModalDialog DLG_NEW_FILE
         Text[ portuguese ] = "Do ficheiro...";
         Text[ russian ] = "Èç ôàéëà...";
         Text[ greek ] = "From file...";
-        Text[ dutch ] = "From file...";
+        Text[ dutch ] = "Uit bestand...";
         Text[ french ] = "À partir d'un fichier...";
         Text[ spanish ] = "De archivo...";
-        Text[ finnish ] = "Tiedostosta";
+        Text[ finnish ] = "Tiedostosta...";
         Text[ italian ] = "Da file...";
         Text[ danish ] = "Fra fil...";
         Text[ swedish ] = "Från fil...";
@@ -439,7 +449,8 @@ ModalDialog DLG_NEW_FILE
         Text[ chinese_traditional ] = "å¾æª”æ¡ˆ...";
         Text[ turkish ] = "From file...";
         Text[ arabic ] = "From file...";
-        Text[ catalan ] = "From file...";
+        Text[ catalan ] = "Del fitxer...";
+        Text[ thai ] = "à¸ˆà¸²à¸à¹à¸Ÿà¹‰à¸¡...";
     };
     String STR_LOAD_TEMPLATE
     {
@@ -447,7 +458,7 @@ ModalDialog DLG_NEW_FILE
         Text [ English ] = "Load templates" ;
         Text [ english_us ] = "Load Styles" ;
         Text [ italian ] = "Carica modelli" ;
-        Text [ spanish ] = "Cargar plantillas" ;
+        Text [ spanish ] = "Cargar estilos" ;
         Text [ french ] = "Charger les styles" ;
         Text [ dutch ] = "Opmaakprofielen laden" ;
         Text [ swedish ] = "Ladda mallar" ;
@@ -455,16 +466,17 @@ ModalDialog DLG_NEW_FILE
         Text [ portuguese ] = "Carregar estilos" ;
         Text [ portuguese_brazilian ] = "Vorlagen laden" ;
         Text[ chinese_simplified ] = "è£…å…¥æ ·å¼";
-        Text[ russian ] = "Çàãğóçêà øàáëîíîâ è ñòèëåé";
+        Text[ russian ] = "Çàãğóçèòü ñòèëè";
         Text[ polish ] = "£aduj style";
         Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿";
         Text[ chinese_traditional ] = "è¼‰å…¥æ¨£å¼";
         Text[ arabic ] = "ÊÍãíá ÃäãÇØ";
         Text[ greek ] = "ÅéóáãùãŞ ğñïôığùí";
-        Text[ korean ] = "í…œí”Œë¦¿ ë¡œë“œ";
+        Text[ korean ] = "ìŠ¤íƒ€ì¼ ë¡œë“œ";
         Text[ turkish ] = "Biçim yükle";
-        Text[ finnish ] = "Lataa mallipohjat";
-        Text[ catalan ] = "Load Templates";
+        Text[ finnish ] = "Lataa tyylit";
+        Text[ catalan ] = "Carrega plantilles";
+        Text[ thai ] = "à¹‚à¸«à¸¥à¸”à¹à¸¡à¹ˆà¹à¸šà¸š";
     };
     FixedText FT_TITLE
     {
@@ -495,6 +507,7 @@ ModalDialog DLG_NEW_FILE
         Text[ turkish ] = "~Başlık";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Títol";
+        Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­";
     };
     Edit ED_TITLE
     {
@@ -519,7 +532,7 @@ ModalDialog DLG_NEW_FILE
         Text [ french ] = "S~ujet" ;
         Text [ swedish ] = "Te~ma" ;
         Text [ dutch ] = "~Onderwerp" ;
-        Text [ spanish ] = "Tema" ;
+        Text [ spanish ] = "~Asunto" ;
         Text [ english_us ] = "Subject" ;
         Hide = TRUE ;
         Text[ chinese_simplified ] = "ä¸»é¢˜";
@@ -532,7 +545,8 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "ì£¼ì œ";
         Text[ turkish ] = "Konu";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tema";
+        Text[ catalan ] = "Assumpte";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡";
     };
     Edit ED_THEMA
     {
@@ -552,7 +566,7 @@ ModalDialog DLG_NEW_FILE
         Text [ italian ] = "Parole chiave" ;
         Text [ portuguese_brazilian ] = "Palavras-chave" ;
         Text [ portuguese ] = "~Palavras-chave" ;
-        Text [ finnish ] = "~Avainsanat" ;
+        Text [ finnish ] = "Avain~sanat" ;
         Text [ danish ] = "Nøgleord" ;
         Text [ french ] = "Mots-cl~és" ;
         Text [ swedish ] = "~Nyckelord" ;
@@ -570,7 +584,8 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "í‚¤ì›Œë“œ(~K)";
         Text[ turkish ] = "A~nahtar sözcükler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Palabras ~clave";
+        Text[ catalan ] = "~Paraules clau";
+        Text[ thai ] = "à¸„à¸³~à¸ªà¸³à¸„à¸±à¸";
     };
     Edit ED_KEYWORDS
     {
@@ -590,7 +605,7 @@ ModalDialog DLG_NEW_FILE
         Text [ italian ] = "Descrizione" ;
         Text [ portuguese_brazilian ] = "Descri??o" ;
         Text [ portuguese ] = "~Descrição" ;
-        Text [ finnish ] = "~Kuvaus" ;
+        Text [ finnish ] = "Ku~vaus" ;
         Text [ danish ] = "Beskrivelse" ;
         Text [ french ] = "Description" ;
         Text [ swedish ] = "B~eskrivning" ;
@@ -608,7 +623,8 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "ì„¤ëª…(~D)";
         Text[ turkish ] = "~Tanım";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Descripción";
+        Text[ catalan ] = "~Descripció";
+        Text[ thai ] = "~à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢";
     };
     MultiLineEdit ED_DESC
     {
@@ -631,9 +647,15 @@ ModalDialog DLG_NEW_FILE
     Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”";
     Text[ arabic ] = "ÌÏíÏ";
     Text[ greek ] = "Äçìéïõñãßá";
-    Text[ korean ] = "ìƒˆë¡œ";
+    Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°";
     Text[ turkish ] = "Yeni";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nou";
+    Text[ thai ] = "à¹ƒà¸«à¸¡à¹ˆ";
 };
+
+
+
+
+
 

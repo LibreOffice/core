@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2002-11-20 10:21:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,11 @@
  *
  *
  ************************************************************************/
+
+#ifdef SOLARIS
+// HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
+#include <ctime>
+#endif
 
 #include <string>   // HACK: prevent conflict between STLPORT and Workshop headers
 #include <cstdarg>  // std::va_list
@@ -526,36 +531,6 @@ int SfxMenuManager::Load( SvStream& rStream )
     }
 
     return SfxConfigItem::ERR_OK;
-}
-
-void SfxMenuManager::Construct_Impl( Menu* pSVMenu, BOOL bWithHelp )
-{
-    SfxVirtualMenu *pOldVirtMenu=0;
-    if ( pMenu )
-    {
-        // Es wird umkonfiguriert
-        pOldVirtMenu = pMenu;
-        pBindings->ENTERREGISTRATIONS();
-    }
-
-    TryToHideDisabledEntries_Impl( pSVMenu );
-    SfxVirtualMenu *pVMenu = new SfxVirtualMenu( pSVMenu, bWithHelp, *pBindings, bOLE );
-    Construct(*pVMenu);
-
-    if ( bMenuBar && pOldVirtMenu )
-    {
-        SfxMenuBarManager *pBar = (SfxMenuBarManager*) this;
-        MenuBar* pOldBar = (MenuBar*) pOldVirtMenu->GetSVMenu();
-        MenuBar* pSvBar = (MenuBar*) GetMenu()->GetSVMenu();
-        if ( pBar->GetWindow()->GetMenuBar() == pOldBar )
-            pBar->GetWindow()->SetMenuBar( pSvBar );
-    }
-
-    if ( pOldVirtMenu )
-    {
-        delete pOldVirtMenu;
-        pBindings->LEAVEREGISTRATIONS();
-    }
 }
 
 //--------------------------------------------------------------------
@@ -1108,10 +1083,8 @@ void SfxMenuManager::Reconfigure()
 {
     SfxVirtualMenu *pVMenu;
     Menu *pSVMenu;
-    if (bMenuBar )
-    {
+    if ( bMenuBar )
         pSVMenu = new MenuBar;
-    }
     else
         pSVMenu = new PopupMenu;
 
@@ -1133,6 +1106,36 @@ void SfxMenuManager::Reconfigure()
     pOldMenu = 0;
     pBindings->LEAVEREGISTRATIONS();
     SetDefault( FALSE );
+}
+
+void SfxMenuManager::Construct_Impl( Menu* pSVMenu, BOOL bWithHelp )
+{
+    SfxVirtualMenu *pOldVirtMenu=0;
+    if ( pMenu )
+    {
+        // Es wird umkonfiguriert
+        pOldVirtMenu = pMenu;
+        pBindings->ENTERREGISTRATIONS();
+    }
+
+    TryToHideDisabledEntries_Impl( pSVMenu );
+    SfxVirtualMenu *pVMenu = new SfxVirtualMenu( pSVMenu, bWithHelp, *pBindings, bOLE );
+    Construct(*pVMenu);
+
+    if ( bMenuBar && pOldVirtMenu )
+    {
+        SfxMenuBarManager *pBar = (SfxMenuBarManager*) this;
+        MenuBar* pOldBar = (MenuBar*) pOldVirtMenu->GetSVMenu();
+        MenuBar* pSvBar = (MenuBar*) GetMenu()->GetSVMenu();
+        if ( pBar->GetWindow()->GetMenuBar() == pOldBar )
+            pBar->GetWindow()->SetMenuBar( pSvBar );
+    }
+
+    if ( pOldVirtMenu )
+    {
+        delete pOldVirtMenu;
+        pBindings->LEAVEREGISTRATIONS();
+    }
 }
 
 //--------------------------------------------------------------------
@@ -1196,7 +1199,10 @@ SfxMenuBarManager::SfxMenuBarManager( const ResId& rResId, SfxBindings &rBinding
         aObjMenus[n].pResMgr = NULL;
     }
 
-    SetForceCtrlCreateMode( bOLE );
+    // #107258# full menu bar hierarchy is needed, if accessibility is enabled
+    BOOL bAccessibilityEnabled = Application::GetSettings().GetMiscSettings().GetEnableATToolSupport();
+    SetForceCtrlCreateMode( bOLE || bAccessibilityEnabled );
+
     Initialize();
 }
 
@@ -1242,7 +1248,7 @@ SvStream* SfxMenuBarManager::GetDefaultStream( StreamMode nMode )
     String aUserConfig = SvtPathOptions().GetUserConfigPath();
     INetURLObject aObj( aUserConfig );
     aObj.insertName( GetStreamName() );
-    return ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL(), nMode );
+    return ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), nMode );
 }
 
 BOOL SfxMenuBarManager::Load( SvStream& rStream, BOOL bOLEServer )
@@ -1277,6 +1283,42 @@ void SfxMenuManager::EraseItemCmds( Menu* pMenu )
     }
 }
 
+// Restore the correct macro ID so that menu items with an associated accelerator
+// are correctly identified. This ensures that the accelerator info is displayed on
+// the popup.
+void SfxMenuManager::RestoreMacroIDs( Menu* pMenu )
+{
+    USHORT nCount = pMenu->GetItemCount();
+    for ( USHORT nSVPos = 0; nSVPos < nCount; nSVPos++ )
+    {
+        USHORT nId = pMenu->GetItemId( nSVPos );
+        PopupMenu* pPopupMenu = pMenu->GetPopupMenu( nId );
+        if ( pPopupMenu )
+            RestoreMacroIDs( pPopupMenu );
+        else if ( nId < SID_SFX_START )
+        {
+            // Restore a valid ID for macro commands!
+            String aCommand = pMenu->GetItemCommand( nId );
+            if ( aCommand.CompareToAscii("macro:", 6 ) == COMPARE_EQUAL )
+            {
+                String  aTitle      = pMenu->GetItemText( nId );
+                String  aHelpText   = pMenu->GetHelpText( nId );
+                ULONG   nHelpId     = pMenu->GetHelpId( nId );
+                MenuItemBits nBits  = pMenu->GetItemBits( nId );
+
+                SfxMacroInfo aInfo( aCommand );
+                SFX_APP()->GetMacroConfig()->GetSlotId( &aInfo );
+                nId = aInfo.GetSlotId();
+
+                pMenu->RemoveItem( nSVPos );
+                pMenu->InsertItem( nId, aTitle, nBits, nSVPos );
+                pMenu->SetHelpText( nId, aHelpText );
+                pMenu->SetHelpId( nId, nHelpId );
+            }
+        }
+    }
+}
+
 MenuBar* SfxMenuBarManager::LoadMenuBar( SvStream& rStream )
 {
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xInputStream =
@@ -1287,6 +1329,8 @@ MenuBar* SfxMenuBarManager::LoadMenuBar( SvStream& rStream )
         ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
         ::framework::MenuConfiguration aConfig( aXMultiServiceFactory );
         pSVMenu = aConfig.CreateMenuBarFromConfiguration( xInputStream );
+        if ( pSVMenu )
+            SfxMenuManager::RestoreMacroIDs( pSVMenu );
     }
     catch ( ::com::sun::star::lang::WrappedTargetException&  )
     {
@@ -1685,9 +1729,17 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
             delete pSVMenu;
             pSVMenu = (PopupMenu*) pMenu;
         }
-    }
 
-    SfxPopupMenuManager aPop( pSVMenu, pFrame->GetBindings() );
-    aPop.RemoveDisabledEntries();
-    aPop.Execute( rPoint, pWindow );
+        SfxPopupMenuManager aPop( pSVMenu, pFrame->GetBindings() );
+        aPop.RemoveDisabledEntries();
+        aPop.Execute( rPoint, pWindow );
+    }
+}
+
+BOOL SfxMenuBarManager::ReInitialize()
+{
+    BOOL bRet = SfxConfigItem::ReInitialize();
+    if ( bRet )
+        UpdateObjectMenus();
+    return bRet;
 }

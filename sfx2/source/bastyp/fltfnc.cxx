@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: er $ $Date: 2002-11-15 13:01:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,6 @@ using namespace ::vos;
 #include "frame.hxx"
 #include "dispatch.hxx"
 #include "urlframe.hxx"
-#include "picklist.hxx"
 #include "topfrm.hxx"
 #include "plugwin.hxx"
 #include "helper.hxx"
@@ -380,7 +379,7 @@ const SfxFilter* SfxFilterContainer::GetFilter4Protocol(
  */
 {
     const INetURLObject& rObj = rMed.GetURLObject();
-    String aName = rMed.GetURLObject().GetMainURL();
+    String aName = rMed.GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
     // Hier noch pruefen, ob das Doc im Browser dargestellt werden soll
     SFX_ITEMSET_ARG( rMed.GetItemSet(), pTargetItem, SfxStringItem,
                      SID_TARGETNAME, sal_False);

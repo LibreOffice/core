@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplpitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-08 16:45:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,4 +119,5 @@ BYTE SfxTemplateItem::GetFlagCount() const
 {
     return sizeof(USHORT) * 8;
 }
+
 

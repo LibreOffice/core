@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-30 15:14:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@
 #include "viewsh.hxx"
 #include "dispatch.hxx"
 #include "printer.hxx"
-#include "picklist.hxx"
 #include "plugobj.hxx"
 #include "arrdecl.hxx"
 #include "sfxresid.hxx"
@@ -123,6 +122,7 @@
 #include "dlgcont.hxx"
 #include "scriptcont.hxx"
 #include <misccfg.hxx>
+#include "docfac.hxx"
 
 #ifndef PRODUCT
 DECLARE_LIST( SfxFrameWindowFactoryArray_Impl, SfxFrameWindowFactory* )
@@ -197,10 +197,6 @@ BOOL SfxApplication::QueryExit_Impl()
         pAppData_Impl->bDirectAliveCount = FALSE;
     }
 
-    // alle "normal" bearbeiteten Dokumente schlie\sen
-    MemCache_Impl &rCache = SfxPickList_Impl::Get()->GetMemCache();
-    rCache.ClearObjects();
-
 /*
     SfxObjectShell *pLastDocSh = SfxObjectShell::GetFirst();
     if ( bQuit )
@@ -250,9 +246,6 @@ void SfxApplication::Deinitialize()
     //!Wait();
     StarBASIC::Stop();
 
-    // Pickliste (nicht in StoreConfig wegen letztem Doc)
-    SfxPickList_Impl::Get()->SavePicklist();
-
     // ggf. BASIC speichern
     if ( pImp->pBasicMgr && pImp->pBasicMgr->IsModified() )
         SaveBasicManager();
@@ -287,6 +280,7 @@ void SfxApplication::Deinitialize()
     // dabei sollten auch restliche Komponenten ( Beamer! ) verschwinden
     DELETEZ(pMenuMgr);
     DELETEZ(pAcceleratorMgr);
+    SfxObjectFactory::ClearAll_Impl();
     DELETEZ( pImp->pBasicMgr );
     if( pImp->pBasicLibContainer )
         pImp->pBasicLibContainer->release();
@@ -298,7 +292,7 @@ void SfxApplication::Deinitialize()
 
     DBG_ASSERT( pViewFrame == 0, "active foreign ViewFrame" );
 
-    DELETEZ(pInterfaces);
+    delete[] pInterfaces, pInterfaces = 0;
     DELETEZ(pImageMgr);
 
     // free administration managers
@@ -311,7 +305,6 @@ void SfxApplication::Deinitialize()
     DELETEX(pAppData_Impl->pSfxFrameObjectFactoryPtr);
     DELETEX(pAppData_Impl->pSfxPluginObjectFactoryPtr);
 
-    SfxPickList_Impl::Delete();
     delete pAppData_Impl->pLabelResMgr;
 
 #ifndef PRODUCT

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdde.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-11 07:45:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,7 +525,8 @@ BOOL SfxApplication::InitializeDde()
         // Config-Pfad als Topic wegen Mehrfachstart
         INetURLObject aOfficeLockFile( SvtPathOptions().GetUserConfigPath() );
         aOfficeLockFile.insertName( DEFINE_CONST_UNICODE( "soffice.lck" ) );
-        String aService( SfxDdeServiceName_Impl( aOfficeLockFile.GetMainURL() ) );
+        String aService( SfxDdeServiceName_Impl(
+                    aOfficeLockFile.GetMainURL(INetURLObject::DECODE_TO_IURI) ) );
         aService.ToUpperAscii();
         pAppData_Impl->pDdeService2 = new ImplDdeService( aService );
         pAppData_Impl->pTriggerTopic = new SfxDdeTriggerTopic_Impl;
@@ -637,12 +638,12 @@ BOOL ImplDdeService::MakeTopic( const String& rNm )
         INetURLObject aWorkPath( SvtPathOptions().GetWorkPath() );
         INetURLObject aFile;
         if ( aWorkPath.GetNewAbsURL( rNm, &aFile ) &&
-             SfxContentHelper::IsDocument( aFile.GetMainURL() ) )
+             SfxContentHelper::IsDocument( aFile.GetMainURL( INetURLObject::NO_DECODE ) ) )
         {
             // File vorhanden
 
             // dann versuche die Datei zu laden:
-            SfxStringItem aName( SID_FILE_NAME, aFile.GetMainURL() );
+            SfxStringItem aName( SID_FILE_NAME, aFile.GetMainURL( INetURLObject::NO_DECODE ) );
             SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, TRUE);
 //          SfxBoolItem aHidden(SID_HIDDEN, TRUE);
             // minimiert!

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cd $ $Date: 2002-09-24 08:38:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
 #endif
+#include <vcl/svapp.hxx>
 
 #include <so3/svstor.hxx>
 
@@ -89,6 +90,7 @@
 //static const char __FAR_DATA pUnknownStr[]    = "???";
 static USHORT __FAR_DATA aCodeArr[] =
 {
+    KEY_F1       ,
     KEY_F2       ,
     KEY_F3       ,
     KEY_F4       ,
@@ -128,6 +130,7 @@ static USHORT __FAR_DATA aCodeArr[] =
     KEY_MENU        ,
     KEY_HELP        ,
 
+    KEY_F1        | KEY_SHIFT,
     KEY_F2        | KEY_SHIFT,
     KEY_F3        | KEY_SHIFT,
     KEY_F4        | KEY_SHIFT,
@@ -192,6 +195,7 @@ static USHORT __FAR_DATA aCodeArr[] =
     KEY_Y         | KEY_MOD1 ,
     KEY_Z         | KEY_MOD1 ,
 
+    KEY_F1        | KEY_MOD1 ,
     KEY_F2        | KEY_MOD1 ,
     KEY_F3        | KEY_MOD1 ,
     KEY_F4        | KEY_MOD1 ,
@@ -260,6 +264,7 @@ static USHORT __FAR_DATA aCodeArr[] =
     KEY_Y         | KEY_SHIFT | KEY_MOD1,
     KEY_Z         | KEY_SHIFT | KEY_MOD1,
 
+    KEY_F1        | KEY_SHIFT | KEY_MOD1,
     KEY_F2        | KEY_SHIFT | KEY_MOD1,
     KEY_F3        | KEY_SHIFT | KEY_MOD1,
     KEY_F4        | KEY_SHIFT | KEY_MOD1,
@@ -301,6 +306,44 @@ static long nAccCfgTabs[] =
 #pragma warning (disable:4355)
 #endif
 
+
+class SfxAccCfgLBoxString_Impl : public SvLBoxString
+{
+public:
+    SfxAccCfgLBoxString_Impl( SvLBoxEntry* pEntry, USHORT nFlags, const String& rTxt ) :
+        SvLBoxString( pEntry, nFlags, rTxt ) {}
+    virtual ~SfxAccCfgLBoxString_Impl();
+
+    virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags, SvLBoxEntry* pEntry );
+};
+
+SfxAccCfgLBoxString_Impl::~SfxAccCfgLBoxString_Impl()
+{
+}
+
+// -----------------------------------------------------------------------
+
+void SfxAccCfgLBoxString_Impl::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxEntry* pEntry )
+{
+    Font aOldFont( rDev.GetFont() );
+    Font aFont( aOldFont );
+    DBG_ASSERT( pEntry && pEntry->GetUserData(), "Entry or UserData invalid" );
+
+    rDev.SetFont( aFont );
+
+    BOOL bCanBeConfigured = ((SfxMenuConfigEntry*)pEntry->GetUserData())->IsConfigurable();
+    if ( !bCanBeConfigured )
+        rDev.DrawCtrlText( rPos, GetText(), 0, STRING_LEN, TEXT_DRAW_DISABLE );
+    else
+        rDev.DrawText( rPos, GetText() );
+    rDev.SetFont( aOldFont );
+}
+
+void SfxAccCfgTabListBox_Impl::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const Image& rImg1, const Image& rImg2 )
+{
+    SvTabListBox::InitEntry( pEntry, rTxt, rImg1, rImg2 );
+}
+
 /* SfxAcceleratorConfigListBox::KeyInput() *******************************************
 
 Springt den Eintrag an, der der gedrueckten Tastenkombination entspricht.
@@ -308,7 +351,6 @@ Ausgenommen davon sind die fuer die Dialogsteuerung ueblichen
 Tastenkombinationen.
 
 ****************************************************************************/
-
 void SfxAccCfgTabListBox_Impl::KeyInput( const KeyEvent &rKEvt )
 {
     KeyCode aCode1 = rKEvt.GetKeyCode();
@@ -423,6 +465,18 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
     aGroupLBox.SetFunctionListBox( &aFunctionBox );
 }
 
+void SfxAcceleratorConfigPage::CreateCustomItems( SvLBoxEntry* pEntry, const String& aCol1, const String& aCol2 )
+{
+    // Initialize text columns with own class to enable custom painting
+    // This is needed as we have to paint disabled entries by ourself. No support for that in the
+    // original SvTabListBox!
+    SfxAccCfgLBoxString_Impl* pStrItem = new SfxAccCfgLBoxString_Impl( pEntry, 0, aCol1 );
+    pEntry->ReplaceItem( pStrItem, 1 );
+
+    pStrItem = new SfxAccCfgLBoxString_Impl( pEntry, 0, aCol2 );
+    pEntry->ReplaceItem( pStrItem, 2 );
+}
+
 void SfxAcceleratorConfigPage::Init( SfxAcceleratorManager* pAccMgr )
 {
     // Insert all editable accelerators into list box. It is possible
@@ -463,6 +517,37 @@ void SfxAcceleratorConfigPage::Init( SfxAcceleratorManager* pAccMgr )
             SfxMenuConfigEntry *pEntry = (SfxMenuConfigEntry*) aEntriesBox.GetEntry( 0, nPos )->GetUserData();
             pEntry->SetId( nId );
             aConfigAccelArr[ nPos ] = nId;
+
+            SvLBoxEntry* pLBEntry = aEntriesBox.GetEntry( NULL, nPos );
+            CreateCustomItems( pLBEntry, aEntriesBox.GetEntryText( pLBEntry, 0 ), aText );
+        }
+    }
+
+    // Map the VCL hardcoded key codes and mark them as not changeable
+    ULONG nCount = Application::GetReservedKeyCodeCount();
+    for ( ULONG n = 0; n < nCount; n++ )
+    {
+        const KeyCode* pKeyCode = Application::GetReservedKeyCode( n );
+        USHORT nPos = KeyCodeToPos_Config( *pKeyCode );
+        if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+        {
+            USHORT nCol = aEntriesBox.TabCount() - 1;
+            String aText = Application::GetReservedKeyCodeDescription( n );
+            if( aText.Len() )
+            {
+                aText.Insert( (sal_Unicode)'[', 0 );
+                aText.Append( ']' );
+                aEntriesBox.SetEntryText( aText, nPos, nCol );
+            }
+
+            // Hardcoded function mapped so no ID possible and mark entry as not changeable
+            SfxMenuConfigEntry *pEntry = (SfxMenuConfigEntry*) aEntriesBox.GetEntry( 0, nPos )->GetUserData();
+            pEntry->SetConfigurable( FALSE );
+            pEntry->SetId( 0 );
+            aConfigAccelArr[ nPos ] = 0;
+
+            SvLBoxEntry* pLBEntry = aEntriesBox.GetEntry( NULL, nPos );
+            CreateCustomItems( pLBEntry, aEntriesBox.GetEntryText( pLBEntry, 0 ), aText );
         }
     }
 }
@@ -535,7 +620,11 @@ void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr, BOOL bIsDe
     }
 
     for (i=0; i<aListOfIds.Count(); i++)
-        SFX_APP()->GetMacroConfig()->ReleaseSlotId(aListOfIds[i]);
+    {
+        // Check if macro is still present to prevent an assertion if the macro was removed by the user before!
+        if ( SFX_APP()->GetMacroConfig()->GetMacroInfo( aListOfIds[i] ))
+            SFX_APP()->GetMacroConfig()->ReleaseSlotId(aListOfIds[i]);
+    }
 
     pAccMgr->SetDefault(FALSE);
 }
@@ -773,8 +862,23 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     {
         // Eintrag ausgewaehlt: Buttons enablen/disablen
         USHORT nPos = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
-        aChangeButton.Enable( aConfigAccelArr[ nPos ] != aFunctionBox.GetCurId() );
-        aRemoveButton.Enable( aConfigAccelArr[ nPos ] > 0 );
+        if ( aConfigAccelArr[ nPos ] == 0 )
+        {
+            // Entry without mapped function.
+            // Can be hardcoded keyboard shortcut or non-mapped keyboard shortcut
+            USHORT nPos = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
+            SfxMenuConfigEntry *pEntry = (SfxMenuConfigEntry*) aEntriesBox.GetEntry( 0, nPos )->GetUserData();
+            if ( pEntry->IsConfigurable() )
+                aChangeButton.Enable( TRUE );
+            else
+                aChangeButton.Enable( FALSE );
+            aRemoveButton.Enable( FALSE );
+        }
+        else
+        {
+            aChangeButton.Enable( aConfigAccelArr[ nPos ] != aFunctionBox.GetCurId() );
+            aRemoveButton.Enable( aConfigAccelArr[ nPos ] > 0 );
+        }
     }
     else if ( pListBox == &aGroupLBox )
     {
@@ -789,8 +893,23 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
         // Zuerst "uberpr"ufen, ob durch den Wechsel der Selektion der Zustand des ChangeButtons wechselt
         USHORT nEntryPos = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
         USHORT nId = aFunctionBox.GetCurId();
-        aChangeButton.Enable( aConfigAccelArr[ nEntryPos ] != nId );
-        aRemoveButton.Enable( aConfigAccelArr[ nEntryPos ] > 0 );
+
+        if ( aConfigAccelArr[ nEntryPos ] == 0 )
+        {
+            // Entry without mapped function.
+            // Can be hardcoded keyboard shortcut or non-mapped keyboard shortcut
+            SfxMenuConfigEntry *pEntry = (SfxMenuConfigEntry*) aEntriesBox.GetEntry( 0, nEntryPos )->GetUserData();
+            if ( pEntry->IsConfigurable() )
+                aChangeButton.Enable( aConfigAccelArr[ nEntryPos ] != nId );
+            else
+                aChangeButton.Enable( FALSE );
+            aRemoveButton.Enable( FALSE );
+        }
+        else
+        {
+            aChangeButton.Enable( aConfigAccelArr[ nEntryPos ] != nId );
+            aRemoveButton.Enable( aConfigAccelArr[ nEntryPos ] > 0 );
+        }
 
         aKeyBox.Clear();
         aKeyArr.Clear();

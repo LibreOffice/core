@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-28 12:49:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #include "topfrm.hxx"
 
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
@@ -86,6 +89,12 @@
 #endif
 #ifndef _UNO_COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+#include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 #ifndef _SV_MENU_HXX
@@ -143,6 +152,8 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::beans;
 
 //------------------------------------------------------------------------
 
@@ -164,12 +175,10 @@ class SfxTopWindow_Impl : public Window
 {
 public:
     SfxTopFrame*        pFrame;
-    Dialog*             pModalDialog;
 
     SfxTopWindow_Impl( SfxTopFrame* pF );
 //        : Window( pF->pImp->pWindow, WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK )
 //        , pFrame( pF )
-//        , pModalDialog( 0 )
 //    { SetBackground(); }
     ~SfxTopWindow_Impl( );
 
@@ -186,7 +195,6 @@ public:
 SfxTopWindow_Impl::SfxTopWindow_Impl( SfxTopFrame* pF )
         : Window( pF->pImp->pWindow, WB_BORDER | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK )
         , pFrame( pF )
-        , pModalDialog( 0 )
 {
     SetBackgroundBrush( Brush( Color( COL_WHITE )) );
 }
@@ -236,16 +244,14 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
         if ( pView->GetViewShell()->KeyInput( *rNEvt.GetKeyEvent() ) )
             return TRUE;
     }
-    else if ( rNEvt.GetType() == EVENT_EXECUTEDIALOG )
+    else if ( rNEvt.GetType() == EVENT_EXECUTEDIALOG /*|| rNEvt.GetType() == EVENT_INPUTDISABLE*/ )
     {
-        pModalDialog = (Dialog*) rNEvt.GetWindow();
         pView->SetModalMode( sal_True );
         return sal_True;
     }
-    else if ( rNEvt.GetType() == EVENT_ENDEXECUTEDIALOG )
+    else if ( rNEvt.GetType() == EVENT_ENDEXECUTEDIALOG /*|| rNEvt.GetType() == EVENT_INPUTENABLE*/ )
     {
-        pModalDialog = NULL;
-        EnableInput( sal_True, sal_True );
+        //EnableInput( sal_True, sal_True );
         pView->SetModalMode( sal_False );
         return sal_True;
     }
@@ -255,7 +261,26 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
 
 long SfxTopWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
+    USHORT nType = rNEvt.GetType();
+    if ( nType == EVENT_KEYINPUT || nType == EVENT_KEYUP )
+    {
+        SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
+        SfxViewShell* pShell = pView ? pView->GetViewShell() : NULL;
+        if ( pShell && pShell->HasKeyListeners_Impl() && pShell->HandleNotifyEvent_Impl( rNEvt ) )
+            return sal_True;
+    }
+    else if ( nType == EVENT_MOUSEBUTTONUP || nType == EVENT_MOUSEBUTTONDOWN )
+    {
+        Window* pWindow = rNEvt.GetWindow();
+        SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
+        SfxViewShell* pShell = pView ? pView->GetViewShell() : NULL;
+        if ( pShell )
+            if ( pWindow == pShell->GetWindow() || pShell->GetWindow()->IsChild( pWindow ) )
+                if ( pShell->HasMouseClickListeners_Impl() && pShell->HandleNotifyEvent_Impl( rNEvt ) )
+                    return sal_True;
+    }
+
+    if ( nType == EVENT_MOUSEBUTTONDOWN )
     {
         Window* pWindow = rNEvt.GetWindow();
         const MouseEvent* pMEvent = rNEvt.GetMouseEvent();
@@ -376,13 +401,12 @@ class SfxTopViewFrame_Impl
 public:
     sal_Bool            bActive;
     Window*             pWindow;
-    const char*         pFactoryName;
+    String              aFactoryName;
     StopButtonTimer_Impl* pStopButtonTimer;
 
                         SfxTopViewFrame_Impl()
                             : bActive( sal_False )
                             , pWindow( 0 )
-                            , pFactoryName( 0 )
                             , pStopButtonTimer( 0 )
                         {}
 };
@@ -392,12 +416,102 @@ static svtools::AsynchronLink* pPendingCloser = 0;
 SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHidden, const SfxItemSet* pSet )
 {
     Reference < XFrame > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    Reference < XFrame > xFrame = xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 );
-    SfxTopFrame *pFrame = Create( xFrame );
-    pFrame->pImp->bHidden = bHidden;
+    SfxTopFrame *pFrame = NULL;
+    BOOL bNewView = FALSE;
+    if ( pSet )
+    {
+        SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_OPEN_NEW_VIEW, sal_False );
+        bNewView = pItem && pItem->GetValue();
+    }
 
+    if ( pDoc && !bHidden && !bNewView )
+    {
+        URL aTargetURL;
+        aTargetURL.Complete = pDoc->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+
+        BOOL bIsBasic = FALSE;
+        if ( !aTargetURL.Complete.getLength() )
+        {
+            String sFactory = String::CreateFromAscii(pDoc->GetFactory().GetShortName());
+            bIsBasic = (sFactory.CompareIgnoreCaseToAscii("sbasic")==COMPARE_EQUAL);
+
+            if (!bIsBasic)
+            {
+                String aURL = String::CreateFromAscii("private:factory/");
+                aURL += sFactory;
+                aTargetURL.Complete = aURL;
+            }
+        }
+
+        if (bIsBasic)
+        {
+            Reference < XFramesSupplier > xSupplier( xDesktop, UNO_QUERY );
+            if (xSupplier.is())
+            {
+                Reference < XIndexAccess > xContainer(xSupplier->getFrames(), UNO_QUERY);
+                if (xContainer.is())
+                {
+                    sal_Int32 nCount = xContainer->getCount();
+                    for (sal_Int32 i=0; i<nCount; ++i)
+                    {
+                        Reference < XFrame > xFrame;
+                        if (!(xContainer->getByIndex(i) >>= xFrame) || !xFrame.is())
+                            continue;
+                        Reference < XPropertySet > xSet(xFrame, UNO_QUERY);
+                        sal_Bool bIsBacking;
+                        if (
+                            (xSet.is()) &&
+                            (xSet->getPropertyValue(::rtl::OUString::createFromAscii("IsBackingMode"))>>=bIsBacking) &&
+                            (bIsBacking)
+                           )
+                        {
+                            pFrame = Create(xFrame);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+            xTrans->parseStrict( aTargetURL );
+
+            Reference < ::com::sun::star::frame::XDispatchProvider > xProv( xDesktop, UNO_QUERY );
+            Reference < ::com::sun::star::frame::XDispatch > xDisp;
+            if ( xProv.is() )
+            {
+                Sequence < ::com::sun::star::beans::PropertyValue > aSeq(1);
+                aSeq[0].Name = ::rtl::OUString::createFromAscii("Model");
+                aSeq[0].Value <<= pDoc->GetModel();
+                ::rtl::OUString aTargetFrame( ::rtl::OUString::createFromAscii("_default") );
+                xDisp = xProv->queryDispatch( aTargetURL, aTargetFrame , 0 );
+                if ( xDisp.is() )
+                    xDisp->dispatch( aTargetURL, aSeq );
+            }
+
+            SfxFrameArr_Impl& rArr = *SFX_APP()->Get_Impl()->pTopFrames;
+            for( USHORT nPos = rArr.Count(); nPos--; )
+            {
+                SfxTopFrame *pF = (SfxTopFrame*) rArr[ nPos ];
+                if ( pF->GetCurrentDocument() == pDoc )
+                {
+                    pFrame = pF;
+                    break;
+                }
+            }
+        }
+    }
+
+    if ( !pFrame  )
+    {
+        Reference < XFrame > xFrame = xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 );
+        pFrame = Create( xFrame );
+    }
+
+    pFrame->pImp->bHidden = bHidden;
     Window* pWindow = pFrame->GetTopWindow_Impl();
-    if ( pWindow )
+    if ( pWindow && pDoc )
     {
         String aTitle = pDoc->GetTitle( SFX_TITLE_DETECT );
         aTitle += String::CreateFromAscii( " - " );
@@ -489,7 +603,11 @@ SfxTopFrame::SfxTopFrame( Window* pExternal, sal_Bool bHidden )
     }
 
     pWindow = new SfxTopWindow_Impl( this );
+/** AS:
+    Hide this window till the component was realy loaded. Otherwhise it overpaint e.g. the old component hardly
+    and produce repaint errors.
     pWindow->Show();
+  */
 }
 
 SfxTopFrame::~SfxTopFrame()
@@ -652,6 +770,12 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
     // ViewDaten
     SFX_ITEMSET_ARG(
         pSet, pViewDataItem, SfxStringItem, SID_USER_DATA, sal_False );
+    // ViewOnly
+    SFX_ITEMSET_ARG(
+        pSet, pEditItem, SfxBoolItem, SID_VIEWONLY, sal_False);
+
+    if ( pEditItem  && pEditItem->GetValue() )
+        SetMenuBarOn_Impl( FALSE );
 
     if ( pHidItem )
         pImp->bHidden = pHidItem->GetValue();
@@ -844,9 +968,17 @@ String SfxTopViewFrame::UpdateTitle()
 
     const SfxObjectFactory &rFact = GetObjectShell()->GetFactory();
     if ( rFact.GetFilterContainer()->GetFilterCount() )
-        pImp->pFactoryName = rFact.GetShortName();
+    {
+        pImp->aFactoryName = String::CreateFromAscii( rFact.GetShortName() );
+        USHORT nSlotId = rFact.GetCreateNewSlotId();
+        if ( nSlotId )
+        {
+            pImp->aFactoryName += String::CreateFromAscii("?slot=");
+            pImp->aFactoryName += String::CreateFromInt32( (sal_Int32) nSlotId );
+        }
+    }
     else
-        pImp->pFactoryName = SfxObjectFactory::GetDefaultFactory().GetShortName();
+        pImp->aFactoryName = String::CreateFromAscii( SfxObjectFactory::GetDefaultFactory().GetShortName() );
 
     String aTitle = SfxViewFrame::UpdateTitle();
     aTitle += String::CreateFromAscii( " - " );
@@ -1125,9 +1257,7 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
             String aFactName;
             if ( pFactoryItem )
                 aFactName = pFactoryItem->GetValue();
-            else if ( pImp->pFactoryName )
-                aFactName = String::CreateFromAscii( pImp->pFactoryName );
-            else
+            else if ( !pImp->aFactoryName.Len() )
             {
                 DBG_ERROR("Missing argument!");
                 break;
@@ -1135,7 +1265,7 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
 
             SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, GetPool() );
             String aFact = String::CreateFromAscii("private:factory/");
-            aFact += aFactName;
+            aFact += pImp->aFactoryName;
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
             aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
             aReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii( "_blank" ) ) );
@@ -1172,7 +1302,8 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
                     bUI = 2;
                 if ( ( bOther || pDocSh->PrepareClose( bUI ) ) )
                 {
-                    pDocSh->SetModified( FALSE );
+                    if ( !bOther )
+                        pDocSh->SetModified( FALSE );
                     rReq.Done(); // unbedingt vor Close() rufen!
                     if ( SfxApplication::IsPlugin() && rReq.GetSlot() == SID_BACKTOWEBTOP )
                     {
@@ -1236,10 +1367,10 @@ void SfxTopViewFrame::GetState_Impl( SfxItemSet &rSet )
             {
             case SID_NEWDOCDIRECT :
             {
-                if ( pImp->pFactoryName )
+                if ( pImp->aFactoryName.Len() )
                 {
                     String aFact = String::CreateFromAscii("private:factory/");
-                    aFact += String::CreateFromAscii( pImp->pFactoryName );
+                    aFact += pImp->aFactoryName;
                     rSet.Put( SfxStringItem( nWhich, aFact ) );
                 }
                 break;

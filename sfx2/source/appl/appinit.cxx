@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-19 17:17:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,6 @@
 #include "mnumgr.hxx"
 #include "msgpool.hxx"
 #include "newhdl.hxx"
-#include "picklist.hxx"
 #include "plugobj.hxx"
 #include "progress.hxx"
 #include "sfxhelp.hxx"
@@ -220,7 +219,6 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SfxApplication* pApp = SFX_APP();
-    SfxPickList_Impl::Get()->ClearMemCache();
     pApp->Get_Impl()->aLateInitTimer.Stop();
     pApp->Broadcast( SfxSimpleHint( SFX_HINT_DEINITIALIZING ) );
     pApp->Get_Impl()->pAppDispatch->ReleaseAll();
@@ -302,7 +300,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
 
     // diverse Pointer
     pImp->pAutoSaveTimer = new Timer;
-    SfxPickList_Impl::GetOrCreate( SvtHistoryOptions().GetSize( ePICKLIST ) );
     SfxPickList::GetOrCreate( SvtHistoryOptions().GetSize( ePICKLIST ) );
 
     /////////////////////////////////////////////////////////////////
@@ -350,8 +347,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_ACTIVATEDOC,     String(SfxResId(STR_EVENT_ACTIVATEDOC)),    aEventNames.GetString( 10 ) );
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_DEACTIVATEDOC,   String(SfxResId(STR_EVENT_DEACTIVATEDOC)),  aEventNames.GetString( 11 ) );
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_PRINTDOC,        String(SfxResId(STR_EVENT_PRINTDOC)),       aEventNames.GetString( 12 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_ONERROR,         String(SfxResId(STR_EVENT_ONERROR)),        aEventNames.GetString( 13 ) );
-    SfxEventConfiguration::RegisterEvent(SFX_EVENT_NEWMESSAGE,      String(SfxResId(STR_EVENT_NEWMESSAGE)),     aEventNames.GetString( 14 ) );
+    //SfxEventConfiguration::RegisterEvent(SFX_EVENT_MODIFYCHANGED, String(SfxResId(SFX_EVENT_MODIFYCHANGED)),  aEventNames.GetString( 13 ) );
 
     // Subklasse initialisieren
     bDowning = sal_False;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pb $ $Date: 2002-10-31 09:55:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1133,6 +1133,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
             {
                 aFmtLb.MakeVisible( pEntry );
                 aFmtLb.Select( pEntry );
+                bWaterDisabled = !HasSelectedStyle(); //added by BerryJia for fixing Bug76391 2003-1-22
                 FmtSelectHdl( NULL );
             }
         }
@@ -1243,7 +1244,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
 }
 
 //-------------------------------------------------------------------------
-inline BOOL SfxCommonTemplateDialog_Impl::HasSelectedStyle() const
+BOOL SfxCommonTemplateDialog_Impl::HasSelectedStyle() const
 {
     return pTreeBox? pTreeBox->FirstSelected() != 0:
             aFmtLb.GetSelectionCount() != 0;
@@ -1392,14 +1393,20 @@ void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
 {
 //  EnableItem(SID_STYLE_WATERCAN, pItem != 0);
     bWaterDisabled =  pItem == 0;
+//added by BerryJia for fixing Bug76391 2003-1-7
+    if(!bWaterDisabled)
+        bWaterDisabled = !HasSelectedStyle();
 
-    if(pItem)
+    if(pItem && !bWaterDisabled)
     {
         CheckItem(SID_STYLE_WATERCAN, pItem->GetValue());
         EnableItem( SID_STYLE_WATERCAN, TRUE );
     }
     else
-        EnableItem(SID_STYLE_WATERCAN, FALSE);
+        if(!bWaterDisabled)
+            EnableItem(SID_STYLE_WATERCAN, TRUE);
+        else
+            EnableItem(SID_STYLE_WATERCAN, FALSE);
 
 //Waehrend Giesskannenmodus Statusupdates ignorieren.
 

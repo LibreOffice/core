@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-26 11:49:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,7 @@ void SfxPreviewWin_Impl::ImpPaint(
     }
     Point bPoint=Point(nWidth,nHeight)-aPoint;
 
+
     pWindow->SetLineColor();
     Color aLightGrayCol( COL_LIGHTGRAY );
     pWindow->SetFillColor( aLightGrayCol );
@@ -269,9 +270,12 @@ SfxPreviewWin::SfxPreviewWin(
     SetHelpId( HID_PREVIEW_FRAME );
 
     // adjust contrast mode initially
-    bool bUseContrast = true && GetSettings().GetStyleSettings().GetHighContrastMode();
-    bUseContrast = bUseContrast && UseHighContrastSetting();
+    bool bUseContrast = UseHighContrastSetting();
     SetDrawMode( bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+
+    // #107818# This preview window is for document previews.  Therefore
+    // right-to-left mode should be off
+    EnableRTL( FALSE );
 }
 
 void SfxPreviewWin::Paint( const Rectangle& rRect )
@@ -316,16 +320,14 @@ void SfxPreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         // adjust contrast mode
-        bool bUseContrast = true && GetSettings().GetStyleSettings().GetHighContrastMode();
-        bUseContrast = bUseContrast && UseHighContrastSetting();
+        bool bUseContrast = UseHighContrastSetting();
         SetDrawMode( bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
     }
 }
 
 bool SfxPreviewWin::UseHighContrastSetting() const
 {
-    SvtAccessibilityOptions aAccOptions;
-    return true && aAccOptions.GetIsForDrawings();
+    return GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 

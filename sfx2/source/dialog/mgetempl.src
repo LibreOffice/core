@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-09-10 14:14:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,18 +117,18 @@ TabPage TP_MANAGE_STYLES
         Text [ swedish ] = "~Autom. uppdatering" ;
         Text [ danish ] = "Opdater automatisk" ;
         Text [ italian ] = "Aggiorna automaticamente" ;
-        Text [ spanish ] = "~Actualizar automáticamente" ;
+        Text [ spanish ] = "~Actualización automática" ;
         Text [ french ] = "Actualisation ~automatique" ;
-        Text [ dutch ] = "~Autom. actualiseren" ;
+        Text [ dutch ] = "~Autom. bijwerken" ;
         Text [ portuguese ] = "Actualizar ~automaticamente" ;
         Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ–°(~A)";
-        Text[ russian ] = "Àâòîì. îáíîâëåíèå";
+        Text[ russian ] = "Àâòîîáíîâëåíèå";
         Text[ polish ] = "~Aktualizuj automatycznie";
         Text[ japanese ] = "è‡ªå‹•çš„ã«æ›´æ–°(~A)";
         Text[ chinese_traditional ] = "è‡ªå‹•æ›´æ–°(~A)";
         Text[ arabic ] = "ÊÍÏíË ÊáŞÇÆí";
         Text[ greek ] = "Áõôüìáôç åíçìİñùóç";
-        Text[ korean ] = "ìë™ ìƒˆë¡œê³ ì¹¨(~A)";
+        Text[ korean ] = "ìë™ìœ¼ë¡œ ìƒˆë¡œ ê³ ì¹¨(~A)";
         Text[ turkish ] = "~Otomatik güncelleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Actualitza automàticament";
@@ -146,10 +146,10 @@ TabPage TP_MANAGE_STYLES
         Text [ portuguese_brazilian ] = "~Pr?imo" ;
         Text [ portuguese ] = "~Estilo seguinte" ;
         Text [ finnish ] = "Seu~raava tyyli" ;
-        Text [ danish ] = "Næste typografi" ;
+        Text [ danish ] = "Næ~ste typografi" ;
         Text [ french ] = "~Style de suite" ;
         Text [ swedish ] = "Nästa ~formatmall" ;
-        Text [ dutch ] = "~Volgend profiel" ;
+        Text [ dutch ] = "V~olgend profiel" ;
         Text [ spanish ] = "~Estilo siguiente" ;
         Text [ english_us ] = "Ne~xt Style" ;
         Text[ chinese_simplified ] = "ä¸‹ä¸€ä¸ªæ ·å¼(~X)";
@@ -159,7 +159,7 @@ TabPage TP_MANAGE_STYLES
         Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹æ¨£å¼(~X)";
         Text[ arabic ] = "äãØ ÊÇáí";
         Text[ greek ] = "Åğüìåíï ğñüôõğï";
-        Text[ korean ] = "ë‹¤ìŒ í…œí”Œë¦¿(~X)";
+        Text[ korean ] = "ë‹¤ìŒ ìŠ¤íƒ€ì¼(~X)";
         Text[ turkish ] = "Sonraki biçim";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "~Estil següent";
@@ -185,7 +185,7 @@ TabPage TP_MANAGE_STYLES
         Text [ italian ] = "~Basato su" ;
         Text [ portuguese_brazilian ] = "~Baseado em" ;
         Text [ portuguese ] = "~Baseado em" ;
-        Text [ finnish ] = "~Perusta" ;
+        Text [ finnish ] = "Perusta" ;
         Text [ danish ] = "Kædet med" ;
         Text [ french ] = "~Lié à" ;
         Text [ swedish ] = "~Länkad med" ;
@@ -228,7 +228,7 @@ TabPage TP_MANAGE_STYLES
         Text [ french ] = "~Catégorie" ;
         Text [ swedish ] = "~Kategori" ;
         Text [ dutch ] = "~Bereik" ;
-        Text [ spanish ] = "~Área" ;
+        Text [ spanish ] = "~Categoría" ;
         Text [ english_us ] = "~Category" ;
         Text[ chinese_simplified ] = "åˆ†ç±»(~C)";
         Text[ russian ] = "Êàòåãîğèÿ";
@@ -296,6 +296,18 @@ TabPage TP_MANAGE_STYLES
     };
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

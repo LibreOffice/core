@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: cd $ $Date: 2002-09-24 10:44:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,6 @@ using namespace ::com::sun::star::frame;
 
 #pragma hdrstop
 
-#include "picklist.hxx"
 #include "openflag.hxx"
 #include "objshimp.hxx"
 #include "viewsh.hxx"
@@ -419,19 +418,36 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             // Wg. Doppeltbelegung in Toolboxen (mit/ohne Ctrl) ist es auch
             // m"oglich, da\s der Slot zwar enabled ist, aber Ctrl-Click
             // trotzdem nicht geht!
-            if( !pSh || !pSh->HasName() ||
-                !(pSh->Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ))
+            if( !pSh || !pSh->HasName() || !(pSh->Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ))
                 break;
 
-            // while switching to ReadOnly mode the storage should
-            // be reloaded also
-            /*
-            SFX_ITEMSET_ARG(
-                pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem,
-                SID_EDITDOC, sal_False );
-            if ( pItem && !pItem->GetValue() )
-                   break;
-            */
+            SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, sal_False );
+            if ( pItem && pItem->GetValue() )
+            {
+                SfxMedium* pMed = pSh->GetMedium();
+                SfxApplication* pApp = SFX_APP();
+                SfxAllItemSet aSet( pApp->GetPool() );
+                aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetURLObject().GetMainURL(INetURLObject::NO_DECODE) ) );
+                aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
+                aSet.Put( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_blank") ) );
+                SFX_ITEMSET_ARG( pMed->GetItemSet(), pReferer, SfxStringItem, SID_REFERER, sal_False );
+                if ( pReferer )
+                    aSet.Put( *pReferer );
+                SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pVersionItem, SfxInt16Item, SID_VERSION, sal_False );
+                if ( pVersionItem )
+                    aSet.Put( *pVersionItem );
+
+                if( pMed->GetFilter() )
+                {
+                    aSet.Put( SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetFilterName() ) );
+                    SFX_ITEMSET_ARG( pMed->GetItemSet(), pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
+                    if ( pOptions )
+                        aSet.Put( *pOptions );
+                }
+
+                GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, aSet );
+                return;
+            }
 
             sal_uInt16 nOpenMode;
             sal_Bool bNeedsReload = sal_False;
@@ -461,18 +477,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if ( pEditItem )
                     nOpenMode = pEditItem->GetValue() ? SFX_STREAM_READWRITE : SFX_STREAM_READONLY;
             }
-            /* the code looks to be useless
-             * it could not be reached before becouse of just commented code above
-             * so now it should be commented out also
-            else
-            {
-                // sonst Reaload abschaltbar
-                HACK(SID_EDITDOC ist hier falsch verwendet)
-                SFX_REQUEST_ARG(rReq, pReloadItem, SfxBoolItem, SID_EDITDOC, sal_False);
-                if ( pReloadItem )
-                    bReload = pReloadItem->GetValue();
-            }
-            */
 
             // doing
             if( pSh  )
@@ -484,11 +488,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(),
                                  pVersionItem, SfxInt16Item, SID_VERSION, sal_False );
 
+                INetURLObject aMedObj( pMed->GetName() );
                 if ( ( !bNeedsReload &&
-                    ( pMed->GetURLObject().GetProtocol() == INET_PROT_FILE
-                            && pMed->GetURLObject().getFSysPath(INetURLObject::FSYS_DETECT) == aPhysObj.getFSysPath(INetURLObject::FSYS_DETECT)
-                            && !SfxContentHelper::IsYounger( aPhysObj.GetMainURL(),
-                                                             pMed->GetURLObject().GetMainURL() )
+                    ( aMedObj.GetProtocol() == INET_PROT_FILE
+                            && aMedObj.getFSysPath(INetURLObject::FSYS_DETECT) == aPhysObj.getFSysPath(INetURLObject::FSYS_DETECT)
+                            && !SfxContentHelper::IsYounger( aPhysObj.GetMainURL( INetURLObject::NO_DECODE ),
+                                                             aMedObj.GetMainURL( INetURLObject::NO_DECODE ) )
                       || pMed->IsRemote()
                     )
                    ) || pVersionItem )
@@ -634,11 +639,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if ( rReq.GetSlot() == SID_EDITDOC )
                 bForEdit = !bForEdit;
 
-            // ggf. beim ::com::sun::star::sdbcx::User nachfragen
-            sal_Bool bDo = sal_True;
-            SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem,
-                            SID_SILENT, sal_False);
-            if ( GetFrame()->DocIsModified_Impl() &&
+            // ggf. beim User nachfragen
+            sal_Bool bDo = GetViewShell()->PrepareClose();
+            SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
+            if ( bDo && GetFrame()->DocIsModified_Impl() &&
                  !rReq.IsAPI() && ( !pSilentItem || !pSilentItem->GetValue() ) )
             {
                 QueryBox aBox( &GetWindow(), ResId(MSG_QUERY_LASTVERSION) );
@@ -685,19 +689,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         xOldObj, TYPE(SfxTopViewFrame) ) :
                         (SfxTopViewFrame*)GetNext( *pView, xOldObj,
                                                TYPE( SfxTopViewFrame ) );
-                }
-
-                MemCache_Impl& rCache = SfxPickList_Impl::Get()->GetMemCache();
-                if( !pNoCacheItem || pNoCacheItem->GetValue() )
-                {
-                    SfxObjectShell* pSh = xOldObj;
-                    if ( pURLItem )
-                        pSh = rCache.Find( aURL, String() );
-                    if( pSh )
-                    {
-                        pSh->PrepareReload();
-                        rCache.RemoveObject( pSh );
-                    }
                 }
 
                 DELETEZ( xOldObj->Get_Impl()->pReloadTimer );
@@ -932,19 +923,16 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
         {
             case SID_EDITDOC:
             {
-                if ( !pSh || !pSh->HasName() ||
-                     !( pSh->Get_Impl()->nLoadedFlags &  SFX_LOADED_MAINDOCUMENT ) )
+                if ( !pSh || !pSh->HasName() || !( pSh->Get_Impl()->nLoadedFlags &  SFX_LOADED_MAINDOCUMENT ) )
                     rSet.DisableItem( SID_EDITDOC );
                 else
                 {
-                    SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem,
-                                     SfxBoolItem, SID_EDITDOC, sal_False );
+                    SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_EDITDOC, sal_False );
                     if ( pItem && !pItem->GetValue() )
                         rSet.DisableItem( SID_EDITDOC );
                     else
                         rSet.Put( SfxBoolItem( nWhich, !pSh->IsReadOnly() ) );
                 }
-
                 break;
             }
 
@@ -1377,7 +1365,10 @@ String SfxViewFrame::UpdateTitle()
     String aURL;
     SfxFrame *pFrm = GetFrame();
     if ( pObjSh->HasName() )
-        aURL = pMedium->GetURLObject().GetURLNoPass();
+    {
+        INetURLObject aTmp( pMedium->GetName() );
+        aURL = aTmp.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+    }
 
     if ( aURL != pImp->aActualURL )
         // URL hat sich ge"andert
@@ -2856,7 +2847,9 @@ void SfxViewFrame::ExecView_Impl
                     SFX_REQUEST_ARG( rReq, pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
                     if ( pHiddenItem )
                         bHidden = pHiddenItem->GetValue();
-                    SfxFrame* pFrame = SfxTopFrame::Create( GetObjectShell(), GetCurViewId(), bHidden );
+                    SfxAllItemSet aSet( GetPool() );
+                    aSet.Put( SfxBoolItem( SID_OPEN_NEW_VIEW, TRUE ) );
+                    SfxFrame* pFrame = SfxTopFrame::Create( GetObjectShell(), GetCurViewId(), bHidden, &aSet );
                     if ( bHidden )
                         pFrame->GetCurrentViewFrame()->LockObjectShell_Impl( TRUE );
                 }
@@ -3099,7 +3092,7 @@ void SfxViewFrame::SetModalMode( sal_Bool bModal )
 
 BOOL SfxViewFrame::IsInModalMode() const
 {
-    return pImp->bModal;
+    return pImp->bModal || GetFrame()->GetWindow().IsInModalMode();
 }
 
 void SfxViewFrame::Resize()
@@ -3466,12 +3459,17 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                 if ( pWork )
                 {
                     BOOL bNewFullScreenMode = pItem ? pItem->GetValue() : !pWork->IsFullScreenMode();
-                    pWork->ShowFullScreenMode( bNewFullScreenMode );
-                    pWork->SetMenuBarMode( bNewFullScreenMode ? MENUBAR_MODE_HIDE : MENUBAR_MODE_NORMAL );
-                    GetFrame()->GetWorkWindow_Impl()->SetFullScreen_Impl( bNewFullScreenMode );
-                    if ( !pItem )
-                        rReq.AppendItem( SfxBoolItem( SID_WIN_FULLSCREEN, bNewFullScreenMode ) );
-                    rReq.Done();
+                    if ( bNewFullScreenMode != pWork->IsFullScreenMode() )
+                    {
+                        pWork->ShowFullScreenMode( bNewFullScreenMode );
+                        pWork->SetMenuBarMode( bNewFullScreenMode ? MENUBAR_MODE_HIDE : MENUBAR_MODE_NORMAL );
+                        GetFrame()->GetWorkWindow_Impl()->SetFullScreen_Impl( bNewFullScreenMode );
+                        if ( !pItem )
+                            rReq.AppendItem( SfxBoolItem( SID_WIN_FULLSCREEN, bNewFullScreenMode ) );
+                        rReq.Done();
+                    }
+                    else
+                        rReq.Ignore();
                 }
             }
             else

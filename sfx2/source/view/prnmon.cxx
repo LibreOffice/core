@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-24 12:14:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_VIEW_PRINTABLESTATE_HPP_
+#include <com/sun/star/view/PrintableState.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
 #endif
@@ -100,6 +104,7 @@
 #include "desrupt.hxx"
 #include "bindings.hxx"
 #include "sfxresid.hxx"
+#include "event.hxx"
 
 #include "view.hrc"
 
@@ -372,10 +377,12 @@ IMPL_LINK( SfxPrintProgress, EndPrintNotify, void *, pvoid )
     if ( pImp->pMonitor )
         pImp->pMonitor->Hide();
 
+    SfxViewShell* pViewShell = pImp->pViewShell;
+
     // Slots enablen
-    pImp->pViewShell->Invalidate( SID_PRINTDOC );
-    pImp->pViewShell->Invalidate( SID_PRINTDOCDIRECT );
-    pImp->pViewShell->Invalidate( SID_SETUPPRINTER );
+    pViewShell->Invalidate( SID_PRINTDOC );
+    pViewShell->Invalidate( SID_PRINTDOCDIRECT );
+    pViewShell->Invalidate( SID_SETUPPRINTER );
 
     // . . . falls der Printer im System umgestellt wurde, hier Aenderung
     // nachziehen.
@@ -400,25 +407,26 @@ IMPL_LINK( SfxPrintProgress, EndPrintNotify, void *, pvoid )
     }
     else
         // ggf. vorherigen Print-To-File-Status zuruecksetzen
-        pImp->pViewShell->GetPrinter()->EnablePrintFile( pImp->bOldEnablePrintFile );
+        pViewShell->GetPrinter()->EnablePrintFile( pImp->bOldEnablePrintFile );
 
-    // lief der Drucker im Thread?
+    // printing in thread will kill force us to kill this instance, so get necessary data before
+    BOOL bRestoreFlag = pImp->bRestoreFlag;
+    BOOL bOldFlag = pImp->bOldFlag;
     if ( pImp->bDeleteOnEndPrint )
     {
-        // Dialog sofort l"oschen sonst wird ggf. das MDI vorher geschlossen
         DELETEZ(pImp->pMonitor);
-
-        // Progress per PostMessage zerst"oren, nicht sofort sonst GPF
-        pImp->Delete( this );
+        delete this;
     }
     else
     {
-        DBG_ASSERT( !pImp->pOldPrinter, "Printer konnte nicht korrekt restauriert werden!" );
+        DBG_ASSERT( !pImp->pOldPrinter, "Unable to restore printer!" );
         pImp->bRunning = FALSE;
     }
 
-    if ( pImp->bRestoreFlag && pImp->pViewShell->GetObjectShell()->IsEnableSetModified() != pImp->bOldFlag )
-        pImp->pViewShell->GetObjectShell()->EnableSetModified( TRUE );
+    if ( bRestoreFlag && pViewShell->GetObjectShell()->IsEnableSetModified() != bOldFlag )
+        pViewShell->GetObjectShell()->EnableSetModified( TRUE );
+
+    pViewShell->GetObjectShell()->Broadcast( SfxPrintingHint( com::sun::star::view::PrintableState_JOB_COMPLETED, NULL, NULL ) );
     return 0;
 }
 

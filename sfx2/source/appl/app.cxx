@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-11 15:13:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,7 @@
 #include "sfxdir.hxx"
 #include "event.hxx"
 #include "appimp.hxx"
+#include "imestatuswindow.hxx"
 
 #ifdef DBG_UTIL
 #include "tbxctrl.hxx"
@@ -542,6 +543,7 @@ SfxApplication::SfxApplication()
 
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
+    pAppData_Impl->m_xImeStatusWindow->init();
     pApp->PreInit();
 
 #if SUPD>637
@@ -1036,7 +1038,7 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
             // otherwise BaseURL is set in activation of document
             INetURLObject aObject( SvtPathOptions().GetWorkPath() );
             aObject.setFinalSlash();
-            INetURLObject::SetBaseURL( aObject.GetMainURL() );
+            INetURLObject::SetBaseURL( aObject.GetMainURL( INetURLObject::NO_DECODE ) );
         }
 
         if( pNewContainerFrame )
@@ -1126,8 +1128,7 @@ sal_uInt32 SfxApplication::DetectFilter(
         else
         {
             // Finden anhand der Extension
-            pFilter = rMatcher.GetFilter4Extension(
-                rMedium.GetURLObject().GetName() );
+            pFilter = rMatcher.GetFilter4Extension( INetURLObject( rMedium.GetName() ).GetName() );
             if ( pFilter && pFilter->UsesStorage() )
                 pFilter = 0;
         }
@@ -1225,7 +1226,7 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
                     SfxRequest aReq(SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, pIter->GetPool());
 
                     sal_Bool        bHadName    = pIter->HasName()                  ;
-                    INetURLObject   aOldURL     = pIter->GetMedium()->GetURLObject();
+                    INetURLObject   aOldURL( pIter->GetMedium()->GetName() );
                     String          aOldName    = pIter->GetTitle()                 ;
 
                     const SfxFilter *pFilter = pIter->GetMedium()->GetFilter();
@@ -1234,7 +1235,7 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
                         // packed files must be saved with default format, but remember original filter !
                         pFilter = pIter->GetFactory().GetFilter(0);
 
-                    String aSaveName, aSavePath = aSaveObj.GetMainURL();
+                    String aSaveName, aSavePath = aSaveObj.GetMainURL( INetURLObject::NO_DECODE );
                     String aFilterName;
                     if ( pFilter )
                     {
@@ -1256,7 +1257,7 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
 
                     pIter->ExecuteSlot(aReq);
 
-                    pInternalOptions->PushRecoveryItem( bHadName ? aOldURL.GetMainURL() : aOldName              ,
+                    pInternalOptions->PushRecoveryItem( bHadName ? aOldURL.GetMainURL( INetURLObject::NO_DECODE ) : aOldName                ,
                                                         pOrigFilter ? pOrigFilter->GetFilterName() : aFilterName      ,
                                                         aSaveName                                               );
                 }
@@ -1272,65 +1273,6 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
             WarningBox( pTopWindow, SfxResId(STR_RECOVER_PREPARED) ).Execute();
         }
     }
-
-#if SUPD<613//MUSTINI
-/*TODO: We need a new key to save informations for SenCrashMail feature.*/
-    sal_Bool bSendMail = pInternalOptions->CrashMailEnabled();
-    if ( !pAppData_Impl->bBean && bSendMail )
-    {
-        String aInfo = System::GetSummarySystemInfos();
-        if ( aInfo.Len() )
-        {
-            TempFile aTempFile( aSaveObj.GetMainURL() );
-            String aFileName = aTempFile.GetName();
-            SvFileStream aStr( aFileName, STREAM_STD_READWRITE );
-            aStr.WriteByteString(aInfo);
-            aStr << "\n<Build>\n";
-            aStr << BUILD;
-            aStr << '\n';
-            aStr << "</Build>\n";
-            aStr << "\n<Plattform>\n";
-#ifdef WNT
-            ByteString aPlattform( "wntmsci3" );
-#elif defined ( C50 )
-#   if defined ( SPARC )
-            ByteString aPlattform( "unxsols2" );
-#   elif defined ( INTEL )
-            ByteString aPlattform( "unxsoli2" );
-#   endif
-#elif defined ( C52 )
-#   if defined ( SPARC )
-            ByteString aPlattform( "unxsols3" );
-#   elif defined ( INTEL )
-            ByteString aPlattform( "unxsoli3" );
-#   endif
-#elif GLIBC == 2
-            ByteString aPlattform( "unxlngi2" );
-#elif defined ( SPARC ) && defined ( GCC )
-            ByteString aPlattform( "unxsogs" );
-#endif
-#ifndef DBG_UTIL
-            aPlattform += ".pro";
-#endif
-            aStr << aPlattform.GetBuffer();
-            aStr << '\n';
-            aStr << "</Plattform>\n";
-            aStr << "\n<OfficeLanguage>\n";
-            aStr.WriteByteString( ByteString( osl_getThreadTextencoding() ) );
-            aStr << '\n';
-            aStr << "</OfficeLanguage>\n";
-            aStr << "\n<ExceptionType>\n";
-            aStr << nError;
-            aStr << '\n';
-            aStr << "</ExceptionType>\n";
-            aStr.Close();
-
-            pAppIniMgr->WriteKey( pAppIniMgr->GetGroupName( SFX_GROUP_WORKINGSET_IMPL ),
-                                  DEFINE_CONST_UNICODE("Info"), aFileName );
-            pAppIniMgr->Flush();
-        }
-    }
-#endif//MUSTINI
 
     // transfer configuration data
     ::utl::ConfigManager::GetConfigManager()->StoreConfigItems();

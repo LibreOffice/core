@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-31 09:36:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #include "frmload.hxx"
 
+#include <framework/interaction.hxx>
+
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -69,6 +71,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
@@ -123,6 +128,7 @@
 #include <vos/mutex.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
+#include <sot/storinfo.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -146,6 +152,7 @@ using namespace ::rtl;
 #include "loadenv.hxx"
 #include "docfile.hxx"
 #include "docfilt.hxx"
+#include "brokenpackageint.hxx"
 
 SfxFrameLoader_Impl::SfxFrameLoader_Impl( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
     : pMatcher( 0 )
@@ -176,6 +183,8 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     String aTypeName;
     sal_uInt32 nPropertyCount = rArgs.getLength();
     sal_Bool bReadOnlyTest = sal_False;
+    ::com::sun::star::uno::Reference< XInteractionHandler > xInteraction;
+    ::com::sun::star::uno::Reference < XModel > xModel;
     for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
         if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
@@ -205,25 +214,42 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
             rArgs[nProperty].Value >>= sTemp;
             aFilterName = sTemp;
         }
+        if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Model")) )
+            rArgs[nProperty].Value >>= xModel;
         if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly")) )
             rArgs[nProperty].Value >>= bReadOnlyTest;
+        else if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) )
+            rArgs[nProperty].Value >>= xInteraction;
     }
 
     const SfxFilter*  pFilter  = NULL;
     SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
     if ( !aFilterName.Len() )
     {
-        // no filter detection made, give a warning for the developer
-        DBG_ERROR("load called without calling detect before!");
-        if ( !aTypeName.Len() )
-            return sal_False;
-
         // try to find a filter with SFX filter detection using the typename
         SfxFilterFlags    nMust    = SFX_FILTER_IMPORT;
         SfxFilterFlags    nDont    = SFX_FILTER_NOTINSTALLED;
-        pFilter = rMatcher.GetFilter4EA( aTypeName, nMust, nDont );
+        if ( aTypeName.Len() )
+            pFilter = rMatcher.GetFilter4EA( aTypeName, nMust, nDont );
         if ( !pFilter )
-            return sal_False;
+        {
+            if ( xInteraction.is() )
+            {
+                ::framework::RequestFilterSelect* pRequest = new ::framework::RequestFilterSelect( rURL );
+                ::com::sun::star::uno::Reference< XInteractionRequest > xRequest ( pRequest );
+                xInteraction->handle( xRequest );
+                if( !pRequest->isAbort() )
+                {
+                    aFilterName = pRequest->getFilter();
+                    pFilter = rMatcher.GetFilter( aFilterName );
+                }
+            }
+
+            if ( pFilter )
+                aTypeName = pFilter->GetTypeName();
+            else
+                return sal_False;
+        }
         else
             // use filter names without prefix
             aFilterName = pFilter->GetFilterName();
@@ -250,6 +276,15 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 
     if ( !pFrame )
         pFrame = SfxTopFrame::Create( rFrame );
+
+    if ( xModel.is() )
+    {
+        for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, FALSE ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, FALSE ) )
+        {
+            if ( xModel == pDoc->GetModel() )
+                return pFrame->InsertDocument( pDoc );
+        }
+    }
 
     // check for the URL pattern of our factory URLs
     BOOL bFactoryURL = FALSE;
@@ -283,75 +318,87 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 
         if ( pFactory )
         {
-            INetURLObject aObj( rURL );
-            if ( aParam.Len() )
+            // in case an application has no import&export filter it can not be open for edit
+            const SfxFilter* pCombinedFilters = NULL;
+            SfxFactoryFilterContainer* pCont = pFactory->GetFilterContainer();
+            if ( pCont )
             {
-                // slots are executed on the module shell
-                sal_uInt16 nSlotId = (sal_uInt16) aParam.ToInt32();
-                SfxModule* pMod = pFactory->GetModule()->Load();
-                SfxRequest aReq( nSlotId, SFX_CALLMODE_SYNCHRON, pMod->GetPool() );
-                aReq.AppendItem( SfxStringItem ( SID_FILE_NAME, rURL ) );
-                aReq.AppendItem( SfxFrameItem ( SID_DOCFRAME, pFrame ) );
+                SfxFilterFlags    nMust    = SFX_FILTER_IMPORT | SFX_FILTER_EXPORT;
+                SfxFilterFlags    nDont    = SFX_FILTER_NOTINSTALLED;
+                pCombinedFilters = pCont->GetAnyFilter( nMust, nDont );
+            }
 
-                // the next parameter is especially needed for Impress, because they want to know
-                // wether their slot is called directly (like from Autopilot menue) or as part
-                // of a "NewDocument" request
-                aReq.AppendItem( SfxBoolItem ( SID_NEWDOCDIRECT, TRUE ) );
-
-                const SfxPoolItem* pRet = pMod->ExecuteSlot( aReq );
-                if ( pRet )
+            if ( pCombinedFilters )
+            {
+                INetURLObject aObj( rURL );
+                if ( aParam.Len() )
                 {
-                    bLoadState = sal_True;
+                    // slots are executed on the module shell
+                    sal_uInt16 nSlotId = (sal_uInt16) aParam.ToInt32();
+                    SfxModule* pMod = pFactory->GetModule()->Load();
+                    SfxRequest aReq( nSlotId, SFX_CALLMODE_SYNCHRON, pMod->GetPool() );
+                    aReq.AppendItem( SfxStringItem ( SID_FILE_NAME, rURL ) );
+                    aReq.AppendItem( SfxFrameItem ( SID_DOCFRAME, pFrame ) );
+
+                    // the next parameter is especially needed for Impress, because they want to know
+                    // wether their slot is called directly (like from Autopilot menue) or as part
+                    // of a "NewDocument" request
+                    aReq.AppendItem( SfxBoolItem ( SID_NEWDOCDIRECT, TRUE ) );
+
+                    const SfxPoolItem* pRet = pMod->ExecuteSlot( aReq );
+                    if ( pRet )
+                    {
+                        bLoadState = sal_True;
+                    }
+                    else
+                    {
+                        SfxObjectShell* pDoc = pFrame->GetCurrentDocument();
+                        if ( !pDoc )
+                        {
+                            REFERENCE< XFrame > aXFrame;
+                            pFrame->SetFrameInterface_Impl( aXFrame );
+                            pFrame->DoClose();
+                        }
+
+                        bLoadState = sal_False;
+                    }
+
+                    return bLoadState;
+                }
+
+                if( pFactory->GetStandardTemplate().Len() )
+                {
+                    // standard template set -> load it "AsTemplate"
+                    aSet.Put( SfxStringItem ( SID_FILE_NAME, pFactory->GetStandardTemplate() ) );
+                    aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
                 }
                 else
                 {
-                    SfxObjectShell* pDoc = pFrame->GetCurrentDocument();
-                    if ( !pDoc )
+                    // execute "NewDocument" request
+                    SfxViewShell *pView = pFrame->GetCurrentViewFrame() ? pFrame->GetCurrentViewFrame()->GetViewShell() : NULL;
+                    SfxRequest aReq( SID_NEWDOCDIRECT, SFX_CALLMODE_SYNCHRON, aSet );
+                    aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, pFrame ) );
+                    aReq.AppendItem( SfxStringItem( SID_NEWDOCDIRECT, String::CreateFromAscii(pFactory->GetShortName()) ) );
+                    const SfxPoolItem* pRet = pApp->ExecuteSlot( aReq );
+                    if ( pFrame->GetCurrentViewFrame() && pView != pFrame->GetCurrentViewFrame()->GetViewShell() )
                     {
-                        REFERENCE< XFrame > aXFrame;
-                        pFrame->SetFrameInterface_Impl( aXFrame );
-                        pFrame->DoClose();
+                        bLoadState = sal_True;
+                    }
+                    else if ( xListener.is() )
+                    {
+                        if ( !pFrame->GetCurrentDocument() )
+                        {
+                            REFERENCE< XFrame > aXFrame;
+                            pFrame->SetFrameInterface_Impl( aXFrame );
+                            pFrame->DoClose();
+                        }
+
+                        bLoadState = sal_False;
                     }
 
-                    bLoadState = sal_False;
+                    xFrame = REFERENCE< XFrame >();
+                    return bLoadState;
                 }
-
-                return bLoadState;
-            }
-
-            String aPathName( aObj.GetMainURL() );
-            if( pFactory->GetStandardTemplate().Len() )
-            {
-                // standard template set -> load it "AsTemplate"
-                aSet.Put( SfxStringItem ( SID_FILE_NAME, pFactory->GetStandardTemplate() ) );
-                aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-            }
-            else
-            {
-                // execute "NewDocument" request
-                SfxViewShell *pView = pFrame->GetCurrentViewFrame() ? pFrame->GetCurrentViewFrame()->GetViewShell() : NULL;
-                SfxRequest aReq( SID_NEWDOCDIRECT, SFX_CALLMODE_SYNCHRON, aSet );
-                aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, pFrame ) );
-                aReq.AppendItem( SfxStringItem( SID_NEWDOCDIRECT, String::CreateFromAscii(pFactory->GetShortName()) ) );
-                const SfxPoolItem* pRet = pApp->ExecuteSlot( aReq );
-                if ( pFrame->GetCurrentViewFrame() && pView != pFrame->GetCurrentViewFrame()->GetViewShell() )
-                {
-                    bLoadState = sal_True;
-                }
-                else if ( xListener.is() )
-                {
-                    if ( !pFrame->GetCurrentDocument() )
-                    {
-                        REFERENCE< XFrame > aXFrame;
-                        pFrame->SetFrameInterface_Impl( aXFrame );
-                        pFrame->DoClose();
-                    }
-
-                    bLoadState = sal_False;
-                }
-
-                xFrame = REFERENCE< XFrame >();
-                return bLoadState;
             }
         }
     }
@@ -364,10 +411,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     aSet.Put( SfxFrameItem( SID_DOCFRAME, pFrame ) );
     aSet.Put( SfxStringItem( SID_FILTER_NAME, aFilterName ) );
 
-    // create LoadEnvironment and set link for callback when it is finished
-    pLoader = LoadEnvironment_Impl::Create( aSet );
-    pLoader->AddRef();
-    pLoader->SetDoneLink( LINK( this, SfxFrameLoader_Impl, LoadDone_Impl ) );
+    SfxAllItemSet aResSet( aSet );
 
     if ( !pFactory )
     {
@@ -379,15 +423,97 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 
     if ( pFactory )
     {
+        // in case an application has no import&export filter it should be used in readonly mode
+        SfxFilterFlags    nMust    = SFX_FILTER_IMPORT | SFX_FILTER_EXPORT;
+        SfxFilterFlags    nDont    = SFX_FILTER_NOTINSTALLED;
+        SfxFactoryFilterContainer* pCont = pFactory->GetFilterContainer();
+        if ( pCont )
+        {
+            const SfxFilter* pCombinedFilters = pCont->GetAnyFilter( nMust, nDont );
+            if ( !pCombinedFilters )
+            {
+                aSet.Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+                aSet.Put( SfxBoolItem( SID_EDITDOC, sal_False ) );
+            }
+        }
+    }
+
+       // create LoadEnvironment and set link for callback when it is finished
+       pLoader = LoadEnvironment_Impl::Create( aSet );
+       pLoader->AddRef();
+       pLoader->SetDoneLink( LINK( this, SfxFrameLoader_Impl, LoadDone_Impl ) );
+
+    if ( pFactory )
+    {
         bLoadDone = sal_False;
         pMatcher = new SfxFilterMatcher( pFactory->GetFilterContainer() );
+
         pLoader->SetFilterMatcher( pMatcher );
         pLoader->Start();
 
         // wait for callback
         while( bLoadDone == sal_False )
             Application::Yield();
+
+        if ( pLoader->GetError() == ERRCODE_IO_BROKENPACKAGE && xInteraction.is() )
+        {
+            OUString aDocName = INetURLObject(rURL).getName( INetURLObject::LAST_SEGMENT, true,
+                                                      INetURLObject::DECODE_WITH_CHARSET );
+
+            SFX_ITEMSET_ARG( &aSet, pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, FALSE );
+            if ( !pRepairItem || !pRepairItem->GetValue() )
+            {
+                RequestPackageReparation* pRequest = new RequestPackageReparation( aDocName );
+                ::com::sun::star::uno::Reference< XInteractionRequest > xRequest ( pRequest );
+                xInteraction->handle( xRequest );
+                if( pRequest->isApproved() )
+                {
+                    aResSet.Put( SfxBoolItem( SID_REPAIRPACKAGE, sal_True ) );
+                    aResSet.Put( SfxBoolItem( SID_EDITDOC, sal_False ) );
+                    pLoader->ReleaseRef();
+                    pLoader = LoadEnvironment_Impl::Create( aResSet );
+                    pLoader->AddRef();
+                    pLoader->SetDoneLink( LINK( this, SfxFrameLoader_Impl, LoadDone_Impl ) );
+
+                    bLoadDone = sal_False;
+                    pLoader->SetFilterMatcher( pMatcher );
+                    pLoader->Start();
+
+                    // wait for callback
+                    while( bLoadDone == sal_False )
+                        Application::Yield();
+
+                    if ( pLoader->GetError() == ERRCODE_IO_BROKENPACKAGE )
+                    {
+                           NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocName );
+                           xRequest = ::com::sun::star::uno::Reference< XInteractionRequest >( pNotifyRequest );
+                           xInteraction->handle( xRequest );
+                    }
+                }
+            }
+            else
+            {
+                   NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocName );
+                ::com::sun::star::uno::Reference< XInteractionRequest > xRequest ( pNotifyRequest );
+                   xInteraction->handle( xRequest );
+            }
+        }
     }
+
+    if ( pLoader->GetError() )
+    {
+        SfxFrame* pFrame = pLoader->GetFrame();
+        if ( pFrame && !pFrame->GetCurrentDocument() )
+        {
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            REFERENCE< XFrame > aXFrame;
+            pFrame->SetFrameInterface_Impl( aXFrame );
+            pFrame->DoClose();
+        }
+    }
+
+    xFrame = REFERENCE< XFrame >();
+    xListener = REFERENCE< XLoadEventListener >();
 
     return bLoadState;
 }
@@ -406,15 +532,6 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
 
     if ( pLoader->GetError() )
     {
-        SfxFrame* pFrame = pLoader->GetFrame();
-        if ( pFrame && !pFrame->GetCurrentDocument() )
-        {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
-            REFERENCE< XFrame > aXFrame;
-            pFrame->SetFrameInterface_Impl( aXFrame );
-            pFrame->DoClose();
-        }
-
         bLoadDone  = sal_True ;
         bLoadState = sal_False;
     }
@@ -424,8 +541,6 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
         bLoadState = sal_True;
     }
 
-    xFrame = REFERENCE< XFrame >();
-    xListener = REFERENCE< XLoadEventListener >();
     return NULL;
 }
 
@@ -592,11 +707,15 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
         // ctor of SfxMedium uses owner transition of ItemSet
         SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, FALSE, NULL, pSet );
         aMedium.UseInteractionHandler( TRUE );
-        aMedium.SetInteractionHandler( xInteraction );
 
         BOOL bIsStorage = aMedium.IsStorage();
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
+            // remember input stream and content and put them into the descriptor later
+            // should be done here since later the medium can switch to a version
+            xStream = aMedium.GetInputStream();
+            xContent = aMedium.GetContent();
+
             // maybe that IsStorage() already created an error!
             if ( bIsStorage )
             {
@@ -632,9 +751,6 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
             if ( aMedium.GetFilter() )
                 pFilter = aMedium.GetFilter();
 
-            // remember input stream and content and put them into the descriptor later
-            xStream = aMedium.GetInputStream();
-            xContent = aMedium.GetContent();
             bReadOnly = aMedium.IsReadOnly();
         }
 
@@ -777,6 +893,16 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
             ::com::sun::star::ucb::CommandAbortedException        exAbort ;
             exPacked.TargetException <<= exAbort;
             throw exPacked;
+        }
+        else if ( !pFilter && aMedium.GetStorage() )
+        {
+            SvStorageInfoList aList;
+            aMedium.GetStorage()->FillInfoList( &aList );
+            if ( pOldFilter && !aList.Count() && !aMedium.GetStorage()->IsOLEStorage() && pOldFilter->UsesStorage() && pOldFilter->GetVersion() >= SOFFICE_FILEFORMAT_60 )
+            {
+                // possibly broken package
+                pFilter = pOldFilter;
+            }
         }
 
         // may be - w4w filter doesn't close the stream

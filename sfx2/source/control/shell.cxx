@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-06 12:44:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1430,16 +1430,19 @@ const SvVerbList* SfxShell::GetVerbs() const
 void SfxShell::VerbExec(SfxRequest& rReq)
 {
     USHORT nId = rReq.GetSlot();
-    SfxViewShell *pViewShell = SfxViewShell::Current();
-    const SvVerbList* pList = pViewShell->GetVerbs();
-
-    for (USHORT n=0; n<pList->Count(); n++)
+    SfxViewShell *pViewShell = GetViewShell();
+    if ( pViewShell )
     {
-        if (nId == SID_VERB_START + n)
+        const SvVerbList* pList = pViewShell->GetVerbs();
+
+        for (USHORT n=0; n<pList->Count(); n++)
         {
-            pViewShell->DoVerb((*pList)[n].GetId());
-            rReq.Done();
-            return;
+            if (nId == SID_VERB_START + n)
+            {
+                pViewShell->DoVerb((*pList)[n].GetId());
+                rReq.Done();
+                return;
+            }
         }
     }
 }

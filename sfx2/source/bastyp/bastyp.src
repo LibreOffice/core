@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:22:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ String ERR_INET_NAME_RESOLVE
 {
     Text = "Der Rechnername konnte nicht aufgelöst werden\n" ;
     Text [ ENGLISH ] = "Could not resolve hostname" ;
-    Text [ dutch ] = "De naam van de computer kon niet worden herleid\n" ;
+    Text [ dutch ] = "De naam van de computer kan niet worden herleid\n" ;
     Text [ english_us ] = "The computer name could not be resolved\n" ;
     Text [ italian ] = "Non è stato possibile risolvere il nome dell'host\n" ;
     Text [ spanish ] = "El nombre del ordenador no se pudo resolver.\n" ;
@@ -78,22 +78,23 @@ String ERR_INET_NAME_RESOLVE
     Text [ portuguese ] = "Impossível resolver o nome do computador.\n" ;
     Text [ portuguese_brazilian ] = "Der Rechnername konnte nicht aufgel?t werden\n" ;
     Text[ chinese_simplified ] = "æ— æ³•æ‰¾åˆ°ä¸»æœºåœ°å€\n";
-    Text[ russian ] = "Îïğåäåëèòü èìÿ êîìïşòåğà íå óäàåòñÿ\n";
+    Text[ russian ] = "Íåâîçìîæíî îïğåäåëèòü èìÿ êîìïüşòåğà\n";
     Text[ polish ] = "Nazwy komputera nie mo¿na by³o przetworzyæ\n";
-    Text[ japanese ] = "ï¾ï½½ï¾„åã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ\n";
+    Text[ japanese ] = "ãƒ›ã‚¹ãƒˆåã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ\n";
     Text[ chinese_traditional ] = "ç„¡æ³•æ‰¾åˆ°ä¸»æ©Ÿåœ°å€ã€‚\n";
     Text[ arabic ] = "ÊÚĞÑ ÊÍáíá ÇÓã ÇáÍÇÓÈ\n";
     Text[ greek ] = "Äåí Şôáí äõíáôüí ãßíåé áíÜëõóç ôïõ ïíüìáôïò ôïõ õğïëïãéóôŞ $(ARG1)";
     Text[ korean ] = "ì»´í“¨í„° ì´ë¦„ì„ í™•ì¸í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤ \n";
     Text[ turkish ] = "Bilgisayarın adı çözülemedi\n";
-    Text[ catalan ] = "El nombre del ordenador no se pudo resolver.\n";
-    Text[ finnish ] = "Tietokoneen nimeä ei voitu selvittää \n";
+    Text[ catalan ] = "No s'ha pogut resoldre el nom de l'ordinador\n";
+    Text[ finnish ] = "Tietokoneen nimeä ei voitu selvittää\n";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹à¸à¹‰à¸Šà¸·à¹ˆà¸­à¸„à¸­à¸¡à¸à¸´à¸§à¹€à¸•à¸­à¸£à¹Œà¹„à¸”à¹‰\n";
 };
 String ERR_INET_CONNECT
 {
     Text = "Die Internetverbindung konnte nicht hergestellt werden" ;
     Text [ ENGLISH ] = "The Internetconnection could not be established" ;
-    Text [ dutch ] = "De Internet-verbinding kon niet worden tot stand gebracht worden" ;
+    Text [ dutch ] = "De internetverbinding kan niet tot stand worden gebracht" ;
     Text [ english_us ] = "Internet connection could not be established" ;
     Text [ italian ] = "Non è stato possibile ripristinare il collegamento Internet" ;
     Text [ spanish ] = "No se pudo crear la conexión Internet" ;
@@ -103,22 +104,23 @@ String ERR_INET_CONNECT
     Text [ portuguese_brazilian ] = "Die Internetverbindung konnte nicht hergestellt werden" ;
     Text [ portuguese ] = "Impossível estabelecer a ligação com a Internet." ;
     Text[ chinese_simplified ] = "æ— æ³•å’Œå›½é™…äº’è”ç½‘å»ºç«‹è¿æ¥";
-    Text[ russian ] = "Óñòàíîâèòü ñâÿçü ñ Èíòåğíåòîì íå óäàåòñÿ";
+    Text[ russian ] = "Íåâîçìîæíî óñòàíîâèòü èíòåğíåò-ñîåäèíåíèå.";
     Text[ polish ] = "Nie mo¿na by³o uzyskaæ po³¹czenia z sieci¹ Internetu";
-    Text[ japanese ] = "ï½²ï¾ï¾€ï½°ï¾ˆï½¯ï¾„ã®æ¥ç¶šãŒã§ãã¦ã„ã¾ã›ã‚“ã€‚";
+    Text[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆã®æ¥ç¶šãŒã§ãã¦ã„ã¾ã›ã‚“ã€‚";
     Text[ chinese_traditional ] = "ç„¡æ³•å’Œ Internet å»ºç«‹é€£çµã€‚";
     Text[ arabic ] = "ÊÚĞÑ Úãá ÇÊÕÇá ÅäÊÑäÊ";
     Text[ greek ] = "Äåí Şôáí äõíáôüí íá ğñáãìáôïğïéçèåß ç óıíäåóç ìå ôï Internet";
-    Text[ korean ] = "ì¸í„°ë„· ì ‘ì†ì„ êµ¬ì¶•í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
+    Text[ korean ] = "ì¸í„°ë„· ì ‘ì†ì„ ì„¤ì •í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Internet bağlantısı gerçekleştirilemedi.";
-    Text[ catalan ] = "No se pudo crear la conexión Internet";
-    Text[ finnish ] = "Internet-yhteyden muodostaminen ei onnistunut";
+    Text[ catalan ] = "No s'ha pogut crear la connexió a Internet";
+    Text[ finnish ] = "Internet-yhteyden muodostaminen ei onnistunut.";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•à¹„à¸”à¹‰";
 };
 String ERR_INET_READ
 {
     Text = "Daten konnten nicht über das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)" ;
     Text [ ENGLISH ] = "Error reading from the internet\n.Server error message: $(ARG1)" ;
-    Text [ dutch ] = "De gegevens konden niet via Internet worden gelezen.\nFoutmelding server: $(ARG1)" ;
+    Text [ dutch ] = "De gegevens kunnen niet via het internet worden gelezen.\nFoutmelding server: $(ARG1)" ;
     Text [ english_us ] = "Error reading data from the internet\n.Server error message: $(ARG1)" ;
     Text [ italian ] = "Non è stato possibile leggere i dati tramite Internet.\nErrore di server: $(ARG1)" ;
     Text [ spanish ] = "Los datos no se pudieron leer a través de Internet.\nMensaje de error del servidor: $(ARG1)" ;
@@ -128,22 +130,23 @@ String ERR_INET_READ
     Text [ portuguese ] = "Foi impossível ler os dados via Internet.\nMensagem de erro do servidor: $(ARG1)" ;
     Text [ portuguese_brazilian ] = "Daten konnten nicht ?er das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)" ;
     Text[ chinese_simplified ] = "æ— æ³•é€šè¿‡å›½é™…äº’è”ç½‘è¯»å–æ•°æ®ã€‚\næœåŠ¡å™¨æŠ¥å‘Šé”™è¯¯ï¼š$(ARG1)";
-    Text[ russian ] = "Ïğî÷èòàòü äàííûå ÷åğåç Èíòåğíåò íå óäàåòñÿ.\nÑîîáùåíèå îøèáêè ñ ñåğâåğà: $(ARG1)";
+    Text[ russian ] = "Îøèáêà ÷òåíèÿ äàííûõ èç èíòåğíåòà.\nÑîîáùåíèå îá îøèáêå: $(ARG1)";
     Text[ polish ] = "Danych nie mo¿na odczytaæ przez Internet. \nKomunikat o b³êdzie serwera: $(ARG1)";
-    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ã¯ï½²ï¾ï¾€ï½°ï¾ˆï½¯ï¾„ã‹ã‚‰ã¯èª­ã¿å–ã‚Œã¾ã›ã‚“ã§ã—ãŸ\nã€‚ï½»ï½°ï¾Šï¾ï½° ï½´ï¾—ï½° ï¾’ï½¯ï½¾ï½°ï½¼ï¾: $(ARG1)";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã¯ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆã‹ã‚‰ã¯èª­ã¿å–ã‚Œã¾ã›ã‚“ã§ã—ãŸ\nã€‚ã‚µãƒ¼ãƒãƒ¼ ã‚¨ãƒ©ãƒ¼ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸: $(ARG1)";
     Text[ chinese_traditional ] = "ç„¡æ³•é€é Internet è®€å–è³‡æ–™ã€‚\nä¼ºæœå™¨å ±å‘ŠéŒ¯èª¤ï¼š$(ARG1)";
     Text[ arabic ] = "ÊÚĞÑ ŞÑÇÁÉ ÇáÈíÇäÇÊ ÚÈÑ ÇáÅäÊÑäÊ.\nÑÓÇáÉ ÎØÃ ãä ÇáãÒæøÏ: $(ARG1)";
     Text[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç äåäïìİíùí áğü ôï Internet.\nÌŞíõìá óöÜëìáôïò ôïõ äéáêïìéóôŞ: $(ARG1)";
-    Text[ korean ] = "ì¸í„°ë„·ì„ã€€í†µí•œ ë°ì´í„° ì½ê¸° ì˜¤ë¥˜\n.ì„œë²„ ì˜¤ë¥˜ ë©”ì‹œì§€: $(ARG1)";
+    Text[ korean ] = "ì¸í„°ë„·ì„ í†µí•œ ë°ì´í„° ì½ê¸° ì˜¤ë¥˜\n.ì„œë²„ ì˜¤ë¥˜ ë©”ì‹œì§€: $(ARG1)";
     Text[ turkish ] = "Internet üzerinden veri okunurken hata oluştu.\nSunucu hata iletisi: $(ARG1)";
-    Text[ catalan ] = "Los datos no se pudieron leer a través de Internet.\nMensaje de error del servidor: $(ARG1)";
+    Text[ catalan ] = "Les dades no s'han pogut llegir a través d'Internet.\nMissatge d'error del servidor: $(ARG1)";
     Text[ finnish ] = "On ilmennyt virhe luettaessa tietoja Internetistä.\nPalvelimen virhesanoma: $(ARG1)";
+    Text[ thai ] = "à¸à¸²à¸£à¸­à¹ˆà¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸ˆà¸²à¸à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•\n.à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸‚à¸­à¸‡à¹€à¸‹à¸´à¸£à¹Œà¸Ÿà¹€à¸§à¸­à¸£à¹Œ: $(ARG1)";
 };
 String ERR_INET_WRITE
 {
     Text = "Daten konnten nicht ins Internet übertragen werden.\nServerfehlermeldung: $(ARG1)" ;
     Text [ ENGLISH ] = "Error writing to the internet.Server error message: $(ARG1)" ;
-    Text [ dutch ] = "De gegevens konden niet naar Internet worden getransfereerd.\nFoutmelding server: $(ARG1)" ;
+    Text [ dutch ] = "De gegevens kunnen niet naar het internet worden verzonden.\nFoutmelding server: $(ARG1)" ;
     Text [ english_us ] = "Error transferring data to the internet.\nServer error message: $(ARG1)" ;
     Text [ italian ] = "Non è stato possibile trasmettere i dati in Internet.\nErrore di server: $(ARG1)" ;
     Text [ spanish ] = "Los datos no se pudieron transferir a Internet.\nMensaje de error del servidor: $(ARG1)" ;
@@ -153,22 +156,23 @@ String ERR_INET_WRITE
     Text [ portuguese ] = "Foi impossível transmitir dados para a Internet.\nMensagem de erro do servidor: $(ARG1)" ;
     Text [ portuguese_brazilian ] = "Daten konnten nicht ins Internet ?ertragen werden.\nServerfehlermeldung: $(ARG1)" ;
     Text[ chinese_simplified ] = "æ— æ³•å‘å›½é™…äº’è”ç½‘ä¼ é€’æ•°æ®ã€‚\næœåŠ¡å™¨æŠ¥å‘Šé”™è¯¯ï¼š$(ARG1)";
-    Text[ russian ] = "Ïåğåäàòü äàííûå â Èíòåğíåò íå óäàåòñÿ.\nÑîîáùåíèå îøèáêè ñ ñåğâåğà: $(ARG1)";
+    Text[ russian ] = "Íåâîçìîæíî ïåğåäàòü äàííûå â Èíòåğíåò.\nÑîîáùåíèå îá îøèáêå: $(ARG1)";
     Text[ polish ] = "Danych nie mo¿na przes³aæ przez Internet.\nKomunikat o b³êdzie z serwera: $(ARG1)";
-    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ã¯ï½²ï¾ï¾€ï½°ï¾ˆï½¯ï¾„ã«è»¢é€ã§ãã¾ã›ã‚“ã§ã—ãŸ\nã€‚ï½»ï½°ï¾Šï¾ï½° ï½´ï¾—ï½° ï¾’ï½¯ï½¾ï½°ï½¼ï¾: $(ARG1)";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã¯ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆã«è»¢é€ã§ãã¾ã›ã‚“ã§ã—ãŸ\nã€‚ã‚µãƒ¼ãƒãƒ¼ ã‚¨ãƒ©ãƒ¼ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸: $(ARG1)";
     Text[ chinese_traditional ] = "ç„¡æ³•å‘ Internet å‚³éè³‡æ–™ã€‚\nä¼ºæœå™¨å ±å‘ŠéŒ¯èª¤ï¼š$(ARG1)";
     Text[ arabic ] = "ÊÚĞÑ äŞá ÇáÈíÇäÇÊ Åáì ÇáÅäÊÑäÊ.\nÑÓÇáÉ ÎØÃ ãä ÇáãÒæøÏ: $(ARG1)";
     Text[ greek ] = "ÓöÜëìá êáôÜ ôçí ìåôÜäïóç äåäïìİíùí ìİóù ôïõ Internet.\nÌŞíõìá óöÜëìáôïò ôïõ äéáêïìéóôŞ: $(ARG1)";
     Text[ korean ] = "ì¸í„°ë„·ì—ì„œ ë°ì´í„°  ì „ì†¡ ì˜¤ë¥˜.\nì„œë²„ ì˜¤ë¥˜ ë©”ì‹œì§€: $(ARG1)";
     Text[ turkish ] = "Veriler Internet üzerinden aktarılamadı.\nSunucu hata iletisi: $(ARG1)";
-    Text[ catalan ] = "Los datos no se pudieron transferir a Internet.\nMensaje de error del servidor: $(ARG1)";
+    Text[ catalan ] = "Les dades no s'han pogut transmetre a Internet.\nMissatge d'error del servidor: $(ARG1)";
     Text[ finnish ] = "On ilmennyt virhe siirrettäessä tietoja Internetiin.\nPalvelimen virhesanoma: $(ARG1)";
+    Text[ thai ] = "à¸à¸²à¸£à¸–à¹ˆà¸²à¸¢à¹‚à¸­à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸›à¸¢à¸±à¸‡à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•à¸œà¸´à¸”à¸à¸¥à¸²à¸”\nà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸‚à¸­à¸‡à¹€à¸‹à¸´à¸£à¹Œà¸Ÿà¹€à¸§à¸­à¸£à¹Œ: $(ARG1)";
 };
 String ERR_INET_GENERAL
 {
     Text = "Ein allgemeiner Fehler im Internetbereich trat auf" ;
     Text [ ENGLISH ] = "Gereral Internet Error" ;
-    Text [ dutch ] = "Algemene fout in Internet" ;
+    Text [ dutch ] = "Algemene fout op het internet" ;
     Text [ english_us ] = "General Internet Error" ;
     Text [ italian ] = "Si è verificato un errore generale nell'area Internet" ;
     Text [ spanish ] = "Error general en Internet" ;
@@ -178,16 +182,17 @@ String ERR_INET_GENERAL
     Text [ portuguese ] = "Surgiu um erro geral na área da Internet." ;
     Text [ portuguese_brazilian ] = "Ein allgemeiner Fehler im Internetbereich trat auf" ;
     Text[ chinese_simplified ] = "åœ¨å›½é™…äº’è”ç½‘å†…å‘ç”Ÿä¸€ä¸ªä¸€èˆ¬é”™è¯¯ã€‚";
-    Text[ russian ] = "Ïğîèçîøëà îáùàÿ îøèáêà â îáëàñòè Èíòåğíåòà";
+    Text[ russian ] = "Îøèáêà äîñòóïà â Èíòåğíåò";
     Text[ polish ] = "Wyst¹pi³ ogólny b³¹d w sieci Internetu";
-    Text[ japanese ] = "ï½²ï¾ï¾€ï½°ï¾ˆï½¯ï¾„é ˜åŸŸã®ä¸€èˆ¬çš„ãªï½´ï¾—ï½°ã®ç™ºç”Ÿ";
+    Text[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆé ˜åŸŸã®ä¸€èˆ¬çš„ãªã‚¨ãƒ©ãƒ¼ã®ç™ºç”Ÿ";
     Text[ chinese_traditional ] = "åœ¨ Internet é€£çµç¯„åœå…§ç™¼ç”Ÿä¸€å€‹ä¸€èˆ¬éŒ¯èª¤ã€‚";
     Text[ arabic ] = "ÍÏË ÎØÃ ÚÇã İí äØÇŞ ÇáÅäÊÑäÊ";
     Text[ greek ] = "Ãåíéêü óöÜëìá ôïõ Internet";
     Text[ korean ] = "ì¸í„°ë„·ì—ì„œ ì¼ë°˜ì ì¸ ì˜¤ë¥˜ ë°œìƒ";
     Text[ turkish ] = "Genel Internet hatası";
-    Text[ catalan ] = "Error general en Internet";
+    Text[ catalan ] = "Error general d'Internet";
     Text[ finnish ] = "Yleinen Internet-virhe";
+    Text[ thai ] = "à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸‚à¸­à¸‡à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•à¸—à¸±à¹ˆà¸§à¹„à¸›";
 };
 String ERR_WRONG_URL
 {
@@ -203,16 +208,17 @@ String ERR_WRONG_URL
     Text [ portuguese ] = "Erro no URL\n" ;
     Text [ portuguese_brazilian ] = "Fehlerhafter URL\n" ;
     Text[ chinese_simplified ] = "URLåœ°å€ä¸å®Œæ•´\n";
-    Text[ russian ] = "Îøèáêè â URL\n";
+    Text[ russian ] = "Íåïğàâèëüíûé URL\n";
     Text[ polish ] = "B³¹d w URL\n";
-    Text[ japanese ] = "URLã«ï½´ï¾—ï½°ã‚ã‚Š\n";
+    Text[ japanese ] = "URLã«ã‚¨ãƒ©ãƒ¼ã‚ã‚Š\n";
     Text[ chinese_traditional ] = "URL ä½å€ä¸å®Œæ•´\n";
     Text[ arabic ] = "URL ÛíÑ ÕÍíÍ\n";
     Text[ greek ] = "Åóöáëìİíï URL\n";
     Text[ korean ] = "URL ì˜¤ë¥˜\n";
     Text[ turkish ] = "Hatalı URL\n";
-    Text[ catalan ] = "URL errónea\n";
+    Text[ catalan ] = "URL incorrecta\n";
     Text[ finnish ] = "Virheellinen URL-osoite\n";
+    Text[ thai ] = "à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸” URL\n";
 };
 String ERR_ACTIVEDOWNLOADS
 {
@@ -223,20 +229,21 @@ String ERR_ACTIVEDOWNLOADS
     Text[ portuguese ] = "Existem ainda alguns downloads em curso.\nCancelar?\n";
     Text[ danish ] = "Der er fortsat aktive overførsler.\nEr du sikker på, at du vil annullere?\n";
     Text[ french ] = "Vous avez des téléchargements en cours.\nVoulez-vous vraiment annuler ?\n";
-    Text[ swedish ] = "Det finns fortfarande aktiva nedladdningar.\nVill Du verkligen avbryta?\n";
-    Text[ dutch ] = "Er zijn nog downloads actief.\nWilt u de applicatie werkelijk stoppen?\n";
+    Text[ swedish ] = "Det finns fortfarande aktiva nedladdningar.\nVill du verkligen avbryta?\n";
+    Text[ dutch ] = "Er zijn nog downloads actief.\nWilt u de toepassing werkelijk annuleren?\n";
     Text[ spanish ] = "Todavía existen descargas activas.\n¿Desea realmente cancelar?\n";
     Text[ chinese_simplified ] = "è¿˜æ­£åœ¨ä¸‹è½½æ–‡ä»¶ã€‚\næ‚¨çœŸè¦ä¸­æ–­å—ï¼Ÿ\n";
     Text[ russian ] = "Çàãğóçêà åùå èäåò.\nÂû äåéñòâèòåëüíî õîòèòå åå ïğåğâàòü?\n";
     Text[ polish ] = "Trwa jeszcze pobieranie.\nCzy je przerwaæ?\n";
-    Text[ japanese ] = "ã¾ã ï¾€ï¾ï½³ï¾ï¾›ï½°ï¾„ï¾ä¸­ã§ã™ã€‚\nä¸­æ­¢ã—ã¦ã‚‚ã‚ˆã‚ã—ã„ã§ã™ã‹?\n";
+    Text[ japanese ] = "ã¾ã ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ä¸­ã§ã™ã€‚\nä¸­æ­¢ã—ã¦ã‚‚ã‚ˆã‚ã—ã„ã§ã™ã‹?\n";
     Text[ chinese_traditional ] = "é‚„æ­£åœ¨ä¸‹è¼‰æª”æ¡ˆã€‚\nçœŸè¦ä¸­æ–·ï¼Ÿ\n";
     Text[ arabic ] = "ãÇÒÇáÊ åäÇß ÚãáíÇÊ ÊäÒíá äÔØÉ.\nåá ÊÑíÏ ÇáÅäåÇÁ İÚáÇğ¿\n";
     Text[ greek ] = "Åêôåëïıíôáé áêüìç ëŞøåéò äåäïìİíùí.\nÈİëåôå ğñáãìáôéêÜ íá ôåñìáôßóåôå ôç äéáäéêáóßá;\n";
-    Text[ korean ] = "ë‹¤ìš´ë¡œë“œê°€ ì§„í–‰ ì¤‘ì…ë‹ˆë‹¤.\nê·¸ë˜ë„ ì·¨ì†Œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?\n";
+    Text[ korean ] = "ë‹¤ìš´ë¡œë“œê°€ ì§„í–‰ ì¤‘ì…ë‹ˆë‹¤.\nì·¨ì†Œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?\n";
     Text[ turkish ] = "Şu an devam eden veri indirme işleri var.\nGerçekten çıkmak istiyor musunuz?\n";
-    Text[ catalan ] = "Todavía existen descargas activas.\n¿Desea realmente cancelar?\n";
+    Text[ catalan ] = "Encara hi ha descàrreges actives.\nRealment voleu cancel.lar?\n";
     Text[ finnish ] = "Noutoja on yhä käynnissä.\nHaluatko varmasti lopettaa?\n";
+    Text[ thai ] = "à¸¢à¸±à¸‡à¸¡à¸µà¸à¸²à¸£à¸”à¸²à¸§à¸™à¹Œà¹‚à¸«à¸¥à¸”à¸­à¸¢à¸¹à¹ˆ\nà¸„à¸¸à¸“à¹à¸™à¹ˆà¹ƒà¸ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆà¸—à¸µà¹ˆà¸ˆà¸°à¹€à¸¥à¸´à¸?\n";
 };
 String ERR_QUEUEDDOWNLOADS
 {
@@ -245,23 +252,24 @@ String ERR_QUEUEDDOWNLOADS
     Text [ english_us ] = "There are still downloads to be performed.\nDo you really want to quit?\n" ;
     Text [ portuguese ] = "Ainda existem downloads em fila de espera.\\Deseja realmente cancelar?\n" ;
     Text [ portuguese_brazilian ] = "Es stehen noch Downloads in der Warteschlange.\nWollen Sie wirklich beenden?\n" ;
-    Text [ swedish ] = "Det finns fortfarande nedladdningar i kö.\nVill Du ändå avsluta?\n" ;
+    Text [ swedish ] = "Det finns fortfarande nedladdningar i kö.\nVill du ändå avsluta?\n" ;
     Text [ danish ] = "Der er fortsat overførsler i kø.\nEr du sikker på, at du vil afslutte?\n" ;
     Text [ italian ] = "Ci sono ancora dei download in corso.\nVolete davvero terminare?\n" ;
     Text [ spanish ] = "Todavía hay documentos para descargar.\n¿Desea realmente cancelar?\n" ;
     Text [ french ] = "Il y a des téléchargements dans la file d'attente.\nÊtes-vous sûr de vouloir quitter ?\n" ;
     Text [ dutch ] = "Er staan nog downloads op de wachtlijst.\nWilt u werkelijk beëindigen?\n" ;
     Text[ chinese_simplified ] = "è¿˜æœ‰ä¸‹è½½å‘½ä»¤ç­‰å€™å¤„ç†ã€‚\næ‚¨çœŸè¦ç»“æŸå—ï¼Ÿ\n";
-    Text[ russian ] = "Íà î÷åğåäè åùå ñòîÿò çàãğóçêè.\nÂû äåéñòâèòåëüíî õîòèòå çàêîí÷èòü?\n";
+    Text[ russian ] = "Î÷åğåäü çàãğóçêè íå ïóñòà.\nÂû äåéñòâèòåëüíî õîòèòå çàêîí÷èòü?\n";
     Text[ polish ] = "Nie zakoñczono jeszcze pobierania.\nCzy na pewno zakoñczyæ?\n";
-    Text[ japanese ] = "ï¾€ï¾ï½³ï¾ï¾›ï½°ï¾„ï¾ã¯ã¾ã å¾…æ©Ÿä¸­ã§ã™ã€‚\nçµ‚äº†ã—ã¦ã‚‚ã‚ˆã‚ã—ã„ã§ã™ã‹?\n";
+    Text[ japanese ] = "ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã¯ã¾ã å¾…æ©Ÿä¸­ã§ã™ã€‚\nçµ‚äº†ã—ã¦ã‚‚ã‚ˆã‚ã—ã„ã§ã™ã‹?\n";
     Text[ chinese_traditional ] = "é‚„æ­£åœ¨ä¸‹è¼‰æª”æ¡ˆã€‚\nçœŸè¦çµæŸï¼Ÿ\n";
     Text[ arabic ] = "ãÇÒÇáÊ åäÇß ÚãáíÇÊ ÊäÒíá Úáì ŞÇÆãÉ ÇáÇäÊÙÇÑ.\nåá ÊÑíÏ ÇáÅäåÇÁ İÚáÇõ¿\n";
     Text[ greek ] = "ÕğÜñ÷ïõí áêüìç ëŞøåéò äåäïìİíùí óôç óåéñÜ áíáìïíŞò.\nÈİëåôå óßãïõñá íá ôåñìáôßóåôå ôç äéáäéêáóßá;\n";
-    Text[ korean ] = "ë‹¤ìš´ë¡œë“œê°€ ëŒ€ê¸° ì¤‘ì…ë‹ˆë‹¤.\nê·¸ë˜ë„ ì¢…ë£Œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?\n";
+    Text[ korean ] = "ë‹¤ìš´ë¡œë“œê°€ ëŒ€ê¸° ì¤‘ì…ë‹ˆë‹¤.\nê·¸ë˜ë„ ì¢…ë£Œí•˜ê² ìŠµë‹ˆê¹Œ?\n";
     Text[ turkish ] = "Bekleme sırasında veri indirme işleri var.\nGerçekten çıkmak istiyor musunuz?\n";
-    Text[ catalan ] = "Todavía hay documentos para descargar.\n¿Desea realmente cancelar?\n";
+    Text[ catalan ] = "Encara hi ha documents per descarregar.\nRealment voleu cancel.lar?\n";
     Text[ finnish ] = "Noutoja on vielä suorittamatta.\nHaluatko varmasti lopettaa?\n";
+    Text[ thai ] = "à¸¢à¸±à¸‡à¸¡à¸µà¸à¸²à¸£à¸”à¸²à¸§à¸™à¹Œà¹‚à¸«à¸¥à¸”à¸­à¸¢à¸¹à¹ˆ\nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹€à¸¥à¸´à¸à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?\n";
 };
 String ERR_FILEISLOCAL
 {
@@ -270,23 +278,24 @@ String ERR_FILEISLOCAL
     Text [ english_us ] = "The file already exists on your computer.\nDo you want to copy it anyway?" ;
     Text [ portuguese ] = "O ficheiro já se encontra no seu computador.\nMesmo assim copiar?" ;
     Text [ portuguese_brazilian ] = "Die Datei liegt bereits lokal auf Ihrem Rechner.\nSoll sie trotzdem kopiert werden?" ;
-    Text [ swedish ] = "Filen finns redan lokalt på Din dator.\nSkall den ändå kopieras?" ;
+    Text [ swedish ] = "Filen finns redan lokalt på din dator.\nSkall den ändå kopieras?" ;
     Text [ danish ] = "Filen findes allerede lokalt på din computer.\nSkal den kopieres alligevel?" ;
     Text [ italian ] = "Il file si trova già sul computer dell'utente.\nVolete copiarlo lo stesso?" ;
     Text [ spanish ] = "El archivo ya está guardado localmente en su ordenador.\n¿Desea copiarlo de todas maneras?" ;
     Text [ french ] = "Ce fichier existe déjà sur votre disque dur.\nSouhaitez-vous tout de même la copier?" ;
     Text [ dutch ] = "Het bestand bevindt zich reeds op uw computer.\nWilt u het toch kopiëren?" ;
     Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶å·²ç»å­˜ç›˜åœ¨æ‚¨çš„è®¡ç®—æœºä¸Šã€‚\næ‚¨è¿˜æ˜¯è¦å¤åˆ¶å®ƒå—ï¼Ÿ";
-    Text[ russian ] = "İòîò ôàéë óæå íàõîäèòñÿ íà Âàøåì êîìïüşòåğå.\nÂñå ğàâíî ñêîïèğîâàòü åãî?";
+    Text[ russian ] = "Ôàéë óæå íàõîäèòñÿ íà âàøåì êîìïüşòåğå.\nÊîïèğîâàòü, íåñìîòğÿ íà ıòî?";
     Text[ polish ] = "Plik jest ju¿ ulokowany w twoim komputerze.\nCzy ma on pomimo tego zostaæ skopiowany?";
-    Text[ japanese ] = "ã“ã®ï¾Œï½§ï½²ï¾™ã¯ã™ã§ã«ï½ºï¾ï¾‹ï¾Ÿï½­ï½°ï¾€ï½°ä¸Šã«ã‚ã‚Šã¾ã™ã€‚\nãã‚Œã§ã‚‚ï½ºï¾‹ï¾Ÿï½°ã—ã¾ã™ã‹ï¼Ÿ";
+    Text[ japanese ] = "ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã™ã§ã«ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿ãƒ¼ä¸Šã«ã‚ã‚Šã¾ã™ã€‚\nãã‚Œã§ã‚‚ã‚³ãƒ”ãƒ¼ã—ã¾ã™ã‹ï¼Ÿ";
     Text[ chinese_traditional ] = "é€™å€‹æª”æ¡ˆå·²ç¶“å„²å­˜åœ¨ç£ç¢Ÿä¸Šã€‚\né‚„æ˜¯è¦è¤‡è£½å®ƒï¼Ÿ";
     Text[ arabic ] = "åĞÇ Çáãáİ ãæÌæÏ ÈÇáİÚá İí ßãÈíæÊÑß.\nåá ÊÑíÏ äÓÎå Úáì ÇáÑÛã ãä Ğáß¿";
     Text[ greek ] = "Ôï áñ÷åßï õğÜñ÷åé Şäç ôïğéêÜ óôïí õğïëïãéóôŞ óáò.\nÈİëåôå íá ôçí áíôéãñÜøåôå ğáñ' üëá áõôÜ;";
-    Text[ korean ] = "íŒŒì¼ì€ ì´ë¯¸ ì‚¬ìš©ìì˜ ì»´í“¨í„°ì— ì§€ì—­ì ìœ¼ë¡œ ì¡´ì¬í•©ë‹ˆë‹¤.\nê·¸ë˜ë„ ë³µì‚¬í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ korean ] = "íŒŒì¼ì€ ì´ë¯¸ ì‚¬ìš©ìì˜ ì»´í“¨í„°ì— ì§€ì—­ì ìœ¼ë¡œ ì¡´ì¬í•©ë‹ˆë‹¤.\nê·¸ë˜ë„ ë³µì‚¬í•˜ê² ìŠµë‹ˆê¹Œ?";
     Text[ turkish ] = "Dosya bilgisayarınızda zaten mevcut.\nYine de kopyalansın mı?";
-    Text[ catalan ] = "El archivo ya está guardado localmente en su ordenador.\n¿Desea copiarlo de todas maneras?";
+    Text[ catalan ] = "El fitxer ja existeix en el vostre ordinador.\nVoleu copiar-lo igualment?";
     Text[ finnish ] = "Tiedosto on jo tietokoneella.\nHaluatko kopioida tiedoston?";
+    Text[ thai ] = "à¸¡à¸µà¹à¸Ÿà¹‰à¸¡à¸­à¸¢à¸¹à¹ˆà¹ƒà¸™à¸„à¸­à¸¡à¸à¸´à¸§à¹€à¸•à¸­à¸£à¹Œà¸„à¸¸à¸“à¹à¸¥à¹‰à¸§\nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸„à¸±à¸”à¸¥à¸­à¸à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 String ERR_FILENAMECHECK83
 {
@@ -300,18 +309,19 @@ String ERR_FILENAMECHECK83
     Text [ italian ] = "Il nome del file digitato non è valido.\nTenete presente che il nome del file può avere una lunghezza massima di 8 caratteri\ne l'estensione del file di 3." ;
     Text [ spanish ] = "El nombre del archivo especificado no es válido.\\Tenga en cuenta que el nombre debe tener un máximo de 8 caracteres\ny la terminación 3." ;
     Text [ french ] = "Le nom de fichier indiqué est incorrect.\nIl peut comporter au maximum 8 caractères\net l'extension de fichier au maximum 3 caractères." ;
-    Text [ dutch ] = "De aangegeven bestandsnaam is ongeldig.\nWij wijzen u erop dat de bestandsnaam maximaal 8 tekens\nen de extensie maximaal 3 tekens lang mag zijn." ;
+    Text [ dutch ] = "De opgegeven bestandsnaam is ongeldig.\nWij wijzen u erop dat de bestandsnaam maximaal 8 tekens\nen de extensie maximaal 3 tekens lang mag zijn." ;
     Text[ chinese_simplified ] = "ç»™å®šçš„æ–‡ä»¶åç§°æ— æ•ˆã€‚\nè¯·æ³¨æ„ï¼šæ–‡ä»¶åä¸å¾—è¶…è¿‡8ä¸ªå­—ç¬¦ã€‚\næ–‡ä»¶çš„æ‰©å±•åä¸å¾—è¶…è¿‡ 3 ä¸ªå­—ç¬¦ã€‚";
-    Text[ russian ] = "Çàäàííîå èìÿ ôàéëà íåïğàâèëüíî.\nÏîæàëóéñòà, ó÷òèòå, ÷òî èìÿ ôàéëà ìîæåò ñîäåğæàòü íå áîëåå 8 çíàêîâ\n, à ğàñøèğåíèå ôàéëà íå áîëåå 3 çíàêîâ.";
+    Text[ russian ] = "Ââåäåíî íåïğàâèëüíîå èìÿ ôàéëà.\nÈìÿ ôàéëà ìîæåò ñîäåğæàòü íå áîëåå 8 ñèìâîëîâ\n, à ğàñøèğåíèå ôàéëà - íå áîëåå 3 ñèìâîëîâ.";
     Text[ polish ] = "Podana nazwa pliku jest nieprawid³owa.\nNale¿y uwzglêdniæ, ¿e nazwa pliku mo¿e zawieraæ maksym. 8 znaków\n,a rozszerzenie pliku maksym. 3 znaki.";
-    Text[ japanese ] = "æŒ‡å®šã—ãŸï¾Œï½§ï½²ï¾™åãŒç„¡åŠ¹ã§ã™ã€‚\nï¾Œï½§ï½²ï¾™åã¯æœ€é«˜8æ–‡å­—ã¾ã§ã€\nï¾Œï½§ï½²ï¾™æ‹¡å¼µå­ã¯æœ€é«˜3æ–‡å­—ã¾ã§ã¨åˆ¶é™ãŒã‚ã‚Šã¾ã™ã€‚æ³¨æ„ã—ã¦ãã ã•ã„ã€‚";
+    Text[ japanese ] = "æŒ‡å®šã—ãŸãƒ•ã‚¡ã‚¤ãƒ«åãŒç„¡åŠ¹ã§ã™ã€‚\nãƒ•ã‚¡ã‚¤ãƒ«åã¯æœ€é«˜8æ–‡å­—ã¾ã§ã€\nãƒ•ã‚¡ã‚¤ãƒ«æ‹¡å¼µå­ã¯æœ€é«˜3æ–‡å­—ã¾ã§ã¨åˆ¶é™ãŒã‚ã‚Šã¾ã™ã€‚æ³¨æ„ã—ã¦ãã ã•ã„ã€‚";
     Text[ chinese_traditional ] = "è¼¸å…¥çš„æª”æ¡ˆåç„¡æ•ˆã€‚\nè«‹æ‚¨ç•™æ„æª”æ¡ˆåä¸å¾—è¶…é8å€‹å­—å…ƒã€‚\nå‰¯æª”åä¸å¾—è¶…é 3 å€‹å­—å…ƒã€‚";
     Text[ arabic ] = "ÇÓã Çáãáİ ÇáãõÏÎá ÛíÑ ÕÇáÍ.\n ÇáÑÌÇÁ ãáÇÍÙÉ Ãä ÇÓã Çáãáİ íÌÈ ÃáÇ íÒíÏ Úä\nËãÇäíÉ ÍÑæİ æÇãÊÏÇÏå Úä ËáÇËÉ.";
     Text[ greek ] = "Ôï åğéëåãìİíï üíïìá áñ÷åßïõ äåí åßíáé İãêõñï.\nĞáñáêáëş ğñïóİîôå üôé äåí åğéôñİğåôáé ôï üíïìá ôïõ áñ÷åßïõ íá õğåñâáßíåé ôïõò 8 ÷áñáêôŞñåò\n ? ";
-    Text[ korean ] = "ì§€ì •ëœ íŒŒì¼ ì´ë¦„ì´ ìœ íš¨í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\níŒŒì¼ì˜ ì´ë¦„ì´ 8ë¬¸ìë¥¼ ì´ˆê³¼í•  ìˆ˜ ì—†ë‹¤ëŠ” ì ê³¼\ní™•ì¥ìê°€ 3ë¬¸ìë¥¼ ì´ˆê³¼ í• ìˆ˜ ì—†ë‹¤ëŠ” ì ì„ ìœ ì˜í•˜ì‹­ì‹œì˜¤.";
+    Text[ korean ] = "ì§€ì •ëœ íŒŒì¼ ì´ë¦„ì´ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤.\níŒŒì¼ì˜ ì´ë¦„ì´ 8ë¬¸ìë¥¼ ì´ˆê³¼í•  ìˆ˜ ì—†ë‹¤ëŠ” ì ê³¼\ní™•ì¥ìê°€ 3ë¬¸ìë¥¼ ì´ˆê³¼ í•  ìˆ˜ ì—†ë‹¤ëŠ” ì ì„ ìœ ì˜í•˜ì‹­ì‹œì˜¤.";
     Text[ turkish ] = "Girilen dosya adı geçerli değil.\nDosya adı en fazla 8 ve dosyan\\uzantısı en fazla 3 karakter uzunluğunda olabilir.";
-    Text[ catalan ] = "El nombre del archivo especificado no es válido.\\Tenga en cuenta que el nombre debe tener un máximo de 8 caracteres\ny la terminación 3.";
-    Text[ finnish ] = "Annettu tiedostonimi on virheellinen.\nTiedostonimi voi olla korkeintaan kahdeksan merkin pituinen\nja tunniste voi olla enintään kolmen merkin pituinen.";
+    Text[ catalan ] = "El nom del fitxer especificat no és vàlid.\nTingueu en compte que el nom ha de tenir un màxim de 8 caràcters\ni l'extensió 3.";
+    Text[ finnish ] = "Annettu tiedoston nimi on virheellinen.\nTiedoston nimi voi olla korkeintaan kahdeksan merkin pituinen\nja tunniste voi olla enintään kolmen merkin pituinen.";
+    Text[ thai ] = "à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¹à¸Ÿà¹‰à¸¡à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡\nà¸à¸£à¸¸à¸“à¸²à¸«à¸¡à¸²à¸¢à¹€à¸«à¸•à¸¸à¸§à¹ˆà¸²à¸Šà¸·à¹ˆà¸­à¹à¸Ÿà¹‰à¸¡à¸¡à¸µà¹„à¸¡à¹ˆà¹€à¸à¸´à¸™ 8 à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸° \n à¹à¸¥à¸°à¸ªà¹ˆà¸§à¸™à¸‚à¸¢à¸²à¸¢à¹à¸Ÿà¹‰à¸¡à¸¡à¸µ 3 à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™";
 };
 String ERR_INSUFFICIENTDISKSPACE
 {
@@ -322,20 +332,21 @@ String ERR_INSUFFICIENTDISKSPACE
     Text[ portuguese ] = "O ficheiro %1 excede o espaço disponível no disco.\nContinuar?\n";
     Text[ danish ] = "Filen %1 overskrider den tilgængelige diskplads.\nVil du fortsætte alligevel?\n";
     Text[ french ] = "La taille du fichier %1 dépasse l'espace libre sur votre disque dur.\nSouhaitez-vous poursuivre ?\n";
-    Text[ swedish ] = "Filen %1 blir större än det tillgängliga diskutrymmet.\nVill Du ändå fortsätta?\n";
-    Text[ dutch ] = "Bestand %1 wordt groter dan de beschikbare schuifruimte.\nWilt u doorgaan ?\n";
+    Text[ swedish ] = "Filen %1 blir större än det tillgängliga diskutrymmet.\nVill du ändå fortsätta?\n";
+    Text[ dutch ] = "Bestand %1 wordt groter dan de beschikbare schuifruimte.\nWilt u doorgaan?\n";
     Text[ spanish ] = "El tamaño del archivo %1 excederá al del disponible en el disco.\n¿Desea continuar?\n";
     Text[ chinese_simplified ] = "æ–‡ä»¶ %1 æ‰€éœ€ç©ºé—´å¤§äºç°æœ‰çš„å¯ç”¨ç©ºé—´ã€‚\næ‚¨è¦ç»§ç»­å—ï¼Ÿ\n";
-    Text[ russian ] = "Îáúåì ôàéëà %1 áîëüøå, ÷åì îáúåì äîñòóïíîãî íà äèñêå ìåñòà.\nÂñå ğàâíî ïğîäîëæàòü?\n";
+    Text[ russian ] = "Îáúåì ôàéëà %1 áîëüøå, ÷åì äîñòóïíî ìåñòà íà äèñêå.\nÏğîäîëæèòü, íåñìîòğÿ íà ıòî?\n";
     Text[ polish ] = "Plik %1 przewy¿sza iloœæ miejsca na dysku.\nKontynuowaæ ?\n";
-    Text[ japanese ] = "ï¾Œï½§ï½²ï¾™ %1ã¯ç©ºãï¾ƒï¾ï½½ï½¸å®¹é‡é ˜åŸŸã‚’è¶Šãˆã¦ã„ã¾ã™ï½¡\nç¶šè¡Œã—ã¾ã™ã‹?\n";
+    Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ« %1ã¯ç©ºããƒ‡ã‚¹ã‚¯å®¹é‡é ˜åŸŸã‚’è¶Šãˆã¦ã„ã¾ã™ï½¡\nç¶šè¡Œã—ã¾ã™ã‹?\n";
     Text[ chinese_traditional ] = "æª”æ¡ˆ %1 æ‰€éœ€ç©ºé–“å¤§æ–¼ç¾å­˜çš„å¯ç”¨ç©ºé–“ã€‚\nè¦ç¹¼çºŒï¹–\n";
     Text[ arabic ] = "Óæİ íÕÈÍ Çáãáİ %1 ÃßÈÑ ãä ÇáãÓÇÍÉ ÇáãÊÇÍÉ Úáì ÇáŞÑÕ.\nåá ÊÑíÏ ÇáãÊÇÈÚÉ¿\n";
     Text[ greek ] = "Ôï áñ÷åßï %1 õğåñâáßíåé ôïí äéáèİóéìï ÷şñï áğïèŞêåõóçò.\nÈİëåôå íá óõíå÷ßóåôå;\n";
-    Text[ korean ] = "íŒŒì¼ %1ì´(ê°€) ì‚¬ìš© ê°€ëŠ¥í•œ ë””ìŠ¤í¬ ê³µê°„ë³´ë‹¤ í½ë‹ˆë‹¤.\nê³„ì†í•˜ì‹œê² ìŠµë‹ˆê¹Œ?\n";
+    Text[ korean ] = "íŒŒì¼ %1ì´(ê°€) ì‚¬ìš© ê°€ëŠ¥í•œ ë””ìŠ¤í¬ ê³µê°„ë³´ë‹¤ í½ë‹ˆë‹¤.\nê³„ì† ì§„í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ?\n";
     Text[ turkish ] = "%1 dosyası mevcut disk alanını aşıyor.\nDevam etmek istiyor musunuz ?\n";
-    Text[ catalan ] = "El tamaño del archivo %1 excederá al del disponible en el disco.\n¿Desea continuar?\n";
+    Text[ catalan ] = "La mida del fitxer %1 és més gran que l'espi disponible al disc.\nVoleu continuar?\n";
     Text[ finnish ] = "Tiedoston %1 koko on suurempi kuin käytettävissä oleva levytila.\nHaluatko jatkaa?\n";
+    Text[ thai ] = "à¹à¸Ÿà¹‰à¸¡ %1 à¸¡à¸µà¸‚à¸™à¸²à¸”à¹€à¸à¸´à¸™à¹€à¸™à¸·à¹‰à¸­à¸—à¸µà¹ˆà¸§à¹ˆà¸²à¸‡à¸”à¸´à¸ªà¸à¹Œ\nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸—à¸³à¸•à¹ˆà¸­à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?\n";
 };
 //= Texte "downloadcontroller" =================================================================
 String STR_DOWNLOAD_SOURCE
@@ -354,14 +365,15 @@ String STR_DOWNLOAD_SOURCE
     Text [ chinese_simplified ] = "æº";
     Text [ russian ] = "Èñòî÷íèê";
     Text [ polish ] = "ród³o";
-    Text [ japanese ] = "ï½¿ï½°ï½½";
+    Text [ japanese ] = "ã‚½ãƒ¼ã‚¹";
     Text [ chinese_traditional ] = "è³‡æ–™æº";
     Text [ arabic ] = "ÇáãÕÏÑ";
     Text[ greek ] = "Ğñïİëåõóç";
-    Text[ korean ] = "ì†ŒìŠ¤";
+    Text[ korean ] = "ì›ë³¸";
     Text[ turkish ] = "Kaynak";
-    Text[ catalan ] = "Fuente";
+    Text[ catalan ] = "Font";
     Text[ finnish ] = "Lähde";
+    Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸—à¸µà¹ˆà¸¡à¸²";
 };
 String STR_DOWNLOAD_DESTINATION
 {
@@ -377,16 +389,17 @@ String STR_DOWNLOAD_DESTINATION
     Text [ portuguese ] = "Destino" ;
     Text [ portuguese_brazilian ] = "Ziel" ;
     Text [ chinese_simplified ] = "ç›®æ ‡";
-    Text [ russian ] = "Öåëü";
+    Text [ russian ] = "Íàçíà÷åíèå";
     Text [ polish ] = "Cel";
-    Text [ japanese ] = "ï¾€ï½°ï½¹ï¾ï½¯ï¾„";
+    Text [ japanese ] = "ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ";
     Text [ chinese_traditional ] = "ç›®æ¨™";
     Text [ arabic ] = "ÇáåÏİ";
     Text[ greek ] = "Ğñïïñéóìüò";
-    Text[ korean ] = "íƒ€ê²Ÿ";
+    Text[ korean ] = "ëŒ€ìƒ";
     Text[ turkish ] = "Hedef";
-    Text[ catalan ] = "Destino";
+    Text[ catalan ] = "Destí";
     Text[ finnish ] = "Kohde";
+    Text[ thai ] = "à¸ˆà¸¸à¸”à¸«à¸¡à¸²à¸¢";
 };
 String STR_DOWNLOAD_STATE
 {
@@ -404,14 +417,15 @@ String STR_DOWNLOAD_STATE
     Text [ chinese_simplified ] = "çŠ¶æ€";
     Text [ russian ] = "Ñîñòîÿíèå";
     Text [ polish ] = "Stan";
-    Text [ japanese ] = "ï½½ï¾ƒï½°ï¾€ï½½";
+    Text [ japanese ] = "ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹";
     Text [ chinese_traditional ] = "ç‹€æ…‹";
     Text [ arabic ] = "ÇáÍÇáÉ";
     Text[ greek ] = "ÊáôÜóôáóç";
     Text[ korean ] = "ìƒíƒœ";
     Text[ turkish ] = "Durum";
-    Text[ catalan ] = "Estado";
+    Text[ catalan ] = "Estat";
     Text[ finnish ] = "Tila";
+    Text[ thai ] = "à¸ªà¸–à¸²à¸™à¸°";
 };
 String STR_DOWNLOAD_REMAININGTIME
 {
@@ -427,7 +441,7 @@ String STR_DOWNLOAD_REMAININGTIME
     Text [ portuguese ] = "Tempo restante" ;
     Text [ portuguese_brazilian ] = "Restzeit" ;
     Text [ chinese_simplified ] = "å‰©ä½™æ—¶é—´";
-    Text [ russian ] = "Îñòàòîê âğåìåíè";
+    Text [ russian ] = "Îñòàâøååñÿ âğåìÿ";
     Text [ polish ] = "Pozosta³y czas";
     Text [ japanese ] = "æ®‹ã‚Šæ™‚é–“";
     Text [ chinese_traditional ] = "å‰©é¤˜æ™‚é–“";
@@ -435,8 +449,9 @@ String STR_DOWNLOAD_REMAININGTIME
     Text[ greek ] = "×ñüíïò ğïõ áğïìİíåé";
     Text[ korean ] = "ë‚¨ì€ ì‹œê°„";
     Text[ turkish ] = "Kalan süre";
-    Text[ catalan ] = "Tiempo restante";
+    Text[ catalan ] = "Temps restant";
     Text[ finnish ] = "Aikaa jäljellä";
+    Text[ thai ] = "à¹€à¸§à¸¥à¸²à¸—à¸µà¹ˆà¹€à¸«à¸¥à¸·à¸­à¸­à¸¢à¸¹à¹ˆ";
 };
 String STR_DOWNLOAD_STATEFORMAT
 {
@@ -462,6 +477,7 @@ String STR_DOWNLOAD_STATEFORMAT
     Text[ turkish ] = "$(READ) Toplam $(TOTAL) [ $(TIME) ]";
     Text[ catalan ] = "$(READ) de $(TOTAL) [ $(TIME) ]";
     Text[ finnish ] = "$(READ)/$(TOTAL) [ $(TIME) ]";
+    Text[ thai ] = "$(READ) of $(TOTAL) [ $(TIME) ]";
 };
 
 Resource RID_DLSTATUS2
@@ -480,7 +496,7 @@ Resource RID_DLSTATUS2
         Text [ portuguese_brazilian ] = "Verbindung zu: $(HOST). Warten auf Antwort..." ;
         Text [ portuguese ] = "Ligação com: $(HOST). Esperando resposta ..." ;
         Text[ chinese_simplified ] = "è¿æ¥ï¼š$(HOST)ã€‚æ­£åœ¨ç­‰å€™å›åº”...";
-        Text[ russian ] = "Ïîäêëş÷åíèå ê: $(HOST). Æäèòå îòâåòà...";
+        Text[ russian ] = "Ïîäêëş÷åíèå ê: $(HOST). Îæèäàíèå îòêëèêà...";
         Text[ polish ] = "Po³¹czenie z: $(HOST). Czekanie na odpowiedŸ...";
         Text[ japanese ] = "æ¥ç¶šå…ˆ:$(HOST)ã€‚å¿œç­”ã‚’å¾…ã£ã¦ã„ã¾ã™...";
         Text[ chinese_traditional ] = "é€£ç·šåˆ°ï¼š$(HOST)ã€‚æ­£åœ¨ç­‰å€™ç­”å¾©...";
@@ -491,8 +507,9 @@ Resource RID_DLSTATUS2
         Text[ korean ] = "ë‹¤ìŒì— ì—°ê²°: $(HOST). ì‘ë‹µì„ ê¸°ë‹¤ë¦½ë‹ˆë‹¤...";
         Text[ turkish ] = "Bağlanılan: $(HOST). Yanıt bekleniyor...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Conexión con: $(HOST). Esperando respuesta...";
+        Text[ catalan ] = "Connectant amb: $(HOST). Esperant resposta...";
         Text[ finnish ] = "Yhdistetään kohteeseen: $(HOST). Odotetaan vastausta...";
+        Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­: $(HOST). à¸à¸³à¸¥à¸±à¸‡à¸£à¸­à¸à¸²à¸£à¸•à¸­à¸šà¸ªà¸™à¸­à¸‡...";
     };
     String SVBINDSTATUS_CONNECTING
     {
@@ -504,11 +521,11 @@ Resource RID_DLSTATUS2
         Text [ spanish ] = "Abriendo: $(TARGET) en $(HOST)" ;
         Text [ french ] = "Ouverture de $(TARGET) sur $(HOST)" ;
         Text [ swedish ] = "$(TARGET) öppnas på $(HOST)" ;
-        Text [ danish ] = "Åbner: $(TARGET) på $(HOST)" ;
+        Text [ danish ] = "Følgende åbnes: $(TARGET) på $(HOST)" ;
         Text [ portuguese ] = "Abrir: $(TARGET) em $(HOST)" ;
         Text [ portuguese_brazilian ] = "Ge?fnet wird: $(TARGET) auf $(HOST)" ;
         Text[ chinese_simplified ] = "æ‰“å¼€ï¼š $(HOST)ä¸Šçš„$(TARGET)";
-        Text[ russian ] = "Îòêğûâàåòÿ: $(TARGET) â $(HOST)";
+        Text[ russian ] = "Îòêğûâàåòñÿ $(TARGET) â $(HOST)";
         Text[ polish ] = "Otwarte zostanie: $(TARGET) na $(HOST)";
         Text[ japanese ] = "é–‹ã: $(HOST) ä¸Šã® $(TARGET)";
         Text[ chinese_traditional ] = "é–‹å•Ÿï¼š$(HOST)ä¸Šçš„$(TARGET)";
@@ -519,8 +536,9 @@ Resource RID_DLSTATUS2
         Text[ korean ] = "ì—´ê¸°: $(HOST)ì—ì„œ $(TARGET)";
         Text[ turkish ] = "Açılan:  $(HOST) üzerinde bulunan $(TARGET)";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Abriendo: $(TARGET) en $(HOST)";
+        Text[ catalan ] = "Obrint $(TARGET) a $(HOST)";
         Text[ finnish ] = "Avataan $(TARGET) koneelta $(HOST)";
+        Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¹€à¸›à¸´à¸” $(TARGET) à¸šà¸™ $(HOST)";
     };
     String SVBINDSTATUS_DOWNLOADINGDATA
     {
@@ -532,11 +550,11 @@ Resource RID_DLSTATUS2
         Text [ french ] = "Transfert de $(TARGET) Lu : $(BYTE)" ;
         Text [ dutch ] = "Geladen wordt: $(TARGET) Gelezen: $(BYTE)" ;
         Text [ swedish ] = "Överförs: $(TARGET) Läst: $(BYTE)" ;
-        Text [ danish ] = "Overfører: $(TARGET) Indlæst: $(BYTE)" ;
+        Text [ danish ] = "Følgende overføres: $(TARGET) Læst: $(BYTE)" ;
         Text [ portuguese_brazilian ] = "?bertragen wird: $(TARGET) Gelesen: $(BYTE)" ;
         Text [ portuguese ] = "Transferir: $(TARGET) Lidos: $(BYTE)" ;
         Text[ chinese_simplified ] = "ä¼ é€’ï¼š$(TARGET)å·²ç»é˜…è¯»ï¼š$(BYTE)";
-        Text[ russian ] = "Ïåğåäàåòñÿ: $(TARGET) Ïğî÷èòàíî: $(BYTE)";
+        Text[ russian ] = "Ïåğåäàíî: $(TARGET) Ïîëó÷åíî: $(BYTE)";
         Text[ polish ] = "Przetransmitowane zostanie: $(TARGET) Przeczytano: $(BYTE)";
         Text[ japanese ] = "è»¢é€:$(TARGET) èª­ã¿å–ã‚Š:$(BYTE)";
         Text[ chinese_traditional ] = "å‚³éï¼š$(TARGET)å·²ç¶“é–±è®€ï¼š$(BYTE)";
@@ -547,8 +565,9 @@ Resource RID_DLSTATUS2
         Text[ korean ] = "ì „ì†¡: $(TARGET) íŒë…: $(BYTE)";
         Text[ turkish ] = "Aktarılan: $(TARGET) Okunan: $(BYTE)";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Transfiriendo: $(TARGET) Leído: $(BYTE)";
+        Text[ catalan ] = "Transferint: $(TARGET) Llegit: $(BYTE)";
         Text[ finnish ] = "Siirretään: $(TARGET) Luettu: $(BYTE)";
+        Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸–à¹ˆà¸²à¸¢à¹‚à¸­à¸™: $(TARGET) à¸­à¹ˆà¸²à¸™: $(BYTE)";
     };
     String SVBINDSTATUS_ENDDOWNLOADDATA
     {
@@ -559,12 +578,12 @@ Resource RID_DLSTATUS2
         Text [ spanish ] = "Desconectado" ;
         Text [ french ] = "Déconnecté" ;
         Text [ dutch ] = "Verbinding verbroken" ;
-        Text [ swedish ] = "Föbindelse är bruten" ;
+        Text [ swedish ] = "Förbindelse är bruten" ;
         Text [ danish ] = "Forbindelse afbrudt" ;
         Text [ portuguese_brazilian ] = "Verbindung abgebaut" ;
         Text [ portuguese ] = "Ligação cancelada" ;
         Text[ chinese_simplified ] = "å·²ç»ç»“æŸè¿æ¥";
-        Text[ russian ] = "Ñîåäèíåíèå îòêëş÷åíî";
+        Text[ russian ] = "Ñîåäèíåíèå ğàçîğâàíî";
         Text[ polish ] = "Po³¹czenie roz³¹czone";
         Text[ japanese ] = "æ¥ç¶šãŒåˆ‡æ–­ã•ã‚Œã¾ã—ãŸã€‚";
         Text[ chinese_traditional ] = "å·²ç¶“çµæŸé€£ç·š";
@@ -575,8 +594,9 @@ Resource RID_DLSTATUS2
         Text[ korean ] = "ì—°ê²° í•´ì œ";
         Text[ turkish ] = "Bağlantı kesildi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Desconectado";
+        Text[ catalan ] = "Desconnectat";
         Text[ finnish ] = "Istunto lopetettu";
+        Text[ thai ] = "à¹„à¸¡à¹ˆà¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­";
     };
 };
 
@@ -585,6 +605,14 @@ String STR_HTML_GENERATOR
     Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION (%1)" ;
     Text[ language_user1 ] = "pb: no translation";
 };
+
+
+
+
+
+
+
+
 
 
 

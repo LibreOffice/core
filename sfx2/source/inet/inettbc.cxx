@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-29 08:04:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _SFXCANCEL_HXX //autogen
 #include <svtools/cancel.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
+#include <svtools/historyoptions.hxx>
+#endif
 #include <vcl/toolbox.hxx>
 #ifndef _VOS_THREAD_HXX //autogen
 #include <vos/thread.hxx>
@@ -91,7 +94,6 @@
 
 #include <unotools/localfilehelper.hxx>
 
-#include "picklist.hxx"
 #include "sfx.hrc"
 #include "dispatch.hxx"
 #include "viewfrm.hxx"
@@ -127,30 +129,14 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, BOOL bNew ) const
     String aFilter;
     String aOptions;
 
-    SfxPickEntry_Impl* pEntry = SfxPickList_Impl::Get()->GetHistoryPickEntryFromTitle( rName );
-
-    if ( pEntry )
+    INetURLObject aObj( rName );
+    if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        aName = pEntry->aName;
-        aFilter = pEntry->aFilter;
-        USHORT nPos = aFilter.Search( '|' );
-        if( nPos != STRING_NOTFOUND )
-        {
-            aOptions = aFilter.Copy( nPos + 1 );
-            aFilter.Erase( nPos + 1 );
-        }
+        String aBaseURL = GetURLBox()->GetBaseURL();
+        aName = SvtURLBox::ParseSmart( rName, aBaseURL, SvtPathOptions().GetWorkPath() );
     }
     else
-    {
-        INetURLObject aObj( rName );
-        if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
-        {
-            String aBaseURL = GetURLBox()->GetBaseURL();
-            aName = SvtURLBox::ParseSmart( rName, aBaseURL, SvtPathOptions().GetWorkPath() );
-        }
-        else
-            aName = rName;
-    }
+        aName = rName;
 
     if ( !aName.Len() )
         return;
@@ -231,20 +217,30 @@ void SfxURLToolBoxControl_Impl::StateChanged
     else if ( !GetURLBox()->IsModified() && SFX_ITEM_AVAILABLE == eState )
     {
         SvtURLBox* pURLBox = GetURLBox();
-
-        SfxPickList_Impl* pPickList = SfxPickList_Impl::Get();
-        DBG_ASSERT( pPickList , "Pickliste invalid" );
         pURLBox->Clear();
-        const ULONG nPickEntryCount = pPickList->HistoryPickEntryCount();
-        ULONG nPickEntry;
-        for ( nPickEntry = 0; nPickEntry < nPickEntryCount; ++nPickEntry )
+
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > lList = SvtHistoryOptions().GetList(eHISTORY);
+        for (sal_Int32 i=0; i<lList.getLength(); ++i)
         {
-            DBG_ASSERT( pPickList->GetHistoryPickEntry( nPickEntry ),
-                        "Pickentry ist invalid" );
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lProps = lList[i];
+            for (sal_Int32 p=0; p<lProps.getLength(); ++p)
+            {
+                if (lProps[p].Name != HISTORY_PROPERTYNAME_URL)
+                    continue;
 
-            INetURLObject aURL ( pPickList->GetHistoryPickEntry( nPickEntry )->aTitle );
+                ::rtl::OUString sURL;
+                if (!(lProps[p].Value>>=sURL) || !sURL.getLength())
+                    continue;
 
-            pURLBox->InsertEntry( aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
+                INetURLObject aURL    ( sURL );
+                String        sMainURL( aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
+                String        sFile;
+
+                if (::utl::LocalFileHelper::ConvertURLToSystemPath(sMainURL,sFile))
+                    pURLBox->InsertEntry(sFile);
+                else
+                    pURLBox->InsertEntry(sMainURL);
+            }
         }
 
         const SfxStringItem *pURL = PTR_CAST(SfxStringItem,pState);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2002-11-20 11:41:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERGROUPMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HDL_
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-#endif
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -234,6 +234,20 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 using namespace ::cppu;
+
+//-----------------------------------------------------------------------------
+
+const short FILEOPEN_SIMPLE = TemplateDescription::FILEOPEN_SIMPLE;
+const short FILESAVE_SIMPLE = TemplateDescription::FILESAVE_SIMPLE;
+const short FILESAVE_AUTOEXTENSION_PASSWORD = TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD;
+const short FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS = TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS;
+const short FILESAVE_AUTOEXTENSION_SELECTION = TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
+const short FILESAVE_AUTOEXTENSION_TEMPLATE = TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE;
+const short FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE = TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE;
+const short FILEOPEN_PLAY = TemplateDescription::FILEOPEN_PLAY;
+const short FILEOPEN_READONLY_VERSION = TemplateDescription::FILEOPEN_READONLY_VERSION;
+const short FILEOPEN_LINK_PREVIEW = TemplateDescription::FILEOPEN_LINK_PREVIEW;
+const short FILESAVE_AUTOEXTENSION = TemplateDescription::FILESAVE_AUTOEXTENSION;
 
 //-----------------------------------------------------------------------------
 
@@ -637,7 +651,10 @@ void FileDialogHelper_Impl::updateSelectionBox()
 
     updateExtendedControl(
         ExtendedFilePickerElementIds::CHECKBOX_SELECTION,
-        pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_SUPPORTSSELECTION ) != 0 );
+        ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_SUPPORTSSELECTION ) != 0 ) );
+
+    Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+    xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, makeAny( mbSelection ) );
 }
 
 // ------------------------------------------------------------------------
@@ -1012,6 +1029,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent, const s
     mbExport                = SFXWB_EXPORT == ( nFlags & SFXWB_EXPORT );
     mbIsSaveDlg             = sal_False;
     mbPwdCheckBoxState      = sal_False;
+    mbSelection             = sal_False;
+    mbSelectionEnabled      = sal_True;
 
     // default settings
     m_nDontFlags = SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG;
@@ -1261,6 +1280,9 @@ void FileDialogHelper_Impl::preExecute()
     setDefaultValues( );
     updatePreviewState( sal_False );
 
+    implInitializeFileName( );
+    // #106079# / 2002-12-09 / fs@openoffice.org
+
     // allow for dialog implementations which need to be executed before they return valid values for
     // current filter and such
     mnPostUserEventId = Application::PostUserEvent( LINK( this, FileDialogHelper_Impl, InitControls ) );
@@ -1274,11 +1296,52 @@ void FileDialogHelper_Impl::postExecute( sal_Int16 _nResult )
 }
 
 // ------------------------------------------------------------------------
+void FileDialogHelper_Impl::implInitializeFileName( )
+{
+    if ( maFileName.getLength() )
+    {
+        INetURLObject aObj( maPath );
+        aObj.Append( maFileName );
+
+        // in case we're operating as save dialog, and "auto extension" is checked,
+        // cut the extension from the name
+        // #106079# / 2002-12-09 / fs@openoffice.org
+        if ( mbIsSaveDlg && mbHasAutoExt )
+        {
+            try
+            {
+                sal_Bool bAutoExtChecked = sal_False;
+
+                Reference < XFilePickerControlAccess > xControlAccess( mxFileDlg, UNO_QUERY );
+                if  (   xControlAccess.is()
+                    &&  (   xControlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0 )
+                        >>= bAutoExtChecked
+                        )
+                    )
+                {
+                    if ( bAutoExtChecked )
+                    {   // cut the extension
+                        aObj.removeExtension( );
+                        mxFileDlg->setDefaultName( aObj.GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+                    }
+                }
+            }
+            catch( const Exception& e )
+            {
+                e;  // make compiler happy
+                DBG_ERROR( "FileDialogHelper_Impl::implInitializeFileName: could not ask for the auto-extension current-value!" );
+            }
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
 sal_Int16 FileDialogHelper_Impl::implDoExecute()
 {
     preExecute();
 
     sal_Int16 nRet = ExecutableDialogResults::CANCEL;
+
     if ( mbSystemPicker )
     {
         PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );
@@ -1326,6 +1389,12 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
             SFX_ITEMSET_ARG( rpSet, pPassItem, SfxStringItem, SID_PASSWORD, FALSE );
             mbPwdCheckBoxState = ( pPassItem != NULL );
         }
+
+        SFX_ITEMSET_ARG( rpSet, pSelectItem, SfxBoolItem, SID_SELECTION, FALSE );
+        if ( pSelectItem )
+            mbSelection = pSelectItem->GetValue();
+        else
+            mbSelectionEnabled = sal_False;
 
         // the password will be set in case user decide so
         rpSet->ClearItem( SID_PASSWORD );
@@ -1521,53 +1590,46 @@ void FileDialogHelper_Impl::getRealFilter( String& _rFilter ) const
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::setPath( const OUString& rPath )
+void FileDialogHelper_Impl::displayFolder( const ::rtl::OUString& _rPath )
 {
-    // We check wether the path points to a dirctory or not
-    //
-    // We set the display directory only, when it is on a local / remote(?)
-    // filesystem
-
-    if ( ! rPath.getLength() )
+    if ( ! _rPath.getLength() )
+        // nothing to do
         return;
-    /* if (! utl::LocalFileHelper::IsLocalFile( rPath ) )
-    {
+
+    if ( !::utl::UCBContentHelper::IsFolder( _rPath ) )
+        // only valid folders accepted here
         return;
-    }*/
 
-    OUString aName;
-    OUString aPath;
-
-    INetURLObject aObj( rPath );
-
-    // if the given path isn't a folder, we cut off the last part
-    // and take it as filename and the rest of the path should be
-    // the folder
-
-    if ( ! utl::UCBContentHelper::IsFolder( rPath ) )
-    {
-        aName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET );
-        aObj.removeSegment();
-    }
-
-    aPath = aObj.GetMainURL( INetURLObject::NO_DECODE );
-
-    if ( ! utl::UCBContentHelper::IsFolder( aPath ) )
-        return;
-    else
-        maPath = aPath;
-
-    // set the path
+    maPath = _rPath;
     if ( mxFileDlg.is() )
     {
         try
         {
-            if ( maPath.getLength() )
-                mxFileDlg->setDisplayDirectory( maPath );
-            if ( aName.getLength() )
-                mxFileDlg->setDefaultName( aName );
+            mxFileDlg->setDisplayDirectory( maPath );
         }
-        catch( IllegalArgumentException ){}
+        catch( const IllegalArgumentException& e )
+        {
+            e; // make compiler happy
+            DBG_ERROR( "FileDialogHelper_Impl::displayFolder: caught an exception!" );
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper_Impl::setFileName( const ::rtl::OUString& _rFile )
+{
+    maFileName = _rFile;
+    if ( mxFileDlg.is() )
+    {
+        try
+        {
+            mxFileDlg->setDefaultName( maFileName );
+        }
+        catch( const IllegalArgumentException& e )
+        {
+            e; // make compiler happy
+            DBG_ERROR( "FileDialogHelper_Impl::setFileName: caught an exception!" );
+        }
     }
 }
 
@@ -1919,7 +1981,7 @@ void FileDialogHelper_Impl::loadConfig()
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
 
                 if ( !maPath.getLength() )
-                    setPath( getInitPath( aUserData, 2 ) );
+                    displayFolder( getInitPath( aUserData, 2 ) );
 
                 if ( ! maCurFilter.getLength() )
                 {
@@ -1935,7 +1997,7 @@ void FileDialogHelper_Impl::loadConfig()
         }
 
         if ( !maPath.getLength() )
-            setPath( SvtPathOptions().GetGraphicPath() );
+            displayFolder( SvtPathOptions().GetGraphicPath() );
     }
     else
     {
@@ -1954,7 +2016,7 @@ void FileDialogHelper_Impl::loadConfig()
             aUserData = DEFINE_CONST_UNICODE( STD_CONFIG_STR );
 
         if ( ! maPath.getLength() )
-            setPath( getInitPath( aUserData, 1 ) );
+            displayFolder( getInitPath( aUserData, 1 ) );
 
         if ( mbHasAutoExt )
         {
@@ -1968,7 +2030,7 @@ void FileDialogHelper_Impl::loadConfig()
         }
 
         if ( !maPath.getLength() )
-            setPath( SvtPathOptions().GetWorkPath() );
+            displayFolder( SvtPathOptions().GetWorkPath() );
     }
 }
 
@@ -2231,9 +2293,29 @@ ErrCode FileDialogHelper::GetGraphic( Graphic& rGraphic ) const
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper::SetDisplayDirectory( const String& rPath )
+void FileDialogHelper::SetDisplayDirectory( const String& _rPath )
 {
-    mpImp->setPath( rPath );
+    if ( !_rPath.Len() )
+        return;
+
+    // if the given path isn't a folder, we cut off the last part
+    // and take it as filename and the rest of the path should be
+    // the folder
+
+    ::rtl::OUString sPath;
+    ::rtl::OUString sFileName;
+
+    INetURLObject aObj( _rPath );
+    if ( !::utl::UCBContentHelper::IsFolder( _rPath ) )
+    {
+        sFileName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET );
+        aObj.removeSegment();
+    }
+
+    sPath = aObj.GetMainURL( INetURLObject::NO_DECODE );
+
+    mpImp->displayFolder( sPath );
+    mpImp->setFileName( sFileName );
 }
 
 // ------------------------------------------------------------------------

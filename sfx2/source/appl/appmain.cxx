@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-19 17:17:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@
 #include "interno.hxx"
 #include "fcontnr.hxx"
 #include "viewsh.hxx"
-#include "picklist.hxx"
 #include "intro.hxx"
 #include "msgpool.hxx"
 #include "cfgmgr.hxx"

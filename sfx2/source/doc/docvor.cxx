@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2002-11-20 11:42:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ friend class SfxOrganizeListBox_Impl;
 
     SvStringsDtor*          GetAllFactoryURLs_Impl() const;
     sal_Bool                GetFactoryURL_Impl( String& rFactoryURL, String& rFileURL ) const;
-    long                    Dispatch_Impl( USHORT nId );
+    long                    Dispatch_Impl( USHORT nId, Menu* _pMenu );
     String                  GetPath_Impl( BOOL bOpen, const String& rFileName );
     void                    InitBitmaps( void );
 
@@ -286,7 +286,7 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
         INetURLObject aObj( aWorkPath );
         DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL !" );
         aObj.setFinalSlash();
-        aLastDir = aObj.GetMainURL();
+        aLastDir = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
     }
     else
     {
@@ -294,7 +294,7 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
         String aProgURL = SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(PROGURL)") );
         INetURLObject aObj( aProgURL );
         DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL !" );
-        aLastDir = aObj.GetMainURL();
+        aLastDir = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
     }
 
     InitBitmaps();
@@ -1096,7 +1096,7 @@ sal_Int8 SfxOrganizeListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
         if ( SOT_FORMAT_FILE == nId && aHelper.GetString( nId, aFileName ) )
         {
             INetURLObject aObj( aFileName, INET_PROT_FILE );
-            bSuccess |= pMgr->InsertFile( this, aObj.GetMainURL() );
+            bSuccess |= pMgr->InsertFile( this, aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
         }
     }
     bDropMoveOk = TRUE;
@@ -1597,11 +1597,11 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
                 aObj.removeExtension();
 
             aObj.setExtension( aExtension );
-            aPath = aObj.GetMainURL();
+            aPath = aObj.GetMainURL(INetURLObject::DECODE_TO_IURI);
         }
 
         aObj.removeSegment();
-        aLastDir = aObj.GetMainURL();
+        aLastDir = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
     }
     return aPath;
 }
@@ -1681,7 +1681,7 @@ sal_Bool SfxOrganizeDlg_Impl::GetFactoryURL_Impl( String& rFactoryURL, String& r
     return bRet;
 }
 
-long SfxOrganizeDlg_Impl::Dispatch_Impl(USHORT nId)
+long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
 
 /*  [Beschreibung]
 
@@ -1904,8 +1904,13 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl(USHORT nId)
 
     if ( !bHandled && ( nId > ID_RESET_DEFAULT_TEMPLATE || nId <= ID_RESET_DEFAULT_TEMPLATE_END ) )
     {
-        String aObjFacURL = aEditBtn.GetPopupMenu()->GetPopupMenu( ID_RESET_DEFAULT_TEMPLATE )->GetItemCommand( nId );
-        SfxObjectFactory::SetStandardTemplate( aObjFacURL, String() );
+        Menu* pSubMenu = _pMenu ? _pMenu : aEditBtn.GetPopupMenu()->GetPopupMenu( ID_RESET_DEFAULT_TEMPLATE );
+        if ( pSubMenu )
+        {
+            String aObjFacURL = pSubMenu->GetItemCommand( nId );
+            SfxObjectFactory::SetStandardTemplate( aObjFacURL, String() );
+            bHandled = sal_True;
+        }
     }
 
     return bHandled ? 1 : 0;
@@ -1928,7 +1933,7 @@ IMPL_LINK_INLINE_START( SfxOrganizeDlg_Impl, MenuSelect_Impl, Menu *, pMenu )
 
 */
 {
-    return Dispatch_Impl(pMenu->GetCurItemId());
+    return Dispatch_Impl( pMenu->GetCurItemId(), pMenu );
 }
 IMPL_LINK_INLINE_END( SfxOrganizeDlg_Impl, MenuSelect_Impl, Menu *, pMenu )
 
@@ -1948,12 +1953,12 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AccelSelect_Impl, Accelerator *, pAccel )
                                     0: Event wurde nicht verarbeitet (SV)
 
 */
+
 {
-    SvLBoxEntry *pEntry=pFocusBox && pFocusBox->GetSelectionCount()
-        ? pFocusBox->FirstSelected() : 0 ;
-    return pEntry && (pAccel->GetCurItemId() == ID_NEW  ||
-                      !DontDelete_Impl(pEntry)) ?
-        Dispatch_Impl(pAccel->GetCurItemId()): 0;
+    SvLBoxEntry* pEntry = pFocusBox && pFocusBox->GetSelectionCount() ?
+        pFocusBox->FirstSelected() : NULL ;
+    return pEntry && ( pAccel->GetCurItemId() == ID_NEW  || !DontDelete_Impl( pEntry ) ) ?
+        Dispatch_Impl( pAccel->GetCurItemId(), NULL ) : 0;
     return 0;
 }
 
@@ -2209,7 +2214,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
         INetURLObject aObj( aPath );
         aObj.removeSegment();
         aObj.setFinalSlash();
-        aLastDir = aObj.GetMainURL();
+        aLastDir = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
     }
 
     return 0;

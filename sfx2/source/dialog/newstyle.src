@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newstyle.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:23:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,17 +82,17 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
     Text [ dutch ] = "Opmaakprofiel maken" ;
     Text [ spanish ] = "Crear estilo" ;
     Text [ english_us ] = "Create Style" ;
-    Text[ chinese_simplified ] = "Éú³ÉÑùÊ½";
-    Text[ russian ] = "Ñîçäàòü ñòèëü";
+    Text[ chinese_simplified ] = "ç”Ÿæˆæ ·å¼";
+    Text[ russian ] = "Íîâûé ñòèëü";
     Text[ polish ] = "Utwórz styl";
-    Text[ japanese ] = "½À²Ù‚Ìì¬";
-    Text[ chinese_traditional ] = "»s§@¼Ë¦¡";
+    Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«ã®ä½œæˆ";
+    Text[ chinese_traditional ] = "è£½ä½œæ¨£å¼";
     Text[ arabic ] = "ÅäÔÇÁ äãØ";
     Text[ greek ] = "Äçìéïõñãßá ğñïôığïõ";
-    Text[ korean ] = "¼­½ÄÆÄÀÏ ÀÛ¼º";
+    Text[ korean ] = "ìŠ¤íƒ€ì¼ ë§Œë“¤ê¸°";
     Text[ turkish ] = "Biçim oluştur";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Crear estilo";
+    Text[ catalan ] = "Crea un estil";
     Moveable = TRUE ;
     FixedLine FL_COL
     {
@@ -111,17 +111,18 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Text [ dutch ] = "Naam opmaakprofiel" ;
         Text [ spanish ] = "Nombre del estilo" ;
         Text [ english_us ] = "Style name" ;
-        Text[ chinese_simplified ] = "ÑùÊ½Ãû³Æ";
+        Text[ chinese_simplified ] = "æ ·å¼åç§°";
         Text[ russian ] = "Íàçâàíèå ñòèëÿ";
         Text[ polish ] = "Nazwa stylu";
-        Text[ japanese ] = "½À²Ù–¼";
-        Text[ chinese_traditional ] = "¼Ë¦¡¦WºÙ";
+        Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«å";
+        Text[ chinese_traditional ] = "æ¨£å¼åç¨±";
         Text[ arabic ] = "ÇÓã ÇáäãØ";
         Text[ greek ] = "¼íïìá ğñïôığïõ";
-        Text[ korean ] = "¼­½Ä ÆÄÀÏ ÀÌ¸§";
+        Text[ korean ] = "ìŠ¤íƒ€ì¼ ì´ë¦„";
         Text[ turkish ] = "Biçim adı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombre del estilo";
+        Text[ catalan ] = "Nom de l'estil";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¸¥à¸±à¸à¸©à¸“à¸°";
     };
     ComboBox LB_COL
     {
@@ -160,19 +161,32 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Message [ dutch ] = "Dit opmaakprofiel bestaat reeds. Overschrijven?" ;
         Message [ spanish ] = "El estilo ya existe. ¿Desea sobrescribirlo?" ;
         Message [ english_us ] = "Style already exists. Overwrite?" ;
-        Message[ chinese_simplified ] = "ÑùÊ½ÒÑ¾­´æÔÚ¡£Òª¸ÄĞ´£¿";
+        Message[ chinese_simplified ] = "æ ·å¼å·²ç»å­˜åœ¨ã€‚è¦æ”¹å†™ï¼Ÿ";
         Message[ russian ] = "Ñòèëü óæå ñóùåñòâóåò. Ïåğåïèñàòü?";
         Message[ polish ] = "Styl ju¿ istnieje. Zast¹piæ innym?";
-        Message[ japanese ] = "½À²Ù‚Í‚·‚Å‚É‚ ‚è‚Ü‚·Bã‘‚«‚µ‚Ü‚·‚©B";
-        Message[ chinese_traditional ] = "¼Ë¦¡¤w¸g¦s¦b¡C­nÂĞ¼g¡H";
+        Message[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚ä¸Šæ›¸ãã—ã¾ã™ã‹ã€‚";
+        Message[ chinese_traditional ] = "æ¨£å¼å·²ç¶“å­˜åœ¨ã€‚è¦è¦†å¯«ï¼Ÿ";
         Message[ arabic ] = "åĞÇ ÇáäãØ ãæÌæÏ ãÓÈŞÇğ. åá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
         Message[ greek ] = "Ôï ğñüôõğï õğÜñ÷åé Şäç. Íá äéáãñáöåß;";
-        Message[ korean ] = "¼­½Ä ÆÄÀÏÀÌ ÀÌ¹Ì ÀÖ½À´Ï´Ù. µ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
+        Message[ korean ] = "ì´ ìŠ¤íƒ€ì¼ì€ ì´ë¯¸ ìˆìŠµë‹ˆë‹¤. ê²¹ì³ì“°ì‹œê² ìŠµë‹ˆê¹Œ?";
         Message[ turkish ] = "Biçim mevcut durumda. Üzerine yazılsın mı?";
         Message[ language_user1 ] = " ";
-        Message[ catalan ] = "El estilo ya existe. ¿Desea sobrescribirlo?";
+        Message[ catalan ] = "L'estil ja existeix. Voleu sobreescriure'l?";
+        Message[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸¡à¸µà¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§  à¹€à¸‚à¸µà¸¢à¸™à¸—à¸±à¸šà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
     };
+    Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸¥à¸±à¸à¸©à¸“à¸°";
 };
+
+
+
+
+
+
+
+
+
+
+
 
 
 

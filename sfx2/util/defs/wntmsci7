@@ -11316,9 +11316,3 @@ SfxCompare_UString_SfxPropertyDescriptor_Impl
 ?disposing@HelpStatusListener_Impl@@UAAXABUEventObject@lang@star@sun@com@@@Z
 ?statusChanged@HelpStatusListener_Impl@@UAAXABUFeatureStateEvent@frame@star@sun@com@@@Z
 ?queryInterface@cppu@@YA?AVAny@uno@star@sun@com@@ABVType@3456@PAVXTypeProvider@lang@456@PAVXServiceInfo@9456@PAVXStandaloneDocumentInfo@document@456@@Z
-?Impl_ExistURLInMenu@@YAEPBVPopupMenu@@ABVString@@PAV2@@Z
-?begin@?$list@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@V?$allocator@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@2@@_STL@@QBE?AU?$_List_iterator@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@U?$_Const_traits@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@2@@2@XZ
-?distance@_STL@@YAXU?$_List_iterator@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@U?$_Const_traits@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@2@@1@0AAI@Z
-?end@?$list@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@V?$allocator@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@2@@_STL@@QBE?AU?$_List_iterator@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@U?$_Const_traits@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@2@@2@XZ
-??0?$Reference@VXDropTargetDropContext@dnd@datatransfer@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
-??0DropTargetEvent@dnd@datatransfer@star@sun@com@@QAE@ABU012345@@Z

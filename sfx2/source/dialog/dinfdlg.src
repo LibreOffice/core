@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 16:23:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ TabPage TP_DOCINFODESC
         Text [ italian ] = "~Titolo" ;
         Text [ portuguese_brazilian ] = "~T?tulo" ;
         Text [ portuguese ] = "~Título" ;
-        Text [ finnish ] = "~Otsikko" ;
+        Text [ finnish ] = "O~tsikko" ;
         Text [ danish ] = "Titel" ;
         Text [ french ] = "Titre" ;
         Text [ swedish ] = "~Rubrik" ;
@@ -123,12 +123,12 @@ TabPage TP_DOCINFODESC
         Text [ italian ] = "Oggetto" ;
         Text [ portuguese_brazilian ] = "~Assunto" ;
         Text [ portuguese ] = "~Assunto" ;
-        Text [ finnish ] = "~Aihe" ;
+        Text [ finnish ] = "A~ihe" ;
         Text [ danish ] = "Emne" ;
         Text [ french ] = "~Sujet" ;
         Text [ swedish ] = "T~ema" ;
         Text [ dutch ] = "~Onderwerp" ;
-        Text [ spanish ] = "Tema" ;
+        Text [ spanish ] = "~Asunto" ;
         Text [ english_us ] = "~Subject" ;
         Text[ chinese_simplified ] = "ä¸»é¢˜(~S)";
         Text[ russian ] = "Òåìà";
@@ -162,7 +162,7 @@ TabPage TP_DOCINFODESC
         Text [ italian ] = "~Parole chiave" ;
         Text [ portuguese_brazilian ] = "~Palavras-chave" ;
         Text [ portuguese ] = "~Palavras-chave" ;
-        Text [ finnish ] = "~Avainsanat" ;
+        Text [ finnish ] = "A~vainsanat" ;
         Text [ danish ] = "Nøgleord" ;
         Text [ french ] = "~Mots-clés" ;
         Text [ swedish ] = "~Nyckelord" ;
@@ -195,7 +195,7 @@ TabPage TP_DOCINFODESC
         Pos = MAP_APPFONT ( 6 , 52 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Left = TRUE ;
-        Text = "~Beschreibung" ;
+        Text = "~Kommentar" ;
         Text [ ENGLISH ] = "~Description" ;
         Text [ norwegian ] = "~Description" ;
         Text [ italian ] = "~Descrizione" ;
@@ -207,14 +207,14 @@ TabPage TP_DOCINFODESC
         Text [ swedish ] = "~Beskrivning" ;
         Text [ dutch ] = "~Beschrijving" ;
         Text [ spanish ] = "~Descripción" ;
-        Text [ english_us ] = "~Comment" ;
+        Text [ english_us ] = "~Comments" ;
         Text[ chinese_simplified ] = "è¯´æ˜(~C)";
         Text[ russian ] = "Îïèñàíèå";
         Text[ polish ] = "Opis";
         Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆ(~C)";
         Text[ chinese_traditional ] = "æè¿°(~C)";
         Text[ greek ] = "ĞåñéãñáöŞ";
-        Text[ korean ] = "ì„¤ëª…(~C)";
+        Text[ korean ] = "ë©”ëª¨(~C)";
         Text[ arabic ] = "ÇáæÕİ";
         Text[ turkish ] = "~Tanım";
         Text[ language_user1 ] = " ";
@@ -252,13 +252,13 @@ TabPage TP_DOCINFODOC
     };
     FixedLine FL_FILE_1
     {
-        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Pos = MAP_APPFONT ( 6 , 31 ) ;
         Size = MAP_APPFONT ( 248 , 1 ) ;
     };
     FixedText FT_FILE_TYP
     {
-        Pos = MAP_APPFONT ( 6 , 39 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 37 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Typ:" ;
         Text [ ENGLISH ] = "Type:" ;
         Text [ english_us ] = "Type:" ;
@@ -281,17 +281,17 @@ TabPage TP_DOCINFODOC
         Text[ turkish ] = "Tip:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus";
-        Text[ finnish ] = "Tyyppi";
+        Text[ finnish ] = "Tyyppi:";
         Text[ thai ] = "à¸Šà¸™à¸´à¸”:";
     };
     FixedText FT_FILE_SHOW_TYP
     {
-        Pos = MAP_APPFONT ( 54 , 39 ) ;
+        Pos = MAP_APPFONT ( 78 , 37 ) ;
         Size = MAP_APPFONT ( 106 , 10 ) ;
     };
     CheckBox CB_FILE_READONLY
     {
-        Pos = MAP_APPFONT ( 163 , 39 ) ;
+        Pos = MAP_APPFONT ( 163 , 37 ) ;
         Size = MAP_APPFONT ( 91 , 10 ) ;
         Text = "~Schreibgeschützt" ;
         Text [ ENGLISH ] = "~Readonly" ;
@@ -302,7 +302,7 @@ TabPage TP_DOCINFODOC
         Text [ italian ] = "~Sola lettura" ;
         Text [ spanish ] = "~Solo lectura" ;
         Text [ french ] = "~En lecture seule" ;
-        Text [ dutch ] = "~Schrijfbeveiligd" ;
+        Text [ dutch ] = "~Alleen-lezen" ;
         Text [ portuguese ] = "~Só leitura" ;
         Text[ chinese_simplified ] = "é˜²æ”¹å†™(~R)";
         Text[ russian ] = "~Òîëüêî äëÿ ÷òåíèÿ";
@@ -310,18 +310,18 @@ TabPage TP_DOCINFODOC
         Text[ japanese ] = "èª­ã¿å–ã‚Šå°‚ç”¨(~R)";
         Text[ chinese_traditional ] = "å”¯è®€(~R)";
         Text[ greek ] = "Ìüíï ãéá áíÜãíùóç";
-        Text[ korean ] = "ì“°ê¸° ë³´í˜¸(~R)";
+        Text[ korean ] = "ì½ê¸° ì „ìš©(~R)";
         Text[ arabic ] = "ááŞÑÇÁÉ İŞØ";
         Text[ turkish ] = "S~alt okunur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Només lectura";
-        Text[ finnish ] = "~Vain luku";
+        Text[ finnish ] = "Vain ~luku";
         Text[ thai ] = "~à¸­à¹ˆà¸²à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";
     };
     FixedText FT_FILE
     {
-        Pos = MAP_APPFONT ( 6 , 51 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 49 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Ort:" ;
         Text [ ENGLISH ] = "Location:" ;
         Text [ english_us ] = "Location:" ;
@@ -349,13 +349,13 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_FILE_VAL
     {
-        Pos = MAP_APPFONT ( 54 , 51 ) ;
+        Pos = MAP_APPFONT ( 78 , 49 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
     };
     FixedText FT_FILE_SIZE
     {
-        Pos = MAP_APPFONT ( 6 , 63 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 61 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Größe:" ;
         Text [ ENGLISH ] = "Size:" ;
         Text [ english_us ] = "Size:" ;
@@ -383,18 +383,18 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_FILE_SHOW_SIZE
     {
-        Pos = MAP_APPFONT ( 54 , 63 ) ;
-        Size = MAP_APPFONT ( 200 , 10 ) ;
+        Pos = MAP_APPFONT ( 78 , 61 ) ;
+        Size = MAP_APPFONT ( 170 , 10 ) ;
     };
     FixedLine FL_FILE_2
     {
-        Pos = MAP_APPFONT ( 6 , 86 ) ;
+        Pos = MAP_APPFONT ( 6 , 74 ) ;
         Size = MAP_APPFONT ( 248 , 1 ) ;
     };
     FixedText FT_CREATE
     {
-        Pos = MAP_APPFONT ( 6 , 90 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 80 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Erstellt am:" ;
         Text [ ENGLISH ] = "Created:" ;
         Text [ english_us ] = "Created:" ;
@@ -422,48 +422,13 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_CREATE_VAL
     {
-        Pos = MAP_APPFONT ( 54 , 90 ) ;
+        Pos = MAP_APPFONT ( 78 , 80 ) ;
         Size = MAP_APPFONT ( 123 , 10 ) ;
-    };
-    FixedText FT_TIMELOG
-    {
-        Pos = MAP_APPFONT ( 179 , 90 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
-        Text = "Bearbeitet:" ;
-        Text [ ENGLISH ] = "Edit time:" ;
-        Text [ norwegian ] = "Edit time:" ;
-        Text [ italian ] = "Modificato:" ;
-        Text [ portuguese_brazilian ] = "Edit time:" ;
-        Text [ portuguese ] = "Editado:" ;
-        Text [ french ] = "Durée d'ouverture :" ;
-        Text [ dutch ] = "Bewerkt:" ;
-        Text [ spanish ] = "Abierto desde :" ;
-        Text [ danish ] = "Redigeret:" ;
-        Text [ swedish ] = "Redigeringstid:" ;
-        Text [ finnish ] = "Muokattu:" ;
-        Text [ english_us ] = "Edited:" ;
-        Text[ chinese_simplified ] = "å·²ç»ç¼–è¾‘ï¼š";
-        Text[ russian ] = "Îòğåäàêòèğîâàí:";
-        Text[ polish ] = "Opracowano:";
-        Text[ japanese ] = "ç·¨é›†æ™‚é–“:";
-        Text[ chinese_traditional ] = "å·²ç¶“ç·¨è¼¯ï¼š";
-        Text[ greek ] = "ÅğåîåñãÜóôçêå:";
-        Text[ korean ] = "í¸ì§‘:";
-        Text[ arabic ] = "ãÍÑÑ:";
-        Text[ turkish ] = "Düzenleme:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Editat el:";
-        Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚:";
-    };
-    FixedText FT_TIMELOG_VAL
-    {
-        Pos = MAP_APPFONT ( 232 , 90 ) ;
-        Size = MAP_APPFONT ( 26 , 10 ) ;
     };
     FixedText FT_CHANGE
     {
-        Pos = MAP_APPFONT ( 6 , 102 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 92 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Geändert am:" ;
         Text [ ENGLISH ] = "Changed:" ;
         Text [ english_us ] = "Modified:" ;
@@ -481,7 +446,7 @@ TabPage TP_DOCINFODOC
         Text[ japanese ] = "å¤‰æ›´æ—¥æ™‚:";
         Text[ chinese_traditional ] = "è®Šæ›´çš„æ—¥æœŸï¼š";
         Text[ greek ] = "ÔñïğïğïéŞèçêå ôç:";
-        Text[ korean ] = "ë³€ê²½ì¼ì:";
+        Text[ korean ] = "ë³€ê²½ì¼:";
         Text[ arabic ] = "ÊÇÑíÎ ÇáÊÚÏíá:";
         Text[ turkish ] = "Değiştirme tarihi:";
         Text[ language_user1 ] = " ";
@@ -491,29 +456,98 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_CHANGE_VAL
     {
-        Pos = MAP_APPFONT ( 54 , 102 ) ;
+        Pos = MAP_APPFONT ( 78 , 92 ) ;
         Size = MAP_APPFONT ( 123 , 10 ) ;
+    };
+    FixedText FT_PRINT
+    {
+        Pos = MAP_APPFONT ( 6 , 104 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "Letzter Druck:" ;
+        Text [ ENGLISH ] = "Last printed:" ;
+        Text [ english_us ] = "Last printed:" ;
+        Text [ italian ] = "Ultima stampa:" ;
+        Text [ spanish ] = "Última impresión:" ;
+        Text [ french ] = "Dernière impression :" ;
+        Text [ dutch ] = "Afgedrukt op:" ;
+        Text [ swedish ] = "Senaste utskrift:" ;
+        Text [ danish ] = "Udskrevet den:" ;
+        Text [ portuguese_brazilian ] = "Gedruckt am:" ;
+        Text [ portuguese ] = "Impresso em:" ;
+        Text[ chinese_simplified ] = "ä¸Šæ¬¡æ‰“å°çš„æ—¥æœŸï¼š";
+        Text[ russian ] = "Íàïå÷àòàí:";
+        Text[ polish ] = "Wydrukowany:";
+        Text[ japanese ] = "å°åˆ·æ—¥æ™‚:";
+        Text[ chinese_traditional ] = "ä¸Šä¸€æ¬¡åˆ—å°ï¼š";
+        Text[ greek ] = "Åêôõğşèçêå ôç:";
+        Text[ korean ] = "ìµœê·¼ ì¸ì‡„ì¼:";
+        Text[ arabic ] = "ÊÇÑíÎ ÇáØÈÇÚÉ:";
+        Text[ turkish ] = "Yazdırma tarihi:";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Imprès el:";
+        Text[ finnish ] = "Tulostettu:";
+        Text[ thai ] = "à¸à¸´à¸¡à¸à¹Œ:";
+    };
+    FixedText FT_PRINT_VAL
+    {
+        Pos = MAP_APPFONT ( 78 , 104 ) ;
+        Size = MAP_APPFONT ( 123 , 10 ) ;
+    };
+    FixedText FT_TIMELOG
+    {
+        Pos = MAP_APPFONT ( 6 , 116 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "Bearbeitungszeit:" ;
+        Text [ ENGLISH ] = "Editing time:" ;
+        Text [ norwegian ] = "Editing time:" ;
+        Text [ italian ] = "Durata revisioni:" ;
+        Text [ portuguese_brazilian ] = "Edit time:" ;
+        Text [ portuguese ] = "Editado:" ;
+        Text [ french ] = "Durée d'édition :" ;
+        Text [ dutch ] = "Bewerkt:" ;
+        Text [ spanish ] = "Tiempo de edición:" ;
+        Text [ danish ] = "Redigeret:" ;
+        Text [ swedish ] = "Redigeringstid:" ;
+        Text [ finnish ] = "Muokattu:" ;
+        Text [ english_us ] = "Editing time:" ;
+        Text[ chinese_simplified ] = "ç¼–è¾‘æ—¶é—´ï¼š";
+        Text[ russian ] = "Îòğåäàêòèğîâàí:";
+        Text[ polish ] = "Opracowano:";
+        Text[ japanese ] = "ç·¨é›†æ™‚é–“:";
+        Text[ chinese_traditional ] = "ç·¨è¼¯æ™‚é–“ï¼š";
+        Text[ greek ] = "ÅğåîåñãÜóôçêå:";
+        Text[ korean ] = "í¸ì§‘ ì‹œê°„:";
+        Text[ arabic ] = "ãÍÑÑ:";
+        Text[ turkish ] = "Düzenleme:";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Editat el:";
+        Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚:";
+    };
+    FixedText FT_TIMELOG_VAL
+    {
+        Pos = MAP_APPFONT ( 78 , 116 ) ;
+        Size = MAP_APPFONT ( 30 , 10 ) ;
     };
     FixedText FT_DOCNO
     {
-        Pos = MAP_APPFONT ( 179 , 102 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
-        Text = "Version:" ;
-        Text [ ENGLISH ] = "Version:" ;
-        Text [ english_us ] = "Version:" ;
+        Pos = MAP_APPFONT ( 6 , 128 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "Dokumentnummer:" ;
+        Text [ ENGLISH ] = "Document number:" ;
+        Text [ english_us ] = "Document number:" ;
         Text [ portuguese_brazilian ] = "N?mero do documento:" ;
-        Text [ swedish ] = "Version:" ;
+        Text [ swedish ] = "Dokumentnummer:" ;
         Text [ danish ] = "Version:" ;
-        Text [ italian ] = "Versione:" ;
-        Text [ spanish ] = "Versión:" ;
-        Text [ french ] = "Version :" ;
+        Text [ italian ] = "Numero revisioni:" ;
+        Text [ spanish ] = "Revisión nº:" ;
+        Text [ french ] = "Révision n° :" ;
         Text [ dutch ] = "Versie:" ;
         Text [ portuguese ] = "Versão:" ;
-        Text[ chinese_simplified ] = "ç‰ˆæœ¬ï¼š";
+        Text[ chinese_simplified ] = "æ–‡æ¡£å·ç ï¼š";
         Text[ russian ] = "Âåğñèÿ:";
         Text[ polish ] = "Wersja:";
         Text[ japanese ] = "ãƒãƒ¼ã‚¸ãƒ§ãƒ³:";
-        Text[ chinese_traditional ] = "ç‰ˆæœ¬ï¼š";
+        Text[ chinese_traditional ] = "æ–‡ä»¶è™Ÿç¢¼ï¼š";
         Text[ greek ] = "¸êäïóç:";
         Text[ korean ] = "ë²„ì „:";
         Text[ arabic ] = "ÇáÅÕÏÇÑ:";
@@ -525,46 +559,12 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_DOCNO_VAL
     {
-        Pos = MAP_APPFONT ( 232 , 102 ) ;
-        Size = MAP_APPFONT ( 26 , 10 ) ;
-    };
-    FixedText FT_PRINT
-    {
-        Pos = MAP_APPFONT ( 6 , 114 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "Gedruckt am:" ;
-        Text [ ENGLISH ] = "Last printed:" ;
-        Text [ english_us ] = "Printed:" ;
-        Text [ italian ] = "Stampato il:" ;
-        Text [ spanish ] = "Impreso el:" ;
-        Text [ french ] = "Imprimé le :" ;
-        Text [ dutch ] = "Afgedrukt op:" ;
-        Text [ swedish ] = "Utskrivet den:" ;
-        Text [ danish ] = "Udskrevet den:" ;
-        Text [ portuguese_brazilian ] = "Gedruckt am:" ;
-        Text [ portuguese ] = "Impresso em:" ;
-        Text[ chinese_simplified ] = "æ‰“å°æ—¥æœŸï¼š";
-        Text[ russian ] = "Íàïå÷àòàí:";
-        Text[ polish ] = "Wydrukowany:";
-        Text[ japanese ] = "å°åˆ·æ—¥æ™‚:";
-        Text[ chinese_traditional ] = "åˆ—å°æ—¥æœŸï¼š";
-        Text[ greek ] = "Åêôõğşèçêå ôç:";
-        Text[ korean ] = "ì¸ì‡„ì¼ì:";
-        Text[ arabic ] = "ÊÇÑíÎ ÇáØÈÇÚÉ:";
-        Text[ turkish ] = "Yazdırma tarihi:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Imprès el:";
-        Text[ finnish ] = "Tulostettu";
-        Text[ thai ] = "à¸à¸´à¸¡à¸à¹Œ:";
-    };
-    FixedText FT_PRINT_VAL
-    {
-        Pos = MAP_APPFONT ( 54 , 114 ) ;
-        Size = MAP_APPFONT ( 123 , 10 ) ;
+        Pos = MAP_APPFONT ( 78 , 128 ) ;
+        Size = MAP_APPFONT ( 30 , 10 ) ;
     };
     PushButton BTN_DELETE
     {
-        Pos = MAP_APPFONT ( 204 , 122 ) ;
+        Pos = MAP_APPFONT ( 204 , 140 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Hide = TRUE;
         Text = "~Löschen";
@@ -575,7 +575,7 @@ TabPage TP_DOCINFODOC
         Text[ greek ] = "ÄéáãñáöŞ";
         Text[ dutch ] = "~Wissen";
         Text[ french ] = "Supprimer";
-        Text[ spanish ] = "~Eliminar";
+        Text[ spanish ] = "~Borrar";
         Text[ italian ] = "~Elimina";
         Text[ danish ] = "Slet";
         Text[ swedish ] = "~Radera";
@@ -593,12 +593,12 @@ TabPage TP_DOCINFODOC
     };
     CheckBox CB_USE_USERDATA
     {
-        Pos = MAP_APPFONT ( 6 , 126 ) ;
+        Pos = MAP_APPFONT ( 6 , 144 ) ;
         Size = MAP_APPFONT ( 192 , 10 ) ;
         Hide = TRUE;
         Text = "~Benutzerdaten verwenden" ;
         Text[English] = "~Using user data";
-        Text[french] = "~Utiliser les données d'identité";
+        Text[french] = "~Utiliser les données d'utilisateur";
         Text [ italian ] = "Usa i dati utente" ;
         Text [ dutch ] = "~Gebruikersgegevens toepassen" ;
         Text [ spanish ] = "Utilizar los ~datos del usuario" ;
@@ -613,22 +613,22 @@ TabPage TP_DOCINFODOC
         Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼ ãƒ‡ãƒ¼ã‚¿ã‚’ä½¿ç”¨ã™ã‚‹(~A)";
         Text[ chinese_traditional ] = "æ¡ç”¨ä½¿ç”¨è€…è³‡æ–™(~A)";
         Text[ greek ] = "×ñŞóç ~ğñïóùğéêşí äåäïìİíùí";
-        Text[ korean ] = "ì‚¬ìš©ì ë°ì´í„° ì´ìš©(~A)";
+        Text[ korean ] = "ì‚¬ìš©ì ì •ë³´ ì‚¬ìš©(~A)";
         Text[ arabic ] = "ÇÓÊÎÏÇã ÈíÇäÇÊ ÇáãÓÊÎÏã";
         Text[ turkish ] = "~Kullanıcı verilerini kullan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Aplica les dades de l'usuari";
-        Text[ finnish ] = "~Käytä käyttäjätietoja";
+        Text[ finnish ] = "Käytä ~käyttäjätietoja";
         Text[ thai ] = "à¹ƒ~à¸Šà¹‰à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰";
     };
     FixedLine FL_FILE_3
     {
-        Pos = MAP_APPFONT ( 5 , 148 ) ;
+        Pos = MAP_APPFONT ( 5 , 160 ) ;
         Size = MAP_APPFONT ( 248 , 1 ) ;
     };
     FixedText FT_TEMPL
     {
-        Pos = MAP_APPFONT ( 5 , 152 ) ;
+        Pos = MAP_APPFONT ( 5 , 164 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "Vorlage:" ;
         Text [ ENGLISH ] = "Template:" ;
@@ -636,7 +636,7 @@ TabPage TP_DOCINFODOC
         Text [ italian ] = "Modello:" ;
         Text [ portuguese_brazilian ] = "Modelo:" ;
         Text [ portuguese ] = "Modelo:" ;
-        Text [ finnish ] = "Mallipohja:" ;
+        Text [ finnish ] = "Malli:" ;
         Text [ danish ] = "Skabelon:" ;
         Text [ french ] = "Modèle :" ;
         Text [ swedish ] = "Mall:" ;
@@ -650,7 +650,7 @@ TabPage TP_DOCINFODOC
         Text[ chinese_traditional ] = "æ¨£å¼ï¼š";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Ğñüôõğï:";
-        Text[ korean ] = "í…œí”Œë¦¿:";
+        Text[ korean ] = "ì„œì‹ íŒŒì¼:";
         Text[ arabic ] = "ÇáŞÇáÈ:";
         Text[ turkish ] = "Şablon:";
         Text[ catalan ] = "Plantilla:";
@@ -658,8 +658,8 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_TEMPL_VAL
     {
-        Pos = MAP_APPFONT ( 54 , 152 ) ;
-        Size = MAP_APPFONT ( 200 , 10 ) ;
+        Pos = MAP_APPFONT ( 78 , 164 ) ;
+        Size = MAP_APPFONT ( 180 , 10 ) ;
     };
     String STR_UNKNOWNSIZE
     {
@@ -680,7 +680,7 @@ TabPage TP_DOCINFODOC
         Text[ japanese ] = "ä¸æ˜";
         Text[ chinese_traditional ] = "ä¸æ˜çš„";
         Text[ greek ] = "Üãíùóôï";
-        Text[ korean ] = "ì•Œë ¤ì ¸ ìˆì§€ ì•ŠìŒ";
+        Text[ korean ] = "ì•Œ ìˆ˜ ì—†ìŒ";
         Text[ arabic ] = "ÛíÑ ãÚÑæİ";
         Text[ turkish ] = "bilinmiyor";
         Text[ language_user1 ] = " ";
@@ -759,7 +759,7 @@ TabPage TP_DOCINFOUSER
         Text [ italian ] = "Campi info..." ;
         Text [ portuguese_brazilian ] = "Camos de Info..." ;
         Text [ portuguese ] = "~Campos de informação" ;
-        Text [ finnish ] = "~Tietokentät" ;
+        Text [ finnish ] = "~Tietokentät..." ;
         Text [ danish ] = "Infofelter..." ;
         Text [ french ] = "~Champs d'information..." ;
         Text [ swedish ] = "~Infofält..." ;
@@ -808,7 +808,7 @@ TabPage TP_DOCINFORELOAD
         Text[ swedish ] = "Uppdatera inte automatiskt";
         Text[ polish ] = "Do not refresh automatically";
         Text[ japanese ] = "è‡ªå‹•æ›´æ–°ã—ãªã„";
-        Text[ korean ] = "ìë™ìœ¼ë¡œ ìƒˆë¡œ ê³ ì¹¨ ì•ˆí•¨";
+        Text[ korean ] = "ìë™ìœ¼ë¡œ ìƒˆë¡œ ê³ ì¹¨ í•˜ì§€ ì•ŠìŒ";
         Text[ chinese_simplified ] = "ä¸è‡ªåŠ¨æ›´æ–°";
         Text[ chinese_traditional ] = "ä¸è‡ªå‹•æ›´æ–°";
         Text[ turkish ] = "Do not refresh automatically";
@@ -835,7 +835,7 @@ TabPage TP_DOCINFORELOAD
         Text[ swedish ] = "Uppdatera det här dokumentet";
         Text[ polish ] = "Refresh this document";
         Text[ japanese ] = "ã“ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’æ›´æ–°ã™ã‚‹";
-        Text[ korean ] = "ë¬¸ì„œ ìƒˆë¡œ ê³ ì¹¨";
+        Text[ korean ] = "ì´ ë¬¸ì„œë¥¼ ìƒˆë¡œ ê³ ì¹¨";
         Text[ chinese_simplified ] = "æ›´æ–°è¿™ä¸ªæ–‡æ¡£";
         Text[ chinese_traditional ] = "æ›´æ–°é€™å€‹æ–‡ä»¶";
         Text[ turkish ] = "Refresh this document";
@@ -860,7 +860,7 @@ TabPage TP_DOCINFORELOAD
         Text[ swedish ] = "var";
         Text[ polish ] = "every";
         Text[ japanese ] = "ã™ã¹ã¦";
-        Text[ korean ] = "ëª¨ë‘";
+        Text[ korean ] = "ì„¤ì • ì‹œê°„";
         Text[ chinese_simplified ] = "æ¯";
         Text[ chinese_traditional ] = "æ¯";
         Text[ turkish ] = "every";
@@ -898,10 +898,10 @@ TabPage TP_DOCINFORELOAD
         Text[ finnish ] = "seconds";
         Text[ italian ] = "secondi";
         Text[ danish ] = "seconds";
-        Text[ swedish ] = "sekunder";
+        Text[ swedish ] = "sekund";
         Text[ polish ] = "seconds";
         Text[ japanese ] = "ç§’æ¯";
-        Text[ korean ] = "ì´ˆ";
+        Text[ korean ] = "ì´ˆ ë§ˆë‹¤";
         Text[ chinese_simplified ] = "ç§’";
         Text[ chinese_traditional ] = "ç§’";
         Text[ turkish ] = "seconds";
@@ -931,7 +931,7 @@ TabPage TP_DOCINFORELOAD
         Text[ swedish ] = "Vidarebefordra från det här dokumentet";
         Text[ polish ] = "Redirect from this document";
         Text[ japanese ] = "ã“ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‹ã‚‰è»¢é€ã™ã‚‹";
-        Text[ korean ] = "ì´ ë¬¸ì„œë¡œë¶€í„° ë‹¤ì‹œ ì „ë‹¬";
+        Text[ korean ] = "ì´ ë¬¸ì„œë¡œë¶€í„° ë‹¤ì‹œ ì „ì†¡";
         Text[ chinese_simplified ] = "ä»è¿™ä¸ªæ–‡æ¡£è½¬é€";
         Text[ chinese_traditional ] = "å¾é€™å€‹æ–‡ä»¶è½‰é€";
         Text[ turkish ] = "Redirect from this document";
@@ -948,7 +948,7 @@ TabPage TP_DOCINFORELOAD
         Text[ russian ] = "after";
         Text[ greek ] = "after";
         Text[ dutch ] = "after";
-        Text[ french ] = "aAprès";
+        Text[ french ] = "après";
         Text[ spanish ] = "tras";
         Text[ finnish ] = "after";
         Text[ italian ] = "dopo";
@@ -956,7 +956,7 @@ TabPage TP_DOCINFORELOAD
         Text[ swedish ] = "efter";
         Text[ polish ] = "after";
         Text[ japanese ] = "æ›´æ–°ã™ã‚‹æ™‚é–“";
-        Text[ korean ] = "ì‹œê°„ ì„¤ì •";
+        Text[ korean ] = "ì„¤ì • ì‹œê°„";
         Text[ chinese_simplified ] = "ç»è¿‡";
         Text[ chinese_traditional ] = "ç¶“é";
         Text[ turkish ] = "after";
@@ -994,7 +994,7 @@ TabPage TP_DOCINFORELOAD
         Text[ swedish ] = "sekund";
         Text[ polish ] = "seconds";
         Text[ japanese ] = "ç§’æ¯";
-        Text[ korean ] = "ì´ˆ";
+        Text[ korean ] = "ì´ˆ í›„";
         Text[ chinese_simplified ] = "ç§’";
         Text[ chinese_traditional ] = "ç§’";
         Text[ turkish ] = "seconds";
@@ -1023,7 +1023,7 @@ TabPage TP_DOCINFORELOAD
         Text[ polish ] = "URL";
         Text[ portuguese_brazilian ] = "~URL";
         Text[ japanese ] = "URL ã¸";
-        Text[ korean ] = "URLë¡œ";
+        Text[ korean ] = "ì „ì†¡ URL";
         Text[ chinese_simplified ] = "é€è‡³ URL";
         Text[ chinese_traditional ] = "é€è‡³ URL";
         Text[ turkish ] = "~URL";
@@ -1054,14 +1054,14 @@ TabPage TP_DOCINFORELOAD
         Text[ greek ] = "to frame";
         Text[ dutch ] = "to frame";
         Text[ french ] = "au cadre";
-        Text[ spanish ] = "al frame";
+        Text[ spanish ] = "al marco";
         Text[ finnish ] = "to frame";
         Text[ italian ] = "al frame";
         Text[ danish ] = "to frame";
         Text[ swedish ] = "till ram";
         Text[ polish ] = "to frame";
         Text[ japanese ] = "ãƒ•ãƒ¬ãƒ¼ãƒ ã¸";
-        Text[ korean ] = "í”„ë ˆì„ì—";
+        Text[ korean ] = "í”„ë ˆì„ ëŒ€ìƒ";
         Text[ chinese_simplified ] = "é€è‡³æ¡†å¯¹è±¡";
         Text[ chinese_traditional ] = "é€è‡³è¨Šæ¡†";
         Text[ turkish ] = "to frame";
@@ -1087,10 +1087,10 @@ TabPage TP_DOCINFORELOAD
         Text[ finnish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
         Text[ italian ] = "Se selezionate l'opzione \"%PLACEHOLDER%\" dovete indicare un URL.";
         Text[ danish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
-        Text[ swedish ] = "Om du väljer alternativet \"%PLACEHOLDER%\" måster du ange en URL.";
+        Text[ swedish ] = "Om du väljer alternativet \"%PLACEHOLDER%\" måste du ange en URL.";
         Text[ polish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
         Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³ \"%PLACEHOLDER%\" ã‚’é¸æŠã™ã‚‹ã¨ãã¯ã€URL ã‚’æŒ‡å®šã—ã¦ãã ã•ã„ã€‚";
-        Text[ korean ] = "\"%PLACEHOLDER%\" ì˜µì…˜ì„ ì„ íƒí•  ê²½ìš° URLì„ ì…ë ¥í•´ì•¼ë§Œ í•©ë‹ˆë‹¤.";
+        Text[ korean ] = "[%PLACEHOLDER%] ì˜µì…˜ì„ ì„ íƒí•  ê²½ìš° URLì„ ì…ë ¥í•´ì•¼ë§Œ í•©ë‹ˆë‹¤.";
         Text[ chinese_simplified ] = "å¦‚æœé€‰æ‹©é€‰é¡¹ \"%PLACEHOLDER%\"ï¼Œæ‚¨å°±å¿…é¡»è¾“å…¥ä¸€ä¸ª URL åœ°å€ã€‚";
         Text[ chinese_traditional ] = "å¦‚æœæ‚¨é¸æ“‡é¸é … \"%PLACEHOLDER%\" ï¼Œå°±å¿…é ˆè¼¸å…¥ä¸€å€‹ URL åœ°å€ã€‚";
         Text[ turkish ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
@@ -1112,7 +1112,7 @@ TabDialog SID_DOCINFO
     Text [ italian ] = "Proprietà di " ;
     Text [ spanish ] = "Propiedades de  " ;
     Text [ french ] = "Propriétés de " ;
-    Text [ dutch ] = "Eigenschappen van  " ;
+    Text [ dutch ] = "Eigenschappen van" ;
     Text [ swedish ] = "Egenskaper för " ;
     Text [ danish ] = "Egenskaber af " ;
     Text [ portuguese_brazilian ] = "Eigenschaften von " ;
@@ -1123,12 +1123,12 @@ TabDialog SID_DOCINFO
     Text[ japanese ] = "ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ ";
     Text[ chinese_traditional ] = "å±¬æ€§ï¼š ";
     Text[ greek ] = "Éäéüôçôåò ôïõ ";
-    Text[ korean ] = "ë“±ë¡ì •ë³´ ";
+    Text[ korean ] = "ë“±ë¡ ì •ë³´ ";
     Text[ arabic ] = "ÎÕÇÆÕ ";
     Text[ turkish ] = "Özellikler ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Propietats de ";
-    Text[ finnish ] = "Ominaisuudet:";
+    Text[ finnish ] = "Ominaisuudet: ";
     TabControl 1
     {
         SVLook = TRUE ;
@@ -1149,7 +1149,7 @@ TabDialog SID_DOCINFO
                 Text [ portuguese_brazilian ] = "Allgemein" ;
                 Text [ portuguese ] = "Geral" ;
                 Text[ chinese_simplified ] = "å¸¸è§„";
-                Text[ russian ] = "Îáùåå";
+                Text[ russian ] = "Îáùèå";
                 Text[ polish ] = "Ogólne";
                 Text[ japanese ] = "å…¨èˆ¬";
                 Text[ chinese_traditional ] = "ä¸€èˆ¬";
@@ -1159,7 +1159,7 @@ TabDialog SID_DOCINFO
                 Text[ turkish ] = "Genel";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "General";
-                Text[ finnish ] = "Yleistä";
+                Text[ finnish ] = "Yleiset";
                 Text[ thai ] = "à¸—à¸±à¹ˆà¸§à¹„à¸›";
             };
             PageItem
@@ -1182,7 +1182,7 @@ TabDialog SID_DOCINFO
                 Text[ japanese ] = "æ¦‚è¦";
                 Text[ chinese_traditional ] = "æè¿°";
                 Text[ greek ] = "ĞåñéãñáöŞ";
-                Text[ korean ] = "ì„¤ëª…";
+                Text[ korean ] = "ë‚´ìš©";
                 Text[ arabic ] = "ÇáæÕİ";
                 Text[ turkish ] = "Tanım";
                 Text[ language_user1 ] = " ";
@@ -1212,7 +1212,7 @@ TabDialog SID_DOCINFO
                 Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼";
                 Text[ chinese_traditional ] = "ä½¿ç”¨è€…";
                 Text[ greek ] = "×ñŞóôçò";
-                Text[ korean ] = "ì‚¬ìš©ì";
+                Text[ korean ] = "ì‚¬ìš©ì ì •ì˜";
                 Text[ arabic ] = "ÇáãÓÊÎÏã";
                 Text[ turkish ] = "Kullanıcı";
                 Text[ language_user1 ] = " ";
@@ -1251,3 +1251,8 @@ TabDialog SID_DOCINFO
     };
     Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´à¸‚à¸­à¸‡ ";
 };
+
+
+
+
+

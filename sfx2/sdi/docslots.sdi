@@ -2,7 +2,7 @@
     shell SfxObjectShell
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: as $ $Date: 2002-09-13 06:40:54 $ $Revision: 1.8 $
+    $Author: hr $ $Date: 2003-03-27 11:27:31 $ $Revision: 1.9 $
     $Logfile:   T:/sfx2/sdi/docslots.sdv  $ $Workfile:   DOCSLOTS.SDI  $
 =========================================================================*/
 
@@ -90,73 +90,6 @@ interface Document : Object
     [
         ExecMethod = ExecView_Impl ;
         StateMethod = StateView_Impl ;
-    ]
-     //---------------------------------------------------------------------
-    SID_ON_CREATEDOC // ole(no) api(final/play)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
-     //---------------------------------------------------------------------
-    SID_ON_OPENDOC // ole(no) api(final/play)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
-     //---------------------------------------------------------------------
-    SID_ON_PREPARECLOSEDOC // ole(no) api(final/play)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
-     //---------------------------------------------------------------------
-    SID_ON_CLOSEDOC // ole(no) api(final/play)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
-     //---------------------------------------------------------------------
-    SID_ON_SAVEDOC // ole(no) api(final/play)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
-     //---------------------------------------------------------------------
-    SID_ON_SAVEASDOC // ole(no) api(final/play)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
-
-    SID_ON_SAVEDOCDONE // ole(no) api(final/play)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
-
-     //---------------------------------------------------------------------
-    SID_ON_SAVEASDOCDONE // ole(no) api(final/play)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
-     //---------------------------------------------------------------------
-    SID_ON_ACTIVATEDOC // ole(no) api(final/play)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
-     //---------------------------------------------------------------------
-    SID_ON_DEACTIVATEDOC // ole(no) api(final/play)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
-     //---------------------------------------------------------------------
-    SID_ON_PRINTDOC // ole(no) api(final/play)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
     ]
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-30 08:14:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,11 @@
  *
  *
  ************************************************************************/
+
+#ifdef SOLARIS
+// HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
+#include <ctime>
+#endif
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 

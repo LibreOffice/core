@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-20 16:02:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,6 @@
 #include <unotools/ucbhelper.hxx>
 #include <svtools/asynclink.hxx>
 
-#include "picklist.hxx"
 #include "docfac.hxx"
 #include "docfile.hxx"
 #include "event.hxx"
@@ -167,11 +166,8 @@ DBG_NAME(SfxObjectShell);
 #define DocumentInfo
 #include "sfxslots.hxx"
 
-#if SUPD>636
 extern svtools::AsynchronLink* pPendingCloser;
-#else
-extern AsynchronLink* pPendingCloser;
-#endif
+static SfxObjectShell* pWorkingDoc = NULL;
 
 //=========================================================================
 
@@ -570,10 +566,6 @@ sal_uInt16 SfxObjectShell::PrepareClose
             {
                 // Bei Nein nicht noch Informationlost
                 bClose = sal_True;
-
-                // nicht mehr aus Cache nachladen
-                MemCache_Impl &rCache = SfxPickList_Impl::Get()->GetMemCache();
-                rCache.RemoveObject( this );
             }
         }
     }
@@ -843,6 +835,11 @@ SfxObjectShell* SfxObjectShell::GetObjectShell()
 
 SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames()
 {
+    return GetEventNames_Impl();
+}
+
+SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames_Impl()
+{
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     ResStringArray aEventNames( SfxResId( EVENT_NAMES_ARY ) );
@@ -915,3 +912,31 @@ void SfxObjectShell::SetAutoStyleFilterIndex(sal_uInt16 nSet)
     pImp->nStyleFilter = nSet;
 }
 
+void SfxObjectShell::SetWorkingDocument( SfxObjectShell* pDoc )
+{
+    pWorkingDoc = pDoc;
+    StarBASIC* pBas = SFX_APP()->GetBasic_Impl();
+    if ( pDoc && pBas )
+    {
+        SFX_APP()->Get_Impl()->pThisDocument = pDoc;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xInterface ( pDoc->GetModel() , ::com::sun::star::uno::UNO_QUERY );
+        ::com::sun::star::uno::Any aComponent;
+        aComponent <<= xInterface;
+        SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
+        if ( pCompVar )
+        {
+            pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent ) );
+        }
+        else
+        {
+            SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent );
+            xUnoObj->SetFlag( SBX_DONTSTORE );
+            pBas->Insert( xUnoObj );
+        }
+    }
+}
+
+SfxObjectShell* SfxObjectShell::GetWorkingDocument()
+{
+    return pWorkingDoc;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-04 08:49:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl( Window* pParent ,
                     , pBindings( pBind )
 {
     pWindow = new SfxRecordingFloat_Impl( pBindings, this, pParent );
+    SetWantsFocus( FALSE );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
     ( ( SfxFloatingWindow* ) pWindow )->Initialize( pInfo );
 }

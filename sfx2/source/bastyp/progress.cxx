@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2002-11-26 16:43:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,8 +198,8 @@ struct SfxProgress_Impl : public SfxCancellable
 #define aTypeLibInfo aProgressTypeLibImpl
 
 //========================================================================
-
-static inline ULONG Get10ThSec()
+#if (_MSC_VER < 1300)
+inline ULONG Get10ThSec()
 {
 #if defined (MSC) && defined (WIN)
     ULONG n10Ticks = 10 * (ULONG)GetTickCount();
@@ -209,7 +209,9 @@ static inline ULONG Get10ThSec()
 
     return n10Ticks / CLOCKS_PER_SEC;
 }
-
+#else
+extern ULONG Get10ThSec();
+#endif
 // -----------------------------------------------------------------------
 
 void SfxProgress_Impl::Enable_Impl( BOOL bEnable )

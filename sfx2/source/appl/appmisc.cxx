@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-11 18:06:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,6 @@
 
 #include "sfxresid.hxx"
 #include "app.hxx"
-#include "picklist.hxx"
 #include "appdata.hxx"
 #include "arrdecl.hxx"
 #include "cfgmgr.hxx"
@@ -703,6 +702,11 @@ SfxAcceleratorManager* SfxApplication::GetAcceleratorManager() const
             return pMgr;
     }
 
+    return pAcceleratorMgr;
+}
+
+SfxAcceleratorManager* SfxApplication::GetGlobalAcceleratorManager() const
+{
     return pAcceleratorMgr;
 }
 

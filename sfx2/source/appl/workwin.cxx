@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-11 15:43:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,8 @@ void SfxWorkWindow::DeleteControllers_Impl()
             if (pCW->pCli)
                 ReleaseChild_Impl(*pChild->GetWindow());
             pCW->pWin = 0;
-            delete pChild;
+            pWorkWin->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( pChild->GetWindow() );
+            pChild->Destroy();
         }
         delete pCW->pControl;
         delete pCW;
@@ -501,6 +502,7 @@ void SfxWorkWindow::DeleteControllers_Impl()
         {
             // Release siehe unten
             pTbx->StoreConfig();
+            pWorkWin->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( &pTbx->GetToolBox() );
             delete(pTbx);
         }
     }
@@ -640,51 +642,63 @@ SvBorder SfxWorkWindow::Arrange_Impl()
         switch ( pCli->eAlign )
         {
             case SFX_ALIGN_HIGHESTTOP:
-                aUpperClientArea.Top() += aSize.Height();
             case SFX_ALIGN_TOP:
             case SFX_ALIGN_TOOLBOXTOP:
             case SFX_ALIGN_LOWESTTOP:
+                aSize.Width() = aTmp.GetWidth();
+                if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
+                    aSize = ((SplitWindow *)(pCli->pWin))->CalcLayoutSizePixel( aSize );
                 bAllowHiding = FALSE;
                 aBorder.Top() += aSize.Height();
                 aPos = aTmp.TopLeft();
                 aTmp.Top() += aSize.Height();
-                aSize.Width() = aTmp.GetWidth();
+                if ( pCli->eAlign == SFX_ALIGN_HIGHESTTOP )
+                    aUpperClientArea.Top() += aSize.Height();
                 break;
 
             case SFX_ALIGN_LOWESTBOTTOM:
-                aUpperClientArea.Bottom() -= aSize.Height();
             case SFX_ALIGN_BOTTOM:
             case SFX_ALIGN_TOOLBOXBOTTOM:
             case SFX_ALIGN_HIGHESTBOTTOM:
+                aSize.Width() = aTmp.GetWidth();
+                if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
+                    aSize = ((SplitWindow *)(pCli->pWin))->CalcLayoutSizePixel( aSize );
                 aBorder.Bottom() += aSize.Height();
                 aPos = aTmp.BottomLeft();
                 aPos.Y() -= (aSize.Height()-1);
                 aTmp.Bottom() -= aSize.Height();
-                aSize.Width() = aTmp.GetWidth();
+                if ( pCli->eAlign == SFX_ALIGN_LOWESTBOTTOM )
+                    aUpperClientArea.Bottom() -= aSize.Height();
                 break;
 
             case SFX_ALIGN_FIRSTLEFT:
-                aUpperClientArea.Left() += aSize.Width();
             case SFX_ALIGN_LEFT:
-            case SFX_ALIGN_TOOLBOXLEFT:
             case SFX_ALIGN_LASTLEFT:
+            case SFX_ALIGN_TOOLBOXLEFT:
+                aSize.Height() = aTmp.GetHeight();
+                if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
+                    aSize = ((SplitWindow *)(pCli->pWin))->CalcLayoutSizePixel( aSize );
                 bAllowHiding = FALSE;
                 aBorder.Left() += aSize.Width();
                 aPos = aTmp.TopLeft();
                 aTmp.Left() += aSize.Width();
-                aSize.Height() = aTmp.GetHeight();
+                if ( pCli->eAlign != SFX_ALIGN_TOOLBOXLEFT )
+                    aUpperClientArea.Left() += aSize.Width();
                 break;
 
-            case SFX_ALIGN_LASTRIGHT:
-                aUpperClientArea.Right() -= aSize.Width();
-            case SFX_ALIGN_RIGHT:
-            case SFX_ALIGN_TOOLBOXRIGHT:
             case SFX_ALIGN_FIRSTRIGHT:
+            case SFX_ALIGN_RIGHT:
+            case SFX_ALIGN_LASTRIGHT:
+            case SFX_ALIGN_TOOLBOXRIGHT:
+                aSize.Height() = aTmp.GetHeight();
+                if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
+                    aSize = ((SplitWindow *)(pCli->pWin))->CalcLayoutSizePixel( aSize );
                 aBorder.Right() += aSize.Width();
                 aPos = aTmp.TopRight();
                 aPos.X() -= (aSize.Width()-1);
                 aTmp.Right() -= aSize.Width();
-                aSize.Height() = aTmp.GetHeight();
+                if ( pCli->eAlign != SFX_ALIGN_TOOLBOXRIGHT )
+                    aUpperClientArea.Right() -= aSize.Width();
                 break;
 
             default:
@@ -1175,6 +1189,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
         FASTBOOL bFullScreenTbx = SFX_VISIBILITY_FULLSCREEN ==
                     ( nTbxMode & SFX_VISIBILITY_FULLSCREEN );
         nTbxMode &= ~SFX_VISIBILITY_FULLSCREEN;
+        nTbxMode &= ~SFX_VISIBILITY_VIEWER;
 
         // wird in diesem Kontext eine ToolBox gefordert?
         FASTBOOL bModesMatching = nUpdateMode && ( nTbxMode & nUpdateMode) == nUpdateMode;
@@ -1408,6 +1423,8 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, BOOL bSetFocus )
     SfxChildWindow *pChildWin = SfxChildWindow::CreateChildWindow( pCW->nId, pWorkWin, &GetBindings(), pCW->aInfo);
     if (pChildWin)
     {
+        if ( bSetFocus )
+            bSetFocus = pChildWin->WantsFocus();
         pChildWin->SetWorkWindow_Impl( this );
 #if 0
         // Enable-Status richtig setzen
@@ -1518,7 +1535,7 @@ void SfxWorkWindow::RemoveChildWin_Impl( SfxChildWin_Impl *pCW )
 
     pWorkWin->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( pChildWin->GetWindow() );
     pCW->pWin = 0;
-    delete pChildWin;
+    pChildWin->Destroy();
 
     GetBindings().Invalidate( nId );
 }
@@ -2403,7 +2420,7 @@ void SfxWorkWindow::ShowChildWindow_Impl(USHORT nId, BOOL bVisible, BOOL bSetFoc
                 {
                     pCW->pCli->bSetFocus = bSetFocus;
                     pCW->pCli->nVisible = CHILD_VISIBLE;
-                    pChildWin->Show( bSetFocus ? 0 : SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                    pChildWin->Show( bSetFocus && pChildWin->WantsFocus() ? 0 : SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                 }
                 else
                     ((SfxDockingWindow*)pChildWin->GetWindow())->Reappear_Impl();

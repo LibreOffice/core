@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cd $ $Date: 2001-10-08 05:27:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,27 +70,28 @@ String STR_NODEFPRINTER
     TEXT = "Kein Standarddrucker gefunden.\nBitte wählen Sie einen Drucker aus und versuchen Sie es noch einmal." ;
     TEXT [ English ] = "No default printer found.\nPlease choose a printer and try again." ;
     TEXT [ norwegian ] = "Ingen standardskriver funnet.\nVelg en skriver og prøv igjen." ;
-    TEXT [ italian ] = "Stampante predefinita non trovata.\nScegliere una stampante e riprovare." ;
+    TEXT [ italian ] = "Stampante standard non trovata.\nScegliete una stampante e riprovate." ;
     TEXT [ portuguese_brazilian ] = "Nenhuma impressora padr o encontrada.\nEscolha uma impressora e tente novamente." ;
     TEXT [ portuguese ] = "Nenhuma impressora padrão encontrada.\nEscolha uma impressora e tente novamente." ;
-    TEXT [ finnish ] = "Oletustulostinta ei ole.\nValitse tulostin ja yrit? uudelleen." ;
+    TEXT [ finnish ] = "Oletustulostinta ei ole.\nValitse tulostin ja yritä uudelleen." ;
     TEXT [ danish ] = "Der blev ikke fundet nogen standardprinter.\nVælg venligst en printer og prøv igen." ;
     TEXT [ french ] = "Impossible de détecter l'imprimante par défaut.\nSélectionnezr une imprimante et recommencez." ;
     TEXT [ swedish ] = "Ingen standardskrivare hittades.\nVälj en skrivare och försök igen." ;
-    TEXT [ dutch ] = "Geen standaardprinter gevonden.\nKies een printer en probeer nogmaals." ;
+    TEXT [ dutch ] = "Geen standaardprinter gevonden.\nKies een printer en probeer het nogmaals." ;
     TEXT [ spanish ] = "No se encontró ninguna impresora predeterminada.\nSeleccione por favor una impresora e inténtelo nuevamente." ;
     TEXT [ english_us ] = "No default printer found.\nPlease choose a printer and try again." ;
     TEXT[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ°é»˜è®¤æ‰“å°æœºã€‚\nè¯·æ‚¨é€‰æ‹©ä¸€ä¸ªæ‰“å°æœºï¼Œç„¶åå†é‡è¯•æ‰“å°ã€‚";
-    TEXT[ russian ] = "Ñòàíäàğòíûé ïğèíòåğ íå îáíàğóæåí.\nÂûáåğèòå, ïîæàëóéñòà, ïğèíòåğ è ïîïğîáóéòå åùå ğàç.";
+    TEXT[ russian ] = "Íå îáíàğóæåí ïğèíòåğ ïî óìîë÷àíèş.\nÂûáåğèòå ïğèíòåğ è ïîïğîáóéòå åùå ğàç.";
     TEXT[ polish ] = "Nie znaleziono drukarki domyœlnej.\nProszê wybraæ drukarkê i spróbowaæ jeszcze raz.";
-    TEXT[ japanese ] = "æ¨™æº–ï¾Œï¾Ÿï¾˜ï¾ï¾€ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚\nï¾Œï¾Ÿï¾˜ï¾ï¾€ã‚’é¸æŠã— å†åº¦è©¦ã¿ã¦ãã ã•ã„ã€‚";
+    TEXT[ japanese ] = "æ¨™æº–ãƒ—ãƒªãƒ³ã‚¿ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚\nãƒ—ãƒªãƒ³ã‚¿ã‚’é¸æŠã— å†åº¦è©¦ã¿ã¦ãã ã•ã„ã€‚";
     TEXT[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°é»˜èªå°è¡¨æ©Ÿã€‚\nè«‹é¸æ“‡ä¸€å€‹å°è¡¨æ©Ÿï¹ç„¶å¾Œå†é‡è©¦åˆ—å°ã€‚";
     TEXT[ language_user1 ] = " ";
     TEXT[ greek ] = "Äåí âñİèçêå ğñïåğéëåãìİíïò åêôõğùôŞò.\nĞáñáêáëş åğéëİîôå İíáí åêôõğùôŞ êáé îáíáğñïóğáèŞóôå.";
-    TEXT[ korean ] = "ê¸°ë³¸ í”„ë¦°í„°ë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤. \ní”„ë¦°í„°ë¥¼ ì„ íƒí•œ ë‹¤ìŒ, ì¬ì‹œë„í•˜ì‹­ì‹œì˜¤.";
+    TEXT[ korean ] = "ê¸°ë³¸ í”„ë¦°í„°ë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤. \ní”„ë¦°í„°ë¥¼ ì„ íƒí•œ ë‹¤ìŒ ë‹¤ì‹œ ì‹œë„í•˜ì‹­ì‹œì˜¤.";
     TEXT[ arabic ] = "áã íÊã ÇáÚËæÑ Úáì ØÇÈÚÉ ŞíÇÓíÉ. ãä İÖáß ÇÎÊÑ ØÇÈÚÉ Ëã ÍÇæá ãÑÉ ÃÎÑì";
     TEXT[ turkish ] = "Standart yazıcı bulunamadı.\nBir yazıcı seçip yeniden deneyin.";
-    TEXT[ catalan ] = "No se encontró ninguna impresora predeterminada.\nSeleccione por favor una impresora e inténtelo nuevamente.";
+    TEXT[ catalan ] = "No s'ha trobat cap impressora per defecte.\\Trieu-ne una i torneu-ho a provar.";
+    TEXT[ thai ] = "à¹„à¸¡à¹ˆà¸à¸šà¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ\nà¸à¸£à¸¸à¸“à¸²à¹€à¸¥à¸·à¸­à¸à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œà¹à¸¥à¸°à¸¥à¸­à¸‡à¸­à¸µà¸à¸„à¸£à¸±à¹‰à¸‡";
 };
 String STR_NOSTARTPRINTER
 {
@@ -100,24 +101,25 @@ String STR_NOSTARTPRINTER
     TEXT [ italian ] = "Impossibile avviare la stampante.\nVerificare la configurazione della stampante." ;
     TEXT [ portuguese_brazilian ] = "N?o consegui iniciar a impressora.\nVerifique a configura??o da impressora." ;
     TEXT [ portuguese ] = "Foi impossível iniciar a impressora.\nPor favor, verifique a configuração da impressora." ;
-    TEXT [ finnish ] = "Tulostinta ei voi k?ynnist??.\nTarkista tulostimen kokoonpano." ;
+    TEXT [ finnish ] = "Tulostinta ei voi käynnistää.\nTarkista tulostimen määritykset." ;
     TEXT [ danish ] = "Det var ikke muligt at starte printeren.\nKontroller venligst din printerkonfiguration." ;
     TEXT [ french ] = "Impossible de démarrer l'imprimante !\nVérifiez-en la configuration." ;
     TEXT [ swedish ] = "Det gick inte att starta skrivaren.\nKontrollera skrivarkonfigurationen." ;
-    TEXT [ dutch ] = "Printer kon niet worden gestart.\nControleer de configuratie van uw printer." ;
+    TEXT [ dutch ] = "Printer kan niet worden gestart.\nControleer de configuratie van uw printer." ;
     TEXT [ spanish ] = "No se puede iniciar la impresora.\nPor favor verifique la configuración de su impresora." ;
     TEXT [ english_us ] = "Could not start printer.\nPlease check your printer configuration." ;
     TEXT[ chinese_simplified ] = "æ— æ³•å¯åŠ¨æ‰“å°æœºã€‚\nè¯·æ‚¨æ£€æŸ¥æ‰“å°æœºçš„é…ç½®ã€‚";
-    TEXT[ russian ] = "Çàïóñê ïğèíòåğà íå óäàåòñÿ.\nÏğîâåğüòå, ïîæàëóéñòà, Âàøó êîíôèãóğàöèş ïğèíòåğà.";
+    TEXT[ russian ] = "Íåâîçìîæíî çàïóñòèòü ïğèíòåğ.\nÏğîâåğüòå êîíôèãóğàöèş ïğèíòåğà.";
     TEXT[ polish ] = "Drukarki nie mo¿na by³o uruchomiæ.\nSprawdŸ proszê konfiguracjê drukarki.";
-    TEXT[ japanese ] = "ï¾Œï¾Ÿï¾˜ï¾ï¾€ã‚’èµ·å‹•ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚\nï¾Œï¾Ÿï¾˜ï¾ï¾€ã®è¨­å®šã‚’ï¾ï½ªï½¯ï½¸ã—ã¦ãã ã•ã„ã€‚";
+    TEXT[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿ã‚’èµ·å‹•ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚\nãƒ—ãƒªãƒ³ã‚¿ã®è¨­å®šã‚’ãƒã‚§ãƒƒã‚¯ã—ã¦ãã ã•ã„ã€‚";
     TEXT[ chinese_traditional ] = "ç„¡æ³•å•Ÿå‹•å°è¡¨æ©Ÿã€‚\nè«‹æª¢æŸ¥å°è¡¨æ©Ÿçš„é…ç½®ã€‚";
     TEXT[ greek ] = "Äåí Şôáí äõíáôüí íá ôåèåß óå ëåéôïõñãßá ï åêôõğùôŞò.\nĞáñáêáëş åëİãîôå ôéò ñõèìßóåéò ôïõ.";
-    TEXT[ korean ] = "í”„ë¦°í„°ê°€ ì‹œì‘ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.\ní”„ë¦°í„°êµ¬ì„±ì„ ê²€ì‚¬í•˜ì‹­ì‹œì˜¤.";
+    TEXT[ korean ] = "í”„ë¦°í„°ê°€ ì‹œì‘ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.\ní”„ë¦°í„° ì„¤ì •ì„ ê²€ì‚¬í•˜ì‹­ì‹œì˜¤.";
     TEXT[ arabic ] = "ÊÚĞÑ ÊÔÛíá ÇáØÇÈÚÉ. ÇáÑÌÇÁ İÍÕ\nÊßæíä ÇáØÇÈÚÉ.";
     TEXT[ turkish ] = "Yazıcı çalıştırılamadı.\nYazıcı konfigürasyonunu kontrol edin.";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "No se puede iniciar la impresora.\nPor favor verifique la configuración de su impresora.";
+    TEXT[ catalan ] = "No es pot iniciar la impressora\nVerifiqueu la seva configuració.";
+    TEXT[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸£à¸´à¹ˆà¸¡à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œà¹„à¸”à¹‰\nà¸à¸£à¸¸à¸“à¸²à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸à¸²à¸£à¸à¸³à¸«à¸™à¸”à¸„à¹ˆà¸²à¸•à¸´à¸”à¸•à¸±à¹‰à¸‡à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ";
 };
 String STR_PRINTER_NOTAVAIL
 {
@@ -127,24 +129,25 @@ String STR_PRINTER_NOTAVAIL
     TEXT [ italian ] = "Questo documento era stato formattato in precedenza per la stampante $1. La stampante, però, non esiste.\nUsare la stampante predefinita $2?" ;
     TEXT [ portuguese_brazilian ] = "Este documento foi formatado anterior para a impressora" ;
     TEXT [ portuguese ] = "O documento foi formatado para a impressora $1. A impressora não está disponível.\nUsar a impressora padrão $2?" ;
-    TEXT [ finnish ] = "Asiakirja on muotoiltu tulostinta $1 varten. M??ritetty tulostin ei ole k?ytett?viss?. \nHaluatko k?ytt?? vakiotulostinta $2 ?" ;
+    TEXT [ finnish ] = "Asiakirja on muotoiltu tulostinta $1 varten. Määritetty tulostin ei ole käytettävissä. \nHaluatko käyttää vakiotulostinta $2?" ;
     TEXT [ danish ] = "Dette dokument er formateret til printeren $1. Denne printer er ikke tilgængelig.\nVil du bruge standardprinteren $2?" ;
     TEXT [ french ] = "Ce document a été formaté pour l'imprimante $1. L'imprimante n'est pas disponible.\nUtiliser l'imprimante par défaut $2 ?" ;
     TEXT [ swedish ] = "Dokumentet har formaterats för skrivaren $1. Denna skrivare är inte tillgänglig.\nSkall standardskrivaren $2 användas?" ;
-    TEXT [ dutch ] = "Dit document is opgemaakt voor printer $1. Deze printer is niet voorhanden.\nWilt u de standaardprinter $2 gebruiken?" ;
+    TEXT [ dutch ] = "Dit document is opgemaakt voor printer $1. Deze printer is niet beschikbaar.\nWilt u de standaardprinter $2 gebruiken?" ;
     TEXT [ spanish ] = "Este documento se ha formateado para la impresora $1, pero esta no está disponible.\n¿Desea usar la impresora predeterminada $2?" ;
     TEXT [ english_us ] = "This document has been formatted for the printer $1. The specified printer is not available. \nDo you want to use the standard printer $2 ?" ;
     TEXT[ chinese_simplified ] = "è¿™ä¸ªæ–‡æ¡£æ ¼å¼æ˜¯ä¸“é—¨ä¸ºæ‰“å°æœº $1 è®¾å®šçš„ã€‚\nä½†æ˜¯è¿™ä¸ªæ‰“å°æœºä¸å­˜åœ¨ã€‚æ‚¨è¦ä½¿ç”¨é»˜è®¤æ‰“å°æœº $2 ï¼Ÿ";
-    TEXT[ russian ] = "İòîò äîêóìåíò îòôîğìàòèğîâàí äëÿ ïğèíòåğà $1. İòîãî ïğèíòåğà íåò â íàëè÷èè.\nÈñïîëüçîâàòü ñòàíäàğòíûé ïğèíòåğ $2?";
+    TEXT[ russian ] = "İòîò äîêóìåíò îòôîğìàòèğîâàí äëÿ ïğèíòåğà $1, êîòîğûé â íàñòîÿùåå âğåìÿ íåäîñòóïåí.\nÈñïîëüçîâàòü ïğèíòåğ $2?";
     TEXT[ polish ] = "Dokument zosta³ sformatowany dla drukarki $1. Drukarki tego typu brak.\nU¿yæ drukarki domyœlnej $2?";
-    TEXT[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã¯ï¾Œï¾Ÿï¾˜ï¾ï¾€ $1ç”¨ã«æ›¸å¼è¨­å®šã•ã‚Œã¾ã—ãŸã€‚ï¾Œï¾Ÿï¾˜ï¾ï¾€ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚\næ¨™æº–ï¾Œï¾Ÿï¾˜ï¾ï¾€ $2ã‚’ä½¿ç”¨ã—ã¦ã‚‚ã‚ˆã‚ã—ã„ã§ã—ã‚‡ã†ã‹?";
+    TEXT[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¯ãƒ—ãƒªãƒ³ã‚¿ $1 ç”¨ã«æ›¸å¼è¨­å®šã•ã‚Œã¾ã—ãŸã€‚ãƒ—ãƒªãƒ³ã‚¿ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚\næ¨™æº–ãƒ—ãƒªãƒ³ã‚¿ $2 ã‚’ä½¿ç”¨ã—ã¾ã™ã‹ã€‚";
     TEXT[ chinese_traditional ] = "é€™å€‹æ–‡ä»¶æ ¼å¼æ˜¯å°ˆé–€ç‚ºå°è¡¨æ©Ÿ $1 è¨­å®šçš„ã€‚\nä½†æ˜¯é€™å€‹å°è¡¨æ©Ÿä¸å­˜åœ¨ã€‚æ‚¨è¦ä½¿ç”¨é»˜èªå°è¡¨æ©Ÿ $2 ï¼Ÿ";
     TEXT[ greek ] = "Ôï İããñáöï İ÷åé äéáìïñöùğïéçèåß ãéá ôïí åêôõğùôŞ $1. Ï åêôõğùôŞò áõôüò äåí åßíáé \näéáèİóéìïò. Íá ÷ñçóéìïğïéçèåß ï ğñïåğéëåãìİíïò åêôõğùôŞò";
-    TEXT[ korean ] = "ì´ ë¬¸ì„œëŠ” í”„ë¦°í„°$1ìš©ìœ¼ë¡œ í¬ë§·ë˜ì—ˆìŠµë‹ˆë‹¤. ì§€ì •ëœ í”„ë¦°í„°ê°€ ì—†ìŠµë‹ˆë‹¤. \nê¸°ë³¸ í”„ë¦°í„°$2 ì„ (ë¥¼) ì‚¬ìš©í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    TEXT[ korean ] = "ì´ ë¬¸ì„œì˜ í˜•ì‹ì´ í”„ë¦°í„°$1ìš©ìœ¼ë¡œ ì§€ì •ë˜ì—ˆìŠµë‹ˆë‹¤. ì§€ì •ëœ í”„ë¦°í„°ê°€ ì—†ìŠµë‹ˆë‹¤. \nê¸°ë³¸ í”„ë¦°í„°$2 ì„ (ë¥¼) ì‚¬ìš©í•˜ê² ìŠµë‹ˆê¹Œ?";
     TEXT[ arabic ] = "Êã ÊäÓíŞ ÇáãÓÊäÏ ááØÇÈÚÉ $1. ÅáÇ Ãä åĞå ÇáØÇÈÚÉ ÛíÑ ãæÌæÏÉ.\nåá ÊÑíÏ ÇÓÊÎÏÇã ÇáØÇÈÚÉ ÇáÇİÊÑÇÖíÉ $2¿";
     TEXT[ turkish ] = "Belge, $1 yazıcısı için formatlandı. Belirtilen yazıcı bulunamadı.\nStandart yazıcı $2 kullanılsın mı?";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Este documento se ha formateado para la impresora $1, pero esta no está disponible.\n¿Desea usar la impresora predeterminada $2?";
+    TEXT[ catalan ] = "Aquest document s'ha formatat per a la impressora $1, però no està disponible.\nVoleu utilitzar la impressora predeterminada $2?";
+    TEXT[ thai ] = "à¸ˆà¸±à¸”à¸£à¸¹à¸›à¹à¸šà¸šà¹€à¸­à¸à¸ªà¸²à¸™à¸µà¹‰à¸ªà¸³à¸«à¸£à¸±à¸šà¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ $1 à¹à¸¥à¹‰à¸§ à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œà¸—à¸µà¹ˆà¸£à¸°à¸šà¸¸à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¹„à¸”à¹‰ \nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹ƒà¸Šà¹‰à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œà¸¡à¸²à¸•à¸£à¸à¸²à¸™ $2 à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 String STR_MENU_NEWMAIL
 {
@@ -153,24 +156,25 @@ String STR_MENU_NEWMAIL
     Text [ dutch ] = "Nieuw ~bericht" ;
     Text [ english_us ] = "New ~Mail" ;
     Text [ italian ] = "Nuovo ~messaggio" ;
-    Text [ spanish ] = "Nuevo ~mensaje" ;
+    Text [ spanish ] = "~Mensaje nuevo" ;
     Text [ french ] = "Nouveau ~message" ;
     Text [ swedish ] = "Nytt m~eddelande" ;
     Text [ danish ] = "Ny meddelelse" ;
     Text [ portuguese ] = "No~va mensagem" ;
     Text [ portuguese_brazilian ] = "N~eue Nachricht" ;
     Text[ chinese_simplified ] = "æ–°å»ºç”µå­é‚®ä»¶(~M)";
-    Text[ russian ] = "Ñîçäàòü ñîîáùåíèå";
+    Text[ russian ] = "Íîâîå ñîîáùåíèå ıë. ïî÷òû";
     Text[ polish ] = "Nowa wiadomoœæ";
-    Text[ japanese ] = "æ–°ã—ã„ï¾’ï½¯ï½¾ï½°ï½¼ï¾(~M)";
+    Text[ japanese ] = "æ–°ã—ã„ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸(~M)";
     Text[ chinese_traditional ] = "æ–°é›»å­éƒµä»¶(~M)";
     Text[ greek ] = "Äçìéïõñãßá ìçíıìáôïò";
     Text[ korean ] = "ìƒˆ ë©”ì¼(~M)";
     Text[ arabic ] = "ÑÓÇáÉ ÌÏíÏÉ";
     Text[ turkish ] = "Y~eni ileti";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Nuevo ~mensaje";
+    Text[ catalan ] = "~Correu nou";
     Text[ finnish ] = "Uusi ~viesti";
+    Text[ thai ] = "à¹€~à¸¡à¸¥à¹Œà¹ƒà¸«à¸¡à¹ˆ";
 };
 String STR_PRINT_OPTIONS
 {
@@ -190,14 +194,15 @@ String STR_PRINT_OPTIONS
     Text[ chinese_simplified ] = "å…¶ä»–...";
     Text[ russian ] = "Ïàğàìåòğû...";
     Text[ polish ] = "Dodatki";
-    Text[ japanese ] = "ï½µï¾Œï¾Ÿï½¼ï½®ï¾...";
+    Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³...";
     Text[ chinese_traditional ] = "å…¶ä»–...";
     Text[ greek ] = "Åğéëïãİò...";
     Text[ korean ] = "ì˜µì…˜...";
     Text[ arabic ] = "ÅÖÇİÇÊ...";
     Text[ turkish ] = "Seçenekler...";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opciones...";
+    Text[ catalan ] = "Opcions...";
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸...";
 };
 String STR_PRINT_OPTIONS_TITLE
 {
@@ -207,7 +212,7 @@ String STR_PRINT_OPTIONS_TITLE
     Text [ italian ] = "Opzioni stampante" ;
     Text [ portuguese_brazilian ] = "Op??s de Impressora" ;
     Text [ portuguese ] = "Opções de impressão" ;
-    Text [ finnish ] = "Tulostimen m??ritykset" ;
+    Text [ finnish ] = "Tulostimen määritykset" ;
     Text [ danish ] = "Printerindstillinger" ;
     Text [ french ] = "Options d'impression" ;
     Text [ swedish ] = "Skrivaralternativ" ;
@@ -217,14 +222,15 @@ String STR_PRINT_OPTIONS_TITLE
     Text[ chinese_simplified ] = "æ‰“å°æœº å…¶ä»–";
     Text[ russian ] = "Ïàğàìåòğû ïå÷àòè";
     Text[ polish ] = "Opcje drukarki";
-    Text[ japanese ] = "ï¾Œï¾Ÿï¾˜ï¾ï¾€ã®ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+    Text[ japanese ] = "å°åˆ·ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "å°è¡¨æ©Ÿ å…¶ä»–";
     Text[ greek ] = "Åğéëïãİò åêôõğùôŞ";
     Text[ korean ] = "í”„ë¦°í„° ì˜µì…˜";
     Text[ arabic ] = "ÎíÇÑÇÊ ÇáØÇÈÚÉ";
     Text[ turkish ] = "Yazıcı seçenekleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opciones de impresión";
+    Text[ catalan ] = "Opcions de la impressora";
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ";
 };
 String STR_ERROR_PRINTER_BUSY
 {
@@ -234,7 +240,7 @@ String STR_ERROR_PRINTER_BUSY
     Text [ italian ] = "stampante occupata" ;
     Text [ portuguese_brazilian ] = "Impressora ocupada" ;
     Text [ portuguese ] = "Impressora ocupada" ;
-    Text [ finnish ] = "Tulostin k?yt?s?" ;
+    Text [ finnish ] = "Tulostin käytössä" ;
     Text [ danish ] = "Printeren er optaget" ;
     Text [ french ] = "Imprimante occupée" ;
     Text [ swedish ] = "Skrivaren är upptagen" ;
@@ -242,9 +248,9 @@ String STR_ERROR_PRINTER_BUSY
     Text [ spanish ] = "Impresora ocupada" ;
     Text [ english_us ] = "Printer busy" ;
     Text[ chinese_simplified ] = "æ‰“å°æœºå¿™ç¢Œ";
-    Text[ russian ] = "Ïğèíòåğ óæå â ğåæèìå ıêñïëóàòàöèè";
+    Text[ russian ] = "Ïğèíòåğ çàíÿò";
     Text[ polish ] = "Drukarka ju¿ pracuje";
-    Text[ japanese ] = "ï¾Œï¾Ÿï¾˜ï¾ï¾€ã¯èµ·å‹•ä¸­ã§ã™ã€‚";
+    Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿ã¯èµ·å‹•ä¸­ã§ã™ã€‚";
     Text[ chinese_traditional ] = "å°è¡¨æ©Ÿå·²ç¶“é‹ä½œ";
     Text[ greek ] = "Ï åêôõğùôŞò åßíáé áğáó÷ïëçìİíïò";
     Text[ korean ] = "í”„ë¦°í„° ì´ë¯¸ ì‘ë™ì¤‘";
@@ -252,6 +258,7 @@ String STR_ERROR_PRINTER_BUSY
     Text[ turkish ] = "Yazıcı şu an kullanılıyor";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Impresora ocupada";
+    Text[ thai ] = "à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œà¹„à¸¡à¹ˆà¸§à¹ˆà¸²à¸‡";
 };
 String STR_ERROR_PRINT
 {
@@ -269,9 +276,9 @@ String STR_ERROR_PRINT
     Text [ spanish ] = "Error al imprimir" ;
     Text [ english_us ] = "Error while printing" ;
     Text[ chinese_simplified ] = "æ‰“å°é”™è¯¯";
-    Text[ russian ] = "Îøèáêà ïğè ïå÷àòè";
+    Text[ russian ] = "Îøèáêà ïå÷àòè";
     Text[ polish ] = "B³¹d podczas drukowania";
-    Text[ japanese ] = "å°åˆ·ä¸­ã«ï½´ï¾—ï½°ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚";
+    Text[ japanese ] = "å°åˆ·ä¸­ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚";
     Text[ chinese_traditional ] = "åˆ—å°éŒ¯èª¤";
     Text[ greek ] = "ÓöÜëìá êáôÜ ôçí åêôığùóç";
     Text[ korean ] = "ì¸ì‡„ì‹œ ì˜¤ë¥˜ ë°œìƒ";
@@ -279,6 +286,7 @@ String STR_ERROR_PRINT
     Text[ turkish ] = "Yazdırma hatası";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Error al imprimir";
+    Text[ thai ] = "à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸‚à¸“à¸°à¸à¸´à¸¡à¸à¹Œ";
 };
 String STR_PRINTING
 {
@@ -290,7 +298,7 @@ String STR_PRINTING
     Text [ portuguese ] = "A imprimir" ;
     Text [ finnish ] = "Tulostetaan" ;
     Text [ danish ] = "Udskriver" ;
-    Text [ french ] = "Impression en cours" ;
+    Text [ french ] = "Impression" ;
     Text [ swedish ] = "Skriver ut" ;
     Text [ dutch ] = "Bezig met afdrukken" ;
     Text [ spanish ] = "Imprimiendo" ;
@@ -305,7 +313,8 @@ String STR_PRINTING
     Text[ arabic ] = "ØÈÇÚÉ";
     Text[ turkish ] = "Yazdır";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imprimiendo";
+    Text[ catalan ] = "S'està imprimint";
+    Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸à¸´à¸¡à¸à¹Œ";
 };
 String STR_PAGE
 {
@@ -319,20 +328,21 @@ String STR_PAGE
     Text [ danish ] = "Side " ;
     Text [ french ] = "Page " ;
     Text [ swedish ] = "Sida  " ;
-    Text [ dutch ] = "Pagina  " ;
+    Text [ dutch ] = "Pagina" ;
     Text [ spanish ] = "Página  " ;
     Text [ english_us ] = "Page " ;
     Text[ chinese_simplified ] = "é¡µ ";
     Text[ russian ] = "Ñòğàíèöà  ";
     Text[ polish ] = "Strona  ";
-    Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ ";
+    Text[ japanese ] = "ãƒšãƒ¼ã‚¸ ";
     Text[ chinese_traditional ] = "é  ";
     Text[ greek ] = "Óåëßäá ";
     Text[ korean ] = "í˜ì´ì§€ ";
     Text[ arabic ] = "ÇáÕİÍÉ ";
     Text[ turkish ] = "Sayfa ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Página  ";
+    Text[ catalan ] = "Pàgina  ";
+    Text[ thai ] = "à¸«à¸™à¹‰à¸² ";
 };
 String STR_MDIFRAME_INTERFACE
 {
@@ -352,14 +362,15 @@ String STR_MDIFRAME_INTERFACE
     Text[ chinese_simplified ] = "MDI-è§†çª—";
     Text[ russian ] = "Îêíî MDI";
     Text[ polish ] = "Okno MDI";
-    Text[ japanese ] = "MDI ï½³ï½¨ï¾ï¾„ï¾ï½³";
+    Text[ japanese ] = "MDI ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦";
     Text[ chinese_traditional ] = "MDI è¦–çª—";
     Text[ greek ] = "ĞáñÜèõñï MDI";
     Text[ korean ] = "MDI ì°½";
     Text[ arabic ] = "äÇİĞÉ MDI";
     Text[ turkish ] = "MDI penceresi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ventana MDI";
+    Text[ catalan ] = "Finestra MDI";
+    Text[ thai ] = "à¸«à¸™à¹‰à¸²à¸•à¹ˆà¸²à¸‡ MDI ";
 };
 String STR_ERROR_SAVE_TEMPLATE
 {
@@ -369,24 +380,25 @@ String STR_ERROR_SAVE_TEMPLATE
     Text [ italian ] = "Errore durante la scrittura del modello " ;
     Text [ portuguese_brazilian ] = "Erro ao gravar o modelo " ;
     Text [ portuguese ] = "Erro ao gravar o modelo " ;
-    Text [ finnish ] = "On ilmennyt virhe tallennettaessa mallipohjaa" ;
+    Text [ finnish ] = "On ilmennyt virhe tallennettaessa mallia " ;
     Text [ danish ] = "Fejl under skrivning af skabelon " ;
     Text [ french ] = "Erreur lors de l'écriture du modèle " ;
     Text [ swedish ] = "Fel vid skrivning av mall  " ;
-    Text [ dutch ] = "Fout bij schrijven van sjabloon  " ;
+    Text [ dutch ] = "Fout bij schrijven van sjabloon" ;
     Text [ spanish ] = "Error al grabar la plantilla  " ;
     Text [ english_us ] = "Error saving template " ;
     Text[ chinese_simplified ] = "åœ¨å†™å…¥æ ·å¼æ—¶å‘ç”Ÿé”™è¯¯ ";
-    Text[ russian ] = "Îøèáêà ïğè çàïèñè øàáëîíà  ";
+    Text[ russian ] = "Îøèáêà ñîõğàíåíèÿ øàáëîíà  ";
     Text[ polish ] = "B³¹d przy zapisywaniu szablonu   ";
-    Text[ japanese ] = "ï¾ƒï¾ï¾Œï¾Ÿï¾šï½°ï¾„ã®æ›¸ãè¾¼ã¿æ™‚ã®ï½´ï¾—ï½° ";
+    Text[ japanese ] = "ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®æ›¸ãè¾¼ã¿æ™‚ã®ã‚¨ãƒ©ãƒ¼ ";
     Text[ chinese_traditional ] = "å¯«å…¥æ¨£å¼æ™‚ç™¼ç”Ÿä¸€å€‹éŒ¯èª¤ ";
     Text[ greek ] = "ÓöÜëìá êáôÜ ôçí åããñáöŞ ôïõ ğñïôığïõ ";
-    Text[ korean ] = "ì„œì‹ íŒŒì¼ ì“°ê¸°ì—ì„œ ì˜¤ë¥˜ ë°œìƒ ";
+    Text[ korean ] = "ì„œì‹ íŒŒì¼ ì €ì¥ ì¤‘ ì˜¤ë¥˜ ë°œìƒ ";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ÇáŞÇáÈ ";
     Text[ turkish ] = "Şablon hazırlamada hata ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Error al grabar la plantilla  ";
+    Text[ catalan ] = "S'ha produït un error en desar la plantilla  ";
+    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹à¸¡à¹ˆà¹à¸šà¸šà¸œà¸´à¸”à¸à¸¥à¸²à¸” ";
 };
 String STR_READONLY
 {
@@ -400,8 +412,8 @@ String STR_READONLY
     Text [ danish ] = "(skrivebeskyttet)" ;
     Text [ french ] = "(en lecture seule)" ;
     Text [ swedish ] = "(skrivskyddad)" ;
-    Text [ dutch ] = "(alleen lezen)" ;
-    Text [ spanish ] = "(solo lectura)" ;
+    Text [ dutch ] = "(alleen-lezen)" ;
+    Text [ spanish ] = "(sólo lectura)" ;
     Text [ english_us ] = " (read-only)" ;
     Text[ chinese_simplified ] = " (é˜²æ”¹å†™)";
     Text[ russian ] = "(òîëüêî äëÿ ÷òåíèÿ)";
@@ -409,17 +421,18 @@ String STR_READONLY
     Text[ japanese ] = "(èª­ã¿å–ã‚Šå°‚ç”¨)";
     Text[ chinese_traditional ] = "(å”¯è®€)";
     Text[ greek ] = "(ìüíï ãéá áíÜãíùóç)";
-    Text[ korean ] = "(ì“°ê¸° ë³´í˜¸)";
+    Text[ korean ] = " (ì½ê¸° ì „ìš©)";
     Text[ arabic ] = "(ááŞÑÇÁÉ İŞØ)";
     Text[ turkish ] = "(salt okunur)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "(solo lectura)";
+    Text[ catalan ] = "(només lectura)";
+    Text[ thai ] = " (à¸­à¹ˆà¸²à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§)";
 };
 String STR_PRINT_NEWORI
 {
     Text = "Sie haben die Seitenorientierungseinstellung geändert.\nSollen die geänderten Einstellungen in das Dokument\nübernommen werden?" ;
     Text [ English ] = "You have changed the page orientation.\nWould you like your changes to be saved\nin the document?" ;
-    Text [ dutch ] = "U heeft de instelling van de pagina-oriëntatie veranderd.\nWilt u de nieuwe instellingen overnemen in uw document?" ;
+    Text [ dutch ] = "U heeft de paginaoriëntatie gewijzigd.\nWilt u de nieuwe instellingen overnemen in uw document?" ;
     Text [ english_us ] = "The page orientation has been modified.\nShould the new settings be saved \nin the active document?" ;
     Text [ italian ] = "È stata cambiata l'orientazione della pagina.\nTrasferire le impostazioni cambiate nel documento?" ;
     Text [ spanish ] = "La orientación de la página ha sido modificada.\n¿Desea aplicar las modificaciones al documento\n actual?" ;
@@ -429,17 +442,18 @@ String STR_PRINT_NEWORI
     Text [ portuguese_brazilian ] = "Sie haben die Seitenorientierungseinstellung ge?ndert.\nSollen die ge?nderten Einstellungen in das Dokument\n?ernommen werden?" ;
     Text [ portuguese ] = "Você modificou a orientação da página.\nDeseja aplicar as novas definições\nao documento activo?" ;
     Text[ chinese_simplified ] = "æ‚¨æ›´æ”¹äº†é¡µé¢è®¾å®šã€‚\nè¿™ä¸ªæ–‡æ¡£è¦æ¥æ”¶æ›´æ”¹çš„è®¾å®šå—ï¼Ÿ";
-    Text[ russian ] = "Âû èçìåíèëè óñòàíîâêó îğèåíòàöèè ñòğàíèöû.\nÑîõğàíèòü ıòè èçìåíèÿ\nâ òåêóùåì äîêóìåíòå?";
+    Text[ russian ] = "Èçìåíåíà òåêóùàÿ îğèåíòàöèÿ ñòğàíèöû.\nÑîõğàíèòü ıòè èçìåíåíèÿ\nâ àêòèâíîì äîêóìåíòå?";
     Text[ polish ] = "Zmieni³eœ ustawienia strony.\nCzy te zmienione ustawienia maj¹ zostaæ \nzapisane w dokumencie?";
-    Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾æ–¹å‘ã®è¨­å®šãŒå¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ã€‚\nå¤‰æ›´ã•ã‚ŒãŸè¨­å®šã‚’ç¾åœ¨ã®ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã«\né©ç”¨ã—ã¾ã™ã‹?";
+    Text[ japanese ] = "ãƒšãƒ¼ã‚¸æ–¹å‘ã®è¨­å®šãŒå¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ã€‚\nå¤‰æ›´ã•ã‚ŒãŸè¨­å®šã‚’ç¾åœ¨ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«\né©ç”¨ã—ã¾ã™ã‹?";
     Text[ chinese_traditional ] = "æ‚¨è®Šæ›´äº†é é¢è¨­å®šã€‚\né€™å€‹æ–‡æª”æ¡ç”¨è®Šæ›´çš„è¨­å®šï¹–";
     Text[ greek ] = "¸÷åôå áëëÜîåé ôçí ñıèìéóç ãéá ôïí ğñïóáíáôïëéóìü ôçò óåëßäáò.\nÈİëåôå íá åöáñìïóôïıí ïé áëëáãİò \nóôï êåßìåíï;";
-    Text[ korean ] = "í˜ì´ì§€ ë°©í–¥ì„¤ì •ì´ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\në³€ê²½ëœ ì„¤ì •ì„ ë¬¸ì„œì— ì ìš©í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ korean ] = "í˜ì´ì§€ ë°©í–¥ì˜ ì„¤ì •ì´ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\në³€ê²½ëœ ì„¤ì •ì„ ë¬¸ì„œì— ì ìš©í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Text[ arabic ] = "áŞÏ ŞãÊ ÈÊÛííÑ ÅÚÏÇÏÇÊ ÇÊÌÇå ÇáÕİÍÉ.\nåá ÊÑíÏ ÊØÈíŞ ÇáÅÚÏÇÏÇÊ ÇáÌÏíÏÉ\nÚáì ÇáãÓÊäÏ¿";
     Text[ turkish ] = "Sayfa duruş ayarını değiştirdiniz.\nDeğiştirilen ayar\nbelgede kullanılsın mı?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "La orientación de la página ha sido modificada.\n¿Desea aplicar las modificaciones al documento\n actual?";
+    Text[ catalan ] = "S'ha modificat l'orientació de la pàgina.\nVoleu aplicar les modificacions al document\n actual?";
     Text[ finnish ] = "Sivun suuntaa on muutettu.\nTallennetaanko uudet asetukset \naktiiviseen asiakirjaan?";
+    Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¸à¸²à¸£à¸§à¸²à¸‡à¸«à¸™à¹‰à¸²à¸à¸£à¸°à¸”à¸²à¸©\nà¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¸à¸³à¸«à¸™à¸”à¹ƒà¸«à¸¡à¹ˆ \nà¹ƒà¸™à¹€à¸­à¸à¸ªà¸²à¸£à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸­à¸¢à¸¹à¹ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 String STR_PRINT_NEWSIZE
 {
@@ -449,29 +463,30 @@ String STR_PRINT_NEWSIZE
     Text [ italian ] = "Sono state modificate le dimensioni della pagina.\nTrasferire le impostazioni cambiate nel documento?" ;
     Text [ spanish ] = "El tamaño de la página se ha modificado.\n¿Desea aplicar las modificaciones al documento\nactual?" ;
     Text [ french ] = "Le format de la page a changé.\nVoulez-vous appliquer les paramètres modifiés\ndans le document ?" ;
-    Text [ dutch ] = "U heeft het paginaformaat veranderd.\nWilt u deze verandering in uw\ndocument overnemen?" ;
+    Text [ dutch ] = "U heeft de paginagrootte gewijzigd.\nWilt u de nieuwe instellingen\novernemen in het document?" ;
     Text [ swedish ] = "Du har ändrat sidstorleken.\nSka de ändrade inställningarna\növertas till dokumentet?" ;
     Text [ danish ] = "Sidestørrelsen er blevet ændret.\nSkal ændringerne overtages i dokumentet?" ;
     Text [ portuguese_brazilian ] = "Sie haben die Seitengr?e ge?ndert.\nSollen die ge?nderten Einstellungen in das\nDokument ?ernommen werden?" ;
     Text [ portuguese ] = "Você modificou o tamanho da página.\n Deseja aplicar as novas definições \nao documento activo?" ;
     Text[ chinese_simplified ] = "æ‚¨å·²ç»æ›´æ”¹é¡µé¢å¤§å°ã€‚\næ‚¨çš„æ–‡æ¡£è¦é‡‡ç”¨è¿™ä¸ªè®¾å®šå—ï¼Ÿ";
-    Text[ russian ] = "Âû èçìåíèëè ğàçìåğ ñòğàíèöû.\nÑîõğàíèòü ıòè èçìåíåíèÿ\nâ òåêóùåì äîêóìåíòå?";
+    Text[ russian ] = "Ğàçìåğ ñòğàíèöû èçìåíåí.\nÑîõğàíèòü ıòè èçìåíåíèÿ\nâ àêòèâíîì äîêóìåíòå?";
     Text[ polish ] = "Zmieni³eœ rozmiar strony. \nCzy zmiany maj¹ zostaæ zapisane \nw aktywnym dokumencie?";
-    Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ ï½»ï½²ï½½ï¾ãŒå¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ã€‚\nå¤‰æ›´ã•ã‚ŒãŸè¨­å®šã‚’ç¾åœ¨ã®ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã«\né©ç”¨ã—ã¾ã™ã‹?";
+    Text[ japanese ] = "ãƒšãƒ¼ã‚¸ ã‚µã‚¤ã‚ºãŒå¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ã€‚\nå¤‰æ›´ã•ã‚ŒãŸè¨­å®šã‚’ç¾åœ¨ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«\né©ç”¨ã—ã¾ã™ã‹?";
     Text[ chinese_traditional ] = "æ‚¨å·²ç¶“è®Šæ›´äº†é é¢å¤§å°ã€‚\nè®“æ–‡ä»¶æ¡ç”¨é€™å€‹è¨­å®šï¼Ÿ";
     Text[ greek ] = "ÁëëÜîáôå ôï ìİãåèïò ôçò óåëßäáò.\nÍá åöáñìïóôåß áõôŞ ç áëëáãŞ óôï İããñáöï;";
-    Text[ korean ] = "í˜ì´ì§€ í¬ê¸°ê°€ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\në³€ê²½ëœ ì„¤ì •ì„ ë¬¸ì„œì— ì ìš©í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ korean ] = "í˜ì´ì§€ í¬ê¸°ê°€ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\në³€ê²½ëœ ì„¤ì •ì„ ë¬¸ì„œì— ì ìš©í•˜ê² ìŠµë‹ˆê¹Œ?";
     Text[ arabic ] = "áŞÏ ŞãÊ ÈÊÛííÑ ÍÌã ÇáÕİÍÉ.\nåá ÊÑíÏ ÊØÈíŞ ÇáÅÚÏÇÏÇÊ ÇáÌÏíÏÉ Úáì ÇáãÓÊäÏ¿";
     Text[ turkish ] = "Sayfa boyutunu değiştirdiniz.\nDeğiştirilen ayarlar\nbelgede kullanılsın mı?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El tamaño de la página se ha modificado.\n¿Desea aplicar las modificaciones al documento\nactual?";
+    Text[ catalan ] = "La mida de la pàgina s'ha modificat.\nVoleu aplicar les modificacions al document\nactual?";
     Text[ finnish ] = "Sivun kokoa on muutettu.\nTallennetaanko uudet asetukset\naktiiviseen asiakirjaan?";
+    Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¸‚à¸™à¸²à¸”à¸«à¸™à¹‰à¸²à¸à¸£à¸°à¸”à¸²à¸©\nà¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¸à¸³à¸«à¸™à¸”à¹ƒà¸«à¸¡à¹ˆ\nà¹ƒà¸™à¹€à¸­à¸à¸ªà¸²à¸£à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸­à¸¢à¸¹à¹ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 String STR_PRINT_NEWORISIZE
 {
     Text = "Sie haben die Seitengröße und die\nSeitenorientierung geändert. Sollen\ndie geänderten Einstellungen in das\nDokument übernommen werden?" ;
     Text [ English ] = "You have changed the page size. and\nthe page orientation. Would you like\nyour changes to be saved in the document?" ;
-    Text [ dutch ] = "U heeft het paginaformaat en de\npagina-oriëntering veranderd. Wilt u\nde veranderingen in het\ndocument overnemen?" ;
+    Text [ dutch ] = "U heeft de paginagrootte en de\\paginaoriëntatie gewijzigd. Wilt u\nde nieuwe instellingen overnemen\nin het document?" ;
     Text [ english_us ] = "The page size and orientation have been modified\n. Would you like to  save the new settings in the\nactive document?" ;
     Text [ italian ] = "Sia le dimensioni della pagina che l'orientamento sono stati cambiati.\nTrasferire le impostazioni\ncambiate nel documento?" ;
     Text [ spanish ] = "El tamaño y orientación de la página se han modificado\n. ¿Desea aplicar las modificaciones al\ndocumento actual?" ;
@@ -481,17 +496,18 @@ String STR_PRINT_NEWORISIZE
     Text [ portuguese_brazilian ] = "Sie haben die Seitengr?e und die\nSeitenorientierung ge?ndert. Sollen\ndie ge?nderten Einstellungen in das\nDokument ?ernommen werden?" ;
     Text [ portuguese ] = "Você modificou o tamanho e a orientação da página.\n Deseja aplicar as novas definições\nao documento activo?" ;
     Text[ chinese_simplified ] = "æ‚¨å·²ç»æ›´æ”¹é¡µé¢å¤§å°å’Œé¡µé¢æ–¹å‘ã€‚\næ‚¨çš„æ–‡æ¡£è¦é‡‡ç”¨è¿™äº›æ›´æ”¹å—ï¼Ÿ";
-    Text[ russian ] = "Âû èçìåíèëè ğàçìåğ è îğèåíòàöèş ñòğàíèöû\n. Ñîõğàíèòü\nıòè èçìåíåíèÿ â\nòåêóùåì äîêóìåíòå?";
+    Text[ russian ] = "Ğàçìåğ è îğèåíòàöèÿ ñòğàíèöû èçìåíåíû\n. Ñîõğàíèòü\nıòè èçìåíåíèÿ â\nàêòèâíîì äîêóìåíòå?";
     Text[ polish ] = "Zmieni³eœ rozmiar strony i \norientacjê strony. Czy nowe ustawienia \nmaj¹ zostaæ zapisane \nw aktywnym dokumencie?";
-    Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ ï½»ï½²ï½½ï¾ã¨\nï¾ï¾Ÿï½°ï½¼ï¾æ–¹å‘ãŒå¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ï½¡\nå¤‰æ›´ã•ã‚ŒãŸè¨­å®šã‚’ç¾åœ¨ã®ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã«\né©ç”¨ã—ã¾ã™ã‹?";
+    Text[ japanese ] = "ãƒšãƒ¼ã‚¸ ã‚µã‚¤ã‚ºã¨\nãƒšãƒ¼ã‚¸æ–¹å‘ãŒå¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ï½¡\nå¤‰æ›´ã•ã‚ŒãŸè¨­å®šã‚’ç¾åœ¨ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«\né©ç”¨ã—ã¾ã™ã‹?";
     Text[ chinese_traditional ] = "æ‚¨å·²ç¶“è®Šæ›´é é¢å¤§å°å’Œé é¢æ–¹å‘ã€‚\næ‚¨çš„æ–‡ä»¶è¦æ¡ç”¨é€™äº›è®Šæ›´ï¼Ÿ";
     Text[ greek ] = "¸÷åôå áëëÜîåé ôï ìİãåèïò ôçò óåëßäáò\nêáé ôïí ğñïóáíáôïëéóìü ôçò óåëßäáò.\nÈİëåôå íá åöáñìïóôïıí ïé áëëáãİò \nóôï êåßìåíï;";
-    Text[ korean ] = "í˜ì´ì§€ í¬ê¸°ì™€  \ní˜ì´ì§€ ë°©í–¥ì´ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤. ë³€ê²½ëœ ì„¤ì •ì„ ë¬¸ì„œì— ì ìš©í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ korean ] = "í˜ì´ì§€ í¬ê¸°ì™€ \ní˜ì´ì§€ ë°©í–¥ì´ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤. ë³€ê²½ëœ ì„¤ì •ì„ ë¬¸ì„œì— ì ìš©í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Text[ arabic ] = "áŞÏ ŞãÊ ÈÊÛííÑ ÍÌã ÇáÕİÍÉ æÇÊÌÇååÇ.\nåá ÊÑíÏ ÊØÈíŞ ÇáÅÚÏÇÏÇÊ ÇáÌÏíÏÉ Úáì ÇáãÓÊäÏ¿";
     Text[ turkish ] = "Sayfa boyutunu ve sayfa duruşunu değiştirdiniz. Değiştirilen\n ayarlar\nbelgede kullanılsın mı?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El tamaño y orientación de la página se han modificado\n. ¿Desea aplicar las modificaciones al\ndocumento actual?";
+    Text[ catalan ] = "La mida i l'orientació de la pàgina s'han modificat\n. Voleu aplicar las modificacions al\ndocument actual?";
     Text[ finnish ] = "Sivun kokoa ja suuntaa on muutettu.\nHaluatko tallentaa uudet asetukset\naktiiviseen asiakirjaan?";
+    Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¸‚à¸™à¸²à¸”à¹à¸¥à¸°à¸à¸²à¸£à¸§à¸²à¸‡à¹à¸™à¸§à¸«à¸™à¹‰à¸²à¸à¸£à¸°à¸”à¸²à¸©\n. à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¸à¸³à¸«à¸™à¸”à¹ƒà¸«à¸¡à¹ˆà¹ƒà¸™\nà¹€à¸­à¸à¸ªà¸²à¸£à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸­à¸¢à¸¹à¹ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 String STR_PLUGINVIEW
 {
@@ -521,15 +537,16 @@ String RID_EXPLORERTOOLSTOOLBOX
     Text[ chinese_simplified ] = "æ¡Œé¢å·¥å…·æ ";
     Text[ russian ] = "Ïàíåëü èíñòğóìåíòîâ ğàáî÷åãî ñòîëà";
     Text[ polish ] = "Pasek narzêdzi pulpitu";
-    Text[ japanese ] = "ï¾ƒï¾ï½½ï½¸ï¾„ï½¯ï¾Œï¾Ÿã®æ¨™æº–ï¾‚ï½°ï¾™ï¾Šï¾ï½°";
+    Text[ japanese ] = "ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã®æ¨™æº–ãƒ„ãƒ¼ãƒ«ãƒãƒ¼";
     Text[ chinese_traditional ] = "æ¡Œé¢å·¥å…·åˆ—";
     Text[ greek ] = "ÃñáììŞ åñãáëåéşí Desktop";
     Text[ korean ] = "ë°”íƒ•í™”ë©´ ë„êµ¬ëª¨ìŒ";
     Text[ arabic ] = "ÔÑíØ ÃÏæÇÊ ÓØÍ ÇáãßÊÈ";
     Text[ turkish ] = "Masaüstü araç çubuğu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de herramientas del escritorio";
-    Text[ finnish ] = "Ty??d?n ty?alurivi";
+    Text[ catalan ] = "Barra d'eines de l'escriptori";
+    Text[ finnish ] = "Työpöydän työkalurivi";
+    Text[ thai ] = "à¹à¸–à¸šà¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­à¹€à¸”à¸ªà¸à¹Œà¸—à¹‡à¸­à¸›";
 };
 String STR_PREVIEW_DOCINFO
 {
@@ -539,7 +556,7 @@ String STR_PREVIEW_DOCINFO
     Text [ swedish ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titel:</b><dd>$(TITEL)<dt><b>Tema:</b><dd>$(THEME)<dt><b>Nyckelord:</b><dd>$(KEYWORDS)<dt><b>Beskrivning:</b><dd>$(TEXT)</dl></font></body></html>" ;
     Text [ danish ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titel:</b><dd>$(TITEL)<dt><b>Emne:</b><dd>$(THEME)<dt><b>Nøgleord:</b><dd>$(KEYWORDS)<dt><b>Beskrivelse:</b><dd>$(TEXT)</dl></font></body></html>" ;
     Text [ italian ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titolo:</b><dd>$(TITEL)<dt><b>Argomento:</b><dd>$(THEME)<dt><b>Parole chiavee:</b><dd>$(KEYWORDS)<dt><b>Beschreibung:</b><dd>$(TEXT)</dl></font></body></html>" ;
-    Text [ spanish ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Título:</b><dd>$(TITULO)<dt><b>Tema:</b><dd>$(THEME)<dt><b>Contraseñas:</b><dd>$(KEYWORDS)<dt><b>Descripción:</b><dd>$(TEXT)</dl></font></body></html>" ;
+    Text [ spanish ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Título:</b><dd>$(TITULO)<dt><b>Asunto:</b><dd>$(THEME)<dt><b>Contraseñas:</b><dd>$(KEYWORDS)<dt><b>Descripción:</b><dd>$(TEXT)</dl></font></body></html>" ;
     Text [ french ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titre :</b><dd>$(TITEL)<dt><b>Objet :</b><dd>$(THEME)<dt><b>Mots-clés :</b><dd>$(KEYWORDS)<dt><b>Description :  </b><dd>$(TEXT)</dl></font></body></html>" ;
     Text [ dutch ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titel:</b><dd>$(TITEL)<dt><b>Onderwerp:</b><dd>$(THEME)<dt><b>Sl&uuml;telwoorden:</b><dd>$(KEYWORDS)<dt><b>Beschrijving:</b><dd>$(TEXT)</dl></font></body></html>" ;
     Text [ portuguese_brazilian ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titel:</b><dd>$(TITEL)<dt><b>Thema:</b><dd>$(THEME)<dt><b>Schl&uuml;sselworte:</b><dd>$(KEYWORDS)<dt><b>Beschreibung:</b><dd>$(TEXT)</dl></font></body></html>" ;
@@ -547,15 +564,16 @@ String STR_PREVIEW_DOCINFO
     Text[ chinese_simplified ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>æ ‡é¢˜:</b><dd>$(TITEL)<dt><b>ä¸»é¢˜:</b><dd>$(THEME)<dt><b>å…³é”®å­—:</b><dd>$(KEYWORDS)<dt><b>è¯´æ˜:</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ russian ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Çàãîëîâîê:</b><dd>$(TITEL)<dt><b>Òåìà:</b><dd>$(THEME)<dt><b>Êëş÷åâûå ñëîâà:</b><dd>$(KEYWORDS)<dt><b>Îïèñàíèå:</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ polish ] = "<html><body BGCOLOR=\"#c0c0c0\"><czcionka FACE=\"Arial\"><dl><dt><b>Tytu³:</b><dd>$(TITEL)<dt><b>Temat:</b><dd>$(THEME)<dt><b>S³owa kluczowe:</b><dd>$(KEYWORDS)<dt><b>Opis:</b><dd>$(TEXT)</dl></font></body></html>";
-    Text[ japanese ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titel:</b><dd>$(TITEL)<dt><b>ï¾ƒï½°ï¾:</b><dd>$(THEME)<dt><b>ï½·ï½°ï¾œï½°ï¾„ï¾:</b><dd>$(KEYWORDS)<dt><b>èª¬æ˜:</b><dd>$(TEXT)</dl></font></body></html>";
+    Text[ japanese ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titel:</b><dd>$(TITEL)<dt><b>ãƒ†ãƒ¼ãƒ:</b><dd>$(THEME)<dt><b>ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰:</b><dd>$(KEYWORDS)<dt><b>èª¬æ˜:</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ chinese_traditional ] = "html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>æ¨™é¡Œï¼š</b><dd>$(TITEL)<dt><b>ä¸»é¡Œï¼š</b><dd>$(THEME)<dt><b>é—œéµå­—ï¼š</b><dd>$(KEYWORDS)<dt><b>æè¿°ï¼š</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ greek ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Ôßôëïò:</b><dd>$(TITEL)<dt><b>Èİìá:</b><dd>$(THEME)<dt><b>Ëİîåéò-êëåéäéÜ:</b><dd>$(KEYWORDS)<dt><b>ĞåñéãñáöŞ:</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ korean ] = "<html><body BGCOLOR=\"#c0c0c0\"><foFACE=\"Arial\"><dl><dt><b>ì œëª©:</b><dd>$(TITEL)<dt><b>ì£¼ì œ:</b><dd>$(THEME)<dt><b>í‚¤ì›Œë“œ:</b><dd>$(KEYWORDS)<dt><b>ê¸°ìˆ :</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ arabic ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Title:</b><dd>$(TITEL)<dt><b>Subject:</b><dd>$(THEME)<dt><b>Keywords:</b><dd>$(KEYWORDS)<dt><b>Description:</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ turkish ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titel:</b><dd>$(TITEL)<dt><b>Konu:</b><dd>$(THEME)<dt><b>Anahtar sözcük:</b><dd>$(KEYWORDS)<dt><b>Tanım:</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Título:</b><dd>$(TITULO)<dt><b>Tema:</b><dd>$(THEME)<dt><b>Contraseñas:</b><dd>$(KEYWORDS)<dt><b>Descripción:</b><dd>$(TEXT)</dl></font></body></html>";
+    Text[ catalan ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Title:</b><dd>$(TITEL)<dt><b>Subject:</b><dd>$(THEME)<dt><b>Keywords:</b><dd>$(KEYWORDS)<dt><b>Description:</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ finnish ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Otsikko:</b><dd>$(TITEL)<dt><b>Aihe:</b><dd>$(THEME)<dt><b>Avainsanat:</b><dd>$(KEYWORDS)<dt><b>Kuvaus:</b><dd>$(TEXT)</dl></font></body></html>";
+    Text[ thai ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡:</b><dd>$(TITEL)<dt><b>à¸«à¸±à¸§à¹€à¸£à¸·à¹ˆà¸­à¸‡:</b><dd>$(THEME)<dt><b>à¸„à¸³à¸ªà¸³à¸„à¸±à¸:</b><dd>$(KEYWORDS)<dt><b>à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢:</b><dd>$(TEXT)</dl></font></body></html>";
 };
 String STR_PREVIEW_NODOCINFO
 {
@@ -567,21 +585,22 @@ String STR_PREVIEW_NODOCINFO
     Text [ italian ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>nessuna proprietà di documento.</B></FONT></P></BODY></HTML>" ;
     Text [ spanish ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>No se encontraron propiedades de documentos.</B></FONT></P></BODY></HTML>" ;
     Text [ french ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Propri&eacute;t&eacute;s de document introuvables.</B></FONT></P></BODY></HTML>" ;
-    Text [ dutch ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Geen documenteigenschappen voorhanden.</B></FONT></P></BODY></HTML>" ;
+    Text [ dutch ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Geen documenteigenschappen beschikbaar.</B></FONT></P></BODY></HTML>" ;
     Text [ portuguese_brazilian ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Keine Dokumenteigenschaften vorhanden.</B></FONT></P></BODY></HTML>" ;
     Text [ portuguese ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Propriedades do documento não foram encontradas.</B></FONT></P></BODY></HTML>" ;
     Text[ chinese_simplified ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>æ–‡æ¡£å±æ€§ä¸å­˜åœ¨ã€‚</B></FONT></P></BODY></HTML>";
     Text[ russian ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Ñâîéñòâà äîêóìåíòà íå îáíàğóæåíû.</B></FONT></P></BODY></HTML>";
     Text[ polish ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Brak w³aœciwoœci dokumentów.</B></FONT></P></BODY></HTML>";
-    Text[ japanese ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã®å±æ€§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚</B></FONT></P></BODY></HTML>";
+    Text[ japanese ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®å±æ€§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚</B></FONT></P></BODY></HTML>";
     Text[ chinese_traditional ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>æ–‡ä»¶å±¬æ€§ä¸å­˜åœ¨ã€‚</B></FONT></P></BODY></HTML>";
     Text[ greek ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Äåí âñİèçêáí éäéüôçôåò åããñÜöïõ.</B></FONT></P></BODY></HTML>";
-    Text[ korean ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>ë¬¸ì„œ ë“±ë¡ì •ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.</B></FONT></P></BODY></HTML>";
+    Text[ korean ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>ë¬¸ì„œ ë“±ë¡ ì •ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.</B></FONT></P></BODY></HTML>";
     Text[ arabic ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>No document properties found.</B></FONT></P></BODY></HTML>";
     Text[ turkish ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Belge özellikleri bulunamadı.</B></FONT></P></BODY></HTML>";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>No se encontraron propiedades de documentos.</B></FONT></P></BODY></HTML>";
-    Text[ finnish ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Asiakirjan ominaisuuksia ei l?dy.</B></FONT></P></BODY></HTML>";
+    Text[ catalan ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>No s'han trobat propietats del document.</B></FONT></P></BODY></HTML>";
+    Text[ finnish ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Asiakirjan ominaisuuksia ei löydy.</B></FONT></P></BODY></HTML>";
+    Text[ thai ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>à¹„à¸¡à¹ˆà¸à¸šà¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´à¸‚à¸­à¸‡à¹€à¸­à¸à¸ªà¸²à¸£</B></FONT></P></BODY></HTML>";
 };
 String STR_EXPLORERVIEW
 {
@@ -599,15 +618,16 @@ String STR_EXPLORERVIEW
     Text[ chinese_simplified ] = "èµ„æºç®¡ç†å™¨";
     Text[ russian ] = "Ïğîâîäíèê";
     Text[ polish ] = "Eksplorator";
-    Text[ japanese ] = "ï½´ï½¸ï½½ï¾Œï¾Ÿï¾›ï½°ï¾—";
+    Text[ japanese ] = "ã‚¨ã‚¯ã‚¹ãƒ—ãƒ­ãƒ¼ãƒ©";
     Text[ chinese_traditional ] = "æª”æ¡ˆç¸½ç®¡";
     Text[ greek ] = "ÅîåñåõíçôŞò";
-    Text[ korean ] = "ìµìŠ¤í”Œë¡œëŸ¬";
+    Text[ korean ] = "íƒìƒ‰ê¸°";
     Text[ arabic ] = "ÇáãÓÊßÔİ";
     Text[ turkish ] = "Explorer";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Explorador";
     Text[ finnish ] = "Resurssienhallinta";
+    Text[ thai ] = "à¸œà¸¹à¹‰à¸ªà¸³à¸£à¸§à¸ˆ";
 };
  // -----------------------------------------------------------------------
 InfoBox MSG_CANT_CLOSE
@@ -618,23 +638,24 @@ InfoBox MSG_CANT_CLOSE
     Message [ italian ] = "Non è possibile chiudere il documento poiché\nc'è una stampa in corso." ;
     Message [ spanish ] = "El documento no se puede cerrar por ahora\nya que todavía se está imprimiendo." ;
     Message [ french ] = "Impossible de fermer le document :\nl'imprimante est encore active." ;
-    Message [ dutch ] = "Het document kan op het moment niet worden gesloten,\ndaar er nog een afdrukopdracht wordt uitgevoerd." ;
-    Message [ swedish ] = "Dokumentet kan inte stängas för tillfället\neftersom ett utskriftsuppdrag fortfarande utförs." ;
-    Message [ danish ] = "Det er for tiden ikke muligt at afslutte programmet,\nfordi et udskriftsjob udføres." ;
+    Message [ dutch ] = "Het document kan momenteel niet worden gesloten\nomdat er nog een afdrukopdracht wordt uitgevoerd." ;
+    Message [ swedish ] = "Dokumentet kan inte stängas för tillfället\neftersom ett utskriftsjobb fortfarande utförs." ;
+    Message [ danish ] = "Dokumentet kan i øjeblikket ikke lukkes,\nda et udskriftsjob endnu ikke er afsluttet." ;
     Message [ portuguese_brazilian ] = "Das Dokument kann zur Zeit nicht geschlossen werden,\nda noch ein Druckauftrag l?uft." ;
     Message [ portuguese ] = "De momento é impossível fechar o documento,\n uma vez que a impressora ainda está activa." ;
     Message[ chinese_simplified ] = "ç›®å‰æ— æ³•å…³é—­è¿™ä¸ªæ–‡ä»¶ï¼Œ\nå› ä¸ºæ­£åœ¨æ‰§è¡Œä¸€ä¸ªæ‰“å°ä»»åŠ¡ã€‚";
-    Message[ russian ] = "Çàêğûòü ıòîò äîêóìåíò â íàñòîÿùèé ìîìåíò íåâîçìîæíî,\nïîñêîëüêó âûïîëíÿåòñÿ åùå îäíî çàäàíèå ïå÷àòè.";
+    Message[ russian ] = "Íåâîçìîæíî â äàííûé ìîìåíò çàêğûòü ıòîò äîêóìåíò,\nïîñêîëüêó âûïîëíÿåòñÿ åùå îäíî çàäàíèå ïå÷àòè.";
     Message[ polish ] = "Dokumentu nie mo¿na na razie zamkn¹æ,\nponiewa¿ wykonywane jest polecenie wydruku.";
-    Message[ japanese ] = "ã¾ã å°åˆ·ï½¼ï¾ï½®ï¾Œï¾ã®å‡¦ç†ä¸­ã§ã™ã€‚\nï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã‚’é–‰ã˜ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚";
+    Message[ japanese ] = "ã¾ã å°åˆ·ã‚¸ãƒ§ãƒ–ã®å‡¦ç†ä¸­ã§ã™ã€‚\nãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’é–‰ã˜ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚";
     Message[ chinese_traditional ] = "æ­£åœ¨åŸ·è¡Œä¸€å€‹åˆ—å°ä»»å‹™ï¼Œ\nå› æ­¤ç„¡æ³•é—œé–‰é€™å€‹æ–‡ä»¶ã€‚";
     Message[ greek ] = "Äåí åßíáé äõíáôüí íá êëåßóåôå áõôü ôï İããñáöï\n åğåéäŞ åêôåëåßôáé ìéá åñãáóßá åêôığùóçò.";
-    Message[ korean ] = "ì¸ì‡„ì‘ì—…ì´ ì•„ì§ ì§„í–‰ì¤‘ì´ê¸° ë•Œë¬¸ì—\në¬¸ì„œë¥¼ í˜„ì¬ ë‹«ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
+    Message[ korean ] = "ì¸ì‡„ ì‘ì—…ì´ ì•„ì§ ì§„í–‰ì¤‘ì´ë¯€ë¡œ\në¬¸ì„œë¥¼ ì§€ê¸ˆ ë‹«ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     Message[ arabic ] = "áÇ íãßä ÅÛáÇŞ ÇáãÓÊäÏ ÍÇáíÇğ¡\náÃä åäÇáß ÚãáíÉ ØÈÇÚÉ ŞíÏ ÇáÊäİíĞ.";
     Message[ turkish ] = "Belge, devam eden bir yazdırma işi nedeniyle\nşu an kapatılamıyor.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "El documento no se puede cerrar por ahora\nya que todavía se está imprimiendo.";
-    Message[ finnish ] = "Asiakirjaa ei voida sulkea, koska\ntulostustyö on kesken.";
+    Message[ catalan ] = "El document no es pot tancar ara per ara\nperquè encara s'està imprimint.";
+    Message[ finnish ] = "Asiakirjaa ei voitu sulkea, koska\ntulostustyö on kesken.";
+    Message[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸›à¸´à¸”à¹€à¸­à¸à¸ªà¸²à¸£à¹„à¸”à¹‰à¹€à¸à¸£à¸²à¸°\nà¸‡à¸²à¸™à¸à¸´à¸¡à¸à¹Œà¸à¸³à¸¥à¸±à¸‡à¸”à¸³à¹€à¸™à¸´à¸™à¸­à¸¢à¸¹à¹ˆ";
 };
  // DLG_PRINTMONITOR ------------------------------------------------------
 
@@ -654,13 +675,14 @@ InfoBox MSG_CANT_CLOSE
     TEXT[ chinese_simplified ] = "æ‰“å°ç›‘è§†å™¨"; \
     TEXT[ russian ] = "Ìîíèòîğ ïå÷àòè"; \
     TEXT[ polish ] = "Monitor wydruku"; \
-    TEXT[ japanese ] = "å°åˆ·ï¾“ï¾†ï¾€ï½°";    \
+    TEXT[ japanese ] = "å°åˆ·ãƒ¢ãƒ‹ã‚¿ãƒ¼";    \
     TEXT[ chinese_traditional ] = "åˆ—å°ç›£è¦–å™¨";    \
     TEXT[ greek ] = "Ïèüíç åêôığùóçò";  \
     TEXT[ korean ] = "ì¸ì‡„ ëª¨ë‹ˆí„°";    \
     TEXT[ arabic ] = "ãÑÇŞÈ ÇáØÇÈÚÉ";   \
     TEXT[ turkish ] = "Yazıcı penceresi";   \
-    TEXT[ catalan ] = "Monitor de impresión";
+    TEXT[ catalan ] = "Monitor d'impressió";    \
+    TEXT[ thai ] = "à¸ˆà¸­à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œ";
 
 ModelessDialog DLG_PRINTMONITOR
 {
@@ -697,14 +719,15 @@ ModelessDialog DLG_PRINTMONITOR
         TEXT[ chinese_simplified ] = "çš„æ‰“å°è®¾å¤‡æ˜¯";
         TEXT[ russian ] = "ïå÷àòàåòñÿ íà";
         TEXT[ polish ] = "bêdzie przedstawiony jako";
-        TEXT[ japanese ] = "å°åˆ·ã•ã‚Œã‚‹ï¾Œï¾Ÿï¾˜ï¾ï¾€ã¯";
+        TEXT[ japanese ] = "å°åˆ·ã•ã‚Œã‚‹ãƒ—ãƒªãƒ³ã‚¿ã¯";
         TEXT[ chinese_traditional ] = "çš„åˆ—å°è¨­å‚™æ˜¯";
         TEXT[ greek ] = "åêôõğşíåôáé óôï";
-        TEXT[ korean ] = "ì¶œë ¥ë  ê³³";
+        TEXT[ korean ] = "ì¶œë ¥ ì¥ì†Œ";
         TEXT[ arabic ] = "Óæİ íõØÈÚ Úáì";
         TEXT[ turkish ] = "çıktının alındığı yer";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "se está imprimiendo en";
+        TEXT[ catalan ] = "se està imprimint en";
+        TEXT[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸à¸´à¸¡à¸à¹Œà¸šà¸™";
     };
     FixedText FT_PRINTER
     {
@@ -734,27 +757,28 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE = "Fehler beim Versenden der Nachricht. Mögliche Fehler sind ein fehlendes Benutzerkonto oder ein fehlerhaftes Setup.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME oder die ihres e-mail Programms." ;
     MESSAGE [ English ] = "Error while sending mail. Possible errors are a missing account or an incorrect setup.\nPlease check your settings within %PRODUCTNAME or within your e-mail client." ;
     MESSAGE [ norwegian ] = "Feil ved sending av mail." ;
-    MESSAGE [ italian ] = "Errore durante l'invio del messaggio." ;
+    MESSAGE [ italian ] = "Errore durante l'invio del messaggio. I possibili errori sono: conto dell'utente errato oppure setup errato.\nVerificate le impostazioni di %PRODUCTNAME oppure il programma di eMail." ;
     MESSAGE [ portuguese_brazilian ] = "Erro ao enviar correio." ;
     MESSAGE [ portuguese ] = "Erro ao enviar correio." ;
-    MESSAGE [ finnish ] = "Virhe s?hk?ostia l?hetett?ess?." ;
-    MESSAGE [ danish ] = "Fejl ved afsendelse af meddelelsen." ;
-    MESSAGE [ french ] = "Erreur lors de l'envoi du message." ;
-    MESSAGE [ swedish ] = "Fel vid sändning av meddelande." ;
-    MESSAGE [ dutch ] = "Fout bij het verzenden van het bericht." ;
-    MESSAGE [ spanish ] = "Error al enviar el mensaje." ;
-    MESSAGE [ english_us ] = "Error sending mail." ;
-    MESSAGE[ chinese_simplified ] = "åœ¨å¯„å‘é‚®ä»¶æ—¶å‘ç”Ÿä¸€ä¸ªé”™è¯¯ã€‚";
-    MESSAGE[ russian ] = "Îøèáêà ïğè îòïğàâêå ñîîáùåíèÿ.";
-    MESSAGE[ polish ] = "B³¹d przy przesy³aniu wiadomoœci.";
-    MESSAGE[ japanese ] = "ï¾’ï½¯ï½¾ï½°ï½¼ï¾ã®é€ä¿¡æ™‚ã®ï½´ï¾—ï½°ï½¡";
-    MESSAGE[ chinese_traditional ] = "åœ¨å‚³é€é€™å€‹æ–‡ä»¶æ™‚ç™¼ç”Ÿä¸€å€‹éŒ¯èª¤ã€‚";
+    MESSAGE [ finnish ] = "Virhe viestiä lähetettäessä. Syitä voivat olla puuttuva käyttäjätili tai virheelliset asetukset.\nTarkista %PRODUCTNAMEn tai sähköpostiohjelmasi asetukset." ;
+    MESSAGE [ danish ] = "Fejl ved afsendelse af meddelelsen. Mulige fejl er en manglende brugerkonto eller en forkert opsætning.\nKontroller indstillingerne i %PRODUCTNAME eller i dit e-mail-program." ;
+    MESSAGE [ french ] = "Erreur lors de l'envoi du message. Erreurs possibles : compte d'utilisateur manquant ou Setup erroné.\nVérifiez les paramètres de %PRODUCTNAME ou ceux du logiciel de messagerie." ;
+    MESSAGE [ swedish ] = "Fel vid sändning av meddelande. Möjliga fel är att ett användarkonto saknas eller en felaktig installation.\nKontrollera inställningarna i %PRODUCTNAME eller i ditt e-postprogram." ;
+    MESSAGE [ dutch ] = "Fout bij verzenden van bericht. Mogelijke fouten zijn een ontbrekende gebruikersaccount of een defecte Setup.\nControleer de instellingen van %PRODUCTNAME of die van uw e-mailprogramma." ;
+    MESSAGE [ spanish ] = "Error al enviar el mensaje. La razón puede ser una cuenta de usuario o una instalación defectuosa.\nCompruebe la configuración de %PRODUCTNAME o la de su programa de correo electrónico." ;
+    MESSAGE [ english_us ] = "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings." ;
+    MESSAGE[ chinese_simplified ] = "åœ¨å¯„å‘ç”µå­é‚®ä»¶æ—¶å‘ç”Ÿä¸€ä¸ªé”™è¯¯ã€‚å¯èƒ½ç¼ºå°‘ä¸€ä¸ªç”¨æˆ·å¸å·æˆ–è€…å®‰è£…ç¨‹åºæœ‰é”™è¯¯ã€‚\nè¯·æ‚¨æ£€æŸ¥ %PRODUCTNAME çš„è®¾å®šæˆ–è€…æ‚¨çš„ç”µå­é‚®ä»¶ç¨‹åºçš„è®¾å®šã€‚";
+    MESSAGE[ russian ] = "Îøèáêà îòïğàâêè ñîîáùåíèÿ. Âîçìîæíî, îøèáêà âîçíèêëà èç-çà îòñóòñòâèÿ ó÷åòíîé çàïèñè ïîëüçîâàòåëÿ èëè íåïîëàäîê â óñòàíîâêå.\nÏğîâåğüòå íàñòğîéêè %PRODUCTNAME è ïğîãğàììû ıëåêòğîííîé ïî÷òû.";
+    MESSAGE[ polish ] = "B³¹d w przesy³aniu wiadomoœci: brak konta u¿ytkownika lub nieprawid³owa instalacja.\nNale¿y sprawdziæ ustawienia programu %PRODUCTNAME lub programu poczty elektronicznej.";
+    MESSAGE[ japanese ] = "ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡æ™‚ã®ã‚¨ãƒ©ãƒ¼ã€‚ã‚¨ãƒ©ãƒ¼ã®åŸå› ã¨ã—ã¦ã¯ã€ãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚¢ã‚«ã‚¦ãƒ³ãƒˆãŒãªã„ã‹ã€ã‚ã‚‹ã„ã¯ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ãŒæ­£ã—ããªã„ã‹ãŒè€ƒãˆã‚‰ã‚Œã¾ã™ã€‚\n%PRODUCTNAMEã€ã¾ãŸã¯ãŠä½¿ã„ã® E-mail ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®è¨­å®šã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚";
+    MESSAGE[ chinese_traditional ] = "åœ¨å‚³é€é€™å€‹æ–‡ä»¶æ™‚ç™¼ç”Ÿä¸€å€‹éŒ¯èª¤ã€‚å¯èƒ½ç¼ºå°‘ä¸€å€‹ä½¿ç”¨è€…è³¬è™Ÿæˆ–å®‰è£æœ‰å•é¡Œã€‚\nè«‹æ‚¨æª¢æŸ¥ %PRODUCTNAME çš„è¨­å®šå’Œæ‚¨çš„é›»å­éƒµä»¶ç¨‹å¼çš„è¨­å®šã€‚";
     MESSAGE[ greek ] = "ÓöÜëìá êáôÜ ôçí áğïóôïëŞ ìçíıìáôïò.";
-    MESSAGE[ korean ] = "ë©”ì‹œì§€ë¥¼ ë³´ë‚¼ ë•Œ ì˜¤ë¥˜ ë°œìƒ";
+    MESSAGE[ korean ] = "ë©”ì‹œì§€ë¥¼ ë³´ë‚¼ ë•Œ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤. ì‚¬ìš©ì ê³„ì •ì´ ì—†ê±°ë‚˜\nì„¤ì¹˜ì— ì˜¤ë¥˜ê°€ ìˆìŠµë‹ˆë‹¤. %PRODUCTNAMEì´ë‚˜ í•´ë‹¹ ì „ì ë©”ì¼ í”„ë¡œê·¸ë¨ì˜ ì„¤ì •ì´ ì˜¬ë°”ë¥¸ì§€ í™•ì¸í•˜ì‹­ì‹œì˜¤.";
     MESSAGE[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÅÑÓÇá ÇáÑÓÇáÉ ";
     MESSAGE[ turkish ] = "Posta gönderirken hata oluştu.";
     MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ catalan ] = "Error al enviar el mensaje.";
+    MESSAGE[ catalan ] = "S'ha produït un error a l'enviar el missatge.";
+    MESSAGE[ thai ] = "à¸ªà¹ˆà¸‡à¹€à¸¡à¸¥à¹Œà¸œà¸´à¸”à¸à¸¥à¸²à¸”";
 };
 
  // DLG_MAILDIALOG --------------------------------------------------------
@@ -770,25 +794,26 @@ ErrorBox ERRBOX_SFX_INVALID_MERGEOPT
     Message [ English ] = "Before sending mail or news messages, you must\nspecify your email address and a SMTP server.\nPlease write your address down in\n\"Extras\\Options\\General...\\User Data\\Email\" and\n\"Extras\\Options\\Internet\\Mail/News\\Message dispatch\".\nThen try again sending this message." ;
     Message [ english_us ] = "Before sending mail or news messages, you must\nspecify your e-mail address and an SMTP server.\nPlease enter the required settings under \n\"Tools\\Options\\General...\\User Data\\E-Mail\" and\n\"Tools\\Options\\Internet\\Mail/News\\Outgoing Mail\".\nThen try sending this message again." ;
     Message [ portuguese_brazilian ] = "Um eine Nachricht ?er das Internet zu verschicken,\nwird Ihre Email-Adresse und ein SMTP-Server zum Versand ben?igt.\nBitte tragen Sie diese Einstellungen unter\n\"Extras\\\\Optionen\\\\Allgemein...\\\\Allgemeines\\\\Email\" und\n\"Extras\\\\Optionen\\\\Internet\\\\Mail/News\\\\Nachrichtenversand\" ein,\nbevor Sie erneut eine Nachricht verschicken wollen." ;
-    Message [ swedish ] = "För att ett meddelande skall kunna skickas via Internet,\nbehövs Din e-postadress och en SMTP-server.\nVar vänlig och för in dessa inställningar under\n\"Verktyg\\Alternativ\\Allmänt...\\Användardata\\E-post\" och\n\"Verktyg\\Alternativ\\Internet\\E-post/Nyheter\\Meddelandesändning\"\ninnan Du skickar ett meddelande igen." ;
+    Message [ swedish ] = "För att ett meddelande skall kunna skickas via Internet,\nbehövs din e-postadress och en SMTP-server.\nVar vänlig och för in dessa inställningar under\n\"Verktyg\\Alternativ\\Allmänt...\\Användardata\\E-post\" och\n\"Verktyg\\Alternativ\\Internet\\E-post/Nyheter\\Meddelandesändning\"\ninnan du skickar ett meddelande igen." ;
     Message [ danish ] = "For at kunne sende en meddelelse over Internet\nkræves din e-mail-adresse og en SMTP-server.\nIndtast disse indstillinger under\n\"Funktioner\\Indstillinger\\Generelt...\\Brugerdata\\E-mail\" og\n\"Funktioner\\Indstillinger\\Internet\\E-mail/Nyheder/Nyhedsafsendelse\",\nfør du igen sender en meddelelse." ;
     Message [ italian ] = "Per poter inviare un messaggio tramite Internet,\nè necessario un indirizzo di eMail e un server SMTP.\nSpecificate queste impostazioni in\n\"Strumenti\\Opzioni\\Generale...\\Dati utente\\eMail\" e in\n\"Strumenti\\Opzioni\\Internet\\Mail/News\\\\Invio messaggi\",\nprima di inviare nuovamente un messaggio." ;
     Message [ spanish ] = "Para enviar un mensaje a través de Internet\nse necesitan su dirección de correo electrónico y un servidor SMTP para el envío.\nAntes de enviar el próximo mensaje, introduzca por favor estas informaciones en\n\"Herramientas\\Opciones\\Generales...\\Datos de usuario\\E-mail y en\n\"Herramientas\\Opciones\\Internet\\Correo/Noticias\\Correo saliente\"." ;
     Message [ french ] = "Pour envoyer un message via Internet \nle programme nécessite une adresse e-mail et un serveur SMTP.\nVeuillez indiquer ces paramètres sous \n\"Outils\\Options\\Général...\\Identité\\E-mail\" et \"Outils\\Options\\Internet\\Mail/News\\Envoi de messages\" \n avant de refaire une tentative d'envoi de message." ;
-    Message [ dutch ] = "Om een bericht via Internet te versturen,\nwordt uw e-mail adres en een SMTP server benodigd.\nVermeld deze onder \n\"Extra\\Opties\\Algemeen...\\Gebruikersgegevens\\E-mail\" en\n\"Extra\\Opties\\Internet\\Mail/Nieuws\\Berichten versturen\",\nvoordat u opnieuw een bericht stuurt." ;
+    Message [ dutch ] = "Om een bericht via het internet te verzenden,\nis uw e-mailadres en een SMTP server vereist.\nVoer deze onder \n\"Extra\\Opties\\Algemeen...\\Gebruikersgegevens\\E-mail\" en\n\"Extra\\Opties\\Internet\\Mail\\Nieuws\\Berichten verzenden\"\nin voordat u opnieuw een bericht verzendt." ;
     Message [ portuguese ] = "Para o envio de uma mensagem via Internet são necessários\\ o seu endereço electrónico e um servidor SMTP. Digite o seu endereço em\n\"Ferramentas\\\\Opções\\\\Geral...\\\\Dados do utilizador\\\\e-mail\" e\n\"Ferramentas\\\\Opções\\\\Internet\\\\Correio/Notícias\"\nantes de reenviar a mensagem." ;
-    Message[ chinese_simplified ] = "é€šè¿‡å›½é™…äº’è”ç½‘å¯„å‘ç”µå­é‚®ä»¶æ—¶\néœ€è¦æ‚¨çš„ç”µå­é‚®ä»¶åœ°å€å’Œä¸€ä¸ªSMTPæœåŠ¡å™¨ã€‚\nè¯·åœ¨å¯„å‘ç”µå­é‚®ä»¶ä¹‹å‰æŒ‰å‡»èœå•\n\"å·¥å…·\\é€‰é¡¹...\\å¸¸è§„\\ç”¨æˆ·èµ„æ–™\\ç”µå­é‚®ä»¶\"\nå’Œ\"å·¥å…·\\é€‰é¡¹\\å›½é™…äº’è”ç½‘\\ç”µå­é‚®ä»¶/æ–°é—»\"å¤„ä½œç›¸å…³çš„è®¾å®šã€‚";
-    Message[ russian ] = "×òîáû îòïğàâèòü ñîîáùåíèå ïî Èíòåğíåòó,\níåîáõîäèì Âàø àäğåñ ıëåêòğîííîé ïî÷òû è ñåğâåğ SMTP äëÿ äîñòàâêè ïî÷òû.\nÂâåäèòå, ïîæàëóéñòà, ıòè óñòàíîâêè â\n\"Ñåğâèñ\\Ïàğàìåòğû\\Îáùèå...\\Äàííûå ïîëüçîâàòåëÿ\\İë. ïî÷òà\" è â\n\"Ñåğâèñ\\Ïàğàìåòğû\\Èíòåğíåò\\Ïî÷òà/Íîâîñòè\\Äîñòàâêà íîâîñòåé\",\nïğåæäå ÷åì Âû îïÿòü îòïğàâèòå ñîîáùåíèå.";
+    Message[ chinese_simplified ] = "é€šè¿‡å›½é™…äº’è”ç½‘å¯„å‘ç”µå­é‚®ä»¶æ—¶\néœ€è¦æ‚¨çš„ç”µå­é‚®ä»¶åœ°å€å’Œä¸€ä¸ªSMTPæœåŠ¡å™¨ã€‚\nè¯·åœ¨å¯„å‘ç”µå­é‚®ä»¶ä¹‹å‰æŒ‰å‡»èœå•\n\"å·¥å…·\\é€‰é¡¹...\\å¸¸è§„\\ä½¿ç”¨è€…æ•°æ®\\ç”µå­é‚®ä»¶\"\nå’Œ\"å·¥å…·\\é€‰é¡¹\\å›½é™…äº’è”ç½‘\\ç”µå­é‚®ä»¶/æ–°é—»\"å¤„ä½œç›¸å…³çš„è®¾å®šã€‚";
+    Message[ russian ] = "×òîáû îòïğàâèòü ñîîáùåíèå ïî Èíòåğíåòó,\níåîáõîäèìî óêàçàòü âàø àäğåñ ıëåêòğîííîé ïî÷òû è ñåğâåğ SMTP äëÿ äîñòàâêè ïî÷òû.\nÂâåäèòå ıòè óñòàíîâêè â\n\"Ñåğâèñ\\Ïàğàìåòğû\\Îáùèå...\\Äàííûå ïîëüçîâàòåëÿ\\İë. ïî÷òà\" è â\n\"Ñåğâèñ\\Ïàğàìåòğû\\Èíòåğíåò\\Ïî÷òà\\Íîâîñòè\\Äîñòàâêà íîâîñòåé\",\nïğåæäå ÷åì ñíîâà îòïğàâëÿòü ñîîáùåíèå.";
     Message[ polish ] = "Aby wys³aæ wiadomoœæ via Internet,\nwymagany jest twój adres e-mail i serwer SMTP.\nProszê wprowadŸ te ustawienia w \n\"Narzêdzia\\\\Opcje\\\\Ogólne...\\\\Dane u¿ytkownika\\\\e-mail\" i\n\"Narzêdzia\\\\Opcje\\\\Internet\\\\Poczta/Wiadomoœci\\\\Wysy³anie wiadomoœci\",\nzanim ponownie wyœlesz wiadomoœæ.";
-    Message[ japanese ] = "ï½²ï¾ï¾€ï½°ï¾ˆï½¯ï¾„ã§ï¾’ï½¯ï½¾ï½°ï½¼ï¾ã‚’é€ä¿¡ã™ã‚‹ã«ã¯ã€\nE-mail ï½±ï¾„ï¾ï¾šï½½ã¨SMTP ï½»ï½°ï¾Šï¾ï½°ãŒå¿…è¦ã§ã™ã€‚\nï¾’ï½¯ï½¾ï½°ï½¼ï¾ã‚’å†é€ä¿¡ã™ã‚‹å‰ã«ã€\nï¾‚ï½°ï¾™â†’ï½µï¾Œï¾Ÿï½¼ï½®ï¾â†’å…¨èˆ¬...â†’ï¾•ï½°ï½»ï¾ï½°ï¾ƒï¾ï½°ï¾€â†’â†’E-mailã€ãŠã‚ˆã³\nï¾‚ï½°ï¾™â†’ï½µï¾Œï¾Ÿï½¼ï½®ï¾â†’ï½²ï¾ï¾€ï½°ï¾ˆï½¯ï¾„â†’ï¾’ï½°ï¾™â†’ï¾†ï½­ï½°ï½½â†’ï¾’ï½¯ï½¾ï½°ï½¼ï¾é€ä¿¡ã§ã€\nã“ã®è¨­å®šã‚’ç™»éŒ²ã—ã¦ãã ã•ã„ã€‚";
+    Message[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆã§ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ä¿¡ã™ã‚‹ã«ã¯ã€\nE-mail ã‚¢ãƒ‰ãƒ¬ã‚¹ã¨SMTP ã‚µãƒ¼ãƒãƒ¼ãŒå¿…è¦ã§ã™ã€‚\nãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å†é€ä¿¡ã™ã‚‹å‰ã«ã€\nãƒ„ãƒ¼ãƒ«â†’ã‚ªãƒ—ã‚·ãƒ§ãƒ³â†’å…¨èˆ¬...â†’ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ‡ãƒ¼ã‚¿â†’E-mailã€ãŠã‚ˆã³\nãƒ„ãƒ¼ãƒ«â†’ã‚ªãƒ—ã‚·ãƒ§ãƒ³â†’ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆâ†’ãƒ¡ãƒ¼ãƒ«â†’ãƒ‹ãƒ¥ãƒ¼ã‚¹â†’ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡ã§ã€\nã“ã®è¨­å®šã‚’ç™»éŒ²ã—ã¦ãã ã•ã„ã€‚";
     Message[ chinese_traditional ] = "é€é Internet å‚³é€é›»å­éƒµä»¶\néœ€è¦æ‚¨çš„é›»å­éƒµä»¶åœ°å€å’Œä¸€å€‹ SMTP ä¼ºæœå™¨ã€‚\nè«‹åœ¨é‡æ–°å‚³é€é›»å­éƒµä»¶ä¹‹å‰åœ¨\n<å·¥å…·>-<é¸é …>-<ä¸€èˆ¬>-<ä½¿ç”¨è€…è³‡æ–™>å’Œ<å·¥å…·>-<é¸é …>-<Internet>-<é›»å­éƒµ/æ–°è>ä½œç›¸é—œçš„è¨­å®šã€‚";
     Message[ greek ] = "Ãéá íá İ÷åôå ôç äõíáôüôçôá áğïóôïëŞò ìçíıìáôïò ìİóù ôïõ Internet\nğñİğåé íá ïñßóåôå ôç äéêŞ óáò äéåıèõíóç E-mail êáé İíáí äéáêïìéóôŞ SMTP.\nĞáñáêáëş åéóÜãåôå áõôİò ôéò ñõèìßóåéò óôï\n\"Åñãáëåßá\\Åğéëïãİò\\ÃåíéêÜ...\\ĞñïóùğéêÜ äåäïìİíá\\E-Mail\" êáé\n\"Åñãáëåßá\\Åğéëïãİò\\Internet\\Áëëçëïãñáößá/ÓõæçôŞóåéò\\ÁğïóôïëŞ ìçíõìÜôùí\".\nğñéí áğïóôåßëåôå îáíÜ êÜğïéï ìŞíõìá.";
-    Message[ korean ] = "ì¸í„°ë„·ìœ¼ë¡œ ë©”ì‹œì§€ë¥¼ ë³´ë‚´ë ¤ë©´,\nE-Mail ì£¼ì†Œì™€ SMTP ì„œë²„ê°€ í•„ìš”í•©ë‹ˆë‹¤.\nìƒˆë¡œ ë©”ì‹œì§€ë¥¼ ë‹¤ì‹œ ë³´ë‚´ê¸° ì „ì—\n\"ë„êµ¬\\ì˜µì…˜\\ì¼ë°˜...\\ì‚¬ìš©ì ë°ì´í„°\\E-Mail\"ê³¼\n\"ë„êµ¬\\ì˜µì…˜\\ì¸í„°ë„·\\ë©”ì¼/ë‰´ìŠ¤\\ë©”ì‹œì§€ ë³´ë‚´ê¸°\"ì—ì„œ ì´ ì„¤ì •ì„ ì…ë ¥í•˜ì‹­ì‹œì˜¤.";
+    Message[ korean ] = "ì¸í„°ë„·ìœ¼ë¡œ ë©”ì‹œì§€ë¥¼ ë³´ë‚´ë ¤ë©´\nì „ì ë©”ì¼ ì£¼ì†Œì™€ SMTP ì„œë²„ê°€ í•„ìš”í•©ë‹ˆë‹¤.\në©”ì‹œì§€ë¥¼ ë‹¤ì‹œ ë³´ë‚´ê¸° ì „ì—\n[ë„êµ¬]-[ì˜µì…˜]-[ì¼ë°˜...]-[ì‚¬ìš©ì ë°ì´í„°]-[ì „ì ë©”ì¼]ê³¼\n[ë„êµ¬]-[ì˜µì…˜]-[ì¸í„°ë„·]-[ë©”ì¼]-[ë‰´ìŠ¤]-[ë©”ì‹œì§€ ë³´ë‚´ê¸°]ì—ì„œ ì´ ì„¤ì •ì„ ì§€ì •í•˜ì‹­ì‹œì˜¤.";
     Message[ arabic ] = "ÅÑÓÇá ÑÓÇáÉ ãä ÎáÇá ÇáÅäÊÑäÊ¡\níÊØáÈ æÌæÏ ÚäæÇä ÈÑíÏ ÅáßÊÑæäí æãÒæøÏ SMTP.\nÇáÑÌÇÁ ÅÏÑÇÌ åĞå ÇáÅÚÏÇÏÇÊ ÊÍÊ\n\"ÃÏæÇÊ/ÎíÇÑÇÊ/ÚÇã.../ÈíÇäÇÊ ÇáãÓÊÎÏã/ÈÑíÏ ÅáßÊÑæäí\"¡ Ëã ÊÍÊ\n\"ÃÏæÇÊ/ÎíÇÑÇÊ/ÅäÊÑäÊ/ÇáÈÑíÏ \\ãÌãæÚÇÊ ÇáÃÎÈÇÑ/ÅÑÓÇá ÇáÈÑíÏ\"¡\nËã ÍÇæá ÅÑÓÇá åĞå ÇáÑÓÇáÉ ãÑÉ ÃÎÑì.";
     Message[ language_user1 ] = " ";
     Message[ turkish ] = "Internet üzerinden ileti gönderebilmek için önce\n e-posta adresinizi ve bir SMTP sunucusu belirtmeniz gerekiyor.\nİleti göndermeden önce bu ayarlar için,\n\"Araçlar\\Seçenekler\\Genel...\\Kullanıcı\\E-Posta\" ve\n\"Araçlar\\Seçenekler\\Internet\\E-Posta/Haber Grubu\\Giden Posta\" \nalanlarına girin.";
-    Message[ catalan ] = "Para enviar un mensaje a través de Internet\nse necesitan su dirección de correo electrónico y un servidor SMTP para el envío.\nAntes de enviar el próximo mensaje, introduzca por favor estas informaciones en\n\"Herramientas\\Opciones\\Generales...\\Datos de usuario\\E-mail y en\n\"Herramientas\\Opciones\\Internet\\Correo/Noticias\\Correo saliente\".";
-    Message[ finnish ] = "Ennen kuin voit lähettää sähköpostia tai uutisryhmäsanomia, sähköpostiosoite ja SMTP-palvelin\non määritettävä.\nMääritä asetukset valitsemalla \nTyökalut\\Asetukset\\Yleistä\\Käyttäjätiedot\\Sähköposti ja\n\"Työkalut\\Asetukset\\Internet\\Sähköposti ja uutisryhmät\\Lähtevä posti\".\nYritä lähettää viesti uudelleen sen jälkeen, kun olet määrittänyt asetukset.";
+    Message[ catalan ] = "Per enviar un missatge a través d'Internet\nes necessita la direcció de correu electrònic i un servidor SMTP per fer l'enviament.\nAbans d'enviar el pròxim missatge, introduïu aquests paràmteres a\n\"Eines\\Opcions\\Generals...\\Dades d'usuari\\Correu electrònic i a\n\"Eines\\Opcions\\Internet\\Correu/Notícies\\Correu sortint\".";
+    Message[ finnish ] = "Ennen kuin voit lähettää sähköpostia tai uutisryhmäsanomia, sähköpostiosoite ja SMTP-palvelin\non määritettävä.\nMääritä asetukset valitsemalla \nTyökalut\\Asetukset\\Yleiset\\Käyttäjätiedot\\Sähköposti ja\n\"Työkalut\\Asetukset\\Internet\\Sähköposti ja uutisryhmät\\Lähtevä posti\".\nYritä lähettää viesti uudelleen sen jälkeen, kun olet määrittänyt asetukset.";
+    Message[ thai ] = "à¸à¹ˆà¸­à¸™à¸ªà¹ˆà¸‡à¹€à¸¡à¸¥à¹Œà¸«à¸£à¸·à¸­à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¹ƒà¸«à¸¡à¹ˆ, à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡\nà¸£à¸°à¸šà¸¸à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸­à¸µà¹€à¸¡à¸¥à¹Œà¹à¸¥à¸°à¹€à¸‹à¸´à¸£à¹Œà¸Ÿà¹€à¸§à¸­à¸£à¹Œ SMTP \nà¸à¸£à¸¸à¸“à¸²à¹ƒà¸ªà¹ˆà¸à¸²à¸£à¸à¸³à¸«à¸™à¸”à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸ à¸²à¸¢à¹ƒà¸•à¹‰ \n\"à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­\\à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸\\à¸—à¸±à¹ˆà¸§à¹„à¸›...\\à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰\\à¸­à¸µà¹€à¸¡à¸¥à¹Œ\" à¹à¸¥à¸°\n\"à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­\\à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸\\à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•\\à¹€à¸¡à¸¥à¹Œ/à¸‚à¹ˆà¸²à¸§à¸ªà¸²à¸£\\à¹€à¸¡à¸¥à¹Œà¸‚à¸²à¸­à¸­à¸\".\nà¸•à¹ˆà¸­à¸ˆà¸²à¸à¸™à¸±à¹‰à¸™à¸¥à¸­à¸‡à¸ªà¹ˆà¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸™à¸µà¹‰à¸­à¸µà¸à¸„à¸£à¸±à¹‰à¸‡";
 };
 ErrorBox ERRBOX_SFX_NO_OUTBOX
 {
@@ -798,7 +823,7 @@ ErrorBox ERRBOX_SFX_NO_OUTBOX
     Message [ English ] = "You need an outbox for this aktion.\nPlease create an outbox, before trying again." ;
     Message [ english_us ] = "To perform this action an outbox is required.\nPlease create an outbox prior to executing this action again." ;
     Message [ portuguese_brazilian ] = "F? die von Ihnen gew?hlte Aktion wird ein Ausgangskorb ben?igt.\nBitte legen Sie einen Ausgangskorb an, bevor Sie diese Aktion erneut ausf?ren." ;
-    Message [ swedish ] = "Du behöver en utkorg för åtgärden som Du har valt.\nVar vänlig och skapa en utkorg innan Du utför den här åtgärden igen." ;
+    Message [ swedish ] = "Du behöver en utkorg för åtgärden som du har valt.\nVar vänlig och skapa en utkorg innan du utför den här åtgärden igen." ;
     Message [ danish ] = "Du har brug for en udbakke for at kunne udføre denne handling.\nOpret venligst en udbakke, før du gentager denne handling." ;
     Message [ italian ] = "Per effettuare l'operazione scelta dall'utente, si necessita della posta in uscita.\nPrima di provare a rieffettuare tale operazione creare una posta in uscita." ;
     Message [ spanish ] = "Se necesitará una carpeta de salida para ejecutar esta acción.\nPor favor cree una carpeta de salida antes de reiniciar la acción." ;
@@ -806,17 +831,18 @@ ErrorBox ERRBOX_SFX_NO_OUTBOX
     Message [ dutch ] = "Voor de door u verlangde activiteit is een postvak UIT nodig.\nMaak een postvak UIT voordat u deze opdracht opnieuw selecteert." ;
     Message [ portuguese ] = "É necessária uma caixa de envio para executar esta acção.\nCrie primeiro uma caixa de envio e tente novamente." ;
     Message[ chinese_simplified ] = "æ‰§è¡Œè¿™ä¸ªæ“ä½œçš„å‰ææ˜¯å·²ç»å»ºç«‹äº†ä¸€ä¸ªå‘ä»¶ç®±ã€‚\nè¯·æ‚¨åœ¨å»ºç«‹ä¸€ä¸ªå‘ä»¶ç®±ä¹‹åå†é‡æ–°æ‰§è¡Œè¿™ä¸ªå‘½ä»¤ã€‚";
-    Message[ russian ] = "Äëÿ âûáğàííîé Âàìè îïåğàöèè íåîáõîäèìà ïàïêà \"Îòïğàâëåííûå\".\nÏğåæäå ÷åì Âû ïîâòîğèòå ıòó îïåğàöèş, ñîçäàéòå, ïîæàëóéñòà, ïàïêó \"Îòïğàâëåííûå\".";
+    Message[ russian ] = "Äëÿ âûáğàííîé îïåğàöèè íåîáõîäèìà ïàïêà \"Îòïğàâëåííûå\".\nÏğåæäå ÷åì ïîâòîğèòü ıòó îïåğàöèş, ñîçäàéòå ïàïêó \"Îòïğàâëåííûå\".";
     Message[ polish ] = "Dla wybranej przez ciebie akcji potrzebna jest skrzynka nadawcza.\nProszê utwórz skrzynkê nadawcz¹, zanim wykonasz ponownie tê akcjê.";
-    Message[ japanese ] = "é¸æŠã—ãŸï½±ï½¸ï½¼ï½®ï¾ã®å®Ÿè¡Œã«ã¯ã€é€ä¿¡ï¾„ï¾šï½²ãŒå¿…è¦ã§ã™ã€‚\nã“ã®ï½±ï½¸ï½¼ï½®ï¾ã‚’å®Ÿè¡Œã—ãªãŠã™å‰ã«ã€é€ä¿¡ï¾„ï¾šï½²ã‚’æ ¼ç´ã—ã¾ã™ã€‚";
+    Message[ japanese ] = "é¸æŠã—ãŸã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®å®Ÿè¡Œã«ã¯ã€é€ä¿¡ãƒˆãƒ¬ã‚¤ãŒå¿…è¦ã§ã™ã€‚\nã“ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’å®Ÿè¡Œã—ãªãŠã™å‰ã«ã€é€ä¿¡ãƒˆãƒ¬ã‚¤ã‚’æ ¼ç´ã—ã¾ã™ã€‚";
     Message[ chinese_traditional ] = "åŸ·è¡Œé€™å€‹å‹•ä½œè¦æ±‚å…ˆé…ç½®ä¸€å€‹å¯„ä»¶åŒ£ã€‚\nè«‹å»ºç«‹ä¸€å€‹å¯„ä»¶åŒ£ï¼Œç„¶åé‡æ–°åŸ·è¡Œé€™å€‹å‹•ä½œã€‚";
     Message[ greek ] = "Ãéá íá åêôåëåóôåß áõôŞ ç åíİñãåéá áğáéôåßôáé ï öÜêåëïò 'Åîåñ÷üìåíá'\nĞáñáêáëş äçìéïõñãŞóôå áõôüí ôïí öÜêåëï ğñéí ôçí åğüìåíç åêôİëåóç áõôŞ? ";
-    Message[ korean ] = "ì„ íƒí•œ ì‘ì—…ì—ëŠ” ë³´ë‚¼í¸ì§€í•¨ì´ í•„ìš”í•©ë‹ˆë‹¤. \nì´ ì‘ì—…ì„ ì¬ì‹¤í–‰í•˜ê¸° ì „ì— ë³´ë‚¼í¸ì§€í•¨ì„ ë§Œë“œì‹­ì‹œì˜¤.";
+    Message[ korean ] = "ì„ íƒí•œ ì‘ë™ì„ ì‹¤í–‰í•˜ë ¤ë©´ ë³´ë‚¼ í¸ì§€í•¨ì´ í•„ìš”í•©ë‹ˆë‹¤. \nì´ ì‘ë™ì„ ë‹¤ì‹œ ì‹¤í–‰í•˜ê¸° ì „ì— ë³´ë‚¼ í¸ì§€í•¨ì„ ë§Œë“œì‹­ì‹œì˜¤.";
     Message[ arabic ] = "ÊäİíĞ ÇáÅÌÑÇÁ ÇáĞí ŞãÊ ÈÇÎÊíÇÑå íÍÊÇÌ Åáì ÓáÉ ÕÇÏÑÇÊ.\nÇáÑÌÇÁ ÅäÔÇÁ ÓáÉ ÕÇÏÑÇÊ¡ ŞÈá ãÍÇæáÉ ÊäİíĞ åĞÇ ÇáÅÌÑÇÁ ãÌÏÏÇğ.";
     Message[ turkish ] = "Seçtiğiniz işlem için giden kutusu gerekiyor.\nBu işlemi yeniden yürütmeden önce giden kutusunu oluşturun.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Se necesitará una carpeta de salida para ejecutar esta acción.\nPor favor cree una carpeta de salida antes de reiniciar la acción.";
-    Message[ finnish ] = "T?m?n toiminnon suorittamiseen tarvitaan L?htev?t-laatikko.\nLuo L?htev?t-laatikko, ennen kuin suoritat t?m?n toiminnon uudelleen.";
+    Message[ catalan ] = "Es necessita una carpeta de sortida per executar aquesta acció.\nCreeu una carpeta de sortida abans de reiniciar l'acció.";
+    Message[ finnish ] = "Tämän toiminnon suorittamiseen tarvitaan Lähtevät-laatikko.\nLuo Lähtevät-laatikko, ennen kuin suoritat tämän toiminnon uudelleen.";
+    Message[ thai ] = "à¹à¸ªà¸”à¸‡à¸§à¹ˆà¸²à¸à¸²à¸£à¸à¸£à¸°à¸—à¸³à¸™à¸µà¹‰à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸à¸¥à¹ˆà¸­à¸‡à¸‚à¸²à¸­à¸­à¸\nà¸à¸£à¸¸à¸“à¸²à¸ªà¸£à¹‰à¸²à¸‡à¸à¸¥à¹ˆà¸­à¸‡à¸‚à¸²à¸­à¸­à¸à¸à¹ˆà¸­à¸™à¸à¸²à¸£à¸à¸£à¸°à¸—à¸³à¸™à¸µà¹‰à¸­à¸µà¸à¸„à¸£à¸±à¹‰à¸‡";
 };
  // QueryBoxen ------------------------------------------------------------
 QueryBox MSG_QUERY_OPENASTEMPLATE
@@ -826,29 +852,30 @@ QueryBox MSG_QUERY_OPENASTEMPLATE
     /* ### ACHTUNG: Neuer Text in Resource? Das Dokument kann (z.B. aufgrund fehlender Rechte)\nnicht zum Bearbeiten geöffnet werden. Soll es als Vorlage\nfür ein neues Dokument verwendet werden? : Das Dokument kann (z.B. aufgrund fehlernder Rechte)\nnicht zum bearbeiten geöffnet werden. Soll es als Vorlage\nfür ein neues Dokument verwendet werden? */
     /* ### ACHTUNG: Neuer Text in Resource? Das Dokument kann (z.B. aufgrund fehlender Rechte)\nnicht zum Bearbeiten geöffnet werden. Soll es als Vorlage\nfür ein neues Dokument verwendet werden? : Das Dokument kann (z.B. aufgrund fehlernder Rechte)\nnicht zum bearbeiten geöffnet werden. Soll es als Vorlage\nfür ein neues Dokument verwendet werden? */
     /* ### ACHTUNG: Neuer Text in Resource? Das Dokument kann (z.B. aufgrund fehlender Rechte)\nnicht zum Bearbeiten geöffnet werden. Soll es als Vorlage\nfür ein neues Dokument verwendet werden? : Das Dokument kann (z.B. aufgrund fehlender Rechte)\nnicht zum Bearbeiten ge÷ffnet werden. Soll es als Vorlage\nf³r ein neues Dokument verwendet werden? */
-    Message = "Das Dokument kann (z.B. aufgrund fehlender Rechte)\nnicht zum Bearbeiten geöffnet werden. Soll es als Vorlage\nfür ein neues Dokument verwendet werden?" ;
+    Message = "Das Dokument kann nicht (z.B. aufgrund fehlender Rechte) bearbeitet werden. Wollen Sie statt dessen mit einer Kopie weiter arbeiten?" ;
     Message [ English ] = "Can't open the document for edit, possibly due to\nmissing access rights. Should be used as template\nfor a new document?" ;
     Message [ portuguese ] = "O documento não pode ser aberto para edição (por ex. devido \nà falta de direitos de acesso). Deseja usá-lo como modelo\npara abrir um novo documento?" ;
-    Message [ english_us ] = "Document cannot be opened for editing, possibly due to\nmissing access rights. Do you want to use it as a template\nfor a new document?" ;
+    Message [ english_us ] = "This document cannot be edited, possibly due to missing access rights. Do you want to edit a copy of the document?" ;
     Message [ portuguese_brazilian ] = "Das Dokument kann (z.B. aufgrund fehlernder Rechte)\nnicht zum bearbeiten ge?fnet werden. Soll es als Vorlage\nf? ein neues Dokument verwendet werden?" ;
-    Message [ swedish ] = "Dokumentet kan inte öppnas för redigering\n(t ex därför att rättigheter saknas). Skall det användas\n som mall för ett nytt dokument?" ;
+    Message [ swedish ] = "Dokumentet kan inte redigeras (t.ex. därför att rättigheter saknas). Vill du arbeta med en kopia av dokumentet i stället?" ;
     Message [ danish ] = "Det er ikke muligt at åbne dokumentet til redigering\n(muligvis har du ingen adgangsrettigheder). Skal det\nanvendes som skabelon for et nyt dokument?" ;
-    Message [ italian ] = "Il documento (ad esempio per la mancanza di diritti)\nnon può essere aperto per la modifica. Lo si vuole usare come modello \nper un nuovo documento?" ;
-    Message [ spanish ] = "No es posible abrir el documento \npara la edición (p.ej. por falta de derechos). ¿Desea usarlo como plantilla \npara un nuevo documento?" ;
-    Message [ french ] = "Impossible de charger le document en mode d'écriture\n(droits d'accès insuffisants). Souhaitez-vous l'utiliser comme\nmodèle pour créer un nouveau document ?" ;
-    Message [ dutch ] = "Het document kan (b.v. vanwege ontbrekende rechten)\nniet geopend worden ter bewerking. Wilt u het als sjabloon\nvoor een nieuw document gebruiken?" ;
-    Message[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶ä¸èƒ½è¢«æ‰“å¼€ç¼–è¾‘(å¦‚ç”¨æˆ·æ²¡æœ‰ä½¿ç”¨æƒ)ã€‚\næ‚¨è¦å°†ä½¿ç”¨è¿™ä¸ªæ ·å¼\næ¥å»ºç«‹ä¸€ä¸ªæ–°æ–‡ä»¶å—ï¼Ÿ";
-    Message[ russian ] = "Îòêğûòü ıòîò äîêóìåíò äëÿ ğåäàêòèğîâàíèÿ íå óäàåòñÿ\n(âîçìîæíî èç-çà îòñóòñòâèÿ ïğàâ). Èñïîëüçîâàòü åãî â êà÷åñòâå øàáëîíà\näëÿ íîâîãî äîêóìåíòà?";
+    Message [ italian ] = "Impossibile modificare il documento (probabilmente per la mancanza di diritti). Volete provare a modificare una copia del documento?" ;
+    Message [ spanish ] = "Este documento no se puede editar, posiblemente los derechos de acceso no son suficientes. ¿Desea editar una copia del documento?" ;
+    Message [ french ] = "Ce document ne peut pas être édité (droits d'accès insuffisants). Souhaitez-vous poursuivre votre travail avec une copie du document ?" ;
+    Message [ dutch ] = "Het document kan (bijvoorbeeld vanwege ontbrekende rechten)\nniet geopend worden ter bewerking. Wilt u het als sjabloon\nvoor een nieuw document gebruiken?" ;
+    Message[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶ä¸èƒ½è¢«æ‰“å¼€ç¼–è¾‘(ä¾‹å¦‚æ²¡æœ‰è¯»å–æƒåŠ›)ã€‚\nè¦ä½¿ç”¨è¿™ä¸ªæ ·å¼æ¥å»ºç«‹ä¸€ä¸ªæ–°æ–‡ä»¶å—ï¼Ÿ";
+    Message[ russian ] = "Íåâîçìîæíî îòêğûòü ıòîò äîêóìåíò äëÿ ğåäàêòèğîâàíèÿ\n(âîçìîæíî èç-çà îòñóòñòâèÿ ïğàâ). Èñïîëüçîâàòü åãî â êà÷åñòâå øàáëîíà\näëÿ íîâîãî äîêóìåíòà?";
     Message[ polish ] = "Dokumentu nie mo¿na (np. z powodu brakuj¹cych praw)\notworzyæ do edycji. Czy u¿yæ tego dokumentu jako szablonu \nnowego dokumentu?";
-    Message[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã¯(ï½±ï½¸ï½¾ï½½æ¨©ãªã—ãªã©ã§)\nç·¨é›†ç”¨ã«é–‹ã‘ã¾ã›ã‚“ã€‚æ–°ã—ã„ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ç”¨\nï¾ƒï¾ï¾Œï¾Ÿï¾šï½°ï¾„ã¨ã—ã¦ä½¿ã„ã¾ã™ã‹?";
-    Message[ chinese_traditional ] = "ç„¡æ³•é–‹å•Ÿç·¨è¼¯é€™å€‹æ–‡ä»¶(ç¼ºå°‘è®€å–æ¬ŠåŠ›)ã€‚\næ‚¨è¦ä½¿ç”¨é€™å€‹æ¨£å¼ä¾†å»ºç«‹ä¸€å€‹æ–°æ–‡ä»¶ï¼Ÿ";
+    Message[ japanese ] = "ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹æ¨©åˆ©ãŒãªã„ãªã©ã®ç†ç”±ã§ã€ã“ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¯ç·¨é›†ã§ãã¾ã›ã‚“ã€‚ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ã‚³ãƒ”ãƒ¼ã¨ã—ã¦ç·¨é›†ã—ã¾ã™ã‹ã€‚";
+    Message[ chinese_traditional ] = "ç„¡æ³•é–‹å•Ÿç·¨è¼¯é€™å€‹æ–‡ä»¶(ç¼ºå°‘è®€å–æ¬ŠåŠ›)ã€‚æ‚¨è¦æ–°å»ºé€™å€‹æ–‡ä»¶çš„è¤‡è£½ä»¶ï¼Ÿ";
     Message[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷ôåß ôï İããñáöï ğñïò\nåğåîåñãáóßá (ğ.÷. ëüãù İëëåéøçò äéêáéùìÜôùí ğñüóâáóçò). Èİëåôå\níá ÷ñçóéìïğïéçèåß ùò ğñüôõğï ? ";
-    Message[ korean ] = "ì´ ë¬¸ì„œëŠ” (ì˜ˆë¥¼ ë“¤ì–´ ì•¡ì„¸ìŠ¤ ê¶Œí•œì´ ì—†ìŒìœ¼ë¡œ ì¸í•´)\n í¸ì§‘ì„ ìœ„í•´ ì—´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ìƒˆ ë¬¸ì„œë¥¼ ìœ„í•œ ì„œì‹íŒŒì¼ë¡œ ì‚¬ìš©í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Message[ korean ] = "ì•¡ì„¸ìŠ¤ ê¶Œí•œì´ ì—†ëŠ” ì´ìœ ë¡œ ì´ ë¬¸ì„œë¥¼ í¸ì§‘í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ì´ ë¬¸ì„œë¥¼ ë³µì‚¬í•˜ì—¬ í¸ì§‘í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Message[ arabic ] = "áÇ íãßä İÊÍ ÇáãÓÊäÏ ááÊÍÑíÑ (áÚÏã ÊæİÑ ÇáÍŞæŞ ÇááÇÒãÉ\nÚáì ÓÈíá ÇáãËÇá). åá ÊÑíÏ ÇÓÊÎÏÇãå\nßŞÇáÈ áãÓÊäÏ ÌÏíÏ¿";
     Message[ turkish ] = "Belge (muhtemelen erişim hakkı olmaması nedeniyle)\n düzenleme için açılamıyor. Belgeyi yeni bir\nbelge için şablon olarak kullanmak istiyor musunuz?";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "No es posible abrir el documento \npara la edición (p.ej. por falta de derechos). ¿Desea usarlo como plantilla \npara un nuevo documento?";
-    Message[ finnish ] = "Asiakirjaa ei voi avata muokattavaksi, k?ytt?ikeudet\nsaattavat olla puutteelliset. Haluatko k?ytt?? asiakirjaa uuden\nasiakirjan mallipohjana?";
+    Message[ catalan ] = "No es pot obrir el document \nper editar-lo (p.e. per falta de drets). Voleu utilitzar-lo com a plantilla \nper un document nou?";
+    Message[ finnish ] = "Asiakirjaa ei voi avata muokattavaksi, käyttöoikeudet\nsaattavat olla puutteelliset. Haluatko käyttää asiakirjaa uuden\nasiakirjan mallina?";
+    Message[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸´à¸”à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸à¸·à¹ˆà¸­à¹à¸à¹‰à¹„à¸‚à¹„à¸”à¹‰  à¹€à¸™à¸·à¹ˆà¸­à¸‡à¸ˆà¸²à¸\nà¸ªà¸´à¸—à¸˜à¸´à¹ƒà¸™à¸à¸²à¸£à¹€à¸‚à¹‰à¸²à¸–à¸¶à¸‡à¸­à¸²à¸ˆà¸œà¸´à¸”à¸à¸¥à¸²à¸” à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹ƒà¸Šà¹‰à¸¡à¸±à¸™à¹€à¸›à¹‡à¸™à¹à¸¡à¹ˆà¹à¸šà¸š\nà¸ªà¸³à¸«à¸£à¸±à¸šà¹€à¸­à¸à¸ªà¸²à¸£à¹ƒà¸«à¸¡à¹ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 String STR_FRAMESIZE
 {
@@ -858,22 +885,23 @@ String STR_FRAMESIZE
     Text [ swedish ] = "Ramstorlek" ;
     Text [ danish ] = "Frame-størrelse" ;
     Text [ italian ] = "Dimensione frame" ;
-    Text [ spanish ] = "Tamaño del frame" ;
+    Text [ spanish ] = "Tamaño del marco" ;
     Text [ french ] = "Taille du Frame" ;
     Text [ dutch ] = "Kadergrootte" ;
     Text [ portuguese ] = "Tamanho da moldura" ;
     Text[ chinese_simplified ] = "æ¡†å¯¹è±¡å¤§å°";
     Text[ russian ] = "Ğàçìåğ êàäğà";
     Text[ polish ] = "Wielkoœæ ramki";
-    Text[ japanese ] = "ï¾Œï¾šï½°ï¾‘ ï½»ï½²ï½½ï¾";
+    Text[ japanese ] = "ãƒ•ãƒ¬ãƒ¼ãƒ  ã‚µã‚¤ã‚º";
     Text[ chinese_traditional ] = "è¨Šæ¡†å¤§å°";
     Text[ greek ] = "Ìİãåèïò Frame";
     Text[ korean ] = "í”„ë ˆì„ í¬ê¸°";
     Text[ arabic ] = "ÍÌã ÇáÅØÇÑ";
     Text[ turkish ] = "Frame boyutu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tamaño del frame";
+    Text[ catalan ] = "Mida del marc";
     Text[ finnish ] = "Kehyksen koko";
+    Text[ thai ] = "à¸‚à¸™à¸²à¸”à¸à¸£à¸­à¸š";
 };
 String RID_EXTERNALFRAME_TOOLBOX
 {
@@ -891,15 +919,16 @@ String RID_EXTERNALFRAME_TOOLBOX
     Text[ chinese_simplified ] = "åŠŸèƒ½æ ";
     Text[ russian ] = "Ïàíåëü ôóíêöèé";
     Text[ polish ] = "Pasek funkcji";
-    Text[ japanese ] = "ï¾Œï½§ï¾ï½¸ï½¼ï½®ï¾ ï¾Šï¾ï½°";
+    Text[ japanese ] = "ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ãƒãƒ¼";
     Text[ chinese_traditional ] = "å·¥å…·åˆ—";
     Text[ greek ] = "ÃñáììŞ ëåéôïõñãéşí";
     Text[ korean ] = "ê¸°ëŠ¥ ëª¨ìŒ";
     Text[ arabic ] = "ÔÑíØ ÇáãåÇã";
     Text[ turkish ] = "Araç çubuğu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de funciones";
-    Text[ finnish ] = "Toimintopalkki";
+    Text[ catalan ] = "Barra de funcions";
+    Text[ finnish ] = "Toimintorivi";
+    Text[ thai ] = "à¹à¸–à¸šà¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
 };
 ToolBox RID_EXTERNALFRAME_TOOLBOX
 {
@@ -1054,25 +1083,35 @@ String STR_FORWARDMAIL
     Text[English] = "Per Regel weitergeleitete Nachricht.\nDie Originalnachricht als Anhang." ;
     Text[ english_us ] = "Message forwarded by a rule.\nThe original message as attachment.";
     Text[ portuguese ] = "Mensagem transmitida por regra.\nMensagem original como anexo.";
-    Text[ russian ] = "Ïî ïğàâèëó îòïğàâëåííîå ñîîáùåíèå.\nÈñõîäíîå ñîîáùåíèå êàê ïğèëîæåíèå.";
+    Text[ russian ] = "Ñîîáùåíèå ïåğåñëàíî â ñîîòâåòñòâèè ñ çàäàííûì ïğàâèëîì.\nÈñõîäíîå ñîîáùåíèå â âèäå âëîæåíèÿ.";
     Text[ greek ] = "Ç áğïóôïëŞ áõôïı ôïõ ìçíıìáôïò İãéíå ìİóù êÜğïéïõ êáíüíá.\nÔï áñ÷éêü ìŞíõìá ùò óõíçììİíï.";
-    Text[ dutch ] = "Per regel doorgegeven bericht.\nHet originele bericht als aanhangsel.";
+    Text[ dutch ] = "Per regel doorgegeven bericht.\nHet originele bericht als bijlage.";
     Text[ french ] = "Message transmis par règle.\nMessage d'origine en tant que fichier joint.";
-    Text[ spanish ] = "Mensaje transmitido por regla.\nEl mensaje original como anexo.";
+    Text[ spanish ] = "Mensaje transmitido por regla.\nEl mensaje original como documento adjunto.";
     Text[ italian ] = "Messaggio inoltrato secondo una regola.\nMessaggio originale come allegato.";
     Text[ danish ] = "Meddelelse som er blevet videresendt ifølge en regel.\nDen oprindelige meddelelse er vedhæftet.";
     Text[ swedish ] = "Meddelande som vidarebefordrats per regel.\nOriginalmeddelandet som bilaga.";
     Text[ polish ] = "Wiadomoœæ przes³ana dalej wed³ug regu³y.\nOrygina³ wiadomoœci jako za³¹cznik.";
     Text[ portuguese_brazilian ] = "Per Regel weitergeleitete Nachricht.\nDie Originalnachricht als Anhang.";
-    Text[ japanese ] = "ï¾™ï½°ï¾™ã§è»¢é€ã•ã‚ŒãŸï¾’ï½¯ï½¾ï½°ï½¼ï¾ã€‚\nï½µï¾˜ï½¼ï¾ï¾…ï¾™ã®ï¾’ï½¯ï½¾ï½°ï½¼ï¾ã¯æ·»ä»˜ã¨ã—ã¦ã€‚";
-    Text[ korean ] = "ê·œì¹™ì— ì˜í•´ ì „ë‹¬ëœ ë©”ì‹œì§€. \nì›ë˜ ë©”ì‹œì§€ëŠ” ì²¨ë¶€ í˜•ì‹ìœ¼ë¡œ.";
+    Text[ japanese ] = "ãƒ«ãƒ¼ãƒ«ã§è»¢é€ã•ã‚ŒãŸãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€‚\nã‚ªãƒªã‚¸ãƒŠãƒ«ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã¯æ·»ä»˜ã¨ã—ã¦ã€‚";
+    Text[ korean ] = "ê·œì¹™ì— ì˜í•´ ì „ë‹¬ëœ ë©”ì‹œì§€.\nì›ë³¸ ë©”ì‹œì§€ëŠ” ì²¨ë¶€ í˜•ì‹ìœ¼ë¡œ";
     Text[ chinese_simplified ] = "æŒ‰å¸¸è§„è½¬å¯„çš„ç”µå­é‚®ä»¶ã€‚\nç”µå­é‚®ä»¶åŸä»¶ä½œä¸ºé™„ä»¶ã€‚";
     Text[ chinese_traditional ] = "é€éè¦å‰‡è½‰å¯„çš„é›»å­éƒµä»¶ã€‚\næºé›»å­éƒµä»¶ç•¶ä½œé™„åŠ ã€‚";
     Text[ arabic ] = "ÑÓÇáÉ Êã ÊãÑíÑåÇ ÍÓÈ ÇáŞÇÚÏÉ.\nÇáÑÓÇáÉ ÇáÃÕáíÉ ßãÑİŞÇÊ.";
     Text[ turkish ] = "Kurala göre aktarılan ileti.\nEk olarak özgün ileti.";
-    Text[ catalan ] = "Mensaje transmitido por regla.\nEl mensaje original como anexo.";
-    Text[ finnish ] = "Viesti edelleenl?hetettiin s??nn? mukaan.\nAlkuper?inen viesti liitteen?.";
+    Text[ catalan ] = "Una regla ha fet reenviar el missatge.\nEl missatge original va adjunt.";
+    Text[ finnish ] = "Viesti edelleenlähetettiin säännön mukaan.\nAlkuperäinen viesti liitteenä.";
+    Text[ thai ] = "à¸ªà¹ˆà¸‡à¸•à¹ˆà¸­à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¹‚à¸”à¸¢à¸à¸\nTà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸•à¹‰à¸™à¸‰à¸šà¸±à¸šà¹€à¸›à¹‡à¸™à¸ªà¸´à¹ˆà¸‡à¸—à¸µà¹ˆà¹à¸™à¸šà¸¡à¸²";
 };
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-11 15:23:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,11 @@
  *
  ************************************************************************/
 
+#ifdef SOLARIS
+// HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
+#include <ctime>
+#endif
+
 #include <string>           // prevent conflict with STL includes
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
@@ -89,6 +94,9 @@
 
 #ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
 #include <svtools/menuoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
+#include <svtools/miscopt.hxx>
 #endif
 
 #pragma hdrstop
@@ -237,6 +245,8 @@ void SfxToolBoxControl::StateChanged
     // enabled/disabled-Flag pauschal korrigieren
     pBox->EnableItem( GetId(), eState != SFX_ITEM_DISABLED );
 
+    USHORT nItemBits = pBox->GetItemBits( GetId() );
+    nItemBits &= ~TIB_CHECKABLE;
     TriState eTri = STATE_NOCHECK;
     switch ( eState )
     {
@@ -247,6 +257,7 @@ void SfxToolBoxControl::StateChanged
                 // BoolItem fuer checken
                 if ( ((const SfxBoolItem*)pState)->GetValue() )
                     eTri = STATE_CHECK;
+                nItemBits |= TIB_CHECKABLE;
             }
             else if ( pState->ISA(SfxEnumItemInterface) &&
                 ((SfxEnumItemInterface *)pState)->HasBoolValue())
@@ -254,6 +265,7 @@ void SfxToolBoxControl::StateChanged
                 // EnumItem wie Bool behandeln
                 if ( ((const SfxEnumItemInterface *)pState)->GetBoolValue() )
                     eTri = STATE_CHECK;
+                nItemBits |= TIB_CHECKABLE;
             }
             else if ( bShowString && pState->ISA(SfxStringItem) )
                 pBox->SetItemText(nId, ((const SfxStringItem*)pState)->GetValue() );
@@ -265,6 +277,7 @@ void SfxToolBoxControl::StateChanged
     }
 
     pBox->SetItemState( GetId(), eTri );
+    pBox->SetItemBits( GetId(), nItemBits );
 }
 
 //--------------------------------------------------------------------
@@ -669,19 +682,82 @@ SfxAppToolBoxControl_Impl::~SfxAppToolBoxControl_Impl()
     delete pMenu;
 }
 
-void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
+//_____________________________________________________
+/*
+    it return the existing state of the given URL in the popupmenu of this toolbox control.
+
+    If the given URL can be located as an action command of one menu item of the
+    popup menu of this control, we return TRUE. Otherwhise we return FALSE.
+    Further we return a fallback URL, in case we have to return FALSE. Because
+    the outside code must select a valid item of the popup menu everytime ...
+    and we define it here. By the way this m ethod was written to handle
+    error situations gracefully. E.g. it can be called during creation time
+    but then we have no valid menu. For this case we know another fallback URL.
+    Then we return the private:factory/ URL of the default factory.
+
+    @param  *pMenu
+                pounts to the popup menu, on which item we try to locate the given URL
+                Can be NULL! Search will be supressed then.
+
+    @param  sURL
+                the URL for searching
+
+    @param  pFallback
+                contains the fallback URL in case we return FALSE
+                Must point to valid memory!
+
+    @return TRUE - if URL could be located as an item of the popup menu.
+            FALSE - otherwhise.
+*/
+BOOL Impl_ExistURLInMenu( const PopupMenu *pMenu     ,
+                          const String    &sURL      ,
+                                String    *pFallback )
 {
-    String aURL = rURL;
-    if( !rURL.Len() )
+    BOOL bValidFallback = FALSE;
+    if (pMenu && sURL.Len())
     {
-        aURL = DEFINE_CONST_UNICODE("private:factory/");
-        aURL += String::CreateFromAscii(SfxObjectFactory::GetDefaultFactory().GetShortName());
+        USHORT c = pMenu->GetItemCount();
+        for (USHORT p=0; p<c; ++p)
+        {
+            USHORT nId = pMenu->GetItemId(p);
+            String aCmd( pMenu->GetItemCommand(nId) );
+
+            if (!bValidFallback && aCmd.Len())
+            {
+                *pFallback = aCmd;
+                bValidFallback = TRUE;
+            }
+
+            if (sURL.Equals(aCmd))
+                return TRUE;
+        }
     }
 
+    if (!bValidFallback)
+    {
+        *pFallback  = DEFINE_CONST_UNICODE("private:factory/");
+        *pFallback += String::CreateFromAscii(SfxObjectFactory::GetDefaultFactory().GetShortName());
+    }
+
+    return FALSE;
+}
+
+void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
+{
+    /* We accept URL's here only, which exist as items of our internal popup menu.
+       All other ones will be ignored and a fallback is used ... */
+    String aURL = rURL;
+    String sFallback;
+    BOOL bValid = Impl_ExistURLInMenu(pMenu,aURL,&sFallback);
+    if (!bValid)
+        aURL = sFallback;
+
+    BOOL bBig = ( SvtMiscOptions().GetSymbolSet() == SFX_SYMBOLS_LARGE );
     GetToolBox().SetItemImage( GetId(),
                                SvFileInformationManager::GetImage( INetURLObject( aURL ),
-                               FALSE,
+                               bBig,
                                 GetToolBox().GetBackground().GetColor().IsDark() ) );
+    aLastURL = aURL;
 }
 
 void SfxAppToolBoxControl_Impl::StateChanged
@@ -691,10 +767,20 @@ void SfxAppToolBoxControl_Impl::StateChanged
     const SfxPoolItem*  pState
 )
 {
-    if ( !aLastURL.Len() && pState && pState->ISA(SfxStringItem) )
+    if ( pState && pState->ISA(SfxStringItem) )
     {
+        // Important step for following SetImage() call!
+        // It needs the valid pMenu item to fullfill it's specification
+        // to check for supported URLs ...
+        if ( !pMenu )
+        {
+            Reference <com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
+            ::framework::MenuConfiguration aConf( aXMultiServiceFactory );
+            Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame()->GetFrameInterface() );
+            pMenu = aConf.CreateBookmarkMenu( aXFrame, BOOKMARK_NEWMENU );
+        }
         GetToolBox().EnableItem( GetId(), eState != SFX_ITEM_DISABLED );
-        SetImage( ((const SfxStringItem*)pState)->GetValue() );
+        SetImage(((const SfxStringItem*)pState)->GetValue());
     }
     else
         SfxToolBoxControl::StateChanged( nId, eState, pState );

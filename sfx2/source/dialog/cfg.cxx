@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2002-11-20 11:41:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ SfxMenuConfigEntry::SfxMenuConfigEntry( USHORT nInitId, const String& rInitStr,
     , bPopUp(bPopup)
     , aHelpText(rHelpText)
     , aStr(rInitStr)
+    , bConfigure( TRUE )
 {
     if ( SfxMacroConfig::IsMacroSlot( nId ) )
     {
@@ -541,8 +542,10 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
         }
     }
 
-    SfxObjectShell *pDoc = SfxObjectShell::GetFirst();
-    while ( pDoc )
+    //SfxObjectShell *pDoc = SfxObjectShell::GetFirst();
+    SfxObjectShell *pDoc = SfxObjectShell::GetWorkingDocument();
+    //while ( pDoc )
+    if ( pDoc )
     {
         BOOL bInsert = TRUE;
         if ( pArr )
@@ -576,7 +579,7 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
             }
         }
 
-        pDoc = SfxObjectShell::GetNext(*pDoc);
+        //pDoc = SfxObjectShell::GetNext(*pDoc);
     }
 
     pSfxApp->LeaveBasicCall();

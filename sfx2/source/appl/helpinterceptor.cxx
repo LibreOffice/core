@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-10-29 12:15:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,21 +114,6 @@ HelpInterceptor_Impl::~HelpInterceptor_Impl()
 
 // -----------------------------------------------------------------------
 
-Reference< XController > HelpInterceptor_Impl::getController() const throw( RuntimeException )
-{
-    Reference< XController > xRet;
-    if( m_pWindow )
-    {
-        Reference< XFrame > xFrame = m_pWindow->getTextFrame();
-        if( xFrame.is() )
-            xRet = xFrame->getController();
-    }
-
-    return xRet;
-}
-
-// -----------------------------------------------------------------------
-
 void HelpInterceptor_Impl::addURL( const String& rURL )
 {
     if ( !m_pHistory )
@@ -150,7 +135,8 @@ void HelpInterceptor_Impl::addURL( const String& rURL )
     }
 
     m_aCurrentURL = rURL;
-    m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL ), LIST_APPEND );
+    Any aEmptyViewData;
+    m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL, aEmptyViewData ), LIST_APPEND );
     m_nCurPos = m_pHistory->Count() - 1;
 
     if ( m_xListener.is() )
@@ -164,24 +150,6 @@ void HelpInterceptor_Impl::addURL( const String& rURL )
     }
 
     m_pWindow->UpdateToolbox();
-}
-
-// -----------------------------------------------------------------------
-
-void HelpInterceptor_Impl::LeavePage()
-{
-    if( m_pHistory && m_pHistory->Count() > m_nCurPos)
-    {
-        // get view position of _current_ URL
-        HelpHistoryEntry_Impl* pCurEntry = m_pHistory->GetObject( m_nCurPos );
-        try
-        {
-            Reference< XController > xContr( getController() );
-            if( xContr.is() )
-                pCurEntry->aViewData = xContr->getViewData();
-        }
-        catch( const Exception& ) {}
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -202,7 +170,8 @@ void HelpInterceptor_Impl::SetStartURL( const String& rURL )
     if ( !m_pHistory )
     {
         m_pHistory = new HelpHistoryList_Impl;
-        m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL ), ((ULONG)0x0) );
+        Any aEmptyViewData;
+        m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL, aEmptyViewData ), ((ULONG)0x0) );
         m_nCurPos = m_pHistory->Count() - 1;
 
         m_pWindow->UpdateToolbox();
@@ -210,14 +179,10 @@ void HelpInterceptor_Impl::SetStartURL( const String& rURL )
     m_aCurrentURL = rURL;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool HelpInterceptor_Impl::HasHistoryPred() const
 {
     return m_pHistory && ( m_nCurPos > 0 );
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool HelpInterceptor_Impl::HasHistorySucc() const
 {
@@ -321,7 +286,7 @@ Sequence< ::rtl::OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 {
     Sequence< ::rtl::OUString > aURLList( 1 );
     aURLList[0] = DEFINE_CONST_UNICODE("vnd.sun.star.help://*");
-    return aURLList;
+    return aURLList;;
 }
 
 // -----------------------------------------------------------------------
@@ -337,7 +302,17 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
     {
         if ( m_pHistory )
         {
-            LeavePage();       // save current position
+            if(m_pHistory->Count() > m_nCurPos)
+            {
+                Reference<XFrame> xFrame(m_xIntercepted, UNO_QUERY);
+                Reference<XController> xController;
+                if(xFrame.is())
+                    xController = xFrame->getController();
+                if(xController.is())
+                {
+                    m_pHistory->GetObject(m_nCurPos)->aViewData = xController->getViewData();
+                }
+            }
 
             ULONG nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
                                                     : ( !bBack && m_nCurPos < m_pHistory->Count() - 1 )
