@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotform.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,9 +322,9 @@ void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, SingleRefData& rSRD )
         }
 
     if( rSRD.IsRowRel() )
-        rSRD.nRelRow = ( INT16 ) nRow;
+        rSRD.nRelRow = static_cast<SCROW>(nRow);
     else
-        rSRD.nRow = nRow;
+        rSRD.nRow = static_cast<SCROW>(nRow);
 
     if( rSRD.IsRowRel() || rSRD.IsColRel() )
         rSRD.CalcAbsIfRel( aEingPos );
@@ -340,16 +340,16 @@ void LotusToSc::ReadSRD( SingleRefData& rSRD, BYTE nRelBit )
     Read( nTab );
     Read( nCol );
 
-    BOOL b3D = ( nTab != aEingPos.Tab() );
+    BOOL b3D = ( static_cast<SCTAB>(nTab) != aEingPos.Tab() );
 
     rSRD.SetColRel( ( nRelBit & 0x01 ) != 0 );
-    rSRD.nCol = nCol;
+    rSRD.nCol = static_cast<SCCOL>(nCol);
 
     rSRD.SetRowRel( ( nRelBit & 0x02 ) != 0 );
-    rSRD.nRow = nRow;
+    rSRD.nRow = static_cast<SCROW>(nRow);
 
     rSRD.SetTabRel( ( ( nRelBit & 0x04) != 0 ) || !b3D );
-    rSRD.nTab = nTab;
+    rSRD.nTab = static_cast<SCTAB>(nTab);
 
     rSRD.SetFlag3D( b3D );
 
