@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:52 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,26 +101,33 @@ BOOL lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, USHORT nRecursion 
         ScToken* t;
         for( t = pFormula->GetNextReferenceOrName(); t; t = pFormula->GetNextReferenceOrName() )
         {
-            if( t->GetType() == svIndex )
+            switch( t->GetType() )
             {
-                ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex( t->GetIndex() );
-                if( (t->GetOpCode() == ocName) && (nRecursion < 42) && pRangeData &&
-                    lcl_HasRelRef( pDoc, pRangeData->GetCode(), nRecursion + 1 ) )
-                    return TRUE;
-            }
-            else
-            {
-                SingleRefData& rRef1 = t->GetSingleRef();
-                if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
-                    return TRUE;
-                if ( t->GetType() == svDoubleRef )
+                case svDoubleRef:
                 {
                     SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                     if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
                         return TRUE;
                 }
-            }
+                // fall through
 
+                case svSingleRef:
+                {
+                    SingleRefData& rRef1 = t->GetSingleRef();
+                    if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
+                        return TRUE;
+                }
+                break;
+
+                case svIndex:
+                {
+                    if( t->GetOpCode() == ocName )      // DB areas always absolute
+                        if( ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex( t->GetIndex() ) )
+                            if( (nRecursion < 42) && lcl_HasRelRef( pDoc, pRangeData->GetCode(), nRecursion + 1 ) )
+                                return TRUE;
+                }
+                break;
+            }
         }
     }
     return FALSE;
