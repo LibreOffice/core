@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 10:34:18 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1489,7 +1489,7 @@ const SwFrm *SwFEShell::GetBox( const Point &rPt ) const
             for ( USHORT i = 0; !pFrm && i < pPage->GetSortedObjs()->Count(); ++i )
             {
                 const SdrObject *pObj = (*pPage->GetSortedObjs())[i];
-                if ( pObj->IsWriterFlyFrame() )
+                if ( pObj->ISA(SwVirtFlyDrawObj) )
                 {
                     pFrm = lcl_FindFrm( ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm(),
                                         rPt, nFuzzy );
