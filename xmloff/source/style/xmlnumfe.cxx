@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-01 18:26:36 $
+ *  last change: $Author: nn $ $Date: 2000-11-03 11:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1145,6 +1145,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
         WriteMapElement_Impl( eOp2, fLimit2, nKey, 1 );
     }
 
+    xHandler->ignorableWhitespace( sWS );
     xHandler->endElement( sElem );
 }
 
