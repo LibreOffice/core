@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dbo $ $Date: 2002-08-19 07:18:50 $
+#   last change: $Author: pjunck $ $Date: 2004-11-03 08:50:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,11 @@ SHL1LIBS= \
     $(SLB)$/cppu_threadpool.lib	\
     $(SLB)$/cppu_cppu.lib
 
+.IF "$(GUI)" == "WNT"
 SHL1TARGET=$(TARGET)
+.ELSE
+SHL1TARGET= uno_$(TARGET)
+.ENDIF
 
 SHL1STDLIBS= \
     $(SALLIB)
