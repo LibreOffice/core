@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmsg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:21:28 $
+ *  last change: $Author: gh $ $Date: 2002-06-26 13:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,83 +75,14 @@
 ///////////////////////////////
 String S_PROG_START
 {
-    Text = "Programmstart: ($Arg1); ($Arg2)";
-    Text[ english_us ] = "Program start: ($Arg1); ($Arg2)";
-    Text[ LANGUAGE_USER1 ] = "Programmstart: <Datum>; <Uhrzeit>";
-    Text[ portuguese ] = "InÌcio do programa: ($Arg1); ($Arg2)";
-    Text[ russian ] = "Program start: ($Arg1); ($Arg2)";
-    Text[ greek ] = "Program start: ($Arg1); ($Arg2)";
-    Text[ dutch ] = "Programma start: ($Arg1); ($Arg2)";
-    Text[ french ] = "DÈmarrage du programme : ($Arg1); ($Arg2)";
-    Text[ spanish ] = "Inicio de programa: ($Arg1); ($Arg2)";
-    Text[ italian ] = "Program start: ($Arg1); ($Arg2)";
-    Text[ danish ] = "Program start: ($Arg1); ($Arg2)";
-    Text[ swedish ] = "Program start: ($Arg1); ($Arg2)";
-    Text[ polish ] = "Uruchomienie programu: ($Arg1); ($Arg2)";
-    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
-    Text[ japanese ] = "Program start: ($Arg1); ($Arg2)";
-    Text[ korean ] = "ÌîÑÎ°úÍ∑∏Îû® ÏãúÏûë: ($Arg1); ($Arg2)";
-    Text[ chinese_simplified ] = "Program start: ($Arg1); ($Arg2)";
-    Text[ chinese_traditional ] = "Program start: ($Arg1); ($Arg2)";
-    Text[ arabic ] = "Program start: ($Arg1); ($Arg2)";
-    Text[ turkish ] = "Program ba˛latma: ($Arg1); ($Arg2)";
-    Text[ catalan ] = "Inicio de programa: ($Arg1); ($Arg2)";
-    Text[ finnish ] = "Ohjelman aloitus: ($Arg1); ($Arg2)";
+    Text = "Program start: ($Arg1); ($Arg2)";
 };
 String S_ERROR_OUTSIDE_TESTCASE
 {
-    Text = "Fehler auﬂerhalb eines Testcase.";
-    Text[ english_us ] = "Error outside of test case";
-    Text[ portuguese ] = "Erro fora de um ´test caseª.";
-    Text[ russian ] = "Error outside of test case.";
-    Text[ greek ] = "Error outside of test case.";
-    Text[ dutch ] = "Fout buiten testcase.";
-    Text[ french ] = "Erreur en dehors d'un scÈnario de test (test case).";
-    Text[ spanish ] = "Error fuera de un Testcase.";
-    Text[ italian ] = "Error outside of test case";
-    Text[ danish ] = "Error outside of test case.";
-    Text[ swedish ] = "Error outside of test case";
-    Text[ polish ] = "B≥πd poza Testcase.";
-    Text[ portuguese_brazilian ] = "Fehler au?erhalb eines Testcase.";
-    Text[ japanese ] = "Error outside of test case.";
-    Text[ korean ] = "ÌÖåÏä§Ìä∏ ÏºÄÏù¥Ïä§ Ïô∏Î∂ÄÏùò Ïò§Î•ò";
-    Text[ chinese_simplified ] = "Error outside of test case";
-    Text[ chinese_traditional ] = "Error outside of test case";
-    Text[ arabic ] = "Error outside of test case";
-    Text[ turkish ] = "Error outside of test case";
-    Text[ catalan ] = "Error fuera de un Testcase.";
-    Text[ finnish ] = "Testitapauksen ulkopuolinen virhe";
+    Text = "Error outside of test case";
 };
 String S_WARNING_PREFIX
 {
-    Text = "Warnung: ";
-    Text[ english_us ] = "Warning: ";
-    Text[ portuguese ] = "AdvertÍncia: ";
-    Text[ russian ] = "Warning:";
-    Text[ greek ] = "Warning: ";
-    Text[ dutch ] = "Waarschuwing:  ";
-    Text[ french ] = "Avertissement : ";
-    Text[ spanish ] = "Advertencia: ";
-    Text[ italian ] = "Warning: ";
-    Text[ danish ] = "Warning: ";
-    Text[ swedish ] = "Warning: ";
-    Text[ polish ] = "Ostrzeøenie: ";
-    Text[ portuguese_brazilian ] = "Warning: ";
-    Text[ japanese ] = "Warning: ";
-    Text[ korean ] = "Í≤ΩÍ≥†: ";
-    Text[ chinese_simplified ] = "Warning: ";
-    Text[ chinese_traditional ] = "Warning: ";
-    Text[ arabic ] = "Warning:";
-    Text[ turkish ] = "Uyar˝: ";
-    Text[ catalan ] = "Advertencia: ";
-    Text[ finnish ] = "Varoitus: ";
+    Text = "Warning: ";
 };
-
-
-
-
-
-
-
-
 

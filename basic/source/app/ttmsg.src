@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 16:36:03 $
+ *  last change: $Author: gh $ $Date: 2002-06-26 13:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,603 +75,103 @@
 ///////////////////////////////
 String S_NAME_NOT_THERE
 {
-    Text = "Name nicht vorhanden: #($Arg1)";
-    Text[ english_us ] = "Name doesn't exist: #($Arg1)";
-    Text[ portuguese ] = "Nome inexistente: #($Arg1)";
-    Text[ russian ] = "Name doesn't exist: #($Arg1)";
-    Text[ greek ] = "Name doesn't exist: #($Arg1)";
-    Text[ dutch ] = "Naam bestaat niet: #($Arg1)";
-    Text[ french ] = "Nom inexistant : #($Arg1)";
-    Text[ spanish ] = "El nombre no existe: #($Arg1)";
-    Text[ italian ] = "Name doesn't exist: #($Arg1)";
-    Text[ danish ] = "Name doesn't exist: #($Arg1)";
-    Text[ swedish ] = "Name doesn't exist: #($Arg1)";
-    Text[ polish ] = "Nazwa nie istnieje: #($Arg1)";
-    Text[ portuguese_brazilian ] = "Name nicht vorhanden: #($Arg1)";
-    Text[ japanese ] = "この名前はありません: #($Arg1)";
-    Text[ korean ] = "이름이 없음: #($Arg1)";
-    Text[ chinese_simplified ] = "名称不存在：#($Arg1)";
-    Text[ chinese_traditional ] = "名稱不存在： #($Arg1)";
-    Text[ arabic ] = "Name doesn't exist: #($Arg1)";
-    Text[ turkish ] = "Name doesn't exist: #($Arg1)";
-    Text[ catalan ] = "El nom no existeix: #($Arg1)";
-    Text[ finnish ] = "Nime� ei ole: #($Arg1)";
+    Text = "Name doesn't exist: #($Arg1)";
 };
 String S_DOUBLE_NAME
 {
-    Text = "Name Doppelt: ($Arg1)";
-    Text[ english_us ] = "Name double: ($Arg1)";
-    Text[ portuguese ] = "Nome duplo: ($Arg1)";
-    Text[ russian ] = "Name double: ($Arg1)";
-    Text[ greek ] = "Name double: ($Arg1)";
-    Text[ dutch ] = "Dubbele naam: ($Arg1)";
-    Text[ french ] = "Nome double : ($Arg1)";
-    Text[ spanish ] = "Nombre doble: ($Arg1)";
-    Text[ italian ] = "Name double: ($Arg1)";
-    Text[ danish ] = "Name double: ($Arg1)";
-    Text[ swedish ] = "Name double: ($Arg1)";
-    Text[ polish ] = "Podw�jna nazwa: ($Arg1)";
-    Text[ portuguese_brazilian ] = "Name Doppelt: ($Arg1)";
-    Text[ japanese ] = "名前が重複しています: ($Arg1)";
-    Text[ korean ] = "이름이 중복됨 : ($Arg1)";
-    Text[ chinese_simplified ] = "双重名称：($Arg1)";
-    Text[ chinese_traditional ] = "名稱雙重：($Arg1)";
-    Text[ arabic ] = "Name double: ($Arg1)";
-    Text[ turkish ] = "Name double: ($Arg1)";
-    Text[ catalan ] = "Anomena el doble: ($Arg1)";
-    Text[ finnish ] = "Kaksoisnimi: ($Arg1)";
+    Text = "Name double: ($Arg1)";
 };
 String S_READING_FILE
 {
-    Text = "Einlesen der Dateien";
-    Text[ english_us ] = "Reading the files";
-    Text[ portuguese ] = "Leitura dos ficheiros";
-    Text[ russian ] = "Reading the files";
-    Text[ greek ] = "Reading the files";
-    Text[ dutch ] = "Bestanden lezen";
-    Text[ french ] = "Lecture des fichiers";
-    Text[ spanish ] = "Leyendo los archivos";
-    Text[ italian ] = "Reading the files";
-    Text[ danish ] = "Reading the files";
-    Text[ swedish ] = "Reading the files";
-    Text[ polish ] = "Czytanie plik�w";
-    Text[ portuguese_brazilian ] = "Einlesen der Dateien";
-    Text[ japanese ] = "ファイルの読み取り";
-    Text[ korean ] = "파일 읽기";
-    Text[ chinese_simplified ] = "读取文件";
-    Text[ chinese_traditional ] = "讀取檔案";
-    Text[ arabic ] = "Reading the files";
-    Text[ turkish ] = "Reading the files";
-    Text[ catalan ] = "S'estan llegint els fitxers";
-    Text[ finnish ] = "Luetaan tiedostoja";
+    Text = "Reading the files";
 };
 String S_CANNOT_OPEN_FILE
 {
-    Text = "Kann Datei nicht �ffnen: ($Arg1)";
-    Text[ english_us ] = "File cannot be opened: ($Arg1)";
-    Text[ portuguese ] = "Imposs�vel abrir ficheiro: ($Arg1)";
-    Text[ russian ] = "File cannot be opened: ($Arg1)";
-    Text[ greek ] = "File cannot be opened: ($Arg1)";
-    Text[ dutch ] = "Kan bestand niet openen: ($Arg1)";
-    Text[ french ] = "Impossible d'ouvrir le fichier : ($Arg1)";
-    Text[ spanish ] = "No se puede abrir el archivo: ($Arg1)";
-    Text[ italian ] = "File cannot be opened: ($Arg1)";
-    Text[ danish ] = "File cannot be opened: ($Arg1)";
-    Text[ swedish ] = "File cannot be opened: ($Arg1)";
-    Text[ polish ] = "Nie mo�e otworzy� pliku: ($Arg1)";
-    Text[ portuguese_brazilian ] = "Kann Datei nicht ?ffnen: ($Arg1)";
-    Text[ japanese ] = "ファイルが開けられません: ($Arg1)";
-    Text[ korean ] = "파일이 열리지 않음: ($Arg1)";
-    Text[ chinese_simplified ] = "无法打开文件：($Arg1)";
-    Text[ chinese_traditional ] = "無法開啟檔案： ($Arg1)";
-    Text[ arabic ] = "File cannot be opened: ($Arg1)";
-    Text[ turkish ] = "File cannot be opened: ($Arg1)";
-    Text[ catalan ] = "El fitxer no es pot obrir: ($Arg1)";
-    Text[ finnish ] = "Tiedoston avaaminen ei onnistu: ($Arg1)";
+    Text = "File cannot be opened: ($Arg1)";
 };
 String S_INVALID_LINE
 {
-    Text = "Zeile \"($Arg1)\" Ist ung�ltig.";
-    Text[ english_us ] = "Line \"($Arg1)\" is invalid.";
-    Text[ portuguese ] = "A linha \"($Arg1)\" n�o � v�lida.";
-    Text[ russian ] = "Line \"($Arg1)\" is invalid.";
-    Text[ greek ] = "Line \"($Arg1)\" is invalid.";
-    Text[ dutch ] = "Regel \"($Arg1)\" is ongeldig.";
-    Text[ french ] = "Ligne \"($Arg1)\" non valable.";
-    Text[ spanish ] = "La l�nea \"($Arg1)\" no es v�lida.";
-    Text[ italian ] = "Line \"($Arg1)\" is invalid.";
-    Text[ danish ] = "Line \"($Arg1)\" is invalid.";
-    Text[ swedish ] = "Line \"($Arg1)\" is invalid.";
-    Text[ polish ] = "Wiersz \"($Arg1)\" jest niewa�ny.";
-    Text[ portuguese_brazilian ] = "Zeile \"($Arg1)\" Ist ung?tig.";
-    Text[ japanese ] = "\"($Arg1)\"行は無効です。";
-    Text[ korean ] = "행 \"($Arg1)\" 은 유효하지 않습니다.";
-    Text[ chinese_simplified ] = "行($Arg1)无效。";
-    Text[ chinese_traditional ] = "行($Arg1)無效。";
-    Text[ arabic ] = "Line \"($Arg1)\" is invalid.";
-    Text[ turkish ] = "Line \"($Arg1)\" is invalid.";
-    Text[ catalan ] = "La l�nia \"($Arg1) no �s v�lida.";
-    Text[ finnish ] = "Rivi (Arg1) ei ole kelvollinen.";
+    Text = "Line \"($Arg1)\" is invalid.";
 };
 String S_SHORTNAME_UNKNOWN
 {
-    Text = "Kurzname unbekannt beim Kopieren: ($Arg1)";
-    Text[ english_us ] = "Short name unknown during copying: ($Arg1)";
-    Text[ portuguese ] = "Abreviatura desconhecida ao copiar: ($Arg1)";
-    Text[ russian ] = "Short name unknown during copying: ($Arg1)";
-    Text[ greek ] = "Short name unknown during copying: ($Arg1)";
-    Text[ dutch ] = "Afkorting onbekend bij kopi�ren: ($Arg1)";
-    Text[ french ] = "Abr�viation inconnue lors de la copie : ($Arg1)";
-    Text[ spanish ] = "Abreviatura desconocida al copiar: ($Arg1)";
-    Text[ italian ] = "Short name unknown during copying: ($Arg1)";
-    Text[ danish ] = "Short name unknown during copying: ($Arg1)";
-    Text[ swedish ] = "Short name unknown during copying: ($Arg1)";
-    Text[ polish ] = "Skr�t nazwy nieznany podczas kopiowania: ($Arg1)";
-    Text[ portuguese_brazilian ] = "Kurzname Unbekannt beim Kopieren: ($Arg1)";
-    Text[ japanese ] = "Short name unknown during copying: ($Arg1)";
-    Text[ korean ] = "복사시에 알 수 없는 짧은 이름: ($Arg1)";
-    Text[ chinese_simplified ] = "复制时不明的简称：($Arg1)";
-    Text[ chinese_traditional ] = "複製時檔案短名稱不明：($Arg1)";
-    Text[ arabic ] = "Short name unknown during copying: ($Arg1)";
-    Text[ turkish ] = "Short name unknown during copying: ($Arg1)";
-    Text[ catalan ] = "El nom curt �s desconegut durant la c�pia: ($Arg1)";
-    Text[ finnish ] = "Kopioitaessa havaittu tuntematon lyhyt nimi: ($Arg1)";
+    Text = "Short-name unknown during copying: ($Arg1)";
 };
 String S_LONGNAME_UNKNOWN
 {
-    Text = "Langname unbekannt: ($Arg1)";
-    Text[ english_us ] = "Long name unknown: ($Arg1)";
-    Text[ portuguese ] = "Nome desconhecido: ($Arg1)";
-    Text[ russian ] = "Long name unknown: ($Arg1)";
-    Text[ greek ] = "������� ����� ������� ������: ($Arg1)";
-    Text[ dutch ] = "Naam onbekend: ($Arg1)";
-    Text[ french ] = "Nom inconnu : ($Arg1)";
-    Text[ spanish ] = "Nombre largo desconocido: ($Arg1)";
-    Text[ italian ] = "Long name unknown: ($Arg1)";
-    Text[ danish ] = "Short name unknown during copying: ($Arg1)";
-    Text[ swedish ] = "Long name unknown: ($Arg1)";
-    Text[ polish ] = "Pe�na nazwa nieznana: ($Arg1)";
-    Text[ portuguese_brazilian ] = "Kurzname Unbekannt beim Kopieren: ($Arg1)";
-    Text[ japanese ] = "長い名前は不明: ($Arg1)";
-    Text[ korean ] = "알 수 없는 긴 이름: ($Arg1)";
-    Text[ chinese_simplified ] = "长名称不明：($Arg1)";
-    Text[ chinese_traditional ] = "長檔案名稱不明：($Arg1)";
-    Text[ arabic ] = "��� ���� ��� �����: ($Arg1)";
-    Text[ turkish ] = "Short name unknown during copying: ($Arg1)";
-    Text[ catalan ] = "El nom llarg �s desconegut: ($Arg1)";
-    Text[ finnish ] = "Tuntematon pitk� nimi: ($Arg1)";
+    Text = "Long-name unknown: ($Arg1)";
 };
 String S_FIRST_SHORTNAME_REQ_ASTRX
 {
-    Text = "Erster Kurzname muss mit * beginnen. �berspringe.";
-    Text[ english_us ] = "First short name must start with * . Ignore.";
-    Text[ portuguese ] = "A primeira abreviatura dever� come�ar com *. Ignorar.";
-    Text[ russian ] = "First short name must start with * . Leave out.";
-    Text[ greek ] = "First short name must start with * . Ignore.";
-    Text[ dutch ] = "Eerste afkorting moet beginnen met *. Overslaan.";
-    Text[ french ] = "La premi�re abr�viation doit commencer par *. Ignorer.";
-    Text[ spanish ] = "La primera abreviatura debe comenzar con *. Ignorar.";
-    Text[ italian ] = "First short name must start with * . Ignore.";
-    Text[ danish ] = "First short name must start with *. Ignore. ";
-    Text[ swedish ] = "First short name must start with * . Ignore.";
-    Text[ polish ] = "Pierwszy skr�t nazwy musi si� zaczyna� na * . Omi�.";
-    Text[ portuguese_brazilian ] = "Erster Kurzname mu? mit * beginnen. ?berspringe.";
-    Text[ japanese ] = "First short name must start with * . Ignore.";
-    Text[ korean ] = "첫번째 짧은 이름은 반드시 * 로 시작 되어야 합니다.건너뛰기";
-    Text[ chinese_simplified ] = "第一个简称必须以 * 开头。省略。";
-    Text[ chinese_traditional ] = "第一個短名稱必須以 * 開始。忽略。";
-    Text[ arabic ] = "First short name must start with * . Leave out.";
-    Text[ turkish ] = "First short name must start with * . Ignore.";
-    Text[ catalan ] = "El primer nom curt ha de comen�ar per *. Ignora.";
-    Text[ finnish ] = "Ensimm�isen lyhyen nimen ensimm�isen merkin on oltava *. Ohita.";
+    Text = "First short-name must start with * . Ignoring.";
 };
 String S_TIMOUT_WAITING
 {
-    Text = "Server Timeout beim Warten auf Antwort. Sequenz Nr: ($Arg1)";
-    Text[ english_us ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
-    Text[ portuguese ] = "Server Timeout ao esperar pela resposta. Sequ�ncia n�: ($Arg1)";
-    Text[ russian ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
-    Text[ greek ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
-    Text[ dutch ] = "Server timeout bij het wachten op antwoord. Sequentie nr: ($Arg1)";
-    Text[ french ] = "Timeout du serveur lors de l'attente de la r�ponse. N� de s�quence : ($Arg1)";
-    Text[ spanish ] = "Desconexi�n temporal al esperar por respuesta. Secuencia n�m.: ($Arg1)";
-    Text[ italian ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
-    Text[ danish ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
-    Text[ swedish ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
-    Text[ polish ] = "Server Timeout podczas czekania na odpowied�. Numer sekwencji: ($Arg1)";
-    Text[ portuguese_brazilian ] = "Server Timeout beim Warten auf Antwort. Sequenz Nr: ($Arg1)";
-    Text[ japanese ] = "応答待ちの際のサーバーのタイムアウト。シーケンスNo.: ($Arg1)";
-    Text[ korean ] = "응답을 기다릴 때 서버 타임아웃. 일련 번호: ($Arg1)";
-    Text[ chinese_simplified ] = "在等候答复时服务器超时。序列号：($Arg1)";
-    Text[ chinese_traditional ] = "伺服器等候答复超時。序列號碼： ($Arg1)";
-    Text[ arabic ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
-    Text[ turkish ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
-    Text[ catalan ] = "S'ha excedit el temps del servidor en esperar resposta. Seq��ncia n�m. ($Arg1)";
-    Text[ finnish ] = "Palvelimen aikakatkaisu vastausta odotettaessa. J�rjestysnumero: ($Arg1)";
+    Text = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
 };
 String S_APPLICATION_RESTARTED
 {
-    Text = "Applikation wurde neu gestartet.";
-    Text[ english_us ] = "Application has been restarted.";
-    Text[ portuguese ] = "A aplica��o foi reiniciada.";
-    Text[ russian ] = "Application has been restarted.";
-    Text[ greek ] = "Application has been restarted.";
-    Text[ dutch ] = "Applicatie werd opnieuw gestart";
-    Text[ french ] = "L'application a �t� red�marr�e.";
-    Text[ spanish ] = "Se reinici� la aplicaci�n.";
-    Text[ italian ] = "Application has been restarted.";
-    Text[ danish ] = "Application has been restarted.";
-    Text[ swedish ] = "Application has been restarted.";
-    Text[ polish ] = "Aplikacja zosta�a ponownie uruchomiona.";
-    Text[ portuguese_brazilian ] = "Applikation wurde neu gestartet.";
-    Text[ japanese ] = "アプリケーションは再スタートされました。";
-    Text[ korean ] = "응용 프로그램이 다시 시작 되었습니다.";
-    Text[ chinese_simplified ] = "应用程序已经重新启动。";
-    Text[ chinese_traditional ] = "重新啟動了應用程式。";
-    Text[ arabic ] = "Application has been restarted.";
-    Text[ turkish ] = "Application has been restarted.";
-    Text[ catalan ] = "S'ha reiniciat l'aplicaci�";
-    Text[ finnish ] = "Sovellus on k�ynnistetty uudelleen.";
+    Text = "Application has been restarted.";
 };
 String S_APPLICATION_START_FAILED
 {
-    Text = "Applikation \"($Arg1)\" kann nicht gestartet werden. ";
-    Text[ english_us ] = "Application \"($Arg1)\" cannot be started. ";
-    Text[ portuguese ] = "Imposs�vel iniciar a aplica��o \"($Arg1)\". ";
-    Text[ russian ] = "Application \"($Arg1)\" cannot be started. ";
-    Text[ greek ] = "Application \"($Arg1)\" cannot be started. ";
-    Text[ dutch ] = "Applicatie \"($Arg1)\" kan niet worden gestart.  ";
-    Text[ french ] = "Impossible de lancer l'application \"($Arg1)\".  ";
-    Text[ spanish ] = "No se puede iniciar la aplicaci�n \"($Arg1)\".  ";
-    Text[ italian ] = "Application \"($Arg1)\" cannot be started.  ";
-    Text[ danish ] = "Application \"($Arg1)\" cannot be started. ";
-    Text[ swedish ] = "Application \"($Arg1)\" cannot be started.  ";
-    Text[ polish ] = "Nie mo�na uruchomi� aplikacji \"($Arg1)\". ";
-    Text[ portuguese_brazilian ] = "Applikation \"($Arg1)\" kann nicht gestartet werden. ";
-    Text[ japanese ] = "アプリケーション \"($Arg1)\" はスタートできません。 ";
-    Text[ korean ] = "응용 프로그램 \"($Arg1)\"은(는) 시작될 수 없습니다. ";
-    Text[ chinese_simplified ] = "无法启动应用程序($Arg1)。 ";
-    Text[ chinese_traditional ] = "無法啟動應用程式($Arg1)。";
-    Text[ arabic ] = "Application \"($Arg1)\" cannot be started. ";
-    Text[ turkish ] = "Application \"($Arg1)\" cannot be started. ";
-    Text[ catalan ] = "No es pot iniciar l'aplicaci�\"($Arg1)\".";
-    Text[ finnish ] = "Sovelluksen ($Arg1) k�ynnistys ei onnistu. ";
+    Text = "Application \"($Arg1)\" cannot be started. ";
 };
 String S_TIMOUT_SENDING
 {
-    Text = "Server Timeout beim Senden. Sequenz Nr: ($Arg1)";
-    Text[ english_us ] = "Server Timeout while sending. Sequence No: ($Arg1)";
-    Text[ portuguese ] = "Server Timeout ao enviar. Sequ�ncia n�: ($Arg1)";
-    Text[ russian ] = "Server Timeout while sending. Sequence No: ($Arg1)";
-    Text[ greek ] = "Server Timeout while sending. Sequence No: ($Arg1)";
-    Text[ dutch ] = "Server timeout bij het zenden. Sequentie nr: ($Arg1)";
-    Text[ french ] = "Timeout du serveur lors de l'envoi. N� de s�quence : ($Arg1)";
-    Text[ spanish ] = "Desconexi�n temporal al enviar. Secuencia n�m.: ($Arg1)";
-    Text[ italian ] = "Server Timeout while sending. Sequence No: ($Arg1)";
-    Text[ danish ] = "Server Timeout while sending. Sequence No: ($Arg1)";
-    Text[ swedish ] = "Server Timeout while sending. Sequence No: ($Arg1)";
-    Text[ polish ] = "Server Timeout podczas wysy�ania. Numer sekwencji: ($Arg1)";
-    Text[ portuguese_brazilian ] = "Server Timeout beim Senden. Sequenz Nr: ($Arg1)";
-    Text[ japanese ] = "送信の際のサーバーのタイムアウト。シーケンスNo.: ($Arg1)";
-    Text[ korean ] = "송신시 서버 시간 초과. 일련 번호: ($Arg1)";
-    Text[ chinese_simplified ] = "在寄发时服务器超时。序列号：($Arg1)";
-    Text[ chinese_traditional ] = "伺服器發送時超時。序列號碼： ($Arg1)";
-    Text[ arabic ] = "Server Timeout while sending. Sequence No: ($Arg1)";
-    Text[ turkish ] = "Server Timeout while sending. Sequence No: ($Arg1)";
-    Text[ catalan ] = "S'ha excedit el temps del servidor en enviar. Seq��ncia n�m. ($Arg1)";
-    Text[ finnish ] = "Palvelimen aikakatkaisu l�hetett�ess�. J�rjestysnumero: ($Arg1)";
+    Text = "Server Timeout while sending. Sequence No: ($Arg1)";
 };
 String S_NO_CONNECTION
 {
-    Text = "Keine Verbindung. Sequenz Nr: ($Arg1)";
-    Text[ english_us ] = "No connection. Sequence No: ($Arg1)";
-    Text[ portuguese ] = "Sem liga��o. Sequ�ncia n�: ($Arg1)";
-    Text[ russian ] = "No connection. Sequence No: ($Arg1)";
-    Text[ greek ] = "No connection. Sequence No: ($Arg1)";
-    Text[ dutch ] = "Geen verbinding. Sequentie nr: ($Arg1)";
-    Text[ french ] = "Aucune connexion. N� de s�quence : ($Arg1)";
-    Text[ spanish ] = "Sin conexi�n. Secuencia n�m.: ($Arg1)";
-    Text[ italian ] = "No connection. Sequence No: ($Arg1)";
-    Text[ danish ] = "No connection. Sequence No: ($Arg1)";
-    Text[ swedish ] = "No connection. Sequence No: ($Arg1)";
-    Text[ polish ] = "Brak po��czenia. Numer sekwencji: ($Arg1)";
-    Text[ portuguese_brazilian ] = "Keine Verbindung. Sequenz Nr: ($Arg1)";
-    Text[ japanese ] = "接続なし。シーケンスNo.: ($Arg1)";
-    Text[ korean ] = "연결 안됨. 일련번호: ($Arg1)";
-    Text[ chinese_simplified ] = "没有连接。序列号：($Arg1)";
-    Text[ chinese_traditional ] = "無法連線。序列號碼：($Arg1)";
-    Text[ arabic ] = "No connection. Sequence No: ($Arg1)";
-    Text[ turkish ] = "No connection. Sequence No: ($Arg1)";
-    Text[ catalan ] = "No hi ha connexi�. Seq��ncia n�m. ($Arg1)";
-    Text[ finnish ] = "Ei yhteytt�. J�rjestysnumero: ($Arg1)";
+    Text = "No connection. Sequence No: ($Arg1)";
 };
 String S_NO_FILES_FOUND // Not used anymore. needed only for old *.res files
 {
-    Text = "Keine ($Arg1) Dateien gefunden";
-    Text[ english_us ] = "No ($Arg1) files found";
-    Text[ portuguese ] = "N�o foram encontrados quaisquer ficheiros ($Arg1)";
-    Text[ russian ] = "No ($Arg1) files found";
-    Text[ greek ] = "No ($Arg1) files found";
-    Text[ dutch ] = "Geen ($Arg1) bestanden gevonden";
-    Text[ french ] = "Aucun fichier ($Arg1) d�tect�";
-    Text[ spanish ] = "No se encontr� ning�n archivo ($Arg1)";
-    Text[ italian ] = "No ($Arg1) files found";
-    Text[ danish ] = "No ($Arg1) files found";
-    Text[ swedish ] = "No ($Arg1) files found";
-    Text[ polish ] = "Nie znaleziono plik�w ($Arg1)";
-    Text[ portuguese_brazilian ] = "Keine ($Arg1) Dateien gefunden";
-    Text[ japanese ] = "($Arg1)ファイルは見つかりません。";
-    Text[ korean ] = "($Arg1) 파일을 찾지 못했습니다.";
-    Text[ chinese_simplified ] = "没有找到 ($Arg1) 文件";
-    Text[ chinese_traditional ] = "沒有找到 ($Arg1) 檔案";
-    Text[ arabic ] = "No ($Arg1) files found";
-    Text[ turkish ] = "No ($Arg1) files found";
-    Text[ catalan ] = "No s'han trobat els fitxers ($Arg1)";
-    Text[ finnish ] = "($Arg1) tiedostoja ei l�ytynyt";
+    Text = "No ($Arg1) files found";
 };
 String S_ERRORS_DETECTED
 {
-    Text = "** ($Arg1) Fehler aufgetreten";
-    Text[ english_us ] = "** ($Arg1) errors occurred";
-    Text[ portuguese ] = "** ($Arg1): erros ocorridos";
-    Text[ russian ] = "** ($Arg1) errors occurred";
-    Text[ greek ] = "** ($Arg1) errors occurred";
-    Text[ dutch ] = "** ($Arg1) fout opgetreden";
-    Text[ french ] = "** ($Arg1) : Erreurs survenues";
-    Text[ spanish ] = "** Ha ocurrido el error ($Arg1)";
-    Text[ italian ] = "** ($Arg1) errors occurred";
-    Text[ danish ] = "** ($Arg1) errors occurred";
-    Text[ swedish ] = "** ($Arg1) errors occurred";
-    Text[ polish ] = "** Wyst�pi�o ($Arg1) b��d�w";
-    Text[ portuguese_brazilian ] = "** ($Arg1) Fehler aufgetreten";
-    Text[ japanese ] = "** ($Arg1) のエラー発生";
-    Text[ korean ] = "** ($Arg1) 오류 발생";
-    Text[ chinese_simplified ] = "发生了** ($Arg1) 错误";
-    Text[ chinese_traditional ] = "** ($Arg1) 錯誤";
-    Text[ arabic ] = "** ($Arg1) errors occurred";
-    Text[ turkish ] = "** ($Arg1) errors occurred";
-    Text[ catalan ] = "** S'han produ�t ($Arg1) errors";
-    Text[ finnish ] = "** ($Arg1) virhett� havaittu";
+    Text = "** ($Arg1) errors occurred";
 };
 String S_NO_ERRORS_DETECTED
 {
-    Text = "** Keine Fehler aufgetreten";
-    Text[ english_us ] = "** No errors have occurred";
-    Text[ portuguese ] = "**N�o ocorreram erros";
-    Text[ russian ] = "** No errors have occurred";
-    Text[ greek ] = "** No errors have occurred";
-    Text[ dutch ] = "** Geen fouten opgetreden";
-    Text[ french ] = "** Aucune erreur n'est survenue";
-    Text[ spanish ] = "** No ha ocurrido ning�n error";
-    Text[ italian ] = "** No errors have occurred";
-    Text[ danish ] = "** No errors have occurred";
-    Text[ swedish ] = "** No errors have occurred";
-    Text[ polish ] = "** Nie wyst�pi�y �adne b��dy";
-    Text[ portuguese_brazilian ] = "** Keine Fehler aufgetreten";
-    Text[ japanese ] = "** エラーなし";
-    Text[ korean ] = "** 발생된 오류 없음.";
-    Text[ chinese_simplified ] = "** 没有出现错误";
-    Text[ chinese_traditional ] = "** 沒有出現錯誤";
-    Text[ arabic ] = "** No errors have occurred";
-    Text[ turkish ] = "** No errors have occurred";
-    Text[ catalan ] = "** No hi ha hagut cap error";
-    Text[ finnish ] = "** Virheit� ei ilmennyt";
+    Text = "** No errors have occurred";
 };
 String S_WARNINGS_DETECTED
 {
-    Text = "** ($Arg1) Warnungen aufgetreten";
-    Text[ english_us ] = "** ($Arg1) warnings occurred";
-    Text[ portuguese ] = "** ($Arg1)advert�ncias ocorridas";
-    Text[ russian ] = "** ($Arg1) warnings occurred";
-    Text[ greek ] = "** ($Arg1) warnings occurred";
-    Text[ dutch ] = "** ($Arg1) waarschuwingen weergegeven";
-    Text[ french ] = "** ($Arg1) : Avertissements survenus";
-    Text[ spanish ] = "** Han aparecido las advertencias ($Arg1)";
-    Text[ italian ] = "** ($Arg1) warnings occurred";
-    Text[ danish ] = "** ($Arg1) warnings occurred";
-    Text[ swedish ] = "** ($Arg1) warnings occurred";
-    Text[ polish ] = "** Wyst�pi�o ($Arg1) ostrze�e�";
-    Text[ portuguese_brazilian ] = "** ($Arg1) Warnungen aufgetreten";
-    Text[ japanese ] = "** ($Arg1) の警告発生";
-    Text[ korean ] = "** ($Arg1) 경고 발생";
-    Text[ chinese_simplified ] = "发生了** ($Arg1) 警告";
-    Text[ chinese_traditional ] = "** ($Arg1) 警告";
-    Text[ arabic ] = "** ($Arg1) warnings occurred";
-    Text[ turkish ] = "** ($Arg1) warnings occurred";
-    Text[ catalan ] = "** Han aparegut les advert�ncies ($Arg1)";
-    Text[ finnish ] = "** ($Arg1) varoitusta";
+    Text = "** ($Arg1) warnings occurred";
 };
 String S_NO_WARNINGS_DETECTED
 {
-    Text = "** Keine Warnungen aufgetreten";
-    Text[ english_us ] = "** No warnings have occurred";
-    Text[ portuguese ] = "**N�o ocorreram quaisquer erros";
-    Text[ russian ] = "** No warnings have occurred";
-    Text[ greek ] = "** No warnings have occurred";
-    Text[ dutch ] = "** Geen waarschuwingen weergegeven";
-    Text[ french ] = "** Aucun avertissement n'est survenu";
-    Text[ spanish ] = "** No han aparecido advertencias";
-    Text[ italian ] = "** No warnings have occurred";
-    Text[ danish ] = "** No warnings have occurred";
-    Text[ swedish ] = "** No warnings have occurred";
-    Text[ polish ] = "** Nie wyst�pi�y �adne ostrze�enia";
-    Text[ portuguese_brazilian ] = "** Keine Warnungen aufgetreten";
-    Text[ japanese ] = "** 警告なし";
-    Text[ korean ] = "** 발생된 경고 없음.";
-    Text[ chinese_simplified ] = "** 没有出现警告";
-    Text[ chinese_traditional ] = "** 沒有警告";
-    Text[ arabic ] = "** No warnings have occurred";
-    Text[ turkish ] = "** No warnings have occurred";
-    Text[ catalan ] = "** No han aparegut advert�ncies";
-    Text[ finnish ] = "** Varoituksia ei ilmennyt";
+    Text = "** No warnings have occurred";
 };
 String S_INCLUDE_FILE_WARNINGS_DETECTED
 {
-    Text = "** ($Arg1) Warnungen bei der Initialisierung aufgetreten";
-    Text[ english_us ] = "** ($Arg1) warnings occurred during initialization";
-    Text[ portuguese ] = "Advert�ncias ** ($Arg1) durante a inicializa��o";
-    Text[ russian ] = "**�� ����� ������������� ���������� ($Arg1) ��������������";
-    Text[ greek ] = "** �������������� ��������������� ��� ($Arg1) ���� ��� ������������";
-    Text[ dutch ] = "** ($Arg1) waarschuwingen weergegeven";
-    Text[ french ] = "** ($Arg1) : Avertissements durant l'initialisation";
-    Text[ spanish ] = "** Han aparecido las advertencias ($Arg1) durante la inicializaci�n";
-    Text[ italian ] = "** ($Arg1) avvertenze durante l'inizializzazione";
-    Text[ danish ] = "** ($Arg1) advarsler opstod under initialiseringen";
-    Text[ swedish ] = "** ($Arg1) warnings occurred during initialization";
-    Text[ polish ] = "** Wyst�pi�o ($Arg1) ostrze�e� podczas inicjalizacji";
-    Text[ portuguese_brazilian ] = "** ($Arg1) Warnungen aufgetreten";
-    Text[ japanese ] = "** 初期化中に ($Arg1) の警告あり";
-    Text[ korean ] = "** ($Arg1) 초기화에서 경고 발생";
-    Text[ chinese_simplified ] = "在初始化时发出 ** ($Arg1) 警告";
-    Text[ chinese_traditional ] = "** 在初始化時發出警告($Arg1) 警告";
-    Text[ arabic ] = "** ($Arg1) ������� ����� ����� ������� ����";
-    Text[ turkish ] = "** ($Arg1) warnings occurred";
-    Text[ catalan ] = "** Han aparegut les advert�ncies ($Arg1) durant la inicialitzaci�";
-    Text[ finnish ] = "** ($Arg1) varoitusta asennuksessa";
+    Text = "** ($Arg1) warnings occurred during initialization";
 };
 String S_NO_INCLUDE_FILE_WARNINGS_DETECTED
 {
-    Text = "** Keine Warnungen bei der Initialisierung aufgetreten";
-    Text[ english_us ] = "** No warnings occurred during initialization";
-    Text[ portuguese ] = "**N�o apareceram quaisquer advert�ncias durante a inicializa��o";
-    Text[ russian ] = "**�� ����� ������������� �������������� �� ����������";
-    Text[ greek ] = "** ��� ������������� ����� ������������� ���� ��� ������������";
-    Text[ dutch ] = "** Geen waarschuwingen weergegeven";
-    Text[ french ] = "** Aucun avertissement durant l'initialisation";
-    Text[ spanish ] = "** No han aparecido advertencias durante la inicializaci�n";
-    Text[ italian ] = "** Nessuna avvertenza durante l'inizializzazione";
-    Text[ danish ] = "** Ingen advarsler opstod under initialiseringen";
-    Text[ swedish ] = "** No warnings occurred during initialization";
-    Text[ polish ] = "** Nie wyst�pi�y �adne ostrze�enia podczas inicjalizacji";
-    Text[ portuguese_brazilian ] = "** Keine Warnungen aufgetreten";
-    Text[ japanese ] = "** 初期化中に警告なし";
-    Text[ korean ] = "** 초기화에서 경고가 발생하지 않았습니다.";
-    Text[ chinese_simplified ] = "** 在初始化时没有出现警告";
-    Text[ chinese_traditional ] = "** 在初始化時沒有發出警告";
-    Text[ arabic ] = "** �� ���� ��� ������� ����� �������";
-    Text[ turkish ] = "** No warnings have occurred";
-    Text[ catalan ] = "** No han aparegut advert�ncies durant la inicialitzaci�";
-    Text[ finnish ] = "** Ei varoituksia asennuksessa";
+    Text = "** No warnings occurred during initialization";
 };
 String S_UNKNOWN_SLOT_CONTROL
 {
-    Text = "Slot/Control unbekannt :\"($Arg1)\"";
-    Text[ english_us ] = "Slot/Control unknown :\"($Arg1)\"";
-    Text[ portuguese ] = "Slot/Control desconhecido :\"($Arg1)\"";
-    Text[ russian ] = "Slot/Control unknown :\"($Arg1)\"";
-    Text[ greek ] = "Slot/Control unknown :\"($Arg1)\"";
-    Text[ dutch ] = "Slot/Control onbekend :\"($Arg1)\"";
-    Text[ french ] = "Slot/Control inconnu : \"($Arg1)\"";
-    Text[ spanish ] = "Slot/Control desconocido :\"($Arg1)\"";
-    Text[ italian ] = "Slot/Control unknown :\"($Arg1)\"";
-    Text[ danish ] = "Slot/Control unknown :\"($Arg1)\"";
-    Text[ swedish ] = "Slot/Control unknown :\"($Arg1)\"";
-    Text[ polish ] = "Nieznany Slot/Control :\"($Arg1)\"";
-    Text[ portuguese_brazilian ] = "Slot/Control unbekannt :\"($Arg1)\"";
-    Text[ japanese ] = "スロット/コントロールがわかりません:\"($Arg1)\"";
-    Text[ korean ] = "알수 없는 슬롯/컨트롤 :\"($Arg1)\"";
-    Text[ chinese_simplified ] = "不明的 Slot/Control：\"($Arg1)\"";
-    Text[ chinese_traditional ] = "Slot/Control 不明：($Arg1)";
-    Text[ arabic ] = "Slot/Control unknown :\"($Arg1)\"";
-    Text[ turkish ] = "Slot/Control unknown :\"($Arg1)\"";
-    Text[ catalan ] = "Slot/Control desconegut :\"($Arg1)\"";
-    Text[ finnish ] = "Tuntematon paikka/ohjain: ($Arg1)";
+    Text = "Slot/Control unknown :\"($Arg1)\"";
 };
 String S_RETURN_SEQUENCE_MISSMATCH
 {
-    Text = "Return Stream mit falscher Sequenz: ($Arg1) statt ($Arg2)";
-    Text[ english_us ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
-    Text[ portuguese ] = "Return Stream com sequ�ncia incorrecta: ($Arg1) em lugar de ($Arg2)";
-    Text[ russian ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
-    Text[ greek ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
-    Text[ dutch ] = "Return Stream met verkeerde sequentie: ($Arg1) in plaats van ($Arg2)";
-    Text[ french ] = "Return Stream avec une s�quence erron�e : ($Arg1) au lieu de ($Arg2)";
-    Text[ spanish ] = "Return Stream con secuencia falsa: ($Arg1) en vez de ($Arg2)";
-    Text[ italian ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
-    Text[ danish ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
-    Text[ swedish ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
-    Text[ polish ] = "Return Stream o nieprawid�owej sekwencji: ($Arg1) zamiast ($Arg2)";
-    Text[ portuguese_brazilian ] = "Return Stream mit falscher Sequenz: ($Arg1) statt ($Arg2)";
-    Text[ japanese ] = "リターンストリームのシーケンスが間違っています: ($Arg2) でなく ($Arg1)";
-    Text[ korean ] = "일련 번호가 틀린 리턴 스트림: ($Arg2) 대신 ($Arg1)";
-    Text[ chinese_simplified ] = "含有错误序列的返回信息流：($Arg1) 代替($Arg2)";
-    Text[ chinese_traditional ] = "返回數據流的序列錯誤：($Arg1)， 應該是 ($Arg2)";
-    Text[ arabic ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
-    Text[ turkish ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
-    Text[ catalan ] = "Return Stream amb seq��ncia falsa: ($Arg1) en comptes de ($Arg2)";
-    Text[ finnish ] = "Paluuvirran j�rjestys on v��r�: ($Arg1) eik� ($Arg2)";
+    Text = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
 };
 String S_RETURNED_VALUE_ID_MISSMATCH
 {
-    Text = "Returnwert Empfangen aber andere Id erwartet";
-    Text[ english_us ] = "Return value received but different Id expected";
-    Text[ portuguese ] = "Recebido o valor Return, mas � necess�rio outro ID";
-    Text[ russian ] = "Return value received but different Id expected";
-    Text[ greek ] = "Return value received but different Id expected";
-    Text[ dutch ] = "Retourwaarde ontvangen echter andere Id verwacht";
-    Text[ french ] = "Valeur de renvoi re�ue mais attente d'un autre ID";
-    Text[ spanish ] = "Recibido Valor Return, pero se esperaba otro Id";
-    Text[ italian ] = "Return value received but different Id expected";
-    Text[ danish ] = "Return value received but different Id expected";
-    Text[ swedish ] = "Return value received but different Id expected";
-    Text[ polish ] = "Odebrano warto�� return, ale oczekiwane jest inne ID";
-    Text[ portuguese_brazilian ] = "Returnwert Empfangen aber andere Id erwartet";
-    Text[ japanese ] = "リターン値を受け取りましたが、別のIdが必要です。";
-    Text[ korean ] = "반환값 수신함,  하지만 다른 Id를 기대함";
-    Text[ chinese_simplified ] = "返回值接收期待的是其它的 Id(标识符)";
-    Text[ chinese_traditional ] = "接收到返回值，但是期待是其它 Id";
-    Text[ arabic ] = "Return value received but different Id expected";
-    Text[ turkish ] = "Return value received but different Id expected";
-    Text[ catalan ] = "S'ha rebut el valor Return, per� s'esperava un altre Id";
-    Text[ finnish ] = "Palautusarvo saatu, mutta tunnus ei ole odotettu";
+    Text = "Return value received but different Id expected";
 };
 String S_RETURNED_VALUE_NO_RECEIVER
 {
-    Text = "Returnwert Empfangen aber kein Empf�nger definiert";
-    Text[ english_us ] = "Return value received but receiver not defined";
-    Text[ portuguese ] = "Recebido o valor Return, mas o destinat�rio n�o foi definido";
-    Text[ russian ] = "Return value received but receiver not defined";
-    Text[ greek ] = "Return value received but receiver not defined";
-    Text[ dutch ] = "Retourwaarde ontvangen echter geen ontvanger gedefinieerd";
-    Text[ french ] = "Valeur de renvoi re�ue mais aucun destinataire d�fini";
-    Text[ spanish ] = "Recibido valor Return sin definici�n de destinatario";
-    Text[ italian ] = "Return value received but receiver not defined";
-    Text[ danish ] = "Return value received but receiver not defined";
-    Text[ swedish ] = "Return value received but receiver not defined";
-    Text[ polish ] = "Odebrano warto�� return, ale brak zdefiniowanego odbiorcy";
-    Text[ portuguese_brazilian ] = "Returnwert Empfangen aber kein Empf?nger definiert";
-    Text[ japanese ] = "リターン値を受け取りましたが、受信者が決定できません。";
-    Text[ korean ] = "반환값 수신함, 하지만 수신자가  정의되지 않았음";
-    Text[ chinese_simplified ] = "返回值接收没有指定接收者";
-    Text[ chinese_traditional ] = "接收到返回值，但是沒有指定接收目標。";
-    Text[ arabic ] = "Return value received but receiver not defined";
-    Text[ turkish ] = "Return value received but receiver not defined";
-    Text[ catalan ] = "S'ha rebut un valor Return sense definici� del destinatari";
-    Text[ finnish ] = "Palautusarvo saatu, mutta vastaanottajaa ei ole m��ritetty";
+    Text = "Return value received but no receiver defined";
 };
 String S_UNKNOWN_METHOD
 {
-    Text = "Unbekannte Methode an Objekt : ($Arg1).($Arg2)";
-    Text[ english_us ] = "Unknown method on object :($Arg1).($Arg2)";
-    Text[ portuguese ] = "M�todo desconhecido ($Arg1) para ($Arg2)";
-    Text[ russian ] = "Unknown method '($Arg1)' to ($Arg2)";
-    Text[ greek ] = "Unknown method on object :($Arg1).($Arg2)";
-    Text[ dutch ] = "Onbekende methode aan object: ($Arg1).($Arg2)";
-    Text[ french ] = "M�thode inconnue vers l'objet : ($Arg1).($Arg2)";
-    Text[ spanish ] = "M�todo desconocido ($Arg1) a ($Arg2)";
-    Text[ italian ] = "Unknown method '($Arg1)' to ($Arg2)";
-    Text[ danish ] = "Unknown method on object: ($Arg1).($Arg2)";
-    Text[ swedish ] = "Unknown method '($Arg1)' to ($Arg2)";
-    Text[ polish ] = "Nieznana metoda do obiektu: ($Arg1).($Arg2)";
-    Text[ portuguese_brazilian ] = "Unbekannte Methode an Objekt : ($Arg1).($Arg2)";
-    Text[ japanese ] = "Unknown method on object :($Arg1).($Arg2)";
-    Text[ korean ] = "개체에 알수 없는 메소드 : ($Arg1).($Arg2)";
-    Text[ chinese_simplified ] = "Unknown method on object:($Arg1).($Arg2)";
-    Text[ chinese_traditional ] = "物件方式不明： ($Arg1).($Arg2)";
-    Text[ arabic ] = "Unknown method '($Arg1)' to ($Arg2)";
-    Text[ turkish ] = "Unknown method on object :($Arg1).($Arg2)";
-    Text[ catalan ] = "M�tode desconegut ($Arg1) a ($Arg2)";
-    Text[ finnish ] = "Tuntematon menetelm� objektissa($Arg1).($Arg2)";
+    Text = "Unknown method on object :($Arg1).($Arg2)";
 };
 /*
 String
@@ -703,15 +203,4 @@ String
     Text = ;
 };
 */
-
-
-
-
-
-
-
-
-
-
-
 
