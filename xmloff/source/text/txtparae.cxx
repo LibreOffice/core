@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-04 09:49:55 $
+ *  last change: $Author: mib $ $Date: 2001-05-07 07:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,10 @@ SV_IMPL_PTRARR( OUStrings_Impl, OUStringPtr )
 
 SV_DECL_PTRARR_SORT_DEL( OUStringsSort_Impl, OUStringPtr, 20, 10 )
 SV_IMPL_OP_PTRARR_SORT( OUStringsSort_Impl, OUStringPtr )
+
+#ifndef PRODUCT
+static txtparae_bContainsIllegalCharacters = sal_False;
+#endif
 
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                                   const Reference < XPropertySet > & rPropSet,
@@ -815,6 +819,9 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
     delete pFrameGraphicIdxs;
     delete pFrameEmbeddedIdxs;
     delete pFrameShapeIdxs;
+#ifndef PRODUCT
+    txtparae_bContainsIllegalCharacters = sal_False;
+#endif
 }
 
 SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateShapeExtPropMapper(
@@ -2474,6 +2481,8 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
             bExpCharAsElement = sal_True;
             bExpCharAsText = sal_False;
             break;
+        case 0x000D:
+            break;  // legal character
         case 0x0020:    // Blank
             if( rPrevCharIsSpace )
             {
@@ -2482,6 +2491,18 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
                 bExpCharAsText = sal_False;
             }
             bCurrCharIsSpace = sal_True;
+            break;
+        default:
+            if( cChar < 0x0020 )
+            {
+#ifndef PRODUCT
+                OSL_ENSURE( txtparae_bContainsIllegalCharacters ||
+                            cChar >= 0x0020,
+                            "illegal character in text content" );
+                txtparae_bContainsIllegalCharacters = sal_True;
+#endif
+                bExpCharAsText = sal_False;
+            }
             break;
         }
 
