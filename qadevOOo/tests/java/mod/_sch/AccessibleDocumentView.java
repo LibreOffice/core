@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentView.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2003-05-27 13:19:19 $
+ *  last change: $Date: 2003-09-08 12:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,29 +60,26 @@
  ************************************************************************/
 package mod._sch;
 
-import lib.TestCase;
-import com.sun.star.lang.XMultiServiceFactory;
-import lib.TestParameters;
 import java.io.PrintWriter;
-import lib.TestEnvironment;
-import com.sun.star.uno.XInterface;
-import util.SOfficeFactory;
+
 import lib.StatusException;
-import com.sun.star.frame.XController;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
 import util.AccessibilityTools;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleValue;
-import com.sun.star.frame.XModel;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.awt.XWindow;
-import com.sun.star.accessibility.XAccessible;
-import util.utils;
 import util.SOfficeFactory;
-import com.sun.star.chart.XChartDocument;
-import com.sun.star.drawing.XShape;
-import com.sun.star.awt.Rectangle;
+import util.utils;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
 import com.sun.star.awt.PosSize;
+import com.sun.star.awt.Rectangle;
+import com.sun.star.awt.XWindow;
+import com.sun.star.chart.XChartDocument;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 public class AccessibleDocumentView extends TestCase {
 
@@ -103,13 +100,13 @@ public class AccessibleDocumentView extends TestCase {
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
 
-        oObj = at.SearchedContext;
+        oObj = AccessibilityTools.SearchedContext;
 
         if (oObj == null) {
             log.println("DocumentView hasn't the role 'Document'");
             log.println("trying the role 'Shape'");
             at.getAccessibleObjectForRole(xRoot, AccessibleRole.SHAPE);
-            oObj = at.SearchedContext;
+            oObj = AccessibilityTools.SearchedContext;
         }
 
         log.println("ImplementationName " + utils.getImplName(oObj));
