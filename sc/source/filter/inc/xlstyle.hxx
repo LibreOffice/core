@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:24:48 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,6 @@ const sal_uInt16 EXC_XF_HIDDEN              = 0x0002;
 const sal_uInt16 EXC_XF_STYLE               = 0x0004;
 const sal_uInt16 EXC_XF_STYLEPARENT         = 0x0FFF;   /// Syles don't have a parent.
 const sal_uInt16 EXC_XF_WRAPPED             = 0x0008;   /// Automatic line break.
-const sal_uInt16 EXC_XF_SHRINK              = 0x0010;   /// Shrink to fit into cell.
 
 const sal_uInt8 EXC_XF_DIFF_VALFMT          = 0x01;
 const sal_uInt8 EXC_XF_DIFF_FONT            = 0x02;
@@ -211,13 +210,11 @@ const sal_uInt8 EXC_XF2_TOPLINE             = 0x20;
 const sal_uInt8 EXC_XF2_BOTTOMLINE          = 0x40;
 const sal_uInt8 EXC_XF2_BACKGROUND          = 0x80;
 
-const sal_uInt16 EXC_XF8_SHRINKTOFIT        = 0x0010;
+const sal_uInt16 EXC_XF8_SHRINK             = 0x0010;   /// Shrink to fit into cell.
 const sal_uInt16 EXC_XF8_MERGE              = 0x0020;
 
-const sal_uInt8 EXC_XF8_STACKED             = 0xFF;     /// Special rotation angle.
-
 // Diagonal Border Line Styles
-const sal_uInt32 EXC_XF_DIAGONAL_TR_TO_BL   = 0x40000000;   /// Top Right to Bottom Left.
+const sal_uInt32 EXC_XF_DIAGONAL_TL_TO_BR   = 0x40000000;   /// Top left to Bottom right.
 const sal_uInt32 EXC_XF_DIAGONAL_BL_TO_TR   = 0x80000000;   /// Bottom Left to Top Right.
 const sal_uInt32 EXC_XF_DIAGONAL_BOTH       = 0xC0000000;   /// Both.
 
@@ -509,6 +506,7 @@ struct XclCellAlign
     sal_uInt8                   mnRotation;     /// Text rotation angle.
     sal_uInt8                   mnIndent;       /// Indentation.
     bool                        mbWrapped;      /// true = Multi-line text.
+    bool                        mbShrink;       /// true = Shrink to fit cell size.
 
     explicit                    XclCellAlign();
 };
@@ -524,10 +522,14 @@ struct XclCellBorder
     sal_uInt16                  mnRightColor;   /// Palette index for right line.
     sal_uInt16                  mnTopColor;     /// Palette index for top line.
     sal_uInt16                  mnBottomColor;  /// Palette index for bottom line.
+    sal_uInt16                  mnDiagColor;    /// Palette index for diagonal line(s).
     sal_uInt8                   mnLeftLine;     /// Style of left line.
     sal_uInt8                   mnRightLine;    /// Style of right line.
     sal_uInt8                   mnTopLine;      /// Style of top line.
     sal_uInt8                   mnBottomLine;   /// Style of bottom line.
+    sal_uInt8                   mnDiagLine;     /// Style of diagonal line(s).
+    bool                        mbDiagTLtoBR;   /// true = Top-left to bottom-right on.
+    bool                        mbDiagBLtoTR;   /// true = Bottom-left to top-right on.
 
     explicit                    XclCellBorder();
 };
@@ -554,9 +556,9 @@ bool operator==( const XclCellArea& rLeft, const XclCellArea& rRight );
 // ----------------------------------------------------------------------------
 
 /** Contains base members for XF record import/export.
-    @In detail this class stores the XF type (cell/style), the index to the parent
-    style XF and all "attribute used" flags, which reflect the state of specific
-    attribute groups (true = user has changed the attributes). */
+    @descr  In detail this class stores the XF type (cell/style), the index to the
+    parent style XF and all "attribute used" flags, which reflect the state of
+    specific attribute groups (true = user has changed the attributes). */
 class XclXFBase
 {
 public:
