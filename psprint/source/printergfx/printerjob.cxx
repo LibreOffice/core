@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:48:22 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1235,6 +1235,7 @@ bool PrinterJob::writePageSetup( osl::File* pFile, const JobData& rJob )
     WritePS (pFile, "%%BeginPageSetup\n%\n");
 
     bSuccess = writeFeatureList( pFile, rJob, false );
+    WritePS (pFile, "%%EndPageSetup\n");
 
     sal_Char  pTranslate [128];
     sal_Int32 nChar = 0;
@@ -1269,8 +1270,6 @@ bool PrinterJob::writePageSetup( osl::File* pFile, const JobData& rJob )
     }
 
     WritePS (pFile, pTranslate);
-
-    WritePS (pFile, "%%EndPageSetup\n");
 
     return bSuccess;
 }
