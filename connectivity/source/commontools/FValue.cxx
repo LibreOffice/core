@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-26 12:38:27 $
+ *  last change: $Author: fs $ $Date: 2002-09-06 12:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,7 +653,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int64& _rRH)
 // -------------------------------------------------------------------------
 ORowSetValue& ORowSetValue::operator=(const Sequence<sal_Int8>& _rRH)
 {
-    if (!isStorageCompatible(DataType::LONGVARCHAR,m_eTypeKind))
+    if (!isStorageCompatible(DataType::LONGVARBINARY,m_eTypeKind))
         free();
 
     if (m_bNull)
