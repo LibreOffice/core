@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:08:56 $
+ *  last change: $Author: hr $ $Date: 2004-08-04 10:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,13 +688,8 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
         // TODO: copy encrypted element
         if ( !pElement->m_pStream->IsEncrypted() )
         {
-<<<<<<< xstorage.cxx
-            uno::Reference< io::XStream > xSubStr =
-                                        xDest->openStreamElement( pElement->m_aName,
-=======
             uno::Reference< io::XStream > xSubStr =
                                         xDest->openStreamElement( aName,
->>>>>>> 1.9
                                         embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
             OSL_ENSURE( xSubStr.is(), "No destination substream!\n" );
 
@@ -702,13 +697,8 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
         }
         else if ( pElement->m_pStream->HasCachedPassword() && pElement->m_pStream->IsModified() )
         {
-<<<<<<< xstorage.cxx
-            uno::Reference< io::XStream > xSubStr =
-                                        xDest->openEncryptedStreamElement( pElement->m_aName,
-=======
             uno::Reference< io::XStream > xSubStr =
                                         xDest->openEncryptedStreamElement( aName,
->>>>>>> 1.9
                                             embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE,
                                             pElement->m_pStream->GetCachedPassword() );
             OSL_ENSURE( xSubStr.is(), "No destination substream!\n" );
@@ -1601,15 +1591,8 @@ void OStorage::MakeLinkToSubComponent_Impl( const uno::Reference< lang::XCompone
 
     xComponent->addEventListener( uno::Reference< lang::XEventListener >(
         static_cast< ::cppu::OWeakObject* >( m_pData->m_pSubElDispListener ), uno::UNO_QUERY ) );
-<<<<<<< xstorage.cxx
-
-    sal_Int32 nLength = m_pData->m_aOpenSubComponentsList.getLength();
-    m_pData->m_aOpenSubComponentsList.realloc( nLength + 1 );
-    m_pData->m_aOpenSubComponentsList[nLength] = xComponent;
-=======
 
     m_pData->m_aOpenSubComponentsList.push_back( xComponent );
->>>>>>> 1.9
 }
 
 //____________________________________________________________________________________________________
