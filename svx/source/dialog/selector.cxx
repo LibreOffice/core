@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:38:18 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 15:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,37 +664,49 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
                             bIsRootNode = TRUE;
                         }
 
+                        OUString sDisplayTitle;
+                        OUString sModelTitle;
+                        SfxObjectShell* pCurrentDoc = SfxObjectShell::GetWorkingDocument();
+                        if ( pCurrentDoc )
+                        {
+                            sDisplayTitle = pCurrentDoc->GetTitle();
+                            sModelTitle = xModelToDocTitle( pCurrentDoc->GetModel() );
+                        }
+
+                        if ( sDisplayTitle.getLength() == 0 && sModelTitle.getLength() != 0 )
+                        {
+                            sDisplayTitle = sModelTitle;
+                        }
+
                         for ( ULONG n = 0; n < children.getLength(); n++ )
                         {
-                            Reference< browse::XBrowseNode >& theChild = children[n];
-                            BOOL bDisplay = TRUE;
                             /* To mimic current starbasic behaviour we
                             need to make sure that only the current document
                             is displayed in the config tree. Tests below
                             set the bDisplay flag to FALSE if the current
                             node is a first level child of the Root and is NOT
                             either the current document, user or share */
-                            OUString currentDocTitle;
-                               if ( SfxObjectShell::GetWorkingDocument() )
-                            {
-                                currentDocTitle = SfxObjectShell::GetWorkingDocument()->GetTitle();
-                            }
+                            Reference< browse::XBrowseNode >& theChild = children[n];
                             ::rtl::OUString uiName = theChild->getName();
+                            BOOL bDisplay = TRUE;
 
                             if ( bIsRootNode )
                             {
-                                if (  ! ((theChild->getName().equals( user )  ||                                    theChild->getName().equals( share ) ||
-                                    theChild->getName().equals( currentDocTitle ) ) ) )
+                                if ( uiName.equals( sModelTitle ) )
                                 {
-                                    bDisplay=FALSE;
+                                    uiName = sDisplayTitle;
                                 }
-                                if ( uiName.equals( user ) )
+                                else if ( uiName.equals( user ) )
                                 {
                                     uiName = m_sMyMacros;
                                 }
                                 else if ( uiName.equals( share ) )
                                 {
                                     uiName = m_sProdMacros;
+                                }
+                                else
+                                {
+                                    bDisplay = FALSE;
                                 }
                             }
                             if (children[n]->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
@@ -1278,7 +1290,6 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
             {
                 Reference< browse::XBrowseNode > rootNode(
                     reinterpret_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
-
                 try {
                     if ( rootNode->hasChildNodes() )
                     {
@@ -1293,27 +1304,49 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                             bIsRootNode = TRUE;
                         }
 
+                        OUString sDisplayTitle;
+                        OUString sModelTitle;
+                        SfxObjectShell* pCurrentDoc = SfxObjectShell::GetWorkingDocument();
+                        if ( pCurrentDoc )
+                        {
+                            sDisplayTitle = pCurrentDoc->GetTitle();
+                            sModelTitle = xModelToDocTitle( pCurrentDoc->GetModel() );
+                        }
+
+                        if ( sDisplayTitle.getLength() == 0 && sModelTitle.getLength() != 0 )
+                        {
+                            sDisplayTitle = sModelTitle;
+                        }
+
                         for ( ULONG n = 0; n < children.getLength(); n++ )
                         {
-                            Reference< browse::XBrowseNode >& theChild = children[n];
-                            BOOL bDisplay = TRUE;
                             /* To mimic current starbasic behaviour we
                             need to make sure that only the current document
                             is displayed in the config tree. Tests below
                             set the bDisplay flag to FALSE if the current
                             node is a first level child of the Root and is NOT
                             either the current document, user or share */
-                            OUString currentDocTitle;
-                               if ( SfxObjectShell::GetWorkingDocument() )
-                            {
-                                currentDocTitle = SfxObjectShell::GetWorkingDocument()->GetTitle();
-                            }
+                            Reference< browse::XBrowseNode >& theChild = children[n];
+                            ::rtl::OUString uiName = theChild->getName();
+                            BOOL bDisplay = TRUE;
+
                             if ( bIsRootNode )
                             {
-                                if (  ! ((theChild->getName().equals( user )  ||                                    theChild->getName().equals( share ) ||
-                                    theChild->getName().equals( currentDocTitle ) ) ) )
+                                if ( uiName.equals( sModelTitle ) )
                                 {
-                                    bDisplay=FALSE;
+                                    uiName = sDisplayTitle;
+                                }
+                                else if ( uiName.equals( user ) )
+                                {
+                                    uiName = m_sMyMacros;
+                                }
+                                else if ( uiName.equals( share ) )
+                                {
+                                    uiName = m_sProdMacros;
+                                }
+                                else
+                                {
+                                    bDisplay = FALSE;
                                 }
                             }
                             if (children[n]->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
