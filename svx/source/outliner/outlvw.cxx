@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:45:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1548,14 +1548,14 @@ void OutlinerView::ExecuteSpellPopup( const Point& rPosPixel, Link* pStartDlg )
     pEditView->ExecuteSpellPopup( rPosPixel, pStartDlg );
 }
 
-ULONG OutlinerView::Read( SvStream& rInput, EETextFormat eFormat, BOOL bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
+ULONG OutlinerView::Read( SvStream& rInput,  const String& rBaseURL, EETextFormat eFormat, BOOL bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     DBG_CHKTHIS(OutlinerView,0);
     USHORT nOldParaCount = pEditView->GetEditEngine()->GetParagraphCount();
     ESelection aOldSel = pEditView->GetSelection();
     aOldSel.Adjust();
 
-    ULONG nRet = pEditView->Read( rInput, eFormat, bSelect, pHTTPHeaderAttrs );
+    ULONG nRet = pEditView->Read( rInput, rBaseURL, eFormat, bSelect, pHTTPHeaderAttrs );
 
     // MT 08/00: Hier sollte eigentlich das gleiche wie in PasteSpecial passieren!
     // Mal anpassen, wenn dieses ImplInitPaste und ImpPasted-Geraffel ueberarbeitet ist.
