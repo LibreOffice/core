@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:29:06 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ TabPage TP_ENV_FMT
         Text [ italian ] = "Destinatario" ;
         Text [ portuguese_brazilian ] = "EndereÁo" ;
         Text [ portuguese ] = "Destinat·rio" ;
-        Text [ finnish ] = "Empf‰nger" ;
+        Text [ finnish ] = "Saaja" ;
         Text [ danish ] = "Modtager" ;
         Text [ french ] = "Destinataire" ;
         Text [ swedish ] = "Mottagare" ;
@@ -118,13 +118,13 @@ TabPage TP_ENV_FMT
         Text[ polish ] = "Stanowisko";
         Text[ portuguese_brazilian ] = "Position";
         Text[ japanese ] = "à íu";
-        Text[ korean ] = "Position";
+        Text[ korean ] = "¡˜¿ß";
         Text[ chinese_simplified ] = "Œª÷√";
         Text[ chinese_traditional ] = "¶Ï∏m";
         Text[ turkish ] = "Pozisyon";
         Text[ arabic ] = "«·„Ê÷⁄";
         Text[ catalan ] = "PosiciÛn";
-        Text[ finnish ] = "Position";
+        Text[ finnish ] = "Sijainti";
     };
     FixedText TXT_ADDR_LEFT
     {
@@ -240,13 +240,13 @@ TabPage TP_ENV_FMT
         Text[ polish ] = "Format";
         Text[ portuguese_brazilian ] = "Format";
         Text[ japanese ] = "èëéÆ";
-        Text[ korean ] = "Format";
+        Text[ korean ] = "∆˜∏À";
         Text[ chinese_simplified ] = "∏Ò Ω";
         Text[ chinese_traditional ] = "ÆÊ¶°";
         Text[ turkish ] = "Format";
         Text[ arabic ] = "«· ‰”Ìﬁ";
         Text[ catalan ] = "Formato";
-        Text[ finnish ] = "Format";
+        Text[ finnish ] = "Muotoile";
     };
     MenuButton BTN_ADDR_EDIT
     {
@@ -288,7 +288,7 @@ TabPage TP_ENV_FMT
         Text [ italian ] = "Mittente" ;
         Text [ portuguese_brazilian ] = "Remetente" ;
         Text [ portuguese ] = "Remetente" ;
-        Text [ finnish ] = "Absender" ;
+        Text [ finnish ] = "L‰hett‰j‰" ;
         Text [ danish ] = "Afsender" ;
         Text [ french ] = "ExpÈditeur" ;
         Text [ swedish ] = "Avs‰ndare" ;
@@ -327,13 +327,13 @@ TabPage TP_ENV_FMT
         Text[ polish ] = "Pozycja";
         Text[ portuguese_brazilian ] = "Position";
         Text[ japanese ] = "à íu";
-        Text[ korean ] = "Position";
+        Text[ korean ] = "¡˜¿ß";
         Text[ chinese_simplified ] = "Œª÷√";
         Text[ chinese_traditional ] = "¶Ï∏m";
         Text[ turkish ] = "›˛ unvan˝";
         Text[ arabic ] = "«·„Ê÷⁄";
         Text[ catalan ] = "PosiciÛn";
-        Text[ finnish ] = "Position";
+        Text[ finnish ] = "Sijainti";
     };
     FixedText TXT_SEND_LEFT
     {
@@ -449,13 +449,13 @@ TabPage TP_ENV_FMT
         Text[ polish ] = "Format";
         Text[ portuguese_brazilian ] = "Format";
         Text[ japanese ] = "èëéÆ";
-        Text[ korean ] = "Format";
+        Text[ korean ] = "∆˜∏À";
         Text[ chinese_simplified ] = "∏Ò Ω";
         Text[ chinese_traditional ] = "ÆÊ¶°";
         Text[ turkish ] = "Format";
         Text[ arabic ] = "«· ‰”Ìﬁ";
         Text[ catalan ] = "Formato";
-        Text[ finnish ] = "Format";
+        Text[ finnish ] = "Muotoile";
     };
     MenuButton BTN_SEND_EDIT
     {
@@ -526,7 +526,7 @@ TabPage TP_ENV_FMT
         Text [ italian ] = "Formato" ;
         Text [ portuguese_brazilian ] = "Formato" ;
         Text [ portuguese ] = "Fo~rmato" ;
-        Text [ finnish ] = "~Format" ;
+        Text [ finnish ] = "~Muotoile" ;
         Text [ danish ] = "Forma~ter" ;
         Text [ french ] = "Forma~t" ;
         Text [ swedish ] = "~Format" ;
@@ -542,7 +542,7 @@ TabPage TP_ENV_FMT
         Text[ arabic ] = "«· ‰”Ìﬁ";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "≈ÈÎÔ„›Ú";
-        Text[ korean ] = "º≠Ωƒ(~O)";
+        Text[ korean ] = "∆˜∏À(~O)";
         Text[ turkish ] = "Format";
         Text[ catalan ] = "~Formato";
     };
@@ -564,7 +564,7 @@ TabPage TP_ENV_FMT
         Text [ italian ] = "~Largh." ;
         Text [ portuguese_brazilian ] = "Largura" ;
         Text [ portuguese ] = "~Largura" ;
-        Text [ finnish ] = "~Breite" ;
+        Text [ finnish ] = "Leveys" ;
         Text [ danish ] = "Bredde" ;
         Text [ french ] = "~Largeur" ;
         Text [ swedish ] = "~Bredd" ;
@@ -579,7 +579,7 @@ TabPage TP_ENV_FMT
         Text[ chinese_traditional ] = "ºe(~W)";
         Text[ arabic ] = "«·⁄—÷";
         Text[ greek ] = "–Î‹ÙÔÚ";
-        Text[ korean ] = "≥ ∫Ò(~W)";
+        Text[ korean ] = "∆¯(~W)";
         Text[ turkish ] = "Geni˛lik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~ncho";
@@ -612,7 +612,7 @@ TabPage TP_ENV_FMT
         Text [ italian ] = "~Altezza" ;
         Text [ portuguese_brazilian ] = "Altura" ;
         Text [ portuguese ] = "~Altura" ;
-        Text [ finnish ] = "~Hˆhe" ;
+        Text [ finnish ] = "K~orkeus" ;
         Text [ danish ] = "H¯jde" ;
         Text [ french ] = "~Hauteur" ;
         Text [ swedish ] = "~Hˆjd" ;
