@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-02-19 08:05:21 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 20:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,7 +537,7 @@ BOOL SwFmtRuby::PutValue( const com::sun::star::uno::Any& rVal,
          case MID_RUBY_ADJUST:
         {
             sal_Int16 nSet; rVal >>= nSet;
-            if(nSet >= 0 && nSet < com::sun::star::text::RubyAdjust_INDENT_BLOCK)
+            if(nSet >= 0 && nSet <= com::sun::star::text::RubyAdjust_INDENT_BLOCK)
                 nAdjustment = nSet;
             else
                 bRet = sal_False;
