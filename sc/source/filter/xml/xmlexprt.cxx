@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-31 11:45:30 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 17:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,11 +581,6 @@ void ScXMLExport::_ExportFontDecls()
 {
     GetFontAutoStylePool(); // make sure the pool is created
     SvXMLExport::_ExportFontDecls();
-}
-
-void ScXMLExport::_ExportChangeTracking()
-{
-    pChangeTrackingExportHelper->CollectAndWriteChanges();
 }
 
 table::CellRangeAddress ScXMLExport::GetEndAddress(uno::Reference<sheet::XSpreadsheet>& xTable,const sal_Int16 nTable)
@@ -1173,6 +1168,7 @@ void ScXMLExport::_ExportContent()
         uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
         if ( xIndex.is() )
         {
+            pChangeTrackingExportHelper->CollectAndWriteChanges();
             WriteCalculationSettings(xSpreadDoc);
             sal_Int32 nTableCount = xIndex->getCount();
             ScMyAreaLinksContainer aAreaLinks;
@@ -1369,7 +1365,6 @@ void ScXMLExport::_ExportAutoStyles()
         {
             sal_Int32 nTableCount = xIndex->getCount();
             pCellStyles->AddNewTable(nTableCount - 1);
-            aTableShapes.resize(nTableCount);
             for (sal_uInt16 nTable = 0; nTable < nTableCount; nTable++)
             {
                 uno::Any aTable = xIndex->getByIndex(nTable);
@@ -1645,7 +1640,7 @@ void ScXMLExport::_ExportAutoStyles()
                 GetChartExport()->exportAutoStyles();
             }
 
-            GetFormExport()->exportAutoStyles();
+            //GetFormExport()->exportAutoStyles();
             GetPageExport()->exportAutoStyles();
 
             nProgressValue = nOldProgressValue + nProgressObjects;
@@ -2092,6 +2087,18 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                 AddAttribute(XML_NAMESPACE_TABLE, sXML_end_x, sBuffer.makeStringAndClear());
                 GetMM100UnitConverter().convertMeasure(sBuffer, nEndY);
                 AddAttribute(XML_NAMESPACE_TABLE, sXML_end_y, sBuffer.makeStringAndClear());
+                uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
+                if( xShapeProp.is() )
+                {
+                    uno::Any aPropAny = xShapeProp->getPropertyValue(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ) );
+                    sal_Int16 nLayerID;
+                    if( aPropAny >>= nLayerID )
+                    {
+                        if( nLayerID == SC_LAYER_BACK )
+                            AddAttribute(XML_NAMESPACE_TABLE, sXML_table_background, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)));
+                    }
+                }
                 ExportShape(xShape, pPoint);
             }
             aItr++;
@@ -2111,7 +2118,21 @@ void ScXMLExport::WriteTableShapes()
             uno::Any aAny = xCurrentShapes->getByIndex(*aItr);
             uno::Reference<drawing::XShape> xShape;
             if (aAny >>= xShape)
+            {
+                uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
+                if( xShapeProp.is() )
+                {
+                    uno::Any aPropAny = xShapeProp->getPropertyValue(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ) );
+                    sal_Int16 nLayerID;
+                    if( aPropAny >>= nLayerID )
+                    {
+                        if( nLayerID == SC_LAYER_BACK )
+                            AddAttribute(XML_NAMESPACE_TABLE, sXML_table_background, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)));
+                    }
+                }
                 ExportShape(xShape, NULL);
+            }
             aItr = aTableShapes[nCurrentTable].erase(aItr);
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-22 17:10:39 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 17:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,6 @@ class ScXMLExport : public SvXMLExport
     virtual void _ExportMasterStyles();
     virtual void _ExportContent();
     virtual void _ExportMeta();
-    virtual void _ExportChangeTracking();
 
     void CollectInternalShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
