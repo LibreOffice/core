@@ -179,7 +179,7 @@ class SelectionView
 
     void SelectAll()
     {
-        mxSelection.selectAllAccessible();
+        mxSelection.selectAllAccessibleChildren();
     }
 
     void ClearSelection()

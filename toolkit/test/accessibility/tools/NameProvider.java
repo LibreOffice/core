@@ -82,7 +82,7 @@ public class NameProvider
         maStateMap.put (new Integer (AccessibleStateType.ARMED), "ARMED");
         maStateMap.put (new Integer (AccessibleStateType.BUSY), "BUSY");
         maStateMap.put (new Integer (AccessibleStateType.CHECKED), "CHECKED");
-        maStateMap.put (new Integer (AccessibleStateType.COLLAPSED), "COLLAPSED");
+        //        maStateMap.put (new Integer (AccessibleStateType.COLLAPSED), "COLLAPSED");
         maStateMap.put (new Integer (AccessibleStateType.DEFUNC), "DEFUNC");
         maStateMap.put (new Integer (AccessibleStateType.EDITABLE), "EDITABLE");
         maStateMap.put (new Integer (AccessibleStateType.ENABLED), "ENABLED");

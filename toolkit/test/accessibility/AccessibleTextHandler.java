@@ -1,8 +1,9 @@
 
+import com.sun.star.accessibility.AccessibleTextType;
+import com.sun.star.accessibility.TextSegment;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.accessibility.XAccessibleEditableText;
-import com.sun.star.accessibility.AccessibleTextType;
 
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Point;
@@ -171,20 +172,21 @@ class AccessibleTextHandler extends NodeHandler
                 // sWord + nStart mark the current word
                 // make a node as soon as a new one is found; close the last
                 // one at the end
-                String sWord = xText.getTextAtIndex(0, nTextType);
-                String sBefore = xText.getTextBeforeIndex(0, nTextType);
-                String sBehind = xText.getTextBehindIndex(0, nTextType);
+                TextSegment sWord = xText.getTextAtIndex(0, nTextType);
+                TextSegment sBefore = xText.getTextBeforeIndex(0, nTextType);
+                TextSegment sBehind = xText.getTextBehindIndex(0, nTextType);
                 int nStart = 0;
                 for(int i = 1; i < nLength; i++)
                 {
-                    String sTmp = xText.getTextAtIndex(i, nTextType);
-                    String sTBef = xText.getTextBeforeIndex(i, nTextType);
-                    String sTBeh = xText.getTextBehindIndex(i, nTextType);
+                    TextSegment sTmp = xText.getTextAtIndex(i, nTextType);
+                    TextSegment sTBef = xText.getTextBeforeIndex(i, nTextType);
+                    TextSegment sTBeh = xText.getTextBehindIndex(i, nTextType);
                     if( ! ( sTmp.equals( sWord ) && sTBef.equals( sBefore ) &&
                             sTBeh.equals( sBehind ) ) )
                     {
                         aNode.addChild (new StringNode (textAtIndexNodeString(
-                            nStart, i, sWord, sBefore, sBehind), aNode));
+                            nStart, i,
+                            sWord.SegmentText, sBefore.SegmentText, sBehind.SegmentText), aNode));
                         sWord = sTmp;
                         sBefore = sTBef;
                         sBehind = sTBeh;
@@ -194,12 +196,13 @@ class AccessibleTextHandler extends NodeHandler
                     // don't generate more than 50 children.
                     if (aNode.getChildCount() > 50)
                     {
-                        sWord = "...";
+                        sWord.SegmentText = "...";
                         break;
                     }
                 }
                 aNode.addChild (new StringNode (textAtIndexNodeString(
-                    nStart, nLength, sWord, sBefore, sBehind), aNode));
+                    nStart, nLength,
+                    sWord.SegmentText, sBefore.SegmentText, sBehind.SegmentText), aNode));
             }
             catch( IndexOutOfBoundsException e )
             {
@@ -323,7 +326,7 @@ class AccessibleTextHandler extends NodeHandler
                 try
                 {
                     aPortion = xText.getTextAtIndex(
-                        nIndex, AccessibleTextType.ATTRIBUTE_RUN);
+                        nIndex, AccessibleTextType.ATTRIBUTE_RUN).SegmentText;
                 }
                 catch(com.sun.star.lang.IllegalArgumentException e)
                 {

@@ -61,6 +61,7 @@ class TopWindowListener
     */
     private void AddTopLevelNode (XAccessible xNewTopLevelObject)
     {
+        System.out.println ("adding top level window");
         if (xNewTopLevelObject != null)
         {
             XAccessibleContext xContext = xNewTopLevelObject.getAccessibleContext();
