@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:06:03 $
+ *  last change: $Author: os $ $Date: 2002-10-24 11:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,7 +593,27 @@ void SwWrtShell::EnterStdMode()
         LeaveAddMode();
     bExtMode = FALSE;
     bInSelect = FALSE;
-    ResetSelect(0,FALSE);
+    if(IsSelFrmMode())
+    {
+        UnSelectFrm();
+        LeaveSelFrmMode();
+    }
+    else
+    {
+        /*  ACT_KONTEXT() opens and action which has to be
+            closed prior to the call of
+            GetChgLnk().Call()
+        */
+        {
+            ACT_KONTEXT(this);
+            bSelWrd = bSelLn = FALSE;
+            KillPams();
+            ClearMark();
+            fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+            fnKillSel = &SwWrtShell::ResetSelect;
+        }
+    }
+    SwTransferable::ClearSelection( *this );
 }
 
 /*
