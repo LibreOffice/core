@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:24:31 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,6 +339,10 @@ Point ScDetectiveFunc::GetDrawPos( USHORT nCol, USHORT nRow, BOOL bArrow )
     aPos.X() = (long) ( aPos.X() * HMM_PER_TWIPS );
     aPos.Y() = (long) ( aPos.Y() * HMM_PER_TWIPS );
 
+    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+    if ( bNegativePage )
+        aPos.X() = -aPos.X();
+
     return aPos;
 }
 
@@ -374,6 +378,8 @@ BOOL ScDetectiveFunc::HasArrow( USHORT nStartCol, USHORT nStartRow, USHORT nStar
         return TRUE;
     }
 
+    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+
     Rectangle aStartRect;
     Rectangle aEndRect;
     if (!bStartAlien)
@@ -382,6 +388,8 @@ BOOL ScDetectiveFunc::HasArrow( USHORT nStartCol, USHORT nStartRow, USHORT nStar
         Size aStartSize = Size(
                             (long) ( pDoc->GetColWidth( nStartCol, nTab) * HMM_PER_TWIPS ),
                             (long) ( pDoc->GetRowHeight( nStartRow, nTab) * HMM_PER_TWIPS ) );
+        if ( bNegativePage )
+            aStartPos.X() -= aStartSize.Width();
         aStartRect = Rectangle( aStartPos, aStartSize );
     }
     if (!bEndAlien)
@@ -390,6 +398,8 @@ BOOL ScDetectiveFunc::HasArrow( USHORT nStartCol, USHORT nStartRow, USHORT nStar
         Size aEndSize = Size(
                             (long) ( pDoc->GetColWidth( nEndCol, nTab) * HMM_PER_TWIPS ),
                             (long) ( pDoc->GetRowHeight( nEndRow, nTab) * HMM_PER_TWIPS ) );
+        if ( bNegativePage )
+            aEndPos.X() -= aEndSize.Width();
         aEndRect = Rectangle( aEndPos, aEndSize );
     }
 
@@ -490,9 +500,12 @@ BOOL ScDetectiveFunc::InsertArrow( USHORT nCol, USHORT nRow,
 
     if (bFromOtherTab)
     {
-        aStartPos = Point( aEndPos.X() - 1000, aEndPos.Y() - 1000 );
-        if (aStartPos.X() < 0)
-            aStartPos.X() += 2000;
+        BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+        long nPageSign = bNegativePage ? -1 : 1;
+
+        aStartPos = Point( aEndPos.X() - 1000 * nPageSign, aEndPos.Y() - 1000 );
+        if (aStartPos.X() * nPageSign < 0)
+            aStartPos.X() += 2000 * nPageSign;
         if (aStartPos.Y() < 0)
             aStartPos.Y() += 2000;
     }
@@ -571,8 +584,11 @@ BOOL ScDetectiveFunc::InsertToOtherTab( USHORT nStartCol, USHORT nStartRow,
         pData->bValidEnd = TRUE;
     }
 
+    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+    long nPageSign = bNegativePage ? -1 : 1;
+
     Point aStartPos = GetDrawPos( nStartCol, nStartRow, TRUE );
-    Point aEndPos   = Point( aStartPos.X() + 1000, aStartPos.Y() - 1000 );
+    Point aEndPos   = Point( aStartPos.X() + 1000 * nPageSign, aStartPos.Y() - 1000 );
     if (aEndPos.Y() < 0)
         aEndPos.Y() += 2000;
 
@@ -657,6 +673,11 @@ void ScDetectiveFunc::DrawCircle( USHORT nCol, USHORT nRow, ScDetectiveData& rDa
     Point aStartPos = GetDrawPos( nCol, nRow, FALSE );
     Size aSize( (long) ( pDoc->GetColWidth(nCol, nTab) * HMM_PER_TWIPS ),
                 (long) ( pDoc->GetRowHeight(nRow, nTab) * HMM_PER_TWIPS ) );
+
+    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+    if ( bNegativePage )
+        aStartPos.X() -= aSize.Width();
+
     Rectangle aRect( aStartPos, aSize );
     aRect.Left()    -= 250;
     aRect.Right()   += 250;
@@ -694,6 +715,9 @@ SdrObject* ScDetectiveFunc::DrawCaption( USHORT nCol, USHORT nRow, const String&
         pPage = pModel->GetPage(nTab);
     }
 
+    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+    long nPageSign = bNegativePage ? -1 : 1;
+
     USHORT nNextCol = nCol+1;
     const ScMergeAttr* pMerge = (const ScMergeAttr*) pDoc->GetAttr( nCol,nRow,nTab, ATTR_MERGE );
     if ( pMerge->GetColMerge() > 1 )
@@ -704,16 +728,24 @@ SdrObject* ScDetectiveFunc::DrawCaption( USHORT nCol, USHORT nRow, const String&
     if ( bLeft )
     {
         aTailPos = GetDrawPos( nCol, nRow, FALSE );
-        aTailPos.X() += 10;             // links knapp innerhalb der Zelle
+        aTailPos.X() += 10 * nPageSign;             // left, just inside the cell
     }
     else
-        aTailPos.X() -= 10;             // knapp vor die naechste Zelle zeigen
+        aTailPos.X() -= 10 * nPageSign;             // point just before the next cell
 
     //  arrow head should be visible (if visible rectangle is set)
-    if ( aTailPos.X() > rVisible.Right() && rVisible.Right() )
-        aTailPos.X() = rVisible.Right();
+    if ( bNegativePage )
+    {
+        if ( aTailPos.X() < rVisible.Left() && rVisible.Left() )
+            aTailPos.X() = rVisible.Left();
+    }
+    else
+    {
+        if ( aTailPos.X() > rVisible.Right() && rVisible.Right() )
+            aTailPos.X() = rVisible.Right();
+    }
 
-    aRectPos.X() += 600;
+    aRectPos.X() += 600 * nPageSign;
     aRectPos.Y() -= 1500;
     if ( aRectPos.Y() < rVisible.Top() ) aRectPos.Y() = rVisible.Top();
 
@@ -727,17 +759,36 @@ SdrObject* ScDetectiveFunc::DrawCaption( USHORT nCol, USHORT nRow, const String&
     if ( !bHasUserText )
         nMaxWidth = aRectSize.Width();  // Notiz nicht zu gross
 
-    if ( rVisible.Right() )
+    if ( bNegativePage )
     {
-        nMaxWidth = rVisible.Right() - aRectPos.X() - 100;
-        if (nMaxWidth < nDefWidth)
+        if ( rVisible.Left() )
         {
-            aRectPos.X() -= nDefWidth - nMaxWidth;
-            nMaxWidth = nDefWidth;
+            nMaxWidth = aRectPos.X() - rVisible.Left() - 100;
+            if (nMaxWidth < nDefWidth)
+            {
+                aRectPos.X() += nDefWidth - nMaxWidth;
+                nMaxWidth = nDefWidth;
+            }
         }
+        if ( aRectPos.X() > rVisible.Right() )
+            aRectPos.X() = rVisible.Right();
+
+        aRectPos.X() -= aRectSize.Width();
     }
-    if ( aRectPos.X() < rVisible.Left() )
-        aRectPos.X() = rVisible.Left();
+    else
+    {
+        if ( rVisible.Right() )
+        {
+            nMaxWidth = rVisible.Right() - aRectPos.X() - 100;
+            if (nMaxWidth < nDefWidth)
+            {
+                aRectPos.X() -= nDefWidth - nMaxWidth;
+                nMaxWidth = nDefWidth;
+            }
+        }
+        if ( aRectPos.X() < rVisible.Left() )
+            aRectPos.X() = rVisible.Left();
+    }
 
     SdrCaptionObj* pCaption = new SdrCaptionObj( Rectangle( aRectPos,aRectSize ), aTailPos );
     SfxItemSet& rAttrSet = rData.GetCaptionSet();
@@ -802,9 +853,13 @@ SdrObject* ScDetectiveFunc::DrawCaption( USHORT nCol, USHORT nRow, const String&
 
 void ScDetectiveFunc::DeleteArrowsAt( USHORT nCol, USHORT nRow, BOOL bDestPnt )
 {
+    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+
     Point aPos = GetDrawPos( nCol, nRow, FALSE );
     Size aSize = Size(  (long) ( pDoc->GetColWidth( nCol, nTab) * HMM_PER_TWIPS ),
                         (long) ( pDoc->GetRowHeight( nRow, nTab) * HMM_PER_TWIPS ) );
+    if ( bNegativePage )
+        aPos.X() -= aSize.Width();
     Rectangle aRect( aPos, aSize );
 
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
@@ -877,6 +932,10 @@ void ScDetectiveFunc::DeleteBox( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHOR
 
     Point aStartCorner = GetDrawPos( nCol1, nRow1, FALSE );
     Point aEndCorner = GetDrawPos( nCol2+1, nRow2+1, FALSE );
+    Rectangle aCornerRect( aStartCorner, aEndCorner );
+    aCornerRect.Justify();
+    aStartCorner = aCornerRect.TopLeft();
+    aEndCorner = aCornerRect.BottomRight();
     Rectangle aObjRect;
 
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
@@ -899,6 +958,7 @@ void ScDetectiveFunc::DeleteBox( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHOR
                     pObject->Type() == TYPE(SdrRectObj) )
             {
                 aObjRect = ((SdrRectObj*)pObject)->GetLogicRect();
+                aObjRect.Justify();
                 if ( RectIsPoints( aObjRect, aStartCorner, aEndCorner ) )
                     ppObj[nDelCount++] = pObject;
             }
