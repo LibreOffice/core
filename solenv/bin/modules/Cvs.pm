@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2003-12-10 13:47:11 $
+#   last change: $Author: hr $ $Date: 2004-02-18 17:01:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -259,16 +259,10 @@ sub delete_rev
     my $rev = shift;
     my $file = $self->name();
 
-    if ( $^O eq "MSWin32" || $^O eq 'os2' ) {
-        open (CVSDELETE, "$self->{CVS_BINARY} admin -o$rev $file 2>nul |");
-    }
-    else {
-        open (CVSDELETE, "$self->{CVS_BINARY} admin -o$rev $file 2>/dev/null |");
-    }
-    while(<CVSDELETE>) {
+    my $response_ref = $self->execute("admin -o$rev $file");
+    foreach ( @{$response_ref} ) {
         /deleting revision $rev/ && return 1;
     }
-    close(CVSDELETE);
     return 0;
 }
 
@@ -281,16 +275,15 @@ sub update
     my $options = shift;
 
     my $file = $self->name();
-    open (CVSUPDATE, "$self->{CVS_BINARY} update $options $file 2>&1 |");
+    my $response_ref = $self->execute("update $options $file");
     my $conflict          = 0;
     my $notknown          = 0;
     my $connectionfailure = 0;
-    while(<CVSUPDATE>) {
+    foreach ( @{$response_ref} ) {
         /conflicts during merge/ && ++$conflict;
         /nothing known about/ && ++$notknown;
         /\[update aborted\]: connect to/ && ++$connectionfailure;
     }
-    close(CVSUPDATE);
     if ( $conflict || $notknown || $connectionfailure) {
         my $failure = 'unkownfailure';
         $failure = 'conflict' if $conflict;
@@ -309,12 +302,10 @@ sub commit
     my $options = shift;
 
     my $file = $self->name();
-    open (CVSCOMMIT, "$self->{CVS_BINARY} commit $options $file 2>&1 |");
-    my @commit_message = <CVSCOMMIT>;
-    close(CVSCOMMIT);
+    my $response_ref = $self->execute("commit $options $file");
 
     # already commited ?
-    return 'nothingcommitted' if !@commit_message;
+    return 'nothingcommitted' if !@{$response_ref};
 
     my $conflict           = 0;
     my $uptodate           = 0;
@@ -322,7 +313,7 @@ sub commit
     my $success            = 0;
     my $connectionfailure = 0;
     my $new_revision = undef;
-    foreach (@commit_message) {
+    foreach ( @{$response_ref} ) {
         /Up-to-date check failed/ && ++$uptodate;
         /nothing known about/ && ++$notknown;
         /had a conflict and has not been modified/ && ++$conflict;
@@ -367,23 +358,21 @@ sub tag
     }
 
     my $file = $self->name();
-    open (CVSTAG, "$self->{CVS_BINARY} tag $options $tag $file 2>&1 |");
-    my @tag_message = <CVSTAG>;
-    close(CVSTAG);
+    my $response_ref = $self->execute("tag $options $tag $file");
 
     unless ( $options =~ /-F/ && $options =~ /-b/ ) {
         # No message from CVS means that tag already exists
         # and has not been moved.
         # If both -F and -b is given, CVS will always return
         # message.
-        return 'success' if !@tag_message;
+        return 'success' if !@{$response_ref};
     }
 
     my $tagged             = 0;
     my $cant_move          = 0;
     my $connectionfailure  = 0;
     my $invalidfile        = 0;
-    foreach (@tag_message) {
+    foreach ( @{$response_ref} ) {
         /^T $file/ && ++$tagged;
         /NOT MOVING tag/ && ++$cant_move;
         /nothing known about/ && ++$invalidfile;
@@ -412,8 +401,8 @@ sub status
     my ($status, $working_rev, $repository_rev);
     my ($sticky_tag, $branch, $sticky_date, $sticky_options);
 
-    open (CVSSTATUS, "$self->{CVS_BINARY} status $file 2>&1 |");
-    while(<CVSSTATUS>) {
+    my $response_ref = $self->execute("status $file");
+    foreach ( @{$response_ref} ) {
         chomp();
         /File: no file/ && ++$nofile;
         /Status:\s+([\w\-\s]+)$/ && ($status = $1);
@@ -424,7 +413,6 @@ sub status
         /Sticky Options:\s+(.+)/ && ($sticky_options = $1);
         /\[status aborted\]: connect to/ && ++$connectionfailure;
     }
-    close(CVSSTATUS);
 
     return 'connectionfailure' if $connectionfailure;
     # all variables except $status will contain garbage if 'Locally Added'
@@ -463,11 +451,9 @@ sub diff
     my $file = $self->name();
     my ($nofile, $unkowntagfailure, $unkownrevfailure, $connectionfailure);
 
-    open (CVSDIFF, "$self->{CVS_BINARY} diff $options -r$rev1 -r$rev2 $file 2>&1 |");
-    my @diff = <CVSDIFF>;
-    close(CVSDIFF);
+    my $response_ref = $self->execute("diff $options -r$rev1 -r$rev2 $file");
 
-    foreach (@diff){
+    foreach ( @{$response_ref} ){
         /\[diff aborted\]: connect to/ && ++$connectionfailure;
         /cvs \[server aborted\]: no such tag \w+/ && ++$unkowntagfailure;
         /cvs server: tag [\d\.]+ is not in file $file/ && ++$unkownrevfailure;
@@ -476,9 +462,38 @@ sub diff
     return 'connectionfailure' if $connectionfailure;
     return 'unkowntagfailiure' if $unkowntagfailure;
     return 'unkownrevfailiure' if $unkownrevfailure;
-    return wantarray ? @diff : \@diff;
+    return wantarray ? @{$response_ref} : $response_ref;
 }
 #### private methods ####
+
+sub execute
+{
+    my $self    = shift;
+    my $command = shift;
+    my $authtimeout = 0;
+    my @response;
+    while () {
+        if ( $authtimeout >= 5 ) {
+            # fail after 5 tries
+            die("FATAL: OOo CVS server authorization time out, can't continue!\nPlease notify Release Engineering.")
+        }
+        if ( $authtimeout > 0 ) {
+            # sleep 5 seconds after a authorization timeout
+            carp("WARNING: OOo CVS server authorization time out, count: $authtimeout, sleeping for 5 seconds ...");
+            sleep(5);
+        }
+        open(CVS, "$self->{CVS_BINARY} $command 2>&1 |");
+        @response = <CVS>;
+        close(CVS);
+
+        foreach ( @response ) {
+            /unrecognized auth response/ && ++$authtimeout;
+        }
+        last if !$authtimeout;
+    }
+    return wantarray ? @response : \@response;
+}
+
 sub parse_log
 {
     my $self = shift;
@@ -491,9 +506,9 @@ sub parse_log
     my $rev_data = {};
     my ($rev, $date, $author, $state, $comment, @branches);
 
-    open(CVSLOG, "$self->{CVS_BINARY} log $file |");
+    my $response_ref = $self->execute("log $file");
 
-    while( <CVSLOG> ) {
+    foreach ( @{$response_ref} ) {
         chomp;
 
         if ( $in_revisions ) {
@@ -535,8 +550,6 @@ sub parse_log
             /^RCS file:\s((\d|\.)+)$/o && do { $self->{ARCHIVE_PATH} = $1; next; };
         }
     }
-
-    close(CVSLOG);
 
     $self->{"_PARSED"} = 1;
 }
