@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-02 20:23:58 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "첫 이미지";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Erstes Bild";
-        QuickHelpText[ catalan ] = "Primera imagen";
+        QuickHelpText[ catalan ] = "Primera imatge";
     };
     ImageButton BTN_REVERSE
     {
@@ -160,7 +160,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "뒤로";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "R�ckw�rts";
-        QuickHelpText[ catalan ] = "Atr�s";
+        QuickHelpText[ catalan ] = "Enrera";
     };
     ImageButton BTN_STOP
     {
@@ -191,7 +191,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "정지";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Stopp";
-        QuickHelpText[ catalan ] = "Finalizar";
+        QuickHelpText[ catalan ] = "Finalitza";
     };
     ImageButton BTN_PLAY
     {
@@ -221,7 +221,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "재생";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abspielen";
-        QuickHelpText[ catalan ] = "Reproducir";
+        QuickHelpText[ catalan ] = "Reprodueix";
     };
     ImageButton BTN_LAST
     {
@@ -251,7 +251,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "마지막 이미지";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Letztes Bild";
-        QuickHelpText[ catalan ] = "�ltima imagen";
+        QuickHelpText[ catalan ] = "�ltima imatge";
     };
     NumericField NUM_FLD_BITMAP
     {
@@ -291,7 +291,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "이미지 번호";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Bildnummer";
-        QuickHelpText[ catalan ] = "N�mero de imagen";
+        QuickHelpText[ catalan ] = "Nombre d'imatge";
     };
     TimeField TIME_FIELD
     {
@@ -334,7 +334,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "디스플레이 소요시간";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Anzeigedauer";
-        QuickHelpText[ catalan ] = "Duraci�n";
+        QuickHelpText[ catalan ] = "Duraci�";
         QuickHelpText[ finnish ] = "Kesto";
     };
     ListBox LB_LOOP_COUNT
@@ -806,7 +806,7 @@ DockingWindow FLT_WIN_ANIMATION
         < " " ; > ;
     };
         QuickHelpText[ turkish ] = "Anzahl der Durchl�ufe";
-        QuickHelpText[ catalan ] = "Cantidad de secuencias";
+        QuickHelpText[ catalan ] = "Nombre de seq��ncies";
     StringList [ catalan ] =
     {
             < "1" ; > ;
@@ -888,7 +888,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "개체 적용";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Objekt �bernehmen";
-        QuickHelpText[ catalan ] = "Aceptar objeto";
+        QuickHelpText[ catalan ] = "Accepta l'objecte";
         QuickHelpText[ finnish ] = "Liit� objekti";
     };
     ImageButton BTN_GET_ALL_OBJECTS
@@ -926,7 +926,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "개체를 개별적으로 적용";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Objekte einzeln �bernehmen";
-        QuickHelpText[ catalan ] = "Aceptar objetos uno a uno";
+        QuickHelpText[ catalan ] = "Accepta els objectes un a un";
         QuickHelpText[ finnish ] = "Objektit yksitt�in";
     };
     ImageButton BTN_REMOVE_BITMAP
@@ -964,7 +964,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "현재 이미지 삭제";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aktuelles Bild l�schen";
-        QuickHelpText[ catalan ] = "Eliminar imagen actual";
+        QuickHelpText[ catalan ] = "Suprimeix la imatge actual";
         QuickHelpText[ finnish ] = "Poista nykyinen kuva";
     };
     ImageButton BTN_REMOVE_ALL
@@ -1002,7 +1002,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ korean ] = "모든 이미지 삭제";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Alle Bilder l�schen";
-        QuickHelpText[ catalan ] = "Eliminar todas las im�genes";
+        QuickHelpText[ catalan ] = "Elimina totes les imatges";
         QuickHelpText[ finnish ] = "Poista kaikki kuvat";
     };
     FixedText FT_COUNT
