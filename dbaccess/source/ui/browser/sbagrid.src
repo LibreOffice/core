@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:20:42 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ czech ] = "Formát sloupce...";
             Text[ hebrew ] = "Spalten~formatierung...";
             Text[ hindi ] = "~स्तंभ रचना...";
+            Text[ slovak ] = "~Formát stĺpca...";
         };
         MenuItem
         {
@@ -146,6 +147,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ czech ] = "Zkopírovat popis sloupce";
             Text[ hebrew ] = "Spaltenb~eschreibung kopieren";
             Text[ hindi ] = "स्तं~भ विवरण का प्रतिलिपि";
+            Text[ slovak ] = "Kopírovať ~popisy stĺpcov";
         };
     };
 };
@@ -184,6 +186,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text[ czech ] = "Formát tabulky...";
             Text[ hebrew ] = "Tabellenformatierung...";
             Text[ hindi ] = "सारणी रचना...";
+            Text[ slovak ] = "Formát tabuľky...";
         };
         MenuItem
         {
@@ -216,6 +219,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text[ czech ] = "Výška sloupce...";
             Text[ hebrew ] = "‮גובה שורה...‬";
             Text[ hindi ] = "पंक्ति ऊँचाई...";
+            Text[ slovak ] = "Výška riadka...";
         };
     };
 };
@@ -248,6 +252,7 @@ String RID_STR_UNDO_MODIFY_RECORD
     Text[ czech ] = "Zpět: Vstup dat";
     Text[ hebrew ] = "Rückgängig: Dateneingabe";
     Text[ hindi ] = "अनावृत्ति: ड़ॉटा इनपुट";
+    Text[ slovak ] = "Späť: dátový vstup";
 };
 
 String RID_STR_SAVE_CURRENT_RECORD
@@ -280,6 +285,7 @@ String RID_STR_SAVE_CURRENT_RECORD
     Text[ czech ] = "Uložit aktuální záznam";
     Text[ hebrew ] = "aktuellen Datensatz speichern";
     Text[ hindi ] = "वर्तमान अभिलेख को संचित करो";
+    Text[ slovak ] = "Uložiť aktívny záznam";
 };
 
 String STR_QRY_TITLE
@@ -313,6 +319,7 @@ String STR_QRY_TITLE
     Text[ czech ] = "Dotaz #";
     Text[ hebrew ] = "Abfrage #";
     Text[ hindi ] = "जानकारी #";
+    Text[ slovak ] = "Dotaz #";
 };
 String STR_TBL_TITLE
 {
@@ -345,6 +352,7 @@ String STR_TBL_TITLE
     Text[ czech ] = "Tabulka #";
     Text[ hebrew ] = "Tabelle #";
     Text[ hindi ] = "सारणी #";
+    Text[ slovak ] = "Tabuľka #";
 };
 String STR_VIEW_TITLE
 {
@@ -374,6 +382,7 @@ String STR_VIEW_TITLE
     Text[ czech ] = "Pohled #";
     Text[ hebrew ] = "‮תצוגה #‬";
     Text[ hindi ] = "दृश्य #";
+    Text[ slovak ] = "Zobraziť #";
 };
 
 String STR_OBJECT_ALREADY_EXISTS
@@ -404,6 +413,7 @@ String STR_OBJECT_ALREADY_EXISTS
     Text[ hebrew ] = "Der Name \"#\" existiert bereits.";
     Text[ thai ] = "The name \"#\" already exists.";
     Text[ hindi ] = "# नाम पहिले से ही अस्तित्व में है ।";
+    Text[ slovak ] = "Názov # už existuje.";
 };
 
 
@@ -435,6 +445,7 @@ String STR_NO_COLUMNNAME_MATCHING
     Text[ hebrew ] = "Es konnten keine übereinstimmenden Spaltennamen gefunden werden";
     Text[ thai ] = "No matching column names were found.";
     Text[ hindi ] = "स्तंभ नामों के समान नाम प्राप्त नहीं हुआ । ";
+    Text[ slovak ] = "Neboli nájdené zhodné názvy stĺpcov.";
 };
 
 String STR_ERROR_OCCURED_WHILE_COPYING
@@ -465,6 +476,7 @@ String STR_ERROR_OCCURED_WHILE_COPYING
     Text[ hebrew ] = "Es ist ein Fehler aufgetreten! Wollen Sie den Kopiervorgang fortsetzen?";
     Text[ thai ] = "An error occurred. Do you want to continue copying?";
     Text[ hindi ] = "गलती घटित हुआ । आप प्रतिलिपि बनाने का कार्य को जारी रखना चाहते है?";
+    Text[ slovak ] = "Objavila sa chyba. Chcete pokračovať v kopírovaní?";
 };
 
 String STR_DATASOURCE_GRIDCONTROL_NAME
@@ -495,6 +507,7 @@ String STR_DATASOURCE_GRIDCONTROL_NAME
     Text[ portuguese_brazilian ] = "Data source table view";
     Text[ thai ] = "Data source table view";
     Text[ hindi ] = "Data source table view";
+    Text[ slovak ] = "Tabuľkový pohľad na zdroj dát";
 };
 
 String STR_DATASOURCE_GRIDCONTROL_DESC
@@ -525,7 +538,10 @@ String STR_DATASOURCE_GRIDCONTROL_DESC
     Text[ portuguese_brazilian ] = "Shows the selected table or query.";
     Text[ thai ] = "Shows the selected table or query.";
     Text[ hindi ] = "Shows the selected table or query.";
+    Text[ slovak ] = "Ukáže vybranú tabuľku alebo dotaz.";
 };
+
+
 
 
 
