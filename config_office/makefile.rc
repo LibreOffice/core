@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: svesik $ $Date: 2001-01-24 16:42:00 $
+#   last change: $Author: svesik $ $Date: 2001-02-15 22:05:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ all_subdirs : $(RC_SUBDIRS)
 # 
 
 RC_SUBDIRS =  \
-	DocumentProperties \
 	UnoControls \
 	XmlSearch \
 	automation \
@@ -108,6 +107,7 @@ RC_SUBDIRS =  \
 	dbaccess \
 	desktop \
 	drafts \
+	dtrans \
 	eventattacher \
 	extensions \
 	extras \
@@ -126,6 +126,7 @@ RC_SUBDIRS =  \
 	jut \
 	ldapber \
 	lingu \
+	linguistic \
 	offapi \
 	officecfg \
 	offmgr \
@@ -175,7 +176,8 @@ RC_SUBDIRS =  \
 	wizards \
 	xml2cmp \
 	xmlhelp \
-	xmloff
+	xmloff \
+	xprinter
 
 # 
 # bootstrap target
@@ -209,7 +211,6 @@ non_vcl :	udk_modules ucbhelper offuh unoil unoidl sax officecfg UnoControls \
 # dependency handling between directories
 # 
 
-DocumentProperties : svtools
 UnoControls : cppuhelper offuh tools
 XmlSearch : external
 automation : basic
@@ -227,6 +228,7 @@ cpputools : cppuhelper
 dbaccess : connectivity offmgr
 desktop : sc sd sw
 drafts : offapi
+dtrans : offapi sal
 eventattacher : cppuhelper offapi
 extensions : rdbmaker svx
 fileaccess : tools
@@ -241,6 +243,8 @@ io : rdbmaker
 javaunohelper : cppuhelper jurt
 jurt : codemaker ridljar sandbox
 jut : javaunohelper
+lingu : linguistic
+linguistic : sfx2
 offapi : udkapi
 offmgr : basctl sch sim2 starmath uui
 offuh : codemaker drafts
@@ -251,7 +255,7 @@ remotebridges : bridges rdbmaker
 ridljar : udkapi
 rsc : tools
 sal : xml2cmp
-sax : cppuhelper
+sax : cppuhelper external offapi
 sc : offmgr
 scaddins : cppuhelper
 sch : basctl svx
@@ -280,7 +284,7 @@ unoidl : registry
 unoil : jurt
 unotools : comphelper cppuhelper offuh tools
 uui : svtools
-vcl : rsc sot ucbhelper unotools
+vcl : rsc sot ucbhelper unotools xprinter
 vos : sal
 wizards : offmgr
 xmlhelp : external jut XmlSearch
