@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sorgitm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:33:41 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ sal_Bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, BYT
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
+        case 0:
         case MID_SCRIPT_ORGANIZER_LANGUAGE:
             bIsString = TRUE;
             aValue = aLanguage;
@@ -152,6 +153,7 @@ sal_Bool SfxScriptOrganizerItem::PutValue( const com::sun::star::uno::Any& rVal,
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
+        case 0:
         case MID_SCRIPT_ORGANIZER_LANGUAGE:
             bRet = (rVal >>= aValue);
             if ( bRet )
