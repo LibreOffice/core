@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 16:17:28 $
+#   last change: $Author: rt $ $Date: 2004-09-09 10:23:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ SRC1FILES= \
 
 
 SLOFILES = \
+    $(SLO)$/formtoolbars.obj \
     $(SLO)$/fmdocumentclassification.obj \
     $(SLO)$/fmcontrolbordermanager.obj \
     $(SLO)$/fmtextcontroldialogs.obj \
