@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:50:18 $
+ *  last change: $Author: hr $ $Date: 2004-08-04 12:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1445,12 +1445,9 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         break;
     // OD 2004-05-05 #i28701#
     case XML_TYPE_WRAP_INFLUENCE_ON_POSITION:
-    {
         pHdl = new XMLConstantsPropertyHandler( pXML_WrapInfluenceOnPosition_Enum,
                                                 XML_TOKEN_INVALID );
-    }
-    break;
-    }
+        break;
     case XML_TYPE_BORDER_MODEL:
         pHdl = new XMLNamedBoolPropertyHdl( xmloff::token::XML_COLLAPSING,
                                             xmloff::token::XML_SEPARATING );
