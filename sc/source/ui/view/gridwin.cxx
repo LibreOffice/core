@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:05:32 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,7 +769,7 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     String aCurrent;
     String aTabName;
     SCTAB nTabCount = pDoc->GetTableCount();
-    USHORT nEntryCount = 0;
+    SCTAB nEntryCount = 0;
     for (SCTAB i=nTab+1; i<nTabCount && pDoc->IsScenario(i); i++)
     {
         if (pDoc->HasScenarioRange( i, rScenRange ))
@@ -2814,13 +2814,13 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel )
     if ( pViewData->HasEditView(eWhich) )
     {
         ScModule* pScMod = SC_MOD();
-        USHORT nEditStartCol = pViewData->GetEditViewCol(); //! change to GetEditStartCol after calcrtl is integrated
-        USHORT nEditStartRow = pViewData->GetEditViewRow();
-        USHORT nEditEndCol = pViewData->GetEditEndCol();
-        USHORT nEditEndRow = pViewData->GetEditEndRow();
+        SCCOL nEditStartCol = pViewData->GetEditViewCol(); //! change to GetEditStartCol after calcrtl is integrated
+        SCROW nEditStartRow = pViewData->GetEditViewRow();
+        SCCOL nEditEndCol = pViewData->GetEditEndCol();
+        SCROW nEditEndRow = pViewData->GetEditEndRow();
 
-        if ( nCellX >= (short) nEditStartCol && nCellX <= (short) nEditEndCol &&
-             nCellY >= (short) nEditStartRow && nCellY <= (short) nEditEndRow )
+        if ( nCellX >= (SCsCOL) nEditStartCol && nCellX <= (SCsCOL) nEditEndCol &&
+             nCellY >= (SCsROW) nEditStartRow && nCellY <= (SCsROW) nEditEndRow )
         {
             //  handle selection within the EditView
 
@@ -4203,6 +4203,7 @@ void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, USHORT nEdges
     SCROW nRow2 = rRange.aEnd.Row();
     SCTAB nTab2 = rRange.aEnd.Tab();
     BOOL bHiddenEdge = FALSE;
+    SCROW nTmp;
 
     ScDocument* pDoc = pDocSh->GetDocument();
     while ( nCol1 > 0 && ( pDoc->GetColFlags( nCol1, nTab1 ) & CR_HIDDEN ) )
@@ -4215,14 +4216,22 @@ void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, USHORT nEdges
         ++nCol2;
         bHiddenEdge = TRUE;
     }
-    while ( nRow1 > 0 && ( pDoc->GetRowFlags( nRow1, nTab1 ) & CR_HIDDEN ) )
+    nTmp = pDoc->GetRowFlagsArray( nTab1).GetLastForCondition( 0, nRow1,
+            CR_HIDDEN, 0);
+    if (!ValidRow(nTmp))
+        nTmp = 0;
+    if (nTmp < nRow1)
     {
-        --nRow1;
+        nRow1 = nTmp;
         bHiddenEdge = TRUE;
     }
-    while ( nRow2 < MAXROW && ( pDoc->GetRowFlags( nRow2, nTab1 ) & CR_HIDDEN ) )
+    nTmp = pDoc->GetRowFlagsArray( nTab1).GetFirstForCondition( nRow2, MAXROW,
+            CR_HIDDEN, 0);
+    if (!ValidRow(nTmp))
+        nTmp = MAXROW;
+    if (nTmp > nRow2)
     {
-        ++nRow2;
+        nRow2 = nTmp;
         bHiddenEdge = TRUE;
     }
 
