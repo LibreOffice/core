@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-17 08:35:55 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,6 @@ namespace configmgr
     {
         MutexGuard aGuard(m_aMutex);
         ensureConnection();
-        m_pImpl->setOptions(m_aModule.getOptions());
 
         if (ServiceCreationInfo const* pInfo = findCreationInfo(aServiceSpecifier))
         {

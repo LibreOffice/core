@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: lla $ $Date: 2000-11-20 10:08:34 $
+#   last change: $Author: dg $ $Date: 2000-11-30 08:40:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 
 SLOFILES=\
+    $(SLO)$/dataconverter.obj \
+    $(SLO)$/valuehandler.obj \
     $(SLO)$/typeconverter.obj \
     $(SLO)$/xmltreebuilder.obj \
     $(SLO)$/xmlformater.obj \
@@ -84,8 +86,6 @@ SLOFILES=\
     $(SLO)$/dataexport.obj \
     $(SLO)$/dataimport.obj \
     $(SLO)$/updatedom.obj \
-    $(SLO)$/dataconverter.obj \
-    $(SLO)$/valuehandler.obj \
     $(SLO)$/updatehandler.obj \
     $(SLO)$/updatetree.obj \
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:18 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ namespace configmgr
             ApiProvider&        m_rProvider;
             ApiTreeImpl*        m_pParentTree;
             UnoInterface*       m_pInstance;
+
         public:
             explicit ApiTreeImpl(UnoInterface* pInstance, Tree const& aTree, ApiTreeImpl& rParentTree);
             explicit ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree, ApiTreeImpl* pParentTree = 0);
@@ -196,12 +197,16 @@ namespace configmgr
         class ApiRootTreeImpl : private INodeListener
         {
             typedef configuration::Tree Tree;
+            vos::ORef< OOptions > m_xOptions;
+
         public:
-            explicit ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree);
+            explicit ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree, vos::ORef< OOptions >const& _xOptions);
             ~ApiRootTreeImpl();
 
             ApiTreeImpl& getApiTree() { return m_aTreeImpl; }
             ApiTreeImpl const& getApiTree() const { return m_aTreeImpl; }
+            vos::ORef< OOptions > getOptions() const {return m_xOptions;}
+
 
         // self-locked methods for dispose handling
             bool disposeTree();

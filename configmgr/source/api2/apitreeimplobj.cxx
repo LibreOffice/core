@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-29 15:01:52 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ configuration::TemplateProvider ApiProvider::getTemplateProvider() const
 
 UnoTypeConverter ApiProvider::getTypeConverter() const
 {
-    return m_rProviderImpl.getTypeConverter();
+    return m_rProviderImpl.getDefaultOptions()->getTypeConverter();
 }
 //-------------------------------------------------------------------------
 
@@ -140,9 +140,10 @@ ApiTreeImpl::~ApiTreeImpl()
     deinit();
 }
 //-------------------------------------------------------------------------
-ApiRootTreeImpl::ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree)
+ApiRootTreeImpl::ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree, vos::ORef< OOptions >const& _xOptions)
 : m_aTreeImpl(pInstance, rProvider, aTree, 0)
 , m_pNotificationSource(0)
+, m_xOptions(_xOptions)
 {
     implSetLocation();
     enableNotification(true);
@@ -212,6 +213,7 @@ bool ApiTreeImpl::disposeTree(bool bForce)
 bool ApiRootTreeImpl::disposeTree()
 {
     implSetNotificationSource(0);
+    m_xOptions = NULL;
     return m_aTreeImpl.disposeTree(true);
 }
 //-------------------------------------------------------------------------
@@ -462,23 +464,14 @@ void disposeOneRemovedNode(configuration::NodeChange const& , configuration::Nod
     {
         configuration::ElementTree aElementTree( aRemoveInfo.oldElement.getBodyPtr() );
 
-        // dispose the element representing the removed node
-        configuration::Tree aTree = aElementTree.getTree();
-        OSL_ENSURE(!aTree.isEmpty(),"disposeOneRemovedNode: Element Tree has no Tree");
-        configuration::NodeRef aRoot = aTree.getRootNode();
-        OSL_ENSURE(aRoot.isValid(),"disposeOneRemovedNode: Tree has no root node");
-        if (!configuration::isSimpleValue(aTree,aRoot))
-        {   // (only if it is not a value node, i.e. a child of a value set)
-            SetElement* pSetElement = aFactory.findSetElement(aElementTree );
+        SetElement* pSetElement = aFactory.findSetElement(aElementTree );
+        if (pSetElement)
+        {
+            // factory always does an extra acquire
+            UnoInterfaceRef xReleaseSetElement(pSetElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
 
-            if (pSetElement)
-            {
-                // factory always does an extra acquire
-                UnoInterfaceRef xReleaseSetElement(pSetElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
-
-                pSetElement->haveNewParent(0);
-                pSetElement->disposeTree(true);
-            }
+            pSetElement->haveNewParent(0);
+            pSetElement->disposeTree(true);
         }
     }
 }

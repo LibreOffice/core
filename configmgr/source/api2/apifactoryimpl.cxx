@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactoryimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 12:14:15 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ NodeElement* ReadOnlyObjectFactory::doCreateGroupMember(configuration::Tree cons
 }
 //-----------------------------------------------------------------------------
 
-TreeElement* ReadOnlyObjectFactory::doCreateAccessRoot(configuration::Tree const& aTree, Template* pSetElementTemplate)
+TreeElement* ReadOnlyObjectFactory::doCreateAccessRoot(configuration::Tree const& aTree, Template* pSetElementTemplate, vos::ORef< OOptions >const& _xOptions)
 {
     OSL_ENSURE(!aTree.isEmpty(), "ERROR: trying to create a root object without a tree");
 
@@ -208,7 +208,7 @@ bool UpdateObjectFactory::implIsReadOnly(configuration::Tree const& aTree, confi
     OSL_ENSURE(aNode.isValid(), "ERROR: trying to create an object without a node");
     OSL_ENSURE(aTree.isValidNode(aNode), "ERROR: node does not match tree , while trying to create an object");
 
-    return !aNode.getAttributes().writable;
+    return !aNode.getAttributes().bWritable;
 }
 //-----------------------------------------------------------------------------
 
@@ -269,7 +269,7 @@ NodeElement* UpdateObjectFactory::doCreateGroupMember(configuration::Tree const&
 }
 //-----------------------------------------------------------------------------
 
-TreeElement* UpdateObjectFactory::doCreateAccessRoot(configuration::Tree const& aTree, Template* pSetElementTemplate)
+TreeElement* UpdateObjectFactory::doCreateAccessRoot(configuration::Tree const& aTree, Template* pSetElementTemplate, vos::ORef< OOptions >const& _xOptions)
 {
     OSL_ENSURE(!aTree.isEmpty(), "ERROR: trying to create a root object without a tree");
 
@@ -294,19 +294,19 @@ TreeElement* UpdateObjectFactory::doCreateAccessRoot(configuration::Tree const& 
     {
         if (!pSetElementTemplate)
         {
-             ORootElementGroupUpdate * pNewObject = new ORootElementGroupUpdate(m_rProvider, aTree);
+             ORootElementGroupUpdate * pNewObject = new ORootElementGroupUpdate(m_rProvider, aTree, _xOptions);
              pNewObject->acquire();
              pResult = &pNewObject->getElementClass();
         }
         else if (pSetElementTemplate->isInstanceValue())
         {
-             ORootElementValueSetUpdate * pNewObject = new ORootElementValueSetUpdate(m_rProvider, aTree);
+             ORootElementValueSetUpdate * pNewObject = new ORootElementValueSetUpdate(m_rProvider, aTree, _xOptions);
              pNewObject->acquire();
              pResult = &pNewObject->getElementClass();
         }
         else
         {
-             ORootElementTreeSetUpdate * pNewObject = new ORootElementTreeSetUpdate(m_rProvider, aTree);
+             ORootElementTreeSetUpdate * pNewObject = new ORootElementTreeSetUpdate(m_rProvider, aTree, _xOptions);
              pNewObject->acquire();
              pResult = &pNewObject->getElementClass();
         }

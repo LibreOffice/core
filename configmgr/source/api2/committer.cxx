@@ -2,9 +2,9 @@
  *
  *  $RCSfile: committer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 12:14:15 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,10 @@ void Committer::commit()
     Tree aTree(rApiTree.getTree());
     if (!aTree.hasChanges()) return;
 
-
-    TreeChangeList  aChangeList(aTree.getContextPath().toString(),aTree.getRootNode().getName().toString());
+    TreeChangeList  aChangeList(aTree.getContextPath().toString(),
+                                aTree.getRootNode().getName().toString(),
+                                rtl::OUString(),
+                                aTree.getRootNode().getAttributes());
 
     ITreeProvider2* pUpdateProvider = getUpdateProvider();
     OSL_ASSERT(pUpdateProvider);
@@ -131,8 +133,8 @@ void Committer::commit()
     if (aHelper.prepareCommit(aChangeList))
     try
     {
-
-        pUpdateProvider->updateTree(aChangeList);
+        OSL_ENSURE(m_rTree.getOptions().isValid(),"INTERNAL ERROR: Invalid Options used.");
+        pUpdateProvider->updateTree(aChangeList, m_rTree.getOptions());
         aHelper.finishCommit(aChangeList);
 
         aLocalGuard.clear();        // done locally
@@ -140,7 +142,6 @@ void Committer::commit()
 
         NotifyDisabler  aDisableNotify(m_rTree);    // do not notify self
         pUpdateProvider->notifyUpdate(aChangeList);
-
     }
     catch(...)
     {

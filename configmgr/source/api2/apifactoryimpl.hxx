@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactoryimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ namespace configmgr
             ~ReadOnlyObjectFactory();
 
             virtual NodeElement*    doCreateGroupMember(configuration::Tree const& aTree, configuration::NodeRef const& aNode, configuration::Template* pSetElementTemplate);
-            virtual TreeElement*    doCreateAccessRoot(configuration::Tree const& aTree, configuration::Template* pSetElementTemplate);
+            virtual TreeElement*    doCreateAccessRoot(configuration::Tree const& aTree, configuration::Template* pSetElementTemplate, vos::ORef< OOptions >const& _xOptions);
             virtual SetElement* doCreateSetElement(configuration::ElementTree const& aTree, configuration::Template* pSetElementTemplate);
         };
         // used to create UNO objects
@@ -90,7 +90,7 @@ namespace configmgr
             ~UpdateObjectFactory();
 
             virtual NodeElement*    doCreateGroupMember(configuration::Tree const& aTree, configuration::NodeRef const& aNode, configuration::Template* pSetElementTemplate);
-            virtual TreeElement*    doCreateAccessRoot(configuration::Tree const& aTree, configuration::Template* pSetElementTemplate);
+            virtual TreeElement*    doCreateAccessRoot(configuration::Tree const& aTree, configuration::Template* pSetElementTemplate, vos::ORef< OOptions >const& _xOptions);
             virtual SetElement* doCreateSetElement(configuration::ElementTree const& aTree, configuration::Template* pSetElementTemplate);
         private:
             bool implIsReadOnly(configuration::Tree const& aTree, configuration::NodeRef const& aNode);

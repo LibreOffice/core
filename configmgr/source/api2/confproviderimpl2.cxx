@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-29 13:59:46 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,14 +114,17 @@ namespace configmgr
         // extract the args
         ::rtl::OUString sUser, sPath, sLocale;
         sal_Int32 nLevels;
-        sal_Bool bIsSetupMode = false;
-
+        sal_Bool bIsSetupMode = sal_False;
         OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bIsSetupMode);
-        ::rtl::OUString sNodeAccessor = IConfigSession::composeNodeAccessor(sPath, sUser);
 
-        // m_pConfiguration->setOptions(getOptions());
-        getOptions()->add("Locale", sLocale);
-        getOptions()->setSetupMode(bIsSetupMode);
+        vos::ORef<OOptions> xOptions = new OOptions(*getDefaultOptions());
+        xOptions->setUser(sUser);
+        xOptions->setLocale(sLocale);
+        xOptions->setSetupMode(bIsSetupMode);
+
+        // determine which parts are need for the path
+        m_pTreeMgr->getPathRequirements(sPath, xOptions, nLevels, sUser, sLocale);
+        ::rtl::OUString sNodeAccessor = IConfigSession::composeNodeAccessor(sPath, sUser, sLocale);
 
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sNodeAccessor));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
@@ -130,7 +133,7 @@ namespace configmgr
         uno::Reference< uno::XInterface > xReturn;
         if (aArgs.getLength() != 0)
         {
-            NodeElement* pElement = buildReadAccess(sNodeAccessor, nLevels);
+            NodeElement* pElement = buildReadAccess(sNodeAccessor, xOptions, nLevels);
             if (pElement != 0)
             {
                 xReturn = pElement->getUnoInstance();
@@ -142,7 +145,6 @@ namespace configmgr
         return xReturn;
     }
 
-
     //-----------------------------------------------------------------------------------
     uno::Reference<uno::XInterface> OConfigurationProviderImpl::createUpdateAccess( uno::Sequence<uno::Any> const& aArgs)
         throw (uno::Exception, uno::RuntimeException)
@@ -150,25 +152,29 @@ namespace configmgr
         CFG_TRACE_INFO("config provider: going to create an update access instance");
 
         // extract the args
-        sal_Int32 nLevels;
         ::rtl::OUString sUser, sPath, sLocale;
-        sal_Bool bIsSetupMode = false;
-
+        sal_Int32 nLevels;
+        sal_Bool bIsSetupMode = sal_False;
         OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bIsSetupMode);
-        ::rtl::OUString sNodeAccessor = IConfigSession::composeNodeAccessor(sPath, sUser);
+
+        vos::ORef<OOptions> xOptions = new OOptions(*getDefaultOptions());
+        xOptions->setUser(sUser);
+        xOptions->setLocale(sLocale);
+        xOptions->setSetupMode(bIsSetupMode);
+
+        // determine which parts are need for the path
+        m_pTreeMgr->getPathRequirements(sPath, xOptions, nLevels, sUser, sLocale);
+        ::rtl::OUString sNodeAccessor = IConfigSession::composeNodeAccessor(sPath, sUser, sLocale);
 
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sNodeAccessor));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
 
-        // m_pConfiguration->setOptions(getOptions());
-        getOptions()->add("Locale", sLocale);
-        getOptions()->setSetupMode(bIsSetupMode);
 
         // create the access object
         uno::Reference< uno::XInterface > xReturn;
         if (aArgs.getLength() != 0)
         {
-            NodeElement* pElement = buildUpdateAccess(sNodeAccessor, nLevels);
+            NodeElement* pElement = buildUpdateAccess(sNodeAccessor, xOptions, nLevels);
             if (pElement != 0)
             {
                 xReturn = pElement->getUnoInstance();
