@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:32:55 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2312,6 +2312,33 @@ BOOL SwTxtNode::MayBeNumbered() const
     return ! pNdNum || pNdNum->IsNum();
 }
 
+// -> #i27615#
+BOOL SwTxtNode::IsNumbered() const
+{
+    BOOL bResult = FALSE;
+    SwNumRule * pRule = GetNumRule();
+
+    if (pRule && pNdNum && pNdNum->IsNum())
+        bResult = TRUE;
+
+    return bResult;
+}
+
+BOOL SwTxtNode::HasMarkedLabel() const
+{
+    BOOL bResult = FALSE;
+
+    if (pNdNum)
+    {
+        SwNumRule * pNumRule = GetNumRule();
+
+        if (pNumRule)
+            bResult = pNumRule->IsLevelMarked(pNdNum->GetRealLevel());
+    }
+
+    return bResult;
+}
+// <- #i27615#
 
 SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
                                         BOOL bChgFollow )
