@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BridgeFactory.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:51 $
+ *  last change: $Author: jbu $ $Date: 2000-10-06 16:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@ package com.sun.star.comp.bridgefactory;
 
 import java.util.Enumeration;
 
+import com.sun.star.lang.XEventListener;
+import com.sun.star.lang.XComponent;
 
 import com.sun.star.bridge.BridgeExistsException;
 import com.sun.star.bridge.XBridge;
@@ -93,12 +95,12 @@ import com.sun.star.uno.UnoRuntime;
  * <p>
  * This component is only usable for remote bridges.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:51 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-10-06 16:29:18 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @since       UDK1.0
  */
-public class BridgeFactory implements XBridgeFactory {
+public class BridgeFactory implements XBridgeFactory, XEventListener {
     static private final boolean DEBUG = false;
 
     /**
@@ -142,8 +144,39 @@ public class BridgeFactory implements XBridgeFactory {
         return FactoryHelper.writeRegistryServiceInfo(BridgeFactory.class.getName(), __serviceName, regKey);
     }
 
-
+    // TODO : (jbu) WeakTable still necessary ?????
     static protected WeakTable _bridges = new WeakTable();
+
+    /****
+     * gets called, when an instantiated bridge is disposed
+     ****/
+    public void disposing( com.sun.star.lang.EventObject event )
+    {
+        // TODO:
+        // jbu: in my eyes, this would be the better solution, but
+        //      XBridge.getName() always returns "remote" instead the name
+        //      of the bridge given during creating it
+//          System.out.println( "disposing called\n" );
+//          XBridge bridge = (XBridge) UnoRuntime.queryInterface( XBridge.class , event.Source );
+//          if( bridge != null )
+//          {
+//              System.out.println( "removing from hashmap :\n" + bridge.getName() );
+//              _bridges.remove( bridge.getName() );
+//          }
+
+        // iterating about all bridges, to find the correct one to remove
+        java.util.Enumeration enum = _bridges.keys();
+        while( enum.hasMoreElements() )
+        {
+            Object key = enum.nextElement();
+            XBridge value = (XBridge) _bridges.get( key, XBridge.class );
+            if( value != null && value.equals( event.Source ) )
+            {
+                _bridges.remove( key );
+                break;
+            }
+        }
+    }
 
     /**
      * Creates a remote bridge and memorizes it under <code>sName</code>.
@@ -171,6 +204,15 @@ public class BridgeFactory implements XBridgeFactory {
             IBridge iBridge = UnoRuntime.getBridgeByName("java", null, "remote", sName, new Object[]{sProtocol, aConnection, anInstanceProvider});
 
             xBridge = (XBridge)_bridges.put(sName, iBridge, XBridge.class);
+            XComponent component = (XComponent) UnoRuntime.queryInterface( XComponent.class , xBridge );
+            if( component == null )
+            {
+                System.out.println( "warning : bridges does not support XComponent" );
+            }
+            else
+            {
+                component.addEventListener( this );
+            }
         }
         catch(Exception exception) {
             throw new com.sun.star.lang.IllegalArgumentException(exception.getMessage());
