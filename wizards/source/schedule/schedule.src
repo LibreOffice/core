@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:29:39 $
+ *  last change: $Author: nf $ $Date: 2002-02-15 10:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1326,7 +1326,7 @@ Text[ swedish ] = "Månad";
     Text[ danish ] = "Måned";
     Text[ polish ] = "Miesi¹c";
     Text[ portuguese_brazilian ] = "Month";
-    Text[ japanese ] = "æœˆ";
+    Text[ japanese ] = "";
     Text[ korean ] = "ì›”";
     Text[ chinese_simplified ] = "æœˆ";
     Text[ chinese_traditional ] = "æœˆ";
