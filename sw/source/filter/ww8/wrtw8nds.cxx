@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-19 08:47:12 $
+ *  last change: $Author: cmc $ $Date: 2001-10-26 12:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1224,8 +1224,8 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             SfxItemSet* pTmpSet = 0;
             const BYTE nPrvNxtNd =
                 ( WWFL_ULSPACE_LIKE_SWG & rWW8Wrt.GetIniFlags())
-                        ? (ND_HAS_PREV_LAYNODE|ND_HAS_NEXT_LAYNODE)
-                        : pNd->HasPrevNextLayNode();
+                        ? pNd->HasPrevNextLayNode()
+                        : (ND_HAS_PREV_LAYNODE|ND_HAS_NEXT_LAYNODE);
 
             if( (ND_HAS_PREV_LAYNODE|ND_HAS_NEXT_LAYNODE ) != nPrvNxtNd )
             {
