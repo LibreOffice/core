@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:44:14 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,8 @@
     Text[ thai ] = "บันทึก";    \
     Text[ czech ] = "Uložit";  \
     Text[ hebrew ] = "‮שמירה‬";    \
-    Text[ hindi ] = "संचित करो";
+    Text[ hindi ] = "संचित करो";    \
+    Text[ slovak ] = "Uložiť";
 
 TabPage RID_SFXPAGE_SAVE
 {
@@ -132,6 +133,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ czech ] = "Načítání";
         Text[ hebrew ] = "‮טעינה‬";
         Text[ hindi ] = "लोड़ करो";
+        Text[ slovak ] = "Načítať";
     };
     CheckBox CB_LOAD_SETTINGS
     {
@@ -163,6 +165,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ czech ] = "S dokumentem načíst nastavení specifická pro uživatele";
         Text[ hebrew ] = "‮טעינת קביעות המשתמש ביחד עם המסמך‬";
         Text[ hindi ] = "लेखपत्र के साथ उपभोक्ता-निर्दिष्ट निर्धारण को लोड़ करो";
+        Text[ slovak ] = "S dokumentom načítať nastavenia špecifické pre užívateľa";
     };
     FixedLine GB_SAVE
     {
@@ -195,6 +198,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ czech ] = "Ukládání";
         Text[ hebrew ] = "‮שמירה‬";
         Text[ hindi ] = "संचित करो";
+        Text[ slovak ] = "Uložiť";
     };
     CheckBox BTN_DOCINFO
     {
@@ -228,6 +232,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ czech ] = "Upravit vlastnosti dokumentu před uložením";
         Text[ hebrew ] = "‮עריכת תכונות המסמך לפני שמירה‬";
         Text[ hindi ] = "संचित करने से पहिले लेखपत्र विशेषतों का ~संपादन करो";
+        Text[ slovak ] = "~Upraviť vlastnosti dokumentu pred uložením";
     };
     CheckBox BTN_BACKUP
     {
@@ -260,6 +265,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ czech ] = "Vždy vytvořit záložní kopii";
         Text[ hebrew ] = "‮יצירת עותק לגיבוי תמיד‬";
         Text[ hindi ] = "हमे~शा बैकअप् प्रतिलिपि उत्पन्न करो";
+        Text[ slovak ] = "~Vždy vytvoriť záložnú kópiu";
     };
 
     CheckBox BTN_AUTOSAVE
@@ -293,6 +299,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ czech ] = "Ukládat každých";
         Text[ hebrew ] = "‮שמירה אוטומטית בכל‬";
         Text[ hindi ] = "स्व~यं संचित करो";
+        Text[ slovak ] = "Ukl~adať každých";
     };
     NumericField ED_AUTOSAVE
     {
@@ -341,6 +348,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ czech ] = "minut";
         Text[ hebrew ] = "‮דקות‬";
         Text[ hindi ] = "मिनटें";
+        Text[ slovak ] = "Minúty";
     };
     CheckBox BTN_AUTOSAVEPROMPT
     {
@@ -373,6 +381,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ czech ] = "Dotaz před uložením";
         Text[ hebrew ] = "‮תיזכורת לשמור‬";
         Text[ hindi ] = "संचित करने केलिए ~उत्तेजित करो";
+        Text[ slovak ] = "~Pýtať sa pred uložením";
     };
 
     CheckBox BTN_NOPRETTYPRINTING
@@ -405,6 +414,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ czech ] = "Optimalizace na velikost XML formátu (nehezký tisk)";
         Text[ hebrew ] = "‮אופטימיזצית גודל עבור צורת XML (ללא הדפסה מעוצבת)‬";
         Text[ hindi ] = "XML फाइलों केलिए परिमाण योग्य बनाना (कोई सुन्दर छपाई नहीं)";
+        Text[ slovak ] = "Optimalizácia na veľkosť pre XML formát (nepekná tlač)";
     };
 
     FixedLine GB_RELATIVE
@@ -437,6 +447,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ czech ] = "Uložit URL odkazy relativně k";
         Text[ hebrew ] = "‮שמירת URL ים יחסית ל ‬";
         Text[ hindi ] = "से संबन्धित URL को संचित करो";
+        Text[ slovak ] = "Uložiť URL odkazy relatívne k";
     };
     CheckBox BTN_RELATIVE_FSYS
     {
@@ -470,6 +481,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ czech ] = "souborovému systému";
         Text[ hebrew ] = "‮מערכת קבצים‬";
         Text[ hindi ] = "~फाइल सिस्टम";
+        Text[ slovak ] = "~Súborovému systému";
     };
     CheckBox BTN_RELATIVE_INET
     {
@@ -501,6 +513,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ czech ] = "Internetu";
         Text[ hebrew ] = "‮אינטרנט‬";
         Text[ hindi ] = "~इन्टरनेट्";
+        Text[ slovak ] = "~Internetu";
     };
     FixedLine FL_FILTER
     {
@@ -532,6 +545,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ czech ] = "Standardní formát souboru";
         Text[ hebrew ] = "‮צורת קובץ רגיל‬";
         Text[ hindi ] = "स्टान्डर्ड फाइल रचना";
+        Text[ slovak ] = "Štandardný formát súboru";
     };
     FixedText FT_APP
     {
@@ -563,6 +577,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ czech ] = "Typ dokumentu";
         Text[ hebrew ] = "‮סוג מסמך‬";
         Text[ hindi ] = "ले~खपत्र वर्ग";
+        Text[ slovak ] = "Typ d~okumentu";
     };
     FixedText FT_FILTER
     {
@@ -594,6 +609,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ czech ] = "Vždy ukládat jako";
         Text[ hebrew ] = "‮לשמור תמיד כ‬";
         Text[ hindi ] = "हमेशा संचित ~करो जैसे";
+        Text[ slovak ] = "~Vždy ukladať ako";
     };
     ListBox LB_APP
     {
@@ -843,6 +859,15 @@ TabPage RID_SFXPAGE_SAVE
         < "रेखाचित्र" ;        APP_DRAW      ; > ;
         < "सूत्र" ;           APP_MATH      ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Textový dokument" ;     APP_WRITER    ; > ;
+        < "HTML dokument" ;    APP_WRITER_WEB;  > ;
+        < "Zošit" ; APP_CALC      ; > ;
+        < "Prezentácia" ;     APP_IMPRESS   ; > ;
+        < "Kresba" ;        APP_DRAW      ; > ;
+        < "Vzorec" ;           APP_MATH      ; > ;
+    };
     };
     ListBox LB_FILTER
     {
@@ -902,6 +927,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Text[ czech ] = "Použití \"%1\" jako výchozího formátu souboru může způsobit ztrátu informace.\n";
         Text[ hebrew ] = "‮יתכן ששימוש ב \"%1\" כצורת קובץ ברירת המחדל יגרום לאובדן נתונים.\n‬";
         Text[ hindi ] = "Using \"%1\" as default file format may cause information loss.\n";
+        Text[ slovak ] = "Použitie \"%1\" ako východzieho formátu súboru môže spôsobiť stratu informácií.\n";
     };
 /*    CheckBox CB_DONT_SHOW_AGAIN
     {
@@ -923,6 +949,8 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Size = MAP_APPFONT( 50, 14 );
     };
 };
+
+
 
 
 
