@@ -2,9 +2,9 @@
  *
  *  $RCSfile: folderitem_writer.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 09:01:03 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #include "macros.inc"
 
 FolderItem gid_Folderitem_Swriter
-    Name = "%PRODUCTNAME %PRODUCTVERSION Writer";
+    Name = "%PRODUCTNAME Writer";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     FolderID = gid_Folder_Staroffice51;
     FileID = gid_File_Exe_Swriter;
