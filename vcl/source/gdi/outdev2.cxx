@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-04 15:25:01 $
+ *  last change: $Author: ka $ $Date: 2001-07-26 16:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,14 +672,7 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
 
     OUTDEV_INIT();
 
-    if( ( OUTDEV_PRINTER == meOutDevType ) && mbClipRegion && ( REGION_COMPLEX == maRegion.GetType() ) )
-    {
-        Bitmap aMask;
-        ImplPrintTransparent( aBmp, aMask, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
-        return;
-    }
-
-    if ( !( !aBmp ) )
+    if( !aBmp.IsEmpty() )
     {
         TwoRect aPosAry;
 
@@ -826,47 +819,10 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
     if( OUTDEV_PRINTER == meOutDevType )
     {
         Bitmap aBmp( aBmpEx.GetBitmap() );
+        Bitmap aMask( aBmpEx.GetMask() );
 
-        if( aBmpEx.IsAlpha() )
-        {
-            if( !aBmp.IsEmpty() )
-            {
-                TwoRect aPosAry;
-
-                aPosAry.mnSrcX = rSrcPtPixel.X();
-                aPosAry.mnSrcY = rSrcPtPixel.Y();
-                aPosAry.mnSrcWidth = rSrcSizePixel.Width();
-                aPosAry.mnSrcHeight = rSrcSizePixel.Height();
-                aPosAry.mnDestX = ImplLogicXToDevicePixel( rDestPt.X() );
-                aPosAry.mnDestY = ImplLogicYToDevicePixel( rDestPt.Y() );
-                aPosAry.mnDestWidth = ImplLogicWidthToDevicePixel( rDestSize.Width() );
-                aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
-
-                const ULONG nMirrFlags = ImplAdjustTwoRect( aPosAry, aBmp.GetSizePixel() );
-
-                if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
-                {
-                    if ( nMirrFlags )
-                        aBmp.Mirror( nMirrFlags );
-
-#ifndef REMOTE_APPSERVER
-                    mpGraphics->DrawBitmap( &aPosAry, *aBmp.ImplGetImpBitmap()->ImplGetSalBitmap() );
-#else
-                    aBmp.ImplDrawRemote( this,
-                                Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
-                                Size( aPosAry.mnSrcWidth, aPosAry.mnSrcHeight ),
-                                Point( aPosAry.mnDestX, aPosAry.mnDestY ),
-                                Size( aPosAry.mnDestWidth, aPosAry.mnDestHeight ) );
-#endif
-                }
-            }
-        }
-        else
-        {
-            Bitmap aMask( aBmpEx.GetMask() );
-            aBmp.Replace( aMask, Color( COL_WHITE ) );
-            ImplPrintTransparent( aBmp, aMask, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
-        }
+           aBmp.Replace( aMask = aBmpEx.GetMask(), Color( COL_WHITE ) );
+        ImplPrintTransparent( aBmp, aMask, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
 
         return;
     }
@@ -1674,90 +1630,6 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
 
 // ------------------------------------------------------------------------
 
-static Pair* ImplGetMap( long nFromSize, long nToSize )
-{
-    DBG_ASSERT( nFromSize && nToSize, "ImplGetMap(): Invalid size!" );
-
-    Pair*           pMap = new Pair[ nFromSize ];
-    const double    fSize = (double) nToSize / nFromSize;
-    double          fRealSum = 0.0;
-    const long      nLastToPos = nToSize - 1L;
-    long            nErrSum = 0L, nPos = 0L, nSize = 0L;
-
-    for( long i = 0L; i < nFromSize; i++ )
-    {
-        nPos = nPos + nSize;
-        nSize = Max( FRound( fSize - ( nErrSum - fRealSum ) ), 0L );
-
-        nErrSum += nSize;
-        fRealSum += fSize;
-
-        pMap[ i ].A() = nPos = Min( nPos, nLastToPos );
-        pMap[ i ].B() = Min( nPos + Max( nSize, 1L ) - 1L, nLastToPos );
-    }
-
-    return pMap;
-}
-
-// ------------------------------------------------------------------------
-
-static BOOL ImplCreateBandBitmaps( BitmapReadAccess* pPAcc, BitmapReadAccess* pMAcc,
-                                   long* pMapX, long* pMapY,
-                                   long nDstWidth, long nDstY1, long nDstY2,
-                                   Bitmap& rPaint, Bitmap& rMask )
-{
-    const Size  aSz( nDstWidth, nDstY2 - nDstY1 + 1 );
-    BOOL        bRet = FALSE;
-
-    rPaint = Bitmap( aSz, pPAcc->GetBitCount(), pPAcc->HasPalette() ? &pPAcc->GetPalette() : NULL );
-    rMask = Bitmap( aSz, pMAcc->GetBitCount(), pMAcc->HasPalette() ? &pMAcc->GetPalette() : NULL );
-
-    BitmapWriteAccess* pWPAcc = rPaint.AcquireWriteAccess();
-    BitmapWriteAccess* pWMAcc = rMask.AcquireWriteAccess();
-
-    if( pWPAcc && pWMAcc )
-    {
-        const long  nWidth = pWPAcc->Width();
-        const long  nHeight = pWPAcc->Width();
-        const long  nPScanSize = pWPAcc->GetScanlineSize();
-        const long  nMScanSize = pWMAcc->GetScanlineSize();
-        long        nY = 0, nScanY = nDstY1;
-
-        while( nScanY <= nDstY2 )
-        {
-            const long nMapY = pMapY[ nScanY ];
-
-            for( long nX = 0L; nX < nWidth; nX++ )
-            {
-                const long nMapX = pMapX[ nX ];
-                pWPAcc->SetPixel( nY, nX, pPAcc->GetPixel( nMapY, nMapX ) );
-                pWMAcc->SetPixel( nY, nX, pMAcc->GetPixel( nMapY, nMapX ) );
-            }
-
-            while( ( nScanY < nDstY2 ) && ( pMapY[ nScanY + 1 ] == nMapY ) )
-            {
-                HMEMCPY( pWPAcc->GetScanline( nY + 1L ), pWPAcc->GetScanline( nY ), nPScanSize );
-                HMEMCPY( pWMAcc->GetScanline( nY + 1L ), pWMAcc->GetScanline( nY ), nMScanSize );
-                nY++, nScanY++;
-            }
-
-            nY++, nScanY++;
-        }
-
-        bRet = TRUE;
-    }
-
-    if( pWPAcc )
-        rPaint.ReleaseAccess( pWPAcc );
-
-    if( pWMAcc )
-        rMask.ReleaseAccess( pWMAcc );
-
-    return bRet;
-}
-
-// ------------------------------------------------------------------------
-
 void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
                                          const Point& rDestPt, const Size& rDestSize,
                                          const Point& rSrcPtPixel, const Size& rSrcSizePixel )
@@ -1769,15 +1641,12 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
 
     aSrcRect.Justify();
 
-    if( !!rBmp && aSrcRect.GetWidth() && aSrcRect.GetHeight() && aDestSz.Width() && aDestSz.Height() )
+    if( !rBmp.IsEmpty() && aSrcRect.GetWidth() && aSrcRect.GetHeight() && aDestSz.Width() && aDestSz.Height() )
     {
+        Bitmap  aPaint( rBmp ), aMask( rMask );
         ULONG   nMirrFlags = 0UL;
-        Bitmap  aPaint( rBmp );
-        Bitmap  aMask( rMask );
-        Region  aDstRgn;
-        BOOL    bMask = !!aMask;
 
-        if( bMask && ( aMask.GetBitCount() > 1 ) )
+        if( aMask.GetBitCount() > 1 )
             aMask.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
 
         // mirrored horizontically
@@ -1800,116 +1669,60 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
         if( aSrcRect != Rectangle( aPt, aPaint.GetSizePixel() ) )
         {
             aPaint.Crop( aSrcRect );
-            if( bMask )
-                aMask.Crop( aSrcRect );
+            aMask.Crop( aSrcRect );
         }
 
         // destination mirrored
         if( nMirrFlags )
         {
             aPaint.Mirror( nMirrFlags );
-            if( bMask )
-                aMask.Mirror( nMirrFlags );
+            aMask.Mirror( nMirrFlags );
         }
-
-        const Rectangle aDstRect( aDestPt, aDestSz );
-
-        // create destination region
-        if( mbClipRegion && !maRegion.IsEmpty() )
-        {
-            aDstRgn = maRegion;
-            aDstRgn.Intersect( aDstRect );
-        }
-        else
-            aDstRgn = aDstRect;
-
-        aDstRgn.Move( -aDstRect.Left(), -aDstRect.Top() );
 
         // we always want to have a mask
-        if( !bMask )
+        if( aMask.IsEmpty() )
         {
             aMask = Bitmap( aSrcRect.GetSize(), 1 );
             aMask.Erase( Color( COL_BLACK ) );
         }
 
-        BitmapReadAccess* pPAcc = aPaint.AcquireReadAccess();
-        BitmapReadAccess* pMAcc = aMask.AcquireReadAccess();
+        // do painting
+        const long      nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
+        long            nX, nY, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
+        long*           pMapX = new long[ nSrcWidth + 1 ];
+        long*           pMapY = new long[ nSrcHeight + 1 ];
+        const BOOL      bOldMap = mbMap;
 
-        if( pPAcc && pMAcc )
+        mbMap = FALSE;
+
+        // create forward mapping tables
+        for( nX = 0L; nX <= nSrcWidth; nX++ )
+            pMapX[ nX ] = aDestPt.X() + FRound( (double) aDestSz.Width() * nX / nSrcWidth );
+
+        for( nY = 0L; nY <= nSrcHeight; nY++ )
+            pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
+
+        // walk through all rectangles of mask
+        Region          aWorkRgn( aMask.CreateRegion( COL_BLACK, Rectangle( Point(), aMask.GetSizePixel() ) ) );
+        ImplRegionInfo  aInfo;
+        BOOL            bRgnRect = aWorkRgn.ImplGetFirstRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
+
+        while( bRgnRect )
         {
-            const long      nWidth = aDestSz.Width();
-            const long      nHeight = aDestSz.Height();
-            const long      nWidth1 = nWidth - 1;
-            const long      nHeight1 = nHeight - 1;
-            const long      nOldWidth1 = aSrcRect.GetWidth() - 1;
-            const long      nOldHeight1 = aSrcRect.GetHeight() - 1;
-            const long      nScanByteCount = Max( nWidth * aPaint.GetBitCount() / 8L, 1L );
-            const long      nBandHeight = BAND_MAX_SIZE / nScanByteCount + 1;
-            long*           pMapX = new long[ nWidth ];
-            long*           pMapY = new long[ nHeight ];
-            long            nX, nY;
-            long            nBandY1, nBandY2;
-            GDIMetaFile*    pOldMetaFile = mpMetaFile;
-            const BOOL      bOldMap = mbMap;
+            Bitmap          aBandBmp( aPaint );
+            const Rectangle aBandRect( Point( nWorkX, nWorkY ), Size( nWorkWidth, nWorkHeight ) );
+            const Point     aMapPt( pMapX[ nWorkX ], pMapY[ nWorkY ] );
+            const Size      aMapSz( pMapX[ nWorkX + nWorkWidth ] - aMapPt.X(), pMapY[ nWorkY + nWorkHeight ] - aMapPt.Y() );
 
-            mpMetaFile = NULL;
-            Push( PUSH_CLIPREGION );
-            SetClipRegion();
-            mbMap = FALSE;
-
-            // create mapping tables
-            for( nX = 0L; nX < nWidth; nX++ )
-                pMapX[ nX ] = nWidth1 ? ( nX * nOldWidth1 / nWidth1 ) : 0;
-
-            for( nY = 0L; nY < nHeight; nY++ )
-                pMapY[ nY ] = nHeight1 ? ( nY * nOldHeight1 / nHeight1 ) : 0;
-
-            // process bands
-            for( nBandY1 = 0, nBandY2 = nBandHeight; nBandY1 < nHeight; nBandY1 += nBandHeight, nBandY2 += nBandHeight )
-            {
-                Bitmap aWorkPaint, aWorkMask;
-
-                // don't walk over bounds
-                if( nBandY2 > nHeight1 )
-                    nBandY2 = nHeight1;
-
-                if( ImplCreateBandBitmaps( pPAcc, pMAcc, pMapX, pMapY, nWidth, nBandY1, nBandY2, aWorkPaint, aWorkMask ) )
-                {
-                    Region aWorkRgn( aDstRgn );
-                    aWorkRgn.Move( 0, -nBandY1 );
-                    aWorkRgn.Intersect( aWorkMask.CreateRegion( COL_BLACK, Rectangle( aPt, aWorkMask.GetSizePixel() ) ) );
-
-                    ImplRegionInfo  aInfo;
-                    long            nWorkX, nWorkY, nWorkWidth, nWorkHeight;
-                    BOOL            bRgnRect = aWorkRgn.ImplGetFirstRect( aInfo, nWorkX, nWorkY,
-                                                                          nWorkWidth, nWorkHeight );
-
-                    while( bRgnRect )
-                    {
-                        Bitmap      aCropBmp( aWorkPaint );
-                        const Point aOutPt( nWorkX + aDestPt.X(), nWorkY + nBandY1 + aDestPt.Y() );
-                        const Size  aOutSz( nWorkWidth, nWorkHeight );
-                        const Size  aOutSz1( nWorkWidth + 1, nWorkHeight + 1 );
-
-                        aCropBmp.Crop( Rectangle( Point( nWorkX, nWorkY ), aOutSz ) );
-                        ImplDrawBitmap( aOutPt, aOutSz1, Point(), aOutSz, aCropBmp, META_BMPSCALE_ACTION );
-                        bRgnRect = aWorkRgn.ImplGetNextRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
-                    }
-                }
-            }
-
-            delete[] pMapX;
-            delete[] pMapY;
-            mbMap = bOldMap;
-            Pop();
-            mpMetaFile = pOldMetaFile;
+            aBandBmp.Crop( aBandRect );
+            ImplDrawBitmap( aMapPt, aMapSz, Point(), aBandBmp.GetSizePixel(), aBandBmp, META_BMPSCALEPART_ACTION );
+            bRgnRect = aWorkRgn.ImplGetNextRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
         }
 
-        if( pPAcc )
-            aPaint.ReleaseAccess( pPAcc );
+        mbMap = bOldMap;
 
-        if( pMAcc )
-            aMask.ReleaseAccess( pMAcc );
+        delete[] pMapX;
+        delete[] pMapY;
     }
 }
 
@@ -1919,8 +1732,6 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
                                   const Point& rDestPt, const Size& rDestSize,
                                   const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
-#ifndef REMOTE_APPSERVER
-
     Point       aPt;
     Point       aDestPt( LogicToPixel( rDestPt ) );
     Size        aDestSz( LogicToPixel( rDestSize ) );
@@ -1928,17 +1739,15 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
 
     aSrcRect.Justify();
 
-    if( !!rMask &&
-        aSrcRect.GetWidth() && aSrcRect.GetHeight() &&
-        aDestSz.Width() && aDestSz.Height() )
+    if( !rMask.IsEmpty() && aSrcRect.GetWidth() && aSrcRect.GetHeight() && aDestSz.Width() && aDestSz.Height() )
     {
-        ULONG   nMirrFlags = 0UL;
         Bitmap  aMask( rMask );
-        Region  aRegion;
+        ULONG   nMirrFlags = 0UL;
 
         if( aMask.GetBitCount() > 1 )
             aMask.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
 
+        // mirrored horizontically
         if( aDestSz.Width() < 0L )
         {
             aDestSz.Width() = -aDestSz.Width();
@@ -1946,6 +1755,7 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
             nMirrFlags |= BMP_MIRROR_HORZ;
         }
 
+        // mirrored vertically
         if( aDestSz.Height() < 0L )
         {
             aDestSz.Height() = -aDestSz.Height();
@@ -1961,17 +1771,13 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
         if( nMirrFlags )
             aMask.Mirror( nMirrFlags );
 
-        aRegion = aMask.CreateRegion( COL_BLACK, Rectangle( Point(), aMask.GetSizePixel() ) );
-
-        ImplRegionInfo      aInfo;
-        const Size          aSrcSz( aMask.GetSizePixel() );
-        long                nSrcX, nSrcY, nSrcWidth, nSrcHeight;
-        long                nDstX, nDstY, nDstWidth, nDstHeight;
-        GDIMetaFile*        pOldMetaFile = mpMetaFile;
-        Pair*               pMapX = ImplGetMap( aSrcSz.Width(), aDestSz.Width() );
-        Pair*               pMapY = ImplGetMap( aSrcSz.Height(), aDestSz.Height() );
-        BOOL                bOldMap = mbMap;
-        BOOL                bRegionRect = aRegion.ImplGetFirstRect( aInfo, nSrcX, nSrcY, nSrcWidth, nSrcHeight );
+        // do painting
+        const long      nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
+        long            nX, nY, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
+        long*           pMapX = new long[ nSrcWidth + 1 ];
+        long*           pMapY = new long[ nSrcHeight + 1 ];
+        GDIMetaFile*    pOldMetaFile = mpMetaFile;
+        const BOOL      bOldMap = mbMap;
 
         mpMetaFile = NULL;
         mbMap = FALSE;
@@ -1981,14 +1787,25 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
         ImplInitLineColor();
         ImplInitFillColor();
 
-        while( bRegionRect )
+        // create forward mapping tables
+        for( nX = 0L; nX <= nSrcWidth; nX++ )
+            pMapX[ nX ] = aDestPt.X() + FRound( (double) aDestSz.Width() * nX / nSrcWidth );
+
+        for( nY = 0L; nY <= nSrcHeight; nY++ )
+            pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
+
+        // walk through all rectangles of mask
+        Region          aWorkRgn( aMask.CreateRegion( COL_BLACK, Rectangle( Point(), aMask.GetSizePixel() ) ) );
+        ImplRegionInfo  aInfo;
+        BOOL            bRgnRect = aWorkRgn.ImplGetFirstRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
+
+        while( bRgnRect )
         {
-            nDstX = pMapX[ nSrcX ].A();
-            nDstY = pMapY[ nSrcY ].A();
-            nDstWidth = pMapX[ nSrcX + nSrcWidth - 1L ].B() - nDstX + 1L;
-            nDstHeight = pMapY[ nSrcY + nSrcHeight - 1L ].B() - nDstY + 1L;
-            mpGraphics->DrawRect( nDstX + aDestPt.X(), nDstY + aDestPt.Y(), nDstWidth, nDstHeight );
-            bRegionRect = aRegion.ImplGetNextRect( aInfo, nSrcX, nSrcY, nSrcWidth, nSrcHeight );
+            const Point aMapPt( pMapX[ nWorkX ], pMapY[ nWorkY ] );
+            const Size  aMapSz( pMapX[ nWorkX + nWorkWidth ] - aMapPt.X(), pMapY[ nWorkY + nWorkHeight ] - aMapPt.Y() );
+
+            DrawRect( Rectangle( aMapPt, aMapSz ) );
+            bRgnRect = aWorkRgn.ImplGetNextRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
         }
 
         Pop();
@@ -1997,6 +1814,4 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
         mbMap = bOldMap;
         mpMetaFile = pOldMetaFile;
     }
-
-#endif
 }
