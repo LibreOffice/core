@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 10:01:09 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 13:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #   include <vos/refobj.hxx>
 #endif
 #ifndef _VOS_SECURITY_HXX_
-//# include <vos/security.hxx>
+#   include <vos/security.hxx>
 #endif
 #ifndef _RTL_USTRING_
 #   include <rtl/ustring>
