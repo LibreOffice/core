@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-19 18:21:51 $
+#   last change: $Author: obo $ $Date: 2004-03-17 13:41:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssutil.db \
     $(UCR)$/cssbeans.db \
     $(UCR)$/cssbridge.db \
+    $(UCR)$/cssboleautomation.db \
     $(UCR)$/cssconnection.db\
     $(UCR)$/csscontainer.db \
     $(UCR)$/cssio.db \
