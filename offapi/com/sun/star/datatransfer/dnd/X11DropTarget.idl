@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11DropTarget.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 //=============================================================================
 
-interface XDropTarget;
+ published interface XDropTarget;
 
 //=============================================================================
 /** This service connects the Java-like UNO Drag and Drop protocol to the
@@ -95,7 +95,7 @@ interface XDropTarget;
     @see XDropTarget
 */
 
-service X11DropTarget
+published service X11DropTarget
 {
     //-------------------------------------------------------------------------
     /** Used to get data from other applications via X Drag and Drop protocol.
