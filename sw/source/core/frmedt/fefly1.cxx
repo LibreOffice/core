@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:15:53 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 13:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,9 +681,12 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
                 {
                     StartAllAction();
                     pFmt->GetDoc()->SetAttr( aAnch, *pFmt );
-                    if( nAnchorId == FLY_AUTO_CNTNT && bFlyFrame &&
-                        pFly->IsFlyAtCntFrm() )
-                        ((SwFlyAtCntFrm*)pFly)->CheckCharRect();
+                    if ( nAnchorId == FLY_AUTO_CNTNT &&
+                         bFlyFrame && pFly->IsFlyAtCntFrm() )
+                    {
+                        // OD 11.11.2003 #i22341#
+                        static_cast<SwFlyAtCntFrm*>(pFly)->CheckCharRectAndTopOfLine();
+                    }
                     EndAllAction();
                 }
             }
@@ -1139,7 +1142,9 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
 
         if( FLY_PAGE != eType )
         {
-            rSet.Put( SwFmtAnchor( eType ));
+            // OD 12.11.2003 #i22341# - content anchor of anchor item is needed.
+            // Thus, don't overwrite anchor item by default contructed anchor item.
+            //rSet.Put( SwFmtAnchor( eType ) );
             if( FLY_IN_CNTNT == eType )
             {
                 rSet.ClearItem( RES_OPAQUE );
