@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpbitmap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-22 17:26:31 $
+ *  last change: $Author: thb $ $Date: 2001-07-05 15:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
 #endif
 #pragma hdrstop
 
@@ -770,7 +773,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
     SvxOpenGraphicDialog aDlg( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Import" ) ) );
     aDlg.EnableLink(sal_False);
 
-    if( aDlg.Execute() == RET_OK )
+    if( !aDlg.Execute() )
     {
         Graphic         aGraphic;
         USHORT          nError = 1;
@@ -781,9 +784,16 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
 
         if( !nError )
         {
-            String aName( aDlg.GetPath() );
             String aDesc( ResId(RID_SVXSTR_DESC_EXT_BITMAP, pMgr) );
             WarningBox*    pWarnBox = NULL;
+
+            // convert file URL to UI name
+            String          aName;
+            INetURLObject   aURL;
+
+            aURL.SetURL(aDlg.GetPath());
+            ::utl::LocalFileHelper::ConvertURLToPhysicalName( aURL.GetMainURL(INetURLObject::NO_DECODE), aName );
+
             SvxNameDialog* pDlg =
                 new SvxNameDialog( DLGWIN, aName, aDesc );
             nError = RID_SVXSTR_WARN_NAME_DUPLICATE;
