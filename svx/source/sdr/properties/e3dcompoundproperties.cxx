@@ -2,9 +2,9 @@
  *
  *  $RCSfile: e3dcompoundproperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:34:01 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _SDR_PROPERTIES_E3DCOMPOUNDPROPERTIES_HXX
 #include <svx/sdr/properties/e3dcompoundproperties.hxx>
+#endif
+
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
 #endif
 
 #ifndef _E3D_OBJ3D_HXX
