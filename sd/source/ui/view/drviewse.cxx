@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:13:41 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #include "DrawViewShell.hxx"
+
+#include "ViewShellHint.hxx"
 
 #ifndef _COM_SUN_STAR_FORM_FORMBUTTONTYPE_HPP_
 #include <com/sun/star/form/FormButtonType.hpp>
@@ -1148,6 +1150,9 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 mbIsLayerModeActive = pIsActive->GetValue ();
             }
 
+            Broadcast (
+                ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
+
             if (nSId == SID_MASTERPAGE                                       ||
                 (nSId == SID_SLIDE_MASTERPAGE   && ePageKind == PK_STANDARD) ||
                 (nSId == SID_TITLE_MASTERPAGE   && ePageKind == PK_STANDARD) ||
@@ -1219,6 +1224,8 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 GetViewShellBase().GetPaneManager().RequestMainViewShellChange(
                     eShellType);
             }
+            Broadcast (
+                ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_END));
 
             InvalidateWindows();
             Invalidate();
@@ -1226,6 +1233,34 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             rReq.Done();
         }
         break;
+
+
+        case SID_CLOSE_MASTER_VIEW:
+        {
+            Broadcast (
+                ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
+
+            // Switch page back to the first one.  Not doing so leads to a
+            // crash.  This seems to be some bug in the edit mode switching
+            // and page switching methods.
+            SwitchPage (0);
+            ChangeEditMode(EM_PAGE, IsLayerModeActive());
+            Broadcast (
+                ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_END));
+
+            if (pFuActual != NULL
+                && pFuActual->GetSlotID() == SID_BEZIER_EDIT)
+            {
+                GetViewFrame()->GetDispatcher()->Execute(
+                    SID_OBJECT_SELECT,
+                    SFX_CALLMODE_ASYNCHRON);
+            }
+
+
+            rReq.Done();
+        }
+        break;
+
 
         case SID_RULER:
         {
