@@ -255,7 +255,8 @@ Dim Separator as String
 			Separator = GetPathSeparator()
 			&apos; Is the delivered Path already a URL
 			If Instr(1,UCase(BigString),&quot;FILE:///&quot;) = 0 Then
-				BigString = ReplaceString(BigString,&quot;/&quot;, Separator)
+				BigString = ReplaceString(BigString,&quot;/&quot;,Separator)
+				BigString = ReplaceString(BigString,&quot;|&quot;,&quot;:&quot;)
 				BigString = &quot;file:///&quot; &amp; BigString
 			End If
 		End If
@@ -339,7 +340,7 @@ End Function
 Function DirectoryNameoutofPath(sPath as String, Separator as String) as String
 Dim LocFileName as String
 	LocFileName = FileNameoutofPath(sPath, Separator)
-	DirectoryNameoutofPath = RTrimStr(sPath, LocFileName)
+	DirectoryNameoutofPath = RTrimStr(sPath, Separator &amp; LocFileName)
 End Function
 
 
@@ -357,28 +358,24 @@ Dim LocCount%, LocPos%
 End Function
 
 
-Function BubbleSortList(ByVal SortList(),Optional bsort2ndValue as Boolean)
-Dim s as Integer
-Dim t as Integer
-Dim i as Integer
-Dim k as Integer
-Dim bJustOneDim as Boolean
-Dim bSort2nd as Boolean
-Dim DisplayDummy as String
-	
-	bJustOneDim = False
-	bSort2nd = False
-On Local Error Goto NO2NDDIM
+Function BubbleSortList(ByVal SortList(),optional sort2ndValue as Boolean)
+	Dim s as Integer
+	Dim t as Integer
+	Dim i,k as Integer
+	Dim bJustOneDim, bSort2nd as Boolean
+	Dim DisplayDummy as String
+	bJustOneDim = false
+	bSort2nd = false
+On Local Error Goto No2ndDim
     k = Ubound(SortList(),2)
-NO2NDDIM:
+	No2ndDim:
 	bJustOneDim = Err &lt;&gt; 0
-On Local Error Goto 0	
 	i = Ubound(SortList(),1)
-	If IsMissing(bSort2ndValue) Then
+	If ismissing(sort2ndValue) then
 		bSort2nd = false
-	Else
-		bSort2nd = bSort2ndValue
-	End If
+	else
+		bSort2nd = sort2ndValue
+	end if
 	
 	For s = 1 to i - 1
 		For t = 0 to i-s

@@ -594,7 +594,8 @@ Dim PropValue(1) as new com.sun.star.beans.PropertyValue
 End Sub
 
 
-Function ModifyPropertyValue(oContent() as Object, TargetProperties())
+
+Function ModifyPropertyValue(oContent() as Object, TargetProperties() as New com.sun.star.beans.PropertyValue )
 Dim MaxIndex as Integer
 Dim i as Integer
 Dim a as Integer
@@ -673,5 +674,13 @@ Function IsFatOffice() As Boolean
     IsFatOffice = FALSE
   End If
 End Function
+
+
+Function GetLocale(sLanguage as String, sCountry as String)
+Dim oLocale as New com.sun.star.lang.Locale
+	oLocale.Language = sLanguage
+	oLocale.Country = sCountry
+	GetLocale = oLocale
+End Function					
 
 </script:module>

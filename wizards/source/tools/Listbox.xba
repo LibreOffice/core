@@ -5,9 +5,11 @@ Dim OriginalList()
 Dim oDialogModel as Object
 
 
-Sub InitializeListboxProcedures(oModel as Object, SourceListbox as Object)
+Sub InitializeListboxProcedures(oModel as Object, SourceListbox as Object, TargetListbox as Object)
+Dim EmptyList()
 	Set oDialogModel = oModel
 	OriginalList()= SourceListbox.StringItemList()
+	TargetListbox.StringItemList() = EmptyList()
 End Sub
 
 
