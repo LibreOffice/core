@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-14 12:17:09 $
+ *  last change: $Author: sj $ $Date: 2001-03-14 16:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,13 +717,18 @@ sal_Bool PPTWriter::ImplCreateDocument()
                 if ( !ImplGetShapeByIndex( nIndex ) )
                     continue;
 
-                if ( mbPresObj && ( mType == "presentation.Outliner" ) )
+                if ( mbPresObj && ( ( mType == "presentation.Outliner" ) || ( mType == "presentation.Subtitle" ) ) )
                 {
                     if ( bOutliner == FALSE )
                     {
                         bOutliner = TRUE;
                         mnTextStyle = EPP_TEXTSTYLE_BODY;
-                        sal_uInt32 nTextType = ( bSecOutl ) ? EPP_TEXTTYPE_HalfBody : EPP_TEXTTYPE_Body;
+                        sal_uInt32 nTextType = EPP_TEXTTYPE_Body;
+                        if ( bSecOutl )
+                            nTextType = EPP_TEXTTYPE_HalfBody;
+                        else if ( mType == "presentation.Subtitle" )
+                            nTextType = EPP_TEXTTYPE_CenterBody;
+
                         TextRuleEntry* pRule = new TextRuleEntry( i );
                         SvMemoryStream aExtBu( 0x200, 0x200 );
                         if ( !mbEmptyPresObj )
@@ -1618,6 +1623,15 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
                 nTransitionType = PPT_TRANSITION_TYPE_WIPE;
             break;
 
+            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_TOP :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_LEFT :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_BOTTOM :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_RIGHT :
+                nTransitionType = PPT_TRANSITION_TYPE_WIPE;
+            break;
 
             case ::com::sun::star::presentation::FadeEffect_FADE_TO_CENTER :
                 nDirection++;
