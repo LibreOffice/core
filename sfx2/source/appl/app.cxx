@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-10 11:39:05 $
+ *  last change: $Author: mba $ $Date: 2001-07-12 09:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,10 @@
 #endif
 #include <basic/basmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+
+#if SUPD>637
 #include <rtl/logfile.hxx>
+#endif
 
 #include <appuno.hxx>
 #include "sfxhelp.hxx"
@@ -277,8 +280,9 @@ void SfxApplication::SetApp( SfxApplication* pSfxApp )
     static ::osl::Mutex aProtector;
     ::osl::MutexGuard aGuard( aProtector );
 
+#if SUPD>637
     RTL_LOGFILE_CONTEXT( aLog, "SfxApplication::SetApp()" );
-
+#endif
     DBG_ASSERT( !pApp, "SfxApplication already created!" );
     if ( pApp )
         DELETEZ( pApp );
@@ -312,9 +316,10 @@ SfxApplication::SfxApplication()
     , pImageMgr( 0 )
     , nInterfaces( 0 )
 {
+#if SUPD>637
     RTL_LOGFILE_CONTEXT( aLog, "SfxApplication::SfxApplication()" );
-
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "start create svtools option objects" );
+#endif
     pSaveOptions = new SvtSaveOptions;
     pUndoOptions = new SvtUndoOptions;
     pHelpOptions = new SvtHelpOptions;
@@ -332,8 +337,10 @@ SfxApplication::SfxApplication()
     pInternalOptions = new SvtInternalOptions;
     pSysLocaleOptions = new SvtSysLocaleOptions;
     SvtViewOptions::AcquireOptions();
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "end create svtools option objects" );
 
+#if SUPD>637
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "end create svtools option objects" );
+#endif
     pImp = new SfxApplication_Impl;
     pImp->bConfigLoaded = sal_False;
     pImp->pEmptyMenu = 0;
@@ -368,11 +375,17 @@ SfxApplication::SfxApplication()
     pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
     pApp->PreInit();
 
+#if SUPD>637
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "start create SfxConfigManager" );
+#endif
     pCfgMgr = new SfxConfigManager;
+#if SUPD>637
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "end create SfxConfigManager" );
+#endif
 
+#if SUPD>637
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "start InitializeDDE()" );
+#endif
 #ifdef DDE_AVAILABLE
 #ifdef PRODUCT
     InitializeDde();
@@ -388,7 +401,9 @@ SfxApplication::SfxApplication()
     }
 #endif
 #endif
+#if SUPD>637
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "end InitializeDDE()" );
+#endif
 }
 
 SfxApplication::~SfxApplication()
@@ -1305,7 +1320,6 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
     if( Application::IsInExecute() )
     {
         SfxObjectShell *pIter, *pNext;
-
         for(pIter = SfxObjectShell::GetFirst(); pIter; pIter = pNext)
         {
             pNext = SfxObjectShell::GetNext(*pIter);
@@ -1425,7 +1439,14 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
     }
 #endif//MUSTINI
 
+    // transfer configuration data
     ::utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+
+    // make sure that it is written to disk
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        xProvider( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), ::com::sun::star::uno::UNO_QUERY );
+    if ( xProvider.is() )
+        xProvider->dispose();
 
     switch( nError & EXC_MAJORTYPE )
     {
