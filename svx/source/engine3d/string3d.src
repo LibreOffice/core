@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:20:51 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,373 +65,75 @@
  // Strings fuer die Draw-Dialoge --------------------------------------------
 String RID_SVX_3D_CREATE_LATHE
 {
-    Text = "Erstelle 3D-Rotationsobjekt" ;
-    Text [ ENGLISH ] = "Create 3D-Latheobject" ;
-    Text [ english_us ] = "Create 3D rotation object" ;
-    Text [ italian ] = "Crea oggetto di rotazione 3D" ;
-    Text [ spanish ] = "Crear objeto de rotación 3D" ;
-    Text [ french ] = "Créer un corps de révolution 3D" ;
-    Text [ dutch ] = "3D-rotatieobjecten maken" ;
-    Text [ swedish ] = "Skapa 3D-rotationsobjekt" ;
-    Text [ danish ] = "Opret 3D-rotationsobjekt" ;
-    Text [ portuguese_brazilian ] = "Criar objeto de rotação 3D" ;
-    Text [ portuguese ] = "Criar objectos de rotação 3D" ;
-    Text[ chinese_simplified ] = "å»ºç«‹3ç»´æ—‹è½¬ä½“";
-    Text[ russian ] = "Ñîçäàòü òğåõìåğíûé îáúåêò âğàùåíèÿ";
-    Text[ polish ] = "Utwórz obiekt obrotowy 3D";
-    Text[ japanese ] = "3D å›è»¢ä½“ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ";
-    Text[ chinese_traditional ] = "å»ºç«‹ 3D æ—‹è½‰é«”";
-    Text[ arabic ] = "ÅäÔÇÁ ßÇÆä ÇÓÊÏÇÑÉ ËáÇËí ÇáÃÈÚÇÏ";
-    Text[ greek ] = "Äçìéïõñãßá ğåñéóôñåöüìåíïõ áíôéêåéìİíïõ 3Ä";
-    Text[ korean ] = "3D íšŒì „ ê°œì²´ ë§Œë“¤ê¸°";
-    Text[ turkish ] = "3B döner nesne oluştur";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Crea un objecte de gir 3D";
-    Text[ finnish ] = "Luo 3D-pyörähdyskappale";
-    Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸§à¸±à¸•à¸–à¸¸à¸«à¸¡à¸¸à¸™ 3à¸¡à¸´à¸•à¸´";
-    Text[ czech ] = "VytvoÅ™it 3D rotaÄnÃ­ objekt";
-    Text[ hebrew ] = "â€®×™×¦×™×¨×ª ×¢×¦× ×¡×™×‘×•×‘×™ ×ª×œ×ª ××™××“×™â€¬";
-    Text[ hindi ] = "3D à¤˜à¥à¤®à¤¾à¤µ à¤µà¤¸à¥à¤¤à¥ à¤•à¥‹ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
-    Text[ slovak ] = "VytvoriÅ¥ 3D rotaÄnÃ½ objekt";
-    Text[ hungarian ] = "TÃ©rbeli forgÃ¡stest lÃ©trehozÃ¡sa";
-    Text[ slovenian ] = "Ustvari 3D sukajoÄi se predmet";
+    Text [ de ] = "Erstelle 3D-Rotationsobjekt" ;
+    Text [ en-US ] = "Create 3D rotation object" ;
+    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_EXCHANGE_PASTE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Objekt(e) einfügen : Objekt(e) einf³gen */
     /* ### ACHTUNG: Neuer Text in Resource? Objekt(e) einfügen : Objekt(e) einf³gen */
-    Text = "Objekt(e) einfügen" ;
-    Text [ ENGLISH ] = "Paste object(s)" ;
-    Text [ norwegian ] = "Lim inn objekt(er)" ;
-    Text [ italian ] = "Incolla oggetti" ;
-    Text [ portuguese_brazilian ] = "Inserir objeto(s)" ;
-    Text [ portuguese ] = "Inserir objecto(s)" ;
-    Text [ finnish ] = "Lisää objekti(t)" ;
-    Text [ danish ] = "Indsæt objekt(er)" ;
-    Text [ french ] = "Insérer le(s) objet(s)" ;
-    Text [ swedish ] = "Infoga objekt" ;
-    Text [ dutch ] = "Object(en) invoegen" ;
-    Text [ spanish ] = "Insertar objeto(s)" ;
-    Text [ english_us ] = "Insert object(s)" ;
-    Text[ chinese_simplified ] = "æ’å…¥å¯¹è±¡";
-    Text[ russian ] = "Âñòàâèòü îáúåêò(û)";
-    Text[ polish ] = "Wstaw obiekt(y)";
-    Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ¿å…¥";
-    Text[ chinese_traditional ] = "æ’å…¥ç‰©ä»¶";
-    Text[ arabic ] = "ÅÏÑÇÌ ßÇÆä/ßÇÆäÇÊ";
-    Text[ greek ] = "ÅéóáãùãŞ áíôéêåéìİíïõ/-ùí";
-    Text[ korean ] = "ê°œì²´ ì‚½ì…";
-    Text[ turkish ] = "Nesne ekle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insereix objecte(s)";
-    Text[ thai ] = "à¹à¸—à¸£à¸à¸§à¸±à¸•à¸–à¸¸";
-    Text[ czech ] = "VloÅ¾it objekt(y)";
-    Text[ hebrew ] = "â€®×”×›× ×¡×ª ×¢×¦××™×â€¬";
-    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤œà¥‹à¤¡à¤¼à¥‹";
-    Text[ slovak ] = "VloÅ¾iÅ¥ objekt(y)";
-    Text[ hungarian ] = "Objektum(ok) beszÃºrÃ¡sa";
-    Text[ slovenian ] = "Vstavi predmet(e)";
+    Text [ de ] = "Objekt(e) einfügen" ;
+    Text [ en-US ] = "Insert object(s)" ;
+    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_SEGMENTS
 {
-    Text = "Anzahl Segmente" ;
-    Text [ ENGLISH ] = "Segment counts" ;
-    Text [ english_us ] = "Number of segments" ;
-    Text [ dutch ] = "Aantal segmenten" ;
-    Text [ italian ] = "Numero dei segmenti" ;
-    Text [ spanish ] = "Número de segmentos" ;
-    Text [ french ] = "Nombre de segments" ;
-    Text [ swedish ] = "Antal segment" ;
-    Text [ danish ] = "Antal segmenter" ;
-    Text [ portuguese ] = "Número de segmentos" ;
-    Text [ portuguese_brazilian ] = "Número de segmentos" ;
-    Text[ chinese_simplified ] = "åˆ†æ®µæ•°ç›®";
-    Text[ russian ] = "Êîëè÷åñòâî ñåãìåíòîâ";
-    Text[ polish ] = "Liczba segmentów";
-    Text[ japanese ] = "åˆ‡ç‰‡ã®æ•°";
-    Text[ chinese_traditional ] = "åˆ†æ®µæ•¸ç›®";
-    Text[ arabic ] = "ÚÏÏ ÇáŞØÚ";
-    Text[ greek ] = "Áñéèìüò ôìçìÜôùí";
-    Text[ korean ] = "ì„¸ê·¸ë¨¼íŠ¸ ìˆ˜";
-    Text[ turkish ] = "Parça sayısı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Nombre de segments";
-    Text[ finnish ] = "Osioiden määrä";
-    Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¸ªà¹ˆà¸§à¸™";
-    Text[ czech ] = "PoÄet ÄÃ¡stÃ­";
-    Text[ hebrew ] = "â€®××¡×¤×¨ ×”×§×˜×¢×™×â€¬";
-    Text[ hindi ] = "à¤–à¤£à¥à¤¡à¥‹à¤‚ à¤•à¥€ à¤¸à¤‚à¤–à¥à¤¯à¤¾";
-    Text[ slovak ] = "PoÄet ÄastÃ­";
-    Text[ hungarian ] = "Szegmensek szÃ¡ma";
-    Text[ slovenian ] = "Å tevilo odsekov";
+    Text [ de ] = "Anzahl Segmente" ;
+    Text [ en-US ] = "Number of segments" ;
+    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_DEEPTH
 {
-    Text = "Objekttiefe" ;
-    Text [ ENGLISH ] = "Objectdeepth" ;
-    Text [ english_us ] = "Object depth" ;
-    Text [ dutch ] = "Objectdiepte" ;
-    Text [ italian ] = "Profondità oggetto" ;
-    Text [ spanish ] = "Profundidad del objeto" ;
-    Text [ french ] = "Profondeur de l'objet" ;
-    Text [ swedish ] = "Objektdjup" ;
-    Text [ danish ] = "Objektdybde" ;
-    Text [ portuguese ] = "Profundidade do objecto" ;
-    Text [ portuguese_brazilian ] = "Profundidade do objeto" ;
-    Text[ chinese_simplified ] = "å¯¹è±¡æ·±åº¦";
-    Text[ russian ] = "Ãëóáèíà îáúåêòà";
-    Text[ polish ] = "G³êbia obiektu";
-    Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å¥¥è¡Œã";
-    Text[ chinese_traditional ] = "ç‰©ä»¶æ·±åº¦";
-    Text[ arabic ] = "ÚãŞ ÇáßÇÆä";
-    Text[ greek ] = "ÂÜèïò áíôéêåéìİíïõ";
-    Text[ korean ] = "ê°œì²´ ê¹Šì´";
-    Text[ turkish ] = "Nesne derinliği";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Profunditat de l'objecte";
-    Text[ finnish ] = "Objektin syvyys";
-    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸¥à¸¶à¸à¸‚à¸­à¸‡à¸§à¸±à¸•à¸–à¸¸";
-    Text[ czech ] = "Hloubka objektu";
-    Text[ hebrew ] = "â€®×¢×•××§ ×”×¢×¦×â€¬";
-    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤•à¥€ à¤—à¤¹à¤°à¤¾à¤ˆ";
-    Text[ slovak ] = "HÄºbka objektu";
-    Text[ hungarian ] = "Objektum mÃ©lysÃ©ge";
-    Text[ slovenian ] = "Globina predmeta";
+    Text [ de ] = "Objekttiefe" ;
+    Text [ en-US ] = "Object depth" ;
+    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_FOCAL
 {
-    Text = "Kamerabrennweite" ;
-    Text [ ENGLISH ] = "Focal length" ;
-    Text [ english_us ] = "Focal length" ;
-    Text [ italian ] = "Ampiezza focale" ;
-    Text [ spanish ] = "Distancia focal" ;
-    Text [ french ] = "Focale de la caméra" ;
-    Text [ dutch ] = "Brandpuntsafstand" ;
-    Text [ swedish ] = "Kamerabrännvidd" ;
-    Text [ danish ] = "Kamerabrændvidde" ;
-    Text [ portuguese ] = "Distância focal" ;
-    Text [ portuguese_brazilian ] = "Distância focal" ;
-    Text[ chinese_simplified ] = "ç…§ç›¸æœºç„¦è·";
-    Text[ russian ] = "Ôîêóñíîå ğàññòîÿíèå";
-    Text[ polish ] = "Ogniskowa";
-    Text[ japanese ] = "ã‚«ãƒ¡ãƒ©ã®ç„¦ç‚¹è·é›¢";
-    Text[ chinese_traditional ] = "ç…§ç›¸æ©Ÿç„¦è·";
-    Text[ arabic ] = "ÇáØæá ÇáÈÄÑí ááßÇãíÑÇ";
-    Text[ greek ] = "ÅóôéáêŞ áğüóôáóç êÜìåñáò";
-    Text[ korean ] = "ì¹´ë©”ë¼ ì´ˆì  ê±°ë¦¬";
-    Text[ turkish ] = "Kamera odak uzaklığı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Longitud focal";
-    Text[ finnish ] = "Polttoväli";
-    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸¢à¸²à¸§à¸ˆà¸¸à¸”à¸£à¸§à¸¡";
-    Text[ czech ] = "OhniskovÃ¡ vzdÃ¡lenost";
-    Text[ hebrew ] = "â€®××¨×—×§ ××™×§×•×“â€¬";
-    Text[ hindi ] = "à¤¤à¤¾à¤² à¤•à¥‡ à¤®à¤§à¥à¤¯ à¤¸à¥‡ à¤‰à¤¸à¤•à¥‡ à¤•à¥‡à¤¨à¥à¤¦à¥à¤° à¤¤à¤• à¤•à¥€ à¤¦à¥‚à¤°à¥€";
-    Text[ slovak ] = "OhniskovÃ¡ vzdialenosÅ¥";
-    Text[ hungarian ] = "FÃ³kusztÃ¡volsÃ¡g";
-    Text[ slovenian ] = "DolÅ¾ina fokusa";
+    Text [ de ] = "Kamerabrennweite" ;
+    Text [ en-US ] = "Focal length" ;
+    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_CAMPOS
 {
-    Text = "Kameraposition" ;
-    Text [ ENGLISH ] = "Cameraposition" ;
-    Text [ english_us ] = "Camera position" ;
-    Text [ dutch ] = "Camerapositie" ;
-    Text [ italian ] = "Posizione focale" ;
-    Text [ spanish ] = "Posición de la cámara" ;
-    Text [ french ] = "Position de la caméra" ;
-    Text [ swedish ] = "Kameraposition" ;
-    Text [ danish ] = "Kameraposition" ;
-    Text [ portuguese ] = "Posição da câmara" ;
-    Text [ portuguese_brazilian ] = "Posição da câmera" ;
-    Text[ chinese_simplified ] = "ç…§ç›¸æœºä½ç½®";
-    Text[ russian ] = "Ïîëîæåíèå êàìåğû";
-    Text[ polish ] = "Pozycja kamery";
-    Text[ japanese ] = "ã‚«ãƒ¡ãƒ©ä½ç½®";
-    Text[ chinese_traditional ] = "ç…§ç›¸æ©Ÿä½ç½®";
-    Text[ arabic ] = "ãæÖÚ ÇáßÇãíÑÇ";
-    Text[ greek ] = "Èİóç ğáñáôçñçôŞ";
-    Text[ korean ] = "ì¹´ë©”ë¼ ìœ„ì¹˜";
-    Text[ turkish ] = "Kamera konumu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Posició de la càmara";
-    Text[ finnish ] = "Kameran sijainti";
-    Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¸à¸¥à¹‰à¸­à¸‡";
-    Text[ czech ] = "UmÃ­stÄ›nÃ­ kamery";
-    Text[ hebrew ] = "â€®××™×§×•× ××¦×œ××”â€¬";
-    Text[ hindi ] = "à¤•à¥‡à¤®à¤°à¤¾ à¤•à¤¾ à¤¸à¥à¤¥à¤¾à¤¨";
-    Text[ slovak ] = "Umiestnenie kamery";
-    Text[ hungarian ] = "KameraÃ¡llÃ¡s";
-    Text[ slovenian ] = "PoloÅ¾aj kamere";
+    Text [ de ] = "Kameraposition" ;
+    Text [ en-US ] = "Camera position" ;
+    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_ROTATE
 {
-    Text = "3D-Objekt rotieren" ;
-    Text [ ENGLISH ] = "Rotate 3D-Object" ;
-    Text [ english_us ] = "Rotate 3D object" ;
-    Text [ dutch ] = "3D-object draaien" ;
-    Text [ italian ] = "Ruota oggetto 3d" ;
-    Text [ spanish ] = "Rodar un objeto 3D" ;
-    Text [ french ] = "Rotation de l'objet 3D" ;
-    Text [ swedish ] = "Rotera 3D-objekt" ;
-    Text [ danish ] = "Roter 3D-objekt" ;
-    Text [ portuguese ] = "Rodar objecto 3D" ;
-    Text [ portuguese_brazilian ] = "Girar objeto 3D" ;
-    Text[ chinese_simplified ] = "æ—‹è½¬ 3 ç»´å¯¹è±¡";
-    Text[ russian ] = "Âğàùàòü òğåõìåğíûé îáúåêò";
-    Text[ polish ] = "Obróæ obiekt 3D";
-    Text[ japanese ] = "ç«‹ä½“ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å›è»¢";
-    Text[ chinese_traditional ] = "æ—‹è½‰ 3D ç‰©ä»¶";
-    Text[ arabic ] = "ÇÓÊÏÇÑÉ ßÇÆä ËáÇËí ÇáÃÈÚÇÏ";
-    Text[ greek ] = "ĞåñéóôñïöŞ áíôéêåéìİíïõ 3Ä";
-    Text[ korean ] = "3D ê°œì²´ íšŒì „";
-    Text[ turkish ] = "3B nesneyi döndür";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Gira l'objecte 3D";
-    Text[ finnish ] = "Kierrä 3D-kappaletta";
-    Text[ thai ] = "à¸«à¸¡à¸¸à¸™à¸§à¸±à¸•à¸–à¸¸ 3à¸¡à¸´à¸•à¸´";
-    Text[ czech ] = "OtoÄit 3D objekt";
-    Text[ hebrew ] = "â€®×¡×™×‘×•×‘ ×¢×¦× ×ª×œ×ª ××™××“×™â€¬";
-    Text[ hindi ] = "3D à¤µà¤¸à¥à¤¤à¥ à¤•à¥‹ à¤˜à¥à¤®à¤¾à¤“";
-    Text[ slovak ] = "OtoÄiÅ¥ 3D objekt";
-    Text[ hungarian ] = "TÃ©rbeli objektum forgatÃ¡sa";
-    Text[ slovenian ] = "Sukaj 3D predmet";
+    Text [ de ] = "3D-Objekt rotieren" ;
+    Text [ en-US ] = "Rotate 3D object" ;
+    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_EXTRUDE
 {
-    Text = "Extrusionsobjekt erstellen" ;
-    Text [ ENGLISH ] = "Create Extrusionobject" ;
-    Text [ english_us ] = "Create extrusion object" ;
-    Text [ dutch ] = "Extrusieobject maken" ;
-    Text [ italian ] = "Creare un oggetto di estrusione" ;
-    Text [ spanish ] = "Crear un objeto de extrusión" ;
-    Text [ french ] = "Créer un objet d'extrusion" ;
-    Text [ swedish ] = "Skapa extrusionsobjekt" ;
-    Text [ danish ] = "Opret ekstruderingsobjekt" ;
-    Text [ portuguese ] = "Criar objecto de extrusão" ;
-    Text [ portuguese_brazilian ] = "Criar um objeto de extrusão" ;
-    Text[ chinese_simplified ] = "ç”Ÿæˆæ¨¡å‹å¼å¯¹è±¡";
-    Text[ russian ] = "Ñîçäàòü îáúåêò ıêñòğóçèè";
-    Text[ polish ] = "Utwórz obiekt wyt³aczany";
-    Text[ japanese ] = "æµ®ãå‡ºã—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ";
-    Text[ chinese_traditional ] = "ç”¢ç”Ÿæ¨¡å£“å¼ç‰©ä»¶";
-    Text[ arabic ] = "ÅäÔÇÁ ßÇÆä ŞĞİ";
-    Text[ greek ] = "Äçìéïõñãßá áíôéêåéìİíïõ åîşèçóçò";
-    Text[ korean ] = "ì…ì²´ë©´ ê°œì²´ ì‘ì„±";
-    Text[ turkish ] = "Kalıp nesne oluştur";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Crea un objecte d'extrusió";
-    Text[ finnish ] = "Luo pursotuskappale";
-    Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸§à¸±à¸•à¸–à¸¸à¹‚à¸œà¸¥à¹ˆà¸­à¸­à¸à¸¡à¸²";
-    Text[ czech ] = "VytvoÅ™it protaÅ¾enÃ½ objekt";
-    Text[ hebrew ] = "â€®×™×¦×™×¨×ª ×¢×¦× ×©×™×—×•×œâ€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤·à¥à¤•à¤¾à¤¸à¤¨ à¤µà¤¸à¥à¤¤à¥ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
-    Text[ slovak ] = "VytvoriÅ¥ predÄºÅ¾enÃ½ objekt";
-    Text[ hungarian ] = "KihÃºzott objektum lÃ©trehozÃ¡sa";
-    Text[ slovenian ] = "Ustvari izrivajoÄi predmet";
+    Text [ de ] = "Extrusionsobjekt erstellen" ;
+    Text [ en-US ] = "Create extrusion object" ;
+    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_LATHE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Rotationskörper erstellen : Rotationsk÷rper erstellen */
     /* ### ACHTUNG: Neuer Text in Resource? Rotationskörper erstellen : Rotationsk÷rper erstellen */
-    Text = "Rotationskörper erstellen" ;
-    Text [ ENGLISH ] = "Create Rotationobject" ;
-    Text [ english_us ] = "Create rotation object" ;
-    Text [ dutch ] = "Rotatieobject maken" ;
-    Text [ italian ] = "Creare un oggetto di rotazione" ;
-    Text [ spanish ] = "Crear cuerpo de rotación" ;
-    Text [ french ] = "Créer un corps de révolution" ;
-    Text [ swedish ] = "Skapa rotationsobjekt" ;
-    Text [ danish ] = "Opret rotationsobjekt" ;
-    Text [ portuguese ] = "Criar objecto de rotação" ;
-    Text [ portuguese_brazilian ] = "Criar um objeto de rotação" ;
-    Text[ chinese_simplified ] = "åˆ¶ä½œæ—‹è½¬ä½“";
-    Text[ russian ] = "Ñîçäàòü îáúåêò âğàùåíèÿ";
-    Text[ polish ] = "Utwórz obiekt obrotowy";
-    Text[ japanese ] = "å›è»¢ã‚ªãƒ–kã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ";
-    Text[ chinese_traditional ] = "è£½ä½œæ—‹è½‰é«”";
-    Text[ arabic ] = "ÅäÔÇÁ ÌÓã ÇÓÊÏÇÑÉ";
-    Text[ greek ] = "Äçìéïõñãßá ğåñéóôñåöüìåíïõ áíôéêåéìİíïõ";
-    Text[ korean ] = "íšŒì „ê°œì²´ ë§Œë“¤ê¸°";
-    Text[ turkish ] = "Döner nesne oluştur";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Crea un objecte de gir";
-    Text[ finnish ] = "Luo pyörähdyskappale";
-    Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸§à¸±à¸•à¸–à¸¸à¸«à¸¡à¸¸à¸™";
-    Text[ czech ] = "VytvoÅ™it rotaÄnÃ­ objekt";
-    Text[ hebrew ] = "â€®×™×¦×™×¨×ª ×¢×¦× ×¡×™×‘×•×‘×™â€¬";
-    Text[ hindi ] = "à¤˜à¥à¤®à¤¾à¤µ à¤µà¤¸à¥à¤¤à¥ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
-    Text[ slovak ] = "VytvoriÅ¥ rotaÄnÃ½ objekt";
-    Text[ hungarian ] = "ForgÃ¡stest lÃ©trehozÃ¡sa";
-    Text[ slovenian ] = "Ustvari sukajoÄi se predmet";
+    Text [ de ] = "Rotationskörper erstellen" ;
+    Text [ en-US ] = "Create rotation object" ;
+    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_BREAK_LATHE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Rotationskörper aufbrechen : Rotationsk÷rper aufbrechen */
     /* ### ACHTUNG: Neuer Text in Resource? Rotationskörper aufbrechen : Rotationsk÷rper aufbrechen */
-    Text = "3D-Objekt aufbrechen" ;
-    Text [ ENGLISH ] = "Break 3-D object" ;
-    Text [ english_us ] = "Split 3D object" ;
-    Text [ portuguese ] = "Subdividir objecto 3-D" ;
-    Text [ portuguese_brazilian ] = "Subdividir objeto 3D" ;
-    Text [ swedish ] = "Dela upp 3D-objekt" ;
-    Text [ danish ] = "Opdel 3D-rotationsobjekt" ;
-    Text [ italian ] = "Separa oggetto 3D" ;
-    Text [ spanish ] = "Quebrar objeto 3D" ;
-    Text [ french ] = "Fractionner l'objet 3D" ;
-    Text [ dutch ] = "3D-object opsplitsen" ;
-    Text[ chinese_simplified ] = "åˆ†å¼€3ç»´å¯¹è±¡";
-    Text[ russian ] = "Ğàçáèòü òğåõìåğíûé îáúåêò";
-    Text[ polish ] = "Podziel obiekt 3D";
-    Text[ japanese ] = "ç«‹ä½“ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆ‡ã‚Šé›¢ã™";
-    Text[ chinese_traditional ] = "åˆ†é–‹ 3D ç‰©ä»¶";
-    Text[ arabic ] = "ÊŞÓíã ßÇÆä ËáÇËí ÇáÃÈÚÇÏ";
-    Text[ greek ] = "ÄéÜóğáóç áíôéêåéìİíïõ 3Ä";
-    Text[ korean ] = "3D ê°œì²´ ë¶„í• ";
-    Text[ turkish ] = "3B nesneyi ayır";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Divideix l'objecte 3D";
-    Text[ finnish ] = "Pura 3D-kappale";
-    Text[ thai ] = "à¹à¸¢à¸à¸§à¸±à¸•à¸–à¸¸ 3à¸¡à¸´à¸•à¸´";
-    Text[ czech ] = "RozdÄ›lit 3D objekt";
-    Text[ hebrew ] = "â€®×‘×§×™×¢×ª ×¢×¦× ×ª×œ×ª ××™××“×™â€¬";
-    Text[ hindi ] = "3D à¤µà¤¸à¥à¤¤à¥ à¤•à¥‹ à¤…à¤²à¤—à¤¾à¤¨à¤¾";
-    Text[ slovak ] = "RozdeliÅ¥ 3D objekt";
-    Text[ hungarian ] = "TÃ©rbeli objektum felosztÃ¡sa";
-    Text[ slovenian ] = "Razdeli 3D predmet";
+    Text [ de ] = "3D-Objekt aufbrechen" ;
+    Text [ en-US ] = "Split 3D object" ;
+    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_ATTRIBUTES
 {
-    Text = "3D-Attribute" ;
-    Text [ ENGLISH ] = "3D attributes" ;
-    Text [ portuguese ] = "Atributos 3-D" ;
-    Text [ english_us ] = "3D Attributes" ;
-    Text [ portuguese_brazilian ] = "Atributos 3D" ;
-    Text [ swedish ] = "3D-attribut" ;
-    Text [ danish ] = "3D-attributter" ;
-    Text [ italian ] = "Attributi 3D" ;
-    Text [ spanish ] = "Atributos en 3D" ;
-    Text [ french ] = "Attributs 3D" ;
-    Text [ dutch ] = "3D-attributen" ;
-    Text[ chinese_simplified ] = "3ç»´å±æ€§";
-    Text[ russian ] = "Òğåõìåğíûå àòğèáóòû";
-    Text[ polish ] = "Atrybuty 3D";
-    Text[ japanese ] = "ç«‹ä½“ã®å±æ€§";
-    Text[ chinese_traditional ] = "3D å±¬æ€§";
-    Text[ arabic ] = "ÓãÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
-    Text[ greek ] = "Éäéüôçôåò 3Ä";
-    Text[ korean ] = "3D ì†ì„±";
-    Text[ turkish ] = "3B öznitelikler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Atributs de 3D";
-    Text[ finnish ] = "3D-määritteet";
-    Text[ thai ] = "à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°3à¸¡à¸´à¸•à¸´";
-    Text[ czech ] = "3D atributy";
-    Text[ hebrew ] = "â€®×ª×›×•× ×•×ª ×ª×œ×ª ××™××“×™×•×ªâ€¬";
-    Text[ hindi ] = "3D à¤à¤Ÿà¥à¤°à¤¿à¤¬à¥à¤¯à¥‚à¤Ÿà¥à¤¸";
-    Text[ slovak ] = "3D atribÃºty";
-    Text[ hungarian ] = "TÃ©rbeli jellemzÅ‘k";
-    Text[ slovenian ] = "3D atributi";
+    Text [ de ] = "3D-Attribute" ;
+    Text [ en-US ] = "3D Attributes" ;
+    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
