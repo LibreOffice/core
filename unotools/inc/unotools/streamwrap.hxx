@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamwrap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:43:54 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,16 @@
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
+#include <com/sun/star/io/XTruncate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
+#include <com/sun/star/io/XStream.hpp>
+#endif
 
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
@@ -103,6 +112,10 @@ protected:
     ::osl::Mutex    m_aMutex;
     SvStream*       m_pSvStream;
     sal_Bool        m_bSvStreamOwner : 1;
+    OInputStreamWrapper()
+                    { m_pSvStream = 0; m_bSvStreamOwner = sal_False; }
+    void            SetStream(SvStream* _pStream, sal_Bool bOwner )
+                    { m_pSvStream = _pStream; m_bSvStreamOwner = bOwner; }
 
 public:
     OInputStreamWrapper(SvStream& _rStream);
@@ -134,18 +147,13 @@ typedef ::cppu::ImplHelper1 <   ::com::sun::star::io::XSeekable
 /** helper class for wrapping an SvStream into an <type scope="com.sun.star.io">XInputStream</type>
     which is seekable (i.e. supports the <type scope="com.sun.star.io">XSeekable</type> interface).
 */
-class OSeekableInputStreamWrapper
-                :public OInputStreamWrapper
-                ,public OSeekableInputStreamWrapper_Base
+class OSeekableInputStreamWrapper : public ::cppu::ImplInheritanceHelper1 < OInputStreamWrapper, com::sun::star::io::XSeekable >
 {
+protected:
+    OSeekableInputStreamWrapper() {}
 public:
     OSeekableInputStreamWrapper(SvStream& _rStream);
     OSeekableInputStreamWrapper(SvStream* _pStream, sal_Bool _bOwner = sal_False);
-
-    // disambiguate XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  ) throw ();
-    virtual void SAL_CALL release(  ) throw ();
 
     // XSeekable
     virtual void SAL_CALL seek( sal_Int64 _nLocation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
@@ -206,8 +214,24 @@ public:
     virtual sal_Int64 SAL_CALL getLength(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 };
 
-}   // namespace utl
+class OStreamWrapper : public ::cppu::ImplInheritanceHelper3 < OSeekableInputStreamWrapper, com::sun::star::io::XStream, com::sun::star::io::XOutputStream, com::sun::star::io::XTruncate >
+{
+public:
+    OStreamWrapper(SvStream& _rStream);
 
+// stario::XStream
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL getOutputStream(  ) throw (::com::sun::star::uno::RuntimeException);
+
+// stario::XOutputStream
+    virtual void SAL_CALL writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
+    virtual void SAL_CALL flush() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
+    virtual void SAL_CALL closeOutput() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
+    virtual void SAL_CALL truncate() throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+};
+
+};
+// namespace utl
 
 #endif // _UTL_STREAM_WRAPPER_HXX_
 
