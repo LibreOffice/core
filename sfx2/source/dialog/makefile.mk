@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2002-05-28 13:16:12 $
+#   last change: $Author: mba $ $Date: 2002-07-18 07:13:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,9 +114,11 @@ SLOFILES =\
         $(SLO)$/tplpitem.obj		\
         $(SLO)$/versdlg.obj			\
         $(SLO)$/printopt.obj		\
+                $(SLO)$/recfloat.obj            \
         $(SLO)$/cfgtreelstbox.obj
 
 SRCFILES =\
+                recfloat.src                       \
         about.src			\
         cfg.src				\
         dialog.src			\

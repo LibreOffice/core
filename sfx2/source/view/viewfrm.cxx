@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-10 10:39:31 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 07:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,7 @@ DBG_NAME(SfxViewFrame);
 SFX_IMPL_INTERFACE(SfxViewFrame,SfxShell,SfxResId(0))
 {
     SFX_CHILDWINDOW_REGISTRATION( SID_BROWSER );
+    SFX_CHILDWINDOW_REGISTRATION( SID_RECORDING_FLOATWINDOW );
 }
 
 TYPEINIT2(SfxViewFrame,SfxShell,SfxListener);
@@ -3354,6 +3355,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
     FASTBOOL bDone = FALSE;
     switch ( rReq.GetSlot() )
     {
+        case SID_STOP_RECORDING :
         case SID_RECORDMACRO :
         {
             // try to find any active recorder on this frame
@@ -3370,17 +3372,31 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             if (xSupplier.is())
                 xRecorder = xSupplier->getDispatchRecorder();
 
+            BOOL bIsRecording = xRecorder.is();
+            SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, SID_RECORDMACRO, sal_False);
+            if ( pItem && pItem->GetValue() == bIsRecording )
+                return;
+
             if ( xRecorder.is() )
             {
-                // disable active recording and insert script into basic library container of application
+                // disable active recording
                 aProp <<= com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier >();
                 xSet->setPropertyValue(sProperty,aProp);
-                AddDispatchMacroToBasic_Impl(xRecorder->getRecordedMacro());
+
+                SFX_REQUEST_ARG( rReq, pRecordItem, SfxBoolItem, FN_PARAM_1, sal_False);
+                if ( !pRecordItem || !pRecordItem->GetValue() )
+                    // insert script into basic library container of application
+                    AddDispatchMacroToBasic_Impl(xRecorder->getRecordedMacro());
+
                 xRecorder->endRecording();
                 xRecorder = NULL;
                 GetBindings().SetRecorder_Impl( xRecorder );
+
+                SetChildWindow( SID_RECORDING_FLOATWINDOW, FALSE );
+                if ( rReq.GetSlot() == SID_RECORDING_FLOATWINDOW )
+                    GetBindings().Invalidate( SID_RECORDMACRO );
             }
-            else
+            else if ( rReq.GetSlot() == SID_RECORDMACRO )
             {
                 // enable recording
                 com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xFactory(

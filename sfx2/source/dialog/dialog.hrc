@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-04 12:14:35 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 07:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,10 @@
 #define BMP_EXPANDED_HC                 ( RC_DIALOG_BEGIN + 98 )
 
 #define IMG_LST_STYLE_DESIGNER_HC       ( RC_DIALOG_BEGIN + 99 )
+
+#define RC_IMG_NORMAL                   ( RC_DIALOG_BEGIN + 100 )
+#define RC_IMG_HC                       ( RC_DIALOG_BEGIN + 101 )
+#define RC_BTN_RECORD                   ( RC_DIALOG_BEGIN + 102 )
 
 #endif // #ifndef _SFX_DIALOG_HRC
 
