@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:07:17 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,10 +250,23 @@ sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
     return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:adabas:"),12));
 }
 // --------------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info) throw(SQLException, RuntimeException)
 {
-    if ( ! acceptsURL(url) )
-        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    if ( acceptsURL(url) )
+    {
+        ::std::vector< DriverPropertyInfo > aDriverInfo;
+
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet of the database."))
+                ,sal_False
+                ,::rtl::OUString()
+                ,Sequence< ::rtl::OUString >())
+                );
+        return Sequence< DriverPropertyInfo >(aDriverInfo.begin(),aDriverInfo.size());
+    }
+
+    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
     return Sequence< DriverPropertyInfo >();
 }
 // --------------------------------------------------------------------------------
