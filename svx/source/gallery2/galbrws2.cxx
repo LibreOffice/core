@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-01 14:03:35 $
+ *  last change: $Author: ka $ $Date: 2000-12-09 16:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,9 @@ void GalleryValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
                 if( pObj->GetObjKind() == SGA_OBJ_SOUND )
                     aBmp.Replace( COL_LIGHTMAGENTA, COL_WHITE );
+
+                if( ( pDev->GetBitCount() <= 8 ) && ( aBmp.GetBitCount() >= 8 ) )
+                    aBmp.Dither( BMP_DITHER_FLOYD );
 
                 aGraphic = aBmp;
             }
