@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-02 15:58:22 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 13:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,8 @@ namespace xmloff
     XMLFORM_CONSTASCII_STRING( PROPERTY_FORMATKEY,          "FormatKey");
     XMLFORM_CONSTASCII_STRING( PROPERTY_ALIGN,              "Align");
     XMLFORM_CONSTASCII_STRING( PROPERTY_BORDER,             "Border");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_AUTOCONTROLFOCUS,   "AutomaticControlFocus");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_APPLYDESIGNMODE,    "ApplyFormDesignMode");
 
     // services
     XMLFORM_CONSTASCII_STRING( SERVICE_FORMSCOLLECTION, "com.sun.star.form.Forms" );
@@ -240,6 +242,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/01/02 15:58:22  fs
+ *  event ex- & import
+ *
  *  Revision 1.3  2000/12/18 15:14:35  fs
  *  some changes ... now exporting/importing styles
  *
