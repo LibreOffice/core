@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:08:43 $
+ *  last change: $Author: os $ $Date: 2002-11-15 11:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,6 +498,7 @@ BOOL SwField::PutValue( const uno::Any& rVal, BYTE nMId )
             BOOL bFixed;
             if(rVal >>= bFixed)
                 bIsAutomaticLanguage = !bFixed;
+        }
         break;
         default:
             DBG_ERROR("illegal property");
