@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-02 20:49:25 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 21:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ korean ] = "모든 열 삭제(~C)";
         Text[ turkish ] = "S~�tunun t�m�n� sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Suprimeix la(es) ~columna(es) sencera(es)";
+        Text[ catalan ] = "Suprimeix les ~columnes senceres";
         Text[ thai ] = "ลบ~คอลัมน์ทั้งหมด";
     };
     RadioButton BTN_DELROWS
@@ -164,7 +164,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ korean ] = "모든 행 삭제(~R)";
         Text[ turkish ] = "S~at�r�n t�m�n� sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Suprimeix la(es) ~fila(es) sencera(es)";
+        Text[ catalan ] = "Suprimeix les ~files senceres";
         Text[ thai ] = "ลบแ~ถวทั้งหมด";
     };
     RadioButton BTN_CELLSLEFT
@@ -3617,7 +3617,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ korean ] = "이름으로 쓰는 위치";
         Text[ turkish ] = "Ad i�in kaynak";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombre a partir de ";
+        Text[ catalan ] = "Nom a partir de ";
         Text[ finnish ] = "Luo nimi kohteesta";
         Text[ thai ] = "สร้างชื่อจาก";
     };
