@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:38:56 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1848,7 +1848,8 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pMenu )
                         String aCmd( pMenu->GetItemCommand( nId ) );
                         if ( !bImageSet && aCmd.Len() )
                         {
-                            Image aImage = SvFileInformationManager::GetImage( aCmd, FALSE, bIsHiContrastMode );
+                            Image aImage = SvFileInformationManager::GetImage(
+                                INetURLObject(aCmd), FALSE, bIsHiContrastMode );
                             if ( !!aImage )
                                 pMenu->SetItemImage( nId, aImage );
                         }
