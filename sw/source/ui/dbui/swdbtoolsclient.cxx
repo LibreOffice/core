@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdbtoolsclient.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 12:23:42 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,8 @@ void SwDbtoolsClient::registerClient()
         {
             // get the symbol for the method creating the factory
             const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString::createFromAscii("createDataAccessToolsFactory");
-            getDbToolsClientFactoryFunction() = reinterpret_cast<createDataAccessToolsFactoryFunction>(
+            //  reinterpret_cast<createDataAccessToolsFactoryFunction> removed for gcc permissive
+            getDbToolsClientFactoryFunction() = (createDataAccessToolsFactoryFunction)(
                 osl_getSymbol(getDbToolsClientModule(), sFactoryCreationFunc.pData));
 
             if (NULL == getDbToolsClientFactoryFunction())
