@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-31 10:25:03 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 13:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #include "app.hxx"
 #include "docinf.hxx"
 #include "docfile.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 #include "sfxtypes.hxx"
 
 //========================================================================
@@ -179,9 +176,14 @@ ULONG SfxPSStringProperty_Impl::Load( SvStream& rStream )
 {
     UINT32 nLen;
     rStream >> nLen;
-    ByteString aTemp;
-    rStream.Read( aTemp.AllocBuffer( (xub_StrLen)( nLen - 1 ) ), nLen );
-    aString = String( aTemp, rStream.GetStreamCharSet() );
+    if ( nLen > 0 )
+    {
+        ByteString aTemp;
+        rStream.Read( aTemp.AllocBuffer( (xub_StrLen)( nLen - 1 ) ), nLen );
+        aString = String( aTemp, rStream.GetStreamCharSet() );
+    }
+    else
+        aString.Erase();
     return rStream.GetErrorCode();
 }
 
@@ -840,13 +842,7 @@ ULONG SfxDocumentInfo::LoadPropertySet( SvStorage* pStorage )
     if( aTmpTime != DateTime( Date( 1, 1, 1601 ), Time( 0, 0, 0 ) ) )
         SetPrinted( SfxStamp( String(), aTime ) );
     else
-//-----------------------------------------------------------------------
-#if SUPD > 562
         SetPrinted( SfxStamp( TIMESTAMP_INVALID_DATETIME ));
-#else
-        SetPrinted( SfxStamp( SFX_STAMP_INVALID ));
-#endif // SUPD > 562
-//-----------------------------------------------------------------------
 
     pStr = (SfxPSStringProperty_Impl*) pPS->GetProperty( PID_REVNUMBER );
     if( pStr )
