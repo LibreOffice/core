@@ -1581,7 +1581,7 @@ sub put_systemintegration_into_installset
     {
         my $productversion = $variables->{'PRODUCTVERSION'};
 
-        if ($installer::globals::product =~ /OpenOffice/i )
+        if ($installer::globals::product =~ /OpenOffice/i && $ENV{'RPM'} != "")
         {
             push(@systemfiles, "openofficeorg-redhat-menus-$productversion-1.noarch.rpm");
             push(@systemfiles, "openofficeorg-suse-menus-$productversion-1.noarch.rpm");
