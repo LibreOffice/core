@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcontr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-30 14:13:00 $
+ *  last change: $Author: thb $ $Date: 2001-10-02 15:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,22 +361,15 @@ long SdTabControl::AllowRenaming()
 
     if( aCompareName != aNewName )
     {
-        if (pDrViewSh->GetEditMode() == EM_PAGE)
+        // Seite umbenennen
+        if( pDrViewSh->GetDocSh()->CheckPageName( this, aNewName ) )
         {
-            // Seite umbenennen
-            if( pDrViewSh->GetDocSh()->CheckPageName( this, aNewName ) )
-            {
-                SetEditText( aNewName );
-                EndRenaming();
-            }
-            else
-            {
-                bOK = FALSE;
-            }
+            SetEditText( aNewName );
+            EndRenaming();
         }
         else
         {
-            // MasterPage umbenennen
+            bOK = FALSE;
         }
     }
     return( bOK );
