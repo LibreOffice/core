@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:45:23 $
+ *  last change: $Author: fs $ $Date: 2002-09-13 15:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,7 +505,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             appendColumns(xColSup);
             // now append the primary key
             Reference<XKeysSupplier> xKeySup(xTable,UNO_QUERY);
-            appendKey(xKeySup);
+            appendPrimaryKey(xKeySup);
         }
         // now set the properties
         if(bNew)
@@ -959,7 +959,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_
     }
 }
 // -----------------------------------------------------------------------------
-void OTableController::appendKey(Reference<XKeysSupplier>& _rxSup)
+void OTableController::appendPrimaryKey(Reference<XKeysSupplier>& _rxSup)
 {
     if(!_rxSup.is())
         return; // the database doesn't support keys
@@ -1440,7 +1440,7 @@ void OTableController::alterColumns()
                     if(aMsg.Execute() == RET_YES)
                     {
                         xKeyColumns = NULL;
-                        dropKey();
+                        dropPrimaryKey();
                     }
                     else
                     {
@@ -1489,6 +1489,8 @@ void OTableController::alterColumns()
 
 
     // check if we have to do something with the primary key
+    sal_Bool bNeedDropKey = sal_False;
+    sal_Bool bNeedAppendKey = sal_False;
     if(xKeyColumns.is())
     {
         aIter = m_vRowList.begin();
@@ -1499,26 +1501,34 @@ void OTableController::alterColumns()
             if ( !pField )
                 continue;
 
-            if(pField->IsPrimaryKey() && !xKeyColumns->hasByName(pField->GetName()))
-            {// new primary key column inserted which isn't already in the columns selection
-                dropKey();
-                Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
-                appendKey(xKeySup);
+            if  (   pField->IsPrimaryKey()
+                &&  !xKeyColumns->hasByName( pField->GetName() )
+                )
+            {   // new primary key column inserted which isn't already in the columns selection
+                bNeedDropKey = bNeedAppendKey = sal_True;
                 break;
             }
-            else if(xKeyColumns->hasByName(pField->GetName()))
-            {// found a column which is in the primary key but is marked not to be
-                dropKey();
-                Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
-                appendKey(xKeySup);
+            else if (   !pField->IsPrimaryKey()
+                    &&  xKeyColumns->hasByName( pField->GetName() )
+                    )
+            {   // found a column which currently is in the primary key, but is marked not to be anymore
+                bNeedDropKey = bNeedAppendKey = sal_True;
                 break;
             }
         }
     }
     else
-    {// no primary key available so we check if we should create one
-        Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
-        appendKey(xKeySup);
+    {   // no primary key available so we check if we should create one
+        bNeedAppendKey = sal_True;
+    }
+
+    if ( bNeedDropKey )
+        dropPrimaryKey();
+
+    if ( bNeedAppendKey )
+    {
+        Reference< XKeysSupplier > xKeySup( m_xTable, UNO_QUERY );
+        appendPrimaryKey( xKeySup );
     }
 
     reSyncRows();
@@ -1527,7 +1537,7 @@ void OTableController::alterColumns()
         reload();
 }
 // -----------------------------------------------------------------------------
-void OTableController::dropKey()
+void OTableController::dropPrimaryKey()
 {
     Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
     Reference<XIndexAccess> xKeys;
