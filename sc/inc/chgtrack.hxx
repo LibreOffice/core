@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-02-09 14:05:53 $
+ *  last change: $Author: er $ $Date: 2001-02-09 16:16:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,8 @@ protected:
 
                                 ScChangeAction( ScChangeActionType,
                                                 const ScRange& );
+
+                                // only to be used in the XML import
                                 ScChangeAction( ScChangeActionType,
                                                 const ScBigRange&,
                                                 const ULONG nAction,
@@ -320,10 +322,12 @@ protected:
                                                 const ScChangeActionState eState,
                                                 const DateTime& aDateTime,
                                                 const String& aUser,
-                                                const String& aComment ); // only to use in the XML import
+                                                const String& aComment );
+                                // only to be used in the XML import
                                 ScChangeAction( ScChangeActionType,
                                                 const ScBigRange&,
-                                                const ULONG nAction); // only to use in the XML import
+                                                const ULONG nAction);
+
                                 ScChangeAction( SvStream&,
                                     ScMultipleReadHeader&, ScChangeTrack* );
     virtual                     ~ScChangeAction();
@@ -524,10 +528,12 @@ public:
             void                SetComment( const String& rStr )
                                     { aComment = rStr; }
 
-            void                LoadDeleted(const ULONG nActionNumber,
-                                            ScChangeTrack* pTrack); // only use this with the XML import
-            void                LoadDependent(const ULONG nActionNumber,
-                                            ScChangeTrack* pTrack); // only use this with the XML import
+                                // only to be used in the XML import
+            void                SetDeletedInThis( ULONG nActionNumber,
+                                        const ScChangeTrack* pTrack );
+                                // only to be used in the XML import
+            void                AddDependent( ULONG nActionNumber,
+                                        const ScChangeTrack* pTrack );
 };
 
 
@@ -952,9 +958,12 @@ public:
                                     ULONG nOldFormat, ScBaseCell* pNewCell,
                                     ULONG nNewFormat, ScDocument* pDoc );
 
-                                // use this only in the XML import
-            void                SetNewCell(ScBaseCell* pNewCell, ScDocument* pDoc);
-                                // this functions should be protected but for the XML import they are public
+                                // Use this only in the XML import,
+                                // takes ownership of cell.
+            void                SetNewCell( ScBaseCell* pNewCell, ScDocument* pDoc );
+
+                                // These functions should be protected but for
+                                // the XML import they are public.
             void                SetNextContent( ScChangeActionContent* p )
                                     { pNextContent = p; }
             void                SetPrevContent( ScChangeActionContent* p )
