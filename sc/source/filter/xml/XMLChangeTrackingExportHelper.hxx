@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-19 15:03:59 $
+ *  last change: $Author: sab $ $Date: 2001-01-24 15:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef _SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
 #define _SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
 #ifndef __SGI_STL_LIST
 #include <stl/list>
 #endif
@@ -98,7 +95,7 @@ class ScChangeTrackingExportHelper
     com::sun::star::uno::Reference<com::sun::star::text::XText> xText;
 
     rtl::OUString GetChangeID(const sal_uInt32 nActionNumber);
-    rtl::OUString& GetAcceptanceState(const ScChangeAction* pAction);
+    void GetAcceptanceState(const ScChangeAction* pAction);
 
     void WriteBigRange(const ScBigRange& rBigRange, const sal_Char *pName);
     void WriteChangeInfo(const ScChangeAction* pAction);
