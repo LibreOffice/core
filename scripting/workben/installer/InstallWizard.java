@@ -28,7 +28,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
                 // Check for and backup any config.xml files
                 // Check for and backup any StarBasic macro files
                 // Check for and backup ProtocolHandler
-                
+
                 if (!InstallWizard.isPatchedTypes())
         {
                     File backup = new File(InstUtil.getTmpDir(), "TypeDetection.xml");
@@ -47,31 +47,31 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
                     File destination = new File(InstallWizard.getJavaPath());
                     //InstUtil.copy(backup, destination); //Restore typedetection.xml
         }
-                 
+
                 System.out.println( "ShutdownHook" );
             }
 
             InstUtil.removeTmpDir();
     }
     }// class ShutdownHook
-    
+
     static {
         Runtime rt=Runtime.getRuntime();
         rt.addShutdownHook(new ShutdownHook());
     }
-*/  
+*/
     /** Creates new form InstallWizard */
     public InstallWizard() {
         super("Office Scripting Framework Installer - Early Developer Release");
-    
+
      try {
          System.out.print("All diagnostic output is being redirected to SFrameworkInstall.log\n");
-         System.out.print("Location: "+  System.getProperty( "user.dir" ) + 
+         System.out.print("Location: "+  System.getProperty( "user.dir" ) +
              File.separator + "SFrameworkInstall.log\n");
- 
+
          LogStream log = new LogStream( "SFrameworkInstall.log" );
                  System.setErr(log);
-         
+
                  System.setOut(log);
      }
      catch( FileNotFoundException fnfe ) {
@@ -102,25 +102,25 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         navNext = new javax.swing.JButton();
         navCancel = new javax.swing.JButton();
         screens = new javax.swing.JPanel();
-        
+
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 exitForm(evt);
             }
         });
-        
+
         navigation.setLayout(new java.awt.GridBagLayout());
         java.awt.GridBagConstraints gridBagConstraints1;
-        
+
         navBack.setText("<< Back");
         gridBagConstraints1 = new java.awt.GridBagConstraints();
         gridBagConstraints1.insets = new java.awt.Insets(1, 1, 1, 1);
-        
+
         navNext.setText("Next >>");
         gridBagConstraints1 = new java.awt.GridBagConstraints();
         gridBagConstraints1.gridx = 2;
         gridBagConstraints1.gridy = 0;
-        
+
         navCancel.setText("Cancel");
         gridBagConstraints1 = new java.awt.GridBagConstraints();
         gridBagConstraints1.gridx = 6;
@@ -128,7 +128,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         //navigation.add(navNext, gridBagConstraints1);
         //navigation.add(navBack, gridBagConstraints1);
         //navigation.add(navCancel, gridBagConstraints1);
-    
+
         getContentPane().add(navigation, java.awt.BorderLayout.SOUTH);
         screens.setLayout(new java.awt.CardLayout());
         screens.add(WELCOME, new Welcome(this));
@@ -136,10 +136,10 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         screens.add(VERSIONS, version);
     _final = new Final(this);
         screens.add(FINAL, _final);
-    
+
     //boolean hasIDEInstallation = (InstUtil.hasNetbeansInstallation() || InstUtil.hasJeditInstallation()) ;
     boolean hasIDEInstallation = ( InstUtil.hasNetbeansInstallation() ) ;
-    
+
     if( hasIDEInstallation )
     {
         idewelcome = new IdeWelcome(this);
@@ -154,21 +154,21 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     navNext.addActionListener(this);
     navNext.addActionListener(version);
     navNext.addActionListener(_final);
-    
+
     if( hasIDEInstallation )
     {
         navNext.addActionListener(ideversion);
         navNext.addActionListener(idefinal);
     }
-    
+
     navCancel.addActionListener(this);
     navBack.addActionListener(this);
-    
+
 
     URL url = this.getClass().getResource("sidebar.jpg");
     JLabel sideBar = new JLabel();
     sideBar.setIcon(new ImageIcon(url));
-    getContentPane().add (sideBar, java.awt.BorderLayout.WEST);             
+    getContentPane().add (sideBar, java.awt.BorderLayout.WEST);
         pack();
     }// initComponents
 
@@ -234,6 +234,10 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
                 officePath = args[++i];
             if (args[i].equals("-netbeans"))
                 netbeansPath = args[++i];
+            if (args[i].equals("-net"))
+                bNetworkInstall = true;
+            if (args[i].equals("-bindings"))
+                bBindingsInstall = true;
             //if (args[i].equals("-jedit"))
             //    jeditPath = args[++i];
             i++;
@@ -250,7 +254,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
             System.out.println("Log file is: " +
                 System.getProperty("user.dir") +
                 File.separator + "SFrameworkInstall.log");
- 
+
             LogStream log = new LogStream( "SFrameworkInstall.log" );
             System.setErr(log);
             System.setOut(log);
@@ -262,7 +266,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         }
 
         if (officePath != null) {
-            XmlUpdater xud = new XmlUpdater(officePath, label, progressbar);
+            XmlUpdater xud = new XmlUpdater(officePath, label, progressbar, bNetworkInstall, bBindingsInstall );
             xud.run();
         }
 
@@ -281,6 +285,10 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         System.err.println("java -jar SFrameworkInstall.jar");
         System.err.println("\t[-office <path_to_office_installation]");
         System.err.println("\t[-netbeans <path_to_netbeans_installation]");
+        System.err.println("\t[-net]");
+        System.err.println("\t[-bindings]");
+        System.err.println("\n\n-net indicates that this is the network part of a network install.");
+        System.err.println("-bindings will only install the menu & key bindings in user/config/soffice.cfg.");
         //System.err.println("\t[-jedit <path_to_jedit_installation]");
     }
 
@@ -298,17 +306,17 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     {
         return bPatchedRDB;
     }
-    
+
     public static synchronized boolean isInstallStarted()
     {
         return bInstallStarted;
     }
-    
+
     public static synchronized void setPatchedTypes(boolean value)
     {
         bPatchedTypes = value;
     }
-    
+
     public static synchronized void setPatchedJava(boolean value)
     {
         bPatchedJava = value;
@@ -318,17 +326,17 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     {
         bPatchedRDB = value;
     }
-    
+
     public static synchronized void setInstallStarted(boolean value)
     {
         bInstallStarted = value;
-    }   
+    }
 
     public static synchronized void setTypesPath(String path)
     {
         typesPath = path;
     }
-    
+
     public static synchronized void setJavaPath(String path)
     {
         javaPath = path;
@@ -338,12 +346,12 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     {
         return typesPath;
     }
-    
+
     public static synchronized String getJavaPath()
     {
         return javaPath;
     }
-    
+
     private javax.swing.JPanel  navigation;
     private javax.swing.JButton navBack;
     private javax.swing.JButton navNext;
@@ -363,12 +371,15 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     public static String IDEVERSIONS = "IDEVERSIONS";
     public static String IDEWELCOME  = "IDEWELCOME";
     public static String IDEFINAL    = "IDEFINAL";
-    
+
     public static int DEFWIDTH     = 480;
     public static int DEFHEIGHT    = 240;
 
     private static String typesPath = null;
     private static String javaPath  = null;
+
+    public static boolean bNetworkInstall   = false;
+    public static boolean bBindingsInstall   = false;
 
     private static boolean bPatchedTypes     = false;
     private static boolean bPatchedJava      = false;

@@ -124,10 +124,10 @@ public class FileUpdater {
                     if( ( xmlArray[i].indexOf( "<library:libraries xmlns:library" ) != -1 ) && ( xmlArray[i+1].indexOf( "ScriptBindingLibrary" ) == -1 ) ) {
             String opSys = System.getProperty("os.name");
             if (opSys.indexOf("Windows") != -1) {
-                out.write(" <library:library library:name=\"ScriptBindingLibrary\" library:link=\"false\"/>\n" );
+                out.write(" <library:library library:name=\"ScriptBindingLibrary\" library:link=\"true\"/>\n" );
             }
             else {
-                out.write(" <library:library library:name=\"ScriptBindingLibrary\" xlink:href=\"file://"+installPath+"/user/basic/ScriptBindingLibrary/script.xlb/\" xlink:type=\"simple\" library:link=\"false\"/>\n" );
+                out.write(" <library:library library:name=\"ScriptBindingLibrary\" xlink:href=\"file://"+installPath+"/share/basic/ScriptBindingLibrary/script.xlb/\" xlink:type=\"simple\" library:link=\"true\"/>\n" );
             }
                      }
                 }
@@ -200,10 +200,10 @@ public class FileUpdater {
                     if( ( xmlArray[i].indexOf( "<library:libraries xmlns:library" ) != -1 ) && ( xmlArray[i+1].indexOf( "ScriptBindingLibrary" ) == -1 ) ) {
             String opSys = System.getProperty("os.name");
             if (opSys.indexOf("Windows") != -1) {
-                out.write(" <library:library library:name=\"ScriptBindingLibrary\" library:link=\"false\"/>\n" );
+                out.write(" <library:library library:name=\"ScriptBindingLibrary\" library:link=\"true\"/>\n" );
             }
             else {
-                out.write(" <library:library library:name=\"ScriptBindingLibrary\" xlink:href=\"file://"+installPath+"/user/basic/ScriptBindingLibrary/dialog.xlb/\" xlink:type=\"simple\" library:link=\"false\"/>\n" );
+                out.write(" <library:library library:name=\"ScriptBindingLibrary\" xlink:href=\"file://"+installPath+"/share/basic/ScriptBindingLibrary/dialog.xlb/\" xlink:type=\"simple\" library:link=\"true\"/>\n" );
             }
                      }
                 }

@@ -678,7 +678,7 @@ sub RemoveEventFromDocViaAPI( event as string )
 
 	url.Complete = &quot;script://_$ScriptFrmwrkHelper.removeEvent?&quot; _
 					+ &quot;language=Java&amp;function=ScriptFrmwrkHelper.removeEvent&quot; _
-					+ &quot;&amp;location=user&quot;
+					+ &quot;&amp;location=share&quot;
 					
 	parser.parseStrict(url)
 	disp = document.queryDispatch(url,&quot;&quot;,0)
@@ -823,7 +823,7 @@ Sub UpdateCfgFile ( fileName as String )
 	FuncProvider = createUnoService(&quot;drafts.com.sun.star.script.framework.provider.FunctionProvider&quot;)
 	FuncProvider.initialize( args() )
 	Func = FuncProvider.getFunction(&quot;script://_$ScriptFrmwrkHelper.updateCfgFile?&quot; _
-		+ &quot;language=Java&amp;function=ScriptFrmwrkHelper.updateCfgFile&amp;location=user&quot;)
+		+ &quot;language=Java&amp;function=ScriptFrmwrkHelper.updateCfgFile&amp;location=share&quot;)
 	Dim inArgs(2)
 	Dim outArgs()
 	Dim outIndex()
@@ -1838,7 +1838,7 @@ Sub RunDebugger(lang as String, uri as String, filename as String)
 
     url.Complete = &quot;script://_$DebugRunner.Debug?&quot; _
         + &quot;language=Java&amp;function=DebugRunner.go&quot; _
-        + &quot;&amp;location=user&quot;
+        + &quot;&amp;location=share&quot;
 
     parser.parseStrict(url)
     disp = document.queryDispatch(url,&quot;&quot;,0)
