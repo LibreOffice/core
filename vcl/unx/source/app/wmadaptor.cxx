@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:51:37 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 16:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1969,9 +1969,10 @@ int GnomeWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* p
         if( pEvent->state == PropertyNewValue )
         {
             Atom nType;
-            int nFormat;
-            unsigned long nItems, nBytesLeft;
-            unsigned char* pData;
+            int nFormat = 0;
+            unsigned long nItems = 0;
+            unsigned long nBytesLeft = 0;
+            unsigned char* pData = 0;
             XGetWindowProperty( m_pDisplay,
                                 pEvent->window,
                                 m_aWMAtoms[ WIN_STATE ],
