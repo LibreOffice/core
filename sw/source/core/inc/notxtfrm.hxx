@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: od $ $Date: 2002-09-25 13:11:39 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ public:
     virtual BOOL GetCharRect( SwRect &, const SwPosition&,
                               SwCrsrMoveState* = 0) const;
     BOOL GetCrsrOfst(SwPosition* pPos, Point& aPoint,
-                            const SwCrsrMoveState* = 0) const;
+                     SwCrsrMoveState* = 0) const;
 
     const Size &GetGrfSize() const  { return GetSize(); }
     void GetGrfArea( SwRect &rRect, SwRect * = 0, BOOL bMirror = TRUE ) const;
