@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
+ *  last change: $Author: jl $ $Date: 2001-02-13 11:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,17 +92,14 @@ using namespace osl;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
-
+/*
 struct DndParams
 {
     IDataObject* data;
-    IDropSource* source;
     DWORD dwOkEffects;
-    DWORD dwEffect;
-    HRESULT hr;
     DWORD threadIdCreator;
 };
-
+*/
 
 class SourceContext;
 // RIGHT MOUSE BUTTON drag and drop not supportet currently.
@@ -114,13 +111,6 @@ class DragSource:
 
 {
     Reference<XMultiServiceFactory> m_serviceFactory;
-    // only valid for one dnd operation
-    // The context notifies the XDragSourceListener s
-    Reference<XDragSourceContext>   m_currentContext;
-    SourceContext* m_pcurrentContext_impl;
-    // From com::sun::star::datatransfer::dnd::DNDConstants
-    sal_Int8 m_sourceActions;
-
     HWND m_hAppWindow;
 
     // The mouse button that set off the drag and drop operation
@@ -130,6 +120,18 @@ class DragSource:
     DragSource();
     DragSource(const DragSource&);
     DragSource &operator= ( const DragSource&);
+
+public:
+    // only valid for one dnd operation
+    // the thread ID of the thread which created the window
+    DWORD m_threadIdWindow;
+    // The context notifies the XDragSourceListener s
+    Reference<XDragSourceContext>   m_currentContext;
+
+    // the wrapper for the Transferable ( startDrag)
+    IDataObject* m_pDataObject;
+
+    sal_Int8 m_sourceActions;
 
 public:
     DragSource(const Reference<XMultiServiceFactory>& sf);
