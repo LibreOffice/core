@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineProperties.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:39:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
     <p>The properties for line ends and line starts are only supported by
     shapes with open line ends.
  */
-service LineProperties
+published service LineProperties
 {
     /** This property contains the type of the line.
      */
