@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:01:14 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,12 +138,12 @@ public:
         string is returned.  */
     String transliterate( const String& rStr,
                         xub_StrLen nStart, xub_StrLen nLen,
-                        ::com::sun::star::uno::Sequence <long>* pOffset ) const;
+                        ::com::sun::star::uno::Sequence <sal_Int32>* pOffset ) const;
 
     // Wrapper implementations of class Transliteration
     String transliterate( const String& rStr, sal_uInt16 nLanguage,
                         xub_StrLen nStart, xub_StrLen nLen,
-                        ::com::sun::star::uno::Sequence <long>* pOffset );
+                        ::com::sun::star::uno::Sequence <sal_Int32>* pOffset );
 
     /** If two strings are equal per this transliteration.
         Returns the number of matched code points in any case, even if strings
