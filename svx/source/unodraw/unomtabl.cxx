@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomtabl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-02 15:26:30 $
+ *  last change: $Author: cl $ $Date: 2001-05-10 14:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,7 +519,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
     nStartCount = mpStylePool ? mpStylePool->GetItemCount( XATTR_LINESTART ) : 0;
     for( nSurrogate = 0; nSurrogate < nStartCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINESTART, nSurrogate);
+        pItem = (NameOrIndex*)mpStylePool->GetItem( XATTR_LINESTART, nSurrogate);
         if( pItem && pItem->GetName() == aSearchName )
             return sal_True;
     }
@@ -527,7 +527,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
     USHORT nEndCount = mpModelPool ? mpModelPool->GetItemCount( XATTR_LINEEND ) : 0;
     for( nSurrogate = 0; nSurrogate < nEndCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpStylePool->GetItem( XATTR_LINEEND, nSurrogate);
+        pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINEEND, nSurrogate);
         if( pItem && pItem->GetName() == aSearchName )
             return sal_True;
     }
