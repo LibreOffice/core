@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:58:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@
 #endif
 
 // Enable this to use the helpclass SwRVPMark
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #ifndef _RVP_MARK_HXX
 #include <rvp_mark.hxx>
 #endif
@@ -398,7 +398,7 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
                 nLeading = 0;
         }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         const XubString aDbgTxt1( pPrtFont->GetName() );
         const XubString aDbgTxt2( aMet.GetName() );
 #endif
