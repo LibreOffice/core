@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-19 10:19:19 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ public:
 
     virtual SdrPage*  AllocPage(FASTBOOL bMasterPage);
     virtual SdrModel* AllocModel() const;
-    virtual void    SetChanged( FASTBOOL bFlg = TRUE );
+    virtual void    SetChanged( sal_Bool bFlg = sal_True );
 
     virtual Window* GetCurDocViewWin();
     virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
