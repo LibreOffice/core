@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-16 15:24:35 $
+ *  last change: $Author: dbo $ $Date: 2001-03-30 13:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,24 +190,30 @@ static OString toRTTImangledname( const OString & rRTTIname )
 
 class RTTIHolder
 {
-    static std::map< OString, void* > aAllRTTI;
+    std::map< OString, void* > aAllRTTI;
 public:
-    static void* getRTTI( const OString& rTypename );
-    static void* getRTTI_UnoName( const OString& rUnoTypename )
+    ~RTTIHolder();
+
+    void* getRTTI( const OString& rTypename );
+    void* getRTTI_UnoName( const OString& rUnoTypename )
         { return getRTTI( toRTTIname( rUnoTypename ) ); }
 
-    static void* insertRTTI( const OString& rTypename );
-    static void* insertRTTI_UnoName( const OString& rTypename )
+    void* insertRTTI( const OString& rTypename );
+    void* insertRTTI_UnoName( const OString& rTypename )
         { return insertRTTI( toRTTIname( rTypename ) ); }
-    static void* generateRTTI( typelib_CompoundTypeDescription* pCompTypeDescr );
+    void* generateRTTI( typelib_CompoundTypeDescription* pCompTypeDescr );
 };
 
-/*
- *  note: the contents of this map are not freed causing a leak
- *  this was suggested by dbo because the bridge may
- *  even be called while being unloaded (sounds like a bug, but ...)
- */
-std::map< OString, void* > RTTIHolder::aAllRTTI;
+RTTIHolder::~RTTIHolder()
+{
+    for ( std::map< OString, void* >::const_iterator iPos( aAllRTTI.begin() );
+          iPos != aAllRTTI.end(); ++iPos )
+    {
+        void ** pRTTI = (void **)iPos->second;
+        ::free( pRTTI[ 0 ] );
+        delete (void *)pRTTI;
+    }
+}
 
 #ifdef DEBUG
 #include <stdio.h>
@@ -269,19 +275,16 @@ void* RTTIHolder::insertRTTI( const OString& rTypename )
 
 void* RTTIHolder::generateRTTI( typelib_CompoundTypeDescription * pCompTypeDescr )
 {
-    static ::osl::Mutex aMutex;
-    ::osl::Guard< ::osl::Mutex > guard( aMutex );
-
     OString aUNOCompTypeName( OUStringToOString( pCompTypeDescr->aBase.pTypeName, RTL_TEXTENCODING_ASCII_US ) );
     OString aRTTICompTypeName( toRTTIname( aUNOCompTypeName ) );
 
-    void* pHaveRTTI = RTTIHolder::getRTTI( aRTTICompTypeName );
+    void* pHaveRTTI = getRTTI( aRTTICompTypeName );
     if( pHaveRTTI )
         return pHaveRTTI;
 
     if( ! pCompTypeDescr->pBaseTypeDescription )
         // this is a base type
-        return RTTIHolder::insertRTTI( aRTTICompTypeName );
+        return insertRTTI( aRTTICompTypeName );
 
     // get base class RTTI
     void* pSuperRTTI = generateRTTI( pCompTypeDescr->pBaseTypeDescription );
@@ -352,7 +355,24 @@ void cc50_solaris_sparc_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
     // will be released by deleteException
     typelib_typedescriptionreference_getDescription( &pTypeDescr, pUnoExc->pType );
 
-    void* pRTTI = RTTIHolder::generateRTTI( (typelib_CompoundTypeDescription *)pTypeDescr );
+    void* pRTTI;
+    {
+    static ::osl::Mutex aMutex;
+    ::osl::Guard< ::osl::Mutex > guard( aMutex );
+
+    static RTTIHolder * s_pRTTI = 0;
+    if (! s_pRTTI)
+    {
+#ifdef LEAK_STATIC_DATA
+        s_pRTTI = new RTTIHolder();
+#else
+        static RTTIHolder s_aRTTI;
+        s_pRTTI = &s_aRTTI;
+#endif
+    }
+
+    pRTTI = s_pRTTI->generateRTTI( (typelib_CompoundTypeDescription *)pTypeDescr );
+    }
 
     // a must be
     OSL_ENSURE( sizeof(sal_Int32) == sizeof(void *), "### pointer size differs from sal_Int32!" );

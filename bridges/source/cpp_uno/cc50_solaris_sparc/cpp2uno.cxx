@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 14:39:54 $
+ *  last change: $Author: dbo $ $Date: 2001-03-30 13:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,11 @@
  *
  ************************************************************************/
 
-#define LEAK_STATIC_DATA
-//  #define TRACE(x) OSL_TRACE(x)
+#ifdef DEBUG
+#define TRACE(x) OSL_TRACE(x)
+#else
 #define TRACE(x)
+#endif
 
 #include <alloca.h>
 #include <list>

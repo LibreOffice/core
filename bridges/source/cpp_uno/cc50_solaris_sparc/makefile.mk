@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dbo $ $Date: 2001-03-08 14:37:58 $
+#   last change: $Author: dbo $ $Date: 2001-03-30 13:29:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,10 @@ NO_BSYMBOLIC=TRUE
 .IF "$(COM)$(CPU)" == "C50S" || "$(COM)$(CPU)" == "C52S"  
 
 #CFLAGS += -O5 -xO5
+
+.IF "$(cppu_no_leak)" == ""
+CFLAGS += -DLEAK_STATIC_DATA
+.ENDIF
 
 SLOFILES= \
     $(SLO)$/cpp2uno.obj		\
