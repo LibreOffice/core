@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: lla $ $Date: 2001-03-23 12:44:25 $
+#   last change: $Author: jb $ $Date: 2001-03-29 08:52:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,6 @@ SLOFILES=	\
         $(SLO)$/synchronize.obj	\
         $(SLO)$/filehelper.obj	\
         $(SLO)$/strimpl.obj	\
-        $(SLO)$/strconverter.obj	\
         $(SLO)$/treemap.obj	\
         $(SLO)$/mergechange.obj
 
