@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmfwk.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:50:49 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 11:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include "jvmfwk/framework.h"
 #include "jvmfwk.hxx"
 #include <stack>
+#include <stdio.h>
 
 #include "osl/thread.hxx"
 #define OUSTR(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
