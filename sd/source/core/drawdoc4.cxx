@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 09:47:56 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,9 +710,10 @@ USHORT SdDrawDocument::GetMasterPageUserCount(SdrPage* pMaster) const
     for (nPage = 0; nPage < nPageCount; nPage++)
     {
         const SdrPage* pPage = GetPage(nPage);
-        for (USHORT nPos = 0; nPos < pPage->GetMasterPageCount(); nPos++)
+
+        if(pPage->TRG_HasMasterPage())
         {
-            if (pMaster == pPage->GetMasterPage(nPos))
+            if(&(pPage->TRG_GetMasterPage()) == pMaster)
             {
                 nResult++;
             }
