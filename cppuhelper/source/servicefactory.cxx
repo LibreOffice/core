@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 10:12:29 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,42 +64,42 @@
 #endif
 #include <vector>
 
-#include <rtl/string.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/bootstrap.hxx>
+#include "rtl/string.hxx"
+#include "rtl/ustrbuf.hxx"
+#include "rtl/bootstrap.hxx"
+#include "osl/diagnose.h"
+#include "osl/file.h"
+#include "osl/module.h"
+#include "osl/process.h"
+#include "cppuhelper/shlib.hxx"
+#include "cppuhelper/factory.hxx"
+#include "cppuhelper/component_context.hxx"
+#include "cppuhelper/servicefactory.hxx"
+#include "cppuhelper/bootstrap.hxx"
 
-#include <osl/diagnose.h>
-#include <osl/file.h>
-#include <osl/module.h>
-#include <osl/process.h>
-
-#include <cppuhelper/shlib.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/component_context.hxx>
-#include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/bootstrap.hxx>
-
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XSet.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
-#include <com/sun/star/security/XAccessController.hpp>
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/lang/XInitialization.hpp"
+#include "com/sun/star/lang/XSingleServiceFactory.hpp"
+#include "com/sun/star/lang/XSingleComponentFactory.hpp"
+#include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/container/XSet.hpp"
+#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
+#include "com/sun/star/registry/XSimpleRegistry.hpp"
+#include "com/sun/star/registry/XImplementationRegistration.hpp"
+#include "com/sun/star/security/XAccessController.hpp"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+
+#if ! defined SAL_DLLPREFIX
+#define SAL_DLLPREFIX
+#endif
+#define CORE_COMPONENT_LIB(x) SAL_DLLPREFIX x SAL_DLLEXTENSION
 
 
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::registry;
 
 namespace cppu
 {
@@ -116,6 +116,8 @@ void addFactories(
 Reference< security::XAccessController > createDefaultAccessController() SAL_THROW( () );
 //--------------------------------------------------------------------------------------------------
 Reference< lang::XSingleComponentFactory > create_boostrap_macro_expander_factory() SAL_THROW( () );
+//--------------------------------------------------------------------------------------------------
+OUString const & get_this_libpath();
 
 //==================================================================================================
 static Reference< XInterface > SAL_CALL createInstance(
@@ -136,9 +138,7 @@ static Reference< XInterface > SAL_CALL createInstance(
             return xFac->createInstance();
         }
     }
-    throw Exception(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("no factory object given!") ),
-        Reference< XInterface >() );
+    throw RuntimeException( OUSTR("no factory object given!"), Reference< XInterface >() );
 }
 //==================================================================================================
 Reference< registry::XSimpleRegistry > SAL_CALL createSimpleRegistry(
@@ -148,16 +148,23 @@ Reference< registry::XSimpleRegistry > SAL_CALL createSimpleRegistry(
     try
     {
         return Reference< registry::XSimpleRegistry >(
-            createInstance( loadSharedLibComponentFactory(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("simreg") ), rBootstrapPath,
-                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.SimpleRegistry") ),
-                Reference< lang::XMultiServiceFactory >(), Reference< registry::XRegistryKey >() ) ), UNO_QUERY );
+            createInstance(
+                loadSharedLibComponentFactory(
+                    OUSTR(CORE_COMPONENT_LIB("simreg")),
+                    0 == rBootstrapPath.getLength() ? get_this_libpath() : rBootstrapPath,
+                    OUSTR("com.sun.star.comp.stoc.SimpleRegistry"),
+                    Reference< lang::XMultiServiceFactory >(),
+                    Reference< registry::XRegistryKey >() ) ),
+            UNO_QUERY );
     }
-    catch (Exception &)
+    catch (Exception & exc)
     {
+#if defined _DEBUG
+        OString cstr_msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+        OSL_ENSURE( !"### exception occured:", cstr_msg.getStr() );
+#endif
     }
 
-    OSL_ENSURE( 0, "### cannot instanciate simple registry!" );
     return Reference< registry::XSimpleRegistry >();
 }
 //==================================================================================================
@@ -168,18 +175,23 @@ Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
     try
     {
         return Reference< registry::XSimpleRegistry >(
-            createInstance( loadSharedLibComponentFactory(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("defreg") ), rBootstrapPath,
-                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.NestedRegistry") ),
-                Reference< lang::XMultiServiceFactory >(),
-                Reference< registry::XRegistryKey >() ) ),
+            createInstance(
+                loadSharedLibComponentFactory(
+                    OUSTR(CORE_COMPONENT_LIB("defreg")),
+                    0 == rBootstrapPath.getLength() ? get_this_libpath() : rBootstrapPath,
+                    OUSTR("com.sun.star.comp.stoc.NestedRegistry"),
+                    Reference< lang::XMultiServiceFactory >(),
+                    Reference< registry::XRegistryKey >() ) ),
             UNO_QUERY );
     }
-    catch (Exception &)
+    catch (Exception & exc)
     {
+#if defined _DEBUG
+        OString cstr_msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+        OSL_ENSURE( !"### exception occured:", cstr_msg.getStr() );
+#endif
     }
 
-    OSL_ENSURE( 0, "### cannot instanciate simple registry!" );
     return Reference< registry::XSimpleRegistry >();
 }
 
@@ -310,30 +322,38 @@ static void add_access_control_entries(
     entry.value <<= ac_service;
     context_values.push_back( entry );
 }
+
 //--------------------------------------------------------------------------------------------------
 Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
     OUString const & rBootstrapPath )
     SAL_THROW( (Exception) )
 {
-    Reference< lang::XMultiComponentFactory > xMgr( createInstance( loadSharedLibComponentFactory(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("smgr") ), rBootstrapPath,
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.ORegistryServiceManager") ),
-        Reference< lang::XMultiServiceFactory >(), Reference< registry::XRegistryKey >() ) ), UNO_QUERY );
+    OUString const & bootstrap_path =
+        0 == rBootstrapPath.getLength() ? get_this_libpath() : rBootstrapPath;
+
+    Reference< lang::XMultiComponentFactory > xMgr(
+        createInstance(
+            loadSharedLibComponentFactory(
+                OUSTR(CORE_COMPONENT_LIB("smgr")), bootstrap_path,
+                OUSTR("com.sun.star.comp.stoc.ORegistryServiceManager"),
+                Reference< lang::XMultiServiceFactory >(),
+                Reference< registry::XRegistryKey >() ) ),
+        UNO_QUERY );
 
     // write initial shared lib loader, simple registry, default registry, impl reg
     static char const * ar[] = {
-        "smgr", "com.sun.star.comp.stoc.OServiceManagerWrapper",
-        "cpld", "com.sun.star.comp.stoc.DLLComponentLoader",
-        "simreg", "com.sun.star.comp.stoc.SimpleRegistry",
-        "defreg", "com.sun.star.comp.stoc.NestedRegistry",
-        "tdmgr", "com.sun.star.comp.stoc.TypeDescriptionManager",
-        "impreg", "com.sun.star.comp.stoc.ImplementationRegistration",
-        "sec", "com.sun.star.security.comp.stoc.AccessController",
-        "sec", "com.sun.star.security.comp.stoc.FilePolicy",
+        CORE_COMPONENT_LIB("smgr"), "com.sun.star.comp.stoc.OServiceManagerWrapper",
+        CORE_COMPONENT_LIB("cpld"), "com.sun.star.comp.stoc.DLLComponentLoader",
+        CORE_COMPONENT_LIB("simreg"), "com.sun.star.comp.stoc.SimpleRegistry",
+        CORE_COMPONENT_LIB("defreg"), "com.sun.star.comp.stoc.NestedRegistry",
+        CORE_COMPONENT_LIB("tdmgr"), "com.sun.star.comp.stoc.TypeDescriptionManager",
+        CORE_COMPONENT_LIB("impreg"), "com.sun.star.comp.stoc.ImplementationRegistration",
+        CORE_COMPONENT_LIB("sec"), "com.sun.star.security.comp.stoc.AccessController",
+        CORE_COMPONENT_LIB("sec"), "com.sun.star.security.comp.stoc.FilePolicy",
         0
     };
     addFactories(
-        ar, rBootstrapPath,
+        ar, bootstrap_path,
         xMgr, Reference< registry::XRegistryKey >() );
 
     return xMgr;
@@ -378,7 +398,7 @@ Reference< XComponentContext > bootstrapInitialContext(
         Reference< registry::XRegistryKey > xKey( services_xRegistry->getRootKey() );
         if (xKey.is())
         {
-            xKey = xKey->openKey( OUString( RTL_CONSTASCII_USTRINGPARAM("/SINGLETONS") ) );
+            xKey = xKey->openKey( OUSTR("/SINGLETONS") );
             if (xKey.is())
             {
                 entry.bLateInitService = true;
@@ -444,8 +464,10 @@ Reference< XComponentContext > bootstrapInitialContext(
         if (types_xRegistry.is()) // insert rdb provider?
         {
             // add registry td provider factory to smgr and instance to tdmgr
-            Reference< lang::XSingleComponentFactory > xFac( loadSharedLibComponentFactory(
-                OUSTR("rdbtdp"), rBootstrapPath,
+            Reference< lang::XSingleComponentFactory > xFac(
+                loadSharedLibComponentFactory(
+                    OUSTR(CORE_COMPONENT_LIB("rdbtdp")),
+                    0 == rBootstrapPath.getLength() ? get_this_libpath() : rBootstrapPath,
                 OUSTR("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"),
                 Reference< lang::XMultiServiceFactory >( xSF, UNO_QUERY ),
                 Reference< registry::XRegistryKey >() ), UNO_QUERY );
@@ -525,8 +547,8 @@ static Reference< lang::XMultiComponentFactory > createImplServiceFactory(
 
                 if (! xWriteReg->isValid())
                 {
-                    throw Exception(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("specified first registry could not be open readonly!") ),
+                    throw RuntimeException(
+                        OUSTR("specified first registry could not be open readonly!"),
                         Reference< XInterface >() );
                 }
             }
@@ -551,9 +573,8 @@ static Reference< lang::XMultiComponentFactory > createImplServiceFactory(
 
     if (bRegistryShouldBeValid && (!xRegistry.is() || !xRegistry->isValid()))
     {
-        throw Exception(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("specified registry could not be initialized") ),
-            Reference< XInterface >() );
+        throw RuntimeException(
+            OUSTR("specified registry could not be initialized"), Reference< XInterface >() );
     }
 
     Bootstrap bootstrap;
