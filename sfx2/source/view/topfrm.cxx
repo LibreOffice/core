@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:29:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,11 @@
 #include <vcl/dialog.hxx>
 #include <svtools/urihelper.hxx>
 #include <svtools/moduleoptions.hxx>
+
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
+#include <unotools/bootstrap.hxx>
 
 #include <sfxresid.hxx>
 #include <../appl/app.hrc>
@@ -256,7 +261,7 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
         if ( !pContainer )
             pContainer = pCurrent;
         if ( pView && pView != pContainer )*/
-        if ( !pView->GetViewShell()->GetIPClient() )
+        if ( pView->GetViewShell() && !pView->GetViewShell()->GetIPClient() )
             pView->MakeActive_Impl( FALSE );
         Window* pWindow = rNEvt.GetWindow();
         ULONG nHelpId  = 0;
@@ -544,11 +549,20 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
     if ( pWindow && pDoc )
     {
         ::rtl::OUString aDocServiceName( pDoc->GetFactory().GetDocumentServiceName() );
+        ::rtl::OUString aProductName;
+        ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= aProductName;
         String aTitle = pDoc->GetTitle( SFX_TITLE_DETECT );
         aTitle += String::CreateFromAscii( " - " );
-        aTitle += Application::GetDisplayName();
+        aTitle += String(aProductName);
         aTitle += ' ';
         aTitle += String( GetModuleName_Impl( aDocServiceName ) );
+#ifndef PRODUCT
+        ::rtl::OUString aDefault;
+        aTitle += DEFINE_CONST_UNICODE(" [");
+        String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
+        aTitle += aVerId;
+        aTitle += ']';
+#endif
         pWindow->SetText( aTitle );
         if( pWindow->GetType() == WINDOW_WORKWINDOW )
         {
@@ -1084,11 +1098,21 @@ String SfxTopViewFrame::UpdateTitle()
         aTitle += String::CreateFromAscii( " " );
     }
 
+    ::rtl::OUString aProductName;
+    ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= aProductName;
+
     aTitle += String::CreateFromAscii( " - " );
-    aTitle += Application::GetDisplayName();
+    aTitle += String(aProductName);
     aTitle += ' ';
     ::rtl::OUString aDocServiceName( GetObjectShell()->GetFactory().GetDocumentServiceName() );
     aTitle += String( GetModuleName_Impl( aDocServiceName ) );
+#ifndef PRODUCT
+    ::rtl::OUString aDefault;
+    aTitle += DEFINE_CONST_UNICODE(" [");
+    String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
+    aTitle += aVerId;
+    aTitle += ']';
+#endif
 
     GetBindings().Invalidate( SID_NEWDOCDIRECT );
 
