@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobdata.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:45:33 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,10 @@ struct JobData
             m_eOrientation( orientation::Portrait ),
             m_pParser( NULL ) {}
 
+    JobData& operator=(const psp::JobData& rRight);
+
+    JobData( const JobData& rData ) { *this = rData; }
+
     // creates a new buffer using new
     // it is up to the user to delete it again
     bool getStreamBuffer( void*& pData, int& bytes );
@@ -112,5 +116,6 @@ struct JobData
 };
 
 } // namespace
+
 
 #endif // PSPRINT_JOBDATA_HXX
