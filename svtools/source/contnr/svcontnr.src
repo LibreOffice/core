@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svcontnr.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:38 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,13 @@ String STR_SVT_ACC_DESC_TABLISTBOX
     Text[ korean ] = "행: %1, 열: %2";
     Text[ chinese_simplified ] = "行：%1, 列：%2";
     Text[ chinese_traditional ] = "列：%1，欄：%2";
-    Text[ turkish ] = "Row: %1, Column: %2";
+    Text[ turkish ] = "Sat�r: %1,  S�tun: %2";
     Text[ arabic ] = "Row: %1, Column: %2";
     Text[ catalan ] = "Row: %1, Column: %2";
     Text[ thai ] = "Row: %1, Column: %2";
+    Text[ czech ] = "Řádek: %1, Sloupec: %2";
+    Text[ hebrew ] = "‮שורה: %1, עמוד: %2‬";
+    Text[ hindi ] = "Row: %1, Column: %2";
 };
 String STR_SVT_ACC_DESC_FILEVIEW
 {
@@ -132,60 +135,69 @@ String STR_SVT_ACC_DESC_FILEVIEW
     Text[ korean ] = ", 유형: %1, URL: %2";
     Text[ chinese_simplified ] = "，类型：%1, URL: %2";
     Text[ chinese_traditional ] = "，類型：%1，URL：%2";
-    Text[ turkish ] = ", Type: %1, URL: %2";
+    Text[ turkish ] = ", T�r: %1, URL: %2";
     Text[ arabic ] = ", Type: %1, URL: %2";
     Text[ catalan ] = ", Type: %1, URL: %2";
     Text[ thai ] = ", Type: %1, URL: %2";
+    Text[ czech ] = ", Typ: %1, URL: %2";
+    Text[ hebrew ] = "סוג: %1, URL: %2";
+    Text[ hindi ] = ", Type: %1, URL: %2";
 };
 String STR_SVT_ACC_DESC_FOLDER
 {
     Text = "Ordner";
     Text [ english_us ] = "Folder";
-    Text[ portuguese ] = "Folder";
-    Text[ russian ] = "Folder";
-    Text[ greek ] = "Folder";
-    Text[ dutch ] = "Folder";
+    Text[ portuguese ] = "Pasta";
+    Text[ russian ] = "�����";
+    Text[ greek ] = "�������";
+    Text[ dutch ] = "Map";
     Text[ french ] = "Dossier";
     Text[ spanish ] = "Carpeta";
-    Text[ finnish ] = "Folder";
+    Text[ finnish ] = "Kansio";
     Text[ italian ] = "Cartella";
-    Text[ danish ] = "Folder";
+    Text[ danish ] = "Mappe";
     Text[ swedish ] = "Mapp";
-    Text[ polish ] = "Folder";
-    Text[ portuguese_brazilian ] = "Folder";
+    Text[ polish ] = "Foldery";
+    Text[ portuguese_brazilian ] = "Pasta";
     Text[ japanese ] = "フォルダ";
     Text[ korean ] = "폴더";
     Text[ chinese_simplified ] = "文件夹";
     Text[ chinese_traditional ] = "資料夾";
-    Text[ turkish ] = "Folder";
-    Text[ arabic ] = "Folder";
-    Text[ catalan ] = "Folder";
-    Text[ thai ] = "Folder";
+    Text[ turkish ] = "Dizin";
+    Text[ arabic ] = "����";
+    Text[ catalan ] = "Carpeta";
+    Text[ thai ] = "โฟลเดอร์";
+    Text[ czech ] = "Adresář";
+    Text[ hebrew ] = "‮תיקיה‬";
+    Text[ hindi ] = "कोष्ठ";
 };
 String STR_SVT_ACC_DESC_FILE
 {
     Text = "Datei";
     Text [ english_us ] = "File";
-    Text[ portuguese ] = "File";
-    Text[ russian ] = "File";
-    Text[ greek ] = "File";
-    Text[ dutch ] = "File";
+    Text[ portuguese ] = "Ficheiro";
+    Text[ russian ] = "����";
+    Text[ greek ] = "������";
+    Text[ dutch ] = "Bestand";
     Text[ french ] = "Fichier";
     Text[ spanish ] = "Archivo";
-    Text[ finnish ] = "File";
+    Text[ finnish ] = "Tiedosto";
     Text[ italian ] = "File";
-    Text[ danish ] = "File";
+    Text[ danish ] = "Fil";
     Text[ swedish ] = "Fil";
-    Text[ polish ] = "File";
-    Text[ portuguese_brazilian ] = "File";
+    Text[ polish ] = "Plik";
+    Text[ portuguese_brazilian ] = "Arquivo";
     Text[ japanese ] = "ファイル";
     Text[ korean ] = "파일";
     Text[ chinese_simplified ] = "文件";
     Text[ chinese_traditional ] = "檔案";
-    Text[ turkish ] = "File";
-    Text[ arabic ] = "File";
-    Text[ catalan ] = "File";
-    Text[ thai ] = "File";
+    Text[ turkish ] = "Dosya";
+    Text[ arabic ] = "���";
+    Text[ catalan ] = "Fitxer";
+    Text[ thai ] = "แฟ้ม";
+    Text[ czech ] = "Soubor";
+    Text[ hebrew ] = "‮קובץ‬";
+    Text[ hindi ] = "फाइल";
 };
 String STR_SVT_ACC_EMPTY_FIELD
 {
@@ -202,15 +214,32 @@ String STR_SVT_ACC_EMPTY_FIELD
     Text[ danish ] = "Empty Field";
     Text[ swedish ] = "Tomt f�lt";
     Text[ polish ] = "Empty Field";
-    Text[ japanese ] = "Empty Field";
+    Text[ japanese ] = "空白フィールド";
     Text[ korean ] = "빈 필드";
     Text[ chinese_simplified ] = "空白字段";
     Text[ chinese_traditional ] = "空白欄位";
-    Text[ turkish ] = "Empty Field";
+    Text[ turkish ] = "Bo� Alan";
     Text[ arabic ] = "Empty Field";
     Text[ catalan ] = "Empty Field";
     Text[ thai ] = "Empty Field";
+    Text[ czech ] = "Prázdné pole";
+    Text[ hebrew ] = "Empty Field";
+    Text[ portuguese_brazilian ] = "Empty Field";
+    Text[ hindi ] = "Empty Field";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
