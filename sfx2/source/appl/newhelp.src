@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-20 14:31:17 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 09:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,25 @@ TabPage TP_HELP_SEARCH
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "~Nur ganze W�rter" ;
         Text [ english_us ] = "~Complete words only";
+        Text[ portuguese ] = "~S� palavras inteiras";
+        Text[ russian ] = "~������ ��� �����";
+        Text[ greek ] = "~Complete words only";
+        Text[ dutch ] = "~Complete words only";
+        Text[ french ] = "Que les mots entiers";
+        Text[ spanish ] = "~S�lo palabras completas";
+        Text[ finnish ] = "~Complete words only";
+        Text[ italian ] = "~Solo parole intere";
+        Text[ danish ] = "~Complete words only";
+        Text[ swedish ] = "~Bara hela ord";
+        Text[ polish ] = "~Complete words only";
+        Text[ portuguese_brazilian ] = "~Complete words only";
+        Text[ japanese ] = "単語として";
+        Text[ korean ] = "~Complete words only";
+        Text[ chinese_simplified ] = "只允许整个字";
+        Text[ chinese_traditional ] = "只允許整個字(~C)";
+        Text[ turkish ] = "~Complete words only";
+        Text[ arabic ] = "~Complete words only";
+        Text[ catalan ] = "~Complete words only";
     };
     CheckBox CB_SCOPE
     {
@@ -344,17 +363,17 @@ TabPage TP_HELP_SEARCH
         Text[ russian ] = "~������ ������ � ����������";
         Text[ greek ] = "~Search headings only";
         Text[ dutch ] = "~Alleen in titels zoeken";
-        Text[ french ] = "~Recherche uniquement dans les titres";
+        Text[ french ] = "Recherche uniquement dans les titres";
         Text[ spanish ] = "~Buscar s�lo en t�tulos";
         Text[ italian ] = "~Cerca solo intestazioni";
         Text[ danish ] = "~Search headings only";
-        Text[ swedish ] = "S�k bara i ~rubriker";
+        Text[ swedish ] = "S�k bara i r~ubriker";
         Text[ polish ] = "Przeszukaj tylko tytu�y";
         Text[ portuguese_brazilian ] = "~Search headings only";
         Text[ japanese ] = "ﾀｲﾄﾙのみで検索(~H)";
         Text[ korean ] = "제목에서만 찾기(~H)";
-        Text[ chinese_simplified ] = "仅大标题范围内搜寻(~H)";
-        Text[ chinese_traditional ] = "僅在大標題範圍内搜尋(~H)";
+        Text[ chinese_simplified ] = "仅在标题范围内搜寻";
+        Text[ chinese_traditional ] = "僅在大標題範圍内搜尋";
         Text[ turkish ] = "~Search headings only";
         Text[ arabic ] = "~Search headings only";
         Text[ catalan ] = "~Search headings only";
@@ -588,7 +607,7 @@ String STR_HELP_BUTTON_INDEX_ON
     Text[ polish ] = "Poka� obszar nawigacji";
     Text[ portuguese_brazilian ] = "Index";
     Text[ japanese ] = "ﾅﾋﾞｹﾞｰｼｮﾝ範囲の表示ｵﾝ";
-    Text[ korean ] = "탐색 영역 표시하기";
+    Text[ korean ] = "탐색 영역 표시";
     Text[ chinese_simplified ] = "显示浏览区域";
     Text[ chinese_traditional ] = "顯示瀏覽區域";
     Text[ turkish ] = "�ndis";
@@ -613,7 +632,7 @@ String STR_HELP_BUTTON_INDEX_OFF
     Text[ polish ] = "Ukryj obszar nawigacji";
     Text[ portuguese_brazilian ] = "Hide navigation area";
     Text[ japanese ] = "ﾅﾋﾞｹﾞｰｼｮﾝ範囲の表示ｵﾌ";
-    Text[ korean ] = "탐색 영역 숨기기";
+    Text[ korean ] = "탐색 영역 해제";
     Text[ chinese_simplified ] = "隐入浏览区域";
     Text[ chinese_traditional ] = "隱入瀏覽區域";
     Text[ turkish ] = "Hide navigation area";
@@ -695,22 +714,22 @@ String STR_HELP_BUTTON_NEXT
 String STR_HELP_BUTTON_PRINT
 {
     Text = "Drucken...";
-    Text [ english_us ] = "Print";
-    Text[ portuguese ] = "Imprimir";
-    Text[ russian ] = "������";
+    Text [ english_us ] = "Print...";
+    Text[ portuguese ] = "Imprimir...";
+    Text[ russian ] = "������...";
     Text[ greek ] = "��������";
     Text[ dutch ] = "Afdrukken";
-    Text[ french ] = "Imprimer";
-    Text[ spanish ] = "Imprimir";
-    Text[ italian ] = "Stampa";
+    Text[ french ] = "Imprimer...";
+    Text[ spanish ] = "Imprimir...";
+    Text[ italian ] = "Stampa...";
     Text[ danish ] = "Print";
-    Text[ swedish ] = "Skriv ut";
+    Text[ swedish ] = "Skriv ut...";
     Text[ polish ] = "Drukuj";
     Text[ portuguese_brazilian ] = "Print";
-    Text[ japanese ] = "印刷";
+    Text[ japanese ] = "印刷...";
     Text[ korean ] = "인쇄";
-    Text[ chinese_simplified ] = "打印";
-    Text[ chinese_traditional ] = "列印";
+    Text[ chinese_simplified ] = "打印...";
+    Text[ chinese_traditional ] = "列印...";
     Text[ turkish ] = "Print";
     Text[ arabic ] = "�����";
     Text[ catalan ] = "Imprimir";
@@ -719,23 +738,23 @@ String STR_HELP_BUTTON_PRINT
 String STR_HELP_BUTTON_ADDBOOKMARK
 {
     Text = "Lesezeichen hinzuf�gen...";
-    Text [ english_us ] = "Add to Bookmarks";
-    Text[ portuguese ] = "Adicionar marcador";
-    Text[ russian ] = "�������� ��������";
+    Text [ english_us ] = "Add to Bookmarks...";
+    Text[ portuguese ] = "Adicionar marcador...";
+    Text[ russian ] = "�������� ��������...";
     Text[ greek ] = "Add to bookmarks";
     Text[ dutch ] = "Bladwijzers toevoegen";
-    Text[ french ] = "Ajouter un signet";
-    Text[ spanish ] = "A�adir marcador";
+    Text[ french ] = "Ajouter un signet...";
+    Text[ spanish ] = "A�adir marcador...";
     Text[ finnish ] = "Add to bookmarks";
-    Text[ italian ] = "Aggiungi segnalibro";
+    Text[ italian ] = "Aggiungi segnalibro...";
     Text[ danish ] = "Add to bookmarks";
-    Text[ swedish ] = "L�gg till bokm�rke";
+    Text[ swedish ] = "L�gg till bokm�rke...";
     Text[ polish ] = "Dodaj zak�adk�";
     Text[ portuguese_brazilian ] = "Add to bookmarks";
-    Text[ japanese ] = "ﾌﾞｯｸﾏｰｸの追加";
+    Text[ japanese ] = "ﾌﾞｯｸﾏｰｸの追加...";
     Text[ korean ] = "책갈피에 추가";
-    Text[ chinese_simplified ] = "加入书签";
-    Text[ chinese_traditional ] = "加入書籤";
+    Text[ chinese_simplified ] = "加入书签...";
+    Text[ chinese_traditional ] = "加入書籤...";
     Text[ turkish ] = "Add to bookmarks";
     Text[ arabic ] = "Add to bookmarks";
     Text[ catalan ] = "Add to bookmarks";
@@ -744,6 +763,25 @@ String STR_HELP_BUTTON_SEARCHDIALOG
 {
     Text = "Suchen...";
     Text [ english_us ] = "Find...";
+    Text[ portuguese ] = "Localizar...";
+    Text[ russian ] = "�����...";
+    Text[ greek ] = "Find...";
+    Text[ dutch ] = "Find...";
+    Text[ french ] = "Rechercher...";
+    Text[ spanish ] = "Buscar...";
+    Text[ finnish ] = "Find...";
+    Text[ italian ] = "Cerca...";
+    Text[ danish ] = "Find...";
+    Text[ swedish ] = "S�k...";
+    Text[ polish ] = "Find...";
+    Text[ portuguese_brazilian ] = "Find...";
+    Text[ japanese ] = "検索...";
+    Text[ korean ] = "Find...";
+    Text[ chinese_simplified ] = "搜寻...";
+    Text[ chinese_traditional ] = "搜尋...";
+    Text[ turkish ] = "Find...";
+    Text[ arabic ] = "Find...";
+    Text[ catalan ] = "Find...";
 };
 String STR_HELP_BUTTON_SOURCEVIEW
 {
@@ -1025,12 +1063,13 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     MESSAGE[ polish ] = "No themes found.";
     MESSAGE[ portuguese_brazilian ] = "No themes found.";
     MESSAGE[ japanese ] = "ﾃｰﾏは見つかりません。";
-    MESSAGE[ korean ] = "No themes found.";
+    MESSAGE[ korean ] = "제목이 없습니다.";
     MESSAGE[ chinese_simplified ] = "没有找到主题。";
     MESSAGE[ chinese_traditional ] = "沒有找到主題。";
     MESSAGE[ turkish ] = "No themes found.";
     MESSAGE[ arabic ] = "No themes found.";
     MESSAGE[ catalan ] = "No themes found.";
 };
+
 
 
