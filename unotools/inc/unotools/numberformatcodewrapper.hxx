@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberformatcodewrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 17:15:02 $
+ *  last change: $Author: er $ $Date: 2000-11-03 16:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,9 @@ public:
 
     // Wrapper implementations of class NumberFormatCodeMapper
 
-    ::com::sun::star::i18n::NumberFormatCode getDefault( sal_Int16 formatType, sal_Int16 formatUsage ) const;
-    ::com::sun::star::i18n::NumberFormatCode getFormatCode( sal_Int32 formatIndex ) const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > getAllFormatCode( sal_Int16 formatUsage ) const;
+    ::com::sun::star::i18n::NumberFormatCode getDefault( sal_Int16 nFormatType, sal_Int16 nFormatUsage ) const;
+    ::com::sun::star::i18n::NumberFormatCode getFormatCode( sal_Int16 nFormatIndex ) const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > getAllFormatCode( sal_Int16 nFormatUsage ) const;
 
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberformatcodewrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 17:15:39 $
+ *  last change: $Author: er $ $Date: 2000-11-03 16:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ NumberFormatCodeWrapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage
 
 
 ::com::sun::star::i18n::NumberFormatCode
-NumberFormatCodeWrapper::getFormatCode( sal_Int32 formatIndex ) const
+NumberFormatCodeWrapper::getFormatCode( sal_Int16 formatIndex ) const
 {
     try
     {
