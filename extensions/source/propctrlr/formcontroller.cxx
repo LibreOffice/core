@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-14 15:58:23 $
+ *  last change: $Author: fs $ $Date: 2001-05-17 11:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1434,8 +1434,13 @@ namespace pcr
                     {
                         const SvxColorItem&     rColorItem=
                             (const SvxColorItem&)       pOut->Get(SID_ATTR_CHAR_COLOR );
-                        sal_Int32 nColor= rColorItem.GetValue().GetColor();
-                        m_xPropValueAccess->setPropertyValue( PROPERTY_TEXTCOLOR,makeAny(nColor));
+                        sal_Int32 nColor = rColorItem.GetValue().GetColor();
+
+                        Any aUnoColor;
+                        if (COL_AUTO != nColor)
+                            aUnoColor <<= (sal_Int32)nColor;
+
+                        m_xPropValueAccess->setPropertyValue( PROPERTY_TEXTCOLOR, aUnoColor );
                     }
 
                 }
@@ -2796,6 +2801,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/05/14 15:58:23  fs
+ *  #86810# don't use setPropertyToDefault - the 'standard' value is used for MAYBEVOID properties, not for MAYBEDEFAULT properties
+ *
  *  Revision 1.20  2001/05/14 09:51:27  pl
  *  rtl string api changes
  *
