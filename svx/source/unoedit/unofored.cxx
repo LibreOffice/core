@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-11 10:14:17 $
+ *  last change: $Author: thb $ $Date: 2002-04-26 10:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,12 +368,17 @@ Rectangle SvxEditEngineForwarder::GetParaBounds( USHORT nPara ) const
     const ULONG nWidth = rEditEngine.CalcTextWidth();
     const ULONG nHeight = rEditEngine.GetTextHeight( nPara );
 
-    return Rectangle( aPnt.X(), aPnt.Y(), nWidth, nHeight );
+    return Rectangle( aPnt.X(), aPnt.Y(), aPnt.X() + nWidth, aPnt.Y() + nHeight );
 }
 
 MapMode SvxEditEngineForwarder::GetMapMode() const
 {
     return rEditEngine.GetRefMapMode();
+}
+
+OutputDevice* SvxEditEngineForwarder::GetRefDevice() const
+{
+    return rEditEngine.GetRefDevice();
 }
 
 sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara, USHORT& nIndex ) const
@@ -412,27 +417,27 @@ USHORT SvxEditEngineForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
     return rEditEngine.GetLineLen(nPara, nLine);
 }
 
+sal_Bool SvxEditEngineForwarder::QuickFormatDoc( BOOL bFull )
+{
+    rEditEngine.QuickFormatDoc();
+
+    return sal_True;
+}
+
 sal_Bool SvxEditEngineForwarder::Delete( const ESelection& rSelection )
 {
-    EditEngine& rCacheEE = rEditEngine;
-
-    rCacheEE.QuickDelete( rSelection );
-    rCacheEE.QuickFormatDoc();
+    rEditEngine.QuickDelete( rSelection );
+    rEditEngine.QuickFormatDoc();
 
     return sal_True;
 }
 
 sal_Bool SvxEditEngineForwarder::InsertText( const String& rStr, const ESelection& rSelection )
 {
-    EditEngine& rCacheEE = rEditEngine;
-
-    rCacheEE.QuickInsertText( rStr, rSelection );
-    rCacheEE.QuickFormatDoc();
+    rEditEngine.QuickInsertText( rStr, rSelection );
+    rEditEngine.QuickFormatDoc();
 
     return sal_True;
 }
 
 //------------------------------------------------------------------------
-
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedhlp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-28 12:25:39 $
+ *  last change: $Author: thb $ $Date: 2002-04-26 10:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,32 +118,32 @@ void SvxEditSourceHint::SetEndValue( ULONG n )
 
 //------------------------------------------------------------------------
 
-SfxHint SvxEditSourceHintTranslator::EENotification2Hint( EENotify* aNotify )
+::std::auto_ptr<SfxHint> SvxEditSourceHintTranslator::EENotification2Hint( EENotify* aNotify )
 {
     if( aNotify )
     {
         switch( aNotify->eNotificationType )
         {
             case EE_NOTIFY_TEXTMODIFIED:
-                return TextHint( TEXT_HINT_MODIFIED, aNotify->nParagraph );
+                return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_MODIFIED, aNotify->nParagraph ) );
 
             case EE_NOTIFY_PARAGRAPHINSERTED:
-                return TextHint( TEXT_HINT_PARAINSERTED, aNotify->nParagraph );
+                return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_PARAINSERTED, aNotify->nParagraph ) );
 
             case EE_NOTIFY_PARAGRAPHREMOVED:
-                return TextHint( TEXT_HINT_PARAREMOVED, aNotify->nParagraph );
+                return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_PARAREMOVED, aNotify->nParagraph ) );
 
             case EE_NOTIFY_PARAGRAPHSMOVED:
-                return SvxEditSourceHint( EDITSOURCE_HINT_PARASMOVED, aNotify->nParagraph, aNotify->nParam1, aNotify->nParam2 );
+                return ::std::auto_ptr<SfxHint>( new SvxEditSourceHint( EDITSOURCE_HINT_PARASMOVED, aNotify->nParagraph, aNotify->nParam1, aNotify->nParam2 ) );
 
             case EE_NOTIFY_TEXTHEIGHTCHANGED:
-                return TextHint( TEXT_HINT_TEXTHEIGHTCHANGED, aNotify->nParagraph );
+                return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_TEXTHEIGHTCHANGED, aNotify->nParagraph ) );
 
             case EE_NOTIFY_TEXTVIEWSCROLLED:
-                return TextHint( TEXT_HINT_VIEWSCROLLED );
+                return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_VIEWSCROLLED ) );
 
             case EE_NOTIFY_TEXTVIEWSELECTIONCHANGED:
-                return SvxEditSourceHint( EDITSOURCE_HINT_SELECTIONCHANGED );
+                return ::std::auto_ptr<SfxHint>( new SvxEditSourceHint( EDITSOURCE_HINT_SELECTIONCHANGED ) );
 
             default:
                 DBG_ERROR( "SvxEditSourceHintTranslator::EENotification2Hint unknown notification" );
@@ -151,5 +151,5 @@ SfxHint SvxEditSourceHintTranslator::EENotification2Hint( EENotify* aNotify )
         }
     }
 
-    return SfxHint();
+    return ::std::auto_ptr<SfxHint>( new SfxHint() );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-16 14:31:37 $
+ *  last change: $Author: thb $ $Date: 2002-04-26 10:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ private:
     SvxTextForwarder*               GetEditModeTextForwarder();
     SvxDrawOutlinerViewForwarder*   CreateViewForwarder();
 
-    sal_Bool                        HasView() const { return mpViewForwarder ? sal_True : sal_False; }
+    sal_Bool                        HasView() const { return mpView ? sal_True : sal_False; }
     sal_Bool                        IsEditMode() const
                                     {
                                         SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
@@ -309,8 +309,18 @@ void SAL_CALL SvxTextEditSourceImpl::release()
 void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+    const SvxViewHint* pViewHint = PTR_CAST( SvxViewHint, &rHint );
 
-    if( pSdrHint )
+    if( pViewHint )
+    {
+        switch( pViewHint->GetId() )
+        {
+            case SVX_HINT_VIEWCHANGED:
+                Broadcast( *pViewHint );
+                break;
+        }
+    }
+    else if( pSdrHint )
     {
         switch( pSdrHint->GetKind() )
         {
@@ -352,12 +362,19 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     delete mpTextForwarder;
                     mpTextForwarder = NULL;
                 }
+
+                // register as listener - need to broadcast state change messages
+                if( mpView && mpView->GetTextEditOutliner() )
+                    mpView->GetTextEditOutliner()->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
+
                 Broadcast( *pSdrHint );
                 break;
 
             case HINT_ENDEDIT:
                 // remove as listener - outliner might outlive ourselves
-                mpModel->GetDrawOutliner().SetNotifyHdl( Link() );
+                if( mpView && mpView->GetTextEditOutliner() )
+                    mpView->GetTextEditOutliner()->SetNotifyHdl( Link() );
+
                 Broadcast( *pSdrHint );
                 break;
         }
@@ -398,7 +415,7 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         mpObject = NULL;
         mpWindow = NULL;
 
-        Broadcast( TextHint( SFX_HINT_DYING ) );
+        Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
     }
 }
 
@@ -414,6 +431,8 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 {
+    sal_Bool bCreated = sal_False;
+
     if (!mpTextForwarder)
     {
         if( mpOutliner == NULL )
@@ -453,11 +472,8 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 
         mpTextForwarder = new SvxOutlinerForwarder( *mpOutliner );
 
-        if( HasView() )
-        {
-            // register as listener - need to broadcast state change messages
-            mpOutliner->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
-        }
+        // delay listener subscription until Outliner is fully setup
+        bCreated = sal_True;
 
         mbForwarderIsEditMode = sal_False;
     }
@@ -524,6 +540,12 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         mbDataValid = TRUE;
     }
 
+    if( bCreated && HasView() )
+    {
+        // register as listener - need to broadcast state change messages
+        mpOutliner->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
+    }
+
     return mpTextForwarder;
 }
 
@@ -531,17 +553,16 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 
 SvxTextForwarder* SvxTextEditSourceImpl::GetEditModeTextForwarder()
 {
-    if (!mpTextForwarder)
+    if( !mpTextForwarder && HasView() )
     {
-        mpTextForwarder = new SvxOutlinerForwarder( mpModel->GetDrawOutliner() );
+        SdrOutliner* pEditOutliner = mpView->GetTextEditOutliner();
 
-        if( HasView() )
+        if( pEditOutliner )
         {
-            // register as listener - need to broadcast state change messages
-            mpModel->GetDrawOutliner().SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
-        }
+            mpTextForwarder = new SvxOutlinerForwarder( *pEditOutliner );
 
-        mbForwarderIsEditMode = sal_True;
+            mbForwarderIsEditMode = sal_True;
+        }
     }
 
     return mpTextForwarder;
@@ -585,10 +606,15 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
 
 SvxDrawOutlinerViewForwarder* SvxTextEditSourceImpl::CreateViewForwarder()
 {
-    if( mpView->GetTextEditOutlinerView() )
+    if( mpView->GetTextEditOutlinerView() && mpObject )
+    {
+        // register as listener - need to broadcast state change messages
+        mpView->GetTextEditOutliner()->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
+
         return new SvxDrawOutlinerViewForwarder( *mpView->GetTextEditOutlinerView() );
-    else
-        return NULL;
+    }
+
+    return NULL;
 }
 
 SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( sal_Bool bCreate )
@@ -602,55 +628,48 @@ SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( sal_Bool bCre
     if( mpModel == NULL )
         return NULL;
 
+    // shall we delete?
     if( mpViewForwarder )
     {
-        // are we still in edit mode?
-        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
-        if( !pTextObj || !pTextObj->IsTextEditActive() )
+        if( !IsEditMode() )
         {
-            // no, destroy all forwarders (no need for UpdateData(),
+            // destroy all forwarders (no need for UpdateData(),
             // it's been synched on EndTextEdit)
             delete mpViewForwarder;
             mpViewForwarder = NULL;
+        }
+    }
+    // which to create? Directly in edit mode, create new, or none?
+    else if( mpView )
+    {
+        if( IsEditMode() )
+        {
+            // create new view forwarder
+            mpViewForwarder = CreateViewForwarder();
+        }
+        else if( bCreate )
+        {
+            // dispose old text forwarder
+            UpdateData();
 
             delete mpTextForwarder;
             mpTextForwarder = NULL;
-        }
-    }
-    else if( bCreate && mpView )
-    {
-        // dispose old text forwarder
-        UpdateData();
 
-        delete mpTextForwarder;
-        mpTextForwarder = NULL;
-
-        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
-        if( pTextObj )
-        {
-            // edit mode already active?
-            if( pTextObj->IsTextEditActive() )
+            // enter edit mode
+            mpView->EndTextEdit();
+            if( mpView->BegTextEdit( mpObject, NULL, NULL, (SdrOutliner*)NULL, NULL, FALSE, FALSE ) )
             {
-                // create new view forwarder
-                mpViewForwarder = CreateViewForwarder();
-            }
-            else
-            {
-                // enter edit mode
-                mpView->EndTextEdit();
-                if( mpView->BegTextEdit( mpObject, NULL, NULL, (SdrOutliner*)NULL, NULL, FALSE, FALSE ) )
+                SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+                if( pTextObj->IsTextEditActive() )
                 {
-                    if( pTextObj->IsTextEditActive() )
-                    {
-                        // create new view forwarder
-                        mpViewForwarder = CreateViewForwarder();
-                    }
-                    else
-                    {
-                        // failure. Somehow, BegTextEdit did not set
-                        // our SdrTextObj into edit mode
-                        mpView->EndTextEdit();
-                    }
+                    // create new view forwarder
+                    mpViewForwarder = CreateViewForwarder();
+                }
+                else
+                {
+                    // failure. Somehow, BegTextEdit did not set
+                    // our SdrTextObj into edit mode
+                    mpView->EndTextEdit();
                 }
             }
         }
@@ -766,7 +785,12 @@ Point SvxTextEditSourceImpl::PixelToLogic( const Point& rPoint, const MapMode& r
 IMPL_LINK(SvxTextEditSourceImpl, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
-        Broadcast( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+    {
+        ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+
+        if( aHint.get() )
+            Broadcast( *aHint.get() );
+    }
 
     return 0;
 }

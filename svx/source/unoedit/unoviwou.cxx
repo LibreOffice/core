@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoviwou.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-07 15:45:46 $
+ *  last change: $Author: thb $ $Date: 2002-04-26 10:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 
 #include "unoviwou.hxx"
 #include "outliner.hxx"
+#include "svdotext.hxx"
+
 
 SvxDrawOutlinerViewForwarder::SvxDrawOutlinerViewForwarder( OutlinerView& rOutl ) :
     mrOutlinerView ( rOutl )
@@ -90,7 +92,13 @@ Rectangle SvxDrawOutlinerViewForwarder::GetVisArea() const
 
     if( pOutDev )
     {
-        return pOutDev->LogicToPixel( mrOutlinerView.GetVisArea() );
+        Rectangle aVisArea = mrOutlinerView.GetVisArea();
+
+        // figure out map mode from edit engine
+        Outliner* pOutliner = mrOutlinerView.GetOutliner();
+
+        if( pOutliner )
+            return pOutDev->LogicToPixel( aVisArea, pOutliner->GetRefMapMode() );
     }
 
     return Rectangle();

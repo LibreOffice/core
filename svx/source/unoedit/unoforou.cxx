@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-11 10:14:17 $
+ *  last change: $Author: thb $ $Date: 2002-04-26 10:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,12 +338,17 @@ Rectangle SvxOutlinerForwarder::GetParaBounds( USHORT nPara ) const
     ULONG nHeight = rOutliner.GetTextHeight( nPara );
     Size aSize = rOutliner.CalcTextSize();
 
-    return Rectangle( aPnt.X(), aPnt.Y(), aSize.Width(), nHeight );
+    return Rectangle( aPnt.X(), aPnt.Y(), aPnt.X() + aSize.Width(), aPnt.Y() + nHeight );
 }
 
 MapMode SvxOutlinerForwarder::GetMapMode() const
 {
     return rOutliner.GetRefMapMode();
+}
+
+OutputDevice* SvxOutlinerForwarder::GetRefDevice() const
+{
+    return rOutliner.GetRefDevice();
 }
 
 sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara, USHORT& nIndex ) const
@@ -382,8 +387,16 @@ USHORT SvxOutlinerForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
     return rOutliner.GetLineLen(nPara, nLine);
 }
 
+sal_Bool SvxOutlinerForwarder::QuickFormatDoc( BOOL bFull )
+{
+    rOutliner.QuickFormatDoc();
+
+    return sal_True;
+}
+
 sal_Bool SvxOutlinerForwarder::Delete( const ESelection& rSelection )
 {
+    flushCache();
     rOutliner.QuickDelete( rSelection );
     rOutliner.QuickFormatDoc();
 
@@ -392,6 +405,7 @@ sal_Bool SvxOutlinerForwarder::Delete( const ESelection& rSelection )
 
 sal_Bool SvxOutlinerForwarder::InsertText( const String& rStr, const ESelection& rSelection )
 {
+    flushCache();
     rOutliner.QuickInsertText( rStr, rSelection );
     rOutliner.QuickFormatDoc();
 

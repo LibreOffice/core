@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-11 10:14:17 $
+ *  last change: $Author: thb $ $Date: 2002-04-26 10:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2265,6 +2265,11 @@ MapMode SvxDummyTextSource::GetMapMode() const
     return MapMode();
 }
 
+OutputDevice* SvxDummyTextSource::GetRefDevice() const
+{
+    return NULL;
+}
+
 sal_Bool SvxDummyTextSource::GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const
 {
     return sal_False;
@@ -2283,6 +2288,11 @@ USHORT SvxDummyTextSource::GetLineCount( USHORT nPara ) const
 USHORT SvxDummyTextSource::GetLineLen( USHORT nPara, USHORT nLine ) const
 {
     return 0;
+}
+
+sal_Bool SvxDummyTextSource::QuickFormatDoc( BOOL bFull )
+{
+    return sal_False;
 }
 
 sal_Bool SvxDummyTextSource::Delete( const ESelection& )

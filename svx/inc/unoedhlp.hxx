@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedhlp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-28 12:18:11 $
+ *  last change: $Author: thb $ $Date: 2002-04-26 10:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #ifndef _SVX_UNOEDHLP_HXX
 #define _SVX_UNOEDHLP_HXX
 
+#include <memory>
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -114,7 +116,7 @@ public:
 
         @return the translated hint
      */
-    static SfxHint EENotification2Hint( EENotify* aNotify );
+    static ::std::auto_ptr<SfxHint> EENotification2Hint( EENotify* aNotify );
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoviwed.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-07 15:45:46 $
+ *  last change: $Author: thb $ $Date: 2002-04-26 10:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,12 @@
 
 #include "unoviwed.hxx"
 #include "editview.hxx"
+#include "editeng.hxx"
+#include "svdotext.hxx"
+
 
 SvxEditEngineViewForwarder::SvxEditEngineViewForwarder( EditView& rView ) :
-    mrView ( rView )
+    mrView( rView )
 {
 }
 
@@ -90,7 +93,13 @@ Rectangle SvxEditEngineViewForwarder::GetVisArea() const
 
     if( pOutDev )
     {
-        return pOutDev->LogicToPixel( mrView.GetVisArea() );
+        Rectangle aVisArea = mrView.GetVisArea();
+
+        // figure out map mode from edit engine
+        EditEngine* pEditEngine = mrView.GetEditEngine();
+
+        if( pEditEngine )
+            return pOutDev->LogicToPixel( aVisArea, pEditEngine->GetRefMapMode() );
     }
 
     return Rectangle();
