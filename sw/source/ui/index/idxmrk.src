@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 21:06:34 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,7 +501,7 @@
             Text[ greek ] = "ÁêñéâŞò áíáæŞôçóç";\
             Text[ dutch ] = "~Exact dezelfde tekens";\
             Text[ french ] = "Respecter la ~casse";\
-            Text[ spanish ] = "Búsqueda e~xacta";\
+            Text[ spanish ] = "Coincidencia e~xacta";\
             Text[ italian ] = "Ricerca esatta";\
             Text[ danish ] = "Søg eksakt";\
             Text[ swedish ] = "E~xakt sökning";\
@@ -1213,23 +1213,23 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     DEFBUTTON = WB_DEF_NO ;
     MESSAGE = "Der Bibliographie-Eintrag ist bereits mit abweichenden Daten im Dokument enthalten. Möchten sie die bereits enthaltenen Einträge anpassen?" ;
     MESSAGE [ English ] = "The bibliography entry is already contained in the document with different data. Do you want to adjust the existing bibliography entries?" ;
-    MESSAGE[ english_us ] = "The bibliography entry is already contained in the document with different data. ";
+    MESSAGE[ english_us ] = "The document already contains the bibliography entry but with different data. Do you want to adjust the existing entries?";
     MESSAGE[ portuguese ] = "A entrada bibliográfica já existe no documento com dados diferentes. ";
-    MESSAGE[ russian ] = "İòîò ıëåìåíò áèáëèîãğàôèè ñ íåêîòîğûìè îòëè÷íûìè äàííûìè óæå ñîäåğæèòñÿ â äîêóìåíòå. ";
+    MESSAGE[ russian ] = "İòà çàïèñü áèáëèîãğàôèè ñ íåêîòîğûìè îòëè÷íûìè äàííûìè óæå ñîäåğæèòñÿ â äîêóìåíòå. Âû õîòèòå ñîãëàñîâàòü ñîäåğæàùèåñÿ çàïèñè?";
     MESSAGE[ greek ] = "Ç êáôá÷şñéóç âéâëéïèŞêçò õğÜñ÷åé Şäç óôï İããñáöï ìå äéáöïñåôéêÜ äåäïìİíá. Èİëåôå íá åöáñìïóôïıí ôá íİá äåäïìİíá;";
     MESSAGE[ dutch ] = "Het bibliografie-item bevindt zich reeds met andere gegevens in het document. ";
-    MESSAGE[ french ] = "L'entrée de bibliographie existe déjà en relation avec des données différentes dans le document.  ";
-    MESSAGE[ spanish ] = "La entrada de bibliografía existe ya con datos diferentes en el documento. ";
+    MESSAGE[ french ] = "L'entrée de bibliographie existe déjà en relation avec des données différentes dans le document. Voulez-vous ajuster les entrées existantes ?";
+    MESSAGE[ spanish ] = "La entrada bibliográfica existe ya con datos diferentes en el documento. ¿Desea ajustar las entradas ya existentes?";
     MESSAGE[ italian ] = "La voce bibliografica è già presente nel documento con dati diversi. ";
     MESSAGE[ danish ] = "Litteraturlisteelementet er allerede indeholdt i dokumentet med afvigende data. ";
-    MESSAGE[ swedish ] = "Bibliografiposten finns redan med avvikande data i dokumentet. ";
-    MESSAGE[ polish ] = "Wpis bibliograficzny zawarty jest w dokumencie ³¹cznie z innymi danymi.";
+    MESSAGE[ swedish ] = "Bibliografiposten finns redan med avvikande data i dokumentet. Vill du anpassa posterna som redan finns där?";
+    MESSAGE[ polish ] = "Wpis bibliograficzny zawarty jest w dokumencie z innymi danymi. Dopasowaæ je?";
     MESSAGE[ portuguese_brazilian ] = "The bibliography entry is already contained in the document with different data.";
-    MESSAGE[ japanese ] = "‚±‚ÌQl•¶Œ£‚Í‚±‚Ì•¶‘‚Ì•Ê‚ÌŒÂŠ‚É‚·‚Å‚Éo‚Ä‚«‚Ä‚¢‚Ü‚·B ";
+    MESSAGE[ japanese ] = "‚±‚ÌQl•¶Œ£‚Ì€–Ú‚Í‚±‚Ì•¶‘‚Ì•Ê‚Ì‰ÓŠ‚É‚·‚Å‚Éo‚Ä‚«‚Ä‚¢‚Ü‚·B‚±‚ÌŠù‘¶€–Ú‚É“K‡‚³‚¹‚Ü‚·‚©B";
     MESSAGE[ korean ] = "Âü°í¹®Çå Ç×¸ñÀº ÀÌ¹Ì ´Ù¸¥ µ¥ÀÌÅÍ¿Í ÇÔ²² ¹®¼­¿¡ Æ÷ÇÔµÇ¾î ÀÖ½À´Ï´Ù. ";
-    MESSAGE[ chinese_simplified ] = "ÎÄµµÄÚÒÑ¾­º¬ÓĞ¸½´ø²»Í¬Êı¾İµÄÄ¿Â¼ÌõÄ¿¡£ ";
-    MESSAGE[ chinese_traditional ] = "¦b¤å¥ó¤º¤w¸g§t¦³¤£¦P¼Æ¾Úªº¥Ø¿ı±ø¥Ø¡C ";
-    MESSAGE[ arabic ] = "ÅÏÎÇá ÇáãÑÌÚ ãæÌæÏ ÈÇáİÚá İí ÇáãÓÊäÏ ÈÈíÇäÇÊ ãÎÊáİÉ. ";
+    MESSAGE[ chinese_simplified ] = "ÎÄµµÄÚÒÑ¾­º¬ÓĞ¸½´ø²»Í¬Êı¾İµÄÄ¿Â¼ÌõÄ¿¡£Òªµ÷ÕûÒÑ¾­´æÔÚµÄÌõÄ¿£¿";
+    MESSAGE[ chinese_traditional ] = "¤å¥ó¤º¤w¸g§t¦³ªş±a¤£¦P¸ê®Æªº¥Ø¿ı±ø¥Ø¡C­n½Õ¾ã¤w¸g¦s¦bªº±ø¥Ø¡H";
+    MESSAGE[ arabic ] = "ÅÏÎÇá ÇáãÑÌÚ ãæÌæÏ ÈÇáİÚá İí ÇáãÓÊäÏ ÈÈíÇäÇÊ ãÎÊáİÉ. åá ÊÑíÏ ãáÇÁãÉ ÇáÅÏÎÇáÇÊ ÇáãæÌæÏÉ¿";
     MESSAGE[ turkish ] = "Kaynakça girişi, farklı veriler ile belgede mevcut.";
 };
 
