@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: cl $ $Date: 2002-01-30 11:38:57 $
+#   last change: $Author: hr $ $Date: 2003-04-04 19:18:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,7 +106,8 @@ SLOFILES =      \
         $(SLO)$/unokywds.obj	\
         $(SLO)$/unostyls.obj	\
         $(SLO)$/unopback.obj	\
-        $(SLO)$/unovwcrs.obj
+        $(SLO)$/unovwcrs.obj	\
+        $(SLO)$/unodoc.obj
 
 # --- Tagets -------------------------------------------------------
 
