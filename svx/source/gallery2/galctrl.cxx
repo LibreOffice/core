@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-03 13:47:44 $
+ *  last change: $Author: oj $ $Date: 2002-04-09 07:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,26 @@ BOOL GalleryListView::SeekRow( long nRow )
     mnCurRow = nRow;
     return TRUE;
 }
+// -----------------------------------------------------------------------------
 
+String GalleryListView::GetCellText(long _nRow, USHORT nColumnId) const
+{
+    String sRet;
+    if( mpTheme && ( _nRow < mpTheme->GetObjectCount() ) )
+    {
+        SgaObject* pObj = mpTheme->AcquireObject( _nRow );
+
+        if( pObj )
+        {
+            sRet = GalleryBrowser2::GetItemText( *mpTheme, *pObj,
+                ( GALLERY_BRWBOX_TITLE == nColumnId ) ? GALLERY_ITEM_TITLE : GALLERY_ITEM_PATH );
+
+            mpTheme->ReleaseObject( pObj );
+        }
+    }
+
+    return sRet;;
+}
 // ------------------------------------------------------------------------
 
 void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId ) const

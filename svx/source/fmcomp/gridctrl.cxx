@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-06 15:29:37 $
+ *  last change: $Author: oj $ $Date: 2002-04-09 07:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2650,14 +2650,22 @@ void DbGridControl::SetFilterMode(sal_Bool bMode)
             setDataSource(Reference< XRowSet > ());
     }
 }
-
+// -----------------------------------------------------------------------------
+String DbGridControl::GetCellText(long _nRow, USHORT _nColId) const
+{
+    DbGridColumn* pColumn = m_aColumns.GetObject( GetModelColumnPos( _nColId ) );
+    String sRet;
+    if ( const_cast<DbGridControl*>(this)->SeekRow(_nRow) )
+        sRet = GetCurrentRowCellText(pColumn, m_xPaintRow);
+    return sRet;
+}
 //------------------------------------------------------------------------------
-XubString DbGridControl::GetCellText(DbGridColumn* pColumn) const
+XubString DbGridControl::GetCurrentRowCellText(DbGridColumn* pColumn,const DbGridRowRef& _rRow) const
 {
     // Ausgabe des Textes fuer eine Zelle
     XubString aText;
-    if (pColumn)
-        aText = pColumn->GetCellText(m_xPaintRow, m_xFormatter);
+    if ( pColumn && IsValid(m_xPaintRow) )
+        aText = pColumn->GetCellText(_rRow, m_xFormatter);
     return aText;
 }
 
@@ -2667,7 +2675,7 @@ sal_uInt32 DbGridControl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
     if (SeekRow(nRow))
     {
         DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(nColId));
-        return GetDataWindow().GetTextWidth(GetCellText(pColumn));
+        return GetDataWindow().GetTextWidth(GetCurrentRowCellText(pColumn,m_xPaintRow));
     }
     else
         return 30;  //xxxx
@@ -2782,7 +2790,7 @@ void DbGridControl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
             GetDataWindow().ReleaseMouse();
 
         DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(nColId));
-        OStringTransferable* pTransferable = new OStringTransferable(GetCellText(pColumn));
+        OStringTransferable* pTransferable = new OStringTransferable(GetCurrentRowCellText(pColumn,m_xPaintRow));
         Reference< XTransferable > xEnsureDelete(pTransferable);
         pTransferable->StartDrag(this, DND_ACTION_COPY);
     }
@@ -2803,7 +2811,7 @@ void DbGridControl::copyCellText(sal_Int32 _nRow, sal_Int16 _nColId)
     DBG_ASSERT(canCopyCellText(_nRow, _nColId), "DbGridControl::copyCellText: invalid call!");
     DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(_nColId));
     SeekRow(_nRow);
-    OStringTransfer::CopyString( GetCellText( pColumn ), this );
+    OStringTransfer::CopyString( GetCurrentRowCellText( pColumn,m_xPaintRow ), this );
 }
 
 //------------------------------------------------------------------------------
@@ -3352,7 +3360,7 @@ void DbGridControl::KeyInput( const KeyEvent& rEvt )
         if (nRow >= 0 && nRow < GetRowCount() && nColId < ColCount())
         {
             DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(nColId));
-            OStringTransfer::CopyString( GetCellText( pColumn ), this );
+            OStringTransfer::CopyString( GetCurrentRowCellText( pColumn,m_xPaintRow ), this );
             return;
         }
     }

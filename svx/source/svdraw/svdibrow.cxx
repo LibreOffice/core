@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdibrow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-02 16:33:59 $
+ *  last change: $Author: oj $ $Date: 2002-04-09 07:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,49 @@ BOOL __EXPORT _SdrItemBrowserControl::SeekRow(long nRow)
     return TRUE;
 }
 
+String _SdrItemBrowserControl::GetCellText(long _nRow, USHORT _nColId) const
+{
+    String sRet;
+    if ( _nRow >= 0 && _nRow < aList.Count() )
+    {
+        ImpItemListRow* pEntry = ImpGetEntry(_nRow);
+        if ( pEntry )
+        {
+            if ( pEntry->bComment )
+            {
+                if (_nColId == ITEMBROWSER_NAMECOL_ID)
+                    sRet = pEntry->aName;
+            }
+            else
+            {
+                rtl_TextEncoding aTextEncoding = gsl_getSystemTextEncoding();
+
+                sRet = XubString("???", aTextEncoding);
+                switch (_nColId)
+                {
+                    case ITEMBROWSER_WHICHCOL_ID:
+                        sRet = UniString::CreateFromInt32(pEntry->nWhichId); break;
+                    case ITEMBROWSER_STATECOL_ID:
+                    {
+                        switch (pEntry->eState)
+                        {
+                            case SFX_ITEM_UNKNOWN : sRet=String("Uknown", aTextEncoding);   break;
+                            case SFX_ITEM_DISABLED: sRet=String("Disabled", aTextEncoding); break;
+                            case SFX_ITEM_DONTCARE: sRet=String("DontCare", aTextEncoding); break;
+                            case SFX_ITEM_SET     : sRet=String("Set", aTextEncoding);      break;
+                            case SFX_ITEM_DEFAULT : sRet=String("Default", aTextEncoding);  break;
+                        } // switch
+                    } break;
+                    case ITEMBROWSER_TYPECOL_ID: sRet = pEntry->GetItemTypeStr(); break;
+                    case ITEMBROWSER_NAMECOL_ID: sRet = pEntry->aName; break;
+                    case ITEMBROWSER_VALUECOL_ID: sRet = pEntry->aValue; break;
+                } // switch
+            }
+        }
+    }
+    return sRet;
+}
+
 void __EXPORT _SdrItemBrowserControl::PaintField(OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId) const
 {
     if (nAktPaintRow<0 || (ULONG)nAktPaintRow>=aList.Count()) {
@@ -420,27 +463,8 @@ void __EXPORT _SdrItemBrowserControl::PaintField(OutputDevice& rDev, const Recta
             rDev.DrawText(rRect.TopLeft(),pEntry->aName);
         }
     } else {
-        rtl_TextEncoding aTextEncoding = gsl_getSystemTextEncoding();
-
-        XubString aStr("???", aTextEncoding);
-        switch (nColumnId) {
-            case ITEMBROWSER_WHICHCOL_ID:
-                aStr = UniString::CreateFromInt32(pEntry->nWhichId); break;
-            case ITEMBROWSER_STATECOL_ID: {
-                switch (pEntry->eState) {
-                    case SFX_ITEM_UNKNOWN : aStr=String("Uknown", aTextEncoding);   break;
-                    case SFX_ITEM_DISABLED: aStr=String("Disabled", aTextEncoding); break;
-                    case SFX_ITEM_DONTCARE: aStr=String("DontCare", aTextEncoding); break;
-                    case SFX_ITEM_SET     : aStr=String("Set", aTextEncoding);      break;
-                    case SFX_ITEM_DEFAULT : aStr=String("Default", aTextEncoding);  break;
-                } // switch
-            } break;
-            case ITEMBROWSER_TYPECOL_ID: aStr = pEntry->GetItemTypeStr(); break;
-            case ITEMBROWSER_NAMECOL_ID: aStr = pEntry->aName; break;
-            case ITEMBROWSER_VALUECOL_ID: aStr = pEntry->aValue; break;
-        } // switch
         rDev.SetClipRegion(aR);
-        rDev.DrawText(aR.TopLeft(),aStr);
+        rDev.DrawText(aR.TopLeft(),GetCellText(nAktPaintRow,nColumnId));
         rDev.SetClipRegion();
     }
 }
