@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:42:27 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1571,11 +1571,13 @@ void ImplListBoxWindow::ImplPaint( USHORT nPos, BOOL bErase, bool bLayout )
             {
                 SetTextColor( rStyleSettings.GetHighlightTextColor() );
                 SetFillColor( rStyleSettings.GetHighlightColor() );
+                SetTextFillColor( rStyleSettings.GetHighlightColor() );
                 DrawRect( aRect );
             }
             else
             {
                 ImplInitSettings( FALSE, TRUE, FALSE );
+                SetTextFillColor();
                 if( bErase )
                     Erase( aRect );
             }
