@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-12 09:27:13 $
+ *  last change: $Author: dr $ $Date: 2001-10-25 11:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
+#include <com/sun/star/util/XNumberFormatTypes.hpp>
+#endif
 
 #include <string.h>
 #include <stdio.h>
@@ -1831,7 +1835,7 @@ void lcl_GetCouppcd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat
     throw( lang::IllegalArgumentException )
 {
     rDate = rMat;
-    rDate.setYear( rSettle.nYear );
+    rDate.setYear( rSettle.getYear() );
     if( rDate < rSettle )
         rDate.addYears( 1 );
     while( rDate > rSettle )
@@ -1856,7 +1860,7 @@ void lcl_GetCoupncd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat
     throw( lang::IllegalArgumentException )
 {
     rDate = rMat;
-    rDate.setYear( rSettle.nYear );
+    rDate.setYear( rSettle.getYear() );
     if( rDate > rSettle )
         rDate.addYears( -1 );
     while( rDate <= rSettle )
@@ -1940,7 +1944,7 @@ double GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
     ScaDate aMat( nNullDate, nMat, nBase );
     ScaDate aDate;
     lcl_GetCouppcd( aDate, ScaDate( nNullDate, nSettle, nBase ), aMat, nFreq );
-    sal_uInt16 nMonths = (aMat.nYear - aDate.nYear) * 12 + aMat.nMonth - aDate.nMonth;
+    sal_uInt16 nMonths = (aMat.getYear() - aDate.getYear()) * 12 + aMat.getMonth() - aDate.getMonth();
     return static_cast< double >( nMonths * nFreq / 12 );
 }
 
@@ -3068,8 +3072,6 @@ double ConvertDataList::Convert( double fVal, const STRING& rFrom, const STRING&
     ConvertData*    p = First();
     while( p && ( bSearchFrom || bSearchTo ) )
     {
-#define CHECKIT(part)
-
         if( bSearchFrom )
         {
             sal_Int16   n = p->GetMatchingLevel( rFrom );
@@ -3137,7 +3139,7 @@ ScaDate::ScaDate( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nBase )
 {
     DaysToDate( nNullDate + nDate, nOrigDay, nMonth, nYear );
     bLastDayMode = (nBase != 5);
-    bLastDay = (nOrigDay >= DaysInMonth( nMonth, nYear ));
+    bLastDay = (nOrigDay >= ::DaysInMonth( nMonth, nYear ));
     b30Days = (nBase == 0) || (nBase == 4);
     bUSMode = (nBase == 0);
     setDay();
@@ -3157,14 +3159,17 @@ ScaDate::ScaDate( const ScaDate& rCopy ) :
 
 ScaDate& ScaDate::operator=( const ScaDate& rCopy )
 {
-    nOrigDay = rCopy.nOrigDay;
-    nDay = rCopy.nDay;
-    nMonth = rCopy.nMonth;
-    nYear = rCopy.nYear;
-    bLastDayMode = rCopy.bLastDayMode;
-    bLastDay = rCopy.bLastDay;
-    b30Days = rCopy.b30Days;
-    bUSMode = rCopy.bUSMode;
+    if( this != &rCopy )
+    {
+        nOrigDay = rCopy.nOrigDay;
+        nDay = rCopy.nDay;
+        nMonth = rCopy.nMonth;
+        nYear = rCopy.nYear;
+        bLastDayMode = rCopy.bLastDayMode;
+        bLastDay = rCopy.bLastDay;
+        b30Days = rCopy.b30Days;
+        bUSMode = rCopy.bUSMode;
+    }
     return *this;
 }
 
@@ -3172,13 +3177,15 @@ void ScaDate::setDay()
 {
     if( b30Days )
     {
+        // 30-days-mode: set nDay to 30 if original was last day in month
         nDay = Min( nOrigDay, static_cast< sal_uInt16 >( 30 ) );
-        if( bLastDay || (nDay >= DaysInMonth( nMonth, nYear )) )
+        if( bLastDay || (nDay >= ::DaysInMonth( nMonth, nYear )) )
             nDay = 30;
     }
     else
     {
-        sal_uInt16 nLastDay = DaysInMonth( nMonth, nYear );
+        // set nDay to last day in this month if original was last day
+        sal_uInt16 nLastDay = ::DaysInMonth( nMonth, nYear );
         nDay = bLastDay ? nLastDay : Min( nOrigDay, nLastDay );
     }
 }
@@ -3193,7 +3200,7 @@ sal_Int32 ScaDate::getDaysInMonthRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const
         nRet = (nTo - nFrom + 1) * 30;
     else
     {
-        for( sal_uInt16 nMonthIx = nFrom; nMonthIx <= nTo; nMonthIx++ )
+        for( sal_uInt16 nMonthIx = nFrom; nMonthIx <= nTo; ++nMonthIx )
             nRet += getDaysInMonth( nMonthIx );
     }
     return nRet;
@@ -3204,7 +3211,7 @@ sal_Int32 ScaDate::getDaysInYearRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const
     if( nFrom > nTo )
         return 0;
 
-    return b30Days ? ((nTo - nFrom + 1) * 360) : GetDaysInYears( nFrom, nTo );
+    return b30Days ? ((nTo - nFrom + 1) * 360) : ::GetDaysInYears( nFrom, nTo );
 }
 
 void ScaDate::doAddYears( sal_Int32 nYearCount ) throw( lang::IllegalArgumentException )
@@ -3220,8 +3227,9 @@ void ScaDate::addMonths( sal_Int32 nMonthCount ) throw( lang::IllegalArgumentExc
     sal_Int32 nNewMonth = nMonthCount + nMonth;
     if( nNewMonth > 12 )
     {
-        doAddYears( (nNewMonth - 1) / 12 );
-        nMonth = static_cast< sal_uInt16 >( (nNewMonth - 1) % 12 ) + 1;
+        --nNewMonth;
+        doAddYears( nNewMonth / 12 );
+        nMonth = static_cast< sal_uInt16 >( nNewMonth % 12 ) + 1;
     }
     else if( nNewMonth < 1 )
     {
@@ -3235,9 +3243,9 @@ void ScaDate::addMonths( sal_Int32 nMonthCount ) throw( lang::IllegalArgumentExc
 
 sal_Int32 ScaDate::getDate( sal_Int32 nNullDate ) const
 {
-    sal_uInt16 nLastDay = DaysInMonth( nMonth, nYear );
+    sal_uInt16 nLastDay = ::DaysInMonth( nMonth, nYear );
     sal_uInt16 nRealDay = (bLastDayMode && bLastDay) ? nLastDay : Min( nLastDay, nOrigDay );
-    return DateToDays( nRealDay, nMonth, nYear ) - nNullDate;
+    return ::DateToDays( nRealDay, nMonth, nYear ) - nNullDate;
 }
 
 sal_Int32 ScaDate::getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( lang::IllegalArgumentException )
@@ -3257,15 +3265,15 @@ sal_Int32 ScaDate::getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( la
             if( ((rFrom.nMonth == 2) || (rFrom.nDay < 30)) && (aTo.nOrigDay == 31) )
                 aTo.nDay = 31;
             else if( (aTo.nMonth == 2) && aTo.bLastDay )
-                aTo.nDay = DaysInMonth( 2, aTo.nYear );
+                aTo.nDay = ::DaysInMonth( 2, aTo.nYear );
         }
         // corrections for base 4 (Europe)
         else
         {
             if( (aFrom.nMonth == 2) && (aFrom.nDay == 30) )
-                aFrom.nDay = DaysInMonth( 2, aFrom.nYear );
+                aFrom.nDay = ::DaysInMonth( 2, aFrom.nYear );
             if( (aTo.nMonth == 2) && (aTo.nDay == 30) )
-                aTo.nDay = DaysInMonth( 2, aTo.nYear );
+                aTo.nDay = ::DaysInMonth( 2, aTo.nYear );
         }
     }
 
@@ -3315,8 +3323,14 @@ sal_Bool ScaDate::operator<( const ScaDate& rCmp ) const
 //-----------------------------------------------------------------------------
 
 ScaAnyConverter::ScaAnyConverter( const uno::Reference< lang::XMultiServiceFactory >& xServiceFact ) :
-    xServiceFactory( xServiceFact )
+    bHasValidFormat( sal_False )
 {
+    if( xServiceFact.is() )
+    {
+        uno::Reference< uno::XInterface > xInstance = xServiceFact->createInstance(
+            OUString::createFromAscii( "com.sun.star.util.NumberFormatter" ) );
+        xFormatter = uno::Reference< util::XNumberFormatter >( xInstance, uno::UNO_QUERY );
+    }
 }
 
 ScaAnyConverter::~ScaAnyConverter()
@@ -3325,15 +3339,51 @@ ScaAnyConverter::~ScaAnyConverter()
 
 void ScaAnyConverter::init( const uno::Reference< beans::XPropertySet >& xPropSet ) throw( uno::RuntimeException )
 {
-//! current behaviour: only english separators are allowed: ',' for thousands, '.' for decimal
-// 2do: get locale separators
+    // try to get default number format
+    bHasValidFormat = sal_False;
+    if( xFormatter.is() )
+    {
+        // get XFormatsSupplier from outer XPropertySet
+        uno::Reference< util::XNumberFormatsSupplier > xFormatsSupp( xPropSet, uno::UNO_QUERY );
+        if( xFormatsSupp.is() )
+        {
+            // get XNumberFormatTypes from XNumberFormatsSupplier to get standard index
+            uno::Reference< util::XNumberFormats > xFormats( xFormatsSupp->getNumberFormats() );
+            uno::Reference< util::XNumberFormatTypes > xFormatTypes( xFormats, uno::UNO_QUERY );
+            if( xFormatTypes.is() )
+            {
+                lang::Locale eLocale;
+                nDefaultFormat = xFormatTypes->getStandardIndex( eLocale );
+                xFormatter->attachNumberFormatsSupplier( xFormatsSupp );
+                bHasValidFormat = sal_True;
+            }
+        }
+    }
+}
 
-//    uno::Reference< util::XNumberFormatsSupplier > xFormatsSupp( xPropSet, uno::UNO_QUERY );
-//    if( !xFormatsSupp.is() )
-//        throw uno::RuntimeException();
-
-    cGroupSep = ',';
-    cDecSep = '.';
+double ScaAnyConverter::convertToDouble( const OUString& rString ) const throw( lang::IllegalArgumentException )
+{
+    double fValue = 0.0;
+    if( bHasValidFormat )
+    {
+        try
+        {
+            fValue = xFormatter->convertStringToNumber( nDefaultFormat, rString );
+        }
+        catch( uno::Exception& )
+        {
+            throw lang::IllegalArgumentException();
+        }
+    }
+    else
+    {
+        int nErrorNum;
+        const sal_Unicode* pLastChar;
+        fValue = SolarMath::StringToDouble( rString.getStr(), ',', '.', nErrorNum, &pLastChar );
+        if( (nErrorNum != 0) || (*pLastChar != '\0') )
+            throw lang::IllegalArgumentException();
+    }
+    return fValue;
 }
 
 sal_Bool ScaAnyConverter::getDouble(
@@ -3354,14 +3404,7 @@ sal_Bool ScaAnyConverter::getDouble(
         {
             const OUString* pString = static_cast< const OUString* >( rAny.getValue() );
             if( pString->getLength() )
-            {
-                int nErrorNum;
-                const sal_Unicode* pLastChar;
-                rfResult = SolarMath::StringToDouble(
-                    pString->getStr(), cGroupSep, cDecSep, nErrorNum, &pLastChar );
-                if( (nErrorNum != 0) || (*pLastChar != '\0') )
-                    throw lang::IllegalArgumentException();
-            }
+                rfResult = convertToDouble( *pString );
             else
                 bContainsVal = sal_False;
         }

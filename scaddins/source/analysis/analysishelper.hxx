@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-12 09:27:13 $
+ *  last change: $Author: dr $ $Date: 2001-10-25 11:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,13 +63,32 @@
 #define ANALYSISHELPER_HXX
 
 
-#include <com/sun/star/sheet/XAddIn.hpp>
+#ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/sheet/addin/XAnalysis.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
+#include <com/sun/star/util/XNumberFormatter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_SHEET_XADDIN_HPP_
+#include <com/sun/star/sheet/XAddIn.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_ADDIN_XANALYSIS_HPP_
+#include <com/sun/star/sheet/addin/XAnalysis.hpp>
+#endif
 
 #include <math.h>
 
@@ -998,6 +1017,16 @@ inline ConvertData* ConvertDataList::Next( void )
 class ScaDate
 {
 private:
+    sal_uInt16                  nOrigDay;           /// is the day of the original date.
+    sal_uInt16                  nDay;               /// is the calculated day depending on the current month/year.
+    sal_uInt16                  nMonth;             /// is the current month (one-based).
+    sal_uInt16                  nYear;              /// is the current year.
+    sal_Bool                    bLastDayMode : 1;   /// if sal_True, recalculate nDay after every calculation.
+    sal_Bool                    bLastDay : 1;       /// is sal_True, if original date was the last day in month.
+    sal_Bool                    b30Days : 1;        /// is sal_True, if every month has 30 days in calculations.
+    sal_Bool                    bUSMode : 1;        /// is sal_True, if the US method of 30-day-calculations is used.
+
+                                /// Calculates nDay from nOrigDay and current date.
     void                        setDay();
 
                                 /// @return  count of days in current month
@@ -1010,19 +1039,10 @@ private:
                                 /// @ return  count of days in the given year range
     sal_Int32                   getDaysInYearRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const;
 
-                                /// adds/subtracts the given count of years, does not adjust day
+                                /// Adds/subtracts the given count of years, does not adjust day.
     void                        doAddYears( sal_Int32 nYearCount ) throw( CSS::lang::IllegalArgumentException );
 
 public:
-    sal_uInt16                  nOrigDay;
-    sal_uInt16                  nDay;
-    sal_uInt16                  nMonth;
-    sal_uInt16                  nYear;
-    sal_Bool                    bLastDayMode : 1;
-    sal_Bool                    bLastDay : 1;
-    sal_Bool                    b30Days : 1;
-    sal_Bool                    bUSMode : 1;
-
                                 ScaDate();
                                 /** @param nBase
                                         date handling mode (days in month / days in year):
@@ -1035,6 +1055,11 @@ public:
                                 ScaDate( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nBase );
                                 ScaDate( const ScaDate& rCopy );
     ScaDate&                    operator=( const ScaDate& rCopy );
+
+                                /// @return  the current month.
+    inline sal_uInt16           getMonth() const    { return nMonth; };
+                                /// @return  the current year.
+    inline sal_uInt16           getYear() const     { return nYear; };
 
                                 /// adds/subtracts the given count of months, adjusts day
     void                        addMonths( sal_Int32 nMonthCount ) throw( CSS::lang::IllegalArgumentException );
@@ -1084,10 +1109,18 @@ inline void ScaDate::addYears( sal_Int32 nYearCount ) throw( CSS::lang::IllegalA
 class ScaAnyConverter
 {
 private:
-    CSS::uno::Reference< CSS::lang::XMultiServiceFactory > xServiceFactory;
+    CSS::uno::Reference< CSS::util::XNumberFormatter > xFormatter;
+    sal_Int32                   nDefaultFormat;
+    sal_Bool                    bHasValidFormat;
 
-    sal_Unicode                 cGroupSep;
-    sal_Unicode                 cDecSep;
+                                /** Converts a string to double using the number formatter. If the formatter is not
+                                    valid, SolarMath::StringToDouble() with english separators will be used.
+                                    @throws com::sun::star::lang::IllegalArgumentException
+                                        on strings not representing any double value.
+                                    @return  the converted double value. */
+    double                      convertToDouble(
+                                    const ::rtl::OUString& rString ) const
+                                throw( CSS::lang::IllegalArgumentException );
 
 public:
                                 ScaAnyConverter(
