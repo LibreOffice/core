@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtscn6.tab,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-07-16 11:42:06 $
+ *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,62 +629,49 @@ static ImplDBCSConvertData const aImplGB2312DBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplGB2312TextConverterData =
-{
-    &aImplGB2312DBCSCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplGB2312TextConverter =
-{
-    &aImplGB2312TextConverterData,
-    ImplDBCSToUnicode,
-    ImplUnicodeToDBCS,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplGB2312TextEncodingData =
-{
-    &aImplGB2312TextConverter,
-    RTL_TEXTENCODING_GB_2312,
-    1, 2, 2,
-    134,
-    936,
-    25,
-    (const sal_Char*)"euc-cn",
-    (const sal_Char*)"gb2312",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MULTIBYTE |
-    RTL_TEXTENCODING_INFO_MIME,
-    SCRIPT_CHINESE_SIMPLIFIED
-};
+static ImplTextEncodingData const aImplGB2312TextEncodingData
+    = { { &aImplGB2312DBCSCvtData,
+          ImplDBCSToUnicode,
+          ImplUnicodeToDBCS,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_GB_2312,
+        1,
+        2,
+        2,
+        134,
+        "euc-cn",
+        "gb2312",
+        RTL_TEXTENCODING_INFO_ASCII
+            | RTL_TEXTENCODING_INFO_MULTIBYTE
+            | RTL_TEXTENCODING_INFO_MIME };
+    /* SCRIPT_CHINESE_SIMPLIFIED, pc code page 936, mac encoding 25 */
 
 /* ======================================================================= */
 
-static ImplTextEncodingData aImplEUCCNTextEncodingData =
-{
-    &aImplGB2312TextConverter,
-    RTL_TEXTENCODING_EUC_CN,
-    1, 2, 2,
-    134,
-    936,
-    25,
-    (const sal_Char*)"euc-cn",
-    (const sal_Char*)"gb2312",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MULTIBYTE,
-    SCRIPT_CHINESE_SIMPLIFIED
-};
+static ImplTextEncodingData const aImplEUCCNTextEncodingData
+    = { { &aImplGB2312DBCSCvtData,
+          ImplDBCSToUnicode,
+          ImplUnicodeToDBCS,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_EUC_CN,
+        1,
+        2,
+        2,
+        134,
+        "euc-cn",
+        "gb2312",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+    /* SCRIPT_CHINESE_SIMPLIFIED, pc code page 936, mac encoding 25 */
 
 /* ======================================================================= */
 
@@ -1223,45 +1210,27 @@ static ImplDBCSConvertData const aImplGBT12345DBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplGBT12345TextConverterData =
-{
-    &aImplGBT12345DBCSCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplGBT12345TextConverter =
-{
-    &aImplGBT12345TextConverterData,
-    ImplDBCSToUnicode,
-    ImplUnicodeToDBCS,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplGBT12345TextEncodingData =
-{
-    &aImplGBT12345TextConverter,
-    RTL_TEXTENCODING_GBT_12345,
-    1, 2, 2,
-    134,
-    936,
-    25,
-    (const sal_Char*)"euc-cn",
-    (const sal_Char*)"cn-gb-12345",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MULTIBYTE |
-    RTL_TEXTENCODING_INFO_MIME,
-    SCRIPT_CHINESE_SIMPLIFIED
-};
+static ImplTextEncodingData const aImplGBT12345TextEncodingData
+    = { { &aImplGBT12345DBCSCvtData,
+          ImplDBCSToUnicode,
+          ImplUnicodeToDBCS,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_GBT_12345,
+        1,
+        2,
+        2,
+        134,
+        "euc-cn",
+        "cn-gb-12345",
+        RTL_TEXTENCODING_INFO_ASCII
+            | RTL_TEXTENCODING_INFO_MULTIBYTE
+            | RTL_TEXTENCODING_INFO_MIME };
+    /* SCRIPT_CHINESE_SIMPLIFIED, pc code page 936, mac encoding 25 */
 
 /* ======================================================================= */
 
@@ -1800,44 +1769,25 @@ static ImplDBCSConvertData const aImplGBKDBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplGBKTextConverterData =
-{
-    &aImplGBKDBCSCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplGBKTextConverter =
-{
-    &aImplGBKTextConverterData,
-    ImplDBCSToUnicode,
-    ImplUnicodeToDBCS,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplGBKTextEncodingData =
-{
-    &aImplGBKTextConverter,
-    RTL_TEXTENCODING_GBK,
-    1, 2, 2,
-    134,
-    936,
-    25,
-    (const sal_Char*)"euc-cn",
-    (const sal_Char*)"gb2312",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MULTIBYTE,
-    SCRIPT_CHINESE_SIMPLIFIED
-};
+static ImplTextEncodingData const aImplGBKTextEncodingData
+    = { { &aImplGBKDBCSCvtData,
+          ImplDBCSToUnicode,
+          ImplUnicodeToDBCS,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_GBK,
+        1,
+        2,
+        2,
+        134,
+        "euc-cn",
+        "gb2312",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+    /* SCRIPT_CHINESE_SIMPLIFIED, pc code page 936, mac encoding 25 */
 
 /* ======================================================================= */
 
@@ -2376,46 +2326,26 @@ static ImplDBCSConvertData const aImplMS936DBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplMS936TextConverterData =
-{
-    &aImplMS936DBCSCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplMS936TextConverter =
-{
-    &aImplMS936TextConverterData,
-    ImplDBCSToUnicode,
-    ImplUnicodeToDBCS,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplMS936TextEncodingData =
-{
-    &aImplMS936TextConverter,
-    RTL_TEXTENCODING_MS_936,
-    1, 2, 2,
-    134,
-    936,
-    25,
-    (const sal_Char*)"euc-cn",
-    (const sal_Char*)"gb2312",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MULTIBYTE |
-    RTL_TEXTENCODING_INFO_WIN |
-    RTL_TEXTENCODING_INFO_DOS_OS2,
-    SCRIPT_CHINESE_SIMPLIFIED
-};
+static ImplTextEncodingData const aImplMS936TextEncodingData
+    = { { &aImplMS936DBCSCvtData,
+          ImplDBCSToUnicode,
+          ImplUnicodeToDBCS,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_MS_936,
+        1,
+        2,
+        2,
+        134,
+        "euc-cn",
+        "gb2312",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+    /* WIN/DOS/OS2, SCRIPT_CHINESE_SIMPLIFIED, pc code page 936, mac encoding
+       25 */
 
 /* ======================================================================= */
 
@@ -2954,42 +2884,22 @@ static ImplDBCSConvertData const aImplAPPLECHINSIMPDBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplAPPLECHINSIMPTextConverterData =
-{
-    &aImplAPPLECHINSIMPDBCSCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplAPPLECHINSIMPTextConverter =
-{
-    &aImplAPPLECHINSIMPTextConverterData,
-    ImplDBCSToUnicode,
-    ImplUnicodeToDBCS,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplAPPLECHINSIMPTextEncodingData =
-{
-    &aImplAPPLECHINSIMPTextConverter,
-    RTL_TEXTENCODING_APPLE_CHINSIMP,
-    1, 2, 2,
-    134,
-    936,
-    25,
-    (const sal_Char*)"euc-cn",
-    (const sal_Char*)"gb2312",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MULTIBYTE |
-    RTL_TEXTENCODING_INFO_MAC,
-    SCRIPT_CHINESE_SIMPLIFIED
-};
+static ImplTextEncodingData const aImplAPPLECHINSIMPTextEncodingData
+    = { { &aImplAPPLECHINSIMPDBCSCvtData,
+          ImplDBCSToUnicode,
+          ImplUnicodeToDBCS,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_APPLE_CHINSIMP,
+        1,
+        2,
+        2,
+        134,
+        "euc-cn",
+        "gb2312",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+    /* MAC, SCRIPT_CHINESE_SIMPLIFIED, pc code page 936, mac encoding 25 */

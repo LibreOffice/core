@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtarb1.tab,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-07-16 11:04:34 $
+ *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,46 +238,27 @@ static ImplByteConvertData const aImplIBM862ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplIBM862TextConverterData =
-{
-    &aImplIBM862ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplIBM862TextConverter =
-{
-    &aImplIBM862TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplIBM862TextEncodingData =
-{
-    &aImplIBM862TextConverter,
-    RTL_TEXTENCODING_IBM_862,
-    1, 1, 1,
-    177,
-    862,
-    5,
-    (const sal_Char*)"iso8859-8",
-    (const sal_Char*)"DOS-862",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MIME |
-    RTL_TEXTENCODING_INFO_R2L |
-    RTL_TEXTENCODING_INFO_DOS_OS2,
-    SCRIPT_HEBREW
-};
+static ImplTextEncodingData const aImplIBM862TextEncodingData
+    = { { &aImplIBM862ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_IBM_862,
+        1,
+        1,
+        1,
+        177,
+        "iso8859-8",
+        "DOS-862",
+        RTL_TEXTENCODING_INFO_ASCII
+            | RTL_TEXTENCODING_INFO_MIME
+            | RTL_TEXTENCODING_INFO_R2L };
+    /* DOS/OS2, SCRIPT_HEBREW, pc code page 862, mac encoding 5 */
 
 /* ======================================================================= */
 
@@ -416,45 +397,25 @@ static ImplByteConvertData const aImplIBM864ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplIBM864TextConverterData =
-{
-    &aImplIBM864ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplIBM864TextConverter =
-{
-    &aImplIBM864TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplIBM864TextEncodingData =
-{
-    &aImplIBM864TextConverter,
-    RTL_TEXTENCODING_IBM_864,
-    1, 1, 1,
-    178,
-    864,
-    4,
-    (const sal_Char*)"iso8859-6",
-    (const sal_Char*)"iso-8859-6",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_R2L |
-    RTL_TEXTENCODING_INFO_DOS_OS2,
-    SCRIPT_ARABIC
-};
+static ImplTextEncodingData const aImplIBM864TextEncodingData
+    = { { &aImplIBM864ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_IBM_864,
+        1,
+        1,
+        1,
+        178,
+        "iso8859-6",
+        "iso-8859-6",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_R2L };
+    /* DOS/OS2, SCRIPT_ARABIC, pc code page 864, mac encoding 4 */
 
 /* ======================================================================= */
 
@@ -588,46 +549,27 @@ static ImplByteConvertData const aImplMS1255ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplMS1255TextConverterData =
-{
-    &aImplMS1255ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplMS1255TextConverter =
-{
-    &aImplMS1255TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplMS1255TextEncodingData =
-{
-    &aImplMS1255TextConverter,
-    RTL_TEXTENCODING_MS_1255,
-    1, 1, 1,
-    177,
-    862,
-    5,
-    (const sal_Char*)"iso8859-8",
-    (const sal_Char*)"windows-1255",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MIME |
-    RTL_TEXTENCODING_INFO_R2L |
-    RTL_TEXTENCODING_INFO_WIN,
-    SCRIPT_HEBREW
-};
+static ImplTextEncodingData const aImplMS1255TextEncodingData
+    = { { &aImplMS1255ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_MS_1255,
+        1,
+        1,
+        1,
+        177,
+        "iso8859-8",
+        "windows-1255",
+        RTL_TEXTENCODING_INFO_ASCII
+            | RTL_TEXTENCODING_INFO_MIME
+            | RTL_TEXTENCODING_INFO_R2L };
+    /* WIN, SCRIPT_HEBREW, pc code page 862, mac encoding 5 */
 
 /* ======================================================================= */
 
@@ -779,46 +721,27 @@ static ImplByteConvertData const aImplMS1256ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplMS1256TextConverterData =
-{
-    &aImplMS1256ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplMS1256TextConverter =
-{
-    &aImplMS1256TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplMS1256TextEncodingData =
-{
-    &aImplMS1256TextConverter,
-    RTL_TEXTENCODING_MS_1256,
-    1, 1, 1,
-    178,
-    864,
-    4,
-    (const sal_Char*)"iso8859-6",
-    (const sal_Char*)"windows-1256",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MIME |
-    RTL_TEXTENCODING_INFO_R2L |
-    RTL_TEXTENCODING_INFO_WIN,
-    SCRIPT_ARABIC
-};
+static ImplTextEncodingData const aImplMS1256TextEncodingData
+    = { { &aImplMS1256ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_MS_1256,
+        1,
+        1,
+        1,
+        178,
+        "iso8859-6",
+        "windows-1256",
+        RTL_TEXTENCODING_INFO_ASCII
+            | RTL_TEXTENCODING_INFO_MIME
+            | RTL_TEXTENCODING_INFO_R2L };
+    /* WIN, SCRIPT_ARABIC, pc code page 864, mac encoding 4 */
 
 /* ======================================================================= */
 
@@ -899,45 +822,27 @@ static ImplByteConvertData const aImplISO88596ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplISO88596TextConverterData =
-{
-    &aImplISO88596ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplISO88596TextConverter =
-{
-    &aImplISO88596TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplISO88596TextEncodingData =
-{
-    &aImplISO88596TextConverter,
-    RTL_TEXTENCODING_ISO_8859_8,
-    1, 1, 1,
-    178,
-    864,
-    4,
-    (const sal_Char*)"iso8859-6",
-    (const sal_Char*)"iso-8859-6",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_R2L |
-    RTL_TEXTENCODING_INFO_MIME,
-    SCRIPT_ARABIC
-};
+static ImplTextEncodingData const aImplISO88596TextEncodingData
+    = { { &aImplISO88596ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_ISO_8859_8,
+        1,
+        1,
+        1,
+        178,
+        "iso8859-6",
+        "iso-8859-6",
+        RTL_TEXTENCODING_INFO_ASCII
+            | RTL_TEXTENCODING_INFO_R2L
+            | RTL_TEXTENCODING_INFO_MIME };
+    /* SCRIPT_ARABIC, pc code page 864, mac encoding 4 */
 
 
 /* ======================================================================= */
@@ -1040,42 +945,24 @@ static ImplByteConvertData const aImplISO88598ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplISO88598TextConverterData =
-{
-    &aImplISO88598ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplISO88598TextConverter =
-{
-    &aImplISO88598TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplISO88598TextEncodingData =
-{
-    &aImplISO88598TextConverter,
-    RTL_TEXTENCODING_ISO_8859_8,
-    1, 1, 1,
-    177,
-    862,
-    5,
-    (const sal_Char*)"iso8859-8",
-    (const sal_Char*)"iso-8859-8",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_R2L |
-    RTL_TEXTENCODING_INFO_MIME,
-    SCRIPT_HEBREW
-};
+static ImplTextEncodingData const aImplISO88598TextEncodingData
+    = { { &aImplISO88598ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_ISO_8859_8,
+        1,
+        1,
+        1,
+        177,
+        "iso8859-8",
+        "iso-8859-8",
+        RTL_TEXTENCODING_INFO_ASCII
+            | RTL_TEXTENCODING_INFO_R2L
+            | RTL_TEXTENCODING_INFO_MIME };
+    /* SCRIPT_HEBREW, pc code page 862, mac encoding 5 */

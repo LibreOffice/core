@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtkr6.tab,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-12-13 22:22:20 $
+ *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,86 +617,75 @@ static ImplDBCSConvertData const aImplKSC5601DBCSCvtData =
     DBCS_EUDC_MS949_COUNT
 };
 
-/* ----------------------------------------------------------------------- */
+/* ======================================================================= */
 
-static ImplTextConverterData const aImplKSC5601TextConverterData =
-{
-    &aImplKSC5601DBCSCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplKSC5601TextConverter =
-{
-    &aImplKSC5601TextConverterData,
-    ImplDBCSToUnicode,
-    ImplUnicodeToDBCS,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
+static ImplTextEncodingData const aImplEUCKRTextEncodingData
+    = { { &aImplKSC5601DBCSCvtData,
+          ImplDBCSToUnicode,
+          ImplUnicodeToDBCS,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_EUC_KR,
+        1,
+        2,
+        2,
+        129,
+        "euc-kr",
+        "euc-kr",
+        RTL_TEXTENCODING_INFO_ASCII
+            | RTL_TEXTENCODING_INFO_MULTIBYTE
+            | RTL_TEXTENCODING_INFO_MIME };
+    /* SCRIPT_KOREAN, pc code page 934, mac encoding 3 */
 
 /* ======================================================================= */
 
-static ImplTextEncodingData const aImplEUCKRTextEncodingData =
-{
-    &aImplKSC5601TextConverter,
-    RTL_TEXTENCODING_EUC_KR,
-    1, 2, 2,
-    129,
-    934,
-    3,
-    (const sal_Char*)"euc-kr",
-    (const sal_Char*)"euc-kr",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MULTIBYTE |
-    RTL_TEXTENCODING_INFO_MIME,
-    SCRIPT_KOREAN
-};
-
-/* ======================================================================= */
-
-static ImplTextEncodingData const aImplMS949TextEncodingData =
-{
-    &aImplKSC5601TextConverter,
-    RTL_TEXTENCODING_MS_949,
-    1, 2, 2,
-    129,
-    934,
-    3,
-    (const sal_Char*)"euc-kr",
-    (const sal_Char*)"euc-kr",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MULTIBYTE |
-    RTL_TEXTENCODING_INFO_WIN |
-    RTL_TEXTENCODING_INFO_DOS_OS2,
-    SCRIPT_KOREAN
-};
+static ImplTextEncodingData const aImplMS949TextEncodingData
+    = { { &aImplKSC5601DBCSCvtData,
+          ImplDBCSToUnicode,
+          ImplUnicodeToDBCS,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_MS_949,
+        1,
+        2,
+        2,
+        129,
+        "euc-kr",
+        "euc-kr",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+    /* WIN/DOS/OS2, SCRIPT_KOREAN, pc code page 934, mac encoding 3 */
 
 /* ======================================================================= */
 
 /* Apple has some extension, which we don't support */
 
-static ImplTextEncodingData const aImplAPPLEKOREANTextEncodingData =
-{
-    &aImplKSC5601TextConverter,
-    RTL_TEXTENCODING_APPLE_KOREAN,
-    1, 2, 2,
-    129,
-    934,
-    3,
-    (const sal_Char*)"euc-kr",
-    (const sal_Char*)"euc-kr",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MULTIBYTE |
-    RTL_TEXTENCODING_INFO_MAC |
-    SCRIPT_KOREAN
-};
+static ImplTextEncodingData const aImplAPPLEKOREANTextEncodingData
+    = { { &aImplKSC5601DBCSCvtData,
+          ImplDBCSToUnicode,
+          ImplUnicodeToDBCS,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_APPLE_KOREAN,
+        1,
+        2,
+        2,
+        129,
+        "euc-kr",
+        "euc-kr",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+    /* MAC, SCRIPT_KOREAN, pc code page 934, mac encoding 3 */
 
 /* ======================================================================= */
 
@@ -1250,44 +1239,26 @@ static ImplDBCSConvertData const aImplJOHABDBCSCvtData =
     DBCS_EUDC_MS1361_COUNT
 };
 
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverterData const aImplJOHABTextConverterData =
-{
-    &aImplJOHABDBCSCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplJOHABTextConverter =
-{
-    &aImplJOHABTextConverterData,
-    ImplDBCSToUnicode,
-    ImplUnicodeToDBCS,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
 /* ======================================================================= */
 
-static ImplTextEncodingData const aImplMS1361TextEncodingData =
-{
-    &aImplJOHABTextConverter,
-    RTL_TEXTENCODING_MS_1361,
-    1, 2, 2,
-    130,
-    1361,
-    3,
-    (const sal_Char*)"euc-kr",
-    (const sal_Char*)"euc-kr",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MULTIBYTE |
-    RTL_TEXTENCODING_INFO_MIME,
-    SCRIPT_KOREAN
-};
+static ImplTextEncodingData const aImplMS1361TextEncodingData
+    = { { &aImplJOHABDBCSCvtData,
+          ImplDBCSToUnicode,
+          ImplUnicodeToDBCS,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_MS_1361,
+        1,
+        2,
+        2,
+        130,
+        "euc-kr",
+        "euc-kr",
+        RTL_TEXTENCODING_INFO_ASCII
+            | RTL_TEXTENCODING_INFO_MULTIBYTE
+            | RTL_TEXTENCODING_INFO_MIME };
+    /* SCRIPT_KOREAN, pc code page 1361, mac encoding 3 */

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: tcvtsym1.tab,v $
+ *  $RCSfile: gettextencodingdata.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
@@ -42,13 +42,13 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
  *  Copyright: 2000 by Sun Microsystems, Inc.
  *
@@ -59,24 +59,29 @@
  *
  ************************************************************************/
 
-/* Symbol Font Encodings */
+#ifndef INCLUDED_RTL_TEXTENC_GETTEXTENCODINGDATA_H
+#define INCLUDED_RTL_TEXTENC_GETTEXTENCODINGDATA_H
 
-static ImplTextEncodingData const aImplSYMBOLTextEncodingData
-    = { { NULL,
-          ImplSymbolToUnicode,
-          ImplUnicodeToSymbol,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL },
-        RTL_TEXTENCODING_SYMBOL,
-        1,
-        1,
-        1,
-        2,
-        "adobe-fontspecific",
-        "invariant",
-        RTL_TEXTENCODING_INFO_SYMBOL };
-    /* SCRIPT_SYMBOL, pc code page 65400, mac encoding 32 */
+#ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
+#include "tenchelp.h"
+#endif
+
+#ifndef _RTL_TEXTENC_H
+#include "rtl/textenc.h"
+#endif
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+
+#if defined __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+ImplTextEncodingData const *
+Impl_getTextEncodingData(rtl_TextEncoding nEncoding) SAL_THROW_EXTERN_C();
+
+#if defined __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* INCLUDED_RTL_TEXTENC_GETTEXTENCODINGDATA_H */

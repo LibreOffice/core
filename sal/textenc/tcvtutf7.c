@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtutf7.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:30 $
+ *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,15 @@
  *
  ************************************************************************/
 
-#define _RTL_CCVTUTF7_C
+#ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
+#include "tenchelp.h"
+#endif
 
 #ifndef _RTL_ALLOC_H
-#include <rtl/alloc.h>
-#endif
-
-#ifndef _RTL_TENCHELP_H
-#include <tenchelp.h>
+#include "rtl/alloc.h"
 #endif
 #ifndef _RTL_TEXTCVT_H
-#include <rtl/textcvt.h>
+#include "rtl/textcvt.h"
 #endif
 
 /* ======================================================================= */
@@ -139,7 +137,7 @@ static sal_uChar const aImplMustShiftTab[128] =
 
 /* ----------------------------------------------------------------------- */
 
-typedef struct _ImplUTF7ToUCContextData
+typedef struct
 {
     int                     mbShifted;
     int                     mbFirst;
@@ -439,7 +437,7 @@ sal_Size ImplUTF7ToUnicode( const ImplTextConverterData* pData, void* pContext,
 
 /* ======================================================================= */
 
-typedef struct _ImplUTF7FromUCContextData
+typedef struct
 {
     int                     mbShifted;
     sal_uInt32              mnBitBuffer;

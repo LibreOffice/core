@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtuni1.tab,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:30 $
+ *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,101 +59,51 @@
  *
  ************************************************************************/
 
-/* ======================================================================= */
+/* Unicode Encodings */
 
-/* This file contain the tables for all unicode enabled text encodings */
+static ImplTextEncodingData const aImplUTF7TextEncodingData
+    = { { NULL,
+          ImplUTF7ToUnicode,
+          ImplUnicodeToUTF7,
+          ImplUTF7CreateUTF7TextToUnicodeContext,
+          ImplUTF7DestroyTextToUnicodeContext,
+          ImplUTF7ResetTextToUnicodeContext,
+          ImplUTF7CreateUnicodeToTextContext,
+          ImplUTF7DestroyUnicodeToTextContext,
+          ImplUTF7ResetUnicodeToTextContext },
+        RTL_TEXTENCODING_UTF7,
+        1,
+        6,
+        1,
+        0,
+        "iso8859-1",
+        "utf-7",
+        RTL_TEXTENCODING_INFO_CONTEXT
+            | RTL_TEXTENCODING_INFO_UNICODE
+            | RTL_TEXTENCODING_INFO_7BIT
+            | RTL_TEXTENCODING_INFO_MULTIBYTE
+            | RTL_TEXTENCODING_INFO_MIME };
+    /* SCRIPT_UNICODE, pc code page 850 */
 
-/* ======================================================================= */
-
-/* UTF7 */
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverterData const aImplUTF7TextConverterData =
-{
-    NULL,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplUTF7TextConverter =
-{
-    &aImplUTF7TextConverterData,
-    ImplUTF7ToUnicode,
-    ImplUnicodeToUTF7,
-    ImplUTF7CreateUTF7TextToUnicodeContext,
-    ImplUTF7DestroyTextToUnicodeContext,
-    ImplUTF7ResetTextToUnicodeContext,
-    ImplUTF7CreateUnicodeToTextContext,
-    ImplUTF7DestroyUnicodeToTextContext,
-    ImplUTF7ResetUnicodeToTextContext
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplUTF7TextEncodingData =
-{
-    &aImplUTF7TextConverter,
-    RTL_TEXTENCODING_UTF7,
-    1, 6, 1,
-    0,
-    850,
-    0,
-    (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"utf-7",
-    RTL_TEXTENCODING_INFO_CONTEXT |
-    RTL_TEXTENCODING_INFO_UNICODE |
-    RTL_TEXTENCODING_INFO_7BIT |
-    RTL_TEXTENCODING_INFO_MULTIBYTE |
-    RTL_TEXTENCODING_INFO_MIME,
-    SCRIPT_UNICODE
-};
-
-/* ======================================================================= */
-
-/* UTF8 */
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverterData const aImplUTF8TextConverterData =
-{
-    NULL,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplUTF8TextConverter =
-{
-    &aImplUTF8TextConverterData,
-    ImplUTF8ToUnicode,
-    ImplUnicodeToUTF8,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplUTF8TextEncodingData =
-{
-    &aImplUTF8TextConverter,
-    RTL_TEXTENCODING_UTF8,
-    1, 6, 1,
-    0,
-    850,
-    0,
-    (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"utf-8",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_UNICODE |
-    RTL_TEXTENCODING_INFO_MULTIBYTE |
-    RTL_TEXTENCODING_INFO_MIME,
-    SCRIPT_UNICODE
-};
+static ImplTextEncodingData const aImplUTF8TextEncodingData
+    = { { NULL,
+          ImplUTF8ToUnicode,
+          ImplUnicodeToUTF8,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_UTF8,
+        1,
+        6,
+        1,
+        0,
+        "iso8859-1",
+        "utf-8",
+        RTL_TEXTENCODING_INFO_ASCII
+            | RTL_TEXTENCODING_INFO_UNICODE
+            | RTL_TEXTENCODING_INFO_MULTIBYTE
+            | RTL_TEXTENCODING_INFO_MIME };
+    /* SCRIPT_UNICODE, pc code page 850 */

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: tcvtsym1.tab,v $
+ *  $RCSfile: context.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
@@ -59,24 +59,28 @@
  *
  ************************************************************************/
 
-/* Symbol Font Encodings */
+#ifndef INCLUDED_RTL_TEXTENC_CONTEXT_H
+#include "context.h"
+#endif
 
-static ImplTextEncodingData const aImplSYMBOLTextEncodingData
-    = { { NULL,
-          ImplSymbolToUnicode,
-          ImplUnicodeToSymbol,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL },
-        RTL_TEXTENCODING_SYMBOL,
-        1,
-        1,
-        1,
-        2,
-        "adobe-fontspecific",
-        "invariant",
-        RTL_TEXTENCODING_INFO_SYMBOL };
-    /* SCRIPT_SYMBOL, pc code page 65400, mac encoding 32 */
+#ifndef _RTL_ALLOC_H_
+#include "rtl/alloc.h"
+#endif
+
+void * ImplCreateUnicodeToTextContext(void)
+{
+    void * pContext = rtl_allocateMemory(sizeof (ImplUnicodeToTextContext));
+    ((ImplUnicodeToTextContext *) pContext)->m_nHighSurrogate = 0;
+    return pContext;
+}
+
+void ImplResetUnicodeToTextContext(void * pContext)
+{
+    if (pContext)
+        ((ImplUnicodeToTextContext *) pContext)->m_nHighSurrogate = 0;
+}
+
+void ImplDestroyContext(void * pContext)
+{
+    rtl_freeMemory(pContext);
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: th $ $Date: 2001-08-22 09:52:54 $
+ *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,18 +59,28 @@
  *
  ************************************************************************/
 
-#define _RTL_TENCINFO_C
+#ifndef _RTL_TENCINFO_H
+#include "rtl/tencinfo.h"
+#endif
 
-#include <string.h>
+#ifndef INCLUDED_RTL_TEXTENC_GETTEXTENCODINGDATA_H
+#include "gettextencodingdata.h"
+#endif
+#ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
+#include "tenchelp.h"
+#endif
 
 #ifndef _RTL_ALLOC_H
-#include <rtl/alloc.h>
+#include "rtl/alloc.h"
 #endif
-#ifndef _RTL_TENCINFO_H
-#include <rtl/tencinfo.h>
+
+#ifndef INCLUDED_STDDEF_H
+#include <stddef.h>
+#define INCLUDED_STDDEF_H
 #endif
-#ifndef _RTL_TENCHELP_H
-#include <tenchelp.h>
+#ifndef INCLUDED_STRING_H
+#include <string.h>
+#define INCLUDED_STRING_H
 #endif
 
 /* ======================================================================= */
@@ -139,13 +149,13 @@ static sal_Bool Impl_matchString( const sal_Char* pCompStr, const sal_Char* pMat
 
 /* ======================================================================= */
 
-typedef struct _ImplStrCharsetDef
+typedef struct
 {
     const sal_Char*             mpCharsetStr;
     rtl_TextEncoding            meTextEncoding;
 } ImplStrCharsetDef;
 
-typedef struct _ImplStrFirstPartCharsetDef
+typedef struct
 {
     const sal_Char*             mpCharsetStr;
     const ImplStrCharsetDef*    mpSecondPartTab;
@@ -954,36 +964,14 @@ sal_uInt8 SAL_CALL rtl_getBestWindowsCharsetFromTextEncoding( rtl_TextEncoding e
 }
 
 /* ----------------------------------------------------------------------- */
-/*
-sal_uInt32 SAL_CALL rtl_getBestPCCodePageFromTextEncoding( rtl_TextEncoding eTextEncoding  )
-{
-    const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
-    if ( pData )
-        return pData->mnBestPCCodePage;
-    else
-        return 0;
-}
-*/
-/* ----------------------------------------------------------------------- */
-/*
-sal_uInt32 SAL_CALL rtl_getBestMacTextEncodingFromTextEncoding( rtl_TextEncoding eTextEncoding )
-{
-    const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
-    if ( pData )
-        return pData->mnBestMacTextEncoding;
-    else
-        return 0xFFFFFFFF;
-}
-*/
-/* ----------------------------------------------------------------------- */
 
 const sal_Char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding  )
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
-        return pData->mpBestUnixCharset;
+        return (sal_Char const *) pData->mpBestUnixCharset;
     else if( eTextEncoding == RTL_TEXTENCODING_UNICODE )
-        return "iso10646-1";
+        return (sal_Char const *) "iso10646-1";
     else
         return 0;
 }
@@ -994,7 +982,7 @@ const sal_Char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncodin
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
-        return pData->mpBestMimeCharset;
+        return (sal_Char const *) pData->mpBestMimeCharset;
     else
         return 0;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tenchelp.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-05-18 13:53:18 $
+ *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,159 +59,114 @@
  *
  ************************************************************************/
 
-#ifndef _RTL_TENCHELP_H
-#define _RTL_TENCHELP_H
+#ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
+#define INCLUDED_RTL_TEXTENC_TENCHELP_H
 
-#ifndef _RTL_TEXTENC_H
-#include <rtl/textenc.h>
-#endif
 #ifndef _RTL_TENCINFO_H
-#include <rtl/tencinfo.h>
+#include "rtl/tencinfo.h"
+#endif
+#ifndef _RTL_TEXTENC_H
+#include "rtl/textenc.h"
+#endif
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
 #endif
 
-/* ----------- */
-/* - Scripts - */
-/* ----------- */
+#if defined __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
-typedef sal_uInt16 rtl_Script;
-#define SCRIPT_DONTKNOW             ((rtl_Script)0)
-#define SCRIPT_UNICODE              ((rtl_Script)1)
-#define SCRIPT_SYMBOL               ((rtl_Script)2)
-#define SCRIPT_LATIN                ((rtl_Script)3)
-#define SCRIPT_EASTEUROPE           ((rtl_Script)4)
-#define SCRIPT_CYRILLIC             ((rtl_Script)5)
-#define SCRIPT_BALTIC               ((rtl_Script)6)
-#define SCRIPT_TURKISH              ((rtl_Script)7)
-#define SCRIPT_GREEK                ((rtl_Script)8)
-#define SCRIPT_JAPANESE             ((rtl_Script)9)
-#define SCRIPT_CHINESE_SIMPLIFIED   ((rtl_Script)10)
-#define SCRIPT_CHINESE_TRADITIONAL  ((rtl_Script)11)
-#define SCRIPT_KOREAN               ((rtl_Script)12)
-#define SCRIPT_ARABIC               ((rtl_Script)13)
-#define SCRIPT_HEBREW               ((rtl_Script)14)
-#define SCRIPT_ARMENIAN             ((rtl_Script)15)
-#define SCRIPT_DEVANAGARI           ((rtl_Script)16)
-#define SCRIPT_BENGALI              ((rtl_Script)17)
-#define SCRIPT_GURMUKHI             ((rtl_Script)18)
-#define SCRIPT_GUJARATI             ((rtl_Script)19)
-#define SCRIPT_ORIYA                ((rtl_Script)20)
-#define SCRIPT_TAMIL                ((rtl_Script)21)
-#define SCRIPT_TELUGU               ((rtl_Script)22)
-#define SCRIPT_KANNADA              ((rtl_Script)23)
-#define SCRIPT_MALAYALAM            ((rtl_Script)24)
-#define SCRIPT_THAI                 ((rtl_Script)25)
-#define SCRIPT_VIETNAMESE           ((rtl_Script)26)
-#define SCRIPT_LAO                  ((rtl_Script)27)
-#define SCRIPT_GEORGIEN             ((rtl_Script)28)
+#define RTL_UNICODE_START_HIGH_SURROGATES 0xD800
+#define RTL_UNICODE_END_HIGH_SURROGATES 0xDBFF
+#define RTL_UNICODE_START_LOW_SURROGATES 0xDC00
+#define RTL_UNICODE_END_LOW_SURROGATES 0xDFFF
 
-/* -------- */
-/* - Help - */
-/* -------- */
+#define RTL_UNICODE_CHAR_DEFAULT 0xFFFD
 
-#ifndef NULL
-#define NULL    ((void*)0)
-#endif
-
-#define RTL_UNICODE_START_HIGH_SURROGATES                   0xD800
-#define RTL_UNICODE_END_HIGH_SURROGATES                     0xDBFF
-#define RTL_UNICODE_START_LOW_SURROGATES                    0xDC00
-#define RTL_UNICODE_END_LOW_SURROGATES                      0xDFFF
-
-#define RTL_UNICODE_SURROGATES_HALFMASK                     0x03FFUL
-#define RTL_UNICODE_SURROGATES_HALFBASE                     0x0010000UL
-#define RTL_UNICODE_SURROGATES_HALFSHIFT                    10
-
-#define RTL_UNICODE_CHAR_DEFAULT                            0xFFFD
-
-#define RTL_TEXTCVT_BYTE_PRIVATE_START                      0xF100
-#define RTL_TEXTCVT_BYTE_PRIVATE_END                        0xF1FF
+#define RTL_TEXTCVT_BYTE_PRIVATE_START 0xF100
+#define RTL_TEXTCVT_BYTE_PRIVATE_END 0xF1FF
 
 /* ----------------- */
 /* - TextConverter - */
 /* ----------------- */
 
-typedef struct _ImplTextConverterData
-{
-    const void*                     mpConvertTables;
-    sal_Char*                       mpTextDefChar;
-    sal_Unicode                     mcUnicodeDefChar;
-} ImplTextConverterData;
+typedef void ImplTextConverterData;
 
-typedef sal_Size (*ImplConvertToUnicodeProc)( const ImplTextConverterData* pData,
-                                              void* pContext,
-                                              const sal_Char* pSrcBuf, sal_Size nSrcBytes,
-                                              sal_Unicode* pDestBuf, sal_Size nDestChars,
-                                              sal_uInt32 nFlags, sal_uInt32* pInfo,
-                                              sal_Size* pSrcCvtBytes );
-typedef sal_Size (*ImplConvertToTextProc)( const ImplTextConverterData* pData,
-                                           void* pContext,
-                                           const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                                           sal_Char* pDestBuf, sal_Size nDestBytes,
-                                           sal_uInt32 nFlags, sal_uInt32* pInfo,
-                                           sal_Size* pSrcCvtChars );
-typedef void* (*ImplCreateTextContextProc)( void );
-typedef void  (*ImplDestroyTextContextProc)( void* pContext );
-typedef void  (*ImplResetTextContextProc)( void* pContext );
-typedef void* (*ImplCreateUnicodeContextProc)( void );
-typedef void  (*ImplDestroyUnicodeContextProc)( void* pContext );
-typedef void  (*ImplResetUnicodeContextProc)( void* pContext );
+typedef
+sal_Size (* ImplConvertToUnicodeProc)(ImplTextConverterData const * pData,
+                                      void * pContext,
+                                      sal_Char const * pSrcBuf,
+                                      sal_Size nSrcBytes,
+                                      sal_Unicode * pDestBuf,
+                                      sal_Size nDestChars,
+                                      sal_uInt32 nFlags,
+                                      sal_uInt32 * pInfo,
+                                      sal_Size * pSrcCvtBytes);
 
-typedef struct _ImplTextConverter
+typedef
+sal_Size (* ImplConvertToTextProc)(ImplTextConverterData const * pData,
+                                   void * pContext,
+                                   sal_Unicode const * pSrcBuf,
+                                   sal_Size nSrcChars,
+                                   sal_Char * pDestBuf,
+                                   sal_Size nDestBytes,
+                                   sal_uInt32 nFlags,
+                                   sal_uInt32 * pInfo,
+                                   sal_Size * pSrcCvtChars);
+
+typedef void * (* ImplCreateTextContextProc)(void);
+
+typedef void (* ImplDestroyTextContextProc)(void * pContext);
+
+typedef void (* ImplResetTextContextProc)(void * pContext);
+
+typedef void * (* ImplCreateUnicodeContextProc)(void);
+
+typedef void (* ImplDestroyUnicodeContextProc)(void * pContext);
+
+typedef void (* ImplResetUnicodeContextProc)(void * pContext);
+
+typedef struct
 {
-    const ImplTextConverterData*    mpConvertData;
-    ImplConvertToUnicodeProc        mpConvertTextToUnicodeProc;
-    ImplConvertToTextProc           mpConvertUnicodeToTextProc;
-    ImplCreateTextContextProc       mpCreateTextToUnicodeContext;
-    ImplDestroyTextContextProc      mpDestroyTextToUnicodeContext;
-    ImplResetTextContextProc        mpResetTextToUnicodeContext;
-    ImplCreateUnicodeContextProc    mpCreateUnicodeToTextContext;
-    ImplDestroyUnicodeContextProc   mpDestroyUnicodeToTextContext;
-    ImplResetUnicodeContextProc     mpResetUnicodeToTextContext;
+    ImplTextConverterData const * mpConvertData;
+    ImplConvertToUnicodeProc mpConvertTextToUnicodeProc;
+    ImplConvertToTextProc mpConvertUnicodeToTextProc;
+    ImplCreateTextContextProc mpCreateTextToUnicodeContext;
+    ImplDestroyTextContextProc mpDestroyTextToUnicodeContext;
+    ImplResetTextContextProc mpResetTextToUnicodeContext;
+    ImplCreateUnicodeContextProc mpCreateUnicodeToTextContext;
+    ImplDestroyUnicodeContextProc mpDestroyUnicodeToTextContext;
+    ImplResetUnicodeContextProc mpResetUnicodeToTextContext;
 } ImplTextConverter;
-
-#define RTL_TEXTTOUNICODECONTEXT_NOTUSED    ((rtl_TextToUnicodeContext)1)
-#define RTL_UNICODETOTEXTCONTEXT_NOTUSED    ((rtl_UnicodeToTextContext)1)
-
-/* ---------------------------- */
-/* - TextEncoding - InfoFlags - */
-/* ---------------------------- */
-
-#define RTL_TEXTENCODING_INFO_WIN       ((sal_uInt32)0x0100)
-#define RTL_TEXTENCODING_INFO_DOS_OS2   ((sal_uInt32)0x0200)
-#define RTL_TEXTENCODING_INFO_MAC       ((sal_uInt32)0x0400)
 
 /* ----------------------------- */
 /* - TextEncoding - Structures - */
 /* ----------------------------- */
 
-typedef struct _ImplTextEncodingData
+typedef struct
 {
-    const ImplTextConverter*        mpConverter;
-    rtl_TextEncoding                meTextEncoding;
-    sal_uInt8                       mnMinCharSize;
-    sal_uInt8                       mnMaxCharSize;
-    sal_uInt8                       mnAveCharSize;
-    sal_uInt8                       mnBestWindowsCharset;
-    sal_uInt32                      mnBestPCCodePage;
-    sal_uInt32                      mnBestMacTextEncoding;
-    const sal_Char*                 mpBestUnixCharset;
-    const sal_Char*                 mpBestMimeCharset;
-    sal_uInt32                      mnInfoFlags;
-    rtl_Script                      mnScript;
+    ImplTextConverter maConverter;
+    rtl_TextEncoding meTextEncoding;
+    sal_uInt8 mnMinCharSize;
+    sal_uInt8 mnMaxCharSize;
+    sal_uInt8 mnAveCharSize;
+    sal_uInt8 mnBestWindowsCharset;
+    char const * mpBestUnixCharset;
+    char const * mpBestMimeCharset;
+    sal_uInt32 mnInfoFlags;
 } ImplTextEncodingData;
-
 
 /* ----------------------------------- */
 /* - TextConverter - Byte-Structures - */
 /* ----------------------------------- */
 
-typedef struct _ImplUniCharTabData
+typedef struct
 {
     sal_uInt16                      mnUniChar;
     sal_uChar                       mnChar;
 } ImplUniCharTabData;
 
-typedef struct _ImplByteConvertData
+typedef struct
 {
     const sal_uInt16*               mpToUniTab1;
     const sal_uInt16*               mpToUniTab2;
@@ -233,7 +188,7 @@ typedef struct _ImplByteConvertData
 /* - TextConverter - DBCS-Structures - */
 /* ----------------------------------- */
 
-typedef struct _ImplDBCSEUDCData
+typedef struct
 {
     sal_uChar                       mnLeadStart;
     sal_uChar                       mnLeadEnd;
@@ -249,7 +204,7 @@ typedef struct _ImplDBCSEUDCData
     sal_uInt16                      mnUniEnd;
 } ImplDBCSEUDCData;
 
-typedef struct _ImplDBCSToUniLeadTab
+typedef struct
 {
     sal_uInt16                      mnUniChar;
     sal_uInt8                       mnTrailStart;
@@ -257,14 +212,14 @@ typedef struct _ImplDBCSToUniLeadTab
     const sal_uInt16*               mpToUniTrailTab;
 } ImplDBCSToUniLeadTab;
 
-typedef struct _ImplUniToDBCSHighTab
+typedef struct
 {
     sal_uInt8                       mnLowStart;
     sal_uInt8                       mnLowEnd;
     const sal_uInt16*               mpToUniTrailTab;
 } ImplUniToDBCSHighTab;
 
-typedef struct _ImplDBCSConvertData
+typedef struct
 {
     const ImplDBCSToUniLeadTab*     mpToUniLeadTab;
     const ImplUniToDBCSHighTab*     mpToDBCSHighTab;
@@ -278,7 +233,7 @@ typedef struct _ImplDBCSConvertData
 /* - TextConverter - EUC-Structures - */
 /* ---------------------------------- */
 
-typedef struct _ImplEUCJPConvertData
+typedef struct
 {
     const ImplDBCSToUniLeadTab*     mpJIS0208ToUniLeadTab;
     const ImplDBCSToUniLeadTab*     mpJIS0212ToUniLeadTab;
@@ -286,32 +241,21 @@ typedef struct _ImplEUCJPConvertData
     const ImplUniToDBCSHighTab*     mpUniToJIS0212HighTab;
 } ImplEUCJPConvertData;
 
-/* -------------------------------------- */
-/* - TextConverter - ISO2022-Structures - */
-/* -------------------------------------- */
-
-/* ---------------------------- */
-/* - TextEncoding - Functions - */
-/* ---------------------------- */
-
-const ImplTextEncodingData* Impl_getTextEncodingData( rtl_TextEncoding eTextEncoding );
-
 /* --------------------------------- */
 /* - TextConverter - HelpFunctions - */
 /* --------------------------------- */
 
-sal_Unicode ImplGetUndefinedUnicodeChar( sal_uChar c, sal_uInt32 nFlags, const ImplTextConverterData* pData );
-sal_Size ImplGetUndefinedAsciiMultiByte( sal_uInt32 nFlags, const ImplTextConverterData* pData, sal_Char* pBuf, sal_Size nMaxLen );
-sal_Size ImplGetInvalidAsciiMultiByte( sal_uInt32 nFlags, const ImplTextConverterData* pData, sal_Char* pBuf, sal_Size nMaxLen );
+sal_Unicode ImplGetUndefinedUnicodeChar(sal_uChar cChar, sal_uInt32 nFlags);
 
-#define IMPL_TEXTCVT_BREAK          1
-#define IMPL_TEXTCVT_CONTINUE       2
-int ImplHandleUndefinedUnicodeToTextChar( const ImplTextConverterData* pData,
-                                          const sal_Unicode** ppSrcBuf, const sal_Unicode* pEndSrcBuf,
-                                          sal_Char** ppDestBuf, const sal_Char* pEndDestBuf,
-                                          sal_uInt32 nFlags, sal_uInt32* pInfo );
-
-int ImplIsUnicodeIgnoreChar( sal_Unicode c, sal_uInt32 nFlags );
+sal_Bool
+ImplHandleUndefinedUnicodeToTextChar(ImplTextConverterData const * pData,
+                                     sal_Unicode const ** ppSrcBuf,
+                                     sal_Unicode const * pEndSrcBuf,
+                                     sal_Char ** ppDestBuf,
+                                     sal_Char const * pEndDestBuf,
+                                     sal_uInt32 nFlags,
+                                     sal_uInt32 * pInfo);
+    /* sal_True means 'continue,' sal_False means 'break' */
 
 /* ----------------------------- */
 /* - TextConverter - Functions - */
@@ -382,12 +326,8 @@ sal_Size ImplUnicodeToUTF8( const ImplTextConverterData* pData, void* pContext,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtChars );
 
-/* ------------------------------------ */
-/* - TextConverter - ReplaceFunctions - */
-/* ------------------------------------ */
+#if defined __cplusplus
+}
+#endif /* __cplusplus */
 
-#define IMPL_MAX_REPLACECHAR            5
-sal_uInt16 ImplGetReplaceChar( sal_Unicode c );
-const sal_uInt16* ImplGetReplaceString( sal_Unicode c );
-
-#endif /* _RTL_CCVTHELP_HXX */
+#endif /* INCLUDED_RTL_TEXTENC_TENCHELP_H */

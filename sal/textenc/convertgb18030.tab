@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: tcvtsym1.tab,v $
+ *  $RCSfile: convertgb18030.tab,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
@@ -59,24 +59,49 @@
  *
  ************************************************************************/
 
-/* Symbol Font Encodings */
+#ifndef INCLUDED_RTL_TEXTENC_CONTEXT_H
+#include "context.h"
+#endif
+#ifndef INCLUDED_RTL_TEXTENC_CONVERTGB18030_H
+#include "convertgb18030.h"
+#endif
 
-static ImplTextEncodingData const aImplSYMBOLTextEncodingData
-    = { { NULL,
-          ImplSymbolToUnicode,
-          ImplUnicodeToSymbol,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL },
-        RTL_TEXTENCODING_SYMBOL,
+#ifndef _RTL_TENCINFO_H
+#include "rtl/tencinfo.h"
+#endif
+#ifndef _RTL_TEXTENC_H
+#include "rtl/textenc.h"
+#endif
+
+#ifndef INCLUDED_STDDEF_H
+#include <stddef.h>
+#define INCLUDED_STDDEF_H
+#endif
+
+#include "generate/gb180302000.tab"
+
+static ImplGb18030ConverterData const aImplGb18030ConvertData
+    = { aImplGb180302000ToUnicodeData,
+        aImplGb180302000ToUnicodeRanges,
+        aImplUnicodeToGb180302000Data,
+        aImplUnicodeToGb180302000Ranges };
+
+static ImplTextEncodingData const aImplGb18030TextEncodingData
+    = { { &aImplGb18030ConvertData,
+          &ImplConvertGb18030ToUnicode,
+          &ImplConvertUnicodeToGb18030,
+          &ImplCreateGb18030ToUnicodeContext,
+          &ImplDestroyContext,
+          &ImplResetGb18030ToUnicodeContext,
+          &ImplCreateUnicodeToTextContext,
+          &ImplDestroyContext,
+          &ImplResetUnicodeToTextContext },
+        RTL_TEXTENCODING_GB_18030,
         1,
-        1,
-        1,
+        4,
         2,
-        "adobe-fontspecific",
-        "invariant",
-        RTL_TEXTENCODING_INFO_SYMBOL };
-    /* SCRIPT_SYMBOL, pc code page 65400, mac encoding 32 */
+        0, /* TODO! */
+        NULL, /* TODO! */
+        "UTF-8",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+    /* SCRIPT_CHINESE_SIMPLIFIED */

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: tcvtsym1.tab,v $
+ *  $RCSfile: converter.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
@@ -59,24 +59,42 @@
  *
  ************************************************************************/
 
-/* Symbol Font Encodings */
+#ifndef INCLUDED_RTL_TEXTENC_CONVERTER_H
+#define INCLUDED_RTL_TEXTENC_CONVERTER_H
 
-static ImplTextEncodingData const aImplSYMBOLTextEncodingData
-    = { { NULL,
-          ImplSymbolToUnicode,
-          ImplUnicodeToSymbol,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL },
-        RTL_TEXTENCODING_SYMBOL,
-        1,
-        1,
-        1,
-        2,
-        "adobe-fontspecific",
-        "invariant",
-        RTL_TEXTENCODING_INFO_SYMBOL };
-    /* SCRIPT_SYMBOL, pc code page 65400, mac encoding 32 */
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+
+#if defined __cplusplus
+extern "C" {
+#endif /* __cpluscplus */
+
+typedef enum
+{
+    IMPL_BAD_INPUT_STOP,
+    IMPL_BAD_INPUT_CONTINUE,
+    IMPL_BAD_INPUT_NO_OUTPUT
+} ImplBadInputConversionAction;
+
+ImplBadInputConversionAction
+ImplHandleBadInputMbTextToUnicodeConversion(sal_Bool bUndefined,
+                                            sal_uInt32 nFlags,
+                                            sal_Unicode ** pDestBufPtr,
+                                            sal_Unicode * pDestBufEnd,
+                                            sal_uInt32 * pInfo)
+    SAL_THROW_EXTERN_C();
+
+ImplBadInputConversionAction
+ImplHandleBadInputUnicodeToTextConversion(sal_Bool bUndefined,
+                                          sal_uInt32 nFlags,
+                                          sal_Char ** pDestBufPtr,
+                                          sal_Char * pDestBufEnd,
+                                          sal_uInt32 * pInfo)
+    SAL_THROW_EXTERN_C();
+
+#if defined __cplusplus
+}
+#endif /* __cpluscplus */
+
+#endif /* INCLUDED_RTL_TEXTENC_CONVERTER_H */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtmb.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-19 14:02:35 $
+ *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,12 @@
  *
  ************************************************************************/
 
-#define _RTL_TCVTMB_C
-
-#ifndef _RTL_TENCHELP_H
-#include <tenchelp.h>
+#ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
+#include "tenchelp.h"
 #endif
+
 #ifndef _RTL_TEXTCVT_H
-#include <rtl/textcvt.h>
+#include "rtl/textcvt.h"
 #endif
 
 /* ======================================================================= */
@@ -87,7 +86,7 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
     sal_uChar                   cTrail;
     sal_Unicode                 cConv;
     const ImplDBCSToUniLeadTab* pLeadEntry;
-    const ImplDBCSConvertData*  pConvertData = (const ImplDBCSConvertData*)(pData->mpConvertTables);
+    const ImplDBCSConvertData*  pConvertData = (const ImplDBCSConvertData*)pData;
     const ImplDBCSToUniLeadTab* pLeadTab = pConvertData->mpToUniLeadTab;
     sal_Unicode*                pEndDestBuf;
     const sal_Char*             pEndSrcBuf;
@@ -120,7 +119,7 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
                     continue;
                 }
                 else
-                    cConv = ImplGetUndefinedUnicodeChar( cLead, nFlags, pData );
+                    cConv = ImplGetUndefinedUnicodeChar(cLead, nFlags);
             }
         }
         else
@@ -259,13 +258,12 @@ sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtChars )
 {
-    int                         nAction;
     sal_uInt16                  cConv;
     sal_Unicode                 c;
     sal_uChar                   nHighChar;
     sal_uChar                   nLowChar;
     const ImplUniToDBCSHighTab* pHighEntry;
-    const ImplDBCSConvertData*  pConvertData = (const ImplDBCSConvertData*)(pData->mpConvertTables);
+    const ImplDBCSConvertData*  pConvertData = (const ImplDBCSConvertData*)pData;
     const ImplUniToDBCSHighTab* pHighTab = pConvertData->mpToDBCSHighTab;
     sal_Char*                   pEndDestBuf;
     const sal_Unicode*          pEndSrcBuf;
@@ -321,7 +319,8 @@ sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
                 pEUDCTab++;
             }
 
-            if ( (c >= 0xF100) && (c <= 0xF1FF) )
+            if (c >= RTL_TEXTCVT_BYTE_PRIVATE_START
+                && c <= RTL_TEXTCVT_BYTE_PRIVATE_END)
             {
                 if ( nFlags & RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 )
                     cConv = (sal_Char)(sal_uChar)(c & 0xFF);
@@ -342,14 +341,16 @@ sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
 
             /* Handle undefined and surrogates characters */
             /* (all surrogates characters are undefined) */
-            nAction = ImplHandleUndefinedUnicodeToTextChar( pData,
-                                                            &pSrcBuf, pEndSrcBuf,
-                                                            &pDestBuf, pEndDestBuf,
-                                                            nFlags, pInfo );
-            if ( nAction == IMPL_TEXTCVT_BREAK )
-                break;
-            else
+            if (ImplHandleUndefinedUnicodeToTextChar(pData,
+                                                     &pSrcBuf,
+                                                     pEndSrcBuf,
+                                                     &pDestBuf,
+                                                     pEndDestBuf,
+                                                     nFlags,
+                                                     pInfo))
                 continue;
+            else
+                break;
         }
 
         /* SingleByte */
@@ -405,7 +406,7 @@ sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
     sal_Unicode                 cConv;
     const ImplDBCSToUniLeadTab* pLeadEntry;
     const ImplDBCSToUniLeadTab* pLeadTab;
-    const ImplEUCJPConvertData* pConvertData = (const ImplEUCJPConvertData*)(pData->mpConvertTables);
+    const ImplEUCJPConvertData* pConvertData = (const ImplEUCJPConvertData*)pData;
     sal_Unicode*                pEndDestBuf;
     const sal_Char*             pEndSrcBuf;
 
@@ -562,14 +563,13 @@ sal_Size ImplUnicodeToEUCJP( const ImplTextConverterData* pData,
                              sal_uInt32 nFlags, sal_uInt32* pInfo,
                              sal_Size* pSrcCvtChars )
 {
-    int                         nAction;
     sal_uInt32                  cConv;
     sal_Unicode                 c;
     sal_uChar                   nHighChar;
     sal_uChar                   nLowChar;
     const ImplUniToDBCSHighTab* pHighEntry;
     const ImplUniToDBCSHighTab* pHighTab;
-    const ImplEUCJPConvertData* pConvertData = (const ImplEUCJPConvertData*)(pData->mpConvertTables);
+    const ImplEUCJPConvertData* pConvertData = (const ImplEUCJPConvertData*)pData;
     sal_Char*                   pEndDestBuf;
     const sal_Unicode*          pEndSrcBuf;
 
@@ -627,14 +627,16 @@ sal_Size ImplUnicodeToEUCJP( const ImplTextConverterData* pData,
 
                     /* Handle undefined and surrogates characters */
                     /* (all surrogates characters are undefined) */
-                    nAction = ImplHandleUndefinedUnicodeToTextChar( pData,
-                                                                    &pSrcBuf, pEndSrcBuf,
-                                                                    &pDestBuf, pEndDestBuf,
-                                                                    nFlags, pInfo );
-                    if ( nAction == IMPL_TEXTCVT_BREAK )
-                        break;
-                    else
+                    if (ImplHandleUndefinedUnicodeToTextChar(pData,
+                                                             &pSrcBuf,
+                                                             pEndSrcBuf,
+                                                             &pDestBuf,
+                                                             pEndDestBuf,
+                                                             nFlags,
+                                                             pInfo))
                         continue;
+                    else
+                        break;
                 }
             }
         }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2001-05-30 12:20:10 $
+#   last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -57,49 +57,54 @@
 #   Contributor(s): _______________________________________
 #
 #
-#
 #*************************************************************************
 
-PRJ=..
+PRJ = ..
+PRJNAME = sal
+TARGET = textenc
 
-PRJNAME=sal
-TARGET=textenc
+.INCLUDE: settings.mk
 
-# --- Settings -----------------------------------------------------
+SLOFILES = \
+    $(SLO)$/context.obj \
+    $(SLO)$/converter.obj \
+    $(SLO)$/converteuctw.obj \
+    $(SLO)$/convertgb18030.obj \
+    $(SLO)$/tcvtbyte.obj \
+    $(SLO)$/tcvtmb.obj \
+    $(SLO)$/tcvtutf7.obj \
+    $(SLO)$/tcvtutf8.obj \
+    $(SLO)$/tenchelp.obj \
+    $(SLO)$/tencinfo.obj \
+    $(SLO)$/textcvt.obj \
+    $(SLO)$/textenc.obj
 
-.INCLUDE :	svpre.mk
-.INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
+.IF "$(UPDATER)" != ""
 
-# --- Files --------------------------------------------------------
+OBJFILES = \
+    $(OBJ)$/context.obj \
+    $(OBJ)$/converter.obj \
+    $(OBJ)$/converteuctw.obj \
+    $(OBJ)$/convertgb18030.obj \
+    $(OBJ)$/tcvtbyte.obj \
+    $(OBJ)$/tcvtmb.obj \
+    $(OBJ)$/tcvtutf7.obj \
+    $(OBJ)$/tcvtutf8.obj \
+    $(OBJ)$/tenchelp.obj \
+    $(OBJ)$/tencinfo.obj \
+    $(OBJ)$/textcvt.obj \
+    $(OBJ)$/textenc.obj
 
-SLOFILES=	$(SLO)$/textenc.obj 	\
-            $(SLO)$/tencinfo.obj	\
-            $(SLO)$/tenchelp.obj	\
-            $(SLO)$/textcvt.obj 	\
-            $(SLO)$/tcvtbyte.obj	\
-            $(SLO)$/tcvtmb.obj		\
-            $(SLO)$/tcvtutf7.obj	\
-            $(SLO)$/tcvtutf8.obj
+.ENDIF # UPDATER
 
-.IF "$(UPDATER)"!=""
-OBJFILES=	$(OBJ)$/textenc.obj 	\
-            $(OBJ)$/tencinfo.obj	\
-            $(OBJ)$/tenchelp.obj	\
-            $(OBJ)$/textcvt.obj 	\
-            $(OBJ)$/tcvtbyte.obj	\
-            $(OBJ)$/tcvtmb.obj		\
-            $(OBJ)$/tcvtutf7.obj	\
-            $(OBJ)$/tcvtutf8.obj
-.ENDIF
+# Optimization off on Solaris Intel due to internal compiler error; to be
+# reevaluated after compiler upgrade:
+.IF "$(OS)$(CPU)" == "SOLARISI"
 
-# Optimization of on Solaris Intel due to internal compiler error
-# To be reevaluated after compiler upgrade
-.IF "$(OS)$(CPU)"=="SOLARISI"
-NOOPTFILES= \
-            $(SLO)$/textenc.obj     \
-            $(OBJ)$/textenc.obj
-.ENDIF
-# --- Targets ------------------------------------------------------
+NOOPTFILES = \
+    $(OBJ)$/textenc.obj \
+    $(SLO)$/textenc.obj
 
-.INCLUDE :	target.mk
+.ENDIF # OS, CPU, SOLARISI
+
+.INCLUDE: target.mk

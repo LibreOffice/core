@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textcvt.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:30 $
+ *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,15 @@
  *
  ************************************************************************/
 
-#define _RTL_TEXTCVT_C
-
-#ifndef _RTL_TENCHELP_H
-#include <tenchelp.h>
-#endif
 #ifndef _RTL_TEXTCVT_H
-#include <rtl/textcvt.h>
+#include "rtl/textcvt.h"
+#endif
+
+#ifndef INCLUDED_RTL_TEXTENC_GETTEXTENCODINGDATA_H
+#include "gettextencodingdata.h"
+#endif
+#ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
+#include "tenchelp.h"
 #endif
 
 /* ======================================================================= */
@@ -150,7 +152,7 @@ rtl_TextToUnicodeConverter SAL_CALL rtl_createTextToUnicodeConverter( rtl_TextEn
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
-        return (rtl_TextToUnicodeConverter)pData->mpConverter;
+        return (rtl_TextToUnicodeConverter) &pData->maConverter;
     else
         return 0;
 }
@@ -168,10 +170,10 @@ rtl_TextToUnicodeContext SAL_CALL rtl_createTextToUnicodeContext( rtl_TextToUnic
     const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
     if ( !pConverter )
         return 0;
-    if ( pConverter->mpCreateTextToUnicodeContext )
+    else if ( pConverter->mpCreateTextToUnicodeContext )
         return (rtl_TextToUnicodeContext)pConverter->mpCreateTextToUnicodeContext();
     else
-        return RTL_TEXTTOUNICODECONTEXT_NOTUSED;
+        return (rtl_TextToUnicodeContext)1;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -228,7 +230,7 @@ rtl_UnicodeToTextConverter SAL_CALL rtl_createUnicodeToTextConverter( rtl_TextEn
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
-        return (rtl_TextToUnicodeConverter)pData->mpConverter;
+        return (rtl_TextToUnicodeConverter) &pData->maConverter;
     else
         return 0;
 }
@@ -246,10 +248,10 @@ rtl_UnicodeToTextContext SAL_CALL rtl_createUnicodeToTextContext( rtl_UnicodeToT
     const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
     if ( !pConverter )
         return 0;
-    if ( pConverter->mpCreateUnicodeToTextContext )
+    else if ( pConverter->mpCreateUnicodeToTextContext )
         return (rtl_UnicodeToTextContext)pConverter->mpCreateUnicodeToTextContext();
     else
-        return RTL_UNICODETOTEXTCONTEXT_NOTUSED;
+        return (rtl_UnicodeToTextContext)1;
 }
 
 /* ----------------------------------------------------------------------- */

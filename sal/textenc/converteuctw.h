@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: tcvtsym1.tab,v $
+ *  $RCSfile: converteuctw.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
@@ -59,24 +59,59 @@
  *
  ************************************************************************/
 
-/* Symbol Font Encodings */
+#ifndef INCLUDED_RTL_TEXTENC_CONVERTEUCTW_H
+#define INCLUDED_RTL_TEXTENC_CONVERTEUCTW_H
 
-static ImplTextEncodingData const aImplSYMBOLTextEncodingData
-    = { { NULL,
-          ImplSymbolToUnicode,
-          ImplUnicodeToSymbol,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL },
-        RTL_TEXTENCODING_SYMBOL,
-        1,
-        1,
-        1,
-        2,
-        "adobe-fontspecific",
-        "invariant",
-        RTL_TEXTENCODING_INFO_SYMBOL };
-    /* SCRIPT_SYMBOL, pc code page 65400, mac encoding 32 */
+#ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
+#include "tenchelp.h"
+#endif
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+
+#if defined __cplusplus
+extern "C" {
+#endif /* __cpluscplus */
+
+typedef struct
+{
+    sal_Unicode const * m_pCns116431992ToUnicodeData;
+    sal_Int32 const * m_pCns116431992ToUnicodeRowOffsets;
+    sal_Int32 const * m_pCns116431992ToUnicodePlaneOffsets;
+    sal_uInt32 const * m_pUnicodeToCns116431992Data;
+    sal_Int32 const * m_pUnicodeToCns116431992PageOffsets;
+    sal_Int32 const * m_pUnicodeToCns116431992PlaneOffsets;
+} ImplEucTwConverterData;
+
+void * ImplCreateEucTwToUnicodeContext(void) SAL_THROW_EXTERN_C();
+
+void ImplResetEucTwToUnicodeContext(void * pContext) SAL_THROW_EXTERN_C();
+
+sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
+                                   void * pContext,
+                                   sal_Char const * pSrcBuf,
+                                   sal_Size nSrcBytes,
+                                   sal_Unicode * pDestBuf,
+                                   sal_Size nDestChars,
+                                   sal_uInt32 nFlags,
+                                   sal_uInt32 * pInfo,
+                                   sal_Size * pSrcCvtBytes)
+    SAL_THROW_EXTERN_C();
+
+sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
+                                   void * pContext,
+                                   sal_Unicode const * pSrcBuf,
+                                   sal_Size nSrcChars,
+                                   sal_Char * pDestBuf,
+                                   sal_Size nDestBytes,
+                                   sal_uInt32 nFlags,
+                                   sal_uInt32 * pInfo,
+                                   sal_Size * pSrcCvtChars)
+    SAL_THROW_EXTERN_C();
+
+#if defined __cplusplus
+}
+#endif /* __cpluscplus */
+
+#endif /* INCLUDED_RTL_TEXTENC_CONVERTEUCTW_H */

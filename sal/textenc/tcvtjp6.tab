@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtjp6.tab,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2000-12-13 22:22:57 $
+ *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,45 +616,27 @@ static ImplDBCSConvertData const aImplSJISDBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplSJISTextConverterData =
-{
-    &aImplSJISDBCSCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplSJISTextConverter =
-{
-    &aImplSJISTextConverterData,
-    ImplDBCSToUnicode,
-    ImplUnicodeToDBCS,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplSJISTextEncodingData =
-{
-    &aImplSJISTextConverter,
-    RTL_TEXTENCODING_SHIFT_JIS,
-    1, 2, 2,
-    128,
-    932,
-    1,
-    (const sal_Char*)"euc-jp",
-    (const sal_Char*)"shift_jis",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MULTIBYTE |
-    RTL_TEXTENCODING_INFO_MIME,
-    SCRIPT_JAPANESE
-};
+static ImplTextEncodingData const aImplSJISTextEncodingData
+    = { { &aImplSJISDBCSCvtData,
+          ImplDBCSToUnicode,
+          ImplUnicodeToDBCS,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_SHIFT_JIS,
+        1,
+        2,
+        2,
+        128,
+        "euc-jp",
+        "shift_jis",
+        RTL_TEXTENCODING_INFO_ASCII
+            | RTL_TEXTENCODING_INFO_MULTIBYTE
+            | RTL_TEXTENCODING_INFO_MIME };
+    /* SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */
 
 /* ======================================================================= */
 
@@ -1193,46 +1175,25 @@ static ImplDBCSConvertData const aImplMS932DBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplMS932TextConverterData =
-{
-    &aImplMS932DBCSCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplMS932TextConverter =
-{
-    &aImplMS932TextConverterData,
-    ImplDBCSToUnicode,
-    ImplUnicodeToDBCS,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplMS932TextEncodingData =
-{
-    &aImplMS932TextConverter,
-    RTL_TEXTENCODING_MS_932,
-    1, 2, 2,
-    128,
-    932,
-    1,
-    (const sal_Char*)"euc-jp",
-    (const sal_Char*)"shift_jis",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MULTIBYTE |
-    RTL_TEXTENCODING_INFO_WIN |
-    RTL_TEXTENCODING_INFO_DOS_OS2,
-    SCRIPT_JAPANESE
-};
+static ImplTextEncodingData const aImplMS932TextEncodingData
+    = { { &aImplMS932DBCSCvtData,
+          ImplDBCSToUnicode,
+          ImplUnicodeToDBCS,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_MS_932,
+        1,
+        2,
+        2,
+        128,
+        "euc-jp",
+        "shift_jis",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+    /* WIN/DOS/OS2, SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */
 
 /* ======================================================================= */
 
@@ -1771,45 +1732,25 @@ static ImplDBCSConvertData const aImplAPPLEJAPANESEDBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplAPPLEJAPANESETextConverterData =
-{
-    &aImplAPPLEJAPANESEDBCSCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplAPPLEJAPANESETextConverter =
-{
-    &aImplAPPLEJAPANESETextConverterData,
-    ImplDBCSToUnicode,
-    ImplUnicodeToDBCS,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplAPPLEJAPANESETextEncodingData =
-{
-    &aImplAPPLEJAPANESETextConverter,
-    RTL_TEXTENCODING_APPLE_JAPANESE,
-    1, 2, 2,
-    128,
-    932,
-    1,
-    (const sal_Char*)"euc-jp",
-    (const sal_Char*)"shift_jis",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MULTIBYTE |
-    RTL_TEXTENCODING_INFO_MAC,
-    SCRIPT_JAPANESE
-};
+static ImplTextEncodingData const aImplAPPLEJAPANESETextEncodingData
+    = { { &aImplAPPLEJAPANESEDBCSCvtData,
+          ImplDBCSToUnicode,
+          ImplUnicodeToDBCS,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_APPLE_JAPANESE,
+        1,
+        2,
+        2,
+        128,
+        "euc-jp",
+        "shift_jis",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+    /* MAC, SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */
 
 /* ======================================================================= */
 
@@ -2615,45 +2556,27 @@ static ImplEUCJPConvertData const aImplEUCJPCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplEUCJPTextConverterData =
-{
-    &aImplEUCJPCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplEUCJPTextConverter =
-{
-    &aImplEUCJPTextConverterData,
-    ImplEUCJPToUnicode,
-    ImplUnicodeToEUCJP,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplEUCJPTextEncodingData =
-{
-    &aImplEUCJPTextConverter,
-    RTL_TEXTENCODING_EUC_JP,
-    1, 3, 2,
-    128,
-    932,
-    1,
-    (const sal_Char*)"euc-jp",
-    (const sal_Char*)"euc-jp",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MULTIBYTE |
-    RTL_TEXTENCODING_INFO_MIME,
-    SCRIPT_JAPANESE
-};
+static ImplTextEncodingData const aImplEUCJPTextEncodingData
+    = { { &aImplEUCJPCvtData,
+          ImplEUCJPToUnicode,
+          ImplUnicodeToEUCJP,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_EUC_JP,
+        1,
+        3,
+        2,
+        128,
+        "euc-jp",
+        "euc-jp",
+        RTL_TEXTENCODING_INFO_ASCII
+            | RTL_TEXTENCODING_INFO_MULTIBYTE
+            | RTL_TEXTENCODING_INFO_MIME };
+    /* SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */
 
 /* ======================================================================= */
 
@@ -2662,7 +2585,7 @@ static ImplTextEncodingData const aImplEUCJPTextEncodingData =
 #define HALFWIDTHKANA_START 0xFF61
 #define HALFWIDTHKANA_END   0xFF9F
 
-static sal_uChar aImplJISX0201Tab[HALFWIDTHKANA_END - HALFWIDTHKANA_START + 1] =
+static sal_uChar const aImplJISX0201Tab[HALFWIDTHKANA_END - HALFWIDTHKANA_START + 1] =
 {
           0xA1, 0xA2, 0xA3, 0xA4, 0x5A, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF,
     0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xBF,
@@ -2672,7 +2595,7 @@ static sal_uChar aImplJISX0201Tab[HALFWIDTHKANA_END - HALFWIDTHKANA_START + 1] =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplByteConvertData aImplJISX0201ByteCvtData =
+static ImplByteConvertData const aImplJISX0201ByteCvtData =
 {
     NULL,
     NULL,
@@ -2688,43 +2611,25 @@ static ImplByteConvertData aImplJISX0201ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData aImplJISX0201TextConverterData =
-{
-    &aImplJISX0201ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter aImplJISX0201TextConverter =
-{
-    &aImplJISX0201TextConverterData,
-    NULL,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData aImplJISX0201TextEncodingData =
-{
-    &aImplJISX0201TextConverter,
-    RTL_TEXTENCODING_JIS_X_0201,
-    1, 1, 1,
-    128,
-    923,
-    1,
-    (const sal_Char*)"euc-jp",
-    (const sal_Char*)"euc-jp",
-    RTL_TEXTENCODING_INFO_MULTIBYTE,
-    SCRIPT_JAPANESE,
-};
+static ImplTextEncodingData const aImplJISX0201TextEncodingData
+    = { { &aImplJISX0201ByteCvtData,
+          NULL,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_JIS_X_0201,
+        1,
+        1,
+        1,
+        128,
+        "euc-jp",
+        "euc-jp",
+        RTL_TEXTENCODING_INFO_MULTIBYTE };
+    /* SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */
 
 /* ======================================================================= */
 
@@ -2739,43 +2644,25 @@ static ImplDBCSConvertData const aImplJISX0208DBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData aImplJISX0208TextConverterData =
-{
-    &aImplJISX0208DBCSCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT,
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter aImplJISX0208TextConverter =
-{
-    &aImplJISX0208TextConverterData,
-    NULL,
-    ImplUnicodeToDBCS,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData aImplJISX0208TextEncodingData =
-{
-    &aImplJISX0208TextConverter,
-    RTL_TEXTENCODING_JIS_X_0208,
-    2, 2, 2,
-    128,
-    932,
-    1,
-    (const sal_Char*)"euc-jp",
-    (const sal_Char*)"euc-jp",
-    RTL_TEXTENCODING_INFO_MULTIBYTE,
-    SCRIPT_JAPANESE,
-};
+static ImplTextEncodingData const aImplJISX0208TextEncodingData
+    = { { &aImplJISX0208DBCSCvtData,
+          NULL,
+          ImplUnicodeToDBCS,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_JIS_X_0208,
+        2,
+        2,
+        2,
+        128,
+        "euc-jp",
+        "euc-jp",
+        RTL_TEXTENCODING_INFO_MULTIBYTE };
+    /* SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */
 
 /* ======================================================================= */
 
@@ -2790,40 +2677,22 @@ static ImplDBCSConvertData const aImplJISX0212DBCSCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData aImplJISX0212TextConverterData =
-{
-    &aImplJISX0212DBCSCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT,
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter aImplJISX0212TextConverter =
-{
-    &aImplJISX0212TextConverterData,
-    NULL,
-    ImplUnicodeToDBCS,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData aImplJISX0212TextEncodingData =
-{
-    &aImplJISX0212TextConverter,
-    RTL_TEXTENCODING_JIS_X_0212,
-    2, 2, 2,
-    128,
-    923,
-    1,
-    (const sal_Char*)"euc-jp",
-    (const sal_Char*)"euc-jp",
-    RTL_TEXTENCODING_INFO_MULTIBYTE,
-    SCRIPT_JAPANESE,
-};
+static ImplTextEncodingData const aImplJISX0212TextEncodingData
+    = { { &aImplJISX0212DBCSCvtData,
+          NULL,
+          ImplUnicodeToDBCS,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_JIS_X_0212,
+        2,
+        2,
+        2,
+        128,
+        "euc-jp",
+        "euc-jp",
+        RTL_TEXTENCODING_INFO_MULTIBYTE };
+    /* SCRIPT_JAPANESE, pc code page 932, mac encoding 1 */

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: tcvtsym1.tab,v $
+ *  $RCSfile: converteuctw.tab,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
@@ -59,24 +59,51 @@
  *
  ************************************************************************/
 
-/* Symbol Font Encodings */
+#ifndef INCLUDED_RTL_TEXTENC_CONTEXT_H
+#include "context.h"
+#endif
+#ifndef INCLUDED_RTL_TEXTENC_CONVERTEUCTW_H
+#include "converteuctw.h"
+#endif
 
-static ImplTextEncodingData const aImplSYMBOLTextEncodingData
-    = { { NULL,
-          ImplSymbolToUnicode,
-          ImplUnicodeToSymbol,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL,
-          NULL },
-        RTL_TEXTENCODING_SYMBOL,
+#ifndef _RTL_TENCINFO_H
+#include "rtl/tencinfo.h"
+#endif
+#ifndef _RTL_TEXTENC_H
+#include "rtl/textenc.h"
+#endif
+
+#ifndef INCLUDED_STDDEF_H
+#include <stddef.h>
+#define INCLUDED_STDDEF_H
+#endif
+
+#include "generate/cns116431992.tab"
+
+static ImplEucTwConverterData const aImplEucTwConvertData
+    = { aImplCns116431992ToUnicodeData,
+        aImplCns116431992ToUnicodeRowOffsets,
+        aImplCns116431992ToUnicodePlaneOffsets,
+        aImplUnicodeToCns116431992Data,
+        aImplUnicodeToCns116431992PageOffsets,
+        aImplUnicodeToCns116431992PlaneOffsets };
+
+static ImplTextEncodingData const aImplEucTwTextEncodingData
+    = { { &aImplEucTwConvertData,
+          &ImplConvertEucTwToUnicode,
+          &ImplConvertUnicodeToEucTw,
+          &ImplCreateEucTwToUnicodeContext,
+          &ImplDestroyContext,
+          &ImplResetEucTwToUnicodeContext,
+          &ImplCreateUnicodeToTextContext,
+          &ImplDestroyContext,
+          &ImplResetUnicodeToTextContext },
+        RTL_TEXTENCODING_EUC_TW,
         1,
-        1,
-        1,
+        4,
         2,
-        "adobe-fontspecific",
-        "invariant",
-        RTL_TEXTENCODING_INFO_SYMBOL };
-    /* SCRIPT_SYMBOL, pc code page 65400, mac encoding 32 */
+        0, /* TODO! */
+        NULL, /* TODO! */
+        NULL, /* TODO! */
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+    /* SCRIPT_CHINESE_TRADITIONAL */

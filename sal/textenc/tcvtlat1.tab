@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtlat1.tab,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-07-16 11:33:08 $
+ *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,67 +63,6 @@
 
 /* This file contain the tables for all 1 byte charsets, for the */
 /* following scripts: latin, iceland, nordic */
-
-/* ======================================================================= */
-
-/* Hilfstabellen, die fuer mehrere Zeichensaetze gelten */
-
-/* ----------------------------------------------------------------------- */
-
-#define NOTABCHAR_START                 0xFFFF
-#define NOTABCHAR_END                   0x0000
-#define NOTABUNI_START                  0xFF
-#define NOTABUNI_END                    0x00
-
-/* ----------------------------------------------------------------------- */
-
-#define SAME8090UNI_START               0x80
-#define SAME8090UNI_END                 0x9F
-static sal_uInt16 const aImpl8090SameToUniTab[SAME8090UNI_END - SAME8090UNI_START + 1] =
-{
-/*       0       1       2       3       4       5       6       7 */
-/*       8       9       A       B       C       D       E       F */
-    0x0080, 0x0081, 0x0082, 0x0083, 0x0084, 0x0085, 0x0086, 0x0087, /* 0x80 */
-    0x0088, 0x0089, 0x008A, 0x008B, 0x008C, 0x008D, 0x008E, 0x008F, /* 0x80 */
-    0x0090, 0x0091, 0x0092, 0x0093, 0x0094, 0x0095, 0x0096, 0x0097, /* 0x90 */
-    0x0098, 0x0099, 0x009A, 0x009B, 0x009C, 0x009D, 0x009E, 0x009F, /* 0x90 */
-};
-
-/* ----------------------------------------------------------------------- */
-
-#define SAME8090CHAR_START              0x0080
-#define SAME8090CHAR_END                0x009F
-static sal_uChar const aImpl8090SameToCharTab[SAME8090CHAR_END - SAME8090CHAR_START + 1] =
-{
-/*     0     1     2     3     4     5     6     7 */
-/*     8     9     A     B     C     D     E     F */
-    0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, /* 0x0080 */
-    0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, /* 0x0080 */
-    0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, /* 0x0090 */
-    0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F  /* 0x0090 */
-};
-
-/* ----------------------------------------------------------------------- */
-
-#define SAMEA0FFCHAR_START              0x00A0
-#define SAMEA0FFCHAR_END                0x00FF
-static sal_uChar const aImplA0FFSameToCharTab[SAMEA0FFCHAR_END - SAMEA0FFCHAR_START + 1] =
-{
-/*     0     1     2     3     4     5     6     7 */
-/*     8     9     A     B     C     D     E     F */
-    0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, /* 0x00A0 */
-    0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF, /* 0x00A0 */
-    0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, /* 0x00B0 */
-    0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xBF, /* 0x00B0 */
-    0xC0, 0xC1, 0xC2, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7, /* 0x00C0 */
-    0xC8, 0xC9, 0xCA, 0xCB, 0xCC, 0xCD, 0xCE, 0xCF, /* 0x00C0 */
-    0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7, /* 0x00D0 */
-    0xD8, 0xD9, 0xDA, 0xDB, 0xDC, 0xDD, 0xDE, 0xDF, /* 0x00D0 */
-    0xE0, 0xE1, 0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0xE7, /* 0x00E0 */
-    0xE8, 0xE9, 0xEA, 0xEB, 0xEC, 0xED, 0xEE, 0xEF, /* 0x00E0 */
-    0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, /* 0x00F0 */
-    0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF  /* 0x00F0 */
-};
 
 /* ======================================================================= */
 
@@ -281,45 +220,25 @@ static ImplByteConvertData const aImplIBM437ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplIBM437TextConverterData =
-{
-    &aImplIBM437ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplIBM437TextConverter =
-{
-    &aImplIBM437TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplIBM437TextEncodingData =
-{
-    &aImplIBM437TextConverter,
-    RTL_TEXTENCODING_IBM_437,
-    1, 1, 1,
-    0,
-    437,
-    0,
-    (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"ibm437",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MIME  |
-    RTL_TEXTENCODING_INFO_DOS_OS2,
-    SCRIPT_LATIN
-};
+static ImplTextEncodingData const aImplIBM437TextEncodingData
+    = { { &aImplIBM437ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_IBM_437,
+        1,
+        1,
+        1,
+        0,
+        "iso8859-1",
+        "ibm437",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
+    /* DOS/OS2, SCRIPT_LATIN, pc code page 437 */
 
 /* ======================================================================= */
 
@@ -436,45 +355,25 @@ static ImplByteConvertData const aImplIBM850ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplIBM850TextConverterData =
-{
-    &aImplIBM850ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplIBM850TextConverter =
-{
-    &aImplIBM850TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplIBM850TextEncodingData =
-{
-    &aImplIBM850TextConverter,
-    RTL_TEXTENCODING_IBM_850,
-    1, 1, 1,
-    0,
-    850,
-    0,
-    (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"ibm850",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MIME  |
-    RTL_TEXTENCODING_INFO_DOS_OS2,
-    SCRIPT_LATIN
-};
+static ImplTextEncodingData const aImplIBM850TextEncodingData
+    = { { &aImplIBM850ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_IBM_850,
+        1,
+        1,
+        1,
+        0,
+        "iso8859-1",
+        "ibm850",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
+    /* DOS/OS2, SCRIPT_LATIN, pc code page 850 */
 
 /* ======================================================================= */
 
@@ -630,44 +529,25 @@ static ImplByteConvertData const aImplIBM860ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplIBM860TextConverterData =
-{
-    &aImplIBM860ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplIBM860TextConverter =
-{
-    &aImplIBM860TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplIBM860TextEncodingData =
-{
-    &aImplIBM860TextConverter,
-    RTL_TEXTENCODING_IBM_860,
-    1, 1, 1,
-    0,
-    860,
-    0,
-    (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"iso-8859-1",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_DOS_OS2,
-    SCRIPT_LATIN
-};
+static ImplTextEncodingData const aImplIBM860TextEncodingData
+    = { { &aImplIBM860ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_IBM_860,
+        1,
+        1,
+        1,
+        0,
+        "iso8859-1",
+        "iso-8859-1",
+        RTL_TEXTENCODING_INFO_ASCII };
+    /* DOS/OS2, SCRIPT_LATIN, pc code page 860 */
 
 /* ======================================================================= */
 
@@ -825,44 +705,25 @@ static ImplByteConvertData const aImplIBM861ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplIBM861TextConverterData =
-{
-    &aImplIBM861ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplIBM861TextConverter =
-{
-    &aImplIBM861TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplIBM861TextEncodingData =
-{
-    &aImplIBM861TextConverter,
-    RTL_TEXTENCODING_IBM_861,
-    1, 1, 1,
-    0,
-    861,
-    37,
-    (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"iso-8859-1",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_DOS_OS2,
-    SCRIPT_LATIN
-};
+static ImplTextEncodingData const aImplIBM861TextEncodingData
+    = { { &aImplIBM861ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_IBM_861,
+        1,
+        1,
+        1,
+        0,
+        "iso8859-1",
+        "iso-8859-1",
+        RTL_TEXTENCODING_INFO_ASCII };
+    /* DOS/OS2, SCRIPT_LATIN, pc code page 861, mac encoding 37 */
 
 /* ======================================================================= */
 
@@ -1020,44 +881,25 @@ static ImplByteConvertData const aImplIBM863ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplIBM863TextConverterData =
-{
-    &aImplIBM863ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplIBM863TextConverter =
-{
-    &aImplIBM863TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplIBM863TextEncodingData =
-{
-    &aImplIBM863TextConverter,
-    RTL_TEXTENCODING_IBM_863,
-    1, 1, 1,
-    0,
-    863,
-    0,
-    (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"iso-8859-1",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_DOS_OS2,
-    SCRIPT_LATIN
-};
+static ImplTextEncodingData const aImplIBM863TextEncodingData
+    = { { &aImplIBM863ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_IBM_863,
+        1,
+        1,
+        1,
+        0,
+        "iso8859-1",
+        "iso-8859-1",
+        RTL_TEXTENCODING_INFO_ASCII };
+    /* DOS/OS2, SCRIPT_LATIN, pc code page 863 */
 
 /* ======================================================================= */
 
@@ -1215,44 +1057,25 @@ static ImplByteConvertData const aImplIBM865ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplIBM865TextConverterData =
-{
-    &aImplIBM865ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplIBM865TextConverter =
-{
-    &aImplIBM865TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplIBM865TextEncodingData =
-{
-    &aImplIBM865TextConverter,
-    RTL_TEXTENCODING_IBM_865,
-    1, 1, 1,
-    0,
-    865,
-    0,
-    (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"iso-8859-1",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_DOS_OS2,
-    SCRIPT_LATIN
-};
+static ImplTextEncodingData const aImplIBM865TextEncodingData
+    = { { &aImplIBM865ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_IBM_865,
+        1,
+        1,
+        1,
+        0,
+        "iso8859-1",
+        "iso-8859-1",
+        RTL_TEXTENCODING_INFO_ASCII };
+    /* DOS/OS2, SCRIPT_LATIN, pc code page 865 */
 
 /* ======================================================================= */
 
@@ -1340,45 +1163,25 @@ static ImplByteConvertData const aImplMS1252ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplMS1252TextConverterData =
-{
-    &aImplMS1252ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplMS1252TextConverter =
-{
-    &aImplMS1252TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplMS1252TextEncodingData =
-{
-    &aImplMS1252TextConverter,
-    RTL_TEXTENCODING_MS_1252,
-    1, 1, 1,
-    0,
-    850,
-    0,
-    (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"windows-1252",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MIME  |
-    RTL_TEXTENCODING_INFO_WIN,
-    SCRIPT_LATIN
-};
+static ImplTextEncodingData const aImplMS1252TextEncodingData
+    = { { &aImplMS1252ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_MS_1252,
+        1,
+        1,
+        1,
+        0,
+        "iso8859-1",
+        "windows-1252",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
+    /* WIN, SCRIPT_LATIN, pc code page 850 */
 
 /* ======================================================================= */
 
@@ -1426,44 +1229,25 @@ static ImplByteConvertData const aImplISO88591ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplISO88591TextConverterData =
-{
-    &aImplISO88591ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplISO88591TextConverter =
-{
-    &aImplISO88591TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplISO88591TextEncodingData =
-{
-    &aImplISO88591TextConverter,
-    RTL_TEXTENCODING_ISO_8859_1,
-    1, 1, 1,
-    0,
-    850,
-    0,
-    (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"iso-8859-1",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MIME,
-    SCRIPT_LATIN
-};
+static ImplTextEncodingData const aImplISO88591TextEncodingData
+    = { { &aImplISO88591ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_ISO_8859_1,
+        1,
+        1,
+        1,
+        0,
+        "iso8859-1",
+        "iso-8859-1",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
+    /* SCRIPT_LATIN, pc code page 850 */
 
 /* ======================================================================= */
 
@@ -1574,44 +1358,25 @@ static ImplByteConvertData const aImplISO885914ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplISO885914TextConverterData =
-{
-    &aImplISO885914ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplISO885914TextConverter =
-{
-    &aImplISO885914TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplISO885914TextEncodingData =
-{
-    &aImplISO885914TextConverter,
-    RTL_TEXTENCODING_ISO_8859_14,
-    1, 1, 1,
-    0,
-    850,
-    0,
-    (const sal_Char*)"iso8859-14",
-    (const sal_Char*)"iso-8859-14",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MIME,
-    SCRIPT_LATIN
-};
+static ImplTextEncodingData const aImplISO885914TextEncodingData
+    = { { &aImplISO885914ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_ISO_8859_14,
+        1,
+        1,
+        1,
+        0,
+        "iso8859-14",
+        "iso-8859-14",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
+    /* SCRIPT_LATIN, pc code page 850 */
 
 /* ======================================================================= */
 
@@ -1696,44 +1461,25 @@ static ImplByteConvertData const aImplISO885915ByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplISO885915TextConverterData =
-{
-    &aImplISO885915ByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplISO885915TextConverter =
-{
-    &aImplISO885915TextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplISO885915TextEncodingData =
-{
-    &aImplISO885915TextConverter,
-    RTL_TEXTENCODING_ISO_8859_15,
-    1, 1, 1,
-    0,
-    850,
-    0,
-    (const sal_Char*)"iso8859-15",
-    (const sal_Char*)"iso-8859-15",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MIME,
-    SCRIPT_LATIN
-};
+static ImplTextEncodingData const aImplISO885915TextEncodingData
+    = { { &aImplISO885915ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_ISO_8859_15,
+        1,
+        1,
+        1,
+        0,
+        "iso8859-15",
+        "iso-8859-15",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
+    /* SCRIPT_LATIN, pc code page 850 */
 
 /* ======================================================================= */
 
@@ -1856,44 +1602,25 @@ static ImplByteConvertData const aImplAPPLEICELANDByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplAPPLEICELANDTextConverterData =
-{
-    &aImplAPPLEICELANDByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplAPPLEICELANDTextConverter =
-{
-    &aImplAPPLEICELANDTextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplAPPLEICELANDTextEncodingData =
-{
-    &aImplAPPLEICELANDTextConverter,
-    RTL_TEXTENCODING_APPLE_ICELAND,
-    1, 1, 1,
-    0,
-    861,
-    37,
-    (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"iso-8859-1",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MAC,
-    SCRIPT_LATIN
-};
+static ImplTextEncodingData const aImplAPPLEICELANDTextEncodingData
+    = { { &aImplAPPLEICELANDByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_APPLE_ICELAND,
+        1,
+        1,
+        1,
+        0,
+        "iso8859-1",
+        "iso-8859-1",
+        RTL_TEXTENCODING_INFO_ASCII };
+    /* MAC, SCRIPT_LATIN, pc code page 861, mac encoding 37 */
 
 /* ======================================================================= */
 
@@ -2023,45 +1750,25 @@ static ImplByteConvertData const aImplAPPLEROMANByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplAPPLEROMANTextConverterData =
-{
-    &aImplAPPLEROMANByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplAPPLEROMANTextConverter =
-{
-    &aImplAPPLEROMANTextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplAPPLEROMANTextEncodingData =
-{
-    &aImplAPPLEROMANTextConverter,
-    RTL_TEXTENCODING_APPLE_ROMAN,
-    1, 1, 1,
-    77,
-    850,
-    0,
-    (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"macintosh",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_MIME  |
-    RTL_TEXTENCODING_INFO_MAC,
-    SCRIPT_LATIN
-};
+static ImplTextEncodingData const aImplAPPLEROMANTextEncodingData
+    = { { &aImplAPPLEROMANByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_APPLE_ROMAN,
+        1,
+        1,
+        1,
+        77,
+        "iso8859-1",
+        "macintosh",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
+    /* MAC, SCRIPT_LATIN, pc code page 850 */
 
 /* ======================================================================= */
 
@@ -2092,43 +1799,24 @@ static ImplByteConvertData const aImplUSASCIIByteCvtData =
 
 /* ----------------------------------------------------------------------- */
 
-static ImplTextConverterData const aImplUSASCIITextConverterData =
-{
-    &aImplUSASCIIByteCvtData,
-    NULL,
-    RTL_UNICODE_CHAR_DEFAULT
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextConverter const aImplUSASCIITextConverter =
-{
-    &aImplUSASCIITextConverterData,
-    ImplCharToUnicode,
-    ImplUnicodeToChar,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-/* ----------------------------------------------------------------------- */
-
-static ImplTextEncodingData const aImplUSASCIITextEncodingData =
-{
-    &aImplUSASCIITextConverter,
-    RTL_TEXTENCODING_ASCII_US,
-    1, 1, 1,
-    0,
-    437,
-    0,
-    (const sal_Char*)"iso8859-1",
-    (const sal_Char*)"us-ascii",
-    RTL_TEXTENCODING_INFO_ASCII |
-    RTL_TEXTENCODING_INFO_7BIT |
-    RTL_TEXTENCODING_INFO_MIME,
-    SCRIPT_LATIN
-};
-
+static ImplTextEncodingData const aImplUSASCIITextEncodingData
+    = { { &aImplUSASCIIByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_ASCII_US,
+        1,
+        1,
+        1,
+        0,
+        "iso8859-1",
+        "us-ascii",
+        RTL_TEXTENCODING_INFO_ASCII
+            | RTL_TEXTENCODING_INFO_7BIT
+            | RTL_TEXTENCODING_INFO_MIME };
+    /* SCRIPT_LATIN, pc code page 437 */
