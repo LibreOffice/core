@@ -2,9 +2,9 @@
  *
  *  $RCSfile: all_tags.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:20:39 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 // NOT FULLY DEFINED SERVICES
 #include <limits>
 #include <ary/info/infodisp.hxx>
+#include <adc_cl.hxx>
 
 
 namespace ary
@@ -547,8 +548,12 @@ SinceTag::Add_SpecialMeaningToken( const char *     i_sText,
                                    intt             )
 {
     const char cCiphersend = '9' + 1;
-    if (sVersion.empty() AND NOT csv::in_range('0', *i_sText, cCiphersend))
+    if ( sVersion.empty()
+         AND NOT csv::in_range('0', *i_sText, cCiphersend)
+         AND autodoc::CommandLine::Get_().DoesTransform_SinceTag() )
+    {
         return true;
+    }
 
     if (sVersion.empty())
     {
@@ -557,7 +562,7 @@ SinceTag::Add_SpecialMeaningToken( const char *     i_sText,
     else
     {
         StreamLock sHelp(100);
-        sVersion = sHelp() << sVersion << i_sText << c_str;
+        sVersion = sHelp() << sVersion << " " << i_sText << c_str;
     }
 
     return true;
