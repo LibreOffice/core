@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:20 $
+ *  last change: $Author: oj $ $Date: 2000-10-09 11:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
@@ -583,7 +583,7 @@ void SAL_CALL OAdabasTable::alterColumnByIndex( sal_Int32 index, const Reference
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > *)0 ));
 
-    return ::utl::concatSequences(aTypes.getTypes(),OTable_TYPEDEF::getTypes());
+    return ::comphelper::concatSequences(aTypes.getTypes(),OTable_TYPEDEF::getTypes());
 }
 
 
