@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-27 14:03:15 $
+ *  last change: $Author: sj $ $Date: 2002-04-04 13:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3210,6 +3210,15 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                         }
                     }
                     aObjData.nSpFlags &=~ ( SP_FFLIPH | SP_FFLIPV );            // #68396#
+                }
+                else  if ( ( aObjData.eShapeType == mso_sptCurvedLeftArrow )    // #97935# not taking the autoshapes from msashape,
+                        || ( aObjData.eShapeType == mso_sptCurvedRightArrow )   // instead we are using our precalculated ones
+                        || ( aObjData.eShapeType == mso_sptCurvedUpArrow )
+                        || ( aObjData.eShapeType == mso_sptCurvedDownArrow ) )
+                {
+                        pRet = GetAutoForm( aObjData.eShapeType );
+                        if ( pRet )
+                            pRet->NbcSetSnapRect( aBoundRect ); // Groesse setzen
                 }
                 else
                 {
