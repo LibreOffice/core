@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:21:49 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData ) :
     pChangeTrack( NULL ),
     pInStrm( NULL ),
     pStrm( NULL ),
-    pFmlConv( NULL ),
     nTabIdCount( 0 ),
     bGlobExit( sal_False ),
     eNestedMode( nmBase )
@@ -133,8 +132,7 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData ) :
             if( pStrm )
             {
                 pChangeTrack = new ScChangeTrack( pExcRoot->pDoc );
-                pFmlConv = new XclImpChTrFmlConverter( pExcRoot, *pStrm, *this );
-                if( pChangeTrack && pFmlConv )
+                if( pChangeTrack )
                 {
                     sOldUsername = pChangeTrack->GetUser();
                     pChangeTrack->SetUseFixDateTime( TRUE );
@@ -148,8 +146,6 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData ) :
 
 XclImpChangeTrack::~XclImpChangeTrack()
 {
-    if( pFmlConv )
-        delete pFmlConv;
     if( pChangeTrack )
         delete pChangeTrack;
     if( pStrm )
@@ -249,10 +245,23 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     sal_uInt16 nFmlSize;
     *pStrm >> nFmlSize;
 
+    // create a memory stream and copy the formula to be able to read simultaneously
+    // the formula and the additional 3D tab ref data following the formula
+    // here we have to simulate an Excel record to be able to use an XclImpStream...
+    // 2do: remove the stream member from formula converter and add it as a parameter
+    // to the Convert() routine (to prevent the construction/destruction of the
+    // converter in each formula)
+    SvMemoryStream aMemStrm;
+    aMemStrm << (sal_uInt16) 0x0001 << nFmlSize;
+    pStrm->CopyToStream( aMemStrm, nFmlSize );
+    XclImpStream aFmlaStrm( aMemStrm );
+    aFmlaStrm.StartNextRecord();
+    XclImpChTrFmlConverter aFmlConv( pExcRoot, aFmlaStrm, *this );
+
     // read the formula, 3D tab refs from extended data
     const ScTokenArray* pArray = NULL;
-    pFmlConv->Reset( rPosition );
-    BOOL bOK = (pFmlConv->Convert( pArray, nFmlSize ) == ConvOK);
+    aFmlConv.Reset( rPosition );
+    BOOL bOK = (aFmlConv.Convert( pArray, nFmlSize ) == ConvOK);
     rpTokenArray = (bOK && pArray) ? new ScTokenArray( *pArray ) : NULL;
     pStrm->Ignore( 1 );
 }

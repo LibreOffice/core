@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:18:06 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,6 @@ private:
     ScChangeTrack*              pChangeTrack;
     SvStream*                   pInStrm;        // input stream
     XclImpStream*               pStrm;          // stream import class
-    XclImpChTrFmlConverter*     pFmlConv;       // special formula converter
     sal_uInt16                  nTabIdCount;
     sal_Bool                    bGlobExit;      // global exit loop
 
