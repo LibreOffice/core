@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:25:09 $
+ *  last change: $Author: kz $ $Date: 2002-02-21 21:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -932,7 +932,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "å¤§ç¶±ç´š";
         Text[ arabic ] = "ãÓÊæíÇÊ ÇáÊŞÓíã";
         Text[ greek ] = "Åğßğåäá äéÜñèñùóçò";
-        Text[ korean ] = "ë‹¤ë‹¨ê³„";
+        Text[ korean ] = "ì•„ì›ƒíŠ¸ë¼ì¸";
         Text[ turkish ] = "Anahat düzeyleri";
         Text[ catalan ] = "Niveles del esquema";
         Text[ finnish ] = "Jäsennystaso";
