@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-19 15:12:08 $
+ *  last change: $Author: obo $ $Date: 2001-12-20 12:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2044,7 +2044,8 @@ BOOL Printer::StartPage()
         }
 
         mpGraphics = new ImplServerGraphics( ImplGetSVData()->mpAtoms );
-        mpGraphics->SetInterface( Reference< XRmOutputDevice >( mpPrinter->mxRemotePrinter, UNO_QUERY ) );
+        Reference< XRmOutputDevice > temp( mpPrinter->mxRemotePrinter, UNO_QUERY );
+        mpGraphics->SetInterface( temp );
 
         mbDevOutput = TRUE;
         mbInPrintPage = TRUE;
