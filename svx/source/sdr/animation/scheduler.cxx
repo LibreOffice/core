@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scheduler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:43:34 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #ifndef _SDR_ANIMATION_SCHEDULER_HXX
 #include <svx/sdr/animation/scheduler.hxx>
 #endif
+
+#include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
 // event class
@@ -215,21 +217,32 @@ namespace sdr
         void Scheduler::Timeout()
         {
             mnTime += mnDeltaTime;
-
             Stop();
-
             Event* pNextEvent = maList.GetFirst();
+
+            // copy events which need to be executed to a vector
+            ::std::vector< Event* > EventPointerVector;
 
             while(pNextEvent && pNextEvent->GetTime() <= mnTime)
             {
                 maList.Remove(pNextEvent);
-                pNextEvent->Trigger(mnTime);
+                EventPointerVector.push_back(pNextEvent);
                 pNextEvent = maList.GetFirst();
             }
 
-            if(pNextEvent)
+            // execute events from the vector
+            ::std::vector< Event* >::iterator aCandidate = EventPointerVector.begin();
+
+            for(;aCandidate != EventPointerVector.end(); aCandidate++)
             {
-                mnDeltaTime = pNextEvent->GetTime() - mnTime;
+                // trigger event. This may re-insert the event to the queue (maList)
+                (*aCandidate)->Trigger(mnTime);
+            }
+
+            // re-start timer for next event to be scheduled (if any)
+            if(maList.GetFirst())
+            {
+                mnDeltaTime = maList.GetFirst()->GetTime() - mnTime;
 
                 if(0L != mnDeltaTime)
                 {
