@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: vg $ $Date: 2000-12-20 14:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,8 @@ namespace xmloff
     //---------------------------------------------------------------------
     const OControlElement::ElementType& operator ++(OControlElement::ElementType& _e)
     {
-        sal_Int32 nAsInt = static_cast<sal_Int32>(_e);
+        OControlElement::ElementType e = _e;
+        sal_Int32 nAsInt = static_cast<sal_Int32>(e);
         _e = static_cast<OControlElement::ElementType>( ++nAsInt );
         return _e;
     }
@@ -508,7 +509,7 @@ namespace xmloff
         Property aProp = _rxPropInfo->getPropertyByName(_rPropValue.Name);
         // the untranslated string value as read in handleAttribute
         ::rtl::OUString sValue;
-    #ifdef DEBUG
+    #ifdef _DEBUG
         sal_Bool bSuccess =
     #endif
         _rPropValue.Value >>= sValue;
@@ -968,6 +969,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.3  2000/12/13 10:40:15  fs
  *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
  *
