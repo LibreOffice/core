@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 14:03:36 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@
 #include "measure.hxx" //add for SvxMeasureDialog
 #include "connect.hxx" //add for SvxConnectionDialog
 #include "cuioptgenrl.hxx"  //add for SvxGeneralTabPage
+#include "cfg.hxx"    //add for SvxConfigDialog
 #define ITEMID_TABSTOP  0 //add for #include "tabstpge.hxx"
 #include "numpages.hxx" // add for
 #include "paragrph.hxx" //add for
@@ -128,7 +129,9 @@
 #include "grfpage.hxx" //add for SvxGrfCropPage
 #include "scriptdlg.hxx" // for ScriptOrgDialog
 #include "selector.hxx" // for SvxScriptSelectorDialog
+#include "macropg.hxx" // for SvxMacroAssignDlg
 
+#define OSL_TRACE osl_trace
 using namespace svx;
 // AbstractTabDialog implementations just forwards everything to the dialog
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl)
@@ -928,6 +931,9 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( const ResId& 
         case RID_OFA_AUTOCORR_DLG :
             pDlg = new OfaAutoCorrDlg( pParent, pAttrSet );
             break;
+        case RID_SVXDLG_CUSTOMIZE :
+            pDlg = new SvxConfigDialog( pParent, pAttrSet, pViewFrame );
+            break;
         default:
             break;
     }
@@ -1143,28 +1149,19 @@ void AbstractScriptSelectorDialog_Impl::SetRunLabel()
 }
 
 VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( Window* pParent,  //add for SvxScriptOrgDialog
-                                            const String& rLanguage,
-                                            const ResId& rResId )
+                                            const String& rLanguage)
 {
     OSL_TRACE("in ADF_Impl::CreateSvxScriptOrgDialog");
     Dialog* pDlg=NULL;
     rtl::OUString aResName;
     ResMgr* pBasResMgr = NULL;
-    switch ( rResId.GetId() )
-    {
-        case RID_DLG_SCRIPTORGANIZER :
-            OSL_TRACE("creating dialog");
-            aResName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "basctl" ));
-            aResName += rtl::OUString::valueOf( sal_Int32( SUPD ));
+    OSL_TRACE("creating dialog");
+    aResName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "basctl" ));
+    aResName += rtl::OUString::valueOf( sal_Int32( SUPD ));
 
-            pBasResMgr = ResMgr::CreateResMgr( rtl::OUStringToOString( aResName, RTL_TEXTENCODING_ASCII_US ));
+    pBasResMgr = ResMgr::CreateResMgr( rtl::OUStringToOString( aResName, RTL_TEXTENCODING_ASCII_US ));
 
-            pDlg = new SvxScriptOrgDialog( pParent, pBasResMgr, rLanguage);
-            break;
-        default:
-            OSL_TRACE("not creating dialog");
-            break;
-    }
+    pDlg = new SvxScriptOrgDialog( pParent, pBasResMgr, rLanguage);
 
     if ( pDlg )
         return new VclAbstractDialog_Impl( pDlg );
@@ -1834,6 +1831,18 @@ AbstractSvxPostItDialog* AbstractDialogFactory_Impl::CreateSvxPostItDialog( Wind
     return 0;
 }
 //CHINA001   SvxPostItDialog end
+
+VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxMacroAssignDlg( Window* pParent,  SfxItemSet& rSet, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex )
+{
+    OSL_TRACE("in ADF_Impl::CreateSvxMacroAssignDlg");
+    Dialog* pDlg=NULL;
+
+    pDlg = new SvxMacroAssignDlg( pParent, rSet, xNameReplace, nSelectedIndex );
+
+    if ( pDlg )
+        return new VclAbstractDialog_Impl( pDlg );
+    return 0;
+}
 
 //STRIP001 AbstractSvxSpellCheckDialog * AbstractDialogFactory_Impl::CreateSvxSpellCheckDialog( Window* pParent,  //add for SvxSpellCheckDialog
 //STRIP001 ::com::sun::star::uno::Reference<
