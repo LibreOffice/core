@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contenthelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-26 15:14:35 $
+ *  last change: $Author: kso $ $Date: 2001-03-27 14:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,11 +111,14 @@
 #endif
 
 namespace com { namespace sun { namespace star { namespace ucb {
+    struct CommandInfo;
+    class XCommandEnvironment;
     class XCommandInfo;
     class XPersistentPropertySet;
 } } } }
 
 namespace com { namespace sun { namespace star { namespace beans {
+    struct Property;
     class XPropertySetInfo;
 } } } }
 
@@ -123,6 +126,8 @@ namespace ucb_impl { struct ContentImplHelper_Impl; }
 
 namespace ucb
 {
+
+#if 0
 
 //=========================================================================
 
@@ -142,6 +147,8 @@ struct CommandInfoTableEntry
     sal_Int32                           nHandle;
     const ::com::sun::star::uno::Type*  pArgType;
 };
+
+#endif
 
 //=========================================================================
 
@@ -197,7 +204,7 @@ protected:
 
 private:
     /**
-      * Your implementation of this method must return a table containing
+      * Your implementation of this method must return a sequence containing
       * the meta data of the properties supported by the content.
       * Note: If you wish to provide your own implementation of the interface
       * XPropertyContainer ( completely override addContent and removeContent
@@ -205,17 +212,23 @@ private:
       * meta data for your Additional Core Properties here to get a fully
       * featured getPropertySetInfo method ( see below ).
       *
-      * @return a table containing the property meta data.
+      * @param xEnv is an environment to use for example, for interactions.
+      * @return a sequence containing the property meta data.
       */
-    virtual const ::ucb::PropertyInfoTableEntry& getPropertyInfoTable() = 0;
+    virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
+    getProperties( const com::sun::star::uno::Reference<
+                    com::sun::star::ucb::XCommandEnvironment > & xEnv ) = 0;
 
     /**
-      * Your implementation of this method must return a table containing
+      * Your implementation of this method must return a sequence containing
       * the meta data of the commands supported by the content.
       *
-      * @return a table containing the command meta data.
+      * @param xEnv is an environment to use for example, for interactions.
+      * @return a sequence containing the command meta data.
       */
-    virtual const ::ucb::CommandInfoTableEntry&  getCommandInfoTable() = 0;
+    virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
+    getCommands( const com::sun::star::uno::Reference<
+                    com::sun::star::ucb::XCommandEnvironment > & xEnv ) = 0;
 
     /**
       * The implementation of this method shall return the URL of the parent
@@ -236,22 +249,32 @@ protected:
       * supported by the content. To implement the required command
       * "getPropertySetInfo" simply return the return value of this method.
       *
+      * @param xEnv is an environment to use for example, for interactions.
+      * @param bCache indicates, whether the implemetation should use
+      *        cached data, if exist.
       * @return an XPropertySetInfo implementation object containing meta data
       *         for the properties supported by this content.
       */
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >
-    getPropertySetInfo();
+    getPropertySetInfo( const com::sun::star::uno::Reference<
+                            com::sun::star::ucb::XCommandEnvironment > & xEnv,
+                        sal_Bool bCache = sal_True );
 
     /**
       * This method returns complete meta data for the commands supported by
       * the content. To implement the required command "getCommandInfo" simply
       * return the return value of this method.
       *
+      * @param xEnv is an environment to use for example, for interactions.
+      * @param bCache indicates, whether the implemetation should use
+      *        cached data, if exist.
       * @return an XCommandInfo implementation object containing meta data
       *         for the commands supported by this content.
       */
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandInfo >
-    getCommandInfo();
+    getCommandInfo( const com::sun::star::uno::Reference<
+                            com::sun::star::ucb::XCommandEnvironment > & xEnv,
+                    sal_Bool bCache = sal_True );
 
     /**
       * This method can be used to propagate changes of property values.

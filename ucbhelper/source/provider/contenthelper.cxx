@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contenthelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 13:41:49 $
+ *  last change: $Author: kso $ $Date: 2001-03-27 14:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,7 +754,12 @@ void SAL_CALL ContentImplHelper::addProperty(
     // exist in dynamic and static(!) properties.
     //////////////////////////////////////////////////////////////////////
 
-    if ( getPropertySetInfo()->hasPropertyByName( Name ) )
+    // @@@ Need real command environment here, but where to get it from?
+    //     XPropertyContainer interface should be replaced by
+    //     XCommandProcessor commands!
+    Reference< XCommandEnvironment > xEnv;
+
+    if ( getPropertySetInfo( xEnv )->hasPropertyByName( Name ) )
     {
         // Property does already exist.
         throw PropertyExistException();
@@ -839,7 +844,12 @@ void SAL_CALL ContentImplHelper::removeProperty( const OUString& Name )
 
     try
     {
-        Property aProp = getPropertySetInfo()->getPropertyByName( Name );
+        // @@@ Need real command environment here, but where to get it from?
+        //     XPropertyContainer interface should be replaced by
+        //     XCommandProcessor commands!
+        Reference< XCommandEnvironment > xEnv;
+
+        Property aProp = getPropertySetInfo( xEnv )->getPropertyByName( Name );
 
         if ( !( aProp.Attributes & PropertyAttribute::REMOVEABLE ) )
         {
@@ -1255,23 +1265,31 @@ sal_Bool ContentImplHelper::exchange(
 }
 
 //=========================================================================
-Reference< XCommandInfo > ContentImplHelper::getCommandInfo()
+Reference< XCommandInfo > ContentImplHelper::getCommandInfo(
+        const Reference< XCommandEnvironment > & xEnv, sal_Bool bCache )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     if ( !m_pImpl->m_xCommandsInfo.isValid() )
-        m_pImpl->m_xCommandsInfo = new CommandProcessorInfo( m_xSMgr, this );
+        m_pImpl->m_xCommandsInfo
+            = new CommandProcessorInfo( m_xSMgr, xEnv, this );
+    else if ( !bCache )
+        m_pImpl->m_xCommandsInfo->reset();
 
     return Reference< XCommandInfo >( m_pImpl->m_xCommandsInfo.getBodyPtr() );
 }
 
 //=========================================================================
-Reference< XPropertySetInfo > ContentImplHelper::getPropertySetInfo()
+Reference< XPropertySetInfo > ContentImplHelper::getPropertySetInfo(
+        const Reference< XCommandEnvironment > & xEnv, sal_Bool bCache )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     if ( !m_pImpl->m_xPropSetInfo.isValid() )
-        m_pImpl->m_xPropSetInfo = new PropertySetInfo( m_xSMgr, this );
+        m_pImpl->m_xPropSetInfo
+            = new PropertySetInfo( m_xSMgr, xEnv, this );
+    else if ( !bCache )
+        m_pImpl->m_xPropSetInfo->reset();
 
     return Reference< XPropertySetInfo >(
                                     m_pImpl->m_xPropSetInfo.getBodyPtr() );
