@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-31 14:35:35 $
+ *  last change: $Author: sj $ $Date: 2001-09-17 14:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2209,7 +2209,10 @@ void SdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationInfoA
                 pInfo->bDimHide = TRUE;                     // verstecken statt abblenden
             break;
             default :
+            {
+                ePresChange = PRESCHANGE_MANUAL;
                 pInfo->bDimHide = FALSE;                    // verstecken statt abblenden
+            }
             break;
         }
     }
