@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:29:54 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,11 @@
 #ifndef SC_XICONTENT_HXX
 #include "xicontent.hxx"
 #endif
+#ifndef SC_XIESCHER_HXX
+#include "xiescher.hxx"
+#endif
 
-#include "XclImpObjects.hxx"
+#include "root.hxx"
 
 
 // Global data ================================================================
@@ -186,6 +189,11 @@ XclImpWebQueryBuffer& XclImpRoot::GetWebQueryBuffer() const
     if( !mrImpData.mpWebQBuffer.get() )
         mrImpData.mpWebQBuffer.reset( new XclImpWebQueryBuffer( GetRoot() ) );
     return *mrImpData.mpWebQBuffer;
+}
+
+ExcelToSc& XclImpRoot::GetFmlaConverter() const
+{
+    return *mpRD->pFmlaConverter;
 }
 
 String XclImpRoot::GetScAddInName( const String& rXclName ) const
