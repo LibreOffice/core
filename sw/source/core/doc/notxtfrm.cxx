@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-27 14:44:55 $
+ *  last change: $Author: os $ $Date: 2002-11-01 13:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,9 @@
 #endif
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
+#endif
+#ifndef _ACCESSIBILITYOPTIONS_HXX
+#include <accessibilityoptions.hxx>
 #endif
 
 #define DEFTEXTSIZE  12
@@ -494,7 +497,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
         }
         return;
     }
-    if( pSh->GetViewOptions()->IsStopAnimatedGraphics() )
+    if( pSh->GetAccessibilityOptions()->IsStopAnimatedGraphics() )
         StopAnimation();
 
     if ( pSh->Imp()->IsPaintInScroll() && pSh->GetWin() && rRect != Frm() &&
@@ -1111,7 +1114,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             {
                 const FASTBOOL bAnimate = rGrfObj.IsAnimated() &&
                                             !pShell->IsPreView() &&
-                            !pShell->GetViewOptions()->IsStopAnimatedGraphics();
+                            !pShell->GetAccessibilityOptions()->IsStopAnimatedGraphics();
                 if( bAnimate &&
                     FindFlyFrm() != ::GetFlyFromMarked( 0, pShell ))
                 {

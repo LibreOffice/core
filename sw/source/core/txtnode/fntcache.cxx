@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-24 06:30:22 $
+ *  last change: $Author: os $ $Date: 2002-11-01 13:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
+#endif
+#ifndef _ACCESSIBILITYOPTIONS_HXX
+#include <accessibilityoptions.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
 #include <svtools/accessibilityoptions.hxx>
@@ -2228,9 +2231,8 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
         // UnderLineColor has to be changed if:
         // 1. IsAlwaysAutoColor is set
 
-        const SwViewOption* pViewOption = GetShell()->GetViewOptions();
         bChgUnderColor = ! bPrt && GetShell() &&
-                         pViewOption->IsAlwaysAutoColor();
+                GetShell()->GetAccessibilityOptions()->IsAlwaysAutoColor();
 
         bChgFntColor = COL_AUTO == rFnt.GetColor().GetColor() || bChgUnderColor;
 
@@ -2272,6 +2274,7 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
             // we take the window text color for painting
             if( GetShell() && GetShell()->GetWin() )
             {
+                const SwViewOption* pViewOption = GetShell()->GetViewOptions();
                 if(pViewOption->IsPagePreview() &&
                         !SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews())
                     nNewColor = COL_BLACK;

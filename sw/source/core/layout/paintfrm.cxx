@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: od $ $Date: 2002-10-28 08:55:41 $
+ *  last change: $Author: os $ $Date: 2002-11-01 13:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,9 @@
 #endif
 #ifndef _DBG_LAY_HXX
 #include <dbg_lay.hxx>
+#endif
+#ifndef _ACCESSIBILITYOPTIONS_HXX
+#include <accessibilityoptions.hxx>
 #endif
 
 #define GETOBJSHELL()       ((SfxObjectShell*)rSh.GetDoc()->GetDocShell())
@@ -2883,7 +2886,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
         // to ignore the setting of a new color. Therefore we have to reset
         // the drawing mode
         pOut->SetDrawMode( 0 );
-        if ( pGlobalShell->GetViewOptions()->IsUseAutomaticBorderColor() )
+        if ( pGlobalShell->GetAccessibilityOptions()->IsUseAutomaticBorderColor() )
         {
             aShadowColor = pGlobalShell->GetWin()->GetSettings().
                            GetStyleSettings().GetWindowTextColor();
@@ -2942,7 +2945,7 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
                    ( IsInFly() ? SUBCOL_FLY : SUBCOL_PAGE ) );
     if( pColor && pGlobalShell->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
-        pGlobalShell->GetViewOptions()->IsUseAutomaticBorderColor() )
+        pGlobalShell->GetAccessibilityOptions()->IsUseAutomaticBorderColor() )
     {
         pColor = &pGlobalShell->GetWin()->GetSettings().GetStyleSettings()
                                                        .GetWindowTextColor();

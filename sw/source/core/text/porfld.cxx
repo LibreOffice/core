@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-27 13:40:00 $
+ *  last change: $Author: os $ $Date: 2002-11-01 13:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@
 #endif
 #ifndef _PORFTN_HXX
 #include <porftn.hxx>   // SwFtnPortion
+#endif
+#ifndef _ACCESSIBILITYOPTIONS_HXX
+#include <accessibilityoptions.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -918,14 +921,16 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
         if( aTmp.IsOver( rInf.GetPaintRect() ) && !bDraw )
         {
             rInf.NoteAnimation();
+            ViewShell* pViewShell = 0;
             if( OUTDEV_VIRDEV == rInf.GetOut()->GetOutDevType() )
             {
                 ( (Graphic*) pBrush->GetGraphic() )->StopAnimation(0,nId);
                 rInf.GetTxtFrm()->GetShell()->InvalidateWindows( aTmp );
             }
             // first check accessibility options before starting animation
-            else if ( ! rInf.GetOpt().IsStopAnimatedGraphics() &&
-                      ! rInf.GetTxtFrm()->GetShell()->IsPreView() )
+            else if ( 0 != (pViewShell = rInf.GetTxtFrm()->GetShell()) &&
+                     ! pViewShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
+                      ! pViewShell->IsPreView() )
             {
                 ( (Graphic*) pBrush->GetGraphic() )->StartAnimation(
                     (OutputDevice*)rInf.GetOut(), aPos, aSize, nId );

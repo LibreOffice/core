@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-24 06:27:54 $
+ *  last change: $Author: os $ $Date: 2002-11-01 13:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,9 @@
 #endif
 #ifndef _ITRATR_HXX
 #include <itratr.hxx>
+#endif
+#ifndef _ACCESSIBILITYOPTIONS_HXX
+#include <accessibilityoptions.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -716,7 +719,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     {
         // check if accessibility options allow blinking portions:
         const ViewShell* pSh = GetTxtFrm()->GetShell();
-        if ( pSh && ! pSh->GetViewOptions()->IsStopAnimatedText() &&
+        if ( pSh && ! pSh->GetAccessibilityOptions()->IsStopAnimatedText() &&
              ! pSh->IsPreView() )
         {
             if( !pBlink )
