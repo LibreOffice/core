@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 12:04:10 $
+ *  last change: $Author: oj $ $Date: 2001-10-19 12:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,6 +677,8 @@ void setColumnUiProperties( const Reference< XPropertySet>& _rxColumn,const OFie
         _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(_pFieldDesc->GetHorJustify())));
     if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
         _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(_pFieldDesc->GetDescription()));
+    if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
+        _rxColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,makeAny(_pFieldDesc->GetDefaultValue()));
 }
 // -----------------------------------------------------------------------------
 float ConvertFontWeight( ::FontWeight eWeight )

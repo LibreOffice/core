@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:25:13 $
+ *  last change: $Author: oj $ $Date: 2001-10-19 12:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,6 +448,10 @@ void OTableDesignView::setReadOnly(sal_Bool _bReadOnly)
 void OTableDesignView::reSync()
 {
     GetEditorCtrl()->DeactivateCell();
+    OTableRow* pRow = (*GetEditorCtrl()->GetRowList())[GetEditorCtrl()->GetCurRow()];
+    OFieldDescription* pFieldDescr = pRow ? pRow->GetActFieldDescr() : NULL;
+    if(pFieldDescr)
+        GetDescWin()->DisplayData(pFieldDescr);
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 12:04:08 $
+ *  last change: $Author: oj $ $Date: 2001-10-19 12:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1029,7 +1029,7 @@ void OTableController::loadData()
             sal_Int32 nAlign        = 0;
 
             sal_Bool bIsAutoIncrement,bIsCurrency;
-            ::rtl::OUString sName,sDefaultValue,sDescription,sTypeName;
+            ::rtl::OUString sName,sControlDefault,sDescription,sTypeName;
 
             // get the properties from the column
             xColumn->getPropertyValue(PROPERTY_NAME)            >>= sName;
@@ -1044,8 +1044,8 @@ void OTableController::loadData()
 
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
                 xColumn->getPropertyValue(PROPERTY_HELPTEXT)    >>= sDescription;
-            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-                xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE)>>= sDefaultValue;
+            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
+                xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT)>>= sControlDefault;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
                 xColumn->getPropertyValue(PROPERTY_FORMATKEY)   >>= nFormatKey;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
@@ -1076,7 +1076,7 @@ void OTableController::loadData()
                 //////////////////////////////////////////////////////////////////////
                 // Spezielle Daten
                 pActFieldDescr->SetIsNullable(nNullable);
-                pActFieldDescr->SetDefaultValue(sDefaultValue);
+                pActFieldDescr->SetDefaultValue(sControlDefault);
                 pActFieldDescr->SetPrecision(nPrecision);
                 pActFieldDescr->SetScale(nScale);
             }
@@ -1285,7 +1285,7 @@ void OTableController::alterColumns()
 
             sal_Int32 nType,nPrecision,nScale,nNullable,nFormatKey=0,nAlignment=0;
             sal_Bool bAutoIncrement;
-            ::rtl::OUString sDescription,sDefaultValue;
+            ::rtl::OUString sDescription,sControlDefault;
 
             xColumn->getPropertyValue(PROPERTY_TYPE)            >>= nType;
             xColumn->getPropertyValue(PROPERTY_PRECISION)       >>= nPrecision;
@@ -1295,8 +1295,8 @@ void OTableController::alterColumns()
             //  xColumn->getPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(pField->IsCurrency()));
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
                 xColumn->getPropertyValue(PROPERTY_HELPTEXT) >>= sDescription;
-            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-                xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE) >>= sDefaultValue;
+            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
+                xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT) >>= sControlDefault;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
                 xColumn->getPropertyValue(PROPERTY_FORMATKEY)   >>= nFormatKey;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
@@ -1307,8 +1307,7 @@ void OTableController::alterColumns()
                 nPrecision != pField->GetPrecision()        ||
                 nScale != pField->GetScale()                ||
                 nNullable != pField->GetIsNullable()        ||
-                bAutoIncrement != pField->IsAutoIncrement() ||
-                sDefaultValue != pField->GetDefaultValue()) &&
+                bAutoIncrement != pField->IsAutoIncrement())&&
                 xColumnFactory.is())
             {
                 Reference<XPropertySet> xNewColumn;
@@ -1369,6 +1368,11 @@ void OTableController::alterColumns()
             {
                 if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
                     xColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(pField->GetDescription()));
+            }
+            if(sControlDefault != pField->GetDefaultValue())
+            {
+                if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
+                    xColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,makeAny(pField->GetDefaultValue()));
             }
         }
         else if(xColumnFactory.is() && xAlter.is() && nPos < nColumnCount)
