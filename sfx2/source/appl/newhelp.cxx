@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: os $ $Date: 2002-09-05 11:21:41 $
+ *  last change: $Author: pb $ $Date: 2002-09-23 13:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2284,6 +2284,12 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             // do nothing disables the writer accelerators
             nDone = 1;
          }
+        else if ( rKeyCode.IsMod1() && rKeyCode.GetCode() == KEY_F4 )
+        {
+            // <STRG><F4> -> close top frame
+            pHelpWin->CloseWindow();
+            nDone = 1;
+        }
     }
 
     return nDone ? nDone : Window::PreNotify( rNEvt );
@@ -2864,8 +2870,13 @@ long SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             DoAction( rKeyCode.GetCode() == KEY_RIGHT ? TBI_FORWARD : TBI_BACKWARD );
             bHandled = sal_True;
         }
+        else if ( rKeyCode.IsMod1() && rKeyCode.GetCode() == KEY_F4 )
+        {
+            // <STRG><F4> -> close top frame
+            CloseWindow();
+            bHandled = sal_True;
+        }
     }
-
     return bHandled ? 1 : Window::PreNotify( rNEvt );
 }
 // -----------------------------------------------------------------------
@@ -2985,6 +2996,33 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
             }
             break;
         }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SfxHelpWindow_Impl::CloseWindow()
+{
+    try
+    {
+        // search for top frame
+        Reference< XFramesSupplier > xCreator = getTextFrame()->getCreator();
+        while ( xCreator.is() && !xCreator->isTop() )
+        {
+            xCreator = xCreator->getCreator();
+        }
+
+        // when found, close it
+        if ( xCreator.is() && xCreator->isTop() )
+        {
+            Reference < XCloseable > xCloser( xCreator, UNO_QUERY );
+            if ( xCloser.is() )
+                xCloser->close( sal_False );
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERRORFILE( "SfxHelpWindow_Impl::CloseWindow(): caught an exception" );
     }
 }
 
