@@ -1222,7 +1222,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         my $create_download = 0;
         my $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
         if ( $$downloadname ne "" ) { $create_download = 1; }
-        if ( $installer::globals::languagepack ) { $create_download = 0; }  # no download sets for Unix language packs
+        if (( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi )) { $create_download = 0; } # no download sets for Unix language packs
         if (( $is_success ) && ( $create_download ))
         {
             $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);
