@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_fat.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change:$Date: 2004-04-21 12:42:57 $
+ *  last change:$Date: 2004-07-23 10:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,7 @@ public class java_fat implements TestBase {
                 System.out.println("Exception while creating " +
                                    tCase.getObjectName());
                 System.out.println("Message " + e.getMessage());
+                e.printStackTrace ();
                 tEnv = null;
             } catch (java.lang.UnsatisfiedLinkError e) {
                 System.out.println("Exception while creating " +
