@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:18:33 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ japanese ] = "η·γ®ε±ζ€§";
         Text[ chinese_traditional ] = "η·ζΆε±¬ζ€§";
         Text[ arabic ] = "Line properties";
-        Text[ greek ] = "Line properties";
+        Text[ greek ] = "Ιδιότητες γραμμής";
         Text[ korean ] = "μ„  λ“±λ΅ μ •λ³΄";
         Text[ turkish ] = "Satύr φzellikleri";
         Text[ language_user1 ] = " ";
@@ -197,7 +197,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ greek ] = "Χρώμα";
         Text[ korean ] = "μƒ‰μƒ(~R)";
         Text[ turkish ] = "Renk";
-        Text[ language_user1 ] = "DD(09.05.2001): ~Color";
+        Text[ language_user1 ] = "; DD(09.05.2001): ~Color";
         Text[ catalan ] = "Colo~r";
         Text[ thai ] = "~ΰΈªΰΈµ";
         Text[ czech ] = "Barva";
@@ -342,7 +342,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ japanese ] = "η·γ®ηµ‚η‚Ή";
         Text[ chinese_traditional ] = "η·ζΆη®­ι ­";
         Text[ arabic ] = "δεΗνΗΚ ΗαΞΨ";
-        Text[ greek ] = "Άκρα γραμμής";
+        Text[ greek ] = "Στυλ βέλους";
         Text[ korean ] = "ν™”μ‚΄ν‘ μ¤νƒ€μΌ";
         Text[ turkish ] = "Ok biηemleri";
         Text[ language_user1 ] = " ";
@@ -497,7 +497,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ japanese ] = "δΈ­ε¤®(~N)";
         Text[ chinese_traditional ] = "η½®δΈ­(~N)";
         Text[ arabic ] = "ΚζΣνΨ";
-        Text[ greek ] = "κεντραρισμένα";
+        Text[ greek ] = "στο κέντρο";
         Text[ korean ] = "κ°€μ΄λ°(~N)";
         Text[ turkish ] = "Ortala";
         Text[ language_user1 ] = " ";
@@ -532,7 +532,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ japanese ] = "δΈ­ε¤®ζƒγ(~E)";
         Text[ chinese_traditional ] = "η½®δΈ­(~E)";
         Text[ arabic ] = "ΚζΣνΨ";
-        Text[ greek ] = "κεντραρισμένα";
+        Text[ greek ] = "στο κέντρο";
         Text[ korean ] = "κ°€μ΄λ°(~E)";
         Text[ turkish ] = "Ortala";
         Text[ language_user1 ] = " ";
@@ -609,7 +609,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ chinese_simplified ] = "ε›Ύζ ‡";
         Text[ chinese_traditional ] = "ε–η¤Ί";
         Text[ arabic ] = "ΡγÒ";
-        Text[ greek ] = "Σύμβολο";
+        Text[ greek ] = "Εικονίδιο";
         Text[ korean ] = "μ•„μ΄μ½";
         Text[ turkish ] = "Simge";
         Text[ language_user1 ] = " ";
@@ -750,7 +750,7 @@ TabPage RID_SVXPAGE_LINE
                     Text[ chinese_simplified ] = "η”»ε»";
                     Text[ chinese_traditional ] = "η•«ε»";
                     Text[ arabic ] = "ΗαΜΗανΡν";
-                    Text[ greek ] = "Gallery";
+                    Text[ greek ] = "Συλλογή";
                     Text[ korean ] = "κ°¤λ¬λ¦¬";
                     Text[ turkish ] = "Galeri";
                     Text[ language_user1 ] = " ";
@@ -1017,7 +1017,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ japanese ] = "ε±ζ€§";
         Text[ chinese_traditional ] = "ε±¬ζ€§";
         Text[ arabic ] = "ΚΪΡνέ";
-        Text[ greek ] = "Ορισμός";
+        Text[ greek ] = "Ιδιότητες";
         Text[ korean ] = "λ“±λ΅ μ •λ³΄";
         Text[ turkish ] = "Φzellikler";
         Text[ language_user1 ] = " ";
@@ -1899,7 +1899,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ japanese ] = "η·γ®ηµ‚η‚Ήγ‚’η®΅η†";
         Text[ chinese_traditional ] = "η®΅η†η·ζΆη®­ι ­";
         Text[ arabic ] = "γαΗΝΩΙ";
-        Text[ greek ] = "Συμβουλή";
+        Text[ greek ] = "Οργάνωση των στυλ βέλους";
         Text[ korean ] = "ν™”μ‚΄ν‘ μ¤νƒ€μΌ κ΄€λ¦¬";
         Text[ turkish ] = "Ηizgi ucu sitillerini dόzenle";
         Text[ language_user1 ] = " ";
@@ -1934,7 +1934,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ japanese ] = "ιΈζγ—γγ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ‚’θΏ½ε γ—γ¦ζ–°γ—γ„η·η«―γ‚’δ½ζγ—γΎγ™γ€‚";
         Text[ chinese_traditional ] = "ζ‚¨θƒ½ε¤ ι€ιζ–°εΆιΈζ“‡δΈ€ε€‹η‰©δ»¶η„ζ–ΉεΌδΎ†ζ–°ε»ΊδΈ€ε€‹η·ζΆη®­ι ­γ€‚";
         Text[ arabic ] = "νγίδί ΗαΝΥζα Ϊαμ δεΗνΗΚ ΜΟνΟΙ ααΞΨ Ϊδ ΨΡνή ΕΟΡΗΜ ίΗΖδ γΝΟΟ";
-        Text[ greek ] = "Για να δημιουργήσετε νέες 'αρχές' γραμμής, προσθέστε ένα επιλεγμένο αντικείμενο";
+        Text[ greek ] = "Προσθήκη επιλεγμένου αντικειμένου για δημιουργία νέων στυλ βέλους.";
         Text[ korean ] = "μƒλ΅μ΄ ν™”μ‚΄ν‘ μ¤νƒ€μΌμ„ λ§λ“¤λ ¤λ©΄ μ„ νƒλ κ°μ²΄λ¥Ό μ¶”κ°€ν•μ‹­μ‹μ¤.";
         Text[ turkish ] = "Yeni ok biηemleri oluώturmak iηin seηili bir nesneyi seη.";
         Text[ language_user1 ] = " ";
@@ -1969,7 +1969,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ japanese ] = "η·γ®ηµ‚η‚Ήγ‚Ήγ‚Ώγ‚¤γƒ«";
         Text[ chinese_traditional ] = "η·ζΆη®­ι ­εΌζ¨£";
         Text[ arabic ] = "δεΗνΙ ΗαΞΨ";
-        Text[ greek ] = "Τέλος γραμμής";
+        Text[ greek ] = "Στυλ βέλους";
         Text[ korean ] = "ν™”μ‚΄ν‘ μ¤νƒ€μΌ";
         Text[ turkish ] = "Ηizgi ucu biηimi";
         Text[ language_user1 ] = " ";
@@ -2010,7 +2010,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ japanese ] = "γ‚Ώγ‚¤γƒγƒ«(~T)";
         Text[ chinese_traditional ] = "ζ¨™ι΅(~T)";
         Text[ arabic ] = "δεΗνΙ ΗαΞΨ";
-        Text[ greek ] = "Τέλος γραμμής";
+        Text[ greek ] = "Τίτλ~ος";
         Text[ korean ] = "μ λª©(~T)";
         Text[ turkish ] = "Baώlύk";
         Text[ language_user1 ] = " ";
@@ -2089,7 +2089,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ japanese ] = "ε¤‰ζ›΄(~M)...";
         Text[ chinese_traditional ] = "θ®ζ›΄(~M)...";
         Text[ arabic ] = "ΚΪΟνα";
-        Text[ greek ] = "Τροποποίηση";
+        Text[ greek ] = "~Τροποποίηση...";
         Text[ korean ] = "μμ •(~M)...";
         Text[ turkish ] = "~Deπiώtir...";
         Text[ language_user1 ] = " ";
@@ -2396,6 +2396,7 @@ TabDialog RID_SVXDLG_LINE
     Text[ hindi ] = "ΰ¤°ΰ¥‡ΰ¤–ΰ¤Ύ";
     Text[ slovak ] = "Δiara";
 };
+
 
 
 
