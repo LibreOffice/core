@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:53:26 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -937,6 +937,9 @@ void __EXPORT ScTextWnd::KeyInput(const KeyEvent& rKEvt)
 
 void __EXPORT ScTextWnd::GetFocus()
 {
+    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+    if ( pViewSh )
+        pViewSh->SetFormShellAtTop( FALSE );     // focus in input line -> FormShell no longer on top
 }
 
 void __EXPORT ScTextWnd::LoseFocus()
