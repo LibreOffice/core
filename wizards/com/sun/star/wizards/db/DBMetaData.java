@@ -2,9 +2,9 @@
 *
 *  $RCSfile: DBMetaData.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: kz $ $Date: 2004-11-27 09:05:19 $
+*  last change: $Author: vg $ $Date: 2005-02-17 11:19:46 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -318,7 +318,7 @@ public class DBMetaData {
     }
 
     void InitializeWidthList() {
-        WidthList = new int[16][2];
+        WidthList = new int[17][2];
         WidthList[0][0] = DataType.BIT; // ==  -7;
         WidthList[1][0] = DataType.TINYINT; // ==  -6;
         WidthList[2][0] = DataType.BIGINT; // ==  -5;
@@ -335,6 +335,7 @@ public class DBMetaData {
         WidthList[13][0] = DataType.DATE; // ==  91;
         WidthList[14][0] = DataType.TIME; // ==  92;
         WidthList[15][0] = DataType.TIMESTAMP; // ==  93;
+        WidthList[16][0] = DataType.BOOLEAN; // ==  16;
         // NumericTypes are all types where aggregate functions can be performed on.
         // Similarly to a major competitor date/time/timmestamp fields are not included
         NumericTypes = new int[9];
