@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxfgrprd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-25 12:25:06 $
+ *  last change: $Author: sj $ $Date: 2002-04-29 11:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ DXFGroupReader::DXFGroupReader(SvStream & rIStream,
     S100[ 0 ] = S102[ 0 ] = 0;
     for (i=0; i<50; i++) F10_59[i]=0.0;
     for (i=0; i<20; i++) I60_79[i]=0;
+    for (i=0; i<10; i++) I90_99[i]=0;
     for (i=0; i< 8; i++) F140_147[i]=0.0;
     for (i=0; i< 6; i++) I170_175[i]=0;
     for (i=0; i<30; i++) F210_239[i]=0.0;
@@ -180,6 +181,8 @@ USHORT DXFGroupReader::Read()
     if      (nG<  10) ReadS(S0_9[nG]);
     else if (nG<  60) F10_59[nG-10]=ReadF();
     else if (nG<  80) I60_79[nG-60]=ReadI();
+    else if (nG<  90) goto LErr;
+    else if (nG<  99) I90_99[nG-90]=ReadI();
     else if (nG==100) ReadS(S100);
     else if (nG==102) ReadS(S102);
     else if (nG==105)
@@ -226,17 +229,16 @@ LErr:
 
 long DXFGroupReader::GetI(USHORT nG)
 {
-    nG-=60;
-    if (nG<20) return I60_79[nG];
-    else {
-        nG-=110;
-        if (nG<6) return I170_175[nG];
-        else {
-            nG-=890;
-            if (nG<20) return I1060_1079[nG];
-            else return 0;
-        }
-    }
+    sal_Int32 nRetValue = 0;
+    if ( ( nG >= 60 ) && ( nG <= 79 ) )
+        nRetValue = I60_79[ nG - 60 ];
+    else if ( ( nG >= 90 ) && ( nG <= 99 ) )
+        nRetValue = I90_99[ nG - 90 ];
+    else if ( ( nG >= 170 ) && ( nG <= 175 ) )
+        nRetValue = I170_175[ nG - 170 ];
+    else if ( ( nG >= 1060 ) && ( nG <= 1079 ) )
+        nRetValue = I1060_1079[ nG - 1060 ];
+    return nRetValue;
 }
 
 double DXFGroupReader::GetF(USHORT nG)
@@ -275,16 +277,14 @@ const char * DXFGroupReader::GetS(USHORT nG)
 
 void DXFGroupReader::SetI(USHORT nG, long nI)
 {
-    nG-=60;
-    if (nG<20) I60_79[nG]=nI;
-    else {
-        nG-=110;
-        if (nG<6) I170_175[nG]=nI;
-        else {
-            nG-=890;
-            if (nG<20) I1060_1079[nG]=nI;
-        }
-    }
+    if ( ( nG >= 60 ) && ( nG <= 79 ) )
+        I60_79[ nG - 60 ] = nI;
+    else if ( ( nG >= 90 ) && ( nG <= 99 ) )
+        I90_99[ nG - 90 ] = nI;
+    else if ( ( nG >= 170 ) && ( nG <= 175 ) )
+        I170_175[ nG - 170 ] = nI;
+    else if ( ( nG >= 1060 ) && ( nG <= 1079 ) )
+        I1060_1079[ nG - 1060 ] = nI;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxfgrprd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-19 08:55:17 $
+ *  last change: $Author: sj $ $Date: 2002-04-29 11:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ private:
     char   S0_9      [10][DXF_MAX_STRING_LEN+1]; // Strings  Gruppencodes 0..9
     double F10_59    [50];      // Floats   Gruppencodes 10..59
     long   I60_79    [20];      // Integers Gruppencodes 60..79
+    long   I90_99    [10];
     char   S100      [DXF_MAX_STRING_LEN+1];
     char   S102      [DXF_MAX_STRING_LEN+1];
     double F140_147  [ 8];      // Floats   Gruppencodes 140..147
