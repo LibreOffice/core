@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-03 08:06:33 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 05:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Druckdaten reduzieren" ;
         Text [ English ] = "Reduce printing data" ;
+        Text[ english_us ] = "Reduce printing data";
+        Text[ portuguese ] = "Reduce printing data";
+        Text[ russian ] = "Reduce printing data";
+        Text[ greek ] = "Reduce printing data";
+        Text[ dutch ] = "Reduce printing data";
+        Text[ french ] = "Reduce printing data";
+        Text[ spanish ] = "Reduce printing data";
+        Text[ italian ] = "Reduce printing data";
+        Text[ danish ] = "Reduce printing data";
+        Text[ swedish ] = "Reducera utskriftsdata";
+        Text[ polish ] = "Zredukuj dane drukowania";
+        Text[ portuguese_brazilian ] = "Reduce printing data";
+        Text[ japanese ] = "Reduce printing data";
+        Text[ korean ] = "Reduce printing data";
+        Text[ chinese_simplified ] = "Reduce printing data";
+        Text[ chinese_traditional ] = "Reduce printing data";
+        Text[ turkish ] = "Reduce printing data";
+        Text[ arabic ] = "Reduce printing data";
+        Text[ catalan ] = "Reduce printing data";
     };
     FixedText FT_OUTPUTTYPE
     {
@@ -93,6 +112,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 60, 10 ) ;
         Text = "Einstellungen für" ;
         Text [ ENGLISH ] = "Settings for" ;
+        Text[ english_us ] = "Settings for";
+        Text[ portuguese ] = "Settings for";
+        Text[ russian ] = "Settings for";
+        Text[ greek ] = "Settings for";
+        Text[ dutch ] = "Settings for";
+        Text[ french ] = "Settings for";
+        Text[ spanish ] = "Settings for";
+        Text[ italian ] = "Settings for";
+        Text[ danish ] = "Settings for";
+        Text[ swedish ] = "Inställningar för";
+        Text[ polish ] = "Ustawienia dotycz¹";
+        Text[ portuguese_brazilian ] = "Settings for";
+        Text[ japanese ] = "Settings for";
+        Text[ korean ] = "Settings for";
+        Text[ chinese_simplified ] = "Settings for";
+        Text[ chinese_traditional ] = "Settings for";
+        Text[ turkish ] = "Settings for";
+        Text[ arabic ] = "Settings for";
+        Text[ catalan ] = "Settings for";
     };
     RadioButton RB_PRINTEROUTPUT
     {
@@ -101,6 +139,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 60, 10 ) ;
         Text = "~Drucker" ;
         Text [ ENGLISH ] = "~Printer" ;
+        Text[ english_us ] = "~Printer";
+        Text[ portuguese ] = "~Printer";
+        Text[ russian ] = "~Printer";
+        Text[ greek ] = "~Printer";
+        Text[ dutch ] = "~Printer";
+        Text[ french ] = "~Printer";
+        Text[ spanish ] = "~Printer";
+        Text[ italian ] = "~Printer";
+        Text[ danish ] = "~Printer";
+        Text[ swedish ] = "S~krivare";
+        Text[ polish ] = "Drukarka";
+        Text[ portuguese_brazilian ] = "~Printer";
+        Text[ japanese ] = "~Printer";
+        Text[ korean ] = "~Printer";
+        Text[ chinese_simplified ] = "~Printer";
+        Text[ chinese_traditional ] = "~Printer";
+        Text[ turkish ] = "~Printer";
+        Text[ arabic ] = "~Printer";
+        Text[ catalan ] = "~Printer";
     };
     RadioButton RB_PRINTFILEOUTPUT
     {
@@ -109,6 +166,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 100, 10 ) ;
         Text = "Drucken ~in Datei" ;
         Text [ ENGLISH ] = "Print to ~file" ;
+        Text[ english_us ] = "Print to ~file";
+        Text[ portuguese ] = "Print to ~file";
+        Text[ russian ] = "Print to ~file";
+        Text[ greek ] = "Print to ~file";
+        Text[ dutch ] = "Print to ~file";
+        Text[ french ] = "Print to ~file";
+        Text[ spanish ] = "Print to ~file";
+        Text[ italian ] = "Print to ~file";
+        Text[ danish ] = "Print to ~file";
+        Text[ swedish ] = "Skriv ut t~ill fil";
+        Text[ polish ] = "Drukuj do pliku";
+        Text[ portuguese_brazilian ] = "Print to ~file";
+        Text[ japanese ] = "Print to ~file";
+        Text[ korean ] = "Print to ~file";
+        Text[ chinese_simplified ] = "Print to ~file";
+        Text[ chinese_traditional ] = "Print to ~file";
+        Text[ turkish ] = "Print to ~file";
+        Text[ arabic ] = "Print to ~file";
+        Text[ catalan ] = "Print to ~file";
     };
 
     // -----------
@@ -120,6 +196,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 121, 10 ) ;
         Text = "Transparenz ~reduzieren" ;
         Text [ ENGLISH ] = "~Reduce transparency" ;
+        Text[ english_us ] = "~Reduce transparency";
+        Text[ portuguese ] = "~Reduce transparency";
+        Text[ russian ] = "~Reduce transparency";
+        Text[ greek ] = "~Reduce transparency";
+        Text[ dutch ] = "~Reduce transparency";
+        Text[ french ] = "~Reduce transparency";
+        Text[ spanish ] = "~Reduce transparency";
+        Text[ italian ] = "~Reduce transparency";
+        Text[ danish ] = "~Reduce transparency";
+        Text[ swedish ] = "~Reducera transparens";
+        Text[ polish ] = "Zredukuj przezroczystoœæ";
+        Text[ portuguese_brazilian ] = "~Reduce transparency";
+        Text[ japanese ] = "~Reduce transparency";
+        Text[ korean ] = "~Reduce transparency";
+        Text[ chinese_simplified ] = "~Reduce transparency";
+        Text[ chinese_traditional ] = "~Reduce transparency";
+        Text[ turkish ] = "~Reduce transparency";
+        Text[ arabic ] = "~Reduce transparency";
+        Text[ catalan ] = "~Reduce transparency";
     };
     RadioButton RB_REDUCETRANSPARENCY_AUTO
     {
@@ -128,6 +223,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 115, 10 ) ;
         Text = "Auto~matisch" ;
         Text [ ENGLISH ] = "Auto~matic" ;
+        Text[ english_us ] = "Auto~matic";
+        Text[ portuguese ] = "Auto~matic";
+        Text[ russian ] = "Auto~matic";
+        Text[ greek ] = "Auto~matic";
+        Text[ dutch ] = "Auto~matic";
+        Text[ french ] = "Auto~matic";
+        Text[ spanish ] = "Auto~matic";
+        Text[ italian ] = "Auto~matic";
+        Text[ danish ] = "Auto~matic";
+        Text[ swedish ] = "Auto~matiskt";
+        Text[ polish ] = "Automatycznie";
+        Text[ portuguese_brazilian ] = "Auto~matic";
+        Text[ japanese ] = "Auto~matic";
+        Text[ korean ] = "Auto~matic";
+        Text[ chinese_simplified ] = "Auto~matic";
+        Text[ chinese_traditional ] = "Auto~matic";
+        Text[ turkish ] = "Auto~matic";
+        Text[ arabic ] = "Auto~matic";
+        Text[ catalan ] = "Auto~matic";
     };
     RadioButton RB_REDUCETRANSPARENCY_NONE
     {
@@ -136,6 +250,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 115, 10 ) ;
         Text = "~Keine Transparenz" ;
         Text [ ENGLISH ] = "~No transparency" ;
+        Text[ english_us ] = "~No transparency";
+        Text[ portuguese ] = "~No transparency";
+        Text[ russian ] = "~No transparency";
+        Text[ greek ] = "~No transparency";
+        Text[ dutch ] = "~No transparency";
+        Text[ french ] = "~No transparency";
+        Text[ spanish ] = "~No transparency";
+        Text[ italian ] = "~No transparency";
+        Text[ danish ] = "~No transparency";
+        Text[ swedish ] = "I~ngen transparens";
+        Text[ polish ] = "Bez przezroczystoœci";
+        Text[ portuguese_brazilian ] = "~No transparency";
+        Text[ japanese ] = "~No transparency";
+        Text[ korean ] = "~No transparency";
+        Text[ chinese_simplified ] = "~No transparency";
+        Text[ chinese_traditional ] = "~No transparency";
+        Text[ turkish ] = "~No transparency";
+        Text[ arabic ] = "~No transparency";
+        Text[ catalan ] = "~No transparency";
     };
 
     // -----------
@@ -147,6 +280,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 121, 10 ) ;
         Text = "Farb~verläufe reduzieren" ;
         Text [ ENGLISH ] = "Reduce ~gradients" ;
+        Text[ english_us ] = "Reduce ~gradients";
+        Text[ portuguese ] = "Reduce ~gradients";
+        Text[ russian ] = "Reduce ~gradients";
+        Text[ greek ] = "Reduce ~gradients";
+        Text[ dutch ] = "Reduce ~gradients";
+        Text[ french ] = "Reduce ~gradients";
+        Text[ spanish ] = "Reduce ~gradients";
+        Text[ italian ] = "Reduce ~gradients";
+        Text[ danish ] = "Reduce ~gradients";
+        Text[ swedish ] = "Reducera färg~gradienter";
+        Text[ polish ] = "Zredukuj gradienty";
+        Text[ portuguese_brazilian ] = "Reduce ~gradients";
+        Text[ japanese ] = "Reduce ~gradients";
+        Text[ korean ] = "Reduce ~gradients";
+        Text[ chinese_simplified ] = "Reduce ~gradients";
+        Text[ chinese_traditional ] = "Reduce ~gradients";
+        Text[ turkish ] = "Reduce ~gradients";
+        Text[ arabic ] = "Reduce ~gradients";
+        Text[ catalan ] = "Reduce ~gradients";
     };
     RadioButton RB_REDUCEGRADIENTS_STRIPES
     {
@@ -155,6 +307,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 79, 10 ) ;
         Text = "Fabverlauf~sstreifen" ;
         Text [ ENGLISH ] = "Gradient ~stripes" ;
+        Text[ english_us ] = "Gradient ~stripes";
+        Text[ portuguese ] = "Gradient ~stripes";
+        Text[ russian ] = "Gradient ~stripes";
+        Text[ greek ] = "Gradient ~stripes";
+        Text[ dutch ] = "Gradient ~stripes";
+        Text[ french ] = "Gradient ~stripes";
+        Text[ spanish ] = "Gradient ~stripes";
+        Text[ italian ] = "Gradient ~stripes";
+        Text[ danish ] = "Gradient ~stripes";
+        Text[ swedish ] = "Gradient ~stripes";
+        Text[ polish ] = "Paski gradientu";
+        Text[ portuguese_brazilian ] = "Gradient ~stripes";
+        Text[ japanese ] = "Gradient ~stripes";
+        Text[ korean ] = "Gradient ~stripes";
+        Text[ chinese_simplified ] = "Gradient ~stripes";
+        Text[ chinese_traditional ] = "Gradient ~stripes";
+        Text[ turkish ] = "Gradient ~stripes";
+        Text[ arabic ] = "Gradient ~stripes";
+        Text[ catalan ] = "Gradient ~stripes";
     };
     NumericField NF_REDUCEGRADIENTS_STEPCOUNT
     {
@@ -174,6 +345,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 112, 10 ) ;
         Text = "~Zwischenfarbe" ;
         Text [ ENGLISH ] = "Medium ~color" ;
+        Text[ english_us ] = "Medium ~color";
+        Text[ portuguese ] = "Medium ~color";
+        Text[ russian ] = "Medium ~color";
+        Text[ greek ] = "Medium ~color";
+        Text[ dutch ] = "Medium ~color";
+        Text[ french ] = "Medium ~color";
+        Text[ spanish ] = "Medium ~color";
+        Text[ italian ] = "Medium ~color";
+        Text[ danish ] = "Medium ~color";
+        Text[ swedish ] = "Medium ~color";
+        Text[ polish ] = "Kolor poœredni";
+        Text[ portuguese_brazilian ] = "Medium ~color";
+        Text[ japanese ] = "Medium ~color";
+        Text[ korean ] = "Medium ~color";
+        Text[ chinese_simplified ] = "Medium ~color";
+        Text[ chinese_traditional ] = "Medium ~color";
+        Text[ turkish ] = "Medium ~color";
+        Text[ arabic ] = "Medium ~color";
+        Text[ catalan ] = "Medium ~color";
     };
 
     // -----------
@@ -185,6 +375,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 121, 10 ) ;
         Text = "~Bitmaps reduzieren" ;
         Text [ ENGLISH ] = "Reduce ~bitmaps" ;
+        Text[ english_us ] = "Reduce ~bitmaps";
+        Text[ portuguese ] = "Reduce ~bitmaps";
+        Text[ russian ] = "Reduce ~bitmaps";
+        Text[ greek ] = "Reduce ~bitmaps";
+        Text[ dutch ] = "Reduce ~bitmaps";
+        Text[ french ] = "Reduce ~bitmaps";
+        Text[ spanish ] = "Reduce ~bitmaps";
+        Text[ italian ] = "Reduce ~bitmaps";
+        Text[ danish ] = "Reduce ~bitmaps";
+        Text[ swedish ] = "Reducera ~bitmaps";
+        Text[ polish ] = "Zredukuj mapy bitowe";
+        Text[ portuguese_brazilian ] = "Reduce ~bitmaps";
+        Text[ japanese ] = "Reduce ~bitmaps";
+        Text[ korean ] = "Reduce ~bitmaps";
+        Text[ chinese_simplified ] = "Reduce ~bitmaps";
+        Text[ chinese_traditional ] = "Reduce ~bitmaps";
+        Text[ turkish ] = "Reduce ~bitmaps";
+        Text[ arabic ] = "Reduce ~bitmaps";
+        Text[ catalan ] = "Reduce ~bitmaps";
     };
     RadioButton RB_REDUCEBITMAPS_OPTIMAL
     {
@@ -193,6 +402,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 236, 10 ) ;
         Text = "~Gute Druckqualität" ;
         Text [ ENGLISH ] = "~Good quality" ;
+        Text[ english_us ] = "~Good quality";
+        Text[ portuguese ] = "~Good quality";
+        Text[ russian ] = "~Good quality";
+        Text[ greek ] = "~Good quality";
+        Text[ dutch ] = "~Good quality";
+        Text[ french ] = "~Good quality";
+        Text[ spanish ] = "~Good quality";
+        Text[ italian ] = "~Good quality";
+        Text[ danish ] = "~Good quality";
+        Text[ swedish ] = "~Good quality";
+        Text[ polish ] = "Wysoka jakoœæ wydruku";
+        Text[ portuguese_brazilian ] = "~Good quality";
+        Text[ japanese ] = "~Good quality";
+        Text[ korean ] = "~Good quality";
+        Text[ chinese_simplified ] = "~Good quality";
+        Text[ chinese_traditional ] = "~Good quality";
+        Text[ turkish ] = "~Good quality";
+        Text[ arabic ] = "~Good quality";
+        Text[ catalan ] = "~Good quality";
     };
     RadioButton RB_REDUCEBITMAPS_NORMAL
     {
@@ -201,6 +429,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 236, 10 ) ;
         Text = "N~ormale Druckqualität" ;
         Text [ ENGLISH ] = "N~ormal quality" ;
+        Text[ english_us ] = "N~ormal quality";
+        Text[ portuguese ] = "N~ormal quality";
+        Text[ russian ] = "N~ormal quality";
+        Text[ greek ] = "N~ormal quality";
+        Text[ dutch ] = "N~ormal quality";
+        Text[ french ] = "N~ormal quality";
+        Text[ spanish ] = "N~ormal quality";
+        Text[ italian ] = "N~ormal quality";
+        Text[ danish ] = "N~ormal quality";
+        Text[ swedish ] = "N~ormal quality";
+        Text[ polish ] = "Zwyk³a jakoœæ wydruku";
+        Text[ portuguese_brazilian ] = "N~ormal quality";
+        Text[ japanese ] = "N~ormal quality";
+        Text[ korean ] = "N~ormal quality";
+        Text[ chinese_simplified ] = "N~ormal quality";
+        Text[ chinese_traditional ] = "N~ormal quality";
+        Text[ turkish ] = "N~ormal quality";
+        Text[ arabic ] = "N~ormal quality";
+        Text[ catalan ] = "N~ormal quality";
     };
     RadioButton RB_REDUCEBITMAPS_RESOLUTION
     {
@@ -209,6 +456,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 60, 10 ) ;
         Text = "Aufl~ösung" ;
         Text [ ENGLISH ] = "Reso~lution" ;
+        Text[ english_us ] = "Reso~lution";
+        Text[ portuguese ] = "Reso~lution";
+        Text[ russian ] = "Reso~lution";
+        Text[ greek ] = "Reso~lution";
+        Text[ dutch ] = "Reso~lution";
+        Text[ french ] = "Reso~lution";
+        Text[ spanish ] = "Reso~lution";
+        Text[ italian ] = "Reso~lution";
+        Text[ danish ] = "Reso~lution";
+        Text[ swedish ] = "Reso~lution";
+        Text[ polish ] = "Rozdzielczoœæ";
+        Text[ portuguese_brazilian ] = "Reso~lution";
+        Text[ japanese ] = "Reso~lution";
+        Text[ korean ] = "Reso~lution";
+        Text[ chinese_simplified ] = "Reso~lution";
+        Text[ chinese_traditional ] = "Reso~lution";
+        Text[ turkish ] = "Reso~lution";
+        Text[ arabic ] = "Reso~lution";
+        Text[ catalan ] = "Reso~lution";
     };
     ListBox LB_REDUCEBITMAPS_RESOLUTION
     {
@@ -236,6 +502,186 @@ TabPage TP_COMMONPRINTOPTIONS
             < "300 DPI"; 0; > ;
             < "600 DPI"; 0; > ;
         };
+    StringList [ language_user1 ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ english_us ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ portuguese ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ dutch ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ french ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ spanish ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ italian ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ danish ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ swedish ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "72 dpi"; 0; > ;
+        < "96 dpi"; 0; > ;
+        < "150 dpi (faks)"; 0; > ;
+        < "200 dpi (prekonfiguracja)"; 0; > ;
+        < "300 dpi"; 0; > ;
+        < "600 dpi"; 0; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "72 DPI"; 0; > ;
+        < "96 DPI"; 0; > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (Voreinstellung)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
     };
     CheckBox CB_REDUCEBITMAPS_TRANSPARENCY
     {
@@ -244,6 +690,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 236, 10 ) ;
         Text = "Transparente Ob~jekte einschließen" ;
         Text [ ENGLISH ] = "Include transparent ob~jects" ;
+        Text[ english_us ] = "Include transparent ob~jects";
+        Text[ portuguese ] = "Include transparent ob~jects";
+        Text[ russian ] = "Include transparent ob~jects";
+        Text[ greek ] = "Include transparent ob~jects";
+        Text[ dutch ] = "Include transparent ob~jects";
+        Text[ french ] = "Include transparent ob~jects";
+        Text[ spanish ] = "Include transparent ob~jects";
+        Text[ italian ] = "Include transparent ob~jects";
+        Text[ danish ] = "Include transparent ob~jects";
+        Text[ swedish ] = "Inkludera transparenta ob~jekt";
+        Text[ polish ] = "£¹cznie z przezroczystymi obiektami";
+        Text[ portuguese_brazilian ] = "Include transparent ob~jects";
+        Text[ japanese ] = "Include transparent ob~jects";
+        Text[ korean ] = "Include transparent ob~jects";
+        Text[ chinese_simplified ] = "Include transparent ob~jects";
+        Text[ chinese_traditional ] = "Include transparent ob~jects";
+        Text[ turkish ] = "Include transparent ob~jects";
+        Text[ arabic ] = "Include transparent ob~jects";
+        Text[ catalan ] = "Include transparent ob~jects";
     };
 
     // -----------
@@ -255,6 +720,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 123, 10 ) ;
         Text = "Farben in Graustufen um~wandeln" ;
         Text [ ENGLISH ] = "Con~vert colors to greyscales" ;
+        Text[ english_us ] = "Con~vert colors to greyscales";
+        Text[ portuguese ] = "Con~vert colors to greyscales";
+        Text[ russian ] = "Con~vert colors to greyscales";
+        Text[ greek ] = "Con~vert colors to greyscales";
+        Text[ dutch ] = "Con~vert colors to greyscales";
+        Text[ french ] = "Con~vert colors to greyscales";
+        Text[ spanish ] = "Con~vert colors to greyscales";
+        Text[ italian ] = "Con~vert colors to greyscales";
+        Text[ danish ] = "Con~vert colors to greyscales";
+        Text[ swedish ] = "Om~vandla färger till gråskalor";
+        Text[ polish ] = "Zamieñ kolory na odcienie koloru szarego";
+        Text[ portuguese_brazilian ] = "Con~vert colors to greyscales";
+        Text[ japanese ] = "Con~vert colors to greyscales";
+        Text[ korean ] = "Con~vert colors to greyscales";
+        Text[ chinese_simplified ] = "Con~vert colors to greyscales";
+        Text[ chinese_traditional ] = "Con~vert colors to greyscales";
+        Text[ turkish ] = "Con~vert colors to greyscales";
+        Text[ arabic ] = "Con~vert colors to greyscales";
+        Text[ catalan ] = "Con~vert colors to greyscales";
     };
 
     // -----------
@@ -285,6 +769,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ greek ] = "ÐñïåéäïðïéÞóåéò åêôõðùôÞ";
         Text[ korean ] = "ÇÁ¸°ÅÍ-°æ°í";
         Text[ turkish ] = "Uyarýlar";
+        Text[ catalan ] = "Printer warnings";
     };
     CheckBox CB_PAPERSIZE
     {
@@ -298,7 +783,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text [ spanish ] = "~Tamaño del papel" ;
         Text [ french ] = "~Taille du papier" ;
         Text [ dutch ] = "Papiergr~ootte" ;
-        Text [ swedish ] = "~Pappersstorlek" ;
+        Text [ swedish ] = "P~appersstorlek" ;
         Text [ danish ] = "Papirstørrelse" ;
         Text [ portuguese_brazilian ] = "Papiergr~öße" ;
         Text [ portuguese ] = "~Tamanho do papel" ;
@@ -311,6 +796,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ greek ] = "ÌÝãåèïò ÷áñôéïý";
         Text[ korean ] = "¿ëÁö Å©±â(~S)";
         Text[ turkish ] = "Sayfa boyutu";
+        Text[ catalan ] = "P~aper size";
     };
     CheckBox CB_PAPERORIENTATION
     {
@@ -337,6 +823,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ greek ] = "Ðñïóáíáôïëéóìüò ÷áñôéïý";
         Text[ korean ] = "¿ëÁö ¹æÇâ(~O)";
         Text[ turkish ] = "Sayfa duruþu";
+        Text[ catalan ] = "Pap~er orientation";
     };
     CheckBox CB_TRANSPARENCY
     {
@@ -345,6 +832,25 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 123, 10 ) ;
         Text = "~Transparenz" ;
         Text [ ENGLISH ] = "~Transparency" ;
+        Text[ english_us ] = "~Transparency";
+        Text[ portuguese ] = "~Transparency";
+        Text[ russian ] = "~Transparency";
+        Text[ greek ] = "~Transparency";
+        Text[ dutch ] = "~Transparency";
+        Text[ french ] = "~Transparency";
+        Text[ spanish ] = "~Transparency";
+        Text[ italian ] = "~Transparency";
+        Text[ danish ] = "~Transparency";
+        Text[ swedish ] = "~Transparens";
+        Text[ polish ] = "Przezroczystoœæ";
+        Text[ portuguese_brazilian ] = "~Transparency";
+        Text[ japanese ] = "~Transparency";
+        Text[ korean ] = "~Transparency";
+        Text[ chinese_simplified ] = "~Transparency";
+        Text[ chinese_traditional ] = "~Transparency";
+        Text[ turkish ] = "~Transparency";
+        Text[ arabic ] = "~Transparency";
+        Text[ catalan ] = "~Transparency";
     };
 };
 
@@ -394,7 +900,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ russian ] = "Â äàííîì äîêóìåíòå ñîäåðæàòñÿ ïðîçðà÷íûå îáúåêòû.\nÏå÷àòü òàêèõ îáúåêòîâ ìîæåò çàíÿòü íåêîòîðîå\n âðåìÿ. Èãíîðèðîâàòü ýòè îáúåêòû â ïå÷àòè?";
         Text[ greek ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
         Text[ danish ] = "Dokumentet indeholder transparente objekter.\nPå nogle printere kan dette føre til længere\nudskrivningstider. Skal transparensinformationerne\nfor udskrivningen ignoreres?";
-        Text[ polish ] = "Dokument zawiera przezroczyste obiekty.\nW przypadku niektórych drukarek wydruk tych obiektów\nmo¿e potrwaæ trochê d³u¿ej. Czy informacje\no przezroczystoœci maj¹ zostaæ zignorowane?";
+        Text[ polish ] = "Dokument zawiera przezroczyste obiekty.\nW przypadku niektórych drukarek wydruk tych obiektów\nmo¿e potrwaæ trochê d³u¿ej. Czy zignorowaæ\ninformacje o przezroczystoœci?";
         Text[ portuguese_brazilian ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
         Text[ japanese ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
         Text[ korean ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
@@ -407,7 +913,8 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ french ] = "Le document contient des objets transparents.\nCeci peut entraîner une durée d'impression plus\nlongue sur certaines imprimantes. Ignorer\nles informations de transparence pour l'impression?";
         Text[ spanish ] = "El documento contiene objetos transparentes.\nEsto puede causar demoras en algunas impresoras.\n¿Desea que se ignoren las informaciones\nde transparencia para la impresión?";
         Text[ italian ] = "Il vostro documento contiene oggetti trasparenti.\nCon alcune stampanti il processo di stampa potrebbe\ndurare più a lungo del solito. Volete ignorare\nle informazioni di trasparenza per la stampa?";
-        Text[ swedish ] = "Dokumentet innehåller transparenta objekt.\nDet kan leda till längre väntetid på vissa skrivare.\nSka transparensinformation ignoreras för\nutskriften?";
+        Text[ swedish ] = "Dokumentet innehåller transparenta objekt.\nDet kan leda till längre väntetid på vissa skrivare.\nSka transparensen ignoreras för\nutskriften?";
+        Text[ catalan ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe reduced?";
     };
     OKButton BTN_PRINTTRANS_YES
     {
@@ -435,6 +942,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ korean ] = "¿¹(~Y)";
         Text[ turkish ] = "~Evet";
         Text[ language_user1 ] = "-";
+        Text[ catalan ] = "~Yes";
     };
     PushButton BTN_PRINTTRANS_NO
     {
@@ -461,6 +969,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ korean ] = "¾Æ´Ï¿À(~N)";
         Text[ turkish ] = "~Hayýr";
         Text[ language_user1 ] = "-";
+        Text[ catalan ] = "~No";
     };
     CancelButton BTN_PRINTTRANS_CANCEL
     {
@@ -469,6 +978,24 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text = "~Abbrechen" ;
         Text [ English ] = "~Cancel" ;
         Text [ english_us ] = "~Cancel" ;
+        Text[ portuguese ] = "~Cancel";
+        Text[ russian ] = "~Cancel";
+        Text[ greek ] = "~Cancel";
+        Text[ dutch ] = "~Cancel";
+        Text[ french ] = "~Cancel";
+        Text[ spanish ] = "~Cancel";
+        Text[ italian ] = "~Cancel";
+        Text[ danish ] = "~Cancel";
+        Text[ swedish ] = "~Avbryt";
+        Text[ polish ] = "Anuluj";
+        Text[ portuguese_brazilian ] = "~Cancel";
+        Text[ japanese ] = "~Cancel";
+        Text[ korean ] = "~Cancel";
+        Text[ chinese_simplified ] = "~Cancel";
+        Text[ chinese_traditional ] = "~Cancel";
+        Text[ turkish ] = "~Cancel";
+        Text[ arabic ] = "~Cancel";
+        Text[ catalan ] = "~Cancel";
     };
     CheckBox CBX_NOPRINTTRANSWARN
     {
@@ -495,5 +1022,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ korean ] = "ÀÌ °æ°í´Â ´õ ÀÌ»ó Ç¥½Ã¾Ê±â(~D)";
         Text[ turkish ] = "~Bu uyarýyý bir daha gösterme";
         Text[ language_user1 ] = "-";
+        Text[ catalan ] = "~Don't show warning again";
     };
+    Text[ catalan ] = "Warning";
 };
