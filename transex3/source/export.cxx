@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 16:04:01 $
+ *  last change: $Author: rt $ $Date: 2004-11-18 08:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include "wrdtrans.hxx"
 #include "tokens.h"
 #include "utf8conv.hxx"
+#include <iostream>
 
 extern "C" { int yyerror( char * ); }
 extern "C" { int YYWarning( char * ); }
@@ -105,14 +106,9 @@ ByteString sFile;
 MergeDataFile *pMergeDataFile;
 FILE *pTempFile;
 
-/*int nTypBuffer = 0;
-int nTypCurrent = 0;
-bool bNextIsMacro = false;
-bool bLastWasMacro = false;*/
+
 ByteString sStrBuffer;
 bool bMarcro = false;
-/*bool bStart = true;
-int nNextTyp = 0;*/
 
 extern "C" {
 // the whole interface to lexer is in this extern "C" section
@@ -378,6 +374,43 @@ int GetError()
 //
 // class ResData
 //
+
+void ResData::Dump(){
+    printf("**************\nResData\n");
+    printf("sPForm = %s , sResTyp = %s , sId = %s , sGId = %s , sHelpId = %s\n",sPForm.GetBuffer()
+        ,sResTyp.GetBuffer(),sId.GetBuffer(),sGId.GetBuffer(),sHelpId.GetBuffer());
+
+    ByteString a("*pStringList");
+    ByteString b("*pUIEntries");
+    ByteString c("*pFilterList");
+    ByteString d("*pItemList");
+    ByteString e("*pPairedList");
+    ByteString f("sText");
+
+    Export::DumpMap( f , sText );
+
+    if( pStringList )   Export::DumpExportList( a , *pStringList );
+    if( pUIEntries )    Export::DumpExportList( b , *pUIEntries );
+    if( pFilterList )   Export::DumpExportList( c , *pFilterList );
+    if( pItemList )     Export::DumpExportList( d , *pItemList );
+    if( pPairedList )   Export::DumpExportList( e , *pPairedList );
+    printf("\n");
+}
+
+void ResData::addFallbackData( ByteString& sId , const ByteString& sText ){
+    aFallbackData[ sId ] = sText;
+}
+bool ResData::getFallbackData( ByteString& sId , ByteString& sText ){
+    sText = aFallbackData[ sId ];
+    return sText.Len() > 0;
+}
+
+void ResData::addMergedLanguage( ByteString& sLang ){
+    aMergedLanguages[ sLang ]=ByteString("1");
+}
+bool ResData::isMerged( ByteString& sLang ){
+    return aMergedLanguages[ sLang ].Equals("1");
+}
 
 /*****************************************************************************/
 BOOL ResData::SetId( const ByteString &rId, USHORT nLevel )
@@ -906,6 +939,16 @@ int Export::Execute( int nToken, char * pToken )
                     nListIndex = 0;
                     nListLevel = 0;
                 }
+                // PairedList
+                else if ( sKey ==  "PAIREDLIST" ) {
+                    pResData->bList = TRUE;
+                    nList = LIST_PAIRED;
+                    ByteString sLang("de" , RTL_TEXTENCODING_ASCII_US );
+                    nListLang = sLang;
+                    nListIndex = 0;
+                    nListLevel = 0;
+                }
+
                 else if ( sKey ==  "ITEMLIST" ) {
                     pResData->bList = TRUE;
                     nList = LIST_ITEM;
@@ -936,6 +979,8 @@ int Export::Execute( int nToken, char * pToken )
                     nList = LIST_STRING;
                 else if ( sKey == "FILTERLIST" )
                     nList = LIST_FILTER;
+                else if ( sKey == "PAIREDLIST" )
+                    nList = LIST_PAIRED;                // abcd
                 else if ( sKey == "ITEMLIST" )
                     nList = LIST_ITEM;
                 else if ( sKey == "UIENTRIES" )
@@ -1287,6 +1332,7 @@ BOOL Export::ListExists( ResData *pResData, USHORT nLst )
         case LIST_STRING: return pResData->pStringList != NULL; break;
         case LIST_FILTER: return pResData->pFilterList != NULL; break;
         case LIST_ITEM: return pResData->pItemList != NULL; break;
+        case LIST_PAIRED: return pResData->pPairedList != NULL; break;
         case LIST_UIENTRIES: return pResData->pUIEntries != NULL; break;
     }
     return FALSE;
@@ -1452,6 +1498,7 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
             }
         //}
     }
+    FillInFallbacks( pResData );
     if ( pResData->pStringList ) {
         ByteString sList( "stringlist" );
         WriteExportList( pResData, pResData->pStringList, sList, bCreateNew );
@@ -1470,6 +1517,12 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
         if ( bCreateNew )
             pResData->pItemList = 0;
     }
+    if ( pResData->pPairedList ) {
+        ByteString sList( "pairedlist" );
+        WriteExportList( pResData, pResData->pPairedList, sList, bCreateNew );
+        if ( bCreateNew )
+            pResData->pItemList = 0;
+    }
     if ( pResData->pUIEntries ) {
         ByteString sList( "uientries" );
         WriteExportList( pResData, pResData->pUIEntries, sList, bCreateNew );
@@ -1477,6 +1530,25 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
             pResData->pUIEntries = 0;
     }
     return TRUE;
+}
+ByteString Export::GetPairedListID( const ByteString& sText ){
+// < "STRING" ; IDENTIFIER ; > ;
+    ByteString sIdent = sText.GetToken( 1, ';' ).ToUpperAscii();
+    while( sIdent.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
+    sIdent.EraseTrailingChars( ' ' );
+    sIdent.EraseLeadingChars( ' ' );
+    return sIdent;
+}
+ByteString Export::GetPairedListString( const ByteString& sText ){
+// < "STRING" ; IDENTIFIER ; > ;
+    ByteString sString = sText.GetToken( 0, ';' );
+    while( sString.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
+    sString.EraseTrailingChars( ' ' );
+    ByteString s1 = sString.Copy( sString.Search( '\"' )+1 );
+    sString = s1.Copy( 0 , s1.SearchBackward( '\"' ) );
+    sString.EraseTrailingChars( ' ' );
+    sString.EraseLeadingChars( ' ' );
+    return sString;
 }
 
 /*****************************************************************************/
@@ -1495,22 +1567,35 @@ BOOL Export::WriteExportList( ResData *pResData, ExportList *pExportList,
 
     ByteString sTimeStamp( Export::GetTimeStamp());
     ByteString sCur;
-    for ( ULONG i = 0; i < pExportList->Count(); i++ ) {
-        ByteString sLID( ByteString::CreateFromInt64( i + 1 ));
+    for ( ULONG i = 0; pExportList != NULL && i < pExportList->Count(); i++ ) {
         ExportListEntry *pEntry = pExportList->GetObject( i );
                 // mandatory for export: german and eng. and/or enus
+        //ByteString a("Export::WriteExportList::pEntry");
+        //Export::DumpMap( a,  *pEntry );
+
+        ByteString sLID( ByteString::CreateFromInt64( i + 1 ));
         for( long int n = 0; n < aLanguages.size(); n++ ){
             sCur = aLanguages[ n ];
-
-            if ((*pEntry)[ ByteString("de") ].Len() &&
-                    ((*pEntry)[ ByteString("en-US") ].Len() ||
-                         (*pEntry)[ ByteString("en") ].Len()))
+            if ( //1 )
+                  (*pEntry)[ ByteString("de") ].Len() &&
+                     ((*pEntry)[ ByteString("en-US") ].Len() ||
+                          (*pEntry)[ ByteString("en") ].Len()))
                 {
                     if ( bEnableExport )
                     {
-                        ByteString sText((*pEntry)[ ByteString("de") ] );
-                        if ((*pEntry)[ sCur ].Len())
-                            sText = (*pEntry)[ sCur ];
+                        ByteString sText((*pEntry)[ ByteString("en-US") ] );
+
+                        // Strip PairList Line String
+                        if( rTyp.EqualsIgnoreCaseAscii("pairedlist") ){
+                            sLID = GetPairedListID( sText );
+                            if ((*pEntry)[ sCur ].Len())
+                                sText = (*pEntry)[ sCur ];
+                            sText = GetPairedListString( sText );
+                        }
+                        else{
+                            if ((*pEntry)[ sCur ].Len())
+                                sText = (*pEntry)[ sCur ];
+                        }
 
                         ByteString sOutput( sProject ); sOutput += "\t";
                         if ( sRoot.Len())
@@ -1520,7 +1605,6 @@ BOOL Export::WriteExportList( ResData *pResData, ExportList *pExportList,
                         sOutput += sGID; sOutput += "\t";
                         sOutput += sLID; sOutput += "\t\t";
                         sOutput += pResData->sPForm; sOutput += "\t0\t";
-                        //sOutput += ByteString::CreateFromInt64( LangId[ j ] ); sOutput += "\t";
                         sOutput += sCur; sOutput += "\t";
 
                         sOutput += sText; sOutput += "\t\t\t\t";
@@ -1600,6 +1684,14 @@ void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
             nListIndex = 0;
         }
     }
+    else if ( nList == LIST_PAIRED ) {
+        pList = pResData->pPairedList;
+        if ( !pList ) {
+            pResData->pPairedList = new ExportList();
+            pList = pResData->pPairedList;
+            nListIndex = 0;
+        }
+    }
     else if ( nList == LIST_UIENTRIES ) {
         pList = pResData->pUIEntries;
         if ( !pList ) {
@@ -1617,11 +1709,36 @@ void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
         pList->Insert( pNew, LIST_APPEND );
     }
     ExportListEntry *pCurEntry = pList->GetObject( nListIndex );
-    (*pCurEntry)[ nListLang ] = rText;
-    if ( nListLang.EqualsIgnoreCaseAscii("de") ) {
-        (*pCurEntry)[ GERMAN_LIST_LINE_INDEX ] = rLine;
+
+    // For paired list use the line to set proper lid
+    if( nList == LIST_PAIRED ){
+        (*pCurEntry)[ nListLang ] = rLine;
+    }else
+        (*pCurEntry)[ nListLang ] = rText;
+        //(*pCurEntry)[ nListLang ] = rLine;
+
+    // Remember en-US fallback string, so each list has the same amount of elements
+    if ( nListLang.EqualsIgnoreCaseAscii("en-US")  ) {
+        if( nList == LIST_PAIRED ){
+            const ByteString sPlist("pairedlist");
+            ByteString sKey = MergeDataFile::CreateKey( sPlist , pResData->sId , GetPairedListID( rLine ) );
+            pResData->addFallbackData( sKey , rText );
+        }
+    }
+
+    if ( nListLang.EqualsIgnoreCaseAscii("de")  ) {
+        if( nList == LIST_PAIRED ){
+            (*pCurEntry)[ GERMAN_LIST_LINE_INDEX ] = rLine;
+        }
+        else
+            //(*pCurEntry)[ ByteString("de") ] = rText;
+            //(*pCurEntry)[ GERMAN_LIST_LINE_INDEX ] = rText;
+            (*pCurEntry)[ GERMAN_LIST_LINE_INDEX ] = rLine;
+
         pList->NewGermanEntry();
     }
+
+    //printf("Export::InsertListEntry ResData.id = %s ResData.ListData = %s\n",pResData->sId.GetBuffer() ,(*pCurEntry)[ nListLang ].GetBuffer());
     nListIndex++;
 }
 
@@ -1732,6 +1849,7 @@ void Export::WriteToMerged( const ByteString &rText , bool bSDFContent )
     static ByteString SLASH  ('\\');
     static ByteString RETURN ('\n');
 
+
     if( pParseQueue->bMflag && !bSDFContent ) pParseQueue->bMflag;
 
     if ( !bDontWriteOutput || !bUnmerge ) {
@@ -1829,29 +1947,6 @@ void Export::ConvertMergeContent( ByteString &rText, USHORT nTyp )
 
     rText = sNew;
 
-/*
-    while ( rText.SearchAndReplace( "\\\"", "-=<[Hochkomma]>=-" )
-        != STRING_NOTFOUND ) {};
-//  while ( rText.SearchAndReplace( "\\\\", "-=<[BSlashBSlash]>=-" )
-//      != STRING_NOTFOUND ) {};
-    while ( rText.SearchAndReplace( "\"", "-=<[BSlashHKom}>=-" )
-        != STRING_NOTFOUND ) {};
-    while ( rText.SearchAndReplace( "\0x7F", "-=<[0x7F]>=-" )
-        != STRING_NOTFOUND ) {};
-// new
-    while ( rText.SearchAndReplace( "\\", "-=<[BSlash]>=-" )
-        != STRING_NOTFOUND ) {};
-    while ( rText.SearchAndReplace(  "-=<[BSlash]>=-", "\\\\" )
-        != STRING_NOTFOUND ) {};
-// new
-    while ( rText.SearchAndReplace( "-=<[BSlashHKom}>=-", "\\\"" )
-        != STRING_NOTFOUND ) {};
-//  while ( rText.SearchAndReplace(  "-=<[BSlashBSlash]>=-", "\\\\" )
-//      != STRING_NOTFOUND ) {};
-    while ( rText.SearchAndReplace( "-=<[Hochkomma]>=-", "\"" )
-        != STRING_NOTFOUND ) {};
-*/
-
     if ( bNoOpen ) {
         ByteString sTmp( rText );
         rText = "\"";
@@ -1880,6 +1975,7 @@ BOOL Export::PrepareTextToMerge( ByteString &rText, USHORT nTyp,
         case LIST_STRING :
         case LIST_UIENTRIES :
         case LIST_FILTER :
+        case LIST_PAIRED:
         case LIST_ITEM :
         {
             if ( bUnmerge )
@@ -1907,11 +2003,23 @@ BOOL Export::PrepareTextToMerge( ByteString &rText, USHORT nTyp,
                     pList = pResData->pItemList;
                 }
                 break;
+                case LIST_PAIRED : {
+                    pResData->sResTyp = "pairedlist";
+                    pList = pResData->pPairedList;
+                }
+                break;
+
             }
             if ( pList ) {
                 ExportListEntry *pCurEntry = pList->GetObject( nListIndex - 1 );
                 if ( pCurEntry ) {
+                    //printf("%s\n",Export::DumpMap( "pCurEntry", *pCurEntry ).GetBuffer() );
+                    //ByteString a("pCurEntry");
+                    //Export::DumpMap( a , *pCurEntry );
                     rText = (*pCurEntry)[ GERMAN_LIST_LINE_INDEX ];
+                    if( nTyp == LIST_PAIRED ){
+                        pResData->addMergedLanguage( nLangIndex );
+                    }
                 }
             }
 
@@ -1940,8 +2048,11 @@ BOOL Export::PrepareTextToMerge( ByteString &rText, USHORT nTyp,
                 sLastListLine = "<";
                 sLastListLine += sTmp;
             }
-            pResData->sId = ByteString::CreateFromInt32( nListIndex );
-            //pResData->sId = nListIndex;//ByteString::CreateFromInt32( nListIndex );
+            if ( pResData->sResTyp.EqualsIgnoreCaseAscii( "pairedlist" ) ){
+               pResData->sId = GetPairedListID( sLastListLine );
+            }
+            else pResData->sId = ByteString::CreateFromInt32( nListIndex );
+
             if ( pResData->sGId.Len())
                 pResData->sGId += ".";
             pResData->sGId += sOldId;
@@ -2013,7 +2124,15 @@ BOOL Export::PrepareTextToMerge( ByteString &rText, USHORT nTyp,
         else if( !isInitialized )InitLanguages();
 
     }
+//  printf("*************DUMPING****************\n");
+//  printf("%s\n",pMergeDataFile->Dump().GetBuffer());
+//  printf("*************DUMPING****************\n");
+
+//  printf("Dumping ResData\n");
+//  pResData->Dump();
     PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+//  printf("Dumping pEntrys\n");
+    //if( pEntrys ) pEntrys->Dump();
     pResData->sId = sOldId;
     pResData->sGId = sOldGId;
     pResData->sResTyp = sOldTyp;
@@ -2031,27 +2150,6 @@ BOOL Export::PrepareTextToMerge( ByteString &rText, USHORT nTyp,
     }
 
     if ( nLangIndex.EqualsIgnoreCaseAscii("de") ) {
-        if ( pWordTransformer ) {
-            ByteString sRealContent = rText.Copy( nStart + 1, nEnd - nStart - 1 );
-            ByteString sPostFix( rText.Copy( nEnd ));
-            rText.Erase( nStart + 1 );
-
-            if ( pWordTransformer->Transform( sRealContent ) != WordTransformer::OK ) {
-                ByteString aString;
-                for ( USHORT i = 0; i < pWordTransformer->NrOfErrors(); i++ ) {
-                    pWordTransformer->GetError( i, &aString );
-                    fprintf( stderr, "%s\n" , aString.GetBuffer());
-                }
-                rText = sOrigText;
-                return FALSE;
-            }
-
-            rText += sRealContent;
-            rText += sPostFix;
-
-            if ( rText != sOrigText )
-                return TRUE;
-        }
         return FALSE;
     }
 
@@ -2060,6 +2158,9 @@ BOOL Export::PrepareTextToMerge( ByteString &rText, USHORT nTyp,
 
     ConvertMergeContent( sContent, nTyp );
 
+
+
+    //printf("Merged %s\n",nLangIndex.GetBuffer());
     // merge new res. in text line
     rText += sContent;
     rText += sPostFix;
@@ -2073,6 +2174,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
 {
     if ( bUnmerge ) { return;}
 
+    //pResData->Dump();
 
     if ( !pMergeDataFile ){
         pMergeDataFile = new MergeDataFile( sMergeSrc, sFile ,bErrorLog, aCharSet, bUTF8 );
@@ -2089,7 +2191,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
             PFormEntrys *pEntry = pMergeDataFile->GetPFormEntrys( pResData );
 
             bool bWriteNoSlash = false;
-           if ( pEntry && pResData->bText ) {
+            if ( pEntry && pResData->bText ) {
 
                 BOOL bAddSemikolon = FALSE;
                 BOOL bFirst = TRUE;
@@ -2244,6 +2346,10 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
             // looking for left list entrys
 
             if ( pResData->bList ) {
+                //printf("Dumping ResData\n");
+                //pResData->Dump();
+
+                bool bPairedList = false;
                 ByteString sOldId = pResData->sId;
                 ByteString sOldGId = pResData->sGId;
                 ByteString sOldTyp = pResData->sResTyp;
@@ -2256,27 +2362,49 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                 for ( USHORT nT = LIST_STRING; nT <= LIST_UIENTRIES; nT++ ) {
                     ExportList *pList = NULL;
                     switch ( nT ) {
-                        case LIST_STRING : pResData->sResTyp = "stringlist"; pList = pResData->pStringList; break;
-                        case LIST_FILTER : pResData->sResTyp = "filterlist"; pList = pResData->pFilterList; break;
-                        case LIST_UIENTRIES : pResData->sResTyp = "uientries"; pList = pResData->pUIEntries; break;
-                        case LIST_ITEM : pResData->sResTyp = "itemlist"; pList = pResData->pItemList; break;
+                        case LIST_STRING : pResData->sResTyp = "stringlist"; pList = pResData->pStringList; bPairedList = false; break;
+                        case LIST_FILTER : pResData->sResTyp = "filterlist"; pList = pResData->pFilterList; bPairedList = false; break;
+                        case LIST_UIENTRIES : pResData->sResTyp = "uientries"; pList = pResData->pUIEntries;bPairedList = false; break;
+                        case LIST_ITEM : pResData->sResTyp = "itemlist"; pList = pResData->pItemList;       bPairedList = false; break;
+                        case LIST_PAIRED : pResData->sResTyp = "pairedlist"; pList = pResData->pPairedList; bPairedList = true;  break;
                     }
                     ByteString sCur;
                     for( long int n = 0; n < aLanguages.size(); n++ ){
                         sCur = aLanguages[ n ];
+
                         USHORT nIdx = 1;
-                        //pResData->sId = ByteString::CreateFromInt32( nIdx );
-                        pResData->sId = ByteString("1");
+
+                        // Set matching pairedlist identifier
+                        //if( pResData->sResTyp.Equals( "pairedlist" ) && pResData->pPairedList && ( nIdx == 1 ) ){
+                        if( bPairedList && pResData->pPairedList && ( nIdx == 1 ) ){
+                            ExportListEntry* pListE = ( ExportListEntry* ) pResData->pPairedList->GetObject( nIdx-1 );
+                            pResData->sId = GetPairedListID ( (*pListE)[ ByteString("de") ] );
+                        }
+                        else
+                            pResData->sId = ByteString("1");
+
                         PFormEntrys *pEntrys;
                         ULONG nLIndex = 0;
                         ULONG nMaxIndex = 0;
                         if ( pList )
                             nMaxIndex = pList->GetGermanEntryCount();
                         while(( pEntrys = pMergeDataFile->GetPFormEntrys( pResData )) && ( nLIndex < nMaxIndex )) {
+                            //if( pEntrys ) pEntrys->Dump();
                             ByteString sText;
-                            //BOOL bText = pEntrys->GetText( sText, STRING_TYP_TEXT, nLang, TRUE );
-                            BOOL bText = pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, TRUE );
+                            BOOL bText;
+                            bText = pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, TRUE );
+
+                            // Use fallback, if data is missing in sdf file
+                            //if( !bText && pResData->sResTyp.Equals( "pairedlist" ) ){
+                            if( !bText && bPairedList ){
+                                if( pResData->isMerged( sCur ) ) break;
+                                const ByteString sPlist("pairedlist");
+                                ByteString sKey = MergeDataFile::CreateKey( sPlist , pResData->sGId , pResData->sId );
+                                bText = pResData->getFallbackData( sKey , sText );
+                            }
+
                             if ( bText && sText.Len()) {
+                                //if( pEntrys ) pEntrys->Dump();
                                 if ( nIdx == 1 ) {
                                     ByteString sHead;
                                     if ( bNextMustBeDefineEOL )
@@ -2286,12 +2414,12 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                                         case LIST_STRING : sHead += "StringList "; break;
                                         case LIST_FILTER : sHead += "FilterList "; break;
                                         case LIST_ITEM : sHead += "ItemList "; break;
+                                        case LIST_PAIRED : sHead += "PairedList "; break;
                                         case LIST_UIENTRIES : sHead += "UIEntries "; break;
                                     }
                                     //if ( nIdx != GERMAN_INDEX ) {
                                       sHead += "[ ";
-                                    //sHead += LangName[ nLang ];
-                                    sHead += sCur;//nLang;
+                                    sHead += sCur;
                                     sHead += " ] ";
                                     //}
                                     if ( bDefine || bNextMustBeDefineEOL ) {
@@ -2330,16 +2458,28 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                                     if ( sLine.GetChar( nEnd ) == '\"' )
                                         bFound = TRUE;
                                 }*/
-                                nEnd = sLine.SearchBackward( '\"' );
-                                //nEnd --;
-                                ByteString sPostFix( sLine.Copy( ++nEnd ));
-                                sLine.Erase( nStart );
+
+                                ByteString sPostFix;
+                                //if( !pResData->sResTyp.Equals( "pairedlist" ) ){
+                                if( !bPairedList ){
+                                    nEnd = sLine.SearchBackward( '\"' );
+                                    //nEnd --;
+                                    sPostFix = ByteString( sLine.Copy( ++nEnd ));
+                                    sLine.Erase( nStart );
+                                }
+
 
                                 ConvertMergeContent( sText, nT );
 
                                 // merge new res. in text line
-                                sLine += sText;
-                                sLine += sPostFix;
+                                //if( pResData->sResTyp.Equals( "pairedlist" ) ){
+                                if( bPairedList ){
+                                    sLine = MergePairedList( sLine , sText );
+                                }
+                                else{
+                                    sLine += sText;
+                                    sLine += sPostFix;
+                                }
 
                                 ByteString sText( "\t" );
                                 sText += sLine;
@@ -2350,7 +2490,18 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                                 sText += sSpace;
                                 sText += "\t";
                                 WriteToMerged( sText ,true );
-                                pResData->sId = ByteString::CreateFromInt32( ++nIdx );
+
+                                // Set matching pairedlist identifier
+                                //if ( pResData->sResTyp.EqualsIgnoreCaseAscii( "pairedlist" ) ){
+                                if ( bPairedList ){
+                                    nIdx++;
+                                    ExportListEntry* pListE = ( ExportListEntry* ) pResData->pPairedList->GetObject( ( nIdx ) -1 );
+                                    if( pListE ){
+                                        pResData->sId = GetPairedListID ( (*pListE)[ ByteString("de") ] );
+                                    }
+                                }
+                                else
+                                    pResData->sId = ByteString::CreateFromInt32( ++nIdx );
                             }
                             else
                                 break;
@@ -2378,10 +2529,13 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
         case MERGE_MODE_LIST : {
             ExportList *pList = NULL;
             switch ( nList ) {
+                // PairedList
                 case LIST_STRING : pList = pResData->pStringList; break;
                 case LIST_FILTER : pList = pResData->pFilterList; break;
                 case LIST_UIENTRIES : pList = pResData->pUIEntries; break;
                 case LIST_ITEM : pList = pResData->pItemList; break;
+                case LIST_PAIRED : pList = pResData->pPairedList; break;
+
             }
 
             nListIndex++;
@@ -2423,6 +2577,15 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
         break;
     }
     pParseQueue->bMflag = false;
+}
+
+ByteString Export::MergePairedList( ByteString& sLine , ByteString& sText ){
+// < "xy" ; IDENTIFIER ; >
+    ByteString sPre  = sLine.Copy( 0 , sLine.Search('\"') );
+    ByteString sPost = sLine.Copy( sLine.SearchBackward('\"') + 1 , sLine.Len() );
+    sPre.Append( sText );
+    sPre.Append( sPost );
+    return sPre;
 }
 
 /*****************************************************************************/
