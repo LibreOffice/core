@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:08:28 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
 
 #ifdef PCH
 #include "ui_pch.hxx"
@@ -320,7 +324,16 @@ BOOL ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
             xObj->setVisualAreaSize( nAspect, aSz );
         }
 
-        awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+        awt::Size aSz;
+        try
+        {
+            aSz = xObj->getVisualAreaSize( nAspect );
+        }
+        catch ( embed::NoVisualAreaSizeException& )
+        {
+            // the default size will be set later
+        }
+
         Size aSize( aSz.Width, aSz.Height );
         aSize = OutputDevice::LogicToLogic( aSize, aMapObj, aMap100 );  // fuer SdrOle2Obj
 
