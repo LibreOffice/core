@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcharset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-09 06:09:44 $
+ *  last change: $Author: fs $ $Date: 2001-10-12 11:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ namespace dbtools
         <p>Possible representations are:
         <ul>
             <li><b>IANA names.</b>
-            Have a look at <A href="ftp://ftp.isi.edu/in-notes/iana/assignments/character-sets">this document</A> for
+            Have a look at <A href="http://www.iana.org/assignments/character-sets">this document</A> for
             more details</li>
             <li><b>rtl_TextEncoding</b></li>
             <li><b>logical names</b> This are strings without a deeper meaning. They're introduced because different
@@ -217,6 +217,9 @@ namespace dbtools
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/04/09 06:09:44  fs
+ *  m_nLivingIterators for _DEBUG, not DBG_UTIL
+ *
  *  Revision 1.1  2000/11/29 22:21:00  fs
  *  initial checkin - helper class for translating charset representations
  *
