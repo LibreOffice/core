@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-27 16:39:44 $
+ *  last change: $Author: mtg $ $Date: 2001-03-22 15:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,19 @@ void XMLTextParagraphExport::exportNumStyles( sal_Bool bUsed )
 
 void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed )
 {
+    Reference < lang::XMultiServiceFactory > xFactory (GetExport().GetModel(), UNO_QUERY);
+    if (xFactory.is())
+    {
+        Reference < XInterface > xInt = xFactory->createInstance (
+                                            OUString( RTL_CONSTASCII_USTRINGPARAM (
+                                                "com.sun.star.text.Defaults") ) );
+        if ( xInt.is() )
+        {
+            Reference < XPropertySet > xPropSet (xInt, UNO_QUERY);
+            if (xPropSet.is())
+                exportDefaultStyle( xPropSet, sXML_text, GetParaPropMapper());
+        }
+    }
     exportStyleFamily( "ParagraphStyles", sXML_paragraph, GetParaPropMapper(),
                        bUsed, XML_STYLE_FAMILY_TEXT_PARAGRAPH, 0);
     exportStyleFamily( "CharacterStyles", sXML_text, GetTextPropMapper(),
@@ -203,5 +216,3 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed )
         aLineNumberingExport.Export();
     }
 }
-
-
