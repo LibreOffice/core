@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sb $ $Date: 2002-03-19 15:11:16 $
+ *  last change: $Author: sb $ $Date: 2002-05-28 10:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,11 +919,17 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
         { "ascii", RTL_TEXTENCODING_ASCII_US },
         { "us", RTL_TEXTENCODING_ASCII_US },
         { "gb180302000", RTL_TEXTENCODING_GB_18030 },
-            /* This is no actual MIME character set name, it's only a guess */
+            /* This is no actual MIME character set name, it is only in here
+               for backwards compatibility (before "GB18030" was officially
+               registered with IANA, this code contained some guesses of what
+               would become official names for GB18030). */
         { "gb18030", RTL_TEXTENCODING_GB_18030 },
-            /* This is no actual MIME character set name, it's only a guess */
         { "big5hkscs", RTL_TEXTENCODING_BIG5_HKSCS },
         { "tis620", RTL_TEXTENCODING_TIS_620 },
+        { "gbk", RTL_TEXTENCODING_GBK },
+        { "cp936", RTL_TEXTENCODING_GBK },
+        { "ms936", RTL_TEXTENCODING_GBK },
+        { "windows936", RTL_TEXTENCODING_GBK },
         { NULL, RTL_TEXTENCODING_DONTKNOW }
     };
 
