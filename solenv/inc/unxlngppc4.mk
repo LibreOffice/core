@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-04 12:38:18 $
+#   last change: $Author: rt $ $Date: 2004-03-02 11:34:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,12 +89,6 @@ CXX*=g++
 # name of C Compiler
 CC*=gcc
 
-# flags for C and C++ Compiler
-# do not use standard header search paths
-# if installed elsewhere
-.IF "$(BUILD_SOSL)"!=""
-CFLAGS= 
-.ENDIF
 CFLAGS+=-fsigned-char -fmessage-length=0 -c $(INCLUDE)
 
 # flags for the C++ Compiler
