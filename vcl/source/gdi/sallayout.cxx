@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:18:29 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 10:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,11 +131,20 @@ int GetVerticalFlags( sal_Unicode nChar )
 
 sal_Unicode GetVerticalChar( sal_Unicode nChar )
 {
-return 0;
     int nVert = 0;
 
     switch( nChar )
     {
+        // #104627# special treatment for some unicodes
+        case 0x002C: nVert = 0x3001; break;
+        case 0x002E: nVert = 0x3002; break;
+#if 0 // to few fonts have the compatibility forms, using
+      // them will then cause more trouble than good
+      // TODO: decide on a font specific basis
+        case 0x2018: nVert = 0xFE41; break;
+        case 0x2019: nVert = 0xFE42; break;
+        case 0x201C: nVert = 0xFE43; break;
+        case 0x201D: nVert = 0xFE44; break;
         // CJK compatibility forms
         case 0x2025: nVert = 0xFE30; break;
         case 0x2014: nVert = 0xFE31; break;
@@ -157,13 +166,7 @@ return 0;
         case 0x300D: nVert = 0xFE42; break;
         case 0x300E: nVert = 0xFE43; break;
         case 0x300F: nVert = 0xFE44; break;
-        // #104627# special treatment for some unicodes
-        case 0x002C: nVert = 0x3001; break;
-        case 0x002E: nVert = 0x3002; break;
-        case 0x2018: nVert = 0xFE41; break;
-        case 0x2019: nVert = 0xFE42; break;
-        case 0x201C: nVert = 0xFE43; break;
-        case 0x201D: nVert = 0xFE44; break;
+#endif
     }
 
     return nVert;
@@ -279,81 +282,7 @@ sal_Unicode GetLocalizedChar( sal_Unicode nChar, LanguageType eLang )
 
 // =======================================================================
 
-ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
-    int nMinCharPos, int nEndCharPos, int nFlags )
-:   mpStr( pStr ),
-    mnLength( nLength ),
-    mnMinCharPos( nMinCharPos ),
-    mnCurCharPos( nMinCharPos ),
-    mnEndCharPos( nEndCharPos ),
-    mnFlags( nFlags ),
-    mnLayoutWidth( 0 ),
-    mpDXArray( NULL ),
-    mnOrientation( 0 ),
-    mnRunIndex( 0 )
-{
-    if( mnFlags & SAL_LAYOUT_BIDI_STRONG )
-    {
-        // do not bother to BiDi analyze strong LTR/RTL
-        if( mnFlags & SAL_LAYOUT_BIDI_RTL )
-        {
-            maRuns.push_back( mnEndCharPos );
-            maRuns.push_back( mnMinCharPos );
-        }
-        else
-        {
-            maRuns.push_back( mnMinCharPos );
-            maRuns.push_back( mnEndCharPos );
-        }
-
-        ResetPos();
-        return;
-    }
-
-    UBiDiLevel nLevel = UBIDI_DEFAULT_LTR;
-    if( mnFlags & SAL_LAYOUT_BIDI_RTL )
-        nLevel = UBIDI_DEFAULT_RTL;
-
-    // prepare substring for BiDi analysis
-    UErrorCode rcI18n = U_ZERO_ERROR;
-    UBiDi* pParaBidi = ubidi_openSized( mnLength, 0, &rcI18n );
-    if( !pParaBidi )
-        return;
-    ubidi_setPara( pParaBidi, mpStr, mnLength, nLevel, NULL, &rcI18n );
-
-    UBiDi* pLineBidi = pParaBidi;
-    int nSubLength = mnEndCharPos - mnMinCharPos;
-    if( nSubLength != mnLength )
-    {
-        pLineBidi = ubidi_openSized( nSubLength, 0, &rcI18n );
-        ubidi_setLine( pParaBidi, mnMinCharPos, mnEndCharPos, pLineBidi, &rcI18n );
-    }
-
-    // do BiDi analysis if necessary
-    int nRunCount = ubidi_countRuns( pLineBidi, &rcI18n );
-    maRuns.resize( 2 * nRunCount );
-    for( int i = 0; i < nRunCount; ++i )
-    {
-        int32_t nMinPos, nLength;
-        UBiDiDirection nDir = ubidi_getVisualRun( pLineBidi, i, &nMinPos, &nLength );
-        int j = 2 * i;
-        maRuns[ j+0 ] = maRuns[ j+1 ] = nMinPos + mnMinCharPos;
-        j += (nDir==UBIDI_LTR);
-        maRuns[ j ] += nLength;
-    }
-
-    // cleanup BiDi engine
-    if( pLineBidi != pParaBidi )
-        ubidi_close( pLineBidi );
-    ubidi_close( pParaBidi );
-
-    // prepare calls to GetNextPos/GetNextRun
-    ResetPos();
-}
-
-// -----------------------------------------------------------------------
-
-bool ImplLayoutArgs::GetNextPos( int* nCharPos, bool* bRightToLeft )
+bool ImplLayoutRuns::GetNextPos( int* nCharPos, bool* bRightToLeft )
 {
     if( mnRunIndex >= (int)maRuns.size() )
         return false;
@@ -377,7 +306,7 @@ bool ImplLayoutArgs::GetNextPos( int* nCharPos, bool* bRightToLeft )
 
 // -----------------------------------------------------------------------
 
-bool ImplLayoutArgs::GetNextRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLeft )
+bool ImplLayoutRuns::GetNextRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLeft )
 {
     if( mnRunIndex >= (int)maRuns.size() )
         return false;
@@ -404,20 +333,20 @@ bool ImplLayoutArgs::GetNextRun( int* nMinRunPos, int* nEndRunPos, bool* bRightT
 
 // -----------------------------------------------------------------------
 
-bool ImplLayoutArgs::NeedFallback( int nCharPos, bool bRTL )
+bool ImplLayoutRuns::AddRun( int nCharPos, bool bRTL )
 {
     // try to merge fallback runs
-    int nIndex = maReruns.size();
-    if( (--nIndex > 0) && ((nCharPos + bRTL) == maReruns[ nIndex ]) )
+    int nIndex = maRuns.size();
+    if( (--nIndex > 0) && ((nCharPos + bRTL) == maRuns[ nIndex ]) )
     {
         // merge with current run
-        maReruns[ nIndex ] = nCharPos + !bRTL;
+        maRuns[ nIndex ] = nCharPos + !bRTL;
     }
     else
     {
         // append new run
-        maReruns.push_back( nCharPos + bRTL );
-        maReruns.push_back( nCharPos + !bRTL );
+        maRuns.push_back( nCharPos + bRTL );
+        maRuns.push_back( nCharPos + !bRTL );
     }
 
     // TODO: return !(mnFlags & SAL_LAYOUT_FOR_FALLBACK);
@@ -426,10 +355,10 @@ bool ImplLayoutArgs::NeedFallback( int nCharPos, bool bRTL )
 
 // -----------------------------------------------------------------------
 
-bool ImplLayoutArgs::NeedFallback( int nCharPos0, int nCharPos1, bool bRTL )
+bool ImplLayoutRuns::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
 {
     // swap if needed
-    if( (nCharPos0 < nCharPos1) ^ bRTL )
+    if( (nCharPos0 > nCharPos1) ^ bRTL )
     {
         int nTemp = nCharPos0;
         nCharPos0 = nCharPos1;
@@ -437,26 +366,86 @@ bool ImplLayoutArgs::NeedFallback( int nCharPos0, int nCharPos1, bool bRTL )
     }
 
     // append new run
-    maReruns.push_back( nCharPos0 );
-    maReruns.push_back( nCharPos1 );
+    maRuns.push_back( nCharPos0 );
+    maRuns.push_back( nCharPos1 );
 
     return true;
     // TODO: return !(mnFlags & SAL_LAYOUT_FOR_FALLBACK);
+}
+
+// =======================================================================
+
+ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
+    int nMinCharPos, int nEndCharPos, int nFlags )
+:   mpStr( pStr ),
+    mnLength( nLength ),
+    mnMinCharPos( nMinCharPos ),
+    mnEndCharPos( nEndCharPos ),
+    mnFlags( nFlags ),
+    mnLayoutWidth( 0 ),
+    mpDXArray( NULL ),
+    mnOrientation( 0 )
+{
+    if( mnFlags & SAL_LAYOUT_BIDI_STRONG )
+    {
+        // do not bother to BiDi analyze strong LTR/RTL
+        bool bRTL = ((mnFlags & SAL_LAYOUT_BIDI_RTL) != 0);
+        maRuns.AddRun( mnMinCharPos, mnEndCharPos, bRTL );
+        maRuns.ResetPos();
+        return;
+    }
+
+    UBiDiLevel nLevel = UBIDI_DEFAULT_LTR;
+    if( mnFlags & SAL_LAYOUT_BIDI_RTL )
+        nLevel = UBIDI_DEFAULT_RTL;
+
+    // prepare substring for BiDi analysis
+    UErrorCode rcI18n = U_ZERO_ERROR;
+    UBiDi* pParaBidi = ubidi_openSized( mnLength, 0, &rcI18n );
+    if( !pParaBidi )
+        return;
+    ubidi_setPara( pParaBidi, mpStr, mnLength, nLevel, NULL, &rcI18n );
+
+    UBiDi* pLineBidi = pParaBidi;
+    int nSubLength = mnEndCharPos - mnMinCharPos;
+    if( nSubLength != mnLength )
+    {
+        pLineBidi = ubidi_openSized( nSubLength, 0, &rcI18n );
+        ubidi_setLine( pParaBidi, mnMinCharPos, mnEndCharPos, pLineBidi, &rcI18n );
+    }
+
+    // do BiDi analysis if necessary
+    int nRunCount = ubidi_countRuns( pLineBidi, &rcI18n );
+    //maRuns.resize( 2 * nRunCount );
+    for( int i = 0; i < nRunCount; ++i )
+    {
+        int32_t nMinPos, nLength;
+        UBiDiDirection nDir = ubidi_getVisualRun( pLineBidi, i, &nMinPos, &nLength );
+        bool bRTL = (nDir != UBIDI_LTR);
+        int nPos = nMinPos + mnMinCharPos;
+        maRuns.AddRun( nPos, nPos+nLength, bRTL );
+    }
+
+    // cleanup BiDi engine
+    if( pLineBidi != pParaBidi )
+        ubidi_close( pLineBidi );
+    ubidi_close( pParaBidi );
+
+    // prepare calls to GetNextPos/GetNextRun
+    maRuns.ResetPos();
 }
 
 // -----------------------------------------------------------------------
 
 bool ImplLayoutArgs::PrepareFallback()
 {
-    int nSize = maReruns.size();
-    if( !nSize )
+    if( maReruns.IsEmpty() )
         return false;
-    DBG_ASSERT( !(nSize & 1), "odd ImplLayoutArgs run size" );
 
     // TODO: sort out chars that were not requested anyway
     maRuns = maReruns;
-    maReruns.clear();
-    ResetPos();
+    maRuns.ResetPos();
+    maReruns.Clear();
     return true;
 }
 
