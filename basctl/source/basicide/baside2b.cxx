@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 14:33:32 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1432,7 +1432,7 @@ WatchWindow::WatchWindow( Window* pParent ) :
                                     BMP_COLOR_HIGHCONTRAST);
     aRemoveWatchButton.SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
     aRemoveWatchButton.SetPosPixel( Point( nTextLen + aXEdit.GetSizePixel().Width() + 4, 2 ) );
-    Size aSz( aRemoveWatchButton.GetImage().GetSizePixel() );
+    Size aSz( aRemoveWatchButton.GetModeImage().GetSizePixel() );
     aSz.Width() += 6;
     aSz.Height() += 6;
     aRemoveWatchButton.SetSizePixel( aSz );
@@ -1597,7 +1597,7 @@ StackWindow::StackWindow( Window* pParent ) :
 
     aGotoCallButton.SetClickHdl( LINK( this, StackWindow, ButtonHdl ) );
     aGotoCallButton.SetPosPixel( Point( DWBORDER, 2 ) );
-    Size aSz( aGotoCallButton.GetImage().GetSizePixel() );
+    Size aSz( aGotoCallButton.GetModeImage().GetSizePixel() );
     aSz.Width() += 6;
     aSz.Height() += 6;
     aGotoCallButton.SetSizePixel( aSz );
