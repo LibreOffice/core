@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-05-07 11:52:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,11 @@ class SwXFootnoteProperties : public cppu::WeakAggImplHelper2
 {
     SwDoc*                      pDoc;
     const SfxItemPropertyMap*   _pMap;
-
+protected:
+    virtual ~SwXFootnoteProperties();
 public:
     SwXFootnoteProperties(SwDoc* pDoc);
-    virtual ~SwXFootnoteProperties();
+
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -155,10 +156,11 @@ class SwXEndnoteProperties : public cppu::WeakAggImplHelper2
 {
     SwDoc*                      pDoc;
     const SfxItemPropertyMap*   _pMap;
-
+protected:
+    virtual ~SwXEndnoteProperties();
 public:
     SwXEndnoteProperties(SwDoc* pDoc);
-    virtual ~SwXEndnoteProperties();
+
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -188,9 +190,11 @@ class SwXLineNumberingProperties : public cppu::WeakAggImplHelper2
 {
     SwDoc*                      pDoc;
     const SfxItemPropertyMap*   _pMap;
+protected:
+    virtual ~SwXLineNumberingProperties();
 public:
     SwXLineNumberingProperties(SwDoc* pDoc);
-    virtual ~SwXLineNumberingProperties();
+
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -231,13 +235,14 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper5
     const SfxItemPropertyMap*   _pMap;
     sal_Bool                    bOwnNumRuleCreated;
     static String               sInvalidStyle;
-
+protected:
+    virtual ~SwXNumberingRules();
 public:
     SwXNumberingRules();
     SwXNumberingRules(SwDocShell& rDocSh);  // chapter numbering
     SwXNumberingRules(const SwNumRule& rRule); // NumRule for paragraphs, numbering styles
     SwXNumberingRules(SwDoc& rDoc); //create a new instance
-    virtual ~SwXNumberingRules();
+
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & SwXNumberingRules::getUnoTunnelId();
 
@@ -294,9 +299,11 @@ public:
 --------------------------------------------------*/
 class SwXChapterNumbering : public SwXNumberingRules
 {
+protected:
+    virtual ~SwXChapterNumbering();
 public:
     SwXChapterNumbering(SwDocShell& rDocSh);
-    virtual ~SwXChapterNumbering();
+
 
     void    Invalidate() {SwXNumberingRules::Invalidate();}
 
@@ -332,11 +339,12 @@ class SwXTextColumns : public cppu::WeakAggImplHelper4
     sal_Int8                    nSepLineHeightRelative;
     sal_Int8                    nSepLineVertAlign;//style::VerticalAlignment
     sal_Bool                    bSepLineIsOn;
-
+protected:
+    virtual ~SwXTextColumns();
 public:
     SwXTextColumns(sal_uInt16 nColCount);
     SwXTextColumns(const SwFmtCol& rFmtCol);
-    virtual ~SwXTextColumns();
+
 
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
