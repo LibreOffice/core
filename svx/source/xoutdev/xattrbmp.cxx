@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattrbmp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-12 11:54:52 $
+ *  last change: $Author: aw $ $Date: 2000-12-14 16:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,6 +558,9 @@ XFillBitmapItem::XFillBitmapItem( SvStream& rIn, USHORT nVer ) :
             }
         }
     }
+
+    // #81908# force bitmap to exist
+    GetBitmap();
 }
 
 //*************************************************************************
