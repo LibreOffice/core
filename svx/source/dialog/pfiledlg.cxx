@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfiledlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-27 08:23:46 $
+ *  last change: $Author: gt $ $Date: 2002-10-18 13:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,4 +313,12 @@ sal_Bool SvxPluginFileDlg::IsAvailable (sal_uInt16 nKind)
     return bFound;
 }
 
+void SvxPluginFileDlg::SetDialogHelpId( const sal_Int32 _nHelpId )
+{
+    maFileDlg.SetDialogHelpId( _nHelpId );
+}
 
+void SvxPluginFileDlg::SetContext( sfx2::FileDialogHelper::Context _eNewContext )
+{
+    maFileDlg.SetContext( _eNewContext );
+}
