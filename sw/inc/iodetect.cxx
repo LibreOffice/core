@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:26:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,8 +522,6 @@ FASTBOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
 
             if( bRet && ppFilter  )
                 *ppFilter = pFltr;
-
-            break;
         }
 
         pFltr = aIter.Next();
