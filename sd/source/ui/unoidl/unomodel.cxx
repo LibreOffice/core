@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-27 22:03:08 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 22:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
+
+#ifndef _SVX_UNOFIELD_HXX
+#include <svx/unofield.hxx>
+#endif
 
 #ifndef _UNOMODEL_HXX
 #include <unomodel.hxx>
@@ -678,6 +682,11 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.Settings") ) )
     {
         return sd::DocumentSettings_createInstance( this );
+    }
+
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextField.DateTime") ) )
+    {
+        return (::cppu::OWeakObject * )new SvxUnoTextField( ID_EXT_DATEFIELD );
     }
 
     uno::Reference< uno::XInterface > xRet;
