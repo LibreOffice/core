@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edfld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:18:38 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,12 +540,6 @@ void SwEditShell::ChangeDBFields( const SvStringsDtor& rOldNames,
     GetDoc()->ChangeDBFields( rOldNames, rNewName );
 }
 
-BOOL SwEditShell::RenameUserFields(const String& rOldName, const String& rNewName)
-{
-    return GetDoc()->RenameUserFields(rOldName, rNewName);
-}
-
-
 /*--------------------------------------------------------------------
     Beschreibung:  Alle Expression-Felder erneuern
  --------------------------------------------------------------------*/
@@ -570,21 +564,6 @@ SwNewDBMgr* SwEditShell::GetNewDBMgr() const
 SwFieldType* SwEditShell::InsertFldType(const SwFieldType& rFldType)
 {
     return GetDoc()->InsertFldType(rFldType);
-}
-
-void SwEditShell::LockExpFlds()
-{
-    GetDoc()->LockExpFlds();
-}
-
-void SwEditShell::UnlockExpFlds()
-{
-    GetDoc()->UnlockExpFlds();
-}
-
-BOOL SwEditShell::IsExpFldsLocked() const
-{
-    return GetDoc()->IsExpFldsLocked();
 }
 
 void SwEditShell::SetFldUpdateFlags( USHORT eFlags )
