@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:39:11 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,8 @@
 #ifndef _SWSWERROR_H
 #include <swerror.h>
 #endif
+
+#include <node.hxx> // #i23726#
 
 //siehe auch swtable.cxx
 #define COLFUZZY 20L
@@ -1690,6 +1692,38 @@ BYTE SwFEShell::WhichMouseTabCol( const Point &rPt ) const
     }
     return SW_TABCOL_NONE;
 }
+
+// -> #i23726#
+SwTxtNode * SwFEShell::GetNumRuleNodeAtPos( const Point &rPt)
+{
+    SwTxtNode * pResult = NULL;
+
+    SwContentAtPos aCntntAtPos
+        (SwContentAtPos::SW_NUMLABEL);
+
+    if( GetContentAtPos(rPt, aCntntAtPos) && aCntntAtPos.aFnd.pNode)
+        pResult = aCntntAtPos.aFnd.pNode->GetTxtNode();
+
+    return pResult;
+}
+
+BOOL SwFEShell::IsNumLabel( const Point &rPt, int nMaxOffset )
+{
+    BOOL bResult = FALSE;
+
+    SwContentAtPos aCntntAtPos
+        (SwContentAtPos::SW_NUMLABEL);
+
+    if( GetContentAtPos(rPt, aCntntAtPos))
+    {
+        if ((nMaxOffset >= 0 && aCntntAtPos.nDist <= nMaxOffset) ||
+            (nMaxOffset < 0))
+            bResult = TRUE;
+    }
+
+    return bResult;
+}
+// <- #i23726#
 
 /*************************************************************************
 |*
