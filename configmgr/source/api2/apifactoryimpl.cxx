@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactoryimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-01 13:45:22 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 12:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,13 +134,13 @@ TreeElement* ReadOnlyObjectFactory::doCreateAccessRoot(configuration::Tree const
     TreeElement * pResult = 0;
     if (!pSetElementTemplate)
     {
-         ORootElementGroupInfo * pNewObject = new ORootElementGroupInfo(m_rProvider, aTree);
+         ORootElementGroupInfo * pNewObject = new ORootElementGroupInfo(m_rProvider, aTree, _xOptions);
          pNewObject->acquire();
          pResult = &pNewObject->getElementClass();
     }
     else
     {
-         ORootElementSetInfo * pNewObject = new ORootElementSetInfo(m_rProvider, aTree);
+         ORootElementSetInfo * pNewObject = new ORootElementSetInfo(m_rProvider, aTree, _xOptions);
          pNewObject->acquire();
          pResult = &pNewObject->getElementClass();
     }
@@ -280,13 +280,13 @@ TreeElement* UpdateObjectFactory::doCreateAccessRoot(configuration::Tree const& 
         OSL_ENSURE(false, "WARNING: Trying to create an 'Update Access' on a read-only tree/node");
         if (!pSetElementTemplate)
         {
-             ORootElementGroupInfo * pNewObject = new ORootElementGroupInfo(m_rProvider, aTree);
+             ORootElementGroupInfo * pNewObject = new ORootElementGroupInfo(m_rProvider, aTree, _xOptions);
              pNewObject->acquire();
              pResult = &pNewObject->getElementClass();
         }
         else
         {
-             ORootElementSetInfo * pNewObject = new ORootElementSetInfo(m_rProvider, aTree);
+             ORootElementSetInfo * pNewObject = new ORootElementSetInfo(m_rProvider, aTree, _xOptions);
              pNewObject->acquire();
              pResult = &pNewObject->getElementClass();
         }
