@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetCell.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:26:54 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,10 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+#ifndef __com_sun_star_beans_XTolerantMultiPropertySet_idl__
+#include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
+#endif
+
 #ifndef __com_sun_star_util_XModifyBroadcaster_idl__
 #include <com/sun/star/util/XModifyBroadcaster.idl>
 #endif
@@ -243,7 +247,11 @@ published service SheetCell
      */
     interface com::sun::star::text::XTextFieldsSupplier;
 
-    //=========================================================================
+    //-------------------------------------------------------------------------
+
+    [optional] interface com::sun::star::beans::XTolerantMultiPropertySet;
+
+    //-------------------------------------------------------------------------
 
     /**
 
