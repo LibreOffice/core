@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:07:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ public:
         ::sdr::contact::ObjectContact& rObjectContact,
         ::sdr::contact::ViewContact& rViewContact,
         cache::PageCache* pCache);
-    ~PageObjectViewObjectContact (void);
+    virtual ~PageObjectViewObjectContact (void);
 
     virtual void PaintObject (::sdr::contact::DisplayInfo& rDisplayInfo);
 
