@@ -31,7 +31,7 @@
   <dlg:button dlg:id="cmdCancel" dlg:tab-index="18" dlg:left="6" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34572" dlg:value="cmdCancel">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:ImportWizard.Main.CancelTask?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
-  <dlg:button dlg:id="cmdHelp" dlg:tab-index="19" dlg:left="65" dlg:top="190" dlg:width="50" dlg:height="14" dlg:tag="34571" dlg:value="cmdHelp" dlg:button-type="help"/>
+  <dlg:button dlg:id="cmdHelp" dlg:tab-index="19" dlg:left="65" dlg:top="190" dlg:width="50" dlg:height="14" dlg:value="cmdHelp" dlg:button-type="help"/>
   <dlg:button dlg:id="cmdGoOn" dlg:tab-index="20" dlg:left="214" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34574" dlg:value="cmdGoOn">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:ImportWizard.Main.NextStep?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
