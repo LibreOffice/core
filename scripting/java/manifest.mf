@@ -3,8 +3,8 @@ OpenIDE-Module: org.openoffice.netbeans.modules.office/1
 OpenIDE-Module-Name: Office Support
 OpenIDE-Module-Short-Description: Scripting Support for Office Documents
 OpenIDE-Module-Localizing-Bundle: org/openoffice/netbeans/modules/office/Bundle.properties
-OpenIDE-Module-Specification-Version: 0.1
-OpenIDE-Module-Implementation-Version: 0.1
+OpenIDE-Module-Specification-Version: 0.2
+OpenIDE-Module-Implementation-Version: 0.2
 OpenIDE-Module-Install: org/openoffice/netbeans/modules/office/utils/OfficeModule.class
 OpenIDE-Module-Layer: org/openoffice/netbeans/modules/office/resources/layer.xml
 
