@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:52:30 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,6 +360,8 @@ public:
     void            DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect );
     void            DoScenarioMenue( const ScRange& rScenRange );
     void            DoPageFieldMenue( SCCOL nCol, SCROW nRow );
+
+    BOOL            HasPageFieldData( SCCOL nCol, SCROW nRow ) const;
 
     void            DrawButtons( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     ScTableInfo& rTabInfo );
