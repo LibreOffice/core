@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-22 17:36:29 $
+ *  last change: $Author: nn $ $Date: 2001-03-15 20:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,8 @@
 #define SC_UNONAME_SORTASC          "SortAscending"
 #define SC_UNONAME_ENUSLIST         "EnableUserSortList"
 #define SC_UNONAME_USINDEX          "UserSortListIndex"
+#define SC_UNONAME_COLLLOC          "CollatorLocale"
+#define SC_UNONAME_COLLALG          "CollatorAlgorithm"
 
 //  text fields
 #define SC_UNONAME_ANCTYPE          "AnchorType"
