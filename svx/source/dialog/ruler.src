@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:17:23 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ Menu RID_SVXMN_RULER
             Text [ swedish ] = "Kilometer" ;
             Text [ danish ] = "Kilometer" ;
             Text [ portuguese ] = "Quilómetro" ;
-            Text [ portuguese_brazilian ] = "Quilometro" ;
+            Text [ portuguese_brazilian ] = "Quilômetro" ;
             Text[ chinese_simplified ] = "å…¬é‡Œ";
             Text[ russian ] = "Êèëîìåòğû";
             Text[ polish ] = "Kilometr";
@@ -458,7 +458,7 @@ String RID_SVXSTR_RULER_TAB_CENTER
     TEXT[ japanese ] = "ä¸­å¤®æƒãˆ";
     TEXT[ chinese_traditional ] = "ç½®ä¸­";
     TEXT[ arabic ] = "ÊæÓíØ";
-    TEXT[ greek ] = "Êåíôñáñéóìİíá";
+    TEXT[ greek ] = "Óôï êİíôñï";
     TEXT[ korean ] = "ê°€ìš´ë°";
     TEXT[ turkish ] = "Orta";
     TEXT[ language_user1 ] = " ";
@@ -469,6 +469,7 @@ String RID_SVXSTR_RULER_TAB_CENTER
     TEXT[ hindi ] = "à¤®à¤§à¥à¤¯à¤­à¤¾à¤—";
     TEXT[ slovak ] = "Na stred";
 };
+
 
 
 
