@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 14:56:55 $
+#   last change: $Author: rt $ $Date: 2004-05-03 09:18:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,13 +79,8 @@ SHL1OBJS=  \
 
 SHL1TARGET= rtl_OString
 SHL1STDLIBS=\
-   $(SALLIB) 
-.IF "$(GUI)" == "WNT"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-.ENDIF
+   $(SALLIB) \
+   $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -105,13 +100,8 @@ SHL2OBJS=  \
 
 SHL2TARGET= rtl_OUString
 SHL2STDLIBS=\
-   $(SALLIB) 
-.IF "$(GUI)" == "WNT"
-SHL2STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL2STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-.ENDIF
+   $(SALLIB) \
+   $(CPPUNITLIB)
 
 SHL2IMPLIB= i$(SHL2TARGET)
 # SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
@@ -131,13 +121,15 @@ SHL3OBJS=  \
 
 SHL3TARGET= rtl_OUStringBuffer
 SHL3STDLIBS=\
-   $(SALLIB) 
-.IF "$(GUI)" == "WNT"
-SHL3STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL3STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-.ENDIF
+   $(SALLIB) \
+   $(CPPUNITLIB)
+
+# .IF "$(GUI)" == "WNT"
+# SHL3STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
+# .ENDIF
+# .IF "$(GUI)" == "UNX"
+# SHL3STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
+# .ENDIF
 
 SHL3IMPLIB= i$(SHL3TARGET)
 # SHL3DEF=    $(MISC)$/$(SHL3TARGET).def
@@ -149,12 +141,60 @@ SHL3VERSIONMAP = export.map
 # auto generated Target:FileBase
 # END ------------------------------------------------------------------
 
+# BEGIN ----------------------------------------------------------------
+SHL4OBJS=  \
+    $(SLO)$/rtl_old_teststrbuf.obj 
+
+SHL4TARGET= rtl_old_teststrbuf
+SHL4STDLIBS=\
+   $(SALLIB) \
+   $(CPPUNITLIB)
+
+SHL4IMPLIB= i$(SHL4TARGET)
+DEF4NAME    =$(SHL4TARGET)
+SHL4VERSIONMAP = export.map
+
+# END ------------------------------------------------------------------
+
+# BEGIN ----------------------------------------------------------------
+SHL5OBJS=  \
+    $(SLO)$/rtl_old_testowstring.obj 
+
+SHL5TARGET= rtl_old_testowstring
+SHL5STDLIBS=\
+   $(SALLIB) \
+   $(CPPUNITLIB)
+
+SHL5IMPLIB= i$(SHL5TARGET)
+DEF5NAME    =$(SHL5TARGET)
+SHL5VERSIONMAP = export.map
+
+# END ------------------------------------------------------------------
+
+# BEGIN ----------------------------------------------------------------
+SHL6OBJS=  \
+    $(SLO)$/rtl_old_testostring.obj 
+
+SHL6TARGET= rtl_old_testostring
+SHL6STDLIBS=\
+   $(SALLIB) \
+   $(CPPUNITLIB)
+
+SHL6IMPLIB= i$(SHL6TARGET)
+DEF6NAME    =$(SHL6TARGET)
+SHL6VERSIONMAP = export.map
+
+# END ------------------------------------------------------------------
+
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
 SLOFILES=\
     $(SHL1OBJS) \
     $(SHL2OBJS) \
-    $(SHL3OBJS)
+    $(SHL3OBJS) \
+    $(SHL4OBJS) \
+    $(SHL5OBJS) \
+    $(SHL6OBJS)
 
 # --- Targets ------------------------------------------------------
 
