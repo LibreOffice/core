@@ -1,7 +1,7 @@
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.XComponentContext;
-import drafts.com.sun.star.script.framework.XScriptContext;
+import drafts.com.sun.star.script.framework.runtime.XScriptContext;
 import com.sun.star.util.XStringSubstitution;
 
 import javax.mail.*;

@@ -6,7 +6,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.XStorable;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XModel;
-import drafts.com.sun.star.script.framework.XScriptContext;
+import drafts.com.sun.star.script.framework.runtime.XScriptContext;
 
 // for debug only
 import javax.swing.JOptionPane;
