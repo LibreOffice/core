@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-07 14:14:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ namespace configmgr
             bool isLocalized() const { return data().isLocalized(); }
 
             NodeAddressType address() const { return NodeAddressType(m_pData); }
-            Accessor accessor() const { return m_aAccessor; }
+            Accessor const& accessor() const { return m_aAccessor; }
 
             DataType& data() const { return *static_cast<NodePointerType>(m_aAccessor.validate(m_pData)); }
             NodePointerType getDataPtr() const { return static_cast<NodePointerType>(m_aAccessor.access(m_pData)); }
@@ -138,8 +138,58 @@ namespace configmgr
             AddressType m_pData;
         };
     // -------------------------------------------------------------------------
+        class NodeAccessRef
+        {
+        public:
+            typedef NodeAccess::Name                Name;
+            typedef NodeAccess::Attributes          Attributes;
+
+            typedef NodeAccess::NodeAddressType     NodeAddressType;
+            typedef NodeAccess::AddressType         AddressType;
+            typedef NodeAccess::DataType            DataType;
+            typedef NodeAccess::NodePointerType     NodePointerType;
+
+            NodeAccessRef(NodeAccess const& _aNodeAccess)
+            : m_pAccessor(&_aNodeAccess.accessor())
+            , m_pData(_aNodeAccess.rawAddress())
+            {}
+
+            NodeAccessRef(Accessor const * _pAccessor, NodeAddressType const& _aNodeRef)
+            : m_pAccessor(_pAccessor)
+            , m_pData(_aNodeRef.m_pData)
+            {}
+
+            NodeAccessRef(Accessor const * _pAccessor, NodePointerType _pNode)
+            : m_pAccessor(_pAccessor)
+            , m_pData(_pAccessor->address(_pNode))
+            {}
+
+            NodeAccess toNodeAccess () const { return NodeAccess(accessor(),address()); }
+
+            bool isValid() const { return m_pData.is(); }
+            bool isLocalRoot() const { return data().isFragmentRoot(); }
+
+            Name getName() const { return NodeAccess::wrapName( data().getName(*m_pAccessor) ); }
+            Attributes getAttributes() const { return data().getAttributes(); }
+
+            bool isDefault()   const { return data().isDefault(); }
+            bool isLocalized() const { return data().isLocalized(); }
+
+            NodeAddressType address() const { return NodeAddressType(m_pData); }
+            Accessor const& accessor() const { return *m_pAccessor; }
+
+            DataType& data() const { return *static_cast<NodePointerType>(m_pAccessor->validate(m_pData)); }
+            NodePointerType getDataPtr() const { return static_cast<NodePointerType>(m_pAccessor->access(m_pData)); }
+
+            AddressType rawAddress() const { return m_pData; }
+
+        private:
+            Accessor const *   m_pAccessor;
+            AddressType m_pData;
+        };
+    // -------------------------------------------------------------------------
     // helper - finds child or element
-        NodeAccess  getSubnode(NodeAccess const & _aNode, NodeAccess::Name const & _aName);
+        NodeAccess  getSubnode(NodeAccessRef const & _aNode, NodeAccess::Name const & _aName);
         NodeAddress getSubnodeAddress(memory::Accessor const& _aAccess, NodeAddress const & _aNodeAddress, NodeAccess::Name const & _aName);
         NodeAddress getSubnodeAddress(memory::UpdateAccessor& _aAccess, NodeAddress const & _aNodeAddress, NodeAccess::Name const & _aName);
     // -------------------------------------------------------------------------
