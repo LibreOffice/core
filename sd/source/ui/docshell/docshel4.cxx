@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-26 08:32:42 $
+ *  last change: $Author: ka $ $Date: 2002-08-01 11:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 #ifndef _SFX_PROGRESS_HXX
 #include <sfx2/progress.hxx>
 #endif
@@ -338,8 +341,22 @@ BOOL SdDrawDocShell::InitNew( SvStorage * pStor )
 |*
 \************************************************************************/
 
+sal_Bool SdDrawDocShell::IsNewDocument() const
+{
+    return( mbNewDocument &&
+            ( !GetMedium() || GetMedium()->GetURLObject().GetProtocol() == INET_PROT_NOT_VALID ) );
+}
+
+/*************************************************************************
+|*
+|* Load: Pools und Dokument laden
+|*
+\************************************************************************/
+
 BOOL SdDrawDocShell::Load( SvStorage* pStore )
 {
+    mbNewDocument = sal_False;
+
     ULONG   nStoreVer = pStore->GetVersion();
     BOOL    bRet = FALSE;
     BOOL    bXML = ( nStoreVer >= SOFFICE_FILEFORMAT_60 );
@@ -430,6 +447,8 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
 
 BOOL SdDrawDocShell::LoadFrom(SvStorage* pStor)
 {
+    mbNewDocument = sal_False;
+
     const ULONG nStoreVer = pStor->GetVersion();
     const BOOL bBinary = ( nStoreVer < SOFFICE_FILEFORMAT_60 );
 
@@ -530,6 +549,8 @@ BOOL SdDrawDocShell::LoadFrom(SvStorage* pStor)
 
 BOOL SdDrawDocShell::ConvertFrom( SfxMedium& rMedium )
 {
+    mbNewDocument = sal_False;
+
     const String    aFilterName( rMedium.GetFilter()->GetFilterName() );
     SdFilter*       pFilter = NULL;
     BOOL            bRet = FALSE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-26 08:32:42 $
+ *  last change: $Author: ka $ $Date: 2002-08-01 11:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
+#endif
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
@@ -405,4 +408,17 @@ OutputDevice* SdModule::GetRefDevice( SdDrawDocShell& rDocShell )
 sal_Bool SdModule::IsPrinterRefDevice() const
 {
     return sal_True;
+}
+
+/*************************************************************************
+|*
+\************************************************************************/
+
+::com::sun::star::text::WritingMode SdModule::GetDefaultWritingMode() const
+{
+    const SvtLanguageOptions aLanguageOptions;
+
+    return( aLanguageOptions.IsCTLFontEnabled() ?
+            ::com::sun::star::text::WritingMode_RL_TB :
+            ::com::sun::star::text::WritingMode_LR_TB );
 }

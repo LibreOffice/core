@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-26 08:32:41 $
+ *  last change: $Author: ka $ $Date: 2002-08-01 11:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1133,28 +1133,26 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
         aLayoutRect = GetLayoutRect();
     }
 
-    Rectangle aRect0 = aTitleRect;
-    Rectangle aRect1 = aLayoutRect;
-    Rectangle aRect2 = aLayoutRect;
-    Rectangle aRect3 = aLayoutRect;
-    Rectangle aRect4 = aLayoutRect;
-
-    Size aTitleSize = aTitleRect.GetSize();
-    Point aTitlePos = aTitleRect.TopLeft();
-
-    Size aLayoutSize = aLayoutRect.GetSize();
-    Point aLayoutPos = aLayoutRect.TopLeft();
-    Size aTempSize;
-    Point aTempPnt;
-
-    PresObjKind nObjKind[MAX_PRESOBJ];
+    Rectangle   aRect0( aTitleRect );
+    Rectangle   aRect1( aLayoutRect );
+    Rectangle   aRect2( aLayoutRect );
+    Rectangle   aRect3( aLayoutRect );
+    Rectangle   aRect4( aLayoutRect );
+    Size        aTitleSize( aTitleRect.GetSize() );
+    Point       aTitlePos( aTitleRect.TopLeft() );
+    Size        aLayoutSize( aLayoutRect.GetSize() );
+    Point       aLayoutPos( aLayoutRect.TopLeft() );
+    Size        aTempSize;
+    Point       aTempPnt;
+    PresObjKind nObjKind[ MAX_PRESOBJ ];
+    List        aObjList;
+    sal_Bool    bRightToLeft = ( GetModel() && static_cast< SdDrawDocument* >( GetModel() )->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB );
 
     for (nIndex = 0; nIndex < MAX_PRESOBJ; nIndex++)
     {
         nObjKind[nIndex] = PRESOBJ_NONE;
     }
 
-    List aObjList;
 
     switch (eAutoLayout)
     {
@@ -1245,6 +1243,9 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
 
+            if( bRightToLeft )
+                ::std::swap< Rectangle >( aRect1, aRect2 );
+
             nObjKind[0] = PRESOBJ_TITLE;
             pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
@@ -1268,6 +1269,9 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
 
             aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
+
+            if( bRightToLeft )
+                ::std::swap< Rectangle >( aRect1, aRect2 );
 
             nObjKind[0] = PRESOBJ_TITLE;
             pObj = GetPresObj(nObjKind[0]);
@@ -1303,6 +1307,9 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
 
+            if( bRightToLeft )
+                ::std::swap< Rectangle >( aRect1, aRect2 );
+
             nObjKind[0] = PRESOBJ_TITLE;
             pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
@@ -1324,6 +1331,9 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
 
             aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
+
+            if( bRightToLeft )
+                ::std::swap< Rectangle >( aRect1, aRect2 );
 
             nObjKind[0] = PRESOBJ_TITLE;
             pObj = GetPresObj(nObjKind[0]);
@@ -1359,6 +1369,9 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
 
+            if( bRightToLeft )
+                ::std::swap< Rectangle >( aRect1, aRect2 );
+
             nObjKind[0] = PRESOBJ_TITLE;
             pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
@@ -1380,6 +1393,9 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
 
             aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
+
+            if( bRightToLeft )
+                ::std::swap< Rectangle >( aRect1, aRect2 );
 
             nObjKind[0] = PRESOBJ_TITLE;
             pObj = GetPresObj(nObjKind[0]);
@@ -1424,6 +1440,12 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
             aRect1 = Rectangle (aLayoutPos, aLayoutSize);
 
+            if( bRightToLeft )
+            {
+                ::std::swap< long >( aRect1.Left(), aRect2.Left() );
+                aRect3.Left() = aRect2.Left();
+            }
+
             nObjKind[0] = PRESOBJ_TITLE;
             pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
@@ -1451,6 +1473,9 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
 
             aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
+
+            if( bRightToLeft )
+                ::std::swap< Rectangle >( aRect1, aRect2 );
 
             nObjKind[0] = PRESOBJ_TITLE;
             pObj = GetPresObj(nObjKind[0]);
@@ -1504,6 +1529,12 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aLayoutSize.Width() = long (aLayoutSize.Width() * 0.488);
             aLayoutPos.X() = long (aLayoutPos.X() + aLayoutSize.Width() * 1.05);
             aRect3 = Rectangle (aLayoutPos, aLayoutSize);
+
+            if( bRightToLeft )
+            {
+                ::std::swap< long >( aRect1.Left(), aRect2.Left() );
+                aRect3.Left() = aRect2.Left();
+            }
 
             nObjKind[0] = PRESOBJ_TITLE;
             pObj = GetPresObj(nObjKind[0]);

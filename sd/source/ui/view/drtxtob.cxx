@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-25 10:43:43 $
+ *  last change: $Author: ka $ $Date: 2002-08-01 11:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
+#endif
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 #ifndef _SFX_TPLPITEM_HXX //autogen
 #include <sfx2/tplpitem.hxx>
@@ -208,10 +211,13 @@ SdDrawTextObjectBar::~SdDrawTextObjectBar()
 
 void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
 {
-    SfxWhichIter    aIter( rSet );
-    USHORT          nWhich = aIter.FirstWhich();
-    BOOL            bTemplate = FALSE;
-    SfxItemSet      aAttrSet( pView->GetDoc()->GetPool() );
+    SfxWhichIter        aIter( rSet );
+    USHORT              nWhich = aIter.FirstWhich();
+    BOOL                bTemplate = FALSE;
+    SfxItemSet          aAttrSet( pView->GetDoc()->GetPool() );
+    SvtLanguageOptions  aLangOpt;
+    sal_Bool            bDisableParagraphTextDirection = !aLangOpt.IsCTLFontEnabled();
+
     pView->GetAttributes( aAttrSet );
 
     while ( nWhich )
@@ -388,6 +394,9 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                 rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, bLeftToRight ) );
                 rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, !bLeftToRight ) );
+
+                if( !bLeftToRight )
+                    bDisableParagraphTextDirection = sal_True;
             }
             break;
 
@@ -419,6 +428,8 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
         rSet.DisableItem( SID_PARASPACE_DECREASE );
         rSet.DisableItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
         rSet.DisableItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT );
+        rSet.DisableItem( SID_ATTR_PARA_LEFT_TO_RIGHT );
+        rSet.DisableItem( SID_ATTR_PARA_RIGHT_TO_LEFT );
     }
     else
     {
@@ -468,6 +479,33 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SVX_ADJUST_BLOCK:
                 rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, TRUE ) );
             break;
+        }
+
+        // paragraph text direction
+        if( bDisableParagraphTextDirection )
+        {
+            rSet.DisableItem( SID_ATTR_PARA_LEFT_TO_RIGHT );
+            rSet.DisableItem( SID_ATTR_PARA_RIGHT_TO_LEFT );
+        }
+        else
+        {
+            switch( ( ( (SvxWritingModeItem&) aAttrSet.Get( EE_PARA_WRITINGDIR ) ) ).GetValue() )
+            {
+                case com::sun::star::text::WritingMode_TB_RL:
+                {
+                    rSet.DisableItem( SID_ATTR_PARA_LEFT_TO_RIGHT );
+                    rSet.DisableItem( SID_ATTR_PARA_RIGHT_TO_LEFT );
+                }
+                break;
+
+                case com::sun::star::text::WritingMode_LR_TB:
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, TRUE ) );
+                break;
+
+                case com::sun::star::text::WritingMode_RL_TB:
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, TRUE ) );
+                break;
+            }
         }
 
         if (aAttrSet.GetItemState(EE_PARA_BULLETSTATE) == SFX_ITEM_ON)

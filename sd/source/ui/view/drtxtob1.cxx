@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-25 10:43:43 $
+ *  last change: $Author: ka $ $Date: 2002-08-01 11:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,6 +466,18 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                         SvxLineSpacingItem aItem( SVX_LINESPACE_TWO_LINES );
                         aItem.SetPropLineSpace( 200 );
                         aNewAttr.Put( aItem );
+                    }
+                    break;
+                    case SID_ATTR_PARA_LEFT_TO_RIGHT:
+                    {
+                        aNewAttr.Put( SvxWritingModeItem( ::com::sun::star::text::WritingMode_LR_TB, EE_PARA_WRITINGDIR ) );
+                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT ) );
+                    }
+                    break;
+                    case SID_ATTR_PARA_RIGHT_TO_LEFT:
+                    {
+                        aNewAttr.Put( SvxWritingModeItem( ::com::sun::star::text::WritingMode_RL_TB, EE_PARA_WRITINGDIR ) );
+                        aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT ) );
                     }
                     break;
 

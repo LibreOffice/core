@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-26 08:32:40 $
+ *  last change: $Author: ka $ $Date: 2002-08-01 11:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _SFXLSTNER_HXX
 #include <svtools/lstner.hxx>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
+#include <com/sun/star/text/WritingMode.hpp>
 #endif
 
 class SdOptions;
@@ -174,6 +177,8 @@ public:
     sal_Bool                IsPrinterRefDevice() const;
 
     SvNumberFormatter*      GetNumberFormatter();
+
+    ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
 
     //virtuelle Methoden fuer den Optionendialog
     virtual SfxItemSet*  CreateItemSet( USHORT nId );

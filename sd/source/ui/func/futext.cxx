@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-24 10:16:44 $
+ *  last change: $Author: ka $ $Date: 2002-08-01 11:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,8 @@ static USHORT SidArray[] = {
     SID_HYPERLINK_GETLINK,            //   10361
     SID_TEXTDIRECTION_LEFT_TO_RIGHT,  //   10907
     SID_TEXTDIRECTION_TOP_TO_BOTTOM,  //   10908
+    SID_ATTR_PARA_LEFT_TO_RIGHT,      //   10950
+    SID_ATTR_PARA_RIGHT_TO_LEFT,      //   10951
     FN_NUM_BULLET_ON,                 //   20138
     SID_BULLET,                       //   27019
     SID_PARASPACE_INCREASE,           //   27346
@@ -854,8 +856,10 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 }
                 else
                 {
-                    // as before
-                    aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT));
+                    const SdrTextHorzAdjust eHA = ( ( pDoc && pDoc->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB ) ?
+                                                    SDRTEXTHORZADJUST_RIGHT : SDRTEXTHORZADJUST_LEFT );
+
+                    aSet.Put( SdrTextHorzAdjustItem( eHA ) );
                 }
 
                 pTextObj->SetItemSet(aSet);

@@ -92,6 +92,20 @@ shell SdDrawTextObjectBar
 //      Cachable, AutoUpdate;
     ]
 
+    SfxBoolItem ParaLeftToRight SID_ATTR_PARA_LEFT_TO_RIGHT // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+//      Cachable, AutoUpdate;
+    ]
+
+    SfxBoolItem ParaRightToLeft SID_ATTR_PARA_RIGHT_TO_LEFT // ole : ?, status : ?
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+//      Cachable, AutoUpdate;
+    ]
+
     SfxBoolItem LineSpacing100 SID_ATTR_PARA_LINESPACE_10  // ole : ?, status : ?
     [
         ExecMethod = Execute;

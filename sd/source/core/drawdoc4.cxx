@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-18 13:04:59 $
+ *  last change: $Author: ka $ $Date: 2002-08-01 11:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #ifndef SVX_LIGHT
+#include <tools/urlobj.hxx>
+#include <sfx2/docfile.hxx>
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
@@ -70,6 +72,9 @@
 #include <offmgr/osplcfg.hxx>
 #endif
 #include "sdoutl.hxx"
+#ifndef _SVX_WRITINGMODEITEM_HXX
+#include <svx/writingmodeitem.hxx>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif#else
@@ -266,10 +271,10 @@ using namespace ::com::sun::star::linguistic2;
 
 void SdDrawDocument::CreateLayoutTemplates()
 {
-    SdStyleSheetPool* pStyleSheetPool = (SdStyleSheetPool*)GetStyleSheetPool();
-    SfxStyleSheetBase* pSheet = NULL;
-    String aHelpFile;
-    String aStdName = String(SdResId(STR_STANDARD_STYLESHEET_NAME));
+    SdStyleSheetPool*       pStyleSheetPool = (SdStyleSheetPool*)GetStyleSheetPool();
+    SfxStyleSheetBase*      pSheet = NULL;
+    String                  aHelpFile;
+    String                  aStdName = String(SdResId(STR_STANDARD_STYLESHEET_NAME));
 
     // ---- Standardvorlage -----------------------------------------------
 
@@ -368,13 +373,32 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SvxCharReliefItem(RELIEF_NONE));
     rISet.Put(SvxColorItem(Color(COL_AUTO)));
 
-                    // Absatzattribute (Edit Engine)
+    // Absatzattribute (Edit Engine)
     rISet.Put(SvxLRSpaceItem());
     rISet.Put(SvxULSpaceItem());
-    rISet.Put(SvxAdjustItem());
+
+    // only change paragraph text direction,
+    // if this is a new document and
+    // text direction is set explicitly to RTL
+    if( pDocSh &&
+        pDocSh->IsNewDocument() &&
+        SD_MOD()->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB )
+    {
+        SvxAdjustItem       aAdjust( SVX_ADJUST_RIGHT );
+        SvxWritingModeItem  aWritingMode( ::com::sun::star::text::WritingMode_RL_TB, EE_PARA_WRITINGDIR );
+
+        rISet.Put( aAdjust );
+        rISet.Put( aWritingMode );
+
+        pItemPool->SetPoolDefaultItem( aAdjust );
+        pItemPool->SetPoolDefaultItem( aWritingMode );
+    }
+    else
+        rISet.Put( SvxAdjustItem() );
+
     rISet.Put(SvxLineSpacingItem());
 
-                    // Bullet
+    // Bullet
     // BulletItem und BulletFont fuer Titel und Gliederung
     SvxBulletItem aBulletItem(EE_PARA_BULLET);
                             // die sind in allen Ebenen identisch
@@ -1419,4 +1443,19 @@ void SdDrawDocument::SetTextDefaults() const
 
     SvxNumBulletItem aNumBulletItem( aNumRule, EE_PARA_NUMBULLET );
     pItemPool->SetPoolDefaultItem( aNumBulletItem );
+}
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+::com::sun::star::text::WritingMode SdDrawDocument::GetDefaultWritingMode() const
+{
+    const SfxPoolItem* pItem = ( pItemPool ? pItemPool->GetPoolDefaultItem( EE_PARA_WRITINGDIR ) : NULL );
+
+    return( pItem ?
+            (::com::sun::star::text::WritingMode)( (SvxWritingModeItem&)( *pItem ) ).GetValue() :
+            ::com::sun::star::text::WritingMode_LR_TB );
 }

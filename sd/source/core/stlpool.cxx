@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-20 12:44:35 $
+ *  last change: $Author: ka $ $Date: 2002-08-01 11:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@
 #include "glob.hrc"
 #include "glob.hxx"
 #include "drawdoc.hxx"
+#include "sdmod.hxx"
 #include "sdpage.hxx"
 #include "helpids.h"
 
@@ -332,7 +333,10 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
             // Attributierung fuer Level 1, die anderen Ebenen "erben"
             if (nLevel == 1)
             {
-                SfxItemSet& rSet = pSheet->GetItemSet();
+                SfxItemSet&     rSet = pSheet->GetItemSet();
+                const SvxAdjust eAdjust = ( ( pDoc && pDoc->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB ) ?
+                                            SVX_ADJUST_RIGHT : SVX_ADJUST_LEFT );
+
                 rSet.Put(aSvxFontItem);
                 rSet.Put(aSvxFontItemCJK);
                 rSet.Put(aSvxFontItemCTL);
@@ -349,7 +353,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
                 rSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE) );
                 rSet.Put( SvxCharReliefItem(RELIEF_NONE) );
                 rSet.Put( SvxColorItem( Color(COL_AUTO)) );
-                rSet.Put( SvxAdjustItem(SVX_ADJUST_LEFT) );
+                rSet.Put( SvxAdjustItem( eAdjust ) );
                 rSet.Put( XLineStyleItem(XLINE_NONE) );
                 rSet.Put( XFillStyleItem(XFILL_NONE) );
 

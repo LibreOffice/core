@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-19 12:08:14 $
+ *  last change: $Author: ka $ $Date: 2002-08-01 11:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,17 +83,18 @@
 #ifndef _TOOLS_INTN_HXX
 #include <tools/intn.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
 #ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
 #endif
-
 #ifndef _RSCSFX_HXX
 #include <rsc/rscsfx.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
+#include <com/sun/star/text/WritingMode.hpp>
+#endif
 
 class Timer;
 class SfxObjectShell;
@@ -135,267 +136,266 @@ enum DocCreationMode
     DOC_LOADED
 };
 
-//==================================================================
+// ------------------
+// - SdDrawDocument -
+// ------------------
 
 class SdDrawDocument : public FmFormModel
 {
+private:
+
+    SdOutliner*         pOutliner;          // local outliner for outline mode
+    SdOutliner*         pInternalOutliner;  // internal outliner for creation of text objects
+    Timer*              pWorkStartupTimer;
+    Timer*              pOnlineSpellingTimer;
+    List*               pOnlineSpellingList;
+    List*               pDeletedPresObjList;
+    SvxSearchItem*      pOnlineSearchItem;
+    List*               pFrameViewList;
+    List*               pCustomShowList;
+    SdDrawDocShell*     pDocSh;
+    SdTransferable *    pCreatingTransferable;
+    BOOL                bHasOnlineSpellErrors;
+    BOOL                bInitialOnlineSpellingEnabled;
+    String              aBookmarkFile;
+    SdDrawDocShellRef   xBookmarkDocShRef;
+    String              aPresPage;
+    BOOL                bNewOrLoadCompleted;
+    BOOL                bPresAll;
+    BOOL                bPresEndless;
+    BOOL                bPresManual;
+    BOOL                bPresMouseVisible;
+    BOOL                bPresMouseAsPen;
+    BOOL                bStartPresWithNavigator;
+    BOOL                bAnimationAllowed;
+    BOOL                bPresLockedPages;
+    BOOL                bPresAlwaysOnTop;
+    BOOL                bPresFullScreen;
+    ULONG               nPresPause;
+    BOOL                bPresShowLogo;
+    BOOL                bOnlineSpell;
+    BOOL                bHideSpell;
+    BOOL                bCustomShow;
+    BOOL                bSummationOfParagraphs;
+
+    ULONG               nPresFirstPage;
+    LanguageType        eLanguage;
+    LanguageType        eLanguageCJK;
+    LanguageType        eLanguageCTL;
+    SvxNumType          ePageNumType;
+    Link                aOldNotifyUndoActionHdl;
+    SdDrawDocShellRef   xAllocedDocShRef;   // => AllocModel()
+    BOOL                bAllocDocSh;        // => AllocModel()
+    DocumentType        eDocType;
+    UINT16              nFileFormatVersion;
+    SotStorage*         pDocStor;
+    SotStorageRef       xPictureStorage;
+    SotStorageStreamRef xDocStream;
+    International*      mpInternational;
+    CharClass*          mpCharClass;
+    ::com::sun::star::lang::Locale* mpLocale;
+
+    void                UpdatePageObjectsInNotes(USHORT nStartPos);
+    void                FillOnlineSpellingList(SdPage* pPage);
+    void                SpellObject(SdrTextObj* pObj);
+
+                        DECL_LINK(NotifyUndoActionHdl, SfxUndoAction*);
+                        DECL_LINK(WorkStartupHdl, Timer*);
+                        DECL_LINK(OnlineSpellingHdl, Timer*);
+                        DECL_LINK(OnlineSpellEventHdl, EditStatus*);
+
 protected:
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
 
 public:
-    static SdDrawDocument* pDocLockedInsertingLinks;  // static to prevent recursions while resolving links
 
-private:
-    SdOutliner*       pOutliner;          // Lokaler Outliner fuer den Gliederungsmodus
-    SdOutliner*       pInternalOutliner;  // Interner Outliner zum Erzeugen von Textobjekten
-    Timer*            pWorkStartupTimer;
-    Timer*            pOnlineSpellingTimer;
-    List*             pOnlineSpellingList;
-    List*             pDeletedPresObjList;
-    SvxSearchItem*    pOnlineSearchItem;
-    List*             pFrameViewList;
-    List*             pCustomShowList;
-    SdDrawDocShell*   pDocSh;
-    SdTransferable *  pCreatingTransferable;
-    BOOL              bHasOnlineSpellErrors;
-    BOOL              bInitialOnlineSpellingEnabled;
-    String            aBookmarkFile;      // Zum Laden von Bookmarks
-    SdDrawDocShellRef xBookmarkDocShRef;  // Zum Laden von Bookmarks
-    String            aPresPage;
-    BOOL              bNewOrLoadCompleted;
-    BOOL              bPresAll;
-    BOOL              bPresEndless;
-    BOOL              bPresManual;
-    BOOL              bPresMouseVisible;
-    BOOL              bPresMouseAsPen;
-    BOOL              bStartPresWithNavigator;
-    BOOL              bAnimationAllowed;
-    BOOL              bPresLockedPages;
-    BOOL              bPresAlwaysOnTop;
-    BOOL              bPresFullScreen;
-    ULONG             nPresPause;
-    BOOL              bPresShowLogo;
-    BOOL              bOnlineSpell;
-    BOOL              bHideSpell;
-    BOOL              bCustomShow;
-    BOOL              bSummationOfParagraphs;
+                        TYPEINFO();
 
-    ULONG             nPresFirstPage;
-    LanguageType      eLanguage;
-    LanguageType      eLanguageCJK;
-    LanguageType      eLanguageCTL;
-    SvxNumType        ePageNumType;
-    Link              aOldNotifyUndoActionHdl;
-    SdDrawDocShellRef xAllocedDocShRef;   // Fuer AllocModel()
-    BOOL              bAllocDocSh;        // Fuer AllocModel()
-    DocumentType      eDocType;
-    UINT16            nFileFormatVersion;
+                        SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
+                        ~SdDrawDocument();
 
-    SotStorage*             pDocStor;
-    SotStorageRef           xPictureStorage;
-    SotStorageStreamRef     xDocStream;
+    virtual SdrModel*   AllocModel() const;
+    virtual SdrPage*    AllocPage(FASTBOOL bMasterPage);
+    virtual const SdrModel* LoadModel(const String& rFileName);
+    virtual void        DisposeLoadedModels();
+    virtual FASTBOOL    IsReadOnly() const;
+    virtual void        SetChanged(FASTBOOL bFlag = TRUE);
+    virtual SvStream*   GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
+    virtual void        HandsOff();
 
-    void  UpdatePageObjectsInNotes(USHORT nStartPos);
-    DECL_LINK(NotifyUndoActionHdl, SfxUndoAction*);
-    DECL_LINK(WorkStartupHdl, Timer*);
-    DECL_LINK(OnlineSpellingHdl, Timer*);
-    DECL_LINK(OnlineSpellEventHdl, EditStatus*);
-    void FillOnlineSpellingList(SdPage* pPage);
-    void SpellObject(SdrTextObj* pObj);
+    SfxItemPool&        GetPool() { return( *pItemPool ); }
 
-    International*                      mpInternational;
-    ::com::sun::star::lang::Locale*     mpLocale;
-    CharClass*                          mpCharClass;
+    SdOutliner*         GetOutliner(BOOL bCreateOutliner=TRUE);
+    SdOutliner*         GetInternalOutliner(BOOL bCreateOutliner=TRUE);
+
+    SdDrawDocShell*     GetDocSh() const { return(pDocSh) ; }
+
+    LanguageType        GetLanguage( const USHORT nId ) const;
+    void                SetLanguage( const LanguageType eLang, const USHORT nId );
+
+    SvxNumType          GetPageNumType() const { return ePageNumType; }
+    void                SetPageNumType(SvxNumType eType) { ePageNumType = eType; }
+    String              CreatePageNumValue(USHORT nNum) const;
+
+    DocumentType        GetDocumentType() const { return eDocType; }
+
+    void                SetAllocDocSh(BOOL bAlloc);
+
+    void                CreatingDataObj( SdTransferable* pTransferable ) { pCreatingTransferable = pTransferable; }
+
+    void                CreateFirstPages();
+    BOOL                CreateMissingNotesAndHandoutPages();
+
+    void                MovePage(USHORT nPgNum, USHORT nNewPos);
+    void                InsertPage(SdrPage* pPage, USHORT nPos=0xFFFF);
+    void                DeletePage(USHORT nPgNum);
+    SdrPage*            RemovePage(USHORT nPgNum);
+    void                RemoveUnnessesaryMasterPages( SdPage* pMaster=NULL, BOOL bOnlyDuplicatePages=FALSE, BOOL bUndo=TRUE );
+    void                SetMasterPage(USHORT nSdPageNum, const String& rLayoutName,
+                                      SdDrawDocument* pSourceDoc, BOOL bMaster, BOOL bCheckMasters);
+
+    SdDrawDocument*     OpenBookmarkDoc(const String& rBookmarkFile);
+    SdDrawDocument*     OpenBookmarkDoc(SfxMedium& rMedium);
+    BOOL                InsertBookmark(List* pBookmarkList, List* pExchangeList, BOOL bLink,
+                                        BOOL bReplace, USHORT nPgPos, BOOL bNoDialogs,
+                                        SdDrawDocShell* pBookmarkDocSh, BOOL bCopy,
+                                        Point* pObjPos);
+    BOOL                InsertBookmarkAsPage(List* pBookmarkList, List* pExchangeList,
+                                              BOOL bLink, BOOL bReplace, USHORT nPgPos,
+                                              BOOL bNoDialogs, SdDrawDocShell* pBookmarkDocSh,
+                                              BOOL bCopy, BOOL bMergeMasterPages);
+    BOOL                InsertBookmarkAsObject(List* pBookmarkList, List* pExchangeListL,
+                                                BOOL bLink, SdDrawDocShell* pBookmarkDocSh,
+                                                Point* pObjPos);
+    void                CloseBookmarkDoc();
+
+    SdrObject*          GetObj(const String& rObjName) const;
+
+    USHORT              GetPageByName(const String& rPgName, BOOL& rbIsMasterPage ) const;
+    SdPage*             GetSdPage(USHORT nPgNum, PageKind ePgKind) const;
+    USHORT              GetSdPageCount(PageKind ePgKind) const;
+    void                SetSelected(SdPage* pPage, BOOL bSelect);
+    BOOL                MovePages(USHORT nTargetPage);
+
+    SdPage*             GetMasterSdPage(USHORT nPgNum, PageKind ePgKind);
+    USHORT              GetMasterSdPageCount(PageKind ePgKind) const;
+
+    USHORT              GetMasterPageUserCount(SdrPage* pMaster) const;
+
+    void                SetPresPage( const String& rPresPage ) { aPresPage = rPresPage; }
+    const String&       GetPresPage() const { return aPresPage; }
+
+    void                SetPresAll(BOOL bNewPresAll);
+    BOOL                GetPresAll() const       { return bPresAll; }
+
+    void                SetPresEndless(BOOL bNewPresEndless);
+    BOOL                GetPresEndless() const   { return bPresEndless; }
+
+    void                SetPresManual(BOOL bNewPresManual);
+    BOOL                GetPresManual() const        { return bPresManual; }
+
+    void                SetPresMouseVisible(BOOL bNewPresMouseVisible);
+    BOOL                GetPresMouseVisible() const { return bPresMouseVisible; }
+
+    void                SetPresMouseAsPen(BOOL bNewPresMouseAsPen);
+    BOOL                GetPresMouseAsPen() const    { return bPresMouseAsPen; }
+
+    void                SetPresFirstPage (ULONG nNewFirstPage);
+    ULONG               GetPresFirstPage() const { return nPresFirstPage; }
+
+    void                SetStartPresWithNavigator (BOOL bStart);
+    BOOL                GetStartPresWithNavigator() const { return bStartPresWithNavigator; }
+
+    void                SetAnimationAllowed (BOOL bAllowed) { bAnimationAllowed = bAllowed; }
+    BOOL                IsAnimationAllowed() const { return bAnimationAllowed; }
+
+    void                SetPresPause( ULONG nSecondsToWait ) { nPresPause = nSecondsToWait; }
+    ULONG               GetPresPause() const { return nPresPause; }
+
+    void                SetPresShowLogo( BOOL bShowLogo ) { bPresShowLogo = bShowLogo; }
+    BOOL                IsPresShowLogo() const { return bPresShowLogo; }
+
+    void                SetPresLockedPages (BOOL bLock);
+    BOOL                GetPresLockedPages() const { return bPresLockedPages; }
+
+    void                SetPresAlwaysOnTop (BOOL bOnTop);
+    BOOL                GetPresAlwaysOnTop() const { return bPresAlwaysOnTop; }
+
+    void                SetPresFullScreen (BOOL bNewFullScreen);
+    BOOL                GetPresFullScreen() const { return bPresFullScreen; }
+
+       void                SetSummationOfParagraphs( BOOL bOn = TRUE ) { bSummationOfParagraphs = bOn; }
+    const BOOL          IsSummationOfParagraphs() const { return bSummationOfParagraphs; }
+
+    void                SetOnlineSpell( BOOL bIn );
+    BOOL                GetOnlineSpell() const { return bOnlineSpell; }
+    void                StopOnlineSpelling();
+    void                StartOnlineSpelling(BOOL bForceSpelling=TRUE);
+
+    void                ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner* pOutl);
+
+    void                InsertObject(SdrObject* pObj, SdPage* pPage);
+    void                RemoveObject(SdrObject* pObj, SdPage* pPage);
+
+    void                SetHideSpell( BOOL bIn );
+    BOOL                GetHideSpell() const { return bHideSpell; }
+
+    ULONG               GetLinkCount();
+
+    List*               GetFrameViewList() const { return pFrameViewList; }
+    List*               GetCustomShowList(BOOL bCreate = FALSE);
+
+    void                SetCustomShow(BOOL bCustShow) { bCustomShow = bCustShow; }
+    BOOL                IsCustomShow() const { return bCustomShow; }
+
+    void                NbcSetChanged(FASTBOOL bFlag = TRUE);
+
+    void                SetTextDefaults() const;
+
+    void                CreateLayoutTemplates();
+    void                RenameLayoutTemplate(const String& rOldLayoutName, const String& rNewName);
+
+    void                StopWorkStartupDelay();
+
+    void                NewOrLoadCompleted(DocCreationMode eMode);
+    BOOL                IsNewOrLoadCompleted() const {return bNewOrLoadCompleted; }
+
+    FrameView*          GetFrameView(ULONG nPos) { return (FrameView*) pFrameViewList->GetObject(nPos); }
+
+    SdAnimationInfo*    GetAnimationInfo(SdrObject* pObject) const;
+
+    SdIMapInfo*         GetIMapInfo( SdrObject* pObject ) const;
+    IMapObject*         GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint, const Window& rCmpWnd );
+
+    Graphic             GetGraphicFromOle2Obj( const SdrOle2Obj* pOle2Obj );
+
+    List*               GetDeletedPresObjList();
+
+    CharClass*          GetCharClass() const { return mpCharClass; }
+    International*      GetInternational() const { return mpInternational; }
+
+    void                RestoreLayerNames();
+    void                MakeUniqueLayerNames();
+
+    void                UpdateAllLinks();
+
+    void                CheckMasterPages();
+
+    void                Merge(SdrModel& rSourceModel,
+                                USHORT nFirstPageNum=0, USHORT nLastPageNum=0xFFFF,
+                                USHORT nDestPos=0xFFFF,
+                                FASTBOOL bMergeMasterPages=FALSE, FASTBOOL bAllMasterPages=FALSE,
+                                FASTBOOL bUndo=TRUE, FASTBOOL bTreadSourceAsConst=FALSE);
+
+    ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
 
 public:
-    TYPEINFO();
 
-    SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
-    ~SdDrawDocument();
+    static SdDrawDocument* pDocLockedInsertingLinks;  // static to prevent recursions while resolving links
 
-    virtual SdrModel* AllocModel() const;
-    virtual SdrPage*  AllocPage(FASTBOOL bMasterPage);
-    virtual const SdrModel* LoadModel(const String& rFileName);
-    virtual void DisposeLoadedModels();
-    virtual FASTBOOL IsReadOnly() const;
-
-    SfxItemPool&    GetPool() { return( *pItemPool ); }
-
-    SdOutliner*     GetOutliner(BOOL bCreateOutliner=TRUE);
-    SdOutliner*     GetInternalOutliner(BOOL bCreateOutliner=TRUE);
-
-    SdDrawDocShell* GetDocSh() const { return(pDocSh) ; }
-
-    LanguageType    GetLanguage( const USHORT nId ) const;
-    void            SetLanguage( const LanguageType eLang, const USHORT nId );
-
-    SvxNumType      GetPageNumType() const { return ePageNumType; }
-    void            SetPageNumType(SvxNumType eType) { ePageNumType = eType; }
-    String          CreatePageNumValue(USHORT nNum) const;
-
-    DocumentType    GetDocumentType() const { return eDocType; }
-
-    void            SetAllocDocSh(BOOL bAlloc);
-
-    void     CreatingDataObj( SdTransferable* pTransferable ) { pCreatingTransferable = pTransferable; }
-
-    void     CreateFirstPages();
-    BOOL     CreateMissingNotesAndHandoutPages();
-
-    void     MovePage(USHORT nPgNum, USHORT nNewPos);
-    void     InsertPage(SdrPage* pPage, USHORT nPos=0xFFFF);
-    void     DeletePage(USHORT nPgNum);
-    SdrPage* RemovePage(USHORT nPgNum);
-    void     RemoveUnnessesaryMasterPages( SdPage* pMaster=NULL, BOOL bOnlyDuplicatePages=FALSE, BOOL bUndo=TRUE );
-    void     SetMasterPage(USHORT nSdPageNum, const String& rLayoutName,
-                           SdDrawDocument* pSourceDoc, BOOL bMaster, BOOL bCheckMasters);
-
-    SdDrawDocument* OpenBookmarkDoc(const String& rBookmarkFile);
-    SdDrawDocument* OpenBookmarkDoc(SfxMedium& rMedium);
-    BOOL     InsertBookmark(List* pBookmarkList, List* pExchangeList, BOOL bLink,
-                            BOOL bReplace, USHORT nPgPos, BOOL bNoDialogs,
-                            SdDrawDocShell* pBookmarkDocSh, BOOL bCopy,
-                            Point* pObjPos);
-    BOOL     InsertBookmarkAsPage(List* pBookmarkList, List* pExchangeList,
-                                  BOOL bLink, BOOL bReplace, USHORT nPgPos,
-                                  BOOL bNoDialogs, SdDrawDocShell* pBookmarkDocSh,
-                                  BOOL bCopy, BOOL bMergeMasterPages);
-    BOOL     InsertBookmarkAsObject(List* pBookmarkList, List* pExchangeListL,
-                                    BOOL bLink, SdDrawDocShell* pBookmarkDocSh,
-                                    Point* pObjPos);
-    void     CloseBookmarkDoc();
-
-    SdrObject* GetObj(const String& rObjName) const;
-
-    USHORT  GetPageByName(const String& rPgName, BOOL& rbIsMasterPage ) const;
-    SdPage* GetSdPage(USHORT nPgNum, PageKind ePgKind) const;
-    USHORT  GetSdPageCount(PageKind ePgKind) const;
-    void    SetSelected(SdPage* pPage, BOOL bSelect);
-    BOOL    MovePages(USHORT nTargetPage);
-
-    SdPage* GetMasterSdPage(USHORT nPgNum, PageKind ePgKind);
-    USHORT  GetMasterSdPageCount(PageKind ePgKind) const;
-
-    USHORT  GetMasterPageUserCount(SdrPage* pMaster) const;
-
-    void            SetPresPage( const String& rPresPage ) { aPresPage = rPresPage; }
-    const String&   GetPresPage() const { return aPresPage; }
-
-    void SetPresAll(BOOL bNewPresAll);
-    BOOL GetPresAll() const          { return bPresAll; }
-
-    void SetPresEndless(BOOL bNewPresEndless);
-    BOOL GetPresEndless() const      { return bPresEndless; }
-
-    void SetPresManual(BOOL bNewPresManual);
-    BOOL GetPresManual() const       { return bPresManual; }
-
-    void SetPresMouseVisible(BOOL bNewPresMouseVisible);
-    BOOL GetPresMouseVisible() const { return bPresMouseVisible; }
-
-    void SetPresMouseAsPen(BOOL bNewPresMouseAsPen);
-    BOOL GetPresMouseAsPen() const   { return bPresMouseAsPen; }
-
-    void  SetPresFirstPage (ULONG nNewFirstPage);
-    ULONG GetPresFirstPage() const { return nPresFirstPage; }
-
-    void  SetStartPresWithNavigator (BOOL bStart);
-    BOOL  GetStartPresWithNavigator() const { return bStartPresWithNavigator; }
-
-    void  SetAnimationAllowed (BOOL bAllowed) { bAnimationAllowed = bAllowed; }
-    BOOL  IsAnimationAllowed() const { return bAnimationAllowed; }
-
-    void  SetPresPause( ULONG nSecondsToWait ) { nPresPause = nSecondsToWait; }
-    ULONG GetPresPause() const { return nPresPause; }
-
-    void  SetPresShowLogo( BOOL bShowLogo ) { bPresShowLogo = bShowLogo; }
-    BOOL  IsPresShowLogo() const { return bPresShowLogo; }
-
-    void  SetPresLockedPages (BOOL bLock);
-    BOOL  GetPresLockedPages() const { return bPresLockedPages; }
-
-    void  SetPresAlwaysOnTop (BOOL bOnTop);
-    BOOL  GetPresAlwaysOnTop() const { return bPresAlwaysOnTop; }
-
-    void  SetPresFullScreen (BOOL bNewFullScreen);
-    BOOL  GetPresFullScreen() const { return bPresFullScreen; }
-
-       void  SetSummationOfParagraphs( BOOL bOn = TRUE ) { bSummationOfParagraphs = bOn; }
-    const BOOL  IsSummationOfParagraphs() const { return bSummationOfParagraphs; }
-
-
-    void SetOnlineSpell( BOOL bIn );
-    BOOL GetOnlineSpell() const { return bOnlineSpell; }
-    void StopOnlineSpelling();
-    void StartOnlineSpelling(BOOL bForceSpelling=TRUE);
-
-// #91457# removed link and replaced with Imp method
-//  DECL_LINK(OnlineSpellCallback, SpellCallbackInfo*);
-    void ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner* pOutl);
-
-    void InsertObject(SdrObject* pObj, SdPage* pPage);
-    void RemoveObject(SdrObject* pObj, SdPage* pPage);
-
-    void SetHideSpell( BOOL bIn );
-    BOOL GetHideSpell() const { return bHideSpell; }
-
-    ULONG GetLinkCount();
-
-    List* GetFrameViewList() const { return pFrameViewList; }
-    List* GetCustomShowList(BOOL bCreate = FALSE);
-
-    void  SetCustomShow(BOOL bCustShow) { bCustomShow = bCustShow; }
-    BOOL  IsCustomShow() const { return bCustomShow; }
-
-    friend SvStream& operator << (SvStream& rOut, SdDrawDocument& rDoc);
-    friend SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc);
-
-    virtual void SetChanged(FASTBOOL bFlag = TRUE);
-    void NbcSetChanged(FASTBOOL bFlag = TRUE);
-    virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
-    virtual void HandsOff();
-
-    void SetTextDefaults() const;
-
-    void CreateLayoutTemplates();
-    void RenameLayoutTemplate(const String& rOldLayoutName, const String& rNewName);
-
-    void StopWorkStartupDelay();
-
-    void NewOrLoadCompleted(DocCreationMode eMode);
-    BOOL IsNewOrLoadCompleted() const {return bNewOrLoadCompleted; }
-
-    FrameView* GetFrameView(ULONG nPos)
-               { return (FrameView*) pFrameViewList->GetObject(nPos); }
-
-    SdAnimationInfo* GetAnimationInfo(SdrObject* pObject) const;
-
-    SdIMapInfo* GetIMapInfo( SdrObject* pObject ) const;
-    IMapObject* GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint, const Window& rCmpWnd );
-
-    Graphic     GetGraphicFromOle2Obj( const SdrOle2Obj* pOle2Obj );
-
-    List*       GetDeletedPresObjList();
-
-    CharClass*  GetCharClass() const { return mpCharClass; }
-    International* GetInternational() const { return mpInternational; }
-
-    void        RestoreLayerNames();
-    void        MakeUniqueLayerNames();
-
-    void    UpdateAllLinks();
-
-    void CheckMasterPages();
-
-    void Merge(SdrModel& rSourceModel,
-               USHORT nFirstPageNum=0, USHORT nLastPageNum=0xFFFF,
-               USHORT nDestPos=0xFFFF,
-               FASTBOOL bMergeMasterPages=FALSE, FASTBOOL bAllMasterPages=FALSE,
-               FASTBOOL bUndo=TRUE, FASTBOOL bTreadSourceAsConst=FALSE);
+    friend SvStream&    operator<<(SvStream& rOut, SdDrawDocument& rDoc);
+    friend SvStream&    operator>>(SvStream& rIn, SdDrawDocument& rDoc);
 };
 
-
-
 #endif // _DRAWDOC_HXX
-
-

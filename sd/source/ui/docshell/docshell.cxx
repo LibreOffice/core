@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-30 14:24:01 $
+ *  last change: $Author: ka $ $Date: 2002-08-01 11:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,8 @@ SdDrawDocShell::SdDrawDocShell(SfxObjectCreateMode eMode,
 //  pStbMgr( NULL ),
     bSdDataObj(bDataObject),
     bOwnPrinter(FALSE),
-    eDocType(eDocumentType)
+    eDocType(eDocumentType),
+    mbNewDocument( sal_True )
 {
 //    pDoc = new SdDrawDocument(eDocType, this);
     Construct();
@@ -248,7 +249,8 @@ SdDrawDocShell::SdDrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
 //  pStbMgr( NULL ),
     bSdDataObj(bDataObject),
     bOwnPrinter(FALSE),
-    eDocType(eDocumentType)
+    eDocType(eDocumentType),
+    mbNewDocument( sal_True )
 {
     Construct();
 }
