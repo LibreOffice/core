@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-19 13:15:09 $
+ *  last change: $Author: ama $ $Date: 2001-06-29 07:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #endif
 #ifndef _FMTCNCT_HXX //autogen
 #include <fmtcnct.hxx>
+#endif
+#ifndef _LAYHELP_HXX
+#include <layhelp.hxx>
 #endif
 
 
@@ -1157,7 +1160,8 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                         if ( pO->IsWriterFlyFrame() )
                         {
                             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                            if( pFly->IsFlyLayFrm() )
+                            if( pFly->IsFlyLayFrm() &&
+                                pFly->Frm().Top() != WEIT_WECH )
                             {
                                 SwTwips nBottom = pFly->Frm().Top() +
                                                   pFly->Frm().Height();
@@ -1834,18 +1838,21 @@ void SwFrm::AppendFly( SwFlyFrm *pNew )
             //Damit man noch brauchbar an das Ende des Dokumentes springen
             //kann werden die Flys nicht ganz an das Ende gehaengt.
             SwRootFrm *pRoot = (SwRootFrm*)pPage->GetUpper();
-            SwPageFrm *pTmp = pRoot->GetLastPage();
-            if ( pTmp->GetPhyPageNum() > 30 )
+            if( !SwLayHelper::CheckPageFlyCache( pPage, pNew ) )
             {
-                for ( USHORT i = 0; i < 10; ++i )
+                SwPageFrm *pTmp = pRoot->GetLastPage();
+                if ( pTmp->GetPhyPageNum() > 30 )
                 {
-                    pTmp = (SwPageFrm*)pTmp->GetPrev();
-                    if( pTmp->GetPhyPageNum() <= pPage->GetPhyPageNum() )
-                        break; // damit wir nicht vor unserem Anker landen
+                    for ( USHORT i = 0; i < 10; ++i )
+                    {
+                        pTmp = (SwPageFrm*)pTmp->GetPrev();
+                        if( pTmp->GetPhyPageNum() <= pPage->GetPhyPageNum() )
+                            break; // damit wir nicht vor unserem Anker landen
+                    }
+                    if ( pTmp->IsEmptyPage() )
+                        pTmp = (SwPageFrm*)pTmp->GetPrev();
+                    pPage = pTmp;
                 }
-                if ( pTmp->IsEmptyPage() )
-                    pTmp = (SwPageFrm*)pTmp->GetPrev();
-                pPage = pTmp;
             }
             pPage->SwPageFrm::AppendFly( pNew );
         }

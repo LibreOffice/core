@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-06-08 11:44:09 $
+ *  last change: $Author: ama $ $Date: 2001-06-29 07:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1284,6 +1284,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
 
     if( pPageMaker )
     {
+        pPageMaker->CheckFlyCache( pPage );
         delete pPageMaker;
         if( pDoc->GetLayoutCache() )
         {

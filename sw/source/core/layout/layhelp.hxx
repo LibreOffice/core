@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layhelp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-29 12:41:00 $
+ *  last change: $Author: ama $ $Date: 2001-06-29 07:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,15 @@
 #define _SVSTDARR_XUB_STRLEN
 #include <svtools/svstdarr.hxx>
 #endif
+#ifndef _SWRECT_HXX
+#include <swrect.hxx>
+#endif
 
 class SwDoc;
 class SwFrm;
 class SwLayoutFrm;
 class SwPageFrm;
+class SwFlyFrm;
 class SwSectionFrm;
 class SwSectionNode;
 class SwLayoutCache;
@@ -80,21 +84,27 @@ class SvStream;
 
 /*************************************************************************
  *                      class SwLayCacheImpl
- * contains the page break information of the document (after loading)
+ * contains the page break information and the text frame positions
+ * of the document (after loading)
  * and is used inside the constructor of the layout rootframe to
- * insert content at the right pages.
+ * insert content and text frames at the right pages.
  * For every page of the main text (body content, no footnotes, text frames etc.)
  * we have the nodeindex of the first content at the page,
  * the type of content ( table or paragraph )
  * and if it's not the first part of the table/paragraph,
  * the row/character-offset inside the table/paragraph.
+ * The text frame positions are stored in the SwPageFlyCache array.
  *************************************************************************/
+
+class SwFlyCache;
+typedef SwFlyCache* SwFlyCachePtr;
+SV_DECL_PTRARR_DEL( SwPageFlyCache, SwFlyCachePtr, 0, 4 )
 
 class SwLayCacheImpl : public SvULongs
 {
     SvXub_StrLens aOffset;
     SvUShorts aType;
-
+    SwPageFlyCache aFlyCache;
     void Insert( USHORT nType, ULONG nIndex, xub_StrLen nOffset );
 
 public:
@@ -104,6 +114,9 @@ public:
     ULONG GetBreakIndex( USHORT nIdx ) const { return GetObject( nIdx ); }
     xub_StrLen GetBreakOfst( USHORT nIdx ) const { return aOffset[ nIdx ]; }
     USHORT GetBreakType( USHORT nIdx ) const { return aType[ nIdx ]; }
+
+    USHORT GetFlyCount() const { return aFlyCache.Count(); }
+    SwFlyCache *GetFlyCache( USHORT nIdx ) const { return aFlyCache[ nIdx ]; }
 };
 
 /*************************************************************************
@@ -147,8 +160,10 @@ class SwLayHelper
     ULONG nMaxParaPerPage;
     ULONG nParagraphCnt;
     ULONG nStartOfContent;
-    USHORT nIndex;
+    USHORT nIndex;                      // the index in the page break array
+    USHORT nFlyIdx;                     // the index in the fly cache array
     BOOL bFirst : 1;
+    void _CheckFlyCache( SwPageFrm* pPage );
 public:
     SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
             SwLayoutFrm* &rpL, SwActualSection* &rpA, BOOL &rBrk,
@@ -160,6 +175,14 @@ public:
     BOOL BreakPage( xub_StrLen& rOffs, ULONG nNodeIndex );
     BOOL CheckInsertPage();
 
+    // Look for fresh text frames at this (new) page and set them to the right
+    // position, if they are in the fly cache.
+    void CheckFlyCache( SwPageFrm* pPage )
+    { if( pImpl && nFlyIdx < pImpl->GetFlyCount() ) _CheckFlyCache( pPage ); }
+
+    // Look for this text frame and set it to the right position,
+    // if it's in the fly cache.
+    static BOOL CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly );
 };
 
 /*************************************************************************
@@ -171,6 +194,7 @@ public:
 #define SW_LAYCACHE_IO_REC_PAGES    'p'
 #define SW_LAYCACHE_IO_REC_PARA     'P'
 #define SW_LAYCACHE_IO_REC_TABLE    'T'
+#define SW_LAYCACHE_IO_REC_FLY      'F'
 
 #define SW_LAYCACHE_IO_VERSION_MAJOR    1
 #define SW_LAYCACHE_IO_VERSION_MINOR    0
@@ -228,6 +252,16 @@ public:
 
     USHORT GetMajorVersion() const { return nMajorVersion; }
     USHORT GetMinorVersion() const { return nMinorVersion; }
+};
+
+// Stored information about text frames:
+class SwFlyCache : public SwRect // position and size
+{
+public:
+    ULONG nOrdNum;      // Id to recognize text frames
+    USHORT nPageNum;    // page number
+    SwFlyCache( USHORT nP, ULONG nO, long nX, long nY, long nW, long nH ) :
+        SwRect( nX, nY, nW, nH ), nOrdNum( nO ), nPageNum( nP ){}
 };
 
 #endif

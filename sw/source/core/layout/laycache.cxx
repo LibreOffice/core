@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-06-22 07:56:05 $
+ *  last change: $Author: ama $ $Date: 2001-06-29 07:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,17 @@
 #ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
 #endif
+#ifndef _DFLYOBJ_HXX //autogen
+#include <dflyobj.hxx>
+#endif
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
+#endif
+#ifndef _FLYFRM_HXX //autogen
+#include <flyfrm.hxx>
+#endif
+
+SV_IMPL_PTRARR( SwPageFlyCache, SwFlyCachePtr )
 
 /*-----------------28.5.2001 10:06------------------
  *  Reading and writing of the layout cache.
@@ -203,12 +214,26 @@ BOOL SwLayCacheImpl::Read( SvStream& rStream )
         case SW_LAYCACHE_IO_REC_TABLE:
             aIo.OpenRec( SW_LAYCACHE_IO_REC_TABLE );
             aIo.OpenFlagRec();
-            aIo.GetStream() >> nIndex
-                             >> nOffset;
+            aIo.GetStream() >> nOffset
+                            >> nIndex;
             Insert( SW_LAYCACHE_IO_REC_TABLE, nIndex, (xub_StrLen)nOffset );
             aIo.CloseFlagRec();
             aIo.CloseRec( SW_LAYCACHE_IO_REC_TABLE );
             break;
+        case SW_LAYCACHE_IO_REC_FLY:
+        {
+            aIo.OpenRec( SW_LAYCACHE_IO_REC_FLY );
+            aIo.OpenFlagRec();
+            aIo.CloseFlagRec();
+            long nX, nY, nW, nH;
+            USHORT nPgNum;
+            aIo.GetStream() >> nPgNum >> nIndex
+                    >> nX >> nY >> nW >> nH;
+            SwFlyCache* pFly = new SwFlyCache( nPgNum, nIndex, nX, nY, nW, nH );
+            aFlyCache.Insert( pFly, aFlyCache.Count() );
+            aIo.CloseRec( SW_LAYCACHE_IO_REC_FLY );
+            break;
+        }
         default:
             aIo.SkipRec();
             break;
@@ -227,6 +252,8 @@ BOOL SwLayCacheImpl::Read( SvStream& rStream )
  * If at the top of a page is the rest of a paragraph/table
  * from the bottom of the previous page, the character/row
  * number is stored, too.
+ * The position, size and page number of the text frames
+ * are stored, too
  * --------------------------------------------------*/
 
 void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
@@ -240,91 +267,54 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                 FindStartNode()->GetIndex();
         // The first page..
         SwPageFrm* pPage = (SwPageFrm*)rDoc.GetRootFrm()->Lower();
-        //.. is not very interesting, cause it's clear that the first
-        // page starts with the first paragraph/table, do we get the
-        if( pPage ) // second page
-            pPage = (SwPageFrm*)pPage->GetNext();
 
         aIo.OpenRec( SW_LAYCACHE_IO_REC_PAGES );
         aIo.OpenFlagRec( 0, 0 );
         aIo.CloseFlagRec();
         while( pPage )
         {
-            SwLayoutFrm* pLay = pPage->FindBodyCont();
-            SwFrm* pTmp = pLay ? pLay->ContainsAny() : NULL;
-            // We are only interested in paragraph or table frames,
-            // a section frames contains paragraphs/tables.
-            if( pTmp && pTmp->IsSctFrm() )
-                pTmp = ((SwSectionFrm*)pTmp)->ContainsAny();
-
-            if( pTmp ) // any content
+            if( pPage->GetPrev() )
             {
-                if( pTmp->IsTxtFrm() )
+                SwLayoutFrm* pLay = pPage->FindBodyCont();
+                SwFrm* pTmp = pLay ? pLay->ContainsAny() : NULL;
+                // We are only interested in paragraph or table frames,
+                // a section frames contains paragraphs/tables.
+                if( pTmp && pTmp->IsSctFrm() )
+                    pTmp = ((SwSectionFrm*)pTmp)->ContainsAny();
+
+                if( pTmp ) // any content
                 {
-                    ULONG nNdIdx = ((SwTxtFrm*)pTmp)->GetNode()->GetIndex();
-                    if( nNdIdx > nStartOfContent )
+                    if( pTmp->IsTxtFrm() )
                     {
-                        /*  Open Paragraph Record */
-                        aIo.OpenRec( SW_LAYCACHE_IO_REC_PARA );
-                        BOOL bFollow = ((SwTxtFrm*)pTmp)->IsFollow();
-                        aIo.OpenFlagRec( bFollow ? 0x01 : 0x00,
-                                           bFollow ? 8 : 4 );
-                        nNdIdx -= nStartOfContent;
-                        aIo.GetStream() << nNdIdx;
-                        if( bFollow )
-                            aIo.GetStream() << (ULONG)((SwTxtFrm*)pTmp)->GetOfst();
-                        aIo.CloseFlagRec();
-                        /*  Close Paragraph Record */
-                        aIo.CloseRec( SW_LAYCACHE_IO_REC_PARA );
-                    }
-                }
-                else if( pTmp->IsTabFrm() )
-                {
-                    SwTabFrm* pTab = (SwTabFrm*)pTmp;
-                    ULONG nOfst = STRING_LEN;
-                    if( pTab->IsFollow() )
-                    {
-                        // If the table is a follow, we have to look for the
-                        // master and to count all rows to get the row number
-                        nOfst = 0;
-                        while( pTab->IsFollow() )
-                            pTab = pTab->FindMaster();
-                        while( pTab != pTmp )
-                        {
-                            SwFrm* pSub = pTab->Lower();
-                            while( pSub )
-                            {
-                                ++nOfst;
-                                pSub = pSub->GetNext();
-                            }
-                            pTab = pTab->GetFollow();
-                            ASSERT( pTab, "Table follow without master" );
-                        }
-                    }
-                    do
-                    {
-                        ULONG nNdIdx =
-                                pTab->GetTable()->GetTableNode()->GetIndex();
+                        ULONG nNdIdx = ((SwTxtFrm*)pTmp)->GetNode()->GetIndex();
                         if( nNdIdx > nStartOfContent )
                         {
-                            /* Open Table Record */
-                            aIo.OpenRec( SW_LAYCACHE_IO_REC_TABLE );
-                            aIo.OpenFlagRec( 0, 8 );
+                            /*  Open Paragraph Record */
+                            aIo.OpenRec( SW_LAYCACHE_IO_REC_PARA );
+                            BOOL bFollow = ((SwTxtFrm*)pTmp)->IsFollow();
+                            aIo.OpenFlagRec( bFollow ? 0x01 : 0x00,
+                                            bFollow ? 8 : 4 );
                             nNdIdx -= nStartOfContent;
-                            aIo.GetStream() << nNdIdx
-                                            << nOfst;
+                            aIo.GetStream() << nNdIdx;
+                            if( bFollow )
+                                aIo.GetStream() << (ULONG)((SwTxtFrm*)pTmp)->GetOfst();
                             aIo.CloseFlagRec();
-                            /* Close Table Record  */
-                            aIo.CloseRec( SW_LAYCACHE_IO_REC_TABLE );
+                            /*  Close Paragraph Record */
+                            aIo.CloseRec( SW_LAYCACHE_IO_REC_PARA );
                         }
-                        // If the table has a follow on the next page,
-                        // we know already the row number and store this
-                        // immediately.
-                        if( pTab->GetFollow() )
+                    }
+                    else if( pTmp->IsTabFrm() )
+                    {
+                        SwTabFrm* pTab = (SwTabFrm*)pTmp;
+                        ULONG nOfst = STRING_LEN;
+                        if( pTab->IsFollow() )
                         {
-                            if( nOfst == STRING_LEN )
-                                nOfst = 0;
-                            do
+                            // If the table is a follow, we have to look for the
+                            // master and to count all rows to get the row number
+                            nOfst = 0;
+                            while( pTab->IsFollow() )
+                                pTab = pTab->FindMaster();
+                            while( pTab != pTmp )
                             {
                                 SwFrm* pSub = pTab->Lower();
                                 while( pSub )
@@ -333,20 +323,90 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                     pSub = pSub->GetNext();
                                 }
                                 pTab = pTab->GetFollow();
-                                SwPageFrm *pTabPage = pTab->FindPageFrm();
-                                if( pTabPage != pPage )
-                                {
-                                    ASSERT( pPage->GetPhyPageNum() <
-                                            pTabPage->GetPhyPageNum(),
-                                            "Looping Tableframes" );
-                                    pPage = pTabPage;
-                                    break;
-                                }
-                            } while ( pTab->GetFollow() );
+                                ASSERT( pTab, "Table follow without master" );
+                            }
                         }
-                        else
-                            break;
-                    } while( pTab );
+                        do
+                        {
+                            ULONG nNdIdx =
+                                    pTab->GetTable()->GetTableNode()->GetIndex();
+                            if( nNdIdx > nStartOfContent )
+                            {
+                                /* Open Table Record */
+                                aIo.OpenRec( SW_LAYCACHE_IO_REC_TABLE );
+                                aIo.OpenFlagRec( 0, 8 );
+                                nNdIdx -= nStartOfContent;
+                                aIo.GetStream() << nNdIdx
+                                                << nOfst;
+                                aIo.CloseFlagRec();
+                                /* Close Table Record  */
+                                aIo.CloseRec( SW_LAYCACHE_IO_REC_TABLE );
+                            }
+                            // If the table has a follow on the next page,
+                            // we know already the row number and store this
+                            // immediately.
+                            if( pTab->GetFollow() )
+                            {
+                                if( nOfst == STRING_LEN )
+                                    nOfst = 0;
+                                do
+                                {
+                                    SwFrm* pSub = pTab->Lower();
+                                    while( pSub )
+                                    {
+                                        ++nOfst;
+                                        pSub = pSub->GetNext();
+                                    }
+                                    pTab = pTab->GetFollow();
+                                    SwPageFrm *pTabPage = pTab->FindPageFrm();
+                                    if( pTabPage != pPage )
+                                    {
+                                        ASSERT( pPage->GetPhyPageNum() <
+                                                pTabPage->GetPhyPageNum(),
+                                                "Looping Tableframes" );
+                                        pPage = pTabPage;
+                                        break;
+                                    }
+                                } while ( pTab->GetFollow() );
+                            }
+                            else
+                                break;
+                        } while( pTab );
+                    }
+                }
+            }
+            if( pPage->GetSortedObjs() )
+            {
+                SwSortDrawObjs &rObjs = *pPage->GetSortedObjs();
+                for ( USHORT i = 0; i < rObjs.Count(); ++i )
+                {
+                    SdrObject *pO = rObjs[i];
+                    if ( pO->IsWriterFlyFrame() )
+                    {
+                        SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                        if( pFly->Frm().Left() != WEIT_WECH &&
+                            !pFly->GetAnchor()->FindFooterOrHeader() )
+                        {
+                            const SwContact *pC = (SwContact*)GetUserCall(pO);
+                            if( pC )
+                            {
+                                ULONG nOrdNum = pO->GetOrdNum();
+                                USHORT nPageNum = pPage->GetPhyPageNum();
+                                /* Open Fly Record */
+                                aIo.OpenRec( SW_LAYCACHE_IO_REC_FLY );
+                                aIo.OpenFlagRec( 0, 0 );
+                                aIo.CloseFlagRec();
+                                SwRect &rRct = pFly->Frm();
+                                long nX = rRct.Left() - pPage->Frm().Left();
+                                long nY = rRct.Top() - pPage->Frm().Top();
+                                aIo.GetStream() << nPageNum << nOrdNum
+                                                << nX << nY << rRct.Width()
+                                                << rRct.Height();
+                                /* Close Fly Record  */
+                                aIo.CloseRec( SW_LAYCACHE_IO_REC_FLY );
+                            }
+                        }
+                    }
                 }
             }
             pPage = (SwPageFrm*)pPage->GetNext();
@@ -531,6 +591,7 @@ SwLayHelper::SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
                           ->GetIndex();
         nNodeIndex -= nStartOfContent;
         nIndex = 0;
+        nFlyIdx = 0;
         while( nIndex < pImpl->Count() && (*pImpl)[ nIndex ] < nNodeIndex )
             ++nIndex;
         if( nIndex >= pImpl->Count() )
@@ -811,8 +872,10 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
                 }
             }
 
+            SwPageFrm* pLastPage = rpPage;
             if( CheckInsertPage() )
             {
+                _CheckFlyCache( pLastPage );
                 if( rpPrv && rpPrv->IsTxtFrm() && !rpPrv->GetValidSizeFlag() )
                     rpPrv->Frm().Height( rpPrv->GetUpper()->Prt().Height() );
 
@@ -852,6 +915,117 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
                  (*pImpl)[ nIndex ] == nNodeIndex );
     }
     bFirst = FALSE;
+    return bRet;
+}
+
+ /*-----------------28.6.2001 14:40------------------
+  * SwLayHelper::_CheckFlyCache(..)
+  * If a new page is inserted, the last page is analysed.
+  * If there are text frames with default position, the fly cache
+  * is checked, if these frames are stored in the cache.
+  * --------------------------------------------------*/
+
+void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
+{
+    if( !pPage )
+        return;
+    USHORT nFlyCount = pImpl->GetFlyCount();
+    // Any text frames at the page, fly cache avaiable?
+    if( pPage->GetSortedObjs() && nFlyIdx < nFlyCount )
+    {
+        SwSortDrawObjs &rObjs = *pPage->GetSortedObjs();
+        USHORT nPgNum = pPage->GetPhyPageNum();
+        for ( USHORT i = 0; i < rObjs.Count(); ++i )  // check objects
+        {
+            SdrObject *pO = rObjs[i];
+            if ( pO->IsWriterFlyFrame() )  // a text frame?
+            {
+                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                if( pFly->Frm().Left() == WEIT_WECH && pFly->GetAnchor() &&
+                    !pFly->GetAnchor()->FindFooterOrHeader() )
+                {   // Only frame with default position and not in header/footer
+                    const SwContact *pC = (SwContact*)GetUserCall(pO);
+                    if( pC )
+                    {
+                        ULONG nOrdNum = pO->GetOrdNum(); // the Id
+                        SwFlyCache* pFlyC;
+                        while( nFlyIdx < nFlyCount && ( pFlyC = pImpl->
+                               GetFlyCache(nFlyIdx) )->nPageNum < nPgNum)
+                            ++nFlyIdx;
+                        if( nFlyIdx < nFlyCount &&
+                            pFlyC->nPageNum == nPgNum )
+                        {
+                            USHORT nIdx = nFlyIdx;
+                            while( nIdx < nFlyCount && ( pFlyC = pImpl->
+                                   GetFlyCache( nIdx ) )->nPageNum == nPgNum &&
+                                   pFlyC->nOrdNum != nOrdNum )
+                                ++nIdx;
+                            if( nIdx < nFlyCount && pFlyC->nPageNum == nPgNum &&
+                                pFlyC->nOrdNum == nOrdNum )
+                            {   // we get the stored information
+                                pFly->Frm().Pos().X() = pFlyC->Left() +
+                                                        pPage->Frm().Left();
+                                pFly->Frm().Pos().Y() = pFlyC->Top() +
+                                                        pPage->Frm().Top();
+                                pFly->Frm().Width( pFlyC->Width() );
+                                pFly->Frm().Height( pFlyC->Height() );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*-----------------28.6.2001 14:48------------------
+ * SwLayHelper::CheckPageFlyCache(..)
+ * looks for the given text frame in the fly cache and sets
+ * the position and size, if possible.
+ * The fly cache is sorted by pages and we start searching with the given page.
+ * If we found the page number in the fly cache, we set
+ * the rpPage parameter to the right page, if possible.
+ * --------------------------------------------------*/
+
+BOOL SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
+{
+    if( !pFly->GetAnchor() || !pFly->GetVirtDrawObj() ||
+        pFly->GetAnchor()->FindFooterOrHeader() )
+        return FALSE;
+    BOOL bRet = FALSE;
+    SwDoc* pDoc = rpPage->GetFmt()->GetDoc();
+    SwLayCacheImpl *pCache = pDoc->GetLayoutCache() ?
+                             pDoc->GetLayoutCache()->LockImpl() : NULL;
+    if( pCache )
+    {
+        USHORT nPgNum = rpPage->GetPhyPageNum();
+        USHORT nIdx = 0;
+        USHORT nCnt = pCache->GetFlyCount();
+        ULONG nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
+        SwFlyCache* pFlyC;
+        while( nIdx < nCnt &&
+               nPgNum > (pFlyC = pCache->GetFlyCache( nIdx ))->nPageNum )
+            ++nIdx;
+        while( nIdx < nCnt &&
+               nOrdNum != (pFlyC = pCache->GetFlyCache( nIdx ))->nOrdNum )
+            ++nIdx;
+        if( nIdx < nCnt )
+        {
+            SwPageFrm *pPage = rpPage;
+            while( pPage && pPage->GetPhyPageNum() < pFlyC->nPageNum )
+                pPage = (SwPageFrm*)pPage->GetNext();
+            if( pPage )
+            {
+                rpPage = pPage;
+                pFly->Frm().Pos().X() = pFlyC->Left() + pPage->Frm().Left();
+                pFly->Frm().Pos().Y() = pFlyC->Top() + pPage->Frm().Top();
+                pFly->Frm().Width( pFlyC->Width() );
+                pFly->Frm().Height( pFlyC->Height() );
+                bRet = TRUE;
+            }
+        }
+        pDoc->GetLayoutCache()->UnlockImpl();
+    }
     return bRet;
 }
 
