@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dragmt3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:35:11 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,12 +146,12 @@ SV_IMPL_PTRARR(E3dDragMethodUnitGroup, E3dDragMethodUnit*);
 E3dDragMethod::E3dDragMethod (
     SdrDragView &rView,
     const SdrMarkList& rMark,
-    E3dDragDetail eDetail,
+    //BFS01E3dDragDetail eDetail,
     E3dDragConstraint eConstr,
     BOOL bFull)
 :   SdrDragMethod(rView),
     eConstraint(eConstr),
-    eDragDetail(eDetail),
+    //BFS01eDragDetail(eDetail),
     bMoveFull(bFull),
     bMovedAtAll(FALSE)
 {
@@ -190,7 +190,7 @@ E3dDragMethod::E3dDragMethod (
             {
                 // Drahtgitterdarstellung fuer Parent-Koodinaten erzeugen
                 pNewUnit->aWireframePoly.SetPointCount(0);
-                p3DObj->CreateWireframe(pNewUnit->aWireframePoly, NULL, eDragDetail);
+                p3DObj->CreateWireframe(pNewUnit->aWireframePoly, NULL /*BFS01, eDragDetail*/);
                 pNewUnit->aWireframePoly.Transform(pNewUnit->aTransform);
             }
 
@@ -442,7 +442,7 @@ void E3dDragMethod::Mov(const Point& rPnt)
 |*
 \************************************************************************/
 
-void E3dDragMethod::DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const
+void E3dDragMethod::DrawXor(XOutputDevice& rXOut, FASTBOOL bFull) const
 {
     UINT16 nPVCnt = rView.GetPageViewCount();
     XPolygon aLine(2);
@@ -490,10 +490,10 @@ TYPEINIT1(E3dDragRotate, E3dDragMethod);
 
 E3dDragRotate::E3dDragRotate(SdrDragView &rView,
     const SdrMarkList& rMark,
-    E3dDragDetail eDetail,
+    //BFS01E3dDragDetail eDetail,
     E3dDragConstraint eConstr,
     BOOL bFull)
-:   E3dDragMethod(rView, rMark, eDetail, eConstr, bFull)
+:   E3dDragMethod(rView, rMark/*BFS01, eDetail*/, eConstr, bFull)
 {
     // Zentrum aller selektierten Objekte in Augkoordinaten holen
     UINT16 nCnt = aGrp.Count();
@@ -671,11 +671,11 @@ TYPEINIT1(E3dDragMove, E3dDragMethod);
 
 E3dDragMove::E3dDragMove(SdrDragView &rView,
     const SdrMarkList& rMark,
-    E3dDragDetail eDetail,
+    //BFS01E3dDragDetail eDetail,
     SdrHdlKind eDrgHdl,
     E3dDragConstraint eConstr,
     BOOL bFull)
-:   E3dDragMethod(rView, rMark, eDetail, eConstr, bFull),
+:   E3dDragMethod(rView, rMark, /*BFS01eDetail,*/ eConstr, bFull),
     eWhatDragHdl(eDrgHdl)
 {
     switch(eWhatDragHdl)
@@ -880,7 +880,7 @@ void E3dDragMove::Mov(const Point& rPnt)
                 {
                     Hide();
                     aGrp[nOb]->aWireframePoly.SetPointCount(0);
-                    aGrp[nOb]->p3DObj->CreateWireframe(aGrp[nOb]->aWireframePoly, NULL, eDragDetail);
+                    aGrp[nOb]->p3DObj->CreateWireframe(aGrp[nOb]->aWireframePoly, NULL/*BFS01, eDragDetail*/);
                     aGrp[nOb]->aWireframePoly.Transform(aGrp[nOb]->aTransform);
                     Show();
                 }
