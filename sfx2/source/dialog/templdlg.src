@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:49:32 $
+ *  last change: $Author: kz $ $Date: 2004-05-20 21:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 
 ImageList DLG_STYLE_DESIGNER
 {
-    ImageBitmap = Bitmap { File = "sc_tdlg.bmp" ; };
+    Prefix = "sc";
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
     IdList =
     {
@@ -78,7 +78,7 @@ ImageList DLG_STYLE_DESIGNER
 };
 ImageList IMG_LST_STYLE_DESIGNER_HC
 {
-    ImageBitmap = Bitmap { File = "sch_tdlg.bmp" ; };
+    Prefix = "sch";
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
     IdList =
     {
