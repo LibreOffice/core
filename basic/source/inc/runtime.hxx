@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-18 08:58:43 $
+ *  last change: $Author: ab $ $Date: 2000-11-29 11:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,11 @@ public:
 #endif
     INT16   nDirFlags;
     short   nCurDirPos;
+
+    // #80200 HACK to provide minimum wildcard functionality
+    sal_Bool bWildcard;
+    String sExtension;
+    String sPreWildcard;
 
 #ifdef _USE_UNO
     Sequence< OUString > aDirSeq;
