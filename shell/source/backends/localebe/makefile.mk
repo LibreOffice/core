@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 14:10:32 $
+#   last change: $Author: rt $ $Date: 2004-09-17 13:02:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,7 @@ DLLPRE =
 
 
 SLOFILES=\
-    $(SLO)$/componentdef.obj \
+    $(SLO)$/localebecdef.obj \
     $(SLO)$/localebackend.obj \
     $(SLO)$/localelayer.obj
         
