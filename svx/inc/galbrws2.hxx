@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:22:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <vcl/toolbox.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/lstner.hxx>
+#include <svtools/miscopt.hxx>
 #include "galbrws.hxx"
 
 // ----------------------
@@ -138,6 +139,7 @@ class GalleryBrowser2 : public Control, public SfxListener
 
 private:
 
+    SvtMiscOptions      maMiscOptions;
     Gallery*            mpGallery;
     GalleryTheme*       mpCurTheme;
     GalleryIconView*    mpIconView;
@@ -170,6 +172,7 @@ private:
                         DECL_LINK( MenuSelectHdl, Menu* pMenu );
                         DECL_LINK( SelectObjectHdl, void* );
                         DECL_LINK( SelectTbxHdl, ToolBox* );
+                        DECL_LINK( MiscHdl, void* );
 
 private:
 
