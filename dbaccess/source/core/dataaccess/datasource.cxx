@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 15:59:32 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 07:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,15 +65,15 @@
 #ifndef _DBA_CORE_USERINFORMATION_HXX_
 #include "userinformation.hxx"
 #endif
-#ifndef _DBA_CORE_REGISTRYHELPER_HXX_
-#include "registryhelper.hxx"
-#endif
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
+#endif
+#ifndef _COMPHELPER_SEQSTREAM_HXX
+#include <comphelper/seqstream.hxx>
 #endif
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
@@ -92,6 +92,9 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _COMPHELPER_STREAMSECTION_HXX_
+#include <comphelper/streamsection.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
@@ -153,7 +156,6 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
@@ -1089,27 +1091,20 @@ void ODatabaseSource::flushToConfiguration()
     m_aConfigurationNode.setNodeValue(CONFIGKEY_LAYOUTINFORMATION, makeAny(m_aLayoutInformation));
 
     // write the additional info tags
-    // unfortunately, the same as always applies here: the configuration does not support different
-    // operations in one transaction, so we have to open an separate sub tree for the info node, so we can
-    // do separate transactions
-    OConfigurationTreeRoot aInfoNode = m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_INFO).cloneAsRoot();
+    OConfigurationNode aInfoNode = m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_INFO);
     if (aInfoNode.isValid())
     {
         // stage 0: collect all names under the info node which currently exist
         ::std::set< rtl::OUString > aExistentKeys;
         Sequence< ::rtl::OUString > aNodeNames = aInfoNode.getNodeNames();
-        for (   const ::rtl::OUString* pNodeNames = aNodeNames.getConstArray() + aNodeNames.getLength() - 1;
-                pNodeNames >= aNodeNames.getConstArray();
-                --pNodeNames
-            )
-        {
-            aExistentKeys.insert(*pNodeNames);
-            aInfoNode.commit();
-        }
+        const ::rtl::OUString* pNodeNames       =                   aNodeNames.getConstArray();
+        const ::rtl::OUString* pNodeNamesEnd    = pNodeNames    +   aNodeNames.getLength();
+        for ( ; pNodeNames != pNodeNamesEnd; ++pNodeNames )
+            aExistentKeys.insert( *pNodeNames );
 
 
         // stage 1: write all currently set info values
-        static ::rtl::OUString s_sValueConfigKey(RTL_CONSTASCII_USTRINGPARAM("Value"));
+        static ::rtl::OUString s_sValueConfigKey( RTL_CONSTASCII_USTRINGPARAM("Value") );
         ::std::set< rtl::OUString > aUsedKeys;
         const PropertyValue* pInfoValues = m_aInfo.getConstArray();
         for (sal_Int32 i=0; i<m_aInfo.getLength(); ++i, ++pInfoValues)
@@ -1127,7 +1122,6 @@ void ODatabaseSource::flushToConfiguration()
                     // no need to delete this previously-existing node afterwards ....
             }
             aSettingsItem.setNodeValue(s_sValueConfigKey, pInfoValues->Value);
-            aInfoNode.commit();
         }
 
         // stage 2: delete all info values which may be present in the registry, but not used by the current values
@@ -1137,124 +1131,15 @@ void ODatabaseSource::flushToConfiguration()
             )
         {
             aInfoNode.removeNode(*aErase);
-            aInfoNode.commit();
         }
     }
 
     flushDocuments();
     flushTables();
-
     // TODO : flushing of queries/tables ?
+
+    m_aConfigurationNode.commit( );
 }
-
-#if 0
-//------------------------------------------------------------------------------
-void ODatabaseSource::readUIAspects(const ::vos::ORef< ::store::OStream >& _rStream)
-{
-    DBG_ASSERT(_rStream.isValid() && _rStream->isOpen(), "ODatabaseSource::readUIAspects : you gave me garbage !");
-
-    OCompatStreamSector aCompat(_rStream, OCompatStreamSector::mode_Read);
-
-    sal_Int32 nTokensUsed(0);
-    *_rStream >> nTokensUsed;
-
-    if ((nTokensUsed & PT_SVFORMATTER) != 0)
-    {
-        OCompatStreamSector aCompat(_rStream, OCompatStreamSector::mode_Read);
-
-        // a object which wraps the storage stream into an SvStream
-        OStorageStreamWrapper aSvStreamWrapper(_rStream);
-
-        // an ObjectInputStream
-        Reference< XObjectInputStream > xInStream(m_xServiceFactory->createInstance(
-            ::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")),
-            UNO_QUERY
-            );
-        Reference< XActiveDataSink > xInDataSink(xInStream, UNO_QUERY);
-        DBG_ASSERT(xInDataSink.is(), "ODatabaseSource::readUIAspects : could not instantiate an input stream !");
-        if (xInDataSink.is())
-        {   // can't load the formatter without that service
-
-            // an uno wrapper for the SvStream
-            Reference< XInputStream > xUnoStream = new ::comphelper::OInputStreamWrapper(aSvStreamWrapper);
-            xInDataSink->setInputStream(xUnoStream);
-
-            try
-            {
-                Reference< XPersistObject > xPersistentSupplier = xInStream->readObject();
-                Reference< XNumberFormatsSupplier > xSupplier(xPersistentSupplier, UNO_QUERY);
-                DBG_ASSERT(xSupplier.is(), "ODatabaseSource::readUIAspects : the object read is no NumberFormatsSupplier !");
-                if (xSupplier.is())
-                    m_xNumberFormatsSupplier = xSupplier;
-            }
-            catch(Exception&)
-            {
-                DBG_ERROR("ODatabaseSource::readUIAspects : could not read the formatter !");
-            }
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
-void ODatabaseSource::writeUIAspects(const ::vos::ORef< ::store::OStream >& _rStream)
-{
-    DBG_ASSERT(_rStream.isValid() && _rStream->isOpen(), "ODatabaseSource::writeUIAspects : you gave me garbage !");
-
-    OCompatStreamSector aCompat(_rStream, OCompatStreamSector::mode_Write);
-    sal_Int32 nTokensUsed(0);
-
-    Reference< XPersistObject > xPersistentSupplier(m_xNumberFormatsSupplier, UNO_QUERY);
-    DBG_ASSERT(xPersistentSupplier.is() || !m_xNumberFormatsSupplier.is(),
-        "ODatabaseSource::writeUIAspects : have a formats supplier, but it has no XPersistObject interface !");
-
-    // create an SvStream based on _rStream (we'll need this below)
-    OStorageStreamWrapper aSvStreamWrapper(_rStream);
-    Reference< XObjectOutputStream > xOutStream;
-    Reference< XOutputStream > xUnoStream;
-        // will be filled below
-
-    if (xPersistentSupplier.is())
-    {   // no need to store the formats supplier if we don't have one, then it can be defaulted on loading
-
-        // first, we need an XObjectOutputStream based on _rStream
-        xOutStream = Reference< XObjectOutputStream >(m_xServiceFactory->createInstance(
-            ::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")),
-            UNO_QUERY
-            );
-        Reference< XActiveDataSource > xOutDataSource(xOutStream, UNO_QUERY);
-        DBG_ASSERT(xOutDataSource.is(), "ODatabaseSource::writeUIAspects : could not instantiate an output stream !");
-        if (xOutDataSource.is())
-        {   // can't store the formatter without that service
-
-            // an uno wrapper for the SvStream
-            xUnoStream = new ::comphelper::OOutputStreamWrapper(aSvStreamWrapper);
-            xOutDataSource->setOutputStream(xUnoStream);
-
-            nTokensUsed |= PT_SVFORMATTER;
-                // now we have all items for storing the formats supplier
-        }
-    }
-
-    *_rStream << nTokensUsed;
-
-
-    if ((nTokensUsed & PT_SVFORMATTER) != 0)
-    {
-        OCompatStreamSector aCompat(_rStream, OCompatStreamSector::mode_Write);
-            // as the formatter is a rather complex object and as it's store and load depend on the
-            // availableness of some services, we put this into an own "skippable sector"
-        try
-        {
-            xOutStream->writeObject(xPersistentSupplier);
-        }
-        catch(Exception&)
-        {
-            DBG_ERROR("ODatabaseSource::writeUIAspects : could not store the formatter");
-        }
-    }
-}
-
-#endif
 
 //........................................................................
 }   // namespace dbaccess

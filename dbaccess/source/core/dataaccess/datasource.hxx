@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-26 09:15:31 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 07:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,11 +318,6 @@ protected:
 // other stuff
     void    initializeFromConfiguration();
     void    flushToConfiguration();
-
-#if 0
-    void    readUIAspects(const ::vos::ORef< ::store::OStream >& _rStream);
-    void    writeUIAspects(const ::vos::ORef< ::store::OStream >& _rStream);
-#endif
 
     void    initializeDocuments(sal_Bool _bRead = sal_True);
     void    flushDocuments();
