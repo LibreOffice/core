@@ -2,9 +2,9 @@
  *
  *  $RCSfile: areasdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:58:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,6 @@ const USHORT SC_AREASDLG_RR_OFFSET  = 2;
 
 // globale Funktionen (->am Ende der Datei):
 
-BOOL    lcl_GetColNum( String rStr, USHORT& rColumn );
 BOOL    lcl_CheckRepeatString( const String& rStr, BOOL bIsRow, ScRange* pRange );
 void    lcl_GetRepeatRangeString( const ScRange* pRange, BOOL bIsRow, String& rStr );
 void    lcl_CheckEqual( String& rStr );
@@ -707,39 +706,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, ScRefEdit*, pEd )
 
 //----------------------------------------------------------------------------
 
-BOOL lcl_GetColNum( String rStr, USHORT& rColumn )
-{
-    // liefert Spalte bei 1 beginnend (A -> 1)
-
-    xub_StrLen nLen = rStr.Len();
-    BOOL bOk = ( nLen < 3 );
-
-    rStr.ToUpperAscii();
-
-    if ( bOk )
-        switch ( nLen )
-        {
-            case 0:
-                rColumn = 0;
-                break;
-            case 1:
-                rColumn = (( (rStr.GetChar(0)) ) - 'A' ) + 1;
-                break;
-            case 2:
-                rColumn =  (((rStr.GetChar(0) - 'A') + 1) * 26)
-                         + ((rStr.GetChar(1) - 'A') + 1);
-                break;
-            default:
-                break;
-        }
-
-    return bOk;
-}
-
-
-//----------------------------------------------------------------------------
-
-BOOL lcl_CheckRepeatOne( const String& rStr, BOOL bIsRow, USHORT& rVal )
+BOOL lcl_CheckRepeatOne( const String& rStr, BOOL bIsRow, SCCOLROW& rVal )
 {
     // Zulaessige Syntax fuer rStr:
     // Row: [$]1-MAXTAB
@@ -747,7 +714,7 @@ BOOL lcl_CheckRepeatOne( const String& rStr, BOOL bIsRow, USHORT& rVal )
 
     String  aStr    = rStr;
     xub_StrLen nLen = aStr.Len();
-    USHORT  nNum    = 0;
+    SCCOLROW    nNum    = 0;
     BOOL    bStrOk  = ( nLen > 0 ) && ( bIsRow ? ( nLen < 6 ) : ( nLen < 4 ) );
 
     if ( bStrOk )
@@ -761,25 +728,22 @@ BOOL lcl_CheckRepeatOne( const String& rStr, BOOL bIsRow, USHORT& rVal )
 
             if ( bStrOk )
             {
-                int n = aStr.ToInt32();
+                sal_Int32 n = aStr.ToInt32();
 
-                if ( bStrOk = (n > 0) && ( n <= MAXROW+1 ) )
-                    nNum = (USHORT)n;
+                if ( bStrOk = (n > 0) && ( n <= MAXROWCOUNT ) )
+                    nNum = static_cast<SCCOLROW>(n - 1);
             }
         }
         else
         {
-            bStrOk =   CharClass::isAsciiAlpha(aStr)
-                    && lcl_GetColNum( aStr, nNum )
-                    && nNum && nNum <= MAXCOL+1;
+            SCCOL nCol = 0;
+            bStrOk = ::AlphaToCol( nCol, aStr);
+            nNum = nCol;
         }
     }
 
     if ( bStrOk )
-    {
-        nNum--;
         rVal = nNum;
-    }
 
     return bStrOk;
 }
@@ -797,8 +761,8 @@ BOOL lcl_CheckRepeatString( const String& rStr, BOOL bIsRow, ScRange* pRange )
     // und alles auch ohne $
 
     BOOL bOk = FALSE;
-    USHORT nStart = 0;
-    USHORT nEnd = 0;
+    SCCOLROW nStart = 0;
+    SCCOLROW nEnd = 0;
     xub_StrLen nCount = rStr.GetTokenCount(':');
     if (nCount == 1)
     {
@@ -829,8 +793,8 @@ BOOL lcl_CheckRepeatString( const String& rStr, BOOL bIsRow, ScRange* pRange )
         }
         else
         {
-            rStart.SetCol( nStart );
-            rEnd  .SetCol( nEnd );
+            rStart.SetCol( static_cast<SCCOL>(nStart) );
+            rEnd  .SetCol( static_cast<SCCOL>(nEnd) );
             rStart.SetRow( 0 );
             rEnd  .SetRow( 0 );
         }
