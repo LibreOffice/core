@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:22:18 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,7 +900,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ french ] = "Images" ;
         Text [ swedish ] = "~Grafik" ;
         Text [ dutch ] = "A~fbeeldingen" ;
-        Text [ spanish ] = "~Imágenes" ;
+        Text [ spanish ] = "Imágenes" ;
         Text [ english_us ] = "~Graphics" ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -1316,7 +1316,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ french ] = "Fin de la page" ;
         Text [ swedish ] = "~Sidslut" ;
         Text [ dutch ] = "Pag~ina-einde" ;
-        Text [ spanish ] = "Fi~n de página" ;
+        Text [ spanish ] = "Fin de página" ;
         Text [ english_us ] = "~End of page" ;
         Text[ chinese_simplified ] = "é¡µçš„ç»“æŸä½ç½®(~E)";
         Text[ russian ] = "Â êîíöå ñòğàíèöû";
@@ -1439,7 +1439,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ spanish ] = "Bandeja según c~onfiguración de impresora";
         Text[ italian ] = "Cassetto come da  imposta~zione stampante";
         Text[ danish ] = "fra udskriftsindstillingerne";
-        Text[ swedish ] = "Pappersmagasin ~från skrivarinställning";
+        Text[ swedish ] = "~Pappersmagasin från skrivarinställning";
         Text[ polish ] = "Zasobnik papieru z ustaw~ieñ drukarki";
         Text[ portuguese_brazilian ] = "da impressora ~setup";
         Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿è¨­å®šã®ç”¨ç´™ãƒˆãƒ¬ã‚¤ã‚’ä½¿ç”¨ã™ã‚‹(~P)";
@@ -1465,7 +1465,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ greek ] = "Fa~x";
         Text[ dutch ] = "~Fax";
         Text[ french ] = "Fa~x";
-        Text[ spanish ] = "~Fax";
+        Text[ spanish ] = "Fax";
         Text[ italian ] = "Fax";
         Text[ danish ] = "Fax";
         Text[ swedish ] = "Fa~x";
@@ -1750,7 +1750,7 @@ TabPage TP_STD_FONT
         Text [ dutch ] = "~Alleen in het actuele document" ;
         Text [ english_us ] = "C~urrent document only" ;
         Text [ italian ] = "Solo per il documento corrente" ;
-        Text [ spanish ] = "Solo para el documento ~actual" ;
+        Text [ spanish ] = "Sólo para el documento ~actual" ;
         Text [ french ] = "Uniquement pour le document actif" ;
         Text [ swedish ] = "Bara för det a~ktuella dokumentet" ;
         Text [ danish ] = "Kun det aktuelle dokument" ;
@@ -2076,7 +2076,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ russian ] = "Ğàñïîçíàíèå ÷èñëîâîãî ôîğìàòà";
         Text[ dutch ] = "Herkenning ~getalnotatie";
         Text[ french ] = "Reconnaissance du format numérique";
-        Text[ spanish ] = "Reconocimiento formato ~numérico";
+        Text[ spanish ] = "Reconocimiento del formato ~numérico";
         Text[ italian ] = "Riconoscimento formato numerico";
         Text[ danish ] = "Talformatgenkendelse";
         Text[ swedish ] = "Talformatsigen~känning";
@@ -2108,7 +2108,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ spanish ] = "~Alineación";
         Text[ italian ] = "Allineamento";
         Text[ danish ] = "Justering";
-        Text[ swedish ] = "Ju~stering";
+        Text[ swedish ] = "~Justering";
         Text[ polish ] = "Wyrównanie";
         Text[ portuguese_brazilian ] = "Automatic alignment";
         Text[ japanese ] = "é…ç½®";
@@ -2448,7 +2448,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ greek ] = "Ïé áëëáãİò åğçñåÜæïõí ìüíï ôçí Üìåóá ãåéôïíéêŞ ğåñéï÷Ş";
         Text[ dutch ] = "Veranderingen hebben alleen uitwerkingen op het aangrenzende bereik";
         Text[ french ] = "Modifications n'affectent que la plage adjacente";
-        Text[ spanish ] = "Las modificaciones afectan solo a la fila o columna contigua";
+        Text[ spanish ] = "Las modificaciones afectan sólo a la fila o columna contigua";
         Text[ finnish ] = "Muutokset vaikuttavat vain vierekkäiseen alueeseen";
         Text[ italian ] = "Le modifiche di una riga si ripercuotono solo sulle aree adiacenti";
         Text[ danish ] = "Række- eller kolonneændringer påvirker kun den direkte nabo";
@@ -2471,7 +2471,7 @@ TabPage TP_OPTTABLE_PAGE
         Text [ English ] = "F~ix, proportional" ;
         Text [ english_us ] = "Fi~xed, proportional" ;
         Text [ portuguese_brazilian ] = "F~ix, proportional" ;
-        Text [ swedish ] = "Fast, pr~oportionell" ;
+        Text [ swedish ] = "Fa~st, proportionell" ;
         Text [ danish ] = "Fast, proportional" ;
         Text [ italian ] = "Fisso, proporzionale" ;
         Text [ spanish ] = "Fijo, ~proporcional" ;
@@ -2600,7 +2600,7 @@ TabPage TP_OPTSRCVIEW
         Text [ swedish ] = "Färgtilldelning för syntaxframhävning" ;
         Text [ danish ] = "Farvetildeling syntaks - fremhævning" ;
         Text [ italian ] = "Assegnazione colori per evidenziare la sintassi" ;
-        Text [ spanish ] = "Colores para sintaxis-destacado" ;
+        Text [ spanish ] = "Colores para marcar la sintaxis" ;
         Text [ french ] = "Couleurs pour marquage de syntaxe" ;
         Text [ dutch ] = "Kleuren voor Syntax - markering" ;
         Text [ portuguese ] = "Cores para destaques de sintaxe" ;
