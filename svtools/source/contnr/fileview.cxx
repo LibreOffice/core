@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-13 13:41:02 $
+ *  last change: $Author: dv $ $Date: 2001-07-16 11:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -946,9 +946,7 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
             DBG_ERRORFILE( "createCursor: CommandAbortedException" );
         }
         catch( ::com::sun::star::uno::Exception& )
-        {
-            DBG_ERRORFILE( "createCursor: Any other exception" );
-        }
+        {}
 
         if ( xResultSet.is() )
         {
