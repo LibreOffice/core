@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 16:59:37 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 13:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,28 @@ public:
                                 SwCrsrMoveState* pCMS = 0 ) const;
     // Eine etwas abgespeckte GetCharRect-Version fuer autopositionierte Rahmen
     sal_Bool GetAutoPos( SwRect &, const SwPosition& ) const;
+
+    /** determine top of line for given position in the text frame
+
+        OD 11.11.2003 #i22341#
+        Assumption: given position exists in the text frame or in a follow of it
+        OD 2004-02-02 - adjustment
+        Top of first paragraph line is the top of the paragraph.
+
+        @author OD
+
+        @param _onTopOfLine
+        output parameter - top of line, if the given position is found in the
+        text frame.
+
+        @param _rPos
+        input parameter - reference to the position in the text frame
+
+        @return boolean indicating, if the top of line for the given position
+        has been determined or not.
+    */
+    bool GetTopOfLine( SwTwips& _onTopOfLine,
+                       const SwPosition& _rPos ) const;
 
     //Liefert in nOffset den Offset des Characters innerhalb des
     //gesetzten Textbuffers zurueck, welcher der durch aPoint
