@@ -2,6 +2,7 @@
 ..\%__SRC%\bin\regcomp %_DEST%\bin%_EXT%\regcomp
 ..\%__SRC%\bin\uno.exe %_DEST%\bin%_EXT%\uno.exe
 ..\%__SRC%\bin\uno %_DEST%\bin%_EXT%\uno
+..\%__SRC%\bin\uno %_DEST%\bin%_EXT%\uno.bin
 ..\%__SRC%\bin\regsingleton.exe %_DEST%\bin%_EXT%\regsingleton.exe
 ..\%__SRC%\bin\regsingleton %_DEST%\bin%_EXT%\regsingleton
 
