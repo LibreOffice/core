@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-21 13:49:37 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 13:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,9 @@ BOOL OJoinTableView::RemoveConnection( OTableConnection* pConn )
 OTableWindow* OJoinTableView::GetWindow( const String& rName )
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
-    return m_aTableMap[rName];
+    OTableWindowMapIterator aIter = m_aTableMap.find(rName);
+
+    return aIter == m_aTableMap.end() ? NULL : aIter->second;
 }
 // -----------------------------------------------------------------------------
 OTableWindowData* OJoinTableView::CreateImpl(const ::rtl::OUString& _rComposedName,
@@ -1131,6 +1133,7 @@ void OJoinTableView::ClearAll()
         delete (*aIter);
     }
     m_vTableConnection.clear();
+    m_pLastFocusTabWin = NULL;
 
     // scroll to the upper left
     Scroll(-GetScrollOffset().X(), TRUE, TRUE);
