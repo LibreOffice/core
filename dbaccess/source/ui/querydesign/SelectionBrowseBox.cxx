@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:43:58 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,7 @@ namespace
             }
         }
         m_pBrowseBox->SelectColumnId( GetCurItemId() );
+        m_pBrowseBox->DeactivateCell();
     }
 }
 
@@ -1886,7 +1887,7 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
             if(!m_bOrderByUnRelated)
                 pEntry->SetVisible(sal_True);
             pEntry->SetOrderDir( eDir );
-            nPos = getFields().end() - aIter;
+            nPos = aIter - getFields().begin();
             break;
         }
     }
