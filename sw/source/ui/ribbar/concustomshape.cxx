@@ -2,9 +2,9 @@
  *
  *  $RCSfile: concustomshape.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:31:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,23 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
     {
         pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
         ((SdrObjCustomShape*)pObj)->MergeDefaultAttributes( &aCustomShape );
+    }
+}
+
+void ConstCustomShape::CreateDefaultObject()
+{
+    SwDrawBase::CreateDefaultObject();
+    SdrView *pSdrView = pSh->GetDrawView();
+    if ( pSdrView )
+    {
+        const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+        sal_uInt32 nCount = rMarkList.GetMarkCount();
+        if ( rMarkList.GetMarkCount() == 1 )
+        {
+            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+            if ( pObj && pObj->ISA( SdrObjCustomShape ) )
+                SetAttributes( pObj );
+        }
     }
 }
 
