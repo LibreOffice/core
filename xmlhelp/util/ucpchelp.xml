@@ -25,7 +25,7 @@
         </language>
         <status value="final"/>
         <supported-service>
-            com.sun.star.help.XMLHelp
+            com.sun.star.ucb.HelpContentProvider
         </supported-service>
 
         <service-dependency>
