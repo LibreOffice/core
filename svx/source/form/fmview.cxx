@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:21:07 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 #endif
 #ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
-#include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FORM_XRESET_HPP_
@@ -384,8 +381,13 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
     {
         if (bDesign)
         {
-            //////////////////////////////////////////////////////////////////
-            // UnoObjekte neu zeichnen
+            if ( GetActualOutDev() && GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW )
+            {
+                const Window* pWindow = static_cast< const Window* >( GetActualOutDev() );
+                const_cast< Window* >( pWindow )->GrabFocus();
+            }
+
+            // redraw UNO objects
             if (pCurPageView)
             {
                 SdrObjListIter aIter(*pCurPage);
@@ -533,43 +535,12 @@ void FmFormView::DeactivateControls(SdrPageView* pPageView)
 //------------------------------------------------------------------------
 void FmFormView::ObjectCreated(FmFormObj* pObj)
 {
-    Reference< XPropertySet >  xSet(pObj->GetUnoControlModel(), UNO_QUERY);
-    if (!xSet.is())
+    Reference< XPropertySet > xSet( pObj->GetUnoControlModel(), UNO_QUERY );
+    if ( !xSet.is() )
         return;
 
-    sal_Int16 nClassId = FormComponentType::CONTROL;
-    try
-    {
-        xSet->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
-
-        // some initial property defaults
-        switch ( nClassId )
-        {
-        case FormComponentType::SCROLLBAR:
-        case FormComponentType::SPINBUTTON:
-        {
-            const Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
-            sal_Int32 eOrientation = ::com::sun::star::awt::ScrollBarOrientation::HORIZONTAL;
-            if ( rBoundRect.GetWidth() < rBoundRect.GetHeight() )
-                eOrientation = ::com::sun::star::awt::ScrollBarOrientation::VERTICAL;
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii( "Orientation" ), makeAny( eOrientation ) );
-        }
-        break;
-
-        case FormComponentType::LISTBOX:
-        case FormComponentType::COMBOBOX:
-        {
-            const Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
-            sal_Bool bDropDown = ( rBoundRect.GetWidth() >= 3 * rBoundRect.GetHeight() );
-            xSet->setPropertyValue( FM_PROP_DROPDOWN, makeAny( (sal_Bool)bDropDown ) );
-        }
-        break;
-        }
-    }
-    catch( const Exception& )
-    {
-        OSL_ENSURE( sal_False, "FmFormView::ObjectCreated: caught an exception!" );
-    }
+    // some initial property defaults
+    sal_Int16 nClassId = pImpl->implInitializeNewControlModel( xSet, pObj );
 
     if ( !pFormShell->GetImpl()->GetWizardUsing() )
         return;
