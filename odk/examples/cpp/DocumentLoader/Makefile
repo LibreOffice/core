@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.16 $
+#  $Revision: 1.17 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 17:02:18 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:15:10 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -128,7 +128,7 @@ CppDocumentLoaderExample : $(OUT_BIN)/DocumentLoader$(EXE_EXT) $(COMPOENNT_ENV_F
 	@echo -
 	@echo Use the following command to execute the example!
 	@echo -
-	@echo make DocumentLoader.run
+	@echo $(MAKE) DocumentLoader.run
 	@echo -
 	@echo NOTE: This example does not use the new UNO bootstrap mechanism, it uses still a socket
 	@echo $(SQM)      $(SQM)connection. Before you can run this example you have to start your office in listening mode. 
