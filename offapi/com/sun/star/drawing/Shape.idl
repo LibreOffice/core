@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 19:19:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #include <com/sun/star/container/XNameContainer.idl>
 #endif
 
+#ifndef __com_sun_star_beans_XTolerantMultiPropertySet_idl__
+#include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
+#endif
+
 //=============================================================================
 
  module com {  module sun {  module star {  module drawing {
@@ -139,6 +143,10 @@ published service Shape
         <type scope="com::sun::star::container">XIdentifierContainer</type>.
     */
     [optional] interface com::sun::star::drawing::XGluePointsSupplier;
+
+    //-------------------------------------------------------------------------
+
+        [optional] interface com::sun::star::beans::XTolerantMultiPropertySet;
 
     //-------------------------------------------------------------------------
 
