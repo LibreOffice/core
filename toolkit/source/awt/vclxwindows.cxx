@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2002-03-07 20:06:27 $
+ *  last change: $Author: mt $ $Date: 2002-03-08 08:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLELISTBOX_HXX_
 #include <toolkit/awt/vclxaccessiblelistbox.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLETEXTCOMPONENT_HXX_
+#include <toolkit/awt/vclxaccessibletextcomponent.hxx>
 #endif
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/property.hxx>
@@ -544,6 +547,12 @@ IMPL_XTYPEPROVIDER_START( VCLXCheckBox )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXCheckBox::CreateAccessibleContext()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTextComponent( this );
+}
+
+
 void VCLXCheckBox::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -762,6 +771,12 @@ IMPL_XTYPEPROVIDER_START( VCLXRadioButton )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton>* ) NULL ),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXRadioButton::CreateAccessibleContext()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTextComponent( this );
+}
+
 
 void VCLXRadioButton::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2223,6 +2238,12 @@ IMPL_XTYPEPROVIDER_START( VCLXEdit )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXEdit::CreateAccessibleContext()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTextComponent( this );
+}
+
+
 void VCLXEdit::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -2535,6 +2556,10 @@ IMPL_XTYPEPROVIDER_START( VCLXComboBox )
     VCLXEdit::getTypes()
 IMPL_XTYPEPROVIDER_END
 
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXComboBox::CreateAccessibleContext()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTextComponent( this );
+}
 
 void VCLXComboBox::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
