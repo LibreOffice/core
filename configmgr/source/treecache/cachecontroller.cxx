@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:01:31 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,7 +465,10 @@ CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
     if (aCache->hasModule(_aRequest.getComponentName()))
     {
         CFG_TRACE_INFO_NI("CacheController: found node in cache");
-
+        if (_aRequest.getOptions().isRefreshEnabled())
+        {
+            refreshComponent(_aRequest);
+        }
         aResultAddress = aCache->acquireModule(_aRequest.getComponentName());
     }
     else
@@ -714,9 +717,9 @@ void CacheController::saveAndNotify(UpdateRequest const & _anUpdate) CFG_UNO_THR
 }
 // -----------------------------------------------------------------------------
 
-void CacheController::flushPendingUpdates()
+void CacheController::flushPendingUpdates()CFG_NOTHROW()
 {
-    OSL_ASSERT(m_bDisposing);
+    //OSL_ASSERT(m_bDisposing);
 
     if (m_pCacheWriter)
     {
@@ -888,7 +891,7 @@ bool CacheController::saveAllPendingChanges(CacheRef const & _aCache, RequestOpt
     return bSuccess;
 }
 // -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
 
 //-----------------------------------------------------------------------------
 void CacheController::freeComponent(ComponentRequest const & _aRequest) CFG_NOTHROW()
@@ -911,10 +914,43 @@ void CacheController::freeComponent(ComponentRequest const & _aRequest) CFG_NOTH
         }
     }
 }
-
+// -----------------------------------------------------------------------------
 void CacheController::dataChanged(const ComponentRequest& _aRequest) CFG_NOTHROW()
 {
     refreshComponent(_aRequest);
+}
+// -----------------------------------------------------------------------------
+void CacheController::refreshAllComponents() CFG_UNO_THROW_ALL()
+{
+    osl::ClearableMutexGuard aGuard(m_aCacheList.mutex());
+    CacheList::Map aCacheRefreshableList;
+    CacheList::Map aCacheRefreshableListCopy;
+    m_aCacheList.swap(aCacheRefreshableList);
+    aCacheRefreshableListCopy = aCacheRefreshableList;
+    // replace the data into the map as we have a copy
+    m_aCacheList.swap(aCacheRefreshableList);
+    aGuard.clear();
+
+    for (CacheList::Map::iterator i = aCacheRefreshableListCopy.begin();
+        i != aCacheRefreshableListCopy.end(); ++i)
+    {
+        if (!i->second->isEmpty())
+        {
+            ExtendedCacheData aCacheData = i->second->m_aData;
+            RequestOptions aOption = i->first;
+            CacheData::ModuleList aModuleList = aCacheData.accessModuleList();
+            for (CacheData::ModuleList::iterator itr = aModuleList.begin();
+                itr != aModuleList.end(); ++itr)
+            {
+                //Check the cacheline has atleast one client reference
+                if (itr->second->clientReferences() > 0)
+                {
+                    ComponentRequest aRequest(itr->first,i->first);
+                    refreshComponent(aRequest);
+                }
+            }
+        }
+    }
 }
 // INotifyListener
 // ----------------------------------------------------------------------------
