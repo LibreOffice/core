@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:07:10 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,10 @@
 /** Expands to the value (with type 'valuetype') of the item with Which-ID 'which'. */
 #define GETITEMVALUE( itemset, itemtype, which, valuetype ) \
     static_cast< valuetype >( GETITEM( itemset, itemtype, which ).GetValue() )
+
+/** Expands to the value of the SfxBoolItem with Which-ID 'which'. */
+#define GETITEMBOOL( itemset, which ) \
+    GETITEMVALUE( itemset, SfxBoolItem, which, bool )
 
 
 // Global static helpers ======================================================
