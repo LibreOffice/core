@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:01 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 16:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ namespace configmgr
 
     public:
         typedef RequestOptions::Locale Locale;
+        typedef RequestOptions::LocaleString LocaleString;
         typedef RequestOptions::Entity Entity;
 
         OOptions()
@@ -117,8 +118,8 @@ namespace configmgr
 
         bool isForSessionUser()     const { return ! m_aRequestOptions.hasEntity(); }
 
-        Locale getLocale()          const { return m_aRequestOptions.getLocale(); }
-        Entity getUser()            const { return m_aRequestOptions.getEntity(); }
+        LocaleString    getLocale() const { return m_aRequestOptions.getLocale(); }
+        Entity          getUser()   const { return m_aRequestOptions.getEntity(); }
 
         RequestOptions const & getRequestOptions() const
         { return m_aRequestOptions; }
