@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-14 15:04:40 $
+ *  last change: $Author: cl $ $Date: 2001-12-17 16:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,7 +446,6 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else
     {
-#ifndef SVX_LIGHT
         const SfxSimpleHint* pSfxHint = PTR_CAST(SfxSimpleHint, &rHint );
 
         // ist unser SdDrawDocument gerade gestorben?
@@ -466,8 +465,8 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
             }
         }
-#endif
     }
+    SfxBaseModel::Notify( rBC, rHint );
 }
 
 /******************************************************************************
