@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-20 16:04:17 $
+ *  last change: $Author: cl $ $Date: 2002-07-09 10:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ turkish ] = "Transparency mode";
         Text[ arabic ] = "Transparency mode";
         Text[ catalan ] = "Transparency mode";
+        Text[ thai ] = "โหมดโปร่งแสง";
     };
     RadioButton RBT_TRANS_OFF
     {
@@ -130,6 +131,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Ei l�pikuultavuutta";
         Text[ catalan ] = "~Sin transparencia";
+        Text[ thai ] = "ไ~ม่โปร่งแสง";
     };
     RadioButton RBT_TRANS_LINEAR
     {
@@ -157,6 +159,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ turkish ] = "~Do�rusal saydaml�k";
         Text[ arabic ] = "������ ����";
         Text[ catalan ] = "~Transparencia lineal";
+        Text[ thai ] = "โ~ปร่งแสง";
     };
     MetricField MTR_TRANSPARENT
     {
@@ -199,6 +202,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ turkish ] = "~Saydaml�k ge�isi";
         Text[ arabic ] = "���� ��������";
         Text[ catalan ] = "~Gradiente transparencia";
+        Text[ thai ] = "ไล่ระดับสี";
     };
     FixedText FT_TRGR_TYPE
     {
@@ -227,6 +231,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Tyyp~pi";
         Text[ catalan ] = "Ti~po";
+        Text[ thai ] = "ชนิ~ด";
     };
     ListBox LB_TRGR_GRADIENT_TYPES
     {
@@ -442,6 +447,15 @@ TabPage RID_SVXPAGE_TRANSPARENCE
             < "Cuadrado" ; Default ; > ;
             < "Rectangular" ; Default ; > ;
         };
+    StringList [ thai ] =
+    {
+         < "เส้นตรง" ; Default ; > ;
+        < "แกน" ; Default ; > ;
+        < "รัศมีวงกลม" ; Default ; > ;
+        < "กลมรี" ; Default ; > ;
+        < "2 ชั้น" ; Default ; > ;
+        < "สี่เหลี่ยม" ; Default ; > ;
+    };
     };
     FixedText FT_TRGR_CENTER_X
     {
@@ -470,6 +484,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Keski~X";
         Text[ catalan ] = "Centro ~X";
+        Text[ thai ] = "ศูนย์กลาง ~X";
     };
     MetricField MTR_TRGR_CENTER_X
     {
@@ -513,6 +528,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Keski~Y";
         Text[ catalan ] = "Centro ~Y";
+        Text[ thai ] = "ศูนย์กลาง ~Y";
     };
     MetricField MTR_TRGR_CENTER_Y
     {
@@ -556,6 +572,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Kulma";
         Text[ catalan ] = "~Angulo";
+        Text[ thai ] = "~มุม";
     };
     MetricField MTR_TRGR_ANGLE
     {
@@ -591,6 +608,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ finnish ] = " asteet";
         CustomUnitText[ catalan ] = "grados";
+        CustomUnitText[ thai ] = " องศา";
     };
     FixedText FT_TRGR_BORDER
     {
@@ -618,6 +636,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ turkish ] = "~Kenar";
         Text[ finnish ] = "~Reuna";
         Text[ catalan ] = "~Borde";
+        Text[ thai ] = "เ~ส้นขอบ";
     };
     MetricField MTR_TRGR_BORDER
     {
@@ -660,6 +679,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ turkish ] = "~Ba�lang�� de�eri";
         Text[ finnish ] = "~Aloitusarvo";
         Text[ catalan ] = "~Valor inicial";
+        Text[ thai ] = "ค่าเ~ริ่ม";
     };
     MetricField MTR_TRGR_START_VALUE
     {
@@ -702,6 +722,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ turkish ] = "~Son de�er";
         Text[ finnish ] = "~Lopetusarvo";
         Text[ catalan ] = "~Valor final";
+        Text[ thai ] = "ค่า~สิ้นสุด";
     };
     MetricField MTR_TRGR_END_VALUE
     {
@@ -750,6 +771,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     Text[ turkish ] = "Saydaml�k";
     Text[ finnish ] = "L�pikuultavuus";
     Text[ catalan ] = "Transparencia";
+    Text[ thai ] = "โปร่งแสง";
 };
 
  // RID_SVXPAGE_AREA ------------------------------------------------------
@@ -809,6 +831,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "Fill";
         Text[ arabic ] = "Fill";
         Text[ catalan ] = "Fill";
+        Text[ thai ] = "เติม";
     };
     RadioButton RBT_FILL_OFF
     {
@@ -836,6 +859,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "No Fill";
         Text[ arabic ] = "No Fill";
         Text[ catalan ] = "No Fill";
+        Text[ thai ] = "ไม่มี";
     };
     RadioButton RBT_COLOR
     {
@@ -864,6 +888,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ arabic ] = "���";
         Text[ catalan ] = "~Color";
         Text[ language_user1 ] = " ";
+        Text[ thai ] = "สี";
     };
     RadioButton RBT_GRADIENT
     {
@@ -892,6 +917,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ arabic ] = "���� �����";
         Text[ catalan ] = "~Gradiente";
         Text[ language_user1 ] = " ";
+        Text[ thai ] = "ไล่ระดับสี";
     };
     RadioButton RBT_HATCH
     {
@@ -919,6 +945,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "Hatching";
         Text[ arabic ] = "Hatching";
         Text[ catalan ] = "Hatching";
+        Text[ thai ] = "แรเงา";
     };
     RadioButton RBT_BITMAP
     {
@@ -947,6 +974,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ arabic ] = "���� �����";
         Text[ catalan ] = "Bit~map";
         Text[ language_user1 ] = " ";
+        Text[ thai ] = "บิทแม็ป";
     };
     ListBox LB_COLOR
     {
@@ -1022,6 +1050,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Lis�ykset";
         Text[ catalan ] = "Incremento";
+        Text[ thai ] = "ส่วนเพิ่ม";
     };
     TriStateBox TSB_STEPCOUNT
     {
@@ -1051,6 +1080,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "A~utomaattinen";
         Text[ catalan ] = "~autom�tico";
+        Text[ thai ] = "อั~ตโนมัติ";
     };
     NumericField NUM_FLD_STEPCOUNT
     {
@@ -1097,6 +1127,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Taustav�ri";
         Text[ catalan ] = "Color de ~fondo";
+        Text[ thai ] = "สี~พื้นหลัง";
     };
     ListBox LB_HATCHBCKGRDCOLOR
     {
@@ -1137,6 +1168,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Koko";
         Text[ catalan ] = "Tama�o";
+        Text[ thai ] = "ขนาด";
     };
     TriStateBox TSB_ORIGINAL
     {
@@ -1166,6 +1198,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Alkuper�inen";
         Text[ catalan ] = "Ori~ginal";
+        Text[ thai ] = "~ต้นฉบับ";
     };
     TriStateBox TSB_SCALE
     {
@@ -1195,6 +1228,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Suhteellinen";
         Text[ catalan ] = "Rel~ativo";
+        Text[ thai ] = "สัม~พัทธ์";
     };
     FixedText FT_X_SIZE
     {
@@ -1223,6 +1257,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Le~veys";
         Text[ catalan ] = "A~ncho";
+        Text[ thai ] = "ความก~ว้าง";
     };
     MetricField MTR_FLD_X_SIZE
     {
@@ -1269,6 +1304,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "K~orkeus";
         Text[ catalan ] = "A~ltura";
+        Text[ thai ] = "ความสู~ง";
     };
     MetricField MTR_FLD_Y_SIZE
     {
@@ -1316,6 +1352,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Sijainti";
         Text[ catalan ] = "Posici�n";
+        Text[ thai ] = "ตำแหน่ง";
     };
 
     Control CTL_POSITION
@@ -1352,6 +1389,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~X-siirtym�";
         Text[ catalan ] = "Offset ~X";
+        Text[ thai ] = "ออฟเซต ~X ";
     };
     FixedText FT_Y_OFFSET
     {
@@ -1380,6 +1418,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Y-siirtym�";
         Text[ catalan ] = "Offset ~Y";
+        Text[ thai ] = "ออฟเซต ~Y ";
     };
     MetricField MTR_FLD_X_OFFSET
     {
@@ -1439,6 +1478,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Vierekk�in";
         Text[ catalan ] = "A~zulejar";
+        Text[ thai ] = "~ซ้อนทับ";
     };
     TriStateBox TSB_STRETCH
     {
@@ -1468,6 +1508,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Automaattinen sovitus";
         Text[ catalan ] = "Aju~star";
+        Text[ thai ] = "~พอดีอัตโนมัติ";
     };
     FixedLine FL_OFFSET
     {
@@ -1496,6 +1537,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Siirtym�";
         Text[ catalan ] = "Desplazamiento";
+        Text[ thai ] = "ออฟเซต";
     };
     RadioButton RBT_ROW
     {
@@ -1524,6 +1566,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Ri~vi";
         Text[ catalan ] = "~Fila";
+        Text[ thai ] = "แถ~ว";
     };
     RadioButton RBT_COLUMN
     {
@@ -1552,6 +1595,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Sarake";
         Text[ catalan ] = "~Columna";
+        Text[ thai ] = "คอลั~มน์";
     };
     MetricField MTR_FLD_OFFSET
     {
@@ -1568,6 +1612,7 @@ TabPage RID_SVXPAGE_AREA
         Last = 100 ;
         SpinSize = 5 ;
     };
+    Text[ thai ] = "พื้นที่";
 };
  // RID_SVXPAGE_SHADOW ------------------------------------------------------
 TabPage RID_SVXPAGE_SHADOW
@@ -1624,6 +1669,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ turkish ] = "Properties";
         Text[ arabic ] = "Properties";
         Text[ catalan ] = "Properties";
+        Text[ thai ] = "คุณสมบัติ";
     };
     TriStateBox TSB_SHOW_SHADOW
     {
@@ -1653,6 +1699,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ arabic ] = "�����";
         Text[ catalan ] = "~Mostrar";
         Text[ language_user1 ] = " ";
+        Text[ thai ] = "ใ~ช้เงา";
     };
     FixedText FT_POSITION
     {
@@ -1681,6 +1728,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ arabic ] = "������";
         Text[ catalan ] = "Posici�n";
         Text[ language_user1 ] = " ";
+        Text[ thai ] = "~ตำแหน่ง";
     };
     Control CTL_POSITION
     {
@@ -1717,6 +1765,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ arabic ] = "�����";
         Text[ catalan ] = "~Distancia";
         Text[ language_user1 ] = " ";
+        Text[ thai ] = "~ระยะ";
     };
     MetricField MTR_FLD_DISTANCE
     {
@@ -1772,6 +1821,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ turkish ] = "~Renk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Co~lor";
+        Text[ thai ] = "~สี";
     };
     FixedText FT_TRANSPARENT
     {
@@ -1800,6 +1850,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ arabic ] = "������";
         Text[ catalan ] = "Tran~sparencia";
         Text[ language_user1 ] = " ";
+        Text[ thai ] = "ความเ~ข้มของสี";
     };
     MetricField MTR_SHADOW_TRANSPARENT
     {
@@ -1823,6 +1874,7 @@ TabPage RID_SVXPAGE_SHADOW
         Size = MAP_APPFONT ( 110 , 42 ) ;
         TabStop = FALSE ;
     };
+    Text[ thai ] = "เงา";
 };
  // RID_SVXPAGE_HATCH --------------------------------------------------------
 TabPage RID_SVXPAGE_HATCH
@@ -1869,6 +1921,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ turkish ] = "Properties";
         Text[ arabic ] = "Properties";
         Text[ catalan ] = "Properties";
+        Text[ thai ] = "คุณสมบัติ";
     };
     FixedText FT_LINE_DISTANCE
     {
@@ -1898,6 +1951,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ turkish ] = "~Aral�k";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~spacio";
+        Text[ thai ] = "~ระยะห่าง";
     };
     MetricField MTR_FLD_DISTANCE
     {
@@ -1943,6 +1997,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ turkish ] = "A~��";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~ngulo";
+        Text[ thai ] = "~มุม";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -1980,6 +2035,7 @@ TabPage RID_SVXPAGE_HATCH
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ catalan ] = "grados";
+        CustomUnitText[ thai ] = " องศา";
     };
     Control CTL_ANGLE
     {
@@ -2017,6 +2073,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ turkish ] = "�iz~gi tipi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo de ~l�nea";
+        Text[ thai ] = "ชนิดของเ~ส้น";
     };
     ListBox LB_LINE_TYPE
     {
@@ -2169,6 +2226,12 @@ TabPage RID_SVXPAGE_HATCH
         < "Cruzado" ; Default ; > ;
         < "Triple" ; Default ; > ;
     };
+    StringList [ thai ] =
+    {
+         < "เส้นเดียว" ; Default ; > ;
+        < "เส้นตัด" ; Default ; > ;
+        < "สามเส้น" ; Default ; > ;
+    };
     };
     FixedText FT_LINE_COLOR
     {
@@ -2198,6 +2261,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ turkish ] = "�izgi ~rengi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Color de l�nea";
+        Text[ thai ] = "~สีของเส้น";
     };
     ListBox LB_LINE_COLOR
     {
@@ -2250,6 +2314,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ turkish ] = "E~kle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~�adir...";
+        Text[ thai ] = "เ~พิ่ม...";
     };
     PushButton BTN_MODIFY
     {
@@ -2280,6 +2345,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ turkish ] = "~De�i�tir...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modificar...";
+        Text[ thai ] = "~ดัดแปลงแก้ไข...";
     };
     PushButton BTN_DELETE
     {
@@ -2310,6 +2376,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ turkish ] = "~Sil...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar...";
+        Text[ thai ] = "~ลบ...";
     };
     ImageButton BTN_LOAD
     {
@@ -2356,6 +2423,7 @@ TabPage RID_SVXPAGE_HATCH
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tarama tablosu y�kle";
         QuickHelpText[ catalan ] = "Cargar tabla de tramas";
+        QuickHelpText[ thai ] = "Load Hatches List";
     };
     ImageButton BTN_SAVE
     {
@@ -2402,6 +2470,7 @@ TabPage RID_SVXPAGE_HATCH
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tarama tablosunu kaydet";
         QuickHelpText[ catalan ] = "Guardar tabla de tramas";
+        QuickHelpText[ thai ] = "Save Hatches List";
     };
     Text[ chinese_simplified ] = "阴影线";
     Text[ russian ] = "���������";
@@ -2414,6 +2483,7 @@ TabPage RID_SVXPAGE_HATCH
     Text[ turkish ] = "Tarama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tramas";
+    Text[ thai ] = "ขีด";
 };
  // RID_SVXPAGE_BITMAP -------------------------------------------------------
 TabPage RID_SVXPAGE_BITMAP
@@ -2460,6 +2530,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ turkish ] = "Properties";
         Text[ arabic ] = "Properties";
         Text[ catalan ] = "Properties";
+        Text[ thai ] = "คุณสมบัติ";
     };
     FixedText FT_PIXEL_EDIT
     {
@@ -2487,6 +2558,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ turkish ] = "Pattern Edit";
         Text[ arabic ] = "Pattern Edit";
         Text[ catalan ] = "Pattern Edit";
+        Text[ thai ] = "ตัวแก้ไขลวดลาย";
     };
     Control CTL_PIXEL
     {
@@ -2522,6 +2594,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ arabic ] = "��������";
         Text[ catalan ] = "~Primer plano";
         Text[ language_user1 ] = " ";
+        Text[ thai ] = "สีพื้น~หน้า";
     };
     ListBox LB_COLOR
     {
@@ -2559,6 +2632,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ arabic ] = "�������";
         Text[ catalan ] = "~Fondo";
         Text[ language_user1 ] = " ";
+        Text[ thai ] = "สี~พื้นหลัง";
     };
     ListBox LB_BACKGROUND_COLOR
     {
@@ -2611,6 +2685,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ turkish ] = "~Ekle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~A�adir...";
+        Text[ thai ] = "เ~พิ่ม...";
     };
     PushButton BTN_MODIFY
     {
@@ -2641,6 +2716,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ turkish ] = "~De�i�tir...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modificar...";
+        Text[ thai ] = "~ดัดแปลงแก้ไข...";
     };
     PushButton BTN_IMPORT
     {
@@ -2671,6 +2747,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ turkish ] = "�~�e aktar...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Importar...";
+        Text[ thai ] = "~นำเข้า...";
     };
     PushButton BTN_DELETE
     {
@@ -2701,6 +2778,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ turkish ] = "~Sil...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar...";
+        Text[ thai ] = "~ลบ...";
     };
     ImageButton BTN_LOAD
     {
@@ -2744,6 +2822,7 @@ TabPage RID_SVXPAGE_BITMAP
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Bitmaptabelle laden";
         QuickHelpText[ catalan ] = "Cargar tabla de bitmaps";
+        QuickHelpText[ thai ] = "Load Bitmap List";
     };
     ImageButton BTN_SAVE
     {
@@ -2787,6 +2866,7 @@ TabPage RID_SVXPAGE_BITMAP
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Bitmaptabelle sichern";
         QuickHelpText[ catalan ] = "Guardar tabla de bitmaps";
+        QuickHelpText[ thai ] = "Save Bitmap List";
     };
     Text[ chinese_simplified ] = "位图图案";
     Text[ russian ] = "������� bitmap";
@@ -2799,6 +2879,7 @@ TabPage RID_SVXPAGE_BITMAP
     Text[ turkish ] = "Bit e�lem";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modelos de bitmap";
+    Text[ thai ] = "ลวดลายบิทแม็ป";
 };
  // RID_SVXPAGE_GRADIENT -----------------------------------------------------
 TabPage RID_SVXPAGE_GRADIENT
@@ -2845,6 +2926,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ turkish ] = "Properties";
         Text[ arabic ] = "Properties";
         Text[ catalan ] = "Properties";
+        Text[ thai ] = "คุณสมบัติ";
     };
     FixedText FT_TYPE
     {
@@ -2874,6 +2956,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ turkish ] = "~Tip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ti~po";
+        Text[ thai ] = "ชนิ~ด";
     };
     ListBox LB_GRADIENT_TYPES
     {
@@ -3098,6 +3181,15 @@ TabPage RID_SVXPAGE_GRADIENT
         < "Cuadrado" ; Default ; > ;
         < "Rectangular" ; Default ; > ;
     };
+    StringList [ thai ] =
+    {
+         < "เส้นตรง" ; Default ; > ;
+        < "แกน" ; Default ; > ;
+        < "รัศมีวงกลม" ; Default ; > ;
+        < "กลมรี" ; Default ; > ;
+        < "2 ชั้น" ; Default ; > ;
+        < "สี่เหลี่ยม" ; Default ; > ;
+    };
     };
     FixedText FT_CENTER_X
     {
@@ -3127,6 +3219,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ turkish ] = "~X kayd�r";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Centro ~X";
+        Text[ thai ] = "ศูนย์กลาง ~X";
     };
     MetricField MTR_CENTER_X
     {
@@ -3171,6 +3264,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ turkish ] = "~Y kayd�r";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Centro ~Y";
+        Text[ thai ] = "ศูนย์กลาง ~Y";
     };
     MetricField MTR_CENTER_Y
     {
@@ -3215,6 +3309,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ turkish ] = "A~��";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "�n~gulo";
+        Text[ thai ] = "~มุม";
     };
     MetricField MTR_ANGLE
     {
@@ -3252,6 +3347,7 @@ TabPage RID_SVXPAGE_GRADIENT
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ catalan ] = "grados";
+        CustomUnitText[ thai ] = " องศา";
     };
     FixedText FT_BORDER
     {
@@ -3281,6 +3377,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ turkish ] = "~Kenar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Borde";
+        Text[ thai ] = "เ~ส้นขอบ";
     };
     MetricField MTR_BORDER
     {
@@ -3325,6 +3422,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ korean ] = "시작(~F)";
         Text[ turkish ] = "~�lk";
         Text[ catalan ] = "~De";
+        Text[ thai ] = "~จาก";
     };
     ListBox LB_COLOR_FROM
     {
@@ -3378,6 +3476,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ korean ] = "끝(~T)";
         Text[ turkish ] = "~Son";
         Text[ catalan ] = "~A";
+        Text[ thai ] = "~ถึง";
     };
     ListBox LB_COLOR_TO
     {
@@ -3445,6 +3544,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ turkish ] = "E~kle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A�ad~ir...";
+        Text[ thai ] = "เ~พิ่ม...";
     };
     PushButton BTN_MODIFY
     {
@@ -3475,6 +3575,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ turkish ] = "~De�i�tir...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modificar...";
+        Text[ thai ] = "~ดัดแปลงแก้ไข...";
     };
     PushButton BTN_DELETE
     {
@@ -3505,6 +3606,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ turkish ] = "~Sil...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar...";
+        Text[ thai ] = "~ลบ...";
     };
     ImageButton BTN_LOAD
     {
@@ -3548,6 +3650,7 @@ TabPage RID_SVXPAGE_GRADIENT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Farbverlauftabelle laden";
         QuickHelpText[ catalan ] = "Cargar tabla de gradientes";
+        QuickHelpText[ thai ] = "Load Gradients List";
     };
     ImageButton BTN_SAVE
     {
@@ -3591,6 +3694,7 @@ TabPage RID_SVXPAGE_GRADIENT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Farbverlauftabelle sichern";
         QuickHelpText[ catalan ] = "Guardar tabla de gradientes";
+        QuickHelpText[ thai ] = "Save Gradients List";
     };
     Text[ chinese_simplified ] = "彩色图案";
     Text[ russian ] = "�����������";
@@ -3603,6 +3707,7 @@ TabPage RID_SVXPAGE_GRADIENT
     Text[ turkish ] = "Gradyan";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Gradientes de color";
+    Text[ thai ] = "ไล่ระดับสี";
 };
  // RID_SVXPAGE_COLOR --------------------------------------------------------
 TabPage RID_SVXPAGE_COLOR
@@ -3650,6 +3755,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ turkish ] = "Properties";
         Text[ arabic ] = "Properties";
         Text[ catalan ] = "Properties";
+        Text[ thai ] = "คุณสมบัติ";
     };
     FixedText FT_NAME
     {
@@ -3679,6 +3785,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
+        Text[ thai ] = "~ชื่อ";
     };
     Edit EDT_NAME
     {
@@ -3715,6 +3822,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ turkish ] = "~Renk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Co~lor";
+        Text[ thai ] = "~สี";
     };
     ListBox LB_COLOR
     {
@@ -3754,6 +3862,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ turkish ] = "Renk tablosu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Color table";
+        Text[ thai ] = "ตารางสี";
     };
     Control CTL_COLORTABLE
     {
@@ -3893,6 +4002,11 @@ TabPage RID_SVXPAGE_COLOR
             < "RGB" ; Default ; > ;
         < "CMYK" ; Default ; > ;
     };
+    StringList [ thai ] =
+    {
+         < "RGB" ; Default ; > ;
+        < "CMYK" ; Default ; > ;
+    };
     };
     FixedText FT_1
     {
@@ -3999,6 +4113,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ turkish ] = "E~kle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~A�adir";
+        Text[ thai ] = "เ~พิ่ม";
     };
     PushButton BTN_WORK_ON
     {
@@ -4029,6 +4144,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ turkish ] = "D~�zenle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~ditar...";
+        Text[ thai ] = "แ~ก้ไข...";
     };
     PushButton BTN_DELETE
     {
@@ -4059,6 +4175,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ turkish ] = "~Sil...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar...";
+        Text[ thai ] = "~ลบ...";
     };
     PushButton BTN_MODIFY
     {
@@ -4089,6 +4206,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ turkish ] = "~De�i�tir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "M~odificar";
+        Text[ thai ] = "~ดัดแปลงแก้ไข";
     };
     ImageButton BTN_LOAD
     {
@@ -4132,6 +4250,7 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Farbtabelle laden";
         QuickHelpText[ catalan ] = "Cargar tabla de colores";
+        QuickHelpText[ thai ] = "Load Color List";
     };
     ImageButton BTN_SAVE
     {
@@ -4175,6 +4294,7 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Farbtabelle sichern";
         QuickHelpText[ catalan ] = "Guardar tabla de colores";
+        QuickHelpText[ thai ] = "Save Color List";
     };
     Text[ chinese_simplified ] = "颜色";
     Text[ russian ] = "�����";
@@ -4187,6 +4307,7 @@ TabPage RID_SVXPAGE_COLOR
     Text[ turkish ] = "Renkler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Colores";
+    Text[ thai ] = "สี";
 };
  // RID_SVXDLG_AREA ----------------------------------------------------------
 TabDialog RID_SVXDLG_AREA
@@ -4242,6 +4363,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ turkish ] = "Y�zey";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Relleno";
+                Text[ thai ] = "พื้นที่";
             };
             PageItem
             {
@@ -4270,6 +4392,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ language_user1 ] = " ";
                 Text[ finnish ] = "Varjo ";
                 Text[ catalan ] = "Sombra";
+                Text[ thai ] = "เงา";
             };
             PageItem
             {
@@ -4296,6 +4419,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ turkish ] = "Saydaml�k";
                 Text[ finnish ] = "L�pikuultavuus";
                 Text[ catalan ] = "Transparencia";
+                Text[ thai ] = "โปร่งแสง";
             };
             PageItem
             {
@@ -4325,6 +4449,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ turkish ] = "Renkler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Colores";
+                Text[ thai ] = "สี";
             };
             PageItem
             {
@@ -4354,6 +4479,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ turkish ] = "Gradyan";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Gradientes";
+                Text[ thai ] = "ไล่ระดับสี";
             };
             PageItem
             {
@@ -4383,6 +4509,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ turkish ] = "Tarama";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Tramas";
+                Text[ thai ] = "แรเงา";
             };
             PageItem
             {
@@ -4412,6 +4539,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ turkish ] = "Bit e�lem";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Modelos de bitmap";
+                Text[ thai ] = "บิทแม็ป";
             };
         };
     };
@@ -4426,6 +4554,36 @@ TabDialog RID_SVXDLG_AREA
     Text[ turkish ] = "Y�zey";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Relleno";
+    Text[ thai ] = "พื้นที่";
 };
+
+Image RID_SVXIMG_LOAD_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sch05501.bmp" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xff00 ;
+        Green = 0x0000 ;
+        Blue = 0xff00 ;
+    };
+};
+
+Image RID_SVXIMG_SAVE_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sch05502.bmp" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xff00 ;
+        Green = 0x0000 ;
+        Blue = 0xff00 ;
+    };
+};
+
  // ********************************************************************** EOF
 
