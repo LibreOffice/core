@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clipboardmanager.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:36:59 $
+ *  last change: $Author: obr $ $Date: 2001-07-27 10:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,28 +72,29 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 using namespace std;
 
+using ::dtrans::ClipboardManager;
+using ::rtl::OUString;
 
 // ------------------------------------------------------------------------
 
-OClipboardManager::OClipboardManager():
+ClipboardManager::ClipboardManager():
     m_aMutex(),
     WeakComponentImplHelper3< XClipboardManager, XEventListener, XServiceInfo > (m_aMutex),
-    m_defaultName(OUString::createFromAscii("default"))
+    m_aDefaultName(OUString::createFromAscii("default"))
 {
 }
 
 // ------------------------------------------------------------------------
 
-OClipboardManager::~OClipboardManager()
+ClipboardManager::~ClipboardManager()
 {
 }
 
 // ------------------------------------------------------------------------
 
-OUString SAL_CALL OClipboardManager::getImplementationName(  )
+OUString SAL_CALL ClipboardManager::getImplementationName(  )
     throw(RuntimeException)
 {
     return OUString::createFromAscii(CLIPBOARDMANAGER_IMPLEMENTATION_NAME);
@@ -101,7 +102,7 @@ OUString SAL_CALL OClipboardManager::getImplementationName(  )
 
 // ------------------------------------------------------------------------
 
-sal_Bool SAL_CALL OClipboardManager::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL ClipboardManager::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
     Sequence < OUString > SupportedServicesNames = ClipboardManager_getSupportedServiceNames();
@@ -115,7 +116,7 @@ sal_Bool SAL_CALL OClipboardManager::supportsService( const OUString& ServiceNam
 
 // ------------------------------------------------------------------------
 
-Sequence< OUString > SAL_CALL OClipboardManager::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL ClipboardManager::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
     return ClipboardManager_getSupportedServiceNames();
@@ -123,7 +124,7 @@ Sequence< OUString > SAL_CALL OClipboardManager::getSupportedServiceNames(  )
 
 // ------------------------------------------------------------------------
 
-Reference< XClipboard > SAL_CALL OClipboardManager::getClipboard( const OUString& aName )
+Reference< XClipboard > SAL_CALL ClipboardManager::getClipboard( const OUString& aName )
     throw(NoSuchElementException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
@@ -134,7 +135,7 @@ Reference< XClipboard > SAL_CALL OClipboardManager::getClipboard( const OUString
                                 static_cast < XClipboardManager * > (this));
 
     ClipboardMap::iterator iter =
-        m_aClipboardMap.find(aName.getLength() ? aName : m_defaultName);
+        m_aClipboardMap.find(aName.getLength() ? aName : m_aDefaultName);
 
     if (iter != m_aClipboardMap.end())
         return iter->second;
@@ -144,7 +145,7 @@ Reference< XClipboard > SAL_CALL OClipboardManager::getClipboard( const OUString
 
 // ------------------------------------------------------------------------
 
-void SAL_CALL OClipboardManager::addClipboard( const Reference< XClipboard >& xClipboard )
+void SAL_CALL ClipboardManager::addClipboard( const Reference< XClipboard >& xClipboard )
     throw(IllegalArgumentException, ElementExistException, RuntimeException)
 {
     OSL_ASSERT(xClipboard.is());
@@ -156,7 +157,7 @@ void SAL_CALL OClipboardManager::addClipboard( const Reference< XClipboard >& xC
 
     // the name "default" is reserved for internal use
     OUString aName = xClipboard->getName();
-    if (m_defaultName.compareTo(aName) == 0)
+    if (m_aDefaultName.compareTo(aName) == 0)
         throw IllegalArgumentException(OUString::createFromAscii("name reserved"),
                                        static_cast < XClipboardManager * > (this), 1);
 
@@ -165,7 +166,7 @@ void SAL_CALL OClipboardManager::addClipboard( const Reference< XClipboard >& xC
     if (!rBHelper.bDisposed && !rBHelper.bInDispose)
     {
         pair< const OUString, Reference< XClipboard > > value (
-            aName.getLength() ? aName : m_defaultName,
+            aName.getLength() ? aName : m_aDefaultName,
             xClipboard );
 
         pair< ClipboardMap::iterator, bool > p = m_aClipboardMap.insert(value);
@@ -184,17 +185,17 @@ void SAL_CALL OClipboardManager::addClipboard( const Reference< XClipboard >& xC
 
 // ------------------------------------------------------------------------
 
-void SAL_CALL OClipboardManager::removeClipboard( const OUString& aName )
+void SAL_CALL ClipboardManager::removeClipboard( const OUString& aName )
      throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     if (!rBHelper.bDisposed)
-        m_aClipboardMap.erase(aName.getLength() ? aName : m_defaultName );
+        m_aClipboardMap.erase(aName.getLength() ? aName : m_aDefaultName );
 }
 
 // ------------------------------------------------------------------------
 
-Sequence< OUString > SAL_CALL OClipboardManager::listClipboardNames()
+Sequence< OUString > SAL_CALL ClipboardManager::listClipboardNames()
     throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
@@ -218,7 +219,7 @@ Sequence< OUString > SAL_CALL OClipboardManager::listClipboardNames()
 
 // ------------------------------------------------------------------------
 
-void SAL_CALL OClipboardManager::dispose()
+void SAL_CALL ClipboardManager::dispose()
     throw(RuntimeException)
 {
     ClearableMutexGuard aGuard( rBHelper.rMutex );
@@ -267,7 +268,7 @@ void SAL_CALL OClipboardManager::dispose()
 
 // ------------------------------------------------------------------------
 
-void SAL_CALL  OClipboardManager::disposing( const EventObject& event )
+void SAL_CALL  ClipboardManager::disposing( const EventObject& event )
     throw(RuntimeException)
 {
     Reference < XClipboard > xClipboard(event.Source, UNO_QUERY);
@@ -281,7 +282,7 @@ void SAL_CALL  OClipboardManager::disposing( const EventObject& event )
 Reference< XInterface > SAL_CALL ClipboardManager_createInstance(
     const Reference< XMultiServiceFactory > & xMultiServiceFactory)
 {
-    return Reference < XInterface >( ( OWeakObject * ) new OClipboardManager());
+    return Reference < XInterface >( ( OWeakObject * ) new ClipboardManager());
 }
 
 // ------------------------------------------------------------------------
