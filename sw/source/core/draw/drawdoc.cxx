@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:06:25 $
+ *  last change: $Author: ka $ $Date: 2000-12-03 17:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ SdrPage* SwDrawDocument::AllocPage(FASTBOOL bMasterPage)
 }
 
 
-SvStream* SwDrawDocument::GetDocumentStream( FASTBOOL& rbDeleteAfterUse ) const
+SvStream* SwDrawDocument::GetDocumentStream( SdrDocumentStreamInfo& rInfo ) const
 {
     SvStream* pRet = 0;
     SvStorageRef xRoot( pDoc->GetDocStorage() );
@@ -264,7 +264,7 @@ SvStream* SwDrawDocument::GetDocumentStream( FASTBOOL& rbDeleteAfterUse ) const
         pRet = xRoot->OpenStream( sDrawStrmNm,
                     STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE );
         if( pRet )
-            rbDeleteAfterUse = TRUE;
+            rInfo.mbDeleteAfterUse = TRUE;
     }
     return pRet;
 }
