@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-23 10:54:56 $
+ *  last change: $Author: oj $ $Date: 2001-03-29 06:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef DBAUI_SQLNAMEEDIT_HXX
+#include "SqlNameEdit.hxx"
+#endif
 
 #define SAD_DEFAULT                 0x0000
 #define SAD_OVERWRITE               0x0001
@@ -97,11 +100,11 @@ namespace dbaui
     private:
         FixedText       m_aDescription;
         FixedText       m_aCatalogLbl;
-        Edit            m_aCatalog;
+        OSQLNameEdit    m_aCatalog;
         FixedText       m_aSchemaLbl;
-        Edit            m_aSchema;
+        OSQLNameEdit    m_aSchema;
         FixedText       m_aLabel;
-        Edit            m_aTitle;
+        OSQLNameEdit    m_aTitle;
         OKButton        m_aPB_OK;
         CancelButton    m_aPB_CANCEL;
         HelpButton      m_aPB_HELP;
