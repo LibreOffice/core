@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-22 11:50:41 $
+ *  last change: $Author: ka $ $Date: 2002-07-30 12:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,37 +275,47 @@ void GraphicObject::ImplAutoSwapIn()
         {
             mbIsInSwapIn = TRUE;
 
-            SvStream* pStream = GetSwapStream();
-
-            if( GRFMGR_AUTOSWAPSTREAM_NONE != pStream )
+            if( maGraphic.SwapIn() )
+                mbAutoSwapped = FALSE;
+            else
             {
-                if( GRFMGR_AUTOSWAPSTREAM_LINK == pStream )
+                SvStream* pStream = GetSwapStream();
+
+                if( GRFMGR_AUTOSWAPSTREAM_NONE != pStream )
                 {
-                    if( HasLink() )
+                    if( GRFMGR_AUTOSWAPSTREAM_LINK == pStream )
                     {
-                        String aURLStr;
-
-                        if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( GetLink(), aURLStr ) )
+                        if( HasLink() )
                         {
-                            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_READ );
+                            String aURLStr;
 
-                            if( pIStm )
+                            if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( GetLink(), aURLStr ) )
                             {
-                                (*pIStm) >> maGraphic;
-                                mbAutoSwapped = ( maGraphic.GetType() != GRAPHIC_NONE );
-                                delete pIStm;
+                                SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_READ );
+
+                                if( pIStm )
+                                {
+                                    (*pIStm) >> maGraphic;
+                                    mbAutoSwapped = ( maGraphic.GetType() != GRAPHIC_NONE );
+                                    delete pIStm;
+                                }
                             }
                         }
                     }
+                    else if( GRFMGR_AUTOSWAPSTREAM_TEMP == pStream )
+                        mbAutoSwapped = !maGraphic.SwapIn();
+                    else if( GRFMGR_AUTOSWAPSTREAM_LOADED == pStream )
+                        mbAutoSwapped = maGraphic.IsSwapOut();
+                    else
+                    {
+                        mbAutoSwapped = !maGraphic.SwapIn( pStream );
+                        delete pStream;
+                    }
                 }
-                else if( GRFMGR_AUTOSWAPSTREAM_TEMP == pStream )
-                    mbAutoSwapped = !maGraphic.SwapIn();
-                else if( GRFMGR_AUTOSWAPSTREAM_LOADED == pStream )
-                    mbAutoSwapped = maGraphic.IsSwapOut();
                 else
                 {
-                    mbAutoSwapped = !maGraphic.SwapIn( pStream );
-                    delete pStream;
+                    DBG_ASSERT( ( GRAPHIC_NONE == meType ) || ( GRAPHIC_DEFAULT == meType ),
+                                "GraphicObject::ImplAutoSwapIn: could not get stream to swap in graphic! (=>KA)" );
                 }
             }
 

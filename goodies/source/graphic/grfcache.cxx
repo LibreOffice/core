@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-31 09:01:11 $
+ *  last change: $Author: ka $ $Date: 2002-07-30 12:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,7 @@ BOOL GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
             break;
 
             default:
+                DBG_ASSERT( GetID().IsEmpty(), "GraphicCacheEntry::ImplInit: Could not initialize graphic! (=>KA)" );
             break;
         }
 
