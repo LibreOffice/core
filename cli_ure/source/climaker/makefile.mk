@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-04 12:29:40 $
+#   last change: $Author: rt $ $Date: 2004-07-12 13:05:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ UNOTYPES = \
     com.sun.star.lang.XComponent					\
     com.sun.star.lang.XMultiComponentFactory			\
     com.sun.star.lang.XMultiServiceFactory			\
+    com.sun.star.lang.XSingleComponentFactory			\
     com.sun.star.container.XSet					\
     com.sun.star.container.XHierarchicalNameAccess			\
     com.sun.star.loader.XImplementationLoader			\
@@ -97,7 +98,7 @@ UNOTYPES = \
     com.sun.star.reflection.XConstantsTypeDescription		\
     com.sun.star.reflection.XIndirectTypeDescription		\
     com.sun.star.reflection.XEnumTypeDescription			\
-    com.sun.star.reflection.XInterfaceTypeDescription		\
+    com.sun.star.reflection.XInterfaceTypeDescription2		\
     com.sun.star.reflection.XInterfaceMethodTypeDescription		\
     com.sun.star.reflection.XInterfaceAttributeTypeDescription	\
     com.sun.star.reflection.XCompoundTypeDescription		\
