@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-05 13:42:43 $
+ *  last change: $Author: hjs $ $Date: 2001-11-07 19:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@
 #include "rvp.hxx"
 #include <vos/mutex.hxx>
 #ifndef _VCL_UNOHELP_HXX
-#include <vcl/unohelp.hxx>
+#include <unohelp.hxx>
 #endif
 
 struct SalPrinterQueueInfo
