@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,15 +424,11 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
             SwTxtLineAccess aAccess( (SwTxtFrm*)this );
             SwParaPortion *pPara = aAccess.GetPara();
 
-            OutputDevice *pOldRef = pSh->GetReferenzDevice();
-            pSh->SetReferenzDevice( NULL );
             SwTxtPaintInfo aInf( (SwTxtFrm*)this, rRect );
 
 #ifdef BIDI
             aLayoutModeModifier.Modify( sal_False );
 #endif
-
-            pSh->SetReferenzDevice( pOldRef );
 
             SwTxtPainter  aLine( (SwTxtFrm*)this, &aInf );
             sal_Bool bNoDummy = !aLine.GetNext(); // Nur eine Leerzeile!
@@ -569,8 +565,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
         SwRect aRect;
         if( bCheck && aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
             return sal_False;
-        else if( OUTDEV_PRINTER != pSh->GetOut()->GetOutDevType() &&
-                 ! pSh->GetViewOptions()->IsPDFExport() )
+        else if( pSh->GetWin() )
         {
             SwFont *pFnt;
             const SwTxtNode& rTxtNode = *GetTxtNode();
@@ -761,10 +756,7 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
 #endif
 
         ViewShell *pSh = GetShell();
-        OutputDevice *pOldRef = pSh->GetReferenzDevice();
-        pSh->SetReferenzDevice( NULL );
         SwTxtPaintInfo aInf( (SwTxtFrm*)this, rRect );
-        pSh->SetReferenzDevice( pOldRef );
         aInf.SetWrongList( ( (SwTxtNode*)GetTxtNode() )->GetWrong() );
         aInf.GetTxtFly()->SetTopRule();
 
