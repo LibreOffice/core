@@ -19753,3 +19753,8 @@ _TI2?AVWrappedTargetException@lang@star@sun@com@@
 ?setIgnoreWidthCJK@FmSearchParams@svxform@@QAEXE@Z
 ?setParams@FmSearchConfigItem@svxform@@QAEXABUFmSearchParams@2@@Z
 ??0?$Sequence@VOUString@rtl@@@uno@star@sun@com@@QAE@ABV01234@@Z
+??0PPTStyleSheet@@QAE@ABVDffRecordHeader@@AAVSvStream@@AAVSdrPowerPointImport@@ABUPPTTextParagraphStyleAtomInterpreter@@ABUPPTTextSpecInfo@@@Z
+??0PPTTextParagraphStyleAtomInterpreter@@QAE@XZ
+??1PPTTextParagraphStyleAtomInterpreter@@QAE@XZ
+?Read@PPTTextParagraphStyleAtomInterpreter@@QAEEAAVSvStream@@ABVDffRecordHeader@@@Z
+??0SfxObjectShellRef@@QAE@PAVSfxObjectShell@@@Z
