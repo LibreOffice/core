@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-24 11:21:08 $
+ *  last change: $Author: cl $ $Date: 2002-07-26 10:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,32 +632,24 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
 
         case SID_PREVIEW_WIN:
         {
-            BOOL bPreview = FALSE;
+            bool bPreview = FALSE;
 
             if ( rReq.GetArgs() )
             {
                 bPreview = ((const SfxBoolItem&) (rReq.GetArgs()->Get(SID_PREVIEW_WIN))).GetValue();
-                GetViewFrame()->SetChildWindow(SdPreviewChildWindow::GetChildWindowId(),
-                                          bPreview,false);
             }
             else
             {
                 USHORT nId = SdPreviewChildWindow::GetChildWindowId();
                 bPreview = !SfxBoolItem(SID_PREVIEW_WIN, GetViewFrame()->HasChildWindow(nId)).GetValue();
-                GetViewFrame()->ToggleChildWindow(SdPreviewChildWindow::GetChildWindowId() );
             }
+
+            SetPreview( bPreview );
 
             if (eEditMode == EM_PAGE)
                 pFrameView->SetShowPreviewInPageMode(bPreview);
             else
                 pFrameView->SetShowPreviewInMasterPageMode(bPreview);
-
-            SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate(SID_PREVIEW_WIN);
-            rBindings.Invalidate(SID_PREVIEW_QUALITY_COLOR);
-            rBindings.Invalidate(SID_PREVIEW_QUALITY_GRAYSCALE);
-            rBindings.Invalidate(SID_PREVIEW_QUALITY_BLACKWHITE);
-            rBindings.Invalidate(SID_PREVIEW_QUALITY_CONTRAST);
 
             Cancel();
             rReq.Ignore ();

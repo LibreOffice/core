@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-18 10:32:17 $
+ *  last change: $Author: cl $ $Date: 2002-07-26 10:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1904,4 +1904,43 @@ void  SdViewShell::GetMenuState( SfxItemSet &rSet )
     }
 }
 
+
+void SdViewShell::SetPreview( bool bVisible )
+{
+    DBG_ASSERT( GetViewFrame(), "FATAL: no viewframe?" );
+    DBG_ASSERT( pWindow, "FATAL: no window?" );
+
+    if( GetViewFrame() && pWindow )
+    {
+        GetViewFrame()->SetChildWindow(SdPreviewChildWindow::GetChildWindowId(), bVisible,false);
+
+        const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
+
+        sal_uInt16 nPreviewSlot;
+
+        SvtAccessibilityOptions aAccOptions;
+
+        if( GetViewFrame()->GetDispatcher() )
+        {
+            if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForPagePreviews() )
+            {
+                nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
+            }
+            else
+            {
+                nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
+            }
+
+            GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SFX_CALLMODE_ASYNCHRON );
+        }
+
+        SfxBindings& rBindings = GetViewFrame()->GetBindings();
+        rBindings.Invalidate(SID_PREVIEW_WIN);
+        rBindings.Invalidate(SID_PREVIEW_QUALITY_COLOR);
+        rBindings.Invalidate(SID_PREVIEW_QUALITY_GRAYSCALE);
+        rBindings.Invalidate(SID_PREVIEW_QUALITY_BLACKWHITE);
+        rBindings.Invalidate(SID_PREVIEW_QUALITY_CONTRAST);
+
+    }
+}
 

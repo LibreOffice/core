@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-24 11:15:41 $
+ *  last change: $Author: cl $ $Date: 2002-07-26 10:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,29 +375,21 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_PREVIEW_WIN:
         {
-            BOOL bPreview = FALSE;
+            bool bPreview = FALSE;
 
             if ( rReq.GetArgs() )
             {
                 bPreview = ((const SfxBoolItem&) (rReq.GetArgs()->Get(SID_PREVIEW_WIN))).GetValue();
-                GetViewFrame()->SetChildWindow(SdPreviewChildWindow::GetChildWindowId(),
-                                          bPreview,false);
             }
             else
             {
                 USHORT nId = SdPreviewChildWindow::GetChildWindowId();
                 bPreview = !SfxBoolItem(SID_PREVIEW_WIN, GetViewFrame()->HasChildWindow(nId)).GetValue();
-                GetViewFrame()->ToggleChildWindow(SdPreviewChildWindow::GetChildWindowId() );
             }
 
-            pFrameView->SetShowPreviewInOutlineMode(bPreview);
+            SetPreview( bPreview );
 
-            SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate(SID_PREVIEW_WIN);
-            rBindings.Invalidate(SID_PREVIEW_QUALITY_COLOR);
-            rBindings.Invalidate(SID_PREVIEW_QUALITY_GRAYSCALE);
-            rBindings.Invalidate(SID_PREVIEW_QUALITY_BLACKWHITE);
-            rBindings.Invalidate(SID_PREVIEW_QUALITY_CONTRAST);
+            pFrameView->SetShowPreviewInOutlineMode(bPreview);
 
             Cancel();
             rReq.Ignore ();
