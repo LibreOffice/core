@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-19 16:00:45 $
+ *  last change: $Author: sab $ $Date: 2000-10-20 06:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2695,31 +2695,35 @@ void ScXMLExport::_ExportAutoStyles()
             GetPageExport()->collectAutoStyles(sal_True);
 
             const UniReference< XMLPropertySetMapper > aColumnStylesMapperRef = pColumnStylesPropertySetMapper;
-            ScXMLExportPropertyMapper* aColumnStylesExpPropMapper = new ScXMLExportPropertyMapper(aColumnStylesMapperRef);
+            ScXMLExportPropertyMapper* pColumnStylesExpPropMapper = new ScXMLExportPropertyMapper(aColumnStylesMapperRef);
             GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN,
-                *aColumnStylesExpPropMapper, GetDocHandler(), GetMM100UnitConverter(),
+                *pColumnStylesExpPropMapper, GetDocHandler(), GetMM100UnitConverter(),
                 GetNamespaceMap());
+            delete pColumnStylesExpPropMapper;
             const UniReference< XMLPropertySetMapper > aRowStylesMapperRef = pRowStylesPropertySetMapper;
-            ScXMLExportPropertyMapper* aRowStylesExpPropMapper = new ScXMLExportPropertyMapper(aRowStylesMapperRef);
+            ScXMLExportPropertyMapper* pRowStylesExpPropMapper = new ScXMLExportPropertyMapper(aRowStylesMapperRef);
             GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_ROW,
-                *aRowStylesExpPropMapper, GetDocHandler(), GetMM100UnitConverter(),
+                *pRowStylesExpPropMapper, GetDocHandler(), GetMM100UnitConverter(),
                 GetNamespaceMap());
+            delete pRowStylesExpPropMapper;
             const UniReference< XMLPropertySetMapper > aTableStylesMapperRef = pTableStylesPropertySetMapper;
-            ScXMLExportPropertyMapper* aTableStylesExpPropMapper = new ScXMLExportPropertyMapper(aTableStylesMapperRef);
+            ScXMLExportPropertyMapper* pTableStylesExpPropMapper = new ScXMLExportPropertyMapper(aTableStylesMapperRef);
             GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE,
-                *aTableStylesExpPropMapper, GetDocHandler(), GetMM100UnitConverter(),
+                *pTableStylesExpPropMapper, GetDocHandler(), GetMM100UnitConverter(),
                 GetNamespaceMap());
+            delete pTableStylesExpPropMapper;
             exportAutoDataStyles();
             const UniReference< XMLPropertySetMapper > aCellStylesMapperRef = pCellStylesPropertySetMapper;
-            ScXMLExportPropertyMapper* aCellStylesExpPropMapper = new ScXMLExportPropertyMapper(aCellStylesMapperRef);
+            ScXMLExportPropertyMapper* pCellStylesExpPropMapper = new ScXMLExportPropertyMapper(aCellStylesMapperRef);
             GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_CELL,
-                *aCellStylesExpPropMapper, GetDocHandler(), GetMM100UnitConverter(),
+                *pCellStylesExpPropMapper, GetDocHandler(), GetMM100UnitConverter(),
                 GetNamespaceMap());
+            delete pCellStylesExpPropMapper;
             GetTextParagraphExport()->exportTextAutoStyles();
             GetShapeExport()->exportAutoStyles();
             GetChartExport()->exportAutoStyles();
 
-            exportPageMaster();
+            GetPageExport()->exportAutoStyles();
         }
     }
 }
