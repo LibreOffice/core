@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2001-08-22 13:00:34 $
+ *  last change: $Author: as $ $Date: 2001-09-27 07:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,32 +152,171 @@
 struct FactoryInfo
 {
     public:
+        //---------------------------------------------------------------------------------------------------------
         // initialize empty struct
         FactoryInfo()
         {
             free();
         }
 
+        //---------------------------------------------------------------------------------------------------------
         // easy way to reset struct member!
         void free()
         {
-            bInstalled          = sal_False         ;
-            sFactory            = ::rtl::OUString() ;
-            sShortName          = ::rtl::OUString() ;
-            sTemplateFile       = ::rtl::OUString() ;
-            sWindowAttributes   = ::rtl::OUString() ;
-            sEmptyDocumentURL   = ::rtl::OUString() ;
-            nIcon               = 0                 ;
+            bInstalled                  = sal_False         ;
+            sFactory                    = ::rtl::OUString() ;
+            sShortName                  = ::rtl::OUString() ;
+            sTemplateFile               = ::rtl::OUString() ;
+            sWindowAttributes           = ::rtl::OUString() ;
+            sEmptyDocumentURL           = ::rtl::OUString() ;
+            nIcon                       = 0                 ;
+            bChangedTemplateFile        = sal_False         ;
+            bChangedWindowAttributes    = sal_False         ;
+            bChangedEmptyDocumentURL    = sal_False         ;
+            bChangedIcon                = sal_False         ;
         }
 
-    public:
-        sal_Bool            bInstalled          ;
-        ::rtl::OUString     sFactory            ;
-        ::rtl::OUString     sShortName          ;
-        ::rtl::OUString     sTemplateFile       ;
-        ::rtl::OUString     sWindowAttributes   ;
-        ::rtl::OUString     sEmptyDocumentURL   ;
-        sal_Int32           nIcon               ;
+        //---------------------------------------------------------------------------------------------------------
+        // returns list of properties, which has changed only!
+        // We use given value of sNodeBase to build full qualified pathes ...
+        // Last sign of it must be "/". Beacuse we use it directly, without any additional things!
+        css::uno::Sequence< css::beans::PropertyValue > getChangedProperties( const ::rtl::OUString& sNodeBase )
+        {
+            // a) reserve memory for max. count of changed properties
+            // b) add names and values of changed ones only and count it
+            // c) resize return list by using count
+            css::uno::Sequence< css::beans::PropertyValue > lProperties   ( 4 );
+            sal_Int8                                        nRealyChanged = 0  ;
+
+            if( bChangedTemplateFile == sal_True )
+            {
+                lProperties[nRealyChanged].Name    = sNodeBase + PROPERTYNAME_TEMPLATEFILE;
+                lProperties[nRealyChanged].Value <<= sTemplateFile;
+                ++nRealyChanged;
+            }
+            if( bChangedWindowAttributes == sal_True )
+            {
+                lProperties[nRealyChanged].Name    = sNodeBase + PROPERTYNAME_WINDOWATTRIBUTES;
+                lProperties[nRealyChanged].Value <<= sWindowAttributes;
+                ++nRealyChanged;
+            }
+            if( bChangedEmptyDocumentURL == sal_True )
+            {
+                lProperties[nRealyChanged].Name    = sNodeBase + PROPERTYNAME_EMPTYDOCUMENTURL;
+                lProperties[nRealyChanged].Value <<= sEmptyDocumentURL;
+                ++nRealyChanged;
+            }
+            if( bChangedIcon == sal_True )
+            {
+                lProperties[nRealyChanged].Name    = sNodeBase + PROPERTYNAME_ICON;
+                lProperties[nRealyChanged].Value <<= nIcon;
+                ++nRealyChanged;
+            }
+
+            // Don't forget to reset changed flags! Otherwise we save it again and again and ...
+            bChangedTemplateFile        = sal_False         ;
+            bChangedWindowAttributes    = sal_False         ;
+            bChangedEmptyDocumentURL    = sal_False         ;
+            bChangedIcon                = sal_False         ;
+
+            lProperties.realloc( nRealyChanged );
+            return lProperties;
+        }
+
+        //---------------------------------------------------------------------------------------------------------
+        // We must support setting AND marking of changed values.
+        // That's why we can't make our member public. We must use get/set/init methods
+        // to control access on it!
+        sal_Bool            getInstalled        () const { return bInstalled;         };
+        ::rtl::OUString     getFactory          () const { return sFactory;           };
+        ::rtl::OUString     getShortName        () const { return sShortName;         };
+        ::rtl::OUString     getTemplateFile     () const { return sTemplateFile;      };
+        ::rtl::OUString     getWindowAttributes () const { return sWindowAttributes;  };
+        ::rtl::OUString     getEmptyDocumentURL () const { return sEmptyDocumentURL;  };
+        sal_Int32           getIcon             () const { return nIcon;              };
+
+        //---------------------------------------------------------------------------------------------------------
+        // If you call set-methods - we check for changes of valkues and mark it.
+        // But if you whish to set it without that ... you must initialize it!
+        void initInstalled        ( sal_Bool               bNewInstalled        ) { bInstalled        = bNewInstalled        ; }
+        void initFactory          ( const ::rtl::OUString& sNewFactory          ) { sFactory          = sNewFactory          ; }
+        void initShortName        ( const ::rtl::OUString& sNewShortName        ) { sShortName        = sNewShortName        ; }
+        void initTemplateFile     ( const ::rtl::OUString& sNewTemplateFile     ) { sTemplateFile     = sNewTemplateFile     ; }
+        void initWindowAttributes ( const ::rtl::OUString& sNewWindowAttributes ) { sWindowAttributes = sNewWindowAttributes ; }
+        void initEmptyDocumentURL ( const ::rtl::OUString& sNewEmptyDocumentURL ) { sEmptyDocumentURL = sNewEmptyDocumentURL ; }
+        void initIcon             ( sal_Int32              nNewIcon             ) { nIcon             = nNewIcon             ; }
+
+        //---------------------------------------------------------------------------------------------------------
+        void setInstalled( sal_Bool bNewInstalled )
+        {
+            bInstalled = bNewInstalled;
+        };
+
+        //---------------------------------------------------------------------------------------------------------
+        void setFactory( const ::rtl::OUString& sNewFactory )
+        {
+            sFactory = sNewFactory;
+        };
+
+        //---------------------------------------------------------------------------------------------------------
+        void setShortName( const ::rtl::OUString& sNewShortName )
+        {
+            sShortName = sNewShortName;
+        };
+
+        //---------------------------------------------------------------------------------------------------------
+        void setTemplateFile( const ::rtl::OUString& sNewTemplateFile )
+        {
+            if( sTemplateFile != sNewTemplateFile )
+            {
+                sTemplateFile        = sNewTemplateFile;
+                bChangedTemplateFile = sal_True        ;
+            }
+        };
+
+        //---------------------------------------------------------------------------------------------------------
+        void setWindowAttributes( const ::rtl::OUString& sNewWindowAttributes )
+        {
+            if( sWindowAttributes != sNewWindowAttributes )
+            {
+                sWindowAttributes        = sNewWindowAttributes;
+                bChangedWindowAttributes = sal_True            ;
+            }
+        };
+
+        //---------------------------------------------------------------------------------------------------------
+        void setEmptyDocumentURL( const ::rtl::OUString& sNewEmptyDocumentURL )
+        {
+            if( sEmptyDocumentURL != sNewEmptyDocumentURL )
+            {
+                sEmptyDocumentURL        = sNewEmptyDocumentURL;
+                bChangedEmptyDocumentURL = sal_True            ;
+            }
+        };
+
+        //---------------------------------------------------------------------------------------------------------
+        void setIcon( sal_Int32 nNewIcon )
+        {
+            if( nNewIcon != nNewIcon )
+            {
+                nNewIcon     = nNewIcon;
+                bChangedIcon = sal_True;
+            }
+        };
+
+    private:
+        sal_Bool            bInstalled                      ;
+        ::rtl::OUString     sFactory                        ;
+        ::rtl::OUString     sShortName                      ;
+        ::rtl::OUString     sTemplateFile                   ;
+        ::rtl::OUString     sWindowAttributes               ;
+        ::rtl::OUString     sEmptyDocumentURL               ;
+        sal_Int32           nIcon                           ;
+
+        sal_Bool            bChangedTemplateFile        :1  ;
+        sal_Bool            bChangedWindowAttributes    :1  ;
+        sal_Bool            bChangedEmptyDocumentURL    :1  ;
+        sal_Bool            bChangedIcon                :1  ;
 };
 
 typedef FactoryInfo   FactoryInfoList[FACTORYCOUNT];
@@ -329,7 +468,7 @@ SvtModuleOptions_Impl::~SvtModuleOptions_Impl()
 *//*-*************************************************************************************************************/
 void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< ::rtl::OUString >& lNames )
 {
-    impl_Read( lNames );
+    OSL_ENSURE( sal_False, "SvtModuleOptions_Impl::Notify()\nNot implemented yet!\n" );
 }
 
 /*-****************************************************************************************************//**
@@ -351,34 +490,37 @@ void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< ::rtl::OUString >&
 *//*-*****************************************************************************************************/
 void SvtModuleOptions_Impl::Commit()
 {
-    // Clear whole cfg list.
-    ClearNodeSet( ::rtl::OUString() );
-    // Build complete list of all factories, her properties and values.
-    css::uno::Sequence< css::beans::PropertyValue > lProperties     ( FACTORYCOUNT*PROPERTYCOUNT );
-    FactoryInfo*                                    pInfo           = NULL                        ;
-    sal_Int32                                       nPropertyStart  = 0                           ;
+    // Reserve memory for ALL possible factory properties!
+    // Step over all factories and get her realy changed values only.
+    // Build list of these ones and use it for commit.
+    css::uno::Sequence< css::beans::PropertyValue > lCommitProperties( FACTORYCOUNT*PROPERTYCOUNT );
+    FactoryInfo*                                    pInfo            = NULL                        ;
+    sal_Int32                                       nRealCount       = 0                           ;
+    ::rtl::OUString                                 sBasePath                                      ;
     for( sal_Int32 nFactory=0; nFactory<FACTORYCOUNT; ++nFactory )
     {
         pInfo = &(m_lFactories[nFactory]);
 
-        if( pInfo->bInstalled == sal_True )
-        {
-            lProperties[nPropertyStart+PROPERTYHANDLE_SHORTNAME       ].Name = PATHSEPERATOR + pInfo->sFactory + PATHSEPERATOR + PROPERTYNAME_SHORTNAME       ;
-            lProperties[nPropertyStart+PROPERTYHANDLE_TEMPLATEFILE    ].Name = PATHSEPERATOR + pInfo->sFactory + PATHSEPERATOR + PROPERTYNAME_TEMPLATEFILE    ;
-            lProperties[nPropertyStart+PROPERTYHANDLE_WINDOWATTRIBUTES].Name = PATHSEPERATOR + pInfo->sFactory + PATHSEPERATOR + PROPERTYNAME_WINDOWATTRIBUTES;
-            lProperties[nPropertyStart+PROPERTYHANDLE_EMPTYDOCUMENTURL].Name = PATHSEPERATOR + pInfo->sFactory + PATHSEPERATOR + PROPERTYNAME_EMPTYDOCUMENTURL;
-            lProperties[nPropertyStart+PROPERTYHANDLE_ICON            ].Name = PATHSEPERATOR + pInfo->sFactory + PATHSEPERATOR + PROPERTYNAME_ICON            ;
+        // These path is used to build full qualified property names ....
+        // See pInfo->getChangedProperties() for further informations
+        sBasePath  = PATHSEPERATOR + pInfo->getFactory() + PATHSEPERATOR;
 
-            lProperties[nPropertyStart+PROPERTYHANDLE_SHORTNAME       ].Value <<= pInfo->sShortName         ;
-            lProperties[nPropertyStart+PROPERTYHANDLE_TEMPLATEFILE    ].Value <<= pInfo->sTemplateFile      ;
-            lProperties[nPropertyStart+PROPERTYHANDLE_WINDOWATTRIBUTES].Value <<= pInfo->sWindowAttributes  ;
-            lProperties[nPropertyStart+PROPERTYHANDLE_EMPTYDOCUMENTURL].Value <<= pInfo->sEmptyDocumentURL  ;
-            lProperties[nPropertyStart+PROPERTYHANDLE_ICON            ].Value <<= pInfo->nIcon              ;
+        css::uno::Sequence< css::beans::PropertyValue > lChangedProperties = pInfo->getChangedProperties ( sBasePath );
+        sal_Int32                                       nPropertyCount     = lChangedProperties.getLength();
+        for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
+        {
+            lCommitProperties[nRealCount] = lChangedProperties[nProperty];
+            ++nRealCount;
         }
-        nPropertyStart += PROPERTYCOUNT;
     }
-    // Write list to cfg.
-    SetSetProperties( ::rtl::OUString(), lProperties );
+    // Resize commit list to real size.
+    // If nothing to do - suppress calling of configuration ...
+    // It could be to expensive :-)
+    if( nRealCount > 0 )
+    {
+        lCommitProperties.realloc( nRealCount );
+        SetSetProperties( ::rtl::OUString(), lCommitProperties );
+    }
 }
 
 /*-****************************************************************************************************//**
@@ -408,21 +550,21 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
         case SvtModuleOptions::E_SWRITER    :   {
                                                     // Module writer knows more then one factory!
                                                     bInstalled = (
-                                                                    ( m_lFactories[SvtModuleOptions::E_WRITER      ].bInstalled == sal_True ) ||
-                                                                    ( m_lFactories[SvtModuleOptions::E_WRITERWEB   ].bInstalled == sal_True ) ||
-                                                                    ( m_lFactories[SvtModuleOptions::E_WRITERGLOBAL].bInstalled == sal_True )
+                                                                    ( m_lFactories[SvtModuleOptions::E_WRITER      ].getInstalled() == sal_True ) ||
+                                                                    ( m_lFactories[SvtModuleOptions::E_WRITERWEB   ].getInstalled() == sal_True ) ||
+                                                                    ( m_lFactories[SvtModuleOptions::E_WRITERGLOBAL].getInstalled() == sal_True )
                                                                  );
                                                 }
                                                 break;
-        case SvtModuleOptions::E_SCALC      :   bInstalled = m_lFactories[SvtModuleOptions::E_CALC].bInstalled;
+        case SvtModuleOptions::E_SCALC      :   bInstalled = m_lFactories[SvtModuleOptions::E_CALC].getInstalled();
                                                 break;
-        case SvtModuleOptions::E_SDRAW      :   bInstalled = m_lFactories[SvtModuleOptions::E_DRAW].bInstalled;
+        case SvtModuleOptions::E_SDRAW      :   bInstalled = m_lFactories[SvtModuleOptions::E_DRAW].getInstalled();
                                                 break;
-        case SvtModuleOptions::E_SIMPRESS   :   bInstalled = m_lFactories[SvtModuleOptions::E_IMPRESS].bInstalled;
+        case SvtModuleOptions::E_SIMPRESS   :   bInstalled = m_lFactories[SvtModuleOptions::E_IMPRESS].getInstalled();
                                                 break;
-        case SvtModuleOptions::E_SMATH      :   bInstalled = m_lFactories[SvtModuleOptions::E_MATH].bInstalled;
+        case SvtModuleOptions::E_SMATH      :   bInstalled = m_lFactories[SvtModuleOptions::E_MATH].getInstalled();
                                                 break;
-        case SvtModuleOptions::E_SCHART     :   bInstalled = m_lFactories[SvtModuleOptions::E_CHART].bInstalled;
+        case SvtModuleOptions::E_SCHART     :   bInstalled = m_lFactories[SvtModuleOptions::E_CHART].getInstalled();
                                                 break;
         case SvtModuleOptions::E_SBASIC     :   bInstalled = sal_True; // Couldn't be deselected by setup yet!
                                                 break;
@@ -438,7 +580,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
 
     if( eFactory>=0 && eFactory<FACTORYCOUNT )
     {
-        sName = m_lFactories[eFactory].sFactory;
+        sName = m_lFactories[eFactory].getFactory();
     }
 
     return sName;
@@ -482,7 +624,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
 
     if( eFactory>=0 && eFactory<FACTORYCOUNT )
     {
-        sFile = m_lFactories[eFactory].sTemplateFile;
+        sFile = m_lFactories[eFactory].getTemplateFile();
     }
 
     return sFile;
@@ -495,7 +637,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
 
     if( eFactory>=0 && eFactory<FACTORYCOUNT )
     {
-        sAttributes = m_lFactories[eFactory].sWindowAttributes;
+        sAttributes = m_lFactories[eFactory].getWindowAttributes();
     }
 
     return sAttributes;
@@ -507,7 +649,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
     // Attention: Hard configured yet ... because it's not fine to make changes possible by xml file yet.
     //            But it's good to plan further possibilities!
 
-    //return m_lFactories[eFactory].sEmptyDocumentURL;
+    //return m_lFactories[eFactory].getEmptyDocumentURL();
 
     ::rtl::OUString sURL;
     switch( eFactory )
@@ -539,7 +681,7 @@ sal_Int32 SvtModuleOptions_Impl::GetFactoryIcon( SvtModuleOptions::EFactory eFac
 
     if( eFactory>=0 && eFactory<FACTORYCOUNT )
     {
-        nIcon = m_lFactories[eFactory].nIcon;
+        nIcon = m_lFactories[eFactory].getIcon();
     }
 
     return nIcon;
@@ -551,7 +693,7 @@ void SvtModuleOptions_Impl::SetFactoryStandardTemplate(       SvtModuleOptions::
 {
     if( eFactory>=0 && eFactory<FACTORYCOUNT )
     {
-        m_lFactories[eFactory].sTemplateFile = sTemplate;
+        m_lFactories[eFactory].setTemplateFile( sTemplate );
         SetModified();
     }
 }
@@ -562,7 +704,7 @@ void SvtModuleOptions_Impl::SetFactoryWindowAttributes(       SvtModuleOptions::
 {
     if( eFactory>=0 && eFactory<FACTORYCOUNT )
     {
-        m_lFactories[eFactory].sWindowAttributes = sAttributes;
+        m_lFactories[eFactory].setWindowAttributes( sAttributes );
         SetModified();
     }
 }
@@ -714,6 +856,8 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< ::rtl::OUString
     FactoryInfo*                pInfo           = NULL                  ;
     SvtModuleOptions::EFactory  eFactory                                ;
     ::rtl::OUString             sFactoryName                            ;
+    ::rtl::OUString             sTemp                                   ;
+    sal_Int32                   nTemp                                   ;
     for( sal_Int32 nSetNode=0; nSetNode<nNodeCount; ++nSetNode )
     {
         sFactoryName = lFactories[nSetNode];
@@ -722,13 +866,18 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< ::rtl::OUString
             pInfo = &(m_lFactories[eFactory]);
             pInfo->free();
 
-            pInfo->bInstalled                                         = sal_True                ;
-            pInfo->sFactory                                           = sFactoryName            ;
-            lValues[nPropertyStart+PROPERTYHANDLE_SHORTNAME       ] >>= pInfo->sShortName       ;
-            lValues[nPropertyStart+PROPERTYHANDLE_TEMPLATEFILE    ] >>= pInfo->sTemplateFile    ;
-            lValues[nPropertyStart+PROPERTYHANDLE_WINDOWATTRIBUTES] >>= pInfo->sWindowAttributes;
-            lValues[nPropertyStart+PROPERTYHANDLE_EMPTYDOCUMENTURL] >>= pInfo->sEmptyDocumentURL;
-            lValues[nPropertyStart+PROPERTYHANDLE_ICON            ] >>= pInfo->nIcon            ;
+            pInfo->initInstalled( sal_True     );
+            pInfo->initFactory  ( sFactoryName );
+            lValues[nPropertyStart+PROPERTYHANDLE_SHORTNAME       ] >>= sTemp;
+            pInfo->initShortName( sTemp );
+            lValues[nPropertyStart+PROPERTYHANDLE_TEMPLATEFILE    ] >>= sTemp;
+            pInfo->initTemplateFile( sTemp );
+            lValues[nPropertyStart+PROPERTYHANDLE_WINDOWATTRIBUTES] >>= sTemp;
+            pInfo->initWindowAttributes( sTemp );
+            lValues[nPropertyStart+PROPERTYHANDLE_EMPTYDOCUMENTURL] >>= sTemp;
+            pInfo->initEmptyDocumentURL( sTemp );
+            lValues[nPropertyStart+PROPERTYHANDLE_ICON            ] >>= nTemp;
+            pInfo->initIcon( nTemp );
         }
         nPropertyStart += PROPERTYCOUNT;
     }
