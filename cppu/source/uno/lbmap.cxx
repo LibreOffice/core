@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:53 $
+ *  last change: $Author: dbo $ $Date: 2000-09-21 11:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,22 +469,23 @@ static Mapping getMediateMapping(
         Mapping aAnUno2Uno( getDirectMapping( aAnUno, aUno, rAddPurpose ) );
         if (! aAnUno2Uno.is())
             return Mapping();
+
         if (aUno2To.is()) // to is not uno
         {
-            // create another mediate mapping
+            // create another purposed mediate mapping
             aUno2To = createMediateMapping( aAnUno, rTo, aAnUno2Uno, aUno2To, rAddPurpose );
             // : ano_uno <-> uno <-> to
         }
         else
         {
             aUno2To = aAnUno2Uno;
-            // : ano_uno <-> to (i.e. uno)
+            // : ano_uno <-> to (i.e., uno)
         }
         aUno = aAnUno;
     }
 
     Mapping aFrom2Uno( getDirectMapping( rFrom, aUno ) );
-    if (aFrom2Uno.is())
+    if (aFrom2Uno.is() && aUno2To.is())
     {
         return createMediateMapping( rFrom, rTo, aFrom2Uno, aUno2To, rAddPurpose );
         // : from <-> some uno ...
