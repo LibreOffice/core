@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-07 16:45:42 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 14:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,6 @@
 #ifndef _FETC_HXX_
 #include "Fetc.hxx"
 #endif
-
-#include <systools/win32/user9x.h>
 
 #include <windows.h>
 

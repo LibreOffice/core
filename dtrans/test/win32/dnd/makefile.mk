@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jl $ $Date: 2001-07-19 11:14:24 $
+#   last change: $Author: hro $ $Date: 2002-08-14 14:53:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,6 +123,8 @@ APP1STDLIBS= \
     $(SALLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB)		\
+    uwinapi.lib \
+    unicows.lib\
     user32.lib		\
     ole32.lib		\
     comsupp.lib		\
@@ -131,8 +133,6 @@ APP1STDLIBS= \
     uuid.lib		
 
 APP1LIBS=	\
-            $(SOLARLIBDIR)$/user9x.lib\
-            $(SOLARLIBDIR)$/tools32.lib\
             $(SLB)$/dtobjfact.lib	\
             $(SLB)$/dtutils.lib
 

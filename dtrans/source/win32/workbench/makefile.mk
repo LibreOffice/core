@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: tra $ $Date: 2001-09-28 12:28:09 $
+#   last change: $Author: hro $ $Date: 2002-08-14 14:50:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,13 +96,13 @@ APP1OBJS=		$(OBJ)$/test_wincb.obj
 APP1STDLIBS=	$(SALLIB) \
                 $(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
+                unicows.lib\
                 user32.lib \
                 ole32.lib\
                 comdlg32.lib
 
 APP1LIBS= $(SLB)$/dtutils.lib\
-          $(SOLARLIBDIR)$/user9x.lib\
-          $(SOLARLIBDIR)$/tools32.lib
+          $(SOLARLIBDIR)$/uwinapi.lib
 
 APP1NOSAL=  TRUE
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-04 12:03:51 $
+#   last change: $Author: hro $ $Date: 2002-08-14 14:43:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,11 @@ SHL1LIBS=$(SLB)$/mcnttype.lib
 SHL1STDLIBS= \
         $(SALLIB)	\
         $(CPPULIB) 	\
-        $(CPPUHELPERLIB)
+        $(CPPUHELPERLIB) \
+        uwinapi.lib \
+        unicows.lib
+
+
 
 SHL1IMPLIB=i$(SHL1TARGET) 
 
@@ -107,6 +111,9 @@ SHL2STDLIBS= \
         $(SALLIB)	\
         $(CPPULIB) 	\
         $(CPPUHELPERLIB)\
+        uwinapi.lib\
+        unicows.lib\
+        advapi32.lib\
         ole32.lib\
         gdi32.lib
 
@@ -124,13 +131,15 @@ SHL3TARGET=$(TARGET3)
 SHL3LIBS=$(SLB)$/sysdtrans.lib\
          $(SLB)$/dtutils.lib\
          $(SLB)$/dtobjfact.lib\
-         $(SLB)$/mtaolecb.lib\
-         $(SOLARLIBDIR)$/user9x.lib
+         $(SLB)$/mtaolecb.lib
 
 SHL3STDLIBS= \
         $(SALLIB)	\
         $(CPPULIB) 	\
         $(CPPUHELPERLIB)\
+        uwinapi.lib\
+        unicows.lib\
+        advapi32.lib\
         ole32.lib\
         comsupp.lib\
         oleaut32.lib\
@@ -150,13 +159,15 @@ SHL4TARGET=$(TARGET4)
 SHL4LIBS=	\
             $(SLB)$/dnd.lib\
             $(SLB)$/dtobjfact.lib\
-            $(SLB)$/dtutils.lib\
-            $(SOLARLIBDIR)$/user9x.lib
+            $(SLB)$/dtutils.lib
 
 SHL4STDLIBS= \
         $(SALLIB)	\
         $(CPPULIB) 	\
         $(CPPUHELPERLIB) \
+        uwinapi.lib\
+        unicows.lib\
+        advapi32.lib\
         ole32.lib\
         comsupp.lib\
         oleaut32.lib\

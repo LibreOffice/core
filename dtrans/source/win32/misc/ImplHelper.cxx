@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-10 09:43:48 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 14:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@
 
 #include <memory>
 #include <windows.h>
-#include <systools/win32/user9x.h>
 
 //------------------------------------------------------------------------
 // defines
