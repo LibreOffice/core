@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: sj $ $Date: 2002-02-18 16:28:56 $
+ *  last change: $Author: sj $ $Date: 2002-03-18 16:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1846,8 +1846,13 @@ void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
     double  fYDiff = - ( fSin * fWidthHalf - fCos * ( -fHeightHalf ) );
 
     maRect.Move( (sal_Int32)( -( fWidthHalf - fXDiff ) ), (sal_Int32)(  - ( fHeightHalf + fYDiff ) ) );
+    mnAngle *= 655;
+    mnAngle += 0x8000;
+    mnAngle &=~0xffff;                                  // nAngle auf volle Gradzahl runden
+    rPropOpt.AddOpt( ESCHER_Prop_Rotation, mnAngle );
 
-    if ( ( mnAngle > 4500 && mnAngle <= 13500 ) || ( mnAngle > 22500 && mnAngle <= 31500 ) )
+    if ( ( mnAngle >= ( 45 << 16 ) && mnAngle < ( 135 << 16 ) ) ||
+            ( mnAngle >= ( 225 << 16 ) && mnAngle < ( 315 << 16 ) ) )
     {
         // In diesen beiden Bereichen steht in PPT gemeinerweise die
         // BoundingBox bereits senkrecht. Daher muss diese VOR
@@ -1857,10 +1862,6 @@ void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
         Size    aNewSize( maRect.GetHeight(), maRect.GetWidth() );
         maRect = Rectangle( Point( aTopLeft.X, aTopLeft.Y ), aNewSize );
     }
-    mnAngle *= 655;
-    mnAngle += 0x8000;
-    mnAngle &=~0xffff;                                  // nAngle auf volle Gradzahl runden
-    rPropOpt.AddOpt( ESCHER_Prop_Rotation, mnAngle );
 }
 
 //  -----------------------------------------------------------------------
@@ -4288,7 +4289,13 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     mnAngle = ( 36000 + mnAngle ) % 36000;
                 else
                     mnAngle = ( 36000 - ( mnAngle % 36000 ) );
-                if ( ( mnAngle > 4500 && mnAngle <= 13500 ) || ( mnAngle > 22500 && mnAngle <= 31500 ) )
+                mnAngle *= 655;
+                mnAngle += 0x8000;
+                mnAngle &=~0xffff;                                  // nAngle auf volle Gradzahl runden
+                aPropOpt.AddOpt( ESCHER_Prop_Rotation, mnAngle );
+
+                if ( ( mnAngle >= ( 45 << 16 ) && mnAngle < ( 135 << 16 ) )
+                    || ( mnAngle >= ( 225 << 16 ) && mnAngle < ( 315 << 16 ) ) )
                 {
                     double  fWidthHalf = maRect.GetWidth() / 2;
                     double  fHeightHalf = maRect.GetHeight() / 2;
@@ -4298,12 +4305,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     Size    aNewSize( maRect.GetHeight(), maRect.GetWidth() );
                     maRect = Rectangle( aTopLeft, aNewSize );
                 }
-                mnAngle *= 655;
-                mnAngle += 0x8000;
-                mnAngle &=~0xffff;                                  // nAngle auf volle Gradzahl runden
-                aPropOpt.AddOpt( ESCHER_Prop_Rotation, mnAngle );
                 mnAngle = 0;
-
                 sal_uInt16 nAdjCount;
                 for ( nAdjCount = 0; nAdjCount < aAdjustmentList.Count(); nAdjCount++ )
                     aPropOpt.AddOpt( ESCHER_Prop_adjustValue + nAdjCount, (sal_uInt32)aAdjustmentList.GetObject( nAdjCount ) );
