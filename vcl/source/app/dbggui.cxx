@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-04 13:23:14 $
+ *  last change: $Author: vg $ $Date: 2002-02-07 10:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1751,7 +1751,7 @@ void DbgPrintShell( const char* pLine );
 
 void DbgPrintMsgBox( const char* pLine )
 {
-#ifndef REMOTE_APPSERVER
+#ifdef REMOTE_APPSERVER
     DbgPrintShell( pLine );
     return;
 #endif
