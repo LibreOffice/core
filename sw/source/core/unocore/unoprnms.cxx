@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-21 12:51:52 $
+ *  last change: $Author: os $ $Date: 2000-10-13 14:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,7 +492,6 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_CREATE_FROM_TEXT_FRAMES                
 const SwPropNameLen __FAR_DATA  UNO_NAME_CREATE_FROM_GRAPHIC_OBJECTS            (MAP_CHAR_LEN("CreateFromGraphicObjects"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CREATE_FROM_EMBEDDED_OBJECTS           (MAP_CHAR_LEN("CreateFromEmbeddedObjects"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CREATE_FROM_STAR_MATH                  (MAP_CHAR_LEN("CreateFromStarMath"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_CREATE_FROM_STAR_IMAGE                 (MAP_CHAR_LEN("CreateFromStarImage"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CREATE_FROM_STAR_CHART                 (MAP_CHAR_LEN("CreateFromStarChart"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CREATE_FROM_STAR_CALC                  (MAP_CHAR_LEN("CreateFromStarCalc"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CREATE_FROM_STAR_DRAW                  (MAP_CHAR_LEN("CreateFromStarDraw"));
@@ -527,3 +526,14 @@ const SwPropNameLen __FAR_DATA UNO_NAME_IS_COLLAPSED                            
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_START                                (MAP_CHAR_LEN("IsStart"));
 const SwPropNameLen __FAR_DATA UNO_NAME_SEQUENCE_NUMBER                         (MAP_CHAR_LEN("SequenceNumber"));
 const SwPropNameLen __FAR_DATA UNO_NAME_REFERENCE_ID                            (MAP_CHAR_LEN("ReferenceId"));
+
+const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_LEFT_BORDER_DISTANCE             (MAP_CHAR_LEN("HeaderLeftBorderDistance"));
+const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_RIGHT_BORDER_DISTANCE            (MAP_CHAR_LEN("HeaderRightBorderDistance"));
+const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_TOP_BORDER_DISTANCE              (MAP_CHAR_LEN("HeaderTopBorderDistance"));
+const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_BOTTOM_BORDER_DISTANCE           (MAP_CHAR_LEN("HeaderBottomBorderDistance"));
+
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_LEFT_BORDER_DISTANCE             (MAP_CHAR_LEN("FooterLeftBorderDistance"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_RIGHT_BORDER_DISTANCE            (MAP_CHAR_LEN("FooterRightBorderDistance"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_TOP_BORDER_DISTANCE              (MAP_CHAR_LEN("FooterTopBorderDistance"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_BOTTOM_BORDER_DISTANCE           (MAP_CHAR_LEN("FooterBottomBorderDistance"));
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-10 09:42:53 $
+ *  last change: $Author: os $ $Date: 2000-10-13 14:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,6 +820,10 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_HEADER_TOP_BORDER),             FN_UNO_HEADER_BOX,              &::getCppuType((const table::BorderLine*)0),    0, TOP_BORDER   |CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_HEADER_BOTTOM_BORDER),          FN_UNO_HEADER_BOX,              &::getCppuType((const table::BorderLine*)0),    0, BOTTOM_BORDER|CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_HEADER_BORDER_DISTANCE),            FN_UNO_HEADER_BOX,    &::getCppuType((const sal_Int32*)0),  0, BORDER_DISTANCE|CONVERT_TWIPS },
+                    { SW_PROP_NAME(UNO_NAME_HEADER_LEFT_BORDER_DISTANCE),   RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
+                    { SW_PROP_NAME(UNO_NAME_HEADER_RIGHT_BORDER_DISTANCE),  RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
+                    { SW_PROP_NAME(UNO_NAME_HEADER_TOP_BORDER_DISTANCE),        RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
+                    { SW_PROP_NAME(UNO_NAME_HEADER_BOTTOM_BORDER_DISTANCE), RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_HEADER_SHADOW_FORMAT),          FN_UNO_HEADER_SHADOW,       &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_HEADER_BODY_DISTANCE),          FN_UNO_HEADER_BODY_DISTANCE,&::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_LO_MARGIN|CONVERT_TWIPS       },
                     { SW_PROP_NAME(UNO_NAME_HEADER_IS_DYNAMIC_DISTANCE),        FN_UNO_HEADER_IS_DYNAMIC_DISTANCE,&::getBooleanCppuType(),          PROPERTY_NONE ,0         },
@@ -840,6 +844,10 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_FOOTER_TOP_BORDER),             RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, TOP_BORDER   |CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_FOOTER_BOTTOM_BORDER),          RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, BOTTOM_BORDER|CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_FOOTER_BORDER_DISTANCE),         RES_BOX,    &::getCppuType((const sal_Int32*)0),   0, BORDER_DISTANCE|CONVERT_TWIPS },
+                    { SW_PROP_NAME(UNO_NAME_FOOTER_LEFT_BORDER_DISTANCE),   RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
+                    { SW_PROP_NAME(UNO_NAME_FOOTER_RIGHT_BORDER_DISTANCE),  RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
+                    { SW_PROP_NAME(UNO_NAME_FOOTER_TOP_BORDER_DISTANCE),        RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
+                    { SW_PROP_NAME(UNO_NAME_FOOTER_BOTTOM_BORDER_DISTANCE), RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_FOOTER_SHADOW_FORMAT),          FN_UNO_FOOTER_SHADOW,       &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_FOOTER_BODY_DISTANCE),          FN_UNO_FOOTER_BODY_DISTANCE,&::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_UP_MARGIN|CONVERT_TWIPS       },
                     { SW_PROP_NAME(UNO_NAME_FOOTER_IS_DYNAMIC_DISTANCE),FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE,&::getBooleanCppuType(),          PROPERTY_NONE ,0         },
@@ -1451,7 +1459,6 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_USE_ALPHABETICAL_SEPARATORS       ), WID_USE_ALPHABETICAL_SEPARATORS         ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_LEVEL_FORMAT                      ), WID_LEVEL_FORMAT                        ,  &::getCppuType((uno::Reference<container::XIndexReplace>*)0)  , PROPERTY_NONE,0},
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_STAR_MATH             ), WID_CREATE_FROM_STAR_MATH               ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
-                    { SW_PROP_NAME(UNO_NAME_CREATE_FROM_STAR_IMAGE            ), WID_CREATE_FROM_STAR_IMAGE              ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_STAR_CHART            ), WID_CREATE_FROM_STAR_CHART              ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_STAR_CALC             ), WID_CREATE_FROM_STAR_CALC               ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_STAR_DRAW             ), WID_CREATE_FROM_STAR_DRAW               ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
