@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-01-03 21:28:40 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-17 23:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,45 +97,51 @@ struct SalGraphicsData
 {
     // NSView and NSWindow
 
-    VCLVIEW     mhDC;                 // VCLVIEW
+    VCLVIEW         mhDC;                   // VCLVIEW
 
     // QuickDraw graph port, offscreen graphic world, and graphic device handle
 
-    CGrafPtr    mpCGrafPort;          // QD color graphics port
-    GWorldPtr   mpGWorld;             // QD offscreen GWorld
-    GDHandle    mhGDevice;            // QD GDevice
+    CGrafPtr        mpCGrafPort;            // QD color graphics port
+    GWorldPtr       mpGWorld;               // QD offscreen GWorld
+    GDHandle        mhGDevice;              // QD GDevice
 
-    // Regions within a current port
+    // Graph port pixels, state and flags
 
-    RgnHandle   mhClipRgn;            // Clip Region Handle
+    BOOL            mbGWorldPixelsLocked;   // GWorld pixels locked?
+    GWorldFlags     mnGWorldFlags;          // GWorld pixels status flags
+    PixMapHandle    mhGWorldPixMap;         // GWorld pixels
+
+    // Clip region
+
+    BOOL            mbClipRgnChanged;       // Did the clip region change?
+    RgnHandle       mhClipRgn;              // Clip Region Handle
 
     // Font attributes
 
-    short       mnFontID;              // Mac FontFamilyId
-    short       mnFontSize;            // Mac Font Size
-    RGBColor    maFontColor;           // Text Color
-    Style       mnFontStyle;           // Mac Font Style
+    short           mnFontID;               // Mac FontFamilyId
+    short           mnFontSize;             // Mac Font Size
+    RGBColor        maFontColor;            // Text Color
+    Style           mnFontStyle;            // Mac Font Style
 
     // Pen attributes and status
 
-    BOOL        mbPenTransparent;       // Is pen transparent?
-    short       mnPenMode;              // Pen Mode
-    short       mnPenModePort;          // Port pen Mode
-    RGBColor    maPenColor;             // Pen Color
+    BOOL            mbPenTransparent;       // Is pen transparent?
+    short           mnPenMode;              // Pen Mode
+    short           mnPenModePort;          // Port pen Mode
+    RGBColor        maPenColor;             // Pen Color
 
     // Brush attributes and status
 
-    BOOL        mbBrushTransparent;     // Is brush transparent?
-    RGBColor    maBrushColor;           // Brush Color
+    BOOL            mbBrushTransparent;     // Is brush transparent?
+    RGBColor        maBrushColor;           // Brush Color
 
     // Miscellaneous status flags
 
-    BOOL        mbClipRegionChanged;    // Did the clip region change?
-    BOOL        mbPrinter;              // Is a printer available?
-    BOOL        mbVirDev;               // Is a virtual device available?
-    BOOL        mbWindow;               // Is a window availble?
-    BOOL        mbScreen;               // Is this screen compatiable?
-    OSStatus    mnMacOSStatus;          // The current MacOS error
+    BOOL            mbPrinter;              // Is a printer available?
+    BOOL            mbVirDev;               // Is a virtual device available?
+    BOOL            mbWindow;               // Is a window availble?
+    BOOL            mbScreen;               // Is this screen compatiable?
+    OSStatus        mnOSStatus;             // The current MacOS error
 };
 
 typedef struct SalGraphicsData   SalGraphicsData;
