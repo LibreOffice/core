@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascharanchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 13:57:45 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,6 @@ namespace objectpositioning
 
             // method to cast <SwAnchoredObjectPosition::GetAnchorFrm()>
             const SwTxtFrm& GetAnchorTxtFrm() const;
-            // method to cast <SwAnchoredObjectPosition::GetFrmOfObj()>
-            SwFlyInCntFrm* GetFlyInCntFrmOfObj() const;
 
             /** determine the relative position to base line for object position
 
