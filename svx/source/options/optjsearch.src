@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:47:08 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "ќбращатьс€ как с равноценными";
         Text[ greek ] = "Їдйб мефбчеясйуз";
         Text[ dutch ] = "Treat as equal";
-        Text[ french ] = "Treat as equal";
+        Text[ french ] = "Considйrer comme identique";
         Text[ spanish ] = "Tratar igual";
         Text[ italian ] = "Treat as equal";
         Text[ danish ] = "Treat as equal";
@@ -108,7 +108,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "«аглавные/строчные буквы";
         Text[ greek ] = " ецблбяб/–еж№";
         Text[ dutch ] = "Match case";
-        Text[ french ] = "Match case";
+        Text[ french ] = "Majuscules/minuscules";
         Text[ spanish ] = "Mayъsculas/minъsculas";
         Text[ italian ] = "Match case";
         Text[ danish ] = "Match case";
@@ -134,7 +134,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "Ќормальные/полуширокие формы";
         Text[ greek ] = "÷ьсмет кбнпнйкпэ/мйупэ рл№фпхт";
         Text[ dutch ] = "Match full/half width form";
-        Text[ french ] = "Match full/half width form";
+        Text[ french ] = "Formes de demi et pleine chasse";
         Text[ spanish ] = "Formas normales/medio anchas";
         Text[ italian ] = "Match full/half width form";
         Text[ danish ] = "Match full/half width form";
@@ -160,7 +160,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "’ирагана/катакана";
         Text[ greek ] = "Hiragana/Katakana";
         Text[ dutch ] = "Match hiragana/katakana";
-        Text[ french ] = "Match hiragana/katakana";
+        Text[ french ] = "Hiragana/katakana";
         Text[ spanish ] = "Hiragana/katakana";
         Text[ italian ] = "Match hiragana/katakana";
         Text[ danish ] = "Match hiragana/katakana";
@@ -186,7 +186,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = " онтрактаци€ гласных (yo-on, sokuon)";
         Text[ greek ] = "”хнбясеуз (yo-on, sokuon)";
         Text[ dutch ] = "Match contractions (yo-on, sokuon)";
-        Text[ french ] = "Match contractions (yo-on, sokuon)";
+        Text[ french ] = "Contractions (yo-on, sokuon)";
         Text[ spanish ] = "Contracciones (yo-on, sokuon)";
         Text[ italian ] = "Match contractions (yo-on, sokuon)";
         Text[ danish ] = "Match contractions (yo-on, sokuon)";
@@ -212,7 +212,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "ƒефис/cho-on";
         Text[ greek ] = "ћеяпн/”хндефйкё гсбммё/cho-on";
         Text[ dutch ] = "Match minus/dash/cho-on";
-        Text[ french ] = "Match minus/dash/cho-on";
+        Text[ french ] = "Moins/tiret/cho-on";
         Text[ spanish ] = "Menos/Guiуn/cho-on";
         Text[ italian ] = "Match minus/dash/cho-on";
         Text[ danish ] = "Match minus/dash/cho-on";
@@ -238,7 +238,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "ѕовтор€ющиес€ знаки";
         Text[ greek ] = "„бсбкфёсет ербн№лзшзт";
         Text[ dutch ] = "Match 'repeat character' marks";
-        Text[ french ] = "Match 'repeat character' marks";
+        Text[ french ] = "Caractиres de rйpйtition";
         Text[ spanish ] = "Carбcter de repeticiуn";
         Text[ italian ] = "Match 'repeat character' marks";
         Text[ danish ] = "Match 'repeat character' marks";
@@ -264,7 +264,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "¬ариант кандзи (итаидзи)";
         Text[ greek ] = "Kanji Variante (itaiji)";
         Text[ dutch ] = "Match variant-form kanji (itaiji)";
-        Text[ french ] = "Match variant-form kanji (itaiji)";
+        Text[ french ] = "Variantes kanji (itaiji)";
         Text[ spanish ] = "Variante Kanji (itaiji)";
         Text[ italian ] = "Match variant-form kanji (itaiji)";
         Text[ danish ] = "Match variant-form kanji (itaiji)";
@@ -290,7 +290,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "—тарые формы каны";
         Text[ greek ] = "–блйЁт мпсцЁт kana";
         Text[ dutch ] = "Match old kana forms";
-        Text[ french ] = "Match old kana forms";
+        Text[ french ] = "Anciennes formes kana";
         Text[ spanish ] = "Antiguas formas Kana";
         Text[ italian ] = "Match old kana forms";
         Text[ danish ] = "Match old kana forms";
@@ -316,7 +316,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "Di/zi, du/zu";
         Text[ greek ] = "Di/zi, du/zu";
         Text[ dutch ] = "Match di/zi, du/zu";
-        Text[ french ] = "Match di/zi, du/zu";
+        Text[ french ] = "Di/zi, du/zu";
         Text[ spanish ] = "Di/zi, du/zu";
         Text[ italian ] = "Match di/zi, du/zu";
         Text[ danish ] = "Match di/zi, du/zu";
@@ -342,7 +342,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "Ba/va, ha/fa";
         Text[ greek ] = "Ba/va, ha/fa";
         Text[ dutch ] = "Match ba/va, ha/fa";
-        Text[ french ] = "Match ba/va, ha/fa";
+        Text[ french ] = "Ba/va, ha/fa";
         Text[ spanish ] = "Ba/va, ha/fa";
         Text[ italian ] = "Match ba/va, ha/fa";
         Text[ danish ] = "Match ba/va, ha/fa";
@@ -368,7 +368,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "Tsi/thi/chi, dhi/zi";
         Text[ greek ] = "Tsi/thi/chi, dhi/zi";
         Text[ dutch ] = "Match tsi/thi/chi, dhi/zi";
-        Text[ french ] = "Match tsi/thi/chi, dhi/zi";
+        Text[ french ] = "Tsi/thi/chi, dhi/zi";
         Text[ spanish ] = "Tsi/thi/chi, dhi/zi";
         Text[ italian ] = "Match tsi/thi/chi, dhi/zi";
         Text[ danish ] = "Match tsi/thi/chi, dhi/zi";
@@ -394,8 +394,8 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "Hyu/fyu, byu/vyu";
         Text[ greek ] = "Hyu/fyu, byu/vyu";
         Text[ dutch ] = "Match hyu/fyu, byu/vyu";
-        Text[ french ] = "Match hyu/fyu, byu/vyu";
-        Text[ spanish ] = "Match hyu/fyu, byu/vyu";
+        Text[ french ] = "Hyu/fyu, byu/vyu";
+        Text[ spanish ] = "hyu/fyu, byu/vyu";
         Text[ italian ] = "Match hyu/fyu, byu/vyu";
         Text[ danish ] = "Match hyu/fyu, byu/vyu";
         Text[ swedish ] = "Hyu/fyu, byu/vyu";
@@ -420,7 +420,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "Se/she, ze/je";
         Text[ greek ] = "Se/she, ze/je";
         Text[ dutch ] = "Match se/she, ze/je";
-        Text[ french ] = "Match se/she, ze/je";
+        Text[ french ] = "Se/she, ze/je";
         Text[ spanish ] = "Se/she, ze/je";
         Text[ italian ] = "Match se/she, ze/je";
         Text[ danish ] = "Match se/she, ze/je";
@@ -446,7 +446,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "Ia/iya (piano/piyano)";
         Text[ greek ] = "Ia/iya (piano/piyano)";
         Text[ dutch ] = "Match ia/iya (piano/piyano)";
-        Text[ french ] = "Match ia/iya (piano/piyano)";
+        Text[ french ] = "Ia/iya (piano/piyano)";
         Text[ spanish ] = "Ia/iya (piano/piyano)";
         Text[ italian ] = "Match ia/iya (piano/piyano)";
         Text[ danish ] = "Match ia/iya (piano/piyano)";
@@ -472,7 +472,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "Ki/ku (tekisuto/tekusuto)";
         Text[ greek ] = "Ki/ku (tekisuto/tekusuto)";
         Text[ dutch ] = "Match ki/ku (tekisuto/tekusuto)";
-        Text[ french ] = "Match ki/ku (tekisuto/tekusuto)";
+        Text[ french ] = "Ki/ku (tekisuto/tekusuto)";
         Text[ spanish ] = "Ki/ku (tekisuto/tekusuto)";
         Text[ italian ] = "Match ki/ku (tekisuto/tekusuto)";
         Text[ danish ] = "Match ki/ku (tekisuto/tekusuto)";
@@ -498,7 +498,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "»гнорировать";
         Text[ greek ] = "–бс№влешз";
         Text[ dutch ] = "Ignore";
-        Text[ french ] = "Ignore";
+        Text[ french ] = "Ignorer";
         Text[ spanish ] = "Ignorar";
         Text[ italian ] = "Ignore";
         Text[ danish ] = "Ignore";
@@ -523,7 +523,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "«наки пунктуации";
         Text[ greek ] = "”змеяб уфяозт";
         Text[ dutch ] = "Punctuation characters";
-        Text[ french ] = "Punctuation characters";
+        Text[ french ] = "Caractиres de ponctuation";
         Text[ spanish ] = "Caracteres de puntuaciуn";
         Text[ italian ] = "Punctuation characters";
         Text[ danish ] = "Punctuation characters";
@@ -548,11 +548,11 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "«наки пробелов";
         Text[ greek ] = "„бсбкфёсбт кенпэ";
         Text[ dutch ] = "Whitespace characters";
-        Text[ french ] = "Whitespace characters";
+        Text[ french ] = "Espaces";
         Text[ spanish ] = "Carбcter de espacio";
         Text[ italian ] = "Whitespace characters";
         Text[ danish ] = "Whitespace characters";
-        Text[ swedish ] = "Tomrumstecken";
+        Text[ swedish ] = "Mellanrumstecken";
         Text[ polish ] = "Znak spacji";
         Text[ portuguese_brazilian ] = "Whitespace characters";
         Text[ japanese ] = "ЛуФТВ∆ВµВƒОgЧpВ≥ВкВйХґОЪ";
@@ -573,7 +573,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "ƒолгие гласные (cho-on)";
         Text[ greek ] = "ћбкс№ уэмцщнб (cho-on)";
         Text[ dutch ] = "Prolonged soundmarks (cho-on)";
-        Text[ french ] = "Prolonged soundmarks (cho-on)";
+        Text[ french ] = "Voyelles prolongйes (cho-on)";
         Text[ spanish ] = "Vocales largas (cho-on)";
         Text[ italian ] = "Prolonged soundmarks (cho-on)";
         Text[ danish ] = "Prolonged soundmarks (cho-on)";
@@ -598,7 +598,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "“очка в центре";
         Text[ greek ] = " енфсйкё фелеяб";
         Text[ dutch ] = "Middle dots";
-        Text[ french ] = "Middle dots";
+        Text[ french ] = "Points centraux";
         Text[ spanish ] = "Punto centrado";
         Text[ italian ] = "Middle dots";
         Text[ danish ] = "Middle dots";
