@@ -7078,3 +7078,7 @@ FreeSpaceStr
 ?getArray@?$Sequence@ULocale@lang@star@sun@com@@@uno@star@sun@com@@QAAPAULocale@lang@345@XZ
 ?s_pType@?$Sequence@ULocale@lang@star@sun@com@@@uno@star@sun@com@@2PAU_typelib_TypeDescriptionReference@@A
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Sequence@ULocale@lang@star@sun@com@@@2345@@Z
+??0SvtDefaultOptions@@QAE@XZ
+??1SvtDefaultOptions@@QAE@XZ
+?GetDefaultPath@SvtDefaultOptions@@QBE?AVString@@G@Z
+?GetDefaultPropertyNames@@YA?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@XZ
