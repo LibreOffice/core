@@ -12,6 +12,8 @@
 #define TERMINATIONVETO_MESSAGE "SO TerminationVeto"
 #define TERMINATE_MESSAGE       "SO Terminate"
 #define LISTENER_WINDOWCLASS    "SO Listener Class"
+#define KILLTRAY_MESSAGE        "SO KillTray"
+
 static  UINT aTerminationVetoMessage = 0x7FFF;
 static  UINT aTerminateMessage = 0x7FFF;
 static  HMENU popupMenu = NULL;
@@ -113,6 +115,24 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow)
 {
+    // Look for -killtray argument
+
+    for ( int i = 1; i < __argc; i++ )
+    {
+        if ( 0 == strcmp( __argv[i], "-killtray" ) )
+        {
+            HWND    hwndTray = FindWindow( LISTENER_WINDOWCLASS, NULL );
+
+            if ( hwndTray )
+            {
+                UINT    uMsgKillTray = RegisterWindowMessage( KILLTRAY_MESSAGE );
+                SendMessage( hwndTray, uMsgKillTray, 0, 0 );
+            }
+
+            return 0;
+        }
+    }
+
     launchSoffice();
     return 0;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-29 09:25:19 $
+ *  last change: $Author: hro $ $Date: 2001-09-18 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ using namespace ::osl;
 #define LISTENER_WINDOWNAME     "SO Listener Window"
 #define EXECUTER_WINDOWCLASS    "SO Executer Class"
 #define EXECUTER_WINDOWNAME     "SO Executer Window"
+#define KILLTRAY_MESSAGE        TEXT("SO KillTray")
 
 #define ID_QUICKSTART               1
 #define IDM_EXIT                    2
@@ -364,6 +365,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
     static HMENU popupMenu = NULL;
 
     static UINT s_uTaskbarRestart = 0;
+    static UINT s_uMsgKillTray = 0;
 
     switch (uMsg)
     {
@@ -374,6 +376,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 // request notfication when taskbar is recreated
                 // we then have to add our icon again
                 s_uTaskbarRestart = RegisterWindowMessage(TEXT("TaskbarCreated"));
+                s_uMsgKillTray = RegisterWindowMessage( KILLTRAY_MESSAGE );
 
                 // create the menu
                 if( !popupMenu )
@@ -456,7 +459,19 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 // re-create taskbar icon
                 addTaskbarIcon( hWnd );
             }
-            return DefWindowProc(hWnd, uMsg, wParam, lParam);
+            else if ( uMsg == s_uMsgKillTray )
+            {
+                // delete taskbar icon
+                NOTIFYICONDATAA nid;
+                nid.cbSize=sizeof(NOTIFYICONDATA);
+                nid.hWnd = hWnd;
+                nid.uID = ID_QUICKSTART;
+                Shell_NotifyIconA(NIM_DELETE, &nid);
+
+                SendMessage( hWnd, WM_COMMAND, IDM_EXIT, (LPARAM)hWnd );
+            }
+            else
+                return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
     return 0;
 }
@@ -466,8 +481,6 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     static HMENU popupMenu = NULL;
-
-    static UINT s_uTaskbarRestart = 0;
 
     switch (uMsg)
     {
