@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinformation.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:23:36 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 13:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,41 +88,12 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
 //--------------------------------------------------------------------------
-UserInformation::UserInformation(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
-    :m_xServiceFactory(_rxFactory)
-{
-    OSL_ENSHURE(m_xServiceFactory.is(), "UserInformation::UserInformation : invalid service factory !");
-
-    if (!m_xServiceFactory.is())
-        return;
-
-    // get the ConfigManager wrapping the soffice.ini
-    Reference< XSimpleRegistry > xSofficeIni(
-        m_xServiceFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.config.SpecialConfigManager")),
-        UNO_QUERY);
-
-    OSL_ENSHURE(xSofficeIni.is(), "UserInformation::UserInformation : could not get access to the SpecialConfigManager !");
-    if (!xSofficeIni.is())
-        return;
-
-    try
-    {
-        Reference< XRegistryKey > xIniRoot = xSofficeIni->getRootKey();
-        m_xUserConfigKey = xIniRoot.is() ? xIniRoot->openKey(::rtl::OUString::createFromAscii("User")) : Reference< XRegistryKey > ();
-    }
-    catch(InvalidRegistryException&)
-    {
-    }
-}
-
-//--------------------------------------------------------------------------
-Locale UserInformation::getUserLanguage() const
+UserInformation::UserInformation()
 {
     Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-    LanguageType eLanguage = ConvertIsoStringToLanguage(connectivity::getString(aValue),'_');
+    LanguageType eLanguage = ConvertIsoStringToLanguage(connectivity::getString(aValue),'-');
     UniString sLanguage, sCountry;
     ConvertLanguageToIsoNames(eLanguage, sLanguage, sCountry);
-    return Locale(sLanguage,sCountry,::rtl::OUString());
+    m_aUserLocale = Locale(sLanguage,sCountry,::rtl::OUString());
 }
-
 

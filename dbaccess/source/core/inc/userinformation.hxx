@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinformation.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:40 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 13:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,16 +75,12 @@
 
 class UserInformation
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-        m_xServiceFactory;
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >
-        m_xUserConfigKey;
+    ::com::sun::star::lang::Locale  m_aUserLocale;
 
 public:
-    UserInformation(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+    UserInformation();
 
-    sal_Bool                            isValid() const { return m_xUserConfigKey.is(); }
-    ::com::sun::star::lang::Locale      getUserLanguage() const;
+    ::com::sun::star::lang::Locale      getUserLanguage() const { return m_aUserLocale; }
 };
 
 #endif // _DBA_CORE_USERINFORMATION_HXX_
