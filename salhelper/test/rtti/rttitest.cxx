@@ -24,5 +24,6 @@ int main( int argc, char *argv[ ], char *envp[ ] )
 
 
     MyClassB* pB= dynamic_cast<MyClassB* >( pA);
+        pB->funcA();
     return 0;
 }

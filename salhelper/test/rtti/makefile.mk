@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jl $ $Date: 2001-04-23 09:12:56 $
+#   last change: $Author: jl $ $Date: 2001-04-23 14:48:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,6 +106,11 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1EXPORTFILE=	exports.dxp
 
 DEF1NAME=	$(SHL1TARGET)
+# generate exports ------------------------------------------------
+#DEF1DEPN=      $(MISC)$/$(SHL1TARGET).flt
+#DEFLIB1NAME=   $(TARGET)
+#-----------------------------------------------------------------
+
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
 SHL1VERSIONMAP=	sols.map
@@ -129,13 +134,22 @@ APP1STDLIBS= \
 
 #LIBCIMT=msvcrtd.lib
 
-APP1LIBS=	$(LB)$/isamplelibrtti.lib
+.IF "$(OS)" == "WNT"
+APP1STDLIBS+=	$(LB)$/isamplelibrtti.lib
+.ELSE
+APP1STDLIBS+=	-lsamplelibrtti
+.ENDIF 
+
 
 .IF "$(GUI)"=="WNT"
 APP1STDLIBS += $(LIBCIMT)
 .ENDIF
 
-APP1DEF=	$(MISC)\$(APP1TARGET).def
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+$(MISC)$/$(SHL1TARGET).flt : makefile.mk
+       +echo   _TI2       >$@
+       +echo   _TI1      >>$@
+
