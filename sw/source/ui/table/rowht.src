@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-19 12:01:36 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ ModalDialog DLG_ROW_HEIGHT
         Text[ chinese_traditional ] = "¦Û°Ê³Ì¾A½Õ¾ã(~F)";
         Text[ arabic ] = "ãáÇÁãÉ ÊáŞÇÆíÉ ááÍÌã";
         Text[ greek ] = "ÄõíáìéêŞ ğñïóáñìïãŞ";
-        Text[ korean ] = "Å©±â¿¡ ¸ÂÃã";
+        Text[ korean ] = "Å©±â¿¡ ¸ÂÃã(~F)";
         Text[ turkish ] = "i~çerik boyuna uydur";
     };
     GroupBox GB_HEIGHT
