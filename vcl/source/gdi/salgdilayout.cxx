@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:24:12 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_OUTDEV_CXX
 #include <tools/ref.hxx>
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
@@ -87,7 +86,7 @@
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
 #endif
-#ifndef _POLY_HXX
+#ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
 #ifndef _SV_REGION_HXX
@@ -330,7 +329,7 @@ void    SalGraphics::DrawPolyPolygon( ULONG nPoly, const ULONG* pPoints, PCONSTS
         {
             ULONG nPoints = pPoints[i];
             pPtAry2[i] = new SalPoint[ nPoints ];
-            BOOL bCopied = mirror( nPoints, pPtAry[i], pPtAry2[i], pOutDev );
+            mirror( nPoints, pPtAry[i], pPtAry2[i], pOutDev );
         }
 
         drawPolyPolygon( nPoly, pPoints, (PCONSTSALPOINT*)pPtAry2 );
