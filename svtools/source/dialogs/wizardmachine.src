@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 14:01:53 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ String STR_WIZDLG_FINISH
     Text[ french ] = "Cr�er";
     Text[ spanish ] = "~Crear";
     Text[ italian ] = "~Crea";
-    Text[ danish ] = "~Udf�r";
+    Text[ danish ] = "~Opret";
     Text[ swedish ] = "~F�rdigst�ll";
     Text[ polish ] = "~Utw�rz";
     Text[ portuguese_brazilian ] = "~Criar";
@@ -93,6 +93,8 @@ String STR_WIZDLG_FINISH
     Text[ hebrew ] = "‮חדש‬";
     Text[ hindi ] = "उ~त्पन्न करो";
     Text[ slovak ] = "Vytvo~riť";
+    Text[ hungarian ] = "~Létrehozás";
+    Text[ slovenian ] = "Ustva~ri";
 };
 
 String STR_WIZDLG_NEXT
@@ -125,6 +127,8 @@ String STR_WIZDLG_NEXT
     Text[ hebrew ] = "‮הבא >>‬";
     Text[ hindi ] = "~आगे >>";
     Text[ slovak ] = "Ďa~lší >>";
+    Text[ hungarian ] = "~Tovább >>";
+    Text[ slovenian ] = "~Naprej >>";
 };
 
 String STR_WIZDLG_PREVIOUS
@@ -157,11 +161,23 @@ String STR_WIZDLG_PREVIOUS
     Text[ hebrew ] = "‮<< קודם‬";
     Text[ hindi ] = "<< पी~छे";
     Text[ slovak ] = "<< ~Späť";
+    Text[ hungarian ] = "<< ~Vissza";
+    Text[ slovenian ] = "<< Na~zaj";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28.146.1  2003/12/16 16:25:07  hr
+ *  #111934#: join CWS ooo111fix1
+ *
+ *  Revision 1.28.82.1  2003/11/24 13:27:10  ihi
+ *  OOo 1.1.1 merge
+ *
+ *  Revision 1.28  2003/07/17 14:01:53  hr
+ *  INTEGRATION: CWS mergerc3 (1.27.12); FILE MERGED
+ *  2003/07/16 16:59:22 ihi 1.27.12.1: rc-3 merge all languages
+ *
  *  Revision 1.27.12.1  2003/07/16 16:59:22  ihi
  *  rc-3 merge all languages
  *
@@ -298,6 +314,7 @@ String STR_WIZDLG_PREVIOUS
  *
  *  Revision 1.0 14.02.01 11:46:26  fs
  ************************************************************************/
+
 
 
 
