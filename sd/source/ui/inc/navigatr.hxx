@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-23 10:50:44 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,7 @@ private:
                                 DECL_LINK( GetFocusObjectsHdl, void * );
                                 DECL_LINK( SelectToolboxHdl, void * );
                                 DECL_LINK( ClickToolboxHdl, ToolBox * );
+                                DECL_LINK( DropdownClickToolBoxHdl, ToolBox * );
                                 DECL_LINK( ClickPageHdl, void * );
                                 DECL_LINK( ClickObjectHdl, void * );
                                 DECL_LINK( SelectDocumentHdl, void * );
