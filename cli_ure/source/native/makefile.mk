@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dbo $ $Date: 2003-06-05 13:17:59 $
+#   last change: $Author: dbo $ $Date: 2003-08-20 12:53:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,6 @@ UNOTYPES = \
 CFLAGS += -clr -AI $(OUT)$/bin
 
 SLOFILES = \
-        $(SLO)$/native_ure.obj		\
         $(SLO)$/native_bootstrap.obj
 
 SHL1OBJS = $(SLOFILES)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: native_share.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2003-05-08 12:41:00 $
+ *  last change: $Author: dbo $ $Date: 2003-08-20 12:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,10 @@
 #using "cli_ure.dll"
 #using "cli_types.dll"
 
-#include <vcclr.h>
-
 #include "rtl/ustring.hxx"
 #include "uno/mapping.hxx"
+
+#include <vcclr.h>
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 

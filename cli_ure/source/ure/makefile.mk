@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dbo $ $Date: 2003-07-02 14:17:26 $
+#   last change: $Author: dbo $ $Date: 2003-08-20 12:53:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,15 +79,10 @@ ALLTAR : \
 
 CSFILES = \
     assembly.cs							\
-    uno$/ServiceImplementationAttribute.cs				\
-    uno$/SingletonAttribute.cs					\
     uno$/util$/DisposeGuard.cs					\
     uno$/util$/WeakAdapter.cs					\
     uno$/util$/WeakBase.cs						\
     uno$/util$/WeakComponentBase.cs					\
-    uno$/util$/ServiceBase.cs					\
-    uno$/util$/ServiceFactory.cs					\
-    uno$/util$/DeployedTypeResolver.cs
 
 $(OUT)$/bin$/cli_ure.dll : $(CSFILES) $(OUT)$/bin$/cli_types.dll
     +csc $(CSCFLAGS) \

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dbo $ $Date: 2003-06-05 13:18:00 $
+#   last change: $Author: dbo $ $Date: 2003-08-20 12:53:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,8 +86,8 @@ $(OUT)$/bin$/cli_types.dll : $(OUT)$/bin$/climaker.exe $(SOLARBINDIR)$/types.rdb
     +$(OUT)$/bin$/climaker.exe $(CLIMAKERFLAGS) \
         --out $@ \
         --version "1.0.0.0" \
-        --product "OpenOffice.org SDK" \
-        --description "This assembly contains API metadata of the OpenOffice.org Software Development Kit (SDK)." \
+        --product "Software Development Kit (SDK)" \
+        --description "This assembly contains API metadata of the Software Development Kit (SDK)." \
         $(SOLARBINDIR)$/types_doc.rdb
 
 .ENDIF

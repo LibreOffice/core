@@ -2,9 +2,9 @@
  *
  *  $RCSfile: native_bootstrap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2003-04-22 16:33:56 $
+ *  last change: $Author: dbo $ $Date: 2003-08-20 12:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,11 @@
 #include "rtl/bootstrap.hxx"
 #include "cppuhelper/bootstrap.hxx"
 
+
+[assembly:System::Reflection::AssemblyProduct( "CLI-UNO Language Binding" )];
+// xxx todo AssemblyCompany, AssemblyCopyright, AssemblyTrademark
+[assembly:System::Reflection::AssemblyDescription( "CLI-UNO Helper Library" )];
+[assembly:System::Reflection::AssemblyVersion( "3.1.0.0" )];
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

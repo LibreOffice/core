@@ -1,7 +1,5 @@
 UDK_3.1 {
     global:
-    ?ServiceFactory_load@util@uno@@YA?AV?$Reference@VXSingleComponentFactory@lang@star@sun@com@@@2star@sun@com@@ABV?$Reference@VXComponentContext@uno@star@sun@com@@@2456@ABVOUString@rtl@@1@Z;
-    ?ServiceFactory_writeInfo@util@uno@@YAXABV?$Reference@VXComponentContext@uno@star@sun@com@@@2star@sun@com@@ABVOUString@rtl@@ABV?$Reference@VXRegistryKey@registry@star@sun@com@@@2456@@Z;
 
     local:
     *;
