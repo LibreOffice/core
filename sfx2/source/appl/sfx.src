@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:52:29 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ String STR_NONAME
     Text[ czech ] = "Nepojmenovaný";
     Text[ hebrew ] = "‮ללא כותרת‬";
     Text[ hindi ] = "नाम रहित";
+    Text[ slovak ] = "Bez_názvu";
 };
 
 String STR_NONE
@@ -121,6 +122,7 @@ String STR_NONE
     Text[ czech ] = "- žádná -";
     Text[ hebrew ] = "‮- ללא -‬";
     Text[ hindi ] = "- कोई नहीं -";
+    Text[ slovak ] = "- žiadna -";
 };
 
 String STR_CLOSE
@@ -152,6 +154,7 @@ String STR_CLOSE
     Text[ czech ] = "Zavřít";
     Text[ hebrew ] = "‮סגירה‬";
     Text[ hindi ] = "बन्द करो";
+    Text[ slovak ] = "Zavrieť";
 };
 
 String STR_STYLE_FILTER_AUTO
@@ -183,6 +186,7 @@ String STR_STYLE_FILTER_AUTO
     TEXT[ czech ] = "Automaticky";
     TEXT[ hebrew ] = "‮אוטומטי‬";
     TEXT[ hindi ] = "स्वचालित";
+    TEXT[ slovak ] = "Automaticky";
 };
 
 String STR_STYLE_FILTER_USED
@@ -214,6 +218,7 @@ String STR_STYLE_FILTER_USED
     TEXT[ czech ] = "Použité styly";
     TEXT[ hebrew ] = "‮סגנונות מיושמים‬";
     TEXT[ hindi ] = "लागू किया हुआ शैलियाँ";
+    TEXT[ slovak ] = "Použité štýly";
 };
 
 
@@ -247,6 +252,7 @@ String STR_STYLE_FILTER_USERDEF
     TEXT[ czech ] = "Vlastní styly";
     TEXT[ hebrew ] = "‮סגנונות מותאמים‬";
     TEXT[ hindi ] = "शैलियों को व्यवस्था करो";
+    TEXT[ slovak ] = "Vlastné štýly";
 };
 
 String STR_STYLE_FILTER_ALL
@@ -278,6 +284,7 @@ String STR_STYLE_FILTER_ALL
     TEXT[ czech ] = "Všechny styly";
     TEXT[ hebrew ] = "‮כל הסגנונות‬";
     TEXT[ hindi ] = "सब शैलियाँ";
+    TEXT[ slovak ] = "Všetky štýly";
 };
 
 String STR_STANDARD
@@ -308,6 +315,7 @@ String STR_STANDARD
     Text[ czech ] = "Standardní";
     Text[ hebrew ] = "‮רגיל‬";
     Text[ hindi ] = "स्टान्डार्ड";
+    Text[ slovak ] = "Štandardný";
 };
 String STR_STANDARD_SHORTCUT
 {
@@ -337,6 +345,7 @@ String STR_STANDARD_SHORTCUT
     Text[ czech ] = "Standardní";
     Text[ hebrew ] = "‮רגיל‬";
     Text[ hindi ] = "Standard";
+    Text[ slovak ] = "Štandardný";
 };
 
 String STR_FILTERNAME_ALL
@@ -367,6 +376,7 @@ String STR_FILTERNAME_ALL
     Text[ czech ] = "Všechny soubory (*.*)";
     Text[ hebrew ] = "‮כל הקבצים (*.*)‬";
     Text[ hindi ] = "सब फाइलें (*.*)";
+    Text[ slovak ] = "Všetky súbory (*.*)";
 };
 
 String STR_HUMAN_APPNAME
@@ -402,6 +412,7 @@ String STR_BYTES
     Text[ czech ] = "Bajtů";
     Text[ hebrew ] = "‮בתים‬";
     Text[ hindi ] = "बइट्स";
+    Text[ slovak ] = "Bajtov";
 };
 
 String STR_KB
@@ -432,6 +443,7 @@ String STR_KB
     Text[ czech ] = "KB";
     Text[ hebrew ] = "‮KB‬";
     Text[ hindi ] = "KB";
+    Text[ slovak ] = "kB";
 };
 
 String STR_MB
@@ -462,6 +474,7 @@ String STR_MB
     Text[ czech ] = "MB";
     Text[ hebrew ] = "MB";
     Text[ hindi ] = "MB";
+    Text[ slovak ] = "MB";
 };
 
 
@@ -493,6 +506,7 @@ String STR_GB
     Text[ czech ] = "GB";
     Text[ hebrew ] = "‮GB‬";
     Text[ hindi ] = "GB";
+    Text[ slovak ] = "GB";
 };
 
 String STR_UNDO
@@ -525,6 +539,7 @@ String STR_UNDO
     Text[ czech ] = "Zpět: ";
     Text[ hebrew ] = "‮ביטול פעולה:‬";
     Text[ hindi ] = "अनावृत्ति: ";
+    Text[ slovak ] = "Späť: ";
 };
 
 String STR_REDO
@@ -555,6 +570,7 @@ String STR_REDO
     Text[ czech ] = "Znovu: ";
     Text[ hebrew ] = "‮שחזור פעולה:‬";
     Text[ hindi ] = "फ़िर से ~करो: ";
+    Text[ slovak ] = "Z~novu: ";
 };
 
 String STR_REPEAT
@@ -585,6 +601,7 @@ String STR_REPEAT
     Text[ czech ] = "Opakovat: ";
     Text[ hebrew ] = "‮בצוע חוזר:‬";
     Text[ hindi ] = "~दुहराना: ";
+    Text[ slovak ] = "Opako~vať: ";
 };
 
 String RID_STR_NEW_TASK
@@ -615,6 +632,7 @@ String RID_STR_NEW_TASK
     Text[ czech ] = "Nový úkol";
     Text[ hebrew ] = "‮משימה חדשה‬";
     Text[ hindi ] = "नया कार्य";
+    Text[ slovak ] = "Nová úloha";
 };
 QueryBox MSG_QUERY_LASTVERSION
 {
@@ -648,7 +666,10 @@ QueryBox MSG_QUERY_LASTVERSION
     Message[ czech ] = "Zrušit všechny změny?";
     Message[ hebrew ] = "‮האם לבטל כל השינויים?‬";
     Message[ hindi ] = "सब परिवर्तनों को रद्द करना है?";
+    Message[ slovak ] = "Zrušiť všetky zmeny?";
 };
+
+
 
 
 
