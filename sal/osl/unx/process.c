@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-08 13:57:13 $
+ *  last change: $Author: jbu $ $Date: 2001-06-08 16:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1129,7 +1129,7 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
         free((void *)Data.m_pszDir);
     }
 
-    osl_freeThreadHandle(hThread);
+    osl_destroyThread(hThread);
 
     if (Data.m_pProcImpl->m_pid != 0)
     {
