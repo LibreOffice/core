@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swuipardlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:31:15 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,4 +82,4 @@ public:
     ~SwParaDlg();
 };
 
-#endif 
+#endif
