@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:11:22 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,6 @@
 #include "selector.hxx" // for SvxScriptSelectorDialog
 #include "macropg.hxx" // for SvxMacroAssignDlg
 
-#define OSL_TRACE osl_trace
 using namespace svx;
 // AbstractTabDialog implementations just forwards everything to the dialog
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl)
@@ -1117,6 +1116,13 @@ AbstractTakeProgress * AbstractDialogFactory_Impl::CreateTakeProgressDialog( Win
     if ( pDlg )
         return new AbstractTakeProgress_Impl( pDlg );
     return 0;
+}
+
+VclAbstractDialog*
+AbstractDialogFactory_Impl::CreateScriptErrorDialog(
+    Window* pParent, ::com::sun::star::uno::Any aException )
+{
+    return new SvxScriptErrorDialog( pParent, aException );
 }
 
 AbstractScriptSelectorDialog*
