@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:53:50 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1323,10 +1323,6 @@ namespace accessibility
         CheckPosition( nIndex );
 
         SvxTextForwarder& rCacheTF = GetTextForwarder();
-#ifdef DBG_UTIL
-        Rectangle aTestRect = rCacheTF.GetCharBounds( static_cast< USHORT >( GetParagraphIndex() ),
-                                                      rCacheTF.GetTextLen(GetParagraphIndex()) );
-#endif
         Rectangle aRect = rCacheTF.GetCharBounds( static_cast< USHORT >( GetParagraphIndex() ), static_cast< USHORT >( nIndex ) );
 
         // offset from parent (paragraph)
@@ -1521,6 +1517,8 @@ namespace accessibility
                     aResult.SegmentStart = nStartIndex;
                     aResult.SegmentEnd = nEndIndex;
                 }
+
+                break;
             }
 
             case AccessibleTextType::LINE:
@@ -1545,10 +1543,13 @@ namespace accessibility
                         break;
                     }
                 }
+
+                break;
             }
 
             default:
                 aResult = OCommonAccessibleText::getTextAtIndex( nIndex, aTextType );
+                break;
         } /* end of switch( aTextType ) */
 
         return aResult;
@@ -1586,6 +1587,8 @@ namespace accessibility
                         }
                     }
                 }
+
+                break;
             }
 
             case AccessibleTextType::LINE:
@@ -1614,10 +1617,13 @@ namespace accessibility
                         break;
                     }
                 }
+
+                break;
             }
 
             default:
                 aResult = OCommonAccessibleText::getTextBeforeIndex( nIndex, aTextType );
+                break;
         } /* end of switch( aTextType ) */
 
         return aResult;
@@ -1655,6 +1661,8 @@ namespace accessibility
                         }
                     }
                 }
+
+                break;
             }
 
             case AccessibleTextType::LINE:
@@ -1681,10 +1689,13 @@ namespace accessibility
                         break;
                     }
                 }
+
+                break;
             }
 
             default:
                 aResult = OCommonAccessibleText::getTextBehindIndex( nIndex, aTextType );
+                break;
         } /* end of switch( aTextType ) */
 
         return aResult;
