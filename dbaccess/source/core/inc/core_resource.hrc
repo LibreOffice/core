@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_resource.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-03 10:25:58 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 17:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,7 @@
 
 //------------------------------------------------------------------------------
 //- String-IDs
-#define RID_STR_DBACC_PROGRAMMATIC_USED             ( RID_CORE_STRINGS_START +  0 )
-#define RID_STR_DBACC_NAMEURL_EXISTS                ( RID_CORE_STRINGS_START +  1 )
-#define RID_STR_DBACC_TITLE_CONFLICT                ( RID_CORE_STRINGS_START +  2 )
-#define RID_STR_DBACC_FALLBACKTITLE_CONFLICT        ( RID_CORE_STRINGS_START +  3 )
-#define RID_STR_DBACC_TITLE_USED                    ( RID_CORE_STRINGS_START +  4 )
-#define RID_STR_STANDARD                            ( RID_CORE_STRINGS_START +  5 )
+#define RID_STR_TRIED_OPEN_TABLE                ( RID_CORE_STRINGS_START +  5 )
 
 
 
