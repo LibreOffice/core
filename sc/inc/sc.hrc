@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 12:53:49 $
+ *  last change: $Author: dr $ $Date: 2002-10-23 14:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,6 +355,7 @@
 #define HID_SCMENU_EDIT_TABLE   ( HID_SC_OTHER_START + 1 )
 
 #define HID_SELECTTABLES        ( HID_SC_OTHER_START + 2 )
+#define HID_SC_REPLCELLSWARN    ( HID_SC_OTHER_START + 3 )
 
 // Analysis Addin Functions (max.120) ----------------------------------------
 #define HID_AAI_FUNC_WORKDAY        ( HID_SC_AAI_FUNCS_START )

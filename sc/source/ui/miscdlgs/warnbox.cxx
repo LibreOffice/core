@@ -2,9 +2,9 @@
  *
  *  $RCSfile: warnbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-16 13:22:10 $
+ *  last change: $Author: dr $ $Date: 2002-10-23 14:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ void ScCbWarningBox::DisableDialog()
 ScReplaceWarnBox::ScReplaceWarnBox( Window* pParent ) :
     ScCbWarningBox( pParent, String( ScResId( STR_REPLCELLSWARN ) ), true )
 {
+    SetHelpId( HID_SC_REPLCELLSWARN );
 }
 
 bool ScReplaceWarnBox::IsDialogEnabled()
