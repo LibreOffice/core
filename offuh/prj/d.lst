@@ -7,6 +7,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\accessibility
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\awt
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\beans
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\bridge
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\bridge\oleautomation
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\chart
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\chart2
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\container
@@ -101,6 +102,8 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
 ..\%__SRC%\inc\com\sun\star\beans\*.hpp %_DEST%\inc%_EXT%\com\sun\star\beans\*.hpp
 ..\%__SRC%\inc\com\sun\star\bridge\*.hdl %_DEST%\inc%_EXT%\com\sun\star\bridge\*.hdl
 ..\%__SRC%\inc\com\sun\star\bridge\*.hpp %_DEST%\inc%_EXT%\com\sun\star\bridge\*.hpp
+..\%__SRC%\inc\com\sun\star\bridge\oleautomation\*.hdl %_DEST%\inc%_EXT%\com\sun\star\bridge\oleautomation\*.hdl
+..\%__SRC%\inc\com\sun\star\bridge\oleautomation\*.hpp %_DEST%\inc%_EXT%\com\sun\star\bridge\oleautomation\*.hpp
 ..\%__SRC%\inc\com\sun\star\chart\*.hdl %_DEST%\inc%_EXT%\com\sun\star\chart\*.hdl
 ..\%__SRC%\inc\com\sun\star\chart\*.hpp %_DEST%\inc%_EXT%\com\sun\star\chart\*.hpp
 ..\%__SRC%\inc\com\sun\star\chart2\*.hpp %_DEST%\inc%_EXT%\com\sun\star\chart2\*.hpp
