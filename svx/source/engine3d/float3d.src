@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-02 21:10:14 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 22:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ì—…ë°ì´íŠ¸!";
         QuickHelpText[ turkish ] = "Aktualisieren";
         QuickHelpText[ catalan ] = "Actualizar";
-        QuickHelpText[ finnish ] = "P?ivit?!";
+        QuickHelpText[ finnish ] = "Päivitä!";
     };
     ImageButton BTN_ASSIGN
     {
@@ -376,7 +376,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "í• ë‹¹!";
         QuickHelpText[ turkish ] = "Zuweisen";
         QuickHelpText[ catalan ] = "Asignar";
-        QuickHelpText[ finnish ] = "Liit?!";
+        QuickHelpText[ finnish ] = "Liitä!";
     };
      // Unterer Teil
     ImageButton BTN_CHANGE_TO_3D
@@ -573,7 +573,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "3D-ì†ì„±ë§Œ!";
         QuickHelpText[ turkish ] = "Nur 3D-Attribute zuweisen";
         QuickHelpText[ catalan ] = "Asignar solo atributos 3D";
-        QuickHelpText[ finnish ] = "Vain kolmiulotteiset m??ritteet!";
+        QuickHelpText[ finnish ] = "Vain kolmiulotteiset määritteet!";
     };
     ImageButton BTN_ALL_ATTRIBUTES
     {
@@ -608,7 +608,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ëª¨ë“  ì†ì„± í• ë‹¹!";
         QuickHelpText[ turkish ] = "Alle Attribute zuweisen";
         QuickHelpText[ catalan ] = "Asignar todos los atributos";
-        QuickHelpText[ finnish ] = "Liit? kaikki m??ritteet!";
+        QuickHelpText[ finnish ] = "Liitä kaikki määritteet!";
     };
      // Geometrie
     FixedText FT_HORIZONTAL
@@ -722,7 +722,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ korean ] = "ì„¸ê·¸ë¨¼íŠ¸";
         Text[ turkish ] = "Parçalar";
         Text[ catalan ] = "Segmentos";
-        Text[ finnish ] = "Osiot";
+        Text[ finnish ] = "Segmentit";
     };
     FixedText FT_PERCENT_DIAGONAL
     {
@@ -751,7 +751,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ korean ] = "ëª¨ì„œë¦¬ ë‘¥ê¸€ë¦¼";
         Text[ turkish ] = "Kenar eğimi";
         Text[ catalan ] = "Aristas redondeadas";
-        Text[ finnish ] = "Py?istetyt kulmat";
+        Text[ finnish ] = "Pyöristetyt kulmat";
     };
     MetricField MTR_PERCENT_DIAGONAL
     {
@@ -1018,7 +1018,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "í‰ë©´!";
         QuickHelpText[ turkish ] = "Flach";
         QuickHelpText[ catalan ] = "Plano";
-        QuickHelpText[ finnish ] = "Litte?!";
+        QuickHelpText[ finnish ] = "Litteä!";
     };
     ImageButton BTN_NORMALS_SPHERE
     {
@@ -1088,7 +1088,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ë³´í†µìœ¼ë¡œ ë³€í™˜!";
         QuickHelpText[ turkish ] = "Normalen umkehren";
         QuickHelpText[ catalan ] = "Invertir los normales";
-        QuickHelpText[ finnish ] = "K??nn? normaalit!";
+        QuickHelpText[ finnish ] = "Käännä normaalit!";
     };
     ImageButton BTN_TWO_SIDED_LIGHTING
     {
@@ -1366,7 +1366,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     StringList [ finnish ] =
     {
-            < "Litte?" ; > ;
+            < "Litteä" ; > ;
         < "Phong" ; > ;
         < "Gouraud" ; > ;
     };
@@ -1501,7 +1501,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ korean ] = "ìŒì˜";
         Text[ turkish ] = "Gölge";
         Text[ catalan ] = "Sombra";
-        Text[ finnish ] = "Varjo";
+        Text[ finnish ] = "Varjo ";
     };
     FixedText FT_DISTANCE
     {
@@ -1530,7 +1530,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ korean ] = "ê±°ë¦¬";
         Text[ turkish ] = "Uzaklık";
         Text[ catalan ] = "Distancia";
-        Text[ finnish ] = "Et?isyys";
+        Text[ finnish ] = "Etäisyys";
     };
     MetricField MTR_DISTANCE
     {
@@ -1687,7 +1687,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ê´‘ì› 1!";
         QuickHelpText[ turkish ] = "Lichtquelle 1";
         QuickHelpText[ catalan ] = "Fuente de luz 1";
-        QuickHelpText[ finnish ] = "Valonl?hde 1!";
+        QuickHelpText[ finnish ] = "Valonlähde 1!";
     };
     ImageButton BTN_LIGHT_2
     {
@@ -1722,7 +1722,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ê´‘ì› 2!";
         QuickHelpText[ turkish ] = "Lichtquelle 2";
         QuickHelpText[ catalan ] = "Fuente de luz 2";
-        QuickHelpText[ finnish ] = "Valonl?hde 2!";
+        QuickHelpText[ finnish ] = "Valonlähde 2!";
     };
     ImageButton BTN_LIGHT_3
     {
@@ -1757,7 +1757,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ê´‘ì› 3!";
         QuickHelpText[ turkish ] = "Lichtquelle 3";
         QuickHelpText[ catalan ] = "Fuente de luz 3";
-        QuickHelpText[ finnish ] = "Valonl?hde 3!";
+        QuickHelpText[ finnish ] = "Valonlähde 3!";
     };
     ImageButton BTN_LIGHT_4
     {
@@ -1792,7 +1792,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ê´‘ì› 4!";
         QuickHelpText[ turkish ] = "Lichtquelle 4";
         QuickHelpText[ catalan ] = "Fuente de luz 4";
-        QuickHelpText[ finnish ] = "Valonl?hde 4!";
+        QuickHelpText[ finnish ] = "Valonlähde 4!";
     };
     ImageButton BTN_LIGHT_5
     {
@@ -1827,7 +1827,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ê´‘ì› 5!";
         QuickHelpText[ turkish ] = "Lichtquelle 5";
         QuickHelpText[ catalan ] = "Fuente de luz 5";
-        QuickHelpText[ finnish ] = "Valonl?hde 5!";
+        QuickHelpText[ finnish ] = "Valonlähde 5!";
     };
     ImageButton BTN_LIGHT_6
     {
@@ -1862,7 +1862,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ê´‘ì› 6!";
         QuickHelpText[ turkish ] = "Lichtquelle 6";
         QuickHelpText[ catalan ] = "Fuente de luz 6";
-        QuickHelpText[ finnish ] = "Valonl?hde 6!";
+        QuickHelpText[ finnish ] = "Valonlähde 6!";
     };
     ImageButton BTN_LIGHT_7
     {
@@ -1897,7 +1897,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ê´‘ì› 7!";
         QuickHelpText[ turkish ] = "Lichtquelle 7";
         QuickHelpText[ catalan ] = "Fuente de luz 7";
-        QuickHelpText[ finnish ] = "Valonl?hde 7!";
+        QuickHelpText[ finnish ] = "Valonlähde 7!";
     };
     ImageButton BTN_LIGHT_8
     {
@@ -1932,7 +1932,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ê´‘ì› 8!";
         QuickHelpText[ turkish ] = "Lichtquelle 8";
         QuickHelpText[ catalan ] = "Fuente de luz 8";
-        QuickHelpText[ finnish ] = "Valonl?hde 8!";
+        QuickHelpText[ finnish ] = "Valonlähde 8!";
     };
     ListBox LB_LIGHT_1
     {
@@ -2031,7 +2031,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ìƒ‰ìƒ ëŒ€í™”ìƒìë¥¼ í†µí•´ ìƒ‰ìƒ ì„ íƒ!";
         QuickHelpText[ turkish ] = "Rengi, renk penceresinde seç";
         QuickHelpText[ catalan ] = "Seleccionar colores en diálogo de colores";
-        QuickHelpText[ finnish ] = "V?rien valintaikkuna!";
+        QuickHelpText[ finnish ] = "Värien valintaikkuna!";
     };
     FixedText FT_LIGHTSOURCE
     {
@@ -2060,7 +2060,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ korean ] = "ê´‘ì›";
         Text[ turkish ] = "Işık kaynağı";
         Text[ catalan ] = "Fuente de luz";
-        Text[ finnish ] = "Valon lähde";
+        Text[ finnish ] = "Valonlähde";
     };
     ListBox LB_AMBIENTLIGHT
     {
@@ -2103,7 +2103,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ìƒ‰ìƒ ëŒ€í™”ìƒìë¥¼ í†µí•´ ìƒ‰ìƒ ì„ íƒ!";
         QuickHelpText[ turkish ] = "Rengi, renk penceresinde seç";
         QuickHelpText[ catalan ] = "Seleccionar color en diálogo de colores";
-        QuickHelpText[ finnish ] = "V?rien valintaikkuna!";
+        QuickHelpText[ finnish ] = "Värien valintaikkuna!";
     };
     FixedText FT_AMBIENTLIGHT
     {
@@ -2132,7 +2132,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ korean ] = "ì£¼ë³€ê´‘";
         Text[ turkish ] = "Ortam ışığı";
         Text[ catalan ] = "Luz ambiental";
-        Text[ finnish ] = "Ympäröivä valaistus";
+        Text[ finnish ] = "Taustavalo";
     };
     FixedLine FL_LIGHT
     {
@@ -2261,7 +2261,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ìƒ‰ìƒ!";
         QuickHelpText[ turkish ] = "Farbe";
         QuickHelpText[ catalan ] = "Color";
-        QuickHelpText[ finnish ] = "V?ri!";
+        QuickHelpText[ finnish ] = "Väri!";
     };
     FixedText FT_TEX_MODE
     {
@@ -2395,7 +2395,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ì§ˆê°, ìŒì˜ ë° ìƒ‰ìƒ!";
         QuickHelpText[ turkish ] = "Textur, Schattierung und Farbe";
         QuickHelpText[ catalan ] = "Textura, sombra y color";
-        QuickHelpText[ finnish ] = "Pintakuvio, varjostus ja v?ri!";
+        QuickHelpText[ finnish ] = "Pintakuvio, varjostus ja väri!";
     };
     FixedText FT_TEX_PROJECTION_X
     {
@@ -2529,7 +2529,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ì›í˜•!";
         QuickHelpText[ turkish ] = "Kreisförmig";
         QuickHelpText[ catalan ] = "Circular";
-        QuickHelpText[ finnish ] = "Ympyr?n muotoinen!";
+        QuickHelpText[ finnish ] = "Ympyrän muotoinen!";
     };
     FixedText FT_TEX_PROJECTION_Y
     {
@@ -2663,7 +2663,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ì›í˜•!";
         QuickHelpText[ turkish ] = "Kreisförmig";
         QuickHelpText[ catalan ] = "Circular";
-        QuickHelpText[ finnish ] = "Ympyr?n muotoinen!";
+        QuickHelpText[ finnish ] = "Ympyrän muotoinen!";
     };
     FixedText FT_TEX_FILTER
     {
@@ -3024,7 +3024,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     StringList [ finnish ] =
     {
-            < "K?ytt?j?n m??ritt?m?" ; > ;
+            < "Käyttäjän määrittämä" ; > ;
         < "Metalli" ; > ;
         < "Kulta" ; > ;
         < "Kromi" ; > ;
@@ -3059,7 +3059,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ korean ] = "ê°œì²´ ìƒ‰";
         Text[ turkish ] = "Nesne rengi";
         Text[ catalan ] = "Color del objeto";
-        Text[ finnish ] = "Objektin v?ri";
+        Text[ finnish ] = "Objektin väri";
     };
     ListBox LB_MAT_COLOR
     {
@@ -3102,7 +3102,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ìƒ‰ìƒ ëŒ€í™”ìƒìë¥¼ í†µí•´ ìƒ‰ìƒ ì„ íƒ!";
         QuickHelpText[ turkish ] = "Rengi, renk penceresinde seç";
         QuickHelpText[ catalan ] = "Seleccionar colores en diálogo de colores";
-        QuickHelpText[ finnish ] = "V?rien valintaikkuna!";
+        QuickHelpText[ finnish ] = "Värien valintaikkuna!";
     };
     FixedText FT_MAT_EMISSION
     {
@@ -3131,7 +3131,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ korean ] = "ì¡°ëª…ìƒ‰";
         Text[ turkish ] = "Işık rengi";
         Text[ catalan ] = "Iluminación";
-        Text[ finnish ] = "Valaistuksen v?ri";
+        Text[ finnish ] = "Valaistuksen väri";
     };
     ListBox LB_MAT_EMISSION
     {
@@ -3174,7 +3174,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ìƒ‰ìƒ ëŒ€í™”ìƒìë¥¼ í†µí•´ ìƒ‰ìƒ ì„ íƒ!";
         QuickHelpText[ turkish ] = "Rengi, renk penceresinde seç";
         QuickHelpText[ catalan ] = "Seleccionar color en diálogo de colores";
-        QuickHelpText[ finnish ] = "V?rien valintaikkuna!";
+        QuickHelpText[ finnish ] = "Värien valintaikkuna!";
     };
     FixedText FT_MAT_SPECULAR
     {
@@ -3203,7 +3203,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ korean ] = "ìƒ‰ìƒ";
         Text[ turkish ] = "Renk";
         Text[ catalan ] = "Color";
-        Text[ finnish ] = "V?ri";
+        Text[ finnish ] = "Väri";
     };
     ListBox LB_MAT_SPECULAR
     {
@@ -3246,7 +3246,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ korean ] = "ìƒ‰ìƒ ëŒ€í™”ìƒìë¥¼ í†µí•´ ìƒ‰ìƒ ì„ íƒ!";
         QuickHelpText[ turkish ] = "Rengi, renk penceresinde seç";
         QuickHelpText[ catalan ] = "Seleccionar colores en diálogo de colores";
-        QuickHelpText[ finnish ] = "V?rien valintaikkuna!";
+        QuickHelpText[ finnish ] = "Värien valintaikkuna!";
     };
     FixedText FT_MAT_SPECULAR_INTENSITY
     {
@@ -3320,7 +3320,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ korean ] = "í•˜ì¼ë¼ì´íŠ¸";
         Text[ turkish ] = "Parlama noktası";
         Text[ catalan ] = "Punto de brillo";
-        Text[ finnish ] = "Heijastava";
+        Text[ finnish ] = "Heijastus";
     };
     /*
     ImageButton BTN_MAT_FAVORITES {
@@ -3466,7 +3466,7 @@ String RID_SVXFLOAT3D_FIX_X
     Text[ turkish ] = "X";
     Text[ arabic ] = "X";
     Text[ catalan ] = "X";
-    Text[ finnish ] = "Luku";
+    Text[ finnish ] = "X";
 };
 String RID_SVXFLOAT3D_FIX_Y
 {
@@ -3594,6 +3594,7 @@ String RID_SVXFLOAT3D_FIX_B
     Text[ catalan ] = "A:";
     Text[ finnish ] = "B:";
 };
+
 
 
 
