@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-24 06:28:08 $
+ *  last change: $Author: gt $ $Date: 2002-11-19 11:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,6 +346,8 @@ private:
 protected:
     virtual void    Resize();
     virtual BOOL    Close();
+    virtual Window* GetPreferredKeyInputWindow();
+    virtual void    GetFocus();
 
 public:
     SvxFrameWindow_Impl( USHORT nId, SfxBindings& rBindings, BOOL bParagraphMode );
@@ -1218,6 +1220,16 @@ SfxPopupWindow* SvxFrameWindow_Impl::Clone() const
 {
     //! HACK: wie bekomme ich den Paragraph-Mode ??
     return new SvxFrameWindow_Impl( GetId(), (SfxBindings&)GetBindings(), FALSE );
+}
+
+Window* SvxFrameWindow_Impl::GetPreferredKeyInputWindow()
+{
+    return &aFrameSet;
+}
+
+void SvxFrameWindow_Impl::GetFocus()
+{
+    aFrameSet.GrabFocus();
 }
 
 void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
@@ -2617,7 +2629,7 @@ SfxPopupWindow* SvxFrameToolBoxControl::CreatePopupWindow()
                                                     GetBindings(),
                                                     bParagraphMode );
 
-    pFrameWin->StartPopupMode( &GetToolBox(), TRUE );
+    pFrameWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS | FLOATWIN_POPUPMODE_ALLOWTEAROFF );
     pFrameWin->StartSelection();
 
     return pFrameWin;
