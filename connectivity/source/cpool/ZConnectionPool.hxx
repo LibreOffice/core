@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:16 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,6 @@ namespace connectivity
         void invalidatePooledConnections();
     };
 }
-#endif _CONNECTIVITY_ZCONNECTIONPOOL_HXX_
+#endif // _CONNECTIVITY_ZCONNECTIONPOOL_HXX_
 
 
