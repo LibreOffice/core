@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lrucache.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:35 $
+ *  last change: $Author: dbo $ $Date: 2000-11-30 14:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <rtl/ustring>
 #endif
 
-#include <stl/hash_map>
+#include <hash_map>
 
 
 /** Implementation of a least recently used (lru) cache.
