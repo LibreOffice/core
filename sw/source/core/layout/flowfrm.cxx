@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:07:25 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,14 @@
 #ifndef _FMTCLBL_HXX
 #include <fmtclbl.hxx>
 #endif
+// --> OD 2004-06-23 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
+#ifndef _LAYOUTER_HXX
+#include <layouter.hxx>
+#endif
+// <--
 
 BOOL SwFlowFrm::bMoveBwdJump = FALSE;
 
@@ -350,33 +358,30 @@ BYTE SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRect )
     } while ( !nRet && pTmp );
     if ( pPage->GetSortedObjs() )
     {
-        const SwSortDrawObjs &rObjs = *pPage->GetSortedObjs();
+        // --> OD 2004-07-01 #i28701# - new type <SwSortedObjs>
+        const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
         ULONG nIndex = ULONG_MAX;
         for ( USHORT i = 0; nRet < 3 && i < rObjs.Count(); ++i )
         {
-            SdrObject *pObj = rObjs[i];
-            SdrObjUserCall *pUserCall;
-            const SwFrmFmt *pFmt = pObj->ISA(SwVirtFlyDrawObj) ?
-                ((SwVirtFlyDrawObj*)pObj)->GetFmt() :
-                ((SwContact*)(pUserCall = GetUserCall(pObj)))->GetFmt();
-            const SwRect aRect( pObj->GetCurrentBoundRect() );
+            // --> OD 2004-07-01 #i28701# - consider changed type of
+            // <SwSortedObjs> entries.
+            SwAnchoredObject* pObj = rObjs[i];
+            const SwFrmFmt& rFmt = pObj->GetFrmFmt();
+            const SwRect aRect( pObj->GetObjRect() );
             if ( aRect.IsOver( rRect ) &&
-                 pFmt->GetSurround().GetSurround() != SURROUND_THROUGHT )
+                 rFmt.GetSurround().GetSurround() != SURROUND_THROUGHT )
             {
                 if( rThis.IsLayoutFrm() && //Fly Lower von This?
-                    Is_Lower_Of( &rThis, pObj ) )
+                    Is_Lower_Of( &rThis, pObj->GetDrawObj() ) )
                     continue;
-                const SwFrm* pAnchor;
-                if( pObj->ISA(SwVirtFlyDrawObj) )
+                if( pObj->ISA(SwFlyFrm) )
                 {
-                    const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+                    const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pObj);
                     if ( pFly->IsAnLower( &rThis ) )//This Lower vom Fly?
                         continue;
-                    pAnchor = pFly->GetAnchorFrm();
                 }
-                else
-                    pAnchor = ((SwDrawContact*)pUserCall)->GetAnchorFrm( pObj );
 
+                const SwFrm* pAnchor = pObj->GetAnchorFrm();
                 if ( pAnchor == &rThis )
                 {
                     nRet |= 1;
@@ -387,10 +392,10 @@ BYTE SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRect )
                 //denn dann weiche ich ihm nicht aus.
                 if ( ::IsFrmInSameKontext( pAnchor, &rThis ) )
                 {
-                    if ( pFmt->GetAnchor().GetAnchorId() == FLY_AT_CNTNT )
+                    if ( rFmt.GetAnchor().GetAnchorId() == FLY_AT_CNTNT )
                     {
                         // Den Index des anderen erhalten wir immer ueber das Ankerattr.
-                        ULONG nTmpIndex = pFmt->GetAnchor().GetCntntAnchor()->nNode.GetIndex();
+                        ULONG nTmpIndex = rFmt.GetAnchor().GetCntntAnchor()->nNode.GetIndex();
                         // Jetzt wird noch ueberprueft, ob der aktuelle Absatz vor dem
                         // Anker des verdraengenden Objekts im Text steht, dann wird
                         // nicht ausgewichen.
@@ -1150,18 +1155,21 @@ BOOL SwFlowFrm::IsPrevObjMove() const
         const FASTBOOL bCol = pPreUp->IsColBodyFrm();//ColFrms jetzt mit BodyFrm
         for ( USHORT i = 0; i < pPre->GetDrawObjs()->Count(); ++i )
         {
-            const SdrObject *pObj = (*pPre->GetDrawObjs())[i];
+            // --> OD 2004-07-01 #i28701# - consider changed type of
+            // <SwSortedObjs> entries.
+            const SwAnchoredObject* pObj = (*pPre->GetDrawObjs())[i];
             // OD 2004-01-20 #110582# - do not consider hidden fly frames
-            if ( pObj->ISA(SwVirtFlyDrawObj) &&
-                 rThis.GetUpper()->GetFmt()->GetDoc()->IsVisibleLayerId( pObj->GetLayer() ) )
+            if ( pObj->ISA(SwFlyFrm) &&
+                 rThis.GetUpper()->GetFmt()->GetDoc()->IsVisibleLayerId(
+                                            pObj->GetDrawObj()->GetLayer() ) )
             {
-                const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+                const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pObj);
 
                 if ( WEIT_WECH != pFly->Frm().Top() && !pFly->IsFlyInCntFrm() )
                 {
-                    if( pObj->GetSnapRect().Top()  > nBottom )
+                    if( pObj->GetObjRect().Top() > nBottom )
                         return TRUE;
-                    if( bCol && pObj->GetSnapRect().Left() > nRight )
+                    if( bCol && pObj->GetObjRect().Left() > nRight )
                     {
                         SwFmtHoriOrient aHori( pFly->GetFmt()->GetHoriOrient() );
                         if( FRAME == aHori.GetRelationOrient() ||
@@ -1447,30 +1455,6 @@ const SwFrm* SwFlowFrm::_GetPrevFrmForUpperSpaceCalc( const SwFrm* _pProposedPre
     return pPrevFrm;
 }
 
-/** method to determine the spacing values of previous frame
-
-    OD 2004-03-10 #i11860#
-    Note: line spacing value is only determined for text frames
-
-    @author OD
-*/
-void SwFlowFrm::_GetSpacingValuesOfFrm( const SwFrm& _rFrm,
-                                       SwTwips& _roLowerSpacing,
-                                       SwTwips& _roLineSpacing ) const
-{
-    const SvxULSpaceItem& rULSpace = _rFrm.GetAttrSet()->GetULSpace();
-    _roLowerSpacing = rULSpace.GetLower();
-
-    _roLineSpacing = 0;
-    if ( _rFrm.IsTxtFrm() )
-    {
-        _roLineSpacing = static_cast<const SwTxtFrm&>(_rFrm).GetLineSpace();
-    }
-
-    ASSERT( _roLowerSpacing >= 0 && _roLineSpacing >= 0,
-            "<SwFlowFrm::GetSpacingValuesOfFrm(..)> - spacing values aren't positive!" );
-}
-
 // OD 2004-03-12 #i11860# - add 3rd parameter <_bConsiderGrid>
 SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                                    const SwFrm* pPr,
@@ -1515,7 +1499,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             // values of found previous frame and use these values.
             SwTwips nPrevLowerSpace = 0;
             SwTwips nPrevLineSpacing = 0;
-            _GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing );
+            GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing );
             if( pDoc->IsParaSpaceMax() )
             {
                 nUpper = nPrevLowerSpace + pAttrs->GetULSpace().GetUpper();
@@ -1674,7 +1658,7 @@ SwTwips SwFlowFrm::_GetUpperSpaceAmountConsideredForPrevFrm() const
     {
         SwTwips nPrevLowerSpace = 0;
         SwTwips nPrevLineSpacing = 0;
-        _GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing );
+        GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing );
         if ( nPrevLowerSpace > 0 || nPrevLineSpacing > 0 )
         {
             if ( rThis.GetAttrSet()->GetDoc()->IsParaSpaceMax() ||
@@ -2263,6 +2247,24 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
     }
     else //Keine Breaks also kann ich zurueckfliessen
         pNewUpper = rThis.GetLeaf( MAKEPAGE_NONE, FALSE );
+
+    // --> OD 2004-06-23 #i27801# - no move backward of 'master' text frame,
+    // if - due to its object positioning - it isn't allowed to be on the new page frame
+    if ( pNewUpper &&
+         rThis.IsTxtFrm() && !IsFollow() )
+    {
+        sal_uInt32 nToPageNum( 0L );
+        const bool bMoveFwdByObjPos = SwLayouter::FrmMovedFwdByObjPos(
+                                                *(pOldPage->GetFmt()->GetDoc()),
+                                                static_cast<SwTxtFrm&>(rThis),
+                                                nToPageNum );
+        if ( bMoveFwdByObjPos &&
+             pNewUpper->FindPageFrm()->GetPhyPageNum() < nToPageNum )
+        {
+            pNewUpper = 0;
+        }
+    }
+    // <--
 
     //Fuer Follows ist das zurueckfliessen nur dann erlaubt wenn in der
     //neuen Umgebung kein Nachbar existiert (denn dieses waere der Master).
