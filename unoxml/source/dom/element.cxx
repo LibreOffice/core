@@ -2,9 +2,9 @@
  *
  *  $RCSfile: element.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-27 16:14:29 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,8 @@ namespace DOM
     }
 
     /**
-    Returns a NodeList of all descendant Elements with a given tag name, 
-    in the order in which they are 
+    Returns a NodeList of all descendant Elements with a given tag name,
+    in the order in which they are
     encountered in a preorder traversal of this Element tree.
     */
     Reference< XNodeList > CElement::getElementsByTagName(const OUString& name)
@@ -161,11 +161,11 @@ namespace DOM
     }
 
     /**
-    Returns a NodeList of all the descendant Elements with a given local 
+    Returns a NodeList of all the descendant Elements with a given local
     name and namespace URI in the order in which they are encountered in
     a preorder traversal of this Element tree.
     */
-    Reference< XNodeList > CElement::getElementsByTagNameNS(const OUString& namespaceURI, 
+    Reference< XNodeList > CElement::getElementsByTagNameNS(const OUString& namespaceURI,
             const OUString& localName)
         throw (RuntimeException)
     {
@@ -254,8 +254,28 @@ namespace DOM
         {
             Reference< XUnoTunnel > tunnel(oldAttr, UNO_QUERY);
             xmlAttrPtr pAttr = (xmlAttrPtr)tunnel->getSomething(Sequence< sal_Int8 >());
+
+            if (pAttr->parent != m_aNodePtr)
+            {
+                DOMException e;
+                e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
+                throw e;
+            }
+            if (pAttr->doc != m_aNodePtr->doc)
+            {
+                DOMException e;
+                e.Code = DOMExceptionType_WRONG_DOCUMENT_ERR;
+                throw e;
+            }
+
+            if (oldAttr->getNamespaceURI().getLength() > 0)
+                aAttr = oldAttr->getOwnerDocument()->createAttributeNS(
+                    oldAttr->getNamespaceURI(), oldAttr->getName());
+            else
+                aAttr = oldAttr->getOwnerDocument()->createAttribute(oldAttr->getName());
+            aAttr->setValue(oldAttr->getValue());
             xmlRemoveProp(pAttr);
-            aAttr = Reference< XAttr >(static_cast< CAttr* >(CNode::get((xmlNodePtr)pAttr)));
+
         }
         return aAttr;
     }
@@ -267,7 +287,7 @@ namespace DOM
         throw (RuntimeException)
     {
         Reference< XAttr > aAttr;
-        if (m_aNodePtr != NULL) 
+        if (m_aNodePtr != NULL)
         {
             // check whether the attrib belongs to this document
             Reference< XDocument > newDoc(newAttr->getOwnerDocument(), UNO_QUERY);
@@ -275,7 +295,7 @@ namespace DOM
             if (newDoc != oldDoc) {
                 throw RuntimeException();
             }
-            
+
             // get the implementation
             Reference< XUnoTunnel > tunnel(newAttr, UNO_QUERY);
             xmlAttrPtr pAttr = (xmlAttrPtr)tunnel->getSomething(Sequence< sal_Int8 >());
@@ -283,7 +303,7 @@ namespace DOM
             // check whether the attribute is not in use by another element
             xmlNsPtr pNs = NULL;
             if (pAttr->parent != NULL)
-                if(strcmp((char*)pAttr->parent->name, "__private") == NULL 
+                if(strcmp((char*)pAttr->parent->name, "__private") == NULL
                     && pNs && pAttr->ns != NULL)
                 {
                     pNs = xmlSearchNs(m_aNodePtr->doc, m_aNodePtr, pAttr->ns->prefix);
@@ -294,7 +314,7 @@ namespace DOM
             }
 
             xmlAttrPtr res = NULL;
-            
+
             if (bNS)
                 res = xmlNewNsProp(m_aNodePtr, pNs, pAttr->name, pAttr->children->content);
             else
@@ -309,12 +329,12 @@ namespace DOM
             // get the new attr node
             aAttr = Reference< XAttr >(static_cast< CAttr*  >(CNode::get((xmlNodePtr)res)));
         }
-        
+
         if (aAttr.is())
         {
             // attribute adition event
             // dispatch DOMAttrModified event
-            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY); 
+            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
             Reference< XMutationEvent > event(docevent->createEvent(
                 OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
             event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
@@ -367,8 +387,8 @@ namespace DOM
             }
 
             // dispatch DOMAttrModified event
-            
-            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY); 
+
+            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
             Reference< XMutationEvent > event(docevent->createEvent(
                 OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
             event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"),
@@ -379,14 +399,14 @@ namespace DOM
     }
 
     /**
-    Adds a new attribute. 
+    Adds a new attribute.
     */
     void CElement::setAttributeNS(
             const OUString& namespaceURI, const OUString& qualifiedName, const OUString& value)
         throw (DOMException)
-    {       
+    {
         if (namespaceURI.getLength() == 0) throw RuntimeException();
-        
+
         OString o1, o2, o3, o4, o5;
         xmlChar *xPrefix = NULL;
         xmlChar *xLName = NULL;
@@ -394,13 +414,13 @@ namespace DOM
         xmlChar *xQName = (xmlChar*)o1.getStr();
         sal_Int32 idx = qualifiedName.indexOf(':');
         if (idx != -1)
-        {            
+        {
             o2 = OUStringToOString(
-                qualifiedName.copy(0,idx), 
+                qualifiedName.copy(0,idx),
                 RTL_TEXTENCODING_UTF8);
             xPrefix = (xmlChar*)o2.getStr();
             o3 = OUStringToOString(
-                qualifiedName.copy(idx+1), 
+                qualifiedName.copy(idx+1),
                 RTL_TEXTENCODING_UTF8);
             xLName = (xmlChar*)o3.getStr();
         }  else {
@@ -437,10 +457,10 @@ namespace DOM
                     xmlSetNsProp(m_aNodePtr, pNs, xLName, xValue);
                 }
                 // dispatch DOMAttrModified event
-                Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY); 
+                Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
                 Reference< XMutationEvent > event(docevent->createEvent(
                     OUString::createFromAscii("DOMAttrModified")), UNO_QUERY);
-                event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"), sal_True, sal_False, 
+                event->initMutationEvent(OUString::createFromAscii("DOMAttrModified"), sal_True, sal_False,
                     Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString((char*)xLName, strlen((char*)xLName), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
                     oldValue, value, qualifiedName, aChangeType);
                 dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
@@ -450,7 +470,7 @@ namespace DOM
                 throw RuntimeException();
             }
 
-        }           
+        }
     }
 
     Reference< XNamedNodeMap > SAL_CALL CElement::getAttributes()throw (RuntimeException)
@@ -475,4 +495,22 @@ namespace DOM
     {
         return OUString();
     }
+
+    void SAL_CALL CElement::setElementName(const OUString& aName) throw (DOMException)
+    {
+        if (aName.getLength() > 0 && aName.indexOf(OUString::createFromAscii(":")) < 0)
+        {
+            OString oName = OUStringToOString(aName, RTL_TEXTENCODING_UTF8);
+            xmlChar *xName = (xmlChar*)oName.getStr();
+            // xmlFree((void*)m_aNodePtr->name);
+            m_aNodePtr->name = xmlStrdup(xName);
+        }
+        else
+        {
+            DOMException e;
+            e.Code = DOMExceptionType_INVALID_CHARACTER_ERR;
+            throw e;
+        }
+    }
+
 }
