@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABQueryHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-05-28 22:02:59 $
+ *  last change: $Author: mmaher $ $Date: 2001-07-20 15:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,8 @@ namespace connectivity
             sal_Int32                       getResultCount() const;
 
             sal_Int32                       getRealCount() const;
+
+            void                            notifyQueryError() ;
 
         };
     }
