@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fehelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 13:07:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ AstType* FeDeclarator::compose(AstDeclaration* pDecl)
     return NULL; // return through this statement should not happen
 }
 
-FeInheritanceHeader::FeInheritanceHeader(NodeType nodeType, ::rtl::OString* pName, StringList* pInherits)
+FeInheritanceHeader::FeInheritanceHeader(NodeType nodeType, ::rtl::OString* pName, ::rtl::OString* pInherits)
     : m_nodeType(nodeType)
     , m_pName(pName)
     , m_pInherits(NULL)
@@ -139,54 +139,29 @@ FeInheritanceHeader::FeInheritanceHeader(NodeType nodeType, ::rtl::OString* pNam
     initializeInherits(pInherits);
 }
 
-sal_Bool FeInheritanceHeader::initializeInherits(StringList* pInherits)
+void FeInheritanceHeader::initializeInherits(::rtl::OString* pInherits)
 {
-    if ( pInherits && (pInherits->size() > 0) )
+    if ( pInherits )
     {
-        StringList::iterator iter = pInherits->begin();
-        StringList::iterator end = pInherits->end();
         AstScope* pScope = idlc()->scopes()->topNonNull();
-        AstDeclaration* pDecl = NULL;
-
-        m_pInherits = new DeclList();
-        while (pScope && iter != end)
+        AstDeclaration* pDecl = pScope->lookupByName(*pInherits);
+        if ( pDecl )
         {
-            pDecl = pScope->lookupByName(*iter);
-            if ( pDecl )
+            if ( pDecl->getNodeType() == getNodeType()
+                 && (pDecl->getNodeType() != NT_interface
+                     || static_cast< AstInterface* >(pDecl)->isDefined()) )
             {
-                m_pInherits->push_back(pDecl);
-            } else
-            {
-                idlc()->error()->lookupError(*iter);
-                return sal_False;
+                m_pInherits = pDecl;
             }
-            ++iter;
+            else
+            {
+                idlc()->error()->inheritanceError(
+                    getNodeType(), getName(), pDecl);
+            }
         }
-    }
-    return sal_True;
-}
-
-sal_Bool FeInterfaceHeader::initializeInherits(StringList* pInherits)
-{
-    if ( !pInherits )
-        return sal_True;
-
-    if ( !FeInheritanceHeader::initializeInherits(pInherits) )
-        return sal_False;
-
-    DeclList::iterator iter = m_pInherits->begin();
-    DeclList::iterator end  = m_pInherits->end();
-
-    while ( iter != end )
-    {
-        AstInterface* pIface = ((AstInterface*)*iter);
-        if ( ((*iter)->getNodeType() != NT_interface) ||
-             !((AstInterface*)*iter)->isDefined() )
+        else
         {
-            idlc()->error()->inheritanceError(getName(), *iter);
-            return sal_False;
+            idlc()->error()->lookupError(*pInherits);
         }
-        ++iter;
     }
-    return sal_True;
 }
