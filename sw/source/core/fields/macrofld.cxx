@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrofld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-02 18:37:24 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,18 @@
 
 #pragma hdrstop
 
-#include "doc.hxx"
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
 
-#include "hintids.hxx"
-#include "docufld.hxx"
-
-#ifndef _UNOPRNMS_HXX
-#include <unoprnms.hxx>
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _DOCUFLD_HXX
+#include <docufld.hxx>
+#endif
+#ifndef _UNOFLDMID_H
+#include <unofldmid.h>
 #endif
 
 using namespace ::com::sun::star;
@@ -187,48 +192,44 @@ String SwMacroField::GetPar2() const
 /*-----------------05.03.98 13:38-------------------
 
 --------------------------------------------------*/
-BOOL SwMacroField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwMacroField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_MACRO_NAME)))
+    switch( nMId )
+    {
+    case FIELD_PROP_PAR1:
         rAny <<= OUString(GetMacroName());
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_MACRO_LIBRARY)))
-        rAny <<= OUString(GetLibName());
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_HINT)))
+        break;
+    case FIELD_PROP_PAR2:
         rAny <<= OUString(aText);
-
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
+        break;
+    case FIELD_PROP_PAR3:
+        rAny <<= OUString(GetLibName());
+        break;
+    default:
+        DBG_ERROR("illegal property")
+    }
     return TRUE;
 }
 /*-----------------05.03.98 13:38-------------------
 
 --------------------------------------------------*/
-BOOL SwMacroField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwMacroField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_MACRO_NAME)))
+    String sTmp;
+    switch( nMId )
     {
-        OUString uTmp;
-        rAny >>= uTmp;
-        CreateMacroString(aMacro, String(uTmp), GetLibName());
+    case FIELD_PROP_PAR1:
+        CreateMacroString( aMacro, ::GetString(rAny, sTmp), GetLibName());
+        break;
+    case FIELD_PROP_PAR2:
+        ::GetString( rAny, aText );
+        break;
+    case FIELD_PROP_PAR3:
+        CreateMacroString(aMacro, GetMacroName(), ::GetString(rAny, sTmp) );
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_MACRO_LIBRARY)))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        CreateMacroString(aMacro, GetMacroName(), String(uTmp));
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_HINT)))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        aText = String(uTmp);
-    }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return TRUE;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 12:20:07 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@
 #ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
 #endif
+
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
@@ -225,8 +226,8 @@
 #ifndef _HINTS_HXX
 #include <hints.hxx>
 #endif
-#ifndef _UNOPRNMS_HXX
-#include <unoprnms.hxx>
+#ifndef _UNOFLDMID_H
+#include <unofldmid.h>
 #endif
 #ifndef _SWUNOHELPER_HXX
 #include <swunohelper.hxx>
@@ -378,45 +379,46 @@ sal_uInt16 SwPageNumberField::GetSubType() const
 /*-----------------05.03.98 10:25-------------------
 
 --------------------------------------------------*/
-BOOL SwPageNumberField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwPageNumberField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE)))
+    switch( nMId )
     {
+    case FIELD_PROP_FORMAT:
         rAny <<= (sal_Int16)GetFormat();
-    }
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_OFFSET )))
-    {
+        break;
+    case FIELD_PROP_USHORT1:
         rAny <<= nOffset;
-    }
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE)))
-    {
-         text::PageNumberType eType;
-        eType = text::PageNumberType_CURRENT;
-        if(nSubType == PG_PREV)
-            eType = text::PageNumberType_PREV;
-        else if(nSubType == PG_NEXT)
-            eType = text::PageNumberType_NEXT;
-        rAny.setValue(&eType, ::getCppuType((const text::PageNumberType*)0));
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_USERTEXT) ))
-    {
+        break;
+    case FIELD_PROP_SUBTYPE:
+        {
+             text::PageNumberType eType;
+            eType = text::PageNumberType_CURRENT;
+            if(nSubType == PG_PREV)
+                eType = text::PageNumberType_PREV;
+            else if(nSubType == PG_NEXT)
+                eType = text::PageNumberType_NEXT;
+            rAny.setValue(&eType, ::getCppuType((const text::PageNumberType*)0));
+        }
+        break;
+    case FIELD_PROP_PAR1:
         rAny <<= OUString(sUserStr);
+        break;
+
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 /*-----------------05.03.98 10:25-------------------
 
 --------------------------------------------------*/
-BOOL SwPageNumberField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwPageNumberField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
     BOOL bRet = TRUE;
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE)))
+    sal_Int16 nSet;
+    switch( nMId )
     {
-        sal_Int16 nSet;
+    case FIELD_PROP_FORMAT:
         rAny >>= nSet;
 
         // TODO: woher kommen die defines?
@@ -425,15 +427,12 @@ BOOL SwPageNumberField::PutValue( const uno::Any& rAny, const String& rProperty 
         else
             //exception(wrong_value)
             ;
-    }
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_OFFSET )))
-    {
-        sal_Int16 nSet;
+        break;
+    case FIELD_PROP_USHORT1:
         rAny >>= nSet;
         nOffset = nSet;
-    }
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE) ))
-    {
+        break;
+    case FIELD_PROP_SUBTYPE:
         switch( SWUnoHelper::GetEnumAsInt32( rAny ) )
         {
             case text::PageNumberType_CURRENT:
@@ -448,17 +447,14 @@ BOOL SwPageNumberField::PutValue( const uno::Any& rAny, const String& rProperty 
             default:
                 bRet = FALSE;
         }
+        break;
+    case FIELD_PROP_PAR1:
+        ::GetString( rAny, sUserStr );
+        break;
+
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_USERTEXT) ))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        sUserStr = String(uTmp);
-    }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return bRet;
 }
 /*--------------------------------------------------------------------
@@ -516,56 +512,55 @@ SwField* SwAuthorField::Copy() const
 /*-----------------05.03.98 11:15-------------------
 
 --------------------------------------------------*/
-BOOL SwAuthorField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwAuthorField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FULL_NAME )))
+    sal_Bool bVal;
+    switch( nMId )
     {
-        sal_Bool bVal = GetFormat() == AF_NAME;
+    case FIELD_PROP_BOOL1:
+        bVal = GetFormat() == AF_NAME;
         rAny.setValue(&bVal, ::getBooleanCppuType());
-    }
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT ))||
-        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
+        break;
+
+    case FIELD_PROP_BOOL2:
+        bVal = IsFixed();
+        rAny.setValue(&bVal, ::getBooleanCppuType());
+        break;
+
+    case FIELD_PROP_PAR1:
         rAny <<= rtl::OUString(GetContent());
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED )))
-    {
-        sal_Bool bVal = IsFixed();
-        rAny.setValue(&bVal, ::getBooleanCppuType());
+        break;
+
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 /*-----------------05.03.98 11:15-------------------
 
 --------------------------------------------------*/
-BOOL SwAuthorField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwAuthorField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FULL_NAME )))
+    switch( nMId )
     {
-        sal_Bool bSet = *(sal_Bool*)rAny.getValue();
-        SetFormat(bSet ? AF_NAME : AF_SHORTCUT);
-    }
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT)) ||
-        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        aContent = String(uTmp);
-    }
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED )))
-    {
-        sal_Bool bSet = *(sal_Bool*)rAny.getValue();
-        if(bSet)
+    case FIELD_PROP_BOOL1:
+        SetFormat( *(sal_Bool*)rAny.getValue() ? AF_NAME : AF_SHORTCUT );
+        break;
+
+    case FIELD_PROP_BOOL2:
+        if( *(sal_Bool*)rAny.getValue() )
             SetFormat( GetFormat() | AF_FIXED);
         else
             SetFormat( GetFormat() & ~AF_FIXED);
+        break;
+
+    case FIELD_PROP_PAR1:
+        ::GetString( rAny, aContent );
+        break;
+
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 
@@ -662,81 +657,93 @@ SwField* SwFileNameField::Copy() const
 /*-----------------05.03.98 08:59-------------------
 
 --------------------------------------------------*/
-BOOL SwFileNameField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwFileNameField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FILE_FORMAT)))
+    switch( nMId )
     {
-        sal_Int16 nRet;
-        switch( GetFormat() &(~FF_FIXED) )
+    case FIELD_PROP_FORMAT:
         {
-            case FF_PATH:
-                nRet = text::FilenameDisplayFormat::PATH;
-            break;
-            case FF_NAME_NOEXT:
-                nRet = text::FilenameDisplayFormat::NAME;
-            break;
-            case FF_NAME:
-                nRet = text::FilenameDisplayFormat::NAME_AND_EXT;
-            break;
-            default:    nRet = text::FilenameDisplayFormat::FULL;
+            sal_Int16 nRet;
+            switch( GetFormat() &(~FF_FIXED) )
+            {
+                case FF_PATH:
+                    nRet = text::FilenameDisplayFormat::PATH;
+                break;
+                case FF_NAME_NOEXT:
+                    nRet = text::FilenameDisplayFormat::NAME;
+                break;
+                case FF_NAME:
+                    nRet = text::FilenameDisplayFormat::NAME_AND_EXT;
+                break;
+                default:    nRet = text::FilenameDisplayFormat::FULL;
+            }
+            rAny <<= nRet;
         }
-        rAny <<= nRet;
-    }
-    else if (rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED)))
-    {
-        sal_Bool bVal = IsFixed();
-        rAny.setValue(&bVal, ::getBooleanCppuType());
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
+        break;
+
+    case FIELD_PROP_BOOL2:
+        {
+            BOOL bVal = IsFixed();
+            rAny.setValue(&bVal, ::getBooleanCppuType());
+        }
+        break;
+
+    case FIELD_PROP_PAR3:
         rAny <<= OUString(GetContent());
+        break;
+    default:
+        DBG_ERROR("illegal property")
+    }
     return sal_True;
 }
 /*-----------------05.03.98 09:01-------------------
 
 --------------------------------------------------*/
-BOOL SwFileNameField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwFileNameField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FILE_FORMAT)))
+    switch( nMId )
     {
-        sal_Int32 nType;
-        rAny >>= nType;
-        BOOL bFixed = IsFixed();
-        switch( nType )
+    case FIELD_PROP_FORMAT:
         {
-            case text::FilenameDisplayFormat::PATH:
-                nType = FF_PATH;
-            break;
-            case text::FilenameDisplayFormat::NAME:
-                nType = FF_NAME_NOEXT;
-            break;
-            case text::FilenameDisplayFormat::NAME_AND_EXT:
-                nType = FF_NAME;
-            break;
-            default:    nType = FF_PATHNAME;
+            //JP 24.10.2001: int32 because in UnoField.cxx a putvalue is
+            //              called with a int32 value! But normally we need
+            //              here only a int16
+            sal_Int32 nType;
+            rAny >>= nType;
+            BOOL bFixed = IsFixed();
+            switch( nType )
+            {
+                case text::FilenameDisplayFormat::PATH:
+                    nType = FF_PATH;
+                break;
+                case text::FilenameDisplayFormat::NAME:
+                    nType = FF_NAME_NOEXT;
+                break;
+                case text::FilenameDisplayFormat::NAME_AND_EXT:
+                    nType = FF_NAME;
+                break;
+                default:    nType = FF_PATHNAME;
+            }
+            if(bFixed)
+                nType |= FF_FIXED;
+            SetFormat(nType);
         }
-        if(bFixed)
-            nType |= FF_FIXED;
-        SetFormat(nType);
-    }
-    else if (rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED)))
+        break;
 
-    {
-        sal_Bool bSet = *(sal_Bool*)rAny.getValue();
-        if(bSet)
+    case FIELD_PROP_BOOL2:
+        if( *(sal_Bool*)rAny.getValue() )
             SetFormat( GetFormat() | FF_FIXED);
         else
             SetFormat( GetFormat() & ~FF_FIXED);
+        break;
+
+    case FIELD_PROP_PAR3:
+        ::GetString( rAny, aContent );
+        break;
+
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
-    {
-        OUString sVal;
-        rAny >>= sVal;
-        SetExpansion(sVal);
-    }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 /*--------------------------------------------------------------------
@@ -821,36 +828,47 @@ SwField* SwTemplNameField::Copy() const
 /*-----------------05.03.98 08:59-------------------
 
 --------------------------------------------------*/
-BOOL SwTemplNameField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwTemplNameField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FILE_FORMAT)))
+    switch ( nMId )
     {
-        sal_Int16 nRet;
-        switch( GetFormat() )
+    case FIELD_PROP_FORMAT:
         {
-            case FF_PATH:       nRet = text::FilenameDisplayFormat::PATH; break;
-            case FF_NAME_NOEXT: nRet = text::FilenameDisplayFormat::NAME; break;
-            case FF_NAME:       nRet = text::FilenameDisplayFormat::NAME_AND_EXT; break;
-            case FF_UI_RANGE:   nRet = text::TemplateDisplayFormat::AREA; break;
-            case FF_UI_NAME:    nRet = text::TemplateDisplayFormat::TITLE;  break;
-            default:    nRet = text::FilenameDisplayFormat::FULL;
+            sal_Int16 nRet;
+            switch( GetFormat() )
+            {
+                case FF_PATH:       nRet = text::FilenameDisplayFormat::PATH; break;
+                case FF_NAME_NOEXT: nRet = text::FilenameDisplayFormat::NAME; break;
+                case FF_NAME:       nRet = text::FilenameDisplayFormat::NAME_AND_EXT; break;
+                case FF_UI_RANGE:   nRet = text::TemplateDisplayFormat::AREA; break;
+                case FF_UI_NAME:    nRet = text::TemplateDisplayFormat::TITLE;  break;
+                default:    nRet = text::FilenameDisplayFormat::FULL;
 
+            }
+            rAny <<= nRet;
         }
-        rAny <<= nRet;
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
     return sal_True;
 }
 /*-----------------05.03.98 09:01-------------------
 
 --------------------------------------------------*/
-BOOL SwTemplNameField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwTemplNameField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FILE_FORMAT)))
+    switch ( nMId )
     {
-        sal_Int32 nType;
-        rAny >>= nType;
-        switch( nType )
+    case FIELD_PROP_FORMAT:
         {
+            //JP 24.10.2001: int32 because in UnoField.cxx a putvalue is
+            //              called with a int32 value! But normally we need
+            //              here only a int16
+            sal_Int32 nType;
+            rAny >>= nType;
+            switch( nType )
+            {
             case text::FilenameDisplayFormat::PATH:
                 SetFormat(FF_PATH);
             break;
@@ -867,12 +885,12 @@ BOOL SwTemplNameField::PutValue( const uno::Any& rAny, const String& rProperty )
                 SetFormat(FF_UI_NAME);
             break;
             default:    SetFormat(FF_PATHNAME);
+            }
         }
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 /*--------------------------------------------------------------------
@@ -965,39 +983,44 @@ void SwDocStatField::ChangeExpansion( const SwFrm* pFrm )
 /*-----------------05.03.98 11:38-------------------
 
 --------------------------------------------------*/
-BOOL SwDocStatField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwDocStatField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE)))
+    switch ( nMId )
     {
+    case FIELD_PROP_USHORT2:
         rAny <<= (sal_Int16)GetFormat();
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 /*-----------------05.03.98 11:38-------------------
 
 --------------------------------------------------*/
-BOOL SwDocStatField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwDocStatField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE)))
+    BOOL bRet = FALSE;
+    switch ( nMId )
     {
-        sal_Int16 nSet;
-        rAny >>= nSet;
-        if(nSet <= SVX_NUM_CHARS_LOWER_LETTER_N &&
-            nSet != SVX_NUM_CHAR_SPECIAL &&
-                nSet != SVX_NUM_BITMAP)
-            SetFormat(nSet);
-        else
-            return FALSE;
+    case FIELD_PROP_USHORT2:
+        {
+            sal_Int16 nSet;
+            rAny >>= nSet;
+            if(nSet <= SVX_NUM_CHARS_LOWER_LETTER_N &&
+                nSet != SVX_NUM_CHAR_SPECIAL &&
+                    nSet != SVX_NUM_BITMAP)
+            {
+                SetFormat(nSet);
+                bRet = TRUE;
+            }
+        }
+        break;
+
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
-    return sal_True;
+    return bRet;
 }
 
 /*--------------------------------------------------------------------
@@ -1185,7 +1208,7 @@ String SwDocInfoField::GetCntnt(sal_Bool bName) const
             break;
 
             default:
-                aStr += *ViewShell::GetShellRes()->aDocInfoLst[(GetSubType() & 0xff) - DI_SUBTYPE_BEGIN];
+                aStr += *ViewShell::GetShellRes()->aDocInfoLst[ nSub - DI_SUBTYPE_BEGIN ];
                 break;
         }
         if( IsFixed() )
@@ -1231,100 +1254,97 @@ void SwDocInfoField::SetLanguage(sal_uInt16 nLng)
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwDocInfoField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwDocInfoField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_AUTHOR)) ||
-        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT) ))
+    switch( nMId )
     {
+    case FIELD_PROP_PAR1:
         rAny <<= OUString(aContent);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_REVISION)))
-    {
-        rAny  <<= (sal_Int16)aContent.ToInt32();
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED)))
-    {
-        sal_Bool bVal = 0 != (nSubType & DI_SUB_FIXED);
-        rAny.setValue(&bVal, ::getBooleanCppuType());
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
-    {
-        rAny  <<= (sal_Int32)GetFormat();
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATE_TIME_VALUE)))
-    {
-        double fVal = GetValue();
-        rAny.setValue(&fVal, ::getCppuType(&fVal));
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
-        rAny <<= rtl::OUString(Expand());
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_DATE)))
-    {
-        sal_uInt16 nExtSub = nSubType & 0xff00;
-        nExtSub &= ~DI_SUB_FIXED;
-        sal_Bool bVal = (nExtSub == DI_SUB_DATE);
-        rAny.setValue(&bVal, ::getBooleanCppuType());
-    }
+        break;
 
-#ifdef DBG_UTIL
-    else
+    case FIELD_PROP_USHORT1:
+        rAny  <<= (sal_Int16)aContent.ToInt32();
+        break;
+
+    case FIELD_PROP_BOOL1:
+        {
+            sal_Bool bVal = 0 != (nSubType & DI_SUB_FIXED);
+            rAny.setValue(&bVal, ::getBooleanCppuType());
+        }
+        break;
+    case FIELD_PROP_FORMAT:
+        rAny  <<= (sal_Int32)GetFormat();
+        break;
+
+    case FIELD_PROP_DOUBLE:
+        {
+            double fVal = GetValue();
+            rAny.setValue(&fVal, ::getCppuType(&fVal));
+        }
+        break;
+    case FIELD_PROP_PAR3:
+        rAny <<= rtl::OUString(Expand());
+        break;
+    case FIELD_PROP_BOOL2:
+        {
+            sal_uInt16 nExtSub = (nSubType & 0xff00) & ~DI_SUB_FIXED;
+            sal_Bool bVal = (nExtSub == DI_SUB_DATE);
+            rAny.setValue(&bVal, ::getBooleanCppuType());
+        }
+        break;
+    default:
         DBG_ERROR("illegal property")
-#endif
+    }
     return sal_True;
 }
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwDocInfoField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwDocInfoField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED)))
+    sal_Int32 nValue;
+    switch( nMId )
     {
-        sal_Bool bTemp = *(sal_Bool*)rAny.getValue();
-        if(bTemp)
+    case FIELD_PROP_PAR1:
+        if( nSubType & DI_SUB_FIXED )
+            ::GetString( rAny, aContent );
+        break;
+
+    case FIELD_PROP_USHORT1:
+        if( nSubType & DI_SUB_FIXED )
+        {
+            rAny >>= nValue;
+            aContent = String::CreateFromInt32(nValue);
+        }
+        break;
+
+    case FIELD_PROP_BOOL1:
+        if(*(sal_Bool*)rAny.getValue())
             nSubType |= DI_SUB_FIXED;
         else
             nSubType &= ~DI_SUB_FIXED;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
-    {
-        sal_Int32 nNumberFormat;
-        rAny >>= nNumberFormat;
-        if(nNumberFormat >= 0)
-            SetFormat(nNumberFormat);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_REVISION)) &&
-        (nSubType & DI_SUB_FIXED))
-    {
-        sal_Int32 nRev;
-        rAny >>= nRev;
-        aContent = String::CreateFromInt32(nRev);
-    }
-    else if((rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_AUTHOR)) ||
-        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT))) &&
-        (nSubType & DI_SUB_FIXED) )
-    {
-        OUString sVal;
-        rAny >>= sVal;
-        aContent = sVal;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
-    {
-        OUString sVal;
-        rAny >>= sVal;
-        SetExpansion(sVal);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_DATE)))
-    {
+        break;
+    case FIELD_PROP_FORMAT:
+        {
+            rAny >>= nValue;
+            if( nValue >= 0)
+                SetFormat(nValue);
+        }
+        break;
+
+    case FIELD_PROP_PAR3:
+        ::GetString( rAny, aContent );
+        break;
+    case FIELD_PROP_BOOL2:
         nSubType &= 0xf0ff;
         if(*(sal_Bool*)rAny.getValue())
             nSubType |= DI_SUB_DATE;
         else
             nSubType |= DI_SUB_TIME;
-    }
-#ifdef DBG_UTIL
-    else
+        break;
+    default:
         DBG_ERROR("illegal property")
-#endif
+    }
     return sal_True;
 }
 
@@ -1579,58 +1599,58 @@ sal_uInt16 SwHiddenTxtField::GetSubType() const
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwHiddenTxtField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwHiddenTxtField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
+    const String* pOut = 0;
+    switch( nMId )
     {
-        rAny <<= OUString(aCond);
+    case FIELD_PROP_PAR1:
+        pOut = &aCond;
+        break;
+    case FIELD_PROP_PAR2:
+        pOut = &aTRUETxt;
+        break;
+    case FIELD_PROP_PAR3:
+        pOut = &aFALSETxt;
+        break;
+    case FIELD_PROP_BOOL1:
+        {
+            sal_Bool bHidden = bIsHidden;
+            rAny.setValue(&bHidden, ::getBooleanCppuType());
+        }
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_TRUE_CONTENT )) ||
-            rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )) )
-    {
-        rAny <<= OUString(aTRUETxt);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FALSE_CONTENT)))
-    {
-        rAny <<= OUString(aFALSETxt);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_HIDDEN))||
-        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_CONDITION_TRUE)))
-    {
-        sal_Bool bHidden = bIsHidden;
-        rAny.setValue(&bHidden, ::getBooleanCppuType());
-    }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
+    if( pOut )
+        rAny <<= OUString( *pOut );
     return sal_True;
 }
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwHiddenTxtField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwHiddenTxtField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    OUString uTmp;
-    rAny >>= uTmp;
-    String sVal(uTmp);
-
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
-        SetPar1(sVal);
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_TRUE_CONTENT ))||
-            rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
-        aTRUETxt = sVal;
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FALSE_CONTENT)))
-        aFALSETxt = sVal;
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_HIDDEN))||
-        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_CONDITION_TRUE)))
+    switch( nMId )
     {
+    case FIELD_PROP_PAR1:
+        {
+            String sVal;
+            SetPar1(::GetString( rAny, sVal ));
+        }
+        break;
+    case FIELD_PROP_PAR2:
+        ::GetString( rAny, aTRUETxt );
+        break;
+    case FIELD_PROP_PAR3:
+        ::GetString( rAny, aFALSETxt );
+        break;
+    case FIELD_PROP_BOOL1:
         bIsHidden = *(sal_Bool*)rAny.getValue();
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 
@@ -1712,38 +1732,42 @@ SwField* SwHiddenParaField::Copy() const
 /*-----------------05.03.98 13:25-------------------
 
 --------------------------------------------------*/
-BOOL SwHiddenParaField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwHiddenParaField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
-        rAny <<= OUString(aCond);
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_HIDDEN)))
+    switch ( nMId )
     {
-        sal_Bool bHidden = bIsHidden;
-        rAny.setValue(&bHidden, ::getBooleanCppuType());
+    case FIELD_PROP_PAR1:
+        rAny <<= OUString(aCond);
+        break;
+    case  FIELD_PROP_BOOL1:
+        {
+            sal_Bool bHidden = bIsHidden;
+            rAny.setValue(&bHidden, ::getBooleanCppuType());
+        }
+        break;
+
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 /*-----------------05.03.98 13:25-------------------
 
 --------------------------------------------------*/
-BOOL SwHiddenParaField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwHiddenParaField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
+    switch ( nMId )
     {
-        OUString uTmp;
-        rAny >>= uTmp;
-        aCond = String(uTmp);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_HIDDEN)))
+    case FIELD_PROP_PAR1:
+        ::GetString( rAny, aCond );
+        break;
+    case FIELD_PROP_BOOL1:
         bIsHidden = *(sal_Bool*)rAny.getValue();
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
+        break;
+
+    default:
+        DBG_ERROR("illegal property")
+    }
     return sal_True;
 }
 
@@ -1835,54 +1859,53 @@ String SwPostItField::GetPar2() const
 /*-----------------05.03.98 13:42-------------------
 
 --------------------------------------------------*/
-BOOL SwPostItField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwPostItField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_AUTHOR)))
-        rAny <<= OUString(sAuthor);
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT)))
-        rAny <<= OUString(sTxt);
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATE)))
+    switch( nMId )
     {
-        util::Date aSetDate;
-        aSetDate.Day = aDate.GetDay();
-        aSetDate.Month = aDate.GetMonth();
-        aSetDate.Year = aDate.GetYear();
-        rAny.setValue(&aSetDate, ::getCppuType((util::Date*)0));
+    case FIELD_PROP_PAR1:
+        rAny <<= OUString(sAuthor);
+        break;
+    case FIELD_PROP_PAR2:
+        rAny <<= OUString(sTxt);
+        break;
+    case FIELD_PROP_DATE:
+        {
+            util::Date aSetDate;
+            aSetDate.Day = aDate.GetDay();
+            aSetDate.Month = aDate.GetMonth();
+            aSetDate.Year = aDate.GetYear();
+            rAny.setValue(&aSetDate, ::getCppuType((util::Date*)0));
+        }
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 /*-----------------05.03.98 13:42-------------------
 
 --------------------------------------------------*/
-BOOL SwPostItField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwPostItField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_AUTHOR)))
+    switch( nMId )
     {
-        OUString uTmp;
-        rAny >>= uTmp;
-        sAuthor = String(uTmp);
+    case FIELD_PROP_PAR1:
+        ::GetString( rAny, sAuthor );
+        break;
+    case FIELD_PROP_PAR2:
+        ::GetString( rAny, sTxt );
+        break;
+    case FIELD_PROP_DATE:
+        if( rAny.getValueType() == ::getCppuType((util::Date*)0) )
+        {
+            util::Date aSetDate = *(util::Date*)rAny.getValue();
+            aDate = Date(aSetDate.Day, aSetDate.Month, aSetDate.Year);
+        }
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT)))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        sTxt = String(uTmp);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATE)) &&
-        rAny.getValueType() == ::getCppuType((util::Date*)0))
-    {
-        util::Date aSetDate = *(util::Date*)rAny.getValue();
-        aDate = Date(aSetDate.Day, aSetDate.Month, aSetDate.Year);
-    }
-
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 /*--------------------------------------------------------------------
@@ -1981,57 +2004,58 @@ void SwExtUserField::SetSubType(sal_uInt16 nSub)
 /*-----------------05.03.98 14:14-------------------
 
 --------------------------------------------------*/
-BOOL SwExtUserField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwExtUserField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_USER_DATA_TYPE)))
+    switch( nMId )
     {
-        sal_Int16 nTmp = nType;
-        rAny <<= nTmp;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT))||
-        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
+    case FIELD_PROP_PAR1:
         rAny <<= OUString(aContent);
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED)))
-    {
-        sal_Bool bTmp = IsFixed();
-        rAny.setValue(&bTmp, ::getBooleanCppuType());
+        break;
+
+    case FIELD_PROP_USHORT1:
+        {
+            sal_Int16 nTmp = nType;
+            rAny <<= nTmp;
+        }
+        break;
+    case FIELD_PROP_BOOL1:
+        {
+            sal_Bool bTmp = IsFixed();
+            rAny.setValue(&bTmp, ::getBooleanCppuType());
+        }
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 /*-----------------05.03.98 14:14-------------------
 
 --------------------------------------------------*/
-BOOL SwExtUserField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwExtUserField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_USER_DATA_TYPE)))
+    switch( nMId )
     {
-        sal_Int16 nTmp;
-        rAny >>= nTmp;
-        nType = nTmp;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT))||
-        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        aContent = String(uTmp);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED)))
-    {
-        sal_Bool bSet = *(sal_Bool*)rAny.getValue();
-        if(bSet)
+    case FIELD_PROP_PAR1:
+        ::GetString( rAny, aContent );
+        break;
+
+    case FIELD_PROP_USHORT1:
+        {
+            sal_Int16 nTmp;
+            rAny >>= nTmp;
+            nType = nTmp;
+        }
+        break;
+    case FIELD_PROP_BOOL1:
+        if( *(sal_Bool*)rAny.getValue() )
             SetFormat(GetFormat() | AF_FIXED);
         else
             SetFormat(GetFormat() & ~AF_FIXED);
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 //-------------------------------------------------------------------------
@@ -2100,31 +2124,37 @@ void SwRefPageSetField::SetPar2(const String& rStr)
 /*-----------------05.03.98 14:52-------------------
 
 --------------------------------------------------*/
-BOOL SwRefPageSetField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwRefPageSetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_ON)))
+    switch( nMId )
+    {
+    case FIELD_PROP_BOOL1:
         rAny.setValue(&bOn, ::getBooleanCppuType());
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_OFFSET )))
+        break;
+    case FIELD_PROP_USHORT1:
         rAny <<= (sal_Int16)nOffset;
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
+        break;
+    default:
+        DBG_ERROR("illegal property")
+    }
     return sal_True;
 }
 /*-----------------05.03.98 14:52-------------------
 
 --------------------------------------------------*/
-BOOL SwRefPageSetField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwRefPageSetField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_ON)))
+    switch( nMId )
+    {
+    case FIELD_PROP_BOOL1:
         bOn = *(sal_Bool*)rAny.getValue();
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_OFFSET )))
+        break;
+    case FIELD_PROP_USHORT1:
         rAny >>=nOffset;
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
+        break;
+    default:
+        DBG_ERROR("illegal property")
+    }
     return sal_True;
 }
 /*--------------------------------------------------------------------
@@ -2360,37 +2390,39 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
 /*-----------------05.03.98 14:52-------------------
 
 --------------------------------------------------*/
-BOOL SwRefPageGetField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwRefPageGetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE)))
+    switch( nMId )
     {
+    case FIELD_PROP_USHORT1:
         rAny <<= (sal_Int16)GetFormat();
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 /*-----------------05.03.98 14:52-------------------
 
 --------------------------------------------------*/
-BOOL SwRefPageGetField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwRefPageGetField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE )))
+    switch( nMId )
     {
-        sal_Int16 nSet;
-        rAny >>= nSet;
-        if(nSet <= SVX_NUM_PAGEDESC )
-            SetFormat(nSet);
-        else
-            //exception(wrong_value)
-            ;
+    case FIELD_PROP_USHORT1:
+        {
+            sal_Int16 nSet;
+            rAny >>= nSet;
+            if(nSet <= SVX_NUM_PAGEDESC )
+                SetFormat(nSet);
+            else
+                //exception(wrong_value)
+                ;
+        }
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 
@@ -2483,66 +2515,70 @@ void SwJumpEditField::SetPar2(const String& rStr)
 /*-----------------05.03.98 15:00-------------------
 
 --------------------------------------------------*/
-BOOL SwJumpEditField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwJumpEditField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_PLACEHOLDER_TYPE)))
+    switch( nMId )
     {
-        sal_Int16 nRet;
-        switch( GetFormat() )
+    case FIELD_PROP_USHORT1:
         {
-            case JE_FMT_TEXT:   nRet = text::PlaceholderType::TEXT; break;
+            sal_Int16 nRet;
+            switch( GetFormat() )
+            {
             case JE_FMT_TABLE:  nRet = text::PlaceholderType::TABLE; break;
             case JE_FMT_FRAME:  nRet = text::PlaceholderType::TEXTFRAME; break;
             case JE_FMT_GRAPHIC:nRet = text::PlaceholderType::GRAPHIC; break;
-            //case JE_FMT_OLE:
-            default: nRet = nRet = text::PlaceholderType::OBJECT;
+            case JE_FMT_OLE:    nRet = text::PlaceholderType::OBJECT; break;
+//          case JE_FMT_TEXT:
+            default:
+                nRet = text::PlaceholderType::TEXT; break;
+            }
+            rAny <<= nRet;
         }
-        rAny <<= nRet;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_HINT)))
+        break;
+    case FIELD_PROP_PAR1 :
         rAny <<= OUString(sHelp);
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_PLACEHOLDER    )))
+        break;
+    case FIELD_PROP_PAR2 :
          rAny <<= OUString(sTxt);
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
+         break;
+    default:
+        DBG_ERROR("illegal property")
+    }
     return sal_True;
 }
 /*-----------------05.03.98 15:00-------------------
 
 --------------------------------------------------*/
-BOOL SwJumpEditField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwJumpEditField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_PLACEHOLDER_TYPE)))
+    switch( nMId )
     {
-        sal_Int16 nSet;
-        rAny >>= nSet;
-        switch( nSet )
+    case FIELD_PROP_USHORT1:
         {
-            case text::PlaceholderType::TEXT     : SetFormat(JE_FMT_TEXT); break;
-            case text::PlaceholderType::TABLE    : SetFormat(JE_FMT_TABLE); break;
-            case text::PlaceholderType::TEXTFRAME: SetFormat(JE_FMT_FRAME); break;
-            case text::PlaceholderType::GRAPHIC  : SetFormat(JE_FMT_GRAPHIC); break;
-            case text::PlaceholderType::OBJECT   : SetFormat(JE_FMT_OLE); break;
+            //JP 24.10.2001: int32 because in UnoField.cxx a putvalue is
+            //              called with a int32 value! But normally we need
+            //              here only a int16
+            sal_Int32 nSet;
+            rAny >>= nSet;
+            switch( nSet )
+            {
+                case text::PlaceholderType::TEXT     : SetFormat(JE_FMT_TEXT); break;
+                case text::PlaceholderType::TABLE    : SetFormat(JE_FMT_TABLE); break;
+                case text::PlaceholderType::TEXTFRAME: SetFormat(JE_FMT_FRAME); break;
+                case text::PlaceholderType::GRAPHIC  : SetFormat(JE_FMT_GRAPHIC); break;
+                case text::PlaceholderType::OBJECT   : SetFormat(JE_FMT_OLE); break;
+            }
         }
+        break;
+    case FIELD_PROP_PAR1 :
+        ::GetString( rAny, sHelp );
+        break;
+    case FIELD_PROP_PAR2 :
+         ::GetString( rAny, sTxt);
+         break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_HINT)))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        sHelp = String(uTmp);
-    }
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_PLACEHOLDER    )))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        sTxt = String(uTmp);
-    }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 
@@ -2592,32 +2628,30 @@ void SwCombinedCharField::SetPar1(const String& rStr)
 }
 
 BOOL SwCombinedCharField::QueryValue( com::sun::star::uno::Any& rAny,
-                                        const String& rProperty ) const
+                                        BYTE nMId ) const
 {
-    if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )) ||
-        rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION )))
+    switch( nMId )
+    {
+    case FIELD_PROP_PAR1:
         rAny <<= rtl::OUString( sCharacters );
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
+        break;
+    default:
+        DBG_ERROR("illegal property")
+    }
     return sal_True;
 }
 
 BOOL SwCombinedCharField::PutValue( const com::sun::star::uno::Any& rAny,
-                                        const String& rProperty )
+                                        BYTE nMId )
 {
-    if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT)) ||
-        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
+    switch( nMId )
     {
-        OUString uTmp;
-        rAny >>= uTmp;
-        sCharacters = String( uTmp ).Copy( 0, MAX_COMBINED_CHARACTERS );
+    case FIELD_PROP_PAR1:
+        ::GetString( rAny, sCharacters ).Erase( MAX_COMBINED_CHARACTERS );
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-17 09:48:07 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,6 @@
 #ifndef _UNOFIELD_HXX
 #include <unofield.hxx>
 #endif
-#ifndef _UNOPRNMS_HXX
-#include <unoprnms.hxx>
-#endif
 #ifndef _FMTFLD_HXX
 #include <fmtfld.hxx>
 #endif
@@ -165,6 +162,9 @@
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _UNOFLDMID_H
+#include <unofldmid.h>
 #endif
 
 using namespace ::com::sun::star;
@@ -504,85 +504,82 @@ void SwGetExpField::SetLanguage(USHORT nLng)
 /*-----------------07.03.98 16:08-------------------
 
 --------------------------------------------------*/
-BOOL SwGetExpField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwGetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VALUE )))
+    switch( nMId )
+    {
+    case FIELD_PROP_DOUBLE:
         rAny <<= GetValue();
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT )))
+        break;
+    case FIELD_PROP_FORMAT:
         rAny <<= (sal_Int32)GetFormat();
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VARIABLE_SUBTYPE )))
+        break;
+    case FIELD_PROP_USHORT1:
          rAny <<= (sal_Int16)nSubType;
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
+        break;
+    case FIELD_PROP_PAR1:
          rAny <<= OUString( GetFormula() );
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE )))
-    {
-        sal_Int16 nRet = lcl_SubTypeToAPI(GetSubType() & 0xff);
-        rAny <<= nRet;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
-    {
-        BOOL bTmp = 0 != (nSubType & SUB_CMD);
-        rAny.setValue(&bTmp, ::getBooleanCppuType());
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
+        break;
+    case FIELD_PROP_SUBTYPE:
+        {
+            sal_Int16 nRet = lcl_SubTypeToAPI(GetSubType() & 0xff);
+            rAny <<= nRet;
+        }
+        break;
+    case FIELD_PROP_BOOL2:
+        {
+            BOOL bTmp = 0 != (nSubType & SUB_CMD);
+            rAny.setValue(&bTmp, ::getBooleanCppuType());
+        }
+        break;
+    case FIELD_PROP_PAR4:
         rAny <<= rtl::OUString(GetExpStr());
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
+        break;
+    default:
+        DBG_ERROR("illegal property")
+    }
     return TRUE;
 }
 /*-----------------07.03.98 16:08-------------------
 
 --------------------------------------------------*/
-BOOL SwGetExpField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwGetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VALUE )))
+    sal_Int32 nTmp;
+    String sTmp;
+    switch( nMId )
     {
+    case FIELD_PROP_DOUBLE:
         SwValueField::SetValue(*(double*) rAny.getValue());
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT )))
-    {
-        sal_Int32 nTmp;
+        break;
+    case FIELD_PROP_FORMAT:
         rAny >>= nTmp;
         SetFormat(nTmp);
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VARIABLE_SUBTYPE )))
-    {
-         sal_Int32 nTmp;
+        break;
+    case FIELD_PROP_USHORT1:
          rAny >>= nTmp;
          nSubType = nTmp;
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        SetFormula( uTmp );
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE )))
-    {
-        sal_Int32 nSet = lcl_APIToSubType(rAny);
-        if(nSet >=0 )
-            SetSubType((GetSubType() & 0xff00) | nSet);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
-    {
-        sal_Bool bTmp = *(sal_Bool*) rAny.getValue();
-        if(bTmp)
+        break;
+    case FIELD_PROP_PAR1:
+         SetFormula( ::GetString( rAny, sTmp ));
+        break;
+    case FIELD_PROP_SUBTYPE:
+        nTmp = lcl_APIToSubType(rAny);
+        if( nTmp >=0 )
+            SetSubType( (GetSubType() & 0xff00) | nTmp);
+        break;
+    case FIELD_PROP_BOOL2:
+        if(*(sal_Bool*) rAny.getValue())
             nSubType |= SUB_CMD;
         else
             nSubType &= (~SUB_CMD);
+        break;
+    case FIELD_PROP_PAR4:
+        ChgExpStr(::GetString( rAny, sTmp ));
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
-    {
-        OUString sVal;
-        rAny >>= sVal;
-        ChgExpStr(sVal);
-    }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return TRUE;
 }
 
@@ -730,54 +727,65 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
 /* -----------------24.03.99 09:44-------------------
  *
  * --------------------------------------------------*/
-BOOL SwSetExpFieldType::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwSetExpFieldType::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE )))
+    switch( nMId )
     {
-        sal_Int16 nRet = lcl_SubTypeToAPI(GetType());
-        rAny <<= nRet;
-    }
-    else if(rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_SEPARATOR )))
-    {
-        OUString sRet(GetDelimiter());
-        rAny <<= sRet;
-    }
-    else if(rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CHAPTER_NUMBERING_LEVEL )))
-    {
-        sal_Int8 nRet = nLevel < MAXLEVEL? nLevel : -1;
-        rAny <<= nRet;
+    case FIELD_PROP_SUBTYPE:
+        {
+            sal_Int16 nRet = lcl_SubTypeToAPI(GetType());
+            rAny <<= nRet;
+        }
+        break;
+    case FIELD_PROP_PAR2:
+        rAny <<= OUString(GetDelimiter());
+        break;
+    case FIELD_PROP_SHORT1:
+        {
+            sal_Int8 nRet = nLevel < MAXLEVEL? nLevel : -1;
+            rAny <<= nRet;
+        }
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
     return TRUE;
 }
 
-BOOL SwSetExpFieldType::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwSetExpFieldType::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    BOOL bRet = FALSE;
-    if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE ) ))
+    switch( nMId )
     {
-        sal_Int32 nSet = lcl_APIToSubType(rAny);
-        if(nSet >=0)
-            SetType(nSet);
+    case FIELD_PROP_SUBTYPE:
+        {
+            sal_Int32 nSet = lcl_APIToSubType(rAny);
+            if(nSet >=0)
+                SetType(nSet);
+        }
+        break;
+    case FIELD_PROP_PAR2:
+        {
+            String sTmp;
+            if( ::GetString( rAny, sTmp ).Len() )
+                SetDelimiter( sTmp.GetChar( 0 ));
+            else
+                SetDelimiter(' ');
+        }
+        break;
+    case FIELD_PROP_SHORT1:
+        {
+            sal_Int8 nLvl;
+            rAny >>= nLvl;
+            if(nLvl < 0 || nLvl >= MAXLEVEL)
+                SetOutlineLvl(UCHAR_MAX);
+            else
+                SetOutlineLvl(nLvl);
+        }
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if(rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_SEPARATOR )))
-    {
-        OUString sDelim;
-        rAny >>= sDelim;
-        if(sDelim.getLength())
-            SetDelimiter(sDelim.getStr()[0]);
-        else
-            SetDelimiter(' ');
-    }
-    else if(rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CHAPTER_NUMBERING_LEVEL )))
-    {
-        sal_Int8 nLvl;
-        rAny >>= nLvl;
-        if(nLvl < 0 || nLvl >= MAXLEVEL)
-            SetOutlineLvl(UCHAR_MAX);
-        else
-            SetOutlineLvl(nLvl);
-    }
-    return bRet;
+    return TRUE;
 }
 
 BOOL SwSeqFldList::InsertSort( _SeqFldLstElem* pNew )
@@ -1126,39 +1134,37 @@ String SwInputField::Expand() const
 /*-----------------06.03.98 11:12-------------------
 
 --------------------------------------------------*/
-BOOL SwInputField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwInputField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_HINT )))
-        rAny <<= OUString( aPText );
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
+    switch( nMId )
+    {
+    case FIELD_PROP_PAR1:
          rAny <<= OUString( aContent );
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
+        break;
+    case FIELD_PROP_PAR2:
+        rAny <<= OUString( aPText );
+        break;
+    default:
+        DBG_ERROR("illegal property")
+    }
     return TRUE;
 }
 /*-----------------06.03.98 11:12-------------------
 
 --------------------------------------------------*/
-BOOL SwInputField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwInputField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_HINT )))
+    switch( nMId )
     {
-        OUString uTmp;
-        rAny >>= uTmp;
-        aPText = String( uTmp );
+    case FIELD_PROP_PAR1:
+         ::GetString( rAny, aContent );
+        break;
+    case FIELD_PROP_PAR2:
+        ::GetString( rAny, aPText );
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        aContent = String( uTmp );
-    }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return TRUE;
 }
 /*--------------------------------------------------------------------
@@ -1201,150 +1207,149 @@ void SwInputField::SetSubType(USHORT nSub)
 /*-----------------05.03.98 17:22-------------------
 
 --------------------------------------------------*/
-BOOL SwSetExpField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwSetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_IS_VISIBLE )))
+    switch( nMId )
     {
-        sal_Bool bVal = 0 == (nSubType & SUB_INVISIBLE);
-        rAny.setValue(&bVal, ::getBooleanCppuType());
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT )))
+    case FIELD_PROP_BOOL2:
+        {
+            sal_Bool bVal = 0 == (nSubType & SUB_INVISIBLE);
+            rAny.setValue(&bVal, ::getBooleanCppuType());
+        }
+        break;
+    case FIELD_PROP_FORMAT:
         rAny <<= (sal_Int32)GetFormat();
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE )))
+        break;
+    case FIELD_PROP_USHORT2:
         rAny <<= (sal_Int16)GetFormat();
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_SEQUENCE_VALUE )))
+        break;
+    case FIELD_PROP_USHORT1:
         rAny <<= (sal_Int16)nSeqNo;
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VARIABLE_NAME )))
+        break;
+    case FIELD_PROP_PAR1:
         rAny <<= OUString ( SwStyleNameMapper::GetProgName(GetPar1(), GET_POOLID_TXTCOLL ) );
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
-    {
-        //I18N - if the formula contains only "TypeName+1"
-        //and it's one of the initially created sequence fields
-        //then the localized names has to be replaced by a programmatic name
-        OUString sFormula = SwXFieldMaster::LocalizeFormula(*this, GetFormula(), TRUE);
-        rAny <<= OUString( sFormula );
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VALUE )))
+        break;
+    case FIELD_PROP_PAR2:
+        {
+            //I18N - if the formula contains only "TypeName+1"
+            //and it's one of the initially created sequence fields
+            //then the localized names has to be replaced by a programmatic name
+            OUString sFormula = SwXFieldMaster::LocalizeFormula(*this, GetFormula(), TRUE);
+            rAny <<= OUString( sFormula );
+        }
+        break;
+    case FIELD_PROP_DOUBLE:
         rAny <<= (double)GetValue();
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE )))
-    {
-        sal_Int16 nRet = 0;
-            nRet = lcl_SubTypeToAPI(GetSubType() & 0xff);
-        rAny <<= nRet;
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_HINT )))
+        break;
+    case FIELD_PROP_SUBTYPE:
+        {
+            sal_Int16 nRet = 0;
+                nRet = lcl_SubTypeToAPI(GetSubType() & 0xff);
+            rAny <<= nRet;
+        }
+        break;
+    case FIELD_PROP_PAR3:
         rAny <<= OUString( aPText );
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
-    {
-        BOOL bTmp = 0 != (nSubType & SUB_CMD);
-        rAny.setValue(&bTmp, ::getBooleanCppuType());
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_INPUT)))
-    {
-        BOOL bTmp = GetInputFlag();
-        rAny.setValue(&bTmp, ::getBooleanCppuType());
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
+        break;
+    case FIELD_PROP_BOOL3:
+        {
+            BOOL bTmp = 0 != (nSubType & SUB_CMD);
+            rAny.setValue(&bTmp, ::getBooleanCppuType());
+        }
+        break;
+    case FIELD_PROP_BOOL1:
+        {
+            BOOL bTmp = GetInputFlag();
+            rAny.setValue(&bTmp, ::getBooleanCppuType());
+        }
+        break;
+    case FIELD_PROP_PAR4:
         rAny <<= rtl::OUString(GetExpStr());
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
+        break;
+    default:
+        DBG_ERROR("illegal property")
+    }
     return TRUE;
 }
 /*-----------------05.03.98 17:22-------------------
 
 --------------------------------------------------*/
-BOOL SwSetExpField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwSetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_IS_VISIBLE )))
+    sal_Int32 nTmp32;
+    sal_Int16 nTmp16;
+    String sTmp;
+    switch( nMId )
     {
-        sal_Bool bVal = *(sal_Bool*)rAny.getValue();
-        if(bVal)
+    case FIELD_PROP_BOOL2:
+        if(*(sal_Bool*)rAny.getValue())
             nSubType &= ~SUB_INVISIBLE;
         else
             nSubType |= SUB_INVISIBLE;
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT )))
-    {
-        sal_Int32 nTmp;
-        rAny >>= nTmp;
-        SetFormat(nTmp);
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE )))
-    {
-        sal_Int16 nSet;
-        rAny >>=nSet;
-        if(nSet <= SVX_NUMBER_NONE )
-            SetFormat(nSet);
-        else
-            //exception(wrong_value)
-            ;
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_SEQUENCE_VALUE )))
-    {
-        sal_Int16 nSet;
-        rAny >>=nSet;
-        nSeqNo = nSet;
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VARIABLE_NAME )))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        uTmp = SwStyleNameMapper::GetUIName( uTmp, GET_POOLID_TXTCOLL );
-        SetPar1( uTmp );
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        //I18N - if the formula contains only "TypeName+1"
-        //and it's one of the initially created sequence fields
-        //then the localized names has to be replaced by a programmatic name
-        OUString sFormula = SwXFieldMaster::LocalizeFormula(*this, uTmp, FALSE);
-        SetFormula( sFormula );
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_VALUE )))
-    {
-         double fVal;
-         rAny >>= fVal;
-         SetValue(fVal);
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE )))
-    {
-        sal_Int32 nSet = lcl_APIToSubType(rAny);
-        if(nSet >= 0)
-            SetSubType((GetSubType() & 0xff00) | nSet);
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_HINT )))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        aPText = String( uTmp );
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
-    {
-        sal_Bool bTmp = *(sal_Bool*) rAny.getValue();
-        if(bTmp)
+        break;
+    case FIELD_PROP_FORMAT:
+        rAny >>= nTmp32;
+        SetFormat(nTmp32);
+        break;
+    case FIELD_PROP_USHORT2:
+        {
+            rAny >>= nTmp16;
+            if(nTmp16 <= SVX_NUMBER_NONE )
+                SetFormat(nTmp16);
+            else
+                //exception(wrong_value)
+                ;
+        }
+        break;
+    case FIELD_PROP_USHORT1:
+        rAny >>= nTmp16;
+        nSeqNo = nTmp16;
+        break;
+    case FIELD_PROP_PAR1:
+        SetPar1( SwStyleNameMapper::GetUIName(
+                            ::GetString( rAny, sTmp ), GET_POOLID_TXTCOLL ) );
+        break;
+    case FIELD_PROP_PAR2:
+        {
+            OUString uTmp;
+            rAny >>= uTmp;
+            //I18N - if the formula contains only "TypeName+1"
+            //and it's one of the initially created sequence fields
+            //then the localized names has to be replaced by a programmatic name
+            OUString sFormula = SwXFieldMaster::LocalizeFormula(*this, uTmp, FALSE);
+            SetFormula( sFormula );
+        }
+        break;
+    case FIELD_PROP_DOUBLE:
+        {
+             double fVal;
+             rAny >>= fVal;
+             SetValue(fVal);
+        }
+        break;
+    case FIELD_PROP_SUBTYPE:
+        nTmp32 = lcl_APIToSubType(rAny);
+        if(nTmp32 >= 0)
+            SetSubType((GetSubType() & 0xff00) | nTmp32);
+        break;
+    case FIELD_PROP_PAR3:
+        ::GetString( rAny, aPText );
+        break;
+    case FIELD_PROP_BOOL3:
+        if(*(sal_Bool*) rAny.getValue())
             nSubType |= SUB_CMD;
         else
             nSubType &= (~SUB_CMD);
+        break;
+    case FIELD_PROP_BOOL1:
+        SetInputFlag(*(sal_Bool*) rAny.getValue());
+        break;
+    case FIELD_PROP_PAR4:
+        ChgExpStr( ::GetString( rAny, sTmp ));
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_INPUT)))
-    {
-        sal_Bool bTmp = *(sal_Bool*) rAny.getValue();
-        SetInputFlag(bTmp);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
-    {
-        OUString sVal;
-        rAny >>= sVal;
-        ChgExpStr(sVal);
-    }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return TRUE;
 }
 

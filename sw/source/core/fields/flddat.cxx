@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddat.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,18 @@
 #include <com/sun/star/util/DateTime.hpp>
 #endif
 
-#ifndef _UNOPRNMS_HXX
-#include <unoprnms.hxx>
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
-#include "doc.hxx"
-#include "fldbas.hxx"
-#include "flddat.hxx"
+#ifndef _FLDBAS_HXX
+#include <fldbas.hxx>
+#endif
+#ifndef _FLDDAT_HXX
+#include <flddat.hxx>
+#endif
+#ifndef _UNOFLDMID_H
+#include <unofldmid.h>
+#endif
 
 using namespace ::com::sun::star;
 /*--------------------------------------------------
@@ -293,99 +299,95 @@ ULONG SwDateTimeField::GetTime(BOOL bUseOffset) const
 /*-----------------04.03.98 11:05-------------------
 
 --------------------------------------------------*/
-BOOL SwDateTimeField::QueryValue( uno::Any& rVal, const String& rProperty ) const
+BOOL SwDateTimeField::QueryValue( uno::Any& rVal, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED )))
+    switch( nMId )
     {
-        BOOL bTmp = IsFixed();
-        rVal.setValue(&bTmp, ::getCppuBooleanType());
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
+    case FIELD_PROP_BOOL1:
+        {
+            BOOL bTmp = IsFixed();
+            rVal.setValue(&bTmp, ::getCppuBooleanType());
+        }
+        break;
+    case FIELD_PROP_BOOL2:
+        {
+            BOOL bTmp = IsDate();
+            rVal.setValue(&bTmp, ::getCppuBooleanType());
+        }
+        break;
+    case FIELD_PROP_FORMAT:
         rVal <<= (sal_Int32)GetFormat();
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_DATE)))
-    {
-        BOOL bTmp = IsDate();
-        rVal.setValue(&bTmp, ::getCppuBooleanType());
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_ADJUST)))
+        break;
+    case FIELD_PROP_SUBTYPE:
         rVal <<= (sal_Int32)nOffset;
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATE_TIME_VALUE)))
-    {
-        ULONG nDate = GetDate();
-        ULONG nTime = GetTime();
-        DateTime aDateTime;
-        aDateTime.SetDate(nDate);
-        aDateTime.SetTime(nTime);
+        break;
+    case FIELD_PROP_DATE_TIME:
+        {
+            DateTime aDateTime;
+            aDateTime.SetDate(GetDate());
+            aDateTime.SetTime(GetTime());
 
-        util::DateTime DateTimeValue;
-        DateTimeValue.HundredthSeconds = aDateTime.Get100Sec();
-        DateTimeValue.Seconds = aDateTime.GetSec();
-        DateTimeValue.Minutes = aDateTime.GetMin();
-        DateTimeValue.Hours = aDateTime.GetHour();
-        DateTimeValue.Day = aDateTime.GetDay();
-        DateTimeValue.Month = aDateTime.GetMonth();
-        DateTimeValue.Year = aDateTime.GetYear();
-        rVal <<= DateTimeValue;
+            util::DateTime DateTimeValue;
+            DateTimeValue.HundredthSeconds = aDateTime.Get100Sec();
+            DateTimeValue.Seconds = aDateTime.GetSec();
+            DateTimeValue.Minutes = aDateTime.GetMin();
+            DateTimeValue.Hours = aDateTime.GetHour();
+            DateTimeValue.Day = aDateTime.GetDay();
+            DateTimeValue.Month = aDateTime.GetMonth();
+            DateTimeValue.Year = aDateTime.GetYear();
+            rVal <<= DateTimeValue;
+        }
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-
-#ifdef   DBG_UTIL
-    else
-        DBG_ERROR("Was war das fuer ein Typ?")
-#endif
     return TRUE;
 }
 /*-----------------04.03.98 11:05-------------------
 
 --------------------------------------------------*/
-BOOL SwDateTimeField::PutValue( const uno::Any& rVal, const String& rProperty )
+BOOL SwDateTimeField::PutValue( const uno::Any& rVal, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_FIXED)))
+    sal_Int32 nTmp;
+    switch( nMId )
     {
-        BOOL bFix = *(sal_Bool*)rVal.getValue();
-        if(bFix)
+    case FIELD_PROP_BOOL1:
+        if(*(sal_Bool*)rVal.getValue())
             nSubType |= FIXEDFLD;
         else
             nSubType &= ~FIXEDFLD;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
-    {
-        sal_Int32 nTmp;
+        break;
+    case FIELD_PROP_BOOL2:
+        nSubType &=  ~(DATEFLD|TIMEFLD);
+        nSubType |= *(sal_Bool*)rVal.getValue() ? DATEFLD : TIMEFLD;
+        break;
+    case FIELD_PROP_FORMAT:
         rVal >>= nTmp;
         ChangeFormat(nTmp);
+        break;
+    case FIELD_PROP_SUBTYPE:
+        rVal >>= nTmp;
+        nOffset = nTmp;
+        break;
+    case FIELD_PROP_DATE_TIME:
+        {
+            util::DateTime aDateTimeValue;
+            if(!(rVal >>= aDateTimeValue))
+                return FALSE;
+            DateTime aDateTime;
+            aDateTime.Set100Sec(aDateTimeValue.HundredthSeconds);
+            aDateTime.SetSec(aDateTimeValue.Seconds);
+            aDateTime.SetMin(aDateTimeValue.Minutes);
+            aDateTime.SetHour(aDateTimeValue.Hours);
+            aDateTime.SetDay(aDateTimeValue.Day);
+            aDateTime.SetMonth(aDateTimeValue.Month);
+            aDateTime.SetYear(aDateTimeValue.Year);
+            SetDateTime(aDateTime.GetDate(), aDateTime.GetTime());
+        }
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_DATE)))
-    {
-        BOOL bDate = *(sal_Bool*)rVal.getValue();
-        nSubType &=  ~(DATEFLD|TIMEFLD);
-        nSubType |= bDate ? DATEFLD : TIMEFLD;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_ADJUST)))
-    {
-        sal_Int32 nVal;
-        rVal >>= nVal;
-        nOffset = nVal;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATE_TIME_VALUE)))
-    {
-        util::DateTime aDateTimeValue;
-        if(!(rVal >>= aDateTimeValue))
-            return FALSE;
-        DateTime aDateTime;
-        aDateTime.Set100Sec(aDateTimeValue.HundredthSeconds);
-        aDateTime.SetSec(aDateTimeValue.Seconds);
-        aDateTime.SetMin(aDateTimeValue.Minutes);
-        aDateTime.SetHour(aDateTimeValue.Hours);
-        aDateTime.SetDay(aDateTimeValue.Day);
-        aDateTime.SetMonth(aDateTimeValue.Month);
-        aDateTime.SetYear(aDateTimeValue.Year);
-        SetDateTime(aDateTime.GetDate(), aDateTime.GetTime());
-    }
-#ifdef   DBG_UTIL
-    else
-    {
-        DBG_ERROR("was war das fuer ein Typ?");
-    }
-#endif
     return TRUE;
 }
 

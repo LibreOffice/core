@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:10:50 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,15 +68,25 @@
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_LONGS
+#define _SVSTDARR_ULONGS
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
 
-#ifndef _SVARRAY_HXX
-#include <svtools/svarray.hxx>
-#endif
 #include <svtools/svstdarr.hxx>
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
+#include <com/sun/star/beans/PropertyValues.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
@@ -102,32 +112,23 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
+#ifndef _DOC_HXX
 #include <doc.hxx>
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
 #endif
-#ifndef _UNO_LINGU_HXX
-#include <svx/unolingu.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX
-#include <svx/langitem.hxx>
+#ifndef _UNOFLDMID_H
+#include <unofldmid.h>
 #endif
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
-#include <com/sun/star/beans/PropertyValues.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
 #endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace rtl;
+
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
+
 typedef SwAuthEntry* SwAuthEntryPtr;
 SV_DECL_PTRARR_DEL( SwAuthDataArr, SwAuthEntryPtr, 5, 5 )
 SV_IMPL_PTRARR( SwAuthDataArr, SwAuthEntryPtr )
@@ -591,128 +592,129 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
 /* -----------------------------15.11.00 17:33--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, const String& rProperty ) const
+BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_BRACKET_BEFORE)))
+    switch( nMId )
     {
-        OUString sVal(m_cPrefix);
-        rVal <<= sVal;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_BRACKET_AFTER)))
-    {
-        OUString sVal(m_cSuffix);
-        rVal <<= sVal;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_NUMBER_ENTRIES)))
-    {
-        sal_Bool bVal = m_bIsSequence;
-        rVal.setValue(&bVal, ::getBooleanCppuType());
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SORT_BY_POSITION)))
-    {
-        sal_Bool bVal = m_bSortByDocument;
-        rVal.setValue(&bVal, ::getBooleanCppuType());
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SORT_KEYS)))
-    {
-        Sequence<PropertyValues> aRet(m_pSortKeyArr->Count());
-        PropertyValues* pValues = aRet.getArray();
-        for(sal_Int32 i = 0; i < m_pSortKeyArr->Count(); i++)
+    case FIELD_PROP_PAR1:
+    case FIELD_PROP_PAR2:
         {
-            const SwTOXSortKey* pKey = (*m_pSortKeyArr)[i];
-            pValues[i].realloc(2);
-            PropertyValue* pValue = pValues[i].getArray();
-            pValue[0].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_SORT_KEY));
-            pValue[0].Value <<= sal_Int16(pKey->eField);
-            pValue[1].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_IS_SORT_ASCENDING));
-            pValue[1].Value.setValue(&pKey->bSortAscending, ::getBooleanCppuType());
+            OUString sVal( FIELD_PROP_PAR1 == nMId ? m_cPrefix : m_cSuffix);
+            rVal <<= sVal;
         }
-        rVal <<= aRet;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SORT_ALGORITHM)))
+        break;
+    case FIELD_PROP_PAR3:
         rVal <<= OUString(GetSortAlgorithm());
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_LOCALE)))
+        break;
+
+    case FIELD_PROP_BOOL1:
+    case FIELD_PROP_BOOL2:
+        {
+            sal_Bool bVal = FIELD_PROP_BOOL1 == nMId ? m_bIsSequence: m_bSortByDocument;
+            rVal.setValue(&bVal, ::getBooleanCppuType());
+        }
+        break;
+
+    case FIELD_PROP_LOCALE:
         rVal <<= SvxCreateLocale(GetLanguage());
-    else
-        return FALSE;
+        break;
+
+    case FIELD_PROP_PROP_SEQ:
+        {
+            Sequence<PropertyValues> aRet(m_pSortKeyArr->Count());
+            PropertyValues* pValues = aRet.getArray();
+            OUString sProp1( C2U(SW_PROP_NAME_STR(UNO_NAME_SORT_KEY)) ),
+                     sProp2( C2U(SW_PROP_NAME_STR(UNO_NAME_IS_SORT_ASCENDING)));
+            for(sal_uInt16 i = 0; i < m_pSortKeyArr->Count(); i++)
+            {
+                const SwTOXSortKey* pKey = (*m_pSortKeyArr)[i];
+                pValues[i].realloc(2);
+                PropertyValue* pValue = pValues[i].getArray();
+                pValue[0].Name = sProp1;
+                pValue[0].Value <<= sal_Int16(pKey->eField);
+                pValue[1].Name = sProp2;
+                pValue[1].Value.setValue(&pKey->bSortAscending, ::getBooleanCppuType());
+            }
+            rVal <<= aRet;
+        }
+        break;
+    default:
+        DBG_ERROR("illegal property")
+    }
     return TRUE;
 }
 /* -----------------------------15.11.00 17:33--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwAuthorityFieldType::PutValue( const Any& rVal, const String& rProperty )
+BOOL    SwAuthorityFieldType::PutValue( const Any& rAny, BYTE nMId )
 {
     sal_Bool bRet = TRUE;
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_BRACKET_BEFORE)))
+    String sTmp;
+    switch( nMId )
     {
-        OUString sVal; rVal >>= sVal;
-        if(sVal.getLength())
-            m_cPrefix = sVal[0];
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_BRACKET_AFTER)))
-    {
-        OUString sVal; rVal >>= sVal;
-        if(sVal.getLength())
-            m_cSuffix = sVal[0];
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_NUMBER_ENTRIES)))
-    {
-        sal_Bool bValue = *(sal_Bool*)rVal.getValue();
-        m_bIsSequence = bValue;
-
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SORT_BY_POSITION)))
-    {
-        sal_Bool bValue = *(sal_Bool*)rVal.getValue();
-        m_bSortByDocument = bValue;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SORT_KEYS)))
-    {
-        Sequence<PropertyValues> aSeq;
-        bRet = rVal >>= aSeq;
-        if(bRet)
+    case FIELD_PROP_PAR1:
+    case FIELD_PROP_PAR2:
+        if( ::GetString( rAny, sTmp ).Len() )
         {
-            m_pSortKeyArr->DeleteAndDestroy(0, m_pSortKeyArr->Count());
-            const PropertyValues* pValues = aSeq.getConstArray();
-            for(sal_Int32 i = 0; i < aSeq.getLength() && i < USHRT_MAX / 4; i++)
+            if( FIELD_PROP_PAR1 == nMId )
+                m_cPrefix = sTmp.GetChar(0);
+            else
+                m_cSuffix = sTmp.GetChar(0);
+        }
+        break;
+    case FIELD_PROP_PAR3:
+        SetSortAlgorithm( ::GetString( rAny, sTmp ));
+        break;
+
+    case FIELD_PROP_BOOL1:
+        m_bIsSequence = *(sal_Bool*)rAny.getValue();
+        break;
+    case FIELD_PROP_BOOL2:
+        m_bSortByDocument = *(sal_Bool*)rAny.getValue();
+        break;
+
+    case FIELD_PROP_LOCALE:
+        {
+            Locale aLocale;
+            if( 0 != (bRet = rAny >>= aLocale ))
+                SetLanguage( SvxLocaleToLanguage( aLocale ));
+        }
+        break;
+
+    case FIELD_PROP_PROP_SEQ:
+        {
+            Sequence<PropertyValues> aSeq;
+            if( 0 != (bRet = rAny >>= aSeq) )
             {
-                const PropertyValue* pValue = pValues[i].getConstArray();
-                SwTOXSortKey* pSortKey = new SwTOXSortKey;
-                for(sal_Int32 j = 0; j < pValues[i].getLength(); j++)
+                m_pSortKeyArr->DeleteAndDestroy(0, m_pSortKeyArr->Count());
+                const PropertyValues* pValues = aSeq.getConstArray();
+                for(sal_Int32 i = 0; i < aSeq.getLength() && i < USHRT_MAX / 4; i++)
                 {
-                    if(pValue[j].Name.equalsAsciiL(SW_PROP_NAME(UNO_NAME_SORT_KEY)))
+                    const PropertyValue* pValue = pValues[i].getConstArray();
+                    SwTOXSortKey* pSortKey = new SwTOXSortKey;
+                    for(sal_Int32 j = 0; j < pValues[i].getLength(); j++)
                     {
-                        sal_Int16 nVal = -1; pValue[j].Value >>= nVal;
-                        if(nVal >= 0 && nVal < AUTH_FIELD_END)
-                            pSortKey->eField = (ToxAuthorityField) nVal;
-                        else
-                            bRet = FALSE;
+                        if(pValue[j].Name.equalsAsciiL(SW_PROP_NAME(UNO_NAME_SORT_KEY)))
+                        {
+                            sal_Int16 nVal = -1; pValue[j].Value >>= nVal;
+                            if(nVal >= 0 && nVal < AUTH_FIELD_END)
+                                pSortKey->eField = (ToxAuthorityField) nVal;
+                            else
+                                bRet = FALSE;
+                        }
+                        else if(pValue[j].Name.equalsAsciiL(SW_PROP_NAME(UNO_NAME_IS_SORT_ASCENDING)))
+                        {
+                            pSortKey->bSortAscending = *(sal_Bool*)pValue[j].Value.getValue();
+                        }
                     }
-                    else if(pValue[j].Name.equalsAsciiL(SW_PROP_NAME(UNO_NAME_IS_SORT_ASCENDING)))
-                    {
-                        pSortKey->bSortAscending = *(sal_Bool*)pValue[j].Value.getValue();
-                    }
+                    m_pSortKeyArr->Insert(pSortKey, m_pSortKeyArr->Count());
                 }
-                m_pSortKeyArr->Insert(pSortKey, m_pSortKeyArr->Count());
             }
         }
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SORT_ALGORITHM)))
-    {
-        OUString sAlgorithm;
-        bRet = rVal >>= sAlgorithm;
-        if(bRet)
-            SetSortAlgorithm(sAlgorithm);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_LOCALE)))
-    {
-        Locale aLocale;
-        bRet = rVal >>= aLocale;
-        if(bRet)
-            SetLanguage(SvxLocaleToLanguage(aLocale));
-    }
-    else
-        bRet = FALSE;
     return bRet;
 }
 /* -----------------19.10.99 13:25-------------------
@@ -877,7 +879,7 @@ const char* aFieldNames[] =
 /* -----------------------------16.11.00 12:27--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwAuthorityField::QueryValue( Any& rVal, const String& rProperty ) const
+BOOL    SwAuthorityField::QueryValue( Any& rAny, BYTE nMId ) const
 {
     if(!GetTyp())
         return FALSE;
@@ -895,7 +897,7 @@ BOOL    SwAuthorityField::QueryValue( Any& rVal, const String& rProperty ) const
         else
             pValues[i].Value <<= OUString(rField);
     }
-    rVal <<= aRet;
+    rAny <<= aRet;
     return FALSE;
 }
 /* -----------------------------15.11.00 17:33--------------------------------
@@ -909,13 +911,13 @@ sal_Int16 lcl_Find(const OUString& rFieldName)
     return -1;
 }
 //----------------------------------------------------------------------------
-BOOL    SwAuthorityField::PutValue( const Any& rVal, const String& rProperty )
+BOOL    SwAuthorityField::PutValue( const Any& rAny, BYTE nMId )
 {
     if(!GetTyp() || !((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(nHandle))
         return FALSE;
 
     Sequence <PropertyValue> aParam;
-    if(!(rVal >>= aParam))
+    if(!(rAny >>= aParam))
         return FALSE;
 
     String sToSet;

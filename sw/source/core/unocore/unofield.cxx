@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 12:15:55 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,10 @@
 
 #include <swtypes.hxx>
 #include <cmdid.h>
+
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
 #endif
-
 #ifndef _HINTS_HXX //autogen
 #include <hints.hxx>
 #endif
@@ -246,6 +246,9 @@
 #ifndef _SWUNOHELPER_HXX
 #include <swunohelper.hxx>
 #endif
+#ifndef SW_UNOFLDMID_H
+#include <unofldmid.h>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -255,687 +258,32 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::rtl;
 
-/******************************************************************************
- *
- ******************************************************************************/
-//Abbildung der Properties auf den Descriptor
-#define FIELD_PROP_PAR1             10
-#define FIELD_PROP_PAR2             11
-#define FIELD_PROP_PAR3             12
-#define FIELD_PROP_FORMAT           13
-#define FIELD_PROP_SUBTYPE          14
-#define FIELD_PROP_BOOL1            15
-#define FIELD_PROP_BOOL2            16
-#define FIELD_PROP_DATE             17
-#define FIELD_PROP_USHORT1          18
-#define FIELD_PROP_USHORT2          19
-#define FIELD_PROP_BYTE1            20
-#define FIELD_PROP_DOUBLE           21
-#define FIELD_PROP_BOOL3            22
-#define FIELD_PROP_PAR4             23
-#define FIELD_PROP_SHORT1           24
-#define FIELD_PROP_DATE_TIME        25
-#define FIELD_PROP_PROP_SEQ         26
 
-//static SfxItemPropertyMap aSetRefFieldPropMap     [] = {{0,0,0,0}};
-//static SfxItemPropertyMap aInetFieldPropMap       [] = {{0,0,0,0}};
-
-
-class SwFieldPropMapProvider
+static const sal_uInt16 aDocInfoSubTypeFromService[] =
 {
-public:
-    static const SfxItemPropertyMap* GetPropertyMap(USHORT nServiceId);
-};
-/* -----------------------------27.03.00 09:59--------------------------------
-
- ---------------------------------------------------------------------------*/
-const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nServiceId)
-{
-    const SfxItemPropertyMap* pRet = 0;
-    switch(nServiceId)
-    {
-        case  SW_SERVICE_FIELDTYPE_DATETIME:
-        {
-            static SfxItemPropertyMap aDateTimeFieldPropMap[] =
-            {
-                {SW_PROP_NAME(UNO_NAME_ADJUST), FIELD_PROP_SUBTYPE,     &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATE_TIME_VALUE), FIELD_PROP_DATE_TIME,  &::getCppuType((util::DateTime*)0), PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   &::getBooleanCppuType()  , PROPERTY_NONE,0},
-                {SW_PROP_NAME(UNO_NAME_IS_DATE),    FIELD_PROP_BOOL2,   &::getBooleanCppuType()  , PROPERTY_NONE,0},
-                {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT), FIELD_PROP_FORMAT,   &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aDateTimeFieldPropMap;
-        }
-        break;
-        case  SW_SERVICE_FIELDTYPE_USER     :
-        {
-            static SfxItemPropertyMap aUserFieldPropMap[] =
-            {
-                {SW_PROP_NAME(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL2,  &::getBooleanCppuType(), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_VISIBLE),     FIELD_PROP_BOOL1,   &::getBooleanCppuType(), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),  FIELD_PROP_FORMAT,  &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-
-            pRet = aUserFieldPropMap;
-        }
-        break;
-        case  SW_SERVICE_FIELDTYPE_SET_EXP  :
-        {
-            static SfxItemPropertyMap aSetExpFieldPropMap       [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CONTENT),            FIELD_PROP_PAR2,    &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR4, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_HINT),               FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),      FIELD_PROP_FORMAT,  &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_USHORT2, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_INPUT),       FIELD_PROP_BOOL1,   &::getBooleanCppuType(),    PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL3,  &::getBooleanCppuType(), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_VISIBLE),       FIELD_PROP_BOOL2,   &::getBooleanCppuType(),    PROPERTY_NONE, 0},
-                //TODO: UNO_NAME_VARIABLE_NAME gibt es das wirklich?
-                {SW_PROP_NAME(UNO_NAME_SEQUENCE_VALUE), FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_SUB_TYPE),           FIELD_PROP_SUBTYPE, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_VALUE),          FIELD_PROP_DOUBLE,  &::getCppuType((const double*)0),   PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_VARIABLE_NAME),  FIELD_PROP_PAR1,    &::getCppuType((const OUString*)0),   PropertyAttribute::READONLY, 0},
-                {0,0,0,0}
-            };
-            pRet = aSetExpFieldPropMap;
-        }
-        break;
-        case  SW_SERVICE_FIELDTYPE_GET_EXP  :
-        {
-            static SfxItemPropertyMap aGetExpFieldPropMap       [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CONTENT),            FIELD_PROP_PAR1,    &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR4, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL2,  &::getBooleanCppuType(), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),  FIELD_PROP_FORMAT,  &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_SUB_TYPE),           FIELD_PROP_SUBTYPE, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_VALUE),          FIELD_PROP_DOUBLE,  &::getCppuType((const double*)0), PropertyAttribute::READONLY,  0},
-                {SW_PROP_NAME(UNO_NAME_VARIABLE_SUBTYPE),   FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aGetExpFieldPropMap;
-        }
-        break;
-        case  SW_SERVICE_FIELDTYPE_FILE_NAME:
-        {
-            static SfxItemPropertyMap aFileNameFieldPropMap [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_FILE_FORMAT), FIELD_PROP_FORMAT, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL2, &::getBooleanCppuType(),      PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aFileNameFieldPropMap;
-        }
-        break;
-        case  SW_SERVICE_FIELDTYPE_PAGE_NUM :
-        {
-            static SfxItemPropertyMap aPageNumFieldPropMap      [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_FORMAT,  &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_OFFSET),             FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0),  PROPERTY_NONE,    0},
-                {SW_PROP_NAME(UNO_NAME_SUB_TYPE),           FIELD_PROP_SUBTYPE, &::getCppuType((const PageNumberType*)0), PROPERTY_NONE,    0},
-                {SW_PROP_NAME(UNO_NAME_USERTEXT),           FIELD_PROP_PAR1,    &::getCppuType((const OUString*)0), PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aPageNumFieldPropMap;
-        }
-        break;
-        case  SW_SERVICE_FIELDTYPE_AUTHOR   :
-        {
-            static SfxItemPropertyMap aAuthorFieldPropMap       [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CONTENT),    FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),    PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL2, &::getBooleanCppuType(),      PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_FULL_NAME),FIELD_PROP_BOOL1, &::getBooleanCppuType(),        PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aAuthorFieldPropMap;
-        }
-        break;
-        case  SW_SERVICE_FIELDTYPE_CHAPTER  :
-        {
-            static SfxItemPropertyMap aChapterFieldPropMap      [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CHAPTER_FORMAT),FIELD_PROP_USHORT1,  &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_LEVEL        ),FIELD_PROP_BYTE1,         &::getCppuType((const sal_Int8*)0),     PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aChapterFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_GET_REFERENCE         :
-        {
-            static SfxItemPropertyMap aGetRefFieldPropMap       [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_REFERENCE_FIELD_PART),FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0),   PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_REFERENCE_FIELD_SOURCE),FIELD_PROP_USHORT2, &::getCppuType((const sal_Int16*)0),     PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_SEQUENCE_NUMBER),    FIELD_PROP_SHORT1,  &::getCppuType((const sal_Int16*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_SOURCE_NAME),        FIELD_PROP_PAR1,    &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aGetRefFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT      :
-        {
-            static SfxItemPropertyMap aConditionedTxtFieldPropMap   [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CONDITION),      FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_FALSE_CONTENT),  FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_CONDITION_TRUE) ,  FIELD_PROP_BOOL1, &::getBooleanCppuType(),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_TRUE_CONTENT) ,  FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aConditionedTxtFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_HIDDEN_TEXT :
-        {
-            static SfxItemPropertyMap aHiddenTxtFieldPropMap    [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CONDITION),      FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_CONTENT) ,       FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_HIDDEN) ,     FIELD_PROP_BOOL1, &::getBooleanCppuType(),   PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aHiddenTxtFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_ANNOTATION            :
-        {
-            static SfxItemPropertyMap aAnnotationFieldPropMap   [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_AUTHOR), FIELD_PROP_PAR1,    &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_CONTENT),    FIELD_PROP_PAR2,    &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATE),   FIELD_PROP_DATE,    &::getCppuType((const util::Date*)0),   PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aAnnotationFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_INPUT_USER:
-        case SW_SERVICE_FIELDTYPE_INPUT                 :
-        {
-            static SfxItemPropertyMap aInputFieldPropMap        [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CONTENT),    FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_HINT),       FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aInputFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_MACRO                 :
-        {
-            static SfxItemPropertyMap aMacroFieldPropMap        [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_HINT), FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_MACRO_NAME),FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_MACRO_LIBRARY),FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aMacroFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_DDE                   :
-        {
-            static SfxItemPropertyMap aDDEFieldPropMap          [] = {{0,0,0,0}};
-            pRet = aDDEFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_HIDDEN_PARA           :
-        {
-            static SfxItemPropertyMap aHiddenParaFieldPropMap   [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CONDITION),FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_HIDDEN) ,  FIELD_PROP_BOOL1, &::getBooleanCppuType(),   PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aHiddenParaFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_DOC_INFO              :
-        {
-            static SfxItemPropertyMap aDocInfoFieldPropMap      [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   &::getBooleanCppuType(),        PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_INFO_FORMAT),    FIELD_PROP_USHORT2, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_INFO_TYPE),  FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aDocInfoFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_TEMPLATE_NAME         :
-        {
-            static SfxItemPropertyMap aTmplNameFieldPropMap [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_FILE_FORMAT), FIELD_PROP_FORMAT, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aTmplNameFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_USER_EXT              :
-        {
-            static SfxItemPropertyMap aUsrExtFieldPropMap       [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CONTENT),            FIELD_PROP_PAR1,    &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_FIXED),           FIELD_PROP_BOOL1,   &::getBooleanCppuType(),        PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_USER_DATA_TYPE), FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aUsrExtFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_REF_PAGE_SET          :
-        {
-            static SfxItemPropertyMap aRefPgSetFieldPropMap [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_OFFSET),     FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_ON),     FIELD_PROP_BOOL1,   &::getBooleanCppuType(),        PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aRefPgSetFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_REF_PAGE_GET          :
-        {
-            static SfxItemPropertyMap aRefPgGetFieldPropMap [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aRefPgGetFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_JUMP_EDIT             :
-        {
-            static SfxItemPropertyMap aJumpEdtFieldPropMap      [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_HINT),               FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_PLACEHOLDER),        FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_PLACEHOLDER_TYPE), FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0),  PROPERTY_NONE,  0},
-                {0,0,0,0}
-            };
-            pRet = aJumpEdtFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_SCRIPT                :
-        {
-            static SfxItemPropertyMap aScriptFieldPropMap       [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CONTENT),        FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_SCRIPT_TYPE),    FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_URL_CONTENT),    FIELD_PROP_BOOL1, &::getBooleanCppuType(),      PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aScriptFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET     :
-        {
-            static SfxItemPropertyMap aDBNextSetFieldPropMap    [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CONDITION)   ,     FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, &::getCppuType((short*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aDBNextSetFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET      :
-        {
-            static SfxItemPropertyMap aDBNumSetFieldPropMap [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CONDITION),        FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME   ), FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, &::getCppuType((short*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME  ), FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_SET_NUMBER       ), FIELD_PROP_FORMAT, &::getCppuType((const sal_Int32*)0), PROPERTY_NONE,   0},
-                {0,0,0,0}
-            };
-            pRet = aDBNumSetFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM      :
-        {
-            static SfxItemPropertyMap aDBSetNumFieldPropMap [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, &::getCppuType((short*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),       FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,   0},
-                {SW_PROP_NAME(UNO_NAME_SET_NUMBER       ), FIELD_PROP_FORMAT, &::getCppuType((const sal_Int32*)0), PROPERTY_NONE,   0},
-                {0,0,0,0}
-            };
-            pRet = aDBSetNumFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_DATABASE              :
-        {
-            static SfxItemPropertyMap aDBFieldPropMap           [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CONTENT),            FIELD_PROP_PAR1,    &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_DATA_BASE_FORMAT),FIELD_PROP_BOOL1, &::getBooleanCppuType()  , PROPERTY_NONE,0},
-                {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),      FIELD_PROP_FORMAT, &::getCppuType((const sal_Int32*)0), PROPERTY_NONE,  0},
-                {0,0,0,0}
-            };
-            pRet = aDBFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_DATABASE_NAME         :
-        {
-            static SfxItemPropertyMap aDBNameFieldPropMap       [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, &::getCppuType((short*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aDBNameFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_PAGE_COUNT            :
-        case SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT       :
-        case SW_SERVICE_FIELDTYPE_WORD_COUNT            :
-        case SW_SERVICE_FIELDTYPE_CHARACTER_COUNT       :
-        case SW_SERVICE_FIELDTYPE_TABLE_COUNT           :
-        case SW_SERVICE_FIELDTYPE_GRAPHIC_OBJECT_COUNT  :
-        case SW_SERVICE_FIELDTYPE_EMBEDDED_OBJECT_COUNT :
-        {
-            static SfxItemPropertyMap aDocstatFieldPropMap      [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_USHORT2, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-            //  {UNO_NAME_STATISTIC_TYPE_ID,FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE,  0},
-                {0,0,0,0}
-            };
-            pRet = aDocstatFieldPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR :
-        case SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR :
-        case SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR      :
-        {
-            static SfxItemPropertyMap aDocInfoAuthorPropMap         [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_AUTHOR), FIELD_PROP_PAR1,    &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL1,   &::getBooleanCppuType()  , PROPERTY_NONE,0},
-                {0,0,0,0}
-            };
-            pRet = aDocInfoAuthorPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME   :
-        case SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME:
-        case SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME:
-        {
-            static SfxItemPropertyMap aDocInfoDateTimePropMap           [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATE_TIME_VALUE),        FIELD_PROP_DOUBLE,  &::getCppuType((const double*)0), PropertyAttribute::READONLY,  0},
-                {SW_PROP_NAME(UNO_NAME_IS_DATE),    FIELD_PROP_BOOL2,   &::getBooleanCppuType()  , PROPERTY_NONE,0},
-                {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),FIELD_PROP_FORMAT,    &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   &::getBooleanCppuType()  , PROPERTY_NONE,   0},
-                {0,0,0,0}
-            };
-            pRet = aDocInfoDateTimePropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME     :
-        {
-            static SfxItemPropertyMap aDocInfoEditTimePropMap           [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATE_TIME_VALUE),        FIELD_PROP_DOUBLE,  &::getCppuType((const double*)0), PropertyAttribute::READONLY,  0},
-                {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),FIELD_PROP_FORMAT,    &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   &::getBooleanCppuType()  , PROPERTY_NONE,   0},
-                {0,0,0,0}
-            };
-            pRet = aDocInfoEditTimePropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION   :
-        case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0:
-        case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1:
-        case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2:
-        case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3:
-        case SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS         :
-        case SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT           :
-        case SW_SERVICE_FIELDTYPE_DOCINFO_TITLE             :
-        {
-            static SfxItemPropertyMap aDocInfoStringContentPropMap          [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CONTENT),    FIELD_PROP_PAR1,    &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL1,   &::getBooleanCppuType()  , PROPERTY_NONE,0},
-                {0,0,0,0}
-            };
-            pRet = aDocInfoStringContentPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_DOCINFO_REVISION          :
-        {
-            static SfxItemPropertyMap aDocInfoRevisionPropMap   [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_REVISION),   FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL1,   &::getBooleanCppuType()  , PROPERTY_NONE,0},
-                {0,0,0,0}
-            };
-            pRet = aDocInfoRevisionPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_DUMMY_0 :
-        case SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS:
-        {
-            static SfxItemPropertyMap aCombinedCharactersPropMap[] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CONTENT), FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aCombinedCharactersPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_TABLE_FORMULA:
-        {
-            static SfxItemPropertyMap aTableFormulaPropMap[] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_FORMULA), FIELD_PROP_PAR2, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL1,  &::getBooleanCppuType(), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT), FIELD_PROP_FORMAT,   &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
-                {0,0,0,0}
-            };
-            pRet = aTableFormulaPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_DUMMY_3:
-        case SW_SERVICE_FIELDTYPE_DUMMY_4:
-        case SW_SERVICE_FIELDTYPE_DUMMY_5:
-        case SW_SERVICE_FIELDTYPE_DUMMY_6:
-        case SW_SERVICE_FIELDTYPE_DUMMY_7:
-        case SW_SERVICE_FIELDTYPE_DUMMY_8:
-        {
-            static SfxItemPropertyMap aEmptyPropMap         [] =
-            {
-                {0,0,0,0}
-            };
-            pRet = aEmptyPropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDMASTER_USER :
-        {
-            static SfxItemPropertyMap aUserFieldTypePropMap[] =
-            {
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  new uno::Type(::getCppuType((Sequence<Reference<XDependentTextField> >*)0)), PropertyAttribute::READONLY, 0},
-#else
-                {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  &::getCppuType((Sequence<Reference<XDependentTextField> >*)0), PropertyAttribute::READONLY, 0},
-#endif
-                {SW_PROP_NAME(UNO_NAME_IS_EXPRESSION),      0,  &::getBooleanCppuType(), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_NAME),               0,  &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_VALUE),          0,  &::getCppuType((const double*)0), PROPERTY_NONE,    0},
-                {SW_PROP_NAME(UNO_NAME_CONTENT),            0,  &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
-                {0,0,0,0}
-            };
-            pRet = aUserFieldTypePropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDMASTER_DDE         :
-        {
-            static SfxItemPropertyMap aDDEFieldTypePropMap[] =
-            {
-                {SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT ), 0,    &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_DDE_COMMAND_FILE    ), 0,    &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE    ), 0,    &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  new uno::Type(::getCppuType((Sequence<Reference<XDependentTextField> >*)0)), PropertyAttribute::READONLY, 0},
-#else
-                {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  &::getCppuType((Sequence<Reference<XDependentTextField> >*)0), PropertyAttribute::READONLY, 0},
-#endif
-                {SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE), 0,  &::getBooleanCppuType(), PROPERTY_NONE,    0},
-                {SW_PROP_NAME(UNO_NAME_NAME),               0,  &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
-                {0,0,0,0}
-            };
-            pRet = aDDEFieldTypePropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDMASTER_SET_EXP     :
-        {
-            static SfxItemPropertyMap aSetExpFieldTypePropMap[] =
-            {
-                {SW_PROP_NAME(UNO_NAME_CHAPTER_NUMBERING_LEVEL),0,  &::getCppuType((sal_Int8*)0), PROPERTY_NONE,    0},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  new uno::Type(::getCppuType((Sequence<Reference<XDependentTextField> >*)0)), PropertyAttribute::READONLY, 0},
-#else
-                {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  &::getCppuType((Sequence<Reference<XDependentTextField> >*)0), PropertyAttribute::READONLY, 0},
-#endif
-                {SW_PROP_NAME(UNO_NAME_NAME),               0,  &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_NUMBERING_SEPARATOR), 0, &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_SUB_TYPE),           0,  &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
-                {0,0,0,0}
-            };
-            pRet = aSetExpFieldTypePropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDMASTER_DATABASE    :
-        {
-            static SfxItemPropertyMap aDBFieldTypePropMap           [] =
-            {
-                {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME   ), 0, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), 0, &::getCppuType((short*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME  ), 0, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME ), 0, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  new uno::Type(::getCppuType((Sequence<Reference<XDependentTextField> >*)0)), PropertyAttribute::READONLY, 0},
-#else
-                {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  &::getCppuType((Sequence<Reference<XDependentTextField> >*)0), PropertyAttribute::READONLY, 0},
-#endif
-                {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
-                {0,0,0,0}
-            };
-            pRet = aDBFieldTypePropMap;
-        }
-        break;
-        case SW_SERVICE_FIELDMASTER_DUMMY2      :
-        case SW_SERVICE_FIELDMASTER_DUMMY3      :
-        case SW_SERVICE_FIELDMASTER_DUMMY4      :
-        case SW_SERVICE_FIELDMASTER_DUMMY5      :
-        {
-            static SfxItemPropertyMap aStandardFieldMasterMap[] =
-            {
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  new uno::Type(::getCppuType((Sequence<Reference<XDependentTextField> >*)0)), PropertyAttribute::READONLY, 0},
-#else
-                {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  &::getCppuType((Sequence<Reference<XDependentTextField> >*)0), PropertyAttribute::READONLY, 0},
-#endif
-                {SW_PROP_NAME(UNO_NAME_NAME),               0,  &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
-                {0,0,0,0}
-            };
-            pRet = aStandardFieldMasterMap;
-        }
-        break;
-        case SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY:
-        {
-            static SfxItemPropertyMap aBibliographyFieldMap[] =
-            {
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                {SW_PROP_NAME(UNO_NAME_FIELDS  )    , FIELD_PROP_PROP_SEQ, new uno::Type(::getCppuType((Sequence<PropertyValue>*)0)),PROPERTY_NONE, 0},
-#else
-                {SW_PROP_NAME(UNO_NAME_FIELDS  )    , FIELD_PROP_PROP_SEQ, &::getCppuType((Sequence<PropertyValue>*)0),PROPERTY_NONE, 0},
-#endif
-                {0,0,0,0}
-            };
-            pRet = aBibliographyFieldMap;
-        }
-        break;
-        case SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY:
-        {
-            static SfxItemPropertyMap aBibliographyFieldMasterMap[] =
-            {
-                {SW_PROP_NAME(UNO_NAME_BRACKET_BEFORE     ) , 0, &::getCppuType((OUString*)0),               PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_BRACKET_AFTER      ) , 0, &::getCppuType((OUString*)0),               PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_NUMBER_ENTRIES  ) , 0, &::getBooleanCppuType(),                    PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_IS_SORT_BY_POSITION) , 0, &::getBooleanCppuType(),                    PROPERTY_NONE, 0},
-                { SW_PROP_NAME(UNO_NAME_LOCALE),            0,  &::getCppuType((lang::Locale*)0)  , PROPERTY_NONE,     0},
-                { SW_PROP_NAME(UNO_NAME_SORT_ALGORITHM),    0,  &::getCppuType((OUString*)0)  , PROPERTY_NONE,     0},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                {SW_PROP_NAME(UNO_NAME_SORT_KEYS          ) , 0, new uno::Type(::getCppuType((Sequence<PropertyValues>*)0)),PROPERTY_NONE, 0},
-#else
-                {SW_PROP_NAME(UNO_NAME_SORT_KEYS          ) , 0, &::getCppuType((Sequence<PropertyValues>*)0),PROPERTY_NONE, 0},
-#endif
-                {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
-                {0,0,0,0}
-            };
-            pRet = aBibliographyFieldMasterMap;
-        }
-        break;
-    }
-    DBG_ASSERT(pRet, "illegal service id")
-    return pRet;
-};
-
-const sal_uInt16 aDocInfoSubTypeFromService[] =
-{
-    DI_CHANGE|DI_SUB_AUTHOR,    //SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR
-    DI_CHANGE|DI_SUB_DATE,      //SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME
-    DI_EDIT|DI_SUB_TIME,        //SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME
-    DI_COMMENT,                 //SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION
-    DI_CREATE|DI_SUB_AUTHOR,    //SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR
-    DI_CREATE|DI_SUB_DATE,      //SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME
-    DI_INFO1,                   //SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0
-    DI_INFO2,                   //SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1
-    DI_INFO3,                   //SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2
-    DI_INFO4,                   //SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3
-    DI_PRINT|DI_SUB_AUTHOR,     //SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR
-    DI_PRINT|DI_SUB_DATE,       //SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME
-    DI_KEYS,                    //SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS
-    DI_THEMA,                   //SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT
-    DI_TITEL,                   //SW_SERVICE_FIELDTYPE_DOCINFO_TITLE
-    DI_DOCNO                    //SW_SERVICE_FIELDTYPE_DOCINFO_REVISION
+    DI_CHANGE|DI_SUB_AUTHOR,    //PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_AUTHOR
+    DI_CHANGE|DI_SUB_DATE,      //PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME
+    DI_EDIT|DI_SUB_TIME,        //PROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME
+    DI_COMMENT,                 //PROPERTY_MAP_FLDTYP_DOCINFO_DESCRIPTION
+    DI_CREATE|DI_SUB_AUTHOR,    //PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_AUTHOR
+    DI_CREATE|DI_SUB_DATE,      //PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME
+    DI_INFO1,                   //PROPERTY_MAP_FLDTYP_DOCINFO_INFO_0
+    DI_INFO2,                   //PROPERTY_MAP_FLDTYP_DOCINFO_INFO_1
+    DI_INFO3,                   //PROPERTY_MAP_FLDTYP_DOCINFO_INFO_2
+    DI_INFO4,                   //PROPERTY_MAP_FLDTYP_DOCINFO_INFO_3
+    DI_PRINT|DI_SUB_AUTHOR,     //PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_AUTHOR
+    DI_PRINT|DI_SUB_DATE,       //PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_DATE_TIME
+    DI_KEYS,                    //PROPERTY_MAP_FLDTYP_DOCINFO_KEY_WORDS
+    DI_THEMA,                   //PROPERTY_MAP_FLDTYP_DOCINFO_SUBJECT
+    DI_TITEL,                   //PROPERTY_MAP_FLDTYP_DOCINFO_TITLE
+    DI_DOCNO                    //PROPERTY_MAP_FLDTYP_DOCINFO_REVISION
 };
 struct ServiceIdResId
 {
     USHORT nResId;
     USHORT nServiceId;
 };
-const ServiceIdResId aServiceToRes[] =
+static const ServiceIdResId aServiceToRes[] =
 {
     {RES_DATETIMEFLD,   SW_SERVICE_FIELDTYPE_DATETIME               },
     {RES_USERFLD,       SW_SERVICE_FIELDTYPE_USER                   },
@@ -996,29 +344,215 @@ const ServiceIdResId aServiceToRes[] =
 //-----------------------------------------------------------------
 sal_uInt16 lcl_ServiceIdToResId(sal_uInt16 nServiceId)
 {
-    USHORT nIndex = 0;
-    while(aServiceToRes[nIndex].nServiceId != USHRT_MAX)
-    {
-        if(aServiceToRes[nIndex].nServiceId == nServiceId)
-            return aServiceToRes[nIndex].nResId;
-        nIndex++;
-    }
-    DBG_ERROR("service id not found")
-    return USHRT_MAX;
+    for( const ServiceIdResId* pMap = aServiceToRes;
+            USHRT_MAX != pMap->nServiceId && nServiceId != pMap->nServiceId;
+            ++pMap )
+        ;
+#ifdef DBG_UTIL
+    if( USHRT_MAX == pMap->nServiceId )
+        DBG_ERROR("service id not found");
+#endif
+    return pMap->nResId;
 }
 //-----------------------------------------------------------------
-sal_uInt16 lcl_GetServiceForResId(sal_uInt16 nWhich)
+sal_uInt16 lcl_GetServiceForField( const SwField& rFld )
 {
-    USHORT nIndex = 0;
-    while(aServiceToRes[nIndex].nResId != USHRT_MAX)
+    sal_uInt16 nWhich = rFld.Which(), nSrvId = USHRT_MAX;
+    //special handling for some fields
+    switch( nWhich )
     {
-        if(aServiceToRes[nIndex].nResId == nWhich)
-            return aServiceToRes[nIndex].nServiceId;
-        nIndex++;
+    case RES_INPUTFLD:
+        if( INP_USR == (rFld.GetSubType() & 0x00ff) )
+            nSrvId = SW_SERVICE_FIELDTYPE_INPUT_USER;
+        break;
+
+    case RES_DOCINFOFLD:
+        {
+            USHORT nSubType = rFld.GetSubType();
+            switch( (nSubType & 0xff))
+            {
+            case DI_CHANGE:
+                nSrvId = ((nSubType&0x300) == DI_SUB_AUTHOR)
+                        ? SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR
+                        : SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME;
+                break;
+            case DI_CREATE:
+                nSrvId = ((nSubType&0x300) == DI_SUB_AUTHOR)
+                        ? SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR
+                        : SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME;
+                break;
+            case DI_PRINT:
+                nSrvId = ((nSubType&0x300) == DI_SUB_AUTHOR)
+                        ? SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR
+                        : SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME;
+                break;
+            case DI_EDIT:   nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME;break;
+            case DI_COMMENT:nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION;break;
+            case DI_INFO1:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0;   break;
+            case DI_INFO2:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1;   break;
+            case DI_INFO3:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2;   break;
+            case DI_INFO4:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3;   break;
+            case DI_KEYS:   nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS;break;
+            case DI_THEMA:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT;  break;
+            case DI_TITEL:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_TITLE;    break;
+            case DI_DOCNO:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_REVISION; break;
+            }
+        }
+        break;
+
+    case RES_HIDDENTXTFLD:
+        nSrvId = TYP_CONDTXTFLD == rFld.GetSubType()
+                        ? SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT
+                        : SW_SERVICE_FIELDTYPE_HIDDEN_TEXT;
+        break;
+
+    case RES_DOCSTATFLD:
+        {
+            switch( rFld.GetSubType() )
+            {
+            case DS_PAGE: nSrvId = SW_SERVICE_FIELDTYPE_PAGE_COUNT; break;
+            case DS_PARA: nSrvId = SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT; break;
+            case DS_WORD: nSrvId = SW_SERVICE_FIELDTYPE_WORD_COUNT     ; break;
+            case DS_CHAR: nSrvId = SW_SERVICE_FIELDTYPE_CHARACTER_COUNT; break;
+            case DS_TBL:  nSrvId = SW_SERVICE_FIELDTYPE_TABLE_COUNT    ; break;
+            case DS_GRF:  nSrvId = SW_SERVICE_FIELDTYPE_GRAPHIC_OBJECT_COUNT; break;
+            case DS_OLE:  nSrvId = SW_SERVICE_FIELDTYPE_EMBEDDED_OBJECT_COUNT; break;
+            }
+        }
+        break;
     }
-    DBG_ERROR("resid id not found")
-    return USHRT_MAX;
+    if( USHRT_MAX == nSrvId )
+    {
+        for( const ServiceIdResId* pMap = aServiceToRes;
+                USHRT_MAX != pMap->nResId; ++pMap )
+            if( nWhich == pMap->nResId )
+            {
+                nSrvId = pMap->nServiceId;
+                break;
+            }
+    }
+#ifdef DBG_UTIL
+    if( USHRT_MAX == nSrvId )
+        DBG_ERROR("resid not found");
+#endif
+    return nSrvId;
 }
+
+sal_uInt16 lcl_GetPropMapIdForFieldType( USHORT nWhich )
+{
+    sal_uInt16 nId;
+    switch( nWhich )
+    {
+    case RES_USERFLD:   nId = PROPERTY_MAP_FLDMSTR_USER;            break;
+    case RES_DBFLD:     nId = PROPERTY_MAP_FLDMSTR_DATABASE;        break;
+    case RES_SETEXPFLD: nId = PROPERTY_MAP_FLDMSTR_SET_EXP;         break;
+    case RES_DDEFLD:    nId = PROPERTY_MAP_FLDMSTR_DDE;             break;
+    case RES_AUTHORITY: nId = PROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY;    break;
+    default:            nId = PROPERTY_MAP_FLDMSTR_DUMMY0;
+    }
+    return nId;
+}
+
+
+BYTE GetFieldTypeMId( const OUString& rProperty, const SwFieldType& rTyp )
+{
+    USHORT nId = lcl_GetPropMapIdForFieldType( rTyp.Which() );
+    const SfxItemPropertyMap* pMap = aSwMapProvider.GetPropertyMap( nId );
+    if( !pMap )
+        nId = USHRT_MAX;
+    else
+        for( ; pMap->pName; ++pMap )
+            if( rProperty.equalsAsciiL( pMap->pName, pMap->nNameLen ) )
+            {
+                nId = pMap->nWID;
+                break;
+            }
+    return (BYTE)nId;
+}
+
+USHORT lcl_GetPropertyMapOfService( USHORT nServiceId )
+{
+    USHORT nRet;
+    switch ( nServiceId)
+    {
+    case SW_SERVICE_FIELDTYPE_DATETIME: nRet = PROPERTY_MAP_FLDTYP_DATETIME; break;
+    case SW_SERVICE_FIELDTYPE_USER: nRet = PROPERTY_MAP_FLDTYP_USER; break;
+    case SW_SERVICE_FIELDTYPE_SET_EXP: nRet = PROPERTY_MAP_FLDTYP_SET_EXP; break;
+    case SW_SERVICE_FIELDTYPE_GET_EXP: nRet = PROPERTY_MAP_FLDTYP_GET_EXP; break;
+    case SW_SERVICE_FIELDTYPE_FILE_NAME: nRet = PROPERTY_MAP_FLDTYP_FILE_NAME; break;
+    case SW_SERVICE_FIELDTYPE_PAGE_NUM: nRet = PROPERTY_MAP_FLDTYP_PAGE_NUM; break;
+    case SW_SERVICE_FIELDTYPE_AUTHOR: nRet = PROPERTY_MAP_FLDTYP_AUTHOR; break;
+    case SW_SERVICE_FIELDTYPE_CHAPTER: nRet = PROPERTY_MAP_FLDTYP_CHAPTER; break;
+    case SW_SERVICE_FIELDTYPE_GET_REFERENCE: nRet = PROPERTY_MAP_FLDTYP_GET_REFERENCE; break;
+    case SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT: nRet = PROPERTY_MAP_FLDTYP_CONDITIONED_TEXT; break;
+    case SW_SERVICE_FIELDTYPE_ANNOTATION: nRet = PROPERTY_MAP_FLDTYP_ANNOTATION; break;
+    case SW_SERVICE_FIELDTYPE_INPUT_USER:
+    case SW_SERVICE_FIELDTYPE_INPUT: nRet = PROPERTY_MAP_FLDTYP_INPUT; break;
+    case SW_SERVICE_FIELDTYPE_MACRO: nRet = PROPERTY_MAP_FLDTYP_MACRO; break;
+    case SW_SERVICE_FIELDTYPE_DDE: nRet = PROPERTY_MAP_FLDTYP_DDE; break;
+    case SW_SERVICE_FIELDTYPE_HIDDEN_PARA: nRet = PROPERTY_MAP_FLDTYP_HIDDEN_PARA; break;
+    case SW_SERVICE_FIELDTYPE_DOC_INFO: nRet = PROPERTY_MAP_FLDTYP_DOC_INFO; break;
+    case SW_SERVICE_FIELDTYPE_TEMPLATE_NAME: nRet = PROPERTY_MAP_FLDTYP_TEMPLATE_NAME; break;
+    case SW_SERVICE_FIELDTYPE_USER_EXT: nRet = PROPERTY_MAP_FLDTYP_USER_EXT; break;
+    case SW_SERVICE_FIELDTYPE_REF_PAGE_SET: nRet = PROPERTY_MAP_FLDTYP_REF_PAGE_SET; break;
+    case SW_SERVICE_FIELDTYPE_REF_PAGE_GET: nRet = PROPERTY_MAP_FLDTYP_REF_PAGE_GET; break;
+    case SW_SERVICE_FIELDTYPE_JUMP_EDIT: nRet = PROPERTY_MAP_FLDTYP_JUMP_EDIT; break;
+    case SW_SERVICE_FIELDTYPE_SCRIPT: nRet = PROPERTY_MAP_FLDTYP_SCRIPT; break;
+    case SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET: nRet = PROPERTY_MAP_FLDTYP_DATABASE_NEXT_SET; break;
+    case SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET: nRet = PROPERTY_MAP_FLDTYP_DATABASE_NUM_SET; break;
+    case SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM: nRet = PROPERTY_MAP_FLDTYP_DATABASE_SET_NUM; break;
+    case SW_SERVICE_FIELDTYPE_DATABASE: nRet = PROPERTY_MAP_FLDTYP_DATABASE; break;
+    case SW_SERVICE_FIELDTYPE_DATABASE_NAME: nRet = PROPERTY_MAP_FLDTYP_DATABASE_NAME; break;
+    case SW_SERVICE_FIELDTYPE_TABLE_FORMULA: nRet = PROPERTY_MAP_FLDTYP_TABLE_FORMULA; break;
+    case SW_SERVICE_FIELDTYPE_PAGE_COUNT:
+    case SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT:
+    case SW_SERVICE_FIELDTYPE_WORD_COUNT:
+    case SW_SERVICE_FIELDTYPE_CHARACTER_COUNT:
+    case SW_SERVICE_FIELDTYPE_TABLE_COUNT:
+    case SW_SERVICE_FIELDTYPE_GRAPHIC_OBJECT_COUNT:
+    case SW_SERVICE_FIELDTYPE_EMBEDDED_OBJECT_COUNT: nRet = PROPERTY_MAP_FLDTYP_DOCSTAT; break;
+    case SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR:
+    case SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR:
+    case SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR: nRet = PROPERTY_MAP_FLDTYP_DOCINFO_AUTHOR; break;
+    case SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME:
+    case SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME:
+    case SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME: nRet = PROPERTY_MAP_FLDTYP_DOCINFO_DATE_TIME; break;
+    case SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME: nRet = PROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME; break;
+    case SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION:
+    case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0:
+    case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1:
+    case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2:
+    case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3:
+    case SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS:
+    case SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT:
+    case SW_SERVICE_FIELDTYPE_DOCINFO_TITLE: nRet = PROPERTY_MAP_FLDTYP_DOCINFO_MISC; break;
+    case SW_SERVICE_FIELDTYPE_DOCINFO_REVISION: nRet = PROPERTY_MAP_FLDTYP_DOCINFO_REVISION; break;
+    case SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY: nRet = PROPERTY_MAP_FLDTYP_BIBLIOGRAPHY; break;
+    case SW_SERVICE_FIELDTYPE_DUMMY_0:
+    case SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS: nRet = PROPERTY_MAP_FLDTYP_COMBINED_CHARACTERS; break;
+    case SW_SERVICE_FIELDTYPE_DUMMY_3:
+    case SW_SERVICE_FIELDTYPE_DUMMY_4:
+    case SW_SERVICE_FIELDTYPE_DUMMY_5:
+    case SW_SERVICE_FIELDTYPE_DUMMY_6:
+    case SW_SERVICE_FIELDTYPE_DUMMY_7:
+    case SW_SERVICE_FIELDTYPE_DUMMY_8: nRet = PROPERTY_MAP_FLDTYP_DUMMY_0; break;
+    case SW_SERVICE_FIELDMASTER_USER: nRet = PROPERTY_MAP_FLDMSTR_USER; break;
+    case SW_SERVICE_FIELDMASTER_DDE: nRet = PROPERTY_MAP_FLDMSTR_DDE; break;
+    case SW_SERVICE_FIELDMASTER_SET_EXP: nRet = PROPERTY_MAP_FLDMSTR_SET_EXP; break;
+    case SW_SERVICE_FIELDMASTER_DATABASE: nRet = PROPERTY_MAP_FLDMSTR_DATABASE; break;
+    case SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY: nRet = PROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY; break;
+    case SW_SERVICE_FIELDMASTER_DUMMY2:
+    case SW_SERVICE_FIELDMASTER_DUMMY3:
+    case SW_SERVICE_FIELDMASTER_DUMMY4:
+    case SW_SERVICE_FIELDMASTER_DUMMY5: nRet = PROPERTY_MAP_FLDMSTR_DUMMY0; break;
+    case SW_SERVICE_FIELDTYPE_HIDDEN_TEXT: nRet = PROPERTY_MAP_FLDTYP_HIDDEN_TEXT; break;
+    default:
+        DBG_ERROR( "wrong service id" );
+        nRet = USHRT_MAX;
+    }
+    return nRet;
+}
+
 /******************************************************************
  * SwXFieldMaster
  ******************************************************************/
@@ -1058,7 +592,8 @@ OUString SwXFieldMaster::getImplementationName(void) throw( RuntimeException )
 BOOL SwXFieldMaster::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     sal_Bool bRet = sal_False;
-    if(rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextFieldMaster")))
+    if(rServiceName.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextFieldMaster")))
         bRet = sal_True;
     else
     {
@@ -1153,24 +688,16 @@ uno::Reference< XPropertySetInfo >  SwXFieldMaster::getPropertySetInfo(void)
                                             throw( uno::RuntimeException )
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    USHORT nId;
-    switch( nResTypeId )
-    {
-    case RES_USERFLD:   nId = SW_SERVICE_FIELDMASTER_USER;          break;
-    case RES_DBFLD:     nId = SW_SERVICE_FIELDMASTER_DATABASE;      break;
-    case RES_SETEXPFLD: nId = SW_SERVICE_FIELDMASTER_SET_EXP;       break;
-    case RES_DDEFLD:    nId = SW_SERVICE_FIELDMASTER_DDE;           break;
-    case RES_AUTHORITY: nId = SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY;  break;
-    default:            nId = SW_SERVICE_FIELDMASTER_DUMMY2;
-    }
     uno::Reference< XPropertySetInfo >  aRef = new SfxItemPropertySetInfo(
-                            SwFieldPropMapProvider::GetPropertyMap( nId ));
+                        aSwMapProvider.GetPropertyMap(
+                                lcl_GetPropMapIdForFieldType( nResTypeId ) ));
     return aRef;
 }
 /*-- 14.12.98 11:08:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
+                                    const uno::Any& rValue)
     throw( UnknownPropertyException, PropertyVetoException,
             IllegalArgumentException, WrappedTargetException, uno::RuntimeException)
 {
@@ -1200,14 +727,18 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
                 }
             }
         }
-        if(bSetValue)
-            pType->PutValue(aValue, rPropertyName);
+        if( bSetValue )
+        {
+            BYTE nMId = GetFieldTypeMId( rPropertyName, *pType  );
+            if( UCHAR_MAX != nMId )
+                pType->PutValue( rValue, nMId );
+        }
     }
     else if(!pType && m_pDoc &&
         ( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NAME))) )
     {
         OUString uTmp;
-        aValue >>= uTmp;
+        rValue >>= uTmp;
         String sTypeName(uTmp);
         SwFieldType* pType = m_pDoc->GetFldType(nResTypeId, sTypeName);
         if(pType ||
@@ -1259,85 +790,67 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
     }
     else
     {
-        if(nResTypeId == RES_USERFLD)
+        switch( nResTypeId )
         {
+        case RES_USERFLD:
             if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CONTENT)))
-            {
-                OUString uTmp;
-                aValue >>= uTmp;
-                sParam1 = String(uTmp);
-            }
+                ::GetString( rValue, sParam1 );
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_VALUE )))
             {
-                if(aValue.getValueType() != ::getCppuType((const double*)0))
+                if(rValue.getValueType() != ::getCppuType((const double*)0))
                     throw IllegalArgumentException();
-                fParam1 = *(double*)aValue.getValue();
+                fParam1 = *(double*)rValue.getValue();
             }
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_EXPRESSION )))
             {
-                if(aValue.getValueType() != ::getBooleanCppuType())
+                if(rValue.getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
-                bParam1 = *(sal_Bool*)aValue.getValue();
+                bParam1 = *(sal_Bool*)rValue.getValue();
             }
-        }
-        else if(RES_DBFLD == nResTypeId)
-        {
-            OUString uTmp;
-            aValue >>= uTmp;
-            String sTmp(uTmp);
+            break;
+        case RES_DBFLD:
             if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
-                sParam1 = sTmp;
+                ::GetString( rValue, sParam1 );
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME)))
-                sParam2 = sTmp;
+                ::GetString( rValue, sParam2 );
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME)))
-                sParam3 = sTmp;
+                ::GetString( rValue, sParam3 );
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE)))
-                aValue >>= nParam2;
+                rValue >>= nParam2;
 
             if(sParam1.Len() && sParam2.Len() && sParam3.Len())
-            {
                 GetFldType();
-            }
-        }
-        else if(RES_SETEXPFLD == nResTypeId)
-        {
+            break;
+        case  RES_SETEXPFLD:
             if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_SEPARATOR)))
-            {
-                OUString uTmp;
-                aValue >>= uTmp;
-                sParam1 = uTmp;
-            }
+                ::GetString( rValue, sParam1 );
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAPTER_NUMBERING_LEVEL)))
+                rValue >>= nParam1;
+            break;
+        case RES_DDEFLD:
             {
-                aValue >>= nParam1;
-            }
-        }
-        else if(RES_DDEFLD == nResTypeId)
-        {
-            USHORT nPart = rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE))  ? 0 :
-                rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_FILE))  ? 1 :
-                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT))  ? 2 :
-                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
-            if(nPart  < 3 )
-            {
-                OUString uTmp;
-                aValue >>= uTmp;
-                if(!sParam1.Len())
+                USHORT nPart = rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE))  ? 0 :
+                        rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_FILE))  ? 1 :
+                        rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT))  ? 2 :
+                        rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
+                if(nPart  < 3 )
                 {
-                    sParam1 = so3::cTokenSeperator;
-                    sParam1 += so3::cTokenSeperator;
-                }
-                sParam1.SetToken(nPart, so3::cTokenSeperator, uTmp);
-            }
-            else if(3 == nPart)
-            {
-                bParam1 = *(sal_Bool*)aValue.getValue();
-            }
-        }
-        else
-            throw UnknownPropertyException();
-    }
+                    String sTmp;
+                    if(!sParam1.Len())
+                        (sParam1 = so3::cTokenSeperator)
+                                += so3::cTokenSeperator;
 
+                    sParam1.SetToken( nPart, so3::cTokenSeperator,
+                                ::GetString( rValue, sTmp ));
+                }
+                else if(3 == nPart)
+                    bParam1 = *(sal_Bool*)rValue.getValue();
+            }
+            break;
+        default:
+            throw UnknownPropertyException();
+        }
+    }
 }
 /* -----------------------------30.03.01 14:40--------------------------------
 
@@ -1380,13 +893,13 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
         String sName;
         if(pType)
             SwXTextFieldMasters::getInstanceName(*pType, sName);
-        aRet <<= (OUString)sName;
+        aRet <<= OUString(sName);
     }
     else if(pType)
     {
-        if(rPropertyName.equalsAsciiL( MAP_CHAR_LEN("Name")))
+        if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NAME) ))
         {
-            aRet <<= OUString(SwXFieldMaster::GetProgrammaticName(*pType, *GetDoc()));
+            aRet <<= SwXFieldMaster::GetProgrammaticName(*pType, *GetDoc());
         }
         else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS)) )
         {
@@ -1424,8 +937,11 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
             aRet <<= aRetSeq;
         }
         else if(pType)
-        {   //TODO: Properties fuer die uebrigen Feldtypen einbauen
-            pType->QueryValue(aRet, rPropertyName);
+        {
+            //TODO: Properties fuer die uebrigen Feldtypen einbauen
+            BYTE nMId = GetFieldTypeMId( rPropertyName, *pType );
+            if( UCHAR_MAX != nMId )
+                pType->QueryValue( aRet, nMId );
         }
         else
         {
@@ -1442,52 +958,53 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
             Sequence<Reference <XDependentTextField> > aRetSeq(0);
             aRet <<= aRetSeq;
         }
-        else if(nResTypeId == RES_USERFLD)
-        {
-            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CONTENT)) )
-                aRet <<= (OUString)sParam1;
-            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_VALUE )))
-                aRet <<= fParam1;
-            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_EXPRESSION )))
-                aRet.setValue(&bParam1, ::getBooleanCppuType());
-        }
-        else if(RES_DBFLD == nResTypeId)
-        {
-            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
-                aRet <<= (OUString)sParam1;
-            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME)))
-                aRet <<= (OUString)sParam2;
-            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME)))
-                aRet <<= (OUString)sParam3;
-        }
-        else if(RES_SETEXPFLD == nResTypeId)
-        {
-            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_SEPARATOR)))
-            {
-                aRet <<= (OUString)sParam1;
-            }
-            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAPTER_NUMBERING_LEVEL)))
-            {
-                aRet <<= nParam1;
-            }
-        }
-        else if(RES_DDEFLD == nResTypeId)
-        {
-            USHORT nPart = rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE))  ? 0 :
-                rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_FILE)) ? 1 :
-                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT))  ? 2 :
-                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
-            if(nPart  < 3 )
-            {
-                aRet <<= (OUString)sParam1.GetToken(nPart, so3::cTokenSeperator);
-            }
-            else if(3 == nPart)
-            {
-                aRet.setValue(&bParam1, ::getBooleanCppuType());
-            }
-        }
         else
-            throw UnknownPropertyException();
+        {
+            const String* pStr = 0;
+            String sStr;
+            switch ( nResTypeId )
+            {
+            case RES_USERFLD:
+                if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CONTENT)) )
+                    pStr = &sParam1;
+                else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_VALUE )))
+                    aRet <<= fParam1;
+                else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_EXPRESSION )))
+                    aRet.setValue(&bParam1, ::getBooleanCppuType());
+                break;
+            case RES_DBFLD:
+                if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
+                    pStr = &sParam1;
+                else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME)))
+                    pStr = &sParam2;
+                else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME)))
+                    pStr = &sParam3;
+                break;
+            case RES_SETEXPFLD:
+                if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_SEPARATOR)))
+                    pStr = &sParam1;
+                else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAPTER_NUMBERING_LEVEL)))
+                    aRet <<= nParam1;
+                break;
+            case RES_DDEFLD:
+                {
+                    USHORT nPart = rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE))  ? 0 :
+                        rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_FILE)) ? 1 :
+                            rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT))  ? 2 :
+                            rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
+                    if(nPart  < 3 )
+                        pStr = &(sStr = sParam1.GetToken(nPart, so3::cTokenSeperator));
+                    else if(3 == nPart)
+                        aRet.setValue(&bParam1, ::getBooleanCppuType());
+                }
+                break;
+            default:
+                throw UnknownPropertyException();
+            }
+
+            if( pStr )
+                aRet <<= OUString( *pStr );
+        }
     }
     return aRet;
 }
@@ -1666,21 +1183,21 @@ struct SwFieldProperties_Impl
     String      sPar2;
     String      sPar3;
     String      sPar4;
+    Date            aDate;
+    double          fDouble;
+    Sequence<PropertyValue> aPropSeq;
+    util::DateTime* pDateTime;
+
     sal_Int32       nSubType;
     sal_Int32       nFormat;
-    sal_Bool        bFormatIsDefault;
-
     sal_uInt16      nUSHORT1;
     sal_uInt16      nUSHORT2;
     sal_Int16       nSHORT1;
     sal_Int8        nByte1;
+    sal_Bool        bFormatIsDefault;
     sal_Bool        bBool1;
     sal_Bool        bBool2;
     sal_Bool        bBool3;
-    Date            aDate;
-    double          fDouble;
-    util::DateTime* pDateTime;
-    Sequence<PropertyValue> aPropSeq;
 
     SwFieldProperties_Impl():
         nSubType(0),
@@ -1750,7 +1267,7 @@ SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc* pDc) :
     pFmtFld(&rFmt),
     aLstnrCntnr( (XTextContent*)this),
     m_pDoc(pDc),
-    m_nServiceId(USHRT_MAX),
+    m_nServiceId( lcl_GetServiceForField( *pFmtFld->GetFld() ) ),
     m_bIsDescriptor(sal_False),
     m_pProps(0),
     m_bCallUpdate(sal_False)
@@ -1758,83 +1275,6 @@ SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc* pDc) :
     pFmtFld->GetFld()->GetTyp()->Add(this);
     //TODO: GetObject impl., darin soll das fuer dieses FmtFld bereits vorhandene
     //Objekt gesucht werden
-    USHORT nResId(pFmtFld->GetFld()->GetTyp()->Which());
-    m_nServiceId = lcl_GetServiceForResId(nResId);
-    //special handling of SwInputField
-
-    switch( nResId )
-    {
-    case RES_INPUTFLD:
-        if( (((SwInputField*)pFmtFld->GetFld())->GetSubType()& 0x00ff) == INP_USR )
-            m_nServiceId = SW_SERVICE_FIELDTYPE_INPUT_USER;
-        break;
-
-    case RES_DOCINFOFLD:
-        {
-            USHORT nSubType = ((SwDocInfoField*)pFmtFld->GetFld())->GetSubType();
-            switch( (nSubType & 0xff))
-            {
-            case DI_CHANGE:
-                m_nServiceId = ((nSubType&0x300) == DI_SUB_AUTHOR)
-                        ? SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR
-                        : SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME;
-                break;
-            case DI_CREATE:
-                m_nServiceId = ((nSubType&0x300) == DI_SUB_AUTHOR)
-                        ? SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR
-                        : SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME;
-                break;
-            case DI_PRINT:
-                m_nServiceId = ((nSubType&0x300) == DI_SUB_AUTHOR)
-                        ? SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR
-                        : SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME;
-                break;
-            case DI_EDIT:
-                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME;      break;
-            case DI_COMMENT:
-                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION;    break;
-            case DI_INFO1:
-                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0;         break;
-            case DI_INFO2:
-                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1;         break;
-            case DI_INFO3:
-                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2;         break;
-            case DI_INFO4:
-                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3;         break;
-            case DI_KEYS:
-                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS;      break;
-            case DI_THEMA:
-                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT;        break;
-            case DI_TITEL:
-                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_TITLE;          break;
-            case DI_DOCNO:
-                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_REVISION;       break;
-            }
-        }
-        break;
-
-    case RES_HIDDENTXTFLD:
-        m_nServiceId = ((SwHiddenTxtField*)pFmtFld->GetFld())->GetSubType() == TYP_CONDTXTFLD
-                ? SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT
-                : SW_SERVICE_FIELDTYPE_HIDDEN_TEXT;
-        break;
-
-    case RES_DOCSTATFLD:
-        {
-            switch(((SwDocStatField*)pFmtFld->GetFld())->GetSubType())
-            {
-            case DS_PAGE: m_nServiceId = SW_SERVICE_FIELDTYPE_PAGE_COUNT; break;
-            case DS_PARA: m_nServiceId = SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT; break;
-            case DS_WORD: m_nServiceId = SW_SERVICE_FIELDTYPE_WORD_COUNT     ; break;
-            case DS_CHAR: m_nServiceId = SW_SERVICE_FIELDTYPE_CHARACTER_COUNT; break;
-            case DS_TBL:  m_nServiceId = SW_SERVICE_FIELDTYPE_TABLE_COUNT    ; break;
-            case DS_GRF:  m_nServiceId = SW_SERVICE_FIELDTYPE_GRAPHIC_OBJECT_COUNT; break;
-            case DS_OLE:  m_nServiceId = SW_SERVICE_FIELDTYPE_EMBEDDED_OBJECT_COUNT; break;
-            }
-        }
-        break;
-    }
-
     if (pDc)
         pDc->GetUnoCallBack()->Add(this);
 }
@@ -1961,7 +1401,7 @@ void SwXTextField::attachToRange(
                 if(m_pProps->pDateTime)
                 {
                     Any aVal; aVal <<= *m_pProps->pDateTime;
-                    pFld->PutValue(aVal, C2U(SW_PROP_NAME_STR(UNO_NAME_DATE_TIME_VALUE)));
+                    pFld->PutValue( aVal, FIELD_PROP_DATE_TIME );
                 }
                 ((SwDateTimeField*)pFld)->SetOffset(m_pProps->nSubType);
             }
@@ -1976,7 +1416,7 @@ void SwXTextField::attachToRange(
                 if(m_pProps->sPar3.Len())
                     ((SwFileNameField*)pFld)->SetExpansion(m_pProps->sPar3);
                 Any aFormat(&m_pProps->nFormat, ::getCppuType(&m_pProps->nFormat));
-                pFld->PutValue(aFormat, C2U(SW_PROP_NAME_STR(UNO_NAME_FILE_FORMAT)));
+                pFld->PutValue( aFormat, FIELD_PROP_FORMAT );
             }
             break;
             case SW_SERVICE_FIELDTYPE_TEMPLATE_NAME:
@@ -1985,7 +1425,7 @@ void SwXTextField::attachToRange(
                 pFld = new SwTemplNameField((SwTemplNameFieldType*)pFldType,
                                                     m_pProps->nFormat);
                 Any aFormat(&m_pProps->nFormat, ::getCppuType(&m_pProps->nFormat));
-                pFld->PutValue(aFormat, C2U(SW_PROP_NAME_STR(UNO_NAME_FILE_FORMAT)));
+                pFld->PutValue(aFormat, FIELD_PROP_FORMAT);
             }
             break;
             case SW_SERVICE_FIELDTYPE_CHAPTER:
@@ -1994,7 +1434,7 @@ void SwXTextField::attachToRange(
                 pFld = new SwChapterField((SwChapterFieldType*)pFldType, m_pProps->nUSHORT1);
                 ((SwChapterField*)pFld)->SetLevel(m_pProps->nByte1);
                 Any aVal; aVal <<= (sal_Int16)m_pProps->nUSHORT1;
-                pFld->PutValue(aVal, C2U(SW_PROP_NAME_STR(UNO_NAME_CHAPTER_FORMAT)));
+                pFld->PutValue(aVal, FIELD_PROP_USHORT1 );
             }
             break;
             case SW_SERVICE_FIELDTYPE_AUTHOR:
@@ -2040,20 +1480,18 @@ void SwXTextField::attachToRange(
                 if(m_pProps->sPar3.Len())
                     ((SwGetRefField*)pFld)->SetExpand(m_pProps->sPar3);
                 Any aVal; aVal <<=(sal_Int16)m_pProps->nUSHORT1;
-                pFld->PutValue(aVal, C2U(SW_PROP_NAME_STR(UNO_NAME_REFERENCE_FIELD_PART)));
+                pFld->PutValue(aVal, FIELD_PROP_USHORT1 );
                 aVal <<=(sal_Int16)m_pProps->nUSHORT2;
-                pFld->PutValue(aVal, C2U(SW_PROP_NAME_STR(UNO_NAME_REFERENCE_FIELD_SOURCE)));
+                pFld->PutValue(aVal, FIELD_PROP_USHORT2 );
                 aVal <<=(sal_Int16)m_pProps->nSHORT1;
-                pFld->PutValue(aVal, C2U(SW_PROP_NAME_STR(UNO_NAME_SEQUENCE_NUMBER)));
+                pFld->PutValue(aVal, FIELD_PROP_SHORT1 );
             }
             break;
             case SW_SERVICE_FIELDTYPE_JUMP_EDIT:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_JUMPEDITFLD);
                 pFld = new SwJumpEditField((SwJumpEditFieldType*)pFldType,
-                                m_pProps->nUSHORT1,
-                                                                m_pProps->sPar2,
-                                                                m_pProps->sPar1);
+                        m_pProps->nUSHORT1, m_pProps->sPar2, m_pProps->sPar1);
             }
             break;
             case SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR     :
@@ -2077,9 +1515,10 @@ void SwXTextField::attachToRange(
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_DOCINFOFLD);
                 sal_uInt16 nSubType = aDocInfoSubTypeFromService[
                         m_nServiceId - SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR];
-                if(SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME == m_nServiceId ||
-                        SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME == m_nServiceId ||
-                        SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME == m_nServiceId)
+                if( SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME == m_nServiceId ||
+                    SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME == m_nServiceId ||
+                    SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME == m_nServiceId ||
+                    SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME == m_nServiceId )
                 {
                     if(m_pProps->bBool2) //IsDate
                     {
@@ -2147,7 +1586,7 @@ void SwXTextField::attachToRange(
                                                 m_pProps->nUSHORT1);
                 ((SwPageNumberField*)pFld)->SetUserString(m_pProps->sPar1);
                 Any aVal; aVal <<= m_pProps->nSubType;
-                pFld->PutValue(aVal, C2U(SW_PROP_NAME_STR(UNO_NAME_SUB_TYPE)));
+                pFld->PutValue( aVal, FIELD_PROP_SUBTYPE );
             }
             break;
             case SW_SERVICE_FIELDTYPE_DDE:
@@ -2331,7 +1770,7 @@ void SwXTextField::attachToRange(
                 if(m_pProps->aPropSeq.getLength())
                 {
                     Any aVal; aVal <<= m_pProps->aPropSeq;
-                    pFld->PutValue(aVal, C2U(SW_PROP_NAME_STR(UNO_NAME_FIELDS)));
+                    pFld->PutValue( aVal, FIELD_PROP_PROP_SEQ );
                 }
             }
             break;
@@ -2482,7 +1921,8 @@ uno::Reference< XPropertySetInfo >  SwXTextField::getPropertySetInfo(void)
     uno::Reference< XPropertySetInfo >  aRef;
     if(m_nServiceId != USHRT_MAX)
     {
-        const SfxItemPropertyMap* pMap = SwFieldPropMapProvider::GetPropertyMap(m_nServiceId);
+        const SfxItemPropertyMap* pMap = aSwMapProvider.GetPropertyMap(
+                        lcl_GetPropertyMapOfService( m_nServiceId ));
         uno::Reference< beans::XPropertySetInfo >  xInfo = new SfxItemPropertySetInfo(pMap);
         // extend PropertySetInfo!
         const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
@@ -2497,144 +1937,119 @@ uno::Reference< XPropertySetInfo >  SwXTextField::getPropertySetInfo(void)
 /*-- 14.12.98 11:37:19---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::Any& rValue)
     throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException,
         WrappedTargetException, uno::RuntimeException )
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
     SwField* pField = (SwField*)GetField();
-    const SfxItemPropertyMap* _pMap = SwFieldPropMapProvider::GetPropertyMap(m_nServiceId);
+    const SfxItemPropertyMap* _pMap = aSwMapProvider.GetPropertyMap(
+                                lcl_GetPropertyMapOfService( m_nServiceId));
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
     if(!pMap)
         throw UnknownPropertyException();
     if(pMap->nFlags & PropertyAttribute::READONLY)
         throw IllegalArgumentException();
+
     if(pField)
     {
         // Sonderbehandlung Serienbrieffeld
-        sal_uInt16 nWhich = pFmtFld->GetFld()->GetTyp()->Which();
+        sal_uInt16 nWhich = pField->Which();
         if( RES_DBFLD == nWhich &&
             (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
-                rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME))||
-                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME))))
+            rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME))||
+            rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME))))
         {
             // hier muss ein neuer Feldtyp angelegt werden und
             // das Feld an den neuen Typ umgehaengt werden
             DBG_WARNING("not implemented")
         }
         else
-            pField->PutValue(aValue, rPropertyName);
+            pField->PutValue( rValue, pMap->nWID );
     }
     else if(m_pProps)
     {
+        String* pStr = 0;
+        BOOL* pBool = 0;
         switch(pMap->nWID)
         {
-            case FIELD_PROP_PAR1:
-            {
-                OUString uTmp;
-                aValue >>= uTmp;
-                m_pProps->sPar1 = String(uTmp);
-            }
+        case FIELD_PROP_PAR1:
+            pStr = &m_pProps->sPar1;
             break;
-            case FIELD_PROP_PAR2:
-            {
-                OUString uTmp;
-                aValue >>= uTmp;
-                m_pProps->sPar2 = String(uTmp);
-            }
+        case FIELD_PROP_PAR2:
+            pStr = &m_pProps->sPar2;
             break;
-            case FIELD_PROP_PAR3:
-            {
-                OUString uTmp;
-                aValue >>= uTmp;
-                m_pProps->sPar3 = String(uTmp);
-            }
+        case FIELD_PROP_PAR3:
+            pStr = &m_pProps->sPar3;
             break;
-            case FIELD_PROP_PAR4:
-            {
-                OUString uTmp;
-                aValue >>= uTmp;
-                m_pProps->sPar4 = String(uTmp);
-            }
+        case FIELD_PROP_PAR4:
+            pStr = &m_pProps->sPar4;
             break;
-            case FIELD_PROP_FORMAT:
-            {
-                aValue >>= m_pProps->nFormat;
-                m_pProps->bFormatIsDefault = sal_False;
-            }
+        case FIELD_PROP_FORMAT:
+            rValue >>= m_pProps->nFormat;
+            m_pProps->bFormatIsDefault = sal_False;
             break;
-            case FIELD_PROP_SUBTYPE:
-            {
-                m_pProps->nSubType = SWUnoHelper::GetEnumAsInt32( aValue );
-            }
+        case FIELD_PROP_SUBTYPE:
+            m_pProps->nSubType = SWUnoHelper::GetEnumAsInt32( rValue );
             break;
-            case FIELD_PROP_BYTE1 :
-                aValue >>= m_pProps->nByte1;
+        case FIELD_PROP_BYTE1 :
+            rValue >>= m_pProps->nByte1;
             break;
-            case FIELD_PROP_BOOL1 :
-            {
-                if(aValue.getValueType() != getCppuBooleanType())
-                    throw IllegalArgumentException();
-                m_pProps->bBool1 = *(sal_Bool*)aValue.getValue();;
-            }
+        case FIELD_PROP_BOOL1 :
+            pBool = &m_pProps->bBool1;
             break;
-            case FIELD_PROP_BOOL2 :
-            {
-                if(aValue.getValueType() != getCppuBooleanType())
-                    throw IllegalArgumentException();
-                m_pProps->bBool2 = *(sal_Bool*)aValue.getValue();;
-            }
+        case FIELD_PROP_BOOL2 :
+            pBool = &m_pProps->bBool2;
             break;
-            case FIELD_PROP_BOOL3 :
-            {
-                if(aValue.getValueType() != getCppuBooleanType())
-                    throw IllegalArgumentException();
-                m_pProps->bBool3 = *(sal_Bool*)aValue.getValue();
-            }
+        case FIELD_PROP_BOOL3 :
+            pBool = &m_pProps->bBool3;
             break;
-            case FIELD_PROP_DATE :
-            {
-                if(aValue.getValueType() != ::getCppuType((const util::Date*)0))
-                    throw IllegalArgumentException();
+        case FIELD_PROP_DATE :
+        {
+            if(rValue.getValueType() != ::getCppuType((const util::Date*)0))
+                throw IllegalArgumentException();
 
-                util::Date aTemp = *(const util::Date*)aValue.getValue();
-                m_pProps->aDate = Date(aTemp.Day, aTemp.Month, aTemp.Year);
-            }
-            break;
-            case FIELD_PROP_USHORT1:
+            util::Date aTemp = *(const util::Date*)rValue.getValue();
+            m_pProps->aDate = Date(aTemp.Day, aTemp.Month, aTemp.Year);
+        }
+        break;
+        case FIELD_PROP_USHORT1:
+        case FIELD_PROP_USHORT2:
             {
-                sal_Int16 nVal;
-                aValue >>= nVal;
-                m_pProps->nUSHORT1 = nVal;
+                 sal_Int16 nVal;
+                rValue >>= nVal;
+                if( FIELD_PROP_USHORT1 == pMap->nWID)
+                    m_pProps->nUSHORT1 = nVal;
+                else
+                    m_pProps->nUSHORT2 = nVal;
             }
             break;
-            case FIELD_PROP_USHORT2:
-            {
-                sal_Int16 nVal;
-                aValue >>= nVal;
-                m_pProps->nUSHORT2 = nVal;
-            }
+        case FIELD_PROP_SHORT1:
+            rValue >>= m_pProps->nSHORT1;
             break;
-            case FIELD_PROP_SHORT1:
-            {
-                aValue >>= m_pProps->nSHORT1;
-            }
+        case FIELD_PROP_DOUBLE:
+            if(rValue.getValueType() != ::getCppuType((const double*)0))
+                throw IllegalArgumentException();
+            m_pProps->fDouble = *(double*)rValue.getValue();
             break;
-            case FIELD_PROP_DOUBLE:
-            {
-                if(aValue.getValueType() != ::getCppuType((const double*)0))
-                    throw IllegalArgumentException();
-                m_pProps->fDouble = *(double*)aValue.getValue();
-            }
+
+        case FIELD_PROP_DATE_TIME :
+            if(!m_pProps->pDateTime)
+                m_pProps->pDateTime = new util::DateTime;
+            rValue >>= (*m_pProps->pDateTime);
             break;
-            case FIELD_PROP_DATE_TIME :
-                if(!m_pProps->pDateTime)
-                    m_pProps->pDateTime = new util::DateTime;
-                aValue >>= (*m_pProps->pDateTime);
+        case FIELD_PROP_PROP_SEQ:
+            rValue >>= m_pProps->aPropSeq;
             break;
-            case FIELD_PROP_PROP_SEQ:
-                aValue >>= m_pProps->aPropSeq;
-            break;
+        }
+        if( pStr )
+            ::GetString( rValue, *pStr );
+        else if( pBool )
+        {
+            if( rValue.getValueType() == getCppuBooleanType() )
+                *pBool = *(sal_Bool*)rValue.getValue();
+            else
+                throw IllegalArgumentException();
         }
     }
     else
@@ -2649,7 +2064,8 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
     vos::OGuard  aGuard(Application::GetSolarMutex());
     uno::Any aRet;
     const SwField* pField = GetField();
-    const SfxItemPropertyMap* _pMap = SwFieldPropMapProvider::GetPropertyMap(m_nServiceId);
+    const SfxItemPropertyMap* _pMap = aSwMapProvider.GetPropertyMap(
+                                lcl_GetPropertyMapOfService( m_nServiceId));
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
     if(!pMap )
     {
@@ -2658,80 +2074,85 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
     }
     if(!pMap )
         throw UnknownPropertyException();
-    if(FN_UNO_TEXT_WRAP == pMap->nWID)
+
+    switch( pMap->nWID )
     {
+    case FN_UNO_TEXT_WRAP:
         aRet <<= WrapTextMode_NONE;
-    }
-    else if(FN_UNO_ANCHOR_TYPE == pMap->nWID)
-    {
+        break;
+    case FN_UNO_ANCHOR_TYPE:
         aRet <<= TextContentAnchorType_AS_CHARACTER;
-    }
-    else if(FN_UNO_ANCHOR_TYPES == pMap->nWID)
-    {
-        uno::Sequence<TextContentAnchorType> aTypes(1);
-        TextContentAnchorType* pArray = aTypes.getArray();
-        pArray[0] = TextContentAnchorType_AS_CHARACTER;
-        aRet.setValue(&aTypes, ::getCppuType((uno::Sequence<TextContentAnchorType>*)0));
-    }
-    else if(pField)
-        pField->QueryValue(aRet, rPropertyName);
-    else if(m_pProps)
-    {
-        switch(pMap->nWID)
+        break;
+    case FN_UNO_ANCHOR_TYPES:
         {
+            uno::Sequence<TextContentAnchorType> aTypes(1);
+            TextContentAnchorType* pArray = aTypes.getArray();
+            pArray[0] = TextContentAnchorType_AS_CHARACTER;
+            aRet.setValue(&aTypes, ::getCppuType((uno::Sequence<TextContentAnchorType>*)0));
+        }
+        break;
+
+    default:
+        if( pField )
+            pField->QueryValue( aRet, pMap->nWID );
+        else if( m_pProps )
+        {
+            switch(pMap->nWID)
+            {
             case FIELD_PROP_PAR1:
                 aRet <<= OUString(m_pProps->sPar1);
-            break;
+                break;
             case FIELD_PROP_PAR2:
                 aRet <<= OUString(m_pProps->sPar2);
-            break;
+                break;
             case FIELD_PROP_PAR3:
                 aRet <<= OUString(m_pProps->sPar3);
-            break;
+                break;
             case FIELD_PROP_PAR4:
                 aRet <<= OUString(m_pProps->sPar4);
-            break;
+                break;
             case FIELD_PROP_FORMAT:
                 aRet <<= m_pProps->nFormat;
-            break;
+                break;
             case FIELD_PROP_SUBTYPE:
                 aRet <<= m_pProps->nSubType;
-            break;
+                break;
             case FIELD_PROP_BYTE1 :
                 aRet <<= m_pProps->nByte1;
-            break;
+                break;
             case FIELD_PROP_BOOL1 :
                 aRet.setValue(&m_pProps->bBool1, ::getCppuBooleanType());
-            break;
+                break;
             case FIELD_PROP_BOOL2 :
                 aRet.setValue(&m_pProps->bBool2, ::getCppuBooleanType());
-            break;
+                break;
             case FIELD_PROP_DATE :
                 aRet.setValue(&m_pProps->aDate, ::getCppuType((const util::Date*)0));
-            break;
+                break;
             case FIELD_PROP_USHORT1:
                 aRet <<= (sal_Int16)m_pProps->nUSHORT1;
-            break;
+                break;
             case FIELD_PROP_USHORT2:
                 aRet <<= (sal_Int16)m_pProps->nUSHORT2;
-            break;
+                break;
             case FIELD_PROP_SHORT1:
                 aRet <<= m_pProps->nSHORT1;
-            break;
+                break;
             case FIELD_PROP_DOUBLE:
                 aRet <<= m_pProps->fDouble;
-            break;
+                break;
             case FIELD_PROP_DATE_TIME :
                 if(m_pProps->pDateTime)
                     aRet <<= (*m_pProps->pDateTime);
-            break;
+                break;
             case FIELD_PROP_PROP_SEQ:
                 aRet <<= m_pProps->aPropSeq;
-            break;
+                break;
+            }
         }
+        else
+            throw uno::RuntimeException();
     }
-    else
-        throw uno::RuntimeException();
     return aRet;
 }
 /*-- 14.12.98 11:37:20---------------------------------------------------
@@ -3411,4 +2832,11 @@ void SwXFieldEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 }
 
 
+String& GetString( const com::sun::star::uno::Any& rAny, String& rStr )
+{
+    OUString aStr;
+    rAny >>= aStr;
+    rStr = String( aStr );
+    return rStr;
+}
 

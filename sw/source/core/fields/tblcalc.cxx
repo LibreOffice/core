@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblcalc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 09:27:16 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,24 +65,36 @@
 
 #pragma hdrstop
 
-#include "cntfrm.hxx"
-#include "doc.hxx"
-#include "pam.hxx"      // fuer GetBodyTxtNode
-#include "ndtxt.hxx"
-
-#ifndef _UNOPRNMS_HXX
-#include <unoprnms.hxx>
+#ifndef _CNTFRM_HXX
+#include <cntfrm.hxx>
 #endif
-
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _PAM_HXX
+#include <pam.hxx>      // fuer GetBodyTxtNode
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
 #endif
 #ifndef _TXTFLD_HXX //autogen
 #include <txtfld.hxx>
 #endif
-#include "expfld.hxx"
-#include "hints.hxx"    // fuer Modify()
-#include "docfld.hxx"   // fuer _SetGetExpFld
+#ifndef _EXPFLD_HXX
+#include <expfld.hxx>
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>    // fuer Modify()
+#endif
+#ifndef _DOCFLD_HXX
+#include <docfld.hxx>   // fuer _SetGetExpFld
+#endif
+#ifndef _UNOFLDMID_H
+#include <unofldmid.h>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -236,57 +248,58 @@ void SwTblField::SetPar2(const String& rStr)
 /*-----------------04.03.98 10:33-------------------
 
 --------------------------------------------------*/
-BOOL SwTblField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwTblField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
     BOOL bRet = TRUE;
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FORMULA)))
+    switch ( nMId )
     {
-        USHORT nOldSubType = nSubType;
-        SwTblField* pThis = (SwTblField*)this;
-        pThis->nSubType |= SUB_CMD;
-        rAny <<= rtl::OUString( Expand() );
-        pThis->nSubType = nOldSubType;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
-    {
-        BOOL bFormula = 0 != (SUB_CMD & nSubType);
-        rAny.setValue(&bFormula, ::getBooleanCppuType());
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
+    case FIELD_PROP_PAR2:
+        {
+            USHORT nOldSubType = nSubType;
+            SwTblField* pThis = (SwTblField*)this;
+            pThis->nSubType |= SUB_CMD;
+            rAny <<= rtl::OUString( Expand() );
+            pThis->nSubType = nOldSubType;
+        }
+        break;
+    case FIELD_PROP_BOOL1:
+        {
+            BOOL bFormula = 0 != (SUB_CMD & nSubType);
+            rAny.setValue(&bFormula, ::getBooleanCppuType());
+        }
+        break;
+    case FIELD_PROP_PAR1:
         rAny <<= rtl::OUString(GetExpStr());
-    else
-        bRet = SwValueField::QueryValue( rAny, rProperty );
+        break;
+    default:
+        bRet = SwValueField::QueryValue( rAny, nMId );
+    }
     return bRet;
 }
 /*-----------------04.03.98 10:33-------------------
 
 --------------------------------------------------*/
-BOOL SwTblField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwTblField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
     BOOL bRet = TRUE;
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FORMULA)))
+    String sTmp;
+    switch ( nMId )
     {
-        OUString uTmp;
-        rAny >>= uTmp;
-        SetFormula( uTmp );
-    }
-
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
-    {
-        BOOL bFormula = *(sal_Bool*)rAny.getValue();
-        if(bFormula)
+    case FIELD_PROP_PAR2:
+        SetFormula( ::GetString( rAny, sTmp ));
+        break;
+    case FIELD_PROP_BOOL1:
+        if(*(sal_Bool*)rAny.getValue())
             nSubType = GSE_FORMULA|SUB_CMD;
         else
             nSubType = GSE_FORMULA;
+        break;
+    case FIELD_PROP_PAR1:
+        ChgExpStr( ::GetString( rAny, sTmp ));
+        break;
+    default:
+        bRet = SwValueField::PutValue( rAny, nMId );
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
-    {
-        OUString sTmp;
-        rAny >>= sTmp;
-        ChgExpStr(sTmp);
-    }
-    else
-        bRet = SwValueField::PutValue( rAny, rProperty );
     return bRet;
 }
 

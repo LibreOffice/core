@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddefld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 10:18:28 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@
 #ifndef _SWDDETBL_HXX
 #include <swddetbl.hxx>
 #endif
-#ifndef _UNOPRNMS_HXX
-#include <unoprnms.hxx>
+#ifndef _UNOFLDMID_H
+#include <unofldmid.h>
 #endif
 
 using namespace rtl;
@@ -396,51 +396,53 @@ void SwDDEFieldType::_RefCntChgd()
 /* -----------------------------28.08.00 16:23--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwDDEFieldType::QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const
+BOOL SwDDEFieldType::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const
 {
-    USHORT nPart = rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DDE_COMMAND_TYPE))  ? 0 :
-        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DDE_COMMAND_FILE))  ? 1 :
-            rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DDE_COMMAND_ELEMENT))  ? 2 :
-            rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
-    if(nPart < 3 )
+    BYTE nPart = 0;
+    switch( nMId )
     {
-        rVal <<= OUString(GetCmd().GetToken(nPart, so3::cTokenSeperator));
+    case FIELD_PROP_PAR2:      nPart = 3; break;
+    case FIELD_PROP_PAR4:      nPart = 2; break;
+    case FIELD_PROP_SUBTYPE:   nPart = 1; break;
+    case FIELD_PROP_BOOL1:
+        {
+            sal_Bool bSet = GetType() == so3::LINKUPDATE_ALWAYS ? TRUE : FALSE;
+            rVal.setValue(&bSet, ::getBooleanCppuType());
+        }
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if(3 == nPart)
-    {
-        sal_Bool bSet = GetType() == so3::LINKUPDATE_ALWAYS ? TRUE : FALSE;
-        rVal.setValue(&bSet, ::getBooleanCppuType());
-    }
-    else
-        return FALSE;
+    if( nPart )
+        rVal <<= OUString(GetCmd().GetToken(nPart-1, so3::cTokenSeperator));
     return TRUE;
 }
 /* -----------------------------28.08.00 16:23--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwDDEFieldType::PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty )
+BOOL SwDDEFieldType::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId )
 {
-    USHORT nPart = rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DDE_COMMAND_TYPE))  ? 0 :
-        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DDE_COMMAND_FILE))  ? 1 :
-            rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DDE_COMMAND_ELEMENT))  ? 2 :
-            rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
-    if(nPart < 3 )
+    BYTE nPart = 0;
+    switch( nMId )
     {
-        OUString sVal;
-        rVal >>= sVal;
-        String sCmd = GetCmd();
+    case FIELD_PROP_PAR2:      nPart = 3; break;
+    case FIELD_PROP_PAR4:      nPart = 2; break;
+    case FIELD_PROP_SUBTYPE:   nPart = 1; break;
+    case FIELD_PROP_BOOL1:
+        SetType( *(sal_Bool*)rVal.getValue() ? so3::LINKUPDATE_ALWAYS
+                                             : so3::LINKUPDATE_ONCALL );
+        break;
+    default:
+        DBG_ERROR("illegal property")
+    }
+    if( nPart )
+    {
+        String sTmp, sCmd( GetCmd() );
         while(3 > sCmd.GetTokenCount(so3::cTokenSeperator))
             sCmd += so3::cTokenSeperator;
-        sCmd.SetToken(nPart, so3::cTokenSeperator, sVal);
+        sCmd.SetToken( nPart-1, so3::cTokenSeperator, ::GetString( rVal, sTmp ) );
         SetCmd( sCmd );
     }
-    else if(3 == nPart)
-    {
-        sal_Bool bSet = *(sal_Bool*)rVal.getValue();
-        SetType( bSet ? so3::LINKUPDATE_ALWAYS : so3::LINKUPDATE_ONCALL );
-    }
-    else
-        return FALSE;
     return TRUE;
 }
 /* ---------------------------------------------------------------------------

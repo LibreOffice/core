@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrfld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,28 +65,38 @@
 
 #pragma hdrstop
 
-#ifndef _SVDMODEL_HXX //autogen
-#include <svx/svdmodel.hxx>
-#endif
-
-#ifndef _ZFORLIST_HXX //autogen
+#ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
 #endif
-
 #ifndef _ZFORMAT_HXX //autogen
 #include <svtools/zformat.hxx>
 #endif
-
-#ifndef _UNOPRNMS_HXX
-#include <unoprnms.hxx>
+#ifndef _SVDMODEL_HXX
+#include <svx/svdmodel.hxx>
 #endif
 
-#include "calbck.hxx"
-#include "calc.hxx"
-#include "usrfld.hxx"
-#include "doc.hxx"
-#include "editsh.hxx"
-#include "dpage.hxx"
+
+#ifndef _CALBCK_HXX
+#include <calbck.hxx>
+#endif
+#ifndef _CALC_HXX
+#include <calc.hxx>
+#endif
+#ifndef _USRFLD_HXX
+#include <usrfld.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _EDITSH_HXX
+#include <editsh.hxx>
+#endif
+#ifndef _DPAGE_HXX
+#include <dpage.hxx>
+#endif
+#ifndef _UNOFLDMID_H
+#include <unofldmid.h>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -174,59 +184,59 @@ void SwUserField::SetSubType(sal_uInt16 nSub)
 /*-----------------09.03.98 08:04-------------------
 
 --------------------------------------------------*/
-BOOL SwUserField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwUserField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
+    switch( nMId )
     {
+    case FIELD_PROP_BOOL2:
+        {
+            BOOL bTmp = 0 != (nSubType & SUB_CMD);
+            rAny.setValue(&bTmp, ::getBooleanCppuType());
+        }
+        break;
+    case FIELD_PROP_BOOL1:
+        {
+            BOOL bTmp = 0 == (nSubType & SUB_INVISIBLE);
+            rAny.setValue(&bTmp, ::getBooleanCppuType());
+        }
+        break;
+    case FIELD_PROP_FORMAT:
         rAny <<= (sal_Int32)GetFormat();
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_VISIBLE)))
-    {
-        BOOL bTmp = 0 == (nSubType & SUB_INVISIBLE);
-        rAny.setValue(&bTmp, ::getBooleanCppuType());
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
-    {
-        BOOL bTmp = 0 != (nSubType & SUB_CMD);
-        rAny.setValue(&bTmp, ::getBooleanCppuType());
-    }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 /*-----------------09.03.98 08:04-------------------
 
 --------------------------------------------------*/
-sal_Bool SwUserField::PutValue( const uno::Any& rAny, const String& rProperty )
+sal_Bool SwUserField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
+    switch( nMId )
     {
-        sal_Int32 nTmp;
-        rAny >>= nTmp;
-        SetFormat(nTmp);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_VISIBLE)))
-    {
-        sal_Bool bTmp = *(sal_Bool*) rAny.getValue();
-        if(bTmp)
+    case FIELD_PROP_BOOL1:
+        if(*(sal_Bool*) rAny.getValue())
             nSubType &= (~SUB_INVISIBLE);
         else
             nSubType |= SUB_INVISIBLE;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_SHOW_FORMULA)))
-    {
-        sal_Bool bTmp = *(sal_Bool*) rAny.getValue();
-        if(bTmp)
+        break;
+    case FIELD_PROP_BOOL2:
+        if(*(sal_Bool*) rAny.getValue())
             nSubType |= SUB_CMD;
         else
             nSubType &= (~SUB_CMD);
+        break;
+    case FIELD_PROP_FORMAT:
+        {
+            sal_Int32 nTmp;
+            rAny >>= nTmp;
+            SetFormat(nTmp);
+        }
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 
@@ -388,62 +398,59 @@ void SwUserFieldType::CtrlSetContent( const String& rStr )
 /*-----------------04.03.98 17:05-------------------
 
 --------------------------------------------------*/
-BOOL SwUserFieldType::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwUserFieldType::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_VALUE)))
+    switch( nMId )
     {
+    case FIELD_PROP_DOUBLE:
         rAny <<= (double) nValue;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT)))
-    {
+        break;
+    case FIELD_PROP_PAR2:
         rAny <<= rtl::OUString(aContent);
+        break;
+    case FIELD_PROP_BOOL1:
+        {
+            BOOL bExpression = 0 != (GSE_EXPR&nType);
+            rAny.setValue(&bExpression, ::getBooleanCppuType());
+        }
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_EXPRESSION)))
-    {
-        BOOL bExpression = 0 != (GSE_EXPR&nType);
-        rAny.setValue(&bExpression, ::getBooleanCppuType());
-    }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("unknown property")
-#endif
     return sal_True;
 }
 /*-----------------04.03.98 17:05-------------------
 
 --------------------------------------------------*/
-BOOL SwUserFieldType::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwUserFieldType::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_VALUE)))
+    switch( nMId )
     {
-        double fVal;
-        rAny >>= fVal;
-        nValue = fVal;
+    case FIELD_PROP_DOUBLE:
+        {
+            double fVal;
+            rAny >>= fVal;
+            nValue = fVal;
 
-        // Folgende Zeile ist eigentlich falsch, da die Sprache unbekannt ist
-        // (haengt am Feld) und aContent daher auch eigentlich ans Feld gehoeren
-        // muesste. Jedes Feld kann eine andere Sprache, aber den gleichen Inhalt
-        // haben, nur die Formatierung ist unterschiedlich.
-        DoubleToString(aContent, nValue, (sal_uInt16)LANGUAGE_SYSTEM);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT )))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        aContent = String(uTmp);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_EXPRESSION)))
-    {
-        BOOL bExpression = *(sal_Bool*)rAny.getValue();
-        if(bExpression)
+            // Folgende Zeile ist eigentlich falsch, da die Sprache unbekannt ist
+            // (haengt am Feld) und aContent daher auch eigentlich ans Feld gehoeren
+            // muesste. Jedes Feld kann eine andere Sprache, aber den gleichen Inhalt
+            // haben, nur die Formatierung ist unterschiedlich.
+            DoubleToString(aContent, nValue, (sal_uInt16)LANGUAGE_SYSTEM);
+        }
+        break;
+    case FIELD_PROP_PAR2:
+        ::GetString( rAny, aContent );
+        break;
+    case FIELD_PROP_BOOL1:
+        if(*(sal_Bool*)rAny.getValue())
             nType |= GSE_EXPR;
         else
             nType &= ~GSE_EXPR;
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("unknown property")
-#endif
     return sal_True;
 }
 

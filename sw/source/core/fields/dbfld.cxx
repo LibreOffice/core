@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-05 10:23:57 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,6 @@
 #include <unotools/transliterationwrapper.hxx>
 #endif
 
-#ifndef _UNOPRNMS_HXX
-#include <unoprnms.hxx>
-#endif
 #ifndef _FMTFLD_HXX
 #include <fmtfld.hxx>
 #endif
@@ -124,6 +121,9 @@
 #endif
 #ifndef _TXTATR_HXX
 #include <txtatr.hxx>
+#endif
+#ifndef _UNOFLDMID_H
+#include <unofldmid.h>
 #endif
 
 
@@ -199,56 +199,71 @@ void SwDBFieldType::ReleaseRef()
 /* -----------------24.02.99 14:51-------------------
  *
  * --------------------------------------------------*/
-BOOL    SwDBFieldType::QueryValue( com::sun::star::uno::Any& rAny, const String& rProperty ) const
+BOOL SwDBFieldType::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
 {
-    USHORT nToken = USHRT_MAX;
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_BASE_NAME    )))
+    switch( nMId )
+    {
+    case FIELD_PROP_PAR2:
         rAny <<= aDBData.sDataSource;
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_TABLE_NAME)))
+        break;
+    case FIELD_PROP_PAR4:
         rAny <<= aDBData.sCommand;
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_COMMAND_TYPE)))
+        break;
+    case FIELD_PROP_PAR1:
+        rAny <<= OUString(sColumn);
+        break;
+    case FIELD_PROP_SHORT1:
         rAny <<= aDBData.nCommandType;
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_COLUMN_NAME)))
-        rAny <<= (OUString)sColumn;
-    return nToken != USHRT_MAX;
+        break;
+    default:
+        DBG_ERROR("illegal property")
+    }
+    return TRUE;
 }
 /* -----------------24.02.99 14:51-------------------
  *
  * --------------------------------------------------*/
-BOOL    SwDBFieldType::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
+BOOL SwDBFieldType::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 {
-    OUString sTmp;
-    sal_Bool bRet = rAny >>= sTmp;
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_BASE_NAME    )))
-        rAny >>= aDBData.sDataSource;
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_TABLE_NAME)))
-        rAny >>= aDBData.sCommand;
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_COMMAND_TYPE)))
-        rAny >>= aDBData.nCommandType;
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_COLUMN_NAME)))
+    switch( nMId )
     {
-        sal_Bool bUpdate = sTmp != (OUString)sColumn;
-        sColumn = sTmp;
-        if(bUpdate)
+    case FIELD_PROP_PAR2:
+        rAny >>= aDBData.sDataSource;
+        break;
+    case FIELD_PROP_PAR4:
+        rAny >>= aDBData.sCommand;
+        break;
+    case FIELD_PROP_PAR1:
         {
-            SwClientIter aIter( *this );
-            SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
-            while(pFld)
+            String sTmp;
+            ::GetString( rAny, sTmp );
+            if( sTmp != sColumn )
             {
-                // Feld im Undo?
-                SwTxtFld *pTxtFld = pFld->GetTxtFld();
-                if(pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
+                sColumn = sTmp;
+                SwClientIter aIter( *this );
+                SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+                while(pFld)
                 {
-                    SwDBField* pDBField = (SwDBField*)pFld->GetFld();
-                    pDBField->ClearInitialized();
-                    pDBField->InitContent();
-
+                    // Feld im Undo?
+                    SwTxtFld *pTxtFld = pFld->GetTxtFld();
+                    if(pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
+                    {
+                        SwDBField* pDBField = (SwDBField*)pFld->GetFld();
+                        pDBField->ClearInitialized();
+                        pDBField->InitContent();
+                     }
+                    pFld = (SwFmtFld*)aIter.Next();
                 }
-                pFld = (SwFmtFld*)aIter.Next();
             }
         }
+        break;
+    case FIELD_PROP_SHORT1:
+        rAny >>= aDBData.nCommandType;
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    return bRet;
+    return TRUE;
 }
 /*--------------------------------------------------------------------
     Beschreibung: SwDBField
@@ -491,57 +506,55 @@ void SwDBField::SetSubType(USHORT nType)
 /*-----------------06.03.98 16:15-------------------
 
 --------------------------------------------------*/
-BOOL SwDBField::QueryValue( com::sun::star::uno::Any& rAny, const String& rProperty ) const
+BOOL SwDBField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_DATA_BASE_FORMAT)))
+    switch( nMId )
     {
-        BOOL bTemp = 0 == (GetSubType()&SUB_OWN_FMT);
-        rAny.setValue(&bTemp, ::getBooleanCppuType());
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
+    case FIELD_PROP_BOOL1:
+        {
+            BOOL bTemp = 0 == (GetSubType()&SUB_OWN_FMT);
+            rAny.setValue(&bTemp, ::getBooleanCppuType());
+        }
+        break;
+    case FIELD_PROP_FORMAT:
         rAny <<= (sal_Int32)GetFormat();
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT))||
-        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
+        break;
+    case FIELD_PROP_PAR1:
         rAny <<= OUString(aContent);
-#ifdef   DBG_UTIL
-    else
-        DBG_ERROR("Was war das fuer ein Typ?")
-#endif
+        break;
+    default:
+        DBG_ERROR("illegal property")
+    }
     return TRUE;
 
 }
 /*-----------------06.03.98 16:15-------------------
 
 --------------------------------------------------*/
-BOOL SwDBField::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
+BOOL SwDBField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_DATA_BASE_FORMAT)))
+    switch( nMId )
     {
-        sal_Bool bTemp = *(sal_Bool*)rAny.getValue();
-        if(bTemp)
+    case FIELD_PROP_BOOL1:
+        if( *(sal_Bool*)rAny.getValue() )
             SetSubType(GetSubType()&~SUB_OWN_FMT);
         else
             SetSubType(GetSubType()|SUB_OWN_FMT);
+        break;
+    case FIELD_PROP_FORMAT:
+        {
+            sal_Int32 nTemp;
+            rAny >>= nTemp;
+            SetFormat(nTemp);
+        }
+        break;
+    case FIELD_PROP_PAR1:
+        ::GetString( rAny, aContent );
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBER_FORMAT)))
-    {
-        sal_Int32 nTemp;
-        rAny >>= nTemp;
-        SetFormat(nTemp);
-    }
-    else if( rProperty.EqualsAscii( SW_PRPNM_EQLASCI(UNO_NAME_CONTENT ))||
-        rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        aContent = uTmp;
-    }
-#ifdef   DBG_UTIL
-    else
-        DBG_ERROR("Was war das fuer ein Typ?")
-#endif
     return TRUE;
-
 }
 
 /*--------------------------------------------------------------------
@@ -588,36 +601,44 @@ String SwDBNameInfField::GetCntnt(BOOL bName) const
 /*-----------------06.03.98 16:55-------------------
 
 --------------------------------------------------*/
-BOOL SwDBNameInfField::QueryValue( com::sun::star::uno::Any& rAny, const String& rProperty ) const
+BOOL SwDBNameInfField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_BASE_NAME)))
-        rAny <<= aDBData.sDataSource;
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_TABLE_NAME)))
-        rAny <<= aDBData.sCommand;
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_COMMAND_TYPE)))
-        rAny <<= aDBData.nCommandType;
-    else
+    switch( nMId )
     {
-        DBG_ERROR("was war das fuer ein Typ?")
-        return FALSE;
+    case FIELD_PROP_PAR1:
+        rAny <<= aDBData.sDataSource;
+        break;
+    case FIELD_PROP_PAR2:
+        rAny <<= aDBData.sCommand;
+        break;
+    case FIELD_PROP_SHORT1:
+        rAny <<= aDBData.nCommandType;
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
     return TRUE;
 }
 /*-----------------06.03.98 16:55-------------------
 
 --------------------------------------------------*/
-BOOL    SwDBNameInfField::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
+BOOL SwDBNameInfField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 {
-    sal_Bool bRet;
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_BASE_NAME)))
-        bRet = rAny >>= aDBData.sDataSource;
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_TABLE_NAME)))
-        bRet = rAny >>= aDBData.sCommand;
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_DATA_COMMAND_TYPE)))
+    switch( nMId )
+    {
+    case FIELD_PROP_PAR1:
+        rAny >>= aDBData.sDataSource;
+        break;
+    case FIELD_PROP_PAR2:
+        rAny >>= aDBData.sCommand;
+        break;
+    case FIELD_PROP_SHORT1:
         rAny >>= aDBData.nCommandType;
-    else
-        bRet = FALSE;
-    return bRet;
+        break;
+    default:
+        DBG_ERROR("illegal property")
+    }
+    return TRUE;
 }
 
 /*--------------------------------------------------------------------
@@ -692,28 +713,34 @@ void SwDBNextSetField::SetPar1(const String& rStr)
 /*-----------------06.03.98 16:16-------------------
 
 --------------------------------------------------*/
-BOOL SwDBNextSetField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwDBNextSetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
+    BOOL bRet = TRUE;
+    switch( nMId )
+    {
+    case FIELD_PROP_PAR3:
         rAny <<= OUString(aCond);
-    else
-        return SwDBNameInfField::QueryValue(rAny, rProperty);
-    return TRUE;
+        break;
+    default:
+        bRet = SwDBNameInfField::QueryValue( rAny, nMId );
+    }
+    return bRet;
 }
 /*-----------------06.03.98 16:16-------------------
 
 --------------------------------------------------*/
-BOOL    SwDBNextSetField::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
+BOOL SwDBNextSetField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
+    BOOL bRet = TRUE;
+    switch( nMId )
     {
-        OUString uTemp;
-        rAny >>= uTemp;
-        aCond = String(uTemp);
+    case FIELD_PROP_PAR3:
+        ::GetString( rAny, aCond );
+        break;
+    default:
+        bRet = SwDBNameInfField::PutValue( rAny, nMId );
     }
-    else
-        return SwDBNameInfField::PutValue(rAny, rProperty);
-    return TRUE;
+    return bRet;
 }
 
 /*--------------------------------------------------------------------
@@ -821,36 +848,44 @@ void SwDBNumSetField::SetPar2(const String& rStr)
 /*-----------------06.03.98 16:16-------------------
 
 --------------------------------------------------*/
-BOOL SwDBNumSetField::QueryValue( com::sun::star::uno::Any& rAny, const String& rProperty ) const
+BOOL SwDBNumSetField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SET_NUMBER)))
-        rAny <<= (sal_Int32)aPar2.ToInt32();
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
+    BOOL bRet = TRUE;
+    switch( nMId )
+    {
+    case FIELD_PROP_PAR3:
         rAny <<= OUString(aCond);
-    else
-        return SwDBNameInfField::QueryValue(rAny, rProperty);
-    return TRUE;
+        break;
+    case FIELD_PROP_FORMAT:
+        rAny <<= (sal_Int32)aPar2.ToInt32();
+        break;
+    default:
+        bRet = SwDBNameInfField::QueryValue(rAny, nMId );
+    }
+    return bRet;
 }
 /*-----------------06.03.98 16:16-------------------
 
 --------------------------------------------------*/
-BOOL    SwDBNumSetField::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
+BOOL    SwDBNumSetField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SET_NUMBER)))
+    BOOL bRet = TRUE;
+    switch( nMId )
     {
-        sal_Int32 nVal;
-        rAny >>= nVal;
-        aPar2 = String::CreateFromInt32(nVal);
+    case FIELD_PROP_PAR3:
+        ::GetString( rAny, aCond );
+        break;
+    case FIELD_PROP_FORMAT:
+        {
+            sal_Int32 nVal;
+            rAny >>= nVal;
+            aPar2 = String::CreateFromInt32(nVal);
+        }
+        break;
+    default:
+        bRet = SwDBNameInfField::PutValue(rAny, nMId );
     }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONDITION)))
-    {
-        OUString uTemp;
-        rAny >>= uTemp;
-        aCond = String(uTemp);
-    }
-    else
-        return SwDBNameInfField::PutValue(rAny, rProperty);
-    return TRUE;
+    return bRet;
 }
 
 /*--------------------------------------------------------------------
@@ -911,16 +946,16 @@ SwField* SwDBNameField::Copy() const
 /*-----------------06.03.98 16:16-------------------
 
 --------------------------------------------------*/
-BOOL SwDBNameField::QueryValue( com::sun::star::uno::Any& rAny, const String& rProperty ) const
+BOOL SwDBNameField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
 {
-    return SwDBNameInfField::QueryValue(rAny, rProperty);
+    return SwDBNameInfField::QueryValue(rAny, nMId );
 }
 /*-----------------06.03.98 16:16-------------------
 
 --------------------------------------------------*/
-BOOL    SwDBNameField::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
+BOOL SwDBNameField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 {
-    return SwDBNameInfField::PutValue(rAny, rProperty);
+    return SwDBNameInfField::PutValue(rAny, nMId );
 }
 /*--------------------------------------------------------------------
     Beschreibung: SwDBNameFieldType
@@ -994,38 +1029,48 @@ SwField* SwDBSetNumberField::Copy() const
 /*-----------------06.03.98 16:15-------------------
 
 --------------------------------------------------*/
-BOOL SwDBSetNumberField::QueryValue( com::sun::star::uno::Any& rAny, const String& rProperty ) const
+BOOL SwDBSetNumberField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE)))
+    BOOL bRet = TRUE;
+    switch( nMId )
     {
+    case FIELD_PROP_USHORT1:
         rAny <<= (sal_Int16)GetFormat();
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SET_NUMBER)))
+        break;
+    case FIELD_PROP_FORMAT:
         rAny <<= nNumber;
-    else
-        return SwDBNameInfField::QueryValue(rAny, rProperty);
-    return TRUE;
+        break;
+    default:
+        bRet = SwDBNameInfField::QueryValue( rAny, nMId );
+    }
+    return bRet;
 }
 /*-----------------06.03.98 16:15-------------------
 
 --------------------------------------------------*/
-BOOL    SwDBSetNumberField::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
+BOOL SwDBSetNumberField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_NUMBERING_TYPE)))
+    BOOL bRet = TRUE;
+    switch( nMId )
     {
-        sal_Int16 nSet;
-        rAny >>= nSet;
-        if(nSet < (INT16) SVX_NUMBER_NONE )
-            SetFormat(nSet);
-        else
-            //exception(wrong_value)
-            ;
-    }
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SET_NUMBER)))
+    case FIELD_PROP_USHORT1:
+        {
+            sal_Int16 nSet;
+            rAny >>= nSet;
+            if(nSet < (INT16) SVX_NUMBER_NONE )
+                SetFormat(nSet);
+            else
+                //exception(wrong_value)
+                ;
+        }
+        break;
+    case FIELD_PROP_FORMAT:
         rAny >>= nNumber;
-    else
-        return SwDBNameInfField::PutValue(rAny, rProperty);
-    return TRUE;
+        break;
+    default:
+        bRet = SwDBNameInfField::PutValue( rAny, nMId );
+    }
+    return bRet;
 }
 
 

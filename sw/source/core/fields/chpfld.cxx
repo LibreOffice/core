@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chpfld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_TEXT_CHAPTERFORMAT_HPP_
+#include <com/sun/star/text/ChapterFormat.hpp>
+#endif
+
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -83,13 +87,10 @@
 #ifndef _EXPFLD_HXX
 #include <expfld.hxx>       // fuer GetBodyTxtNode
 #endif
+#ifndef _UNOFLDMID_H
+#include <unofldmid.h>
+#endif
 
-#ifndef _UNOPRNMS_HXX
-#include <unoprnms.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_CHAPTERFORMAT_HPP_
-#include <com/sun/star/text/ChapterFormat.hpp>
-#endif
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
@@ -229,69 +230,79 @@ void SwChapterField::ChangeExpansion( const SwFrm* pFrm,
 /*-----------------05.03.98 16:19-------------------
 
 --------------------------------------------------*/
-BOOL   SwChapterField::QueryValue( com::sun::star::uno::Any& rAny, const String& rProperty ) const
+BOOL SwChapterField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_LEVEL)))
-        rAny <<= (sal_Int8)nLevel;
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CHAPTER_FORMAT)))
+    switch( nMId )
     {
-        sal_Int16 nRet;
-        switch( GetFormat() )
+    case FIELD_PROP_BYTE1:
+        rAny <<= (sal_Int8)nLevel;
+        break;
+
+    case FIELD_PROP_USHORT1:
         {
-            case CF_NUMBER: nRet = text::ChapterFormat::NUMBER; break;
-            case CF_TITLE:  nRet = text::ChapterFormat::NAME; break;
-            case CF_NUMBER_NOPREPST:
-                nRet = text::ChapterFormat::DIGIT;
-            break;
-            case CF_NUM_NOPREPST_TITLE:
-                nRet = text::ChapterFormat::NO_PREFIX_SUFFIX;
-            break;
-            case CF_NUM_TITLE:
-            default:        nRet = text::ChapterFormat::NAME_NUMBER;
+            sal_Int16 nRet;
+            switch( GetFormat() )
+            {
+                case CF_NUMBER: nRet = text::ChapterFormat::NUMBER; break;
+                case CF_TITLE:  nRet = text::ChapterFormat::NAME; break;
+                case CF_NUMBER_NOPREPST:
+                    nRet = text::ChapterFormat::DIGIT;
+                break;
+                case CF_NUM_NOPREPST_TITLE:
+                    nRet = text::ChapterFormat::NO_PREFIX_SUFFIX;
+                break;
+                case CF_NUM_TITLE:
+                default:        nRet = text::ChapterFormat::NAME_NUMBER;
+            }
+            rAny <<= nRet;
         }
-        rAny <<= nRet;
+        break;
+
+    default:
+        DBG_ERROR("illegal property");
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return sal_True;
 }
 /*-----------------05.03.98 16:19-------------------
 
 --------------------------------------------------*/
-BOOL    SwChapterField::PutValue( const com::sun::star::uno::Any& rAny, const String& rProperty )
+BOOL SwChapterField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_LEVEL)))
+    BOOL bRet = TRUE;
+    switch( nMId )
     {
+    case FIELD_PROP_BYTE1:
         sal_Int8 nTmp;
         rAny >>= nTmp;
         if(nTmp >= 0 && nTmp < MAXLEVEL)
             nLevel = nTmp;
         else
-            return FALSE;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CHAPTER_FORMAT)))
-    {
-        sal_Int16 nVal;
-        rAny >>= nVal;
-        switch( nVal )
+            bRet = FALSE;
+        break;
+
+    case FIELD_PROP_USHORT1:
         {
-            case text::ChapterFormat::NAME: SetFormat(CF_TITLE); break;
-            case text::ChapterFormat::NUMBER:  SetFormat(CF_NUMBER); break;
-            case text::ChapterFormat::NO_PREFIX_SUFFIX:
-                        SetFormat(CF_NUM_NOPREPST_TITLE);
-            break;
-            case text::ChapterFormat::DIGIT:
-                    SetFormat(CF_NUMBER_NOPREPST);
-            break;
-            //case text::ChapterFormat::NAME_NUMBER:
-            default:        SetFormat(CF_NUM_TITLE);
+            sal_Int16 nVal;
+            rAny >>= nVal;
+            switch( nVal )
+            {
+                case text::ChapterFormat::NAME: SetFormat(CF_TITLE); break;
+                case text::ChapterFormat::NUMBER:  SetFormat(CF_NUMBER); break;
+                case text::ChapterFormat::NO_PREFIX_SUFFIX:
+                            SetFormat(CF_NUM_NOPREPST_TITLE);
+                break;
+                case text::ChapterFormat::DIGIT:
+                        SetFormat(CF_NUMBER_NOPREPST);
+                break;
+                //case text::ChapterFormat::NAME_NUMBER:
+                default:        SetFormat(CF_NUM_TITLE);
+            }
         }
+        break;
+
+    default:
+        DBG_ERROR("illegal property");
+        bRet = FALSE;
     }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
-    return sal_True;
+    return bRet;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,25 @@
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
 
+#ifndef _COM_SUN_STAR_TEXT_REFERENCEFIELDPART_HPP_
+#include <com/sun/star/text/ReferenceFieldPart.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_REFERENCEFIELDSOURCE_HPP_
+#include <com/sun/star/text/ReferenceFieldSource.hpp>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
+
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -132,32 +151,15 @@
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
 #endif
+#ifndef _UNOFLDMID_H
+#include <unofldmid.h>
+#endif
+
 #ifndef _SHELLRES_HXX
 #include <shellres.hxx>
 #endif
 
-#ifndef _UNOPRNMS_HXX
-#include <unoprnms.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_TEXT_REFERENCEFIELDPART_HPP_
-#include <com/sun/star/text/ReferenceFieldPart.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_REFERENCEFIELDSOURCE_HPP_
-#include <com/sun/star/text/ReferenceFieldSource.hpp>
-#endif
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
-#include <svx/unolingu.hxx>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -501,13 +503,15 @@ String SwGetRefField::GetPar2() const
 /*-----------------06.03.98 13:34-------------------
 
 --------------------------------------------------*/
-BOOL SwGetRefField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwGetRefField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_REFERENCE_FIELD_PART)))
+    switch( nMId )
     {
-        sal_Int16 nPart = 0;
-        switch(GetFormat())
+    case FIELD_PROP_USHORT1:
         {
+            sal_Int16 nPart = 0;
+            switch(GetFormat())
+            {
             case REF_PAGE       : nPart = ReferenceFieldPart::PAGE                ; break;
             case REF_CHAPTER    : nPart = ReferenceFieldPart::CHAPTER             ; break;
             case REF_CONTENT    : nPart = ReferenceFieldPart::TEXT                ; break;
@@ -516,46 +520,53 @@ BOOL SwGetRefField::QueryValue( uno::Any& rAny, const String& rProperty ) const
             case REF_ONLYNUMBER : nPart = ReferenceFieldPart::CATEGORY_AND_NUMBER ; break;
             case REF_ONLYCAPTION: nPart = ReferenceFieldPart::ONLY_CAPTION        ; break;
             case REF_ONLYSEQNO  : nPart = ReferenceFieldPart::ONLY_SEQUENCE_NUMBER; break;
+            }
+            rAny <<= nPart;
         }
-        rAny <<= nPart;
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_REFERENCE_FIELD_SOURCE)))
-    {
-        sal_Int16 nSource = 0;
-        switch(nSubType)
+        break;
+    case FIELD_PROP_USHORT2:
         {
+            sal_Int16 nSource = 0;
+            switch(nSubType)
+            {
             case  REF_SETREFATTR : nSource = ReferenceFieldSource::REFERENCE_MARK; break;
             case  REF_SEQUENCEFLD: nSource = ReferenceFieldSource::SEQUENCE_FIELD; break;
             case  REF_BOOKMARK   : nSource = ReferenceFieldSource::BOOKMARK; break;
             case  REF_OUTLINE    : DBG_ERROR("not implemented"); break;
             case  REF_FOOTNOTE   : nSource = ReferenceFieldSource::FOOTNOTE; break;
             case  REF_ENDNOTE    : nSource = ReferenceFieldSource::ENDNOTE; break;
+            }
+            rAny <<= nSource;
         }
-        rAny <<= nSource;
-    }
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SOURCE_NAME )))
+        break;
+    case FIELD_PROP_PAR1:
         rAny <<= rtl::OUString(GetPar1());
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
+        break;
+    case FIELD_PROP_PAR3:
         rAny <<= rtl::OUString(Expand());
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SEQUENCE_NUMBER)))
+        break;
+    case FIELD_PROP_SHORT1:
         rAny <<= (sal_Int16)nSeqNo;
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
+        break;
+    default:
+        DBG_ERROR("illegal property")
+    }
     return TRUE;
 }
 /*-----------------06.03.98 13:34-------------------
 
 --------------------------------------------------*/
-BOOL SwGetRefField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwGetRefField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_REFERENCE_FIELD_PART)))
+    String sTmp;
+    switch( nMId )
     {
-        sal_Int16 nPart;
-        rAny >>= nPart;
-        switch(nPart)
+    case FIELD_PROP_USHORT1:
         {
+            sal_Int16 nPart;
+            rAny >>= nPart;
+            switch(nPart)
+            {
             case ReferenceFieldPart::PAGE:                  nPart = REF_PAGE; break;
             case ReferenceFieldPart::CHAPTER:               nPart = REF_CHAPTER; break;
             case ReferenceFieldPart::TEXT:                  nPart = REF_CONTENT; break;
@@ -565,45 +576,41 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, const String& rProperty )
             case ReferenceFieldPart::ONLY_CAPTION:          nPart = REF_ONLYCAPTION; break;
             case ReferenceFieldPart::ONLY_SEQUENCE_NUMBER : nPart = REF_ONLYSEQNO; break;
             default: return FALSE;
+            }
+            SetFormat(nPart);
         }
-        SetFormat(nPart);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_REFERENCE_FIELD_SOURCE)))
-    {
-        sal_Int16 nSource;
-        rAny >>= nSource;
-        switch(nSource)
+        break;
+    case FIELD_PROP_USHORT2:
         {
+            sal_Int16 nSource;
+            rAny >>= nSource;
+            switch(nSource)
+            {
             case ReferenceFieldSource::REFERENCE_MARK : nSubType = REF_SETREFATTR ; break;
             case ReferenceFieldSource::SEQUENCE_FIELD : nSubType = REF_SEQUENCEFLD; break;
             case ReferenceFieldSource::BOOKMARK       : nSubType = REF_BOOKMARK   ; break;
             case ReferenceFieldSource::FOOTNOTE       : nSubType = REF_FOOTNOTE   ; break;
             case ReferenceFieldSource::ENDNOTE        : nSubType = REF_ENDNOTE    ; break;
+            }
         }
+        break;
+    case FIELD_PROP_PAR1:
+        SetPar1( ::GetString( rAny, sTmp ));
+        break;
+    case FIELD_PROP_PAR3:
+        SetExpand( ::GetString( rAny, sTmp ));
+        break;
+    case FIELD_PROP_SHORT1:
+        {
+            sal_Int16 nSetSeq;
+            rAny >>= nSetSeq;
+            if(nSetSeq >= 0)
+                nSeqNo = nSetSeq;
+        }
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SOURCE_NAME )))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        SetPar1(uTmp);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CURRENT_PRESENTATION)))
-    {
-        OUString sVal;
-        rAny >>= sVal;
-        SetExpand(sVal);
-    }
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SEQUENCE_NUMBER)))
-    {
-        sal_Int16 nSetSeq;
-        rAny >>= nSetSeq;
-        if(nSetSeq >= 0)
-            nSeqNo = nSetSeq;
-    }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return TRUE;
 }
 

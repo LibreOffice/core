@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrptfld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,11 @@
 
 #pragma hdrstop
 
-#include "docufld.hxx"
-
-#ifndef _UNOPRNMS_HXX
-#include <unoprnms.hxx>
+#ifndef _DOCUFLD_HXX
+#include <docufld.hxx>
+#endif
+#ifndef _UNOFLDMID_H
+#include <unofldmid.h>
 #endif
 
 using namespace ::com::sun::star;
@@ -139,44 +140,43 @@ String SwScriptField::GetPar2() const
 /*-----------------05.03.98 15:00-------------------
 
 --------------------------------------------------*/
-BOOL SwScriptField::QueryValue( uno::Any& rAny, const String& rProperty ) const
+BOOL SwScriptField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_URL_CONTENT)))
+    switch( nMId )
+    {
+    case FIELD_PROP_PAR1:
+        rAny <<= OUString( sType );
+        break;
+    case FIELD_PROP_PAR2:
+        rAny <<= OUString( sCode );
+        break;
+    case FIELD_PROP_BOOL1:
         rAny.setValue(&bCodeURL, ::getBooleanCppuType());
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SCRIPT_TYPE)))
-        rAny <<= OUString(sType);
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT)))
-         rAny <<= OUString(sCode);
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
+        break;
+    default:
+        DBG_ERROR("illegal property")
+    }
     return TRUE;
-
 }
 /*-----------------05.03.98 15:00-------------------
 
 --------------------------------------------------*/
-BOOL SwScriptField::PutValue( const uno::Any& rAny, const String& rProperty )
+BOOL SwScriptField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
-    if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_URL_CONTENT)))
+    switch( nMId )
+    {
+    case FIELD_PROP_PAR1:
+        ::GetString( rAny, sType );
+        break;
+    case FIELD_PROP_PAR2:
+        ::GetString( rAny, sCode );
+        break;
+    case FIELD_PROP_BOOL1:
         bCodeURL = *(sal_Bool*)rAny.getValue();
-    else if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SCRIPT_TYPE)))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-        sType = String(uTmp);
+        break;
+    default:
+        DBG_ERROR("illegal property")
     }
-    else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_CONTENT)))
-    {
-        OUString uTmp;
-        rAny >>= uTmp;
-          sCode = String(uTmp);
-    }
-#ifdef DBG_UTIL
-    else
-        DBG_ERROR("Welches Property?")
-#endif
     return TRUE;
 }
 

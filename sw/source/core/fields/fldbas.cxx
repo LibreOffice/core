@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:08:14 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,11 +248,11 @@ const String& SwFieldType::GetName() const
     return aEmptyStr;
 }
 
-BOOL    SwFieldType::QueryValue( uno::Any& rVal, const String& rProperty ) const
+BOOL SwFieldType::QueryValue( uno::Any& rVal, BYTE nMId ) const
 {
     return FALSE;
 }
-BOOL    SwFieldType::PutValue( const uno::Any& rVal, const String& rProperty )
+BOOL SwFieldType::PutValue( const uno::Any& rVal, BYTE nMId )
 {
     return FALSE;
 }
@@ -468,11 +468,11 @@ void SwField::SetSubType(USHORT nType)
 //  ASSERT(0, "Sorry Not implemented");
 }
 
-BOOL  SwField::QueryValue( uno::Any& rVal, const String& rProperty ) const
+BOOL  SwField::QueryValue( uno::Any& rVal, BYTE nMId ) const
 {
     return FALSE;
 }
-BOOL SwField::PutValue( const uno::Any& rVal, const String& rProperty )
+BOOL SwField::PutValue( const uno::Any& rVal, BYTE nMId )
 {
     return FALSE;
 }
