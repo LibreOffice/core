@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:11:03 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         void             CreatePicklistArguments(
                             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsList,
                             const MenuItemHandler* );
+        void             CheckAndAddMenuExtension( Menu* pMenu );
         static void      impl_RetrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                                   const ::com::sun::star::uno::Sequence< rtl::OUString >& rCommands,
                                                                   std::vector< MenuItemHandler* >& aMenuShortCuts );
