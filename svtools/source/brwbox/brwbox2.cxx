@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-22 12:44:33 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1974,9 +1974,9 @@ void BrowseBox::Dispatch( USHORT nId )
                 // deselect the current row, if it isn't the first
                 // and there is no other selected row above
                 long nCurRow = GetCurRow();
-                BOOL bSelect = ( !IsRowSelected( nCurRow ) ||
+                BOOL bLocalSelect = ( !IsRowSelected( nCurRow ) ||
                                  GetSelectRowCount() == 1 || IsRowSelected( nCurRow - 1 ) );
-                SelectRow( nCurRow, bSelect, TRUE );
+                SelectRow( nCurRow, bLocalSelect, TRUE );
                 if ( bDone = GoToRow( GetCurRow() + 1 , FALSE ) )
                     SelectRow( GetCurRow(), TRUE, TRUE );
             }
@@ -1990,9 +1990,9 @@ void BrowseBox::Dispatch( USHORT nId )
                 // deselect the current row, if it isn't the first
                 // and there is no other selected row under
                 long nCurRow = GetCurRow();
-                BOOL bSelect = ( !IsRowSelected( nCurRow ) ||
+                BOOL bLocalSelect = ( !IsRowSelected( nCurRow ) ||
                                  GetSelectRowCount() == 1 || IsRowSelected( nCurRow + 1 ) );
-                SelectRow( nCurRow, bSelect, TRUE );
+                SelectRow( nCurRow, bLocalSelect, TRUE );
                 if ( bDone = GoToRow( nCurRow - 1 , FALSE ) )
                     SelectRow( GetCurRow(), TRUE, TRUE );
             }
