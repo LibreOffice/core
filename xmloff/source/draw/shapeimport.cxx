@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-23 18:22:47 $
+ *  last change: $Author: cl $ $Date: 2000-11-23 19:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ static __FAR_DATA SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
     { XML_NAMESPACE_DRAW,           sXML_polygon,       XML_TOK_GROUP_POLYGON       },
     { XML_NAMESPACE_DRAW,           sXML_polyline,      XML_TOK_GROUP_POLYLINE      },
     { XML_NAMESPACE_DRAW,           sXML_path,          XML_TOK_GROUP_PATH          },
-    { XML_NAMESPACE_TEXT,           sXML_text_box,      XML_TOK_GROUP_TEXT_BOX      },
+    { XML_NAMESPACE_DRAW,           sXML_text_box,      XML_TOK_GROUP_TEXT_BOX      },
 
     { XML_NAMESPACE_DRAW,           sXML_control,       XML_TOK_GROUP_CONTROL       },
     { XML_NAMESPACE_DRAW,           sXML_connector,     XML_TOK_GROUP_CONNECTOR     },
@@ -231,7 +231,7 @@ static __FAR_DATA SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
     { XML_NAMESPACE_DRAW,           sXML_caption,       XML_TOK_GROUP_CAPTION       },
 
     { XML_NAMESPACE_CHART,          sXML_chart,         XML_TOK_GROUP_CHART         },
-    { XML_NAMESPACE_OFFICE,         sXML_image,         XML_TOK_GROUP_IMAGE         },
+    { XML_NAMESPACE_DRAW,           sXML_image,         XML_TOK_GROUP_IMAGE         },
 //  { XML_NAMESPACE_DRAW,           sXML_3DCube,        XML_TOK_GROUP_3D_CUBE       },
 //  { XML_NAMESPACE_DRAW,           sXML_3DSphere,      XML_TOK_GROUP_3D_SPHERE     },
 //  { XML_NAMESPACE_DRAW,           sXML_3DLathe,       XML_TOK_GROUP_3D_LATHE      },

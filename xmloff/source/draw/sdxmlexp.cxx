@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-22 13:03:29 $
+ *  last change: $Author: cl $ $Date: 2000-11-23 19:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1788,7 +1788,7 @@ void SdXMLExport::ImpExportTextBoxShape(SvXMLExport& rExp,
             rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_transform, aTransform.GetExportString(rExp.GetMM100UnitConverter()));
 
         // write text-box
-        SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_TEXT, sXML_text_box, sal_True, sal_True);
+        SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DRAW, sXML_text_box, sal_True, sal_True);
 
         // export text
         if(!bIsEmptyPresObj)
@@ -2356,7 +2356,7 @@ void SdXMLExport::ImpExportGraphicObjectShape(SvXMLExport& rExp,
             rExp.AddAttribute(XML_NAMESPACE_XLINK, sXML_actuate, aStr );
         }
         // write graphic object
-        SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_OFFICE, sXML_image, sal_True, sal_True);
+        SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DRAW, sXML_image, sal_True, sal_True);
     }
 }
 
