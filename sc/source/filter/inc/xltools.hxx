@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:05:32 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef SC_XLTOOLS_HXX
 #define SC_XLTOOLS_HXX
 
+#ifndef _RTL_TEXTENC_H
+#include <rtl/textenc.h>
+#endif
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
 #endif
@@ -194,6 +197,14 @@ public:
     /** Returns the Excel column width for the passed Calc width (twips).
         @param nScCharWidth  Width of the '0' character in Calc (twips). */
     static sal_uInt16           GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth );
+
+// text encoding --------------------------------------------------------------
+
+    /** Returns a text encoding from an Excel code page.
+        @return  The corresponding text encoding or RTL_TEXTENCODING_DONTKNOW. */
+    static rtl_TextEncoding     GetTextEncoding( sal_uInt16 nCodePage );
+    /** Returns an Excel code page from a text encoding. */
+    static sal_uInt16           GetXclCodePage( rtl_TextEncoding eTextEnc );
 
 // font names -----------------------------------------------------------------
 
