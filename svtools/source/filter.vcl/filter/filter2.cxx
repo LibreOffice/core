@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2002-12-05 13:35:32 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
+#endif
 #include "filter.hxx"
 #include "FilterConfigCache.hxx"
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
