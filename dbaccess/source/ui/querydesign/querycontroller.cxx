@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:19:03 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 13:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,7 +752,7 @@ sal_Bool OQueryController::Construct(Window* pParent)
     m_pWindow->getView()->Construct(NULL);
     //  m_pView  = pView;
     m_pView  = m_pWindow->getView()->getRealView();
-    OGenericUnoController::Construct(pParent);
+    OSingleDocumentController::Construct(pParent);
     //  getView()->Show();
     m_pWindow->Show();
     return sal_True;
