@@ -6,16 +6,6 @@
 SHL1STDLIBS=
 .ENDIF
 
-# Link in static data members for template classes
-.IF "$(OS)$(CVER)"=="MACOSXC295"
-SHL1STDLIBS+=$(STATICLIB)
-# Allow certain libraries to not link to libstatic*.dylib. This is only used
-# by libraries that cannot be linked to other libraries.
-.IF "$(NOSHAREDSTATICLIB)"==""
-SHL1STDLIBS+=$(STATICLIB)
-.ENDIF
-.ENDIF
-
 .IF "$(SHLLINKARCONLY)" != ""
 SHL1STDLIBS=
 STDSHL=
@@ -325,11 +315,6 @@ $(SHL1TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-    .IF "$(CVER)"=="C295"
-        @echo "------------------------------"
-        @echo "Updating static data member initializations"
-        @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -351,14 +336,6 @@ $(SHL1TARGETN) : \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(STDSHL1) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    .IF "$(CVER)"=="C295"
-        # This is a hack as libstatic and libcppuhelper have a circular dependency
-        .IF "$(PRJNAME)"=="cppuhelper"
-            @echo "------------------------------"
-            @echo "Rerunning static data member initializations"
-            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-        .ENDIF
-    .ENDIF
 .IF "$(SHL1VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL1VERSIONMAP) $@
@@ -422,16 +399,6 @@ runtest_$(SHL1TARGET) : $(SHL1TARGETN)
 
 .IF "$(OS)"=="AIX"
 SHL2STDLIBS=
-.ENDIF
-
-# Link in static data members for template classes
-.IF "$(OS)$(CVER)"=="MACOSXC295"
-SHL2STDLIBS+=$(STATICLIB)
-# Allow certain libraries to not link to libstatic*.dylib. This is only used
-# by libraries that cannot be linked to other libraries.
-.IF "$(NOSHAREDSTATICLIB)"==""
-SHL2STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -743,11 +710,6 @@ $(SHL2TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-    .IF "$(CVER)"=="C295"
-        @echo "------------------------------"
-        @echo "Updating static data member initializations"
-        @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -769,14 +731,6 @@ $(SHL2TARGETN) : \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(STDSHL2) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    .IF "$(CVER)"=="C295"
-        # This is a hack as libstatic and libcppuhelper have a circular dependency
-        .IF "$(PRJNAME)"=="cppuhelper"
-            @echo "------------------------------"
-            @echo "Rerunning static data member initializations"
-            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-        .ENDIF
-    .ENDIF
 .IF "$(SHL2VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL2VERSIONMAP) $@
@@ -840,16 +794,6 @@ runtest_$(SHL2TARGET) : $(SHL2TARGETN)
 
 .IF "$(OS)"=="AIX"
 SHL3STDLIBS=
-.ENDIF
-
-# Link in static data members for template classes
-.IF "$(OS)$(CVER)"=="MACOSXC295"
-SHL3STDLIBS+=$(STATICLIB)
-# Allow certain libraries to not link to libstatic*.dylib. This is only used
-# by libraries that cannot be linked to other libraries.
-.IF "$(NOSHAREDSTATICLIB)"==""
-SHL3STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -1161,11 +1105,6 @@ $(SHL3TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-    .IF "$(CVER)"=="C295"
-        @echo "------------------------------"
-        @echo "Updating static data member initializations"
-        @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -1187,14 +1126,6 @@ $(SHL3TARGETN) : \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(STDSHL3) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    .IF "$(CVER)"=="C295"
-        # This is a hack as libstatic and libcppuhelper have a circular dependency
-        .IF "$(PRJNAME)"=="cppuhelper"
-            @echo "------------------------------"
-            @echo "Rerunning static data member initializations"
-            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-        .ENDIF
-    .ENDIF
 .IF "$(SHL3VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL3VERSIONMAP) $@
@@ -1258,16 +1189,6 @@ runtest_$(SHL3TARGET) : $(SHL3TARGETN)
 
 .IF "$(OS)"=="AIX"
 SHL4STDLIBS=
-.ENDIF
-
-# Link in static data members for template classes
-.IF "$(OS)$(CVER)"=="MACOSXC295"
-SHL4STDLIBS+=$(STATICLIB)
-# Allow certain libraries to not link to libstatic*.dylib. This is only used
-# by libraries that cannot be linked to other libraries.
-.IF "$(NOSHAREDSTATICLIB)"==""
-SHL4STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -1579,11 +1500,6 @@ $(SHL4TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-    .IF "$(CVER)"=="C295"
-        @echo "------------------------------"
-        @echo "Updating static data member initializations"
-        @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -1605,14 +1521,6 @@ $(SHL4TARGETN) : \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(STDSHL4) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    .IF "$(CVER)"=="C295"
-        # This is a hack as libstatic and libcppuhelper have a circular dependency
-        .IF "$(PRJNAME)"=="cppuhelper"
-            @echo "------------------------------"
-            @echo "Rerunning static data member initializations"
-            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-        .ENDIF
-    .ENDIF
 .IF "$(SHL4VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL4VERSIONMAP) $@
@@ -1676,16 +1584,6 @@ runtest_$(SHL4TARGET) : $(SHL4TARGETN)
 
 .IF "$(OS)"=="AIX"
 SHL5STDLIBS=
-.ENDIF
-
-# Link in static data members for template classes
-.IF "$(OS)$(CVER)"=="MACOSXC295"
-SHL5STDLIBS+=$(STATICLIB)
-# Allow certain libraries to not link to libstatic*.dylib. This is only used
-# by libraries that cannot be linked to other libraries.
-.IF "$(NOSHAREDSTATICLIB)"==""
-SHL5STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -1997,11 +1895,6 @@ $(SHL5TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-    .IF "$(CVER)"=="C295"
-        @echo "------------------------------"
-        @echo "Updating static data member initializations"
-        @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -2023,14 +1916,6 @@ $(SHL5TARGETN) : \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(STDSHL5) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    .IF "$(CVER)"=="C295"
-        # This is a hack as libstatic and libcppuhelper have a circular dependency
-        .IF "$(PRJNAME)"=="cppuhelper"
-            @echo "------------------------------"
-            @echo "Rerunning static data member initializations"
-            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-        .ENDIF
-    .ENDIF
 .IF "$(SHL5VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL5VERSIONMAP) $@
@@ -2094,16 +1979,6 @@ runtest_$(SHL5TARGET) : $(SHL5TARGETN)
 
 .IF "$(OS)"=="AIX"
 SHL6STDLIBS=
-.ENDIF
-
-# Link in static data members for template classes
-.IF "$(OS)$(CVER)"=="MACOSXC295"
-SHL6STDLIBS+=$(STATICLIB)
-# Allow certain libraries to not link to libstatic*.dylib. This is only used
-# by libraries that cannot be linked to other libraries.
-.IF "$(NOSHAREDSTATICLIB)"==""
-SHL6STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -2415,11 +2290,6 @@ $(SHL6TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-    .IF "$(CVER)"=="C295"
-        @echo "------------------------------"
-        @echo "Updating static data member initializations"
-        @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -2441,14 +2311,6 @@ $(SHL6TARGETN) : \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(STDSHL6) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    .IF "$(CVER)"=="C295"
-        # This is a hack as libstatic and libcppuhelper have a circular dependency
-        .IF "$(PRJNAME)"=="cppuhelper"
-            @echo "------------------------------"
-            @echo "Rerunning static data member initializations"
-            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-        .ENDIF
-    .ENDIF
 .IF "$(SHL6VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL6VERSIONMAP) $@
@@ -2512,16 +2374,6 @@ runtest_$(SHL6TARGET) : $(SHL6TARGETN)
 
 .IF "$(OS)"=="AIX"
 SHL7STDLIBS=
-.ENDIF
-
-# Link in static data members for template classes
-.IF "$(OS)$(CVER)"=="MACOSXC295"
-SHL7STDLIBS+=$(STATICLIB)
-# Allow certain libraries to not link to libstatic*.dylib. This is only used
-# by libraries that cannot be linked to other libraries.
-.IF "$(NOSHAREDSTATICLIB)"==""
-SHL7STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -2833,11 +2685,6 @@ $(SHL7TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-    .IF "$(CVER)"=="C295"
-        @echo "------------------------------"
-        @echo "Updating static data member initializations"
-        @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -2859,14 +2706,6 @@ $(SHL7TARGETN) : \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(STDSHL7) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    .IF "$(CVER)"=="C295"
-        # This is a hack as libstatic and libcppuhelper have a circular dependency
-        .IF "$(PRJNAME)"=="cppuhelper"
-            @echo "------------------------------"
-            @echo "Rerunning static data member initializations"
-            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-        .ENDIF
-    .ENDIF
 .IF "$(SHL7VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL7VERSIONMAP) $@
@@ -2930,16 +2769,6 @@ runtest_$(SHL7TARGET) : $(SHL7TARGETN)
 
 .IF "$(OS)"=="AIX"
 SHL8STDLIBS=
-.ENDIF
-
-# Link in static data members for template classes
-.IF "$(OS)$(CVER)"=="MACOSXC295"
-SHL8STDLIBS+=$(STATICLIB)
-# Allow certain libraries to not link to libstatic*.dylib. This is only used
-# by libraries that cannot be linked to other libraries.
-.IF "$(NOSHAREDSTATICLIB)"==""
-SHL8STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -3251,11 +3080,6 @@ $(SHL8TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-    .IF "$(CVER)"=="C295"
-        @echo "------------------------------"
-        @echo "Updating static data member initializations"
-        @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -3277,14 +3101,6 @@ $(SHL8TARGETN) : \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(STDSHL8) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    .IF "$(CVER)"=="C295"
-        # This is a hack as libstatic and libcppuhelper have a circular dependency
-        .IF "$(PRJNAME)"=="cppuhelper"
-            @echo "------------------------------"
-            @echo "Rerunning static data member initializations"
-            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-        .ENDIF
-    .ENDIF
 .IF "$(SHL8VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL8VERSIONMAP) $@
@@ -3348,16 +3164,6 @@ runtest_$(SHL8TARGET) : $(SHL8TARGETN)
 
 .IF "$(OS)"=="AIX"
 SHL9STDLIBS=
-.ENDIF
-
-# Link in static data members for template classes
-.IF "$(OS)$(CVER)"=="MACOSXC295"
-SHL9STDLIBS+=$(STATICLIB)
-# Allow certain libraries to not link to libstatic*.dylib. This is only used
-# by libraries that cannot be linked to other libraries.
-.IF "$(NOSHAREDSTATICLIB)"==""
-SHL9STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -3669,11 +3475,6 @@ $(SHL9TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-    .IF "$(CVER)"=="C295"
-        @echo "------------------------------"
-        @echo "Updating static data member initializations"
-        @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -3695,14 +3496,6 @@ $(SHL9TARGETN) : \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(STDSHL9) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    .IF "$(CVER)"=="C295"
-        # This is a hack as libstatic and libcppuhelper have a circular dependency
-        .IF "$(PRJNAME)"=="cppuhelper"
-            @echo "------------------------------"
-            @echo "Rerunning static data member initializations"
-            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-        .ENDIF
-    .ENDIF
 .IF "$(SHL9VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL9VERSIONMAP) $@
@@ -3766,16 +3559,6 @@ runtest_$(SHL9TARGET) : $(SHL9TARGETN)
 
 .IF "$(OS)"=="AIX"
 SHL10STDLIBS=
-.ENDIF
-
-# Link in static data members for template classes
-.IF "$(OS)$(CVER)"=="MACOSXC295"
-SHL10STDLIBS+=$(STATICLIB)
-# Allow certain libraries to not link to libstatic*.dylib. This is only used
-# by libraries that cannot be linked to other libraries.
-.IF "$(NOSHAREDSTATICLIB)"==""
-SHL10STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -4087,11 +3870,6 @@ $(SHL10TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-    .IF "$(CVER)"=="C295"
-        @echo "------------------------------"
-        @echo "Updating static data member initializations"
-        @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -4113,14 +3891,6 @@ $(SHL10TARGETN) : \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(STDSHL10) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    .IF "$(CVER)"=="C295"
-        # This is a hack as libstatic and libcppuhelper have a circular dependency
-        .IF "$(PRJNAME)"=="cppuhelper"
-            @echo "------------------------------"
-            @echo "Rerunning static data member initializations"
-            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-        .ENDIF
-    .ENDIF
 .IF "$(SHL10VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL10VERSIONMAP) $@
