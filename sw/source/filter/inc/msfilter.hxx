@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msfilter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:50:42 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #define SW_MS_MSFILTER_HXX
 
 #include <set>
+#include <vector>
+
 #ifndef _SWTYPES_HXX
 #   include <swtypes.hxx>       //SwTwips
 #endif
@@ -75,10 +77,15 @@
 #ifndef _RTL_TEXTENC_H
 #   include <rtl/textenc.h>     //rtl_TextEncoding
 #endif
+#ifndef _SV_GEN_HXX
+#   include <tools/gen.hxx>     //Size
+#endif
 
 class SwDoc;
 class SwPaM;
 class String;
+class SwNoTxtNode;
+class SwTxtNode;
 namespace
 {
     template<class C> class StyleMapperImpl;
@@ -284,6 +291,77 @@ namespace sw
             */
             StyleResult GetStyle(const String& rName, ww::sti eSti);
         };
+
+
+        /** Given a SwNoTxtNode (ole/graphic) get original size
+
+            Get the uncropped and unscaled size of the underlying graphic or
+            ole object associated with a given SwNoTxtNode.
+
+            This function will swap in the graphic if it is swapped out from
+            the graphic or object cache, but will swap it out if that was the
+            case, i.e.  rNd is logically unchanged before and after
+            GetSwappedInSize, though not physically const
+
+            @param rNd
+                the SwNoTxtNode whose objects original size we want
+
+            @return
+                the uncropped unscaled size of the SwNoTxtNode
+
+            @author
+                <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        Size GetSwappedInSize(const SwNoTxtNode& rNd);
+
+        struct CharRunEntry
+        {
+            xub_StrLen mnEndPos;
+            sal_uInt16 mnScript;
+            rtl_TextEncoding meCharSet;
+            bool mbRTL;
+            CharRunEntry(xub_StrLen nEndPos, sal_uInt16 nScript,
+                rtl_TextEncoding eCharSet, bool bRTL)
+            : mnEndPos(nEndPos), mnScript(nScript), meCharSet(eCharSet),
+            mbRTL(bRTL)
+            {
+            }
+        };
+
+        typedef std::vector<CharRunEntry> CharRuns;
+        typedef CharRuns::const_iterator cCharRunIter;
+
+        /** Collect the ranges of Text which share
+
+            Word generally requires characters which share the same direction,
+            the same script, and occasionally (depending on the format) the
+            same charset to be exported in independant chunks.
+
+            So this function finds these ranges and returns a STL container
+            of CharRuns
+
+            @param rTxtNd
+                The TextNode we want to ranges from
+
+            @param nStart
+                The position in the TxtNode to start processing from
+
+            @param bSplitOnCharSet
+                Set to true is we want to split on ranges of characters that
+                share a plausible charset for export to e.g. WW7- or perhaps
+                RTF format, not necessary for a unicode aware format like WW8+
+
+            @return STL container of CharRuns which describe the shared
+            direction, script and optionally script of the contigious sequences
+            of characters
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+
+            @see #i22537# for example
+        */
+        CharRuns GetPseudoCharRuns(const SwTxtNode& rTxtNd,
+            xub_StrLen nStart = 0, bool bSplitOnCharSet = false);
     }
 }
 
