@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprgen.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:53:55 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,11 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
             p->GenElement( eOp );
             eOp = _ELEM;
         }
+    }
+    else if( IsTypeOf() )
+    {
+        pLeft->Gen();
+        pGen->Gen( _TESTCLASS, nStringId );
     }
     else
     {
