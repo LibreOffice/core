@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdef.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:30 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@ BOOL RscId::IsSetNames()           { return bNames;  }
 |*    Letzte Aenderung  MM 17.05.91
 |*
 *************************************************************************/
-long RscId::GetNumber() const{
-    long lVal;
+INT32 RscId::GetNumber() const{
+    INT32 lVal;
     aExp.Evaluate( &lVal );
     return lVal;
 }
@@ -112,7 +112,7 @@ void RscId::Create( const RscExpType & rExpType )
     if( aExp.IsDefinition() )
         aExp.aExp.pDef->IncRef();
     else if( aExp.IsExpression() ){
-        long lValue;
+        INT32 lValue;
 
         aExp.Evaluate( &lValue );
         aExp.SetLong( lValue );
@@ -227,14 +227,14 @@ BOOL RscId::operator > ( const RscId& rRscId ) const
 
 /*************************************************************************
 |*
-|*    RscId::long()
+|*    RscId::INT32()
 |*
 |*    Beschreibung
 |*    Ersterstellung    MM 16.05.91
 |*    Letzte Aenderung  MM 16.05.91
 |*
 *************************************************************************/
-RscId::operator long() const
+RscId::operator INT32() const
 {
     return( GetNumber() );
 }
@@ -294,7 +294,7 @@ ByteString RscId::GetMacro() const
 |*    Letzte Aenderung  MM 01.11.91
 |*
 *************************************************************************/
-RscDefine::RscDefine( ULONG lKey, const ByteString & rDefName, long lDefId )
+RscDefine::RscDefine( ULONG lKey, const ByteString & rDefName, INT32 lDefId )
     : StringNode( rDefName )
 {
     nRefCount = 0;
@@ -378,7 +378,7 @@ void RscDefine::ChangeMacro( RscExpression * pExpression ){
     pExp->Evaluate( &lId );
 }
 
-void RscDefine::ChangeMacro( long lIdentifier ){
+void RscDefine::ChangeMacro( INT32 lIdentifier ){
     if( pExp ){
         delete pExp;
         pExp = NULL;
@@ -444,7 +444,7 @@ ByteString RscDefine::GetMacro()
 |*
 *************************************************************************/
 RscDefine * RscDefineList::New( ULONG lFileKey, const ByteString & rDefName,
-                                long lDefId, ULONG lPos )
+                                INT32 lDefId, ULONG lPos )
 {
     RscDefine * pDef;
 
@@ -568,7 +568,7 @@ void RscDefineList::WriteAll( FILE * fOutput )
 |*    Letzte Aenderung  MM 01.11.91
 |*
 *************************************************************************/
-BOOL RscExpType::Evaluate( long * plValue ) const{
+BOOL RscExpType::Evaluate( INT32 * plValue ) const{
     if( IsDefinition() ){
         aExp.pDef->Evaluate();
         // Eventuellen Fehler ignorieren
@@ -659,9 +659,9 @@ RscExpression::~RscExpression(){
 |*    Letzte Aenderung  MM 01.11.91
 |*
 *************************************************************************/
-BOOL RscExpression::Evaluate( long * plValue ){
-    long lLeft;
-    long lRight;
+BOOL RscExpression::Evaluate( INT32 * plValue ){
+    INT32 lLeft;
+    INT32 lRight;
 
     // linken und rechten Zweig auswerten
     if( aLeftExp.Evaluate( &lLeft ) && aRightExp.Evaluate( &lRight ) ){
@@ -1147,7 +1147,7 @@ BOOL RscFileTab::TestDef( ULONG lFileKey, ULONG lPos,
 |*
 *************************************************************************/
 RscDefine * RscFileTab::NewDef( ULONG lFileKey, const ByteString & rDefName,
-                                long lId, ULONG lPos )
+                                INT32 lId, ULONG lPos )
 {
     RscDefine * pDef = FindDef( rDefName );
 
@@ -1252,7 +1252,7 @@ void RscFileTab::DeleteDef( const ByteString & rDefName )
 |*    Letzte Aenderung  MM 11.11.91
 |*
 *************************************************************************/
-BOOL RscFileTab::ChangeDef( const ByteString & rDefName, long lId )
+BOOL RscFileTab::ChangeDef( const ByteString & rDefName, INT32 lId )
 {
     RscDefine * pDef = FindDef( rDefName );
 
