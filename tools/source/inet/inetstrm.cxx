@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetstrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-05-10 13:41:05 $
+ *  last change: $Author: th $ $Date: 2001-05-11 12:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,9 @@
 
 #include <ctype.h> // toupper
 
-sal_Bool SAL_CALL ascii_isWhitespace( sal_Unicode ch )
+inline sal_Bool SAL_CALL ascii_isWhitespace( sal_Unicode ch )
 {
-    return ((ch <= 0x20) && c);
+    return ((ch <= 0x20) && ch);
 }
 
 #define CONSTASCII_STRINGPARAM(a) (a), RTL_TEXTENCODING_ASCII_US
