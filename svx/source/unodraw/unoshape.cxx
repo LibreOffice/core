@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-07 15:24:20 $
+ *  last change: $Author: cl $ $Date: 2000-12-07 19:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
 #endif
 
 #include <toolkit/unohlp.hxx>
@@ -1016,6 +1019,15 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
             }
             break;
         }
+        case OWN_ATTR_WRITINGMODE:
+        {
+            if( pObj && pObj->ISA(SdrTextObj) )
+            {
+                SdrTextObj* pText = (SdrTextObj*)pObj;
+                pText->SetVerticalWriting( ::cppu::any2bool(rVal) );
+                return;
+            }
+        }
         case OWN_ATTR_FRAMERECT:
         {
             awt::Rectangle aUnoRect;
@@ -1341,6 +1353,15 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                     throw uno::RuntimeException();
 
                 break;
+            }
+            case OWN_ATTR_WRITINGMODE:
+            {
+                if( pObj && pObj->ISA(SdrTextObj) )
+                {
+                    SdrTextObj* pText = (SdrTextObj*)pObj;
+                    aAny = ::cppu::bool2any( pText->IsVerticalWriting() );
+                    break;
+                }
             }
             case OWN_ATTR_ISFONTWORK:
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-29 11:28:46 $
+ *  last change: $Author: cl $ $Date: 2000-12-07 19:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2052,6 +2052,41 @@ SdrFitToSizeType SdrTextObj::GetFitToSize() const
     return eType;
 }
 
+void SdrTextObj::ForceOutlinerParaObject()
+{
+    if( pOutlinerParaObject == NULL )
+    {
+        USHORT nOutlMode = OUTLINERMODE_TEXTOBJECT;
+        if( IsTextFrame() && eTextKind == OBJ_OUTLINETEXT )
+            nOutlMode = OUTLINERMODE_OUTLINEOBJECT;
+
+        Outliner* pOutliner = SdrMakeOutliner( nOutlMode, pModel );
+        if( pOutliner )
+        {
+            Outliner& aDrawOutliner = pModel->GetDrawOutliner();
+            pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
+
+            OutlinerParaObject* pOutlinerParaObject = pOutliner->CreateParaObject();
+            SetOutlinerParaObject( pOutlinerParaObject );
+
+            delete pOutliner;
+        }
+    }
+}
+
+BOOL SdrTextObj::IsVerticalWriting() const
+{
+    return pOutlinerParaObject && pOutlinerParaObject->IsVertical();
+}
+
+void SdrTextObj::SetVerticalWriting( BOOL bVertical )
+{
+    ForceOutlinerParaObject();
+
+    DBG_ASSERT( pOutlinerParaObject, "SdrTextObj::SetVerticalWriting() without OutlinerParaObject!" );
+    if( pOutlinerParaObject )
+        pOutlinerParaObject->SetVertical( bVertical );
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //
