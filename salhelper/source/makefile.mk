@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-21 12:31:29 $
+#   last change: $Author: hr $ $Date: 2004-09-09 11:44:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,6 +118,8 @@ SHL1VERSIONMAP=gcc3_linux_intel.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="FREEBSDIgcc2"
 SHL1VERSIONMAP=lngi.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="FREEBSDIgcc3"
+SHL1VERSIONMAP=gcc3_linux_intel.map
+.ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXSgcc3"
 SHL1VERSIONMAP=gcc3_linux_intel.map
 .ENDIF
 
