@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 07:43:30 $
+ *  last change: $Author: jp $ $Date: 2001-07-06 13:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _CACHESTR_HXX //autogen
 #include <tools/cachestr.hxx>
 #endif
-#ifndef _SV_SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 #ifndef _ZFORLIST_HXX //autogen
@@ -702,7 +702,8 @@ ByteString& HTMLOutFuncs::CreateTableDataOptionsValNum( ByteString& aStrTD,
     if ( bValue || nFormat )
     {
         ((aStrTD += ' ') += sHTML_O_SDnum) += "=\"";
-        (aStrTD += ByteString::CreateFromInt32(System::GetLanguage()))
+        (aStrTD += ByteString::CreateFromInt32(
+                                Application::GetSettings().GetLanguage() ))
             += ';'; // Language fuer Format 0
         if ( nFormat )
         {
