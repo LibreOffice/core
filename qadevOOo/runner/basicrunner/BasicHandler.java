@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BasicHandler.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:25 $
+ *  last change:$Date: 2003-11-18 16:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,8 +270,8 @@ public class BasicHandler implements XServiceInfo, XSingleServiceFactory {
             XPropertySet oScriptingSettings = (XPropertySet)
                     UnoRuntime.queryInterface(XPropertySet.class, oScripting);
 
-            oScriptingSettings.setPropertyValue("Warning",new Boolean(false));
-            oScriptingSettings.setPropertyValue("OfficeBasic",new Integer(2));
+            oScriptingSettings.setPropertyValue("Warning", Boolean.FALSE);
+            oScriptingSettings.setPropertyValue("OfficeBasic", new Integer(2));
 
             XChangesBatch oSecureChange = (XChangesBatch)
                     UnoRuntime.queryInterface(XChangesBatch.class, oSecure);
