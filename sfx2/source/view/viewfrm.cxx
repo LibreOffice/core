@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:49:25 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,7 +649,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 bForEdit = !bForEdit;
 
             // ggf. beim User nachfragen
-            sal_Bool bDo = GetViewShell()->PrepareClose();
+            sal_Bool bDo = ( GetViewShell()->PrepareClose() != FALSE );
             SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
             if ( bDo && GetFrame()->DocIsModified_Impl() &&
                  !rReq.IsAPI() && ( !pSilentItem || !pSilentItem->GetValue() ) )
@@ -2209,7 +2209,11 @@ void SfxViewFrame::Show()
     if ( &GetWindow() == &GetFrame()->GetWindow() || !GetFrame()->HasComponent() )
         GetWindow().Show();
 
-    if ( GetFrame()->GetFrameInterface()->isActive() && SfxViewFrame::Current() != this && !GetActiveChildFrame_Impl() )
+    SfxViewFrame* pCurrent = SfxViewFrame::Current();
+    if ( GetFrame()->GetFrameInterface()->isActive() &&
+            pCurrent != this &&
+            ( !pCurrent || pCurrent->GetParentViewFrame_Impl() != this ) &&
+            !GetActiveChildFrame_Impl() )
         MakeActive_Impl( FALSE );
 }
 
