@@ -518,6 +518,12 @@ UDK_3.3 {
         osl_createDirectoryPath;
         osl_getFunctionSymbol;
         osl_getModuleURLFromFunctionAddress;
+        rtl_cipher_createARCFOUR;
+        rtl_cipher_initARCFOUR;
+        rtl_cipher_decodeARCFOUR;
+        rtl_cipher_encodeARCFOUR;
+        rtl_cipher_destroyARCFOUR;
+        rtl_digest_rawMD5;
         rtl_uStringbuffer_insertUtf32;
         rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths;
 } UDK_3.2;
