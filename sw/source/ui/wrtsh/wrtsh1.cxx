@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:08:35 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1348,6 +1348,8 @@ int SwWrtShell::GetSelectionType() const
 
             if (rView.IsBezierEditMode())
                 nCnt |= SEL_BEZ;
+            else if( GetDrawView()->GetContext() == SDRCONTEXT_MEDIA )
+                nCnt |= SEL_MEDIA;
         }
 
         return nCnt;
