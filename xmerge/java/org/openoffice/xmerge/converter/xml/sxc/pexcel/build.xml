@@ -52,7 +52,7 @@
  #
  #
  -->
-<project name="xmrg_util" default="main" basedir=".">
+<project name="xmrg_jooxcxs_pexcel" default="main" basedir=".">
 
     <!-- ================================================================= -->
     <!-- settings                                                          -->
@@ -62,42 +62,30 @@
     <property name="prj.prefix" value="xmrg"/>
 
     <!-- name of this sub target used in recursive builds -->
-    <property name="target" value="xmrg_util"/>
+    <property name="target" value="xmrg_jooxcxs_pexcel"/>
 
     <!-- relative path to project directory -->
-    <property name="prj" value=".."/>
+    <property name="prj" value="../../../../../../../.."/>
 
     <!-- start of java source code package structure -->
-    <property name="java.dir" value="../java"/>
+    <property name="java.dir" value="${prj}/java"/>
 
-    <!-- path component for java package -->
-    <property name="package" value="org/openoffice/xmerge"/>
+    <!-- path component for current java package -->
+    <property name="package"
+              value="org/openoffice/xmerge/converter/xml/sxc/pexcel"/>
 
-     <property name="aportis" value="org/openoffice/xmerge/converter/xml/sxw/aportisdoc"/>
+    <!-- define how to handle CLASSPATH environment -->
+    <property name="build.sysclasspath" value="ignore"/>
 
-    <!-- path component for java package -->
-    <property name="htmlsoff" value="org/openoffice/xmerge/converter/xml/xslt"/>
+    <!-- classpath settings for javac tasks -->
+    <path id="classpath">
+        <pathelement location="${build.class}"/>
+        <pathelement location="${solar.jar}/parser.jar"/>
+        <pathelement location="${solar.jar}/jaxp.jar"/>
+    </path>
 
-    <!-- path component for java package -->
-    <property name="pocketword" value="org/openoffice/xmerge/converter/xml/sxw/pocketword"/>
-
-    <!-- path component for java package -->
-    <property name="pexcel" value="org/openoffice/xmerge/converter/xml/sxc/pexcel"/>
-
-    <!-- name of jar file created, without .jar extension -->
-    <property name="jarname1" value="xmerge"/>
-
-    <!-- name of jar file created, without .jar extension -->
-    <property name="jarname2" value="htmlsoff"/>
-
-    <!-- name of jar file created, without .jar extension -->
-    <property name="jarname3" value="aportisdoc"/>
-
-    <!-- name of jar file created, without .jar extension -->
-    <property name="jarname4" value="pocketword"/>
-
-    <!-- name of jar file created, without .jar extension -->
-    <property name="jarname5" value="pexcel"/>
+    <!-- set wether we want to compile with or without deprecation -->
+    <property name="deprecation" value="on"/>
 
     <!-- ================================================================= -->
     <!--  solar build environment targets                                  -->
@@ -118,7 +106,6 @@
         <property file="${build.dir}/class/solar.properties"/>
     </target>
 
-
     <target name="info">
         <echo message="--------------------"/>
         <echo message="${target}"/>
@@ -131,7 +118,7 @@
     <!-- ================================================================= -->
 
     <!-- the main target, called in recursive builds -->
-    <target name="main" depends="info,prepare,xmerge,htmlsoff,aportis,pocketword,pexcel"/>
+    <target name="main" depends="info,prepare,compile"/>
 
     <!-- prepare output directories -->
     <target name="prepare" depends="init" if="build.class">
@@ -139,64 +126,33 @@
         <mkdir dir="${build.class}"/>
     </target>
 
-    <!-- create xmerge jar file -->
-    <target name="xmerge" depends="prepare" if="build.class">
-        <jar jarfile="${build.class}/${jarname1}.jar"
-             basedir="${build.class}"
-             manifest="${jarname1}.mf">
-            <include name="${package}/**"/>
-            <exclude name="${aportis}/**"/>
-            <exclude name="${pocketword}/**"/>
-            <exclude name="${pexcel}/**"/>
-        </jar>
-    </target>
-
-     <!-- create htmlsoff jar file -->
-    <target name="htmlsoff" depends="prepare,xmerge" if="build.class">
-        <jar jarfile="${build.class}/${jarname2}.jar"
-             basedir="${java.dir}/${htmlsoff}">
-            <include name="htmltosoff.xsl"/>
-        <include name="sofftohtml.xsl"/>
-            <metainf dir="${java.dir}/${htmlsoff}" includes="converter.xml"/>
-        </jar>
-    </target>
-
-     <!-- create aportis jar file -->
-    <target name="aportis" depends="prepare,xmerge" if="build.class">
-        <jar jarfile="${build.class}/${jarname3}.jar"
-             basedir="${build.class}">
-            <include name="${aportis}/**"/>
-            <metainf dir="${java.dir}/${aportis}" includes="converter.xml"/>
-        </jar>
-    </target>
-
-    <!-- create pocketword jar file -->
-    <target name="pocketword" depends="prepare,xmerge" if="build.class">
-        <jar jarfile="${build.class}/${jarname4}.jar"
-             basedir="${build.class}">
-            <include name="${pocketword}/**"/>
-            <metainf dir="${java.dir}/${pocketword}" includes="converter.xml"/>
-        </jar>
-    </target>
-
-     <!-- create pexcel.jar file -->
-    <target name="pexcel" depends="prepare,xmerge" if="build.class">
-        <jar jarfile="${build.class}/${jarname5}.jar"
-             basedir="${build.class}"
-             manifest="${jarname5}.mf">
-            <include name="${pexcel}/**"/>
-            <include name="${pexcel}/Records/**"/>
-            <metainf dir="${java.dir}/${pexcel}" includes="converter.xml"/>
-        </jar>
+    <!-- compile java sources in ${package} -->
+    <target name="compile" depends="prepare" if="build.class">
+        <javac srcdir="${java.dir}"
+               destdir="${build.class}"
+               debug="${debug}"
+               deprecation="${deprecation}"
+               optimize="${optimize}">
+            <classpath refid="classpath"/>
+            <include name="${package}/PocketExcelDecoder.java"/>
+            <include name="${package}/PocketExcelEncoder.java"/>
+            <include name="${package}/PxlDocument.java"/>
+            <include name="${package}/SxcDocumentDeserializerImpl.java"/>
+            <include name="${package}/SxcDocumentSerializerImpl.java"/>
+            <include name="${package}/ConverterCapabilitiesImpl.java"/>
+            <include name="${package}/PluginFactoryImpl.java"/>
+        </javac>
     </target>
 
     <!-- clean up -->
     <target name="clean" depends="prepare">
-        <delete file="${build.class}/${jarname1}.jar"/>
-        <delete file="${build.class}/${jarname2}.jar"/>
-        <delete file="${build.class}/${jarname3}.jar"/>
-        <delete file="${build.class}/${jarname4}.jar"/>
-        <delete file="${build.class}/${jarname5}.jar"/>
+        <delete includeEmptyDirs="true">
+            <fileset dir="${build.class}">
+                <patternset>
+                    <include name="${package}/*.class"/>
+                </patternset>
+            </fileset>
+        </delete>
     </target>
 
 </project>
