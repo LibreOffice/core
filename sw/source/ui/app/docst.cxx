@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-31 07:40:41 $
+ *  last change: $Author: os $ $Date: 2002-11-15 10:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,7 +664,10 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
             {
                 if(SFX_STYLE_FAMILY_PAGE == nFamily)
                 {
-                    static const USHORT aInval[] = {SID_IMAGE_ORIENTATION, FN_INSERT_CTRL, FN_INSERT_OBJ_CTRL, 0};
+                    static const USHORT aInval[] = {
+                        SID_IMAGE_ORIENTATION,
+                        SID_ATTR_CHAR_FONT,
+                        FN_INSERT_CTRL, FN_INSERT_OBJ_CTRL, 0};
                     pView->GetViewFrame()->GetBindings().Invalidate(aInval);
                 }
                 SfxItemSet aTmpSet( *pDlg->GetOutputItemSet() );
