@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interactionrequest.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-29 11:45:19 $
+ *  last change: $Author: kso $ $Date: 2001-05-29 12:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,14 @@ struct InteractionRequest_Impl;
   * After the request was passed to XInteractionHandler::handle(...) the method
   * getSelection() returns the continuation choosen by the interaction handler.
   *
+  * The typical usage of this class would be:
+  *
+  * 1) Create exception object that shall be handled by the interaction handler.
+  * 2) Create InteractionRequest, supply exception as ctor parameter
+  * 3) Create continuations needed and add them to a sequence
+  * 4) Supply the continuations to the InteractionRequest by calling
+  *    setContinuations(...)
+  *
   * This class can also be used as base class for more specialized requests,
   * like authentication requests.
   */
@@ -123,11 +131,6 @@ class InteractionRequest : public cppu::OWeakObject,
 
 protected:
     void setRequest( const com::sun::star::uno::Any & rRequest );
-    void setContinuations(
-        const com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference<
-                com::sun::star::task::XInteractionContinuation > > &
-                    rContinuations );
 
     InteractionRequest();
     virtual ~InteractionRequest();
@@ -139,6 +142,17 @@ public:
       * @param rRequest is the exception describing the error.
       */
     InteractionRequest( const com::sun::star::uno::Any & rRequest );
+
+    /**
+      * This method sets the continuations for the request.
+      *
+      * @param rContinuations contains the possible continuations.
+      */
+    void setContinuations(
+        const com::sun::star::uno::Sequence<
+            com::sun::star::uno::Reference<
+                com::sun::star::task::XInteractionContinuation > > &
+                    rContinuations );
 
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL
