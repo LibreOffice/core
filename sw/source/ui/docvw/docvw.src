@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ Menu MN_READONLY_POPUP
             Text[ chinese_simplified ] = "±ΰΌ­(~E)";
             Text[ russian ] = "~Οπΰβκΰ";
             Text[ polish ] = "~Edytuj";
-            Text[ japanese ] = "•ÒW(~‚d)";
+            Text[ japanese ] = "•ÒW(~E)";
             Text[ chinese_traditional ] = "½sΏθ(~E)";
             Text[ arabic ] = "~ΚΝΡνΡ";
             Text[ dutch ] = "Be~werken";
@@ -390,7 +390,7 @@ Menu MN_READONLY_POPUP
             Text [ dutch ] = "~Koppeling aan afbeelding toevoegen" ;
             Text [ english_us ] = "~Add Link to Picture" ;
             Text [ swedish ] = "~Lδgga till lδnk pε grafik" ;
-            Text [ danish ] = "Tilfψj kζde til billede" ;
+            Text [ danish ] = "Tilfψj kζde til grafik" ;
             Text [ italian ] = "Aggiungi collegamento al grafico" ;
             Text [ spanish ] = "Aρadir ~vνnculo a imagen" ;
             Text [ french ] = "Ajouter un l~ien ΰ l'image" ;
@@ -421,7 +421,7 @@ Menu MN_READONLY_POPUP
             Text [ french ] = "Enregistrer l'~image..." ;
             Text [ english_us ] = "Save Graphics..." ;
             Text [ swedish ] = "~Spara grafik..." ;
-            Text [ danish ] = "~Gem billede..." ;
+            Text [ danish ] = "~Gem grafik..." ;
             Text [ portuguese ] = "~Guardar imagem..." ;
             Text [ portuguese_brazilian ] = "~Grafik speichern..." ;
             Text[ chinese_simplified ] = "΄ζΕΜΝΌΠΞ(~S)...";
@@ -510,7 +510,7 @@ Menu MN_READONLY_POPUP
             Text [ english_us ] = "Add Graphics" ;
             Text [ portuguese_brazilian ] = "Grafik hinzuf~όgen" ;
             Text [ swedish ] = "Lδgg till ~grafik" ;
-            Text [ danish ] = "Tilfψj billede" ;
+            Text [ danish ] = "Tilfψj grafik" ;
             Text [ italian ] = "Aggi~ungi immagine" ;
             Text [ spanish ] = "~Aρadir imagen" ;
             Text [ french ] = "~Ajouter une image" ;
@@ -691,7 +691,7 @@ Menu MN_READONLY_POPUP
             Text [ french ] = "~Copier une image" ;
             Text [ english_us ] = "Copy ~Graphics" ;
             Text [ swedish ] = "Kopiera ~grafik" ;
-            Text [ danish ] = "Kopier billede" ;
+            Text [ danish ] = "Kopier grafik" ;
             Text [ portuguese ] = "Co~piar imagem" ;
             Text [ portuguese_brazilian ] = "Grafik ~kopieren" ;
             Text[ chinese_simplified ] = "Έ΄ΦΖΝΌΠΞ(~G)";
@@ -747,8 +747,8 @@ Menu MN_READONLY_POPUP
             Text [ french ] = "~Dιsactiver des images" ;
             Text [ dutch ] = "~Afbeeldingen uitschakelen" ;
             Text [ english_us ] = "Graphics Off" ;
-            Text [ swedish ] = "~Stδng av grafiker" ;
-            Text [ danish ] = "~Sluk billeder" ;
+            Text [ swedish ] = "~Stδng av grafik" ;
+            Text [ danish ] = "~Sluk for grafik" ;
             Text [ portuguese ] = "~Ocultar imagens" ;
             Text [ portuguese_brazilian ] = "Grafiken ~ausschalten" ;
             Text[ chinese_simplified ] = "ÒώΘλΝΌΠΞ";
@@ -788,7 +788,7 @@ Menu MN_READONLY_POPUP
             Text[ arabic ] = "ΕνήΗέ Plug-Ins";
             Text[ dutch ] = "~PlugIns uitschakelen";
             Text[ chinese_simplified ] = "Κ§»ξ ~Plug-In";
-            Text[ greek ] = "Απενεργοποίηση ~Plug-Ins";
+            Text[ greek ] = "Απενεργοποίηση συνδεόμενων υ~πομονάδων";
             Text[ korean ] = "ΗΓ·―±ΧΐΞ ΑΎ·α";
             Text[ turkish ] = "Plug-in'leri kapat";
             Text[ language_user1 ] = " ";
@@ -806,7 +806,7 @@ String STR_EXPORT_GRAFIK_TITLE
     Text [ french ] = "Export d'image" ;
     Text [ english_us ] = "Graphics Export" ;
     Text [ swedish ] = "Grafik-export" ;
-    Text [ danish ] = "Billedeksport" ;
+    Text [ danish ] = "Grafik-eksport" ;
     Text [ portuguese ] = "Exportar imagem" ;
     Text [ portuguese_brazilian ] = "Grafik-Export" ;
     Text[ chinese_simplified ] = "ΝΌΠΞ-Κδ³φ";
@@ -1208,7 +1208,7 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ arabic ] = "ΚήΪ ΪαΗγΙ ΗαίΚΗΘΙ Γζ ΗαΚΝΟνΟ έν γζΦΪ γΝγν ΦΟ ΗαίΚΗΘΙ.\nαεΠΗ αΗ νγίδ ήΘζα ΓνΙ ΚΫννΡΗΚ.";
     MESSAGE[ dutch ] = "De cursor of de selectie bevindt zich op een schrijfbeveiligde positie.\nDe inhoud kan daarom niet worden gewijzigd.";
     MESSAGE[ chinese_simplified ] = "ΚδΘλΉβ±κ»ςΡ΅ΦΠµΘΔΪΘέΚΗÒ»ΈφΚά±£»¤µΔ΅£\nΞή·¨ΈόΈΔ·ΐΈ²Π΄µΔΔΪΘέ΅£";
-    MESSAGE[ greek ] = "Η σήμανση εγγραφής ή η επιλογή βρίσκεται σε μία προστατευόμενη θέση.\nΓι αυτό το λόγο δεν μπορούν να γίνουν δεκτές οποιεσδήποτε τροποποιήσεις.";
+    MESSAGE[ greek ] = "Το σημάδι της εγγραφής ή η επιλογή βρίσκεται σε μία προστατευόμενη θέση.\nΓι αυτό το λόγο δεν μπορούν να γίνουν δεκτές οποιεσδήποτε τροποποιήσεις.";
     MESSAGE[ korean ] = "ΐΠ±β ΐόΏλ ³»ΏλΐΊ Ί―°ζµΙ Όφ Ύψ½ΐ΄Ο΄Ω.\nΌφΑ¤ΐΊ ΗγΏλµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
     MESSAGE[ turkish ] = "Salt okunur bir iηerik deπiώtirilemez.\nYapύlan deπiώiklikler nu nedenle kabul edilmeyecek.";
     MESSAGE[ language_user1 ] = " ";
