@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 19:30:51 $
+ *  last change: $Author: rt $ $Date: 2001-04-12 07:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ String STR_POOLCHR_FOOTNOTE
     Text[ chinese_simplified ] = "×¢½Å·û";
     Text[ russian ] = "Çíàê ñíîñêè";
     Text[ polish ] = "Symbol przypisów doln.";
-    Text[ japanese ] = "‹r’‹L†";
+    Text[ japanese ] = "‹r’”Ô†";
     Text[ chinese_traditional ] = "µù¸}²Å";
     Text[ arabic ] = "ÑãÒ ÇáÍÇÔíÉ ÇáÓİáíÉ";
     Text[ greek ] = "Óıìâïëï õğïóçìåßùóçò";
@@ -323,7 +323,7 @@ String STR_POOLCHR_ENDNOTE
     Text[ chinese_simplified ] = "Î²±ê·û";
     Text[ russian ] = "Çíàê êîíöåâîé ñíîñêè";
     Text[ polish ] = "Symbol przypisów koñc.";
-    Text[ japanese ] = "•¶––‹r’‹L†";
+    Text[ japanese ] = "•¶––‹r’”Ô†";
     Text[ chinese_traditional ] = "§Àµù²Å¸¹";
     Text[ arabic ] = "ÑãÒ ÇáÊÚáíŞ ÇáÎÊÇãí";
     Text[ greek ] = "Óıìâïëï óçìåßùóçò ôİëïõò";
@@ -395,7 +395,7 @@ String STR_POOLCHR_FOOTNOTE_ANCHOR
     Text[ swedish ] = "Fotnotsankare";
     Text[ polish ] = "Zakotwiczenie przypisów doln.";
     Text[ portuguese_brazilian ] = "Footnote anchor";
-    Text[ japanese ] = "‹r’±İ¶°";
+    Text[ japanese ] = "‹r’QÆ”Ô†";
     Text[ korean ] = "°¢ÁÖ °íÁ¤¡¡±âÁØ";
     Text[ chinese_simplified ] = "×¢½Å±ê¼Ç";
     Text[ chinese_traditional ] = "µù¸}¼Ğ¸¹";
@@ -418,7 +418,7 @@ String STR_POOLCHR_ENDNOTE_ANCHOR
     Text[ swedish ] = "Slutnotsankare";
     Text[ polish ] = "Zakotwiczenie przypisów koñc.";
     Text[ portuguese_brazilian ] = "Endnote anchor";
-    Text[ japanese ] = "•¶––‹r’±İ¶°";
+    Text[ japanese ] = "•¶––‹r’QÆ‹L†";
     Text[ korean ] = "¹ÌÁÖ °íÁ¤ ±âÁØ";
     Text[ chinese_simplified ] = "Î²×¢±ê¼Ç";
     Text[ chinese_traditional ] = "§Àµù¼Ğ¸¹";
