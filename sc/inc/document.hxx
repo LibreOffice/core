@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:19:01 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,6 +326,8 @@ private:
     ScConsolidateParam* pConsolidateDlgData;
 
     List*               pLoadedSymbolStringCellList;    // binary file format import of symbol font string cells
+
+    sal_uInt32          nRangeOverflowType;             // used in (xml) loading for overflow warnings
 
     ScRange             aClipRange;
     ScRange             aEmbedRange;
@@ -1394,6 +1396,10 @@ SC_DLLPUBLIC    SvNumberFormatter*  GetFormatTable() const;
 
     BOOL            HasMacroCallsAfterLoad();
     BOOL            CheckMacroWarn();
+
+    void            SetRangeOverflowType(sal_uInt32 nType)  { nRangeOverflowType = nType; }
+    sal_Bool        HasRangeOverflow() const                { return nRangeOverflowType != 0; }
+    sal_uInt32      GetRangeOverflowType() const            { return nRangeOverflowType; }
 
     // fuer Broadcasting/Listening
     void            SetNoSetDirty( BOOL bVal ) { bNoSetDirty = bVal; }
