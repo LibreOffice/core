@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-30 16:31:35 $
+ *  last change: $Author: jbu $ $Date: 2001-04-27 11:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,15 +330,6 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     return NULL;
 }
 
-/*****************************************************************************/
-/* osl_copyPipe  */
-/*****************************************************************************/
-oslPipe SAL_CALL osl_copyPipe(oslPipe pPipe)
-{
-    osl_acceptPipe( pPipe );
-    return pPipe;
-}
-
 void SAL_CALL osl_acquirePipe( oslPipe pPipe )
 {
     osl_incrementInterlockedCount( &(pPipe->m_nRefCount) );
@@ -436,14 +427,6 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
 /*      OSL_TRACE("Out osl_destroyPipe");     */
 }
 
-
-/*****************************************************************************/
-/* osl_destroyPipe  */
-/*****************************************************************************/
-void SAL_CALL osl_destroyPipe(oslPipe pPipe)
-{
-    osl_releasePipe( pPipe );
-}
 
 /*****************************************************************************/
 /* osl_acceptPipe  */
