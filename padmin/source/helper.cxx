@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:56:35 $
+ *  last change: $Author: rt $ $Date: 2001-05-22 14:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,15 +119,13 @@ void padmin::FindFiles( const String& rDirectory, ::std::list< String >& rResult
     rResult.clear();
 
     OUString aDirPath;
-    ::osl::FileBase::normalizePath( rDirectory, aDirPath );
+    ::osl::FileBase::getFileURLFromSystemPath( rDirectory, aDirPath );
     Directory aDir( aDirPath );
     aDir.open();
     DirectoryItem aItem;
     while( aDir.getNextItem( aItem ) == FileBase::E_None )
     {
         FileStatus aStatus( FileStatusMask_FileName         |
-                            FileStatusMask_FilePath         |
-                            FileStatusMask_NativePath       |
                             FileStatusMask_Type
                             );
         if( aItem.getFileStatus( aStatus ) == FileBase::E_None &&
