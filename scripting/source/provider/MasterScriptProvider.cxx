@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:52 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 14:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,41 +107,7 @@ MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext >
     m_xMgr = m_xContext->getServiceManager();
     validateXRef( m_xMgr,
                   "MasterScriptProvider::MasterScriptProvider: No service manager available\n" );
-    m_XScriptingContext = new ScriptingContext( m_xContext );
-
-    // attemp to raise or access ScriptStorageMgr singleton
-    try
-    {
-        scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
-                        scripting_constants::ScriptingConstantsPool::instance();
-        Any a = m_xContext->getValueByName(
-        scriptingConstantsPool.SCRIPTSTORAGEMANAGER_SERVICE );
-        Reference < XInterface > xInterface;
-        if ( sal_False == ( a >>= xInterface ) )
-        {
-            throw RuntimeException(
-                OUSTR( "MasterScriptProvider::MasterScriptProvider: could not obtain Stora geManager singleton" ),
-                Reference< XInterface >() );
-        }
-        validateXRef( xInterface,
-                          "MasterScriptProvider::initialise: cannot get StorageManager" );
-        m_xScriptStorageMgr = Reference< framework::storage::XScriptStorageManager > ( xInterface, UNO_QUERY_THROW );
-
-        // Set up contextless cache
-        // if initialise method is called a new ProviderCache will be
-        // created with the appropriate context supplied as an argument
-        Sequence< Any > invokeArgs(1);
-        invokeArgs[ 0 ] <<= m_XScriptingContext;
-        m_pPCache = new ProviderCache( m_xContext, invokeArgs );
-    }
-    catch ( Exception & e )
-    {
-        OSL_TRACE("MasterScriptProvider -ctor caught exception %s",
-            ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        ::rtl::OUString temp = OUSTR(
-            "MasterScriptProvider::MasterScriptProvider: could not raise instance of ScriptStorageManager : " );
-        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
-    }
+    m_XScriptingContext = new InvocationCtxProperties( m_xContext );
 
 
     m_bIsValid = true;
@@ -174,41 +140,26 @@ throw ( Exception, RuntimeException )
     m_bIsValid = false;
 
 
-    // related to issue 11866
-    // warning dialog gets launched when adding binding to script in doc
-    // workaround issue: no functionProvider created on doc open
     sal_Int32 len = args.getLength();
-    if ( len >=3  )
+    if ( len > 1  )
     {
         throw RuntimeException(
             OUSTR( "MasterScriptProvider::initialize: invalid number of arguments" ),
             Reference< XInterface >() );
-    }
-    sal_Bool displayDialog = sal_True;
-    if ( len == 2 )
-    {
-        if ( sal_False == ( args[ 1 ] >>= displayDialog ) )
-        {
-            throw RuntimeException(
-                OUSTR( "MasterScriptProvider::initialize: invalid argument, arg 2 must be a boolean" ),
-                Reference< XInterface >() );
-        }
     }
 
     Sequence< Any > invokeArgs( 1 );
 
     if ( args.getLength() != 0 )
     {
-        Any stringAny;
-        ::rtl::OUString ouStr;
-        stringAny <<= ouStr;
+        Any stringAny = makeAny( ::rtl::OUString() );
 
         // check if first parameter is a string
         // if it is, this implies that this is a MSP created
         // with a user or share ctx ( used for browse functionality )
 
         //
-        if ( args[ 0 ].getValueTypeName().equals( stringAny.getValueTypeName() ) )
+        if ( args[ 0 ].getValueType() ==  ::getCppuType((const ::rtl::OUString* ) NULL ) )
         {
             ::rtl::OUString dir;
             args[ 0 ] >>= dir;
@@ -220,85 +171,17 @@ throw ( Exception, RuntimeException )
         {
             try
             {
-                Reference< XInterface > xInterface;
-                if ( sal_False == ( args[ 0 ] >>= xInterface ) )
-                {
-                    throw RuntimeException(
-                        OUSTR( "MasterScriptProvider::initialize: could not extract xModel from arguments" ),
-                        Reference< XInterface >() );
-                }
-                validateXRef( xInterface,
-                          "MasterScriptProvider::initialize: invalid xModel xinterface" );
+                m_xModel.set( args[ 0 ], UNO_QUERY_THROW );
 
-                m_xModel = Reference< frame::XModel > ( xInterface, UNO_QUERY_THROW );
-
-                Any propValXModel;
-                propValXModel <<= m_xModel;
+                Any propValXModel = makeAny( m_xModel );
 
                 ::rtl::OUString url ( m_xModel->getURL() );
-
-                if ( displayDialog == sal_False )
-                {
-                    url = ::rtl::OUString::createFromAscii( "NoDialog::" ).concat( url );
-                }
 
                 // Initial val, indicates no document script storage
                 scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
                 scripting_constants::ScriptingConstantsPool::instance();
-                sal_Int32 documentScriptStorageID =
-                scriptingConstantsPool.DOC_STORAGE_ID_NOT_SET;
 
-                OSL_TRACE( "about to call addStorageAsListener");
-                addStorageAsListener();
-
-                if ( url.getLength() )
-                {
-                    OSL_TRACE("Creating MSP for document, url is %s",
-                        ::rtl::OUStringToOString( url , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                    // If document url is valid (i.e. pointing to a document) we want to get
-                    // the StorageManager to create a storage component, this will be done
-                    // by the document in the next rev.
-                    Reference< XInterface > xInterface = m_xMgr->createInstanceWithContext(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ),
-                                                         m_xContext );
-                    validateXRef( xInterface,
-                        "MasterScriptProvider::initialise: cannot get SimpleFileAccess Service\n" );
-                    Reference < ucb::XSimpleFileAccess > xSimpleFileAccess = Reference <
-                            ucb::XSimpleFileAccess > ( xInterface, UNO_QUERY_THROW );
-
-
-                    OSL_TRACE( ">>>> About to create storage for %s",
-                        ::rtl::OUStringToOString( url,
-                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                    // ask storage manager to create storage
-                    try
-                    {
-                        documentScriptStorageID =
-                            m_xScriptStorageMgr->createScriptStorageWithURI(
-                            xSimpleFileAccess, url );
-                        OSL_TRACE( ">>>> Created storage %d - for %s ",
-                            documentScriptStorageID, ::rtl::OUStringToOString(
-                                url, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                    }
-                    catch ( RuntimeException & e )
-                    {
-                        /* No need to rethrow exception because if no storage available
-                           we continue on...*/
-                        OSL_TRACE( ">>>> Failed to create document storage for %s: %s",
-                                   ::rtl::OUStringToOString( url,
-                                                         RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-                               ::rtl::OUStringToOString( e.Message,
-                                                         RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                    }
-
-                }
-
-                Any propValUrl;
-                propValUrl <<= url;
-
-                Any propValSid;
-                propValSid <<= documentScriptStorageID ;
-
+                Any propValUrl = makeAny( url );
                 OSL_TRACE( "!!** XModel URL inserted into any is %s \n",
                        ::rtl::OUStringToOString( url , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                 // set up invocation context.
@@ -306,8 +189,6 @@ throw ( Exception, RuntimeException )
                                                    propValXModel );
                 m_XScriptingContext->setPropertyValue( scriptingConstantsPool.DOC_URI,
                                                    propValUrl );
-                m_XScriptingContext->setPropertyValue( scriptingConstantsPool.DOC_STORAGE_ID,
-                                                   propValSid );
                 invokeArgs[ 0 ] <<= m_XScriptingContext;
             }
 
@@ -345,18 +226,9 @@ throw ( Exception, RuntimeException )
     else // no args
     {
         // use either scriping context or maybe zero args?
-        //invokeArgs[ 0 ] <<= m_XScriptingContext;
         invokeArgs = Sequence< Any >( 0 ); // no arguments
     }
-    // should be initialised from ctor ( in case createInstance called
-    // instead of createInsanceWithArgs.... )
-    if ( m_pPCache != 0 )
-    {
-        OSL_TRACE("** MSP init, creating provider cache");
-        delete m_pPCache;
-    }
-
-    m_pPCache = new ProviderCache( m_xContext, invokeArgs );
+    m_sAargs = invokeArgs;
     if ( m_xModel.is() )
     {
         // This MSP created from a document, add to ActiveMSPList
@@ -410,9 +282,18 @@ throw ( lang::IllegalArgumentException, RuntimeException )
         buf.appendAscii( "drafts.com.sun.star.script.provider.ScriptProviderFor");
         buf.append( language );
         ::rtl::OUString serviceName = buf.makeStringAndClear();
-        xScriptProvider = m_pPCache->getProvider( serviceName );
-        validateXRef( xScriptProvider, "MasterScriptProvider::getScript() failed to obtain provider" );
-        xScript=xScriptProvider->getScript( scriptURI );
+        if ( providerCache() )
+        {
+            xScriptProvider = providerCache()->getProvider( serviceName );
+            validateXRef( xScriptProvider, "MasterScriptProvider::getScript() failed to obtain provider" );
+            xScript=xScriptProvider->getScript( scriptURI );
+        }
+        else
+        {
+            ::rtl::OUString temp = OUSTR( "MasterScriptProvider::getScript: can't access ProviderCache " );
+            throw RuntimeException( temp,
+                    Reference< XInterface >() );
+        }
     }
 
     catch ( RuntimeException & e )
@@ -440,38 +321,23 @@ MasterScriptProvider::isValid()
 {
     return m_bIsValid;
 }
-//*************************************************************************
-void
-MasterScriptProvider::addStorageAsListener() throw ( RuntimeException )
-{
-    try
-    {
-        OSL_TRACE( "IN addStorageAsListener()" );
-        // try get XEventListener from m_xScriptStorageMgr
-        Reference< lang::XEventListener > xEventListener =
-            Reference< lang::XEventListener >( m_xScriptStorageMgr, UNO_QUERY_THROW );
-        validateXRef( xEventListener, "MasterScriptProvider::initialse: storage manager not XEventListener\n" );
-        // try get XComponent from m_xModel, if we can, then
-        // register as listener so we get event when doc is disposed
-        Reference< lang::XComponent > xComponent =
-            Reference< lang::XComponent >( m_xModel, UNO_QUERY_THROW );
-        validateXRef( xComponent, "MasterScriptProvider::initialse: model not XComponent\n" );
-        xComponent->addEventListener( xEventListener );
-        OSL_TRACE( " addStorageAsListener(), successful" );
 
-    }
-    catch ( Exception & e )
+//*************************************************************************
+ProviderCache*
+MasterScriptProvider::providerCache()
+{
+    if ( !m_pPCache )
     {
-        ::rtl::OUString errorMsg = OUSTR( "MasterScriptProvider::addStorageAsListene() failed, reason: " );
-        errorMsg.concat( e.Message );
-        OSL_TRACE( "Failed to add listener for storage, reason %s",
-            ::rtl::OUStringToOString( e.Message,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
-        throw RuntimeException(  errorMsg,
-                Reference< XInterface >() );
+        ::osl::MutexGuard aGuard( m_mutex );
+        if ( !m_pPCache )
+        {
+            m_pPCache = new ProviderCache( m_xContext, m_sAargs );
+        }
     }
+    return m_pPCache;
 }
 
+//*************************************************************************
 ::rtl::OUString
 MasterScriptProvider::getLanguageFromURI( const ::rtl::OUString& scriptURI )
 {
@@ -515,6 +381,7 @@ MasterScriptProvider::getName()
     return  ActiveMSPList::instance( m_xContext ).getName();
 }
 
+//*************************************************************************
 Sequence< Reference< browse::XBrowseNode > > SAL_CALL
 MasterScriptProvider::getChildNodes()
         throw ( css::uno::RuntimeException )
@@ -524,6 +391,7 @@ MasterScriptProvider::getChildNodes()
      return ActiveMSPList::instance( m_xContext ).getChildNodes();
 }
 
+//*************************************************************************
 sal_Bool SAL_CALL
 MasterScriptProvider::hasChildNodes()
         throw ( css::uno::RuntimeException )
@@ -531,6 +399,7 @@ MasterScriptProvider::hasChildNodes()
     return ActiveMSPList::instance( m_xContext ).hasChildNodes();
 }
 
+//*************************************************************************
 sal_Int16 SAL_CALL
 MasterScriptProvider::getType()
         throw ( css::uno::RuntimeException )
@@ -539,18 +408,23 @@ MasterScriptProvider::getType()
 }
 
 
+//*************************************************************************
 Sequence< Reference< provider::XScriptProvider > > SAL_CALL
 MasterScriptProvider::getAllProviders() throw ( css::uno::RuntimeException )
 {
-    if ( m_pPCache )
+    OSL_TRACE("Entering MasterScriptProvider Get ALL Providers() " );
+    if ( providerCache() )
     {
-        return m_pPCache->getAllProviders();
+        OSL_TRACE("Leaving MasterScriptProvider Get ALL Providers() " );
+        return providerCache()->getAllProviders();
     }
     else
     {
         OSL_TRACE("MasterScriptProvider::getAllProviders() something wrong, no language providers");
         ::rtl::OUString errorMsg;
         errorMsg = ::rtl::OUString::createFromAscii("MasterScriptProvider::getAllProviders, unknown error, cache not initialised");
+        OSL_TRACE("Leaving MasterScriptProvider Get ALL Providers() THROWING " );
+        return providerCache()->getAllProviders();
         throw RuntimeException( errorMsg.concat( errorMsg ),
                         Reference< XInterface >() );
 
@@ -610,36 +484,9 @@ SAL_THROW( () )
 {
     return ::func_provider::s_implName;
 }
-//******************** ScriptStorageMangaer defines ***********************
-Reference< XInterface > SAL_CALL ssm_create(
-    Reference< XComponentContext > const & xComponentContext )
-SAL_THROW( ( Exception ) );
-//*************************************************************************
-Sequence< ::rtl::OUString > ssm_getSupportedServiceNames() SAL_THROW( () );
-//*************************************************************************
-::rtl::OUString ssm_getImplementationName() SAL_THROW( () );
-//*************************************************************************
-
-//************ ScriptStorage defines **************************************
-Reference< XInterface > SAL_CALL ss_create( const Reference< XComponentContext > & xCompC );
-//******************** ScriptProvider defines ***************************
-Sequence< ::rtl::OUString > ss_getSupportedServiceNames( ) SAL_THROW( () );
-//*************************************************************************
-::rtl::OUString ss_getImplementationName( ) SAL_THROW( () );
-//*************************************************************************
 
 static struct cppu::ImplementationEntry s_entries [] =
     {
-        {
-            ssm_create, ssm_getImplementationName,
-            ssm_getSupportedServiceNames, cppu::createSingleComponentFactory,
-            0, 0
-        },
-        {
-            ss_create, ss_getImplementationName,
-            ss_getSupportedServiceNames, cppu::createSingleComponentFactory,
-            0, 0
-        },
         {
             sp_create, sp_getImplementationName,
             sp_getSupportedServiceNames, cppu::createSingleComponentFactory,
