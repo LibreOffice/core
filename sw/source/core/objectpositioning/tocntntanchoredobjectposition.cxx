@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tocntntanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:02:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,6 +468,20 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                       _GetTopForObjPos( rAnchorTxtFrm, fnRect, bVert ) );
             }
 
+            // --> OD 2005-02-07 #i42124# - capture object inside vertical
+            // layout environment.
+            {
+                const SwTwips nTopOfAnch =
+                                _GetTopForObjPos( *pOrientFrm, fnRect, bVert );
+                const SwLayoutFrm& rVertEnvironLayFrm =
+                    aEnvOfObj.GetVertEnvironmentLayoutFrm(
+                                            *(pOrientFrm->GetUpper()), false );
+                const bool bCheckBottom = !bFollowTextFlow;
+                nRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert,
+                                              rVertEnvironLayFrm, nRelPosY,
+                                              bFollowTextFlow, bCheckBottom );
+            }
+            // <--
             // keep calculated relative vertical position - needed for filters
             // (including the xml-filter)
             {
