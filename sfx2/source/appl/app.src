@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:26 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 18:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,7 +425,7 @@ WarningBox STR_RECOVER_PREPARED
     Message[ chinese_simplified ] = "ÕæÊÇ·Ç³£±§Ç¸£¬ÄúµÄ²Ù×÷Òı·¢ÁËÒ»¸öÎŞ·¨ÅÅ³ıµÄ´íÎó¡£\nÄú¸Õ²ÅĞŞ¸Ä¹ıµÄÎÄ¼şÒÑ¾­±»±£´æ¡£\nÔÚÏÂÒ»´ÎÆô¶¯³ÌĞòÊ±ºÜ¿ÉÄÜÖØĞÂ»Ö¸´ÕâĞ©ÎÄ¼ş¡£";
     Message[ russian ] = "Ïğîèçîøëà íåóñòğàíèìàÿ îøèáêà.\n\nÂñå èçìåíåííûå ôàéëû áóäóò ñîõğàíåíû\nè èõ ìîæíî áóäåò âîññòàíîâèòü ïğè ñëåäóşùåì\nçàïóñêå ïğîãğàììû.";
     Message[ polish ] = "Wyst¹pi³ nieodwracalny b³¹d.\n\nWszystkie zmodyfikowane pliki zosta³y jednak\nzabezpieczone i zostan¹ prawdopodobnie przywrócone przy nastêpnym rozpoczêciu programu.\n.";
-    Message[ japanese ] = "œ‹‚Å‚«‚È‚¢´×°‚ª”­¶‚µ‚Ü‚µ‚½B\n\n•ÏX‚µ‚½Ì§²Ù‚Ì‚·‚×‚Ä‚ª•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚·‚©‚ç\nŸ‚ÉÌßÛ¸Ş×Ñ‚ğŠJn‚·‚éÛ‚É‚Í•œŒ³‚³‚ê‚é‚Í‚¸‚Å‚·B";
+    Message[ japanese ] = "œ‹‚Å‚«‚È‚¢´×°‚ª”­¶‚µ‚Ü‚µ‚½B\n\n•ÏX‚µ‚½‚·‚×‚Ä‚ÌÌ§²Ù‚Í•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚·‚Ì‚Å\nŸ‰ñ‚ÌÌßÛ¸Ş×ÑŠJn‚É•œŒ³‚³‚ê‚éŒ©‚İ‚Å‚·B";
     Message[ chinese_traditional ] = "¯u¬O«D±`©êºp¡M±zªº¾Ş§@¤Şµo¤F¤@­ÓµLªk±Æ°£ªº¿ù»~¡C\n±z¥ı«e­×§ï¹LªºÀÉ®×¤w¸gÀx¦s¡C\n¦b¤U¤@¦¸±Ò°Êµ{¦¡®É«Ü¥i¯à­«·s«ì´_³o¨ÇÀÉ®×¡C";
     Message[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ŞÇÈá ááÅÕáÇÍ.\n\nÊã ÍİÙ ßÇİÉ ÇáãáİÇÊ ÇáÊí Êã ÊÚÏíáåÇ¡ \nÈÍíË íãßä ÇÓÊÚÇÏÊåÇ ÚäÏ ÅÚÇÏÉ\n ÊÔÛíá ÇáÈÑäÇãÌ.";
     Message[ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden.";
@@ -730,7 +730,7 @@ String GID_MATH
     Text [ portuguese ] = "Math" ;
     Text [ finnish ] = "Kaava" ;
     Text [ danish ] = "Math" ;
-    Text [ french ] = "Formule" ;
+    Text [ french ] = "Math" ;
     Text [ swedish ] = "Math" ;
     Text [ dutch ] = "Math" ;
     Text [ spanish ] = "Math" ;
@@ -1122,7 +1122,7 @@ String GID_EXPLORER
     Text[ arabic ] = "ÇáãÓÊßÔİ";
     Text[ dutch ] = "Explorer";
     Text[ chinese_simplified ] = "×ÊÔ´¹ÜÀíÆ÷";
-    Text[ greek ] = "Explorer";
+    Text[ greek ] = "ÅîåñåõíçôŞò";
     Text[ korean ] = "ÀÍ½ºÇÃ·Î·¯";
     Text[ turkish ] = "Explorer";
 };
@@ -2204,7 +2204,7 @@ String STR_EVENT_ONERROR
     Text [ dutch ] = "Javascript runtime error" ;
     Text [ portuguese ] = "Erro na execução de JavaScript" ;
     Text[ chinese_simplified ] = "Javascript-ÔËĞĞÊ±¼ä´íÎó";
-    Text[ russian ] = "Îøèáêà ïğè âûïîëíåíèè Javascript";
+    Text[ russian ] = "Îøèáêà ïğè âûïîëíåíèè JavaScript";
     Text[ polish ] = "B³¹d czasu przeb. w Javascript";
     Text[ japanese ] = "JavaScript runtime ´×°•\\¦‚Ì";
     Text[ chinese_traditional ] = "Javascript ¹B¦æ®É¶¡¿ù»~";
@@ -3292,7 +3292,7 @@ String RID_PLUGIN
     Text[ arabic ] = "ÊäÔíØ Plug-In";
     Text[ dutch ] = "PlugIn-activering";
     Text[ chinese_simplified ] = "¼¤»î Plug-In";
-    Text[ greek ] = "Åíåñãïğïßçóç PlugIn";
+    Text[ greek ] = "Åíåñãïğïßçóç óõíäåüìåíçò õğïìïíÜäáò";
     Text[ korean ] = "ÇÃ·¯±× ÀÎ °¡´É";
     Text[ turkish ] = "Plug-In'leri etkinleştir";
     Text[ language_user1 ] = " ";
