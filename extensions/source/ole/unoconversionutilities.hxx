@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-05 09:30:23 $
+ *  last change: $Author: jl $ $Date: 2000-10-05 11:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,7 +503,7 @@ sal_Bool UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& r
             // ole automation does not know a signed char but only unsigned char
             V_VT(pVariant) = VT_UI1;
             V_UI1(pVariant) = *(sal_uInt8*)rAny.getValue();
-            ret= sal_False;
+            ret= sal_True;
             break;
         case TypeClass_SHORT:       // INT16
             V_VT(pVariant) = VT_I2;
@@ -529,12 +529,12 @@ sal_Bool UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& r
         case TypeClass_UNSIGNED_SHORT:  // UINT16
             V_VT(pVariant) = VT_I2;
             V_I2(pVariant) = *(sal_Int16*)rAny.getValue();
-            ret = sal_False;
+            ret = sal_True;
             break;
         case TypeClass_UNSIGNED_LONG:   // UINT32
              V_VT(pVariant) = VT_I4;
             V_I4(pVariant) = *(sal_Int32*)rAny.getValue();
-            ret = sal_False;
+            ret = sal_True;
             break;
         case TypeClass_UNSIGNED_HYPER:  // UINT64
     //          V_VT(pVariant) = VT_UI8;
