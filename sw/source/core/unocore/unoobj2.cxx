@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:10:12 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1167,49 +1167,19 @@ SwXParagraphEnumeration::~SwXParagraphEnumeration()
 sal_Bool SwXParagraphEnumeration::hasMoreElements(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    sal_Bool bRet = sal_False;
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr)
-    {
-        if(bFirstParagraph)
-            bRet = sal_True;
-        else
-        {
-            SwPosition* pStart = pUnoCrsr->Start();
-            SwUnoCrsr* pNewCrsr = pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, sal_False);
-            //man soll hier auch in Tabellen landen duerfen
-            if(CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType)
-                pNewCrsr->SetRemainInSection( sal_False );
-
-            //was mache ich, wenn ich schon in einer Tabelle stehe?
-            SwTableNode* pTblNode = pNewCrsr->GetNode()->FindTableNode();
-            if((CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType) && pTblNode)
-            {
-                pNewCrsr->GetPoint()->nNode = pTblNode->EndOfSectionIndex();
-                bRet = pNewCrsr->Move(fnMoveForward, fnGoNode);
-            }
-            else
-                bRet = pNewCrsr->MovePara(fnParaNext, fnParaStart);
-            if((CURSOR_SELECTION == eCursorType || CURSOR_SELECTION_IN_TABLE == eCursorType)
-                        && nEndIndex < pNewCrsr->Start()->nNode.GetIndex())
-                bRet = FALSE;
-            delete pNewCrsr;
-        }
-    }
-    return bRet;
+    return bFirstParagraph ? sal_True : xNextPara.is();
 }
-/*-- 10.12.98 11:52:14---------------------------------------------------
+/*-- 14.08.03 13:10:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SwXParagraphEnumeration::nextElement(void)
+uno::Reference< XTextContent > SAL_CALL SwXParagraphEnumeration::NextElement_Impl(void)
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< XTextContent >  aRef;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-         XText* pText = xParentText.get();
+        XText* pText = xParentText.get();
         sal_Bool bInTable = sal_False;
         if(!bFirstParagraph)
         {
@@ -1224,9 +1194,7 @@ uno::Any SwXParagraphEnumeration::nextElement(void)
                     // wir haben es mit einer Tabelle zu tun - also ans Ende
                     pUnoCrsr->GetPoint()->nNode = pTblNode->EndOfSectionIndex();
                     if(!pUnoCrsr->Move(fnMoveForward, fnGoNode))
-                    {
-                        throw container::NoSuchElementException();
-                    }
+                        return aRef;
                     else
                         bInTable = sal_True;
 
@@ -1239,7 +1207,7 @@ uno::Any SwXParagraphEnumeration::nextElement(void)
             SwPosition* pStart = pUnoCrsr->Start();
             sal_Int32 nFirstContent = bFirstParagraph ? nFirstParaStart : -1;
             sal_Int32 nLastContent = nEndIndex ==  pStart->nNode.GetIndex() ? nLastParaEnd : -1;
-            bFirstParagraph = sal_False;
+//            bFirstParagraph = sal_False;
             //steht man nun in einer Tabelle, oder in einem einfachen Absatz?
 
             SwTableNode* pTblNode = pUnoCrsr->GetNode()->FindTableNode();
@@ -1256,12 +1224,32 @@ uno::Any SwXParagraphEnumeration::nextElement(void)
                 aRef =  (XTextContent*)new SwXParagraph((SwXText*)pText, pNewCrsr, nFirstContent, nLastContent);
             }
         }
-        else
-            throw container::NoSuchElementException();
-
+//        else
+//            throw container::NoSuchElementException();
     }
     else
         throw uno::RuntimeException();
+
+    return aRef;
+}
+/*-- 10.12.98 11:52:14---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Any SwXParagraphEnumeration::nextElement(void)
+    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    uno::Reference< XTextContent >  aRef;
+
+    if (bFirstParagraph)
+    {
+        xNextPara = NextElement_Impl();
+        bFirstParagraph = sal_False;
+    }
+    aRef = xNextPara;
+    if (!aRef.is())
+        throw container::NoSuchElementException();
+    xNextPara = NextElement_Impl();
 
     uno::Any aRet(&aRef, ::getCppuType((uno::Reference<XTextContent>*)0));
     return aRet;
@@ -1723,6 +1711,7 @@ sal_Bool        SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
     OTextCursorHelper* pCursor = 0;
     SwXTextPortion* pPortion = 0;
     SwXText* pText = 0;
+    SwXParagraph* pPara = 0;
     if(xRangeTunnel.is())
     {
         pRange = (SwXTextRange*)xRangeTunnel->getSomething(
@@ -1733,6 +1722,8 @@ sal_Bool        SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
                                 SwXTextPortion::getUnoTunnelId());
         pText = (SwXText*)xRangeTunnel->getSomething(
                                 SwXText::getUnoTunnelId());
+        pPara = (SwXParagraph*)xRangeTunnel->getSomething(
+                                SwXParagraph::getUnoTunnelId());
     }
 
     //if it's a text cursor then create a temporary cursor there and re-use the pCursor variable
@@ -1751,16 +1742,34 @@ sal_Bool        SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
     }
     else
     {
-        SwDoc*      pDoc = pCursor ? pCursor->GetDoc() : NULL;
-        if ( !pDoc )
-            pDoc = pPortion ? pPortion->GetCrsr()->GetDoc() : NULL;
-        const SwPaM* pUnoCrsr = pCursor ? pCursor->GetPaM() : pPortion ? pPortion->GetCrsr() : 0;
+        SwDoc* pDoc = 0;
+        const SwPaM* pUnoCrsr = 0;
+        if (pPara)
+        {
+            pUnoCrsr = pPara->GetCrsr();
+            if (pUnoCrsr)
+                pDoc = pUnoCrsr->GetDoc();
+        }
+        else
+        {
+            pDoc = pCursor ? pCursor->GetDoc() : NULL;
+            if ( !pDoc )
+                pDoc = pPortion ? pPortion->GetCrsr()->GetDoc() : NULL;
+            pUnoCrsr = pCursor ? pCursor->GetPaM() : pPortion ? pPortion->GetCrsr() : 0;
+        }
         if(pUnoCrsr && pDoc == rToFill.GetDoc())
             {
                 DBG_ASSERT((SwPaM*)pUnoCrsr->GetNext() == pUnoCrsr, "was machen wir mit Ringen?" )
                 bRet = sal_True;
                 *rToFill.GetPoint() = *pUnoCrsr->GetPoint();
-                if(pUnoCrsr->HasMark())
+                if(pPara)
+                {
+                    // set selection to the whole paragraph
+                    rToFill.SetMark();
+                    rToFill.GetMark()->nContent =
+                        pUnoCrsr->GetNode()->GetTxtNode()->GetTxt().Len();
+                }
+                else if(pUnoCrsr->HasMark())
                 {
                     rToFill.SetMark();
                     *rToFill.GetMark() = *pUnoCrsr->GetMark();
