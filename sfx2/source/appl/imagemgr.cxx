@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-14 10:10:37 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,14 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
 
             SfxModule* pModule = pViewFrame ? pViewFrame->GetObjectShell()->GetModule() : NULL;
             if ( nId )
-                return SFX_IMAGEMANAGER()->SeekImage( nId, pModule );
+            {
+                if ( pViewFrame )
+                    return pViewFrame->GetImageManager()->GetImage( nId, pModule, bBig );
+                else
+                {
+                    return SFX_APP()->GetImageManager_Impl()->GetImage( nId, NULL, bBig );
+                }
+            }
             break;
         }
 
