@@ -17,7 +17,6 @@ br	bridges\source\cpp_uno\cc50_solaris_sparc			nmake	-	u	br_cc50sols br_unotypes
 br	bridges\source\cpp_uno\cc50_solaris_intel			nmake	-	u	br_cc50soli br_unotypes NULL
 br	bridges\source\cpp_uno\gcc3_netbsd_intel	nmake	-	u	br_gccni br_unotypes NULL
 br  bridges\source\cpp_uno\shared           nmake   -   all br_cppuno_shared br_unotypes NULL
-br	bridges\source\prot_uno					nmake	-	all	br_pruno br_unotypes NULL
 #br	bridges\source\cli_uno					nmake	-	w,vc7	br_cli_uno br_unotypes NULL
 br	bridges\source\jni_uno					nmake	-	all	br_jni_uno br_unotypes NULL
 br	bridges\source\jni_uno\java\com\sun\star\bridges\jni_uno				nmake	-	all	br_jni_uno_java br_unotypes NULL
