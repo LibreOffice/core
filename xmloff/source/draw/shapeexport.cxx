@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-31 11:18:38 $
+ *  last change: $Author: cl $ $Date: 2001-06-01 12:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,8 +151,10 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
         xPropertySetMapper->ChainExportMapper( xExtMapper );
     }
 
+/*
     // chain text attributes
     xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
+*/
 
 /*
     // chain form attributes
@@ -197,6 +199,18 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         xSet->getPropertyValue(msZIndex) >>= nZIndex;
 
     ImplXMLShapeExportInfo& aShapeInfo = (*maCurrentShapesIter).second[nZIndex];
+
+    const sal_Bool bObjSupportsText =
+        aShapeInfo.meShapeType != XmlShapeTypeDrawControlShape &&
+        aShapeInfo.meShapeType != XmlShapeTypeDrawChartShape &&
+        aShapeInfo.meShapeType != XmlShapeTypePresChartShape &&
+        aShapeInfo.meShapeType != XmlShapeTypeDrawOLE2Shape &&
+        aShapeInfo.meShapeType != XmlShapeTypePresOLE2Shape &&
+        aShapeInfo.meShapeType != XmlShapeTypeDraw3DSceneObject &&
+        aShapeInfo.meShapeType != XmlShapeTypeDraw3DCubeObject &&
+        aShapeInfo.meShapeType != XmlShapeTypeDraw3DSphereObject &&
+        aShapeInfo.meShapeType != XmlShapeTypeDraw3DLatheObject &&
+        aShapeInfo.meShapeType != XmlShapeTypeDraw3DExtrudeObject;
 
     // -----------------------------
     // first compute the shapes type
@@ -268,7 +282,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
         sal_Int32 nCount = 0;
         std::vector< XMLPropertyState >::iterator aIter = xPropStates.begin();
-        const std::vector< XMLPropertyState >::iterator aEnd = xPropStates.end();
+        std::vector< XMLPropertyState >::iterator aEnd = xPropStates.end();
         while( aIter != aEnd )
         {
             if( aIter->mnIndex != -1 )
@@ -293,16 +307,39 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 aShapeInfo.msStyleName = rExport.GetAutoStylePool()->Add(aShapeInfo.mnFamily, aParentName, xPropStates);
             }
         }
+
+        // optionaly generate auto style for text attributes
+        if( bObjSupportsText )
+        {
+            xPropStates = GetExport().GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter( xPropSet );
+
+            nCount = 0;
+            aIter = xPropStates.begin();
+            aEnd = xPropStates.end();
+            while( aIter != aEnd )
+            {
+                if( aIter->mnIndex != -1 )
+                    nCount++;
+                aIter++;
+            }
+
+            if( nCount )
+            {
+                const OUString aEmpty;
+                aShapeInfo.msTextStyleName = rExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, aEmpty, xPropStates );
+                if(!aShapeInfo.msTextStyleName.getLength())
+                {
+                    // Style did not exist, add it to AutoStalePool
+                    aShapeInfo.msTextStyleName = rExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TEXT_PARAGRAPH, aEmpty, xPropStates);
+                }
+            }
+        }
     }
 
     // ----------------
     // prep text styles
     // ----------------
-    if( aShapeInfo.meShapeType != XmlShapeTypeDrawControlShape &&
-        aShapeInfo.meShapeType != XmlShapeTypeDrawChartShape &&
-        aShapeInfo.meShapeType != XmlShapeTypePresChartShape &&
-        aShapeInfo.meShapeType != XmlShapeTypeDrawOLE2Shape &&
-        aShapeInfo.meShapeType != XmlShapeTypePresOLE2Shape )
+    if( bObjSupportsText )
     {
         uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY);
         if(xText.is())
@@ -428,6 +465,14 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, aShapeInfo.msStyleName);
         else
             rExport.AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_style_name, aShapeInfo.msStyleName);
+    }
+
+    // ------------------
+    // export text style name
+    // ------------------
+    if( aShapeInfo.msTextStyleName.getLength() != 0 )
+    {
+        rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_text_style_name, aShapeInfo.msTextStyleName);
     }
 
     // --------------------------

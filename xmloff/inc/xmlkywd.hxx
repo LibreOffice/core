@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.163 $
+ *  $Revision: 1.164 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-31 11:14:10 $
+ *  last change: $Author: cl $ $Date: 2001-06-01 12:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2012,4 +2012,6 @@ XML_CONSTASCII_ACTION( sXML_handout_master, "handout-master" );
 
 XML_CONSTASCII_ACTION( sXML_escape_direction, "escape-direction" );
 XML_CONSTASCII_ACTION( sXML_glue_point, "glue-point" );
+
+XML_CONSTASCII_ACTION( sXML_text_style_name, "text-style-name" );
 #endif

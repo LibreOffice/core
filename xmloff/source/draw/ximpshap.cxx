@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-31 11:18:38 $
+ *  last change: $Author: cl $ $Date: 2001-06-01 12:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,16 +482,16 @@ void SdXMLShapeContext::SetStyle()
 {
     try
     {
+        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+        if( !xPropSet.is() )
+            return;
+
         do
         {
             XMLPropStyleContext* pDocStyle = NULL;
 
             // set style on shape
-            if(maDrawStyleName.getLength() == 0 || !mxShape.is())
-                break;
-
-            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-            if( !xPropSet.is() )
+            if(maDrawStyleName.getLength() == 0)
                 break;
 
             const SvXMLStyleContext* pStyle = 0L;
@@ -595,6 +595,25 @@ void SdXMLShapeContext::SetStyle()
             }
 
         } while(0);
+
+        // try to set text auto style
+        do
+        {
+            // set style on shape
+            if( 0 == maTextStyleName.getLength() )
+                break;
+
+            if( NULL == GetImport().GetShapeImport()->GetAutoStylesContext())
+                break;
+
+            XMLPropStyleContext* pStyle = PTR_CAST( XMLPropStyleContext, GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(XML_STYLE_FAMILY_TEXT_PARAGRAPH, maTextStyleName) );
+            if( pStyle == NULL )
+                break;
+
+            // set PropertySet on object
+            pStyle->FillPropertySet(xPropSet);
+
+        } while(0);
     }
     catch( uno::Exception& )
     {
@@ -644,6 +663,10 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_style_name)) )
         {
             maDrawStyleName = rValue;
+        }
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_text_style_name)) )
+        {
+            maTextStyleName = rValue;
         }
         else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_layer)) )
         {

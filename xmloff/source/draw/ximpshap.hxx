@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-31 11:18:38 $
+ *  last change: $Author: cl $ $Date: 2001-06-01 12:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer > mxGluePoints;
 
     rtl::OUString               maDrawStyleName;
+    rtl::OUString               maTextStyleName;
     rtl::OUString               maPresentationClass;
     rtl::OUString               maShapeName;
     sal_uInt16                  mnStyleFamily;
