@@ -24114,3 +24114,11 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ??0?$Reference@VXExecutableDialog@dialogs@ui@star@sun@com@@@uno@star@sun@com@@QAE@ABVBaseReference@1234@W4UnoReference_Query@1234@@Z
 ?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx2053730608@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
 ?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx633416626@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
+?calcFontInfo@?%O:\SRX643\src\svx\source\dialog\chardlg.cxx1608913807@@YA?AVFontInfo@@AAVSvxFont@@PAVSvxCharNamePage@@PBVFontNameBox@@PBVFontStyleBox@@PBVFontSizeBox@@PBVFontList@@GG@Z
+?enableRelativeMode@?%O:\SRX643\src\svx\source\dialog\chardlg.cxx1608913807@@YAXPAVSvxCharNamePage@@PAVFontSizeBox@@G@Z
+?setPrevFontEscapement@?%O:\SRX643\src\svx\source\dialog\chardlg.cxx1608913807@@YAXAAVSvxFont@@EEF@Z
+?calcFontHeightAnyAscent@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx1649118451@@YAXPAVOutputDevice@@AAVFont@@AAJ2@Z
+?initFont@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx1649118451@@YAXAAVFont@@@Z
+?scaleFontWidth@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx1649118451@@YAXAAVFont@@ABVOutputDevice@@AAJ@Z
+?setFont@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx1649118451@@YAXABVSvxFont@@AAV2@@Z
+?setFontSize@?%O:\SRX643\src\svx\source\dialog\fntctrl.cxx1649118451@@YAXAAVFont@@@Z
