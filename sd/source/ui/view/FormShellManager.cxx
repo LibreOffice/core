@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormShellManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:53:44 $
+ *  last change: $Author: rt $ $Date: 2004-06-03 07:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,8 @@ namespace sd {
 
 
 FormShellManager::FormShellManager (const ViewShellBase& rBase)
-    : mrBase(rBase)
+    : mrBase(rBase),
+      meStackPosition(SP_UNKNOWN)
 {
     ViewShell* pShell = mrBase.GetSubShellManager().GetMainSubShell();
 
@@ -130,9 +131,10 @@ IMPL_LINK(FormShellManager, FormControlActivated, FmFormShell*, EMPTYARG)
     // slot calls the form shell is moved to the top of the object bar shell
     // stack.
     ViewShell* pShell = mrBase.GetSubShellManager().GetMainSubShell();
-    if (pShell != NULL)
+    if (pShell!=NULL && meStackPosition!=SP_ABOVE_VIEW_SHELL)
     {
         pShell->GetObjectBarManager().MoveToTop (RID_FORMLAYER_TOOLBOX);
+        meStackPosition = SP_ABOVE_VIEW_SHELL;
     }
 
     return 0;
@@ -157,10 +159,11 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent*, pEvent)
                 // stack.
                 ViewShell* pShell
                     = mrBase.GetSubShellManager().GetMainSubShell();
-                if (pShell != NULL)
+                if (pShell!=NULL && meStackPosition!=SP_BELOW_VIEW_SHELL)
                 {
                     pShell->GetObjectBarManager().MoveBelowShell (
                         RID_FORMLAYER_TOOLBOX);
+                    meStackPosition = SP_BELOW_VIEW_SHELL;
                 }
             }
             break;
