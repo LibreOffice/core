@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-27 11:32:32 $
+ *  last change: $Author: dl $ $Date: 2001-04-20 13:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,6 +680,8 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                     if (pOleDlg && pOleDlg->IsCreateNew())
                     {
                         pView->HideMarkHdl(NULL);
+                        pObj->SetLogicRect(aRect);
+                        aIPObj->SetVisAreaSize( aRect.GetSize() );
                         pViewShell->ActivateObject(pObj, SVVERB_SHOW);
                     }
 
