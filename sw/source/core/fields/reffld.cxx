@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: jp $ $Date: 2001-03-19 10:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,9 +146,22 @@
 #ifndef _COM_SUN_STAR_TEXT_REFERENCEFIELDSOURCE_HPP_
 #include <com/sun/star/text/ReferenceFieldSource.hpp>
 #endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
 extern void InsertSort( SvUShorts& rArr, USHORT nIdx, USHORT* pInsPos = 0 );
@@ -430,21 +443,24 @@ void SwGetRefField::UpdateField()
             if( !pTFld || !pTFld->GetpTxtNode() )   // noch nicht im Node gestezt?
                 break;
 
+            LocaleDataWrapper aLocaleData(
+                            ::comphelper::getProcessServiceFactory(),
+                            SvxCreateLocale( GetLanguage() ) );
+
             // erstmal ein "Kurz" - Test - falls beide im selben
             // Node stehen!
             if( pTFld->GetpTxtNode() == pTxtNd )
             {
                 sTxt = nStt < *pTFld->GetStart()
-                            ? ViewShell::GetShellRes()->aGetRefFld_Up
-                            : ViewShell::GetShellRes()->aGetRefFld_Down;
+                            ? aLocaleData.getAboveWord()
+                            : aLocaleData.getBelowWord();
                 break;
             }
 
             sTxt = ::IsFrameBehind( *pTFld->GetpTxtNode(), *pTFld->GetStart(),
                                     *pTxtNd, nStt )
-                        ? ViewShell::GetShellRes()->aGetRefFld_Up
-                        : ViewShell::GetShellRes()->aGetRefFld_Down;
-
+                        ? aLocaleData.getAboveWord()
+                        : aLocaleData.getBelowWord();
         }
         break;
     }
