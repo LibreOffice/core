@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:34:33 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@
 #include "hints.hxx"
 #include "dpobject.hxx"
 #include "unoguard.hxx"
+#include "listenercalls.hxx"
 
 using namespace com::sun::star;
 
@@ -795,7 +796,34 @@ void ScDocument::BroadcastUno( const SfxHint &rHint )
         bInUnoBroadcast = TRUE;
         pUnoBroadcaster->Broadcast( rHint );
         bInUnoBroadcast = FALSE;
+
+        // During Broadcast notification, Uno objects can add to pUnoListenerCalls.
+        // The listener calls must be processed after completing the broadcast,
+        // because they can add or remove objects from pUnoBroadcaster.
+
+        if ( pUnoListenerCalls && rHint.ISA( SfxSimpleHint ) &&
+                ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DATACHANGED &&
+                !bInUnoListenerCall )
+        {
+            // Listener calls may lead to BroadcastUno calls again. The listener calls
+            // are not nested, instead the calls are collected in the list, and the
+            // outermost call executes them all.
+
+            bInUnoListenerCall = TRUE;
+            pUnoListenerCalls->ExecuteAndClear();
+            bInUnoListenerCall = FALSE;
+        }
     }
+}
+
+void ScDocument::AddUnoListenerCall( const uno::Reference<util::XModifyListener>& rListener,
+                                        const lang::EventObject& rEvent )
+{
+    DBG_ASSERT( bInUnoBroadcast, "AddUnoListenerCall is supposed to be called from BroadcastUno only" );
+
+    if ( !pUnoListenerCalls )
+        pUnoListenerCalls = new ScUnoListenerCalls;
+    pUnoListenerCalls->Add( rListener, rEvent );
 }
 
 void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
