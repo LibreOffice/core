@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-27 09:04:08 $
+ *  last change: $Author: cl $ $Date: 2002-04-08 09:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4426,7 +4426,7 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
 }
 
 // ItemPool fuer dieses Objekt wechseln
-void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool)
+void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
 {
     // Hier passiert erst was in SdrAttrObj und in SdrObjGroup
 }
