@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-15 14:08:36 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,25 @@ String STR_WIZDLG_FINISH
 {
     Text = "~Fertig stellen" ;
     Text [ english ] = "~Finish" ;
-    Text [ english_us ] = "~Finish" ;
+    Text [ english_us ] = "C~reate" ;
     Text [ language_user1 ] = "This is the 'finish' button of an AutoPilot. Please use the appropriate text for your language. Thanks :)";
+    Text[ portuguese ] = "~Finish";
+    Text[ russian ] = "~√ÓÚÓ‚Ó";
+    Text[ greek ] = "~Finish";
+    Text[ dutch ] = "~Finish";
+    Text[ french ] = "~Finish";
+    Text[ spanish ] = "~Finish";
+    Text[ italian ] = "~Finish";
+    Text[ danish ] = "~Finish";
+    Text[ swedish ] = "~F‰rdigst‰ll";
+    Text[ polish ] = "UtwÛrz";
+    Text[ portuguese_brazilian ] = "~Finish";
+    Text[ japanese ] = "~Finish";
+    Text[ korean ] = "~Finish";
+    Text[ chinese_simplified ] = "~Finish";
+    Text[ chinese_traditional ] = "ßπ¶®";
+    Text[ turkish ] = "~Finish";
+    Text[ arabic ] = "≈‰‘«¡";
 };
 
 String STR_WIZDLG_NEXT
@@ -77,19 +94,56 @@ String STR_WIZDLG_NEXT
     Text [ ENGLISH ] = "~Next >>" ;
     Text [ english_us ] = "~Next >>";
     Text [ language_user1 ] = "This is the 'next' button of an AutoPilot. Please use the appropriate text for your language. Thanks :)";
+    Text[ portuguese ] = "~Next >>";
+    Text[ russian ] = "~ƒ‡ÎÂÂ >>";
+    Text[ greek ] = "~Next >>";
+    Text[ dutch ] = "~Next >>";
+    Text[ french ] = "~Next >>";
+    Text[ spanish ] = "~Next >>";
+    Text[ italian ] = "~Next >>";
+    Text[ danish ] = "~Next >>";
+    Text[ swedish ] = "~N‰sta >>";
+    Text[ polish ] = "Dalej >>";
+    Text[ portuguese_brazilian ] = "~Next >>";
+    Text[ japanese ] = "~Next >>";
+    Text[ korean ] = "~Next >>";
+    Text[ chinese_simplified ] = "~Next >>";
+    Text[ chinese_traditional ] = "ƒ~ƒÚ >>";
+    Text[ turkish ] = "~Next >>";
+    Text[ arabic ] = "«· «·Ì <<";
 };
 
 String STR_WIZDLG_PREVIOUS
 {
     Text = "<< ~Zur¸ck" ;
     Text [ ENGLISH ] = "<< ~Previous" ;
-    Text [ english_us ] = "<< ~Previous";
+    Text [ english_us ] = "<< Bac~k";
     Text [ language_user1 ] = "This is the 'previous' button of an AutoPilot. Please use the appropriate text for your language. Thanks :)";
+    Text[ portuguese ] = "<< ~Previous";
+    Text[ russian ] = "<<~Õ‡Á‡‰";
+    Text[ greek ] = "<< ~Previous";
+    Text[ dutch ] = "<< ~Previous";
+    Text[ french ] = "<< ~Previous";
+    Text[ spanish ] = "<< ~Previous";
+    Text[ italian ] = "<< ~Previous";
+    Text[ danish ] = "<< ~Previous";
+    Text[ swedish ] = "<< T~illbaka";
+    Text[ polish ] = "<< Wstecz";
+    Text[ portuguese_brazilian ] = "<< ~Previous";
+    Text[ japanese ] = "<< ~Previous";
+    Text[ korean ] = "<< ~Previous";
+    Text[ chinese_simplified ] = "<< ~Previous";
+    Text[ chinese_traditional ] = "<< ™¶^";
+    Text[ turkish ] = "<< ~Previous";
+    Text[ arabic ] = "<< ~Previous";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/15 14:08:36  fs
+ *  initial checkin - a wizard dialog base class
+ *
  *
  *  Revision 1.0 14.02.01 11:46:26  fs
  ************************************************************************/
