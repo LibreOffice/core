@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-12 18:20:48 $
+ *  last change: $Author: dbo $ $Date: 2001-03-22 14:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,7 @@ void cc50_solaris_intel_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
 {
     // construct cpp exception object
     typelib_TypeDescription * pTypeDescr = 0;
-    TYPELIB_DANGER_GET( &pTypeDescr, pUnoExc->pType );
+    typelib_typedescriptionreference_getDescription( &pTypeDescr, pUnoExc->pType );
 
     void * pCppExc = __Crun::ex_alloc( pTypeDescr->nSize ); // will be released in generated dtor
     uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
