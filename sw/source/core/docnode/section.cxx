@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-20 18:46:15 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 10:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,8 +519,8 @@ const String& SwSection::GetLinkFileName() const
                     refLink->GetLinkManager()->GetDisplayNames(
                         refLink, 0, &sTmp, &sRange, &sFilter ) )
                 {
-                    ( sTmp += cTokenSeperator ) += sFilter;
-                    ( sTmp += cTokenSeperator ) += sRange;
+                    ( sTmp += so3::cTokenSeperator ) += sFilter;
+                    ( sTmp += so3::cTokenSeperator ) += sRange;
                 }
                 else if( GetFmt() && !GetFmt()->GetSectionNode() )
                 {
@@ -1499,7 +1499,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     if( !pFmt || CONTENT_SECTION == eType )
         return ;
 
-    USHORT nUpdateType = LINKUPDATE_ALWAYS;
+    USHORT nUpdateType = so3::LINKUPDATE_ALWAYS;
 
     if( !refLink.Is() )
         // dann mal den BaseLink aufbauen
@@ -1527,10 +1527,10 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     case FILE_LINK_SECTION:
         {
             pLnk->SetContentType( FORMAT_FILE );
-            String sFltr( sCmd.GetToken( 1, cTokenSeperator ) );
-            String sRange( sCmd.GetToken( 2, cTokenSeperator ) );
+            String sFltr( sCmd.GetToken( 1, so3::cTokenSeperator ) );
+            String sRange( sCmd.GetToken( 2, so3::cTokenSeperator ) );
             pFmt->GetDoc()->GetLinkManager().InsertFileLink( *pLnk, eType,
-                                sCmd.GetToken( 0, cTokenSeperator ),
+                                sCmd.GetToken( 0, so3::cTokenSeperator ),
                                 ( sFltr.Len() ? &sFltr : 0 ),
                                 ( sRange.Len() ? &sRange : 0 ) );
         }

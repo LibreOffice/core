@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddefld.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 10:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ class SwDDEFieldType : public SwFieldType
     void _RefCntChgd();
 public:
     SwDDEFieldType( const String& rName, const String& rCmd,
-                    USHORT = LINKUPDATE_ONCALL );
+                    USHORT = so3::LINKUPDATE_ONCALL );
     ~SwDDEFieldType();
 
     const String& GetExpansion() const          { return aExpansion; }

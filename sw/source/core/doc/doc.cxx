@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:19:07 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 10:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,19 +541,6 @@ SwFlyFrmFmt* SwDoc::Insert(const SwPaM &rRg, SvInPlaceObject *pObj,
         USHORT nId = RES_POOLFRM_OLE;
 
         FASTBOOL bMath = SmModuleDummy::HasID( *pObj->GetSvFactory() );
-        if ( !bMath && pObj->IsLink() )
-        {
-            SvGlobalName aCLSID;
-            ULONG lDummy;
-            String aDummy;
-            // Source CLSID erfragen
-            pObj->SvPseudoObject::FillClass( &aCLSID, &lDummy, &aDummy, &aDummy, &aDummy);
-            if( SmModuleDummy::HasID( aCLSID ) )
-            {
-                //zuletzt vom StarMath-Server bearbeitet
-                bMath = TRUE;
-            }
-        }
         if ( bMath )
             nId = RES_POOLFRM_FORMEL;
 

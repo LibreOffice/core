@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-24 10:04:05 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 10:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #endif
 #ifndef _SVX_IMPGRF_HXX //autogen
 #include <svx/impgrf.hxx>
+#endif
+#ifndef _SOT_FORMATS_HXX
+#include <sot/formats.hxx>
 #endif
 
 
@@ -237,7 +240,7 @@ BOOL SwGrfNode::ReRead( const String& rGrfName, const String& rFltName,
                     nNewType = OBJECT_CLIENT_DDE;
                 else
                 {
-                    ::MakeLnkName( sCmd, 0, rGrfName, aEmptyStr, &rFltName );
+                    so3::MakeLnkName( sCmd, 0, rGrfName, aEmptyStr, &rFltName );
                     nNewType = OBJECT_CLIENT_GRF;
                 }
 
@@ -787,8 +790,8 @@ BOOL SwGrfNode::GetFileFilterNms( String* pFileNm, String* pFilterNm ) const
             if( refLink->GetLinkManager()->GetDisplayNames(
                     refLink, &sApp, &sTopic, &sItem ) )
             {
-                ( *pFileNm = sApp ) += cTokenSeperator;
-                ( *pFileNm += sTopic ) += cTokenSeperator;
+                ( *pFileNm = sApp ) += so3::cTokenSeperator;
+                ( *pFileNm += sTopic ) += so3::cTokenSeperator;
                 *pFileNm += sItem;
                 pFilterNm->AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDE" ));
                 bRet = TRUE;
@@ -845,7 +848,7 @@ BOOL SwGrfNode::RestorePersistentData()
 
 void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
 {
-    refLink = new SwBaseLink( LINKUPDATE_ONCALL, FORMAT_GDIMETAFILE, this );
+    refLink = new SwBaseLink( so3::LINKUPDATE_ONCALL, FORMAT_GDIMETAFILE, this );
     SwDoc* pDoc = GetDoc();
     if( GetNodes().IsDocNodes() )
     {
@@ -854,8 +857,8 @@ void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
         {
             USHORT nTmp = 0;
             String sApp, sTopic, sItem;
-            sApp = rGrfName.GetToken( 0, cTokenSeperator, nTmp );
-            sTopic = rGrfName.GetToken( 0, cTokenSeperator, nTmp );
+            sApp = rGrfName.GetToken( 0, so3::cTokenSeperator, nTmp );
+            sTopic = rGrfName.GetToken( 0, so3::cTokenSeperator, nTmp );
             sItem = rGrfName.Copy( nTmp );
             pDoc->GetLinkManager().InsertDDELink( refLink,
                                             sApp, sTopic, sItem );
@@ -864,7 +867,7 @@ void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
         {
             BOOL bSync = rFltName.EqualsAscii( "SYNCHRON" );
             refLink->SetSynchron( bSync );
-            refLink->SetContentType( Graphic::RegisterClipboardFormatName() );
+            refLink->SetContentType( SOT_FORMATSTR_ID_SVXB );
 
             pDoc->GetLinkManager().InsertFileLink( *refLink,
                                             OBJECT_CLIENT_GRF, rGrfName,
@@ -1093,7 +1096,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     {
         String sTmp1, sTmp2;
         rMgr.GetDisplayNames( refLink, &sTmp1, &sTmp2, &sFilter );
-        ::MakeLnkName( sFile, &sTmp1, sTmp2, sFilter );
+        so3::MakeLnkName( sFile, &sTmp1, sTmp2, sFilter );
         sFilter.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDE" ));
     }
 

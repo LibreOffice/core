@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-14 08:51:20 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 10:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _METRIC_HXX //autogen
 #include <vcl/metric.hxx>
+#endif
+#ifndef _OUTDEV_HXX //autogen
+#include <vcl/outdev.hxx>
 #endif
 
 #ifndef _FRMSH_HXX

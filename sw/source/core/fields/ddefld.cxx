@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddefld.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:09:20 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 10:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,11 +404,11 @@ BOOL    SwDDEFieldType::QueryValue( com::sun::star::uno::Any& rVal, const String
             rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
     if(nPart < 3 )
     {
-        rVal <<= OUString(GetCmd().GetToken(nPart, cTokenSeperator));
+        rVal <<= OUString(GetCmd().GetToken(nPart, so3::cTokenSeperator));
     }
     else if(3 == nPart)
     {
-        sal_Bool bSet = GetType() == LINKUPDATE_ALWAYS ? TRUE : FALSE;
+        sal_Bool bSet = GetType() == so3::LINKUPDATE_ALWAYS ? TRUE : FALSE;
         rVal.setValue(&bSet, ::getBooleanCppuType());
     }
     else
@@ -429,15 +429,15 @@ BOOL    SwDDEFieldType::PutValue( const com::sun::star::uno::Any& rVal, const St
         OUString sVal;
         rVal >>= sVal;
         String sCmd = GetCmd();
-        while(3 > sCmd.GetTokenCount(cTokenSeperator))
-            sCmd += cTokenSeperator;
-        sCmd.SetToken(nPart, cTokenSeperator, sVal);
+        while(3 > sCmd.GetTokenCount(so3::cTokenSeperator))
+            sCmd += so3::cTokenSeperator;
+        sCmd.SetToken(nPart, so3::cTokenSeperator, sVal);
         SetCmd( sCmd );
     }
     else if(3 == nPart)
     {
         sal_Bool bSet = *(sal_Bool*)rVal.getValue();
-        SetType( bSet ? LINKUPDATE_ALWAYS : LINKUPDATE_ONCALL );
+        SetType( bSet ? so3::LINKUPDATE_ALWAYS : so3::LINKUPDATE_ONCALL );
     }
     else
         return FALSE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-05-15 09:58:44 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 10:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ class   PushButton;
 class   FixedText;
 class   SwPaM;
 class   SwgReaderOption;
+class   SvEmbeddedRegistryInfo;
 
 class SwDocShell: public SfxObjectShell, public SfxInPlaceObject,
                   public SfxListener

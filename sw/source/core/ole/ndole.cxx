@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-24 10:04:40 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 10:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
+#endif
+#ifndef _OUTDEV_HXX //autogen
+#include <vcl/outdev.hxx>
 #endif
 
 #ifndef _FMTANCHR_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-05-02 12:33:58 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 10:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
+#endif
+#ifndef _TOOLS_RESID_HXX //autogen
+#include <tools/resid.hxx>
 #endif
 
 #ifndef _FMTCNTNT_HXX //autogen
@@ -671,8 +674,8 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     }
 
     // #56167# Der LinkFileName koennte auch nur aus Separatoren bestehen
-    String sCompareString = cTokenSeperator;
-    sCompareString += cTokenSeperator;
+    String sCompareString = so3::cTokenSeperator;
+    sCompareString += so3::cTokenSeperator;
     BOOL bUpdate = ( !pSection->IsLinkType() && rSect.IsLinkType() ) ||
                         ( rSect.GetLinkFileName().Len() &&
                             rSect.GetLinkFileName() != sCompareString &&

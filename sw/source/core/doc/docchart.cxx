@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docchart.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-15 07:56:28 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 10:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _SCH_MEMCHRT_HXX
 #include <sch/memchrt.hxx>
+#endif
+#ifndef _WINDOW_HXX //autogen
+#include <vcl/window.hxx>
 #endif
 
 #ifndef _DOC_HXX

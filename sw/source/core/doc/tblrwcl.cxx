@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-27 17:55:14 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 10:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
+#endif
+#ifndef _FRACT_HXX
+#include <tools/fract.hxx>
 #endif
 
 #ifndef _FMTFSIZE_HXX //autogen

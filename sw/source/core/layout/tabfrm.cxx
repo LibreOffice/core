@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-06-29 13:23:07 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 10:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
+#endif
+#ifndef _OUTDEV_HXX //autogen
+#include <vcl/outdev.hxx>
 #endif
 
 #ifndef _FMTTSPLT_HXX //autogen

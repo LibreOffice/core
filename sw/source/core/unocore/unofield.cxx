@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2001-06-18 14:31:32 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 10:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1205,7 +1205,7 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
                 case RES_DDEFLD :
                 {
                     SwDDEFieldType aType(sTypeName, sParam1,
-                                bParam1 ? LINKUPDATE_ALWAYS : LINKUPDATE_ONCALL);
+                        bParam1 ? so3::LINKUPDATE_ALWAYS : so3::LINKUPDATE_ONCALL);
                     pType = m_pDoc->InsertFldType(aType);
                 }
                 break;
@@ -1298,10 +1298,10 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
                 aValue >>= uTmp;
                 if(!sParam1.Len())
                 {
-                    sParam1 = cTokenSeperator;
-                    sParam1 += cTokenSeperator;
+                    sParam1 = so3::cTokenSeperator;
+                    sParam1 += so3::cTokenSeperator;
                 }
-                sParam1.SetToken(nPart, cTokenSeperator, uTmp);
+                sParam1.SetToken(nPart, so3::cTokenSeperator, uTmp);
             }
             else if(3 == nPart)
             {
@@ -1449,7 +1449,7 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
                     rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
             if(nPart  < 3 )
             {
-                aRet <<= (OUString)sParam1.GetToken(nPart, cTokenSeperator);
+                aRet <<= (OUString)sParam1.GetToken(nPart, so3::cTokenSeperator);
             }
             else if(3 == nPart)
             {
