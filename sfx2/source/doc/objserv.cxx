@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 09:15:08 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     if ( pOptionsItem && pParams->GetItemState(SID_FILE_FILTEROPTIONS) != SFX_ITEM_SET )
         pParams->Put( *pOptionsItem );
 
-    SFX_ITEMSET_ARG( pMedSet, pDataItem, SfxUsrAnyItem, SID_FILTER_DATA, sal_False );
+    SFX_ITEMSET_ARG( pMedSet, pDataItem, SfxUnoAnyItem, SID_FILTER_DATA, sal_False );
     if ( pDataItem && pParams->GetItemState(SID_FILTER_DATA) != SFX_ITEM_SET )
         pParams->Put( *pDataItem );
 
@@ -408,7 +408,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             SfxFilterFlags nMust = SFX_FILTER_EXPORT | ( bSaveTo ? 0 : SFX_FILTER_IMPORT );
             SfxFilterFlags nDont = SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG | ( bIsExport ? SFX_FILTER_IMPORT : 0 );
 
-            SfxFilterMatcher aMatcher( GetFactory().GetFilterContainer() );
+            SfxFilterMatcher aMatcher( GetFactory().GetFactoryName() );
             SfxFilterMatcherIter aIter( &aMatcher, nMust, nDont );
 
             if( !bIsExport )
@@ -461,14 +461,14 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             {
                 // This is the normal dialog
                 SfxObjectFactory& rFact = GetFactory();
-                pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, rFact, nMust, nDont );
+                pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, rFact.GetFactoryName(), nMust, nDont );
 
                 if( strcmp( rFact.GetShortName(), "sdraw" ) != 0 )
                     pFileDlg->SetContext( sfx2::FileDialogHelper::SD_EXPORT );
                 else if( strcmp( rFact.GetShortName(), "simpress" ) != 0 )
                     pFileDlg->SetContext( sfx2::FileDialogHelper::SI_EXPORT );
 
-                pFileDlg->CreateMatcher( rFact );
+                pFileDlg->CreateMatcher( rFact.GetFactoryName() );
                 Reference< ::com::sun::star::ui::dialogs::XFilePicker > xFilePicker = pFileDlg->GetFilePicker();
                 Reference< ::com::sun::star::ui::dialogs::XFilePickerControlAccess > xControlAccess =
                     Reference< ::com::sun::star::ui::dialogs::XFilePickerControlAccess >( xFilePicker, UNO_QUERY );
@@ -489,8 +489,8 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             else
             {
                 // This is the normal dialog
-                pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, GetFactory(), nMust, nDont );
-                pFileDlg->CreateMatcher( GetFactory() );
+                pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, GetFactory().GetFactoryName(), nMust, nDont );
+                pFileDlg->CreateMatcher( GetFactory().GetFactoryName() );
             }
 
             SFX_ITEMSET_ARG( pMedSet, pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
@@ -664,7 +664,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         // get the filename by dialog ...
         // create the file dialog
         sfx2::FileDialogHelper aFileDlg( ::sfx2::FILESAVE_AUTOEXTENSION_PASSWORD,
-                                         0L, GetFactory() );
+                                         0L, GetFactory().GetFactoryName() );
 
         SfxItemSet* pTempSet = NULL;
         if ( aFileDlg.Execute( pParams, aFilterName ) != ERRCODE_NONE )
@@ -1662,7 +1662,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 }
 
                 const SfxFilter* pCombinedFilters = NULL;
-                SfxFactoryFilterContainer* pFilterContainer = GetFactory().GetFilterContainer();
+                SfxFilterContainer* pFilterContainer = GetFactory().GetFilterContainer();
 
                 if ( pFilterContainer )
                 {
@@ -1687,7 +1687,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             case SID_EXPORTDOCASPDF:
             case SID_DIRECTEXPORTDOCASPDF:
             {
-                SfxFactoryFilterContainer* pFilterContainer = GetFactory().GetFilterContainer();
+                SfxFilterContainer* pFilterContainer = GetFactory().GetFilterContainer();
                 if ( pFilterContainer )
                 {
                     String aPDFExtension = String::CreateFromAscii( ".pdf" );
