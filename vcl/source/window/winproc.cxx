@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-31 19:36:53 $
+ *  last change: $Author: ssa $ $Date: 2001-11-08 14:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1334,14 +1334,23 @@ long ImplHandleWheelEvent( Window* pWindow,
     CommandWheelData    aWheelData( nDelta, nNotchDelta, nScrollLines, nMode, nCode, bHorz );
     BOOL                bRet = TRUE;
 
-    // Zuerst rufen wir den Command an dem Fenster, worueber die Maus steht
-    Window* pMouseWindow = pWindow->ImplFindWindow( aMousePos );
+    // first check any floating window ( eg. drop down listboxes)
+    Window *pMouseWindow = NULL;
+    if ( pSVData->maWinData.mpFirstFloat && !pSVData->maWinData.mpCaptureWin &&
+         !pSVData->maWinData.mpFirstFloat->ImplIsFloatPopupModeWindow( pWindow ) )
+    {
+        USHORT nHitTest = IMPL_FLOATWIN_HITTEST_OUTSIDE;
+        pMouseWindow = pSVData->maWinData.mpFirstFloat->ImplFloatHitTest( pWindow, aMousePos, nHitTest );
+    }
+    // then try the window directly beneath the mouse (use absolute screen coords!)
+    if( !pMouseWindow )
+        pMouseWindow = pWindow->ImplFindWindow( aMousePos );
+
     if ( pMouseWindow &&
          pMouseWindow->IsEnabled() && pMouseWindow->IsInputEnabled() )
         bRet = ImplCallWheelCommand( pMouseWindow, aMousePos, &aWheelData );
 
-    // Wenn das Fenster ueber dem die Maus steht, den Event nicht
-    // verarbeitet hat, rufen wir Command an dem Focus-Window
+    // if the commad was not handeld try the focus window
     if ( bRet )
     {
         Window* pFocusWindow = pWindow->mpFrameData->mpFocusWin;
