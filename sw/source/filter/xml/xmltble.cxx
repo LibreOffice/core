@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:08:33 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@
 #endif
 
 #ifndef _LINKMGR_HXX
-#include <so3/linkmgr.hxx>  // for cTokenSeperator
+#include <sfx2/linkmgr.hxx>  // for cTokenSeperator
 #endif
 
 #ifndef _UNOOBJ_HXX
@@ -1221,14 +1221,14 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
             // DDE command
             const String sCmd = pDDEFldType->GetCmd();
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
-                          sCmd.GetToken(0, so3::cTokenSeperator) );
+                          sCmd.GetToken(0, sfx2::cTokenSeperator) );
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_ITEM,
-                          sCmd.GetToken(1, so3::cTokenSeperator) );
+                          sCmd.GetToken(1, sfx2::cTokenSeperator) );
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_TOPIC,
-                          sCmd.GetToken(2, so3::cTokenSeperator) );
+                          sCmd.GetToken(2, sfx2::cTokenSeperator) );
 
             // auto update
-            if (pDDEFldType->GetType() == so3::LINKUPDATE_ALWAYS)
+            if (pDDEFldType->GetType() == sfx2::LINKUPDATE_ALWAYS)
             {
                 AddAttribute( XML_NAMESPACE_OFFICE,
                               XML_AUTOMATIC_UPDATE, XML_TRUE );
