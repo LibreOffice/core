@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmapacc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-30 10:32:48 $
+ *  last change: $Author: vg $ $Date: 2002-08-01 12:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,16 +247,13 @@ sal_Int16 SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleRole(  ) throw (Runtim
 ::rtl::OUString SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleDescription(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
-    String aRet( SVX_RESSTR( RID_SVXSTR_CHARACTER_SELECTION ) );
-
-    return aRet;
+    return SVX_RESSTR( RID_SVXSTR_CHARACTER_SELECTION);
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleName(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
-    String aRet( SVX_RESSTR( RID_SVXSTR_CHAR_SEL_DESC ) );
-    return aRet;
+    return SVX_RESSTR( RID_SVXSTR_CHAR_SEL_DESC);
 }
 // -----------------------------------------------------------------------------
 Reference< XAccessibleRelationSet > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleRelationSet(  ) throw (RuntimeException)
@@ -469,9 +466,7 @@ sal_Int16 SAL_CALL SvxShowCharSetAcc::getAccessibleRole()
 ::rtl::OUString SAL_CALL SvxShowCharSetAcc::getAccessibleDescription()
     throw (uno::RuntimeException)
 {
-    String aRet( SVX_RESSTR( RID_SVXSTR_CHARACTER_SELECTION ) );
-
-    return aRet;
+    return SVX_RESSTR( RID_SVXSTR_CHARACTER_SELECTION );
 }
 
 // -----------------------------------------------------------------------------
@@ -481,8 +476,7 @@ sal_Int16 SAL_CALL SvxShowCharSetAcc::getAccessibleRole()
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    String aRet( SVX_RESSTR( RID_SVXSTR_CHAR_SEL_DESC ) );
-    return aRet;
+    return SVX_RESSTR( RID_SVXSTR_CHAR_SEL_DESC );
 }
 
 // -----------------------------------------------------------------------------
@@ -751,7 +745,7 @@ sal_Int16 SAL_CALL SvxShowCharSetItemAcc::getAccessibleRole()
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    String sDescription( SVX_RESSTR( RID_SVXSTR_CHARACTER_CODE ) );
+    String sDescription = SVX_RESSTR( RID_SVXSTR_CHARACTER_CODE );
 
     sal_Unicode c = mpParent->maText.GetChar(0);
     char buf[16] = "0x0000";
