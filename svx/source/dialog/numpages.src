@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:16:11 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ japanese ] = "γ‚®γƒ£γƒ©γƒªγƒ†γƒΌγƒγ®γ€η®‡ζ΅ζ›Έγγ‚·γƒ³γƒγƒ«γ€γ«γ―ε›³γ―γ‚γ‚γΎγ›γ‚“γ€‚";
         Text[ chinese_traditional ] = "η•«ε»δΈ»ι΅[ι …η›®η¬¦θ™]ε…§ζ²’ζ‰ε–ε½Άγ€‚";
         Text[ arabic ] = "αΗ ΚζΜΟ ΓνΙ ΥζΡ έν γζΦζΪ ΗαΜΗανΡν 'Bullets'.";
-        Text[ greek ] = "Δεν υπάρχουν γραφικά στη γκαλερί με θέμα 'κουκίδες'.";
+        Text[ greek ] = "Δεν υπάρχουν γραφικά στο θέμα 'Κουκίδες' στη Συλλογή.";
         Text[ korean ] = "κ°¤λ¬λ¦¬ μ£Όμ  [κΈ€λ¨Έλ¦¬ κΈ°νΈ]μ— κ·Έλ¦Όμ΄ μ—†μµλ‹λ‹¤.";
         Text[ turkish ] = "'Madde iώaretleri' galeri konusu altύnda grafik mevcut deπil.";
         Text[ language_user1 ] = " ";
@@ -755,8 +755,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
             < " " ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
             < " " ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
             < " " ;                     8/*SVX_NUM_BITMAP              */; > ;
-            < "This is found in a text doc under Format - Numbering/Bullets - Options - Format area - Numbering list box. EM10May00 - Grafik verknόpft - Grafik verknόpft" ;            0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-            < "Keine" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
+            < "; This is found in a text doc under Format - Numbering/Bullets - Options - Format area - Numbering list box. EM10May00 - Grafik verknόpft - Grafik verknόpft" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "; Keine" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
         };
         StringList [ catalan ] =
         {
@@ -966,10 +966,10 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ japanese ] = "ζ–‡ε­—γ‚Ήγ‚Ώγ‚¤γƒ«(~C)";
         Text[ chinese_traditional ] = "ε­—ε…ƒζ¨£εΌ(~C)";
         Text[ arabic ] = "δγΨ ΗαΓΝΡέ:";
-        Text[ greek ] = "Στυλ χαρακτήρων:";
+        Text[ greek ] = "Στυλ ~χαρακτήρων";
         Text[ korean ] = "λ¬Έμ μ¤νƒ€μΌ(~C)";
         Text[ turkish ] = "~Karakter Biηemi";
-        Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
+        Text[ language_user1 ] = "; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
         Text[ catalan ] = "Es~til de carΰcter:";
         Text[ finnish ] = "~Merkkityyli";
         Text[ thai ] = "ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°~ΰΈ•ΰΈ±ΰΈ§ΰΈ­ΰΈ±ΰΈΰΈ‚ΰΈ£ΰΈ°";
@@ -1007,7 +1007,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ japanese ] = "θ‰²";
         Text[ chinese_traditional ] = "ι΅θ‰²";
         Text[ arabic ] = ":Ηααζδ";
-        Text[ greek ] = "Χρώμα:";
+        Text[ greek ] = "Χρώμα";
         Text[ korean ] = "μƒ‰μƒ";
         Text[ turkish ] = "Renk";
         Text[ language_user1 ] = " ";
@@ -1049,7 +1049,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ japanese ] = "η›Έε―Ύη„γªγ‚µγ‚¤γ‚Ί(~R)";
         Text[ chinese_traditional ] = "η›Έε°η„ε¤§ε°(~R)";
         Text[ arabic ] = ":ΝΜγ δΣΘν";
-        Text[ greek ] = "Σχετικό μέγεθος:";
+        Text[ greek ] = "Σχ~ετικό μέγεθος";
         Text[ korean ] = "κΈ°μ¤€ ν¬κΈ°(~R)";
         Text[ turkish ] = "~Gφreli boyut";
         Text[ language_user1 ] = " ";
@@ -1100,7 +1100,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ japanese ] = "η·γƒ¬γƒ™γƒ«ζ•°";
         Text[ chinese_traditional ] = "ε®ζ•΄";
         Text[ arabic ] = "ίΗγα";
-        Text[ greek ] = "Ολοκληρωμένο";
+        Text[ greek ] = "Εμφάνιση δευτερευόντων επιπέδων";
         Text[ korean ] = "ν•μ„ μμ¤€ ν‘μ‹";
         Text[ turkish ] = "Alt seviyeleri gφster";
         Text[ language_user1 ] = " ";
@@ -1327,8 +1327,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         StringList [ language_user1 ] =
         {
             < " " ; > ;
-            < "Zentriert" ; > ;
-            < "Rechts" ; > ;
+            < "; Zentriert" ; > ;
+            < "; Rechts" ; > ;
         };
         StringList [ russian ] =
         {
@@ -1363,7 +1363,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         StringList [ greek ] =
         {
             < "Αριστερά" ; > ;
-            < "Κεντραρισμένα" ; > ;
+            < "Στο κέντρο" ; > ;
             < "Δεξιά" ; > ;
         };
         StringList [ korean ] =
@@ -1548,7 +1548,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
                     Text[ english_us ] = "Gallery";
                     Text[ portuguese ] = "Gallery";
                     Text[ russian ] = "Γΰλεπεÿ";
-                    Text[ greek ] = "Γκαλερί";
+                    Text[ greek ] = "Συλλογή";
                     Text[ dutch ] = "Gallery";
                     Text[ french ] = "Gallery";
                     Text[ spanish ] = "Gallery";
@@ -1928,13 +1928,13 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         };
         StringList [ language_user1 ] =
         {
-            < "Basis oben" ; > ;
+            < "; Basis oben" ; > ;
             < " " ; > ;
             < " " ; > ;
-            < "Zeichen oben" ; > ;
-            < "Zeichen zentriert" ; > ;
-            < "Zeichen unten" ; > ;
-            < "Zeile oben" ; > ;
+            < "; Zeichen oben" ; > ;
+            < "; Zeichen zentriert" ; > ;
+            < "; Zeichen unten" ; > ;
+            < "; Zeile oben" ; > ;
             < " " ; > ;
             < " " ; > ;
         };
@@ -2001,13 +2001,13 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         StringList [ greek ] =
         {
             < "Βάση πάνω" ; > ;
-            < "Βάση κεντραρισμένα" ; > ;
+            < "Βάση στο κέντρο" ; > ;
             < "Βάση κάτω" ; > ;
             < "Χαρακτήρας πάνω" ; > ;
             < "Κεντραρισμένοι χαρακτήρες" ; > ;
             < "Χαρακτήρας κάτω" ; > ;
             < "Γραμμή πάνω" ; > ;
-            < "Γραμμή κεντραρισμένα" ; > ;
+            < "Γραμμή στο κέντρο" ; > ;
             < "Γραμμή κάτω" ; > ;
         };
         StringList [ korean ] =
@@ -2159,7 +2159,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text = "~Fortlaufende Nu~mmerierung" ;
         Text [ ENGLISH ] = "Continuous n~umbering" ;
         Text [ english_us ] = "~Consecutive numbering" ;
-        Text [ portuguese_brazilian ] = "Numeraηγo se~quencial" ;
+        Text [ portuguese_brazilian ] = "Numeraηγo se~qόencial" ;
         Text [ swedish ] = "Fort~lφpande numrering" ;
         Text [ danish ] = "~Fortlψbende nu~mmerering" ;
         Text [ italian ] = "~Numerazione continua" ;
@@ -2173,7 +2173,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ japanese ] = "ι€γ—η•ªε·(~C)";
         Text[ chinese_traditional ] = "ι€£ηΊη·¨θ™(~C)";
         Text[ arabic ] = "ΗαΚΡήνγ ΘΤία γΚΣαΣα";
-        Text[ greek ] = "Συνεχόμενη αρίθμηση";
+        Text[ greek ] = "Σ~υνεχόμενη αρίθμηση";
         Text[ korean ] = "μ—°μ† λ²νΈ λ§¤κΈ°κΈ°(~C)";
         Text[ turkish ] = "~Ardύώύk sayύ";
         Text[ language_user1 ] = " ";
@@ -2198,7 +2198,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ english_us ] = "There are no graphics in the 'Bullets' Gallery theme.";
         Text[ portuguese ] = "Nγo existem imagens no tema \"Bullets\" da Gallery.";
         Text[ russian ] = "Β ςεμε γΰλεπεθ 'Μΰπκεπϋ' γπΰτθχερκθυ ξαϊεκςξβ νε ρσωερςβσες.";
-        Text[ greek ] = "Δεν υπάρχουν γραφικά στο θέμα της Gallery 'Κουκίδες'.";
+        Text[ greek ] = "Δεν υπάρχουν γραφικά στο θέμα \"Κουκκίδες\" στη Συλλογή.";
         Text[ dutch ] = "Er zijn geen afbeeldingen voor het gallery-onderwerp 'Bullets'.";
         Text[ french ] = "Il n'existe pas d'image pour le thθme 'Puces' dans la Gallery..";
         Text[ spanish ] = "No existen imαgenes en el tema 'Viρetas' de la Gallery.";
@@ -2610,9 +2610,9 @@ TabPage RID_SVXPAGE_NUM_POSITION
         };
         StringList [ language_user1 ] =
         {
-            < "Links" ; > ;
-            < "Zentriert" ; > ;
-            < "Rechts" ; > ;
+            < "; Links" ; > ;
+            < "; Zentriert" ; > ;
+            < "; Rechts" ; > ;
         };
         StringList [ russian ] =
         {
@@ -2647,7 +2647,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         StringList [ greek ] =
         {
             < "Αριστερά" ; > ;
-            < "Κεντραρισμένα" ; > ;
+            < "Στο κέντρο" ; > ;
             < "Δεξιά" ; > ;
         };
         StringList [ korean ] =
@@ -2787,6 +2787,7 @@ String RID_STR_FULLNUMS_6 { Text = "A.|I.|a.|i.|61589" ; };
 String RID_STR_FULLNUMS_7 { Text = "1|1.1|1.1.1|1.1.1.1|1.1.1.1.1" ; };
 String RID_STR_FULLNUMS_8 { Text = "61487|61488|61485|61589|61589" ; };
 String RID_STR_FULLNUMS_7_HTML { Text = "I.|I.|I|I.|I." ; };
+
 
 
 
