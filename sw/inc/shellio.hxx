@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-13 14:52:35 $
+ *  last change: $Author: dvo $ $Date: 2002-12-02 11:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,7 @@ protected:
     BOOL bBlockMode: 1;
     BOOL bOrganizerMode : 1;
     BOOL bHasAskTemplateName : 1;
+    BOOL bIgnoreHTMLComments : 1;
 
     virtual String GetTemplateName() const;
 
@@ -305,6 +306,9 @@ public:
 
     BOOL IsOrganizerMode() const { return bOrganizerMode; }
     void SetOrganizerMode( BOOL bSet ) { bOrganizerMode = bSet; }
+
+    BOOL IsIgnoreHTMLComments() const { return bIgnoreHTMLComments; }
+    void SetIgnoreHTMLComments( BOOL bSet ) { bIgnoreHTMLComments = bSet; }
 
     virtual BOOL HasGlossaries() const;
     virtual BOOL ReadGlossaries( SwTextBlocks&, BOOL bSaveRelFiles ) const;
