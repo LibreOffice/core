@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-02 14:33:08 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTOR_HPP_
+#include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
@@ -101,7 +104,9 @@ class DocumentHolder :
 private:
 
     OCommonEmbeddedObject* m_pEmbedObj;
+
     Interceptor*        m_pInterceptor;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor > m_xOutplaceInterceptor;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
@@ -146,10 +151,19 @@ public:
 
     void Hide();
 
-    sal_Bool SetVisArea( const ::com::sun::star::awt::Rectangle& aRect );
-    sal_Bool GetVisArea( ::com::sun::star::awt::Rectangle *pRect );
-    sal_Bool SetExtent( const ::com::sun::star::awt::Size& aSize );
-    sal_Bool GetExtent( ::com::sun::star::awt::Size *pSize );
+    // sal_Bool SetVisArea( sal_Int64 nAspect, const ::com::sun::star::awt::Rectangle& aRect );
+    // sal_Bool GetVisArea( sal_Int64 nAspect, ::com::sun::star::awt::Rectangle *pRect );
+    sal_Bool SetExtent( sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize );
+    sal_Bool GetExtent( sal_Int64 nAspect, ::com::sun::star::awt::Size *pSize );
+
+    sal_Int32 GetMapMode( sal_Int64 nAspect );
+
+    void SetOutplaceDispatchInterceptor(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >&
+                                                                                            xOutplaceInterceptor )
+    {
+        m_xOutplaceInterceptor = xOutplaceInterceptor;
+    }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetDocument() { return m_xDocument; }
 
