@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 23:12:21 $
+ *  last change: $Author: obo $ $Date: 2001-11-23 23:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,7 +585,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         {
          < "Alla mallar" ; SFXSTYLEBIT_ALL ; > ;
             < "Använda mallar" ; SFXSTYLEBIT_USED ; > ;
-            < "Användarformatmallar" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Användardefinierade formatmallar" ; SFXSTYLEBIT_USERDEF ; > ;
             < "Automatiskt" ; SFXSTYLEBIT_AUTO ; > ;
             < "Textformatmallar" ; SWSTYLEBIT_TEXT ; > ;
             < "Kapitelformatmallar" ; SWSTYLEBIT_CHAPTER ; > ;
@@ -3196,6 +3196,7 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ catalan ] = "desconocido";
     Text[ finnish ] = "tuntematon";
 };
+
 
 
 
