@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 12:02:08 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 11:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1016,7 +1016,7 @@ Menu RID_SVXMN_IMAP
                         Text[ russian ] = "Νΰ ~ηΰδνθι ολΰν";
                         Text[ polish ] = "Przesuρ na spσd";
                         Text[ japanese ] = "ζ€θƒιΆγΈη§»ε‹•(~S)";
-                        Text[ chinese_traditional ] = "η½®ζ–ΌεΊ•ε±¤(~S)";
+                        Text[ chinese_traditional ] = "η§»ε‹•ε°ζ€δΈ‹ιΆ(~S)";
                         Text[ arabic ] = "ΕΡΣΗα Εαμ ΗαΞαέ";
                         Text[ greek ] = "Μεταφορά σε ~δεύτερο πλάνο";
                         Text[ korean ] = "λ§¨ λ’¤λ΅(~S)";
