@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 07:54:00 $
+ *  last change: $Author: fs $ $Date: 2001-10-30 08:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@ namespace dbaccess
 class ODataSettings_Base
 {
 protected:
-    static ::com::sun::star::awt::FontDescriptor m_aAppFont;
 // <properties>
     ::rtl::OUString                             m_sFilter;
     ::rtl::OUString                             m_sOrder;
