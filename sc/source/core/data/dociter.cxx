@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-12 13:48:24 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1211,7 +1211,9 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( USHORT& rCol1, USHORT& r
             return NULL;            // nichts gefunden
 
         BOOL bEmpty = TRUE;
-        for (USHORT i=nStartCol; i<=nEndCol; i++)
+        USHORT i;
+
+        for ( i = nStartCol; i <= nEndCol; i++)
         {
             USHORT nPos = i-nStartCol;
             if ( pNextEnd[nPos] < nRow )
