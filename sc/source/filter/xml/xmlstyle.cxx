@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:35:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,7 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     XMLPropertyState* pParaMarginBottomRel = NULL;
 
     XMLPropertyState* pParaAdjust = NULL;
+    XMLPropertyState* pParaAdjustLast = NULL;
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
          aIter != rProperties.end();
@@ -309,6 +310,7 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
                 case CTF_SC_DIAGONALBLTR:       pDiagonalBLTR = propertie; break;
                 case CTF_SC_DIAGONALBLTRWIDTH:  pDiagonalBLTRWidthState = propertie; break;
                 case CTF_SD_SHAPE_PARA_ADJUST:  pParaAdjust = propertie; break;
+                case CTF_PARA_ADJUSTLAST:       pParaAdjustLast = propertie; break;
                 case CTF_PARALEFTMARGIN:        pParaMarginLeft = propertie; break;
                 case CTF_PARALEFTMARGIN_REL:    pParaMarginLeftRel = propertie; break;
                 case CTF_PARARIGHTMARGIN:       pParaMarginRight = propertie; break;
@@ -427,6 +429,11 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     {
         pParaAdjust->mnIndex = -1;
         pParaAdjust->maValue.clear();
+    }
+    if (pParaAdjustLast)
+    {
+        pParaAdjustLast->mnIndex = -1;
+        pParaAdjustLast->maValue.clear();
     }
     if (pSWBorder)
     {
@@ -1193,31 +1200,37 @@ sal_Bool XmlScPropHdl_HoriJustify::importXML(
 {
     sal_Bool bRetval(sal_False);
 
-    table::CellHoriJustify nValue;
-    if (IsXMLToken(rStrImpValue, XML_START))
+    table::CellHoriJustify nValue = table::CellHoriJustify_LEFT;
+    rValue >>= nValue;
+    if (nValue != table::CellHoriJustify_REPEAT)
     {
-         nValue = table::CellHoriJustify_LEFT;
-        rValue <<= nValue;
-        bRetval = sal_True;
+        if (IsXMLToken(rStrImpValue, XML_START))
+        {
+             nValue = table::CellHoriJustify_LEFT;
+            rValue <<= nValue;
+            bRetval = sal_True;
+        }
+        else if (IsXMLToken(rStrImpValue, XML_END))
+        {
+             nValue = table::CellHoriJustify_RIGHT;
+            rValue <<= nValue;
+            bRetval = sal_True;
+        }
+        else if (IsXMLToken(rStrImpValue, XML_CENTER))
+        {
+             nValue = table::CellHoriJustify_CENTER;
+            rValue <<= nValue;
+            bRetval = sal_True;
+        }
+        else if (IsXMLToken(rStrImpValue, XML_JUSTIFY))
+        {
+             nValue = table::CellHoriJustify_BLOCK;
+            rValue <<= nValue;
+            bRetval = sal_True;
+        }
     }
-    else if (IsXMLToken(rStrImpValue, XML_END))
-    {
-         nValue = table::CellHoriJustify_RIGHT;
-        rValue <<= nValue;
+    else
         bRetval = sal_True;
-    }
-    else if (IsXMLToken(rStrImpValue, XML_CENTER))
-    {
-         nValue = table::CellHoriJustify_CENTER;
-        rValue <<= nValue;
-        bRetval = sal_True;
-    }
-    else if (IsXMLToken(rStrImpValue, XML_JUSTIFY))
-    {
-         nValue = table::CellHoriJustify_BLOCK;
-        rValue <<= nValue;
-        bRetval = sal_True;
-    }
 
     return bRetval;
 }
