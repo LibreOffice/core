@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:36:09 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,15 +155,12 @@ void SvTreeListBox::InitTreeView( WinBits nWinStyle )
     InitSettings( TRUE, TRUE, TRUE );
     SetWindowBits( nWinStyle );
     SetTabs();
-    InitAcc();
 }
 
 
 SvTreeListBox::~SvTreeListBox()
 {
     DBG_DTOR(SvTreeListBox,0);
-    if( IsInplaceEditingEnabled() )
-        Application::RemoveAccel( &aInpEditAcc );
     pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
     delete pImp;
     delete (Link*)pReserved;
@@ -210,24 +207,6 @@ BOOL SvTreeListBox::IsSublistOpenWithLeftRight() const
 {
     return pImp->bSubLstOpLR;
 }
-
-void SvTreeListBox::InitAcc()
-{
-    DBG_CHKTHIS(SvTreeListBox,0);
-#ifdef OS2
-    aInpEditAcc.InsertItem( 1, KeyCode(KEY_F9,KEY_SHIFT) );
-#endif
-    aInpEditAcc.SetActivateHdl( LINK( this, SvTreeListBox, InpEdActivateHdl) );
-}
-
-IMPL_LINK_INLINE_START( SvTreeListBox, InpEdActivateHdl, Accelerator *, pAccelerator )
-{
-    DBG_CHKTHIS(SvTreeListBox,0);
-    EditEntry();
-    return 1;
-}
-IMPL_LINK_INLINE_END( SvTreeListBox, InpEdActivateHdl, Accelerator *, pAccelerator )
-
 
 void SvTreeListBox::Resize()
 {
@@ -836,8 +815,6 @@ void SvTreeListBox::EnableInplaceEditing( BOOL bOn )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     SvLBox::EnableInplaceEditing( bOn );
-    if( Control::HasFocus() )
-        Application::InsertAccel( &aInpEditAcc );
 }
 
 void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
@@ -880,8 +857,6 @@ void SvTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
 void SvTreeListBox::GetFocus()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    if( IsInplaceEditingEnabled() )
-        Application::InsertAccel( &aInpEditAcc );
     pImp->GetFocus();
     SvLBox::GetFocus();
 
@@ -894,8 +869,6 @@ void SvTreeListBox::GetFocus()
 void SvTreeListBox::LoseFocus()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    if( IsInplaceEditingEnabled() )
-        Application::RemoveAccel( &aInpEditAcc );
     pImp->LoseFocus();
     SvLBox::LoseFocus();
 }
@@ -1393,6 +1366,12 @@ void SvTreeListBox::CancelEditing()
 }
 
 void SvTreeListBox::EditEntry( SvLBoxEntry* pEntry )
+{
+    pImp->aEditClickPos = Point( -1, -1 );
+    ImplEditEntry( pEntry );
+}
+
+void SvTreeListBox::ImplEditEntry( SvLBoxEntry* pEntry )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     if( IsEditingActive() )
