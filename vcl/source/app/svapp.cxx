@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:05:08 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,9 +171,9 @@
 #include "osl/thread.h"
 #include "rtl/tencinfo.h"
 
-#if defined UNX
-#include "i18n_status.hxx"
-#endif // UNX
+#ifndef _SV_SALIMESTATUS_HXX
+#include <salimestatus.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 
@@ -907,7 +907,7 @@ USHORT Application::GetDispatchLevel()
 BOOL Application::AnyInput( USHORT nType )
 {
 #ifndef REMOTE_APPSERVER
-    return SalInstance::AnyInput( nType );
+    return (BOOL)ImplGetSVData()->mpDefInst->AnyInput( nType );
 #else
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -2317,11 +2317,10 @@ void Application::WaitForClientConnect()
 
 bool Application::CanToggleImeStatusWindow()
 {
-#if defined UNX
-    return vcl::I18NStatus::get().canToggleStatusWindow();
-#else // UNX
-    return false;
-#endif // UNX
+    ImplSVData* pSVData = ImplGetSVData();
+    if( ! pSVData->mpImeStatus )
+        pSVData->mpImeStatus  = pSVData->mpDefInst->CreateI18NImeStatus();
+    return pSVData->mpImeStatus->canToggle();
 }
 
 void Application::ShowImeStatusWindow(bool bShow)
@@ -2329,9 +2328,11 @@ void Application::ShowImeStatusWindow(bool bShow)
     ImplGetSVData()->maAppData.meShowImeStatusWindow = bShow
         ? ImplSVAppData::ImeStatusWindowMode_SHOW
         : ImplSVAppData::ImeStatusWindowMode_HIDE;
-#if defined UNX
-    vcl::I18NStatus::get().toggleStatusWindow();
-#endif
+
+    ImplSVData* pSVData = ImplGetSVData();
+    if( ! pSVData->mpImeStatus )
+        pSVData->mpImeStatus  = pSVData->mpDefInst->CreateI18NImeStatus();
+    pSVData->mpImeStatus->toggle();
 }
 
 bool Application::GetShowImeStatusWindowDefault()
