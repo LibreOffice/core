@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dg $ $Date: 2001-09-26 15:36:55 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 09:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,9 @@ namespace configmgr
     void OProviderImpl::implInitFromSettings(const ConnectionSettings& _rSettings, bool& rNeedProfile)
     {
         bool bIntrinsicNeedProfile = true;
+
+        if (_rSettings.isAdminSession())
+            m_xDefaultOptions->setForceWritable(true);
 
         // if we have a user name, we have to add and remember it for the session
         if (_rSettings.hasUser())
