@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:37:34 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,12 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _COM_SUN_STAR_JAVA_XJAVAVM_HPP_
+#include <com/sun/star/java/XJavaVM.hpp>
+#endif
+#ifndef _RTL_PROCESS_H_
+#include <rtl/process.h>
+#endif
 
 using namespace ::comphelper;
 inline sal_Unicode rtl_ascii_toUpperCase( sal_Unicode ch )
@@ -107,6 +113,7 @@ namespace connectivity
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace dbtools;
+    namespace starjava  = com::sun::star::java;
     //------------------------------------------------------------------------------
     const sal_Unicode CHAR_PLACE = '_';
     const sal_Unicode CHAR_WILD  = '%';
@@ -272,7 +279,69 @@ namespace connectivity
         return aRes;
     }
 
+    // -----------------------------------------------------------------------------
+    ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const Reference<XMultiServiceFactory >& _rxFactory)
+    {
+        ::rtl::Reference< jvmaccess::VirtualMachine > aRet;
+        OSL_ENSURE(_rxFactory.is(),"No XMultiServiceFactory a.v.!");
+        if(!_rxFactory.is())
+            return aRet;
 
+        try
+        {
+            Reference< starjava::XJavaVM > xVM(_rxFactory->createInstance(
+                rtl::OUString::createFromAscii("com.sun.star.java.JavaVirtualMachine")), UNO_QUERY);
+
+            OSL_ENSURE(_rxFactory.is(),"InitJava: I have no factory!");
+            if (!xVM.is() || !_rxFactory.is())
+                throw Exception(); // -2;
+
+            Sequence<sal_Int8> processID(16);
+            rtl_getGlobalProcessId( (sal_uInt8*) processID.getArray() );
+            processID.realloc(17);
+            processID[16] = 0;
+
+            Any uaJVM = xVM->getJavaVM( processID );
+
+            if (!uaJVM.hasValue())
+                throw Exception(); // -5
+            else
+            {
+                sal_Int32 nValue;
+                jvmaccess::VirtualMachine* pJVM = NULL;
+                if ( uaJVM >>= nValue )
+                    pJVM = reinterpret_cast< jvmaccess::VirtualMachine* > (nValue);
+                else
+                {
+                    sal_Int64 nTemp;
+                    uaJVM >>= nTemp;
+                    pJVM = reinterpret_cast< jvmaccess::VirtualMachine* > (nTemp);
+                }
+                aRet = pJVM;
+            }
+        }
+        catch (Exception&)
+        {
+        }
+
+        return aRet;
+    }
+    //------------------------------------------------------------------------------
+    sal_Bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const ::rtl::OUString& _sClassName )
+    {
+        sal_Bool bRet = sal_False;
+        jvmaccess::VirtualMachine::AttachGuard aGuard(_pJVM);
+        JNIEnv* pEnv = aGuard.getEnvironment();
+        if( pEnv )
+        {
+            ::rtl::OString sClassName = ::rtl::OUStringToOString(_sClassName, RTL_TEXTENCODING_ASCII_US);
+            sClassName = sClassName.replace('.','/');
+            jobject out = pEnv->FindClass(sClassName);
+            bRet = out != NULL;
+            pEnv->DeleteLocalRef( out );
+        }
+        return bRet;
+    }
 
 }
 
@@ -347,7 +416,6 @@ sal_Bool isCharOk(char c,const ::rtl::OUString& _rSpecials)
         sName = _rQuote + _rName + _rQuote;
     return sName;
 }
-// -----------------------------------------------------------------------------
 
 
 }
