@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:25:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,8 @@ XclObjComment::XclObjComment( const XclExpRoot& rRoot, const ScAddress& rPos, co
     aPropOpt.AddOpt( ESCHER_Prop_fPrint, nFlags );                  // bool field
     aPropOpt.Commit( pEx->GetStream() );
 
-    XclEscherClientAnchor( rRoot.GetDocPtr(), rPos ).WriteData( *pEx );
+    XclExpEscherNoteAnchor( rRoot, rPos ).WriteData( *pEx );
+
     pEx->AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     pMsodrawing->UpdateStopPos();
     //! Be sure to construct the MSODRAWING ClientTextbox record _after_ the
@@ -598,9 +599,7 @@ XclObjDropDown::XclObjDropDown( const XclExpRoot& rRoot, const ScAddress& rPos, 
     aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x000A0000 );              // bool field
     aPropOpt.Commit( pEx->GetStream() );
 
-    XclEscherClientAnchor aAnchor( *rRoot.mpRD, 0x0001 );                // MsofbtClientAnchor
-    aAnchor.SetDropDownPosition( rPos );
-    aAnchor.WriteData( *pEx );
+    XclExpEscherDropDownAnchor( rRoot, rPos ).WriteData( *pEx );
 
     pEx->AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     pMsodrawing->UpdateStopPos();
@@ -950,7 +949,7 @@ XclExpObjOcxCtrl::XclExpObjOcxCtrl(
     aPropOpt.Commit( rEscherEx.GetStream() );
 
     if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( rxShape ) )
-        XclEscherClientAnchor( *mpRD, *pSdrObj ).WriteData( rEscherEx );
+        XclExpEscherAnchor( rRoot, *pSdrObj ).WriteData( rEscherEx );
     rEscherEx.AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     rEscherEx.CloseContainer();  // ESCHER_SpContainer
 
@@ -1057,7 +1056,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
 
     // anchor
     if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( rxShape ) )
-        XclEscherClientAnchor( *mpRD, *pSdrObj ).WriteData( rEscherEx );
+        XclExpEscherAnchor( rRoot, *pSdrObj ).WriteData( rEscherEx );
     rEscherEx.AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     pMsodrawing->UpdateStopPos();
 
@@ -1558,7 +1557,7 @@ ULONG ExcPane8::GetLen() const
 
 // --- class ExcWindow28 ---------------------------------------------
 
-ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, UINT16 nTab ) :
+ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, sal_uInt16 nScTab ) :
     XclExpRoot( rRoot ),
     pPaneRec( NULL ),
     nFlags( 0 ),
@@ -1578,13 +1577,13 @@ ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, UINT16 nTab ) :
 
     ScExtDocOptions& rOpt = *rRoot.mpRD->pExtDocOpt;
     XclExpPalette& rPal = GetPalette();
-    nFlags |= (nTab == rOpt.nActTab) ? (EXC_WIN2_DISPLAYED|EXC_WIN2_SELECTED) : 0;
+    nFlags |= (nScTab == rOpt.nActTab) ? (EXC_WIN2_DISPLAYED|EXC_WIN2_SELECTED) : 0;
     nFlags |= rOpt.pGridCol ? 0 : EXC_WIN2_DEFAULTCOLOR;
     nGridColorSer = rOpt.pGridCol ?
         rPal.InsertColor( *rOpt.pGridCol, xlColorGrid ) :
         XclExpPalette::GetColorIdFromIndex( EXC_COLOR_WINDOWTEXT );
 
-    const ScExtTabOptions* pTabOpt = rOpt.GetExtTabOptions( nTab );
+    const ScExtTabOptions* pTabOpt = rOpt.GetExtTabOptions( nScTab );
     if( pTabOpt )
     {
         nFlags |= pTabOpt->bSelected ? EXC_WIN2_SELECTED : 0;
@@ -1598,6 +1597,10 @@ ExcWindow28::ExcWindow28( const XclExpRoot& rRoot, UINT16 nTab ) :
         if( bHorSplit || bVertSplit )
             pPaneRec = new ExcPane8( *pTabOpt );
     }
+
+    // #106948# RTL layout
+    if( GetDoc().IsLayoutRTL( nScTab ) )
+        nFlags |= EXC_WIN2_MIRRORED;
 }
 
 
