@@ -32,6 +32,9 @@
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#endif
 
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
@@ -178,8 +181,6 @@ struct UCBStorageElement_Impl
 {
     String                      m_aName;        // the actual URL relative to the root "folder"
     String                      m_aOriginalName;// the original name in the content
-    String                      m_aContentType; // MediaType, can be used to check if a stream "is" a OLEStorage
-    String                      m_aOriginalContentType;
     ULONG                       m_nSize;
     BOOL                        m_bIsFolder;    // Only TRUE when it is a UCBStorage !
     BOOL                        m_bIsStorage;   // Also TRUE when it is an OLEStorage !
@@ -193,8 +194,6 @@ struct UCBStorageElement_Impl
                                             BOOL bIsFolder = FALSE, ULONG nSize = 0 )
                                     : m_aName( rName )
                                     , m_aOriginalName( rName )
-                                    , m_aContentType( rMediaType )
-                                    , m_aOriginalContentType( rMediaType )
                                     , m_nSize( nSize )
                                     , m_bIsFolder( bIsFolder )
                                     , m_bIsStorage( bIsFolder )
@@ -205,6 +204,8 @@ struct UCBStorageElement_Impl
 
     ::ucb::Content*             GetContent();
     BOOL                        IsModified();
+    String                      GetContentType();
+    String                      GetOriginalContentType();
 };
 
 ::ucb::Content* UCBStorageElement_Impl::GetContent()
@@ -217,9 +218,38 @@ struct UCBStorageElement_Impl
         return NULL;
 }
 
+String UCBStorageElement_Impl::GetContentType()
+{
+    if ( m_xStream.Is() )
+        return m_xStream->m_aContentType;
+    else if ( m_xStorage.Is() )
+        return m_xStorage->m_aContentType;
+    else
+        return String();
+}
+
+String UCBStorageElement_Impl::GetOriginalContentType()
+{
+    if ( m_xStream.Is() )
+        return m_xStream->m_aOriginalContentType;
+    else if ( m_xStorage.Is() )
+        return m_xStorage->m_aOriginalContentType;
+    else
+        return String();
+}
+
 BOOL UCBStorageElement_Impl::IsModified()
 {
-    return ( m_bIsRemoved || m_bIsInserted || m_aName != m_aOriginalName || m_aContentType != m_aOriginalContentType );
+    BOOL bModified = m_bIsRemoved || m_bIsInserted || m_aName != m_aOriginalName;
+    if ( bModified )
+    {
+        if ( m_xStream.Is() )
+            bModified = m_xStream->m_aContentType != m_xStream->m_aOriginalContentType;
+        else if ( m_xStorage.Is() )
+            bModified = m_xStorage->m_aContentType != m_xStorage->m_aOriginalContentType;
+    }
+
+    return bModified;
 }
 
 UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nMode, UCBStorageStream* pStream, BOOL bDirect )
@@ -682,6 +712,7 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     , m_bModified( FALSE )
     , m_bCommited( FALSE )
     , m_bDirty( FALSE )
+    , m_aClassId( (const ClsId&) SvGlobalName().GetCLSID() )
 {
     String aName( rName );
     if( !aName.Len() )
@@ -717,6 +748,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL 
     , m_bDirty( FALSE )
     , m_bModified( FALSE )
     , m_bCommited( FALSE )
+    , m_aClassId( (const ClsId&) SvGlobalName().GetCLSID() )
 {
     // UCBStorages work on a content, so a temporary file for a content must be created, even if the stream is only
     // accessed readonly
@@ -767,9 +799,18 @@ void UCBStorage_Impl::Init()
         if ( ( aAny >>= aTmp ) && aTmp.getLength() )
         {
             m_aContentType = m_aOriginalContentType = aTmp;
-            m_nFormat = SotExchange::RegisterFormatName( m_aContentType );
+
+            // get the clipboard format using the content type
+            ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+            aDataFlavor.MimeType = m_aContentType;
+            m_nFormat = SotExchange::GetFormat( aDataFlavor );
+
+            // get the ClassId using the clipboard format ( internal table )
             m_aClassId = (const ClsId& ) GetClassId_Impl( m_nFormat ).GetCLSID();
-//            m_aUserTypeName = rUserTypeName;
+
+            // get human presentable name using the clipboard format
+            SotExchange::GetFormatDataFlavor( m_nFormat, aDataFlavor );
+            m_aUserTypeName = aDataFlavor.HumanPresentableName;
         }
 
         // create cursor for access to children
@@ -932,12 +973,12 @@ sal_Int16 UCBStorage_Impl::Commit()
                         pContent->setPropertyValue( ::rtl::OUString::createFromAscii("Title"), aAny );
                     }
 
-                    if ( pElement->m_aContentType != pElement->m_aOriginalContentType )
+                    if ( pElement->GetContentType() != pElement->GetOriginalContentType() )
                     {
                         // errors will be caught in the "catch" statement outside the loop
                         nRet = COMMIT_RESULT_SUCCESS;
                         Any aAny;
-                        aAny <<= (rtl::OUString) pElement->m_aContentType;
+                        aAny <<= (rtl::OUString) pElement->GetContentType();
                         pContent->setPropertyValue( ::rtl::OUString::createFromAscii("MediaType"), aAny );
                     }
 
@@ -1062,7 +1103,6 @@ sal_Int16 UCBStorage_Impl::Commit()
                 else
                 {
                     pElement->m_aOriginalName = pElement->m_aName;
-                    pElement->m_aOriginalContentType = pElement->m_aContentType;
                     pElement->m_bIsInserted = FALSE;
                 }
 
@@ -1095,7 +1135,6 @@ BOOL UCBStorage_Impl::Revert()
                 pElement->m_xStorage->Revert();
 
             pElement->m_aName = pElement->m_aOriginalName;
-            pElement->m_aContentType = pElement->m_aOriginalContentType;
             pElement->m_bIsRemoved = FALSE;
         }
 
@@ -1125,9 +1164,10 @@ void UCBStorage::SetClass( const SvGlobalName & rClass, ULONG nOriginalClipForma
     pImp->m_aClassId = (const ClsId&) rClass.GetCLSID();
     pImp->m_nFormat = nOriginalClipFormat;
     pImp->m_aUserTypeName = rUserTypeName;
-    pImp->m_aContentType = SotExchange::GetFormatName( nOriginalClipFormat );
-    if ( !pImp->m_aOriginalContentType.Len() )
-        pImp->m_aOriginalContentType = pImp->m_aContentType;
+
+    ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+    SotExchange::GetFormatDataFlavor( pImp->m_nFormat, aDataFlavor );
+    pImp->m_aContentType = aDataFlavor.MimeType;
 }
 
 void UCBStorage::SetClassId( const ClsId& rClsId )
@@ -1345,12 +1385,22 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
     {
         // element does not exist, check if creation is allowed
         if( ( nMode & STREAM_NOCREATE ) )
+        {
             SetError( ( nMode & STREAM_WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
-
-        // create a new UCBStorageElement and insert it into the list
-        pElement = new UCBStorageElement_Impl( rEleName );
-        pElement->m_bIsInserted = TRUE;
-        pImp->m_aChildrenList.Insert( pElement, LIST_APPEND );
+            String aName( pImp->m_aURL );
+            aName += '/';
+            aName += rEleName;
+            UCBStorageStream* pStream = new UCBStorageStream( aName, nMode, bDirect );
+            pStream->pImp->m_aName = rEleName;
+            return pStream;
+        }
+        else
+        {
+            // create a new UCBStorageElement and insert it into the list
+            pElement = new UCBStorageElement_Impl( rEleName );
+            pElement->m_bIsInserted = TRUE;
+            pImp->m_aChildrenList.Insert( pElement, LIST_APPEND );
+        }
     }
 
     if ( pElement && !pElement->m_bIsFolder )
