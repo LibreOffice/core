@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:34:14 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,9 +526,9 @@ void ScXMLExportDataPilot::WriteLayoutInfo(ScDPSaveDimension* pDim)
     if (pLayoutInfo)
     {
         if (pLayoutInfo->AddEmptyLines)
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ADD_EMPTY_LINE, XML_TRUE);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ADD_EMPTY_LINES, XML_TRUE);
         else
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ADD_EMPTY_LINE, XML_FALSE);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ADD_EMPTY_LINES, XML_FALSE);
 
         rtl::OUString sValueStr;
         switch (pLayoutInfo->LayoutMode)
@@ -594,13 +594,13 @@ void ScXMLExportDataPilot::WriteLevels(ScDPSaveDimension* pDim)
     SvXMLUnitConverter::convertBool(sBuffer, pDim->GetShowEmpty());
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_EMPTY, sBuffer.makeStringAndClear());
     SvXMLElementExport aElemDPL(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_LEVEL, sal_True, sal_True);
-    WriteSortInfo(pDim);
-    WriteAutoShowInfo(pDim);
-    WriteLayoutInfo(pDim);
-    rExport.CheckAttrList();
 
     WriteSubTotals(pDim);
     WriteMembers(pDim);
+    WriteAutoShowInfo(pDim);
+    WriteSortInfo(pDim);
+    WriteLayoutInfo(pDim);
+    rExport.CheckAttrList();
 }
 
 void ScXMLExportDataPilot::WriteDatePart(sal_Int32 nPart)
