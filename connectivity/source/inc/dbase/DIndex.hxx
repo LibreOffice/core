@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 08:09:58 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ namespace connectivity
         private:
             SvStream*       m_pFileStream;                  // Stream zum Lesen/Schreiben des Index
             NDXHeader       m_aHeader;
-            ONDXPageList    m_aCollector;                   // Pool von nicht mehr benötigten Seiten
+            ONDXPageList    m_aCollector;                   // Pool von nicht mehr benoetigten Seiten
             ONDXPagePtr     m_aRoot,                        // Wurzel des b+ Baums
                             m_aCurLeaf;                 // aktuelles Blatt
             USHORT          m_nCurNode;                 // Position des aktuellen Knoten
