@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:21:52 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): cmc@openoffice.org, tono@openoffice.org
  *
  *
  ************************************************************************/
@@ -1070,6 +1070,7 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
 
     maOldApos.push_back(false);
     maOldApos.swap(pRdr->maApos);
+    maOldFieldStack.swap(pRdr->maFieldStack);
 }
 
 void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
@@ -1112,6 +1113,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     if (pRdr->pPlcxMan)
         pRdr->pPlcxMan->RestoreAllPLCFx(maPLCFxSave);
     pRdr->maApos.swap(maOldApos);
+    pRdr->maFieldStack.swap(maOldFieldStack);
 }
 
 void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx,
@@ -1242,17 +1244,26 @@ void SwWW8ImplReader::Read_HdFt(BYTE nWhichItems, BYTE grpfIhdt, int nSect, SwPa
                     = (nI & ( WW8_FOOTER_EVEN | WW8_FOOTER_ODD | WW8_FOOTER_FIRST )) ? true: false;
 
                 SwFrmFmt* pFmt = bUseLeft ? &pPD->GetLeft() : &pPD->GetMaster();
+
                 SwFrmFmt* pHdFtFmt;
                 if (bFooter)
                 {
                     bIsFooter = true;
-                    pFmt->SetAttr(SwFmtFooter(true));
+                    //#i17196# Cannot have left without right
+                    if (!pPD->GetMaster().GetFooter().GetFooterFmt())
+                        pPD->GetMaster().SetAttr(SwFmtFooter(true));
+                    if (bUseLeft)
+                        pPD->GetLeft().SetAttr(SwFmtFooter(true));
                     pHdFtFmt = (SwFrmFmt*)pFmt->GetFooter().GetFooterFmt();
                 }
                 else
                 {
                     bIsHeader = true;
-                    pFmt->SetAttr(SwFmtHeader(true));
+                    //#i17196# Cannot have left without right
+                    if (!pPD->GetMaster().GetHeader().GetHeaderFmt())
+                        pPD->GetMaster().SetAttr(SwFmtHeader(true));
+                    if (bUseLeft)
+                        pPD->GetLeft().SetAttr(SwFmtHeader(true));
                     pHdFtFmt = (SwFrmFmt*)pFmt->GetHeader().GetHeaderFmt();
                 }
 
@@ -1579,9 +1590,9 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
         if (!maFontSrcCharSets.empty())
             eSrcCharSet = maFontSrcCharSets.top();
         if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1))
-            eSrcCharSet = pCollA[nCharFmt].eFontSrcCharSet;
+            eSrcCharSet = pCollA[nCharFmt].GetCharSet();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
-            eSrcCharSet = pCollA[nAktColl].eFontSrcCharSet;
+            eSrcCharSet = pCollA[nAktColl].GetCharSet();
     }
     return eSrcCharSet;
 }
@@ -1659,7 +1670,7 @@ bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
     sal_Unicode* pWork = sPlainCharsBuf.AllocBuffer( nLen );
 
     rtl_TextToUnicodeConverter hConverter = 0;
-    if (!bIsUnicode)
+    if (!bIsUnicode || bVer67)
         hConverter = rtl_createTextToUnicodeConverter(eSrcCharSet);
 
     // read the stream data
@@ -1691,17 +1702,24 @@ bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
 
         if (bIsUnicode)
         {
-            if (bVer67)
-            {
-                sal_Char aTest[2];
-                aTest[0] = (nUCode & 0xFF00) >> 8;
-                aTest[1] = (nUCode & 0x00FF);
-                String aTemp(aTest, 2, eSrcCharSet);
-                ASSERT(aTemp.Len() == 1, "so much for that theory");
-                *pWork = aTemp.GetChar(0);
-            }
-            else
+            if (!bVer67)
                 *pWork = nUCode;
+            else
+            {
+                if (nUCode >= 0x3000)       //0x8000 ?
+                {
+                    sal_Char aTest[2];
+                    aTest[0] = (nUCode & 0xFF00) >> 8;
+                    aTest[1] = (nUCode & 0x00FF);
+                    String aTemp(aTest, 2, eSrcCharSet);
+                    ASSERT(aTemp.Len() == 1, "so much for that theory");
+                    *pWork = aTemp.GetChar(0);
+                }
+                else
+                {
+                    *pWork = Custom8BitToUnicode(hConverter, nUCode & 0x00FF);
+                }
+            }
         }
         else
             *pWork = Custom8BitToUnicode(hConverter, nBCode);
@@ -1720,37 +1738,37 @@ bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
     return nL2 >= nLen;
 }
 
-bool SwWW8ImplReader::AddTextToParagraph(String& sAddString)
+bool SwWW8ImplReader::AddTextToParagraph(const String& rAddString)
 {
     const SwTxtNode* pNd = pPaM->GetCntntNode()->GetTxtNode();
-    if (sAddString.Len())
+    if (rAddString.Len())
     {
-        if((pNd->GetTxt().Len()+ sAddString.Len())< STRING_MAXLEN -1 )
+        if ((pNd->GetTxt().Len() + rAddString.Len()) < STRING_MAXLEN -1)
         {
-            rDoc.Insert (*pPaM, sAddString);
+            rDoc.Insert (*pPaM, rAddString);
         }
         else
         {
 
-            if(pNd->GetTxt().Len()< STRING_MAXLEN -1)
+            if (pNd->GetTxt().Len()< STRING_MAXLEN -1)
             {
-                String sTempStr (sAddString,0,STRING_MAXLEN - pNd->GetTxt().Len() -1);
+                String sTempStr (rAddString,0,
+                    STRING_MAXLEN - pNd->GetTxt().Len() -1);
                 rDoc.Insert (*pPaM, sTempStr);
-                sTempStr=sAddString.Copy(sTempStr.Len(),sAddString.Len()-sTempStr.Len());
+                sTempStr = rAddString.Copy(sTempStr.Len(),
+                    rAddString.Len() - sTempStr.Len());
                 AppendTxtNode(*pPaM->GetPoint());
                 rDoc.Insert (*pPaM,sTempStr );
             }
             else
             {
                 AppendTxtNode(*pPaM->GetPoint());
-                rDoc.Insert (*pPaM, sAddString);
+                rDoc.Insert (*pPaM, rAddString);
             }
         }
     }
     return true;
 }
-
-
 
 // Returnwert: true for para end
 bool SwWW8ImplReader::ReadChars(long& rPos, long nNextAttr, long nTextEnd,
@@ -2008,7 +2026,7 @@ void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
             *pStartAttr = pPlcxMan->Get( &rRes ); // hole Attribut-Pos neu
     }
 
-    if( !bTabRowEnd )
+    if (!bTabRowEnd && StyleExists(nAktColl))
     {
         SetTxtFmtCollAndListLevel( *pPaM, pCollA[ nAktColl ]);
         ChkToggleAttr(pCollA[ nOldColl ].n81Flags, pCollA[ nAktColl ].n81Flags);
@@ -2026,7 +2044,7 @@ long SwWW8ImplReader::ReadTextAttr(long& rTxtPos, bool& rbStartLine)
     bool bStartAttr = pPlcxMan->Get(&aRes); // hole Attribut-Pos
     aRes.nAktCp = rTxtPos;              // Akt. Cp-Pos
 
-    if (aRes.nFlags & MAN_MASK_NEW_SEP) // neue Section
+    if ((aRes.nFlags & MAN_MASK_NEW_SEP) && !bIgnoreText)   // neue Section
     {
         ASSERT(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
         // PageDesc erzeugen und fuellen
@@ -3205,7 +3223,7 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
     {
         case 6:
         case 7:
-            if ( (0xa5dc != nMagic) && (0xa699 != nMagic) )
+            if ((0xa5dc != nMagic) && ((nMagic < 0xa697 ) || (nMagic > 0xa699)))
             {
                 //JP 06.05.99: teste auf eigenen 97-Fake!
                 if (pStg && 0xa5ec == nMagic)
