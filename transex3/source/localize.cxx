@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-07 13:40:09 $
+ *  last change: $Author: nf $ $Date: 2001-06-07 15:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,8 +283,6 @@ void SourceTreeLocalizer::WorkOnFile(
 
             system( sCommand.GetBuffer());
 
-            fprintf( stdout, "Executed: %s\n", sCommand.GetBuffer());
-
             SvFileStream aSDFIn( aTemp.GetFull(), STREAM_READ );
             ByteString sLine;
             while ( !aSDFIn.IsEof()) {
@@ -513,12 +511,10 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
 
         system( sCommand.GetBuffer());
 
-        fprintf( stdout, "Executed: %s\n", sCommand.GetBuffer());
-
         SvFileStream aInStream( aOut.GetFull(), STREAM_READ );
         if ( !aInStream.IsOpen()) {
             fprintf( stderr,
-                "ERROR: Unable to open file %s for modification!\n",
+                "ERROR: Unable to open file %s for reading!\n",
                 sOutput.GetBuffer());
         }
         else {

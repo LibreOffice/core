@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-07 13:33:31 $
+ *  last change: $Author: nf $ $Date: 2001-06-07 15:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,7 +593,8 @@ DirEntry Export::GetTempFile()
 #ifdef WNT
     String sTempDir( GetEnv( "TEMP" ), RTL_TEXTENCODING_ASCII_US );
 #else
-    String sTempDir( GetEnv( "HOME" ), RTL_TEXTENCODING_ASCII_US );
+//  String sTempDir( GetEnv( "HOME" ), RTL_TEXTENCODING_ASCII_US );
+    String sTempDir( String::CreateFromAscii( "/tmp" ));
 #endif
     DirEntry aTemp( sTempDir );
     return aTemp.TempName();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-07 13:33:31 $
+ *  last change: $Author: nf $ $Date: 2001-06-07 15:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,8 +933,8 @@ int Export::Execute( int nToken, char * pToken )
                                 ByteString sError( "Language " );
                                 sError += LangName[ nLangIndex ];
                                 sError += " defined twice";
-                                YYWarning( sError.GetBufferAccess());
-                                sError.ReleaseBufferAccess();
+//                              YYWarning( sError.GetBufferAccess());
+//                              sError.ReleaseBufferAccess();
                             }
                             pResData->sText[ nLangIndex ] = sText;
                         }
@@ -959,8 +959,8 @@ int Export::Execute( int nToken, char * pToken )
                                 ByteString sError( "Language " );
                                 sError += LangName[ nLangIndex ];
                                 sError += " defined twice";
-                                YYWarning( sError.GetBufferAccess());
-                                sError.ReleaseBufferAccess();
+//                              YYWarning( sError.GetBufferAccess());
+//                              sError.ReleaseBufferAccess();
                             }
                             pResData->sHelpText[ nLangIndex ] = sText;
                         }
@@ -979,8 +979,8 @@ int Export::Execute( int nToken, char * pToken )
                                 ByteString sError( "Language " );
                                 sError += LangName[ nLangIndex ];
                                 sError += " defined twice";
-                                YYWarning( sError.GetBufferAccess());
-                                sError.ReleaseBufferAccess();
+//                              YYWarning( sError.GetBufferAccess());
+//                              sError.ReleaseBufferAccess();
                             }
                             pResData->sQuickHelpText[ nLangIndex ] = sText;
                         }
@@ -999,8 +999,8 @@ int Export::Execute( int nToken, char * pToken )
                                 ByteString sError( "Language " );
                                 sError += LangName[ nLangIndex ];
                                 sError += " defined twice";
-                                YYWarning( sError.GetBufferAccess());
-                                sError.ReleaseBufferAccess();
+//                              YYWarning( sError.GetBufferAccess());
+//                              sError.ReleaseBufferAccess();
                             }
                             pResData->sTitle[ nLangIndex ] = sText;
                         }

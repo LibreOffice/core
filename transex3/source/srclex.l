@@ -243,7 +243,7 @@ main( int argc, char* argv[])
 	char *pOutput;
 	FILE *pFile;
 
-	fprintf( stdout, "\nTransEx 0.9 Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.\n" );
+	fprintf( stdout, "\nTransEx 3.1 Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.\n" );
 	fprintf( stdout, "========================================================================\n" );
 
 	pOutput = GetOutputFile( argc, argv );
