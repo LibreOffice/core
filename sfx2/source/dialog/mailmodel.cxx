@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-15 15:08:00 $
+ *  last change: $Author: mba $ $Date: 2000-12-20 20:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 
 #include "sfxsids.hrc"
 
-#include <tools/tempfile.hxx>
+#include <unotools/tempfile.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/eitem.hxx>
 #include <comphelper/processfactory.hxx>
@@ -165,8 +165,10 @@ sal_Bool SfxMailModel_Impl::SaveDocument( String& rFileName, String& rType )
             // erase the '*' from the extension (e.g. "*.sdw")
             pExt->Erase( 0, 1 );
         }
-        TempFile aTempFile( aLeadingStr, pExt );
-        rFileName = aTempFile.GetName();
+
+        ::utl::TempFile aTempFile( aLeadingStr, pExt );
+        rFileName = aTempFile.GetURL();
+
         // save document to temp file
         SfxStringItem aFileName( SID_FILE_NAME, rFileName );
         SfxBoolItem aPicklist( SID_PICKLIST, FALSE );
@@ -274,13 +276,8 @@ sal_Bool SfxMailModel_Impl::Send()
     if ( SaveDocument( aFileName, aContentType ) )
     {
         Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
-#if SUPD<609
-        Reference < XDataContainer > xData(
-            xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.chaos.DataContainer") ), UNO_QUERY );
-#else
         Reference < XDataContainer > xData(
             xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.DataContainer") ), UNO_QUERY );
-#endif
         if ( xData.is() )
         {
             xData->setContentType( aContentType );
