@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewWrapper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: iha $ $Date: 2003-10-28 16:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,15 +74,63 @@
 #include <svx/svdmodel.hxx>
 #endif
 
+#ifndef _SVDETC_HXX
+#include <svx/svdetc.hxx>
+#endif
+
+#ifndef _SVDOUTL_HXX
+#include <svx/svdoutl.hxx>
+#endif
+
+// header for class SvxForbiddenCharactersTable
+#ifndef _FORBIDDENCHARACTERSTABLE_HXX
+#include <svx/forbiddencharacterstable.hxx>
+#endif
+
 //.............................................................................
 namespace chart
 {
 //.............................................................................
+    /*
+void lcl_initOutliner( SdrOutliner* pTargetOutliner, SdrOutliner* pSourceOutliner )
+{
+    //just an unsuccessful try to initialize the text edit outliner correctly
+    //if( bInit )
+    {
+        pTargetOutliner->EraseVirtualDevice();
+        pTargetOutliner->SetUpdateMode(FALSE);
+        pTargetOutliner->SetEditTextObjectPool( pSourceOutliner->GetEditTextObjectPool() );
+        pTargetOutliner->SetDefTab( pSourceOutliner->GetDefTab() );
+    }
 
-DrawViewWrapper::DrawViewWrapper( SdrModel* pModel, OutputDevice* pOut)
-            : E3dView(pModel, pOut)
+    pTargetOutliner->SetRefDevice( pSourceOutliner->GetRefDevice() );
+    pTargetOutliner->SetForbiddenCharsTable( pSourceOutliner->GetForbiddenCharsTable() );
+    pTargetOutliner->SetAsianCompressionMode( pSourceOutliner->GetAsianCompressionMode() );
+    pTargetOutliner->SetKernAsianPunctuation( pSourceOutliner->IsKernAsianPunctuation() );
+    pTargetOutliner->SetStyleSheetPool( pSourceOutliner->GetStyleSheetPool() );
+    pTargetOutliner->SetRefMapMode( pSourceOutliner->GetRefMapMode() );
+    pTargetOutliner->SetDefaultLanguage( pSourceOutliner->GetDefaultLanguage() );
+    pTargetOutliner->SetHyphenator( pSourceOutliner->GetHyphenator() );
+
+    USHORT nX, nY;
+    pSourceOutliner->GetGlobalCharStretching( nX, nY );
+    pTargetOutliner->SetGlobalCharStretching( nX, nY );
+
+    *//*
+    if ( !GetRefDevice() )
+    {
+        MapMode aMapMode(eObjUnit, Point(0,0), aObjUnit, aObjUnit);
+        pTargetOutliner->SetRefMapMode(aMapMode);
+    }
+    *//*
+}
+*/
+
+DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut)
+            : E3dView(pSdrModel, pOut)
             , m_pWrappedDLPageView(NULL)
             , m_pMarkHandleProvider(NULL)
+            , m_apOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pSdrModel ) )
 {
     m_pWrappedDLPageView = this->ShowPagePgNum( 0, Point(0,0) );
 
@@ -123,7 +171,7 @@ SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
     {
         OutputDevice* pOutDev = this->GetWin(0);
         if(pOutDev)
-            nHitTolerance = pOutDev->PixelToLogic(Size(HITPIX,0)).Width();
+            nHitTolerance = static_cast<short>(pOutDev->PixelToLogic(Size(HITPIX,0)).Width());
     }
     this->SdrView::PickObj(rPnt, nHitTolerance, pRet, m_pWrappedDLPageView, nOptions);
     return pRet;
@@ -149,6 +197,26 @@ void DrawViewWrapper::setMarkHandleProvider( MarkHandleProvider* pMarkHandleProv
 void DrawViewWrapper::InitRedraw( OutputDevice* pOut, const Region& rReg )
 {
     this->E3dView::InitRedraw( pOut, rReg );
+}
+
+SdrObject* DrawViewWrapper::GetTextEditObject() const
+{
+    SdrObject* pTextObj = NULL;
+    const SdrMarkList& rMarkList = this->GetMarkList();
+    if(rMarkList.GetMarkCount() == 1)
+    {
+        SdrMark* pMark = rMarkList.GetMark(0);
+        SdrObject* pObj = pMark->GetObj();
+        if (pObj->HasTextEdit())
+            pTextObj = (SdrTextObj*)pObj;
+    }
+    return pTextObj;
+}
+
+SdrOutliner* DrawViewWrapper::getOutliner() const
+{
+//    lcl_initOutliner( m_apOutliner.get(), &GetModel()->GetDrawOutliner() );
+    return m_apOutliner.get();
 }
 
 //.............................................................................
