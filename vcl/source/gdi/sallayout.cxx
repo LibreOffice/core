@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:14:18 $
+ *  last change: $Author: hr $ $Date: 2003-08-20 15:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1669,6 +1669,8 @@ int MultiSalLayout::GetNextGlyphs( int nLen, long* pGlyphIdxAry, Point& rPos,
         }
     }
 
+    // #111016# reset to base level font when done
+    mpLayouts[0]->InitFont();
     return 0;
 }
 

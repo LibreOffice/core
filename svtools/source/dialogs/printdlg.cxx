@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:01:36 $
+ *  last change: $Author: hr $ $Date: 2003-08-20 15:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include <prnsetup.hxx>
 #include <printdlg.hxx>
 #include <svtdata.hxx>
+#include <filedlg.hxx>
 
 #ifndef _PICKERHELPER_HXX
 #include "pickerhelper.hxx"
@@ -477,7 +478,25 @@ bool PrintDialog::ImplGetFilename()
                 maFiPrintFile.SetText( aObj.PathToFileName() );
                 return true;
             }
+            return false;
         }
+    }
+
+    // something went awry, lets try the old fashioned dialogue
+    Window* pDlgParent = IsReallyVisible() ? this : GetParent();
+    FileDialog aDlg( pDlgParent, WB_STDDIALOG | WB_SAVEAS );
+#ifdef WNT
+    aDlg.AddFilter( String( RTL_CONSTASCII_USTRINGPARAM( "*.prn" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.prn" ) ) );
+    aDlg.SetDefaultExt( String( RTL_CONSTASCII_USTRINGPARAM( "prn" ) ) );
+#elif defined UNX
+    aDlg.AddFilter( String( RTL_CONSTASCII_USTRINGPARAM( "PostScript" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.ps" ) ) );
+    aDlg.SetDefaultExt( String( RTL_CONSTASCII_USTRINGPARAM( "ps" ) ) );
+#endif
+    if( aDlg.Execute() )
+    {
+        String aTargetFile = aDlg.GetPath();
+        maFiPrintFile.SetText( aTargetFile );
+        return true;
     }
 
     return false;

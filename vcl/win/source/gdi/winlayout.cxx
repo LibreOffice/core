@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hdu $ $Date: 2003-07-22 12:05:31 $
+ *  last change: $Author: hr $ $Date: 2003-08-20 15:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,7 +647,7 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
 
     // calculate glyph position relative to layout base
     // TODO: avoid for nStart!=0 case by reusing rPos
-    long nXOffset = 0;
+    long nXOffset = mnBaseAdv;
     for( int i = 0; i < nStart; ++i )
         nXOffset += mpGlyphAdvances[ i ];
 
