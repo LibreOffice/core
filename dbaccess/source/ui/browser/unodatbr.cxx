@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-16 10:36:35 $
+ *  last change: $Author: fs $ $Date: 2001-08-16 14:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3836,13 +3836,33 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                     aHelper.drop(sSelectedObject);
                     break;
 
-                case ID_FORM_NEW_PILOT:
                 case ID_FORM_NEW_TEXT:
                 case ID_FORM_NEW_CALC:
                 case ID_FORM_NEW_IMPRESS:
                 case ID_FORM_NEW_TEMPLATE:
                     aHelper.newForm(nPos);
                     break;
+
+                case ID_FORM_NEW_PILOT:
+                {
+                    // the type of the object to initially select
+                    sal_Int32 nObjectType = -1;
+                    if (etTable == eType)
+                         nObjectType = CommandType::TABLE;
+                    else if (etQuery == eType)
+                         nObjectType = CommandType::QUERY;
+
+                    // the object name
+                    String sObjectName;
+                    if (-1 != nObjectType)
+                         sObjectName = GetEntryText(pEntry);
+
+                    // the connection
+                    Reference< XConnection > xConn;
+                    if (ensureConnection(pEntry, xConn))
+                         aHelper.newFormWithPilot(GetEntryText(pDSEntry), nObjectType, sObjectName, xConn);
+                }
+                break;
 
                 default:
                     DBG_ERROR("SbaTableQueryBrowser::requestContextMenu: invalid menu id!");
