@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FontWeight.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:46:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 
     <p>They may be expanded in future versions.</p>
  */
-constants FontWeight
+published constants FontWeight
 {
     //-------------------------------------------------------------------------
 
