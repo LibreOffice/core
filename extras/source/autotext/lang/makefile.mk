@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-26 03:54:48 $
+#   last change: $Author: rt $ $Date: 2005-01-28 16:00:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,10 +77,6 @@ ZIP2FORCEALLLANG = TRUE
 ZIP2TARGET      = $(AUTOCORR_TARGET)
 
 ZIP2LIST        = $(LANGDIR)$/acor*.dat
-
-ZIP3TARGET      = $(AUTOTEXT_USER_TARGET)
-
-ZIP3LIST        = $(LANGDIR)/mytext?.bau
 
 
 .INCLUDE : target.mk
