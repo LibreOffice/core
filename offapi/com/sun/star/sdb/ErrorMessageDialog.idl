@@ -1,0 +1,162 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ErrorMessageDialog.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2001-02-20 14:32:46 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_ErrorMessageDialog_idl__
+#define __com_sun_star_sdb_ErrorMessageDialog_idl__
+
+#ifndef __com_sun_star_ui_XExecutableDialog_idl__
+#include <com/sun/star/ui/XExecutableDialog.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XInitialization_idl__
+#include <com/sun/star/lang/XInitialization.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sdb {
+
+
+/** provides a dialog for displaying database related exceptions.
+    <p>If applications use any of the functionality provided in the modules
+    <module scope="com.sun.star">sdbc</module>, <module scope="com.sun.star">sdbcx</module> and <module scope="com.sun.star">sdb</module>,
+    they will - sooner or later - encounter <type scope="com.sun.star.sdbc">SQLException</type>'s.<br/>
+    These exceptions can be chained, so the information wrapped in one single <type scope="com.sun.star.sdbc">SQLException</type>
+    can be rather complex (e.g., every instance where such an exception is passing before it is finally caught, could
+    append an <type scope="com.sun.star.sdb">SQLContext</type> to explain what it was doing), and they should be
+    presented to the user in a consistent way.<br/>
+    This can be reached by using this service.
+    @see com.sun.star.sdb.InteractionHandler
+    </p>
+*/
+service ErrorMessageDialog
+{
+    /** the title of the (dialog) window
+    */
+    [property] string Title;
+
+    /** parent window to use for the dialog
+        <p>This property can't be set while the dialog is beeing displayed.</p>
+    */
+    [property] com::sun::star::awt::XWindow ParentWindow;
+
+    /** is the exception displayed by the dialog
+        <p>This should contain an <type scope="com.sun.star.sdbc">SQLException</type> instance, or an instance
+        of any classe derived from this exception.</p>
+        <p>This property can't be set while the dialog is beeing displayed.</p>
+    */
+    [property] any bla;
+
+    /** allows access to the properties of the object
+    */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** allows to start the execution of the dialog
+    */
+    interface com::sun::star::ui::XExecutableDialog;
+
+    /** allows to initialize the dialog
+        <p>You do not need to call the initialize method directly, instead you may use the createInstanceWithArguments
+        method of your <type scope="com::sun::star::lang">XMultiServiceFactory</type>.</p>
+        <p>You specify a parameter by passing one (or more) <type scope="com::sun::star::beans">PropertyValue</type>
+        object(s) to the initialize method, where the <em>Name</em> field contains a string describing which aspect
+        you want to affect, and the <em>Value</em> field containing a value.
+        <br/>
+        Imagine the initialization values as if you use setPropertyValue of the <type scope="com::sun::star::beans">XPropertySet</type>
+        interface ...
+        <br/>
+        allowed parameters are
+        <ul>
+            <li><b>Title</b><br/>
+                String describing the initial title of the dialog. If not specified, a default title is used.
+            </li>
+            <li><b>ParentWindow</b><br/>
+                <type scope="com::sun::star::awt">XWindow</type> describing the parent window to use for the dialog.
+            </li>
+            <li><b>SQLException</b><br/>
+                <type scope="com::sun::star::sdbc">SQLException</type> describing the error which is beeing displayed.<br/>
+                When initialiting this value, you may use any derivee of <type scope="com::sun::star::sdbc">SQLException</type>.
+            </li>
+        </ul>
+        </p>
+    */
+    interface com::sun::star::lang::XInitialization;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif  // __com_sun_star_sdb_ErrorMessageDialog_idl__
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ ************************************************************************/
+
