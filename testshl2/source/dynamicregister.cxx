@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynamicregister.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:16:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 11:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ DynamicLibraryHelper::DynamicLibraryHelper(rtl::OUString const& _sDLLName, GetOp
         fprintf(stderr, "Try to load '%s'.\n", sDLLName.getStr());
     }
 
-    if (! m_pModule->load( suFile ))
+    if (! m_pModule->load(suFile, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL))
     {
         rtl::OString sDLLName = rtl::OUStringToOString(_sDLLName, RTL_TEXTENCODING_ASCII_US);
         fprintf(stderr, "warning: Can't load module '%s'.\n", sDLLName.getStr());
