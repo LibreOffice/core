@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-15 13:31:51 $
+ *  last change: $Author: cl $ $Date: 2001-01-30 12:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -879,7 +879,7 @@ void SvXMLUnitConverter::convertTime( ::rtl::OUStringBuffer& rBuffer,
     double fTempTime = fHour / 24;
     fTempTime += fMin / (24 * 60);
     fTempTime += fSec / (24 * 60 * 60);
-    fTempTime += fSec100 / (24 * 60 * 60 * 60);
+    fTempTime += fSec100 / (24 * 60 * 60 * 100);
     convertTime( rBuffer, fTempTime );
 }
 
@@ -890,6 +890,7 @@ sal_Bool SvXMLUnitConverter::convertTime( ::com::sun::star::util::DateTime& rDat
     double fTempTime = 0.0;
     if( convertTime( fTempTime, rString ) )
     {
+        fTempTime *= 24;
         double fHoursValue = SolarMath::ApproxFloor (fTempTime);
         fTempTime -= fHoursValue;
         fTempTime *= 60;
