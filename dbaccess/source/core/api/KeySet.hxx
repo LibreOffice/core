@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:38:23 $
+ *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,45 +75,157 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSQLQueryComposer.hpp>
+#endif
 
 namespace dbaccess
 {
-    typedef ::std::map<sal_Int32,::com::sun::star::uno::WeakReference< ::com::sun::star::lang::XUnoTunnel> > OBookmarkMap;
-    class OKeySet;
-    class OKeySetBookmark : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XUnoTunnel>
-    {
-        OKeySet*    m_pKeySet;  // to parent
-        OBookmarkMap::iterator m_aPosIter;      //
-
-    public:
-        OKeySetBookmark(OKeySet* _pKeySet,const OBookmarkMap::iterator& _aPosIter)
-            : m_pKeySet(_pKeySet)
-            , m_aPosIter(_aPosIter)
-        {
-        }
-        ~OKeySetBookmark();
-
-        void removeKeySet();
-
-        sal_Int32 getRealPos() const;
-        OBookmarkMap::iterator getPosIterator() { return m_aPosIter; }
-        void setPosIterator(const OBookmarkMap::iterator& _rIter);
-
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
-
-    };
-
+    typedef ::std::map<sal_Int32,ORowSetRow> OKeySetMatrix;
     // is used when the source supports keys
     class OKeySet : public OCacheSet
     {
-        OBookmarkMap m_aBookmarkMap;
-        ::std::vector<sal_Int32> m_aDeletedRows;
+        OKeySetMatrix m_aKeyMap;
+        OKeySetMatrix::iterator m_aKeyIter;
+        ::std::vector< sal_Int32> m_aColumnPos;
+
+        connectivity::OSQLTable m_xTable; // reference to our table
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement> m_xStatement;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xSet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xRow;
+
+//      ::std::vector< OKeySetMatrix::iterator> m_aKeyPosition;
+//      ::std::vector< OKeySetMatrix::iterator>::iterator m_aKeyIter;
+        sal_Bool m_bRowCountFinal;
+
+        ::std::vector< ::rtl::OUString> getColumnNames();
+        void fillAllRows();
+        sal_Bool fetchRow();
     public:
-        OKeySet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
+        OKeySet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,
+                const connectivity::OSQLTable& _xTable,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >& _xComposer);
         ~OKeySet();
 
-        void RemoveBookmarkPos(OBookmarkMap::iterator& _rIter);
+        // ::com::sun::star::sdbc::XRow
+        virtual sal_Bool SAL_CALL wasNull(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            return m_xRow->wasNull();
+        }
+        // -------------------------------------------------------------------------
+        virtual ::rtl::OUString SAL_CALL getString( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getString(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual sal_Bool SAL_CALL getBoolean( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getBoolean(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual sal_Int8 SAL_CALL getByte( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getByte(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual sal_Int16 SAL_CALL getShort( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getShort(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual sal_Int32 SAL_CALL getInt( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getInt(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual sal_Int64 SAL_CALL getLong( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getLong(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual float SAL_CALL getFloat( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getFloat(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual double SAL_CALL getDouble( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getDouble(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getBytes( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getBytes(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual ::com::sun::star::util::Date SAL_CALL getDate( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getDate(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual ::com::sun::star::util::Time SAL_CALL getTime( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getTime(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual ::com::sun::star::util::DateTime SAL_CALL getTimestamp( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getTimestamp(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getBinaryStream( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getBinaryStream(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getCharacterStream( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getCharacterStream(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual ::com::sun::star::uno::Any SAL_CALL getObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getObject(columnIndex,typeMap);
+        }
+        // -------------------------------------------------------------------------
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef > SAL_CALL getRef( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getRef(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob > SAL_CALL getBlob( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getBlob(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob > SAL_CALL getClob( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getClob(columnIndex);
+        }
+        // -------------------------------------------------------------------------
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray > SAL_CALL getArray( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        {
+            OSL_ENSURE(m_xRow.is(),"m_xRow is null!");
+            return m_xRow->getArray(columnIndex);
+        }
         // -------------------------------------------------------------------------
         virtual sal_Bool SAL_CALL rowUpdated(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
@@ -129,6 +241,22 @@ namespace dbaccess
         {
             return m_bDeleted;
         }
+
+        // ::com::sun::star::sdbc::XResultSet
+        virtual sal_Bool SAL_CALL next(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL isBeforeFirst(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL isAfterLast(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL isFirst(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL isLast(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL beforeFirst(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL afterLast(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL first(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL last(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Int32 SAL_CALL getRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL absolute( sal_Int32 row ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL relative( sal_Int32 rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL previous(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL refreshRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         // ::com::sun::star::sdbcx::XRowLocate
         virtual ::com::sun::star::uno::Any SAL_CALL getBookmark( const ORowSetRow& _rRow ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         // -------------------------------------------------------------------------
@@ -157,6 +285,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/01/22 07:38:23  oj
+    #82632# change member
+
     Revision 1.3  2000/10/17 10:18:12  oj
     some changes for the rowset
 

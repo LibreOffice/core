@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:38:23 $
+ *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,6 +417,11 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             m_bCreateStatement = sal_True;
             break;
         case PROPERTY_ID_FETCHSIZE:
+            if(m_pCache)
+            {
+                m_pCache->setMaxRowSize(m_nFetchSize);
+                fireRowcount();
+            }
             break;
         case PROPERTY_ID_FILTER:
             m_bCreateStatement = sal_True;
@@ -1826,6 +1831,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                         composeTableName(m_xActiveConnection->getMetaData(),m_aUpdateCatalogName,m_aUpdateSchemaName,m_aUpdateTableName,aComposedTableName,sal_False);
 
                     m_pCache = new ORowSetCache(xRs,m_xComposer,aComposedTableName,m_bModified,m_bNew);
+                    m_pCache->setMaxRowSize(m_nFetchSize);
                     m_aCurrentRow = m_pCache->createIterator();
 
                     // get the locale
@@ -2665,6 +2671,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex& _rMutex)
              ,m_bDeleted(rParent.m_bDeleted)
              ,m_bRowObsolete(rParent.m_bRowObsolete)
              ,m_bIsBookmarable(sal_True)
+             ,m_pParent(&rParent)
 {
     DBG_CTOR(ORowSetClone, NULL);
 
@@ -2793,6 +2800,7 @@ void ORowSetClone::disposing()
 {
     ORowSetBase::disposing();
     MutexGuard aGuard( m_aMutex );
+    m_pParent = NULL;
     OSubComponent::disposing();
 }
 
@@ -2871,6 +2879,18 @@ void ORowSetClone::rowDeleted(const ::com::sun::star::uno::Any& _rBookmark)
     }
 }
 // -----------------------------------------------------------------------------
+void SAL_CALL ORowSetClone::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
+{
+    switch(nHandle)
+    {
+    case PROPERTY_ID_FETCHSIZE:
+        if(m_pParent)
+            m_pParent->setFastPropertyValue_NoBroadcast(nHandle,rValue);
+        // run through
+    default:
+        OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle,rValue);
+    }
 
+}
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:38:23 $
+ *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,8 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
         case DataType::INTEGER:
             (*aIter) = getInt(i);
             break;
+        default:
+            OSL_ENSURE(0,"ORowSetValue::makeAny(): UNSPUPPORTED TYPE!");
         }
         if(wasNull())
             aIter->setNull();
@@ -564,6 +566,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.14  2001/01/22 07:38:23  oj
+    #82632# change member
+
     Revision 1.13  2000/12/12 12:15:41  oj
     use paramter instead of member and set member to ull
 

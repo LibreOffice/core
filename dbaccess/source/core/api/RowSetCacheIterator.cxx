@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCacheIterator.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:33:56 $
+ *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,13 +103,6 @@ ORowSetCacheIterator& ORowSetCacheIterator::operator =(const ORowSetMatrix::iter
 // -----------------------------------------------------------------------------
 ORowSetRow& ORowSetCacheIterator::operator *()
 {
-    if(m_aIter->second.aIterator == NULL ||
-       m_aIter->second.aIterator == m_pCache->m_pMatrix->end())
-    {
-        OSL_ENSURE(m_aIter->second.aBookmark.hasValue(),"bookmark has no value!");
-        m_pCache->moveToBookmark(m_aIter->second.aBookmark);
-        m_aIter->second.aIterator = m_pCache->m_aMatrixIter;
-    }
     return *m_aIter->second.aIterator;
 }
 // -----------------------------------------------------------------------------
@@ -127,13 +120,6 @@ const ORowSetRow& ORowSetCacheIterator::operator *() const
 // -----------------------------------------------------------------------------
 ORowSetMatrix::iterator& ORowSetCacheIterator::operator ->()
 {
-    if(m_aIter->second.aIterator == NULL ||
-       m_aIter->second.aIterator == m_pCache->m_pMatrix->end())
-    {
-        OSL_ENSURE(m_aIter->second.aBookmark.hasValue(),"bookmark has no value!");
-        m_pCache->moveToBookmark(m_aIter->second.aBookmark);
-        m_aIter->second.aIterator = m_pCache->m_aMatrixIter;
-    }
     return m_aIter->second.aIterator;
 }
 // -----------------------------------------------------------------------------

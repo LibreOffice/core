@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:38:23 $
+ *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,6 +389,7 @@ namespace dbaccess
                          ,public ::comphelper::OPropertyArrayUsageHelper < ORowSetClone >
     {
     protected:
+        ORowSet*                    m_pParent;
         sal_Int32                   m_nFetchDirection;
         sal_Int32                   m_nFetchSize;
         sal_Int32                   m_nResultSetConcurrency;
@@ -402,6 +403,7 @@ namespace dbaccess
     protected:
         // the clone can not insert anything
         virtual void checkInsert() {}
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
     public:
         ORowSetClone(ORowSet& rParent,::osl::Mutex& _rMutex);
         virtual ~ORowSetClone();
@@ -456,6 +458,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.14  2001/01/22 07:38:23  oj
+    #82632# change member
+
     Revision 1.13  2001/01/09 12:29:09  oj
     two new properties
 

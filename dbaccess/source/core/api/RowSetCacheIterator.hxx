@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCacheIterator.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:34:18 $
+ *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ namespace dbaccess
         ORowSetCacheIterator(const ORowSetCacheIterator& _rRH);
         ORowSetCacheIterator& operator =(const ORowSetCacheIterator&);
 
+        sal_Bool isNull() const { return m_aIter->second.aIterator == NULL; }
         ORowSetCacheIterator& operator =(const ORowSetMatrix::iterator&);
         operator ORowSetMatrix::iterator();
 

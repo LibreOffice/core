@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StaticSet.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
+ *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,17 +74,17 @@ namespace dbaccess
     {
         ORowSetMatrix           m_aSet;
         ORowSetMatrix::iterator m_aSetIter;
-        sal_Bool                m_bBeforeFirst;
         sal_Bool                m_bEnd;
         sal_Bool fetchRow();
         void fillAllRows();
     public:
         OStaticSet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet)
             : OCacheSet(_xDriverSet)
-            , m_bBeforeFirst(sal_True)
             , m_aSetIter(m_aSet.end())
             , m_bEnd(sal_False)
-        {}
+        {
+            m_aSet.push_back(NULL); // this is the beforefirst record
+        }
 
         virtual void fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition);
         // ::com::sun::star::sdbcx::XRowLocate
@@ -128,6 +128,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/14 13:28:20  oj
+    change for rowset when getRow returns 0
+
     Revision 1.3  2000/10/17 10:19:03  oj
     some changes for the rowset
 

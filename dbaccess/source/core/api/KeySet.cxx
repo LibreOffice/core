@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:38:23 $
+ *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COM_SUN_STAR_SDBCxParameterS_HPP_
 #include <com/sun/star/sdbc/XParameters.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XCOLUMNLOCATE_HPP_
+#include <com/sun/star/sdbc/XColumnLocate.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
@@ -89,14 +92,19 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
-
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
+#include <com/sun/star/sdbcx/KeyType.hpp>
+#endif
 
 using namespace dbaccess;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
-//  using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -104,163 +112,114 @@ using namespace ::com::sun::star::util;
 using namespace ::cppu;
 using namespace ::osl;
 
-// -----------------------------------------------------------------------------
-OKeySetBookmark::~OKeySetBookmark()
-{
-    if(m_pKeySet)
-        m_pKeySet->RemoveBookmarkPos(m_aPosIter);
-}
-// -----------------------------------------------------------------------------
-void OKeySetBookmark::removeKeySet()
-{
-    m_pKeySet = NULL;
-    m_aPosIter = NULL;
-}
-// -----------------------------------------------------------------------------
-sal_Int32 OKeySetBookmark::getRealPos() const { return m_aPosIter->first; }
-// -----------------------------------------------------------------------------
-sal_Int64 SAL_CALL OKeySetBookmark::getSomething( const Sequence< sal_Int8 >& _rIdentifier ) throw(RuntimeException)
-{
-    if (_rIdentifier.getLength() != 16)
-        return NULL;
-
-    if (0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  _rIdentifier.getConstArray(), 16 ) )
-        return reinterpret_cast<sal_Int64>(this);
-
-    return NULL;
-}
-
-//--------------------------------------------------------------------------
-Sequence< sal_Int8 > OKeySetBookmark::getUnoTunnelImplementationId()
-{
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-// -----------------------------------------------------------------------------
-void OKeySetBookmark::setPosIterator(const OBookmarkMap::iterator& _rIter)
-{
-    m_aPosIter = _rIter;
-}
-// -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------
-OKeySet::OKeySet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet)
+OKeySet::OKeySet(const Reference< XResultSet>& _xDriverSet,
+                 const connectivity::OSQLTable& _xTable,
+                 const Reference< XSQLQueryComposer >& _xComposer)
             : OCacheSet(_xDriverSet)
+            ,m_xTable(_xTable)
+            ,m_bRowCountFinal(sal_False)
 {
+    try
+    {
+        ::std::vector< ::rtl::OUString> aColumnNames = getColumnNames();
+        sal_Int32 nSize = aColumnNames.size();
+
+        Reference<XColumnLocate> xColumnLocate(_xDriverSet,UNO_QUERY);
+        if(xColumnLocate.is())
+        {
+            ::std::vector< ::rtl::OUString>::const_iterator aIter;
+            for(aIter = aColumnNames.begin();aIter != aColumnNames.end();++aIter)
+                m_aColumnPos.push_back(xColumnLocate->findColumn(*aIter));
+        }
+        else
+        {
+            Reference<XPropertySet> xTableProp(_xTable,UNO_QUERY);
+            ::std::vector< ::rtl::OUString>::const_iterator aIter;
+            ::comphelper::UStringMixEqual bCase(m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+            sal_Int32 nColumnCount = m_xSetMetaData->getColumnCount();
+            for(sal_Int32 i=1;i<=nColumnCount;++i)
+            {
+                for(aIter = aColumnNames.begin();aIter != aColumnNames.end();++aIter)
+                {
+                    if(bCase(m_xSetMetaData->getColumnName(i),*aIter) &&
+                       bCase(m_xSetMetaData->getTableName(i),connectivity::getString(xTableProp->getPropertyValue(PROPERTY_NAME))))
+                    {
+                        m_aColumnPos.push_back(i);
+                        break;
+                    }
+                }
+            }
+        }
+        OSL_ENSURE(m_aColumnPos.size() == nSize,"Error not all pkey columns are found!");
+        // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
+        // without extra varaible to be set
+        m_aKeyMap.insert(OKeySetMatrix::value_type(0,NULL));
+
+        m_aKeyIter = m_aKeyMap.begin();
+
+        static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
+        static ::rtl::OUString aQuote   = m_xConnection->getMetaData()->getIdentifierQuoteString();
+
+        ::rtl::OUString aFilter;
+
+        ::std::vector< ::rtl::OUString>::const_iterator aIter = aColumnNames.begin();
+        for(;aIter != aColumnNames.end();)
+        {
+            ((aFilter += aQuote) += *aIter) += aQuote;
+            aFilter += ::rtl::OUString::createFromAscii(" = ?");
+            ++aIter;
+            if(aIter != aColumnNames.end())
+                aFilter += aAnd;
+        }
+        _xComposer->setFilter(aFilter);
+        m_xStatement = m_xConnection->prepareStatement(_xComposer->getComposedQuery());
+    }
+    catch(SQLException&)
+    {
+    }
 }
 // -----------------------------------------------------------------------------
 OKeySet::~OKeySet()
 {
-    OBookmarkMap::iterator aIter = m_aBookmarkMap.begin();
-    for(;aIter != m_aBookmarkMap.end();++aIter)
-    {
-        Reference< XUnoTunnel> xTunnel = aIter->second;
-        if(xTunnel.is())
-        {
-            OKeySetBookmark* pExistent = (OKeySetBookmark*)xTunnel->getSomething(OKeySetBookmark::getUnoTunnelImplementationId());
-            if(pExistent)
-                pExistent->removeKeySet();
-        }
-    }
-}
-// -----------------------------------------------------------------------------
-void OKeySet::RemoveBookmarkPos(OBookmarkMap::iterator& _rIter)
-{
-    sal_Int32 nSize = m_aBookmarkMap.size();
-
-    if(_rIter != m_aBookmarkMap.end())
-        m_aBookmarkMap.erase(_rIter->first);
+    ::comphelper::disposeComponent(m_xStatement);
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OKeySet::getBookmark( const ORowSetRow& _rRow ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nPos = m_xDriverSet->getRow();
-    if(!nPos)
-        return Any();
-
-    if(m_aDeletedRows.size())
-    {
-        sal_Int32 nDiff = ::std::upper_bound(m_aDeletedRows.begin(),m_aDeletedRows.end(),nPos) - m_aDeletedRows.begin();
-        nPos += nDiff;
-    }
-
-    Reference< XUnoTunnel> xRef;
-    OBookmarkMap::iterator aIter = m_aBookmarkMap.find(nPos);
-    if(aIter == m_aBookmarkMap.end())
-    {
-        OKeySetBookmark* pBookmark= new OKeySetBookmark(this,m_aBookmarkMap.end());
-        xRef = pBookmark;
-        pBookmark->setPosIterator(m_aBookmarkMap.insert(OBookmarkMap::value_type(nPos,xRef)).first);
-
-    }
-    else
-        xRef = aIter->second;
-
-    return makeAny(xRef);
+    OSL_ENSURE(m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin(),
+        "getBookmark is only possible when we stand on a valid row!");
+    return makeAny(m_aKeyIter->first);
 }
 
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OKeySet::moveToBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OKeySet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
-    Reference< XUnoTunnel> xTunnel;
-    bookmark >>= xTunnel;
-    if(xTunnel.is())
-    {
-        OKeySetBookmark* pExistent = (OKeySetBookmark*)xTunnel->getSomething(OKeySetBookmark::getUnoTunnelImplementationId());
-        if(pExistent)
-        {
+    m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(bookmark));
 
-            sal_Int32 nPos = pExistent->getRealPos();
-
-            if(m_aDeletedRows.size())
-            {
-                sal_Int32 nDiff = ::std::upper_bound(m_aDeletedRows.begin(),m_aDeletedRows.end(),nPos) - m_aDeletedRows.begin();
-                nPos -= nDiff;
-            }
-            return m_xDriverSet->absolute(nPos);
-        }
-    }
-    return sal_False;
+    return m_aKeyIter != m_aKeyMap.end();
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OKeySet::moveRelativeToBookmark( const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OKeySet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
-    Reference< XUnoTunnel> xTunnel;
-    bookmark >>= xTunnel;
-    if(xTunnel.is())
+    m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(bookmark));
+    if(m_aKeyIter != m_aKeyMap.end())
     {
-        OKeySetBookmark* pExistent = (OKeySetBookmark*)xTunnel->getSomething(OKeySetBookmark::getUnoTunnelImplementationId());
-        if(pExistent)
-        {
-            sal_Int32 nPos = pExistent->getRealPos() + rows;
-            if(m_aDeletedRows.size())
-            {
-                sal_Int32 nDiff = ::std::upper_bound(m_aDeletedRows.begin(),m_aDeletedRows.end(),nPos) - m_aDeletedRows.begin();
-                nPos -= nDiff;
-            }
-            return m_xDriverSet->absolute(nPos);
-        }
+        relative(rows);
     }
-    return sal_False;
+
+    return !isBeforeFirst() && !isAfterLast();
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& first, const Any& second ) throw(SQLException, RuntimeException)
 {
-    Reference< XUnoTunnel> xFirst,xSecond;
-    first >>= xFirst;
-    second >>= xSecond;
+    sal_Int32 nFirst,nSecond;
+    first >>= nFirst;
+    second >>= nSecond;
 
-    return (xFirst != xSecond) ? CompareBookmark::NOT_EQUAL : CompareBookmark::EQUAL;
+    return (nFirst != nSecond) ? CompareBookmark::NOT_EQUAL : CompareBookmark::EQUAL;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
@@ -270,17 +229,7 @@ sal_Bool SAL_CALL OKeySet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeEx
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OKeySet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
-    Reference< XUnoTunnel> xTunnel;
-    bookmark >>= xTunnel;
-    if(xTunnel.is())
-    {
-        OKeySetBookmark* pExistent = (OKeySetBookmark*)xTunnel->getSomething(OKeySetBookmark::getUnoTunnelImplementationId());
-        if(pExistent)
-        {
-            return pExistent->getRealPos();
-        }
-    }
-    return -1;
+    return ::comphelper::getINT32(bookmark);
 }
 // -------------------------------------------------------------------------
 // ::com::sun::star::sdbcx::XDeleteRows
@@ -307,38 +256,44 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
         xKeys = xKeySup->getKeys();
 
     Reference<XColumnsSupplier> xKeyColsSup;
-    Reference<XIndexAccess> xKeyColumns;
-    if(xKeys.is() && xKeys->getCount())
+    Reference<XNameAccess> xKeyColumns;
+    if(xKeys.is())
     {
-        xKeys->getByIndex(0) >>= xKeyColsSup; // there is only one key per table
+        Reference<XPropertySet> xProp;
+        for(sal_Int32 i=0;i< xKeys->getCount();++i)
+        {
+            xKeys->getByIndex(i) >>= xProp;
+            sal_Int32 nKeyType = 0;
+            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+            if(KeyType::PRIMARY == nKeyType)
+            {
+                xKeyColsSup = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                break;
+            }
+        }
         if(xKeyColsSup.is())
-            xKeyColumns = Reference<XIndexAccess>(xKeyColsSup->getColumns(),UNO_QUERY);
+            xKeyColumns = xKeyColsSup->getColumns();
     }
 
     if(!xKeyColumns.is())
         throw SQLException();
 
     ::rtl::OUString aColumnName;
-    ::std::vector< ::rtl::OUString> aColumnNames;
-    for(sal_Int32 i=0;i < xKeyColumns->getCount();++i)
-    {
-        Reference<XPropertySet> xSet;
-        xKeyColumns->getByIndex(i) >>= xSet;
-        xSet->getPropertyValue(PROPERTY_NAME) >>= aColumnName;
-        aColumnNames.push_back(aColumnName);
-    }
 
     const Any* pBegin   = rows.getConstArray();
     const Any* pEnd     = pBegin + rows.getLength();
 
+    Sequence< ::rtl::OUString> aColumnNames = xKeyColumns->getElementNames();
     Sequence< Any > aKeys;
     for(;pBegin != pEnd;++pBegin)
     {
         aSql += ::rtl::OUString::createFromAscii("( ");
         //  pBegin >>= aKeys;
-        for(::std::vector< ::rtl::OUString>::const_iterator aIter = aColumnNames.begin();aIter != aColumnNames.end();++aIter)
+        const ::rtl::OUString*pColumnBegin = aColumnNames.getConstArray();
+        const ::rtl::OUString*pColumnEnd = pColumnBegin + aColumnNames.getLength();
+        for(;pColumnBegin != pColumnEnd;++pColumnBegin)
         {
-            ((aSql += aQuote) += *aIter) += aQuote;
+            ((aSql += aQuote) += *pColumnBegin) += aQuote;
             aSql += ::rtl::OUString::createFromAscii(" = ?");
             aSql += aAnd;
         }
@@ -352,7 +307,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
 
     pBegin  = rows.getConstArray();
-    i=1;
+    sal_Int32 i=1;
     for(;pBegin != pEnd;++pBegin)
     {
         Sequence< Any >* pValuePair = (Sequence< Any >*)pBegin->getValue();
@@ -406,19 +361,9 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
 
         for(;pBegin != pEnd;++pBegin)
         {
-            Reference< XUnoTunnel> xTunnel;
-            *pBegin >>= xTunnel;
-            if(xTunnel.is())
-            {
-                OKeySetBookmark* pExistent = (OKeySetBookmark*)xTunnel->getSomething(OKeySetBookmark::getUnoTunnelImplementationId());
-                if(pExistent)
-                {
-                    OBookmarkMap::iterator aIter = pExistent->getPosIterator();
-                    m_aDeletedRows.insert(upper_bound(m_aDeletedRows.begin(),m_aDeletedRows.end(),aIter->first),aIter->first);
-                    m_aBookmarkMap.erase(aIter);
-                    pExistent->setPosIterator(m_aBookmarkMap.end());
-                }
-            }
+            sal_Int32 nPos;
+            *pBegin >>= nPos;
+            m_aKeyMap.erase(nPos);
         }
     }
     return aRet;
@@ -427,49 +372,32 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
 void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
 {
     OCacheSet::updateRow( _rInsertRow,_rOrginalRow,_xTable);
+    if(rowUpdated())
+    {
+        m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32((*_rInsertRow)[0].getAny()));
+        connectivity::ORowVector< ORowSetValue >::iterator aIter = m_aKeyIter->second->begin();
+        ::std::vector< sal_Int32>::const_iterator aPosIter = m_aColumnPos.begin();
+        for(;aPosIter != m_aColumnPos.end();++aPosIter,++aIter)
+            *aIter = (*_rInsertRow)[*aPosIter];
+    }
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
 {
     OCacheSet::insertRow( _rInsertRow,_xTable);
     if(rowInserted())
     {
-        OBookmarkMap::iterator aIter = m_aBookmarkMap.begin();
-        for(;aIter != m_aBookmarkMap.end();++aIter)
-        {
-            Reference< XUnoTunnel> xTunnel = aIter->second;
-            if(xTunnel.is())
-            {
-                OKeySetBookmark* pExistent = (OKeySetBookmark*)xTunnel->getSomething(OKeySetBookmark::getUnoTunnelImplementationId());
-                if(pExistent)
-                    pExistent->removeKeySet();
-            }
-        }
-        m_aBookmarkMap.clear();
-        m_aDeletedRows.clear();
-//      sal_Bool bFound = sal_False;
-//      if(m_xDriverSet->last()) // check if the driver append new rows at the end
-//      {
-//          ORowSetRow aRow;
-//          fillValueRow(aRow,m_xDriverRow->getRow());
-//          connectivity::ORowVector< ORowSetValue >::iterator aIter = aRow->begin()+1;
-//          connectivity::ORowVector< ORowSetValue >::iterator aCompareIter = _rInsertRow->begin()+1;
-//          for(;aIter != aRow->end();++aIter,++aCompareIter)
-//          {
-//              if(*aCompareIter != *aIter)
-//                  break;
-//          }
-//          bFound = aIter == aRow->end();
-//
-//      }
-//      if(!bFound)
-//      {
-//          m_xDriverSet->beforeFirst();
-//          while(m_xDriverSet->next())
-//          {
-//          }
-//      }
-//      (*_rInsertRow->begin()) = m_xRowLocate->getBookmark();
+        ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >(m_aColumnPos.size());
+        connectivity::ORowVector< ORowSetValue >::iterator aIter = aKeyRow->begin();
+        ::std::vector< sal_Int32>::const_iterator aPosIter = m_aColumnPos.begin();
+        for(;aPosIter != m_aColumnPos.end();++aPosIter,++aIter)
+            *aIter = (*_rInsertRow)[*aPosIter];
+
+        OKeySetMatrix::iterator aKeyIter = m_aKeyMap.end();
+        --aKeyIter;
+        m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(aKeyIter->first + 1,aKeyRow)).first;
+        // now we set the bookmark for this row
+        (*_rInsertRow)[0] = makeAny((sal_Int32)m_aKeyIter->first);
     }
 }
 // -------------------------------------------------------------------------
@@ -478,19 +406,9 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
     OCacheSet::deleteRow(_rDeleteRow,_xTable);
     if(rowDeleted())
     {
-        Reference< XUnoTunnel> xTunnel;
-        (*_rDeleteRow)[0].getAny() >>= xTunnel;
-        if(xTunnel.is())
-        {
-            OKeySetBookmark* pExistent = (OKeySetBookmark*)xTunnel->getSomething(OKeySetBookmark::getUnoTunnelImplementationId());
-            if(pExistent)
-            {
-                OBookmarkMap::iterator aIter = pExistent->getPosIterator();
-                m_aDeletedRows.insert(upper_bound(m_aDeletedRows.begin(),m_aDeletedRows.end(),aIter->first),aIter->first);
-                m_aBookmarkMap.erase(pExistent->getPosIterator()->first);
-                pExistent->setPosIterator(m_aBookmarkMap.end());
-            }
-        }
+        sal_Int32 nPos = ::comphelper::getINT32((*_rDeleteRow)[0].getAny());
+        m_aKeyMap.erase(nPos);
+        m_aKeyIter = m_aKeyMap.end();
     }
 }
 // -------------------------------------------------------------------------
@@ -507,10 +425,349 @@ void SAL_CALL OKeySet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
 {
 }
 // -------------------------------------------------------------------------
+::std::vector< ::rtl::OUString> OKeySet::getColumnNames()
+{
+    // use keys and indexes for excat postioning
+    // first the keys
+    Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
+    Reference<XIndexAccess> xKeys;
+    if(xKeySup.is())
+        xKeys = xKeySup->getKeys();
+
+    Reference<XColumnsSupplier> xKeyColsSup;
+    Reference<XNameAccess> xKeyColumns;
+    ::std::vector< ::rtl::OUString> aColumnNames;
+    if(xKeys.is())
+    {
+        Reference<XPropertySet> xProp;
+        for(sal_Int32 i=0;i< xKeys->getCount();++i)
+        {
+            xKeys->getByIndex(i) >>= xProp;
+            sal_Int32 nKeyType = 0;
+            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+            if(KeyType::PRIMARY == nKeyType)
+            {
+                xKeyColsSup = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                OSL_ENSURE(xKeyColsSup.is(),"Columnsupplier is null!");
+                xKeyColumns = xKeyColsSup->getColumns();
+                if(xKeyColumns.is())
+                {
+                    Sequence< ::rtl::OUString> aSeqNames = xKeyColumns->getElementNames();
+                    const ::rtl::OUString*pColumnBegin = aSeqNames.getConstArray();
+                    const ::rtl::OUString*pColumnEnd = pColumnBegin + aSeqNames.getLength();
+                    for(;pColumnBegin != pColumnEnd;++pColumnBegin)
+                        aColumnNames.push_back(*pColumnBegin);
+                }
+                break;
+            }
+        }
+    }
+
+    return aColumnNames;
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::next(  ) throw(SQLException, RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+
+    if(isAfterLast())
+        return sal_False;
+    if(!m_bRowCountFinal) // not yet all records fetched
+    {
+        ++m_aKeyIter; // this is possible because we stand on begin() and this is the "beforefirst" row
+        if(m_aKeyIter == m_aKeyMap.end() && !fetchRow())
+            m_aKeyIter = m_aKeyMap.end();
+    }
+    else if(!isAfterLast())
+        ++m_aKeyIter;
+
+    refreshRow();
+    return !isAfterLast();
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
+{
+    return m_aKeyIter == m_aKeyMap.begin();
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::isAfterLast(  ) throw(SQLException, RuntimeException)
+{
+    return  m_bRowCountFinal && m_aKeyIter == m_aKeyMap.end();
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::isFirst(  ) throw(SQLException, RuntimeException)
+{
+    OKeySetMatrix::iterator aTemp = m_aKeyMap.begin();
+    ++aTemp;
+    return m_aKeyIter == aTemp && m_aKeyIter != m_aKeyMap.end();
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::isLast(  ) throw(SQLException, RuntimeException)
+{
+    if(!m_bRowCountFinal)
+        return sal_False;
+
+    OKeySetMatrix::iterator aTemp = m_aKeyMap.end();
+    --aTemp;
+    return m_aKeyIter == aTemp;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OKeySet::beforeFirst(  ) throw(SQLException, RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_aKeyIter = m_aKeyMap.begin();
+    m_xSet = NULL;
+    ::comphelper::disposeComponent(m_xRow);
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OKeySet::afterLast(  ) throw(SQLException, RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    fillAllRows();
+    m_aKeyIter = m_aKeyMap.end();
+    m_xSet = NULL;
+    ::comphelper::disposeComponent(m_xRow);
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::first(  ) throw(SQLException, RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_aKeyIter = m_aKeyMap.begin();
+    ++m_aKeyIter;
+    if(m_aKeyIter == m_aKeyMap.end() && !fetchRow())
+        m_aKeyIter = m_aKeyMap.end();
+
+    refreshRow();
+    return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::last(  ) throw(SQLException, RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    fillAllRows();
+
+    m_aKeyIter = m_aKeyMap.end();
+    --m_aKeyIter;
+    refreshRow();
+    return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
+}
+// -----------------------------------------------------------------------------
+sal_Int32 SAL_CALL OKeySet::getRow(  ) throw(SQLException, RuntimeException)
+{
+    OSL_ENSURE(!isAfterLast(),"getRow is not allowed when afterlast record!");
+    OSL_ENSURE(!isBeforeFirst(),"getRow is not allowed when beforefirst record!");
+
+    OKeySetMatrix::iterator aTemp = m_aKeyIter;
+    sal_Int32 i=0;
+    while(aTemp-- != m_aKeyMap.begin())
+        ++i;
+
+    return i;
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    OSL_ENSURE(row,"absolute(0) isn't allowed!");
+    if(row < 0)
+    {
+        if(!m_bRowCountFinal)
+            fillAllRows();
+
+        for(;row < 0 && m_aKeyIter != m_aKeyMap.begin();++row)
+            m_aKeyIter--;
+    }
+    else
+    {
+        if(row >= m_aKeyMap.size())
+        {
+            if(!m_bRowCountFinal)
+            {
+                sal_Bool bNext = sal_True;
+                for(sal_Int32 i=m_aKeyMap.size()-1;i < row && bNext;++i)
+                    bNext = fetchRow();
+            }
+            else
+                m_aKeyIter = m_aKeyMap.end();
+        }
+        else
+        {
+            m_aKeyIter = m_aKeyMap.begin();
+            for(;row > 0 && m_aKeyIter != m_aKeyMap.end();--row)
+                ++m_aKeyIter;
+        }
+    }
+    refreshRow();
+
+    return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
+{
+    if(!rows)
+    {
+        refreshRow();
+        return sal_True;
+    }
+    return absolute(getRow()+rows);
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::previous(  ) throw(SQLException, RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    if(m_aKeyIter != m_aKeyMap.begin())
+    {
+        --m_aKeyIter;
+        refreshRow();
+    }
+    return m_aKeyIter != m_aKeyMap.begin();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
+{
+    if(isBeforeFirst() || isAfterLast() || !m_xStatement.is())
+        return;
+
+    m_xSet = NULL;
+    ::comphelper::disposeComponent(m_xRow);
+    // we just areassign the base members
+    Reference< XParameters > xParameter(m_xStatement,UNO_QUERY);
+
+    connectivity::ORowVector< ORowSetValue >::iterator aIter = m_aKeyIter->second->begin();
+    ::std::vector< sal_Int32>::const_iterator aPosIter = m_aColumnPos.begin();
+    for(;aPosIter != m_aColumnPos.end();++aPosIter,++aIter)
+    {
+        switch(aIter->getTypeKind())
+        {
+        case DataType::CHAR:
+        case DataType::VARCHAR:
+            xParameter->setString(*aPosIter,*aIter);
+            break;
+        case DataType::DOUBLE:
+        case DataType::FLOAT:
+        case DataType::REAL:
+        case DataType::DECIMAL:
+        case DataType::NUMERIC:
+            xParameter->setDouble(*aPosIter,*aIter);
+            break;
+        case DataType::DATE:
+            xParameter->setDate(*aPosIter,*aIter);
+            break;
+        case DataType::TIME:
+            xParameter->setTime(*aPosIter,*aIter);
+            break;
+        case DataType::TIMESTAMP:
+            xParameter->setTimestamp(*aPosIter,*aIter);
+            break;
+        case DataType::BINARY:
+        case DataType::VARBINARY:
+        case DataType::LONGVARBINARY:
+        case DataType::LONGVARCHAR:
+            xParameter->setBytes(*aPosIter,*aIter);
+            break;
+        case DataType::BIT:
+            xParameter->setBoolean(*aPosIter,*aIter);
+            break;
+        case DataType::TINYINT:
+            xParameter->setByte(*aPosIter,*aIter);
+            break;
+        case DataType::SMALLINT:
+            xParameter->setShort(*aPosIter,*aIter);
+            break;
+        case DataType::INTEGER:
+            xParameter->setInt(*aPosIter,*aIter);
+            break;
+        }
+    }
+
+    m_xSet = m_xStatement->executeQuery();
+    OSL_ENSURE(m_xSet.is(),"No resultset form statement!");
+    sal_Bool bOK = m_xSet->next();
+    OSL_ENSURE(bOK,"No rows!");
+    m_xRow = Reference< XRow>(m_xSet,UNO_QUERY);
+    OSL_ENSURE(m_xRow.is(),"No row form statement!");
+}
+// -----------------------------------------------------------------------------
+sal_Bool OKeySet::fetchRow()
+{
+    sal_Bool bRet;
+    if(!m_bRowCountFinal && (bRet = m_xDriverSet->next()))
+    {
+        ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >(m_aColumnPos.size());
+        connectivity::ORowVector< ORowSetValue >::iterator aIter = aKeyRow->begin();
+        ::std::vector< sal_Int32>::const_iterator aPosIter = m_aColumnPos.begin();
+        for(;aPosIter != m_aColumnPos.end();++aPosIter,++aIter)
+        {
+            sal_Int32 nType = m_xSetMetaData->getColumnType(*aPosIter);
+
+            switch(nType)
+            {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+                (*aIter) = m_xDriverRow->getString(*aPosIter);
+                break;
+            case DataType::DOUBLE:
+            case DataType::FLOAT:
+            case DataType::REAL:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                (*aIter) = m_xDriverRow->getDouble(*aPosIter);
+                break;
+            case DataType::DATE:
+                (*aIter) = m_xDriverRow->getDate(*aPosIter);
+                break;
+            case DataType::TIME:
+                (*aIter) = m_xDriverRow->getTime(*aPosIter);
+                break;
+            case DataType::TIMESTAMP:
+                (*aIter) = m_xDriverRow->getTimestamp(*aPosIter);
+                break;
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+            case DataType::LONGVARCHAR:
+                (*aIter) = m_xDriverRow->getBytes(*aPosIter);
+                break;
+            case DataType::BIT:
+                (*aIter) = m_xDriverRow->getBoolean(*aPosIter);
+                break;
+            case DataType::TINYINT:
+                (*aIter) = (sal_Int32)m_xDriverRow->getByte(*aPosIter);
+                break;
+            case DataType::SMALLINT:
+                (*aIter) = (sal_Int32)m_xDriverRow->getShort(*aPosIter);
+                break;
+            case DataType::INTEGER:
+                (*aIter) = m_xDriverRow->getInt(*aPosIter);
+                break;
+            }
+            if(m_xDriverRow->wasNull())
+                aIter->setNull();
+            aIter->setTypeKind(nType);
+        }
+        m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(m_aKeyMap.size(),aKeyRow)).first;
+    }
+    else
+        m_bRowCountFinal = sal_True;
+    return bRet;
+}
+// -------------------------------------------------------------------------
+void OKeySet::fillAllRows()
+{
+    if(!m_bRowCountFinal)
+    {
+        while(fetchRow())
+            ;
+    }
+}
+// -----------------------------------------------------------------------------
 
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/01/22 07:38:23  oj
+    #82632# change member
+
     Revision 1.6  2000/11/15 15:57:40  oj
     change for rowset
 
