@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcmain.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:07:41 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,8 @@ int SAL_CALL main( int argc, char** argv )
     const StringVector& files = options.getInputFiles();
     sal_Int32   nFiles = files.size();
     sal_Int32 nErrors = 0;
-    for ( sal_Int32 i=0; i < nFiles; i++ )
+    sal_Int32 i;
+    for ( i=0; i < nFiles; i++ )
     {
         OString sysFileName( convertToAbsoluteSystemPath(files[i]) );
 
