@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-16 12:28:39 $
+ *  last change: $Author: os $ $Date: 2001-05-08 08:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1425,7 +1425,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     !bFrmSelection &&
                     nFrmType & FRMTYPE_COLSECT )
                 {
-                    const SwSection *pSect = rSh.GetAnySection();
+                    const SwSection *pSect = rSh.GetAnySection(FALSE, pPt);
                     ASSERT( pSect, "Welcher Bereich?");
                     if( pSect )
                     {
@@ -1669,7 +1669,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     {
                         eRecType = bSectOutTbl ? RECT_OUTTABSECTION
                                                : RECT_SECTION;
-                        const SwSection *pSect = rSh.GetAnySection( bSectOutTbl );
+                        const SwSection *pSect = rSh.GetAnySection( bSectOutTbl, pPt );
                         ASSERT( pSect, "Welcher Bereich?");
                         pFmt = pSect->GetFmt();
                     }
@@ -1784,6 +1784,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/02/16 12:28:39  ama
+    Fix #81084#: Negativ indent of paragraphs in flyframes
+
     Revision 1.1.1.1  2000/09/18 17:14:49  hr
     initial import
 

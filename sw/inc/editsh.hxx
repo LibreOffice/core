@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-05-02 12:31:45 $
+ *  last change: $Author: os $ $Date: 2001-05-08 08:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,7 +799,7 @@ public:
     // Fussnote steht, deren Referenz in einem spaltigen Bereich steckt.
     // Wenn man bOutOfTab setzt, wird der Bereich gesucht,
     // der die Tabelle umfasst, nicht etwa ein innerer.
-    const SwSection* GetAnySection( BOOL bOutOfTab = FALSE ) const;
+    const SwSection* GetAnySection( BOOL bOutOfTab = FALSE, const Point* pPt = 0 ) const;
 
     USHORT GetSectionFmtCount() const;
     USHORT GetSectionFmtPos( const SwSectionFmt& ) const;

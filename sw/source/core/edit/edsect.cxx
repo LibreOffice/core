@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edsect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-05-02 12:34:08 $
+ *  last change: $Author: os $ $Date: 2001-05-08 08:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #ifndef _TABFRM_HXX
 #include <tabfrm.hxx>       // SwTabFrm
 #endif
+#ifndef _ROOTFRM_HXX
+#include <rootfrm.hxx>      // SwRootFrm
+#endif
 
 
     // SS fuer Bereiche
@@ -149,9 +152,20 @@ const SwSection* SwEditShell::GetCurrSection() const
  * Bereich innerhalb der Fussnote sein.
  * --------------------------------------------------*/
 
-const SwSection* SwEditShell::GetAnySection( BOOL bOutOfTab ) const
+const SwSection* SwEditShell::GetAnySection( BOOL bOutOfTab, const Point* pPt ) const
 {
-    SwFrm* pFrm = GetCurrFrm();
+    SwFrm *pFrm;
+    if ( pPt )
+    {
+        SwPosition aPos( *GetCrsr()->GetPoint() );
+        Point aPt( *pPt );
+        GetLayout()->GetCrsrOfst( &aPos, aPt );
+        SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
+        pFrm = pNd->GetFrm( pPt );
+    }
+    else
+        pFrm = GetCurrFrm( FALSE );
+
     if( bOutOfTab && pFrm )
         pFrm = pFrm->FindTabFrm();
     if( pFrm && pFrm->IsInSct() )
