@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-23 12:58:50 $
+ *  last change: $Author: bc $ $Date: 2002-10-01 14:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,8 @@ public class ReportWizard {
      boolean[] baskbeforeOverwrite = new boolean[2];
      boolean[] bmodifiedbySaveAsDialog = new boolean[2];
      boolean bfinalaskbeforeOverwrite;
+     int iOldContentPos;
+     int iOldLayoutPos;
 
      String[] OriginalList = new String[]{""};
      static XDesktop xDesktop;
@@ -492,35 +494,44 @@ public class ReportWizard {
             break;
 
         case SOCONTENTLST:
+            iPos = xContentListBox.getSelectedItemPos();
+            if (iPos != iOldContentPos){
+            iOldContentPos = iPos;
             tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(false));
             CurReportDocument.ReportTextDocument.lockControllers();
-            iPos = xContentListBox.getSelectedItemPos();
             CurReportDocument.loadSectionsfromTemplate(CurReportPaths.ContentFiles[0][iPos]);
             CurReportDocument.loadStyleTemplates(CurReportPaths.ContentFiles[0][iPos], "LoadTextStyles");
             CurReportDocument.setTableColumnSeparators();
             CurReportDocument.ReportTextDocument.unlockControllers();
             CurReportDocument.selectFirstPage();
             tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(true));
+            }
             break;
 
         case SOLAYOUTLST:
+            iPos = xLayoutListBox.getSelectedItemPos();
+            if (iPos != iOldLayoutPos){
+            iOldLayoutPos = iPos;
             tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(false));
             CurReportDocument.ReportTextDocument.lockControllers();
-            iPos = xLayoutListBox.getSelectedItemPos();
             boolean bOldIsCurLandscape = ((Boolean) tools.getUNOPropertyValue(CurReportDocument.ReportPageStyle, "IsLandscape")).booleanValue();
             CurReportDocument.loadStyleTemplates(CurReportPaths.LayoutFiles[0][iPos], "LoadPageStyles");
             CurReportDocument.changePageOrientation(CurReportPaths.BitmapPath, CurUNODialog, bOldIsCurLandscape);
             CurReportDocument.ReportTextDocument.unlockControllers();
             CurReportDocument.selectFirstPage();
             tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(true));
+            }
             break;
+
         default:
             break;
            }
         }
         catch(Exception exception){
             exception.printStackTrace(System.out);
-        // make sure the dialog does not block the component
+        // make sure the dialog does not block the component and Controllers are unlocked
+        if (CurReportDocument.ReportTextDocument.hasControllersLocked())
+        CurReportDocument.ReportTextDocument.unlockControllers();
         tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(true));
         }
      }
@@ -592,14 +603,18 @@ public class ReportWizard {
 
                     case SOOPTLANDSCAPE:
             tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(false));
+            CurReportDocument.ReportTextDocument.lockControllers();
                         CurReportDocument.changePageOrientation(CurReportPaths.BitmapPath, CurUNODialog, true);
             tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(true));
+            CurReportDocument.ReportTextDocument.unlockControllers();
                         break;
 
                     case SOOPTPORTRAIT:
             tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(false));
+            CurReportDocument.ReportTextDocument.lockControllers();
                         CurReportDocument.changePageOrientation(CurReportPaths.BitmapPath, CurUNODialog, false);
             tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(true));
+            CurReportDocument.ReportTextDocument.unlockControllers();
                         break;
 
             case SOOPTSAVEASTEMPLATE:
@@ -1014,6 +1029,7 @@ public class ReportWizard {
                 new Object[] {new Integer(8), slblDataStructure, new Integer(6), new Integer(70), new Integer(4), new Integer(125)});
 
         short iSelPos = (short) tools.FieldInList(CurReportPaths.ContentFiles[0], CurReportPaths.ReportPath + "/cnt-default.stw");
+        iOldContentPos = (int) iSelPos;
         xContentListBox = CurUNODialog.insertListBox("lstContent", SOCONTENTLST, new ActionListenerImpl(), new ItemListenerImpl(),
                     new String[] {"Height", "HelpURL", "PositionX", "PositionY", "SelectedItems", "Step", "StringItemList", "TabIndex", "Width"},
                 new Object[] {new Integer(63), "HID:34363", new Integer(6), new Integer(80), new short[] {iSelPos},  new Integer(4), CurReportPaths.ContentFiles[1], new Short((short)32), new Integer(125)});
@@ -1026,6 +1042,7 @@ public class ReportWizard {
         xLayoutListBox = CurUNODialog.insertListBox("lstLayout", SOLAYOUTLST, new ActionListenerImpl(), new ItemListenerImpl(),
                     new String[] {"Height", "HelpURL", "PositionX", "PositionY", "SelectedItems", "Step", "StringItemList", "TabIndex", "Width"},
                 new Object[] {new Integer(63), "HID:34364", new Integer(140), new Integer(80), new short[] {iSelLayoutPos}, new Integer(4), CurReportPaths.LayoutFiles[1], new Short((short)33), new Integer(125)});
+        iOldLayoutPos = (int) iSelPos;
 
         CurUNODialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblOrientation",
                             new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "Width"},
@@ -1094,7 +1111,7 @@ public class ReportWizard {
         CurUNODialog.assignPropertyToDialogControl("lstSort" + new Integer(i+1).toString(), "StringItemList", SortFieldNames);
         CurUNODialog.assignPropertyToDialogControl("lstSort" + new Integer(i+1).toString(), "SelectedItems", SelList);
         }
-        System.out.println(xSortListBox[0].getSelectedItemPos());
+//      System.out.println(xSortListBox[0].getSelectedItemPos());
     }
     }
     catch(Exception exception){
