@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:54:48 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ ModalDialog DLG_BIB_BASE
         Text[ korean ] = "货肺(~N)";
         Text[ turkish ] = "~Yeni";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nuevo";
     };
     PushButton PB_DELETE
     {
@@ -140,6 +141,7 @@ ModalDialog DLG_BIB_BASE
         Text[ korean ] = "昏力(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar";
     };
     PushButton PB_RENAME
     {
@@ -168,6 +170,7 @@ ModalDialog DLG_BIB_BASE
         Text[ korean ] = "捞抚 官操扁(~R)";
         Text[ turkish ] = "Y~eniden adland齬";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Cambiar nombre";
     };
     GroupBox GB_BIB
     {
@@ -196,6 +199,7 @@ ModalDialog DLG_BIB_BASE
         Text[ korean ] = "备开";
         Text[ turkish ] = "Kategori";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Area";
     };
     OKButton BT_OK
     {
@@ -262,6 +266,7 @@ ModalDialog DLG_BIB_BASE
     Text[ korean ] = "备开 祈笼";
     Text[ turkish ] = "Kategorileri d鼁enle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar 醨eas";
 };
 /*
 String STR_GLOSSARY_BIB_DLG
