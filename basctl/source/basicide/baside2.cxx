@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-05 10:22:51 $
+ *  last change: $Author: sb $ $Date: 2002-07-05 14:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1417,8 +1417,8 @@ ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
         = Color(m_aColorConfig.GetColorValue(svx::BASICSTRING).nColor);
     m_aSyntaxColors[TT_COMMENT]
         = Color(m_aColorConfig.GetColorValue(svx::BASICCOMMENT).nColor);
-    m_aSyntaxColors[TT_ERROR] = Color(COL_RED); // FIXME (#99517#)
-//      = Color(m_aColorConfig.GetColorValue(svx::BASICERROR).nColor);
+    m_aSyntaxColors[TT_ERROR]
+        = Color(m_aColorConfig.GetColorValue(svx::BASICERROR).nColor);
     m_aSyntaxColors[TT_OPERATOR]
         = Color(m_aColorConfig.GetColorValue(svx::BASICOPERATOR).nColor);
     m_aSyntaxColors[TT_KEYWORD]
@@ -1650,10 +1650,9 @@ void ModulWindowLayout::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
                        nColor);
         bChanged = bChanged || aColor != m_aSyntaxColors[TT_COMMENT];
         m_aSyntaxColors[TT_COMMENT] = aColor;
-// FIXME (#99517#):
-//      aColor = Color(m_aColorConfig.GetColorValue(svx::BASICERROR).nColor);
-//      bChanged = bChanged || aColor != m_aSyntaxColors[TT_ERROR];
-//      m_aSyntaxColors[TT_ERROR] = aColor;
+        aColor = Color(m_aColorConfig.GetColorValue(svx::BASICERROR).nColor);
+        bChanged = bChanged || aColor != m_aSyntaxColors[TT_ERROR];
+        m_aSyntaxColors[TT_ERROR] = aColor;
         aColor = Color(m_aColorConfig.GetColorValue(svx::BASICOPERATOR).
                        nColor);
         bChanged = bChanged || aColor != m_aSyntaxColors[TT_OPERATOR];
