@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:46:27 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ korean ] = "±×·ìº¯°æ½Ã¿¡¡¡»õ¡¡ÂÊ (~P)";
         Text[ turkish ] = "~Her grup için yeni sayfa baþlat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nueva página entre grupos";
     };
     CheckBox BTN_CASE
     {
@@ -125,6 +126,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºÐ(~C)";
         Text[ turkish ] = "~Büyük/küçük harf duyarlý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Mayúsculas/minúsculas";
     };
     CheckBox BTN_SORT
     {
@@ -154,6 +156,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ korean ] = "±×·ì¿¡ µû¶ó ¹üÀ§¸¦ »çÀü¿¡ Á¤·Ä(~S)";
         Text[ turkish ] = "Bölümü önce gruplara göre ~sýrala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ordenar primero e~l área por grupos";
     };
     CheckBox BTN_FORMATS
     {
@@ -184,6 +187,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ korean ] = "¼­½Ä Æ÷ÇÔ(~N)";
         Text[ turkish ] = "~Formatlamayý da dikkate al";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Incluir formatos";
     };
     CheckBox BTN_USERDEF
     {
@@ -213,6 +217,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ korean ] = "»ç¿ëÀÚ°¡ Á¤ÀÇÇÑ  Á¤·Ä ¼ø¼­(~U)";
         Text[ turkish ] = "~Kullanýcý tanýmlý sýralama düzeni";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Orden de clasificación definido por el usuario";
     };
     ListBox LB_USERDEF
     {
@@ -250,6 +255,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ korean ] = "¿À¸§Â÷¼ø(~A)";
         Text[ turkish ] = "A~rtan düzende";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ascendente";
     };
     RadioButton BTN_DESCENDING
     {
@@ -279,6 +285,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ korean ] = "³»¸²Â÷¼ø(~E)";
         Text[ turkish ] = "A~zalan düzende";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Descendente";
     };
     GroupBox GB_OPTIONS
     {
@@ -307,6 +314,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ korean ] = "Á¤·Ä";
         Text[ turkish ] = "Sýralama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ordenar";
     };
 };
 
@@ -346,6 +354,7 @@ TabPage RID_SUBTBASE
         Text[ korean ] = "¿¡ÀÇÇÑ ±×·ì(~G)";
         Text[ turkish ] = "~Gruplama esasý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Agrupar por";
     };
     ListBox LB_GROUP
     {
@@ -384,6 +393,7 @@ TabPage RID_SUBTBASE
         Text[ korean ] = "¿¡ ´ëÇÑ ¼Ò°è °è»ê(~C)";
         Text[ turkish ] = "~Ara toplamlarý hesaplanacak sütun(lar)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Calcular subtotales para";
     };
     Control WND_COLUMNS
     {
@@ -420,6 +430,7 @@ TabPage RID_SUBTBASE
         Text[ korean ] = "°è»ê¡¡±ÔÄ¢(~F)";
         Text[ turkish ] = "K~ullanýlacak fonksiyon";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Usar función";
     };
     ListBox LB_FUNCTIONS
     {
@@ -751,6 +762,20 @@ TabPage RID_SUBTBASE
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Suma" ; Default ; > ;
+        < "Cantidad" ; Default ; > ;
+        < "Promedio" ; Default ; > ;
+        < "Máx." ; Default ; > ;
+        < "Mín." ; Default ; > ;
+        < "Producto" ; Default ; > ;
+        < "Cantidad (solo números)" ; Default ; > ;
+        < "DesvEst (Muestra)" ; Default ; > ;
+        < "DesvEstP (Población)" ; Default ; > ;
+        < "Varianza (Muestra)" ; Default ; > ;
+        < "VarP (Población)" ; Default ; > ;
+    };
     };
 };
 
@@ -823,6 +848,7 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text[ korean ] = "1¹øÂ° ±×·ì";
                 Text[ turkish ] = "1. Grup";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Grupo 1";
             };
             PageItem
             {
@@ -850,6 +876,7 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text[ korean ] = "2¹øÂ° ±×·ì";
                 Text[ turkish ] = "2. Grup";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Grupo 2";
             };
             PageItem
             {
@@ -877,6 +904,7 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text[ korean ] = "3¹øÂ° ±×·ì";
                 Text[ turkish ] = "3. Grup";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Grupo 3";
             };
             PageItem
             {
@@ -904,6 +932,7 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text[ korean ] = "¿É¼Ç";
                 Text[ turkish ] = "Seçenekler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Opciones";
             };
         };
     };
@@ -936,6 +965,7 @@ TabDialog RID_SCDLG_SUBTOTALS
         Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar";
     };
     Text[ chinese_simplified ] = "·ÖÀà»ã×Ü";
     Text[ russian ] = "Ïðîìåæóòî÷íûå èòîãè";
@@ -947,6 +977,7 @@ TabDialog RID_SCDLG_SUBTOTALS
     Text[ korean ] = "¼Ò°è";
     Text[ turkish ] = "Ara toplamlar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Subtotales";
 };
 
 
