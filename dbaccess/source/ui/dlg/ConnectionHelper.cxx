@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:57:25 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@
 #ifdef _ADO_DATALINK_BROWSE_
 typedef void*               HWND;
 typedef void*               HMENU;
+typedef void*               HDC;
 #ifndef _SV_SYSDATA_HXX
 #include <vcl/sysdata.hxx>
 #endif
