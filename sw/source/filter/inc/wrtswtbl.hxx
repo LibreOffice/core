@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtswtbl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:46:57 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,8 @@ protected:
                             USHORT nParentLineWidth,
                             const SwTableLines& rLines,
                             const SvxBrushItem* pLineBrush,
-                            USHORT nDepth );
+                            USHORT nDepth,
+                            sal_uInt16 nNumOfHeaderRows );
 
     void MergeBorders( const SvxBorderLine* pBorderLine, BOOL bTable );
 
@@ -357,7 +358,7 @@ protected:
 public:
     SwWriteTable( const SwTableLines& rLines, long nWidth, USHORT nBWidth,
                     BOOL bRel, USHORT nMaxDepth = USHRT_MAX,
-                    USHORT nLeftSub=0, USHORT nRightSub=0 );
+                    USHORT nLeftSub=0, USHORT nRightSub=0, sal_uInt32 nNumOfRowsToRepeat=0 );
     SwWriteTable( const SwHTMLTableLayout *pLayoutInfo );
     virtual ~SwWriteTable();
 
