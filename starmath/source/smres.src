@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:18:33 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9478,7 +9478,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 HelpId = HID_SMA_SETOPERATIONS_CAT ;
                 Text = "Mengenoperationen" ;
                 Text [ ENGLISH ] = "set operations" ;
-                Text [ english_us ] = "Set-Operations" ;
+                Text [ english_us ] = "Set Operations" ;
                 Text [ portuguese_brazilian ] = "Mengenoperationen" ;
                 Text [ swedish ] = "Mängdoperationer" ;
                 Text [ danish ] = "Mængdeoperationer" ;
