@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:38:57 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -991,7 +991,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
         if( !pTestObj || !bHitTest || pTestObj != this ||
             pTestObj->GetOutlinerParaObject() != pOutlinerParaObject )
         {
-            if( bHitTest )
+//          if( bHitTest )
                 rOutliner.SetTextObj( this );
 
             rOutliner.SetUpdateMode(TRUE);
