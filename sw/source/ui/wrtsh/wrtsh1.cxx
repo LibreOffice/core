@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:13:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,7 +660,6 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 
 BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef&  xRef )
 {
-    if ( svt::EmbeddedObjectRef::TryRunningState( xRef.GetObject() ) )
     {
         ResetCursorStack();
         StartAllAction();
@@ -846,8 +845,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                     : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ));
         if( !aRect.IsEmpty() )
         {
-            // TODO/LEAN: getMapUnit still needs running state
-            xObj.TryRunningState();
+            // TODO/LEAN: getMapUnit can switch object to running state
+            // xObj.TryRunningState();
 
             MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
 
@@ -875,8 +874,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
             return;
     }
 
-    // TODO/LEAN: getMapUnit still needs running state
-    xObj.TryRunningState();
+    // TODO/LEAN: getMapUnit can switch object to running state
+    // xObj.TryRunningState();
 
     awt::Size aSize = xObj->getVisualAreaSize( nAspect );
     Size aVisArea( aSize.Width, aSize.Height );
