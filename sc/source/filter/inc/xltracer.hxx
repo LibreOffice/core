@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltracer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:43:53 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,30 +72,50 @@
 #include "xltools.hxx"
 #endif
 
+// As Trace features become implemented, we can safely delete the enum entry as
+// we use the member mnID to keep track of the actual trace tag ID value.
 enum XclTracerId
 {
-    eUnKnown  = 0,          /// unused but allows us to set the correct index
-    eRowLimitExceeded = 1,
-    eTabLimitExceeded = 2,
-    ePassword = 3,
-    ePrintRange = 4,
-    eHorizontalPrint = 5,
-    eShortDate = 6,
-    eShrinkToFit = 7,
-    eAlignmentFill = 8,
-    eDiagonalBorder = 9,
-    eBorderLineStyle = 10,
-    eFillPattern = 11,
-    eInvisibleGrid = 12,
-    eFormattedNote = 13,
-    eFormulaExtName = 14,
-    ePivotDataSource = 15,
-    eTraceLength = 16        /// this *should* always be the final entry
+    eUnKnown  ,          /// unused but allows us to set the correct index
+    eRowLimitExceeded ,
+    eTabLimitExceeded ,
+    ePassword ,
+    ePrintRange ,
+    eHorizontalPrint ,
+    eShortDate ,
+    eShrinkToFit ,
+    eAlignmentFill ,
+    eDiagonalBorder ,
+    eBorderLineStyle ,
+    eFillPattern ,
+    eInvisibleGrid ,
+    eFormattedNote ,
+    eFormulaExtName ,
+    eFormulaMissingArg ,
+    ePivotDataSource ,
+    ePivotChartExists ,
+    eChartUnKnownType ,
+    eChartTrendLines ,
+    eChartOnlySheet ,
+    eChartRange ,
+    eChartDSName,
+    eChartDataTable,
+    eChartLegendPosition,
+    eChartTextFormatting,
+    eChartEmbeddedObj,
+    eChartBorderAuto,
+    eChartAxisAuto,
+    eChartInvalidXY,
+    eUnsupportedObject ,
+    eObjectNotPrintable ,
+    eDVType,
+    eTraceLength         /// this *should* always be the final entry
 };
 
 struct XclTracerDetails
 {
     XclTracerId                 meProblemId;    /// Excel Import Trace index.
+    sal_uInt32                  mnID;           /// actual ID Index trace tag Value
     const sal_Char*             mpContext;      /// Context for problem e.g. Limits
     const sal_Char*             mpDetail;       /// Context Detail e.g. SheetX
     const sal_Char*             mpProblem;      /// Description of problem
@@ -151,7 +171,24 @@ public:
     void                        TraceInvisibleGrid(bool bVisibleGrid);
     void                        TraceFormattedNote(bool bFormattedNote);
     void                        TraceFormulaExtName();
+    void                        TraceFormulaMissingArg();
     void                        TracePivotDataSource(bool bExternal);
+    void                        TracePivotChartExists();
+    void                        TraceChartUnKnownType();
+    void                        TraceChartTrendLines();
+    void                        TraceChartOnlySheet();
+    void                        TraceChartRange();
+    void                        TraceChartDSName();
+    void                        TraceChartDataTable();
+    void                        TraceChartLegendPosition();
+    void                        TraceChartTextFormatting();
+    void                        TraceChartEmbeddedObj();
+    void                        TraceChartBorderAuto();
+    void                        TraceChartAxisAuto();
+    void                        TraceChartInvalidXY();
+    void                        TraceUnsupportedObjects();
+    void                        TraceObjectNotPrintable();
+    void                        TraceDVType(bool bType);
 
     /** Returns the SVX filter tracer for usage in external code (i.e. Escher). */
     inline MSFilterTracer&      GetBaseTracer() { return *mpTracer; }
