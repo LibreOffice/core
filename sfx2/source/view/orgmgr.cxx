@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:15:34 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,9 @@
 #include <so3/svstor.hxx>
 #endif
 #include <tools/urlobj.hxx>
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
@@ -247,12 +249,12 @@ const String& SfxObjectList::GetFileName( USHORT i ) const
 SfxOrganizeMgr::SfxOrganizeMgr( SfxOrganizeListBox_Impl *pLeft,
                                 SfxOrganizeListBox_Impl *pRight,
                                 SfxDocumentTemplates *pTempl) :
+    pImpl(new SfxOrganizeMgr_Impl),
+    pTemplates(pTempl? pTempl: new SfxDocumentTemplates),
     pLeftBox(pLeft),
     pRightBox(pRight),
-    pTemplates(pTempl? pTempl: new SfxDocumentTemplates),
-    pImpl(new SfxOrganizeMgr_Impl),
-    bModified(0),
-    bDeleteTemplates(pTempl == 0)
+    bDeleteTemplates(pTempl == 0),
+    bModified(0)
 
 /*  [Beschreibung]
 
@@ -272,7 +274,6 @@ SfxOrganizeMgr::SfxOrganizeMgr( SfxOrganizeListBox_Impl *pLeft,
              !( pTmp->GetFlags() & SFXOBJECTSHELL_HASOPENDOC ) || !pTmp->GetStyleSheetPool() )
             continue;
         _FileListEntry* pNewEntry = NULL;
-        BOOL bHasLongName = pTmp->GetMedium()->GetLongName().Len() != 0;
         String aTitle = pTmp->GetTitle( SFX_TITLE_TITLE );
         pNewEntry = new _FileListEntry( pTmp->GetMedium()->GetName(), pCollator, &aTitle );
         pNewEntry->aDocShell = pTmp;
