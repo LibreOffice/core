@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:34 $
+ *  last change: $Author: pb $ $Date: 2000-12-08 08:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ public:
                                 GetFolderContents( const String& rFolder, sal_Bool bFolder );
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                 GetFolderContentProperties( const String& rFolder, sal_Bool bFolder );
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString > GetResultSet( const String& rURL );
 
     static sal_Bool             CopyTo( const String& rSource, const String& rDest );
     static sal_Bool             MoveTo( const String& rSource, const String& rDest, sal_Int32 nNameClash = com::sun::star::ucb::NameClash::ERROR );

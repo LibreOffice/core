@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-01 16:30:52 $
+ *  last change: $Author: pb $ $Date: 2000-12-08 08:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,10 +370,10 @@ Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder
 
     if ( pFiles )
     {
-        USHORT nCount = pFiles->Count();
+        ULONG nCount = pFiles->Count();
         Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( USHORT i = 0; i < nCount; ++i )
+        for ( ULONG i = 0; i < nCount; ++i )
         {
             OUString* pFile = pFiles->GetObject(i);
             pRet[i] = *( pFile );
@@ -506,16 +506,102 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
 
     if ( pProperties )
     {
-        USHORT nCount = pProperties->Count();
+        ULONG nCount = pProperties->Count();
         Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( USHORT i = 0; i < nCount; ++i )
+        for ( ULONG i = 0; i < nCount; ++i )
         {
             OUString* pProperty = pProperties->GetObject(i);
             pRet[i] = *( pProperty );
             delete pProperty;
         }
         delete pProperties;
+        return aRet;
+    }
+    else
+        return Sequence < OUString > ();
+}
+
+// -----------------------------------------------------------------------
+
+Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
+{
+    StringList_Impl* pList = NULL;
+    try
+    {
+        Content aCnt( rURL, Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+        Reference< XResultSet > xResultSet;
+        Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
+        Sequence< OUString > aProps(3);
+        OUString* pProps = aProps.getArray();
+        pProps[0] = OUString::createFromAscii( "Title" );
+        pProps[1] = OUString::createFromAscii( "ContentType" );
+        pProps[2] = OUString::createFromAscii( "IsFolder" );
+
+        try
+        {
+            xDynResultSet = aCnt.createDynamicCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS );
+            if ( xDynResultSet.is() )
+                xResultSet = xDynResultSet->getStaticResultSet();
+        }
+        catch( ::com::sun::star::ucb::CommandAbortedException& )
+        {
+            DBG_ERRORFILE( "createCursor: CommandAbortedException" );
+        }
+        catch( ... )
+        {
+            DBG_ERRORFILE( "createCursor: Any other exception" );
+        }
+
+        if ( xResultSet.is() )
+        {
+            pList = new StringList_Impl;
+            Reference< com::sun::star::sdbc::XRow > xRow( xResultSet, UNO_QUERY );
+            Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+
+            try
+            {
+                while ( xResultSet->next() )
+                {
+                    String aTitle( xRow->getString(1) );
+                    String aType( xRow->getString(2) );
+                    sal_Bool bFolder = xRow->getBoolean(3);
+                    String aRow = aTitle;
+                    aRow += '\t';
+                    aRow += aType;
+                    aRow += '\t';
+                    aRow += String( xContentAccess->queryContentIdentifierString() );
+                    OUString* pRow = new OUString( aRow );
+                    pList->Insert( pRow, LIST_APPEND );
+                }
+            }
+            catch( ::com::sun::star::ucb::CommandAbortedException& )
+            {
+                DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
+            }
+            catch( ... )
+            {
+                DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
+            }
+        }
+    }
+    catch( ... )
+    {
+        DBG_ERRORFILE( "GetResultSet: Any other exception" );
+    }
+
+    if ( pList )
+    {
+        ULONG nCount = pList->Count();
+        Sequence < OUString > aRet( nCount );
+        OUString* pRet = aRet.getArray();
+        for ( ULONG i = 0; i < nCount; ++i )
+        {
+            OUString* pEntry = pList->GetObject(i);
+            pRet[i] = *( pEntry );
+            delete pEntry;
+        }
+        delete pList;
         return aRet;
     }
     else
