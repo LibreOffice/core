@@ -2,9 +2,9 @@
  *
  *  $RCSfile: richtextcontrol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 14:55:36 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,6 +516,13 @@ namespace frm
             {
                 aDispatcherLoop->second->invalidate();
             }
+        }
+        else if ( _rPropertyName.equals( PROPERTY_HIDEINACTIVESELECTION ) )
+        {
+            RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
+            sal_Bool bHide = pRichTextControl->GetHideInactiveSelection();
+            OSL_VERIFY( _rValue >>= bHide );
+            pRichTextControl->SetHideInactiveSelection( bHide );
         }
         else
             VCLXWindow::setProperty( _rPropertyName, _rValue );
