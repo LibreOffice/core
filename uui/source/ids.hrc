@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-22 14:06:59 $
+ *  last change: $Author: mav $ $Date: 2001-06-26 14:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  The UUI Resources
 //
-// $Author: kso $ $Date: 2001-06-22 14:06:59 $ $Revision: 1.3 $
+// $Author: mav $ $Date: 2001-06-26 14:38:18 $ $Revision: 1.4 $
 //============================================================================
 
 #ifndef UUI_IDS_HRC
@@ -89,6 +89,9 @@
 #define STR_COOKIES_SEND_TITLE (RID_UUI_START + 9)
 #define STR_ERROR_FILEIO (RID_UUI_START + 10)
 #define STR_ERROR_WRONGMEDIUM (RID_UUI_START + 11)
+#define DLG_UUI_PASSWORD (RID_UUI_START + 12)
+#define STR_ERROR_PASSWORDS_NOT_IDENTICAL (RID_UUI_START + 13)
+#define STR_ERROR_PASSWORD_WRONG (RID_UUI_START + 14)
 
 //============================================================================
 // errors
@@ -137,6 +140,7 @@
 //============================================================================
 #define HID_DLG_LOGIN (HID_UUI_START + 0)
 #define HID_DLG_COOKIES (HID_UUI_START + 1)
+#define HID_DLG_PASSWORD (HID_UUI_START+2)
 
 // HID_UUI_END (aka HID_CHAOS_NEW_DATABASE) is reserved in
 // sfx2/util/hidother.src!
