@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:15:37 $
+ *  last change: $Author: fme $ $Date: 2001-11-08 08:34:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,9 +473,10 @@ class SwScanner
     xub_StrLen nLen;
     BOOL bReverse;
     BOOL bStart;
+    BOOL bIsOnlineSpell;
 public:
     SwScanner( SwTxtNode* pNd, const SwWrongList* pWrng, xub_StrLen nStart,
-                xub_StrLen nEnde, BOOL bRev );
+                xub_StrLen nEnde, BOOL bRev, BOOL bOS );
     BOOL NextWord( LanguageType aLang );
     const XubString& GetWord() const    { return aWord; }
     xub_StrLen GetBegin() const         { return nBegin; }
@@ -486,8 +487,9 @@ public:
 
 
 SwScanner::SwScanner( SwTxtNode* pNd, const SwWrongList* pWrng,
-                        xub_StrLen nStart, xub_StrLen nEnde, BOOL bRev )
-    : pNode( pNd ), pWrong( pWrng ), nLen( 0 ), bReverse( bRev ), bStart( TRUE )
+                        xub_StrLen nStart, xub_StrLen nEnde, BOOL bRev, BOOL bOS )
+    : pNode( pNd ), pWrong( pWrng ), nLen( 0 ), bReverse( bRev ), bStart( TRUE ),
+      bIsOnlineSpell( bOS )
 {
     ASSERT( pNode->GetTxt().Len(), "SwScanner: EmptyString" );
     if( bReverse )
@@ -553,16 +555,6 @@ BOOL SwScanner::NextWord( LanguageType aLang )
         aBound = pBreakIt->xBreak->getWordBoundary( rText, nBegin,
             pBreakIt->GetLocale( aLang ), WordType::DICTIONARY_WORD, !bReverse );
         bStart = aBound.startPos != aBound.endPos;
-        if( bStart )
-        {
-            if( bReverse )
-            {
-                if( nEndPos > aBound.startPos )
-                    nEndPos = (xub_StrLen)aBound.startPos;
-            }
-            else if( nEndPos < aBound.endPos && nEndPos > aBound.startPos )
-                nEndPos = (xub_StrLen)aBound.endPos;
-        }
     }
     if( !bStart )
     {
@@ -581,17 +573,21 @@ BOOL SwScanner::NextWord( LanguageType aLang )
     if( !nLen )
         return FALSE;
 
-    aWord = rText.Copy( nBegin, nLen );
+    // only in online spelling mode we want to consider the last word
+    // surrounding nEndPos
     if( bReverse )
     {
-        if( nBegin < nEndPos )
+        if( nBegin + ( bIsOnlineSpell ? nLen : 0 ) < nEndPos )
             return FALSE;
     }
     else
     {
-        if( nBegin + nLen > nEndPos )
+        if( nBegin + ( bIsOnlineSpell ? 0 : nLen ) > nEndPos )
             return FALSE;
     }
+
+    aWord = rText.Copy( nBegin, nLen );
+
     return TRUE;
 }
 
@@ -599,8 +595,6 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 {
     // Die Aehnlichkeiten zu SwTxtFrm::_AutoSpell sind beabsichtigt ...
     // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
-
-    LanguageType eFmtLang = GetSwAttrSet().GetLanguage().GetLanguage();
 
     BOOL bCheck = FALSE;
     BOOL bNoLang = FALSE;
@@ -650,18 +644,17 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
             nBegin = aText.Len();
         if( nEnd > aText.Len() )
             nEnd = aText.Len();
+
         LanguageType eActLang = GetLang( nBegin );
-        SwScanner aScanner( this, GetWrong(), nBegin, nEnd, bReverse );
+
+        SwScanner aScanner( this, GetWrong(), nBegin, nEnd, bReverse, FALSE );
         while( !pArgs->xSpellAlt.is() && aScanner.NextWord( eActLang ) )
         {
             const XubString& rWord = aScanner.GetWord();
 
-            if ( (USHORT)(eActLang=(LanguageType)GetLang(aScanner.GetBegin(),
-                          rWord.Len())) == USHRT_MAX )
-                eActLang=eFmtLang;
-
-            if( eActLang == LANGUAGE_SYSTEM )
-                eActLang = GetAppLanguage();
+            // get next language for next word, consider language attributes
+            // within the word
+            eActLang = GetLang( aScanner.GetBegin(), rWord.Len() );
 
             if( rWord.Len() > 1 )
             {
@@ -702,6 +695,21 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
                     }
                 }
             }
+
+            // get next language in order to find next word
+            xub_StrLen nNextBegin = aScanner.GetBegin() + rWord.Len();
+            // first we have to skip some whitespace characters
+            while ( nNextBegin < aText.Len() &&
+                    ( 0x3000 == aText.GetChar( nNextBegin ) ||
+                      ' ' == aText.GetChar( nNextBegin ) ||
+                      '\t' == aText.GetChar( nNextBegin ) ||
+                      0x0a == aText.GetChar( nNextBegin ) ) )
+                nNextBegin++;
+
+            if ( nNextBegin < aText.Len() )
+                eActLang = GetLang( nNextBegin );
+            else
+                break;
         }
     }
 
@@ -726,8 +734,6 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
         nActPos = STRING_LEN;
 
     SwAutoCompleteWord& rACW = pNode->GetDoc()->GetAutoCompleteWords();
-
-    LanguageType eFmtLang = pNode->GetSwAttrSet().GetLanguage().GetLanguage();
 
     // modify string according to redline information
     const SwDoc* pDoc = pNode->GetDoc();
@@ -799,7 +805,8 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
     if( nBegin < nEnd )
     {
         LanguageType eActLang = pNode->GetLang( nBegin );
-        SwScanner aScanner( pNode, NULL, nBegin, nEnd, FALSE );
+
+        SwScanner aScanner( pNode, NULL, nBegin, nEnd, FALSE, TRUE );
         while( aScanner.NextWord( eActLang ) )
         {
             if( bIncInsertPos )
@@ -812,9 +819,9 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
             nBegin = aScanner.GetBegin();
             nLen = aScanner.GetLen();
 
-            if ( (USHORT)(eActLang=(LanguageType)pNode->GetLang(nBegin, nLen))
-                == USHRT_MAX )
-                eActLang = eFmtLang;
+            // get next language for next word, consider language attributes
+            // within the word
+            eActLang = pNode->GetLang( aScanner.GetBegin(), rWord.Len() );
 
             BOOL bSpell = TRUE;
             BOOL bSoft = FALSE;
@@ -853,6 +860,21 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
                         rACW.InsertWord( rWord );
                 }
             }
+
+            // get next language in order to find next word
+            xub_StrLen nNextBegin = aScanner.GetBegin() + rWord.Len();
+            // first we have to skip some whitespace characters
+            while ( nNextBegin < pNode->aText.Len() &&
+                    ( 0x3000 == pNode->aText.GetChar( nNextBegin ) ||
+                      ' ' == pNode->aText.GetChar( nNextBegin ) ||
+                      '\t' == pNode->aText.GetChar( nNextBegin ) ||
+                      0x0a == pNode->aText.GetChar( nNextBegin ) ) )
+                nNextBegin++;
+
+            if ( nNextBegin < pNode->aText.Len() )
+                eActLang = pNode->GetLang( nNextBegin );
+            else
+                break;
         }
     }
     if( pNode->GetWrong() )
@@ -980,7 +1002,7 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos,
     if( nBegin < nEnd )
     {
         USHORT nCnt = 200;
-        SwScanner aScanner( pNode, NULL, nBegin, nEnd, FALSE );
+        SwScanner aScanner( pNode, NULL, nBegin, nEnd, FALSE, FALSE );
         while( aScanner.NextWord( pNode->GetLang( nBegin ) ) )
         {
             nBegin = aScanner.GetBegin();

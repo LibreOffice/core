@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-31 20:50:21 $
+ *  last change: $Author: fme $ $Date: 2001-11-08 08:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2307,7 +2307,7 @@ USHORT SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen) const
     {
         if( !pSwpHints )
             nWhichId = GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                        pBreakIt->GetRealScriptOfText( aText, 0 ));
+                        pBreakIt->GetRealScriptOfText( aText, nBegin ));
 
         nRet = ((SvxLanguageItem&)GetSwAttrSet().Get( nWhichId )).GetLanguage();
         if( LANGUAGE_DONTKNOW == nRet )
