@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lineaction.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:24:30 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@
 #include <canvas/canvastools.hxx>
 #endif
 
+#include <boost/utility.hpp>
+
 #include <cppcanvas/canvas.hxx>
 
 #include <mtftools.hxx>
@@ -94,37 +96,85 @@ namespace cppcanvas
 {
     namespace internal
     {
-        LineAction::LineAction( const ::Point&          rStartPoint,
-                                const ::Point&          rEndPoint,
-                                const CanvasSharedPtr&  rCanvas,
-                                const OutDevState&      rState ) :
-            maStartPoint( rStartPoint ),
-            maEndPoint( rEndPoint ),
-            mpCanvas( rCanvas ),
-            maState()
+        namespace
         {
-            tools::initRenderState(maState,rState);
-            maState.DeviceColor = rState.lineColor;
+            class LineAction : public Action, private ::boost::noncopyable
+            {
+            public:
+                LineAction( const ::Point&,
+                            const ::Point&,
+                            const CanvasSharedPtr&,
+                            const OutDevState& );
+
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                     const Subset&                  rSubset ) const;
+
+                virtual sal_Int32 getActionCount() const;
+
+            private:
+                Point                   maStartPoint;
+                Point                   maEndPoint;
+                CanvasSharedPtr         mpCanvas;
+                rendering::RenderState  maState;
+            };
+
+            LineAction::LineAction( const ::Point&          rStartPoint,
+                                    const ::Point&          rEndPoint,
+                                    const CanvasSharedPtr&  rCanvas,
+                                    const OutDevState&      rState ) :
+                maStartPoint( rStartPoint ),
+                maEndPoint( rEndPoint ),
+                mpCanvas( rCanvas ),
+                maState()
+            {
+                tools::initRenderState(maState,rState);
+                maState.DeviceColor = rState.lineColor;
+            }
+
+            bool LineAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            {
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::LineAction::render()" );
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::LineAction: 0x%X", this );
+
+                rendering::RenderState aLocalState( maState );
+                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
+                mpCanvas->getUNOCanvas()->drawLine( ::vcl::unotools::point2DFromPoint(maStartPoint),
+                                                    ::vcl::unotools::point2DFromPoint(maEndPoint),
+                                                    mpCanvas->getViewState(),
+                                                    aLocalState );
+
+                return true;
+            }
+
+            bool LineAction::render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                     const Subset&                  rSubset ) const
+            {
+                // line only contains a single action, fail if subset
+                // requests different range
+                if( rSubset.mnSubsetBegin != 0 ||
+                    rSubset.mnSubsetEnd != 1 )
+                    return false;
+
+                return render( rTransformation );
+            }
+
+            sal_Int32 LineAction::getActionCount() const
+            {
+                return 1;
+            }
         }
 
-        LineAction::~LineAction()
+        ActionSharedPtr LineActionFactory::createLineAction( const ::Point&         rStartPoint,
+                                                             const ::Point&         rEndPoint,
+                                                             const CanvasSharedPtr& rCanvas,
+                                                             const OutDevState&     rState  )
         {
-        }
-
-        bool LineAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
-        {
-            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::LineAction::render()" );
-            RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::LineAction: 0x%X", this );
-
-            rendering::RenderState aLocalState( maState );
-            ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
-
-            mpCanvas->getUNOCanvas()->drawLine( ::vcl::unotools::point2DFromPoint(maStartPoint),
-                                                ::vcl::unotools::point2DFromPoint(maEndPoint),
-                                                mpCanvas->getViewState(),
-                                                aLocalState );
-
-            return true;
+            return ActionSharedPtr( new LineAction( rStartPoint,
+                                                    rEndPoint,
+                                                    rCanvas,
+                                                    rState) );
         }
 
     }

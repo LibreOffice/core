@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lineaction.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:24:44 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,21 +62,13 @@
 #ifndef _CPPCANVAS_LINEACTION_HXX
 #define _CPPCANVAS_LINEACTION_HXX
 
-#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <com/sun/star/rendering/RenderState.hpp>
-#endif
-
-#ifndef _SV_GEN_HXX
-#include <tools/gen.hxx>
-#endif
-
 #include <action.hxx>
 #include <cppcanvas/canvas.hxx>
 
-class Color;
+class Point;
 
 
-/* Definition of internal::LineAction class */
+/* Definition of internal::LineActionFactory class */
 
 namespace cppcanvas
 {
@@ -84,26 +76,28 @@ namespace cppcanvas
     {
         struct OutDevState;
 
-        class LineAction : public Action
+        /** Creates encapsulated converters between GDIMetaFile and
+            XCanvas. The Canvas argument is deliberately placed at the
+            constructor, to force reconstruction of this object for a
+            new canvas. This considerably eases internal state
+            handling, since a lot of the internal state (e.g. fonts,
+            text layout) is Canvas-dependent.
+         */
+        class LineActionFactory
         {
         public:
-            LineAction( const ::Point&,
-                        const ::Point&,
-                        const CanvasSharedPtr&,
-                        const OutDevState& );
-            virtual ~LineAction();
-
-            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+            /// Plain hair line from point 1 to point 2
+            static ActionSharedPtr createLineAction( const ::Point&,
+                                                     const ::Point&,
+                                                     const CanvasSharedPtr&,
+                                                     const OutDevState& );
 
         private:
-            // default: disabled copy/assignment
-            LineAction(const LineAction&);
-            LineAction& operator=( const LineAction& );
-
-            Point                                               maStartPoint;
-            Point                                               maEndPoint;
-            CanvasSharedPtr                                     mpCanvas;
-            ::com::sun::star::rendering::RenderState    maState;
+            // static factory, disable big four
+            LineActionFactory();
+            ~LineActionFactory();
+            LineActionFactory(const LineActionFactory&);
+            LineActionFactory& operator=( const LineActionFactory& );
         };
     }
 }
