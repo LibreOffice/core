@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2001-10-31 22:08:16 $
+ *  last change: $Author: kz $ $Date: 2001-11-02 21:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1982,7 +1982,7 @@ String STR_COLOR
     Text[ japanese ] = "è‰²";
     Text[ greek ] = "×ñşìá";
     Text[ korean ] = "ìƒ‰ìƒ";
-    Text[ chinese_traditional ] = "é¡”è‰²";
+    Text[ chinese_traditional ] = "é¡è‰²";
     Text[ arabic ] = "Çááæä";
     Text[ turkish ] = "Renk";
     Text[ catalan ] = "Color";
@@ -5807,7 +5807,7 @@ ModalDialog RID_UNDO_DELETE_WARNING
     Text[ portuguese ] = "Hint";
     Text[ russian ] = "Óêàçàíèå";
     Text[ greek ] = "Hint";
-    Text[ dutch ] = "Aanwijzing";
+    Text[ dutch ] = "%PRODUCTNAME 6.0";
     Text[ french ] = "%PRODUCTNAME 6.0";
     Text[ spanish ] = "Indicación";
     Text[ finnish ] = "Hint";
@@ -11538,7 +11538,7 @@ String STR_UNDO_COLORRESOLUTION
     Text[ japanese ] = "è‰²ã®è§£åƒåº¦";
     Text[ greek ] = "ÁíÜëõóç ÷ñùìÜôùí";
     Text[ korean ] = "ìƒ‰ í•´ìƒë„";
-    Text[ chinese_traditional ] = "é¡”è‰²è§£æåº¦";
+    Text[ chinese_traditional ] = "é¡è‰²è§£æåº¦";
     Text[ arabic ] = "ÇÓÊÈÇäÉ ÇáÃáæÇä";
     Text[ turkish ] = "Renk çözünürlüğü";
     Text[ catalan ] = "Resolución del color";
@@ -13675,6 +13675,7 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transparencia";
     Text[ finnish ] = "Läpikuultavuus";
 };
+
 
 
 
