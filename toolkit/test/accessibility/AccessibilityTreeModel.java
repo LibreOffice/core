@@ -770,7 +770,7 @@ public class AccessibilityTreeModel
                 maCanvas.repaint ();
                 break;
 
-            case AccessibleEventId.ACCESSIBLE_TABLE_MODEL_CHANGED:
+            case AccessibleEventId.ACCESSIBLE_TABLE_MODEL_EVENT:
                 AccessibleTableModelChange aModelChange = (AccessibleTableModelChange)aEvent.NewValue;
                 System.out.println( "Range: StartRow " + aModelChange.FirstRow +
                                     " StartColumn " + aModelChange.FirstColumn +
@@ -789,21 +789,21 @@ public class AccessibilityTreeModel
             case AccessibleEventId.ACCESSIBLE_NAME_EVENT:
             case AccessibleEventId.ACCESSIBLE_DESCRIPTION_EVENT:
             case AccessibleEventId.ACCESSIBLE_STATE_EVENT:
-            case AccessibleEventId.CONTROLLED_BY_PROPERTY:
-            case AccessibleEventId.CONTROLLER_FOR_PROPERTY:
-            case AccessibleEventId.LABEL_FOR_PROPERTY:
-            case AccessibleEventId.LABELED_BY_PROPERTY:
-            case AccessibleEventId.MEMBER_OF_PROPERTY:
+            case AccessibleEventId.CONTROLLED_BY_EVENT:
+            case AccessibleEventId.CONTROLLER_FOR_EVENT:
+            case AccessibleEventId.LABEL_FOR_EVENT:
+            case AccessibleEventId.LABELED_BY_EVENT:
+            case AccessibleEventId.MEMBER_OF_EVENT:
             case AccessibleEventId.ACCESSIBLE_SELECTION_EVENT:
                 handleEvent (xSource, AccessibleContextHandler.class);
                 break;
 
-            case AccessibleEventId.ACCESSIBLE_TABLE_CAPTION_CHANGED:
-            case AccessibleEventId.ACCESSIBLE_TABLE_COLUMN_DESCRIPTION_CHANGED:
-            case AccessibleEventId.ACCESSIBLE_TABLE_COLUMN_HEADER_CHANGED:
-            case AccessibleEventId.ACCESSIBLE_TABLE_ROW_DESCRIPTION_CHANGED:
-            case AccessibleEventId.ACCESSIBLE_TABLE_ROW_HEADER_CHANGED:
-            case AccessibleEventId.ACCESSIBLE_TABLE_SUMMARY_CHANGED:
+            case AccessibleEventId.ACCESSIBLE_TABLE_CAPTION_EVENT:
+            case AccessibleEventId.ACCESSIBLE_TABLE_COLUMN_DESCRIPTION_EVENT:
+            case AccessibleEventId.ACCESSIBLE_TABLE_COLUMN_HEADER_EVENT:
+            case AccessibleEventId.ACCESSIBLE_TABLE_ROW_DESCRIPTION_EVENT:
+            case AccessibleEventId.ACCESSIBLE_TABLE_ROW_HEADER_EVENT:
+            case AccessibleEventId.ACCESSIBLE_TABLE_SUMMARY_EVENT:
                 handleEvent (xSource, AccessibleTableHandler.class);
                 break;
 
@@ -811,7 +811,7 @@ public class AccessibilityTreeModel
                 handleEvent (xSource, AccessibleActionHandler.class);
                 break;
 
-            case AccessibleEventId.ACCESSIBLE_HYPERTEXT_OFFSET:
+            case AccessibleEventId.ACCESSIBLE_HYPERTEXT_EVENT:
                 handleEvent (xSource, AccessibleHypertextHandler.class);
                 break;
 
