@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComponentContextEntry.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-14 11:58:23 $
+ *  last change: $Author: dbo $ $Date: 2002-01-21 14:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,16 @@
  ************************************************************************/
 package com.sun.star.comp.helper;
 
-//==================================================================================================
+/** Component context entry for constructing ComponentContext objects.
+    <p>
+    A ComponentContextEntry is separated into a late-init and direct-value
+    purpose.
+    The first one is commonly used for singleton objects of the component
+    context, that are raised on first-time retrieval of the key.
+    You have to pass a com.sun.star.lang.XSingleComponentFactory
+    or string (=> service name) object for this.
+    </p>
+*/
 public class ComponentContextEntry
 {
     /** if late init of service instance, set service name (String) or
@@ -71,13 +80,25 @@ public class ComponentContextEntry
     */
     public Object m_value;
 
-    //______________________________________________________________________________________________
+    /** Creating a late-init singleton entry component context entry.
+        The second parameter will be ignored and overwritten during
+        instanciation of the singleton instance.
+
+        @param lateInit
+               object factory or service string
+        @param value
+               pass null (dummy separating from second ctor signature)
+    */
     public ComponentContextEntry( Object lateInit, Object value )
     {
         this.m_lateInit = lateInit;
         this.m_value = value;
     }
-    //______________________________________________________________________________________________
+    /** Creating a direct value component context entry.
+
+        @param value
+               pass null
+    */
     public ComponentContextEntry( Object value )
     {
         this.m_lateInit = null;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComponentContext.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-28 17:43:34 $
+ *  last change: $Author: dbo $ $Date: 2002-01-21 14:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,9 @@ class Disposer implements XEventListener
         m_xComp.dispose();
     }
 }
-//==================================================================================================
+
+/** Component context implementation.
+*/
 public class ComponentContext implements XComponentContext, XComponent
 {
     private static final boolean DEBUG = false;
@@ -105,7 +107,15 @@ public class ComponentContext implements XComponentContext, XComponent
 
     private Vector m_eventListener;
 
-    //----------------------------------------------------------------------------------------------
+    /** Ctor to create a component context passing a hashtable for values and a delegator
+        reference. Entries of the passed hashtable are either direct values or
+        ComponentContextEntry objects.
+
+        @param table
+               entries
+        @param xDelegate
+               if values are not found, request is delegated to this object
+    */
     public ComponentContext( Hashtable table, XComponentContext xDelegate )
     {
         m_eventListener = new Vector();
