@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-09-20 12:10:05 $
+ *  last change: $Author: os $ $Date: 2002-10-30 10:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ extern int bDocSzUpdated;
     if ( bModified )
         SetVisArea( aNewVisArea, FALSE );
 
-    if ( UpdateScrollbars() && !bInOuterResizePixel )
+    if ( UpdateScrollbars() && !bInOuterResizePixel && !bInInnerResizePixel)
         OuterResizePixel( Point(),
                           GetViewFrame()->GetWindow().GetOutputSizePixel() );
 }
@@ -378,7 +378,7 @@ void SwView::SetVisArea( const Rectangle &rRect, BOOL bUpdateScrollbar )
 
     SwEditWin::ClearTip();
 
-    if ( bOuterResize && !bInOuterResizePixel)
+    if ( bOuterResize && !bInOuterResizePixel && !bInInnerResizePixel)
             OuterResizePixel( Point(),
                           GetViewFrame()->GetWindow().GetOutputSizePixel() );
 }
@@ -1098,6 +1098,7 @@ void SwView::ShowAtResize()
 
 void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
 {
+    bInInnerResizePixel = TRUE;
     SvBorder aBorder;
     CalcAndSetBorderPixel( aBorder, TRUE );
     Size aSz( rSize );
@@ -1134,6 +1135,7 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
     bProtectDocShellVisArea = TRUE;
     CalcVisArea( aEditSz );
     bProtectDocShellVisArea = FALSE;
+    bInInnerResizePixel = FALSE;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-06-28 12:09:35 $
+ *  last change: $Author: os $ $Date: 2002-10-30 10:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,7 @@ class SwView: public SfxViewShell
                     bDrawSelMode : 1,
                     bShowAtResize : 1,
                     bInOuterResizePixel : 1,
+                    bInInnerResizePixel : 1,
                     bIsApi : 1,
                     bPasteState : 1,
                     bPasteSpecialState : 1
