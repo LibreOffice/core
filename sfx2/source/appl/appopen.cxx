@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-13 13:30:55 $
+ *  last change: $Author: as $ $Date: 2002-08-26 13:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,12 @@
 #endif
 #ifndef _COM_SUN_STAR_SYSTEM_SYSTEMSHELLEXECUTEFLAGS_HPP_
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
+#include <com/sun/star/document/MacroExecMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -1225,6 +1231,28 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     SFX_REQUEST_ARG(rReq, pHidItem, SfxBoolItem, SID_HIDDEN, FALSE);
     if ( pHidItem )
         bHidden = pHidItem->GetValue();
+
+    // This request is an UI call. We have to set the right values inside the MediaDescriptor
+    // for: InteractionHandler, StatusIndicator, MacroExecutionMode and DocTemplate.
+    // But we have to look for already existing values or for real hidden requests.
+    SFX_REQUEST_ARG(rReq, pPreviewItem, SfxBoolItem, SID_PREVIEW, FALSE);
+    if (!bHidden && ( !pPreviewItem || !pPreviewItem->GetValue() ) )
+    {
+        SFX_REQUEST_ARG(rReq, pInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, FALSE);
+        SFX_REQUEST_ARG(rReq, pMacroExecItem  , SfxUInt16Item, SID_MACROEXECMODE     , FALSE);
+        SFX_REQUEST_ARG(rReq, pDocTemplateItem, SfxUInt16Item, SID_UPDATEDOCMODE     , FALSE);
+
+        if (!pInteractionItem)
+        {
+            Reference < ::com::sun::star::task::XInteractionHandler > xHdl( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.comp.uui.UUIInteractionHandler")), UNO_QUERY );
+            if (xHdl.is())
+                rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,::com::sun::star::uno::makeAny(xHdl)) );
+        }
+        if (!pMacroExecItem)
+            rReq.AppendItem( SfxUInt16Item(SID_MACROEXECMODE,::com::sun::star::document::MacroExecMode::USE_CONFIG) );
+        if (!pDocTemplateItem)
+            rReq.AppendItem( SfxUInt16Item(SID_UPDATEDOCMODE,::com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG) );
+    }
 
     // convert items to properties for framework API calls
     Sequence < PropertyValue > aArgs;
