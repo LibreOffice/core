@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 22:39:21 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 17:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ Window WIN_HELP_INDEX
                 Text[ swedish ] = "Bokm�rken";
                 Text[ polish ] = "Zak�adki";
                 Text[ portuguese_brazilian ] = "Bookmarks";
-                Text[ japanese ] = "ﾌﾞｯｸﾏｰｸ";
+                Text[ japanese ] = "ブックマーク";
                 Text[ korean ] = "책갈피";
                 Text[ chinese_simplified ] = "书签";
                 Text[ chinese_traditional ] = "書籤";
@@ -221,7 +221,7 @@ TabPage TP_HELP_INDEX
         Text[ swedish ] = "~S�kord";
         Text[ polish ] = "Szukane has�o";
         Text[ portuguese_brazilian ] = "~Suchbegriff";
-        Text[ japanese ] = "検索ｷｰ(~S)";
+        Text[ japanese ] = "検索キー(~S)";
         Text[ korean ] = "검색 용어(~S)";
         Text[ chinese_simplified ] = "搜寻条目(~S)";
         Text[ chinese_traditional ] = "搜尋項目(~S)";
@@ -287,7 +287,7 @@ TabPage TP_HELP_SEARCH
         Text[ swedish ] = "S�~kord";
         Text[ polish ] = "Szukane has�o";
         Text[ portuguese_brazilian ] = "~Suchbegriff";
-        Text[ japanese ] = "検索ｷｰ(~E)";
+        Text[ japanese ] = "検索キー(~E)";
         Text[ korean ] = "검색 용어(~E)";
         Text[ chinese_simplified ] = "搜寻条目(~E)";
         Text[ chinese_traditional ] = "搜尋項目(~E)";
@@ -372,7 +372,7 @@ TabPage TP_HELP_SEARCH
         Text[ swedish ] = "S�k bara i r~ubriker";
         Text[ polish ] = "Przeszukaj tylko tytu�y";
         Text[ portuguese_brazilian ] = "~Search headings only";
-        Text[ japanese ] = "ﾀｲﾄﾙだけで検索(~H)";
+        Text[ japanese ] = "タイトルだけで検索(~H)";
         Text[ korean ] = "제목에서만 찾기(~H)";
         Text[ chinese_simplified ] = "仅在大标题范围内搜寻(~H)";
         Text[ chinese_traditional ] = "僅在大標題範圍內搜尋(~H)";
@@ -439,7 +439,7 @@ TabPage TP_HELP_BOOKMARKS
         Text[ swedish ] = "~Bokm�rken";
         Text[ polish ] = "Zak�adki";
         Text[ portuguese_brazilian ] = "Bookmarks";
-        Text[ japanese ] = "ﾌﾞｯｸﾏｰｸ(~B)";
+        Text[ japanese ] = "ブックマーク(~B)";
         Text[ korean ] = "책갈피(~B)";
         Text[ chinese_simplified ] = "书签(~B)";
         Text[ chinese_traditional ] = "書籤(~B)";
@@ -590,7 +590,7 @@ String STR_HELP_WINDOW_TITLE
     Text[ swedish ] = "%PRODUCTNAME hj�lp";
     Text[ polish ] = "%PRODUCTNAME - Pomoc";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Help";
-    Text[ japanese ] = "%PRODUCTNAME ﾍﾙﾌﾟ";
+    Text[ japanese ] = "%PRODUCTNAME ヘルプ";
     Text[ korean ] = "%PRODUCTNAME 도움말";
     Text[ chinese_simplified ] = "%PRODUCTNAME 帮助";
     Text[ chinese_traditional ] = "%PRODUCTNAME 說明";
@@ -614,7 +614,7 @@ String STR_HELP_BUTTON_INDEX_ON
     Text[ swedish ] = "Visa navigationsomr�de";
     Text[ polish ] = "Poka� obszar nawigacji";
     Text[ portuguese_brazilian ] = "Index";
-    Text[ japanese ] = "ﾅﾋﾞｹﾞｰｼｮﾝ範囲の表示ｵﾝ";
+    Text[ japanese ] = "ナビゲーション範囲の表示オン";
     Text[ korean ] = "탐색 영역 표시";
     Text[ chinese_simplified ] = "显示浏览区域";
     Text[ chinese_traditional ] = "顯示瀏覽區域";
@@ -639,7 +639,7 @@ String STR_HELP_BUTTON_INDEX_OFF
     Text[ swedish ] = "D�lj navigationsomr�de";
     Text[ polish ] = "Ukryj obszar nawigacji";
     Text[ portuguese_brazilian ] = "Hide navigation area";
-    Text[ japanese ] = "ﾅﾋﾞｹﾞｰｼｮﾝ範囲の表示ｵﾌ";
+    Text[ japanese ] = "ナビゲーション範囲の表示オフ";
     Text[ korean ] = "탐색 영역 해제";
     Text[ chinese_simplified ] = "隐入浏览区域";
     Text[ chinese_traditional ] = "隱入瀏覽區域";
@@ -662,7 +662,7 @@ String STR_HELP_BUTTON_START
     Text[ swedish ] = "Startsida";
     Text[ polish ] = "Strona startowa";
     Text[ portuguese_brazilian ] = "Start page";
-    Text[ japanese ] = "開始ﾍﾟｰｼﾞ";
+    Text[ japanese ] = "開始ページ";
     Text[ korean ] = "시작 페이지";
     Text[ chinese_simplified ] = "首页";
     Text[ chinese_traditional ] = "首頁";
@@ -686,7 +686,7 @@ String STR_HELP_BUTTON_PREV
     Text[ swedish ] = "F�reg�ende sida";
     Text[ polish ] = "Poprzednia strona";
     Text[ portuguese_brazilian ] = "Backward";
-    Text[ japanese ] = "前ﾍﾟｰｼﾞ";
+    Text[ japanese ] = "前ページ";
     Text[ korean ] = "이전 페이지";
     Text[ chinese_simplified ] = "上一页";
     Text[ chinese_traditional ] = "上一頁";
@@ -710,7 +710,7 @@ String STR_HELP_BUTTON_NEXT
     Text[ swedish ] = "N�sta sida";
     Text[ polish ] = "Nast�pna strona";
     Text[ portuguese_brazilian ] = "Forward";
-    Text[ japanese ] = "次ﾍﾟｰｼﾞ";
+    Text[ japanese ] = "次ページ";
     Text[ korean ] = "다음 페이지";
     Text[ chinese_simplified ] = "下一页";
     Text[ chinese_traditional ] = "下一頁";
@@ -759,7 +759,7 @@ String STR_HELP_BUTTON_ADDBOOKMARK
     Text[ swedish ] = "L�gg till bokm�rke...";
     Text[ polish ] = "Dodaj zak�adk�...";
     Text[ portuguese_brazilian ] = "Add to bookmarks";
-    Text[ japanese ] = "ﾌﾞｯｸﾏｰｸの追加...";
+    Text[ japanese ] = "ブックマークの追加...";
     Text[ korean ] = "책갈피에 추가";
     Text[ chinese_simplified ] = "加入书签...";
     Text[ chinese_traditional ] = "加入書籤...";
@@ -805,7 +805,7 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text[ swedish ] = "HTML-k�lltext";
     Text[ polish ] = "Tekst �r�d�owy HTML";
     Text[ portuguese_brazilian ] = "FramesetSource";
-    Text[ japanese ] = "HTML ｿｰｽﾃｷｽﾄ";
+    Text[ japanese ] = "HTML ソーステキスト";
     Text[ chinese_simplified ] = "HTML 源文本";
     Text[ chinese_traditional ] = "HTML 原始檔";
     Text[ arabic ] = "�� ���� HTML";
@@ -833,7 +833,7 @@ String STR_HELP_FIRST_MESSAGE
     Text[ swedish ] = "Hj�lpen startas...";
     Text[ polish ] = "Uruchamianie Pomocy...";
     Text[ portuguese_brazilian ] = "Help is started...";
-    Text[ japanese ] = "ﾍﾙﾌﾟを開始しています...";
+    Text[ japanese ] = "ヘルプを開始しています...";
     Text[ korean ] = "도움말을 시작합니다...";
     Text[ chinese_simplified ] = "正在启动帮助功能...";
     Text[ chinese_traditional ] = "正在啟動說明功能...";
@@ -875,7 +875,7 @@ ModalDialog DLG_HELP_ADDBOOKMARK
         TEXT[ chinese_simplified ] = "书签：";
         TEXT[ russian ] = "��������:";
         TEXT[ polish ] = "Zak�adka:";
-        TEXT[ japanese ] = "ﾌﾞｯｸﾏｰｸ:";
+        TEXT[ japanese ] = "ブックマーク:";
         TEXT[ chinese_traditional ] = "書籤：";
         TEXT[ arabic ] = ":����� ������";
         TEXT[ greek ] = "�������������:";
@@ -932,7 +932,7 @@ ModalDialog DLG_HELP_ADDBOOKMARK
         TEXT[ swedish ] = "Byt namn p� bokm�rke";
         TEXT[ polish ] = "Zmie� nazw� zak�adki";
         TEXT[ portuguese_brazilian ] = "Rename bookmark";
-        TEXT[ japanese ] = "ﾌﾞｯｸﾏｰｸの名前の変更";
+        TEXT[ japanese ] = "ブックマークの名前の変更";
         TEXT[ korean ] = "책갈피 이름 바꾸기";
         TEXT[ chinese_simplified ] = "重新命名书签";
         TEXT[ chinese_traditional ] = "重命名書籤";
@@ -953,7 +953,7 @@ ModalDialog DLG_HELP_ADDBOOKMARK
     TEXT[ swedish ] = "L�gg till bokm�rke";
     TEXT[ polish ] = "Dodaj zak�adk�";
     TEXT[ portuguese_brazilian ] = "Add to Bookmarks";
-    TEXT[ japanese ] = "ﾌﾞｯｸﾏｰｸの追加";
+    TEXT[ japanese ] = "ブックマークの追加";
     TEXT[ korean ] = "책갈피에 추가";
     TEXT[ chinese_simplified ] = "加入书签";
     TEXT[ chinese_traditional ] = "加入書籤";
@@ -1073,7 +1073,7 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     MESSAGE[ swedish ] = "S�kningen gav inget resultat.";
     MESSAGE[ polish ] = "Nie znaleziono �adnych temat�w.";
     MESSAGE[ portuguese_brazilian ] = "No themes found.";
-    MESSAGE[ japanese ] = "ﾃｰﾏは見つかりません。";
+    MESSAGE[ japanese ] = "テーマは見つかりません。";
     MESSAGE[ korean ] = "제목이 없습니다.";
     MESSAGE[ chinese_simplified ] = "没有找到主题。";
     MESSAGE[ chinese_traditional ] = "沒有找到主題。";
@@ -1081,6 +1081,7 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     MESSAGE[ arabic ] = "No themes found.";
     MESSAGE[ catalan ] = "No themes found.";
 };
+
 
 
 
