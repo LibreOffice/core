@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: hr $ $Date: 2002-05-13 15:35:06 $
+#   last change: $Author: jl $ $Date: 2002-05-16 13:03:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.47 $$"
+LIBSMKREV!:="$$Revision: 1.48 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -98,6 +98,7 @@ RTLLIB=
 TECLIB=
 CPPULIB=-lcppu
 CPPUHELPERLIB=-lcppuhelper$(UDK_MAJOR)$(COMID)
+JENVLIBST=-ljenv
 .INCLUDE .IGNORE : ucbhelper$/version.mk
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COMID)
 REGLIB=-lreg
@@ -241,6 +242,7 @@ CONNECTIVITYLIB=connectivity.lib
 LDAPBERLIB=ldapber.lib
 CPPULIB=$(LIBPRE) icppu.lib
 CPPUHELPERLIB=$(LIBPRE) icppuhelper.lib
+JENVLIBST=$(LIBPRE) jenv.lib
 SALTLSLIB=isaltls.lib
 SALZIPLIB=isalzip.lib
 UCBHELPERLIB=$(LIBPRE) iucbhelper.lib
