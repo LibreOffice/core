@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-07 08:01:20 $
+ *  last change: $Author: mib $ $Date: 2001-06-12 07:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,14 +656,40 @@ void lcl_SetNodeNumStart( SwPaM& rCrsr, uno::Any aValue )
 /* -----------------17.09.98 09:44-------------------
  *
  * --------------------------------------------------*/
+class SwTextCursorItemSet_Impl
+{
+    SwDoc *pDoc;
+    SfxItemSet* pItemSet;
+    sal_uInt16 nWhich;
+    sal_Bool bGotAttrs;
+
+public:
+    SwTextCursorItemSet_Impl( SwDoc *pD, sal_uInt16 nW ) :
+        pDoc( pD ), nWhich( nW ), pItemSet(0), bGotAttrs( sal_False ) {}
+    ~SwTextCursorItemSet_Impl()
+        {delete pItemSet;}
+
+    SfxItemSet& GetItemSet( SwPaM *pPaM=0 )
+    {
+        if( !pItemSet )
+            pItemSet = new SfxItemSet( pDoc->GetAttrPool(), nWhich, nWhich );
+        if( pPaM && !bGotAttrs )
+        {
+            SwXTextCursor::GetCrsrAttr( *pPaM, *pItemSet );
+            bGotAttrs = TRUE;
+        }
+        return *pItemSet;
+    }
+
+    SfxItemSet *GetItemSetPtr() { return pItemSet; }
+};
+
 sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                                 SwPaM& rPam,
-                                SfxItemSet& rSet,
-                                const uno::Any& aValue,
-                                sal_Bool& rPut ) throw (lang::IllegalArgumentException)
+                                SwTextCursorItemSet_Impl& rSet,
+                                const uno::Any& aValue ) throw (lang::IllegalArgumentException)
 {
     sal_Bool bRet = sal_True;
-    rPut = sal_True;
     if(aValue.getValueType() == ::getCppuVoidType())
         bRet = sal_False;
     else
@@ -671,11 +697,10 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
         switch(pMap->nWID)
         {
             case RES_TXTATR_CHARFMT:
-                lcl_setCharStyle(rPam.GetDoc(), aValue, rSet);
+                lcl_setCharStyle(rPam.GetDoc(), aValue, rSet.GetItemSet() );
             break;
             case FN_UNO_PARA_STYLE :
                 lcl_SetTxtFmtColl(aValue, rPam);
-                rPut = sal_False;
             break;
             case FN_UNO_PAGE_STYLE :
             break;
@@ -717,7 +742,6 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                         pTxtNd->UpdateNum( aNum );
 
                     }
-                    rPut = sal_False;
                 }
                 //PROPERTY_MAYBEVOID!
             }
@@ -730,7 +754,6 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
             break;
             case FN_UNO_NUM_RULES:
                 SwUnoCursorHelper::setNumberingProperty(aValue, rPam);
-                rPut = sal_False;
             break;
             case RES_PARATR_DROP:
             {
@@ -739,9 +762,10 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                     OUString uStyle;
                     if(aValue >>= uStyle)
                     {
+                        SfxItemSet& rItemSet = rSet.GetItemSet( &rPam );
                         SwFmtDrop* pDrop = 0;
                         const SfxPoolItem* pItem;
-                        if(SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_DROP, sal_True, &pItem ) )
+                        if(SFX_ITEM_SET == rItemSet.GetItemState( RES_PARATR_DROP, sal_True, &pItem ) )
                             pDrop = new SwFmtDrop(*((SwFmtDrop*)pItem));
                         if(!pDrop)
                             pDrop = new SwFmtDrop();
@@ -752,7 +776,7 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                             pDrop->SetCharFmt(pStyle->GetCharFmt());
                         else
                              throw lang::IllegalArgumentException();
-                        rSet.Put(*pDrop);
+                        rItemSet.Put(*pDrop);
                         delete pDrop;
                     }
                     else
@@ -768,9 +792,10 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                     OUString sTmp;
                     if(aValue >>= sTmp)
                     {
+                        SfxItemSet& rItemSet = rSet.GetItemSet( &rPam );
                         SwFmtRuby* pRuby = 0;
                         const SfxPoolItem* pItem;
-                        if(SFX_ITEM_SET == rSet.GetItemState( RES_TXTATR_CJK_RUBY, sal_True, &pItem ) )
+                        if(SFX_ITEM_SET == rItemSet.GetItemState( RES_TXTATR_CJK_RUBY, sal_True, &pItem ) )
                             pRuby = new SwFmtRuby(*((SwFmtRuby*)pItem));
                         if(!pRuby)
                             pRuby = new SwFmtRuby(aEmptyStr);
@@ -782,7 +807,7 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                             sal_uInt16 nId = SwDoc::GetPoolId( sStyle, GET_POOLID_CHRFMT );
                             pRuby->SetCharFmtId(nId);
                         }
-                        rSet.Put(*pRuby);
+                        rItemSet.Put(*pRuby);
                         delete pRuby;
                     }
                     else
@@ -795,7 +820,8 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
             case RES_PAGEDESC      :
             if(MID_PAGEDESC_PAGEDESCNAME == pMap->nMemberId )
             {
-                lcl_setPageDesc(rPam.GetDoc(), aValue, rSet);
+                SfxItemSet& rItemSet = rSet.GetItemSet( &rPam );
+                lcl_setPageDesc(rPam.GetDoc(), aValue, rItemSet);
                 break;
             }
             //hier kein break
@@ -1887,15 +1913,11 @@ void SwXTextCursor::SetPropertyValue(
                             rPropSet.getPropertyMap(), rPropertyName);
     if(pMap)
     {
-        SfxItemSet rSet(pDoc->GetAttrPool(),
-            pMap->nWID, pMap->nWID);
-        SwXTextCursor::GetCrsrAttr(rPaM, rSet);
-        BOOL bDef = FALSE;
-        BOOL bPut;
-        if(!lcl_setCrsrPropertyValue(pMap, rPaM, rSet, aValue, bPut ))
-            rPropSet.setPropertyValue(*pMap, aValue, rSet);
-        if(bPut)
-            SwXTextCursor::SetCrsrAttr(rPaM, rSet);
+        SwTextCursorItemSet_Impl aSet(pDoc, pMap->nWID );
+        if(!lcl_setCrsrPropertyValue( pMap, rPaM, aSet, aValue ))
+            rPropSet.setPropertyValue(*pMap, aValue, aSet.GetItemSet( &rPaM ) );
+        if( aSet.GetItemSetPtr() )
+            SwXTextCursor::SetCrsrAttr(rPaM, aSet.GetItemSet() );
     }
     else
         throw UnknownPropertyException();
