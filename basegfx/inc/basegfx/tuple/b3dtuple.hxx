@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtuple.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:09 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,6 @@ namespace basegfx
     */
     class B3DTuple
     {
-    private:
-        static B3DTuple                             maEmptyTuple;
-
     protected:
         double                                      mfX;
         double                                      mfY;
@@ -195,7 +192,7 @@ namespace basegfx
 
         bool equalZero() const
         {
-            return (this == &maEmptyTuple ||
+            return (this == &getEmptyTuple() ||
                 (::basegfx::fTools::equalZero(mfX)
                 && ::basegfx::fTools::equalZero(mfY)
                 && ::basegfx::fTools::equalZero(mfZ)));
@@ -203,7 +200,7 @@ namespace basegfx
 
         bool equalZero(const double& rfSmallValue) const
         {
-            return (this == &maEmptyTuple ||
+            return (this == &getEmptyTuple() ||
                 (::basegfx::fTools::equalZero(mfX, rfSmallValue)
                 && ::basegfx::fTools::equalZero(mfY, rfSmallValue)
                 && ::basegfx::fTools::equalZero(mfZ, rfSmallValue)));
@@ -338,10 +335,7 @@ namespace basegfx
             }
         }
 
-        static const B3DTuple& getEmptyTuple()
-        {
-            return maEmptyTuple;
-        }
+        static const B3DTuple& getEmptyTuple();
     };
 
     // external operators

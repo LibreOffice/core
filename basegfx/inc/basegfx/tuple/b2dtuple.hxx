@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dtuple.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-25 09:54:10 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:16:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@ namespace basegfx
     */
     class B2DTuple
     {
-    private:
-        static B2DTuple                             maEmptyTuple;
-
     protected:
         double                                      mfX;
         double                                      mfY;
@@ -264,10 +261,7 @@ namespace basegfx
 
         void correctValues(const double fCompareValue = 0.0);
 
-        static const B2DTuple& getEmptyTuple()
-        {
-            return maEmptyTuple;
-        }
+        static const B2DTuple& getEmptyTuple();
     };
 
     // external operators
