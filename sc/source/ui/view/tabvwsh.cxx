@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-14 10:36:48 $
+ *  last change: $Author: nn $ $Date: 2000-11-14 15:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/galbrws.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/srchitem.hxx>
 #include <offmgr/sbasltid.hrc>
@@ -122,6 +123,7 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION(ScSimpleRefDlgWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(SID_SEARCH_DLG);
     SFX_CHILDWINDOW_REGISTRATION(SID_HYPERLINK_DIALOG);
+    SFX_CHILDWINDOW_REGISTRATION(GalleryChildWindow::GetChildWindowId());
 }
 
 SFX_IMPL_VIEWFACTORY( ScTabViewShell, ScResId(STR_NONAME) )

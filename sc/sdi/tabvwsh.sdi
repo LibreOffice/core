@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: hr $ $Date: 2000-09-18 16:44:52 $ $Revision: 1.1.1.1 $
+ // $Author: nn $ $Date: 2000-11-14 15:35:03 $ $Revision: 1.2 $
  // $Logfile:   T:/sc/sdi/tabvwsh.sdv  $ $Workfile:   tabvwsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ interface BaseSelection : Selection
     SID_INSERT_SIMAGE       [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_INSERT_SMATH        [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_GALLERY_FORMATS     [ ExecMethod = ExecGallery; StateMethod = GetGalleryState; ]
-    SID_GALLERY             [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_GALLERY             [ ExecMethod = ExecChildWin; StateMethod = GetChildWinState; ]
     SID_DRAW_NOTEEDIT       [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_OBJECTRESIZE        [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
 
@@ -239,44 +239,5 @@ shell ScTabViewShell : SfxViewShell
     SID_TBXCTL_INSOBJ       [ ExecMethod = ExecTbx; StateMethod = GetTbxState; ]
 
 }
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.250  2000/06/21 12:33:27  nn
-    #75361# slots for grid options moved to tabvwsh
-
-    Revision 1.249  2000/05/11 17:01:05  nn
-    slots for old basic api removed2
-
-    Revision 1.248  1999/08/24 14:12:30  ANK
-    #68244# JumpToTable moved
-
-
-      Rev 1.247   24 Aug 1999 16:12:30   ANK
-   #68244# JumpToTable moved
-
-      Rev 1.246   09 Aug 1999 19:07:32   NN
-   sound/video
-
-      Rev 1.245   21 Jun 1999 20:38:22   ANK
-   #66547# Slot's moved
-
-      Rev 1.244   02 Jun 1999 21:42:24   ANK
-   #66547# SubShells
-
-------------------------------------------------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

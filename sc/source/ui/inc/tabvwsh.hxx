@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-13 19:25:51 $
+ *  last change: $Author: nn $ $Date: 2000-11-14 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,9 @@ public:
     void            GetDrawInsState(SfxItemSet &rSet);
     void            ExecGallery(SfxRequest& rReq);      // StarGallery
     void            GetGalleryState(SfxItemSet& rSet);
+
+    void            ExecChildWin(SfxRequest& rReq);
+    void            GetChildWinState( SfxItemSet& rSet );
 
     void            ExecImageMap( SfxRequest& rReq );
     void            GetImageMapState( SfxItemSet& rSet );

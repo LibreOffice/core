@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh9.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:31:22 $
+ *  last change: $Author: nn $ $Date: 2000-11-14 15:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,12 +353,11 @@
 #define _SVX_TAB_LINE_HXX
 #define _SVX_TRANSFRM_HXX
 
-class SbxArray;
-
 // INCLUDE ---------------------------------------------------------------
 
 #include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
+#include <svx/galbrws.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -389,6 +388,30 @@ const ImageMap& ScIMapDlgGetMap( SvxIMapDlg* pDlg );
 
 //------------------------------------------------------------------
 
+void ScTabViewShell::ExecChildWin(SfxRequest& rReq)
+{
+    USHORT nSlot = rReq.GetSlot();
+    switch(nSlot)
+    {
+        case SID_GALLERY:
+        {
+            SfxViewFrame* pThisFrame = GetViewFrame();
+            pThisFrame->ToggleChildWindow( GalleryChildWindow::GetChildWindowId() );
+            pThisFrame->GetBindings().Invalidate( SID_GALLERY );
+            rReq.Ignore();
+        }
+        break;
+    }
+}
+
+void ScTabViewShell::GetChildWinState( SfxItemSet& rSet )
+{
+    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GALLERY ) )
+    {
+        USHORT nId = GalleryChildWindow::GetChildWindowId();
+        rSet.Put( SfxBoolItem( SID_GALLERY, GetViewFrame()->HasChildWindow( nId ) ) );
+    }
+}
 
 //------------------------------------------------------------------
 

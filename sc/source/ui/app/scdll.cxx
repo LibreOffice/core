@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 18:23:17 $
+ *  last change: $Author: nn $ $Date: 2000-11-14 15:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@
 #include <svx/fntctl.hxx>
 #include <svx/fntszctl.hxx>
 #include <svx/grafctrl.hxx>
+#include <svx/galbrws.hxx>
 
 #include "tbinsert.hxx"
 
@@ -268,6 +269,7 @@ void ScDLL::Init()
     SvxFontWorkChildWindow      ::RegisterChildWindow(FALSE, pMod);
     SvxHyperlinkDlgWrapper      ::RegisterChildWindow(FALSE, pMod);
     SvxIMapDlgChildWindow       ::RegisterChildWindow(FALSE, pMod);
+    GalleryChildWindow          ::RegisterChildWindow(FALSE, pMod);
 
     //  Edit-Engine-Felder, soweit nicht schon in OfficeApplication::Init
 
