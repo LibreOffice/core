@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-25 12:59:42 $
+ *  last change: $Author: fs $ $Date: 2000-10-26 07:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,14 @@ namespace dbaui
         aLogin.SetPassword(_rAuthRequest.Password.getStr());
 
         aLogin.SetSavePassword(bRemember);
-        aLogin.SetSavePasswordText(ModuleRes(bRememberPersistent ? STR_REMEMBERPASSWORD_PERSISTENT : STR_REMEMBERPASSWORD_SESSION));    // TODO
+        aLogin.SetSavePasswordText(ModuleRes(bRememberPersistent ? STR_REMEMBERPASSWORD_PERSISTENT : STR_REMEMBERPASSWORD_SESSION));
+
+        if (_rAuthRequest.ServerName.getLength())
+        {
+            String sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
+            sLoginRequest.SearchAndReplaceAscii("$name$", _rAuthRequest.ServerName.getStr()),
+            aLogin.SetLoginRequestText(sLoginRequest);
+        }
 
         // execute
         sal_Int32 nResult = aLogin.Execute();
@@ -357,6 +364,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/25 12:59:42  fs
+ *  initial checkin - InteractionHandler for common database related interaction requests
+ *
  *
  *  Revision 1.0 25.10.00 10:18:21  fs
  ************************************************************************/
