@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 14:29:49 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1998 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   ctredlin.src  $
- //   $Author: rt $
- //     $Date: 2000-12-06 14:29:49 $
- // $Revision: 1.6 $
+ //   $Author: kz $
+ //     $Date: 2001-01-12 21:15:25 $
+ // $Revision: 1.7 $
  //  $Logfile:   T:/svx/source/dialog/ctredlin.srv  $
  //---------------------------------------------------------------------------
 
@@ -809,7 +809,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ ENGLISH ] = "Accept All" ;
         Pos = MAP_APPFONT ( 141 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ english_us ] = "~Accept All" ;
+        Text [ english_us ] = "A~ccept All" ;
         Text [ portuguese_brazilian ] = "Alle ak~zeptieren" ;
         Text [ swedish ] = "A~cceptera alla" ;
         Text [ danish ] = "Accepter alle" ;
@@ -836,7 +836,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ ENGLISH ] = "Reject All" ;
         Pos = MAP_APPFONT ( 207 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ english_us ] = "~Reject All" ;
+        Text [ english_us ] = "R~eject All" ;
         Text [ portuguese_brazilian ] = "Alle ab~lehnen" ;
         Text [ swedish ] = "A~vböj alla" ;
         Text [ danish ] = "Forkast alle" ;
