@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:03:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
 #ifndef _VCL_PDFEXTOUTDEVDATA_HXX
 #include <vcl/pdfextoutdevdata.hxx>
@@ -138,8 +141,12 @@
 #ifndef SVX_SOURCE_FORM_FORMPDFEXPORT_HXX
 #include "formpdfexport.hxx"
 #endif
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
 
 #include <set>
+#include <memory>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -158,6 +165,7 @@ using namespace ::com::sun::star;
 
 #include <cppuhelper/implbase1.hxx>
 
+// =============================================================================
 class SdrControlEventListenerImpl : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
 {
 protected:
@@ -197,7 +205,20 @@ void SdrControlEventListenerImpl::StartListening(const uno::Reference< lang::XCo
         xComp->addEventListener(this);
 }
 
-// -----------------------------------------------------------------------------
+// =============================================================================
+struct SAL_DLLPRIVATE SdrUnoObjDataHolder
+{
+    mutable ::rtl::Reference< SdrControlEventListenerImpl >
+                                    pEventListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
+                                    xPainterControl;
+        // unfortunately, the drawing layer does not really have a separation between mode and view
+        // The SdrUnoObj is responsible for painting, though it's a model part. However, only
+        // XControl's can paint, but not XControlModel's. In some situations, we cannot
+        // obtain an XControl for our XControlModel, then we use a dedicated painter control.
+};
+
+// =============================================================================
 namespace
 {
     void lcl_ensureControlVisibility( SdrView* _pView, const SdrUnoObj* _pObject, bool _bVisible )
@@ -262,12 +283,12 @@ namespace
 TYPEINIT1(SdrUnoObj, SdrRectObj);
 
 SdrUnoObj::SdrUnoObj(const String& rModelName, BOOL _bOwnUnoControlModel)
-:   bOwnUnoControlModel(_bOwnUnoControlModel)
+    :bOwnUnoControlModel( _bOwnUnoControlModel )
+    ,m_pImpl( new SdrUnoObjDataHolder )
 {
     bIsUnoObj = TRUE;
 
-    pEventListener = new SdrControlEventListenerImpl(this);
-    pEventListener->acquire();
+    m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
     // nur ein owner darf eigenstaendig erzeugen
     if (rModelName.Len())
@@ -277,12 +298,12 @@ SdrUnoObj::SdrUnoObj(const String& rModelName, BOOL _bOwnUnoControlModel)
 SdrUnoObj::SdrUnoObj(const String& rModelName,
                      const uno::Reference< lang::XMultiServiceFactory >& rxSFac,
                      BOOL _bOwnUnoControlModel)
-:   bOwnUnoControlModel(_bOwnUnoControlModel)
+    :bOwnUnoControlModel( _bOwnUnoControlModel )
+    ,m_pImpl( new SdrUnoObjDataHolder )
 {
     bIsUnoObj = TRUE;
 
-    pEventListener = new SdrControlEventListenerImpl(this);
-    pEventListener->acquire();
+    m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
     // nur ein owner darf eigenstaendig erzeugen
     if (rModelName.Len())
@@ -291,17 +312,27 @@ SdrUnoObj::SdrUnoObj(const String& rModelName,
 
 SdrUnoObj::~SdrUnoObj()
 {
-    uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
-    if (xComp.is())
+    try
     {
-        // gehoert das Control seiner Umgebung?
-        uno::Reference< container::XChild > xContent(xUnoControlModel, uno::UNO_QUERY);
-        if (xContent.is() && !xContent->getParent().is())
-            xComp->dispose();
-        else
-            pEventListener->StopListening(xComp);
+        // clean up the control model
+        uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
+        if (xComp.is())
+        {
+            // is the control model owned by it's environment?
+            uno::Reference< container::XChild > xContent(xUnoControlModel, uno::UNO_QUERY);
+            if (xContent.is() && !xContent->getParent().is())
+                xComp->dispose();
+            else
+                m_pImpl->pEventListener->StopListening(xComp);
+        }
+        // clean up the painter control
+        ::comphelper::disposeComponent( m_pImpl->xPainterControl );
     }
-    pEventListener->release();
+    catch( const uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "SdrUnoObj::~SdrUnoObj: caught an exception!" );
+    }
+    delete m_pImpl;
 }
 
 void SdrUnoObj::SetModel(SdrModel* pNewModel)
@@ -338,6 +369,33 @@ UINT16 SdrUnoObj::GetObjIdentifier() const
     return UINT16(OBJ_UNO);
 }
 
+// ----------------------------------------------------------------------------
+uno::Reference< awt::XControl > SdrUnoObj::getPainterControl() const
+{
+    if ( m_pImpl->xPainterControl.is() )
+        return m_pImpl->xPainterControl;
+
+    try
+    {
+        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+        DBG_ASSERT( xFactory.is(), "SdrUnoObj::getPainterControl: no service factory!" );
+        if ( xFactory.is() )
+        {
+            ::rtl::OUString sControlServiceName = GetUnoControlTypeName();
+            m_pImpl->xPainterControl = m_pImpl->xPainterControl.query( xFactory->createInstance( sControlServiceName ) );
+            if ( m_pImpl->xPainterControl.is() )
+                m_pImpl->xPainterControl->setModel( GetUnoControlModel() );
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_ERROR( "SdrUnoObj::getPainterControl: caught an exception!" );
+    }
+    DBG_ASSERT( m_pImpl->xPainterControl.is(), "SdrUnoObj::getPainterControl: could not create the painter control!" );
+    return m_pImpl->xPainterControl;
+}
+
+// ----------------------------------------------------------------------------
 namespace
 {
     /** helper class to restore graphics at <awt::XView> object after <SdrUnoObj::Paint>
@@ -366,227 +424,212 @@ namespace
     };
 }
 
+// ----------------------------------------------------------------------------
 sal_Bool SdrUnoObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
-    const SdrPageView* pPV = rInfoRec.pPV;
-    OutputDevice* pOut = rXOut.GetOutDev();
-    OutDevType eOutDevType = pOut->GetOutDevType();
+    const SdrPageView* pPV              = rInfoRec.pPV;
+    OutputDevice* pOut                  = rXOut.GetOutDev();
+    OutDevType eOutDevType              = pOut->GetOutDevType();
     const SdrUnoControlRec* pControlRec = NULL;
+    vcl::PDFExtOutDevData* pPDFExport   = PTR_CAST( vcl::PDFExtOutDevData, pOut->GetExtOutDevData() );
+    uno::Reference< awt::XControl > xControl;
 
-    vcl::PDFExtOutDevData* pPDFExport = PTR_CAST( vcl::PDFExtOutDevData, pOut->GetExtOutDevData() );
-
-    if (pPV && xUnoControlModel.is())
+    if ( pPV && xUnoControlModel.is() )
     {
-        // const SdrPageViewWinList& rWL = pPV->GetWinList();
-        // const SdrPageViewWindows& rPageViewWindows = pPV->GetPageViewWindows();
         const SdrPageViewWindow* pWindow = pPV->FindWindow(*pOut);
-
-        if(!pWindow)
+        if ( !pWindow )
         {
-            if(eOutDevType == OUTDEV_VIRDEV)
+            if ( eOutDevType == OUTDEV_VIRDEV )
             {
                 // Controls koennen sich z.Z. noch nicht ins VDev zeichnen,
                 // daher wird das korrespondierende, im ersten Window liegende
                 // Control invalidiert (s.u.)
                 if(pPV->WindowCount() > 0)
-                {
                     // Liste enhaelt Windows, daher nehmen wir das erste
                     pWindow = pPV->GetWindow(0L);
-                }
             }
         }
 
-        if(pWindow)
+        if ( pWindow )
         {
             const SdrUnoControlList& rControlList = pWindow->GetControlList();
             USHORT nCtrlNum = rControlList.Find(xUnoControlModel);
 
             if (nCtrlNum != SDRUNOCONTROL_NOTFOUND)
-            {
                 pControlRec = &rControlList[nCtrlNum];
-            }
         }
-
-//      USHORT nWinNum = rWL.Find(pOut);
-//
-//      if (nWinNum == SDRPAGEVIEWWIN_NOTFOUND && eOutDevType == OUTDEV_VIRDEV)
-//      {
-//          // Controls koennen sich z.Z. noch nicht ins VDev zeichnen,
-//          // daher wird das korrespondierende, im ersten Window liegende
-//          // Control invalidiert (s.u.)
-//          if (rWL.GetCount() > 0)
-//          {
-//              // Liste enhaelt Windows, daher nehmen wir das erste
-//              nWinNum = 0;
-//          }
-//      }
-//
-//      if (nWinNum != SDRPAGEVIEWWIN_NOTFOUND)
-//      {
-//          const SdrPageViewWinRec& rWR = rWL[nWinNum];
-//          const SdrUnoControlList& rControlList = rWR.GetControlList();
-//          USHORT nCtrlNum = rControlList.Find(xUnoControlModel);
-//
-//          if (nCtrlNum != SDRUNOCONTROL_NOTFOUND)
-//          {
-//              pControlRec = &rControlList[nCtrlNum];
-//          }
-//      }
     }
 
-    if (pControlRec && pControlRec->GetControl().is())
+    if ( pControlRec )
+        xControl = pControlRec->GetControl();
+
+    if ( !xControl.is() && ( eOutDevType == OUTDEV_VIRDEV ) )
     {
-        SdrUnoControlPaintGuard aLockForPaint( *const_cast< SdrUnoControlRec* >( pControlRec ) );
+        // if we didn't find a control, but need to paint onto a virtual device,
+        // use a temporary control
+        xControl = getPainterControl();
+    }
 
-        uno::Reference< awt::XControl > xUnoControl = pControlRec->GetControl();
+    if ( xControl.is() )
+    {
+        uno::Reference< awt::XView > xView( xControl, uno::UNO_QUERY );
+        if ( !xView.is() )
+            return FALSE;
 
-        uno::Reference< awt::XView > xView(xUnoControl, uno::UNO_QUERY);
-        if (xView.is())
+        ::std::auto_ptr< SdrUnoControlPaintGuard > aLockForPaint;
+        if ( pControlRec )
+            aLockForPaint.reset( new SdrUnoControlPaintGuard( *const_cast< SdrUnoControlRec* >( pControlRec ) ) );
+
+        const MapMode& rMap = pOut->GetMapMode();
+        xView->setZoom( (float)double( rMap.GetScaleX() ),
+                        (float)double( rMap.GetScaleY() )
+                       );
+
+        uno::Reference< awt::XWindow > xWindow( xControl, uno::UNO_QUERY );
+        if ( xWindow.is() )
         {
-            // OD 08.05.2003 #109432# - create helper object to restore graphics
-            // at <awt::XView> object.
-            RestoreXViewGraphics aRestXViewGraph( xView );
+            Point aPixPos(pOut->LogicToPixel(aRect.TopLeft()));
+            Size aPixSize(pOut->LogicToPixel(aRect.GetSize()));
+            xWindow->setPosSize(aPixPos.X(), aPixPos.Y(),
+                                aPixSize.Width(), aPixSize.Height(),
+                                awt::PosSize::POSSIZE);
+        }
 
-            OutputDevice* pOut = rXOut.GetOutDev();
-            const MapMode& rMap = pOut->GetMapMode();
-            xView->setZoom((float) double(rMap.GetScaleX()),
-                           (float) double(rMap.GetScaleY()));
+        // OD 08.05.2003 #109432# - create helper object to restore graphics
+        // at <awt::XView> object.
+        RestoreXViewGraphics aRestXViewGraph( xView );
 
-            BOOL bDesignMode = pPV->GetView().IsDesignMode();
-
-            uno::Reference< awt::XWindow > xWindow(xUnoControl, uno::UNO_QUERY);
-            if (xWindow.is())
+        BOOL bInvalidatePeer = FALSE;
+        switch ( eOutDevType )
+        {
+        case OUTDEV_WINDOW:
+        {
+            // don't paint if there's a "alive control" which paints itself
+            BOOL bDesignMode = pPV ? pPV->GetView().IsDesignMode() : TRUE;
+            BOOL bPrintPreview = pPV ? pPV->GetView().IsPrintPreview() : FALSE;
+            if ( bDesignMode || bPrintPreview )
             {
-                Point aPixPos(pOut->LogicToPixel(aRect.TopLeft()));
-                Size aPixSize(pOut->LogicToPixel(aRect.GetSize()));
-                xWindow->setPosSize(aPixPos.X(), aPixPos.Y(),
-                                    aPixSize.Width(), aPixSize.Height(),
-                                    awt::PosSize::POSSIZE);
-            }
-
-            BOOL bInvalidatePeer = FALSE;
-            if (eOutDevType == OUTDEV_WINDOW)
-            {
-                // Nicht wenn an der Stelle ein 'lebendes' Control liegt
-                // das sich selber zeichnet.
-                if (bDesignMode || pPV->GetView().IsPrintPreview())
+                if ( bPrintPreview )
                 {
-                    if (pPV->GetView().IsPrintPreview())
-                    {
-                        uno::Reference< awt::XGraphics > x( pOut->CreateUnoGraphics()); // UNO3
-                        xView->setGraphics( x );
-                    }
-
-                    // don't draw if we're in print preview and the control isn't printable
-                    // FS - 10/06/99
-                    BOOL bDrawIt = TRUE;
-                    if (pPV->GetView().IsPrintPreview())
-                    {
-                        uno::Reference< beans::XPropertySet > xP(xUnoControl->getModel(), uno::UNO_QUERY);
-                        if (xP.is())
-                        {
-                            uno::Reference< beans::XPropertySetInfo > xPropInfo = xP->getPropertySetInfo();
-                            if( xPropInfo.is() && xPropInfo->hasPropertyByName( rtl::OUString::createFromAscii("Printable")) )
-                            {
-                                uno::Any aVal( xP->getPropertyValue( rtl::OUString::createFromAscii("Printable")) );
-                                if( aVal.hasValue() && aVal.getValueType() == ::getCppuBooleanType() )
-                                    bDrawIt = *(sal_Bool*)aVal.getValue();
-                            }
-                            else
-                                bDrawIt = FALSE;
-                        }
-                        else
-                            bDrawIt = FALSE;
-                    }
-
-                    if (bDrawIt)
-                    {
-                        if( pPV->GetView().IsFillDraft() )
-                        {
-                            const SfxItemSet& rSet = GetObjectItemSet();
-
-                            // perepare ItemSet to avoid old XOut filling
-                            SfxItemSet aEmptySet(*rSet.GetPool());
-                            aEmptySet.Put(XFillStyleItem(XFILL_NONE));
-                            rXOut.SetFillAttr(aEmptySet);
-
-                            rXOut.SetLineAttr(rSet);
-
-                            rXOut.DrawRect( aRect );
-                        }
-                        else
-                        {
-                            Point aP = pOut->LogicToPixel(aRect.TopLeft());
-                            xView->draw(aP.X(), aP.Y());
-                        }
-                    }
-                }
-                else if ( xUnoControl->isTransparent() )
-                {
-                    bInvalidatePeer = TRUE;
-                }
-            }
-            else if (eOutDevType == OUTDEV_PRINTER)
-            {
-                uno::Reference< beans::XPropertySet > xP(xUnoControl->getModel(), uno::UNO_QUERY);
-                if (xP.is())
-                {
-                    uno::Reference< beans::XPropertySetInfo > xPropInfo = xP->getPropertySetInfo();
-                    if( xPropInfo.is() && xPropInfo->hasPropertyByName( rtl::OUString::createFromAscii("Printable")) )
-                    {
-                        uno::Any aVal( xP->getPropertyValue( rtl::OUString::createFromAscii("Printable")) );
-                        if( aVal.hasValue() && aVal.getValueType() == ::getCppuBooleanType() && *(sal_Bool*)aVal.getValue() )
-                        {
-                            uno::Reference< awt::XGraphics > x = pOut->CreateUnoGraphics(); // UNO3
-                            xView->setGraphics( x );
-                            Point aP = pOut->LogicToPixel(aRect.TopLeft());
-                            xView->draw(aP.X(), aP.Y());
-                        }
-                    }
-                }
-            }
-            else if (eOutDevType == OUTDEV_VIRDEV)
-            {
-                bool bDefaultDraw = true;
-                if ( pPDFExport )
-                {
-                    ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget > pPDFControl;
-                    ::svxform::describePDFControl( xUnoControl, pPDFControl );
-                    if ( pPDFControl.get() != NULL )
-                    {
-                        // still need to fill in the location
-                        pPDFControl->Location = aRect;
-
-                        Size aFontSize( pPDFControl->TextFont.GetSize() );
-                        aFontSize = pOut->LogicToLogic( aFontSize, MapMode( MAP_POINT ), pOut->GetMapMode() );
-                        pPDFControl->TextFont.SetSize( aFontSize );
-
-                        pPDFExport->BeginStructureElement( vcl::PDFWriter::Form );
-                        pPDFExport->CreateControl( *pPDFControl.get() );
-                        pPDFExport->EndStructureElement();
-                        bDefaultDraw = false;
-                    }
-                }
-
-                if ( bDefaultDraw )
-                {
-                    uno::Reference< awt::XGraphics > x = pOut->CreateUnoGraphics();
+                    uno::Reference< awt::XGraphics > x( pOut->CreateUnoGraphics() );
                     xView->setGraphics( x );
-                    Point aP = pOut->LogicToPixel( aRect.TopLeft() );
-                    xView->draw( aP.X(), aP.Y() );
+                }
+
+                // don't draw if we're in print preview and the control isn't printable
+                // FS - 10/06/99
+                sal_Bool bDrawIt = sal_True;
+                if ( bPrintPreview )
+                {
+                    uno::Reference< beans::XPropertySet > xP( xControl->getModel(), uno::UNO_QUERY );
+                    if (xP.is())
+                    {
+                        uno::Reference< beans::XPropertySetInfo > xPropInfo = xP->getPropertySetInfo();
+                        if( xPropInfo.is() && xPropInfo->hasPropertyByName( rtl::OUString::createFromAscii("Printable")) )
+                        {
+                            uno::Any aVal( xP->getPropertyValue( rtl::OUString::createFromAscii("Printable")) );
+                            OSL_VERIFY( aVal >>= bDrawIt );
+                        }
+                        else
+                            bDrawIt = sal_False;
+                    }
+                    else
+                        bDrawIt = sal_False;
+                }
+
+                if (bDrawIt)
+                {
+                    if( pPV->GetView().IsFillDraft() )
+                    {
+                        const SfxItemSet& rSet = GetObjectItemSet();
+
+                        // perepare ItemSet to avoid old XOut filling
+                        SfxItemSet aEmptySet(*rSet.GetPool());
+                        aEmptySet.Put(XFillStyleItem(XFILL_NONE));
+                        rXOut.SetFillAttr(aEmptySet);
+
+                        rXOut.SetLineAttr(rSet);
+
+                        rXOut.DrawRect( aRect );
+                    }
+                    else
+                    {
+                        Point aP = pOut->LogicToPixel(aRect.TopLeft());
+                        xView->draw(aP.X(), aP.Y());
+                    }
                 }
             }
-            else
-                DBG_ERROR( "SdrUnoObj::DoPaintObject: Ehm - what kind of device is this?" );
-
-            if ( bInvalidatePeer )
+            else if ( xControl->isTransparent() )
             {
-                uno::Reference< awt::XWindowPeer > xPeer(xUnoControl->getPeer());
-                if (xPeer.is())
+                bInvalidatePeer = TRUE;
+            }
+        }
+        break;
+
+        case OUTDEV_PRINTER:
+        {
+            uno::Reference< beans::XPropertySet > xP(xControl->getModel(), uno::UNO_QUERY);
+            if (xP.is())
+            {
+                uno::Reference< beans::XPropertySetInfo > xPropInfo = xP->getPropertySetInfo();
+                if( xPropInfo.is() && xPropInfo->hasPropertyByName( rtl::OUString::createFromAscii("Printable")) )
                 {
-                    xPeer->invalidate(INVALIDATE_NOTRANSPARENT |
-                                      INVALIDATE_CHILDREN);
+                    uno::Any aVal( xP->getPropertyValue( rtl::OUString::createFromAscii("Printable")) );
+                    if( aVal.hasValue() && aVal.getValueType() == ::getCppuBooleanType() && *(sal_Bool*)aVal.getValue() )
+                    {
+                        uno::Reference< awt::XGraphics > x = pOut->CreateUnoGraphics(); // UNO3
+                        xView->setGraphics( x );
+                        Point aP = pOut->LogicToPixel(aRect.TopLeft());
+                        xView->draw(aP.X(), aP.Y());
+                    }
                 }
+            }
+        }
+        break;
+
+        case OUTDEV_VIRDEV:
+        {
+            bool bDefaultDraw = true;
+            if ( pPDFExport )
+            {
+                ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget > pPDFControl;
+                ::svxform::describePDFControl( xControl, pPDFControl );
+                if ( pPDFControl.get() != NULL )
+                {
+                    // still need to fill in the location
+                    pPDFControl->Location = aRect;
+
+                    Size aFontSize( pPDFControl->TextFont.GetSize() );
+                    aFontSize = pOut->LogicToLogic( aFontSize, MapMode( MAP_POINT ), pOut->GetMapMode() );
+                    pPDFControl->TextFont.SetSize( aFontSize );
+
+                    pPDFExport->BeginStructureElement( vcl::PDFWriter::Form );
+                    pPDFExport->CreateControl( *pPDFControl.get() );
+                    pPDFExport->EndStructureElement();
+                    bDefaultDraw = false;
+                }
+            }
+
+            if ( bDefaultDraw )
+            {
+                uno::Reference< awt::XGraphics > x = pOut->CreateUnoGraphics();
+                xView->setGraphics( x );
+                Point aP = pOut->LogicToPixel( aRect.TopLeft() );
+                xView->draw( aP.X(), aP.Y() );
+            }
+        }
+        break;
+
+        default:
+            DBG_ERROR( "SdrUnoObj::DoPaintObject: Ehm - what kind of device is this?" );
+        }
+
+        if ( bInvalidatePeer )
+        {
+            uno::Reference< awt::XWindowPeer > xPeer(xControl->getPeer());
+            if (xPeer.is())
+            {
+                xPeer->invalidate(INVALIDATE_NOTRANSPARENT |
+                                    INVALIDATE_CHILDREN);
             }
         }
     }
@@ -701,7 +744,7 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
 
     uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
     if (xComp.is())
-        pEventListener->StartListening(xComp);
+        m_pImpl->pEventListener->StartListening(xComp);
 }
 
 FASTBOOL SdrUnoObj::HasSpecialDrag() const
@@ -972,7 +1015,7 @@ void SdrUnoObj::SetUnoControlModel( uno::Reference< awt::XControlModel > xModel)
     {
         uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
         if (xComp.is())
-            pEventListener->StopListening(xComp);
+            m_pImpl->pEventListener->StopListening(xComp);
 
         if (pModel)
         {
@@ -983,6 +1026,7 @@ void SdrUnoObj::SetUnoControlModel( uno::Reference< awt::XControlModel > xModel)
     }
 
     xUnoControlModel = xModel;
+    m_pImpl->xPainterControl.clear();
 
     // control model muss servicename des controls enthalten
     if (xUnoControlModel.is())
@@ -998,7 +1042,7 @@ void SdrUnoObj::SetUnoControlModel( uno::Reference< awt::XControlModel > xModel)
 
         uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
         if (xComp.is())
-            pEventListener->StartListening(xComp);
+            m_pImpl->pEventListener->StartListening(xComp);
 
         if (pModel)
         {
