@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:36:32 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ protected:
     virtual ~ScAccessibleDocument(void);
 public:
 
-     virtual void SetDefunc();
+     virtual void SAL_CALL disposing();
 
    ///=====  SfxListener  =====================================================
 

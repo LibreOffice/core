@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-12 09:43:13 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ ScAccessibleDocumentPagePreview::~ScAccessibleDocumentPagePreview(void)
         mpViewShell->RemoveAccessibilityObject(*this);
 }
 
-void ScAccessibleDocumentPagePreview::SetDefunc()
+void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
 {
     mxTable.clear();
     mxHeader.clear();
@@ -189,7 +189,7 @@ void ScAccessibleDocumentPagePreview::SetDefunc()
         mpViewShell = NULL;
     }
 
-    ScAccessibleDocumentBase::SetDefunc();
+    ScAccessibleDocumentBase::disposing();
 }
 
 //=====  SfxListener  =====================================================
@@ -200,7 +200,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
     {
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
         if (rRef.GetId() == SFX_HINT_DYING)
-            SetDefunc();
+            dispose();
     }
 }
 
@@ -363,7 +363,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     if (aId.getLength() == 0)
     {
         aId.realloc (16);
-        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
+        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
     }
     return aId;
 }
@@ -411,7 +411,7 @@ Rectangle ScAccessibleDocumentPagePreview::GetBoundingBox() throw (uno::RuntimeE
 sal_Bool ScAccessibleDocumentPagePreview::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    return !getAccessibleParent().is() ||
+    return ScAccessibleContextBase::IsDefunc() || !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 

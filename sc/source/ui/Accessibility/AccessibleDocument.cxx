@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-14 15:29:58 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,14 +125,15 @@ ScAccessibleDocument::ScAccessibleDocument(
 
 ScAccessibleDocument::~ScAccessibleDocument(void)
 {
-    FreeAccessibleSpreadsheet();
-    if (mpViewShell)
+    if (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose)
     {
-        mpViewShell->RemoveAccessibilityObject(*this);
+        // increment refcount to prevent double call off dtor
+        osl_incrementInterlockedCount( &m_refCount );
+        dispose();
     }
 }
 
-void ScAccessibleDocument::SetDefunc()
+void SAL_CALL ScAccessibleDocument::disposing()
 {
     FreeAccessibleSpreadsheet();
     if (mpViewShell)
@@ -141,7 +142,7 @@ void ScAccessibleDocument::SetDefunc()
         mpViewShell = NULL;
     }
 
-    ScAccessibleDocumentBase::SetDefunc();
+    ScAccessibleDocumentBase::disposing();
 }
 
     //=====  SfxListener  =====================================================
@@ -191,7 +192,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         else if (rRef.GetId() == SFX_HINT_DYING)
         {
             // it seems the Broadcaster is dying, since the view is dying
-            SetDefunc();
+            dispose();
         }
     }
 }
@@ -238,7 +239,7 @@ void SAL_CALL ScAccessibleDocument::grabFocus(  )
     //=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
-long SAL_CALL
+sal_Int32 SAL_CALL
     ScAccessibleDocument::getAccessibleChildCount(void)
     throw (uno::RuntimeException)
 {
@@ -248,11 +249,11 @@ long SAL_CALL
     if (pDrawPage)
     {
         sal_uInt32 nObjCount(pDrawPage->GetObjCount());
-        for (sal_uInt32 i = 0; i < nObjCount; i++)
+        for (sal_uInt32 i = 0; i < nObjCount; ++i)
         {
             SdrObject* pObj = pDrawPage->GetObj(i);
             if (pObj && (pObj->GetLayer() != SC_LAYER_INTERN))
-                nShapes++;
+                ++nShapes;
         }
     }
     return nShapes + 1;
@@ -260,7 +261,7 @@ long SAL_CALL
 
     /// Return the specified child or NULL if index is invalid.
 uno::Reference<XAccessible> SAL_CALL
-    ScAccessibleDocument::getAccessibleChild(long nIndex)
+    ScAccessibleDocument::getAccessibleChild(sal_Int32 nIndex)
     throw (uno::RuntimeException,
         lang::IndexOutOfBoundsException)
 {
@@ -342,7 +343,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     if (aId.getLength() == 0)
     {
         aId.realloc (16);
-        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
+        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
     }
     return aId;
 }
@@ -417,7 +418,7 @@ void ScAccessibleDocument::FreeAccessibleSpreadsheet()
 {
     if (mpAccessibleSpreadsheet)
     {
-        mpAccessibleSpreadsheet->SetDefunc();
+        mpAccessibleSpreadsheet->dispose();
         mpAccessibleSpreadsheet->release();
         mpAccessibleSpreadsheet = NULL;
     }
@@ -443,7 +444,7 @@ SdrPage* ScAccessibleDocument::GetDrawPage()
 sal_Bool ScAccessibleDocument::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    return (mpViewShell == NULL) || !getAccessibleParent().is() ||
+    return ScAccessibleContextBase::IsDefunc() || (mpViewShell == NULL) || !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 

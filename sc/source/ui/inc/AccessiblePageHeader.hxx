@@ -1,10 +1,10 @@
-/*************************************************************************
+ /*************************************************************************
  *
  *  $RCSfile: AccessiblePageHeader.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 19:21:12 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ protected:
     virtual ~ScAccessiblePageHeader();
 
 public:
-    void SetDefunc();
+     virtual void SAL_CALL disposing();
 
     //=====  SfxListener  =====================================================
 

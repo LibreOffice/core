@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 19:26:25 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ ScAccessiblePageHeader::~ScAccessiblePageHeader()
         mpViewShell->RemoveAccessibilityObject(*this);
 }
 
-void ScAccessiblePageHeader::SetDefunc()
+void SAL_CALL ScAccessiblePageHeader::disposing()
 {
     if (mpViewShell)
     {
@@ -103,7 +103,7 @@ void ScAccessiblePageHeader::SetDefunc()
         mpViewShell = NULL;
     }
 
-    ScAccessibleContextBase::SetDefunc();
+    ScAccessibleContextBase::disposing();
 }
 
 //=====  SfxListener  =====================================================
@@ -115,7 +115,7 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
         ULONG nId = rRef.GetId();
         if ( nId == SFX_HINT_DYING )
-            SetDefunc();
+            dispose();
     }
 }
 
@@ -150,7 +150,7 @@ sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount() throw (uno:
 {
     ScUnoGuard aGuard;
 
-    long nRet = 0;
+    sal_Int32 nRet = 0;
 
     //! ...
 
@@ -275,7 +275,7 @@ Rectangle ScAccessiblePageHeader::GetBoundingBox() throw (uno::RuntimeException)
 
 sal_Bool ScAccessiblePageHeader::IsDefunc( const uno::Reference<XAccessibleStateSet>& rxParentStates )
 {
-    return (mpViewShell == NULL) || !getAccessibleParent().is() ||
+    return ScAccessibleContextBase::IsDefunc() || (mpViewShell == NULL) || !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 

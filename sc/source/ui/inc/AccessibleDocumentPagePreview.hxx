@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 19:21:12 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ protected:
     virtual ~ScAccessibleDocumentPagePreview(void);
 public:
 
-     virtual void SetDefunc();
+     virtual void SAL_CALL disposing();
 
    ///=====  SfxListener  =====================================================
 
