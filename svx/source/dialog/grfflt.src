@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-20 20:33:00 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ dutch ] = "~Breedte" ;
         Text[ spanish ] = "A~ncho" ;
         Text[ english_us ] = "~Width" ;
-        Text[ chinese_simplified ] = "їн(~W)";
+        Text[ chinese_simplified ] = "їн¶И(~W)";
         Text[ russian ] = "~Ширина";
         Text[ polish ] = "Szer.";
         Text[ japanese ] = "•ќ(~W)";
@@ -201,7 +201,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ dutch ] = "~Hoogte" ;
         Text[ spanish ] = "A~ltura" ;
         Text[ english_us ] = "H~eight" ;
-        Text[ chinese_simplified ] = "ёЯ(~E)";
+        Text[ chinese_simplified ] = "ёЯ¶И(~E)";
         Text[ russian ] = "~Высота";
         Text[ polish ] = "Wys.";
         Text[ japanese ] = "Ќ‚‚і(~E)";
@@ -856,6 +856,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     };
     Text[ catalan ] = "Relieve";
 };
+
 
 
 
