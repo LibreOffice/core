@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 12:49:19 $
+ *  last change: $Author: hr $ $Date: 2001-09-28 13:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 
 #include <string>
+#ifdef max
+#undef max
+#endif
 #include <algorithm>
 
 // .......................................................................
@@ -491,7 +494,8 @@ namespace svt
         // change to a new position
         if (IsEditing() && (nColPos != nEditCol || nRow != nEditRow) && (nColPos != BROWSER_INVALIDID) && (nRow < GetRowCount()))
         {
-            HideAndDisable(Controller());
+            CellControllerRef aController(Controller());
+            HideAndDisable(aController);
         }
 
         if (0 == rEvt.GetColumnId())
@@ -1426,6 +1430,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/06/15 12:49:19  fs
+ *  initial checkin - moved this herein from svx/source/fmcomp/dbbrowse*
+ *
  *
  *  Revision 1.0 15.06.01 12:45:03  fs
  ************************************************************************/
