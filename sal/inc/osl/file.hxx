@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: tra $ $Date: 2002-12-06 08:46:35 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,6 +696,29 @@ public:
     inline VolumeDevice getDeviceHandle() const
     {
         return _aDevice;
+    }
+
+    /** Return whether the file system is case sensitive or
+        case insensitive
+
+        @return
+        true if the file system is case sensitive false otherwise
+    */
+    bool isCaseSensitiveFileSystem() const
+    {
+        return (_aInfo.uAttributes & osl_Volume_Attribute_Case_Sensitive);
+    }
+
+    /** Return whether the file system preserves the case of
+        file and directory names or not
+
+        @return
+        true if the file system preserves the case of file and
+        directory names false otherwise
+    */
+    bool isCasePreservingFileSystem() const
+    {
+        return (_aInfo.uAttributes & osl_Volume_Attribute_Case_Is_Preserved);
     }
 
     friend class Directory;
