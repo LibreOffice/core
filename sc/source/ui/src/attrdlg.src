@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-04 14:34:56 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ chinese_traditional ] = "Âê©w(~P)";
         Text[ arabic ] = "ãÍãí";
         Text[ greek ] = "Êëåéäùìİíï";
-        Text[ korean ] = "ÀåÆò";
+        Text[ korean ] = "ÀåÆò(~P)";
         Text[ turkish ] = "~Koruma altında";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Protegido";
@@ -400,7 +400,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ chinese_traditional ] = "Áô¤J¤½¦¡(~F)";
         Text[ arabic ] = "ÅÎİÇÁ ÇáÕíÛÉ";
         Text[ greek ] = "Áğüêñõøç ôığïõ";
-        Text[ korean ] = "¼ö½Ä ¼û±â±â";
+        Text[ korean ] = "¼ö½Ä ¼û±â±â(~F)";
         Text[ turkish ] = "~Formulü gizle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ocultar ~fórmulas";
@@ -430,7 +430,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ chinese_traditional ] = "¥ş³¡Áô¤J(~A)";
         Text[ arabic ] = "ÅÎİÇÁ Çáßá";
         Text[ greek ] = "~Áğüêñõøç üëùí";
-        Text[ korean ] = "ÀüºÎ ¼û±â±â";
+        Text[ korean ] = "ÀüºÎ ¼û±â±â(~A)";
         Text[ turkish ] = "~Tümünü gizle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ocultar ~todo";
@@ -522,7 +522,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ chinese_traditional ] = "¥´¦L®ÉÁô¤J(~W)";
         Text[ arabic ] = "ÅÎİÇÁ ÚäÏ ÇáØÈÇÚÉ";
         Text[ greek ] = "Áğüêñõøç êáôÜ ôçí åêôığùóç";
-        Text[ korean ] = "ÀÎ¼â ½Ã ¼û±â±â";
+        Text[ korean ] = "ÀÎ¼â ½Ã ¼û±â±â(~W)";
         Text[ turkish ] = "~Yazdırırken gizle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ocultar para la impresión";
@@ -587,6 +587,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ catalan ] = "Impresión";
     };
 };
+
 
 
 
