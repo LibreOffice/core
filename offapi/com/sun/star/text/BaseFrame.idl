@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BaseFrame.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-02 11:06:26 $
+ *  last change: $Author: os $ $Date: 2001-03-06 15:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,13 +356,6 @@ service BaseFrame
     /** determines if the size is protected.
      */
     [property] boolean SizeProtected;
-
-    //-------------------------------------------------------------------------
-    /** the relative size to the size from the container object.
-        That isn't a metric value, its specify how large the object relative to the container object is.
-     */
-    [property] boolean SizeRelative;
-
     //-------------------------------------------------------------------------
     /** determines the type of the surrounding text.@see WrapTextMode
      */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextTable.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
+ *  last change: $Author: os $ $Date: 2001-03-06 15:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,11 +237,9 @@ service TextTable
      */
     [property] short RelativeWidth;
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::TextTable::SizeRelative
     /** determins if the value of the relative width is valid.
      */
-    [property] boolean SizeRelative;
+    [property] boolean IsWidthRelative;
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::TextTable::RepeatHeadline
@@ -351,6 +349,9 @@ service TextTable
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:21  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:44:27  mi
     moved from api
 
