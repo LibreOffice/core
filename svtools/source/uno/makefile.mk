@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:45:16 $
+#   last change: $Author: obo $ $Date: 2004-07-06 12:13:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,9 +83,11 @@ SLOFILES= \
             $(SLO)$/addrtempuno.obj	\
             $(SLO)$/genericunodialog.obj \
             $(SLO)$/registerservices.obj \
-                        $(SLO)$/registerlight.obj \
+            $(SLO)$/registerlight.obj \
             $(SLO)$/unoiface.obj	\
-            $(SLO)$/imgprod.obj
+            $(SLO)$/imgprod.obj \
+            $(SLO)$/toolboxcontroller.obj \
+            $(SLO)$/framestatuslistener.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1OBJFILES=  \
@@ -95,7 +97,9 @@ LIB1OBJFILES=  \
             $(SLO)$/genericunodialog.obj \
             $(SLO)$/registerservices.obj \
             $(SLO)$/unoiface.obj	\
-            $(SLO)$/imgprod.obj
+            $(SLO)$/imgprod.obj     \
+            $(SLO)$/toolboxcontroller.obj \
+            $(SLO)$/framestatuslistener.obj
 
 # --- Targets ------------------------------------------------------
 
