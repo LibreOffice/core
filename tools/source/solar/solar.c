@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solar.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:04:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:46:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ int check( TestFunc func, Type eT, void* p )
 
   bSignal = 0;
 
-  if ( !sigsetjmp( check_env, 0 ) )
+  if ( !sigsetjmp( check_env, 1 ) )
   {
     signal( SIGSEGV,    SignalHdl );
     signal( SIGBUS,     SignalHdl );
