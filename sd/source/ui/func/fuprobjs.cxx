@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuprobjs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-15 13:34:21 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "fuprobjs.hxx"
+
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -81,15 +83,22 @@
 #include "prltempl.hrc"
 
 #include "sdresid.hxx"
-#include "fuprobjs.hxx"
 #include "drawdoc.hxx"
-#include "outlnvsh.hxx"
-#include "viewshel.hxx"
+#ifndef SD_OUTLINE_VIEW_SHELL_HX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "glob.hxx"
 #include "prlayout.hxx"
 #include "prltempl.hxx"
 #include "unchss.hxx"
 
+namespace sd {
 
 TYPEINIT1( FuPresentationObjects, FuPoor );
 
@@ -100,31 +109,33 @@ TYPEINIT1( FuPresentationObjects, FuPoor );
 |*
 \************************************************************************/
 
-FuPresentationObjects::FuPresentationObjects(SdViewShell* pViewSh,
-                                           SdWindow* pWin, SdView* pView,
-                                           SdDrawDocument* pDoc,
-                                           SfxRequest& rReq)
+FuPresentationObjects::FuPresentationObjects (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
      : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
-
 {
     // ergibt die Selektion ein eindeutiges Praesentationslayout?
     // wenn nicht, duerfen die Vorlagen nicht bearbeitet werden
     SfxItemSet aSet(pDoc->GetItemPool(), SID_STATUS_LAYOUT, SID_STATUS_LAYOUT);
-    ( (SdOutlineViewShell*) pViewSh )->GetStatusBarState( aSet );
+    static_cast<OutlineViewShell*>(pViewSh)->GetStatusBarState( aSet );
     String aLayoutName = (((SfxStringItem&)aSet.Get(SID_STATUS_LAYOUT)).GetValue());
     DBG_ASSERT(aLayoutName.Len(), "Layout unbestimmt");
 
     BOOL    bUnique = FALSE;
     USHORT  nDepth, nTmp;
-    SdOutlineView* pOlView = (SdOutlineView*)( (SdOutlineViewShell*) pViewSh )->GetView();
+    OutlineView* pOlView = static_cast<OutlineView*>(
+        static_cast<OutlineViewShell*>(pViewSh)->GetView());
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( (Window*) pWin );
-    Outliner* pOutl = pOutlinerView->GetOutliner();
+    ::Outliner* pOutl = pOutlinerView->GetOutliner();
     List* pList = pOutlinerView->CreateSelectionList();
     Paragraph* pPara = (Paragraph*)pList->First();
-    nDepth = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
+    nDepth = pOutl->GetDepth((USHORT)pOutl->GetAbsPos( pPara ) );
     while( pPara )
     {
-        nTmp = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
+        nTmp = pOutl->GetDepth((USHORT) pOutl->GetAbsPos( pPara ) );
 
         if( nDepth != nTmp )
         {
@@ -199,3 +210,4 @@ FuPresentationObjects::~FuPresentationObjects()
 
 
 
+} // end of namespace sd
