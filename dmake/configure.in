@@ -37,6 +37,12 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
+AC_CHECK_TYPES(int8)
+AC_CHECK_TYPES(uint8)
+AC_CHECK_TYPES(int16)
+AC_CHECK_TYPES(uint16)
+AC_CHECK_TYPES(int32)
+AC_CHECK_TYPES(uint32)
 AC_HEADER_TIME
 AC_CHECK_SIZEOF(short, 2)
 AC_CHECK_SIZEOF(int, 4)
@@ -110,6 +116,9 @@ case "$_os" in
 	  ;;
 	"GNU")
 	  OS_VERSION=linux
+	  ;;
+	"AIX")
+	  OS_VERSION=sysvr4
 	  ;;
    *)
       AC_MSG_ERROR([$_os operating system is not suitable to build dmake!])
