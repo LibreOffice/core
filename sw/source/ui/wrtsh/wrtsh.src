@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:54:30 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ String STR_SETFMTCOLL_UNDO
     TEXT [ english_us ] = "Apply Styles" ;
     TEXT[ chinese_simplified ] = "Ê¹ÓÃÑùÊ½";
     TEXT[ russian ] = "Ïğèìåíèòü ñòèëè";
-    TEXT[ polish ] = "Zastosuj szablony";
+    TEXT[ polish ] = "Zastosuj style";
     TEXT[ japanese ] = "½À²Ù‚Ì“K—p";
     TEXT[ chinese_traditional ] = "¨Ï¥Î¼Ë¦¡";
     TEXT[ arabic ] = "ÇÓÊÎÏÇã ÇáäãÇĞÌ";
@@ -413,7 +413,7 @@ String STR_DELBOOKMARK
     TEXT [ spanish ] = "Eliminar marcador" ;
     TEXT [ english_us ] = "Delete bookmark" ;
     TEXT[ chinese_simplified ] = "É¾³ıÊéÇ©";
-    TEXT[ russian ] = "Óäàëèòü çàêëàäêó";
+    TEXT[ russian ] = "Óäàëèòü òåêñòîâóş ïîìåòêó";
     TEXT[ polish ] = "Usuñ zak³adkê";
     TEXT[ japanese ] = "Ã·½ÄÏ°¸‚Ìíœ";
     TEXT[ chinese_traditional ] = "§R°£¤º¤å¼ĞÅÒ";
@@ -441,7 +441,7 @@ String STR_INSBOOKMARK
     TEXT [ spanish ] = "Insertar marca" ;
     TEXT [ english_us ] = "Insert bookmark" ;
     TEXT[ chinese_simplified ] = "²åÈëÊéÇ©";
-    TEXT[ russian ] = "Âñòàâèòü çàêëàäêó";
+    TEXT[ russian ] = "Âñòàâèòü òåêñòîâóş ïîìåòêó";
     TEXT[ polish ] = "Wstaw zak³adkê";
     TEXT[ japanese ] = "Ã·½ÄÏ°¸‚Ì‘}“ü";
     TEXT[ chinese_traditional ] = "´¡¤J¤º¤å¼ĞÅÒ";
@@ -885,7 +885,7 @@ String STR_INSERTFLY
     TEXT[ polish ] = "Wstaw ramkê";
     TEXT[ japanese ] = "˜g‚Ì‘}“ü";
     TEXT[ chinese_traditional ] = "´¡¤J®Øª«¥ó";
-    TEXT[ arabic ] = "ÅÏÑÇÌ ÅØÇÑ";
+    TEXT[ arabic ] = "ÅÏÑÇÌ ßÇÏÑ";
     TEXT[ dutch ] = "Kader invoegen";
     TEXT[ chinese_simplified ] = "²åÈë¿ò¶ÔÏó";
     TEXT[ greek ] = "ĞñïóèŞêç ğëáéóßïõ";
@@ -913,7 +913,7 @@ String STR_DELETEFLY
     TEXT[ polish ] = "Usuñ ramkê";
     TEXT[ japanese ] = "˜g‚Ìíœ";
     TEXT[ chinese_traditional ] = "§R°£®Øª«¥ó";
-    TEXT[ arabic ] = "ÍĞİ ÅØÇÑ";
+    TEXT[ arabic ] = "ÍĞİ ßÇÏÑ";
     TEXT[ dutch ] = "Kader wissen";
     TEXT[ chinese_simplified ] = "É¾³ı¿ò¶ÔÏó";
     TEXT[ greek ] = "ÄéáãñáöŞ ğëáéóßïõ";
@@ -1611,7 +1611,7 @@ String STR_MERGE_TABLE
     Text[ italian ] = "Collega tabella";
     Text[ danish ] = "Flet tabeller";
     Text[ swedish ] = "Förbind tabeller";
-    Text[ polish ] = "Scal tabelê";
+    Text[ polish ] = "Po³¹cz tabele";
     Text[ portuguese_brazilian ] = "Merge table";
     Text[ japanese ] = "•\\‚ÌŒ‹‡";
     Text[ chinese_simplified ] = "ºÏ²¢±í¸ñ";
@@ -2199,7 +2199,7 @@ String STR_UNDO_CHAIN
     Text[ polish ] = "Po³¹cz ramkê tekstow¹";
     Text[ japanese ] = "Ã·½Ä˜g‚ÌŒ‹‡";
     Text[ chinese_traditional ] = "³sµ²¤å¦r¤è¶ô";
-    Text[ arabic ] = "ÊÑÇÈØ ÅØÇÑÇÊ ÇáäÕ";
+    Text[ arabic ] = "ÊÑÇÈØ ßæÇÏÑ ÇáäÕ";
     Text[ dutch ] = "Tekstkader verbinden";
     Text[ chinese_simplified ] = "Á´½ÓÎÄ±¾¿ò";
     Text[ greek ] = "Óıíäåóç ğëáéóßïõ êåéìİíïõ";
@@ -2225,7 +2225,7 @@ String STR_UNDO_UNCHAIN
     Text[ polish ] = "Roz³¹cz ramki tekstu";
     Text[ japanese ] = "Ã·½Ä˜g‚ÌŒ‹‡‰ğœ";
     Text[ chinese_traditional ] = "¨ú®ø¤å¦r¤è¶ôªº³sµ²";
-    Text[ arabic ] = "İß ÊÑÇÈØ ÅØÇÑÇÊ ÇáäÕ";
+    Text[ arabic ] = "İß ÊÑÇÈØ ßæÇÏÑ ÇáäÕ";
     Text[ dutch ] = "Tekstkaderverbinding verwijderen";
     Text[ chinese_simplified ] = "È¡ÏûÎÄ±¾¿òµÄÁ´½Ó";
     Text[ greek ] = "Áğïóıíäåóç ğëáßóéá êåéìİíïõ";
@@ -2329,7 +2329,7 @@ String STR_UNDO_SETFLYFRMFMT
     Text[ polish ] = "Zastosuj styl ramki";
     Text[ japanese ] = "˜g½À²Ù‚Ì“K—p";
     Text[ chinese_traditional ] = "¨Ï¥Î¤è¶ô¼Ë¦¡";
-    Text[ arabic ] = "ÇÓÊÎÏÇã äãØ ÅØÇÑ";
+    Text[ arabic ] = "ÇÓÊÎÏÇã äãØ ßÇÏÑ";
     Text[ dutch ] = "Kaderopmaakprofiel toepassen";
     Text[ chinese_simplified ] = "Ê¹ÓÃ¿òÑùÊ½";
     Text[ greek ] = "ÅöáñìïãŞ óôõë ğëáéóßïõ";
@@ -2384,7 +2384,7 @@ String STR_INSERT_URLBTN
     Text[ arabic ] = "ÅÏÑÇÌ ãİÊÇÍ URL";
     Text[ dutch ] = "URL button invoegen";
     Text[ chinese_simplified ] = "²åÈë URL °´Å¥";
-    Text[ greek ] = "Ğñüóèåóç êïõìğéïı URL";
+    Text[ greek ] = "ĞñïóèŞêç ğåäßïõ åğéëïãŞò URL";
     Text[ korean ] = "URL ¹öÆ° »ğÀÔ";
     Text[ turkish ] = "URL düğmesi ekle";
     Text[ language_user1 ] = " ";
