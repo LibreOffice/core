@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocumentView.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:11:10 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com {  module sun {  module star {  module view {
 
 /** specifies a view of a standard office document.
  */
-service OfficeDocumentView
+published service OfficeDocumentView
 {
     /** This mandatory interface gives access to the current user selection
                 within this office document view.
