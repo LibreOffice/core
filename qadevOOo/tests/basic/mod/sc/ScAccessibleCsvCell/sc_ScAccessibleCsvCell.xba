@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScAccessibleCsvCell.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:58:47 $ 
+'*  last change:$Date: 2003-05-27 12:09:54 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -95,11 +95,11 @@ On Error Goto ErrHndl
     wait(3000)
     oWin = tk.getActiveTopWindow()
     xRoot = utils.at_getAccessibleObject(oWin)
-    oParent = utils.at_getAccessibleObjectForRole(xRoot,48)
+    oParent = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.TABLE)
     oObj = oParent.getAccessibleChild(3).getAccessibleContext()
     Out.Log("Child: "+oObj.getAccessibleName())
     Out.Log("Implementation name: "+oObj.getImplementationName())
-    accButton = utils.at_getAccessibleObjectForRole(xRoot,35,"Cancel")
+    accButton = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON,"Cancel")
     accText = oObj.getText()
 
 Exit Sub
