@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Process.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:12:58 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,24 +59,30 @@
  */
 package com.sun.star.wizards.web;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
-//import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
 
 import com.sun.star.lang.XMultiServiceFactory;
-
-import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.ui.event.*;
-import com.sun.star.wizards.web.data.*;
+import com.sun.star.wizards.common.ConfigSet;
+import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.UCB;
+import com.sun.star.wizards.ui.event.Task;
+import com.sun.star.wizards.web.data.CGContent;
+import com.sun.star.wizards.web.data.CGDocument;
+import com.sun.star.wizards.web.data.CGExporter;
+import com.sun.star.wizards.web.data.CGLayout;
+import com.sun.star.wizards.web.data.CGPublish;
+import com.sun.star.wizards.web.data.CGSettings;
 import com.sun.star.wizards.web.export.Exporter;
 
 
@@ -387,6 +393,9 @@ public class Process implements Runnable, WebWizardConst, ProcessErrors {
                 String key = (String)set.getKey(p);
                 task.setSubtaskName(key);
 
+                if (key.equals(ZIP_PUBLISHER))
+                    fileAccess.delete(p.cp_URL);
+
                 if (!publish(dir, p, ucb, task)) {
                     return false;
                 }
@@ -408,7 +417,7 @@ public class Process implements Runnable, WebWizardConst, ProcessErrors {
      */
     private boolean publish(String dir,CGPublish publish,UCB copy,Task task) {
         try {
-            copy.deleteDirContent(publish.url);
+            //copy.deleteDirContent(publish.url);
             task.advance(true);
             copy.copy(dir,publish.url);
             task.advance(true);
@@ -486,11 +495,7 @@ public class Process implements Runnable, WebWizardConst, ProcessErrors {
         String filesPath = fileAccess.getURL(
             FileAccess.connectURLs(settings.workPath ,  "layouts/"), layout.cp_FSName );
         ucb.copy(filesPath,targetDir,new ExtensionVerifier("xsl"));
-        String icon = settings.cp_DefaultSession.cp_GeneralInfo.cp_Icon;
-        if ((icon!=null) && (!icon.equals(""))) {
-            String icon2 = FileAccess.connectURLs(targetDir , "images/favicon.ico");
-            fileAccess.copy(icon,icon2);
-        }
+
     }
 
     /**
@@ -593,7 +598,7 @@ public class Process implements Runnable, WebWizardConst, ProcessErrors {
             contentDir = fileAccess.createNewDir(dir,content.cp_Name);
             if (contentDir == null || contentDir.equals("") )
                 throw new IOException("Directory " + dir + " could not be created.");
-            content.dirName = fileAccess.getFilename(contentDir);
+            content.dirName = FileAccess.getFilename(contentDir);
 
             task.advance(true,TASK_EXPORT_DOCUMENTS);
             toPerform--;
@@ -675,7 +680,7 @@ public class Process implements Runnable, WebWizardConst, ProcessErrors {
              * and find an available filename which starts with
              * this filename, but with the new extension. (destExt)
              */
-            String docFilename = fileAccess.getFilename(doc.cp_URL);
+            String docFilename = FileAccess.getFilename(doc.cp_URL);
 
             String docExt = FileAccess.getExtension(docFilename);
             String fn = doc.localFilename.substring(0,doc.localFilename.length()-docExt.length()-1); //filename without extension
@@ -695,7 +700,7 @@ public class Process implements Runnable, WebWizardConst, ProcessErrors {
              */
             if (exporter.cp_OwnDirectory) { //+++
                   dir = fileAccess.createNewDir(dir, fn );
-                  doc.dirName = fileAccess.getFilename(dir);
+                  doc.dirName = FileAccess.getFilename(dir);
             }
 
             /*
@@ -711,7 +716,7 @@ public class Process implements Runnable, WebWizardConst, ProcessErrors {
              * this will be used by the exporter,
              * and to generate the TOC.
              */
-            doc.urlFilename = fileAccess.getFilename(file);
+            doc.urlFilename = FileAccess.getFilename(file);
 
             task.advance(true);
 
