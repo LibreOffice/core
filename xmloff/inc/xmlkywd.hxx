@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-24 18:52:31 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1253,7 +1253,7 @@ XML_CONSTASCII_ACTION( sXML_string_value_if_false, "string-value-if-false" );
 XML_CONSTASCII_ACTION( sXML_string_value_if_true, "string-value-if-true" );
 XML_CONSTASCII_ACTION( sXML_stroke , "stroke" );
 XML_CONSTASCII_ACTION( sXML_stroke_color , "stroke-color" );
-XML_CONSTASCII_ACTION( sXML_stroke_dasharray , "stroke-dasharray" );
+XML_CONSTASCII_ACTION( sXML_stroke_dash , "stroke-dash" );
 XML_CONSTASCII_ACTION( sXML_stroke_linejoin , "stroke-linejoin" );
 XML_CONSTASCII_ACTION( sXML_stroke_opacity, "stroke-opacity" );
 XML_CONSTASCII_ACTION( sXML_stroke_width, "stroke-width" );
@@ -1521,4 +1521,26 @@ XML_CONSTASCII_ACTION( sXML_lighting_mode, "lighting-mode");
 XML_CONSTASCII_ACTION( sXML_specular, "specular");
 XML_CONSTASCII_ACTION( sXML_light, "light");
 XML_CONSTASCII_ACTION( sXML_3DScene, "scene");
+
+XML_CONSTASCII_ACTION( sXML_start_shape, "start-shape");
+XML_CONSTASCII_ACTION( sXML_start_glue_point, "start-glue-point");
+XML_CONSTASCII_ACTION( sXML_end_shape, "end-shape");
+XML_CONSTASCII_ACTION( sXML_end_glue_point, "end-glue-point");
+XML_CONSTASCII_ACTION( sXML_line_skew, "line-skew");
+XML_CONSTASCII_ACTION( sXML_curve, "curve" );
+XML_CONSTASCII_ACTION( sXML_start_line_spacing_horizontal, "start-line-spacing-horizontal" );
+XML_CONSTASCII_ACTION( sXML_start_line_spacing_vertical, "start-line-spacing-vertical" );
+XML_CONSTASCII_ACTION( sXML_end_line_spacing_horizontal, "end-line-spacing-horizontal" );
+XML_CONSTASCII_ACTION( sXML_end_line_spacing_vertical, "end-line-spacing-vertical" );
+XML_CONSTASCII_ACTION( sXML_line_distance, "line-distance" );
+XML_CONSTASCII_ACTION( sXML_guide_overhang, "guide-overhang" );
+XML_CONSTASCII_ACTION( sXML_guide_distance, "guide-distance" );
+XML_CONSTASCII_ACTION( sXML_start_guide, "start-guide" );
+XML_CONSTASCII_ACTION( sXML_end_guide, "end-guide" );
+
+XML_CONSTASCII_ACTION( sXML_dots, "dots" );
+XML_CONSTASCII_ACTION( sXML_dots_length, "dots-length" );
+XML_CONSTASCII_ACTION( sXML_dashes, "dashes" );
+XML_CONSTASCII_ACTION( sXML_dashes_length, "dashes-length" );
+
 #endif

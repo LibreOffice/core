@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 17:37:17 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,23 +827,55 @@ struct ZOrderHint
     int operator<(const ZOrderHint& rComp) const { return nShould < rComp.nShould; }
 };
 
+struct ConnectionHint
+{
+    sal_Int32 nConnectorIndex;
+    sal_Bool  bStart;
+    sal_Int32 nDestShapeId;
+    sal_Int32 nDestGlueId;
+};
+
+struct ltint32
+{
+  bool operator()(const sal_Int32 p, sal_Int32 q) const
+  {
+    return p < q;
+  }
+};
+
 class ShapeSortContext
 {
 public:
     uno::Reference< drawing::XShapes > mxShapes;
     list<ZOrderHint>              maZOrderList;
     list<ZOrderHint>              maUnsortedList;
+    vector<ConnectionHint>        maConnections;
+    map<sal_Int32,sal_Int32,ltint32> maShapeIdMap;
+
     sal_Int32                     mnCurrentZ;
     ShapeSortContext*             mpParentContext;
-    const OUString                maZOrderStr;
+    const OUString                msZOrder;
+    const OUString                msStartShape;
+    const OUString                msEndShape;
+    const OUString                msStartGluePointIndex;
+    const OUString                msEndGluePointIndex;
 
     ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, ShapeSortContext* pParentContext = NULL );
 
     void moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos );
+    void restoreConnections();
+
+    void createShapeId( sal_Int32 nId );
+    uno::Reference< drawing::XShape > getShapeFromId( sal_Int32 nId );
 };
 
 ShapeSortContext::ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, ShapeSortContext* pParentContext )
-: mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( pParentContext ), maZOrderStr(RTL_CONSTASCII_USTRINGPARAM("ZOrder"))
+:   mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( pParentContext ),
+    msZOrder(RTL_CONSTASCII_USTRINGPARAM("ZOrder")),
+    msStartShape(RTL_CONSTASCII_USTRINGPARAM("StartShape")),
+    msEndShape(RTL_CONSTASCII_USTRINGPARAM("EndShape")),
+    msStartGluePointIndex(RTL_CONSTASCII_USTRINGPARAM("StartGluePointIndex")),
+    msEndGluePointIndex(RTL_CONSTASCII_USTRINGPARAM("EndGluePointIndex"))
 {
 }
 
@@ -853,10 +885,10 @@ void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
     uno::Reference< beans::XPropertySet > xPropSet;
     aAny >>= xPropSet;
 
-    if( xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( maZOrderStr ) )
+    if( xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( msZOrder ) )
     {
         aAny <<= nDestPos;
-        xPropSet->setPropertyValue( maZOrderStr, aAny );
+        xPropSet->setPropertyValue( msZOrder, aAny );
 
         list<ZOrderHint>::iterator aIter = maZOrderList.begin();
         list<ZOrderHint>::iterator aEnd = maZOrderList.end();
@@ -886,6 +918,52 @@ void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
     }
 }
 
+void ShapeSortContext::restoreConnections()
+{
+    if( !maConnections.empty() )
+    {
+        uno::Any aAny;
+        uno::Reference< beans::XPropertySet > xConnector;
+
+        const vector<ConnectionHint>::size_type nCount = maConnections.size();
+        for( vector<ConnectionHint>::size_type i = 0; i < nCount; i++ )
+        {
+            ConnectionHint& rHint = maConnections[i];
+            if( mxShapes->getByIndex( rHint.nConnectorIndex ) >>= xConnector )
+            {
+                uno::Reference< drawing::XShape > xShape( getShapeFromId( rHint.nDestShapeId ) );
+                if( xShape.is() )
+                {
+                    aAny <<= xShape;
+                    xConnector->setPropertyValue( rHint.bStart ? msStartShape : msEndShape, aAny );
+                }
+
+                aAny <<= rHint.nDestGlueId;
+                xConnector->setPropertyValue( rHint.bStart ? msStartGluePointIndex : msEndGluePointIndex, aAny );
+            }
+        }
+    }
+}
+
+void ShapeSortContext::createShapeId( sal_Int32 nId )
+{
+    maShapeIdMap[nId] = mnCurrentZ;
+}
+
+uno::Reference< drawing::XShape > ShapeSortContext::getShapeFromId( sal_Int32 nId )
+{
+    uno::Reference< drawing::XShape > xShape;
+
+    map<sal_Int32,sal_Int32,ltint32>::iterator aIter = maShapeIdMap.find( nId );
+    if( aIter != maShapeIdMap.end() )
+    {
+        uno::Any aAny( mxShapes->getByIndex( maShapeIdMap[nId] ) );
+        aAny >>= xShape;
+    }
+
+    return xShape;
+}
+
 void XMLShapeImportHelper::pushGroupForSorting( uno::Reference< drawing::XShapes >& rShapes )
 {
     mpSortContext = new ShapeSortContext( rShapes, mpSortContext );
@@ -897,6 +975,10 @@ void XMLShapeImportHelper::popGroupAndSort()
     if( mpSortContext == NULL )
         return;
 
+    // restore connections for connection shapes
+    mpSortContext->restoreConnections();
+
+    // sort shapes
     list<ZOrderHint>& rZList = mpSortContext->maZOrderList;
     if( !rZList.empty() )
     {
@@ -959,3 +1041,26 @@ void XMLShapeImportHelper::shapeWithZIndexAdded( com::sun::star::uno::Reference<
     }
 }
 
+void XMLShapeImportHelper::addShapeConnection( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rConnectorShape,
+                         sal_Bool bStart,
+                         sal_Int32 nDestShapeId,
+                         sal_Int32 nDestGlueId )
+{
+    DBG_ASSERT( mpSortContext, "Connection Shapes are not working without a sort context!" );
+    if( mpSortContext )
+    {
+        ConnectionHint aHint;
+        aHint.nConnectorIndex = mpSortContext->mnCurrentZ;
+        aHint.bStart = bStart;
+        aHint.nDestShapeId = nDestShapeId;
+        aHint.nDestGlueId = nDestGlueId;
+
+        mpSortContext->maConnections.push_back( aHint );
+    }
+}
+
+void XMLShapeImportHelper::createShapeId( sal_Int32 nId )
+{
+    if( mpSortContext )
+        mpSortContext->createShapeId( nId );
+}

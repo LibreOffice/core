@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 16:59:46 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DRAWING_CONNECTORTYPE_HPP_
+#include <com/sun/star/drawing/ConnectorType.hpp>
+#endif
+
 #ifndef _XMLOFF_ENUMPROPERTYHANDLER_HXX
 #include <EnumPropertyHdl.hxx>
 #endif
@@ -147,8 +151,8 @@ using namespace ::com::sun::star;
 const XMLPropertyMapEntry aXMLSDProperties[] =
 {
     // stroke attributes
-    { "LineStyle",      XML_NAMESPACE_DRAW, sXML_stroke, XML_SD_TYPE_STROKE, 0 },
-    { "LineDashName",   XML_NAMESPACE_DRAW, sXML_stroke_dasharray,      XML_TYPE_STRING, 0 },
+    { "LineStyle",      XML_NAMESPACE_DRAW, sXML_stroke,                XML_SD_TYPE_STROKE, 0 },
+    { "LineDashName",   XML_NAMESPACE_DRAW, sXML_stroke_dash,           XML_TYPE_STRING, 0 },
     { "LineWidth",      XML_NAMESPACE_SVG,  sXML_stroke_width,          XML_TYPE_MEASURE, 0 },
     { "LineColor",      XML_NAMESPACE_SVG,  sXML_stroke_color,          XML_TYPE_COLOR, 0 },
     { "LineStartName",  XML_NAMESPACE_DRAW, sXML_marker_start,          XML_TYPE_STRING, 0 },
@@ -188,6 +192,24 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "AdjustBlue",     XML_NAMESPACE_DRAW, sXML_blue,                  XML_TYPE_PERCENT16, 0 },        // signed?
 
     // animation text attributes
+
+    // connector attributes
+    { "EdgeNode1HorzDist",  XML_NAMESPACE_DRAW, sXML_start_line_spacing_horizontal, XML_TYPE_MEASURE, 0 },
+    { "EdgeNode1VertDist",  XML_NAMESPACE_DRAW, sXML_start_line_spacing_vertical,   XML_TYPE_MEASURE, 0 },
+    { "EdgeNode2HorzDist",  XML_NAMESPACE_DRAW, sXML_end_line_spacing_horizontal,   XML_TYPE_MEASURE, 0 },
+    { "EdgeNode2VertDist",  XML_NAMESPACE_DRAW, sXML_end_line_spacing_vertical,     XML_TYPE_MEASURE, 0 },
+
+    // measure attributes
+    { "MeasureLineDistance",        XML_NAMESPACE_DRAW, sXML_line_distance,             XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLineOverhang",    XML_NAMESPACE_DRAW, sXML_guide_overhang,            XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLineDistance",    XML_NAMESPACE_DRAW, sXML_guide_distance,            XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLine1Length",     XML_NAMESPACE_DRAW, sXML_start_guide,               XML_TYPE_MEASURE, 0 },
+    { "MeasureHelpLine2Length",     XML_NAMESPACE_DRAW, sXML_end_guide,                 XML_TYPE_MEASURE, 0 },
+//  { "MeasureUnit",                XML_NAMESPACE_DRAW, sXML_unit,                      XML_TYPE_MEASURE_UNIT|MID_FLAG_MULTI_PROPERTY, 0 },
+//  { "MeasureShowUnit",            XML_NAMESPACE_DRAW, sXML_unit,                      XML_TYPE_MEASURE_UNIT|MID_FLAG_MULTI_PROPERTY, 0 },
+//  { "MeasureBelowReferenceEdge",  XML_NAMESPACE_DRAW, sXML_placing,                   XML_TYPE_MEASURE_PLACING, 0 },
+    { "MeasureTextRotate90",        XML_NAMESPACE_DRAW, sXML_parallel,                  XML_TYPE_BOOL, 0 },
+
 
     // text attributes
     { "CharColor",      XML_NAMESPACE_FO,       sXML_color,                 XML_TYPE_COLOR, 0 },
@@ -389,6 +411,15 @@ SvXMLEnumMapEntry aXML_FadeEffect_EnumMap[] =
     { sXML_stretch_from_bottom, presentation::FadeEffect_STRETCH_FROM_BOTTOM },
     { sXML_vertical_lines,      presentation::FadeEffect_VERTICAL_LINES },
     { sXML_horizontal_lines,    presentation::FadeEffect_HORIZONTAL_LINES },
+    { NULL, 0 }
+};
+
+SvXMLEnumMapEntry   aXML_ConnectionKind_EnumMap[] =
+{
+    { sXML_standard,    drawing::ConnectorType_STANDARD },
+    { sXML_curve,       drawing::ConnectorType_CURVE },
+    { sXML_line,        drawing::ConnectorType_LINE },
+    { sXML_lines,       drawing::ConnectorType_LINES },
     { NULL, 0 }
 };
 

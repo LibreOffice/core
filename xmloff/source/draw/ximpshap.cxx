@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 17:50:31 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DRAWING_CONNECTORTYPE_HPP_
+#include <com/sun/star/drawing/ConnectorType.hpp>
+#endif
+
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include "families.hxx"
 #endif
@@ -111,6 +115,10 @@
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
+#endif
+
+#ifndef _SDPROPLS_HXX
+#include "sdpropls.hxx"
 #endif
 
 using namespace ::rtl;
@@ -350,6 +358,10 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_zindex)) )
         {
             mnZOrder = rValue.toInt32();
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_id)) )
+        {
+            GetImport().GetShapeImport()->createShapeId( rValue.toInt32() );
         }
     }
 }
@@ -1174,7 +1186,17 @@ SdXMLConnectorShapeContext::SdXMLConnectorShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
+    maStart(0,0),
+    maEnd(1,1),
+    mnType( (USHORT)drawing::ConnectorType_STANDARD ),
+    mnStartShapeId(-1),
+    mnStartGlueId(-1),
+    mnEndShapeId(-1),
+    mnEndGlueId(-1),
+    mnDelta1(0),
+    mnDelta2(0),
+    mnDelta3(0)
 {
 }
 
@@ -1182,6 +1204,85 @@ SdXMLConnectorShapeContext::SdXMLConnectorShapeContext(
 
 SdXMLConnectorShapeContext::~SdXMLConnectorShapeContext()
 {
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    switch( nPrefix )
+    {
+    case XML_NAMESPACE_DRAW:
+    {
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_start_shape)) )
+        {
+            mnStartShapeId = rValue.toInt32();
+            break;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_start_glue_point)) )
+        {
+            mnStartGlueId = rValue.toInt32();
+            break;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_end_shape)) )
+        {
+            mnEndShapeId = rValue.toInt32();
+            break;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_end_glue_point)) )
+        {
+            mnEndGlueId = rValue.toInt32();
+            break;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_line_skew)) )
+        {
+            SvXMLTokenEnumerator aTokenEnum( rValue );
+            OUString aToken;
+            if( aTokenEnum.getNextToken( aToken ) )
+            {
+                GetImport().GetMM100UnitConverter().convertMeasure(mnDelta1, aToken);
+                if( aTokenEnum.getNextToken( aToken ) )
+                {
+                    GetImport().GetMM100UnitConverter().convertMeasure(mnDelta2, aToken);
+                    if( aTokenEnum.getNextToken( aToken ) )
+                    {
+                        GetImport().GetMM100UnitConverter().convertMeasure(mnDelta3, aToken);
+                    }
+                }
+            }
+            break;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_type)) )
+        {
+            SvXMLUnitConverter::convertEnum( mnType, rValue, aXML_ConnectionKind_EnumMap );
+            break;
+        }
+    }
+    case XML_NAMESPACE_SVG:
+    {
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x1)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maStart.X, rValue);
+            break;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y1)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maStart.Y, rValue);
+            break;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x2)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maEnd.X, rValue);
+            break;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y2)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maEnd.Y, rValue);
+            break;
+        }
+    }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1196,8 +1297,37 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ConnectorShape"))), uno::UNO_QUERY);
         if(xShape.is())
         {
+            // add connection ids
+            if( mnStartShapeId != -1 )
+                GetImport().GetShapeImport()->addShapeConnection( xShape, sal_True, mnStartShapeId, mnStartGlueId );
+            if( mnEndShapeId != -1 )
+                GetImport().GetShapeImport()->addShapeConnection( xShape, sal_False, mnEndShapeId, mnEndGlueId );
+
             // add, set style and properties from base shape
             AddShape(xShape);
+
+            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
+            if( xProps.is() )
+            {
+                uno::Any aAny;
+                aAny <<= maStart;
+                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")), aAny);
+
+                aAny <<= maEnd;
+                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")), aAny );
+
+                aAny <<= (drawing::ConnectorType)mnType;
+                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeKind")), aAny );
+
+                aAny <<= mnDelta1;
+                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine1Delta")), aAny );
+
+                aAny <<= mnDelta2;
+                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine2Delta")), aAny );
+
+                aAny <<= mnDelta3;
+                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine3Delta")), aAny );
+            }
             SetStyle();
             SdXMLShapeContext::StartElement(xAttrList);
         }
@@ -1217,7 +1347,9 @@ SdXMLMeasureShapeContext::SdXMLMeasureShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
+    maStart(0,0),
+    maEnd(1,1)
 {
 }
 
@@ -1225,6 +1357,37 @@ SdXMLMeasureShapeContext::SdXMLMeasureShapeContext(
 
 SdXMLMeasureShapeContext::~SdXMLMeasureShapeContext()
 {
+}
+
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLMeasureShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    switch( nPrefix )
+    {
+    case XML_NAMESPACE_SVG:
+    {
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x1)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maStart.X, rValue);
+            break;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y1)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maStart.Y, rValue);
+            break;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x2)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maEnd.X, rValue);
+            break;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y2)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maEnd.Y, rValue);
+            break;
+        }
+    }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1241,6 +1404,18 @@ void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         {
             // add, set style and properties from base shape
             AddShape(xShape);
+
+            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
+            if( xProps.is() )
+            {
+                uno::Any aAny;
+                aAny <<= maStart;
+                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")), aAny);
+
+                aAny <<= maEnd;
+                xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")), aAny );
+            }
+
             SetStyle();
             SdXMLShapeContext::StartElement(xAttrList);
         }

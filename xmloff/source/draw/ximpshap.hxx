@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-23 18:30:39 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_POINT_HPP_
+#include <com/sun/star/awt/Point.hpp>
+#endif
+
 #ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
 #endif
@@ -110,6 +114,9 @@ protected:
 
     void SetStyle();
     void AddShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape);
+
+    SvXMLImport& GetImport() { return SvXMLImportContext::GetImport(); }
+    const SvXMLImport& GetImport() const { return SvXMLImportContext::GetImport(); }
 
 public:
     TYPEINFO();
@@ -289,6 +296,20 @@ public:
 
 class SdXMLConnectorShapeContext : public SdXMLShapeContext
 {
+private:
+    ::com::sun::star::awt::Point maStart;
+    ::com::sun::star::awt::Point maEnd;
+
+    USHORT      mnType;
+
+    sal_Int32   mnStartShapeId;
+    sal_Int32   mnStartGlueId;
+    sal_Int32   mnEndShapeId;
+    sal_Int32   mnEndGlueId;
+
+    sal_Int32   mnDelta1;
+    sal_Int32   mnDelta2;
+    sal_Int32   mnDelta3;
 public:
     TYPEINFO();
 
@@ -298,6 +319,9 @@ public:
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLConnectorShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -305,6 +329,10 @@ public:
 
 class SdXMLMeasureShapeContext : public SdXMLShapeContext
 {
+private:
+    ::com::sun::star::awt::Point maStart;
+    ::com::sun::star::awt::Point maEnd;
+
 public:
     TYPEINFO();
 
@@ -314,6 +342,9 @@ public:
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLMeasureShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-15 12:18:13 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #include <tools/debug.hxx>
 #endif
 
+#include "xmlkywd.hxx"
+#include "xmlnmspe.hxx"
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -94,7 +97,13 @@ using namespace ::com::sun::star;
 
 XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )
-:   rExport( rExp )
+:   rExport( rExp ),
+    mnNextUniqueShapeId(1),
+    msZIndex( RTL_CONSTASCII_USTRINGPARAM("ZOrder") ),
+    msEmptyPres( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ),
+    msModel( RTL_CONSTASCII_USTRINGPARAM("Model") ),
+    msStartShape( RTL_CONSTASCII_USTRINGPARAM("StartShape") ),
+    msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") )
 {
     // construct PropertyHandlerFactory
     xSdPropHdlFactory = new XMLSdPropHdlFactory;
@@ -161,9 +170,9 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
         sal_Bool bIsEmptyPresObj = sal_False;
 
-        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject"))))
+        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(msEmptyPres) )
         {
-            uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject")));
+            uno::Any aAny = xPropSet->getPropertyValue(msEmptyPres);
             aAny >>= bIsEmptyPresObj;
         }
 
@@ -175,15 +184,31 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
     // check for calc ole
     const OUString aShapeType( xShape->getShapeType() );
-    if( (0 == aShapeType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.OLE2Shape" ))) ||
-        (0 == aShapeType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.CalcShape" ))) )
+    if( aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.OLE2Shape" )) ||
+        aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.CalcShape" )) )
     {
         uno::Reference< chart::XChartDocument > xChartDoc;
-        uno::Any aAny( xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) ) );
+        uno::Any aAny( xPropSet->getPropertyValue(msModel) );
         aAny >>= xChartDoc;
         if( xChartDoc.is() )
         {
             GetExport().GetChartExport()->collectAutoStyles( xChartDoc );
+        }
+    }
+
+    // check for connector
+    if( aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.ConnectorShape" ) ) )
+    {
+        uno::Reference< drawing::XShape > xConnection;
+
+        // create shape ids for export later
+        if( xPropSet->getPropertyValue( msStartShape ) >>= xConnection )
+        {
+            createShapeId( xConnection );
+        }
+        if( xPropSet->getPropertyValue( msEndShape ) >>= xConnection )
+        {
+            createShapeId( xConnection );
         }
     }
 }
@@ -204,9 +229,10 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             aNewName = GetExport().GetAutoStylePool()->Find(
                 XML_STYLE_FAMILY_SD_GRAPHICS_ID, aParentName, xPropStates);
 
+        // compute the shape type
         XmlShapeType eShapeType(XmlShapeTypeNotYetSet);
-
         SdXMLExport::ImpCalcShapeType(xShape, eShapeType);
+
         SdXMLExport::ImpWriteSingleShapeStyleInfo(GetExport(), xShape,
             XML_STYLE_FAMILY_SD_GRAPHICS_ID, aNewName, eShapeType, nFeatures, pRefPoint);
     }
@@ -237,3 +263,51 @@ void XMLShapeExport::exportAutoStyles()
     }
 }
 
+/** creates a unique id for this shape, this id is saved and exported with this shape later
+    with the exportShape method. Its ok to call this twice with the same shape */
+void XMLShapeExport::createShapeId( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape )
+{
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+    if( xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( msZIndex ) )
+    {
+        sal_Int32 nIndex = 0;
+        xPropSet->getPropertyValue( msZIndex ) >>= nIndex;
+
+        const std::vector<XMLShapeIdHint>::size_type nCount = maUsedShapeIds.size();
+        for( std::vector<XMLShapeIdHint>::size_type i = 0; i < nCount; i++ )
+        {
+            if( maUsedShapeIds[i].mnShapeIndex == nIndex )
+                return; // we already have an id for this shape;
+        }
+
+        XMLShapeIdHint aNewHint;
+        aNewHint.mnShapeIndex = nIndex;
+        aNewHint.mnShapeId = mnNextUniqueShapeId++;
+        maUsedShapeIds.push_back( aNewHint );
+    }
+    else
+    {
+        DBG_ERROR( "createShapeId failed!" );
+    }
+}
+
+/** returns the unique id for this shape. It returns -1 if the was no createShapeId call
+    for this shape yet. */
+sal_Int32 XMLShapeExport::getShapeId( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape )
+{
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+    if( xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( msZIndex ) )
+    {
+        sal_Int32 nIndex = 0;
+        xPropSet->getPropertyValue( msZIndex ) >>= nIndex;
+
+        const std::vector<XMLShapeIdHint>::size_type nCount = maUsedShapeIds.size();
+        for( std::vector<XMLShapeIdHint>::size_type i = 0; i < nCount; i++ )
+        {
+            if( maUsedShapeIds[i].mnShapeIndex == nIndex )
+                return maUsedShapeIds[i].mnShapeId;
+        }
+    }
+
+    return -1;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 17:00:21 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,15 @@
 #define _SDPROPLS_HXX
 
 #ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
-#include <maptype.hxx>
+#include "maptype.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLTYPES_HXX
-#include <xmltypes.hxx>
+#include "xmltypes.hxx"
+#endif
+
+#ifndef _SVTOOLS_XMLEMENT_HXX
+#include "xmlement.hxx"
 #endif
 
 #ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
@@ -114,6 +118,11 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define XML_SD_TYPE_TEX_GENERATION_MODE_Y           (XML_SD_TYPES_START + 21 )
 #define XML_SD_TYPE_TEX_KIND                        (XML_SD_TYPES_START + 22 )
 #define XML_SD_TYPE_TEX_MODE                        (XML_SD_TYPES_START + 23 )
+
+//////////////////////////////////////////////////////////////////////////////
+// enum maps for attributes
+
+extern SvXMLEnumMapEntry aXML_ConnectionKind_EnumMap[];
 
 //////////////////////////////////////////////////////////////////////////////
 // factory for own graphic properties
