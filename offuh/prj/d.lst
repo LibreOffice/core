@@ -37,6 +37,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\io
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\java
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\lang
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\linguistic2
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\media
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\packages
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\packages\manifest
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\packages\zip
@@ -171,6 +172,8 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
 ..\%__SRC%\inc\com\sun\star\lang\*.hpp %_DEST%\inc%_EXT%\com\sun\star\lang\*.hpp
 ..\%__SRC%\inc\com\sun\star\linguistic2\*.hdl %_DEST%\inc%_EXT%\com\sun\star\linguistic2\*.hdl
 ..\%__SRC%\inc\com\sun\star\linguistic2\*.hpp %_DEST%\inc%_EXT%\com\sun\star\linguistic2\*.hpp
+..\%__SRC%\inc\com\sun\star\media\*.hdl %_DEST%\inc%_EXT%\com\sun\star\media\*.hdl
+..\%__SRC%\inc\com\sun\star\media\*.hpp %_DEST%\inc%_EXT%\com\sun\star\media\*.hpp
 ..\%__SRC%\inc\com\sun\star\packages\*.hdl %_DEST%\inc%_EXT%\com\sun\star\packages\*.hdl
 ..\%__SRC%\inc\com\sun\star\packages\*.hpp %_DEST%\inc%_EXT%\com\sun\star\packages\*.hpp
 ..\%__SRC%\inc\com\sun\star\packages\manifest\*.hdl %_DEST%\inc%_EXT%\com\sun\star\packages\manifest\*.hdl
