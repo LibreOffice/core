@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hro $ $Date: 2001-08-30 13:39:27 $
+ *  last change: $Author: mt $ $Date: 2001-09-04 05:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,6 +853,30 @@ void Window::ImplRemoveWindow( BOOL bRemoveFrameData )
         ImplReleaseServerGraphics();
 #endif
     }
+}
+
+// -----------------------------------------------------------------------
+
+void Window::ImplCallResize()
+{
+    mbCallResize = FALSE;
+    Resize();
+
+    // #88419# Most classes don't call the base class in Resize() and Move(),
+    // => Call ImpleResize/Move instead of Resize/Move directly...
+    if ( mxWindowPeer.is() )
+        Application::GetUnoWrapper()->WindowEvent_Resize( this );
+}
+
+// -----------------------------------------------------------------------
+
+void Window::ImplCallMove()
+{
+    mbCallMove = FALSE;
+    Move();
+
+    if ( mxWindowPeer.is() )
+        Application::GetUnoWrapper()->WindowEvent_Move( this );
 }
 
 // -----------------------------------------------------------------------
@@ -2617,13 +2641,15 @@ void Window::ImplScroll( const Rectangle& rRect,
                     pWindow->ImplSetClipFlag();
                 if ( pWindow->mpClientWindow )
                     pWindow->mpClientWindow->maPos = pWindow->maPos;
+
                 if ( pWindow->IsVisible() )
                 {
-                    pWindow->mbCallMove = FALSE;
-                    pWindow->Move();
+                    pWindow->ImplCallMove();
                 }
                 else
+                {
                     pWindow->mbCallMove = TRUE;
+                }
             }
             pWindow = pWindow->mpNext;
         }
@@ -2942,11 +2968,12 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             {
                 if ( mpClientWindow->IsVisible() )
                 {
-                    mpClientWindow->mbCallMove = FALSE;
-                    mpClientWindow->Move();
+                    mpClientWindow->ImplCallMove();
                 }
                 else
+                {
                     mpClientWindow->mbCallMove = TRUE;
+                }
             }
         }
         else
@@ -2966,13 +2993,11 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         {
             if ( bNewPos )
             {
-                mbCallMove = FALSE;
-                Move();
+                ImplCallMove();
             }
             if ( bNewSize )
             {
-                mbCallResize = FALSE;
-                Resize();
+                ImplCallResize();
             }
         }
         else
@@ -4257,42 +4282,28 @@ void Window::Draw( OutputDevice*, const Point&, const Size&, ULONG )
 
 void Window::Move()
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
-
-    if ( mxWindowPeer.is() )
-        Application::GetUnoWrapper()->WindowEvent_Move( this );
 }
 
 // -----------------------------------------------------------------------
 
 void Window::Resize()
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
-
-    if ( mxWindowPeer.is() )
-        Application::GetUnoWrapper()->WindowEvent_Resize( this );
 }
 
 // -----------------------------------------------------------------------
 
 void Window::Activate()
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
 }
 
 // -----------------------------------------------------------------------
 
 void Window::Deactivate()
 {
-    { // Klammerung, da in diesem Handler das Window zerstoert werden darf
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -5439,13 +5450,11 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
     {
         if ( mbCallMove )
         {
-            mbCallMove = FALSE;
-            Move();
+            ImplCallMove();
         }
         if ( mbCallResize )
         {
-            mbCallResize = FALSE;
-            Resize();
+            ImplCallResize();
         }
 
         StateChanged( STATE_CHANGE_VISIBLE );
