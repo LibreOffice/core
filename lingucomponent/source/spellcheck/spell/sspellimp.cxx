@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sspellimp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: khendricks $ $Date: 2001-09-08 15:55:44 $
+ *  last change: $Author: khendricks $ $Date: 2001-09-10 23:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,11 +215,12 @@ INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocal
           if (!pMS_en_US)
           {
              SvtPathOptions aPathOpt;
-             OUString dictpath = aPathOpt.GetDictionaryPath();
-             OUString spath;
-         osl::FileBase::getSystemPathFromFileURL(dictpath,spath);
-             OUString dict = spath + A2OU("/en_US.dic");
-             OUString aff = spath + A2OU("/en_US.aff");
+             OUString dicpath = aPathOpt.GetDictionaryPath() + A2OU("/en_US.dic");
+             OUString affpath = aPathOpt.GetDictionaryPath() + A2OU("/en_US.aff");
+             OUString dict;
+             OUString aff;
+         osl::FileBase::getSystemPathFromFileURL(dicpath,dict);
+          osl::FileBase::getSystemPathFromFileURL(affpath,aff);
              pMS_en_US = new MySpell(OU2A(aff),OU2A(dict));
       }
           pMS = pMS_en_US;
@@ -229,11 +230,12 @@ INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocal
     {
           if (!pMS_de_DE) {
              SvtPathOptions aPathOpt;
-             OUString dictpath = aPathOpt.GetDictionaryPath();
-             OUString spath;
-         osl::FileBase::getSystemPathFromFileURL(dictpath,spath);
-             OUString dict = spath + A2OU("/de_DE.dic");
-             OUString aff = spath + A2OU("/de_DE.aff");
+             OUString dicpath = aPathOpt.GetDictionaryPath() + A2OU("/de_DE.dic");
+             OUString affpath = aPathOpt.GetDictionaryPath() + A2OU("/de_DE.aff");
+             OUString dict;
+             OUString aff;
+         osl::FileBase::getSystemPathFromFileURL(dicpath,dict);
+          osl::FileBase::getSystemPathFromFileURL(affpath,aff);
              pMS_de_DE = new MySpell(OU2A(aff),OU2A(dict));
       }
           pMS = pMS_de_DE;
