@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-04 13:58:47 $
+ *  last change: $Author: cl $ $Date: 2002-11-08 12:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1296,7 +1296,9 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
         if(nFamily == pStyle->GetFamily() && !pStyle->IsDefaultStyle())
         {
             const UniString aStyleName(pStyle->GetName(), (sal_uInt16)pStyle->GetName().getLength());
-            if(!nPrefLen || aStyleName.Equals(rPrefix, 0, nPrefLen))
+            sal_uInt16 nStylePrefLen = aStyleName.SearchBackward( sal_Unicode('-') ) + 1;
+
+            if(!nPrefLen || ((nPrefLen == nStylePrefLen) && aStyleName.Equals(rPrefix, 0, nPrefLen)))
             {
                 uno::Reference< style::XStyle > xStyle;
                 const OUString aPureStyleName = nPrefLen ?
@@ -1388,7 +1390,9 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
         if(pStyle && nFamily == pStyle->GetFamily())
         {
             const UniString aStyleName(pStyle->GetName(), (sal_uInt16)pStyle->GetName().getLength());
-            if(!nPrefLen || aStyleName.Equals(rPrefix, 0, nPrefLen))
+            sal_uInt16 nStylePrefLen = aStyleName.SearchBackward( sal_Unicode('-') ) + 1;
+
+            if(!nPrefLen || ((nPrefLen == nStylePrefLen) && aStyleName.Equals(rPrefix, 0, nPrefLen)))
             {
                 if(pStyle->GetParent().getLength())
                 {

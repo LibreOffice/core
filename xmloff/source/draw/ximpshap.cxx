@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-17 14:40:18 $
+ *  last change: $Author: cl $ $Date: 2002-11-08 12:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,7 +628,7 @@ void SdXMLShapeContext::SetStyle()
                             do
                             {
                                 nPos++;
-                                nPos = aStyleName.indexOf( sal_Unicode('-'), nPos );
+                                nPos = aStyleName.lastIndexOf( sal_Unicode('-'), nPos );
                                 if( -1 != nPos )
                                     aFamily = aStyleName.copy( 0, nPos );
 
