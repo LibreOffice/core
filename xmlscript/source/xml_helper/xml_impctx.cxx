@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_impctx.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:19:22 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 16:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,8 @@ struct MGuard
 
 //==============================================================================
 class DocumentHandlerImpl :
-    public ::cppu::WeakImplHelper3< container::XNameAccess,
-                                    xml::sax::XDocumentHandler,
+    public ::cppu::WeakImplHelper3< xml::sax::XDocumentHandler,
+                                    xml::input::XNamespaceMapping,
                                     lang::XInitialization >
 {
     friend class ExtendedAttributes;
@@ -223,20 +223,11 @@ public:
         Reference< xml::sax::XLocator > const & xLocator )
         throw (xml::sax::SAXException, RuntimeException);
 
-    // XNameAccess
-    virtual Any SAL_CALL getByName(
-        OUString const & name )
-        throw (container::NoSuchElementException, lang::WrappedTargetException,
-               RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getElementNames()
+    // XNamespaceMapping
+    virtual sal_Int32 SAL_CALL getUidByUri( OUString const & Uri )
         throw (RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( OUString const & name )
-        throw (RuntimeException);
-    // XElementAccess
-    virtual Type SAL_CALL getElementType()
-        throw (RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements()
-        throw (RuntimeException);
+    virtual OUString SAL_CALL getUriByUid( sal_Int32 Uid )
+        throw (container::NoSuchElementException, RuntimeException);
 };
 
 //______________________________________________________________________________
@@ -534,57 +525,33 @@ void DocumentHandlerImpl::initialize(
     }
 }
 
-// XNameAccess
+
+// XNamespaceMapping
 
 //______________________________________________________________________________
-Any DocumentHandlerImpl::getByName( OUString const & name )
-    throw (container::NoSuchElementException, lang::WrappedTargetException,
-           RuntimeException)
+sal_Int32 DocumentHandlerImpl::getUidByUri( OUString const & Uri )
+    throw (RuntimeException)
 {
-    return makeAny( getUidByURI( name ) );
+    sal_Int32 uid = getUidByURI( Uri );
+    OSL_ASSERT( uid != UID_UNKNOWN );
+    return uid;
 }
 
 //______________________________________________________________________________
-Sequence< OUString > DocumentHandlerImpl::getElementNames()
-    throw (RuntimeException)
+OUString DocumentHandlerImpl::getUriByUid( sal_Int32 Uid )
+    throw (container::NoSuchElementException, RuntimeException)
 {
     MGuard guard( m_pMutex );
-    Sequence< OUString > names( m_URI2Uid.size() );
     t_OUString2LongMap::const_iterator iPos( m_URI2Uid.begin() );
     t_OUString2LongMap::const_iterator const iEnd( m_URI2Uid.end() );
-    OUString * pNames = names.getArray();
-    sal_Int32 nPos = 0;
     for ( ; iPos != iEnd; ++iPos )
     {
-        pNames[ nPos ] = iPos->first;
-        ++nPos;
+        if (iPos->second == Uid)
+            return iPos->first;
     }
-    return names;
-}
-
-//______________________________________________________________________________
-sal_Bool DocumentHandlerImpl::hasByName( OUString const & name )
-    throw (RuntimeException)
-{
-    MGuard guard( m_pMutex );
-    return m_URI2Uid.find( name ) != m_URI2Uid.end();
-}
-
-// XElementAccess
-
-//______________________________________________________________________________
-Type DocumentHandlerImpl::getElementType()
-    throw (RuntimeException)
-{
-    return ::getCppuType( reinterpret_cast< sal_Int32 const * >( 0 ) );
-}
-
-//______________________________________________________________________________
-sal_Bool DocumentHandlerImpl::hasElements()
-    throw (RuntimeException)
-{
-    MGuard guard( m_pMutex );
-    return ! m_URI2Uid.empty();
+    throw container::NoSuchElementException(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("no such xmlns uid!") ),
+        static_cast< OWeakObject * >(this) );
 }
 
 
@@ -594,7 +561,8 @@ sal_Bool DocumentHandlerImpl::hasElements()
 void DocumentHandlerImpl::startDocument()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    m_xRoot->startDocument( static_cast< container::XNameAccess * >( this ) );
+    m_xRoot->startDocument(
+        static_cast< xml::input::XNamespaceMapping * >( this ) );
 }
 
 //______________________________________________________________________________
@@ -858,15 +826,20 @@ sal_Int32 ExtendedAttributes::getLength()
 OUString ExtendedAttributes::getLocalNameByIndex( sal_Int32 nIndex )
     throw (RuntimeException)
 {
-    return m_pLocalNames[ nIndex ];
+    if (nIndex < m_nAttributes)
+        return m_pLocalNames[ nIndex ];
+    else
+        return OUString();
 }
 
 //______________________________________________________________________________
 OUString ExtendedAttributes::getQNameByIndex( sal_Int32 nIndex )
     throw (RuntimeException)
 {
-    OSL_ASSERT( nIndex < m_nAttributes );
-    return m_pQNames[ nIndex ];
+    if (nIndex < m_nAttributes)
+        return m_pQNames[ nIndex ];
+    else
+        return OUString();
 }
 
 //______________________________________________________________________________
@@ -881,7 +854,10 @@ OUString ExtendedAttributes::getTypeByIndex( sal_Int32 nIndex )
 OUString ExtendedAttributes::getValueByIndex( sal_Int32 nIndex )
     throw (RuntimeException)
 {
-    return m_pValues[ nIndex ];
+    if (nIndex < m_nAttributes)
+        return m_pValues[ nIndex ];
+    else
+        return OUString();
 }
 
 //______________________________________________________________________________
@@ -903,7 +879,10 @@ sal_Int32 ExtendedAttributes::getIndexByUidName(
 sal_Int32 ExtendedAttributes::getUidByIndex( sal_Int32 nIndex )
     throw (RuntimeException)
 {
-    return m_pUids[ nIndex ];
+    if (nIndex < m_nAttributes)
+        return m_pUids[ nIndex ];
+    else
+        return -1;
 }
 
 //______________________________________________________________________________
