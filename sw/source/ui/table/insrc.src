@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:52:46 $
+ *  last change: $Author: kz $ $Date: 2001-03-02 20:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ chinese_simplified ] = "Φ®Η°(~B)";
         Text[ russian ] = "οεπεδ";
         Text[ polish ] = "prze~d";
-        Text[ japanese ] = "‘O‚Ε(~B)";
+        Text[ japanese ] = "‘O(~B)";
         Text[ chinese_traditional ] = "¤§«e(~B)";
         Text[ arabic ] = "ήΘα";
         Text[ greek ] = "Πριν από";
@@ -153,7 +153,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ chinese_simplified ] = "Φ®Ίσ(~F)";
         Text[ russian ] = "οξρλε";
         Text[ polish ] = "za";
-        Text[ japanese ] = "γ‚Ε(~F)";
+        Text[ japanese ] = "γ(~F)";
         Text[ chinese_traditional ] = "¤§«α(~F)";
         Text[ arabic ] = "ΘΪΟ";
         Text[ greek ] = "μετά από";
@@ -232,7 +232,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ chinese_simplified ] = "ΚύΔΏ(~A)";
         Text[ russian ] = "Χθρλξ";
         Text[ polish ] = "Liczba";
-        Text[ japanese ] = "‘”(~A)";
+        Text[ japanese ] = "”(~A)";
         Text[ chinese_traditional ] = "ΌΖ¥Ψ(~A)";
         Text[ arabic ] = "ΗαΪΟΟ";
         Text[ greek ] = "~Αριθμός";
