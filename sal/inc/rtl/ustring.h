@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 13:40:58 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,29 @@ sal_Int32 SAL_CALL rtl_ustr_shortenedCompare_WithLength( const sal_Unicode * fir
     first string compares greater than the second string.
  */
 sal_Int32 SAL_CALL rtl_ustr_reverseCompare_WithLength( const sal_Unicode * first, sal_Int32 firstLen, const sal_Unicode * second, sal_Int32 secondLen ) SAL_THROW_EXTERN_C();
+
+/** Compare two strings from back to front for equality.
+
+    The comparison is based on the numeric value of each character in the
+    strings and returns 'true' if, ans only if, both strings are equal.
+    This function cannot be used for language-specific sorting.
+
+    @param first
+    the first string to be compared.  Need not be null-terminated, but must be
+    at least as long as the specified len.
+
+    @param second
+    the second string which is compared with the first one.  Need not be
+    null-terminated, but must be at least as long as the specified len.
+
+    @param len
+    the length of both strings.
+
+    @return
+    true if both strings are equal, false if they are not equal.
+ */
+
+sal_Bool SAL_CALL rtl_ustr_asciil_reverseEquals_WithLength( const sal_Unicode * first, const sal_Char * second, sal_Int32 len ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings, ignoring the case of ASCII characters.
 
