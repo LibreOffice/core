@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-08 16:16:10 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,8 @@
 #include "internal/allocator.hxx"
 #endif
 
-#include <list>
 #include <hash_map>
-
+#include <list>
 
 using namespace ::rtl;
 using namespace ::osl;
