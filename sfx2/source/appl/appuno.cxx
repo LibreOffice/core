@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-26 07:49:37 $
+ *  last change: $Author: as $ $Date: 2002-08-26 13:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
@@ -259,6 +262,7 @@ static const String sFilterFlags    = String::CreateFromAscii( "FilterFlags" );
 static const String sMacroExecMode  = String::CreateFromAscii( "MacroExecutionMode" );
 static const String sUpdateDocMode  = String::CreateFromAscii( "UpdateDocMode" );
 static const String sMinimized      = String::CreateFromAscii( "Minimized" );
+static const String sInteractionHdl = String::CreateFromAscii( "InteractionHandler" );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -530,6 +534,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         DBG_ASSERT( bOK, "invalid type for StatusIndicator" )
                         if (bOK)
                             rSet.Put( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, rProp.Value ) );
+                     }
+                else if ( aName == sInteractionHdl )
+                     {
+                        Reference< ::com::sun::star::task::XInteractionHandler > xVal;
+                        sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
+                        DBG_ASSERT( bOK, "invalid type for InteractionHandler" )
+                        if (bOK)
+                            rSet.Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, rProp.Value ) );
                      }
                 else if ( aName == sViewData )
                     rSet.Put( SfxUnoAnyItem( SID_VIEW_DATA, rProp.Value ) );
@@ -851,6 +863,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             sal_Int32 nAdditional=0;
             if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_INTERACTIONHANDLER ) == SFX_ITEM_SET )
+                nAdditional++;
             if ( rSet.GetItemState( SID_ORIGURL ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_DOC_SALVAGE ) == SFX_ITEM_SET )
@@ -953,6 +967,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_DOCFRAME )
                         continue;
                     if ( nId == SID_PROGRESS_STATUSBAR_CONTROL )
+                        continue;
+                    if ( nId == SID_INTERACTIONHANDLER )
                         continue;
                     if ( nId == SID_VIEW_DATA )
                         continue;
@@ -1129,6 +1145,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nProps].Name = sStatusInd;
+                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_INTERACTIONHANDLER, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sInteractionHdl;
                 pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_VIEW_DATA, sal_False, &pItem ) == SFX_ITEM_SET )
