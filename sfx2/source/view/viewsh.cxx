@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-19 18:03:15 $
+ *  last change: $Author: as $ $Date: 2002-05-24 11:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1871,31 +1871,38 @@ BOOL SfxViewShell::TryContextMenuInterception( Menu& rIn, Menu*& rpOut, ::com::s
     ::cppu::OInterfaceIteratorHelper aIt( pImp->aInterceptorContainer );
     while( aIt.hasMoreElements() )
     {
-        ::com::sun::star::ui::ContextMenuInterceptorAction eAction =
-            ((::com::sun::star::ui::XContextMenuInterceptor*)aIt.next())->notifyContextMenuExecute( aEvent );
-        switch ( eAction )
+        try
         {
-            case ::com::sun::star::ui::ContextMenuInterceptorAction_CANCELLED :
-                // interceptor does not want execution
-                return FALSE;
-                break;
-            case ::com::sun::star::ui::ContextMenuInterceptorAction_EXECUTE_MODIFIED :
-                // interceptor wants his modified menu to be executed
-                bModified = TRUE;
-                break;
-            case ::com::sun::star::ui::ContextMenuInterceptorAction_CONTINUE_MODIFIED :
-                // interceptor has modified menu, but allows for calling other interceptors
-                bModified = TRUE;
-                continue;
-                break;
-            case ::com::sun::star::ui::ContextMenuInterceptorAction_IGNORED :
-                // interceptor is indifferent
-                continue;
-                break;
-            default:
-                DBG_ERROR("Wrong return value of ContextMenuInterceptor!");
-                continue;
-                break;
+            ::com::sun::star::ui::ContextMenuInterceptorAction eAction =
+                ((::com::sun::star::ui::XContextMenuInterceptor*)aIt.next())->notifyContextMenuExecute( aEvent );
+            switch ( eAction )
+            {
+                case ::com::sun::star::ui::ContextMenuInterceptorAction_CANCELLED :
+                    // interceptor does not want execution
+                    return FALSE;
+                    break;
+                case ::com::sun::star::ui::ContextMenuInterceptorAction_EXECUTE_MODIFIED :
+                    // interceptor wants his modified menu to be executed
+                    bModified = TRUE;
+                    break;
+                case ::com::sun::star::ui::ContextMenuInterceptorAction_CONTINUE_MODIFIED :
+                    // interceptor has modified menu, but allows for calling other interceptors
+                    bModified = TRUE;
+                    continue;
+                    break;
+                case ::com::sun::star::ui::ContextMenuInterceptorAction_IGNORED :
+                    // interceptor is indifferent
+                    continue;
+                    break;
+                default:
+                    DBG_ERROR("Wrong return value of ContextMenuInterceptor!");
+                    continue;
+                    break;
+            }
+        }
+        catch( ::com::sun::star::uno::RuntimeException& )
+        {
+            aIt.remove();
         }
 
         break;

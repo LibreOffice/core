@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: as $ $Date: 2002-04-24 13:04:21 $
+ *  last change: $Author: as $ $Date: 2002-05-24 11:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,7 +711,16 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
         ::cppu::OInterfaceIteratorHelper aIt( *pContnr );
         while( aIt.hasMoreElements() )
-            ((::com::sun::star::frame::XStatusListener *)aIt.next())->statusChanged( aEvent );
+        {
+            try
+            {
+                ((::com::sun::star::frame::XStatusListener *)aIt.next())->statusChanged( aEvent );
+            }
+            catch( ::com::sun::star::uno::RuntimeException& )
+            {
+                aIt.remove();
+            }
+        }
     }
 }
 

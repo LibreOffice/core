@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mav $ $Date: 2002-05-03 13:37:26 $
+ *  last change: $Author: as $ $Date: 2002-05-24 11:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1464,7 +1464,16 @@ void SfxBaseModel::changing()
         EVENTOBJECT aEvent( (XMODEL *)this );
         OINTERFACEITERATORHELPER aIt( *pIC );
         while( aIt.hasMoreElements() )
-            ((XMODIFYLISTENER *)aIt.next())->modified( aEvent );
+        {
+            try
+            {
+                ((XMODIFYLISTENER *)aIt.next())->modified( aEvent );
+            }
+            catch( RUNTIMEEXCEPTION& )
+            {
+                aIt.remove();
+            }
+        }
     }
 }
 
@@ -1481,7 +1490,16 @@ void SfxBaseModel::impl_change()
         EVENTOBJECT aEvent( (XMODEL *)this );
         OINTERFACEITERATORHELPER aIt( *pIC );
         while( aIt.hasMoreElements() )
-            ((XMODIFYLISTENER *)aIt.next())->modified( aEvent );
+        {
+            try
+            {
+                ((XMODIFYLISTENER *)aIt.next())->modified( aEvent );
+            }
+            catch( RUNTIMEEXCEPTION& )
+            {
+                aIt.remove();
+            }
+        }
     }
 }
 
@@ -1562,7 +1580,16 @@ void SfxBaseModel::postEvent_Impl( const SfxEventHint& rHint )
         DOCEVENTOBJECT aEvent( (XMODEL *)this, aName );
         OINTERFACEITERATORHELPER aIt( *pIC );
         while( aIt.hasMoreElements() )
-            ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
+        {
+            try
+            {
+                ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
+            }
+            catch( RUNTIMEEXCEPTION& )
+            {
+                aIt.remove();
+            }
+        }
     }
 }
 
@@ -1629,7 +1656,16 @@ void SfxBaseModel::notifyEvent( const ::com::sun::star::document::EventObject& a
     {
         OINTERFACEITERATORHELPER aIt( *pIC );
         while( aIt.hasMoreElements() )
-            ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
+        {
+            try
+            {
+                ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
+            }
+            catch( RUNTIMEEXCEPTION& )
+            {
+                aIt.remove();
+            }
+        }
     }
 }
 
