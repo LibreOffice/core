@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:21:52 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,16 +124,14 @@ TabPage TP_CONTENT_OPT
         Pos = MAP_APPFONT ( 136 , 14 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ de ] = "Horizontale Bildla~ufleiste" ;
-        Text [ en-US ] = "H~orizontal scroll bar" ;
-        Text [ x-comment ] = " ";
+        Text [ en-US ] = "H~orizontal scrollbar" ;
     };
     CheckBox CB_VSCROLL
     {
         Pos = MAP_APPFONT ( 136 , 27 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ de ] = "~Vertikale Bildlaufleiste" ;
-        Text [ en-US ] = "~Vertical scroll bar" ;
-        Text [ x-comment ] = " ";
+        Text [ en-US ] = "~Vertical scrollbar" ;
     };
     CheckBox CB_ANY_RULER
     {
