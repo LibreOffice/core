@@ -2,9 +2,9 @@
  *
  *  $RCSfile: directsql.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 22:16:33 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 11:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,9 @@ String STR_DIRECTSQL_CONNECTIONLOST
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/08/21 22:16:33  kz
+ *  Merge SRC638: 22.08.01 - 00:15:50
+ *
  *  Revision 1.6  2001/08/13 20:56:12  kz
  *  Merge SRC638: 13.08.01 - 22:55:32
  *
@@ -380,6 +383,7 @@ String STR_DIRECTSQL_CONNECTIONLOST
  *
  *  Revision 1.0 18.06.01 17:01:52  fs
  ************************************************************************/
+
 
 
 
