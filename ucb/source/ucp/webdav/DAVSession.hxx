@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSession.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-16 14:37:12 $
+ *  last change: $Author: kso $ $Date: 2002-09-18 12:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
 
 #ifndef _DAVEXCEPTION_HXX_
 #include "DAVException.hxx"
@@ -92,6 +89,9 @@
 #endif
 #ifndef _DAVTYPES_HXX_
 #include "DAVTypes.hxx"
+#endif
+#ifndef _DAVREQUESTENVIRONMENT_HXX_
+#include "DAVRequestEnvironment.hxx"
 #endif
 
 namespace webdav_ucp
@@ -118,18 +118,12 @@ public:
 
     virtual sal_Bool CanUse( const ::rtl::OUString & inPath ) = 0;
 
-    // Authentication methods
-    //
-    virtual void setServerAuthListener(DAVAuthListener * inDAVAuthListener) = 0;
-    virtual void setProxyAuthListener(DAVAuthListener * inDAVAuthListener ) = 0;
-
     // DAV methods
     //
 
     virtual void OPTIONS( const ::rtl::OUString &  inPath,
                           DAVCapabilities & outCapabilities,
-                          const com::sun::star::uno::Reference<
-                            com::sun::star::ucb::XCommandEnvironment >& inEnv )
+                          const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     // allprop & named
@@ -137,64 +131,55 @@ public:
                            const Depth                            inDepth,
                            const std::vector< ::rtl::OUString > & inPropertyNames,
                            std::vector< DAVResource > &           ioResources,
-                           const com::sun::star::uno::Reference<
-                             com::sun::star::ucb::XCommandEnvironment >& inEnv )
+                           const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     // propnames
     virtual void PROPFIND( const ::rtl::OUString &          inPath,
                            const Depth                      inDepth,
                            std::vector< DAVResourceInfo > & ioResInfo,
-                           const com::sun::star::uno::Reference<
-                             com::sun::star::ucb::XCommandEnvironment >& inEnv )
+                           const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     virtual void PROPPATCH( const ::rtl::OUString &               inPath,
                              const std::vector< ProppatchValue > & inValues,
-                               const com::sun::star::uno::Reference<
-                                 com::sun::star::ucb::XCommandEnvironment >& inEnv )
+                            const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     virtual void HEAD( const ::rtl::OUString &  inPath,
                        const std::vector< ::rtl::OUString > & inHeaderNames,
                        DAVResource & ioResource,
-                       const com::sun::star::uno::Reference<
-                            com::sun::star::ucb::XCommandEnvironment >& inEnv )
+                       const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
                     GET( const ::rtl::OUString & inPath,
-                         const com::sun::star::uno::Reference<
-                          com::sun::star::ucb::XCommandEnvironment >& inEnv )
+                         const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     virtual void    GET( const ::rtl::OUString & inPath,
         com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& o,
-        const com::sun::star::uno::Reference<
-         com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
                     GET( const ::rtl::OUString & inPath,
                          const std::vector< ::rtl::OUString > & inHeaderNames,
                          DAVResource & ioResource,
-                         const com::sun::star::uno::Reference<
-                          com::sun::star::ucb::XCommandEnvironment >& inEnv )
+                         const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     virtual void    GET( const ::rtl::OUString & inPath,
         com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& o,
         const std::vector< ::rtl::OUString > & inHeaderNames,
         DAVResource & ioResource,
-        const com::sun::star::uno::Reference<
-         com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     virtual void    PUT( const ::rtl::OUString & inPath,
         const com::sun::star::uno::Reference<
             com::sun::star::io::XInputStream >& s,
-        const com::sun::star::uno::Reference<
-             com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
@@ -203,8 +188,7 @@ public:
                           const rtl::OUString & rReferer,
                           const com::sun::star::uno::Reference<
                            com::sun::star::io::XInputStream > & inInputStream,
-                       const com::sun::star::uno::Reference<
-                           com::sun::star::ucb::XCommandEnvironment >& inEnv )
+                          const DAVRequestEnvironment & rEnv )
         throw ( DAVException ) = 0;
 
     virtual void POST( const rtl::OUString & inPath,
@@ -214,44 +198,37 @@ public:
                         com::sun::star::io::XInputStream > & inInputStream,
                        com::sun::star::uno::Reference<
                         com::sun::star::io::XOutputStream > & oOutputStream,
-                       const com::sun::star::uno::Reference<
-                        com::sun::star::ucb::XCommandEnvironment >& inEnv )
+                       const DAVRequestEnvironment & rEnv )
         throw ( DAVException ) = 0;
 
     virtual void    MKCOL( const ::rtl::OUString & inPath,
-                           const com::sun::star::uno::Reference<
-                           com::sun::star::ucb::XCommandEnvironment >& inEnv )
+                           const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     virtual void    COPY( const ::rtl::OUString & inSource,
                           const ::rtl::OUString & inDestination,
-                          const com::sun::star::uno::Reference<
-                          com::sun::star::ucb::XCommandEnvironment >& inEnv,
+                          const DAVRequestEnvironment & rEnv,
                           sal_Bool inOverwrite = false )
         throw( DAVException ) = 0;
 
     virtual void    MOVE( const ::rtl::OUString & inSource,
                           const ::rtl::OUString & inDestination,
-                          const com::sun::star::uno::Reference<
-                          com::sun::star::ucb::XCommandEnvironment >& inEnv,
+                          const DAVRequestEnvironment & rEnv,
                           sal_Bool inOverwrite = false )
         throw( DAVException ) = 0;
 
     virtual void    DESTROY( const ::rtl::OUString & inPath,
-                             const com::sun::star::uno::Reference<
-                             com::sun::star::ucb::XCommandEnvironment >& inEnv )
+                             const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     // Note: Uncomment the following if locking support is required
     /*
     virtual void LOCK ( const Lock & inLock,
-                          const com::sun::star::uno::Reference<
-                          com::sun::star::ucb::XCommandEnvironment >& inEnv )
+                        const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     virtual void UNLOCK ( const Lock & inLock,
-                            const com::sun::star::uno::Reference<
-                            com::sun::star::ucb::XCommandEnvironment >& inEnv)
+                          const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
     */
 protected:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-16 14:37:11 $
+ *  last change: $Author: kso $ $Date: 2002-09-18 12:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 //=========================================================================
 //=========================================================================
 
+using namespace webdav_ucp;
+using namespace com::sun::star;
+
 namespace webdav_ucp
 {
 
@@ -94,19 +97,20 @@ namespace webdav_ucp
 class AuthListener : public DAVAuthListener
 {
 public:
+    AuthListener( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+    : m_xEnv( xEnv ) {}
+
     virtual int authenticate( const ::rtl::OUString & inRealm,
                                  const ::rtl::OUString & inHostName,
                               ::rtl::OUString & inoutUserName,
-                              ::rtl::OUString & outPassWord,
-                                 const com::sun::star::uno::Reference<
-                                   com::sun::star::ucb::XCommandEnvironment >&
-                                    Environment );
+                              ::rtl::OUString & outPassWord );
+private:
+    uno::Reference< ucb::XCommandEnvironment > m_xEnv;
+    rtl::OUString m_aPrevPassword;
+    rtl::OUString m_aPrevUsername;
 };
 
 }
-
-using namespace webdav_ucp;
-using namespace com::sun::star;
 
 //=========================================================================
 //=========================================================================
@@ -121,16 +125,22 @@ using namespace com::sun::star;
 int AuthListener::authenticate( const ::rtl::OUString & inRealm,
                                    const ::rtl::OUString & inHostName,
                                 ::rtl::OUString & inoutUserName,
-                                ::rtl::OUString & outPassWord,
-                                   const uno::Reference<
-                                       ucb::XCommandEnvironment >&  Environment )
+                                ::rtl::OUString & outPassWord )
 {
-    if ( Environment.is() )
+    if ( m_xEnv.is() )
     {
         uno::Reference< task::XInteractionHandler > xIH
-              = Environment->getInteractionHandler();
+            = m_xEnv->getInteractionHandler();
         if ( xIH.is() )
         {
+            // #102871# - Supply username and password from previous try.
+            // Password container service depends on this!
+            if ( inoutUserName.getLength() == 0 )
+                inoutUserName = m_aPrevUsername;
+
+            if ( outPassWord.getLength() == 0 )
+                outPassWord = m_aPrevPassword;
+
             rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
                 = new ucbhelper::SimpleAuthenticationRequest( inHostName,
                                                               inRealm,
@@ -155,6 +165,10 @@ int AuthListener::authenticate( const ::rtl::OUString & inRealm,
                     inoutUserName = xSupp->getUserName();
                     outPassWord   = xSupp->getPassword();
 
+                    // #102871# - Remember username and password.
+                    m_aPrevUsername = inoutUserName;
+                    m_aPrevPassword = outPassWord;
+
                     // go on.
                     return 0;
                 }
@@ -164,10 +178,6 @@ int AuthListener::authenticate( const ::rtl::OUString & inRealm,
     // Abort.
     return -1;
 }
-
-//=========================================================================
-
-AuthListener webdavAuthListener;
 
 //=========================================================================
 //=========================================================================
@@ -203,7 +213,10 @@ void DAVResourceAccess::OPTIONS( DAVCapabilities & rCapabilities,
         bRetry = sal_False;
         try
         {
-            m_xSession->OPTIONS( m_aPath, rCapabilities, xEnv );
+            m_xSession->OPTIONS( m_aPath,
+                                 rCapabilities,
+                                 DAVRequestEnvironment(
+                                    new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
         {
@@ -231,8 +244,12 @@ void DAVResourceAccess::PROPFIND( const Depth nDepth,
         bRetry = sal_False;
         try
         {
-            m_xSession->PROPFIND(
-                m_aPath, nDepth, rPropertyNames, rResources, xEnv );
+            m_xSession->PROPFIND( m_aPath,
+                                  nDepth,
+                                  rPropertyNames,
+                                  rResources,
+                                  DAVRequestEnvironment(
+                                    new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
         {
@@ -259,7 +276,11 @@ void DAVResourceAccess::PROPFIND( const Depth nDepth,
         bRetry = sal_False;
         try
         {
-            m_xSession->PROPFIND( m_aPath, nDepth, rResInfo, xEnv );
+            m_xSession->PROPFIND( m_aPath,
+                                  nDepth,
+                                  rResInfo,
+                                  DAVRequestEnvironment(
+                                    new AuthListener( xEnv ) ) ) ;
         }
         catch ( DAVException & e )
         {
@@ -285,7 +306,10 @@ void DAVResourceAccess::PROPPATCH( const std::vector< ProppatchValue >& rValues,
         bRetry = sal_False;
         try
         {
-            m_xSession->PROPPATCH( m_aPath, rValues, xEnv );
+            m_xSession->PROPPATCH( m_aPath,
+                                   rValues,
+                                   DAVRequestEnvironment(
+                                    new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
         {
@@ -312,7 +336,11 @@ void DAVResourceAccess::HEAD( const std::vector< rtl::OUString > & rHeaderNames,
         bRetry = sal_False;
         try
         {
-            m_xSession->HEAD( m_aPath, rHeaderNames, rResource, xEnv );
+            m_xSession->HEAD( m_aPath,
+                              rHeaderNames,
+                              rResource,
+                              DAVRequestEnvironment(
+                                new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
         {
@@ -338,7 +366,9 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
         bRetry = sal_False;
         try
         {
-            xStream = m_xSession->GET( m_aPath, xEnv );
+            xStream = m_xSession->GET( m_aPath,
+                                       DAVRequestEnvironment(
+                                        new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
         {
@@ -366,7 +396,10 @@ void DAVResourceAccess::GET( uno::Reference< io::XOutputStream > & rStream,
         bRetry = sal_False;
         try
         {
-            m_xSession->GET( m_aPath, rStream, xEnv );
+            m_xSession->GET( m_aPath,
+                             rStream,
+                             DAVRequestEnvironment(
+                                new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
         {
@@ -394,7 +427,11 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
         bRetry = sal_False;
         try
         {
-            xStream = m_xSession->GET( m_aPath, rHeaderNames, rResource, xEnv );
+            xStream = m_xSession->GET( m_aPath,
+                                       rHeaderNames,
+                                       rResource,
+                                       DAVRequestEnvironment(
+                                        new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
         {
@@ -424,7 +461,12 @@ void DAVResourceAccess::GET(
         bRetry = sal_False;
         try
         {
-            m_xSession->GET( m_aPath, rStream, rHeaderNames, rResource, xEnv );
+            m_xSession->GET( m_aPath,
+                             rStream,
+                             rHeaderNames,
+                             rResource,
+                             DAVRequestEnvironment(
+                                new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
         {
@@ -450,7 +492,10 @@ void DAVResourceAccess::PUT( const uno::Reference< io::XInputStream > & rStream,
         bRetry = sal_False;
         try
         {
-            m_xSession->PUT( m_aPath, rStream, xEnv );
+            m_xSession->PUT( m_aPath,
+                             rStream,
+                             DAVRequestEnvironment(
+                                new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
         {
@@ -479,8 +524,12 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
         bRetry = sal_False;
         try
         {
-            xStream = m_xSession->POST(
-                m_aPath, rContentType, rReferer, rInputStream, xEnv );
+            xStream = m_xSession->POST( m_aPath,
+                                        rContentType,
+                                        rReferer,
+                                        rInputStream,
+                                        DAVRequestEnvironment(
+                                            new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
         {
@@ -512,8 +561,13 @@ void DAVResourceAccess::POST(
         bRetry = sal_False;
         try
         {
-            m_xSession->POST( m_aPath, rContentType, rReferer,
-                              rInputStream, rOutputStream, xEnv );
+            m_xSession->POST( m_aPath,
+                              rContentType,
+                              rReferer,
+                              rInputStream,
+                              rOutputStream,
+                              DAVRequestEnvironment(
+                                new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
         {
@@ -538,7 +592,9 @@ void DAVResourceAccess::MKCOL( const uno::Reference<
         bRetry = sal_False;
         try
         {
-            m_xSession->MKCOL( m_aPath, xEnv );
+            m_xSession->MKCOL( m_aPath,
+                               DAVRequestEnvironment(
+                                new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
         {
@@ -566,7 +622,11 @@ void DAVResourceAccess::COPY( const ::rtl::OUString & rSourcePath,
         bRetry = sal_False;
         try
         {
-            m_xSession->COPY( rSourcePath, rDestinationURI, xEnv, bOverwrite );
+            m_xSession->COPY( rSourcePath,
+                              rDestinationURI,
+                              DAVRequestEnvironment(
+                                new AuthListener( xEnv ) ),
+                              bOverwrite );
         }
         catch ( DAVException & e )
         {
@@ -594,7 +654,11 @@ void DAVResourceAccess::MOVE( const ::rtl::OUString & rSourcePath,
         bRetry = sal_False;
         try
         {
-            m_xSession->MOVE( rSourcePath, rDestinationURI, xEnv, bOverwrite );
+            m_xSession->MOVE( rSourcePath,
+                              rDestinationURI,
+                              DAVRequestEnvironment(
+                                new AuthListener( xEnv ) ),
+                              bOverwrite );
         }
         catch ( DAVException & e )
         {
@@ -619,7 +683,9 @@ void DAVResourceAccess::DESTROY( const uno::Reference<
         bRetry = sal_False;
         try
         {
-            m_xSession->DESTROY( m_aPath, xEnv );
+            m_xSession->DESTROY( m_aPath,
+                                 DAVRequestEnvironment(
+                                    new AuthListener( xEnv ) ) );
         }
         catch ( DAVException & e )
         {
@@ -685,8 +751,6 @@ void DAVResourceAccess::initialize()
 
                 if ( !m_xSession.is() )
                     return;
-
-                m_xSession->setServerAuthListener( &webdavAuthListener );
             }
 
             // Own URI is needed for redirect cycle detection.

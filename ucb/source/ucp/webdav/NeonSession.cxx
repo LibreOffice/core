@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-16 14:37:12 $
+ *  last change: $Author: kso $ $Date: 2002-09-18 12:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,7 @@ extern "C" void NeonSession_ResponseBlockWriter( void *       inUserData,
     }
 }
 
+// -------------------------------------------------------------------
 extern "C" int NeonSession_NeonAuth( void *       inUserData,
                                      const char * inRealm,
                                      int          attempt,
@@ -280,7 +281,9 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
 #endif
 
     NeonSession * theSession = static_cast< NeonSession * >( inUserData );
-    if ( !theSession->getServerAuthListener() )
+    DAVAuthListener * pListener
+        = theSession->getRequestEnvironment().m_xAuthListener.get();
+    if ( !pListener )
     {
         // abort
         return -1;
@@ -294,34 +297,21 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
                     //   (last checked: 0.22.0).
                     rtl::OUString::createFromAscii( inoutPassWord ) ); */
 
-    // #102871# - Supply username and password from previous try. Password
-    // container service depends on this!
-    if ( theUserName.getLength() == 0 )
-        theUserName = theSession->getUserName();
-
-    if ( thePassWord.getLength() == 0 )
-        thePassWord = theSession->getPassWord();
-
-    int theRetVal = theSession->getServerAuthListener()->authenticate(
+    int theRetVal = pListener->authenticate(
                             rtl::OUString::createFromAscii( inRealm ),
                             theSession->getHostName(),
                             theUserName,
-                            thePassWord,
-                            theSession->getCommandEnvironment() );
+                            thePassWord );
     strcpy( inoutUserName,
             rtl::OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ) );
 
     strcpy( inoutPassWord,
             rtl::OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
 
-    // #102871# - Remember username and password.
-    theSession->setUserName( theUserName );
-    theSession->setPassWord( thePassWord );
-
     return theRetVal;
 }
 
-
+// -------------------------------------------------------------------
 extern "C" void NeonSession_ProgressNotify( void * userdata,
                                             off_t progress,
                                             off_t total )
@@ -330,6 +320,7 @@ extern "C" void NeonSession_ProgressNotify( void * userdata,
     // total:    total bytes to read, -1 -> total count not known
 }
 
+// -------------------------------------------------------------------
 extern "C" void NeonSession_StatusNotify( void * userdata,
                                           ne_conn_status status,
                                           const char *info )
@@ -346,6 +337,7 @@ extern "C" void NeonSession_StatusNotify( void * userdata,
     // info: hostname
 }
 
+// -------------------------------------------------------------------
 extern "C" void NeonSession_PreSendRequest( ne_request * req,
                                             void * userdata,
                                             ne_buffer * headers )
@@ -391,6 +383,7 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
     }
 }
 
+// -------------------------------------------------------------------
 extern "C" void NeonSession_ResponseHeaderCatcher( void * userdata,
                                                    const char * value )
 {
@@ -453,8 +446,7 @@ NeonSession::NeonSession(
             const ProxyConfig& rProxyCfg )
     throw ( DAVException )
 : DAVSession( rSessionFactory ),
-  m_pRequestData( new RequestDataMap ),
-  m_pListener( 0 )
+  m_pRequestData( new RequestDataMap )
 {
     // @@@ We need to keep the char buffer for hostname and proxyname
     // for the whole session lifetime because neon only stores a pointer
@@ -462,26 +454,90 @@ NeonSession::NeonSession(
     // by having the members mHostName and mProxyName, which are OStrings!
 
     NeonUri theUri( inUri );
-
-    m_aScheme = theUri.GetScheme();
-
-    m_aHostName = theUri.GetHost();
-    m_nPort = theUri.GetPort();
+    m_aScheme    = theUri.GetScheme();
+    m_aHostName  = theUri.GetHost();
+    m_nPort      = theUri.GetPort();
 
     m_aProxyName = rProxyCfg.aName;
     m_nProxyPort = rProxyCfg.nPort;
 
+    // Note: Uses m_aHostName and m_nPort (in case of error)
     Init();
 
-    m_pHttpSession = CreateSession( m_aScheme,
-                                    m_aHostName,
-                                    m_nPort,
-                                    m_aProxyName,
-                                    m_nProxyPort,
-                                    theUri.GetUserInfo() );
-    if ( !m_pHttpSession )
+    // @@@ For FTP over HTTP proxy inUserInfo is needed to be able to
+    //     build the complete request URI (including user:pass), but
+    //     currently (0.22.0) neon does not allow to pass the user info
+    //     to the session
+
+    m_pHttpSession = ne_session_create(
+                rtl::OUStringToOString( m_aScheme,
+                                        RTL_TEXTENCODING_UTF8 ).getStr(),
+                /* theUri.GetUserInfo(),
+                   @@@ for FTP via HTTP proxy, but not supported by Neon */
+                rtl::OUStringToOString( m_aHostName,
+                                        RTL_TEXTENCODING_UTF8 ).getStr(),
+                m_nPort );
+
+    if ( m_pHttpSession == 0 )
         throw DAVException( DAVException::DAV_SESSION_CREATE,
                             theUri.makeConnectionEndPointString() );
+
+    // Set a progress callback for the session.
+    ne_set_progress( m_pHttpSession, NeonSession_ProgressNotify, this );
+
+    // Set a status notification callback for the session, to report
+    // connection status.
+    ne_set_status( m_pHttpSession, NeonSession_StatusNotify, this );
+
+    // Add hooks (i.e. for adding additional headers to the request)
+
+#if 0
+    /* Hook called when a request is created. */
+    //typedef void (*ne_create_request_fn)(ne_request *req, void *userdata,
+    //                 const char *method, const char *path);
+
+    ne_hook_create_request( m_pHttpSession, create_req_hook_fn, this );
+#endif
+
+    /* Hook called before the request is sent.  'header' is the raw HTTP
+     * header before the trailing CRLF is added: add in more here. */
+    //typedef void (*ne_pre_send_fn)(ne_request *req, void *userdata,
+    //               ne_buffer *header);
+
+    ne_hook_pre_send( m_pHttpSession, NeonSession_PreSendRequest, this );
+
+#if 0
+    /* Hook called after the request is sent. May return:
+     *  NE_OK     everything is okay
+     *  NE_RETRY  try sending the request again.
+     * anything else signifies an error, and the request is failed. The return
+     * code is passed back the _dispatch caller, so the session error must
+     * also be set appropriately (ne_set_error).
+     */
+    //typedef int (*ne_post_send_fn)(ne_request *req, void *userdata,
+    //               const ne_status *status);
+
+    ne_hook_post_send( m_pHttpSession, post_send_req_hook_fn, this );
+
+    /* Hook called when the request is destroyed. */
+    //typedef void (*ne_destroy_req_fn)(ne_request *req, void *userdata);
+
+    ne_hook_destroy_request( m_pHttpSession, destroy_req_hook_fn, this );
+
+    /* Hook called when the session is destroyed. */
+    //typedef void (*ne_destroy_sess_fn)(void *userdata);
+
+    ne_hook_destroy_session( m_pHttpSession, destroy_sess_hook_fn, this );
+#endif
+
+    if ( m_aProxyName.getLength() )
+    {
+        ne_session_proxy( m_pHttpSession,
+                          rtl::OUStringToOString( m_aProxyName,
+                                                  RTL_TEXTENCODING_UTF8 )
+                            .getStr(),
+                          m_nProxyPort );
+    }
 
     // Note: Uncomment the following if locking support is required
     /*
@@ -494,6 +550,14 @@ NeonSession::NeonSession(
 
     // Register for redirects.
     ne_redirect_register( m_pHttpSession );
+
+    // authentication callbacks.
+
+    // Note: Calling ne_set_[server|proxy]_auth more than once per
+    //       m_pHttpSession instance sometimes(?) crashes Neon! ( last
+    //       checked: 0.22.0)
+    ne_set_server_auth( m_pHttpSession, NeonSession_NeonAuth, this );
+    ne_set_proxy_auth ( m_pHttpSession, NeonSession_NeonAuth, this );
 }
 
 // -------------------------------------------------------------------
@@ -531,55 +595,16 @@ sal_Bool NeonSession::CanUse( const rtl::OUString & inUri )
 }
 
 // -------------------------------------------------------------------
-void NeonSession::setServerAuthListener( DAVAuthListener * inDAVAuthListener )
-{
-//    OSL_ENSURE( m_pListener == 0, "Authentication listener already set!" );
-
-    // @@@ Neon ( last checked: 0.22.0) cannot handle multiple callbacks.
-    //     Calling ne_set_server_auth more than once sometimes crashes Neon!
-    if ( m_pListener == 0 )
-    {
-        osl::Guard< osl::Mutex > theGuard( m_aMutex );
-        if ( m_pListener == 0 )
-        {
-            m_pListener = inDAVAuthListener;
-            ne_set_server_auth( m_pHttpSession, NeonSession_NeonAuth, this );
-        }
-    }
-}
-
-// -------------------------------------------------------------------
-void NeonSession::setProxyAuthListener( DAVAuthListener * inDAVAuthListener )
-{
-    // Note: Content is currently not using proxy auth
-}
-
-// -------------------------------------------------------------------
-void NeonSession::setUserName( const rtl::OUString & rUserName )
-{
-    osl::Guard< osl::Mutex > theGuard( m_aMutex );
-    m_aPrevUserName = rUserName;
-}
-
-// -------------------------------------------------------------------
-void NeonSession::setPassWord( const rtl::OUString & rPassWord )
-{
-    osl::Guard< osl::Mutex > theGuard( m_aMutex );
-    m_aPrevPassWord = rPassWord;
-}
-
-// -------------------------------------------------------------------
 // OPTIONS
 // -------------------------------------------------------------------
 void NeonSession::OPTIONS( const rtl::OUString & inPath,
                            DAVCapabilities & outCapabilities,
-                           const uno::Reference<
-                                ucb::XCommandEnvironment >& inEnv )
+                           const DAVRequestEnvironment & rEnv )
     throw( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    m_xEnv = inEnv;
+    m_aEnv = rEnv;
 
     HttpServerCapabilities servercaps;
     memset( &servercaps, 0, sizeof( servercaps ) );
@@ -602,13 +627,12 @@ void NeonSession::PROPFIND( const rtl::OUString &                inPath,
                             const Depth                          inDepth,
                             const std::vector< rtl::OUString > & inPropNames,
                             std::vector< DAVResource > &         ioResources,
-                            const uno::Reference<
-                                ucb::XCommandEnvironment >&      inEnv )
+                            const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    m_xEnv = inEnv;
+    m_aEnv = rEnv;
 
     int theRetVal = NE_OK;
     NeonPropFindRequest theRequest( m_pHttpSession,
@@ -627,13 +651,12 @@ void NeonSession::PROPFIND( const rtl::OUString &                inPath,
 void NeonSession::PROPFIND( const rtl::OUString &                   inPath,
                             const Depth                             inDepth,
                             std::vector< DAVResourceInfo >&         ioResInfo,
-                            const uno::Reference<
-                                ucb::XCommandEnvironment >&         inEnv )
+                            const DAVRequestEnvironment & rEnv )
     throw( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    m_xEnv = inEnv;
+    m_aEnv = rEnv;
 
     int theRetVal = NE_OK;
     NeonPropFindRequest theRequest( m_pHttpSession,
@@ -650,8 +673,7 @@ void NeonSession::PROPFIND( const rtl::OUString &                   inPath,
 // -------------------------------------------------------------------
 void NeonSession::PROPPATCH( const rtl::OUString &                   inPath,
                              const std::vector< ProppatchValue > &   inValues,
-                             const uno::Reference<
-                                ucb::XCommandEnvironment >&          inEnv )
+                             const DAVRequestEnvironment & rEnv )
     throw( DAVException )
 {
     /* @@@ Which standard live properties can be set by the client?
@@ -752,6 +774,10 @@ void NeonSession::PROPPATCH( const rtl::OUString &                   inPath,
 
     if ( theRetVal == NE_OK )
     {
+        osl::Guard< osl::Mutex > theGuard( m_aMutex );
+
+        m_aEnv = rEnv;
+
         pItems[ n ].name = NULL;
 
         theRetVal = ne_proppatch( m_pHttpSession,
@@ -776,13 +802,12 @@ void NeonSession::PROPPATCH( const rtl::OUString &                   inPath,
 void NeonSession::HEAD( const ::rtl::OUString &  inPath,
                         const std::vector< ::rtl::OUString > & inHeaderNames,
                         DAVResource & ioResource,
-                        const uno::Reference<
-                            ucb::XCommandEnvironment >& inEnv )
+                        const DAVRequestEnvironment & rEnv )
     throw( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    m_xEnv = inEnv;
+    m_aEnv = rEnv;
 
     int theRetVal = NE_OK;
     NeonHeadRequest theRequest( m_pHttpSession,
@@ -798,13 +823,12 @@ void NeonSession::HEAD( const ::rtl::OUString &  inPath,
 // -------------------------------------------------------------------
 uno::Reference< io::XInputStream > NeonSession::GET(
                                     const rtl::OUString &           inPath,
-                                    const uno::Reference<
-                                        ucb::XCommandEnvironment >& inEnv )
+                                    const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    m_xEnv = inEnv;
+    m_aEnv = rEnv;
 
     rtl::Reference< NeonInputStream > xInputStream( new NeonInputStream );
     NeonRequestContext aCtx( xInputStream );
@@ -823,13 +847,12 @@ uno::Reference< io::XInputStream > NeonSession::GET(
 // -------------------------------------------------------------------
 void NeonSession::GET( const rtl::OUString &                 inPath,
                        uno::Reference< io::XOutputStream > & ioOutputStream,
-                       const uno::Reference<
-                            ucb::XCommandEnvironment >&      inEnv )
+                       const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    m_xEnv = inEnv;
+    m_aEnv = rEnv;
 
     NeonRequestContext aCtx( ioOutputStream );
     int theRetVal = GET( m_pHttpSession,
@@ -848,12 +871,12 @@ uno::Reference< io::XInputStream > NeonSession::GET(
                     const rtl::OUString & inPath,
                     const std::vector< ::rtl::OUString > & inHeaderNames,
                     DAVResource & ioResource,
-                    const uno::Reference< ucb::XCommandEnvironment > & inEnv )
+                    const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    m_xEnv = inEnv;
+    m_aEnv = rEnv;
 
     ioResource.uri = inPath;
     ioResource.properties.clear();
@@ -878,12 +901,12 @@ void NeonSession::GET(
                     uno::Reference< io::XOutputStream > & ioOutputStream,
                     const std::vector< ::rtl::OUString > & inHeaderNames,
                     DAVResource & ioResource,
-                    const uno::Reference< ucb::XCommandEnvironment > & inEnv )
+                    const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    m_xEnv = inEnv;
+    m_aEnv = rEnv;
 
     ioResource.uri = inPath;
     ioResource.properties.clear();
@@ -903,13 +926,12 @@ void NeonSession::GET(
 // -------------------------------------------------------------------
 void NeonSession::PUT( const rtl::OUString &                      inPath,
                        const uno::Reference< io::XInputStream > & inInputStream,
-                       const uno::Reference<
-                            ucb::XCommandEnvironment >&           inEnv )
+                       const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    m_xEnv = inEnv;
+    m_aEnv = rEnv;
 
     uno::Sequence< sal_Int8 > aDataToSend;
     if ( !getDataFromInputStream( inInputStream, aDataToSend ) )
@@ -936,7 +958,7 @@ uno::Reference< io::XInputStream > NeonSession::POST(
                     const rtl::OUString & rContentType,
                     const rtl::OUString & rReferer,
                     const uno::Reference< io::XInputStream > & inInputStream,
-                    const uno::Reference< ucb::XCommandEnvironment >& inEnv )
+                    const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
@@ -948,7 +970,7 @@ uno::Reference< io::XInputStream > NeonSession::POST(
         return uno::Reference< io::XInputStream >();
     }
 
-    m_xEnv = inEnv;
+    m_aEnv = rEnv;
 
     rtl::Reference< NeonInputStream > xInputStream( new NeonInputStream );
     NeonRequestContext aCtx( xInputStream );
@@ -974,7 +996,7 @@ void NeonSession::POST( const rtl::OUString & inPath,
                         const rtl::OUString & rReferer,
                         const uno::Reference< io::XInputStream > & inInputStream,
                         uno::Reference< io::XOutputStream > & oOutputStream,
-                        const uno::Reference< ucb::XCommandEnvironment >& inEnv )
+                        const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
@@ -985,7 +1007,7 @@ void NeonSession::POST( const rtl::OUString & inPath,
         // @@@ error
     }
 
-    m_xEnv = inEnv;
+    m_aEnv = rEnv;
 
     NeonRequestContext aCtx( oOutputStream );
     int theRetVal = POST( m_pHttpSession,
@@ -1005,13 +1027,12 @@ void NeonSession::POST( const rtl::OUString & inPath,
 // MKCOL
 // -------------------------------------------------------------------
 void NeonSession::MKCOL( const rtl::OUString &                  inPath,
-                         const uno::Reference<
-                                    ucb::XCommandEnvironment >& inEnv )
+                         const DAVRequestEnvironment & rEnv )
      throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    m_xEnv = inEnv;
+    m_aEnv = rEnv;
 
     int theRetVal = ne_mkcol( m_pHttpSession,
                               rtl::OUStringToOString(
@@ -1022,16 +1043,15 @@ void NeonSession::MKCOL( const rtl::OUString &                  inPath,
 // -------------------------------------------------------------------
 // COPY
 // -------------------------------------------------------------------
-void NeonSession::COPY( const rtl::OUString &               inSourceURL,
-                        const rtl::OUString &               inDestinationURL,
-                        const uno::Reference<
-                                ucb::XCommandEnvironment >& inEnv,
-                        sal_Bool                            inOverWrite )
+void NeonSession::COPY( const rtl::OUString &         inSourceURL,
+                        const rtl::OUString &         inDestinationURL,
+                        const DAVRequestEnvironment & rEnv,
+                        sal_Bool                      inOverWrite )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    m_xEnv = inEnv;
+    m_aEnv = rEnv;
 
     NeonUri theSourceUri( inSourceURL );
     NeonUri theDestinationUri( inDestinationURL );
@@ -1051,16 +1071,15 @@ void NeonSession::COPY( const rtl::OUString &               inSourceURL,
 // -------------------------------------------------------------------
 // MOVE
 // -------------------------------------------------------------------
-void NeonSession::MOVE( const rtl::OUString &           inSourceURL,
-                        const rtl::OUString &           inDestinationURL,
-                        const uno::Reference<
-                            ucb::XCommandEnvironment >& inEnv,
-                        sal_Bool                        inOverWrite )
+void NeonSession::MOVE( const rtl::OUString &         inSourceURL,
+                        const rtl::OUString &         inDestinationURL,
+                        const DAVRequestEnvironment & rEnv,
+                        sal_Bool                      inOverWrite )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    m_xEnv = inEnv;
+    m_aEnv = rEnv;
 
     NeonUri theSourceUri( inSourceURL );
     NeonUri theDestinationUri( inDestinationURL );
@@ -1079,13 +1098,12 @@ void NeonSession::MOVE( const rtl::OUString &           inSourceURL,
 // DESTROY
 // -------------------------------------------------------------------
 void NeonSession::DESTROY( const rtl::OUString & inPath,
-                           const uno::Reference<
-                                    ucb::XCommandEnvironment >& inEnv )
+                           const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    m_xEnv = inEnv;
+    m_aEnv = rEnv;
 
     int theRetVal = ne_delete( m_pHttpSession,
                                rtl::OUStringToOString(
@@ -1099,10 +1117,12 @@ void NeonSession::DESTROY( const rtl::OUString & inPath,
 // Note: Uncomment the following if locking support is required
 /*
 void NeonSession::LOCK( const Lock & inLock,
-                        const uno::Reference< ucb::XCommandEnvironment >& inEnv )
+                        const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
-    m_xEnv = inEnv;
+    osl::Guard< osl::Mutex > theGuard( m_aMutex );
+
+    m_aEnv = rEnv;
 
     Lockit( inLock, true );
 }
@@ -1114,9 +1134,13 @@ void NeonSession::LOCK( const Lock & inLock,
 // Note: Uncomment the following if locking support is required
 /*
 void NeonSession::UNLOCK( const Lock & inLock,
-                          const uno::Reference< ucb::XCommandEnvironment >& inEnv )
+                          const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
+    osl::Guard< osl::Mutex > theGuard( m_aMutex );
+
+    m_aEnv = rEnv;
+
     Lockit( inLock, false );
 }
 */
@@ -1145,14 +1169,13 @@ void NeonSession::Init( void )
 void NeonSession::HandleError( int nError )
     throw ( DAVException )
 {
-    m_xEnv = 0;
+    m_aEnv = DAVRequestEnvironment();
 
     // Map error code to DAVException.
     switch ( nError )
     {
         case NE_OK:
             // Cleanup.
-            m_aPrevUserName = m_aPrevPassWord = rtl::OUString();
             return;
 
         case NE_ERROR:        // Generic error
@@ -1213,103 +1236,6 @@ void NeonSession::HandleError( int nError )
                                     ne_get_error( m_pHttpSession ) ) );
         }
     }
-}
-
-// -------------------------------------------------------------------
-// CreateSession
-// Creates a new neon session.
-// -------------------------------------------------------------------
-HttpSession * NeonSession::CreateSession( const ::rtl::OUString & inScheme,
-                                          const rtl::OUString & inHostName,
-                                             int inPort,
-                                          const rtl::OUString & inProxyName,
-                                             int inProxyPort,
-                                          const rtl::OUString & inUserInfo )
-    throw ( DAVException )
-{
-    if ( inHostName.getLength() == 0 || inPort <= 0 )
-        throw DAVException( DAVException::DAV_INVALID_ARG );
-
-    // @@@ For FTP over HTTP proxy inUserInfo is needed to be able to
-    //     build the complete request URI (including user:pass), but
-    //     currently (0.21.3) neon does not allow to pass the user info
-    //     to the session
-
-    HttpSession* theHttpSession = ne_session_create(
-                rtl::OUStringToOString( inScheme,
-                                        RTL_TEXTENCODING_UTF8 ).getStr(),
-                /* inUserInfo,
-                   @@@ for FTP via HTTP proxy, but not supported by Neon */
-                rtl::OUStringToOString( inHostName,
-                                        RTL_TEXTENCODING_UTF8 ).getStr(),
-                inPort );
-
-    if ( theHttpSession == 0 )
-        throw DAVException( DAVException::DAV_SESSION_CREATE,
-                            NeonUri::makeConnectionEndPointString(
-                                                inHostName, inPort ) );
-
-    // Set a progress callback for the session.
-    ne_set_progress(
-        theHttpSession, NeonSession_ProgressNotify, theHttpSession );
-
-    // Set a status notification callback for the session, to report
-    // connection status.
-    ne_set_status(
-        theHttpSession, NeonSession_StatusNotify, theHttpSession );
-
-    // Add hooks (i.e. for adding additional headers to the request)
-
-#if 0
-    /* Hook called when a request is created. */
-    //typedef void (*ne_create_request_fn)(ne_request *req, void *userdata,
-    //                 const char *method, const char *path);
-
-    ne_hook_create_request( theHttpSession, create_req_hook_fn, this );
-#endif
-
-    /* Hook called before the request is sent.  'header' is the raw HTTP
-     * header before the trailing CRLF is added: add in more here. */
-    //typedef void (*ne_pre_send_fn)(ne_request *req, void *userdata,
-    //               ne_buffer *header);
-
-    ne_hook_pre_send(
-        theHttpSession, NeonSession_PreSendRequest, this );
-
-#if 0
-    /* Hook called after the request is sent. May return:
-     *  NE_OK     everything is okay
-     *  NE_RETRY  try sending the request again.
-     * anything else signifies an error, and the request is failed. The return
-     * code is passed back the _dispatch caller, so the session error must
-     * also be set appropriately (ne_set_error).
-     */
-    //typedef int (*ne_post_send_fn)(ne_request *req, void *userdata,
-    //               const ne_status *status);
-
-    ne_hook_post_send( theHttpSession, post_send_req_hook_fn, this );
-
-    /* Hook called when the request is destroyed. */
-    //typedef void (*ne_destroy_req_fn)(ne_request *req, void *userdata);
-
-    ne_hook_destroy_request( theHttpSession, destroy_req_hook_fn, this );
-
-    /* Hook called when the session is destroyed. */
-    //typedef void (*ne_destroy_sess_fn)(void *userdata);
-
-    ne_hook_destroy_session( theHttpSession, destroy_sess_hook_fn, this );
-#endif
-
-    if ( inProxyName.getLength() )
-    {
-        ne_session_proxy( theHttpSession,
-                          rtl::OUStringToOString( inProxyName,
-                                                  RTL_TEXTENCODING_UTF8 )
-                            .getStr(),
-                          inProxyPort );
-    }
-
-    return theHttpSession;
 }
 
 // Note: Uncomment the following if locking support is required
@@ -1450,8 +1376,8 @@ int NeonSession::POST( ne_session * sess,
 
     if ( rContentType.getLength() || rReferer.getLength() )
     {
-        // Remember contenttype and referer. Data will be adde to HTTP request
-        // header in in 'PresendRequest' callback.
+        // Remember contenttype and referer. Data will be added to HTTP request
+        // header in in 'PreSendRequest' callback.
         pData = static_cast< RequestDataMap* >( m_pRequestData );
         (*pData)[ req ] = RequestData( rContentType, rReferer );
     }

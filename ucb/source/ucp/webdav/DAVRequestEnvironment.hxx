@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: DAVAuthListener.hxx,v $
+ *  $RCSfile: DAVRequestEnvironment.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: kso $ $Date: 2002-09-18 12:46:13 $
  *
@@ -58,34 +58,30 @@
  *
  *
  ************************************************************************/
+#ifndef _DAVREQUESTENVIRONMENT_HXX_
+#define _DAVREQUESTENVIRONMENT_HXX_
+
+#include <memory>
+
 #ifndef _DAVAUTHLISTENER_HXX_
-#define _DAVAUTHLISTENER_HXX_
-
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UCB_XREFERENCE_HPP_
-#include <com/sun/star/uno/XReference.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include "DAVAuthListener.hxx"
 #endif
 
 namespace webdav_ucp
 {
 
-class DAVAuthListener
+struct DAVRequestEnvironment
 {
-    public:
-        virtual int authenticate(
-            const ::rtl::OUString & inRealm,
-            const ::rtl::OUString & inHostName,
-            ::rtl::OUString & inoutUserName,
-            ::rtl::OUString & outPassWord ) = 0;
+    std::auto_ptr< DAVAuthListener >     m_xAuthListener;
+//    std::auto_ptr< DAVStatusListener >   m_xStatusListener;
+//    std::auto_ptr< DAVProgressListener > m_xStatusListener;
+
+    DAVRequestEnvironment( DAVAuthListener * pListener )
+    : m_xAuthListener( pListener ) {}
+
+    DAVRequestEnvironment() {}
 };
 
 }; // namespace webdav_ucp
 
-#endif // _DAVAUTHLISTENER_HXX_
+#endif // _DAVREQUESTENVIRONMENT_HXX_
