@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2002-05-28 20:25:18 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 15:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,21 +831,101 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     {
         Text = "Von ~links/oben" ;
         Text [ english_us ] = "From ~left/top" ;
+        Text[ portuguese ] = "From ~left/top";
+        Text[ russian ] = "From ~left/top";
+        Text[ greek ] = "From ~left/top";
+        Text[ dutch ] = "From ~left/top";
+        Text[ french ] = "De la gauche/du haut";
+        Text[ spanish ] = "De la ~Izquierda/de arriba";
+        Text[ finnish ] = "From ~left/top";
+        Text[ italian ] = "Da sinistra/in alto";
+        Text[ danish ] = "From ~left/top";
+        Text[ swedish ] = "Fr�n ~v�nster/uppifr�n";
+        Text[ polish ] = "From ~left/top";
+        Text[ portuguese_brazilian ] = "From ~left/top";
+        Text[ japanese ] = "左/上から";
+        Text[ korean ] = "왼쪽/위로부터";
+        Text[ chinese_simplified ] = "从左/上";
+        Text[ chinese_traditional ] = "從左/上";
+        Text[ turkish ] = "From ~left/top";
+        Text[ arabic ] = "From ~left/top";
+        Text[ catalan ] = "From ~left/top";
+        Text[ thai ] = "From ~left/top";
     };
     String ST_RIGHTINDENT_ASIAN
     {
         Text = "Von ~rechts/unten" ;
         Text [ english_us ] = "From rig~ht/bottom" ;
+        Text[ portuguese ] = "From rig~ht/bottom";
+        Text[ russian ] = "From rig~ht/bottom";
+        Text[ greek ] = "From rig~ht/bottom";
+        Text[ dutch ] = "From rig~ht/bottom";
+        Text[ french ] = "De la droite/du bas";
+        Text[ spanish ] = "De la ~derecha/Abajo";
+        Text[ finnish ] = "From rig~ht/bottom";
+        Text[ italian ] = "Da destra/in basso";
+        Text[ danish ] = "From rig~ht/bottom";
+        Text[ swedish ] = "Fr�n h�ge~r/nedifr�n";
+        Text[ polish ] = "From rig~ht/bottom";
+        Text[ portuguese_brazilian ] = "From rig~ht/bottom";
+        Text[ japanese ] = "右/下から";
+        Text[ korean ] = "오른쪽/아래로부터";
+        Text[ chinese_simplified ] = "从右/下";
+        Text[ chinese_traditional ] = "從右/下";
+        Text[ turkish ] = "From rig~ht/bottom";
+        Text[ arabic ] = "From rig~ht/bottom";
+        Text[ catalan ] = "From rig~ht/bottom";
+        Text[ thai ] = "From rig~ht/bottom";
     };
     String ST_TOPSPACE_ASIAN
     {
         Text = "~Oben/Links" ;
         Text [ english_us ] = "~Top/Left" ;
+        Text[ portuguese ] = "~Top/Left";
+        Text[ russian ] = "~Top/Left";
+        Text[ greek ] = "~Top/Left";
+        Text[ dutch ] = "~Top/Left";
+        Text[ french ] = "En haut/� gauche";
+        Text[ spanish ] = "~Arriba/a la izquierda";
+        Text[ finnish ] = "~Top/Left";
+        Text[ italian ] = "In alto/a sinistra";
+        Text[ danish ] = "~Top/Left";
+        Text[ swedish ] = "~Uppe/till v�nster";
+        Text[ polish ] = "~Top/Left";
+        Text[ portuguese_brazilian ] = "~Top/Left";
+        Text[ japanese ] = "上/左";
+        Text[ korean ] = "위/왼쪽";
+        Text[ chinese_simplified ] = "上/左";
+        Text[ chinese_traditional ] = "上/左";
+        Text[ turkish ] = "~Top/Left";
+        Text[ arabic ] = "~Top/Left";
+        Text[ catalan ] = "~Top/Left";
+        Text[ thai ] = "~Top/Left";
     };
     String ST_BOTTOMSPACE_ASIAN
     {
         Text = "~Unten/Rechts" ;
         Text [ english_us ] = "~Bottom/Right" ;
+        Text[ portuguese ] = "~Bottom/Right";
+        Text[ russian ] = "~Bottom/Right";
+        Text[ greek ] = "~Bottom/Right";
+        Text[ dutch ] = "~Bottom/Right";
+        Text[ french ] = "En bas/� droite";
+        Text[ spanish ] = "~Abajo/a la derecha";
+        Text[ finnish ] = "~Bottom/Right";
+        Text[ italian ] = "In basso/a destra";
+        Text[ danish ] = "~Bottom/Right";
+        Text[ swedish ] = "~Nere/till h�ger";
+        Text[ polish ] = "~Bottom/Right";
+        Text[ portuguese_brazilian ] = "~Bottom/Right";
+        Text[ japanese ] = "下/右";
+        Text[ korean ] = "아래/오른쪽";
+        Text[ chinese_simplified ] = "下/右";
+        Text[ chinese_traditional ] = "下/右";
+        Text[ turkish ] = "~Bottom/Right";
+        Text[ arabic ] = "~Bottom/Right";
+        Text[ catalan ] = "~Bottom/Right";
+        Text[ thai ] = "~Bottom/Right";
     };
 
     Text[ chinese_simplified ] = "缩进和间隔";
@@ -927,7 +1007,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ spanish ] = "I~zquierda" ;
         Text [ english_us ] = "~Left" ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "向左(~L)";
+        Text[ chinese_simplified ] = "左(~L)";
         Text[ russian ] = "�����";
         Text[ polish ] = "Do ~lewej";
         Text[ japanese ] = "左揃え(~L)";
@@ -955,9 +1035,9 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ french ] = "� droite" ;
         Text [ swedish ] = "H�ge~r" ;
         Text [ dutch ] = "Re~chts" ;
-        Text [ spanish ] = "Derecha" ;
+        Text [ spanish ] = "~Derecha" ;
         Text [ english_us ] = "Righ~t" ;
-        Text[ chinese_simplified ] = "向右(~T)";
+        Text[ chinese_simplified ] = "右(~T)";
         Text[ russian ] = "������";
         Text[ polish ] = "Do pra~wej";
         Text[ japanese ] = "右揃え(~T)";
@@ -1036,6 +1116,12 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ english_us ] = "~Left/Top" ;
         Text[ korean ] = "왼쪽/위";
         Text[ chinese_traditional ] = "向左/向上";
+        Text[ french ] = "� gauche/En haut";
+        Text[ spanish ] = "~A la izquierda/Arriba";
+        Text[ italian ] = "A sinistra/in alto";
+        Text[ swedish ] = "V�nster/uppe";
+        Text[ japanese ] = "左/上";
+        Text[ chinese_simplified ] = "左/上";
     };
     String ST_RIGHTALIGN_ASIAN
     {
@@ -1043,6 +1129,12 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text [ english_us ] = "Righ~t/Bottom" ;
         Text[ korean ] = "오른쪽/아래";
         Text[ chinese_traditional ] = "向右/向下";
+        Text[ french ] = "� droite/En bas";
+        Text[ spanish ] = "~A la derecha/Abajo";
+        Text[ italian ] = "A destra/in basso";
+        Text[ swedish ] = "H�~ger/nere";
+        Text[ japanese ] = "右/下";
+        Text[ chinese_simplified ] = "右/下";
     };
     FixedText FT_LASTLINE
     {
@@ -1106,7 +1198,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         };
         stringlist [ swedish ] =
         {
-            < "V�nster" ; Default ; > ;
+            < "Till v�nster" ; Default ; > ;
             < "Centrerat" ; Default ; > ;
             < "Marginaljusterad" ; Default ; > ;
         };
@@ -1148,7 +1240,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         };
         StringList [ chinese_simplified ] =
         {
-                < "向左" ; Default ; > ;
+                < "左" ; Default ; > ;
             < "居中" ; Default ; > ;
             < "左右对齐" ; Default ; > ;
         };
@@ -1276,7 +1368,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ polish ] = "~Snap to text grid (if active)";
         Text[ portuguese_brazilian ] = "~Snap to text grid (if active)";
         Text[ japanese ] = "文字グリッド線で位置合わせ (グリッド線表示状態で)";
-        Text[ korean ] = "문자 수/열 수 외곽선에 정렬 (활성시)";
+        Text[ korean ] = "텍스트 그리드선에 정렬 (활성시)";
         Text[ chinese_simplified ] = "和文字格子线对齐(如使用格子线)";
         Text[ chinese_traditional ] = "和文字格子線對齊(如有使用格子線)";
         Text[ turkish ] = "~Snap to text grid (if active)";
@@ -1302,17 +1394,17 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ russian ] = "������������ ������ �� ���������";
         Text[ greek ] = "Vertical text alignment";
         Text[ dutch ] = "Verticale uitlijning";
-        Text[ french ] = "Alignement vertical du texte";
-        Text[ spanish ] = "Alineaci�n vertical del texto";
+        Text[ french ] = "Texte � texte";
+        Text[ spanish ] = "Texto a texto";
         Text[ finnish ] = "Tekstin tasaus pystysuunnassa";
-        Text[ italian ] = "Allineamento verticale testo";
+        Text[ italian ] = "Testo a testo";
         Text[ danish ] = "Vertical text alignment";
-        Text[ swedish ] = "Vertikal textjustering";
+        Text[ swedish ] = "Text-till-text";
         Text[ polish ] = "Wyr�wnanie tekstu w pionie";
         Text[ portuguese_brazilian ] = "Vertical text alignment";
-        Text[ japanese ] = "縦書き";
+        Text[ japanese ] = "文字幅と間隔";
         Text[ korean ] = "문자 간 사이";
-        Text[ chinese_simplified ] = "直式文字方向";
+        Text[ chinese_simplified ] = "字符高度";
         Text[ chinese_traditional ] = "字元高度";
         Text[ turkish ] = "Vertical text alignment";
         Text[ arabic ] = "Vertical text alignment";
@@ -1494,9 +1586,9 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     {
             < "自动" ; > ;
         < "基线" ; > ;
-        < "向上" ; > ;
+        < "上" ; > ;
         < "居中" ; > ;
-        < "向下" ; > ;
+        < "下" ; > ;
     };
     StringList [ chinese_traditional ] =
     {
