@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 20:52:28 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ namespace dbaui
         for (; aIter != m_aStates.end(); ++aIter)
             addStatusListener(aIter->first);
 
-        ToolBox* pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
+        ToolBox*    pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
         if ( pToolBox )
         {
             USHORT nCount = pToolBox->GetItemCount();
@@ -209,8 +209,13 @@ namespace dbaui
                     break;
                 }
             }
+
             // check if paste special is allowed, when not don't add DROPDOWN
             pToolBox->SetItemBits(m_nToolBoxId,pToolBox->GetItemBits(m_nToolBoxId) | TIB_DROPDOWN);
+
+            // refresh needs a different toolbox item style!
+            if ( m_aCommandURL.equalsAscii( ".uno:Refresh" ))
+                pToolBox->SetItemBits( m_nToolBoxId, pToolBox->GetItemBits( m_nToolBoxId ) | TIB_DROPDOWNONLY );
         }
     }
     // -----------------------------------------------------------------------------
