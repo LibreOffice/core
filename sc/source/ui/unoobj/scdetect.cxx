@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:11:40 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,6 +729,8 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                                     {   // gefundenen Filter einstellen
                                         pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterName[ nFilter ]) );
                                     }
+                                    bSync = FALSE;              // leave inner loop
+                                    nFilter = nFilterCount;     // leave outer loop
                                 }
                                 else
                                 { //                                         Tabellenfehler
