@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:11:54 $
+ *  last change: $Author: rt $ $Date: 2001-08-29 20:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ italian ] = "Riga" ;
         QuickHelpText [ portuguese_brazilian ] = "Fileira" ;
         QuickHelpText [ portuguese ] = "Linha" ;
-        QuickHelpText [ finnish ] = "Rivi" ;
+        QuickHelpText [ finnish ] = "Rivi!" ;
         QuickHelpText [ danish ] = "Række" ;
         QuickHelpText [ french ] = "Ligne" ;
         QuickHelpText [ swedish ] = "Rad" ;
@@ -180,7 +180,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ italian ] = "Colonna" ;
         Text [ portuguese_brazilian ] = "Coluna" ;
         Text [ portuguese ] = "Coluna" ;
-        Text [ finnish ] = "Sarake " ;
+        Text [ finnish ] = "Sarake" ;
         Text [ danish ] = "Kolonne" ;
         Text [ french ] = "Colonne" ;
         Text [ swedish ] = "Kolumn" ;
@@ -216,7 +216,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ italian ] = "Colonna" ;
         QuickHelpText [ portuguese_brazilian ] = "Coluna" ;
         QuickHelpText [ portuguese ] = "Coluna" ;
-        QuickHelpText [ finnish ] = "Sarake" ;
+        QuickHelpText [ finnish ] = "Sarake!" ;
         QuickHelpText [ danish ] = "Kolonne" ;
         QuickHelpText [ french ] = "Colonne" ;
         QuickHelpText [ swedish ] = "Kolumn" ;
@@ -286,7 +286,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Dokument";
         QuickHelpText[ catalan ] = "Documento";
-        QuickHelpText[ finnish ] = "Asiakirja";
+        QuickHelpText[ finnish ] = "Asiakirja!";
     };
     ToolBox TBX_CMD
     {
@@ -385,7 +385,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ italian ] = "Fine" ;
                 Text [ portuguese_brazilian ] = "Final" ;
                 Text [ portuguese ] = "Fim" ;
-                Text [ finnish ] = "Lopeta" ;
+                Text [ finnish ] = "Loppu" ;
                 Text [ danish ] = "Slut" ;
                 Text [ french ] = "Fin" ;
                 Text [ swedish ] = "Slut" ;
@@ -440,7 +440,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ turkish ] = "Ýçerikler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Contenidos";
-                Text[ finnish ] = "Sisältö";
+                Text[ finnish ] = "Sis?lt?";
             };
             ToolBoxItem
             {
@@ -589,7 +589,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ turkish ] = "Görüntü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Visualización";
-        Text[ finnish ] = "Näytä";
+        Text[ finnish ] = "N?yt?";
     };
     String STR_ACTIVE
     {
@@ -645,7 +645,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ turkish ] = "Etkin deðil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "inactivo";
-        Text[ finnish ] = "ei käytössä";
+        Text[ finnish ] = "ei k?yt?s?";
     };
     String STR_HIDDEN
     {
@@ -759,7 +759,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comentario";
-        Text[ finnish ] = "Kommentti";
+        Text[ finnish ] = "Huomautus";
     };
 
     Text[ chinese_simplified ] = "åŠ©æ‰‹";
@@ -845,7 +845,7 @@ String SCSTR_CONTENT_ROOT
     Text[ turkish ] = "Ýçerikler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Contenidos";
-    Text[ finnish ] = "Sisältö";
+    Text[ finnish ] = "Sis?lt?";
 };
 String SCSTR_CONTENT_TABLE
 {
@@ -1078,7 +1078,7 @@ Menu RID_POPUP_DROPMODE
             Text[ turkish ] = "Hyperlink olarak ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Insertar como hiperenlace";
-            Text[ finnish ] = "Lisää hyperlinkkinä";
+            Text[ finnish ] = "Lis?? hyperlinkkin?";
         };
         MenuItem
         {
@@ -1110,7 +1110,7 @@ Menu RID_POPUP_DROPMODE
             Text[ turkish ] = "Baðlantý olarak ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Insertar como vínculo";
-            Text[ finnish ] = "Lisää linkkinä";
+            Text[ finnish ] = "Lis?? linkkin?";
         };
         MenuItem
         {
@@ -1141,7 +1141,7 @@ Menu RID_POPUP_DROPMODE
             Text[ turkish ] = "Kopya olarak ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Insertar como copia";
-            Text[ finnish ] = "Lisää kopiona";
+            Text[ finnish ] = "Lis?? kopiona";
         };
     };
 };
@@ -1211,6 +1211,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
         };
     };
 };
+
 
 
 
