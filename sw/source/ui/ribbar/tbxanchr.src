@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxanchr.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:13:28 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,8 @@ Menu MN_ANCHOR_POPUP
         };
     };
 };
+
+
 
 
 
