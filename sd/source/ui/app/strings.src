@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-22 04:53:02 $
+ *  last change: $Author: aw $ $Date: 2001-10-24 14:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5729,8 +5729,8 @@ ModalDialog RID_UNDO_DELETE_WARNING
     Closeable = TRUE;
 
     HelpID = RID_UNDO_DELETE_WARNING;
-    Text = "Hinweis" ;
-    Text [ ENGLISH ] = "Hint" ;
+    Text = "%PRODUCTNAME 6.0" ;
+    Text [ ENGLISH ] = "%PRODUCTNAME 6.0" ;
 
     FixedImage IMG_UNDO_DELETE_WARNING
     {
