@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-10-10 06:01:59 $
+ *  last change: $Author: os $ $Date: 2002-10-10 09:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,6 +697,8 @@ SfxTabPage* SwColumnPage::Create(Window *pParent, const SfxItemSet &rSet)
 
 BOOL SwColumnPage::FillItemSet(SfxItemSet &rSet)
 {
+    if(aCLNrEdt.HasChildPathFocus())
+        aCLNrEdt.GetDownHdl().Call(&aCLNrEdt);
     // Im ItemSet setzen
     // Die aktuellen Einstellungen sind
     // schon vorhanden
