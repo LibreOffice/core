@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:44:22 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ czech ] = "Data";
         Text[ hebrew ] = "Daten";
         Text[ hindi ] = "ड़ॉटा";
+        Text[ slovak ] = "Dáta";
     };
     FixedText FT_EXPLANATION
     {
@@ -138,6 +139,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ czech ] = "V současné době není formulář, ke kterému je ovládací prvek svázán, propojen se zdrojem dat.\n\nProsím všimněte si, že nastavení provedená na této stránce se projeví okamžitě po opuštění této stránky.";
         Text[ hebrew ] = "Das Formular, zu dem das Kontrollfeld gehört, ist im Augenblick noch nicht (oder noch nicht vollständig) an eine Datenquelle gebunden.\n\nBitte wählen Sie eine Datenquelle und eine Tabelle aus.\n\n\nBitte beachten Sie, dass die Einstellungen, die sie auf dieser Seiter für das Formular vornehmen, sofort beim Verlassen der Seite wirksam werden.";
         Text[ hindi ] = "वर्तमान में, नियंत्रण जो फ़ॉर्म से मिला हुआ है वह ड़ॉटा मूल से नहीं जुड़ा (अथवा पूर्ण रूप से) है ।\n\nकृपया ड़ॉटा मूल और सारणी को चुनिए ।\n\n\nकृपया ध्यान दीजिए कि इस पृष्ठ में की हुयी निर्धारणें इस पृष्ठ से बाहर आते ही लागू होगा ।";
+        Text[ slovak ] = "Formulár, ku ktorému patria ovládacie prvky, nie je (alebo nie úplne) zviazaný so zdrojom dát.\n\nProsíme, vyberte zdroj dát a tabuľku.\n\n\nUpozorňujeme, že nastavenia urobené na tejto stránke, sa uplatnia hneď po opustení tejto stránky.";
     };
     FixedText FT_DATASOURCE
     {
@@ -170,6 +172,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ czech ] = "Zdroj dat:";
         Text[ hebrew ] = "~Datenquelle:";
         Text[ hindi ] = "~ड़ॉटा मूल:";
+        Text[ slovak ] = "Zdroj ~dát:";
     };
     ListBox LB_DATASOURCE
     {
@@ -211,6 +214,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ czech ] = "Tabulka:";
         Text[ hebrew ] = "~Tabelle:";
         Text[ hindi ] = "~सारणी:";
+        Text[ slovak ] = "~Tabuľka:";
     };
     ListBox LB_TABLE
     {
@@ -243,6 +247,7 @@ TabPage RID_PAGE_TABLESELECTION
     Text[ czech ] = "Data";
     Text[ hebrew ] = "Daten";
     Text[ hindi ] = "ड़ॉटा";
+    Text[ slovak ] = "Dáta";
 };
 
 TabPage RID_PAGE_OPTION_DBFIELD
@@ -316,6 +321,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text[ czech ] = "Přejete si uložit hodnotu do databázového pole?";
         Text[ hebrew ] = "Möchten Sie den Wert in einem Datenbankfeld speichern?";
         Text[ hindi ] = "आप लेखासंचय क्षेत्र में मूल्य को संचित करना चाहते है?";
+        Text[ slovak ] = "Chcete uložiť hodnotu v poli databázy?";
     };
     RadioButton RB_STOREINFIELD_YES
     {
@@ -351,6 +357,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text[ czech ] = "Ano, chci ji uložit do tohoto pole v databázi:";
         Text[ hebrew ] = "~Ja, und zwar in folgendem Datenbankfeld :";
         Text[ hindi ] = "~हाँ, मैं निम्नलिखित लेखासंचय क्षेत्र में संचित करना चाहता हूँ:";
+        Text[ slovak ] = "Á~no, chcem uložiť v nasledujúcom databázovom poli:";
     };
     ListBox LB_STOREINFIELD
     {
@@ -395,6 +402,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text[ czech ] = "Ne, hodnota bude uložena jen ve formuláři.";
         Text[ hebrew ] = "~Nein, ich möchte den Wert nur im Formular speichern.";
         Text[ hindi ] = "न~हीं, मैं मूल्य को केवल फ़ार्म में संचित करना चाहता हूँ ।";
+        Text[ slovak ] = "N~ie, chcem uložiť len hodnotu z formulára.";
     };
     Text[ catalan ] = "Camp de la base de dades";
     Text[ finnish ] = "Tietokantakentt�";
@@ -402,6 +410,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
     Text[ czech ] = "Databázové pole";
     Text[ hebrew ] = "Datenbankfeld";
     Text[ hindi ] = "लेखासंचय क्षेत्र";
+    Text[ slovak ] = "Pole databázy";
 };
 
 TabPage RID_PAGE_FORM_DATASOURCE_STATUS
@@ -436,6 +445,7 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text[ czech ] = "Formulář";
         Text[ hebrew ] = "‮טופס‬";
         Text[ hindi ] = "फ़ॉर्म";
+        Text[ slovak ] = "Formulár";
     };
     FixedText FT_FORMDATASOURCELABEL
     {
@@ -467,6 +477,7 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text[ czech ] = "Zdroj dat";
         Text[ hebrew ] = "‮מקור הנתונים‬";
         Text[ hindi ] = "ड़ॉटा मूल";
+        Text[ slovak ] = "Zdroj dát";
     };
     FixedText FT_FORMDATASOURCE
     {
@@ -504,6 +515,7 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text[ czech ] = "Typ obsahu";
         Text[ hebrew ] = "Art des Inhaltes";
         Text[ hindi ] = "विषय वर्ग";
+        Text[ slovak ] = "Obsah";
     };
     FixedText FT_FORMCONTENTTYPE
     {
@@ -541,6 +553,7 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text[ czech ] = "Obsah";
         Text[ hebrew ] = "Inhalt";
         Text[ hindi ] = "विषय";
+        Text[ slovak ] = "Obsah";
     };
     FixedText FT_FORMTABLE
     {
@@ -577,6 +590,7 @@ String RID_STR_TYPE_TABLE
     Text[ czech ] = "Tabulka";
     Text[ hebrew ] = "‮טבלה‬";
     Text[ hindi ] = "सारणी";
+    Text[ slovak ] = "Tabuľka";
 };
 
 String RID_STR_TYPE_QUERY
@@ -607,6 +621,7 @@ String RID_STR_TYPE_QUERY
     Text[ czech ] = "Dotaz";
     Text[ hebrew ] = "Abfrage";
     Text[ hindi ] = "जानकारी";
+    Text[ slovak ] = "Dotaz";
 };
 
 String RID_STR_TYPE_COMMAND
@@ -637,11 +652,21 @@ String RID_STR_TYPE_COMMAND
     Text[ czech ] = "SQL příkaz";
     Text[ hebrew ] = "SQL-Befehl";
     Text[ hindi ] = "SQL आज्ञा";
+    Text[ slovak ] = "SQL príkaz";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30.26.1  2003/06/12 11:09:52  gh
+ *  final Merge RC
+ *
+ *  Revision 1.30  2003/04/29 17:44:22  hr
+ *  INTEGRATION: CWS mergem8 (1.20.2.8.4.4.2.1.26); FILE MERGED
+ *  2003/04/29 08:35:39 gh 1.20.2.8.4.4.2.1.26.3: final merge for Beta2
+ *  2003/04/16 18:57:44 gh 1.20.2.8.4.4.2.1.26.2: RESYNC: (1.20.2.8.4.4.2.1-1.29); FILE MERGED
+ *  2003/04/14 14:46:26 gh 1.20.2.8.4.4.2.1.26.1: merging all languages
+ *
  *  Revision 1.20.2.8.4.4.2.1.26.3  2003/04/29 08:35:39  gh
  *  final merge for Beta2
  *
@@ -764,6 +789,8 @@ String RID_STR_TYPE_COMMAND
  *
  *  Revision 1.0 14.02.01 11:05:25  fs
  ************************************************************************/
+
+
 
 
 
