@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:48:44 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,13 +660,8 @@ SdrPageViewWindow::SdrPageViewWindow(SdrPageView& rPageView, OutputDevice& rOut)
 
 SdrPageViewWindow::~SdrPageViewWindow()
 {
-    // #110094#
-    if(mpObjectContact)
-    {
-        mpObjectContact->PrepareDelete();
-        delete mpObjectContact;
-        mpObjectContact = 0L;
-    }
+    // #110094#, #i26631#
+    ResetObjectContact();
 
     if (mxControlContainer.is())
     {
@@ -904,6 +899,17 @@ sdr::contact::ObjectContact& SdrPageViewWindow::GetObjectContact() const
     }
 
     return *mpObjectContact;
+}
+
+// #i26631#
+void SdrPageViewWindow::ResetObjectContact()
+{
+    if(mpObjectContact)
+    {
+        mpObjectContact->PrepareDelete();
+        delete mpObjectContact;
+        mpObjectContact = 0L;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
