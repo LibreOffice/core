@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langselect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 14:51:46 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 15:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "app.hxx"
 #include "langselect.hxx"
 #include "langselect.hrc"
+#include <stdio.h>
 
 #ifndef _RTL_STRING_HXX
 #include <rtl/string.hxx>
@@ -81,40 +82,75 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
-
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/lang/XLocalizable.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <rtl/locale.hxx>
+#include <osl/process.h>
 
 using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
+using namespace com::sun::star::beans;
 
 namespace desktop {
 
-LanguageSelection::LanguageSelection()
-:m_pText(NULL)
-,m_pListBox(NULL)
-,m_pButton(NULL)
-,m_pDialog(NULL)
+LanguageSelectionDialog::LanguageSelectionDialog(ResMgr *pResMgr) :
+    ModalDialog(NULL,ResId(DLG_LANGSELECT, pResMgr)),
+    m_aText(this, ResId(TXT_DLG_LANGSELECT, pResMgr)),
+    m_aListBox(this, ResId(LST_DLG_LANGSELECT, pResMgr)),
+    m_aButton(this, ResId(BTN_DLG_LANGSELECT_OK, pResMgr))
 {
-
+    FreeResource();
 }
 
-LanguageSelection::~LanguageSelection()
-{
-    delete m_pText;
-    delete m_pListBox;
-    delete m_pButton;
-    delete m_pDialog;
-}
+LangList LanguageSelection::m_lLanguages;
 
 // execute the language selection
 // display a dialog if more than one language is installed
 // XXX this is a temporary solution
-LanguageType LanguageSelection::Execute()
+static sal_Bool bFoundLanguage = sal_False;
+static LanguageType aFoundLanguageType = LANGUAGE_DONTKNOW;
+
+Locale LanguageSelection::IsoStringToLocale(const OUString& str)
+{
+    Locale l;
+    sal_Int32 index=0;
+    l.Language = str.getToken(0, '-', index);
+    if (index >= 0) l.Country = str.getToken(0, '-', index);
+    if (index >= 0) l.Variant = str.getToken(0, '-', index);
+    return l;
+}
+
+void LanguageSelection::prepareLanguage()
+{
+    // XXX make everything works without assertions in first run
+    // in multi-language installations, some things might fail in first run
+    if (getUserLanguage() != LANGUAGE_DONTKNOW) return;
+    LangList l = getInstalledLanguages();
+    if (l.size() >= 1)
+    {
+        // throw any away existing default config
+        OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
+        Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
+        Reference< XLocalizable > theConfigProvider(
+            theMSF->createInstance( sConfigSrvc ),UNO_QUERY );
+        OSL_ENSURE(theConfigProvider.is(), "cannot localize config manager.");
+        if (theConfigProvider.is())
+        {
+            OUString aLocaleString = ConvertLanguageToIsoString(*l.begin());
+            Locale l = LanguageSelection::IsoStringToLocale(aLocaleString);
+            theConfigProvider->setLocale(l);
+        }
+    }
+}
+
+LanguageType LanguageSelection::getLanguageType()
 {
 
-    static sal_Bool bFoundLanguage = sal_False;
-    static LanguageType aFoundLanguageType = LANGUAGE_DONTKNOW;
     if (bFoundLanguage)
         return aFoundLanguageType;
 
@@ -122,36 +158,30 @@ LanguageType LanguageSelection::Execute()
     LanguageType aUserLanguage = getUserLanguage();
     if (aUserLanguage != LANGUAGE_DONTKNOW)
     {
-        bFoundLanguage = sal_True;
+       bFoundLanguage = sal_True;
         aFoundLanguageType = aUserLanguage;
         return aFoundLanguageType;
     }
 
-    // get resource
-    rtl::OString aMgrName = OString("langselect") + OString::valueOf((sal_Int32)SUPD, 10);
-    LanguageType aLanguageType = LANGUAGE_DONTKNOW;
-    ResMgr* pResMgr = ResMgr::SearchCreateResMgr( aMgrName, aLanguageType );
-    ResId aResId(DLG_LANGSELECT, pResMgr);
-    m_pDialog = new ModalDialog(NULL, aResId);
-    aResId = ResId(TXT_DLG_LANGSELECT, pResMgr);
-    m_pText = new FixedText(m_pDialog, aResId);
-    aResId = ResId(LST_DLG_LANGSELECT, pResMgr);
-    m_pListBox = new ListBox(m_pDialog, aResId);
-    aResId = ResId(BTN_DLG_LANGSELECT_OK, pResMgr);
-    m_pButton = new OKButton(m_pDialog, aResId);
-
     // fill list
-    m_lLanguages = getInstalledLanguages();
-    StrList languages(getLanguageStrings(m_lLanguages));
-    for (StrList::iterator str_iter = languages.begin(); str_iter != languages.end(); str_iter++)
-    {
-        m_pListBox->InsertEntry(*str_iter);
-    }
+    if (m_lLanguages.size() < 1)
+        m_lLanguages = getInstalledLanguages();
 
     if (m_lLanguages.size() > 1) {
         // are there multiple languages installed?
-        m_pDialog->Execute();
-        short nSelected = m_pListBox->GetSelectEntryPos();
+        // get resource
+        rtl::OString aMgrName = OString("langselect") + OString::valueOf((sal_Int32)SUPD, 10);
+        LanguageType aLanguageType = LANGUAGE_DONTKNOW;
+        ResMgr* pResMgr = ResMgr::SearchCreateResMgr( aMgrName, aLanguageType );
+        LanguageSelectionDialog lsd(pResMgr);
+        StrList languages(getLanguageStrings(m_lLanguages));
+        for (StrList::iterator str_iter = languages.begin(); str_iter != languages.end(); str_iter++)
+        {
+            lsd.m_aListBox.InsertEntry(*str_iter);
+        }
+
+        lsd.Execute();
+        short nSelected = lsd.m_aListBox.GetSelectEntryPos();
         LangList::const_iterator i = m_lLanguages.begin();
         for (sal_Int32 n=0; n<nSelected; n++) i++;
         bFoundLanguage = sal_True;
@@ -172,8 +202,9 @@ LanguageType LanguageSelection::Execute()
     }
 }
 
+
 // Get the localized selection strings for the list of languages
-StrList LanguageSelection::getLanguageStrings(const LangList& langLst) const
+StrList LanguageSelection::getLanguageStrings(const LangList& langLst)
 {
     StrList aList;
     rtl::OString aMgrName = OString("langselect") + OString::valueOf((sal_Int32)SUPD, 10);
@@ -191,7 +222,7 @@ StrList LanguageSelection::getLanguageStrings(const LangList& langLst) const
 }
 
 // get a language choosen by the user
-LanguageType LanguageSelection::getUserLanguage() const
+LanguageType LanguageSelection::getUserLanguage()
 {
     LanguageType aLanguageType = LANGUAGE_DONTKNOW;
     try{
@@ -232,7 +263,7 @@ LanguageType LanguageSelection::getUserLanguage() const
 }
 
 // get a list with the languages that are installed
-LangList LanguageSelection::getInstalledLanguages() const
+LangList LanguageSelection::getInstalledLanguages()
 {
     LangList aList;
     // read language list from org.openoffice.Setup/Office/ooSetupLocales
