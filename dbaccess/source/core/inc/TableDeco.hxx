@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:15:36 $
+ *  last change: $Author: fs $ $Date: 2001-05-02 10:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,9 @@ namespace dbaccess
     typedef ::comphelper::OIdPropertyArrayUsageHelper< ODBTableDecorator >  ODBTableDecorator_PROP;
 
     class ODBTableDecorator :public comphelper::OBaseMutex
+                            ,public OTableDescriptor_BASE
                             ,public ODataSettings //ODataSettings_Base
                             ,public OConfigurationFlushable
-                            ,public OTableDescriptor_BASE
                             ,public IColumnFactory
                             ,public ::connectivity::sdbcx::IRefreshableColumns
                             ,public ODBTableDecorator_PROP
