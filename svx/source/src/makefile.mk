@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 09:45:12 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 12:18:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,11 +80,11 @@ RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 RES1FILELIST=\
     $(SRS)$/app.srs \
     $(SRS)$/svxslots.srs \
-    $(SOLARRESDIR)$/sfxslots.srs \
-    $(SOLARRESDIR)$/svtools.srs \
-    $(SOLARRESDIR)$/sfx.srs 	\
-    $(SOLARRESDIR)$/so2.srs 	\
-    $(SOLARRESDIR)$/basic.srs
+    $(SOLARCOMMONRESDIR)$/sfxslots.srs \
+    $(SOLARCOMMONRESDIR)$/svtools.srs \
+    $(SOLARCOMMONRESDIR)$/sfx.srs 	\
+    $(SOLARCOMMONRESDIR)$/so2.srs 	\
+    $(SOLARCOMMONRESDIR)$/basic.srs
 
 RESLIB1NAME=$(TARGET)
 RESLIB1IMAGES=$(PRJ)$/res $(PRJ)$/source/src
