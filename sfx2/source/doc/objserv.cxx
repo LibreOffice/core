@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:31:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1141,7 +1141,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             }
             case SID_MACRO_SIGNATURE:
             {
-                rSet.Put( SfxUInt16Item( SID_SIGNATURE, GetScriptingSignatureState() ) );
+                rSet.Put( SfxUInt16Item( SID_MACRO_SIGNATURE, GetScriptingSignatureState() ) );
                 break;
             }
         }
@@ -1427,24 +1427,15 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
         return;
     }
 
-    // xmlsec05 TODO/LATER: may need additional fixing
-    // if ( !IsHandsOff() )
-       //   DoHandsOff();
-
     GetMedium()->SignContents_Impl( bScriptingContent );
-
-    // if ( IsHandsOff() )
-    // {
-    //  if ( !DoSaveCompleted( pMedium ) )
-    //      DBG_ERROR("Case not handled - no way to get a storage!");
-    // }
-    // else
-    //  DoSaveCompleted( (SvStorage*)0 );
 
     if ( bScriptingContent )
         pImp->nScriptingSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
     else
         pImp->nDocumentSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
+
+    // Doc was not modified befor, and signature is already in the storage...
+    SetModified( FALSE );
 
     Invalidate( SID_SIGNATURE );
     Invalidate( SID_MACRO_SIGNATURE );
