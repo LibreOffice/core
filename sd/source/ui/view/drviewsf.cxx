@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:09:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,12 +147,6 @@
 #include "drawdoc.hxx"
 #ifndef SD_WINDOW_HXX
 #include "Window.hxx"
-#endif
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
-#endif
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
 #endif
 #ifndef SD_OBJECT_BAR_MANAGER_HXX
 #include "ObjectBarManager.hxx"
@@ -302,31 +296,6 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_GRAYSCALE, (BOOL)(nQuality == 1) ) );
         rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_BLACKWHITE, (BOOL)(nQuality == 2) ) );
         rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_CONTRAST, (BOOL)(nQuality == 3) ) );
-    }
-
-    // Preview-Fenster
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_COLOR ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_GRAYSCALE ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_BLACKWHITE ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_CONTRAST ) )
-    {
-        USHORT nId = PreviewChildWindow::GetChildWindowId();
-
-        if( GetViewFrame()->GetChildWindow( nId ) )
-        {
-            ULONG nMode = pFrameView->GetPreviewDrawMode();
-            rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_COLOR, (BOOL)(nMode == PREVIEW_DRAWMODE_COLOR) ) );
-            rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_GRAYSCALE, (BOOL)(nMode == PREVIEW_DRAWMODE_GRAYSCALE) ) );
-            rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_BLACKWHITE, (BOOL)(nMode == PREVIEW_DRAWMODE_BLACKWHITE) ) );
-            rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_CONTRAST, (BOOL)(nMode == PREVIEW_DRAWMODE_CONTRAST) ) );
-        }
-        else
-        {
-            rSet.DisableItem( SID_PREVIEW_QUALITY_COLOR );
-            rSet.DisableItem( SID_PREVIEW_QUALITY_GRAYSCALE );
-            rSet.DisableItem( SID_PREVIEW_QUALITY_BLACKWHITE );
-            rSet.DisableItem( SID_PREVIEW_QUALITY_CONTRAST );
-        }
     }
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) )
