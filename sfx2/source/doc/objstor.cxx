@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-17 08:30:27 $
+ *  last change: $Author: mav $ $Date: 2002-09-25 10:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,173 +561,171 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         }
     }
 
-    Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    Reference< XNameAccess > xFilterCFG;
-    if( xServiceManager.is() )
-    {
-        xFilterCFG = Reference< XNameAccess >(
-            xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
-            UNO_QUERY );
-    }
-
     SFX_ITEMSET_ARG( pSet, pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
     SFX_ITEMSET_ARG( pSet, pData, SfxUsrAnyItem, SID_FILTER_DATA, sal_False );
-    if ( pData || pOptions )
-        bOk = sal_True;
-    else if( xFilterCFG.is() )
+    if ( !pData && !pOptions )
     {
-        BOOL bAbort = FALSE;
-        try {
-            Sequence < PropertyValue > aProps;
-            Any aAny = xFilterCFG->getByName( pFilter->GetName() );
-            if ( aAny >>= aProps )
-            {
-                ::rtl::OUString aServiceName;
-                sal_Int32 nPropertyCount = aProps.getLength();
-                for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
-                    if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
-                    {
-                        ::rtl::OUString aServiceName;
-                        aProps[nProperty].Value >>= aServiceName;
-                        if( aServiceName.getLength() )
+        Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+        Reference< XNameAccess > xFilterCFG;
+        if( xServiceManager.is() )
+        {
+            xFilterCFG = Reference< XNameAccess >(
+                xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+                UNO_QUERY );
+        }
+
+        if( xFilterCFG.is() )
+        {
+            BOOL bAbort = FALSE;
+            try {
+                Sequence < PropertyValue > aProps;
+                Any aAny = xFilterCFG->getByName( pFilter->GetName() );
+                if ( aAny >>= aProps )
+                {
+                    ::rtl::OUString aServiceName;
+                    sal_Int32 nPropertyCount = aProps.getLength();
+                    for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+                        if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
                         {
-                            SfxItemSet* pSet = pMedium->GetItemSet();
-                            Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
-                            if( rHandler.is() )
+                            ::rtl::OUString aServiceName;
+                            aProps[nProperty].Value >>= aServiceName;
+                            if( aServiceName.getLength() )
                             {
-                                // we need some properties in the media descriptor, so we have to make sure that they are in
-                                Any aAny;
-                                aAny <<= pMedium->GetInputStream();
-                                SfxItemSet* pSet = GetMedium()->GetItemSet();
-                                if ( pSet->GetItemState( SID_INPUTSTREAM ) < SFX_ITEM_SET )
-                                    pSet->Put( SfxUsrAnyItem( SID_INPUTSTREAM, aAny ) );
-                                if ( pSet->GetItemState( SID_FILE_NAME ) < SFX_ITEM_SET )
-                                    pSet->Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
-                                if ( pSet->GetItemState( SID_FILTER_NAME ) < SFX_ITEM_SET )
-                                    pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
-
-                                Sequence< PropertyValue > rProperties;
-                                TransformItems( SID_OPENDOC, *GetMedium()->GetItemSet(), rProperties, NULL );
-                                RequestFilterOptions* pFORequest = new RequestFilterOptions( GetModel(), rProperties );
-
-                                Reference< XInteractionRequest > rRequest( pFORequest );
-                                rHandler->handle( rRequest );
-
-                                if ( !pFORequest->isAbort() )
+                                SfxItemSet* pSet = pMedium->GetItemSet();
+                                Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
+                                if( rHandler.is() )
                                 {
-                                       SfxAllItemSet aNewParams( GetPool() );
-                                       TransformParameters( SID_OPENDOC,
-                                                         pFORequest->getFilterOptions(),
-                                                         aNewParams,
-                                                         NULL );
+                                    // we need some properties in the media descriptor, so we have to make sure that they are in
+                                    Any aAny;
+                                    aAny <<= pMedium->GetInputStream();
+                                    SfxItemSet* pSet = GetMedium()->GetItemSet();
+                                    if ( pSet->GetItemState( SID_INPUTSTREAM ) < SFX_ITEM_SET )
+                                    pSet->Put( SfxUsrAnyItem( SID_INPUTSTREAM, aAny ) );
+                                    if ( pSet->GetItemState( SID_FILE_NAME ) < SFX_ITEM_SET )
+                                        pSet->Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
+                                    if ( pSet->GetItemState( SID_FILTER_NAME ) < SFX_ITEM_SET )
+                                        pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
 
-                                       SFX_ITEMSET_ARG( &aNewParams,
-                                                     pOptions,
-                                                     SfxStringItem,
-                                                     SID_FILE_FILTEROPTIONS,
-                                                     sal_False );
-                                       if ( pOptions )
+                                    Sequence< PropertyValue > rProperties;
+                                    TransformItems( SID_OPENDOC, *GetMedium()->GetItemSet(), rProperties, NULL );
+                                    RequestFilterOptions* pFORequest = new RequestFilterOptions( GetModel(), rProperties );
+
+                                    Reference< XInteractionRequest > rRequest( pFORequest );
+                                    rHandler->handle( rRequest );
+
+                                    if ( !pFORequest->isAbort() )
                                     {
-                                           GetMedium()->GetItemSet()->Put( *pOptions );
-                                        bOk = sal_True;
+                                       SfxAllItemSet aNewParams( GetPool() );
+                                           TransformParameters( SID_OPENDOC,
+                                                             pFORequest->getFilterOptions(),
+                                                             aNewParams,
+                                                             NULL );
+
+                                           SFX_ITEMSET_ARG( &aNewParams,
+                                                         pOptions,
+                                                         SfxStringItem,
+                                                         SID_FILE_FILTEROPTIONS,
+                                                         sal_False );
+                                           if ( pOptions )
+                                        {
+                                               GetMedium()->GetItemSet()->Put( *pOptions );
+                                        }
+
+                                           SFX_ITEMSET_ARG( &aNewParams,
+                                                         pData,
+                                                         SfxUsrAnyItem,
+                                                         SID_FILTER_DATA,
+                                                         sal_False );
+                                           if ( pData )
+                                               GetMedium()->GetItemSet()->Put( *pData );
                                     }
-
-                                       SFX_ITEMSET_ARG( &aNewParams,
-                                                     pData,
-                                                     SfxUsrAnyItem,
-                                                     SID_FILTER_DATA,
-                                                     sal_False );
-                                       if ( pData )
-                                           GetMedium()->GetItemSet()->Put( *pData );
+                                    else
+                                        bAbort = TRUE;
                                 }
-                                else
-                                    bAbort = TRUE;
                             }
+
+                            break;
                         }
+                }
 
-                        break;
-                    }
+                if( bAbort )
+                {
+                    // filter options were not entered
+                    SetError( ERRCODE_ABORT );
+                }
             }
-
-            if( bAbort )
+            catch( NoSuchElementException& )
             {
-                // filter options were not entered
+                // the filter name is unknown
+                SetError( ERRCODE_IO_INVALIDPARAMETER );
+            }
+            catch( Exception& )
+            {
                 SetError( ERRCODE_ABORT );
             }
         }
-        catch( NoSuchElementException& )
-        {
-            // the filter name is unknown
-            SetError( ERRCODE_IO_INVALIDPARAMETER );
-        }
-        catch( Exception& )
-        {
-            SetError( ERRCODE_ABORT );
-        }
     }
-
 
     if ( GetError() == ERRCODE_NONE && bHasStorage && !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
     {
         SvStorageRef xStor( pMed->GetStorage() );
-        DBG_ASSERT( pFilter, "No filter for storage found!" );
-        if( xStor.Is() && !xStor->GetError() && pMed->GetFilter() && pMed->GetFilter()->GetVersion() < SOFFICE_FILEFORMAT_60 )
+        if( pMed->GetLastStorageCreationState() == ERRCODE_NONE )
         {
-            // Undoobjekte aufraeumen, muss vor dem eigentlichen Laden erfolgen
-            SvEmbeddedObjectRef xThis = this;
-            SvPersistRef xPer;
-            if ( xThis.Is() )
-                xPer = new SvEmbeddedObject;
-            else
-                xPer = new SvPersist;
-
-            xPer->DoOwnerLoad(xStor);
-            xPer->CleanUp();
-            xPer->DoSave();
-            xPer->DoSaveCompleted( 0 );
-        }
-
-        BOOL bCorrupted = FALSE;
-        if ( xStor.Is() )
-        {
-            SvStorageInfoList aList;
-            xStor->FillInfoList( &aList );
-            if ( !aList.Count() && !xStor->IsOLEStorage() )
+            DBG_ASSERT( pFilter, "No filter for storage found!" );
+            if( xStor.Is() && !xStor->GetError() && pMed->GetFilter() && pMed->GetFilter()->GetVersion() < SOFFICE_FILEFORMAT_60 )
             {
-                SetError( ERRCODE_IO_WRONGFORMAT );
-                bCorrupted = TRUE;
-            }
-            else
-            {
-                BOOL bHasMacros = FALSE;
-                if ( xStor->IsOLEStorage() )
-                    bHasMacros = BasicManager::HasBasicWithModules( *xStor );
+                // Undoobjekte aufraeumen, muss vor dem eigentlichen Laden erfolgen
+                SvEmbeddedObjectRef xThis = this;
+                SvPersistRef xPer;
+                if ( xThis.Is() )
+                    xPer = new SvEmbeddedObject;
                 else
-                    bHasMacros = xStor->IsStorage( String::CreateFromAscii("Basic") );
+                    xPer = new SvPersist;
 
-                if ( bHasMacros )
-                    AdjustMacroMode( String() );
+                xPer->DoOwnerLoad(xStor);
+                xPer->CleanUp();
+                xPer->DoSave();
+                xPer->DoSaveCompleted( 0 );
             }
-        }
 
-        // Load
-        //if ( !GetError() )
-        // Because of Hotfix: as few changes as possible!
-        if ( !bCorrupted )
-        {
-            const String aOldURL( INetURLObject::GetBaseURL() );
-            if( aBaseURL.Len() ) INetURLObject::SetBaseURL( aBaseURL );
-            pImp->nLoadedFlags = 0;
-            bOk = xStor.Is() && LoadOwnFormat( *pMed );
-            INetURLObject::SetBaseURL( aOldURL );
-            if ( bOk )
+            if ( xStor.Is() )
             {
-                GetDocInfo().Load(xStor);
-                bHasName = sal_True;
+                SvStorageInfoList aList;
+                xStor->FillInfoList( &aList );
+                if ( !aList.Count() && !xStor->IsOLEStorage() )
+                    SetError( ERRCODE_IO_WRONGFORMAT );
+                else
+                {
+                    BOOL bHasMacros = FALSE;
+                    if ( xStor->IsOLEStorage() )
+                        bHasMacros = BasicManager::HasBasicWithModules( *xStor );
+                    else
+                        bHasMacros = xStor->IsStorage( String::CreateFromAscii("Basic") );
+
+                    if ( bHasMacros )
+                        AdjustMacroMode( String() );
+                }
             }
-            else
-                SetError( ERRCODE_ABORT );
+
+            // Load
+            if ( !GetError() )
+            {
+                const String aOldURL( INetURLObject::GetBaseURL() );
+                if( aBaseURL.Len() ) INetURLObject::SetBaseURL( aBaseURL );
+                pImp->nLoadedFlags = 0;
+                bOk = xStor.Is() && LoadOwnFormat( *pMed );
+                INetURLObject::SetBaseURL( aOldURL );
+                if ( bOk )
+                {
+                    GetDocInfo().Load(xStor);
+                    bHasName = sal_True;
+                }
+                else
+                    SetError( ERRCODE_ABORT );
+            }
         }
+        else
+            SetError( pMed->GetLastStorageCreationState() );
     }
     else if ( GetError() == ERRCODE_NONE && InitNew(0) )
     {
@@ -760,7 +758,11 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         //Medium offen halten um andere Zugriffe zu verhindern
         {
             if(pMedium->GetFilter() && pMedium->GetFilter()->UsesStorage())
+            {
                 pMedium->GetStorage();
+                if( pMedium->GetLastStorageCreationState() != ERRCODE_NONE )
+                    pMedium->SetError( pMedium->GetLastStorageCreationState() );
+            }
             else
                 pMedium->GetInStream();
             if(pMedium->GetError())

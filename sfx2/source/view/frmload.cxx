@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: as $ $Date: 2002-09-09 11:55:49 $
+ *  last change: $Author: mav $ $Date: 2002-09-25 10:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAPPEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveAppException.hpp>
+#endif
 
 #ifndef __FRAMEWORK_DISPATCH_INTERACTION_HXX_
 #include <framework/interaction.hxx>
@@ -104,6 +107,10 @@
 
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
+#endif
+
+#ifndef _UCBHELPER_SIMPLEINTERACTIONREQUEST_HXX
+#include <ucbhelper/simpleinteractionrequest.hxx>
 #endif
 
 #include <rtl/ustring.h>
@@ -123,6 +130,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::ucb;
 using namespace ::rtl;
 
 #include "app.hxx"
@@ -154,7 +162,7 @@ SfxFrameLoader_Impl::~SfxFrameLoader_Impl()
     delete pMatcher;
 }
 
-sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs, const Reference< XFrame >& rFrame ) throw( RuntimeException )
+sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs, const REFERENCE< XFrame >& rFrame ) throw( RuntimeException )
 {
     // this methods assumes that the filter is detected before, usually by calling the detect() method below
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -300,7 +308,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
                     SfxObjectShell* pDoc = pFrame->GetCurrentDocument();
                     if ( !pDoc )
                     {
-                        Reference < XFrame > aXFrame;
+                        REFERENCE< XFrame > aXFrame;
                         pFrame->SetFrameInterface_Impl( aXFrame );
                         pFrame->DoClose();
                     }
@@ -334,7 +342,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
                 {
                     if ( !pFrame->GetCurrentDocument() )
                     {
-                        Reference < XFrame > aXFrame;
+                        REFERENCE< XFrame > aXFrame;
                         pFrame->SetFrameInterface_Impl( aXFrame );
                         pFrame->DoClose();
                     }
@@ -342,7 +350,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
                     bLoadState = sal_False;
                 }
 
-                xFrame = Reference < XFrame >();
+                xFrame = REFERENCE< XFrame >();
                 return bLoadState;
             }
         }
@@ -402,7 +410,7 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
         if ( pFrame && !pFrame->GetCurrentDocument() )
         {
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
-            Reference < XFrame > aXFrame;
+            REFERENCE< XFrame > aXFrame;
             pFrame->SetFrameInterface_Impl( aXFrame );
             pFrame->DoClose();
         }
@@ -416,8 +424,8 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
         bLoadState = sal_True;
     }
 
-    xFrame = Reference < XFrame >();
-    xListener = Reference < XLoadEventListener >();
+    xFrame = REFERENCE< XFrame >();
+    xListener = REFERENCE< XLoadEventListener >();
     return NULL;
 }
 
@@ -435,8 +443,8 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
 
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxFrameLoader::detect" );
 
-    Reference < XInputStream > xStream;
-    Reference < XInteractionHandler > xInteraction;
+    REFERENCE< XInputStream > xStream;
+    REFERENCE< XInteractionHandler > xInteraction;
     String aURL;
     ::rtl::OUString sTemp;
     rtl::OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
@@ -587,7 +595,30 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
         {
             // maybe that IsStorage() already created an error!
             if ( bIsStorage )
+            {
                 aMedium.GetStorage();
+                if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
+                {
+                    // error during storage creation means _here_ that the medium
+                    // is broken, but we can not handle it in medium since unpossibility
+                    // to create a storage does not _always_ means that the medium is broken
+
+                    aMedium.SetError( aMedium.GetLastStorageCreationState() );
+
+                    if ( xInteraction.is() )
+                    {
+                        InteractiveAppException xException( OUString(),
+                                                            REFERENCE< XInterface >(),
+                                                            InteractionClassification_ERROR,
+                                                            aMedium.GetError() );
+
+                        REFERENCE< XInteractionRequest > xRequest(
+                            new ucbhelper::SimpleInteractionRequest( makeAny( xException ),
+                                                                      ucbhelper::CONTINUATION_APPROVE ) );
+                        xInteraction->handle( xRequest );
+                    }
+                }
+            }
             else
                 aMedium.GetInStream();
 
@@ -686,7 +717,7 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
                         ::rtl::OUString aDetectedFilter( pFilter->GetName()     );
 
                         ::framework::RequestAmbigousFilter* pRequest = new ::framework::RequestAmbigousFilter( aURL, aSelectedFilter, aDetectedFilter );
-                        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > xRequest( static_cast< ::com::sun::star::task::XInteractionRequest* >(pRequest), ::com::sun::star::uno::UNO_QUERY );
+                        REFERENCE< ::com::sun::star::task::XInteractionRequest > xRequest( static_cast< ::com::sun::star::task::XInteractionRequest* >(pRequest), ::com::sun::star::uno::UNO_QUERY );
 
                         xInteraction->handle( xRequest );
                         if( pRequest->isAbort() )

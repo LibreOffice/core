@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-18 12:06:27 $
+ *  last change: $Author: mav $ $Date: 2002-09-25 10:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,6 +443,8 @@ public:
     Reference < XInputStream > xInputStream;
     ::utl::UcbLockBytesRef     xLockBytes;
 
+    sal_uInt32                  nLastStorageError;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > xInteraction;
 
     SfxPoolCancelManager* GetCancelManager();
@@ -564,6 +566,12 @@ void SfxMedium::ResetError()
         pInStream->ResetError();
     if( pOutStream )
         pOutStream->ResetError();
+}
+
+//------------------------------------------------------------------
+sal_uInt32 SfxMedium::GetLastStorageCreationState()
+{
+    return pImp->nLastStorageError;
 }
 
 //------------------------------------------------------------------
@@ -1008,7 +1016,7 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
             return NULL;
     }
 
-    if( GetError() != SVSTREAM_OK )
+    if( ( pImp->nLastStorageError = GetError() ) != SVSTREAM_OK )
     {
         aStorage.Clear();
         if ( pInStream )
@@ -1105,7 +1113,7 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
 
     if ( aStorage.Is() )
     {
-        if( aStorage->GetError() != SVSTREAM_OK )
+        if( ( pImp->nLastStorageError = aStorage->GetError() ) != SVSTREAM_OK )
             bResetStorage = TRUE;
         else if ( GetFilter() )
             aStorage->SetVersion( GetFilter()->GetVersion() );
