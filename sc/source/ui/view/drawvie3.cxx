@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:30:15 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,8 +199,11 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
         if ( pObj->ISA( SdrGrafObj ) )
             aGraphic = ( (SdrGrafObj*) pObj )->GetGraphic();
         else
-            aGraphic = ScDrawLayer::GetGraphicFromOle2Obj(
-                        (const SdrOle2Obj*) pObj );
+        {
+            Graphic* pGraphic = ((const SdrOle2Obj*) pObj )->GetGraphic();
+            if ( pGraphic )
+                aGraphic = *pGraphic;
+        }
 
         ScIMapDlgSet( aGraphic, pImageMap, &aTargetList, pObj );    // aus imapwrap
 
