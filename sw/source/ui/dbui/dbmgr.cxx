@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:59:51 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,11 +107,17 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
 #ifndef _DBCONFIG_HXX
 #include <dbconfig.hxx>
 #endif
 #ifndef _SWDBTOOLSCLIENT_HXX
 #include <swdbtoolsclient.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
 #endif
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
@@ -230,6 +236,9 @@
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
 #endif
+#ifndef _MMCONFIGITEM_HXX
+#include <mmconfigitem.hxx>
+#endif
 
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
@@ -313,12 +322,16 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
-#include "swabstdlg.hxx" //CHINA001
-#include "dbui.hrc" //CHINA001
+#ifndef _RTL_TEXTENC_H
+#include <rtl/textenc.h>
+#endif
+#include <osl/file.hxx>
+#include <swabstdlg.hxx> //CHINA001
+#include <dbui.hrc> //CHINA001
 #include <envelp.hrc> //CHINA001
 
-// using namespace ::rtl;
-using namespace svx;
+using namespace ::osl;
+using namespace ::svx;
 using namespace ::com::sun::star;
 using namespace com::sun::star::text;
 using namespace com::sun::star::uno;
@@ -376,7 +389,7 @@ struct SwNewDBMgr_Impl
 {
     SwDSParam*          pMergeData;
     AbstractMailMergeDlg*     pMergeDialog;
-    uno::Reference<com::sun::star::lang::XEventListener > xDisposeListener;
+    uno::Reference<lang::XEventListener> xDisposeListener;
 
     SwNewDBMgr_Impl(SwNewDBMgr& rDBMgr)
        :pMergeData(0)
@@ -387,28 +400,28 @@ struct SwNewDBMgr_Impl
 /*-- 24.10.2003 15:54:18---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void lcl_InitNumberFormatter(SwDSParam& rParam, Reference<XDataSource> xSource)
+void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSource> xSource)
 {
-    Reference<XMultiServiceFactory> xMgr = ::comphelper::getProcessServiceFactory();
+    uno::Reference<XMultiServiceFactory> xMgr = ::comphelper::getProcessServiceFactory();
     if( xMgr.is() )
     {
-        Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.util.NumberFormatter" ));
-        rParam.xFormatter = Reference<util::XNumberFormatter>(xInstance, UNO_QUERY) ;
+        uno::Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.util.NumberFormatter" ));
+        rParam.xFormatter = uno::Reference<util::XNumberFormatter>(xInstance, UNO_QUERY) ;
     }
     if(!xSource.is())
         xSource = SwNewDBMgr::getDataSourceAsParent(rParam.xConnection, rParam.sDataSource);
 
-    Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
+    uno::Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
     if(xSourceProps.is())
     {
         Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
         if(aFormats.hasValue())
         {
-            Reference<XNumberFormatsSupplier> xSuppl;
+            uno::Reference<XNumberFormatsSupplier> xSuppl;
             aFormats >>= xSuppl;
             if(xSuppl.is())
             {
-                Reference< XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
+                uno::Reference< XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
                 Any aNull = xSettings->getPropertyValue(C2U("NullDate"));
                 aNull >>= rParam.aNullDate;
                 if(rParam.xFormatter.is())
@@ -445,18 +458,18 @@ BOOL lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
 BOOL lcl_GetColumnCnt(SwDSParam* pParam,
     const String& rColumnName, long nLanguage, String& rResult, double* pNumber)
 {
-    Reference< XColumnsSupplier > xColsSupp( pParam->xResultSet, UNO_QUERY );
-    Reference <XNameAccess> xCols = xColsSupp->getColumns();
+    uno::Reference< XColumnsSupplier > xColsSupp( pParam->xResultSet, UNO_QUERY );
+    uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
     if(!xCols->hasByName(rColumnName))
         return FALSE;
     Any aCol = xCols->getByName(rColumnName);
-    Reference< XPropertySet > xColumnProps;
+    uno::Reference< XPropertySet > xColumnProps;
     aCol >>= xColumnProps;
 
     SwDBFormatData aFormatData;
     if(!pParam->xFormatter.is())
     {
-        Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(
+        uno::Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(
                                     pParam->xConnection,pParam->sDataSource);
         lcl_InitNumberFormatter(*pParam, xSource );
     }
@@ -483,9 +496,9 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
 
     SwDBData aData;
     aData.nCommandType = CommandType::TABLE;
-    Reference<XResultSet>  xResSet;
+    uno::Reference<XResultSet>  xResSet;
     Sequence<Any> aSelection;
-    Reference< XConnection> xConnection;
+    uno::Reference< XConnection> xConnection;
 
     aData.sDataSource = _rDescriptor.getDataSource();
     _rDescriptor[daCommand]     >>= aData.sCommand;
@@ -523,7 +536,7 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
             aDataSourceParams.Insert(pInsert, aDataSourceParams.Count());
             try
             {
-                Reference<XComponent> xComponent(pInsert->xConnection, UNO_QUERY);
+                uno::Reference<XComponent> xComponent(pInsert->xConnection, UNO_QUERY);
                 if(xComponent.is())
                     xComponent->addEventListener(pImpl->xDisposeListener);
             }
@@ -560,7 +573,7 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
         DBG_ERROR("exception in MergeNew()")
     }
 
-    Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,aData.sDataSource);
+    uno::Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,aData.sDataSource);
 
     lcl_InitNumberFormatter(*pImpl->pMergeData, xSource);
 
@@ -732,8 +745,8 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
 {
     if(pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB)
     {
-        Reference< XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, UNO_QUERY );
-          Reference <XNameAccess> xCols = xColsSupp->getColumns();
+        uno::Reference< XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, UNO_QUERY );
+        uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
         String sFormatStr( lcl_GetDBInsertMode( *pImpl->pMergeData ));
         USHORT nFmtLen = sFormatStr.Len();
         if( nFmtLen )
@@ -748,7 +761,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                 if(!xCols->hasByName(sColumn))
                     return;
                 Any aCol = xCols->getByName(sColumn);
-                Reference< XPropertySet > xColumnProp;
+                uno::Reference< XPropertySet > xColumnProp;
                 aCol >>= xColumnProp;
                 if(xColumnProp.is())
                 {
@@ -785,7 +798,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
             for(long i = 0; i < nLength; i++)
             {
                 Any aCol = xCols->getByName(pColNames[i]);
-                Reference< XPropertySet > xColumnProp;
+                uno::Reference< XPropertySet > xColumnProp;
                 aCol >>= xColumnProp;
                 SwDBFormatData aDBFormat;
                 sStr += GetDBField( xColumnProp, aDBFormat);
@@ -806,7 +819,7 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
     String sOldTableName(pListBox->GetSelectEntry());
     pListBox->Clear();
     SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
-    Reference< XConnection> xConnection;
+    uno::Reference< XConnection> xConnection;
     if(pParam && pParam->xConnection.is())
         xConnection = pParam->xConnection;
     else
@@ -816,10 +829,10 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
     }
     if(xConnection.is())
     {
-        Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
+        uno::Reference<XTablesSupplier> xTSupplier = uno::Reference<XTablesSupplier>(xConnection, UNO_QUERY);
         if(xTSupplier.is())
         {
-            Reference<XNameAccess> xTbls = xTSupplier->getTables();
+            uno::Reference<XNameAccess> xTbls = xTSupplier->getTables();
             Sequence<rtl::OUString> aTbls = xTbls->getElementNames();
             const rtl::OUString* pTbls = aTbls.getConstArray();
             for(long i = 0; i < aTbls.getLength(); i++)
@@ -828,10 +841,10 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
                 pListBox->SetEntryData(nEntry, (void*)0);
             }
         }
-        Reference<XQueriesSupplier> xQSupplier = Reference<XQueriesSupplier>(xConnection, UNO_QUERY);
+        uno::Reference<XQueriesSupplier> xQSupplier = uno::Reference<XQueriesSupplier>(xConnection, UNO_QUERY);
         if(xQSupplier.is())
         {
-            Reference<XNameAccess> xQueries = xQSupplier->getQueries();
+            uno::Reference<XNameAccess> xQueries = xQSupplier->getQueries();
             Sequence<rtl::OUString> aQueries = xQueries->getElementNames();
             const rtl::OUString* pQueries = aQueries.getConstArray();
             for(long i = 0; i < aQueries.getLength(); i++)
@@ -856,7 +869,7 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
     if (!bAppend)
         pListBox->Clear();
     SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
-    Reference< XConnection> xConnection;
+    uno::Reference< XConnection> xConnection;
     if(pParam && pParam->xConnection.is())
         xConnection = pParam->xConnection;
     else
@@ -864,10 +877,10 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
         rtl::OUString sDBName(rDBName);
         xConnection = RegisterConnection( sDBName );
     }
-    Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
+    uno::Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
     if(xColsSupp.is())
     {
-        Reference <XNameAccess> xCols = xColsSupp->getColumns();
+        uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
         const Sequence<rtl::OUString> aColNames = xCols->getElementNames();
         const rtl::OUString* pColNames = aColNames.getConstArray();
         for(int nCol = 0; nCol < aColNames.getLength(); nCol++)
@@ -881,15 +894,15 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
 
  ---------------------------------------------------------------------------*/
 BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
-        Reference< XConnection> xConnection,
+        uno::Reference< XConnection> xConnection,
         const String& rTableName, BOOL bAppend)
 {
     if (!bAppend)
         pListBox->Clear();
-    Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
+    uno::Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
     if(xColsSupp.is())
     {
-        Reference <XNameAccess> xCols = xColsSupp->getColumns();
+        uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
         const Sequence<rtl::OUString> aColNames = xCols->getElementNames();
         const rtl::OUString* pColNames = aColNames.getConstArray();
         for(int nCol = 0; nCol < aColNames.getLength(); nCol++)
@@ -926,7 +939,7 @@ SwNewDBMgr::~SwNewDBMgr()
         {
             try
             {
-                Reference<XComponent> xComp(pParam->xConnection, UNO_QUERY);
+                uno::Reference<XComponent> xComp(pParam->xConnection, UNO_QUERY);
                 if(xComp.is())
                     xComp->dispose();
             }
@@ -957,7 +970,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
             rOpt.nMergeCnt = pImpl->pMergeData->aSelection.getLength();
         else if(pImpl->pMergeData->xResultSet.is())
         {
-            Reference<XPropertySet> xPrSet(pImpl->pMergeData->xResultSet, UNO_QUERY);
+            uno::Reference<XPropertySet> xPrSet(pImpl->pMergeData->xResultSet, UNO_QUERY);
             if(xPrSet.is())
             {
                 try
@@ -1040,7 +1053,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
             const SwXMailMerge *pEvtSrc = GetMailMergeEvtSrc();
             if (pEvtSrc)
             {
-                Reference< XInterface > xRef( (XMailMergeBroadcaster *) pEvtSrc );
+                uno::Reference< XInterface > xRef( (XMailMergeBroadcaster *) pEvtSrc );
                 text::MailMergeEvent aEvt( xRef, rView.GetDocShell()->GetModel() );
                 pEvtSrc->LaunchMailMergeEvent( aEvt );
             }
@@ -1105,6 +1118,149 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
 
     return bRet;
 }
+/*-- 21.06.2004 09:08:16---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
+                                SwPrtOptions& rOpt, SfxProgress& rProgress )
+{
+    SwWrtShell* pSh = &rView.GetWrtShell();
+    //check if the doc is synchronized and contains at least one linked section
+    //merge source is already open
+    rOpt.nMergeCnt = 0;
+    rOpt.SetPrintSingleJobs( sal_True );
+
+    SfxPrinter *pPrt = pSh->GetPrt();
+    Link aSfxSaveLnk = pPrt->GetEndPrintHdl();
+    if( rOpt.IsPrintSingleJobs()  )
+        pPrt->SetEndPrintHdl( Link() );
+
+    BOOL bNewJob = FALSE,
+         bUserBreak = FALSE,
+         bRet = FALSE;
+    long nStartRow, nEndRow;
+    //calculate number of data sets to be printed
+
+    Sequence<PropertyValue> aViewProperties(15);
+    PropertyValue* pViewProperties =  aViewProperties.getArray();
+    pViewProperties[0].Name = C2U("MailMergeCount");
+    pViewProperties[0].Value <<= (sal_Int32)rOpt.nMergeCnt;
+    pViewProperties[1].Name = C2U("PrintGraphics");
+    pViewProperties[1].Value <<= (sal_Bool)rOpt.IsPrintGraphic();
+    pViewProperties[2].Name = C2U("PrintTables");
+    pViewProperties[2].Value <<= (sal_Bool)rOpt.IsPrintTable();
+    pViewProperties[3].Name = C2U("PrintDrawings");
+    pViewProperties[3].Value <<= (sal_Bool)rOpt.IsPrintDraw();
+    pViewProperties[4].Name = C2U("PrintLeftPages");
+    pViewProperties[4].Value <<= (sal_Bool)rOpt.IsPrintLeftPage();
+    pViewProperties[5].Name = C2U("PrintRightPages");
+    pViewProperties[5].Value <<= (sal_Bool)rOpt.IsPrintRightPage();
+    pViewProperties[6].Name = C2U("PrintControls");
+    pViewProperties[6].Value <<= (sal_Bool)rOpt.IsPrintControl();
+    pViewProperties[7].Name = C2U("PrintReversed");
+    pViewProperties[7].Value <<= (sal_Bool)rOpt.IsPrintReverse();
+    pViewProperties[8].Name = C2U("PrintPaperFromSetup");
+    pViewProperties[8].Value <<= (sal_Bool)rOpt.IsPaperFromSetup();
+    pViewProperties[9].Name = C2U("PrintFaxName");
+    pViewProperties[9].Value <<= rOpt.GetFaxName();
+    pViewProperties[10].Name = C2U("PrintAnnotationMode");
+    pViewProperties[10].Value <<= (com::sun::star::text::NotePrintMode) rOpt.GetPrintPostIts();
+    pViewProperties[11].Name = C2U("PrintProspect");
+    pViewProperties[11].Value <<= (sal_Bool)rOpt.IsPrintProspect();
+    pViewProperties[12].Name = C2U("PrintPageBackground");
+    pViewProperties[12].Value <<= (sal_Bool)rOpt.IsPrintPageBackground();
+    pViewProperties[13].Name = C2U("PrintBlackFonts");
+    pViewProperties[13].Value <<= (sal_Bool)rOpt.IsPrintBlackFont();
+    pViewProperties[14].Name = C2U("IsSinglePrintJob");
+    pViewProperties[14].Value <<= (sal_Bool)rOpt.IsPrintSingleJobs();
+
+    rView.SetAdditionalPrintOptions(aViewProperties);
+
+    SwMailMergeConfigItem* pConfigItem = rView.GetMailMergeConfigItem();
+    DBG_ASSERT(pConfigItem, "mail merge config item is missing")
+    if(!pConfigItem)
+        return sal_False;
+
+    USHORT nDocStart = pConfigItem->GetPrintRangeStart();
+    USHORT nDocEnd = pConfigItem->GetPrintRangeEnd();
+    DBG_ASSERT(nDocStart < nDocEnd && nDocEnd <= pConfigItem->GetMergedDocumentCount(),
+            "merge print settings are not correct")
+    for( sal_uInt32 nPrintDocument = nDocStart; nPrintDocument < nDocEnd; ++nPrintDocument)
+    {
+        SwDocMergeInfo& rDocInfo = pConfigItem->GetDocumentMergeInfo(nPrintDocument);
+        rOpt.aMulti.SelectAll(FALSE);
+        rOpt.aMulti.Select(Range( rDocInfo.nStartPageInTarget, rDocInfo.nEndPageInTarget ), TRUE );
+
+        ++rOpt.nMergeAct;
+
+        // launch MailMergeEvent if required
+        const SwXMailMerge *pEvtSrc = GetMailMergeEvtSrc();
+        if (pEvtSrc)
+        {
+            uno::Reference< XInterface > xRef( (XMailMergeBroadcaster *) pEvtSrc );
+            text::MailMergeEvent aEvt( xRef, rView.GetDocShell()->GetModel() );
+            pEvtSrc->LaunchMailMergeEvent( aEvt );
+        }
+
+        rView.SfxViewShell::Print( rProgress ); // ggf Basic-Macro ausfuehren
+        if( rOpt.IsPrintSingleJobs() && bRet )
+        {
+            //rOpt.bJobStartet = FALSE;
+            bRet = FALSE;
+        }
+
+        bMergeLock = TRUE;
+        if(rOpt.IsPrintProspect())
+        {
+            if( pPrt->IsJobActive() || pPrt->StartJob( rOpt.GetJobName() ))
+            {
+                pSh->PrintProspect( rOpt, rProgress );
+                bRet = TRUE;
+            }
+        }
+        else if( pSh->Prt( rOpt, rProgress ) )
+            bRet = TRUE;
+        bMergeLock = FALSE;
+
+        if( !pPrt->IsJobActive() )
+        {
+            bUserBreak = TRUE;
+            bRet = FALSE;
+            break;
+        }
+        if( !rOpt.IsPrintSingleJobs() )
+        {
+            String& rJNm = (String&)rOpt.GetJobName();
+            rJNm.Erase();
+        }
+    }
+
+    if( rOpt.IsPrintSingleJobs() )
+    {
+        pSh->GetPrt()->SetEndPrintHdl( aSfxSaveLnk );
+        if ( !bUserBreak && !pSh->GetPrt()->IsJobActive() )     //Schon zu spaet?
+            aSfxSaveLnk.Call( pSh->GetPrt() );
+    }
+
+    rOpt.nMergeCnt = 0;
+    rOpt.nMergeAct = 0;
+
+    nMergeType = DBMGR_INSERT;
+
+    SwDocShell* pDocSh = rView.GetDocShell();
+    SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(pDocSh);
+
+    while (pTmpFrm)     // Alle Views Invalidieren
+    {
+        SwView *pVw = PTR_CAST(SwView, pTmpFrm->GetViewShell());
+        if (pVw)
+            pVw->GetEditWin().Invalidate();
+        pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, pDocSh);
+    }
+
+    return bRet;
+}
+
 
 /*--------------------------------------------------------------------
     Beschreibung:   Serienbrief als Mail versenden
@@ -1118,12 +1274,12 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
     BOOL bLoop = TRUE;
 
     {
-        Reference< XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, UNO_QUERY );
-        Reference <XNameAccess> xCols = xColsSupp->getColumns();
+        uno::Reference< XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, UNO_QUERY );
+        uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
         if(!xCols->hasByName(sEMailAddrFld))
             return FALSE;
         Any aCol = xCols->getByName(sEMailAddrFld);
-        Reference< XPropertySet > xColumnProp;
+        uno::Reference< XPropertySet > xColumnProp;
         aCol >>= xColumnProp;
 
         SfxDispatcher* pSfxDispatcher = pSh->GetView().GetViewFrame()->GetDispatcher();
@@ -1263,15 +1419,15 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
     BOOL bSynchronizedDoc = pSh->IsLabelDoc() && pSh->GetSectionFmtCount() > 1;
     BOOL bLoop = TRUE;
 
-    Reference< XPropertySet > xColumnProp;
+    uno::Reference< XPropertySet > xColumnProp;
     {
         USHORT nColPos = 0;
         BOOL bColumnName = sEMailAddrFld.Len() > 0;
 
         if (bColumnName)
         {
-            Reference< XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, UNO_QUERY );
-            Reference <XNameAccess> xCols = xColsSupp->getColumns();
+            uno::Reference< XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, UNO_QUERY );
+            uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
             if(!xCols->hasByName(sEMailAddrFld))
                 return FALSE;
             Any aCol = xCols->getByName(sEMailAddrFld);
@@ -1381,7 +1537,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
                             const SwXMailMerge *pEvtSrc = GetMailMergeEvtSrc();
                             if (pEvtSrc)
                             {
-                                Reference< XInterface > xRef( (XMailMergeBroadcaster *) pEvtSrc );
+                                uno::Reference< XInterface > xRef( (XMailMergeBroadcaster *) pEvtSrc );
                                 text::MailMergeEvent aEvt( xRef, xDocSh->GetModel() );
                                 pEvtSrc->LaunchMailMergeEvent( aEvt );
                             }
@@ -1452,14 +1608,14 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
     ULONG nRet = 0;
     if(pNFmtr)
     {
-        Reference< XDataSource> xSource;
-        Reference< XConnection> xConnection;
+        uno::Reference< XDataSource> xSource;
+        uno::Reference< XConnection> xConnection;
         sal_Bool bUseMergeData = sal_False;
         if(pImpl->pMergeData &&
             pImpl->pMergeData->sDataSource.equals(rDBName) && pImpl->pMergeData->sCommand.equals(rTableName))
         {
             xConnection = pImpl->pMergeData->xConnection;
-            Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,rDBName);
+            uno::Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,rDBName);
             bUseMergeData = sal_True;
         }
         if(!xConnection.is() || !xSource.is())
@@ -1475,10 +1631,10 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
             if(bUseMergeData)
                 pImpl->pMergeData->xConnection = xConnection;
         }
-        Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
+        uno::Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
         if(xColsSupp.is())
         {
-            Reference <XNameAccess> xCols;
+            uno::Reference<XNameAccess> xCols;
             try
             {
                 xCols = xColsSupp->getColumns();
@@ -1490,7 +1646,7 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
             if(!xCols.is() || !xCols->hasByName(rColNm))
                 return nRet;
             Any aCol = xCols->getByName(rColNm);
-            Reference< XPropertySet > xColumn;
+            uno::Reference< XPropertySet > xColumn;
             aCol >>= xColumn;
             nRet = GetColumnFmt(xSource, xConnection, xColumn, pNFmtr, nLanguage);
         }
@@ -1502,9 +1658,9 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
 /* -----------------------------07.06.01 15:43--------------------------------
 
  ---------------------------------------------------------------------------*/
-ULONG SwNewDBMgr::GetColumnFmt( Reference< XDataSource> xSource,
-                        Reference< XConnection> xConnection,
-                        Reference< XPropertySet> xColumn,
+ULONG SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
+                        uno::Reference< XConnection> xConnection,
+                        uno::Reference< XPropertySet> xColumn,
                         SvNumberFormatter* pNFmtr,
                         long nLanguage )
 {
@@ -1513,15 +1669,15 @@ ULONG SwNewDBMgr::GetColumnFmt( Reference< XDataSource> xSource,
 
     if(!xSource.is())
     {
-        Reference<XChild> xChild(xConnection, UNO_QUERY);
-        xSource = Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
+        uno::Reference<XChild> xChild(xConnection, UNO_QUERY);
+        xSource = uno::Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
     }
     if(xSource.is() && xConnection.is() && xColumn.is() && pNFmtr)
     {
         SvNumberFormatsSupplierObj* pNumFmt = new SvNumberFormatsSupplierObj( pNFmtr );
-        Reference< util::XNumberFormatsSupplier >  xDocNumFmtsSupplier = pNumFmt;
-        Reference< XNumberFormats > xDocNumberFormats = xDocNumFmtsSupplier->getNumberFormats();
-         Reference< XNumberFormatTypes > xDocNumberFormatTypes(xDocNumberFormats, UNO_QUERY);
+        uno::Reference< util::XNumberFormatsSupplier >  xDocNumFmtsSupplier = pNumFmt;
+        uno::Reference< XNumberFormats > xDocNumberFormats = xDocNumFmtsSupplier->getNumberFormats();
+        uno::Reference< XNumberFormatTypes > xDocNumberFormatTypes(xDocNumberFormats, UNO_QUERY);
 
         String sLanguage, sCountry;
         ::ConvertLanguageToIsoNames( (USHORT)nLanguage, sLanguage, sCountry );
@@ -1530,14 +1686,14 @@ ULONG SwNewDBMgr::GetColumnFmt( Reference< XDataSource> xSource,
         aLocale.Country = sCountry;
 
         //get the number formatter of the data source
-        Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
-        Reference< XNumberFormats > xNumberFormats;
+        uno::Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
+        uno::Reference< XNumberFormats > xNumberFormats;
         if(xSourceProps.is())
         {
             Any aFormats = xSourceProps->getPropertyValue(C2U("NumberFormatsSupplier"));
             if(aFormats.hasValue())
             {
-                Reference<XNumberFormatsSupplier> xSuppl;
+                uno::Reference<XNumberFormatsSupplier> xSuppl;
                 aFormats >>= xSuppl;
                 if(xSuppl.is())
                 {
@@ -1554,7 +1710,7 @@ ULONG SwNewDBMgr::GetColumnFmt( Reference< XDataSource> xSource,
             {
                 try
                 {
-                    Reference<XPropertySet> xNumProps = xNumberFormats->getByKey( nFmt );
+                    uno::Reference<XPropertySet> xNumProps = xNumberFormats->getByKey( nFmt );
                     Any aFormat = xNumProps->getPropertyValue(C2U("FormatString"));
                     Any aLocale = xNumProps->getPropertyValue(C2U("Locale"));
                     rtl::OUString sFormat;
@@ -1587,7 +1743,7 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
 {
     sal_Int32 nRet = DataType::SQLNULL;
     SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
-    Reference< XConnection> xConnection;
+    uno::Reference< XConnection> xConnection;
     if(pParam && pParam->xConnection.is())
         xConnection = pParam->xConnection;
     else
@@ -1595,14 +1751,14 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
         rtl::OUString sDBName(rDBName);
         xConnection = RegisterConnection( sDBName );
     }
-    Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
+    uno::Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
     if(xColsSupp.is())
     {
-          Reference <XNameAccess> xCols = xColsSupp->getColumns();
+        uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
         if(xCols->hasByName(rColNm))
         {
             Any aCol = xCols->getByName(rColNm);
-            Reference <XPropertySet> xCol;
+            uno::Reference<XPropertySet> xCol;
             aCol >>= xCol;
             Any aType = xCol->getPropertyValue(C2S("Type"));
             aType >>= nRet;
@@ -1614,8 +1770,8 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
 /* -----------------------------03.07.00 17:12--------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rDataSource,
-                                                    Reference<XDataSource>& rxSource)
+uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rDataSource,
+                                                    uno::Reference<XDataSource>& rxSource)
 {
     Reference< sdbc::XConnection> xConnection;
     Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
@@ -1637,34 +1793,34 @@ Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rDataSourc
 /* -----------------------------03.07.00 17:12--------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(Reference<sdbc::XConnection> xConnection,
+uno::Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(uno::Reference<sdbc::XConnection> xConnection,
                                     const String& rTableOrQuery,
                                     BYTE    eTableOrQuery)
 {
-    Reference< sdbcx::XColumnsSupplier> xRet;
+    uno::Reference< sdbcx::XColumnsSupplier> xRet;
     if(SW_DB_SELECT_QUERY != eTableOrQuery)
     {
-        Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
+        uno::Reference<XTablesSupplier> xTSupplier = uno::Reference<XTablesSupplier>(xConnection, UNO_QUERY);
         if(xTSupplier.is())
         {
-            Reference<XNameAccess> xTbls = xTSupplier->getTables();
+            uno::Reference<XNameAccess> xTbls = xTSupplier->getTables();
             if(xTbls->hasByName(rTableOrQuery))
                 try
                 {
                     Any aTable = xTbls->getByName(rTableOrQuery);
-                    Reference<XPropertySet> xPropSet;
+                    uno::Reference<XPropertySet> xPropSet;
                     aTable >>= xPropSet;
-                    xRet = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
+                    xRet = uno::Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
                 }
                 catch(Exception&){}
         }
     }
     if(!xRet.is() && SW_DB_SELECT_QUERY != SW_DB_SELECT_TABLE)
     {
-        Reference<XQueriesSupplier> xQSupplier = Reference<XQueriesSupplier>(xConnection, UNO_QUERY);
+        uno::Reference<XQueriesSupplier> xQSupplier = uno::Reference<XQueriesSupplier>(xConnection, UNO_QUERY);
         if(xQSupplier.is())
         {
-            Reference<XNameAccess> xQueries = xQSupplier->getQueries();
+            uno::Reference<XNameAccess> xQueries = xQSupplier->getQueries();
             if ( xQueries->hasByName(rTableOrQuery) )
                 try
                 {
@@ -1680,11 +1836,11 @@ Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(Reference<sdbc
 /* -----------------------------05.07.00 13:44--------------------------------
 
  ---------------------------------------------------------------------------*/
-String SwNewDBMgr::GetDBField(Reference<XPropertySet> xColumnProps,
+String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
                         const SwDBFormatData& rDBFormatData,
                         double* pNumber)
 {
-    Reference< XColumn > xColumn(xColumnProps, UNO_QUERY);
+    uno::Reference< XColumn > xColumn(xColumnProps, UNO_QUERY);
     String sRet;
     DBG_ASSERT(xColumn.is(), "SwNewDBMgr::::ImportDBField: illegal arguments")
     if(!xColumn.is())
@@ -1930,7 +2086,14 @@ BOOL SwNewDBMgr::ToNextRecord(SwDSParam* pParam)
         }
         else
         {
+            sal_Int32 nBefore = pParam->xResultSet->getRow();
             pParam->bEndOfDB = !pParam->xResultSet->next();
+            if( !pParam->bEndOfDB && nBefore == pParam->xResultSet->getRow())
+            {
+                //next returned true but it didn't move
+                pParam->bEndOfDB = sal_True;
+            }
+
             pParam->CheckEndOfDB();
             bRet = !pParam->bEndOfDB;
             ++pParam->nSelectionIndex;
@@ -2000,11 +2163,11 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
     aData.nCommandType = nCommandType;
 
     SwDSParam* pFound = FindDSData(aData, TRUE);
-    Reference< XDataSource> xSource;
+    uno::Reference< XDataSource> xSource;
     if(pFound->xResultSet.is())
         return TRUE;
     SwDSParam* pParam = FindDSConnection(rDataSource, FALSE);
-    Reference< XConnection> xConnection;
+    uno::Reference< XConnection> xConnection;
     if(pParam && pParam->xConnection.is())
         pFound->xConnection = pParam->xConnection;
     else
@@ -2016,7 +2179,7 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
     {
         try
         {
-            Reference< sdbc::XDatabaseMetaData >  xMetaData = pFound->xConnection->getMetaData();
+            uno::Reference< sdbc::XDatabaseMetaData >  xMetaData = pFound->xConnection->getMetaData();
             try
             {
                 pFound->bScrollable = xMetaData
@@ -2054,16 +2217,16 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
 /* -----------------------------14.08.2001 10:26------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference< XConnection> SwNewDBMgr::RegisterConnection(rtl::OUString& rDataSource)
+uno::Reference< XConnection> SwNewDBMgr::RegisterConnection(rtl::OUString& rDataSource)
 {
     SwDSParam* pFound = SwNewDBMgr::FindDSConnection(rDataSource, TRUE);
-    Reference< XDataSource> xSource;
+    uno::Reference< XDataSource> xSource;
     if(!pFound->xConnection.is())
     {
         pFound->xConnection = SwNewDBMgr::GetConnection(rDataSource, xSource );
         try
         {
-            Reference<XComponent> xComponent(pFound->xConnection, UNO_QUERY);
+            uno::Reference<XComponent> xComponent(pFound->xConnection, UNO_QUERY);
             if(xComponent.is())
                 xComponent->addEventListener(pImpl->xDisposeListener);
         }
@@ -2170,7 +2333,7 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, BOOL bCreate)
             aDataSourceParams.Insert(pFound, aDataSourceParams.Count());
             try
             {
-                Reference<XComponent> xComponent(pFound->xConnection, UNO_QUERY);
+                uno::Reference<XComponent> xComponent(pFound->xConnection, UNO_QUERY);
                 if(xComponent.is())
                     xComponent->addEventListener(pImpl->xDisposeListener);
             }
@@ -2205,7 +2368,7 @@ SwDSParam*  SwNewDBMgr::FindDSConnection(const rtl::OUString& rDataSource, BOOL 
         aDataSourceParams.Insert(pFound, aDataSourceParams.Count());
         try
         {
-            Reference<XComponent> xComponent(pFound->xConnection, UNO_QUERY);
+            uno::Reference<XComponent> xComponent(pFound->xConnection, UNO_QUERY);
             if(xComponent.is())
                 xComponent->addEventListener(pImpl->xDisposeListener);
         }
@@ -2265,12 +2428,12 @@ const SwDBData& SwNewDBMgr::GetAddressDBName()
  ---------------------------------------------------------------------------*/
 Sequence<rtl::OUString> SwNewDBMgr::GetExistingDatabaseNames()
 {
-    Reference<XNameAccess> xDBContext;
-    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    uno::Reference<XNameAccess> xDBContext;
+    uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if( xMgr.is() )
     {
-        Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
-        xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
+        uno::Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
+        xDBContext = uno::Reference<XNameAccess>(xInstance, UNO_QUERY) ;
     }
     if(xDBContext.is())
     {
@@ -2323,7 +2486,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
         Any aInfoAny;
         INetURLObject aTempURL(aURL);
         bool bStore = true;
-        if(sExt.EqualsAscii("oob"))
+        if(sExt.EqualsAscii("odb"))
         {
             bStore = false;
         }
@@ -2398,7 +2561,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
             Reference<XInterface> xNewInstance;
             if(!bStore)
             {
-                //oob-file
+                //odb-file
                 Any aDataSource = xDBContext->getByName(aTempURL.GetMainURL(INetURLObject::NO_DECODE));
                 aDataSource >>= xNewInstance;
             }
@@ -2415,7 +2578,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
                     xDataProperties->setPropertyValue(C2U("Info"), aInfoAny);
 
                 Reference<XStorable> xStore(xNewInstance, UNO_QUERY_THROW);
-                String sExt = String::CreateFromAscii(".oob");
+                String sExt = String::CreateFromAscii(".odb");
                 String sTmpName;
                 {
                     utl::TempFile aTempFile(sNewName , &sExt, &sHomePath);
@@ -2451,7 +2614,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     sal_Int32 nSelectionPos = 0;
     sal_Int32 nResultSetIdx = -1;
     sal_Int16 nCmdType = CommandType::TABLE;
-    Reference< XConnection> xConnection;
+    uno::Reference< XConnection> xConnection;
 
     ODataAccessDescriptor aDescriptor(rProperties);
     sDataSource = aDescriptor.getDataSource();
@@ -2490,7 +2653,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     {
         aDescriptor[daSelection] <<= pImpl->pMergeDialog->GetSelection();
 
-        Reference<XResultSet> xResSet = pImpl->pMergeDialog->GetResultSet();
+        uno::Reference<XResultSet> xResSet = pImpl->pMergeDialog->GetResultSet();
         if(xResSet.is())
             aDescriptor[daCursor] <<= xResSet;
 
@@ -2511,13 +2674,13 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
                         const Sequence< PropertyValue>& rProperties)
 {
     rtl::OUString sDataSource, sDataTableOrQuery;
-    Reference<XResultSet>  xResSet;
+    uno::Reference<XResultSet>  xResSet;
     Sequence<Any> aSelection;
     BOOL bHasSelectionProperty = FALSE;
     sal_Int32 nSelectionPos = 0;
     sal_Int16 nCmdType = CommandType::TABLE;
     const PropertyValue* pValues = rProperties.getConstArray();
-    Reference< XConnection> xConnection;
+    uno::Reference< XConnection> xConnection;
     for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
     {
         if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cDataSourceName)))
@@ -2542,14 +2705,14 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
         DBG_ERROR("PropertyValues missing or unset")
         return;
     }
-    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    Reference<XDataSource> xSource;
-    Reference<XChild> xChild(xConnection, UNO_QUERY);
+    uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    uno::Reference<XDataSource> xSource;
+    uno::Reference<XChild> xChild(xConnection, UNO_QUERY);
     if(xChild.is())
-        xSource = Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
+        xSource = uno::Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
     if(!xSource.is())
         xSource = SwNewDBMgr::GetDbtoolsClient().getDataSource(sDataSource, xMgr);
-    Reference< XColumnsSupplier > xColSupp( xResSet, UNO_QUERY );
+    uno::Reference< XColumnsSupplier > xColSupp( xResSet, UNO_QUERY );
     SwDBData aDBData;
     aDBData.sDataSource = sDataSource;
     aDBData.sCommand = sDataTableOrQuery;
@@ -2608,14 +2771,14 @@ void SwNewDBMgr::RemoveDbtoolsClient()
 /* -----------------------------20.08.2002 12:00------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference<XDataSource> SwNewDBMgr::getDataSourceAsParent(const Reference< XConnection>& _xConnection,const ::rtl::OUString& _sDataSourceName)
+uno::Reference<XDataSource> SwNewDBMgr::getDataSourceAsParent(const uno::Reference< XConnection>& _xConnection,const ::rtl::OUString& _sDataSourceName)
 {
-    Reference<XDataSource> xSource;
+    uno::Reference<XDataSource> xSource;
     try
     {
-        Reference<XChild> xChild(_xConnection, UNO_QUERY);
+        uno::Reference<XChild> xChild(_xConnection, UNO_QUERY);
         if ( xChild.is() )
-            xSource = Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
+            xSource = uno::Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
         if ( !xSource.is() )
             xSource = SwNewDBMgr::GetDbtoolsClient().getDataSource(_sDataSourceName, ::comphelper::getProcessServiceFactory());
     }
@@ -2628,21 +2791,21 @@ Reference<XDataSource> SwNewDBMgr::getDataSourceAsParent(const Reference< XConne
 /* -----------------------------20.08.2002 12:00------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDataSourceName,
+uno::Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDataSourceName,
                                        const ::rtl::OUString& _sCommand,
                                        sal_Int32 _nCommandType,
-                                       const Reference<XConnection>& _xConnection
+                                       const uno::Reference<XConnection>& _xConnection
                                       )
 {
-    Reference<XResultSet> xResultSet;
+    uno::Reference<XResultSet> xResultSet;
     try
     {
-        Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+        uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
         if( xMgr.is() )
         {
-            Reference<XInterface> xInstance = xMgr->createInstance(
+            uno::Reference<XInterface> xInstance = xMgr->createInstance(
                 C2U( "com.sun.star.sdb.RowSet" ));
-            Reference <XPropertySet> xRowSetPropSet(xInstance, UNO_QUERY);
+            uno::Reference<XPropertySet> xRowSetPropSet(xInstance, UNO_QUERY);
             if(xRowSetPropSet.is())
             {
                 xRowSetPropSet->setPropertyValue(C2U("DataSourceName"), makeAny(_sDataSourceName));
@@ -2650,22 +2813,215 @@ Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDataSour
                 xRowSetPropSet->setPropertyValue(C2U("Command"), makeAny(_sCommand));
                 xRowSetPropSet->setPropertyValue(C2U("CommandType"), makeAny(_nCommandType));
 
-                Reference< XCompletedExecution > xRowSet(xInstance, UNO_QUERY);
+                uno::Reference< XCompletedExecution > xRowSet(xInstance, UNO_QUERY);
 
                 if ( xRowSet.is() )
                 {
-                    Reference< XInteractionHandler > xHandler(xMgr->createInstance(C2U("com.sun.star.sdb.InteractionHandler")), UNO_QUERY);
+                    uno::Reference< XInteractionHandler > xHandler(xMgr->createInstance(C2U("com.sun.star.sdb.InteractionHandler")), UNO_QUERY);
                     xRowSet->executeWithCompletion(xHandler);
                 }
-                xResultSet = Reference<XResultSet>(xRowSet, UNO_QUERY);
+                xResultSet = uno::Reference<XResultSet>(xRowSet, UNO_QUERY);
             }
         }
     }
     catch(const Exception&)
     {
-        DBG_ASSERT(0,"Catched exception while creating a new RowSet!");
+        DBG_ASSERT(0,"Caught exception while creating a new RowSet!");
     }
     return xResultSet;
+}
+/*-- 13.05.2004 16:14:15---------------------------------------------------
+    merge all data into one resulting document and return the number of
+    merged documents
+  -----------------------------------------------------------------------*/
+sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
+                            SwView& rSourceView )
+{
+    // check the availability of all data in the config item
+    uno::Reference< XResultSet> xResultSet = rMMConfig.GetResultSet();
+    if(!xResultSet.is())
+        return false;
+    bInMerge = TRUE;
+    sal_Int32 nRet  = 0;
+    pImpl->pMergeData = new SwDSParam(
+                rMMConfig.GetCurrentDBData(), xResultSet, rMMConfig.GetSelection());
+
+    try{
+        //set to start position
+        if(pImpl->pMergeData->aSelection.getLength())
+        {
+            sal_Int32 nPos = 0;
+            pImpl->pMergeData->aSelection.getConstArray()[ pImpl->pMergeData->nSelectionIndex++ ] >>= nPos;
+            pImpl->pMergeData->bEndOfDB = !pImpl->pMergeData->xResultSet->absolute( nPos );
+            pImpl->pMergeData->CheckEndOfDB();
+            if(pImpl->pMergeData->nSelectionIndex >= pImpl->pMergeData->aSelection.getLength())
+                pImpl->pMergeData->bEndOfDB = TRUE;
+        }
+        else
+        {
+            pImpl->pMergeData->bEndOfDB = !pImpl->pMergeData->xResultSet->first();
+            pImpl->pMergeData->CheckEndOfDB();
+        }
+    }
+    catch(Exception&)
+    {
+        pImpl->pMergeData->bEndOfDB = TRUE;
+        pImpl->pMergeData->CheckEndOfDB();
+        DBG_ERROR("exception in MergeNew()")
+    }
+
+    //bCancel is set from the PrintMonitor
+    bCancel = FALSE;
+
+    PrintMonitor aPrtMonDlg(&rSourceView.GetEditWin(), TRUE);
+    aPrtMonDlg.aDocName.SetText(rSourceView.GetDocShell()->GetTitle(22));
+    aPrtMonDlg.aCancel.SetClickHdl(LINK(this, SwNewDBMgr, PrtCancelHdl));
+    if (!IsMergeSilent())
+        aPrtMonDlg.Show();
+    // the print monitor needs some time to act
+    for( USHORT i = 0; i < 25; i++)
+        Application::Reschedule();
+    SwWrtShell& rSourceShell = rSourceView.GetWrtShell();
+    BOOL bSynchronizedDoc = rSourceShell.IsLabelDoc() && rSourceShell.GetSectionFmtCount() > 1;
+    String sSourceDocURL;
+    //save the settings of the first
+    rSourceShell.SwCrsrShell::SttDoc();
+    USHORT nStartingPageNo = rSourceShell.GetVirtPageNum();
+    String sStartingPageDesc = rSourceShell.GetPageDesc(
+                                rSourceShell.GetCurPageDesc()).GetName();
+
+    try
+    {
+        // save the working document into a temporary location
+        sSourceDocURL = URIHelper::SmartRelToAbs(utl::TempFile::CreateTempName());
+        SfxStringItem aURL( SID_FILE_NAME, sSourceDocURL );
+        const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
+                String::CreateFromAscii( FILTER_XML ),
+                SwDocShell::Factory().GetFilterContainer() );
+
+        SfxStringItem aFilterName( SID_FILTER_NAME, pSfxFlt->GetFilterName());
+        rSourceView.GetViewFrame()->GetDispatcher()->Execute(
+                            SID_EXPORTDOC, SFX_CALLMODE_SYNCHRON, &aURL, &aFilterName, 0);
+
+        // create a target docshell to put the merged document into
+        SfxObjectShellRef xTargetDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
+        xTargetDocShell->DoInitNew( 0 );
+        SfxViewFrame* pTargetFrame = SFX_APP()->CreateViewFrame( *xTargetDocShell, 0, TRUE );
+
+        //the created window has to be located at the same position as the source window
+        Window& rTargetWindow = pTargetFrame->GetFrame()->GetWindow();
+        Window& rSourceWindow = rSourceView.GetViewFrame()->GetFrame()->GetWindow();
+        rTargetWindow.SetPosPixel(rSourceWindow.GetPosPixel());
+
+//        pTargetFrame->GetFrame()->Appear();
+        SwView* pTargetView = static_cast<SwView*>( pTargetFrame->GetViewShell() );
+        rMMConfig.SetTargetView(pTargetView);
+        //initiate SelectShell() to create sub shells
+        pTargetView->AttrChangedNotify( &pTargetView->GetWrtShell() );
+        SwWrtShell* pTargetShell = pTargetView->GetWrtShellPtr();
+        //copy the styles from the source to the target document
+        SwgReaderOption aOpt;
+        aOpt.SetTxtFmts( sal_True );
+        aOpt.SetFrmFmts( sal_True );
+        aOpt.SetPageDescs( sal_True );
+        aOpt.SetNumRules( sal_True );
+        aOpt.SetMerge( sal_False );
+        pTargetView->GetDocShell()->LoadStylesFromFile(
+                sSourceDocURL, aOpt, sal_True );
+
+
+        long nStartRow, nEndRow;
+        ULONG nDocNo = 1;
+
+        do
+        {
+            nStartRow = pImpl->pMergeData->xResultSet->getRow();
+            String sStat(SW_RES(STR_STATSTR_LETTER));
+            sStat += ' ';
+            sStat += String::CreateFromInt32( nDocNo );
+            aPrtMonDlg.aPrintInfo.SetText(sStat);
+
+            // create a new docshell from the temporary document
+            SfxBoolItem aHidden( SID_HIDDEN, TRUE );
+            SfxStringItem aReferer( SID_REFERER, String::CreateFromAscii(URL_PREFIX_PRIV_SOFFICE ));
+            SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
+            const SfxPoolItem* pReturnValue =
+                            rSourceView.GetViewFrame()->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
+                                    &aURL, &aFilterName, &aHidden, &aReferer, &aTarget, 0);
+            if(pReturnValue)
+            {
+                SfxViewFrameItem* pVItem = (SfxViewFrameItem*)pReturnValue;
+                SwView* pWorkView = (SwView*) pVItem->GetFrame()->GetViewShell();
+                SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
+                pWorkView->AttrChangedNotify( &rWorkShell );//Damit SelectShell gerufen wird.
+
+                // merge the data
+                SwDoc* pWorkDoc = rWorkShell.GetDoc();
+                SwNewDBMgr* pWorkDBMgr = pWorkDoc->GetNewDBMgr();
+                pWorkDoc->SetNewDBMgr( this );
+                pWorkDoc->EmbedAllLinks();
+                if(UIUNDO_DELETE_INVISIBLECNTNT == rWorkShell.GetUndoIds())
+                    rWorkShell.Undo();
+                // create a layout
+                rWorkShell.CalcLayout();
+                rWorkShell.ViewShell::UpdateFlds();
+
+                // strip invisible content and convert fields to text
+                rWorkShell.RemoveInvisibleContent();
+                rWorkShell.ConvertFieldsToText();
+
+
+                // insert the document into the target document
+                rWorkShell.SwCrsrShell::EndDoc();
+                DBG_ASSERT(!rWorkShell.GetTableFmt(),"document ends with a table - no full selection possible")
+                rWorkShell.SwCrsrShell::SttDoc();
+                DBG_ASSERT(!rWorkShell.GetTableFmt(),"document starts with a table - no full selection possible")
+                rWorkShell.SelAll();
+                pTargetShell->SwCrsrShell::EndDoc();
+                if(nDocNo > 1)
+                {
+                    pTargetShell->InsertPageBreak( &sStartingPageDesc, nStartingPageNo );
+                }
+                else
+                {
+                    pTargetShell->SetPageStyle(sStartingPageDesc);
+                }
+                USHORT nPageCountBefore = pTargetShell->GetPageCnt();
+                DBG_ASSERT(!pTargetShell->GetTableFmt(),"target document end with a table - paragraph should be appended")
+                pTargetShell->Paste( rWorkShell.GetDoc(), sal_True );
+
+                //add the document info to the config item
+                SwDocMergeInfo aMergeInfo;
+                aMergeInfo.nStartPageInTarget = nPageCountBefore;
+                aMergeInfo.nEndPageInTarget = pTargetShell->GetPageCnt();
+                aMergeInfo.nDBRow = nStartRow;
+                rMMConfig.AddMergedDocument( aMergeInfo );
+                ++nRet;
+
+                // the print monitor needs some time to act
+                for( USHORT i = 0; i < 25; i++)
+                    Application::Reschedule();
+
+                //restore the ole DBMgr
+                pWorkDoc->SetNewDBMgr( pWorkDBMgr );
+                //now the temporary document should be closed
+                pWorkView->GetDocShell()->DoClose();
+            }
+            nEndRow = pImpl->pMergeData->xResultSet->getRow();
+            ++nDocNo;
+        } while( !bCancel &&
+                (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
+    }
+    catch(Exception& rEx)
+    {
+        DBG_ERROR("exception caught in SwNewDBMgr::MergeDocuments")
+    }
+    File::remove( sSourceDocURL );
+    if(sSourceDocURL.Len())
+        File::remove( sSourceDocURL );
+    DELETEZ(pImpl->pMergeData);
+    bInMerge = FALSE;
+    return nRet;
 }
 /* -----------------09.12.2002 12:38-----------------
  *
@@ -2685,7 +3041,7 @@ void SwConnectionDisposedListener_Impl::disposing( const EventObject& rSource )
         throw (RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    Reference<XConnection> xSource(rSource.Source, UNO_QUERY);
+    uno::Reference<XConnection> xSource(rSource.Source, UNO_QUERY);
     for(USHORT nPos = rDBMgr.aDataSourceParams.Count(); nPos; nPos--)
     {
         SwDSParam* pParam = rDBMgr.aDataSourceParams[nPos - 1];
