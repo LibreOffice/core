@@ -2,9 +2,9 @@
  *
  *  $RCSfile: native_bootstrap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2003-04-07 09:40:43 $
+ *  last change: $Author: dbo $ $Date: 2003-04-22 16:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,11 @@ namespace uno
 namespace util
 {
 
+/** Bootstrapping native UNO.
+*/
 public __sealed __gc class Bootstrap
 {
-    inline Bootstrap();
+    inline Bootstrap() {}
 
 public:
 

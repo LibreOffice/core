@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2003-04-07 09:40:43 $
+#   last change: $Author: dbo $ $Date: 2003-04-22 16:33:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,7 @@ PRJNAME = cli_ure
 TARGET = cli_cppuhelper
 NO_BSYMBOLIC = TRUE
 ENABLE_EXCEPTIONS = TRUE
+LIBTARGET = NO
 USE_DEFFILE = TRUE
 
 .INCLUDE : settings.mk
@@ -91,6 +92,8 @@ SLOFILES = \
         $(SLO)$/native_ure.obj		\
         $(SLO)$/native_bootstrap.obj
 
+SHL1OBJS = $(SLOFILES)
+
 SHL1TARGET = $(TARGET)
 
 SHL1STDLIBS = \
@@ -101,9 +104,6 @@ SHL1STDLIBS = \
 
 SHL1VERSIONMAP = msvc.map
 
-SHL1DEPN =
-SHL1IMPLIB = i$(TARGET)
-SHL1LIBS = $(SLB)$/$(TARGET).lib
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 DEF1NAME = $(SHL1TARGET)
 
