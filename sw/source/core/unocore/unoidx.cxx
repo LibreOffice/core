@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 09:23:18 $
+ *  last change: $Author: os $ $Date: 2000-10-27 12:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _UNOCRSR_HXX
 #include <unocrsr.hxx>
 #endif
+#ifndef _UNOSTYLE_HXX
+#include <unostyle.hxx>
+#endif
 #ifndef _NDTXT_HXX //autogen
 #include <ndtxt.hxx>
 #endif
@@ -108,6 +111,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_CHAPTERFORMAT_HPP_
 #include <com/sun/star/text/ChapterFormat.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_BIBLIOGRAPHYDATAFIELD_HPP_
+#include <com/sun/star/text/BibliographyDataField.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
@@ -141,6 +147,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::text;
 using namespace ::rtl;
 
 //-----------------------------------------------------------------------------
@@ -487,19 +494,13 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
             case WID_USE_LEVEL_FROM_SOURCE             :
                 pTOXBase->SetLevelFromChapter(lcl_AnyToBool(aValue));
             break;
-//          case WID_LEVEL_FORMAT                      :
-//              object readonly
-//          break;
-//          case WID_LEVEL_PARAGRAPH_STYLES            :DBG_ERROR("not implemented")
-//              object readonly
-//          break;
 //          case WID_RECALC_TAB_STOPS                  :DBG_ERROR("not implemented")
 //              lcl_AnyToBool(aValue) ?
 //          break;
-            //case WID_???                             :
             break;
             case WID_MAIN_ENTRY_CHARACTER_STYLE_NAME   :
-                pTOXBase->SetMainEntryCharStyle(lcl_AnyToString(aValue));
+                pTOXBase->SetMainEntryCharStyle(
+                    SwXStyleFamilies::GetUIName(lcl_AnyToString(aValue), SFX_STYLE_FAMILY_CHAR));
             break;
             case WID_CREATE_FROM_TABLES                :
                 nCreate = lcl_AnyToBool(aValue) ? nCreate | TOX_TABLE : nCreate & ~TOX_TABLE;
@@ -534,11 +535,13 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
             case WID_PARA_HEAD             :
                 bForm = sal_True;
                 //Header steht an Pos 0
-                aForm.SetTemplate( 0, lcl_AnyToString(aValue));
+                aForm.SetTemplate( 0, SwXStyleFamilies::GetUIName(
+                    lcl_AnyToString(aValue), SFX_STYLE_FAMILY_PARA));
             break;
             case WID_PARA_SEP              :
                 bForm = sal_True;
-                aForm.SetTemplate( 1, lcl_AnyToString(aValue));
+                aForm.SetTemplate( 1, SwXStyleFamilies::GetUIName(
+                    lcl_AnyToString(aValue), SFX_STYLE_FAMILY_PARA));
             break;
 
             case WID_PARA_LEV1             :
@@ -555,33 +558,11 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
                 bForm = sal_True;
                 // im sdbcx::Index beginnt Lebel 1 bei Pos 2 sonst bei Pos 1
                 sal_uInt16 nLPos = pTOXBase->GetType() == TOX_INDEX ? 2 : 1;
-                aForm.SetTemplate(nLPos + pMap->nWID - WID_PARA_LEV1, lcl_AnyToString(aValue));
+                aForm.SetTemplate(nLPos + pMap->nWID - WID_PARA_LEV1,
+                    SwXStyleFamilies::GetUIName(
+                        lcl_AnyToString(aValue), SFX_STYLE_FAMILY_PARA));
             }
             break;
-            /*
-            case WID_FORM_SEP  :
-                bForm = sal_True;
-                //in Stichwort-Forms steht der Trenner an Pos 1
-                aForm.SetPattern(1, lcl_AnyToString(aValue));
-            break;
-            case WID_FORM_LEV1 :
-            case WID_FORM_LEV2 :
-            case WID_FORM_LEV3 :
-            case WID_FORM_LEV4 :
-            case WID_FORM_LEV5 :
-            case WID_FORM_LEV6 :
-            case WID_FORM_LEV7 :
-            case WID_FORM_LEV8 :
-            case WID_FORM_LEV9 :
-            case WID_FORM_LEV10:
-            {
-                bForm = sal_True;
-                // im sdbcx::Index beginnt Lebel 1 bei Pos 2 sonst bei Pos 1
-                sal_uInt16 nLPos = pTOXBase->GetType() == TOX_INDEX ? 2 : 1;
-                aForm.SetPattern(nLPos + pMap->nWID - WID_FORM_LEV1, lcl_AnyToString(aValue));
-            }
-            break;
-             */
             default:
                 //this is for items only
                 if(WID_PRIMARY_KEY > pMap->nWID)
@@ -659,8 +640,6 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             case WID_CREATE_FROM_OUTLINE               :
                 bRet = 0 != (nCreate & TOX_OUTLINELEVEL);
             break;
-//          case WID_PARAGRAPH_STYLE_NAMES             :DBG_ERROR("not implemented")
-//          break;
             case WID_CREATE_FROM_CHAPTER               :
                 bRet = pTOXBase->IsFromChapter();
             break;
@@ -743,7 +722,9 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             break;
             case WID_MAIN_ENTRY_CHARACTER_STYLE_NAME   :
                 bBOOL = sal_False;
-                aRet <<= OUString(pTOXBase->GetMainEntryCharStyle());
+                aRet <<= OUString(
+                    SwXStyleFamilies::GetProgrammaticName(
+                        pTOXBase->GetMainEntryCharStyle(), SFX_STYLE_FAMILY_CHAR));
             break;
             case WID_CREATE_FROM_TABLES                :
                 bRet = 0 != (nCreate & TOX_TABLE);
@@ -774,11 +755,14 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             break;
             case WID_PARA_HEAD             :
                 //Header steht an Pos 0
-                aRet <<= OUString(rForm.GetTemplate( 0 ));
+                aRet <<= OUString(
+                    SwXStyleFamilies::GetProgrammaticName(rForm.GetTemplate( 0 ), SFX_STYLE_FAMILY_PARA));
                 bBOOL = sal_False;
             break;
             case WID_PARA_SEP              :
-                aRet <<= OUString(rForm.GetTemplate( 1 ));
+                aRet <<= OUString(
+                    SwXStyleFamilies::GetProgrammaticName(
+                        rForm.GetTemplate( 1 ), SFX_STYLE_FAMILY_PARA));
                 bBOOL = sal_False;
             break;
             case WID_PARA_LEV1             :
@@ -794,7 +778,10 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             {
                 // im sdbcx::Index beginnt Lebel 1 bei Pos 2 sonst bei Pos 1
                 sal_uInt16 nLPos = pTOXBase->GetType() == TOX_INDEX ? 2 : 1;
-                aRet <<= OUString(rForm.GetTemplate(nLPos + pMap->nWID - WID_PARA_LEV1));
+                aRet <<= OUString(
+                SwXStyleFamilies::GetProgrammaticName(
+                        rForm.GetTemplate(nLPos + pMap->nWID - WID_PARA_LEV1),
+                                                            SFX_STYLE_FAMILY_PARA));
                 bBOOL = sal_False;
             }
             break;
@@ -890,211 +877,17 @@ void SwXDocumentIndex::attachToRange(const Reference< text::XTextRange > & xText
                 if(aPam.HasMark())
                     pDoc->DeleteAndJoin(aPam);
 
-//              SwForm aForm(pType->GetType());
-//              SwTOXBase* pTOXBase = new SwTOXBase(pType, aForm,
-//                          TOX_MARK, pType->GetTypeName());
                 SwTOXBase& rTOXBase = pProps->GetTOXBase();
-                //TODO: Descriptor- interface!
-/*              sal_uInt16 nCreate = pTOXBase->GetCreateType();
-                sal_uInt16 nOLEOptions = pTOXBase->GetOLEOptions();
-                sal_uInt16 nTOIOptions = 0;
-                const SfxItemPropertyMap* pMap = _pMap;
-                while(pMap->nWID)
-                {
-                    // hier werden alle drei Typen verarbeitet, es sollten aber nie falsche Einstellungen m”glich sein
-                    switch(pMap->nWID)
-                    {
-                        case WID_IDX_TITLE:
-                            pTOXBase->SetTitle(pProps->sTitle);
-                        break;
-                        case WID_LEVEL                             :
-                            pTOXBase->SetLevel(pProps->nLevels);
-                        break;
-                        case WID_CREATE_FROM_MARKS                 :
-                            nCreate = pProps->bMarks ?
-                                nCreate | TOX_MARK: nCreate & ~TOX_MARK;
-                        break;
-                        case WID_CREATE_FROM_OUTLINE               :
-                            nCreate = pProps->bOutlines ?
-                                nCreate | TOX_OUTLINELEVEL: nCreate & ~TOX_OUTLINELEVEL;
-                        break;
-//                      case WID_PARAGRAPH_STYLE_NAMES             :
-//                          DBG_ERROR("not implemented")
-//                          //pProps->bParaStyles = lcl_AnyToBool(aValue);
-//                      break;
-                        case WID_CREATE_FROM_CHAPTER               :
-                            pTOXBase->SetFromChapter(pProps->bFromChapter);
-                        break;
-                        case WID_CREATE_FROM_LABELS                :
-                            nCreate = pProps->bFromLabels ?
-                                nCreate | TOX_SEQUENCE : nCreate & ~TOX_SEQUENCE;
-                        break;
-                        case WID_PROTECTED                         :
-                            pTOXBase->SetProtected(pProps->bProtected);
-                        break;
-                        case WID_USE_ALPHABETICAL_SEPARATORS:
-                            nTOIOptions = pProps->bUseAlphabeticalSeparators ?
-                                nTOIOptions | TOI_ALPHA_DELIMITTER : nTOIOptions & ~TOI_ALPHA_DELIMITTER;
-                        break;
-                        case WID_USE_KEY_AS_ENTRY                  :
-                            nTOIOptions = pProps->bKeyAsEntry ?
-                                nTOIOptions | TOI_KEY_AS_ENTRY : nTOIOptions & ~TOI_KEY_AS_ENTRY;
-                        break;
-                        case WID_USE_COMBINED_ENTRIES              :
-                            nTOIOptions = pProps->bCombineEntries ?
-                                nTOIOptions | TOI_SAME_ENTRY : nTOIOptions & ~TOI_SAME_ENTRY;
-                        break;
-                        case WID_IS_CASE_SENSITIVE                 :
-                            nTOIOptions = pProps->bCaseSensitive ?
-                                nTOIOptions | TOI_CASE_SENSITIVE :
-                                    nTOIOptions & ~TOI_CASE_SENSITIVE;
-                        break;
-                        case WID_USE_P_P                           :
-                            nTOIOptions = pProps->bUsePP ?
-                                nTOIOptions | TOI_FF : nTOIOptions & ~TOI_FF;
-                        break;
-                        case WID_USE_DASH                          :
-                            nTOIOptions = pProps->bUseDash ?
-                                nTOIOptions | TOI_DASH : nTOIOptions & ~TOI_DASH;
-                        break;
-                        case WID_USE_UPPER_CASE                    :
-                            nTOIOptions = pProps->bUseUpperCase ?
-                                nTOIOptions | TOI_INITIAL_CAPS : nTOIOptions & ~TOI_INITIAL_CAPS;
-                        break;
-                        case WID_IS_COMMA_SEPARATED :
-                            aForm.SetCommaSeparated(pProps->bIsCommaSeparated);
-                        break;
-                        case WID_LABEL_CATEGORY                    :
-                            pTOXBase->SetSequenceName(pProps->sLabelCategory);
-                        break;
-                        case WID_LABEL_DISPLAY_TYPE                :
-                            pTOXBase->SetCaptionDisplay((SwCaptionDisplay)pProps->nDisplayType);
-                        break;
-                        case WID_USE_LEVEL_FROM_SOURCE             :
-                            pTOXBase->SetFromChapter(pProps->bLevelFromChapter);
-                        break;
-                        case WID_LEVEL_PARAGRAPH_STYLES            :
-                        {
-                            for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
-                                pTOXBase->SetStyleNames(pProps->sStyleNames[i], i);
-                        }
-                        break;
-//                      case WID_RECALC_TAB_STOPS                  :
-//                          DBG_ERROR("not implemented")
-//                          now always recalculated
-//                      break;
-                        //case WID_???                             :
-                        break;
-                        case WID_MAIN_ENTRY_CHARACTER_STYLE_NAME   :
-                            pTOXBase->SetMainEntryCharStyle(pProps->sMainEntryStyleName);
-                        break;
-                        case WID_CREATE_FROM_TABLES                :
-                            nCreate = pProps->bTables ?
-                                nCreate | TOX_TABLE : nCreate & ~TOX_TABLE;
-                        break;
-                        case WID_CREATE_FROM_TEXT_FRAMES           :
-                            nCreate = pProps->bTextFrames ?
-                                nCreate | TOX_FRAME : nCreate & ~TOX_FRAME;
-                        break;
-                        case WID_CREATE_FROM_GRAPHIC_OBJECTS       :
-                            nCreate = pProps->bGraphics ?
-                                nCreate | TOX_GRAPHIC : nCreate & ~TOX_GRAPHIC;
-                        break;
-                        case WID_CREATE_FROM_EMBEDDED_OBJECTS      :
-                            nCreate = pProps->bEmbeddedObjects ?
-                                nCreate | TOX_OLE : nCreate &~ TOX_OLE;
-                        break;
-                        case WID_CREATE_FROM_STAR_MATH             :
-                            nOLEOptions = pProps->bFromStarMath ?
-                                nOLEOptions | TOO_MATH : nOLEOptions & ~TOO_MATH;
-                        break;
-                        case WID_CREATE_FROM_STAR_IMAGE            :
-                            nOLEOptions = pProps->bFromStarImage ?
-                                nOLEOptions | TOO_IMAGE : nOLEOptions & ~TOO_IMAGE;
-                        break;
-                        case WID_CREATE_FROM_STAR_CHART            :
-                            nOLEOptions = pProps->bFromStarChart ?
-                                nOLEOptions | TOO_CHART : nOLEOptions & ~TOO_CHART;
-                        break;
-                        case WID_CREATE_FROM_STAR_CALC             :
-                            nOLEOptions = pProps->bFromStarCalc ?
-                                nOLEOptions | TOO_CALC : nOLEOptions & ~TOO_CALC;
-                        break;
-                        case WID_CREATE_FROM_STAR_DRAW             :
-                            nOLEOptions = pProps->bFromStarDraw ?
-                                nOLEOptions | TOO_DRAW_IMPRESS : nOLEOptions & ~TOO_DRAW_IMPRESS;
-                        break;
-                        case WID_CREATE_FROM_OTHER_EMBEDDED_OBJECTS:
-                            nOLEOptions = pProps->bFromOtherEmbedded ?
-                                nOLEOptions | TOO_OTHER : nOLEOptions & ~TOO_OTHER;
-                        break;
-                        case WID_PARA_HEAD:
-                            //Header steht an Pos 0
-                            aForm.SetTemplate( 0, pProps->sParaStyleHeading);
-                        break;
-                        case WID_PARA_SEP              :
-                            //in Stichwort-Forms steht der Trenner an Pos 1
-                            aForm.SetTemplate( 1, pProps->sParaStyleSeparator);
-                        break;
-                        case WID_PARA_LEV1:
-                        case WID_PARA_LEV2:
-                        case WID_PARA_LEV3:
-                        case WID_PARA_LEV4:
-                        case WID_PARA_LEV5:
-                        case WID_PARA_LEV6:
-                        case WID_PARA_LEV7:
-                        case WID_PARA_LEV8:
-                        case WID_PARA_LEV9:
-                        case WID_PARA_LEV10:
-                        {
-                            // im sdbcx::Index beginnt Level 1 bei Pos 2 sonst bei Pos 0
-                            sal_uInt16 nLPos = pType->GetType() == TOX_INDEX ? 2 : 1;
-                            aForm.SetTemplate(nLPos + pMap->nWID - WID_PARA_LEV1,
-                                                        pProps->sParaStyles[pMap->nWID - WID_PARA_LEV1]);
-                        }
-                        break;
-                        case WID_LEVEL_FORMAT:
-                        {
-                            sal_uInt16 nStart = pType->GetType() == TOX_INDEX ? 2 : 1;
-                            for(sal_uInt16 i = nStart; i < aForm.GetFormMax(); i++)
-                            {
-                                aForm.SetPattern(i, pProps->sLevelPatterns[i - 1]);
-                            }
-                        }
-                        break;
-                    }
-                    pMap++;
-                }
-                switch(pType->GetType())
-                {
-                    case TOX_INDEX:
-                        pTOXBase->SetOptions(nTOIOptions);
-                    break;
-                    case TOX_CONTENT:
-                    //break;
-                    case TOX_USER:
-                        if(!nCreate)
-                            nCreate = TOX_MARK;
-                    break;
-                }
-                pTOXBase->SetOLEOptions(nOLEOptions);
-                pTOXBase->SetCreate(nCreate);
-                pTOXBase->SetTOXForm(aForm);
                 //TODO: apply Section attributes (columns and background)
-*/              const SwTOXBaseSection* pTOX = pDoc->InsertTableOf(
+                const SwTOXBaseSection* pTOX = pDoc->InsertTableOf(
                                     *aPam.GetPoint(), rTOXBase, 0, sal_True );
 
-//              if(pProps->sName.Len())
-//                  pDoc->SetTOXBaseName( *pTOX, pProps->sName );
-                    pDoc->SetTOXBaseName( *pTOX, pProps->GetTOXBase().GetTOXName() );
-
+                pDoc->SetTOXBaseName( *pTOX, pProps->GetTOXBase().GetTOXName() );
 
                 // Seitennummern eintragen
                 pBase = (const SwTOXBaseSection*)pTOX;
                 pBase->GetFmt()->Add(this);
                 ((SwTOXBaseSection*)pTOX)->UpdatePageNum();
-
-//              delete pTOXBase;
             }
             else
                 throw IllegalArgumentException();
@@ -2116,7 +1909,7 @@ void SwXIndexStyleAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
     {
         if(i)
             sSetStyles += TOX_STYLE_DELIMITER;
-        sSetStyles += String(pStyles[i]);
+        sSetStyles += SwXStyleFamilies::GetUIName(pStyles[i], SFX_STYLE_FAMILY_PARA);
     }
     pTOXBase->SetStyleNames(sSetStyles, (sal_uInt16) nIndex);
 }
@@ -2150,7 +1943,8 @@ uno::Any SwXIndexStyleAccess_Impl::getByIndex(sal_Int32 nIndex)
     OUString* pStyles = aStyles.getArray();
     for(sal_uInt16 i = 0; i < nStyles; i++)
     {
-        pStyles[i] = OUString(rStyles.GetToken(i, TOX_STYLE_DELIMITER));
+        pStyles[i] = OUString(SwXStyleFamilies::GetProgrammaticName(
+            rStyles.GetToken(i, TOX_STYLE_DELIMITER), SFX_STYLE_FAMILY_PARA));
     }
     uno::Any aRet(&aStyles, ::getCppuType((uno::Sequence<OUString>*)0));
     return aRet;
@@ -2334,6 +2128,19 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
                 }
                 aToken.nChapterFormat = nFormat;
             }
+            else if( COMPARE_EQUAL == pProperties[j].Name.compareToAscii("BibliographyDataField"))
+            {
+                sal_Int16 nType; pProperties[j].Value >>= nType;
+                if(nType < 0 || nType > BibliographyDataField::ISBN)
+                {
+                    IllegalArgumentException aExcept;
+                    aExcept.Message = C2U("BibliographyDataField - wrong value");
+                    aExcept.ArgumentPosition = j;
+                    throw aExcept;
+                }
+                aToken.nAuthorityField = nType;
+            }
+
         }
         //exception if wrong TokenType
         if(TOKEN_END <= aToken.eTokenType )
@@ -2517,12 +2324,13 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
             }
             break;
             case TOKEN_AUTHORITY :
-                rCurTokenSeq.realloc( 1 );
+                rCurTokenSeq.realloc( 2 );
                 PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<= OUString::createFromAscii("TokenBibliographyDataField");
-                DBG_ERROR("bibliography not implemented")
+                pArr[1].Name = C2U("BibliographyDataField");
+                pArr[1].Value <<= sal_Int16(aToken.nAuthorityField);
             break;
         }
     }
@@ -2549,6 +2357,9 @@ sal_Bool SwXIndexTokenAccess_Impl::hasElements(void) throw( RuntimeException )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/10/27 09:23:18  os
+    SwXIndexTokenAccess_Impl::getByIndex corrected
+
     Revision 1.3  2000/10/16 10:31:05  os
     #79422# SwXDocumentIndexMark: invalidation uses SwUnoCallBack
 
