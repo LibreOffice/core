@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:18:46 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1923,12 +1923,14 @@ public:
     {
         if( bNew ) n8Dummy1 |= DUMMY_PARASPACEMAX; else n8Dummy1 &= ~DUMMY_PARASPACEMAX;
         if( bAtPages ) n8Dummy1 |= DUMMY_PARASPACEMAX_AT_PAGES; else n8Dummy1 &= ~DUMMY_PARASPACEMAX_AT_PAGES;
+        SetModified();
     }
 
     sal_Bool IsTabCompat() const { return n8Dummy1 & DUMMY_TAB_COMPAT; }
     void SetTabCompat( sal_Bool bNew )
     {
         if( bNew ) n8Dummy1 |= DUMMY_TAB_COMPAT; else n8Dummy1 &= ~DUMMY_TAB_COMPAT;
+        SetModified();
     }
 
     sal_Bool IsUseVirtualDevice() const { return n8Dummy1 & DUMMY_USE_VIRTUAL_DEVICE; }
