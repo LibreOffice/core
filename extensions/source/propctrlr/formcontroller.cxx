@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-10 07:13:25 $
+ *  last change: $Author: oj $ $Date: 2002-08-06 08:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1144,7 +1144,7 @@ namespace pcr
             ////////////////////////////////////////////////////////////
             // Setzen der UI-Daten
             OLineDescriptor aProperty;
-            aProperty.eControlType = BCT_MEDIT;
+            aProperty.eControlType = BCT_COMBOBOX;
 
             aProperty.sName = (const ::rtl::OUString&)PROPERTY_COMMAND;
             aProperty.sTitle = m_pPropertyInfo->getPropertyTranslation(PROPERTY_ID_COMMAND);
@@ -2718,6 +2718,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.48  2001/12/10 07:13:25  fs
+ *  #95263# when retrieving the columns of a SQL-command form, use a '0=1' filter instead of the one supplied with the statement
+ *
  *  Revision 1.47  2001/12/07 11:12:31  tbe
  *  #92755# Assign Standard Values for Basic Controls in Designmode
  *
