@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 15:02:52 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ namespace com
 #define SEQUENCE ::com::sun::star::uno::Sequence
 #define RUNTIME_EXCEPTION ::com::sun::star::uno::RuntimeException
 
-class SfxFrameLoader_Impl : public ::cppu::WeakImplHelper3< ::com::sun::star::frame::XSynchronousFrameLoader, ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo >
+class SfxFrameLoader_Impl : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XSynchronousFrameLoader, ::com::sun::star::lang::XServiceInfo >
 {
     REFERENCE < ::com::sun::star::frame::XFrame > xFrame;
     REFERENCE < ::com::sun::star::frame::XLoadEventListener > xListener;
@@ -169,11 +169,6 @@ public:
     //----------------------------------------------------------------------------------
     virtual sal_Bool SAL_CALL load( const SEQUENCE< ::com::sun::star::beans::PropertyValue >& lDescriptor, const REFERENCE< ::com::sun::star::frame::XFrame >& xFrame ) throw( RUNTIME_EXCEPTION );
     virtual void SAL_CALL cancel() throw( RUNTIME_EXCEPTION );
-
-    //----------------------------------------------------------------------------------
-    // XExtendedFilterDetect
-    //----------------------------------------------------------------------------------
-    virtual ::rtl::OUString SAL_CALL detect( SEQUENCE< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( RUNTIME_EXCEPTION );
 };
 
 #endif
