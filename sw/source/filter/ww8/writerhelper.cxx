@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:19:16 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,13 @@
 #endif
 #ifndef SW_MS_MSFILTER_HXX
 #   include <msfilter.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
 #endif
 
 #include <algorithm>                //std::swap
@@ -140,6 +147,10 @@
 #ifndef _FCHRFMT_HXX
 #   include <fchrfmt.hxx>           //SwFmtCharFmt
 #endif
+#ifndef _UNOTOOLS_STREAMWRAP_HXX
+#   include <unotools/streamwrap.hxx>
+#endif
+
 #ifdef DEBUGDUMP
 #   ifndef _SV_SVAPP_HXX
 #       include <vcl/svapp.hxx>
@@ -350,33 +361,33 @@ namespace sw
         }
 
         DrawingOLEAdaptor::DrawingOLEAdaptor(SdrOle2Obj &rObj,
-            SvPersist &rPers)
+            SfxObjectShell &rPers)
             : msOrigPersistName(rObj.GetPersistName()),
-            mxIPRef(rObj.GetObjRef()), mrPers(rPers)
+            mxIPRef(rObj.GetObjRef()), mrPers(rPers),
+            mpGraphic( rObj.GetGraphic() )
         {
-            rObj.SetPersistName(String());
-            rObj.SetObjRef(SvInPlaceObjectRef());
+            //rObj.SetPersistName(String());
+            //rObj.SetObjRef(0);
+            rObj.AbandonObject();
         }
 
-        bool DrawingOLEAdaptor::TransferToDoc(const String &rName)
+        bool DrawingOLEAdaptor::TransferToDoc( ::rtl::OUString &rName )
         {
-            ASSERT(mxIPRef.Is(), "Transferring invalid object to doc");
-            if (!mxIPRef.Is())
+            ASSERT(mxIPRef.is(), "Transferring invalid object to doc");
+            if (!mxIPRef.is())
                 return false;
 
-            SvInfoObjectRef refObj = new SvEmbeddedInfoObject(mxIPRef, rName);
-            bool bSuccess = mrPers.Move(refObj, rName);
+            bool bSuccess = mrPers.GetEmbeddedObjectContainer().InsertEmbeddedObject( mxIPRef, rName );
             if (bSuccess)
             {
-                SvPersist *pO = mxIPRef;
-                ASSERT(!pO->IsModified(), "Not expected to be modified here");
-                if (pO->IsModified())
-                {
-                    pO->DoSave();
-                    pO->DoSaveCompleted();
-                }
-                mxIPRef.Clear();
-                bSuccess = mrPers.Unload(pO);
+                if ( mpGraphic )
+                    ::svt::EmbeddedObjectRef::SetGraphicToContainer( *mpGraphic,
+                                                                    mrPers.GetEmbeddedObjectContainer(),
+                                                                    rName,
+                                                                    ::rtl::OUString() );
+
+                //mxIPRef->changeState( com::sun::star::embed::EmbedStates::LOADED );
+                mxIPRef = 0;
             }
 
             return bSuccess;
@@ -384,16 +395,20 @@ namespace sw
 
         DrawingOLEAdaptor::~DrawingOLEAdaptor()
         {
-            if (mxIPRef.Is())
+            if (mxIPRef.is())
             {
-                if (SvInfoObject* pInfo = mrPers.Find(msOrigPersistName))
+                DBG_ASSERT( !mrPers.GetEmbeddedObjectContainer().HasEmbeddedObject( mxIPRef ), "Object in adaptor is inserted?!" );
+                try
                 {
-                    pInfo->SetDeleted(TRUE);
-                    pInfo->SetObj(0);
+                    com::sun::star::uno::Reference < com::sun::star::util::XCloseable > xClose( mxIPRef, com::sun::star::uno::UNO_QUERY );
+                    if ( xClose.is() )
+                        xClose->close(sal_True);
                 }
-                mxIPRef->DoClose();
-                mrPers.Remove(mxIPRef);
-                mxIPRef.Clear();
+                catch ( com::sun::star::util::CloseVetoException& )
+                {
+                }
+
+                mxIPRef = 0;
             }
         }
 
