@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 09:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,15 +102,18 @@ namespace configmgr
 
         ConfigChangeBroadcastHelper* m_pBroadcastHelper;
     public:
-        CacheClientAccess();
+        explicit
+        CacheClientAccess(memory::HeapManager & _rHeapManager,
+                          ConfigChangeBroadcastHelper* _pBroadcastHelper);
+
         ~CacheClientAccess();
 
         /// gets a helper to broadcast changes for
         ConfigChangeBroadcastHelper * getBroadcaster() const
         { return m_pBroadcastHelper; }
 
-        /// disposes an existing broadcast helper
-        void disposeBroadcaster() const;
+        /// removes an existing broadcast helper
+        ConfigChangeBroadcastHelper * releaseBroadcaster();
 
         /// gets a data segment reference for the given path - creates if necessary
         memory::Segment * attachDataSegment(const memory::SegmentAddress & _aSegment, const Path& _aLocation);
@@ -122,6 +125,8 @@ namespace configmgr
 
         /// check if the given module exists already (and is not empty)
         bool hasModule(const Path& _aLocation);
+        /// checks if the given module exists and has defaults available
+        bool hasModuleDefaults(memory::Accessor const & _aAccessor, Path const & _aLocation);
 
         /// retrieve the subtree at _aPath (maybe if it has the requested defaults) and clientAcquire() it
         data::NodeAddress acquireNode(memory::Accessor const& _aAccessToken, Path const& _aPath);
@@ -129,7 +134,7 @@ namespace configmgr
         /** add or merge the given subtree at the given location,
             return <TRUE/> if the tree has defaults then
         */
-        bool insertDefaults(memory::UpdateAccessor& _aUpdateToken, backend::NodeInstance & _aDefaultData ) CFG_UNO_THROW_RTE(  );
+        bool insertDefaults(memory::UpdateAccessor& _aUpdateToken, backend::NodeInstance const & _aDefaultData ) CFG_UNO_THROW_RTE(  );
 
         /// clientRelease() the tree at aComponentName, and return the resulting reference count
         CacheLine::RefCount releaseNode( Path const& _aPath );
@@ -162,7 +167,8 @@ namespace configmgr
         Data                m_aData;
         DeadModuleList      m_aDeadModules;         /// list of nodes which are registered for throwing away
     public:
-        CacheLoadingAccess();
+        explicit
+        CacheLoadingAccess(memory::HeapManager & _rHeapManager);
         ~CacheLoadingAccess();
 
         /// gets a data segment reference for the given path if exists
@@ -171,6 +177,8 @@ namespace configmgr
         memory::Segment * attachDataSegment(const memory::SegmentAddress & _aSegment, ModuleName const & _aModule);
         /// gets a data segment reference for the given path if exists
         memory::Segment * getDataSegment(ModuleName const & _aModule);
+        /// gets a data segment address for the given module if it exists
+        memory::SegmentAddress getDataSegmentAddress(ModuleName const & _aModule);
 
         /// return TRUE if there is no data (left) in this object's cache data
         bool isEmpty();
@@ -190,6 +198,11 @@ namespace configmgr
         /// merge the given change list into this tree - reflects old data to _aUpdate
         void applyUpdate(memory::UpdateAccessor& _aUpdateToken,  backend::UpdateInstance & _aUpdate) CFG_UNO_THROW_RTE( );
 
+        /// collect the modules that can be disposed now (i.e. released after _rLimitReleaseTime)
+        TimeStamp collectDisposeList(CacheLoadingAccess::DisposeList & _rList,
+                                        TimeStamp const & _aLimitTime,
+                                        TimeInterval const & _aDelay);
+
         /// clear the contained tree, return all remaining modules
         void clearData( DisposeList& _rDisposeList) CFG_NOTHROW();
 
@@ -198,17 +211,20 @@ namespace configmgr
             return the tree that is then pertinent and clientAcquire() it once
         */
         data::TreeAddress addComponentData( memory::UpdateAccessor& _aAccessToken,
-                                            backend::NodeInstance & _aNodeInstance,
+                                            backend::NodeInstance const & _aNodeInstance,
                                             bool _bIncludesDefaults
                                            ) CFG_UNO_THROW_RTE();
 
         /// merge the given change list into the pending change list of this tree
-        void addChangesToPending( backend::UpdateInstance const& _anUpdate ) CFG_UNO_THROW_RTE(  );
+        void addChangesToPending( backend::ConstUpdateInstance const& _anUpdate ) CFG_UNO_THROW_RTE(  );
         /// retrieve accumulated pending changes
         std::auto_ptr<SubtreeChange> releasePendingChanges(ModuleName const& _aModule);
 
         /// find the modules having pending changes
         bool findPendingChangedModules( Data::PendingModuleList & _rPendingList );
+
+        /// get a local lock for this cache line
+        osl::Mutex & mutex() { return m_aMutex; }
     };
 
 

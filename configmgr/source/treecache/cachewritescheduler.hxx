@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachewritescheduler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 09:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,14 @@
 #ifndef CONFIGMGR_CACHEWRITESCHEDULER_HXX
 #define CONFIGMGR_CACHEWRITESCHEDULER_HXX
 
-#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
-#include "options.hxx"
+#ifndef CONFIGMGR_MISC_REQUESTOPTIONS_HXX_
+#include "requestoptions.hxx"
 #endif
-
 #ifndef CONFIGMGR_TIMESTAMP_HXX
 #include "timestamp.hxx"
+#endif
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
 
 #ifndef INCLUDED_SET
@@ -78,7 +80,10 @@
 #ifndef _VOS_TIMER_HXX_
 #include <vos/timer.hxx>
 #endif
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
 
+#endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
@@ -87,13 +92,14 @@
 namespace configmgr
 {
     class RequestOptions;
-    namespace backend { class ComponentRequest; }
+    namespace backend { class ComponentRequest; class CacheController; }
 
     // Write down the Cache, much less complex than caching Nodes
     // (better control)
     class OCacheWriteScheduler
     {
-        typedef std::set< vos::ORef< OOptions >, ltOptions > CacheWriteList; // fire and forget!
+        typedef std::set< RequestOptions, lessRequestOptions > CacheWriteList; // fire and forget!
+        typedef backend::CacheController CacheManager;
 
         class Timer : public vos::OTimer
         {
@@ -120,18 +126,18 @@ namespace configmgr
     private:
         mutable osl::Mutex  m_aMutex;
         vos::ORef<Timer>    m_xTimer;
-        TreeManager&        m_rTreeManager;
+        CacheManager&       m_rTreeManager;
 
         CacheWriteList      m_aWriteList;
-        // TimeInterval m_aCleanupDelay;
-        TimeInterval m_aCleanupInterval;
+
+        TimeInterval m_aWriteInterval;
 
     public:
     //-------- Construction and destruction -----------------------------------
         explicit
-        OCacheWriteScheduler(TreeManager& _rTreeManager, TimeInterval const& _aCleanupDelay)
+        OCacheWriteScheduler(CacheManager& _rTreeManager, TimeInterval const& _aWriteInterval)
             : m_rTreeManager(_rTreeManager)
-            , m_aCleanupInterval(_aCleanupDelay)
+            , m_aWriteInterval(_aWriteInterval)
         {
             m_xTimer = new Timer(*this);
         }
@@ -139,26 +145,20 @@ namespace configmgr
 
     //-------- Delay and Interval ---------------------------------------------
         /// retrieves the recurrance interval used for cleanup
-        TimeInterval const& getCleanupInterval() const
+        TimeInterval const& getWriteInterval() const
         {
             osl::MutexGuard aGuard(m_aMutex);
-            return m_aCleanupInterval;
+            return m_aWriteInterval;
         }
-        /// calculate the time when to cleanup an pbject that became eligible at <var>aBaseTime</var>.
-        TimeStamp getCleanupTime(TimeStamp const& aBaseTime = TimeStamp::getCurrentTime())
-        {
-            return implGetCleanupTime(aBaseTime, getCleanupInterval());
-        }
-        static TimeStamp implGetCleanupTime(TimeStamp const& aBaseTime, TimeInterval const& aDelay)
+
+        static TimeStamp implGetScheduleTime(TimeStamp const& aBaseTime, TimeInterval const& aDelay)
         {
             return aBaseTime + aDelay;
         }
     //-------- Control of execution  ------------------------------------------
-        void scheduleWrite(vos::ORef< OOptions > const& _xOptions, bool _bASync = false) CFG_UNO_THROW_ALL(  );
         void scheduleWrite(backend::ComponentRequest _aComponent) CFG_UNO_THROW_ALL(  );
 
         /// stop pending activities for one set of options (do not discard them)
-        bool clearTasks(vos::ORef< OOptions > const& _xOptions);
         bool clearTasks(RequestOptions const& _xOptions);
 
         /// stop and discard pending activities
@@ -173,7 +173,7 @@ namespace configmgr
 
         void runWriter();
         void implStartBefore(TimeStamp const& _aTime);
-        void writeOneTreeFoundByOption(vos::ORef< OOptions > const& _xOption) CFG_UNO_THROW_ALL(  );
+        void writeOneTreeFoundByOption(RequestOptions const& _aOption) CFG_UNO_THROW_ALL(  );
     };
 } // namespace configmgr
 

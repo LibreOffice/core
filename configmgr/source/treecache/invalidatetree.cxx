@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 09:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 
-#include "treecache.hxx"
+#include "cachecontroller.hxx"
 
 #ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
@@ -72,22 +72,10 @@
 #ifndef CONFIGMGR_UPDATEHELPER_HXX
 #include "updatehelper.hxx"
 #endif
-#ifndef INCLUDED_CONFIGMGR_MERGECHANGE_HXX
-#include "mergechange.hxx"
-#endif
 #ifndef _CONFIGMGR_TREEACTIONS_HXX_
 #include "treeactions.hxx"
 #endif
 
-#ifndef CONFIGMGR_TREEPROVIDER_HXX
-#include "treeprovider.hxx"
-#endif
-#ifndef CONFIGMGR_TREEDATA_HXX
-#include "treedata.hxx"
-#endif
-#ifndef CONFIGMGR_LOADER_HXX
-#include "loader.hxx"
-#endif
 #ifndef CONFIGMGR_TREEACCESSOR_HXX
 #include "treeaccessor.hxx"
 #endif
@@ -125,29 +113,31 @@ namespace configmgr
 // ------------------------------- invalidateTree -------------------------------
 // -----------------------------------------------------------------------------
 
+namespace backend
+{
 // -----------------------------------------------------------------------------
-auto_ptr<TreeChangeList> createDiffs(data::NodeAccess const& _aCachedNode, ISubtree const * _pLoadedSubtree,
-                                    const vos::ORef<OOptions>& _rOptions,
-                                    AbsolutePath const& _aAbsoluteSubtreePath)
+std::auto_ptr<SubtreeChange> createDiffs(data::NodeAccess const& _aCachedNode,
+                                            ISubtree const * _pLoadedSubtree,
+                                            AbsolutePath const& _aAbsoluteSubtreePath)
 {
     OSL_PRECOND(_aCachedNode.isValid(), "Need an existing node to create a diff");
     OSL_PRECOND(_pLoadedSubtree != 0, "Need a result node to create a diff");
     // Create a TreeChangeList with the right name, parentname and ConfigurationProperties
-    std::auto_ptr<TreeChangeList> aNewChangeList(
-                                        new TreeChangeList(_rOptions, _aAbsoluteSubtreePath) );
+    std::auto_ptr<SubtreeChange> aNewChange(new SubtreeChange(_aAbsoluteSubtreePath.getLocalName().getName().toString(),
+                                                                node::Attributes()) );
 
-    if (!createUpdateFromDifference(aNewChangeList->root, _aCachedNode, *_pLoadedSubtree))
-        aNewChangeList.reset();
+    if (!createUpdateFromDifference(*aNewChange, _aCachedNode, *_pLoadedSubtree))
+        aNewChange.reset();
 
-    return aNewChangeList;
+    return aNewChange;
 }
 // -----------------------------------------------------------------------------
-
-auto_ptr<ISubtree> TreeManager::loadNodeFromSession( AbsolutePath const& _aAbsoluteSubtreePath,
+/*
+std::auto_ptr<ISubtree> TreeManager::loadNodeFromSession( AbsolutePath const& _aAbsoluteSubtreePath,
                                                      const vos::ORef < OOptions >& _xOptions,
                                                      sal_Int16 _nMinLevels)  CFG_UNO_THROW_ALL()
 {
-    TreeInfo* pInfo = this->requestTreeInfo(_xOptions,true /*create TreeInfo*/);
+    TreeInfo* pInfo = this->requestTreeInfo(_xOptions,true /*create TreeInfo* /);
 
     CFG_TRACE_INFO_NI("cache manager: cache miss. going to load the node");
     rtl::Reference< OTreeLoader > xLoader = pInfo->getNewLoaderWithoutPending(_aAbsoluteSubtreePath, _nMinLevels, _xOptions, m_xBackend.get());
@@ -173,91 +163,120 @@ auto_ptr<ISubtree> TreeManager::loadNodeFromSession( AbsolutePath const& _aAbsol
 
     return pResponse;
 }
-
+*/
 // -----------------------------------------------------------------------------
 
 class OInvalidateTreeThread: public vos::OThread
 {
-    vos::ORef<OOptions> m_aOptions;
-    TreeManager&        m_rTreeManager;
-    AbsolutePath        m_aAbsoluteSubtreePath;
+    typedef CacheController CacheManager;
+    RequestOptions      m_aOptions;
+    CacheManager&       m_rTreeManager;
+    Name                m_aComponentName;
+
+public:
+    OInvalidateTreeThread(CacheManager& _rTreeManager,  Name const & _aComponentName,
+                            const RequestOptions& _aOptions)
+    : m_rTreeManager(_rTreeManager)
+    , m_aComponentName(_aComponentName)
+    , m_aOptions(_aOptions)
+    {}
+
+    ~OInvalidateTreeThread()
+    {}
+
+private:
+    virtual void SAL_CALL onTerminated()
+    {
+        delete this;
+    }
 
     virtual void SAL_CALL run();
-public:
-    OInvalidateTreeThread(TreeManager& _pTreeManager, const AbsolutePath &_aAbsoluteSubtreePath,
-                          const vos::ORef<OOptions>& _rOptions)
-            :m_rTreeManager(_pTreeManager),
-             m_aAbsoluteSubtreePath(_aAbsoluteSubtreePath),
-             m_aOptions(_rOptions)
-        {}
-    ~OInvalidateTreeThread(){}
-
-    virtual void SAL_CALL onTerminated()
-        {
-            delete this;
-        }
 };
 
 // -----------------------------------------------------------------------------
-void TreeManager::invalidateTreeAsync(const AbsolutePath &_aAbsoluteSubtreePath, const vos::ORef<OOptions>& _rOptions) CFG_UNO_THROW_ALL()
+
+void CacheController::invalidateComponent(ComponentRequest const & _aComponent) CFG_UNO_THROW_ALL(  )
 {
-    if (m_bDisposeMode == false)
+    if (!this->m_bDisposing)
     {
         // start the InvalidateTreeThread only, if we are not at disposemode
-        // for correct handling
-
-        OInvalidateTreeThread *pThread = new OInvalidateTreeThread(*this, _aAbsoluteSubtreePath, _rOptions);
-        if (pThread)
+        if (OInvalidateTreeThread *pThread =
+            new OInvalidateTreeThread(*this, _aComponent.getComponentName(), _aComponent.getOptions()))
         {
             pThread->create();
         }
+        else
+            OSL_ENSURE(false, "Could not create refresher thread");
     }
-}
 
+}
 
 // -----------------------------------------------------------------------------
 
-void TreeManager::refreshSubtree(const AbsolutePath &_aAbsoluteSubtreePath, const vos::ORef<OOptions>& _aOptions) CFG_UNO_THROW_ALL()
+CacheLocation CacheController::refreshComponent(ComponentRequest const & _aRequest) CFG_UNO_THROW_ALL()
 {
+    if (m_bDisposing) return CacheLocation();
+
+    CacheRef aCache = m_aCacheList.get(_aRequest.getOptions());
+    if (!aCache.is()) return CacheLocation();
+
     // load the Node direct from the session, without using the cache
-    auto_ptr<ISubtree> aLoadedSubtree( this->loadNodeFromSession( _aAbsoluteSubtreePath, _aOptions, -1) );
+    ComponentRequest aForcedRequest(_aRequest);
+    aForcedRequest.forceReload();
 
-    if (aLoadedSubtree.get())
+    NodeResult aLoadedInstance = this->getComponentData(aForcedRequest);
+
+    CacheLocation aResult;
+    if (aLoadedInstance.is())
     {
-        if (TreeInfo* pTreeInfo = this->requestTreeInfo(_aOptions, false))
+        Name aModuleName = aLoadedInstance->root().getModuleName();
+
+        memory::UpdateAccessor aChangingAccessor( aCache->getDataSegment(aModuleName) );
+        OSL_ENSURE(aChangingAccessor.is(), "No existing cache line for tree being refreshed");
+
+        data::TreeAddress aCachedTreeAddress = aCache->acquireModule(aModuleName);
+
+        aResult.segment = aCache->getDataSegmentAddress(aModuleName);
+        aResult.address = aCachedTreeAddress.addressValue();
+
+        if (aCachedTreeAddress.is())
+        try
         {
-            memory::UpdateAccessor aChangingAccessor(pTreeInfo->getDataSegment(_aAbsoluteSubtreePath)); // todo: get from lock
+            std::auto_ptr<SubtreeChange> aTreeChanges;
+            data::NodeAddress aRootAddress;
 
-            OSL_ENSURE(aChangingAccessor.is(), "No existing cache line for tree being refreshed");
-
-            data::NodeAddress aCachedTreeAddress =
-                pTreeInfo->acquireSubtreeWithDepth(aChangingAccessor.accessor(), _aAbsoluteSubtreePath, 0, 0);
-
-            if (aCachedTreeAddress.is())
-            try
             {
-                auto_ptr<TreeChangeList> aTreeChanges =
-                    createDiffs(data::NodeAccess(aChangingAccessor.accessor(),aCachedTreeAddress), aLoadedSubtree.get(), _aOptions, _aAbsoluteSubtreePath);
+                data::TreeAccessor aTreeAccess(aChangingAccessor.accessor(),aCachedTreeAddress);
+                data::NodeAccess aRootNode = aTreeAccess.getRootNode();
 
-                if (aTreeChanges.get() != NULL)
-                {
-                    // change all Values... found in the Subtree in the CacheTree
-                    applyUpdateWithAdjustment(*aTreeChanges, aChangingAccessor, aCachedTreeAddress);
-
-                    data::Accessor aNotifyLock = aChangingAccessor.downgrade(); // keep a read lock during notification
-
-                    this->notifyUpdate(aNotifyLock,*aTreeChanges);
-                }
-
-                this->releaseSubtree(_aAbsoluteSubtreePath, _aOptions);
+                aTreeChanges = createDiffs(aRootNode, aLoadedInstance->data().get(), aLoadedInstance->root().location());
+                aRootAddress = aRootNode.address();
             }
-            catch (...)
+
+            if (aTreeChanges.get() != NULL)
             {
-                this->releaseSubtree(_aAbsoluteSubtreePath, _aOptions);
-                throw;
+                // change all Values... found in the Subtree in the CacheTree
+                applyUpdateWithAdjustmentToTree(*aTreeChanges, aChangingAccessor, aRootAddress);
+
+                data::Accessor aNotifyLock = aChangingAccessor.downgrade(); // keep a read lock during notification
+
+                UpdateRequest anUpdateReq(  aTreeChanges.get(),
+                                            aLoadedInstance->root().location(),
+                                            _aRequest.getOptions()
+                                          );
+
+                m_aNotifier.notifyChanged(anUpdateReq);
             }
+
+            aCache->releaseModule(aModuleName);
+        }
+        catch (...)
+        {
+            aCache->releaseModule(aModuleName);
+            throw;
         }
     }
+    return aResult;
 }
 
 // -----------------------------------------------------------------------------
@@ -265,14 +284,18 @@ void OInvalidateTreeThread::run()
 {
     try
     {
-        m_rTreeManager.refreshSubtree(m_aAbsoluteSubtreePath, m_aOptions);
+        ComponentRequest aRequest(m_aComponentName, m_aOptions);
+        m_rTreeManager.refreshComponent(aRequest);
     }
     catch(uno::Exception&)
     {
         // do nothing, only thread safe exception absorb
-        CFG_TRACE_ERROR_NI("OInvalidateTreeThread::run: absorb exception");
+        CFG_TRACE_ERROR_NI("OInvalidateTreeThread::run: refreshing failed - ignoring the exception");
     }
 }
-} // namespace configmgr
+// -----------------------------------------------------------------------------
+    } // namespace backend
 
+// -----------------------------------------------------------------------------
+} // namespace configmgr
 

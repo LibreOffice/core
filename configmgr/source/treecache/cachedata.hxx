@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedata.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 09:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ namespace configmgr
         struct NodeInstance;
         struct TemplateInstance;
         struct UpdateInstance;
+        struct ConstUpdateInstance;
     }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -108,11 +109,15 @@ namespace configmgr
 
         /// check if the given module exists already (and is not empty)
         bool hasModule(ModuleName const & _aModule) const;
+        /// checks if the given module exists and has defaults available
+        bool hasModuleDefaults(memory::Accessor const & _aAccessor, ModuleName const & _aModule) const;
 
         /// creates a new data segment reference for the given path if exists
         memory::Segment * attachDataSegment(memory::SegmentAddress const & _aLocation, ModuleName const & _aModule);
-        /// gets a data segment reference for the given path if exists
+        /// gets a data segment reference for the given path if it exists
         memory::Segment * getDataSegment(ModuleName const & _aModule);
+        /// gets a data segment address for the given module if it exists
+        memory::SegmentAddress getDataSegmentAddress(ModuleName const & _aModule) const;
 
         /// checks whether a certain node exists in the tree
         bool  hasNode(memory::Accessor const & _aAccessor, Path const & _aLocation) const;
@@ -130,7 +135,7 @@ namespace configmgr
         CacheLine::RefCount releaseModule( ModuleName const & _aModule, bool _bKeepDeadModule = false );
 
         bool insertDefaults( memory::UpdateAccessor& _aAccessToken,
-                             backend::NodeInstance & _aDefaultInstance
+                             backend::NodeInstance const & _aDefaultInstance
                            ) CFG_UNO_THROW_RTE();
 
         /// merge the given changes into this tree - reflects old values to _anUpdate
@@ -140,6 +145,8 @@ namespace configmgr
         // low-level interface for cache management
         typedef std::map<ModuleName, ModuleRef> ModuleList;
         ModuleList& accessModuleList() { return m_aModules; }
+
+        memory::HeapManager & getHeapManager() const { return m_rHeapManager; }
     protected:
         virtual ModuleRef doCreateAttachedModule(memory::HeapManager & _rHeapManager, const memory::SegmentAddress & _aLocation, const ModuleName& _aName) CFG_UNO_THROW_RTE(  );
 
@@ -204,16 +211,18 @@ namespace configmgr
             return the tree that is now pertinent and clientAcquire() it once
         */
         data::TreeAddress addComponentData( memory::UpdateAccessor& _aAccessToken,
-                                            backend::NodeInstance & _aNodeInstance,
+                                            backend::NodeInstance const & _aNodeInstance,
                                             bool _bWithDefaults
                                            ) CFG_UNO_THROW_RTE();
 
         typedef std::vector< ModuleName >  PendingModuleList;
         /// find the modules having pending changes
+        bool hasPending(ModuleName const & _aModule);
+        /// find the modules having pending changes
         void findPendingModules( PendingModuleList & _rPendingList );
 
         /// add or merge the given subtreechange at the given location
-        void addPending(backend::UpdateInstance const & _anUpdate) CFG_UNO_THROW_RTE(  );
+        void addPending(backend::ConstUpdateInstance const & _anUpdate) CFG_UNO_THROW_RTE(  );
         /// remove and return pending changes for the given component
         std::auto_ptr<SubtreeChange> releasePending(ModuleName const & _aModule) CFG_UNO_THROW_RTE(  );
     private:

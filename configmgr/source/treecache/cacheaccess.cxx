@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheaccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 09:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,30 @@ namespace configmgr
 
 // -------------------------------------------------------------------------
 
+CacheClientAccess::CacheClientAccess(memory::HeapManager & _rHeapManager,
+                                     ConfigChangeBroadcastHelper *  _pBroadcastHelper)
+: m_aMutex()
+, m_aData(_rHeapManager)
+, m_pBroadcastHelper( _pBroadcastHelper )
+{
+}
+// -------------------------------------------------------------------------
+
+CacheClientAccess::~CacheClientAccess()
+{
+    OSL_ENSURE(!m_pBroadcastHelper, "Forgot to dispose broadcast helper");
+}
+// -------------------------------------------------------------------------
+
+ConfigChangeBroadcastHelper *  CacheClientAccess::releaseBroadcaster()
+{
+    osl::MutexGuard aGuard(m_aMutex);
+    ConfigChangeBroadcastHelper * pRet = m_pBroadcastHelper;
+    m_pBroadcastHelper = NULL;
+    return pRet;
+}
+// -------------------------------------------------------------------------
+
 /// gets a data segment reference for the given path - creates if necessary
 memory::Segment * CacheLoadingAccess::createNewDataSegment(ModuleName const & _aModule)
 {
@@ -112,6 +136,14 @@ bool CacheClientAccess::hasModule(const Path& _aLocation)
     osl::MutexGuard aGuard( this->m_aMutex );
 
     return this->m_aData.hasModule(_aLocation.getModuleName());
+}
+// -------------------------------------------------------------------------
+
+bool CacheClientAccess::hasModuleDefaults(memory::Accessor const& _aAccessor, Path const& _aLocation)
+{
+    osl::MutexGuard aGuard( this->m_aMutex );
+
+    return this->m_aData.hasModuleDefaults(_aAccessor, _aLocation.getModuleName());
 }
 // -------------------------------------------------------------------------
 
@@ -150,7 +182,7 @@ void CacheClientAccess::applyUpdate(memory::UpdateAccessor& _aUpdateToken,  back
 {
     osl::MutexGuard aGuard( this->m_aMutex ); // needed to protect the map access in the Tree
 
-    CFG_TRACE_INFO("CacheClientAccess: Merging changes into subtree '%s'", OUSTRING2ASCII(_aUpdate.root.toString()) );
+    CFG_TRACE_INFO("CacheClientAccess: Merging changes into subtree '%s'", OUSTRING2ASCII(_aUpdate.root().toString()) );
 
     this->m_aData.applyUpdate(_aUpdateToken, _aUpdate );
 }
@@ -171,11 +203,11 @@ data::NodeAddress CacheClientAccess::findInnerNode( data::Accessor const& _aAcce
 // -------------------------------------------------------------------------
 
 bool CacheClientAccess::insertDefaults( memory::UpdateAccessor& _aAccessToken,
-                                        backend::NodeInstance & _aDefaultData ) CFG_UNO_THROW_RTE(  )
+                                        backend::NodeInstance const & _aDefaultData ) CFG_UNO_THROW_RTE(  )
 {
     osl::MutexGuard aGuard( this->m_aMutex );
 
-    CFG_TRACE_INFO("Tree Info: Adding default data for path '%s'", OUSTRING2ASCII(_aDefaultData.root.toString()) );
+    CFG_TRACE_INFO("Tree Info: Adding default data for path '%s'", OUSTRING2ASCII(_aDefaultData.root().toString()) );
 
     return this->m_aData.insertDefaults(_aAccessToken, _aDefaultData);
 }
@@ -196,6 +228,19 @@ bool CacheClientAccess::isEmpty()
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 
+CacheLoadingAccess::CacheLoadingAccess(memory::HeapManager & _rHeapManager)
+: m_aMutex()
+, m_aData(_rHeapManager)
+, m_aDeadModules()
+{
+}
+// -------------------------------------------------------------------------
+
+CacheLoadingAccess::~CacheLoadingAccess()
+{
+}
+// -------------------------------------------------------------------------
+
 /// gets a data segment reference for the given path - creates if necessary
 memory::Segment * CacheLoadingAccess::attachDataSegment(const memory::SegmentAddress & _aSegment, ModuleName const & _aModule)
 {
@@ -211,6 +256,15 @@ memory::Segment * CacheLoadingAccess::getDataSegment(ModuleName const & _aModule
     osl::MutexGuard aGuard( this->m_aMutex );
 
     return this->m_aData.getDataSegment(_aModule);
+}
+// -------------------------------------------------------------------------
+
+/// gets a data segment reference for the given path if exists
+memory::SegmentAddress CacheLoadingAccess::getDataSegmentAddress(ModuleName const & _aModule)
+{
+    osl::MutexGuard aGuard( this->m_aMutex );
+
+    return this->m_aData.getDataSegmentAddress(_aModule);
 }
 // -------------------------------------------------------------------------
 
@@ -263,7 +317,7 @@ void CacheLoadingAccess::applyUpdate(memory::UpdateAccessor& _aUpdateToken,  bac
 {
     osl::MutexGuard aGuard( this->m_aMutex ); // needed to protect the map access in the Tree
 
-    CFG_TRACE_INFO("CacheLoadingAccess: Merging changes into subtree '%s'", OUSTRING2ASCII(_aUpdate.root.toString()) );
+    CFG_TRACE_INFO("CacheLoadingAccess: Merging changes into subtree '%s'", OUSTRING2ASCII(_aUpdate.root().toString()) );
 
     this->m_aData.applyUpdate(_aUpdateToken, _aUpdate);
 }
@@ -296,20 +350,20 @@ bool CacheLoadingAccess::isEmpty()
 // -------------------------------------------------------------------------
 
 data::TreeAddress CacheLoadingAccess::addComponentData( memory::UpdateAccessor& _aAccessToken,
-                                                        backend::NodeInstance & _aNodeInstance,
+                                                        backend::NodeInstance const & _aNodeInstance,
                                                         bool _bIncludesDefaults
                                                        ) CFG_UNO_THROW_RTE()
 {
     osl::MutexGuard aGuard( this->m_aMutex );
 
     CFG_TRACE_INFO("CacheLoadingAccess: Adding component data for path '%s'. %s",
-                    OUSTRING2ASCII(_aNodeInstance.root.toString()),
+                    OUSTRING2ASCII(_aNodeInstance.root().toString()),
                     _bIncludesDefaults ? "Data includes defaults." : "Data does not include defaults." );
 
     data::TreeAddress aResult = this->m_aData.addComponentData(_aAccessToken, _aNodeInstance, _bIncludesDefaults);
     if (aResult.is())
     {
-        m_aDeadModules.erase( _aNodeInstance.root.getModuleName() );
+        m_aDeadModules.erase( _aNodeInstance.root().getModuleName() );
         CFG_TRACE_INFO_NI("- Data added successfully - returning Subtree");
     }
     else
@@ -319,13 +373,13 @@ data::TreeAddress CacheLoadingAccess::addComponentData( memory::UpdateAccessor& 
 }
 // -------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void CacheLoadingAccess::addChangesToPending( backend::UpdateInstance const& _anUpdate ) CFG_UNO_THROW_RTE(  )
+void CacheLoadingAccess::addChangesToPending( backend::ConstUpdateInstance const& _anUpdate ) CFG_UNO_THROW_RTE(  )
 {
     // NICE: m_pPending[_rLocation] += pSubtreeChange;
 
     osl::MutexGuard aGuard( this->m_aMutex ); // needed to protect the map access in the Data
 
-    CFG_TRACE_INFO("CacheLoadingAccess: Adding pending changes for subtree '%s'", OUSTRING2ASCII(_anUpdate.root.toString()) );
+    CFG_TRACE_INFO("CacheLoadingAccess: Adding pending changes for subtree '%s'", OUSTRING2ASCII(_anUpdate.root().toString()) );
 
     this->m_aData.addPending(_anUpdate);
 }
@@ -367,6 +421,107 @@ void CacheLoadingAccess::clearData(DisposeList& _rList) CFG_NOTHROW()
 
     rModules.clear();
     m_aDeadModules.clear();
+}
+// -------------------------------------------------------------------------
+
+TimeStamp CacheLoadingAccess::collectDisposeList(CacheLoadingAccess::DisposeList & _rList, TimeStamp const & _aLimitTime, TimeInterval const & _aDelay)
+{
+    TimeStamp aRetTime = TimeStamp::never();
+
+    osl::MutexGuard aGuard( this->m_aMutex );
+
+    CFG_TRACE_INFO("Tree Info: Collecting disposable module trees for cleanup" );
+
+    Data::ModuleList& rActiveModules = this->m_aData.accessModuleList();
+
+    DeadModuleList::iterator it = m_aDeadModules.begin();
+
+    while (it != m_aDeadModules.end())
+    {
+        DeadModuleList::iterator current = it;
+        // increment here, as we may later erase(current)
+        ++it;
+
+#if defined _DEBUG || defined _DBG_UTIL || defined CFG_TRACE_ENABLE
+        OUString sCurrentName( current->first.toString() );
+#endif
+        TimeStamp aExpireTime = current->second + _aDelay;
+        if (aExpireTime <= _aLimitTime)
+        {
+            Data::ModuleList::iterator itModule = rActiveModules.find( current->first );
+
+            if (itModule != rActiveModules.end())
+            {
+                ModuleRef xModule = itModule->second;
+
+                bool bHandled = false;
+
+                if (!xModule.is())
+                {
+                    CFG_TRACE_ERROR_NI("- Unexpected: Module '%s' is NULL in active module list", OUSTRING2ASCII(sCurrentName) );
+                    bHandled = true;
+                }
+                else if (xModule->clientReferences() != 0)// at least in temporary use
+                {
+                    OSL_ENSURE( false, "Referenced entry in dead module list");
+
+                    CFG_TRACE_WARNING_NI("- Module '%s' in (temporary ?) use - rescheduling", OUSTRING2ASCII(sCurrentName) );
+                    bHandled = false; // still remove from the lists
+                }
+                else if (m_aData.hasPending(current->first))
+                {
+                    CFG_TRACE_WARNING_NI("- Module '%s' has pending changes - rescheduling disposal", OUSTRING2ASCII(sCurrentName) );
+                    bHandled = false;
+                }
+                else // now this really can be disposed
+                {
+                    CFG_TRACE_INFO_NI("- Removing module '%s' for disposal", OUSTRING2ASCII(sCurrentName) );
+
+                    // It really is ok to dispose this entry
+                    _rList.push_back(xModule);
+
+                    bHandled = true;
+                }
+
+
+                if (bHandled)
+                {
+                    // really remove
+                    rActiveModules.erase(itModule);
+                    m_aDeadModules.erase(current);
+                }
+                else
+                {
+                    // reschedule
+                    TimeStamp aRetryTime = _aLimitTime + _aDelay;
+                    OSL_ASSERT(aRetryTime > _aLimitTime);
+
+                    current->second = _aLimitTime; // ?
+                    if (aRetryTime < aRetTime)
+                        aRetTime = aRetryTime;
+                }
+            }
+            else
+            {
+                // obsolete dispose list entry - discard
+                OSL_ENSURE( false, "Obsolete entry in dead module list");
+
+                CFG_TRACE_WARNING_NI("- Module '%s' not found any more - obsolete entry in dead module list", OUSTRING2ASCII(sCurrentName) );
+
+                m_aDeadModules.erase(current);
+            }
+        }
+        else // consider for restart time
+        {
+            CFG_TRACE_INFO_NI("- Module '%s' has not expired yet - rescheduling", OUSTRING2ASCII(sCurrentName) );
+
+            if (aExpireTime < aRetTime)
+                aRetTime = aExpireTime;
+        }
+    }
+
+    OSL_ASSERT(aRetTime > _aLimitTime);
+    return aRetTime;
 }
 // -------------------------------------------------------------------------
 

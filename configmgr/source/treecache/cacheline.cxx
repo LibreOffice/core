@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheline.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 09:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,13 +332,25 @@ namespace configmgr
 // -----------------------------------------------------------------------------
 
     CacheLine::CacheLine(Name const & _aModuleName, memory::HeapManager & _rHeapImpl,
-                            memory::SegmentAddress const & _aLocation)
-    : m_storage(_rHeapImpl,_aLocation.segment)
+                            memory::SegmentAddress const & _aSegment)
+    : m_storage(_rHeapImpl,_aSegment.id)
     , m_name(_aModuleName)
-    , m_base( memory::Pointer(_aLocation.address) )
+    , m_base( memory::Pointer(_aSegment.base) )
     , m_nDataRefs(0)
     {
     }
+// -----------------------------------------------------------------------------
+
+    memory::SegmentAddress CacheLine::getDataSegmentAddress() const
+    {
+        memory::SegmentAddress aResult;
+
+        aResult.id      = m_storage.getId();
+        aResult.base    = m_base.addressValue();
+
+        return aResult;
+    }
+
 // -----------------------------------------------------------------------------
 
     void CacheLine::setBase(data::TreeAddress _base)
@@ -351,7 +363,7 @@ namespace configmgr
 
     CacheLineRef CacheLine::createAttached( Name const & _aModuleName,
                                             memory::HeapManager & _rHeapImpl,
-                                            memory::SegmentAddress const & _aLocation
+                                            memory::SegmentAddress const & _aSegment
                                           ) CFG_UNO_THROW_RTE(  )
     {
         if (_aModuleName.isEmpty())
@@ -359,17 +371,33 @@ namespace configmgr
             OSL_ENSURE(false, "Cannot make a cache line without a name");
             return NULL;
         }
-        if (_aLocation.address == 0)
+        if (_aSegment.isNull())
         {
-            OSL_ENSURE(false, "Cannot attach a cache line to a NULL address");
+            OSL_ENSURE(false, "Cannot attach a cache line to a NULL segment");
             return NULL;
         }
 
-        CacheLineRef xResult = new CacheLine(_aModuleName,_rHeapImpl,_aLocation);
+        CacheLineRef xResult = new CacheLine(_aModuleName,_rHeapImpl,_aSegment);
 
         return xResult;
     }
 // -----------------------------------------------------------------------------
+
+    CacheLineRef CacheLine::createNew(  Name const & _aModuleName,
+                                        memory::HeapManager & _rHeapImpl
+                                      ) CFG_UNO_THROW_RTE(  )
+    {
+        if (_aModuleName.isEmpty())
+        {
+            OSL_ENSURE(false, "Cannot make a cache line without a name");
+            return NULL;
+        }
+
+        CacheLineRef xResult = new CacheLine(_aModuleName,_rHeapImpl);
+
+        return xResult;
+    }
+// -------------------------------------------------------------------------
 
     CacheLine::Name CacheLine::getModuleName() const
     {
@@ -388,6 +416,16 @@ namespace configmgr
     }
 // -----------------------------------------------------------------------------
 
+    bool CacheLine::hasDefaults(memory::Accessor const & _anAccessor) const
+    {
+        if ( !m_base.is() ) return false; // cannot get defaults without data
+
+        data::TreeAccessor aModuleTree(_anAccessor, m_base);
+        OSL_ASSERT( aModuleTree.isValid());
+
+        return aModuleTree.data().hasDefaultsAvailable();
+    }
+// -----------------------------------------------------------------------------
     data::NodeAccess CacheLine::internalGetNode(memory::Accessor const & _anAccessor, Path const& aConfigName) const
     {
         OSL_ENSURE( m_base.is(), "Cannot get a node from a dataless module");
@@ -420,19 +458,19 @@ namespace configmgr
 // -------------------------------------------------------------------------
 
     data::TreeAddress CacheLine::setComponentData( memory::UpdateAccessor& _aAccessToken,
-                                                           backend::NodeInstance & _aNodeInstance,
+                                                           backend::NodeInstance const & _aNodeInstance,
                                                            bool _bWithDefaults
                                                          ) CFG_UNO_THROW_RTE(  )
     {
-        OSL_PRECOND(_aNodeInstance.node.get(), "CacheLine::insertDefaults: inserting NULL defaults !");
-        OSL_PRECOND(_aNodeInstance.root.isModuleRoot(), "Should have complete component to fill cache");
-        OSL_PRECOND(_aNodeInstance.root.getModuleName() == this->getModuleName(),"Data location does not match module");
+        OSL_PRECOND(_aNodeInstance.data().get(), "CacheLine::insertDefaults: inserting NULL defaults !");
+        OSL_PRECOND(_aNodeInstance.root().isModuleRoot(), "Should have complete component to fill cache");
+        OSL_PRECOND(_aNodeInstance.root().getModuleName() == this->getModuleName(),"Data location does not match module");
 
         OSL_PRECOND(!base().is(), "Data is already loaded");
 
         if (!base().is()) // no data yet
         {
-            this->setBase( data::buildTree(_aAccessToken, _aNodeInstance.node->getName(), *_aNodeInstance.node, _bWithDefaults) );
+            this->setBase( data::buildTree(_aAccessToken, _aNodeInstance.data()->getName(), *_aNodeInstance.data(), _bWithDefaults) );
         }
 
         return this->base();
@@ -440,18 +478,18 @@ namespace configmgr
 // -----------------------------------------------------------------------------
 
     data::TreeAddress CacheLine::insertDefaults( memory::UpdateAccessor& _aAccessToken,
-                                                 backend::NodeInstance & _aDefaultInstance
+                                                 backend::NodeInstance const & _aDefaultInstance
                                                ) CFG_UNO_THROW_RTE(  )
     {
-        OSL_PRECOND(_aDefaultInstance.node.get(), "CacheLine::insertDefaults: inserting NULL defaults !");
-        OSL_PRECOND(_aDefaultInstance.root.isModuleRoot(), "Should have complete component to fill tree with defaults");
-        OSL_PRECOND(_aDefaultInstance.root.getModuleName() == this->getModuleName(),"Data location does not match module");
+        OSL_PRECOND(_aDefaultInstance.data().get(), "CacheLine::insertDefaults: inserting NULL defaults !");
+        OSL_PRECOND(_aDefaultInstance.root().isModuleRoot(), "Should have complete component to fill tree with defaults");
+        OSL_PRECOND(_aDefaultInstance.root().getModuleName() == this->getModuleName(),"Data location does not match module");
 
         OSL_PRECOND(m_base.is(), "Data must already be loaded to insert defaults");
 
         if (m_base.is())
         {
-            data::mergeDefaults(_aAccessToken,m_base,*_aDefaultInstance.node);
+            data::mergeDefaults(_aAccessToken,m_base,*_aDefaultInstance.data());
         }
 
         return m_base;
@@ -468,8 +506,8 @@ namespace configmgr
 // -----------------------------------------------------------------------------
 
     ExtendedCacheLine::ExtendedCacheLine(Name const & _aModuleName, memory::HeapManager & _rHeapImpl,
-                                            memory::SegmentAddress const & _aLocation)
-    : CacheLine(_aModuleName,_rHeapImpl,_aLocation)
+                                            memory::SegmentAddress const & _aSegment)
+    : CacheLine(_aModuleName,_rHeapImpl,_aSegment)
     , m_pPending()
     {
     }
@@ -478,7 +516,7 @@ namespace configmgr
 
     ExtendedCacheLineRef ExtendedCacheLine::createAttached( Name const & _aModuleName,
                                                             memory::HeapManager & _rHeapImpl,
-                                                            memory::SegmentAddress const & _aLocation
+                                                            memory::SegmentAddress const & _aSegment
                                                           ) CFG_UNO_THROW_RTE(  )
     {
         if (_aModuleName.isEmpty())
@@ -486,13 +524,13 @@ namespace configmgr
             OSL_ENSURE(false, "Cannot make a cache line without a name");
             return NULL;
         }
-        if (_aLocation.address == 0)
+        if (_aSegment.isNull())
         {
-            OSL_ENSURE(false, "Cannot attach a cache line to a NULL address");
+            OSL_ENSURE(false, "Cannot attach a cache line to a NULL segment");
             return NULL;
         }
 
-        ExtendedCacheLineRef xResult = new ExtendedCacheLine(_aModuleName,_rHeapImpl,_aLocation);
+        ExtendedCacheLineRef xResult = new ExtendedCacheLine(_aModuleName,_rHeapImpl,_aSegment);
 
         return xResult;
     }
@@ -514,15 +552,15 @@ namespace configmgr
     }
 // -------------------------------------------------------------------------
 
-    void ExtendedCacheLine::addPending(backend::UpdateInstance const & _anUpdate) CFG_UNO_THROW_RTE(  )
+    void ExtendedCacheLine::addPending(backend::ConstUpdateInstance const & _anUpdate) CFG_UNO_THROW_RTE(  )
     {
-        Path aRootLocation = _anUpdate.root.location();
+        Path aRootLocation = _anUpdate.root().location();
 
         OSL_PRECOND(!aRootLocation.isRoot(),"Pending change cannot be located at root");
         OSL_PRECOND(aRootLocation.getModuleName() == this->getModuleName(),"Pending change location does not match module");
 
-        OSL_PRECOND(_anUpdate.update.get() != NULL,"Adding NULL 'pending' change");
-        OSL_PRECOND(_anUpdate.update->getNodeName() == aRootLocation.getLocalName().getName().toString(),
+        OSL_PRECOND(_anUpdate.data() != NULL,"Adding NULL 'pending' change");
+        OSL_PRECOND(_anUpdate.data()->getNodeName() == aRootLocation.getLocalName().getName().toString(),
                     "Path to pending change does not match change name");
 
         using std::auto_ptr;
@@ -569,7 +607,7 @@ namespace configmgr
             }
         }
 
-        auto_ptr<SubtreeChange> pAddedChange( new SubtreeChange(*_anUpdate.update, SubtreeChange::DeepChildCopy()) );
+        auto_ptr<SubtreeChange> pAddedChange( new SubtreeChange(*_anUpdate.data(), SubtreeChange::DeepChildCopy()) );
 
         if (aRootLocation.getDepth() > 1)
         {

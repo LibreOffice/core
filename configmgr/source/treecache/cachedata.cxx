@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedata.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 09:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,11 +225,28 @@ namespace configmgr
     }
 // -------------------------------------------------------------------------
 
+    /// gets a data segment reference for the given path if exists
+    memory::SegmentAddress CacheData::getDataSegmentAddress(const ModuleName & _aModule) const
+    {
+        CacheLineRef aModule = internalGetModule(_aModule);
+
+        return aModule.is() ? aModule->getDataSegmentAddress() : memory::SegmentAddress();
+    }
+// -------------------------------------------------------------------------
+
     bool CacheData::hasModule(const ModuleName & _aModule) const
     {
         CacheLineRef aModule = internalGetModule(_aModule);
 
         return aModule.is() && !aModule->isEmpty();
+    }
+// -------------------------------------------------------------------------
+
+    bool CacheData::hasModuleDefaults(memory::Accessor const & _aAccessor, const ModuleName & _aModule) const
+    {
+        CacheLineRef aModule = internalGetModule(_aModule);
+
+        return aModule.is() && !aModule->hasDefaults(_aAccessor);
     }
 // -------------------------------------------------------------------------
 
@@ -314,21 +331,43 @@ namespace configmgr
     }
 // -----------------------------------------------------------------------------
 
+    bool CacheData::insertDefaults( memory::UpdateAccessor& _aAccessToken,
+                                    backend::NodeInstance const & _aDefaultInstance) CFG_UNO_THROW_RTE(  )
+    {
+        OSL_PRECOND(_aDefaultInstance.data().get(), "insertDefaults: Data must not be NULL");
+        OSL_PRECOND(_aDefaultInstance.root().isModuleRoot(), "insertDefaults: Default tree being added must be for module");
+
+        // we should already have the module in cache !
+        CacheLineRef xModule = internalGetModule(_aDefaultInstance.root().location());
+
+        OSL_ENSURE( xModule.is(), "CacheData::insertDefaults: No module to insert the defaults to - where did the data segment come from ?");
+
+        if (!xModule.is()) return false;
+
+        // make sure to keep the module alive
+        CacheLineClientRef( xModule ).keep();
+
+        data::TreeAddress aResultTree = xModule->insertDefaults(_aAccessToken, _aDefaultInstance);
+
+        return aResultTree.is();
+    }
+// -----------------------------------------------------------------------------
+
     void CacheData::applyUpdate(memory::UpdateAccessor & _aAccessToken, backend::UpdateInstance & _anUpdate ) CFG_UNO_THROW_RTE(  )
     {
         // request the subtree, atleast one level must exist!
-        data::NodeAddress aNodeAddr = internalGetNode(_aAccessToken.accessor(),_anUpdate.root.location());
+        data::NodeAddress aNodeAddr = internalGetNode(_aAccessToken.accessor(),_anUpdate.root().location());
 
         if (aNodeAddr.is())
         {
-            applyUpdateToTree(*_anUpdate.update,_aAccessToken,aNodeAddr);
+            applyUpdateToTree(*_anUpdate.data(),_aAccessToken,aNodeAddr);
         }
         else
         {
             OSL_ENSURE(false, "CacheData::applyUpdate called for non-existing tree");
             OUString aStr(RTL_CONSTASCII_USTRINGPARAM("CacheData: update to non-existing node: "));
 
-            aStr += _anUpdate.root.toString();
+            aStr += _anUpdate.root().toString();
 
             throw uno::RuntimeException(aStr,0);
         }
@@ -384,11 +423,11 @@ namespace configmgr
     data::TreeAddress TemplateCacheData::addTemplates(  memory::UpdateAccessor& _aUpdateToken,
                                                         backend::NodeInstance & _aTemplatesNode) CFG_UNO_THROW_RTE(  )
     {
-        OSL_PRECOND(_aTemplatesNode.node.get(), "addTemplates: Data must not be NULL");
-        OSL_PRECOND(_aTemplatesNode.root.isModuleRoot(), "addTemplates: Template tree being added must be for module");
+        OSL_PRECOND(_aTemplatesNode.data().get(), "addTemplates: Data must not be NULL");
+        OSL_PRECOND(_aTemplatesNode.root().isModuleRoot(), "addTemplates: Template tree being added must be for module");
 
         // we should already have the module in cache !
-        CacheLineRef xModule = internalGetModule(_aTemplatesNode.root.location());
+        CacheLineRef xModule = internalGetModule(_aTemplatesNode.root().location());
 
         OSL_ENSURE( xModule.is(), "ExtendedCacheData::addTemplates: No module to add the templates to - where did the data segment come from ?");
 
@@ -399,7 +438,7 @@ namespace configmgr
 
         static const OUString aDummyTemplateName(RTL_CONSTASCII_USTRINGPARAM("cfg:Template"));
         static const OUString aDummyTemplateModule(RTL_CONSTASCII_USTRINGPARAM("cfg:Templates"));
-        _aTemplatesNode.node->makeSetNode(aDummyTemplateName,aDummyTemplateModule);
+        _aTemplatesNode.data()->makeSetNode(aDummyTemplateName,aDummyTemplateModule);
 
         data::TreeAddress aResult = xModule->setComponentData(_aUpdateToken, _aTemplatesNode, true);
 
@@ -469,14 +508,14 @@ namespace configmgr
 // -------------------------------------------------------------------------
 
     data::TreeAddress ExtendedCacheData::addComponentData(memory::UpdateAccessor& _aUpdateToken,
-                                                    backend::NodeInstance & _aNodeInstance,
+                                                    backend::NodeInstance const & _aNodeInstance,
                                                     bool _bWithDefaults) CFG_UNO_THROW_RTE(  )
     {
-        OSL_PRECOND(_aNodeInstance.node.get(), "addComponentData: Data must not be NULL");
-        OSL_PRECOND(_aNodeInstance.root.isModuleRoot(), "addComponentData: tree being added must be for module");
+        OSL_PRECOND(_aNodeInstance.data().get(), "addComponentData: Data must not be NULL");
+        OSL_PRECOND(_aNodeInstance.root().isModuleRoot(), "addComponentData: tree being added must be for module");
 
         // we should already have the module in cache !
-        CacheLineRef xModule = internalGetModule(_aNodeInstance.root.location());
+        CacheLineRef xModule = internalGetModule(_aNodeInstance.root().location());
 
         OSL_ENSURE( xModule.is(), "ExtendedCacheData::addComponentData: No module to add the subtree to - where did the data segment come from ?");
 
@@ -494,10 +533,10 @@ namespace configmgr
     }
 // -----------------------------------------------------------------------------
 
-    void ExtendedCacheData::addPending(backend::UpdateInstance const & _anUpdate) CFG_UNO_THROW_RTE(  )
+    void ExtendedCacheData::addPending(backend::ConstUpdateInstance const & _anUpdate) CFG_UNO_THROW_RTE(  )
     {
         // do we already have the module in cache ?
-        CacheLineRef xModule = internalGetModule(_anUpdate.root.location());
+        CacheLineRef xModule = internalGetModule(_anUpdate.root().location());
 
         if (xModule.is())
         {
@@ -529,7 +568,29 @@ namespace configmgr
     }
 // -----------------------------------------------------------------------------
 
+    bool ExtendedCacheData::hasPending(ModuleName const & _aModule)
+    {
+        ExtendedCacheLineRef xModule = implExtended(internalGetModule(_aModule));
 
+        return xModule.is() && xModule->hasPending();
+    }
+// -----------------------------------------------------------------------------
+
+    void ExtendedCacheData::findPendingModules( PendingModuleList & _rPendingList )
+    {
+        ModuleList& rModules = CacheData::accessModuleList();
+        for (ModuleList::iterator it = rModules.begin();
+                it != rModules.end();
+                ++it)
+        {
+            OSL_ASSERT( it->second.is() );
+            if ( implExtended(it->second)->hasPending() )
+                _rPendingList.push_back( it->first );
+        }
+    }
+// -----------------------------------------------------------------------------
+
+// -----------------------------------------------------------------------------
 } // namespace configmgr
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 09:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,29 +62,49 @@
 #ifndef CONFIGMGR_DISPOSETIMER_HXX
 #define CONFIGMGR_DISPOSETIMER_HXX
 
+#ifndef CONFIGMGR_API_APITYPES_HXX_
+#include "apitypes.hxx"
+#endif
+#ifndef CONFIGMGR_TIMESTAMP_HXX
+#include "timestamp.hxx"
+#endif
+#ifndef CONFIGMGR_MISC_REQUESTOPTIONS_HXX_
+#include "requestoptions.hxx"
+#endif
+
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+
+#ifndef _VOS_TIMER_HXX_
+#include <vos/timer.hxx>
+#endif
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
-#include "apitypes.hxx"
-#include "timestamp.hxx"
-#include "options.hxx"
-#include <osl/mutex.hxx>
-#include <vos/timer.hxx>
+#ifndef INCLUDED_UTILITY
+#include <utility>
+#define INCLUDED_UTILITY
+#endif
+#ifndef INCLUDED_MAP
 #include <map>
+#define INCLUDED_MAP
+#endif
 
 namespace uno   = ::com::sun::star::uno;
 namespace lang  = ::com::sun::star::lang;
 
 namespace configmgr
 {
-    class TreeManager;
-
-    class RequestOptions;
+    namespace backend { class CacheController; }
 ////////////////////////////////////////////////////////////////////////////////
 /* OTreeDisposeScheduler:
    does something special????
@@ -92,7 +112,8 @@ namespace configmgr
 
     class OTreeDisposeScheduler
     {
-        typedef std::multimap< TimeStamp, vos::ORef< OOptions >, ltTimeStamp > Agenda;
+        typedef std::multimap< TimeStamp, RequestOptions, ltTimeStamp > Agenda;
+        typedef backend::CacheController CacheManager;
 
         class Timer : public vos::OTimer
         {
@@ -120,14 +141,14 @@ namespace configmgr
         Agenda              m_aAgenda;
 
         vos::ORef<Timer>    m_xTimer;
-        TreeManager&        m_rTreeManager;
+        CacheManager&       m_rTreeManager;
 
         TimeInterval m_aCleanupDelay;
         TimeInterval m_aCleanupInterval;
     public:
     //-------- Construction and destruction -----------------------------------
         explicit
-        OTreeDisposeScheduler(TreeManager& _rTreeManager, TimeInterval const& _aCleanupDelay)
+        OTreeDisposeScheduler(CacheManager& _rTreeManager, TimeInterval const& _aCleanupDelay)
             : m_rTreeManager(_rTreeManager)
             , m_aCleanupDelay(_aCleanupDelay)
             , m_aCleanupInterval(_aCleanupDelay)
@@ -136,7 +157,7 @@ namespace configmgr
         }
 
         explicit
-        OTreeDisposeScheduler(TreeManager& _rTreeManager, TimeInterval const& _aCleanupDelay, TimeInterval const& _aCleanupInterval)
+        OTreeDisposeScheduler(CacheManager& _rTreeManager, TimeInterval const& _aCleanupDelay, TimeInterval const& _aCleanupInterval)
             : m_rTreeManager(_rTreeManager)
             , m_aCleanupDelay(_aCleanupDelay)
             , m_aCleanupInterval(_aCleanupInterval)
@@ -183,19 +204,11 @@ namespace configmgr
             return m_aCleanupInterval;
         }
 
-        /// calculate the time when to cleanup an pbject that became eligible at <var>aBaseTime</var>.
-        TimeStamp getCleanupTime(TimeStamp const& aBaseTime = TimeStamp::getCurrentTime())
-        {
-            return implGetCleanupTime(aBaseTime, getCleanupDelay());
-        }
-
     //-------- Control of execution  ------------------------------------------
         /// ensure this will execute cleanup duties for _xOptions (no later than after getCleanupDelay() has elapsed)
-        void scheduleCleanup(vos::ORef< OOptions > const& _xOptions);
         void scheduleCleanup(RequestOptions const & _aOptions);
 
         /// stop and discard pending activities for _xOptions
-        void clearTasks(vos::ORef< OOptions > const& _xOptions);
         void clearTasks(RequestOptions const & _aOptions);
 
         /// stop and discard pending activities
@@ -208,18 +221,19 @@ namespace configmgr
         // vos::OTimer
         void onTimerShot();
 
-        vos::ORef< OOptions > getTask(TimeStamp const& _aActualTime, TimeStamp& _aNextTime);
+        typedef std::pair<bool,RequestOptions> Task;
+        Task getTask(TimeStamp const& _aActualTime, TimeStamp& _aNextTime);
 
         /// ensure this will execute cleanup duties for _xOptions (no later than after getCleanupDelay() has elapsed)
       //  TimeStamp fillDisposeList(CacheLoadingAccess & _aCache, DisposeList& _rList, TimeStamp const& aLimitTime)
 
         TimeStamp runDisposer(TimeStamp const& _aActualTime);
     private:
-        TimeStamp implAddTask(vos::ORef< OOptions > const& _xOptions, TimeStamp const& _aTime);
+        TimeStamp implAddTask(RequestOptions const& _xOptions, TimeStamp const& _aTime);
         void implStartBefore(TimeStamp const& _aTime);
 
-        static TimeStamp implGetCleanupTime(TimeStamp const& aBaseTime, TimeInterval const& aDelay)
-        { return aBaseTime + aDelay; }
+        static TimeStamp implGetCleanupTime(TimeStamp const& aPostingTime, TimeInterval const& aDelay)
+        { return aPostingTime + aDelay; }
     };
 
 

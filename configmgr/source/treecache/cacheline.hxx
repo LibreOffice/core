@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheline.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 09:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,19 +113,24 @@ namespace configmgr
 
         memory::Segment * getDataSegment();
 
+        memory::SegmentAddress getDataSegmentAddress() const;
+
         bool isEmpty() const { return m_base.isNull(); }
+
+        bool hasDefaults(memory::Accessor const & _aAccessor) const;
+
         data::TreeAddress getModuleRootAddress( ) const { return m_base; }
 
         data::TreeAddress   getPartialTree(memory::Accessor const & _aAccessor, Path const & _aTemplatePath ) const;
         data::NodeAddress   getNode(memory::Accessor const & _aAccessor, Path const & _aPath) const;
 
         data::TreeAddress   setComponentData( memory::UpdateAccessor& _aAccessToken,
-                                              backend::NodeInstance & _aNodeInstance,
+                                              backend::NodeInstance const & _aNodeInstance,
                                               bool _bWithDefaults
                                            ) CFG_UNO_THROW_RTE();
 
         data::TreeAddress   insertDefaults(   memory::UpdateAccessor& _aAccessToken,
-                                              backend::NodeInstance & _aDefaultInstance
+                                              backend::NodeInstance const & _aDefaultInstance
                                            ) CFG_UNO_THROW_RTE();
 
         // get the module name for this component
@@ -180,7 +185,7 @@ namespace configmgr
     // management of pending changes
         bool hasPending() const {return m_pPending.get() != NULL;}
 
-        void addPending(backend::UpdateInstance const & _anUpdate) CFG_UNO_THROW_RTE();
+        void addPending(backend::ConstUpdateInstance const & _anUpdate) CFG_UNO_THROW_RTE();
         std::auto_ptr<SubtreeChange> releasePending() {return m_pPending;}
 
     private:
