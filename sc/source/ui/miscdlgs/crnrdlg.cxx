@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: er $ $Date: 2001-03-14 14:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,6 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
 // INCLUDE -------------------------------------------------------------------
 
 #include "reffact.hxx"
@@ -100,14 +96,9 @@ const ULONG nEntryDataCol = 0;
 const ULONG nEntryDataRow = 1;
 const ULONG nEntryDataDelim = 2;
 
-SEG_EOFGLOBALS()
-
 
 //============================================================================
 //  class ScColRowNameRangesDlg
-
-//----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(crnrdlg_01)
 
 
 /*************************************************************************
@@ -166,9 +157,6 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
 }
 
 
-//----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(crnrdlg_02)
-
 /*************************************************************************
 #*  Member:     ~ScColRowNameRangesDlg                      Datum:04.09.97
 #*------------------------------------------------------------------------
@@ -187,9 +175,6 @@ __EXPORT ScColRowNameRangesDlg::~ScColRowNameRangesDlg()
 {
 }
 
-
-//----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(crnrdlg_03)
 
 /*************************************************************************
 #*  Member:     Init                                        Datum:04.09.97
@@ -260,8 +245,6 @@ void ScColRowNameRangesDlg::Init()
     Range1SelectHdl( 0 );
 }
 
-
-#pragma SEG_FUNCDEF(crnrdlg_16)
 
 /*************************************************************************
 #*  Member:     SetColRowData                               Datum:04.09.97
@@ -362,8 +345,6 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,BOOL bRef)
 }
 
 
-#pragma SEG_FUNCDEF(crnrdlg_17)
-
 /*************************************************************************
 #*  Member:     AdjustColRowData                            Datum:04.09.97
 #*------------------------------------------------------------------------
@@ -440,8 +421,6 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,BOOL bRe
 }
 
 
-#pragma SEG_FUNCDEF(crnrdlg_04)
-
 /*************************************************************************
 #*  Member:     SetReference                                Datum:04.09.97
 #*------------------------------------------------------------------------
@@ -479,9 +458,6 @@ void ScColRowNameRangesDlg::SetReference( const ScRange& rRef, ScDocument* pDoc 
 }
 
 
-//----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(crnrdlg_05)
-
 /*************************************************************************
 #*  Member:     Close                                       Datum:04.09.97
 #*------------------------------------------------------------------------
@@ -501,8 +477,6 @@ BOOL __EXPORT ScColRowNameRangesDlg::Close()
     return DoClose( ScColRowNameRangesDlgWrapper::GetChildWindowId() );
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(crnrdlg_06)
 
 /*************************************************************************
 #*  Member:     SetActive                                   Datum:04.09.97
@@ -534,8 +508,6 @@ void ScColRowNameRangesDlg::SetActive()
     RefInputDone();
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(crnrdlg_07)
 
 /*************************************************************************
 #*  Member:     UpdateNames                                 Datum:04.09.97
@@ -665,8 +637,6 @@ void ScColRowNameRangesDlg::UpdateNames()
     aLbRange.Invalidate();
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(crnrdlg_0e)
 
 /*************************************************************************
 #*  Member:     UpdateRangeData                             Datum:04.09.97
@@ -729,9 +699,6 @@ void ScColRowNameRangesDlg::UpdateRangeData( const String& rRangeStr, BOOL bColN
     aEdAssign2.Enable();
 }
 
-//------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(crnrdlg_12)
 
 /*************************************************************************
 #*  Member:     IsRefInputMode                              Datum:04.09.97
@@ -756,7 +723,6 @@ BOOL ScColRowNameRangesDlg::IsRefInputMode() const
 //------------------------------------------------------------------------
 // Handler:
 // ========
-#pragma SEG_FUNCDEF(crnrdlg_08)
 
 /*************************************************************************
 #*  Handler:    OkBtnHdl                                    Datum:04.09.97
@@ -791,8 +757,6 @@ IMPL_LINK( ScColRowNameRangesDlg, OkBtnHdl, void *, EMPTYARG )
     return 0;
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(crnrdlg_0d)
 
 /*************************************************************************
 #*  Handler:    CancelBtnHdl                                Datum:04.09.97
@@ -815,8 +779,6 @@ IMPL_LINK_INLINE_START( ScColRowNameRangesDlg, CancelBtnHdl, void *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( ScColRowNameRangesDlg, CancelBtnHdl, void *, EMPTYARG )
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(crnrdlg_09)
 
 /*************************************************************************
 #*  Handler:    AddBtnHdl                                   Datum:04.09.97
@@ -889,8 +851,6 @@ IMPL_LINK( ScColRowNameRangesDlg, AddBtnHdl, void *, EMPTYARG )
     return 0;
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(crnrdlg_0a)
 
 /*************************************************************************
 #*  Handler:    RemoveBtnHdl                                Datum:04.09.97
@@ -978,8 +938,6 @@ IMPL_LINK( ScColRowNameRangesDlg, RemoveBtnHdl, void *, EMPTYARG )
     return 0;
 }
 
-//------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(crnrdlg_0c)
 
 /*************************************************************************
 #*  Handler:    Range1SelectHdl                             Datum:04.09.97
@@ -1067,8 +1025,6 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1SelectHdl, void *, EMPTYARG )
 }
 
 
-#pragma SEG_FUNCDEF(crnrdlg_13)
-
 /*************************************************************************
 #*  Handler:    Range1DataModifyHdl                         Datum:04.09.97
 #*------------------------------------------------------------------------
@@ -1116,8 +1072,6 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1DataModifyHdl, void *, EMPTYARG )
 }
 
 
-#pragma SEG_FUNCDEF(crnrdlg_18)
-
 /*************************************************************************
 #*  Handler:    Range2DataModifyHdl                         Datum:04.09.97
 #*------------------------------------------------------------------------
@@ -1154,8 +1108,6 @@ IMPL_LINK( ScColRowNameRangesDlg, Range2DataModifyHdl, void *, EMPTYARG )
     return 0;
 }
 
-
-#pragma SEG_FUNCDEF(crnrdlg_14)
 
 /*************************************************************************
 #*  Handler:    ColClickHdl                                 Datum:04.09.97
@@ -1195,8 +1147,6 @@ IMPL_LINK( ScColRowNameRangesDlg, ColClickHdl, void *, EMPTYARG )
 }
 
 
-#pragma SEG_FUNCDEF(crnrdlg_15)
-
 /*************************************************************************
 #*  Handler:    RowClickHdl                                 Datum:04.09.97
 #*------------------------------------------------------------------------
@@ -1235,8 +1185,6 @@ IMPL_LINK( ScColRowNameRangesDlg, RowClickHdl, void *, EMPTYARG )
 }
 
 
-#pragma SEG_FUNCDEF(crnrdlg_19)
-
 /*************************************************************************
 #*  Handler:    EdGetFocusHdl                               Datum:04.09.97
 #*------------------------------------------------------------------------
@@ -1261,8 +1209,6 @@ IMPL_LINK( ScColRowNameRangesDlg, EdGetFocusHdl, ScRefEdit*, pEd )
 }
 
 
-#pragma SEG_FUNCDEF(crnrdlg_1a)
-
 /*************************************************************************
 #*  Handler:    EdLoseFocusHdl                              Datum:04.09.97
 #*------------------------------------------------------------------------
@@ -1283,73 +1229,3 @@ IMPL_LINK( ScColRowNameRangesDlg, EdLoseFocusHdl, ScRefEdit*, pEd )
     bDlgLostFocus = !IsActive();
     return 0;
 }
-
-
-/*----------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.19  2000/09/17 14:09:14  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.18  2000/08/31 16:38:36  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.17  2000/07/19 18:21:38  er
-    i18n: replaced International with CharClass isAlpha, isNumeric, isAlphaNumeric, toUpper, toLower et al.
-
-    Revision 1.16  2000/04/17 15:33:25  nn
-    unicode changes
-
-    Revision 1.15  1999/06/09 16:11:28  NN
-    Sfx-appwin removed
-
-
-      Rev 1.14   09 Jun 1999 18:11:28   NN
-   Sfx-appwin removed
-
-      Rev 1.13   10 Dec 1998 20:53:26   ANK
-   #51738# Umstellung auf ScRefEdit zum Anzeigen von Referenzen
-
-      Rev 1.12   12 Aug 1998 19:52:12   ANK
-   #54702# IsRefInputMode ueberarbeitet
-
-      Rev 1.11   06 Aug 1998 21:16:26   ANK
-   #54702# Enablen/Disablen der Applikation nur noch in ScAnyRefDlg
-
-      Rev 1.10   18 Feb 1998 14:16:54   RG
-   ->DOS-Format
-
-      Rev 1.9   30 Sep 1997 13:45:00   TJ
-   include
-
-      Rev 1.8   05 Sep 1997 12:19:18   ANK
-   Erweiterung auf Feldtexte
-
-      Rev 1.7   03 Sep 1997 16:04:52   RG
-   change header
-
-      Rev 1.6   13 Jun 1997 12:08:22   ER
-   Range1SelectHdl: nicht auf letztem Delimiter stehenbleiben
-
-      Rev 1.5   12 Jun 1997 17:13:50   ER
-   #36216# Beschriftungsbereiche sortiert anzeigen
-
-      Rev 1.4   16 May 1997 15:02:28   MH
-   aufraeumen - hjs
-
-      Rev 1.3   12 Feb 1997 18:14:52   ER
-   #35808# CompileColRowNameFormula nach Beschriftungsbereiche-Dialog-OK
-
-      Rev 1.2   04 Feb 1997 14:09:40   ER
-   chg: ColRowNameRanges mit ScRangePair
-
-      Rev 1.1   18 Nov 1996 19:42:56   ER
-   Init: bei Eingangsselektin evtl. RowHead Button anknipsen
-
-      Rev 1.0   18 Nov 1996 19:09:04   ER
-   new: ScColRowNameRangesDlg
-
-----------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
-
