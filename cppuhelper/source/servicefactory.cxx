@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-25 14:15:02 $
+ *  last change: $Author: ok $ $Date: 2001-07-09 12:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,12 @@ static OUString findBoostrapArgument(const OUString & arg_name, sal_Bool * pFall
         OUString progExt = OUString::createFromAscii(SAL_PRGEXTENSION);
         if(fileName.lastIndexOf(progExt) == (fileName.getLength() - progExt.getLength()))
            fileName = fileName.copy(0, fileName.lastIndexOf(progExt));
+
+#ifdef WNT
+        progExt = progExt.toAsciiUpperCase();
+           if(fileName.lastIndexOf(progExt) == (fileName.getLength() - progExt.getLength()))
+           fileName = fileName.copy(0, fileName.lastIndexOf(progExt));
+#endif
 
         result = fileName;
         result += OUString(RTL_CONSTASCII_USTRINGPARAM("_"));
