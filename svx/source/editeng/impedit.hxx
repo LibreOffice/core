@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-05 16:53:10 $
+ *  last change: $Author: mt $ $Date: 2001-03-08 09:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,7 +644,6 @@ public:
     sal_Bool        UpdateFields();
     EditSelection   CutCopy( EditView* pView, sal_Bool bCut );
     EditSelection   Paste( EditView* pView, sal_Bool bUseSpecial = sal_False );
-    sal_uInt16      SearchAndReplace( const XubString& rBefore, const XubString& rAfter, EditView* pView );
 
     EditPaM         Read( SvStream& rInput, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
     void            Write( SvStream& rOutput, EETextFormat eFormat, EditSelection aSel );

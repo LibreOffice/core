@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-23 13:05:25 $
+ *  last change: $Author: mt $ $Date: 2001-03-08 09:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,19 +97,6 @@ using namespace com::sun::star::linguistic2;
 
 
 DBG_NAME( EditView );
-
-#ifndef SVX_LIGHT
-void SetSearchFlags( SvxSearchItem& rSearchItem, sal_uInt16 nSearchFlags )
-{
-    rSearchItem.SetWordOnly( nSearchFlags &  EE_SEARCH_WORDONLY ? sal_True : sal_False );
-    rSearchItem.SetExact( nSearchFlags &  EE_SEARCH_EXACT ? sal_True : sal_False );
-    rSearchItem.SetBackward( nSearchFlags &  EE_SEARCH_BACKWARD ? sal_True : sal_False );
-    rSearchItem.SetSelection( nSearchFlags &  EE_SEARCH_INSELECTION ? sal_True : sal_False );
-    rSearchItem.SetRegExp( nSearchFlags &  EE_SEARCH_REGEXPR ? sal_True : sal_False );
-    rSearchItem.SetPattern( nSearchFlags &  EE_SEARCH_PATTERN ? sal_True : sal_False );
-}
-#endif
-
 
 // ----------------------------------------------------------------------
 // class EditView
@@ -341,35 +328,6 @@ Cursor* EditView::GetCursor() const
 {
     DBG_CHKTHIS( EditView, 0 );
     return pImpEditView->pCursor;
-}
-
-sal_uInt16 EditView::SearchAndReplace( const XubString& rBefore, const XubString& rAfter, EditSearchMode eSearchMode )
-{
-#ifndef SVX_LIGHT
-    // eSearchMode auswerten!
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    PIMPEE->UndoActionStart( EDITUNDO_SRCHANDREPL );
-    sal_uInt16 n = PIMPEE->SearchAndReplace( rBefore, rAfter, this );
-    PIMPEE->UndoActionEnd( EDITUNDO_SRCHANDREPL );
-    return n;
-#else
-    return 0;
-#endif
-}
-
-sal_Bool EditView::Search( const XubString& rText, sal_uInt16 nFlags )
-{
-#ifndef SVX_LIGHT
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    SvxSearchItem aSrchItem( SID_SEARCH_ITEM );
-    SetSearchFlags( aSrchItem, nFlags );
-    aSrchItem.SetSearchString( rText );
-    return PIMPEE->Search( aSrchItem, this );
-#else
-    return sal_False;
-#endif
 }
 
 void EditView::InsertText( const XubString& rStr, sal_Bool bSelect )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-07 10:22:58 $
+ *  last change: $Author: mt $ $Date: 2001-03-08 09:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -796,87 +796,6 @@ BOOL ImpEditEngine::Search( const SvxSearchItem& rSearchItem, EditView* pEditVie
     pEditView->pImpEditView->DrawSelection();
     pEditView->ShowCursor( TRUE, FALSE );
     return bFound;
-}
-
-USHORT ImpEditEngine::SearchAndReplace( const XubString& rBefore, const XubString& rAfter, EditView* pView )
-{
-    EditSelection aSel( pView->pImpEditView->GetEditSelection() );
-    aSel.Adjust( aEditDoc );
-
-    USHORT nStartNode, nEndNode;
-    EditSelection   aTmpSel;
-
-    short nDiff = rAfter.Len() - rBefore.Len();
-    USHORT nReplaces = 0;
-
-    BOOL bRange = aSel.HasRange();
-    if ( bRange )
-    {
-        pView->pImpEditView->DrawSelection();
-        nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
-        nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
-    }
-    else
-    {
-        nStartNode = 0;
-        nEndNode = aEditDoc.Count()-1;
-    }
-
-    // ueber die Absaetze iterieren...
-    for ( USHORT nNode = nStartNode; nNode <= nEndNode; nNode++ )
-    {
-        ContentNode* pNode = aEditDoc.GetObject( nNode );
-        ParaPortion* pPortion = GetParaPortions().GetObject( nNode );
-
-        // pPortion koennte durch GetObject opimiert werden!
-        DBG_ASSERT( aEditDoc.SaveGetObject( nNode ), "Node nicht gefunden: Search&Replace" );
-        DBG_ASSERT( GetParaPortions().SaveGetObject( nNode ), "Portion nicht gefunden: Search&Replace" );
-
-        USHORT nStartPos = 0;
-        USHORT nEndPos = pNode->Len();
-        if ( bRange )
-        {
-            if ( nNode == nStartNode )
-                nStartPos = aSel.Min().GetIndex();
-            if ( nNode == nEndNode ) // kann auch == nStart sein!
-                nEndPos = aSel.Max().GetIndex();
-        }
-
-        USHORT nXStart = pNode->Search( rBefore, nStartPos );
-        while ( nXStart != STRING_NOTFOUND )
-        {
-            USHORT nXEnd = nXStart + rBefore.Len();
-            if ( nXEnd > nEndPos )
-                break;
-
-            // gefundenes Wort 'selektieren'
-            aTmpSel.Min().SetNode( pNode );
-            aTmpSel.Min().SetIndex( nXStart );
-            aTmpSel.Max().SetNode( pNode );
-            aTmpSel.Max().SetIndex( nXEnd );
-
-            ImpDeleteSelection( aTmpSel );
-            aTmpSel.Max().SetIndex( nXStart );  // schneller als = DeleteSel...
-            ImpInsertText( aTmpSel, rAfter );
-
-            // Selektion korrigieren...
-            if ( bRange && ( nNode == nEndNode ) )
-            {
-                aSel.Max().GetIndex() += nDiff;
-                pView->pImpEditView->SetEditSelection( aSel );
-            }
-
-            nEndPos += nDiff;
-            nReplaces++;
-
-            pPortion->MarkInvalid( nXStart, nDiff );
-            nXStart = pNode->Search( rBefore, nXStart+rAfter.Len() );
-        }
-    }
-
-    UpdateSelections();
-    FormatAndUpdate( pView );
-    return nReplaces;
 }
 
 EditPaM ImpEditEngine::Clear()
