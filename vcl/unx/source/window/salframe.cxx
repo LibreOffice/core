@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 15:17:19 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,6 +384,10 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
     }
     else if( pParentData )
     {
+        // plugin parent may be killed unexpectedly by
+        // plugging process; ignore XErrors in that case
+        GetDisplay()->GetXLib()->SetIgnoreXErrors( TRUE );
+
         nStyle_ |= SAL_FRAME_STYLE_CHILD;
         Attributes.override_redirect = True;
 
@@ -2194,6 +2198,10 @@ SalFrame* SalFrame::GetParent() const
 
 bool SalFrameData::SetPluginParent( SystemParentData* pNewParent )
 {
+    // plugin parent may be killed unexpectedly by
+    // plugging process; ignore XErrors in that case
+    GetDisplay()->GetXLib()->SetIgnoreXErrors( TRUE );
+
     // first deinit frame
     if( mpInputContext )
     {
@@ -2489,7 +2497,8 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
         ImplSVData* pSVData = ImplGetSVData();
         if ( pSVData->maWinData.mpFirstFloat )
         {
-            if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) )
+            static const char* pEnv = getenv( "SAL_FLOATWIN_NOAPPFOCUSCLOSE" );
+            if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) && !(pEnv && *pEnv) )
                 pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
         }
     }
