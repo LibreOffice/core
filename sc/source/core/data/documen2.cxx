@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 15:23:59 $
+ *  last change: $Author: er $ $Date: 2000-12-13 12:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1493,6 +1493,8 @@ BOOL ScDocument::MoveTab( USHORT nOldPos, USHORT nNewPos )
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i])
                         pTab[i]->StartAllListeners();
+                // #81844# sheet names of references may not be valid until sheet is moved
+                pChartListenerCollection->UpdateScheduledSeriesRanges();
                 SetDirty();
                 SetAutoCalc( bOldAutoCalc );
 
@@ -1581,6 +1583,8 @@ BOOL ScDocument::CopyTab( USHORT nOldPos, USHORT nNewPos, const ScMarkData* pOnl
                 //  update conditional formats after table is inserted
                 if ( pCondFormList )
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
+                // #81844# sheet names of references may not be valid until sheet is copied
+                pChartListenerCollection->UpdateScheduledSeriesRanges();
             }
             else
                 bValid = FALSE;

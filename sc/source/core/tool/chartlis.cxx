@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartlis.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: er $ $Date: 2000-12-13 12:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,8 @@ ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP,
     pDoc( pDocP ),
     pUnoData( NULL ),
     bUsed( FALSE ),
-    bDirty( FALSE )
+    bDirty( FALSE ),
+    bSeriesRangesScheduled( FALSE )
 {
     SetRangeList( rRange );
 }
@@ -116,7 +117,8 @@ ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP,
     pDoc( pDocP ),
     pUnoData( NULL ),
     bUsed( FALSE ),
-    bDirty( FALSE )
+    bDirty( FALSE ),
+    bSeriesRangesScheduled( FALSE )
 {
 }
 
@@ -125,7 +127,8 @@ ScChartListener::ScChartListener( const ScChartListener& r ) :
         pDoc( r.pDoc ),
         pUnoData( NULL ),
         bUsed( FALSE ),
-        bDirty( r.bDirty )
+        bDirty( r.bDirty ),
+        bSeriesRangesScheduled( r.bSeriesRangesScheduled )
 {
     if ( r.pUnoData )
         pUnoData = new ScChartUnoData( *r.pUnoData );
@@ -252,6 +255,29 @@ void ScChartListener::SetRangeList( const ScRange& rRange )
 }
 
 
+void ScChartListener::UpdateScheduledSeriesRanges()
+{
+    if ( bSeriesRangesScheduled )
+    {
+        bSeriesRangesScheduled = FALSE;
+        UpdateSeriesRanges();
+    }
+}
+
+
+void ScChartListener::UpdateSeriesRangesIntersecting( const ScRange& rRange )
+{
+    if ( aRangeListRef->Intersects( rRange ) )
+        UpdateSeriesRanges();
+}
+
+
+void ScChartListener::UpdateSeriesRanges()
+{
+    pDoc->SetChartRangeList( GetString(), aRangeListRef );
+}
+
+
 BOOL ScChartListener::operator==( const ScChartListener& r )
 {
     BOOL b1 = aRangeListRef.Is();
@@ -260,6 +286,7 @@ BOOL ScChartListener::operator==( const ScChartListener& r )
         pDoc == r.pDoc &&
         bUsed == r.bUsed &&
         bDirty == r.bDirty &&
+        bSeriesRangesScheduled == r.bSeriesRangesScheduled &&
         GetString() == r.GetString() &&
         b1 == b2 &&
         ((!b1 && !b2) || (*aRangeListRef == *r.aRangeListRef))
@@ -445,6 +472,27 @@ void ScChartListenerCollection::SetRangeDirty( const ScRange& rRange )
     }
     if ( bDirty )
         StartTimer();
+}
+
+
+void ScChartListenerCollection::UpdateScheduledSeriesRanges()
+{
+    for ( USHORT nIndex = 0; nIndex < nCount; nIndex++ )
+    {
+        ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
+        pCL->UpdateScheduledSeriesRanges();
+    }
+}
+
+
+void ScChartListenerCollection::UpdateSeriesRangesContainingTab( USHORT nTab )
+{
+    ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
+    for ( USHORT nIndex = 0; nIndex < nCount; nIndex++ )
+    {
+        ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
+        pCL->UpdateSeriesRangesIntersecting( aRange );
+    }
 }
 
 

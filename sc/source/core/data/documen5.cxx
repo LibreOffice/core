@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-10 14:13:21 $
+ *  last change: $Author: er $ $Date: 2000-12-13 12:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,8 +550,17 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
         }
         if ( bChanged )
         {
-            SetChartRangeList( pChartListener->GetString(), aNewRLR );
-            pChartListener->ChangeListening( aNewRLR, bDataChanged );
+            if ( nDz != 0 )
+            {   // #81844# sheet to be deleted or inserted or moved
+                // => no valid sheet names for references right now
+                pChartListener->ChangeListening( aNewRLR, bDataChanged );
+                pChartListener->ScheduleSeriesRanges();
+            }
+            else
+            {
+                SetChartRangeList( pChartListener->GetString(), aNewRLR );
+                pChartListener->ChangeListening( aNewRLR, bDataChanged );
+            }
         }
     }
 }

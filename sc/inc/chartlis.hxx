@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartlis.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: er $ $Date: 2000-12-13 12:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ private:
     ScDocument*     pDoc;
     BOOL            bUsed;  // fuer ScChartListenerCollection::FreeUnused
     BOOL            bDirty;
+    BOOL            bSeriesRangesScheduled;
 
                     // not implemented
     ScChartListener& operator=( const ScChartListener& );
@@ -128,6 +129,12 @@ public:
     void            SetUsed( BOOL bFlg ) { bUsed = bFlg; }
     BOOL            IsDirty() const { return bDirty; }
     void            SetDirty( BOOL bFlg ) { bDirty = bFlg; }
+
+    // if chart series ranges are to be updated later on (e.g. DeleteTab, InsertTab)
+    void            ScheduleSeriesRanges()      { bSeriesRangesScheduled = TRUE; }
+    void            UpdateScheduledSeriesRanges();
+    void            UpdateSeriesRangesIntersecting( const ScRange& rRange );
+    void            UpdateSeriesRanges();
 
     BOOL            operator==( const ScChartListener& );
     BOOL            operator!=( const ScChartListener& r )
@@ -167,6 +174,9 @@ public:
                         BOOL bSetChartRangeLists = FALSE );
 
     void            SetRangeDirty( const ScRange& rRange );     // z.B. Zeilen/Spalten
+
+    void            UpdateScheduledSeriesRanges();
+    void            UpdateSeriesRangesContainingTab( USHORT nTab );
 
     BOOL            operator==( const ScChartListenerCollection& );
 };

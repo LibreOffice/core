@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-30 18:29:31 $
+ *  last change: $Author: er $ $Date: 2000-12-13 12:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,8 @@ BOOL ScDocument::InsertTab( USHORT nPos, const String& rName,
                 //  update conditional formats after table is inserted
                 if ( pCondFormList )
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
+                // #81844# sheet names of references are not valid until sheet is inserted
+                pChartListenerCollection->UpdateScheduledSeriesRanges();
 
                 SetDirty();
                 bValid = TRUE;
@@ -375,6 +377,8 @@ BOOL ScDocument::DeleteTab( USHORT nTab, ScDocument* pRefUndoDoc )
                             pTab[i]->StartAllListeners();
                     SetDirty();
                 }
+                // #81844# sheet names of references are not valid until sheet is deleted
+                pChartListenerCollection->UpdateScheduledSeriesRanges();
                 SetAutoCalc( bOldAutoCalc );
                 bValid = TRUE;
             }
@@ -407,15 +411,8 @@ BOOL ScDocument::RenameTab( USHORT nTab, const String& rName, BOOL bUpdateRef,
             if (bValid)
             {
                 pTab[nTab]->SetName(rName);
-/*                                          kann das nicht weg?
-                if (bUpdateRef)
-                {
-                    for (i = 0; i <= MAXTAB; i++)
-                        if (pTab[i])
-                            pTab[i]->UpdateCompile();
-                    SetDirty();
-                }
-*/
+                if ( pChartListenerCollection )
+                    pChartListenerCollection->UpdateSeriesRangesContainingTab( nTab );
             }
         }
     return bValid;
