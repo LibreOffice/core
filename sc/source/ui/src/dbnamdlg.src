@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-14 15:03:56 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_simplified ] = "ζ’ε…¥/ε ι™¤ε•ε…ƒζ Ό(~C)";
         Text[ russian ] = "Βρςΰβθςό/σδΰλθςό ÿχεικθ";
         Text[ polish ] = "Wstaw/usuρ komσrki";
-        Text[ japanese ] = "θ΅γ®ζΏε…¥/ε‰ι™¤(~C)";
+        Text[ japanese ] = "ο½ΎοΎ™γ®ζΏε…¥/ε‰ι™¤(~C)";
         Text[ chinese_traditional ] = "ζ’ε…¥/εªι™¤ε„²ε­ζ Ό(~C)";
         Text[ arabic ] = "ΕΟΡΗΜ/ΝΠέ ΞαΗνΗ";
         Text[ greek ] = "Προσθήκη/Διαγραφή κελιών";
@@ -577,6 +577,7 @@ ModelessDialog RID_SCDLG_DBNAMES
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Definir αrea de base de datos";
 };
+
 
 
 
