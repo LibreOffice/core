@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-07 06:16:21 $
+#   last change: $Author: pluby $ $Date: 2001-03-07 06:22:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,8 +106,11 @@ SLOFILES=\
     $(SLO)$/NeonPUTFile.obj		\
     $(SLO)$/NeonSession.obj 	\
     $(SLO)$/authinteraction.obj 	\
-    $(SLO)$/DateTimeHelper.obj	\
-    $(SLO)$/proxyconfig.obj
+    $(SLO)$/DateTimeHelper.obj
+
+.IF "$(UPD)">="619"
+SLOFILES+=$(SLO)$/proxyconfig.obj
+.ENDIF
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
