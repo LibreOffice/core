@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:57:21 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:15:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1079,6 +1079,11 @@ FloatingWindow RID_INSERT
             {
                 Identifier = SID_INSERT_VIDEO ;
                 HelpID = SID_INSERT_VIDEO ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_AVMEDIA ;
+                HelpID = SID_INSERT_AVMEDIA ;
             };
         };
     };
