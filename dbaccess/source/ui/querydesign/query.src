@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 19:38:26 $
+ *  last change: $Author: kz $ $Date: 2001-06-01 19:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1263,22 +1263,22 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             HelpId = SID_FM_ADDTABLE ;
             Text = "Tabellen hinzufügen..." ;
             Text [ ENGLISH ] = "Add tables..." ;
-            Text[ english_us ] = "Add Tables";
+            Text[ english_us ] = "Add Tables...";
             Text[ portuguese ] = "Adicionar tabelas";
-            Text[ russian ] = "Äîáàâèòü òàáëèöû";
+            Text[ russian ] = "Äîáàâèòü òàáëèöû...";
             Text[ greek ] = "ĞñïóèŞêç ğßíáêá";
             Text[ dutch ] = "Tabellen toevoegen";
-            Text[ french ] = "Ajouter des tables";
+            Text[ french ] = "Ajouter des tables...";
             Text[ spanish ] = "Añadir tablas";
             Text[ finnish ] = "Lisää taulukoita";
-            Text[ italian ] = "Aggiungi tabelle";
+            Text[ italian ] = "Aggiungi tabelle...";
             Text[ danish ] = "Add tables";
-            Text[ swedish ] = "Lägg till tabeller";
+            Text[ swedish ] = "Lägg till tabeller...";
             Text[ polish ] = "Dodaj tabelê";
             Text[ portuguese_brazilian ] = "Add tables";
-            Text[ japanese ] = "Ã°ÌŞÙ‚Ì’Ç‰Á";
+            Text[ japanese ] = "Ã°ÌŞÙ‚Ì’Ç‰Á...";
             Text[ korean ] = "Å×ÀÌºí Ãß°¡";
-            Text[ chinese_simplified ] = "Add tables";
+            Text[ chinese_simplified ] = "ĞÂÔö±í¸ñ...";
             Text[ chinese_traditional ] = "¼W¥[ªí®æ";
             Text[ turkish ] = "Add tables";
             Text[ arabic ] = "ÅÖÇİÉ ÌÏÇæá";
@@ -1721,10 +1721,10 @@ QueryBox QUERY_VIEW_DESIGN_SAVEMODIFIED
     Message [ English ] = "The view has been modified.\nDo you want to save your changes?" ;
     Message [ english_us ] = "The table view has been changed.\nDo you want to save the changes?" ;
     Message[ portuguese ] = "The view has been changed.\nDo you want to save the changes?";
-    Message[ russian ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ russian ] = "Âèä òàáëèöû áûë èçìåíåí.\nÑîõğàíèòü ıòè èçìåíåíèÿ?";
     Message[ greek ] = "The view has been changed.\nDo you want to save the changes?";
     Message[ dutch ] = "The view has been changed.\nDo you want to save the changes?";
-    Message[ french ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ french ] = "Des modifications ont été effectuées dans la vue.\nDoivent-elles être enregistrées ?";
     Message[ spanish ] = "Se ha modificaco la visualización de la tabla.\n¿Desea guardar las modificaciones?";
     Message[ finnish ] = "The view has been changed.\nDo you want to save the changes?";
     Message[ italian ] = "La vista tabelle è stata modificata.\nVolete salvare le modifiche?";
@@ -1732,7 +1732,7 @@ QueryBox QUERY_VIEW_DESIGN_SAVEMODIFIED
     Message[ swedish ] = "Tabellvyn har ändrats.\nSka ändringarna sparas?";
     Message[ polish ] = "Zmieniono widok tabeli.\nZapisaæ zmiany?";
     Message[ portuguese_brazilian ] = "The view has been changed.\nDo you want to save the changes?";
-    Message[ japanese ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ japanese ] = "Ã°ÌŞÙËŞ­°‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
     Message[ korean ] = "The view has been changed.\nDo you want to save the changes?";
     Message[ chinese_simplified ] = "Õâ¸ö±í¸ñÊÓÍ¼ÒÑ¾­¸Ä±ä¡£\nÒª´æÅÌ¸ü¸ÄµÄÄÚÈİ?";
     Message[ chinese_traditional ] = "³o­ÓÀËµø¤w¸gÅÜ§ó¡C\n­nÀx¦sÅÜ§ó?®e?";
@@ -2087,7 +2087,7 @@ String STR_QUERYDESIGN_NO_VIEW_ASK
     Text[ english_us ] = "Do you want to create a query instead?";
     Text[ portuguese ] = "Em lugar disso, criar uma consulta?";
     Text[ russian ] = "Ñîçäàòü âìåñòî ıòîãî çàïğîñ?";
-    Text[ greek ] = "Do you want to create a view instead?";
+    Text[ greek ] = "Èİëåôå íá äçìéïõñãŞóåôå (áíôß áõôïı) İíá åñşôçìá;";
     Text[ dutch ] = "Wilt u in plaats daarvan een query definiëren?";
     Text[ french ] = "Voulez-vous générer une requête à la place ?";
     Text[ spanish ] = "¿Desea crear una consulta en su lugar?";
