@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:30:40 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,9 +136,9 @@
 #ifndef _GLOSHDL_HXX
 #include <gloshdl.hxx>
 #endif
-#ifndef _GLOSSARY_HXX
-#include <glossary.hxx>
-#endif
+//CHINA001 #ifndef _GLOSSARY_HXX
+//CHINA001 #include <glossary.hxx>
+//CHINA001 #endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>
 #endif
@@ -206,6 +206,9 @@
 #ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
 #endif
+#include "swabstdlg.hxx" //CHINA001
+#include "envelp.hrc" //CHINA001
+#include <misc.hrc> //CHINA001
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -244,7 +247,13 @@ const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
     //
     if(!rItem.bSynchron || !(nCol|nRow))
     {
-        SwGlossaryDlg::SetActGroup(rItem.sGlossaryGroup);
+        //CHINA001 SwGlossaryDlg::SetActGroup(rItem.sGlossaryGroup);
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
+        if ( fnSetActGroup )
+            (*fnSetActGroup)( rItem.sGlossaryGroup );
+        //CHINA001 end
         SwGlossaryHdl* pGlosHdl = rSh.GetView().GetGlosHdl();
         pGlosHdl->SetCurGroup(rItem.sGlossaryGroup, sal_True);
         pGlosHdl->InsertGlossary( rItem.sGlossaryBlockName );
@@ -307,7 +316,12 @@ static sal_uInt16 nBCTitleNo = 0;
     SfxItemSet aSet( GetPool(), FN_LABEL, FN_LABEL, 0 );
     aSet.Put( aLabCfg.GetItem() );
 
-    SwLabDlg* pDlg = new SwLabDlg(0, aSet, pNewDBMgr, bLabel);
+    //CHINA001 SwLabDlg* pDlg = new SwLabDlg(0, aSet, pNewDBMgr, bLabel);
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+    AbstarctSwLabDlg* pDlg = pFact->CreateSwLabDlg( 0, aSet, pNewDBMgr, bLabel,ResId( DLG_LAB ));
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
     if ( RET_OK == pDlg->Execute() )
     {
@@ -537,7 +551,11 @@ static sal_uInt16 nBCTitleNo = 0;
             if(!bLabel)
             {
                 uno::Reference< frame::XModel >  xModel = pSh->GetView().GetDocShell()->GetBaseModel();
-                SwLabDlg::UpdateFieldInformation(xModel, rItem);
+                //CHINA001 SwLabDlg::UpdateFieldInformation(xModel, rItem);
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwLabDlgMethod SwLabDlgUpdateFieldInformation = pFact->GetSwLabDlgStaticMethod ();
+                SwLabDlgUpdateFieldInformation(xModel, rItem);
             }
 
             pFldMgr->SetEvalExpFlds(sal_True);
