@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linguprops.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:50:25 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 12:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #define UPN_IS_SPELL_IN_ALL_LANGUAGES       "IsSpellInAllLanguages"
 #define UPN_IS_SPELL_SPECIAL                "IsSpellSpecial"
 #define UPN_IS_WRAP_REVERSE                 "IsWrapReverse"
+#define UPN_DATA_FILES_CHANGED_CHECK_VALUE  "DataFilesChangedCheckValue"
 
 // UNO property names for text conversion options
 #define UPN_ACTIVE_CONVERSION_DICTIONARIES  "ActiveConversionDictionaries"
@@ -123,6 +124,7 @@
 #define UPH_IS_HYPH_AUTO                    14
 #define UPH_IS_HYPH_SPECIAL                 15
 #define UPH_IS_WRAP_REVERSE                 16
+#define UPH_DATA_FILES_CHANGED_CHECK_VALUE  17
 #define UPH_DEFAULT_LANGUAGE                21
 #define UPH_DEFAULT_LOCALE_CJK              22
 #define UPH_DEFAULT_LOCALE_CTL              23
@@ -136,6 +138,5 @@
 #define UPH_IS_USE_CHARACTER_VARIANTS       31
 #define UPH_IS_TRANSLATE_COMMON_TERMS       32
 #define UPH_IS_REVERSE_MAPPING              33
-
 #endif
 
