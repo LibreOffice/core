@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: mt $ $Date: 2004-07-23 09:58:23 $
+#   last change: $Author: mt $ $Date: 2004-07-26 06:14:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -160,8 +160,10 @@ SHL4TARGET=$(TARGET)
 SHL4LIBS=\
                 $(SLB)$/helper.lib      \
                 $(SLB)$/dialogs.lib     \
-                $(SLB)$/component.lib   \
-                $(SLB)$/xs_comm.lib
+                $(SLB)$/component.lib   
+
+SHL4OBJS=$(SLO)$/baseencoding.obj
+
 SHL4STDLIBS=\
                 $(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
