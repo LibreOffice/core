@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:04:20 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3058,7 +3058,7 @@ String RID_SVXITEMS_TAB_FILL_CHAR
     Text [ english_us ] = "Fill character:" ;
     Text[ chinese_simplified ] = "³äÌî×Ö·û£º";
     Text[ russian ] = "Çàïîëíèòåëü:";
-    Text[ polish ] = "Znaki wiod¹ce:";
+    Text[ polish ] = "Wype³niacze:";
     Text[ japanese ] = "Ø°ÀŞ°:";
     Text[ chinese_traditional ] = "¥R¶ñ¦r¤¸¡G";
     Text[ arabic ] = "ÍÑİ ÓÇÈŞ:";
@@ -7706,7 +7706,7 @@ String RID_SVXITEMS_SCRPTSPC_OFF
     Text[ swedish ] = "Inget automatiskt teckenavstånd";
     Text[ polish ] = "Bez automatycznych odstêpów miêdzy literami";
     Text[ portuguese_brazilian ] = "No automatic character distance";
-    Text[ japanese ] = "©“®•¶šŠÔŠu‚É‚µ‚È‚¢";
+    Text[ japanese ] = "©“®•¶šŠÔŠu’²®‚È‚µ";
     Text[ korean ] = "¹®ÀÚ °£°İ, ºñÀÚµ¿";
     Text[ chinese_simplified ] = "²»×Ô¶¯µ÷Õû×Ö·û¼ä¸ô";
     Text[ chinese_traditional ] = "¤£¦Û°Ê½Õ¾ã¦r¤¸¶¡¹j";
@@ -7731,7 +7731,7 @@ String RID_SVXITEMS_SCRPTSPC_ON
     Text[ swedish ] = "Inget automatiskt teckenavstånd";
     Text[ polish ] = "Bez automatycznych odstêpów miêdzy literami";
     Text[ portuguese_brazilian ] = "Automatic character distance";
-    Text[ japanese ] = "©“®•¶šŠÔŠu‚É‚µ‚È‚¢";
+    Text[ japanese ] = "©“®•¶šŠÔŠu’²®‚È‚µ";
     Text[ korean ] = "¹®ÀÚ °£°İ, ºñÀÚµ¿";
     Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû×Ö·û¼ä¸ô";
     Text[ chinese_traditional ] = "¤£¦Û°Ê½Õ¾ã¦r¤¸¶¡¹j";
@@ -8061,7 +8061,7 @@ String RID_SVXITEMS_PARAVERTALIGN_AUTO
     Text[ swedish ] = "Textjustering automatiskt";
     Text[ polish ] = "Automatyczne wyrównanie tekstu";
     Text[ portuguese_brazilian ] = "text alignment automatically";
-    Text[ japanese ] = "Ã·½Ä”z’u‚Ì©“®’²®";
+    Text[ japanese ] = "©“®•¶š”z’u";
     Text[ korean ] = "text alignment automatically";
     Text[ chinese_simplified ] = "ÎÄ×Ö×Ô¶¯¶ÔÆë";
     Text[ chinese_traditional ] = "¤å¦r¦Û°Ê¹ï»ô";
@@ -8086,7 +8086,7 @@ String RID_SVXITEMS_PARAVERTALIGN_BASELINE
     Text[ swedish ] = "Textjustering baslinje";
     Text[ polish ] = "Wyrównanie tekstu do linii podstawowej";
     Text[ portuguese_brazilian ] = "text alignment baseline";
-    Text[ japanese ] = "Šîü‚ÉÃ·½Ä”z’u";
+    Text[ japanese ] = "Šîü‚É•¶š”z’u";
     Text[ korean ] = "text alignment baseline";
     Text[ chinese_simplified ] = "ÎÄ×Ö¶ÔÆë»ùÏß";
     Text[ chinese_traditional ] = "¤å¦r©M°ò½u¹ï»ô";
@@ -8111,7 +8111,7 @@ String RID_SVXITEMS_PARAVERTALIGN_TOP
     Text[ swedish ] = "Textjustering uppe";
     Text[ polish ] = "Wyrównanie tekstu do góry";
     Text[ portuguese_brazilian ] = "text alignment top";
-    Text[ japanese ] = "ã‘µ‚¦‚ÅÃ·½Ä”z’u";
+    Text[ japanese ] = "ã‘µ‚¦‚Å•¶š”z’u";
     Text[ korean ] = "text alignment top";
     Text[ chinese_simplified ] = "ÎÄ×ÖÏòÉÏ¶ÔÆë";
     Text[ chinese_traditional ] = "¤å¦r¦V¤W¹ï»ô";
@@ -8136,7 +8136,7 @@ String RID_SVXITEMS_PARAVERTALIGN_CENTER
     Text[ swedish ] = "Textjustering centrerat";
     Text[ polish ] = "Wyœrodkowanie tekstu";
     Text[ portuguese_brazilian ] = "text alignment center";
-    Text[ japanese ] = "’†‰›‘µ‚¦‚ÅÃ·½Ä”z’u";
+    Text[ japanese ] = "’†‰›‘µ‚¦‚Å•¶š”z’u";
     Text[ korean ] = "text alignment center";
     Text[ chinese_simplified ] = "ÎÄ×Ö¾ÓÖĞ¶ÔÆë";
     Text[ chinese_traditional ] = "¤å¦r¸m¤¤¹ï»ô";
@@ -8161,7 +8161,7 @@ String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
     Text[ swedish ] = "Textjustering nere";
     Text[ polish ] = "Wyrównanie tekstu do do³u";
     Text[ portuguese_brazilian ] = "text alignment bottom";
-    Text[ japanese ] = "‰º‘µ‚¦‚ÅÃ·½Ä”z’u";
+    Text[ japanese ] = "‰º‘µ‚¦‚Å•¶š”z’u";
     Text[ korean ] = "text alignment bottom";
     Text[ chinese_simplified ] = "ÎÄ×ÖÏòÏÂ¶ÔÆë";
     Text[ chinese_traditional ] = "¤å¦r¦V¤U¹ï»ô";
@@ -8172,5 +8172,6 @@ String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
 };
 
  // ********************************************************************** EOF
+
 
 
