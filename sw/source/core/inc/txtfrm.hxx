@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-28 12:35:54 $
+ *  last change: $Author: fme $ $Date: 2002-04-10 07:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@ class SwStripes;
 struct SwCrsrMoveState;
 struct SwFillData;
 class SwPortionHandler;
+
+#ifdef BIDI
+class SwScriptInfo;
+#endif
 
 #ifdef VERTICAL_LAYOUT
 #define GRID_ON         0
@@ -512,6 +516,9 @@ public:
     // Calculates the coordinates of a point when switching from
     // RTL to LTR layout.
     void SwitchRTLtoLTR( Point& rPoint ) const;
+
+    // returns the script info stored at the paraportion
+    SwScriptInfo* GetScriptInfo();
 #endif
 
 };
