@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:59:50 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 09:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,11 +373,13 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const ::rtl::OUString
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     construct(sql);
+    Reference< XResultSet > xRS;
     OResultSet* pResult = createResultSet();
-    Reference< XResultSet > xRS = pResult;
+    xRS = pResult;
     initializeResultSet(pResult);
 
     pResult->OpenImpl();
+
     return xRS;
 }
 // -------------------------------------------------------------------------
@@ -518,19 +520,34 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
         m_aSQLIterator.traverseAll();
         const OSQLTables& xTabs = m_aSQLIterator.getTables();
 
+        // sanity checks
         if ( xTabs.empty() )
+            // no tables -> nothing to operate on -> error
             throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. It contains no valid table."),
                                         static_cast<XWeak*>(this),
                                         makeAny(m_aSQLIterator.getWarning()));
+
         if ( xTabs.size() > 1 || m_aSQLIterator.getWarning().Message.getLength() )
+            // more than one table -> can't operate on them -> error
             throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. It contains more than one table."),
                                         static_cast<XWeak*>(this),
                                         makeAny(m_aSQLIterator.getWarning()));
 
         if ( (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT || m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT_COUNT) && m_aSQLIterator.getSelectColumns()->empty() )
+            // SELECT statement without columns -> error
             throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. It contains no valid column names."),
                                         static_cast<XWeak*>(this),
                                         makeAny(m_aSQLIterator.getWarning()));
+
+        if ( m_aSQLIterator.getStatementType() == SQL_STATEMENT_CREATE_TABLE )
+            // CREATE TABLE is not supported at all
+            throwGenericSQLException(   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("The \"CREATE TABLE\" of statement is not supported.")),
+                                        static_cast<XWeak*>(this));
+
+        if ( ( m_aSQLIterator.getStatementType() == SQL_STATEMENT_ODBC_CALL ) || ( m_aSQLIterator.getStatementType() == SQL_STATEMENT_UNKNOWN ) )
+            // ODBC call or unknown statement type -> error
+            throwGenericSQLException(   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("This kind of statement is not supported.")),
+                                        static_cast<XWeak*>(this));
 
         // at this moment we support only one table per select statement
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xTabs.begin()->second,UNO_QUERY);
@@ -543,7 +560,8 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
                 m_pTable->acquire();
         }
         OSL_ENSURE(m_pTable,"No table!");
-        m_xColNames     = m_pTable->getColumns();
+        if ( m_pTable )
+            m_xColNames     = m_pTable->getColumns();
         Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
         // set the binding of the resultrow
         m_aRow          = new OValueRefVector(xNames->getCount());
@@ -565,7 +583,6 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
 
         m_pSQLAnalyzer  = createAnalyzer();
 
-        OSL_ENSURE(m_pTable,"We need a table object!");
         Reference<XIndexesSupplier> xIndexSup(xTunnel,UNO_QUERY);
         if(xIndexSup.is())
             m_pSQLAnalyzer->setIndexes(xIndexSup->getIndexes());
