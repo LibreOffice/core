@@ -2,9 +2,9 @@
  *
  *  $RCSfile: masterlayoutdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:50:03 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 18:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
         Pos = MAP_APPFONT( 3, 3 );
         Size = MAP_APPFONT( 83, 10 );
 
-        Text = "Platzhalter";
-        Text[english_us] = "Placeholders";
+        Text [ de ] = "Platzhalter";
+        Text [ en-US ] = "Placeholders";
     };
 
     CheckBox CB_HEADER
@@ -85,8 +85,8 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
         Size = MAP_APPFONT( 134 , 10 );
         TabStop = TRUE;
 
-        Text = "Kopfzeile";
-        Text[english_us] = "Header";
+        Text [ de ] = "Kopfzeile";
+        Text [ en-US ] = "Header";
     };
 
     CheckBox CB_DATE
@@ -95,8 +95,8 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
         Size = MAP_APPFONT( 134 , 10 );
         TabStop = TRUE;
 
-        Text = "Datum/Uhrzeit";
-        Text[english_us] = "Date/time";
+        Text [ de ] = "Datum/Uhrzeit";
+        Text [ en-US ] = "Date/time";
     };
 
     CheckBox CB_FOOTER
@@ -105,8 +105,8 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
         Size = MAP_APPFONT( 134 , 10 );
         TabStop = TRUE;
 
-        Text = "Fuﬂzeile";
-        Text[english_us] = "Footer";
+        Text [ de ] = "Fuﬂzeile";
+        Text [ en-US ] = "Footer";
     };
 
     CheckBox CB_PAGE_NUMBER
@@ -115,8 +115,8 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
         Size = MAP_APPFONT( 134 , 10 );
         TabStop = TRUE;
 
-        Text = "Seitenzahl";
-        Text [ english_us ] = "Page number";
+        Text [ de ] = "Seitenzahl";
+        Text [ en-US ] = "Page number";
     };
 
     OKButton BT_OK
@@ -135,26 +135,26 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
 
     String STR_SLIDE_NUMBER
     {
-        Text = "Foliennummer";
-        Text[english_us] = "Slide number";
+        Text [ de ] = "Foliennummer";
+        Text [ en-US ] = "Slide number";
     };
 
     String STR_MASTER_LAYOUT_TITLE
     {
-        Text = "Masterlayout";
-        Text[english_us] = "Master Layout";
+        Text [ de ] = "Masterlayout";
+        Text [ en-US ] = "Master Layout";
     };
 
     String STR_NOTES_MASTER_LAYOUT_TITLE
     {
-        Text = "Notizenmasterlayout";
-        Text[english_us] = "Notes Master Layout";
+        Text [ de ] = "Notizenmasterlayout";
+        Text [ en-US ] = "Notes Master Layout";
     };
 
     String STR_HANDOUT_TEMPLATE_LAYOUT_TITLE
     {
-        Text = "Handzettelmasterlayout";
-        Text[english_us] = "Handout Master Layout";
+        Text [ de ] = "Handzettelmasterlayout";
+        Text [ en-US ] = "Handout Master Layout";
     };
 };
 
