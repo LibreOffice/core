@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeInfoContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-24 16:49:51 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,8 @@ class XMLChangeInfoContext : public SvXMLImportContext
 {
     const ::rtl::OUString& rType;
 
-    ::rtl::OUString sAuthor;
-    ::rtl::OUString sDateTime;
+    ::rtl::OUStringBuffer sAuthorBuffer;
+    ::rtl::OUStringBuffer sDateTimeBuffer;
     ::rtl::OUStringBuffer sCommentBuffer;
 
     XMLChangedRegionImportContext& rChangedRegion;
