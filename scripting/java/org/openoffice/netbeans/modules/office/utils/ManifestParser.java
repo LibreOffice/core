@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestParser.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-09-10 10:46:29 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ import org.xml.sax.SAXParseException;
 
 import org.openide.xml.XMLUtil;
 
-import com.sun.star.script.framework.browse.XMLParser;
+import com.sun.star.script.framework.container.XMLParser;
 import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 import org.openoffice.idesupport.OfficeInstallation;
 
