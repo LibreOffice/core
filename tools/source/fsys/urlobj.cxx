@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: abi $ $Date: 2003-05-08 09:50:35 $
+ *  last change: $Author: abi $ $Date: 2003-05-08 13:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5296,24 +5296,26 @@ UniString INetURLObject::RelToAbs(UniString const & rTheRelURIRef,
 static star::uno::Any GetCasePreservedURL(INetURLObject& aObj)
 {
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-    try
-    {
-        star::uno::Any aVoidArgument;
-        ucb::Content aCnt(
-            aObj.GetMainURL(INetURLObject::NO_DECODE),
-            star::uno::Reference<
-            star::ucb::XCommandEnvironment > () );
 
-        return aCnt.executeCommand(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getCasePreservingURL")),
-            aVoidArgument);
-
-//     return aCnt.getPropertyValue(
-//     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CasePreservingURL")));
-    }
-    catch( star::uno::Exception& )
+    if(aObj.GetProtocol() == INET_PROT_FILE )
     {
-        DBG_WARNING( "Any other exception" );
+        try
+        {
+            star::uno::Any aVoidArgument;
+            ucb::Content aCnt(
+                aObj.GetMainURL(INetURLObject::NO_DECODE),
+                star::uno::Reference<
+                star::ucb::XCommandEnvironment > () );
+
+            return aCnt.executeCommand(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("getCasePreservingURL")),
+                aVoidArgument);
+        }
+        catch( star::uno::Exception& )
+        {
+            DBG_WARNING( "Any other exception" );
+        }
     }
 
     return star::uno::Any();
