@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atlwindow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 14:05:41 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,4 +290,4 @@ LRESULT APIENTRY EditSubclassProc( HWND hwnd, UINT uMsg,WPARAM wParam, LPARAM lP
     return CallWindowProc( wpOrigEditProc, hwnd, uMsg,
         wParam, lParam);
 }
- 
+
