@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 03:24:12 $
+#   last change: $Author: hr $ $Date: 2004-12-10 18:08:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,6 @@ TARGET=ui
 # --- Update-Version -----------------------------------------------
 
 .INCLUDE :  $(UPD)minor.mk
-RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 
 # --- Files --------------------------------------------------------
 
