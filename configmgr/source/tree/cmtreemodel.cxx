@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:38 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,16 +293,16 @@ SubtreeChange::ChildIterator SubtreeChange::end() const throw()
 
 //--------------------------------------------------------------------------
 SubtreeChange::ChildIterator::ChildIterator(const SubtreeChange* _pTree)
-    :m_pTree(_pTree)
-    ,m_aNames(_pTree->elementNames())
+    :m_aNames(_pTree->elementNames())
+    ,m_pTree(_pTree)
     ,m_nPos(0)
 {
 }
 
 //--------------------------------------------------------------------------
 SubtreeChange::ChildIterator::ChildIterator(const SubtreeChange* _pTree, struct EndPos)
-    :m_pTree(_pTree)
-    ,m_aNames(_pTree->elementNames())
+    :m_aNames(_pTree->elementNames())
+    ,m_pTree(_pTree)
     ,m_nPos(_pTree->size())
 {
 }
