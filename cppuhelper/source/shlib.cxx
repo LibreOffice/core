@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-19 15:01:16 $
+ *  last change: $Author: hjs $ $Date: 2001-01-16 10:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,7 @@ Reference< XSingleServiceFactory > SAL_CALL loadSharedLibComponentFactory(
 {
 #ifdef MACOSX
     OUString aComponentName;
-    OUString aModulePath( makeComponentPath( rLibName, rPath, aComponentName ) );
+    OUString aModulePath( makeComponentPath( rLibName, rPath, &aComponentName ) );
 #else
     OUString aModulePath( makeComponentPath( rLibName, rPath ) );
 #endif
@@ -493,7 +493,7 @@ void SAL_CALL writeSharedLibComponentInfo(
 {
 #ifdef MACOSX
     OUString aComponentName;
-    OUString aModulePath( makeComponentPath( rLibName, rPath, aComponentName ) );
+    OUString aModulePath( makeComponentPath( rLibName, rPath, &aComponentName ) );
 #else
     OUString aModulePath( makeComponentPath( rLibName, rPath ) );
 #endif
