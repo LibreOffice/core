@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-04 10:29:22 $
+ *  last change: $Author: mtg $ $Date: 2001-10-17 20:40:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -859,6 +859,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_BOTTOM_MARGIN), RES_UL_SPACE,           CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NMID(UNO_NAME_BACK_TRANSPARENT), RES_BACKGROUND,  CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
                     { SW_PROP_NMID(UNO_NAME_WIDTH), FN_TABLE_WIDTH,         CPPU_E2T(CPPUTYPE_INT32)  ,         PROPERTY_NONE, 0xff},
+                    { SW_PROP_NMID(UNO_NAME_IS_WIDTH_RELATIVE), FN_TABLE_IS_RELATIVE_WIDTH,         CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE, 0xff},
                     { SW_PROP_NMID(UNO_NAME_CHART_ROW_AS_LABEL), FN_UNO_RANGE_ROW_LABEL,            CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE,  0},
                     { SW_PROP_NMID(UNO_NAME_CHART_COLUMN_AS_LABEL), FN_UNO_RANGE_COL_LABEL,         CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_TABLE_BORDER), FN_UNO_TABLE_BORDER,         CPPU_E2T(CPPUTYPE_TABLEBORDER), PropertyAttribute::MAYBEVOID, CONVERT_TWIPS },
