@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: rt $ $Date: 2004-08-20 09:15:13 $
-#*    $Revision: 1.13 $
+#*    last change   $Author: kz $ $Date: 2005-01-18 13:27:23 $
+#*    $Revision: 1.14 $
 #*
 #*    $Logfile: $
 #*
@@ -71,6 +71,20 @@ static sal_Bool check( sal_Bool b , char * message )
     if ( ! b )
         fprintf( stderr, "%s failed\n" , message );
     return b;
+}
+
+namespace {
+
+bool checkEmpty(rtl::OUString const & string, char const * message) {
+    bool ok = string.getLength() == 0;
+    if (!ok) {
+        fprintf(
+            stderr, "%s failed: %s\n", message,
+            rtl::OUStringToOString(string, RTL_TEXTENCODING_UTF8).getStr());
+    }
+    return ok;
+}
+
 }
 
 //==================================================================================================
@@ -598,17 +612,10 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
         bRet = (equals( aData, aRet ) && equals( aData, aRet2 )) && bRet ;
 
         // multiple inheritance test
-        Reference< XMulti > multi1(xLBT->getMulti());
-        bRet &= check(multi1->f1() == 1, "multi1, f1");
-        bRet &= check(multi1->f2() == 2, "multi1, f2");
-        bRet &= check(multi1->f3() == 3, "multi1, f3");
-        multi1->seta(4);
-        bRet &= check(multi1->geta() == 4, "multi1, a");
-        Reference< XMulti > multi2(new testtools::bridgetest::Multi);
-        bRet &= check(xLBT->testMultiF1(multi2) == 1, "multi2, f1");
-        bRet &= check(xLBT->testMultiF2(multi2) == 2, "multi2, f2");
-        bRet &= check(xLBT->testMultiF3(multi2) == 3, "multi2, f3");
-        bRet &= check(xLBT->testMultiA(multi2, 4) == 4, "multi2, a");
+        bRet &= checkEmpty(
+            testtools::bridgetest::testMulti(xLBT->getMulti()), "remote multi");
+        bRet &= checkEmpty(
+            xLBT->testMulti(new testtools::bridgetest::Multi), "local multi");
         }
 
     }
