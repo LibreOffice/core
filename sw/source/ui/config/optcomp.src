@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcomp.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:11:58 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Kompatibilit�tsoptionen f�r %DOCNAME" ;
         Text[ english_us ] = "Compatibility options for %DOCNAME";
+        Text[ chinese_simplified ] = "%DOCNAME 的兼容选项";
     };
     FixedText FT_FORMATTING
     {
@@ -83,6 +84,7 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
         Size = MAP_APPFONT ( 236 , 8 ) ;
         Text = "Empfohlen ~Formatierungsoptionen f�r" ;
         Text[ english_us ] = "Recommended ~formatting options for";
+        Text[ chinese_simplified ] = "推荐的格式选项";
     };
     ListBox LB_FORMATTING
     {
@@ -96,6 +98,7 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
         Size = MAP_APPFONT ( 236 , 8 ) ;
         Text = "~Optionen" ;
         Text[ english_us ] = "~Options";
+        Text[ chinese_simplified ] = "选项";
     };
     Control LB_OPTIONS
     {
@@ -111,6 +114,7 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text = "~Zur�cksetzen" ;
         Text[ english_us ] = "~Reset";
+        Text[ chinese_simplified ] = "重设";
     };
     PushButton PB_DEFAULT
     {
@@ -118,18 +122,21 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text = "Als ~Standard verwenden" ;
         Text[ english_us ] = "Use as ~Default";
+        Text[ chinese_simplified ] = "做为默认值使用";
     };
 
     String STR_USERENTRY
     {
         Text = "<Benutzerdefiniert>";
         Text[ english_us ] = "<User settings>";
+        Text[ chinese_simplified ] = "<用户设置>";
     };
 
     String STR_QRYBOX_USEASDEFAULT
     {
         Text = "M�chten Sie die Kompatibilt�tsoptionen der Standard-Vorlage �ndern?\nDiese �nderungen wirken sich auf alle neuen Dokumente aus, die auf der Standard-Vorlage basieren.";
         Text[ english_us ] = "Do you want to change the compatibility options of the default template?\nThis will affect all new documents based on the default template.";
+        Text[ chinese_simplified ] = "您要更改默认文档样式的兼容选项吗？\n这样将影响所有基于默认文档样式的新文档。";
     };
 
 // the option strings ----------------------------------------------------
@@ -138,33 +145,39 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     {
         Text = "Druckerma�e f�r Dokumentformatierung verwenden";
         Text[ english_us ] = "Use printer metrics for document formatting";
+        Text[ chinese_simplified ] = "文档格式采用打印机版式";
     };
     String STR_MERGE_PARA_DIST
     {
         Text = "Alle Absatz- und Tabellenabst�nde addieren (aktuelles Dokument)";
         Text[ english_us ] = "Add spacing between paragraphs and tables (in current document)";
+        Text[ chinese_simplified ] = "段落和表格之间添加空格(在当前文档)";
     };
     String STR_MERGE_PARA_DIST_PAGESTART
     {
         Text = "Absatz- und Tabellenabst�nde an Seitenanf�ngen addieren (aktuelles Dokument)";
         Text[ english_us ] = "Add paragraph and table spacing at tops of pages (in current document)";
+        Text[ chinese_simplified ] = "在页面上方添加段落和表格空格(在当前文档)";
     };
     String STR_TAB_ALIGNMENT
     {
         Text[ language_user1 ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
         Text = "%FORMATNAME %FORMATVERSION Tabulator-Formatierungen verwenden";
         Text[ english_us ] = "Use %FORMATNAME %FORMATVERSION tabstop formatting";
+        Text[ chinese_simplified ] = "使用 %FORMATNAME %FORMATVERSION 制表符格式化";
     };
     String STR_EXTERNAL_LEADING
     {
         Text = "Keinen zus�tzlichen Leerraum zwischen Textzeilen hinzuf�gen";
         Text[ english_us ] = "Do not add leading (extra space) between lines of text";
+        Text[ chinese_simplified ] = "在行和文字之间不添加行间距离 (多余空格)";
     };
     String STR_LINE_SPACING
     {
         Text[ language_user1 ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
         Text = "%FORMATNAME %FORMATVERSION Zeilenabstand verwenden";
         Text[ english_us ] = "Use %FORMATNAME %FORMATVERSION line spacing";
+        Text[ chinese_simplified ] = "使用 %FORMATNAME %FORMATVERSION 线条间隔";
     };
     String STR_ADD_TABLESPACING
     {
