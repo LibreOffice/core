@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:30:23 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ String RID_BASELISTBOX_ERROR_FILLLIST
     Text [ english_us ] = "The contents of a combo box or list field could not be determined.";
     Text[ portuguese ] = "Foi impossνvel determinar o conteϊdo de uma caixa combinada ou caixa de listagem.";
     Text[ russian ] = "Νεβξημξζνξ ξοπεδελθςό ρξδεπζθμξε οξλÿ ρξ ροθρκξμ θλθ οξλÿ ροθρκΰ.";
-    Text[ greek ] = "Δεν ήταν δυνατόν να γίνει αναγνώριση του περιεχομένου ενός πεδίου συνδυασμού ή ενός πεδίου λίστας";
+    Text[ greek ] = "Δεν ήταν δυνατόν να γίνει αναγνώριση του περιεχομένου ενός πλαισίου συνδυασμού ή ενός πεδίου καταλόγου";
     Text[ dutch ] = "Inhoud combinatieveld of keuzelijst niet gevonden.";
     Text[ french ] = "Impossible de dιterminer le contenu de la zone combinιe/zone de liste.";
     Text[ spanish ] = "No se pudo determinar ni el contenido del cuadro combinado ni el del listado.";
@@ -78,7 +78,7 @@ String RID_BASELISTBOX_ERROR_FILLLIST
     Text[ danish ] = "Det var ikke muligt at bestemme indholdet for en kombinationsboks eller rulleliste.";
     Text[ swedish ] = "Innehεllet i ett kombinationsfδlt eller en listruta kunde inte bestδmmas.";
     Text[ polish ] = "Nie moΏna ustaliζ zawartoci pola kombi lub pola listy.";
-    Text[ portuguese_brazilian ] = "O conteϊdo de uma caixa de combinaηγo ou campo de listagem nγo pτde ser determinado.";
+    Text[ portuguese_brazilian ] = "Nγo foi possνvel determinar o conteϊdo de uma caixa de combinaηγo ou campo de listagem.";
     Text[ japanese ] = "γ‚³γƒ³γƒγƒγƒƒγ‚―γ‚ΉγΎγγ―γƒªγ‚Ήγƒγƒγƒƒγ‚―γ‚Ήγ®ε†…ε®ΉγηΆΊθªγ§γγΎγ›γ‚“γ§γ—γγ€‚";
     Text[ korean ] = "μ½¤λ³΄ μƒμ λλ” λª©λ΅ ν•„λ“μ λ‚΄μ©μ„ ν™•μΈν•μ§€ λª»ν–μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "ζ— ζ³•η΅®ε®η»„εζ΅†ζ–θ€…ε—θ΅¨ζ΅†ε†…η„ε†…ε®Ήγ€‚";
@@ -163,7 +163,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text [ english_us ] = "An error occurred while this control was being loaded. It was therefore replaced with a placeholder.";
     Text[ portuguese ] = "Ao carregar este controlo ocorreu um erro. Por esta razγo foi substituνdo por um marcador de posiηγo.";
     Text[ russian ] = "Ξψθακΰ ηΰγπσηκθ ύλεμενςΰ σοπΰβλενθÿ. Ξν αϋλ ηΰμενεν οξλεμ οξδρςΰνξβκθ.";
-    Text[ greek ] = "Προέκυψε σφάλμα κατά τη φόρτωση αυτού του στοιχείου ελέγχου. Για αυτόν τον λόγο αντικαταστάθηκε με ένα σύμβολο κράτησης θέσης.";
+    Text[ greek ] = "Προέκυψε σφάλμα κατά τη φόρτωση αυτού του στοιχείου ελέγχου. Για αυτόν τον λόγο αντικαταστάθηκε με ένα πλαίσιο δείκτη τοποθέτησης.";
     Text[ dutch ] = "Fout bij het laden van control. Is vervangen door plaatsvervanger.";
     Text[ french ] = "Erreur lors du chargement de ce contrτle ; c'est pouquoi il a ιtι remplacι par un substituant.";
     Text[ spanish ] = "Ha ocurrido un error al cargar este Control. Por ello se ha reemplazado con un comodνn.";
@@ -193,7 +193,7 @@ String RID_STR_READERROR
     Text [ ENGLISH ] = "Error while reading data from database" ;
     Text [ norwegian ] = "Feil ved lesing av data fra database" ;
     Text [ italian ] = "Errore durante la lettura di dati dal database" ;
-    Text [ portuguese_brazilian ] = "Erro ao ler dados do banco de dados" ;
+    Text [ portuguese_brazilian ] = "Ocorreu um erro ao ler dados do banco de dados" ;
     Text [ portuguese ] = "Erro ao ler dados da base de dados" ;
     Text [ finnish ] = "On ilmennyt virhe luettaessa tietokannan tietoja." ;
     Text [ danish ] = "Fejl under lζsning af data fra databasen" ;
@@ -225,7 +225,7 @@ String RID_STR_CONNECTERROR
     Text [ ENGLISH ] = "Can't create connection" ;
     Text [ norwegian ] = "Kan ikke opprette forbindelse" ;
     Text [ italian ] = "Impossibile creare il collegamento" ;
-    Text [ portuguese_brazilian ] = "Nγo foi possνvel estabelecer conexγo" ;
+    Text [ portuguese_brazilian ] = "Nγo foi possνvel estabelecer a conexγo" ;
     Text [ portuguese ] = "Nγo foi possνvel estabelecer ligaηγo." ;
     Text [ finnish ] = "Yhteyden muodostaminen ei onnistunut." ;
     Text [ danish ] = "Det var ikke muligt at oprette forbindelsen" ;
@@ -266,7 +266,7 @@ String RID_ERR_LOADING_FORM
     Text[ danish ] = "Det var ikke muligt at indlζse dataindholdet.";
     Text[ swedish ] = "Datainnehεllet kunde inte laddas.";
     Text[ polish ] = "Nie moΏna za³adowaζ danych.";
-    Text[ portuguese_brazilian ] = "O conteϊdo dos dados nγo pτde ser carregado.";
+    Text[ portuguese_brazilian ] = "Nγo foi possνvel carregar o conteϊdo dos dados.";
     Text[ japanese ] = "γƒ‡γƒΌγ‚Ώε†…ε®Ήγθª­γΏθΎΌγ‚γΎγ›γ‚“γ§γ—γγ€‚";
     Text[ korean ] = "λ°μ΄ν„° λ‚΄μ©μ„ λ΅λ“ν•μ§€ λª»ν–μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "ζ— ζ³•θ£…ε…¥ζ•°ζ®ε†…ε®Ήγ€‚";
@@ -297,14 +297,14 @@ String RID_ERR_REFRESHING_FORM
     Text[ danish ] = "Det var ikke muligt at opdatere dataindholdet.";
     Text[ swedish ] = "Datainnehεllet kunde inte uppdateras.";
     Text[ polish ] = "Nie moΏna zaktualizowaζ danych.";
-    Text[ portuguese_brazilian ] = "O conteϊdo dos dados nγo pτde ser atualizado.";
+    Text[ portuguese_brazilian ] = "Nγo foi possνvel atualizar o conteϊdo dos dados.";
     Text[ japanese ] = "γƒ‡γƒΌγ‚Ώε†…ε®Ήγζ›΄ζ–°γ§γγΎγ›γ‚“γ§γ—γγ€‚";
     Text[ korean ] = "λ°μ΄ν„° λ‚΄μ©μ„ μ—…λ°μ΄νΈν•μ§€ λª»ν–μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "ζ— ζ³•ζ›΄ζ–°ζ•°ζ®ε†…ε®Ήγ€‚";
     Text[ chinese_traditional ] = "η„΅ζ³•ζ›΄ζ–°θ³‡ζ–™ε…§ε®Ήγ€‚";
     Text[ arabic ] = "ΚΪΠΡ ΚΝΟνΛ ΗαγΝΚζνΗΚ ΗαΘνΗδνΙ.";
     Text[ turkish ] = "Veri iηeriπi gόncellenemedi.";
-    Text[ language_user1 ] = "The meaning here is 'refresh', not 'update'.";
+    Text[ language_user1 ] = "; The meaning here is 'refresh', not 'update'.";
     Text[ catalan ] = "No s'ha pogut actualitzar el contingut de les dades";
     Text[ finnish ] = "Tietosisδllφn pδivittδminen ei onnistunut.";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΈ›ΰΈ£ΰΈ±ΰΈΰΈ›ΰΈ£ΰΈΈΰΈ‡ΰΉ€ΰΈ™ΰΈ·ΰΉ‰ΰΈ­ΰΈ«ΰΈ²ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΉ„ΰΈ”ΰΉ‰";
@@ -329,7 +329,7 @@ String RID_STR_ERR_INSERTRECORD
     Text[ danish ] = "Fejl ved indsζttelse af den nye datapost";
     Text[ swedish ] = "Fel vid infogning av den nya dataposten";
     Text[ polish ] = "B³Ήd wstawiania nowego rekordu";
-    Text[ portuguese_brazilian ] = "Erro ao inserir o novo registro";
+    Text[ portuguese_brazilian ] = "Ocorreu um erro ao inserir o novo registro";
     Text[ japanese ] = "ζ–°γ—γ„γƒ¬γ‚³γƒΌγƒ‰γ‚’ζΏε…¥γ™γ‚‹ζ™‚γ®γ‚¨γƒ©γƒΌ";
     Text[ korean ] = "μƒ λ μ½”λ“ μ‚½μ…μ‹ μ¤λ¥";
     Text[ chinese_simplified ] = "ε¨ζ’ε…¥ζ–°ζ•°ζ®ζ΅η›®ζ—¶ε‘η”ι”™θ――";
@@ -360,7 +360,7 @@ String RID_STR_ERR_UPDATERECORD
     Text[ danish ] = "Fejl ved skrivning af den aktuelle datapost";
     Text[ swedish ] = "Fel vid skrivning av den aktuella dataposten";
     Text[ polish ] = "B³Ήd aktualizacji bieΏΉcego rekordu";
-    Text[ portuguese_brazilian ] = "Erro ao atualizar o registro atual";
+    Text[ portuguese_brazilian ] = "Ocorreu um erro ao atualizar o registro atual";
     Text[ japanese ] = "ηΎε¨γ®γƒ¬γ‚³γƒΌγƒ‰γ‚’ζ›ΈγθΎΌγ‚€ζ™‚γ®γ‚¨γƒ©γƒΌ";
     Text[ korean ] = "ν„μ¬μ λ°μ΄ν„° λ μ½”λ“μ—μ„ μ¤λ¥";
     Text[ chinese_simplified ] = "ε¨ζ›΄ζ–°ε½“ε‰ζ•°ζ®ζ΅η›®ζ—¶ε‘η”ι”™θ――";
@@ -391,7 +391,7 @@ String RID_STR_ERR_DELETERECORD
     Text[ danish ] = "Fejl ved sletning af den aktuelle datapost";
     Text[ swedish ] = "Fel vid radering av den aktuella dataposten";
     Text[ polish ] = "B³Ήd usuwania bieΏΉcego rekordu";
-    Text[ portuguese_brazilian ] = "Erro ao excluir o registro atual";
+    Text[ portuguese_brazilian ] = "Ocorreu um erro ao excluir o registro atual";
     Text[ japanese ] = "ηΎε¨γ®γƒ¬γ‚³γƒΌγƒ‰γ‚’ε‰ι™¤γ™γ‚‹ζ™‚γ®γ‚¨γƒ©γƒΌ";
     Text[ korean ] = "ν„μ¬ λ μ½”λ“ μ‚­μ μ‹μ— μ¤λ¥";
     Text[ chinese_simplified ] = "ε¨ε ι™¤ε½“ε‰ζ•°ζ®ζ΅η›®ζ—¶ε‘η”ι”™θ――";
@@ -422,7 +422,7 @@ String RID_STR_ERR_DELETERECORDS
     Text[ danish ] = "Fejl ved sletning af de angivne dataposter";
     Text[ swedish ] = "Fel vid radering av de angivna dataposterna";
     Text[ polish ] = "B³Ήd usuwania okrelonych rekordσw";
-    Text[ portuguese_brazilian ] = "Erro ao excluir os registros especificados";
+    Text[ portuguese_brazilian ] = "Ocorreu um erro ao excluir os registros especificados";
     Text[ japanese ] = "ζ‡ε®γ—γγƒ¬γ‚³γƒΌγƒ‰γ‚’ε‰ι™¤γ™γ‚‹ζ™‚γ®γ‚¨γƒ©γƒΌ";
     Text[ korean ] = "μ§€μ •λ λ μ½”λ“ μ‚­μ  μ¤‘ μ¤λ¥";
     Text[ chinese_simplified ] = "ε¨ε ι™¤ζ‡ε®η„ζ•°ζ®ζ΅η›®ζ—¶ε‘η”ι”™θ――";
@@ -445,7 +445,7 @@ String RID_STR_NEED_NON_NULL_OBJECT
     Text [ english_us ] = "The object cannot be NULL.";
     Text[ portuguese ] = "O objecto nγo pode ser NULL.";
     Text[ russian ] = "Ξαϊεκς νε μξζες αϋςό NULL.";
-    Text[ greek ] = "The object must not be NULL.";
+    Text[ greek ] = "Το αντικείμενο δεν μπορεί να είναι ΚΕΝΟ.";
     Text[ dutch ] = "Het object mag niet NUL zijn.";
     Text[ french ] = "L'objet ne pas κtre NULL.";
     Text[ spanish ] = "El objeto no puede ser NULL.";
@@ -476,7 +476,7 @@ String RID_STR_OPEN_GRAPHICS
     Text [ english_us ] = "Insert graphics from...";
     Text[ portuguese ] = "Inserir imagem de...";
     Text[ russian ] = "Βρςΰβθςό γπΰτθχερκθε ξαϊεκςϋ θη...";
-    Text[ greek ] = "Insert graphics from...";
+    Text[ greek ] = "Εισαγωγή γραφικών από...";
     Text[ dutch ] = "Afbeelding invoegen uit...";
     Text[ french ] = "Insιrer une image ΰ partir de...";
     Text[ spanish ] = "Insertar una imagen de...";
@@ -507,7 +507,7 @@ String RID_STR_CLEAR_GRAPHICS
     Text [ english_us ] = "Remove graphics";
     Text[ portuguese ] = "Remover imagem";
     Text[ russian ] = "Σδΰλθςό γπΰτθχερκθε ξαϊεκςϋ";
-    Text[ greek ] = "Remove graphics";
+    Text[ greek ] = "Κατάργηση γραφικών";
     Text[ dutch ] = "Afbeelding verwijderen";
     Text[ french ] = "Supprimer l'image";
     Text[ spanish ] = "Borrar la imagen";
@@ -543,7 +543,7 @@ String RID_STR_SYNTAXERROR
     Text [ english ] = "Syntax error in query expression" ;
     Text [ english_us ] = "Syntax error in query expression" ;
     Text [ portuguese ] = "Erro ao analisar a expressγo de consulta." ;
-    Text [ portuguese_brazilian ] = "Erro de sintaxe ao analisar a expressγo de consulta." ;
+    Text [ portuguese_brazilian ] = "Ocorreu um erro ao analisar a expressγo da consulta" ;
     Text [ swedish ] = "Fel vid analys av frεgeuttryck" ;
     Text [ danish ] = "Fejl under analysen af forespψrgseludtrykket" ;
     Text [ italian ] = "Errore nell'analizzare dell'espressione di ricerca" ;
@@ -567,6 +567,7 @@ String RID_STR_SYNTAXERROR
     Text[ hindi ] = "ΰ¤ΰ¤Ύΰ¤¨ΰ¤•ΰ¤Ύΰ¤°ΰ¥€ ΰ¤•ΰ¥€ ΰ¤µΰ¤°ΰ¥ΰ¤£ΰ¤¨ ΰ¤®ΰ¥‡ΰ¤‚ ΰ¤Έΰ¤Ώΰ¤¨ΰ¥ΰ¤ΰ¤Ύΰ¤•ΰ¥ΰ¤Έ ΰ¤•ΰ¥€ ΰ¤—ΰ¤²ΰ¤¤ΰ¥€";
     Text[ slovak ] = "Chyba syntaxu v dotaze";
 };
+
 
 
 
