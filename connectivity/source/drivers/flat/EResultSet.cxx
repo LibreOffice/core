@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EResultSet.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:45:13 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ Any SAL_CALL OFlatResultSet::getBookmark(  ) throw( SQLException,  RuntimeExcept
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    return makeAny((sal_Int32)(*m_aRow)[0]);
+    return makeAny((sal_Int32)(*m_aRow)[0]->getValue());
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OFlatResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
