@@ -81,6 +81,7 @@ startup_DATA = macros.mk recipes.mk
 SUBDIRS = @OS_VERSION@
 subdir = startup/unix
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 DIST_SOURCES =
 DATA = $(startup_DATA)

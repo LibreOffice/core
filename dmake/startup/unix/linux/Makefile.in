@@ -78,6 +78,7 @@ startupdir = $(datadir)/startup/unix/linux
 startup_DATA = macros.mk 
 subdir = startup/unix/linux
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 DIST_SOURCES =
 DATA = $(startup_DATA)

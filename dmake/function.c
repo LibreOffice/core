@@ -1,4 +1,4 @@
-/* RCS  $Id: function.c,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: function.c,v 1.2 2002-10-04 13:31:34 waratah Exp $
 --
 -- SYNOPSIS
 --      GNU style functions for dmake.
@@ -39,7 +39,7 @@ static char *_exec_assign ANSI((char *));
 static char *_exec_foreach ANSI((char *, char *, char *));
 static char *_exec_andor  ANSI((char *, int));
 static char *_exec_not    ANSI((char *));
-static int   _mystrcmp    ANSI((CONST PVOID, CONST PVOID));
+static int   _mystrcmp    ANSI((const PVOID, const PVOID));
 
 
 PUBLIC char *
@@ -433,10 +433,10 @@ char *args;
 
 static int
 _mystrcmp( p, q )
-CONST PVOID p;
-CONST PVOID q;
+const PVOID p;
+const PVOID q;
 {
-   return(strcmp(*((CONST char **)p),*((CONST char **)q)));
+   return(strcmp(*((const char **)p),*((const char **)q)));
 }
 
 

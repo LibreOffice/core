@@ -81,6 +81,7 @@ startup_DATA = startup.mk template.mk
 SUBDIRS = unix 
 subdir = startup
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 DIST_SOURCES =
 DATA = $(startup_DATA)

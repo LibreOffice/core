@@ -82,6 +82,7 @@ INCLUDES = -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/unix/@OS_VERSION@/g
 CFLAGS = -O
 subdir = unix
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LIBRARIES = $(noinst_LIBRARIES)
 
@@ -93,7 +94,7 @@ am_libunix_a_OBJECTS = arlib.$(OBJEXT) dcache.$(OBJEXT) dirbrk.$(OBJEXT) \
 libunix_a_OBJECTS = $(am_libunix_a_OBJECTS)
 
 DEFS = @DEFS@
-DEFAULT_INCLUDES =  -I. -I$(srcdir)
+DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@

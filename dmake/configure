@@ -457,7 +457,7 @@ echo > confdefs.h
 
 # A filename unique to this package, relative to the directory that
 # configure is in, which we can look for to find out if srcdir is correct.
-ac_unique_file=acconfig.h
+ac_unique_file=
 
 # Find the source files, if location was not specified.
 if test -z "$srcdir"; then
@@ -1675,7 +1675,7 @@ EOF
 
 fi
 
-for ac_hdr in fcntl.h limits.h strings.h sys/file.h sys/time.h unistd.h
+for ac_hdr in fcntl.h limits.h strings.h sys/types.h sys/stat.h unistd.h errno.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
@@ -2202,7 +2202,7 @@ case "$_os" in
 	  OS_VERSION=linux
 	  ;;
 	"OSF1")
-	  OS_VERSION=tru64
+	  OS_VERSION=sysvr4
 	  ;;
 	"NetBSD")
 	  OS_VERSION=linux
@@ -2221,6 +2221,10 @@ esac
 echo "$ac_t""checked ($_os)" 1>&6
 
 
+
+
+
+  
 
 
 trap '' 1 2 15
@@ -2286,19 +2290,7 @@ fi
 
 trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
 
-# Transform confdefs.h into DEFS.
-# Protect against shell expansion while executing Makefile rules.
-# Protect against Makefile macro expansion.
-cat > conftest.defs <<\EOF
-s%#define \([A-Za-z_][A-Za-z0-9_]*\) *\(.*\)%-D\1=\2%g
-s%[ 	`~#$^&*(){}\\|;'"<>?]%\\&%g
-s%\[%\\&%g
-s%\]%\\&%g
-s%\$%$$%g
-EOF
-DEFS=`sed -f conftest.defs confdefs.h | tr '\012' ' '`
-rm -f conftest.defs
-
+DEFS=-DHAVE_CONFIG_H
 
 # Without the "./", some shells look in PATH for config.status.
 : ${CONFIG_STATUS=./config.status}
@@ -2338,7 +2330,7 @@ ac_given_INSTALL="$INSTALL"
 
 trap 'rm -fr `echo "Makefile unix/Makefile startup/Makefile startup/unix/Makefile \
 		startup/unix/linux/Makefile startup/unix/solaris/Makefile \
-		startup/unix/macosx/Makefile dmakeroot.h " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+		startup/unix/macosx/Makefile dmakeroot.h  config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -2505,10 +2497,136 @@ s%@INSTALL@%$INSTALL%g
 fi; done
 rm -f conftest.s*
 
+# These sed commands are passed to sed as "A NAME B NAME C VALUE D", where
+# NAME is the cpp macro being defined and VALUE is the value it is being given.
+#
+# ac_d sets the value in "#define NAME VALUE" lines.
+ac_dA='s%^\([ 	]*\)#\([ 	]*define[ 	][ 	]*\)'
+ac_dB='\([ 	][ 	]*\)[^ 	]*%\1#\2'
+ac_dC='\3'
+ac_dD='%g'
+# ac_u turns "#undef NAME" with trailing blanks into "#define NAME VALUE".
+ac_uA='s%^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
+ac_uB='\([ 	]\)%\1#\2define\3'
+ac_uC=' '
+ac_uD='\4%g'
+# ac_e turns "#undef NAME" without trailing blanks into "#define NAME VALUE".
+ac_eA='s%^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
+ac_eB='$%\1#\2define\3'
+ac_eC=' '
+ac_eD='%g'
+
+if test "${CONFIG_HEADERS+set}" != set; then
+EOF
+cat >> $CONFIG_STATUS <<EOF
+  CONFIG_HEADERS="config.h"
+EOF
+cat >> $CONFIG_STATUS <<\EOF
+fi
+for ac_file in .. $CONFIG_HEADERS; do if test "x$ac_file" != x..; then
+  # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
+  case "$ac_file" in
+  *:*) ac_file_in=`echo "$ac_file"|sed 's%[^:]*:%%'`
+       ac_file=`echo "$ac_file"|sed 's%:.*%%'` ;;
+  *) ac_file_in="${ac_file}.in" ;;
+  esac
+
+  echo creating $ac_file
+
+  rm -f conftest.frag conftest.in conftest.out
+  ac_file_inputs=`echo $ac_file_in|sed -e "s%^%$ac_given_srcdir/%" -e "s%:% $ac_given_srcdir/%g"`
+  cat $ac_file_inputs > conftest.in
+
+EOF
+
+# Transform confdefs.h into a sed script conftest.vals that substitutes
+# the proper values into config.h.in to produce config.h.  And first:
+# Protect against being on the right side of a sed subst in config.status.
+# Protect against being in an unquoted here document in config.status.
+rm -f conftest.vals
+cat > conftest.hdr <<\EOF
+s/[\\&%]/\\&/g
+s%[\\$`]%\\&%g
+s%#define \([A-Za-z_][A-Za-z0-9_]*\) *\(.*\)%${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD}%gp
+s%ac_d%ac_u%gp
+s%ac_u%ac_e%gp
+EOF
+sed -n -f conftest.hdr confdefs.h > conftest.vals
+rm -f conftest.hdr
+
+# This sed command replaces #undef with comments.  This is necessary, for
+# example, in the case of _POSIX_SOURCE, which is predefined and required
+# on some systems where configure will not decide to define it.
+cat >> conftest.vals <<\EOF
+s%^[ 	]*#[ 	]*undef[ 	][ 	]*[a-zA-Z_][a-zA-Z_0-9]*%/* & */%
+EOF
+
+# Break up conftest.vals because some shells have a limit on
+# the size of here documents, and old seds have small limits too.
+
+rm -f conftest.tail
+while :
+do
+  ac_lines=`grep -c . conftest.vals`
+  # grep -c gives empty output for an empty file on some AIX systems.
+  if test -z "$ac_lines" || test "$ac_lines" -eq 0; then break; fi
+  # Write a limited-size here document to conftest.frag.
+  echo '  cat > conftest.frag <<CEOF' >> $CONFIG_STATUS
+  sed ${ac_max_here_lines}q conftest.vals >> $CONFIG_STATUS
+  echo 'CEOF
+  sed -f conftest.frag conftest.in > conftest.out
+  rm -f conftest.in
+  mv conftest.out conftest.in
+' >> $CONFIG_STATUS
+  sed 1,${ac_max_here_lines}d conftest.vals > conftest.tail
+  rm -f conftest.vals
+  mv conftest.tail conftest.vals
+done
+rm -f conftest.vals
+
+cat >> $CONFIG_STATUS <<\EOF
+  rm -f conftest.frag conftest.h
+  echo "/* $ac_file.  Generated automatically by configure.  */" > conftest.h
+  cat conftest.in >> conftest.h
+  rm -f conftest.in
+  if cmp -s $ac_file conftest.h 2>/dev/null; then
+    echo "$ac_file is unchanged"
+    rm -f conftest.h
+  else
+    # Remove last slash and all that follows it.  Not all systems have dirname.
+      ac_dir=`echo $ac_file|sed 's%/[^/][^/]*$%%'`
+      if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
+      # The file is in a subdirectory.
+      test ! -d "$ac_dir" && mkdir "$ac_dir"
+    fi
+    rm -f $ac_file
+    mv conftest.h $ac_file
+  fi
+fi; done
+
 EOF
 cat >> $CONFIG_STATUS <<EOF
 AMDEP_TRUE="$AMDEP_TRUE"
 ac_aux_dir="$ac_aux_dir"
+am_indx=1
+for am_file in config.h; do
+  case " \$CONFIG_HEADERS " in
+  *" \$am_file "*)
+    am_dir=\`echo \$am_file |sed 's%:.*%%;s%[^/]*\$%%'\`
+    if test -n "\$am_dir"; then
+      am_tmpdir=\`echo \$am_dir |sed 's%^\(/*\).*\$%\1%'\`
+      for am_subdir in \`echo \$am_dir |sed 's%/% %'\`; do
+        am_tmpdir=\$am_tmpdir\$am_subdir/
+        if test ! -d \$am_tmpdir; then
+          mkdir \$am_tmpdir
+        fi
+      done
+    fi
+    echo timestamp > "\$am_dir"stamp-h\$am_indx
+    ;;
+  esac
+  am_indx=\`expr \$am_indx + 1\`
+done
 
 EOF
 cat >> $CONFIG_STATUS <<\EOF
@@ -2551,6 +2669,7 @@ for mf in $CONFIG_FILES; do
   done
 done
 
+test -z "$CONFIG_HEADERS" || echo timestamp >	   stamp-h
 
 exit 0
 EOF
