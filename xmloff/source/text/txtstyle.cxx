@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-22 21:02:27 $
+ *  last change: $Author: mtg $ $Date: 2001-03-30 10:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,9 +189,8 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed )
     Reference < lang::XMultiServiceFactory > xFactory (GetExport().GetModel(), UNO_QUERY);
     if (xFactory.is())
     {
-        Reference < XInterface > xInt = xFactory->createInstance (
-                                            OUString( RTL_CONSTASCII_USTRINGPARAM (
-                                                "com.sun.star.text.Defaults") ) );
+        OUString sTextDefaults ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.text.Defaults" ) );
+        Reference < XInterface > xInt = xFactory->createInstance ( sTextDefaults );
         if ( xInt.is() )
         {
             Reference < XPropertySet > xPropSet (xInt, UNO_QUERY);
