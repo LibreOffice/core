@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-14 08:47:32 $
+ *  last change: $Author: tl $ $Date: 2001-06-21 09:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,34 @@ static const sal_Char cHyph[] = "com.sun.star.linguistic2.Hyphenator";
 static const sal_Char cThes[] = "com.sun.star.linguistic2.Thesaurus";
 
 // static ----------------------------------------------------------------
+
+static Sequence< INT16 > lcl_LocaleSeqToLangSeq( const Sequence< Locale > &rSeq )
+{
+    INT32 nLen = rSeq.getLength();
+    Sequence< INT16 > aRes( nLen );
+    INT16 *pRes = aRes.getArray();
+    const Locale *pSeq = rSeq.getConstArray();
+    for (INT32 i = 0;  i < nLen;  ++i)
+    {
+        pRes[i] = SvxLocaleToLanguage( pSeq[i] );
+    }
+    return aRes;
+}
+
+
+static BOOL lcl_SeqHasLang( const Sequence< INT16 > &rSeq, INT16 nLang )
+{
+    INT32 nLen = rSeq.getLength();
+    const INT16 *pLang = rSeq.getConstArray();
+    INT32 nPos = -1;
+    for (INT32 i = 0;  i < nLen  &&  nPos < 0;  ++i)
+    {
+        if (nLang == pLang[i])
+            nPos = i;
+    }
+    return nPos < 0 ? FALSE : TRUE;
+}
+
 
 static INT32 lcl_SeqGetEntryPos(
     const Sequence< OUString > &rSeq, const OUString &rEntry )
@@ -1899,13 +1927,23 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
     aPrioDownPB.SetClickHdl( LINK( this, SvxEditModulesDlg, UpDownHdl_Impl ));
     aBackPB    .SetClickHdl( LINK( this, SvxEditModulesDlg, BackHdl_Impl ));
 
-    //fill option CheckListBox
-    aLanguageLB.Clear();
-    const Sequence<Locale>& rLoc = rLinguData.GetAllSupportedLocales();
+    //
+    //fill language box
+    //
+    Sequence< INT16 > aAvailLang;
+    Reference< XAvailableLocales > xAvail( rLinguData.GetManager(), UNO_QUERY );
+    if (xAvail.is())
+    {
+        aAvailLang = lcl_LocaleSeqToLangSeq(
+                        xAvail->getAvailableLocales( C2U(cSpell) ) );
+    }
+    const Sequence< Locale >& rLoc = rLinguData.GetAllSupportedLocales();
     const Locale* pLocales = rLoc.getConstArray();
+    aLanguageLB.Clear();
     for(long i = 0; i < rLoc.getLength(); i++)
     {
-        aLanguageLB.InsertLanguage( SvxLocaleToLanguage( pLocales[i] ));
+        INT16 nLang = SvxLocaleToLanguage( pLocales[i] );
+        aLanguageLB.InsertLanguage( nLang, lcl_SeqHasLang( aAvailLang, nLang ) );
     }
     LanguageType eSysLang = GetSystemLanguage();
     aLanguageLB.SelectLanguage( eSysLang );
