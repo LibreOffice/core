@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:31:04 $
+#   last change: $Author: vg $ $Date: 2005-03-23 10:48:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,6 @@
 defaultlangiso=en-US
 
 # Complete list of all supported ISO codes
-completelangiso=af ar bg ca cs cy da de el en-US eo es et eu fi fr gl he hi-IN hu it ja kn-IN ko lt ms nb nl nn ns pl pt pt-BR ru sk sl sv th tn tr zh-CN zh-TW zu
+completelangiso=af ar bg ca cs cy da de el en-GB en-US eo es et eu fi fr gl he hi-IN hu it ja km kn-IN ko lt ms nb nl nn ns pl pt pt-BR ru sk sl sv th tn tr xh zh-CN zh-TW zu
 
 alllangiso=$(strip $(defaultlangiso) $(subst,$(defaultlangiso), $(uniq $(subst,ALL,$(completelangiso) $(WITH_LANG)))))
