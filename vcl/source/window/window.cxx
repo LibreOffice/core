@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-14 19:45:43 $
+ *  last change: $Author: mt $ $Date: 2002-02-25 16:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HDL_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
@@ -4033,6 +4036,13 @@ Window::~Window()
     UnoWrapperBase* pWrapper = Application::GetUnoWrapper( FALSE );
     if ( pWrapper )
         pWrapper->WindowDestroyed( this );
+
+   if ( mxAccessible.is() )
+   {
+      ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xC( mxAccessible, ::com::sun::star::uno::UNO_QUERY );
+      if ( xC.is() )
+         xC->dispose();
+   }
 
     ImplSVData* pSVData = ImplGetSVData();
 
