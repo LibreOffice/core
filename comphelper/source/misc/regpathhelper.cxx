@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regpathhelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-08 08:31:16 $
+ *  last change: $Author: hro $ $Date: 2001-06-29 15:34:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,15 @@
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
 #endif
+#ifndef _RTL_TEXTENC_H
+#include <rtl/textenc.h>
+#endif
+#ifndef _RTL_URI_H_
+#include <rtl/uri.h>
+#endif
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
+#endif
 
 using namespace vos;
 using namespace osl;
@@ -119,7 +128,10 @@ static sal_Bool retrievePortalUserDir( OUString *pDirectory )
                 }
                 else
                 {
-                    *pDirectory = sArg.copy( nStart + 1 , nEnd - nStart -1 );
+                    OUString aEncHome = sArg.copy( nStart + 1 , nEnd - nStart -1 );
+                    *pDirectory = rtl::Uri::decode(aEncHome,
+                                                   rtl_UriDecodeWithCharset,
+                                                   RTL_TEXTENCODING_UTF8);
                 }
                   break;
             }
