@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-03 10:43:54 $
+ *  last change: $Author: fs $ $Date: 2002-01-23 15:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,23 +958,33 @@ void ViewTabListBox_Impl::Resize()
 
 void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
 {
-    if ( rKEvt.GetKeyCode().GetCode() == KEY_RETURN )
+    bool bHandled = false;
+
+    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    if ( 0 == rKeyCode.GetModifier() )
     {
-        ResetQuickSearch_Impl( NULL );
-        GetDoubleClickHdl().Call( this );
+        if ( rKeyCode.GetCode() == KEY_RETURN )
+        {
+            ResetQuickSearch_Impl( NULL );
+            GetDoubleClickHdl().Call( this );
+            bHandled = true;
+        }
+        else if ( ( rKeyCode.GetCode() == KEY_DELETE ) &&
+                  mbEnableDelete )
+        {
+            ResetQuickSearch_Impl( NULL );
+            DeleteEntries();
+            bHandled = true;
+        }
+        else if ( ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_NUM ) ||
+                  ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_ALPHA ) )
+        {
+            DoQuickSearch( rKEvt.GetCharCode() );
+            bHandled = true;
+        }
     }
-    else if ( ( rKEvt.GetKeyCode().GetCode() == KEY_DELETE ) &&
-              mbEnableDelete )
-    {
-        ResetQuickSearch_Impl( NULL );
-        DeleteEntries();
-    }
-    else if ( ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_NUM ) ||
-              ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_ALPHA ) )
-    {
-        DoQuickSearch( rKEvt.GetCharCode() );
-    }
-    else
+
+    if ( !bHandled )
     {
         ResetQuickSearch_Impl( NULL );
         SvHeaderTabListBox::KeyInput( rKEvt );
