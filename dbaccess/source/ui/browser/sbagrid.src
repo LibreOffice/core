@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 21:22:41 $
+ *  last change: $Author: kz $ $Date: 2001-10-25 20:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,7 @@ String STR_OBJECT_ALREADY_EXISTS
     Text[ swedish ] = "Namnet # finns redan.";
     Text[ polish ] = "Nazwa # ju� istnieje.";
     Text[ portuguese_brazilian ] = "The name # already exists.";
-    Text[ japanese ] = "The name # already exists.";
+    Text[ japanese ] = "名前 # はすでにあります。";
     Text[ korean ] = "The name # already exists.";
     Text[ chinese_simplified ] = "名称 # 已经存在。";
     Text[ chinese_traditional ] = "名稱 # 已經存在。";
@@ -400,7 +400,7 @@ String STR_NO_COLUMNNAME_MATCHING
     Text[ swedish ] = "Det gick inte att hitta n�gra kolumnnamn som st�mmer �verens.";
     Text[ polish ] = "Nie znaleziono odpowiednich nazw kolumn!";
     Text[ portuguese_brazilian ] = "No matching column names found.";
-    Text[ japanese ] = "No matching column names found.";
+    Text[ japanese ] = "一致する列の名前はありません。";
     Text[ korean ] = "No matching column names found.";
     Text[ chinese_simplified ] = "无法找到相符的列名称！";
     Text[ chinese_traditional ] = "沒有找到符合條件的欄名稱！";
@@ -426,7 +426,7 @@ String STR_ERROR_OCCURED_WHILE_COPYING
     Text[ swedish ] = "Det har uppst�tt ett fel. Vill du forts�tta att kopiera?";
     Text[ polish ] = "Wyst�pi� b��d! Kontynuowa� proces kopiowania?";
     Text[ portuguese_brazilian ] = "A error occured. Would you like to continue the copying?";
-    Text[ japanese ] = "A error occured. Would you like to continue the copying?";
+    Text[ japanese ] = "ｴﾗｰが発生しました。ｺﾋﾟｰ処理を続行しますか。";
     Text[ korean ] = "A error occured. Would you like to continue the copying?";
     Text[ chinese_simplified ] = "出现一个错误！还是要继续复制？";
     Text[ chinese_traditional ] = "已經發生一個錯誤。要繼續複製？";
@@ -434,6 +434,7 @@ String STR_ERROR_OCCURED_WHILE_COPYING
     Text[ arabic ] = "A error occured. Would you like to continue the copying?";
     Text[ catalan ] = "A error occured. Would you like to continue the copying?";
 };
+
 
 
 
