@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-02-08 08:41:59 $
+ *  last change: $Author: os $ $Date: 2002-04-18 12:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1056,6 +1056,16 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
     aVertAlignFT            ( this, ResId( FT_VERTALIGN ) ),
     aVertAlignLB            ( this, ResId( LB_VERTALIGN ) )
 {
+    SvtCJKOptions aCJKOptions;
+    if(aCJKOptions.IsAsianTypographyEnabled())
+    {
+        String sLeft(ResId(ST_LEFTALIGN_ASIAN));
+        aLeft.SetText(sLeft);
+        aRight.SetText(String(ResId(ST_RIGHTALIGN_ASIAN)));
+        sLeft.EraseAllChars( '~' );
+        aLastLineLB.RemoveEntry( 0 );
+        aLastLineLB.InsertEntry( sLeft, 0 );
+    }
     FreeResource();
     Link aLink = LINK( this, SvxParaAlignTabPage, AlignHdl_Impl );
     aLeft.SetClickHdl( aLink );
