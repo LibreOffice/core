@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeInfoContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,30 +121,7 @@ XMLChangeInfoContext::~XMLChangeInfoContext()
 void XMLChangeInfoContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
-    // process attributes: chg-author, chg-date-time
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
-    {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        OUString sValue = xAttrList->getValueByIndex(nAttr);
-        if (XML_NAMESPACE_OFFICE == nPrefix)
-        {
-            if ( IsXMLToken( sLocalName, XML_CHG_AUTHOR ) )
-            {
-                sAuthor = sValue;
-            }
-            else if ( IsXMLToken( sLocalName, XML_CHG_DATE_TIME ) )
-            {
-                sDateTime = sValue;
-            }
-            // else: unknown attribute
-        }
-        // else: unknown namespace
-    }
-
+    // no attributes
 }
 
 SvXMLImportContext* XMLChangeInfoContext::CreateChildContext(
@@ -154,13 +131,23 @@ SvXMLImportContext* XMLChangeInfoContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = NULL;
 
-    if ( ( XML_NAMESPACE_TEXT == nPrefix ) &&
+    if( XML_NAMESPACE_DC == nPrefix )
+    {
+        if( IsXMLToken( rLocalName, XML_CREATOR ) )
+            pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
+                                            rLocalName, sAuthorBuffer);
+        else if( IsXMLToken( rLocalName, XML_DATE ) )
+            pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
+                                            rLocalName, sDateTimeBuffer);
+    }
+    else if ( ( XML_NAMESPACE_TEXT == nPrefix ) &&
          IsXMLToken( rLocalName, XML_P )       )
     {
         pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
                                                    rLocalName, sCommentBuffer);
     }
-    else
+
+    if( !pContext )
     {
         pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                           xAttrList);
@@ -172,7 +159,7 @@ SvXMLImportContext* XMLChangeInfoContext::CreateChildContext(
 void XMLChangeInfoContext::EndElement()
 {
     // set values at changed region context
-    rChangedRegion.SetChangeInfo(rType, sAuthor,
+    rChangedRegion.SetChangeInfo(rType, sAuthorBuffer.makeStringAndClear(),
                                  sCommentBuffer.makeStringAndClear(),
-                                 sDateTime);
+                                 sDateTimeBuffer.makeStringAndClear());
 }
