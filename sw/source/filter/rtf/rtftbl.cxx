@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:23:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,6 @@
  ************************************************************************/
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-
-#pragma hdrstop
 
 #ifdef WTC
 #define private public
@@ -838,10 +835,9 @@ void SwRTFParser::ReadTable( int nToken )
     {
         //Associate this tablenode with this after position, replace an
         //old node association if necessary
-        maTables.insert(::std::map<SwTableNode *, SwNodeIndex *>::value_type(pTableNode, &(pPam->GetPoint()->nNode)));
+        maTables.insert(std::map<SwTableNode *, SwNodeIndex *>::value_type(pTableNode, &(pPam->GetPoint()->nNode)));
     }
 
-    ULONG nOldPos = pPam->GetPoint()->nNode.GetIndex();
     SwNodeIndex aOldIdx(pPam->GetPoint()->nNode);
     SwNodeIdx aOldPos(aOldIdx);
     SwPaM aRg(*pPam);
