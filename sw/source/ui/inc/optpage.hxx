@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:43:13 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _OPTPAGE_HXX
 #define _OPTPAGE_HXX
-
 #ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
 #endif
@@ -209,6 +208,7 @@ public:
     void                SetFax( const SvStringsDtor& );
     void                SelectFax( const String& );
     void                SetPreview(BOOL bPrev);
+    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
 
 };
 
@@ -272,6 +272,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 
     void    SetFontMode(sal_uInt8 nGroup) {nFontGroup = nGroup;}
+    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
 };
 
 /*-----------------18.01.97 12.10-------------------
@@ -333,7 +334,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 
     void SetWrtShell(SwWrtShell* pSh) {pWrtShell = pSh;}
-
+    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
 
 };
 /*-----------------31.10.97 17:55-------------------
