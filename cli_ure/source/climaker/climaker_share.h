@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_share.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2003-07-02 14:17:23 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include "com/sun/star/reflection/XConstantTypeDescription.hpp"
 #include "com/sun/star/reflection/XConstantsTypeDescription.hpp"
 #include "com/sun/star/reflection/XEnumTypeDescription.hpp"
-#include "com/sun/star/reflection/XInterfaceTypeDescription.hpp"
+#include "com/sun/star/reflection/XInterfaceTypeDescription2.hpp"
 #include "com/sun/star/reflection/XCompoundTypeDescription.hpp"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
@@ -130,7 +130,7 @@ __gc class TypeEmitter : public ::System::IDisposable
     __gc class iface_entry
     {
     public:
-        css::reflection::XInterfaceTypeDescription * m_xType;
+        css::reflection::XInterfaceTypeDescription2 * m_xType;
         ::System::Reflection::Emit::TypeBuilder * m_type_builder;
     };
     ::System::Collections::Hashtable * m_incomplete_ifaces;
@@ -162,7 +162,7 @@ __gc class TypeEmitter : public ::System::IDisposable
         css::reflection::XCompoundTypeDescription > const & xType );
     ::System::Type * get_type(
         css::uno::Reference<
-        css::reflection::XInterfaceTypeDescription > const & xType );
+        css::reflection::XInterfaceTypeDescription2 > const & xType );
 public:
     TypeEmitter(
         ::System::Reflection::Emit::ModuleBuilder * module_builder,
