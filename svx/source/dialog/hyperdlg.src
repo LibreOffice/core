@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:21:36 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,10 +212,10 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ swedish ] = "Må~l";
         Text[ polish ] = "Cel";
         Text[ portuguese_brazilian ] = "T~arget";
-        Text[ japanese ] = "À°¹Þ¯Ä(~A)";
-        Text[ korean ] = "Å¸°Ù(~A)";
-        Text[ chinese_simplified ] = "ÌøÔ¾µÄÄ¿±ê(~A)";
-        Text[ chinese_traditional ] = "¸õÅDªº¥Ø¼Ð(~A)";
+        Text[ japanese ] = "À°¹Þ¯Ä(~G)";
+        Text[ korean ] = "Å¸°Ù(~G)";
+        Text[ chinese_simplified ] = "ÌøÔ¾µÄÄ¿±ê(~G)";
+        Text[ chinese_traditional ] = "¸õÅDªº¥Ø¼Ð(~G)";
         Text[ arabic ] = "ÇáåÏÝ";
         Text[ turkish ] = "~Hedef";
         Text[ catalan ] = "Destino";
@@ -265,7 +265,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ russian ] = "Ïàðîëü";
         Text[ greek ] = "Êùäéêüò ðñü~óâáóçò";
         Text[ dutch ] = "~Wachtwoord";
-        Text[ french ] = "~Mot de passe";
+        Text[ french ] = "Mot de passe";
         Text[ spanish ] = "~Contraseña";
         Text[ italian ] = "~Password";
         Text[ danish ] = "Adgangskode";
@@ -273,7 +273,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ polish ] = "Has³o";
         Text[ portuguese_brazilian ] = "~Password";
         Text[ japanese ] = "Êß½Ü°ÄÞ(~P)";
-        Text[ korean ] = "ÆÐ½º¿öµå(~P)";
+        Text[ korean ] = "ÄÚµå ¿öµå(~P)";
         Text[ chinese_simplified ] = "ÃÜÂë(~P)";
         Text[ chinese_traditional ] = "±K½X(~P)";
         Text[ arabic ] = "ßáãÉ ÇáÓÑ";
@@ -339,7 +339,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ spanish ] = "Navegador";
         QuickHelpText[ italian ] = "Browser Web";
         QuickHelpText[ danish ] = "WWW-browser";
-        QuickHelpText[ swedish ] = "WWW-browser";
+        QuickHelpText[ swedish ] = "Webbläsare";
         QuickHelpText[ polish ] = "Przegl¹darka WWW";
         QuickHelpText[ portuguese_brazilian ] = "Browse";
         QuickHelpText[ japanese ] = "WWWÌÞ×³»Þ";
@@ -376,7 +376,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ polish ] = "Cel w dokumencie";
         QuickHelpText[ portuguese_brazilian ] = "Target";
         QuickHelpText[ japanese ] = "ÄÞ·­ÒÝÄ‚É‚ ‚éÀ°¹Þ¯Ä";
-        QuickHelpText[ korean ] = "¹®¼­³»¡¡´ë»ó";
+        QuickHelpText[ korean ] = "¹®¼­ ³»¡¡´ë»ó!";
         QuickHelpText[ chinese_simplified ] = "Ä¿±ê";
         QuickHelpText[ chinese_traditional ] = "¤å¥ó¤ºªº¥Ø¼Ð";
         QuickHelpText[ arabic ] = "ÇáåÏÝ Ýí ÇáãÓÊäÏ";
@@ -1500,7 +1500,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ polish ] = "Cel w dokumencie";
         QuickHelpText[ portuguese_brazilian ] = "Target in document";
         QuickHelpText[ japanese ] = "ÄÞ·­ÒÝÄ‚É‚ ‚éÀ°¹Þ¯Ä";
-        QuickHelpText[ korean ] = "¹®¼­³» ´ë»ó";
+        QuickHelpText[ korean ] = "¹®¼­ ³» ´ë»ó!";
         QuickHelpText[ chinese_simplified ] = "ÎÄµµÄÚµÄÄ¿±ê";
         QuickHelpText[ chinese_traditional ] = "¤å¥ó¤§¤ºªº¥Ø¼Ð";
         QuickHelpText[ arabic ] = "ÇáåÏÝ Ýí ÇáãÓÊäÏ";
@@ -2444,7 +2444,7 @@ String RID_SVXSTR_HYPDLG_APPLYBUT
     Text[ japanese ] = "“K—p";
     Text[ korean ] = "Àû¿ë";
     Text[ chinese_simplified ] = "Ì×ÓÃ";
-    Text[ chinese_traditional ] = "®M¥Î";
+    Text[ chinese_traditional ] = "±Ä¥Î";
     Text[ arabic ] = "ÊØÈíÞ";
     Text[ turkish ] = "Uygula";
     Text[ language_user1 ] = " ";
@@ -2496,7 +2496,7 @@ String RID_SVXSTR_HYPDLG_MACROACT1
     Text[ japanese ] = "µÌÞ¼Þª¸Ä—pÏ³½";
     Text[ korean ] = "¸¶¿ì½º¸¦ °³Ã¼À§¿¡";
     Text[ chinese_simplified ] = "Êó±êÔÚ¶ÔÏóÖ®ÉÏ";
-    Text[ chinese_traditional ] = "·Æ¹«¦bª«¥ó¤§¤W";
+    Text[ chinese_traditional ] = "¹«¼Ð¦bª«¥ó¤§¤W";
     Text[ arabic ] = "ÇáãÇæÓ ÝæÞ ÇáßÇÆä";
     Text[ turkish ] = "Fare oku nesne üzerinde";
     Text[ catalan ] = "Ratón sobre objeto";
@@ -2547,7 +2547,7 @@ String RID_SVXSTR_HYPDLG_MACROACT3
     Text[ japanese ] = "µÌÞ¼Þª¸Ä‚©‚çÏ³½‚ð—£‚·";
     Text[ korean ] = "¸¶¿ì½º°¡ °³Ã¼¸¦ ¹þ¾î³²";
     Text[ chinese_simplified ] = "Êó±êÀë¿ª¶ÔÏó";
-    Text[ chinese_traditional ] = "·Æ¹«ÖÃ¶}ª«¥ó";
+    Text[ chinese_traditional ] = "¹«¼ÐÖÃ¶}ª«¥ó";
     Text[ arabic ] = "ÇÈÊÚÇÏ ÇáãÇæÓ Úä ÇáßÇÆä";
     Text[ turkish ] = "Fare oku nesneden ayrýlýyor";
     Text[ catalan ] = "Ratón fuera de objeto";
@@ -2621,7 +2621,7 @@ String RID_SVXSTR_HYPERDLG_HLMAILTP
     Text[ italian ] = "Mail & news";
     Text[ danish ] = "E-mail og nyheder";
     Text[ swedish ] = "E-post & nyheter";
-    Text[ polish ] = "E-mail & wiadomoœci";
+    Text[ polish ] = "Poczta i wiadomoœci";
     Text[ portuguese_brazilian ] = "Mail & News";
     Text[ japanese ] = "Ò°Ù & Æ­°½";
     Text[ korean ] = "¸ÞÀÏ & ´º½º";
@@ -2762,6 +2762,7 @@ Image RID_SVXBMP_HLDOCNTP
     ImageBitmap = Bitmap { File = "hldocntp.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
