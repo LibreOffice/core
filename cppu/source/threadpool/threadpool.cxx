@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadpool.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:57:23 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ using namespace cppu_threadpool;
 
 struct uno_ThreadPool_Equal
 {
-    sal_Int32 operator () ( const uno_ThreadPool &a , const uno_ThreadPool &b ) const
+    sal_Bool operator () ( const uno_ThreadPool &a , const uno_ThreadPool &b ) const
         {
             return a == b;
         }
@@ -423,9 +423,9 @@ struct uno_ThreadPool_Equal
 
 struct uno_ThreadPool_Hash
 {
-    sal_Int32 operator () ( const uno_ThreadPool &a  )  const
+    sal_Size operator () ( const uno_ThreadPool &a  )  const
         {
-            return (sal_Int32) a;
+            return (sal_Size) a;
         }
 };
 
