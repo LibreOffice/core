@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 12:33:46 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
@@ -107,8 +110,17 @@
 #include "zforlist.hxx"
 #include "numhead.hxx"
 
+struct GregorianInit
+{
+    const ::rtl::OUString* operator()()
+    {
+        static ::rtl::OUString sGregorian
+            (RTL_CONSTASCII_USTRINGPARAM("gregorian"));
+        return &sGregorian;
+    }
+};
 
-::rtl::OUString SvNumberformat::sGregorian( RTL_CONSTASCII_USTRINGPARAM( "gregorian" ) );
+namespace { struct Gregorian : public rtl::Static<const ::rtl::OUString, Gregorian, GregorianInit> {}; }
 
 const double _D_MAX_U_LONG_ = (double) 0xffffffff;      // 4294967295.0
 const double _D_MAX_LONG_   = (double) 0x7fffffff;      // 2147483647.0
@@ -2626,7 +2638,7 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
 
 BOOL SvNumberformat::ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const
 {
-    if ( GetCal().getUniqueID() != sGregorian )
+    if ( GetCal().getUniqueID() != Gregorian::get() )
         return FALSE;
     const ImpSvNumberformatInfo& rInfo = rNumFor.Info();
     const USHORT nAnz = rNumFor.GetnAnz();
@@ -2656,7 +2668,8 @@ void SvNumberformat::SwitchToOtherCalendar( String& rOrgCalendar,
         double& fOrgDateTime ) const
 {
     CalendarWrapper& rCal = GetCal();
-    if ( rCal.getUniqueID() == sGregorian )
+    const rtl::OUString &rGregorian = Gregorian::get();
+    if ( rCal.getUniqueID() == rGregorian )
     {
         using namespace ::com::sun::star::i18n;
         ::com::sun::star::uno::Sequence< ::rtl::OUString > xCals
@@ -2666,7 +2679,7 @@ void SvNumberformat::SwitchToOtherCalendar( String& rOrgCalendar,
         {
             for ( sal_Int32 j=0; j < nCnt; j++ )
             {
-                if ( xCals[j] != sGregorian )
+                if ( xCals[j] != rGregorian )
                 {
                     if ( !rOrgCalendar.Len() )
                     {
@@ -2687,9 +2700,10 @@ void SvNumberformat::SwitchToGregorianCalendar( const String& rOrgCalendar,
         double fOrgDateTime ) const
 {
     CalendarWrapper& rCal = GetCal();
-    if ( rOrgCalendar.Len() && rCal.getUniqueID() != sGregorian )
+    const rtl::OUString &rGregorian = Gregorian::get();
+    if ( rOrgCalendar.Len() && rCal.getUniqueID() != rGregorian )
     {
-        rCal.loadCalendar( sGregorian, rLoc().getLocale() );
+        rCal.loadCalendar( rGregorian, rLoc().getLocale() );
         rCal.setDateTime( fOrgDateTime );
     }
 }
@@ -2699,7 +2713,8 @@ BOOL SvNumberformat::ImpFallBackToGregorianCalendar( String& rOrgCalendar, doubl
 {
     using namespace ::com::sun::star::i18n;
     CalendarWrapper& rCal = GetCal();
-    if ( rCal.getUniqueID() != sGregorian )
+    const rtl::OUString &rGregorian = Gregorian::get();
+    if ( rCal.getUniqueID() != rGregorian )
     {
         sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
         if ( nVal == 0 && rCal.getLoadedCalendar().Eras[0].ID.equalsAsciiL(
@@ -2710,9 +2725,9 @@ BOOL SvNumberformat::ImpFallBackToGregorianCalendar( String& rOrgCalendar, doubl
                 rOrgCalendar = rCal.getUniqueID();
                 fOrgDateTime = rCal.getDateTime();
             }
-            else if ( rOrgCalendar == String(sGregorian) )
+            else if ( rOrgCalendar == String(rGregorian) )
                 rOrgCalendar.Erase();
-            rCal.loadCalendar( sGregorian, rLoc().getLocale() );
+            rCal.loadCalendar( rGregorian, rLoc().getLocale() );
             rCal.setDateTime( fOrgDateTime );
             return TRUE;
         }
