@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-17 11:15:07 $
+ *  last change: $Author: fs $ $Date: 2001-05-21 04:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2056,63 +2056,69 @@ namespace pcr
                     || (PROPERTY_ID_EFFECTIVE_MAX == nPropId) || (PROPERTY_ID_EFFECTIVE_DEFAULT == nPropId))
                 {
                     // only if the set has a formatssupplier, too
-                    if (::comphelper::hasProperty(PROPERTY_FORMATSSUPPLIER, m_xPropValueAccess))
+                    if  (   !::comphelper::hasProperty(PROPERTY_FORMATSSUPPLIER, m_xPropValueAccess)
+                        ||  (FormComponentType::DATEFIELD == m_nClassId)
+                        ||  (FormComponentType::TIMEFIELD == m_nClassId)
+                        )
                     {
-                        // and the supplier is really available
-                        Reference< XNumberFormatsSupplier >  xSupplier;
-                        m_xPropValueAccess->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xSupplier;
-                        if (xSupplier.is())
+                        delete pProperty;
+                        continue;
+                    }
+
+                    // and the supplier is really available
+                    Reference< XNumberFormatsSupplier >  xSupplier;
+                    m_xPropValueAccess->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xSupplier;
+                    if (xSupplier.is())
+                    {
+                        Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
+                        DBG_ASSERT(xTunnel.is(), "OPropertyBrowserController::ChangeFormatProperty : xTunnel is invalid!");
+                        SvNumberFormatsSupplierObj* pSupplier = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
+
+                        if (pSupplier != NULL)
                         {
-                            Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
-                            DBG_ASSERT(xTunnel.is(), "OPropertyBrowserController::ChangeFormatProperty : xTunnel is invalid!");
-                            SvNumberFormatsSupplierObj* pSupplier = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
+                            bFilter = sal_False;    // don't do further checks
+                            sal_Bool bIsFormatKey = (PROPERTY_ID_FORMATKEY == nPropId);
 
-                            if (pSupplier != NULL)
+                            pProperty->eControlType = BCT_USERDEFINED;
+
+                            pProperty->bIsLocked = bIsFormatKey;
+                            pProperty->bHasBrowseButton = bIsFormatKey;
+
+                            if (bIsFormatKey)
                             {
-                                bFilter = sal_False;    // don't do further checks
-                                sal_Bool bIsFormatKey = (PROPERTY_ID_FORMATKEY == nPropId);
+                                pProperty->pControl = new OFormatDescriptionControl(getPropertyBox(), WB_READONLY | WB_TABSTOP | WB_BORDER);
+                                    // HACK : the Control need's a non-null parent, but we don't have one ... so use the property box
+                                ((OFormatDescriptionControl*)pProperty->pControl)->SetFormatSupplier(pSupplier);
 
-                                pProperty->eControlType = BCT_USERDEFINED;
+                                pProperty->nUniqueButtonId = UID_PROP_DLG_NUMBER_FORMAT;
+                            }
+                            else
+                            {
+                                pProperty->pControl = new OFormattedNumericControl(getPropertyBox(), WB_TABSTOP | WB_BORDER);
+                                    // HACK : same as above
 
-                                pProperty->bIsLocked = bIsFormatKey;
-                                pProperty->bHasBrowseButton = bIsFormatKey;
+                                FormatDescription aDesc;
+                                aDesc.pSupplier = pSupplier;
+                                aKey = m_xPropValueAccess->getPropertyValue(PROPERTY_FORMATKEY);
+                                aDesc.nKey = aKey.hasValue() ? ::comphelper::getINT32(aKey) : 0;
+                                ((OFormattedNumericControl*)pProperty->pControl)->SetFormatDescription(aDesc);
+                            }
 
+                            // the initial value
+                            if (aVal.hasValue())
+                            {
                                 if (bIsFormatKey)
                                 {
-                                    pProperty->pControl = new OFormatDescriptionControl(getPropertyBox(), WB_READONLY | WB_TABSTOP | WB_BORDER);
-                                        // HACK : the Control need's a non-null parent, but we don't have one ... so use the property box
-                                    ((OFormatDescriptionControl*)pProperty->pControl)->SetFormatSupplier(pSupplier);
-
-                                    pProperty->nUniqueButtonId = UID_PROP_DLG_NUMBER_FORMAT;
+                                    pProperty->sValue = String::CreateFromInt32(::comphelper::getINT32(aVal));
                                 }
                                 else
                                 {
-                                    pProperty->pControl = new OFormattedNumericControl(getPropertyBox(), WB_TABSTOP | WB_BORDER);
-                                        // HACK : same as above
-
-                                    FormatDescription aDesc;
-                                    aDesc.pSupplier = pSupplier;
-                                    aKey = m_xPropValueAccess->getPropertyValue(PROPERTY_FORMATKEY);
-                                    aDesc.nKey = aKey.hasValue() ? ::comphelper::getINT32(aKey) : 0;
-                                    ((OFormattedNumericControl*)pProperty->pControl)->SetFormatDescription(aDesc);
-                                }
-
-                                // the initial value
-                                if (aVal.hasValue())
-                                {
-                                    if (bIsFormatKey)
-                                    {
-                                        pProperty->sValue = String::CreateFromInt32(::comphelper::getINT32(aVal));
-                                    }
+                                    if (aVal.getValueTypeClass() == TypeClass_DOUBLE)
+                                        pProperty->sValue = convertSimpleToString(aVal);
                                     else
-                                    {
-                                        if (aVal.getValueTypeClass() == TypeClass_DOUBLE)
-                                            pProperty->sValue = convertSimpleToString(aVal);
-                                        else
-                                            DBG_WARNING("OPropertyBrowserController::UpdateUI : non-double values not supported for Effective*-properties !");
-                                            // our UI supports only setting double values for the min/max/default, but by definition
-                                            // the default may be a string if the field is not in numeric mode ....
-                                    }
+                                        DBG_WARNING("OPropertyBrowserController::UpdateUI : non-double values not supported for Effective*-properties !");
+                                        // our UI supports only setting double values for the min/max/default, but by definition
+                                        // the default may be a string if the field is not in numeric mode ....
                                 }
                             }
                         }
@@ -2801,6 +2807,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2001/05/17 11:15:07  fs
+ *  #86859# ChangeFontProperty: translate COL_AUTO into a void Any
+ *
  *  Revision 1.21  2001/05/14 15:58:23  fs
  *  #86810# don't use setPropertyToDefault - the 'standard' value is used for MAYBEVOID properties, not for MAYBEDEFAULT properties
  *
