@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxcolor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:14:07 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ namespace svx
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::beans;
-    using namespace ::drafts::com::sun::star::frame;
+    using namespace ::com::sun::star::frame;
 
     #define DECLARE_ASCII(s)        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
     #define TOOLBAR_RESNAME         DECLARE_ASCII("private:resource/toolbar/")
@@ -133,7 +133,7 @@ namespace svx
 
                     if ( m_bDocking )
                         xManager->dockWindow( m_sToolboxResName,
-                            ::drafts::com::sun::star::ui::DockingArea_DOCKINGAREA_BOTTOM, aPos );
+                            ::com::sun::star::ui::DockingArea_DOCKINGAREA_BOTTOM, aPos );
                 }
             }
         }
