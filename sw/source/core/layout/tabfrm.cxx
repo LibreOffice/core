@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:50:18 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:25:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,8 @@ BOOL MA_FASTCALL lcl_CalcLowers( SwLayoutFrm *pLay, long nBottom );
 void MA_FASTCALL lcl_CalcLayout( SwLayoutFrm *pLay, long nBottom );
 BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva );
 BOOL MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm, long nBottom );
-SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwLayoutFrm *pRow );
+// OD 2004-02-18 #106629# - correct type of 1st parameter
+SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwRowFrm *pRow );
 
 //
 // Local helper function to change the split attribute for
@@ -320,6 +321,7 @@ void lcl_ShrinkCellsAndAllContent( SwRowFrm& rRow )
         }
         else
         {
+
             // TODO: Optimize number of frames which are set to 0 height
             while ( pTmp )
             {
@@ -3267,28 +3269,31 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
     return nHeight;
 }
 
-SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwLayoutFrm *pRow );
-
-SwTwips MA_FASTCALL lcl_CalcMinCellHeight( SwLayoutFrm *pCell,
-                                  const SwBorderAttrs *pAttrs = 0 )
+// OD 2004-02-18 #106629# - correct type of 1st parameter
+SwTwips MA_FASTCALL lcl_CalcMinCellHeight( SwCellFrm* _pCell,
+                                           const SwBorderAttrs* _pAttrs = 0 )
 {
-    SWRECTFN( pCell )
+    SWRECTFN( _pCell )
     SwTwips nHeight = 0;
-    SwFrm *pLow = pCell->Lower();
+    SwFrm* pLow = _pCell->Lower();
     if ( pLow )
     {
         long nFlyAdd = 0;
         while ( pLow )
         {
-            if( pLow->IsCntntFrm() || pLow->IsSctFrm() )
+            // OD 2004-02-18 #106629# - change condition and switch then-body
+            // and else-body
+            if ( pLow->IsRowFrm() )
+            {
+                nHeight += ::lcl_CalcMinRowHeight( static_cast<SwRowFrm*>(pLow) );
+            }
+            else
             {
                 long nLowHeight = (pLow->Frm().*fnRect->fnGetHeight)();
                 nHeight += nLowHeight;
                 nFlyAdd = Max( 0L, nFlyAdd - nLowHeight );
                 nFlyAdd = Max( nFlyAdd, ::CalcHeightWidthFlys( pLow ) );
             }
-            else
-                nHeight += ::lcl_CalcMinRowHeight( (SwLayoutFrm*)pLow );
 
             pLow = pLow->GetNext();
         }
@@ -3298,14 +3303,13 @@ SwTwips MA_FASTCALL lcl_CalcMinCellHeight( SwLayoutFrm *pCell,
     //Der Border will natuerlich auch mitspielen, er kann leider nicht
     //aus PrtArea und Frm errechnet werden, da diese in beliebiger
     //Kombination ungueltig sein koennen.
-    if ( pCell->Lower() )
+    if ( _pCell->Lower() )
     {
-        SwTabFrm* pTab = pCell->FindTabFrm();
-        if ( pAttrs )
-            nHeight += pAttrs->CalcTop() + pAttrs->CalcBottom();
+        if ( _pAttrs )
+            nHeight += _pAttrs->CalcTop() + _pAttrs->CalcBottom();
         else
         {
-            SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCell );
+            SwBorderAttrAccess aAccess( SwFrm::GetCache(), _pCell );
             const SwBorderAttrs &rAttrs = *aAccess.Get();
             nHeight += rAttrs.CalcTop() + rAttrs.CalcBottom();
         }
@@ -3313,25 +3317,26 @@ SwTwips MA_FASTCALL lcl_CalcMinCellHeight( SwLayoutFrm *pCell,
     return nHeight;
 }
 
-SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwLayoutFrm *pRow )
+// OD 2004-02-18 #106629# - correct type of 1st parameter
+SwTwips MA_FASTCALL lcl_CalcMinRowHeight( SwRowFrm* _pRow )
 {
-    SWRECTFN( pRow )
-    const SwFmtFrmSize &rSz = pRow->GetFmt()->GetFrmSize();
+    SWRECTFN( _pRow )
+    const SwFmtFrmSize &rSz = _pRow->GetFmt()->GetFrmSize();
 
-    if ( pRow->HasFixSize() )
+    if ( _pRow->HasFixSize() )
     {
         ASSERT( ATT_FIX_SIZE == rSz.GetSizeType(), "pRow claims to have fixed size" )
         return rSz.GetHeight();
     }
 
     SwTwips nHeight = 0;
-    SwLayoutFrm *pLow = (SwLayoutFrm*)pRow->Lower();
+    SwCellFrm* pLow = static_cast<SwCellFrm*>(_pRow->Lower());
     while ( pLow )
     {
         SwTwips nTmp = ::lcl_CalcMinCellHeight( pLow );
         if ( nTmp > nHeight )
             nHeight = nTmp;
-        pLow = (SwLayoutFrm*)pLow->GetNext();
+        pLow = static_cast<SwCellFrm*>(pLow->GetNext());
     }
     if ( rSz.GetSizeType() == ATT_MIN_SIZE )
         nHeight = Max( nHeight, rSz.GetHeight() );
@@ -3564,10 +3569,9 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
         SwTwips nMinHeight = rSz.GetSizeType() == ATT_MIN_SIZE ?
                              rSz.GetHeight() : 0;
-        SwLayoutFrm *pCell = (SwLayoutFrm*)Lower();
         if( nMinHeight < (Frm().*fnRect->fnGetHeight)() )
         {
-            SwLayoutFrm *pCell = (SwLayoutFrm*)Lower();
+            SwCellFrm* pCell = static_cast<SwCellFrm*>(Lower());
             while ( pCell )
             {
                 SwTwips nAct = ::lcl_CalcMinCellHeight( pCell );
@@ -3575,7 +3579,7 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                     nMinHeight = nAct;
                 if ( nMinHeight >= (Frm().*fnRect->fnGetHeight)() )
                     break;
-                pCell = (SwLayoutFrm*)pCell->GetNext();
+                pCell = static_cast<SwCellFrm*>(pCell->GetNext());
             }
         }
         if ( ((Frm().*fnRect->fnGetHeight)() - nRealDist) < nMinHeight )
@@ -3842,14 +3846,14 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         bValidPrtArea = TRUE;
 
         //Position einstellen.
-        long nLeftSpace = pAttrs->CalcLeft( this );
+        SwTwips nLeftSpace = pAttrs->CalcLeft( this );
         // OD 23.01.2003 #106895# - add 1st param to <SwBorderAttrs::CalcRight(..)>
-        long nRightSpace = pAttrs->CalcRight( this );
+        SwTwips nRightSpace = pAttrs->CalcRight( this );
         (this->*fnRect->fnSetXMargins)( nLeftSpace, nRightSpace );
         if ( Lower() )
         {
-            long nTopSpace = pAttrs->CalcTop();
-            long nBottomSpace = pAttrs->CalcBottom();
+            SwTwips nTopSpace = pAttrs->CalcTop();
+            SwTwips nBottomSpace = pAttrs->CalcBottom();
             (this->*fnRect->fnSetYMargins)( nTopSpace, nBottomSpace );
         }
     }
