@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:13:35 $
+ *  last change: $Author: nn $ $Date: 2001-12-03 20:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1223,7 +1223,8 @@ IMPL_LINK( ScPivotLayoutDlg, OkHdl, OKButton *, EMPTYARG )
             SetDispatcherLock( FALSE );
             SwitchToDocument();
 
-            Hide();     // in case the Execute call shows a QueryBox
+            //  #95513# don't hide the dialog before executing the slot, instead it is used as
+            //  parent for message boxes in ScTabViewShell::GetDialogParent
 
             GetBindings().GetDispatcher()->Execute( SID_PIVOT_TABLE,
                                       SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
