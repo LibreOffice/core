@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-06 12:26:46 $
+ *  last change: $Author: dv $ $Date: 2001-07-09 09:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1058,6 +1058,9 @@ void FileDialogHelper_Impl::addGraphicFilter()
 }
 
 // ------------------------------------------------------------------------
+#define GRF_CONFIG_STR      "   "
+#define STD_CONFIG_STR      "1 "
+
 void FileDialogHelper_Impl::saveConfig()
 {
     Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
@@ -1069,7 +1072,7 @@ void FileDialogHelper_Impl::saveConfig()
     if ( mbHasPreview )
     {
         SvtViewOptions aDlgOpt( E_DIALOG, IMPGRF_CONFIGNAME );
-        String aUserData = String::CreateFromAscii( "   " );
+        String aUserData = String::CreateFromAscii( GRF_CONFIG_STR );
 
         try
         {
@@ -1099,7 +1102,7 @@ void FileDialogHelper_Impl::saveConfig()
     else
     {
         SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
-           String aUserData = String::CreateFromAscii( "1 " );
+           String aUserData = String::CreateFromAscii( STD_CONFIG_STR );
 
         if ( aDlgOpt.Exists() )
         {
@@ -1183,21 +1186,21 @@ void FileDialogHelper_Impl::loadConfig()
         if ( aViewOpt.Exists() )
             aUserData = aViewOpt.GetUserData();
 
-        if ( aUserData.Len() > 0 )
-        {
-            if ( ! maPath.getLength() )
-                setPath( aUserData.GetToken( 1, ' ' ) );
+        if ( ! aUserData.Len() )
+            aUserData = String::CreateFromAscii( STD_CONFIG_STR );
 
-            if ( mbHasAutoExt )
+        if ( ! maPath.getLength() )
+            setPath( aUserData.GetToken( 1, ' ' ) );
+
+        if ( mbHasAutoExt )
+        {
+            sal_Int32 nFlag = aUserData.GetToken( 0, ' ' ).ToInt32();
+            aValue <<= (sal_Bool) nFlag;
+            try
             {
-                sal_Int32 nFlag = aUserData.GetToken( 0, ' ' ).ToInt32();
-                aValue <<= (sal_Bool) nFlag;
-                try
-                {
-                    xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue );
-                }
-                catch( IllegalArgumentException ){}
+                xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue );
             }
+            catch( IllegalArgumentException ){}
         }
     }
 }
