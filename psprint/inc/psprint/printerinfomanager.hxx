@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:37:13 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ public:
     virtual FILE* startSpool( const rtl::OUString& rPrinterName );
     // close the FILE* returned by startSpool and does the actual spooling
     // returns a numerical job id
-    virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile );
+    virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData );
 
     // for spadmin: whether adding or removing a printer is possible
     virtual bool addOrRemovePossible() const;
