@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:15:00 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ TabPage TP_DOC_STAT
         Text[ czech ] = "Počet stránek:";
         Text[ hebrew ] = "‮מספר העמודים:‬";
         Text[ hindi ] = "पृष्ठों की संख्या:";
+        Text[ slovak ] = "Počet strán:";
     };
     FixedText FT_TABLE
     {
@@ -135,6 +136,7 @@ TabPage TP_DOC_STAT
         Text[ czech ] = "Počet tabulek:";
         Text[ hebrew ] = "‮מספר הטבלאות:‬";
         Text[ hindi ] = "सारणियों की संख्या:";
+        Text[ slovak ] = "Počet tabuliek:";
     };
     FixedText FT_GRF
     {
@@ -169,6 +171,7 @@ TabPage TP_DOC_STAT
         Text[ czech ] = "Počet obrázků:";
         Text[ hebrew ] = "‮מספר האוביקטים הגרפיים:‬";
         Text[ hindi ] = "सुचित्रों की संख्या:";
+        Text[ slovak ] = "Počet obrázkov:";
     };
     FixedText FT_OLE
     {
@@ -203,6 +206,7 @@ TabPage TP_DOC_STAT
         Text[ czech ] = "Počet OLE objektů:";
         Text[ hebrew ] = "OLE‮מספר ה ‬";
         Text[ hindi ] = "OLE वस्तुओं की संख्या:";
+        Text[ slovak ] = "Počet OLE objektov:";
     };
     FixedText FT_PARA
     {
@@ -237,6 +241,7 @@ TabPage TP_DOC_STAT
         Text[ czech ] = "Počet odstavců:";
         Text[ hebrew ] = "‮מספר הפסקאות‬";
         Text[ hindi ] = "परिच्छेदों की संख्या:";
+        Text[ slovak ] = "Počet odstavcov:";
     };
     FixedText FT_WORD
     {
@@ -271,6 +276,7 @@ TabPage TP_DOC_STAT
         Text[ czech ] = "Počet slov:";
         Text[ hebrew ] = "‮מספר המלים:‬";
         Text[ hindi ] = "शब्दों की संख्या:";
+        Text[ slovak ] = "Počet slov:";
     };
     FixedText FT_CHAR
     {
@@ -305,6 +311,7 @@ TabPage TP_DOC_STAT
         Text[ czech ] = "Počet znaků:";
         Text[ hebrew ] = "‮מספר התוים:‬";
         Text[ hindi ] = "अक्षरों की संख्या:";
+        Text[ slovak ] = "Počet znakov:";
     };
     FixedText FT_LINE
     {
@@ -337,6 +344,7 @@ TabPage TP_DOC_STAT
         Text[ czech ] = "Počet řádků:";
         Text[ hebrew ] = "‮מספר השורות:‬";
         Text[ hindi ] = "रेखाओं की संख्या:";
+        Text[ slovak ] = "Počet riadkov:";
     };
     FixedText FT_PAGE_COUNT
     {
@@ -418,8 +426,11 @@ TabPage TP_DOC_STAT
         Text[ czech ] = "Aktualizovat";
         Text[ hebrew ] = "‮עדכון‬";
         Text[ hindi ] = "~अपडेट्";
+        Text[ slovak ] = "~Aktualizovať";
     };
 };
+
+
 
 
 
