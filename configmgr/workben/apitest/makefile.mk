@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: lla $ $Date: 2000-11-03 11:56:29 $
+#   last change: $Author: dg $ $Date: 2000-11-15 18:30:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,8 @@ PRJNAME=configmgr
 TARGET=cfgapi
 TARGET2=cfgreg
 TARGET3=cfgadduser
+TARGET4=cfgadmin
+TARGET5=cfgupdate
 TARGETTYPE=CUI
 LIBTARGET=NO
 
@@ -127,6 +129,35 @@ APP3STDLIBS+=$(LIBCIMT)
 APP3TARGET= $(TARGET3)
 APP3OBJS=	\
     $(SLO)$/cfgadduser.obj	\
+
+# ... cfgadmin ..............................
+APP4STDLIBS = $(APPSTDLIBS)
+
+APP4STDLIBS+=$(STDLIBCPP)
+
+.IF "$(GUI)"=="WNT"
+APP4STDLIBS+=$(LIBCIMT)
+.ENDIF
+
+APP4TARGET= $(TARGET4)
+APP4OBJS=	\
+    $(SLO)$/cfgadmin.obj	\
+    $(SLO)$/typeconverter.obj
+
+
+# ... cfgupdate ..............................
+APP5STDLIBS = $(APPSTDLIBS)
+
+APP5STDLIBS+=$(STDLIBCPP)
+
+.IF "$(GUI)"=="WNT"
+APP5STDLIBS+=$(LIBCIMT)
+.ENDIF
+
+APP5TARGET= $(TARGET5)
+APP5OBJS=	\
+    $(SLO)$/cfgupdate.obj	\
+    $(SLO)$/typeconverter.obj
 
 
 .INCLUDE :  target.mk
