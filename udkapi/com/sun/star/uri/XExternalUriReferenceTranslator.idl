@@ -1,0 +1,125 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XExternalUriReferenceTranslator.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:36:51 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_uri_XExternalUriReferenceTranslator_idl__
+#define __com_sun_star_uri_XExternalUriReferenceTranslator_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+module com { module sun { module star { module uri {
+
+/**
+   translates between external and internal URI references.
+
+   <p>Some URI schemes leave unspecified important aspects of how to interpret
+   URIs of those schemes.  For example, it is unspecified for &ldquo;file&rdquo;
+   URLs how to map the byte sequences that constitute the path segments of a
+   &ldquo;file&rdquo; URL to filenames on a given platform:  The UNO environment
+   always assumes that path segments of &ldquo;file&rdquo; URLs represent
+   UTF-8&ndash;encoded strings (which have to be mapped to filenames in a
+   platform-specific way), while other applications typically assume that path
+   segments of &ldquo;file&rdquo; URLs directly represent a platform's
+   byte-sequence filenames.  This interface offers methods to translate between
+   such <dfn>internal</dfn> URIs (e.g., UTF-8&ndash;encoded &ldquo;file&rdquo;
+   URLs used within the UNO environment) and <dfn>external</dfn> URIs (e.g.,
+   byte-sequence&ndash;oriented &ldquo;file&rdquo; URLs used by other
+   applications).  Typically, only &ldquo;file&rdquo; URLs are affected by this
+   translation.</p>
+
+   <p>Since the translation process is based on URI schemes, relative URI
+   references (that do not include a scheme) are left unmodified by the
+   translation process.</p>
+
+   @since #109735#
+ */
+interface XExternalUriReferenceTranslator {
+    /**
+       returns the internal counterpart of an external URI reference.
+
+       @param externalUriReference
+       an external URI reference.
+
+       @returns
+       the internal counterpart of the given external URI reference.  An empty
+       string is returned if the given external URI reference either is an empty
+       string or cannot be converted (for example, because it contains illegal
+       characters).
+     */
+    string translateToInternal([in] string externalUriReference);
+
+    /**
+       returns the external counterpart of an internal URI reference.
+
+       @param internalUriReference
+       an internal URI reference.
+
+       @returns
+       the external counterpart of the given internal URI reference.  An empty
+       string is returned if the given internal URI reference either is an empty
+       string or cannot be converted (for example, because it contains illegal
+       characters).
+     */
+    string translateToExternal([in] string internalUriReference);
+};
+
+}; }; }; };
+
+#endif
