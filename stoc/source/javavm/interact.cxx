@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interact.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:27:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 09:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,25 +128,10 @@ bool InteractionRequest::RetryContinuation::isSelected() const
 InteractionRequest::InteractionRequest(css::uno::Any const & rRequest):
     m_aRequest(rRequest)
 {
-    bool bRetry;
-#if defined LINUX || defined FREEBSD || defined NETBSD
-    // Only if Java is disabled we allow retry:
-    bRetry = m_aRequest.isExtractableTo(
-        getCppuType(static_cast< css::java::JavaDisabledException * >(0)));
-#else // LINUX
-    // If the creation of the JVM failed then do not offer retry, because Java
-    // might crash next time:
-    bRetry = !m_aRequest.isExtractableTo(
-        getCppuType(
-            static_cast< css::java::JavaVMCreationFailureException * >(0)));
-#endif // LINUX
-    m_aContinuations.realloc(bRetry ? 2 : 1);
+    m_aContinuations.realloc(2);
+    m_xRetryContinuation = new RetryContinuation;
     m_aContinuations[0] = new AbortContinuation;
-    if (bRetry)
-    {
-        m_xRetryContinuation = new RetryContinuation;
-        m_aContinuations[1] = m_xRetryContinuation.get();
-    }
+    m_aContinuations[1] = m_xRetryContinuation.get();
 }
 
 css::uno::Any SAL_CALL InteractionRequest::getRequest()
