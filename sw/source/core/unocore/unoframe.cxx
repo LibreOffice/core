@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:04:10 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2207,19 +2207,7 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                     aExcept.Message = OUString::createFromAscii("CLSID invalid");
                     throw aExcept;
                 }
-                const SotFactory* pFact = SvFactory::Find( aClassName );
-                if ( pFact )
-                {
-                    SvStorageRef aStor = new SvStorage( aEmptyStr );
-                    xIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aClassName, aStor );
-                }
-                else
-                {
-                    SvStorageRef aStor = new SvStorage( FALSE, aEmptyStr );
-                    String aFileName;
-                    BOOL bOk;
-                    xIPObj = SvOutPlaceObject::InsertObject( NULL, &aStor, bOk, aClassName, aFileName );
-                }
+                xIPObj = SvInPlaceObject::CreateObject( aClassName );
             }
             if ( xIPObj.Is() )
             {
