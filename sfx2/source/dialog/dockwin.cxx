@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-30 09:58:00 $
+ *  last change: $Author: dv $ $Date: 2000-12-05 12:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,7 +826,8 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
 
         // Angedockte Fenster werden, sofern sie resizable sind, in ein
         // SplitWindow eingesetzt
-        if ( pImp->bSplitable && !(pInfo->nFlags & SFX_CHILDWIN_FORCEDOCK) )
+        if ( pImp->bSplitable && !(pInfo->nFlags & SFX_CHILDWIN_FORCEDOCK) &&
+             pBindings->GetDispatcher_Impl() )
         {
 //          pImp->bAutoHide = ( pInfo->nFlags & SFX_CHILDWIN_AUTOHIDE) != 0;
             SfxViewFrame *pFrame = pBindings->GetDispatcher_Impl()->GetFrame();
