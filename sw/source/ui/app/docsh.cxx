@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:10:07 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1225,18 +1225,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                     rSet.DisableItem( nWhich );
             }
             break;
-
         case SID_BROWSER_MODE:
-            {
-                SfxViewShell* pViewShell = SfxViewShell::Current();
-                BOOL bDisable = PTR_CAST(SwPagePreView, pViewShell) != 0;
-
-                if (bDisable)
-                    rSet.DisableItem( nWhich );
-                else
-                    rSet.Put( SfxBoolItem( nWhich, GetDoc()->IsBrowseMode()));
-                break;
-            }
         case FN_PRINT_LAYOUT:
             {
                 SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -1245,7 +1234,12 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 if (bDisable)
                     rSet.DisableItem( nWhich );
                 else
-                    rSet.Put( SfxBoolItem( nWhich, !GetDoc()->IsBrowseMode()));
+                {
+                    sal_Bool bState = GetDoc()->IsBrowseMode();
+                    if(FN_PRINT_LAYOUT == nWhich)
+                        bState = !bState;
+                    rSet.Put( SfxBoolItem( nWhich, bState));
+                }
             }
             break;
 
