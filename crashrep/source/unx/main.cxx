@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:11:57 $
+ *  last change: $Author: vg $ $Date: 2003-07-25 11:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,13 +139,6 @@ static const char *getlocale()
         locale = "C";
 
     return locale;
-}
-
-static const char *get_user_name()
-{
-    struct passwd *ppwd = getpwuid( getuid() );
-
-    return ppwd ? (ppwd->pw_name ? ppwd->pw_name : "") : "";
 }
 
 static const char *get_home_dir()
@@ -301,7 +294,7 @@ bool write_report( const hash_map< string, string >& rSettings )
     fprintf( fp,
        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
        "<!DOCTYPE errormail:errormail PUBLIC \"-//OpenOffice.org//DTD ErrorMail 1.0//EN\" \"errormail.dtd\">\n"
-       "<errormail:errormail xmlns:errormail=\"http://openoffice.org/2002/errormail\" uid=\"%s\" usertype=\"%s\">\n"
+       "<errormail:errormail xmlns:errormail=\"http://openoffice.org/2002/errormail\" usertype=\"%s\">\n"
        "<reportmail:mail xmlns:reportmail=\"http://openoffice.org/2002/reportmail\" version=\"1.0\" feedback=\"%s\" email=\"%s\">\n"
        "<reportmail:title>%s</reportmail:title>\n"
        "<reportmail:attachment name=\"description.txt\" media-type=\"text/plain\" class=\"UserComment\"/>\n"
@@ -309,7 +302,6 @@ bool write_report( const hash_map< string, string >& rSettings )
        "</reportmail:mail>\n"
        "<officeinfo:officeinfo xmlns:officeinfo=\"http://openoffice.org/2002/officeinfo\" build=\"%s\" platform=\"%s\" language=\"%s\" exceptiontype=\"%d\" product=\"%s\" procpath=\"%s\"/>\n"
        ,
-       get_user_name(),
        pszUserType ? pszUserType : "",
        xml_encode(rSettings.find( "CONTACT" )->second).c_str(),
        xml_encode(rSettings.find( "EMAIL" )->second).c_str(),
