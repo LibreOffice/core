@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:10:53 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,7 +536,7 @@ String STR_UNDO
     Text[ turkish ] = "Geri al: ";
     Text[ catalan ] = "Desf�s: ";
     Text[ thai ] = "เลิกทำ: ";
-    Text[ czech ] = "Zpět: ";
+    Text[ czech ] = "~Zpět: ";
     Text[ hebrew ] = "‮ביטול פעולה:‬";
     Text[ hindi ] = "अनावृत्ति: ";
     Text[ slovak ] = "Späť: ";
@@ -567,7 +567,7 @@ String STR_REDO
     Text[ catalan ] = "Restaurar: ";
     Text[ finnish ] = "Tois~ta: ";
     Text[ thai ] = "~ทำซ้ำ: ";
-    Text[ czech ] = "Znovu: ";
+    Text[ czech ] = "Zn~ovu: ";
     Text[ hebrew ] = "‮שחזור פעולה:‬";
     Text[ hindi ] = "फ़िर से ~करो: ";
     Text[ slovak ] = "Z~novu: ";
@@ -598,7 +598,7 @@ String STR_REPEAT
     Text[ catalan ] = "~Repeteix: ";
     Text[ finnish ] = "~Toista: ";
     Text[ thai ] = "~ซ้ำ: ";
-    Text[ czech ] = "Opakovat: ";
+    Text[ czech ] = "O~pakovat: ";
     Text[ hebrew ] = "‮בצוע חוזר:‬";
     Text[ hindi ] = "~दुहराना: ";
     Text[ slovak ] = "Opako~vať: ";
@@ -668,6 +668,8 @@ QueryBox MSG_QUERY_LASTVERSION
     Message[ hindi ] = "सब परिवर्तनों को रद्द करना है?";
     Message[ slovak ] = "Zrušiť všetky zmeny?";
 };
+
+
 
 
 
