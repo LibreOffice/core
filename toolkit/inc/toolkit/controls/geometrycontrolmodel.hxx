@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:02:54 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 11:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,12 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
+#ifndef COMPHELPER_IDPROPERTYARRAYUSAGEHELPER_HXX
+#include <comphelper/IdPropArrayHelper.hxx>
+#endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 
 FORWARD_DECLARE_INTERFACE( lang, XMultiServiceFactory )
 FORWARD_DECLARE_INTERFACE( script, XNameContainer )
@@ -151,6 +157,12 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         */
         OGeometryControlModel_Base(::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance);
 
+        /** releases the aggregation
+            <p>Can be used if in a derived class, an exception has to be thrown after this base class here already
+            did the aggregation</p>
+        */
+        void releaseAggregation();
+
     protected:
         ~OGeometryControlModel_Base();
 
@@ -203,7 +215,7 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         // XComponent
         virtual void SAL_CALL disposing();
 
-    protected:
+    private:
         void registerProperties();
     };
 
@@ -250,6 +262,68 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
     };
 
+    //====================================================================
+    //= OCommonGeometryControlModel
+    //====================================================================
+    /** allows to extend an arbitrary <type scope="com.sun.star.awt">UnoControlModel</type> with geometry
+        information.
+    */
+    class OCommonGeometryControlModel
+        :public OGeometryControlModel_Base
+        ,public ::comphelper::OIdPropertyArrayUsageHelper< OCommonGeometryControlModel >
+    {
+        typedef ::std::hash_map< ::rtl::OUString, sal_Int32, ::comphelper::UStringHash >                HashMapString2Int;
+        typedef ::std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > >   PropSeqArray;
+        typedef ::std::vector< ::std::vector< sal_Int32 > >                                             IntArrayArray;
+
+        // for creating class-unique PropertySetInfo's, we need some info:
+        static  HashMapString2Int   s_aServiceSpecifierMap;
+            // this one maps from a String, which is the service specifier for our aggregate, to a unique id
+        static  PropSeqArray        s_aAggregateProperties;
+            // this one contains the properties which belong to all the unique ids in s_aServiceSpecifierMap
+        static  IntArrayArray       s_aAmbiguousPropertyIds;
+            // the ids of the properties which we as well as our aggregate supply
+            // For such props, we let our base class handle them, and whenever such a prop is set, we forward this
+            // to our aggregate.
+
+        // With this, we can ensure that two instances of this class share the same PropertySetInfo if and only
+        // if both aggregates have the same service specifier.
+
+    private:
+        ::rtl::OUString m_sServiceSpecifier;        // the service specifier of our aggregate
+        sal_Int32       m_nPropertyMapId;           // our unique property info id, used to look up in s_aAggregateProperties
+
+    public:
+        /** instantiate the model
+
+            @param _rxAgg
+                the instance to aggregate. Must support the <type scope="com.sun.star.awt">UnoControlModel</type>
+                (this is not checked here)
+        */
+        OCommonGeometryControlModel(
+                    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAgg,
+            const   ::rtl::OUString& _rxServiceSpecifier
+        );
+
+        // OIdPropertyArrayUsageHelper overridables
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const;
+
+        // OPropertySetAggregationHelper overridables
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+
+        // OGeometryControlModel_Base
+        virtual OGeometryControlModel_Base* createClone_Impl(
+            ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance);
+
+        // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    private:
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+                sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue)
+            throw (::com::sun::star::uno::Exception);
+    };
+
 #include "toolkit/controls/geometrycontrolmodel_impl.hxx"
 
 //........................................................................
@@ -257,44 +331,3 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
 //........................................................................
 
 #endif // _TOOLKIT_HELPERS_GEOMETRYCONTROLMODEL_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.11  2002/01/08 13:17:58  fs
- *  #96008# be an ComponentImplHelper
- *
- *  Revision 1.10  2001/09/05 06:40:48  fs
- *  #88891# override the XTypeProvider methods
- *
- *  Revision 1.9  2001/03/23 14:47:31  tbe
- *  removed HelpText property from geometry model
- *
- *  Revision 1.8  2001/03/22 15:34:01  tbe
- *  added HelpText property
- *
- *  Revision 1.7  2001/03/08 16:43:34  tbe
- *  OPropertyStateHelper overridables
- *
- *  Revision 1.6  2001/03/07 14:27:58  tbe
- *  added step and tag property
- *
- *  Revision 1.5  2001/03/02 12:33:51  tbe
- *  clone geometry control model
- *
- *  Revision 1.4  2001/03/01 14:27:14  tbe
- *  removed ClassId from geometry control model
- *
- *  Revision 1.3  2001/02/28 10:51:22  tbe
- *  added additional properties to geometry model
- *
- *  Revision 1.2  2001/02/21 17:21:57  ab
- *  Support for XScriptEventsSupplier added
- *
- *  Revision 1.1  2001/01/24 14:57:23  mt
- *  model for dialog controls (weith pos/size)
- *
- *
- *  Revision 1.0 17.01.01 11:36:59  fs
- ************************************************************************/
-
