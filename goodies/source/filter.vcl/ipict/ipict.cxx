@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipict.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-09 11:33:51 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 16:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,8 +270,8 @@ Point PictReader::ReadPoint()
 
     *pPict >> ny >> nx;
 
-   return Point( (long) ( Fraction( (long) nx ) * aHRes ) - aBoundingRect.Left(),
-                 (long) ( Fraction( (long) ny ) * aVRes ) - aBoundingRect.Top() );
+   return Point( (long)nx - aBoundingRect.Left(),
+                 (long)ny - aBoundingRect.Top() );
 }
 
 Point PictReader::ReadDeltaH(Point aBase)
@@ -280,8 +280,7 @@ Point PictReader::ReadDeltaH(Point aBase)
 
     *pPict >> ((char&)ndh);
 
-    return Point( aBase.X() + (long) ( Fraction( (long) ndh ) * aHRes ),
-                  aBase.Y() );
+    return Point( aBase.X() + (long)ndh, aBase.Y() );
 }
 
 Point PictReader::ReadDeltaV(Point aBase)
@@ -290,7 +289,7 @@ Point PictReader::ReadDeltaV(Point aBase)
 
     *pPict >> ((char&)ndv);
 
-    return Point( aBase.X(), aBase.Y() + (long) ( Fraction( (long) ndv ) * aVRes ) );
+    return Point( aBase.X(), aBase.Y() + (long)ndv );
 }
 
 Point PictReader::ReadUnsignedDeltaH(Point aBase)
@@ -299,7 +298,7 @@ Point PictReader::ReadUnsignedDeltaH(Point aBase)
 
     *pPict >> ndh;
 
-    return Point(aBase.X() + (long) ( Fraction( (long)ndh ) * aHRes ), aBase.Y() );
+    return Point( aBase.X() + (long)ndh, aBase.Y() );
 }
 
 Point PictReader::ReadUnsignedDeltaV(Point aBase)
@@ -308,7 +307,7 @@ Point PictReader::ReadUnsignedDeltaV(Point aBase)
 
     *pPict >> ndv;
 
-    return Point( aBase.X(), aBase.Y() + (long) ( Fraction( (long)ndv ) * aVRes ) );
+    return Point( aBase.X(), aBase.Y() + (long)ndv );
 }
 
 Size PictReader::ReadSize()
@@ -317,8 +316,7 @@ Size PictReader::ReadSize()
 
     *pPict >> ny >> nx;
 
-    return Size( (long) ( Fraction( (long) nx ) * aHRes ),
-                 (long) ( Fraction( (long) ny ) * aVRes ) );
+    return Size( (long)nx, (long)ny );
 }
 
 Color PictReader::ReadColor()
@@ -1050,9 +1048,6 @@ void PictReader::ReadHeader()
         else                            // Version 2 oder hoeher
         {
             short   nExtVer;
-            ULONG   nTempX;
-            ULONG   nTempY;
-
             // 3 Bytes ueberspringen, um auf
             // ExtVersion2 oder Version2 zu kommen
             pPict->SeekRel( 3 );
@@ -1063,29 +1058,23 @@ void PictReader::ReadHeader()
             // dementsprechend Aufloesung einlesen oder nicht
             if ( nExtVer == -2 )
             {
-                // Horizontale Skalierung als Bruch ( bzgl. 72 DPI )
-                *pPict >> nTempX;
-                nTempX &= 0x0000ffff;
-
-                // Vertikale Skalierung als Bruch ( bzgl. 72 DPI )
-                *pPict >> nTempY;
-                nTempY &= 0x0000ffff;
-
-                // nachfolgender Code soll nicht beeinflusst werden
-                pPict->SeekRel( -12 );
+                sal_Int16 nReserved;
+                sal_Int32 nHResFixed, nVResFixed;
+                *pPict >> nReserved >> nHResFixed >> nVResFixed;
+                double fHRes = nHResFixed;
+                fHRes /= 65536;
+                double fVRes = nVResFixed;
+                fVRes /= 65536;
+                aHRes /= fHRes;
+                aVRes /= fVRes;
+                *pPict >> y1 >> x1 >> y2 >> x2;     // reading the optimal bounding rect
+                aBoundingRect=Rectangle( x1,y1, --x2, --y2 );
+                pPict->SeekRel( -22 );
             }
             else
             {
-                nTempX = nTempY = 72;
-
-                // nachfolgender Code soll nicht beeinflusst werden
                 pPict->SeekRel( -4 );
             }
-
-            // gefundene Aufloesung setzen
-            aHRes = Fraction( 72, nTempX );
-            aVRes = Fraction( 72, nTempY );
-
             IsVersion2=TRUE;
         }
     }
@@ -1245,7 +1234,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
     case 0x000d:   // TxSize
     {
         *pPict >> nUSHORT;
-        aActFont.SetSize( Size( 0, (long) ( Fraction( (long) nUSHORT ) * aVRes ) ) );
+        aActFont.SetSize( Size( 0, (long)nUSHORT ) );
         eActMethod=PDM_UNDEFINED;
         nDataSize=2;
     }
@@ -1832,8 +1821,6 @@ ULONG PictReader::ReadData(USHORT nOpcode)
 
 void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile, PFilterCallback pcallback, void * pcallerdata)
 {
-    const Fraction  aFrac72( 1, 72 );
-    const MapMode   aMap72( MAP_INCH, Point(), aFrac72, aFrac72 );
     USHORT          nOpcode;
     BYTE            nOneByteOpcode;
     ULONG           nSize, nPos, nStartPos, nEndPos, nPercent, nLastPercent;
@@ -1925,7 +1912,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile, P
     rGDIMetaFile.Stop();
     delete pVirDev;
 
-    rGDIMetaFile.SetPrefMapMode( aMap72 );
+    rGDIMetaFile.SetPrefMapMode( MapMode( MAP_INCH, Point(), aHRes, aVRes ) );
     rGDIMetaFile.SetPrefSize( aBoundingRect.GetSize() );
 
     pPict->SetNumberFormatInt(nOrigNumberFormat);
