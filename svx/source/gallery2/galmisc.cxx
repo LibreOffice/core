@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-02 11:48:06 $
+ *  last change: $Author: ka $ $Date: 2000-11-16 12:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <unotools/ucbstreamhelper.hxx>
 #include <unotools/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/resmgr.hxx>
@@ -143,44 +144,31 @@ IMPL_LINK( SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
 // - SGAImport -
 // -------------
 
-USHORT SGAImport( const String& rFile, Graphic& rGraphic,
-                  String& rFilterName, BOOL bShowProgress, const USHORT nDepth )
+USHORT SGAImport( const INetURLObject& rURL, Graphic& rGraphic,
+                  String& rFilterName, BOOL bShowProgress )
 {
-    USHORT nRet = SGA_IMPORT_NONE;
+    USHORT      nRet = SGA_IMPORT_NONE;
+    SfxMedium   aMedium( rURL.GetMainURL(), STREAM_READ, TRUE );
+    String      aFilterName;
 
-    // Wir duerfen hier maximal 2-mal reinlaufen (1.INET => 2.reelles File );
-    // alles andere fuehrt zu einer unendlichen Rekursion => kein gueltiges File
-    if ( nDepth < 2 )
+    aMedium.SetTransferPriority( SFX_TFPRIO_VISIBLE_HIGHRES_GRAPHIC | SFX_TFPRIO_SYNCHRON );
+    aMedium.DownLoad();
+
+    SvStream* pIStm = aMedium.GetInStream();
+
+    if( pIStm )
     {
-        // INet-Download oder normales Laden
-        if ( ( INetURLObject( ::URIHelper::SmartRelToAbs( rFile, FALSE,
-                                                          INetURLObject::WAS_ENCODED,
-                                                          INetURLObject::DECODE_UNAMBIGUOUS ) ).GetProtocol() != INET_PROT_FILE ) )
+        GraphicFilter*      pGraphicFilter = GetGrfFilter();
+        GalleryProgress*    pProgress = bShowProgress ? new GalleryProgress( pGraphicFilter ) : NULL;
+        USHORT              nFormat;
+
+        if( !pGraphicFilter->ImportGraphic( rGraphic, rURL.GetMainURL(), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
         {
-            SfxMedium   aMed( rFile, STREAM_READ, TRUE );
-            String      aFilterName;
-
-            aMed.SetTransferPriority( SFX_TFPRIO_VISIBLE_HIGHRES_GRAPHIC | SFX_TFPRIO_SYNCHRON );
-            aMed.DownLoad();
-
-            // kleine Rekursion
-            if ( SGAImport( aMed.GetPhysicalName(), rGraphic, rFilterName, bShowProgress, nDepth + 1 ) == SGA_IMPORT_FILE )
-                nRet = SGA_IMPORT_INET;
+            rFilterName = pGraphicFilter->GetImportFormatName( nFormat );
+            nRet = SGA_IMPORT_FILE;
         }
-        else
-        {
-            GraphicFilter*      pGraphicFilter = GetGrfFilter();
-            GalleryProgress*    pProgress = bShowProgress ? new GalleryProgress( pGraphicFilter ) : NULL;
-            USHORT              nFormat;
 
-            if( !pGraphicFilter->ImportGraphic( rGraphic, INetURLObject( rFile, INET_PROT_FILE ), GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
-            {
-                rFilterName = pGraphicFilter->GetImportFormatName( nFormat );
-                nRet = SGA_IMPORT_FILE;
-            }
-
-            delete pProgress;
-        }
+        delete pProgress;
     }
 
     return nRet;
@@ -223,31 +211,36 @@ BOOL SGASvDrawImport( SvStream& rIStm, FmFormModel& rModel )
 // - SGAIsSoundFile -
 // ------------------
 
-BOOL SGAIsSoundFile( const String& rFile )
+BOOL SGAIsSoundFile( const INetURLObject& rURL )
 {
-    const String    aExt( INetURLObject( rFile, INET_PROT_FILE ).GetExtension().ToLowerAscii() );
+    DBG_ASSERT( rURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+
+    const String    aExt( rURL.getExtension().ToLowerAscii() );
     BOOL            bRet = FALSE;
 
     if( ( aExt == String( RTL_CONSTASCII_USTRINGPARAM( "wav" ) ) ) ||
         ( aExt == String( RTL_CONSTASCII_USTRINGPARAM( "aif" ) ) ) ||
         ( aExt == String( RTL_CONSTASCII_USTRINGPARAM( "au" ) ) ) )
+    {
         bRet = TRUE;
+    }
     else
     {
-        // File anlesen
-        SvFileStream aIStm( rFile, STREAM_READ );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( rURL.GetMainURL(), STREAM_READ );
 
-        if ( aIStm.IsOpen() )
+        if( pIStm )
         {
             BYTE cVal1, cVal2, cVal3, cVal4;
 
-            aIStm >> cVal1 >> cVal2 >> cVal3 >> cVal4;
+            *pIStm >> cVal1 >> cVal2 >> cVal3 >> cVal4;
 
             if ( ( cVal1 == 'R' && cVal2 == 'I' && cVal3 == 'F' && cVal4 == 'F' ) ||
                  ( cVal1 == '.' && cVal2 == 's' && cVal3 == 'n' && cVal4 == 'd' ) )
             {
                 bRet = TRUE;
             }
+
+            delete pIStm;
         }
     }
 
@@ -290,25 +283,25 @@ BOOL CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& 
     return bRet;
 }
 
-// ----------------
-// - ReduceString -
-// ----------------
+// --------------------
+// - GetReducedString -
+// --------------------
 
-String ReduceString( const String& rString )
+String GetReducedString( const INetURLObject& rURL )
 {
     String aStr;
 
-    if ( rString.Len() > 30 )
+    if ( rURL.GetMainURL().Len() > 30 )
     {
-        const String aName( INetURLObject( rString, INET_PROT_FILE ).GetName() );
+        const String aName( rURL.GetName() );
 
-        aStr = rString.Copy( 0, 30 - aName.Len() - 4 );
+        aStr = rURL.GetMainURL().Copy( 0, 30 - aName.Len() - 4 );
         aStr += String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
         aStr += '/';
         aStr += aName;
     }
     else
-        aStr = rString;
+        aStr = rURL.GetMainURL();
 
     return aStr;
 }
@@ -317,20 +310,22 @@ String ReduceString( const String& rString )
 // - CreateUniqueFileName -
 // ------------------------
 
-INetURLObject CreateUniqueFileName( Gallery* pGallery, SgaObjKind eObjKind )
+INetURLObject CreateUniqueURL( Gallery* pGallery, SgaObjKind eObjKind )
 {
-    SvFileStream    aStm;
-    INetURLObject   aPath( pGallery->GetUserPath(), INET_PROT_FILE );
-    INetURLObject   aTmpPath( aPath );
+    INetURLObject   aURL( pGallery->GetUserURL() );
     sal_uInt32      nNextNumber;
 
-    aTmpPath.Append( String( RTL_CONSTASCII_USTRINGPARAM( "sdddndx1" ) ) );
+    aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( "sdddndx1" ) ) );
 
-    if( FileExists( aTmpPath ) )
+    if( FileExists( aURL ) )
     {
-        aStm.Open( aTmpPath.PathToFileName(), STREAM_READ );
-        aStm >> nNextNumber;
-        aStm.Close();
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READ );
+
+        if( pIStm )
+        {
+            *pIStm >> nNextNumber;
+            delete pIStm;
+        }
     }
     else
         nNextNumber = 1999;
@@ -338,19 +333,46 @@ INetURLObject CreateUniqueFileName( Gallery* pGallery, SgaObjKind eObjKind )
     String aNextFileName( RTL_CONSTASCII_USTRINGPARAM( "dd" ) );
     aNextFileName += String::CreateFromInt32( ++nNextNumber % ( eObjKind == SGA_OBJ_SVDRAW ? 99999999L : 999999L ) );
 
-    aStm.Open( aTmpPath.PathToFileName(), STREAM_WRITE | STREAM_TRUNC );
+    SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_WRITE );
 
-    if( aStm.IsOpen() )
+    if( pOStm )
     {
-        aStm << nNextNumber;
-        aStm.Close();
+        *pOStm << nNextNumber;
+        delete pOStm;
     }
 
-    aPath.Append( String( RTL_CONSTASCII_USTRINGPARAM( "dragdrop" ) ) );
-    CreateDir( aPath );
-    aPath.Append( aNextFileName += String( RTL_CONSTASCII_USTRINGPARAM( ".svm" ) ) );
+    if( SGA_OBJ_SVDRAW == eObjKind )
+    {
+        const static String aBaseURLStr( RTL_CONSTASCII_USTRINGPARAM( "gallery/svdraw/" ) );
 
-    return aPath;
+        String aSvDrawURLStr( aBaseURLStr );
+        aURL = INetURLObject( aSvDrawURLStr += aNextFileName, INET_PROT_PRIV_SOFFICE );
+    }
+    else
+    {
+        aURL.removeSegment();
+        aURL.removeFinalSlash();
+        aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( "dragdrop" ) ) );
+        CreateDir( aURL );
+        aURL.Append( aNextFileName += String( RTL_CONSTASCII_USTRINGPARAM( ".svm" ) ) );
+    }
+
+    return aURL;
+}
+
+// -----------------------------------------------------------------------------
+
+String GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
+{
+    String aRet;
+
+    if( rSvDrawObjURL.GetProtocol() == INET_PROT_PRIV_SOFFICE &&
+        rSvDrawObjURL.GetMainURL().GetTokenCount( '/' ) == 3 )
+    {
+        aRet = rSvDrawObjURL.GetMainURL().GetToken( 2, '/' );
+    }
+
+    return aRet;
 }
 
 // -----------------------------------------------------------------------------
@@ -359,17 +381,20 @@ BOOL FileExists( const INetURLObject& rURL )
 {
     BOOL bRet = FALSE;
 
-    try
+    if( rURL.GetProtocol() != INET_PROT_NOT_VALID )
     {
-        Content     aCnt( rURL.GetMainURL(), uno::Reference< XCommandEnvironment >() );
-        OUString    aTitle;
+        try
+        {
+            Content     aCnt( rURL.GetMainURL(), uno::Reference< XCommandEnvironment >() );
+            OUString    aTitle;
 
-        aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTitle;
-        bRet = ( aTitle.getLength() > 0 );
-    }
-    catch( ... )
-    {
-        DBG_ERROR( "Gallery: FileExists: ucb error" );
+            aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTitle;
+            bRet = ( aTitle.getLength() > 0 );
+        }
+        catch( ... )
+        {
+            DBG_ERROR( "Gallery: FileExists: ucb error" );
+        }
     }
 
     return bRet;

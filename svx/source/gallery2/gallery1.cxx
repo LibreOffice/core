@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:24:49 $
+ *  last change: $Author: ka $ $Date: 2000-11-16 12:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,9 @@
 
 #include <tools/vcompat.hxx>
 #include <ucbhelper/content.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <svtools/pathoptions.hxx>
+#include <sfx2/docfile.hxx>
 #include "gallery.hxx"
 #include "galmisc.hxx"
 #include "galtheme.hxx"
@@ -96,37 +98,49 @@ class GalleryCacheEntry
 private:
 
     Gallery*                mpGallery;
-    String                  maInitPath;
+    String                  maMultiPath;
     ULONG                   mnRefCount;
 
 public:
 
-                    GalleryCacheEntry( Gallery* pGallery, const String& rInitPath ) :
-                        mpGallery( pGallery ), maInitPath( rInitPath ) {}
-                    ~GalleryCacheEntry() { delete mpGallery; }
+                            GalleryCacheEntry( Gallery* pGallery, const String& rMultiPath ) :
+                                mpGallery( pGallery ), maMultiPath( rMultiPath ) {}
+                            ~GalleryCacheEntry() { delete mpGallery; }
 
-    Gallery*        GetGallery() const { return mpGallery; }
-    const String&   GetInitPath() const { return maInitPath; }
+    Gallery*                GetGallery() const { return mpGallery; }
+    const String&           GetMultiPath() const { return maMultiPath; }
 
-    ULONG           GetRefCount() const { return mnRefCount; }
-    void            IncRefCount() { mnRefCount++; }
-    void            DecRefCount() { mnRefCount--; }
+    ULONG                   GetRefCount() const { return mnRefCount; }
+    void                    IncRefCount() { mnRefCount++; }
+    void                    DecRefCount() { mnRefCount--; }
 };
 
 // ---------------------
 // - GalleryThemeEntry -
 // ---------------------
 
-GalleryThemeEntry::GalleryThemeEntry( const String& rBasePath, const String& rName,
+GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const String& rName,
                                       UINT32 _nFileNumber, BOOL _bReadOnly, BOOL _bImported,
                                       BOOL _bNewFile, UINT32 _nId, BOOL _bThemeNameFromResource ) :
         nFileNumber                             ( _nFileNumber ),
-        nId                                             ( _nId ),
+        nId                                     ( _nId ),
         bReadOnly                               ( _bReadOnly || _bImported ),
         bImported                               ( _bImported ),
         bThemeNameFromResource  ( _bThemeNameFromResource )
 {
-    ImplSetPath( rBasePath );
+    INetURLObject aURL( rBaseURL );
+    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+    String aFileName( String( RTL_CONSTASCII_USTRINGPARAM( "sg" ) ) );
+
+    aURL.Append( ( aFileName += String::CreateFromInt32( nFileNumber ) ) += String( RTL_CONSTASCII_USTRINGPARAM( ".thm" ) ) );
+    aThmURL = ImplGetURLIgnoreCase( aURL );
+
+    aURL.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "sdg" ) ) );
+    aSdgURL = ImplGetURLIgnoreCase( aURL );
+
+    aURL.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "sdv" ) ) );
+    aSdvURL = ImplGetURLIgnoreCase( aURL );
+
     SetModified( _bNewFile );
 
     if( nId && bThemeNameFromResource )
@@ -138,50 +152,33 @@ GalleryThemeEntry::GalleryThemeEntry( const String& rBasePath, const String& rNa
 
 // -----------------------------------------------------------------------------
 
-String GalleryThemeEntry::ImplGetFileNameIgnoreCase( const String& rFile ) const
+INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL ) const
 {
-    String                  aFileName;
-    BOOL                    bExists = FALSE;
-    INetURLObject   aFileObj( rFile, INET_PROT_FILE );
+    INetURLObject   aURL( rURL );
+    String          aFileName;
+    BOOL            bExists = FALSE;
 
     // check original file name
-    if( FileExists( aFileObj ) )
+    if( FileExists( aURL ) )
         bExists = TRUE;
     else
     {
         // check upper case file name
-        aFileObj.setName( aFileObj.getName().ToUpperAscii() );
+        aURL.setName( aURL.getName().ToUpperAscii() );
 
-        if( FileExists( aFileObj ) )
+        if( FileExists( aURL ) )
             bExists = TRUE;
         else
         {
             // check lower case file name
-            aFileObj.setName( aFileObj.getName().ToLowerAscii() );
+            aURL.setName( aURL.getName().ToLowerAscii() );
 
-            if( FileExists( aFileObj ) )
+            if( FileExists( aURL ) )
                 bExists = TRUE;
         }
     }
 
-    return aFileObj.PathToFileName();
-}
-
-// -----------------------------------------------------------------------------
-
-void GalleryThemeEntry::ImplSetPath( const String& rPath )
-{
-    INetURLObject   aFile( rPath, INET_PROT_FILE );
-    String                  aFileName( String( RTL_CONSTASCII_USTRINGPARAM( "sg" ) ) );
-
-    aFile.Append( ( aFileName += String::CreateFromInt32( nFileNumber ) ) += String( RTL_CONSTASCII_USTRINGPARAM( ".thm" ) ) );
-    aThmPath = ImplGetFileNameIgnoreCase( aFile.PathToFileName() );
-
-    aFile.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "sdg" ) ) );
-    aSdgPath = ImplGetFileNameIgnoreCase( aFile.PathToFileName() );
-
-    aFile.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "sdv" ) ) );
-    aSdvPath = ImplGetFileNameIgnoreCase( aFile.PathToFileName() );
+    return aURL;
 }
 
 // -----------------------------------------------------------------------------
@@ -211,11 +208,13 @@ void GalleryThemeEntry::SetId( UINT32 nNewId, BOOL bResetThemeName )
 
 SvStream& operator<<( SvStream& rOut, const GalleryImportThemeEntry& rEntry )
 {
+    ByteString aDummy;
+
     rOut << ByteString( rEntry.aThemeName, RTL_TEXTENCODING_UTF8 ) <<
             ByteString( rEntry.aUIName, RTL_TEXTENCODING_UTF8 ) <<
-            ByteString( rEntry.aFileName, RTL_TEXTENCODING_UTF8 ) <<
+            ByteString( rEntry.aURL.GetMainURL(), RTL_TEXTENCODING_UTF8 ) <<
             ByteString( rEntry.aImportName, RTL_TEXTENCODING_UTF8 ) <<
-            ByteString( rEntry.aRoot, RTL_TEXTENCODING_UTF8 );
+            aDummy;
 
     return rOut;
 }
@@ -228,9 +227,9 @@ SvStream& operator>>( SvStream& rIn, GalleryImportThemeEntry& rEntry )
 
     rIn >> aTmpStr; rEntry.aThemeName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
     rIn >> aTmpStr; rEntry.aUIName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
-    rIn >> aTmpStr; rEntry.aFileName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
+    rIn >> aTmpStr; rEntry.aURL = INetURLObject( String( aTmpStr, RTL_TEXTENCODING_UTF8 ) );
     rIn >> aTmpStr; rEntry.aImportName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
-    rIn >> aTmpStr; rEntry.aRoot = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
+    rIn >> aTmpStr;
 
     return rIn;
 }
@@ -266,12 +265,12 @@ List Gallery::aGalleryCache;
 // - Gallery -
 // -----------
 
-Gallery::Gallery( const String& rInitPath ) :
-        bMultiPath                      ( FALSE ),
-        nReadTextEncoding       ( gsl_getSystemTextEncoding() ),
-        nLastFileNumber         ( 0 )
+Gallery::Gallery( const String& rMultiPath ) :
+        bMultiPath          ( FALSE ),
+        nReadTextEncoding   ( gsl_getSystemTextEncoding() ),
+        nLastFileNumber     ( 0 )
 {
-    ImplLoad( rInitPath );
+    ImplLoad( rMultiPath );
 }
 
 // ------------------------------------------------------------------------
@@ -289,18 +288,18 @@ Gallery::~Gallery()
 
 // ------------------------------------------------------------------------
 
-Gallery* Gallery::AcquireGallery( const String& rInitPath )
+Gallery* Gallery::AcquireGallery( const String& rMultiPath )
 {
-    Gallery*                        pGallery = NULL;
+    Gallery*                pGallery = NULL;
     GalleryCacheEntry*      pEntry;
     GalleryCacheEntry*      pFound;
 
     for( pEntry = (GalleryCacheEntry*) aGalleryCache.First(); pEntry && !pGallery; pEntry = (GalleryCacheEntry*) aGalleryCache.Next() )
-        if( rInitPath == pEntry->GetInitPath() )
+        if( rMultiPath == pEntry->GetMultiPath() )
             pGallery = ( pFound = pEntry )->GetGallery();
 
     if( !pGallery )
-        aGalleryCache.Insert( pFound = new GalleryCacheEntry( new Gallery( rInitPath ), rInitPath ), LIST_APPEND );
+        aGalleryCache.Insert( pFound = new GalleryCacheEntry( new Gallery( rMultiPath ), rMultiPath ), LIST_APPEND );
 
     pFound->IncRefCount();
 
@@ -327,42 +326,39 @@ void Gallery::ReleaseGallery( Gallery* pGallery )
 
 // ------------------------------------------------------------------------
 
-void Gallery::ImplLoad( const String& rInitPath )
+void Gallery::ImplLoad( const String& rMultiPath )
 {
-    const USHORT nTokenCount = rInitPath.GetTokenCount( ';' );
+    const USHORT nTokenCount = rMultiPath.GetTokenCount( ';' );
 
     bMultiPath = ( nTokenCount > 0 );
-    aUserPath = SvtPathOptions().GetConfigPath();
-    ImplLoadSubDirs( aUserPath, bMultiPath );
+    aUserURL = SvtPathOptions().GetConfigPath();
+    ImplLoadSubDirs( aUserURL, bMultiPath );
 
     if( bMultiPath )
     {
-        const INetURLObject aRelURL( rInitPath.GetToken( 0, ';' ), INET_PROT_FILE );
-        const INetURLObject aUserURL( rInitPath.GetToken( nTokenCount - 1, ';' ), INET_PROT_FILE );
-
-        aRelPath = aRelURL.PathToFileName();
-        aUserPath = aUserURL.PathToFileName();
+        aRelURL = INetURLObject( rMultiPath.GetToken( 0, ';' ) );
+        aUserURL = INetURLObject( rMultiPath.GetToken( nTokenCount - 1, ';' ) );
 
         for( USHORT i = 0UL; i < nTokenCount; i++ )
-            ImplLoadSubDirs( rInitPath.GetToken( i, ';' ), i < ( nTokenCount - 1 ) );
+            ImplLoadSubDirs( INetURLObject( rMultiPath.GetToken( i, ';' ) ), i < ( nTokenCount - 1 ) );
     }
     else
-        aRelPath = rInitPath;
+        aRelURL = INetURLObject( rMultiPath );
 
-    aRelPath.Len();
-    aUserPath.Len();
+    DBG_ASSERT( aUserURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+    DBG_ASSERT( aRelURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     ImplLoadImports();
 }
 
 // ------------------------------------------------------------------------
 
-void Gallery::ImplLoadSubDirs( const String& rBase, BOOL bReadOnly )
+void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, BOOL bReadOnly )
 {
     try
     {
         uno::Reference< XCommandEnvironment > xEnv;
-        Content                               aCnt( INetURLObject( rBase, INET_PROT_FILE ).GetMainURL(), xEnv );
+        Content                               aCnt( rBaseURL.GetMainURL(), xEnv );
 
         uno::Sequence< OUString > aProps( 1 );
         aProps.getArray()[ 0 ] == OUString::createFromAscii( "Url" );
@@ -377,26 +373,20 @@ void Gallery::ImplLoadSubDirs( const String& rBase, BOOL bReadOnly )
             {
                 while( xResultSet->next() )
                 {
-                    INetURLObject aThmFile;
+                    INetURLObject aThmURL( xContentAccess->queryContentIdentifierString() );
 
-#if SUPD>611
-                    aThmFile.SetSmartURL( xContentAccess->queryContentIdentifierString() );
-#else
-                    aThmFile.SetSmartURL( xContentAccess->queryContentIdentfierString() );
-#endif
-
-                    if( aThmFile.GetExtension().CompareIgnoreCaseToAscii( "thm" ) == COMPARE_EQUAL )
+                    if( aThmURL.GetExtension().CompareIgnoreCaseToAscii( "thm" ) == COMPARE_EQUAL )
                     {
-                        INetURLObject   aSdgFile( aThmFile ); aSdgFile.SetExtension( OUString::createFromAscii( "sdg" ) );
-                        INetURLObject   aSdvFile( aThmFile ); aSdvFile.SetExtension( OUString::createFromAscii( "sdv" ) );
+                        INetURLObject   aSdgURL( aThmURL); aSdgURL.SetExtension( OUString::createFromAscii( "sdg" ) );
+                        INetURLObject   aSdvURL( aThmURL ); aSdvURL.SetExtension( OUString::createFromAscii( "sdv" ) );
                         const OUString  aTitleProp( OUString::createFromAscii( "Title" ) );
                         const OUString  aReadOnlyProp( OUString::createFromAscii( "IsReadOnly" ) );
                         OUString        aTitle;
                         sal_Bool        bReadOnly = sal_False;
 
-                        Content aThmCnt( aThmFile.GetMainURL(), xEnv );
-                        Content aSdgCnt( aSdgFile.GetMainURL(), xEnv );
-                        Content aSdvCnt( aSdvFile.GetMainURL(), xEnv );
+                        Content aThmCnt( aThmURL.GetMainURL(), xEnv );
+                        Content aSdgCnt( aSdgURL.GetMainURL(), xEnv );
+                        Content aSdvCnt( aSdvURL.GetMainURL(), xEnv );
 
                         aThmCnt.getPropertyValue( aTitleProp ) >>= aTitle;
 
@@ -420,12 +410,11 @@ void Gallery::ImplLoadSubDirs( const String& rBase, BOOL bReadOnly )
                                     aSdvCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
                             }
 
-                            GalleryThemeEntry* pEntry = GalleryTheme::CreateThemeEntry( aThmFile.PathToFileName(), bReadOnly );
+                            GalleryThemeEntry* pEntry = GalleryTheme::CreateThemeEntry( aThmURL, bReadOnly );
 
                             if( pEntry )
                             {
-                                String      aBase( aThmFile.GetBase() );
-                                const ULONG nFileNumber = (ULONG) aBase.Erase( 0, 2 ).Erase( 6 ).ToInt32();
+                                const ULONG nFileNumber = (ULONG) aThmURL.GetBase().Erase( 0, 2 ).Erase( 6 ).ToInt32();
 
                                 aThemeList.Insert( pEntry, LIST_APPEND );
 
@@ -448,51 +437,52 @@ void Gallery::ImplLoadSubDirs( const String& rBase, BOOL bReadOnly )
 
 void Gallery::ImplLoadImports()
 {
-    INetURLObject aPath( GetUserPath(), INET_PROT_FILE );
+    INetURLObject aURL( GetUserURL() );
 
-    aPath.Append( String( RTL_CONSTASCII_USTRINGPARAM( "gallery.sdi" ) ) );
+    aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( "gallery.sdi" ) ) );
 
-    if( FileExists( aPath ) )
+    if( FileExists( aURL ) )
     {
-        SvFileStream aInStm( aPath.PathToFileName(), STREAM_READ );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READ );
 
-        if( aInStm.IsOpen() )
+        if( pIStm )
         {
-            GalleryThemeEntry*                      pThemeEntry;
-            GalleryImportThemeEntry*        pImportEntry;
-            INetURLObject                           aFile;
-            UINT32                                          nInventor;
-            UINT32                                          nCount;
-            UINT16                                          nId;
-            UINT16                                          i;
-            UINT16                                          nTempCharSet;
+            GalleryThemeEntry*          pThemeEntry;
+            GalleryImportThemeEntry*    pImportEntry;
+            INetURLObject               aFile;
+            UINT32                      nInventor;
+            UINT32                      nCount;
+            UINT16                      nId;
+            UINT16                      i;
+            UINT16                      nTempCharSet;
 
             for( pImportEntry = aImportList.First(); pImportEntry; pImportEntry = aImportList.Next() )
                 delete pImportEntry;
 
             aImportList.Clear();
-            aInStm >> nInventor;
+            *pIStm >> nInventor;
 
             if( nInventor == COMPAT_FORMAT( 'S', 'G', 'A', '3' ) )
             {
-                aInStm >> nId >> nCount >> nTempCharSet;
+                *pIStm >> nId >> nCount >> nTempCharSet;
 
                 for( i = 0; i < nCount; i++ )
                 {
                     pImportEntry = new GalleryImportThemeEntry;
 
-                    aInStm >> *pImportEntry;
+                    *pIStm >> *pImportEntry;
                     aImportList.Insert( pImportEntry, LIST_APPEND );
-                    aFile = INetURLObject( pImportEntry->aFileName, INET_PROT_FILE );
-                    String aNumberStr( aFile.GetBase() );
-                    pThemeEntry = new GalleryThemeEntry( aFile.GetPath(),
+                    aFile = INetURLObject( pImportEntry->aURL );
+                    pThemeEntry = new GalleryThemeEntry( aFile,
                                                          pImportEntry->aUIName,
-                                                         aNumberStr.Erase( 0, 2 ).Erase( 6 ).ToInt32(),
+                                                         aFile.GetBase().Erase( 0, 2 ).Erase( 6 ).ToInt32(),
                                                          TRUE, TRUE, FALSE, 0, FALSE );
 
                     aThemeList.Insert( pThemeEntry, LIST_APPEND );
                 }
             }
+
+            delete pIStm;
         }
     }
 }
@@ -501,24 +491,24 @@ void Gallery::ImplLoadImports()
 
 void Gallery::ImplWriteImportList()
 {
-    SvFileStream    aOutStm;
-    INetURLObject   aPath( GetUserPath(), INET_PROT_FILE );
+    INetURLObject aURL( GetUserURL() );
+    aURL.Append( ( String( "gallery.sdi", RTL_TEXTENCODING_UTF8 ) ) );
+    SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC );
 
-    aPath.Append( ( String( "gallery.sdi", RTL_TEXTENCODING_UTF8 ) ) );
-    aOutStm.Open( aPath.PathToFileName(), STREAM_WRITE | STREAM_TRUNC );
-
-    if( aOutStm.IsOpen() )
+    if( pOStm )
     {
         const UINT32 nInventor = (UINT32) COMPAT_FORMAT( 'S', 'G', 'A', '3' );
         const UINT16 nId = 0x0004;
 
-        aOutStm << nInventor << nId << (UINT32) aImportList.Count() << (UINT16) gsl_getSystemTextEncoding();
+        *pOStm << nInventor << nId << (UINT32) aImportList.Count() << (UINT16) gsl_getSystemTextEncoding();
 
         for( GalleryImportThemeEntry* pImportEntry = aImportList.First(); pImportEntry; pImportEntry = aImportList.Next() )
-            aOutStm << *pImportEntry;
+            *pOStm << *pImportEntry;
 
-        if( aOutStm.GetError() )
+        if( pOStm->GetError() )
             ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
+
+        delete pOStm;
     }
 }
 
@@ -603,7 +593,7 @@ BOOL Gallery::CreateTheme( const String& rThemeName )
 
     if( !HasTheme( rThemeName ) )
     {
-        GalleryThemeEntry* pNewEntry = new GalleryThemeEntry( GetUserPath(), rThemeName,
+        GalleryThemeEntry* pNewEntry = new GalleryThemeEntry( GetUserURL(), rThemeName,
                                                               ++nLastFileNumber,
                                                               FALSE, FALSE, TRUE, 0, FALSE );
 
@@ -618,41 +608,38 @@ BOOL Gallery::CreateTheme( const String& rThemeName )
 
 // ------------------------------------------------------------------------
 
-BOOL Gallery::CreateImportTheme( const String& rPath, const String& rImportName )
+BOOL Gallery::CreateImportTheme( const INetURLObject& rURL, const String& rImportName )
 {
-    INetURLObject   aPath( rPath, INET_PROT_FILE );
+    INetURLObject   aURL( rURL );
     BOOL            bRet = FALSE;
 
-    if( FileExists( aPath ) )
-    {
-        SvFileStream aInStm( aPath.PathToFileName(), STREAM_READ );
+    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-        if( aInStm.IsOpen() )
+    if( FileExists( aURL ) )
+    {
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READ );
+
+        if( pIStm )
         {
             ULONG   nStmErr;
             UINT16  nId;
 
-            aInStm >> nId;
+            *pIStm >> nId;
 
             if( nId > 0x0004 )
-            {
-                aInStm.Close();
                 ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
-            }
             else
             {
                 ByteString              aTmpStr;
-                String                  aThemeName; aInStm >> aTmpStr; aThemeName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
-                String                  aNumberStr( aPath.GetBase() );
-                GalleryThemeEntry*      pThemeEntry = new GalleryThemeEntry( aPath.GetPath(), rImportName,
-                                                                         aNumberStr.Erase( 0, 2 ).Erase( 6 ).ToInt32(),
-                                                                         TRUE, TRUE, TRUE, 0, FALSE );
+                String                  aThemeName; *pIStm >> aTmpStr; aThemeName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
+                GalleryThemeEntry*      pThemeEntry = new GalleryThemeEntry( aURL, rImportName,
+                                                                             aURL.GetBase().Erase( 0, 2 ).Erase( 6 ).ToInt32(),
+                                                                             TRUE, TRUE, TRUE, 0, FALSE );
                 GalleryTheme*           pImportTheme = new GalleryTheme( this, pThemeEntry );
 
-                aInStm.Seek( STREAM_SEEK_TO_BEGIN );
-                aInStm >> *pImportTheme;
-                nStmErr = aInStm.GetError();
-                aInStm.Close();
+                pIStm->Seek( STREAM_SEEK_TO_BEGIN );
+                *pIStm >> *pImportTheme;
+                nStmErr = pIStm->GetError();
 
                 if( nStmErr )
                 {
@@ -679,7 +666,7 @@ BOOL Gallery::CreateImportTheme( const String& rPath, const String& rImportName 
                     // Thema in Import-Liste eintragen und Import-Liste     speichern
                     GalleryImportThemeEntry* pImportEntry = new GalleryImportThemeEntry;
                     pImportEntry->aThemeName = pImportEntry->aUIName = aNewName;
-                    pImportEntry->aFileName = aPath.GetFull();
+                    pImportEntry->aURL = rURL;
                     pImportEntry->aImportName = rImportName;
                     aImportList.Insert( pImportEntry, LIST_APPEND );
                     ImplWriteImportList();
@@ -688,6 +675,8 @@ BOOL Gallery::CreateImportTheme( const String& rPath, const String& rImportName 
 
                 delete pImportTheme;
             }
+
+            delete pIStm;
         }
     }
 
@@ -740,8 +729,8 @@ BOOL Gallery::RenameTheme( const String& rOldName, const String& rNewName )
 
 BOOL Gallery::RemoveTheme( const String& rThemeName )
 {
-    GalleryThemeEntry*      pThemeEntry = ImplGetThemeEntry( rThemeName );
-    BOOL                            bRet = FALSE;
+    GalleryThemeEntry*  pThemeEntry = ImplGetThemeEntry( rThemeName );
+    BOOL                bRet = FALSE;
 
     if( pThemeEntry && ( !pThemeEntry->IsReadOnly() || pThemeEntry->IsImported() ) )
     {
@@ -759,22 +748,17 @@ BOOL Gallery::RemoveTheme( const String& rThemeName )
         }
         else
         {
-            SfxListener         aDummyListener;
-            GalleryTheme*       pThm = AcquireTheme( rThemeName, aDummyListener );
-            const INetURLObject aThmURL( pThm->GetThmPath(), INET_PROT_FILE );
-            const INetURLObject aSdgURL( pThm->GetSdgPath(), INET_PROT_FILE );
-            const INetURLObject aSdvURL( pThm->GetSdvPath(), INET_PROT_FILE );
+            SfxListener     aDummyListener;
+            GalleryTheme*   pThm = AcquireTheme( rThemeName, aDummyListener );
+            INetURLObject   aThmURL( pThm->GetThmURL() );
+            INetURLObject   aSdgURL( pThm->GetSdgURL() );
+            INetURLObject   aSdvURL( pThm->GetSdvURL() );
 
             ReleaseTheme( pThm, aDummyListener );
 
-            if( FileExists( aThmURL ) )
-                KillFile( aThmURL );
-
-            if( FileExists( aSdgURL ) )
-                KillFile( aSdgURL );
-
-            if( FileExists( aSdvURL ) )
-                KillFile( aSdvURL );
+            KillFile( aThmURL );
+            KillFile( aSdgURL );
+            KillFile( aSdvURL );
         }
 
         delete aThemeList.Remove( pThemeEntry );
@@ -788,15 +772,18 @@ BOOL Gallery::RemoveTheme( const String& rThemeName )
 
 // ------------------------------------------------------------------------
 
-String Gallery::GetImportPath(const String& rThemeName)
+INetURLObject Gallery::GetImportURL( const String& rThemeName )
 {
-    String                                          aPath;
-    GalleryImportThemeEntry*        pImportEntry = ImplGetImportThemeEntry( rThemeName );
+    INetURLObject               aURL;
+    GalleryImportThemeEntry*    pImportEntry = ImplGetImportThemeEntry( rThemeName );
 
     if( pImportEntry )
-        aPath = pImportEntry->aFileName;
+    {
+        aURL = pImportEntry->aURL;
+        DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+    }
 
-    return aPath;
+    return aURL;
 }
 
 // ------------------------------------------------------------------------
@@ -815,26 +802,30 @@ GalleryTheme* Gallery::ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry 
 
         if( !pTheme )
         {
-            INetURLObject aPath;
+            INetURLObject aURL;
 
             if( !pThemeEntry->IsImported() )
-                aPath = INetURLObject( pThemeEntry->GetThmPath(), INET_PROT_FILE );
+                aURL = pThemeEntry->GetThmURL();
             else
-                aPath = INetURLObject( GetImportPath( pThemeEntry->GetThemeName() ), INET_PROT_FILE );
+                aURL = GetImportURL( pThemeEntry->GetThemeName() );
 
-            if( FileExists( aPath ) )
+            DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+
+            if( FileExists( aURL ) )
             {
-                SvFileStream aInStm( aPath.PathToFileName(), STREAM_READ );
+                SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READ );
 
-                if( aInStm.IsOpen() )
+                if( pIStm )
                 {
                     pTheme = new GalleryTheme( this, (GalleryThemeEntry*) pThemeEntry );
-                    aInStm >> *pTheme;
+                    *pIStm >> *pTheme;
 
-                    if( aInStm.GetError() )
+                    if( pIStm->GetError() )
                         delete pTheme, pTheme = NULL;
                     else if( pThemeEntry->IsImported() )
                         pTheme->SetImportName( pThemeEntry->GetThemeName() );
+
+                    delete pIStm;
                 }
             }
 

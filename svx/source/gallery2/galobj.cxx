@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-25 14:47:55 $
+ *  last change: $Author: ka $ $Date: 2000-11-16 12:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ void SgaObject::WriteData( SvStream& rOut ) const
     else
         rOut << aThumbMtf;
 
-    rOut << ByteString( aPath, RTL_TEXTENCODING_UTF8 );
+    rOut << ByteString( aURL.GetMainURL(), RTL_TEXTENCODING_UTF8 );
 }
 
 // ------------------------------------------------------------------------
@@ -190,7 +190,7 @@ void SgaObject::ReadData(SvStream& rIn, UINT16& rReadVersion )
     else
         rIn >> aThumbMtf;
 
-    rIn >> aTmpStr; aPath = String( aTmpStr.GetBuffer(), RTL_TEXTENCODING_UTF8 );
+    rIn >> aTmpStr; aURL = INetURLObject( String( aTmpStr.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
 }
 
 // ------------------------------------------------------------------------
@@ -223,32 +223,30 @@ SgaObjectBmp::SgaObjectBmp()
 
 // ------------------------------------------------------------------------
 
-SgaObjectBmp::SgaObjectBmp( const String& rFile )
+SgaObjectBmp::SgaObjectBmp( const INetURLObject& rURL )
 {
     Graphic aGraphic;
-    String  aStr;
+    String  aFilter;
 
     aGraphic.SetLink( GfxLink() );
 
-    if ( SGA_IMPORT_NONE != SGAImport( rFile, aGraphic, aStr ) )
-        Init( aGraphic, rFile );
+    if ( SGA_IMPORT_NONE != SGAImport( rURL, aGraphic, aFilter ) )
+        Init( aGraphic, rURL );
 }
 
 // ------------------------------------------------------------------------
 
-SgaObjectBmp::SgaObjectBmp( const Graphic& rGraphic, const String& rFile, const String& rFormat )
+SgaObjectBmp::SgaObjectBmp( const Graphic& rGraphic, const INetURLObject& rURL, const String& rFormat )
 {
-    const INetURLObject aURL( rFile, INET_PROT_FILE );
-
-    if( FileExists( aURL ) )
-        Init( rGraphic, rFile );
+    if( FileExists( rURL ) )
+        Init( rGraphic, rURL );
 }
 
 // ------------------------------------------------------------------------
 
-void SgaObjectBmp::Init( const Graphic& rGraphic, const String& rFile )
+void SgaObjectBmp::Init( const Graphic& rGraphic, const INetURLObject& rURL )
 {
-    aPath = rFile;
+    aURL = rURL;
 
     if ( rGraphic.GetType() == GRAPHIC_BITMAP )
         bIsValid = CreateThumb( rGraphic.GetBitmap() );
@@ -298,14 +296,12 @@ SgaObjectSound::SgaObjectSound() :
 
 // ------------------------------------------------------------------------
 
-SgaObjectSound::SgaObjectSound( const String& rFile ) :
+SgaObjectSound::SgaObjectSound( const INetURLObject& rURL ) :
     eSoundType( SOUND_STANDARD )
 {
-    const INetURLObject aURL( rFile, INET_PROT_FILE );
-
-    if( FileExists( aURL ) )
+    if( FileExists( rURL ) )
     {
-        aPath = rFile;
+        aURL = rURL;
         aThumbBmp = Bitmap( Size( 1, 1 ), 1 );
         bIsValid = TRUE;
     }
@@ -382,9 +378,11 @@ SgaObjectAnim::SgaObjectAnim()
 
 // ------------------------------------------------------------------------
 
-SgaObjectAnim::SgaObjectAnim( const Graphic& rGraphic, const String& rFile, const String& rFormatName )
+SgaObjectAnim::SgaObjectAnim( const Graphic& rGraphic,
+                              const INetURLObject& rURL,
+                              const String& rFormatName )
 {
-    aPath = rFile;
+    aURL = rURL;
     bIsValid = CreateThumb( rGraphic.GetBitmap() );
 }
 
@@ -398,8 +396,8 @@ SgaObjectINet::SgaObjectINet()
 
 // ------------------------------------------------------------------------
 
-SgaObjectINet::SgaObjectINet( const Graphic& rGraphic, const String& rFile, const String& rFormatName ) :
-            SgaObjectAnim   ( rGraphic, rFile, rFormatName )
+SgaObjectINet::SgaObjectINet( const Graphic& rGraphic, const INetURLObject& rURL, const String& rFormatName ) :
+            SgaObjectAnim   ( rGraphic, rURL, rFormatName )
 {
 }
 
@@ -415,7 +413,7 @@ SgaObjectSvDraw::SgaObjectSvDraw()
 
 SgaObjectSvDraw::SgaObjectSvDraw( const FmFormModel& rModel, const INetURLObject& rURL )
 {
-    aPath = rURL.GetBase();
+    aURL = rURL;
     bIsValid = CreateThumb( rModel );
 }
 
@@ -429,7 +427,7 @@ SgaObjectSvDraw::SgaObjectSvDraw( SvStream& rIStm, const INetURLObject& rURL )
 
     if( SGASvDrawImport( rIStm, aModel ) )
     {
-        aPath = rURL.GetBase();
+        aURL = rURL;
         bIsValid = CreateThumb( aModel );
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galexpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 14:55:36 $
+ *  last change: $Author: ka $ $Date: 2000-11-16 12:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ BOOL GalleryExplorer::FillObjList( const String& rThemeName, List& rObjList )
         if( pTheme )
         {
             for( ULONG i = 0, nCount = pTheme->GetObjectCount(); i < nCount; i++ )
-                rObjList.Insert( new String( pTheme->GetObjectPath( i ) ), LIST_APPEND );
+                rObjList.Insert( new String( pTheme->GetObjectURL( i ).GetMainURL() ), LIST_APPEND );
 
             pGal->ReleaseTheme( pTheme, aDummyListener );
         }
@@ -209,7 +209,9 @@ BOOL GalleryExplorer::InsertURL( const String& rThemeName, const String& rURL, c
 
         if( pTheme )
         {
-            bRet = pTheme->InsertURL( INetURLObject( rURL, INET_PROT_FILE ) );
+            INetURLObject aURL( rURL );
+            DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+            bRet = pTheme->InsertURL( aURL );
             pGal->ReleaseTheme( pTheme, aDummyListener );
         }
     }

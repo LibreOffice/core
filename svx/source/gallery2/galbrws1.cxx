@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 13:23:43 $
+ *  last change: $Author: ka $ $Date: 2000-11-16 12:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,8 +209,7 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
 
     try
     {
-        Content         aCnt( INetURLObject( pThm->GetThmPath(), INET_PROT_FILE ).GetMainURL(),
-                              uno::Reference< XCommandEnvironment >() );
+        Content         aCnt( pThm->GetThmURL().GetMainURL(), uno::Reference< XCommandEnvironment >() );
         util::DateTime  aDateTimeCreated, aDateTimeModified;
         DateTime        aDateTime;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-02 15:39:24 $
+ *  last change: $Author: ka $ $Date: 2000-11-16 12:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,14 +183,14 @@ void GalleryValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
                 if( mpTheme->IsImported() )
                 {
-                    INetURLObject aPathTmp( mpTheme->GetParent()->GetImportPath( mpTheme->GetName() ), INET_PROT_FILE );
+                    INetURLObject aPathTmp( mpTheme->GetParent()->GetImportURL( mpTheme->GetName() ) );
 
                     aPathTmp.removeSegment();
-                    aPathTmp.Append( INetURLObject( mpTheme->GetObjectPath( nId - 1 ), INET_PROT_FILE ).GetName() );
-                    aItemText = aPathTmp.PathToFileName();
+                    aPathTmp.Append( mpTheme->GetObjectURL( nId - 1 ).GetName() );
+                    aItemText = aPathTmp.GetMainURL();
                 }
                 else
-                    aItemText = mpTheme->GetObjectPath( nId - 1 );
+                    aItemText = mpTheme->GetObjectURL( nId - 1 ).GetMainURL();
 
                 if( pObj->GetTitle().Len() )
                 {
@@ -207,8 +207,9 @@ void GalleryValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                 }
 
                 SetItemText( nId, aItemText );
-                mpTheme->ReleaseObject( pObj );
             }
+
+            mpTheme->ReleaseObject( pObj );
         }
     }
 }
@@ -315,10 +316,10 @@ void GalleryBackgroundPopup::Select()
 {
     Menu::Select();
 
-    const String aFilePath( mpTheme->GetObjectPath( mnObjectPos ) );
-    const SvxBrushItem  aBrushItem( aFilePath, String(), GPOS_TILED, SID_GALLERY_BG_BRUSH );
+    const INetURLObject aURL( mpTheme->GetObjectURL( mnObjectPos ) );
+    const SvxBrushItem  aBrushItem( aURL.GetMainURL(), String(), GPOS_TILED, SID_GALLERY_BG_BRUSH );
     const SfxUInt16Item aPosItem( SID_GALLERY_BG_POS, GetCurItemId() - 1 );
-    const SfxStringItem aPathItem( SID_FILE_NAME, aFilePath );
+    const SfxStringItem aPathItem( SID_FILE_NAME, aURL.GetMainURL() );
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( SID_GALLERY_BG_BRUSH,
                               SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
@@ -626,7 +627,7 @@ void GalleryBrowser2::ShowPreview( BOOL bShow )
             mpValueSet->Show( TRUE );
 
             mpPreview->SetGraphic( Graphic() );
-            mpPreview->PreviewSound( String() );
+            mpPreview->PreviewSound( INetURLObject() );
 
             mbIsPreview = FALSE;
         }
@@ -644,7 +645,7 @@ void GalleryBrowser2::ShowPreview( BOOL bShow )
                 mpPreview->Show( TRUE );
 
                 if( mpCurTheme->GetObjectKind( nPos ) == SGA_OBJ_SOUND )
-                    mpPreview->PreviewSound( mpCurTheme->GetObjectPath( nPos ) );
+                    mpPreview->PreviewSound( mpCurTheme->GetObjectURL( nPos ) );
 
                 mbIsPreview = TRUE;
             }
@@ -691,11 +692,11 @@ void GalleryBrowser2::ImplUpdateInfoBar()
 
             if( mpCurTheme->IsImported() )
             {
-                INetURLObject aPathTmp( mpCurTheme->GetParent()->GetImportPath( mpCurTheme->GetName() ), INET_PROT_FILE );
+                INetURLObject aPathTmp( mpCurTheme->GetParent()->GetImportURL( mpCurTheme->GetName() ) );
 
                 aPathTmp.removeSegment();
-                aPathTmp.Append( INetURLObject( mpCurTheme->GetObjectPath( nObjPos ), INET_PROT_FILE ).GetName() );
-                aInfoText += aPathTmp.PathToFileName();
+                aPathTmp.Append( mpCurTheme->GetObjectURL( nObjPos ).GetName() );
+                aInfoText += aPathTmp.GetMainURL();
             }
             else if( pObj && pObj->GetTitle().Len() )
             {
@@ -704,14 +705,14 @@ void GalleryBrowser2::ImplUpdateInfoBar()
                 if( pObj->GetObjKind() != SGA_OBJ_SVDRAW )
                 {
                     aTitleItemText += String( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
-                    aTitleItemText += mpCurTheme->GetObjectPath( nObjPos );
+                    aTitleItemText += mpCurTheme->GetObjectURL( nObjPos ).GetMainURL();
                     aTitleItemText += ')';
                 }
 
                 aInfoText += aTitleItemText;
             }
             else
-                aInfoText += mpCurTheme->GetObjectPath( nObjPos );
+                aInfoText += mpCurTheme->GetObjectURL( nObjPos ).GetMainURL();
 
             mpCurTheme->ReleaseObject( pObj );
         }
@@ -727,7 +728,7 @@ INetURLObject GalleryBrowser2::GetURL() const
     INetURLObject aURL;
 
     if( mpCurTheme && mnCurActionPos != 0xffffffff )
-        aURL.SetSmartURL( mpCurTheme->GetObjectPath( mnCurActionPos ) );
+        aURL = mpCurTheme->GetObjectURL( mnCurActionPos );
 
     return aURL;
 }
