@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:33:59 $
+ *  last change: $Author: rt $ $Date: 2001-04-26 20:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ Menu MN_READONLY_POPUP
             Text[ chinese_simplified ] = "´æÅÌÍ¼ĞÎ(~S)...";
             Text[ russian ] = "Ñîõğàíèòü ğèñóíîê...";
             Text[ polish ] = "Zapisz grafikê...";
-            Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì•Û‘¶...";
+            Text[ japanese ] = "}‚Ì•Û‘¶...";
             Text[ chinese_traditional ] = "Àx¦s¹Ï§Î(~S)...";
             Text[ arabic ] = "...ÍİÙ ÇáÕæÑÉ";
             Text[ dutch ] = "Afbeelding ops~laan...";
@@ -518,7 +518,7 @@ Menu MN_READONLY_POPUP
             Text[ chinese_simplified ] = "ĞÂÔöÍ¼ĞÎ(~D)";
             Text[ russian ] = "Äîáàâèòü ğèñóíîê";
             Text[ polish ] = "Dodaj grafikê";
-            Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì’Ç‰Á";
+            Text[ japanese ] = "}‚Ì’Ç‰Á";
             Text[ chinese_traditional ] = "·s¼W¹Ï§Î(~D)";
             Text[ arabic ] = "ÅÖÇİÉ ÑÓæã";
             Text[ dutch ] = "Afbeelding t~oevoegen";
@@ -697,7 +697,7 @@ Menu MN_READONLY_POPUP
             Text[ chinese_simplified ] = "¸´ÖÆÍ¼ĞÎ(~G)";
             Text[ russian ] = "Êîïèğîâàòü ğèñóíîê";
             Text[ polish ] = "Kopiuj grafikê";
-            Text[ japanese ] = "¸Ş×Ì¨¯¸‚ÌºËß°(~G)";
+            Text[ japanese ] = "}‚ÌºËß°(~G)";
             Text[ chinese_traditional ] = "½Æ»s¹Ï§Î(~G)";
             Text[ arabic ] = "äÓÎ ÇáÕæÑÉ";
             Text[ dutch ] = "Afbeelding ko~piëren";
@@ -771,7 +771,7 @@ Menu MN_READONLY_POPUP
             HelpID = HID_MN_READONLY_PLUGINOFF ;
             Text = "~PlugIns ausschalten" ;
             Text [ English ] = "~PlugIns off" ;
-            Text [ english_us ] = "Plug-Ins Off" ;
+            Text [ english_us ] = "Plug-ins Off" ;
             Text [ italian ] = "Disattiva i PlugIn" ;
             Text [ spanish ] = "Desactivar ~Plug-ins" ;
             Text [ french ] = "Désactiver les ~Plug-ins" ;
@@ -780,14 +780,14 @@ Menu MN_READONLY_POPUP
             Text [ danish ] = "Sluk ~PlugIns" ;
             Text [ portuguese ] = "Desactivar ~PlugIns" ;
             Text [ portuguese_brazilian ] = "~PlugIns ausschalten" ;
-            Text[ chinese_simplified ] = "Ê§»î ~Plug-In";
+            Text[ chinese_simplified ] = "²»Ê¹ÓÃ ~Plug-In";
             Text[ russian ] = "Îòêëş÷èòü Plug-Ins";
             Text[ polish ] = "Wy³¹cz wtyczki Plug-In";
-            Text[ japanese ] = "Ìß×¸Ş²İ µÌ(~P)";
+            Text[ japanese ] = "Ìß×¸Ş²İµÌ(~P)";
             Text[ chinese_traditional ] = "Ãö³¬ ~PlugIn";
             Text[ arabic ] = "ÅíŞÇİ Plug-Ins";
             Text[ dutch ] = "~PlugIns uitschakelen";
-            Text[ chinese_simplified ] = "Ê§»î ~Plug-In";
+            Text[ chinese_simplified ] = "²»Ê¹ÓÃ ~Plug-In";
             Text[ greek ] = "Áğåíåñãïğïßçóç óõíäåüìåíùí õ~ğïìïíÜäùí";
             Text[ korean ] = "ÇÃ·¯±×ÀÎ Àû¿ëÇØÁ¦";
             Text[ turkish ] = "Plug-in'leri kapat";
@@ -838,7 +838,7 @@ String STR_CHAIN_OK
     Text[ chinese_simplified ] = "ÇëÄúÍ¨¹ı°´»÷Êó±ê×ó¼üÀ´Á¬½Ó¿ò¡£";
     Text[ russian ] = "Íàæìèòå ëåâóş êëàâèøó ìûøè äëÿ ñâÿçè ğàìêè.";
     Text[ polish ] = "Kliknij lewy przycisk myszy, by po³¹czyæ ramki.";
-    Text[ japanese ] = "˜g‚ğ‚Â‚È‚®‚½‚ß‚É¶‚ÌÏ³½ÎŞÀİ‚ğ¸Ø¯¸‚µ‚Ä‰º‚³‚¢";
+    Text[ japanese ] = "Ï³½‚Ì¶¸Ø¯¸‚ÅÃ·½Ä˜g‚ª˜AŒ‹‚µ‚Ü‚·B";
     Text[ chinese_traditional ] = "½Ğ±z«ö·Æ¹«¥ªÁä¡M³sµ²°T®Ø¡C";
     Text[ arabic ] = ".ÇäŞÑ ÈÇáÒÑ ÇáÃíÓÑ ááãÇæÓ áÑÈØ ÇáßæÇÏÑ";
     Text[ dutch ] = "Gebruik de linker muistoets om het kader te koppelen.";
@@ -864,7 +864,7 @@ String STR_CHAIN_NOT_EMPTY
     Text[ chinese_simplified ] = "Ä¿±ê¿ò²»ÊÇ¿ÕµÄ¡£";
     Text[ russian ] = "Öåëåâàÿ ğàìêà íå ÿâëÿåòñÿ ïóñòîé.";
     Text[ polish ] = "Ramka docelowa nie jest pusta.";
-    Text[ japanese ] = "–Ú•W‚Ì˜g‚Í‹ó‚Å‚·";
+    Text[ japanese ] = "–Ú•W‚ÌÃ·½Ä˜g‚É‹ó”’‚ª‚ ‚è‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "¥Ø¼Ğ¤è¶ô¤£¬OªÅªº¡C";
     Text[ arabic ] = "ÇáßÇÏÑ ÇáåÏİ ÛíÑ İÇÑÛ.";
     Text[ dutch ] = "Het doelkader is niet leeg.";
@@ -890,7 +890,7 @@ String STR_CHAIN_IS_IN_CHAIN
     Text[ chinese_simplified ] = "ÒÑ¾­Á´½ÓÄ¿±ê¿ò¡£";
     Text[ russian ] = "Öåëåàâÿ ğàìêà óæå ñâÿçàíà.";
     Text[ polish ] = "Ramka docelowa jest ju¿ po³¹czona.";
-    Text[ japanese ] = "–Ú•W‚Ì˜g‚Í‚·‚Å‚É‚Â‚È‚ª‚ê‚Ä‚¢‚Ü‚·";
+    Text[ japanese ] = "–Ú•W‚ÌÃ·½Ä˜g‚Í‚·‚Å‚É˜AŒ‹‚³‚ê‚Ä‚¢‚Ü‚·B";
     Text[ chinese_traditional ] = "¤w¸g³sµ²¥Ø¼Ğ¤è¶ô¡C";
     Text[ arabic ] = "ÇáßÇÏÑ ÇáåÏİ ãÑÊÈØÇğ ÈÇáİÚá.";
     Text[ dutch ] = "Het doelkader is reeds gekoppeld.";
@@ -916,7 +916,7 @@ String STR_CHAIN_WRONG_AREA
     Text[ chinese_simplified ] = "Ä¿±ê¿ò´¦ÓÚÒ»¸öÎŞ·¨Á´½ÓµÄÇøÓò¡£";
     Text[ russian ] = "Öåëåâàÿ ğàìêà íàõîäèòñÿ â îáëàñòè, â êîòîğîé ñâÿçü íåâîçìîæíà.";
     Text[ polish ] = "Ramka docelowa znajduje siê w obszarze, w którym niemo¿liwe jest po³¹czenie.";
-    Text[ japanese ] = "–Ú•W‚Ì˜g‚Í‚Â‚È‚®‚±‚Æ‚Ì‚Å‚«‚È‚¢”ÍˆÍ‚É‚ ‚è‚Ü‚·";
+    Text[ japanese ] = "–Ú•W‚ÌÃ·½Ä˜g‚Í˜AŒ‹‚Å‚«‚È‚¢”ÍˆÍ‚É‚ ‚è‚Ü‚·";
     Text[ chinese_traditional ] = "¥Ø¼Ğ°T®Ø³B©ó¤@­ÓµLªk°T®Øªº°Ï°ì¡C";
     Text[ arabic ] = "íÊæÇÌÏ ÇáßÇÏÑ ÇáåÏİ İí ãäØŞÉ áÇ íãßä Úãá ÊÓáÓá İíåÇ.";
     Text[ dutch ] = "Het bronkader staat in een bereik waarin geen koppeling mogelijk is.";
@@ -942,7 +942,7 @@ String STR_CHAIN_NOT_FOUND
     Text[ chinese_simplified ] = "ÔÚµ±Ç°µÄÎ»ÖÃÃ»ÓĞÕÒµ½Ä¿±ê¿ò¡£";
     Text[ russian ] = "Â òåêóùåé ïîçèöèè öåëåâàÿ ğàìêà íåîáíàğóæåíà.";
     Text[ polish ] = "Przy aktualnej pozycji nie znaleziono ramki docelowej.";
-    Text[ japanese ] = "Œ»ˆÊ’u‚É–Ú•W‚Ì˜g‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ";
+    Text[ japanese ] = "Œ»ˆÊ’u‚É–Ú•W‚ÌÃ·½Ä˜g‚Í‚ ‚è‚Ü‚¹‚ñ";
     Text[ chinese_traditional ] = "¦b·í«eªº¦ì¸m¨S¦³§ä¨ì¥Ø¼Ğ¤è¶ô¡C";
     Text[ arabic ] = ".áÇ íæÌÏ ßÇÏÑ åÏİ İí ÇáãæŞÚ ÇáÍÇáí";
     Text[ dutch ] = "Op de actuele positie kan geen doelkader worden gevonden.";
@@ -968,7 +968,7 @@ String STR_CHAIN_SOURCE_CHAINED
     Text[ chinese_simplified ] = "Õâ¸öÀ´Ô´¿òÒÑ¾­ÊÇÒ»¸öÁ´½ÓµÄÀ´Ô´¿ò¡£";
     Text[ russian ] = "Èñõîäíàÿ ğàìêà óæå ÿâëÿåòñÿ èñòî÷íèêîì ñâÿçè.";
     Text[ polish ] = "Ramka Ÿród³owa jest ju¿ Ÿród³em po³¹czenia.";
-    Text[ japanese ] = "Œ³‚Ì˜g‚Í‚Â‚È‚¬‚ÌŒ³‚Å‚·";
+    Text[ japanese ] = "‚±‚ÌÃ·½Ä˜g‚É‚Í•Ê‚ÌÃ·½Ä˜g‚ª‚·‚Å‚É˜AŒ‹‚µ‚Ä‚¢‚Ü‚·B";
     Text[ chinese_traditional ] = "³o­Ó¨Ó·½°T®Ø¤w¸g¬O¤@­Ó³sµ²ªº·½°T®Ø¡C";
     Text[ arabic ] = "ßÇÏÑ ÇáãÕÏÑ åæ ãÓÈŞÇğ ãÕÏÑ ÇáÊÓáÓá.";
     Text[ dutch ] = "Het bronkader is reeds basis van een koppeling.";
@@ -994,7 +994,7 @@ String STR_CHAIN_SELF
     Text[ chinese_simplified ] = "Ò»¸ö·â±ÕÊ½µÄÁ´½ÓÊÇ²»¿ÉÄÜµÄ¡£";
     Text[ russian ] = "Çàìêíóòàÿ öåïü íåâîçìîæíà.";
     Text[ polish ] = "Zamkniête ³¹cze nie jest mo¿liwe.";
-    Text[ japanese ] = "•Â‚¶‚½‚Â‚È‚ª‚è‚Í•s‰Â”\\‚Å‚·";
+    Text[ japanese ] = "zŠÂ‚·‚é˜AŒ‹‚Í‚Å‚«‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "¤@­Ó«Ê³¬¦¡ªº³sµ²¬O¤£¥i¯àªº¡C";
     Text[ arabic ] = "ÇáÓáÓáÉ ÇáãÛáŞÉ ÃãÑ ÛíÑ ããßä";
     Text[ dutch ] = "Een gesloten koppeling is niet mogelijk.";
