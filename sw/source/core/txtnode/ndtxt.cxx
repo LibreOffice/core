@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:41:01 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2293,19 +2293,6 @@ void SwTxtNode::NumRuleChgd()
     SwModify::Modify( &rLR, &rLR );
 
 #endif
-}
-
-// #111955#, #115901#
-BOOL SwTxtNode::IsOutlineNum() const
-{
-    BOOL bResult = FALSE;
-
-    SwNumRule * pRule = GetNumRule();
-
-    if (pRule && pRule->IsOutlineRule())
-        bResult = TRUE;
-
-    return bResult;
 }
 
 // #i22362#
