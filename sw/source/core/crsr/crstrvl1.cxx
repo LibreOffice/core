@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstrvl1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:46:12 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 08:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,10 +126,6 @@ FASTBOOL SwCrsrShell::GoPrevSentence()
 FASTBOOL SwCrsrShell::GoStartSentence()
 {
     return CallCrsrFN( &SwCursor::GoStartSentence );
-}
-FASTBOOL SwCrsrShell::GoEndSentence()
-{
-    return CallCrsrFN( &SwCursor::GoEndSentence );
 }
 
 FASTBOOL SwCrsrShell::SelectWord( const Point* pPt )
