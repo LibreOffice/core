@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:40:53 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 19:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4185,7 +4185,7 @@ String RID_SVXSTR_DASH0
     Text[ russian ] = "Ρβεπυςξνκΰÿ οσνκςθπνΰÿ";
     Text[ greek ] = "Διακεκομμένο (Πολύ λεπτά)";
     Text[ dutch ] = "Ultrafijne streepjes";
-    Text[ french ] = "Ultrafine discontinue";
+    Text[ french ] = "Tirets ultrafins";
     Text[ spanish ] = "Trazos ultrafinos";
     Text[ italian ] = "A tratti finissimi";
     Text[ danish ] = "Ultrafin stiplet";
@@ -4208,7 +4208,7 @@ String RID_SVXSTR_DASH1
     Text[ russian ] = "Òξνκΰÿ οσνκςθπνΰÿ";
     Text[ greek ] = "Διακεκομμένο (Λεπτά)";
     Text[ dutch ] = "Fijne streepjes";
-    Text[ french ] = "Fine discontinue";
+    Text[ french ] = "Tirets fins";
     Text[ spanish ] = "Trazos finos";
     Text[ italian ] = "A tratti fini";
     Text[ danish ] = "Fin stiplet";
@@ -4300,7 +4300,7 @@ String RID_SVXSTR_DASH5
     Text[ russian ] = "Òξνκΰÿ οσνκςθπνΰÿ (θημ.)";
     Text[ greek ] = "Διακεκομμένο λεπτά (μεταβλητά)";
     Text[ dutch ] = "Fijne streepjes (variabel)";
-    Text[ french ] = "Fine discontinue (variable)";
+    Text[ french ] = "Tirets fins (variable)";
     Text[ spanish ] = "Trazos finos (variable)";
     Text[ italian ] = "A tratti fini (var)";
     Text[ danish ] = "Fin stiplet (variabel)";
@@ -4415,7 +4415,7 @@ String RID_SVXSTR_DASH10
     Text[ russian ] = "Οσνκςθπνΰÿ (θημ.)";
     Text[ greek ] = "Διακεκομμένο (μεταβλητά)";
     Text[ dutch ] = "Streepjes (variabel)";
-    Text[ french ] = "Discontinue (variable)";
+    Text[ french ] = "Tirets (variable)";
     Text[ spanish ] = "Trazos (variable)";
     Text[ italian ] = "A tratti (var)";
     Text[ danish ] = "Stiplet (variabel)";
@@ -4438,7 +4438,7 @@ String RID_SVXSTR_DASH11
     Text[ russian ] = "Οσνκςθπνϋι";
     Text[ greek ] = "Διακεκομμένο";
     Text[ dutch ] = "Dashed";
-    Text[ french ] = "Dashed";
+    Text[ french ] = "Tirets";
     Text[ spanish ] = "Dashed";
     Text[ italian ] = "Dashed";
     Text[ danish ] = "Dashed";
