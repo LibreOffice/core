@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:53:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _BASEDLGS_HXX //autogen
 #include <sfx2/basedlgs.hxx>
 #endif
+#ifndef _TEXTCONTROLCOMBO_HXX
+#include <textcontrolcombo.hxx>
+#endif
 
 class SwTableAutoFmt;
 class SwView;
@@ -90,8 +93,13 @@ class SwConvertTableDlg: public SfxModalDialog
 
     CheckBox        aHeaderCB;
     CheckBox        aRepeatHeaderCB;
-    FixedText       aRepeatHeaderFT;
-    NumericField    aRepeatHeaderNF;
+
+    FixedText       aRepeatHeaderFT;    // "dummy" to build before and after FT
+    FixedText           aRepeatHeaderBeforeFT;
+    NumericField        aRepeatHeaderNF;
+    FixedText           aRepeatHeaderAfterFT;
+    TextControlCombo    aRepeatHeaderCombo;
+
     CheckBox        aDontSplitCB;
     CheckBox        aBorderCB;
     FixedLine       aOptionsFL;
