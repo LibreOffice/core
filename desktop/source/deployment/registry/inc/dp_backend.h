@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_backend.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:11:47 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ protected:
         CONTEXT_USER, CONTEXT_SHARED,
         CONTEXT_DOCUMENT
     } m_eContext;
-    sal_Bool m_readOnly;
+    bool m_readOnly;
 
     struct StrCannotDetectMediaType : public ::dp_misc::StaticResourceString<
         StrCannotDetectMediaType, RID_STR_CANNOT_DETECT_MEDIA_TYPE> {};
