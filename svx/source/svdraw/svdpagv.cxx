@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:49:23 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,7 +1104,8 @@ SdrPageViewWindow* SdrPageView::RemoveWindow(SdrPageViewWindow& rOld)
 
 //////////////////////////////////////////////////////////////////////////////
 
-SdrPageView::SdrPageView(SdrPage* pPage1, const Point& rOffs, SdrView& rNewView):
+SdrPageView::SdrPageView(SdrPage* pPage1, const Point& rOffs, SdrView& rNewView)
+:   mpDisplayInfo(0L),
     mrView(rNewView),
     //aRedraw(1024,16,16),
     aOfs(rOffs),
