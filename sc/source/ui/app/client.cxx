@@ -2,9 +2,9 @@
  *
  *  $RCSfile: client.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,6 @@
 //sfxsh.hxx
 //#define _SFX_SHELL_HXX
 //#define _SFXAPP_HXX
-#define _SFX_BINDINGS_HXX
 #define _SFXDISPATCH_HXX  //???
 //#define _SFXMSG_HXX ***
 //#define _SFXOBJFACE_HXX ***
@@ -259,10 +258,6 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include "segmentc.hxx"
-#endif
-
 // INCLUDE ---------------------------------------------------------------
 
 #ifndef _SFX_OBJSH_HXX //autogen
@@ -306,11 +301,7 @@
 #include "tabvwsh.hxx"
 #include "document.hxx"
 
-SEG_EOFGLOBALS()
-
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(client_01)
 
 ScClient::ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrModel ) :
     SfxInPlaceClient( pViewShell, pDraw ),
@@ -319,13 +310,9 @@ ScClient::ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrMod
 {
 }
 
-#pragma SEG_FUNCDEF(client_02)
-
 __EXPORT ScClient::~ScClient()
 {
 }
-
-#pragma SEG_FUNCDEF(client_05)
 
 SdrOle2Obj* ScClient::GetDrawObj()
 {
@@ -359,8 +346,6 @@ SdrOle2Obj* ScClient::GetDrawObj()
     }
     return pOle2Obj;
 }
-
-#pragma SEG_FUNCDEF(client_03)
 
 void __EXPORT ScClient::RequestObjAreaPixel( const Rectangle& rObjRect )
 {
@@ -469,8 +454,6 @@ void __EXPORT ScClient::RequestObjAreaPixel( const Rectangle& rObjRect )
         pViewSh->ScrollToObject( pDrawObj );
 }
 
-#pragma SEG_FUNCDEF(client_04)
-
 void __EXPORT ScClient::ViewChanged( USHORT nAspect )
 {
     SfxInPlaceClient::ViewChanged( nAspect );
@@ -515,8 +498,6 @@ void __EXPORT ScClient::ViewChanged( USHORT nAspect )
     }
 }
 
-#pragma SEG_FUNCDEF(client_08)
-
 void __EXPORT ScClient::MakeViewData()
 {
     SfxInPlaceClient::MakeViewData();
@@ -543,8 +524,6 @@ void __EXPORT ScClient::MakeViewData()
     }
 }
 
-#pragma SEG_FUNCDEF(client_06)
-
 void __EXPORT ScClient::MakeVisible()
 {
     SdrOle2Obj* pDrawObj = GetDrawObj();
@@ -556,8 +535,6 @@ void __EXPORT ScClient::MakeVisible()
             pViewSh->ScrollToObject( pDrawObj );
     }
 }
-
-#pragma SEG_FUNCDEF(client_0a)
 
 //  Mit Optimierung gibt es Abstuerze beim Deaktivieren von Grafik-Image-Objekten
 
@@ -602,8 +579,6 @@ void lcl_ReplaceObject( SdrOle2Obj* pGrafOle, SdrGrafObj* pGrafObj,
 #pragma optimize ( "", on )
 #endif
 
-#pragma SEG_FUNCDEF(client_09)
-
 void __EXPORT ScClient::UIActivate( BOOL bActivate )
 {
     SvInPlaceClientRef aIPClient( this );   // nicht aus versehen zwischendrin loeschen
@@ -636,150 +611,5 @@ void __EXPORT ScClient::UIActivate( BOOL bActivate )
         }
     }
 }
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.44  2000/09/17 14:08:53  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.43  2000/08/31 16:38:17  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.42  2000/02/11 12:21:23  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.41  1999/04/19 17:04:18  NN
-    #65014# Objekte/Charts koennen auch gruppiert vorkommen
-
-
-      Rev 1.40   19 Apr 1999 19:04:18   NN
-   #65014# Objekte/Charts koennen auch gruppiert vorkommen
-
-      Rev 1.39   26 Mar 1999 18:12:16   HJS
-   sim ist tot
-
-      Rev 1.38   03 Mar 1999 18:08:40   NN
-   #62107# GetDrawObj: Name vom SdrOle2Obj statt vom IPObj
-
-      Rev 1.37   27 Nov 1998 11:30:16   NN
-   #41302#/#56515# ReplaceObject ohne bMark, ForceMove beim Deaktivieren
-
-      Rev 1.36   16 Oct 1998 21:09:12   NN
-   #57916# ClearHighlightRanges beim Deaktivieren
-
-      Rev 1.35   13 Oct 1998 16:00:34   NN
-   #56590# RequestObjAreaPixel: Rundungsfehler bei SetLogicRect vermeiden
-
-      Rev 1.34   05 Dec 1997 20:08:20   ANK
-   Includes geaendert
-
-      Rev 1.33   04 Sep 1997 20:29:48   RG
-   change header
-
-      Rev 1.32   29 Apr 1997 17:25:50   HJS
-   includes/defines
-
-      Rev 1.31   10 Jan 1997 13:45:44   NN
-   lcl_ReplaceObject ohne Optimierung
-
-      Rev 1.30   04 Dec 1996 14:50:04   NN
-   Image-Objekt wieder durch Grafik ersetzen jetzt in UIActivate
-
-      Rev 1.29   25 Oct 1996 11:39:28   TRI
-   socore.hxx
-
-      Rev 1.28   23 Aug 1996 11:31:40   NF
-   clooks
-
-      Rev 1.27   22 Aug 1996 10:58:20   NF
-   clooks
-
-      Rev 1.26   15 Aug 1996 20:24:50   HJS
-   define raus
-
-      Rev 1.25   15 Aug 1996 19:12:32   HJS
-   clooks
-
-      Rev 1.24   12 Aug 1996 11:37:04   NF
-   clooks
-
-      Rev 1.23   06 Aug 1996 09:10:54   NF
-   clooks
-
-      Rev 1.22   01 Aug 1996 14:24:08   NF
-   clooks
-
-      Rev 1.21   03 Jul 1996 14:51:32   NN
-   ScrollToObject an der View statt DoScroll
-
-      Rev 1.20   30 May 1996 14:53:24   NF
-   CLOOKS ... !
-
-      Rev 1.19   18 Apr 1996 17:15:24   NN
-   313: MakeViewData
-
-      Rev 1.18   18 Apr 1996 15:43:32   NN
-   313: MakeVisible
-
-      Rev 1.17   27 Mar 1996 14:58:04   NN
-   RequestObjAreaPixel: Bereich auf Seite anpassen, Scrollen wenn noetig
-
-      Rev 1.16   21 Mar 1996 11:43:18   ER
-   SV311 soref changes
-
-      Rev 1.15   14 Mar 1996 14:42:30   NN
-   #25327# ViewChanged: erst SetObjArea, dann SetLogicRect (wegen Scale)
-
-      Rev 1.14   29 Feb 1996 18:59:40   NF
-   CLOOKS
-
-      Rev 1.13   23 Feb 1996 12:18:40   NF
-   CLOOKS
-
-      Rev 1.12   16 Feb 1996 14:48:10   MO
-   306er SO2-Aenderungen
-
-      Rev 1.11   26 Jan 1996 09:57:10   NN
-   RequestObjAreaPixel: statt PixelToLogic mit Rechteck
-   Position und Groesse getrennt umrechnen
-
-      Rev 1.10   22 Jan 1996 16:24:02   NN
-   #24481# Scale beruecksichtigen
-
-      Rev 1.9   18 Nov 1995 18:21:34   NN
-   pDrawObject nicht mehr merken, stattdessen suchen
-
-      Rev 1.8   08 Nov 1995 13:04:04   MO
-   301-Aenderungen
-
-      Rev 1.7   26 Sep 1995 18:10:40   JN
-   DrawObject merken
-
-      Rev 1.6   14 Sep 1995 12:01:44   NN
-   soipenv.hxx
-
-      Rev 1.5   06 Sep 1995 09:44:10   NN
-   bei ViewChanged Position behalten
-
-      Rev 1.4   04 Sep 1995 14:09:00   NN
-   SetObjArea am Environment statt SetObjSize (2.55)
-
-      Rev 1.3   09 Aug 1995 13:12:02   NN
-   bGrafEdit-Flag
-
-      Rev 1.2   31 Jul 1995 10:26:44   NN
-   Container Anpassung in RequestObjAreaPixel
-
-      Rev 1.1   13 Jul 1995 13:10:38   NN
-   SdrOle2Obj als Member fuer Groessenaenderungen
-
-      Rev 1.0   13 Jul 1995 12:19:30   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
 

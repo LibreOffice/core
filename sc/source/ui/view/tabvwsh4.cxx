@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1215,10 +1215,10 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
                         if (nMode == SC_ENTER_NORMAL)
                         {
                             if( bShift )
-                                SFX_DISPATCHER().Execute( SID_CURSORENTERUP,
+                                GetViewData()->GetDispatcher().Execute( SID_CURSORENTERUP,
                                             SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
                             else
-                                SFX_DISPATCHER().Execute( SID_CURSORENTERDOWN,
+                                GetViewData()->GetDispatcher().Execute( SID_CURSORENTERDOWN,
                                             SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
                         }
                         else
@@ -1269,7 +1269,7 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         }
         if ( nSlotId )
         {
-            SFX_DISPATCHER().Execute( nSlotId, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+            GetViewData()->GetDispatcher().Execute( nSlotId, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
             bUsed = TRUE;
         }
     }
@@ -1679,7 +1679,7 @@ void ScTabViewShell::ExecTbx( SfxRequest& rReq )
         default:
             DBG_ERROR("Slot im Wald");
     }
-    SFX_BINDINGS().Invalidate( nSlot );
+    GetViewFrame()->GetBindings().Invalidate( nSlot );
 }
 
 void ScTabViewShell::GetTbxState( SfxItemSet& rSet )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,7 +489,8 @@ IMPL_LINK( ScConsolidateDlg, OkHdl, void*, p )
 
             SFX_APP()->LockDispatcher( FALSE );
             SwitchToDocument();
-            SFX_DISPATCHER().Execute( SID_CONSOLIDATE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+            GetBindings().GetDispatcher()->Execute( SID_CONSOLIDATE,
+                                      SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                                       &aOutItem, 0L, 0L );
             Close();
         }

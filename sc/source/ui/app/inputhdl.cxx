@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1700,21 +1700,25 @@ void ScInputHandler::RemoveSelection()
 
 void ScInputHandler::InvalidateAttribs()
 {
-    SfxBindings& rBindings = SFX_APP()->GetBindings();
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (pViewFrm)
+    {
+        SfxBindings& rBindings = pViewFrm->GetBindings();
 
-    rBindings.Invalidate( SID_ATTR_CHAR_FONT );
-    rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
-    rBindings.Invalidate( SID_ATTR_CHAR_COLOR );
+        rBindings.Invalidate( SID_ATTR_CHAR_FONT );
+        rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+        rBindings.Invalidate( SID_ATTR_CHAR_COLOR );
 
-    rBindings.Invalidate( SID_ATTR_CHAR_WEIGHT );
-    rBindings.Invalidate( SID_ATTR_CHAR_POSTURE );
-    rBindings.Invalidate( SID_ATTR_CHAR_UNDERLINE );
-    rBindings.Invalidate( SID_ULINE_VAL_NONE );
-    rBindings.Invalidate( SID_ULINE_VAL_SINGLE );
-    rBindings.Invalidate( SID_ULINE_VAL_DOUBLE );
-    rBindings.Invalidate( SID_ULINE_VAL_DOTTED );
+        rBindings.Invalidate( SID_ATTR_CHAR_WEIGHT );
+        rBindings.Invalidate( SID_ATTR_CHAR_POSTURE );
+        rBindings.Invalidate( SID_ATTR_CHAR_UNDERLINE );
+        rBindings.Invalidate( SID_ULINE_VAL_NONE );
+        rBindings.Invalidate( SID_ULINE_VAL_SINGLE );
+        rBindings.Invalidate( SID_ULINE_VAL_DOUBLE );
+        rBindings.Invalidate( SID_ULINE_VAL_DOTTED );
 
-    rBindings.Invalidate( SID_HYPERLINK_GETLINK );
+        rBindings.Invalidate( SID_HYPERLINK_GETLINK );
+    }
 }
 
 
@@ -2521,7 +2525,11 @@ BOOL ScInputHandler::KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit /* = FALSE
                     ResetAutoPar();
 
                 if ( KEY_INSERT == nCode )
-                    SFX_APP()->GetBindings().Invalidate( SID_ATTR_INSERT );
+                {
+                    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+                    if (pViewFrm)
+                        pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
+                }
             }
 
             DataChanged();              //  ruft auch UpdateParenthesis()

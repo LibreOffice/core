@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5540,8 +5540,9 @@ void ScTableSheetObj::PrintAreaUndo_Impl( ScPrintRangeSaver* pOldRanges )
 
         ScPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab ).UpdatePages();
 
-        SfxBindings& rBindings = SFX_BINDINGS();
-        rBindings.Invalidate( SID_DELETE_PRINTAREA );
+        SfxBindings* pBindings = pDocSh->GetViewBindings();
+        if (pBindings)
+            pBindings->Invalidate( SID_DELETE_PRINTAREA );
 
         pDocSh->SetDocumentModified();
     }
@@ -5873,7 +5874,9 @@ void SAL_CALL ScTableSheetObj::link( const rtl::OUString& aUrl, const rtl::OUStr
         pDoc->SetLink( nTab, nLinkMode, aFileString, aFilterString, aOptString, aSheetString );
 
         pDocSh->UpdateLinks();                  // ggf. Link eintragen oder loeschen
-        SFX_BINDINGS().Invalidate(SID_LINKS);
+        SfxBindings* pBindings = pDocSh->GetViewBindings();
+        if (pBindings)
+            pBindings->Invalidate(SID_LINKS);
 
         //! Undo fuer Link-Daten an der Table
 
@@ -6312,10 +6315,13 @@ void SAL_CALL ScTableSheetObj::setPropertyValue(
             ScPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab ).UpdatePages();
             pDocSh->SetDocumentModified();
 
-            SfxBindings& rBindings = SFX_BINDINGS();
-            rBindings.Invalidate( SID_STYLE_FAMILY4 );
-            rBindings.Invalidate( SID_STATUS_PAGESTYLE );
-            rBindings.Invalidate( FID_RESET_PRINTZOOM );
+            SfxBindings* pBindings = pDocSh->GetViewBindings();
+            if (pBindings)
+            {
+                pBindings->Invalidate( SID_STYLE_FAMILY4 );
+                pBindings->Invalidate( SID_STATUS_PAGESTYLE );
+                pBindings->Invalidate( FID_RESET_PRINTZOOM );
+            }
         }
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_CELLVIS ) )

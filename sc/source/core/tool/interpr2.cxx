@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1711,8 +1711,9 @@ void ScInterpreter::ScDde()
             pLinkMgr->InsertDDELink( *pLink, aAppl, aTopic, aItem );
             if ( pLinkMgr->GetLinks().Count() == 1 )                    // erster ?
             {
-                SfxBindings& rBind = SFX_BINDINGS();
-                rBind.Invalidate( SID_LINKS );              // Link-Manager enablen
+                SfxBindings* pBindings = pDok->GetViewBindings();
+                if (pBindings)
+                    pBindings->Invalidate( SID_LINKS );             // Link-Manager enablen
             }
 
                                     //! asynchron auswerten ???

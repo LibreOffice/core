@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <svx/linkmgr.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svtools/flagitem.hxx>
 #include <svtools/intitem.hxx>
@@ -1351,6 +1352,29 @@ BOOL ScDocument::HasMacroCallsAfterLoad()   // wird direkt nach dem Laden abgefr
     return FALSE;       // nichts gefunden
 }
 
+//------------------------------------------------------------------------
+
+SfxBindings* ScDocument::GetViewBindings()
+{
+    //  used to invalidate slots after changes to this document
+
+    if ( !pShell )
+        return NULL;        // no ObjShell -> no view
+
+    //  first check current view
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    if ( pViewFrame && pViewFrame->GetObjectShell() != pShell )     // wrong document?
+        pViewFrame = NULL;
+
+    //  otherwise use first view for this doc
+    if ( !pViewFrame )
+        pViewFrame = SfxViewFrame::GetFirst( pShell );
+
+    if (pViewFrame)
+        return &pViewFrame->GetBindings();
+    else
+        return NULL;
+}
 
 
 

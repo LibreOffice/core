@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,6 @@
 ///#define _PLUGAPPL_HXX
 //#define _SFX_SHELL_HXX
 //#define _SFXAPP_HXX
-//#define _SFX_BINDINGS_HXX
 //#define _SFXDISPATCH_HXX
 #define _SFXMSG_HXX
 #define _SFXOBJFACE_HXX
@@ -640,11 +639,8 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId, SvDataObject* pObject,
         SfxBoolItem aAreaNew(FN_PARAM_2, bAreaIsNew);
 
         //  asynchron, damit nicht der ganze Import im Drop-Handler passiert
-        //  nicht SFX_DISPATCHER, weil die View beim Drag&Drop nicht aktiv sein muss
-        SfxDispatcher* pDisp =
-            GetViewData()->GetViewShell()->GetViewFrame()->GetDispatcher();
-        if (pDisp)
-            pDisp->Execute(SID_SBA_IMPORT, SFX_CALLMODE_ASYNCHRON,
+        SfxDispatcher& rDisp = GetViewData()->GetDispatcher();
+        rDisp.Execute(SID_SBA_IMPORT, SFX_CALLMODE_ASYNCHRON,
                                     &aDataDesc, &aTarget, &aAreaNew, 0L );
 
         bRet = TRUE;

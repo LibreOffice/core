@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,6 @@
 //sfxsh.hxx
 //#define _SFX_SHELL_HXX
 //#define _SFXAPP_HXX
-//#define _SFX_BINDINGS_HXX
 //#define _SFXDISPATCH_HXX
 //#define _SFXMSG_HXX ***
 //#define _SFXOBJFACE_HXX ***
@@ -389,7 +388,8 @@ BOOL __EXPORT FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 //  #49458# bei Uno-Controls nicht in Textmodus
                 if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
                 {
-                    SFX_DISPATCHER().Execute(SID_DRAW_TEXT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                    pViewShell->GetViewData()->GetDispatcher().
+                        Execute(SID_DRAW_TEXT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 
                     // jetzt den erzeugten FuText holen und in den EditModus setzen
                     FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
@@ -439,10 +439,11 @@ BOOL FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
         {
             pView->MarkObj(aPnt, -2, FALSE, rMEvt.IsMod1());
 
+            SfxDispatcher& rDisp = pViewShell->GetViewData()->GetDispatcher();
             if ( pView->HasMarkedObj() )
-                SFX_DISPATCHER().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                rDisp.Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
             else
-                SFX_DISPATCHER().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                rDisp.Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
         }
     }
 
@@ -473,7 +474,8 @@ BOOL __EXPORT FuConstruct::KeyInput(const KeyEvent& rKEvt)
             }
             else                            // Zeichenmodus beenden
             {
-                SFX_DISPATCHER().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                pViewShell->GetViewData()->GetDispatcher().
+                    Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
             }
             break;
 

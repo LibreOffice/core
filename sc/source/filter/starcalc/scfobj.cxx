@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,6 @@
 //sfxsh.hxx
 //#define _SFX_SHELL_HXX
 //#define _SFXAPP_HXX
-//#define _SFX_BINDINGS_HXX
 //#define _SFXDISPATCH_HXX
 //#define _SFXMSG_HXX ***
 //#define _SFXOBJFACE_HXX ***

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 07:57:08 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,9 @@ void ScModule::FillStatusBar(StatusBar& rStatusBar)
 
 void ScModule::Execute( SfxRequest& rReq )
 {
-    SfxBindings&        rBindings   = SFX_BINDINGS();
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    SfxBindings* pBindings = pViewFrm ? &pViewFrm->GetBindings() : NULL;
+
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     USHORT              nSlot       = rReq.GetSlot();
 
@@ -459,7 +461,8 @@ void ScModule::Execute( SfxRequest& rReq )
                 aNewOpts.SetAutoComplete( bNew );
                 SetAppOptions( aNewOpts );
                 ScInputHandler::SetAutoComplete( bNew );
-                rBindings.Invalidate( FID_AUTOCOMPLETE );
+                if (pBindings)
+                    pBindings->Invalidate( FID_AUTOCOMPLETE );
                 rReq.Done();
             }
             break;
@@ -470,7 +473,8 @@ void ScModule::Execute( SfxRequest& rReq )
                 BOOL bNew = !aNewOpts.GetDetectiveAuto();
                 aNewOpts.SetDetectiveAuto( bNew );
                 SetAppOptions( aNewOpts );
-                rBindings.Invalidate( SID_DETECTIVE_AUTO );
+                if (pBindings)
+                    pBindings->Invalidate( SID_DETECTIVE_AUTO );
                 rReq.Done();
             }
             break;
@@ -485,12 +489,15 @@ void ScModule::Execute( SfxRequest& rReq )
                 aNewOpts.SetStatusFunc( rItem.GetValue() );
                 SetAppOptions( aNewOpts );
 
-                rBindings.Invalidate( SID_TABLE_CELL );
-                rBindings.Update( SID_TABLE_CELL );         // sofort
+                if (pBindings)
+                {
+                    pBindings->Invalidate( SID_TABLE_CELL );
+                    pBindings->Update( SID_TABLE_CELL );            // sofort
 
-                rBindings.Invalidate( SID_PSZ_FUNCTION );
-                rBindings.Update( SID_PSZ_FUNCTION );
-                // falls Menue gleich wieder aufgeklappt wird
+                    pBindings->Invalidate( SID_PSZ_FUNCTION );
+                    pBindings->Update( SID_PSZ_FUNCTION );
+                    // falls Menue gleich wieder aufgeklappt wird
+                }
             }
             break;
 
@@ -861,7 +868,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     //--------------------------------------------------------------
 
-    SfxBindings&            rBindings = SFX_BINDINGS();
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    SfxBindings* pBindings = pViewFrm ? &pViewFrm->GetBindings() : NULL;
+
     ScTabViewShell*         pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
     ScDocShell*             pDocSh  = PTR_CAST(ScDocShell, SfxObjectShell::Current());
     ScDocument*             pDoc    = pDocSh ? pDocSh->GetDocument() : NULL;
@@ -919,7 +928,8 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                 pViewSh->UpdateAnchorHandles();
         }
         SetViewOptions( rNewOpt );
-        rBindings.Invalidate(SID_HELPLINES_MOVE);
+        if (pBindings)
+            pBindings->Invalidate(SID_HELPLINES_MOVE);
     }
 
     //============================================
@@ -949,8 +959,11 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         ScViewOptions aNewViewOpt ( GetViewOptions() );
         aNewViewOpt.SetGridOptions( aNewGridOpt );
         SetViewOptions( aNewViewOpt );
-        rBindings.Invalidate(SID_GRID_VISIBLE);
-        rBindings.Invalidate(SID_GRID_USE);
+        if (pBindings)
+        {
+            pBindings->Invalidate(SID_GRID_VISIBLE);
+            pBindings->Invalidate(SID_GRID_USE);
+        }
     }
 
     //
@@ -1098,7 +1111,8 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         if ( pViewSh )
             pViewSh->UpdateDrawTextOutliner();              // EditEngine-Flags
 
-        rBindings.Invalidate( SID_AUTOSPELL_CHECK );
+        if (pBindings)
+            pBindings->Invalidate( SID_AUTOSPELL_CHECK );
     }
 
     //============================================
@@ -1171,7 +1185,8 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         WaitObject aWait( pDocSh->GetDialogParent() );
         pDoc->CalcAll();
         pViewSh->UpdateCharts( TRUE );
-        rBindings.Invalidate( SID_ATTR_SIZE ); //SvxPosSize-StatusControl-Update
+        if (pBindings)
+            pBindings->Invalidate( SID_ATTR_SIZE ); //SvxPosSize-StatusControl-Update
     }
 
     if ( pViewSh && bUpdateMarks )
@@ -1187,8 +1202,11 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         pViewSh->PaintLeft();
         pViewSh->PaintExtras();
         pViewSh->InvalidateBorder();
-        rBindings.Invalidate( FID_TOGGLEHEADERS ); // -> Checks im Menue
-        rBindings.Invalidate( FID_TOGGLESYNTAX );
+        if (pBindings)
+        {
+            pBindings->Invalidate( FID_TOGGLEHEADERS ); // -> Checks im Menue
+            pBindings->Invalidate( FID_TOGGLESYNTAX );
+        }
     }
 }
 
@@ -1395,11 +1413,12 @@ void ScModule::SetRefDialog( USHORT nId, BOOL bVis )
 
     if(nCurRefDlgId==0 || (nId==nCurRefDlgId && !bVis))
     {
-        SFX_BINDINGS().Update();    // sonst kommt der Sfx beim LockDispatcher durcheinander
-
-        nCurRefDlgId = bVis ? nId : 0 ;             // vor SetChildWindow
-
         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+        if ( pViewFrm )
+            pViewFrm->GetBindings().Update();       // to avoid trouble in LockDispatcher
+
+        nCurRefDlgId = bVis ? nId : 0 ;             // before SetChildWindow
+
         if ( pViewFrm )
             pViewFrm->SetChildWindow( nId, bVis );
 

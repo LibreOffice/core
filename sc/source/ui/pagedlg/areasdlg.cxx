@@ -2,9 +2,9 @@
  *
  *  $RCSfile: areasdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,7 +549,8 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
             {
                 SFX_APP()->LockDispatcher( FALSE );
                 SwitchToDocument();
-                SFX_DISPATCHER().Execute( SID_CHANGE_PRINTAREA, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+                GetBindings().GetDispatcher()->Execute( SID_CHANGE_PRINTAREA,
+                                          SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                                           &aPrintArea, &aRepeatRow, &aRepeatCol, 0L );
             }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,7 +849,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case SID_STATUS_DOCPOS:
             {
                 //! Navigator an-/ausschalten (wie im Writer) ???
-                //!SFX_DISPATCHER().Execute( SID_NAVIGATOR,
+                //!pViewData->GetDispatcher().Execute( SID_NAVIGATOR,
                 //!                       SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
             }
             break;

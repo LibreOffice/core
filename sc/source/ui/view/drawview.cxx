@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,8 @@ void ScDrawView::AddCustomHdl()
 
 void ScDrawView::InvalidateAttribs()
 {
-    SfxBindings& rBindings = SFX_BINDINGS();
+    if (!pViewData) return;
+    SfxBindings& rBindings = pViewData->GetBindings();
 
         // echte Statuswerte:
 
@@ -264,7 +265,8 @@ void ScDrawView::InvalidateAttribs()
 
 void ScDrawView::InvalidateDrawTextAttrs()
 {
-    SfxBindings& rBindings = SFX_BINDINGS();
+    if (!pViewData) return;
+    SfxBindings& rBindings = pViewData->GetBindings();
 
     rBindings.Invalidate( SID_ATTR_CHAR_FONT );
     rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );

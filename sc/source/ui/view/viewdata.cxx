@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1599,6 +1599,18 @@ void ScViewData::SetScreen( const Rectangle& rVisArea )
 SfxObjectShell* ScViewData::GetSfxDocShell() const
 {
     return pDocShell;
+}
+
+SfxBindings& ScViewData::GetBindings()
+{
+    DBG_ASSERT( pViewShell, "GetBindings() without ViewShell" );
+    return pViewShell->GetViewFrame()->GetBindings();
+}
+
+SfxDispatcher& ScViewData::GetDispatcher()
+{
+    DBG_ASSERT( pViewShell, "GetDispatcher() without ViewShell" );
+    return *pViewShell->GetViewFrame()->GetDispatcher();
 }
 
 Window* ScViewData::GetDialogParent()

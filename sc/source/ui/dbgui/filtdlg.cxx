@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,6 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
 // INCLUDE -------------------------------------------------------------------
 #include <rangelst.hxx>
 #ifndef _SFXDISPATCH_HXX //autogen
@@ -106,14 +102,11 @@
 #define ERRORBOX(rid)   ErrorBox( this, WinBits( WB_OK|WB_DEF_OK), \
                                    ScGlobal::GetRscString(rid) ).Execute()
 
-SEG_EOFGLOBALS()
-
 
 //============================================================================
 //  class ScFilterDlg
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(filtdlg_01)
 
 ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                           const SfxItemSet& rArgSet )
@@ -168,7 +161,6 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(filtdlg_02)
 
 __EXPORT ScFilterDlg::~ScFilterDlg()
 {
@@ -185,7 +177,6 @@ __EXPORT ScFilterDlg::~ScFilterDlg()
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(filtdlg_03)
 
 void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
 {
@@ -330,7 +321,6 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(filtdlg_04)
 
 BOOL __EXPORT ScFilterDlg::Close()
 {
@@ -341,8 +331,6 @@ BOOL __EXPORT ScFilterDlg::Close()
 //----------------------------------------------------------------------------
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 // neue Selektion im Referenz-Edit angezeigt wird.
-
-#pragma SEG_FUNCDEF(filtdlg_05)
 
 void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
 {
@@ -358,7 +346,6 @@ void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(filtdlg_06)
 
 void ScFilterDlg::SetActive()
 {
@@ -375,8 +362,6 @@ void ScFilterDlg::SetActive()
 }
 
 //----------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(filtdlg_07)
 
 void ScFilterDlg::FillFieldLists()
 {
@@ -423,7 +408,6 @@ void ScFilterDlg::FillFieldLists()
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(filtdlg_08)
 
 void ScFilterDlg::UpdateValueList( USHORT nList )
 {
@@ -496,8 +480,6 @@ void ScFilterDlg::UpdateValueList( USHORT nList )
     UpdateHdrInValueList( nList );
 }
 
-#pragma SEG_FUNCDEF(filtdlg_13)
-
 void ScFilterDlg::UpdateHdrInValueList( USHORT nList )
 {
     //! GetText / SetText ??
@@ -545,7 +527,6 @@ void ScFilterDlg::UpdateHdrInValueList( USHORT nList )
 }
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(filtdlg_10)
 
 void ScFilterDlg::ClearValueList( USHORT nList )
 {
@@ -561,7 +542,6 @@ void ScFilterDlg::ClearValueList( USHORT nList )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(filtdlg_09)
 
 USHORT ScFilterDlg::GetFieldSelPos( USHORT nField )
 {
@@ -572,7 +552,6 @@ USHORT ScFilterDlg::GetFieldSelPos( USHORT nField )
 }
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(filtdlg_0a)
 
 ScQueryItem* ScFilterDlg::GetOutputItem()
 {
@@ -680,7 +659,6 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(filtdlg_11)
 
 BOOL ScFilterDlg::IsRefInputMode() const
 {
@@ -691,7 +669,6 @@ BOOL ScFilterDlg::IsRefInputMode() const
 //----------------------------------------------------------------------------
 // Handler:
 // ========
-#pragma SEG_FUNCDEF(filtdlg_0b)
 
 IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
 {
@@ -716,7 +693,8 @@ IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
         {
             SFX_APP()->LockDispatcher( FALSE );
             SwitchToDocument();
-            SFX_DISPATCHER().Execute( FID_FILTER_OK, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+            GetBindings().GetDispatcher()->Execute( FID_FILTER_OK,
+                                      SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                                       GetOutputItem(), 0L, 0L );
             Close();
         }
@@ -731,7 +709,6 @@ IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(filtdlg_0c)
 
 IMPL_LINK( ScFilterDlg, MoreClickHdl, MoreButton*, pBtn )
 {
@@ -749,7 +726,6 @@ IMPL_LINK( ScFilterDlg, MoreClickHdl, MoreButton*, pBtn )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(filtdlg_0d)
 
 IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
 {
@@ -785,7 +761,6 @@ IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(filtdlg_0e)
 
 IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
 {
@@ -880,7 +855,6 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(filtdlg_0f)
 
 IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 {
@@ -920,7 +894,6 @@ IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(filtdlg_12)
 
 IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
 {
@@ -947,216 +920,4 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
     return NULL;
 }
 
-
-/*----------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.65  2000/09/17 14:08:56  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.64  2000/08/31 16:38:20  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.63  2000/05/25 10:20:06  er
-    NOOLDSV
-
-    Revision 1.62  2000/04/14 17:38:02  nn
-    unicode changes
-
-    Revision 1.61  2000/02/11 12:23:25  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.60  2000/01/17 19:21:28  nn
-    #67336# SwitchToDocument
-
-    Revision 1.59  1999/06/09 16:09:04  NN
-    Sfx-appwin removed
-
-
-      Rev 1.58   09 Jun 1999 18:09:04   NN
-   Sfx-appwin removed
-
-      Rev 1.57   10 Dec 1998 20:09:18   ANK
-   #51738# Umstellung auf ScRefEdit zum Anzeigen von Referenzen
-
-      Rev 1.56   14 Sep 1998 20:58:06   ANK
-   #55978# Ausgabebereich disablen bei Redlining
-
-      Rev 1.55   02 Sep 1998 12:48:32   TJ
-   include
-
-      Rev 1.54   12 Aug 1998 19:47:32   ANK
-   #54702# IsRefInputMode ueberarbeitet
-
-      Rev 1.53   06 Aug 1998 21:18:30   ANK
-   #54702# Enablen/Disablen der Applikation nur noch in ScAnyRefDlg
-
-      Rev 1.52   15 Mar 1998 14:22:18   NN
-   #48339# App-Fenster disablen mit bChild=FALSE
-
-      Rev 1.51   02 Dec 1997 13:08:12   TJ
-   include
-
-      Rev 1.50   30 Sep 1997 13:07:42   TJ
-   include
-
-      Rev 1.49   03 Sep 1997 15:18:20   RG
-   change header
-
-      Rev 1.48   15 Feb 1997 17:36:26   NN
-   Checkbox 'persistent' fuer Ausgabe-Bereich
-
-      Rev 1.47   14 Feb 1997 19:14:28   ER
-   aktuelle Spalte nur im ersten Eintrag
-
-      Rev 1.46   14 Feb 1997 12:59:30   ER
-   selektierte Spalte statt ersetm leeren Feldnamen
-
-      Rev 1.45   06 Dec 1996 14:11:46   NN
-   #33824# Header umschalten: nur betroffenen Eintrag loeschen/einfuegen
-
-      Rev 1.44   29 Nov 1996 18:57:30   NN
-   Gross-/Kleinschreibung auch in Werte-Liste
-
-      Rev 1.43   27 Nov 1996 14:18:08   NN
-   #31076# Entry-Listen pro Spalte nur einmal holen
-
-      Rev 1.42   15 Nov 1996 17:22:44   NN
-   #33345# Spaltenkoepfe-Button auswerten
-
-      Rev 1.41   13 Nov 1996 20:11:16   NN
-   #33143# AutoHide nur bei Bereichsreferenz
-
-      Rev 1.40   13 Nov 1996 11:33:20   NN
-   ScQueryParam mit dynamischen Eintraegen
-
-      Rev 1.39   05 Nov 1996 14:49:58   NN
-   ScApplication gibts nicht mehr
-
-      Rev 1.38   29 Oct 1996 14:03:36   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.37   22 Oct 1996 15:32:02   RJ
-   Buttons fuer Referenzeingabe
-
-      Rev 1.36   04 Oct 1996 17:22:46   RJ
-   Einklappen des Fensters bei Referenzeingabe
-
-      Rev 1.35   27 Jun 1996 11:49:28   NN
-   Dispatcher::Execute Umstellung
-
-      Rev 1.34   05 Jun 1996 19:19:10   NN
-   kein Show im ctor (Position wird von aussen gesetzt)
-
-      Rev 1.33   26 Apr 1996 12:02:40   NN
-   SfxModelessDialog statt ModelessDialog
-
-      Rev 1.32   25 Apr 1996 18:08:36   NN
-   SetReference aufgeteilt in SetReference und AddRefEntry
-
-      Rev 1.31   18 Jan 1996 11:44:42   MO
-   #24232# leer/nicht-leer-Behandlung, neuer Link
-
-      Rev 1.30   27 Nov 1995 13:42:12   MO
-   RangeUtil/Area/Tripel gegen Address/Range ersetzt
-
-      Rev 1.29   09 Nov 1995 10:20:12   JN
-   weitere Verbesseungen Modeless Dialoge
-
-      Rev 1.28   08 Nov 1995 13:05:48   MO
-   301-Aenderungen
-
-      Rev 1.27   08 Nov 1995 10:45:48   JN
-   Umstellung auf SfxChildWindow
-
-      Rev 1.26   26 Oct 1995 11:34:24   MO
-   Default-Button-Bit bei Error/MessBoxen
-
-      Rev 1.25   18 Sep 1995 10:07:48   MO
-   bRefInput-Kontrolle ueber Timer
-
-      Rev 1.24   14 Jul 1995 13:55:18   MO
-   3. ValueList im Init fuellen (BugId: 15364)
-
-      Rev 1.23   12 Jul 1995 16:57:48   MO
-   TypedStrColloction fuer Wertklisten
-
-      Rev 1.22   07 Jul 1995 17:36:36   MO
-   Bugfix: Auswertung Connect-Parameter
-
-      Rev 1.21   08 Jun 1995 16:22:06   MO
-   leer/nicht-leer Filter
-
-      Rev 1.20   25 Apr 1995 11:40:08   MO
-   leer/nicht-leer Feldwerte
-
-      Rev 1.19   24 Apr 1995 12:49:46   MO
-   Dispatcher Unlock vor Execute
-
-      Rev 1.18   18 Apr 1995 10:02:34   MO
-   Referenzeingabe mit Maus ueberarbeitet
-
-      Rev 1.17   02 Mar 1995 16:20:20   MO
-   InfoBoxen mit Rsc-Strings
-
-      Rev 1.16   26 Feb 1995 10:26:58   TRI
-   basicide.hxx included
-
-      Rev 1.15   22 Feb 1995 17:07:20   MO
-   * Fehler bei der Rueckgabe der Verknuefungsoperationen behoben
-
-
-      Rev 1.14   08 Feb 1995 12:55:02   MO
-   * Dispatcher-Execute: 0L angehaengt (sonst uneindeutig)
-
-      Rev 1.13   03 Feb 1995 12:43:02   MO
-   * Ctor: Show()
-
-
-      Rev 1.12   27 Jan 1995 16:14:44   MO
-   * Umstellung aus Slot-IDs
-
-      Rev 1.11   26 Jan 1995 19:00:18   TRI
-   __EXPORT bei virtuellen Methoden eingebaut
-
-      Rev 1.10   25 Jan 1995 18:53:56   MO
-   * Auswertung der Connect-ListBoxen korrigiert
-
-      Rev 1.9   25 Jan 1995 12:39:00   MO
-   * Einzelne Zellposition als Kopierziel (SetReferenz und Ueberpruefungen)
-
-      Rev 1.8   19 Jan 1995 16:47:48   TRI
-   __EXPORT vor verschiedene LinkHandler gesetzt
-
-      Rev 1.7   18 Jan 1995 13:56:26   TRI
-   Pragmas zur Segementierung eingebaut
-
-      Rev 1.6   17 Jan 1995 11:57:34   MO
-   CheckBoxHdl fuer aBtnHeader wieder aktiviert
-
-      Rev 1.5   16 Jan 1995 14:24:54   MO
-   Fehlerbehandlung bei ungueltigen Bereichsnamen im EndDlg-Handler
-
-      Rev 1.4   13 Jan 1995 17:30:34   MO
-   Special-Dialog ausgegliedert
-
-      Rev 1.3   13 Jan 1995 10:22:14   MO
-   fuer Spezialdialog verwendbare Resource-Handler nach foptmgr verschoben
-
-      Rev 1.2   12 Jan 1995 14:49:52   MO
-   * Erkennung von DB-Bereichen
-   * Gegenseitige Aktualisierung der CopyArea-ListBox/Edit
-   * Einlesen von RangeNames mit RT_ABSAREA
-
-
-      Rev 1.1   09 Jan 1995 11:14:52   MO
-   Parameter werden jetzt per SfxItem (ScQueryItem) uebergeben,
-   bzw. mit GetOutputItemSet() zurueckgegeben.
-
-      Rev 1.0   05 Jan 1995 12:44:12   MO
-   Initial revision.
-
-----------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 

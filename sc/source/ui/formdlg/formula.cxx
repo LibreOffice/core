@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formula.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,7 +735,7 @@ void ScFormulaDlg::DoEnter(BOOL bOk)
     // Enable() der Eingabezeile erzwingen:
     if ( pScViewShell )
         pScViewShell->UpdateInputHandler();
-    SFX_DISPATCHER().Execute( SID_INS_FUNCTION,
+    GetBindings().GetDispatcher()->Execute( SID_INS_FUNCTION,
                               SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                               &aRetItem, &aStrItem, &aMatItem, 0L );
 

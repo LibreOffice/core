@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindings,
 
 __EXPORT ScFunctionDockWin::~ScFunctionDockWin()
 {
-    EndListening( SFX_BINDINGS() );
+    EndListening( GetBindings() );
 }
 
 /*************************************************************************
@@ -706,8 +706,9 @@ BOOL __EXPORT ScFunctionDockWin::Close()
 {
     SfxBoolItem aItem( FID_FUNCTION_BOX, FALSE );
 
-    SFX_DISPATCHER().Execute( FID_FUNCTION_BOX, SFX_CALLMODE_ASYNCHRON |
-                                SFX_CALLMODE_RECORD, &aItem, 0L );
+    GetBindings().GetDispatcher()->Execute( FID_FUNCTION_BOX,
+                                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                                &aItem, 0L );
 
     SfxDockingWindow::Close();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,8 +438,9 @@ BOOL ScDocument::LinkEmptyTab( USHORT& rTab, const String& aDocTab,
                                         &aFilterName );
         pLink->Update();
         pLink->SetInCreate( FALSE );
-        SfxBindings& rBindings = SFX_BINDINGS();
-        rBindings.Invalidate( SID_LINKS );
+        SfxBindings* pBindings = GetViewBindings();
+        if (pBindings)
+            pBindings->Invalidate( SID_LINKS );
     }
     return TRUE;
 }
@@ -487,8 +488,9 @@ BOOL ScDocument::LinkExternalTab( USHORT& rTab, const String& aDocTab,
                                         &aFilterName );
         pLink->Update();
         pLink->SetInCreate( FALSE );
-        SfxBindings& rBindings = SFX_BINDINGS();
-        rBindings.Invalidate( SID_LINKS );
+        SfxBindings* pBindings = GetViewBindings();
+        if (pBindings)
+            pBindings->Invalidate( SID_LINKS );
     }
     return TRUE;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: auditsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 
-#define GLOBALOVERFLOW
-#include "segmentc.hxx"
-
 #include "auditsh.hxx"
 #include "tabvwsh.hxx"
 #include "scresid.hxx"
@@ -89,13 +86,6 @@
 
 //------------------------------------------------------------------------
 
-SEG_EOFGLOBALS()
-
-//------------------------------------------------------------------------
-
-#pragma SEG_SEGCLASS(SFXMACROS_SEG,STARTWORK_CODE)
-
-
 TYPEINIT1( ScAuditingShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScAuditingShell, SfxShell, ScResId(SCSTR_AUDITSHELL))
@@ -105,7 +95,6 @@ SFX_IMPL_INTERFACE(ScAuditingShell, SfxShell, ScResId(SCSTR_AUDITSHELL))
 
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(auditsh_01)
 
 ScAuditingShell::ScAuditingShell(ScViewData* pData) :
     SfxShell(pData->GetViewShell()),
@@ -119,18 +108,16 @@ ScAuditingShell::ScAuditingShell(ScViewData* pData) :
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(auditsh_02)
 
 ScAuditingShell::~ScAuditingShell()
 {
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(auditsh_03)
 
 void ScAuditingShell::Execute( SfxRequest& rReq )
 {
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = pViewData->GetBindings();
     USHORT nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
@@ -188,55 +175,10 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(auditsh_04)
 
 void ScAuditingShell::GetState( SfxItemSet& rSet )
 {
     rSet.Put( SfxBoolItem( nFunction, TRUE ) );         // aktive Funktion markieren
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.11  2000/09/17 14:09:30  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.10  2000/08/31 16:38:44  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.9  2000/05/09 18:30:15  nn
-    use IMPL_INTERFACE macro without IDL
-
-    Revision 1.8  2000/04/14 08:31:36  nn
-    unicode changes
-
-    Revision 1.7  1999/06/02 19:40:56  ANK
-    #66547# SubShells
-
-
-      Rev 1.6   02 Jun 1999 21:40:56   ANK
-   #66547# SubShells
-
-      Rev 1.5   24 Nov 1997 20:04:54   NN
-   includes
-
-      Rev 1.4   04 Sep 1997 19:51:46   RG
-   change header
-
-      Rev 1.3   05 Aug 1997 14:33:14   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.2   29 Oct 1996 13:35:32   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.1   09 Aug 1996 20:34:22   NN
-   Svx-Includes aus scitems.hxx raus
-
-      Rev 1.0   29 May 1996 19:41:46   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
 

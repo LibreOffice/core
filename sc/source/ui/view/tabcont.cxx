@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcont.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,17 +250,18 @@ void __EXPORT ScTabControl::Select()
         pDoc->ExtendMarksFromTable( nPage );
 */
 
-    if (SFX_DISPATCHER().IsLocked())
+    SfxDispatcher& rDisp = pViewData->GetDispatcher();
+    if (rDisp.IsLocked())
         pViewData->GetView()->SetTabNo( nPage );
     else
     {
         //  Tabelle fuer Basic ist 1-basiert
         SfxUInt16Item aItem( SID_CURRENTTAB, nPage + 1 );
-        SFX_DISPATCHER().Execute( SID_CURRENTTAB, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+        rDisp.Execute( SID_CURRENTTAB, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                                 &aItem, (void*) NULL );
     }
 
-    SfxBindings& rBind = SFX_BINDINGS();
+    SfxBindings& rBind = pViewData->GetBindings();
     rBind.Invalidate( FID_FILL_TAB );
 
     rBind.Invalidate( FID_INS_TABLE );

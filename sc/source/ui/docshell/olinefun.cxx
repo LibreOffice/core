@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinefun.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <vcl/sound.hxx>
+#include <sfx2/bindings.hxx>
 
 #include "olinefun.hxx"
 
@@ -75,11 +76,23 @@
 #include "olinetab.hxx"
 #include "undodat.hxx"
 #include "globstr.hrc"
+#include "sc.hrc"
 
 
 //========================================================================
 
-void lcl_InvalidateOutliner();  //! in dbfunc3 - hierher verschieben!!!
+void lcl_InvalidateOutliner( SfxBindings* pBindings )
+{
+    if ( pBindings )
+    {
+        pBindings->Invalidate( SID_OUTLINE_SHOW );
+        pBindings->Invalidate( SID_OUTLINE_HIDE );
+        pBindings->Invalidate( SID_OUTLINE_REMOVE );
+
+        pBindings->Invalidate( SID_STATUS_SUM );            // wegen ein-/ausblenden
+        pBindings->Invalidate( SID_ATTR_SIZE );
+    }
+}
 
 //------------------------------------------------------------------------
 
@@ -163,7 +176,7 @@ BOOL ScOutlineDocFunc::MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL b
 
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, nParts );
         rDocShell.SetDocumentModified();
-        lcl_InvalidateOutliner();
+        lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
         bSuccess = TRUE;
     }
     else
@@ -224,7 +237,7 @@ BOOL ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL
             rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, nParts );
             rDocShell.SetDocumentModified();
             bDone = TRUE;
-            lcl_InvalidateOutliner();
+            lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
             // es wird nicht wieder eingeblendet -> kein UpdatePageBreaks
         }
@@ -277,7 +290,7 @@ BOOL ScOutlineDocFunc::RemoveAllOutlines( USHORT nTab, BOOL bRecord, BOOL bApi )
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab,
                                     PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
         rDocShell.SetDocumentModified();
-        lcl_InvalidateOutliner();
+        lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
         bSuccess = TRUE;
     }
     else if (!bApi)
@@ -340,7 +353,7 @@ BOOL ScOutlineDocFunc::AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bA
 
     rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
     rDocShell.SetDocumentModified();
-    lcl_InvalidateOutliner();
+    lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
     return TRUE;
 }
@@ -423,7 +436,7 @@ BOOL ScOutlineDocFunc::SelectLevel( USHORT nTab, BOOL bColumns, USHORT nLevel,
         lcl_PaintWidthHeight( rDocShell, nTab, bColumns, nStart, nEnd );
 
     rDocShell.SetDocumentModified();
-    lcl_InvalidateOutliner();
+    lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
     return TRUE;
 }
@@ -517,7 +530,7 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
         rDocShell.SetDocumentModified();
         bDone = TRUE;
 
-        lcl_InvalidateOutliner();
+        lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
     }
 
     if (!bDone && !bApi)
@@ -607,7 +620,7 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
         rDocShell.SetDocumentModified();
         bDone = TRUE;
 
-        lcl_InvalidateOutliner();
+        lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
     }
 
     if (!bDone && !bApi)
@@ -692,7 +705,7 @@ BOOL ScOutlineDocFunc::ShowOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, U
 //! if (bPaint)
 //!     UpdateScrollBars();
 
-    lcl_InvalidateOutliner();
+    lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
     return TRUE;        //! immer ???
 }
@@ -753,7 +766,7 @@ BOOL ScOutlineDocFunc::HideOutline( USHORT nTab, BOOL bColumns, USHORT nLevel, U
 //! if (bPaint)
 //!     UpdateScrollBars();
 
-    lcl_InvalidateOutliner();
+    lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
     return TRUE;        //! immer ???
 }

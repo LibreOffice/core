@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1117,7 +1117,7 @@ BOOL ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
             PaintGrid();
             PaintTop();
             PaintLeft();
-            SFX_BINDINGS().Invalidate( SID_ATTR_ZOOM );
+            aViewData.GetBindings().Invalidate( SID_ATTR_ZOOM );
         }
 
         bDone = TRUE;
@@ -2083,7 +2083,7 @@ void ScTabView::SplitAtPixel( const Point& rPixel, BOOL bHor, BOOL bVer )       
 
 void ScTabView::InvalidateSplit()
 {
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = aViewData.GetBindings();
     rBindings.Invalidate( SID_WINDOW_SPLIT );
     rBindings.Invalidate( SID_WINDOW_FIX );
 

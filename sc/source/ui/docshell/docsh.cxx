@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2640,8 +2640,12 @@ void ScDocShell::SetDrawModified( BOOL bIsModified /* = TRUE */ )
 
     if (bUpdate)
     {
-        SFX_BINDINGS().Invalidate( SID_SAVEDOC );
-        SFX_BINDINGS().Invalidate( SID_DOC_MODIFIED );
+        SfxBindings* pBindings = GetViewBindings();
+        if (pBindings)
+        {
+            pBindings->Invalidate( SID_SAVEDOC );
+            pBindings->Invalidate( SID_DOC_MODIFIED );
+        }
     }
 
     if (bIsModified)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshe.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,14 +301,14 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                     //  Request ausfuehren (dabei wird das SearchItem gespeichert)
 
                     aSearchItem.SetWhich(SID_SEARCH_ITEM);
-                    SFX_DISPATCHER().Execute( FID_SEARCH_NOW,
+                    GetViewData()->GetDispatcher().Execute( FID_SEARCH_NOW,
                             rReq.IsAPI() ? SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON :
                                             SFX_CALLMODE_STANDARD,
                             &aSearchItem, 0L );
                 }
                 else
                 {
-                    SFX_DISPATCHER().Execute(
+                    GetViewData()->GetDispatcher().Execute(
                             SID_SEARCH_DLG, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD );
                 }
             }
@@ -319,7 +319,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 
                 SvxSearchItem aSearchItem = ScGlobal::GetSearchItem();
                 aSearchItem.SetWhich(SID_SEARCH_ITEM);
-                SFX_DISPATCHER().Execute( FID_SEARCH_NOW,
+                GetViewData()->GetDispatcher().Execute( FID_SEARCH_NOW,
                         rReq.IsAPI() ? SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON :
                                         SFX_CALLMODE_STANDARD,
                         &aSearchItem, 0L );

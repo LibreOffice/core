@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,6 @@
 //sfxsh.hxx
 //#define _SFX_SHELL_HXX
 //#define _SFXAPP_HXX
-//#define _SFX_BINDINGS_HXX
 //#define _SFXDISPATCH_HXX
 //#define _SFXMSG_HXX
 //#define _SFXOBJFACE_HXX
@@ -323,7 +322,6 @@
 #include <sfx2/request.hxx>
 #include <svtools/whiter.hxx>
 #include <vcl/msgbox.hxx>
-#include <segmentc.hxx>
 
 #include "drawsh.hxx"
 #include "drwlayer.hxx"
@@ -343,10 +341,6 @@
 
 //------------------------------------------------------------------
 
-SEG_EOFGLOBALS()
-
-#pragma SEG_SEGCLASS(SFXMACROS_SEG,STARTWORK_CODE)
-
 TYPEINIT1( ScDrawShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScDrawShell, SfxShell, ScResId(SCSTR_DRAWSHELL) )
@@ -361,8 +355,6 @@ SFX_IMPL_INTERFACE(ScDrawShell, SfxShell, ScResId(SCSTR_DRAWSHELL) )
 
 // abschalten der nicht erwuenschten Acceleratoren:
 
-#pragma SEG_FUNCDEF(drawsh_09)
-
 void ScDrawShell::StateDisableItems( SfxItemSet &rSet )
 {
     SfxWhichIter aIter(rSet);
@@ -375,8 +367,6 @@ void ScDrawShell::StateDisableItems( SfxItemSet &rSet )
     }
 }
 
-
-#pragma SEG_FUNCDEF(drawsh_05)
 
 void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 {
@@ -520,8 +510,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
     }
 }
 
-#pragma SEG_FUNCDEF(drawsh_06)
-
 void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
 {
     ScDrawView*         pView       = pViewData->GetScDrawView();
@@ -560,8 +548,6 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
     delete pDlg;
 }
 
-#pragma SEG_FUNCDEF(drawsh_07)
-
 void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
 {
     ScDrawView* pView       = pViewData->GetScDrawView();
@@ -594,8 +580,6 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
     delete pDlg;
 }
 
-#pragma SEG_FUNCDEF(drawsh_08)
-
 void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, USHORT nTabPage )
 {
     ScDrawView* pView       = pViewData->GetScDrawView();
@@ -621,223 +605,5 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, USHORT nTabPage )
     }
     delete( pDlg );
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.70  2000/09/17 14:09:01  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.69  2000/08/31 16:38:23  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.68  2000/05/09 18:30:02  nn
-    use IMPL_INTERFACE macro without IDL
-
-    Revision 1.67  2000/02/11 12:25:38  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.66  1999/06/22 08:55:54  NN
-    pass ItemSet to GetAttributes
-
-
-      Rev 1.65   22 Jun 1999 10:55:54   NN
-   pass ItemSet to GetAttributes
-
-      Rev 1.64   22 Feb 1999 20:49:50   ANK
-   #47158# Erweiterungen fuer neue DrawForm-Shell
-
-      Rev 1.63   12 Jan 1998 14:06:46   TJ
-   include
-
-      Rev 1.62   05 Dec 1997 19:31:10   NN
-   Includes
-
-      Rev 1.61   04 Sep 1997 14:30:38   RG
-   change header
-
-      Rev 1.60   27 Aug 1997 13:41:54   TRI
-   VCL includes
-
-      Rev 1.59   05 Aug 1997 15:21:44   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.58   14 Apr 1997 13:05:16   HJS
-   includes
-
-      Rev 1.57   04 Apr 1997 16:27:02   TRI
-   includes
-
-      Rev 1.56   23 Jan 1997 15:37:02   NN
-   beim SvxAreaTabDialog die View uebergeben
-
-      Rev 1.55   08 Jan 1997 20:50:12   HJS
-   forward
-
-      Rev 1.54   15 Nov 1996 17:55:46   NN
-   SvxTextTabDialog aufrufen
-
-      Rev 1.53   08 Nov 1996 08:43:00   NF
-   includes...
-
-      Rev 1.52   29 Oct 1996 14:05:14   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.51   21 Oct 1996 15:36:18   NN
-   include tbxalign war ueberfluessig
-
-      Rev 1.50   22 Aug 1996 15:39:42   NF
-   clooks
-
-      Rev 1.49   09 Aug 1996 20:37:12   NN
-   Svx-Includes aus scitems.hxx raus
-
-      Rev 1.48   22 May 1996 14:52:46   NN
-   GetDrawView -> GetScDrawView
-
-      Rev 1.47   10 Apr 1996 09:31:42   NF
-   sv.hxx als ertes includen
-
-      Rev 1.46   22 Mar 1996 14:03:20   MH
-   add: include sfxiiter.hxx
-
-      Rev 1.45   07 Mar 1996 12:27:38   NF
-   Zuviele defines
-
-      Rev 1.44   13 Feb 1996 08:26:50   TRI
-   CLOOKS
-
-      Rev 1.43   23 Jan 1996 23:43:50   HJS
-   anpassung fuer die nicht-b
-
-      Rev 1.42   18 Dec 1995 14:18:42   MO
-   Visibility-Flags auf Server gesetzt
-
-      Rev 1.41   12 Dec 1995 18:58:44   MO
-   Disable-Methode fuer div. Acceleratoren
-
-      Rev 1.40   12 Dec 1995 17:41:40   MO
-   Standard-Textattribute setzen
-
-      Rev 1.39   11 Dec 1995 18:42:58   MO
-   ExecuteTextAttrDlg
-
-      Rev 1.37   10 Dec 1995 15:51:54   TRI
-   define entfernt
-
-      Rev 1.36   30 Nov 1995 20:09:40   MO
-   Linienenden-Control Execute
-
-      Rev 1.35   28 Nov 1995 21:43:52   MO
-   include-Reihenfolge geandert
-
-      Rev 1.34   10 Nov 1995 18:36:30   NN
-   static -> lcl
-
-      Rev 1.33   26 Oct 1995 14:24:20   JN
-   richtigen Dialog bei Legende aufrufen
-
-      Rev 1.32   06 Oct 1995 08:05:46   NN
-   300: Parameter bOnlyHardAttr bei MergeAttrFromMarked
-
-      Rev 1.31   10 Aug 1995 00:36:10   HJS
-   svundo muss da sein
-
-      Rev 1.30   07 Aug 1995 13:04:22   MO
-   253b: Transform-Dialog Aufrufparameter
-
-      Rev 1.29   03 Aug 1995 13:22:26   MO
-   FontWork-ChildWindow Register
-
-      Rev 1.28   21 Jul 1995 10:06:14   NN
-   InvalidateAttribs beim direkten Setzen von Attributen
-
-      Rev 1.27   20 Jul 1995 18:37:38   MO
-   BugFix: vertikale Anordnung der ObjBar (BugId: 16227)
-
-      Rev 1.26   08 Jul 1995 19:14:00   HJS
-   ein define zuviel
-
-      Rev 1.25   06 Jul 1995 22:11:12   HJS
-   ein #define zuviel
-
-      Rev 1.24   04 Jul 1995 11:57:40   MO
-   Parameterkorrektur fuer LineDlg
-
-      Rev 1.23   20 Jun 1995 16:23:46   NN
-   nochmal Segmentierung
-
-      Rev 1.22   13 Jun 1995 18:30:40   MO
-   seg-pragmas korrigiert
-
-      Rev 1.21   13 Jun 1995 14:43:30   MO
-   spezielles Segmentierungs-pragma
-
-      Rev 1.20   07 Jun 1995 10:09:00   MO
-   SFX_OBJECTBAR_OBJECT
-
-      Rev 1.19   07 Jun 1995 08:43:22   MO
-   SvxIds fuer DrawUI
-
-      Rev 1.18   23 May 1995 14:46:04   MO
-   Aufruf Transform-Dialog angepasst
-
-      Rev 1.17   10 May 1995 14:44:36   TRI
-
-      Rev 1.16   04 May 1995 09:28:36   TRI
-   SvxAreaTabPage: geanderte Paramteranzahl
-
-      Rev 1.15   05 Apr 1995 18:16:34   NN
-   tabvwsh-include raus (Funktionen nach viewdata)
-
-      Rev 1.14   04 Apr 1995 18:14:20   TRI
-   Out of Keys
-
-      Rev 1.13   30 Mar 1995 18:31:12   TRI
-   Out of Keys
-
-      Rev 1.12   27 Mar 1995 17:44:54   TRI
-   Out of Keys - Aufteilung
-
-      Rev 1.11   21 Mar 1995 11:12:18   MO
-   242-Aenderungen
-
-      Rev 1.10   15 Mar 1995 12:59:28   NN
-   MarkAll
-
-      Rev 1.9   03 Mar 1995 22:59:16   NN
-   2.41 Anpassung
-
-      Rev 1.8   27 Feb 1995 13:25:36   SC
-   * syntax-Fehler korrigiert
-
-
-      Rev 1.7   27 Feb 1995 08:53:52   NN
-   Anordnung
-
-      Rev 1.6   25 Feb 1995 20:18:46   NN
-   Alignment-Funktionen
-
-      Rev 1.5   17 Feb 1995 18:59:50   NN
-   Paste mit Fenster
-
-      Rev 1.4   15 Feb 1995 02:00:44   NN
-   Cut/Copy/Paste
-
-      Rev 1.3   14 Feb 1995 19:55:38   NN
-   ObjectMenue (disabled)
-
-      Rev 1.2   13 Feb 1995 20:59:58   NN
-   Popup Menue
-
-      Rev 1.1   12 Feb 1995 21:42:34   NN
-   Drawing Objektleiste
-
-      Rev 1.0   01 Feb 1995 18:21:42   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
 

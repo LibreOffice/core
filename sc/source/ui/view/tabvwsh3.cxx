@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,7 +535,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 else
                     pThisFrame->ToggleChildWindow(ScFunctionChildWindow::GetChildWindowId() );
 
-                SFX_BINDINGS().Invalidate(FID_FUNCTION_BOX);
+                GetViewFrame()->GetBindings().Invalidate(FID_FUNCTION_BOX);
                 rReq.Done ();
             }
             break;
@@ -766,7 +766,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case FID_CHG_ACCEPT:
             {
                 pThisFrame->ToggleChildWindow(ScAcceptChgDlgWrapper::GetChildWindowId());
-                SFX_BINDINGS().Invalidate(FID_CHG_ACCEPT);
+                GetViewFrame()->GetBindings().Invalidate(FID_CHG_ACCEPT);
                 rReq.Done ();
 
                 /*
@@ -818,7 +818,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_STATUS_DOCPOS:
             {
                 //! Navigator an-/ausschalten (wie im Writer) ???
-                //!SFX_DISPATCHER().Execute( SID_NAVIGATOR,
+                //!GetViewData()->GetDispatcher().Execute( SID_NAVIGATOR,
                 //!                       SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
             }
             break;

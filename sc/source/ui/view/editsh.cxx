@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,10 +98,6 @@
 #include <vcl/sound.hxx>
 
 
-#define GLOBALOVERFLOW
-#include <segmentc.hxx>
-
-
 #define _EDITSH_CXX
 #include "editsh.hxx"
 
@@ -120,20 +116,14 @@
 #define ScEditShell
 #include "scslots.hxx"
 
-SEG_EOFGLOBALS()
-
-#pragma SEG_SEGCLASS(SFXMACROS_SEG,STARTWORK_CODE)
 
 TYPEINIT1( ScEditShell, SfxShell );
-#pragma SEG_FUNCDEF(editsh_0a)
 
 SFX_IMPL_INTERFACE(ScEditShell, SfxShell, ScResId(SCSTR_EDITSHELL))
 {
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_EDIT) );
 }
 
-
-#pragma SEG_FUNCDEF(editsh_01)
 
 ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
     pEditView       (pView),
@@ -145,13 +135,9 @@ ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("EditCell")));
 }
 
-#pragma SEG_FUNCDEF(editsh_02)
-
 ScEditShell::~ScEditShell()
 {
 }
-
-#pragma SEG_FUNCDEF(editsh_08)
 
 void ScEditShell::SetEditView(EditView* pView)
 {
@@ -161,13 +147,11 @@ void ScEditShell::SetEditView(EditView* pView)
     SetUndoManager( &pEditView->GetEditEngine()->GetUndoManager() );
 }
 
-#pragma SEG_FUNCDEF(editsh_04)
-
 void ScEditShell::Execute( SfxRequest& rReq )
 {
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     USHORT              nSlot       = rReq.GetSlot();
-    SfxBindings&        rBindings   = SFX_BINDINGS();
+    SfxBindings&        rBindings   = pViewData->GetBindings();
 
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
     DBG_ASSERT(pHdl,"kein ScInputHandler");
@@ -189,7 +173,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
             pTableView->SetInsertMode( bIsInsertMode );
             if (pTopView)
                 pTopView->SetInsertMode( bIsInsertMode );
-            SFX_BINDINGS().Invalidate( SID_ATTR_INSERT );
+            rBindings.Invalidate( SID_ATTR_INSERT );
             break;
 
         case SID_ATTR_INSERT:
@@ -199,7 +183,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 pTableView->SetInsertMode( bIsInsertMode );
                 if (pTopView)
                     pTopView->SetInsertMode( bIsInsertMode );
-                SFX_BINDINGS().Invalidate( SID_ATTR_INSERT );
+                rBindings.Invalidate( SID_ATTR_INSERT );
             }
             break;
 
@@ -483,8 +467,6 @@ void ScEditShell::Execute( SfxRequest& rReq )
         pHdl->SetSelIsRef(TRUE);
 }
 
-#pragma SEG_FUNCDEF(editsh_05)
-
 void __EXPORT ScEditShell::GetState( SfxItemSet& rSet )
 {
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
@@ -531,8 +513,6 @@ void __EXPORT ScEditShell::GetState( SfxItemSet& rSet )
     }
 }
 
-#pragma SEG_FUNCDEF(editsh_0c)
-
 const SvxURLField* ScEditShell::GetURLField()
 {
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
@@ -550,8 +530,6 @@ const SvxURLField* ScEditShell::GetURLField()
 
     return NULL;
 }
-
-#pragma SEG_FUNCDEF(editsh_09)
 
 void __EXPORT ScEditShell::GetClipState( SfxItemSet& rSet )
 {
@@ -590,12 +568,10 @@ void lcl_InvalidateUnder( SfxBindings& rBindings )
     rBindings.Invalidate( SID_ULINE_VAL_DOTTED );
 }
 
-#pragma SEG_FUNCDEF(editsh_06)
-
 void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 {
     SfxItemSet          aSet( pEditView->GetEmptyItemSet() );
-    SfxBindings&        rBindings   = SFX_BINDINGS();
+    SfxBindings&        rBindings   = pViewData->GetBindings();
     const SfxItemSet*   pArgs       = rReq.GetArgs();
     USHORT              nSlot       = rReq.GetSlot();
 
@@ -734,8 +710,6 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
     rReq.Done();
 }
 
-#pragma SEG_FUNCDEF(editsh_07)
-
 void ScEditShell::GetAttrState(SfxItemSet &rSet)
 {
     SfxItemSet aAttribs = pEditView->GetAttribs();
@@ -773,8 +747,6 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
         rSet.ClearItem( EE_CHAR_WEIGHT );   // hervorgehobene Klammern hier nicht
 }
 
-#pragma SEG_FUNCDEF(editsh_0b)
-
 String ScEditShell::GetSelectionText( BOOL bWholeWord )
 {
     String aStrSelection;
@@ -796,91 +768,5 @@ String ScEditShell::GetSelectionText( BOOL bWholeWord )
 
     return aStrSelection;
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.85  2000/09/17 14:09:31  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.84  2000/08/31 16:38:45  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.83  2000/07/21 18:21:23  nn
-    select url field after inserting
-
-    Revision 1.82  2000/07/21 10:35:15  nn
-    #75683# SID_HYPERLINK_GETLINK: use selection as text if no link selected
-
-    Revision 1.81  2000/05/09 18:30:15  nn
-    use IMPL_INTERFACE macro without IDL
-
-    Revision 1.80  2000/04/14 08:31:37  nn
-    unicode changes
-
-    Revision 1.79  2000/03/31 17:27:08  nn
-    #74687# after executing dialogs, check for edit mode
-
-    Revision 1.78  2000/02/11 12:37:23  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.77  1999/09/24 15:59:13  nn
-    hlnkitem.hxx moved to svx
-
-    Revision 1.76  1999/06/02 19:41:34  ANK
-    #66547# SubShells
-
-
-      Rev 1.75   02 Jun 1999 21:41:34   ANK
-   #66547# SubShells
-
-      Rev 1.74   14 Jan 1999 16:21:56   NN
-   #60725# SID_CHARMAP: SetAttribs an der EditEngine statt der View
-
-      Rev 1.73   13 Jan 1999 17:05:52   NN
-   #60811# SID_HYPERLINK_SETLINK: Adjust an der Selektion rufen
-
-      Rev 1.72   16 Nov 1998 20:48:28   NN
-   #57254# SID_HYPERLINK_SETLINK: auch TopView
-
-      Rev 1.71   05 Dec 1997 19:21:52   NN
-   Includes
-
-      Rev 1.70   02 Dec 1997 12:38:40   TJ
-   include
-
-      Rev 1.69   24 Nov 1997 20:06:08   NN
-   includes
-
-      Rev 1.68   11 Sep 1997 19:57:02   NN
-   Hyperlink ersetzen: Einfuegen auf Selektion
-
-      Rev 1.67   04 Sep 1997 19:44:22   RG
-   change header
-
-      Rev 1.66   27 Aug 1997 12:19:28   TRI
-   VCL Anpassung
-
-      Rev 1.65   05 Aug 1997 14:29:22   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.64   01 Aug 1997 11:32:58   NN
-   #42327# RemoveAttribs(TRUE)
-
-      Rev 1.63   30 Jul 1997 17:27:10   HJS
-   includes
-
-      Rev 1.62   29 Jul 1997 21:23:02   MH
-   Syntax
-
-      Rev 1.61   29 Jul 1997 09:55:14   OM
-   Hyperlink Statusmethode
-
-      Rev 1.60   16 Jul 1997 21:04:26   NN
-   Hypo-Feature: Klammern hervorheben
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
 

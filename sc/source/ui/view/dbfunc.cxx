@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ void ScDBFunc::HideAutoFilter()
 
     GetViewData()->GetDocShell()->PostPaint( nCol1,nRow1,nTab, nCol2,nRow1,nTab, PAINT_GRID );
 
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = GetViewData()->GetBindings();
     rBindings.Invalidate( SID_AUTO_FILTER );
     rBindings.Invalidate( SID_AUTOFILTER_HIDE );
 }

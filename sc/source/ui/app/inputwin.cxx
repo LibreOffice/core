@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ void __EXPORT ScInputWindow::Select()
                 SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                 if ( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) )
                 {
-                    SFX_DISPATCHER().Execute( SID_OPENDLG_FUNCTION,
+                    pViewFrm->GetDispatcher()->Execute( SID_OPENDLG_FUNCTION,
                                               SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
 
                     //  die Toolbox wird sowieso disabled, also braucht auch nicht umgeschaltet
@@ -873,7 +873,10 @@ void ScTextWnd::StartEditEngine()
     }
 
     SC_MOD()->SetInputMode( SC_INPUT_TOP );
-    SFX_BINDINGS().Invalidate( SID_ATTR_INSERT );
+
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (pViewFrm)
+        pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
 }
 
 void ScTextWnd::StopEditEngine()
@@ -892,7 +895,9 @@ void ScTextWnd::StopEditEngine()
         if (pScMod->IsEditMode())
             pScMod->SetInputMode(SC_INPUT_TABLE);
 
-        SFX_BINDINGS().Invalidate( SID_ATTR_INSERT );
+        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+        if (pViewFrm)
+            pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
 
         if (bSelection)
             Invalidate();           // damit Selektion nicht stehenbleibt
@@ -1208,7 +1213,7 @@ void ScPosWnd::DoEnter()
                 //! new method at ScModule to query if function autopilot is open
                 SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                 if ( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) )
-                    SFX_DISPATCHER().Execute( SID_OPENDLG_FUNCTION,
+                    pViewFrm->GetDispatcher()->Execute( SID_OPENDLG_FUNCTION,
                                               SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
             }
             else
@@ -1224,7 +1229,9 @@ void ScPosWnd::DoEnter()
             //  Position (Zelle oder Namen) setzen
             SfxStringItem aPosItem( SID_CURRENTCELL, aText );
             SfxBoolItem aUnmarkItem( FN_PARAM_1, TRUE );        // Selektion aufheben
-            SFX_DISPATCHER().Execute( SID_CURRENTCELL,
+            SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+            if ( pViewFrm )
+                pViewFrm->GetDispatcher()->Execute( SID_CURRENTCELL,
                                       SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
                                       &aPosItem, &aUnmarkItem, 0L );
 

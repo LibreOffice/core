@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,6 @@
 #define _SFX_PRNMON_HXX
 //#define _SFXDISPATCH_HXX
 //#define _SFXCTRLITEM_HXX
-//#define _SFX_BINDINGS_HXX
 #define _SFX_MINFITEM_HXX
 #define _SFX_MACRO_HXX
 #define _SFX_CHOR
@@ -318,7 +317,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     ScTabView* pTabView = GetViewData()->GetView();
     USHORT nTab = GetViewData()->GetTabNo();
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = GetViewFrame()->GetBindings();
 
     Window*     pWin    = pTabView->GetActiveWin();
     SdrView*    pView   = pTabView->GetSdrView();
@@ -421,8 +420,8 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         //  #59280# Execute fuer die Form-Shell, um im Controller zu deselektieren
         if ( nNewId == SID_FM_CREATE_CONTROL )
         {
-            SFX_DISPATCHER().Execute(SID_FM_LEAVE_CREATE);
-            SFX_BINDINGS().InvalidateAll(FALSE);
+            GetViewData()->GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
+            GetViewFrame()->GetBindings().InvalidateAll(FALSE);
             //! was fuer einen Slot braucht der komische Controller wirklich, um das anzuzeigen????
         }
 
@@ -435,8 +434,8 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if ( nDrawSfxId == SID_FM_CREATE_CONTROL && nNewId != nDrawSfxId )
     {
         //  Wechsel von Control- zu Zeichenfunktion -> im Control-Controller deselektieren
-        SFX_DISPATCHER().Execute(SID_FM_LEAVE_CREATE);
-        SFX_BINDINGS().InvalidateAll(FALSE);
+        GetViewData()->GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
+        GetViewFrame()->GetBindings().InvalidateAll(FALSE);
         //! was fuer einen Slot braucht der komische Controller wirklich, um das anzuzeigen????
     }
 

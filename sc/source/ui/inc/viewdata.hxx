@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,8 @@ class EditStatus;
 class Outliner;
 class Window;
 class SfxObjectShell;
+class SfxBindings;
+class SfxDispatcher;
 class ScPatternAttr;
 class ScRangeListRef;
 class ScExtDocOptions;
@@ -233,6 +235,8 @@ public:
     ScTabViewShell* GetViewShell() const    { return pViewShell; }
 
     SfxObjectShell* GetSfxDocShell() const;
+    SfxBindings&    GetBindings();          // from ViewShell's ViewFrame
+    SfxDispatcher&  GetDispatcher();        // from ViewShell's ViewFrame
 
     ScMarkData&     GetMarkData()           { return aMarkData; }
 

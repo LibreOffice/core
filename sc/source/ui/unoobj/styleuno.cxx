@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,7 +729,9 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const rtl::OUString& aName )
 
                 pStylePool->Erase( pStyle );
 
-                SFX_BINDINGS().Invalidate( SID_STYLE_FAMILY4 );
+                SfxBindings* pBindings = pDocShell->GetViewBindings();
+                if (pBindings)
+                    pBindings->Invalidate( SID_STYLE_FAMILY4 );
                 pDocShell->SetDocumentModified();
             }
         }
@@ -1046,9 +1048,12 @@ void SAL_CALL ScStyleObj::setName( const rtl::OUString& aNewName )
             //  Zellvorlagen = 2, Seitenvorlagen = 4
             UINT16 nId = ( eFamily == SFX_STYLE_FAMILY_PARA ) ?
                             SID_STYLE_FAMILY2 : SID_STYLE_FAMILY4;
-            SfxBindings& rBindings = SFX_BINDINGS();
-            rBindings.Invalidate( nId );
-            rBindings.Invalidate( SID_STYLE_APPLY );
+            SfxBindings* pBindings = pDocShell->GetViewBindings();
+            if (pBindings)
+            {
+                pBindings->Invalidate( nId );
+                pBindings->Invalidate( SID_STYLE_APPLY );
+            }
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,8 @@ BOOL FuSelection::TestComment( SdrPageView* pPV, const Point& rPos )
 //          SdrHdl* pHdl = pView->HitHandle( rPos, *pWindow );
 //          BOOL bDrag = pView->BegDragObj( rPos, NULL, pHdl );
 
-            SFX_DISPATCHER().Execute(SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+            pViewShell->GetViewData()->GetDispatcher().
+                Execute(SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
             // jetzt den erzeugten FuText holen und in den EditModus setzen
             FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
             if ( pPoor && pPoor->GetSlotID() == SID_DRAW_NOTEEDIT )  // hat keine RTTI

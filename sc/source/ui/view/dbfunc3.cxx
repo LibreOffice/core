@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,17 +99,6 @@
 //
 //          Outliner
 //
-
-void lcl_InvalidateOutliner()
-{
-    SfxBindings& rBindings = SFX_BINDINGS();
-    rBindings.Invalidate( SID_OUTLINE_SHOW );
-    rBindings.Invalidate( SID_OUTLINE_HIDE );
-    rBindings.Invalidate( SID_OUTLINE_REMOVE );
-
-    rBindings.Invalidate( SID_STATUS_SUM );         // wegen ein-/ausblenden
-    rBindings.Invalidate( SID_ATTR_SIZE );
-}
 
 //  Outline-Gruppierung erzeugen
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -968,7 +968,7 @@ void ScGridWindow::ExecFilter( ULONG nSel,
         {
 //          lcl_StartFilterDialog( pViewData, aParam, Application::GetAppWindow() );
             pViewData->GetView()->SetCursor(nCol,nRow);     //! auch ueber Slot ??
-            SFX_DISPATCHER().Execute( SID_FILTER, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+            pViewData->GetDispatcher().Execute( SID_FILTER, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
         }
         else
         {
@@ -1247,7 +1247,7 @@ void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
             SfxInt16Item aPosXItem( SID_RANGE_COL, nPosX );
             SfxInt16Item aPosYItem( SID_RANGE_ROW, nPosY );
-            SFX_DISPATCHER().Execute( SID_FILL_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+            pViewData->GetDispatcher().Execute( SID_FILL_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                                         &aPosXItem, &aPosYItem, (void*)0L );
 
         }
@@ -1538,7 +1538,7 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     if (pScMod->IsModalMode(pViewData->GetSfxDocShell()))
         return;
 
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = pViewData->GetBindings();
     if (bEEMouse)
     {
         EditView*   pEditView;
@@ -1635,7 +1635,7 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             }
         }
         else
-            SFX_DISPATCHER().Execute( FID_FILL_AUTO, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+            pViewData->GetDispatcher().Execute( FID_FILL_AUTO, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
     }
     else if (pViewData->GetFillMode() == SC_FILL_MATRIX)
     {
@@ -2698,7 +2698,7 @@ BOOL ScGridWindow::DropPrivate( const DropEvent& rEvt )
                 SfxStringItem aRangeItem( SID_CHART_SOURCE, aRangeName );
                 USHORT nId = (rEvt.GetAction() == DROP_COPY) ?
                             SID_CHART_ADDSOURCE : SID_CHART_SOURCE;
-                SFX_DISPATCHER().Execute( nId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                pViewData->GetDispatcher().Execute( nId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                                             &aRangeItem, &aNameItem, (void*) NULL );
             }
             else if ( nDragStartX != rData.nStartX || nDragStartY != rData.nStartY ||

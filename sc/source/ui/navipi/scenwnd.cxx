@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scenwnd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svtools/slstitm.hxx>
 #include <svtools/stritem.hxx>
 #include <vcl/msgbox.hxx>
@@ -188,7 +189,10 @@ void __EXPORT ScScenarioListBox::DoubleClick()
 {
     SfxStringItem aStringItem( SID_SELECT_SCENARIO, GetSelectEntry() );
 
-    SFX_DISPATCHER().Execute( SID_SELECT_SCENARIO, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (pViewFrm)
+        pViewFrm->GetDispatcher()->Execute( SID_SELECT_SCENARIO,
+                              SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                               &aStringItem, 0L, 0L );
 }
 
@@ -261,7 +265,9 @@ long __EXPORT ScScenarioListBox::Notify( NotifyEvent& rNEvt )
                     if ( nRes == RET_YES )
                     {
                         SfxStringItem aStringItem( SID_DELETE_SCENARIO, aName );
-                        SFX_DISPATCHER().Execute( SID_DELETE_SCENARIO,
+                        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+                        if (pViewFrm)
+                            pViewFrm->GetDispatcher()->Execute( SID_DELETE_SCENARIO,
                                                     SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                                                     &aStringItem, 0L, 0L );
                     }
@@ -269,7 +275,9 @@ long __EXPORT ScScenarioListBox::Notify( NotifyEvent& rNEvt )
                 else if ( nId == RID_NAVIPI_SCENARIO_EDIT )
                 {
                     SfxStringItem aStringItem( SID_EDIT_SCENARIO, aName );
-                    SFX_DISPATCHER().Execute( SID_EDIT_SCENARIO,
+                    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+                    if (pViewFrm)
+                        pViewFrm->GetDispatcher()->Execute( SID_EDIT_SCENARIO,
                                                 SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                                                 &aStringItem, 0L, 0L );
                 }
@@ -308,8 +316,13 @@ ScScenarioWindow::ScScenarioWindow( Window* pParent,const String& aQH_List,
     aEdComment.SetQuickHelpText(aQH_Comment);
     aEdComment.SetBackground( Color( COL_LIGHTGRAY ) );
 
-    SFX_BINDINGS().Invalidate( SID_SELECT_SCENARIO );
-    SFX_BINDINGS().Update( SID_SELECT_SCENARIO );
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (pViewFrm)
+    {
+        SfxBindings& rBindings = pViewFrm->GetBindings();
+        rBindings.Invalidate( SID_SELECT_SCENARIO );
+        rBindings.Update( SID_SELECT_SCENARIO );
+    }
 }
 
 // -----------------------------------------------------------------------

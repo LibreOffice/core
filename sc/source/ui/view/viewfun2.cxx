@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,7 +714,7 @@ void ScViewFunc::SetPrintRanges( const String* pPrint,
 
     ScPrintFunc( pDocSh, pDocSh->GetPrinter(), nCurTab ).UpdatePages();
 
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = GetViewData()->GetBindings();
     rBindings.Invalidate( SID_DELETE_PRINTAREA );
 
     pDocSh->SetDocumentModified();
@@ -1441,7 +1441,7 @@ void ScViewFunc::MakeScenario( const String& rName, const String& rComment,
         SetTabNo( nNewTab, TRUE );          // SC_SCENARIO_COPYALL -> sichtbar
     else
     {
-        SfxBindings& rBindings = SFX_BINDINGS();
+        SfxBindings& rBindings = GetViewData()->GetBindings();
         rBindings.Invalidate( SID_STATUS_DOCPOS );      // Statusbar
         rBindings.Invalidate( SID_TABLES_COUNT );
         rBindings.Invalidate( SID_SELECT_SCENARIO );
@@ -1708,7 +1708,7 @@ BOOL ScViewFunc::DeleteTables(const SvUShorts &TheTabs, BOOL bRecord )
         if (bWasLinked)
         {
             pDocSh->UpdateLinks();              // Link-Manager updaten
-            SFX_BINDINGS().Invalidate(SID_LINKS);
+            GetViewData()->GetBindings().Invalidate(SID_LINKS);
         }
 
         pDocSh->PostPaintExtras();
@@ -1775,7 +1775,7 @@ void ScViewFunc::InsertAreaLink( const String& rFile,
     pLink->Update();            // kein SetInCreate -> Update ausfuehren
     pLink->SetDoInsert(TRUE);   // Default = TRUE
 
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = GetViewData()->GetBindings();
     rBindings.Invalidate( SID_LINKS );
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
@@ -1925,7 +1925,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
             pLink->Update();
             pLink->SetInCreate( FALSE );
 
-            SfxBindings& rBindings = SFX_BINDINGS();
+            SfxBindings& rBindings = GetViewData()->GetBindings();
             rBindings.Invalidate( SID_LINKS );
         }
     }
@@ -1976,7 +1976,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, USHORT nDestTab, BOOL bCopy )
         String aUrl = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("private:factory/"));
         aUrl.AppendAscii(RTL_CONSTASCII_STRINGPARAM( STRING_SCAPP ));               // "scalc4"
         SfxStringItem aItem( SID_FILE_NAME, aUrl );
-        const SfxObjectItem* pObjItem = (const SfxObjectItem*) SFX_DISPATCHER().Execute(
+        const SfxObjectItem* pObjItem = (const SfxObjectItem*) GetViewData()->GetDispatcher().Execute(
                     SID_OPENDOC, SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON, &aItem, 0L );
         if (pObjItem)
         {
@@ -1994,7 +1994,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, USHORT nDestTab, BOOL bCopy )
         String aFactory = STRING_SCAPP;     // "scalc4"
         SfxStringItem aItem( SID_NEWDOCDIRECT, aFactory );
         const SfxViewFrameItem* pViewFrameItem = (const SfxViewFrameItem*)
-            SFX_DISPATCHER().Execute( SID_NEWDOCDIRECT, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
+            GetViewData()->GetDispatcher().Execute( SID_NEWDOCDIRECT, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
 
         if ( pViewFrameItem )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,7 @@ void ScTabViewShell::UpdateInputHandler( BOOL bForce /* = FALSE */ )
         pHdl->NotifyChange( &aState, bForce );
     }
 
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_STATUS_SUM );         // immer zusammen mit Eingabezeile
     rBindings.Invalidate( SID_ATTR_SIZE );
 }
@@ -589,7 +589,7 @@ void ScTabViewShell::ExecDrawOpt( SfxRequest& rReq )
     ScViewOptions aViewOptions = GetViewData()->GetOptions();
     ScGridOptions aGridOptions = aViewOptions.GetGridOptions();
 
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = GetViewFrame()->GetBindings();
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
     USHORT nSlotId = rReq.GetSlot();

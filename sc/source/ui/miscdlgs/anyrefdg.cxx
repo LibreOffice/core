@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,7 @@ void lcl_HideAllReferences()
 ScAnyRefDlg::ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
                           Window* pParent, USHORT nResId)
     :   SfxModelessDialog ( pB, pCW, pParent, ScResId( nResId ) ),
+        pMyBindings( pB ),
         pRefEdit( NULL ),
         pAccel( NULL ),
         bAccInserted( FALSE ),
@@ -451,6 +452,15 @@ ScAnyRefDlg::~ScAnyRefDlg()
     //SFX_APPWINDOW->Enable(TRUE,TRUE);
 //  Application::GetAppWindow()->Invalidate(); //Weils so schoen ist!
     lcl_InvalidateWindows();
+}
+
+//----------------------------------------------------------------------------
+
+SfxBindings& ScAnyRefDlg::GetBindings()
+{
+    //! SfxModelessDialog should allow access to pBindings pointer
+
+    return *pMyBindings;
 }
 
 //----------------------------------------------------------------------------

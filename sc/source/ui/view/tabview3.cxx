@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ void ScTabView::ShowCursor()
 
 void ScTabView::InvalidateAttribs()
 {
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = aViewData.GetBindings();
 
     rBindings.Invalidate( SID_STYLE_APPLY );
     rBindings.Invalidate( SID_STYLE_FAMILY2 );
@@ -366,7 +366,7 @@ void ScTabView::SetCursor( USHORT nPosX, USHORT nPosY, BOOL bNew )
 
 void ScTabView::CellContentChanged()
 {
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = aViewData.GetBindings();
 
     rBindings.Invalidate( SID_ATTR_SIZE );      // -> Fehlermeldungen anzeigen
     rBindings.Invalidate( SID_THESAURUS );
@@ -398,7 +398,7 @@ void ScTabView::SelectionChanged()
 
     UpdateAutoFillMark();
 
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = aViewData.GetBindings();
 
     rBindings.Invalidate( SID_CURRENTCELL );    // -> Navigator
     rBindings.Invalidate( SID_AUTO_FILTER );    // -> Menue
@@ -1476,7 +1476,7 @@ void ScTabView::SetTabNo( USHORT nTab, BOOL bNew )
                         pGridWin[i]->UpdateEditViewPos();
         }
 
-        SfxBindings& rBindings = SFX_BINDINGS();
+        SfxBindings& rBindings = aViewData.GetBindings();
         ScMarkData& rMark = aViewData.GetMarkData();
         if (!rMark.GetTableSelect(nTab))
         {
@@ -2458,7 +2458,7 @@ void ScTabView::ZoomChanged()
 
     InterpretVisible();     // #69343# have everything calculated before painting
 
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = aViewData.GetBindings();
     rBindings.Invalidate( SID_ATTR_ZOOM );
 }
 

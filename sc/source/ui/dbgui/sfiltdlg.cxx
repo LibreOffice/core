@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfiltdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,6 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
 // INCLUDE -------------------------------------------------------------------
 
 #ifndef _SFXDISPATCH_HXX //autogen
@@ -103,14 +99,11 @@
 #define ERRORBOX(rid) ErrorBox( this, WinBits( WB_OK|WB_DEF_OK),\
                                     ScGlobal::GetRscString(rid) ).Execute()
 
-SEG_EOFGLOBALS()
-
 
 //============================================================================
 //  class ScSpecialFilterDialog
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(sfiltdlg_01)
 
 ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                         const SfxItemSet&   rArgSet )
@@ -149,7 +142,6 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(sfiltdlg_02)
 
 __EXPORT ScSpecialFilterDlg::~ScSpecialFilterDlg()
 {
@@ -171,7 +163,6 @@ __EXPORT ScSpecialFilterDlg::~ScSpecialFilterDlg()
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(sfiltdlg_03)
 
 void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 {
@@ -273,7 +264,6 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(sfiltdlg_04)
 
 BOOL __EXPORT ScSpecialFilterDlg::Close()
 {
@@ -284,8 +274,6 @@ BOOL __EXPORT ScSpecialFilterDlg::Close()
 //----------------------------------------------------------------------------
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 // neue Selektion im Referenz-Edit angezeigt wird.
-
-#pragma SEG_FUNCDEF(sfiltdlg_05)
 
 void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
 {
@@ -307,7 +295,6 @@ void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(sfiltdlg_06)
 
 void ScSpecialFilterDlg::SetActive()
 {
@@ -333,7 +320,6 @@ void ScSpecialFilterDlg::SetActive()
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(sfiltdlg_08)
 
 ScQueryItem* ScSpecialFilterDlg::GetOutputItem( const ScQueryParam& rParam,
                                                 const ScRange& rSource )
@@ -347,7 +333,6 @@ ScQueryItem* ScSpecialFilterDlg::GetOutputItem( const ScQueryParam& rParam,
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(sfiltdlg_0e)
 
 BOOL ScSpecialFilterDlg::IsRefInputMode() const
 {
@@ -358,7 +343,6 @@ BOOL ScSpecialFilterDlg::IsRefInputMode() const
 //----------------------------------------------------------------------------
 // Handler:
 // ========
-#pragma SEG_FUNCDEF(sfiltdlg_09)
 
 IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 {
@@ -468,7 +452,8 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
         {
             SFX_APP()->LockDispatcher( FALSE );
             SwitchToDocument();
-            SFX_DISPATCHER().Execute( FID_FILTER_OK, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+            GetBindings().GetDispatcher()->Execute( FID_FILTER_OK,
+                                      SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                                       GetOutputItem( theOutParam, theFilterArea ), 0L, 0L );
             Close();
         }
@@ -488,7 +473,6 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(sfiltdlg_0b)
 
 IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer )
 {
@@ -529,7 +513,6 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(sfiltdlg_0c)
 
 IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
 {
@@ -549,7 +532,6 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(sfiltdlg_0d)
 
 IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, ScRefEdit*, pEd )
 {
@@ -586,158 +568,4 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, ScRefEdit*, pEd )
     return NULL;
 }
 
-
-/*----------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.47  2000/09/17 14:08:57  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.46  2000/08/31 16:38:21  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.45  2000/06/06 17:37:28  nn
-    SpecialFilterDlg: source range in item
-
-    Revision 1.44  2000/04/14 17:38:03  nn
-    unicode changes
-
-    Revision 1.43  2000/01/17 19:21:36  nn
-    #67336# SwitchToDocument
-
-    Revision 1.42  1999/06/09 16:09:04  NN
-    Sfx-appwin removed
-
-
-      Rev 1.41   09 Jun 1999 18:09:04   NN
-   Sfx-appwin removed
-
-      Rev 1.40   10 Dec 1998 20:16:40   ANK
-   #51738# Umstellung auf ScRefEdit zum Anzeigen von Referenzen
-
-      Rev 1.39   14 Sep 1998 20:58:06   ANK
-   #55978# Ausgabebereich disablen bei Redlining
-
-      Rev 1.38   12 Aug 1998 19:47:34   ANK
-   #54702# IsRefInputMode ueberarbeitet
-
-      Rev 1.37   06 Aug 1998 21:18:30   ANK
-   #54702# Enablen/Disablen der Applikation nur noch in ScAnyRefDlg
-
-      Rev 1.36   15 Mar 1998 14:23:32   NN
-   App-Fenster disablen mit bChild=FALSE
-
-      Rev 1.35   30 Sep 1997 13:08:58   TJ
-   include
-
-      Rev 1.34   03 Sep 1997 15:18:54   RG
-   change header
-
-      Rev 1.33   11 Apr 1997 15:50:42   NN
-   #35206# Spaltenkoepfe fuer Spezialfilter disabled
-
-      Rev 1.32   15 Feb 1997 17:36:30   NN
-   Checkbox 'persistent' fuer Ausgabe-Bereich
-
-      Rev 1.31   13 Nov 1996 20:11:26   NN
-   #33143# AutoHide nur bei Bereichsreferenz
-
-      Rev 1.30   13 Nov 1996 11:33:22   NN
-   ScQueryParam mit dynamischen Eintraegen
-
-      Rev 1.29   05 Nov 1996 14:50:16   NN
-   ScApplication gibts nicht mehr
-
-      Rev 1.28   29 Oct 1996 14:03:56   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.27   22 Oct 1996 15:32:18   RJ
-   Buttons fuer Referenzeingabe
-
-      Rev 1.26   04 Oct 1996 17:23:12   RJ
-   Einklappen des Fensters bei Referenzeingabe
-
-      Rev 1.25   27 Jun 1996 11:49:30   NN
-   Dispatcher::Execute Umstellung
-
-      Rev 1.24   05 Jun 1996 19:19:30   NN
-   kein Show im ctor (Position wird von aussen gesetzt)
-
-      Rev 1.23   26 Apr 1996 12:02:42   NN
-   SfxModelessDialog statt ModelessDialog
-
-      Rev 1.22   26 Apr 1996 10:52:40   NN
-   neues SetReference auch fuer SpecialFilterDlg
-
-      Rev 1.21   18 Jan 1996 11:45:32   MO
-   unbennant-Eintrag wieder sichtbar, neuer Link
-
-      Rev 1.20   27 Nov 1995 13:42:12   MO
-   RangeUtil/Area/Tripel gegen Address/Range ersetzt
-
-      Rev 1.19   09 Nov 1995 10:20:12   JN
-   weitere Verbesseungen Modeless Dialoge
-
-      Rev 1.18   08 Nov 1995 13:06:24   MO
-   301-Aenderungen
-
-      Rev 1.17   08 Nov 1995 10:45:46   JN
-   Umstellung auf SfxChildWindow
-
-      Rev 1.16   18 Sep 1995 10:07:54   MO
-   bRefInput-Kontrolle ueber Timer
-
-      Rev 1.15   24 Jul 1995 14:13:28   MO
-   EXPORT
-
-      Rev 1.14   24 Apr 1995 12:49:36   MO
-   Dispatcher Unlock vor Execute
-
-      Rev 1.13   18 Apr 1995 10:02:48   MO
-   Referenzeingabe mit Maus ueberarbeitet
-
-      Rev 1.12   02 Mar 1995 16:20:26   MO
-   InfoBoxen mit Rsc-Strings
-
-      Rev 1.11   08 Feb 1995 12:56:10   MO
-   * Dispatcher-Execute: 0L angehaengt (sonst uneindeutig)
-
-      Rev 1.10   08 Feb 1995 10:27:26   MO
-   * Mac-Anpassungen
-
-
-      Rev 1.9   03 Feb 1995 12:42:44   MO
-   * Ctor: Show
-
-      Rev 1.8   27 Jan 1995 16:15:54   MO
-   * Umstellung auf Slot-IDs
-
-      Rev 1.7   26 Jan 1995 19:02:40   TRI
-   __EXPORT bei virtuellen Methoden eingebaut
-
-      Rev 1.6   25 Jan 1995 18:54:26   MO
-   * Mauseingabe von Bereichen im Filter-Edit wieder moeglich
-
-      Rev 1.5   25 Jan 1995 12:55:50   MO
-   * Einzelne Zellposition als Kopierziel (SetReferenz und Ueberpruefungen)
-
-      Rev 1.4   19 Jan 1995 17:08:02   TRI
-   __EXPORT vor verschiedene LinkHandler gesetzt
-
-      Rev 1.3   18 Jan 1995 13:56:26   TRI
-   Pragmas zur Segementierung eingebaut
-
-      Rev 1.2   17 Jan 1995 11:59:40   MO
-   Erzeugen des OutPut-Items in EndDlgHdl/GetOutputItem
-
-      Rev 1.1   16 Jan 1995 14:26:14   MO
-   Einlesen von Filterbereichsnamen mit Selektion/Modify
-   Fehlerbehandlung von ungueltigen Bereichsnamen im EndDlg-Handler
-
-      Rev 1.0   13 Jan 1995 17:32:24   MO
-   Initial revision.
-
-----------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1763,7 +1763,6 @@ void __EXPORT ScUndoInsertAreaLink::Undo()
     if (pLink)
         pLinkManager->Remove(*pLink);
 
-    SFX_BINDINGS().Invalidate(SID_LINKS);
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
 }
 
@@ -1783,7 +1782,6 @@ void __EXPORT ScUndoInsertAreaLink::Redo()
     pLink->Update();
     pLink->SetInCreate( FALSE );
 
-    SFX_BINDINGS().Invalidate(SID_LINKS);
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
 }
 
@@ -1856,7 +1854,6 @@ void __EXPORT ScUndoRemoveAreaLink::Undo()
     pLink->Update();
     pLink->SetInCreate( FALSE );
 
-    SFX_BINDINGS().Invalidate(SID_LINKS);
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
 }
 
@@ -1873,7 +1870,6 @@ void __EXPORT ScUndoRemoveAreaLink::Redo()
     if (pLink)
         pLinkManager->Remove(*pLink);
 
-    SFX_BINDINGS().Invalidate(SID_LINKS);
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
 }
 

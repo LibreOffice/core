@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,7 @@ void ScTabView::TabChanged()
                 pDrawView->VCAddWin(pGridWin[i]);       // fuer neue Page
     }
 
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = aViewData.GetBindings();
 
     //  Es gibt keine einfache Moeglichkeit, alle Slots der FormShell zu invalidieren
     //  (fuer disablete Slots auf geschuetzten Tabellen), darum hier einfach alles...
@@ -619,7 +619,7 @@ void ScTabView::DrawDeselectAll()
             ( pViewSh->IsDrawTextShell() || pDrawActual->GetSlotID() == SID_DRAW_NOTEEDIT ) )
         {
             // end text edit (as if escape pressed, in FuDraw)
-            SFX_DISPATCHER().Execute( pDrawActual->GetSlotID(),
+            aViewData.GetDispatcher().Execute( pDrawActual->GetSlotID(),
                                         SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
         }
 

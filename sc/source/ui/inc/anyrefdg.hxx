@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ class ScAnyRefDlg : public SfxModelessDialog
 friend  ScRefButton;
 
 private:
+    SfxBindings*    pMyBindings;
     Edit*           pRefEdit;               // aktives Eingabefeld
     ScRefButton*    pRefBtn;                // Button dazu
     String          sOldDialogText;         // Originaltitel des Dialogfensters
@@ -195,6 +196,7 @@ public:
 
     void            ViewShellChanged(ScTabViewShell* pScViewShell);
     void            SwitchToDocument();
+    SfxBindings&    GetBindings();
 
     virtual void    SetActive() = 0;
 //  virtual BOOL    Close();

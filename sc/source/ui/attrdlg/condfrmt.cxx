@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
@@ -89,15 +85,11 @@
 #undef _CONDFRMT_CXX
 
 
-SEG_EOFGLOBALS()
-
-
 //============================================================================
 //  class ScConditionalFormat
 
 //----------------------------------------------------------------------------
 // Konstruktor
-#pragma SEG_FUNCDEF(condfrmt_01)
 
 ScConditionalFormatDlg::ScConditionalFormatDlg(
             SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
@@ -347,7 +339,6 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
 
 //----------------------------------------------------------------------------
 // Destruktor
-#pragma SEG_FUNCDEF(condfrmt_0d)
 
 __EXPORT ScConditionalFormatDlg::~ScConditionalFormatDlg()
 {
@@ -355,7 +346,6 @@ __EXPORT ScConditionalFormatDlg::~ScConditionalFormatDlg()
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(condfrmt_0e)
 
 void ScConditionalFormatDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
 {
@@ -378,7 +368,6 @@ void ScConditionalFormatDlg::SetReference( const ScRange& rRef, ScDocument* pDoc
 }
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(condfrmt_15)
 
 void ScConditionalFormatDlg::AddRefEntry()
 {
@@ -395,7 +384,6 @@ void ScConditionalFormatDlg::AddRefEntry()
 }
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(condfrmt_0f)
 
 BOOL ScConditionalFormatDlg::IsRefInputMode()
 {
@@ -404,7 +392,6 @@ BOOL ScConditionalFormatDlg::IsRefInputMode()
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(condfrmt_10)
 
 void ScConditionalFormatDlg::SetActive()
 {
@@ -422,7 +409,6 @@ void ScConditionalFormatDlg::SetActive()
 
 //----------------------------------------------------------------------------
 // Holt die ausgewaehlte bedingte Formatierung ab
-#pragma SEG_FUNCDEF(condfrmt_11)
 
 void ScConditionalFormatDlg::GetConditionalFormat( ScConditionalFormat& rCndFmt )
 {
@@ -482,7 +468,6 @@ void ScConditionalFormatDlg::GetConditionalFormat( ScConditionalFormat& rCndFmt 
 
 //----------------------------------------------------------------------------
 // Zerstoert den Dialog
-#pragma SEG_FUNCDEF(condfrmt_03)
 
 BOOL ScConditionalFormatDlg::Close()
 {
@@ -495,7 +480,6 @@ BOOL ScConditionalFormatDlg::Close()
 
 //----------------------------------------------------------------------------
 // Enabled/Disabled Condition1-Controls
-#pragma SEG_FUNCDEF(condfrmt_04)
 
 IMPL_LINK( ScConditionalFormatDlg, ClickCond1Hdl, void *, EMPTYARG )
 {
@@ -517,7 +501,6 @@ IMPL_LINK( ScConditionalFormatDlg, ClickCond1Hdl, void *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 // Zellwert/Formel
-#pragma SEG_FUNCDEF(condfrmt_05)
 
 IMPL_LINK( ScConditionalFormatDlg, ChangeCond11Hdl, void *, EMPTYARG )
 {
@@ -546,7 +529,6 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond11Hdl, void *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 // zwischen, gleich, groesser, ...
-#pragma SEG_FUNCDEF(condfrmt_06)
 
 IMPL_LINK( ScConditionalFormatDlg, ChangeCond12Hdl, void *, EMPTYARG )
 {
@@ -578,7 +560,6 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond12Hdl, void *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 // Enabled/Disabled Condition2-Controls
-#pragma SEG_FUNCDEF(condfrmt_07)
 
 IMPL_LINK( ScConditionalFormatDlg, ClickCond2Hdl, void *, EMPTYARG )
 {
@@ -600,7 +581,6 @@ IMPL_LINK( ScConditionalFormatDlg, ClickCond2Hdl, void *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 // Zellwert/Formel
-#pragma SEG_FUNCDEF(condfrmt_08)
 
 IMPL_LINK( ScConditionalFormatDlg, ChangeCond21Hdl, void *, EMPTYARG )
 {
@@ -629,7 +609,6 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond21Hdl, void *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 // zwischen, gleich, groesser, ...
-#pragma SEG_FUNCDEF(condfrmt_09)
 
 IMPL_LINK( ScConditionalFormatDlg, ChangeCond22Hdl, void *, EMPTYARG )
 {
@@ -661,7 +640,6 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond22Hdl, void *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 // Enabled/Disabled Condition3-Controls
-#pragma SEG_FUNCDEF(condfrmt_0a)
 
 IMPL_LINK( ScConditionalFormatDlg, ClickCond3Hdl, void *, EMPTYARG )
 {
@@ -683,7 +661,6 @@ IMPL_LINK( ScConditionalFormatDlg, ClickCond3Hdl, void *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 // Zellwert/Formel
-#pragma SEG_FUNCDEF(condfrmt_0b)
 
 IMPL_LINK( ScConditionalFormatDlg, ChangeCond31Hdl, void *, EMPTYARG )
 {
@@ -712,7 +689,6 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond31Hdl, void *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 // zwischen, gleich, groesser, ...
-#pragma SEG_FUNCDEF(condfrmt_0c)
 
 IMPL_LINK( ScConditionalFormatDlg, ChangeCond32Hdl, void *, EMPTYARG )
 {
@@ -743,7 +719,6 @@ IMPL_LINK( ScConditionalFormatDlg, ChangeCond32Hdl, void *, EMPTYARG )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(condfrmt_12)
 
 IMPL_LINK( ScConditionalFormatDlg, EdGetFocusHdl, ScRefEdit*, pEd )
 {
@@ -756,7 +731,6 @@ IMPL_LINK( ScConditionalFormatDlg, EdGetFocusHdl, ScRefEdit*, pEd )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(condfrmt_13)
 
 IMPL_LINK( ScConditionalFormatDlg, EdLoseFocusHdl, ScRefEdit*, pEd )
 {
@@ -767,7 +741,6 @@ IMPL_LINK( ScConditionalFormatDlg, EdLoseFocusHdl, ScRefEdit*, pEd )
 
 //----------------------------------------------------------------------------
 //  [OK], [Cancel]
-#pragma SEG_FUNCDEF(condfrmt_14)
 
 IMPL_LINK( ScConditionalFormatDlg, BtnHdl, PushButton*, pBtn )
 {
@@ -779,7 +752,7 @@ IMPL_LINK( ScConditionalFormatDlg, BtnHdl, PushButton*, pBtn )
 
         SFX_APP()->LockDispatcher( FALSE );
         SwitchToDocument();
-        SFX_DISPATCHER().Execute( FID_CONDITIONAL_FORMAT,
+        GetBindings().GetDispatcher()->Execute( FID_CONDITIONAL_FORMAT,
                                   SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
                                   &aOutItem, 0L, 0L );
         Close();
@@ -790,78 +763,4 @@ IMPL_LINK( ScConditionalFormatDlg, BtnHdl, PushButton*, pBtn )
     return( 0L );
 }
 
-
-/*****************************************************************************
-
-      Source Code Control System - History
-
-      $Log: not supported by cvs2svn $
-      Revision 1.20  2000/09/17 14:08:55  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.19  2000/08/31 16:38:19  willem.vandorp
-      Header and footer replaced
-
-      Revision 1.18  2000/04/17 13:29:42  nn
-      unicode changes
-
-      Revision 1.17  2000/01/17 19:23:39  nn
-      #67336# SwitchToDocument
-
-      Revision 1.16  1999/06/09 16:08:20  NN
-      Sfx-appwin removed
-
-
-      Rev 1.15   09 Jun 1999 18:08:20   NN
-   Sfx-appwin removed
-
-      Rev 1.14   26 May 1999 14:29:02   NN
-   #66123# Name fuer Standard-Vorlage kommt aus Resource
-
-      Rev 1.13   10 Dec 1998 20:40:42   ANK
-   #51738# Umstellung auf ScRefEdit zum Anzeigen von Referenzen
-
-      Rev 1.12   06 Aug 1998 21:20:52   ANK
-   #54702# Enablen/Disablen der Applikation nur noch in ScAnyRefDlg
-
-      Rev 1.11   16 Sep 1997 19:37:48   NN
-   #42538# bedingte Formatierung/Gueltigkeit mit relativen Referenzen
-
-      Rev 1.10   04 Sep 1997 20:32:54   RG
-   change header
-
-      Rev 1.9   03 Sep 1997 15:11:14   RG
-   change header
-
-      Rev 1.8   28 Nov 1996 18:49:40   NN
-   mehrfache und 3D-Referenzen zulassen
-
-      Rev 1.7   13 Nov 1996 20:12:04   NN
-   #33143# AutoHide nur bei Bereichsreferenz
-
-      Rev 1.6   05 Nov 1996 21:15:46   NN
-   #32969# Focus initial auf ersten Wert
-
-      Rev 1.5   05 Nov 1996 14:51:10   NN
-   ScApplication gibts nicht mehr
-
-      Rev 1.4   01 Nov 1996 06:30:38   MH
-   chg: includes, defines
-
-      Rev 1.3   29 Oct 1996 14:04:36   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.2   22 Oct 1996 17:58:14   RJ
-   Buttons fuer Referenzeingabe
-
-      Rev 1.1   16 Oct 1996 16:33:16   RJ
-   Dialog fuer bedingte Formatierung mit Leben gefuellt
-
-      Rev 1.0   14 Oct 1996 15:09:42   SOH
-   Initial revision.
-
-
-*****************************************************************************/
-
-#pragma SEG_EOFMODULE
 

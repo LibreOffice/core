@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
     //  SID_SC_CELLS (Cells) - removed (old Basic)
 
     const SfxItemSet* pReqArgs = rReq.GetArgs();
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings* pBindings = GetViewBindings();
 
     USHORT nSlot = rReq.GetSlot();
     switch ( nSlot )
@@ -481,8 +481,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     bNewVal = !aDocument.GetAutoCalc();     // Toggle fuer Menue
                 aDocument.SetAutoCalc( bNewVal );
                 SetDocumentModified();
-                rBindings.Invalidate( FID_AUTO_CALC );
-//              rBindings.Invalidate( FID_RECALC );     // jetzt immer enabled
+                if (pBindings)
+                {
+                    pBindings->Invalidate( FID_AUTO_CALC );
+//                  pBindings->Invalidate( FID_RECALC );        // jetzt immer enabled
+                }
                 rReq.Done();
             }
             break;
@@ -651,7 +654,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         }
                     }
                     // Slots invalidieren
-                    rBindings.InvalidateAll(FALSE);
+                    if (pBindings)
+                        pBindings->InvalidateAll(FALSE);
                 }
             }
             break;
@@ -754,7 +758,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                         if (pViewFrm)
                             pViewFrm->ShowChildWindow(ScAcceptChgDlgWrapper::GetChildWindowId(),TRUE); //@51669
-                        SFX_BINDINGS().Invalidate(FID_CHG_ACCEPT);
+                        SfxBindings* pBindings = GetViewBindings();
+                        if (pBindings)
+                            pBindings->Invalidate(FID_CHG_ACCEPT);
 
                         rReq.SetReturnValue( SfxInt32Item( nSlot, 0 ) );        //! ???????
                         rReq.Done();
@@ -996,10 +1002,13 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 
             if (bExtended)
             {
-                SfxBindings& rBindings = SFX_BINDINGS();
-                rBindings.Invalidate( SID_STATUS_PAGESTYLE );
-                rBindings.Invalidate( SID_STYLE_FAMILY4 );
-                rBindings.Invalidate( FID_RESET_PRINTZOOM );
+                SfxBindings* pBindings = GetViewBindings();
+                if (pBindings)
+                {
+                    pBindings->Invalidate( SID_STATUS_PAGESTYLE );
+                    pBindings->Invalidate( SID_STYLE_FAMILY4 );
+                    pBindings->Invalidate( FID_RESET_PRINTZOOM );
+                }
             }
         }
     }
@@ -1033,8 +1042,9 @@ void ScDocShell::SetPrintZoom( USHORT nTab, USHORT nScale, USHORT nPages )
         aPrintFunc.UpdatePages();
         aModificator.SetDocumentModified();
 
-        SfxBindings& rBindings = SFX_BINDINGS();
-        rBindings.Invalidate( FID_RESET_PRINTZOOM );
+        SfxBindings* pBindings = GetViewBindings();
+        if (pBindings)
+            pBindings->Invalidate( FID_RESET_PRINTZOOM );
     }
 }
 
@@ -1142,7 +1152,9 @@ void ScDocShell::PageStyleModified( const String& rStyleName, BOOL bApi )
 
     aModificator.SetDocumentModified();
 
-    SFX_BINDINGS().Invalidate( FID_RESET_PRINTZOOM );
+    SfxBindings* pBindings = GetViewBindings();
+    if (pBindings)
+        pBindings->Invalidate( FID_RESET_PRINTZOOM );
 }
 
 void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
@@ -1189,9 +1201,12 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                             if ( aNewName != aOldName &&
                                 aDocument.RenamePageStyleInUse( aOldName, aNewName ) )
                             {
-                                SfxBindings& rBindings = SFX_BINDINGS();
-                                rBindings.Invalidate( SID_STATUS_PAGESTYLE );
-                                rBindings.Invalidate( FID_RESET_PRINTZOOM );
+                                SfxBindings* pBindings = GetViewBindings();
+                                if (pBindings)
+                                {
+                                    pBindings->Invalidate( SID_STATUS_PAGESTYLE );
+                                    pBindings->Invalidate( FID_RESET_PRINTZOOM );
+                                }
                             }
 
                             if ( pOutSet )
@@ -1942,6 +1957,16 @@ ScTabViewShell* ScDocShell::GetBestViewShell()
     return pViewSh;
 }
 
+SfxBindings* ScDocShell::GetViewBindings()
+{
+    //  used to invalidate slots after changes to this document
+
+    SfxViewShell* pViewSh = GetBestViewShell();
+    if (pViewSh)
+        return &pViewSh->GetViewFrame()->GetBindings();
+    else
+        return NULL;
+}
 
 //------------------------------------------------------------------
 

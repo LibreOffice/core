@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 #if 0
                 if( pScApp->GetSbaObject()->IsAddrPIOpen() )
                 {
-                    SFX_DISPATCHER().Execute( SID_SBA_ADDRPI,
+                    pViewData->GetDispatcher().Execute( SID_SBA_ADDRPI,
                                             SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
                 }
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,6 @@
 //sfxsh.hxx
 //#define _SFX_SHELL_HXX
 //#define _SFXAPP_HXX
-//#define _SFX_BINDINGS_HXX
 //#define _SFXDISPATCH_HXX
 //#define _SFXMSG_HXX
 //#define _SFXOBJFACE_HXX
@@ -319,6 +318,7 @@
 #include <svx/svdview.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
 
 #include "futext.hxx"
@@ -332,10 +332,8 @@
 
 //------------------------------------------------------------------
 
-void lcl_InvalidateAttribs()
+void lcl_InvalidateAttribs( SfxBindings& rBindings )
 {
-    SfxBindings& rBindings = SFX_BINDINGS();
-
     rBindings.Invalidate( SID_ATTR_CHAR_WEIGHT );
     rBindings.Invalidate( SID_ATTR_CHAR_POSTURE );
     rBindings.Invalidate( SID_ATTR_CHAR_UNDERLINE );
@@ -493,7 +491,7 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
                         }
 
                         pView->SetDragMode(SDRDRAG_MOVE);
-                        SfxBindings& rBindings = SFX_BINDINGS();
+                        SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
                         rBindings.Invalidate( SID_OBJECT_ROTATE );
                         rBindings.Invalidate( SID_OBJECT_MIRROR );
                         pHdl=pView->GetHdl(nHdlNum);
@@ -530,7 +528,8 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     //  Notizen editieren -> keine neuen Textobjekte erzeugen,
                     //  stattdessen Textmodus verlassen
 
-                    SFX_DISPATCHER().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                    pViewShell->GetViewData()->GetDispatcher().
+                        Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
                 }
                 else
                 {
@@ -547,7 +546,7 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
     {
         pWindow->CaptureMouse();
 //      ForcePointer(&rMEvt);
-        lcl_InvalidateAttribs();
+        lcl_InvalidateAttribs( pViewShell->GetViewFrame()->GetBindings() );
     }
 
     pViewShell->SetActivePointer(pView->GetPreferedPointer(
@@ -616,7 +615,7 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
         aDragTimer.Stop();
     }
 
-    lcl_InvalidateAttribs();
+    lcl_InvalidateAttribs( pViewShell->GetViewFrame()->GetBindings() );
 
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
@@ -665,10 +664,11 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 pView->MarkObj(aPnt, -2, FALSE, rMEvt.IsMod1());
 
+                SfxDispatcher& rDisp = pViewShell->GetViewData()->GetDispatcher();
                 if ( pView->HasMarkedObj() )
-                    SFX_DISPATCHER().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                    rDisp.Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
                 else
-                    SFX_DISPATCHER().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                    rDisp.Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
             }
         }
     }
@@ -699,7 +699,7 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     nSdrObjKind != OBJ_OUTLINETEXT &&
                     ! pObj->ISA(SdrTextObj) )
                 {
-//                  SFX_DISPATCHER().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+//                  pViewShell->GetViewData()->GetDispatcher().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
                 }
             }
         }
@@ -780,7 +780,7 @@ BOOL __EXPORT FuText::KeyInput(const KeyEvent& rKEvt)
     if ( pView->KeyInput(rKEvt, pWindow) )
     {
         bReturn = TRUE;
-        lcl_InvalidateAttribs();
+        lcl_InvalidateAttribs( pViewShell->GetViewFrame()->GetBindings() );
     }
     else
     {
@@ -801,7 +801,7 @@ BOOL __EXPORT FuText::KeyInput(const KeyEvent& rKEvt)
 void FuText::Activate()
 {
     pView->SetDragMode(SDRDRAG_MOVE);
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_OBJECT_ROTATE );
     rBindings.Invalidate( SID_OBJECT_MIRROR );
 
@@ -857,7 +857,7 @@ void FuText::Deactivate()
 void FuText::SelectionHasChanged()
 {
     pView->SetDragMode(SDRDRAG_MOVE);
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_OBJECT_ROTATE );
     rBindings.Invalidate( SID_OBJECT_MIRROR );
 

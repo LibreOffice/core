@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,7 +835,10 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
 
     //  kein SID_SILENT mehr wegen Bug #42525# (war angeblich sowieso falsch)
 
-    SFX_DISPATCHER().Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (pViewFrm)
+        pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
+                                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                                     &aUrl, &aTarget,
                                     &aFrm, &aReferer,
                                     &aNewView, &aBrowsing,

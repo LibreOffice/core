@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,9 @@ BOOL ScDocFunc::DetectiveAddPred(const ScAddress& rPos)
         rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
         aModificator.SetDocumentModified();
-        SFX_BINDINGS().Invalidate( SID_DETECTIVE_REFRESH );
+        SfxBindings* pBindings = rDocShell.GetViewBindings();
+        if (pBindings)
+            pBindings->Invalidate( SID_DETECTIVE_REFRESH );
     }
     else
         delete pUndo;
@@ -241,7 +243,9 @@ BOOL ScDocFunc::DetectiveDelPred(const ScAddress& rPos)
         rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
         aModificator.SetDocumentModified();
-        SFX_BINDINGS().Invalidate( SID_DETECTIVE_REFRESH );
+        SfxBindings* pBindings = rDocShell.GetViewBindings();
+        if (pBindings)
+            pBindings->Invalidate( SID_DETECTIVE_REFRESH );
     }
     else
         delete pUndo;
@@ -270,7 +274,9 @@ BOOL ScDocFunc::DetectiveAddSucc(const ScAddress& rPos)
         rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
         aModificator.SetDocumentModified();
-        SFX_BINDINGS().Invalidate( SID_DETECTIVE_REFRESH );
+        SfxBindings* pBindings = rDocShell.GetViewBindings();
+        if (pBindings)
+            pBindings->Invalidate( SID_DETECTIVE_REFRESH );
     }
     else
         delete pUndo;
@@ -301,7 +307,9 @@ BOOL ScDocFunc::DetectiveDelSucc(const ScAddress& rPos)
         rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
         aModificator.SetDocumentModified();
-        SFX_BINDINGS().Invalidate( SID_DETECTIVE_REFRESH );
+        SfxBindings* pBindings = rDocShell.GetViewBindings();
+        if (pBindings)
+            pBindings->Invalidate( SID_DETECTIVE_REFRESH );
     }
     else
         delete pUndo;
@@ -330,7 +338,9 @@ BOOL ScDocFunc::DetectiveAddError(const ScAddress& rPos)
         rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoDetective( &rDocShell, pUndo, &aOperation ) );
         aModificator.SetDocumentModified();
-        SFX_BINDINGS().Invalidate( SID_DETECTIVE_REFRESH );
+        SfxBindings* pBindings = rDocShell.GetViewBindings();
+        if (pBindings)
+            pBindings->Invalidate( SID_DETECTIVE_REFRESH );
     }
     else
         delete pUndo;
@@ -397,7 +407,9 @@ BOOL ScDocFunc::DetectiveDelAll(USHORT nTab)
         rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoDetective( &rDocShell, pUndo, NULL, pUndoList ) );
         aModificator.SetDocumentModified();
-        SFX_BINDINGS().Invalidate( SID_DETECTIVE_REFRESH );
+        SfxBindings* pBindings = rDocShell.GetViewBindings();
+        if (pBindings)
+            pBindings->Invalidate( SID_DETECTIVE_REFRESH );
     }
     else
         delete pUndo;
@@ -1845,7 +1857,9 @@ BOOL ScDocFunc::DeleteTable( USHORT nTab, BOOL bRecord, BOOL bApi )
         if (bWasLinked)
         {
             rDocShell.UpdateLinks();                // Link-Manager updaten
-            SFX_BINDINGS().Invalidate(SID_LINKS);
+            SfxBindings* pBindings = rDocShell.GetViewBindings();
+            if (pBindings)
+                pBindings->Invalidate(SID_LINKS);
         }
 
         rDocShell.PostPaintExtras();
@@ -2142,7 +2156,7 @@ BOOL ScDocFunc::InsertPageBreak( BOOL bColumn, const ScAddress& rPos,
 
     ScDocument* pDoc = rDocShell.GetDocument();
     USHORT nTab = rPos.Tab();
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings* pBindings = rDocShell.GetViewBindings();
 
     USHORT nPos = bColumn ? rPos.Col() : rPos.Row();
     if (nPos == 0)
@@ -2166,16 +2180,23 @@ BOOL ScDocFunc::InsertPageBreak( BOOL bColumn, const ScAddress& rPos,
     if (bColumn)
     {
         rDocShell.PostPaint( nPos-1, 0, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID );
-        rBindings.Invalidate( FID_INS_COLBRK );
-        rBindings.Invalidate( FID_DEL_COLBRK );
+        if (pBindings)
+        {
+            pBindings->Invalidate( FID_INS_COLBRK );
+            pBindings->Invalidate( FID_DEL_COLBRK );
+        }
     }
     else
     {
         rDocShell.PostPaint( 0, nPos-1, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID );
-        rBindings.Invalidate( FID_INS_ROWBRK );
-        rBindings.Invalidate( FID_DEL_ROWBRK );
+        if (pBindings)
+        {
+            pBindings->Invalidate( FID_INS_ROWBRK );
+            pBindings->Invalidate( FID_DEL_ROWBRK );
+        }
     }
-    rBindings.Invalidate( FID_DEL_MANUALBREAKS );
+    if (pBindings)
+        pBindings->Invalidate( FID_DEL_MANUALBREAKS );
 
     if (bSetModified)
         aModificator.SetDocumentModified();
@@ -2190,7 +2211,7 @@ BOOL ScDocFunc::RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
 
     ScDocument* pDoc = rDocShell.GetDocument();
     USHORT nTab = rPos.Tab();
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings* pBindings = rDocShell.GetViewBindings();
 
     USHORT nPos = bColumn ? rPos.Col() : rPos.Row();
     BYTE nFlags = bColumn ? pDoc->GetColFlags( nPos, nTab ) : pDoc->GetRowFlags( nPos, nTab );
@@ -2211,16 +2232,23 @@ BOOL ScDocFunc::RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
     if (bColumn)
     {
         rDocShell.PostPaint( nPos-1, 0, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID );
-        rBindings.Invalidate( FID_INS_COLBRK );
-        rBindings.Invalidate( FID_DEL_COLBRK );
+        if (pBindings)
+        {
+            pBindings->Invalidate( FID_INS_COLBRK );
+            pBindings->Invalidate( FID_DEL_COLBRK );
+        }
     }
     else
     {
         rDocShell.PostPaint( 0, nPos-1, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID );
-        rBindings.Invalidate( FID_INS_ROWBRK );
-        rBindings.Invalidate( FID_DEL_ROWBRK );
+        if (pBindings)
+        {
+            pBindings->Invalidate( FID_INS_ROWBRK );
+            pBindings->Invalidate( FID_DEL_ROWBRK );
+        }
     }
-    rBindings.Invalidate( FID_DEL_MANUALBREAKS );
+    if (pBindings)
+        pBindings->Invalidate( FID_DEL_MANUALBREAKS );
 
     if (bSetModified)
         aModificator.SetDocumentModified();
@@ -2396,11 +2424,14 @@ BOOL ScDocFunc::ChangeIndent( const ScMarkData& rMark, BOOL bIncrement, BOOL bAp
     rDocShell.PostPaint( aMarkRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
     aModificator.SetDocumentModified();
 
-    SfxBindings& rBindings = SFX_BINDINGS();
-    rBindings.Invalidate( SID_ALIGNLEFT );          // ChangeIndent setzt auf links
-    rBindings.Invalidate( SID_ALIGNRIGHT );
-    rBindings.Invalidate( SID_ALIGNBLOCK );
-    rBindings.Invalidate( SID_ALIGNCENTERHOR );
+    SfxBindings* pBindings = rDocShell.GetViewBindings();
+    if (pBindings)
+    {
+        pBindings->Invalidate( SID_ALIGNLEFT );         // ChangeIndent setzt auf links
+        pBindings->Invalidate( SID_ALIGNRIGHT );
+        pBindings->Invalidate( SID_ALIGNBLOCK );
+        pBindings->Invalidate( SID_ALIGNCENTERHOR );
+    }
 
     return TRUE;
 }
@@ -3043,9 +3074,12 @@ BOOL ScDocFunc::MergeCells( const ScRange& rRange, BOOL bContents, BOOL bRecord,
         pDoc->SetDirty( rRange );
     aModificator.SetDocumentModified();
 
-    SfxBindings& rBindings = SFX_BINDINGS();
-    rBindings.Invalidate( FID_MERGE_ON );
-    rBindings.Invalidate( FID_MERGE_OFF );
+    SfxBindings* pBindings = rDocShell.GetViewBindings();
+    if (pBindings)
+    {
+        pBindings->Invalidate( FID_MERGE_ON );
+        pBindings->Invalidate( FID_MERGE_OFF );
+    }
 
     return TRUE;
 }
@@ -3486,8 +3520,9 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     pLink->Update();                // kein SetInCreate -> Update ausfuehren
     pLink->SetDoInsert(TRUE);       // Default = TRUE
 
-    SfxBindings& rBindings = SFX_BINDINGS();
-    rBindings.Invalidate( SID_LINKS );
+    SfxBindings* pBindings = rDocShell.GetViewBindings();
+    if (pBindings)
+        pBindings->Invalidate( SID_LINKS );
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
 

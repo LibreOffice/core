@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,6 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         if ( pIPClient->IsInPlaceActive() )
         {
             pIPClient->GetProtocol().Reset2Open();
-//          SFX_APP()->SetDispatcher(pViewShell->GetViewFrame()->GetDispatcher() );
             SFX_APP()->SetViewFrame(pViewShell->GetViewFrame()); // 242.a: ???
         }
     }
@@ -411,7 +410,8 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     //
                     else if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
                     {
-                        SFX_DISPATCHER().Execute(SID_DRAW_TEXT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+                        pViewShell->GetViewData()->GetDispatcher().
+                            Execute(SID_DRAW_TEXT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
 
                         // jetzt den erzeugten FuText holen und in den EditModus setzen
                         FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
@@ -453,7 +453,8 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     //  darum hier die harte IsLeft-Abfrage
     if ( !bReturn && rMEvt.IsLeft() )
         if (pViewShell->IsDrawSelMode())
-            SFX_DISPATCHER().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+            pViewShell->GetViewData()->GetDispatcher().
+                Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 
     return (bReturn);
 }

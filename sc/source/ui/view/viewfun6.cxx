@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun6.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ void ScViewFunc::EditNote()
             //  Shown-Flag nicht veraendern
 
             //  Objekt aktivieren (wie in FuSelection::TestComment)
-            SFX_DISPATCHER().Execute(SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+            GetViewData()->GetDispatcher().Execute(SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
             // jetzt den erzeugten FuText holen und in den EditModus setzen
             FuPoor* pPoor = GetDrawFuncPtr();
             if ( pPoor && pPoor->GetSlotID() == SID_DRAW_NOTEEDIT )  // hat keine RTTI

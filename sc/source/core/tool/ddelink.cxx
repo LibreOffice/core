@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,8 +291,9 @@ void __EXPORT ScDdeLink::ListenersGone()
 
     if ( !pLinkMgr->GetLinks().Count() )            // letzten geloescht ?
     {
-        SfxBindings& rBind = SFX_BINDINGS();
-        rBind.Invalidate( SID_LINKS );
+        SfxBindings* pBindings = pDoc->GetViewBindings();
+        if (pBindings)
+            pBindings->Invalidate( SID_LINKS );
     }
 
     bIsInUpdate = bWas;

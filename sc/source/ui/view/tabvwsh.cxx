@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,6 @@
 #define _SVDRAG_HXX
 #define _SVDLAYER_HXX
 
-//#define _SFX_BINDINGS_HXX
 #define _SFXFILEDLG_HXX
 #define _SFX_MACRO_HXX
 #define _SFXMNUITEM_HXX
@@ -166,9 +165,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#define GLOBALOVERFLOW
-#include <segmentc.hxx>
-
 #include "scitems.hxx"
 #include <basctl/idetemp.hxx>
 #include <svx/imapdlg.hxx>
@@ -190,10 +186,6 @@
 
 #define SearchSettings
 #include <svx/svxslots.hxx>
-
-SEG_EOFGLOBALS()
-
-#pragma SEG_SEGCLASS(SFXMACROS_SEG,STARTWORK_CODE)
 
 TYPEINIT2(ScTabViewShell,SfxViewShell,SfxListener);
 
@@ -235,92 +227,5 @@ SFX_IMPL_VIEWFACTORY( ScTabViewShell, ScResId(STR_NONAME) )
 }
 
 //------------------------------------------------------------------
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.305  2000/09/17 14:09:35  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.304  2000/09/04 13:31:53  tbe
-    basicide, isetbrw, si, vcdlged moved from svx to basctl
-
-    Revision 1.303  2000/08/31 16:38:48  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.302  2000/05/09 18:30:15  nn
-    use IMPL_INTERFACE macro without IDL
-
-    Revision 1.301  2000/05/09 17:37:21  nn
-    old Basic removed
-
-    Revision 1.300  2000/04/14 08:31:38  nn
-    unicode changes
-
-    Revision 1.299  2000/02/09 09:57:30  nn
-    #72165# child window registration for hyperlink dialog
-
-    Revision 1.298  1999/06/07 15:30:30  ANK
-    #66547# Searchsettings aktiviert
-
-
-      Rev 1.297   07 Jun 1999 17:30:30   ANK
-   #66547# Searchsettings aktiviert
-
-      Rev 1.296   02 Jun 1999 21:42:26   ANK
-   #66547# SubShells
-
-      Rev 1.295   09 Apr 1998 21:58:40   ANK
-   Redlining Erweiterungen
-
-      Rev 1.294   13 Mar 1998 12:58:24   ANK
-   Changes
-
-      Rev 1.293   08 Mar 1998 20:38:28   ANK
-   Redlining
-
-      Rev 1.292   05 Dec 1997 19:22:38   NN
-   Includes
-
-      Rev 1.291   20 Nov 1997 20:30:56   NN
-   includes angepasst
-
-      Rev 1.290   14 Oct 1997 19:58:56   ANK
-   Neue Funktionsbox
-
-      Rev 1.289   23 May 1997 20:32:30   NN
-   ScFormulaDlgWrapper registrieren
-
-      Rev 1.288   08 Apr 1997 17:34:42   HJS
-   includes, defines
-
-      Rev 1.287   18 Nov 1996 19:11:58   ER
-   new: ScColRowNameRangesDlg
-
-      Rev 1.286   14 Nov 1996 22:00:44   NN
-   CHILDWINDOW_CONTEXT_REGISTRATION fuer Navigator
-
-      Rev 1.285   29 Oct 1996 13:36:20   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.284   16 Oct 1996 16:24:52   RJ
-   Einbindung des Dialogs fuer bedingte Formatierung
-
-      Rev 1.283   09 Aug 1996 20:35:02   NN
-   Svx-Includes aus scitems.hxx raus
-
-      Rev 1.282   10 Jul 1996 14:21:18   KA
-   gallery entfernt, da jetzt im Explorer
-
-      Rev 1.281   05 Jul 1996 17:25:26   NN
-   SearchSettings aus svxslots, bei GetSbxObject anlegen
-
-      Rev 1.280   20 Jun 1996 19:04:08   NN
-   Werkzeugleiste registrieren
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
 

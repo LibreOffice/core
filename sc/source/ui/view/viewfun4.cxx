@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
         GetViewData()->GetEditView(eWhich, pEditView, nCol, nRow);
         pEditSel = new ESelection(pEditView->GetSelection());
         SC_MOD()->InputEnterHandler();
-        SFX_BINDINGS().Update();            // sonst kommt der Sfx durcheinander...
+        GetViewData()->GetBindings().Update();          // sonst kommt der Sfx durcheinander...
     }
     else
     {
@@ -582,7 +582,7 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
         if ( pFlt && !nErr )
         {
             // Code aus dem SFX geklaut!
-            SfxDispatcher &rDispatcher = SFX_DISPATCHER();
+            SfxDispatcher &rDispatcher = GetViewData()->GetDispatcher();
             SfxStringItem aFileNameItem( SID_FILE_NAME, rFile );
             SfxStringItem aFilterItem( SID_FILTER_NAME, pFlt->GetName() );
 

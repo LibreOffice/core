@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
     //  Rahmen fuer Chart einfuegen wird abgebrochen:
     FuPoor* pPoor = GetDrawFuncPtr();
     if ( pPoor && pPoor->GetSlotID() == SID_DRAW_CHART )
-        SFX_DISPATCHER().Execute(SID_DRAW_CHART, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+        GetViewData()->GetDispatcher().Execute(SID_DRAW_CHART, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 
     MakeDrawLayer();
 

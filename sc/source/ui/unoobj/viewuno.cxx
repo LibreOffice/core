@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,7 +1023,7 @@ void ScTabViewObj::setZoom(INT16 Zoom)
         pViewSh->PaintGrid();
         pViewSh->PaintTop();
         pViewSh->PaintLeft();
-        SFX_BINDINGS().Invalidate( SID_ATTR_ZOOM );
+        pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     }
 }
 
@@ -1308,7 +1308,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
             pViewSh->PaintExtras();
             pViewSh->InvalidateBorder();
 
-            SfxBindings& rBindings = SFX_BINDINGS();
+            SfxBindings& rBindings = pViewSh->GetViewFrame()->GetBindings();
             rBindings.Invalidate( FID_TOGGLEHEADERS ); // -> Checks im Menue
             rBindings.Invalidate( FID_TOGGLESYNTAX );
         }

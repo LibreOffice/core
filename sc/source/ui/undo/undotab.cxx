@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undotab.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,9 @@ void __EXPORT ScUndoInsertTab::Redo()
 
 void __EXPORT ScUndoInsertTab::Repeat(SfxRepeatTarget& rTarget)
 {
-    SFX_DISPATCHER().Execute(FID_INS_TABLE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+    if (rTarget.ISA(ScTabViewTarget))
+        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData()->GetDispatcher().
+            Execute(FID_INS_TABLE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 }
 
 BOOL __EXPORT ScUndoInsertTab::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -323,7 +325,9 @@ void __EXPORT ScUndoInsertTables::Redo()
 
 void __EXPORT ScUndoInsertTables::Repeat(SfxRepeatTarget& rTarget)
 {
-    SFX_DISPATCHER().Execute(FID_INS_TABLE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+    if (rTarget.ISA(ScTabViewTarget))
+        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData()->GetDispatcher().
+            Execute(FID_INS_TABLE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 }
 
 BOOL __EXPORT ScUndoInsertTables::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -430,7 +434,6 @@ void __EXPORT ScUndoDeleteTab::Undo()
     if (bLink)
     {
         pDocShell->UpdateLinks();               // Link-Manager updaten
-        SFX_BINDINGS().Invalidate(SID_LINKS);
     }
 
     EndUndo();      // Draw-Undo muss vor dem Broadcast kommen!
@@ -1004,7 +1007,9 @@ void __EXPORT ScUndoImportTab::Redo()
 
 void __EXPORT ScUndoImportTab::Repeat(SfxRepeatTarget& rTarget)
 {
-    SFX_DISPATCHER().Execute(FID_INS_TABLE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+    if (rTarget.ISA(ScTabViewTarget))
+        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData()->GetDispatcher().
+            Execute(FID_INS_TABLE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 }
 
 BOOL __EXPORT ScUndoImportTab::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1074,7 +1079,6 @@ void ScUndoRemoveLink::DoChange( BOOL bLink ) const
         else            // remove link
             pDoc->SetLink( pTabs[i], SC_LINK_NONE, aEmpty, aEmpty, aEmpty, aEmpty );
     pDocShell->UpdateLinks();
-    SFX_BINDINGS().Invalidate(SID_LINKS);
 }
 
 void __EXPORT ScUndoRemoveLink::Undo()
@@ -1139,7 +1143,9 @@ void __EXPORT ScUndoShowHideTab::Redo()
 
 void __EXPORT ScUndoShowHideTab::Repeat(SfxRepeatTarget& rTarget)
 {
-    SFX_DISPATCHER().Execute( bShow ? FID_TABLE_SHOW : FID_TABLE_HIDE,
+    if (rTarget.ISA(ScTabViewTarget))
+        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData()->GetDispatcher().
+            Execute( bShow ? FID_TABLE_SHOW : FID_TABLE_HIDE,
                                 SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,12 +259,12 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     // Wenn ToolBar vertikal :
     if ( !rReq.GetArgs() )
     {
-        SFX_DISPATCHER().Execute( SID_STYLE_DESIGNER, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+        pViewData->GetDispatcher().Execute( SID_STYLE_DESIGNER, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
         return;
     }
 
     //--------------------------------------------------------------------
-    SfxBindings&        rBindings   = SFX_BINDINGS();
+    SfxBindings&        rBindings   = pViewData->GetBindings();
     const SfxItemSet*   pArgs       = rReq.GetArgs();
     const USHORT        nSlotId     = rReq.GetSlot();
     const USHORT        nCurTab     = GetViewData()->GetTabNo();
@@ -914,7 +914,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
-    SfxBindings&            rBindings   = SFX_BINDINGS();
+    SfxBindings&            rBindings   = pViewData->GetBindings();
     const SfxItemSet*       pSet        = rReq.GetArgs();
     USHORT                  nSlot       = rReq.GetSlot();
 
@@ -963,7 +963,7 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
 void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
-    SfxBindings&            rBindings   = SFX_BINDINGS();
+    SfxBindings&            rBindings   = pViewData->GetBindings();
     const ScPatternAttr*    pAttrs      = pTabViewShell->GetSelectionPattern();
     const SfxItemSet*       pSet        = rReq.GetArgs();
     const SfxItemSet*       pReqArgs    = rReq.GetArgs();
@@ -1231,7 +1231,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
-    SfxBindings&        rBindings = SFX_BINDINGS();
+    SfxBindings&        rBindings = pViewData->GetBindings();
     const SfxItemSet*   pNewAttrs = rReq.GetArgs();
 
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox

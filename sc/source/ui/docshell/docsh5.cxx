@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,7 +805,9 @@ void ScDocShell::ModifyScenario( USHORT nTab, const String& rName, const String&
     if ( rName != aOldName )
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
 
-    SFX_BINDINGS().Invalidate( SID_SELECT_SCENARIO );
+    SfxBindings* pBindings = GetViewBindings();
+    if (pBindings)
+        pBindings->Invalidate( SID_SELECT_SCENARIO );
 }
 
 USHORT ScDocShell::MakeScenario( USHORT nTab, const String& rName, const String& rComment,

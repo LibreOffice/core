@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbinsert.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,6 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
 // INCLUDE ---------------------------------------------------------------
 
 #include <tools/shl.hxx>
@@ -87,9 +83,7 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 
-// STATIC DATA -----------------------------------------------------------
-
-SEG_EOFGLOBALS()
+// -----------------------------------------------------------------------
 
 SFX_IMPL_TOOLBOX_CONTROL( ScTbxInsertCtrl, SfxUInt16Item);
 
@@ -99,21 +93,15 @@ SFX_IMPL_TOOLBOX_CONTROL( ScTbxInsertCtrl, SfxUInt16Item);
 //
 //------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(tbinsert_01)
-
 ScTbxInsertCtrl::ScTbxInsertCtrl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind ) :
         SfxToolBoxControl( nId, rTbx, rBind ),
         nLastSlotId(0)
 {
 }
 
-#pragma SEG_FUNCDEF(tbinsert_02)
-
 __EXPORT ScTbxInsertCtrl::~ScTbxInsertCtrl()
 {
 }
-
-#pragma SEG_FUNCDEF(tbinsert_03)
 
 void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState )
@@ -132,8 +120,6 @@ void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT nSID, SfxItemState eState,
         }
     }
 }
-
-#pragma SEG_FUNCDEF(tbinsert_04)
 
 SfxPopupWindow* __EXPORT ScTbxInsertCtrl::CreatePopupWindow()
 {
@@ -164,19 +150,15 @@ SfxPopupWindow* __EXPORT ScTbxInsertCtrl::CreatePopupWindow()
     return pWin;
 }
 
-#pragma SEG_FUNCDEF(tbinsert_05)
-
 SfxPopupWindowType __EXPORT ScTbxInsertCtrl::GetPopupWindowType() const
 {
     return nLastSlotId ? SFX_POPUPWINDOW_ONTIMEOUT : SFX_POPUPWINDOW_ONCLICK;
 }
 
-#pragma SEG_FUNCDEF(tbinsert_06)
-
 void __EXPORT ScTbxInsertCtrl::Select( BOOL bMod1 )
 {
     if (nLastSlotId)
-        SFX_DISPATCHER().Execute(nLastSlotId);
+        GetBindings().GetDispatcher()->Execute(nLastSlotId);
 }
 
 //------------------------------------------------------------------
@@ -184,8 +166,6 @@ void __EXPORT ScTbxInsertCtrl::Select( BOOL bMod1 )
 //  Popup - Window
 //
 //------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(tbinsert_07)
 
 ScTbxInsertPopup::ScTbxInsertPopup( USHORT nId, WindowAlign eNewAlign,
                         const ResId& rRIdWin, const ResId& rRIdTbx,
@@ -210,13 +190,9 @@ ScTbxInsertPopup::ScTbxInsertPopup( USHORT nId, WindowAlign eNewAlign,
     aTbx.GetToolBox().SetClickHdl(  LINK(this, ScTbxInsertPopup, TbxClickHdl));
 }
 
-#pragma SEG_FUNCDEF(tbinsert_08)
-
 ScTbxInsertPopup::~ScTbxInsertPopup()
 {
 }
-
-#pragma SEG_FUNCDEF(tbinsert_09)
 
 SfxPopupWindow* __EXPORT ScTbxInsertPopup::Clone() const
 {
@@ -225,14 +201,10 @@ SfxPopupWindow* __EXPORT ScTbxInsertPopup::Clone() const
                                     (SfxBindings&) GetBindings() );
 }
 
-#pragma SEG_FUNCDEF(tbinsert_0a)
-
 void ScTbxInsertPopup::StartSelection()
 {
     aTbx.GetToolBox().StartSelection();
 }
-
-#pragma SEG_FUNCDEF(tbinsert_0b)
 
 IMPL_LINK(ScTbxInsertPopup, TbxSelectHdl, ToolBox*, pBox)
 {
@@ -240,18 +212,17 @@ IMPL_LINK(ScTbxInsertPopup, TbxSelectHdl, ToolBox*, pBox)
 
     USHORT nLastSlotId = pBox->GetCurItemId();
     SfxUInt16Item aItem( GetId(), nLastSlotId );
-    SFX_DISPATCHER().Execute( GetId(), SFX_CALLMODE_SYNCHRON, &aItem, 0L );
-    SFX_DISPATCHER().Execute( nLastSlotId, SFX_CALLMODE_ASYNCHRON );
+    SfxDispatcher* pDisp = GetBindings().GetDispatcher();
+    pDisp->Execute( GetId(), SFX_CALLMODE_SYNCHRON, &aItem, 0L );
+    pDisp->Execute( nLastSlotId, SFX_CALLMODE_ASYNCHRON );
     return 0;
 }
-
-#pragma SEG_FUNCDEF(tbinsert_0c)
 
 IMPL_LINK(ScTbxInsertPopup, TbxClickHdl, ToolBox*, pBox)
 {
     USHORT nLastSlotId = pBox->GetCurItemId();
     SfxUInt16Item aItem( GetId(), nLastSlotId );
-    SFX_DISPATCHER().Execute( GetId(), SFX_CALLMODE_SYNCHRON, &aItem, 0L );
+    GetBindings().GetDispatcher()->Execute( GetId(), SFX_CALLMODE_SYNCHRON, &aItem, 0L );
     if(aTbxClickHdl.IsSet())
         aTbxClickHdl.Call(pBox);
     return 0;
@@ -263,60 +234,5 @@ void __EXPORT ScTbxInsertPopup::PopupModeEnd()
     SfxPopupWindow::PopupModeEnd();
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.15  2000/09/17 14:08:55  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.14  2000/08/31 16:38:19  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.13  2000/05/24 17:40:43  er
-    NOOLDSV
-
-    Revision 1.12  2000/05/23 13:07:55  hr
-    prevent conflict between STLPORT and Workshop
-
-    Revision 1.11  1999/04/07 11:52:12  ANK
-    #64357# Asynchron die Slots ausfuehren
-
-
-      Rev 1.10   07 Apr 1999 13:52:12   ANK
-   #64357# Asynchron die Slots ausfuehren
-
-      Rev 1.9   24 Jul 1998 16:05:20   NN
-   #51812# bei GetImage am ImageManager das Module angeben
-
-      Rev 1.8   10 Mar 1998 14:42:54   NN
-   ToolBoxManager mit GetBindings() statt rBindings initialisieren
-
-      Rev 1.7   05 Dec 1997 20:03:38   ANK
-   Includes geaendert
-
-      Rev 1.6   19 Sep 1997 12:12:20   NN
-   EndPopupMode / EndSelection rufen
-
-      Rev 1.5   23 Mar 1997 22:40:06   NN
-   Alignment im ctor des PopupWindow uebergeben
-
-      Rev 1.4   23 Mar 1997 17:52:28   NN
-   Clone nicht mit altem ToolBoxControl (sonst GPF nach Praesentation)
-
-      Rev 1.3   14 Nov 1996 09:46:10   NF
-   includes...
-
-      Rev 1.2   29 Oct 1996 14:04:50   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.1   21 Oct 1996 15:32:20   NN
-   Ausrichtung mit IsHorizontal statt eAlign abfragen
-
-      Rev 1.0   16 Oct 1996 16:48:30   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
 

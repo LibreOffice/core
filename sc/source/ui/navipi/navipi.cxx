@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 18:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,7 +818,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
     rBindings.LEAVEREGISTRATIONS();
 
     StartListening( *(SFX_APP()) );
-    StartListening( SFX_BINDINGS() );
+    StartListening( rBindings );
 
     aLbDocuments.Hide();        // bei NAV_LMODE_NONE gibts die nicht
 
@@ -867,7 +867,7 @@ __EXPORT ScNavigatorDlg::~ScNavigatorDlg()
     delete pMarkArea;
 
     EndListening( *(SFX_APP()) );
-    EndListening( SFX_BINDINGS() );
+    EndListening( rBindings );
 }
 
 //------------------------------------------------------------------------
@@ -1147,7 +1147,7 @@ void ScNavigatorDlg::SetCurrentCell( USHORT nColNo, USHORT nRowNo )
         SfxStringItem   aPosItem( SID_CURRENTCELL, aAddr );
         SfxBoolItem     aUnmarkItem( FN_PARAM_1, bUnmark );     // ggf. Selektion aufheben
 
-        SFX_DISPATCHER().Execute( SID_CURRENTCELL,
+        rBindings.GetDispatcher()->Execute( SID_CURRENTCELL,
                                   SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
                                   &aPosItem, &aUnmarkItem, 0L );
     }
@@ -1158,7 +1158,7 @@ void ScNavigatorDlg::SetCurrentCellStr( const String rName )
     ppBoundItems[0]->ClearCache();
     SfxStringItem   aNameItem( SID_CURRENTCELL, rName );
 
-    SFX_DISPATCHER().Execute( SID_CURRENTCELL,
+    rBindings.GetDispatcher()->Execute( SID_CURRENTCELL,
                               SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
                               &aNameItem, 0L );
 }
@@ -1171,7 +1171,7 @@ void ScNavigatorDlg::SetCurrentTable( USHORT nTabNo )
     {
         //  Tabelle fuer Basic ist 1-basiert
         SfxUInt16Item aTabItem( SID_CURRENTTAB, nTabNo + 1 );
-        SFX_DISPATCHER().Execute( SID_CURRENTTAB,
+        rBindings.GetDispatcher()->Execute( SID_CURRENTTAB,
                                   SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
                                   &aTabItem, 0L );
     }
@@ -1203,7 +1203,7 @@ void ScNavigatorDlg::SetCurrentTableStr( const String rName )
 void ScNavigatorDlg::SetCurrentObject( const String rName )
 {
     SfxStringItem aNameItem( SID_CURRENTOBJECT, rName );
-    SFX_DISPATCHER().Execute( SID_CURRENTOBJECT,
+    rBindings.GetDispatcher()->Execute( SID_CURRENTOBJECT,
                               SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
                               &aNameItem, 0L );
 }
@@ -1213,7 +1213,7 @@ void ScNavigatorDlg::SetCurrentObject( const String rName )
 void ScNavigatorDlg::SetCurrentDoc( const String& rDocName )        // aktivieren
 {
     SfxStringItem aDocItem( SID_CURRENTDOC, rDocName );
-    SFX_DISPATCHER().Execute( SID_CURRENTDOC,
+    rBindings.GetDispatcher()->Execute( SID_CURRENTDOC,
                               SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
                               &aDocItem, 0L );
 }
@@ -1386,15 +1386,15 @@ void ScNavigatorDlg::ShowScenarios( BOOL bShow, BOOL bSetSize )
 
     if ( bShow )
     {
-        SfxBindings& rBindings = SFX_BINDINGS();
-        Size         aMinSize  = aInitSize;
-
+        Size aMinSize = aInitSize;
         aMinSize.Height() += nInitListHeight;
         if ( pFloat )
             pFloat->SetMinOutputSizePixel( aMinSize );
         aSize.Height() = nListModeHeight;
+
         rBindings.Invalidate( SID_SELECT_SCENARIO );
         rBindings.Update( SID_SELECT_SCENARIO );
+
         aWndScenarios.Show();
         aLbDocuments.Show();
     }
