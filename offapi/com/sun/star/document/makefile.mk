@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:53:41 $
+#   last change: $Author: vg $ $Date: 2003-04-01 09:47:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,7 @@ IDLFILES=\
     MediaDescriptor.idl\
     NoSuchFilterRequest.idl\
     OfficeDocument.idl\
+    PrinterIndependentLayout.idl\
     RedlineDisplayType.idl \
     Settings.idl\
     StandaloneDocumentInfo.idl\
