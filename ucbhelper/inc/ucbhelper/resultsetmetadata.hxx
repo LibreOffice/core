@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetmetadata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-26 11:28:30 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
+#endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
 #endif
 
 namespace com { namespace sun { namespace star {
@@ -192,7 +195,7 @@ struct ResultSetMetaData_Impl;
  * com::sun::star::sdbc::XResultSetMetaDataSupplier, which is required for
  * implementations of service com.sun.star.ucb.ContentResultSet.
  */
-class ResultSetMetaData :
+class UCBHELPER_DLLPUBLIC ResultSetMetaData :
                 public ::cppu::OWeakObject,
                 public ::com::sun::star::lang::XTypeProvider,
                 public ::com::sun::star::sdbc::XResultSetMetaData
