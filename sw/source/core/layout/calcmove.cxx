@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:55:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,14 +294,21 @@ inline void PrepareUnlock( SwFlowFrm *pTab )
 
 }
 
-
+// hopefully, one day this function simply will return 'false'
+bool lcl_IsCalcUpperAllowed( const SwFrm& rFrm )
+{
+    return !rFrm.GetUpper()->IsSctFrm() &&
+           !rFrm.GetUpper()->IsFooterFrm() &&
+           !( rFrm.GetUpper()->IsTabFrm() && rFrm.GetUpper()->GetUpper()->IsInTab() ) &&
+           !( rFrm.IsTabFrm() && rFrm.GetUpper()->IsInTab() );
+}
 
 void SwFrm::PrepareMake()
 {
     StackHack aHack;
     if ( GetUpper() )
     {
-        if( !GetUpper()->IsSctFrm() && !GetUpper()->IsFooterFrm() )
+        if ( lcl_IsCalcUpperAllowed( *this ) )
             GetUpper()->Calc();
         ASSERT( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
         if ( !GetUpper() )
@@ -385,7 +392,7 @@ void SwFrm::PrepareMake()
         if ( !GetUpper() )
             return;
 
-        if( !GetUpper()->IsSctFrm() && !GetUpper()->IsFooterFrm() )
+        if ( lcl_IsCalcUpperAllowed( *this ) )
             GetUpper()->Calc();
 
         ASSERT( GetUpper(), "Layoutgeruest wackelig (Upper wech III)." );
@@ -589,6 +596,7 @@ void SwFrm::MakePos()
             ///     <FormatSize(..)>, which is called from <Format(..)>, which
             ///     is called from <MakeAll()>, which is called from <Calc()>.
             if ( !GetUpper()->IsTabFrm() &&
+                 !( IsTabFrm() && GetUpper()->IsInTab() ) &&
                  !GetUpper()->IsSctFrm() &&
                  !( GetUpper()->IsFooterFrm() &&
                     GetUpper()->IsColLocked() )
