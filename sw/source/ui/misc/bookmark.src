@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:52:00 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT[ korean ] = "»èÁ¦(~D)";
         TEXT[ arabic ] = "ÍĞİ";
         TEXT[ turkish ] = "~Sil";
+        TEXT[ catalan ] = "~Eliminar";
     };
     GroupBox GB_BOOKMARK
     {
@@ -162,6 +163,7 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT[ korean ] = "Ã¥°¥ÇÇ";
         TEXT[ arabic ] = "ÅÔÇÑÇÊ ãÑÌÚíÉ";
         TEXT[ turkish ] = "Metin işareti";
+        TEXT[ catalan ] = "Marcas de texto";
     };
     TEXT[ chinese_simplified ] = "²åÈëÊéÇ©";
     TEXT[ russian ] = "Âñòàâêà òåêñòîâîé ïîìåòêè";
@@ -172,6 +174,7 @@ ModalDialog DLG_INSERT_BOOKMARK
     TEXT[ korean ] = "Ã¥°¥ÇÇ »ğÀÔ";
     TEXT[ arabic ] = "ÅÏÑÇÌ ÅÔÇÑÉ ãÑÌÚíÉ";
     TEXT[ turkish ] = "Metin işareti ekle";
+    TEXT[ catalan ] = "Insertar marca";
 };
 String STR_REMOVE_WARNING
 {
@@ -195,5 +198,6 @@ String STR_REMOVE_WARNING
     Text[ chinese_traditional ] = "¤U¦Cªº¦r«¬µL®Ä¦Ó³Q§R°£¡G ";
     Text[ arabic ] = "ÇáÃÍÑİ ÇáÊÇáíÉ ÛíÑ ÕÇáÍÉ¡ áåĞÇ Êã ÍĞİåÇ: ";
     Text[ turkish ] = "Aşağıdaki karakterler geçerli değiller ve bu nedenle çıkartıldılar: ";
+    Text[ catalan ] = "Los siguientes caracteres han sido eliminados porque no se permiten:  ";
 };
 
