@@ -3,9 +3,9 @@
 #*    $Workfile:$
 #*
 #*    Creation date     KR 28.06.99
-#*    last change       $Author: jbu $ $Date: 2002-10-01 13:31:06 $
+#*    last change       $Author: kz $ $Date: 2004-08-30 17:26:25 $
 #*
-#*    $Revision: 1.17 $
+#*    $Revision: 1.18 $
 #*
 #*    $Logfile:$
 #*
@@ -35,6 +35,8 @@ UNIXTEXT= \
 # --- Files --------------------------------------------------------
 
 JAVACLASSFILES = \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpCompiler.class			        \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpLinker.class  			        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpContentIdentifier.class        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpProvider.class                 \
     $(CLASSDIR)$/$(PACKAGE)$/HelpContent.class                  \
@@ -42,6 +44,7 @@ JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/HelpDatabases.class                \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandlerFactory.class  \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandler.class         \
+    $(CLASSDIR)$/$(PACKAGE)$/FileURLStreamHandlerWithNotify.class  \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandlerWithJars.class \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLConnection.class            \
     $(CLASSDIR)$/$(PACKAGE)$/HelpURLConnectionWithJars.class    \
@@ -52,6 +55,7 @@ JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/HelpResultSet.class                \
     $(CLASSDIR)$/$(PACKAGE)$/HelpResultSetForRoot.class         \
     $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class                  \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpKeyword.class                  \
     $(CLASSDIR)$/$(PACKAGE)$/HelpTransformer.class              \
     $(CLASSDIR)$/$(PACKAGE)$/HelpPackager.class                 \
     $(CLASSDIR)$/$(PACKAGE)$/CreateDb.class                     \
@@ -67,7 +71,4 @@ CUSTOMMANIFESTFILE = manifest
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-%.java:
-    javamaker -BUCR -O$(OUT)$/misc$/java $(subst,$/,. $(subst,$(OUT)$/misc$/java$/,-T  $*)) $(RDB)
 
