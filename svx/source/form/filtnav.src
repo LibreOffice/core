@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:25 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ Menu RID_FM_FILTER_MENU
             Text = "~L�schen" ;
             Text [ ENGLISH ] = "~Delete" ;
             Text [ english_us ] = "~Delete" ;
-            Text [ portuguese_brazilian ] = "L?chen" ;
+            Text [ portuguese_brazilian ] = "E~xcluir" ;
             Text [ swedish ] = "~Radera" ;
             Text [ danish ] = "Slet" ;
             Text [ italian ] = "~Elimina" ;
@@ -82,7 +82,7 @@ Menu RID_FM_FILTER_MENU
             Text [ portuguese ] = "E~liminar" ;
             Text[ chinese_simplified ] = "删除(~D)";
             Text[ russian ] = "�������";
-            Text[ polish ] = "Usu�";
+            Text[ polish ] = "~Usu�";
             Text[ japanese ] = "削除(~D)";
             Text[ chinese_traditional ] = "刪除(~D)";
             Text[ arabic ] = "���";
@@ -93,6 +93,9 @@ Menu RID_FM_FILTER_MENU
             Text[ catalan ] = "~Suprimeix";
             Text[ finnish ] = "~Poista";
             Text[ thai ] = "~ลบ";
+            Text[ czech ] = "Smazat";
+            Text[ hebrew ] = "‮מחיקה‬";
+            Text[ hindi ] = "~मिटाओ";
         };
         MenuItem
         {
@@ -110,7 +113,7 @@ Menu RID_FM_FILTER_MENU
             Text[ danish ] = "~Rediger";
             Text[ swedish ] = "~Redigera";
             Text[ polish ] = "~Edytuj";
-            Text[ portuguese_brazilian ] = "~Edit";
+            Text[ portuguese_brazilian ] = "~Editar";
             Text[ japanese ] = "編集(~E)";
             Text[ korean ] = "편집(~E)";
             Text[ chinese_simplified ] = "编辑(~E)";
@@ -121,6 +124,9 @@ Menu RID_FM_FILTER_MENU
             Text[ catalan ] = "~Edita";
             Text[ finnish ] = "~Muokkaa";
             Text[ thai ] = "แ~ก้ไข";
+            Text[ czech ] = "Upravit";
+            Text[ hebrew ] = "‮עריכה‬";
+            Text[ hindi ] = "~संपादन";
         };
         MenuItem
         {
@@ -138,8 +144,8 @@ Menu RID_FM_FILTER_MENU
             Text[ italian ] = "� ~vuoto";
             Text[ danish ] = "Er tom";
             Text[ swedish ] = "~�r tom";
-            Text[ polish ] = "Jest pusty";
-            Text[ portuguese_brazilian ] = "~IS NULL";
+            Text[ polish ] = "~Jest pusty";
+            Text[ portuguese_brazilian ] = "~� Vazio";
             Text[ japanese ] = "空白(~I)";
             Text[ korean ] = "비어 있음(~I)";
             Text[ chinese_simplified ] = "是空缺(~I)";
@@ -149,6 +155,9 @@ Menu RID_FM_FILTER_MENU
             Text[ catalan ] = "~Buit";
             Text[ finnish ] = "~Ei p�de";
             Text[ thai ] = "เ~ป็น Null";
+            Text[ czech ] = "Je null";
+            Text[ hebrew ] = "‮ריק‬";
+            Text[ hindi ] = "Null है ~क्या";
         };
         MenuItem
         {
@@ -166,8 +175,8 @@ Menu RID_FM_FILTER_MENU
             Text[ italian ] = "~Non � vuoto";
             Text[ danish ] = "Er ikke tom";
             Text[ swedish ] = "~�r inte tom";
-            Text[ polish ] = "Nie jest pusty";
-            Text[ portuguese_brazilian ] = "~IS NOT NULL";
+            Text[ polish ] = "~Nie jest pusty";
+            Text[ portuguese_brazilian ] = "~N�o � Vazio";
             Text[ japanese ] = "空白でない(~S)";
             Text[ korean ] = "비어 있지 않음(~S)";
             Text[ chinese_simplified ] = "不是空缺(~S)";
@@ -177,9 +186,21 @@ Menu RID_FM_FILTER_MENU
             Text[ catalan ] = "~No buit";
             Text[ finnish ] = "~P�tee";
             Text[ thai ] = "ไ~ม่เป็น  Null";
+            Text[ czech ] = "Není null";
+            Text[ hebrew ] = "‮לא ריק‬";
+            Text[ hindi ] = "Null ~नहीं है क्या";
         };
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 
