@@ -83,6 +83,11 @@ F4_DRAWGRAPHICS = \
     draw_xpm_Export
 
 # -----------------------------------------------
+# count = 1
+F4_UI_DRAWGRAPHICS = \
+    draw_html_Export_ui
+
+# -----------------------------------------------
 # count = 0
 L4_DRAWGRAPHICS =
 
@@ -91,15 +96,22 @@ L4_DRAWGRAPHICS =
 C4_DRAWGRAPHICS =
 
 # -----------------------------------------------
-TYPES_4fcfg_drawgraphics           = $(foreach,i,$(T4_DRAWGRAPHICS) types$/$i.xcu          )
-FILTERS_4fcfg_drawgraphics         = $(foreach,i,$(F4_DRAWGRAPHICS) filters$/$i.xcu        )
-FRAMELOADERS_4fcfg_drawgraphics    = $(foreach,i,$(L4_DRAWGRAPHICS) frameloaders$/$i.xcu   )
-CONTENTHANDLERS_4fcfg_drawgraphics = $(foreach,i,$(C4_DRAWGRAPHICS) contenthandlers$/$i.xcu)
+TYPES_4fcfg_drawgraphics           = $(foreach,i,$(T4_DRAWGRAPHICS)    types$/$i.xcu                    )
+FILTERS_4fcfg_drawgraphics         = $(foreach,i,$(F4_DRAWGRAPHICS)    filters$/$i.xcu                  )
+UI_FILTERS_4fcfg_drawgraphics      = $(foreach,i,$(F4_UI_DRAWGRAPHICS) $(DIR_LOCFRAG)$/filters$/$i.xcu  )
+FRAMELOADERS_4fcfg_drawgraphics    = $(foreach,i,$(L4_DRAWGRAPHICS)    frameloaders$/$i.xcu             )
+CONTENTHANDLERS_4fcfg_drawgraphics = $(foreach,i,$(C4_DRAWGRAPHICS)    contenthandlers$/$i.xcu          )
 
 # -----------------------------------------------
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_drawgraphics = \
     $(TYPES_4fcfg_drawgraphics) \
-    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
+    $(FILTERS_4fcfg_drawgraphics) \
+    $(UI_FILTERS_4fcfg_drawgraphics) \
     $(FRAMELOADERS_4fcfg_drawgraphics) \
     $(CONTENTHANDLERS_4fcfg_drawgraphics)
+    
+ALL_UI_FILTERS+=$(UI_FILTERS_4fcfg_drawgraphics)    
+    
+ALL_PACKAGES+=drawgraphics
+    
