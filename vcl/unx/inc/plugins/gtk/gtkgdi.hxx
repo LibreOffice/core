@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkgdi.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 10:55:15 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,11 @@ protected:
                               const clipList& rClipList,
                               ControlState nState, const ImplControlValue& aValue,
                               SalControlHandle& rControlHandle, OUString aCaption );
+    BOOL NWPaintGTKTooltip( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
+                            const Rectangle& rControlRectangle,
+                            const clipList& rClipList,
+                            ControlState nState, const ImplControlValue& aValue,
+                            SalControlHandle& rControlHandle, OUString aCaption );
 
 };
 
