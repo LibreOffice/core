@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:31:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2738,7 +2738,7 @@ BOOL SwLayIdle::CollectAutoCmplWords( BOOL bVisAreaOnly )
 }
 
 #ifndef PRODUCT
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 
 /*************************************************************************
 |*
@@ -2785,7 +2785,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     pRoot( pRt ),
     pImp( pI )
 #ifndef PRODUCT
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     , bIndicator( FALSE )
 #endif
 #endif
@@ -2941,7 +2941,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 #endif
 
 #ifndef PRODUCT
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if ( bIndicator && pImp->GetShell()->GetWin() )
     {
         Rectangle aRect( 0, 0, 5, 5 );
