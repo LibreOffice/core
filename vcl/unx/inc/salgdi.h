@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-04 17:39:02 $
+ *  last change: $Author: hdu $ $Date: 2002-10-29 13:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef _SV_SALGDI_H
 #define _SV_SALGDI_H
 
+
 // -=-= exports -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 class   SalFontCacheItem;
 class   SalGraphicsContext;
@@ -108,9 +109,9 @@ typedef SalColormap         *SalColormapRef;
 
 class SalGraphicsData
 {
-    friend  class           SalGraphics;
-    friend  class           SalPrinter;
-    friend  class           SalInfoPrinter;
+    friend class            SalGraphics;
+    friend class            SalPrinter;
+    friend class            SalInfoPrinter;
     friend class            X11FontLayout;
     friend class            ServerFontLayout;
 
@@ -136,10 +137,8 @@ class SalGraphicsData
     Pixel           nPenPixel_;
 
     GC              pFontGC_;       // Font attributes
-    ExtendedFontStructRef   xFont_;
-    ExtendedFontStructRef   mxFallbackFont;
-    ServerFont              *mpServerSideFont;
-    ServerFont              *mpSrvFallbackFont;
+    ExtendedFontStructRef   mXFont[ MAX_FALLBACK ];
+    ServerFont*             mpServerFont[ MAX_FALLBACK ];
 
     Fraction        aScale_;
     SalColor        nTextColor_;
@@ -229,12 +228,13 @@ class SalGraphicsData
 #endif
 
     GC                      SelectFont();
-    void                    SetFont( const ImplFontSelectData* pEntry );
+    bool                    SetFont( const ImplFontSelectData* pEntry, int nFallbackLevel );
 
 protected:
     ULONG                   GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
 
-    void                    DrawStringUCS2MB( const Point&, const sal_Unicode* pStr, int nLength );
+    void                    DrawStringUCS2MB( ExtendedFontStruct& rFont, const Point&,
+                                const sal_Unicode* pStr, int nLength );
 
     void                    DrawPrinterString( const SalLayout& );
 
@@ -244,7 +244,7 @@ protected:
     void                    DrawServerAAFontString( const ServerFontLayout& );
     bool                    DrawServerAAForcedString( const ServerFontLayout& );
 
-    SalLayout*              LayoutText( ImplLayoutArgs& );
+    SalLayout*              LayoutText( ImplLayoutArgs&, int nFallbackLevel );
 public:
                             SalGraphicsData();
                             ~SalGraphicsData();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-04 17:49:25 $
+ *  last change: $Author: hdu $ $Date: 2002-10-29 13:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,8 +185,14 @@ SV_DECL_IMPL_REF( ExtendedFontStruct );
 class X11FontLayout : public GenericSalLayout
 {
 public:
-                    X11FontLayout( const ImplLayoutArgs&, ExtendedFontStruct& );
+                    X11FontLayout( ImplLayoutArgs&, ExtendedFontStruct& );
+    virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
+
+    virtual bool    IsNotdefGlyph( long nGlyphIndex ) const;
+
+private:
+    ExtendedFontStruct& mrFont;
 };
 
 #endif /* EXTENDED_FONTSTRUCT_HXX */
