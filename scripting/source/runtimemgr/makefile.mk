@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: npower $ $Date: 2003-02-13 14:29:21 $
+#   last change: $Author: npower $ $Date: 2003-02-20 10:56:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,6 @@ SLOFILES=\
 SHL1TARGET=	$(TARGET)
 
 SHL1STDLIBS= \
-        $(TOOLSLIB)	\
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
         $(SALLIB)
