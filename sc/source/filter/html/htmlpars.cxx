@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 09:43:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,9 +141,10 @@ ScHTMLParser::~ScHTMLParser()
 
 // ============================================================================
 
-ScHTMLLayoutParser::ScHTMLLayoutParser( EditEngine* pEditP, const Size& aPageSizeP, ScDocument* pDocP ) :
+ScHTMLLayoutParser::ScHTMLLayoutParser( EditEngine* pEditP, const String& rBaseURL, const Size& aPageSizeP, ScDocument* pDocP ) :
         ScHTMLParser( pEditP, pDocP ),
         aPageSize( aPageSizeP ),
+        aBaseURL( rBaseURL ),
         xLockedList( new ScRangeList ),
         pTables( NULL ),
         pColOffset( new ScHTMLColOffset ),
@@ -192,7 +193,7 @@ ScHTMLLayoutParser::~ScHTMLLayoutParser()
 }
 
 
-ULONG ScHTMLLayoutParser::Read( SvStream& rStream )
+ULONG ScHTMLLayoutParser::Read( SvStream& rStream, const String& rBaseURL )
 {
     Link aOldLink = pEdit->GetImportHdl();
     pEdit->SetImportHdl( LINK( this, ScHTMLLayoutParser, HTMLImportHdl ) );
@@ -221,7 +222,7 @@ ULONG ScHTMLLayoutParser::Read( SvStream& rStream )
         }
     }
 
-    ULONG nErr = pEdit->Read( rStream, EE_FORMAT_HTML, pAttributes );
+    ULONG nErr = pEdit->Read( rStream, rBaseURL, EE_FORMAT_HTML, pAttributes );
 
     pEdit->SetImportHdl( aOldLink );
     // Spaltenbreiten erzeugen
@@ -1371,7 +1372,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
         {
             case HTML_O_SRC:
             {
-                pImage->aURL = INetURLObject::RelToAbs( pOption->GetString() );
+                pImage->aURL = INetURLObject::GetAbsURL( aBaseURL, pOption->GetString() );
             }
             break;
             case HTML_O_ALT:
@@ -2821,7 +2822,7 @@ ScHTMLQueryParser::~ScHTMLQueryParser()
 {
 }
 
-sal_uInt32 ScHTMLQueryParser::Read( SvStream& rStrm )
+sal_uInt32 ScHTMLQueryParser::Read( SvStream& rStrm, const String& rBaseURL  )
 {
     SvKeyValueIteratorRef xValues;
     SvKeyValueIterator* pAttributes = 0;
@@ -2849,7 +2850,7 @@ sal_uInt32 ScHTMLQueryParser::Read( SvStream& rStrm )
 
     Link aOldLink = pEdit->GetImportHdl();
     pEdit->SetImportHdl( LINK( this, ScHTMLQueryParser, HTMLImportHdl ) );
-    sal_uInt32 nErr = pEdit->Read( rStrm, EE_FORMAT_HTML, pAttributes );
+    sal_uInt32 nErr = pEdit->Read( rStrm, rBaseURL, EE_FORMAT_HTML, pAttributes );
     pEdit->SetImportHdl( aOldLink );
 
     mpGlobTable->Recalc();
