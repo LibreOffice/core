@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoheaderfooter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:53:33 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,14 +66,22 @@
 #include <tools/gen.hxx>
 #endif
 
+#ifndef _SD_SDUNDO_HXX
 #include "sdundo.hxx"
+#endif
+#ifndef _SDPAGE_HXX
 #include "sdpage.hxx"
+#endif
+
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
 
 class SdDrawDocument;
 
 /************************************************************************/
 
-class SdHeaderFooterUndoAction : public SdUndoAction
+class SD_DLLPUBLIC SdHeaderFooterUndoAction : public SdUndoAction
 {
     SdPage*     mpPage;
 
