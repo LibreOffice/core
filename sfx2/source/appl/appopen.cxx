@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-19 09:37:17 $
+ *  last change: $Author: mba $ $Date: 2002-09-30 16:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,6 +581,7 @@ SfxMedium* SfxApplication::InsertDocumentDialog
                 aURL, SFX_STREAM_READONLY, FALSE,
                 GetFilterMatcher().GetFilter( aFilter ), pSet );
 
+        pMedium->UseInteractionHandler(TRUE);
         LoadEnvironment_ImplRef xLoader = new LoadEnvironment_Impl( pMedium );
         SfxFilterMatcher aMatcher( rFact.GetFilterContainer() );
         xLoader->SetFilterMatcher( &aMatcher );
@@ -617,6 +618,7 @@ SfxMediumList* SfxApplication::InsertDocumentsDialog
                     aURL, SFX_STREAM_READONLY, FALSE,
                     GetFilterMatcher().GetFilter( aFilter ), pSet );
 
+            pMedium->UseInteractionHandler(TRUE);
             LoadEnvironment_ImplRef xLoader = new LoadEnvironment_Impl( pMedium );
             SfxFilterMatcher aMatcher( rFact.GetFilterContainer() );
             xLoader->SetFilterMatcher( &aMatcher );
