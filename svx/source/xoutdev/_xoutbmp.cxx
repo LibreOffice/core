@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _xoutbmp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 20:18:45 $
+ *  last change: $Author: er $ $Date: 2001-05-08 16:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,12 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
         {
             String aName( aURL.getBase() );
             aName += '_';
-            aName += UniString::CreateFromInt32( Time().GetTime() );
+            aName += aURL.getExtension();
+            aName += '_';
+            String aStr( String::CreateFromInt32( rGraphic.GetChecksum(), 16 ) );
+            if ( aStr.GetChar(0) == '-' )
+                aStr.SetChar(0,'m');
+            aName += aStr;
             aURL.setBase( aName );
         }
 
