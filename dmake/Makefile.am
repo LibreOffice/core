@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Makefile.am,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mh $ $Date: 2002-07-11 08:53:29 $
+#   last change: $Author: waratah $ $Date: 2002-10-02 13:42:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,10 +76,8 @@ SUBDIRS = unix startup
 
 EXTRA_DIST = make.c 
 
-bin_PROGRAMS = dmake
-
 # set the include path found by configure
 INCLUDES = -I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/unix/@OS_VERSION@ -I$(top_srcdir)/unix -I$(top_srcdir)/unix/@OS_VERSION@/gnu 
 
-CFLAGS += -O
+CFLAGS = -O
                                                                                 

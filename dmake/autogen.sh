@@ -35,14 +35,6 @@ DIE=0
     DIE=1
 }
 
-(gettextize --version) < /dev/null > /dev/null 2>&1 || {
-    echo
-    echo "You must have gettextize installed to compile $PROJECT."
-    echo "Get ftp://ftp.gnu.org/gnu/gettext/gettext-0.10.38.tar.gz"
-    echo "(or a newer version if it is available)"
-    DIE=1
-}
-
 if test "$DIE" -eq 1; then
     exit 1
 fi
@@ -60,7 +52,7 @@ fi
 if test -z "$ACLOCAL_FLAGS"; then
 
     acdir=`aclocal --print-ac-dir`
-        m4list="glib.m4 gettext.m4"
+        m4list="glib.m4"
 
     for file in $m4list
     do
@@ -76,17 +68,7 @@ if test -z "$ACLOCAL_FLAGS"; then
     done
 fi
 
-echo "Running gettextize...  Ignore non-fatal messages."
-# Hmm, we specify --force here, since otherwise things dont'
-# get added reliably, but we don't want to overwrite intl
-# while making dist.
-echo "no" | gettextize --copy --force
-
 #
-# Really bad hack
-echo "Munging po/Makefile.in.in"
-sed s%@PACKAGE@%@GETTEXT_PACKAGE@% < po/Makefile.in.in > po/Makefile.in.in.new
-mv po/Makefile.in.in.new po/Makefile.in.in
 
 chmod 666 aclocal.m4
 aclocal $ACLOCAL_FLAGS

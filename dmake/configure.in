@@ -1,5 +1,7 @@
 
 dnl Process this file with autoconf to produce a configure script.
+AC_PREREQ(2.13)
+
 AC_INIT(acconfig.h)
 
 dnl set the DMAKEROOT
@@ -7,7 +9,6 @@ dnl set the DMAKEROOT
 PACKAGE=dmake
 VERSION=4.2
 
-AC_PREREQ(1.4)
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 
 dnl Checks for programs.

@@ -17,9 +17,9 @@
 #
 #   $RCSfile: Makefile.in,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: waratah $ $Date: 2002-10-01 15:08:20 $
+#   last change: $Author: waratah $ $Date: 2002-10-02 13:42:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -119,13 +119,22 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+AMTAR = @AMTAR@
+AWK = @AWK@
 CC = @CC@
 CPP = @CPP@
+DEPDIR = @DEPDIR@
+EXEEXT = @EXEEXT@
+INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LN_S = @LN_S@
+OBJEXT = @OBJEXT@
 OS_VERSION = @OS_VERSION@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
+am__include = @am__include@
+am__quote = @am__quote@
+install_sh = @install_sh@
 
 AUTOMAKE_OPTIONS = 1.4 foreign
 
