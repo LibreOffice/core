@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:59:37 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1850,13 +1850,13 @@ ImplIntrospection::ImplIntrospection( const Reference<XMultiServiceFactory> & rX
         {
             xContext->getValueByName(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection") ) ) >>= mxCoreReflection;
-            OSL_ENSURE( mxCoreReflection.is(), "### CoreReflection singleton not accessable!?" );
+            OSL_ENSURE( mxCoreReflection.is(), "### CoreReflection singleton not accessible!?" );
         }
     }
     if (! mxCoreReflection.is())
     {
         throw DeploymentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessable") ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessible") ),
             Reference< XInterface >() );
     }
 
