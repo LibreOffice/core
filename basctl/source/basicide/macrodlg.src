@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-27 15:53:26 $
+ *  last change: $Author: kz $ $Date: 2001-10-02 21:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,14 +119,14 @@ ModalDialog RID_MACROCHOOSER
         Text [ dutch ] = "~Macronaam" ;
         Text [ spanish ] = "Nombre de la ~macro" ;
         Text [ english_us ] = "~Macro name" ;
-        Text[ chinese_simplified ] = "ºêÃû³Æ(~M)";
+        Text[ chinese_simplified ] = "å®åç§°(~M)";
         Text[ russian ] = "Èìÿ ìàêğîñà";
         Text[ polish ] = "Nazwa makra";
-        Text[ japanese ] = "Ï¸Û–¼(~M)";
-        Text[ chinese_traditional ] = "¥¨¶°¦WºÙ(~M)";
+        Text[ japanese ] = "ï¾ï½¸ï¾›å(~M)";
+        Text[ chinese_traditional ] = "å·¨é›†åç¨±(~M)";
         Text[ arabic ] = "ÇÓã ÇáãÇßÑæ";
         Text[ greek ] = "¼íïìá ~ìáêñïåíôïëŞò";
-        Text[ korean ] = "¸ÅÅ©·Î ÀÌ¸§(~M)";
+        Text[ korean ] = "ë§¤í¬ë¡œ ì´ë¦„(~M)";
         Text[ turkish ] = "Makro adı";
         Text[ catalan ] = "Nombre de la ~macro";
     };
@@ -147,14 +147,14 @@ ModalDialog RID_MACROCHOOSER
         Text [ dutch ] = "Ma~cro uit" ;
         Text [ spanish ] = "Macro ~desde" ;
         Text [ english_us ] = "Macro ~from" ;
-        Text[ chinese_simplified ] = "ºêµÄÀ´Ô´(~F)";
+        Text[ chinese_simplified ] = "å®çš„æ¥æº(~F)";
         Text[ russian ] = "Ìàêğîñ èç";
         Text[ polish ] = "Makro z";
-        Text[ japanese ] = "Ï¸Û‚Ì‹L˜^æ(~F)";
-        Text[ chinese_traditional ] = "¥¨¶°ªº¨Ó·½(~F)";
+        Text[ japanese ] = "ï¾ï½¸ï¾›ã®è¨˜éŒ²å…ˆ(~F)";
+        Text[ chinese_traditional ] = "å·¨é›†çš„ä¾†æº(~F)";
         Text[ arabic ] = "ãÇßÑæ ãä";
         Text[ greek ] = "ÌáêñïåíôïëŞ áğü";
-        Text[ korean ] = "¸ÅÅ©·Î ÃâÃ³(~F)";
+        Text[ korean ] = "ë§¤í¬ë¡œ ì¶œì²˜(~F)";
         Text[ turkish ] = "Makro kaynağı";
         Text[ catalan ] = "Macro ~desde";
     };
@@ -183,14 +183,14 @@ ModalDialog RID_MACROCHOOSER
         Text [ dutch ] = "Be~schrijving" ;
         Text [ spanish ] = "De~scripción" ;
         Text [ english_us ] = "De~scription" ;
-        Text[ chinese_simplified ] = "ËµÃ÷(~S)";
+        Text[ chinese_simplified ] = "è¯´æ˜(~S)";
         Text[ russian ] = "Îïèñàíèå";
         Text[ polish ] = "Opis";
-        Text[ japanese ] = "à–¾(~S)";
-        Text[ chinese_traditional ] = "´y­z(~S)";
+        Text[ japanese ] = "èª¬æ˜(~S)";
+        Text[ chinese_traditional ] = "æè¿°(~S)";
         Text[ arabic ] = "ÇáæÕİ";
         Text[ greek ] = "ĞåñéãñáöŞ";
-        Text[ korean ] = "¼³¸í(~S)";
+        Text[ korean ] = "ì„¤ëª…(~S)";
         Text[ turkish ] = "Açıklama";
         Text[ catalan ] = "De~scripción";
     };
@@ -214,14 +214,14 @@ ModalDialog RID_MACROCHOOSER
         Text [ spanish ] = "Eje~cutar" ;
         Text [ english_us ] = "R~un" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Ö´ĞĞ(~U)";
+        Text[ chinese_simplified ] = "æ‰§è¡Œ(~U)";
         Text[ russian ] = "Âûïîëíèòü";
         Text[ polish ] = "Wykonaj";
-        Text[ japanese ] = "Às(~U)";
-        Text[ chinese_traditional ] = "°õ¦æ(~U)";
+        Text[ japanese ] = "å®Ÿè¡Œ(~U)";
+        Text[ chinese_traditional ] = "åŸ·è¡Œ(~U)";
         Text[ arabic ] = "ÊäİíĞ";
         Text[ greek ] = "Åêôİëåóç";
-        Text[ korean ] = "½ÇÇà(~U)";
+        Text[ korean ] = "ì‹¤í–‰(~U)";
         Text[ turkish ] = "Yürüt";
         Text[ catalan ] = "Eje~cutar";
     };
@@ -251,14 +251,14 @@ ModalDialog RID_MACROCHOOSER
         Text [ spanish ] = "Asig~nar..." ;
         Text [ english_us ] = "~Assign..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Ö¸¶¨(~A)...";
+        Text[ chinese_simplified ] = "æŒ‡å®š(~A)...";
         Text[ russian ] = "Íàçíà÷èòü...";
         Text[ polish ] = "Przyp~isz...";
-        Text[ japanese ] = "Š„‚è“–‚Ä(~A)...";
-        Text[ chinese_traditional ] = "«ü©w(~A)...";
+        Text[ japanese ] = "å‰²ã‚Šå½“ã¦(~A)...";
+        Text[ chinese_traditional ] = "æŒ‡å®š(~A)...";
         Text[ arabic ] = "ÊÚííä...";
         Text[ greek ] = "Áíôéóôïß÷éóç...";
-        Text[ korean ] = "¹èÁ¤(~A)...";
+        Text[ korean ] = "ë°°ì •(~A)...";
         Text[ turkish ] = "Ata...";
         Text[ catalan ] = "Asig~nar...";
     };
@@ -280,14 +280,14 @@ ModalDialog RID_MACROCHOOSER
         Text [ spanish ] = "Edi~tar" ;
         Text [ english_us ] = "~Edit" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "±à¼­(~E)";
+        Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
         Text[ russian ] = "~Ïğàâêà";
         Text[ polish ] = "~Edytuj";
-        Text[ japanese ] = "•ÒW(~E)";
-        Text[ chinese_traditional ] = "½s¿è(~E)";
+        Text[ japanese ] = "ç·¨é›†(~E)";
+        Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
         Text[ arabic ] = "ÊÍÑíÑ";
         Text[ greek ] = "Åğåîåñãáóßá";
-        Text[ korean ] = "ÆíÁı(~E)";
+        Text[ korean ] = "í¸ì§‘(~E)";
         Text[ turkish ] = "Düzenle";
         Text[ catalan ] = "Edi~tar";
     };
@@ -310,14 +310,14 @@ ModalDialog RID_MACROCHOOSER
         Text [ spanish ] = "~Eliminar..." ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)...";
+        Text[ chinese_simplified ] = "åˆ é™¤(~D)...";
         Text[ russian ] = "Óäàëèòü";
         Text[ polish ] = "Usuñ...";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)...";
-        Text[ arabic ] = "ÍĞİ...";
+        Text[ japanese ] = "å‰Šé™¤(~D)";
+        Text[ chinese_traditional ] = "åˆªé™¤(~D)...";
+        Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "Á¦°Å(~D)...";
+        Text[ korean ] = "ì œê±°(~D)...";
         Text[ turkish ] = "Sil...";
         Text[ catalan ] = "~Eliminar...";
     };
@@ -338,14 +338,14 @@ ModalDialog RID_MACROCHOOSER
         Text [ dutch ] = "Be~heren..." ;
         Text [ spanish ] = "~Administrar..." ;
         Text [ english_us ] = "~Organizer..." ;
-        Text[ chinese_simplified ] = "¹ÜÀí(~O)...";
+        Text[ chinese_simplified ] = "ç®¡ç†(~O)...";
         Text[ russian ] = "Îğãàíèçîâàòü...";
         Text[ polish ] = "Zarz¹dzaj...";
-        Text[ japanese ] = "ŠÇ—(~O)...";
-        Text[ chinese_traditional ] = "ºŞ²z(~O)...";
+        Text[ japanese ] = "ç®¡ç†(~O)...";
+        Text[ chinese_traditional ] = "ç®¡ç†(~O)...";
         Text[ arabic ] = "ÅÏÇÑÉ...";
         Text[ greek ] = "Äéá~÷åßñéóç...";
-        Text[ korean ] = "°ü¸®(~O)...";
+        Text[ korean ] = "ê´€ë¦¬(~O)...";
         Text[ turkish ] = "Yönet...";
         Text[ catalan ] = "~Administrar...";
     };
@@ -364,14 +364,14 @@ ModalDialog RID_MACROCHOOSER
         VScroll = TRUE ;
         IgnoreTab = TRUE ;
     };
-    Text[ chinese_simplified ] = "ºê";
+    Text[ chinese_simplified ] = "å®";
     Text[ russian ] = "Ìàêğîñ";
     Text[ polish ] = "Makro";
-    Text[ japanese ] = "Ï¸Û";
-    Text[ chinese_traditional ] = "¥¨¶°";
+    Text[ japanese ] = "ï¾ï½¸ï¾›";
+    Text[ chinese_traditional ] = "å·¨é›†";
     Text[ arabic ] = "ãÇßÑæ";
     Text[ greek ] = "ÌáêñïåíôïëŞ";
-    Text[ korean ] = "¸ÅÅ©·Î";
+    Text[ korean ] = "ë§¤í¬ë¡œ";
     Text[ turkish ] = "Makro";
     Text[ catalan ] = "Macro";
 };
@@ -390,14 +390,14 @@ String RID_STR_STDMACRONAME
     Text [ dutch ] = "Macro" ;
     Text [ spanish ] = "Macro" ;
     Text [ english_us ] = "Macro" ;
-    Text[ chinese_simplified ] = "ºê";
+    Text[ chinese_simplified ] = "å®";
     Text[ russian ] = "Ìàêğîñ";
     Text[ polish ] = "Makro";
-    Text[ japanese ] = "Ï¸Û";
-    Text[ chinese_traditional ] = "¥¨¶°";
+    Text[ japanese ] = "ï¾ï½¸ï¾›";
+    Text[ chinese_traditional ] = "å·¨é›†";
     Text[ arabic ] = "ãÇßÑæ";
     Text[ greek ] = "ÌáêñïåíôïëŞ";
-    Text[ korean ] = "¸ÅÅ©·Î";
+    Text[ korean ] = "ë§¤í¬ë¡œ";
     Text[ turkish ] = "Makro";
     Text[ catalan ] = "Macro";
 };
@@ -421,14 +421,14 @@ String RID_STR_BTNDEL
     Text [ dutch ] = "~Wissen" ;
     Text [ spanish ] = "~Eliminar..." ;
     Text [ english_us ] = "~Delete" ;
-    Text[ chinese_simplified ] = "É¾³ı(~D)";
+    Text[ chinese_simplified ] = "åˆ é™¤(~D)";
     Text[ russian ] = "Óäàëèòü";
     Text[ polish ] = "Usuñ...";
-    Text[ japanese ] = "íœ(~D)";
-    Text[ chinese_traditional ] = "§R°£(~D)";
-    Text[ arabic ] = "ÍĞİ...";
+    Text[ japanese ] = "å‰Šé™¤(~D)";
+    Text[ chinese_traditional ] = "åˆªé™¤(~D)";
+    Text[ arabic ] = "ÍĞİ";
     Text[ greek ] = "ÄéáãñáöŞ";
-    Text[ korean ] = "Á¦°Å(~D)...";
+    Text[ korean ] = "ì œê±°(~D)...";
     Text[ turkish ] = "Sil...";
     Text[ catalan ] = "~Eliminar...";
 };
@@ -447,14 +447,14 @@ String RID_STR_BTNNEW
     Text [ dutch ] = "~Nieuw" ;
     Text [ spanish ] = "~Nuevo" ;
     Text [ english_us ] = "~New" ;
-    Text[ chinese_simplified ] = "ĞÂ½¨(~N)";
+    Text[ chinese_simplified ] = "æ–°å»º(~N)";
     Text[ russian ] = "Ñîçä~àòü";
     Text[ polish ] = "Nowy";
-    Text[ japanese ] = "V‹Kì¬(~N)";
-    Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)";
+    Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)";
+    Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”(~N)";
     Text[ arabic ] = "ÌÏíÏ";
     Text[ greek ] = "Äçìéïõñãßá";
-    Text[ korean ] = "»õ·Î(~N)";
+    Text[ korean ] = "ìƒˆë¡œ(~N)";
     Text[ turkish ] = "Yeni";
     Text[ catalan ] = "~Nuevo";
 };
@@ -474,14 +474,14 @@ String RID_STR_CLOSE
     Text [ dutch ] = "Sluiten" ;
     Text [ spanish ] = "Cerrar" ;
     Text [ english_us ] = "Close" ;
-    Text[ chinese_simplified ] = "¹Ø±Õ";
+    Text[ chinese_simplified ] = "å…³é—­";
     Text[ russian ] = "Çàêğûòü";
     Text[ polish ] = "Zamknij";
-    Text[ japanese ] = "•Â‚¶‚é";
-    Text[ chinese_traditional ] = "Ãö³¬";
+    Text[ japanese ] = "é–‰ã˜ã‚‹";
+    Text[ chinese_traditional ] = "é—œé–‰";
     Text[ arabic ] = "ÅÛáÇŞ";
     Text[ greek ] = "Êëåßóéìï";
-    Text[ korean ] = "´İ±â";
+    Text[ korean ] = "ë‹«ê¸°";
     Text[ turkish ] = "Kapat";
     Text[ catalan ] = "Cerrar";
 };
@@ -501,14 +501,14 @@ String RID_STR_CHOOSE
     Text [ swedish ] = "Välj" ;
     Text [ dutch ] = "Selecteren" ;
     Text [ spanish ] = "Seleccionar" ;
-    Text[ chinese_simplified ] = "Ñ¡Ôñ";
+    Text[ chinese_simplified ] = "é€‰æ‹©";
     Text[ russian ] = "Âûáğàòü";
     Text[ polish ] = "Wybierz";
-    Text[ japanese ] = "‘I‘ğ";
-    Text[ chinese_traditional ] = "¿ï¾Ü";
+    Text[ japanese ] = "é¸æŠ";
+    Text[ chinese_traditional ] = "é¸æ“‡";
     Text[ arabic ] = "ÇÎÊíÇÑ";
     Text[ greek ] = "ÅğéëïãŞ";
-    Text[ korean ] = "¼±ÅÃ";
+    Text[ korean ] = "ì„ íƒ";
     Text[ turkish ] = "Seç";
     Text[ catalan ] = "Seleccionar";
 };
@@ -528,17 +528,18 @@ String RID_STR_RUN
     Text [ dutch ] = "Uitvoeren" ;
     Text [ spanish ] = "Ejecutar" ;
     Text [ english_us ] = "Run" ;
-    Text[ chinese_simplified ] = "Ö´ĞĞ";
+    Text[ chinese_simplified ] = "æ‰§è¡Œ";
     Text[ russian ] = "Âûïîëíèòü";
     Text[ polish ] = "Wykonaj";
-    Text[ japanese ] = "Às";
-    Text[ chinese_traditional ] = "°õ¦æ";
+    Text[ japanese ] = "å®Ÿè¡Œ";
+    Text[ chinese_traditional ] = "åŸ·è¡Œ";
     Text[ arabic ] = "ÊäİíĞ";
     Text[ greek ] = "Åêôİëåóç";
-    Text[ korean ] = "½ÇÇà";
+    Text[ korean ] = "ì‹¤í–‰";
     Text[ turkish ] = "Yürüt";
     Text[ catalan ] = "Ejecutar";
 };
+
 
 
 
