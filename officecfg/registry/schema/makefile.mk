@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-28 19:31:21 $
+#   last change: $Author: kz $ $Date: 2004-02-25 16:40:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,19 @@ XCSFILES= \
     org$/openoffice$/Office$/WriterWeb.xcs \
     org$/openoffice$/Office$/Scripting.xcs \
     org$/openoffice$/Office$/Security.xcs \
+    org$/openoffice$/Office$/UI$/Controller.xcs \
+    org$/openoffice$/Office$/UI$/Factories.xcs \
+    org$/openoffice$/Office$/UI$/Commands.xcs \
+    org$/openoffice$/Office$/UI$/BasicIDECommands.xcs \
+    org$/openoffice$/Office$/UI$/BibliographyCommands.xcs \
+    org$/openoffice$/Office$/UI$/CalcCommands.xcs \
+    org$/openoffice$/Office$/UI$/ChartCommands.xcs \
+    org$/openoffice$/Office$/UI$/DbuCommands.xcs \
+    org$/openoffice$/Office$/UI$/DrawImpressCommands.xcs \
+    org$/openoffice$/Office$/UI$/GenericCommands.xcs \
+    org$/openoffice$/Office$/UI$/MathCommands.xcs \
+    org$/openoffice$/Office$/UI$/StartModuleCommands.xcs \
+    org$/openoffice$/Office$/UI$/WriterCommands.xcs \
     org$/openoffice$/Office$/TypeDetection.xcs \
     org$/openoffice$/Setup.xcs \
     org$/openoffice$/UserProfile.xcs \
