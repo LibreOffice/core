@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:41:08 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,8 @@ class ImplWinFontData : public ImplFontData
 {
 public:
                             ImplWinFontData( const ImplDevFontAttributes&,
-                                WIN_BYTE eWinCharSet, int nHeight = 0 );
+                                int nFontHeight, WIN_BYTE eWinCharSet,
+                                WIN_BYTE nPitchAndFamily  );
                             ~ImplWinFontData();
 
     virtual ImplFontData*   Clone() const;
@@ -110,9 +111,13 @@ public:
 
     bool                    HasChar( sal_Unicode c ) const { return mpUnicodeMap->HasChar(c); }
     WIN_BYTE                GetCharSet() const          { return meWinCharSet; }
+    WIN_BYTE                GetPitchAndFamily() const   { return mnPitchAndFamily; }
     bool                    IsGlyphApiDisabled() const  { return mbDisableGlyphApi; }
     bool                    SupportsKorean() const      { return mbHasKoreanRange; }
     bool                    SupportsCJK() const         { return mbHasCJKSupport; }
+    bool                    AliasSymbolsHigh() const    { return mbAliasSymbolsHigh; }
+    bool                    AliasSymbolsLow() const     { return mbAliasSymbolsLow; }
+
     ImplFontCharMap*        GetImplFontCharMap();
 
 private:
@@ -126,6 +131,9 @@ private:
     BYTE*                   mpFontCharSets;     // all Charsets for the current font (used on W98 for kerning)
     BYTE                    mnFontCharSetCount; // Number of Charsets of the current font; 0 - if not queried
     WIN_BYTE                meWinCharSet;
+    WIN_BYTE                mnPitchAndFamily;
+    bool                    mbAliasSymbolsHigh;
+    bool                    mbAliasSymbolsLow;
 
 private:
     void                    ReadCmapTable( HDC );
