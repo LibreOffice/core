@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipException.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:09:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com {  module sun {  module star {   module packages {  module zip {
     <p>This interface is an IDL version of the Java interface
     <em>java.util.zip.ZipException</em> with some minor adaptations.</p>
  */
-exception ZipException: com::sun::star::uno::Exception
+published exception ZipException: com::sun::star::uno::Exception
 {
 };
 
