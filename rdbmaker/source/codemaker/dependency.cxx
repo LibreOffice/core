@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dependency.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:28:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,9 +330,8 @@ sal_Bool checkTypeDependencies(TypeManager& typeMgr, TypeDependency& dependencie
         return sal_True;
     }
 
-    OString superType(reader.getSuperTypeName());
-    if (superType.getLength() > 0)
-    {
+    for (sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i) {
+        OString superType(reader.getSuperTypeName(i));
         dependencies.insert(type, superType, TYPEUSE_SUPER);
         checkTypeDependencies(typeMgr, dependencies, superType);
     }
