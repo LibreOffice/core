@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:00 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,7 @@ class ExcCell : public ExcRecord
 {
 protected:
     ScAddress               aPos;
-    UINT16                  nXF;
+    sal_uInt32              mnXFId;
     static UINT32           nCellCount;     // zaehlt DOPPELT: im Ctor und SaveCont
     static ScProgress*      pPrgrsBar;
 #ifdef DBG_UTIL
@@ -474,8 +474,8 @@ protected:
 public:
     virtual                 ~ExcCell();
 
-    inline void             SetXF( UINT16 nNew )    { nXF = nNew; }
-    virtual UINT16          GetXF() const;
+    inline void             SetXFId( sal_uInt32 nXFId )   { mnXFId = nXFId; }
+    virtual sal_uInt32      GetXFId() const;
 
     inline static void      ResetCellCount()        { nCellCount = 0; }
     inline static void      IncCellCount()          { nCellCount++; }
@@ -539,19 +539,18 @@ public:
 
 //---------------------------------------------------------- class ExcRKMulRK -
 
-class ExcRKMulRK : private List, public ExcCell
+class ExcRKMulRK : public ExcCell
 {
 private:
     struct ExcRKMulRKEntry
     {
-        UINT32              nVal;
-        UINT16              nXF;
+        sal_Int32           mnValue;
+        sal_uInt32          mnXFId;
     };
 
-    inline ExcRKMulRKEntry* _First()    { return (ExcRKMulRKEntry*) List::First(); }
-    inline ExcRKMulRKEntry* _Next()     { return (ExcRKMulRKEntry*) List::Next(); }
-    inline ExcRKMulRKEntry* _Get( ULONG nIndex ) const
-                                { return (ExcRKMulRKEntry*) List::GetObject( nIndex ); }
+    typedef ScfDelList< ExcRKMulRKEntry > ExcRKMulRKEntryList;
+
+    ExcRKMulRKEntryList     maEntryList;
 
 protected:
     virtual void            SaveCont( XclExpStream& rStrm );
@@ -562,20 +561,19 @@ public:
                                 const ScAddress,
                                 const ScPatternAttr*,
                                 RootData& rRootData,
-                                const INT32 nVal );
-    virtual                 ~ExcRKMulRK();
+                                sal_Int32 nValue );
 
                             // returns new RK or NULL if an old RK was extendable
     ExcRKMulRK*             Extend( const ScAddress rPos,
                                 const ScPatternAttr *pAttr,
                                 RootData& rRootData,
-                                const INT32 nVal );
-    virtual UINT16          GetXF() const;
+                                sal_Int32 nValue );
+    virtual sal_uInt32      GetXFId() const;
 
     virtual UINT16          GetNum( void ) const;
 
-    inline BOOL             IsRK( void ) const      { return List::Count() == 1; }
-    inline BOOL             IsMulRK( void ) const   { return List::Count() > 1; }
+    inline BOOL             IsRK( void ) const      { return maEntryList.Count() == 1; }
+    inline BOOL             IsMulRK( void ) const   { return maEntryList.Count() > 1; }
 };
 
 
@@ -724,18 +722,30 @@ public:
 
 //---------------------------------------------------- class ExcBlankMulblank -
 
-class ExcBlankMulblank : public ExcCell, private ScfUInt32List
+class ExcBlankMulblank : public ExcCell
 {
 protected:
+    struct XclExpBlankCell
+    {
+        sal_uInt32              mnXFId;
+        sal_uInt16              mnCount;
+        inline explicit         XclExpBlankCell() : mnXFId( 0 ), mnCount( 0 ) {}
+        inline explicit         XclExpBlankCell( sal_uInt32 nXFId, sal_uInt16 nCount ) :
+                                    mnXFId( nXFId ), mnCount( nCount ) {}
+    };
+
+    typedef ::std::vector< XclExpBlankCell > XclExpBlankCellVec;
+
+    XclExpBlankCellVec      maCellList;
     ULONG                   nRecLen;
     UINT16                  nLastCol;
     BOOL                    bMulBlank;
     BOOL                    bDummy;     // not saved, 'cause row contains formatting info
 
-    inline UINT16           GetXF( UINT32 nEntry ) const    { return (UINT16) nEntry; }
+    inline sal_uInt32       GetXFId( UINT32 nEntry ) const    { return (UINT16) nEntry; }
     inline UINT16           GetCount( UINT32 nEntry ) const { return (UINT16)(nEntry >> 16); }
 
-    inline void             Append( UINT16 nXF, UINT16 nCount );
+    inline void             Append( sal_uInt32 nXFId, sal_uInt16 nCount );
 
     void                    AddEntries(
                                 const ScAddress rPos,
@@ -763,7 +773,7 @@ public:
                                 ExcTable& rExcTab );
 
     inline UINT16           GetLastCol() const  { return nLastCol; }
-    virtual UINT16          GetXF() const;                      // returns last used XF
+    virtual sal_uInt32      GetXFId() const;                      // returns last used XF
 
     virtual UINT16          GetNum() const;
 
@@ -771,9 +781,9 @@ public:
 };
 
 
-inline void ExcBlankMulblank::Append( UINT16 nXF, UINT16 nCount )
+inline void ExcBlankMulblank::Append( sal_uInt32 nXFId, sal_uInt16 nCount )
 {
-    ScfUInt32List::Append( (UINT32) nXF + (((UINT32) nCount) << 16) );
+    maCellList.push_back( XclExpBlankCell( nXFId, nCount ) );
 }
 
 
@@ -988,7 +998,7 @@ private:
     UINT16                  nLastCol;
     UINT16                  nHeight;
     UINT16                  nOptions;
-    UINT16                  nXF;
+    sal_uInt32              mnXFId;
     BOOL                    bDefHeight;
 
     void                    SetRange( UINT16 nFCol, UINT16 nLCol );
@@ -999,7 +1009,7 @@ private:
 protected:
 public:
                             ExcRow( UINT16 nNum, UINT16 nTab, UINT16 nFCol, UINT16 nLCol,
-                                UINT16 nXF, ScDocument& rDoc, ExcEOutline& rOutline, ExcTable& rExcTab );
+                                sal_uInt32 nXFId, ScDocument& rDoc, ExcEOutline& rOutline, ExcTable& rExcTab );
 
     inline BOOL             IsDefault();
 
@@ -1057,16 +1067,16 @@ public:
 class ExcColinfo : public ExcRecord
 {
 private:
+    sal_uInt32              mnXFId;
     UINT16                  nFirstCol;
     UINT16                  nLastCol;
     UINT16                  nColWidth;
-    UINT16                  nXF;
     UINT16                  nOptions;
 
     virtual void            SaveCont( XclExpStream& rStrm );
 
 public:
-                            ExcColinfo( UINT16 nCol, UINT16 nTab, UINT16 nXF, RootData&, ExcEOutline& rOutline );
+                            ExcColinfo( UINT16 nCol, UINT16 nTab, sal_uInt32 nXFId, RootData&, ExcEOutline& rOutline );
 
                             // if expandable, delete rpExp and set to NULL
     void                    Expand( ExcColinfo*& rpExp );
