@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futransf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:20:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 10:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include "futransf.hxx"
 
 #include <svx/dialogs.hrc>
-#include <svx/labdlg.hxx>
+//#include <svx/labdlg.hxx> delete by CHINA001
 #include <svx/polysc3d.hxx>
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -73,9 +73,9 @@
 #include <sfx2/request.hxx>
 #endif
 
-#ifndef _SVX_TRANSFRM_HXX //autogen
-#include <svx/transfrm.hxx>
-#endif
+//CHINA001 #ifndef _SVX_TRANSFRM_HXX //autogen
+//CHINA001 #include <svx/transfrm.hxx>
+//CHINA001 #endif
 
 #include "strings.hrc"
 #ifndef SD_VIEW_SHELL_HXX
@@ -86,6 +86,9 @@
 #endif
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
+//add header of cui CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 namespace sd {
 
@@ -129,43 +132,54 @@ FuTransform::FuTransform(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pVi
                 SfxItemSet aNewAttr( pDoc->GetPool() );
                 pView->GetAttributes( aNewAttr );
 
-                SvxCaptionTabDialog* pDlg = new SvxCaptionTabDialog( NULL, pView);
-
-                const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
-                SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
-                aCombSet.Put( aNewAttr );
-                aCombSet.Put( aSet );
-                pDlg->SetInputSet( &aCombSet );
-
-                if( pDlg->Execute() == RET_OK )
+                //SvxCaptionTabDialog* pDlg = new SvxCaptionTabDialog( NULL, pView);
+                //change for cui CHINA001
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                if ( pFact )
                 {
-                    rReq.Done( *( pDlg->GetOutputItemSet() ) );
-                    pArgs = rReq.GetArgs();
-                }
-                else
-                {
-                    delete pDlg;
-                    pView->EndUndo();
-                    return; // Abbruch
-                }
-                delete( pDlg );
+                    SfxAbstractTabDialog *pDlg = pFact->CreateCaptionDialog( NULL, pView, ResId( RID_SVXDLG_CAPTION ) );
+
+                    const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
+                    SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
+                    aCombSet.Put( aNewAttr );
+                    aCombSet.Put( aSet );
+                    pDlg->SetInputSet( &aCombSet );
+
+                    if( pDlg->Execute() == RET_OK )
+                    {
+                        rReq.Done( *( pDlg->GetOutputItemSet() ) );
+                        pArgs = rReq.GetArgs();
+                    }
+                    else
+                    {
+                        delete pDlg;
+                        pView->EndUndo();
+                        return; // Abbruch
+                    }
+                    delete( pDlg );
+                } //change for cui
             }
             else
             {
-                SvxTransformTabDialog* pDlg = new SvxTransformTabDialog( NULL, &aSet, pView );
-
-                if( pDlg->Execute() == RET_OK )
+                //CHINA001 SvxTransformTabDialog* pDlg = new SvxTransformTabDialog( NULL, &aSet, pView );
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                if(pFact)
                 {
-                    rReq.Done( *( pDlg->GetOutputItemSet() ) );
-                    pArgs = rReq.GetArgs();
+                    SfxAbstractTabDialog* pDlg = pFact->CreateSvxTransformTabDialog( NULL, &aSet,pView, ResId(RID_SVXDLG_TRANSFORM) );
+                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                    if( pDlg->Execute() == RET_OK )
+                    {
+                        rReq.Done( *( pDlg->GetOutputItemSet() ) );
+                        pArgs = rReq.GetArgs();
+                    }
+                    else
+                    {
+                        delete pDlg;
+                        pView->EndUndo();
+                        return; // Abbruch
+                    }
+                    delete( pDlg );
                 }
-                else
-                {
-                    delete pDlg;
-                    pView->EndUndo();
-                    return; // Abbruch
-                }
-                delete( pDlg );
             }
         }
         pView->SetGeoAttrToMarked( *pArgs );
