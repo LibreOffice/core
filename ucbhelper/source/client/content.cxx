@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-07 08:01:44 $
+ *  last change: $Author: kso $ $Date: 2001-02-07 10:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,11 @@
                                 TODO
  **************************************************************************
 
- - Register content-event-listener to handle EXCHANGED and DELETED events.
-
  *************************************************************************/
+
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -92,6 +94,9 @@
 #ifndef _COM_SUN_STAR_UCB_COMMANDINFO_HPP_
 #include <com/sun/star/ucb/CommandInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_CONTENTACTION_HPP_
+#include <com/sun/star/ucb/ContentAction.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #endif
@@ -109,6 +114,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTCREATOR_HPP_
 #include <com/sun/star/ucb/XContentCreator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENTEVENTLISTENER_HPP_
+#include <com/sun/star/ucb/XContentEventListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTIDENTIFIERFACTORY_HPP_
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
@@ -138,6 +146,9 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
 
+#ifndef _UCBHELPER_MACROS_HXX
+#include <ucbhelper/macros.hxx>
+#endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
@@ -163,6 +174,35 @@ namespace ucb
 //=========================================================================
 //=========================================================================
 //
+// class ContentEventListener_Impl.
+//
+//=========================================================================
+//=========================================================================
+
+class ContentEventListener_Impl : public cppu::OWeakObject,
+                                     public XContentEventListener
+{
+    Content_Impl& m_rContent;
+
+public:
+    ContentEventListener_Impl( Content_Impl& rContent )
+    : m_rContent( rContent ) {}
+
+     // XInterface
+    XINTERFACE_DECL()
+
+    // XContentEventListener
+    virtual void SAL_CALL contentEvent( const ContentEvent& evt )
+        throw( RuntimeException );
+
+    // XEventListener ( base of XContentEventListener )
+    virtual void SAL_CALL disposing( const EventObject& Source )
+        throw( RuntimeException );
+};
+
+//=========================================================================
+//=========================================================================
+//
 // class Content_Impl.
 //
 //=========================================================================
@@ -170,23 +210,29 @@ namespace ucb
 
 class Content_Impl : public vos::OReference
 {
-    OUString                          m_aURL;
-    Reference< XMultiServiceFactory > m_xSMgr;
-    Reference< XContent >             m_xContent;
-    Reference< XCommandProcessor >    m_xCommandProcessor;
-      Reference< XCommandEnvironment >  m_xEnv;
-    vos::OMutex                       m_aMutex;
-    sal_Int32                         m_aCommandId;
+friend class ContentEventListener_Impl;
+
+    mutable OUString                    m_aURL;
+    Reference< XMultiServiceFactory >   m_xSMgr;
+    Reference< XContent >               m_xContent;
+    Reference< XCommandProcessor >      m_xCommandProcessor;
+      Reference< XCommandEnvironment >      m_xEnv;
+    Reference< XContentEventListener >  m_xContentEventListener;
+    mutable vos::OMutex                 m_aMutex;
+    sal_Int32                           m_nCommandId;
+
+private:
+    void reinit( const Reference< XContent >& xContent );
 
 public:
-    Content_Impl() {};
-    inline Content_Impl( const Reference< XMultiServiceFactory >& rSMgr,
-                           const Reference< XContent >& rContent,
-                           const Reference< XCommandEnvironment >& rEnv );
+    Content_Impl() : m_nCommandId( 0 ) {};
+    Content_Impl( const Reference< XMultiServiceFactory >& rSMgr,
+                  const Reference< XContent >& rContent,
+                  const Reference< XCommandEnvironment >& rEnv );
 
     virtual ~Content_Impl();
 
-    const OUString&                getURL()     const { return m_aURL; }
+    const OUString&                getURL() const;
     Reference< XContent >          getContent() const { return m_xContent; }
     Reference< XCommandProcessor > getCommandProcessor();
     sal_Int32 getCommandId();
@@ -197,38 +243,6 @@ public:
     inline void setEnvironment(
                         const Reference< XCommandEnvironment >& xNewEnv );
 };
-
-//=========================================================================
-inline Content_Impl::Content_Impl(
-                  const Reference< XMultiServiceFactory >& rSMgr,
-                  const Reference< XContent >& rContent,
-                  const Reference< XCommandEnvironment >& rEnv )
-: m_xSMgr( rSMgr ),
-  m_xContent( rContent ),
-  m_xEnv( rEnv ),
-  m_aCommandId( 0 )
-{
-    if ( m_xContent.is() )
-    {
-        // @@@ register content-event-listener
-        m_aURL = m_xContent->getIdentifier()->getContentIdentifier();
-    }
-}
-
-//=========================================================================
-inline const Reference< XCommandEnvironment >&
-                                        Content_Impl::getEnvironment() const
-{
-    return m_xEnv;
-}
-
-//=========================================================================
-inline void Content_Impl::setEnvironment(
-                        const Reference< XCommandEnvironment >& xNewEnv )
-{
-    vos::OGuard aGuard( m_aMutex );
-    m_xEnv = xNewEnv;
-}
 
 //=========================================================================
 //=========================================================================
@@ -1301,10 +1315,74 @@ sal_Bool Content::isDocument()
 //=========================================================================
 //=========================================================================
 
+Content_Impl::Content_Impl( const Reference< XMultiServiceFactory >& rSMgr,
+                              const Reference< XContent >& rContent,
+                              const Reference< XCommandEnvironment >& rEnv )
+: m_xSMgr( rSMgr ),
+  m_xContent( rContent ),
+  m_xEnv( rEnv ),
+  m_nCommandId( 0 )
+{
+    if ( m_xContent.is() )
+    {
+        m_xContentEventListener = new ContentEventListener_Impl( *this );
+        m_xContent->addContentEventListener( m_xContentEventListener );
+
+#ifdef DEBUG
+        // Only done on demand in product version, but a nice debug helper.
+        getURL();
+#endif
+    }
+}
+
+//=========================================================================
+void Content_Impl::reinit( const Reference< XContent >& xContent )
+{
+    vos::OGuard aGuard( m_aMutex );
+
+    m_xCommandProcessor = 0;
+    m_nCommandId = 0;
+       m_aURL = OUString();
+
+    if ( xContent.is() )
+    {
+        m_xContent->removeContentEventListener( m_xContentEventListener );
+        m_xContent = xContent;
+        m_xContent->addContentEventListener( m_xContentEventListener );
+
+#ifdef DEBUG
+        // Only done on demand in product version, but a nice debug helper.
+        getURL();
+#endif
+    }
+    else
+    {
+        m_xContent->removeContentEventListener( m_xContentEventListener );
+        m_xContent = 0;
+    }
+}
+
 //=========================================================================
 // virtual
 Content_Impl::~Content_Impl()
 {
+    if ( m_xContent.is() )
+        m_xContent->removeContentEventListener( m_xContentEventListener );
+}
+
+//=========================================================================
+const OUString& Content_Impl::getURL() const
+{
+    vos::OGuard aGuard( m_aMutex );
+
+    if ( !m_aURL.getLength() && m_xContent.is() )
+    {
+        Reference< XContentIdentifier > xId = m_xContent->getIdentifier();
+        if ( xId.is() )
+            m_aURL = xId->getContentIdentifier();
+    }
+
+    return m_aURL;
 }
 
 //=========================================================================
@@ -1324,14 +1402,14 @@ sal_Int32 Content_Impl::getCommandId()
 {
     vos::OGuard aGuard( m_aMutex );
 
-    if ( m_aCommandId == 0 )
+    if ( m_nCommandId == 0 )
     {
         Reference< XCommandProcessor > xProc = getCommandProcessor();
         if ( xProc.is() )
-            m_aCommandId = xProc->createCommandIdentifier();
+            m_nCommandId = xProc->createCommandIdentifier();
     }
 
-    return m_aCommandId;
+    return m_nCommandId;
 }
 
 //=========================================================================
@@ -1348,8 +1426,83 @@ Any Content_Impl::executeCommand( const Command& rCommand )
 //=========================================================================
 void Content_Impl::abortCommand()
 {
-    if ( ( m_aCommandId != 0 ) && m_xCommandProcessor.is() )
-        m_xCommandProcessor->abort( m_aCommandId );
+    if ( ( m_nCommandId != 0 ) && m_xCommandProcessor.is() )
+        m_xCommandProcessor->abort( m_nCommandId );
+}
+
+//=========================================================================
+inline const Reference< XCommandEnvironment >&
+                                        Content_Impl::getEnvironment() const
+{
+    return m_xEnv;
+}
+
+//=========================================================================
+inline void Content_Impl::setEnvironment(
+                        const Reference< XCommandEnvironment >& xNewEnv )
+{
+    vos::OGuard aGuard( m_aMutex );
+    m_xEnv = xNewEnv;
+}
+
+//=========================================================================
+//=========================================================================
+//
+// ContentEventListener_Impl Implementation.
+//
+//=========================================================================
+//=========================================================================
+
+//=========================================================================
+//
+// XInterface methods.
+//
+//=========================================================================
+
+XINTERFACE_IMPL_2( ContentEventListener_Impl,
+                   XContentEventListener,
+                   XEventListener ); /* base of XContentEventListener */
+
+//=========================================================================
+//
+// XContentEventListener methods.
+//
+//=========================================================================
+
+// virtual
+void SAL_CALL ContentEventListener_Impl::contentEvent( const ContentEvent& evt )
+    throw( RuntimeException )
+{
+    if ( evt.Source == m_rContent.m_xContent )
+    {
+        switch ( evt.Action )
+        {
+            case ContentAction::DELETED:
+                m_rContent.reinit( Reference< XContent >() );
+                break;
+
+            case ContentAction::EXCHANGED:
+                m_rContent.reinit( evt.Content );
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
+//=========================================================================
+//
+// XEventListenr methods.
+//
+//=========================================================================
+
+// virtual
+void SAL_CALL ContentEventListener_Impl::disposing( const EventObject& Source )
+    throw( RuntimeException )
+{
+    if ( Source.Source == m_rContent.m_xContent )
+        m_rContent.reinit( Reference< XContent >() );
 }
 
 } /* namespace ucb */
