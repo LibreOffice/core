@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accimplaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-17 08:37:53 $
+ *  last change: $Author: fs $ $Date: 2002-04-23 11:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,13 +141,6 @@ namespace comphelper
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rIdentifier ) throw (::com::sun::star::uno::RuntimeException);
 
     public:
-        // make sure the classes instances are allocated on the proper heap
-        inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
-            { return ::rtl_allocateMemory( nSize ); }
-        inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
-            { ::rtl_freeMemory( pMem ); }
-
-    public:
         /** tries to access the implementation of an OAccessibleImplementationAccess derivee which is known as
             interface only.
 
@@ -211,6 +204,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2002/04/17 08:37:53  fs
+ *  initial checkin - helper class for tunneling an XAccessibleContext implementation
+ *
  *
  *  Revision 1.0 16.04.2002 15:30:25  fs
  ************************************************************************/
