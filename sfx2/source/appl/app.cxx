@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 12:47:06 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@
 #include "appimp.hxx"
 #include "imestatuswindow.hxx"
 #include "module.hxx"
+#include "tbxctrl.hxx"
 #include "sfxdlg.hxx"
 
 #ifdef DBG_UTIL
@@ -409,6 +410,7 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
 
 #include <framework/imageproducer.hxx>
 #include <framework/acceleratorinfo.hxx>
+#include <framework/sfxhelperfunctions.hxx>
 #include "imagemgr.hxx"
 #include "accelinfo.hxx"
 
@@ -426,6 +428,7 @@ SfxApplication* SfxApplication::GetOrCreate()
         ::framework::SetImageProducer( GetImage );
         ::framework::SetCommandURLFromKeyCode( GetCommandURLFromKeyCode );
         ::framework::SetKeyCodeFromCommandURL( GetKeyCodeFromCommandURL );
+        ::framework::SetToolBoxControllerCreator( SfxToolBoxControllerFactory );
 
         SfxHelp* pSfxHelp = new SfxHelp;
         Application::SetHelp( pSfxHelp );
