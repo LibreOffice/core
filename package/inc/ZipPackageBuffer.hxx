@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-05 19:37:54 $
+ *  last change: $Author: mtg $ $Date: 2001-09-06 09:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ public:
     virtual ~ZipPackageBuffer(void);
 
     inline void realloc ( sal_Int32 nSize ) { m_aBuffer.realloc ( nSize ); }
-    inline const sal_Int8 * getConstArray () const { m_aBuffer.getConstArray(); }
+    inline const sal_Int8 * getConstArray () const { return m_aBuffer.getConstArray(); }
     inline const com::sun::star::uno::Sequence < sal_Int8> & getSequence () const { return m_aBuffer; }
     virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& rType )
         throw(com::sun::star::uno::RuntimeException);
