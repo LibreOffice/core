@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedesc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: os $ $Date: 2001-02-13 08:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ class SfxPoolItem;
 class SwTxtFmtColl;
 class SwNode;
 
-//Adjustierung der Trennlinie.
+//Separator line adjustment
 enum SwFtnAdj
 {
     FTNADJ_LEFT,
@@ -93,29 +93,26 @@ enum SwFtnAdj
     FTNADJ_RIGHT
 };
 
-//Fussnoteninformationen
+//footnote information
 class SwPageFtnInfo
 {
-    SwTwips     nMaxHeight;     //Maximalraum auf der Seite.
-//  Pen         aPen;           //Pen fuer Trennstrich.
+    SwTwips     nMaxHeight;     //maximum height of the footnote area.
     ULONG       nLineWidth;     //width of separator line
     Color       aLineColor;     //color of the separator line
-    Fraction    aWidth;         //Prozentuale Breite des Trennstriches.
-    SwFtnAdj    eAdj;           //Ausrichtung des Trennstriches.
-    SwTwips     nTopDist;       //Abstand zwischen Body und Trennstrich.
-    SwTwips     nBottomDist;    //Abstand zwischen Trennstrich und 1. Fussnote.
+    Fraction    aWidth;         //percentage width of the separator line.
+    SwFtnAdj    eAdj;           //line adjustment.
+    SwTwips     nTopDist;       //distance between body and separator.
+    SwTwips     nBottomDist;    //distance between separator and first footnote
 public:
     SwTwips     GetHeight() const       { return nMaxHeight; }
     ULONG           GetLineWidth() const { return nLineWidth; }
     const Color&    GetLineColor() const { return aLineColor;}
-//  const Pen&  GetPen()    const       { return aPen; }
     const Fraction& GetWidth() const    { return aWidth; }
     SwFtnAdj    GetAdj()    const       { return eAdj; }
     SwTwips     GetTopDist()const       { return nTopDist; }
     SwTwips     GetBottomDist() const   { return nBottomDist; }
 
     void SetHeight( SwTwips  nNew )     { nMaxHeight = nNew; }
-//  void SetPen   ( const Pen& rNew )   { aPen = rNew; }
     void SetLineWidth(ULONG nSet  )     { nLineWidth = nSet; }
     void SetLineColor(const Color& rCol )  { aLineColor = rCol;}
     void SetWidth( const Fraction &rNew){ aWidth = rNew; }
