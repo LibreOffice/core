@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-11 09:55:18 $
+ *  last change: $Author: cmc $ $Date: 2002-07-12 15:15:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,6 @@
 
 #pragma hdrstop
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
-#include <svtools/svstdarr.hxx>
-#endif
 #ifndef _SFXITEMITER_HXX
 #include <svtools/itemiter.hxx>
 #endif
@@ -1406,49 +1401,9 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
             pSep->GetSprms( &aCur );
 
             // zu ignorierende Attribute sammeln
-            SvUShortsSort aIgnore(9, 1);
             bool bEqual = false;
             if (bContinuousBreak)
-            {
-                /*
-                    zu 'sprmSBkc':
-                    Wir sehen zwei WW-Abschnitte auch dann als gleich an,
-                    wenn sie sich lediglich im break code unterscheiden.
-                    Natuerlich muessen die Kopf/Fuss-Bereiche identisch sein.
-
-                    Ignoriert werden auch die folgenden,
-                    spaltenbezogene Flags:
-                    SCcolumns, SDxaColumns, SDxaColWidth,
-                    SDxaColSpacing, SFEvenlySpaced, SLBetween
-                    und: SFFacingCol (nur bei Ver8)
-
-                    We will also ignore a different formatting of the page
-                    number here.
-
-                    We will also ignore different line numbering settings here
-                    since only the very 1st line numbering settings are taken
-                    into account anyway, see: bNoLnNum
-                */
-                static USHORT __READONLY_DATA aVer67Ids[13] =
-                {
-                    //sortiert!
-                    136, 137, 138, 139, 142, 144, 145, 147, 152, 154, 155,
-                    158, 160
-                };
-                static USHORT __READONLY_DATA aVer8Ids[20] =
-                {
-                    //sortiert!
-                    0x3005, 0x3006, 0x3009, 0x300E, 0x3013, 0x3019, 0x3229,
-                    0x500B, 0x5015, 0x501B, 0x5026, 0x703A, 0x900C, 0x9016,
-                    0x9023, 0x9024, 0xB017, 0xB018, 0xF203, 0xF204
-                };
-                if( bVer67 )
-                    aIgnore.Insert(aVer67Ids, sizeof(aVer67Ids)/sizeof(USHORT));
-                else
-                    aIgnore.Insert(aVer8Ids, sizeof(aVer8Ids)/sizeof(USHORT));
-
                 bEqual = true;
-            }
             else
             {
                 bEqual = (bSectionHasATitlePage == bLastSectionHadATitlePage)
@@ -1478,7 +1433,14 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
                     bSectionHasATitlePage = 0;
                     nSameHdFt ^= (WW8_HEADER_FIRST | WW8_FOOTER_FIRST);
                 }
-                bEqual = pSep->CompareSprms(pOtherMem,nOtherSprmsLen,&aIgnore);
+                /*
+                If we are a continous section then are we equal to the host
+                (previous) section. Relevent because margins cannot be
+                different in a section than from its host page in writer but
+                they can in word, if that is the case then we must make a new
+                page anyway :-(
+                */
+                bEqual = pSep->SprmsAreEquivalent(pOtherMem,nOtherSprmsLen);
             }
 
             // Copy of vorigen Attr. here freed.

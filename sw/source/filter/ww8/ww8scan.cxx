@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-11 16:39:53 $
+ *  last change: $Author: cmc $ $Date: 2002-07-12 15:15:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,6 @@
 #endif
 
 #include <string.h>         // memset()
-
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
-#include <svtools/svstdarr.hxx>
 
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
@@ -3281,7 +3277,8 @@ BOOL WW8PLCFx_SEPX::Find4Sprms(USHORT nId1,USHORT nId2,USHORT nId3,USHORT nId4,
     p4 = 0;
 
     BYTE* pSp = pSprms;
-    for(USHORT i=0; i+1+maSprmParser.mnDelta < nSprmSiz; )
+    USHORT i=0;
+    while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
     {
         // Sprm gefunden?
         USHORT nAktId = maSprmParser.GetSprmId(pSp);
@@ -3313,12 +3310,16 @@ const BYTE* WW8PLCFx_SEPX::HasSprm( USHORT nId, BYTE n2nd ) const
     BYTE* pSp = pSprms;
 
     USHORT i=0;
-    while (i+1+maSprmParser.mnDelta < nSprmSiz)
+    while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
     {
         // Sprm gefunden?
         USHORT nAktId = maSprmParser.GetSprmId(pSp);
-        if ( (nAktId == nId) && (pSp[ 1 + maSprmParser.mnDelta ] == n2nd) )
-            return pSp + maSprmParser.DistanceToData(nId);
+        if (nAktId == nId)
+        {
+            BYTE *pRet = pSp + maSprmParser.DistanceToData(nId);
+            if (*pRet == n2nd)
+                return pRet;
+        }
         // erhoehe Zeiger, so dass er auf naechsten Sprm zeigt
         USHORT x = maSprmParser.GetSprmSize(nAktId, pSp);
         i += x;
@@ -3328,17 +3329,72 @@ const BYTE* WW8PLCFx_SEPX::HasSprm( USHORT nId, BYTE n2nd ) const
     return 0;   // Sprm nicht gefunden
 }
 
-bool WW8PLCFx_SEPX::CompareSprms(const BYTE*  pOtherSprms, long nOtherSprmSiz,
-    const SvUShortsSort* pIgnoreSprms) const
+const wwSprmSequence* WW8PLCFx_SEPX::GetWW6IgnoredSprms()
+{
+    static sal_uInt16 aSprmIds[] =
+    {
+        136, 137, 138, 139, 142, 144, 145, 147, 152, 154, 155,
+        158, 160
+    };
+
+    static wwSprmSequence aWWSprmIds(aSprmIds,
+        sizeof(aSprmIds) / sizeof(aSprmIds[0]));
+    return &aWWSprmIds;
+}
+
+const wwSprmSequence* WW8PLCFx_SEPX::GetWW8IgnoredSprms()
+{
+    static sal_uInt16 aSprmIds[] =
+    {
+        0x3005, 0x3006, 0x3009, 0x300E, 0x3013, 0x3019, 0x3229,
+        0x500B, 0x5015, 0x501B, 0x5026, 0x703A, 0x900C, 0x9016,
+        0x9023, 0x9024, 0xB017, 0xB018, 0xF203, 0xF204
+    };
+
+    static wwSprmSequence aWWSprmIds(aSprmIds,
+        sizeof(aSprmIds) / sizeof(aSprmIds[0]));
+    return &aWWSprmIds;
+}
+
+bool WW8PLCFx_SEPX::SprmsAreEquivalent(const BYTE*  pOtherSprms,
+    long nOtherSprmSiz) const
 {
     bool bRes = false;
     const BYTE* pSp   = pSprms;
 
-    if ( maSprmParser.CountSprms(pSp, nSprmSiz, pIgnoreSprms) ==
-        maSprmParser.CountSprms(pOtherSprms, nOtherSprmSiz, pIgnoreSprms) )
+    /*
+        zu 'sprmSBkc':
+        Wir sehen zwei WW-Abschnitte auch dann als gleich an,
+        wenn sie sich lediglich im break code unterscheiden.
+        Natuerlich muessen die Kopf/Fuss-Bereiche identisch sein.
+
+        Ignoriert werden auch die folgenden,
+        spaltenbezogene Flags:
+        SCcolumns, SDxaColumns, SDxaColWidth,
+        SDxaColSpacing, SFEvenlySpaced, SLBetween
+        und: SFFacingCol (nur bei Ver8)
+
+        We will also ignore a different formatting of the page
+        number here.
+
+        We will also ignore different line numbering settings here
+        since only the very 1st line numbering settings are taken
+        into account anyway, see: bNoLnNum
+    */
+    const wwSprmSequence *pIgnore;
+    if (GetVersion() < 8)
+        pIgnore = GetWW6IgnoredSprms();
+    else
+        pIgnore = GetWW8IgnoredSprms();
+
+    ASSERT(pIgnore, "Impossible");
+
+    if ( maSprmParser.CountSprms(pSp, nSprmSiz, pIgnore) ==
+        maSprmParser.CountSprms(pOtherSprms, nOtherSprmSiz, pIgnore) )
     {
         bRes = true;
-        for(USHORT i=0; i+1+maSprmParser.mnDelta < nSprmSiz; )
+        USHORT i=0;
+        while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
         {
             USHORT nSpId = maSprmParser.GetSprmId(pSp);
 
@@ -3347,7 +3403,7 @@ bool WW8PLCFx_SEPX::CompareSprms(const BYTE*  pOtherSprms, long nOtherSprmSiz,
 
             USHORT nSpLen = maSprmParser.GetSprmSize(nSpId, pSp);
 
-            if (!pIgnoreSprms || !pIgnoreSprms->Seek_Entry(nSpId))
+            if (!pIgnore->search(nSpId))
             {
                 const BYTE* pOtherSp =
                     HasSprm( nSpId, pOtherSprms, nOtherSprmSiz );
@@ -6468,7 +6524,7 @@ USHORT wwSprmParser::GetSprmSize0(sal_uInt16 nId, const sal_uInt8* pSprm) const
 }
 
 int wwSprmParser::CountSprms(const sal_uInt8* pSp, long nSprmSiz,
-    const SvUShortsSort* pIgnoreSprms) const
+    const wwSprmSequence* pIgnoreSprms) const
 {
     USHORT nMySprms = 0;
     USHORT i=0;
@@ -6484,7 +6540,7 @@ int wwSprmParser::CountSprms(const sal_uInt8* pSp, long nSprmSiz,
         i += nSpLen;
         pSp += nSpLen;
 
-        if( !pIgnoreSprms || !pIgnoreSprms->Seek_Entry( nSpId ) )
+        if (!pIgnoreSprms || !pIgnoreSprms->search(nSpId))
             ++nMySprms;
     }
     return nMySprms;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-12 09:02:22 $
+ *  last change: $Author: cmc $ $Date: 2002-07-12 15:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,6 @@ template<class C> class wwSortedArray;
 
 //wwSprmParser knows how to take a sequence of bytes and split it up into
 //sprms and their arguments
-class SvUShortsSort;        //Remove these nasty old things
 class WW8PLCFx_SEPX;        //Yucky friend, remove this horror
 
 struct SprmInfo
@@ -126,6 +125,8 @@ struct SprmInfo
 
 //a managed sorted sequence of sprminfos
 typedef wwSortedArray<SprmInfo> wwSprmSearcher;
+//a managed sorted sequence of sprms
+typedef wwSortedArray<sal_uInt16> wwSprmSequence;
 
 class wwSprmParser
 {
@@ -140,9 +141,6 @@ private:
     SprmInfo GetSprmInfo(sal_uInt16 nId) const;
     USHORT GetSprmSize0(sal_uInt16 nId, const sal_uInt8 * pSprm) const;
 
-    int CountSprms(const sal_uInt8 * pSp, long nSprmSiz,
-        const SvUShortsSort* pIgnoreSprms) const;
-
     enum SprmType {L_FIX=0, L_VAR=1, L_VAR2=2};
 public:
     //7- ids are very different to 8+ ones
@@ -152,10 +150,18 @@ public:
 
     USHORT GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm) const;
     BYTE SprmDataOfs(sal_uInt16 nId) const;
+
+    //Get known len of a sprms head, the bytes of the sprm id + any bytes
+    //reserved to hold a variable length
     USHORT DistanceToData(sal_uInt16 nId) const;
 
     //The minimum acceptable sprm len possible for this type of parser
-    int MinSprmLen() { return (mnVersion < 8) ? 2 : 3; }
+    int MinSprmLen() const { return (mnVersion < 8) ? 2 : 3; }
+
+    //Count the number of sprms in this byte sequence optionally ignoring any
+    //listed in the SprmSequence
+    int CountSprms(const sal_uInt8 * pSp, long nSprmSiz,
+        const wwSprmSequence *pIgnoreSprms=0) const;
 };
 
 //--Line abovewhich the code has meaningful comments
@@ -165,7 +171,6 @@ class  WW8ScannerBase;
 class  WW8PLCFspecial;
 struct WW8PLCFxDesc;
 class  WW8PLCFx_PCD;
-class  SvUShortsSort;
 
 String WW8ReadPString( SvStream& rStrm, rtl_TextEncoding eEnc,
     BOOL bAtEndSeekRel1 = TRUE );
@@ -608,6 +613,9 @@ private:
     USHORT nArrMax;
     UINT16 nSprmSiz;
 
+    static const wwSprmSequence* GetWW8IgnoredSprms();
+    static const wwSprmSequence* GetWW6IgnoredSprms();
+
     //no copying
     WW8PLCFx_SEPX(const WW8PLCFx_SEPX&);
     WW8PLCFx_SEPX& operator=(const WW8PLCFx_SEPX&);
@@ -628,8 +636,7 @@ public:
         long nOtherSprmSiz ) const;
     BOOL Find4Sprms(USHORT nId1, USHORT nId2, USHORT nId3, USHORT nId4,
                     BYTE*& p1,   BYTE*& p2,   BYTE*& p3,   BYTE*& p4 ) const;
-    bool CompareSprms( const BYTE* pOtherSprms, long nOtherSprmSiz,
-        const SvUShortsSort* pIgnoreSprms = 0 ) const;
+    bool SprmsAreEquivalent( const BYTE* pOtherSprms, long nOtherSprmSiz) const;
 };
 
 // Iterator fuer Fuss-/Endnoten und Anmerkungen
