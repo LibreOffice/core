@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.13 $
+#	$Revision: 1.14 $
 #
-#	last change: $Author: hr $ $Date: 2004-05-10 15:50:07 $
+#	last change: $Author: obo $ $Date: 2004-07-06 13:49:07 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -69,29 +69,33 @@ TARGET=win
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	$(SLO)$/accel.obj		\
+SLOFILES= \
             $(SLO)$/abstdlg.obj		\
+            $(SLO)$/accel.obj		\
             $(SLO)$/accmgr.obj		\
             $(SLO)$/brdwin.obj		\
             $(SLO)$/btndlg.obj		\
             $(SLO)$/cmdevt.obj		\
             $(SLO)$/cursor.obj		\
-            $(SLO)$/dockwin.obj 	\
             $(SLO)$/decoview.obj	\
             $(SLO)$/dialog.obj		\
             $(SLO)$/dlgctrl.obj 	\
+            $(SLO)$/dndevdis.obj	\
+            $(SLO)$/dndlcon.obj     \
+            $(SLO)$/dockmgr.obj 	\
+            $(SLO)$/dockwin.obj 	\
             $(SLO)$/floatwin.obj	\
+            $(SLO)$/introwin.obj	\
             $(SLO)$/keycod.obj		\
             $(SLO)$/keyevent.obj	\
             $(SLO)$/menu.obj		\
             $(SLO)$/mnemonic.obj	\
             $(SLO)$/msgbox.obj		\
+            $(SLO)$/scrwnd.obj		\
             $(SLO)$/seleng.obj		\
             $(SLO)$/split.obj		\
             $(SLO)$/splitwin.obj	\
@@ -100,18 +104,14 @@ SLOFILES=	$(SLO)$/accel.obj		\
             $(SLO)$/syswin.obj		\
             $(SLO)$/tabdlg.obj		\
             $(SLO)$/tabpage.obj 	\
+            $(SLO)$/taskpanelist.obj	\
             $(SLO)$/toolbox.obj 	\
             $(SLO)$/toolbox2.obj	\
             $(SLO)$/window.obj		\
             $(SLO)$/window2.obj 	\
             $(SLO)$/window3.obj		\
             $(SLO)$/winproc.obj 	\
-            $(SLO)$/wrkwin.obj		\
-            $(SLO)$/introwin.obj	\
-            $(SLO)$/scrwnd.obj		\
-            $(SLO)$/dndevdis.obj	\
-            $(SLO)$/dndlcon.obj     \
-            $(SLO)$/taskpanelist.obj
+            $(SLO)$/wrkwin.obj
 
 EXCEPTIONSFILES=					\
             $(SLO)$/window.obj		\
