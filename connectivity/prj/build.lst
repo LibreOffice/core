@@ -17,4 +17,5 @@ cn	connectivity\source\drivers\file		nmake	-	all	cn_file cn_dbtools NULL
 cn	connectivity\source\drivers\flat		nmake	-	all	cn_flat cn_dbtools cn_file NULL
 cn	connectivity\source\drivers\dbase		nmake	-	all	cn_dbase cn_dbtools cn_file NULL
 cn	connectivity\source\parse				nmake	-	all	cn_parse NULL
-cn	connectivity\source\dbtools				nmake	-	all	cn_dbtools cn_types cn_cmtools cn_parse cn_res cn_sdbcx NULL
+cn	connectivity\source\simpledbt			nmake	-	all	cn_simpledbt cn_cmtools NULL
+cn	connectivity\source\dbtools				nmake	-	all	cn_dbtools cn_types cn_simpledbt cn_cmtools cn_parse cn_res cn_sdbcx NULL
