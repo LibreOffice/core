@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:12:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ SfxObjectShell::~SfxObjectShell()
 //REMOVE            HandsOff();
 
     // don't call GetStorage() here, in case of Load Failure it's possible that a storage was never assigned!
-    if ( pMedium->HasStorage_Impl() && pMedium->GetStorage() == pImp->m_xDocStorage )
+    if ( pMedium && pMedium->HasStorage_Impl() && pMedium->GetStorage() == pImp->m_xDocStorage )
         pMedium->CanDisposeStorage_Impl( sal_False );
 
     DELETEX( pMedium );
